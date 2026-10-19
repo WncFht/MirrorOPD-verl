@@ -17,7 +17,7 @@ from omegaconf import OmegaConf
 from verl.utils.config import omega_conf_to_dataclass, validate_config
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / "examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh"
+SCRIPT = ROOT / "examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh"
 
 
 def _launch(tmp_path, script=SCRIPT, **overrides):
@@ -304,7 +304,8 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(t
         assert message in result.stdout
 
 
-def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path):
+@pytest.mark.parametrize("domain", ["math", "code", "if"])
+def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path, domain):
     """Exercise the real Make submission and worker config while stubbing only the Hope CLI."""
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
@@ -326,6 +327,7 @@ def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path)
     preview = _launch(
         tmp_path,
         script=ROOT / "hope/mirroropd/run.sh",
+        DOMAIN=domain,
         CUDA_VISIBLE_DEVICES="GPU-0,GPU-1,GPU-2,GPU-3,GPU-4,GPU-5,GPU-6,GPU-7",
         VERL_USE_UV="1",
     )
@@ -338,4 +340,6 @@ def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path)
     assert cfg.trainer.n_gpus_per_node + cfg.distillation.n_gpus_per_node == allocated_gpus == 8
     assert cfg.ray_kwargs.ray_init.runtime_env.py_executable == native_python
     assert cfg.ray_kwargs.ray_init.runtime_env.env_vars.WANDB_MODE == "offline"
+    teachers = {"math": "JustRL-DeepSeek-1.5B", "code": "DeepCoder-1.5B-Preview", "if": "UltraData-IF-1.5B"}
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(teachers[domain])
     assert not (tmp_path / "run").exists()

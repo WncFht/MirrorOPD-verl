@@ -3,8 +3,8 @@
 # 默认占用 8 张卡：student 4 卡（训练与 rollout 共用），teacher 4 卡。
 # 所有常用参数均可由同名环境变量覆盖；末尾还可追加原生 Hydra overrides。
 # 用法：
-#   DRY_RUN=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
-#   CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
+#   DRY_RUN=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
+#   CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
 set -eo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)

@@ -70,7 +70,7 @@ make assets-check ASSET_CHECK_ARGS=--data-only
 
 ## 单教师数学 full-data 配方
 
-[run_deepseek_r1_1_5b_fsdp2.sh](run_deepseek_r1_1_5b_fsdp2.sh) 使用 V1 同步 trainer、FSDP2 student 和独立 vLLM teacher。数学设置参考 One-Shot-OPD 当前可执行配方：DeepSeek-R1-Distill-Qwen-1.5B student、JustRL-DeepSeek-1.5B teacher、完整 DAPO 数据、sampled-token `k1 + PG`、batch 与 mini-batch 均为 64、每批一次更新、AdamW 学习率 1e-6。目前仍采用主线在 loss 中构造的 current-policy advantage；未加入 frozen-reward 分支，不能称为原研究实现的完整等价复现。
+[run_math_deepseek_r1_1_5b_fsdp2.sh](run_math_deepseek_r1_1_5b_fsdp2.sh) 使用 V1 同步 trainer、FSDP2 student 和独立 vLLM teacher。数学设置参考 One-Shot-OPD 当前可执行配方：DeepSeek-R1-Distill-Qwen-1.5B student、JustRL-DeepSeek-1.5B teacher、完整 DAPO 数据、sampled-token `k1 + PG`、batch 与 mini-batch 均为 64、每批一次更新、AdamW 学习率 1e-6。目前仍采用主线在 loss 中构造的 current-policy advantage；未加入 frozen-reward 分支，不能称为原研究实现的完整等价复现。
 
 默认资源与长度：
 
@@ -104,14 +104,14 @@ TP（Tensor Parallelism，张量并行）把一个模型副本中的权重矩阵
 
 ```bash
 # 仅打印启动命令，不启动 Ray，也不安装依赖。
-DRY_RUN=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
+DRY_RUN=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
 
 # 只解析 Hydra 配置；默认使用本仓库的 .venv-native/bin/python。
-CONFIG_ONLY=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
+CONFIG_ONLY=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
 
 # 获得整机 8 张卡的分配、激活原生 Python 环境后运行。
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 \
-  bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
+  bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
 ```
 
 默认使用本仓库 `.venv-native/bin/python` 的绝对路径，同时设置 driver 和 Ray worker 的解释器，无需依赖终端是否激活环境。已有其他独立环境可设置 `PYTHON_BIN=/absolute/path/to/python`；环境需具备当前 verl 的 V1/TransferQueue 和 verifier 依赖。上游锁文件环境只在显式设置 `VERL_USE_UV=1` 时启用。正式启动要求显式设置 `CUDA_VISIBLE_DEVICES`，并检查四个 parquet 文件存在。
@@ -138,7 +138,7 @@ ResOPD 的公开版本 `3bdf019d` 只设置一个 `MAX_RESPONSE_LENGTH`，没有
 
 | 入口 | Teacher | 训练数据 | 训练期间验证 |
 | --- | --- | --- | --- |
-| [math](run_deepseek_r1_1_5b_fsdp2.sh) | `JustRL-DeepSeek-1.5B` | `math/DAPO/train.parquet` | MATH-500、AMC23、AIME25 |
+| [math](run_math_deepseek_r1_1_5b_fsdp2.sh) | `JustRL-DeepSeek-1.5B` | `math/DAPO/train.parquet` | MATH-500、AMC23、AIME25 |
 | [coding](run_code_deepseek_r1_1_5b_fsdp2.sh) | `DeepCoder-1.5B-Preview` | `code/TACO/train.parquet` | `code/LCBv6/test.parquet` |
 | [IF](run_if_deepseek_r1_1_5b_fsdp2.sh) | `UltraData-IF-1.5B` | `if/MultiIF/train.parquet`，第一轮 | 关闭；正式 MultiIF 需要独立三轮评测 |
 
@@ -160,7 +160,7 @@ IF 默认设置 `data.val_files=[]`、`TEST_FREQ=-1` 和 `trainer.val_before_tra
 
 coding / IF 即使关闭 task reward 对 loss 的贡献，仍会计算 verifier 诊断分数。coding 的 `gen` 还包含 CPU 测试执行成本；LCB runner 的全局等待预算包含新进程启动时间，部署前应使用已知正确的小程序检查判分环境。数学的采样耗时不能直接外推到这两个领域。
 
-Hope 的现有入口保留数学默认，也支持 `DOMAIN=code` / `DOMAIN=if`。在开发机本地 Hope 配置的 worker 环境设置 `afo.role.worker.env.DOMAIN = code` 或 `if`；IF 同时设置实际共享路径的 `OPENCOMPASS_ROOT` 和 `NLTK_DATA`。`hope/` 不随源码包更新。
+Hope 仍通过 `make opd-submit` 提交，由 worker 执行 `hope/mirroropd/run.sh`，再按 `DOMAIN=math|code|if` 选择带领域前缀的配方；默认 `math`。在开发机本地 Hope 配置的 worker 环境设置 `afo.role.worker.env.DOMAIN = code` 或 `if`；IF 同时设置实际共享路径的 `OPENCOMPASS_ROOT` 和 `NLTK_DATA`。旧的无前缀配方入口已删除。`hope/` 不随源码包更新，接收新版源码时需要单独同步 `hope/mirroropd/run.sh`。
 
 ## MFU 与效率调整
 
@@ -190,11 +190,11 @@ $P_{\mathrm{dense}}$ 由 MLP、attention 投影、embedding 和 LM head 的尺�
 ```bash
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 TEST_FREQ=-1 SAVE_FREQ=-1 \
   EXPERIMENT_NAME=math-perf-baseline \
-  bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh trainer.total_training_steps=10
+  bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh trainer.total_training_steps=10
 
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 TEST_FREQ=-1 SAVE_FREQ=-1 \
   EXPERIMENT_NAME=math-perf-cudagraph ROLLOUT_ENFORCE_EAGER=False \
-  bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh trainer.total_training_steps=10
+  bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh trainer.total_training_steps=10
 ```
 
 现有 Hope worker 入口固定 4+4 卡；测试另一种卡数分配时，需要同步调整接收端本地入口和资源申请。增大 `TRAIN_BATCH_SIZE` 会改变每个 epoch 的更新步数；当前约 63% 的回答达到 7168 token 上限，缩短回答预算也会改变训练样本。它们需要单独比较训练质量。完整验证的 14 轮、每轮 9120 条回答应与训练性能测试分开计时。

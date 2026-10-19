@@ -3,5 +3,5 @@
 set -eo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-export DOMAIN=${DOMAIN:-math}
+export DOMAIN=math
 exec bash "$SCRIPT_DIR/_run_single_teacher_fsdp2.sh" "$@"

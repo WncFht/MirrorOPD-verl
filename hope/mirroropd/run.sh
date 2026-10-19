@@ -6,6 +6,12 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd -- "$SCRIPT_DIR/../.." && pwd)
 cd "$REPO_ROOT"
 
+export DOMAIN=${DOMAIN:-math}
+case "$DOMAIN" in
+    math|code|if) ;;
+    *) echo "Unknown DOMAIN=$DOMAIN; expected math, code or if" >&2; exit 2 ;;
+esac
+
 # 保留调度器设置的设备编号或 UUID；未设置时使用任务内的 8 个逻辑设备。
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3,4,5,6,7}
 export STUDENT_GPUS=4
@@ -39,4 +45,4 @@ for index in range(count):
 PY
 fi
 
-exec bash "$REPO_ROOT/examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh" "$@"
+exec bash "$REPO_ROOT/examples/mirroropd/run_${DOMAIN}_deepseek_r1_1_5b_fsdp2.sh" "$@"
