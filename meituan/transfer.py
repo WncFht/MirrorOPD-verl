@@ -37,6 +37,7 @@ RUNTIME_DIRS = {
     "log_snap",
     "result_snap",
     "offline-wheels",
+    "hope",
 }
 CACHE_DIRS = {
     "__pycache__",
@@ -260,16 +261,21 @@ def unpack(args, snap_dir):
         extracted = Path(temp) / "extracted"
         extracted.mkdir()
         with tarfile.open(archive, "r:gz") as bundle:
+            members = []
             for member in bundle.getmembers():
                 path = PurePosixPath(member.name)
                 if not path.parts or path.is_absolute() or ".." in path.parts:
                     raise ValueError(f"Unsafe archive member: {member.name}")
+                # Hope settings belong to the receiving machine, including when applying old bundles.
+                if args.kind == "code" and path.parts[0] == "hope":
+                    continue
                 if args.kind == "code" and excluded(path):
                     raise ValueError(f"Protected runtime path in source archive: {member.name}")
                 expected = "wandb" if args.kind == "logs" else "results"
                 if args.kind != "code" and path.parts[0] != expected:
                     raise ValueError(f"Expected {expected}/ in archive, found: {member.name}")
-            bundle.extractall(extracted, filter="data")
+                members.append(member)
+            bundle.extractall(extracted, members=members, filter="data")
         if args.kind == "code":
             destination = repo_path(args.paths[0]) if args.paths else ROOT
             destination.mkdir(parents=True, exist_ok=True)

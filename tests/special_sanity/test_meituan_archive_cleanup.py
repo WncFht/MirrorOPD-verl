@@ -60,6 +60,36 @@ class SourceArchiveCleanupTest(unittest.TestCase):
         self.assertTrue(current.exists())
         self.assertTrue(all(path.exists() for path in unrelated))
 
+    def test_pack_excludes_hope_with_or_without_git(self):
+        """Tracked Hope files and files found by fallback scanning stay local."""
+        (self.repo / "hope").mkdir()
+        (self.repo / "hope/local.hope").write_text("local job settings")
+        archive = self.pack("archive_MirrorOPD-verl_current.tar.gz")
+        with tarfile.open(archive) as bundle:
+            self.assertEqual(bundle.getnames(), ["verl/payload.bin"])
+        (self.repo / ".git").mkdir()
+        with patch.object(transfer.subprocess, "check_output", return_value=b"hope/local.hope\0verl/payload.bin\0"):
+            self.assertEqual([member for _, member in transfer.source_files([])], ["verl/payload.bin"])
+
+    def test_unpack_legacy_archive_keeps_local_hope(self):
+        """Even a previous delivery containing Hope files cannot replace local job settings."""
+        (self.repo / "hope").mkdir()
+        (self.repo / "hope/local.hope").write_text("incoming job settings")
+        (self.repo / "hope/new.hope").write_text("incoming new job")
+        (self.receiving / "hope").mkdir(parents=True)
+        original = self.receiving / "hope/local.hope"
+        original.write_text("machine-specific job settings")
+        archive = self.downloads / "archive_MirrorOPD-verl_legacy.tar.gz"
+        with tarfile.open(archive, "w:gz") as bundle:
+            bundle.add(self.repo / "hope", arcname="hope")
+            bundle.add(self.repo / "verl", arcname="verl")
+        self.unpack(archive)
+        self.assertEqual(original.read_text(), "machine-specific job settings")
+        self.assertFalse((self.receiving / "hope/new.hope").exists())
+        self.assertEqual(
+            (self.receiving / "verl/payload.bin").read_bytes(), (self.repo / "verl/payload.bin").read_bytes()
+        )
+
     def test_same_name_can_switch_from_parts_to_single_archive(self):
         """Publishing a smaller replacement removes obsolete same-name parts."""
         name = "custom.tar.gz"

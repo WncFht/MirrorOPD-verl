@@ -178,8 +178,9 @@ def test_real_launch_requires_explicit_gpu_allocation(tmp_path):
     assert not (tmp_path / "run").exists()
 
 
-def test_source_archive_launch_records_missing_git_without_aborting(tmp_path):
-    """An unpacked source tree can reach Python startup without a .git directory."""
+@pytest.mark.parametrize("exit_code", [0, 23])
+def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(tmp_path, exit_code):
+    """An unpacked tree logs stdout/stderr while retaining the trainer's success or failure."""
     checkout = tmp_path / "source checkout"
     script = checkout / "examples/mirroropd" / SCRIPT.name
     script.parent.mkdir(parents=True)
@@ -189,7 +190,11 @@ def test_source_archive_launch_records_missing_git_without_aborting(tmp_path):
         path.parent.mkdir(parents=True)
         path.touch()
     interpreter = tmp_path / "mock-python"
-    interpreter.write_text('#!/bin/sh\nprintf "%s\\n" "$@"\n')
+    interpreter.write_text(
+        '#!/bin/sh\ncase " $* " in *" --cfg "*) printf "mock: true\\n"; exit 0 ;; esac\n'
+        'printf "mock training stdout\\n"\nprintf "mock training stderr\\n" >&2\n'
+        f"exit {exit_code}\n"
+    )
     interpreter.chmod(0o755)
     result = _launch(
         tmp_path,
@@ -199,10 +204,14 @@ def test_source_archive_launch_records_missing_git_without_aborting(tmp_path):
         PYTHON_BIN=str(interpreter),
         CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7",
     )
-    assert result.returncode == 0, result.stderr
+    assert result.returncode == exit_code, result.stderr
     assert "source archive without Git metadata" in (tmp_path / "run/source_commit.txt").read_text()
     assert (tmp_path / "run/source_changes.patch").read_bytes() == b""
     assert "verl.trainer.main_ppo" in (tmp_path / "run/command.sh").read_text()
+    log = (tmp_path / "run/train.log").read_text()
+    for message in ("mock training stdout", "mock training stderr"):
+        assert message in log
+        assert message in result.stdout
 
 
 def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path):

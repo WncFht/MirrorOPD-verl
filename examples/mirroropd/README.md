@@ -118,7 +118,9 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 \
 
 `RUN_DIR` 必须是新目录，默认在 `outputs/` 下；保存实际命令、Git commit、相对 HEAD 的工作区 patch、解析配置、checkpoint 和验证输出。CLI 末尾参数仍是原生 Hydra overrides。改变训练步数时还要给足 `TOTAL_EPOCHS`，因为外层训练同时受 epoch 与 total step 限制。
 
-通过人工源码包部署、没有 `.git` 的目录同样可以启动；此时 `source_commit.txt` 标记版本不可用，`source_changes.patch` 为空。集群提交入口为 `make opd-submit`，申请单机 8 张 80GB 卡，完整操作见 [Hope 说明](../../hope/README.md)。
+正式运行会将 stdout/stderr 同时显示在终端并保存到 `$RUN_DIR/train.log`，默认路径为 `outputs/<实验名>/train.log`。Python 使用无缓冲输出；训练失败时保留非零退出码。启动时打印日志的完整路径，可用 `tail -f <日志完整路径>` 跟踪。`DRY_RUN=1` 和 `CONFIG_ONLY=1` 不创建日志或实验目录。
+
+通过人工源码包部署、没有 `.git` 的目录同样可以启动；此时 `source_commit.txt` 标记版本不可用，`source_changes.patch` 为空。开发机已有本地 Hope 配置时，可通过 `make opd-submit` 提交单机 8 卡任务；`hope/` 不随源码包同步，完整操作见 [Hope 说明](../../hope/README.md)。
 
 配方默认记录 console 与离线 W&B。SDK 写入根目录固定为本仓库，实际 run 位于 `wandb/offline-run-*/`；Ray 训练进程使用同样的路径和模式。可用 `make sync-log-pack` 打包后人工下载，完整流程见 [美团开发机同步说明](../../meituan/README.md)。
 

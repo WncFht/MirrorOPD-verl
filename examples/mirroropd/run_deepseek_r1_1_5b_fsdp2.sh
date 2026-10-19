@@ -264,14 +264,19 @@ if [[ -e $RUN_DIR ]]; then
 fi
 # 同时记录源码状态、完整命令和解析配置，便于回溯每次实验。
 mkdir -p "$RUN_DIR"
-if [[ -d $REPO_ROOT/.git || -f $REPO_ROOT/.git ]] && command -v git >/dev/null 2>&1; then
-    git rev-parse HEAD > "$RUN_DIR/source_commit.txt"
-    git diff --binary HEAD > "$RUN_DIR/source_changes.patch"
-else
-    printf 'unavailable (source archive without Git metadata)\n' > "$RUN_DIR/source_commit.txt"
-    : > "$RUN_DIR/source_changes.patch"
-fi
-printf '%q ' "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/command.sh"
-printf '\n' >> "$RUN_DIR/command.sh"
-"${CMD[@]}" --cfg job --resolve "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/resolved_config.yaml"
-exec "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@"
+# tee 同时保存 stdout / stderr；pipefail 保留 Python 失败时的退出码。
+export PYTHONUNBUFFERED=1
+{
+    printf 'Training log: %s\n' "$RUN_DIR/train.log"
+    if [[ -d $REPO_ROOT/.git || -f $REPO_ROOT/.git ]] && command -v git >/dev/null 2>&1; then
+        git rev-parse HEAD > "$RUN_DIR/source_commit.txt"
+        git diff --binary HEAD > "$RUN_DIR/source_changes.patch"
+    else
+        printf 'unavailable (source archive without Git metadata)\n' > "$RUN_DIR/source_commit.txt"
+        : > "$RUN_DIR/source_changes.patch"
+    fi
+    printf '%q ' "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/command.sh"
+    printf '\n' >> "$RUN_DIR/command.sh"
+    "${CMD[@]}" --cfg job --resolve "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/resolved_config.yaml"
+    exec "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@"
+} 2>&1 | tee "$RUN_DIR/train.log"

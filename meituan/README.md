@@ -22,9 +22,11 @@ make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.g
 make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.gz.part.000
 ```
 
-源码包使用当前工作区中的文件，包含尚未提交的修改和 `meituan/packages/` 下的离线 ZIP。有 Git 时读取已跟踪文件和未被忽略的新增文件；无 Git 时扫描源码目录。默认排除 `.git`、虚拟环境、缓存、`model/`、`models/`、`data/`、`outputs/`、`results/`、`wandb/`、checkpoint 和已有传输包。
+源码包使用当前工作区中的文件，包含尚未提交的修改和 `meituan/packages/` 下的离线 ZIP。有 Git 时读取已跟踪文件和未被忽略的新增文件；无 Git 时扫描源码目录。排除 `hope/`、`.git`、虚拟环境、缓存、`model/`、`models/`、`data/`、`outputs/`、`results/`、`wandb/`、checkpoint 和已有传输包。
 
 源码解包沿用 MD-OPD 的替换语义：先完整解包到临时目录，再替换归档涉及的顶层文件或目录，例如 `verl/`、`examples/`、`meituan/`。这些目录中未进入新包的旧文件也会移除；运行目录不参与替换。解包前应保存接收端在这些源码目录里的修改。
+
+`hope/` 由各机器本地维护，源码打包始终排除；新版解包工具收到包含 `hope/` 的旧包时也跳过该目录，保留接收端现有配置。
 
 可用 `ARCHIVE_SOURCES="Makefile meituan"` 选择仓库顶层路径，用 `ARCHIVE=自定义名称.tar.gz` 设置包名，用 `DEST=/目标项目目录` 设置源码解包位置。源码包完整生成后，自动清理同目录中 `archive_MirrorOPD-verl*.tar.gz` 及其旧分卷；固定同名包也可重新生成，旧文件在新包完整写入后替换。日志包、结果包和依赖 ZIP 不参与这项清理。
 
@@ -63,7 +65,7 @@ python -m verl.trainer.main_ppo --help
 
 ## 提交 8 卡任务
 
-开发机安装、数据检查完成后，在仓库根目录执行 `make opd-submit`。它提交 `hope/mirroropd/mirroropd.hope`，由集群 worker 使用现有 `.venv-native` 执行单机 8 卡训练：student 4 卡、teacher 4 卡，推理 TP 均为 1。任务启动时检查原生依赖和 8 张 GPU 上的小矩阵乘法，再运行数学配方。队列、平台镜像、共享挂载路径与预览命令见 [Hope 说明](../hope/README.md)。
+开发机安装、数据检查完成，且本地已有 `hope/mirroropd/mirroropd.hope` 和对应启动入口后，在仓库根目录执行 `make opd-submit`。它提交接收端保留的 Hope 配置，默认由集群 worker 使用现有 `.venv-native` 执行单机 8 卡训练：student 4 卡、teacher 4 卡，推理 TP 均为 1。`hope/` 不随源码同步，配置和入口由开发机本地维护；仓库内的参考说明见 [Hope 说明](../hope/README.md)。
 
 ## 模型与数据布局
 
@@ -112,6 +114,8 @@ make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.
 默认只合并到本地 `wandb/`。需要上传到 W&B 时，显式添加 `WANDB_SYNC=1`；接收端应已安装并登录 `wandb`。可用 `WANDB_RUNS_DIR=自定义目录` 改变打包源或接收位置。这个参数表示实际 run 目录；SDK 的 `WANDB_DIR` 表示其父级写入根目录，两个参数分开设置。
 
 本项目的数学配方默认启用 `console` 和 `wandb`，设置 `WANDB_MODE=offline`、`WANDB_DIR=<仓库根目录>`，并将这些环境变量显式传给 Ray 训练进程。W&B 实际记录位于 `<仓库>/wandb/offline-run-*/`，与同步脚本的默认扫描目录一致。运行输出和 checkpoint 仍保存在 `outputs/<实验名>/`。
+
+完整终端 stdout/stderr 同时保存到 `outputs/<实验名>/train.log`，用 `tail -f outputs/<实验名>/train.log` 查看。这个文本日志通过 `make sync-results-pack` 随实验结果打包；`make sync-log-pack` 负责 W&B 离线 run。
 
 ## 结果下载
 
