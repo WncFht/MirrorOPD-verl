@@ -57,6 +57,6 @@
 
 [^verl]: verl-project. verl 固定基线，2026. [263653e7](https://github.com/verl-project/verl/tree/263653e749306287a5032140cce3d7833c1959d0).
 [^oneshot]: Thinking-Space. One-Shot-OPD 固定参考，2026. [6b6b1782](https://github.com/Thinking-Space/One-Shot-OPD/tree/6b6b1782cc3f04749dd077de19353f839f6bc048).
-[^recipe]: Thinking-Space. 单教师 OPD 配方. [recipe/opd.sh](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/opd.sh).
-[^mopd]: Thinking-Space. 多教师 OPD 配方. [recipe/mopd.sh](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/mopd.sh).
-[^data]: Thinking-Space. 数据布局与准备. [data/README.md](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/data/README.md).
+[^recipe]: Thinking-Space. 单教师 OPD 配方。[recipe/opd.sh](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/opd.sh).
+[^mopd]: Thinking-Space. 多教师 OPD 配方。[recipe/mopd.sh](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/mopd.sh).
+[^data]: Thinking-Space. 数据布局与准备。[data/README.md](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/data/README.md).
