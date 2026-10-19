@@ -34,7 +34,7 @@
 # 仅打印启动命令，不启动 Ray，也不安装依赖。
 DRY_RUN=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
 
-# 只解析 Hydra 配置；默认通过锁文件的 fsdp + vllm + math extras 运行。
+# 只解析 Hydra 配置；默认使用本仓库的 .venv-native/bin/python。
 CONFIG_ONLY=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
 
 # 获得整机 8 张卡的分配、激活原生 Python 环境后运行。
@@ -42,7 +42,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 \
   bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
 ```
 
-默认 uv 启动同步配置 driver 与 Ray worker 的 Python。已有独立环境可设置 `VERL_USE_UV=0 PYTHON_BIN=/absolute/path/to/python`；环境需具备当前 verl 的 V1/TransferQueue 和 verifier 依赖。正式启动要求显式设置 `CUDA_VISIBLE_DEVICES`，并检查四个 parquet 文件存在。
+默认使用本仓库 `.venv-native/bin/python` 的绝对路径，同时设置 driver 和 Ray worker 的解释器，无需依赖终端是否激活环境。已有其他独立环境可设置 `PYTHON_BIN=/absolute/path/to/python`；环境需具备当前 verl 的 V1/TransferQueue 和 verifier 依赖。上游锁文件环境只在显式设置 `VERL_USE_UV=1` 时启用。正式启动要求显式设置 `CUDA_VISIBLE_DEVICES`，并检查四个 parquet 文件存在。
 
 `RUN_DIR` 必须是新目录，默认在 `outputs/` 下；保存实际命令、Git commit、相对 HEAD 的工作区 patch、解析配置、checkpoint 和验证输出。CLI 末尾参数仍是原生 Hydra overrides。改变训练步数时还要给足 `TOTAL_EPOCHS`，因为外层训练同时受 epoch 与 total step 限制。
 

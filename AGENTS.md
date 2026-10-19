@@ -19,6 +19,7 @@
 - 用户要求使用原生 Python、pip 或 Conda；开发机安装和启动流程不使用 Docker、uv，也不升级平台管理的宿主机驱动。
 - 复用 `/bin/python3` 对应的预装 GPU 依赖，用 `venv --system-site-packages --without-pip .venv-native` 隔离本项目新增包；安装和检查入口为 `make native-install`、`make native-check`。
 - 运行现有示例前激活 `.venv-native` 并设置 `VERL_USE_UV=0`，避免示例自动切回上游 uv/CUDA 13 环境。
+- 本项目数学配方默认直接使用仓库 `.venv-native/bin/python` 的绝对路径，driver 与 Ray worker 共用；其他上游示例仍按前条约定运行。
 - 2026-10-20 已观察到的开发机配置是 Python 3.12.13、A100 80GB、R535 驱动、PyTorch 2.11.0+cu128、vLLM 0.25.1+cu129；GPU 导入与实际训练验收分别进行，不把安装完成视为训练通过。
 - 脚本保持 Bash 3.2 兼容，使用 `set -eo pipefail`；通用传输逻辑使用 Python 标准库，Mac 和 Linux 共用同一入口。
 - 数学配方默认离线 W&B，实际 run 保存到仓库 `wandb/`；同步参数 `WANDB_RUNS_DIR` 指实际 run 目录，SDK 的 `WANDB_DIR` 指其父级根目录。源码 archive 自动清理旧包，日志和结果增量包保留到人工处理。

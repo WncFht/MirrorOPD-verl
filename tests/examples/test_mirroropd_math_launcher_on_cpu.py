@@ -126,6 +126,27 @@ def test_uv_launch_includes_math_dependencies_for_driver_and_workers(tmp_path):
     assert "--extra math" in worker_python
 
 
+def test_default_launch_uses_absolute_native_interpreter():
+    """Default launch selection must not depend on activation or the ambient Python PATH."""
+    env = os.environ.copy()
+    for name in ("PYTHON_BIN", "VERL_USE_UV", "CUDA_VISIBLE_DEVICES"):
+        env.pop(name, None)
+    env["DRY_RUN"] = "1"
+    result = subprocess.run(["bash", str(SCRIPT)], env=env, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    command = shlex.split(result.stdout)
+    expected = str(ROOT / ".venv-native/bin/python")
+    assert command[0] == expected
+    assert f"ray_kwargs.ray_init.runtime_env.py_executable='{expected}'" in command
+
+
+def test_explicit_native_interpreter_reaches_ray_workers(tmp_path):
+    """The Ray runtime override retains the requested absolute environment path."""
+    interpreter = str(tmp_path / "custom-env/bin/python")
+    cfg = _config(tmp_path, PYTHON_BIN=interpreter)
+    assert cfg.ray_kwargs.ray_init.runtime_env.py_executable == interpreter
+
+
 def test_launcher_fixes_offline_wandb_location_for_ray(tmp_path):
     """The training driver and Ray task runner share a checkout-relative offline log root."""
     cfg = _config(tmp_path, WANDB_DIR=str(tmp_path / "unrelated"), WANDB_MODE="offline")

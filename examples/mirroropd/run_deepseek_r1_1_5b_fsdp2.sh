@@ -222,11 +222,12 @@ ARGS=(
 )
 
 # ── 6. Python 环境与执行模式 ──────────────────────────────────────────
-# 已激活原生环境（开发机）：VERL_USE_UV=0，PYTHON_BIN 默认为 python3。
-# uv 模式：driver 与 Ray worker 使用相同 extras，包含数学 verifier 依赖。
-LAUNCH=("${PYTHON_BIN:-python3}")
-RAY=(ray_kwargs.ray_init.runtime_env.py_executable=null)
-if [ "${VERL_USE_UV:-1}" != 0 ] && [ "${DEVICE:-gpu}" = gpu ]; then
+# 原生模式默认使用本仓库虚拟环境的绝对路径，driver 与 Ray worker 保持一致。
+# PYTHON_BIN 可显式指定其他绝对路径；uv 模式需显式 VERL_USE_UV=1。
+PYTHON_BIN=${PYTHON_BIN:-$REPO_ROOT/.venv-native/bin/python}
+LAUNCH=("$PYTHON_BIN")
+RAY=("ray_kwargs.ray_init.runtime_env.py_executable='$PYTHON_BIN'")
+if [ "${VERL_USE_UV:-0}" != 0 ] && [ "${DEVICE:-gpu}" = gpu ]; then
     LAUNCH=(uv run --frozen --all-packages --extra fsdp --extra vllm --extra math python3)
     RAY=('ray_kwargs.ray_init.runtime_env.py_executable="uv run --frozen --all-packages --extra fsdp --extra vllm --extra math"')
 fi

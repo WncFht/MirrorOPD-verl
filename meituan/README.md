@@ -59,6 +59,35 @@ export VERL_USE_UV=0
 python -m verl.trainer.main_ppo --help
 ```
 
+本项目数学配方已默认选择 `<仓库绝对路径>/.venv-native/bin/python`，并将同一个路径传给 Ray worker。可先运行 `DRY_RUN=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh` 检查命令，再用 `CONFIG_ONLY=1` 解析配置。需要其他环境时显式设置 `PYTHON_BIN=/绝对路径/bin/python`；不要把它指向只包含系统预装包的 `/bin/python3`。
+
+## 模型与数据布局
+
+模型和数据放在源码仓库的相邻目录，以便多个项目共享，也避免每次上传源码包时重复传输。当前配方默认复用相邻 `models/` 与 `MD-OPD/data/`，无需移动本机已经准备好的文件。
+
+```text
+fanghaotian/
+├── MirrorOPD-verl/
+│   ├── .venv-native/
+│   ├── outputs/
+│   └── wandb/
+├── models/
+│   ├── DeepSeek-R1-Distill-Qwen-1.5B/
+│   └── JustRL-DeepSeek-1.5B/
+└── MD-OPD/
+    └── data/math/
+        ├── DAPO/train.parquet
+        ├── MATH-500/test.parquet
+        ├── AMC23/test.parquet
+        └── AIME25/test.parquet
+```
+
+模型目录使用完整的 Hugging Face 格式快照，包含配置、tokenizer、权重文件，分片权重还需 index 和全部分片。仅复制 Hugging Face cache 中的符号链接不能保证在开发机可用，应一并传输其指向的真实文件。数据使用本项目已预处理的 parquet，不用原始 JSON 直接替换。
+
+开发机也可以采用独立的共享数据目录，例如 `fanghaotian/datasets/opd/`，保留其下的 `math/<数据集>/` 结构，启动时指定 `DATA_ROOT=/绝对路径/datasets/opd`。`MODEL_ROOT`、`DATA_ROOT` 只指定目录；student、teacher 和四个 parquet 文件名由配方拼接。需要不同文件时分别覆盖 `STUDENT_MODEL`、`TEACHER_MODEL`、`TRAIN_FILE`、`MATH_FILE`、`AMC_FILE`、`AIME_FILE`。
+
+`make archive-pack` 只负责源码；上述模型和数据需要另行准备并人工传输一次。已有文件无需随每次代码同步重传。
+
 ## 日志下载
 
 在开发机执行：
