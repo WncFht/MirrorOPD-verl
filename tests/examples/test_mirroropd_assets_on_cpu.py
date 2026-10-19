@@ -80,18 +80,21 @@ def test_missing_raw_answer_is_not_converted_to_a_plausible_string(answer):
         prepare_data.make_row("question", answer, "DAPO", 0)
 
 
-def test_prepare_and_manifest_detects_changed_answers(raw_math, tmp_path, monkeypatch):
+def test_prepared_data_is_checked_from_actual_rows(raw_math, tmp_path, monkeypatch):
     root = tmp_path / "data"
     monkeypatch.setattr(sys, "argv", ["prepare_math_data.py", "--raw-dir", str(raw_math), "--data-root", str(root)])
     prepare_data.main()
     manifest = json.loads((root / "math_manifest.json").read_text())
     path = root / assets.DATASETS["DAPO"]["path"]
-    assert manifest["data"]["DAPO"]["sha256"] == assets.file_sha256(path)
-    rows = pq.read_table(path).to_pylist()
-    rows[0]["reward_model"]["ground_truth"] = "different but well-formed"
-    write_rows(path, rows)
+    assert manifest["data"]["DAPO"]["rows"] == 2
     monkeypatch.setattr(sys, "argv", ["check_assets.py", "--data-only", "--data-root", str(root)])
-    with pytest.raises(ValueError, match="SHA256 does not match"):
+    assets.main()
+    report = json.loads((root / "asset_check.json").read_text())
+    assert report["models"] == {} and report["data"]["DAPO"]["rows"] == 2
+    rows = pq.read_table(path).to_pylist()
+    rows[0]["reward_model"]["ground_truth"] = " "
+    write_rows(path, rows)
+    with pytest.raises(ValueError, match="ground_truth must be a nonempty string"):
         assets.main()
 
 
@@ -147,7 +150,7 @@ def test_duplicate_questions_are_reported_without_changing_the_recipe(tmp_path, 
     assert counts["same"] == 2
 
 
-def make_tiny_model(folder, swapped=False):
+def make_tiny_model(folder):
     """Save a real one-layer Qwen2 checkpoint and a four-token fast tokenizer."""
     from tokenizers import Tokenizer
     from tokenizers.models import WordLevel
@@ -165,24 +168,24 @@ def make_tiny_model(folder, swapped=False):
             max_position_embeddings=131072,
         )
     ).save_pretrained(folder)
-    vocabulary = {"[UNK]": 0, "<eos>": 1, "1": 3 if swapped else 2, "+": 2 if swapped else 3}
+    vocabulary = {"[UNK]": 0, "<eos>": 1, "1": 2, "+": 3}
     backend = Tokenizer(WordLevel(vocabulary, unk_token="[UNK]"))
     tokenizer = PreTrainedTokenizerFast(tokenizer_object=backend, unk_token="[UNK]", eos_token="<eos>")
     tokenizer.chat_template = "{{ messages[0]['content'] }}"
     tokenizer.save_pretrained(folder)
 
 
-def test_local_model_prepare_materializes_symlinks_and_checks_hashes(tmp_path, monkeypatch):
+def test_local_model_prepare_materializes_symlinks_without_generation_config(tmp_path, monkeypatch):
     source = tmp_path / "source"
     destination = tmp_path / "model"
     for index, name in enumerate(assets.MODELS):
         folder = source / name
         make_tiny_model(folder)
+        (folder / "generation_config.json").unlink()
         weights = folder / "model.safetensors"
         shared = tmp_path / f"weights-{index}.safetensors"
         weights.rename(shared)
         weights.symlink_to(shared)
-        monkeypatch.setitem(assets.MODELS[name], "weight_sha256", assets.file_sha256(shared))
     monkeypatch.setattr(
         sys, "argv", ["prepare_models.py", "--source-root", str(source), "--model-root", str(destination)]
     )
@@ -190,26 +193,20 @@ def test_local_model_prepare_materializes_symlinks_and_checks_hashes(tmp_path, m
     for name in assets.MODELS:
         assert (destination / name / "model.safetensors").is_file()
         assert not (destination / name / "model.safetensors").is_symlink()
+        assert not (destination / name / "generation_config.json").exists()
+        # The separate chat template must survive materialization for prompt length checks.
+        from transformers import AutoTokenizer
+
+        tokenizer = AutoTokenizer.from_pretrained(destination / name, local_files_only=True)
+        assert tokenizer.apply_chat_template([{"role": "user", "content": "1 + 1"}], tokenize=False) == "1 + 1"
     assert (destination / "model_manifest.json").is_file()
 
 
-def test_missing_layer_tensor_is_rejected(tmp_path):
-    from safetensors.numpy import load_file, save_file
-
+def test_missing_weight_file_is_rejected(tmp_path):
     name = next(iter(assets.MODELS))
     folder = tmp_path / name
     make_tiny_model(folder)
     weights = folder / "model.safetensors"
-    tensors = load_file(weights)
-    tensors.pop("model.layers.0.mlp.gate_proj.weight")
-    save_file(tensors, weights)
-    with pytest.raises(ValueError, match="tensor names"):
+    weights.unlink()
+    with pytest.raises(FileNotFoundError, match="model.safetensors"):
         assets.check_model(folder, name)
-
-
-def test_incompatible_token_id_mappings_are_rejected(tmp_path, monkeypatch):
-    for index, name in enumerate(assets.MODELS):
-        make_tiny_model(tmp_path / name, swapped=bool(index))
-    monkeypatch.setattr(sys, "argv", ["check_assets.py", "--model-root", str(tmp_path)])
-    with pytest.raises(ValueError, match="token-to-ID mappings differ"):
-        assets.main()

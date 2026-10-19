@@ -7,11 +7,11 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from check_assets import MODEL_FILES, MODEL_ROOT, MODELS, check_model, file_sha256, write_json
+from check_assets import MODEL_FILES, MODEL_ROOT, MODELS, OPTIONAL_MODEL_FILES, check_model, write_json
 
 
 def main():
-    """Copy complete local snapshots or explicitly download fixed Hub revisions, then verify hashes."""
+    """Copy local model files or explicitly download fixed Hub revisions."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model-root", type=Path, default=MODEL_ROOT)
     source = parser.add_mutually_exclusive_group(required=True)
@@ -37,7 +37,7 @@ def main():
                     snapshot_download(
                         repo_id=spec["repo"],
                         revision=spec["revision"],
-                        allow_patterns=[*MODEL_FILES, "README.md", "LICENSE*", "chat_template.jinja"],
+                        allow_patterns=[*MODEL_FILES, *OPTIONAL_MODEL_FILES, "LICENSE*"],
                     )
                 )
             else:
@@ -47,24 +47,21 @@ def main():
                 # Materialize snapshot symlinks so transfers do not depend on a separate HF cache.
                 shutil.copy2(source_folder / filename, destination / filename)
             for source_file in [
-                source_folder / "README.md",
-                source_folder / "chat_template.jinja",
+                *(source_folder / filename for filename in OPTIONAL_MODEL_FILES),
                 *source_folder.glob("LICENSE*"),
             ]:
                 if source_file.is_file():
                     shutil.copy2(source_file, destination / source_file.name)
-            result, _ = check_model(destination, name, verify_sha256=True)
+            result = check_model(destination, name)
             result["path"] = name
-            result["metadata_sha256"] = {
-                filename: file_sha256(destination / filename)
-                for filename in (*MODEL_FILES, "chat_template.jinja")
-                if filename.endswith((".json", ".jinja")) and (destination / filename).is_file()
-            }
+            result["source"] = str(source_folder)
+            if args.download:
+                result.update(repo=spec["repo"], revision=spec["revision"])
             reports[name] = result
         for name in MODELS:
             (staged / name).replace(root / name)
     write_json(root / "model_manifest.json", {"mode": "download" if args.download else "import", "models": reports})
-    print(f"Prepared pinned model snapshots: {root}")
+    print(f"Prepared model directories: {root}")
 
 
 if __name__ == "__main__":

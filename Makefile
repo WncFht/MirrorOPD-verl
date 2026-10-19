@@ -43,7 +43,7 @@ help:
 	@echo '结果下载：make sync-results-pack [RESULTS_REMOTE_DIR=outputs]；传回后 make sync-results-unpack [RESULTS_ARCHIVE=...]'
 	@echo '离线环境：make native-install；make native-check（开发机，系统 Python 3.12）'
 	@echo 'W&B 验证：make wandb-check（只写一条离线日志，不加载模型）'
-	@echo '训练资产：make assets-check [MODEL_ROOT=../model] [DATA_ROOT=../data] [ASSET_CHECK_ARGS=--verify-model-sha256]'
+	@echo '训练资产：make assets-check [MODEL_ROOT=../model] [DATA_ROOT=../data] [ASSET_CHECK_ARGS=--data-only]'
 	@echo '压缩包默认放在 transfer_snap/，超过 10 MiB 分卷；上传下载由人工完成。'
 	@echo '源码打包成功后清理旧源码包；解包成功后删除输入包，可设 KEEP_ARCHIVE_AFTER_UNPACK=1 保留。'
 
@@ -79,7 +79,7 @@ native-unpack:
 
 native-install: native-env native-unpack
 	$(NATIVE_PYTHON) -m pip install --no-index --no-deps --no-build-isolation -e .
-	$(NATIVE_PYTHON) -m pip install --no-index --no-deps --require-hashes --find-links=offline-wheels -r meituan/requirements-native.txt
+	$(NATIVE_PYTHON) -m pip install --no-index --no-deps --find-links=offline-wheels -r meituan/requirements-native.txt
 
 native-check: native-unpack
 	$(NATIVE_PYTHON) offline-wheels/check_native_env.py

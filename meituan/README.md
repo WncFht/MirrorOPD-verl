@@ -38,7 +38,7 @@ make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.g
 
 ## 原生 Python 与离线依赖
 
-仓库包含 `packages/mirroropd-native-deps-20261020.zip`，内容是 PyPI 官方发布的 TransferQueue 0.1.11、liger-kernel 0.8.4 wheel、来源与 SHA-256 清单，以及环境检查脚本。两个 wheel 都是 `py3-none-any`，无需编译 CUDA 扩展。[^transferqueue] [^liger]
+仓库包含 `packages/mirroropd-native-deps-20261020.zip`，内容是 PyPI 官方发布的 TransferQueue 0.1.11、liger-kernel 0.8.4 wheel、来源说明，以及环境检查脚本。两个 wheel 都是 `py3-none-any`，无需编译 CUDA 扩展。[^transferqueue] [^liger]
 
 将源码包上传并解压到开发机项目目录后执行：
 
@@ -47,7 +47,7 @@ make native-install
 make native-check
 ```
 
-`native-install` 使用 `/bin/python3` 创建 `.venv-native`，继承预装的 GPU 依赖；将 ZIP 解压到被 Git 忽略的 `offline-wheels/`；离线安装本项目源码及两个缺失包，并通过 pip 校验固定哈希。它不会联网解析依赖。pytest 等开发机额外工具需要预先安装；这两个 wheel 不构成完整 GPU 环境。
+`native-install` 使用 `/bin/python3` 创建 `.venv-native`，继承预装的 GPU 依赖；将 ZIP 解压到被 Git 忽略的 `offline-wheels/`；按固定版本离线安装本项目源码及两个缺失包。它不会联网解析依赖。pytest 等开发机额外工具需要预先安装；这两个 wheel 不构成完整 GPU 环境。
 
 `native-check` 检查解释器、源码路径、包版本、vLLM 0.25.1 的 `_C_stable_libtorch` 扩展和其他导入，并报告 GPU 是否可见。它不启动训练，GPU kernel 和完整训练还需单独验收。
 
@@ -83,11 +83,11 @@ fanghaotian/
         └── AIME25/test.parquet
 ```
 
-当前两个固定模型使用完整的 Hugging Face 格式快照，包含配置、tokenizer、chat template 与 `model.safetensors`。`examples/mirroropd/prepare_models.py` 可复制已有目录并物化 HF 缓存符号链接，或在可联网机器显式下载固定版本。数据使用已预处理的 parquet；`prepare_math_data.py` 支持从旧 parquet 导入，或从原始文件重建。
+当前两个模型使用 Hugging Face 格式目录，包含配置、tokenizer 与 `model.safetensors`；`generation_config.json` 可选，chat template 可以包含在 tokenizer 配置中或单独保存。`examples/mirroropd/prepare_models.py` 可复制已有目录并物化 HF 缓存符号链接，或在可联网机器显式下载固定版本。数据使用已预处理的 parquet；`prepare_math_data.py` 支持从旧 parquet 导入，或从原始文件重建。
 
 `MODEL_ROOT`、`DATA_ROOT` 只指定目录；student、teacher 和四个 parquet 文件名由配方拼接。默认会自动定位仓库相邻的 `model/`、`data/`。需要不同文件时分别覆盖 `STUDENT_MODEL`、`TEACHER_MODEL`、`TRAIN_FILE`、`MATH_FILE`、`AMC_FILE`、`AIME_FILE`。
 
-模型和数据准备后执行 `make assets-check`；首次传输模型后可执行 `make assets-check ASSET_CHECK_ARGS=--verify-model-sha256`，完整读取约 7.1 GB 权重并核对固定哈希。检查报告写到 `data/asset_check.json`。准备方式、检查项及已发现的数据重复和题面重叠见 [数学资产说明](../examples/mirroropd/README.md)。这些检查在 CPU 完成，不加载模型 tensor，不启动 GPU 训练。
+模型和数据准备后执行 `make assets-check`；模型仅检查必要文件，重点检查四份数据的字段、行数、空答案、重复题、题面重叠和 prompt 长度。只查数据可用 `make assets-check ASSET_CHECK_ARGS=--data-only`，会跳过模型与 token 长度计算。检查报告写到 `data/asset_check.json`。准备方式及检查范围见 [数学资产说明](../examples/mirroropd/README.md)。这些检查在 CPU 完成，不加载模型 tensor，不启动 GPU 训练。
 
 `make archive-pack` 只负责源码；上述模型和数据需要另行准备并人工传输一次。已有文件无需随每次代码同步重传。
 
@@ -145,7 +145,7 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 
 ## 验证
 
-单包上传前在 Mac 执行 `shasum -a 256 <源码包>`，开发机执行 `sha256sum <上传的源码包>`，比较哈希；分卷对每个文件分别比较。源码包内容可用 `tar -tzf <源码包>` 查看，应包含 `Makefile`、`AGENTS.md`、`meituan/`、`verl/` 等源码，包含离线 ZIP，排除虚拟环境、模型和训练输出。
+源码包内容可用 `tar -tzf <源码包>` 查看，应包含 `Makefile`、`AGENTS.md`、`meituan/`、`verl/` 等源码，包含离线 ZIP，排除虚拟环境、模型和训练输出。分卷需要全部上传后再解包。
 
 开发机先运行 `make native-check`，确认本仓库源码路径、两个补充依赖和 vLLM 扩展导入正确；运行 `make assets-check` 检查模型及四份数据。再单独测试 GPU 张量运算；上述检查不替代完整训练验收。
 
@@ -160,5 +160,5 @@ make sync-log-pack
 
 ### 参考文献
 
-[^transferqueue]: TransferQueue contributors. TransferQueue 0.1.11 release files. PyPI, 2026. [发布页](https://pypi.org/project/TransferQueue/0.1.11/)。wheel 来源与哈希保存在 ZIP 内的 `sources.json`、`SHA256SUMS`。
-[^liger]: Liger Kernel contributors. liger-kernel 0.8.4 release files. PyPI, 2026. [发布页](https://pypi.org/project/liger-kernel/0.8.4/)。wheel 来源与哈希保存在 ZIP 内的 `sources.json`、`SHA256SUMS`。
+[^transferqueue]: TransferQueue contributors. TransferQueue 0.1.11 release files. PyPI, 2026. [发布页](https://pypi.org/project/TransferQueue/0.1.11/)。wheel 来源保存在 ZIP 内的 `sources.json`。
+[^liger]: Liger Kernel contributors. liger-kernel 0.8.4 release files. PyPI, 2026. [发布页](https://pypi.org/project/liger-kernel/0.8.4/)。wheel 来源保存在 ZIP 内的 `sources.json`。

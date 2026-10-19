@@ -1,9 +1,8 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Validate the fixed math recipe's local models and parquet files on CPU."""
+"""Validate math data on CPU, with minimal local model file checks."""
 
 import argparse
-import hashlib
 import json
 import os
 from collections import Counter
@@ -21,15 +20,14 @@ MODELS = {
     "DeepSeek-R1-Distill-Qwen-1.5B": {
         "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
         "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
-        "weight_sha256": "58858233513d76b8703e72eed6ce16807b523328188e13329257fb9594462945",
     },
     "JustRL-DeepSeek-1.5B": {
         "repo": "hbx/JustRL-DeepSeek-1.5B",
         "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
-        "weight_sha256": "1bedcdf243c4e2e633fa04c05617809cf6a1bbc1a07221609035f6347efecffb",
     },
 }
-MODEL_FILES = ("config.json", "generation_config.json", "tokenizer.json", "tokenizer_config.json", "model.safetensors")
+MODEL_FILES = ("config.json", "tokenizer.json", "tokenizer_config.json", "model.safetensors")
+OPTIONAL_MODEL_FILES = ("generation_config.json", "chat_template.jinja", "README.md")
 DATASETS = {
     "DAPO": {"path": "math/DAPO/train.parquet", "rows": 17917, "split": "train"},
     "MATH-500": {"path": "math/MATH-500/test.parquet", "rows": 500, "split": "test"},
@@ -56,15 +54,6 @@ SCHEMA = pa.schema(
         ),
     ]
 )
-
-
-def file_sha256(path):
-    """Hash files incrementally, including multi-gigabyte model weights when requested."""
-    digest = hashlib.sha256()
-    with Path(path).open("rb") as stream:
-        while chunk := stream.read(8 * 1024 * 1024):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def write_json(path, value):
@@ -129,7 +118,6 @@ def check_data(path, name, tokenizer=None, max_prompt_length=4096):
     report = {
         "path": str(path.resolve()),
         "rows": len(rows),
-        "sha256": file_sha256(path),
         "duplicate_prompt_rows": len(prompts) - len(counts),
     }
     if tokenizer is not None:
@@ -148,11 +136,8 @@ def check_data(path, name, tokenizer=None, max_prompt_length=4096):
     return report, counts
 
 
-def check_model(folder, name, verify_sha256=False):
-    """Check complete fixed snapshots, safetensors payload boundaries and a loadable tokenizer."""
-    from safetensors import safe_open
-    from transformers import AutoTokenizer
-
+def check_model(folder, name):
+    """Check required files without reading weights; generation configuration is optional."""
     folder = Path(folder)
     for filename in MODEL_FILES:
         path = folder / filename
@@ -161,62 +146,14 @@ def check_model(folder, name, verify_sha256=False):
         if filename.endswith(".json"):
             json.loads(path.read_text())
     config = json.loads((folder / "config.json").read_text())
-    if config["model_type"] != "qwen2":
-        raise ValueError(f"{folder}: expected qwen2 model, got {config['model_type']}")
     weights = folder / "model.safetensors"
-    hidden = config["hidden_size"]
-    intermediate = config["intermediate_size"]
-    key_value = config["num_key_value_heads"] * (hidden // config["num_attention_heads"])
-    expected_shapes = {
-        "model.embed_tokens.weight": [config["vocab_size"], hidden],
-        "lm_head.weight": [config["vocab_size"], hidden],
-        "model.norm.weight": [hidden],
-    }
-    layer_shapes = {
-        "input_layernorm.weight": [hidden],
-        "post_attention_layernorm.weight": [hidden],
-        "self_attn.q_proj.weight": [hidden, hidden],
-        "self_attn.q_proj.bias": [hidden],
-        "self_attn.k_proj.weight": [key_value, hidden],
-        "self_attn.k_proj.bias": [key_value],
-        "self_attn.v_proj.weight": [key_value, hidden],
-        "self_attn.v_proj.bias": [key_value],
-        "self_attn.o_proj.weight": [hidden, hidden],
-        "mlp.gate_proj.weight": [intermediate, hidden],
-        "mlp.up_proj.weight": [intermediate, hidden],
-        "mlp.down_proj.weight": [hidden, intermediate],
-    }
-    for layer in range(config["num_hidden_layers"]):
-        expected_shapes.update({f"model.layers.{layer}.{key}": shape for key, shape in layer_shapes.items()})
-    with safe_open(str(weights), framework="pt", device="cpu") as tensors:
-        keys = set(tensors.keys())
-        if keys != set(expected_shapes):
-            raise ValueError(f"{folder}: checkpoint tensor names differ from the complete Qwen2 configuration")
-        for key, shape in expected_shapes.items():
-            if tensors.get_slice(key).get_shape() != shape:
-                raise ValueError(f"{folder}: incompatible tensor shape for {key}")
-        tensor_count = len(keys)
-    tokenizer = AutoTokenizer.from_pretrained(folder, local_files_only=True, trust_remote_code=False)
-    if max(tokenizer.get_vocab().values()) >= config["vocab_size"]:
-        raise ValueError(f"{folder}: tokenizer IDs exceed model vocabulary size")
-    tokenizer.apply_chat_template([{"role": "user", "content": "1 + 1 = ?"}], add_generation_prompt=True, tokenize=True)
     report = {
         "path": str(folder.resolve()),
-        "expected_repo": MODELS[name]["repo"],
-        "expected_revision": MODELS[name]["revision"],
         "weight_bytes": weights.stat().st_size,
-        "tensor_count": tensor_count,
-        "vocab_size": config["vocab_size"],
-        "tokenizer_size": len(tokenizer),
-        "max_position_embeddings": config["max_position_embeddings"],
-        "weight_sha256_verified": verify_sha256,
+        "model_type": config.get("model_type"),
     }
-    if verify_sha256:
-        report["weight_sha256"] = file_sha256(weights)
-        if report["weight_sha256"] != MODELS[name]["weight_sha256"]:
-            raise ValueError(f"{weights}: SHA256 differs from the pinned model snapshot")
-    print(f"OK model {name}: {tensor_count} tensors, {len(tokenizer)} tokenizer entries", flush=True)
-    return report, tokenizer
+    print(f"OK model {name}: required files present", flush=True)
+    return report
 
 
 def main():
@@ -225,34 +162,21 @@ def main():
     parser.add_argument("--model-root", type=Path, default=MODEL_ROOT)
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     parser.add_argument("--data-only", action="store_true", help="skip models and prompt tokenization")
-    parser.add_argument("--verify-model-sha256", action="store_true", help="read and hash both complete weight files")
     parser.add_argument("--max-prompt-length", type=int, default=4096)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
     report = {"checked_at": datetime.now(ZoneInfo("Asia/Shanghai")).isoformat(), "models": {}, "data": {}}
     tokenizer = None
     if not args.data_only:
-        tokenizers = []
+        from transformers import AutoTokenizer
+
         for name in MODELS:
-            result, tok = check_model(args.model_root / name, name, args.verify_model_sha256)
-            report["models"][name] = result
-            tokenizers.append(tok)
-        if tokenizers[0].get_vocab() != tokenizers[1].get_vocab():
-            raise ValueError(
-                "Student and teacher token-to-ID mappings differ; token-level distillation is incompatible"
-            )
-        if tokenizers[0].all_special_ids != tokenizers[1].all_special_ids:
-            raise ValueError("Student and teacher special token IDs differ")
-        tokenizer = tokenizers[0]
-        report["tokenizer_ids_match"] = True
+            report["models"][name] = check_model(args.model_root / name, name)
+        student = args.model_root / next(iter(MODELS))
+        tokenizer = AutoTokenizer.from_pretrained(student, local_files_only=True, trust_remote_code=False)
     prompt_sets = {}
-    manifest_path = args.data_root / "math_manifest.json"
-    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else None
-    report["data_manifest_verified"] = manifest is not None
     for name, spec in DATASETS.items():
         result, prompts = check_data(args.data_root / spec["path"], name, tokenizer, args.max_prompt_length)
-        if manifest is not None and manifest["data"][name]["sha256"] != result["sha256"]:
-            raise ValueError(f"{name}: file SHA256 does not match math_manifest.json")
         report["data"][name] = result
         prompt_sets[name] = set(prompts)
     report["exact_train_validation_overlap"] = {

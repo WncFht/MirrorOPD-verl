@@ -17,7 +17,7 @@ from pathlib import Path
 
 import pyarrow as pa
 import pyarrow.parquet as pq
-from check_assets import DATA_ROOT, DATASETS, SCHEMA, check_data, file_sha256, write_json
+from check_assets import DATA_ROOT, DATASETS, SCHEMA, check_data, write_json
 
 RAW_FILES = {
     "dapo-math-17k.parquet": ("BytedTsinghua-SIA/DAPO-Math-17k", "data/dapo-math-17k.parquet"),
@@ -134,12 +134,10 @@ def main():
         download_raw(raw_dir)
     if not args.source_root:
         for filename, (repo, member) in RAW_FILES.items():
-            path = raw_dir / filename
             manifest["raw"][filename] = {
                 "repo": repo,
                 "member": member,
                 "mirror_revision": "master",
-                "sha256": file_sha256(path),
             }
     with tempfile.TemporaryDirectory(prefix=".prepare-math-", dir=root) as temp:
         staged = Path(temp)

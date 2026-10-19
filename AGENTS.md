@@ -21,6 +21,7 @@
 - 运行现有示例前激活 `.venv-native` 并设置 `VERL_USE_UV=0`，避免示例自动切回上游 uv/CUDA 13 环境。
 - 本项目数学配方默认直接使用仓库 `.venv-native/bin/python` 的绝对路径，driver 与 Ray worker 共用；其他上游示例仍按前条约定运行。
 - 训练资产统一放在仓库同级 `model/`（单数）和 `data/`。开发机基目录为 `/home/hadoop-hmart-poistar/dolphinfs_hdd_hadoop-hmart-poistar/fanghaotian/`；准备脚本位于 `examples/mirroropd/`，运行前执行 `make assets-check`。本机原有 `models/` 和 `MD-OPD/data/` 作为导入来源保留。
+- 资产检查重点是数据；模型只检查必要文件，`generation_config.json` 可选。用户要求项目自有工具不增加文件摘要计算、校验或清单。
 - 2026-10-20 已观察到的开发机配置是 Python 3.12.13、A100 80GB、R535 驱动、PyTorch 2.11.0+cu128、vLLM 0.25.1+cu129；GPU 导入与实际训练验收分别进行，不把安装完成视为训练通过。
 - 脚本保持 Bash 3.2 兼容，使用 `set -eo pipefail`；通用传输逻辑使用 Python 标准库，Mac 和 Linux 共用同一入口。
 - 数学配方默认离线 W&B，实际 run 保存到仓库 `wandb/`；同步参数 `WANDB_RUNS_DIR` 指实际 run 目录，SDK 的 `WANDB_DIR` 指其父级根目录。源码 archive 自动清理旧包，日志和结果增量包保留到人工处理。

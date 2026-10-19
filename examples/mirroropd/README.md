@@ -23,9 +23,9 @@ fanghaotian/
 
 | 脚本 | 用途 |
 | --- | --- |
-| [prepare_models.py](prepare_models.py) | 从已有目录复制完整快照、物化缓存符号链接，或显式下载固定 Hub revision；核对完整权重 SHA-256，写 `model_manifest.json` |
+| [prepare_models.py](prepare_models.py) | 从已有目录复制模型文件、物化缓存符号链接，或显式下载固定 Hub revision；写 `model_manifest.json` |
 | [prepare_math_data.py](prepare_math_data.py) | 导入已有 parquet，或从五个原始文件重建四份数学数据；统一 Arrow schema，写 `math_manifest.json` |
-| [check_assets.py](check_assets.py) | 检查模型结构、tokenizer ID 映射、全部数据行、SHA-256、prompt 长度、重复与训练/验证题面重叠，写 `asset_check.json` |
+| [check_assets.py](check_assets.py) | 模型仅检查必要文件；逐行检查数据，统计 prompt 长度、重复与训练/验证题面重叠，写 `asset_check.json` |
 
 在已有资产的机器上，可以离线导入旧目录；路径参数填写该机器的实际绝对路径：
 
@@ -36,7 +36,7 @@ fanghaotian/
   --source-root /已有的/MD-OPD/data --data-root /目标/data
 ```
 
-原文件保留，目标文件按新目录创建。数据输出已存在时默认拒绝覆盖；确认要重建时显式传 `--overwrite`。模型目标已存在时使用检查脚本核对。模型导入会读取、复制并校验约 7.1 GB 权重，只需执行一次。
+原文件保留，目标文件按新目录创建。数据输出已存在时默认拒绝覆盖；确认要重建时显式传 `--overwrite`。模型目标已存在时直接运行检查，无需重新导入。复制两个模型约涉及 7.1 GB 权重，只需执行一次。
 
 从原始数据重建时使用 `--raw-dir`；源目录包含 `dapo-math-17k.parquet`、`math500_test.jsonl`、`amc23.parquet`、`aime2025-I.jsonl`、`aime2025-II.jsonl`。转换沿用固定 MD-OPD 的数学规则：DAPO 按源 `extra_info.index` 保留第一次出现，去掉原始 Answer 格式包装；AMC/AIME 与 MATH-500 保留各自题面和答案，AIME 按 I、II 顺序合并。[^math-prep]
 
@@ -48,23 +48,23 @@ fanghaotian/
 .venv-native/bin/python examples/mirroropd/prepare_math_data.py --download
 ```
 
-模型下载固定为 DeepSeek `ad9f0ae0`、JustRL `0637e409`，权重哈希来自对应快照。[^student-model] [^teacher-model] 数据下载使用 ModelScope 的上述原始数据镜像，镜像 revision 为 `master`；实际原始文件 SHA-256 写入 manifest。重复实验应保留原始文件及 manifest，不把浮动镜像 revision 当作不可变版本。
+模型下载固定为 DeepSeek `ad9f0ae0`、JustRL `0637e409`。[^student-model] [^teacher-model] 数据下载使用 ModelScope 的上述原始数据镜像，镜像 revision 为 `master`；manifest 记录来源与数据行数。重复实验应保留原始文件，不把浮动镜像 revision 当作不可变版本。
 
 准备完成后在开发机执行：
 
 ```bash
 make assets-check
-# 首次传输模型后建议读取完整权重并核对固定哈希：
-make assets-check ASSET_CHECK_ARGS=--verify-model-sha256
+# 只检查数据，不要求模型已到位：
+make assets-check ASSET_CHECK_ARGS=--data-only
 ```
 
-模型尚未到位时可先执行 `make assets-check ASSET_CHECK_ARGS=--data-only`，此时只检查 parquet 结构、内容字段和文件哈希，不计算 tokenizer 长度。
+默认模型检查只要求 `config.json`、`tokenizer.json`、`tokenizer_config.json`、`model.safetensors` 存在且非空，配置 JSON 能解析。`generation_config.json` 是可选文件，缺少时不报错；准备脚本在来源中有该文件时会保留它。检查不读取完整权重或逐张量核对，也不计算文件摘要。student tokenizer 仅用于计算数据 prompt 长度；`--data-only` 跳过模型和 tokenizer，不计算 token 长度。
 
-检查要求四份数据分别为 17917、500、40、30 行，五个字段及嵌套类型一致；每行必须有 user prompt、正确 `data_source`、`ability=math`、非空字符串答案、`style=rule`、正确 split 和唯一 `extra_info.index`。有 `math_manifest.json` 时还核对每个 parquet 的文件 SHA-256。模型检查固定 Qwen2 配置要求的全部 tensor 名称和形状，比较 student/teacher 完整 token-to-ID 映射。prompt 长度使用 student 的 chat template 和 generation prompt 计算；超过限制的数量会报告，训练端仍按 `filter_overlong_prompts` 处理。
+检查要求四份数据分别为 17917、500、40、30 行，五个字段及嵌套类型一致；每行必须有非空 user prompt、正确 `data_source`、`ability=math`、非空字符串答案、`style=rule`、正确 split 和唯一 `extra_info.index`。直接检查实际 parquet 内容，不依赖 manifest。prompt 长度使用 student 的 chat template 和 generation prompt 计算；超过限制的数量会报告，训练端仍按 `filter_overlong_prompts` 处理。这些检查确认数据格式与训练入口兼容，不能判定题目的标准答案是否正确。
 
 重复题面和训练/验证交集只报告，不自动改变配方。2026-10-20 本机重建的 18487 行与既有数据逐行一致；DAPO 有 662 行重复题面，与 MATH-500、AMC23、AIME25 分别有 2、5、0 道完全相同的题面。完整词面匹配不是语义去污染；若要删除重叠，应另建数据版本和对照实验。
 
-同次 CPU 检查确认两个模型各 339 个 tensor、151665 个 tokenizer 条目，token ID 映射一致，完整权重 SHA-256 匹配。四份数据的最大 prompt 长度分别为 1493、796、220、258 token，均未超过 4096；没有执行 GPU 训练。
+同次 CPU 检查确认四份数据的最大 prompt 长度分别为 1493、796、220、258 token，均未超过 4096；没有执行 GPU 训练。
 
 模型和数据需要另行上传一次，不进入 `make archive-pack` 的源码包。数据传输包应包含顶层 `data/`，在开发机解压到上述 `fanghaotian/` 基目录后再运行检查；这类资产包使用普通 `tar -xzf ... -C <基目录>`，不使用会保护运行目录的源码 `archive-unpack`。
 
