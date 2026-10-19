@@ -129,7 +129,19 @@ def test_uv_launch_includes_math_dependencies_for_driver_and_workers(tmp_path):
 def test_default_launch_uses_absolute_native_interpreter():
     """Default launch selection must not depend on activation or the ambient Python PATH."""
     env = os.environ.copy()
-    for name in ("PYTHON_BIN", "VERL_USE_UV", "CUDA_VISIBLE_DEVICES"):
+    for name in (
+        "PYTHON_BIN",
+        "VERL_USE_UV",
+        "CUDA_VISIBLE_DEVICES",
+        "MODEL_ROOT",
+        "DATA_ROOT",
+        "STUDENT_MODEL",
+        "TEACHER_MODEL",
+        "TRAIN_FILE",
+        "MATH_FILE",
+        "AMC_FILE",
+        "AIME_FILE",
+    ):
         env.pop(name, None)
     env["DRY_RUN"] = "1"
     result = subprocess.run(["bash", str(SCRIPT)], env=env, capture_output=True, text=True)
@@ -138,6 +150,8 @@ def test_default_launch_uses_absolute_native_interpreter():
     expected = str(ROOT / ".venv-native/bin/python")
     assert command[0] == expected
     assert f"ray_kwargs.ray_init.runtime_env.py_executable='{expected}'" in command
+    assert f"actor_rollout_ref.model.path='{ROOT.parent / 'model/DeepSeek-R1-Distill-Qwen-1.5B'}'" in command
+    assert any(str(ROOT.parent / "data/math/DAPO/train.parquet") in argument for argument in command)
 
 
 def test_explicit_native_interpreter_reaches_ray_workers(tmp_path):

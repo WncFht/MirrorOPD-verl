@@ -22,7 +22,7 @@ make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.g
 make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.gz.part.000
 ```
 
-源码包使用当前工作区中的文件，包含尚未提交的修改和 `meituan/packages/` 下的离线 ZIP。有 Git 时读取已跟踪文件和未被忽略的新增文件；无 Git 时扫描源码目录。默认排除 `.git`、虚拟环境、缓存、`models/`、`data/`、`outputs/`、`results/`、`wandb/`、checkpoint 和已有传输包。
+源码包使用当前工作区中的文件，包含尚未提交的修改和 `meituan/packages/` 下的离线 ZIP。有 Git 时读取已跟踪文件和未被忽略的新增文件；无 Git 时扫描源码目录。默认排除 `.git`、虚拟环境、缓存、`model/`、`models/`、`data/`、`outputs/`、`results/`、`wandb/`、checkpoint 和已有传输包。
 
 源码解包沿用 MD-OPD 的替换语义：先完整解包到临时目录，再替换归档涉及的顶层文件或目录，例如 `verl/`、`examples/`、`meituan/`。这些目录中未进入新包的旧文件也会移除；运行目录不参与替换。解包前应保存接收端在这些源码目录里的修改。
 
@@ -63,7 +63,7 @@ python -m verl.trainer.main_ppo --help
 
 ## 模型与数据布局
 
-模型和数据放在源码仓库的相邻目录，以便多个项目共享，也避免每次上传源码包时重复传输。当前配方默认复用相邻 `models/` 与 `MD-OPD/data/`，无需移动本机已经准备好的文件。
+模型和数据统一放在源码仓库相邻的 `model/`（单数）与 `data/`，供开发机和训练任务共享。开发机基目录为 `/home/hadoop-hmart-poistar/dolphinfs_hdd_hadoop-hmart-poistar/fanghaotian/`。本机原有 `models/`、`MD-OPD/data/` 保留为导入来源；新默认目录不再依赖相邻 MD-OPD checkout。
 
 ```text
 fanghaotian/
@@ -71,20 +71,23 @@ fanghaotian/
 │   ├── .venv-native/
 │   ├── outputs/
 │   └── wandb/
-├── models/
+├── model/
 │   ├── DeepSeek-R1-Distill-Qwen-1.5B/
 │   └── JustRL-DeepSeek-1.5B/
-└── MD-OPD/
-    └── data/math/
+└── data/
+    ├── math_manifest.json
+    └── math/
         ├── DAPO/train.parquet
         ├── MATH-500/test.parquet
         ├── AMC23/test.parquet
         └── AIME25/test.parquet
 ```
 
-模型目录使用完整的 Hugging Face 格式快照，包含配置、tokenizer、权重文件，分片权重还需 index 和全部分片。仅复制 Hugging Face cache 中的符号链接不能保证在开发机可用，应一并传输其指向的真实文件。数据使用本项目已预处理的 parquet，不用原始 JSON 直接替换。
+当前两个固定模型使用完整的 Hugging Face 格式快照，包含配置、tokenizer、chat template 与 `model.safetensors`。`examples/mirroropd/prepare_models.py` 可复制已有目录并物化 HF 缓存符号链接，或在可联网机器显式下载固定版本。数据使用已预处理的 parquet；`prepare_math_data.py` 支持从旧 parquet 导入，或从原始文件重建。
 
-开发机也可以采用独立的共享数据目录，例如 `fanghaotian/datasets/opd/`，保留其下的 `math/<数据集>/` 结构，启动时指定 `DATA_ROOT=/绝对路径/datasets/opd`。`MODEL_ROOT`、`DATA_ROOT` 只指定目录；student、teacher 和四个 parquet 文件名由配方拼接。需要不同文件时分别覆盖 `STUDENT_MODEL`、`TEACHER_MODEL`、`TRAIN_FILE`、`MATH_FILE`、`AMC_FILE`、`AIME_FILE`。
+`MODEL_ROOT`、`DATA_ROOT` 只指定目录；student、teacher 和四个 parquet 文件名由配方拼接。默认会自动定位仓库相邻的 `model/`、`data/`。需要不同文件时分别覆盖 `STUDENT_MODEL`、`TEACHER_MODEL`、`TRAIN_FILE`、`MATH_FILE`、`AMC_FILE`、`AIME_FILE`。
+
+模型和数据准备后执行 `make assets-check`；首次传输模型后可执行 `make assets-check ASSET_CHECK_ARGS=--verify-model-sha256`，完整读取约 7.1 GB 权重并核对固定哈希。检查报告写到 `data/asset_check.json`。准备方式、检查项及已发现的数据重复和题面重叠见 [数学资产说明](../examples/mirroropd/README.md)。这些检查在 CPU 完成，不加载模型 tensor，不启动 GPU 训练。
 
 `make archive-pack` 只负责源码；上述模型和数据需要另行准备并人工传输一次。已有文件无需随每次代码同步重传。
 
@@ -135,6 +138,7 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `MAX_FILE_MB` | `100` | 结果文件大小上限，单位为 MiB |
 | `WANDB_RUNS_DIR` | `wandb` | 实际 W&B run 目录，用于日志打包和合并 |
 | `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；更旧源码包仍清理 |
+| `MODEL_ROOT`、`DATA_ROOT` | `../model`、`../data` 的绝对路径 | 数学资产检查目录 |
 | `LOG_ACTION`、`ACTION` | `unpack` | `make sync-log`、`make sync-results` 的操作 |
 
 三个 shell 脚本保留 `pack`、`unpack` 命令行入口，调用同一套 `transfer.py` 逻辑。直接调用 shell 时用 `MIRROROPD_*` 环境变量设置参数；通常使用 Makefile 即可。
@@ -143,7 +147,7 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 
 单包上传前在 Mac 执行 `shasum -a 256 <源码包>`，开发机执行 `sha256sum <上传的源码包>`，比较哈希；分卷对每个文件分别比较。源码包内容可用 `tar -tzf <源码包>` 查看，应包含 `Makefile`、`AGENTS.md`、`meituan/`、`verl/` 等源码，包含离线 ZIP，排除虚拟环境、模型和训练输出。
 
-开发机先运行 `make native-check`，确认本仓库源码路径、两个补充依赖和 vLLM 扩展导入正确。再单独测试 GPU 张量运算；上述检查不替代完整训练验收。
+开发机先运行 `make native-check`，确认本仓库源码路径、两个补充依赖和 vLLM 扩展导入正确；运行 `make assets-check` 检查模型及四份数据。再单独测试 GPU 张量运算；上述检查不替代完整训练验收。
 
 不加载模型即可验证离线 W&B 是否按约定落盘：
 

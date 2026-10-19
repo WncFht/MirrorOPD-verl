@@ -13,8 +13,8 @@ WORKSPACE=$(dirname -- "$REPO_ROOT")
 cd "$REPO_ROOT"
 
 # ── 1. 模型与数据路径 ────────────────────────────────────────────────
-MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/models}
-DATA_ROOT=${DATA_ROOT:-$WORKSPACE/MD-OPD/data}
+MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
+DATA_ROOT=${DATA_ROOT:-$WORKSPACE/data}
 STUDENT_MODEL=${STUDENT_MODEL:-$MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B}
 TEACHER_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/JustRL-DeepSeek-1.5B}
 TRAIN_FILE=${TRAIN_FILE:-$DATA_ROOT/math/DAPO/train.parquet}

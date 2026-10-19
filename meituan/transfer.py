@@ -23,6 +23,7 @@ RUNTIME_DIRS = {
     ".venvs",
     "venv",
     "ENV",
+    "model",
     "models",
     "data",
     "dataset",

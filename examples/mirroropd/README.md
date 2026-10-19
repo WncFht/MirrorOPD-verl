@@ -2,6 +2,72 @@
 
 四个领域的 verifier 从 One-Shot-OPD commit `6b6b1782cc3f04749dd077de19353f839f6bc048` 迁入，数值与任务判分逻辑保留在 `verl/utils/reward_score/one_shot_opd/`。这里提供一个原生 custom reward 入口；训练算法、reward 冻结方式和 IS 尚未修改。[^source]
 
+## 数学资产准备与检查
+
+模型默认放在仓库同级的 `model/`（单数），数据放在同级 `data/`。开发机基目录为 `/home/hadoop-hmart-poistar/dolphinfs_hdd_hadoop-hmart-poistar/fanghaotian/`：
+
+```text
+fanghaotian/
+├── MirrorOPD-verl/
+├── model/
+│   ├── DeepSeek-R1-Distill-Qwen-1.5B/
+│   └── JustRL-DeepSeek-1.5B/
+└── data/
+    ├── math_manifest.json
+    └── math/
+        ├── DAPO/train.parquet
+        ├── MATH-500/test.parquet
+        ├── AMC23/test.parquet
+        └── AIME25/test.parquet
+```
+
+| 脚本 | 用途 |
+| --- | --- |
+| [prepare_models.py](prepare_models.py) | 从已有目录复制完整快照、物化缓存符号链接，或显式下载固定 Hub revision；核对完整权重 SHA-256，写 `model_manifest.json` |
+| [prepare_math_data.py](prepare_math_data.py) | 导入已有 parquet，或从五个原始文件重建四份数学数据；统一 Arrow schema，写 `math_manifest.json` |
+| [check_assets.py](check_assets.py) | 检查模型结构、tokenizer ID 映射、全部数据行、SHA-256、prompt 长度、重复与训练/验证题面重叠，写 `asset_check.json` |
+
+在已有资产的机器上，可以离线导入旧目录；路径参数填写该机器的实际绝对路径：
+
+```bash
+.venv-native/bin/python examples/mirroropd/prepare_models.py \
+  --source-root /已有的/models --model-root /目标/model
+.venv-native/bin/python examples/mirroropd/prepare_math_data.py \
+  --source-root /已有的/MD-OPD/data --data-root /目标/data
+```
+
+原文件保留，目标文件按新目录创建。数据输出已存在时默认拒绝覆盖；确认要重建时显式传 `--overwrite`。模型目标已存在时使用检查脚本核对。模型导入会读取、复制并校验约 7.1 GB 权重，只需执行一次。
+
+从原始数据重建时使用 `--raw-dir`；源目录包含 `dapo-math-17k.parquet`、`math500_test.jsonl`、`amc23.parquet`、`aime2025-I.jsonl`、`aime2025-II.jsonl`。转换沿用固定 MD-OPD 的数学规则：DAPO 按源 `extra_info.index` 保留第一次出现，去掉原始 Answer 格式包装；AMC/AIME 与 MATH-500 保留各自题面和答案，AIME 按 I、II 顺序合并。[^math-prep]
+
+```bash
+.venv-native/bin/python examples/mirroropd/prepare_math_data.py --raw-dir /原始文件目录
+
+# 仅在能访问外网的机器上显式下载；不会安装新的 Python 包。
+.venv-native/bin/python examples/mirroropd/prepare_models.py --download
+.venv-native/bin/python examples/mirroropd/prepare_math_data.py --download
+```
+
+模型下载固定为 DeepSeek `ad9f0ae0`、JustRL `0637e409`，权重哈希来自对应快照。[^student-model] [^teacher-model] 数据下载使用 ModelScope 的上述原始数据镜像，镜像 revision 为 `master`；实际原始文件 SHA-256 写入 manifest。重复实验应保留原始文件及 manifest，不把浮动镜像 revision 当作不可变版本。
+
+准备完成后在开发机执行：
+
+```bash
+make assets-check
+# 首次传输模型后建议读取完整权重并核对固定哈希：
+make assets-check ASSET_CHECK_ARGS=--verify-model-sha256
+```
+
+模型尚未到位时可先执行 `make assets-check ASSET_CHECK_ARGS=--data-only`，此时只检查 parquet 结构、内容字段和文件哈希，不计算 tokenizer 长度。
+
+检查要求四份数据分别为 17917、500、40、30 行，五个字段及嵌套类型一致；每行必须有 user prompt、正确 `data_source`、`ability=math`、非空字符串答案、`style=rule`、正确 split 和唯一 `extra_info.index`。有 `math_manifest.json` 时还核对每个 parquet 的文件 SHA-256。模型检查固定 Qwen2 配置要求的全部 tensor 名称和形状，比较 student/teacher 完整 token-to-ID 映射。prompt 长度使用 student 的 chat template 和 generation prompt 计算；超过限制的数量会报告，训练端仍按 `filter_overlong_prompts` 处理。
+
+重复题面和训练/验证交集只报告，不自动改变配方。2026-10-20 本机重建的 18487 行与既有数据逐行一致；DAPO 有 662 行重复题面，与 MATH-500、AMC23、AIME25 分别有 2、5、0 道完全相同的题面。完整词面匹配不是语义去污染；若要删除重叠，应另建数据版本和对照实验。
+
+同次 CPU 检查确认两个模型各 339 个 tensor、151665 个 tokenizer 条目，token ID 映射一致，完整权重 SHA-256 匹配。四份数据的最大 prompt 长度分别为 1493、796、220、258 token，均未超过 4096；没有执行 GPU 训练。
+
+模型和数据需要另行上传一次，不进入 `make archive-pack` 的源码包。数据传输包应包含顶层 `data/`，在开发机解压到上述 `fanghaotian/` 基目录后再运行检查；这类资产包使用普通 `tar -xzf ... -C <基目录>`，不使用会保护运行目录的源码 `archive-unpack`。
+
 ## 单教师数学 full-data 配方
 
 [run_deepseek_r1_1_5b_fsdp2.sh](run_deepseek_r1_1_5b_fsdp2.sh) 使用 V1 同步 trainer、FSDP2 student 和独立 vLLM teacher。数学设置参考 One-Shot-OPD 当前可执行配方：DeepSeek-R1-Distill-Qwen-1.5B student、JustRL-DeepSeek-1.5B teacher、完整 DAPO 数据、sampled-token `k1 + PG`、batch 与 mini-batch 均为 64、每批一次更新、AdamW 学习率 1e-6。目前仍采用主线在 loss 中构造的 current-policy advantage；未加入 frozen-reward 分支，不能称为原研究实现的完整等价复现。
@@ -28,7 +94,7 @@
 
 脚本将常用环境变量集中在前半部分，按模型与数据、GPU、训练与验证预算分组；原生 Hydra 参数按 data、actor、rollout、validation、distillation、algorithm、trainer 分成数组，最后统一组装。通常改顶部默认值或使用环境变量即可；新增原生配置放入对应数组。
 
-模型默认从仓库相邻的 `models/` 读取，数据默认从相邻 `MD-OPD/data/` 读取；可用 `MODEL_ROOT`、`DATA_ROOT` 或各文件变量覆盖。数据文件分别是 `math/DAPO/train.parquet`、`math/MATH-500/test.parquet`、`math/AMC23/test.parquet` 和 `math/AIME25/test.parquet`。
+模型默认从仓库相邻的 `model/` 读取，数据默认从相邻 `data/` 读取；可用 `MODEL_ROOT`、`DATA_ROOT` 或各文件变量覆盖。目录、准备与检查入口见前文。数据文件分别是 `math/DAPO/train.parquet`、`math/MATH-500/test.parquet`、`math/AMC23/test.parquet` 和 `math/AIME25/test.parquet`。
 
 ```bash
 # 仅打印启动命令，不启动 Ray，也不安装依赖。
@@ -119,3 +185,6 @@ python -m pytest -q tests/experimental/agent_loop/test_validation_response_budge
 [^source]: Thinking-Space. One-Shot-OPD task verifiers. [固定来源](https://github.com/Thinking-Space/One-Shot-OPD/tree/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/utils/reward_score).
 [^opencompass]: OpenCompass. MultiIF instruction checkers. [固定来源](https://github.com/open-compass/opencompass/tree/efb91b2809e91997c5d043d468e4aa986fbb341f/opencompass/datasets/MultiIF).
 [^resopd]: InternLM. ResOPD training launcher. [固定来源](https://github.com/InternLM/ResOPD/blob/3bdf019daf9818419fe38dbc6516e41ca5a70dcb/examples/resopd/run_resopd.sh).
+[^math-prep]: MD-OPD contributors. 数学数据准备，commit `cef14fa0b552b40033f8b7296ce3853d10bf479b`. [固定来源](https://github.com/WncFht/MD-OPD/tree/cef14fa0b552b40033f8b7296ce3853d10bf479b/data/prep)。本仓独立实现相同转换，不在运行时导入相邻 checkout。
+[^student-model]: DeepSeek. DeepSeek-R1-Distill-Qwen-1.5B. [固定快照](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B/tree/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562)。
+[^teacher-model]: hbx. JustRL-DeepSeek-1.5B. [固定快照](https://huggingface.co/hbx/JustRL-DeepSeek-1.5B/tree/0637e4096c789c67f9eecbe8355e0bdeddede1c2)。

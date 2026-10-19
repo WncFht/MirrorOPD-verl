@@ -17,6 +17,10 @@ MirrorOPD 与 OPD-State 是拟迁移的算法和实验实现来源，初始化�
 
 模型和训练数据配方参考 One-Shot-OPD commit `6b6b1782cc3f04749dd077de19353f839f6bc048`。它的嵌入式 verl 和 V0/FSDP teacher 路径不是本仓的框架基线；本仓使用上述官方 verl 的 V1 训练入口。[^oneshot]
 
+## 数学资产准备来源
+
+数学资产准备规则参考本机 MD-OPD commit `cef14fa0b552b40033f8b7296ce3853d10bf479b` 的 `data/prep/prepare_dapo_math500.py`、`prepare_amc23_aime25.py` 和 schema，来源许可为 Apache-2.0。本仓的 `examples/mirroropd/prepare_math_data.py` 独立实现相同转换，并补充离线导入、文件哈希和完整数据检查；运行时不依赖相邻 checkout。2026-10-20 从原始缓存重建的 18487 行与固定参考逐行一致。
+
 ## 版本更新
 
 基线标签保持指向原 commit，不随开发移动。后续上游同步或依赖升级使用独立提交，记录新的来源版本与兼容性验证；已有实验保留运行时实际 commit、解析配置、模型与数据身份。
