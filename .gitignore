@@ -130,3 +130,10 @@ logs
 log
 outputs
 .history
+
+# Manual transfers and extracted native wheels; keep meituan/packages/*.zip tracked.
+/transfer_snap/
+/log_snap/
+/result_snap/
+/offline-wheels/
+*.tar.gz.part.*

@@ -1,4 +1,34 @@
-# Agent Instructions for verl
+# MirrorOPD-verl 运行约定
+
+## 机器与传输
+
+| 机器 | 项目路径 |
+| --- | --- |
+| 本机 | `/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl` |
+| Mac | `/Users/fanghaotian/Desktop/src/MirrorOPD-verl` |
+| 美团开发机 | `/home/hadoop-hmart-poistar/dolphinfs_hdd_hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl` |
+
+- 与开发机之间只能人工上传、下载压缩包；使用根目录 `Makefile` 和 `meituan/` 中的 pack/unpack 脚本。不要假设 Agent 可以 SSH、scp、rsync 到开发机，或开发机可以通过 Git 拉取代码。
+- Git commit/push 用于本项目版本管理；交付到开发机还需要 `make archive-pack`，人工上传生成的包，再在开发机解包。离线依赖 ZIP 位于 `meituan/packages/`，必须随源码包传输。
+- 源码解包替换归档中的顶层路径；`.git`、虚拟环境、模型、训练输出等运行目录不进入默认源码包。日志和结果解包采用合并，分卷必须全部传输。
+- 不假设开发机上的文件已经同步到本机或 Mac；收尾时说明需要传输的包和接收端命令。操作步骤见 [meituan/README.md](meituan/README.md)。
+- 本机执行 Git SSH 操作前，在同一 shell 中执行 `source /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/.ssh/activate.bash`。
+
+## 开发机环境
+
+- 用户要求使用原生 Python、pip 或 Conda；开发机安装和启动流程不使用 Docker、uv，也不升级平台管理的宿主机驱动。
+- 复用 `/bin/python3` 对应的预装 GPU 依赖，用 `venv --system-site-packages --without-pip .venv-native` 隔离本项目新增包；安装和检查入口为 `make native-install`、`make native-check`。
+- 运行现有示例前激活 `.venv-native` 并设置 `VERL_USE_UV=0`，避免示例自动切回上游 uv/CUDA 13 环境。
+- 2026-10-20 已观察到的开发机配置是 Python 3.12.13、A100 80GB、R535 驱动、PyTorch 2.11.0+cu128、vLLM 0.25.1+cu129；GPU 导入与实际训练验收分别进行，不把安装完成视为训练通过。
+- 脚本保持 Bash 3.2 兼容，使用 `set -eo pipefail`；通用传输逻辑使用 Python 标准库，Mac 和 Linux 共用同一入口。
+
+## 提交
+
+提交信息使用英文 Conventional Commits，并保留 AI 协作 trailer。已有其他任务的工作区或暂存区修改不并入当前任务的提交。
+
+# 上游 verl 贡献说明
+
+以下保留向 `verl-project/verl` 贡献时使用的上游规则；本项目开发机环境遵循前文约定。
 
 > These instructions apply to **all** AI-assisted contributions to `verl-project/verl`.
 > Breaching these guidelines can result in automatic banning.
@@ -45,7 +75,7 @@ If work is duplicate/trivial busywork, **do not proceed**. Return a short explan
 # Install `uv` if you don't have it already:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Always use `uv` for Python environment management:
+# Upstream locked environment; the Meituan native workflow is documented above:
 uv venv --python 3.12
 source .venv/bin/activate
 
