@@ -132,6 +132,73 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 \
 
 ResOPD 的公开版本 `3bdf019d` 只设置一个 `MAX_RESPONSE_LENGTH`，没有这条独立验证长度配置；本配方不依赖它的启动脚本。[^resopd]
 
+## Coding 与 IF 训练入口
+
+三个领域共用 [_run_single_teacher_fsdp2.sh](_run_single_teacher_fsdp2.sh)，默认均为 DeepSeek-R1-Distill-Qwen-1.5B student、4 张 student GPU、4 张独立 teacher GPU、TP=1 和 sampled-token `k1 + PG`。数学入口和默认训练参数保持不变。coding 与 IF 的模型、训练数据和验证方式参考 One-Shot-OPD 的 `recipe/opd.sh`。[^oneshot]
+
+| 入口 | Teacher | 训练数据 | 训练期间验证 |
+| --- | --- | --- | --- |
+| [math](run_deepseek_r1_1_5b_fsdp2.sh) | `JustRL-DeepSeek-1.5B` | `math/DAPO/train.parquet` | MATH-500、AMC23、AIME25 |
+| [coding](run_code_deepseek_r1_1_5b_fsdp2.sh) | `DeepCoder-1.5B-Preview` | `code/TACO/train.parquet` | `code/LCBv6/test.parquet` |
+| [IF](run_if_deepseek_r1_1_5b_fsdp2.sh) | `UltraData-IF-1.5B` | `if/MultiIF/train.parquet`，第一轮 | 关闭；正式 MultiIF 需要独立三轮评测 |
+
+模型默认放在仓库同级 `model/`，数据默认放在同级 `data/`；已有目录可用 `MODEL_ROOT`、`DATA_ROOT` 指定。coding 可用 `CODE_VAL_FILE` 选择另一份单轮验证 parquet。现有 `prepare_models.py`、`prepare_math_data.py` 和 `make assets-check` 仍用于数学资产；coding / IF 的 teacher 和 parquet 需要另行准备。训练启动前会检查选中领域的数据文件。
+
+```bash
+DRY_RUN=1 bash examples/mirroropd/run_code_deepseek_r1_1_5b_fsdp2.sh
+DRY_RUN=1 bash examples/mirroropd/run_if_deepseek_r1_1_5b_fsdp2.sh
+
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
+  bash examples/mirroropd/run_code_deepseek_r1_1_5b_fsdp2.sh
+
+OPENCOMPASS_ROOT=/共享目录/opencompass NLTK_DATA=/共享目录/nltk_data \
+  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
+  bash examples/mirroropd/run_if_deepseek_r1_1_5b_fsdp2.sh
+```
+
+IF 默认设置 `data.val_files=[]`、`TEST_FREQ=-1` 和 `trainer.val_before_train=False`，不会把三轮数据当作单轮验证。V1 支持这种只训练的配置；空验证列表配合启用验证的选项会报错。MultiIF checker 仍会对训练回答计算诊断分数，因此 IF 启动时会检查 `OPENCOMPASS_ROOT` 并加载 checker；该变量和可选的 `NLTK_DATA` 会显式传给 Ray worker。依赖见后文。完整三轮生成程序尚未迁入本仓，不能把训练分数当作正式 MultiIF 评测结果。
+
+coding / IF 即使关闭 task reward 对 loss 的贡献，仍会计算 verifier 诊断分数。coding 的 `gen` 还包含 CPU 测试执行成本；LCB runner 的全局等待预算包含新进程启动时间，部署前应使用已知正确的小程序检查判分环境。数学的采样耗时不能直接外推到这两个领域。
+
+Hope 的现有入口保留数学默认，也支持 `DOMAIN=code` / `DOMAIN=if`。在开发机本地 Hope 配置的 worker 环境设置 `afo.role.worker.env.DOMAIN = code` 或 `if`；IF 同时设置实际共享路径的 `OPENCOMPASS_ROOT` 和 `NLTK_DATA`。`hope/` 不随源码包更新。
+
+## MFU 与效率调整
+
+当前 `perf/mfu/actor` 是 actor 的模型 FLOPs 利用率估计。令 $s_i$ 为第 $i$ 条 prompt 加 response 的有效 token 数、$L$ 为层数、$d$ 为 hidden size，Qwen2 估算器采用：
+
+$$
+\widehat F = 6P_{\mathrm{dense}}\sum_i s_i + 6Ld\sum_i s_i^2,
+\qquad
+\mathrm{MFU} = \frac{\widehat F}{\Delta t_{\mathrm{train}}\,N_{\mathrm{actor}}\,F_{\mathrm{peak}}}.
+$$
+
+$P_{\mathrm{dense}}$ 由 MLP、attention 投影、embedding 和 LM head 的尺寸计算；$F_{\mathrm{peak}}$ 来自设备查表，当前 A100/A800 为 312 TFLOP/s，H20 为 148 TFLOP/s。实现见 [flops_counter.py](../../verl/utils/flops_counter.py) 和 [engine_workers.py](../../verl/workers/engine_workers.py)。计时采用 `engine.train_batch` 的内部时间，分母是 actor 的分布式 world size；它不包含整步生成、teacher、完整 offload 切换和权重同步耗时，也不等于 `nvidia-smi` 的 GPU busy 比例。
+
+2026-10-20 提供的前 9 步日志中，第 2–9 步平均耗时约 145.6 秒，其中 `gen` 约 124.9 秒、actor 更新约 12.8 秒。`gen` 包含 student 生成、verifier、teacher 评分与等待，需要分别计时才能判断瓶颈。优先比较吞吐和完整步时，再看局部 MFU。
+
+| 调整顺序 | 参数与候选值 | 比较重点 |
+| --- | --- | --- |
+| 1 | `ROLLOUT_ENFORCE_EAGER=False` | 开启 student CUDA Graph，比较预热后的步时、采样吞吐及整卡显存 |
+| 2 | `TEACHER_TOKEN_BUDGET=16384`；再单独试 `ROLLOUT_TOKEN_BUDGET=16384` | teacher 完整序列评分和 prefill 的批处理；短 prompt 的 student 解码不一定因此加速 |
+| 3 | `TEACHER_GPUS=2` | teacher 排队与总 GPU 小时；同时调整任务申请资源才能节省占用 |
+| 4 | 分别试 `OPTIMIZER_OFFLOAD=False`、`PARAM_OFFLOAD=False`、`GRADIENT_CHECKPOINTING=False` | actor 内部时间和整卡峰值显存；actor 更新当前仅占整步约 9% |
+
+这些选项保留原先的默认值，GPU 性能尚未实测。`TEACHER_ENFORCE_EAGER` 可独立控制 teacher；默认也为 `True`。vLLM 的 CUDA Graph 需要额外显存，更高的 token budget 对小模型大显卡的吞吐可能有帮助，但需要按实际请求形态比较。[^vllm-performance] 每次只改变一项，避免同时改 batch、长度和优化器参数后无法归因。
+
+下面先测相同数据和步数，再只开启 student CUDA Graph；两次均关闭验证和保存，比较后几步的耗时：
+
+```bash
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 TEST_FREQ=-1 SAVE_FREQ=-1 \
+  EXPERIMENT_NAME=math-perf-baseline \
+  bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh trainer.total_training_steps=10
+
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 TEST_FREQ=-1 SAVE_FREQ=-1 \
+  EXPERIMENT_NAME=math-perf-cudagraph ROLLOUT_ENFORCE_EAGER=False \
+  bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh trainer.total_training_steps=10
+```
+
+现有 Hope worker 入口固定 4+4 卡；测试另一种卡数分配时，需要同步调整接收端本地入口和资源申请。增大 `TRAIN_BATCH_SIZE` 会改变每个 epoch 的更新步数；当前约 63% 的回答达到 7168 token 上限，缩短回答预算也会改变训练样本。它们需要单独比较训练质量。完整验证的 14 轮、每轮 9120 条回答应与训练性能测试分开计时。
+
 ## 使用
 
 从仓库根目录向现有训练命令追加：
@@ -160,7 +227,7 @@ reward.custom_reward_function.name=reward_func
 - FC verifier 对齐原仓库的 xLAM / 五类 BFCL 数据约定，不能代表完整 BFCL 官方评测流程。
 - Multi-IF 这里迁移的是逐轮 verifier 和 `score_single_turn()`。完整多轮生成与最后一轮/多语言聚合仍需相应 AgentLoop 或评测调用方；此次没有迁移独立生成程序。
 
-依赖应通过 uv 安装在任务自己的环境中，不修改其他训练任务的共享环境。OpenCompass 验证使用 commit `efb91b2809e91997c5d043d468e4aa986fbb341f` 的四个 checker 文件。[^opencompass]
+开发机依赖使用原生 Python / pip 或 Conda，沿用 `.venv-native`，不修改其他训练任务的共享环境。OpenCompass 验证使用 commit `efb91b2809e91997c5d043d468e4aa986fbb341f` 的四个 checker 文件。[^opencompass]
 
 ## 相对来源的接入修改
 
@@ -191,6 +258,9 @@ python -m pytest -q tests/experimental/agent_loop/test_validation_response_budge
 2026-10-20 核对本机三个数学验证 parquet 共 570 题，用当前 student tokenizer 计算的最大 prompt 长度分别为 796、220、258 token；均未超过配方的 4096 上限。CPU 测试使用 mocked generation 和 TQ 写入来验证长度传递；真实 GPU 训练尚未执行。
 
 ### 参考文献
+
+[^vllm-performance]: vLLM contributors. Optimization and Tuning; Conserving Memory, v0.25.1, 2026. [优化参数](https://docs.vllm.ai/en/v0.25.1/configuration/optimization/)，[CUDA Graph 显存](https://docs.vllm.ai/en/v0.25.1/configuration/conserving_memory/#reduce-cuda-graphs)。
+[^oneshot]: Thinking-Space. One-Shot-OPD 单教师领域配方，2026. [固定来源](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/opd.sh)。
 
 [^source]: Thinking-Space. One-Shot-OPD task verifiers. [固定来源](https://github.com/Thinking-Space/One-Shot-OPD/tree/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/utils/reward_score).
 [^opencompass]: OpenCompass. MultiIF instruction checkers. [固定来源](https://github.com/open-compass/opencompass/tree/efb91b2809e91997c5d043d468e4aa986fbb341f/opencompass/datasets/MultiIF).

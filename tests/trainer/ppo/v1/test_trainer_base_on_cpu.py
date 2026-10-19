@@ -173,6 +173,44 @@ def test_builtin_filter_groups_warns_when_total_generation_limit_is_configured()
     )
 
 
+def _training_only_trainer():
+    trainer = _trainer_with_filter_groups({"enable": False})
+    trainer.config.data.update(
+        {"train_files": ["train.parquet"], "val_files": [], "dataloader_num_workers": 0, "val_batch_size": None}
+    )
+    trainer.config.trainer.update(
+        {"total_epochs": 1, "total_training_steps": None, "val_before_train": False, "val_only": False, "test_freq": -1}
+    )
+    trainer.parameter_sync_step = 1
+    trainer.tokenizer = trainer.processor = None
+    return trainer
+
+
+def test_training_only_dataloader_does_not_load_an_empty_validation_dataset():
+    trainer = _training_only_trainer()
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.create_rl_dataset", return_value=[{}] * 64) as dataset,
+        patch("verl.trainer.ppo.v1.trainer_base.create_rl_sampler", return_value=None),
+        patch("verl.trainer.ppo.v1.trainer_base.StatefulDataLoader") as loader,
+    ):
+        trainer._init_dataloader()
+    assert dataset.call_count == loader.call_count == 1
+    assert trainer.val_dataset == []
+    assert trainer.val_dataloader is None
+    assert trainer.total_training_steps == 1
+    with pytest.raises(ValueError, match="nonempty data.val_files"):
+        trainer._validate()
+
+
+@pytest.mark.parametrize("option,value", [("test_freq", 20), ("val_before_train", True), ("val_only", True)])
+def test_empty_validation_files_reject_requested_validation(option, value):
+    trainer = _training_only_trainer()
+    trainer.config.trainer[option] = value
+    with patch("verl.trainer.ppo.v1.trainer_base.create_rl_dataset", return_value=[{}] * 64):
+        with pytest.raises(ValueError, match="nonempty data.val_files"):
+            trainer._init_dataloader()
+
+
 @pytest.mark.parametrize("score_centering", [True, False])
 def test_update_actor_passes_score_centering_flag(score_centering):
     trainer = _StubTrainer.__new__(_StubTrainer)

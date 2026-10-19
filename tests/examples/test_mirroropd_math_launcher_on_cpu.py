@@ -22,7 +22,7 @@ SCRIPT = ROOT / "examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh"
 
 def _launch(tmp_path, script=SCRIPT, **overrides):
     env = os.environ.copy()
-    for name in ("CUDA_VISIBLE_DEVICES", "STUDENT_GPUS", "TEACHER_GPUS", "ROLLOUT_TP", "TEACHER_TP"):
+    for name in ("CUDA_VISIBLE_DEVICES", "STUDENT_GPUS", "TEACHER_GPUS", "ROLLOUT_TP", "TEACHER_TP", "DOMAIN"):
         env.pop(name, None)
     env.update(
         DRY_RUN="1",
@@ -66,6 +66,84 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
     assert cfg.distillation.distillation_loss.loss_max_clamp is None
     assert [Path(p).parent.name for p in cfg.data.val_files] == ["MATH-500", "AMC23", "AIME25"]
     assert cfg.actor_rollout_ref.model.path.endswith("models with spaces/DeepSeek-R1-Distill-Qwen-1.5B")
+    assert not (tmp_path / "run").exists()
+
+
+@pytest.mark.parametrize(
+    "domain,teacher,train,validation",
+    [
+        ("code", "DeepCoder-1.5B-Preview", "code/TACO/train.parquet", ["LCBv6"]),
+        ("if", "UltraData-IF-1.5B", "if/MultiIF/train.parquet", []),
+    ],
+)
+def test_domain_launchers_select_teacher_and_dataset_protocol(tmp_path, domain, teacher, train, validation):
+    script = ROOT / f"examples/mirroropd/run_{domain}_deepseek_r1_1_5b_fsdp2.sh"
+    cfg = _config(tmp_path, script=script)
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(teacher)
+    assert cfg.data.train_files == [str(tmp_path / "data" / train)]
+    assert [Path(p).parent.name for p in cfg.data.val_files] == validation
+    assert cfg.data.continuous_token.model_family == "deepseek"
+    assert cfg.trainer.n_gpus_per_node == cfg.distillation.n_gpus_per_node == 4
+    if domain == "if":
+        assert cfg.trainer.test_freq == -1
+        assert not cfg.trainer.val_before_train
+        assert cfg.actor_rollout_ref.rollout.max_model_len == 11265
+
+
+def test_performance_controls_reach_student_and_teacher(tmp_path):
+    cfg = _config(
+        tmp_path,
+        ROLLOUT_ENFORCE_EAGER="False",
+        TEACHER_ENFORCE_EAGER="False",
+        PARAM_OFFLOAD="False",
+        OPTIMIZER_OFFLOAD="False",
+        GRADIENT_CHECKPOINTING="False",
+        ROLLOUT_TOKEN_BUDGET="16384",
+        TEACHER_TOKEN_BUDGET="16384",
+    )
+    assert not cfg.actor_rollout_ref.rollout.enforce_eager
+    assert not cfg.distillation.teacher_models.teacher_model.inference.enforce_eager
+    assert not cfg.actor_rollout_ref.actor.fsdp_config.param_offload
+    assert not cfg.actor_rollout_ref.actor.fsdp_config.optimizer_offload
+    assert not cfg.actor_rollout_ref.model.enable_gradient_checkpointing
+    assert cfg.actor_rollout_ref.rollout.max_num_batched_tokens == 16384
+    assert cfg.distillation.teacher_models.teacher_model.inference.max_num_batched_tokens == 16384
+
+
+def test_if_checker_environment_reaches_ray_workers(tmp_path):
+    cfg = _config(
+        tmp_path,
+        script=ROOT / "examples/mirroropd/run_if_deepseek_r1_1_5b_fsdp2.sh",
+        OPENCOMPASS_ROOT=str(tmp_path / "opencompass source"),
+        NLTK_DATA=str(tmp_path / "nltk_data"),
+    )
+    variables = cfg.ray_kwargs.ray_init.runtime_env.env_vars
+    assert variables.OPENCOMPASS_ROOT == str(tmp_path / "opencompass source")
+    assert variables.NLTK_DATA == str(tmp_path / "nltk_data")
+
+
+def test_if_rejects_single_turn_validation(tmp_path):
+    result = _launch(tmp_path, script=ROOT / "examples/mirroropd/run_if_deepseek_r1_1_5b_fsdp2.sh", TEST_FREQ="20")
+    assert result.returncode == 2
+    assert "three-turn" in result.stderr
+
+
+def test_if_checks_checker_source_before_starting_training(tmp_path):
+    train = tmp_path / "data/if/MultiIF/train.parquet"
+    train.parent.mkdir(parents=True)
+    train.touch()
+    result = _launch(
+        tmp_path,
+        script=ROOT / "examples/mirroropd/run_if_deepseek_r1_1_5b_fsdp2.sh",
+        DRY_RUN="0",
+        CONFIG_ONLY="0",
+        CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7",
+        OPENCOMPASS_ROOT=str(tmp_path / "missing"),
+    )
+    assert result.returncode == 2
+    assert "OPENCOMPASS_ROOT" in result.stderr
     assert not (tmp_path / "run").exists()
 
 
@@ -180,19 +258,29 @@ def test_real_launch_requires_explicit_gpu_allocation(tmp_path):
 
 
 @pytest.mark.parametrize("exit_code", [0, 23])
-def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(tmp_path, exit_code):
+@pytest.mark.parametrize("domain", ["math", "code", "if"])
+def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(tmp_path, exit_code, domain):
     """An unpacked tree logs stdout/stderr while retaining the trainer's success or failure."""
     checkout = tmp_path / "source checkout"
-    script = checkout / "examples/mirroropd" / SCRIPT.name
+    entry = SCRIPT if domain == "math" else SCRIPT.with_name(f"run_{domain}_deepseek_r1_1_5b_fsdp2.sh")
+    script = checkout / "examples/mirroropd" / entry.name
     script.parent.mkdir(parents=True)
-    shutil.copy2(SCRIPT, script)
-    for name, split in (("DAPO", "train"), ("MATH-500", "test"), ("AMC23", "test"), ("AIME25", "test")):
-        path = tmp_path / "data/math" / name / f"{split}.parquet"
+    shutil.copy2(entry, script)
+    shutil.copy2(SCRIPT.parent / "_run_single_teacher_fsdp2.sh", script.parent)
+    datasets = {
+        "math": ["math/DAPO/train", "math/MATH-500/test", "math/AMC23/test", "math/AIME25/test"],
+        "code": ["code/TACO/train", "code/LCBv6/test"],
+        "if": ["if/MultiIF/train"],
+    }
+    for name in datasets[domain]:
+        path = tmp_path / "data" / f"{name}.parquet"
         path.parent.mkdir(parents=True)
         path.touch()
+    checker = tmp_path / "checker source"
+    (checker / "opencompass/datasets/MultiIF").mkdir(parents=True)
     interpreter = tmp_path / "mock-python"
     interpreter.write_text(
-        '#!/bin/sh\ncase " $* " in *" --cfg "*) printf "mock: true\\n"; exit 0 ;; esac\n'
+        '#!/bin/sh\ncase " $* " in *" -c "*) exit 0 ;; *" --cfg "*) printf "mock: true\\n"; exit 0 ;; esac\n'
         'printf "mock training stdout\\n"\nprintf "mock training stderr\\n" >&2\n'
         f"exit {exit_code}\n"
     )
@@ -204,6 +292,7 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(t
         CONFIG_ONLY="0",
         PYTHON_BIN=str(interpreter),
         CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7",
+        OPENCOMPASS_ROOT=str(checker),
     )
     assert result.returncode == exit_code, result.stderr
     assert "source archive without Git metadata" in (tmp_path / "run/source_commit.txt").read_text()

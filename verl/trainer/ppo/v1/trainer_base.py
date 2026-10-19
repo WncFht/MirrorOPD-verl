@@ -716,13 +716,24 @@ class PPOTrainer(ABC):
             is_train=True,
             max_samples=self.config.data.get("train_max_samples", -1),
         )
-        self.val_dataset = create_rl_dataset(
-            self.config.data.val_files,
-            self.config.data,
-            self.tokenizer,
-            self.processor,
-            is_train=False,
-            max_samples=self.config.data.get("val_max_samples", -1),
+        validation_requested = (
+            self.config.trainer.get("val_before_train", False)
+            or self.config.trainer.get("val_only", False)
+            or self.config.trainer.get("test_freq", -1) > 0
+        )
+        if not self.config.data.val_files and validation_requested:
+            raise ValueError("Validation requires nonempty data.val_files; disable validation for training-only runs")
+        self.val_dataset = (
+            create_rl_dataset(
+                self.config.data.val_files,
+                self.config.data,
+                self.tokenizer,
+                self.processor,
+                is_train=False,
+                max_samples=self.config.data.get("val_max_samples", -1),
+            )
+            if self.config.data.val_files
+            else []
         )
 
         # Exact refill counts require single-prompt dataloader fetches.
@@ -750,13 +761,17 @@ class PPOTrainer(ABC):
             sampler=create_rl_sampler(self.config.data, self.train_dataset),
         )
         self.train_dataloader_it = None
-        self.val_dataloader = StatefulDataLoader(
-            dataset=self.val_dataset,
-            batch_size=self.config.data.val_batch_size or len(self.val_dataset),
-            num_workers=self.config.data["dataloader_num_workers"],
-            shuffle=self.config.data.get("validation_shuffle", True),
-            drop_last=False,
-            collate_fn=collate_fn,
+        self.val_dataloader = (
+            StatefulDataLoader(
+                dataset=self.val_dataset,
+                batch_size=self.config.data.val_batch_size or len(self.val_dataset),
+                num_workers=self.config.data["dataloader_num_workers"],
+                shuffle=self.config.data.get("validation_shuffle", True),
+                drop_last=False,
+                collate_fn=collate_fn,
+            )
+            if self.val_dataset
+            else None
         )
         logger.info(
             f"train and validate dataloader initialized, train dataset size: "
@@ -1030,6 +1045,8 @@ class PPOTrainer(ABC):
         )
 
     def _validate(self) -> dict[str, float]:
+        if self.val_dataloader is None:
+            raise ValueError("Validation requires nonempty data.val_files")
         # Lists to collect samples for the table
         sample_uids = []
         sample_inputs = []
