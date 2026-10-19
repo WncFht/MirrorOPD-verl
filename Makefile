@@ -12,7 +12,7 @@ LOG_ACTION ?= $(ACTION)
 LOG_ARCHIVE ?=
 RESULTS_ARCHIVE ?=
 WANDB_RUNS_DIR ?= wandb
-WANDB_SYNC ?= 0
+WANDB_SYNC ?= 1
 KEEP_ARCHIVE_AFTER_UNPACK ?= 0
 RESULTS_REMOTE_DIR ?= outputs
 RESULTS_LOCAL_DIR ?= results
@@ -42,7 +42,7 @@ export MIRROROPD_MAX_FILE_MB = $(MAX_FILE_MB)
 help:
 	@echo '源码上传：make archive-pack [ARCHIVE=...] [ARCHIVE_SOURCES="Makefile meituan verl"]'
 	@echo '源码解包：make archive-unpack [ARCHIVE=压缩包或.part.000] [DEST=.]'
-	@echo '日志下载：make sync-log-pack；传回后 make sync-log-unpack [LOG_ARCHIVE=...] [WANDB_SYNC=1]'
+	@echo '日志下载：make sync-log-pack；传回后 make sync-log-unpack [LOG_ARCHIVE=...]（默认上传 W&B，WANDB_SYNC=0 关闭）'
 	@echo '结果下载：make sync-results-pack [RESULTS_REMOTE_DIR=outputs]；传回后 make sync-results-unpack [RESULTS_ARCHIVE=...]'
 	@echo '离线环境：make native-install；make native-check（开发机，系统 Python 3.12）'
 	@echo 'W&B 验证：make wandb-check（只写一条离线日志，不加载模型）'

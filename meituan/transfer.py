@@ -294,7 +294,7 @@ def unpack(args, snap_dir):
             if not incoming.is_dir():
                 raise ValueError(f"Archive contains no {logical}/ directory")
             shutil.copytree(incoming, destination, dirs_exist_ok=True)
-            if args.kind == "logs" and os.environ.get("MIRROROPD_WANDB_SYNC", "0") == "1":
+            if args.kind == "logs" and os.environ.get("MIRROROPD_WANDB_SYNC", "1") == "1":
                 for run in sorted(incoming.glob("offline-run-*")):
                     if run.is_dir():
                         subprocess.run(["wandb", "sync", str(destination / run.name)], check=True)
