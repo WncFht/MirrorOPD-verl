@@ -264,8 +264,13 @@ if [[ -e $RUN_DIR ]]; then
 fi
 # 同时记录源码状态、完整命令和解析配置，便于回溯每次实验。
 mkdir -p "$RUN_DIR"
-git rev-parse HEAD > "$RUN_DIR/source_commit.txt"
-git diff --binary HEAD > "$RUN_DIR/source_changes.patch"
+if [[ -d $REPO_ROOT/.git || -f $REPO_ROOT/.git ]] && command -v git >/dev/null 2>&1; then
+    git rev-parse HEAD > "$RUN_DIR/source_commit.txt"
+    git diff --binary HEAD > "$RUN_DIR/source_changes.patch"
+else
+    printf 'unavailable (source archive without Git metadata)\n' > "$RUN_DIR/source_commit.txt"
+    : > "$RUN_DIR/source_changes.patch"
+fi
 printf '%q ' "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/command.sh"
 printf '\n' >> "$RUN_DIR/command.sh"
 "${CMD[@]}" --cfg job --resolve "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/resolved_config.yaml"

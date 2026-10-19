@@ -22,6 +22,8 @@ MAX_FILE_MB ?= 100
 MODEL_ROOT ?= $(abspath ../model)
 DATA_ROOT ?= $(abspath ../data)
 ASSET_CHECK_ARGS ?=
+HOPE_DIR ?= hope/mirroropd
+HOPE_FILE ?= mirroropd.hope
 
 export MIRROROPD_PYTHON = $(PYTHON)
 export MIRROROPD_SNAP_DIR = $(SNAP_DIR)
@@ -35,6 +37,7 @@ export MIRROROPD_MAX_FILE_MB = $(MAX_FILE_MB)
 
 .PHONY: help archive archive-pack archive-unpack sync-log sync-log-pack sync-log-unpack
 .PHONY: sync-results sync-results-pack sync-results-unpack native-env native-unpack native-install native-check wandb-check assets-check
+.PHONY: opd-submit
 
 help:
 	@echo '源码上传：make archive-pack [ARCHIVE=...] [ARCHIVE_SOURCES="Makefile meituan verl"]'
@@ -44,6 +47,7 @@ help:
 	@echo '离线环境：make native-install；make native-check（开发机，系统 Python 3.12）'
 	@echo 'W&B 验证：make wandb-check（只写一条离线日志，不加载模型）'
 	@echo '训练资产：make assets-check [MODEL_ROOT=../model] [DATA_ROOT=../data] [ASSET_CHECK_ARGS=--data-only]'
+	@echo '8 卡训练：make opd-submit（开发机，提交 hope/mirroropd/mirroropd.hope）'
 	@echo '压缩包默认放在 transfer_snap/，超过 10 MiB 分卷；上传下载由人工完成。'
 	@echo '源码打包成功后清理旧源码包；解包成功后删除输入包，可设 KEEP_ARCHIVE_AFTER_UNPACK=1 保留。'
 
@@ -89,3 +93,8 @@ wandb-check:
 
 assets-check:
 	$(NATIVE_PYTHON) examples/mirroropd/check_assets.py --model-root "$(MODEL_ROOT)" --data-root "$(DATA_ROOT)" $(ASSET_CHECK_ARGS)
+
+opd-submit:
+	@test -f "$(HOPE_DIR)/$(HOPE_FILE)" || { echo "Hope file not found: $(HOPE_DIR)/$(HOPE_FILE)" >&2; exit 1; }
+	@command -v hope >/dev/null 2>&1 || { echo "hope CLI not found; submit from the developer machine" >&2; exit 1; }
+	@cd "$(HOPE_DIR)" && hope run "$(HOPE_FILE)"

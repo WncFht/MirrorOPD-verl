@@ -4,8 +4,10 @@
 
 import os
 import shlex
+import shutil
 import subprocess
 import sys
+from configparser import ConfigParser
 from pathlib import Path
 
 import pytest
@@ -18,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh"
 
 
-def _launch(tmp_path, **overrides):
+def _launch(tmp_path, script=SCRIPT, **overrides):
     env = os.environ.copy()
     for name in ("CUDA_VISIBLE_DEVICES", "STUDENT_GPUS", "TEACHER_GPUS", "ROLLOUT_TP", "TEACHER_TP"):
         env.pop(name, None)
@@ -33,7 +35,7 @@ def _launch(tmp_path, **overrides):
         TRAIN_BATCH_SIZE="64",
     )
     env.update(overrides)
-    return subprocess.run(["bash", str(SCRIPT)], env=env, capture_output=True, text=True)
+    return subprocess.run(["bash", str(script)], env=env, capture_output=True, text=True)
 
 
 def _config(tmp_path, **overrides):
@@ -173,4 +175,68 @@ def test_real_launch_requires_explicit_gpu_allocation(tmp_path):
     result = _launch(tmp_path, DRY_RUN="0", CONFIG_ONLY="0")
     assert result.returncode == 2
     assert "allocated to this run" in result.stderr
+    assert not (tmp_path / "run").exists()
+
+
+def test_source_archive_launch_records_missing_git_without_aborting(tmp_path):
+    """An unpacked source tree can reach Python startup without a .git directory."""
+    checkout = tmp_path / "source checkout"
+    script = checkout / "examples/mirroropd" / SCRIPT.name
+    script.parent.mkdir(parents=True)
+    shutil.copy2(SCRIPT, script)
+    for name, split in (("DAPO", "train"), ("MATH-500", "test"), ("AMC23", "test"), ("AIME25", "test")):
+        path = tmp_path / "data/math" / name / f"{split}.parquet"
+        path.parent.mkdir(parents=True)
+        path.touch()
+    interpreter = tmp_path / "mock-python"
+    interpreter.write_text('#!/bin/sh\nprintf "%s\\n" "$@"\n')
+    interpreter.chmod(0o755)
+    result = _launch(
+        tmp_path,
+        script=script,
+        DRY_RUN="0",
+        CONFIG_ONLY="0",
+        PYTHON_BIN=str(interpreter),
+        CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7",
+    )
+    assert result.returncode == 0, result.stderr
+    assert "source archive without Git metadata" in (tmp_path / "run/source_commit.txt").read_text()
+    assert (tmp_path / "run/source_changes.patch").read_bytes() == b""
+    assert "verl.trainer.main_ppo" in (tmp_path / "run/command.sh").read_text()
+
+
+def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path):
+    """Exercise the real Make submission and worker config while stubbing only the Hope CLI."""
+    fake_bin = tmp_path / "bin"
+    fake_bin.mkdir()
+    hope = fake_bin / "hope"
+    record = tmp_path / "submission.txt"
+    hope.write_text('#!/bin/sh\nprintf "%s\\n" "$PWD" "$@" > "$HOPE_SUBMIT_RECORD"\n')
+    hope.chmod(0o755)
+    env = os.environ.copy()
+    env.update(PATH=str(fake_bin) + os.pathsep + env["PATH"], HOPE_SUBMIT_RECORD=str(record))
+    submitted = subprocess.run(["make", "opd-submit"], cwd=ROOT, env=env, capture_output=True, text=True)
+    assert submitted.returncode == 0, submitted.stderr
+    directory, action, filename = record.read_text().splitlines()
+    assert action == "run"
+    config = ConfigParser(interpolation=None)
+    config.read(Path(directory) / filename)
+    assert config.getint("roles", "workers") == 1
+    allocated_gpus = config.getint("roles", "worker.gcores80g")
+
+    preview = _launch(
+        tmp_path,
+        script=ROOT / "hope/mirroropd/run.sh",
+        CUDA_VISIBLE_DEVICES="GPU-0,GPU-1,GPU-2,GPU-3,GPU-4,GPU-5,GPU-6,GPU-7",
+        VERL_USE_UV="1",
+    )
+    assert preview.returncode == 0, preview.stderr
+    command = shlex.split(preview.stdout)
+    native_python = str(ROOT / ".venv-native/bin/python")
+    assert command[0] == native_python
+    with initialize_config_dir(config_dir=str(ROOT / "verl/trainer/config"), version_base=None):
+        cfg = compose(config_name="ppo_trainer", overrides=command[command.index("verl.trainer.main_ppo") + 1 :])
+    assert cfg.trainer.n_gpus_per_node + cfg.distillation.n_gpus_per_node == allocated_gpus == 8
+    assert cfg.ray_kwargs.ray_init.runtime_env.py_executable == native_python
+    assert cfg.ray_kwargs.ray_init.runtime_env.env_vars.WANDB_MODE == "offline"
     assert not (tmp_path / "run").exists()

@@ -61,6 +61,10 @@ python -m verl.trainer.main_ppo --help
 
 本项目数学配方已默认选择 `<仓库绝对路径>/.venv-native/bin/python`，并将同一个路径传给 Ray worker。可先运行 `DRY_RUN=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh` 检查命令，再用 `CONFIG_ONLY=1` 解析配置。需要其他环境时显式设置 `PYTHON_BIN=/绝对路径/bin/python`；不要把它指向只包含系统预装包的 `/bin/python3`。
 
+## 提交 8 卡任务
+
+开发机安装、数据检查完成后，在仓库根目录执行 `make opd-submit`。它提交 `hope/mirroropd/mirroropd.hope`，由集群 worker 使用现有 `.venv-native` 执行单机 8 卡训练：student 4 卡、teacher 4 卡，推理 TP 均为 1。任务启动时检查原生依赖和 8 张 GPU 上的小矩阵乘法，再运行数学配方。队列、平台镜像、共享挂载路径与预览命令见 [Hope 说明](../hope/README.md)。
+
 ## 模型与数据布局
 
 模型和数据统一放在源码仓库相邻的 `model/`（单数）与 `data/`，供开发机和训练任务共享。开发机基目录为 `/home/hadoop-hmart-poistar/dolphinfs_hdd_hadoop-hmart-poistar/fanghaotian/`。本机原有 `models/`、`MD-OPD/data/` 保留为导入来源；新默认目录不再依赖相邻 MD-OPD checkout。

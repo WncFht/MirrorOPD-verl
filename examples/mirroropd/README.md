@@ -88,6 +88,12 @@ make assets-check ASSET_CHECK_ARGS=--data-only
 | 训练预算 | 1 epoch；全量 17917 条数据未过滤时约 279 steps |
 | 验证 / 保存间隔 | 20 / 50 global steps，并在最后一步触发 |
 
+默认训练 1 epoch。当前 17917 条 DAPO 的 prompt 均未超过 4096，过滤后仍是 17917 条；V1 trainer 按 `floor(17917 / 64) = 279` 计算步数，最后不足一个 batch 的 61 条不参与这个 epoch。每步全局采样 64 道题，每题生成 1 条回答；`ppo_mini_batch_size=64`、`ppo_epochs=1`，每步做一次全局参数更新。64 是整个 student 资源池的 batch；4 个 student 训练 rank 平均各处理 16 条，内部动态 token batching 与梯度累积按实际序列长度安排。
+
+验证发生在 step 20、40、……、260 和最终 step 279，共 14 次；`val_before_train=False`，训练前不额外验证。每次完整覆盖 MATH-500 的 500 题、AMC23 的 40 题、AIME25 的 30 题，合计 570 题，每题采样 16 次，共生成 9120 条回答。`VAL_BATCH_SIZE=16` 是每次向推理端提交 16 道题的窗口，最多展开为 256 条回答请求；实际同时运行的请求数还受每个推理副本 `max_num_seqs=32` 约束。每条验证回答最多 31744 token，验证生成量会显著增加训练总耗时。checkpoint 保存于 step 50、100、150、200、250、279。
+
+TP（Tensor Parallelism，张量并行）把一个模型副本中的权重矩阵及其计算拆到多张 GPU 上协作完成。推理 TP=1 时，一个副本占 1 张卡；TP=2 时，一个副本占 2 张卡。当前 student rollout 的 4 卡、TP=1 对应 4 个相同模型的生成副本；teacher 的 4 卡、TP=1 对应 4 个相同模型的评分副本。若同一个 4 卡资源池改为 TP=2，则只有 2 个推理副本。student 参数更新另用 FSDP2 在 4 张卡上分片训练；推理 TP 与训练的 FSDP2 是两组独立配置。
+
 默认使用全部 8 张卡：4 张用于 student，4 张用于 teacher。两个 1.5B 模型先用 TP=1，通过独立副本并行处理请求；这是面向 80GB GPU 的初始配置，尚未做 GPU 吞吐验收。ResOPD 的公开配方也用 4+4，但其 Qwen3.5-27B teacher 用 TP=4，将一个副本放在四张卡上。[^resopd] 本配方的四个 teacher 副本权重相同，仍是单教师蒸馏。
 
 分配全部 8 张卡不代表每个阶段全部满载：同步训练在 student 生成期间可并发评分已经完成的轨迹，actor 更新期间 teacher 空闲，验证也不调用 teacher。后续依据评分耗时与 rollout 耗时判断四个评分副本的收益。需要缩减资源时可设 `TEACHER_GPUS=1`，恢复 4+1。修改资源时，batch 必须是 student DP 数的整数倍，各推理资源池的 GPU 数必须是其 TP 的整数倍；`STUDENT_GPUS` 与 `TEACHER_GPUS` 是相加的独立资源池，不是同一组卡的两种计数。
@@ -111,6 +117,8 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 \
 默认使用本仓库 `.venv-native/bin/python` 的绝对路径，同时设置 driver 和 Ray worker 的解释器，无需依赖终端是否激活环境。已有其他独立环境可设置 `PYTHON_BIN=/absolute/path/to/python`；环境需具备当前 verl 的 V1/TransferQueue 和 verifier 依赖。上游锁文件环境只在显式设置 `VERL_USE_UV=1` 时启用。正式启动要求显式设置 `CUDA_VISIBLE_DEVICES`，并检查四个 parquet 文件存在。
 
 `RUN_DIR` 必须是新目录，默认在 `outputs/` 下；保存实际命令、Git commit、相对 HEAD 的工作区 patch、解析配置、checkpoint 和验证输出。CLI 末尾参数仍是原生 Hydra overrides。改变训练步数时还要给足 `TOTAL_EPOCHS`，因为外层训练同时受 epoch 与 total step 限制。
+
+通过人工源码包部署、没有 `.git` 的目录同样可以启动；此时 `source_commit.txt` 标记版本不可用，`source_changes.patch` 为空。集群提交入口为 `make opd-submit`，申请单机 8 张 80GB 卡，完整操作见 [Hope 说明](../../hope/README.md)。
 
 配方默认记录 console 与离线 W&B。SDK 写入根目录固定为本仓库，实际 run 位于 `wandb/offline-run-*/`；Ray 训练进程使用同样的路径和模式。可用 `make sync-log-pack` 打包后人工下载，完整流程见 [美团开发机同步说明](../../meituan/README.md)。
 
