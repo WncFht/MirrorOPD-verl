@@ -272,11 +272,11 @@ class AgentLoopBase(ABC):
         self.apply_chat_template_kwargs = self.data_config.get("apply_chat_template_kwargs", {})
         self.mm_processor_kwargs = self.data_config.get("mm_processor_kwargs", {})
         # Continuous Token is the only rollout tokenization path for agent loops.
-        # The model family (boundary handling) is inferred by exact lookup of the
-        # root Hugging Face config's model_type. Unrecognized models use the
-        # default builder (or default VL builder with a multimodal processor).
+        # By default the model family is inferred from the root model_type;
+        # checkpoints with a different chat protocol can select it explicitly.
         self.continuous_token_builder = create_continuous_token_builder(
             self.tokenizer,
+            model_family=self.data_config.get("continuous_token", {}).get("model_family", "auto"),
             hf_model_type=hf_model_type,
             chat_template_kwargs=self.apply_chat_template_kwargs,
             mm_processor_kwargs=self.mm_processor_kwargs,

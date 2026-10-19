@@ -105,6 +105,8 @@ DATA_ARGS=(
     data.validation_shuffle=False
     "data.seed=$SEED"
     data.dataloader_num_workers=0
+    # R1-Distill has a Qwen2 architecture but uses the DeepSeek chat protocol.
+    data.continuous_token.model_family=deepseek
 )
 
 # FSDP2 在 student 池内分片；动态 token batching 与 offload 控制训练显存。

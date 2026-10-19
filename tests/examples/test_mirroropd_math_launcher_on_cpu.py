@@ -54,6 +54,7 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
     assert cfg.trainer.n_gpus_per_node == 4 and cfg.distillation.n_gpus_per_node == 4
     assert cfg.actor_rollout_ref.actor.strategy == "fsdp2"
     assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
+    assert cfg.data.continuous_token.model_family == "deepseek"
     assert cfg.actor_rollout_ref.actor.ppo_epochs == 1
     assert cfg.actor_rollout_ref.rollout.response_length == 7168
     assert cfg.actor_rollout_ref.rollout.val_kwargs.max_tokens == 31744
