@@ -1,6 +1,54 @@
-# MirrorOPD verifier 接入
+# MirrorOPD 数学训练与 verifier
 
 四个领域的 verifier 从 One-Shot-OPD commit `6b6b1782cc3f04749dd077de19353f839f6bc048` 迁入，数值与任务判分逻辑保留在 `verl/utils/reward_score/one_shot_opd/`。这里提供一个原生 custom reward 入口；训练算法、reward 冻结方式和 IS 尚未修改。[^source]
+
+## 单教师数学 full-data 配方
+
+[run_deepseek_r1_1_5b_fsdp2.sh](run_deepseek_r1_1_5b_fsdp2.sh) 使用 V1 同步 trainer、FSDP2 student 和独立 vLLM teacher。数学设置参考 One-Shot-OPD 当前可执行配方：DeepSeek-R1-Distill-Qwen-1.5B student、JustRL-DeepSeek-1.5B teacher、完整 DAPO 数据、sampled-token `k1 + PG`、batch 与 mini-batch 均为 64、每批一次更新、AdamW 学习率 1e-6。目前仍采用主线在 loss 中构造的 current-policy advantage；未加入 frozen-reward 分支，不能称为原研究实现的完整等价复现。
+
+默认资源与长度：
+
+| 项目 | 默认值 |
+| --- | --- |
+| Student 资源池 | 4 张 GPU；FSDP2 数据并行，训练与 rollout 共用 |
+| Student rollout | TP=1，共 4 个推理副本 |
+| Teacher 资源池 | 1 张 GPU；TP=1，1 个副本 |
+| Prompt / 训练 response | 4096 / 7168 token |
+| 验证 response | 31744 token |
+| Student / teacher 最大 context | 35841 / 11265 token，均预留一个 token |
+| 验证集 | MATH-500、AMC23、AIME25；500 + 40 + 30 题 |
+| 验证采样 | 每题 16 次，temperature=0.7、top-p=0.9 |
+| 验证提交窗口 / 推理并发 | 每窗口 16 题；每个 student 推理副本最多 32 条序列 |
+| 训练预算 | 1 epoch；全量 17917 条数据未过滤时约 279 steps |
+| 验证 / 保存间隔 | 20 / 50 global steps，并在最后一步触发 |
+
+这是一组面向 1.5B 模型、H800 80GB 的初始配置，尚未做 GPU 吞吐验收。先保留 batch=64，依据 teacher 评分耗时再调整 teacher 副本数。修改资源时，batch 必须是 student DP 数的整数倍，各推理资源池的 GPU 数必须是其 TP 的整数倍；`STUDENT_GPUS` 与 `TEACHER_GPUS` 是相加的独立资源池，不是同一组卡的两种计数。
+
+模型默认从仓库相邻的 `models/` 读取，数据默认从相邻 `MD-OPD/data/` 读取；可用 `MODEL_ROOT`、`DATA_ROOT` 或各文件变量覆盖。数据文件分别是 `math/DAPO/train.parquet`、`math/MATH-500/test.parquet`、`math/AMC23/test.parquet` 和 `math/AIME25/test.parquet`。
+
+```bash
+# 仅打印启动命令，不启动 Ray，也不安装依赖。
+DRY_RUN=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
+
+# 只解析 Hydra 配置；默认通过锁文件的 fsdp + vllm + math extras 运行。
+CONFIG_ONLY=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
+
+# 获得 GPU 分配后设置 CUDA_VISIBLE_DEVICES，至少覆盖默认的 5 张卡。
+# 脚本不会选择物理 GPU，也不会清理其他训练进程。
+bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
+```
+
+默认 uv 启动同步配置 driver 与 Ray worker 的 Python。已有独立环境可设置 `VERL_USE_UV=0 PYTHON_BIN=/absolute/path/to/python`；环境需具备当前 verl 的 V1/TransferQueue 和 verifier 依赖。正式启动要求显式设置 `CUDA_VISIBLE_DEVICES`，并检查四个 parquet 文件存在。
+
+`RUN_DIR` 必须是新目录，默认在 `outputs/` 下；保存实际命令、Git commit、相对 HEAD 的工作区 patch、解析配置、checkpoint 和验证输出。CLI 末尾参数仍是原生 Hydra overrides。改变训练步数时还要给足 `TOTAL_EPOCHS`，因为外层训练同时受 epoch 与 total step 限制。
+
+## 独立验证长度
+
+新增 `actor_rollout_ref.rollout.val_kwargs.max_tokens`，默认 `null`，保留原有训练/验证共用 response budget 的行为。非空时，验证请求和最终 response、mask、log-prob、router replay 输出使用同一预算；V1 的 TQ 保存未 padding 的实际输出，旧 DataProto 路径按验证预算 padding。
+
+当前支持 vLLM/SGLang 的 `single_turn_agent`；本配方使用 vLLM。配置或数据行选择其他 agent 时会拒绝独立验证预算，避免多轮 agent 静默沿用训练上限；会覆盖请求长度的其他后端也会被配置检查拒绝。应显式配置足以容纳 prompt 与验证预算的 `rollout.max_model_len`；底层服务仍受模型 context 和显存约束。该设置不改变 teacher 的训练评分长度。
+
+ResOPD 的公开版本 `3bdf019d` 只设置一个 `MAX_RESPONSE_LENGTH`，没有这条独立验证长度配置；本配方不依赖它的启动脚本。[^resopd]
 
 ## 使用
 
@@ -51,7 +99,17 @@ python -m pytest -q tests/utils/reward_score/test_one_shot_opd_on_cpu.py
 
 2026-10-20 的 CPU 验证为 33 passed，包含上述固定 OpenCompass checker；环境为 Python 3.12.15、PyTorch 2.7.1、Math-Verify 0.9.0、latex2sympy2_extended 1.11.0、pylatexenc 2.11、NumPy 1.26.4。另通过 Ruff、Python 语法与文档本地链接检查。该测试使用现有独立环境，未更改仓库依赖锁，也不代表已在锁定的完整 GPU 栈中验收。
 
+独立长度和 launcher 的针对性测试：
+
+```bash
+python -m pytest -q tests/experimental/agent_loop/test_validation_response_budget_on_cpu.py \
+  tests/examples/test_mirroropd_math_launcher_on_cpu.py
+```
+
+2026-10-20 核对本机三个数学验证 parquet 共 570 题，用当前 student tokenizer 计算的最大 prompt 长度分别为 796、220、258 token；均未超过配方的 4096 上限。CPU 测试使用 mocked generation 和 TQ 写入来验证长度传递；真实 GPU 训练尚未执行。
+
 ### 参考文献
 
 [^source]: Thinking-Space. One-Shot-OPD task verifiers. [固定来源](https://github.com/Thinking-Space/One-Shot-OPD/tree/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/utils/reward_score).
 [^opencompass]: OpenCompass. MultiIF instruction checkers. [固定来源](https://github.com/open-compass/opencompass/tree/efb91b2809e91997c5d043d468e4aa986fbb341f/opencompass/datasets/MultiIF).
+[^resopd]: InternLM. ResOPD training launcher. [固定来源](https://github.com/InternLM/ResOPD/blob/3bdf019daf9818419fe38dbc6516e41ca5a70dcb/examples/resopd/run_resopd.sh).

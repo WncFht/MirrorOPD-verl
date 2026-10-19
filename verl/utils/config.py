@@ -231,6 +231,20 @@ def validate_config(
             + " which will schedule the memory themselves."
         )
 
+    # Validate the response budget before starting workers. Per-row agent_name
+    # overrides are checked by AgentLoopWorker as well.
+    rollout = config.actor_rollout_ref.rollout
+    val_max_tokens = rollout.val_kwargs.get("max_tokens")
+    if val_max_tokens is not None:
+        if type(val_max_tokens) is not int or val_max_tokens <= 0:
+            raise ValueError("rollout.val_kwargs.max_tokens must be a positive integer or null")
+        if rollout.agent.default_agent_loop != "single_turn_agent":
+            raise ValueError("val_kwargs.max_tokens currently supports only single_turn_agent")
+        if rollout.name not in ("vllm", "sglang"):
+            raise ValueError("val_kwargs.max_tokens requires a vllm or sglang rollout server")
+        if rollout.max_model_len is not None and rollout.prompt_length + val_max_tokens > rollout.max_model_len:
+            raise ValueError("rollout.max_model_len must cover prompt_length + val_kwargs.max_tokens")
+
     # check eval config
     if config.actor_rollout_ref.rollout.val_kwargs.do_sample:
         assert config.actor_rollout_ref.rollout.temperature > 0, (

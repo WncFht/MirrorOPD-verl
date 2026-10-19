@@ -39,6 +39,11 @@ class SingleTurnAgentLoop(AgentLoopBase):
         # priority may arrive as np.int64 from non_tensor_batch; normalize to Python int.
         priority = int(priority)
         messages = list(kwargs["raw_prompt"])
+        # Read before generate(): a server/client may consume request parameters.
+        # Keep validation tokens, masks and log-probs at the same requested budget.
+        response_length = sampling_params.get("max_tokens", self.response_length)
+        if type(response_length) is not int or response_length <= 0:
+            raise ValueError("single-turn max_tokens must be a positive integer")
 
         # 1. extract multimodal inputs from messages
         multi_modal_data = await self.process_multi_modal_info(messages)
@@ -93,11 +98,11 @@ class SingleTurnAgentLoop(AgentLoopBase):
 
         output: AgentLoopOutput = AgentLoopOutput(
             prompt_ids=prompt_ids,
-            response_ids=response_ids[: self.response_length],
-            response_mask=response_mask[: self.response_length],
-            response_logprobs=response_logprobs[: self.response_length] if response_logprobs else None,
+            response_ids=response_ids[:response_length],
+            response_mask=response_mask[:response_length],
+            response_logprobs=response_logprobs[:response_length] if response_logprobs else None,
             routed_experts=(
-                output.routed_experts[: len(prompt_ids) + self.response_length]
+                output.routed_experts[: len(prompt_ids) + response_length]
                 if output.routed_experts is not None
                 else None
             ),

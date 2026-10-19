@@ -42,6 +42,12 @@ class SamplingConfig(BaseConfig):
     top_p: float = 1.0
     do_sample: bool = True
     n: int = 1
+    # Single-turn validation response budget; None reuses rollout.response_length.
+    max_tokens: Optional[int] = None
+
+    def __post_init__(self):
+        if self.max_tokens is not None and (type(self.max_tokens) is not int or self.max_tokens <= 0):
+            raise ValueError("SamplingConfig.max_tokens must be a positive integer or None")
 
 
 @dataclass
