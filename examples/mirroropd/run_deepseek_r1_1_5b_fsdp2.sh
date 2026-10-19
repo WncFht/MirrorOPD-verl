@@ -85,6 +85,10 @@ TEACHER_CONTEXT=$((MAX_PROMPT_LENGTH + MAX_RESPONSE_LENGTH + 1))
 EXPERIMENT_NAME=${EXPERIMENT_NAME:-math-full-sampled-$(date +%Y%m%d-%H%M%S)-$$}
 RUN_DIR=${RUN_DIR:-$REPO_ROOT/outputs/$EXPERIMENT_NAME}
 
+# SDK 在 WANDB_DIR 下创建 wandb/；固定仓库根目录，避免 Ray 的工作目录改变保存位置。
+export WANDB_DIR="$REPO_ROOT"
+export WANDB_MODE=${WANDB_MODE:-offline}
+
 # ── 5. 按职责组织原生 Hydra 参数 ──────────────────────────────────────
 
 # 训练用完整 DAPO；验证按 data_source 分别记录三个数学数据集的结果。
@@ -200,7 +204,7 @@ TRAINER_ARGS=(
     trainer.resume_mode=disable
     trainer.project_name=MirrorOPD-verl
     "trainer.experiment_name='$EXPERIMENT_NAME'"
-    'trainer.logger=[console]'
+    'trainer.logger=[console,wandb]'
     "trainer.default_local_dir='$RUN_DIR/checkpoints'"
     "trainer.validation_data_dir='$RUN_DIR/validation'"
     "hydra.run.dir='$RUN_DIR/hydra'"
@@ -226,6 +230,10 @@ if [ "${VERL_USE_UV:-1}" != 0 ] && [ "${DEVICE:-gpu}" = gpu ]; then
     LAUNCH=(uv run --frozen --all-packages --extra fsdp --extra vllm --extra math python3)
     RAY=('ray_kwargs.ray_init.runtime_env.py_executable="uv run --frozen --all-packages --extra fsdp --extra vllm --extra math"')
 fi
+RAY+=(
+    "+ray_kwargs.ray_init.runtime_env.env_vars.WANDB_DIR='$WANDB_DIR'"
+    "+ray_kwargs.ray_init.runtime_env.env_vars.WANDB_MODE='$WANDB_MODE'"
+)
 export RAY_ADDRESS=${RAY_ADDRESS:-local}
 CMD=("${LAUNCH[@]}" -m verl.trainer.main_ppo)
 # 只打印命令 / 只解析配置时，不创建训练输出目录，也不启动 Ray。

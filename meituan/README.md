@@ -26,7 +26,15 @@ make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.g
 
 源码解包沿用 MD-OPD 的替换语义：先完整解包到临时目录，再替换归档涉及的顶层文件或目录，例如 `verl/`、`examples/`、`meituan/`。这些目录中未进入新包的旧文件也会移除；运行目录不参与替换。解包前应保存接收端在这些源码目录里的修改。
 
-可用 `ARCHIVE_SOURCES="Makefile meituan"` 选择仓库顶层路径，用 `ARCHIVE=自定义名称.tar.gz` 设置包名，用 `DEST=/目标项目目录` 设置源码解包位置。已有同名包会报错；打包和解包均保留源包，便于重复人工传输。未指定解包输入时，依次在 `~/Downloads`、当前目录、`transfer_snap/` 中查找匹配的最新包。
+可用 `ARCHIVE_SOURCES="Makefile meituan"` 选择仓库顶层路径，用 `ARCHIVE=自定义名称.tar.gz` 设置包名，用 `DEST=/目标项目目录` 设置源码解包位置。源码包完整生成后，自动清理同目录中 `archive_MirrorOPD-verl*.tar.gz` 及其旧分卷；固定同名包也可重新生成，旧文件在新包完整写入后替换。日志包、结果包和依赖 ZIP 不参与这项清理。
+
+源码成功解包后，清理输入目录中更旧的源码包，并删除刚使用的包或全部分卷；比当前输入更新的源码包保留。解包失败时保留输入包。需要保留刚解包的输入文件时执行：
+
+```bash
+make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.gz KEEP_ARCHIVE_AFTER_UNPACK=1
+```
+
+未指定解包输入时，依次在 `~/Downloads`、当前目录、`transfer_snap/` 中查找匹配的最新包。上述清理仅针对源码 archive；日志和结果增量包仍保留，便于按顺序人工传输。
 
 ## 原生 Python 与离线依赖
 
@@ -65,7 +73,9 @@ make sync-log-pack
 make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.gz
 ```
 
-默认只合并到本地 `wandb/`。需要上传到 W&B 时，显式添加 `WANDB_SYNC=1`；接收端应已安装并登录 `wandb`。可用 `WANDB_DIR=自定义目录` 改变打包源或接收位置。
+默认只合并到本地 `wandb/`。需要上传到 W&B 时，显式添加 `WANDB_SYNC=1`；接收端应已安装并登录 `wandb`。可用 `WANDB_RUNS_DIR=自定义目录` 改变打包源或接收位置。这个参数表示实际 run 目录；SDK 的 `WANDB_DIR` 表示其父级写入根目录，两个参数分开设置。
+
+本项目的数学配方默认启用 `console` 和 `wandb`，设置 `WANDB_MODE=offline`、`WANDB_DIR=<仓库根目录>`，并将这些环境变量显式传给 Ray 训练进程。W&B 实际记录位于 `<仓库>/wandb/offline-run-*/`，与同步脚本的默认扫描目录一致。运行输出和 checkpoint 仍保存在 `outputs/<实验名>/`。
 
 ## 结果下载
 
@@ -94,9 +104,26 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `SNAP_DIR` | `transfer_snap` | 压缩包与增量状态目录 |
 | `CHUNK_SIZE` | `10485760` | 分卷大小，单位为字节 |
 | `MAX_FILE_MB` | `100` | 结果文件大小上限，单位为 MiB |
+| `WANDB_RUNS_DIR` | `wandb` | 实际 W&B run 目录，用于日志打包和合并 |
+| `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；更旧源码包仍清理 |
 | `LOG_ACTION`、`ACTION` | `unpack` | `make sync-log`、`make sync-results` 的操作 |
 
 三个 shell 脚本保留 `pack`、`unpack` 命令行入口，调用同一套 `transfer.py` 逻辑。直接调用 shell 时用 `MIRROROPD_*` 环境变量设置参数；通常使用 Makefile 即可。
+
+## 验证
+
+单包上传前在 Mac 执行 `shasum -a 256 <源码包>`，开发机执行 `sha256sum <上传的源码包>`，比较哈希；分卷对每个文件分别比较。源码包内容可用 `tar -tzf <源码包>` 查看，应包含 `Makefile`、`AGENTS.md`、`meituan/`、`verl/` 等源码，包含离线 ZIP，排除虚拟环境、模型和训练输出。
+
+开发机先运行 `make native-check`，确认本仓库源码路径、两个补充依赖和 vLLM 扩展导入正确。再单独测试 GPU 张量运算；上述检查不替代完整训练验收。
+
+不加载模型即可验证离线 W&B 是否按约定落盘：
+
+```bash
+make wandb-check
+make sync-log-pack
+```
+
+预期产生 `wandb/offline-run-*/run-*.wandb` 和日志包。人工传回 Mac 后运行 `make sync-log-unpack LOG_ARCHIVE=<下载包>`，确认本地出现对应 run；仅在准备上传到 W&B 服务时添加 `WANDB_SYNC=1`。
 
 ### 参考文献
 

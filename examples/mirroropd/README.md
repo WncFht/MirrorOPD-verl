@@ -46,6 +46,8 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 \
 
 `RUN_DIR` 必须是新目录，默认在 `outputs/` 下；保存实际命令、Git commit、相对 HEAD 的工作区 patch、解析配置、checkpoint 和验证输出。CLI 末尾参数仍是原生 Hydra overrides。改变训练步数时还要给足 `TOTAL_EPOCHS`，因为外层训练同时受 epoch 与 total step 限制。
 
+配方默认记录 console 与离线 W&B。SDK 写入根目录固定为本仓库，实际 run 位于 `wandb/offline-run-*/`；Ray 训练进程使用同样的路径和模式。可用 `make sync-log-pack` 打包后人工下载，完整流程见 [美团开发机同步说明](../../meituan/README.md)。
+
 ## 独立验证长度
 
 新增 `actor_rollout_ref.rollout.val_kwargs.max_tokens`，默认 `null`，保留原有训练/验证共用 response budget 的行为。非空时，验证请求和最终 response、mask、log-prob、router replay 输出使用同一预算；V1 的 TQ 保存未 padding 的实际输出，旧 DataProto 路径按验证预算 padding。

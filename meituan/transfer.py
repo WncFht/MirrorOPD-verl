@@ -13,7 +13,11 @@ from datetime import datetime
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parent.parent
-PREFIXES = {"code": "archive_MirrorOPD-verl", "logs": "log_MirrorOPD-verl", "results": "MirrorOPD_results"}
+PREFIXES = {
+    "code": "archive_MirrorOPD-verl",
+    "logs": "log_MirrorOPD-verl",
+    "results": "MirrorOPD_results",
+}
 RUNTIME_DIRS = {
     ".git",
     ".venvs",
@@ -33,7 +37,15 @@ RUNTIME_DIRS = {
     "result_snap",
     "offline-wheels",
 }
-CACHE_DIRS = {"__pycache__", ".pytest_cache", ".ruff_cache", ".mypy_cache", ".cache", "build", "dist"}
+CACHE_DIRS = {
+    "__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".mypy_cache",
+    ".cache",
+    "build",
+    "dist",
+}
 
 
 def repo_path(value):
@@ -63,7 +75,8 @@ def source_files(selections):
             raise FileNotFoundError(ROOT / name)
     if (ROOT / ".git").exists():
         output = subprocess.check_output(
-            ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], cwd=ROOT
+            ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+            cwd=ROOT,
         )
         candidates = [Path(os.fsdecode(name)) for name in output.split(b"\0") if name]
     else:
@@ -129,8 +142,28 @@ def incremental_files(kind, snap_dir):
     return selected, state_path, state
 
 
+def clean_source_archives(archive, keep, older_than=None):
+    """Remove source archives in the same directory, excluding current outputs and newer downloads."""
+    candidates = {archive}
+    candidates.update(archive.parent.glob(PREFIXES["code"] + "*.tar.gz"))
+    candidates.update(archive.parent.glob(PREFIXES["code"] + "*.tar.gz.part.[0-9]*"))
+    candidates.update(archive.parent.glob(archive.name + ".part.[0-9]*"))
+    removed = 0
+    for path in candidates:
+        if path in keep or not path.is_file():
+            continue
+        if not path.name.endswith(".tar.gz") and not path.suffix[1:].isdigit():
+            continue
+        if older_than is not None and path.stat().st_mtime_ns >= older_than:
+            continue
+        path.unlink()
+        removed += 1
+    if removed:
+        print(f"Removed {removed} old source archive file(s) from {archive.parent}")
+
+
 def pack(args, snap_dir):
-    """Write one archive or ordered 10 MiB parts, retaining previous archives for manual transfer."""
+    """Publish a complete archive before cleaning obsolete source packages or advancing incremental state."""
     state_path, state = None, None
     if args.kind == "code":
         files = source_files(args.paths)
@@ -148,7 +181,7 @@ def pack(args, snap_dir):
     if not archive.name.endswith(".tar.gz"):
         archive = archive.with_name(archive.name + ".tar.gz")
     archive.parent.mkdir(parents=True, exist_ok=True)
-    if archive.exists() or list(archive.parent.glob(archive.name + ".part.*")):
+    if args.kind != "code" and (archive.exists() or list(archive.parent.glob(archive.name + ".part.*"))):
         raise FileExistsError(f"Choose a new archive name: {archive}")
     chunk_size = int(os.environ.get("MIRROROPD_CHUNK_SIZE", "10485760"))
     if chunk_size <= 0:
@@ -172,6 +205,8 @@ def pack(args, snap_dir):
                     outputs.append(archive.parent / part.name)
             for path in outputs:
                 (Path(temp) / path.name).replace(path)
+    if args.kind == "code":
+        clean_source_archives(archive, set(outputs))
     if state_path is not None:
         state_path.parent.mkdir(parents=True, exist_ok=True)
         next_state = state_path.with_suffix(".tmp")
@@ -201,11 +236,19 @@ def unpack(args, snap_dir):
         raise FileNotFoundError(source)
     if args.kind != "code" and args.paths or len(args.paths) > 1:
         raise ValueError("only code unpack accepts an optional destination")
+    source_mtime = source.stat().st_mtime_ns
+    consumed = [source]
+    archive_base = source
     with tempfile.TemporaryDirectory(prefix="mirroropd-unpack-") as temp:
         archive = source
         if ".tar.gz.part." in source.name:
             prefix = source.name.rsplit(".part.", 1)[0] + ".part."
-            parts = sorted(source.parent.glob(prefix + "[0-9]*"), key=lambda path: int(path.name.rsplit(".", 1)[1]))
+            parts = sorted(
+                source.parent.glob(prefix + "[0-9]*"),
+                key=lambda path: int(path.name.rsplit(".", 1)[1]),
+            )
+            consumed = parts
+            archive_base = source.with_name(source.name.rsplit(".part.", 1)[0])
             archive = Path(temp) / "joined.tar.gz"
             with archive.open("wb") as output:
                 for index, part in enumerate(parts):
@@ -248,7 +291,17 @@ def unpack(args, snap_dir):
                 for run in sorted(incoming.glob("offline-run-*")):
                     if run.is_dir():
                         subprocess.run(["wandb", "sync", str(destination / run.name)], check=True)
-    print(f"Unpacked into {destination}; kept the input archive(s)")
+    print(f"Unpacked into {destination}")
+    if args.kind == "code":
+        clean_source_archives(archive_base, set(consumed), older_than=source_mtime)
+        if os.environ.get("KEEP_ARCHIVE_AFTER_UNPACK", "0") != "1":
+            for path in consumed:
+                path.unlink(missing_ok=True)
+            print(f"Removed {len(consumed)} consumed source archive file(s)")
+        else:
+            print("Kept input archive(s): KEEP_ARCHIVE_AFTER_UNPACK=1")
+    else:
+        print("Kept the input archive(s)")
 
 
 def main():
@@ -257,7 +310,11 @@ def main():
     parser.add_argument("kind", choices=PREFIXES)
     parser.add_argument("action", choices=("pack", "unpack"))
     parser.add_argument("archive", nargs="?", default="")
-    parser.add_argument("paths", nargs="*", help="code pack: top-level sources; code unpack: destination")
+    parser.add_argument(
+        "paths",
+        nargs="*",
+        help="code pack: top-level sources; code unpack: destination",
+    )
     args = parser.parse_args()
     snap_dir = repo_path(os.environ.get("MIRROROPD_SNAP_DIR", "transfer_snap"))
     if args.action == "pack":

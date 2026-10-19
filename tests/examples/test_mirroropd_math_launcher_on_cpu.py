@@ -126,6 +126,14 @@ def test_uv_launch_includes_math_dependencies_for_driver_and_workers(tmp_path):
     assert "--extra math" in worker_python
 
 
+def test_launcher_fixes_offline_wandb_location_for_ray(tmp_path):
+    """The training driver and Ray task runner share a checkout-relative offline log root."""
+    cfg = _config(tmp_path, WANDB_DIR=str(tmp_path / "unrelated"), WANDB_MODE="offline")
+    assert cfg.trainer.logger == ["console", "wandb"]
+    assert cfg.ray_kwargs.ray_init.runtime_env.env_vars.WANDB_DIR == str(ROOT)
+    assert cfg.ray_kwargs.ray_init.runtime_env.env_vars.WANDB_MODE == "offline"
+
+
 def test_real_launch_requires_explicit_gpu_allocation(tmp_path):
     result = _launch(tmp_path, DRY_RUN="0", CONFIG_ONLY="0")
     assert result.returncode == 2
