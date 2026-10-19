@@ -12,7 +12,7 @@
 | --- | --- |
 | Student 资源池 | 4 张 GPU；FSDP2 数据并行，训练与 rollout 共用 |
 | Student rollout | TP=1，共 4 个推理副本 |
-| Teacher 资源池 | 1 张 GPU；TP=1，1 个副本 |
+| Teacher 资源池 | 4 张 GPU；TP=1，同一个 teacher 的 4 个评分副本 |
 | Prompt / 训练 response | 4096 / 7168 token |
 | 验证 response | 31744 token |
 | Student / teacher 最大 context | 35841 / 11265 token，均预留一个 token |
@@ -22,7 +22,11 @@
 | 训练预算 | 1 epoch；全量 17917 条数据未过滤时约 279 steps |
 | 验证 / 保存间隔 | 20 / 50 global steps，并在最后一步触发 |
 
-这是一组面向 1.5B 模型、H800 80GB 的初始配置，尚未做 GPU 吞吐验收。先保留 batch=64，依据 teacher 评分耗时再调整 teacher 副本数。修改资源时，batch 必须是 student DP 数的整数倍，各推理资源池的 GPU 数必须是其 TP 的整数倍；`STUDENT_GPUS` 与 `TEACHER_GPUS` 是相加的独立资源池，不是同一组卡的两种计数。
+默认使用全部 8 张卡：4 张用于 student，4 张用于 teacher。两个 1.5B 模型先用 TP=1，通过独立副本并行处理请求；这是面向 80GB GPU 的初始配置，尚未做 GPU 吞吐验收。ResOPD 的公开配方也用 4+4，但其 Qwen3.5-27B teacher 用 TP=4，将一个副本放在四张卡上。[^resopd] 本配方的四个 teacher 副本权重相同，仍是单教师蒸馏。
+
+分配全部 8 张卡不代表每个阶段全部满载：同步训练在 student 生成期间可并发评分已经完成的轨迹，actor 更新期间 teacher 空闲，验证也不调用 teacher。后续依据评分耗时与 rollout 耗时判断四个评分副本的收益。需要缩减资源时可设 `TEACHER_GPUS=1`，恢复 4+1。修改资源时，batch 必须是 student DP 数的整数倍，各推理资源池的 GPU 数必须是其 TP 的整数倍；`STUDENT_GPUS` 与 `TEACHER_GPUS` 是相加的独立资源池，不是同一组卡的两种计数。
+
+脚本将常用环境变量集中在前半部分，按模型与数据、GPU、训练与验证预算分组；原生 Hydra 参数按 data、actor、rollout、validation、distillation、algorithm、trainer 分成数组，最后统一组装。通常改顶部默认值或使用环境变量即可；新增原生配置放入对应数组。
 
 模型默认从仓库相邻的 `models/` 读取，数据默认从相邻 `MD-OPD/data/` 读取；可用 `MODEL_ROOT`、`DATA_ROOT` 或各文件变量覆盖。数据文件分别是 `math/DAPO/train.parquet`、`math/MATH-500/test.parquet`、`math/AMC23/test.parquet` 和 `math/AIME25/test.parquet`。
 
@@ -33,9 +37,9 @@ DRY_RUN=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
 # 只解析 Hydra 配置；默认通过锁文件的 fsdp + vllm + math extras 运行。
 CONFIG_ONLY=1 bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
 
-# 获得 GPU 分配后设置 CUDA_VISIBLE_DEVICES，至少覆盖默认的 5 张卡。
-# 脚本不会选择物理 GPU，也不会清理其他训练进程。
-bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
+# 获得整机 8 张卡的分配、激活原生 Python 环境后运行。
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 \
+  bash examples/mirroropd/run_deepseek_r1_1_5b_fsdp2.sh
 ```
 
 默认 uv 启动同步配置 driver 与 Ray worker 的 Python。已有独立环境可设置 `VERL_USE_UV=0 PYTHON_BIN=/absolute/path/to/python`；环境需具备当前 verl 的 V1/TransferQueue 和 verifier 依赖。正式启动要求显式设置 `CUDA_VISIBLE_DEVICES`，并检查四个 parquet 文件存在。
