@@ -110,7 +110,8 @@ def export(args):
     args.out.mkdir(parents=True, exist_ok=False)
     write_rows(args.out / "history.jsonl", scrub(rows))
     write_json(args.out / "config.json", scrub(dict(run.config)))
-    write_json(args.out / "summary.json", scrub(dict(run.summary)))
+    # summary_metrics is the JSON dict; summary wraps nested values as SDK objects.
+    write_json(args.out / "summary.json", scrub(run.summary_metrics))
     source = {
         "kind": "wandb-api",
         "run": args.run,

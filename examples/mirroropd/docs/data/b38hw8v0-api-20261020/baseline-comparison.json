@@ -1,0 +1,221 @@
+{
+  "note": "External One-Shot-OPD references; matched sampling budgets, different execution pipelines. Not a controlled same-run step-zero comparison. All values are fractions.",
+  "records": [
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "MATH-500",
+      "metric": "mean@16",
+      "key": "val-core/MATH-500/acc/mean@16",
+      "value": 0.8325
+    },
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "AMC23",
+      "metric": "mean@16",
+      "key": "val-core/AMC23/acc/mean@16",
+      "value": 0.7203125
+    },
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "AIME25",
+      "metric": "mean@16",
+      "key": "val-core/AIME25/acc/mean@16",
+      "value": 0.2375
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "MATH-500",
+      "metric": "mean@16",
+      "key": "val-core/MATH-500/acc/mean@16",
+      "value": 0.841125
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "AMC23",
+      "metric": "mean@16",
+      "key": "val-core/AMC23/acc/mean@16",
+      "value": 0.725
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "AIME25",
+      "metric": "mean@16",
+      "key": "val-core/AIME25/acc/mean@16",
+      "value": 0.2520833333333333
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "MATH-500",
+      "metric": "mean@16",
+      "key": "val-core/MATH-500/acc/mean@16",
+      "value": 0.891125
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "AMC23",
+      "metric": "mean@16",
+      "key": "val-core/AMC23/acc/mean@16",
+      "value": 0.89375
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "AIME25",
+      "metric": "mean@16",
+      "key": "val-core/AIME25/acc/mean@16",
+      "value": 0.39166666666666666
+    },
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "MATH-500",
+      "metric": "best@16/mean",
+      "key": "val-core/MATH-500/acc/best@16/mean",
+      "value": 0.942054
+    },
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "AMC23",
+      "metric": "best@16/mean",
+      "key": "val-core/AMC23/acc/best@16/mean",
+      "value": 0.9291
+    },
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "AIME25",
+      "metric": "best@16/mean",
+      "key": "val-core/AIME25/acc/best@16/mean",
+      "value": 0.4576333333333333
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "MATH-500",
+      "metric": "best@16/mean",
+      "key": "val-core/MATH-500/acc/best@16/mean",
+      "value": 0.950208
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "AMC23",
+      "metric": "best@16/mean",
+      "key": "val-core/AMC23/acc/best@16/mean",
+      "value": 0.962875
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "AIME25",
+      "metric": "best@16/mean",
+      "key": "val-core/AIME25/acc/best@16/mean",
+      "value": 0.4093666666666666
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "MATH-500",
+      "metric": "best@16/mean",
+      "key": "val-core/MATH-500/acc/best@16/mean",
+      "value": 0.954912
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "AMC23",
+      "metric": "best@16/mean",
+      "key": "val-core/AMC23/acc/best@16/mean",
+      "value": 0.95
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "AIME25",
+      "metric": "best@16/mean",
+      "key": "val-core/AIME25/acc/best@16/mean",
+      "value": 0.5927333333333333
+    },
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "MATH-500",
+      "metric": "maj@16/mean",
+      "key": "val-core/MATH-500/acc/maj@16/mean",
+      "value": 0.892558
+    },
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "AMC23",
+      "metric": "maj@16/mean",
+      "key": "val-core/AMC23/acc/maj@16/mean",
+      "value": 0.848425
+    },
+    {
+      "model": "Student reference",
+      "run": "wncfht/One-Shot-OPD/6uorrk2k",
+      "dataset": "AIME25",
+      "metric": "maj@16/mean",
+      "key": "val-core/AIME25/acc/maj@16/mean",
+      "value": 0.30346666666666666
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "MATH-500",
+      "metric": "maj@16/mean",
+      "key": "val-core/MATH-500/acc/maj@16/mean",
+      "value": 0.8945639999999999
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "AMC23",
+      "metric": "maj@16/mean",
+      "key": "val-core/AMC23/acc/maj@16/mean",
+      "value": 0.8511749999999999
+    },
+    {
+      "model": "OPD step 20",
+      "run": "wncfht/MirrorOPD-verl/b38hw8v0",
+      "dataset": "AIME25",
+      "metric": "maj@16/mean",
+      "key": "val-core/AIME25/acc/maj@16/mean",
+      "value": 0.3034
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "MATH-500",
+      "metric": "maj@16/mean",
+      "key": "val-core/MATH-500/acc/maj@16/mean",
+      "value": 0.922804
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "AMC23",
+      "metric": "maj@16/mean",
+      "key": "val-core/AMC23/acc/maj@16/mean",
+      "value": 0.9353
+    },
+    {
+      "model": "Teacher reference",
+      "run": "wncfht/One-Shot-OPD/u87buult",
+      "dataset": "AIME25",
+      "metric": "maj@16/mean",
+      "key": "val-core/AIME25/acc/maj@16/mean",
+      "value": 0.4337333333333333
+    }
+  ]
+}
