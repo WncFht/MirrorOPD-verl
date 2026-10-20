@@ -1,0 +1,17 @@
+{
+  "checked_date": "2026-10-20",
+  "scope": "8 physical GPUs; research and documentation only",
+  "local_repository_revision_before_docs": "509c4b2a86b4a4112f3afae33f9207ce51b02420",
+  "paper": "2610.11291v1",
+  "baseline_identification": "Table 1 references and section 2.3; distinguish cited results from authors reimplementations",
+  "methods": [
+    "Read local V1 resource pools, sync/separate_async trainers, AgentLoop/TQ/replay, current distillation loss",
+    "Read pinned NeMo RL controller, Automodel worker offload, vLLM sleep and refit, composed four inherited configs",
+    "Read author Lightning/Relay/Google SKD code; reviewed FastOPD TeX and public submission",
+    "Refreshed 19 relevant upstream issue/PR metadata entries; inspected key diffs and comments",
+    "Read local One-Shot-OPD frozen teacher/mixin and prior fixed ResOPD recipe"
+  ],
+  "nemo_config_audit": "../nemo-rl-20261020/config-audit.json",
+  "prior_upstream_status": "../upstream-opd-20261020/reviewed-status.json",
+  "validation": "No training runtime modified and no GPU performance experiment performed."
+}

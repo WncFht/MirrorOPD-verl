@@ -1,0 +1,90 @@
+{
+  "checked_date": "2026-10-20",
+  "repositories": [
+    {
+      "repository": "jet-ai-projects/Lightning-OPD",
+      "default_branch": "main",
+      "sha": "cd6b559dfedf091c316c761d566e99dc62d14fb9",
+      "commit_date": "2026-05-12T05:08:44Z",
+      "html_url": "https://github.com/jet-ai-projects/Lightning-OPD",
+      "license": "Apache-2.0",
+      "code_role": "Author release",
+      "files_reviewed": [
+        "configs/opd/qwen3-4b-opd.py",
+        "configs/lightning_opd/qwen3-8b-lightning-opd.py",
+        "data_curation/prepare_lightning_opd.py",
+        "slime/rollout/sglang_rollout.py",
+        "slime/rollout/on_policy_distillation.py",
+        "slime/backends/megatron_utils/loss.py",
+        "scripts/serve_teacher_8b.sh",
+        "configs/sft/run_sft.sh"
+      ],
+      "online_gpu_layout": {
+        "actor": 2,
+        "rollout": 4,
+        "teacher": 2
+      },
+      "offline_training_gpu_layout": {
+        "actor": 8,
+        "rollout": 0,
+        "online_teacher": 0
+      }
+    },
+    {
+      "repository": "ZJU-REAL/Relay-OPD",
+      "default_branch": "main",
+      "sha": "eab21451f99e1a40fbb244f556de766d153c88f5",
+      "commit_date": "2026-07-29T06:27:11Z",
+      "html_url": "https://github.com/ZJU-REAL/Relay-OPD",
+      "license": null,
+      "code_role": "Author Relay implementation; third-party OPD/FastOPD/SKD baselines",
+      "license_in_subdirectory": "relay-opd/LICENSE: Apache-2.0",
+      "files_reviewed": [
+        "relay-opd/opd/scripts/relay_opd/train.sh",
+        "relay-opd/opd/scripts/baselines/opd.sh",
+        "relay-opd/opd/scripts/baselines/fastopd/4096.sh",
+        "relay-opd/opd/scripts/baselines/skd.sh",
+        "relay-opd/opd/patches/vllm/speculative_decode.py",
+        "relay-opd/verl/workers/rollout/vllm_rollout/vllm_async_server.py",
+        "relay-opd/verl/trainer/main_ppo.py",
+        "relay-opd/verl/workers/rollout/vllm_rollout/utils.py"
+      ],
+      "gpu_layout": {
+        "hybrid": 4,
+        "scoring_teacher": 4
+      },
+      "generation_models": "teacher target and student draft inside hybrid engines",
+      "vllm_pin": "0.21.0",
+      "fastopd_implementation": "Set MAX_RESPONSE_LENGTH=4096, then exec standard OPD script",
+      "skd_default_loss": "forward_kl_topk_teacher_renorm, k=128"
+    },
+    {
+      "repository": "google-research/google-research",
+      "sha": "5b09c22d73a9d35eb6c5d2a99b95677a45053466",
+      "date": "2026-02-12T18:07:53Z",
+      "path": "speculative_kd",
+      "code_role": "Author SKD release mirrored in Google Research",
+      "files_reviewed": [
+        "README.md",
+        "train/run_kd_train.py",
+        "train/ddp_skd.py",
+        "config/kd_train.yaml",
+        "config/deepspeed_zero3.yaml"
+      ],
+      "default_processes": 8,
+      "placement": "Accelerator prepares both frozen teacher and trainable student, not separate verl resource pools",
+      "transformers_pin": "4.44.2",
+      "gpu_tested_here": false
+    },
+    {
+      "name": "FastOPD / prefix OPD",
+      "paper": "2602.15260v1",
+      "official_paper_url": "https://aclanthology.org/2026.findings-acl.1276/",
+      "submission_url": "https://openreview.net/pdf?id=9zmCdlsUvT",
+      "author_code_status": "Submission states code is in attachment; attachment contents not audited; dedicated author-maintained repository not confirmed.",
+      "inspected_implementation": "Relay-OPD baseline, third-party",
+      "not_the_same_paper": "2610.02832 is a VLA deployment paper"
+    }
+  ],
+  "gpu_tests_performed": false
+}
