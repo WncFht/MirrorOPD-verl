@@ -14,7 +14,7 @@ from omegaconf import OmegaConf
 
 import verl.trainer.ppo.v1.agent_loop_tq as tq_loop
 import verl.trainer.ppo.v1.trainer_base as trainer_module
-import verl.utils.opd_metrics as opd
+import verl.utils.pipeline_metrics as pm
 import verl.workers.engine_workers as engine_module
 from verl.experimental.agent_loop.agent_loop import AgentLoopMetrics, AgentLoopOutput, AgentLoopWorker
 from verl.experimental.agent_loop.single_turn_agent_loop import SingleTurnAgentLoop
@@ -31,7 +31,7 @@ def _requests():
     # All requests took 2s, but staggered admission makes the batch take 6s.
     return [
         {
-            "opd_submission": deepcopy(submission),
+            "rollout_submission": deepcopy(submission),
             "generation_finished_at_ns": finish * 10**9,
             "generation_clock_domain": "node:time",
             "generate_sequences": 2.0,
@@ -43,7 +43,7 @@ def _requests():
 
 
 def test_staggered_batch_and_request_weighted_mean():
-    metrics = opd.aggregate_opd_requests(["a_0_0", "a_1_0", "b_0_0"], _requests())
+    metrics = pm.aggregate_pipeline_requests(["a_0_0", "a_1_0", "b_0_0"], _requests())
     assert metrics == {
         "timing_s/rollout_batch": 6,
         "teacher/request_latency_s/mean": 4,
@@ -62,10 +62,10 @@ def test_incomplete_submissions_never_report_full_batch(problem):
     elif problem == "multi_turn":
         keys[1] = "a_0_1"
     elif problem == "mixed_submission":
-        rows[1]["opd_submission"]["id"] = "another"
+        rows[1]["rollout_submission"]["id"] = "another"
     else:
         rows[1] = {}
-    metrics = opd.aggregate_opd_requests(keys, rows)
+    metrics = pm.aggregate_pipeline_requests(keys, rows)
     assert "timing_s/rollout_batch" not in metrics
     assert "rollout/preemptions" not in metrics
 
@@ -81,18 +81,18 @@ def test_unverified_clocks_omit_span_but_preserve_counts(problem):
         }[problem]
     else:
         rows[1]["generation_finished_at_ns"] = None if problem == "no_finish" else 0
-    metrics = opd.aggregate_opd_requests(["a_0_0", "a_1_0", "b_0_0"], rows)
+    metrics = pm.aggregate_pipeline_requests(["a_0_0", "a_1_0", "b_0_0"], rows)
     assert "timing_s/rollout_batch" not in metrics
     assert metrics["rollout/preemptions"] == 3
 
 
 @pytest.mark.parametrize("unknown", [-1, None])
 def test_unknown_preemptions_are_not_zero_and_warn_once(caplog, unknown):
-    opd._warn_once.cache_clear()
+    pm._warn_once.cache_clear()
     rows = _requests()
     rows[1]["num_preempted"] = unknown
     for _ in range(2):
-        metrics = opd.aggregate_opd_requests(["a_0_0", "a_1_0", "b_0_0"], rows)
+        metrics = pm.aggregate_pipeline_requests(["a_0_0", "a_1_0", "b_0_0"], rows)
         assert "rollout/preemptions" not in metrics
         assert metrics["timing_s/rollout_batch"] == 6
     assert sum("unknown is not zero" in record.message for record in caplog.records) == 1
@@ -100,15 +100,15 @@ def test_unknown_preemptions_are_not_zero_and_warn_once(caplog, unknown):
 
 def test_validation_sums_windows_and_omits_any_partially_missing_metric():
     windows = [{"timing_s/rollout_batch": 6, "rollout/preemptions": 0}, {"timing_s/rollout_batch": 2}]
-    assert opd.aggregate_opd_validation(windows) == {"validation/timing_s/rollout_batch": 8}
-    assert opd.aggregate_opd_validation(windows + [{}]) == {}
+    assert pm.aggregate_validation_windows(windows) == {"validation/timing_s/rollout_batch": 8}
+    assert pm.aggregate_validation_windows(windows + [{}]) == {}
 
 
-def _trainer(enabled=True):
+def _trainer():
     trainer = object.__new__(PPOTrainerSync)
     trainer.config = OmegaConf.create(
         {
-            "trainer": {"v1": {"opd_metrics": enabled}},
+            "trainer": {"v1": {}},
             "actor_rollout_ref": {"rollout": {"n": 2, "val_kwargs": {"n": 3}}},
         }
     )
@@ -118,33 +118,31 @@ def _trainer(enabled=True):
     return trainer
 
 
-@pytest.mark.parametrize("enabled", [False, True])
-def test_submission_and_collection_use_existing_tq(monkeypatch, enabled):
-    trainer = _trainer(enabled)
+def test_submission_and_collection_work_by_default_without_distillation(monkeypatch):
+    trainer = _trainer()
     put, get = MagicMock(), MagicMock()
     monkeypatch.setattr(trainer_module.tq, "kv_batch_put", put)
     monkeypatch.setattr(trainer_module.tq, "kv_batch_get", get)
-    monkeypatch.setattr(opd, "monotonic_clock_domain", lambda: "node:time")
+    monkeypatch.setattr(pm, "monotonic_clock_domain", lambda: "node:time")
     batch = tu.get_tensordict({"uid": ["a", "b"], "__rollout_n__": [2, 1]})
     assert trainer._submit_batch_to_rollout(batch) == 2
     sent = trainer.agent_loop_manager.generate_sequences.call_args.args[0]
-    assert ("__opd_metrics__" in sent) == enabled
-    if enabled:
-        assert sent["__opd_submission__"]["expected_requests"] == 3
-        assert sent["__opd_submission__"]["clock_domain"] == "node:time"
-    get.return_value = tu.list_of_dict_to_tensordict([{"metrics": row} for row in _requests()])
+    assert sent["__rollout_submission__"]["expected_requests"] == 3
+    assert sent["__rollout_submission__"]["clock_domain"] == "node:time"
+    rows = _requests()
+    for row in rows:
+        row.pop("teacher_request_latency_s")
+    get.return_value = tu.list_of_dict_to_tensordict([{"metrics": row} for row in rows])
     meta = SimpleNamespace(
         keys=["a_0_0", "a_1_0", "b_0_0", "padded_copy"],
         tags=[{}, {}, {}, {"is_padding": True}],
         partition_id="train",
     )
-    metrics = trainer._collect_opd_metrics(meta)
-    if enabled:
-        assert get.call_args.kwargs["keys"] == meta.keys[:3]
-        assert metrics["timing_s/rollout_batch"] == 6
-    else:
-        get.assert_not_called()
-        assert metrics == {}
+    metrics = trainer._collect_pipeline_metrics(meta)
+    assert get.call_args.kwargs["keys"] == meta.keys[:3]
+    assert metrics["timing_s/rollout_batch"] == 6
+    assert metrics["rollout/preemptions"] == 3
+    assert "teacher/request_latency_s/mean" not in metrics
 
 
 @pytest.mark.parametrize(
@@ -155,14 +153,14 @@ def test_unsupported_training_modes_skip_batch_stamp_but_validation_can_measure(
     trainer.trainer_mode = mode
     trainer.config.algorithm = {"filter_groups": {"enable": filtering}}
     batch = tu.get_tensordict({"uid": ["a", "b"]})
-    trainer._stamp_opd_submission(batch, validate=validate)
-    assert ("__opd_submission__" in batch) == validate
+    trainer._stamp_rollout_submission(batch, validate=validate)
+    assert ("__rollout_submission__" in batch) == validate
     if validate:
-        assert batch["__opd_submission__"]["expected_requests"] == 6
+        assert batch["__rollout_submission__"]["expected_requests"] == 6
 
 
-@pytest.mark.parametrize("enabled", [False, True])
-def test_completion_stamp_precedes_merge_and_survives_tq(monkeypatch, enabled):
+@pytest.mark.parametrize("submitted", [False, True])
+def test_completion_stamp_precedes_merge_and_survives_tq(monkeypatch, submitted):
     import verl.experimental.agent_loop.single_turn_agent_loop as loop_module
 
     loop = object.__new__(SingleTurnAgentLoop)
@@ -178,14 +176,16 @@ def test_completion_stamp_precedes_merge_and_survives_tq(monkeypatch, enabled):
     monkeypatch.setattr(loop_module, "monotonic_clock_domain", lambda: "node:time")
 
     async def merge(*args, **kwargs):
-        assert clock.call_count == int(enabled)
+        assert clock.call_count == int(submitted)
         return SimpleNamespace(token_ids=[101, 11]), [1], None
 
     loop.ct_merge_assistant_token = merge
     output = asyncio.run(
-        loop.run({}, raw_prompt=[], __opd_metrics__=enabled, __opd_submission__=_requests()[0]["opd_submission"])
+        loop.run(
+            {}, raw_prompt=[], **({"__rollout_submission__": _requests()[0]["rollout_submission"]} if submitted else {})
+        )
     )
-    assert ("generation_finished_at_ns" in output.as_dict()["metrics"]) == enabled
+    assert ("generation_finished_at_ns" in output.as_dict()["metrics"]) == submitted
 
     captured = {}
 
@@ -202,36 +202,35 @@ def test_completion_stamp_precedes_merge_and_survives_tq(monkeypatch, enabled):
     cls = tq_loop.AgentLoopWorkerTQ.__ray_metadata__.modified_class
     asyncio.run(cls._agent_loop_postprocess(worker, [output], uid="a", session_id=0, validate=False, global_steps=5))
     row = tu.get(captured["fields"], "metrics")[0]
-    assert ("generation_finished_at_ns" in row) == enabled
-    if enabled:
+    assert ("generation_finished_at_ns" in row) == submitted
+    if submitted:
         assert row["generation_finished_at_ns"] == 7 * 10**9
-        assert row["opd_submission"]["expected_requests"] == 3
+        assert row["rollout_submission"]["expected_requests"] == 3
 
 
-@pytest.mark.parametrize("enabled,validate", [(False, False), (True, False), (True, True)])
-def test_teacher_rpc_latency_and_validation_omission(monkeypatch, enabled, validate):
+@pytest.mark.parametrize("has_teacher,validate", [(False, False), (True, False), (True, True)])
+def test_teacher_rpc_latency_and_validation_omission(monkeypatch, has_teacher, validate):
     import verl.experimental.agent_loop.agent_loop as loop_module
 
     worker = SimpleNamespace(
-        distillation_enabled=True,
+        distillation_enabled=has_teacher,
         teacher_key="teacher",
         teacher_server_manager=SimpleNamespace(compute_teacher_logprobs_single=AsyncMock(return_value=([1], [-0.1]))),
     )
     output = AgentLoopOutput(prompt_ids=[1], response_ids=[2], response_mask=[1], metrics=AgentLoopMetrics())
     clock = MagicMock(side_effect=[10.0, 12.5])
     monkeypatch.setattr(loop_module, "time", SimpleNamespace(monotonic=clock))
-    asyncio.run(
-        AgentLoopWorker._compute_teacher_logprobs(
-            worker, output, [1], [2], validate, sample_kwargs={"__opd_metrics__": enabled}
-        )
+    asyncio.run(AgentLoopWorker._compute_teacher_logprobs(worker, output, [1], [2], validate, sample_kwargs={}))
+    assert clock.call_count == (2 if has_teacher and not validate else 0)
+    assert output.metrics.teacher_request_latency_s == (2.5 if has_teacher and not validate else None)
+    assert worker.teacher_server_manager.compute_teacher_logprobs_single.await_count == int(
+        has_teacher and not validate
     )
-    assert clock.call_count == (2 if enabled and not validate else 0)
-    assert output.metrics.teacher_request_latency_s == (2.5 if enabled and not validate else None)
-    assert worker.teacher_server_manager.compute_teacher_logprobs_single.await_count == int(not validate)
 
 
-@pytest.mark.parametrize("enabled,source_rank", [(False, True), (True, True), (True, False)])
-def test_fsdp_peak_reduces_all_ranks_once_per_update(monkeypatch, enabled, source_rank):
+@pytest.mark.parametrize("strategy,source_rank", [("megatron", True), ("fsdp2", True), ("fsdp2", False)])
+def test_fsdp_peak_reduces_all_ranks_once_per_update(monkeypatch, strategy, source_rank):
+    is_fsdp = strategy == "fsdp2"
     worker = SimpleNamespace(
         engine=SimpleNamespace(
             train_mode=lambda **kw: nullcontext(),
@@ -239,7 +238,7 @@ def test_fsdp_peak_reduces_all_ranks_once_per_update(monkeypatch, enabled, sourc
             get_data_parallel_rank=lambda: 0,
             is_mp_src_rank_with_outputs=lambda: source_rank,
         ),
-        engine_config=SimpleNamespace(strategy="fsdp2"),
+        engine_config=SimpleNamespace(strategy=strategy),
         device_name="cpu",
         profiler=MagicMock(),
         train_batch=MagicMock(side_effect=lambda data: tu.get_tensordict({}, {"metrics": {"loss": 1.0}})),
@@ -249,25 +248,23 @@ def test_fsdp_peak_reduces_all_ranks_once_per_update(monkeypatch, enabled, sourc
     monkeypatch.setattr(engine_module, "get_torch_device", lambda: device)
     reduce = MagicMock(side_effect=lambda tensor, **kw: tensor.fill_(9))  # A remote/SP rank has the largest peak.
     monkeypatch.setattr(torch.distributed, "all_reduce", reduce)
-    data = tu.get_tensordict(
-        {"index": torch.tensor([0, 1, 2, 3])}, {"mini_batch_size": 2, "epochs": 2, "opd_metrics": enabled}
-    )
+    data = tu.get_tensordict({"index": torch.tensor([0, 1, 2, 3])}, {"mini_batch_size": 2, "epochs": 2})
     # register() accepts a TensorDict directly; only distributed/engine execution is mocked.
     output = TrainingWorker.train_mini_batch(worker, data)
     assert worker.train_batch.call_count == 4
-    assert reduce.call_count == int(enabled)
-    if enabled:
+    assert reduce.call_count == int(is_fsdp)
+    if is_fsdp:
         assert reduce.call_args.kwargs["op"] == torch.distributed.ReduceOp.MAX
     device.reset_peak_memory_stats.assert_not_called()
     if source_rank:
         metrics = tu.get(output, "metrics")
-        assert (opd.FSDP_PEAK_MEMORY in metrics) == enabled
-        if enabled:
+        assert (pm.FSDP_PEAK_MEMORY in metrics) == is_fsdp
+        if is_fsdp:
             # Exercise the same metadata merging primitive used by worker result collection.
             merged = {}
             append_to_dict(merged, metrics)
             append_to_dict(merged, metrics)
-            assert reduce_metrics(merged)[opd.FSDP_PEAK_MEMORY] == 9
+            assert reduce_metrics(merged)[pm.FSDP_PEAK_MEMORY] == 9
     else:
         assert output is None
 
@@ -287,7 +284,7 @@ def test_driver_logs_training_and_validation_in_one_offline_wandb_step(monkeypat
     trainer = _trainer()
     trainer.config.trainer.update(
         {
-            "project_name": "opd-metrics-test",
+            "project_name": "pipeline-metrics-test",
             "experiment_name": "cpu",
             "logger": ["console", "wandb"],
             "val_before_train": False,
@@ -315,7 +312,7 @@ def test_driver_logs_training_and_validation_in_one_offline_wandb_step(monkeypat
     batch = SimpleNamespace(keys=["a_0_0", "a_1_0", "b_0_0"], tags=[{}, {}, {}], partition_id="train")
 
     def step(metrics, timing):
-        metrics[opd.FSDP_PEAK_MEMORY] = 9.0
+        metrics[pm.FSDP_PEAK_MEMORY] = 9.0
         return batch
 
     trainer.step = step
@@ -323,7 +320,7 @@ def test_driver_logs_training_and_validation_in_one_offline_wandb_step(monkeypat
     trainer._validate = lambda: validation
     # Avoid running unrelated token/loss diagnostics; retain actual TQ collection and fit ordering.
     trainer._compute_metrics = lambda batch, metrics, *args, **kwargs: metrics.update(
-        trainer._collect_opd_metrics(batch)
+        trainer._collect_pipeline_metrics(batch)
     )
     cleared = []
 
@@ -361,15 +358,15 @@ def test_driver_logs_training_and_validation_in_one_offline_wandb_step(monkeypat
     assert histories[0]["timing_s/rollout_batch"] == 6
     assert histories[0]["teacher/request_latency_s/mean"] == 4
     assert histories[0]["rollout/preemptions"] == 3
-    assert histories[0][opd.FSDP_PEAK_MEMORY] == 9
+    assert histories[0][pm.FSDP_PEAK_MEMORY] == 9
     assert histories[0]["validation/timing_s/rollout_batch"] == 8
 
 
-@pytest.mark.parametrize("enabled", [False, True])
-def test_actor_passes_opt_in_metadata_and_preserves_canonical_memory_key(enabled):
+@pytest.mark.parametrize("has_peak", [False, True])
+def test_actor_preserves_canonical_memory_key_without_metrics_metadata(has_peak):
     from verl.utils.metric import Metric
 
-    trainer = _trainer(enabled)
+    trainer = _trainer()
     trainer.config.actor_rollout_ref.actor = {
         "ppo_mini_batch_size": 2,
         "calculate_entropy": False,
@@ -381,17 +378,17 @@ def test_actor_passes_opt_in_metadata_and_preserves_canonical_memory_key(enabled
     }
     trainer.config.actor_rollout_ref.rollout.temperature = 1.0
     returned = {"mfu": [0.1], "perf/max_memory_allocated_gb": [3, 9]}
-    if enabled:
-        returned[opd.FSDP_PEAK_MEMORY] = Metric("max", 3)
-        returned[opd.FSDP_PEAK_MEMORY].append(9)
+    if has_peak:
+        returned[pm.FSDP_PEAK_MEMORY] = Metric("max", 3)
+        returned[pm.FSDP_PEAK_MEMORY].append(9)
     trainer.actor_rollout_wg = SimpleNamespace(update_actor=lambda batch: {"metrics": returned})
     batch = SimpleNamespace(extra_info={})
     metrics = {}
     trainer._update_actor(batch, metrics)
-    assert batch.extra_info.get("opd_metrics", False) == enabled
+    assert "opd_metrics" not in batch.extra_info
     assert metrics["perf/mfu/actor"] == 0.1
     assert metrics["actor/perf/max_memory_allocated_gb"] == 9
-    assert (opd.FSDP_PEAK_MEMORY in metrics) == enabled
-    assert f"actor/{opd.FSDP_PEAK_MEMORY}" not in metrics
-    if enabled:
-        assert metrics[opd.FSDP_PEAK_MEMORY] == 9
+    assert (pm.FSDP_PEAK_MEMORY in metrics) == has_peak
+    assert f"actor/{pm.FSDP_PEAK_MEMORY}" not in metrics
+    if has_peak:
+        assert metrics[pm.FSDP_PEAK_MEMORY] == 9
