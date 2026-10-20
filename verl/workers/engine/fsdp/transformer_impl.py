@@ -38,7 +38,7 @@ from verl.utils.activation_offload import enable_activation_offloading
 from verl.utils.checkpoint.fsdp_checkpoint_manager import FSDPCheckpointManager
 from verl.utils.dataset.dataset_utils import DatasetPadMode
 from verl.utils.debug import log_gpu_memory_usage
-from verl.utils.device import get_device_id, get_device_name
+from verl.utils.device import get_device_id, get_device_name, get_torch_device
 from verl.utils.fsdp_utils import (
     CPUOffloadPolicy,
     FSDPModule,
@@ -460,7 +460,9 @@ class FSDPEngine(BaseEngine):
                 param_dtype=param_dtype, reduce_dtype=reduce_dtype, cast_forward_inputs=True
             )
             offload_policy = None
-            if self.engine_config.offload_policy or self.engine_config.forward_only:
+            if self.engine_config.offload_policy or (
+                self.engine_config.forward_only and self.engine_config.forward_only_cpu_offload
+            ):
                 self._is_offload_param = False
                 self._is_offload_optimizer = False
                 offload_policy = CPUOffloadPolicy(pin_memory=True)
@@ -852,8 +854,13 @@ class FSDPEngine(BaseEngine):
         """
         super().to(device=device, model=model, optimizer=optimizer, grad=grad)
 
-        if self.engine_config.forward_only:
-            # force cpu_offload
+        phase_offload = (
+            self.engine_config.forward_only
+            and self.engine_config.strategy == "fsdp2"
+            and not self._uses_fsdp2_cpu_offload_policy
+        )
+        if self.engine_config.forward_only and not phase_offload:
+            # Reference policies retain automatic per-layer CPU offloading.
             return
 
         device_name = get_device_name()
@@ -871,6 +878,11 @@ class FSDPEngine(BaseEngine):
                 offload_fsdp_optimizer(self.optimizer)
         else:
             raise ValueError(f"Invalid device type: {device}")
+
+        if phase_offload:
+            # Phase RPC completion must include H2D completion (model.to is
+            # nonblocking). Do not change actor/ref transfer overlap semantics.
+            get_torch_device().synchronize()
 
     def save_checkpoint(
         self,

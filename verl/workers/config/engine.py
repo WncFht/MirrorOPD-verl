@@ -276,6 +276,9 @@ class FSDPEngineConfig(EngineConfig):
     # fsdp specific flags
     wrap_policy: dict[str, Any] = field(default_factory=dict)
     offload_policy: bool = False
+    # Preserve reference-policy CPUOffloadPolicy by default. FSDP2 forward-only
+    # workers may opt out to use the same phase-level transfers as training.
+    forward_only_cpu_offload: bool = True
     reshard_after_forward: bool = True
     fsdp_size: int = -1
     forward_prefetch: bool = False

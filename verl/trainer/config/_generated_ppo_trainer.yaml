@@ -31,6 +31,7 @@ actor_rollout_ref:
       param_offload: false
       optimizer_offload: false
       offload_policy: false
+      forward_only_cpu_offload: true
       reshard_after_forward: true
       fsdp_size: -1
       forward_prefetch: false
@@ -239,6 +240,7 @@ actor_rollout_ref:
       param_offload: false
       optimizer_offload: false
       offload_policy: false
+      forward_only_cpu_offload: true
       reshard_after_forward: true
       fsdp_size: -1
       forward_prefetch: false
@@ -564,6 +566,7 @@ critic:
     param_offload: false
     optimizer_offload: false
     offload_policy: false
+    forward_only_cpu_offload: true
     reshard_after_forward: true
     fsdp_size: -1
     forward_prefetch: false
@@ -888,6 +891,21 @@ algorithm:
 distillation:
   _target_: verl.workers.config.DistillationConfig
   enabled: false
+  execution_mode: standalone
+  shared_teacher:
+    _target_: verl.workers.config.FSDPEngineConfig
+    strategy: fsdp2
+    forward_only: true
+    model_dtype: bfloat16
+    mixed_precision: null
+    param_offload: true
+    optimizer_offload: false
+    offload_policy: false
+    forward_only_cpu_offload: false
+    reshard_after_forward: true
+    use_dynamic_bsz: true
+    infer_max_token_len_per_gpu: 32768
+    use_torch_compile: false
   distillation_loss:
     _target_: verl.workers.config.DistillationLossConfig
     loss_mode: k3
