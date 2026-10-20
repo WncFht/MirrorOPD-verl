@@ -234,9 +234,6 @@ trainer:
   # V1 trainer mode configs
   v1:
 
-    # Opt-in OPD request timing and cumulative FSDP rank-max memory telemetry.
-    opd_metrics: false
-
     # Trainer mode: "sync", "colocate_async", "separate_async"
     trainer_mode: sync
 

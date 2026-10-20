@@ -81,10 +81,10 @@ from verl.utils.debug import marked_timer
 from verl.utils.debug.metrics import calculate_debug_metrics
 from verl.utils.import_utils import load_extern_type
 from verl.utils.metric import reduce_metrics
-from verl.utils.opd_metrics import (
+from verl.utils.pipeline_metrics import (
     FSDP_PEAK_MEMORY,
-    aggregate_opd_requests,
-    aggregate_opd_validation,
+    aggregate_pipeline_requests,
+    aggregate_validation_windows,
     make_rollout_submission,
 )
 from verl.utils.py_functional import rename_dict
@@ -1068,7 +1068,7 @@ class PPOTrainer(ABC):
         session_to_sample_idx: dict[str, int] = {}
         # To avoid failure sessions
         expected_acc_counts: dict[tuple[str, str], int] = {}
-        opd_windows = []
+        pipeline_windows = []
 
         for batch_dict in self.val_dataloader:
             # 1. put batch to agent loop manager
@@ -1095,7 +1095,7 @@ class PPOTrainer(ABC):
                 {"is_prompt": True, "status": "pending", "global_steps": self.global_steps} for _ in range(len(batch))
             ]
             tq.kv_batch_put(keys=list(batch["uid"]), partition_id="val", tags=tags)
-            self._stamp_opd_submission(batch, validate=True)
+            self._stamp_rollout_submission(batch, validate=True)
             self.agent_loop_manager.generate_sequences(batch)
 
             # 2. sample batch from replay buffer: one prompt (GRPO group) per submitted row.
@@ -1181,8 +1181,7 @@ class PPOTrainer(ABC):
             dump_all_outputs.extend(all_outputs)
             dump_all_keys.extend(batch.keys)
 
-            if OmegaConf.select(self.config, "trainer.v1.opd_metrics", default=False):
-                opd_windows.append(self._collect_opd_metrics(batch))
+            pipeline_windows.append(self._collect_pipeline_metrics(batch))
 
             # 5. cleanup transfer queue
             tq.kv_clear(keys=batch.keys, partition_id=batch.partition_id)
@@ -1230,7 +1229,7 @@ class PPOTrainer(ABC):
             sample_turns,
             expected_acc_counts=expected_acc_counts,
         )
-        val_metrics.update(aggregate_opd_validation(opd_windows))
+        val_metrics.update(aggregate_validation_windows(pipeline_windows))
         return val_metrics
 
     def _maybe_log_val_generations(self, inputs, outputs, scores):
@@ -1524,11 +1523,8 @@ class PPOTrainer(ABC):
         tu.assign_non_tensor_data(batch, "global_steps", self.global_steps)
         return batch
 
-    def _stamp_opd_submission(self, batch: TensorDict, *, validate: bool = False):
-        """Attach opt-in telemetry to the existing request metadata, without changing scheduling."""
-        if not OmegaConf.select(self.config, "trainer.v1.opd_metrics", default=False):
-            return
-        tu.assign_non_tensor_data(batch, "__opd_metrics__", True)
+    def _stamp_rollout_submission(self, batch: TensorDict, *, validate: bool = False):
+        """Stamp supported submissions by default; no algorithm-specific metrics switch."""
         # Refill/filtering, asynchronous and pre-generated subsets have no single batch span.
         supported = validate or (
             self.trainer_mode == "sync"
@@ -1545,16 +1541,14 @@ class PPOTrainer(ABC):
                 expected = len(batch) * int(counts.data)
             else:
                 expected = sum(int(n) for n in counts.tolist())
-            tu.assign_non_tensor_data(batch, "__opd_submission__", make_rollout_submission(expected))
+            tu.assign_non_tensor_data(batch, "__rollout_submission__", make_rollout_submission(expected))
 
-    def _collect_opd_metrics(self, batch: KVBatchMeta) -> dict[str, float]:
-        if not OmegaConf.select(self.config, "trainer.v1.opd_metrics", default=False):
-            return {}
+    def _collect_pipeline_metrics(self, batch: KVBatchMeta) -> dict[str, float]:
         # Padding repeats trajectories; count each real request exactly once.
         keys = [key for key, tag in zip(batch.keys, batch.tags, strict=True) if not tag.get("is_padding", False)]
         data = tq.kv_batch_get(keys=keys, partition_id=batch.partition_id, select_fields=["metrics"]) if keys else {}
         rows = tu.get(data, "metrics", default=[])
-        return aggregate_opd_requests(keys, rows)
+        return aggregate_pipeline_requests(keys, rows)
 
     def _submit_batch_to_rollout(self, batch: TensorDict) -> int:
         """Register prompts in TransferQueue and dispatch them for generation."""
@@ -1571,7 +1565,7 @@ class PPOTrainer(ABC):
         else:
             tq.kv_batch_put(keys=list(batch["uid"]), partition_id="train", tags=tags)
 
-        self._stamp_opd_submission(batch)
+        self._stamp_rollout_submission(batch)
         self.agent_loop_manager.generate_sequences(batch)
         return len(batch)
 
@@ -1923,8 +1917,6 @@ class PPOTrainer(ABC):
             "dataloader_kwargs": {"shuffle": self.config.actor_rollout_ref.actor.shuffle},
             "temperature": self.config.actor_rollout_ref.rollout.temperature,
         }
-        if OmegaConf.select(self.config, "trainer.v1.opd_metrics", default=False):
-            extra_info["opd_metrics"] = True
         batch.extra_info.update(extra_info)
 
         output: TensorDict = self.actor_rollout_wg.update_actor(batch)
@@ -1938,7 +1930,7 @@ class PPOTrainer(ABC):
         return batch
 
     def _compute_metrics(self, batch: KVBatchMeta, metrics, timing_raw, global_steps, epoch):
-        metrics.update(self._collect_opd_metrics(batch))
+        metrics.update(self._collect_pipeline_metrics(batch))
         # 1. collect necessary fields from TransferQueue for computing metrics
         non_padding_mask = np.array([not tag.get("is_padding", False) for tag in batch.tags], dtype=bool)
         fields = [
