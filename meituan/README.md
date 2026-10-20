@@ -65,7 +65,7 @@ python -m verl.trainer.main_ppo --help
 
 ## 提交 8 卡任务
 
-开发机安装、数据检查完成，且本地已有 `hope/mirroropd/mirroropd.hope` 和对应启动入口后，在仓库根目录执行 `make opd-submit`。它提交接收端保留的 Hope 配置，默认由集群 worker 使用现有 `.venv-native` 执行单机 8 卡训练：student 4 卡、teacher 4 卡，推理 TP 均为 1。`hope/` 不随源码同步，配置和入口由开发机本地维护；仓库内的参考说明见 [Hope 说明](../hope/README.md)。
+开发机安装、数据检查完成，且本地已有 `hope/mirroropd/mirroropd.hope` 和对应启动入口后，在仓库根目录执行 `make opd-submit`。它提交接收端保留的 Hope 配置，默认由集群 worker 使用现有 `.venv-native` 执行单机共享 8 卡训练：student rollout、冻结 teacher 评分、actor 更新顺序共池执行，student 推理 TP=1。旧 4+4 可通过 `DISTILLATION_EXECUTION_MODE=standalone` 选择。`hope/` 不随源码同步，配置和入口由开发机本地维护；仓库内的参考说明见 [Hope 说明](../hope/README.md)。
 
 ## 模型与数据布局
 
