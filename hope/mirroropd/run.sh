@@ -14,10 +14,10 @@ esac
 
 # 保留调度器设置的设备编号或 UUID；未设置时使用任务内的 8 个逻辑设备。
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3,4,5,6,7}
-export STUDENT_GPUS=4
-export TEACHER_GPUS=4
-export ROLLOUT_TP=1
-export TEACHER_TP=1
+export DISTILLATION_EXECUTION_MODE=${DISTILLATION_EXECUTION_MODE:-shared_sync}
+# 资源数由公共配方按 execution mode 派生，保留调用者的显式覆盖。
+export ROLLOUT_TP=${ROLLOUT_TP:-1}
+export TEACHER_TP=${TEACHER_TP:-1}
 export PYTHON_BIN="$REPO_ROOT/.venv-native/bin/python"
 export VERL_USE_UV=0
 export WANDB_MODE=offline
