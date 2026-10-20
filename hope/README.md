@@ -27,4 +27,4 @@ DOMAIN=if DRY_RUN=1 bash hope/mirroropd/run.sh
 CONFIG_ONLY=1 bash hope/mirroropd/run.sh
 ```
 
-正式参数统一维护在[共用训练逻辑](../examples/mirroropd/_run_single_teacher_fsdp2.sh)，领域入口分别是 [math](../examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh)、[code](../examples/mirroropd/run_code_deepseek_r1_1_5b_fsdp2.sh) 和 [IF](../examples/mirroropd/run_if_deepseek_r1_1_5b_fsdp2.sh)。步数、batch、验证数量和 TP 解释见[配方说明](../examples/mirroropd/README.md)。数学训练默认 1 epoch；用全量 17917 行 DAPO、全局 batch 64 时是 279 步，每 20 步验证，并在最后一步验证。日志写入仓库 `wandb/`，checkpoint 和验证输出写入 `outputs/<实验名>/`。
+正式参数统一维护在[共用训练逻辑](../examples/mirroropd/_run_single_teacher_fsdp2.sh)，领域入口分别是 [math](../examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh)、[code](../examples/mirroropd/run_code_deepseek_r1_1_5b_fsdp2.sh) 和 [IF](../examples/mirroropd/run_if_deepseek_r1_1_5b_fsdp2.sh)。步数、batch、验证数量和 TP 解释见[配方说明](../examples/mirroropd/docs/训练配方.md)。数学训练默认 1 epoch；用全量 17917 行 DAPO、全局 batch 64 时是 279 步，每 20 步验证，并在最后一步验证。日志写入仓库 `wandb/`，checkpoint 和验证输出写入 `outputs/<实验名>/`。
