@@ -14,7 +14,7 @@ make opd-submit
 
 Hope worker 直接执行 `examples/mirroropd/run_${DOMAIN:-math}_deepseek_r1_1_5b_fsdp2.sh`，不再经本地包装脚本。入口和训练默认值随源码包更新；默认 shared_sync 共用八卡，standalone 保留原 4+4。
 
-开发机本地 `.hope` 的 `worker.script` 需要一次性替换，具体命令、环境归属、预检和迁移步骤见[Hope 直连训练入口决策](../examples/mirroropd/docs/infra/2026-10-21-Hope直连训练入口.md)。`hope/` 仍不随源码包更新，接收端不需要再维护或同步独立 `run.sh`。
+开发机本地 `.hope` 的 `worker.script` 需要一次性替换，具体命令、环境归属、预检和迁移步骤见[Hope 直连入口](../examples/mirroropd/docs/infra/2026-10-21-共享八卡运行与架构.md#hope-直连入口)。`hope/` 仍不随源码包更新，接收端不需要再维护或同步独立 `run.sh`。
 
 Hope 配置中的 `[docker]` 由平台选择作业运行镜像；任务使用已准备好的 `.venv-native`。更换镜像或环境后，在目标 GPU 容器中单独执行依赖和 GPU 运行验收，入口本身不再自动执行原包装脚本的预检。
 
