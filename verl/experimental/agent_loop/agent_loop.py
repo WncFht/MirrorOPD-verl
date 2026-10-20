@@ -31,6 +31,7 @@ import asyncio
 import logging
 import os
 import random
+import time
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 from uuid import uuid4
@@ -83,6 +84,11 @@ class AgentLoopMetrics(BaseModel):
     tool_calls: float = 0.0
     compute_score: float = 0.0
     num_preempted: int = -1  # -1 means not available
+    # Optional V1 telemetry; unset fields stay absent from as_dict().
+    opd_submission: Optional[dict[str, Any]] = None
+    generation_finished_at_ns: Optional[int] = None
+    generation_clock_domain: Optional[str] = None
+    teacher_request_latency_s: Optional[float] = None
 
 
 class AgentLoopOutput(BaseModel):
@@ -1083,6 +1089,8 @@ class AgentLoopWorker:
                 if routing_value is not None:
                     # Non-tensor batch values arrive as 0-d numpy objects / arrays; normalize to Python.
                     routing_key = routing_value.item() if hasattr(routing_value, "item") else routing_value
+            measure = bool((sample_kwargs or {}).get("__opd_metrics__", False))
+            started = time.monotonic() if measure else None
             teacher_ids, teacher_logprobs = await self.teacher_server_manager.compute_teacher_logprobs_single(
                 sequence_ids=prompt_ids + response_ids,
                 multi_modal_data=output.multi_modal_data,
@@ -1090,6 +1098,9 @@ class AgentLoopWorker:
                 mm_processor_output=getattr(output, "mm_processor_output", None),
                 routing_key=routing_key,
             )
+            if measure:
+                # RPC roundtrip, including queueing: this is not pure GPU forward time.
+                output.metrics.teacher_request_latency_s = time.monotonic() - started
             output.extra_fields["teacher_ids"] = teacher_ids
             output.extra_fields["teacher_logprobs"] = teacher_logprobs
 

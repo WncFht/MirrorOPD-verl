@@ -51,6 +51,7 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     assert cfg.trainer.use_v1 and cfg.trainer.v1.trainer_mode == "sync"
+    assert not cfg.trainer.v1.opd_metrics
     assert cfg.trainer.n_gpus_per_node == 4 and cfg.distillation.n_gpus_per_node == 4
     assert cfg.actor_rollout_ref.actor.strategy == "fsdp2"
     assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
@@ -95,6 +96,7 @@ def test_domain_launchers_select_teacher_and_dataset_protocol(tmp_path, domain, 
 def test_performance_controls_reach_student_and_teacher(tmp_path):
     cfg = _config(
         tmp_path,
+        OPD_METRICS="True",
         ROLLOUT_ENFORCE_EAGER="False",
         TEACHER_ENFORCE_EAGER="False",
         PARAM_OFFLOAD="False",
@@ -103,6 +105,7 @@ def test_performance_controls_reach_student_and_teacher(tmp_path):
         ROLLOUT_TOKEN_BUDGET="16384",
         TEACHER_TOKEN_BUDGET="16384",
     )
+    assert cfg.trainer.v1.opd_metrics
     assert not cfg.actor_rollout_ref.rollout.enforce_eager
     assert not cfg.distillation.teacher_models.teacher_model.inference.enforce_eager
     assert not cfg.actor_rollout_ref.actor.fsdp_config.param_offload

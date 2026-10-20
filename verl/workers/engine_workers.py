@@ -41,6 +41,7 @@ from verl.utils.flops_counter import FlopsCounter
 from verl.utils.import_utils import import_external_libs
 from verl.utils.memory_utils import aggressive_empty_cache
 from verl.utils.metric.utils import Metric
+from verl.utils.opd_metrics import FSDP_PEAK_MEMORY
 from verl.utils.profiler import DistProfiler, DistProfilerExtension, ProfilerConfig, log_gpu_memory_usage
 from verl.utils.py_functional import append_to_dict
 from verl.utils.tensordict_utils import maybe_fix_3d_position_ids
@@ -350,6 +351,21 @@ class TrainingWorker(Worker, DistProfilerExtension):
                 self.profiler.step()
                 output_lst.append(actor_output)
 
+            peak_memory = None
+            if tu.get(data, "opd_metrics", default=False) and self.engine_config.strategy in (
+                "fsdp",
+                "fsdp2",
+                "fsdp_turbo",
+            ):
+                # Once per actor update, on ALL ranks (including non-output SP ranks).
+                # The counter is process/device lifetime allocated memory, not a stage peak.
+                # Never reset it: existing perf/max_memory_* metrics must retain their meaning.
+                peak_memory = torch.tensor(
+                    get_torch_device().max_memory_allocated() / (1024**3), device=self.device_name
+                )
+                torch.distributed.all_reduce(peak_memory, op=torch.distributed.ReduceOp.MAX)
+                peak_memory = Metric("max", peak_memory.item())
+
             if self.engine.is_mp_src_rank_with_outputs():
                 actor_output = [tu.get(output, "metrics") for output in output_lst]
                 metrics = {}
@@ -364,6 +380,8 @@ class TrainingWorker(Worker, DistProfilerExtension):
                             )
                     append_to_dict(metrics, output)
 
+                if peak_memory is not None:
+                    metrics[FSDP_PEAK_MEMORY] = peak_memory
                 output = tu.get_tensordict(tensor_dict={}, non_tensor_dict={"metrics": metrics}).cpu()
             else:
                 output = None
