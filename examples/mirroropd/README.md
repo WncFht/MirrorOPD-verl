@@ -11,7 +11,7 @@
 | [判分器与依赖](docs/判分器与依赖.md) | 四领域 reward 路由、依赖、迁入来源和检查范围 |
 | [MFU 计算](docs/2026-10-20-MFU计算.md) | Qwen2 架构逐项参数量、FLOPs、长度平方项、计时分母与数值复核 |
 | [数学基线 b38hw8v0](docs/2026-10-20-sampled-token-OPD数学基线-b38hw8v0.md) | 背景、算法与实际设置、38 步、step 20 与 student / teacher 参考、指标公式与图 |
-| [共享八卡实现与测试](docs/infra/2026-10-20-共享八卡实现与测试.md) | 默认共享流水线、回退选项、测试与部署范围 |
+| [共享八卡实现与测试](docs/infra/2026-10-21-共享八卡实现与测试.md) | 默认共享流水线、回退选项、测试与部署范围 |
 | [八卡 infra 优化](docs/infra/README.md) | 现状证据、各方案完整调度图、八卡模型扩展、上游与论文基线、实施与验收 |
 | [分析复现](docs/分析复现.md) | W&B 只读导出、历史日志解析、统计和图表重建 |
 
@@ -24,7 +24,7 @@ make assets-check
 make opd-submit
 ```
 
-调用关系为 `make opd-submit` → `hope/mirroropd/run.sh` → `run_${DOMAIN}_deepseek_r1_1_5b_fsdp2.sh` → `_run_single_teacher_fsdp2.sh`，`DOMAIN` 默认 `math`，也可为 `code` 或 `if`。具体领域脚本如下；旧的无领域前缀入口已删除。
+调用关系为 `make opd-submit` → Hope `worker.script` → `run_${DOMAIN}_deepseek_r1_1_5b_fsdp2.sh` → `_run_single_teacher_fsdp2.sh`，`DOMAIN` 默认 `math`，也可为 `code` 或 `if`。具体领域脚本如下；旧的无领域前缀入口已删除。
 
 - [Math](run_math_deepseek_r1_1_5b_fsdp2.sh)
 - [Coding](run_code_deepseek_r1_1_5b_fsdp2.sh)
@@ -36,4 +36,4 @@ make opd-submit
 DRY_RUN=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
 ```
 
-`hope/` 由各机器本地维护，不进入源码包。部署、日志传回和默认 W&B 同步流程见[开发机同步说明](../../meituan/README.md)，Hope 设置见 [Hope 文档](../../hope/README.md)。
+`hope/` 由各机器本地维护，不进入源码包。Worker 直接调用随源码更新的领域脚本，入口迁移见[决策记录](docs/infra/2026-10-21-Hope直连训练入口.md)。部署、日志传回和默认 W&B 同步流程见[开发机同步说明](../../meituan/README.md)，Hope 设置见 [Hope 文档](../../hope/README.md)。
