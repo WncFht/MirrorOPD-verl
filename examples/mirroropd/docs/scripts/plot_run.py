@@ -22,7 +22,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from analyze_run import read_rows
+from analyze_run import read_rows, write_json
 
 
 def series(ax, rows, key, label, color, scale=1, linestyle="-"):
@@ -46,8 +46,8 @@ def legend(ax):
     ax.legend(loc="lower left", bbox_to_anchor=(0, 1.02), ncol=2, frameon=False, borderaxespad=0)
 
 
-def save(fig, path, caption):
-    fig.text(0.5, 0.025, caption, ha="center", fontsize=8, color=fv.NEUTRALS["baseline"])
+def save(fig, path, caption, caption_size=8):
+    fig.text(0.5, 0.025, caption, ha="center", fontsize=caption_size, color=fv.NEUTRALS["baseline"])
     fig.canvas.draw()
     problems = fv.audit(fig, print_slot=fig.get_figwidth())
     for p in fv.format_audit_lines(problems):
@@ -62,11 +62,89 @@ def save(fig, path, caption):
     plt.close(fig)
 
 
+def validation_with_baselines(row, source, student, teacher, output, data_directory):
+    """Ledger: one color/model in all panels; all bars are observed metrics.
+
+    External val-only references are shown beside one trained checkpoint;
+    neither a same-run step-zero observation nor error bars are invented.
+    """
+    datasets = ["MATH-500", "AMC23", "AIME25"]
+    metrics = [
+        ("mean@16", "Mean accuracy@16"),
+        ("best@16/mean", "Bootstrap best@16"),
+        ("maj@16/mean", "Bootstrap majority@16"),
+    ]
+    models = [
+        ("Student reference", student, fv.NEUTRALS["baseline"]),
+        (f"OPD step {row['training/global_step']:g}", None, fv.HUES["vteal"]),
+        ("Teacher reference", teacher, fv.HUES["vorange"]),
+    ]
+    records = []
+    plt.rcParams.update(
+        {
+            "font.size": 7.6,
+            "axes.labelsize": 7.6,
+            "legend.fontsize": 6.6,
+            "xtick.labelsize": 6.6,
+            "ytick.labelsize": 6.6,
+        }
+    )
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 2.6), sharey=True)
+    fig.subplots_adjust(left=0.105, right=0.99, top=0.83, bottom=0.21, wspace=0.16)
+    for ax, (metric, label) in zip(axes, metrics, strict=True):
+        for offset, (model, directory, color) in zip((-0.25, 0, 0.25), models, strict=True):
+            values = row if directory is None else json.loads((directory / "summary.json").read_text())
+            origin = source if directory is None else json.loads((directory / "source.json").read_text())
+            scores = []
+            for dataset in datasets:
+                key = f"val-core/{dataset}/acc/{metric}"
+                score = values[key]
+                if not isinstance(score, (int, float)) or not 0 <= score <= 1:
+                    raise ValueError(f"Invalid accuracy: {origin['run']} {key}")
+                scores.append(score * 100)
+                records.append(
+                    {
+                        "model": model,
+                        "run": origin["run"],
+                        "dataset": dataset,
+                        "metric": metric,
+                        "key": key,
+                        "value": score,
+                    }
+                )
+            ax.bar([i + offset for i in range(3)], scores, width=0.24, label=model, color=color)
+        ax.set(xticks=range(3), xticklabels=datasets, xlabel=label, ylim=(0, 100))
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.grid(axis="y", color=fv.NEUTRALS["vmist"], linewidth=0.5)
+        ax.set_axisbelow(True)
+    axes[0].set_ylabel("Accuracy (%)")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.99), ncol=3, frameon=False)
+    write_json(
+        data_directory / "baseline-comparison.json",
+        {
+            "note": "External One-Shot-OPD references; matched sampling budgets, different execution pipelines. "
+            "Not a controlled same-run step-zero comparison. All values are fractions.",
+            "records": records,
+        },
+    )
+    save(
+        fig,
+        output / "validation",
+        "External student / teacher references; OPD step 20 (different pipelines)",
+        caption_size=6.5,
+    )
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--data", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
+    p.add_argument("--student-baseline", type=Path)
+    p.add_argument("--teacher-baseline", type=Path)
     args = p.parse_args()
+    if bool(args.student_baseline) != bool(args.teacher_baseline):
+        p.error("Provide both student and teacher baseline snapshot directories")
     args.out.mkdir(parents=True, exist_ok=True)
     rows = [r for r in read_rows(args.data / "history.jsonl") if "timing_s/step" in r]
     source = json.loads((args.data / "source.json").read_text())
@@ -137,7 +215,11 @@ def main():
     save(fig, args.out / "memory-mfu", coverage + " | actor process memory and internal-update MFU")
 
     val_rows = [r for r in rows if any(k.startswith("val-core/") for k in r)]
-    if val_rows:
+    if val_rows and args.student_baseline:
+        validation_with_baselines(
+            val_rows[-1], source, args.student_baseline, args.teacher_baseline, args.out, args.data
+        )
+    elif val_rows:
         row = val_rows[-1]
         datasets = ["MATH-500", "AMC23", "AIME25"]
         fig, ax = plt.subplots(figsize=(8, 4))
