@@ -1,0 +1,202 @@
+[
+  {
+    "path": "examples/configs/distillation_math.yaml",
+    "world_size": 8,
+    "distillation": {
+      "num_prompts_per_step": 128,
+      "num_generations_per_prompt": 1,
+      "max_rollout_turns": 1,
+      "max_num_steps": 1000,
+      "max_num_epochs": 10,
+      "val_batch_size": 64,
+      "val_period": 20,
+      "val_at_start": false,
+      "val_at_end": false,
+      "max_val_samples": 512,
+      "topk_logits_k": 64,
+      "seed": 42
+    },
+    "loss_fn": {
+      "kl_type": "mixed",
+      "mixed_kl_weight": 0.5,
+      "zero_outside_topk": false
+    },
+    "topology": {
+      "policy": {
+        "model": "Qwen/Qwen3-1.7B-Base",
+        "tp": 2,
+        "cp": 2,
+        "dp_inferred": 2,
+        "global_batch": 64
+      },
+      "teacher": {
+        "model": "Qwen/Qwen3-4B",
+        "tp": 4,
+        "cp": 2,
+        "dp_inferred": 1,
+        "global_batch": 64
+      }
+    },
+    "generation": {
+      "backend": "vllm",
+      "colocated": true,
+      "tp": 1,
+      "pp": 1,
+      "replicas_inferred": 8,
+      "context": 8192,
+      "gpu_memory_utilization": 0.6,
+      "eager": false,
+      "async_engine": false
+    }
+  },
+  {
+    "path": "examples/configs/recipes/llm/distillation-qwen3-32b-to-1.7b-base-1n8g-automodel.v1.yaml",
+    "world_size": 8,
+    "distillation": {
+      "num_prompts_per_step": 64,
+      "num_generations_per_prompt": 1,
+      "max_rollout_turns": 1,
+      "max_num_steps": 20,
+      "max_num_epochs": 10,
+      "val_batch_size": 32,
+      "val_period": 10,
+      "val_at_start": false,
+      "val_at_end": false,
+      "max_val_samples": 256,
+      "topk_logits_k": 64,
+      "seed": 42
+    },
+    "loss_fn": {
+      "kl_type": "reverse",
+      "mixed_kl_weight": 0.5,
+      "zero_outside_topk": false
+    },
+    "topology": {
+      "policy": {
+        "model": "Qwen/Qwen3-1.7B-Base",
+        "tp": 1,
+        "cp": 1,
+        "dp_inferred": 8,
+        "global_batch": 32
+      },
+      "teacher": {
+        "model": "Qwen/Qwen3-32B",
+        "tp": 4,
+        "cp": 1,
+        "dp_inferred": 2,
+        "global_batch": 32
+      }
+    },
+    "generation": {
+      "backend": "vllm",
+      "colocated": true,
+      "tp": 1,
+      "pp": 1,
+      "replicas_inferred": 8,
+      "context": 8192,
+      "gpu_memory_utilization": 0.6,
+      "eager": false,
+      "async_engine": false
+    }
+  },
+  {
+    "path": "examples/configs/recipes/llm/distillation-qwen3-32b-to-1.7b-base-1n4g-automodel.v1.yaml",
+    "world_size": 4,
+    "distillation": {
+      "num_prompts_per_step": 64,
+      "num_generations_per_prompt": 1,
+      "max_rollout_turns": 1,
+      "max_num_steps": 20,
+      "max_num_epochs": 10,
+      "val_batch_size": 32,
+      "val_period": 10,
+      "val_at_start": false,
+      "val_at_end": false,
+      "max_val_samples": 256,
+      "topk_logits_k": 64,
+      "seed": 42
+    },
+    "loss_fn": {
+      "kl_type": "reverse",
+      "mixed_kl_weight": 0.5,
+      "zero_outside_topk": false
+    },
+    "topology": {
+      "policy": {
+        "model": "Qwen/Qwen3-1.7B-Base",
+        "tp": 1,
+        "cp": 1,
+        "dp_inferred": 4,
+        "global_batch": 32
+      },
+      "teacher": {
+        "model": "Qwen/Qwen3-32B",
+        "tp": 4,
+        "cp": 1,
+        "dp_inferred": 1,
+        "global_batch": 32
+      }
+    },
+    "generation": {
+      "backend": "vllm",
+      "colocated": true,
+      "tp": 1,
+      "pp": 1,
+      "replicas_inferred": 4,
+      "context": 8192,
+      "gpu_memory_utilization": 0.6,
+      "eager": false,
+      "async_engine": false
+    }
+  },
+  {
+    "path": "examples/nemo_gym/distillation_qwen3_0_6b.yaml",
+    "world_size": 1,
+    "distillation": {
+      "num_prompts_per_step": 2,
+      "num_generations_per_prompt": 1,
+      "max_rollout_turns": 1,
+      "max_num_steps": 1,
+      "max_num_epochs": 1,
+      "val_batch_size": 2,
+      "val_period": 1,
+      "val_at_start": false,
+      "val_at_end": false,
+      "max_val_samples": null,
+      "topk_logits_k": 16,
+      "seed": 42
+    },
+    "loss_fn": {
+      "kl_type": "reverse",
+      "mixed_kl_weight": 0.5,
+      "zero_outside_topk": false
+    },
+    "topology": {
+      "policy": {
+        "model": "Qwen/Qwen3-0.6B",
+        "tp": 1,
+        "cp": 1,
+        "dp_inferred": 1,
+        "global_batch": 2
+      },
+      "teacher": {
+        "model": "Qwen/Qwen3-1.7B",
+        "tp": 1,
+        "cp": 1,
+        "dp_inferred": 1,
+        "global_batch": 2
+      }
+    },
+    "generation": {
+      "backend": "vllm",
+      "colocated": true,
+      "tp": 1,
+      "pp": 1,
+      "replicas_inferred": 1,
+      "context": 4096,
+      "gpu_memory_utilization": 0.6,
+      "eager": false,
+      "async_engine": true
+    }
+  }
+]
