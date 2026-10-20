@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh"
 
 
-def _launch(tmp_path, script=SCRIPT, **overrides):
+def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
     env = os.environ.copy()
     for name in (
         "CUDA_VISIBLE_DEVICES",
@@ -45,7 +45,7 @@ def _launch(tmp_path, script=SCRIPT, **overrides):
         TRAIN_BATCH_SIZE="64",
     )
     env.update(overrides)
-    return subprocess.run(["bash", str(script)], env=env, capture_output=True, text=True)
+    return subprocess.run(command or ["bash", str(script)], env=env, capture_output=True, text=True)
 
 
 def _config(tmp_path, **overrides):
@@ -317,8 +317,28 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(t
         assert message in result.stdout
 
 
+def _local_hope_command(worker_command=None):
+    if worker_command is None:
+        config = ConfigParser(interpolation=None)
+        config.read(ROOT / "hope/mirroropd/mirroropd.hope")
+        worker_command = config.get("roles", "worker.script")
+    remote_root = "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl"
+    assert remote_root in worker_command
+    return shlex.split(worker_command.replace(remote_root, str(ROOT)))
+
+
+@pytest.mark.parametrize("devices,expected_code", [(None, 0), ("GPU-a,GPU-b", 2)])
+def test_direct_hope_command_preserves_allocation_or_uses_job_local_fallback(tmp_path, devices, expected_code):
+    overrides = {} if devices is None else {"CUDA_VISIBLE_DEVICES": devices}
+    result = _launch(tmp_path, command=_local_hope_command(), **overrides)
+    assert result.returncode == expected_code, result.stderr
+    if expected_code:
+        assert "CUDA_VISIBLE_DEVICES does not cover" in result.stderr
+
+
 @pytest.mark.parametrize("domain", ["math", "code", "if"])
-def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path, domain):
+@pytest.mark.parametrize("mode", ["shared_sync", "standalone"])
+def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path, domain, mode):
     """Exercise the real Make submission and worker config while stubbing only the Hope CLI."""
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
@@ -337,9 +357,15 @@ def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path,
     assert config.getint("roles", "workers") == 1
     allocated_gpus = config.getint("roles", "worker.gcores80g")
 
+    # Execute the configured worker command itself, translating only the remote mount.
+    worker_command = config.get("roles", "worker.script")
+    assert "hope/mirroropd/run.sh" not in worker_command
+    assert "STUDENT_GPUS=" not in worker_command and "TEACHER_GPUS=" not in worker_command
     preview = _launch(
         tmp_path,
-        script=ROOT / "hope/mirroropd/run.sh",
+        command=_local_hope_command(worker_command),
+        PYTHON_BIN="",
+        DISTILLATION_EXECUTION_MODE=mode,
         DOMAIN=domain,
         CUDA_VISIBLE_DEVICES="GPU-0,GPU-1,GPU-2,GPU-3,GPU-4,GPU-5,GPU-6,GPU-7",
         VERL_USE_UV="1",
@@ -351,6 +377,9 @@ def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path,
     with initialize_config_dir(config_dir=str(ROOT / "verl/trainer/config"), version_base=None):
         cfg = compose(config_name="ppo_trainer", overrides=command[command.index("verl.trainer.main_ppo") + 1 :])
     assert cfg.trainer.n_gpus_per_node + cfg.distillation.n_gpus_per_node == allocated_gpus == 8
+    assert cfg.distillation.execution_mode == mode
+    assert cfg.trainer.n_gpus_per_node == (8 if mode == "shared_sync" else 4)
+    assert cfg.distillation.n_gpus_per_node == (0 if mode == "shared_sync" else 4)
     assert cfg.ray_kwargs.ray_init.runtime_env.py_executable == native_python
     assert cfg.ray_kwargs.ray_init.runtime_env.env_vars.WANDB_MODE == "offline"
     teachers = {"math": "JustRL-DeepSeek-1.5B", "code": "DeepCoder-1.5B-Preview", "if": "UltraData-IF-1.5B"}

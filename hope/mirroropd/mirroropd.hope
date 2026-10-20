@@ -10,7 +10,7 @@ workers = 1
 worker.memory = 262144
 worker.vcore = 64
 worker.gcores80g = 8
-worker.script = bash -lc 'cd /mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl && exec bash hope/mirroropd/run.sh'
+worker.script = bash -lc 'CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3,4,5,6,7}" VERL_USE_UV=0 exec bash "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl/examples/mirroropd/run_${DOMAIN:-math}_deepseek_r1_1_5b_fsdp2.sh"'
 
 [user_args]
 
