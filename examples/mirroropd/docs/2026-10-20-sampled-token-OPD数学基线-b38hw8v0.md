@@ -164,19 +164,37 @@ $$
 
 Step 38 的正确率为 54.69%、distillation loss 为 0.05892、entropy 为 0.66507。单个 batch 的高分不能代表最终数学能力。全 38 步 pooled 训练正确率为 38.03%，58.59% 的回答达到训练长度上限。同步指标 trajectory staleness=0、trajectory spans=1、aborted ratio=0，rollout/actor 概率相关性接近 1；当前快照支持训练链路一致且数值稳定。
 
-### Step 20 的固定验证结果
+### Step 20 与 student / teacher 外部基线
 
-![验证结果](figures/b38hw8v0-api-20261020/validation.png)
+Student 参考是 One-Shot-OPD 的 `math_student`（`6uorrk2k`），teacher 参考是 `math_teacher`（`u87buult`），两者都是 `trainer.val_only=True`、只有一行评测 history。用户提供的 student 链接少了最后一个 `k`，已通过同项目 run 列表及模型路径确认正确 ID。Student 对应 DeepSeek-R1-Distill-Qwen-1.5B，teacher 对应 JustRL-DeepSeek-1.5B。[^student-ref] [^teacher-ref]
 
-| 验证集 | mean@16 | Bootstrap best@16 | Bootstrap majority@16 |
-| --- | ---: | ---: | ---: |
-| MATH-500 | 84.11% | 95.02% | 89.46% |
-| AMC23 | 72.50% | 96.29% | 85.12% |
-| AIME25 | 25.21% | 40.94% | 30.34% |
+![与 student / teacher 基线比较](figures/b38hw8v0-api-20261020/validation.png)
 
-本机[资产检查](资产准备.md)曾发现 DAPO 与 MATH-500、AMC23 分别有 2、5 道完全相同的题面。尚未取得本次接收端的资产检查报告，需核对实际数据版本；正式泛化评估应同时报告原配方与排除训练重叠题目的结果。
+图中三个面板分别是 mean@16、bootstrap best@16、bootstrap majority@16；同一模型在所有面板里颜色一致。全部 27 个数值及原始 metric key 保存在 [baseline-comparison.json](data/b38hw8v0-api-20261020/baseline-comparison.json)。两个参考 run 的全量 summary、单行 history 和实际配置也随文档保存，读取时间约为 2026-10-20 12:44（Asia/Shanghai）。
 
-本快照只有 step 20 这一轮验证，没有 step 0 的相同预算基线，也没有后续 checkpoint 的固定题目结果。因此可以报告该时点性能，暂不能量化训练带来的提升。AMC23/AIME25 题量较小，单题会改变数据集平均值；不要把 bootstrap best 或 majority 写成标准 pass@16。
+| 验证集 | Student mean@16 | OPD step 20 mean@16 | Teacher mean@16 | OPD − student，百分点 |
+| --- | ---: | ---: | ---: | ---: |
+| MATH-500 | 83.25% | 84.11% | 89.11% | +0.86 |
+| AMC23 | 72.03% | 72.50% | 89.38% | +0.47 |
+| AIME25 | 23.75% | 25.21% | 39.17% | +1.46 |
+
+相对于外部 student 参考，三个数据集的平均正确率都略高，但差值不足以直接证明训练提升。AIME25 的 bootstrap best@16 从 student 的 45.76% 变为当前 40.94%，majority@16 则基本不变（30.35% 对 30.34%）；不能说所有指标均改善。AMC23 当前 bootstrap best@16 高于 teacher 参考，mean@16 仍远低于 teacher，也不能据此称为整体超越 teacher。
+
+主要采样预算已经核对一致：三个数学验证集、prompt≤4096、response≤31744、n=16、temperature=0.7、top-p=0.9。但执行与输入路径有差异：
+
+| 项目 | One-Shot-OPD 两个参考 | 当前 OPD run |
+| --- | --- | --- |
+| 用途 / trainer | Val-only，旧 DataProto trainer（use_v1=False） | V1 同步训练中的验证 |
+| Student 推理 GPU | 8 × A800，TP=1 | 4 × A800，另 4 卡为 teacher |
+| 验证提交窗口 | val_batch_size=null；该版本默认整个验证集 | 16 题 |
+| vLLM seq / token budget | 64 / 35840 | 32 / 8192 |
+| vLLM memory utilization | 0.75 | 0.5 |
+| 连续 token 配置 | enable=False、model_family=auto | model_family=deepseek，V1 输入路径 |
+| 数据与 verifier | One-Shot-OPD 目录下的数据与 opd_mixed_verify | 本仓独立资产目录与迁入 verifier |
+
+GPU 数和服务容量影响速度；prompt 构造、模型权重版本、题目内容和判分路径尚未做输入级复核，可能影响结果。两个基线作为外部参考，不能补造当前 run 的 step 0 点，也不能将上述差值直接记为同协议训练增益。它们另外记录了 `pass@16`，当前 run 没有该 key；图中统一比较 `best@16/mean`，没有混用 pass 与 bootstrap best。
+
+本机[资产检查](资产准备.md)曾发现 DAPO 与 MATH-500、AMC23 分别有 2、5 道完全相同的题面。尚未取得本次接收端的资产检查报告，需核对实际数据版本；正式泛化评估应同时报告原配方与排除训练重叠题目的结果。当前仍只有 step 20 一个训练后验证点，AMC23/AIME25 题量也较小，应继续观察相同实现下的配对评测。
 
 ### 时间、显存与 GPU 利用率
 
@@ -194,16 +212,19 @@ actor PyTorch 高水位到 step 38 为 allocated 19.82 GiB、reserved 20.85 GiB�
 
 系统采样显示 GPU 0–3 的整卡显存约 37–41 GiB，GPU 4–7 约 32.61–32.86 GiB。近似验证区间内，0–3 的 busy 均值约 35–36%，4–7 为 0%；剔除验证后，训练区间 0–3 约 39–40%，4–7 约 0.5–1.2%。前一组与 student 的工作模式一致，后一组与专用 teacher 一致；这是依据行为的角色推断，改资源分配前仍需核对 Ray 的物理 GPU 映射。15 秒级采样可能漏掉短促 teacher kernel，低 busy 不能直接换算成 teacher 的精确评分耗时。
 
-验证时 4–7 保留约 32 GiB 显存但没有 kernel；GPU 内存占用和计算忙碌程度明显不同。当前更有依据的优化顺序是减少高频完整验证的墙钟占用、提高验证调度与 student 生成效率、测试减少 teacher 卡数，再检查 actor offload。参数候选、显存预算和可执行对照命令见[显存与速度优化](2026-10-20-显存与速度优化.md)。
+验证时 4–7 保留约 32 GiB 显存但没有 kernel；GPU 内存占用和计算忙碌程度明显不同。后续保持完整验证设置不变，优先提高 student 生成效率，并参考 One-Shot-OPD 的共享 FSDP teacher 结构让同一组 8 卡参与生成、打分与更新，再检查 actor offload。参数候选、显存预算和可执行对照命令见[显存与速度优化](2026-10-20-显存与速度优化.md)。
 
 ### 复现与后续结论边界
 
 运行入口与数据准备已从 README 拆到[训练配方](训练配方.md)和[资产准备](资产准备.md)。本次产出不修改正式训练超参数，避免分析期间改变正在运行的基线。下一次更新应下载同一 run 新增 history 或新的完整日志；若任务已结束，补齐退出原因、最终 checkpoint 与验证记录。
 
-优先增加初始 student 的相同验证预算评测，再比较固定 checkpoint 的 mean@16、答案长度和 entropy。性能对照保持训练 batch、response budget、采样温度、teacher 和优化器一致，单独报告验证耗时与 GPU 小时。现有证据支持 sampled-token OPD 的训练信号在下降，尚不足以证明最终质量增益或完整 epoch 已完成。
+外部 student / teacher 参考已补齐；接下来应在本仓同一输入和判分路径下做配对评测，再比较固定 checkpoint 的 mean@16、答案长度和 entropy。性能对照保持训练 batch、response budget、采样温度、teacher 和优化器一致，单独报告验证耗时与 GPU 小时。现有证据支持 sampled-token OPD 的训练信号在下降，尚不足以证明最终质量增益或完整 epoch 已完成。
 
 ### 参考文献
 
 [^run]: 本项目. Math sampled-token OPD run `b38hw8v0`，读取于 2026-10-20. [W&B 实验](https://forge.coreweave.com/wandb/wncfht/MirrorOPD-verl/runs/b38hw8v0)。
 [^oneshot]: Thinking-Space. One-Shot-OPD 单教师领域配方. [固定来源](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/opd.sh)。
 [^api]: Weights & Biases. Public API Run，`history` 与 `scan_history` 的抽样语义. [官方文档](https://docs.wandb.ai/models/ref/python/public-api/run)。
+
+[^student-ref]: 本项目. One-Shot-OPD math_student，run `6uorrk2k`. [W&B student 基线](https://forge.coreweave.com/wandb/wncfht/One-Shot-OPD/runs/6uorrk2k)。
+[^teacher-ref]: 本项目. One-Shot-OPD math_teacher，run `u87buult`. [W&B teacher 基线](https://forge.coreweave.com/wandb/wncfht/One-Shot-OPD/runs/u87buult)。
