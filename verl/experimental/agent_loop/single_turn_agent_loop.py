@@ -13,10 +13,12 @@
 # limitations under the License.
 import logging
 import os
+import time
 from typing import Any
 from uuid import uuid4
 
 from verl.experimental.agent_loop.agent_loop import AgentLoopBase, AgentLoopOutput, register
+from verl.utils.opd_metrics import monotonic_clock_domain
 from verl.utils.profiler import simple_timer
 from verl.utils.rollout_trace import rollout_trace_op
 from verl.workers.rollout.replica import TokenOutput
@@ -83,6 +85,11 @@ class SingleTurnAgentLoop(AgentLoopBase):
                 mm_processor_kwargs=mm_processor_kwargs,
                 priority=priority,
             )
+            if kwargs.get("__opd_metrics__", False):
+                # Stamp the return boundary before token merging, verifier or teacher work.
+                metrics["generation_finished_at_ns"] = time.monotonic_ns()
+                metrics["generation_clock_domain"] = monotonic_clock_domain()
+                metrics["opd_submission"] = kwargs.get("__opd_submission__")
         if metrics.get("num_preempted") is None:
             metrics["num_preempted"] = output.num_preempted if output.num_preempted is not None else -1
 
