@@ -13,6 +13,10 @@ REPO_ROOT=$(cd -- "$SCRIPT_DIR/../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO_ROOT")
 cd "$REPO_ROOT"
 
+# Native launch defaults belong to the shared recipe, including scheduler launches.
+export TOKENIZERS_PARALLELISM=${TOKENIZERS_PARALLELISM:-false}
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
+
 # ── 1. 模型与数据路径 ────────────────────────────────────────────────
 MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
 DATA_ROOT=${DATA_ROOT:-$WORKSPACE/data}
