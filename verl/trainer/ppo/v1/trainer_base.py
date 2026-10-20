@@ -20,6 +20,7 @@ import uuid
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import replace
 from functools import partial
 from pprint import pprint
 from typing import Any, Optional
@@ -91,7 +92,7 @@ from verl.utils.py_functional import rename_dict
 from verl.utils.seqlen_balancing import calculate_workload, get_seqlen_balanced_partitions, log_seqlen_unbalance
 from verl.utils.skip import SkipManager
 from verl.utils.tracking import DapoFilteredRewardTableLogger, Tracking, ValidationGenerationsLogger
-from verl.workers.config import CriticConfig, DistillationConfig, HFModelConfig
+from verl.workers.config import CriticConfig, HFModelConfig
 from verl.workers.engine_workers import ActorRolloutRefWorker, TrainingWorker, TrainingWorkerConfig
 from verl.workers.rollout.llm_server import LLMServerClient, LLMServerManager
 from verl.workers.utils.losses import value_loss
@@ -231,9 +232,18 @@ class PPOTrainer(ABC):
         self.on_init_end()
 
     def _setup(self):
+        self.shared_teacher_wg = None
+        self.distillation_config = (
+            omega_conf_to_dataclass(self.config.distillation) if self.use_teacher_policy else None
+        )
+        if self.distillation_config is not None:
+            self.distillation_config.validate_shared_sync(
+                self.config, use_reference_policy=self.use_reference_policy, use_critic=self.use_critic
+            )
         self._init_tokenizer()
         self._init_dataloader()
         self._init_dump_executor()
+        shared_teacher_config = self._make_shared_teacher_config() if self._uses_shared_teacher() else None
         self._init_resource_pool_mgr()
         self.resource_pool_manager.create_resource_pool()
         self.resource_pool_to_cls = {pool: {} for pool in self.resource_pool_manager.resource_pool_dict.values()}
@@ -258,6 +268,10 @@ class PPOTrainer(ABC):
             role=str(actor_role),
         )
         self.resource_pool_to_cls[actor_rollout_resource_pool][str(actor_role)] = actor_rollout_cls
+        if shared_teacher_config is not None:
+            self.resource_pool_to_cls[actor_rollout_resource_pool][str(Role.TeacherModel)] = RayClassWithInitArgs(
+                cls=self.role_worker_mapping[Role.TeacherModel], config=shared_teacher_config
+            )
 
         if actor_role == Role.Actor and self.use_reference_policy and not self.ref_in_actor:
             ref_resource_pool = self.resource_pool_manager.get_resource_pool(Role.RefPolicy)
@@ -335,6 +349,10 @@ class PPOTrainer(ABC):
         self.actor_rollout_wg = all_wg[str(actor_role)]
         self.actor_rollout_wg.init_model()
         logger.info("actor and ref model engine initialized")
+        if shared_teacher_config is not None:
+            self.shared_teacher_wg = all_wg[str(Role.TeacherModel)]
+            # reset() initializes and offloads before student vLLM allocates its cache.
+            self.shared_teacher_wg.reset()
 
         if self.use_reference_policy and not self.ref_in_actor:
             if actor_role == Role.Actor:
@@ -358,16 +376,13 @@ class PPOTrainer(ABC):
         logger.info("reward loop manager initialized")
 
         # 8. initialize teacher loop manager
-        if self.use_teacher_policy:
+        self.teacher_model_manager = None
+        if self.use_teacher_policy and not self._uses_shared_teacher():
             teacher_resource_pool = self.resource_pool_manager.get_resource_pool(Role.TeacherModel)
             self.teacher_model_manager = MultiTeacherModelManager(
                 config=self.config,
                 resource_pool=teacher_resource_pool,
             )
-            self.distillation_config: DistillationConfig = omega_conf_to_dataclass(self.config.distillation)
-        else:
-            self.teacher_model_manager = None
-            self.distillation_config = None
 
         # 9. initialize agent loop manager
         # Trainers that opt out of colocated rollout replicas on the training
@@ -410,7 +425,43 @@ class PPOTrainer(ABC):
         Returns:
             dict[str, LLMServerClient]: The teacher server clients.
         """
-        return self.teacher_model_manager.get_client() if self.use_teacher_policy else None
+        return self.teacher_model_manager.get_client() if self.teacher_model_manager is not None else None
+
+    def _uses_shared_teacher(self) -> bool:
+        """Whether distillation scores are produced by the colocated FSDP worker."""
+        config = self.config.get("distillation")
+        return is_distillation_enabled(config) and config.get("execution_mode", "standalone") == "shared_sync"
+
+    @staticmethod
+    def _validate_shared_model(model_config: HFModelConfig):
+        """Restrict shared engines to dense text models with compatible class patches."""
+        hf_config = model_config.hf_config
+        if (
+            any(getattr(hf_config, name, None) is not None for name in ("vision_config", "audio_config"))
+            or getattr(hf_config, "is_encoder_decoder", False)
+            or any(getattr(hf_config, name, 0) for name in ("num_local_experts", "num_experts", "n_routed_experts"))
+        ):
+            raise ValueError("shared_sync currently supports dense text models only")
+
+    def _make_shared_teacher_config(self) -> TrainingWorkerConfig:
+        """Construct an independent teacher model config without student cached state."""
+        teacher = next(iter(self.distillation_config.teacher_models.values()))
+        model_config = HFModelConfig(
+            path=teacher.model_path,
+            trust_remote_code=self.config.actor_rollout_ref.model.get("trust_remote_code", False),
+            use_remove_padding=True,
+            use_fused_kernels=False,
+            enable_gradient_checkpointing=False,
+            enable_activation_offload=False,
+        )
+        self._validate_shared_model(model_config)
+        if model_config.tokenizer.get_vocab() != self.tokenizer.get_vocab():
+            raise ValueError("shared_sync requires identical student/teacher token-to-ID vocabularies")
+        for name in ("bos_token_id", "eos_token_id", "pad_token_id"):
+            if getattr(model_config.tokenizer, name) != getattr(self.tokenizer, name):
+                raise ValueError(f"shared_sync requires matching tokenizer {name}")
+        engine_config = replace(self.distillation_config.shared_teacher, fsdp_size=self.config.trainer.n_gpus_per_node)
+        return TrainingWorkerConfig(model_type="language_model", model_config=model_config, engine_config=engine_config)
 
     def get_reward_handles(self) -> list[ray.actor.ActorHandle]:
         """Get the handles of reward loop workers."""
@@ -587,6 +638,8 @@ class PPOTrainer(ABC):
 
         # 3. balance batch across data parallel groups
         batch = self._balance_batch(batch, metrics=metrics)
+        if self._uses_shared_teacher():
+            batch = self._compute_shared_teacher_log_probs(batch, timing_raw)
 
         # 4. compute old_log_prob
         with marked_timer("old_log_prob", timing_raw, color="blue"):
@@ -708,6 +761,8 @@ class PPOTrainer(ABC):
     def _init_tokenizer(self):
         """Initialize tokenizer and processor from the model config."""
         model_config: HFModelConfig = omega_conf_to_dataclass(self.config.actor_rollout_ref.model)
+        if self._uses_shared_teacher():
+            self._validate_shared_model(model_config)
         self.tokenizer = model_config.tokenizer
         # Used for multimodal LLM, could be None
         self.processor = model_config.processor
@@ -857,7 +912,10 @@ class PPOTrainer(ABC):
             self.mapping[Role.RewardModel] = "global_pool"
 
         distillation_config = config.get("distillation")
-        if is_distillation_enabled(distillation_config):
+        if self._uses_shared_teacher():
+            self.role_worker_mapping[Role.TeacherModel] = ray.remote(TrainingWorker)
+            self.mapping[Role.TeacherModel] = global_pool_id
+        elif is_distillation_enabled(distillation_config):
             if distillation_config.n_gpus_per_node <= 0:
                 raise ValueError("config.distillation.n_gpus_per_node must be greater than 0")
             if distillation_config.nnodes <= 0:
@@ -1687,6 +1745,67 @@ class PPOTrainer(ABC):
             seqlen_list=global_seqlen_lst.tolist(), partitions=global_partition_lst, prefix=logging_prefix
         )
         metrics.update(global_balance_stats)
+        return batch
+
+    def _compute_shared_teacher_log_probs(self, batch: KVBatchMeta, timing_raw: dict) -> KVBatchMeta:
+        """Score a completed rollout batch, release teacher, then publish aligned labels."""
+        teacher_batch = KVBatchMeta(
+            keys=list(batch.keys),
+            tags=list(batch.tags),
+            partition_id=batch.partition_id,
+            fields=["input_ids", "position_ids", "loss_mask"],
+            extra_info={
+                "temperature": 1.0,
+                "compute_loss": False,
+                "calculate_entropy": False,
+                "distillation_use_topk": False,
+                "disable_auto_offload": True,
+            },
+        )
+        try:
+            with marked_timer("teacher_transfer", timing_raw):
+                self.shared_teacher_wg.to("device", model=True, optimizer=False, grad=False)
+            with marked_timer("teacher_forward", timing_raw):
+                output = self.shared_teacher_wg.infer_batch(teacher_batch)
+                # KVBatchMeta is not supported by DataProtoFuture.get().
+                ray.get(output.futures)
+        except BaseException:
+            # Preserve the primary error. Distributed process failures are fatal;
+            # this is best-effort cleanup, not a recovery/barrier protocol.
+            try:
+                self.shared_teacher_wg.to("cpu", model=True, optimizer=False, grad=False)
+            except Exception:
+                logger.exception("Shared teacher cleanup failed after scoring failure")
+            raise
+        else:
+            with marked_timer("teacher_transfer", timing_raw):
+                self.shared_teacher_wg.to("cpu", model=True, optimizer=False, grad=False)
+
+        data = tq.kv_batch_get(
+            keys=batch.keys, partition_id=batch.partition_id, select_fields=["input_ids", "log_probs"]
+        )
+        teacher_ids, teacher_logprobs = [], []
+        if len(data) != len(batch):
+            raise ValueError("Incomplete shared teacher output batch")
+        for tokens, log_probs in zip(data["input_ids"].unbind(), data["log_probs"].unbind(), strict=True):
+            if log_probs.shape != tokens.shape or tokens.numel() == 0:
+                raise ValueError("Shared teacher output must match each full token sequence")
+            probs = log_probs.float().clone()
+            if not torch.isfinite(probs[:-1]).all():
+                raise ValueError("Shared teacher returned non-finite token log probabilities")
+            # FSDP already scores x[i+1] at position i. Only the final dummy is replaced.
+            probs[-1] = 0
+            ids = torch.cat((tokens[1:].to(torch.int32), tokens.new_zeros(1, dtype=torch.int32)))
+            teacher_ids.append(ids.unsqueeze(-1))
+            teacher_logprobs.append(probs.unsqueeze(-1))
+        fields = TensorDict(
+            {
+                "teacher_ids": torch.nested.nested_tensor(teacher_ids, layout=torch.jagged),
+                "teacher_logprobs": torch.nested.nested_tensor(teacher_logprobs, layout=torch.jagged),
+            },
+            batch_size=[len(batch)],
+        )
+        tq.kv_batch_put(keys=batch.keys, partition_id=batch.partition_id, fields=fields)
         return batch
 
     def _compute_old_log_prob(self, batch: KVBatchMeta, metrics: dict) -> KVBatchMeta:

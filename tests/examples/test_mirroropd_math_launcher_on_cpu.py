@@ -22,7 +22,17 @@ SCRIPT = ROOT / "examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh"
 
 def _launch(tmp_path, script=SCRIPT, **overrides):
     env = os.environ.copy()
-    for name in ("CUDA_VISIBLE_DEVICES", "STUDENT_GPUS", "TEACHER_GPUS", "ROLLOUT_TP", "TEACHER_TP", "DOMAIN"):
+    for name in (
+        "CUDA_VISIBLE_DEVICES",
+        "STUDENT_GPUS",
+        "TEACHER_GPUS",
+        "ROLLOUT_TP",
+        "TEACHER_TP",
+        "DOMAIN",
+        "DISTILLATION_EXECUTION_MODE",
+        "TEACHER_FSDP_TOKEN_BUDGET",
+        "TEACHER_FSDP_DTYPE",
+    ):
         env.pop(name, None)
     env.update(
         DRY_RUN="1",
@@ -47,7 +57,7 @@ def _config(tmp_path, **overrides):
 
 
 def test_launcher_composes_native_single_teacher_baseline(tmp_path):
-    cfg = _config(tmp_path)
+    cfg = _config(tmp_path, DISTILLATION_EXECUTION_MODE="standalone")
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     assert cfg.trainer.use_v1 and cfg.trainer.v1.trainer_mode == "sync"
@@ -86,7 +96,7 @@ def test_domain_launchers_select_teacher_and_dataset_protocol(tmp_path, domain, 
     assert cfg.data.train_files == [str(tmp_path / "data" / train)]
     assert [Path(p).parent.name for p in cfg.data.val_files] == validation
     assert cfg.data.continuous_token.model_family == "deepseek"
-    assert cfg.trainer.n_gpus_per_node == cfg.distillation.n_gpus_per_node == 4
+    assert cfg.trainer.n_gpus_per_node == 8 and cfg.distillation.n_gpus_per_node == 0
     if domain == "if":
         assert cfg.trainer.test_freq == -1
         assert not cfg.trainer.val_before_train
@@ -96,6 +106,7 @@ def test_domain_launchers_select_teacher_and_dataset_protocol(tmp_path, domain, 
 def test_performance_controls_reach_student_and_teacher(tmp_path):
     cfg = _config(
         tmp_path,
+        DISTILLATION_EXECUTION_MODE="standalone",
         ROLLOUT_ENFORCE_EAGER="False",
         TEACHER_ENFORCE_EAGER="False",
         PARAM_OFFLOAD="False",
@@ -152,6 +163,7 @@ def test_if_checks_checker_source_before_starting_training(tmp_path):
 def test_native_teacher_config_uses_entire_requested_pool(tmp_path, teacher_gpus, teacher_tp, replicas):
     cfg = _config(
         tmp_path,
+        DISTILLATION_EXECUTION_MODE="standalone",
         TEACHER_GPUS=str(teacher_gpus),
         TEACHER_TP=str(teacher_tp),
         CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7",
@@ -168,7 +180,7 @@ def test_native_teacher_config_uses_entire_requested_pool(tmp_path, teacher_gpus
     "overrides",
     [
         {"STUDENT_GPUS": "3"},
-        {"TEACHER_TP": "3"},
+        {"DISTILLATION_EXECUTION_MODE": "standalone", "TEACHER_TP": "3"},
         {"MAX_VAL_RESPONSE_LENGTH": "0"},
         {"CUDA_VISIBLE_DEVICES": "0,1,2,3,4,5,6"},
     ],
@@ -192,7 +204,7 @@ def test_validation_budget_rejects_default_multiturn_agent(tmp_path):
 
 
 def test_validation_budget_rejects_backend_that_overwrites_request_limit(tmp_path):
-    cfg = _config(tmp_path)
+    cfg = _config(tmp_path, DISTILLATION_EXECUTION_MODE="standalone")
     cfg.actor_rollout_ref.rollout.name = "trtllm"
     with pytest.raises(ValueError, match="vllm or sglang"):
         validate_config(cfg, use_reference_policy=False, use_critic=False)
@@ -344,3 +356,34 @@ def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path,
     teachers = {"math": "JustRL-DeepSeek-1.5B", "code": "DeepCoder-1.5B-Preview", "if": "UltraData-IF-1.5B"}
     assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(teachers[domain])
     assert not (tmp_path / "run").exists()
+
+
+def test_default_shared_pipeline_and_teacher_forward_controls(tmp_path):
+    cfg = _config(tmp_path, TEACHER_FSDP_TOKEN_BUDGET="16384", TEACHER_FSDP_DTYPE="bfloat16")
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    distillation = omega_conf_to_dataclass(cfg.distillation)
+    assert distillation.execution_mode == "shared_sync"
+    assert cfg.trainer.n_gpus_per_node == 8
+    assert distillation.n_gpus_per_node == distillation.nnodes == 0
+    assert distillation.shared_teacher.infer_max_token_len_per_gpu == 16384
+    assert distillation.shared_teacher.model_dtype == "bfloat16"
+    assert distillation.shared_teacher.mixed_precision["param_dtype"] == "bfloat16"
+    assert distillation.teacher_models["default"].num_replicas == 0
+    # Shared configuration does not rewrite the vLLM prompt/response budget.
+    assert distillation.teacher_models["default"].inference.response_length == 7168
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"DISTILLATION_EXECUTION_MODE": "invalid"},
+        {"TEACHER_GPUS": "4"},
+        {"ROLLOUT_TP": "2"},
+        {"PARAM_OFFLOAD": "False"},
+        {"OPTIMIZER_OFFLOAD": "False"},
+        {"TEACHER_FSDP_TOKEN_BUDGET": "8192"},
+    ],
+)
+def test_shared_launcher_rejects_incompatible_settings(tmp_path, overrides):
+    assert _launch(tmp_path, **overrides).returncode == 2

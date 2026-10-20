@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # math / code / IF 共用的单教师 sampled-token OPD 启动逻辑。
-# 默认占用 8 张卡：student 4 卡（训练与 rollout 共用），teacher 4 卡。
+# 默认共享 8 张卡：rollout → 冻结 teacher FSDP2 评分 → actor 更新。
+# DISTILLATION_EXECUTION_MODE=standalone 可恢复原 student 4 + teacher 4 路径。
 # 所有常用参数均可由同名环境变量覆盖；末尾还可追加原生 Hydra overrides。
 # 用法：
 #   DRY_RUN=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
@@ -45,12 +46,22 @@ case "$DOMAIN" in
 esac
 
 # ── 2. GPU 与推理资源 ────────────────────────────────────────────────
-# 两个 Ray 资源池互不重叠，总卡数 = STUDENT_GPUS + TEACHER_GPUS。
-# TP 是单个推理副本占用的卡数；此处 DP/PP 均为 1，副本数 = 资源池卡数 / TP。
-# 1.5B 模型先用 TP=1：4 个 student rollout 副本、4 个同模型 teacher 评分副本。
-# 同步训练中 teacher 在 actor 更新和验证阶段空闲；8 卡分配不代表持续满载。
-STUDENT_GPUS=${STUDENT_GPUS:-4}
-TEACHER_GPUS=${TEACHER_GPUS:-4}
+# shared_sync 的 STUDENT_GPUS 是整个共享池；TEACHER_GPUS=0 表示没有独立池。
+# 小规模 smoke test 可显式设置 STUDENT_GPUS=2；正式默认使用 8 卡。
+DISTILLATION_EXECUTION_MODE=${DISTILLATION_EXECUTION_MODE:-shared_sync}
+case "$DISTILLATION_EXECUTION_MODE" in
+    shared_sync)
+        STUDENT_GPUS=${STUDENT_GPUS:-8}
+        TEACHER_GPUS=${TEACHER_GPUS:-0}
+        TEACHER_NNODES=0
+        ;;
+    standalone)
+        STUDENT_GPUS=${STUDENT_GPUS:-4}
+        TEACHER_GPUS=${TEACHER_GPUS:-4}
+        TEACHER_NNODES=1
+        ;;
+    *) echo "Unknown DISTILLATION_EXECUTION_MODE=$DISTILLATION_EXECUTION_MODE" >&2; exit 2 ;;
+esac
 ROLLOUT_TP=${ROLLOUT_TP:-1}
 TEACHER_TP=${TEACHER_TP:-1}
 ROLLOUT_GPU_MEMORY_UTILIZATION=${ROLLOUT_GPU_MEMORY_UTILIZATION:-0.5}
@@ -61,6 +72,9 @@ TEACHER_MAX_NUM_SEQS=${TEACHER_MAX_NUM_SEQS:-64}
 TEACHER_TOKEN_BUDGET=${TEACHER_TOKEN_BUDGET:-8192}
 ROLLOUT_ENFORCE_EAGER=${ROLLOUT_ENFORCE_EAGER:-True}
 TEACHER_ENFORCE_EAGER=${TEACHER_ENFORCE_EAGER:-True}
+# 共享 teacher 的 packed forward 预算，与 vLLM TEACHER_TOKEN_BUDGET 独立。
+TEACHER_FSDP_TOKEN_BUDGET=${TEACHER_FSDP_TOKEN_BUDGET:-32768}
+TEACHER_FSDP_DTYPE=${TEACHER_FSDP_DTYPE:-bfloat16}
 PARAM_OFFLOAD=${PARAM_OFFLOAD:-True}
 OPTIMIZER_OFFLOAD=${OPTIMIZER_OFFLOAD:-True}
 GRADIENT_CHECKPOINTING=${GRADIENT_CHECKPOINTING:-True}
@@ -88,13 +102,32 @@ if [[ $DOMAIN == if ]] && (( TEST_FREQ > 0 )); then
 fi
 
 # ── 4. 启动前检查与派生值 ────────────────────────────────────────────
-for name in STUDENT_GPUS TEACHER_GPUS ROLLOUT_TP TEACHER_TP TRAIN_BATCH_SIZE \
+for name in STUDENT_GPUS ROLLOUT_TP TEACHER_TP TRAIN_BATCH_SIZE TEACHER_FSDP_TOKEN_BUDGET \
     MAX_PROMPT_LENGTH MAX_RESPONSE_LENGTH MAX_VAL_RESPONSE_LENGTH VAL_N VAL_BATCH_SIZE PPO_MAX_TOKEN_LEN_PER_GPU; do
     if [[ ! ${!name} =~ ^[1-9][0-9]*$ ]]; then
         echo "$name must be a positive integer" >&2
         exit 2
     fi
 done
+if [[ $DISTILLATION_EXECUTION_MODE == shared_sync ]]; then
+    if [[ $TEACHER_GPUS != 0 || $ROLLOUT_TP != 1 ]]; then
+        echo "shared_sync requires TEACHER_GPUS=0 and ROLLOUT_TP=1" >&2
+        exit 2
+    fi
+    for name in PARAM_OFFLOAD OPTIMIZER_OFFLOAD; do
+        case "${!name}" in
+            True|true|TRUE) ;;
+            *) echo "shared_sync requires $name=True" >&2; exit 2 ;;
+        esac
+    done
+    if (( TEACHER_FSDP_TOKEN_BUDGET < MAX_PROMPT_LENGTH + MAX_RESPONSE_LENGTH )); then
+        echo "Teacher FSDP token budget must hold a complete training sequence" >&2
+        exit 2
+    fi
+elif [[ ! $TEACHER_GPUS =~ ^[1-9][0-9]*$ ]]; then
+    echo "standalone requires positive TEACHER_GPUS" >&2
+    exit 2
+fi
 if (( TRAIN_BATCH_SIZE % STUDENT_GPUS != 0 || STUDENT_GPUS % ROLLOUT_TP != 0 || TEACHER_GPUS % TEACHER_TP != 0 )); then
     echo "Require batch % student GPUs == 0 and each inference pool divisible by its TP" >&2
     exit 2
@@ -171,7 +204,7 @@ ACTOR_ARGS=(
     "actor_rollout_ref.actor.fsdp_config.optimizer_offload=$OPTIMIZER_OFFLOAD"
 )
 
-# Student 用 vLLM 生成训练回答；与 actor 共用 4 张卡，分阶段切换。
+# Student 用 vLLM 生成训练回答；与 actor 共池，分阶段切换。
 ROLLOUT_ARGS=(
     actor_rollout_ref.rollout.name=vllm
     "actor_rollout_ref.rollout.tensor_model_parallel_size=$ROLLOUT_TP"
@@ -200,10 +233,11 @@ VALIDATION_ARGS=(
     reward.custom_reward_function.name=reward_func
 )
 
-# 固定 teacher 权重，用 vLLM 评分 student 已生成的 token；多个副本共享同一模型。
+# 固定 teacher 权重；两种执行模式使用相同 token 与蒸馏 loss。
 DISTILLATION_ARGS=(
     distillation.enabled=True
-    distillation.nnodes=1
+    "distillation.execution_mode=$DISTILLATION_EXECUTION_MODE"
+    "distillation.nnodes=$TEACHER_NNODES"
     "distillation.n_gpus_per_node=$TEACHER_GPUS"
     "distillation.teacher_models.teacher_model.model_path='$TEACHER_MODEL'"
     distillation.teacher_models.teacher_model.inference.name=vllm
@@ -220,6 +254,13 @@ DISTILLATION_ARGS=(
     distillation.distillation_loss.loss_max_clamp=null
     distillation.distillation_loss.log_prob_min_clamp=null
 )
+if [[ $DISTILLATION_EXECUTION_MODE == shared_sync ]]; then
+    DISTILLATION_ARGS+=(
+        "distillation.shared_teacher.infer_max_token_len_per_gpu=$TEACHER_FSDP_TOKEN_BUDGET"
+        "distillation.shared_teacher.model_dtype=$TEACHER_FSDP_DTYPE"
+        "distillation.shared_teacher.mixed_precision={param_dtype:$TEACHER_FSDP_DTYPE,reduce_dtype:float32}"
+    )
+fi
 
 # 沿用当前主线的 sampled-token k1 + PG 路径，保持 reward / IS 语义不变。
 # task rewards 已禁用，grpo 不承担蒸馏 advantage 的构造；冻结 reward 方案另行讨论。
