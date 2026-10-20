@@ -41,7 +41,7 @@ from verl.utils.flops_counter import FlopsCounter
 from verl.utils.import_utils import import_external_libs
 from verl.utils.memory_utils import aggressive_empty_cache
 from verl.utils.metric.utils import Metric
-from verl.utils.opd_metrics import FSDP_PEAK_MEMORY
+from verl.utils.pipeline_metrics import FSDP_PEAK_MEMORY
 from verl.utils.profiler import DistProfiler, DistProfilerExtension, ProfilerConfig, log_gpu_memory_usage
 from verl.utils.py_functional import append_to_dict
 from verl.utils.tensordict_utils import maybe_fix_3d_position_ids
@@ -352,12 +352,8 @@ class TrainingWorker(Worker, DistProfilerExtension):
                 output_lst.append(actor_output)
 
             peak_memory = None
-            if tu.get(data, "opd_metrics", default=False) and self.engine_config.strategy in (
-                "fsdp",
-                "fsdp2",
-                "fsdp_turbo",
-            ):
-                # Once per actor update, on ALL ranks (including non-output SP ranks).
+            if self.engine_config.strategy in ("fsdp", "fsdp2", "fsdp_turbo"):
+                # Once per training update, on ALL ranks (including non-output SP ranks).
                 # The counter is process/device lifetime allocated memory, not a stage peak.
                 # Never reset it: existing perf/max_memory_* metrics must retain their meaning.
                 peak_memory = torch.tensor(

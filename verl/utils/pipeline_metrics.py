@@ -1,6 +1,6 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Small, opt-in OPD telemetry helpers; no worker logger or scheduling state."""
+"""Training pipeline telemetry helpers; no worker logger or scheduling state."""
 
 import logging
 import math
@@ -40,14 +40,14 @@ def make_rollout_submission(expected_requests: int) -> dict:
 
 @cache
 def _warn_once(reason: str):
-    logger.warning("OPD metrics omitted: %s", reason)
+    logger.warning("Pipeline metrics omitted: %s", reason)
 
 
 def _nonnegative(value) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and value >= 0
 
 
-def aggregate_opd_requests(keys: list[str], rows: list[dict]) -> dict[str, float]:
+def aggregate_pipeline_requests(keys: list[str], rows: list[dict]) -> dict[str, float]:
     """Reduce real trajectories, excluding padding before calling this helper.
 
     A single-turn submission must be complete and contain one output per session.
@@ -64,7 +64,7 @@ def aggregate_opd_requests(keys: list[str], rows: list[dict]) -> dict[str, float
     elif any(value is not None for value in latencies):
         _warn_once("incomplete teacher request latency")
 
-    submissions = [row.get("opd_submission") for row in rows]
+    submissions = [row.get("rollout_submission") for row in rows]
     submission = submissions[0]
     sessions = [key.rsplit("_", 2) for key in keys]
     complete = (
@@ -102,7 +102,7 @@ def aggregate_opd_requests(keys: list[str], rows: list[dict]) -> dict[str, float
     return metrics
 
 
-def aggregate_opd_validation(windows: list[dict[str, float]]) -> dict[str, float]:
+def aggregate_validation_windows(windows: list[dict[str, float]]) -> dict[str, float]:
     """Sum complete validation windows, excluding gaps and never hiding missing windows."""
     if not windows:
         return {}

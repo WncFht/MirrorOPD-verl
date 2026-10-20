@@ -51,6 +51,7 @@ def _worker(engine):
     return SimpleNamespace(
         engine=engine,
         engine_config=SimpleNamespace(
+            strategy="megatron",
             forward_only=False,
             use_dynamic_bsz=False,
             infer_max_token_len_per_gpu=128,
