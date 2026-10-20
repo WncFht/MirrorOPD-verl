@@ -1,0 +1,46 @@
+{
+  "backend": "CPU",
+  "torch": "2.6.0+cu124",
+  "cases": 20,
+  "upstream_checked": true,
+  "upstream_reference": "furiosa-ai/async-opd@e3f79e916aad9dba886256d202bab96f8504a447",
+  "upstream_note": "Optional source path must be prepared at the cited revision; this script does not fetch it.",
+  "max_absolute_gradient_errors": {
+    "current_vs_exact": 3.3306690738754696e-16,
+    "fixed_plus_kl_vs_exact": 2.220446049250313e-16,
+    "corrected_scalar_vs_exact": 3.3306690738754696e-16,
+    "no_is_vs_logprob_mse": 0.0,
+    "upstream_current_vs_exact": 5.209045392251532e-08,
+    "upstream_fixed_vs_fixed_formula": 1.0116790699621347e-07
+  },
+  "two_token_example": [
+    {
+      "first_probability": 0.2,
+      "fixed_is": -0.12276082443418672,
+      "fixed_clip": -0.12276082443418672,
+      "current_is": -0.1227608244341867,
+      "current_clip": -0.1227608244341867
+    },
+    {
+      "first_probability": 0.26,
+      "fixed_is": -0.1476198913821095,
+      "fixed_clip": -0.039949813783334245,
+      "current_is": -0.08214120631979169,
+      "current_clip": -0.024950013204561677
+    },
+    {
+      "first_probability": 0.35,
+      "fixed_is": -0.1745505472423592,
+      "fixed_clip": -0.04723795548705064,
+      "current_is": 0.0,
+      "current_clip": 0.0
+    },
+    {
+      "first_probability": 0.5,
+      "fixed_is": -0.19181378817841674,
+      "fixed_clip": 0.0,
+      "current_is": 0.1547598021015559,
+      "current_clip": 0.1547598021015559
+    }
+  ]
+}
