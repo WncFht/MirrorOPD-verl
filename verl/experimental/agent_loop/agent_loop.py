@@ -629,7 +629,9 @@ class AgentLoopWorker:
             top_p=config.top_p,
             top_k=config.top_k,
             repetition_penalty=1.0,
-            logprobs=config.calculate_log_probs,
+            # Keep the legacy and TQ paths consistent: only training needs the
+            # sampled-token probabilities for policy updates/correction metrics.
+            logprobs=config.calculate_log_probs and not validate,
         )
 
         def apply_greedy_sampling_params(params: dict[str, Any]) -> None:

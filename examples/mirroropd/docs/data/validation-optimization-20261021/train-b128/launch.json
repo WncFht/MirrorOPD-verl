@@ -1,0 +1,40 @@
+{
+  "command": [
+    "bash",
+    "examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh",
+    "trainer.total_training_steps=3",
+    "actor_rollout_ref.rollout.disable_log_stats=False",
+    "++ray_kwargs.ray_init.runtime_env.env_vars.VLLM_LOGGING_LEVEL=INFO",
+    "++ray_kwargs.ray_init.num_gpus=4",
+    "++ray_kwargs.ray_init.num_cpus=64",
+    "++ray_kwargs.ray_init.include_dashboard=False",
+    "++ray_kwargs.ray_init.object_store_memory=4294967296",
+    "++ray_kwargs.ray_init._temp_dir=/tmp/mopd-b128-2",
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes=[1,2,4,8,16,32]"
+  ],
+  "environment_overrides": {
+    "CUDA_VISIBLE_DEVICES": "0,1,2,3",
+    "STUDENT_GPUS": "4",
+    "TEACHER_GPUS": "0",
+    "DISTILLATION_EXECUTION_MODE": "shared_sync",
+    "ROLLOUT_TP": "1",
+    "TRAIN_BATCH_SIZE": "128",
+    "PYTHON_BIN": "/root/.local/share/mirroropd/venvs/profile-cu128/bin/python",
+    "VERL_USE_UV": "0",
+    "MODEL_ROOT": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models",
+    "DATA_ROOT": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data",
+    "VAL_BATCH_SIZE": "16",
+    "TEST_FREQ": "-1",
+    "SAVE_FREQ": "-1",
+    "WANDB_MODE": "offline",
+    "RAY_ADDRESS": "local",
+    "RAY_DEDUP_LOGS": "0",
+    "RAY_USAGE_STATS_ENABLED": "0",
+    "ROLLOUT_ENFORCE_EAGER": "False",
+    "EXPERIMENT_NAME": "local-shared4-b128-graph-20261021-2",
+    "RUN_DIR": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/local-shared4-20261021/local-shared4-b128-graph-20261021-2/training",
+    "OMP_NUM_THREADS": "1",
+    "TOKENIZERS_PARALLELISM": "false",
+    "NVTX_INJECTION64_PATH": "/nonexistent/verl-disabled-nvtx-injection.so"
+  }
+}

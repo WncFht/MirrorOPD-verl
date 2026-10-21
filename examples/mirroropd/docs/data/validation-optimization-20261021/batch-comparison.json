@@ -1,0 +1,44 @@
+{
+  "batch64": {
+    "steps": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "responses": 256,
+    "mean_step_s": 35.92585073783994,
+    "mean_tokens": 405209.25,
+    "tokens_per_second": 11279.043966332625,
+    "stage_mean_s": {
+      "gen": 24.196754233911633,
+      "teacher_transfer": 0.8771783150732517,
+      "teacher_forward": 1.3031976874917746,
+      "old_log_prob": 2.7019368670880795,
+      "update_actor": 5.801039315760136,
+      "update_weights": 0.8714650645852089
+    },
+    "max_fsdp_allocated_gib": 18.57412338256836
+  },
+  "batch128": {
+    "steps": [
+      2,
+      3
+    ],
+    "responses": 256,
+    "mean_step_s": 47.403870064765215,
+    "mean_tokens": 819469,
+    "tokens_per_second": 17286.964099775105,
+    "stage_mean_s": {
+      "gen": 28.186125066131353,
+      "teacher_transfer": 0.9472568519413471,
+      "teacher_forward": 2.3999912329018116,
+      "old_log_prob": 4.457813303917646,
+      "update_actor": 10.284403018653393,
+      "update_weights": 0.8602143228054047
+    },
+    "max_fsdp_allocated_gib": 19.216957092285156
+  },
+  "batch128_run_id": "dgyajowp",
+  "throughput_ratio": 1.5326621787605241
+}

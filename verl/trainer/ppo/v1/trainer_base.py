@@ -496,9 +496,14 @@ class PPOTrainer(ABC):
         # perform validation before training
         if self.config.trainer.get("val_before_train", True):
             self.on_validate_begin()
-            val_metrics = self._validate()
+            # val_only returns before the training loop, so its complete validation
+            # wall time must be logged here as well as for periodic validation.
+            validation_timing = {}
+            with marked_timer("testing", validation_timing):
+                val_metrics = self._validate()
             self.on_validate_end()
             assert val_metrics, f"{val_metrics=}"
+            val_metrics["timing_s/testing"] = validation_timing["testing"]
             pprint(f"Initial validation metrics: {val_metrics}")
             self.logger.log(data=val_metrics, step=self.global_steps)
             if self.config.trainer.get("val_only", False):
