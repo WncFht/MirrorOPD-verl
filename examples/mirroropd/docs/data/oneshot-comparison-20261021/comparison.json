@@ -1,0 +1,1452 @@
+{
+  "mdxt04lm": {
+    "source": {
+      "kind": "wandb-api",
+      "run": "wncfht/One-Shot-OPD/mdxt04lm",
+      "state_at_fetch": "finished",
+      "created_at": "2026-09-04T16:02:17Z",
+      "fetched_at_utc": "2026-10-21T06:44:42.698782+00:00",
+      "history_boundary_step": 279,
+      "rows": 279,
+      "history_method": "scan_history(keys=None)",
+      "online_history_retrieved": true,
+      "system_metrics_available": true,
+      "system_method": "history(stream=system,samples=100000); completeness NOT guaranteed"
+    },
+    "hardware": {
+      "gpu_count": 8,
+      "gpu_nvidia": [
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        }
+      ],
+      "python": "CPython 3.12.13",
+      "os": "Linux-5.10.0-218.0.0.mt20250120.565.mt2203sp4.x86_64-x86_64-with-glibc2.35"
+    },
+    "all_steady_exclude_checkpoint": {
+      "step": {
+        "n": 272,
+        "mean": 159.13841218848864,
+        "median": 158.44795864494517,
+        "min": 154.38925481028855,
+        "max": 177.88803973421454
+      },
+      "gen": {
+        "n": 272,
+        "mean": 128.31522246005753,
+        "median": 127.77373786456883,
+        "min": 125.28856860008091,
+        "max": 146.28522170800716
+      },
+      "old_log_prob": {
+        "n": 272,
+        "mean": 10.112004307413693,
+        "median": 9.9196509225294,
+        "min": 8.29016168601811,
+        "max": 15.282087014056742
+      },
+      "opd_teacher": {
+        "n": 272,
+        "mean": 4.0768477845601465,
+        "median": 3.606185690034181,
+        "min": 3.028126754797995,
+        "max": 6.509052959270775
+      },
+      "teacher_forward": {
+        "n": 0
+      },
+      "teacher_transfer": {
+        "n": 0
+      },
+      "adv": {
+        "n": 272,
+        "mean": 4.087321895428056,
+        "median": 3.6163988607004285,
+        "min": 3.0387531965970993,
+        "max": 6.519117357209325
+      },
+      "update_actor": {
+        "n": 272,
+        "mean": 9.647072348127361,
+        "median": 9.505412180442363,
+        "min": 6.5858412040397525,
+        "max": 14.258146692998707
+      },
+      "update_weights": {
+        "n": 272,
+        "mean": 6.963769495268078,
+        "median": 6.592777129728347,
+        "min": 5.661064984276891,
+        "max": 11.664875311776996
+      },
+      "tokens": {
+        "n": 272,
+        "mean": 375015.85294117645,
+        "median": 375726.0,
+        "min": 325314,
+        "max": 422183
+      },
+      "response_length": {
+        "n": 272,
+        "mean": 5763.897001378677,
+        "median": 5771.9453125,
+        "min": 4991.53125,
+        "max": 6515.859375
+      },
+      "effective_tokens_per_second": 2356.5388631438377,
+      "generation_tokens_per_second": 2874.8686322315707,
+      "rollout_span": {
+        "n": 0
+      },
+      "gen_minus_span": {
+        "n": 0
+      },
+      "gen_minus_longest_request": {
+        "n": 272,
+        "mean": 1.088809231576948,
+        "median": 0.7954061073251069,
+        "min": 0.4114436423406005,
+        "max": 3.0311050629243255
+      }
+    },
+    "steps_2_12": {
+      "step": {
+        "n": 11,
+        "mean": 160.53528602395883,
+        "median": 160.71174835506827,
+        "min": 156.169685841538,
+        "max": 165.16845405846834
+      },
+      "gen": {
+        "n": 11,
+        "mean": 128.21975614376026,
+        "median": 127.09941126592457,
+        "min": 125.58919358253479,
+        "max": 133.8781289346516
+      },
+      "old_log_prob": {
+        "n": 11,
+        "mean": 11.038820626637476,
+        "median": 10.698186459951103,
+        "min": 10.224254214204848,
+        "max": 12.301513743586838
+      },
+      "opd_teacher": {
+        "n": 11,
+        "mean": 4.419280848804522,
+        "median": 3.904464262537658,
+        "min": 3.318054457195103,
+        "max": 6.207320906221867
+      },
+      "teacher_forward": {
+        "n": 0
+      },
+      "teacher_transfer": {
+        "n": 0
+      },
+      "adv": {
+        "n": 11,
+        "mean": 4.4303127178414305,
+        "median": 3.9143807515501976,
+        "min": 3.328143944963813,
+        "max": 6.219975961372256
+      },
+      "update_actor": {
+        "n": 11,
+        "mean": 9.864744240672074,
+        "median": 9.836910819634795,
+        "min": 7.362985515035689,
+        "max": 11.44353217445314
+      },
+      "update_weights": {
+        "n": 11,
+        "mean": 6.9689406678927215,
+        "median": 6.499530423432589,
+        "min": 5.910159292630851,
+        "max": 8.496675003319979
+      },
+      "tokens": {
+        "n": 11,
+        "mean": 402486.54545454547,
+        "median": 405483,
+        "min": 371581,
+        "max": 419506
+      },
+      "response_length": {
+        "n": 11,
+        "mean": 6193.545454545455,
+        "median": 6229.140625,
+        "min": 5708.796875,
+        "max": 6452.53125
+      },
+      "effective_tokens_per_second": 2507.1531338878167,
+      "generation_tokens_per_second": 3091.465161160338,
+      "rollout_span": {
+        "n": 0
+      },
+      "gen_minus_span": {
+        "n": 0
+      },
+      "gen_minus_longest_request": {
+        "n": 11,
+        "mean": 1.0750907313247973,
+        "median": 0.8559525469318032,
+        "min": 0.5009707780554891,
+        "max": 2.4105034340173006
+      }
+    },
+    "gpu": {
+      "training": {
+        "rows": 2854,
+        "busy_percent": {
+          "n": 2854,
+          "mean": 33.68149964961458,
+          "median": 31.375,
+          "min": 0,
+          "max": 100
+        },
+        "peak_device_memory_gib": 61.7825927734375,
+        "power_watts": {
+          "n": 2854,
+          "mean": 131.81148125437983,
+          "median": 116.06993750000001,
+          "min": 83.8775,
+          "max": 426.36075
+        }
+      },
+      "gen": {
+        "rows": 1782,
+        "busy_percent": {
+          "n": 1782,
+          "mean": 31.68202861952862,
+          "median": 31.5,
+          "min": 25.875,
+          "max": 36
+        },
+        "peak_device_memory_gib": 61.7825927734375,
+        "power_watts": {
+          "n": 1782,
+          "mean": 122.48473421717172,
+          "median": 119.368,
+          "min": 99.59025,
+          "max": 150.8505
+        }
+      },
+      "validation": {
+        "rows": 2197,
+        "busy_percent": {
+          "n": 2197,
+          "mean": 69.14406008192991,
+          "median": 83.5,
+          "min": 0,
+          "max": 100
+        },
+        "peak_device_memory_gib": 59.8880615234375,
+        "power_watts": {
+          "n": 2197,
+          "mean": 245.52149857760583,
+          "median": 272.368375,
+          "min": 79.849875,
+          "max": 341.10375
+        }
+      }
+    },
+    "system_sampling_interval_s": {
+      "n": 5206,
+      "mean": 14.999804211084173,
+      "median": 15.005777955055237,
+      "min": 11.902704954147339,
+      "max": 17.69174599647522
+    },
+    "timer_residual_s": {
+      "n": 272,
+      "mean": 0.013002722774057047,
+      "median": 0.011450322344899178,
+      "min": 0.010994781740009785,
+      "max": 0.02587259653955698
+    },
+    "validation_seconds": {
+      "n": 14,
+      "mean": 2385.8400543659395,
+      "median": 2341.717127305921,
+      "min": 2216.180774487555,
+      "max": 2671.7311809752136
+    },
+    "validation_fraction": 0.4277049528081641
+  },
+  "mzwm9q04": {
+    "source": {
+      "kind": "wandb-api",
+      "run": "wncfht/One-Shot-OPD/mzwm9q04",
+      "state_at_fetch": "finished",
+      "created_at": "2026-09-04T23:22:52Z",
+      "fetched_at_utc": "2026-10-21T06:44:52.034618+00:00",
+      "history_boundary_step": 279,
+      "rows": 279,
+      "history_method": "scan_history(keys=None)",
+      "online_history_retrieved": true,
+      "system_metrics_available": true,
+      "system_method": "history(stream=system,samples=100000); completeness NOT guaranteed"
+    },
+    "hardware": {
+      "gpu_count": 8,
+      "gpu_nvidia": [
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        }
+      ],
+      "python": "CPython 3.12.13",
+      "os": "Linux-5.10.0-218.0.0.mt20250120.565.mt2203sp4.x86_64-x86_64-with-glibc2.35"
+    },
+    "all_steady_exclude_checkpoint": {
+      "step": {
+        "n": 272,
+        "mean": 159.33444271492772,
+        "median": 158.2433065804653,
+        "min": 154.46659051254392,
+        "max": 177.26996951457113
+      },
+      "gen": {
+        "n": 272,
+        "mean": 128.22917376337094,
+        "median": 127.3872685818933,
+        "min": 124.6728361742571,
+        "max": 147.29492199793458
+      },
+      "old_log_prob": {
+        "n": 272,
+        "mean": 10.292399730981902,
+        "median": 10.101929448079318,
+        "min": 8.055689413100481,
+        "max": 13.705408357083797
+      },
+      "opd_teacher": {
+        "n": 272,
+        "mean": 4.193886608059984,
+        "median": 3.7952646049670875,
+        "min": 3.085252184420824,
+        "max": 6.456728800199926
+      },
+      "teacher_forward": {
+        "n": 0
+      },
+      "teacher_transfer": {
+        "n": 0
+      },
+      "adv": {
+        "n": 272,
+        "mean": 4.334833105334409,
+        "median": 3.9378647063858807,
+        "min": 3.222566632553935,
+        "max": 6.594959808513522
+      },
+      "update_actor": {
+        "n": 272,
+        "mean": 9.793638265719089,
+        "median": 9.636020983103663,
+        "min": 6.461225967854261,
+        "max": 13.284107967279851
+      },
+      "update_weights": {
+        "n": 272,
+        "mean": 6.671516449738513,
+        "median": 6.224549429025501,
+        "min": 5.346142531372607,
+        "max": 8.847322637215257
+      },
+      "tokens": {
+        "n": 272,
+        "mean": 385524.19852941175,
+        "median": 386911.0,
+        "min": 333543,
+        "max": 431320
+      },
+      "response_length": {
+        "n": 272,
+        "mean": 5928.089901194853,
+        "median": 5947.1015625,
+        "min": 5092.40625,
+        "max": 6632.3125
+      },
+      "effective_tokens_per_second": 2419.591093804935,
+      "generation_tokens_per_second": 2958.7475497315163,
+      "rollout_span": {
+        "n": 0
+      },
+      "gen_minus_span": {
+        "n": 0
+      },
+      "gen_minus_longest_request": {
+        "n": 272,
+        "mean": 1.3138389299411382,
+        "median": 1.0034047486260533,
+        "min": 0.43763721641153097,
+        "max": 3.9389420999214053
+      }
+    },
+    "steps_2_12": {
+      "step": {
+        "n": 11,
+        "mean": 158.87102082701907,
+        "median": 158.13719674386084,
+        "min": 154.90420942101628,
+        "max": 162.499785955064
+      },
+      "gen": {
+        "n": 11,
+        "mean": 127.07985918731852,
+        "median": 127.07525593135506,
+        "min": 125.14549432788044,
+        "max": 128.178360552527
+      },
+      "old_log_prob": {
+        "n": 11,
+        "mean": 10.69690898052332,
+        "median": 10.912631580606103,
+        "min": 9.492411838844419,
+        "max": 11.977149044163525
+      },
+      "opd_teacher": {
+        "n": 11,
+        "mean": 4.464595996605402,
+        "median": 4.1552437376230955,
+        "min": 3.2459794972091913,
+        "max": 6.2350653083994985
+      },
+      "teacher_forward": {
+        "n": 0
+      },
+      "teacher_transfer": {
+        "n": 0
+      },
+      "adv": {
+        "n": 11,
+        "mean": 4.604040727103976,
+        "median": 4.294716393575072,
+        "min": 3.3830153634771705,
+        "max": 6.372610387392342
+      },
+      "update_actor": {
+        "n": 11,
+        "mean": 9.58543976675719,
+        "median": 9.580040291883051,
+        "min": 6.461225967854261,
+        "max": 11.755754454992712
+      },
+      "update_weights": {
+        "n": 11,
+        "mean": 6.892790004611015,
+        "median": 7.0473519917577505,
+        "min": 5.418355384841561,
+        "max": 8.092130405828357
+      },
+      "tokens": {
+        "n": 11,
+        "mean": 403724.2727272727,
+        "median": 411497,
+        "min": 355328,
+        "max": 428102
+      },
+      "response_length": {
+        "n": 11,
+        "mean": 6212.884943181818,
+        "median": 6336.984375,
+        "min": 5454.84375,
+        "max": 6604.046875
+      },
+      "effective_tokens_per_second": 2541.2077710940953,
+      "generation_tokens_per_second": 3128.935135012456,
+      "rollout_span": {
+        "n": 0
+      },
+      "gen_minus_span": {
+        "n": 0
+      },
+      "gen_minus_longest_request": {
+        "n": 11,
+        "mean": 2.2888800164007326,
+        "median": 2.384785348549485,
+        "min": 0.47177038434892893,
+        "max": 3.633873780258
+      }
+    },
+    "gpu": {
+      "training": {
+        "rows": 2859,
+        "busy_percent": {
+          "n": 2859,
+          "mean": 34.41880902413431,
+          "median": 31.625,
+          "min": 0,
+          "max": 100
+        },
+        "peak_device_memory_gib": 62.05206298828125,
+        "power_watts": {
+          "n": 2859,
+          "mean": 143.81849414130815,
+          "median": 126.01925,
+          "min": 89.041,
+          "max": 420.7765
+        }
+      },
+      "gen": {
+        "rows": 1781,
+        "busy_percent": {
+          "n": 1781,
+          "mean": 31.9135317237507,
+          "median": 31.875,
+          "min": 18.125,
+          "max": 36.125
+        },
+        "peak_device_memory_gib": 62.05206298828125,
+        "power_watts": {
+          "n": 1781,
+          "mean": 132.73040714486243,
+          "median": 130.41875,
+          "min": 109.934,
+          "max": 161.096625
+        }
+      },
+      "validation": {
+        "rows": 2235,
+        "busy_percent": {
+          "n": 2235,
+          "mean": 74.10413870246084,
+          "median": 90.25,
+          "min": 0,
+          "max": 100
+        },
+        "peak_device_memory_gib": 62.05206298828125,
+        "power_watts": {
+          "n": 2235,
+          "mean": 276.00745508948546,
+          "median": 308.488875,
+          "min": 88.839875,
+          "max": 369.17775
+        }
+      }
+    },
+    "system_sampling_interval_s": {
+      "n": 5246,
+      "mean": 14.999377010298558,
+      "median": 15.00378954410553,
+      "min": 11.716845035552979,
+      "max": 17.89908003807068
+    },
+    "timer_residual_s": {
+      "n": 272,
+      "mean": 0.012863559655242544,
+      "median": 0.011294452473521233,
+      "min": 0.010855169035494328,
+      "max": 0.024786277674138546
+    },
+    "validation_seconds": {
+      "n": 14,
+      "mean": 2423.8195682914397,
+      "median": 2470.0222624861635,
+      "min": 2115.1792413704097,
+      "max": 2638.5736433416605
+    },
+    "validation_fraction": 0.43126336015684286
+  },
+  "5aub1k4h": {
+    "source": {
+      "kind": "wandb-api",
+      "run": "wncfht/One-Shot-OPD/5aub1k4h",
+      "state_at_fetch": "finished",
+      "created_at": "2026-09-08T03:28:52Z",
+      "fetched_at_utc": "2026-10-21T06:44:55.949874+00:00",
+      "history_boundary_step": 300,
+      "rows": 300,
+      "history_method": "scan_history(keys=None)",
+      "online_history_retrieved": true,
+      "system_metrics_available": true,
+      "system_method": "history(stream=system,samples=100000); completeness NOT guaranteed"
+    },
+    "hardware": {
+      "gpu": "NVIDIA A800-SXM4-80GB",
+      "gpu_count": 8,
+      "gpu_nvidia": [
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "architecture": "Ampere"
+        }
+      ],
+      "python": "CPython 3.12.13",
+      "os": "Linux-5.10.0-218.0.0.mt20250120.565.mt2203sp4.x86_64-x86_64-with-glibc2.35"
+    },
+    "all_steady_exclude_checkpoint": {
+      "step": {
+        "n": 293,
+        "mean": 125.62233133214198,
+        "median": 125.77531606052071,
+        "min": 122.17282953299582,
+        "max": 130.29667470231652
+      },
+      "gen": {
+        "n": 293,
+        "mean": 101.79006880268123,
+        "median": 101.67008134536445,
+        "min": 100.30029614362866,
+        "max": 105.05143921077251
+      },
+      "old_log_prob": {
+        "n": 293,
+        "mean": 4.408652199187504,
+        "median": 3.9050313578918576,
+        "min": 3.3116690292954445,
+        "max": 6.612450733780861
+      },
+      "opd_teacher": {
+        "n": 293,
+        "mean": 5.088996161957853,
+        "median": 5.199149114079773,
+        "min": 3.2985246386379004,
+        "max": 6.313628949224949
+      },
+      "teacher_forward": {
+        "n": 0
+      },
+      "teacher_transfer": {
+        "n": 0
+      },
+      "adv": {
+        "n": 293,
+        "mean": 5.103883291044791,
+        "median": 5.2143976129591465,
+        "min": 3.3134066527709365,
+        "max": 6.326700718142092
+      },
+      "update_actor": {
+        "n": 293,
+        "mean": 8.215860910646922,
+        "median": 8.21048500109464,
+        "min": 6.243096938356757,
+        "max": 10.802221816033125
+      },
+      "update_weights": {
+        "n": 293,
+        "mean": 6.085630442635649,
+        "median": 6.495104626752436,
+        "min": 4.361788667738438,
+        "max": 8.472964498214424
+      },
+      "tokens": {
+        "n": 293,
+        "mean": 373429.72013651876,
+        "median": 372083,
+        "min": 342648,
+        "max": 418789
+      },
+      "response_length": {
+        "n": 293,
+        "mean": 5734.839377133106,
+        "median": 5713.796875,
+        "min": 5253.875,
+        "max": 6443.578125
+      },
+      "effective_tokens_per_second": 2972.6380347868317,
+      "generation_tokens_per_second": 3605.751763936826,
+      "rollout_span": {
+        "n": 0
+      },
+      "gen_minus_span": {
+        "n": 0
+      },
+      "gen_minus_longest_request": {
+        "n": 293,
+        "mean": 0.929901965137304,
+        "median": 0.582277026027441,
+        "min": 0.36693436931818724,
+        "max": 4.4031418561935425
+      }
+    },
+    "steps_2_12": {
+      "step": {
+        "n": 11,
+        "mean": 126.9927767499096,
+        "median": 127.16205519624054,
+        "min": 124.58461405709386,
+        "max": 130.29667470231652
+      },
+      "gen": {
+        "n": 11,
+        "mean": 101.92591926760294,
+        "median": 101.35703455470502,
+        "min": 100.31390539929271,
+        "max": 104.55216339137405
+      },
+      "old_log_prob": {
+        "n": 11,
+        "mean": 5.333998808129267,
+        "median": 5.892296287231147,
+        "min": 3.5931355049833655,
+        "max": 6.519844026304781
+      },
+      "opd_teacher": {
+        "n": 11,
+        "mean": 4.782040734944696,
+        "median": 5.060339542105794,
+        "min": 3.4567026123404503,
+        "max": 5.997118324041367
+      },
+      "teacher_forward": {
+        "n": 0
+      },
+      "teacher_transfer": {
+        "n": 0
+      },
+      "adv": {
+        "n": 11,
+        "mean": 4.794799392196265,
+        "median": 5.072610063478351,
+        "min": 3.4694983856752515,
+        "max": 6.009177804924548
+      },
+      "update_actor": {
+        "n": 11,
+        "mean": 8.783014216714285,
+        "median": 8.548070278950036,
+        "min": 8.184613634832203,
+        "max": 10.802221816033125
+      },
+      "update_weights": {
+        "n": 11,
+        "mean": 6.137258425439623,
+        "median": 6.528670775704086,
+        "min": 4.633419805206358,
+        "max": 7.455000177957118
+      },
+      "tokens": {
+        "n": 11,
+        "mean": 393857,
+        "median": 390402,
+        "min": 375287,
+        "max": 415706
+      },
+      "response_length": {
+        "n": 11,
+        "mean": 6054.015625,
+        "median": 6000.03125,
+        "min": 5763.859375,
+        "max": 6395.40625
+      },
+      "effective_tokens_per_second": 3101.412616369776,
+      "generation_tokens_per_second": 3801.358896580027,
+      "rollout_span": {
+        "n": 0
+      },
+      "gen_minus_span": {
+        "n": 0
+      },
+      "gen_minus_longest_request": {
+        "n": 11,
+        "mean": 1.7019483650272542,
+        "median": 0.7057278212159872,
+        "min": 0.4133495707064867,
+        "max": 4.334420130588114
+      }
+    },
+    "gpu": {
+      "training": {
+        "rows": 2423,
+        "busy_percent": {
+          "n": 2423,
+          "mean": 40.10787247214197,
+          "median": 37.5,
+          "min": 0,
+          "max": 100
+        },
+        "peak_device_memory_gib": 61.45037841796875,
+        "power_watts": {
+          "n": 2423,
+          "mean": 152.59932021254642,
+          "median": 140.803875,
+          "min": 86.66025,
+          "max": 427.157875
+        }
+      },
+      "gen": {
+        "rows": 1395,
+        "busy_percent": {
+          "n": 1395,
+          "mean": 37.61048387096774,
+          "median": 37.75,
+          "min": 27.625,
+          "max": 40
+        },
+        "peak_device_memory_gib": 61.45037841796875,
+        "power_watts": {
+          "n": 1395,
+          "mean": 143.87505474910395,
+          "median": 143.74525,
+          "min": 113.573125,
+          "max": 164.140125
+        }
+      },
+      "validation": {
+        "rows": 2581,
+        "busy_percent": {
+          "n": 2581,
+          "mean": 72.07773149941883,
+          "median": 98.125,
+          "min": 0,
+          "max": 100
+        },
+        "peak_device_memory_gib": 59.66522216796875,
+        "power_watts": {
+          "n": 2581,
+          "mean": 260.6620935199535,
+          "median": 308.417375,
+          "min": 81.65225000000001,
+          "max": 372.3795
+        }
+      }
+    },
+    "system_sampling_interval_s": {
+      "n": 5151,
+      "mean": 14.99998718890096,
+      "median": 15.00420093536377,
+      "min": 11.913978099822998,
+      "max": 17.836437225341797
+    },
+    "timer_residual_s": {
+      "n": 293,
+      "mean": 0.01821237014854524,
+      "median": 0.01689275447279215,
+      "min": 0.014386591501533985,
+      "max": 0.033408486284315586
+    },
+    "validation_seconds": {
+      "n": 15,
+      "mean": 2611.1941852572063,
+      "median": 2581.225443269126,
+      "min": 2357.1460962072015,
+      "max": 3216.973767559044
+    },
+    "validation_fraction": 0.5077552752710214
+  },
+  "rcxtujbi": {
+    "source": {
+      "kind": "wandb-api",
+      "run": "wncfht/MirrorOPD-verl/rcxtujbi",
+      "state_at_fetch": "finished",
+      "created_at": "2026-10-21T00:40:59Z",
+      "fetched_at_utc": "2026-10-21T06:45:56.974775+00:00",
+      "history_boundary_step": 12,
+      "rows": 12,
+      "history_method": "scan_history(keys=None)",
+      "online_history_retrieved": true,
+      "system_metrics_available": true,
+      "system_method": "history(stream=system,samples=100000); completeness NOT guaranteed"
+    },
+    "hardware": {
+      "gpu_count": 8,
+      "gpu_nvidia": [
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        },
+        {
+          "name": "NVIDIA A800-SXM4-80GB",
+          "memory_total": "85899345920",
+          "cuda_cores": 6912,
+          "architecture": "Ampere"
+        }
+      ],
+      "python": "CPython 3.12.13",
+      "os": "Linux-5.10.0-218.0.0.mt20250120.565.mt2203sp4.x86_64-x86_64-with-glibc2.35",
+      "git": {
+        "commit": "e70acdf1e0df157181a931b8cf49a5216c879f38"
+      }
+    },
+    "all_steady_exclude_checkpoint": {
+      "step": {
+        "n": 11,
+        "mean": 148.53593038665977,
+        "median": 148.28055004402995,
+        "min": 147.5309896338731,
+        "max": 150.7254091296345
+      },
+      "gen": {
+        "n": 11,
+        "mean": 127.91761318272488,
+        "median": 128.46568376012146,
+        "min": 126.46764356829226,
+        "max": 129.2011985052377
+      },
+      "old_log_prob": {
+        "n": 11,
+        "mean": 4.858718534762209,
+        "median": 5.171427734196186,
+        "min": 3.14773833937943,
+        "max": 5.69397784397006
+      },
+      "opd_teacher": {
+        "n": 0
+      },
+      "teacher_forward": {
+        "n": 11,
+        "mean": 2.7374359652061355,
+        "median": 2.060059944167733,
+        "min": 1.902956472709775,
+        "max": 4.233419822528958
+      },
+      "teacher_transfer": {
+        "n": 11,
+        "mean": 1.1693361655554988,
+        "median": 1.186772571876645,
+        "min": 1.0421577673405409,
+        "max": 1.2982047703117132
+      },
+      "adv": {
+        "n": 11,
+        "mean": 0.10882937467911026,
+        "median": 0.10727214068174362,
+        "min": 0.10415223613381386,
+        "max": 0.11507710814476013
+      },
+      "update_actor": {
+        "n": 11,
+        "mean": 9.007827962325377,
+        "median": 8.70588332414627,
+        "min": 7.8986941408365965,
+        "max": 10.986172778531909
+      },
+      "update_weights": {
+        "n": 11,
+        "mean": 2.605326057157733,
+        "median": 2.250179076567292,
+        "min": 1.9759699366986752,
+        "max": 4.481032343581319
+      },
+      "tokens": {
+        "n": 11,
+        "mean": 401205.54545454547,
+        "median": 398402,
+        "min": 388231,
+        "max": 419594
+      },
+      "response_length": {
+        "n": 11,
+        "mean": 6169.742897727273,
+        "median": 6136.40625,
+        "min": 5973.6875,
+        "max": 6444.84375
+      },
+      "effective_tokens_per_second": 2701.067306813586,
+      "generation_tokens_per_second": 3086.8582959760174,
+      "rollout_span": {
+        "n": 11,
+        "mean": 126.05510416818181,
+        "median": 125.780488122,
+        "min": 124.224009672,
+        "max": 127.838882881
+      },
+      "gen_minus_span": {
+        "n": 11,
+        "mean": 1.862509014543061,
+        "median": 1.3793169894337183,
+        "min": 0.6268008791214612,
+        "max": 4.233196461753067
+      },
+      "gen_minus_longest_request": {
+        "n": 0
+      }
+    },
+    "steps_2_12": {
+      "step": {
+        "n": 11,
+        "mean": 148.53593038665977,
+        "median": 148.28055004402995,
+        "min": 147.5309896338731,
+        "max": 150.7254091296345
+      },
+      "gen": {
+        "n": 11,
+        "mean": 127.91761318272488,
+        "median": 128.46568376012146,
+        "min": 126.46764356829226,
+        "max": 129.2011985052377
+      },
+      "old_log_prob": {
+        "n": 11,
+        "mean": 4.858718534762209,
+        "median": 5.171427734196186,
+        "min": 3.14773833937943,
+        "max": 5.69397784397006
+      },
+      "opd_teacher": {
+        "n": 0
+      },
+      "teacher_forward": {
+        "n": 11,
+        "mean": 2.7374359652061355,
+        "median": 2.060059944167733,
+        "min": 1.902956472709775,
+        "max": 4.233419822528958
+      },
+      "teacher_transfer": {
+        "n": 11,
+        "mean": 1.1693361655554988,
+        "median": 1.186772571876645,
+        "min": 1.0421577673405409,
+        "max": 1.2982047703117132
+      },
+      "adv": {
+        "n": 11,
+        "mean": 0.10882937467911026,
+        "median": 0.10727214068174362,
+        "min": 0.10415223613381386,
+        "max": 0.11507710814476013
+      },
+      "update_actor": {
+        "n": 11,
+        "mean": 9.007827962325377,
+        "median": 8.70588332414627,
+        "min": 7.8986941408365965,
+        "max": 10.986172778531909
+      },
+      "update_weights": {
+        "n": 11,
+        "mean": 2.605326057157733,
+        "median": 2.250179076567292,
+        "min": 1.9759699366986752,
+        "max": 4.481032343581319
+      },
+      "tokens": {
+        "n": 11,
+        "mean": 401205.54545454547,
+        "median": 398402,
+        "min": 388231,
+        "max": 419594
+      },
+      "response_length": {
+        "n": 11,
+        "mean": 6169.742897727273,
+        "median": 6136.40625,
+        "min": 5973.6875,
+        "max": 6444.84375
+      },
+      "effective_tokens_per_second": 2701.067306813586,
+      "generation_tokens_per_second": 3086.8582959760174,
+      "rollout_span": {
+        "n": 11,
+        "mean": 126.05510416818181,
+        "median": 125.780488122,
+        "min": 124.224009672,
+        "max": 127.838882881
+      },
+      "gen_minus_span": {
+        "n": 11,
+        "mean": 1.862509014543061,
+        "median": 1.3793169894337183,
+        "min": 0.6268008791214612,
+        "max": 4.233196461753067
+      },
+      "gen_minus_longest_request": {
+        "n": 0
+      }
+    },
+    "gpu": {
+      "training": {
+        "rows": 108,
+        "busy_percent": {
+          "n": 108,
+          "mean": 34.8287037037037,
+          "median": 32.0,
+          "min": 0,
+          "max": 100
+        },
+        "peak_device_memory_gib": 40.817626953125,
+        "power_watts": {
+          "n": 108,
+          "mean": 138.4230462962963,
+          "median": 123.2205625,
+          "min": 88.547375,
+          "max": 406.9075
+        }
+      },
+      "gen": {
+        "rows": 71,
+        "busy_percent": {
+          "n": 71,
+          "mean": 32.265845070422536,
+          "median": 32.125,
+          "min": 27.125,
+          "max": 35.5
+        },
+        "peak_device_memory_gib": 40.817626953125,
+        "power_watts": {
+          "n": 71,
+          "mean": 129.74507746478872,
+          "median": 129.517125,
+          "min": 109.647875,
+          "max": 157.36225
+        }
+      }
+    },
+    "system_sampling_interval_s": {
+      "n": 136,
+      "mean": 15.021518824731602,
+      "median": 15.008913397789001,
+      "min": 12.101217985153198,
+      "max": 17.379650831222534
+    },
+    "timer_residual_s": {
+      "n": 11,
+      "mean": 0.13084314424883237,
+      "median": 0.12847123853862286,
+      "min": 0.1208055168390274,
+      "max": 0.1473021563142538
+    },
+    "validation_seconds": {
+      "n": 0
+    },
+    "validation_fraction": 0.0
+  },
+  "local_eager": {
+    "step": {
+      "n": 4,
+      "mean": 94.3598224464804,
+      "median": 93.04463508725166,
+      "min": 91.80222433060408,
+      "max": 99.54779528081417
+    },
+    "gen": {
+      "n": 4,
+      "mean": 82.76110121421516,
+      "median": 81.27980915084481,
+      "min": 80.2525457367301,
+      "max": 88.23224081844091
+    },
+    "old_log_prob": {
+      "n": 4,
+      "mean": 2.757683150470257,
+      "median": 2.7743121050298214,
+      "min": 2.5703462064266205,
+      "max": 2.911762185394764
+    },
+    "opd_teacher": {
+      "n": 0
+    },
+    "teacher_forward": {
+      "n": 4,
+      "mean": 1.3227031361311674,
+      "median": 1.3003915846347809,
+      "min": 1.2320244312286377,
+      "max": 1.4580049440264702
+    },
+    "teacher_transfer": {
+      "n": 4,
+      "mean": 0.8841907773166895,
+      "median": 0.891975536942482,
+      "min": 0.8152125403285027,
+      "max": 0.9375994950532913
+    },
+    "adv": {
+      "n": 4,
+      "mean": 0.08523316495120525,
+      "median": 0.08523306250572205,
+      "min": 0.08237205445766449,
+      "max": 0.08809448033571243
+    },
+    "update_actor": {
+      "n": 4,
+      "mean": 5.624846739694476,
+      "median": 5.631044674664736,
+      "min": 5.252916358411312,
+      "max": 5.984381251037121
+    },
+    "update_weights": {
+      "n": 4,
+      "mean": 0.8293405324220657,
+      "median": 0.8281281664967537,
+      "min": 0.742326632142067,
+      "max": 0.9187791645526886
+    },
+    "tokens": {
+      "n": 4,
+      "mean": 405865.75,
+      "median": 400889.5,
+      "min": 378386,
+      "max": 443298
+    },
+    "response_length": {
+      "n": 4,
+      "mean": 6234.51171875,
+      "median": 6158.59375,
+      "min": 5807.640625,
+      "max": 6813.21875
+    },
+    "effective_tokens_per_second": 4301.255973962875,
+    "generation_tokens_per_second": 4821.211222978093,
+    "rollout_span": {
+      "n": 4,
+      "mean": 80.00941507925,
+      "median": 80.035223952,
+      "min": 79.825475426,
+      "max": 80.141736987
+    },
+    "gen_minus_span": {
+      "n": 4,
+      "mean": 2.7516861349651585,
+      "median": 1.3068472877919746,
+      "min": 0.30254613283577214,
+      "max": 8.090503831440913
+    },
+    "gen_minus_longest_request": {
+      "n": 0
+    }
+  },
+  "local_graph": {
+    "step": {
+      "n": 4,
+      "mean": 35.92585073783994,
+      "median": 34.2299514003098,
+      "min": 33.691906943917274,
+      "max": 41.55159320682287
+    },
+    "gen": {
+      "n": 4,
+      "mean": 24.196754233911633,
+      "median": 22.202485736459494,
+      "min": 22.180830851197243,
+      "max": 30.201214611530304
+    },
+    "old_log_prob": {
+      "n": 4,
+      "mean": 2.7019368670880795,
+      "median": 2.671948004513979,
+      "min": 2.579204000532627,
+      "max": 2.884647458791733
+    },
+    "opd_teacher": {
+      "n": 0
+    },
+    "teacher_forward": {
+      "n": 4,
+      "mean": 1.3031976874917746,
+      "median": 1.3128909952938557,
+      "min": 1.2342840358614922,
+      "max": 1.3527247235178947
+    },
+    "teacher_transfer": {
+      "n": 4,
+      "mean": 0.8771783150732517,
+      "median": 0.8085664622485638,
+      "min": 0.7887731939554214,
+      "max": 1.102807141840458
+    },
+    "adv": {
+      "n": 4,
+      "mean": 0.08130788058042526,
+      "median": 0.08162006735801697,
+      "min": 0.07779911905527115,
+      "max": 0.08419226855039597
+    },
+    "update_actor": {
+      "n": 4,
+      "mean": 5.801039315760136,
+      "median": 5.743769660592079,
+      "min": 5.392912968993187,
+      "max": 6.323704972863197
+    },
+    "update_weights": {
+      "n": 4,
+      "mean": 0.8714650645852089,
+      "median": 0.8670674525201321,
+      "min": 0.7865585386753082,
+      "max": 0.9651668146252632
+    },
+    "tokens": {
+      "n": 4,
+      "mean": 405209.25,
+      "median": 403056.0,
+      "min": 386503,
+      "max": 428222
+    },
+    "response_length": {
+      "n": 4,
+      "mean": 6224.25390625,
+      "median": 6185.4375,
+      "min": 5948.484375,
+      "max": 6577.65625
+    },
+    "effective_tokens_per_second": 11279.043966332625,
+    "generation_tokens_per_second": 16463.044842671967,
+    "rollout_span": {
+      "n": 4,
+      "mean": 21.17779503825,
+      "median": 21.1935392655,
+      "min": 20.758739822,
+      "max": 21.5653618
+    },
+    "gen_minus_span": {
+      "n": 4,
+      "mean": 3.0189591956616333,
+      "median": 1.0056811869576663,
+      "min": 0.6219996192008956,
+      "max": 9.442474789530305
+    },
+    "gen_minus_longest_request": {
+      "n": 0
+    }
+  }
+}

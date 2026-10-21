@@ -1,0 +1,14 @@
+{
+  "catalog_runs": 21,
+  "selected": [
+    "mdxt04lm",
+    "mzwm9q04",
+    "5aub1k4h"
+  ],
+  "selection_reason": "Completed 1.5B student/JustRL teacher, batch64 n1 DP8; cover full-data direct, full-data discounted, and one-shot direct. Exclude val-only, top-K training and other student sizes.",
+  "mirror_reference": "rcxtujbi",
+  "stage_comparison_window": "global steps 2-12; local H800 graph uses steps 2-5",
+  "gpu_statistics": "Sample means; old W&B GPU stream ~15-second cadence; conservative rollout/validation interiors trim 15 seconds at each end plus unallocated stage residual. Short teacher/actor stages are not resolved.",
+  "timer_caution": "One-Shot opd_teacher is nested inside adv and includes its scoring path, not isolated model forward. Do not add both timers.",
+  "snapshot_directory": "outputs/oneshot-comparison-20261021"
+}
