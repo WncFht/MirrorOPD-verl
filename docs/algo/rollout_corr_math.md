@@ -1,11 +1,11 @@
 # Mathematical Formulations of Rollout Correction Methods in `verl`
 
-**Author:** [Yingru Li](https://richardli.xyz) **Last updated:** 2025-11-04
+**Author:** [Yingru Li](https://richardli.xyz)
+**Last updated:** 2025-11-04
 
 ---
 
 > **📖 Documentation Structure**
->
 > - **This document** - Mathematical theory: formulations, derivations, and algorithmic foundations
 > - **[Rollout Correction Usage Guide](rollout_corr.md)** - Practical implementation: configurations, presets, troubleshooting
 >
@@ -48,7 +48,6 @@ This document provides the definitive mathematical formulations for rollout corr
 Rollout correction provides a unified framework to handle **general off-policy problems** in RL training - any scenario where the data collection distribution differs from the training distribution.
 
 **Applicable scenarios include:**
-
 - **Policy mismatch**: Different precision (FP8 vs FP16 vs BF16 vs FP32), different backends (vLLM vs SGLang vs FSDP vs Megatron)
 - **Temporal lag**: Model staleness, asynchronous rollout workers
 - **Replay buffers**: Training on historical trajectories from earlier policy versions
@@ -103,7 +102,6 @@ $$
 The transition dynamics $p(s_{t+1}|s_t, a_t)$ and initial state $p(s_0)$ cancel out, leaving only the product of per-step action probability ratios.
 
 **Key properties:**
-
 - **Off-policy capable**: Can learn from any behavior policy via importance sampling
 - **No trust region**: Policy updates not constrained
 
@@ -120,18 +118,16 @@ $$
 where $r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\mu(a_t|s_t)}$ and $\epsilon$ is the clip range (typically 0.2).
 
 **Key properties:**
-
 - **Two policies**: $\mu$ (reference for clipping) and $\pi_\theta$ (being updated)
 - **Trust region via clipping**: Limits policy update magnitude via ratio $r_t(\theta) = \frac{\pi_\theta}{\mu}$
 
 ### 1.3 Decoupled PPO: Achieving Batch Size Invariance
 
 Decoupled PPO ([Hilton et al., 2021](https://arxiv.org/abs/2110.00641)) solves PPO's batch size sensitivity by **decoupling two roles**:
-
 1. **Proximal policy** $\pi_{\text{prox}}$: The anchor policy for PPO clipping (controls policy update size)
 2. **Behavior policy** $\mu$: The policy that collected the data (for off-policy correction via importance sampling)
 
-**The problem**: Standard PPO controls policy update size via the ratio $\frac{\pi_\theta}{\pi_{\text{old}}}$, where $\pi_{\text{old}}$ is assumed to be both the proximal policy _and_ the behavior policy. This coupling makes the algorithm sensitive to batch size because aggregating data from multiple workers or using replay buffers changes the effective behavior policy.
+**The problem**: Standard PPO controls policy update size via the ratio $\frac{\pi_\theta}{\pi_{\text{old}}}$, where $\pi_{\text{old}}$ is assumed to be both the proximal policy *and* the behavior policy. This coupling makes the algorithm sensitive to batch size because aggregating data from multiple workers or using replay buffers changes the effective behavior policy.
 
 **The solution**: Decouple these two roles, leading to a **three-policy formulation**:
 
@@ -140,12 +136,10 @@ L_{\text{DecoupledPPO}}(\theta) = -\mathbb{E}_{(s,a) \sim \mu} \left[ w_t \cdot 
 $$
 
 where:
-
 - $w_t = \frac{\pi_{\text{prox}}(a_t|s_t)}{\mu(a_t|s_t)}$: Importance sampling weight (corrects for behavior policy $\mu$). Here $\pi_{\text{prox}}$ is frozen during training, so $w_t$ is constant (no stopgrad operator needed).
 - $r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\text{prox}}(a_t|s_t)}$: PPO ratio (controls policy update size against proximal policy $\pi_{\text{prox}}$)
 
 **Key properties**: By decoupling:
-
 - **Batch size invariance**: Policy update control (via $\pi_{\text{prox}}$) is independent of data aggregation
 - **Flexible behavior policy**: Any $\mu$ can be used (different workers, replay buffers, or stale checkpoints)
 - **Stale data utilization**: Older trajectories can be corrected via importance sampling
@@ -161,7 +155,8 @@ The `verl` library implements decoupled PPO using three distinct policies, each 
 
 ### 2.1 Policy Roles and Notation
 
-**$\pi_{\text{rollout}}$ (Behavior Policy $\mu$)** The policy used for data collection. This is the behavior distribution $\mu$ from theory.
+**$\pi_{\text{rollout}}$ (Behavior Policy $\mu$)**
+The policy used for data collection. This is the behavior distribution $\mu$ from theory.
 
 - **When created**: During rollout/data collection phase
 - **Purpose**: Generate trajectories for training
@@ -173,7 +168,8 @@ The `verl` library implements decoupled PPO using three distinct policies, each 
   - Data filtering: Reweighted or filtered data
 - **Fixed**: Frozen during training on a batch
 
-**$\pi_{\text{old}}$ (Proximal Policy $\pi_{\text{prox}}$)** The reference policy for PPO clipping. This is the "proximal policy" from decoupled PPO theory.
+**$\pi_{\text{old}}$ (Proximal Policy $\pi_{\text{prox}}$)**
+The reference policy for PPO clipping. This is the "proximal policy" from decoupled PPO theory.
 
 - **When created**:
   - **Decoupled mode**: Computed at start of training epoch via `actor.compute_log_prob()`
@@ -183,7 +179,8 @@ The `verl` library implements decoupled PPO using three distinct policies, each 
   - When separate from $\pi_{\text{rollout}}$: Enables batch size invariance and efficient use of stale data
 - **Fixed**: Frozen during all PPO update epochs on the same batch
 
-**$\pi_{\theta}$ (Current Policy)** The policy being actively optimized during training.
+**$\pi_{\theta}$ (Current Policy)**
+The policy being actively optimized during training.
 
 - **Updated**: Every gradient step
 - **Purpose**: The policy we're improving
@@ -193,13 +190,11 @@ The `verl` library implements decoupled PPO using three distinct policies, each 
 The three-policy framework can operate in two modes:
 
 **Decoupled Mode (Three Policies)**
-
 - Computes $\pi_{\text{old}}$ separately at the start of each training epoch
 - **Algorithm**: Full decoupled PPO with three policies (mathematically correct)
 - **Properties**: Achieves batch size invariance; separately corrects Drift 1 (rollout→old) and Drift 2 (old→current)
 
 **Bypass Mode (Two Policies)**
-
 - Sets $\pi_{\text{old}} = \pi_{\text{rollout}}$ (skips separate computation)
 - **Algorithm**: Uses $\pi_{\text{rollout}}$ as both behavior policy and proximal policy (mathematically correct)
 - **Key difference**: Proximal policy equals behavior policy, so no IS correction needed between them
@@ -260,7 +255,6 @@ The operating mode determines how the proximal policy $\pi_{\text{old}}$ is comp
 **Configuration:** `bypass_mode = false`
 
 **Policy setup:**
-
 - $\pi_{\text{rollout}}$: Behavior policy (data collection)
 - $\pi_{\text{old}}$: Proximal policy (computed via `actor.compute_log_prob()` at start of training epoch)
 - $\pi_{\theta}$: Current policy (being updated)
@@ -270,7 +264,6 @@ The operating mode determines how the proximal policy $\pi_{\text{old}}$ is comp
 **PPO ratio:** $r_t(\theta) = \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}$ (corrects Drift 2: old→current)
 
 **Properties:**
-
 - ✅ Achieves batch size invariance
 - ✅ Separately corrects two distribution drifts
 - ✅ Efficient stale data utilization
@@ -281,18 +274,15 @@ The operating mode determines how the proximal policy $\pi_{\text{old}}$ is comp
 **Configuration:** `bypass_mode = true`
 
 **Policy setup:**
-
 - $\pi_{\text{rollout}}$: Behavior policy (data collection)
 - $\pi_{\text{old}} = \pi_{\text{rollout}}$: Proximal policy equals behavior policy
 - $\pi_{\theta}$: Current policy (being updated)
 
 **Ratios:**
-
 - **With PPO-clip loss** (`loss_type = "ppo_clip"`, default): PPO ratio $r_t(\theta) = \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\text{rollout}}(a_t|s_t)}$ clips against rollout policy (IS handled by ratio)
 - **With REINFORCE loss** (`loss_type = "reinforce"`): IS ratio $\rho_t = \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\text{rollout}}(a_t|s_t)}$ computed on-the-fly in loss function
 
 **Properties:**
-
 - ✅ Skips `actor.compute_log_prob()` call (faster)
 - ✅ Handles off-policy correction via IS/RS (when using policy gradient with IS/RS)
 - ✅ Uses two policies instead of three (π_rollout = π_old)
@@ -313,13 +303,11 @@ L_{\text{PPO}}(\theta) = -\mathbb{E}_t \left[ w_t \cdot \min\left( r_t(\theta) A
 $$
 
 where:
-
 - $w_t$: IS weight (depends on aggregation level, see Section 3.3). In decoupled mode, $w_t = \frac{\pi_{\text{old}}}{\pi_{\text{rollout}}}$ where $\pi_{\text{old}}$ is frozen, so $w_t$ is constant (no stopgrad needed). In bypass mode with PPO loss, no separate IS weights are typically computed.
 - $r_t(\theta) = \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}$: PPO ratio
 - $\epsilon$: Clip range (typically 0.2)
 
 **Properties:**
-
 - Trust region control via clipping
 - Limits policy update magnitude
 - Standard in RL training
@@ -335,7 +323,6 @@ L_{\text{PG}}(\theta) = -\mathbb{E}_{(s,a) \sim \pi_{\text{rollout}}} \left[ \te
 $$
 
 where:
-
 - $w_{\text{seq}}(\theta)$: Sample weight (IS or RS, see §3.3-3.4 for details)
 - For IS: $w_{\text{seq}}(\theta) = \min\left( \prod_{t \in T} \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\text{rollout}}(a_t|s_t)}, C_{\text{IS}} \right)$
 - For RS: $w_{\text{seq}}(\theta) \in \{0, 1\}$ (binary rejection mask)
@@ -358,13 +345,11 @@ The stopgrad operator is **mathematically required** by importance sampling theo
 1. **Original objective**: We want to optimize $J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}[\sum_t A_t]$.
 
 2. **Off-policy setting**: We only have samples from $\pi_{\text{rollout}}$, so we use importance sampling:
-
    $$
    J(\theta) = \mathbb{E}_{\tau \sim \pi_{\text{rollout}}} \left[ \underbrace{\frac{P_{\pi_\theta}(\tau)}{P_{\pi_{\text{rollout}}}(\tau)}}_{w(\tau;\theta)} \sum_t A_t \right]
    $$
 
 3. **Computing the policy gradient**: The correct gradient uses the **policy gradient theorem BEFORE importance sampling**:
-
    $$
    \begin{aligned}
    \nabla_\theta J(\theta) &= \nabla_\theta \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_t A_t\right] \\
@@ -376,7 +361,6 @@ The stopgrad operator is **mathematically required** by importance sampling theo
    In the final line, $w(\tau;\theta)$ appears as a **multiplicative coefficient** from the change of measure, not as something we differentiate.
 
 4. **What goes wrong without stopgrad**: If we naively compute $\nabla_\theta \left[w(\theta) \log \pi_\theta \right]$ in the loss, we get:
-
    $$
    \nabla_\theta \left[w(\theta) \log \pi_\theta \right] = \underbrace{\log \pi_\theta \cdot \nabla_\theta w(\theta)}_{\text{WRONG: bias term}} + \underbrace{w(\theta) \cdot \nabla_\theta \log \pi_\theta}_{\text{CORRECT: IS-weighted gradient}}
    $$
@@ -392,7 +376,6 @@ The stopgrad operator is **mathematically required** by importance sampling theo
 **Intuition**: The IS weight $w(\theta)$ tells us "how much to trust this sample" for estimating the gradient under $\pi_\theta$. We update $\theta$ to maximize the reweighted objective, but we don't update $\theta$ to maximize the weight itself—that would be circular reasoning (optimizing the correction factor instead of the actual objective).
 
 **Properties:**
-
 - **Algorithm**: Off-policy policy gradient with IS/RS correction
 - **Loss types** (`loss_type` config option in bypass mode):
   - `"ppo_clip"` (default): PPO clipped objective
@@ -416,14 +399,12 @@ The aggregation level determines how per-token probability ratios are combined i
 **IS weights:** $w_t = \min(\rho_t, C_{\text{IS}})$ where $\rho_t = \frac{\pi_{\text{old}}(a_t|s_t)}{\pi_{\text{rollout}}(a_t|s_t)}$ (decoupled) or $\rho_t = \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\text{rollout}}(a_t|s_t)}$ (bypass/pure IS)
 
 **Configuration:**
-
 ```python
 rollout_is = "token"  # IS weights
 rollout_rs = "token_k1"  # Optional: rejection sampling (ratio bounds)
 ```
 
 **Properties:**
-
 - Independent truncation per token
 - Lower variance than sequence-level (product of ratios bounded individually)
 - **Bias-variance tradeoff**: Token-level correction has $O(T^2 \Delta_{\max})$ bias where $T$ is sequence length and $\Delta_{\max}$ is maximum per-token policy divergence. This bias becomes significant when the rollout policy deviates substantially from the training policy. Sequence-level correction is unbiased but has higher variance.
@@ -440,7 +421,6 @@ $$
 where $w_t = \min(\rho_t, C_{\text{IS}})$ are the truncated token-level IS weights. The stopgrad operator ensures that when computing $\nabla_\theta L$, the weights are treated as constants (see §3.2.2 for theoretical justification). This formulation can also be combined with PPO clipping by replacing the REINFORCE gradient with the clipped surrogate objective.
 
 **Implementation:**
-
 - IS weights: `compute_rollout_correction_weights()` in [rollout_corr_helper.py](../../verl/trainer/ppo/rollout_corr_helper.py#L325-L402)
 - Loss: `compute_policy_loss()` in [core_algos.py](../../verl/trainer/ppo/core_algos.py#L812-L884)
 
@@ -449,21 +429,18 @@ where $w_t = \min(\rho_t, C_{\text{IS}})$ are the truncated token-level IS weigh
 **IS weights:** $w_{\text{seq}} = \min\left( \prod_{t \in T} \rho_t, C_{\text{IS}} \right) = \min\left( \exp\left(\sum_{t \in T} \log \rho_t\right), C_{\text{IS}} \right)$ (broadcast to all tokens)
 
 **Configuration:**
-
 ```python
 rollout_is = "sequence"  # IS weights
 rollout_rs = "seq_sum_k1"  # Optional: rejection sampling
 ```
 
 **Properties:**
-
 - Multiplicative aggregation across sequence
 - More sensitive to outliers than token-level
 - Typical threshold: 2.0 - 10.0
 - Optional batch normalization [§3.4](rollout_corr_math.md#34-batch-normalization): Normalizes over sequence means (one weight per sequence)
 
 **Terminology Note:**
-
 - **Seq-TIS (Sequence-Level Truncated IS)**: Clips the sequence ratio $\rho(\tau) \to \min(\rho(\tau), C)$. Maximizes information efficiency by extracting signal from all samples. Best for clean data with moderate mismatch.
 - **Seq-MIS (Sequence-Level Masked IS)**: Rejects (masks) sequences with $\rho(\tau) > C$ instead of clipping. Acts as a hard trust region filter. Best for severe mismatch or when the distribution tail is "toxic" (contains garbage/adversarial samples rather than signal).
 
@@ -480,14 +457,12 @@ where $w_{\text{seq}}$ is broadcast to all tokens in the sequence. The stopgrad 
 **Geometric mean ratio:** $\rho_{\text{geo}} = \exp\left( \frac{1}{|T|} \sum_{t \in T} \log \rho_t \right) = \left(\prod_{t \in T} \rho_t\right)^{1/|T|}$ (broadcast to all tokens)
 
 **Configuration:**
-
 ```python
 rollout_is = null  # No IS weights, pure rejection
 rollout_rs = "seq_mean_k1"  # Geometric mean rejection sampling (ratio bounds)
 ```
 
 **Properties:**
-
 - Length-invariant (normalizes by sequence length)
 - Ideal ratio = 1.0 (policies match)
 - Typical bounds: `"0.999_1.001"` (~±0.1%)
@@ -502,7 +477,6 @@ $$
 $$
 
 Assume the new policy $\pi$ differs slightly from $\mu$, with average per-token ratio $\approx 1.1$:
-
 - **Short sequence (10 tokens):** $\rho \approx 1.1^{10} \approx 2.6$ → fits within threshold, **kept**
 - **Long sequence (100 tokens):** $\rho \approx 1.1^{100} \approx 13,780$ → explodes past threshold, **rejected**
 
@@ -517,12 +491,11 @@ $$
 $$
 
 Now both sequences have the same "trust score":
-
 - **Short (10 tokens):** $(1.1^{10})^{1/10} = 1.1$
 - **Long (100 tokens):** $(1.1^{100})^{1/100} = 1.1$
 
-**Why tight thresholds?** For 100 tokens with per-token log-ratio = 0.01 each:
-
+**Why tight thresholds?**
+For 100 tokens with per-token log-ratio = 0.01 each:
 - Arithmetic product ratio: $e^{100 \times 0.01} \approx 2.7$
 - Geometric ratio: $e^{0.01} \approx 1.010$
 
@@ -557,13 +530,11 @@ $$
 where $\rho_t = \frac{\pi_{\text{old}}(a_t|s_t)}{\pi_{\text{rollout}}(a_t|s_t)}$ and the implementation clips $\log \rho_t$ to $[-20, 20]$ for numerical safety.
 
 **Sequence aggregations (share the same per-token $K2_t$):**
-
 - `seq_sum_k2`: $K2_{\text{sum}} = \sum_{t \in T} K2_t$
 - `seq_mean_k2`: $K2_{\text{mean}} = \frac{1}{|T|} \sum_{t \in T} K2_t$
 - `seq_max_k2`: $K2_{\text{max}} = \max_{t \in T} K2_t$
 
 **Configuration:**
-
 ```python
 rollout_is = null            # Optional: pair with token IS weights for lower variance
 rollout_rs = "token_k2"      # or "seq_sum_k2", "seq_mean_k2", "seq_max_k2"
@@ -571,7 +542,6 @@ rollout_rs_threshold = 2.0   # Positive upper bound only
 ```
 
 **Properties:**
-
 - Symmetric quadratic penalty in $\log \rho_t$; equals zero when policies match.
 - Approximates $\tfrac{1}{2}\operatorname{Var}[\log \rho]$ for small policy drift, making it a smooth detector of mismatch.
 - Upper-threshold only: typical ranges are 1.5-3.0 for `token_k2`, 2.0-2.5 for `seq_mean_k2`, and 2.5-4.0 for `seq_sum_k2`.
@@ -599,27 +569,23 @@ $$
 where $\rho_t = \frac{\pi_{\text{old}}(a_t|s_t)}{\pi_{\text{rollout}}(a_t|s_t)}$ is the per-token ratio.
 
 **K3 equals the reverse KL:** In expectation, $K3 = \text{KL}(\pi_{\text{rollout}} \| \pi_{\text{old}})$. This follows from:
-
 - $\mathbb{E}_{\pi_\text{rollout}}[\rho] = 1$
 - $\mathbb{E}_{\pi_\text{rollout}}[\log \rho] = -\text{KL}(\pi_{\text{rollout}} \| \pi_{\text{old}})$
 - Therefore: $K3 = 1 - (-\text{KL}) - 1 = \text{KL}(\pi_{\text{rollout}} \| \pi_{\text{old}})$
 
 **Configuration:**
-
 ```python
 rollout_is = null          # No IS weights, pure rejection
 rollout_rs = "seq_mean_k3" # K3 rejection sampling
 ```
 
 **Properties:**
-
 - K3 divergence is always >= 0 per token (equals 0 when ρ = 1)
 - More stable than geometric ratio checks because each token term is non-negative
 - Only upper threshold applies (no lower threshold since K3 >= 0)
 - Typical threshold: 0.001 - 0.01
 
 **Why K3 over geometric ratio?**
-
 - Geometric ratio uses average log-ratio; small numerical bias can flip sign
 - K3 = E[ρ - log ρ - 1] is non-negative per token, offering a smoother detector
 - Both estimate the same quantity: KL(π_rollout || π_old)
@@ -635,6 +601,7 @@ $$
 
 This is implemented by combining `rollout_rs="seq_mean_k3"` with `rollout_is="token"`.
 
+
 ---
 
 ### 3.4 Batch Normalization
@@ -642,7 +609,6 @@ This is implemented by combining `rollout_rs="seq_mean_k3"` with `rollout_is="to
 An optional variance reduction technique that normalizes IS weights to have mean 1.0 within each batch.
 
 **Configuration:**
-
 ```python
 rollout_is_batch_normalize = True  # Default: False
 ```
@@ -666,7 +632,6 @@ $$
 where $\bar{w}_j = \frac{1}{T_j}\sum_{t=1}^{T_j} w_{j,t} \cdot m_{j,t}$ is the per-sequence mean (all tokens in a sequence have the same weight), and normalization is over **sequences**.
 
 **Properties:**
-
 - Applied **after** truncation to preserve truncation semantics
 - Ensures $\mathbb{E}[\tilde{w}] = 1$ within each batch
 - **Aggregation-aware**: Token-level normalizes over tokens; sequence-level normalizes over sequences
@@ -674,7 +639,6 @@ where $\bar{w}_j = \frac{1}{T_j}\sum_{t=1}^{T_j} w_{j,t} \cdot m_{j,t}$ is the p
 - Reduces gradient magnitude variance by removing random batch-level scale fluctuations
 
 **Metrics:**
-
 - `rollout_is_batch_norm_factor`: The normalization factor applied (batch mean before normalization)
 
 **Implementation:** [rollout_corr_helper.py](../../verl/trainer/ppo/rollout_corr_helper.py#L401-L421)
@@ -686,7 +650,6 @@ where $\bar{w}_j = \frac{1}{T_j}\sum_{t=1}^{T_j} w_{j,t} \cdot m_{j,t}$ is the p
 Rejection sampling can be added to **any combination** of operating mode and aggregation level. It modifies the `response_mask` to exclude outlier tokens/sequences.
 
 **Configuration examples:**
-
 ```python
 rollout_rs = "token_k1"    # Token-level ratio bounds
 rollout_rs_threshold = "0.6_1.6"
@@ -699,13 +662,11 @@ rollout_rs_threshold = 0.01
 ```
 
 **Acceptance set:**
-
 - **Token-level**: $\mathcal{A}_{\text{token}} = \{ t : C_{\text{RS-lower}} \leq \rho_t \leq C_{\text{RS-upper}} \}$
 - **Sequence-level**: $\mathcal{A}_{\text{seq}} = \{ \text{seq} : C_{\text{RS-lower}} \leq \prod_{t \in T} \rho_t \leq C_{\text{RS-upper}} \}$
 - **Geometric**: $\mathcal{A}_{\text{geo}} = \{ \text{seq} : C_{\text{RS-lower}} \leq \rho_{\text{geo}} \leq C_{\text{RS-upper}} \}$
 
 **Properties:**
-
 - Separate from IS weighting (can use RS without IS)
 - Reduces effective sample size
 - Filters extreme outliers
@@ -721,7 +682,7 @@ rollout_rs_threshold = 0.01
 #### Estimator × Operating Mode
 
 | Estimator | Configuration | Compatible Modes |
-| --- | --- | --- |
+|-----------|---------------|------------------|
 | **Token-TIS** | `rollout_is="token"` | Decoupled PPO, Bypass PG |
 | **Seq-TIS** | `rollout_is="sequence"` | Decoupled PPO, Bypass PG |
 | **Seq-MIS** | `rollout_is="sequence"` + `rollout_rs="seq_sum_k1"` | Decoupled PPO, Bypass PG |
@@ -735,8 +696,8 @@ rollout_rs_threshold = 0.01
 #### Available Preset Methods
 
 | Preset Method | Estimator | Mode | Properties |
-| --- | --- | --- | --- |
-| **Decoupled PPO Mode** (3 policies: π*rollout, π_old, π*θ) |
+|---------------|-----------|------|------------|
+| **Decoupled PPO Mode** (3 policies: π_rollout, π_old, π_θ) |
 | `decoupled_token_is()` | Token-TIS | Decoupled PPO | Per-token IS weights |
 | `decoupled_seq_is()` | Seq-TIS | Decoupled PPO | Sequence-level IS weights |
 | `decoupled_seq_is_rs()` | Seq-MIS | Decoupled PPO | Sequence IS + sequence RS |
@@ -763,7 +724,6 @@ rollout_rs_threshold = 0.01
 These combinations are **fully supported** but require manual configuration:
 
 **1. Token IS + Token RS**
-
 ```python
 config = RolloutCorrectionConfig(
     rollout_is="token",
@@ -772,11 +732,9 @@ config = RolloutCorrectionConfig(
     rollout_rs_threshold="0.5_2.0",
 )
 ```
-
 **Properties:** Token-level IS weights + token-level RS mask.
 
 **2. Pure Token RS**
-
 ```python
 config = RolloutCorrectionConfig(
     rollout_is=None,
@@ -784,11 +742,9 @@ config = RolloutCorrectionConfig(
     rollout_rs_threshold="0.5_2.0",
 )
 ```
-
 **Properties:** Token-level RS mask only, no IS weights.
 
 **3. Pure Sequence RS**
-
 ```python
 config = RolloutCorrectionConfig(
     rollout_is=None,
@@ -796,11 +752,9 @@ config = RolloutCorrectionConfig(
     rollout_rs_threshold="0.5_2.0",
 )
 ```
-
 **Properties:** Sequence-level RS mask only, no IS weights.
 
 **Key properties:**
-
 - Any IS aggregation level (token/sequence) can be used in either decoupled or bypass mode
 - Rejection sampling can be added to any combination
 - Geometric aggregation is typically used for RS only (not IS weighting)
@@ -826,13 +780,11 @@ $$
 where $r_t(\theta) = \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}$ (ignores $\pi_{\text{rollout}}$).
 
 **Why it's wrong:**
-
 - **Ignores $\pi_{\text{rollout}}$**: Uses $\pi_{\text{old}}$ as behavior policy instead of actual $\pi_{\text{rollout}}$
 - **Policy mismatch**: In LLM-RL, rollout typically uses different precision/backend/checkpoint than training, causing $\pi_{\text{rollout}} \neq \pi_{\text{old}}$ even with same model weights
 - **Not PPO's fault**: PPO itself is correct; the issue is the incorrect assumption
 
 **Correct alternatives:**
-
 1. **Decoupled mode**: Three policies with IS correction from $\pi_{\text{rollout}}$ to $\pi_{\text{old}}$
 2. **Bypass mode**: Two policies using $\pi_{\text{rollout}}$ as both behavior policy and proximal policy
 3. **Bypass + Policy Gradient mode**: Two policies with IS/RS correction and no PPO clipping
@@ -902,7 +854,6 @@ $$
 $$
 
 **Interpretation:**
-
 - $\chi^2 = 0$: Policies are identical
 - $\chi^2 > 0$: Higher values indicate more severe off-policy distribution shift
 
@@ -915,7 +866,7 @@ $$
 ### 5.1 Method Summary Table
 
 | Method | Theory | Policies | PPO Clip | IS Correction | Correctness | Speed |
-| --- | --- | --- | --- | --- | --- | --- |
+|--------|--------|----------|----------|---------------|-------------|-------|
 | **Bypass Mode** (π_old = π_rollout, `loss_type` selects algorithm) |
 | `loss_type="ppo_clip"` (default) | PPO (ratio = π_θ/π_rollout) | 2 (rollout, θ) | ✅ | RS mask only (ratio handles IS) | ✅ Correct | **Fast** |
 | `loss_type="reinforce"` | Off-policy REINFORCE | 2 (rollout, θ) | ❌ | ✅ (explicit IS weights) | ✅ Correct | **Fast** |
@@ -936,7 +887,6 @@ $$
 | Naive LLM-RL | Incorrect PPO usage | 2 (old, θ) | ✅ | ❌ | ⚠️ Incorrect | Standard |
 
 **Notes:**
-
 - **Bypass mode** sets π_old = π_rollout and uses `loss_type` to select the loss function:
   - `"ppo_clip"` (default): PPO clipped ratio (IS handled by ratio = π_θ/π_rollout, no explicit IS weights to avoid double-counting)
   - `"reinforce"`: Explicit IS weights applied as $w \cdot \log \pi \cdot A$
@@ -947,7 +897,7 @@ $$
 These estimators define **how IS weights and rejection masks are computed**. They are orthogonal to the operating mode (decoupled PPO vs bypass policy gradient) and can be combined with either.
 
 | Estimator | Configuration | Mechanism | Best For |
-| --- | --- | --- | --- |
+|-----------|---------------|-----------|----------|
 | **Token-TIS** | `rollout_is="token"` | Clips per-token ratios | Lower variance IS with acceptable bias |
 | **Seq-TIS** | `rollout_is="sequence"` | Clips sequence ratio $\rho(\tau) \to \min(\rho(\tau), C)$ | Clean data with moderate mismatch; unbiased |
 | **Seq-MIS** | `rollout_is="sequence"` + `rollout_rs="seq_sum_k1"` | Rejects sequences with $\rho(\tau) > C$ | Severe mismatch; filters "toxic tail" (garbage data) |
@@ -957,7 +907,6 @@ These estimators define **how IS weights and rejection masks are computed**. The
 | **K3-RS-Token-TIS** | `rollout_is="token"` + `rollout_rs="seq_mean_k3"` | K3 filter + token IS weights | Small KL + lower variance IS |
 
 **Note:** Each estimator can be used with either:
-
 - **Decoupled PPO** (`bypass_mode=false`): Three policies with PPO clipping
 - **Bypass Mode** (`bypass_mode=true`): Two policies with configurable loss type
   - `loss_type="ppo_clip"` (default): PPO clipped objective (IS via ratio, RS mask applied)
@@ -966,18 +915,15 @@ These estimators define **how IS weights and rejection masks are computed**. The
 ### 5.3 Method Characteristics by Scenario
 
 **Choosing estimator by off-policy severity:**
-
 - **Negligible** (same checkpoint, minor differences): No IS correction needed; use bypass mode for efficiency
 - **Moderate** (async workers, slight staleness): Token-TIS provides per-token IS correction with lower variance
 - **Severe** (replay buffers, old data): Seq-TIS or Seq-MIS provides sequence-level IS correction; use Seq-MIS when high-weight samples are likely garbage
 
 **Choosing estimator by sequence length:**
-
 - **Short sequences** (standard chat): Seq-TIS is optimal
 - **Long sequences** (CoT, agents): K1-RS or K1-RS-Token-TIS to avoid Length Trap
 
 **Choosing operating mode:**
-
 - **Batch size invariance needed**: Use decoupled mode (`bypass_mode=false`)
 - **Computational efficiency needed**: Use bypass mode (`bypass_mode=true`) to skip `old_log_prob` computation
 - **No PPO clipping**: Use bypass mode with `loss_type="reinforce"`
@@ -985,14 +931,12 @@ These estimators define **how IS weights and rejection masks are computed**. The
 ### 5.4 Decoupled Mode vs Bypass Mode
 
 **Decoupled mode** (computes `old_log_prob` separately):
-
 - Implements full decoupled PPO with three policies (mathematically correct)
 - Separately measures and corrects Drift 1 (rollout→old) and Drift 2 (old→current)
 - Achieves batch size invariance and efficient stale data utilization
 - Enables accurate off-policy metrics monitoring
 
 **Bypass mode** (sets $\pi_{\text{old}} = \pi_{\text{rollout}}$):
-
 - Uses $\pi_{\text{rollout}}$ as both behavior policy and proximal policy (mathematically correct)
 - Computational efficiency: Skips separate `old_log_prob` computation
 - Does not achieve batch size invariance (proximal policy depends on data collection)
@@ -1011,7 +955,7 @@ These estimators define **how IS weights and rejection masks are computed**. The
 
 ## References
 
-- **Williams, R. J. (1992).** "Simple statistical gradient-following algorithms for connectionist reinforcement learning." _Machine Learning_, 8(3-4), 229-256. https://doi.org/10.1007/BF00992696
-- **Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017).** "Proximal policy optimization algorithms." _arXiv preprint arXiv:1707.06347._ https://arxiv.org/abs/1707.06347
-- **Hilton, J., Cobbe, K., & Schulman, J. (2021).** "Batch size-invariance for policy optimization." _arXiv preprint arXiv:2110.00641._ https://arxiv.org/abs/2110.00641
+- **Williams, R. J. (1992).** "Simple statistical gradient-following algorithms for connectionist reinforcement learning." *Machine Learning*, 8(3-4), 229-256. https://doi.org/10.1007/BF00992696
+- **Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017).** "Proximal policy optimization algorithms." *arXiv preprint arXiv:1707.06347.* https://arxiv.org/abs/1707.06347
+- **Hilton, J., Cobbe, K., & Schulman, J. (2021).** "Batch size-invariance for policy optimization." *arXiv preprint arXiv:2110.00641.* https://arxiv.org/abs/2110.00641
   - Introduced decoupled PPO: separating proximal policy (for controlling policy update size) from behavior policy (for off-policy correction) to achieve batch size invariance

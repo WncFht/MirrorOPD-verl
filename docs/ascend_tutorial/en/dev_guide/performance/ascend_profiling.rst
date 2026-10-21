@@ -278,7 +278,7 @@ For vLLM or SGLang inference engines, we can control the ``schedule`` parameter 
 .. code-block:: diff
 
       class NPUWorker(WorkerBase):
-
+  
           def __init__(self, *args, **kwargs):
               # ... existing code ...
   +           # Profile collection
@@ -303,7 +303,7 @@ For vLLM or SGLang inference engines, we can control the ``schedule`` parameter 
   +               )
   +               self.profiler_npu.start()
               # ... existing code ...
-
+  
           def execute_model(self, scheduler_output=None, intermediate_tensors=None, **kwargs):
               # ... existing code ...
               output = self.model_runner.execute_model(scheduler_output,
@@ -324,9 +324,9 @@ For vLLM or SGLang inference engines, we can control the ``schedule`` parameter 
 
       # ... existing imports ...
   +   import torch_npu
-
+  
       class ModelRunner:
-
+  
           def __init__(self, *args, **kwargs):
               # ... existing init code ...
   +           # Profile collection

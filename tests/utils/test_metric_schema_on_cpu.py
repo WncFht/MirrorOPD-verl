@@ -11,7 +11,10 @@ from verl.utils.metric.schema import CANONICAL_FIELDS, evaluation_metrics, metri
 
 
 def test_every_observed_old_key_is_removed_from_public_projection():
-    path = Path(__file__).parents[2] / "docs/metrics/data/metrics-system-20261021/current-metric-inventory.csv"
+    path = (
+        Path(__file__).parents[2]
+        / "examples/mirroropd/docs/metrics/data/metrics-system-20261021/current-metric-inventory.csv"
+    )
     old = {row["metric_key"]: 1.0 for row in csv.DictReader(path.open())}
     new = outer_metrics(old)
     assert not new.keys() & old.keys()

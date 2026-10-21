@@ -70,7 +70,7 @@ If the policy or RM model is not covered by vLLM batch invariance, add `actor_ro
 ## Configuration Reference
 
 | Parameter | Default | Scope | Description |
-| --- | --- | --- | --- |
+|-----------|---------|-------|-------------|
 | `actor_rollout_ref.rollout.full_determinism` | `false` | Rollout | Enables deterministic rollout generation |
 | `actor_rollout_ref.rollout.max_num_seqs` | `1024` | Rollout | Set to `1` to serialize if the policy model is not covered by vLLM batch invariance |
 | `actor_rollout_ref.rollout.seed` | `42` | Rollout | Base seed; each replica uses `replica_rank + seed` |
@@ -110,7 +110,6 @@ Set `trainer.use_v1=false` explicitly when enabling `full_determinism`.
 `VLLM_BATCH_INVARIANT=1` makes vLLM outputs independent of batch composition. Coverage is model- and hardware-dependent — see the [vLLM batch invariance docs](https://docs.vllm.ai/en/latest/features/batch_invariance/) (and [tested models](https://docs.vllm.ai/en/latest/features/batch_invariance/#tested-models)). If not covered, set `max_num_seqs=1` to serialize.
 
 For reward specifically:
-
 - **Discriminative RM** (score-outputting, e.g. Skywork-Reward; no custom reward fn): `max_num_seqs` is **forced to 1** — batch invariance is verified on generation models, not score-outputting RM architectures.
 - **Generative RM** (VLM that outputs text scores, via custom reward fn): `max_num_seqs` is **not forced** — user-managed; rely on batch invariance + per-request seed.
 

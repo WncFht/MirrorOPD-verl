@@ -89,9 +89,9 @@ Feature Support Matrix
    * - Category
      - Notes
    * - Runtime mode
-     - Fully Async, Colocate
+     - Fully Async, Colocate 
    * - Inference engine
-     - vLLM, SGLang
+     - vLLM, SGLang 
    * - Trainer backend
      - FSDP, FSDP2, Megatron
    * - Hardware
@@ -100,7 +100,7 @@ Feature Support Matrix
 Example Workflow
 ----------------
 
-.. list-table::
+.. list-table:: 
    :header-rows: 1
 
    * - Runtime mode
@@ -139,8 +139,8 @@ Example Workflow
      - SGLang
      - Megatron
      -  `bash verl/experimental/fully_async_policy/shell/geo3k_qwen25vl_7b_megatron_4_4.sh <../../verl/experimental/fully_async_policy/shell/geo3k_qwen25vl_7b_megatron_4_4.sh>`_ (vllm->sglang)
-
-
+   
+   
 
 
 Known Issues
@@ -149,3 +149,4 @@ Known Issues
 2. ``PYTORCH_ALLOC_CONF=expandable_segments:True`` is set by default in ``Dockerfile.rocm`` to prevent out-of-memory (OOM). However, this setting may conflict with ``vllm_custom_all_reduce``, so we set ``vllm.disable_custom_all_reduce=True`` in ``config.yaml`` by default which will be removed in the future once ROCm resolves the conflict.
 3. ``attention_backend`` must be set to ``triton`` for SGLang.
 4. Several ROCm-specific pull requests for vLLM and SGLang are still pending upstream integration, so we currently incorporate the required patches directly within the Dockerfile. In the future, we intend to transition to stable, officially released versions.
+

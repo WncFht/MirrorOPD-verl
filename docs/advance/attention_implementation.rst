@@ -5,7 +5,7 @@ Attention Implementation Override
 
 Last updated: 10/31/2025.
 
-By default, VERL's FSDP workers use ``flash_attention_2`` as the attention implementation for improved performance.
+By default, VERL's FSDP workers use ``flash_attention_2`` as the attention implementation for improved performance. 
 However, you can now override this setting to use different attention implementations based on your needs.
 
 Supported Attention Implementations
@@ -84,16 +84,16 @@ You can also specify the attention implementation in your YAML configuration fil
 Important Notes
 ---------------
 
-**Backward Compatibility**: If you don't specify ``attn_implementation`` in the override config,
+**Backward Compatibility**: If you don't specify ``attn_implementation`` in the override config, 
 VERL will continue to use ``flash_attention_2`` by default, ensuring backward compatibility with existing configurations.
 
-**Model Support**: Not all models support all attention implementations. Ensure your model is compatible
+**Model Support**: Not all models support all attention implementations. Ensure your model is compatible 
 with the chosen attention implementation before training.
 
-**Performance Impact**: Different attention implementations have varying performance characteristics.
+**Performance Impact**: Different attention implementations have varying performance characteristics. 
 ``flash_attention_2`` typically offers the best performance, while ``eager`` provides better debugging capabilities.
 
-**Hardware Dependencies**: Some attention implementations (like ``flash_attention_2``) may require
+**Hardware Dependencies**: Some attention implementations (like ``flash_attention_2``) may require 
 specific hardware or CUDA versions. If you encounter compatibility issues, try using ``eager`` or ``sdpa``.
 
 Troubleshooting

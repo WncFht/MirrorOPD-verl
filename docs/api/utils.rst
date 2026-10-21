@@ -73,3 +73,4 @@ Debug Utilities
 
 .. automodule:: verl.utils.profiler
    :members: log_gpu_memory_usage, GPUMemoryLogger
+

@@ -4,12 +4,13 @@ Last updated: 09/29/2026
 
 verl supports two FP8 modes for accelerating RL training:
 
-| Mode                 | Training Precision | Rollout Precision |
-| -------------------- | ------------------ | ----------------- |
-| **FP8 Rollout Only** | BF16               | FP8               |
-| **FP8 End-to-End**   | FP8 (Megatron)     | FP8 (vLLM)        |
+| Mode | Training Precision | Rollout Precision |
+|------|-------------------|-------------------|
+| **FP8 Rollout Only** | BF16 | FP8 |
+| **FP8 End-to-End** | FP8 (Megatron) | FP8 (vLLM) |
 
-> [!TIP] For ready-to-run scripts, see the [low-precision recipe directory](https://github.com/verl-project/verl-recipe/tree/main/low_precision).
+> [!TIP]
+> For ready-to-run scripts, see the [low-precision recipe directory](https://github.com/verl-project/verl-recipe/tree/main/low_precision).
 
 ---
 
@@ -50,7 +51,11 @@ actor_rollout_ref.rollout.quantization=fp8
 
 #### Skipping layers in SGLang FP8 rollout
 
-When using SGLang FP8 rollout, you can skip FP8 weight quantization for selected modules. Skipped modules stay in the rollout model dtype instead of being converted to FP8. This is useful for layers that are not compatible with block-wise FP8 weight quantization, or for modules that you prefer to keep in higher precision.
+When using SGLang FP8 rollout, you can skip FP8 weight quantization for
+selected modules. Skipped modules stay in the rollout model dtype instead
+of being converted to FP8. This is useful for layers that are not
+compatible with block-wise FP8 weight quantization, or for modules that
+you prefer to keep in higher precision.
 
 Set `SGLANG_FP8_IGNORED_LAYERS` before starting training:
 
@@ -78,70 +83,78 @@ You can also use the model `quantization_config`:
 }
 ```
 
-Plain module names, full module paths, and `re:` regex patterns are supported. verl applies the same ignored-layer rules when launching SGLang and when syncing updated actor weights into the rollout engine.
+Plain module names, full module paths, and `re:` regex patterns are
+supported. verl applies the same ignored-layer rules when launching
+SGLang and when syncing updated actor weights into the rollout engine.
 
 ### Experiments and Outcomes
 
 #### Qwen3-8B-Base Dense Model
 
 **Configuration**
-
 - DAPO recipe. AIME24 online validation.
 - vLLM(FP8 spmd rollout) + FSDP
   - Note that SPMD rollout has been deprecated, so we removed the FP8 SPMD rollout.
 - Prompt batch size 32, n=16.
-- Rollout batch size: 32\*3\*16
+- Rollout batch size: 32\*3*16
 - Train_batch_size & ppo_mini_batch_size 32
 - Max response length 20K
 - Token-level TIS, C=2
-- 8\*H100
+- 8*H100
 - vLLM 0.10.0+CUDA 12.6 vs vLLM 0.11.0+CUDA 12.9
 
-**Accuracy** ![Qwen3-8b-base_fp8_acc](https://github.com/Agoniii/verl/blob/xueh/fp8_pr_images/docs/advance/images/Qwen3-8b-base_fp8_acc.png?raw=true) _dark green: BF16, orange: FP8 rollout + token-level TIS, light green: FP8 rollout without TIS_
+**Accuracy**
+![Qwen3-8b-base_fp8_acc](
+https://github.com/Agoniii/verl/blob/xueh/fp8_pr_images/docs/advance/images/Qwen3-8b-base_fp8_acc.png?raw=true)
+*dark green: BF16, orange: FP8 rollout + token-level TIS, light green: FP8 rollout without TIS*
 
 Results and observations:
-
 - With TIS, FP8 rollout aligns with BF16
 - Obvious accuracy drop when TIS is not enabled
 - Higher mismatch kl but within acceptable range throughout the training
 
+
 **Performance**
 
-![Qwen3-8b-base_fp8_rollout_perf](https://github.com/Agoniii/verl/blob/xueh/fp8_pr_images/docs/advance/images/Qwen3-8b-base_fp8_rollout_perf.png?raw=true) _green: BF16, orange: FP8 rollout + CUDA12.6 + DeepGemm, purple: FP8 rollout + CUDA 12.9 + DeepGemm_
+![Qwen3-8b-base_fp8_rollout_perf](
+https://github.com/Agoniii/verl/blob/xueh/fp8_pr_images/docs/advance/images/Qwen3-8b-base_fp8_rollout_perf.png?raw=true)
+*green: BF16, orange: FP8 rollout + CUDA12.6 + DeepGemm, purple: FP8 rollout + CUDA 12.9 + DeepGemm*
 
 Results and observations:
-
 - FP8 rollout leads to around ~12% rollout speedup with CUDA 12.6 + DeepGemm
 - When upgrading to CUDA 12.9, speedup can be up to ~18%
 
 #### Qwen3-30B-A3B-Base MoE Model
 
 **Configuration**
-
 - DAPO recipe. AIME24 online validation.
 - FP8 async rollout, vLLM+FSDP
 - Prompt batch size 32
-- Rollout batch size: 32\*3\*16
+- Rollout batch size: 32\*3*16
 - Train_batch_size & ppo_mini_batch_size 32
 - Max response length 20K
 - Token-level TIS, C=2
-- 2\*8\*H100
+- 2\*8*H100
 - vLLM 0.10.0+CUDA 12.6
 
-**Accuracy** ![Qwen3-30b-a3b_fp8_acc](https://github.com/Agoniii/verl/blob/xueh/fp8_pr_images/docs/advance/images/Qwen3-30b-a3b_fp8_acc.png?raw=true) _grey: BF16 + token-level TIS, red: FP8 rollout + token-level TIS_
+**Accuracy**
+![Qwen3-30b-a3b_fp8_acc](
+https://github.com/Agoniii/verl/blob/xueh/fp8_pr_images/docs/advance/images/Qwen3-30b-a3b_fp8_acc.png?raw=true)
+*grey: BF16 + token-level TIS, red: FP8 rollout + token-level TIS*
 
 Results and observations:
-
 - Rollout & training distribution mismatch is in general higher for MoE
 - Rollout correction required even for BF16
 - FP8 rollout with token-level TIS aligns with BF16
 
+
 **Performance**
 
-![Qwen3-30b-a3b_fp8_perf](https://github.com/Agoniii/verl/blob/xueh/fp8_pr_images/docs/advance/images/Qwen3-30b-a3b_fp8_perf.png?raw=true) _grey: BF16 + token-level TIS, red: FP8 rollout + token-level TIS​_
+![Qwen3-30b-a3b_fp8_perf](
+https://github.com/Agoniii/verl/blob/xueh/fp8_pr_images/docs/advance/images/Qwen3-30b-a3b_fp8_perf.png?raw=true)
+*grey: BF16 + token-level TIS, red: FP8 rollout + token-level TIS​*
 
 Results and observations:
-
 - FP8 rollout : over 35% rollout speedup
 - Expecting more perf gain with CUDA 12.9
 
@@ -185,19 +198,18 @@ actor_rollout_ref.rollout:
 #### Qwen3-30B-A3B MoE Model
 
 **Configuration**
-
 - DAPO recipe. AIME24 online validation.
 - Megatron + Megatron-Bridge, FP8 async rollout with vLLM
 - MoE router in BF16 for both vLLM and Megatron-Core
 - Prompt batch size 128, n=16
 - Max response length 20K
 - Token-level TIS, C=2
-- 2\*8\*H100, CUDA 12.9
+- 2\*8*H100, CUDA 12.9
 
-![Qwen3-30b-a3b_fp8_e2e](https://github.com/user-attachments/assets/70fb1396-ec73-40d7-9a43-1d48553c0ad9) _Orange: BF16, Green: FP8 E2E, Red: FP8 rollout + BF16 training_
+![Qwen3-30b-a3b_fp8_e2e](https://github.com/user-attachments/assets/70fb1396-ec73-40d7-9a43-1d48553c0ad9)
+*Orange: BF16, Green: FP8 E2E, Red: FP8 rollout + BF16 training*
 
 Results and observations:
-
 - FP8 E2E achieves comparable accuracy to the BF16 baseline, with the two curves closely aligned throughout training.
 - The training/inference precision mismatch (measured by KL divergence) follows the ordering: FP8 rollout-only > FP8 E2E > BF16 E2E. This is expected, as FP8 E2E maintains consistent precision across both training and inference, resulting in lower distribution mismatch than the FP8 rollout-only setting where training remains in BF16.
 

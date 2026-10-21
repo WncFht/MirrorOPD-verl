@@ -74,7 +74,7 @@ model.
 ---------------------------------
 
 We provide a SFT Trainer using PyTorch FSDP in
-`sft_trainer.py <https://github.com/verl-project/verl/blob/main/verl/trainer/sft_trainer.py>`_.
+`sft_trainer.py <https://github.com/verl-project/verl/blob/main/verl/trainer/sft_trainer.py>`_. 
 Users can customize their own SFT
 script using our FSDP SFT Trainer.
 

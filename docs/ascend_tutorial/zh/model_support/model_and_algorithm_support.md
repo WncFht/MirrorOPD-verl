@@ -5,7 +5,7 @@ Last updated: 09/21/2026.
 ## Table 1 RL Algorithms
 
 | No. | model | algorithm | download link | actor.strategy | rollout.name | shell location | Usage Guide | hardware |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|---|---------------------|------------|------|------------|-----------|------------------------------|------------|-----------------------------------|
 | 1 | Qwen2.5-7B-Instruct | DAPO | [7B](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) | FSDP | vllm | [`link`](https://github.com/verl-project/verl-recipe/blob/main/dapo/run_dapo_qwen2.5_7b_npu.sh) | - | Atlas 200T A2 Box16, Atlas 800T A3 |
 | 2 | Qwen2.5-VL-3B-Instruct | DAPO | [3B](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct) | FSDP2 | vllm | [`link`](https://github.com/verl-project/verl-recipe/blob/main/dapo/run_dapo_qwen2.5_vl_3b_fsdp2_npu.sh) | - | Atlas 900 A2 PoD |
 | 3 | Qwen2.5-VL-7B-Instruct | GRPO | [7B](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct) | FSDP | vllm | [`link`](https://github.com/verl-project/verl/blob/main/examples/grpo_trainer/run_qwen2_5_vl_7b_fsdp.sh) | - | Atlas 200T A2 Box16, Atlas 800T A3 |
@@ -45,14 +45,14 @@ Last updated: 09/21/2026.
 | 40 | Qwen3-1.7B | GRPO | [1.7B](https://huggingface.co/Qwen/Qwen3-1.7B) | VeOmni | vllm | [`link`](https://github.com/verl-project/verl-ascend-recipe/blob/main/verl_ascend_practice/run_qwen3_1_7b_npu.sh) | - | Atlas 800T A3 |
 | 41 | Qwen3-30B-A3B | GRPO | [30B](https://huggingface.co/Qwen/Qwen3-30B-A3B) | VeOmni | vllm | [`link`](https://github.com/verl-project/verl/blob/main/examples/grpo_trainer/run_qwen3_30b_veomni.sh) | - | Atlas 800T A3 |
 | 42 | Qwen3-VL-30B-A3B-Instruct | GRPO | [30B](https://huggingface.co/Qwen/Qwen3-VL-30B-A3B-Instruct) | VeOmni | vllm | [`link`](https://github.com/verl-project/verl/blob/main/examples/grpo_trainer/run_qwen3_vl_30b_moe_veomni.sh) | - | Atlas 800T A3 |
-| 43 | DeepSeek-V4-Flash | GRPO | [284B](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash) | MindSpeed-llm | vllm | [`link`](https://github.com/verl-project/verl-ascend-recipe/blob/main/DeepSeek-V4-Flash/examples/train_deepseek_v4_grpo_mindspeed_vllm.sh) | - | Atlas 800T A3 |
-| 44 | DeepSeek-V4-Flash | GRPO | [284B](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash) | MindSpeed-llm | vllm | [`link`](https://github.com/verl-project/verl-ascend-recipe/blob/main/DeepSeek-V4-Flash/examples/train_deepseek_v4_grpo_mindspeed_vllm_A5.sh) | - | Ascend 950PR&950DT系列产品 |
+| 43 | DeepSeek-V4-Flash | GRPO | [284B](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash ) | MindSpeed-llm | vllm | [`link`](https://github.com/verl-project/verl-ascend-recipe/blob/main/DeepSeek-V4-Flash/examples/train_deepseek_v4_grpo_mindspeed_vllm.sh) | - | Atlas 800T A3 |
+| 44 | DeepSeek-V4-Flash | GRPO | [284B](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash ) | MindSpeed-llm | vllm | [`link`](https://github.com/verl-project/verl-ascend-recipe/blob/main/DeepSeek-V4-Flash/examples/train_deepseek_v4_grpo_mindspeed_vllm_A5.sh) | - | Ascend 950PR&950DT系列产品 |
 | 45 | Qwen3.8-27B | GRPO | [27B](https://huggingface.co/Qwen/Qwen3.8-27B) | Megatron | vllm | [`link`](https://github.com/verl-project/verl/blob/main/examples/grpo_trainer/run_qwen3_8_27b_megatron.sh) | - | Atlas 800T A3 |
 | 46 | GLM-5.2 | GRPO | [753B](https://huggingface.co/zai-org/GLM-5.2) | Megatron | vllm | [`link`](https://github.com/verl-project/verl/blob/main/examples/ascend_extras/grpo_trainer/run_glm5_2_megatron.sh) | - | Atlas 800T A3 |
 
 ## Table 2 SFT Algorithms
 
 | No. | model | algorithm | download link | actor.strategy | shell location | hardware |
-| --- | --- | --- | --- | --- | --- | --- |
+|-----|-------|-----------|---------------|----------------|----------------|----------|
 | 1 | Qwen3-8B | SFT-PEFT | [8B](https://huggingface.co/Qwen/Qwen3-8B) | FSDP | [`link`](https://github.com/verl-project/verl/blob/main/examples/sft/gsm8k/run_qwen3_8b_fsdp.sh) | Atlas 900 A2 PoD |
 | 2 | Qwen2.5-7B-Instruct | ReTool-SFT | [7B](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) | FSDP | [`link`](https://github.com/verl-project/verl-recipe/blob/main/retool/run_qwen2_7b_sft_npu.sh) | Atlas 900 A2 PoD |

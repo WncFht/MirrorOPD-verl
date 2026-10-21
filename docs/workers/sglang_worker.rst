@@ -19,10 +19,10 @@ In addition, the SGLang team is actively working on supporting features such as 
 
 Installation
 ------------
-Please always follow the following command to install SGLang with verl.
+Please always follow the following command to install SGLang with verl. 
 
 .. code-block:: bash
-
+    
     pip install --upgrade pip
     # Currently 0.4.8, subject to updates at any time, please refer to the latest version specified in `setup.py`
     pip install -e ".[sglang]"
@@ -108,7 +108,7 @@ Different workers initialize the model at different times → different memory u
 
 **2. Delayed initialization causes memory bias**
 
-Some workers start model loading/inference (e.g., ``generate_sequences()``, ``compute_log_prob()``) earlier than others.
+Some workers start model loading/inference (e.g., ``generate_sequences()``, ``compute_log_prob()``) earlier than others.  
 Early workers already use up GPU memory → late workers still have empty memory → memory difference appears.
 
 **3. SGLang's TP init uses "all-device broadcast", but there's no uniform release timing**
@@ -124,7 +124,7 @@ If using:
 
 .. code-block:: bash
 
-    actor.fsdp_config.param_offload=True
+    actor.fsdp_config.param_offload=True  
     ref.fsdp_config.param_offload=True
 
 Then some workers keep params on CPU while others already sharded to GPU → leads to asymmetric memory layout.

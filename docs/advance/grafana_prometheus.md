@@ -110,7 +110,8 @@ If use default path, this parameter can be omitted.
 
 - `actor_rollout_ref.rollout.prometheus.file="/tmp/ray/session_latest/metrics/prometheus/prometheus.yml"`
 
-served_model_name uses `model_path.split("/")[-1]` for data statistics by default. Users can also customize other aliases:
+served_model_name uses `model_path.split("/")[-1]` for data statistics by default.
+Users can also customize other aliases:
 
 - `actor_rollout_ref.rollout.prometheus.served_model_name="Qwen3-235B"`
 
@@ -154,7 +155,8 @@ ray job submit --no-wait --runtime-env="${RUNTIME_ENV}" \
 
 After task execution, verify that Prometheus is correctly collecting metrics.
 
-**Verification:** Visit the Prometheus interface at `http://master_ip:9090` and search for `vllm:` or `sglang:` to confirm metrics are being reported correctly.
+**Verification:** Visit the Prometheus interface at `http://master_ip:9090` and search for `vllm:` or `sglang:` to
+confirm metrics are being reported correctly.
 
 **Troubleshooting:**
 

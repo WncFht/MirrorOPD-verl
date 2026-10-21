@@ -25,7 +25,7 @@ into two parts:
    import argparse
 
    # To extract the solution for each prompts in the dataset
-   # def extract_solution(solution_str):
+   # def extract_solution(solution_str): 
    # ...
 
 
@@ -46,7 +46,7 @@ into two parts:
 
            # Construct a `def make_map_fn(split)` for the corresponding datasets.
        # ...
-
+           
        train_dataset = train_dataset.map(function=make_map_fn('train'), with_indices=True)
        test_dataset = test_dataset.map(function=make_map_fn('test'), with_indices=True)
 

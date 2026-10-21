@@ -80,7 +80,7 @@ NPU 相关的工作流主要包括：
    GPU用例中权重在~/models/路径下，如需适配可以用软链接，``ln -s /root/.cache/modelscope/hub/modelscope/hub/models ~/models``
 
    以下为原始数据集，请按需进行数据处理，示例如下。
-
+   
    ``python examples/data_preprocess/gsm8k_multiturn_sft.py --local_dataset_path ${HOME}/.cache/datasets/openai/gsm8k``
 
 
@@ -145,8 +145,8 @@ NPU 相关的工作流主要包括：
          - name: Checkout repository
            uses: actions/checkout@v4
            with:
-             fetch-depth: 0
-             clean: true
+             fetch-depth: 0 
+             clean: true 
          - name: Install dependencies
            run: |
              pip install --no-deps -e .
@@ -157,7 +157,7 @@ NPU 相关的工作流主要包括：
            run: python examples/data_preprocess/your_script.py --local_dataset_path ${HOME}/.cache/datasets/your_dataset
          - name: Execute NPU test
            run: |
-             ray stop --force
+             ray stop --force 
              bash tests/special_npu/your_test_script.sh
 
 **Note**
@@ -175,9 +175,9 @@ NPU 相关的工作流主要包括：
 (2) 若测试文件路径未被 ``npu_unit_tests.yml`` 中的 ``--ignore-glob`` 规则排除，则会在以下命令中自动执行：
 
    .. code-block:: yaml
-
+   
       pytest -s -x --ignore-glob="xxx" --ignore-glob="xxx" tests/
-
+   
 (3) 若测试路径在 ``--ignore-glob`` 排除范围内，需在 ``npu_unit_tests.yml`` 中新增一个 step 来显式运行该测试。
 (4) 如新增一批相关用例，建议单独创建专门的工作流文件以保持清晰。
 

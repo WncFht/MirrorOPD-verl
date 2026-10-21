@@ -1,6 +1,6 @@
 {
   "date": "2026-10-22",
-  "status": "proposed replacement, not implemented",
+  "status": "implemented in the V1 export path; CPU/Gloo/offline W&B verified, full GPU run pending",
   "old_unique_keys": 493,
   "actions": {
     "remeasure": 8,
@@ -122,5 +122,10 @@
     "nemo_state": "https://github.com/NVIDIA-NeMo/RL/blob/f6d0c3d2d3d21a6dcc66e62aef090ed71596148a/nemo_rl/algorithms/grpo.py#L420",
     "nemo_axis": "https://github.com/NVIDIA-NeMo/RL/blob/f6d0c3d2d3d21a6dcc66e62aef090ed71596148a/nemo_rl/utils/logger.py#L61"
   },
-  "naming": "category/role-or-pair/statistic when a subobject exists; category/statistic otherwise. Keep compound statistic names such as log_ratio_m2 intact."
+  "naming": "category/role-or-pair/statistic when a subobject exists; category/statistic otherwise. Keep compound statistic names such as log_ratio_m2 intact.",
+  "implementation_commits": [
+    "7eed88db9",
+    "4a70b9229",
+    "5edacea9b"
+  ]
 }

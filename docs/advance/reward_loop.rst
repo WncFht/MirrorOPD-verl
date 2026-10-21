@@ -41,7 +41,7 @@ Under the single_controller setup, actor rollout and reward computation can be a
    # compute reward using `async_reward_manager`
    reward_batch = async_reward_manager.compute_rm_score(gen_batch)
 
-Within the ``RewardLoopManager``, multiple ``RewardWorker`` are launched across all nodes to enable distributed reward computation.
+Within the ``RewardLoopManager``, multiple ``RewardWorker`` are launched across all nodes to enable distributed reward computation. 
 The number of parallel workers can be configured via ``config.reward.num_workers``.
 
 Upon receiving a batch reward request, the batch is partitioned into smaller chunks and distributed to each reward worker for parallel execution.
@@ -170,7 +170,7 @@ We recommend **using asynchronous functions** when reward computation need to in
 
    async def compute_score(data_source, solution_str, ground_truth, extra_info):
       """Compute a score by sending an async request to a remote service."""
-
+      
       # prepare request payload
       payload = {"messages": [{"role": "user", "content": "check the correcness of the question and response ..."}], ...}
 
@@ -305,3 +305,4 @@ This design allows us to expose a single unified router address to user-defined 
          self.resource_pool = resource_pool
          self._initialize_llm_servers()
          self._initialize_router()
+

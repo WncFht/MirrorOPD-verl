@@ -18,11 +18,11 @@ Last updated: 05/13/2026.
 
    # 检查设备可见性
    echo $ASCEND_RT_VISIBLE_DEVICES
-
+   
    # 设置可见设备并禁用ray自动设置
    export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
    export RAY_EXPERIMENTAL_NOSET_ASCEND_RT_VISIBLE_DEVICES=1
-
+   
    # 检查驱动状态
    npu-smi info
 
@@ -56,11 +56,11 @@ Last updated: 05/13/2026.
 
    # VERL 框架日志
    export VERL_LOGGING_LEVEL=DEBUG
-
+   
    # 昇腾 NPU 日志（0=DEBUG, 1=INFO, 2=WARNING, 3=ERROR）
    export ASCEND_GLOBAL_LOG_LEVEL=0
    export ASCEND_SLOG_PRINT_TO_STDOUT=1
-
+   
    # HCCL 通信日志
    export HCCL_DEBUG=INFO
 

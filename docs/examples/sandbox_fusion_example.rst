@@ -41,12 +41,12 @@ To integrate Sandbox Fusion into your training script, configure the following p
 
 **Additional Optimization**
 
-To further reduce code verification time, enable parallel processing with:
+To further reduce code verification time, enable parallel processing with:  
 
 - ``reward_model.reward_manager=prime``: The Prime reward manager verifies code across multiple subprocesses concurrently.
 
 **Example Notebook**
 
-For a practical implementation, refer to the example notebook:
+For a practical implementation, refer to the example notebook:  
 
 ``examples/tutorial/agent_loop_get_started/agent_loop_tutorial.ipynb``

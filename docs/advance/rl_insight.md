@@ -58,12 +58,12 @@ rl-insight server start
 
 `rl-insight server start` prints the detected server IP, Grafana URL, and related endpoints. Use that printed IP in the steps below. By default, RL-Insight uses:
 
-| Service           | Default port | Purpose                                  |
-| ----------------- | ------------ | ---------------------------------------- |
-| RL-Insight server | `18080`      | Receives metrics and trace registrations |
-| Prometheus        | `9090`       | Stores and queries metrics               |
-| Tempo             | `3200`       | Stores traces                            |
-| Grafana           | `3000`       | Shows dashboards                         |
+| Service | Default port | Purpose |
+| --- | --- | --- |
+| RL-Insight server | `18080` | Receives metrics and trace registrations |
+| Prometheus | `9090` | Stores and queries metrics |
+| Tempo | `3200` | Stores traces |
+| Grafana | `3000` | Shows dashboards |
 
 ## Step 2: Enable RL-Insight in verl
 
