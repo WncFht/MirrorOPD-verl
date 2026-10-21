@@ -1,0 +1,145 @@
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
+"""Partition-invariant policy diagnostics, including real Gloo reduction."""
+
+import math
+
+import pytest
+import torch
+import torch.distributed as dist
+import torch.multiprocessing as mp
+
+from verl.trainer.ppo.policy_metrics import pair_observations, update_observations
+from verl.utils.metric import Metric
+from verl.utils.metric.observations import Observation, observations_to_cpu
+from verl.utils.py_functional import append_to_dict
+
+
+def merge(parts):
+    names = set().union(*(part.keys() for part in parts))
+    return {name: Observation.merge_partitions([p[name] for p in parts if name in p]) for name in names}
+
+
+def observe(z, mask=None):
+    mask = torch.ones_like(z, dtype=torch.bool) if mask is None else mask
+    return pair_observations(z, torch.zeros_like(z), mask, "current_behavior", quantile=True)
+
+
+def assert_equal(left, right):
+    assert left.keys() == right.keys()
+    for key in left:
+        if math.isnan(left[key]):
+            assert math.isnan(right[key]), key
+        else:
+            assert left[key] == pytest.approx(right[key], rel=1e-10, abs=1e-12), key
+
+
+def test_unequal_partitions_and_empty_rank_are_not_means_of_means():
+    z = torch.tensor([0.01, -0.2, 0.5, -2.0, 1.4, 0.0, 0.2], dtype=torch.float64)
+    expected = merge([observe(z)])
+    got = merge([observe(z[:1]), observe(z[1:5]), observe(z[5:]), observe(z[:0])])
+    assert_equal(expected, got)
+    weights = z.exp()
+    assert got["policy/current_behavior/ess_fraction"] == pytest.approx(
+        (weights.sum().square() / (len(z) * weights.square().sum())).item()
+    )
+    assert got["policy/current_behavior/ratio_p99"] == pytest.approx(weights.max().item())
+
+
+def test_engine_append_protocol_merges_state_and_does_not_keep_autograd():
+    x = torch.tensor([1.0, 3.0, 5.0], requires_grad=True)
+    acc = {}
+    append_to_dict(acc, {"m": Observation.mean(x[:1])})
+    append_to_dict(acc, {"m": Observation.mean(x[1:])})
+    assert acc["m"].aggregate() == 3
+    assert acc["m"].state.grad_fn is None
+    observations_to_cpu(acc)
+    assert acc["m"].state.device.type == "cpu"
+    assert Metric.aggregate_dp([acc["m"], Observation.mean(torch.tensor([9.0]))]) == 4.5
+
+
+def test_padding_nan_is_excluded_but_valid_nan_is_observable():
+    x = torch.tensor([0.0, math.nan, math.inf])
+    got = merge([observe(x, torch.tensor([True, False, False]))])
+    assert got["policy/current_behavior/nonfinite_fraction"] == 0
+    assert got["policy/current_behavior/log_ratio_m2"] == 0
+    bad = merge([observe(x, torch.tensor([True, True, False]))])
+    assert bad["policy/current_behavior/nonfinite_fraction"] == 0.5
+    for key, value in bad.items():
+        if not key.endswith("nonfinite_fraction"):
+            assert math.isnan(value), key
+
+
+def test_empty_and_zero_denominators_are_undefined():
+    result = merge([observe(torch.empty(0))])
+    assert all(math.isnan(value) for value in result.values())
+    assert math.isnan(Observation.ratio(torch.tensor(0.0), 0).aggregate())
+
+
+def test_extreme_finite_log_weights_have_stable_ess():
+    got = merge([observe(torch.tensor([1000.0])), observe(torch.tensor([999.0, -1000.0]))])
+    w = torch.tensor([1.0, math.exp(-1), 0.0], dtype=torch.float64)
+    assert got["policy/current_behavior/ess_fraction"] == pytest.approx((w.sum() ** 2 / (3 * w.square().sum())).item())
+    assert math.isnan(got["policy/current_behavior/ratio_p99"])
+    assert got["policy/current_behavior/log_ratio_abs_max"] == 1000
+
+
+def test_global_p99_is_not_average_of_rank_p99():
+    a, b = torch.zeros(200), torch.tensor([math.log(100.0)])
+    got = merge([observe(a), observe(b)])
+    assert got["policy/current_behavior/ratio_p99"] == 1
+    assert (
+        merge([observe(a)])["policy/current_behavior/ratio_p99"]
+        + merge([observe(b)])["policy/current_behavior/ratio_p99"]
+    ) / 2 > 40
+
+
+def test_coefficient_observations_use_actual_guard_and_clip_branches():
+    current = torch.tensor([[-1.0, -30.0, -1.0, -1.0]])
+    behavior = torch.tensor([[-30.0, -1.0, -2.0, -0.5]])
+    teacher = torch.tensor([[-2.0, -20.0, -2.0, -2.0]])
+    advantage = teacher - current
+    mask = torch.ones_like(current, dtype=torch.bool)
+    active = torch.tensor([[False, True, False, True]])
+    records = update_observations(
+        current,
+        behavior,
+        behavior,
+        advantage,
+        mask,
+        component="distillation",
+        teacher=teacher,
+        mode="token_ppo",
+        clip_active=active,
+    )
+    got = merge([records])
+    z = current - behavior
+    w = torch.where(z.abs() > 20, 0, z.clamp(-20, 20).exp())
+    coefficients = (w * advantage).abs()
+    assert got["correction/log_ratio_guard/fraction"] == 0.5
+    assert got["correction/behavior_ppo/active_fraction"] == 0.5
+    assert got["correction/behavior_ppo/active_mass"] == pytest.approx(
+        (coefficients[active].sum() / coefficients.sum()).item()
+    )
+
+
+def _gloo_worker(rank, path):
+    dist.init_process_group("gloo", init_method="file://" + path, rank=rank, world_size=2)
+    try:
+        # Unequal token counts and unequal local micro-batch counts.
+        partitions = [[torch.tensor([0.1])], [torch.tensor([-0.3, 0.8]), torch.tensor([0.5, 0.0])]]
+        local = {}
+        for z in partitions[rank]:
+            append_to_dict(local, observe(z))
+        observations_to_cpu(local)
+        gathered = [None, None]
+        dist.all_gather_object(gathered, local)
+        result = {k: Metric.aggregate_dp([p[k] for p in gathered]) for k in local}
+        all_z = torch.cat([z for part in partitions for z in part])
+        assert_equal(result, merge([observe(all_z)]))
+    finally:
+        dist.destroy_process_group()
+
+
+def test_real_gloo_merge(tmp_path):
+    mp.spawn(_gloo_worker, args=(str(tmp_path / "rendezvous"),), nprocs=2, join=True)
