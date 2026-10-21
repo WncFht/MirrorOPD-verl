@@ -1,0 +1,83 @@
+{
+  "python": "3.12.11 (main, Oct  7 2025, 15:34:39) [Clang 20.1.4 ]",
+  "results": [
+    {
+      "mode": "legacy",
+      "wall_s": 44.03708162158728,
+      "returncode": 0,
+      "sampled_cgroup_peak_mib": 852.52734375,
+      "max_process_count": 4,
+      "worker": {
+        "import_s": 9.221340522170067,
+        "after_import": {
+          "rss_mib": 733.93359375,
+          "vms_mib": 5249.4765625
+        },
+        "runs": [
+          {
+            "wall_s": 11.217005647718906,
+            "result": [
+              true,
+              {
+                "results": [
+                  true,
+                  true
+                ]
+              }
+            ]
+          },
+          {
+            "wall_s": 11.54170648008585,
+            "result": [
+              true,
+              {
+                "results": [
+                  true,
+                  true
+                ]
+              }
+            ]
+          },
+          {
+            "wall_s": 11.139822825789452,
+            "result": [
+              true,
+              {
+                "results": [
+                  true,
+                  true
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "diagnostic": ""
+    },
+    {
+      "mode": "full_import_as4g",
+      "wall_s": 10.44460655003786,
+      "returncode": 0,
+      "sampled_cgroup_peak_mib": 400.4765625,
+      "max_process_count": 1,
+      "worker": {
+        "import_s": 9.357303820550442,
+        "after_import": {
+          "rss_mib": 734.1640625,
+          "vms_mib": 5249.53515625
+        },
+        "runs": [],
+        "result": [
+          [
+            -4
+          ],
+          {
+            "error_code": -4,
+            "error_message": "Error during testing: /root/.local/share/mirroropd/venvs/profile-cu128/lib/python3.12/site-packages/pandas/_libs/pandas_parser.cpython-312-x86_64-linux-gnu.so: failed to map segment from shared object"
+          }
+        ]
+      },
+      "diagnostic": ""
+    }
+  ]
+}

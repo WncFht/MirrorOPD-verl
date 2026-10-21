@@ -11,6 +11,7 @@ MirrorOPD 自有文档、调研和配套图片、数据统一放在 `examples/mi
 | [资产准备](docs/资产准备.md) | 模型、数学数据目录、导入与 CPU 检查 |
 | [训练配方](docs/训练配方.md) | Math / coding / IF 入口、GPU 资源池、训练与验证预算、Hope 启动 |
 | [判分器与依赖](docs/判分器与依赖.md) | 四领域 reward 路由、依赖、迁入来源和检查范围 |
+| [LCB 判分隔离调研](docs/lcb/README.md) | 内存故障来源、受控 CPU 实验、轻量执行器与资源隔离方案 |
 | [训练基础设施](docs/infra/README.md) | 运行与调度、实测报告、batch/rollout 调优、指标/MFU、模型扩展和上游调研的统一入口 |
 | [OPD 目标与消融](docs/opd-objective/README.md) | 固定 prefix 推导、优势/IS 语义及更新计数的待实施方案 |
 | [分析复现](docs/分析复现.md) | W&B 只读导出、历史日志解析、统计和图表重建 |
