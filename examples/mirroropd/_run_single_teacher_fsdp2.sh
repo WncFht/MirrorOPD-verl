@@ -342,7 +342,17 @@ RAY+=(
     "+ray_kwargs.ray_init.runtime_env.env_vars.WANDB_DIR='$WANDB_DIR'"
     "+ray_kwargs.ray_init.runtime_env.env_vars.WANDB_MODE='$WANDB_MODE'"
 )
-for name in OPENCOMPASS_ROOT NLTK_DATA; do
+# Keep LCB limits identical in the driver and Ray reward workers.
+if [[ $DOMAIN == code ]]; then
+    export MIRROROPD_LCB_RUN_ID=${MIRROROPD_LCB_RUN_ID:-$EXPERIMENT_NAME}
+    export MIRROROPD_LCB_AUDIT_DIR=${MIRROROPD_LCB_AUDIT_DIR:-$RUN_DIR/lcb-audit}
+fi
+for name in OPENCOMPASS_ROOT NLTK_DATA \
+    MIRROROPD_LCB_BACKEND MIRROROPD_LCB_CGROUP_PARENT MIRROROPD_LCB_MEMORY_MIB \
+    MIRROROPD_LCB_ADDRESS_SPACE_MIB MIRROROPD_LCB_OUTPUT_MIB MIRROROPD_LCB_DIAGNOSTIC_MIB \
+    MIRROROPD_LCB_INPUT_MIB MIRROROPD_LCB_MAX_CONCURRENT MIRROROPD_LCB_QUEUE_TIMEOUT_S \
+    MIRROROPD_LCB_STARTUP_TIMEOUT_S MIRROROPD_LCB_POLL_S MIRROROPD_LCB_SLOT_DIR \
+    MIRROROPD_LCB_AUDIT_DIR MIRROROPD_LCB_RUN_ID; do
     if [[ -n ${!name:-} ]]; then
         RAY+=("+ray_kwargs.ray_init.runtime_env.env_vars.$name='${!name}'")
     fi

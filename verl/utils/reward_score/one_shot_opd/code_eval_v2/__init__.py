@@ -1,13 +1,13 @@
 """代码评测 v2 — 对齐 opencompass 配置
 
 HumanEval+: 使用 evalplus 官方库 (sanitize + evaluate)，超时和并行由 evalplus 管理。
-LCB:        使用 ProcessPoolExecutor 并行评测多道题，每道题 multiprocessing.Process 隔离。
+LCB:        使用 ThreadPoolExecutor 并行评测多道题，每条答案由轻量监督进程和独立解释器执行。
 
 verl 通过 val.n 控制采样数，本模块只负责对 *单个 completion* 做 pass/fail 判定。
 
 支持的 data_source:
   - "humanevalplus" / "openai_humaneval" : HumanEval+ (evalplus 官方)
-  - "livecodebench" 等                   : LCB v6 (ProcessPoolExecutor 并行)
+  - "livecodebench" 等                   : LCB v6 (ThreadPoolExecutor 并行)
   - "taco" / "apps" / "code_contests"    : 走 LCB runner
 """
 
@@ -16,15 +16,14 @@ from __future__ import annotations
 import ast
 import base64
 import json
-import multiprocessing
 import pickle
 import re
 import traceback
 import zlib
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Optional
 
-from ._lcb_runner import run_test as lcb_run_test
+from ._isolation import EvaluationInfrastructureError, evaluate
 
 
 # ============================================================================
@@ -202,7 +201,7 @@ def heplus_check_correctness_batch(
 
 
 # ============================================================================
-# LCB 评测 (ProcessPoolExecutor 并行，对齐 opencompass)
+# LCB 评测（线程提交，独立进程执行）
 # ============================================================================
 def _postprocess_lcb_sample(sample: list[dict]) -> dict:
     """把 list[dict] 转成 lcb_run_test 期望的格式."""
@@ -217,39 +216,24 @@ def _postprocess_lcb_sample(sample: list[dict]) -> dict:
     return {"input_output": json.dumps(sample_dict)}
 
 
-def _lcb_worker(sample, generation, results, timeout):
-    result, _ = lcb_run_test(sample, test=generation, debug=False, timeout=timeout)
-    results.append(result)
-
-
 def _lcb_eval_single(args: tuple) -> tuple[bool, dict]:
-    """Run a test in a fresh process, including when called from a reward thread."""
-    processed, generation, timeout = args
-    context = multiprocessing.get_context("spawn")
-    with context.Manager() as manager:
-        results = manager.list()
-        process = context.Process(target=_lcb_worker, args=(processed, generation, results, timeout))
-        process.start()
-        try:
-            n_cases = len(json.loads(processed["input_output"])["inputs"])
-            process.join(timeout=(timeout + 1) * n_cases + 5)
-            if process.is_alive():
-                return False, {"error": "global timeout"}
-            if not results:
-                return False, {"error": "runner exited without a result"}
-            values = list(results[0])
-            return all(value is True for value in values), {"results": [value is True for value in values]}
-        finally:
-            if process.is_alive():
-                process.kill()
-            process.join()
-            process.close()
+    """Evaluate through a lightweight supervisor, preserving infrastructure failures."""
+    processed, generation, timeout = args[:3]
+    context = args[3] if len(args) > 3 else None
+    try:
+        return evaluate(processed, generation, timeout, context)
+    except EvaluationInfrastructureError:
+        raise
+    except Exception as exc:
+        raise EvaluationInfrastructureError(f"LCB supervisor invocation failed: {exc}") from exc
 
 
-def lcb_check_correctness(sample: list[dict], generation: str, timeout: int = 6) -> tuple[bool, dict]:
+def lcb_check_correctness(
+    sample: list[dict], generation: str, timeout: int = 6, context: dict | None = None
+) -> tuple[bool, dict]:
     """LCB 单题评测（兼容旧接口）."""
     processed = _postprocess_lcb_sample(sample)
-    return _lcb_eval_single((processed, generation, timeout))
+    return _lcb_eval_single((processed, generation, timeout, context))
 
 
 def lcb_check_correctness_batch(
@@ -258,7 +242,7 @@ def lcb_check_correctness_batch(
     timeout: int = 6,
     num_workers: int = 4,
 ) -> list[bool]:
-    """批量并行评测 LCB（对齐 opencompass ProcessPoolExecutor 模式）.
+    """批量 LCB 判分；线程提交独立执行任务，结果按输入顺序返回。
 
     Args:
         samples: list of test case lists, 每个元素对应一道题的 test cases.
@@ -273,15 +257,17 @@ def lcb_check_correctness_batch(
     args_list = [(p, g, timeout) for p, g in zip(processed_list, generations, strict=True)]
 
     results = [False] * len(args_list)
-    with ProcessPoolExecutor(max_workers=num_workers) as executor:
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
         future_to_idx = {executor.submit(_lcb_eval_single, args): idx for idx, args in enumerate(args_list)}
         for future in as_completed(future_to_idx):
             idx = future_to_idx[future]
             try:
                 passed, _ = future.result()
                 results[idx] = passed
-            except Exception:
-                results[idx] = False
+            except EvaluationInfrastructureError:
+                raise
+            except Exception as exc:
+                raise EvaluationInfrastructureError(f"Batch LCB execution failed: {exc}") from exc
 
     return results
 
@@ -339,7 +325,9 @@ def compute_score(
                 tests = _lcb_dict_to_list(tests)
             if not isinstance(tests, list) or len(tests) == 0:
                 return _err_result(data_source, "LCB ground_truth 格式错误")
-            passed, _ = lcb_check_correctness(tests, model_code, timeout=6)
+            passed, detail = lcb_check_correctness(
+                tests, model_code, timeout=6, context={**(extra_info or {}), "data_source": data_source}
+            )
         elif data_source in _HUMANEVAL_SOURCES:
             # 单题模式：直接用 subprocess + evalplus 做简单评测
             # 批量模式应使用 heplus_check_correctness_batch
@@ -350,11 +338,17 @@ def compute_score(
             passed, _ = heplus_check_correctness(test_code, model_code, entry_point)
         else:
             raise NotImplementedError(f"code_eval_v2 未实现 data_source={data_source}")
+    except EvaluationInfrastructureError:
+        raise
     except Exception as e:
         traceback.print_exc()
         return _err_result(data_source, f"runner exception: {e}")
 
-    return {"score": 1.0 if passed else 0.0, "acc": bool(passed), "format_score": 1.0}
+    result = {"score": 1.0 if passed else 0.0, "acc": bool(passed), "format_score": 1.0}
+    if data_source in _LCB_SOURCES:
+        # Timings and memory belong in the bounded audit, not accuracy bootstrap metrics.
+        result.update(lcb_status=detail["status"], lcb_backend=detail["backend"], lcb_job_id=detail["job_id"])
+    return result
 
 
 # ============================================================================
@@ -419,6 +413,8 @@ def reward_func(
     """供 verl hydra custom_reward_function.name=reward_func 调用."""
     try:
         return compute_score(data_source, solution_str, ground_truth, extra_info)
+    except EvaluationInfrastructureError:
+        raise
     except Exception as e:
         print(f"[code_eval_v2][ERROR] data_source={data_source}: {e}")
         traceback.print_exc()

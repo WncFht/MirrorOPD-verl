@@ -527,3 +527,13 @@ def test_shared_launcher_remains_vanilla_and_validates_epoch_input(tmp_path):
     assert cfg.actor_rollout_ref.actor.ppo_epochs == 1
     result = _launch(tmp_path, PPO_EPOCHS="0")
     assert result.returncode == 2 and "PPO_EPOCHS" in result.stderr
+
+
+def test_code_launcher_forwards_lcb_policy_and_audit_directory(tmp_path):
+    script = ROOT / "examples/mirroropd/run_code_deepseek_r1_1_5b_fsdp2.sh"
+    cfg = _config(tmp_path, script=script, MIRROROPD_LCB_MEMORY_MIB="2048", MIRROROPD_LCB_MAX_CONCURRENT="2")
+    env = cfg.ray_kwargs.ray_init.runtime_env.env_vars
+    assert env.MIRROROPD_LCB_MEMORY_MIB == "2048"
+    assert env.MIRROROPD_LCB_MAX_CONCURRENT == "2"
+    assert env.MIRROROPD_LCB_RUN_ID == "test"
+    assert env.MIRROROPD_LCB_AUDIT_DIR == str(tmp_path / "run" / "lcb-audit")
