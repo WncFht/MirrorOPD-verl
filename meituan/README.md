@@ -36,7 +36,7 @@ make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.g
 make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.gz KEEP_ARCHIVE_AFTER_UNPACK=1
 ```
 
-未指定解包输入时，依次在 `~/Downloads`、当前目录、`transfer_snap/` 中查找匹配的最新包。上述清理仅针对源码 archive；日志和结果增量包仍保留，便于按顺序人工传输。
+未指定解包输入时，依次在 `~/Downloads`、当前目录、`transfer_snap/` 中查找匹配的最新包。源码解包清理仅针对源码 archive；日志和结果解包后保留输入包。日志打包端的旧包清理规则见下文。
 
 ## 原生 Python 与离线依赖
 
@@ -104,6 +104,8 @@ fanghaotian/
 ```bash
 make sync-log-pack
 ```
+
+日志新包完整生成后，自动清理同目录中 `log_MirrorOPD-verl*.tar.gz` 及其旧分卷；打包失败或没有新增、修改文件时保留旧包。自定义名称的历史包不参与按前缀清理。日志仍按增量打包，因此每个包应在下一次打包前传回接收端。原始 `wandb/` 日志保留。
 
 它扫描 `wandb/offline-run-*`，对有新增或修改文件的 run 打包完整目录，以便接收端合并。`.wandb` 旁文件一并纳入。人工下载生成的 `transfer_snap/log_MirrorOPD-verl_*.tar.gz` 或全部分卷后，在本机或 Mac 执行：
 
