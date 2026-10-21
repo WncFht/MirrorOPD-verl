@@ -1,0 +1,167 @@
+{
+  "runs": {
+    "valid-eager-w16-20261021-2": {
+      "run_id": "46ugm2mm",
+      "testing_seconds": 804.65899553895,
+      "rollout_span_seconds": 797.94467103,
+      "tokens": 2623755.0,
+      "output_tokens_per_second": 3260.7042418542073,
+      "responses": 512,
+      "prompt_groups": 32,
+      "responses_per_group": 16,
+      "score_mean": 0.779296875,
+      "engine_counters": {
+        "vllm:request_success_total": 512.0,
+        "vllm:generation_tokens_total": 2623755.0,
+        "vllm:request_generation_tokens_sum": 2623755.0,
+        "vllm:num_preemptions_total": 0.0
+      },
+      "max_engine_waiting": 32.0,
+      "max_kv_fraction": 0.1065002901915264,
+      "gpu_busy_mean": 33.974183006535945,
+      "gpu_memory_mean_gib": 41.6275621202257,
+      "gpu_memory_max_gib": 41.64532470703125,
+      "gpu_probe_rows": 3060,
+      "decode_tail_samples": [
+        {
+          "window_responses": 256,
+          "completion_90_to_100_seconds": 239.60010957717896
+        },
+        {
+          "window_responses": 256,
+          "completion_90_to_100_seconds": 201.38605570793152
+        }
+      ],
+      "raw_outputs": "outputs/local-validation-20261021/valid-eager-w16-20261021-2/training/validation/0.jsonl",
+      "history_file": "valid-eager-w16-20261021-2/history.jsonl"
+    },
+    "valid-graph-w16-20261021-1": {
+      "run_id": "6jpqrtw0",
+      "testing_seconds": 300.20818142592907,
+      "rollout_span_seconds": 274.904474648,
+      "tokens": 2655694.0,
+      "output_tokens_per_second": 8846.174635834315,
+      "responses": 512,
+      "prompt_groups": 32,
+      "responses_per_group": 16,
+      "score_mean": 0.775390625,
+      "engine_counters": {
+        "vllm:request_success_total": 512.0,
+        "vllm:generation_tokens_total": 2655694.0,
+        "vllm:request_generation_tokens_sum": 2655694.0,
+        "vllm:num_preemptions_total": 0.0
+      },
+      "max_engine_waiting": 32.0,
+      "max_kv_fraction": 0.11910487076934229,
+      "gpu_busy_mean": 79.24646643109541,
+      "gpu_memory_mean_gib": 41.795687726024184,
+      "gpu_memory_max_gib": 41.82110595703125,
+      "gpu_probe_rows": 1132,
+      "decode_tail_samples": [
+        {
+          "window_responses": 256,
+          "completion_90_to_100_seconds": 76.9522454738617
+        },
+        {
+          "window_responses": 256,
+          "completion_90_to_100_seconds": 66.65488958358765
+        }
+      ],
+      "raw_outputs": "outputs/local-validation-20261021/valid-graph-w16-20261021-1/training/validation/0.jsonl",
+      "history_file": "valid-graph-w16-20261021-1/history.jsonl"
+    },
+    "valid-graph-w32-20261021-1": {
+      "run_id": "5s25kbm8",
+      "testing_seconds": 206.97801604866982,
+      "rollout_span_seconds": 198.51584435,
+      "tokens": 2766943.0,
+      "output_tokens_per_second": 13368.294144578947,
+      "responses": 512,
+      "prompt_groups": 32,
+      "responses_per_group": 16,
+      "score_mean": 0.787109375,
+      "engine_counters": {
+        "vllm:request_success_total": 512.0,
+        "vllm:generation_tokens_total": 2766943.0,
+        "vllm:request_generation_tokens_sum": 2766943.0,
+        "vllm:num_preemptions_total": 0.0
+      },
+      "max_engine_waiting": 80.0,
+      "max_kv_fraction": 0.1716792131369398,
+      "gpu_busy_mean": 82.64304123711341,
+      "gpu_memory_mean_gib": 41.77059905062017,
+      "gpu_memory_max_gib": 41.79962158203125,
+      "gpu_probe_rows": 776,
+      "decode_tail_samples": [
+        {
+          "window_responses": 512,
+          "completion_90_to_100_seconds": 88.83260130882263
+        }
+      ],
+      "raw_outputs": "outputs/local-validation-20261021/valid-graph-w32-20261021-1/training/validation/0.jsonl",
+      "history_file": "valid-graph-w32-20261021-1/history.jsonl"
+    },
+    "valid-graph-w32-20261021-4": {
+      "run_id": "0jje8zxj",
+      "testing_seconds": 177.52901381999254,
+      "rollout_span_seconds": 161.300321779,
+      "tokens": 2496643.0,
+      "output_tokens_per_second": 14063.295606043856,
+      "responses": 512,
+      "prompt_groups": 32,
+      "responses_per_group": 16,
+      "score_mean": 0.787109375,
+      "engine_counters": {
+        "vllm:request_success_total": 512.0,
+        "vllm:generation_tokens_total": 2496643.0,
+        "vllm:request_generation_tokens_sum": 2496643.0,
+        "vllm:num_preemptions_total": 0.0
+      },
+      "max_engine_waiting": 80.0,
+      "max_kv_fraction": 0.1425343467175776,
+      "gpu_busy_mean": 73.1590909090909,
+      "gpu_memory_mean_gib": 41.77844497218277,
+      "gpu_memory_max_gib": 41.78790283203125,
+      "gpu_probe_rows": 660,
+      "decode_tail_samples": [
+        {
+          "window_responses": 512,
+          "completion_90_to_100_seconds": 69.50086450576782
+        }
+      ],
+      "raw_outputs": "outputs/local-validation-20261021/valid-graph-w32-20261021-4/training/validation/0.jsonl",
+      "history_file": "valid-graph-w32-20261021-4/history.jsonl"
+    },
+    "valid-graph-w32-s64-20261021-3": {
+      "run_id": "oqhotg75",
+      "testing_seconds": 178.45900367200375,
+      "rollout_span_seconds": 160.900458218,
+      "tokens": 2612812.0,
+      "output_tokens_per_second": 14640.96485040442,
+      "responses": 512,
+      "prompt_groups": 32,
+      "responses_per_group": 16,
+      "score_mean": 0.794921875,
+      "engine_counters": {
+        "vllm:request_success_total": 512.0,
+        "vllm:generation_tokens_total": 2612812.0,
+        "vllm:request_generation_tokens_sum": 2612812.0,
+        "vllm:num_preemptions_total": 0.0
+      },
+      "max_engine_waiting": 44.0,
+      "max_kv_fraction": 0.15811190165045252,
+      "gpu_busy_mean": 72.50299401197604,
+      "gpu_memory_mean_gib": 41.926185836335144,
+      "gpu_memory_max_gib": 42.04766845703125,
+      "gpu_probe_rows": 668,
+      "decode_tail_samples": [
+        {
+          "window_responses": 512,
+          "completion_90_to_100_seconds": 76.54243540763855
+        }
+      ],
+      "raw_outputs": "outputs/local-validation-20261021/valid-graph-w32-s64-20261021-3/training/validation/0.jsonl",
+      "history_file": "valid-graph-w32-s64-20261021-3/history.jsonl"
+    }
+  }
+}
