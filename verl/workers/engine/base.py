@@ -125,10 +125,14 @@ class BaseEngine:
 
         self.optimizer_zero_grad()
         outputs = self.forward_backward_batch(data, loss_function, forward_only=False)
+        # Optional fact about this attempt, never a persistent engine counter.
+        self._optimizer_step_applied = None
         grad_norm = self.optimizer_step()
         if self.is_mp_src_rank_with_outputs():
             assert "grad_norm" not in outputs["metrics"]
             outputs["metrics"]["grad_norm"] = grad_norm
+            if self._optimizer_step_applied is not None:
+                outputs["metrics"]["_optimizer_step_applied"] = self._optimizer_step_applied
         return outputs
 
     def infer_batch(self, data: TensorDict, loss_function: Optional[Callable] = None) -> Any:

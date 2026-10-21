@@ -16,6 +16,7 @@ import json
 import logging
 import math
 import os
+import tempfile
 import uuid
 from abc import ABC, abstractmethod
 from collections import defaultdict
@@ -143,6 +144,8 @@ class PPOTrainer(ABC):
         # track mini-batch index within a parameter_sync_step cycle for Decoupled PPO
         self.local_trigger_step = 0
         self._restored_tq_prompt_count = 0
+        self.actor_optimizer_step_attempts = 0
+        self.actor_optimizer_step = 0
 
     def _build_replay_buffer(self) -> ReplayBuffer:
         """Instantiate the replay buffer (or a user-provided custom sampler).
@@ -509,6 +512,7 @@ class PPOTrainer(ABC):
             self.on_validate_end()
             assert val_metrics, f"{val_metrics=}"
             val_metrics["timing_s/testing"] = validation_timing["testing"]
+            val_metrics.update(self._actor_optimizer_metrics())
             pprint(f"Initial validation metrics: {val_metrics}")
             self.logger.log(data=val_metrics, step=self.global_steps)
             if self.config.trainer.get("val_only", False):
@@ -579,6 +583,7 @@ class PPOTrainer(ABC):
             tq.kv_clear(keys=batch.keys, partition_id=batch.partition_id)
 
             dapo_filtered_reward_counts = metrics.pop(DAPO_FILTERED_REWARD_COUNTS_KEY, None)
+            metrics.update(self._actor_optimizer_metrics())
             self.logger.log(data=metrics, step=self.global_steps)
             if dapo_filtered_reward_counts:
                 self.dapo_filtered_reward_logger.log(
@@ -939,6 +944,8 @@ class PPOTrainer(ABC):
 
     def _load_checkpoint(self):
         self.global_steps = 0
+        self.actor_optimizer_step_attempts = 0
+        self.actor_optimizer_step = 0
 
         # 1. find latest checkpoint folder
         if self.config.trainer.resume_mode == "disable":
@@ -965,6 +972,7 @@ class PPOTrainer(ABC):
         # set global step
         self.global_steps = int(global_step_folder.split("global_step_")[-1])
         logger.info(f"Resuming from {global_step_folder}, setting global step to {self.global_steps}")
+        self._load_actor_optimizer_progress(global_step_folder)
 
         # 2. load actor checkpoint
         self.actor_rollout_wg.load_checkpoint(
@@ -1034,6 +1042,73 @@ class PPOTrainer(ABC):
             f"cleared {len(old_trajectory_keys)} old trajectories from partition {partition_id}"
         )
         return len(inflight_uids)
+
+    @staticmethod
+    def _validate_actor_optimizer_counts(attempts, steps):
+        for name, value in (("attempts", attempts), ("steps", steps)):
+            if value is not None and (type(value) is not int or value < 0):
+                raise ValueError(f"Invalid actor optimizer {name}: {value!r}")
+        if attempts is not None and steps is not None and steps > attempts:
+            raise ValueError("Actor optimizer steps cannot exceed attempts")
+
+    def _accumulate_actor_optimizer_steps(self, output):
+        attempts = tu.get(output, "optimizer_step_attempts", default=None)
+        steps = tu.get(output, "optimizer_steps", default=None)
+        self._validate_actor_optimizer_counts(attempts, steps)
+        for attr, value in (("actor_optimizer_step_attempts", attempts), ("actor_optimizer_step", steps)):
+            previous = getattr(self, attr, None)
+            setattr(self, attr, previous + value if previous is not None and value is not None else None)
+
+    def _actor_optimizer_metrics(self):
+        attempts = getattr(self, "actor_optimizer_step_attempts", None)
+        steps = getattr(self, "actor_optimizer_step", None)
+        metrics = {}
+        if attempts is not None:
+            metrics["training/actor_optimizer_step_attempts"] = attempts
+        if steps is not None:
+            metrics["training/actor_optimizer_step"] = steps
+        if attempts is not None and steps is not None:
+            metrics["training/actor_optimizer_skipped_updates"] = attempts - steps
+        return metrics
+
+    def _save_actor_optimizer_progress(self, checkpoint_dir):
+        attempts = getattr(self, "actor_optimizer_step_attempts", None)
+        steps = getattr(self, "actor_optimizer_step", None)
+        self._validate_actor_optimizer_counts(attempts, steps)
+        state = {
+            "schema_version": 1,
+            "global_step": self.global_steps,
+            "actor_optimizer_step_attempts": attempts,
+            "actor_optimizer_step": steps,
+        }
+        temporary_path = None
+        try:
+            with tempfile.NamedTemporaryFile(mode="w", dir=checkpoint_dir, prefix="trainer_state-", delete=False) as f:
+                temporary_path = f.name
+                json.dump(state, f, indent=2, allow_nan=False)
+                f.write("\n")
+            os.replace(temporary_path, os.path.join(checkpoint_dir, "trainer_state.json"))
+        finally:
+            if temporary_path is not None and os.path.exists(temporary_path):
+                os.unlink(temporary_path)
+
+    def _load_actor_optimizer_progress(self, checkpoint_dir):
+        path = os.path.join(checkpoint_dir, "trainer_state.json")
+        if not os.path.exists(path):
+            self.actor_optimizer_step_attempts = self.actor_optimizer_step = None
+            logger.warning("Checkpoint has no trainer_state.json; absolute actor optimizer counts are unknown")
+            return
+        with open(path) as f:
+            state = json.load(f)
+        if not isinstance(state, dict) or type(state.get("schema_version")) is not int or state["schema_version"] != 1:
+            raise ValueError(f"Invalid trainer state schema in {path}")
+        if type(state.get("global_step")) is not int or state["global_step"] != self.global_steps:
+            raise ValueError(f"Trainer state global_step does not match checkpoint directory: {path}")
+        if "actor_optimizer_step_attempts" not in state or "actor_optimizer_step" not in state:
+            raise ValueError(f"Missing actor optimizer counts in {path}")
+        attempts, steps = state["actor_optimizer_step_attempts"], state["actor_optimizer_step"]
+        self._validate_actor_optimizer_counts(attempts, steps)
+        self.actor_optimizer_step_attempts, self.actor_optimizer_step = attempts, steps
 
     def _save_checkpoint(self):
         """Save actor, critic, and dataloader checkpoints to local (and optionally remote) storage."""
@@ -1108,6 +1183,7 @@ class PPOTrainer(ABC):
                 async_save=True,
             )
             return
+        self._save_actor_optimizer_progress(local_global_step_folder)
         local_latest_checkpointed_iteration = os.path.join(
             self.config.trainer.default_local_dir, "latest_checkpointed_iteration.txt"
         )
@@ -2049,6 +2125,7 @@ class PPOTrainer(ABC):
         batch.extra_info.update(extra_info)
 
         output: TensorDict = self.actor_rollout_wg.update_actor(batch)
+        self._accumulate_actor_optimizer_steps(output)
         output = rename_dict(output["metrics"], "actor/")
         output["perf/mfu/actor"] = output.pop("actor/mfu")
         actor_metrics = reduce_metrics(output)

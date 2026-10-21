@@ -831,8 +831,10 @@ class FSDPEngine(BaseEngine):
             if not torch.isfinite(grad_norm):
                 print(f"WARN: grad_norm is not finite: {grad_norm}")
                 self.optimizer.zero_grad()
+                self._optimizer_step_applied = False
             else:
                 self.optimizer.step()
+                self._optimizer_step_applied = True
 
         if self._qat_enabled:
             from verl.utils.qat.core import invalidate_all_scales
