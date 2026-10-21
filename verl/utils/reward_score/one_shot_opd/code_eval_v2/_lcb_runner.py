@@ -1,4 +1,4 @@
-# Vendored verbatim from LiveCodeBench:
+# Based on LiveCodeBench; local resource exceptions propagate to the isolated worker:
 #   https://github.com/LiveCodeBench/LiveCodeBench/blob/998c52d394b836f15fff3b9a29866191108ff81b/lcb_runner/evaluation/testing_util.py
 #
 # LiveCodeBench is distributed under the MIT License. The upstream copyright
@@ -243,6 +243,8 @@ def grade_call_based(code: str, all_inputs: list, all_outputs: list, fn_name: st
                     "error_code": -2,
                     "error_message": "Wrong Answer",
                 }
+        except (MemoryError, SyntaxError, TimeoutException):
+            raise
         except Exception as e:
             signal.alarm(0)
             if "timeoutexception" in repr(e).lower():
@@ -306,6 +308,8 @@ def grade_stdio(
                 total_execution_time += time.time() - start
                 # reset the alarm
                 signal.alarm(0)
+            except (MemoryError, SyntaxError, TimeoutException):
+                raise
             except Exception as e:
                 signal.alarm(0)
                 if "timeoutexception" in repr(e).lower():
@@ -438,6 +442,8 @@ def run_test(sample, test=None, debug=False, timeout=6):
                     timeout=timeout,
                 )
                 return results, metadata
+            except (MemoryError, SyntaxError, TimeoutException):
+                raise
             except Exception as e:
                 return [-4], {
                     "error_code": -4,
@@ -458,6 +464,8 @@ def run_test(sample, test=None, debug=False, timeout=6):
                     timeout=timeout,
                 )
                 return results, metadata
+            except (MemoryError, SyntaxError, TimeoutException):
+                raise
             except Exception as e:
                 return [-4], {
                     "error_code": -4,
