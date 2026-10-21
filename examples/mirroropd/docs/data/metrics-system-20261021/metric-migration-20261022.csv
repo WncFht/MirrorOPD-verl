@@ -1,15 +1,15 @@
 old_key,action,new_key,reason
-actor/distillation/advantage_sign_flip_fraction,remeasure,distill/advantage_sign_flip_fraction,"Measure per optimizer update, not the old outer aggregate."
-actor/distillation/log_ratio_guard_fraction,remeasure,correction/log_ratio_guard_fraction,"Measure per optimizer update, not the old outer aggregate."
+actor/distillation/advantage_sign_flip_fraction,remeasure,distill/advantage/sign_flip_fraction,"Measure per optimizer update, not the old outer aggregate."
+actor/distillation/log_ratio_guard_fraction,remeasure,correction/log_ratio_guard/fraction,"Measure per optimizer update, not the old outer aggregate."
 actor/distillation/loss,drop,,Duplicate objective in pure OPD; use optim/actor_loss.
-actor/distillation/ppo_clip_fraction,remeasure,correction/behavior_ppo_active_fraction,"Measure per optimizer update, not the old outer aggregate."
-actor/entropy,replace,policy/entropy_pre_update,Keep the defined measurement; emit only the new key.
-actor/grad_norm,remeasure,optim/actor_grad_norm_preclip,"Measure per optimizer update, not the old outer aggregate."
-actor/loss,remeasure,optim/actor_loss,"Measure per optimizer update, not the old outer aggregate."
-actor/lr,remeasure,optim/actor_lr,Record the LR actually used by this optimizer update.
-actor/perf/cpu_memory_used_gb,replace,perf/cpu_memory_used_gib,Keep the defined measurement; emit only the new key.
+actor/distillation/ppo_clip_fraction,remeasure,correction/behavior_ppo/active_fraction,"Measure per optimizer update, not the old outer aggregate."
+actor/entropy,replace,policy/entropy/pre_update,Keep the defined measurement; emit only the new key.
+actor/grad_norm,remeasure,optim/actor/grad_norm_preclip,"Measure per optimizer update, not the old outer aggregate."
+actor/loss,remeasure,optim/actor/loss,"Measure per optimizer update, not the old outer aggregate."
+actor/lr,remeasure,optim/actor/lr,Record the LR actually used by this optimizer update.
+actor/perf/cpu_memory_used_gb,replace,perf/memory/cpu_used_gib,Keep the defined measurement; emit only the new key.
 actor/perf/max_memory_allocated_gb,drop,,Not in the fixed minimal output set; no legacy alias.
-actor/perf/max_memory_reserved_gb,replace,perf/actor_reserved_peak_gib,Keep the defined measurement; emit only the new key.
+actor/perf/max_memory_reserved_gb,replace,perf/actor/reserved_peak_gib,Keep the defined measurement; emit only the new key.
 critic/advantages/max,drop,,Not the advantage consumed by current OPD; compute distillation signal directly.
 critic/advantages/mean,drop,,Not the advantage consumed by current OPD; compute distillation signal directly.
 critic/advantages/min,drop,,Not the advantage consumed by current OPD; compute distillation signal directly.
@@ -28,12 +28,12 @@ global_seqlen/max,drop,,Not in the fixed minimal output set; no legacy alias.
 global_seqlen/mean,drop,,Not in the fixed minimal output set; no legacy alias.
 global_seqlen/min,drop,,Not in the fixed minimal output set; no legacy alias.
 global_seqlen/minmax_diff,drop,,Not in the fixed minimal output set; no legacy alias.
-memory/fsdp_worker_peak_allocated_gib_max,replace,perf/fsdp_allocated_peak_gib,Keep the defined measurement; emit only the new key.
+memory/fsdp_worker_peak_allocated_gib_max,replace,perf/memory/fsdp_allocated_peak_gib,Keep the defined measurement; emit only the new key.
 num_turns/max,drop,,Not in the fixed minimal output set; no legacy alias.
 num_turns/mean,drop,,Not in the fixed minimal output set; no legacy alias.
 num_turns/min,drop,,Not in the fixed minimal output set; no legacy alias.
-perf/mfu/actor,replace,perf/actor_mfu,Keep the defined measurement; emit only the new key.
-perf/throughput,replace,perf/tokens_per_gpu_second,Keep the defined measurement; emit only the new key.
+perf/mfu/actor,replace,perf/actor/mfu,Keep the defined measurement; emit only the new key.
+perf/throughput,replace,perf/throughput/tokens_per_gpu_second,Keep the defined measurement; emit only the new key.
 perf/time_per_step,drop,,Not in the fixed minimal output set; no legacy alias.
 perf/total_num_tokens,drop,,Not in the fixed minimal output set; no legacy alias.
 prompt_length/clip_ratio,drop,,Not in the fixed minimal output set; no legacy alias.
@@ -51,7 +51,7 @@ response_length_non_aborted/mean,drop,,Not in the fixed minimal output set; no l
 response_length_non_aborted/min,drop,,Not in the fixed minimal output set; no legacy alias.
 rollout_corr/chi2_seq,drop,,Not in the fixed minimal output set; no legacy alias.
 rollout_corr/chi2_token,drop,,Not in the fixed minimal output set; no legacy alias.
-rollout_corr/k3_kl,replace,policy/anchor_behavior_k3,Keep the defined measurement; emit only the new key.
+rollout_corr/k3_kl,replace,policy/anchor_behavior/k3,Keep the defined measurement; emit only the new key.
 rollout_corr/kl,drop,,Not in the fixed minimal output set; no legacy alias.
 rollout_corr/log_ppl_abs_diff,drop,,Not in the fixed minimal output set; no legacy alias.
 rollout_corr/log_ppl_diff,drop,,Not in the fixed minimal output set; no legacy alias.
@@ -65,17 +65,17 @@ rollout_corr/training_ppl,drop,,Not in the fixed minimal output set; no legacy a
 timing_per_token_ms/adv,drop,,Not in the fixed minimal output set; no legacy alias.
 timing_per_token_ms/gen,drop,,Not in the fixed minimal output set; no legacy alias.
 timing_per_token_ms/update_actor,drop,,Not in the fixed minimal output set; no legacy alias.
-timing_s/adv,replace,perf/adv_seconds,Keep the defined measurement; emit only the new key.
-timing_s/gen,replace,perf/rollout_pipeline_seconds,Keep the defined measurement; emit only the new key.
-timing_s/old_log_prob,replace,perf/old_log_prob_seconds,Keep the defined measurement; emit only the new key.
-timing_s/rollout_batch,replace,perf/rollout_batch_seconds,Keep the defined measurement; emit only the new key.
-timing_s/save_checkpoint,replace,perf/save_checkpoint_seconds,Keep the defined measurement; emit only the new key.
-timing_s/step,replace,perf/outer_step_seconds,Keep the defined measurement; emit only the new key.
-timing_s/teacher_forward,replace,perf/teacher_forward_seconds,Keep the defined measurement; emit only the new key.
-timing_s/teacher_transfer,replace,perf/teacher_transfer_seconds,Keep the defined measurement; emit only the new key.
-timing_s/testing,replace,perf/validation_seconds,Keep the defined measurement; emit only the new key.
-timing_s/update_actor,replace,perf/update_actor_seconds,Keep the defined measurement; emit only the new key.
-timing_s/update_weights,replace,perf/update_weights_seconds,Keep the defined measurement; emit only the new key.
+timing_s/adv,replace,perf/timing/adv_seconds,Keep the defined measurement; emit only the new key.
+timing_s/gen,replace,perf/timing/rollout_pipeline_seconds,Keep the defined measurement; emit only the new key.
+timing_s/old_log_prob,replace,perf/timing/old_log_prob_seconds,Keep the defined measurement; emit only the new key.
+timing_s/rollout_batch,replace,perf/timing/rollout_batch_seconds,Keep the defined measurement; emit only the new key.
+timing_s/save_checkpoint,replace,perf/timing/save_checkpoint_seconds,Keep the defined measurement; emit only the new key.
+timing_s/step,replace,perf/timing/outer_step_seconds,Keep the defined measurement; emit only the new key.
+timing_s/teacher_forward,replace,perf/timing/teacher_forward_seconds,Keep the defined measurement; emit only the new key.
+timing_s/teacher_transfer,replace,perf/timing/teacher_transfer_seconds,Keep the defined measurement; emit only the new key.
+timing_s/testing,replace,perf/timing/validation_seconds,Keep the defined measurement; emit only the new key.
+timing_s/update_actor,replace,perf/timing/update_actor_seconds,Keep the defined measurement; emit only the new key.
+timing_s/update_weights,replace,perf/timing/update_weights_seconds,Keep the defined measurement; emit only the new key.
 training/actor_optimizer_skipped_updates,drop,,Not in the fixed minimal output set; no legacy alias.
 training/actor_optimizer_step,replace,step/optimizer,Keep the defined measurement; emit only the new key.
 training/actor_optimizer_step_attempts,replace,step/update,Keep the defined measurement; emit only the new key.
@@ -94,8 +94,8 @@ training/off_policy/trajectory_staleness_worst/max,drop,,Not in the fixed minima
 training/off_policy/trajectory_staleness_worst/mean,drop,,Not in the fixed minimal output set; no legacy alias.
 training/off_policy/trajectory_staleness_worst/min,drop,,Not in the fixed minimal output set; no legacy alias.
 training/rollout_actor_probs_pearson_corr,drop,,Not in the fixed minimal output set; no legacy alias.
-training/rollout_probs_diff_max,remeasure,policy/anchor_behavior_log_ratio_abs_max,Compute raw log-prob difference; old probability-difference value is not reused.
-training/rollout_probs_diff_mean,remeasure,policy/anchor_behavior_log_ratio_abs_mean,Compute raw log-prob difference; old probability-difference value is not reused.
+training/rollout_probs_diff_max,remeasure,policy/anchor_behavior/log_ratio_abs_max,Compute raw log-prob difference; old probability-difference value is not reused.
+training/rollout_probs_diff_mean,remeasure,policy/anchor_behavior/log_ratio_abs_mean,Compute raw log-prob difference; old probability-difference value is not reused.
 training/rollout_probs_diff_std,drop,,Not in the fixed minimal output set; no legacy alias.
 training/rollout_probs_diff_valid,drop,,Not in the fixed minimal output set; no legacy alias.
 val-aux/AIME25/acc/best@2/mean,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
@@ -480,15 +480,15 @@ val-core/AIME25/acc/best@16/mean,drop,,"Remove auxiliary, duplicate, best/worst/
 val-core/AIME25/acc/best@16/std,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
 val-core/AIME25/acc/maj@16/mean,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
 val-core/AIME25/acc/maj@16/std,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
-val-core/AIME25/acc/mean@16,replace,eval/aime25_acc_mean,Keep the defined measurement; emit only the new key.
+val-core/AIME25/acc/mean@16,replace,eval/aime25/acc_mean,Keep the defined measurement; emit only the new key.
 val-core/AMC23/acc/best@16/mean,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
 val-core/AMC23/acc/best@16/std,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
 val-core/AMC23/acc/maj@16/mean,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
 val-core/AMC23/acc/maj@16/std,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
-val-core/AMC23/acc/mean@16,replace,eval/amc23_acc_mean,Keep the defined measurement; emit only the new key.
+val-core/AMC23/acc/mean@16,replace,eval/amc23/acc_mean,Keep the defined measurement; emit only the new key.
 val-core/MATH-500/acc/best@16/mean,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
 val-core/MATH-500/acc/best@16/std,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
 val-core/MATH-500/acc/maj@16/mean,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
 val-core/MATH-500/acc/maj@16/std,drop,,"Remove auxiliary, duplicate, best/worst/majority or dispersion expansion; retain only canonical mean accuracy and new failure denominators."
-val-core/MATH-500/acc/mean@16,replace,eval/math500_acc_mean,Keep the defined measurement; emit only the new key.
-validation/timing_s/rollout_batch,replace,perf/validation_rollout_seconds,Keep the defined measurement; emit only the new key.
+val-core/MATH-500/acc/mean@16,replace,eval/math500/acc_mean,Keep the defined measurement; emit only the new key.
+validation/timing_s/rollout_batch,replace,perf/timing/validation_rollout_seconds,Keep the defined measurement; emit only the new key.
