@@ -1,0 +1,1890 @@
+{
+  "standalone": {
+    "gen": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 17.6566091954023,
+            "median": 17.875,
+            "min": 0,
+            "max": 27.875,
+            "stdev": 3.697708002723151
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 36.73864114695582,
+            "median": 36.73626708984375,
+            "min": 36.731719970703125,
+            "max": 36.7481689453125,
+            "stdev": 0.005511711681450326
+          },
+          "max_device_memory_gib": 40.8760986328125,
+          "sum_device_memory_gib": {
+            "n": 87,
+            "mean": 293.90912917564657,
+            "median": 293.89013671875,
+            "min": 293.853759765625,
+            "max": 293.9853515625,
+            "stdev": 0.044093693451602606
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 116.73839942528735,
+            "median": 115.36862500000001,
+            "min": 95.54925,
+            "max": 169.94725,
+            "stdev": 16.09054677072086
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1271.1206896551723,
+            "median": 1265.625,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 108.07420578702205
+          }
+        },
+        "physical_0_3": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 34.29022988505747,
+            "median": 35.5,
+            "min": 0,
+            "max": 39.5,
+            "stdev": 6.511603413622931
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 40.80481939206178,
+            "median": 40.800048828125,
+            "min": 40.79107666015625,
+            "max": 40.82391357421875,
+            "stdev": 0.011026852306567506
+          },
+          "max_device_memory_gib": 40.8760986328125,
+          "sum_device_memory_gib": {
+            "n": 87,
+            "mean": 163.21927756824712,
+            "median": 163.2001953125,
+            "min": 163.164306640625,
+            "max": 163.295654296875,
+            "stdev": 0.044107409226270024
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 134.3991867816092,
+            "median": 131.31525,
+            "min": 109.63925,
+            "max": 165.84675000000001,
+            "stdev": 17.737614054413875
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1264.4827586206898,
+            "median": 1237.5,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 106.93631821213333
+          }
+        },
+        "physical_4_7": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 1.0229885057471264,
+            "median": 0,
+            "min": 0,
+            "max": 20,
+            "stdev": 3.475544165170742
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 32.672462901849855,
+            "median": 32.6724853515625,
+            "min": 32.67230224609375,
+            "max": 32.67254638671875,
+            "stdev": 7.568253062317032e-05
+          },
+          "max_device_memory_gib": 32.86102294921875,
+          "sum_device_memory_gib": {
+            "n": 87,
+            "mean": 130.68985160739942,
+            "median": 130.68994140625,
+            "min": 130.689208984375,
+            "max": 130.690185546875,
+            "stdev": 0.0003027301224926813
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 99.07761206896552,
+            "median": 98.70575,
+            "min": 81.29050000000001,
+            "max": 188.3685,
+            "stdev": 19.03137725717405
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1277.7586206896551,
+            "median": 1275,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 119.7428109234238
+          }
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 34.87356321839081,
+            "median": 36,
+            "min": 0,
+            "max": 40,
+            "stdev": 6.024764007153077
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 40.80529644845546,
+            "median": 40.80389404296875,
+            "min": 40.780517578125,
+            "max": 40.850830078125,
+            "stdev": 0.016528788005016493
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 130.17397701149426,
+            "median": 124.301,
+            "min": 107.436,
+            "max": 172.62,
+            "stdev": 18.44145900938465
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1240,
+            "median": 1200,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 112.59104842769034
+          }
+        },
+        "1": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 34.59770114942529,
+            "median": 36,
+            "min": 0,
+            "max": 40,
+            "stdev": 7.086606709408663
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 40.81337834500719,
+            "median": 40.80572509765625,
+            "min": 40.786376953125,
+            "max": 40.8760986328125,
+            "stdev": 0.024425421190627714
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 136.02366666666666,
+            "median": 131.406,
+            "min": 110.669,
+            "max": 173.95,
+            "stdev": 20.411422956485104
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1253.6206896551723,
+            "median": 1215,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 113.0540353804229
+          }
+        },
+        "2": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 33.7816091954023,
+            "median": 35,
+            "min": 0,
+            "max": 40,
+            "stdev": 7.047059897172229
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 40.80608218839799,
+            "median": 40.803955078125,
+            "min": 40.786376953125,
+            "max": 40.86834716796875,
+            "stdev": 0.021494168653765695
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 135.03741379310344,
+            "median": 129.251,
+            "min": 108.139,
+            "max": 173.572,
+            "stdev": 20.26204528322209
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1275.8620689655172,
+            "median": 1230,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 121.2440525910152
+          }
+        },
+        "3": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 33.9080459770115,
+            "median": 35,
+            "min": 0,
+            "max": 40,
+            "stdev": 7.065527488838746
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 40.7945205863865,
+            "median": 40.796142578125,
+            "min": 40.75885009765625,
+            "max": 40.807861328125,
+            "stdev": 0.012594775649490767
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 136.36168965517243,
+            "median": 136.319,
+            "min": 108.252,
+            "max": 169.797,
+            "stdev": 20.096425527540003
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1288.448275862069,
+            "median": 1305,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 120.65304462476419
+          }
+        },
+        "4": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 1.0804597701149425,
+            "median": 0,
+            "min": 0,
+            "max": 44,
+            "stdev": 6.037130056660794
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 32.612892589349855,
+            "median": 32.6129150390625,
+            "min": 32.61273193359375,
+            "max": 32.61297607421875,
+            "stdev": 7.568253062317032e-05
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 98.70842528735632,
+            "median": 106.079,
+            "min": 81.024,
+            "max": 239.032,
+            "stdev": 21.530184810358467
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1273.7931034482758,
+            "median": 1245,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 134.24631456818597
+          }
+        },
+        "5": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 0.6206896551724138,
+            "median": 0,
+            "min": 0,
+            "max": 30,
+            "stdev": 4.095492074561824
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 32.860939464349855,
+            "median": 32.8609619140625,
+            "min": 32.86077880859375,
+            "max": 32.86102294921875,
+            "stdev": 7.568253062317032e-05
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 100.215,
+            "median": 97.434,
+            "min": 80.257,
+            "max": 419.378,
+            "stdev": 37.75953072758508
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1275.1724137931035,
+            "median": 1305,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 134.8738606992467
+          }
+        },
+        "6": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 0.8850574712643678,
+            "median": 0,
+            "min": 0,
+            "max": 63,
+            "stdev": 6.902014008996185
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 32.607033214349855,
+            "median": 32.6070556640625,
+            "min": 32.60687255859375,
+            "max": 32.60711669921875,
+            "stdev": 7.568253062317032e-05
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 102.22167816091954,
+            "median": 113.756,
+            "min": 83.138,
+            "max": 179.72,
+            "stdev": 17.392351706194287
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1284.4827586206898,
+            "median": 1410,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 134.67237264967238
+          }
+        },
+        "7": {
+          "busy_percent": {
+            "n": 87,
+            "mean": 1.5057471264367817,
+            "median": 0,
+            "min": 0,
+            "max": 80,
+            "stdev": 9.340924663180749
+          },
+          "memory_gib": {
+            "n": 87,
+            "mean": 32.608986339349855,
+            "median": 32.6090087890625,
+            "min": 32.60882568359375,
+            "max": 32.60906982421875,
+            "stdev": 7.568253062317032e-05
+          },
+          "power_watts": {
+            "n": 87,
+            "mean": 95.16534482758621,
+            "median": 80.419,
+            "min": 79.821,
+            "max": 413.397,
+            "stdev": 37.15663058134821
+          },
+          "sm_clock_mhz": {
+            "n": 87,
+            "mean": 1277.5862068965516,
+            "median": 1320,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 132.77639462769272
+          }
+        }
+      },
+      "driver_rss_mib": {
+        "n": 86,
+        "mean": 1606.249136991279,
+        "median": 1607.9609375,
+        "min": 1594.69140625,
+        "max": 1608.2734375,
+        "stdev": 3.9012639778465426
+      }
+    },
+    "old_log_prob": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_0_3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_4_7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "1": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "2": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "4": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "5": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "6": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "driver_rss_mib": null
+    },
+    "adv": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_0_3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_4_7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "1": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "2": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "4": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "5": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "6": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "driver_rss_mib": null
+    },
+    "update_actor": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 39.8125,
+            "median": 48.0625,
+            "min": 15.625,
+            "max": 49.875,
+            "stdev": 14.666873814825026
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 26.05609130859375,
+            "median": 26.130081176757812,
+            "min": 25.53704833984375,
+            "max": 26.485321044921875,
+            "stdev": 0.4030516623352999
+          },
+          "max_device_memory_gib": 32.86102294921875,
+          "sum_device_memory_gib": {
+            "n": 6,
+            "mean": 208.44873046875,
+            "median": 209.0406494140625,
+            "min": 204.29638671875,
+            "max": 211.882568359375,
+            "stdev": 3.224413298682399
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 183.29435416666666,
+            "median": 188.725125,
+            "min": 110.36574999999999,
+            "max": 256.991625,
+            "stdev": 63.46968536028719
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1359.6875,
+            "median": 1372.5,
+            "min": 1256.25,
+            "max": 1410,
+            "stdev": 53.01201220006651
+          }
+        },
+        "physical_0_3": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 79.625,
+            "median": 96.125,
+            "min": 31.25,
+            "max": 99.75,
+            "stdev": 29.333747629650052
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 19.439687093098957,
+            "median": 19.587646484375,
+            "min": 18.401611328125,
+            "max": 20.298095703125,
+            "stdev": 0.8060817162305078
+          },
+          "max_device_memory_gib": 20.542236328125,
+          "sum_device_memory_gib": {
+            "n": 6,
+            "mean": 77.75874837239583,
+            "median": 78.3505859375,
+            "min": 73.6064453125,
+            "max": 81.1923828125,
+            "stdev": 3.2243268649220314
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 262.91808333333336,
+            "median": 269.000625,
+            "min": 115.1825,
+            "max": 407.30675,
+            "stdev": 130.02052358182408
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1388.125,
+            "median": 1393.125,
+            "min": 1350,
+            "max": 1410,
+            "stdev": 23.288274946848254
+          }
+        },
+        "physical_4_7": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "stdev": 0.0
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 32.67249552408854,
+            "median": 32.6724853515625,
+            "min": 32.67242431640625,
+            "max": 32.67254638671875,
+            "stdev": 4.5945596478825745e-05
+          },
+          "max_device_memory_gib": 32.86102294921875,
+          "sum_device_memory_gib": {
+            "n": 6,
+            "mean": 130.68998209635416,
+            "median": 130.68994140625,
+            "min": 130.689697265625,
+            "max": 130.690185546875,
+            "stdev": 0.00018378238591530298
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 103.670625,
+            "median": 105.52625,
+            "min": 81.566,
+            "max": 112.506,
+            "stdev": 11.376274505247752
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1331.25,
+            "median": 1342.5,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 99.35730974618828
+          }
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 68.83333333333333,
+            "median": 94.5,
+            "min": 0,
+            "max": 100,
+            "stdev": 44.40457934342658
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 19.496653238932293,
+            "median": 19.624267578125,
+            "min": 18.294189453125,
+            "max": 20.542236328125,
+            "stdev": 0.8778277620520188
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 293.8405,
+            "median": 365.6495,
+            "min": 114.355,
+            "max": 408.716,
+            "stdev": 140.66145931384332
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1390,
+            "median": 1395.0,
+            "min": 1350,
+            "max": 1410,
+            "stdev": 22.58317958127243
+          }
+        },
+        "1": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 81.5,
+            "median": 99.5,
+            "min": 0,
+            "max": 100,
+            "stdev": 40.11857425183502
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 19.425038655598957,
+            "median": 19.507080078125,
+            "min": 18.372314453125,
+            "max": 20.327392578125,
+            "stdev": 0.8668200293501673
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 229.9911666666667,
+            "median": 164.787,
+            "min": 115.479,
+            "max": 409.199,
+            "stdev": 142.2856057476183
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1387.5,
+            "median": 1402.5,
+            "min": 1335,
+            "max": 1410,
+            "stdev": 31.10466202999158
+          }
+        },
+        "2": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 97.66666666666667,
+            "median": 99.5,
+            "min": 92,
+            "max": 100,
+            "stdev": 3.3862466931200785
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 19.412017822265625,
+            "median": 19.555908203125,
+            "min": 18.430908203125,
+            "max": 20.307861328125,
+            "stdev": 0.8250512332523371
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 256.5638333333333,
+            "median": 239.6395,
+            "min": 115.389,
+            "max": 424.663,
+            "stdev": 154.48162604583973
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1390,
+            "median": 1395.0,
+            "min": 1350,
+            "max": 1410,
+            "stdev": 24.49489742783178
+          }
+        },
+        "3": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 70.5,
+            "median": 99.0,
+            "min": 0,
+            "max": 100,
+            "stdev": 45.619074957741084
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 19.425038655598957,
+            "median": 19.604736328125,
+            "min": 18.509033203125,
+            "max": 20.093017578125,
+            "stdev": 0.6766611714648416
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 271.27683333333334,
+            "median": 291.858,
+            "min": 113.401,
+            "max": 415.182,
+            "stdev": 146.01705701241437
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1385,
+            "median": 1380.0,
+            "min": 1365,
+            "max": 1410,
+            "stdev": 22.58317958127243
+          }
+        },
+        "4": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "stdev": 0.0
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 32.61292521158854,
+            "median": 32.6129150390625,
+            "min": 32.61285400390625,
+            "max": 32.61297607421875,
+            "stdev": 4.5945596478825745e-05
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 107.86116666666666,
+            "median": 113.014,
+            "min": 81.946,
+            "max": 113.165,
+            "stdev": 12.695930661698915
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1320,
+            "median": 1410.0,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 139.427400463467
+          }
+        },
+        "5": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "stdev": 0.0
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 32.86097208658854,
+            "median": 32.8609619140625,
+            "min": 32.86090087890625,
+            "max": 32.86102294921875,
+            "stdev": 4.5945596478825745e-05
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 106.79766666666667,
+            "median": 111.143,
+            "min": 80.855,
+            "max": 113.251,
+            "stdev": 12.751146939262627
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1365,
+            "median": 1410.0,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 110.22703842524301
+          }
+        },
+        "6": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "stdev": 0.0
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 32.60706583658854,
+            "median": 32.6070556640625,
+            "min": 32.60699462890625,
+            "max": 32.60711669921875,
+            "stdev": 4.5945596478825745e-05
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 109.10733333333333,
+            "median": 114.079,
+            "min": 83.374,
+            "max": 114.678,
+            "stdev": 12.608942741826798
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1365,
+            "median": 1410.0,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 110.22703842524301
+          }
+        },
+        "7": {
+          "busy_percent": {
+            "n": 6,
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "stdev": 0.0
+          },
+          "memory_gib": {
+            "n": 6,
+            "mean": 32.60901896158854,
+            "median": 32.6090087890625,
+            "min": 32.60894775390625,
+            "max": 32.60906982421875,
+            "stdev": 4.5945596478825745e-05
+          },
+          "power_watts": {
+            "n": 6,
+            "mean": 90.91633333333334,
+            "median": 82.815,
+            "min": 80.089,
+            "max": 109.68,
+            "stdev": 14.65824248218956
+          },
+          "sm_clock_mhz": {
+            "n": 6,
+            "mean": 1275,
+            "median": 1275.0,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 147.88509052639486
+          }
+        }
+      },
+      "driver_rss_mib": {
+        "n": 5,
+        "mean": 1608.0921875,
+        "median": 1608.11328125,
+        "min": 1607.93359375,
+        "max": 1608.27734375,
+        "stdev": 0.144995032916002
+      }
+    },
+    "update_weights": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_0_3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_4_7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "1": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "2": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "4": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "5": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "6": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "driver_rss_mib": null
+    }
+  },
+  "shared": {
+    "gen": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 31.2239010989011,
+            "median": 31.75,
+            "min": 4.625,
+            "max": 36.125,
+            "stdev": 4.632558256646213
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.75000989306104,
+            "median": 40.74781799316406,
+            "min": 40.74464416503906,
+            "max": 40.75880432128906,
+            "stdev": 0.005053570456006798
+          },
+          "max_device_memory_gib": 40.817626953125,
+          "sum_device_memory_gib": {
+            "n": 91,
+            "mean": 326.0000791444883,
+            "median": 325.9825439453125,
+            "min": 325.9571533203125,
+            "max": 326.0704345703125,
+            "stdev": 0.04042856364805438
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 127.8237445054945,
+            "median": 124.211125,
+            "min": 88.547375,
+            "max": 157.36225,
+            "stdev": 16.956176647360607
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1245.7005494505495,
+            "median": 1222.5,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 106.98702036916687
+          }
+        },
+        "physical_0_3": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 31.47252747252747,
+            "median": 32.5,
+            "min": 0,
+            "max": 36.25,
+            "stdev": 5.039765557467616
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.75228764460637,
+            "median": 40.74781799316406,
+            "min": 40.74293518066406,
+            "max": 40.77223205566406,
+            "stdev": 0.009436153053831676
+          },
+          "max_device_memory_gib": 40.815673828125,
+          "sum_device_memory_gib": {
+            "n": 91,
+            "mean": 163.00915057842548,
+            "median": 162.99127197265625,
+            "min": 162.97174072265625,
+            "max": 163.08892822265625,
+            "stdev": 0.037744612215326705
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 122.5775879120879,
+            "median": 113.791,
+            "min": 83.91425,
+            "max": 156.60775,
+            "stdev": 16.988414720134916
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1211.5796703296703,
+            "median": 1140,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 102.5893640193276
+          }
+        },
+        "physical_4_7": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 30.975274725274726,
+            "median": 31.25,
+            "min": 8.75,
+            "max": 36,
+            "stdev": 4.541942643764117
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.74773214151571,
+            "median": 40.74537658691406,
+            "min": 40.74342346191406,
+            "max": 40.76295471191406,
+            "stdev": 0.005498119825967264
+          },
+          "max_device_memory_gib": 40.817626953125,
+          "sum_device_memory_gib": {
+            "n": 91,
+            "mean": 162.99092856606285,
+            "median": 162.98150634765625,
+            "min": 162.97369384765625,
+            "max": 163.05181884765625,
+            "stdev": 0.021992479303869057
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 133.06990109890108,
+            "median": 139.523,
+            "min": 93.1805,
+            "max": 160.91675,
+            "stdev": 19.70081320233166
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1279.8214285714287,
+            "median": 1297.5,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 128.56088746471178
+          }
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 31.681318681318682,
+            "median": 33,
+            "min": 0,
+            "max": 38,
+            "stdev": 4.444420024352937
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.75793859460852,
+            "median": 40.747314453125,
+            "min": 40.743408203125,
+            "max": 40.815673828125,
+            "stdev": 0.022447646262224497
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 116.16925274725274,
+            "median": 108.677,
+            "min": 82.351,
+            "max": 152.412,
+            "stdev": 16.35492105527562
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1196.868131868132,
+            "median": 1140,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 110.14800233132881
+          }
+        },
+        "1": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 31.934065934065934,
+            "median": 34,
+            "min": 0,
+            "max": 37,
+            "stdev": 6.511190704902168
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.74907441191621,
+            "median": 40.745361328125,
+            "min": 40.741455078125,
+            "max": 40.759033203125,
+            "stdev": 0.006878001442553576
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 119.23179120879121,
+            "median": 112.266,
+            "min": 84.067,
+            "max": 159.787,
+            "stdev": 17.413169903212456
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1188.131868131868,
+            "median": 1140,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 103.11441420859849
+          }
+        },
+        "2": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 31.52747252747253,
+            "median": 33,
+            "min": 0,
+            "max": 38,
+            "stdev": 7.3232364723387455
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.754973359160374,
+            "median": 40.74737548828125,
+            "min": 40.74151611328125,
+            "max": 40.78643798828125,
+            "stdev": 0.01560722336604836
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 123.37296703296704,
+            "median": 112.977,
+            "min": 81.219,
+            "max": 163.924,
+            "stdev": 19.757238235616363
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1216.978021978022,
+            "median": 1140,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 119.87928910384794
+          }
+        },
+        "3": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 30.747252747252748,
+            "median": 31,
+            "min": 0,
+            "max": 37,
+            "stdev": 6.421480283813774
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.74716421274039,
+            "median": 40.745361328125,
+            "min": 40.741455078125,
+            "max": 40.759033203125,
+            "stdev": 0.004839046646387433
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 131.53634065934065,
+            "median": 118.728,
+            "min": 87.93,
+            "max": 166.936,
+            "stdev": 21.9428627379888
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1244.3406593406594,
+            "median": 1140,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 131.71773016401565
+          }
+        },
+        "4": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 30.703296703296704,
+            "median": 32,
+            "min": 0,
+            "max": 37,
+            "stdev": 7.148417859909835
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.74415940504808,
+            "median": 40.745361328125,
+            "min": 40.719970703125,
+            "max": 40.755126953125,
+            "stdev": 0.008806017744566961
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 130.62993406593407,
+            "median": 117.306,
+            "min": 86.591,
+            "max": 159.95,
+            "stdev": 20.699670090125807
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1263.2967032967033,
+            "median": 1140,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 134.04853967504081
+          }
+        },
+        "5": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 30.65934065934066,
+            "median": 31,
+            "min": 0,
+            "max": 36,
+            "stdev": 5.495897015491102
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.752014830872255,
+            "median": 40.743408203125,
+            "min": 40.741455078125,
+            "max": 40.817626953125,
+            "stdev": 0.02196815255151713
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 132.58678021978022,
+            "median": 145.511,
+            "min": 86.132,
+            "max": 165.741,
+            "stdev": 21.56608061274937
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1274.5054945054944,
+            "median": 1215,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 134.98982460634855
+          }
+        },
+        "6": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 30.604395604395606,
+            "median": 32,
+            "min": 0,
+            "max": 39,
+            "stdev": 7.2738177670618684
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.74585497510302,
+            "median": 40.745361328125,
+            "min": 40.741455078125,
+            "max": 40.755126953125,
+            "stdev": 0.003631778697005847
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 134.54556043956043,
+            "median": 149.799,
+            "min": 85.781,
+            "max": 164.463,
+            "stdev": 22.16742174313407
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1290,
+            "median": 1410,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 133.285408053545
+          }
+        },
+        "7": {
+          "busy_percent": {
+            "n": 91,
+            "mean": 31.934065934065934,
+            "median": 32,
+            "min": 20,
+            "max": 38,
+            "stdev": 3.043397946748184
+          },
+          "memory_gib": {
+            "n": 91,
+            "mean": 40.74889935503949,
+            "median": 40.74542236328125,
+            "min": 40.74151611328125,
+            "max": 40.77862548828125,
+            "stdev": 0.009928341435192022
+          },
+          "power_watts": {
+            "n": 91,
+            "mean": 134.51732967032967,
+            "median": 132.874,
+            "min": 109.898,
+            "max": 163.654,
+            "stdev": 20.03124489061745
+          },
+          "sm_clock_mhz": {
+            "n": 91,
+            "mean": 1291.4835164835165,
+            "median": 1410,
+            "min": 1140,
+            "max": 1410,
+            "stdev": 134.57442076886204
+          }
+        }
+      },
+      "driver_rss_mib": {
+        "n": 90,
+        "mean": 1678.3860677083333,
+        "median": 1678.67578125,
+        "min": 1671.6796875,
+        "max": 1685.34375,
+        "stdev": 3.6398506774117365
+      }
+    },
+    "teacher_block": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_0_3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_4_7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "1": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "2": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "4": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "5": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "6": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "driver_rss_mib": null
+    },
+    "old_log_prob": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_0_3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_4_7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "1": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "2": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "4": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "5": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "6": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "driver_rss_mib": null
+    },
+    "adv": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_0_3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_4_7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "1": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "2": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "4": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "5": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "6": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "driver_rss_mib": null
+    },
+    "update_actor": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_0_3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_4_7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "1": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "2": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "4": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "5": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "6": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "driver_rss_mib": {
+        "n": 1,
+        "mean": 1679.8984375,
+        "median": 1679.8984375,
+        "min": 1679.8984375,
+        "max": 1679.8984375,
+        "stdev": null
+      }
+    },
+    "update_weights": {
+      "groups": {
+        "all_eight": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_0_3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "physical_4_7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "max_device_memory_gib": null,
+          "sum_device_memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "per_gpu": {
+        "0": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "1": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "2": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "3": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "4": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "5": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "6": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        },
+        "7": {
+          "busy_percent": null,
+          "memory_gib": null,
+          "power_watts": null,
+          "sm_clock_mhz": null
+        }
+      },
+      "driver_rss_mib": null
+    }
+  }
+}

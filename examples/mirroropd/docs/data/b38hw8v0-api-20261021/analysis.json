@@ -1,0 +1,727 @@
+{
+  "training_rows": 98,
+  "normalization_gpus": 8,
+  "prompts_per_step": 64,
+  "last_observed_global_step": 98,
+  "observed_training_seconds": 14274.555774550885,
+  "observed_testing_seconds": 82141.0514423754,
+  "testing_fraction_of_timed_work": 0.8519476650451991,
+  "steady_steps": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98
+  ],
+  "steady": {
+    "actor/distillation/abs_loss": {
+      "mean": 0.166490386070562,
+      "median": 0.16400417809685072,
+      "min": 0.09019247939189275,
+      "max": 0.2578418729826808
+    },
+    "actor/distillation/loss": {
+      "mean": 0.058961099993015076,
+      "median": 0.05482794716954231,
+      "min": 0.018710242002271116,
+      "max": 0.1106530805118382
+    },
+    "actor/distillation/loss_max": {
+      "mean": 13.10241810316892,
+      "median": 12.868521690368652,
+      "min": 5.961091041564941,
+      "max": 21.180063247680664
+    },
+    "actor/distillation/loss_min": {
+      "mean": -6.4105049261112805,
+      "median": -5.226405620574951,
+      "min": -17.729793548583984,
+      "max": -2.84521222114563
+    },
+    "actor/distillation/pg_clipfrac": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "actor/distillation/pg_clipfrac_lower": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "actor/distillation/ppo_kl": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "actor/entropy": {
+      "mean": 0.746543483021333,
+      "median": 0.7288968563079834,
+      "min": 0.5937052369117737,
+      "max": 0.9616888761520386
+    },
+    "actor/grad_norm": {
+      "mean": 0.6310462099067944,
+      "median": 0.5680460929870605,
+      "min": 0.19934488832950592,
+      "max": 1.3612030744552612
+    },
+    "actor/loss": {
+      "mean": 0.05896110030025551,
+      "median": 0.05482794716954231,
+      "min": 0.018710242584347725,
+      "max": 0.11065308004617691
+    },
+    "actor/lr": {
+      "mean": 1e-06,
+      "median": 1e-06,
+      "min": 1e-06,
+      "max": 1e-06
+    },
+    "actor/perf/cpu_memory_used_gb": {
+      "mean": 115.65465958585445,
+      "median": 116.34061431884766,
+      "min": 93.90425109863281,
+      "max": 130.25240325927734
+    },
+    "actor/perf/max_memory_allocated_gb": {
+      "mean": 19.702490550955545,
+      "median": 19.8154296875,
+      "min": 16.83518648147583,
+      "max": 19.974530696868896
+    },
+    "actor/perf/max_memory_reserved_gb": {
+      "mean": 20.781894329896907,
+      "median": 20.8515625,
+      "min": 18,
+      "max": 21.10546875
+    },
+    "actor/pg_clipfrac": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "actor/pg_clipfrac_lower": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "actor/pg_loss": {
+      "mean": -0.3545344648018633,
+      "median": -0.3449876345694065,
+      "min": -0.5762690231204033,
+      "max": -0.17949751042760909
+    },
+    "actor/ppo_kl": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "critic/advantages/max": {
+      "mean": 0.9999990463256836,
+      "median": 0.9999990463256836,
+      "min": 0.9999990463256836,
+      "max": 0.9999990463256836
+    },
+    "critic/advantages/mean": {
+      "mean": 0.3545344737694435,
+      "median": 0.3449876606464386,
+      "min": 0.17949752509593964,
+      "max": 0.5762690305709839
+    },
+    "critic/advantages/min": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "critic/returns/max": {
+      "mean": 0.9999990463256836,
+      "median": 0.9999990463256836,
+      "min": 0.9999990463256836,
+      "max": 0.9999990463256836
+    },
+    "critic/returns/mean": {
+      "mean": 0.3545344737694435,
+      "median": 0.3449876606464386,
+      "min": 0.17949752509593964,
+      "max": 0.5762690305709839
+    },
+    "critic/returns/min": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "critic/rewards/max": {
+      "mean": 1,
+      "median": 1,
+      "min": 1,
+      "max": 1
+    },
+    "critic/rewards/mean": {
+      "mean": 0.44442654639175255,
+      "median": 0.4375,
+      "min": 0.28125,
+      "max": 0.65625
+    },
+    "critic/rewards/min": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "critic/score/max": {
+      "mean": 1,
+      "median": 1,
+      "min": 1,
+      "max": 1
+    },
+    "critic/score/mean": {
+      "mean": 0.44442654639175255,
+      "median": 0.4375,
+      "min": 0.28125,
+      "max": 0.65625
+    },
+    "critic/score/min": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "global_seqlen/balanced_max": {
+      "mean": 94906.1237113402,
+      "median": 95033,
+      "min": 86146,
+      "max": 105113
+    },
+    "global_seqlen/balanced_min": {
+      "mean": 94653.21649484536,
+      "median": 94901,
+      "min": 85925,
+      "max": 104821
+    },
+    "global_seqlen/max": {
+      "mean": 116428.53608247422,
+      "median": 116399,
+      "min": 115807,
+      "max": 117574
+    },
+    "global_seqlen/mean": {
+      "mean": 94793.52577319587,
+      "median": 94987.5,
+      "min": 86030.75,
+      "max": 104955
+    },
+    "global_seqlen/min": {
+      "mean": 53122.49484536082,
+      "median": 52443,
+      "min": 35117,
+      "max": 71279
+    },
+    "global_seqlen/minmax_diff": {
+      "mean": 63306.0412371134,
+      "median": 64215,
+      "min": 46295,
+      "max": 81213
+    },
+    "num_turns/max": {
+      "mean": 2,
+      "median": 2,
+      "min": 2,
+      "max": 2
+    },
+    "num_turns/mean": {
+      "mean": 2,
+      "median": 2,
+      "min": 2,
+      "max": 2
+    },
+    "num_turns/min": {
+      "mean": 2,
+      "median": 2,
+      "min": 2,
+      "max": 2
+    },
+    "perf/mfu/actor": {
+      "mean": 0.383641774501502,
+      "median": 0.3901787401778737,
+      "min": 0.2790552280516748,
+      "max": 0.4555428407518279
+    },
+    "perf/throughput": {
+      "mean": 327.15773940274903,
+      "median": 326.4822993702749,
+      "min": 284.6426433167549,
+      "max": 359.4196571071492
+    },
+    "perf/time_per_step": {
+      "mean": 144.92462616008658,
+      "median": 144.1008050404489,
+      "min": 140.2718904297799,
+      "max": 173.48024324327707
+    },
+    "perf/total_num_tokens": {
+      "mean": 379174.1030927835,
+      "median": 379950,
+      "min": 344123,
+      "max": 419820
+    },
+    "prompt_length/clip_ratio": {
+      "mean": 0.015625,
+      "median": 0.015625,
+      "min": 0.015625,
+      "max": 0.015625
+    },
+    "prompt_length/max": {
+      "mean": 381.25773195876286,
+      "median": 323,
+      "min": 174,
+      "max": 1295
+    },
+    "prompt_length/mean": {
+      "mean": 96.52657860824742,
+      "median": 95.328125,
+      "min": 76.453125,
+      "max": 120.109375
+    },
+    "prompt_length/min": {
+      "mean": 24.31958762886598,
+      "median": 24,
+      "min": 15,
+      "max": 38
+    },
+    "response/aborted_ratio": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "response_length/clip_ratio": {
+      "mean": 0.5095038659793815,
+      "median": 0.515625,
+      "min": 0.3125,
+      "max": 0.703125
+    },
+    "response_length/max": {
+      "mean": 7168,
+      "median": 7168,
+      "min": 7168,
+      "max": 7168
+    },
+    "response_length/mean": {
+      "mean": 5828.068782216495,
+      "median": 5841.828125,
+      "min": 5276.625,
+      "max": 6448.375
+    },
+    "response_length/min": {
+      "mean": 1425.1546391752577,
+      "median": 1480,
+      "min": 316,
+      "max": 2352
+    },
+    "response_length_non_aborted/clip_ratio": {
+      "mean": 0.5095038659793815,
+      "median": 0.515625,
+      "min": 0.3125,
+      "max": 0.703125
+    },
+    "response_length_non_aborted/max": {
+      "mean": 7168,
+      "median": 7168,
+      "min": 7168,
+      "max": 7168
+    },
+    "response_length_non_aborted/mean": {
+      "mean": 5828.068782216495,
+      "median": 5841.828125,
+      "min": 5276.625,
+      "max": 6448.375
+    },
+    "response_length_non_aborted/min": {
+      "mean": 1425.1546391752577,
+      "median": 1480,
+      "min": 316,
+      "max": 2352
+    },
+    "rollout_corr/chi2_seq": {
+      "mean": 54.0870266550595,
+      "median": 2.358921527862549,
+      "min": -0.7924011945724487,
+      "max": 1257.9881591796875
+    },
+    "rollout_corr/chi2_token": {
+      "mean": 0.007740691765067503,
+      "median": 0.0010699033737182617,
+      "min": 0.0007165670394897461,
+      "max": 0.6319675445556641
+    },
+    "rollout_corr/k3_kl": {
+      "mean": 0.0005869177234906357,
+      "median": 0.0005693021812476218,
+      "min": 0.000491249025799334,
+      "max": 0.0018464316381141543
+    },
+    "rollout_corr/kl": {
+      "mean": 0.0005859327646567649,
+      "median": 0.0005788065027445555,
+      "min": 0.00041280174627900124,
+      "max": 0.0007893323781900108
+    },
+    "rollout_corr/log_ppl_abs_diff": {
+      "mean": 0.0006181888471923999,
+      "median": 0.0006074085831642151,
+      "min": 0.0004975697956979275,
+      "max": 0.000815156614407897
+    },
+    "rollout_corr/log_ppl_diff": {
+      "mean": 0.0005585370842156183,
+      "median": 0.0005541704595088959,
+      "min": 0.00040403008460998535,
+      "max": 0.0007654682267457247
+    },
+    "rollout_corr/log_ppl_diff_max": {
+      "mean": 0.0023559926404166467,
+      "median": 0.002081632614135742,
+      "min": 0.001217961311340332,
+      "max": 0.005707740783691406
+    },
+    "rollout_corr/log_ppl_diff_min": {
+      "mean": -0.0005933396595040548,
+      "median": -0.0005339384078979492,
+      "min": -0.001599729061126709,
+      "max": -0.00011211633682250977
+    },
+    "rollout_corr/ppl_ratio": {
+      "mean": 1.0005588347149879,
+      "median": 1.0005544424057007,
+      "min": 1.0004042387008667,
+      "max": 1.0007660388946533
+    },
+    "rollout_corr/rollout_log_ppl": {
+      "mean": 0.7168503747772925,
+      "median": 0.6994357109069824,
+      "min": 0.5839845538139343,
+      "max": 0.9155701398849487
+    },
+    "rollout_corr/rollout_ppl": {
+      "mean": 2.1512651885907674,
+      "median": 2.0969433784484863,
+      "min": 1.8468871116638184,
+      "max": 2.713083505630493
+    },
+    "rollout_corr/training_log_ppl": {
+      "mean": 0.7174089114690564,
+      "median": 0.6999598145484924,
+      "min": 0.5844219326972961,
+      "max": 0.9161096811294556
+    },
+    "rollout_corr/training_ppl": {
+      "mean": 2.152560365568731,
+      "median": 2.098177671432495,
+      "min": 1.847753882408142,
+      "max": 2.7150893211364746
+    },
+    "timing_per_token_ms/adv": {
+      "mean": 0.0002807073704279509,
+      "median": 0.00027924497873099306,
+      "min": 0.00024970408260529826,
+      "max": 0.0003088582825820059
+    },
+    "timing_per_token_ms/gen": {
+      "mean": 0.33366839158468,
+      "median": 0.3308643588708088,
+      "min": 0.30596840039484435,
+      "max": 0.36764967504763596
+    },
+    "timing_per_token_ms/update_actor": {
+      "mean": 0.03362140781334408,
+      "median": 0.03404684271487547,
+      "min": 0.025929344414557257,
+      "max": 0.040806619752676
+    },
+    "timing_s/adv": {
+      "mean": 0.10623198257970441,
+      "median": 0.10602548532187939,
+      "min": 0.09930561296641827,
+      "max": 0.11657621897757053
+    },
+    "timing_s/gen": {
+      "mean": 124.19113618815221,
+      "median": 124.29880990460515,
+      "min": 122.27921052463353,
+      "max": 131.89502745121717
+    },
+    "timing_s/old_log_prob": {
+      "mean": 5.71052422405211,
+      "median": 5.97458509914577,
+      "min": 3.7990398928523064,
+      "max": 7.528278764337301
+    },
+    "timing_s/save_checkpoint": {
+      "mean": 29.238960225135088,
+      "median": 29.238960225135088,
+      "min": 29.238960225135088,
+      "max": 29.238960225135088
+    },
+    "timing_s/step": {
+      "mean": 144.92462616008658,
+      "median": 144.1008050404489,
+      "min": 140.2718904297799,
+      "max": 173.48024324327707
+    },
+    "timing_s/testing": {
+      "mean": 20535.26286059385,
+      "median": 20648.500610368326,
+      "min": 19643.282928373665,
+      "max": 21200.76729326509
+    },
+    "timing_s/update_actor": {
+      "mean": 12.726601516674322,
+      "median": 12.919206792488694,
+      "min": 9.414764039218426,
+      "max": 15.650291662663221
+    },
+    "timing_s/update_weights": {
+      "mean": 1.8492972534533936,
+      "median": 1.625849973410368,
+      "min": 1.1179427076131105,
+      "max": 4.79711339995265
+    },
+    "training/epoch": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "training/global_step": {
+      "mean": 50,
+      "median": 50,
+      "min": 2,
+      "max": 98
+    },
+    "training/num_turns/max": {
+      "mean": 2,
+      "median": 2,
+      "min": 2,
+      "max": 2
+    },
+    "training/num_turns/mean": {
+      "mean": 2,
+      "median": 2,
+      "min": 2,
+      "max": 2
+    },
+    "training/num_turns/min": {
+      "mean": 2,
+      "median": 2,
+      "min": 2,
+      "max": 2
+    },
+    "training/off_policy/trajectory_spans/max": {
+      "mean": 1,
+      "median": 1,
+      "min": 1,
+      "max": 1
+    },
+    "training/off_policy/trajectory_spans/mean": {
+      "mean": 1,
+      "median": 1,
+      "min": 1,
+      "max": 1
+    },
+    "training/off_policy/trajectory_spans/min": {
+      "mean": 1,
+      "median": 1,
+      "min": 1,
+      "max": 1
+    },
+    "training/off_policy/trajectory_staleness/max": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "training/off_policy/trajectory_staleness/mean": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "training/off_policy/trajectory_staleness/min": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "training/off_policy/trajectory_staleness_worst/max": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "training/off_policy/trajectory_staleness_worst/mean": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "training/off_policy/trajectory_staleness_worst/min": {
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "training/rollout_actor_probs_pearson_corr": {
+      "mean": 0.9996466943898152,
+      "median": 0.9996529221534729,
+      "min": 0.9994900226593018,
+      "max": 0.9997329115867615
+    },
+    "training/rollout_probs_diff_max": {
+      "mean": 0.8808209625716062,
+      "median": 0.9564001560211182,
+      "min": 0.36160576343536377,
+      "max": 0.9999881982803345
+    },
+    "training/rollout_probs_diff_mean": {
+      "mean": 0.003978979781020395,
+      "median": 0.003977359738200903,
+      "min": 0.0037485756911337376,
+      "max": 0.0042031994089484215
+    },
+    "training/rollout_probs_diff_std": {
+      "mean": 0.008566646145407072,
+      "median": 0.008516745641827583,
+      "min": 0.007865486666560173,
+      "max": 0.010119251906871796
+    },
+    "training/rollout_probs_diff_valid": {
+      "mean": 1,
+      "median": 1,
+      "min": 1,
+      "max": 1
+    }
+  },
+  "stage_seconds": {
+    "gen": 124.19113618815221,
+    "old_log_prob": 5.71052422405211,
+    "adv": 0.10623198257970441,
+    "update_actor": 12.726601516674322,
+    "save_checkpoint": 0.3014325796405679,
+    "update_weights": 1.8492972534533936,
+    "other": 0.03940241553425494
+  },
+  "stage_percent": {
+    "gen": 85.69360465416571,
+    "old_log_prob": 3.9403408346516295,
+    "adv": 0.07330153983792823,
+    "update_actor": 8.781531375224159,
+    "save_checkpoint": 0.20799265633957859,
+    "update_weights": 1.2760407271367558,
+    "other": 0.027188212644226706
+  },
+  "aggregate_valid_tokens_per_second": 2616.3538464052367,
+  "normalized_valid_tokens_per_second": 327.0442308006546,
+  "prompts_per_minute": 26.496532036993223,
+  "pooled_response_length/clip_ratio": 0.5105229591836735,
+  "pooled_critic/score/mean": 0.44355867346938777
+}
