@@ -1,0 +1,213 @@
+(vLLMHttpServer pid=2014939) (Worker pid=2015756) INFO 10-21 12:28:58 [gpu_worker.py:538] Available KV cache memory: 35.31 GiB
+(vLLMHttpServer pid=2014934) (Worker pid=2015769) INFO 10-21 12:28:58 [gpu_worker.py:538] Available KV cache memory: 35.31 GiB
+(vLLMHttpServer pid=2014937) (Worker pid=2015777) INFO 10-21 12:28:58 [gpu_worker.py:538] Available KV cache memory: 35.31 GiB
+(vLLMHttpServer pid=2014938) (Worker pid=2015742) INFO 10-21 12:28:58 [gpu_worker.py:538] Available KV cache memory: 35.31 GiB
+(vLLMHttpServer pid=2014939) (Worker pid=2015756) INFO 10-21 12:28:59 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.17 GiB
+(vLLMHttpServer pid=2014934) (Worker pid=2015769) INFO 10-21 12:28:59 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.17 GiB
+(vLLMHttpServer pid=2014937) (Worker pid=2015777) INFO 10-21 12:28:59 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.17 GiB
+(vLLMHttpServer pid=2014938) (Worker pid=2015742) INFO 10-21 12:29:00 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.17 GiB
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:29:16 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:29:16 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:29:16 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:29:16 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (Worker pid=2015769) INFO 10-21 12:29:16 [gpu_worker.py:211] Sleep mode freed 38.85 GiB memory, 2.62 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) (Worker pid=2015756) INFO 10-21 12:29:16 [gpu_worker.py:211] Sleep mode freed 38.87 GiB memory, 2.29 GiB memory is still in use.
+(vLLMHttpServer pid=2014938) (Worker pid=2015742) INFO 10-21 12:29:16 [gpu_worker.py:211] Sleep mode freed 38.87 GiB memory, 2.29 GiB memory is still in use.
+(vLLMHttpServer pid=2014937) (Worker pid=2015777) INFO 10-21 12:29:16 [gpu_worker.py:211] Sleep mode freed 38.85 GiB memory, 2.32 GiB memory is still in use.
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:29:18 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:29:18 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:29:18 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:29:18 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:29:22 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:29:22 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:29:22 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:29:22 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:29:22 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:29:22 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:29:22 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:29:22 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) INFO 10-21 12:29:55 [loggers.py:273] Engine 000: Avg prompt throughput: 133.3 tokens/s, Avg generation throughput: 896.4 tokens/s, Running: 12 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:29:56 [loggers.py:273] Engine 000: Avg prompt throughput: 182.3 tokens/s, Avg generation throughput: 1341.1 tokens/s, Running: 14 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:29:56 [loggers.py:273] Engine 000: Avg prompt throughput: 102.8 tokens/s, Avg generation throughput: 1072.3 tokens/s, Running: 13 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.9%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:29:56 [loggers.py:273] Engine 000: Avg prompt throughput: 153.5 tokens/s, Avg generation throughput: 1336.2 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.1%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:30:05 [loggers.py:273] Engine 000: Avg prompt throughput: 54.5 tokens/s, Avg generation throughput: 5108.1 tokens/s, Running: 13 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:30:06 [loggers.py:273] Engine 000: Avg prompt throughput: 17.5 tokens/s, Avg generation throughput: 5129.3 tokens/s, Running: 13 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.4%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:30:06 [loggers.py:273] Engine 000: Avg prompt throughput: 17.2 tokens/s, Avg generation throughput: 5417.0 tokens/s, Running: 14 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.4%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:30:06 [loggers.py:273] Engine 000: Avg prompt throughput: 20.3 tokens/s, Avg generation throughput: 5154.3 tokens/s, Running: 13 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.4%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:30:15 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3758.9 tokens/s, Running: 9 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.8%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:30:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3623.8 tokens/s, Running: 7 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.7%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:30:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3311.9 tokens/s, Running: 2 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.1%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:30:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3465.5 tokens/s, Running: 6 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:30:25 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 200.1 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:30:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 222.6 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:30:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 64.8 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:30:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 83.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:30:35 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:30:36 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:30:36 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:30:36 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:30:36 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) INFO 10-21 12:30:36 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (Worker pid=2015769) INFO 10-21 12:30:36 [gpu_worker.py:211] Sleep mode freed 38.85 GiB memory, 2.62 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) (Worker pid=2015756) INFO 10-21 12:30:36 [gpu_worker.py:211] Sleep mode freed 38.87 GiB memory, 2.29 GiB memory is still in use.
+(vLLMHttpServer pid=2014937) INFO 10-21 12:30:36 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) (Worker pid=2015777) INFO 10-21 12:30:36 [gpu_worker.py:211] Sleep mode freed 38.85 GiB memory, 2.32 GiB memory is still in use.
+(vLLMHttpServer pid=2014938) (Worker pid=2015742) INFO 10-21 12:30:36 [gpu_worker.py:211] Sleep mode freed 38.87 GiB memory, 2.29 GiB memory is still in use.
+(vLLMHttpServer pid=2014938) INFO 10-21 12:30:36 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:30:54 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:30:54 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:30:54 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:30:54 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:30:54 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:30:54 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:30:54 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:30:54 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:30:55 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:30:55 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:30:55 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:30:55 [block_pool.py:685] Successfully reset prefix cache
+(TaskRunnerV1 pid=2012008) WARNING:2026-10-21 12:30:55,139:Pipeline metrics omitted: backend did not report preemptions for every request; unknown is not zero
+(vLLMHttpServer pid=2014939) INFO 10-21 12:30:55 [loggers.py:273] Engine 000: Avg prompt throughput: 172.4 tokens/s, Avg generation throughput: 325.0 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.4%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:30:56 [loggers.py:273] Engine 000: Avg prompt throughput: 157.2 tokens/s, Avg generation throughput: 522.4 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:30:56 [loggers.py:273] Engine 000: Avg prompt throughput: 145.8 tokens/s, Avg generation throughput: 590.6 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:30:56 [loggers.py:273] Engine 000: Avg prompt throughput: 194.3 tokens/s, Avg generation throughput: 750.6 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.7%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:31:05 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5321.7 tokens/s, Running: 13 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:31:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5720.8 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:31:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5092.4 tokens/s, Running: 12 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.7%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:31:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5451.2 tokens/s, Running: 14 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.5%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:31:15 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3881.2 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:31:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3889.2 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:31:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3091.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:31:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4098.1 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:31:17 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:31:17 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:31:17 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:31:17 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (Worker pid=2015756) INFO 10-21 12:31:17 [gpu_worker.py:211] Sleep mode freed 38.95 GiB memory, 2.53 GiB memory is still in use.
+(vLLMHttpServer pid=2014937) (Worker pid=2015777) INFO 10-21 12:31:17 [gpu_worker.py:211] Sleep mode freed 38.9 GiB memory, 2.57 GiB memory is still in use.
+(vLLMHttpServer pid=2014934) (Worker pid=2015769) INFO 10-21 12:31:17 [gpu_worker.py:211] Sleep mode freed 38.85 GiB memory, 2.85 GiB memory is still in use.
+(vLLMHttpServer pid=2014938) (Worker pid=2015742) INFO 10-21 12:31:17 [gpu_worker.py:211] Sleep mode freed 38.96 GiB memory, 2.53 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) INFO 10-21 12:31:25 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:31:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:31:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:31:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:31:28 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) INFO 10-21 12:31:35 [loggers.py:273] Engine 000: Avg prompt throughput: 114.8 tokens/s, Avg generation throughput: 4096.0 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:31:36 [loggers.py:273] Engine 000: Avg prompt throughput: 180.3 tokens/s, Avg generation throughput: 4202.7 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:31:36 [loggers.py:273] Engine 000: Avg prompt throughput: 135.1 tokens/s, Avg generation throughput: 4106.5 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:31:36 [loggers.py:273] Engine 000: Avg prompt throughput: 149.8 tokens/s, Avg generation throughput: 4284.4 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.3%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:31:45 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4302.8 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.7%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:31:46 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4315.2 tokens/s, Running: 11 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.1%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:31:46 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4322.9 tokens/s, Running: 11 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.1%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:31:46 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4201.2 tokens/s, Running: 11 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:31:55 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 966.6 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:31:56 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1190.1 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:31:56 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1095.9 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:31:56 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 984.8 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:31:59 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:31:59 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:31:59 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:31:59 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (Worker pid=2015769) INFO 10-21 12:31:59 [gpu_worker.py:211] Sleep mode freed 38.85 GiB memory, 2.85 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) (Worker pid=2015756) INFO 10-21 12:31:59 [gpu_worker.py:211] Sleep mode freed 38.9 GiB memory, 2.53 GiB memory is still in use.
+(vLLMHttpServer pid=2014938) (Worker pid=2015742) INFO 10-21 12:31:59 [gpu_worker.py:211] Sleep mode freed 38.94 GiB memory, 2.53 GiB memory is still in use.
+(vLLMHttpServer pid=2014937) (Worker pid=2015777) INFO 10-21 12:31:59 [gpu_worker.py:211] Sleep mode freed 38.91 GiB memory, 2.57 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) INFO 10-21 12:32:05 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:32:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:32:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:32:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:32:09 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:32:09 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:32:09 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:32:09 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:32:10 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:32:10 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:32:10 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:32:10 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:32:10 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:32:10 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:32:10 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:32:10 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) INFO 10-21 12:32:15 [loggers.py:273] Engine 000: Avg prompt throughput: 278.4 tokens/s, Avg generation throughput: 3143.9 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:32:16 [loggers.py:273] Engine 000: Avg prompt throughput: 163.4 tokens/s, Avg generation throughput: 3323.3 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:32:16 [loggers.py:273] Engine 000: Avg prompt throughput: 131.0 tokens/s, Avg generation throughput: 3348.9 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:32:16 [loggers.py:273] Engine 000: Avg prompt throughput: 152.4 tokens/s, Avg generation throughput: 3397.8 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:32:25 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5251.3 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:32:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5252.8 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:32:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4812.5 tokens/s, Running: 13 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.5%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:32:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4684.8 tokens/s, Running: 12 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:32:32 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:32:32 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:32:32 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:32:32 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (Worker pid=2015769) INFO 10-21 12:32:32 [gpu_worker.py:211] Sleep mode freed 38.85 GiB memory, 2.85 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) (Worker pid=2015756) INFO 10-21 12:32:32 [gpu_worker.py:211] Sleep mode freed 39.02 GiB memory, 2.53 GiB memory is still in use.
+(vLLMHttpServer pid=2014938) (Worker pid=2015742) INFO 10-21 12:32:32 [gpu_worker.py:211] Sleep mode freed 38.93 GiB memory, 2.53 GiB memory is still in use.
+(vLLMHttpServer pid=2014937) (Worker pid=2015777) INFO 10-21 12:32:32 [gpu_worker.py:211] Sleep mode freed 38.9 GiB memory, 2.57 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) INFO 10-21 12:32:35 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2691.6 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:32:36 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2060.1 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:32:36 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2479.4 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:32:36 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1649.1 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:32:44 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:32:44 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:32:44 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:32:44 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:32:45 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:32:45 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:32:45 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:32:45 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:32:45 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:32:45 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:32:45 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:32:45 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) INFO 10-21 12:32:45 [loggers.py:273] Engine 000: Avg prompt throughput: 167.5 tokens/s, Avg generation throughput: 259.1 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.3%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:32:46 [loggers.py:273] Engine 000: Avg prompt throughput: 223.2 tokens/s, Avg generation throughput: 488.2 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:32:46 [loggers.py:273] Engine 000: Avg prompt throughput: 216.8 tokens/s, Avg generation throughput: 531.4 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:32:46 [loggers.py:273] Engine 000: Avg prompt throughput: 160.4 tokens/s, Avg generation throughput: 701.0 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.7%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:32:55 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5675.9 tokens/s, Running: 14 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.2%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:32:56 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5676.0 tokens/s, Running: 15 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:32:56 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5603.4 tokens/s, Running: 14 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.3%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:32:56 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 5457.5 tokens/s, Running: 12 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.8%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014939) INFO 10-21 12:33:05 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3870.0 tokens/s, Running: 10 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.5%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:33:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4185.9 tokens/s, Running: 12 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.6%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:33:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4089.5 tokens/s, Running: 11 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:33:06 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 3686.4 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:33:07 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:33:07 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:33:07 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:33:07 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (Worker pid=2015769) INFO 10-21 12:33:07 [gpu_worker.py:211] Sleep mode freed 38.85 GiB memory, 2.85 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) (Worker pid=2015756) INFO 10-21 12:33:07 [gpu_worker.py:211] Sleep mode freed 38.95 GiB memory, 2.53 GiB memory is still in use.
+(vLLMHttpServer pid=2014938) (Worker pid=2015742) INFO 10-21 12:33:07 [gpu_worker.py:211] Sleep mode freed 38.95 GiB memory, 2.53 GiB memory is still in use.
+(vLLMHttpServer pid=2014937) (Worker pid=2015777) INFO 10-21 12:33:07 [gpu_worker.py:211] Sleep mode freed 38.96 GiB memory, 2.57 GiB memory is still in use.
+(vLLMHttpServer pid=2014939) INFO 10-21 12:33:15 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 39.5 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014937) INFO 10-21 12:33:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 77.8 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) INFO 10-21 12:33:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 94.4 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014938) INFO 10-21 12:33:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:33:18 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:33:18 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:33:18 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:33:18 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:33:19 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:33:19 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:33:19 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:33:19 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014934) (EngineCore pid=2015631) INFO 10-21 12:33:19 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014939) (EngineCore pid=2015623) INFO 10-21 12:33:19 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014938) (EngineCore pid=2015570) INFO 10-21 12:33:19 [block_pool.py:685] Successfully reset prefix cache
+(vLLMHttpServer pid=2014937) (EngineCore pid=2015644) INFO 10-21 12:33:19 [block_pool.py:685] Successfully reset prefix cache
+(TaskRunnerV1 pid=2012008) 'Final validation metrics: None'
+(TaskRunnerV1 pid=2012008) Exception ignored in atexit callback: <function _start_and_connect_service.<locals>.teardown_atexit at 0x7efcd9f15260>
+(TaskRunnerV1 pid=2012008)     raise ConnectionResetError('Connection lost')
+(TaskRunnerV1 pid=2012008) ConnectionResetError: Connection lost
