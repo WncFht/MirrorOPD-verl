@@ -1,0 +1,169 @@
+{
+  "review_date": "2026-10-21",
+  "local_commit": "5bb952d8c",
+  "papers": [
+    {
+      "name": "vOPD",
+      "arxiv": "2605.07865v1",
+      "url": "https://arxiv.org/abs/2605.07865v1",
+      "repository": "holi-lab/vOPD",
+      "reviewed_commit": "d4146d5015216c6f8e89a7243c24912b634f531a",
+      "provided_url": "https://hjfy.top/arxiv/2605.07865"
+    },
+    {
+      "name": "TA-OPD",
+      "arxiv": "2608.14728v1",
+      "url": "https://arxiv.org/abs/2608.14728v1",
+      "repository": "ml-stat-Sustech/TA-OPD",
+      "reviewed_commit": "62669afb5101bfdf57dc5ddf81e78f000c5ce2fc"
+    },
+    {
+      "name": "ResOPD",
+      "arxiv": "2610.04882v1",
+      "url": "https://arxiv.org/abs/2610.04882v1",
+      "repository": "InternLM/ResOPD",
+      "reviewed_commit": "3bdf019daf9818419fe38dbc6516e41ca5a70dcb"
+    },
+    {
+      "name": "EMA-PG",
+      "arxiv": "2602.04417v1",
+      "url": "https://arxiv.org/abs/2602.04417v1",
+      "repository": "LunjunZhang/ema-pg",
+      "reviewed_commit": "f9b977632ad948ce935432a517c22291bfaba562"
+    },
+    {
+      "name": "TT-OPD",
+      "arxiv": "2609.34447v2",
+      "url": "https://arxiv.org/abs/2609.34447v2",
+      "repository": null,
+      "reviewed_commit": null
+    }
+  ],
+  "implementations": [
+    {
+      "name": "Nitrobrew",
+      "repository": "tilde-research/nitrobrew-release",
+      "commit": "17f6f16b7451929209ac495c6b0ea0fcc4d0cedc"
+    },
+    {
+      "name": "NeMo RL",
+      "repository": "NVIDIA-NeMo/RL",
+      "commit": "4fdd49c2255d4f83efe8628508b79cc7372a89da"
+    }
+  ],
+  "verl_prs": [
+    {
+      "number": 7855,
+      "url": "https://github.com/verl-project/verl/pull/7855",
+      "title": "[algo, fsdp, megatron, veomni] feat: add tail-aware top-k KL for on-policy distillation",
+      "state": "closed",
+      "merged": true,
+      "merged_at": "2026-10-20T01:53:15Z",
+      "head_sha": "90bd3548853e8cae2761c694ef6a086d0406eaa7",
+      "head_repo_full_name": "PengyuLi7/verl",
+      "merge_commit_sha": "5a8dd519ab32bfd36d2509a137f830ba79e89c54"
+    },
+    {
+      "number": 8228,
+      "url": "https://github.com/verl-project/verl/pull/8228",
+      "title": "[algo, trainer, vllm] feat: add ResOPD sparse on-policy distillation",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "fef6c718d4257b97457fa069652c3d15d90f016d",
+      "head_repo_full_name": "yph22/verl",
+      "merge_commit_sha": "c77cdb8b69de055a765228e42c21a7522a819dd7"
+    },
+    {
+      "number": 6194,
+      "url": "https://github.com/verl-project/verl/pull/6194",
+      "title": "[fsdp, megatron, vllm, trainer, algo, cfg] feat: Nitrobrew on-policy distillation (teacher hidden states communication + constant-memory fused KL)",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "8650c6f845a2dcdd866bb9645768a66b8e552446",
+      "head_repo_full_name": "tilde-research/nitrobrew-verl",
+      "merge_commit_sha": null
+    },
+    {
+      "number": 6920,
+      "url": "https://github.com/verl-project/verl/pull/6920",
+      "title": "[trainer, fsdp, worker, algo, cfg, recipe] feat: add reverse-KL on-policy distillation with FSDP teacher",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "87cd055e872f9fdd7b976fcd797a0934b6dba265",
+      "head_repo_full_name": "YangxSong/verl",
+      "merge_commit_sha": null
+    },
+    {
+      "number": 7590,
+      "url": "https://github.com/verl-project/verl/pull/7590",
+      "title": "[trainer] feat: add reverse KL top-k distillation loss",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "a0fddd853508d6b0e117f98353c71bd5e92f8153",
+      "head_repo_full_name": "YichenZW/verl-opd",
+      "merge_commit_sha": null
+    },
+    {
+      "number": 7806,
+      "url": "https://github.com/verl-project/verl/pull/7806",
+      "title": "[algo, trainer, rollout, vllm] feat: add reverse KL top-k with fixed-token prefill scoring",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "0e4afd97876882f98ebe62caeac203613e9a33b7",
+      "head_repo_full_name": "YichenZW/verl-opd",
+      "merge_commit_sha": null
+    },
+    {
+      "number": 6511,
+      "url": "https://github.com/verl-project/verl/pull/6511",
+      "title": "[veomni, fsdp] feat: enable fused top-K distillation kernel for OPD",
+      "state": "closed",
+      "merged": true,
+      "merged_at": "2026-05-29T05:52:52Z",
+      "head_sha": "9c793135b05a1a70514b001bc3a0aab427d9c03a",
+      "head_repo_full_name": "Luosuu/verl",
+      "merge_commit_sha": "ede393ac5448e65ffbe73d50582ce99d8c34fb89"
+    },
+    {
+      "number": 6848,
+      "url": "https://github.com/verl-project/verl/pull/6848",
+      "title": "[fsdp, megatron, trainer] fix: enhance mem footprint for forward_kl_topk OPD",
+      "state": "closed",
+      "merged": true,
+      "merged_at": "2026-06-30T21:51:26Z",
+      "head_sha": "1625f3d70d82ea9f4308616c33a6d6666a3da30e",
+      "head_repo_full_name": "dimjava/verl",
+      "merge_commit_sha": "1e3b6ffcd1815dab5dc46e0cea275657a1823441"
+    },
+    {
+      "number": 7375,
+      "url": "https://github.com/verl-project/verl/pull/7375",
+      "title": "[wip][feat]: add opd full-vocab",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "3b8f67864294f1af55feec0e35dcf0da6c3b460b",
+      "head_repo_full_name": "wucong25/verl",
+      "merge_commit_sha": "d8bb9cae2b4f999d54ab632f72dc26f22fb87c43"
+    }
+  ],
+  "notes": [
+    "PR state is a 2026-10-21 snapshot, not a guarantee of local integration.",
+    "Author kernel checks are CPU finite-action audits, not end-to-end training benchmarks.",
+    "TT-OPD paper read; no author-linked implementation identified in the inspected paper.",
+    "EMA-PG search/ primitive checked separately: ordinary head autodiff plus stopped tail differs from the stopped-coefficient HETS gradient by the support-mass gradient."
+  ],
+  "verl_issues": [
+    {
+      "number": 7239,
+      "state": "open",
+      "url": "https://github.com/verl-project/verl/issues/7239",
+      "scope": "Full-vocabulary forward-KL proposal, not a merged implementation"
+    }
+  ]
+}
