@@ -137,9 +137,89 @@ def _gloo_worker(rank, path):
         result = {k: Metric.aggregate_dp([p[k] for p in gathered]) for k in local}
         all_z = torch.cat([z for part in partitions for z in part])
         assert_equal(result, merge([observe(all_z)]))
+        # Exercise the actual engine worker output boundary, including loss
+        # contribution DP averaging and replicated learning-rate handling.
+        from types import SimpleNamespace
+
+        from verl.utils import tensordict_utils as tu
+        from verl.workers import engine_workers
+
+        engine_workers.get_torch_device = lambda: SimpleNamespace(
+            max_memory_allocated=lambda: 0, max_memory_reserved=lambda: 0
+        )
+        worker = SimpleNamespace(
+            device_name="cpu",
+            flops_counter=None,
+            engine=SimpleNamespace(get_data_parallel_group=lambda: dist.group.WORLD),
+        )
+        output = engine_workers.TrainingWorker._postprocess_output(
+            worker,
+            {
+                "metrics": {**local, "lr_used": 0.01, "_optimizer_step_applied": True},
+                "loss": [float(rank + 1)],
+                "model_output": {},
+            },
+            global_token_num=None,
+            delta_time=1.0,
+            forward_only=False,
+            images_seqlens=None,
+        )
+        metrics = tu.get(output, "metrics")
+        assert metrics["lr_used"] == 0.01
+        assert metrics["loss"] == 1.5
+        assert metrics["_optimizer_step_applied"] == [True, True]
+        assert_equal({k: Metric.aggregate_dp(metrics[k]) for k in local}, merge([observe(all_z)]))
     finally:
         dist.destroy_process_group()
 
 
 def test_real_gloo_merge(tmp_path):
     mp.spawn(_gloo_worker, args=(str(tmp_path / "rendezvous"),), nprocs=2, join=True)
+
+
+def test_clip_mass_uses_the_loss_sequence_weights():
+    current = torch.full((2, 3), -5.0)
+    behavior = current - math.log(2)
+    teacher = torch.tensor([[-7.0, -7.0, -7.0], [-1.0, -1.0, -1.0]])
+    mask = torch.tensor([[True, True, True], [True, False, False]])
+    active = torch.tensor([[False, False, False], [True, False, False]])
+    scale = torch.ones_like(current) / mask.sum(-1, keepdim=True)
+    observed = update_observations(
+        current,
+        behavior,
+        behavior,
+        teacher - current,
+        mask,
+        component="distillation",
+        teacher=teacher,
+        mode="token_ppo",
+        clip_active=active,
+        coefficient_scale=scale,
+    )
+    assert observed["correction/behavior_ppo/active_mass"].aggregate() == pytest.approx(4 / 6)
+
+
+def test_pair_uses_pre_rejection_tokens_while_advantage_uses_loss_mask():
+    current = torch.tensor([[-1.0, -10.0]])
+    behavior = torch.tensor([[-1.0, -1.0]])
+    used_mask = torch.tensor([[True, False]])
+    original_mask = torch.tensor([[True, True]])
+    result = update_observations(
+        current,
+        behavior,
+        None,
+        torch.tensor([[2.0, 99.0]]),
+        used_mask,
+        component="task",
+        observation_mask=original_mask,
+    )
+    assert result["policy/current_behavior/log_ratio_m2"].aggregate() == 81 / 2
+    assert result["advantage/task/mean"].aggregate() == 2
+    assert not any(k.startswith("policy/current_anchor/") for k in result)
+
+
+def test_loss_contributions_and_raw_observations_cannot_share_a_reducer():
+    with pytest.raises(ValueError, match="Raw observations"):
+        Metric("sum", 1).append(Observation.mean(torch.tensor([2.0])))
+    with pytest.raises(ValueError, match="reduction types"):
+        Metric.aggregate_dp([Observation.mean(torch.tensor([2.0])), Metric("sum", 1)])

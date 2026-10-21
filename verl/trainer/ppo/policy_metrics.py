@@ -48,14 +48,17 @@ def update_observations(
     teacher=None,
     mode=None,
     clip_active=None,
+    coefficient_scale=None,
+    observation_mask=None,
 ):
     """Construct mergeable diagnostics without changing the loss or its RNG."""
     mask = mask.bool()
     result = {}
+    pair_mask = mask if observation_mask is None else observation_mask.bool()
     if behavior is not None:
-        result.update(pair_observations(current, behavior, mask, "current_behavior", quantile=quantile))
+        result.update(pair_observations(current, behavior, pair_mask, "current_behavior", quantile=quantile))
     if anchor is not None:
-        result.update(pair_observations(current, anchor, mask, "current_anchor"))
+        result.update(pair_observations(current, anchor, pair_mask, "current_anchor"))
     adv = advantage.detach().double()[mask]
     prefix = f"advantage/{component}/"
     result[prefix + "mean"] = Observation.mean(adv)
@@ -84,7 +87,10 @@ def update_observations(
     z = cur - beh
     guarded = z.abs() > 20
     weight = torch.where(guarded, 0.0, z.clamp(-20, 20).exp()).double()
-    c4, c2, c5 = weight * a_current.double(), weight * a_rollout.double(), a_current.double()
+    scale = 1.0 if coefficient_scale is None else coefficient_scale.detach().double()[mask]
+    c4 = weight * a_current.double() * scale
+    c2 = weight * a_rollout.double() * scale
+    c5 = a_current.double() * scale
     denom = c4.abs().sum()
     result["correction/is/coeff_change"] = Observation.ratio((c4 - c5).abs().sum(), denom)
     result["distill/advantage/source_coeff_change"] = Observation.ratio((c2 - c4).abs().sum(), denom)
@@ -97,7 +103,7 @@ def update_observations(
         result["correction/behavior_ppo/active_fraction"] = Observation.mean(
             torch.where(finite_signal, active.double(), math.nan)
         )
-        coefficients = (weight * adv).abs()
+        coefficients = (weight * adv * scale).abs()
         result["correction/behavior_ppo/active_mass"] = Observation.ratio(
             coefficients[active].sum(), coefficients.sum()
         )

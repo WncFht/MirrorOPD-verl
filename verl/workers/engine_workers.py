@@ -40,6 +40,8 @@ from verl.utils.distributed import initialize_global_process_group_ray, set_numa
 from verl.utils.flops_counter import FlopsCounter
 from verl.utils.import_utils import import_external_libs
 from verl.utils.memory_utils import aggressive_empty_cache
+from verl.utils.metric.observations import Observation, observations_to_cpu
+from verl.utils.metric.schema import is_update_metric
 from verl.utils.metric.utils import Metric
 from verl.utils.pipeline_metrics import FSDP_PEAK_MEMORY
 from verl.utils.profiler import DistProfiler, DistProfilerExtension, ProfilerConfig, log_gpu_memory_usage
@@ -240,7 +242,8 @@ class TrainingWorker(Worker, DistProfilerExtension):
         loss = torch.sum(torch.tensor(output.pop("loss"), device=self.device_name))
         dp_group = self.engine.get_data_parallel_group()
         if dp_group is not None:
-            torch.distributed.all_reduce(loss, op=torch.distributed.ReduceOp.AVG, group=dp_group)
+            torch.distributed.all_reduce(loss, op=torch.distributed.ReduceOp.SUM, group=dp_group)
+            loss /= torch.distributed.get_world_size(dp_group)
         loss = loss.item()
 
         # For grad_norm, we do not perform all reduce because it is already been done when clipping grad
@@ -248,6 +251,9 @@ class TrainingWorker(Worker, DistProfilerExtension):
         if isinstance(grad_norm, torch.Tensor):
             grad_norm = grad_norm.detach().item()
         lr = metrics.pop("lr", None)
+        lr_used = metrics.pop("lr_used", None)
+
+        observations_to_cpu(metrics)
 
         # For other metrics, we perform all gather in dp group (only if DP > 1)
         if dp_group is not None:
@@ -259,6 +265,8 @@ class TrainingWorker(Worker, DistProfilerExtension):
             final_metrics["grad_norm"] = grad_norm
         if lr is not None:
             final_metrics["lr"] = lr
+        if lr_used is not None:
+            final_metrics["lr_used"] = lr_used
 
         # log memory
         final_metrics["perf/max_memory_allocated_gb"] = get_torch_device().max_memory_allocated() / (1024**3)
@@ -302,6 +310,10 @@ class TrainingWorker(Worker, DistProfilerExtension):
         epochs = tu.pop(data, key="epochs", default=1)
         seed = tu.pop(data, key="seed", default=42)
         dataloader_kwargs = tu.pop(data, key="dataloader_kwargs", default={})
+        collect_metrics = tu.pop(data, key="collect_metrics", default=False)
+        collect_records = tu.pop(data, key="collect_update_records", default=collect_metrics)
+        quantile_interval = tu.pop(data, key="metrics_quantile_interval", default=8)
+        attempt_start = tu.pop(data, key="metrics_attempt_start", default=None)
 
         assert mini_batch_size is not None or num_mini_batch is not None
 
@@ -352,6 +364,16 @@ class TrainingWorker(Worker, DistProfilerExtension):
                     global_token_num=NonTensorData(global_token_num),
                     update_lr_scheduler=batch_idx == total_num_iterations - 1,
                     disable_auto_offload=True,
+                    collect_metrics=collect_metrics,
+                    metrics_quantile=(
+                        collect_metrics
+                        and quantile_interval > 0
+                        and attempt_start is not None
+                        and (
+                            attempt_start + batch_idx + 1 == 1
+                            or (attempt_start + batch_idx + 1) % quantile_interval == 0
+                        )
+                    ),
                 )
                 # Name the mini-batch in the trace so each iteration of this otherwise identical
                 # loop is distinguishable when the whole step is recorded (continuous mode).
@@ -379,6 +401,7 @@ class TrainingWorker(Worker, DistProfilerExtension):
                 actor_output = [tu.get(output, "metrics") for output in output_lst]
                 metrics = {}
                 optimizer_steps = 0
+                update_records = []
                 for output in actor_output:
                     applied = _consume_optimizer_step_status(output, self.engine.get_data_parallel_size())
                     if applied is None:
@@ -393,6 +416,19 @@ class TrainingWorker(Worker, DistProfilerExtension):
                                 if isinstance(val[0], Metric)
                                 else list(chain.from_iterable(val))
                             )
+                        elif isinstance(val, Observation):
+                            output[key] = val.aggregate()
+                    if collect_records:
+                        record = {k: v for k, v in output.items() if is_update_metric(k)}
+                        for old, new in (
+                            ("loss", "optim/actor/loss"),
+                            ("grad_norm", "optim/actor/grad_norm_preclip"),
+                            ("lr_used", "optim/actor/lr"),
+                        ):
+                            if old in output:
+                                record[new] = output[old]
+                        update_records.append({"metrics": record, "applied": applied})
+                        output = {k: v for k, v in output.items() if not is_update_metric(k)}
                     append_to_dict(metrics, output)
 
                 if peak_memory is not None:
@@ -403,6 +439,7 @@ class TrainingWorker(Worker, DistProfilerExtension):
                         "metrics": metrics,
                         "optimizer_step_attempts": len(output_lst),
                         "optimizer_steps": optimizer_steps,
+                        "update_records": update_records,
                     },
                 ).cpu()
             else:
@@ -432,6 +469,9 @@ class TrainingWorker(Worker, DistProfilerExtension):
             if key not in data.keys():
                 tu.assign_non_tensor(data, **{key: val})
 
+        optimizer = getattr(self.engine, "optimizer", None)
+        groups = getattr(optimizer, "param_groups", None)
+        lr_used = float(groups[0]["lr"]) if groups else None
         with (
             self.engine.train_mode(disable_auto_offload=disable_auto_offload),
             Timer(name="train_batch", logger=None) as timer,
@@ -453,6 +493,8 @@ class TrainingWorker(Worker, DistProfilerExtension):
             output.pop("model_output")
             if lr is not None:
                 output["metrics"]["lr"] = lr
+            if lr_used is not None:
+                output["metrics"]["lr_used"] = lr_used
             final_output = self._postprocess_output(
                 output,
                 global_token_num=global_token_num,

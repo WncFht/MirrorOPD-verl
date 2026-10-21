@@ -226,7 +226,7 @@ def test_validation_only_logs_complete_validation_time_without_training():
         }
     )
     trainer.global_steps = 0
-    trainer._validate = MagicMock(return_value={"val-core/math/acc/mean@16": 0.5})
+    trainer._validate = MagicMock(return_value={"eval/math/acc_mean": 0.5})
     trainer._shutdown_dump_executor = MagicMock()
     trainer.step = MagicMock(side_effect=AssertionError("Validation-only must not update parameters"))
     with (
@@ -238,8 +238,8 @@ def test_validation_only_logs_complete_validation_time_without_training():
         trainer.fit(agent_loop_manager=None)
     logged = tracking.return_value.log.call_args.kwargs
     assert logged["step"] == 0
-    assert logged["data"]["val-core/math/acc/mean@16"] == 0.5
-    assert logged["data"]["timing_s/testing"] >= 0
+    assert logged["data"]["eval/math/acc_mean"] == 0.5
+    assert logged["data"]["perf/timing/validation_seconds"] >= 0
     trainer.step.assert_not_called()
     trainer._shutdown_dump_executor.assert_called_once()
 
@@ -387,4 +387,15 @@ def test_fit_logs_optimizer_progress_after_step_aggregation_and_initial_validati
         trainer.fit(None)
     logged = [call.kwargs for call in tracking.return_value.log.call_args_list]
     assert [entry["step"] for entry in logged] == [0, 1, 2]
-    assert [entry["data"]["training/actor_optimizer_step"] for entry in logged] == [0, 4, 8]
+    assert [entry["data"]["step/optimizer"] for entry in logged] == [0, 4, 8]
+
+
+@pytest.mark.parametrize("interval", [-1, True, 1.5, "8"])
+def test_metrics_quantile_interval_is_validated_before_logging(interval):
+    trainer = _StubTrainer.__new__(_StubTrainer)
+    trainer.config = OmegaConf.create({"trainer": {"metrics_quantile_interval": interval}})
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.SkipManager.init"),
+        pytest.raises(ValueError, match="nonnegative integer"),
+    ):
+        trainer.fit(None)

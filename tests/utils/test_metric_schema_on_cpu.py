@@ -57,3 +57,21 @@ def test_axes_follow_measurement_not_transport_step():
     assert metric_axis("policy/anchor_behavior/k3") == "step/outer"
     assert metric_axis("policy/entropy/pre_update") == "step/outer"
     assert metric_axis("eval/math500/acc_mean") == "step/optimizer"
+
+
+def test_validation_mean_matches_the_existing_estimator():
+    from verl.trainer.ppo.metric_utils import process_validation_metrics
+
+    sources = ["math"] * 5
+    uids = ["a", "a", "a", "b", "b"]
+    infos = {"acc": [1, 0, 1, 1, 0]}
+    expected = {("math", "a"): 4, ("math", "b"): 4, ("math", "c"): 4}
+    reference = process_validation_metrics(sources, uids, infos, expected_acc_counts=expected)
+    actual = evaluation_metrics(sources, uids, infos, expected)
+    assert actual["eval/math/acc_mean"] == reference["math"]["acc"]["mean@4"]
+
+
+def test_non_accuracy_reward_is_not_mislabeled_as_accuracy():
+    actual = evaluation_metrics(["reward_task"], ["a"], {"reward": [2.5]})
+    assert actual["eval/reward_task/score_mean"] == 2.5
+    assert "eval/reward_task/acc_mean" not in actual

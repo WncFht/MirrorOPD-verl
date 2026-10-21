@@ -354,12 +354,14 @@ def test_driver_logs_training_and_validation_in_one_offline_wandb_step(monkeypat
         finally:
             store.close()
     assert len(histories) == 1
-    assert histories[0]["_step"] == 1
-    assert histories[0]["timing_s/rollout_batch"] == 6
-    assert histories[0]["teacher/request_latency_s/mean"] == 4
-    assert histories[0]["rollout/preemptions"] == 3
-    assert histories[0][pm.FSDP_PEAK_MEMORY] == 9
-    assert histories[0]["validation/timing_s/rollout_batch"] == 8
+    assert histories[0]["_step"] == 0  # transport sequence, not the outer step
+    assert histories[0]["step/outer"] == 1
+    assert histories[0]["perf/timing/rollout_batch_seconds"] == 6
+    assert histories[0]["perf/memory/fsdp_allocated_peak_gib"] == 9
+    assert histories[0]["perf/timing/validation_rollout_seconds"] == 8
+    assert "teacher/request_latency_s/mean" not in histories[0]
+    assert "rollout/preemptions" not in histories[0]
+    assert "timing_s/rollout_batch" not in histories[0]
 
 
 @pytest.mark.parametrize("has_peak", [False, True])

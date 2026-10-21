@@ -60,9 +60,9 @@ from verl.trainer.ppo.metric_utils import (
     compute_timing_metrics,
     compute_variance_proxy_metrics,
     get_metric_data_with_optional_routed_experts,
-    process_validation_metrics,
 )
 from verl.trainer.ppo.padding_utils import upsample_batch_to_divisible_size
+from verl.trainer.ppo.policy_metrics import pair_observations
 from verl.trainer.ppo.ray_trainer import apply_kl_penalty, compute_spec_decode_metrics
 from verl.trainer.ppo.rollout_corr_helper import compute_rollout_correction_and_add_to_batch
 from verl.trainer.ppo.utils import (
@@ -83,6 +83,7 @@ from verl.utils.debug import marked_timer
 from verl.utils.debug.metrics import calculate_debug_metrics
 from verl.utils.import_utils import load_extern_type
 from verl.utils.metric import reduce_metrics
+from verl.utils.metric.schema import evaluation_metrics, finite_metrics, outer_metrics
 from verl.utils.pipeline_metrics import (
     FSDP_PEAK_MEMORY,
     aggregate_pipeline_requests,
@@ -486,17 +487,24 @@ class PPOTrainer(ABC):
         # initialize SkipManager for V1 rollout skip support
         SkipManager.init(self.config)
 
+        quantile_interval = self.config.trainer.get("metrics_quantile_interval", 8)
+        if type(quantile_interval) is not int or quantile_interval < 0:
+            raise ValueError("trainer.metrics_quantile_interval must be a nonnegative integer")
+        logging_config = OmegaConf.to_container(self.config, resolve=True)
+        logging_config["trainer"]["metrics_format"] = "policy-v2"
         self.logger = Tracking(
             project_name=self.config.trainer.project_name,
             experiment_name=self.config.trainer.experiment_name,
             default_backend=self.config.trainer.logger,
-            config=OmegaConf.to_container(self.config, resolve=True),
+            config=logging_config,
         )
         self.validation_generations_logger = ValidationGenerationsLogger(
+            tracking=self.logger,
             project_name=self.config.trainer.project_name,
             experiment_name=self.config.trainer.experiment_name,
         )
         self.dapo_filtered_reward_logger = DapoFilteredRewardTableLogger(
+            tracking=self.logger,
             project_name=self.config.trainer.project_name,
             experiment_name=self.config.trainer.experiment_name,
         )
@@ -512,9 +520,8 @@ class PPOTrainer(ABC):
             self.on_validate_end()
             assert val_metrics, f"{val_metrics=}"
             val_metrics["timing_s/testing"] = validation_timing["testing"]
-            val_metrics.update(self._actor_optimizer_metrics())
-            pprint(f"Initial validation metrics: {val_metrics}")
-            self.logger.log(data=val_metrics, step=self.global_steps)
+            pprint(f"Initial validation metrics: {outer_metrics(val_metrics) | self._metric_coordinates()}")
+            self.logger.log(data=outer_metrics(val_metrics) | self._metric_coordinates(), step=self.global_steps)
             if self.config.trainer.get("val_only", False):
                 self._shutdown_dump_executor()
                 return
@@ -583,11 +590,13 @@ class PPOTrainer(ABC):
             tq.kv_clear(keys=batch.keys, partition_id=batch.partition_id)
 
             dapo_filtered_reward_counts = metrics.pop(DAPO_FILTERED_REWARD_COUNTS_KEY, None)
-            metrics.update(self._actor_optimizer_metrics())
-            self.logger.log(data=metrics, step=self.global_steps)
+            self.logger.log(data=outer_metrics(metrics) | self._metric_coordinates(), step=self.global_steps)
             if dapo_filtered_reward_counts:
                 self.dapo_filtered_reward_logger.log(
-                    self.config.trainer.logger, dapo_filtered_reward_counts, self.global_steps
+                    self.config.trainer.logger,
+                    dapo_filtered_reward_counts,
+                    self.global_steps,
+                    coordinates=self._metric_coordinates(),
                 )
             progress_bar.update(1)
             self.global_steps += 1
@@ -1071,6 +1080,39 @@ class PPOTrainer(ABC):
             metrics["training/actor_optimizer_skipped_updates"] = attempts - steps
         return metrics
 
+    def _metric_coordinates(self):
+        """Expose existing execution counters as independent business axes."""
+        coordinates = {"step/outer": self.global_steps}
+        for name, attr in (
+            ("step/update", "actor_optimizer_step_attempts"),
+            ("step/optimizer", "actor_optimizer_step"),
+        ):
+            value = getattr(self, attr, None)
+            if value is not None:
+                coordinates[name] = value
+        return coordinates
+
+    def _log_update_records(self, records, attempts_before, steps_before):
+        """Emit each completed update without averaging its time dimension."""
+        attempts, steps = attempts_before, steps_before
+        for record in records:
+            applied = record["applied"]
+            if applied is not None and type(applied) is not bool:
+                raise ValueError("Invalid per-update optimizer execution fact")
+            attempts = attempts + 1 if attempts is not None else None
+            steps = steps + int(applied) if steps is not None and applied is not None else None
+            coordinates = {"step/outer": self.global_steps}
+            if attempts is not None:
+                coordinates["step/update"] = attempts
+            if steps is not None:
+                coordinates["step/optimizer"] = steps
+            values = finite_metrics(record["metrics"])
+            if len(values) != len(record["metrics"]):
+                logger.warning(
+                    "Undefined update observations omitted at outer=%s attempt=%s", self.global_steps, attempts
+                )
+            self.logger.log(data=values | coordinates, step=attempts if attempts is not None else self.global_steps)
+
     def _save_actor_optimizer_progress(self, checkpoint_dir):
         attempts = getattr(self, "actor_optimizer_step_attempts", None)
         steps = getattr(self, "actor_optimizer_step", None)
@@ -1394,7 +1436,9 @@ class PPOTrainer(ABC):
         samples = samples[:generations_to_log]
 
         # Log to each configured logger
-        self.validation_generations_logger.log(self.config.trainer.logger, samples, self.global_steps)
+        self.validation_generations_logger.log(
+            self.config.trainer.logger, samples, self.global_steps, coordinates=self._metric_coordinates()
+        )
 
     @staticmethod
     def _write_generations(inputs, outputs, gts, scores, reward_extra_infos_dict, dump_path, global_steps):
@@ -1521,36 +1565,7 @@ class PPOTrainer(ABC):
         sample_turns,
         expected_acc_counts: dict[tuple[str, str], int] | None = None,
     ) -> dict[str, float]:
-        data_src2var2metric2val = process_validation_metrics(
-            data_sources,
-            sample_uids,
-            reward_extra_infos_dict,
-            expected_acc_counts=expected_acc_counts,
-        )
-        metric_dict = {}
-        for data_source, var2metric2val in data_src2var2metric2val.items():
-            core_var = "acc" if "acc" in var2metric2val else "reward"
-            for var_name, metric2val in var2metric2val.items():
-                n_max = max([int(name.split("@")[-1].split("/")[0]) for name in metric2val.keys()])
-                for metric_name, metric_val in metric2val.items():
-                    if (
-                        (var_name == core_var)
-                        and any(metric_name.startswith(pfx) for pfx in ["mean", "maj", "best"])
-                        and (f"@{n_max}" in metric_name)
-                    ):
-                        metric_sec = "val-core"
-                    else:
-                        metric_sec = "val-aux"
-                    pfx = f"{metric_sec}/{data_source}/{var_name}/{metric_name}"
-                    metric_dict[pfx] = metric_val
-
-        if len(sample_turns) > 0:
-            sample_turns = np.array(sample_turns)
-            metric_dict["val-aux/num_turns/min"] = sample_turns.min()
-            metric_dict["val-aux/num_turns/max"] = sample_turns.max()
-            metric_dict["val-aux/num_turns/mean"] = sample_turns.mean()
-
-        return metric_dict
+        return evaluation_metrics(data_sources, sample_uids, reward_extra_infos_dict, expected_acc_counts)
 
     def _rollout_server_managers(self) -> list:
         """LLM server managers whose inference engines take part in rollout profiling.
@@ -1952,6 +1967,13 @@ class PPOTrainer(ABC):
         # 4. calculate rollout vs actor logprobs diff
         if self.config.actor_rollout_ref.rollout.calculate_log_probs:
             metrics.update(calculate_debug_metrics(data))
+            entry = pair_observations(
+                data.batch["old_log_probs"],
+                data.batch["rollout_log_probs"],
+                data.batch["response_mask"],
+                "anchor_behavior",
+            )
+            metrics.update({key: value.aggregate() for key, value in entry.items()})
 
         return batch
 
@@ -2031,6 +2053,8 @@ class PPOTrainer(ABC):
             rollout_corr_config is not None and "rollout_log_probs" in data.batch and not bypass_recomputing_logprobs
         )
         if rollout_correction:
+            if rollout_corr_config.get("rollout_rs"):
+                data.batch["metrics_response_mask"] = data.batch["response_mask"].clone()
             data, is_metrics = compute_rollout_correction_and_add_to_batch(data, rollout_corr_config)
             metrics.update(is_metrics)
 
@@ -2054,6 +2078,8 @@ class PPOTrainer(ABC):
             fields.append("response_mask")
             if "rollout_is_weights" in data.batch:
                 fields.append("rollout_is_weights")
+            if "metrics_response_mask" in data.batch:
+                fields.append("metrics_response_mask")
 
         output = {}
         for field in fields:
@@ -2122,12 +2148,42 @@ class PPOTrainer(ABC):
             "dataloader_kwargs": {"shuffle": self.config.actor_rollout_ref.actor.shuffle},
             "temperature": self.config.actor_rollout_ref.rollout.temperature,
         }
+        actor = self.config.actor_rollout_ref.actor
+        collect_metrics = (
+            actor.get("strategy", "fsdp2") in ("fsdp", "fsdp2")
+            and actor.get("ulysses_sequence_parallel_size", 1) == 1
+            and actor.get("fsdp_config", {}).get("ulysses_sequence_parallel_size", 1) == 1
+            and getattr(self, "trainer_mode", "sync") == "sync"
+        )
+        attempts_before = getattr(self, "actor_optimizer_step_attempts", None)
+        steps_before = getattr(self, "actor_optimizer_step", None)
+        extra_info.update(
+            collect_metrics=collect_metrics,
+            collect_update_records=True,
+            metrics_has_anchor=not OmegaConf.select(
+                self.config, "algorithm.rollout_correction.bypass_mode", default=False
+            ),
+            metrics_quantile_interval=OmegaConf.select(self.config, "trainer.metrics_quantile_interval", default=8),
+            metrics_attempt_start=attempts_before,
+        )
         batch.extra_info.update(extra_info)
+        if getattr(self, "logger", None) is not None:
+            entry = {key: metrics.pop(key) for key in list(metrics) if key.startswith("policy/anchor_behavior/")}
+            if "actor/entropy" in metrics:
+                entry["policy/entropy/pre_update"] = metrics.pop("actor/entropy")
+            if entry:
+                self.logger.log(data=finite_metrics(entry) | self._metric_coordinates(), step=self.global_steps)
 
         output: TensorDict = self.actor_rollout_wg.update_actor(batch)
+        records = tu.get(output, "update_records", default=[])
+        if records and len(records) != tu.get(output, "optimizer_step_attempts"):
+            raise ValueError("Per-update metric records do not match optimizer attempts")
         self._accumulate_actor_optimizer_steps(output)
+        if records and getattr(self, "logger", None) is not None:
+            self._log_update_records(records, attempts_before, steps_before)
         output = rename_dict(output["metrics"], "actor/")
-        output["perf/mfu/actor"] = output.pop("actor/mfu")
+        if "actor/mfu" in output:
+            output["perf/mfu/actor"] = output.pop("actor/mfu")
         actor_metrics = reduce_metrics(output)
         # SUM metrics are DP-averaged by the existing worker path. The common
         # DP/mini-batch factors cancel only when counts share one denominator.
@@ -2227,6 +2283,8 @@ class PPOTrainer(ABC):
             )
         )
         metrics.update(compute_data_metrics(batch=metrics_batch, use_critic=self.use_critic))
+        metrics["rollout/response_count"] = int(metrics_batch.batch["responses"].shape[0])
+        metrics["rollout/response_tokens"] = int(metrics_batch.batch["response_mask"].sum())
         metrics.update(compute_timing_metrics(batch=batch, timing_raw=timing_raw))
         n_gpus = self._get_n_gpus_for_throughput()
         metrics.update(compute_throughout_metrics(batch=batch, timing_raw=timing_raw, n_gpus=n_gpus))

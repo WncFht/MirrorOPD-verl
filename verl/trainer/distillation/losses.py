@@ -20,8 +20,10 @@ from tensordict import TensorDict
 
 from verl.base_config import BaseConfig
 from verl.trainer.ppo.core_algos import agg_loss, get_policy_loss_fn, kl_penalty
+from verl.trainer.ppo.policy_metrics import update_observations
 from verl.utils import tensordict_utils as tu
 from verl.utils.metric import AggregationType, Metric
+from verl.utils.metric.observations import Observation
 from verl.workers.config import ActorConfig, DistillationConfig, DistillationLossConfig
 from verl.workers.utils.losses import ppo_loss
 from verl.workers.utils.padding import no_padding_2_padding
@@ -218,6 +220,7 @@ def distillation_ppo_loss(
         policy_loss, policy_metrics = ppo_loss(config, model_output, data, dp_group)
         if not distillation_loss_config.use_task_rewards:
             policy_loss = 0.0
+            policy_metrics = {k: v for k, v in policy_metrics.items() if not isinstance(v, Observation)}
 
     # Combine distillation with policy loss
     policy_metrics.update(distill_metrics)
@@ -304,6 +307,35 @@ def distillation_loss(
             **config.global_batch_info,
         )
 
+    if (
+        loss_config.use_policy_gradient
+        and loss_config.loss_mode == "k1"
+        and tu.get_non_tensor_data(data, "collect_metrics", default=False)
+    ):
+        behavior = data.get("rollout_log_probs")
+        if behavior is not None and behavior.is_nested:
+            behavior = behavior.to_padded_tensor(0.0)
+        teacher = no_padding_2_padding(data["teacher_logprobs"], data).squeeze(-1)
+        distillation_metrics.update(
+            update_observations(
+                log_prob,
+                behavior,
+                old_log_prob,
+                -distillation_losses.detach(),
+                response_mask,
+                component="distillation",
+                teacher=teacher,
+                mode="vanilla",
+                quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),
+            )
+        )
+        # Same pre-dual-clip event as vanilla's existing pg_clipfrac, now
+        # weighted by the actual response-token count across partitions.
+        clipped = distillation_metrics.get("distillation/pg_clipfrac")
+        if clipped is not None:
+            distillation_metrics["correction/anchor_ppo/active_fraction"] = Observation.ratio(
+                response_mask.sum() * clipped, response_mask.sum()
+            )
     return distillation_loss, distillation_metrics
 
 
@@ -338,6 +370,7 @@ def _sampled_token_loss(config, loss_config, model_output, data):
             "sum", ((current_advantage * frozen_advantage < 0) & mask).sum()
         ),
     }
+    clip_active = None
     if loss_config.policy_loss_mode == "reinforce":
         loss_mat = -advantage * log_prob
     else:
@@ -349,7 +382,8 @@ def _sampled_token_loss(config, loss_config, model_output, data):
             low = loss_config.clip_ratio if loss_config.clip_ratio_low is None else loss_config.clip_ratio_low
             high = loss_config.clip_ratio if loss_config.clip_ratio_high is None else loss_config.clip_ratio_high
             clipped_loss = -ratio.clamp(1 - low, 1 + high) * advantage
-            metrics["distillation/ppo_clip_count"] = Metric("sum", ((clipped_loss > loss_mat) & mask).sum())
+            clip_active = clipped_loss > loss_mat
+            metrics["distillation/ppo_clip_count"] = Metric("sum", (clip_active & mask).sum())
             loss_mat = torch.maximum(loss_mat, clipped_loss)
     loss = agg_loss(
         loss_mat=loss_mat,
@@ -360,6 +394,31 @@ def _sampled_token_loss(config, loss_config, model_output, data):
         global_batch_size=tu.get(data, "global_batch_size"),
         loss_scale_factor=config.loss_scale_factor,
     )
+    if tu.get_non_tensor_data(data, "collect_metrics", default=False):
+        anchor = data.get("old_log_probs")
+        if anchor is not None and anchor.is_nested:
+            anchor = anchor.to_padded_tensor(0.0)
+        coefficient_scale = torch.ones_like(log_prob)
+        if config.loss_agg_mode == "seq-mean-token-mean":
+            coefficient_scale = coefficient_scale / (mask.sum(-1, keepdim=True).float() + 1e-8)
+        elif config.loss_agg_mode == "seq-mean-token-sum-norm":
+            scale = config.loss_scale_factor if config.loss_scale_factor is not None else mask.shape[-1]
+            coefficient_scale = coefficient_scale / scale
+        metrics.update(
+            update_observations(
+                log_prob,
+                behavior,
+                anchor,
+                advantage,
+                mask,
+                component="distillation",
+                teacher=teacher,
+                mode=loss_config.policy_loss_mode,
+                clip_active=clip_active,
+                coefficient_scale=coefficient_scale,
+                quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),
+            )
+        )
     return loss, metrics
 
 

@@ -155,6 +155,9 @@ trainer:
   # Logging backends to use: "console", "wandb", etc.
   logger: ["console", "wandb"]
 
+  # Exact ratio p99 every N optimizer attempts (first attempt included); 0 disables it.
+  metrics_quantile_interval: 8
+
   # Number of generations to log during validation
   log_val_generations: 0
 

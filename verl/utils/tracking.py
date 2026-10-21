@@ -29,10 +29,48 @@ from typing import Any
 import orjson
 from packaging.version import Version
 
+from verl.utils.metric.schema import metric_axis
+
 logger = logging.getLogger(__name__)
 
 MLFLOW_MAX_ATTEMPTS = 3
 MLFLOW_SLEEP_SECONDS = 5
+
+
+class _WandbMetricAdapter:
+    """Keep W&B transport ordering independent of training business coordinates."""
+
+    def __init__(self, backend):
+        self.backend = backend
+        self.axes = {}
+        self.missing_axes = set()
+
+    def log(self, data, step):
+        if "step/outer" not in data:
+            # Other training entrypoints retain their existing caller protocol.
+            self.backend.log(data=data, step=step)
+            return
+        for name in data:
+            if name.startswith("step/"):
+                if name not in self.axes:
+                    self.backend.define_metric(name, hidden=True)
+                    self.axes[name] = None
+                continue
+            axis = metric_axis(name)
+            if axis not in data:
+                axis = "step/outer"
+            if name not in self.axes:
+                self.backend.define_metric(name, step_metric=axis, step_sync=False)
+                self.axes[name] = axis
+            elif self.axes[name] not in data and self.axes[name] not in self.missing_axes:
+                # Keep the definition fixed if a backend stops reporting an
+                # absolute counter. The raw record still has its outer axis.
+                logger.warning("Metric axis %s became unknown; outer coordinates remain available", self.axes[name])
+                self.missing_axes.add(self.axes[name])
+        self.backend.log(data=data)
+
+    def finish(self, exit_code=0):
+        self.backend.finish(exit_code=exit_code)
 
 
 class Tracking:
@@ -82,8 +120,16 @@ class Tracking:
             if config and config["trainer"].get("wandb_proxy", None):
                 settings = wandb.Settings(https_proxy=config["trainer"]["wandb_proxy"])
             entity = os.environ.get("WANDB_ENTITY", None)
-            wandb.init(project=project_name, name=experiment_name, entity=entity, config=config, settings=settings)
-            self.logger["wandb"] = wandb
+            wandb.init(
+                project=project_name,
+                name=experiment_name,
+                entity=entity,
+                config=config,
+                settings=settings,
+                dir=os.environ.get("WANDB_DIR"),
+                mode=os.environ.get("WANDB_MODE"),
+            )
+            self.logger["wandb"] = _WandbMetricAdapter(wandb)
 
         if "trackio" in default_backend:
             import trackio
@@ -190,7 +236,21 @@ class Tracking:
 
     def log(self, data, step, backend=None):
         for default_backend, logger_instance in self.logger.items():
-            if backend is None or default_backend in backend:
+            if backend is not None and default_backend not in backend:
+                continue
+            if "step/outer" in data and default_backend == "console":
+                if not any(k.startswith(("perf/", "rollout/", "eval/")) for k in data):
+                    continue
+            if "step/outer" in data and default_backend in ("tensorboard", "mlflow"):
+                by_step = {}
+                for name, value in data.items():
+                    if name.startswith("step/"):
+                        continue
+                    axis_step = data.get(metric_axis(name), data["step/outer"])
+                    by_step.setdefault(axis_step, {})[name] = value
+                for axis_step, values in by_step.items():
+                    logger_instance.log(data=values, step=axis_step)
+            else:
                 logger_instance.log(data=data, step=step)
 
     def finish(self, exit_code: int = 0):
@@ -538,7 +598,7 @@ class FileLogger:
             os.makedirs(directory, exist_ok=True)
             self.filepath = os.path.join(directory, f"{self.experiment_name}.jsonl")
         print(f"Creating file logger at {os.path.abspath(self.filepath)}")
-        self.fp = open(self.filepath, "wb", buffering=0)
+        self.fp = open(self.filepath, "ab", buffering=0)
 
     def log(self, data, step):
         data = {"step": step, "data": data}
@@ -664,8 +724,10 @@ def _flatten_dict(raw: dict[str, Any], *, sep: str) -> dict[str, Any]:
 class ValidationGenerationsLogger:
     project_name: str = None
     experiment_name: str = None
+    tracking: Any = None
 
-    def log(self, loggers, samples, step):
+    def log(self, loggers, samples, step, coordinates=None):
+        self.coordinates = coordinates or {"step/outer": step}
         if "wandb" in loggers:
             self.log_generations_to_wandb(samples, step)
         if "swanlab" in loggers:
@@ -719,7 +781,10 @@ class ValidationGenerationsLogger:
 
         # Update reference and log
         if wandb.run is not None:
-            wandb.log({"val/generations": new_table}, step=step)
+            if self.tracking is not None:
+                self.tracking.log({"eval/samples": new_table, **self.coordinates}, step=step, backend=["wandb"])
+            else:
+                wandb.log({"val/generations": new_table}, step=step)
         self.validation_table = new_table
 
     def log_generations_to_swanlab(self, samples, step):
@@ -869,8 +934,11 @@ class DapoFilteredRewardTableLogger:
     project_name: str = None
     experiment_name: str = None
 
-    def log(self, loggers, reward_counts: dict, step: int):
+    tracking: Any = None
+
+    def log(self, loggers, reward_counts: dict, step: int, coordinates=None):
         """reward_counts maps metric value -> count for this step (already merged across mini-batches)."""
+        self.coordinates = coordinates or {"step/outer": step}
         if "wandb" in loggers:
             self._log_to_wandb(reward_counts, step)
 
@@ -902,4 +970,9 @@ class DapoFilteredRewardTableLogger:
             self._rows.append([step, counts_text])
             table = wandb.Table(columns=columns, data=list(self._rows))
 
-        wandb.log({"training/filter_groups/filtered_reward_counts": table}, step=step)
+        if self.tracking is not None:
+            self.tracking.log(
+                {"rollout/filtered_reward_counts": table, **self.coordinates}, step=step, backend=["wandb"]
+            )
+        else:
+            wandb.log({"training/filter_groups/filtered_reward_counts": table}, step=step)
