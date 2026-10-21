@@ -361,3 +361,15 @@ def test_observation_switch_preserves_loss_gradients_rng_and_token_alignment(mod
         assert "correction/log_ratio_guard/fraction" not in metrics
     if mode == "vanilla":
         assert "correction/anchor_ppo/active_fraction" in metrics
+
+
+def test_vanilla_clip_observations_count_pre_dual_clip_events():
+    behavior = torch.full((1, 5), -4.0)
+    student = (behavior + torch.tensor([[2.0, 0.5, 2.0, 0.5, 10.0]]).log()).requires_grad_()
+    teacher = student.detach() + torch.tensor([[1.0, -1.0, -1.0, 1.0, -1.0]])
+    output, data = inputs(student, teacher, behavior)
+    data["old_log_probs"] = behavior
+    tu.assign_non_tensor(data, collect_metrics=True, metrics_quantile=False)
+    actor = SimpleNamespace(loss_agg_mode="token-mean", global_batch_info={}, loss_scale_factor=None)
+    _, metrics = distillation_loss(actor, SimpleNamespace(distillation_loss=loss_config("vanilla")), output, data)
+    assert metrics["correction/anchor_ppo/active_fraction"].aggregate() == 2 / 5

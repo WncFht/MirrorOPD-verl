@@ -604,7 +604,8 @@ class PPOTrainer(ABC):
             current_epoch = (self.global_steps - 1) // self.steps_per_epoch
             if is_last_step:
                 self._shutdown_dump_executor()
-                pprint(f"Final validation metrics: {last_val_metrics}")
+                summary = outer_metrics(last_val_metrics) if last_val_metrics is not None else None
+                pprint(f"Final validation metrics: {summary}")
                 progress_bar.close()
                 return
 
