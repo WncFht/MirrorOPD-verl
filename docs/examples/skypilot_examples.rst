@@ -17,16 +17,16 @@ Choose the installation based on your target platform:
 
    # For Kubernetes only
    pip install "skypilot[kubernetes]"
-   
+
    # For AWS
    pip install "skypilot[aws]"
-   
+
    # For Google Cloud Platform
    pip install "skypilot[gcp]"
-   
+
    # For Azure
    pip install "skypilot[azure]"
-   
+
    # For multiple platforms
    pip install "skypilot[kubernetes,aws,gcp,azure]"
 
@@ -44,7 +44,7 @@ Export necessary API keys for experiment tracking:
 
    # For Weights & Biases tracking
    export WANDB_API_KEY="your-wandb-api-key"
-   
+
    # For HuggingFace gated models (if needed)
    export HF_TOKEN="your-huggingface-token"
 

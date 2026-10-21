@@ -132,7 +132,7 @@ https://github.com/bytedance/SandboxFusion
 示例配置文件如下，在recipe/retool目录下创建一个run_qwen2.5_7b_dapo_npu.sh
 根据开发者实际路径配置情况修改模型训练脚本中的以下参数
 
-.. code-block:: bash 
+.. code-block:: bash
 
   set -x
 
@@ -144,27 +144,27 @@ https://github.com/bytedance/SandboxFusion
   export HCCL_OP_EXPANSION_MODE="AIV"
   export VLLM_ASCEND_ENABLE_MLP_OPTIMIZE=1
   export LD_PRELOAD=/usr/local/lib/libjemalloc.so.2
-  
+
   # ================= data/model/tool =================
   HDFS_ROOT=${HDFS_ROOT:-"${PWD}"}
   DATA_ROOT=${DATA_ROOT:-"${PWD}"}
-  
+
   dapo_math_17k=$DATA_ROOT/dataset/BytedTsinghua-SIA/DAPO-Math-17k
   aime_2024=$DATA_ROOT/dataset/Maxwell-Jia/AIME_2024
   #aime_2025=$DATA_ROOT/dataset/yentinglin/aime_2025
   model_path=$DATA_ROOT/dataset/checkpoint/multiturn-sft-qwen-2.5-7b-instruct/global_step_372/huggingface
-  
+
   train_files="['$dapo_math_17k']"
   test_files="['$aime_2024']"
-  
+
   # tool
   tool_config_path=recipe/retool/sandbox_fusion_tool_config.yaml
-  
+
   # wandb
   project_name=retool
   experiment_name=qwen2.5-7b_dapo
   default_local_dir=$DATA_ROOT/checkpoint/$experiment_name
-  
+
   # 创建日志文件
   export TIMESTAMP=$(date +%Y%m%d_%H%M%S)
   LOG_DIR="$HDFS_ROOT/verl/logs/$project_name/$experiment_name"
@@ -176,38 +176,38 @@ https://github.com/bytedance/SandboxFusion
   else
     echo "Directory $LOG_DIR already exists."
   fi
-  
+
   LOG_FILE="${LOG_DIR}/${TIMESTAMP}.log"
   touch "$LOG_FILE"
   echo "Log file $LOG_FILE created."
 
   # ================= algorithm =================
   adv_estimator=grpo
-  
+
   use_kl_in_reward=False
   kl_coef=0.0
   use_kl_loss=False
   kl_loss_coef=0.0
-  
+
   clip_ratio_low=0.2
   clip_ratio_high=0.28
-  
+
   max_turns=16
   max_prompt_length=2048
   max_response_length=20480
   actor_lr=1e-6
-  
+
   train_batch_size=32
   ppo_mini_batch_size=16
-  
+
   n_resp_per_prompt=16
   n_resp_per_prompt_val=30
-  
+
   # ================= performance =================
   infer_tp=2 # vllm
   train_sp=4 # train
   offload=True
-  
+
   actor_max_token_len_per_gpu=$(( (max_prompt_length + max_response_length) * 1 ))
   log_prob_max_token_len_per_gpu=$(( actor_max_token_len_per_gpu * 4 ))
 

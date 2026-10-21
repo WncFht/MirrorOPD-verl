@@ -2,17 +2,13 @@
 
 Last updated: 02/25/2026.
 
-
 <div align="center">
 
 ## Rethinking the Trust Region in LLM Reinforcement Learning
 
-[![Paper](https://img.shields.io/badge/paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white )](https://arxiv.org/pdf/2602.04879)
-[![Github](https://img.shields.io/badge/Stable_RL-000000?style=for-the-badge&logo=github&logoColor=000&logoColor=white)](https://github.com/sail-sg/Stable-RL)
-[![Twitter](https://img.shields.io/badge/Twitter-%23000000.svg?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/QPHutu/status/2019435642539897303)
+[![Paper](https://img.shields.io/badge/paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/pdf/2602.04879) [![Github](https://img.shields.io/badge/Stable_RL-000000?style=for-the-badge&logo=github&logoColor=000&logoColor=white)](https://github.com/sail-sg/Stable-RL) [![Twitter](https://img.shields.io/badge/Twitter-%23000000.svg?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/QPHutu/status/2019435642539897303)
 
 </div>
-
 
 ## ✨Getting started
 
@@ -63,13 +59,12 @@ DPPO variants achieve stable training while controlling the training-inference m
 
 The plots show numerical differences between a training and an inference engine for Qwen3-30B-A3B-Base with identical parameters. **(Left)** The probability ratio (used in PPO) is highly volatile for low-probability tokens. **(Right)** In contrast, the TV divergence is more stable. This highlights a key flaw of PPO's clipping mechanism: it **over-penalizes low-probability tokens**, which can slow down learning; and **under-penalizes high-probability tokens**, which can permit large, destabilizing updates.
 
-
 <div align="left">
   <img src="https://github.com/sail-sg/Stable-RL/blob/main/figures/clipped_tokens.png?raw=true" alt="issue" style="width: 96%; height: auto;">
 </div>
 
-The most frequently clipped tokens (by GRPO) are important to the reasoning task! 
-They are dominated by:
+The most frequently clipped tokens (by GRPO) are important to the reasoning task! They are dominated by:
+
 - numbers, like 1, 4
 - mathematical symbols, like +, -, =
 - reasoning and structural Words: Wait, Thus, Next
@@ -81,6 +76,7 @@ We only implement the DPPO-Binary-TV/DPPO-Binary-KL here due to their simplicity
 For the TopK divergence approximation, please refer to the [the original repo](https://github.com/sail-sg/Stable-RL) for a complete implementation.
 
 ## Citation
+
 If you find our works useful for your research, please consider citing:
 
 ```bibtex
@@ -93,4 +89,5 @@ If you find our works useful for your research, please consider citing:
 ```
 
 ## 🌻Acknowledgement
+
 We implement our reinforcement learning algorithm extending from [verl](https://github.com/verl-project/verl). We utilize [vLLM](https://github.com/vllm-project/vllm) and [sglang](https://github.com/sgl-project/sglang) for inference. Our models are trained primarily on [Qwen3 family](https://huggingface.co/collections/Qwen/qwen3). Our training data is built from [DAPO-MATH](https://huggingface.co/datasets/BytedTsinghua-SIA/DAPO-Math-17k). Thanks for their great contributions!

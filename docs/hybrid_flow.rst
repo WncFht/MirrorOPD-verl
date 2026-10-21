@@ -17,7 +17,7 @@ We use dataflow to represent RL systems. [4]_.
 DataFlow
 ~~~~~~~~~~~~~~~~~~~~
 
-Dataflow is an abstraction of computations. Neural Network training is a typical dataflow. It can be represented by computational graph. 
+Dataflow is an abstraction of computations. Neural Network training is a typical dataflow. It can be represented by computational graph.
 
 .. image:: https://github.com/eric-haibin-lin/verl-community/blob/main/docs/dataflow.jpeg?raw=true
    :alt: The dataflow graph from CS231n 2024 lecture 4
@@ -102,7 +102,7 @@ Ray trainer
 ~~~~~~~~~~~~~~~~~~~~
 Code: https://github.com/verl-project/verl/blob/main/verl/trainer/ppo/ray_trainer.py
 
-The RayPPOTrainer manages 
+The RayPPOTrainer manages
 
 - Worker and WorkerGroup construction
 - Runs the main loop of PPO algorithm

@@ -10,8 +10,8 @@ To enable multi-turn rollout, make sure to configure the following fields in you
 
 .. code-block:: yaml
 
-    actor_rollout_ref: 
-        rollout: 
+    actor_rollout_ref:
+        rollout:
             multi_turn: True
             name: "sglang"
 
@@ -26,7 +26,7 @@ For custom environment interaction tools, you can implement your own tools based
 
     tools:
       - class_name: ""
-        config: 
+        config:
             type: native
         tool_schema:
 
@@ -319,7 +319,7 @@ We are still evaluating the impact of these issues. If you experience context le
 
 ``actor_rollout_ref.rollout.multi_turn.use_inference_chat_template = True``
 
-GSM8K Multi-turn Training Performance  
+GSM8K Multi-turn Training Performance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See the training performance of multi-turn rollout on the GSM8K task HERE_.

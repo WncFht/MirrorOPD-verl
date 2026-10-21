@@ -53,7 +53,7 @@ Most critic configs are similar to those of actors. Note that the critic model i
 
 Options to prevent the policy from diverging too far from a reference policy. Two mechanisms are available: KL reward penalty and KL loss. For more technical details, see [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155)
 
-Options to use KL loss for KL divergence control: 
+Options to use KL loss for KL divergence control:
 
 - `actor_rollout_ref.actor.use_kl_loss`: to use kl loss in the actor. When used, we are not applying KL in the reward function. Default is False
 
@@ -99,7 +99,7 @@ bash run_gemma.sh
 
 Reference performance with verl v0.2:
 
-| Model                          | Method          | Score | Link                                                                                           |
-|-------------------------------|------------------|-------|------------------------------------------------------------------------------------------------|
-| Qwen/Qwen2.5-0.5B-Instruct     | pretrained model | 36.4  | [Qwen Blog](https://qwenlm.github.io/blog/qwen2.5-llm/)                                        |
-| Qwen/Qwen2.5-0.5B-Instruct     | PPO              | 56.7  | [PPO Command and Logs](https://github.com/eric-haibin-lin/verl-data/blob/experiments/gsm8k/Qwen2.5-0.5B-bsz256_2-prompt1024-resp512-0.567.log) |
+| Model | Method | Score | Link |
+| --- | --- | --- | --- |
+| Qwen/Qwen2.5-0.5B-Instruct | pretrained model | 36.4 | [Qwen Blog](https://qwenlm.github.io/blog/qwen2.5-llm/) |
+| Qwen/Qwen2.5-0.5B-Instruct | PPO | 56.7 | [PPO Command and Logs](https://github.com/eric-haibin-lin/verl-data/blob/experiments/gsm8k/Qwen2.5-0.5B-bsz256_2-prompt1024-resp512-0.567.log) |

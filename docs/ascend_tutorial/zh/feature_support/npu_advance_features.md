@@ -2,7 +2,7 @@
 
 > 本文档介绍昇腾 NPU 在 verl 生态中的高级特性与优化能力，供开发者参考。
 >
-Last updated: 05/13/2026.
+> Last updated: 05/13/2026.
 
 ---
 
@@ -52,17 +52,16 @@ Last updated: 05/13/2026.
 昇腾通过向 SGLang 社区持续建设与维护来支持相关功能，涉及以下核心组件：
 
 | 组件 | 描述 |
-|:---|:---|
+| :-- | :-- |
 | [sgl_kernel_npu](https://github.com/sgl-project/sgl-kernel-npu/blob/main/python/sgl_kernel_npu/README.md) | Ascend NPU 优化推理内核集合，含注意力机制、归一化、激活函数、LoRA 适配器等 |
 | [deepep](https://github.com/sgl-project/sgl-kernel-npu/blob/main/python/deep_ep/README.md) | DeepEP 的 Ascend 实现，为 MoE 模型提供高度优化的专家并行 (EP) 通信内核 |
 
 #### 高级参数配置
 
 | SGLang 参数 | verl 对应通用参数 | 功能说明 |
-|:---|:---|:---|
+| :-- | :-- | :-- |
 | `attention_backend` | `actor_rollout_ref.rollout.engine_kwargs.sglang.attention_backend` | **注意力后端选择** — NPU 上应设置为 `ascend` 以调用昇腾优化内核 |
 | `quantization` | `actor_rollout_ref.rollout.quantization` | **量化支持** — 支持模型量化加载与推理 |
-
 
 > 更多 SGLang NPU 特性参数请参考 [sglang 社区 NPU 特性支持文档](https://docs.sglang.io/docs/hardware-platforms/ascend-npus/ascend_npu_support_features)
 
@@ -81,11 +80,13 @@ Megatron 是 NVIDIA 推出的模型并行训练框架。在 NPU 上运行需额�
 #### MindSpeed Monkey Patch 框架原理
 
 **触发入口:**
+
 ```python
 from mindspeed.megatron_adaptor import repatch
 ```
 
 **调用链:**
+
 ```
 repatch
 ├── 执行 megatron_adaptor.py 模块导入
@@ -98,19 +99,19 @@ repatch
 
 **核心组件:**
 
-| 组件 | 职责 |
-|:---|:---|
-| `Patch` 类 | 实现函数/类的动态替换，支持多层装饰器叠加 |
-| `parse_path()` | 动态模块导入和创建 |
-| `MindSpeedPatchesManager` | 全局单例管理所有 patch 注册 |
-| `MindSpeedFeature` | Feature 基类，各特性通过继承集成 patch 系统 |
+| 组件                      | 职责                                        |
+| :------------------------ | :------------------------------------------ |
+| `Patch` 类                | 实现函数/类的动态替换，支持多层装饰器叠加   |
+| `parse_path()`            | 动态模块导入和创建                          |
+| `MindSpeedPatchesManager` | 全局单例管理所有 patch 注册                 |
+| `MindSpeedFeature`        | Feature 基类，各特性通过继承集成 patch 系统 |
 
 #### Megatron 高级参数配置
 
 ##### 内存与计算优化
 
 | verl 参数 | 功能说明 |
-|:---|:---|
+| :-- | :-- |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.deallocate_pipeline_outputs` | **流水线输出释放** — 张量发送到下一 PP stage 后释放输出数据，降低显存峰值，默认 `False` |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.recompute_granularity` | **重计算粒度控制** — 可选 `full` / `selective` / `none`。`full` 重算整个 Transformer 层，`selective` 仅重算注意力核心部分，默认 `none` |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.recompute_method` | **重计算方法** — 需 `recompute_granularity=full`，可选 `uniform` / `block`，默认 `None` |
@@ -119,7 +120,7 @@ repatch
 ##### 融合算子加速
 
 | verl 参数 | 功能说明 |
-|:---|:---|
+| :-- | :-- |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.use_flash_attn` | **Flash Attention** — 是否使用 Flash Attention 加速注意力计算，默认 `true` |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.use_fused_rotary_pos_emb` | **融合旋转位置编码** — 使用融合算子加速 RoPE 计算，默认 `False` |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.use_fused_swiglu` | **融合 SwiGLU** — 使用融合算子加速 SwiGLU 激活函数，默认 `False` |
@@ -128,7 +129,7 @@ repatch
 ##### 流水线并行优化
 
 | verl 参数 | 功能说明 |
-|:---|:---|
+| :-- | :-- |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.account_for_loss_in_pipeline_split` | **Loss 层流水线划分** — 将 loss 层视为标准 Transformer 层参与划分，默认 `False` |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.account_for_embedding_in_pipeline_split` | **Embedding 层流水线划分** — 将输入 embedding 层视为标准 Transformer 层参与划分，默认 `False` |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.num_layers_in_first_pipeline_stage` | **首 stage 层数** — 指定第一个 pipeline stage 的层数，默认 `none` |
@@ -137,7 +138,7 @@ repatch
 ##### 权重管理
 
 | verl 参数 | 功能说明 |
-|:---|:---|
+| :-- | :-- |
 | `actor_rollout_ref.actor.megatron.use_mbridge` | **Megatron-Bridge 权重转换** — 当前需要保持 `True` |
 | `actor_rollout_ref.actor.megatron.use_dist_checkpointing` | **分布式 checkpoint** — 使用分布式格式保存/加载权重，默认 `False` |
 | `actor_rollout_ref.actor.megatron.dist_checkpointing_path` | **分布式权重路径** — 分布式 checkpoint 加载路径，默认 `null` |
@@ -149,7 +150,7 @@ repatch
 ### 3.1 内存优化
 
 | 特性 | 推理/训练 | 说明 |
-|:---|:---|:---|
+| :-- | :-- | :-- |
 | KV Cache 动态释放 (`free_cache_engine`) | 推理 (vLLM) | 生成阶段后自动卸载 KV Cache，默认启用 |
 | 内存节省模式 (`enable_memory_saver`) | 推理 (SGLang) | 支持显存动态释放/恢复，verl 默认 `True` |
 | 参数 CPU 卸载 (`param_offload`) | 训练 (FSDP/Megatron) | 将模型权重卸载到 CPU |
@@ -163,7 +164,7 @@ repatch
 ### 3.2 计算加速
 
 | 特性 | 推理/训练 | 说明 |
-|:---|:---|:---|
+| :-- | :-- | :-- |
 | 分块预填充 (`enable_chunked_prefill`) | 推理 (vLLM) | 大预填充分块并与解码 batch 处理 |
 | 前缀缓存 (`enable_prefix_caching`) | 推理 (vLLM) | 自动缓存共享前缀，减少重复计算 |
 | Flash Attention | 训练 (Megatron) | 使用 Flash Attention 加速注意力计算，默认启用 |
@@ -175,7 +176,7 @@ repatch
 ### 3.3 并行策略
 
 | 并行类型 | vLLM | SGLang | FSDP | Megatron | 说明 |
-|:---|:---|:---|:---|:---|:---|
+| :-- | :-- | :-- | :-- | :-- | :-- |
 | 数据并行 (DP) | ✅ | ✅ | ✅ | ✅ | 数据维度并行 |
 | 张量并行 (TP) | ✅ | ✅ | — | ✅ | 层内张量切分 |
 | 流水线并行 (PP) | — | — | — | ✅ | 层间流水线切分 |
@@ -195,7 +196,7 @@ repatch
 ### Megatron 训练 MoE 支持
 
 | verl 参数 | 功能说明 |
-|:---|:---|
+| :-- | :-- |
 | `actor_rollout_ref.actor.megatron.expert_model_parallel_size` | 专家并行 (EP) 大小，默认 `1` |
 | `actor_rollout_ref.actor.megatron.expert_tensor_parallel_size` | TP 拓展 EP 大小，默认 `null` |
 | `actor_rollout_ref.actor.megatron.override_transformer_config.moe_grouped_gemm` | **Group GEMM** — MoE 场景下使用 Group GEMM 优化专家计算，默认 `False` |
@@ -214,7 +215,7 @@ repatch
    - `recompute_num_layers` 需 `recompute_granularity='full'` 才生效
    - 当 `recompute_method='uniform'` 时，`recompute_num_layers` 表示每个重计算单元的 Transformer 层数，需能被当前进程模型层数整除
 
-4. **SGLang NPU 特有配置**
+3. **SGLang NPU 特有配置**
    - `attention_backend` 必须设置为 `ascend` 以调用昇腾优化内核
    - `enable_memory_saver` 在 verl 中默认启用，无需额外配置
 
@@ -225,7 +226,7 @@ repatch
 ### 推理后端参数速查
 
 | 参数类别 | vLLM 参数 | SGLang 参数 | verl 通用参数 |
-|:---|:---|:---|:---|
+| :-- | :-- | :-- | :-- |
 | 模型路径 | `model_path` | `model_path` | `actor_rollout_ref.model.path` |
 | 显存控制 | `gpu_memory_utilization` | `mem_fraction_static` | `actor_rollout_ref.rollout.gpu_memory_utilization` |
 | 图模式 | `enforce_eager` | `disable_cuda_graph` | `actor_rollout_ref.rollout.enforce_eager` |
@@ -241,7 +242,7 @@ repatch
 ### 训练后端参数速查
 
 | 参数类别 | FSDP 参数 | Megatron 参数 |
-|:---|:---|:---|
+| :-- | :-- | :-- |
 | 参数卸载 | `fsdp_config.param_offload` | `megatron.param_offload` |
 | 优化器卸载 | `fsdp_config.optimizer_offload` | `megatron.optimizer_offload` |
 | 序列并行 | `ulysses_sequence_parallel_size` | `context_parallel_size` |
