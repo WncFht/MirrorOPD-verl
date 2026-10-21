@@ -55,7 +55,10 @@ class DistillationLossConfig(BaseConfig):
         Otherwise, distillation loss is directly backpropagated as a supervised loss,
         as in https://arxiv.org/abs/2306.13649. Recommended to use loss_mode=k3 or forward_kl_topk.
     policy_loss_mode (str):
-        Name of the policy loss to use when use_policy_gradient is true.
+        vanilla (legacy), token_ppo, token_is, or reinforce when use_policy_gradient is true.
+    advantage_source (str):
+        current student log probability, or frozen rollout log probability. The latter
+        is supported only by the sampled-token modes.
     clip_ratio (float):
         PPO clipping ratio for policy loss.
     clip_ratio_low (float):
