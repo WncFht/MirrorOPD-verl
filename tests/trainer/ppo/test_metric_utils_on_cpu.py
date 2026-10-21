@@ -243,15 +243,14 @@ class TestMetric(unittest.TestCase):
         self.assertEqual(result, 1.0)
 
     def test_aggregate_dp_mismatched_lengths(self):
-        """Test aggregate_dp raises error with mismatched value lengths."""
+        """Globally scaled contributions allow unequal accumulation counts."""
         metric1 = Metric(aggregation="sum")
         metric1.extend([1.0, 2.0])
 
         metric2 = Metric(aggregation="sum")
         metric2.extend([3.0, 4.0, 5.0])  # Different length
 
-        with self.assertRaises(ValueError):
-            Metric.aggregate_dp([metric1, metric2])
+        self.assertEqual(Metric.aggregate_dp([metric1, metric2]), (3.0 + 12.0) / 2)
 
     def test_from_dict(self):
         """Test from_dict creates Metrics from dictionary."""
