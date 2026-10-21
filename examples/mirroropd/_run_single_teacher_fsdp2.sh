@@ -89,6 +89,10 @@ CONTINUOUS_TOKEN_MODEL_FAMILY=${CONTINUOUS_TOKEN_MODEL_FAMILY:-deepseek}
 # ── 3. 训练与验证预算 ────────────────────────────────────────────────
 # batch 是全局 prompt 数；n=1、mini-batch=batch、ppo_epochs=1，每批更新一次。
 TRAIN_BATCH_SIZE=${TRAIN_BATCH_SIZE:-64}
+PPO_EPOCHS=${PPO_EPOCHS:-1}
+OPD_ADVANTAGE_SOURCE=${OPD_ADVANTAGE_SOURCE:-current}
+OPD_POLICY_LOSS_MODE=${OPD_POLICY_LOSS_MODE:-vanilla}
+OPD_CLIP_EPS=${OPD_CLIP_EPS:-0.2}
 LEARNING_RATE=${LEARNING_RATE:-1e-6}
 TOTAL_EPOCHS=${TOTAL_EPOCHS:-1}
 SEED=${SEED:-42}
@@ -109,7 +113,7 @@ if [[ $DOMAIN == if ]] && (( TEST_FREQ > 0 )); then
 fi
 
 # ── 4. 启动前检查与派生值 ────────────────────────────────────────────
-for name in STUDENT_GPUS ROLLOUT_TP TEACHER_TP ROLLOUT_MAX_NUM_SEQS TRAIN_BATCH_SIZE TEACHER_FSDP_TOKEN_BUDGET \
+for name in STUDENT_GPUS ROLLOUT_TP TEACHER_TP ROLLOUT_MAX_NUM_SEQS TRAIN_BATCH_SIZE PPO_EPOCHS TEACHER_FSDP_TOKEN_BUDGET \
     MAX_PROMPT_LENGTH MAX_RESPONSE_LENGTH MAX_VAL_RESPONSE_LENGTH VAL_N VAL_BATCH_SIZE PPO_MAX_TOKEN_LEN_PER_GPU; do
     if [[ ! ${!name} =~ ^[1-9][0-9]*$ ]]; then
         echo "$name must be a positive integer" >&2
@@ -207,7 +211,7 @@ ACTOR_ARGS=(
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=1
     "actor_rollout_ref.actor.ppo_max_token_len_per_gpu=$PPO_MAX_TOKEN_LEN_PER_GPU"
     "actor_rollout_ref.actor.ppo_mini_batch_size=$TRAIN_BATCH_SIZE"
-    actor_rollout_ref.actor.ppo_epochs=1
+    "actor_rollout_ref.actor.ppo_epochs=$PPO_EPOCHS"
     actor_rollout_ref.actor.loss_agg_mode=token-mean
     "actor_rollout_ref.actor.optim.lr=$LEARNING_RATE"
     actor_rollout_ref.actor.optim.betas=[0.9,0.999]
@@ -270,6 +274,11 @@ DISTILLATION_ARGS=(
     distillation.distillation_loss.use_task_rewards=False
     distillation.distillation_loss.loss_max_clamp=null
     distillation.distillation_loss.log_prob_min_clamp=null
+    "distillation.distillation_loss.advantage_source=$OPD_ADVANTAGE_SOURCE"
+    "distillation.distillation_loss.policy_loss_mode=$OPD_POLICY_LOSS_MODE"
+    "distillation.distillation_loss.clip_ratio=$OPD_CLIP_EPS"
+    "distillation.distillation_loss.clip_ratio_low=$OPD_CLIP_EPS"
+    "distillation.distillation_loss.clip_ratio_high=$OPD_CLIP_EPS"
 )
 if [[ $DISTILLATION_EXECUTION_MODE == shared_sync ]]; then
     DISTILLATION_ARGS+=(

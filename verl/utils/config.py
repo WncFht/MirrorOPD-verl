@@ -168,6 +168,9 @@ def validate_sampled_token_distillation(config, *, use_reference_policy=False, u
         "actor_rollout_ref.rollout.multi_turn.enable",
         "actor_rollout_ref.rollout.agent.agent_loop_manager_class",
         "actor_rollout_ref.rollout.agent.agent_loop_config_path",
+        "actor_rollout_ref.rollout.engine_kwargs.vllm.logits_processors",
+        "actor_rollout_ref.rollout.engine_kwargs.vllm.override_generation_config",
+        "actor_rollout_ref.rollout.engine_kwargs.vllm.generation_config",
         "algorithm.filter_groups.enable",
         "trainer.v1.sampler.custom_sampler.path",
         "actor_rollout_ref.model.mtp.enable",
@@ -176,6 +179,9 @@ def validate_sampled_token_distillation(config, *, use_reference_policy=False, u
     for path in disabled:
         if OmegaConf.select(config, path, default=None):
             raise ValueError(f"Sampled-token distillation does not support {path}")
+    engine_logprobs_mode = OmegaConf.select(config, "actor_rollout_ref.rollout.engine_kwargs.vllm.logprobs_mode")
+    if engine_logprobs_mode not in (None, "processed_logprobs"):
+        raise ValueError("Sampled-token distillation requires vLLM processed_logprobs, including engine overrides")
     for path in (
         "actor_rollout_ref.actor.fsdp_config.model_dtype",
         "actor_rollout_ref.actor.fsdp_config.mixed_precision.param_dtype",

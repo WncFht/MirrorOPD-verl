@@ -24,6 +24,7 @@ from tokenizers.models import WordLevel
 from transformers import AutoModelForCausalLM, PreTrainedTokenizerFast, Qwen2Config
 
 from verl.trainer.distillation.losses import distillation_loss
+from verl.trainer.ppo.v1.trainer_base import PPOTrainer
 from verl.utils import tensordict_utils as tu
 from verl.utils.device import get_device_name, get_torch_device
 from verl.utils.distributed import initialize_global_process_group
@@ -37,6 +38,14 @@ from verl.workers.config import (
 )
 from verl.workers.engine_workers import TrainingWorker
 from verl.workers.utils.padding import response_from_nested
+
+
+class _ProgressTrainer(PPOTrainer):
+    def on_step_end(self):
+        pass
+
+    def on_sample_end(self):
+        pass
 
 
 def nested(rows):
@@ -84,7 +93,13 @@ def main():
     """Check actual collective and transfer behavior across colocated engines."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--tie-word-embeddings", action="store_true")
+    parser.add_argument(
+        "--policy-loss-mode", choices=["vanilla", "token_ppo", "token_is", "reinforce"], default="vanilla"
+    )
+    parser.add_argument("--advantage-source", choices=["current", "rollout"], default="current")
+    parser.add_argument("--ppo-epochs", type=int, default=1)
     args = parser.parse_args()
+    assert args.ppo_epochs > 0
     assert get_device_name() == "cuda", "This integration test requires CUDA"
     _, rank, world_size = initialize_global_process_group(timeout_second=180)
     assert world_size >= 2
@@ -146,6 +161,8 @@ def main():
             use_policy_gradient=True,
             loss_max_clamp=None,
             log_prob_min_clamp=None,
+            policy_loss_mode=args.policy_loss_mode,
+            advantage_source=args.advantage_source,
         )
     )
     actor.set_loss_fn(
@@ -156,6 +173,8 @@ def main():
         )
     )
     initial = None
+    progress = _ProgressTrainer.__new__(_ProgressTrainer)
+    progress.actor_optimizer_step_attempts = progress.actor_optimizer_step = 0
     for iteration in range(3):
         teacher_data = data.select("input_ids", "position_ids", "loss_mask")
         tu.assign_non_tensor(
@@ -199,23 +218,39 @@ def main():
         old = actor.infer_batch(data)["log_probs"]
         assert_on_cpu(actor)
         data["old_log_probs"] = response_from_nested(old, data["response_mask"])
+        # Fixed trajectories with cached behavior scores, independent of later
+        # training forwards. This worker integration test does not run vLLM.
+        data["rollout_log_probs"] = data["old_log_probs"].clone()
         tu.assign_non_tensor(
             data,
             global_batch_size=2 * world_size,
             mini_batch_size=2 * world_size,
-            epochs=1,
+            epochs=args.ppo_epochs,
             seed=42,
             dataloader_kwargs={"shuffle": False},
         )
-        actor.train_mini_batch(data)
+        output = actor.train_mini_batch(data)
+        assert tu.get(output, "optimizer_steps") == tu.get(output, "optimizer_step_attempts") == args.ppo_epochs
+        progress._accumulate_actor_optimizer_steps(output)
+        assert progress.actor_optimizer_step == (iteration + 1) * args.ppo_epochs
+        metrics = tu.get(output, "metrics")
+        if args.policy_loss_mode in ("token_ppo", "token_is"):
+            assert sum(metrics["distillation/log_ratio_guard_count"]) == 0
         assert_on_cpu(actor)
         assert_on_cpu(teacher)
         updated = actor.infer_batch(data)["log_probs"]
         assert not torch.equal(updated.values(), old.values()), "Actor optimizer did not update the model"
         if rank == 0:
-            print(f"shared teacher phase/update {iteration + 1} passed", flush=True)
+            print(
+                f"shared teacher phase {iteration + 1}, optimizer steps={progress.actor_optimizer_step} passed",
+                flush=True,
+            )
     saved_scores = actor.infer_batch(data)["log_probs"].values().clone()
     actor.save_checkpoint(str(root / "checkpoint"), None, global_step=3)
+    progress.global_steps = 3
+    if rank == 0:
+        progress._save_actor_optimizer_progress(root / "checkpoint")
+    dist.barrier()
     tu.assign_non_tensor(
         data,
         global_batch_size=2 * world_size,
@@ -224,15 +259,25 @@ def main():
         seed=42,
         dataloader_kwargs={"shuffle": False},
     )
-    actor.train_mini_batch(data)
+    progress._accumulate_actor_optimizer_steps(actor.train_mini_batch(data))
     actor.load_checkpoint(str(root / "checkpoint"), del_local_after_load=False)
+    progress._load_actor_optimizer_progress(root / "checkpoint")
+    assert progress.actor_optimizer_step == 3 * args.ppo_epochs
     torch.testing.assert_close(actor.infer_batch(data)["log_probs"].values(), saved_scores, atol=0, rtol=0)
+    # Resume with a different epoch count, checking saved optimizer state and progress.
+    tu.assign_non_tensor(data, mini_batch_size=2 * world_size, epochs=2, global_batch_size=2 * world_size)
+    progress._accumulate_actor_optimizer_steps(actor.train_mini_batch(data))
+    assert progress.actor_optimizer_step == progress.actor_optimizer_step_attempts == 3 * args.ppo_epochs + 2
     assert_on_cpu(actor)
     assert_on_cpu(teacher)
     dist.barrier()
     if rank == 0:
         shutil.rmtree(root)
-        print("test_shared_teacher_fsdp2 passed", flush=True)
+        print(
+            f"test_shared_teacher_fsdp2 passed: {args.policy_loss_mode}/{args.advantage_source}, "
+            f"optimizer steps after resume={progress.actor_optimizer_step}",
+            flush=True,
+        )
     dist.destroy_process_group()
 
 
