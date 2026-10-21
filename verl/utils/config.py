@@ -119,6 +119,76 @@ def _validate_score_centering_config(config: DictConfig) -> None:
         raise ValueError("score centering cannot be combined with distillation.")
 
 
+def validate_sampled_token_distillation(config, *, use_reference_policy=False, use_critic=False):
+    """Validate the first sampled-token ablation implementation before workers start.
+
+    Shared/standalone resource checks remain independent. LR schedules and epoch
+    budgets are experiment choices, not part of the loss definition.
+    """
+    if not OmegaConf.select(config, "distillation.enabled", default=False):
+        return
+    if OmegaConf.select(config, "distillation.distillation_loss.policy_loss_mode", default="vanilla") == "vanilla":
+        return
+    from verl.workers.config import DistillationLossConfig
+
+    omega_conf_to_dataclass(config.distillation.distillation_loss, DistillationLossConfig)
+    required = {
+        "trainer.use_v1": True,
+        "trainer.v1.trainer_mode": "sync",
+        "trainer.v1.sync.parameter_sync_step": 1,
+        "actor_rollout_ref.actor.strategy": "fsdp2",
+        "actor_rollout_ref.actor.ulysses_sequence_parallel_size": 1,
+        "actor_rollout_ref.actor.fsdp_config.ulysses_sequence_parallel_size": 1,
+        "actor_rollout_ref.actor.optim.optimizer": "AdamW",
+        "actor_rollout_ref.actor.optim.optimizer_impl": "torch.optim",
+        "actor_rollout_ref.actor.entropy_coeff": 0.0,
+        "actor_rollout_ref.rollout.name": "vllm",
+        "actor_rollout_ref.rollout.temperature": 1.0,
+        "actor_rollout_ref.rollout.top_p": 1.0,
+        "actor_rollout_ref.rollout.top_k": -1,
+        "actor_rollout_ref.rollout.do_sample": True,
+        "actor_rollout_ref.rollout.repetition_penalty": 1.0,
+        "actor_rollout_ref.rollout.logprobs_mode": "processed_logprobs",
+        "actor_rollout_ref.rollout.calculate_log_probs": True,
+        "actor_rollout_ref.rollout.agent.default_agent_loop": "single_turn_agent",
+    }
+    for path, expected in required.items():
+        if OmegaConf.select(config, path, default=expected) != expected:
+            raise ValueError(f"Sampled-token distillation requires {path}={expected}")
+    disabled = (
+        "actor_rollout_ref.actor.checkpoint.async_save",
+        "actor_rollout_ref.actor.use_kl_loss",
+        "algorithm.use_kl_in_reward",
+        "algorithm.rollout_correction.bypass_mode",
+        "algorithm.rollout_correction.rollout_is",
+        "algorithm.rollout_correction.rollout_rs",
+        "algorithm.rollout_correction.score_centering",
+        "actor_rollout_ref.actor.policy_loss.rollout_correction.score_centering",
+        "actor_rollout_ref.rollout.topk_log_probs",
+        "actor_rollout_ref.rollout.multi_turn.enable",
+        "actor_rollout_ref.rollout.agent.agent_loop_manager_class",
+        "actor_rollout_ref.rollout.agent.agent_loop_config_path",
+        "algorithm.filter_groups.enable",
+        "trainer.v1.sampler.custom_sampler.path",
+        "actor_rollout_ref.model.mtp.enable",
+        "actor_rollout_ref.actor.fsdp_config.qat.enable",
+    )
+    for path in disabled:
+        if OmegaConf.select(config, path, default=None):
+            raise ValueError(f"Sampled-token distillation does not support {path}")
+    for path in (
+        "actor_rollout_ref.actor.fsdp_config.model_dtype",
+        "actor_rollout_ref.actor.fsdp_config.mixed_precision.param_dtype",
+        "actor_rollout_ref.actor.fsdp_config.mixed_precision.reduce_dtype",
+        "actor_rollout_ref.actor.fsdp_config.mixed_precision.buffer_dtype",
+    ):
+        dtype = OmegaConf.select(config, path, default=None)
+        if dtype is not None and dtype not in ("bf16", "bfloat16", "fp32", "float32"):
+            raise ValueError(f"Sampled-token distillation requires BF16/FP32: {path}={dtype}")
+    if use_reference_policy or use_critic:
+        raise ValueError("Sampled-token distillation does not support reference or critic workers")
+
+
 def validate_config(
     config: DictConfig,
     use_reference_policy: bool,
@@ -132,6 +202,7 @@ def validate_config(
         use_critic (bool): is critic needed
     """
     # number of GPUs total
+    validate_sampled_token_distillation(config, use_reference_policy=use_reference_policy, use_critic=use_critic)
     distillation = config.get("distillation")
     if distillation and distillation.get("enabled", False) and distillation.get("execution_mode") == "shared_sync":
         omega_conf_to_dataclass(distillation).validate_shared_sync(

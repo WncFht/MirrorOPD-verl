@@ -20,6 +20,7 @@ from tensordict import TensorDict
 
 from verl.base_config import BaseConfig
 from verl.trainer.ppo.core_algos import agg_loss, get_policy_loss_fn, kl_penalty
+from verl.utils import tensordict_utils as tu
 from verl.utils.metric import AggregationType, Metric
 from verl.workers.config import ActorConfig, DistillationConfig, DistillationLossConfig
 from verl.workers.utils.losses import ppo_loss
@@ -207,7 +208,9 @@ def distillation_ppo_loss(
     # Called as final policy loss
     distillation_loss_config = distillation_config.distillation_loss
     distill_loss, distill_metrics = distillation_loss(config, distillation_config, model_output, data)
-    if not distillation_loss_config.use_task_rewards and not distillation_loss_config.use_policy_gradient:
+    if not distillation_loss_config.use_task_rewards and (
+        not distillation_loss_config.use_policy_gradient or distillation_loss_config.policy_loss_mode != "vanilla"
+    ):
         # no need to compute policy loss
         policy_loss = 0.0
         policy_metrics = {}
@@ -242,6 +245,8 @@ def distillation_loss(
     """
     assert distillation_config is not None
     loss_config: DistillationLossConfig = distillation_config.distillation_loss
+    if loss_config.policy_loss_mode != "vanilla":
+        return _sampled_token_loss(config, loss_config, model_output, data)
     distillation_loss_fn = get_distillation_loss_fn(loss_config.loss_mode)
     distillation_losses, distillation_metrics = distillation_loss_fn(
         config=config,
@@ -300,6 +305,62 @@ def distillation_loss(
         )
 
     return distillation_loss, distillation_metrics
+
+
+def _sampled_token_loss(config, loss_config, model_output, data):
+    """Response-token surrogate with a generation-time behavior denominator.
+
+    Advantages are detached in all modes. IS modes differentiate the ratio;
+    reinforce differentiates log pi directly. Mask before arithmetic so padded
+    NaNs/infinities neither contaminate the objective nor its gradients.
+    """
+    log_prob = no_padding_2_padding(model_output["log_probs"], data).float()
+    teacher = no_padding_2_padding(data["teacher_logprobs"], data).squeeze(-1).detach().float()
+    behavior = data["rollout_log_probs"].detach()
+    mask = data["response_mask"]
+    if mask.is_nested:
+        mask = mask.to_padded_tensor(False)
+    if behavior.is_nested:
+        behavior = behavior.to_padded_tensor(0.0)
+    mask = mask.bool()
+    behavior = behavior.float()
+    if not (log_prob.shape == teacher.shape == behavior.shape == mask.shape):
+        raise ValueError("Sampled-token log probabilities must match the response mask shape")
+    log_prob = log_prob.masked_fill(~mask, 0.0)
+    teacher = teacher.masked_fill(~mask, 0.0)
+    behavior = behavior.masked_fill(~mask, 0.0)
+    current_advantage = (teacher - log_prob).detach()
+    frozen_advantage = teacher - behavior
+    advantage = current_advantage if loss_config.advantage_source == "current" else frozen_advantage
+    metrics = {
+        "distillation/token_observations": Metric("sum", mask.sum()),
+        "distillation/advantage_sign_flip_count": Metric(
+            "sum", ((current_advantage * frozen_advantage < 0) & mask).sum()
+        ),
+    }
+    if loss_config.policy_loss_mode == "reinforce":
+        loss_mat = -advantage * log_prob
+    else:
+        log_ratio = log_prob - behavior
+        ratio = log_ratio.clamp(-20.0, 20.0).exp()
+        loss_mat = -ratio * advantage
+        metrics["distillation/log_ratio_guard_count"] = Metric("sum", ((log_ratio.abs() > 20) & mask).sum())
+        if loss_config.policy_loss_mode == "token_ppo":
+            low = loss_config.clip_ratio if loss_config.clip_ratio_low is None else loss_config.clip_ratio_low
+            high = loss_config.clip_ratio if loss_config.clip_ratio_high is None else loss_config.clip_ratio_high
+            clipped_loss = -ratio.clamp(1 - low, 1 + high) * advantage
+            metrics["distillation/ppo_clip_count"] = Metric("sum", ((clipped_loss > loss_mat) & mask).sum())
+            loss_mat = torch.maximum(loss_mat, clipped_loss)
+    loss = agg_loss(
+        loss_mat=loss_mat,
+        loss_mask=mask,
+        loss_agg_mode=config.loss_agg_mode,
+        dp_size=tu.get(data, "dp_size"),
+        batch_num_tokens=tu.get(data, "batch_num_tokens"),
+        global_batch_size=tu.get(data, "global_batch_size"),
+        loss_scale_factor=config.loss_scale_factor,
+    )
+    return loss, metrics
 
 
 @register_distillation_loss(DistillationLossSettings(names=["forward_kl_topk"], use_topk=True))  # type: ignore[arg-type]

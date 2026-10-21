@@ -232,6 +232,11 @@ class PPOTrainer(ABC):
         self.on_init_end()
 
     def _setup(self):
+        from verl.utils.config import validate_sampled_token_distillation
+
+        validate_sampled_token_distillation(
+            self.config, use_reference_policy=self.use_reference_policy, use_critic=self.use_critic
+        )
         self.shared_teacher_wg = None
         self.distillation_config = (
             omega_conf_to_dataclass(self.config.distillation) if self.use_teacher_policy else None
@@ -2047,6 +2052,20 @@ class PPOTrainer(ABC):
         output = rename_dict(output["metrics"], "actor/")
         output["perf/mfu/actor"] = output.pop("actor/mfu")
         actor_metrics = reduce_metrics(output)
+        # SUM metrics are DP-averaged by the existing worker path. The common
+        # DP/mini-batch factors cancel only when counts share one denominator.
+        denominator = actor_metrics.pop("actor/distillation/token_observations", None)
+        if denominator is not None:
+            if denominator <= 0:
+                raise ValueError("Sampled-token diagnostics require valid response tokens")
+            for event, ratio in (
+                ("advantage_sign_flip_count", "advantage_sign_flip_fraction"),
+                ("log_ratio_guard_count", "log_ratio_guard_fraction"),
+                ("ppo_clip_count", "ppo_clip_fraction"),
+            ):
+                count = actor_metrics.pop(f"actor/distillation/{event}", None)
+                if count is not None:
+                    actor_metrics[f"actor/distillation/{ratio}"] = count / denominator
         if f"actor/{FSDP_PEAK_MEMORY}" in actor_metrics:
             actor_metrics[FSDP_PEAK_MEMORY] = actor_metrics.pop(f"actor/{FSDP_PEAK_MEMORY}")
         metrics.update(actor_metrics)

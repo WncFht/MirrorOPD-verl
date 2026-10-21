@@ -737,6 +737,8 @@ class FSDPEngine(BaseEngine):
         torch.distributed.all_reduce(
             batch_num_tokens, op=torch.distributed.ReduceOp.SUM, group=self.get_data_parallel_group()
         )
+        if not forward_only and batch_num_tokens.item() == 0:
+            raise ValueError("Cannot train a mini-batch with zero globally valid response tokens")
         tu.assign_non_tensor(data, batch_num_tokens=batch_num_tokens.item())
         tu.assign_non_tensor(data, dp_size=self.get_data_parallel_size())
 

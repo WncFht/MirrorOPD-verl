@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import logging
+import math
 import os
 from dataclasses import dataclass, field
 from typing import Optional
@@ -86,9 +87,10 @@ class DistillationLossConfig(BaseConfig):
 
     use_policy_gradient: bool = True
     policy_loss_mode: str = "vanilla"
+    advantage_source: str = "current"
     clip_ratio: float = 0.2
-    clip_ratio_low: float = 0.2
-    clip_ratio_high: float = 0.2
+    clip_ratio_low: Optional[float] = 0.2
+    clip_ratio_high: Optional[float] = 0.2
 
     # Store global batch info for loss aggregation:
     # dp_size: data parallel size
@@ -106,11 +108,23 @@ class DistillationLossConfig(BaseConfig):
 
         self.loss_settings: DistillationLossSettings = get_distillation_loss_settings(self.loss_mode)
 
-        if self.policy_loss_mode != "vanilla":
-            raise NotImplementedError(
-                f"Only vanilla policy loss is currently supported when use_policy_gradient is True, "
-                f"but got {self.policy_loss_mode}."
-            )
+        if self.policy_loss_mode not in ("vanilla", "token_ppo", "token_is", "reinforce"):
+            raise ValueError(f"Unsupported distillation policy_loss_mode: {self.policy_loss_mode}")
+        if self.advantage_source not in ("current", "rollout"):
+            raise ValueError(f"Unsupported distillation advantage_source: {self.advantage_source}")
+        if self.policy_loss_mode == "vanilla":
+            if self.advantage_source != "current":
+                raise ValueError("vanilla requires advantage_source=current")
+        else:
+            if self.loss_mode != "k1" or not self.use_policy_gradient or self.use_task_rewards:
+                raise ValueError("Sampled-token modes require k1, use_policy_gradient=True, use_task_rewards=False")
+            if self.loss_max_clamp is not None or self.log_prob_min_clamp is not None:
+                raise ValueError("Sampled-token modes require loss_max_clamp=null and log_prob_min_clamp=null")
+            if self.policy_loss_mode == "token_ppo":
+                low = self.clip_ratio if self.clip_ratio_low is None else self.clip_ratio_low
+                high = self.clip_ratio if self.clip_ratio_high is None else self.clip_ratio_high
+                if not math.isfinite(low) or not 0 <= low < 1 or not math.isfinite(high) or high < 0:
+                    raise ValueError("token_ppo requires finite clip widths: 0 <= low < 1 and high >= 0")
 
         if self.use_policy_gradient and self.loss_mode == "forward_kl_topk":
             print(
