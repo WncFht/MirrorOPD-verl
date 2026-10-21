@@ -1,0 +1,49 @@
+{
+  "review_date": "2026-10-21",
+  "mirroropd_verl_base": "9c0017965",
+  "oneshot": {
+    "repository": "Thinking-Space/One-Shot-OPD",
+    "commit": "6b6b1782cc3f04749dd077de19353f839f6bc048",
+    "working_tree_clean": true,
+    "reviewed_files": [
+      "recipe/_common.sh",
+      "verl/verl/workers/fsdp_teacher_worker.py",
+      "verl/verl/workers/engine/fsdp/transformer_impl.py",
+      "verl/verl/trainer/ppo/opd_core_algos.py",
+      "verl/verl/trainer/ppo/opd_trainer_mixin.py",
+      "verl/verl/workers/utils/losses.py"
+    ],
+    "validation": "AST-extracted pure tensor helpers on actual K-wide call shapes; static caller audit; no GPU/Ray run"
+  },
+  "papers": [
+    {
+      "id": "2604.13016",
+      "url": "https://arxiv.org/html/2604.13016",
+      "scope": "Normalized top-k definitions, overlap/symmetric-difference experiments on JustRL/R1-Distill"
+    },
+    {
+      "id": "2605.11182v2",
+      "url": "https://arxiv.org/html/2605.11182v2",
+      "scope": "Top-k gradient semantics and sequence-wide query union"
+    },
+    {
+      "id": "2609.34386v1",
+      "url": "https://arxiv.org/html/2609.34386v1",
+      "scope": "Correction-aware sparsification; no author implementation verified in this review"
+    }
+  ],
+  "additional_implementations": [
+    {
+      "repository": "holi-lab/vOPD",
+      "commit": "d4146d5015216c6f8e89a7243c24912b634f531a"
+    },
+    {
+      "repository": "InternLM/ResOPD",
+      "commit": "3bdf019daf9818419fe38dbc6516e41ca5a70dcb"
+    },
+    {
+      "repository": "tilde-research/nitrobrew-release",
+      "commit": "17f6f16b7451929209ac495c6b0ea0fcc4d0cedc"
+    }
+  ]
+}
