@@ -144,11 +144,11 @@ def incremental_files(kind, snap_dir):
     return selected, state_path, state
 
 
-def clean_source_archives(archive, keep, older_than=None):
-    """Remove source archives in the same directory, excluding current outputs and newer downloads."""
+def clean_archives(kind, archive, keep, older_than=None):
+    """Remove same-kind archives in the same directory, excluding current outputs and newer downloads."""
     candidates = {archive}
-    candidates.update(archive.parent.glob(PREFIXES["code"] + "*.tar.gz"))
-    candidates.update(archive.parent.glob(PREFIXES["code"] + "*.tar.gz.part.[0-9]*"))
+    candidates.update(archive.parent.glob(PREFIXES[kind] + "*.tar.gz"))
+    candidates.update(archive.parent.glob(PREFIXES[kind] + "*.tar.gz.part.[0-9]*"))
     candidates.update(archive.parent.glob(archive.name + ".part.[0-9]*"))
     removed = 0
     for path in candidates:
@@ -161,11 +161,11 @@ def clean_source_archives(archive, keep, older_than=None):
         path.unlink()
         removed += 1
     if removed:
-        print(f"Removed {removed} old source archive file(s) from {archive.parent}")
+        print(f"Removed {removed} old {kind} archive file(s) from {archive.parent}")
 
 
 def pack(args, snap_dir):
-    """Publish a complete archive before cleaning obsolete source packages or advancing incremental state."""
+    """Publish a complete archive before cleaning old packages or advancing incremental state."""
     state_path, state = None, None
     if args.kind == "code":
         files = source_files(args.paths)
@@ -207,8 +207,8 @@ def pack(args, snap_dir):
                     outputs.append(archive.parent / part.name)
             for path in outputs:
                 (Path(temp) / path.name).replace(path)
-    if args.kind == "code":
-        clean_source_archives(archive, set(outputs))
+    if args.kind in ("code", "logs"):
+        clean_archives(args.kind, archive, set(outputs))
     if state_path is not None:
         state_path.parent.mkdir(parents=True, exist_ok=True)
         next_state = state_path.with_suffix(".tmp")
@@ -300,7 +300,7 @@ def unpack(args, snap_dir):
                         subprocess.run(["wandb", "sync", str(destination / run.name)], check=True)
     print(f"Unpacked into {destination}")
     if args.kind == "code":
-        clean_source_archives(archive_base, set(consumed), older_than=source_mtime)
+        clean_archives(args.kind, archive_base, set(consumed), older_than=source_mtime)
         if os.environ.get("KEEP_ARCHIVE_AFTER_UNPACK", "0") != "1":
             for path in consumed:
                 path.unlink(missing_ok=True)

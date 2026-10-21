@@ -49,6 +49,7 @@ help:
 	@echo '训练资产：make assets-check [MODEL_ROOT=../model] [DATA_ROOT=../data] [ASSET_CHECK_ARGS=--data-only]'
 	@echo '8 卡训练：make opd-submit（开发机，提交 hope/mirroropd/mirroropd.hope）'
 	@echo '压缩包默认放在 transfer_snap/，超过 10 MiB 分卷；上传下载由人工完成。'
+	@echo '日志打包成功后清理旧日志包及分卷；增量包请在下次打包前传回。'
 	@echo '源码打包成功后清理旧源码包；解包成功后删除输入包，可设 KEEP_ARCHIVE_AFTER_UNPACK=1 保留。'
 
 archive archive-pack:
