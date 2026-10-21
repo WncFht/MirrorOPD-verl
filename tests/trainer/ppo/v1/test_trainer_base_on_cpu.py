@@ -20,6 +20,7 @@ from omegaconf import OmegaConf
 
 from verl.trainer.ppo.v1.replay_buffer import ReplayBuffer, ReplayBufferAsync
 from verl.trainer.ppo.v1.trainer_base import PPOTrainer, apply_greedy_sampling_params
+from verl.utils import tensordict_utils as tu
 
 
 def test_greedy_reward_baseline_does_not_request_score_centering_heads():
@@ -269,3 +270,121 @@ def test_update_actor_passes_score_centering_flag(score_centering):
     trainer._update_actor(batch, {})
 
     assert batch.extra_info["score_centering"] is score_centering
+
+
+def _progress_trainer():
+    trainer = _StubTrainer.__new__(_StubTrainer)
+    trainer.actor_optimizer_step_attempts = trainer.actor_optimizer_step = 0
+    trainer.config = OmegaConf.create(
+        {
+            "actor_rollout_ref": {
+                "actor": {
+                    "ppo_mini_batch_size": 64,
+                    "calculate_entropy": False,
+                    "entropy_coeff": 0.0,
+                    "ppo_epochs": 4,
+                    "data_loader_seed": 1,
+                    "shuffle": False,
+                    "policy_loss": {},
+                },
+                "rollout": {"n": 1, "temperature": 1.0},
+            }
+        }
+    )
+    trainer.actor_rollout_wg = MagicMock()
+    return trainer
+
+
+def test_actor_rpc_accumulates_once_and_finalizes_token_weighted_diagnostics():
+    trainer = _progress_trainer()
+    trainer.actor_rollout_wg.update_actor.return_value = tu.get_tensordict(
+        {},
+        {
+            "optimizer_step_attempts": 4,
+            "optimizer_steps": 3,
+            "metrics": {
+                "mfu": [0.0],
+                "distillation/token_observations": [2.0, 5.0],
+                "distillation/ppo_clip_count": [0.5, 1.0],
+            },
+        },
+    )
+    metrics = {}
+    for _ in range(2):
+        trainer._update_actor(SimpleNamespace(extra_info={}), metrics)
+    assert trainer.actor_optimizer_step_attempts == 8 and trainer.actor_optimizer_step == 6
+    assert metrics["actor/distillation/ppo_clip_fraction"] == 1.5 / 7
+    assert "actor/distillation/token_observations" not in metrics
+    assert not any(key.startswith("training/actor_optimizer") for key in metrics)
+    assert trainer._actor_optimizer_metrics() == {
+        "training/actor_optimizer_step_attempts": 8,
+        "training/actor_optimizer_step": 6,
+        "training/actor_optimizer_skipped_updates": 2,
+    }
+    trainer.actor_rollout_wg.update_actor.side_effect = RuntimeError("RPC failed")
+    with pytest.raises(RuntimeError, match="RPC failed"):
+        trainer._update_actor(SimpleNamespace(extra_info={}), {})
+    assert trainer.actor_optimizer_step_attempts == 8 and trainer.actor_optimizer_step == 6
+
+
+@pytest.mark.parametrize("attempts,steps", [(True, 1), (4.0, 4), (-1, 0), (2, 3)])
+def test_invalid_rpc_counts_do_not_partially_accumulate(attempts, steps):
+    trainer = _progress_trainer()
+    with pytest.raises(ValueError):
+        trainer._accumulate_actor_optimizer_steps(
+            tu.get_tensordict({}, {"optimizer_step_attempts": attempts, "optimizer_steps": steps})
+        )
+    assert trainer.actor_optimizer_step_attempts == trainer.actor_optimizer_step == 0
+
+
+def test_unknown_execution_does_not_hide_known_attempts():
+    trainer = _progress_trainer()
+    trainer._accumulate_actor_optimizer_steps(
+        tu.get_tensordict({}, {"optimizer_step_attempts": 4, "optimizer_steps": None})
+    )
+    trainer._accumulate_actor_optimizer_steps(
+        tu.get_tensordict({}, {"optimizer_step_attempts": 2, "optimizer_steps": 2})
+    )
+    assert trainer._actor_optimizer_metrics() == {"training/actor_optimizer_step_attempts": 6}
+
+
+def test_fit_logs_optimizer_progress_after_step_aggregation_and_initial_validation():
+    trainer = _progress_trainer()
+    trainer.config.trainer = {
+        "project_name": "test",
+        "experiment_name": "progress",
+        "logger": ["console"],
+        "val_before_train": True,
+        "total_epochs": 1,
+        "save_freq": -1,
+        "test_freq": -1,
+    }
+    trainer.config.global_profiler = {"steps": None}
+    trainer.global_steps = 0
+    trainer.steps_per_epoch = trainer.total_training_steps = 2
+    trainer._validate = MagicMock(return_value={"val/acc": 0.5})
+    for name in ("_shutdown_dump_executor", "_reissue_inflight_prompts", "_start_profiling", "_stop_profiling"):
+        setattr(trainer, name, MagicMock())
+    batch = SimpleNamespace(keys=[], partition_id="train")
+
+    def step(metrics, timing):
+        trainer._accumulate_actor_optimizer_steps(
+            tu.get_tensordict({}, {"optimizer_step_attempts": 4, "optimizer_steps": 4})
+        )
+        return batch
+
+    trainer.step = step
+    trainer._compute_metrics = MagicMock(
+        side_effect=lambda batch, metrics, timing, **kw: metrics.update({"training/actor_optimizer_step": -100})
+    )
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.SkipManager"),
+        patch("verl.trainer.ppo.v1.trainer_base.Tracking") as tracking,
+        patch("verl.trainer.ppo.v1.trainer_base.ValidationGenerationsLogger"),
+        patch("verl.trainer.ppo.v1.trainer_base.DapoFilteredRewardTableLogger"),
+        patch("verl.trainer.ppo.v1.trainer_base.tq.kv_clear"),
+    ):
+        trainer.fit(None)
+    logged = [call.kwargs for call in tracking.return_value.log.call_args_list]
+    assert [entry["step"] for entry in logged] == [0, 1, 2]
+    assert [entry["data"]["training/actor_optimizer_step"] for entry in logged] == [0, 4, 8]
