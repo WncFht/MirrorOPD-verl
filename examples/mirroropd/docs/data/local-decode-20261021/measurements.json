@@ -1,0 +1,1385 @@
+{
+  "date": "2026-10-21",
+  "scope": "Local TP1 decode diagnostic, physical GPU0-3 only. Not eight-GPU training.",
+  "runs": {
+    "eager-gpu0": {
+      "config": {
+        "kind": "local-single-replica-fixed-output-diagnostic",
+        "device": 0,
+        "gpu": "NVIDIA H800",
+        "driver": "550.163.01",
+        "python": "3.12.11",
+        "versions": {
+          "torch": "2.11.0+cu128",
+          "vllm": "0.25.1+cu129",
+          "transformers": "5.12.1"
+        },
+        "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "data": "../MD-OPD/data/math/DAPO/train.parquet",
+        "engine": {
+          "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+          "dtype": "bfloat16",
+          "tensor_parallel_size": 1,
+          "max_model_len": 35841,
+          "max_num_seqs": 32,
+          "max_num_batched_tokens": 8192,
+          "gpu_memory_utilization": 0.5,
+          "enforce_eager": true,
+          "enable_prefix_caching": true,
+          "enable_chunked_prefill": true,
+          "disable_log_stats": false,
+          "seed": 42,
+          "logprobs_mode": "processed_logprobs",
+          "profiler_config": {
+            "profiler": "torch",
+            "torch_profiler_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/local-decode-20261021/eager-gpu0/trace",
+            "torch_profiler_with_stack": false,
+            "torch_profiler_record_shapes": false,
+            "torch_profiler_with_memory": false,
+            "ignore_frontend": true,
+            "delay_iterations": 32,
+            "max_iterations": 40
+          }
+        },
+        "prompt_tokens": [
+          140,
+          83,
+          97,
+          151,
+          102,
+          41,
+          71,
+          55,
+          39,
+          94,
+          91,
+          74,
+          80,
+          158,
+          74,
+          79,
+          99,
+          43,
+          65,
+          52,
+          107,
+          70,
+          102,
+          152,
+          43,
+          115,
+          93,
+          146,
+          139,
+          39,
+          122,
+          106
+        ],
+        "sampling": {
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "logprobs": 0,
+          "ignore_eos": true
+        },
+        "tokens": 1024,
+        "repeats": 3,
+        "limitations": "Initial checkpoint; fixed output length; warmed prefix cache; no Ray/teacher/update; H800, not A800."
+      },
+      "results": [
+        {
+          "batch": 8,
+          "repeat": 0,
+          "seconds": 10.585587412118912,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 773.8824196587699,
+          "batch_wall_ms_per_output_position": 10.337487707147375,
+          "gpu_busy_probe_mean": 30.11627906976744,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 8,
+          "repeat": 1,
+          "seconds": 10.600467592477798,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 772.7960987129594,
+          "batch_wall_ms_per_output_position": 10.3520191332791,
+          "gpu_busy_probe_mean": 29.904761904761905,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 8,
+          "repeat": 2,
+          "seconds": 10.71476112306118,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 764.5527423255859,
+          "batch_wall_ms_per_output_position": 10.463633909239434,
+          "gpu_busy_probe_mean": 29.642857142857142,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 16,
+          "repeat": 0,
+          "seconds": 10.961761392652988,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 1494.6503041911872,
+          "batch_wall_ms_per_output_position": 10.704845110012684,
+          "gpu_busy_probe_mean": 29.795454545454547,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 16,
+          "repeat": 1,
+          "seconds": 11.093683071434498,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 1476.876515626061,
+          "batch_wall_ms_per_output_position": 10.833674874447752,
+          "gpu_busy_probe_mean": 29.377777777777776,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 16,
+          "repeat": 2,
+          "seconds": 11.13843271881342,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 1470.9430324363796,
+          "batch_wall_ms_per_output_position": 10.87737570196623,
+          "gpu_busy_probe_mean": 29.288888888888888,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 32,
+          "repeat": 0,
+          "seconds": 11.413587480783463,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 2870.96410792575,
+          "batch_wall_ms_per_output_position": 11.1460815242026,
+          "gpu_busy_probe_mean": 30.181818181818183,
+          "memory_gib_probe_max": 40.794189453125
+        },
+        {
+          "batch": 32,
+          "repeat": 1,
+          "seconds": 11.249412328004837,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 2912.8632718373865,
+          "batch_wall_ms_per_output_position": 10.985754226567224,
+          "gpu_busy_probe_mean": 30.644444444444446,
+          "memory_gib_probe_max": 40.794189453125
+        },
+        {
+          "batch": 32,
+          "repeat": 2,
+          "seconds": 11.217095956206322,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 2921.2552097202797,
+          "batch_wall_ms_per_output_position": 10.954195269732736,
+          "gpu_busy_probe_mean": 30.733333333333334,
+          "memory_gib_probe_max": 40.794189453125
+        }
+      ],
+      "trace_summary": {
+        "annotations": {
+          "execute_context_0(0)_generation_32(32)": 40
+        },
+        "devices": {
+          "0": {
+            "activity_envelope_ms": 631.8057651367187,
+            "device_activity_union_ms": 105.84074365234375,
+            "kernel_union_ms": 105.24688940429688,
+            "device_activity_envelope_fraction": 0.1675210159398284,
+            "kernel_count": 14395,
+            "top_kernels_by_summed_duration": [
+              {
+                "name": "nvjet_tst_192x32_64x7_4x1_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 27.031187000000035
+              },
+              {
+                "name": "nvjet_tst_64x32_64x16_4x1_v_bz_splitK_TNT",
+                "count": 1120,
+                "sum_ms": 14.291769999999975
+              },
+              {
+                "name": "void cutlass::device_kernel<flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, false, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, false, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, false, true, true, true, false, true> > > >(flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, false, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, false, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, false, true, true, true, false, true> > >::Params)",
+                "count": 1120,
+                "sum_ms": 12.736971999999982
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x2_v_bz_bias_TNT",
+                "count": 1120,
+                "sum_ms": 7.051382999999996
+              },
+              {
+                "name": "nvjet_tst_384x32_64x4_2x1_v_bz_TNT",
+                "count": 40,
+                "sum_ms": 6.501208
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x2_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 6.11920400000001
+              },
+              {
+                "name": "std::enable_if<(((8)>(0)))&&vllm::_typeConvert<c10::BFloat16>::exists, void>::type vllm::fused_add_rms_norm_kernel<c10::BFloat16, 8, true>(c10::BFloat16*, long, c10::BFloat16*, c10::BFloat16 const*, float, int, int)",
+                "count": 2240,
+                "sum_ms": 5.876783999999947
+              },
+              {
+                "name": "_topk_log_softmax_kernel",
+                "count": 40,
+                "sum_ms": 4.772174000000001
+              }
+            ]
+          }
+        },
+        "interpretation": "Profiled interval only; overhead changes gaps. Activity union is not compute/bandwidth utilization. Top-kernel durations are summed and can overlap. Use separate unprofiled runs for speed comparisons."
+      },
+      "trace_file": "outputs/local-decode-20261021/eager-gpu0/trace/rank0.1792553971712787007.pt.trace.json.gz",
+      "log_file": "outputs/local-decode-20261021/eager-gpu0.log",
+      "log_evidence": [
+        "(EngineCore pid=1978586) INFO 10-21 11:37:43 [cuda.py:476] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].",
+        "(EngineCore pid=1978586) INFO 10-21 11:37:43 [flash_attn.py:718] Using FlashAttention version 3",
+        "(EngineCore pid=1978586) INFO 10-21 11:37:46 [gpu_worker.py:538] Available KV cache memory: 35.34 GiB",
+        "(EngineCore pid=1978586) INFO 10-21 11:37:46 [kv_cache_utils.py:2146] GPU KV cache size: 1,322,726 tokens",
+        "INFO 10-21 11:37:58 [loggers.py:273] Engine 000: Avg prompt throughput: 75.7 tokens/s, Avg generation throughput: 736.2 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.6%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:38:08 [loggers.py:273] Engine 000: Avg prompt throughput: 5.2 tokens/s, Avg generation throughput: 772.3 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.6%, Prefix cache hit rate: 62.0%",
+        "INFO 10-21 11:38:18 [loggers.py:273] Engine 000: Avg prompt throughput: 5.2 tokens/s, Avg generation throughput: 759.5 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 69.7%",
+        "INFO 10-21 11:38:28 [loggers.py:273] Engine 000: Avg prompt throughput: 89.0 tokens/s, Avg generation throughput: 1286.8 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.9%, Prefix cache hit rate: 69.3%",
+        "INFO 10-21 11:38:38 [loggers.py:273] Engine 000: Avg prompt throughput: 14.9 tokens/s, Avg generation throughput: 1482.2 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.7%, Prefix cache hit rate: 73.3%",
+        "INFO 10-21 11:38:48 [loggers.py:273] Engine 000: Avg prompt throughput: 14.9 tokens/s, Avg generation throughput: 1458.2 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.6%, Prefix cache hit rate: 76.0%",
+        "INFO 10-21 11:38:58 [loggers.py:273] Engine 000: Avg prompt throughput: 189.1 tokens/s, Avg generation throughput: 1926.5 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 72.6%",
+        "INFO 10-21 11:39:08 [loggers.py:273] Engine 000: Avg prompt throughput: 26.6 tokens/s, Avg generation throughput: 2857.4 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 75.7%",
+        "INFO 10-21 11:39:18 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2924.5 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.7%, Prefix cache hit rate: 75.7%",
+        "INFO 10-21 11:39:28 [loggers.py:273] Engine 000: Avg prompt throughput: 26.6 tokens/s, Avg generation throughput: 2910.7 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.4%, Prefix cache hit rate: 77.9%",
+        "INFO 10-21 11:39:40 [loggers.py:273] Engine 000: Avg prompt throughput: 22.7 tokens/s, Avg generation throughput: 537.4 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.4%, Prefix cache hit rate: 79.5%",
+        "INFO 10-21 11:39:50 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2653.8 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.4%, Prefix cache hit rate: 79.5%"
+      ],
+      "raw_results_file": "outputs/local-decode-20261021/eager-gpu0/results.json"
+    },
+    "eager-gpu2": {
+      "config": {
+        "kind": "local-single-replica-fixed-output-diagnostic",
+        "device": 2,
+        "gpu": "NVIDIA H800",
+        "driver": "550.163.01",
+        "python": "3.12.11",
+        "versions": {
+          "torch": "2.11.0+cu128",
+          "vllm": "0.25.1+cu129",
+          "transformers": "5.12.1"
+        },
+        "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "data": "../MD-OPD/data/math/DAPO/train.parquet",
+        "engine": {
+          "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+          "dtype": "bfloat16",
+          "tensor_parallel_size": 1,
+          "max_model_len": 35841,
+          "max_num_seqs": 32,
+          "max_num_batched_tokens": 8192,
+          "gpu_memory_utilization": 0.5,
+          "enforce_eager": true,
+          "enable_prefix_caching": true,
+          "enable_chunked_prefill": true,
+          "disable_log_stats": false,
+          "seed": 42,
+          "logprobs_mode": "processed_logprobs",
+          "profiler_config": {
+            "profiler": "torch",
+            "torch_profiler_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/local-decode-20261021/eager-gpu2/trace",
+            "torch_profiler_with_stack": false,
+            "torch_profiler_record_shapes": false,
+            "torch_profiler_with_memory": false,
+            "ignore_frontend": true,
+            "delay_iterations": 32,
+            "max_iterations": 40
+          }
+        },
+        "prompt_tokens": [
+          140,
+          83,
+          97,
+          151,
+          102,
+          41,
+          71,
+          55,
+          39,
+          94,
+          91,
+          74,
+          80,
+          158,
+          74,
+          79,
+          99,
+          43,
+          65,
+          52,
+          107,
+          70,
+          102,
+          152,
+          43,
+          115,
+          93,
+          146,
+          139,
+          39,
+          122,
+          106
+        ],
+        "sampling": {
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "logprobs": 0,
+          "ignore_eos": true
+        },
+        "tokens": 1024,
+        "repeats": 3,
+        "limitations": "Initial checkpoint; fixed output length; warmed prefix cache; no Ray/teacher/update; H800, not A800."
+      },
+      "results": [
+        {
+          "batch": 8,
+          "repeat": 0,
+          "seconds": 10.946868754923344,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 748.3418485597223,
+          "batch_wall_ms_per_output_position": 10.690301518479828,
+          "gpu_busy_probe_mean": 29.238095238095237,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 8,
+          "repeat": 1,
+          "seconds": 10.989747859537601,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 745.4220155643027,
+          "batch_wall_ms_per_output_position": 10.732175644079689,
+          "gpu_busy_probe_mean": 28.813953488372093,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 8,
+          "repeat": 2,
+          "seconds": 11.006396539509296,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 744.2944628238179,
+          "batch_wall_ms_per_output_position": 10.748434120614547,
+          "gpu_busy_probe_mean": 28.977272727272727,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 16,
+          "repeat": 0,
+          "seconds": 11.226877205073833,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 1459.355054903021,
+          "batch_wall_ms_per_output_position": 10.963747270579915,
+          "gpu_busy_probe_mean": 29.377777777777776,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 16,
+          "repeat": 1,
+          "seconds": 11.229905761778355,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 1458.9614861919774,
+          "batch_wall_ms_per_output_position": 10.966704845486674,
+          "gpu_busy_probe_mean": 29.133333333333333,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 16,
+          "repeat": 2,
+          "seconds": 11.240085519850254,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 1457.6401550562468,
+          "batch_wall_ms_per_output_position": 10.976646015478764,
+          "gpu_busy_probe_mean": 29.11111111111111,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 32,
+          "repeat": 0,
+          "seconds": 11.75148905813694,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 2788.4125865148003,
+          "batch_wall_ms_per_output_position": 11.476063533336855,
+          "gpu_busy_probe_mean": 29.695652173913043,
+          "memory_gib_probe_max": 40.794189453125
+        },
+        {
+          "batch": 32,
+          "repeat": 1,
+          "seconds": 11.725062221288681,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 2794.697322842738,
+          "batch_wall_ms_per_output_position": 11.450256075477228,
+          "gpu_busy_probe_mean": 29.595744680851062,
+          "memory_gib_probe_max": 40.794189453125
+        },
+        {
+          "batch": 32,
+          "repeat": 2,
+          "seconds": 11.654675967991352,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 2811.575378843198,
+          "batch_wall_ms_per_output_position": 11.381519499991555,
+          "gpu_busy_probe_mean": 29.659574468085108,
+          "memory_gib_probe_max": 40.794189453125
+        }
+      ],
+      "trace_summary": {
+        "annotations": {
+          "execute_context_0(0)_generation_32(32)": 40
+        },
+        "devices": {
+          "0": {
+            "activity_envelope_ms": 628.1187900390624,
+            "device_activity_union_ms": 106.87344702148438,
+            "kernel_union_ms": 106.28182568359375,
+            "device_activity_envelope_fraction": 0.17014846350136723,
+            "kernel_count": 14395,
+            "top_kernels_by_summed_duration": [
+              {
+                "name": "nvjet_tst_192x32_64x7_4x1_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 27.163579000000016
+              },
+              {
+                "name": "nvjet_tst_64x32_64x16_4x1_v_bz_splitK_TNT",
+                "count": 1120,
+                "sum_ms": 14.280768999999959
+              },
+              {
+                "name": "void cutlass::device_kernel<flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, false, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, false, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, false, true, true, true, false, true> > > >(flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, false, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, false, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, false, true, true, true, false, true> > >::Params)",
+                "count": 1120,
+                "sum_ms": 12.677736000000017
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x2_v_bz_bias_TNT",
+                "count": 1120,
+                "sum_ms": 7.044351999999993
+              },
+              {
+                "name": "nvjet_tst_384x32_64x4_2x1_v_bz_TNT",
+                "count": 40,
+                "sum_ms": 6.523364000000001
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x2_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 6.095783000000003
+              },
+              {
+                "name": "std::enable_if<(((8)>(0)))&&vllm::_typeConvert<c10::BFloat16>::exists, void>::type vllm::fused_add_rms_norm_kernel<c10::BFloat16, 8, true>(c10::BFloat16*, long, c10::BFloat16*, c10::BFloat16 const*, float, int, int)",
+                "count": 2240,
+                "sum_ms": 5.862011999999953
+              },
+              {
+                "name": "_topk_log_softmax_kernel",
+                "count": 40,
+                "sum_ms": 4.756688
+              }
+            ]
+          }
+        },
+        "interpretation": "Profiled interval only; overhead changes gaps. Activity union is not compute/bandwidth utilization. Top-kernel durations are summed and can overlap. Use separate unprofiled runs for speed comparisons."
+      },
+      "trace_file": "outputs/local-decode-20261021/eager-gpu2/trace/rank0.1792554120164385218.pt.trace.json.gz",
+      "log_file": "outputs/local-decode-20261021/eager-gpu2.log",
+      "log_evidence": [
+        "(EngineCore pid=1979220) INFO 10-21 11:40:08 [cuda.py:476] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].",
+        "(EngineCore pid=1979220) INFO 10-21 11:40:08 [flash_attn.py:718] Using FlashAttention version 3",
+        "(EngineCore pid=1979220) INFO 10-21 11:40:12 [gpu_worker.py:538] Available KV cache memory: 35.34 GiB",
+        "(EngineCore pid=1979220) INFO 10-21 11:40:12 [kv_cache_utils.py:2146] GPU KV cache size: 1,322,726 tokens",
+        "INFO 10-21 11:40:24 [loggers.py:273] Engine 000: Avg prompt throughput: 78.5 tokens/s, Avg generation throughput: 737.7 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.6%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:40:34 [loggers.py:273] Engine 000: Avg prompt throughput: 5.2 tokens/s, Avg generation throughput: 744.0 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 62.0%",
+        "INFO 10-21 11:40:44 [loggers.py:273] Engine 000: Avg prompt throughput: 5.2 tokens/s, Avg generation throughput: 739.2 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 69.7%",
+        "INFO 10-21 11:40:54 [loggers.py:273] Engine 000: Avg prompt throughput: 88.9 tokens/s, Avg generation throughput: 1165.4 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.7%, Prefix cache hit rate: 69.3%",
+        "INFO 10-21 11:41:04 [loggers.py:273] Engine 000: Avg prompt throughput: 14.9 tokens/s, Avg generation throughput: 1461.7 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.6%, Prefix cache hit rate: 73.3%",
+        "INFO 10-21 11:41:14 [loggers.py:273] Engine 000: Avg prompt throughput: 14.9 tokens/s, Avg generation throughput: 1442.5 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.4%, Prefix cache hit rate: 76.0%",
+        "INFO 10-21 11:41:24 [loggers.py:273] Engine 000: Avg prompt throughput: 189.2 tokens/s, Avg generation throughput: 1662.0 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.4%, Prefix cache hit rate: 72.6%",
+        "INFO 10-21 11:41:34 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2803.5 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.5%, Prefix cache hit rate: 72.6%",
+        "INFO 10-21 11:41:44 [loggers.py:273] Engine 000: Avg prompt throughput: 26.6 tokens/s, Avg generation throughput: 2789.7 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.2%, Prefix cache hit rate: 75.7%",
+        "INFO 10-21 11:41:54 [loggers.py:273] Engine 000: Avg prompt throughput: 26.6 tokens/s, Avg generation throughput: 2793.9 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.8%, Prefix cache hit rate: 77.9%",
+        "INFO 10-21 11:42:09 [loggers.py:273] Engine 000: Avg prompt throughput: 17.7 tokens/s, Avg generation throughput: 950.0 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.4%, Prefix cache hit rate: 79.5%",
+        "INFO 10-21 11:42:19 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2541.6 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.3%, Prefix cache hit rate: 79.5%"
+      ],
+      "raw_results_file": "outputs/local-decode-20261021/eager-gpu2/results.json"
+    },
+    "graph-gpu1-v3": {
+      "config": {
+        "kind": "local-single-replica-fixed-output-diagnostic",
+        "device": 1,
+        "gpu": "NVIDIA H800",
+        "driver": "550.163.01",
+        "python": "3.12.11",
+        "versions": {
+          "torch": "2.11.0+cu128",
+          "vllm": "0.25.1+cu129",
+          "transformers": "5.12.1"
+        },
+        "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "data": "../MD-OPD/data/math/DAPO/train.parquet",
+        "engine": {
+          "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+          "dtype": "bfloat16",
+          "tensor_parallel_size": 1,
+          "max_model_len": 35841,
+          "max_num_seqs": 32,
+          "max_num_batched_tokens": 8192,
+          "gpu_memory_utilization": 0.5,
+          "enforce_eager": false,
+          "enable_prefix_caching": true,
+          "enable_chunked_prefill": true,
+          "disable_log_stats": false,
+          "seed": 42,
+          "logprobs_mode": "processed_logprobs",
+          "compilation_config": {
+            "cudagraph_capture_sizes": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32
+            ]
+          },
+          "profiler_config": {
+            "profiler": "torch",
+            "torch_profiler_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/local-decode-20261021/graph-gpu1-v3/trace",
+            "torch_profiler_with_stack": false,
+            "torch_profiler_record_shapes": false,
+            "torch_profiler_with_memory": false,
+            "ignore_frontend": true,
+            "delay_iterations": 32,
+            "max_iterations": 40
+          }
+        },
+        "prompt_tokens": [
+          140,
+          83,
+          97,
+          151,
+          102,
+          41,
+          71,
+          55,
+          39,
+          94,
+          91,
+          74,
+          80,
+          158,
+          74,
+          79,
+          99,
+          43,
+          65,
+          52,
+          107,
+          70,
+          102,
+          152,
+          43,
+          115,
+          93,
+          146,
+          139,
+          39,
+          122,
+          106
+        ],
+        "sampling": {
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "logprobs": 0,
+          "ignore_eos": true
+        },
+        "tokens": 1024,
+        "repeats": 3,
+        "limitations": "Initial checkpoint; fixed output length; warmed prefix cache; no Ray/teacher/update; H800, not A800."
+      },
+      "results": [
+        {
+          "batch": 8,
+          "repeat": 0,
+          "seconds": 2.627775974571705,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 3117.4651413483584,
+          "batch_wall_ms_per_output_position": 2.5661874751676805,
+          "gpu_busy_probe_mean": 91.0909090909091,
+          "memory_gib_probe_max": 40.507080078125
+        },
+        {
+          "batch": 8,
+          "repeat": 1,
+          "seconds": 2.6480779722332954,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 3093.5644969287505,
+          "batch_wall_ms_per_output_position": 2.5860136447590776,
+          "gpu_busy_probe_mean": 94,
+          "memory_gib_probe_max": 40.509033203125
+        },
+        {
+          "batch": 8,
+          "repeat": 2,
+          "seconds": 2.6090702787041664,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 3139.8157676567757,
+          "batch_wall_ms_per_output_position": 2.5479201940470375,
+          "gpu_busy_probe_mean": 96.63636363636364,
+          "memory_gib_probe_max": 40.509033203125
+        },
+        {
+          "batch": 16,
+          "repeat": 0,
+          "seconds": 2.7209778428077698,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 6021.3647249304295,
+          "batch_wall_ms_per_output_position": 2.6572049246169627,
+          "gpu_busy_probe_mean": 94.36363636363636,
+          "memory_gib_probe_max": 40.534423828125
+        },
+        {
+          "batch": 16,
+          "repeat": 1,
+          "seconds": 2.7283283546566963,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 6005.142296027484,
+          "batch_wall_ms_per_output_position": 2.66438315884443,
+          "gpu_busy_probe_mean": 98.9090909090909,
+          "memory_gib_probe_max": 40.534423828125
+        },
+        {
+          "batch": 16,
+          "repeat": 2,
+          "seconds": 2.742612674832344,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 5973.865777821345,
+          "batch_wall_ms_per_output_position": 2.678332690265961,
+          "gpu_busy_probe_mean": 95.9090909090909,
+          "memory_gib_probe_max": 40.534423828125
+        },
+        {
+          "batch": 32,
+          "repeat": 0,
+          "seconds": 2.959913954138756,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 11070.592087375217,
+          "batch_wall_ms_per_output_position": 2.8905409708386287,
+          "gpu_busy_probe_mean": 93.81818181818181,
+          "memory_gib_probe_max": 40.620361328125
+        },
+        {
+          "batch": 32,
+          "repeat": 1,
+          "seconds": 2.9558357149362564,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 11085.866455438865,
+          "batch_wall_ms_per_output_position": 2.886558315367438,
+          "gpu_busy_probe_mean": 96.5,
+          "memory_gib_probe_max": 40.620361328125
+        },
+        {
+          "batch": 32,
+          "repeat": 2,
+          "seconds": 2.9552396684885025,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 11088.102379445807,
+          "batch_wall_ms_per_output_position": 2.8859762387583032,
+          "gpu_busy_probe_mean": 96.41666666666667,
+          "memory_gib_probe_max": 40.620361328125
+        }
+      ],
+      "trace_summary": {
+        "annotations": {
+          "execute_context_0(0)_generation_32(32)": 40
+        },
+        "devices": {
+          "0": {
+            "activity_envelope_ms": 125.68342016601562,
+            "device_activity_union_ms": 102.48968139648437,
+            "kernel_union_ms": 101.80847680664063,
+            "device_activity_envelope_fraction": 0.8154590419412953,
+            "kernel_count": 14395,
+            "top_kernels_by_summed_duration": [
+              {
+                "name": "nvjet_tst_192x32_64x7_4x1_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 26.83947400000008
+              },
+              {
+                "name": "nvjet_tst_64x32_64x16_4x1_v_bz_splitK_TNT",
+                "count": 1120,
+                "sum_ms": 13.553047999999999
+              },
+              {
+                "name": "void cutlass::device_kernel<flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, true, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, true, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, true, true, true, true, false, true> > > >(flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, true, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, true, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, true, true, true, true, false, true> > >::Params)",
+                "count": 1120,
+                "sum_ms": 11.559569
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x2_v_bz_bias_TNT",
+                "count": 1120,
+                "sum_ms": 6.819018999999999
+              },
+              {
+                "name": "nvjet_tst_384x32_64x4_2x1_v_bz_TNT",
+                "count": 40,
+                "sum_ms": 6.575392000000001
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x2_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 5.9616989999999985
+              },
+              {
+                "name": "void cutlass::device_kernel<flash::FlashAttnFwdCombine<cute::tuple<cute::C<8>, cute::C<128> >, 5, 256, 1, false, true, cutlass::bfloat16_t, float, cutlass::arch::Sm90> >(flash::FlashAttnFwdCombine<cute::tuple<cute::C<8>, cute::C<128> >, 5, 256, 1, false, true, cutlass::bfloat16_t, float, cutlass::arch::Sm90>::Params)",
+                "count": 1120,
+                "sum_ms": 4.889634999999993
+              },
+              {
+                "name": "_topk_log_softmax_kernel",
+                "count": 40,
+                "sum_ms": 4.680662999999999
+              }
+            ]
+          }
+        },
+        "interpretation": "Profiled interval only; overhead changes gaps. Activity union is not compute/bandwidth utilization. Top-kernel durations are summed and can overlap. Use separate unprofiled runs for speed comparisons."
+      },
+      "trace_file": "outputs/local-decode-20261021/graph-gpu1-v3/trace/rank0.1792554048012210444.pt.trace.json.gz",
+      "log_file": "outputs/local-decode-20261021/graph-gpu1-v3.log",
+      "log_evidence": [
+        "(EngineCore pid=1979234) INFO 10-21 11:40:09 [cuda.py:476] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].",
+        "(EngineCore pid=1979234) INFO 10-21 11:40:09 [flash_attn.py:718] Using FlashAttention version 3",
+        "(EngineCore pid=1979234) INFO 10-21 11:40:18 [gpu_worker.py:538] Available KV cache memory: 35.36 GiB",
+        "(EngineCore pid=1979234) INFO 10-21 11:40:18 [kv_cache_utils.py:2146] GPU KV cache size: 1,323,606 tokens",
+        "(EngineCore pid=1979234) INFO 10-21 11:40:20 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.17 GiB",
+        "INFO 10-21 11:40:31 [loggers.py:273] Engine 000: Avg prompt throughput: 177.1 tokens/s, Avg generation throughput: 3545.9 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 69.3%",
+        "INFO 10-21 11:40:41 [loggers.py:273] Engine 000: Avg prompt throughput: 245.6 tokens/s, Avg generation throughput: 7457.3 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.3%, Prefix cache hit rate: 75.7%",
+        "INFO 10-21 11:40:51 [loggers.py:273] Engine 000: Avg prompt throughput: 53.2 tokens/s, Avg generation throughput: 8827.7 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.0%, Prefix cache hit rate: 79.5%"
+      ],
+      "raw_results_file": "outputs/local-decode-20261021/graph-gpu1-v3/results.json"
+    },
+    "graph-gpu3": {
+      "config": {
+        "kind": "local-single-replica-fixed-output-diagnostic",
+        "device": 3,
+        "gpu": "NVIDIA H800",
+        "driver": "550.163.01",
+        "python": "3.12.11",
+        "versions": {
+          "torch": "2.11.0+cu128",
+          "vllm": "0.25.1+cu129",
+          "transformers": "5.12.1"
+        },
+        "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "data": "../MD-OPD/data/math/DAPO/train.parquet",
+        "engine": {
+          "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+          "dtype": "bfloat16",
+          "tensor_parallel_size": 1,
+          "max_model_len": 35841,
+          "max_num_seqs": 32,
+          "max_num_batched_tokens": 8192,
+          "gpu_memory_utilization": 0.5,
+          "enforce_eager": false,
+          "enable_prefix_caching": true,
+          "enable_chunked_prefill": true,
+          "disable_log_stats": false,
+          "seed": 42,
+          "logprobs_mode": "processed_logprobs",
+          "compilation_config": {
+            "cudagraph_capture_sizes": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32
+            ]
+          },
+          "profiler_config": {
+            "profiler": "torch",
+            "torch_profiler_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/local-decode-20261021/graph-gpu3/trace",
+            "torch_profiler_with_stack": false,
+            "torch_profiler_record_shapes": false,
+            "torch_profiler_with_memory": false,
+            "ignore_frontend": true,
+            "delay_iterations": 32,
+            "max_iterations": 40
+          }
+        },
+        "prompt_tokens": [
+          140,
+          83,
+          97,
+          151,
+          102,
+          41,
+          71,
+          55,
+          39,
+          94,
+          91,
+          74,
+          80,
+          158,
+          74,
+          79,
+          99,
+          43,
+          65,
+          52,
+          107,
+          70,
+          102,
+          152,
+          43,
+          115,
+          93,
+          146,
+          139,
+          39,
+          122,
+          106
+        ],
+        "sampling": {
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "logprobs": 0,
+          "ignore_eos": true
+        },
+        "tokens": 1024,
+        "repeats": 3,
+        "limitations": "Initial checkpoint; fixed output length; warmed prefix cache; no Ray/teacher/update; H800, not A800."
+      },
+      "results": [
+        {
+          "batch": 8,
+          "repeat": 0,
+          "seconds": 2.6401247158646584,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 3102.883720141632,
+          "batch_wall_ms_per_output_position": 2.5782467928365804,
+          "gpu_busy_probe_mean": 91.36363636363636,
+          "memory_gib_probe_max": 40.507080078125
+        },
+        {
+          "batch": 8,
+          "repeat": 1,
+          "seconds": 2.653095059096813,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 3087.714468394805,
+          "batch_wall_ms_per_output_position": 2.5909131436492316,
+          "gpu_busy_probe_mean": 95.3,
+          "memory_gib_probe_max": 40.507080078125
+        },
+        {
+          "batch": 8,
+          "repeat": 2,
+          "seconds": 2.623659208416939,
+          "output_tokens": 8192,
+          "output_tokens_per_second": 3122.356735097041,
+          "batch_wall_ms_per_output_position": 2.562167195719667,
+          "gpu_busy_probe_mean": 96.63636363636364,
+          "memory_gib_probe_max": 40.507080078125
+        },
+        {
+          "batch": 16,
+          "repeat": 0,
+          "seconds": 2.7438168674707413,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 5971.243997454838,
+          "batch_wall_ms_per_output_position": 2.6795086596393958,
+          "gpu_busy_probe_mean": 96.27272727272727,
+          "memory_gib_probe_max": 40.534423828125
+        },
+        {
+          "batch": 16,
+          "repeat": 1,
+          "seconds": 2.751411519944668,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 5954.76172184141,
+          "batch_wall_ms_per_output_position": 2.6869253124459647,
+          "gpu_busy_probe_mean": 96.36363636363636,
+          "memory_gib_probe_max": 40.534423828125
+        },
+        {
+          "batch": 16,
+          "repeat": 2,
+          "seconds": 2.7556501254439354,
+          "output_tokens": 16384,
+          "output_tokens_per_second": 5945.60240021782,
+          "batch_wall_ms_per_output_position": 2.691064575628843,
+          "gpu_busy_probe_mean": 96.27272727272727,
+          "memory_gib_probe_max": 40.534423828125
+        },
+        {
+          "batch": 32,
+          "repeat": 0,
+          "seconds": 2.9675301536917686,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 11042.179288131185,
+          "batch_wall_ms_per_output_position": 2.897978665714618,
+          "gpu_busy_probe_mean": 94.9090909090909,
+          "memory_gib_probe_max": 40.620361328125
+        },
+        {
+          "batch": 32,
+          "repeat": 1,
+          "seconds": 2.949222393333912,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 11110.725347150854,
+          "batch_wall_ms_per_output_position": 2.8800999934901483,
+          "gpu_busy_probe_mean": 99,
+          "memory_gib_probe_max": 40.620361328125
+        },
+        {
+          "batch": 32,
+          "repeat": 2,
+          "seconds": 2.9742813408374786,
+          "output_tokens": 32768,
+          "output_tokens_per_second": 11017.115143106605,
+          "batch_wall_ms_per_output_position": 2.9045716219116002,
+          "gpu_busy_probe_mean": 96,
+          "memory_gib_probe_max": 40.620361328125
+        }
+      ],
+      "trace_summary": {
+        "annotations": {
+          "execute_context_0(0)_generation_32(32)": 40
+        },
+        "devices": {
+          "0": {
+            "activity_envelope_ms": 125.08042504882812,
+            "device_activity_union_ms": 102.86478295898438,
+            "kernel_union_ms": 102.19814526367188,
+            "device_activity_envelope_fraction": 0.8223891381791248,
+            "kernel_count": 14395,
+            "top_kernels_by_summed_duration": [
+              {
+                "name": "nvjet_tst_192x32_64x7_4x1_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 26.903595000000053
+              },
+              {
+                "name": "nvjet_tst_64x32_64x16_4x1_v_bz_splitK_TNT",
+                "count": 1120,
+                "sum_ms": 13.805290999999965
+              },
+              {
+                "name": "void cutlass::device_kernel<flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, true, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, true, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, true, true, true, true, false, true> > > >(flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, true, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, true, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, true, true, true, true, false, true> > >::Params)",
+                "count": 1120,
+                "sum_ms": 11.639144999999987
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x2_v_bz_bias_TNT",
+                "count": 1120,
+                "sum_ms": 6.830891999999997
+              },
+              {
+                "name": "nvjet_tst_384x32_64x4_2x1_v_bz_TNT",
+                "count": 40,
+                "sum_ms": 6.492800999999997
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x2_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 5.947171000000009
+              },
+              {
+                "name": "void cutlass::device_kernel<flash::FlashAttnFwdCombine<cute::tuple<cute::C<8>, cute::C<128> >, 5, 256, 1, false, true, cutlass::bfloat16_t, float, cutlass::arch::Sm90> >(flash::FlashAttnFwdCombine<cute::tuple<cute::C<8>, cute::C<128> >, 5, 256, 1, false, true, cutlass::bfloat16_t, float, cutlass::arch::Sm90>::Params)",
+                "count": 1120,
+                "sum_ms": 4.957101000000017
+              },
+              {
+                "name": "_topk_log_softmax_kernel",
+                "count": 40,
+                "sum_ms": 4.742084
+              }
+            ]
+          }
+        },
+        "interpretation": "Profiled interval only; overhead changes gaps. Activity union is not compute/bandwidth utilization. Top-kernel durations are summed and can overlap. Use separate unprofiled runs for speed comparisons."
+      },
+      "trace_file": "outputs/local-decode-20261021/graph-gpu3/trace/rank0.1792554048182076670.pt.trace.json.gz",
+      "log_file": "outputs/local-decode-20261021/graph-gpu3.log",
+      "log_evidence": [
+        "(EngineCore pid=1979227) INFO 10-21 11:40:09 [cuda.py:476] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].",
+        "(EngineCore pid=1979227) INFO 10-21 11:40:09 [flash_attn.py:718] Using FlashAttention version 3",
+        "(EngineCore pid=1979227) INFO 10-21 11:40:18 [gpu_worker.py:538] Available KV cache memory: 35.36 GiB",
+        "(EngineCore pid=1979227) INFO 10-21 11:40:18 [kv_cache_utils.py:2146] GPU KV cache size: 1,323,606 tokens",
+        "(EngineCore pid=1979227) INFO 10-21 11:40:20 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.17 GiB",
+        "INFO 10-21 11:40:31 [loggers.py:273] Engine 000: Avg prompt throughput: 177.1 tokens/s, Avg generation throughput: 3540.3 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 69.3%",
+        "INFO 10-21 11:40:41 [loggers.py:273] Engine 000: Avg prompt throughput: 219.8 tokens/s, Avg generation throughput: 7425.6 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.2%, Prefix cache hit rate: 75.7%",
+        "INFO 10-21 11:40:51 [loggers.py:273] Engine 000: Avg prompt throughput: 78.6 tokens/s, Avg generation throughput: 8762.3 tokens/s, Running: 32 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.9%, Prefix cache hit rate: 79.5%"
+      ],
+      "raw_results_file": "outputs/local-decode-20261021/graph-gpu3/results.json"
+    },
+    "eager-long-gpu0": {
+      "config": {
+        "kind": "local-single-replica-fixed-output-diagnostic",
+        "device": 0,
+        "gpu": "NVIDIA H800",
+        "driver": "550.163.01",
+        "python": "3.12.11",
+        "versions": {
+          "torch": "2.11.0+cu128",
+          "vllm": "0.25.1+cu129",
+          "transformers": "5.12.1"
+        },
+        "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "data": "../MD-OPD/data/math/DAPO/train.parquet",
+        "engine": {
+          "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+          "dtype": "bfloat16",
+          "tensor_parallel_size": 1,
+          "max_model_len": 35841,
+          "max_num_seqs": 32,
+          "max_num_batched_tokens": 8192,
+          "gpu_memory_utilization": 0.5,
+          "enforce_eager": true,
+          "enable_prefix_caching": true,
+          "enable_chunked_prefill": true,
+          "disable_log_stats": false,
+          "seed": 42,
+          "logprobs_mode": "processed_logprobs",
+          "profiler_config": {
+            "profiler": "torch",
+            "torch_profiler_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/local-decode-20261021/eager-long-gpu0/trace",
+            "torch_profiler_with_stack": false,
+            "torch_profiler_record_shapes": false,
+            "torch_profiler_with_memory": false,
+            "ignore_frontend": true,
+            "delay_iterations": 4096,
+            "max_iterations": 40
+          }
+        },
+        "prompt_tokens": [
+          140,
+          83,
+          97,
+          151,
+          102,
+          41,
+          71,
+          55,
+          39,
+          94,
+          91,
+          74,
+          80,
+          158,
+          74,
+          79
+        ],
+        "sampling": {
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "logprobs": 0,
+          "ignore_eos": true
+        },
+        "tokens": 7168,
+        "repeats": 1,
+        "limitations": "Initial checkpoint; fixed output length; warmed prefix cache; no Ray/teacher/update; H800, not A800."
+      },
+      "results": [
+        {
+          "batch": 8,
+          "repeat": 0,
+          "seconds": 77.18512545526028,
+          "output_tokens": 57344,
+          "output_tokens_per_second": 742.9410739668873,
+          "batch_wall_ms_per_output_position": 10.76801415391466,
+          "gpu_busy_probe_mean": 31.308441558441558,
+          "memory_gib_probe_max": 40.790283203125
+        },
+        {
+          "batch": 16,
+          "repeat": 0,
+          "seconds": 78.52223969995975,
+          "output_tokens": 114688,
+          "output_tokens_per_second": 1460.579836212425,
+          "batch_wall_ms_per_output_position": 10.954553529570278,
+          "gpu_busy_probe_mean": 33.883870967741935,
+          "memory_gib_probe_max": 40.790283203125
+        }
+      ],
+      "trace_summary": {
+        "annotations": {
+          "execute_context_0(0)_generation_16(16)": 40
+        },
+        "devices": {
+          "0": {
+            "activity_envelope_ms": 657.088126953125,
+            "device_activity_union_ms": 131.70731176757812,
+            "kernel_union_ms": 131.11639721679688,
+            "device_activity_envelope_fraction": 0.20044086381273754,
+            "kernel_count": 14388,
+            "top_kernels_by_summed_duration": [
+              {
+                "name": "void cutlass::device_kernel<flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, true, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, true, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, true, true, true, true, false, true> > > >(flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, true, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, true, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, true, true, true, true, false, true> > >::Params)",
+                "count": 1120,
+                "sum_ms": 37.12017399999995
+              },
+              {
+                "name": "nvjet_tst_256x16_64x6_4x1_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 25.240307000000005
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x1_v_bz_splitK_TNT",
+                "count": 1120,
+                "sum_ms": 14.012617999999966
+              },
+              {
+                "name": "nvjet_tst_64x8_64x16_4x2_v_bz_bias_TNT",
+                "count": 1120,
+                "sum_ms": 6.872361999999983
+              },
+              {
+                "name": "nvjet_tst_384x16_64x4_2x1_v_bz_TNT",
+                "count": 40,
+                "sum_ms": 6.392226
+              },
+              {
+                "name": "std::enable_if<(((8)>(0)))&&vllm::_typeConvert<c10::BFloat16>::exists, void>::type vllm::fused_add_rms_norm_kernel<c10::BFloat16, 8, true>(c10::BFloat16*, long, c10::BFloat16*, c10::BFloat16 const*, float, int, int)",
+                "count": 2240,
+                "sum_ms": 6.2151890000000005
+              },
+              {
+                "name": "nvjet_tst_64x8_64x16_4x2_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 5.966785999999999
+              },
+              {
+                "name": "void cutlass::device_kernel<flash::FlashAttnFwdCombine<cute::tuple<cute::C<8>, cute::C<128> >, 5, 256, 1, false, true, cutlass::bfloat16_t, float, cutlass::arch::Sm90> >(flash::FlashAttnFwdCombine<cute::tuple<cute::C<8>, cute::C<128> >, 5, 256, 1, false, true, cutlass::bfloat16_t, float, cutlass::arch::Sm90>::Params)",
+                "count": 1120,
+                "sum_ms": 5.895156000000008
+              }
+            ]
+          }
+        },
+        "interpretation": "Profiled interval only; overhead changes gaps. Activity union is not compute/bandwidth utilization. Top-kernel durations are summed and can overlap. Use separate unprofiled runs for speed comparisons."
+      },
+      "trace_file": "outputs/local-decode-20261021/eager-long-gpu0/trace/rank0.1792554367854253080.pt.trace.json.gz",
+      "log_file": "outputs/local-decode-20261021/eager-long-gpu0.log",
+      "log_evidence": [
+        "(EngineCore pid=1979859) INFO 10-21 11:42:38 [cuda.py:476] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].",
+        "(EngineCore pid=1979859) INFO 10-21 11:42:38 [flash_attn.py:718] Using FlashAttention version 3",
+        "(EngineCore pid=1979859) INFO 10-21 11:42:41 [gpu_worker.py:538] Available KV cache memory: 35.34 GiB",
+        "(EngineCore pid=1979859) INFO 10-21 11:42:41 [kv_cache_utils.py:2146] GPU KV cache size: 1,322,726 tokens",
+        "INFO 10-21 11:42:54 [loggers.py:273] Engine 000: Avg prompt throughput: 78.5 tokens/s, Avg generation throughput: 738.8 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.6%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:43:04 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 757.0 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.2%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:43:14 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 745.6 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.7%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:43:24 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 749.8 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.3%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:43:34 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 735.2 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.8%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:43:44 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 732.3 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.4%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:43:54 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 738.0 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.0%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:44:04 [loggers.py:273] Engine 000: Avg prompt throughput: 89.0 tokens/s, Avg generation throughput: 875.1 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.3%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:44:14 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1449.0 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.4%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:44:24 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1456.8 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.5%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:44:34 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1460.4 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.6%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:44:44 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1459.0 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.7%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:44:54 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1475.6 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.8%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:45:04 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1457.4 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.9%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:45:14 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1477.2 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 8.0%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:45:24 [loggers.py:273] Engine 000: Avg prompt throughput: 14.9 tokens/s, Avg generation throughput: 1430.9 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.4%, Prefix cache hit rate: 68.3%",
+        "INFO 10-21 11:45:34 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1458.7 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.5%, Prefix cache hit rate: 68.3%",
+        "INFO 10-21 11:45:44 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1457.2 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.6%, Prefix cache hit rate: 68.3%",
+        "INFO 10-21 11:45:54 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1417.8 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.7%, Prefix cache hit rate: 68.3%",
+        "INFO 10-21 11:46:04 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1450.4 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.8%, Prefix cache hit rate: 68.3%",
+        "INFO 10-21 11:46:16 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 344.3 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 5.1%, Prefix cache hit rate: 68.3%",
+        "INFO 10-21 11:46:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1315.3 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.1%, Prefix cache hit rate: 68.3%",
+        "INFO 10-21 11:46:36 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1302.6 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 7.1%, Prefix cache hit rate: 68.3%"
+      ],
+      "raw_results_file": "outputs/local-decode-20261021/eager-long-gpu0/results.json"
+    },
+    "graph-long-gpu1": {
+      "config": {
+        "kind": "local-single-replica-fixed-output-diagnostic",
+        "device": 1,
+        "gpu": "NVIDIA H800",
+        "driver": "550.163.01",
+        "python": "3.12.11",
+        "versions": {
+          "torch": "2.11.0+cu128",
+          "vllm": "0.25.1+cu129",
+          "transformers": "5.12.1"
+        },
+        "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "data": "../MD-OPD/data/math/DAPO/train.parquet",
+        "engine": {
+          "model": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+          "dtype": "bfloat16",
+          "tensor_parallel_size": 1,
+          "max_model_len": 35841,
+          "max_num_seqs": 32,
+          "max_num_batched_tokens": 8192,
+          "gpu_memory_utilization": 0.5,
+          "enforce_eager": false,
+          "enable_prefix_caching": true,
+          "enable_chunked_prefill": true,
+          "disable_log_stats": false,
+          "seed": 42,
+          "logprobs_mode": "processed_logprobs",
+          "compilation_config": {
+            "cudagraph_capture_sizes": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32
+            ]
+          },
+          "profiler_config": {
+            "profiler": "torch",
+            "torch_profiler_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/local-decode-20261021/graph-long-gpu1/trace",
+            "torch_profiler_with_stack": false,
+            "torch_profiler_record_shapes": false,
+            "torch_profiler_with_memory": false,
+            "ignore_frontend": true,
+            "delay_iterations": 4096,
+            "max_iterations": 40
+          }
+        },
+        "prompt_tokens": [
+          140,
+          83,
+          97,
+          151,
+          102,
+          41,
+          71,
+          55,
+          39,
+          94,
+          91,
+          74,
+          80,
+          158,
+          74,
+          79
+        ],
+        "sampling": {
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "logprobs": 0,
+          "ignore_eos": true
+        },
+        "tokens": 7168,
+        "repeats": 1,
+        "limitations": "Initial checkpoint; fixed output length; warmed prefix cache; no Ray/teacher/update; H800, not A800."
+      },
+      "results": [
+        {
+          "batch": 8,
+          "repeat": 0,
+          "seconds": 19.75390961021185,
+          "output_tokens": 57344,
+          "output_tokens_per_second": 2902.9190237033295,
+          "batch_wall_ms_per_output_position": 2.7558467648175013,
+          "gpu_busy_probe_mean": 98.55696202531645,
+          "memory_gib_probe_max": 40.507080078125
+        },
+        {
+          "batch": 16,
+          "repeat": 0,
+          "seconds": 22.210557147860527,
+          "output_tokens": 114688,
+          "output_tokens_per_second": 5163.670557046225,
+          "batch_wall_ms_per_output_position": 3.0985710306725065,
+          "gpu_busy_probe_mean": 99.73863636363636,
+          "memory_gib_probe_max": 40.534423828125
+        }
+      ],
+      "trace_summary": {
+        "annotations": {
+          "execute_context_0(0)_generation_16(16)": 40
+        },
+        "devices": {
+          "0": {
+            "activity_envelope_ms": 130.73049609375,
+            "device_activity_union_ms": 121.07325537109375,
+            "kernel_union_ms": 120.40174194335937,
+            "device_activity_envelope_fraction": 0.9261286309528665,
+            "kernel_count": 14388,
+            "top_kernels_by_summed_duration": [
+              {
+                "name": "void cutlass::device_kernel<flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, true, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, true, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, true, true, true, true, false, true> > > >(flash::enable_sm90_or_later<flash::FlashAttnFwdSm90<flash::CollectiveMainloopFwdSm90<2, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, 128, cutlass::bfloat16_t, float, cutlass::arch::Sm90, true, false, false, true, true, false, false, true, true, true, true, false, cutlass::bfloat16_t, 1>, flash::CollectiveEpilogueFwd<cute::tuple<cute::C<64>, cute::C<128>, cute::C<128> >, cute::tuple<cute::C<1>, cute::C<1>, cute::C<1> >, cutlass::bfloat16_t, cutlass::arch::Sm90, 128, true, true, true, false, 1>, flash::VarlenDynamicPersistentTileScheduler<64, 128, 128, 128, true, true, true, true, false, true> > >::Params)",
+                "count": 1120,
+                "sum_ms": 35.853554999999986
+              },
+              {
+                "name": "nvjet_tst_256x16_64x6_4x1_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 24.228377
+              },
+              {
+                "name": "nvjet_tst_64x16_64x16_4x1_v_bz_splitK_TNT",
+                "count": 1120,
+                "sum_ms": 13.275042000000054
+              },
+              {
+                "name": "nvjet_tst_64x8_64x16_4x2_v_bz_bias_TNT",
+                "count": 1120,
+                "sum_ms": 6.648924000000009
+              },
+              {
+                "name": "nvjet_tst_384x16_64x4_2x1_v_bz_TNT",
+                "count": 40,
+                "sum_ms": 6.447599000000001
+              },
+              {
+                "name": "nvjet_tst_64x8_64x16_4x2_v_bz_TNT",
+                "count": 1120,
+                "sum_ms": 5.724843999999996
+              },
+              {
+                "name": "void cutlass::device_kernel<flash::FlashAttnFwdCombine<cute::tuple<cute::C<8>, cute::C<128> >, 5, 256, 1, false, true, cutlass::bfloat16_t, float, cutlass::arch::Sm90> >(flash::FlashAttnFwdCombine<cute::tuple<cute::C<8>, cute::C<128> >, 5, 256, 1, false, true, cutlass::bfloat16_t, float, cutlass::arch::Sm90>::Params)",
+                "count": 1120,
+                "sum_ms": 5.217728000000008
+              },
+              {
+                "name": "_topk_log_softmax_kernel",
+                "count": 40,
+                "sum_ms": 4.502299999999999
+              }
+            ]
+          }
+        },
+        "interpretation": "Profiled interval only; overhead changes gaps. Activity union is not compute/bandwidth utilization. Top-kernel durations are summed and can overlap. Use separate unprofiled runs for speed comparisons."
+      },
+      "trace_file": "outputs/local-decode-20261021/graph-long-gpu1/trace/rank0.1792554220565480540.pt.trace.json.gz",
+      "log_file": "outputs/local-decode-20261021/graph-long-gpu1.log",
+      "log_evidence": [
+        "(EngineCore pid=1979852) INFO 10-21 11:42:36 [cuda.py:476] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].",
+        "(EngineCore pid=1979852) INFO 10-21 11:42:36 [flash_attn.py:718] Using FlashAttention version 3",
+        "(EngineCore pid=1979852) INFO 10-21 11:42:44 [gpu_worker.py:538] Available KV cache memory: 35.36 GiB",
+        "(EngineCore pid=1979852) INFO 10-21 11:42:44 [kv_cache_utils.py:2146] GPU KV cache size: 1,323,606 tokens",
+        "(EngineCore pid=1979852) INFO 10-21 11:42:44 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.17 GiB",
+        "INFO 10-21 11:42:56 [loggers.py:273] Engine 000: Avg prompt throughput: 78.6 tokens/s, Avg generation throughput: 3028.0 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.3%, Prefix cache hit rate: 46.5%",
+        "INFO 10-21 11:43:06 [loggers.py:273] Engine 000: Avg prompt throughput: 74.1 tokens/s, Avg generation throughput: 2747.1 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.1%, Prefix cache hit rate: 47.3%",
+        "INFO 10-21 11:43:16 [loggers.py:273] Engine 000: Avg prompt throughput: 14.9 tokens/s, Avg generation throughput: 5699.8 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 4.4%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:43:26 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4828.8 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 8.0%, Prefix cache hit rate: 61.2%",
+        "INFO 10-21 11:43:36 [loggers.py:273] Engine 000: Avg prompt throughput: 14.9 tokens/s, Avg generation throughput: 5447.6 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.5%, Prefix cache hit rate: 68.3%",
+        "INFO 10-21 11:43:46 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4099.6 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.6%, Prefix cache hit rate: 68.3%"
+      ],
+      "raw_results_file": "outputs/local-decode-20261021/graph-long-gpu1/results.json"
+    }
+  },
+  "gpu_samples_file": "gpu-samples.jsonl.gz"
+}
