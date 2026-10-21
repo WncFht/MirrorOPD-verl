@@ -331,11 +331,16 @@ def distillation_loss(
         )
         # Same pre-dual-clip event as vanilla's existing pg_clipfrac, now
         # weighted by the actual response-token count across partitions.
-        clipped = distillation_metrics.get("distillation/pg_clipfrac")
-        if clipped is not None:
-            distillation_metrics["correction/anchor_ppo/active_fraction"] = Observation.ratio(
-                response_mask.sum() * clipped, response_mask.sum()
-            )
+        ratio = (log_prob.detach() - old_log_prob.detach()).clamp(-20, 20).exp()
+        advantage = -distillation_losses.detach()
+        low = loss_config.clip_ratio if loss_config.clip_ratio_low is None else loss_config.clip_ratio_low
+        high = loss_config.clip_ratio if loss_config.clip_ratio_high is None else loss_config.clip_ratio_high
+        active = -advantage * ratio.clamp(1 - low, 1 + high) > -advantage * ratio
+        valid = response_mask.bool()
+        finite = torch.isfinite(ratio[valid]).all() & torch.isfinite(advantage[valid]).all()
+        distillation_metrics["correction/anchor_ppo/active_fraction"] = Observation.mean(
+            torch.where(finite, active[valid].double(), float("nan"))
+        )
     return distillation_loss, distillation_metrics
 
 
