@@ -24,7 +24,7 @@
 - 资产检查重点是数据；模型只检查必要文件，`generation_config.json` 可选。用户要求项目自有工具不增加文件摘要计算、校验或清单。
 - 2026-10-20 已观察到的开发机配置是 Python 3.12.13、A100 80GB、R535 驱动、PyTorch 2.11.0+cu128、vLLM 0.25.1+cu129；GPU 导入与实际训练验收分别进行，不把安装完成视为训练通过。
 - 脚本保持 Bash 3.2 兼容，使用 `set -eo pipefail`；通用传输逻辑使用 Python 标准库，Mac 和 Linux 共用同一入口。
-- 数学配方将终端 stdout/stderr 同时保存到 `outputs/<实验名>/train.log`，默认离线 W&B run 位于仓库 `wandb/`；同步参数 `WANDB_RUNS_DIR` 指实际 run 目录，SDK 的 `WANDB_DIR` 指其父级根目录。源码 archive 自动清理旧包，日志和结果增量包保留到人工处理。
+- 数学配方将终端 stdout/stderr 同时保存到 `outputs/<实验名>/train.log`，默认离线 W&B run 位于仓库 `wandb/`；同步参数 `WANDB_RUNS_DIR` 指实际 run 目录，SDK 的 `WANDB_DIR` 指其父级根目录。源码和日志 pack 成功后自动清理各自旧包；日志增量包须在下次打包前传回，日志和结果 unpack 保留输入包。
 
 ## 提交
 

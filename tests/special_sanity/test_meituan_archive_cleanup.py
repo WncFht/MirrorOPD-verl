@@ -1,6 +1,6 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Exercise source-archive cleanup without GPUs, package installation or network access."""
+"""Exercise transfer-archive cleanup without GPUs, package installation or network access."""
 
 import argparse
 import importlib.util
@@ -154,6 +154,71 @@ class SourceArchiveCleanupTest(unittest.TestCase):
             self.unpack(parts[0])
         self.assertTrue(all(part.exists() for part in parts if part != parts[1]))
         self.assertFalse(self.receiving.exists())
+
+    def test_log_pack_cleans_old_packages_but_stays_incremental(self):
+        """Successful log packing removes old logs and parts while retaining other kinds."""
+        logs = self.repo / "wandb"
+        first = logs / "offline-run-first"
+        first.mkdir(parents=True)
+        (first / "run-first.wandb").write_bytes(os.urandom(4096))
+        args = argparse.Namespace(kind="logs", archive="log_MirrorOPD-verl_old.tar.gz", paths=[])
+        with patch.dict(os.environ, MIRROROPD_WANDB_DIR=str(logs), MIRROROPD_CHUNK_SIZE="1024"):
+            transfer.pack(args, self.snap)
+        parts = list(self.snap.glob(args.archive + ".part.*"))
+        self.assertGreater(len(parts), 1)
+        unrelated = [
+            self.snap / name
+            for name in (
+                "archive_MirrorOPD-verl_old.tar.gz",
+                "MirrorOPD_results_old.tar.gz",
+                "dependencies.zip",
+            )
+        ]
+        old_single = self.snap / "log_MirrorOPD-verl_older.tar.gz"
+        for path in unrelated + [old_single]:
+            path.write_bytes(b"keep")
+        second = logs / "offline-run-second"
+        second.mkdir()
+        (second / "run-second.wandb").write_bytes(b"new run")
+        args.archive = "log_MirrorOPD-verl_current.tar.gz"
+        with patch.dict(os.environ, MIRROROPD_WANDB_DIR=str(logs)):
+            transfer.pack(args, self.snap)
+        current = self.snap / args.archive
+        with tarfile.open(current) as bundle:
+            self.assertEqual(bundle.getnames(), ["wandb/offline-run-second/run-second.wandb"])
+        self.assertTrue(all(not part.exists() for part in parts))
+        self.assertFalse(old_single.exists())
+        self.assertTrue(all(path.exists() for path in unrelated))
+        self.assertTrue((first / "run-first.wandb").exists())
+        args.archive = str(current)
+        with patch.dict(os.environ, MIRROROPD_WANDB_DIR=str(self.receiving), MIRROROPD_WANDB_SYNC="0"):
+            transfer.unpack(args, self.snap)
+        self.assertTrue(current.exists())
+        self.assertEqual((self.receiving / "offline-run-second/run-second.wandb").read_bytes(), b"new run")
+
+    def test_failed_or_empty_log_pack_keeps_old_package_and_state(self):
+        """No changes and write failures must not delete the previous incremental delivery."""
+        logs = self.repo / "wandb"
+        run = logs / "offline-run-first"
+        run.mkdir(parents=True)
+        payload = run / "run-first.wandb"
+        payload.write_bytes(b"first")
+        args = argparse.Namespace(kind="logs", archive="log_MirrorOPD-verl_old.tar.gz", paths=[])
+        with patch.dict(os.environ, MIRROROPD_WANDB_DIR=str(logs)):
+            transfer.pack(args, self.snap)
+            old = self.snap / args.archive
+            expected = old.read_bytes()
+            state = (self.snap / "logs_state.json").read_bytes()
+            args.archive = "log_MirrorOPD-verl_new.tar.gz"
+            transfer.pack(args, self.snap)
+            self.assertFalse((self.snap / args.archive).exists())
+            self.assertEqual(old.read_bytes(), expected)
+            payload.write_bytes(b"updated log")
+            with patch.object(tarfile.TarFile, "add", side_effect=OSError("write failed")):
+                with self.assertRaises(OSError):
+                    transfer.pack(args, self.snap)
+            self.assertEqual(old.read_bytes(), expected)
+            self.assertEqual((self.snap / "logs_state.json").read_bytes(), state)
 
 
 if __name__ == "__main__":
