@@ -32,7 +32,7 @@ In this main entry point, the users only need to define their own reward
 function based on the datasets (or applications) utilized in PPO
 training.
 
-For example, we already provide reward functions for `GSM8k <https://github.com/verl-project/verl/blob/main/verl/utils/reward_score/gsm8k.py>`_ 
+For example, we already provide reward functions for `GSM8k <https://github.com/verl-project/verl/blob/main/verl/utils/reward_score/gsm8k.py>`_
 and `MATH <https://github.com/verl-project/verl/blob/main/verl/utils/reward_score/math_reward.py>`_
 datasets in the ``_select_rm_score_fn``. In the ``RewardManager``, we
 will compute the reward score based on the data_source to select
@@ -94,7 +94,7 @@ pre-defined several roles in `ray_trainer.py <https://github.com/verl-project/ve
        Critic = 3 # This worker only has critic
        RefPolicy = 4 # This worker only has reference policy
        RewardModel = 5 # This worker only has reward model
-       ActorRolloutRef = 6 # This worker contains actor, rollout and reference policy simultaneously 
+       ActorRolloutRef = 6 # This worker contains actor, rollout and reference policy simultaneously
 
 Step 2: Define the worker class corresponding to this role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -140,7 +140,7 @@ Defining reward model/function
        from verl.workers.engine_workers import TrainingWorker
        role_worker_mapping[Role.RewardModel] = TrainingWorker
        mapping[Role.RewardModel] = global_pool_id
-    
+
    reward_fn = RewardManager(tokenizer=tokenizer, num_examine=0)
 
    # Note that we always use function-based RM for validation
@@ -174,7 +174,7 @@ whether it's a model-based RM or a function-based RM
        else:
            raise NotImplementedError
 
-See reward functions implemented in `directory <https://github.com/verl-project/verl/blob/main/verl/utils/reward_score/>`_ 
+See reward functions implemented in `directory <https://github.com/verl-project/verl/blob/main/verl/utils/reward_score/>`_
 for more information.
 
 Define, init and run the PPO Trainer

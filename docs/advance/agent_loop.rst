@@ -120,7 +120,7 @@ Other inference engine should be easy to plug-in by implement the ``AsyncServerB
 
            Args:
                raw_request (Request): raw json request
-           
+
            Returns:
                JSONResponse: json response
 
@@ -149,7 +149,7 @@ Chat completion vs Token in token out
 .. warning::
    The following conclusion is based on our recent experience and is still open to investigation and discussion.
 
-Almost all agent frameworks (LangGraph, CrewAI, LlamaIndex, etc) call LLM with OpenAI chat completion api, and 
+Almost all agent frameworks (LangGraph, CrewAI, LlamaIndex, etc) call LLM with OpenAI chat completion api, and
 keep chat history as messages. So user may expect that we should use the chat completion api in multi-turn rollout.
 
 But based on our recent experience on single-turn training on DAPO and multi-turn training on `retool <https://github.com/verl-project/verl-recipe/tree/main/retool>`_,

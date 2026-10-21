@@ -8,7 +8,6 @@ Last updated: 05/14/2026
 
 搭建可支持 NPU 运行的基础运行环境，保证模型正常加载、数据集可顺利读取，作为后续迁移调试、业务跑通的基础。
 
-
 ### 1.1 软硬件环境与依赖配置
 
 参照官方文档[昇腾安装指南](../../get_start/install_guidance.rst)；若模型依赖的推理引擎 vllm、vllm_ascend 和训练引擎Megatron、MindSpeed、transformers 版本与教程存在差异，**以模型实际适配版本为准**。
@@ -49,7 +48,7 @@ Megatron-Bridge已在社区原生适配大量主流模型结构，支持列表�
 
 以​DSA （DeepSeek Sparse Attention）稀疏注意力结构为示例，介绍定制化适配的方法。昇腾 MindSpeed 支持基于吸收矩阵的 DSA能力，该特性要求将 Megatron 中原有的 `linear_kv_up_proj` 算子拆分为 `linear_k_up_proj` 与 `linear_v_up_proj` 两个独立算子。拆分所需权重需从 HuggingFace 格式的 `self_attn.kv_b_proj.weight` 转换生成，而上述原生 PR 并未适配该算子拆分逻辑。
 
-因此需手动改造适配相关权重转换逻辑，保障吸收矩阵可正常加载与生效。只有在吸收矩阵可用的基础上，才能正常使能 [sparse\_flash\_attention](https://gitcode.com/cann/ops-transformer/tree/master/attention/sparse_flash_attention) 与 [lightning\_indexer](https://gitcode.com/cann/ops-transformer/tree/master/attention/lightning_indexer) 融合算子；通过引入两个融合算子，可大幅减少内存访问频次、优化内存占用率，同时提升计算性能，最终实现大模型训练与推理链路的运行效率提升及资源开销降低。
+因此需手动改造适配相关权重转换逻辑，保障吸收矩阵可正常加载与生效。只有在吸收矩阵可用的基础上，才能正常使能 [sparse_flash_attention](https://gitcode.com/cann/ops-transformer/tree/master/attention/sparse_flash_attention) 与 [lightning_indexer](https://gitcode.com/cann/ops-transformer/tree/master/attention/lightning_indexer) 融合算子；通过引入两个融合算子，可大幅减少内存访问频次、优化内存占用率，同时提升计算性能，最终实现大模型训练与推理链路的运行效率提升及资源开销降低。
 
 ### 2.4 整网功能打通
 
@@ -65,12 +64,12 @@ Megatron-Bridge已在社区原生适配大量主流模型结构，支持列表�
 
 整网跑通后，需启用精度监控参数，设置 `actor_rollout_ref.rollout.calculate_log_probs=True`。在训练过程中需重点观察以下关键指标，以此判断训推一致性及模型训练稳定性：
 
-* **训推一致性参考指标**：
-  * `training/rollout_probs_diff_mean`（rollout概率差异均值），模型正常收敛状态下，该指标建议维持在 0.01 以内；若数值持续高于 0.01 或与 GPU 基准存在明显偏离，可判定存在训推精度异常。
-  * `training/rollout_probs_diff_max`（rollout概率差异最大值）
-  * `training/rollout_actor_probs_pearson_corr`（rollout与actor概率的皮尔逊相关系数）
-* **模型训练稳定性指标**：
-  * `actor/grad_norm`：需关注其是否呈整体下降趋势，以此判断模型训练是否正常收敛。
+- **训推一致性参考指标**：
+  - `training/rollout_probs_diff_mean`（rollout概率差异均值），模型正常收敛状态下，该指标建议维持在 0.01 以内；若数值持续高于 0.01 或与 GPU 基准存在明显偏离，可判定存在训推精度异常。
+  - `training/rollout_probs_diff_max`（rollout概率差异最大值）
+  - `training/rollout_actor_probs_pearson_corr`（rollout与actor概率的皮尔逊相关系数）
+- **模型训练稳定性指标**：
+  - `actor/grad_norm`：需关注其是否呈整体下降趋势，以此判断模型训练是否正常收敛。
 
 此外，配置参数 `trainer.rollout_data_dir=./rollout_dump/` 用于保存训练过程中的 Rollout 中间结果。通过人工核查导出的 Rollout 数据，校验模型回复是否符合预期、输出有无乱码与重复回答现象，可进一步从表象上确认推理引擎适配无误。
 
@@ -104,8 +103,8 @@ Megatron-Bridge已在社区原生适配大量主流模型结构，支持列表�
 
 推理侧已正常使用 NPU 优化的 `npu_swiglu` 融合算子，但训练侧仍执行原生 GLU 小算子实现。
 
-* **根因**：尽管已在 VeRL 参数中添加了 `swiglu` 使能配置，但 Megatron-Bridge 在 NPU 适配 PR 中，未显式配置 `provider.bias_activation_fusion=True`，导致代码未进入 NPU 融合算子分支。
-* **修复方案**：在 Megatron-Bridge 中添加配置项使训练侧正确调用融合算子：
+- **根因**：尽管已在 VeRL 参数中添加了 `swiglu` 使能配置，但 Megatron-Bridge 在 NPU 适配 PR 中，未显式配置 `provider.bias_activation_fusion=True`，导致代码未进入 NPU 融合算子分支。
+- **修复方案**：在 Megatron-Bridge 中添加配置项使训练侧正确调用融合算子：
   ```
   +actor_rollout_ref.actor.megatron.override_transformer_config.swiglu=True \
   +actor_rollout_ref.actor.megatron.override_transformer_config.use_fused_swiglu=True \
@@ -115,10 +114,10 @@ Megatron-Bridge已在社区原生适配大量主流模型结构，支持列表�
 
 在严格对齐过程中，发现 `indexer_k_norm` 处存在精度类型与超参不一致：
 
-* **精度差异**：推理侧在 LayerNorm 中存在升精度到 fp32 操作 `F.layer_norm( x.float(), (self.dim,), self.weight, self.bias, self.eps).type_as(x)`，而训练侧 Megatron 实现为 BF16。微小差异经多层累积不可忽视。
-* **修复方案**：统一训练侧代码增加升精降精操作。
-* **超参差异**：GLM5 推理侧vllm继承 DeepSeek-V3.2 逻辑，`k_norm` 的 EPS 值被硬编码为 `1e-6`；而训练引擎及官方技术报告统一采用 `1e-5`。
-* **修复方案**：将推理侧 EPS 修改为 `1e-5` 与训练侧对齐。
+- **精度差异**：推理侧在 LayerNorm 中存在升精度到 fp32 操作 `F.layer_norm( x.float(), (self.dim,), self.weight, self.bias, self.eps).type_as(x)`，而训练侧 Megatron 实现为 BF16。微小差异经多层累积不可忽视。
+- **修复方案**：统一训练侧代码增加升精降精操作。
+- **超参差异**：GLM5 推理侧vllm继承 DeepSeek-V3.2 逻辑，`k_norm` 的 EPS 值被硬编码为 `1e-6`；而训练引擎及官方技术报告统一采用 `1e-5`。
+- **修复方案**：将推理侧 EPS 修改为 `1e-5` 与训练侧对齐。
 
 ```
 self.k_norm=LayerNorm(self.head_dim,eps=1e-6 -> 1e-5)
@@ -128,14 +127,14 @@ self.k_norm=LayerNorm(self.head_dim,eps=1e-6 -> 1e-5)
 
 排查发现lightning_indexer模块，训练与推理侧该模块具体实现存在不一致，具体表现为：
 
-* **缺失（推理侧遗漏）**：推理侧缺失了 `weights` 的缩放逻辑。参考 Megatron 训练侧、slime 及 transformers 的标准实现，均包含该缩放，故在推理侧补齐以对齐前向：
+- **缺失（推理侧遗漏）**：推理侧缺失了 `weights` 的缩放逻辑。参考 Megatron 训练侧、slime 及 transformers 的标准实现，均包含该缩放，故在推理侧补齐以对齐前向：
 
 ```
 weights, _ = self.weights_proj(x)
 +weights = weights * (self.n_head**-0.5) * (self.head_dim**-0.5)
 ```
 
-* **冗余（训练侧多余错误实现）**：训练侧 Megatron 实现中多出了 `rotate_activation`（哈达玛变换）。经查阅大量资料确认，该操作专用于量化场景，在 BF16 格式中属于错误实现。参考 [Transformer PR#45017](https://github.com/huggingface/transformers/pull/45017)，将训练侧该冗余逻辑移除。
+- **冗余（训练侧多余错误实现）**：训练侧 Megatron 实现中多出了 `rotate_activation`（哈达玛变换）。经查阅大量资料确认，该操作专用于量化场景，在 BF16 格式中属于错误实现。参考 [Transformer PR#45017](https://github.com/huggingface/transformers/pull/45017)，将训练侧该冗余逻辑移除。
 
 ```
 class DSAIndexer(MegatronModule):
@@ -154,14 +153,13 @@ class DSAIndexer(MegatronModule):
 
 为了解决这一通用问题，业界引入了 **Routing Replay（路由回放）** 机制。其核心思想是通过锁定特定阶段的专家路由路径，屏蔽微小扰动对路由决策的干扰，从而保证模型训练的稳定性。目前主流包含R2和R3两种变体：
 
-* **（1）Vanilla Routing Replay (R2)**： (对应`actor_rollout_ref.actor.megatron.router_replay.mode="R2"`，VeOmni 则为 `actor_rollout_ref.actor.veomni.router_replay.mode="R2"`)
-  
-  * **机制**：在梯度更新阶段，复现训练引擎在上一轮采样阶段计算出的专家路径。
-  * **作用**：主要缓解**策略陈旧性**对路由的影响。随着策略的更新，当前前向传播计算出的路由可能与生成旧数据时的路由不一致，R2通过回放旧路由来维持优化信号的连贯性。
-* **（2）Rollout Routing Replay (R3)**：(对应`actor_rollout_ref.actor.megatron.router_replay.mode="R3"`)
-  
-  * **机制**：在序列生成过程中捕捉推理引擎的路由分布，并将其直接重放到训练引擎中。
-  * **作用**：同时解决**训练-推理偏差**和**策略陈旧性**两个问题。它确保了训练阶段计算Loss所依据的专家路径，与实际推理生成结果时的专家路径绝对一致。
+- **（1）Vanilla Routing Replay (R2)**： (对应`actor_rollout_ref.actor.megatron.router_replay.mode="R2"`，VeOmni 则为 `actor_rollout_ref.actor.veomni.router_replay.mode="R2"`)
+  - **机制**：在梯度更新阶段，复现训练引擎在上一轮采样阶段计算出的专家路径。
+  - **作用**：主要缓解**策略陈旧性**对路由的影响。随着策略的更新，当前前向传播计算出的路由可能与生成旧数据时的路由不一致，R2通过回放旧路由来维持优化信号的连贯性。
+
+- **（2）Rollout Routing Replay (R3)**：(对应`actor_rollout_ref.actor.megatron.router_replay.mode="R3"`)
+  - **机制**：在序列生成过程中捕捉推理引擎的路由分布，并将其直接重放到训练引擎中。
+  - **作用**：同时解决**训练-推理偏差**和**策略陈旧性**两个问题。它确保了训练阶段计算Loss所依据的专家路径，与实际推理生成结果时的专家路径绝对一致。
 
 因此，无论是侧重缓解策略陈旧的 R2，还是实现全链路对齐的 R3，Routing Replay 机制都有效弥合了推理与训练框架间的路由鸿沟。在**大尺寸 MoE 模型**的训推一致性对齐中，该机制已成为保障精度对齐与训练稳定的核心手段。目前，DeepSeek-V3.2、GLM-5、MiMo-V2 等主流大模型均已采用了 R3 模式的 Routing Replay 技术。
 

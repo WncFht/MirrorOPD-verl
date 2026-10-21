@@ -4,23 +4,19 @@
 
 ## File Layout
 
-| Generic     | Variants                   | Audience        | Scope                          |
-| ----------- | -------------------------- | --------------- | ------------------------------ |
-| `AGENTS.md` | `CLAUDE.md`, ...           | Agents          | Project-wide instructions.     |
-| `.agent/`   | `.claude/`, `.codex/`, ... | Agents          | Agent specification directory. |
-| `docs/`     | N/A                        | Humans & Agents | Project documentation.         |
+| Generic | Variants | Audience | Scope |
+| --- | --- | --- | --- |
+| `AGENTS.md` | `CLAUDE.md`, ... | Agents | Project-wide instructions. |
+| `.agent/` | `.claude/`, `.codex/`, ... | Agents | Agent specification directory. |
+| `docs/` | N/A | Humans & Agents | Project documentation. |
 
 Generic files are framework-agnostic. Variants directly symlink generic files or refer to them and add framework-specific content.
 
-For skills, keep canonical content under `.agent/skills/<skill-name>/SKILL.md`.
-Variant trees such as `.codex/skills/<skill-name>` and `.claude/skills/<skill-name>` should be directory symlinks to the canonical `.agent` skill directory, not directories containing only a symlinked `SKILL.md`.
-Codex documents support for symlinked skill folders and can skip file-level `SKILL.md` symlinks during discovery. Claude Code discovers the file-level symlink layout in current versions, but directory symlinks match the shared skill-package structure and keep supporting files in sync across frameworks.
+For skills, keep canonical content under `.agent/skills/<skill-name>/SKILL.md`. Variant trees such as `.codex/skills/<skill-name>` and `.claude/skills/<skill-name>` should be directory symlinks to the canonical `.agent` skill directory, not directories containing only a symlinked `SKILL.md`. Codex documents support for symlinked skill folders and can skip file-level `SKILL.md` symlinks during discovery. Claude Code discovers the file-level symlink layout in current versions, but directory symlinks match the shared skill-package structure and keep supporting files in sync across frameworks.
 
 ## Token Budget Mindset
 
-`AGENTS.md` loads on every agent request; domain guides load on entry to a relevant area.
-Keep `AGENTS.md` under **200 lines** and each domain guide under **300 lines**.
-When a file exceeds its budget, split or prune — do not compress prose to fit.
+`AGENTS.md` loads on every agent request; domain guides load on entry to a relevant area. Keep `AGENTS.md` under **200 lines** and each domain guide under **300 lines**. When a file exceeds its budget, split or prune — do not compress prose to fit.
 
 ## When NOT to Add Content
 
@@ -39,10 +35,10 @@ If any of the above apply, **do not add the content**.
 
 The goal is a lean `AGENTS.md` plus rich domain guides that teach agents what they can't learn from the code alone.
 
-| Scope                                                                                            | File         |
-| ------------------------------------------------------------------------------------------------ | ------------ |
-| Project-wide invariants (contribution policy, env setup, test/lint commands, commit conventions) | `AGENTS.md`  |
-| Area-specific knowledge (model patterns, format details, deprecation timelines)                  | Domain guide |
+| Scope | File |
+| --- | --- |
+| Project-wide invariants (contribution policy, env setup, test/lint commands, commit conventions) | `AGENTS.md` |
+| Area-specific knowledge (model patterns, format details, deprecation timelines) | Domain guide |
 
 **Rules of thumb:**
 
@@ -52,11 +48,7 @@ The goal is a lean `AGENTS.md` plus rich domain guides that teach agents what th
 
 ## What Makes a Good Domain Guide
 
-Add what agents can't infer from the code or public docs: project-specific
-conventions that differ from standard patterns, correct approaches that require
-cross-file context, and fixes for repeated mistakes.
-Each entry should be short, specific, and actionable — e.g., which files to
-touch, what order to change them in, and which tests to run.
+Add what agents can't infer from the code or public docs: project-specific conventions that differ from standard patterns, correct approaches that require cross-file context, and fixes for repeated mistakes. Each entry should be short, specific, and actionable — e.g., which files to touch, what order to change them in, and which tests to run.
 
 ## Keeping Docs Lean
 
@@ -69,12 +61,12 @@ touch, what order to change them in, and which tests to run.
 
 ## Anti-Patterns
 
-| Pattern                   | Problem                                                                 |
-| ------------------------- | ----------------------------------------------------------------------- |
-| Reactive accumulation     | Adding a rule per incident without pruning leads to bloat               |
+| Pattern | Problem |
+| --- | --- |
+| Reactive accumulation | Adding a rule per incident without pruning leads to bloat |
 | Copy-paste between guides | Duplicated content drifts apart; keep in one place, link from the other |
-| Imperative walls          | Long DO NOT lists that agents skim past; consolidate into principles    |
-| Config snapshots          | Show the command to get the value, not the value itself                 |
+| Imperative walls | Long DO NOT lists that agents skim past; consolidate into principles |
+| Config snapshots | Show the command to get the value, not the value itself |
 
 ## Change Checklist
 
