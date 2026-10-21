@@ -37,30 +37,30 @@ Below are key factors for tuning vLLM-based rollout. Before tuning, we recommend
   - For vLLM v0.7.0 and later, the vLLM instance will only use gpu_memory_utilization of the **total** memory.
   - For SGLang, it's the fraction of the free GPU memory used for **static** memory like model weights and KV cache. However, the remaining (1-gpu_memory_utilization) will also be used during inference.
 
-  However, if model parameters and optimizer states are not offloaded, using too high a fraction can lead to OOM. 
+  However, if model parameters and optimizer states are not offloaded, using too high a fraction can lead to OOM.
   A value between 0.5 and 0.7 often strikes a good balance between high throughput and avoiding OOM.
 
   Note: since the definition of ``gpu_memory_utilization`` varies across inference engines, a value that works well for one engine may cause OOM for another.
 
 - Adjust ``max_num_seqs`` or ``max_num_batched_tokens``.
-  If the GPU cache utilization is relatively low in the log, increase ``max_num_seqs`` or ``max_num_batched_tokens`` 
-  can enlarge the effective batch size in the decoding stage, allowing more concurrent requests per batch. 
+  If the GPU cache utilization is relatively low in the log, increase ``max_num_seqs`` or ``max_num_batched_tokens``
+  can enlarge the effective batch size in the decoding stage, allowing more concurrent requests per batch.
   We recommend setting ``max_num_batched_tokens > 2048`` for higher throughput.
 
-- Use a smaller ``tensor_parallel_size``. 
-  When GPU resources allow, a smaller tensor parallel size spawns more vLLM replicas. 
-  Data parallelism (DP) can yield higher throughput than tensor parallelism (TP), but also increases KVCache consumption. 
+- Use a smaller ``tensor_parallel_size``.
+  When GPU resources allow, a smaller tensor parallel size spawns more vLLM replicas.
+  Data parallelism (DP) can yield higher throughput than tensor parallelism (TP), but also increases KVCache consumption.
   Carefully balance the trade-off between more replicas and higher memory usage.
   Our experiment in Sec. 8.4 of `HybridFlow paper <https://arxiv.org/pdf/2409.19256v2>`_ evaluate this trade-off.
 
 - Balance performance and memory using ``cudagraph_capture_sizes``.
   If ``cudagraph_capture_sizes`` is set, vLLM will try to capture the model execution graph for different batch sizes.
-  Since cudagraph memory can not be offloaded to cpu, The memory stay in gpu when update actor is running. 
+  Since cudagraph memory can not be offloaded to cpu, The memory stay in gpu when update actor is running.
   Using smaller batch sizes can avoid OOM but slightly reduce throughput.
   Must to set ``enforce_eager=False`` to use ``cudagraph_capture_sizes``.
 
 More tuning details such as dealing with Preemption and Chunked-prefill
-can be found in `vLLM official tuning guide <https://docs.vllm.ai/en/latest/configuration/optimization/>`_ 
+can be found in `vLLM official tuning guide <https://docs.vllm.ai/en/latest/configuration/optimization/>`_
 
 For optimal performance, we recommend using vLLM v0.8.3 or later. See https://github.com/verl-project/verl/blob/main/docs/README_vllm0.8.md for details.
 
@@ -88,18 +88,18 @@ throughput and peak memory against the padded path.
 Batch Size Tuning
 -----------------
 
-To achieve higher throughput in experience preparation (i.e., model fwd) and model update (i.e., actor/critic fwd/bwd), 
+To achieve higher throughput in experience preparation (i.e., model fwd) and model update (i.e., actor/critic fwd/bwd),
 users may need to tune the ``*micro_batch_size_per_gpu`` for different computation.
 
 In verl, the core principle for setting batch sizes is:
 
-- **Algorithmic metrics** (train batch size, PPO mini-batch size) are *global* (from a single-controller perspective), 
+- **Algorithmic metrics** (train batch size, PPO mini-batch size) are *global* (from a single-controller perspective),
   normalized in each worker. See the `normalization code <https://github.com/verl-project/verl/blob/main/verl/workers/engine_workers.py>`_.
 
-- **Performance-related parameters** (micro batch size, max token length for dynamic batch size) are *local* parameters that define the per-GPU data allocations. 
+- **Performance-related parameters** (micro batch size, max token length for dynamic batch size) are *local* parameters that define the per-GPU data allocations.
   See the `normalization code <https://github.com/verl-project/verl/blob/main/verl/workers/engine_workers.py>`_.
 
-.. note:: In your training script, please use ``*micro_batch_size_per_gpu`` instead of ``*micro_batch_size``. 
+.. note:: In your training script, please use ``*micro_batch_size_per_gpu`` instead of ``*micro_batch_size``.
   So that you don't need to consider the normalization of the ``micro_batch_size`` and ``micro_batch_size`` will be deprecated.
 
 Batch Size Tuning tips
@@ -107,14 +107,14 @@ Batch Size Tuning tips
 
 Therefore, users may need to tune the ``*micro_batch_size_per_gpu`` to accelerate training. Here're some tips:
 
-1. **Enable gradient checkpointing**: 
-   Set ``actor_rollout_ref.model.enable_gradient_checkpointing=True`` and ``critic.model.enable_gradient_checkpointing=True``. 
+1. **Enable gradient checkpointing**:
+   Set ``actor_rollout_ref.model.enable_gradient_checkpointing=True`` and ``critic.model.enable_gradient_checkpointing=True``.
    This often allows for larger micro-batch sizes and will be beneficial for large mini-batch training.
 
 2. Increase the ``*micro_batch_size_per_gpu`` as much as possible till equals to normalized ``mini_batch_size``.
 
-3. **Use larger forward-only parameters**: 
-   Forward only parameter, such as ``actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu``, 
+3. **Use larger forward-only parameters**:
+   Forward only parameter, such as ``actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu``,
    ``actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu``, ``critic.forward_micro_batch_size_per_gpu`` could be larger (e.g., 2x) than training related micro batch sizes,
    such as ``actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu``, ``critic.ppo_micro_batch_size_per_gpu``.
 
@@ -142,16 +142,16 @@ Dynamic batch size is a technique that allows the model to process similar numbe
 This can significantly improve the training efficiency and reduce the memory usage.
 
 To utilize this technique, users can set ``use_dynamic_bsz=True`` in actor, ref, critic and reward models.
-With ``use_dynamic_bsz=True``, users don't need to tune ``*micro_batch_size_per_gpu``. 
+With ``use_dynamic_bsz=True``, users don't need to tune ``*micro_batch_size_per_gpu``.
 Instead, users should tune the following parameters:
 
-- ``actor_rollout_ref.actor.ppo_max_token_len_per_gpu``, ``critic.ppo_max_token_len_per_gpu``: 
+- ``actor_rollout_ref.actor.ppo_max_token_len_per_gpu``, ``critic.ppo_max_token_len_per_gpu``:
   The maximum number of tokens to be processed in fwd and bwd of ``update_policy`` and ``update_critic``.
 
-- ``actor_rollout_ref.ref.log_prob_max_token_len_per_gpu`` and ``actor_rollout_ref.rollout.log_prob_max_token_len_per_gpu``: 
+- ``actor_rollout_ref.ref.log_prob_max_token_len_per_gpu`` and ``actor_rollout_ref.rollout.log_prob_max_token_len_per_gpu``:
   The maximum number of tokens to be processed in a the fwd computation of ``compute_log_prob`` and ``compute_ref_log_prob``.
 
-- ``critic.forward_micro_batch_size_per_gpu``, ``reward_model.forward_micro_batch_size_per_gpu``: 
+- ``critic.forward_micro_batch_size_per_gpu``, ``reward_model.forward_micro_batch_size_per_gpu``:
   The maximum number of tokens to be processed in a the fwd computation of ``compute_values``, ``compute_rm_score``.
 
 Dynamic Batch Size Tuning tips
@@ -159,17 +159,17 @@ Dynamic Batch Size Tuning tips
 
 Here're some tips to tune the above parameters:
 
-1. **Increase** ``actor_rollout_ref.actor.ppo_max_token_len_per_gpu``  
+1. **Increase** ``actor_rollout_ref.actor.ppo_max_token_len_per_gpu``
    Make it at least 2 x (max_prompt_length + max_response_length). See `run_qwen3_8b_fsdp.sh <https://github.com/verl-project/verl/blob/main/examples/ppo_trainer/run_qwen3_8b_fsdp.sh>`_ for an example.
    Try to increase it to get higher throughput.
 
-2. **Forward-only parameters can be larger**: 
+2. **Forward-only parameters can be larger**:
    Similar to the non-dynamic-batch scenario, forward-only token limits can exceed those used in forward/backward operations.
- 
+
 3. **Use larger limits for Critic and Reward models**:
-   Critic and Reward parameters can be set at least 2× the Actor’s limits. See  
+   Critic and Reward parameters can be set at least 2× the Actor’s limits. See
    `run_qwen3_8b_fsdp.sh <https://github.com/verl-project/verl/blob/main/examples/ppo_trainer/run_qwen3_8b_fsdp.sh>`_ for an example.
-   
+
 .. :math:`\text{critic.ppo_max_token_len_per_gpu}  = 2 \times  \text{actor.ppo_max_token_len_per_gpu})`.
 
 Ulysses Sequence Parallel for Long Context Training
@@ -329,7 +329,7 @@ FSDP2 offers notable improvements over FSDP1. According to `PyTorch TorchTitan b
     # Enable FSDP2 in actor configuration
     actor_rollout_ref.actor.strategy="fsdp2"
 
-.. note:: 
+.. note::
    FSDP2 requires PyTorch 2.1+ and is recommended for models with transformer architecture.
 
 Memory optimization for entropy calculation from logits

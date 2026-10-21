@@ -7,6 +7,7 @@ Last updated: 07/10/2026.
 This module provides **hybrid inference resource dynamic scheduling** for the fully-async training framework, enabling Trainer-node GPUs to participate in rollout generation during idle periods and thus improving overall GPU utilization.
 
 > **At a glance**
+>
 > - Two kinds of inference replicas: **Standalone** (dedicated rollout nodes, always on) + **Hybrid** (share Trainer-node GPUs; activated during training idle time, weights offloaded and memory returned before each training step).
 > - A pluggable **Policy** decides when to activate/deactivate Hybrid replicas; `DynamicResourceController` owns the lifecycle (state machine `STANDALONE_ONLY <-> HYBRID_ACTIVE`).
 > - When Standalone capacity is sufficient, Hybrid skips rollout entirely and stays focused on training, avoiding needless mode-switching; weight sync to Hybrid replicas can also be skipped, saving communication.
@@ -31,22 +32,22 @@ A **Hybrid + Standalone dual-mode inference resource** design:
 
 The figure above illustrates the **resource-time layout** of the dynamic scheduling system across three consecutive training steps. The vertical axis shows GPU resources split into two pools:
 
-- **Standalone Resource** (top, GPU 0–n): Dedicated rollout GPUs that **continuously perform rollout** across all steps — they are always active during the *Rollout* phase (blue) and idle during *Trainer* / *Weight Sync*.
-- **Hybrid Resource** (bottom, GPU n+1–n+m): Trainer-node GPUs that **switch between rollout and training**. When in *Rollout* mode they join the Rollout LoadBalancer to generate samples (blue); when in *Trainer* mode they run PPO mini-batch updates (yellow); at each *Weight Sync* boundary the latest weights are broadcast to all replicas.
+- **Standalone Resource** (top, GPU 0–n): Dedicated rollout GPUs that **continuously perform rollout** across all steps — they are always active during the _Rollout_ phase (blue) and idle during _Trainer_ / _Weight Sync_.
+- **Hybrid Resource** (bottom, GPU n+1–n+m): Trainer-node GPUs that **switch between rollout and training**. When in _Rollout_ mode they join the Rollout LoadBalancer to generate samples (blue); when in _Trainer_ mode they run PPO mini-batch updates (yellow); at each _Weight Sync_ boundary the latest weights are broadcast to all replicas.
 
 The horizontal axis shows three steps with distinct Hybrid behaviours:
 
-- **Step 1 & 2**: At the start of each step, the MessageQueue does not yet have enough samples. Hybrid resources activate into *Rollout* mode to help generate samples alongside Standalone resources, then switch back to *Trainer* once sufficient samples are buffered.
-- **Step 3**: Before this step begins, the MessageQueue **already contains enough samples** (buffered from previous steps). Hybrid resources skip Rollout entirely and go directly into *Trainer* mode — this is the key optimisation: when Standalone capacity is sufficient, Trainer GPUs stay focused on training without unnecessary context-switching overhead.
+- **Step 1 & 2**: At the start of each step, the MessageQueue does not yet have enough samples. Hybrid resources activate into _Rollout_ mode to help generate samples alongside Standalone resources, then switch back to _Trainer_ once sufficient samples are buffered.
+- **Step 3**: Before this step begins, the MessageQueue **already contains enough samples** (buffered from previous steps). Hybrid resources skip Rollout entirely and go directly into _Trainer_ mode — this is the key optimisation: when Standalone capacity is sufficient, Trainer GPUs stay focused on training without unnecessary context-switching overhead.
 
-The transition threshold is controlled by `dynamic_schedule_deactivate_ratio`: the controller deactivates Hybrid replicas once `deactivate_ratio × required_samples × trigger_parameter_sync_step` samples have been collected. A central *Rollout LoadBalancer* dispatches generation requests from the *MessageQueue* across all active replicas.
+The transition threshold is controlled by `dynamic_schedule_deactivate_ratio`: the controller deactivates Hybrid replicas once `deactivate_ratio × required_samples × trigger_parameter_sync_step` samples have been collected. A central _Rollout LoadBalancer_ dispatches generation requests from the _MessageQueue_ across all active replicas.
 
 Two request-handling mechanisms ensure smooth transitions between modes:
 
 - **Hybrid → Trainer (deactivation)**: When Hybrid resources switch from Rollout back to Trainer, any **in-flight requests** running on them are aborted and automatically **redistributed by the LoadBalancer to Standalone resources**, which continue the rollout. This is transparent to upper layers thanks to the retry mechanism in `FullyAsyncLLMServerClient`.
 - **Trainer → Hybrid (activation)**: After a training step ends, if Hybrid resources switch back into Rollout mode, the `dynamic_schedule_enable_rebalance` parameter controls whether to perform a **reshuffle**: when enabled, the controller clears the LoadBalancer's sticky-session cache and aborts in-flight requests across all active replicas, then resumes them so requests are redistributed via least-loaded routing — naturally balancing load toward the newly activated Hybrid replicas (which start with 0 in-flight requests).
 
-- **Weight Sync (parameter synchronisation)**: During the *Weight Sync* phase, weights are first broadcast from Trainer to all **Standalone** rollout replicas (always required). The policy's `should_activate_after_step()` is then evaluated to decide whether Hybrid resources should enter Rollout mode for the next step. If activation is needed, weights are **additionally synced to Hybrid replicas**; otherwise this second sync is **skipped entirely**, saving significant communication overhead — this is exactly what happens in Step 3 of the figure above.
+- **Weight Sync (parameter synchronisation)**: During the _Weight Sync_ phase, weights are first broadcast from Trainer to all **Standalone** rollout replicas (always required). The policy's `should_activate_after_step()` is then evaluated to decide whether Hybrid resources should enter Rollout mode for the next step. If activation is needed, weights are **additionally synced to Hybrid replicas**; otherwise this second sync is **skipped entirely**, saving significant communication overhead — this is exactly what happens in Step 3 of the figure above.
 
 `DynamicResourceController` manages the lifecycle of hybrid replicas. A pluggable **Policy** decides when to activate and deactivate:
 
@@ -77,13 +78,12 @@ Deactivate (order is critical):
 
 ## 2. Configuration Parameters
 
-All dynamic scheduling parameters live under the `async_training` section of your training config
-(`fully_async_ppo_trainer.yaml` or `fully_async_ppo_megatron_trainer.yaml`):
+All dynamic scheduling parameters live under the `async_training` section of your training config (`fully_async_ppo_trainer.yaml` or `fully_async_ppo_megatron_trainer.yaml`):
 
 ### Core Parameters
 
 | Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
+| --- | --- | --- | --- |
 | `use_dynamic_resource_scheduling` | bool | `False` | Master switch. When `True`, hybrid rollout replicas are initialised on Trainer-node GPUs at startup (sleeping, memory returned to the training engine). |
 | `dynamic_schedule_policy` | str | `"default"` | Name of the scheduling policy (`"default"`, `"static_fully_async"`, `"fixed_ratio"`, or a custom registered name). |
 | `dynamic_schedule_deactivate_ratio` | float | `0.3` | Sample-collection ratio threshold. The controller waits until `deactivate_ratio × required_samples × trigger_parameter_sync_step` samples are buffered before deactivating. Lower → earlier deactivation; `1.0` → wait for a full batch. |
@@ -92,23 +92,22 @@ All dynamic scheduling parameters live under the `async_training` section of you
 ### Existing Async-Training Parameters (used by dynamic scheduling)
 
 | Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
+| --- | --- | --- | --- |
 | `staleness_threshold` | float | `0.1` | Allowed sample staleness ratio; affects `buffer_samples = expected × staleness_threshold`. |
 | `trigger_parameter_sync_step` | int | `4` | Number of collections per weight-sync step; used in the deactivate wait formula above. |
 | `require_batches` | int | `1` | Number of ppo_mini_batches per collection; determines `required_samples`. |
 
-
 ### Rollout Resource Config (under `actor_rollout_ref.rollout`)
 
 | Parameter | Description |
-|-----------|-------------|
+| --- | --- |
 | `gpu_memory_utilization` | Memory utilization for **hybrid** replicas sharing GPU with training. Keep low (e.g. 0.3–0.5). |
 | `standalone_gpu_memory_utilization` | Memory utilization for **standalone** replicas on dedicated rollout nodes (e.g. 0.6–0.8). Falls back to `gpu_memory_utilization` if `null`. |
 
 ### Standalone Node Config (under `rollout`)
 
 | Parameter | Description |
-|-----------|-------------|
+| --- | --- |
 | `rollout.nnodes` | Number of standalone rollout nodes. Set to `0` for pure colocated mode (hybrid only, no dedicated rollout nodes). |
 
 ---
@@ -122,7 +121,7 @@ All dynamic scheduling parameters live under the `async_training` section of you
 The recommended policy with **adaptive deactivate_ratio** and a **cost/benefit activation gate**:
 
 | Method | Behaviour |
-|--------|-----------|
+| --- | --- |
 | `should_deactivate()` | Returns `is_hybrid_active` (deactivate whenever active) |
 | `deactivate_wait_samples()` | Returns `deactivate_ratio × required_samples × trigger_parameter_sync_step` |
 | `should_activate_after_step()` | Activates when generated samples fall behind expectation (a positive gap exists) **and** the estimated wall-clock saved exceeds the switch (activate+deactivate) cost |
@@ -145,7 +144,7 @@ The recommended policy with **adaptive deactivate_ratio** and a **cost/benefit a
 Equivalent to the original fully-async strategy, designed for baseline comparisons or colocated fallback:
 
 | Method | Behaviour |
-|--------|-----------|
+| --- | --- |
 | `should_deactivate()` | Returns `is_hybrid_active` (deactivate whenever active) |
 | `deactivate_wait_samples()` | **Always returns `0`** (deactivate immediately, no waiting) |
 | `should_activate_after_step()` | **Always returns `False`** (never re-activate after weight sync) |
@@ -169,15 +168,12 @@ Identical to `default` except that `update_after_step()` is a no-op — `deactiv
 
 ## 4. Monitoring Metrics
 
-Dynamic resource scheduling emits a set of `dynamic_resource/*` metrics (in addition to the general
-`fully_async/*` metrics documented in [`fully_async.md`](./fully_async.md))
-to help quantify how effectively Hybrid and Standalone GPUs are utilized. This section gives the
-formal definition of each metric.
+Dynamic resource scheduling emits a set of `dynamic_resource/*` metrics (in addition to the general `fully_async/*` metrics documented in [`fully_async.md`](./fully_async.md)) to help quantify how effectively Hybrid and Standalone GPUs are utilized. This section gives the formal definition of each metric.
 
 ### Notation
 
 | Symbol | Meaning |
-|--------|---------|
+| --- | --- |
 | $a$ | `hybrid_gpus` = `trainer.nnodes × trainer.n_gpus_per_node` (Trainer-node GPUs that can switch between rollout/train) |
 | $b$ | `standalone_gpus` = `rollout.nnodes × rollout.n_gpus_per_node` (dedicated rollout-node GPUs) |
 | $\text{compute}_i$ | Training-GPU compute time of micro fit-step $i$ (sum of `timing_raw` keys: `reward`, `old_log_prob`, `ref`, `values`, `adv`, `update_critic`, `update_actor`) |
@@ -188,95 +184,56 @@ formal definition of each metric.
 
 ### 4.1 `dynamic_resource/train_resource_utilization`
 
-Fraction of the Trainer's "training turn" wall-clock time that is spent on actual training-GPU
-compute, aggregated over an entire sync cycle.
+Fraction of the Trainer's "training turn" wall-clock time that is spent on actual training-GPU compute, aggregated over an entire sync cycle.
 
 For each micro fit-step $i = 1, \dots, n$ within the cycle:
 
-- **Numerator** ($\text{compute}_i$): sum of the `timing_raw` training-compute keys
-  (`reward`, `old_log_prob`, `ref`, `values`, `adv`, `update_critic`, `update_actor`).
-  — `ref` is the timing key recorded via `marked_timer(str(Role.RefPolicy), …)` (the enum's
-  string value is `"ref"`, not `"RefPolicy"`). Missing keys — e.g. `values`/`update_critic`
-  when `use_critic=False` — default to 0.
-- **Denominator** ($\text{alloc}_i$): wall-clock time from `_fit_generate()` through
-  `_fit_update_weights()` and `_fit_dump_data()` (includes `timing_s/param_sync` and any hybrid
-  activation time; these are intentionally **not** subtracted)
+- **Numerator** ($\text{compute}_i$): sum of the `timing_raw` training-compute keys (`reward`, `old_log_prob`, `ref`, `values`, `adv`, `update_critic`, `update_actor`). — `ref` is the timing key recorded via `marked_timer(str(Role.RefPolicy), …)` (the enum's string value is `"ref"`, not `"RefPolicy"`). Missing keys — e.g. `values`/`update_critic` when `use_critic=False` — default to 0.
+- **Denominator** ($\text{alloc}_i$): wall-clock time from `_fit_generate()` through `_fit_update_weights()` and `_fit_dump_data()` (includes `timing_s/param_sync` and any hybrid activation time; these are intentionally **not** subtracted)
 
-Both quantities are summed across all micro-steps in the cycle first, and the ratio is computed
-once from the summed totals (not averaged per micro-step):
+Both quantities are summed across all micro-steps in the cycle first, and the ratio is computed once from the summed totals (not averaged per micro-step):
 
 $$
 U_{\text{train}} = \frac{\sum_{i=1}^{n} \text{compute}_i}{\sum_{i=1}^{n} \text{alloc}_i}
 $$
 
-The un-ratioed numerator and denominator are also emitted directly as the raw metrics
-`dynamic_resource/train_compute_time_s` and `dynamic_resource/train_allocated_time_s`
-(aggregated by **sum** across the cycle's micro-steps), so the ratio is computed once from the
-summed totals by `MetricsAggregator` rather than averaged per micro-step.
+The un-ratioed numerator and denominator are also emitted directly as the raw metrics `dynamic_resource/train_compute_time_s` and `dynamic_resource/train_allocated_time_s` (aggregated by **sum** across the cycle's micro-steps), so the ratio is computed once from the summed totals by `MetricsAggregator` rather than averaged per micro-step.
 
 ### 4.2 `dynamic_resource/rollout_resource_utilization`
 
-Fraction of rollout concurrency capacity actually used during the Rollouter's step (the window
-between the previous and current `reset_staleness()` call).
+Fraction of rollout concurrency capacity actually used during the Rollouter's step (the window between the previous and current `reset_staleness()` call).
 
-The Rollouter records an event-driven history of `(len(active_tasks), max_concurrent_samples)`
-tuples — appended every time a sample is submitted, completes, or is drained during a pause,
-**and** whenever `max_concurrent_samples` itself changes (i.e. a replica is
-activated/deactivated under dynamic resource scheduling). This gives timestamps
-$t_0 < t_1 < \dots < t_m$ with two quantities held constant over each interval $[t_k, t_{k+1})$:
-the active-task count $\text{active}_k$ and the concurrency capacity $\text{cap}_k$
-($t_0$ is the previous step's end / this step's start; $t_m$ is "now", appended when
-`reset_staleness()` is called, closing out the window including any trailing drain/idle time).
+The Rollouter records an event-driven history of `(len(active_tasks), max_concurrent_samples)` tuples — appended every time a sample is submitted, completes, or is drained during a pause, **and** whenever `max_concurrent_samples` itself changes (i.e. a replica is activated/deactivated under dynamic resource scheduling). This gives timestamps $t_0 < t_1 < \dots < t_m$ with two quantities held constant over each interval $[t_k, t_{k+1})$: the active-task count $\text{active}_k$ and the concurrency capacity $\text{cap}_k$ ($t_0$ is the previous step's end / this step's start; $t_m$ is "now", appended when `reset_staleness()` is called, closing out the window including any trailing drain/idle time).
 
-Recording the capacity alongside the active count per interval is essential because under dynamic
-resource scheduling $\text{cap}_k$ is **not** constant over a step window — replicas can be
-activated/deactivated mid-window. Using a single end-of-window capacity for the whole window
-would misattribute utilization for intervals that had a different capacity, so each interval uses
-its own $\text{cap}_k$.
+Recording the capacity alongside the active count per interval is essential because under dynamic resource scheduling $\text{cap}_k$ is **not** constant over a step window — replicas can be activated/deactivated mid-window. Using a single end-of-window capacity for the whole window would misattribute utilization for intervals that had a different capacity, so each interval uses its own $\text{cap}_k$.
 
-The capacity for each interval is $\text{cap}_k = \min(\text{servers}_k \times s,\ \text{maxReq})$,
-where $\text{servers}_k$ is `get_active_server_count()` at interval $k$, $s$ is
-`concurrent_samples_per_replica`, and $\text{maxReq}$ is `max_required_samples`:
+The capacity for each interval is $\text{cap}_k = \min(\text{servers}_k \times s,\ \text{maxReq})$, where $\text{servers}_k$ is `get_active_server_count()` at interval $k$, $s$ is `concurrent_samples_per_replica`, and $\text{maxReq}$ is `max_required_samples`:
 
 $$
 \text{cap}_k = \min(\text{servers}_k \times s,\ \text{maxReq})
 $$
 
-Each interval's effective load is $\min(\text{cap}_k, \text{active}_k)$ (the capacity
-$\text{cap}_k$ is already clamped, so the actual served concurrency is the smaller of capacity
-and active tasks). Weighting each interval by its capacity-time (so a higher-capacity interval
-counts proportionally more):
+Each interval's effective load is $\min(\text{cap}_k, \text{active}_k)$ (the capacity $\text{cap}_k$ is already clamped, so the actual served concurrency is the smaller of capacity and active tasks). Weighting each interval by its capacity-time (so a higher-capacity interval counts proportionally more):
 
 $$
 U_{\text{rollout}} = \frac{\sum_k (t_{k+1} - t_k) \cdot \min(\text{cap}_k, \text{active}_k)}{\sum_k (t_{k+1} - t_k) \cdot \text{cap}_k}
 $$
 
-Returns `0.0` if there is no time span to integrate over (e.g. total capacity-time weight is 0;
-intervals with $\text{cap}_k = 0$ contribute zero weight and are skipped).
+Returns `0.0` if there is no time span to integrate over (e.g. total capacity-time weight is 0; intervals with $\text{cap}_k = 0$ contribute zero weight and are skipped).
 
 ### 4.3 `dynamic_resource/resource_utilization`
 
-Cluster-wide GPU utilization for the sync cycle, combining the Hybrid GPUs' time-split between
-rollout and train with the Standalone GPUs (which spend 100% of their time on rollout).
+Cluster-wide GPU utilization for the sync cycle, combining the Hybrid GPUs' time-split between rollout and train with the Standalone GPUs (which spend 100% of their time on rollout).
 
-Let $x \in [0, 1]$ be the fraction of the cycle's wall-clock time that Hybrid GPUs spent doing
-rollout (the rest, $1-x$, they spent training), estimated as the ratio of summed
-"wait for enough samples" time (Hybrid-rollout wall-clock time, only recorded when dynamic
-resource scheduling deactivates Hybrid replicas this cycle) over the summed step time:
+Let $x \in [0, 1]$ be the fraction of the cycle's wall-clock time that Hybrid GPUs spent doing rollout (the rest, $1-x$, they spent training), estimated as the ratio of summed "wait for enough samples" time (Hybrid-rollout wall-clock time, only recorded when dynamic resource scheduling deactivates Hybrid replicas this cycle) over the summed step time:
 
 $$
 x = \mathrm{clip}\left(\frac{\text{wait}}{\text{step}},\ 0,\ 1\right)
 $$
 
-where $\text{wait}$ is the summed `timing_s/wait_for_enough_samples` and $\text{step}$ is the
-summed `timing_s/step`. When dynamic resource scheduling never switches Hybrid GPUs into rollout
-mode this cycle (e.g. disabled, or `wait_for_enough_samples` was skipped), $x = 0$ (100% of
-Hybrid time is training).
+where $\text{wait}$ is the summed `timing_s/wait_for_enough_samples` and $\text{step}$ is the summed `timing_s/step`. When dynamic resource scheduling never switches Hybrid GPUs into rollout mode this cycle (e.g. disabled, or `wait_for_enough_samples` was skipped), $x = 0$ (100% of Hybrid time is training).
 
-Weighting each utilization by the GPU-seconds it was measured over — Hybrid GPUs spend
-$(1-x) \cdot a$ GPU-time training at $U_{\text{train}}$ and $x \cdot a$ GPU-time doing
-rollout at $U_{\text{rollout}}$; Standalone GPUs ($b$ of them) spend all their time doing
-rollout at $U_{\text{rollout}}$:
+Weighting each utilization by the GPU-seconds it was measured over — Hybrid GPUs spend $(1-x) \cdot a$ GPU-time training at $U_{\text{train}}$ and $x \cdot a$ GPU-time doing rollout at $U_{\text{rollout}}$; Standalone GPUs ($b$ of them) spend all their time doing rollout at $U_{\text{rollout}}$:
 
 $$
 U_{\text{cluster}} = \frac{(1-x) \cdot a \cdot U_{\text{train}} + (x \cdot a + b) \cdot U_{\text{rollout}}}{a + b}
@@ -284,36 +241,17 @@ $$
 
 ### 4.4 `dynamic_resource/mq_size`
 
-A snapshot (not an average) of the number of samples remaining in the MessageQueue for subsequent
-steps, taken right after a Trainer `fit_step()` (including any partial-rollout resumption) finishes.
-If we denote this snapshot as $Q$, then $Q$ equals the value returned by
-`message_queue_client.get_queue_size_sync()`. Reported as the last value observed in the cycle
-rather than an average across the cycle's
-micro-steps.
+A snapshot (not an average) of the number of samples remaining in the MessageQueue for subsequent steps, taken right after a Trainer `fit_step()` (including any partial-rollout resumption) finishes. If we denote this snapshot as $Q$, then $Q$ equals the value returned by `message_queue_client.get_queue_size_sync()`. Reported as the last value observed in the cycle rather than an average across the cycle's micro-steps.
 
 ### 4.5 Related rollouter-side metric: `fully_async/rollouter/step_generated_samples`
 
-Number of samples fully generated by the Rollouter during the current param version (reset to 0 at
-each `reset_staleness()` call). It is returned in the rollouter's `timing_raw` alongside
-`dynamic_resource/rollout_resource_utilization` and is the underlying signal the Rollouter uses to
-track per-step throughput; it is documented here because it is computed in the same code path as
-the `dynamic_resource/*` metrics above.
+Number of samples fully generated by the Rollouter during the current param version (reset to 0 at each `reset_staleness()` call). It is returned in the rollouter's `timing_raw` alongside `dynamic_resource/rollout_resource_utilization` and is the underlying signal the Rollouter uses to track per-step throughput; it is documented here because it is computed in the same code path as the `dynamic_resource/*` metrics above.
 
 ### Caveats
 
-- **`rollout_resource_utilization` per-interval capacity**: under dynamic resource scheduling the
-  capacity $S_k$ can change mid-window as replicas are activated/deactivated; each interval uses
-  its own $S_k$ rather than a single end-of-window value, so capacity changes are reflected
-  faithfully. Intervals recorded before `max_concurrent_samples` is first known (a single seed
-  point at init with placeholder capacity 0) are corrected once the real capacity is available.
-- **`resource_utilization` assumes `should_deactivate() == is_hybrid_active`**: the $x$ estimate
-  relies on `timing_s/wait_for_enough_samples` being a faithful proxy for "Hybrid GPUs are in
-  rollout mode this cycle", which holds for the built-in `default`/`static_fully_async` policies
-  but may not hold for custom policies with different activation semantics.
-- **`train_resource_utilization` and `rollout_resource_utilization` are not perfectly comparable**:
-  the former's denominator includes `param_sync`/activation overhead (not subtracted), while the
-  latter's denominator is pure rollout window time — keep this in mind when interpreting the
-  combined `resource_utilization`.
+- **`rollout_resource_utilization` per-interval capacity**: under dynamic resource scheduling the capacity $S_k$ can change mid-window as replicas are activated/deactivated; each interval uses its own $S_k$ rather than a single end-of-window value, so capacity changes are reflected faithfully. Intervals recorded before `max_concurrent_samples` is first known (a single seed point at init with placeholder capacity 0) are corrected once the real capacity is available.
+- **`resource_utilization` assumes `should_deactivate() == is_hybrid_active`**: the $x$ estimate relies on `timing_s/wait_for_enough_samples` being a faithful proxy for "Hybrid GPUs are in rollout mode this cycle", which holds for the built-in `default`/`static_fully_async` policies but may not hold for custom policies with different activation semantics.
+- **`train_resource_utilization` and `rollout_resource_utilization` are not perfectly comparable**: the former's denominator includes `param_sync`/activation overhead (not subtracted), while the latter's denominator is pure rollout window time — keep this in mind when interpreting the combined `resource_utilization`.
 
 ---
 
@@ -322,7 +260,7 @@ the `dynamic_resource/*` metrics above.
 ### Benchmark: Qwen3.5-35B-A3B on DAPO-Math-17K
 
 | Item | Config |
-|------|--------|
+| --- | --- |
 | Model | Qwen3.5-35B-A3B |
 | Dataset | DAPO-Math-17k (train) / AIME-2024 (val) |
 | Backend | Megatron (TP=4, PP=2, EP=8) |
@@ -397,7 +335,7 @@ The 16-16-static curve hugs zero (production-bound, trainer starves); the 24-8-s
 **Summary of load-balance trade-offs**:
 
 | Config | Bottleneck | MQ backlog | Rollout util | Train util |
-|--------|-----------|------------|--------------|------------|
+| --- | --- | --- | --- | --- |
 | 16-16-static | Production (rollout) | Near zero (trainer starves) | Pinned at capacity | Low (waits for samples) |
 | 24-8-static | Consumption (trainer) | At capacity limit | Idle capacity | High (never waits) |
 | dynamic | Matched dynamically | Moderate | High & stable | Near 24-8 |
@@ -481,7 +419,7 @@ async_training:
 ### Step 4: Use `DynamicScheduleContext` fields
 
 | Field | Type | Description |
-|-------|------|-------------|
+| --- | --- | --- |
 | `required_samples` | `int` | Min samples per collection (`ppo_mini_batch_size × require_batches`) |
 | `trigger_parameter_sync_step` | `int` | Collections per weight-sync step |
 | `step_required_samples` | `int` | Derived: `required_samples × trigger_parameter_sync_step` — total samples expected in one weight-sync cycle |

@@ -19,14 +19,13 @@ Last updated: 09/29/2026.
 | Megatron-Bridge | `v0.5.0` |
 | MindSpeed-Bridge | 仓库默认分支（未固定 tag/commit） |
 
-安装脚本同时安装 TransformerEngineNPU 和 MindSpeed-Ops。可以按照
-[昇腾安装指南](../../get_start/install_guidance.rst) 安装，或使用与该组合一致的 A3 vLLM 镜像。
+安装脚本同时安装 TransformerEngineNPU 和 MindSpeed-Ops。可以按照 [昇腾安装指南](../../get_start/install_guidance.rst) 安装，或使用与该组合一致的 A3 vLLM 镜像。
 
 ## 模型和脚本
 
-| model             | HF model | script |
-|-------------------| --- | --- |
-| Qwen3.5-35B-A3B   | `Qwen/Qwen3.5-35B-A3B` | `examples/grpo_trainer/run_qwen3_5_35b_megatron.sh` |
+| model | HF model | script |
+| --- | --- | --- |
+| Qwen3.5-35B-A3B | `Qwen/Qwen3.5-35B-A3B` | `examples/grpo_trainer/run_qwen3_5_35b_megatron.sh` |
 | Qwen3.5-122B-A10B | `Qwen/Qwen3.5-122B-A10B` | `examples/grpo_trainer/run_qwen3_5_122b_a10b_megatron.sh` |
 | Qwen3.5-397B-A17B | `Qwen/Qwen3.5-397B-A17B` | `examples/grpo_trainer/run_qwen3_5_397b_megatron.sh` |
 
@@ -35,8 +34,8 @@ Last updated: 09/29/2026.
 示例脚本默认使用如下 NPU 配置，可以通过同名环境变量覆盖：
 
 | model | nnodes | devices per node | TP | PP | CP | EP | ETP | GEN_DP | GEN_TP | GEN_EP |
-| --- |--------| --- | --- | --- | --- |----| --- |---|----|----|
-| Qwen3.5-35B-A3B | 1 | 16 | 2 | 2 | 1 | 8  | 1 | 1 | 8 | 1 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen3.5-35B-A3B | 1 | 16 | 2 | 2 | 1 | 8 | 1 | 1 | 8 | 1 |
 | Qwen3.5-122B-A10B | 4 | 16 | 2 | 4 | 1 | 16 | 1 | 1 | 16 | 1 |
 | Qwen3.5-397B-A17B | 16 | 16 | 2 | 4 | 1 | 64 | 1 | 16 | 16 | 256 |
 

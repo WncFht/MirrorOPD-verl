@@ -1,6 +1,6 @@
 # Upgrading to vllm >= 0.7
 
-Note: verl+vllm 0.8.3 is now stable. Please see ``docs/README_vllm0.8.md`` for upgrade guide.
+Note: verl+vllm 0.8.3 is now stable. Please see `docs/README_vllm0.8.md` for upgrade guide.
 
 ## Installation
 
@@ -17,7 +17,7 @@ cd verl
 pip3 install -e .
 
 # Install the latest stable version of vLLM
-pip3 install vllm==0.7.3 
+pip3 install vllm==0.7.3
 
 # Install flash-attn
 pip3 install flash-attn --no-build-isolation
@@ -69,5 +69,4 @@ sed -i "903a\    data_parallel_size = world_size // pipeline_model_parallel_size
 VLLM_USE_PRECOMPILED=1 pip install --editable .
 ```
 
-Then you can enable the V1 engine by setting `export VLLM_USE_V1=1`. In some benchmark tests, the V1 engine demonstrates a 1.5x speed improvement over the vLLM V0 engine.
-The stable support of the vLLM V1 engine is available on verl main.
+Then you can enable the V1 engine by setting `export VLLM_USE_V1=1`. In some benchmark tests, the V1 engine demonstrates a 1.5x speed improvement over the vLLM V0 engine. The stable support of the vLLM V1 engine is available on verl main.

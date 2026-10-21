@@ -88,16 +88,16 @@ Atlas 800T A3
 ============= ======================================= ===================
 HDK           ``26.0.rc1``                            NPU硬件驱动与固件
 CANN          ``9.1.0``                               CANN软件，帮助开发者实现在昇腾软硬件平台上开发和运行AI业务
-Python        ``>=3.10, <3.13``\ ，推荐 ``3.12``      
+Python        ``>=3.10, <3.13``\ ，推荐 ``3.12``
 torch         ``2.10.0``                              PyTorch 深度学习框架基础包
-torch_npu     ``2.10.0.post4``                        NPU PyTorch 适配插件        
+torch_npu     ``2.10.0.post4``                        NPU PyTorch 适配插件
 torchvision   ``0.25.0``                              PyTorch 图像处理库
 torchaudio    ``2.10.0``                              PyTorch 音频处理库
 triton        ``3.5.0``                               Triton，用于编写自定义算子
 triton-ascend ``3.2.2``                               NPU Triton 适配，安装命令需参考脚本 `安装脚本 <../../../../scripts/install_vllm_mcore_npu.sh>`_
 transformers  ``5.10.4``                              Hugging Face 大模型库，提供模型架构与预训练权重
 vLLM          ``0.23.0``                              高性能 LLM 推理与服务引擎
-vLLM-Ascend   ``0.23.0``                              NPU vLLM 后端适配  
+vLLM-Ascend   ``0.23.0``                              NPU vLLM 后端适配
 Megatron-LM   ``core_r0.18.0``                        大规模分布式训练框架
 MindSpeed     ``core_r0.18.0``                        Megatron-LM 在昇腾 NPU 上的适配和优化组件
 ============= ======================================= ===================
@@ -116,7 +116,7 @@ CANN是NPU上的异构计算架构，以下为arm平台A3安装指令，请参�
    sudo useradd -g HwHiAiUser -d /home/HwHiAiUser -m HwHiAiUser -s /bin/bash
    # 安装依赖&配源
    sudo yum makecache
-   sudo yum install -y gcc python3 python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) 
+   sudo yum install -y gcc python3 python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r)
    sudo curl https://repo.oepkgs.net/ascend/cann/ascend.repo -o /etc/yum.repos.d/ascend.repo && yum makecache
    # 安装NPU驱动
    sudo yum install -y Atlas-A3-hdk-npu-driver-26.0.rc1
@@ -165,7 +165,7 @@ transformers版本升级5.10.4后，可能出现大量别名废弃告警，可�
 ============= ======================================= ===================
 HDK           ``25.5.0``                              NPU硬件驱动与固件
 CANN          ``>=8.5.0``                             CANN软件，帮助开发者实现在昇腾软硬件平台上开发和运行AI业务
-Python        ``>=3.10, <3.12``\ ，推荐 ``3.11``      
+Python        ``>=3.10, <3.12``\ ，推荐 ``3.11``
 torch         ``2.8.0``                               PyTorch 深度学习框架基础包
 torch_npu     ``2.8.0.post2``                         NPU PyTorch 适配插件
 SGLang        ``v0.5.10``                             高性能 LLM 推理引擎
@@ -195,7 +195,7 @@ CANN是NPU上的异构计算架构，以下为arm平台A3安装指令，请参�
    sudo useradd -g HwHiAiUser -d /home/HwHiAiUser -m HwHiAiUser -s /bin/bash
    # 安装依赖&配源
    sudo yum makecache
-   sudo yum install -y gcc python3 python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) 
+   sudo yum install -y gcc python3 python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r)
    sudo curl https://repo.oepkgs.net/ascend/cann/ascend.repo -o /etc/yum.repos.d/ascend.repo && yum makecache
    # 安装NPU驱动
    sudo yum install -y Atlas-A3-hdk-npu-driver-25.5.0

@@ -24,9 +24,9 @@ Ray Distributed Debugger VSCode Extension (Recommended)
 
    Ensure the following are installed (see the extension README for more detail):
 
-   - Visual Studio Code  
-   - `ray[default]` >= 2.9.1  
-   - `debugpy` >= 1.8.0  
+   - Visual Studio Code
+   - `ray[default]` >= 2.9.1
+   - `debugpy` >= 1.8.0
 
    .. image:: https://github.com/eric-haibin-lin/verl-community/blob/main/docs/ray/readme.png?raw=true
       :alt: VSCode with Ray prerequisites
@@ -44,14 +44,14 @@ Ray Distributed Debugger VSCode Extension (Recommended)
 
       Be sure to remove any legacy flags before starting Ray:
 
-      - `RAY_DEBUG=legacy`  
+      - `RAY_DEBUG=legacy`
       - `--ray-debugger-external`
 
 4. Configuring BreakpointsSet up breakpoint() in your code, and submit job to cluster. Then the extension will show the breakpoint information.
 
 
-   1. Insert `breakpoint()` calls into your remote functions.  
-   2. Submit your job to the cluster.  
+   1. Insert `breakpoint()` calls into your remote functions.
+   2. Submit your job to the cluster.
 
    The extension will detect active breakpoints and display them in VSCode.
 
@@ -93,4 +93,3 @@ Legacy Ray Debugger
 2. Set up breakpoint in your code, and submit job to cluster. Then run ``ray debug`` to wait breakpoint:
 
 .. image:: https://github.com/eric-haibin-lin/verl-community/blob/main/docs/ray/legacy.png?raw=true
-

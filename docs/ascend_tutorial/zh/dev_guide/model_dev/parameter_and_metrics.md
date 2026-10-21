@@ -17,7 +17,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.1 Actor 优化器配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.actor.optim.lr` | `1.0e-06` | Actor 学习率 |
 | `actor_rollout_ref.actor.optim.lr_warmup_steps_ratio` | `0.0` | 学习率预热步数占总训练步数的比例 |
 | `actor_rollout_ref.actor.optim.total_training_steps` | `-1` | 总训练步数，-1 表示自动计算 |
@@ -30,7 +30,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.2 Actor 策略配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.actor.strategy` | `fsdp` / `megatron` | 训练策略，FSDP 方案为 fsdp，Megatron 方案为 megatron |
 | `actor_rollout_ref.actor.ppo_mini_batch_size` | `256` | PPO 训练的 mini batch 大小 |
 | `actor_rollout_ref.actor.ppo_micro_batch_size` | `null` | PPO 训练的 micro batch 大小 |
@@ -69,7 +69,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.3 Policy Loss 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.actor.policy_loss.loss_mode` | `vanilla` | 策略损失模式，可选 vanilla、clip_cov、kl_cov、dppo_tv、dppo_kl、gspo、sapo、geo_mean、cispo、gpg、bypass_mode、reinforce_is 等 |
 | `actor_rollout_ref.actor.policy_loss.clip_cov_ratio` | `0.0002` | clip_cov 模式的协方差比率 |
 | `actor_rollout_ref.actor.policy_loss.clip_cov_lb` | `1.0` | clip_cov 模式的协方差下界 |
@@ -80,7 +80,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.4 Rollout 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.rollout.name` | `???` | Rollout 引擎名称，需用户指定 |
 | `actor_rollout_ref.rollout.mode` | `async` | Rollout 模式，可选 async、sync 等 |
 | `actor_rollout_ref.rollout.nnodes` | `0` | Rollout 使用的节点数 |
@@ -127,7 +127,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.5 Rollout 验证采样配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.rollout.val_kwargs.top_k` | `-1` | 验证时 Top-K 采样参数 |
 | `actor_rollout_ref.rollout.val_kwargs.top_p` | `1.0` | 验证时 Top-P 采样参数 |
 | `actor_rollout_ref.rollout.val_kwargs.temperature` | `0` | 验证时采样温度，0 表示贪心解码 |
@@ -137,7 +137,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.6 Multi-Turn 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.rollout.multi_turn.enable` | `false` | 是否启用多轮对话 |
 | `actor_rollout_ref.rollout.multi_turn.max_assistant_turns` | `null` | 最大助手轮数 |
 | `actor_rollout_ref.rollout.multi_turn.tool_config_path` | `null` | 工具配置文件路径 |
@@ -154,7 +154,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.7 Agent 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.rollout.agent.num_workers` | `8` | Agent 工作进程数 |
 | `actor_rollout_ref.rollout.agent.default_agent_loop` | `single_turn_agent` | 默认 Agent 循环类型 |
 | `actor_rollout_ref.rollout.agent.agent_loop_config_path` | `null` | Agent 循环配置文件路径 |
@@ -164,14 +164,14 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.8 Checkpoint Engine 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.rollout.checkpoint_engine.backend` | `naive` | Checkpoint 引擎后端 |
 | `actor_rollout_ref.rollout.checkpoint_engine.update_weights_bucket_megabytes` | `2048` | 权重更新桶大小（MB） |
 
 #### 1.1.9 Trace 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.rollout.trace.project_name` | 引用自 `trainer.project_name` | 追踪项目名称 |
 | `actor_rollout_ref.rollout.trace.experiment_name` | 引用自 `trainer.experiment_name` | 追踪实验名称 |
 | `actor_rollout_ref.rollout.trace.backend` | `null` | 追踪后端 |
@@ -181,7 +181,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.10 Prometheus 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.rollout.prometheus.enable` | `false` | 是否启用 Prometheus 监控 |
 | `actor_rollout_ref.rollout.prometheus.port` | `9090` | Prometheus 端口 |
 | `actor_rollout_ref.rollout.prometheus.file` | `/tmp/ray/session_latest/metrics/prometheus/prometheus.yml` | Prometheus 配置文件路径 |
@@ -190,7 +190,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.11 Reference 模型配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.ref.rollout_n` | 引用自 `rollout.n` | Rollout 次数 |
 | `actor_rollout_ref.ref.strategy` | 引用自 `actor.strategy` | 训练策略 |
 | `actor_rollout_ref.ref.use_torch_compile` | 引用自 `actor.use_torch_compile` | 是否使用 torch.compile |
@@ -205,7 +205,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.12 Critic 优化器配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `critic.optim.lr` | `1.0e-05` | Critic 学习率 |
 | `critic.optim.lr_warmup_steps_ratio` | `0.0` | 学习率预热步数比例 |
 | `critic.optim.total_training_steps` | `-1` | 总训练步数 |
@@ -218,7 +218,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.13 Critic 策略配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `critic.strategy` | `fsdp` / `megatron` | 训练策略 |
 | `critic.enable` | `null` | 是否启用 Critic，null 表示自动决定 |
 | `critic.ppo_mini_batch_size` | 引用自 `actor.ppo_mini_batch_size` | PPO mini batch 大小 |
@@ -240,7 +240,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.14 Critic 模型配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `critic.model.path` | `~/models/deepseek-llm-7b-chat` | Critic 模型路径 |
 | `critic.model.tokenizer_path` | 引用自 `model.path` | 分词器路径 |
 | `critic.model.override_config` | `{}` | 覆盖模型配置 |
@@ -259,7 +259,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.15 数据配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `data.tokenizer` | `null` | 分词器路径 |
 | `data.use_shm` | `false` | 是否使用共享内存 |
 | `data.train_files` | `~/data/rlhf/gsm8k/train.parquet` | 训练数据文件路径 |
@@ -292,7 +292,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.16 奖励配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `reward.num_workers` | `8` | 奖励计算工作进程数 |
 | `reward.custom_reward_function.path` | `null` | 自定义奖励函数路径 |
 | `reward.custom_reward_function.name` | `compute_score` | 自定义奖励函数名称 |
@@ -310,7 +310,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.17 算法配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `algorithm.gamma` | `1.0` | 折扣因子 |
 | `algorithm.lam` | `1.0` | GAE lambda 参数 |
 | `algorithm.adv_estimator` | `gae` | 优势估计方法，可选 gae 等 |
@@ -328,7 +328,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.18 Rollout Correction 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `algorithm.rollout_correction.rollout_is` | `null` | 是否启用 IS 重要性采样校正 |
 | `algorithm.rollout_correction.rollout_is_threshold` | `2.0` | IS 权重阈值 |
 | `algorithm.rollout_correction.rollout_rs` | `null` | 是否启用拒绝采样校正 |
@@ -340,7 +340,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.19 训练器配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `trainer.balance_batch` | `true` | 是否平衡 batch |
 | `trainer.total_epochs` | `30` | 总训练 epoch 数 |
 | `trainer.total_training_steps` | `null` | 总训练步数，null 表示由 epoch 自动计算 |
@@ -371,7 +371,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.20 模型配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.model.path` | `~/models/deepseek-llm-7b-chat` | 模型路径 |
 | `actor_rollout_ref.model.hf_config_path` | `null` | HuggingFace 配置路径 |
 | `actor_rollout_ref.model.tokenizer_path` | `null` | 分词器路径 |
@@ -397,7 +397,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.1.21 公共引擎配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.hybrid_engine` | `true` | 是否使用混合引擎（训练推理共享权重） |
 | `actor_rollout_ref.nccl_timeout` | `600` | NCCL 通信超时（秒） |
 | `transfer_queue.enable` | `false` | 是否启用传输队列 |
@@ -411,7 +411,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.2.1 FSDP 优化器配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.actor.optim.optimizer` | `AdamW` | 优化器类型 |
 | `actor_rollout_ref.actor.optim.optimizer_impl` | `torch.optim` | 优化器实现 |
 | `actor_rollout_ref.actor.optim.min_lr_ratio` | `0.0` | 最小学习率比例 |
@@ -423,7 +423,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.2.2 Actor FSDP 引擎配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.actor.fsdp_config.wrap_policy.min_num_params` | `0` | FSDP 包装的最小参数数 |
 | `actor_rollout_ref.actor.fsdp_config.param_offload` | `false` | 是否将参数卸载到 CPU |
 | `actor_rollout_ref.actor.fsdp_config.optimizer_offload` | `false` | 是否将优化器状态卸载到 CPU |
@@ -444,7 +444,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 与 Actor FSDP 引擎配置结构相同，主要区别：
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.ref.fsdp_config.forward_only` | `true` | Reference 模型仅前向计算 |
 
 其余参数（`wrap_policy`、`param_offload`、`optimizer_offload`、`reshard_after_forward`、`fsdp_size`、`dtype` 等）默认值与 Actor FSDP 引擎配置一致。
@@ -454,7 +454,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 与 Actor FSDP 引擎配置结构相同，主要区别：
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `critic.model.fsdp_config.forward_only` | `false` | Critic 模型需要训练 |
 | `critic.model.fsdp_config.use_remove_padding` | `false` | Critic 不移除 padding |
 
@@ -469,7 +469,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.3.1 Megatron 优化器配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.actor.optim.optimizer` | `adam` | 优化器类型 |
 | `actor_rollout_ref.actor.optim.lr_warmup_init` | `0.0` | 学习率预热初始值 |
 | `actor_rollout_ref.actor.optim.lr_decay_steps` | `null` | 学习率衰减步数 |
@@ -483,7 +483,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.3.2 Actor Megatron 引擎配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.actor.megatron.param_offload` | `false` | 是否将参数卸载到 CPU，并在角色非活跃时释放梯度缓冲区 |
 | `actor_rollout_ref.actor.megatron.optimizer_offload` | `false` | 是否将优化器状态卸载到 CPU |
 | `actor_rollout_ref.actor.megatron.tensor_model_parallel_size` | `1` | TP 并行大小 |
@@ -509,7 +509,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.3.3 Megatron Transformer 覆盖配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `override_transformer_config.recompute_granularity` | `null` | 重计算粒度 |
 | `override_transformer_config.recompute_modules` | `[core_attn]` | 重计算模块列表 |
 | `override_transformer_config.recompute_method` | `null` | 重计算方法 |
@@ -521,7 +521,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 与 Actor Megatron 引擎配置结构相同，主要区别：
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor_rollout_ref.ref.megatron.forward_only` | `true` | Reference 模型仅前向计算 |
 
 其余参数默认值引用自 Actor Megatron 引擎配置（如 `param_offload`、`tensor_model_parallel_size` 等）。
@@ -530,14 +530,14 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 
 与 Actor Megatron 引擎配置结构相同，主要区别：
 
-| 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| 参数名                         | 默认值  | 说明                |
+| ------------------------------ | ------- | ------------------- |
 | `critic.megatron.forward_only` | `false` | Critic 模型需要训练 |
 
 #### 1.3.6 Megatron LoRA 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `model.lora.type` | `lora` | LoRA 类型 |
 | `model.lora.merge` | `false` | 是否合并 LoRA 权重 |
 | `model.lora.rank` | `0` | LoRA 秩，0 表示不使用 |
@@ -558,14 +558,14 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.3.7 模型 override_config（Megatron 方案）
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `model.override_config.model_config` | `{}` | 模型配置覆盖 |
 | `model.override_config.moe_config.freeze_moe_router` | `false` | 是否冻结 MoE 路由 |
 
 #### 1.3.8 Rollout layer_name_map（Megatron 方案）
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `rollout.layer_name_map.qkv_layer_name` | `qkv` | QKV 层名称映射 |
 | `rollout.layer_name_map.gate_proj_layer_name` | `gate_up` | Gate 投影层名称映射 |
 
@@ -576,7 +576,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.4.1 Profiler 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `profiler.enable` | `false` | 是否启用 Profiler |
 | `profiler.tool` | 引用自 `global_profiler.tool` | Profiler 工具，可选 nsys、npu、torch、torch_memory |
 | `profiler.all_ranks` | `false` | 是否在所有 rank 上启用 |
@@ -586,7 +586,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.4.2 Global Profiler 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `global_profiler.tool` | `null` | 全局 Profiler 工具 |
 | `global_profiler.steps` | `null` | Profiler 采集步数 |
 | `global_profiler.profile_continuous_steps` | `false` | 是否连续步采集 |
@@ -595,7 +595,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.4.3 Router Replay 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `actor.megatron.router_replay.mode` / `actor.veomni.router_replay.mode` | `disabled` | 引擎侧路由重放模式，可选 disabled、R2、R3 |
 | `router_replay.record_file` | `null` | 路由记录文件路径 |
 | `router_replay.replay_file` | `null` | 路由重放文件路径 |
@@ -603,7 +603,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.4.4 Checkpoint 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `checkpoint.save_contents` | `[model, optimizer, extra]` | Checkpoint 保存内容 |
 | `checkpoint.load_contents` | 引用自 `checkpoint.save_contents` | Checkpoint 加载内容 |
 | `checkpoint.async_save` | `false` | 是否异步保存 Checkpoint |
@@ -611,7 +611,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 #### 1.4.5 QAT 配置
 
 | 参数名 | 默认值 | 说明 |
-|--------|--------|------|
+| --- | --- | --- |
 | `qat.enable` | `false` | 是否启用量化感知训练（QAT） |
 | `qat.mode` | `w4a16` | 量化模式 |
 | `qat.group_size` | `16` | 量化分组大小 |
@@ -621,19 +621,19 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 
 #### 1.4.6 MTP 配置
 
-| 参数名 | 默认值 | 说明 |
-|--------|--------|------|
-| `mtp.enable` | `false` | 是否启用多 token 预测（MTP） |
-| `mtp.enable_train` | `false` | 是否在训练中启用 MTP |
-| `mtp.enable_rollout` | `false` | 是否在推理中启用 MTP |
-| `mtp.detach_encoder` | `false` | 是否分离编码器 |
-| `mtp.mtp_loss_scaling_factor` | `0.1` | MTP 损失缩放因子 |
-| `mtp.speculative_algorithm` | `EAGLE` | 推测解码算法 |
-| `mtp.speculative_num_steps` | `3` | 推测步数 |
-| `mtp.speculative_eagle_topk` | `1` | EAGLE Top-K |
-| `mtp.speculative_num_draft_tokens` | `4` | 推测 draft token 数 |
-| `mtp.method` | `mtp` | MTP 方法 |
-| `mtp.num_speculative_tokens` | `1` | 推测 token 数 |
+| 参数名                             | 默认值  | 说明                         |
+| ---------------------------------- | ------- | ---------------------------- |
+| `mtp.enable`                       | `false` | 是否启用多 token 预测（MTP） |
+| `mtp.enable_train`                 | `false` | 是否在训练中启用 MTP         |
+| `mtp.enable_rollout`               | `false` | 是否在推理中启用 MTP         |
+| `mtp.detach_encoder`               | `false` | 是否分离编码器               |
+| `mtp.mtp_loss_scaling_factor`      | `0.1`   | MTP 损失缩放因子             |
+| `mtp.speculative_algorithm`        | `EAGLE` | 推测解码算法                 |
+| `mtp.speculative_num_steps`        | `3`     | 推测步数                     |
+| `mtp.speculative_eagle_topk`       | `1`     | EAGLE Top-K                  |
+| `mtp.speculative_num_draft_tokens` | `4`     | 推测 draft token 数          |
+| `mtp.method`                       | `mtp`   | MTP 方法                     |
+| `mtp.num_speculative_tokens`       | `1`     | 推测 token 数                |
 
 ---
 
@@ -643,15 +643,15 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 
 ### 2.1 训练基础指标
 
-| 指标 | 说明 |
-|------|------|
+| 指标                   | 说明             |
+| ---------------------- | ---------------- |
 | `training/global_step` | 当前全局训练步数 |
-| `training/epoch` | 当前训练 epoch |
+| `training/epoch`       | 当前训练 epoch   |
 
 ### 2.2 Actor 模型指标
 
 | 指标 | 说明 |
-|------|------|
+| --- | --- |
 | `actor/pg_loss` | 策略梯度损失（PPO clip loss），基于优势函数的策略梯度目标函数值 |
 | `actor/kl_loss` | KL 散度损失，衡量当前策略与参考策略之间的偏离程度（仅 `use_kl_loss=True` 时打印） |
 | `actor/entropy` | 策略熵，表示策略的随机性或探索能力（仅 `calculate_entropy=True` 或 `entropy_coeff!=0` 时打印） |
@@ -667,7 +667,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 ### 2.3 Critic 模型指标
 
 | 指标 | 说明 |
-|------|------|
+| --- | --- |
 | `critic/vf_loss` | 值函数损失 |
 | `critic/vf_clipfrac` | Critic 裁剪机制生效的比例，反映值函数更新幅度的稳定性 |
 | `critic/vpred_mean` | 预测值的均值 |
@@ -678,7 +678,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 ### 2.4 数据统计指标
 
 | 指标 | 说明 |
-|------|------|
+| --- | --- |
 | `critic/score/mean` | 非中止样本的序列分数均值 |
 | `critic/score/max` | 非中止样本的序列分数最大值 |
 | `critic/score/min` | 非中止样本的序列分数最小值 |
@@ -716,48 +716,48 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 
 ### 2.5 时间指标
 
-| 指标 | 说明 |
-|------|------|
-| `timing_s/gen` | 生成（rollout）耗时（秒） |
-| `timing_s/ref` | Reference 模型计算 log_p 耗时（秒） |
-| `timing_s/values` | Critic 模型计算 values 耗时（秒） |
-| `timing_s/adv` | 计算优势值耗时（秒） |
-| `timing_s/update_critic` | Critic 模型更新耗时（秒） |
-| `timing_s/update_actor` | Actor 模型更新耗时（秒） |
-| `timing_s/step` | 一步总耗时（秒） |
-| `timing_s/old_log_prob` | Actor 模型计算旧 log_p 耗时（秒） |
-| `timing_s/reward` | 奖励计算耗时（秒） |
-| `timing_s/testing` | 验证耗时（秒） |
-| `timing_s/save_checkpoint` | 保存 checkpoint 耗时（秒） |
-| `timing_s/update_weights` | 权重同步耗时（秒） |
-| `timing_per_token_ms/gen` | 生成阶段每 token 耗时（毫秒） |
-| `timing_per_token_ms/ref` | Reference 模型每 token 耗时（毫秒） |
-| `timing_per_token_ms/values` | Critic 模型每 token 耗时（毫秒） |
-| `timing_per_token_ms/adv` | 优势值计算每 token 耗时（毫秒） |
-| `timing_per_token_ms/update_critic` | Critic 更新每 token 耗时（毫秒） |
-| `timing_per_token_ms/update_actor` | Actor 更新每 token 耗时（毫秒） |
+| 指标                                | 说明                                |
+| ----------------------------------- | ----------------------------------- |
+| `timing_s/gen`                      | 生成（rollout）耗时（秒）           |
+| `timing_s/ref`                      | Reference 模型计算 log_p 耗时（秒） |
+| `timing_s/values`                   | Critic 模型计算 values 耗时（秒）   |
+| `timing_s/adv`                      | 计算优势值耗时（秒）                |
+| `timing_s/update_critic`            | Critic 模型更新耗时（秒）           |
+| `timing_s/update_actor`             | Actor 模型更新耗时（秒）            |
+| `timing_s/step`                     | 一步总耗时（秒）                    |
+| `timing_s/old_log_prob`             | Actor 模型计算旧 log_p 耗时（秒）   |
+| `timing_s/reward`                   | 奖励计算耗时（秒）                  |
+| `timing_s/testing`                  | 验证耗时（秒）                      |
+| `timing_s/save_checkpoint`          | 保存 checkpoint 耗时（秒）          |
+| `timing_s/update_weights`           | 权重同步耗时（秒）                  |
+| `timing_per_token_ms/gen`           | 生成阶段每 token 耗时（毫秒）       |
+| `timing_per_token_ms/ref`           | Reference 模型每 token 耗时（毫秒） |
+| `timing_per_token_ms/values`        | Critic 模型每 token 耗时（毫秒）    |
+| `timing_per_token_ms/adv`           | 优势值计算每 token 耗时（毫秒）     |
+| `timing_per_token_ms/update_critic` | Critic 更新每 token 耗时（毫秒）    |
+| `timing_per_token_ms/update_actor`  | Actor 更新每 token 耗时（毫秒）     |
 
 ### 2.6 性能指标
 
-| 指标 | 说明 |
-|------|------|
-| `perf/total_num_tokens` | 本步处理的总 token 数 |
-| `perf/time_per_step` | 本步总耗时（秒） |
-| `perf/throughput` | 吞吐量：tokens / (time * n_gpus) |
-| `perf/max_memory_allocated_gb` | GPU 最大已分配内存（GB） |
-| `perf/max_memory_reserved_gb` | GPU 最大预留内存（GB） |
-| `perf/cpu_memory_used_gb` | CPU 已使用内存（GB） |
-| `perf/mfu/actor` | Actor 训练的 MFU（模型浮点利用率） |
-| `perf/mfu/critic` | Critic 训练的 MFU |
-| `perf/mfu/actor_infer` | Actor 推理阶段的 MFU |
+| 指标                           | 说明                               |
+| ------------------------------ | ---------------------------------- |
+| `perf/total_num_tokens`        | 本步处理的总 token 数              |
+| `perf/time_per_step`           | 本步总耗时（秒）                   |
+| `perf/throughput`              | 吞吐量：tokens / (time \* n_gpus)  |
+| `perf/max_memory_allocated_gb` | GPU 最大已分配内存（GB）           |
+| `perf/max_memory_reserved_gb`  | GPU 最大预留内存（GB）             |
+| `perf/cpu_memory_used_gb`      | CPU 已使用内存（GB）               |
+| `perf/mfu/actor`               | Actor 训练的 MFU（模型浮点利用率） |
+| `perf/mfu/critic`              | Critic 训练的 MFU                  |
+| `perf/mfu/actor_infer`         | Actor 推理阶段的 MFU               |
 
 ### 2.7 方差代理指标
 
 | 指标 | 说明 |
-|------|------|
+| --- | --- |
 | `variance_proxy/proxy1_signal_strength` | 信号强度：梯度均值的平方范数 \|\|g_mean\|\|^2 |
 | `variance_proxy/proxy2_total_power` | 总功率：梯度平方范数的期望 E[\|\|g_tau\|\|^2] |
-| `variance_proxy/proxy3_pure_noise` | 纯噪声：梯度方差代理 (1/(N-1)) * (Proxy2 - Proxy1) |
+| `variance_proxy/proxy3_pure_noise` | 纯噪声：梯度方差代理 (1/(N-1)) \* (Proxy2 - Proxy1) |
 | `variance_proxy/expected_a_squared` | 优势平方的期望 E[A^2] |
 | `variance_proxy/expected_w` | W-score 代理的期望 E[W] |
 
@@ -772,7 +772,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 **IS 权重指标**（仅启用 IS 校正时）：
 
 | 指标 | 说明 |
-|------|------|
+| --- | --- |
 | `rollout_corr/rollout_is_mean` | IS 权重均值 |
 | `rollout_corr/rollout_is_max` | IS 权重最大值 |
 | `rollout_corr/rollout_is_min` | IS 权重最小值 |
@@ -792,7 +792,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 **Rejection Sampling 指标**（仅启用 RS 校正时）：
 
 | 指标 | 说明 |
-|------|------|
+| --- | --- |
 | `rollout_corr/rollout_rs_{option}_mean` | RS 统计量均值 |
 | `rollout_corr/rollout_rs_{option}_max` | RS 统计量最大值 |
 | `rollout_corr/rollout_rs_{option}_min` | RS 统计量最小值 |
@@ -813,52 +813,52 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 
 **Off-policy 诊断指标**（仅启用 off-policy 诊断时）：
 
-| 指标 | 说明 |
-|------|------|
-| `rollout_corr/training_ppl` | 训练策略的困惑度 |
-| `rollout_corr/training_log_ppl` | 训练策略的 log 困惑度 |
-| `rollout_corr/kl` | KL(π_rollout \|\| π_training) 直接估计 |
-| `rollout_corr/k3_kl` | K3 KL 估计（更稳定） |
-| `rollout_corr/rollout_ppl` | Rollout 策略的困惑度 |
-| `rollout_corr/rollout_log_ppl` | Rollout 策略的 log 困惑度 |
-| `rollout_corr/log_ppl_diff` | log PPL 差值（rollout - training） |
-| `rollout_corr/log_ppl_abs_diff` | log PPL 绝对差值的均值 |
-| `rollout_corr/log_ppl_diff_max` | log PPL 差值最大值 |
-| `rollout_corr/log_ppl_diff_min` | log PPL 差值最小值 |
-| `rollout_corr/ppl_ratio` | PPL 比率（training_ppl / rollout_ppl） |
-| `rollout_corr/chi2_token` | token 级卡方散度 |
-| `rollout_corr/chi2_seq` | 序列级卡方散度 |
+| 指标                            | 说明                                   |
+| ------------------------------- | -------------------------------------- |
+| `rollout_corr/training_ppl`     | 训练策略的困惑度                       |
+| `rollout_corr/training_log_ppl` | 训练策略的 log 困惑度                  |
+| `rollout_corr/kl`               | KL(π_rollout \|\| π_training) 直接估计 |
+| `rollout_corr/k3_kl`            | K3 KL 估计（更稳定）                   |
+| `rollout_corr/rollout_ppl`      | Rollout 策略的困惑度                   |
+| `rollout_corr/rollout_log_ppl`  | Rollout 策略的 log 困惑度              |
+| `rollout_corr/log_ppl_diff`     | log PPL 差值（rollout - training）     |
+| `rollout_corr/log_ppl_abs_diff` | log PPL 绝对差值的均值                 |
+| `rollout_corr/log_ppl_diff_max` | log PPL 差值最大值                     |
+| `rollout_corr/log_ppl_diff_min` | log PPL 差值最小值                     |
+| `rollout_corr/ppl_ratio`        | PPL 比率（training_ppl / rollout_ppl） |
+| `rollout_corr/chi2_token`       | token 级卡方散度                       |
+| `rollout_corr/chi2_seq`         | 序列级卡方散度                         |
 
 #### 2.8.2 序列长度平衡指标
 
 仅启用 `balance_batch` 时打印：
 
-| 指标 | 说明 |
-|------|------|
-| `global_seqlen/min` | 平衡前各 DP 分区的最小序列长度和 |
-| `global_seqlen/max` | 平衡前各 DP 分区的最大序列长度和 |
-| `global_seqlen/minmax_diff` | 平衡前 max - min 差值 |
+| 指标                         | 说明                             |
+| ---------------------------- | -------------------------------- |
+| `global_seqlen/min`          | 平衡前各 DP 分区的最小序列长度和 |
+| `global_seqlen/max`          | 平衡前各 DP 分区的最大序列长度和 |
+| `global_seqlen/minmax_diff`  | 平衡前 max - min 差值            |
 | `global_seqlen/balanced_min` | 平衡后各 DP 分区的最小序列长度和 |
 | `global_seqlen/balanced_max` | 平衡后各 DP 分区的最大序列长度和 |
-| `global_seqlen/mean` | 各分区的平均序列长度和 |
+| `global_seqlen/mean`         | 各分区的平均序列长度和           |
 
 #### 2.8.3 GDPO 奖励指标
 
 仅使用 GDPO 估计器时打印：
 
-| 指标 | 说明 |
-|------|------|
-| `gdpo/{key}/mean` | GDPO 各奖励分量的均值 |
-| `gdpo/{key}/std` | GDPO 各奖励分量的标准差 |
-| `gdpo/{key}/max` | GDPO 各奖励分量的最大值 |
-| `gdpo/{key}/min` | GDPO 各奖励分量的最小值 |
+| 指标              | 说明                    |
+| ----------------- | ----------------------- |
+| `gdpo/{key}/mean` | GDPO 各奖励分量的均值   |
+| `gdpo/{key}/std`  | GDPO 各奖励分量的标准差 |
+| `gdpo/{key}/max`  | GDPO 各奖励分量的最大值 |
+| `gdpo/{key}/min`  | GDPO 各奖励分量的最小值 |
 
 #### 2.8.4 训推一致性指标
 
 仅存在 `actor_rollout_ref.rollout.calculate_log_probs=True` 时打印：
 
 | 指标 | 说明 |
-|------|------|
+| --- | --- |
 | `training/rollout_probs_diff_valid` | 标记为 1（有效） |
 | `training/rollout_probs_diff_max` | rollout 与 actor 概率差异的最大值 |
 | `training/rollout_probs_diff_mean` | rollout 与 actor 概率差异的均值 |
@@ -870,7 +870,7 @@ verl 通过层级化的 YAML 配置文件管理所有参数，涉及到的所有
 验证阶段打印：
 
 | 指标 | 说明 |
-|------|------|
+| --- | --- |
 | `val-core/{data_source}/{var_name}/{metric_name}` | 核心验证指标（mean@N, maj@N, best@N 等） |
 | `val-aux/{data_source}/{var_name}/{metric_name}` | 辅助验证指标（std@N, worst@N 等） |
 | `val-aux/num_turns/mean` | 验证集多轮对话轮数均值 |

@@ -15,7 +15,7 @@ Please checkout the official debugging guide from Ray: https://docs.ray.io/en/la
 "Unable to register worker with raylet"
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The cause of this issue is due to some system setting, e.g., SLURM added some constraints on how the CPUs are shared on a node. 
+The cause of this issue is due to some system setting, e.g., SLURM added some constraints on how the CPUs are shared on a node.
 While `ray.init()` tries to launch as many worker processes as the number of CPU cores of the machine,
 some constraints of SLURM restricts the `core-workers` seeing the `raylet` process, leading to the problem.
 
@@ -61,10 +61,10 @@ If you changed Slurm resource specifications, please make sure to update the env
 Install related
 ------------------------
 
-NotImplementedError: TensorDict does not support membership checks with the `in` keyword. 
+NotImplementedError: TensorDict does not support membership checks with the `in` keyword.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Detail error information: 
+Detail error information:
 
 .. code:: bash
 
@@ -159,7 +159,7 @@ For example:
 .. code:: bash
 
     ray_init.timeline_json_file=/tmp/ray_timeline.json
-  
+
 The file will be generated in the specified path at the end of a training job.
 You can use tools like chrome://tracing or the Perfetto UI and view the ray timeline file.
 

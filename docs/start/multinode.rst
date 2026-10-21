@@ -27,7 +27,7 @@ Set up multinode ray cluster
 
 .. image:: https://github.com/eric-haibin-lin/verl-community/blob/main/docs/ray/status.png?raw=true
 
-4. Additionally, you can access dashboard in the browser with the address you get above. 
+4. Additionally, you can access dashboard in the browser with the address you get above.
 
 *Firewall rules maybe need configure to access the dashboard, if there's any trouble, please contact your network administrator.*
 
@@ -71,14 +71,14 @@ Option 2: Launch via SkyPilot on Kubernetes or clouds
 
 .. note::
    Ready-to-use SkyPilot example configurations are available in the `examples/tutorial/skypilot/ <https://github.com/verl-project/verl/tree/main/examples/tutorial/skypilot>`_ directory:
-   
+
    - ``verl-ppo.yaml`` - PPO training with GSM8K dataset
    - ``verl-grpo.yaml`` - GRPO training with MATH dataset
 
    Agent Loop and tool-use training is covered by the `Agent Loop tutorial
    <https://github.com/verl-project/verl/blob/main/examples/tutorial/agent_loop_get_started/agent_loop_tutorial.ipynb>`_.
    It does not currently include a preconfigured SkyPilot task.
-   
+
    See the `SkyPilot examples README <https://github.com/verl-project/verl/tree/main/examples/tutorial/skypilot>`_ for detailed usage instructions.
 
 Step 1: Setup SkyPilot
@@ -325,7 +325,7 @@ without the need to use K8S or Slurm.
 
 Prerequisite
 ~~~~~~~~~~~~
-Once dstack is `installed <https://dstack.ai/docs/installation>`_, initialize the directory as a repo with ``dstack init``. 
+Once dstack is `installed <https://dstack.ai/docs/installation>`_, initialize the directory as a repo with ``dstack init``.
 
 .. code-block:: bash
 
@@ -352,7 +352,7 @@ Once the fleet is created, define a Ray cluster task, e.g. in ``ray-cluster.dsta
         - WANDB_API_KEY
         - PYTHONUNBUFFERED=1
         - CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
-    
+
     image: verlai/verl:app-verl0.6-transformers4.56.1-sglang0.5.2-mcore0.13.0-te2.2
     commands:
         - git clone https://github.com/verl-project/verl
@@ -362,7 +362,7 @@ Once the fleet is created, define a Ray cluster task, e.g. in ``ray-cluster.dsta
         - |
         if [ $DSTACK_NODE_RANK = 0 ]; then
             python3 examples/data_preprocess/gsm8k.py --local_save_dir ~/data/gsm8k
-            python3 -c "import transformers; transformers.pipeline('text-generation', model='Qwen/Qwen2.5-7B-Instruct')" 
+            python3 -c "import transformers; transformers.pipeline('text-generation', model='Qwen/Qwen2.5-7B-Instruct')"
             ray start --head --port=6379;
         else
             ray start --address=$DSTACK_MASTER_NODE_IP:6379
@@ -392,13 +392,13 @@ Submit Ray jobs
 ~~~~~~~~~~~~~~~
 
 Before you can submit Ray jobs, ensure to install `ray` locally:
-   
+
 .. code-block:: shell
 
     pip install ray
 
 Now you can submit the training job to the Ray cluster which is available at ``localhost:8265``:
-   
+
 .. code-block:: shell
 
     $ RAY_ADDRESS=http://localhost:8265
@@ -451,9 +451,9 @@ Ray Distributed Debugger VSCode Extension (Recommended)
 
    Ensure the following are installed (see the extension README for more detail):
 
-   - Visual Studio Code  
-   - `ray[default]` >= 2.9.1  
-   - `debugpy` >= 1.8.0  
+   - Visual Studio Code
+   - `ray[default]` >= 2.9.1
+   - `debugpy` >= 1.8.0
 
    .. image:: https://github.com/aoshen524/verl/blob/main/docs/start/c7098b755ff689859837773a916c857.png?raw=true
       :alt: VSCode with Ray prerequisites
@@ -471,14 +471,14 @@ Ray Distributed Debugger VSCode Extension (Recommended)
 
       Be sure to remove any legacy flags before starting Ray:
 
-      - `RAY_DEBUG=legacy`  
+      - `RAY_DEBUG=legacy`
       - `--ray-debugger-external`
 
 4. Configuring BreakpointsSet up breakpoint() in your code, and submit job to cluster. Then the extension will show the breakpoint information.
 
 
-   1. Insert `breakpoint()` calls into your remote functions.  
-   2. Submit your job to the cluster.  
+   1. Insert `breakpoint()` calls into your remote functions.
+   2. Submit your job to the cluster.
 
    The extension will detect active breakpoints and display them in VSCode.
 
@@ -528,7 +528,7 @@ Legacy Ray Debugger
 Multi-node training on AMD clusters
 ---------------------------------------------------------------------------------------
 
-If you want to run multi-node training with slurm with Docker/Podman container on AMD Cluster, you can use the following script. 
+If you want to run multi-node training with slurm with Docker/Podman container on AMD Cluster, you can use the following script.
 
 If you encounter any issues in using AMD GPUs running verl, please contact `Yusheng Su <https://yushengsu-thu.github.io/>`_.
 
@@ -590,7 +590,7 @@ slurm_script.sh
     export GPU_MAX_HW_QUEUES=2
     export TORCH_NCCL_HIGH_PRIORITY=1
     export NCCL_CHECKS_DISABLE=1
-    # export NCCL_IB_HCA=rdma0,rdma1,rdma2,rdma3,rdma4,rdma5,rdma6,rdma7 
+    # export NCCL_IB_HCA=rdma0,rdma1,rdma2,rdma3,rdma4,rdma5,rdma6,rdma7
     export NCCL_IB_HCA=mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_8,mlx5_9
     export NCCL_IB_GID_INDEX=3
     export NCCL_CROSS_NIC=0
@@ -610,14 +610,14 @@ slurm_script.sh
     # Build and launch the Docker container
     srun bash -c "
         # Exit on any error
-        set -e 
+        set -e
 
         # Clean up dangling images (images with <none> tag)
         docker image prune -f
 
         # Need to pull the docker first
         docker pull docker.io/rocm/vllm:rocm6.2_mi300_ubuntu20.04_py3.9_vllm_0.6.4
-        
+
         if ! docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "${IMG}"; then
             echo \"Building ${IMG} image...\"
             docker build -f \"${DOCKERFILE}\" -t \"${IMG}\" .
@@ -670,7 +670,7 @@ slurm_script.sh
         echo \"Container setup completed\"
     "
         # (Optional): If you do not want to root mode and require assign yuorself as the user
-        # Please add `-e HOST_UID=$(id -u)` and `-e HOST_GID=$(id -g)` into the above docker launch script. 
+        # Please add `-e HOST_UID=$(id -u)` and `-e HOST_GID=$(id -g)` into the above docker launch script.
 
 
 

@@ -19,8 +19,13 @@ make html
 ```bash
 python -m http.server -d _build/html/
 ```
+
 Launch your browser and navigate to http://localhost:8000 to view the documentation. Alternatively you could drag the file `_build/html/index.html` to your local browser and view directly.
 
 ## Research notes
 
 - [陈旧数据训练的指标与实验对照](research/2026-10-21-陈旧数据训练的指标与实验对照.md)
+
+## Training metrics
+
+- [训练指标设计与实现](metrics/README.md)

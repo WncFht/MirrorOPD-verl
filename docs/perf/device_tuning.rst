@@ -3,28 +3,28 @@ Hardware Resource Needed for RL
 
 Last updated: 06/25/2025.
 
-Since RL requires more resources compared to regular training, 
-determining how much resources are needed to successfully run it before training 
-is a relatively difficult task. To provide more people with reference points for 
-resource selection when dealing with different models and tasks, this section is 
-mainly dedicated to introducing the environmental requirements based on experiments 
+Since RL requires more resources compared to regular training,
+determining how much resources are needed to successfully run it before training
+is a relatively difficult task. To provide more people with reference points for
+resource selection when dealing with different models and tasks, this section is
+mainly dedicated to introducing the environmental requirements based on experiments
 we have conducted.
 
-However, due to limited staff and equipment resources, we also hope for more 
-contributions from the open-source community. When submitting a PR, it is necessary 
+However, due to limited staff and equipment resources, we also hope for more
+contributions from the open-source community. When submitting a PR, it is necessary
 to provide a script to be added to the example/tuning scripts.
 
-We need two types of scripts: one is the configuration that can run with the **minimum 
-resources(min)**, and the other is the configuration that runs with **recommended resources(recommended)**. For the former, 
-it can be understood as a script that can run after applying all memory optimization techniques 
-(e.g., offload, gradient checkpointing). For the latter, it can be understood as a script that 
+We need two types of scripts: one is the configuration that can run with the **minimum
+resources(min)**, and the other is the configuration that runs with **recommended resources(recommended)**. For the former,
+it can be understood as a script that can run after applying all memory optimization techniques
+(e.g., offload, gradient checkpointing). For the latter, it can be understood as a script that
 can run while avoiding operations that incur additional time overhead as much as possible (targetting best throughput).
 
-When defining script names, please follow this format: 
-``[model]_[task]_[gpunums]_[device]_[train]_[infer].sh``. This will effectively improve 
+When defining script names, please follow this format:
+``[model]_[task]_[gpunums]_[device]_[train]_[infer].sh``. This will effectively improve
 the script's recognizability. You can place the script under the ``examples/tuning/`` directory.
 
-If you happen to have a configuration that has already been tested, we welcome you to submit 
+If you happen to have a configuration that has already been tested, we welcome you to submit
 a PR and include a screenshot from Wandb or other verifiable evidence.
 
 ----------------------------------------
@@ -35,7 +35,7 @@ a PR and include a screenshot from Wandb or other verifiable evidence.
 .. list-table::
     :widths: auto
     :header-rows: 1
-    
+
     * - Tag
       - Model
       - Task
@@ -61,7 +61,7 @@ a PR and include a screenshot from Wandb or other verifiable evidence.
 .. list-table::
     :widths: auto
     :header-rows: 1
-    
+
     * - Tag
       - Model
       - Task
@@ -87,7 +87,7 @@ a PR and include a screenshot from Wandb or other verifiable evidence.
 .. list-table::
     :widths: auto
     :header-rows: 1
-    
+
     * - Tag
       - Model
       - Task
@@ -113,7 +113,7 @@ a PR and include a screenshot from Wandb or other verifiable evidence.
 .. list-table::
     :widths: auto
     :header-rows: 1
-    
+
     * - Tag
       - Model
       - Task
@@ -148,7 +148,7 @@ a PR and include a screenshot from Wandb or other verifiable evidence.
 .. list-table::
     :widths: auto
     :header-rows: 1
-    
+
     * - Tag
       - Model
       - Task
@@ -183,7 +183,7 @@ a PR and include a screenshot from Wandb or other verifiable evidence.
 .. list-table::
     :widths: auto
     :header-rows: 1
-    
+
     * - Tag
       - Model
       - Task

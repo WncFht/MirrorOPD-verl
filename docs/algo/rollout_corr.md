@@ -53,25 +53,21 @@ Rollout Correction provides a unified framework to handle **general off-policy p
 **Common off-policy scenarios:**
 
 1. **Policy Mismatch** (Implementation Differences)
-
    - Different precision: FP8 vs FP16 vs BF16 vs FP32
    - Different backends: vLLM vs SGLang vs FSDP vs Megatron
    - Different implementations even with identical weights
 
 2. **Temporal Lag** (Model Staleness)
-
    - Rollout uses older checkpoint while training has progressed
    - Asynchronous rollout workers with stale parameters
    - Common in distributed/async RL systems
 
 3. **Replay Buffers**
-
    - Training on historical trajectories from earlier iterations
    - Experience replay from different policy versions
    - Data augmentation or resampling strategies
 
 4. **Off-Policy Algorithms**
-
    - Behavioral cloning from expert demonstrations
    - DAPO (data from auxiliary policies)
    - Any algorithm using trajectories from a different policy
@@ -93,9 +89,9 @@ This critical implementation mistake that leads to RL training collapse was iden
 
 **Mathematically correct approaches:**
 
-- **Decoupled mode**: Three policies (π_rollout, π_old, π_θ) with IS correction from π_rollout to π_old
-- **Bypass mode**: Two policies (π_rollout = π_old, π_θ) using actual rollout policy as PPO anchor
-- **Bypass + Policy Gradient mode**: Two policies (π_rollout, π_θ) with IS/RS correction and no PPO clipping
+- **Decoupled mode**: Three policies (π*rollout, π_old, π*θ) with IS correction from π_rollout to π_old
+- **Bypass mode**: Two policies (π*rollout = π_old, π*θ) using actual rollout policy as PPO anchor
+- **Bypass + Policy Gradient mode**: Two policies (π*rollout, π*θ) with IS/RS correction and no PPO clipping
 
 See [Mathematical Formulations](rollout_corr_math.md#37-common-implementation-mistake) for detailed explanation.
 
@@ -104,8 +100,7 @@ See [Mathematical Formulations](rollout_corr_math.md#37-common-implementation-mi
 The implementation cleanly separates two orthogonal mechanisms:
 
 1. **IS Weights** (`rollout_is_weights`): Continuous reweighting for gradient correction
-
-   - Policy ratio: π_old/π_rollout (decoupled) or π_θ/π_rollout (bypass)
+   - Policy ratio: π*old/π_rollout (decoupled) or π*θ/π_rollout (bypass)
    - **Safety-bounded**: Clamped to [exp(-20), exp(20)] ≈ [2e-9, 5e8] to prevent overflow
      - Token level: Bounds per-token ratios
      - Sequence level: Bounds product of ratios (broadcast to all tokens)
@@ -233,7 +228,7 @@ Importance sampling weights aggregation level:
 - `null` = No IS weights computed (metrics-only mode)
 - `"token"`: Per-token IS weights
   - **Decoupled mode**: ρ_t = π_old(t)/π_rollout(t)
-  - **Bypass/Pure IS mode**: ρ_t = π_θ(t)/π_rollout(t)
+  - **Bypass/Pure IS mode**: ρ*t = π*θ(t)/π_rollout(t)
   - Independent truncation per token
   - Typical threshold: 1.5 - 5.0
 - `"sequence"`: Per-sequence weight ρ_seq = ∏_t ρ_t
@@ -291,33 +286,19 @@ Threshold specification for rejection sampling.
 
 ### `score_centering` (bool)
 
-Subtract the expected score under the sampler from every token's score
-([Marek & Ryabinin, 2026](https://arxiv.org/abs/2609.20807)). Default: `False`
+Subtract the expected score under the sampler from every token's score ([Marek & Ryabinin, 2026](https://arxiv.org/abs/2609.20807)). Default: `False`
 
-- `True`: Centers the score using the sampler's recorded probabilities; a no-op on-policy
-  when the represented sampler and trainer distributions agree
+- `True`: Centers the score using the sampler's recorded probabilities; a no-op on-policy when the represented sampler and trainer distributions agree
 - Requires `bypass_mode=True` and `loss_type="reinforce"` (raises `ValueError` otherwise)
 - Requires `rollout_is` to be `None` or `"token"` (raises `ValueError` for `"sequence"`) and `rollout_is_batch_normalize=False`
 - Requires `actor_rollout_ref.rollout.topk_log_probs > 0` (sampler top-k log-probs, vLLM only)
 - FSDP actor only; incompatible with `use_fused_kernels` and distillation; single-turn agent loop only
 
-Score centering automatically tries to align with the actual sampling support. When the
-rollout provider verifies that the recorded head covers it, the trainer is normalized over
-that support for centering, sampled scoring, and applicable importance weights. Otherwise,
-the preset approximation uses the recorded sampler head and trainer log-probs. The recording
-head size is the current support budget; sampling parameters are never changed to fit it.
+Score centering automatically tries to align with the actual sampling support. When the rollout provider verifies that the recorded head covers it, the trainer is normalized over that support for centering, sampled scoring, and applicable importance weights. Otherwise, the preset approximation uses the recorded sampler head and trainer log-probs. The recording head size is the current support budget; sampling parameters are never changed to fit it.
 
-The approximation retains the sampler's head probabilities and sampled-token probability.
-It models unrecorded probability using the full-vocabulary trainer tail, with the existing
-epsilon floors for near-zero tail masses. This also approximates an unknown sampling support:
-the modeled tail can include tokens outside that support. Its trainer score and importance
-weights consistently use full-vocabulary normalization. An incomplete head is never normalized
-as if it were the entire sampling support.
+The approximation retains the sampler's head probabilities and sampled-token probability. It models unrecorded probability using the full-vocabulary trainer tail, with the existing epsilon floors for near-zero tail masses. This also approximates an unknown sampling support: the modeled tail can include tokens outside that support. Its trainer score and importance weights consistently use full-vocabulary normalization. An incomplete head is never normalized as if it were the entire sampling support.
 
-When recorded `topk_log_probs` is smaller than an enabled finite sampling `top_k`, a warning
-recommends increasing the recording budget, because aligning a bounded head is usually cheap.
-This warning does not select the estimator: actual coverage determines alignment per token.
-Configured top-k values or head mass close to one alone do not prove complete coverage.
+When recorded `topk_log_probs` is smaller than an enabled finite sampling `top_k`, a warning recommends increasing the recording budget, because aligning a bounded head is usually cheap. This warning does not select the estimator: actual coverage determines alignment per token. Configured top-k values or head mass close to one alone do not prove complete coverage.
 
 ## Understanding the Framework: Components and Combinations
 
@@ -326,12 +307,10 @@ The rollout correction framework is built from **orthogonal components** that ca
 ### Key Components
 
 1. **Operating Mode** (Section: [Operation Modes](#operation-modes))
-
-   - **Decoupled**: Three policies (π_rollout, π_old, π_θ) with separate π_old computation
-   - **Bypass**: Two policies (π_rollout = π_old, π_θ), skips π_old computation
+   - **Decoupled**: Three policies (π*rollout, π_old, π*θ) with separate π_old computation
+   - **Bypass**: Two policies (π*rollout = π_old, π*θ), skips π_old computation
 
 2. **Loss Function** (in bypass mode, controlled by `loss_type`)
-
    - **PPO-clip** (`loss_type="ppo_clip"`, default): PPO clipped objective (IS handled by ratio)
    - **REINFORCE** (`loss_type="reinforce"`): Policy gradient with explicit IS weights (no clipping)
 
@@ -351,27 +330,27 @@ This section provides detailed guidance on choosing and using the verified prese
 
 #### Available Preset Methods
 
-| Preset Method                                                                  | Estimator        | Mode               | IS Level | RS Level | Properties                              |
-| ------------------------------------------------------------------------------ | ---------------- | ------------------ | -------- | -------- | --------------------------------------- |
-| **Decoupled PPO Mode** (3 policies: π_rollout, π_old, π_θ)                     |
-| `decoupled_token_is()`                                                         | Token-TIS        | Decoupled          | token    | -        | Token-level IS weights                    |
-| `decoupled_seq_is()`                                                           | Seq-TIS          | Decoupled          | sequence | -        | Sequence-level IS weights               |
-| `decoupled_seq_is_rs()`                                                        | Seq-MIS          | Decoupled          | sequence | sequence | Sequence IS + seq_sum_k1 RS               |
-| `decoupled_geo_rs()`                                                           | Geo-RS           | Decoupled          | -        | sequence | Geometric RS (seq_mean_k1)               |
-| `decoupled_geo_rs_token_tis()`                                                 | Geo-RS-Token-TIS | Decoupled          | token    | sequence | Geometric RS + token IS |
-| **K3 KL Estimator** (more stable for small KL values)                          |
-| `decoupled_k3_rs()`                                                            | K3-RS            | Decoupled          | -        | sequence       | seq_mean_k3 RS             |
-| `decoupled_k3_rs_token_tis()`                                                  | K3-RS-Token-TIS  | Decoupled          | token    | sequence       | seq_mean_k3 RS  + token IS        |
-| **Bypass Mode (PPO-clip)** (2 policies; ratio handles IS, RS masks outliers)   |
-| `bypass_ppo_clip()`                                                            | -                | Bypass (PPO-clip)  | -        | -        | PPO-clip only                           |
-| `bypass_ppo_clip_geo_rs()`                                                     | Geo-RS           | Bypass (PPO-clip)  | -        | sequence | PPO-clip + Geo-RS                       |
-| `bypass_ppo_clip_k3_rs()`                                                      | K3-RS            | Bypass (PPO-clip)  | -        | sequence       | PPO-clip + K3-RS                       |
+| Preset Method | Estimator | Mode | IS Level | RS Level | Properties |
+| --- | --- | --- | --- | --- | --- |
+| **Decoupled PPO Mode** (3 policies: π*rollout, π_old, π*θ) |
+| `decoupled_token_is()` | Token-TIS | Decoupled | token | - | Token-level IS weights |
+| `decoupled_seq_is()` | Seq-TIS | Decoupled | sequence | - | Sequence-level IS weights |
+| `decoupled_seq_is_rs()` | Seq-MIS | Decoupled | sequence | sequence | Sequence IS + seq_sum_k1 RS |
+| `decoupled_geo_rs()` | Geo-RS | Decoupled | - | sequence | Geometric RS (seq_mean_k1) |
+| `decoupled_geo_rs_token_tis()` | Geo-RS-Token-TIS | Decoupled | token | sequence | Geometric RS + token IS |
+| **K3 KL Estimator** (more stable for small KL values) |
+| `decoupled_k3_rs()` | K3-RS | Decoupled | - | sequence | seq_mean_k3 RS |
+| `decoupled_k3_rs_token_tis()` | K3-RS-Token-TIS | Decoupled | token | sequence | seq_mean_k3 RS + token IS |
+| **Bypass Mode (PPO-clip)** (2 policies; ratio handles IS, RS masks outliers) |
+| `bypass_ppo_clip()` | - | Bypass (PPO-clip) | - | - | PPO-clip only |
+| `bypass_ppo_clip_geo_rs()` | Geo-RS | Bypass (PPO-clip) | - | sequence | PPO-clip + Geo-RS |
+| `bypass_ppo_clip_k3_rs()` | K3-RS | Bypass (PPO-clip) | - | sequence | PPO-clip + K3-RS |
 | **Bypass Mode (REINFORCE)** (2 policies; explicit IS weights, no PPO clipping) |
-| `bypass_pg_is()`                                                               | Seq-TIS          | Bypass (REINFORCE) | sequence | -        | REINFORCE with explicit IS              |
-| `bypass_pg_geo_rs()`                                                           | Geo-RS           | Bypass (REINFORCE) | -        | sequence | REINFORCE with Geo-RS                   |
-| `bypass_pg_geo_rs_token_tis()`                                                 | Geo-RS-Token-TIS | Bypass (REINFORCE) | token    | sequence | REINFORCE + Geo-RS + token IS       |
-| **Other**                                                                      |
-| `disabled()`                                                                   | -                | -                  | -        | -        | Metrics only, no correction             |
+| `bypass_pg_is()` | Seq-TIS | Bypass (REINFORCE) | sequence | - | REINFORCE with explicit IS |
+| `bypass_pg_geo_rs()` | Geo-RS | Bypass (REINFORCE) | - | sequence | REINFORCE with Geo-RS |
+| `bypass_pg_geo_rs_token_tis()` | Geo-RS-Token-TIS | Bypass (REINFORCE) | token | sequence | REINFORCE + Geo-RS + token IS |
+| **Other** |
+| `disabled()` | - | - | - | - | Metrics only, no correction |
 
 **Note:**
 
@@ -528,7 +507,7 @@ config = RolloutCorrectionConfig.bypass_ppo_clip()
 
 **Components:**
 
-- **Operating Mode**: Bypass (2 policies: π_rollout = π_old, π_θ)
+- **Operating Mode**: Bypass (2 policies: π*rollout = π_old, π*θ)
 - **Loss**: PPO-clip (IS handled by ratio, no explicit IS weights)
 - **IS Aggregation**: None (PPO ratio handles it)
 - **RS**: None
@@ -574,7 +553,7 @@ config = RolloutCorrectionConfig.bypass_pg_is(threshold=2.0)
 
 **Components:**
 
-- **Operating Mode**: Bypass (2 policies: π_rollout, π_θ)
+- **Operating Mode**: Bypass (2 policies: π*rollout, π*θ)
 - **Loss**: REINFORCE (policy gradient with explicit IS weights, no PPO clipping)
 - **IS Aggregation**: Sequence-level
 - **RS**: None
@@ -612,7 +591,7 @@ config = RolloutCorrectionConfig.bypass_pg_token_icepop_sc(threshold=5.0, thresh
 
 **Components:**
 
-- **Operating Mode**: Bypass (2 policies: π_rollout, π_θ)
+- **Operating Mode**: Bypass (2 policies: π*rollout, π*θ)
 - **Loss**: REINFORCE (policy gradient with explicit IS weights, no PPO clipping)
 - **IS Aggregation**: None, or token-level (TIS / IcePop)
 - **RS**: None
@@ -632,30 +611,20 @@ algorithm:
 
 **Properties:**
 
-- Centers the policy-gradient score to address the drift term `E_q[R] * E_q[∇log p]`
-  introduced by training-inference mismatch. Evaluation is exact for a verified complete
-  support and uses the preset trainer-tail approximation otherwise
+- Centers the policy-gradient score to address the drift term `E_q[R] * E_q[∇log p]` introduced by training-inference mismatch. Evaluation is exact for a verified complete support and uses the preset trainer-tail approximation otherwise
 - A no-op when the sampler and trainer distributions represented by the estimator agree
 - Composes with token-level TIS / IcePop by centering the already-weighted score
 - Reported by the paper to be stable under sampler quantization
-- The sampler records a top-`k` head per token. Score centering attempts to align with its
-  actual support and otherwise uses the head plus a modeled trainer tail. Trainer head
-  log-probs still require vocabulary normalization; a small recorded head does not imply
-  computation proportional only to `k`
-- Alignment requires a provider receipt proving complete actual support coverage. The vLLM
-  global top-k provider can prove this when its head contains zero-probability entries or
-  covers the vocabulary. A saturated finite head without such proof uses the approximation,
-  even if its probability mass is close to one; older records without receipts do likewise
-- When combining top-k and top-p, vLLM applies top-k first, then top-p within the remaining
-  normalized distribution. Cutoff ties can enlarge actual support beyond configured top-k
+- The sampler records a top-`k` head per token. Score centering attempts to align with its actual support and otherwise uses the head plus a modeled trainer tail. Trainer head log-probs still require vocabulary normalization; a small recorded head does not imply computation proportional only to `k`
+- Alignment requires a provider receipt proving complete actual support coverage. The vLLM global top-k provider can prove this when its head contains zero-probability entries or covers the vocabulary. A saturated finite head without such proof uses the approximation, even if its probability mass is close to one; older records without receipts do likewise
+- When combining top-k and top-p, vLLM applies top-k first, then top-p within the remaining normalized distribution. Cutoff ties can enlarge actual support beyond configured top-k
 
 **Theory:** See [Marek & Ryabinin, 2026](https://arxiv.org/abs/2609.20807).
 
 **Additional requirements:**
 
 - Set `actor_rollout_ref.rollout.calculate_log_probs: true` and `actor_rollout_ref.rollout.topk_log_probs: 128` (vLLM rollout only; `k=128` matches the paper, `k=32` also matches)
-- Set `actor_rollout_ref.rollout.temperature` > 0 and choose sampling parameters independently
-  of the recording budget. Validation and greedy reward-baseline requests do not record heads
+- Set `actor_rollout_ref.rollout.temperature` > 0 and choose sampling parameters independently of the recording budget. Validation and greedy reward-baseline requests do not record heads
 - Set `actor_rollout_ref.actor.policy_loss.loss_mode: bypass_mode` and mirror `bypass_mode`, `loss_type`, `rollout_is`, `rollout_is_threshold`, `score_centering` from `algorithm.rollout_correction` into `actor_rollout_ref.actor.policy_loss.rollout_correction`:
 
   ```yaml
@@ -673,16 +642,9 @@ algorithm:
 
 - Set `actor_rollout_ref.actor.use_fused_kernels: false` (incompatible with fused kernels)
 - v1 trainer (`trainer.use_v1: true`) with an FSDP actor only; single-turn agent loop only
-- Head payload: `8k` bytes per padded prompt+response position on the driver (`k=128`: 1 KB
-  per position), plus one boolean completeness receipt per position
+- Head payload: `8k` bytes per padded prompt+response position on the driver (`k=128`: 1 KB per position), plus one boolean completeness receipt per position
 - The trainer evaluates the head log-probs in chunks of 4096 positions, with an fp32 workspace of roughly `4096 × vocab × 4` bytes
-- Metrics: `actor/sc_correction`, `actor/sc_sampler_head_mass`, `actor/sc_train_head_mass`,
-  `actor/sc_support_aligned`, `actor/sc_sampler_tail_mass`, `actor/sc_support_unknown`.
-  `sc_support_aligned` reports the fraction of response tokens with verified support alignment;
-  `sc_sampler_tail_mass` measures probability outside the recorded head. `sc_support_unknown`
-  reports approximate rows with near-unit head mass but no coverage proof. Trainer head mass
-  is the full-vocabulary mass of the actual support for aligned rows and the recorded head for
-  approximate rows. Head mass close to one alone is not a completeness test
+- Metrics: `actor/sc_correction`, `actor/sc_sampler_head_mass`, `actor/sc_train_head_mass`, `actor/sc_support_aligned`, `actor/sc_sampler_tail_mass`, `actor/sc_support_unknown`. `sc_support_aligned` reports the fraction of response tokens with verified support alignment; `sc_sampler_tail_mass` measures probability outside the recorded head. `sc_support_unknown` reports approximate rows with near-unit head mass but no coverage proof. Trainer head mass is the full-vocabulary mass of the actual support for aligned rows and the recorded head for approximate rows. Head mass close to one alone is not a completeness test
 
 ---
 
@@ -778,11 +740,11 @@ The framework provides **two operating modes** for computing π_old, which can b
 
 ### Operating Modes and Configuration
 
-| Configuration          | `bypass_mode` | `loss_type`            | Operating Mode | Loss Function | Description                                                       |
-| ---------------------- | ------------- | ---------------------- | -------------- | ------------- | ----------------------------------------------------------------- |
-| **Decoupled**          | `false`       | N/A                    | Decoupled      | PPO           | Computes `old_log_prob` separately via `actor.compute_log_prob()` |
-| **Bypass + PPO-clip**  | `true`        | `"ppo_clip"` (default) | Bypass         | PPO-clip      | PPO clipped objective (IS handled by ratio)                       |
-| **Bypass + REINFORCE** | `true`        | `"reinforce"`          | Bypass         | REINFORCE     | Policy gradient with explicit IS weights (no PPO clipping)        |
+| Configuration | `bypass_mode` | `loss_type` | Operating Mode | Loss Function | Description |
+| --- | --- | --- | --- | --- | --- |
+| **Decoupled** | `false` | N/A | Decoupled | PPO | Computes `old_log_prob` separately via `actor.compute_log_prob()` |
+| **Bypass + PPO-clip** | `true` | `"ppo_clip"` (default) | Bypass | PPO-clip | PPO clipped objective (IS handled by ratio) |
+| **Bypass + REINFORCE** | `true` | `"reinforce"` | Bypass | REINFORCE | Policy gradient with explicit IS weights (no PPO clipping) |
 
 ### Operating Mode Details
 
@@ -830,12 +792,12 @@ The framework provides **two operating modes** for computing π_old, which can b
 
 The aggregation level can be chosen **independently** of the operating mode. Any aggregation level works in either decoupled or bypass mode.
 
-| `rollout_is`              | `rollout_rs`                                                       | Behavior                                                                          |
-| ------------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| `null`                    | `null`                                                             | **Disabled**: No computation, no metrics, no rejection                            |
-| `null`                    | `"token_k1"`, `"seq_sum_k1"`, `"seq_mean_k1"`, `"seq_max_k2"`, etc | **Rejection only**: Compute metrics, NO weight correction, YES rejection sampling |
-| `"token"` or `"sequence"` | `null`                                                             | **IS weights only**: Weight correction enabled, NO rejection sampling             |
-| `"token"` or `"sequence"` | `"token_k1"`, `"seq_sum_k1"`, `"seq_mean_k1"`, `"seq_max_k2"`, etc | **Full correction**: Both weight correction and rejection sampling enabled        |
+| `rollout_is` | `rollout_rs` | Behavior |
+| --- | --- | --- |
+| `null` | `null` | **Disabled**: No computation, no metrics, no rejection |
+| `null` | `"token_k1"`, `"seq_sum_k1"`, `"seq_mean_k1"`, `"seq_max_k2"`, etc | **Rejection only**: Compute metrics, NO weight correction, YES rejection sampling |
+| `"token"` or `"sequence"` | `null` | **IS weights only**: Weight correction enabled, NO rejection sampling |
+| `"token"` or `"sequence"` | `"token_k1"`, `"seq_sum_k1"`, `"seq_mean_k1"`, `"seq_max_k2"`, etc | **Full correction**: Both weight correction and rejection sampling enabled |
 
 ### Key Insights
 
@@ -931,15 +893,12 @@ These metrics cover both:
 #### **Core IS Weight Metrics**
 
 - **`rollout_is_mean`**: Mean importance sampling weight across all valid tokens
-
   - Value close to 1.0 indicates minimal off-policy gap
 
 - **`rollout_is_std`**: Standard deviation of IS weights
-
   - Higher values indicate greater variance in IS weights
 
 - **`rollout_is_min`**: Minimum IS weight observed
-
   - Shows the most underweighted token/sequence
   - For sequence/geometric: computed from unclamped log-space ratios (true minimum)
   - For token: computed from safety-bounded weights
@@ -960,7 +919,6 @@ These metrics cover both:
 #### **Threshold Exceedance Metrics**
 
 - **`rollout_is_ratio_fraction_high`**: Fraction of weights exceeding upper threshold
-
   - Shows how often truncation/masking occurs on high end
   - For sequence/geometric: computed from unclamped log-space ratios (true exceedance)
   - For token: computed from safety-bounded weights (before threshold clamping)
@@ -973,7 +931,6 @@ These metrics cover both:
 #### **Sequence-Level Metrics** (for sequence aggregation)
 
 - **`rollout_is_seq_mean`**: Mean IS weight at sequence level
-
   - Should match `rollout_is_mean` for sequence-level aggregation
 
 - **`rollout_is_seq_std`**: Standard deviation of sequence-level IS weights
@@ -983,7 +940,6 @@ These metrics cover both:
 - **`rollout_is_seq_max`**: Maximum sequence-level IS weight
 
 - **`rollout_is_seq_max_deviation`**: Maximum absolute deviation from 1.0 at sequence level
-
   - Shows worst-case sequence off-policy gap
 
 - **`rollout_is_seq_fraction_high`**: Fraction of sequences exceeding upper threshold
@@ -993,7 +949,6 @@ These metrics cover both:
 #### **Rejection Sampling Metrics** (when `rollout_rs` is enabled)
 
 - **`rollout_rs_masked_fraction`**: Fraction of tokens rejected via rejection sampling
-
   - **Important**: Rejection sampling modifies `response_mask` (sets rejected tokens to 0)
   - **Separate from IS weights**: IS weights are still truncated; rejection is an independent filtering step
   - Only present when `rollout_rs` is enabled (token/sequence/geometric)
@@ -1013,52 +968,43 @@ These metrics cover both:
 
 In bypass/pure IS mode, metrics measure the drift between π_θ and π_rollout directly.
 
-- **`training_ppl`**: Perplexity of training reference policy (π_old in decoupled mode, π_θ in bypass/pure IS mode)
-
+- **`training_ppl`**: Perplexity of training reference policy (π*old in decoupled mode, π*θ in bypass/pure IS mode)
   - **Formula**: `exp(-mean(log_probs))`
   - Lower values indicate higher model confidence
 
 - **`rollout_ppl`**: Perplexity of rollout policy π_rollout (e.g., vLLM BF16)
 
 - **`ppl_ratio`**: Ratio of training PPL to rollout PPL
-
   - **Formula**: `exp(mean(log(training_ppl / rollout_ppl)))`
   - **Meaning**: > 1.0 means training is less confident than rollout
 
 - **`training_log_ppl`**: Log perplexity of training policy
-
   - Useful for identifying trends (linear scale)
 
 - **`rollout_log_ppl`**: Log perplexity of rollout policy
 
 - **`log_ppl_diff`**: Mean difference in log perplexities
-
   - **Formula**: `mean(log_ppl_rollout - log_ppl_training)`
   - Sign indicates which policy is more confident
 
 - **`log_ppl_abs_diff`**: Mean absolute log perplexity difference
-
   - Magnitude of off-policy gap regardless of direction
 
 - **`log_ppl_diff_max`**: Maximum log perplexity difference across sequences
-
   - Identifies worst-case sequence
 
 - **`log_ppl_diff_min`**: Minimum log perplexity difference across sequences
 
 - **`kl`**: KL divergence KL(π_rollout || π_training)
-
   - **Formula**: `mean(log_prob_rollout - log_prob_training)`
   - **Note**: Can be negative (rollout is less confident)
 
 - **`k3_kl`**: K3 divergence (equals KL(π_rollout || π_training) in expectation)
-
   - **Formula**: `mean(exp(log_ratio) - log_ratio - 1)`
   - More stable than direct KL (non-negative per token)
   - Always >= 0
 
 - **`chi2_token`**: Chi-squared divergence at token level
-
   - **Formula**: `mean(ratio²) - 1` where ratio = π_training/π_rollout
   - Measures second moment of IS weight distribution
   - Always non-negative

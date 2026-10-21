@@ -58,7 +58,7 @@ Implementation details:
        def __init__(self, config):
            super().__init__()
            self.config = config
-           
+
        def generate_sequences(self, data):
            pass
 
@@ -85,7 +85,7 @@ API: compute reference log probability
        def __init__(self):
            super().__init__()
            self.model = Model()
-           
+
        def infer(self, data):
            return self.model(data)
 
@@ -106,7 +106,7 @@ API: Update actor model parameters
            self.model = FSDP(self.model)  # or other distributed strategy
            self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
            self.loss_fn = xxx
-           
+
        def update(self, data):
            self.optimizer.zero_grad()
            logits = self.model(data)
@@ -143,7 +143,7 @@ process.
        ray_cls = RayClassWithInitArgs(SampleGenerator, config=config)
        # put SampleGenerator onto resource pool
        worker_group = RayWorkerGroup(resource_pool, ray_cls)
-       
+
        # construct reference policy
 
 As we can see, in the control process, multiple processes are wrapped
@@ -190,7 +190,7 @@ registered into the worker_group**
 
    def dispatch_data(worker_group, data):
        return data.chunk(worker_group.world_size)
-       
+
    def collect_data(worker_group, data):
        return torch.cat(data)
 
@@ -241,24 +241,24 @@ flow. It is recommended that ``main_task`` is also a ray remote process.
    def main_task(config):
        # construct SampleGenerator
        resource_pool = RayResourcePool(process_on_nodes=[8] * 2)  # 16 GPUs
-       ray_cls = RayClassWithInitArgs(SampleGenerator, config=config) 
+       ray_cls = RayClassWithInitArgs(SampleGenerator, config=config)
        # put SampleGenerator onto resource pool
        sample_gen = RayWorkerGroup(resource_pool, ray_cls)
-       
+
        # construct reference policy
        ray_cls = RayClassWithInitArgs(ReferencePolicy)
        ref_policy = RayWorkerGroup(resource_pool, ray_cls)
-       
+
        # construct actor
-       ray_cls = RayClassWithInitArgs(DPOActor)  
+       ray_cls = RayClassWithInitArgs(DPOActor)
        dpo_policy = RayWorkerGroup(resource_pool, ray_cls)
-       
+
        dataloader = DataLoader()
-       
+
        for data in dataloader:
            # generate data
            data = sample_gen.generate_sequences(data)
-           # generate scores for each data 
+           # generate scores for each data
            data = generate_scores(data)
            # generate pairwise data using scores
            data = generate_pairwise_data(data)

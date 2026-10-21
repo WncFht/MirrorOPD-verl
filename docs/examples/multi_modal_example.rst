@@ -6,8 +6,8 @@ Last updated: 04/28/2025.
 Introduction
 ------------
 
-Now, verl has supported multi-modal training. You can use fsdp and 
-vllm/sglang to start a multi-modal RL task. Megatron supports is also 
+Now, verl has supported multi-modal training. You can use fsdp and
+vllm/sglang to start a multi-modal RL task. Megatron supports is also
 on the way.
 
 Follow the steps below to quickly start a multi-modal RL task.
@@ -35,11 +35,3 @@ Step 3: Perform GRPO training with multi-modal model on Geo3K Dataset
 
     # run the task
     bash examples/grpo_trainer/run_qwen2_5_vl_7b_fsdp.sh
-
-
-
-
-
-
-
-

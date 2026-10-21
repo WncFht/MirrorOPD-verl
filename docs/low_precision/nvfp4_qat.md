@@ -5,12 +5,11 @@ Last updated: 04/02/2026
 verl supports NVFP4 Quantization-Aware Training (QAT), which applies fake quantization during training so the model learns to tolerate NVFP4 quantization error. At rollout time, weights are packed into real NVFP4 format for vLLM inference. This closes the precision gap between training and inference, preventing KL divergence explosion.
 
 | Training Backend | Training Precision | Rollout Precision | vLLM Quant Method |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **FSDP** | BF16 + fake quantization | NVFP4 W4A16 | `compressed-tensors` |
 | **Megatron** | BF16 + fake quantization | NVFP4 W4A16 | `modelopt` |
 
-> [!TIP]
-> For ready-to-run scripts, environment setup, and experimental results, see the [QAT recipe](https://github.com/verl-project/verl-recipe/tree/main/qat).
+> [!TIP] For ready-to-run scripts, environment setup, and experimental results, see the [QAT recipe](https://github.com/verl-project/verl-recipe/tree/main/qat).
 
 ---
 
@@ -36,7 +35,7 @@ actor_rollout_ref:
 ```
 
 | Parameter | Description | Default |
-|-----------|-------------|---------|
+| --- | --- | --- |
 | `fsdp_config.qat.enable` | Enable QAT | `False` |
 | `fsdp_config.qat.mode` | Quantization mode | `"w4a16"` |
 | `fsdp_config.qat.group_size` | Quantization group size | `16` |
@@ -62,7 +61,7 @@ actor_rollout_ref:
 ```
 
 | Parameter | Description | Default |
-|-----------|-------------|---------|
+| --- | --- | --- |
 | `megatron.qat.enable` | Enable QAT | `False` |
 | `megatron.qat.mode` | Quantization mode | `"w4a16"` |
 | `megatron.qat.group_size` | Quantization group size | `16` |

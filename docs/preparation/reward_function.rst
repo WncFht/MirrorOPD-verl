@@ -18,7 +18,7 @@ In the entrypoint of the PPO Post-Training script `main_ppo.py <https://github.c
 we implement a ``RewardManager`` that utilize pre-implemented reward functions to compute the scores for each response.
 
 In the ``RewardManager``, we implemented a ``__call__`` function to
-compute the score for each response. 
+compute the score for each response.
 All the reward functions are executed by ``compute_score_fn``.
 The input is a ``DataProto``, which includes:
 
@@ -67,5 +67,5 @@ For example:
 
 If you are testing only a single customized reward function, you can simply name it 'compute_score' and leave ``custom_reward_function.name`` unset.
 
-To run multiple tests with different customized reward functions, you can modify both ``custom_reward_function.path`` and ``custom_reward_function.name`` for each trial. 
+To run multiple tests with different customized reward functions, you can modify both ``custom_reward_function.path`` and ``custom_reward_function.name`` for each trial.
 For instance, you might create a single `my_reward.py` file and implement multiple reward functions within it. This way, for different trials, you only need to adjust ``custom_reward_function.name``, making it more convenient to conduct multiple tests within scripts.

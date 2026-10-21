@@ -39,7 +39,7 @@ FSDP Backend Usage Guide
 
 4. Optional configurations for LoRA:
 
-- `actor_rollout_ref.model.lora_adapter_path`: string, path to a pretrained LoRA adapter directory. 
+- `actor_rollout_ref.model.lora_adapter_path`: string, path to a pretrained LoRA adapter directory.
    If provided, loads existing adapter instead of creating new one. Enables multi-stage training from previously saved adapters.
    Directory need contain `adapter_model.safetensors` and `adapter_config.json`.
 - `actor_rollout_ref.model.lora.merge`: bool, whether to merge LoRA adapters into the base model weights before transferring to the rollout engine (vLLM or SGLang).
@@ -90,13 +90,13 @@ Make sure you use Megatron-Bridge later than 0.2.0, and we recommended using 0.5
 
         # LoRA rank (Dimension of the low-rank projection space.). Set to 0 to disable LoRA
         rank: 0
-        
+
         #  Weighting factor for the low-rank projection. Defaults to 32
         alpha: 32
-        
+
         # Dropout rate for the low-rank projection. Defaults to 0.0
         dropout: 0.0
-        
+
         # A list of module names to apply LoRA to.
         # For fused LoRA, Defaults to all linear layers ['linear_qkv', 'linear_proj', 'linear_fc1', 'linear_fc2'].
         # For canonical LoRA: ["linear_q", "linear_k", "linear_v", "linear_proj", "linear_fc1_up", "linear_fc1_gate", "linear_fc2"]
@@ -106,7 +106,7 @@ Make sure you use Megatron-Bridge later than 0.2.0, and we recommended using 0.5
         # - 'linear_fc2': Apply LoRA to the second fully-connected layer in MLP
         # Target modules can also contain wildcards. For example, you can specify
         # target_modules=['*.layers.0.*.linear_qkv', '*.layers.1.*.linear_qkv'] to add LoRA to only linear_qkv on the first two layers
-        # 
+        #
         # Note:
         # For MLA (e.g., DeepSeek), you should use ["linear_kv_down_proj","linear_kv_up_proj","linear_q_down_proj","linear_q_up_proj","linear_q_proj"]
         # Instead of "linear_qkv" or ["linear_q","linear_k","linear_v"]
@@ -116,7 +116,7 @@ Make sure you use Megatron-Bridge later than 0.2.0, and we recommended using 0.5
           - linear_proj
           - linear_fc1
           - linear_fc2
-        
+
         # A list of module names not to apply LoRa to. It will match all nn.Linear & nn.Linear-adjacent modules whose name
         # does not match any string in exclude_modules. If used, will require target_modules to be empty list or None
         exclude_modules: []

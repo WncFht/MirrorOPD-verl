@@ -301,12 +301,21 @@ CUDA_VISIBLE_DEVICES='' python examples/mirroropd/docs/opd-objective/scripts/ver
 ### 参考文献
 
 [^rethinking]: Li et al. Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe. arXiv:2604.13016, 2026，overlap/non-overlap 与 support-size 实验。[论文](https://arxiv.org/html/2604.13016)。
+
 [^oneshot-recipe]: Thinking-Space. One-Shot-OPD，`6b6b1782cc3f04749dd077de19353f839f6bc048`。[配方](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/_common.sh)；[README](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/README.md)。
+
 [^oneshot-worker]: 同一版本。[teacher top-k helper 与实际字段汇总](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/workers/fsdp_teacher_worker.py)。
+
 [^oneshot-engine]: 同一版本。[student top-k 生产](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/workers/engine/fsdp/transformer_impl.py#L1303)。
+
 [^oneshot-loss]: 同一版本。[advantage 与候选轴 PPO](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/trainer/ppo/opd_core_algos.py)；[loss 字段选择](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/workers/utils/losses.py)。
+
 [^oneshot-guard]: 同一版本。[候选漂移校验](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/trainer/ppo/opd_trainer_mixin.py#L145)。
+
 [^vopd-code]: holi-lab. vOPD，`d4146d5015216c6f8e89a7243c24912b634f531a`。[current student top-k baseline](https://github.com/holi-lab/vOPD/blob/d4146d5015216c6f8e89a7243c24912b634f531a/src/opd_trainer.py#L147)。
+
 [^manyfaces]: Zhu et al. The Many Faces of On-Policy Distillation: Pitfalls, Mechanisms, and Fixes. arXiv:2605.11182v2, 2026，第 6.1 节与附录 A.6。[论文](https://arxiv.org/html/2605.11182v2)。
+
 [^sparse]: Miao et al. Look Before You Select: Rethinking Vocabulary Sparsification in On-Policy Distillation. arXiv:2609.34386v1, 2026，第 2–3 节。[论文](https://arxiv.org/html/2609.34386v1)。
+
 [^nitro]: Tilde Research. Nitrobrew，`17f6f16b7451929209ac495c6b0ea0fcc4d0cedc`。[forward 与自定义 backward](https://github.com/tilde-research/nitrobrew-release/blob/17f6f16b7451929209ac495c6b0ea0fcc4d0cedc/nitrobrew.py)。

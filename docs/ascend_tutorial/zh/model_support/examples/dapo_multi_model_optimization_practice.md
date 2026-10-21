@@ -6,31 +6,27 @@ Last updated: 07/03/2026.
 
 DAPO的论文可以参考：[DAPO](https://arxiv.org/pdf/2503.14476)，其中包含以下几个关键技术。
 
-* **Clip-Higher**: 通过对重要性采样比的上限剪裁促进了系统的多样性并避免了熵坍缩（Entropy Collapse）。
-* **Dynamic Sampling**: 提高了训练效率和稳定性。DAPO提出了一种执行动态采样的策略，并过滤掉准确率等于1和0的提示组，从而保持批次间具有有效梯度的提示数量一致。
-* **Token-level Policy Gradient Loss**: 在长链思维强化学习 (long-CoT RL) 场景中至关重要。
-* **Overlong Reward Shaping**: 减少奖励噪声并稳定了训练。
+- **Clip-Higher**: 通过对重要性采样比的上限剪裁促进了系统的多样性并避免了熵坍缩（Entropy Collapse）。
+- **Dynamic Sampling**: 提高了训练效率和稳定性。DAPO提出了一种执行动态采样的策略，并过滤掉准确率等于1和0的提示组，从而保持批次间具有有效梯度的提示数量一致。
+- **Token-level Policy Gradient Loss**: 在长链思维强化学习 (long-CoT RL) 场景中至关重要。
+- **Overlong Reward Shaping**: 减少奖励噪声并稳定了训练。
 
 在verl中，可以进行如下设置，从而进行DAPO算法的运行。
 
-- **奖励模型的管理策略为 DAPO**
-  在dapo算法中，必须配置成dapo。
+- **奖励模型的管理策略为 DAPO** 在dapo算法中，必须配置成dapo。
 
 ```bash
 reward_model.reward_manager.name=dapo
 ```
 
-- **Clip-Higher 更高裁剪**
-  `clip_ratio_low` 和 `clip_ratio_high` 用于指定 DAPO 目标函数中的 $\varepsilon_{\text {low }}$ 和 $\varepsilon_{\text {high }}$。
+- **Clip-Higher 更高裁剪** `clip_ratio_low` 和 `clip_ratio_high` 用于指定 DAPO 目标函数中的 $\varepsilon_{\text {low }}$ 和 $\varepsilon_{\text {high }}$。
 
 ```bash
 clip_ratio_low=0.2  # 裁剪比例下限，默认值为0.2
 clip_ratio_high=0.28 # 裁剪比例上限，默认值为0.28
 ```
 
-- **动态采样的相关配置**
-  将 `filter_groups.enable` 设置为 `True` 会过滤掉输出 `metric` 完全相同的组，例如对于 `acc` 指标，过滤掉输出准确率全部为 1 或 0 的组。
-  训练器会使用 `gen_batch_size` 进行重复采样，直到生成足够数量的符合条件的组，或者达到 `max_num_gen_batches` 所指定的上限为止。
+- **动态采样的相关配置** 将 `filter_groups.enable` 设置为 `True` 会过滤掉输出 `metric` 完全相同的组，例如对于 `acc` 指标，过滤掉输出准确率全部为 1 或 0 的组。训练器会使用 `gen_batch_size` 进行重复采样，直到生成足够数量的符合条件的组，或者达到 `max_num_gen_batches` 所指定的上限为止。
 
 ```bash
 data.gen_batch_size=${gen_prompt_bsz}
@@ -39,16 +35,14 @@ algorithm.filter_groups.metric=${filter_groups_metric} # 使用准确率作为�
 algorithm.filter_groups.max_num_gen_batches=${max_num_gen_batches} # 最大生成批次数量,最多重复生成数据的次数
 ```
 
-- **Token-level Loss**
-  将 `loss_agg_mode` 设置为 `token-mean` 意味着计算一个批次中所有序列内所有 token 的（策略梯度）损失的平均值。
+- **Token-level Loss** 将 `loss_agg_mode` 设置为 `token-mean` 意味着计算一个批次中所有序列内所有 token 的（策略梯度）损失的平均值。
 
 ```bash
 actor_rollout_ref.actor.loss_agg_mode=${loss_agg_mode}
 # 注意：“token-mean”是默认行为。
 ```
 
-- **奖励模型对超长回答的惩罚配置**
-  将 `overlong_buffer.enable` 设置为 `True` 将对输出长度过长但仍未超过硬上下文限制的输出进行惩罚。具体来说，当输出的长度超过 `max_response_length - overlong_buffer.len` 且超出 `0` 到 `overlong_buffer.len` 个 token 时，惩罚值会从 `0` 线性增加到 `overlong_buffer.penalty_factor`。
+- **奖励模型对超长回答的惩罚配置** 将 `overlong_buffer.enable` 设置为 `True` 将对输出长度过长但仍未超过硬上下文限制的输出进行惩罚。具体来说，当输出的长度超过 `max_response_length - overlong_buffer.len` 且超出 `0` 到 `overlong_buffer.len` 个 token 时，惩罚值会从 `0` 线性增加到 `overlong_buffer.penalty_factor`。
 
 ```bash
 reward_model.overlong_buffer.enable=${enable_overlong_buffer} # 启用超长缓冲区惩罚,开启对超长输出的惩罚机制
@@ -60,23 +54,21 @@ reward_model.overlong_buffer.penalty_factor=${overlong_penalty_factor}   #惩罚
 
 ## 硬件要求
 
-
 当前支持Atlas 800T A3 与 Atlas 900 A3 SuperPoD。完成跑完本次最佳实践需要 1 台 Atlas 900 A3 SuperPoD。关键软件版本可以参考：[昇腾快速上手说明](https://github.com/verl-project/verl/blob/main/docs/ascend_tutorial/zh/get_start/quick_start.rst)
-
 
 ## 安装基础环境
 
-| software      | version                                                    |
-| ------------- | ---------------------------------------------------------- |
-| Python        | 3.11                                                       |
-| CANN          | ==9.0.0.B160 (CANN900B160)                                 |
-| torch         | ==2.9.0                                                    |
-| torch_npu     | ==2.9.0                                                    |
-| triton_ascend | ==3.2.1                                                    |
-| verl          | main                                                       |
-| vllm          | v0.18.0                                                    |
-| vllm-ascend   | v0.18.0                                                    |
-| transformers  | 5.3.0                                                      |
+| software      | version                    |
+| ------------- | -------------------------- |
+| Python        | 3.11                       |
+| CANN          | ==9.0.0.B160 (CANN900B160) |
+| torch         | ==2.9.0                    |
+| torch_npu     | ==2.9.0                    |
+| triton_ascend | ==3.2.1                    |
+| verl          | main                       |
+| vllm          | v0.18.0                    |
+| vllm-ascend   | v0.18.0                    |
+| transformers  | 5.3.0                      |
 
 在本实践中，我们通过指定 verl 的 commit id 以避免引入其他问题。注意：main 分支可能会因迭代重构导致 patch 出问题，如需稳定版本可切换至 `release/v0.8.0`。
 
@@ -177,6 +169,7 @@ export VLLM_ASCEND_ENABLE_NZ=0
 ```
 
 ### 训练
+
 ```bash
 # Model Weights Paths
 MODEL_PATH=hf_weights/Qwen3-VL-30B-A3B-Instruct
@@ -216,6 +209,7 @@ ray start --head --port 6766 --dashboard-host=$MASTER_ADDR --dashboard-port=8260
 
 bash recipe/dapo/run_dapo_qwen3_vl_30b_fsdp2_npu.sh
 ```
+
 - 对于多节点任务 Qwen3-VL-30B ，我们推荐使用以下脚本进行大规模多节点训练拉起，根据实际需要修改`NNODES`与`NPUS_PER_NODE` ，并修改配置脚本中参数`trainer.nnodes`和`trainer.n_gpus_per_node`与之相对应。
 
 ```bash
@@ -293,6 +287,7 @@ fi
 
 sleep 600
 ```
+
 DEFAULT_SH: 修改为训练所用配置 sh 文件路径。在此案例中修改为 [Qwen3_VL_30B](https://github.com/verl-project/verl-recipe/blob/main/dapo/run_dapo_qwen3_vl_30b_fsdp2_npu.sh) 路径。
 
 NNODES 和 NPUS_PER_NODE: 修改为使用节点数量和每个节点 NPU 数量。在此案例中分别为2和8。
@@ -307,8 +302,7 @@ ifconfig |grep "$(hostname -I |awk '{print $1}'|awk -F '.' '{print $0}')" -B 1|a
 
 ## 优化参考
 
-- **启动动态批次大小**
-  根据单 GPU 的最大 Token 总数（ppo_max_token_len_per_gpu）动态调整批次大小
+- **启动动态批次大小** 根据单 GPU 的最大 Token 总数（ppo_max_token_len_per_gpu）动态调整批次大小
 
 ```bash
 actor_rollout_ref.actor.use_dynamic_bsz=${use_dynamic_bsz}
@@ -316,8 +310,7 @@ actor_rollout_ref.ref.log_prob_use_dynamic_bsz=${use_dynamic_bsz}
 actor_rollout_ref.rollout.log_prob_use_dynamic_bsz=${use_dynamic_bsz}
 ```
 
-- **单个 GPU 能处理的最大 Token 总数**
-  当`use_dynamic_bsz=True`时，单 GPU 在一个微批次中能处理的最大 Token 数量
+- **单个 GPU 能处理的最大 Token 总数** 当`use_dynamic_bsz=True`时，单 GPU 在一个微批次中能处理的最大 Token 数量
 
 ```bash
 actor_rollout_ref.actor.ppo_max_token_len_per_gpu=${actor_ppo_max_token_len}
@@ -325,8 +318,7 @@ actor_rollout_ref.ref.log_prob_max_token_len_per_gpu=${infer_ppo_max_token_len}
 actor_rollout_ref.rollout.log_prob_max_token_len_per_gpu=${infer_ppo_max_token_len}
 ```
 
-- **单个 GPU 微批次大小**
-  当`use_dynamic_bsz=True`时，框架会以该值为初始批次大小，再根据`ppo_max_token_len_per_gpu`向上 / 向下调整
+- **单个 GPU 微批次大小** 当`use_dynamic_bsz=True`时，框架会以该值为初始批次大小，再根据`ppo_max_token_len_per_gpu`向上 / 向下调整
 
 ```bash
 actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=2
@@ -334,8 +326,7 @@ actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=2
 actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=2
 ```
 
-- **启用 FSDP2 框架**
-  “将模型参数、梯度、优化器状态分片存储在不同 GPU 上”，避免单卡加载全量模型导致显存溢出。
+- **启用 FSDP2 框架** “将模型参数、梯度、优化器状态分片存储在不同 GPU 上”，避免单卡加载全量模型导致显存溢出。
 
 ```bash
 # 启用 FSDP2 框架
@@ -349,12 +340,9 @@ actor_rollout_ref.actor.fsdp_config.reshard_after_forward=True
 actor_rollout_ref.ref.fsdp_config.reshard_after_forward=True
 ```
 
-- **启用专家并行配置**
-  指定有多少个 GPU用于并行计算不同的专家网络。
+- **启用专家并行配置** 指定有多少个 GPU用于并行计算不同的专家网络。
 
 ```bash
 # MoE 架构 Actor 模型的专家并行配置
 actor_rollout_ref.rollout.expert_parallel_size=8
 ```
-
-
