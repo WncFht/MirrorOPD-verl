@@ -1,0 +1,136 @@
+{
+  "full_kl": {
+    "cases": 20,
+    "maximum_gradient_errors": {
+      "stopped_gap_full_sum": 1.6653345369377348e-16,
+      "stopped_score_coefficient": 1.6653345369377348e-16,
+      "analytic_logit_vjp": 1.6653345369377348e-16,
+      "value_is_expected_gradient": 2.0816681711721685e-16,
+      "corrected_value_expected_gradient": 2.220446049250313e-16
+    },
+    "wrong_detached_probability_max_gradient_error": 0.9153375042174559,
+    "singleton_normalized_kl_has_zero_value_and_gradient": true
+  },
+  "oneshot": {
+    "scope": "Extracted helper functions fed with the K-wide tensors supplied by compute_rm_score; no GPU/Ray run",
+    "student_anchor": [
+      0.4000000059604645,
+      0.30000001192092896,
+      0.20000000298023224,
+      0.10000000149011612
+    ],
+    "teacher": [
+      0.10000000149011612,
+      0.25,
+      0.44999998807907104,
+      0.20000000298023224
+    ],
+    "student_top2": [
+      0,
+      1
+    ],
+    "teacher_top2": [
+      2,
+      1
+    ],
+    "expected_union": [
+      0,
+      1,
+      2
+    ],
+    "expected_symmetric_difference": [
+      0,
+      2
+    ],
+    "pipeline_shaped_results": {
+      "only_stu": {
+        "candidate_ids": [
+          0,
+          1
+        ],
+        "reward": [
+          -0.7921682596206665,
+          -0.07813780009746552
+        ],
+        "active_ids": [
+          0,
+          1
+        ],
+        "width": 2
+      },
+      "only_tch": {
+        "candidate_ids": [
+          0,
+          1
+        ],
+        "reward": [
+          -0.7921682596206665,
+          -0.07813780009746552
+        ],
+        "active_ids": [
+          0,
+          1
+        ],
+        "width": 2
+      },
+      "intersection": {
+        "candidate_ids": [
+          0,
+          1
+        ],
+        "reward": [
+          -0.0,
+          -0.18232154846191406
+        ],
+        "active_ids": [
+          1
+        ],
+        "width": 2
+      },
+      "union": {
+        "candidate_ids": [
+          0,
+          1
+        ],
+        "reward": [
+          -0.7921682596206665,
+          -0.07813780009746552
+        ],
+        "active_ids": [
+          0,
+          1
+        ],
+        "width": 2
+      },
+      "union-intersection": {
+        "candidate_ids": [
+          0,
+          1
+        ],
+        "reward": [
+          -0.5545177459716797,
+          -0.0
+        ],
+        "active_ids": [
+          0
+        ],
+        "width": 2
+      }
+    },
+    "full_concatenated_helper": {
+      "ids": [
+        0,
+        1,
+        2,
+        1
+      ],
+      "reward": [
+        -0.6161308288574219,
+        -0.06077384576201439,
+        0.18020670115947723,
+        -0.0
+      ]
+    },
+    "weighted_pg_vs_normalized_kl_max_gradient_difference": 0.17406119406223297
+  }
+}
