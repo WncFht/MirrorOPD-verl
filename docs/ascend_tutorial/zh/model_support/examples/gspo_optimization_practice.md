@@ -13,20 +13,20 @@ GSPO通过将优化颗粒度从**token级**提升到**sequence级**，规避了G
 想要成功在verl仓库中调用到GSPO算法，需要进行如下的必要配置
 
 ```bash
-# 核心算法配置
-algorithm.adv_estimator=grpo \                    # 使用GRPO优势估计器
-algorithm.use_kl_in_reward=False \                # 不在奖励中添加KL惩罚
-# GSPO策略损失模式
+# 核心算法配置  
+algorithm.adv_estimator=grpo \                    # 使用GRPO优势估计器  
+algorithm.use_kl_in_reward=False \                # 不在奖励中添加KL惩罚  
+# GSPO策略损失模式  
 actor_rollout_ref.actor.policy_loss.loss_mode=gspo \ # 启用GSPO策略损失
-# 极小裁剪范围（GSPO特色）
-actor_rollout_ref.actor.clip_ratio_low=0.0003 \   # 裁剪下界，论文推荐值
-actor_rollout_ref.actor.clip_ratio_high=0.0004 \  # 裁剪上界，论文推荐值
-# KL配置（GSPO不使用KL loss）
-actor_rollout_ref.actor.use_kl_loss=False \       # 禁用KL损失
-actor_rollout_ref.actor.kl_loss_coef=0.0 \        # KL损失系数设为0
-# 序列级损失聚合模式（GSPO核心）
-actor_rollout_ref.actor.loss_agg_mode=seq-mean-token-mean \ # 序列级平均，GSPO论文推荐
-# 批次配置
+# 极小裁剪范围（GSPO特色）  
+actor_rollout_ref.actor.clip_ratio_low=0.0003 \   # 裁剪下界，论文推荐值  
+actor_rollout_ref.actor.clip_ratio_high=0.0004 \  # 裁剪上界，论文推荐值  
+# KL配置（GSPO不使用KL loss）  
+actor_rollout_ref.actor.use_kl_loss=False \       # 禁用KL损失  
+actor_rollout_ref.actor.kl_loss_coef=0.0 \        # KL损失系数设为0  
+# 序列级损失聚合模式（GSPO核心）  
+actor_rollout_ref.actor.loss_agg_mode=seq-mean-token-mean \ # 序列级平均，GSPO论文推荐  
+# 批次配置  
 actor_rollout_ref.rollout.n=16 \                  # 每个prompt生成16个响应（组采样）
 ```
 
@@ -38,17 +38,18 @@ actor_rollout_ref.rollout.n=16 \                  # 每个prompt生成16个响�
 
 ### 安装基础环境
 
-| software      | version                    |
-| ------------- | -------------------------- |
-| Python        | 3.11                       |
-| CANN          | ==9.0.0.B160 (CANN900B160) |
-| torch         | ==2.9.0                    |
-| torch_npu     | ==2.9.0                    |
-| triton_ascend | ==3.2.1                    |
-| verl          | main                       |
-| vllm          | v0.18.0                    |
-| vllm-ascend   | v0.18.0                    |
-| transformers  | 5.3.0                      |
+| software      | version                                                    |
+| ------------- | ---------------------------------------------------------- |
+| Python        | 3.11                                                       |
+| CANN          | ==9.0.0.B160 (CANN900B160)                                 |
+| torch         | ==2.9.0                                                    |
+| torch_npu     | ==2.9.0                                                    |
+| triton_ascend | ==3.2.1                                                    |
+| verl          | main                                                       |
+| vllm          | v0.18.0                                                    |
+| vllm-ascend   | v0.18.0                                                    |
+| transformers  | 5.3.0                                                      |
+
 
 ```bash
 cd verl
@@ -298,7 +299,8 @@ HCCL_OP_EXPANSION_MODE环境变量用于配置通信算法的编排展开位置�
 - 软件栈工作在host CPU，通信算法展开一个个task
 - 每个task调用runtime接口，下发到device的rtsqueue
 - STARS从rtsqueue上顺序拿取task
-- 根据task类型分别调用SDMA和RDMA引擎。 **单算子瓶颈**：hostbound 每个task提交是2~5us，一个通信算子有几百个task，单算子场景不会在device上缓存，下发一个执行一个
+- 根据task类型分别调用SDMA和RDMA引擎。
+  **单算子瓶颈**：hostbound 每个task提交是2~5us，一个通信算子有几百个task，单算子场景不会在device上缓存，下发一个执行一个
 
 ##### AICPU机制展开
 

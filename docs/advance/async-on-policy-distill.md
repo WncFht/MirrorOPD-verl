@@ -97,35 +97,30 @@ Driver (TaskRunner)
 ## 5. Key Components
 
 ### 5.1 `OnPolicyDistillTrainer` (`ray_trainer.py`)
-
 - Creates `GenerationBatchFuture` objects holding rollout and (later) teacher futures.
 - Adds scheduling + teacher integration + modified metric emission (KL, timing, MFU).
 
 ### 5.2 Actor Worker (Megatron)
-
 - `OnPolicyDistillActor.update_policy()` orchestrates micro-batch forward/backward.
 - KL Loss injection via `logits_processor` during forward on pipeline last stage.
 
 ### 5.3 Rollout Worker (vLLM / SGLang)
-
-- Pure inference mode (`init_model` builds model; no optimizer).
+- Pure inference mode (`init_model` builds model; no optimizer). 
 - `async_generate_sequences` returns a Ray future for overlapping.
 
 ### 5.4 Teacher Service (`teacher/`)
-
 - Proxy + worker architecture (ZMQ REQ/REP) for batched top-k retrieval.
 - `TeacherClient.submit()` returns a `Future`; aggregator composes micro-batches.
 - Configurable temperature, max tokens, only-response mode.
 
 ### 5.5 KL Loss (`megatron_kl_loss.py`)
-
 - Performs normalization & stable per-token probability construction across TP shards.
 - Gradient is (student_probs - teacher_sparse_probs) scaled by upstream grad.
 
 ## 6. Configuration Highlights (`on_policy_distill_trainer.yaml`)
 
 | Section | Purpose | Notable Keys |
-| --- | --- | --- | --- |
+|---------|---------|-------------|
 | actor_rollout_ref.teacher | Teacher server | server_ip, server_port, n_server_workers |
 | trainer | Global training control | total_epochs, save_freq, scheduler (one_step_off | two_step_off), n_gpus_per_node, nnodes |
 | rollout | Resource split for rollout | n_gpus_per_node, nnodes |
@@ -134,7 +129,7 @@ Driver (TaskRunner)
 
 ### Dynamic Batch Size
 
-Enable by:
+Enable by: 
 
 ```
 actor_rollout_ref.actor.use_dynamic_bsz=True
@@ -229,12 +224,12 @@ Interpretation Tips:
 
 ## 10. Functional Support Summary
 
-| Category            | Supported                        |
-| ------------------- | -------------------------------- |
-| Train engine        | Megatron                         |
-| Rollout engine      | vLLM                             |
+| Category | Supported |
+|----------|-----------|
+| Train engine | Megatron |
+| Rollout engine | vLLM |
 | Distillation signal | Teacher top-k logprobs & indices |
-| Scheduling          | one_step_off, two_step_off       |
+| Scheduling | one_step_off, two_step_off |
 
 ## 11. Quick Checklist Before Running
 
@@ -244,5 +239,4 @@ Interpretation Tips:
 - NCCL environment vars set (see `config/runtime_env.yaml`).
 
 ---
-
 Feel free to open issues or PRs to extend scheduler variants, add new distillation objectives, or broaden engine support, and more improvement.

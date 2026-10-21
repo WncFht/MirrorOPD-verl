@@ -115,7 +115,7 @@ User may want to change the trainer's default behavior, for example:
 - over-sampling: sample more trajectories than the batch size
 - dynamic filtering: filter out samples with group responses are all correct or incorrect
 
-verl `v1 PPO trainer <https://github.com/verl-project/verl/blob/main/verl/trainer/ppo/v1/trainer_base.py>`_
+verl `v1 PPO trainer <https://github.com/verl-project/verl/blob/main/verl/trainer/ppo/v1/trainer_base.py>`_ 
 provides a set of hooks to customize trainer behavior:
 
 - on_init_end
@@ -151,7 +151,7 @@ Agent Framework Developer
 How do I replace verl's AgentLoopManager with my own agent framework?
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-AgentLoopManager is a reference implementation of an agent framework and is designed to be fully replaceable by other agent frameworks.
+AgentLoopManager is a reference implementation of an agent framework and is designed to be fully replaceable by other agent frameworks. 
 You can plug in your own agent framework, the only requirement is:
 
 - implement a non-blocking ``generate_sequences`` method

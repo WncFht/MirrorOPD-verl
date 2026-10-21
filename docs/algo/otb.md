@@ -2,7 +2,7 @@
 
 Last updated: 02/23/2026.
 
-📝 [ArXiv](https://www.arxiv.org/abs/2602.07078) | 📒 [Blog](https://richardli.xyz/optimal-token-baseline) | 🤗 [Datasets](https://huggingface.co/datasets/Jiawei415/DPAO_filter)
+📝 [ArXiv](https://www.arxiv.org/abs/2602.07078) | 📒 [Blog](https://richardli.xyz/optimal-token-baseline) | 🤗 [Datasets](https://huggingface.co/datasets/Jiawei415/DPAO_filter) 
 
 Optimal Token Baseline (OTB) is a dynamic token-level baseline for gradient variance reduction in policy-gradient reinforcement learning. It weights updates with the "Realized Energy" statistic that tracks how much uncertainty has accumulated up to each token, so noisy regions get downweighted while confident regions carry more weight.
 
@@ -33,7 +33,6 @@ The final advantage is `(G_t - B*_t) · mask_t`, so padding tokens stay at zero.
 - `ActorRolloutRefWorker.compute_log_prob` emits an additional tensor `sum_pi_squared` (Σπ² per token) when `actor.calculate_sum_pi_squared=True`. This requires disabling fused log-prob kernels, because they do not surface logits.
 - Trainers assert `sum_pi_squared` exists, regroup trajectories by `non_tensor_batch["uid"]`, and run the OTB calculation. If rollout IS is active, they rescale the weights by `rollout_is_weights**2` before aggregating.
 - In Ulysses sequence-parallel setups, the actor gathers, unpads, and returns Σπ² in the same way it handles log-probabilities, so OTB supports sharded sequence-parallel models out of the box.
-
 ## Configuration checklist
 
 - `actor_rollout_ref.actor.calculate_sum_pi_squared: true` (mandatory).

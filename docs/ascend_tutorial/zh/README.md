@@ -1,5 +1,4 @@
 # Ascend 使用教程
-
 ## 简介
 
 昇腾全面支持 verl 使用与开发，本文档全面介绍了如何在华为昇腾芯片 NPU 上使用 verl。
@@ -17,16 +16,13 @@ zh/
 ├── faq/                           # 常见问题解答
 └── contribution_guide/            # 社区贡献指南
 ```
-
 ## 最新消息
-
 - [verl-ascend-recipe 建仓](https://github.com/verl-project/verl-ascend-recipe) - 新增昇腾recipe
 - [verl on Ascend 2026Q2 roadmap](https://github.com/verl-project/verl/issues/5526) - 2026Q2 roadmap 已发布
 
 ## 快速开始
-
-- [昇腾镜像说明](./get_start/dockerfile_build_guidance.rst) - 构建并使用昇腾环境的 Docker 镜像
-- [昇腾安装指南](./get_start/install_guidance.rst) - 在昇腾 NPU 上自定义安装 verl
+- [昇腾镜像说明](./get_start/dockerfile_build_guidance.rst) - 构建并使用昇腾环境的 Docker 镜像  
+- [昇腾安装指南](./get_start/install_guidance.rst) - 在昇腾 NPU 上自定义安装 verl                                                    
 - [昇腾快速上手说明](./get_start/quick_start.rst) - 快速上手在昇腾 NPU 上运行 verl
 
 ## 特性支持说明
@@ -39,19 +35,21 @@ zh/
 - [NPU 模型与算法支持情况](./model_support/model_and_algorithm_support.md) - 支持的模型/算法列表
 - [最佳实践示例](./model_support/examples) - 最佳实践与模型部署示例
 
+
 ## 开发指南
 
-- [模型开发](./dev_guide/model_dev)
-  - [模型迁移至 NPU 指南](./dev_guide/model_dev/transfer_to_npu_guide.md) - 模型迁移指南
-  - [训练配置参数与指标说明](./dev_guide/model_dev/parameter_and_metrics.md) - 训练参数与指标
-  - [模型评测](./dev_guide/model_dev/evaluation.md) - 模型评测指南
-- [精度调试](./dev_guide/precision_analysis)
-  - [精度对齐指南](./dev_guide/precision_analysis/precision_alignment.md) - 精度对齐指南
-  - [精度调试器](../en/dev_guide/precision_analysis/precision_debugger.md) - 精度问题排查工具
-- [性能调优](./dev_guide/performance)
-  - [昇腾性能分析指南](./dev_guide/performance/ascend_performance_analysis_guide.md) - 性能分析指南
-  - [昇腾性能调优指南](./dev_guide/performance/perf_tuning_on_ascend.rst) - 性能调优指南
-  - [Profiling采集指导](./dev_guide/performance/ascend_profiling.rst) - profiling 工具使用指南
+- [模型开发](./dev_guide/model_dev) 
+    - [模型迁移至 NPU 指南](./dev_guide/model_dev/transfer_to_npu_guide.md) - 模型迁移指南
+    - [训练配置参数与指标说明](./dev_guide/model_dev/parameter_and_metrics.md) - 训练参数与指标
+    - [模型评测](./dev_guide/model_dev/evaluation.md) - 模型评测指南
+- [精度调试](./dev_guide/precision_analysis) 
+    - [精度对齐指南](./dev_guide/precision_analysis/precision_alignment.md) - 精度对齐指南
+    - [精度调试器](../en/dev_guide/precision_analysis/precision_debugger.md) - 精度问题排查工具
+- [性能调优](./dev_guide/performance) 
+    - [昇腾性能分析指南](./dev_guide/performance/ascend_performance_analysis_guide.md) - 性能分析指南
+    - [昇腾性能调优指南](./dev_guide/performance/perf_tuning_on_ascend.rst) - 性能调优指南
+    - [Profiling采集指导](./dev_guide/performance/ascend_profiling.rst) - profiling 工具使用指南
+
 
 ## 支持与反馈
 
@@ -62,7 +60,6 @@ zh/
 3. 联系昇腾技术支持
 
 ## 贡献指南
-
 - [verl 社区贡献](../../contributing) - verl 社区贡献指南
 - [NPU-CI 添加指导](./contribution_guide/ascend_ci_guide.rst) - 昇腾环境 CI 配置与测试
 

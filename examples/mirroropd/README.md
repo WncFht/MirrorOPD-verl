@@ -4,15 +4,17 @@
 
 ## 文档入口
 
+MirrorOPD 自有文档、调研和配套图片、数据统一放在 `examples/mirroropd/docs/`；仓库根 `docs/` 保留上游文档。训练指标集中维护在 `docs/metrics/`。
+
 | 文档 | 内容 |
 | --- | --- |
 | [资产准备](docs/资产准备.md) | 模型、数学数据目录、导入与 CPU 检查 |
 | [训练配方](docs/训练配方.md) | Math / coding / IF 入口、GPU 资源池、训练与验证预算、Hope 启动 |
 | [判分器与依赖](docs/判分器与依赖.md) | 四领域 reward 路由、依赖、迁入来源和检查范围 |
-| [训练基础设施](docs/infra/README.md) | 运行与调度、实测报告、batch/rollout调优、指标/MFU、模型扩展和上游调研的统一入口 |
-| [OPD目标与消融](docs/opd-objective/README.md) | 固定prefix推导、优势/IS语义及更新计数的待实施方案 |
+| [训练基础设施](docs/infra/README.md) | 运行与调度、实测报告、batch/rollout 调优、指标/MFU、模型扩展和上游调研的统一入口 |
+| [OPD 目标与消融](docs/opd-objective/README.md) | 固定 prefix 推导、优势/IS 语义及更新计数的待实施方案 |
 | [分析复现](docs/分析复现.md) | W&B 只读导出、历史日志解析、统计和图表重建 |
-| [训练指标系统设计与调研](../../docs/metrics/2026-10-22-训练指标系统设计与调研.md) | 八类指标的最小替换方案、W&B 命名与字段必要性审计（待实施，不兼容旧输出） |
+| [训练指标](docs/metrics/README.md) | 当前字段字典、统计归约、更新横轴、调研及测试边界 |
 
 ## 启动入口
 

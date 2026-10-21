@@ -5,8 +5,8 @@ Last updated: 05/27/2025 (API docstrings are auto-generated).
 
 The Single Controller provides a unified interface for managing distributed workers
 using Ray or other backends and executing functions across them.
-It simplifies the process of dispatching tasks and collecting results, particularly
-when dealing with data parallelism or model parallelism.
+It simplifies the process of dispatching tasks and collecting results, particularly 
+when dealing with data parallelism or model parallelism. 
 
 
 Core APIs
