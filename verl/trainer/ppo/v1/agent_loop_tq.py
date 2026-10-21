@@ -68,7 +68,9 @@ class AgentLoopWorkerTQ(AgentLoopWorker):
             top_p=config.top_p,
             top_k=config.top_k,
             repetition_penalty=1.0,
-            logprobs=config.calculate_log_probs,
+            # Validation consumes tokens and verifier scores, never actor-update
+            # probabilities. Omit the unused probability payload and TQ storage.
+            logprobs=config.calculate_log_probs and not validate,
         )
         # the trainer never consumes the sampler head on validation rollouts
         if config.topk_log_probs and not validate:

@@ -211,6 +211,38 @@ def test_empty_validation_files_reject_requested_validation(option, value):
             trainer._init_dataloader()
 
 
+def test_validation_only_logs_complete_validation_time_without_training():
+    trainer = _StubTrainer.__new__(_StubTrainer)
+    trainer.config = OmegaConf.create(
+        {
+            "trainer": {
+                "project_name": "test",
+                "experiment_name": "validation",
+                "logger": ["console"],
+                "val_before_train": True,
+                "val_only": True,
+            }
+        }
+    )
+    trainer.global_steps = 0
+    trainer._validate = MagicMock(return_value={"val-core/math/acc/mean@16": 0.5})
+    trainer._shutdown_dump_executor = MagicMock()
+    trainer.step = MagicMock(side_effect=AssertionError("Validation-only must not update parameters"))
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.SkipManager.init"),
+        patch("verl.trainer.ppo.v1.trainer_base.Tracking") as tracking,
+        patch("verl.trainer.ppo.v1.trainer_base.ValidationGenerationsLogger"),
+        patch("verl.trainer.ppo.v1.trainer_base.DapoFilteredRewardTableLogger"),
+    ):
+        trainer.fit(agent_loop_manager=None)
+    logged = tracking.return_value.log.call_args.kwargs
+    assert logged["step"] == 0
+    assert logged["data"]["val-core/math/acc/mean@16"] == 0.5
+    assert logged["data"]["timing_s/testing"] >= 0
+    trainer.step.assert_not_called()
+    trainer._shutdown_dump_executor.assert_called_once()
+
+
 @pytest.mark.parametrize("score_centering", [True, False])
 def test_update_actor_passes_score_centering_flag(score_centering):
     trainer = _StubTrainer.__new__(_StubTrainer)

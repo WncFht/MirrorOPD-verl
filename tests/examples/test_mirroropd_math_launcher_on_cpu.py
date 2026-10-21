@@ -32,6 +32,9 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "DISTILLATION_EXECUTION_MODE",
         "TEACHER_FSDP_TOKEN_BUDGET",
         "TEACHER_FSDP_DTYPE",
+        "ROLLOUT_ENFORCE_EAGER",
+        "ROLLOUT_MAX_NUM_SEQS",
+        "VAL_BATCH_SIZE",
     ):
         env.pop(name, None)
     env.update(
@@ -78,6 +81,28 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
     assert [Path(p).parent.name for p in cfg.data.val_files] == ["MATH-500", "AMC23", "AIME25"]
     assert cfg.actor_rollout_ref.model.path.endswith("models with spaces/DeepSeek-R1-Distill-Qwen-1.5B")
     assert not (tmp_path / "run").exists()
+
+
+def test_default_graph_and_validation_window_keep_training_budget(tmp_path):
+    cfg = _config(tmp_path)
+    assert not cfg.actor_rollout_ref.rollout.enforce_eager
+    assert list(cfg.actor_rollout_ref.rollout.cudagraph_capture_sizes) == [1, 2, 4, 8, 16, 32]
+    assert cfg.data.val_batch_size == 32
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
+    assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
+
+
+def test_graph_capture_covers_concurrency_override_and_eager_fallback(tmp_path):
+    cfg = _config(tmp_path, ROLLOUT_MAX_NUM_SEQS="64", ROLLOUT_ENFORCE_EAGER="True", VAL_BATCH_SIZE="16")
+    assert cfg.actor_rollout_ref.rollout.enforce_eager
+    assert list(cfg.actor_rollout_ref.rollout.cudagraph_capture_sizes) == [1, 2, 4, 8, 16, 32, 64]
+    assert cfg.data.val_batch_size == 16
+
+
+def test_zero_rollout_concurrency_is_rejected_before_capture_derivation(tmp_path):
+    result = _launch(tmp_path, ROLLOUT_MAX_NUM_SEQS="0")
+    assert result.returncode == 2
+    assert "ROLLOUT_MAX_NUM_SEQS must be a positive integer" in result.stderr
 
 
 @pytest.mark.parametrize(
@@ -272,7 +297,10 @@ def test_real_launch_requires_explicit_gpu_allocation(tmp_path):
 
 @pytest.mark.parametrize("exit_code", [0, 23])
 @pytest.mark.parametrize("domain", ["math", "code", "if"])
-def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(tmp_path, exit_code, domain):
+@pytest.mark.parametrize("append_source", [False, True])
+def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(
+    tmp_path, exit_code, domain, append_source
+):
     """An unpacked tree logs stdout/stderr while retaining the trainer's success or failure."""
     checkout = tmp_path / "source checkout"
     entry = SCRIPT if domain == "math" else SCRIPT.with_name(f"run_{domain}_deepseek_r1_1_5b_fsdp2.sh")
@@ -295,6 +323,11 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(t
     interpreter.write_text(
         '#!/bin/sh\ncase " $* " in *" -c "*) exit 0 ;; *" --cfg "*) printf "mock: true\\n"; exit 0 ;; esac\n'
         'printf "mock training stdout\\n"\nprintf "mock training stderr\\n" >&2\n'
+        # A running shell may resume reading the file after its child exits.
+        # Updating the launcher must not execute newly appended source text.
+        'if [ "$MUTATE_LAUNCHER" = 1 ]; then\n'
+        '  printf \'\\nprintf "unexpected" > "$RUN_DIR/unexpected"\\n\' >> "$LAUNCHER_TO_CHANGE"\n'
+        "fi\n"
         f"exit {exit_code}\n"
     )
     interpreter.chmod(0o755)
@@ -306,8 +339,11 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(t
         PYTHON_BIN=str(interpreter),
         CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7",
         OPENCOMPASS_ROOT=str(checker),
+        MUTATE_LAUNCHER="1" if append_source else "0",
+        LAUNCHER_TO_CHANGE=str(script.parent / "_run_single_teacher_fsdp2.sh"),
     )
     assert result.returncode == exit_code, result.stderr
+    assert not (tmp_path / "run/unexpected").exists()
     assert "source archive without Git metadata" in (tmp_path / "run/source_commit.txt").read_text()
     assert (tmp_path / "run/source_changes.patch").read_bytes() == b""
     assert "verl.trainer.main_ppo" in (tmp_path / "run/command.sh").read_text()

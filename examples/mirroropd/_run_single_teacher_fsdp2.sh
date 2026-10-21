@@ -74,7 +74,9 @@ ROLLOUT_TOKEN_BUDGET=${ROLLOUT_TOKEN_BUDGET:-8192}
 TEACHER_GPU_MEMORY_UTILIZATION=${TEACHER_GPU_MEMORY_UTILIZATION:-0.4}
 TEACHER_MAX_NUM_SEQS=${TEACHER_MAX_NUM_SEQS:-64}
 TEACHER_TOKEN_BUDGET=${TEACHER_TOKEN_BUDGET:-8192}
-ROLLOUT_ENFORCE_EAGER=${ROLLOUT_ENFORCE_EAGER:-True}
+# Compiled CUDA Graph rollout is the tested default. True remains an explicit
+# fallback for diagnosing compilation or backend compatibility problems.
+ROLLOUT_ENFORCE_EAGER=${ROLLOUT_ENFORCE_EAGER:-False}
 TEACHER_ENFORCE_EAGER=${TEACHER_ENFORCE_EAGER:-True}
 # 共享 teacher 的 packed forward 预算，与 vLLM TEACHER_TOKEN_BUDGET 独立。
 TEACHER_FSDP_TOKEN_BUDGET=${TEACHER_FSDP_TOKEN_BUDGET:-32768}
@@ -97,7 +99,8 @@ PPO_MAX_TOKEN_LEN_PER_GPU=${PPO_MAX_TOKEN_LEN_PER_GPU:-32768}
 # 验证允许更长的回答；VAL_N 是每题采样次数，VAL_BATCH_SIZE 是提交窗口题数。
 MAX_VAL_RESPONSE_LENGTH=${MAX_VAL_RESPONSE_LENGTH:-31744}
 VAL_N=${VAL_N:-16}
-VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-16}
+# This is a submission window in prompts, not the per-engine sequence limit.
+VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-32}
 TEST_FREQ=${TEST_FREQ:-20}
 SAVE_FREQ=${SAVE_FREQ:-50}
 if [[ $DOMAIN == if ]] && (( TEST_FREQ > 0 )); then
@@ -106,7 +109,7 @@ if [[ $DOMAIN == if ]] && (( TEST_FREQ > 0 )); then
 fi
 
 # ── 4. 启动前检查与派生值 ────────────────────────────────────────────
-for name in STUDENT_GPUS ROLLOUT_TP TEACHER_TP TRAIN_BATCH_SIZE TEACHER_FSDP_TOKEN_BUDGET \
+for name in STUDENT_GPUS ROLLOUT_TP TEACHER_TP ROLLOUT_MAX_NUM_SEQS TRAIN_BATCH_SIZE TEACHER_FSDP_TOKEN_BUDGET \
     MAX_PROMPT_LENGTH MAX_RESPONSE_LENGTH MAX_VAL_RESPONSE_LENGTH VAL_N VAL_BATCH_SIZE PPO_MAX_TOKEN_LEN_PER_GPU; do
     if [[ ! ${!name} =~ ^[1-9][0-9]*$ ]]; then
         echo "$name must be a positive integer" >&2
@@ -151,6 +154,15 @@ fi
 # Student 同时容纳训练与验证；teacher 只评分训练轨迹。额外预留一个 token。
 STUDENT_CONTEXT=$((MAX_PROMPT_LENGTH + (MAX_RESPONSE_LENGTH > MAX_VAL_RESPONSE_LENGTH ? MAX_RESPONSE_LENGTH : MAX_VAL_RESPONSE_LENGTH) + 1))
 TEACHER_CONTEXT=$((MAX_PROMPT_LENGTH + MAX_RESPONSE_LENGTH + 1))
+# Bound capture to the configured decode concurrency rather than unrelated
+# context/token budgets. Native Hydra overrides at the end can still replace it.
+ROLLOUT_CAPTURE_SIZES="["
+rollout_capture_size=1
+while (( rollout_capture_size < ROLLOUT_MAX_NUM_SEQS )); do
+    ROLLOUT_CAPTURE_SIZES+="$rollout_capture_size,"
+    rollout_capture_size=$((rollout_capture_size * 2))
+done
+ROLLOUT_CAPTURE_SIZES+="$ROLLOUT_MAX_NUM_SEQS]"
 EXPERIMENT_NAME=${EXPERIMENT_NAME:-$DOMAIN-full-sampled-$(date +%Y%m%d-%H%M%S)-$$}
 RUN_DIR=${RUN_DIR:-$REPO_ROOT/outputs/$EXPERIMENT_NAME}
 
@@ -217,6 +229,7 @@ ROLLOUT_ARGS=(
     "actor_rollout_ref.rollout.max_num_batched_tokens=$ROLLOUT_TOKEN_BUDGET"
     "actor_rollout_ref.rollout.max_model_len=$STUDENT_CONTEXT"
     "actor_rollout_ref.rollout.enforce_eager=$ROLLOUT_ENFORCE_EAGER"
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes=$ROLLOUT_CAPTURE_SIZES"
     actor_rollout_ref.rollout.n=1
     actor_rollout_ref.rollout.temperature=1.0
     actor_rollout_ref.rollout.top_p=1.0
@@ -363,17 +376,22 @@ fi
 mkdir -p "$RUN_DIR"
 # tee 同时保存 stdout / stderr；pipefail 保留 Python 失败时的退出码。
 export PYTHONUNBUFFERED=1
+# Parse the pipeline and exit together. If this source file is updated while
+# Python runs, Bash must not resume reading newly appended/repositioned code.
 {
-    printf 'Training log: %s\n' "$RUN_DIR/train.log"
-    if [[ -d $REPO_ROOT/.git || -f $REPO_ROOT/.git ]] && command -v git >/dev/null 2>&1; then
-        git rev-parse HEAD > "$RUN_DIR/source_commit.txt"
-        git diff --binary HEAD > "$RUN_DIR/source_changes.patch"
-    else
-        printf 'unavailable (source archive without Git metadata)\n' > "$RUN_DIR/source_commit.txt"
-        : > "$RUN_DIR/source_changes.patch"
-    fi
-    printf '%q ' "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/command.sh"
-    printf '\n' >> "$RUN_DIR/command.sh"
-    "${CMD[@]}" --cfg job --resolve "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/resolved_config.yaml"
-    exec "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@"
-} 2>&1 | tee "$RUN_DIR/train.log"
+    {
+        printf 'Training log: %s\n' "$RUN_DIR/train.log"
+        if [[ -d $REPO_ROOT/.git || -f $REPO_ROOT/.git ]] && command -v git >/dev/null 2>&1; then
+            git rev-parse HEAD > "$RUN_DIR/source_commit.txt"
+            git diff --binary HEAD > "$RUN_DIR/source_changes.patch"
+        else
+            printf 'unavailable (source archive without Git metadata)\n' > "$RUN_DIR/source_commit.txt"
+            : > "$RUN_DIR/source_changes.patch"
+        fi
+        printf '%q ' "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/command.sh"
+        printf '\n' >> "$RUN_DIR/command.sh"
+        "${CMD[@]}" --cfg job --resolve "${ARGS[@]}" "${RAY[@]}" "$@" > "$RUN_DIR/resolved_config.yaml"
+        exec "${CMD[@]}" "${ARGS[@]}" "${RAY[@]}" "$@"
+    } 2>&1 | tee "$RUN_DIR/train.log"
+    exit
+}
