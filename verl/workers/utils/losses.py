@@ -93,6 +93,26 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         metric_aggregation = AggregationType.MEAN
 
     metrics = {}
+    if tu.get_non_tensor_data(data, "collect_metrics", default=False):
+        from verl.trainer.ppo.policy_metrics import update_observations
+
+        def padded(value):
+            return value.to_padded_tensor(0.0) if value is not None and value.is_nested else value
+
+        metrics.update(
+            update_observations(
+                log_prob,
+                padded(data.get("rollout_log_probs")),
+                padded(data["old_log_probs"])
+                if tu.get_non_tensor_data(data, "metrics_has_anchor", default=True)
+                else None,
+                padded(data["advantages"]),
+                padded(data["response_mask"]),
+                component="task",
+                observation_mask=padded(data.get("metrics_response_mask")),
+                quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),
+            )
+        )
 
     # select fields and convert to padded tensor
     fields = ["response_mask", "old_log_probs", "advantages"]

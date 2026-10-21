@@ -326,3 +326,38 @@ def test_gradient_is_invariant_to_dp_and_microbatch_partition(mode, source):
         for i in range(4)
     )
     torch.testing.assert_close(torch.autograd.grad(partitioned, student)[0], expected)
+
+
+@pytest.mark.parametrize(
+    "mode,source",
+    [
+        (mode, source)
+        for mode in ("token_is", "token_ppo", "reinforce", "vanilla")
+        for source in ("current", "rollout")
+        if mode != "vanilla" or source == "current"
+    ],
+)
+def test_observation_switch_preserves_loss_gradients_rng_and_token_alignment(mode, source):
+    student = torch.tensor([[-0.7, -1.4], [-0.3, -1.1]], requires_grad=True)
+    teacher = torch.tensor([[-0.5, -0.9], [-0.6, -1.2]])
+    behavior = torch.tensor([[-0.9, -1.3], [-0.2, -1.0]])
+    output, data = inputs(student, teacher, behavior, lengths=[2, 1], prompt_lengths=[2, 3])
+    data["old_log_probs"] = behavior.clone()
+    actor = SimpleNamespace(loss_agg_mode="token-mean", global_batch_info={}, loss_scale_factor=None)
+    cfg = loss_config(mode, source)
+    config = SimpleNamespace(distillation_loss=cfg)
+    before_rng = torch.random.get_rng_state().clone()
+    plain, _ = distillation_loss(actor, config, output, data)
+    plain_grad = torch.autograd.grad(plain, student, retain_graph=True)[0]
+    tu.assign_non_tensor(data, collect_metrics=True, metrics_quantile=True)
+    observed, metrics = distillation_loss(actor, config, output, data)
+    grad = torch.autograd.grad(observed, student)[0]
+    torch.testing.assert_close(plain, observed, rtol=0, atol=0)
+    torch.testing.assert_close(plain_grad, grad, rtol=0, atol=0)
+    assert torch.equal(before_rng, torch.random.get_rng_state())
+    assert "policy/current_behavior/ratio_p99" in metrics
+    assert "advantage/distillation/abs_mean" in metrics
+    if mode == "reinforce":
+        assert "correction/log_ratio_guard/fraction" not in metrics
+    if mode == "vanilla":
+        assert "correction/anchor_ppo/active_fraction" in metrics
