@@ -62,6 +62,19 @@ logger = logging.getLogger(__file__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "WARN"))
 
 
+def _consume_optimizer_step_status(metrics: dict, dp_size: int) -> Optional[bool]:
+    """Consume the already gathered execution facts before metric flattening."""
+    status = metrics.pop("_optimizer_step_applied", None)
+    if status is None:
+        return None  # backend does not report execution
+    statuses = status if isinstance(status, list) else [status]
+    if len(statuses) != dp_size or any(type(value) is not bool for value in statuses):
+        raise RuntimeError(f"Incomplete optimizer execution status across {dp_size} DP ranks: {statuses}")
+    if any(value != statuses[0] for value in statuses):
+        raise RuntimeError(f"Inconsistent optimizer execution status across DP ranks: {statuses}")
+    return statuses[0]
+
+
 def _plan_liger_flsce_capacity(config: DictConfig, role: str) -> Optional[tuple[int, int]]:
     """Reserve all colocated consumers before the reference engine initializes Liger."""
     if not (config.model.get("use_liger", False) and config.model.get("use_fused_kernels", False)):
@@ -365,7 +378,13 @@ class TrainingWorker(Worker, DistProfilerExtension):
             if self.engine.is_mp_src_rank_with_outputs():
                 actor_output = [tu.get(output, "metrics") for output in output_lst]
                 metrics = {}
+                optimizer_steps = 0
                 for output in actor_output:
+                    applied = _consume_optimizer_step_status(output, self.engine.get_data_parallel_size())
+                    if applied is None:
+                        optimizer_steps = None
+                    elif optimizer_steps is not None:
+                        optimizer_steps += int(applied)
                     for key, val in output.items():
                         # flattn dp and micro batch
                         if isinstance(val, list):
@@ -378,7 +397,14 @@ class TrainingWorker(Worker, DistProfilerExtension):
 
                 if peak_memory is not None:
                     metrics[FSDP_PEAK_MEMORY] = peak_memory
-                output = tu.get_tensordict(tensor_dict={}, non_tensor_dict={"metrics": metrics}).cpu()
+                output = tu.get_tensordict(
+                    tensor_dict={},
+                    non_tensor_dict={
+                        "metrics": metrics,
+                        "optimizer_step_attempts": len(output_lst),
+                        "optimizer_steps": optimizer_steps,
+                    },
+                ).cpu()
             else:
                 output = None
         return output

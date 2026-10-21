@@ -104,3 +104,69 @@ def test_forward_only_stage_is_not_a_profiler_step():
 
     assert TrainingWorker.infer_batch(worker, data) is None
     worker.profiler.step.assert_not_called()
+
+
+def test_real_iterator_counts_epochs_and_minibatches_without_dp_multiplier():
+    from verl.utils.metric import Metric, reduce_metrics
+
+    def micro_counts(*values):
+        metric = Metric("sum")
+        metric.extend(list(values))
+        return metric
+
+    for batch_size, mini_size, epochs, dp_size in ((64, 64, 4, 8), (256, 64, 1, 8), (64, 64, 4, 1)):
+        engine = _engine(is_mp_src_rank_with_outputs=lambda: True, get_data_parallel_size=lambda size=dp_size: size)
+        worker = _worker(engine)
+        calls = []
+
+        def train_batch(data, calls=calls, dp_size=dp_size):
+            calls.append(data.shape[0])
+            # Unequal token counts per rank/micro-batch; both counts traverse the
+            # production aggregation, and their common averaging factors cancel.
+            metrics = {
+                "_optimizer_step_applied": [True] * dp_size,
+                "distillation/token_observations": [micro_counts(r + 1, 3) for r in range(dp_size)],
+                "distillation/ppo_clip_count": [micro_counts(1, 0) for r in range(dp_size)],
+            }
+            return tu.get_tensordict({}, {"metrics": metrics})
+
+        worker.train_batch = train_batch
+        data = TensorDict({"sample": torch.arange(batch_size // dp_size)}, batch_size=[batch_size // dp_size])
+        tu.assign_non_tensor(data, mini_batch_size=mini_size, epochs=epochs, dataloader_kwargs={"shuffle": False})
+        result = TrainingWorker.train_mini_batch(worker, data)
+        assert len(calls) == 4
+        assert tu.get(result, "optimizer_step_attempts") == tu.get(result, "optimizer_steps") == 4
+        metrics = reduce_metrics(tu.get(result, "metrics"))
+        assert "_optimizer_step_applied" not in metrics
+        ratio = metrics["distillation/ppo_clip_count"] / metrics["distillation/token_observations"]
+        assert ratio == dp_size / sum(r + 4 for r in range(dp_size))
+
+
+def test_worker_counts_skipped_and_unknown_updates(monkeypatch):
+    for statuses, expected in (([True, False, True], 2), ([True, None, True], None)):
+        worker = _worker(_engine(is_mp_src_rank_with_outputs=lambda: True))
+        iterator = iter(statuses)
+
+        def train_batch(data, iterator=iterator):
+            status = next(iterator)
+            metrics = {} if status is None else {"_optimizer_step_applied": status}
+            return tu.get_tensordict({}, {"metrics": metrics})
+
+        worker.train_batch = train_batch
+        data = TensorDict({"sample": torch.arange(3)}, batch_size=[3])
+        tu.assign_non_tensor(data, mini_batch_size=1, epochs=1, dataloader_kwargs={"shuffle": False})
+        result = TrainingWorker.train_mini_batch(worker, data)
+        assert tu.get(result, "optimizer_step_attempts") == 3
+        assert tu.get(result, "optimizer_steps") == expected
+
+
+def test_incomplete_or_disagreeing_rank_status_is_an_error():
+    import pytest
+
+    from verl.workers.engine_workers import _consume_optimizer_step_status
+
+    for statuses in ([True, False], [True], [True, None], [1, 1]):
+        with pytest.raises(RuntimeError):
+            _consume_optimizer_step_status({"_optimizer_step_applied": statuses}, 2)
+    assert _consume_optimizer_step_status({}, 2) is None
+    assert _consume_optimizer_step_status({"_optimizer_step_applied": [False, False]}, 2) is False
