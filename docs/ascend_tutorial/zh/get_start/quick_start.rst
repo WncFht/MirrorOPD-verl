@@ -16,7 +16,7 @@
 
 - `硬件支持 <#硬件支持>`_
 - `快速开始 <#快速开始>`_
-   - `环境准备 <#环境准备>`_
+   - `环境准备 <#环境准备>`_ 
    - `权重准备 <#权重准备>`_
    - `数据准备 <#数据准备>`_
    - `运行方式 <#运行方式>`_
@@ -45,7 +45,7 @@
 - 组件初始化：actor、rollout、reference worker 是否能初始化；
 - 模型推理：vLLM-Ascend/sglang rollout 是否能生成；
 - 端到端链路：训练流程是否能完成首个 step。
-
+  
 配置提示：
 
 - 默认配置：示例脚本均使用 Qwen3-0.6B 模型和 GSM8K 数据集。
@@ -153,4 +153,4 @@ vLLM 后端脚本转换为 SGLang
    ++actor_rollout_ref.rollout.engine_kwargs.sglang.moe_a2a_backend="deepep" \
 
    # MoE 模型多 DP 时必须设置为 True（默认为False）
-   +actor_rollout_ref.rollout.engine_kwargs.sglang.enable_dp_attention=False \
+   +actor_rollout_ref.rollout.engine_kwargs.sglang.enable_dp_attention=False \   

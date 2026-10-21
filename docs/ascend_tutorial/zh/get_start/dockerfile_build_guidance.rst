@@ -115,25 +115,25 @@ A3              8.2.RC1                vLLM            `Dockerfile.ascend_8.2.rc
 **verl release版本镜像**
 
 ============== ==================== ============== ============== ==============================================================
-设备类型         CANN基础镜像版本     推理后端        verl版本       参考文件
+设备类型         CANN基础镜像版本     推理后端        verl版本       参考文件                                
 ============== ==================== ============== ============== ==============================================================
 A2              9.1.0                vLLM          release/v0.9.1 `Dockerfile.ascend_9.1.0_a2_v0.9.1 <https://github.com/verl-project/verl/blob/main/docker/ascend/Dockerfile.ascend_9.1.0_a2_v0.9.1>`_
 A3              9.1.0                vLLM          release/v0.9.1 `Dockerfile.ascend_9.1.0_a3_v0.9.1 <https://github.com/verl-project/verl/blob/main/docker/ascend/Dockerfile.ascend_9.1.0_a3_v0.9.1>`_
 950PR&950DT     9.1.0                vLLM          release/v0.9.1 `Dockerfile.ascend_9.1.0_a5_v0.9.1 <https://github.com/verl-project/verl/blob/main/docker/ascend/Dockerfile.ascend_9.1.0_a5_v0.9.1>`_
-A2              9.0.0                vLLM          release/v0.8.0 `Dockerfile.ascend_9.0.0_a2_v0.8.0 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_9.0.0_a2_v0.8.0>`_
-A3              9.0.0                vLLM          release/v0.8.0 `Dockerfile.ascend_9.0.0_a3_v0.8.0 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_9.0.0_a3_v0.8.0>`_
-A2              8.5.0                vLLM          release/v0.7.1 `Dockerfile.ascend_8.5.0_a2_v0.7.1 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_8.5.0_a2_v0.7.1>`_
-A3              8.5.0                vLLM          release/v0.7.1 `Dockerfile.ascend_8.5.0_a3_v0.7.1 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_8.5.0_a3_v0.7.1>`_
+A2              9.0.0                vLLM          release/v0.8.0 `Dockerfile.ascend_9.0.0_a2_v0.8.0 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_9.0.0_a2_v0.8.0>`_     
+A3              9.0.0                vLLM          release/v0.8.0 `Dockerfile.ascend_9.0.0_a3_v0.8.0 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_9.0.0_a3_v0.8.0>`_ 
+A2              8.5.0                vLLM          release/v0.7.1 `Dockerfile.ascend_8.5.0_a2_v0.7.1 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_8.5.0_a2_v0.7.1>`_     
+A3              8.5.0                vLLM          release/v0.7.1 `Dockerfile.ascend_8.5.0_a3_v0.7.1 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_8.5.0_a3_v0.7.1>`_ 
 ============== ==================== ============== ============== ==============================================================
 
 
 **模型定制镜像**
 
 ============== ==================== ============== ============== ==============================================================
-设备类型         CANN基础镜像版本     推理后端        模型           参考文件
+设备类型         CANN基础镜像版本     推理后端        模型           参考文件                            
 ============== ==================== ============== ============== ==============================================================
-A2              8.5.2                vLLM          Qwen3.5        `Dockerfile.ascend_8.5.2_a2_qwen3-5 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_8.5.2_a2_qwen3-5>`_
-A3              8.5.2                vLLM          Qwen3.5        `Dockerfile.ascend_8.5.2_a3_qwen3-5 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_8.5.2_a3_qwen3-5>`_
+A2              8.5.2                vLLM          Qwen3.5        `Dockerfile.ascend_8.5.2_a2_qwen3-5 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_8.5.2_a2_qwen3-5>`_   
+A3              8.5.2                vLLM          Qwen3.5        `Dockerfile.ascend_8.5.2_a3_qwen3-5 <https://github.com/volcengine/verl/blob/main/docker/ascend/Dockerfile.ascend_8.5.2_a3_qwen3-5>`_ 
 ============== ==================== ============== ============== ==============================================================
 
 
@@ -149,7 +149,7 @@ A3              8.5.2                vLLM          Qwen3.5        `Dockerfile.as
 
 .. code:: bash
 
-   # Navigate to the directory containing the Dockerfile
+   # Navigate to the directory containing the Dockerfile 
    cd {verl-root-path}/docker/ascend
 
    # Build the image

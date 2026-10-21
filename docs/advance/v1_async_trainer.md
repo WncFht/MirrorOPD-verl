@@ -13,16 +13,19 @@ Both modes use the V1 `TransferQueue`, asynchronous replay buffer, and partial r
 
 Set the mode with `trainer.v1.trainer_mode`.
 
-| Mode | Rollout resources | Typical use |
-| --- | --- | --- |
-| `sync` | Hybrid rollout replicas colocated with the trainer | Baseline PPO and workloads where strict synchronization is preferred |
-| `colocate_async` | Hybrid rollout replicas colocated with the trainer | Use warmup batches + partial rollout to accelerate. |
-| `separate_async` | Standalone rollout replicas only | Trainer GPUs never run an inference engine; separate resources without switch and offload costs. |
-| `separate_async` with switch | Standalone rollout replicas plus hybrid trainer replicas | Reduce trainer idle time when it's hard to set a perfect rollouter-trainer ratio. |
+
+| Mode                         | Rollout resources                                                  | Typical use                                                                                   |
+| ---------------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| `sync`                       | Hybrid rollout replicas colocated with the trainer                 | Baseline PPO and workloads where strict synchronization is preferred                          |
+| `colocate_async`             | Hybrid rollout replicas colocated with the trainer                 | Use warmup batches + partial rollout to accelerate.                                           |
+| `separate_async`             | Standalone rollout replicas only                                   | Trainer GPUs never run an inference engine; separate resources without switch and offload costs. |
+| `separate_async` with switch | Standalone rollout replicas plus hybrid trainer replicas           | Reduce trainer idle time when it's hard to set a perfect rollouter-trainer ratio.             |
+
 
 `colocate_async` and `separate_async` both enable partial-rollout through `FullyAsyncLLMServerClient`. If generation is aborted during a mode transition, completed tokens are retained and the remaining generation is retried. A resumed trajectory can therefore span multiple model versions.
 
-![v1_trainer_timeline](https://github.com/Begunner/verl-link/blob/main/v1_trainer.svg?raw=true)
+![v1_trainer_timeline](
+https://github.com/Begunner/verl-link/blob/main/v1_trainer.svg?raw=true)
 
 ## The V1 Training Loop
 
@@ -60,10 +63,12 @@ This avoids dropping long-running trajectories during rollout/trainer transition
 
 The V1 sampler controls staleness in model-version units:
 
-| Parameter | Default | Meaning |
-| --- | --- | --- |
-| `trainer.v1.sampler.max_off_policy_threshold` | `8` | Maximum model versions from first generation to being trained before staleness handling is triggered. `null` disables off-policy version control entirely: no samples are dropped or awaited for staleness |
-| `trainer.v1.sampler.max_off_policy_strategy` | `drop` | `drop` evicts stale prompt groups (for GRPO, one stale trajectory, the whole sample dropped); `wait` blocks for threshold-reaching in-flight groups instead of dropping them. Ignored when `max_off_policy_threshold` is `null` |
+
+| Parameter                                     | Default | Meaning                                                                                                                                                                      |
+| --------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `trainer.v1.sampler.max_off_policy_threshold` | `8`     | Maximum model versions from first generation to being trained before staleness handling is triggered. `null` disables off-policy version control entirely: no samples are dropped or awaited for staleness |
+| `trainer.v1.sampler.max_off_policy_strategy`  | `drop`  | `drop` evicts stale prompt groups (for GRPO, one stale trajectory, the whole sample dropped); `wait` blocks for threshold-reaching in-flight groups instead of dropping them. Ignored when `max_off_policy_threshold` is `null` |
+
 
 Monitor both forms of off-policy behavior:
 
@@ -105,6 +110,7 @@ For `N` mini-batches, this results in `N` `save_model_to_cpu` calls and `2 * (N 
 
 These transfers and old log prob computings are skipped when `algorithm.rollout_correction.bypass_mode=True`.
 
+
 ## Separate Async Step Switching (experimental)
 
 Enable step switching with:
@@ -113,11 +119,12 @@ Enable step switching with:
 trainer.v1.separate_async.hybrid_rollout.enable_switch=True
 ```
 
-`enable_switch` also _creates_ the hybrid replicas: without it, no inference engine exists on the training GPUs at all, so warmup and validation generation are served by the standalone pool alone.
+`enable_switch` also *creates* the hybrid replicas: without it, no inference engine exists on the training GPUs at all, so warmup and validation generation are served by the standalone pool alone.
 
 The switch addresses a specific idle window: after a PPO step finishes, the trainer may have to wait for standalone rollout to produce enough sampleable groups for the next step. During that window, the trainer's hybrid replicas can join the standalone load balancer and help generate samples.
 
-![separate_async_switch_timeline](https://github.com/Begunner/verl-link/blob/main/sepa_switch.svg?raw=true)
+![separate_async_switch_timeline](
+https://github.com/Begunner/verl-link/blob/main/sepa_switch.svg?raw=true)
 
 The upper timeline shows `separate_async` without switching; the lower timeline shows hybrid GPUs joining rollout during idle windows when switching is enabled.
 
@@ -147,15 +154,17 @@ The release interval applies in both directions and prevents noisy steps from ch
 
 All settings under `trainer.v1.separate_async.hybrid_rollout` are ignored unless `enable_switch=True`.
 
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `enable_switch` | `false` | Allow hybrid trainer replicas to help rollout between steps |
-| `switch_threshold_ratio` | `0.4` | Target sampleable fraction before hybrid replicas are reclaimed; must be in `(0, 1]` |
-| `adaptive_switch_threshold` | `true` | Adapt the reclaim threshold from observed trainer idle time |
-| `switch_threshold_step_up` | `0.05` | Ratio increase after sustained idle |
-| `switch_threshold_step_down` | `0.03` | Ratio decrease after sustained calm |
-| `switch_threshold_release_steps` | `2` | Consecutive idle or calm steps required before adjustment |
-| `switch_cost_window_size` | `3` | Number of recent transition costs used by the decision |
+
+| Parameter                        | Default | Description                                                                          |
+| -------------------------------- | ------- | ------------------------------------------------------------------------------------ |
+| `enable_switch`                  | `false` | Allow hybrid trainer replicas to help rollout between steps                          |
+| `switch_threshold_ratio`         | `0.4`   | Target sampleable fraction before hybrid replicas are reclaimed; must be in `(0, 1]` |
+| `adaptive_switch_threshold`      | `true`  | Adapt the reclaim threshold from observed trainer idle time                          |
+| `switch_threshold_step_up`       | `0.05`  | Ratio increase after sustained idle                                                  |
+| `switch_threshold_step_down`     | `0.03`  | Ratio decrease after sustained calm                                                  |
+| `switch_threshold_release_steps` | `2`     | Consecutive idle or calm steps required before adjustment                            |
+| `switch_cost_window_size`        | `3`     | Number of recent transition costs used by the decision                               |
+
 
 Temporarily, step switching cannot be combined with rollout PD disaggregation.
 
@@ -276,19 +285,26 @@ The three modes were compared over their first 150 steps with the same four-node
 - DAPO-Math-17k, max_prompt_length=2048, max_response_length=32768
 - Decoupled PPO enabled
 
-| Mode | Resource split | 150-step training time | Aggregate tokens/s | Mean response length |
-| --- | --- | --- | --- | --- |
-| `sync` | 4 hybrid | 22.79 h | 12,053 | 12,720 |
-| `colocate_async` | 4 hybrid | 14.72 h (-35.4%) | 18,852 (+56.4%) | 12,854 |
-| `separate_async` | 2 hybrid + 2 standalone | 14.10 h (-38.1%) | 18,829 (+56.2%) | 12,288 |
 
-![v1_modes_quality_step](https://github.com/Begunner/verl-link/blob/main/v1_trainer/v1_modes_quality_step.png?raw=true)
+| Mode             | Resource split          | 150-step training time | Aggregate tokens/s | Mean response length |
+| ---------------- | ----------------------- | ---------------------- | ------------------ | -------------------- |
+| `sync`           | 4 hybrid                | 22.79 h                | 12,053             | 12,720               |
+| `colocate_async` | 4 hybrid                | 14.72 h (-35.4%)       | 18,852 (+56.4%)    | 12,854               |
+| `separate_async` | 2 hybrid + 2 standalone | 14.10 h (-38.1%)       | 18,829 (+56.2%)    | 12,288               |
 
-![v1_modes_timing_components](https://github.com/Begunner/verl-link/blob/main/v1_trainer/v1_modes_timing_components.png?raw=true)
 
-![v1_modes_offpolicy](https://github.com/Begunner/verl-link/blob/main/v1_trainer/v1_modes_offpolicy.png?raw=true)
+![v1_modes_quality_step](
+https://github.com/Begunner/verl-link/blob/main/v1_trainer/v1_modes_quality_step.png?raw=true)
 
-![v1_modes_policy_alignment](https://github.com/Begunner/verl-link/blob/main/v1_trainer/v1_modes_policy_alignment.png?raw=true)
+![v1_modes_timing_components](
+https://github.com/Begunner/verl-link/blob/main/v1_trainer/v1_modes_timing_components.png?raw=true)
+
+![v1_modes_offpolicy](
+https://github.com/Begunner/verl-link/blob/main/v1_trainer/v1_modes_offpolicy.png?raw=true)
+
+![v1_modes_policy_alignment](
+https://github.com/Begunner/verl-link/blob/main/v1_trainer/v1_modes_policy_alignment.png?raw=true)
+
 
 ### Separate_async switching
 
@@ -300,13 +316,17 @@ The step switch was evaluated for the first 100 steps of two otherwise identical
 - DAPO-Math-17k, max_prompt_length=2048, max_response_length=32768
 - Decoupled PPO disabled
 
-| Mode | Resource split | 100-step training time | Aggregate tokens/s | Mean response length | Mean reward |
-| --- | --- | --- | --- | --- | --- |
-| `no-switch` | 2 hybrid + 1 standalone | 13.15 h | 14,604 | 13,343 | 0.7755 |
-| `switch` | 2 hybrid + 1 standalone | 11.79 h (-10.3%) | 16,445 (+12.6%) | 13,478 | 0.7762 |
 
-![switch_quality_step](https://github.com/Begunner/verl-link/blob/main/v1_trainer/switch_quality_step.png?raw=true)
+| Mode        | Resource split          | 100-step training time | Aggregate tokens/s | Mean response length | Mean reward |
+| ----------- | ----------------------- | ---------------------- | ------------------ | -------------------- | ----------- |
+| `no-switch` | 2 hybrid + 1 standalone | 13.15 h                | 14,604             | 13,343               | 0.7755      |
+| `switch`    | 2 hybrid + 1 standalone | 11.79 h (-10.3%)       | 16,445 (+12.6%)    | 13,478               | 0.7762      |
 
-![switch_timing_components](https://github.com/Begunner/verl-link/blob/main/v1_trainer/switch_timing_components.png?raw=true)
+![switch_quality_step](
+https://github.com/Begunner/verl-link/blob/main/v1_trainer/switch_quality_step.png?raw=true)
 
-![switch_offpolicy](https://github.com/Begunner/verl-link/blob/main/v1_trainer/switch_offpolicy.png?raw=true)
+![switch_timing_components](
+https://github.com/Begunner/verl-link/blob/main/v1_trainer/switch_timing_components.png?raw=true)
+
+![switch_offpolicy](
+https://github.com/Begunner/verl-link/blob/main/v1_trainer/switch_offpolicy.png?raw=true)

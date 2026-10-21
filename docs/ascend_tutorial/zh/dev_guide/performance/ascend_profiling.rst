@@ -275,10 +275,10 @@ Last updated: 07/13/2026.
 .. code-block:: diff
 
       class NPUWorker(WorkerBase):
-
+  
           def __init__(self, *args, **kwargs):
               # ... existing code ...
-
+  
   +           # profile采集
   +           import os
   +           import torch_npu
@@ -300,18 +300,18 @@ Last updated: 07/13/2026.
   +                   on_trace_ready=torch_npu.profiler.tensorboard_trace_handler(os.environ.get('ROLLOUT_PROFILE_PATH'), analyse_flag=True)  # 采集数据保存路径，是否在线解析
   +               )
   +               self.profiler_npu.start()
-
+  
               # ... existing code ...
-
+  
           def execute_model(self, scheduler_output=None, intermediate_tensors=None, **kwargs):
               # ... existing code ...
               output = self.model_runner.execute_model(scheduler_output,
                                                   intermediate_tensors)
-
+              
   +           import os
   +           if os.environ.get('ROLLOUT_PROFILE', "false") == "true":
   +               self.profiler_npu.step()  # 驱动 schedule，对部分decode step进行采集
-
+              
               # ... existing code ...
 
 **SGLang 引擎**
@@ -323,12 +323,12 @@ Last updated: 07/13/2026.
 
       # ... existing imports ...
   +   import torch_npu
-
+  
       class ModelRunner:
-
+  
           def __init__(self, *args, **kwargs):
               # ... existing init code ...
-
+              
   +           # profile采集
   +           import os
   +           import torch_npu
@@ -350,7 +350,7 @@ Last updated: 07/13/2026.
   +                   on_trace_ready=torch_npu.profiler.tensorboard_trace_handler(os.environ.get('ROLLOUT_PROFILE_PATH'), analyse_flag=True)  # 采集数据保存路径，是否在线解析
   +               )
   +               self.profiler_npu.start()
-
+  
           def forward(self, forward_batch, **kwargs):
               # ... existing code ...
 

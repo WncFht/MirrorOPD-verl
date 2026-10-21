@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-22",
+  "implementation_commits": [
+    "7eed88db9",
+    "4a70b9229",
+    "5edacea9b"
+  ],
+  "runs": [
+    {
+      "scope": "full_related_regression",
+      "passed": 328,
+      "seconds": 167.46,
+      "log": "outputs/metrics-implementation-20261022/regression-final.log",
+      "overlaps_other_batches": true
+    },
+    {
+      "scope": "final_boundary_tests",
+      "passed": 40,
+      "seconds": 40.3,
+      "log": "outputs/metrics-implementation-20261022/regression-boundaries.log",
+      "overlaps_other_batches": true
+    },
+    {
+      "scope": "vanilla_clip_and_canonical_summary_fixes",
+      "passed": 91,
+      "seconds": 23.09,
+      "log": "outputs/metrics-implementation-20261022/regression-final-fixes.log",
+      "overlaps_other_batches": true
+    }
+  ],
+  "cpu_only": true,
+  "real_distributed_backend": "Gloo, two processes",
+  "actual_optimizer": "CPU AdamW via BaseEngine/TrainingWorker/V1 logging, including one skipped update",
+  "wandb": "0.28.1 offline history and table readback",
+  "gpu_validation": "Not run; authorized GPUs 0-3 occupied; no other GPUs used",
+  "generated_configs": "All four reference configurations match native Python Hydra composition"
+}
