@@ -1,0 +1,222 @@
+{
+  "checked_at": {
+    "current_time": "2026-10-21 15:11:41 UTC"
+  },
+  "scope": "Read-only research of verl metric history, current PRs, training articles, and logging architecture; no training code changed.",
+  "pull_requests": [
+    {
+      "number": 1497,
+      "title": "[metrics] Add diversed reduce metrics method according to key name",
+      "state": "closed",
+      "draft": false,
+      "merged_at": "2025-05-14T08:12:12Z",
+      "updated_at": "2025-05-19T14:44:49Z",
+      "url": "https://github.com/verl-project/verl/pull/1497",
+      "head_commit": "66bab541385ca8a9a0e226534f027b39e078f224"
+    },
+    {
+      "number": 4778,
+      "title": "[worker, training_utils] fix: Engine Metric Aggregation",
+      "state": "closed",
+      "draft": false,
+      "merged_at": "2026-01-08T16:04:27Z",
+      "updated_at": "2026-02-05T05:43:02Z",
+      "url": "https://github.com/verl-project/verl/pull/4778",
+      "head_commit": "1d1ac3e6d94953c77a3850958af40b35f44b3270"
+    },
+    {
+      "number": 5203,
+      "title": "[worker, training_utils] fix: Metric Aggregation Across DP Ranks",
+      "state": "closed",
+      "draft": false,
+      "merged_at": "2026-02-05T06:43:40Z",
+      "updated_at": "2026-02-05T06:43:41Z",
+      "url": "https://github.com/verl-project/verl/pull/5203",
+      "head_commit": "9e75ad2c6446926b0051a6dbe809209fc467afd3"
+    },
+    {
+      "number": 6977,
+      "title": "[BREAKING][trainer] fix: separate_async should use the same step granularity with other trainers",
+      "state": "closed",
+      "draft": false,
+      "merged_at": "2026-07-08T09:44:35Z",
+      "updated_at": "2026-07-08T09:44:35Z",
+      "url": "https://github.com/verl-project/verl/pull/6977",
+      "head_commit": "1434f64b8d5821d45b92e3bc0c0a63788774092b"
+    },
+    {
+      "number": 5600,
+      "title": "[feat][training_utils] State-based metrics",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-09-21T11:35:01Z",
+      "url": "https://github.com/verl-project/verl/pull/5600",
+      "head_commit": "1d48866eae2332f78e1761bd0eaccd9dbb1954b8"
+    },
+    {
+      "number": 2308,
+      "title": "[training_utils] feat: impl a metrics class for recording metrics and support worker sync [WIP]",
+      "state": "open",
+      "draft": true,
+      "merged_at": null,
+      "updated_at": "2026-09-21T11:35:06Z",
+      "url": "https://github.com/verl-project/verl/pull/2308",
+      "head_commit": "8684755afda34025d2bd94e2dd500670f46f1a91"
+    },
+    {
+      "number": 4294,
+      "title": "[algo] fix: correctly aggregate metrics in actor/critic",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-09-21T11:35:03Z",
+      "url": "https://github.com/verl-project/verl/pull/4294",
+      "head_commit": "9fc627a07aaa4fe999f3becda23deb3093928709"
+    },
+    {
+      "number": 7772,
+      "title": "[trainer] fix: exclude all-masked rows from off-policy sequence metrics",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-09-21T11:34:55Z",
+      "url": "https://github.com/verl-project/verl/pull/7772",
+      "head_commit": "cedb109061e359c4c3f9ab6baf1c815b240446a7"
+    },
+    {
+      "number": 8025,
+      "title": "[training_utils, trainer, tests] feat: raw log-prob mismatch metrics for rollout vs actor",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-10-21T03:37:25Z",
+      "url": "https://github.com/verl-project/verl/pull/8025",
+      "head_commit": "fab0a7d8d1630cfbda4166c918ae66d12b5b775f"
+    },
+    {
+      "number": 8116,
+      "title": "[perf, trainer] feat: report opt-in update phase timing and lifecycle metrics",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-10-08T13:44:21Z",
+      "url": "https://github.com/verl-project/verl/pull/8116",
+      "head_commit": "9354b13eb7843557c9229909d5f242e6a09c1260"
+    },
+    {
+      "number": 8204,
+      "title": "[trainer] feat: record uid / data_source / index join keys in rollout jsonl",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-10-12T08:45:24Z",
+      "url": "https://github.com/verl-project/verl/pull/8204",
+      "head_commit": "9d861f717fe97ebd040862d3b9934662e8fb3c0b"
+    },
+    {
+      "number": 8214,
+      "title": "[trainer, cfg, doc] feat: support custom validation metrics",
+      "state": "closed",
+      "draft": true,
+      "merged_at": null,
+      "updated_at": "2026-10-12T13:57:38Z",
+      "url": "https://github.com/verl-project/verl/pull/8214",
+      "head_commit": "903e27233cbac177259a5f918300b89348778f05"
+    },
+    {
+      "number": 8303,
+      "title": "[trainer, cfg, doc] feat: add Bayes@N validation accuracy summaries",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-10-20T22:10:46Z",
+      "url": "https://github.com/verl-project/verl/pull/8303",
+      "head_commit": "8971a9ff7666dd2584484d3c8f042d3da4162457"
+    },
+    {
+      "number": 8315,
+      "title": "[rollout] feat: trace weight sync and rollout memory stages in RL-Insight",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-10-21T10:42:30Z",
+      "url": "https://github.com/verl-project/verl/pull/8315",
+      "head_commit": "4d6b3eb8606e24c1d70d648e92a1114129ec6c62"
+    },
+    {
+      "number": 5291,
+      "title": "[misc,trainer,rollout] feat: add Prometheus metrics logging to experiment tracking",
+      "state": "open",
+      "draft": false,
+      "merged_at": null,
+      "updated_at": "2026-09-21T11:35:02Z",
+      "url": "https://github.com/verl-project/verl/pull/5291",
+      "head_commit": "664b95c105838e4aad8b3c11b6edbe22385e9d7d"
+    }
+  ],
+  "references": [
+    "https://github.com/google-research/tuning_playbook",
+    "https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/",
+    "https://huggingface.co/blog/the_n_implementation_details_of_rlhf_with_ppo",
+    "https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/",
+    "https://thinkingmachines.ai/blog/on-policy-distillation/",
+    "https://andyljones.com/posts/rl-debugging.html",
+    "https://docs.ray.io/en/latest/rllib/metrics-logger.html",
+    "https://lightning.ai/docs/torchmetrics/stable/pages/implement.html",
+    "https://github.com/THUDM/slime/blob/a4202e0595467d9374d9a68d45a34f45c3f8d230/slime/observability/wandb_utils.py",
+    "https://github.com/NVIDIA-NeMo/RL/blob/f6d0c3d2d3d21a6dcc66e62aef090ed71596148a/nemo_rl/utils/logger.py",
+    "https://github.com/areal-project/AReaL/blob/18f5271f3bf4b78b2a82cf453bbaf75ee0bf8eb6/areal/utils/stats_tracker.py",
+    "https://github.com/verl-project/rl-insight"
+  ],
+  "local_code_commit": "f807da825",
+  "history_source": "outputs/opd-ablation-refresh-20261021/*/history-deduplicated.jsonl",
+  "history_fetch": {
+    "project": "wncfht/MirrorOPD-verl",
+    "fetched_at_utc": "2026-10-21T14:41:53.033944+00:00",
+    "method": "wandb.Api read-only; scan_history without sampling"
+  },
+  "runs": [
+    {
+      "group": "E2",
+      "run_id": "2fida8cj",
+      "unique_outer_steps": 32,
+      "confirmed_updates": 128,
+      "training_system_fields": 98,
+      "val_core_fields": 15,
+      "val_aux_fields": 378,
+      "validation_timing_fields": 1
+    },
+    {
+      "group": "E3",
+      "run_id": "o173jix1",
+      "unique_outer_steps": 32,
+      "confirmed_updates": 128,
+      "training_system_fields": 99,
+      "val_core_fields": 15,
+      "val_aux_fields": 378,
+      "validation_timing_fields": 1
+    },
+    {
+      "group": "E4",
+      "run_id": "84gchtdt",
+      "unique_outer_steps": 32,
+      "confirmed_updates": 128,
+      "training_system_fields": 98,
+      "val_core_fields": 15,
+      "val_aux_fields": 378,
+      "validation_timing_fields": 1
+    },
+    {
+      "group": "E5",
+      "run_id": "c7h61yid",
+      "unique_outer_steps": 32,
+      "confirmed_updates": 128,
+      "training_system_fields": 97,
+      "val_core_fields": 15,
+      "val_aux_fields": 378,
+      "validation_timing_fields": 1
+    }
+  ],
+  "inventory_semantics": "Presence of keys in unsampled, deduplicated history; 0 means not observed in this run, not an unsupported implementation or a numeric zero."
+}
