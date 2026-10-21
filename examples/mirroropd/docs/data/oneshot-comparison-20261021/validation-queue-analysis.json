@@ -1,0 +1,29 @@
+{
+  "valid-graph-w16-20261021-1": {
+    "sample_rounds": 109,
+    "mean_total_running": 36.06422018348624,
+    "max_total_running": 128.0,
+    "fraction_any_idle_replica": 0.1559633027522936,
+    "fraction_idle_replica_while_other_queued": 0,
+    "fraction_total_running_below16": 0.44954128440366975,
+    "fraction_all_waiting_empty": 0.8990825688073395
+  },
+  "valid-graph-w32-20261021-4": {
+    "sample_rounds": 58,
+    "mean_total_running": 64.43103448275862,
+    "max_total_running": 128.0,
+    "fraction_any_idle_replica": 0.1896551724137931,
+    "fraction_idle_replica_while_other_queued": 0,
+    "fraction_total_running_below16": 0.2413793103448276,
+    "fraction_all_waiting_empty": 0.6551724137931034
+  },
+  "valid-graph-w32-s64-20261021-3": {
+    "sample_rounds": 58,
+    "mean_total_running": 72.55172413793103,
+    "max_total_running": 256.0,
+    "fraction_any_idle_replica": 0.1724137931034483,
+    "fraction_idle_replica_while_other_queued": 0,
+    "fraction_total_running_below16": 0.1896551724137931,
+    "fraction_all_waiting_empty": 0.9310344827586207
+  }
+}
