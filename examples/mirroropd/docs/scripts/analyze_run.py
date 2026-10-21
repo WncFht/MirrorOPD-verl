@@ -186,9 +186,14 @@ def download_file(base_url, run_path, name, api_key):
         return response.read()
 
 
+def is_number(value):
+    """Accept finite observations; absent/null sparse history is not a measured zero."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+
+
 def summarize(directory, gpus, batch):
     rows = read_rows(directory / "history.jsonl")
-    train = [r for r in rows if "timing_s/step" in r and "training/global_step" in r]
+    train = [r for r in rows if is_number(r.get("timing_s/step")) and is_number(r.get("training/global_step"))]
     steady = [r for r in train if r["training/global_step"] > 1]
     if not steady:
         steady = train
@@ -196,19 +201,36 @@ def summarize(directory, gpus, batch):
     if train:
         result["last_observed_global_step"] = max(r["training/global_step"] for r in train)
         result["observed_training_seconds"] = sum(r["timing_s/step"] for r in train)
-        result["observed_testing_seconds"] = sum(r.get("timing_s/testing", 0) for r in rows)
+        result["observed_testing_seconds"] = sum(
+            r["timing_s/testing"] for r in rows if is_number(r.get("timing_s/testing"))
+        )
         total = result["observed_training_seconds"] + result["observed_testing_seconds"]
         result["testing_fraction_of_timed_work"] = result["observed_testing_seconds"] / total
     if steady:
         result["steady_steps"] = [r["training/global_step"] for r in steady]
         result["steady"] = {}
         for k in sorted({k for r in steady for k in r if not k.startswith(("val-", "_"))}):
-            vals = [r[k] for r in steady if isinstance(r.get(k), (int, float)) and math.isfinite(r[k])]
+            vals = [r[k] for r in steady if is_number(r.get(k))]
             if vals:
                 result["steady"][k] = {"mean": mean(vals), "median": median(vals), "min": min(vals), "max": max(vals)}
         step = mean(r["timing_s/step"] for r in steady)
-        timing_keys = ["gen", "old_log_prob", "adv", "update_actor", "update_weights"]
-        result["stage_seconds"] = {k: mean(r.get("timing_s/" + k, 0) for r in steady) for k in timing_keys}
+        # Only disjoint step components belong in this sum. rollout_batch overlaps gen;
+        # testing is outside step. Optional checkpoint time is amortized across steps.
+        timing_keys = [
+            "gen",
+            "teacher_forward",
+            "teacher_transfer",
+            "old_log_prob",
+            "adv",
+            "update_actor",
+            "save_checkpoint",
+            "update_weights",
+        ]
+        result["stage_seconds"] = {
+            k: sum(r["timing_s/" + k] for r in steady if is_number(r.get("timing_s/" + k))) / len(steady)
+            for k in timing_keys
+            if any(is_number(r.get("timing_s/" + k)) for r in steady)
+        }
         result["stage_seconds"]["other"] = step - sum(result["stage_seconds"].values())
         result["stage_percent"] = {k: v / step * 100 for k, v in result["stage_seconds"].items()}
         result["aggregate_valid_tokens_per_second"] = sum(r.get("perf/total_num_tokens", 0) for r in steady) / sum(
@@ -217,7 +239,7 @@ def summarize(directory, gpus, batch):
         result["normalized_valid_tokens_per_second"] = result["aggregate_valid_tokens_per_second"] / gpus
         result["prompts_per_minute"] = batch / step * 60
     for key in ["response_length/clip_ratio", "critic/score/mean"]:
-        vals = [r[key] for r in train if key in r]
+        vals = [r[key] for r in train if is_number(r.get(key))]
         if vals:
             result["pooled_" + key] = mean(vals)  # equal global batch size
     write_json(directory / "analysis.json", result)
