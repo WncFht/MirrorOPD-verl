@@ -114,6 +114,8 @@ class Metric:
 
     def extend(self, values: Union["Metric", list[Numeric]]) -> None:
         if isinstance(values, Metric):
+            if not hasattr(values, "aggregation"):
+                raise ValueError("Raw observations cannot merge into loss contributions")
             if values.aggregation != self.aggregation:
                 raise ValueError(f"Aggregation type mismatch: {self.aggregation} != {values.aggregation}")
             values = values.values
