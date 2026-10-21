@@ -368,7 +368,7 @@ def main():
             {k: v["matched_phases"] for k, v in alternate["runs"].items()},
         )
     with (args.out / "matched-steps.csv").open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=list(result["paired_steps"][0]))
+        writer = csv.DictWriter(f, fieldnames=list(result["paired_steps"][0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(result["paired_steps"])
     print(json.dumps(result["comparison"], indent=2))

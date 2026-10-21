@@ -1,0 +1,1072 @@
+{
+  "method": "sample means; system API sampling completeness unknown; timestamp-derived phase boundaries approximate",
+  "gpu_rows": 6858,
+  "stream_rows": 13717,
+  "first_gpu_timestamp": 1792440243.156602,
+  "last_gpu_timestamp": 1792543098.151473,
+  "median_gpu_sample_interval_seconds": 15.002620935440063,
+  "validation_timestamp_intervals": [
+    [
+      1792443206.9074366,
+      1792464407.6747298
+    ],
+    [
+      1792467302.562316,
+      1792487458.0547173
+    ],
+    [
+      1792490396.1856093,
+      1792510039.4685378
+    ],
+    [
+      1792512920.2884605,
+      1792534061.7972798
+    ]
+  ],
+  "phases": {
+    "all_observed": {
+      "sample_rows": 6858,
+      "per_gpu": {
+        "0": {
+          "gpu": {
+            "mean": 35.68474773986585,
+            "max": 100,
+            "min": 0,
+            "samples": 6858
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43271277510.9618,
+            "max": 43997462528,
+            "min": 1702100992,
+            "samples": 6858
+          },
+          "memoryAllocated": {
+            "mean": 50.374396973012246,
+            "max": 51.21978759765625,
+            "min": 1.9815063476562498,
+            "samples": 6858
+          },
+          "powerWatts": {
+            "mean": 145.19226319626713,
+            "max": 477.16,
+            "min": 81.531,
+            "samples": 6858
+          },
+          "temp": {
+            "mean": 35.487314085739285,
+            "max": 55,
+            "min": 29,
+            "samples": 6858
+          }
+        },
+        "1": {
+          "gpu": {
+            "mean": 34.32648002333042,
+            "max": 100,
+            "min": 0,
+            "samples": 6858
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43261904850.011086,
+            "max": 43961810944,
+            "min": 1702100992,
+            "samples": 6858
+          },
+          "memoryAllocated": {
+            "mean": 50.36348575960272,
+            "max": 51.17828369140624,
+            "min": 1.9815063476562498,
+            "samples": 6858
+          },
+          "powerWatts": {
+            "mean": 148.3127331583552,
+            "max": 508.22,
+            "min": 82.184,
+            "samples": 6858
+          },
+          "temp": {
+            "mean": 41.81291921843103,
+            "max": 61,
+            "min": 32,
+            "samples": 6858
+          }
+        },
+        "2": {
+          "gpu": {
+            "mean": 34.08923884514436,
+            "max": 100,
+            "min": 0,
+            "samples": 6858
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43276706315.1986,
+            "max": 44005851136,
+            "min": 1702100992,
+            "samples": 6858
+          },
+          "memoryAllocated": {
+            "mean": 50.380716932935876,
+            "max": 51.22955322265626,
+            "min": 1.9815063476562498,
+            "samples": 6858
+          },
+          "powerWatts": {
+            "mean": 145.70012058909302,
+            "max": 453.771,
+            "min": 80.238,
+            "samples": 6858
+          },
+          "temp": {
+            "mean": 41.31656459609216,
+            "max": 60,
+            "min": 32,
+            "samples": 6858
+          }
+        },
+        "3": {
+          "gpu": {
+            "mean": 34.606590842811315,
+            "max": 100,
+            "min": 0,
+            "samples": 6858
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43258212969.56547,
+            "max": 43963908096,
+            "min": 1702100992,
+            "samples": 6858
+          },
+          "memoryAllocated": {
+            "mean": 50.3591878451005,
+            "max": 51.18072509765626,
+            "min": 1.9815063476562498,
+            "samples": 6858
+          },
+          "powerWatts": {
+            "mean": 147.55546762904638,
+            "max": 520.292,
+            "min": 80.839,
+            "samples": 6858
+          },
+          "temp": {
+            "mean": 36.26246719160105,
+            "max": 54,
+            "min": 30,
+            "samples": 6858
+          }
+        },
+        "4": {
+          "gpu": {
+            "mean": 0.19597550306211722,
+            "max": 100,
+            "min": 0,
+            "samples": 6858
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35116416460.18781,
+            "max": 35330392064,
+            "min": 34228928512,
+            "samples": 6858
+          },
+          "memoryAllocated": {
+            "mean": 40.88088923621435,
+            "max": 41.12998962402344,
+            "min": 39.84771728515625,
+            "samples": 6858
+          },
+          "powerWatts": {
+            "mean": 95.71949591717701,
+            "max": 412.322,
+            "min": 81.024,
+            "samples": 6858
+          },
+          "temp": {
+            "mean": 30.476669582968796,
+            "max": 45,
+            "min": 29,
+            "samples": 6858
+          }
+        },
+        "5": {
+          "gpu": {
+            "mean": 0.1280256634587343,
+            "max": 96,
+            "min": 0,
+            "samples": 6858
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35283147383.30242,
+            "max": 35284254720,
+            "min": 34228928512,
+            "samples": 6858
+          },
+          "memoryAllocated": {
+            "mean": 41.074989576943246,
+            "max": 41.07627868652344,
+            "min": 39.84771728515625,
+            "samples": 6858
+          },
+          "powerWatts": {
+            "mean": 96.52887168270632,
+            "max": 426.144,
+            "min": 80.173,
+            "samples": 6858
+          },
+          "temp": {
+            "mean": 33.72411781860601,
+            "max": 49,
+            "min": 32,
+            "samples": 6858
+          }
+        },
+        "6": {
+          "gpu": {
+            "mean": 0.1216097987751531,
+            "max": 100,
+            "min": 0,
+            "samples": 6858
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35010824327.57772,
+            "max": 35011624960,
+            "min": 34228928512,
+            "samples": 6858
+          },
+          "memoryAllocated": {
+            "mean": 40.75796381521239,
+            "max": 40.75889587402344,
+            "min": 39.84771728515625,
+            "samples": 6858
+          },
+          "powerWatts": {
+            "mean": 101.22106167979003,
+            "max": 432.878,
+            "min": 83.052,
+            "samples": 6858
+          },
+          "temp": {
+            "mean": 34.74511519393409,
+            "max": 48,
+            "min": 34,
+            "samples": 6858
+          }
+        },
+        "7": {
+          "gpu": {
+            "mean": 0.1426071741032371,
+            "max": 100,
+            "min": 0,
+            "samples": 6858
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35013125751.60105,
+            "max": 35013722112,
+            "min": 34228928512,
+            "samples": 6858
+          },
+          "memoryAllocated": {
+            "mean": 40.76064302539575,
+            "max": 40.76133728027344,
+            "min": 39.84771728515625,
+            "samples": 6858
+          },
+          "powerWatts": {
+            "mean": 90.9539775444736,
+            "max": 420.004,
+            "min": 78.581,
+            "samples": 6858
+          },
+          "temp": {
+            "mean": 30.7169728783902,
+            "max": 44,
+            "min": 30,
+            "samples": 6858
+          }
+        }
+      }
+    },
+    "validation_approx": {
+      "sample_rows": 5476,
+      "per_gpu": {
+        "0": {
+          "gpu": {
+            "mean": 35.02118334550767,
+            "max": 100,
+            "min": 0,
+            "samples": 5476
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43878573617.74142,
+            "max": 43997462528,
+            "min": 43762581504,
+            "samples": 5476
+          },
+          "memoryAllocated": {
+            "mean": 51.08138269016219,
+            "max": 51.21978759765625,
+            "min": 50.94635009765624,
+            "samples": 5476
+          },
+          "powerWatts": {
+            "mean": 144.92251899196495,
+            "max": 277.598,
+            "min": 81.531,
+            "samples": 5476
+          },
+          "temp": {
+            "mean": 35.483016800584366,
+            "max": 47,
+            "min": 29,
+            "samples": 5476
+          }
+        },
+        "1": {
+          "gpu": {
+            "mean": 33.42330168005844,
+            "max": 100,
+            "min": 0,
+            "samples": 5476
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43870327092.172386,
+            "max": 43961810944,
+            "min": 43785650176,
+            "samples": 5476
+          },
+          "memoryAllocated": {
+            "mean": 51.07178247088146,
+            "max": 51.17828369140624,
+            "min": 50.97320556640626,
+            "samples": 5476
+          },
+          "powerWatts": {
+            "mean": 148.0872792184076,
+            "max": 330.395,
+            "min": 82.184,
+            "samples": 5476
+          },
+          "temp": {
+            "mean": 41.79620160701242,
+            "max": 58,
+            "min": 32,
+            "samples": 5476
+          }
+        },
+        "2": {
+          "gpu": {
+            "mean": 33.06884587289993,
+            "max": 100,
+            "min": 0,
+            "samples": 5476
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43882289973.29437,
+            "max": 44005851136,
+            "min": 43764678656,
+            "samples": 5476
+          },
+          "memoryAllocated": {
+            "mean": 51.0857090974394,
+            "max": 51.22955322265626,
+            "min": 50.94879150390626,
+            "samples": 5476
+          },
+          "powerWatts": {
+            "mean": 144.94742951059166,
+            "max": 284.774,
+            "min": 80.238,
+            "samples": 5476
+          },
+          "temp": {
+            "mean": 41.29309715120526,
+            "max": 60,
+            "min": 32,
+            "samples": 5476
+          }
+        },
+        "3": {
+          "gpu": {
+            "mean": 33.95854638422206,
+            "max": 100,
+            "min": 0,
+            "samples": 5476
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43865619606.34624,
+            "max": 43963908096,
+            "min": 43764678656,
+            "samples": 5476
+          },
+          "memoryAllocated": {
+            "mean": 51.06630223610699,
+            "max": 51.18072509765626,
+            "min": 50.94879150390626,
+            "samples": 5476
+          },
+          "powerWatts": {
+            "mean": 147.20110609934258,
+            "max": 294.397,
+            "min": 80.839,
+            "samples": 5476
+          },
+          "temp": {
+            "mean": 36.27337472607743,
+            "max": 51,
+            "min": 30,
+            "samples": 5476
+          }
+        },
+        "4": {
+          "gpu": {
+            "mean": 0,
+            "max": 0,
+            "min": 0,
+            "samples": 5476
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35098317838.21183,
+            "max": 35330392064,
+            "min": 35017916416,
+            "samples": 5476
+          },
+          "memoryAllocated": {
+            "mean": 40.85981966719478,
+            "max": 41.12998962402344,
+            "min": 40.76622009277344,
+            "samples": 5476
+          },
+          "powerWatts": {
+            "mean": 95.13474634769905,
+            "max": 113.165,
+            "min": 81.347,
+            "samples": 5476
+          },
+          "temp": {
+            "mean": 30.425493060628195,
+            "max": 32,
+            "min": 29,
+            "samples": 5476
+          }
+        },
+        "5": {
+          "gpu": {
+            "mean": 0,
+            "max": 0,
+            "min": 0,
+            "samples": 5476
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35284254720,
+            "max": 35284254720,
+            "min": 35284254720,
+            "samples": 5476
+          },
+          "memoryAllocated": {
+            "mean": 41.07627868652344,
+            "max": 41.07627868652344,
+            "min": 41.07627868652344,
+            "samples": 5476
+          },
+          "powerWatts": {
+            "mean": 95.8871638056976,
+            "max": 113.519,
+            "min": 80.173,
+            "samples": 5476
+          },
+          "temp": {
+            "mean": 33.643535427319215,
+            "max": 36,
+            "min": 32,
+            "samples": 5476
+          }
+        },
+        "6": {
+          "gpu": {
+            "mean": 0,
+            "max": 0,
+            "min": 0,
+            "samples": 5476
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35011624960,
+            "max": 35011624960,
+            "min": 35011624960,
+            "samples": 5476
+          },
+          "memoryAllocated": {
+            "mean": 40.75889587402344,
+            "max": 40.75889587402344,
+            "min": 40.75889587402344,
+            "samples": 5476
+          },
+          "powerWatts": {
+            "mean": 100.87272790357925,
+            "max": 118.095,
+            "min": 83.138,
+            "samples": 5476
+          },
+          "temp": {
+            "mean": 34.69357195032871,
+            "max": 36,
+            "min": 34,
+            "samples": 5476
+          }
+        },
+        "7": {
+          "gpu": {
+            "mean": 0,
+            "max": 0,
+            "min": 0,
+            "samples": 5476
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35013722112,
+            "max": 35013722112,
+            "min": 35013722112,
+            "samples": 5476
+          },
+          "memoryAllocated": {
+            "mean": 40.76133728027344,
+            "max": 40.76133728027344,
+            "min": 40.76133728027344,
+            "samples": 5476
+          },
+          "powerWatts": {
+            "mean": 90.2876011687363,
+            "max": 111.303,
+            "min": 78.581,
+            "samples": 5476
+          },
+          "temp": {
+            "mean": 30.66471877282688,
+            "max": 33,
+            "min": 30,
+            "samples": 5476
+          }
+        }
+      }
+    },
+    "training_between_steps_1_and_last": {
+      "sample_rows": 938,
+      "per_gpu": {
+        "0": {
+          "gpu": {
+            "mean": 39.96162046908316,
+            "max": 100,
+            "min": 0,
+            "samples": 938
+          },
+          "memoryAllocatedBytes": {
+            "mean": 39716436094.63539,
+            "max": 43997462528,
+            "min": 1702100992,
+            "samples": 938
+          },
+          "memoryAllocated": {
+            "mean": 46.236016897758695,
+            "max": 51.21978759765625,
+            "min": 1.9815063476562498,
+            "samples": 938
+          },
+          "powerWatts": {
+            "mean": 145.15393710021323,
+            "max": 477.16,
+            "min": 82.184,
+            "samples": 938
+          },
+          "temp": {
+            "mean": 35.38805970149254,
+            "max": 55,
+            "min": 31,
+            "samples": 938
+          }
+        },
+        "1": {
+          "gpu": {
+            "mean": 39.223880597014926,
+            "max": 100,
+            "min": 0,
+            "samples": 938
+          },
+          "memoryAllocatedBytes": {
+            "mean": 39681240607.65885,
+            "max": 43961810944,
+            "min": 1702100992,
+            "samples": 938
+          },
+          "memoryAllocated": {
+            "mean": 46.195043958326394,
+            "max": 51.17828369140624,
+            "min": 1.9815063476562498,
+            "samples": 938
+          },
+          "powerWatts": {
+            "mean": 148.7700330490405,
+            "max": 508.22,
+            "min": 83.556,
+            "samples": 938
+          },
+          "temp": {
+            "mean": 41.82515991471215,
+            "max": 61,
+            "min": 35,
+            "samples": 938
+          }
+        },
+        "2": {
+          "gpu": {
+            "mean": 39.050106609808104,
+            "max": 100,
+            "min": 0,
+            "samples": 938
+          },
+          "memoryAllocatedBytes": {
+            "mean": 39731773474.9339,
+            "max": 44005851136,
+            "min": 1702100992,
+            "samples": 938
+          },
+          "memoryAllocated": {
+            "mean": 46.25387195839302,
+            "max": 51.22955322265626,
+            "min": 1.9815063476562498,
+            "samples": 938
+          },
+          "powerWatts": {
+            "mean": 148.19533901918976,
+            "max": 453.771,
+            "min": 82.624,
+            "samples": 938
+          },
+          "temp": {
+            "mean": 41.3454157782516,
+            "max": 60,
+            "min": 34,
+            "samples": 938
+          }
+        },
+        "3": {
+          "gpu": {
+            "mean": 38.772921108742004,
+            "max": 100,
+            "min": 0,
+            "samples": 938
+          },
+          "memoryAllocatedBytes": {
+            "mean": 39684303612.17911,
+            "max": 43963908096,
+            "min": 1702100992,
+            "samples": 938
+          },
+          "memoryAllocated": {
+            "mean": 46.19860976489622,
+            "max": 51.18072509765626,
+            "min": 1.9815063476562498,
+            "samples": 938
+          },
+          "powerWatts": {
+            "mean": 150.05045095948827,
+            "max": 520.292,
+            "min": 82.032,
+            "samples": 938
+          },
+          "temp": {
+            "mean": 36.298507462686565,
+            "max": 54,
+            "min": 32,
+            "samples": 938
+          }
+        },
+        "4": {
+          "gpu": {
+            "mean": 1.3347547974413647,
+            "max": 100,
+            "min": 0,
+            "samples": 938
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35130504469.28785,
+            "max": 35330392064,
+            "min": 35017654272,
+            "samples": 938
+          },
+          "memoryAllocated": {
+            "mean": 40.89728983734717,
+            "max": 41.12998962402344,
+            "min": 40.76591491699219,
+            "samples": 938
+          },
+          "powerWatts": {
+            "mean": 98.39273454157782,
+            "max": 412.322,
+            "min": 81.024,
+            "samples": 938
+          },
+          "temp": {
+            "mean": 30.807036247334754,
+            "max": 45,
+            "min": 29,
+            "samples": 938
+          }
+        },
+        "5": {
+          "gpu": {
+            "mean": 0.8017057569296375,
+            "max": 96,
+            "min": 0,
+            "samples": 938
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35284244938.50746,
+            "max": 35284254720,
+            "min": 35283992576,
+            "samples": 938
+          },
+          "memoryAllocated": {
+            "mean": 41.07626729936742,
+            "max": 41.07627868652344,
+            "min": 41.07597351074219,
+            "samples": 938
+          },
+          "powerWatts": {
+            "mean": 99.12485607675906,
+            "max": 426.144,
+            "min": 80.257,
+            "samples": 938
+          },
+          "temp": {
+            "mean": 34.18123667377399,
+            "max": 49,
+            "min": 33,
+            "samples": 938
+          }
+        },
+        "6": {
+          "gpu": {
+            "mean": 0.7857142857142857,
+            "max": 100,
+            "min": 0,
+            "samples": 938
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35011615178.50746,
+            "max": 35011624960,
+            "min": 35011362816,
+            "samples": 938
+          },
+          "memoryAllocated": {
+            "mean": 40.75888448686742,
+            "max": 40.75889587402344,
+            "min": 40.75859069824219,
+            "samples": 938
+          },
+          "powerWatts": {
+            "mean": 103.48213113006396,
+            "max": 432.878,
+            "min": 83.052,
+            "samples": 938
+          },
+          "temp": {
+            "mean": 35.11407249466951,
+            "max": 48,
+            "min": 34,
+            "samples": 938
+          }
+        },
+        "7": {
+          "gpu": {
+            "mean": 0.9616204690831557,
+            "max": 100,
+            "min": 0,
+            "samples": 938
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35013712330.50746,
+            "max": 35013722112,
+            "min": 35013459968,
+            "samples": 938
+          },
+          "memoryAllocated": {
+            "mean": 40.76132589311742,
+            "max": 40.76133728027344,
+            "min": 40.76103210449219,
+            "samples": 938
+          },
+          "powerWatts": {
+            "mean": 94.34514072494669,
+            "max": 420.004,
+            "min": 78.581,
+            "samples": 938
+          },
+          "temp": {
+            "mean": 31.071428571428573,
+            "max": 44,
+            "min": 30,
+            "samples": 938
+          }
+        }
+      }
+    },
+    "after_last_training_row": {
+      "sample_rows": 430,
+      "per_gpu": {
+        "0": {
+          "gpu": {
+            "mean": 35.02325581395349,
+            "max": 100,
+            "min": 0,
+            "samples": 430
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43412581466.49303,
+            "max": 43823398912,
+            "min": 5103681536,
+            "samples": 430
+          },
+          "memoryAllocated": {
+            "mean": 50.53889642759811,
+            "max": 51.01715087890625,
+            "min": 5.94146728515625,
+            "samples": 430
+          },
+          "powerWatts": {
+            "mean": 148.7662604651163,
+            "max": 392.992,
+            "min": 81.861,
+            "samples": 430
+          },
+          "temp": {
+            "mean": 35.7906976744186,
+            "max": 50,
+            "min": 30,
+            "samples": 430
+          }
+        },
+        "1": {
+          "gpu": {
+            "mean": 35.2953488372093,
+            "max": 100,
+            "min": 0,
+            "samples": 430
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43444545964.65116,
+            "max": 43861147648,
+            "min": 5294522368,
+            "samples": 430
+          },
+          "memoryAllocated": {
+            "mean": 50.57610800099927,
+            "max": 51.06109619140625,
+            "min": 6.16363525390625,
+            "samples": 430
+          },
+          "powerWatts": {
+            "mean": 150.22033953488372,
+            "max": 412.056,
+            "min": 83.287,
+            "samples": 430
+          },
+          "temp": {
+            "mean": 42.086046511627906,
+            "max": 56,
+            "min": 34,
+            "samples": 430
+          }
+        },
+        "2": {
+          "gpu": {
+            "mean": 36.383720930232556,
+            "max": 100,
+            "min": 0,
+            "samples": 430
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43417790206.8093,
+            "max": 43825496064,
+            "min": 5292425216,
+            "samples": 430
+          },
+          "memoryAllocated": {
+            "mean": 50.544960199400435,
+            "max": 51.01959228515624,
+            "min": 6.16119384765625,
+            "samples": 430
+          },
+          "powerWatts": {
+            "mean": 149.9449976744186,
+            "max": 418.799,
+            "min": 81.108,
+            "samples": 430
+          },
+          "temp": {
+            "mean": 41.64418604651163,
+            "max": 54,
+            "min": 33,
+            "samples": 430
+          }
+        },
+        "3": {
+          "gpu": {
+            "mean": 33.96046511627907,
+            "max": 100,
+            "min": 0,
+            "samples": 430
+          },
+          "memoryAllocatedBytes": {
+            "mean": 43439132386.23256,
+            "max": 43863244800,
+            "min": 5292425216,
+            "samples": 430
+          },
+          "memoryAllocated": {
+            "mean": 50.5698057662609,
+            "max": 51.06353759765625,
+            "min": 6.16119384765625,
+            "samples": 430
+          },
+          "powerWatts": {
+            "mean": 146.7380534883721,
+            "max": 410.652,
+            "min": 82.355,
+            "samples": 430
+          },
+          "temp": {
+            "mean": 36.07906976744186,
+            "max": 49,
+            "min": 30,
+            "samples": 430
+          }
+        },
+        "4": {
+          "gpu": {
+            "mean": 0,
+            "max": 0,
+            "min": 0,
+            "samples": 430
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35330392064,
+            "max": 35330392064,
+            "min": 35330392064,
+            "samples": 430
+          },
+          "memoryAllocated": {
+            "mean": 41.12998962402344,
+            "max": 41.12998962402344,
+            "min": 41.12998962402344,
+            "samples": 430
+          },
+          "powerWatts": {
+            "mean": 96.37950697674418,
+            "max": 113.014,
+            "min": 81.616,
+            "samples": 430
+          },
+          "temp": {
+            "mean": 30.35348837209302,
+            "max": 32,
+            "min": 29,
+            "samples": 430
+          }
+        },
+        "5": {
+          "gpu": {
+            "mean": 0,
+            "max": 0,
+            "min": 0,
+            "samples": 430
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35284254720,
+            "max": 35284254720,
+            "min": 35284254720,
+            "samples": 430
+          },
+          "memoryAllocated": {
+            "mean": 41.07627868652344,
+            "max": 41.07627868652344,
+            "min": 41.07627868652344,
+            "samples": 430
+          },
+          "powerWatts": {
+            "mean": 98.07491395348838,
+            "max": 113.251,
+            "min": 80.503,
+            "samples": 430
+          },
+          "temp": {
+            "mean": 33.6953488372093,
+            "max": 37,
+            "min": 33,
+            "samples": 430
+          }
+        },
+        "6": {
+          "gpu": {
+            "mean": 0,
+            "max": 0,
+            "min": 0,
+            "samples": 430
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35011624960,
+            "max": 35011624960,
+            "min": 35011624960,
+            "samples": 430
+          },
+          "memoryAllocated": {
+            "mean": 40.75889587402344,
+            "max": 40.75889587402344,
+            "min": 40.75889587402344,
+            "samples": 430
+          },
+          "powerWatts": {
+            "mean": 99.90957906976745,
+            "max": 117.381,
+            "min": 83.052,
+            "samples": 430
+          },
+          "temp": {
+            "mean": 34.55813953488372,
+            "max": 36,
+            "min": 34,
+            "samples": 430
+          }
+        },
+        "7": {
+          "gpu": {
+            "mean": 0,
+            "max": 0,
+            "min": 0,
+            "samples": 430
+          },
+          "memoryAllocatedBytes": {
+            "mean": 35013722112,
+            "max": 35013722112,
+            "min": 35013722112,
+            "samples": 430
+          },
+          "memoryAllocated": {
+            "mean": 40.76133728027344,
+            "max": 40.76133728027344,
+            "min": 40.76133728027344,
+            "samples": 430
+          },
+          "powerWatts": {
+            "mean": 91.12810930232558,
+            "max": 292.582,
+            "min": 78.581,
+            "samples": 430
+          },
+          "temp": {
+            "mean": 30.56046511627907,
+            "max": 36,
+            "min": 30,
+            "samples": 430
+          }
+        }
+      }
+    }
+  }
+}
