@@ -9,7 +9,7 @@ GPU groups are physical indices, not an asserted Ray rank-to-device mapping.
 import argparse
 from statistics import mean, median
 
-from analyze_run import read_rows, write_json
+from analyze_run import is_number, read_rows, write_json
 
 
 def aggregate(rows):
@@ -17,7 +17,7 @@ def aggregate(rows):
     for gpu in range(8):
         out[str(gpu)] = {}
         for metric in ("gpu", "memoryAllocatedBytes", "memoryAllocated", "powerWatts", "temp"):
-            values = [r[f"system.gpu.{gpu}.{metric}"] for r in rows if f"system.gpu.{gpu}.{metric}" in r]
+            values = [r[f"system.gpu.{gpu}.{metric}"] for r in rows if is_number(r.get(f"system.gpu.{gpu}.{metric}"))]
             if values:
                 out[str(gpu)][metric] = {
                     "mean": mean(values),
@@ -36,9 +36,13 @@ def main():
     args = p.parse_args()
     history = read_rows(args.data / "history.jsonl")
     system = read_rows(args.data / "system-sampled.jsonl.gz")
-    gpu_rows = [r for r in system if "system.gpu.0.gpu" in r]
+    gpu_rows = [r for r in system if is_number(r.get("system.gpu.0.gpu"))]
     times = sorted(r["_timestamp"] for r in gpu_rows)
-    val = [(r["_timestamp"] - r["timing_s/testing"], r["_timestamp"]) for r in history if "timing_s/testing" in r]
+    val = [
+        (r["_timestamp"] - r["timing_s/testing"], r["_timestamp"])
+        for r in history
+        if is_number(r.get("timing_s/testing"))
+    ]
     first, last = min(r["_timestamp"] for r in history), max(r["_timestamp"] for r in history)
     is_val = lambda t: any(a <= t <= b for a, b in val)  # noqa: E731
     groups = {
