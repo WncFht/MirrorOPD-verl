@@ -463,6 +463,12 @@ def test_shared_launcher_rejects_incompatible_settings(tmp_path, overrides):
         ("E4", "current", "token_is"),
         ("E5", "current", "reinforce"),
         ("E6", "rollout", "reinforce"),
+        ("E7", "rollout", "token_ppo"),
+        ("E8", "rollout", "token_is"),
+        ("E9", "current", "token_ppo"),
+        ("E10", "current", "token_is"),
+        ("E11", "current", "reinforce"),
+        ("E12", "rollout", "reinforce"),
     ],
 )
 @pytest.mark.parametrize("execution_mode", ["shared_sync", "standalone"])
@@ -477,19 +483,31 @@ def test_ablation_launcher_composes_supported_modes(tmp_path, group, source, mod
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     assert cfg.distillation.distillation_loss.advantage_source == source
     assert cfg.distillation.distillation_loss.policy_loss_mode == mode
-    assert cfg.actor_rollout_ref.actor.ppo_epochs == 4
-    assert cfg.trainer.total_training_steps == cfg.trainer.save_freq == cfg.trainer.test_freq == 32
+    if int(group[1:]) <= 6:
+        assert cfg.actor_rollout_ref.actor.ppo_epochs == 4
+        assert cfg.trainer.total_training_steps == cfg.trainer.save_freq == cfg.trainer.test_freq == 32
+    else:
+        assert cfg.actor_rollout_ref.actor.ppo_epochs == 16
+        assert cfg.trainer.total_training_steps == 200
+        assert cfg.trainer.test_freq == 50
+        assert cfg.trainer.save_freq == 100
+    assert not cfg.trainer.val_before_train
+    assert cfg.trainer.v1.trainer_mode == "sync"
+    assert cfg.trainer.v1.sync.get("parameter_sync_step", 1) == 1
     assert cfg.actor_rollout_ref.actor.optim.lr_warmup_steps == 0
     assert not cfg.actor_rollout_ref.actor.checkpoint.async_save
 
 
-def test_ablation_launcher_accepts_budget_clip_epochs_and_final_overrides(tmp_path):
+@pytest.mark.parametrize("group", ["E1", "E10"])
+def test_ablation_launcher_accepts_budget_clip_epochs_and_final_overrides(tmp_path, group):
     script = ROOT / "examples/mirroropd/run_math_opd_ablation_fsdp2.sh"
     result = _launch(
         tmp_path,
-        command=["bash", str(script), "E1", "trainer.total_training_steps=7"],
+        command=["bash", str(script), group, "trainer.total_training_steps=7"],
         TOTAL_TRAINING_STEPS="200",
         PPO_EPOCHS="2",
+        TEST_FREQ="200",
+        SAVE_FREQ="200",
         OPD_CLIP_EPS="0.1",
     )
     command = shlex.split(result.stdout)
