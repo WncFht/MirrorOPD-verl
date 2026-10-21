@@ -5,7 +5,7 @@
 | 内容 | 入口 |
 | --- | --- |
 | 数学推导、论文证据、实现刷新时机、实验建议 | [固定前缀下的优势估计与重要性采样](2026-10-20-固定前缀下的优势估计与重要性采样.md) |
-| 实验开关、更新计数、checkpoint 与最小改动方案（待实施） | [优势与 IS 消融及更新计数实现方案](2026-10-21-优势与IS消融及更新计数实现方案.md) |
+| 实验开关、更新计数、checkpoint、启动入口与验证状态 | [优势与 IS 消融及更新计数实现方案](2026-10-21-优势与IS消融及更新计数实现方案.md) |
 | CPU 梯度验算 | [verify_fixed_prefix.py](scripts/verify_fixed_prefix.py) |
 | 固定版本上的验算结果 | [gradient-audit.json](data/gradient-audit.json) |
 

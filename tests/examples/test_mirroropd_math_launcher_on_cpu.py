@@ -452,3 +452,60 @@ def test_default_shared_pipeline_and_teacher_forward_controls(tmp_path):
 )
 def test_shared_launcher_rejects_incompatible_settings(tmp_path, overrides):
     assert _launch(tmp_path, **overrides).returncode == 2
+
+
+@pytest.mark.parametrize(
+    "group,source,mode",
+    [
+        ("E1", "rollout", "token_ppo"),
+        ("E2", "rollout", "token_is"),
+        ("E3", "current", "token_ppo"),
+        ("E4", "current", "token_is"),
+        ("E5", "current", "reinforce"),
+        ("E6", "rollout", "reinforce"),
+    ],
+)
+@pytest.mark.parametrize("execution_mode", ["shared_sync", "standalone"])
+def test_ablation_launcher_composes_supported_modes(tmp_path, group, source, mode, execution_mode):
+    script = ROOT / "examples/mirroropd/run_math_opd_ablation_fsdp2.sh"
+    result = _launch(tmp_path, command=["bash", str(script), group], DISTILLATION_EXECUTION_MODE=execution_mode)
+    assert result.returncode == 0, result.stderr
+    command = shlex.split(result.stdout)
+    with initialize_config_dir(config_dir=str(ROOT / "verl/trainer/config"), version_base=None):
+        cfg = compose(config_name="ppo_trainer", overrides=command[command.index("verl.trainer.main_ppo") + 1 :])
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    assert cfg.distillation.distillation_loss.advantage_source == source
+    assert cfg.distillation.distillation_loss.policy_loss_mode == mode
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 4
+    assert cfg.trainer.total_training_steps == cfg.trainer.save_freq == cfg.trainer.test_freq == 32
+    assert cfg.actor_rollout_ref.actor.optim.lr_warmup_steps == 0
+    assert not cfg.actor_rollout_ref.actor.checkpoint.async_save
+
+
+def test_ablation_launcher_accepts_budget_clip_epochs_and_final_overrides(tmp_path):
+    script = ROOT / "examples/mirroropd/run_math_opd_ablation_fsdp2.sh"
+    result = _launch(
+        tmp_path,
+        command=["bash", str(script), "E1", "trainer.total_training_steps=7"],
+        TOTAL_TRAINING_STEPS="200",
+        PPO_EPOCHS="2",
+        OPD_CLIP_EPS="0.1",
+    )
+    command = shlex.split(result.stdout)
+    with initialize_config_dir(config_dir=str(ROOT / "verl/trainer/config"), version_base=None):
+        cfg = compose(config_name="ppo_trainer", overrides=command[command.index("verl.trainer.main_ppo") + 1 :])
+    assert cfg.trainer.total_training_steps == 7
+    assert cfg.trainer.save_freq == cfg.trainer.test_freq == 200
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 2
+    loss = cfg.distillation.distillation_loss
+    assert loss.clip_ratio == loss.clip_ratio_low == loss.clip_ratio_high == 0.1
+
+
+def test_shared_launcher_remains_vanilla_and_validates_epoch_input(tmp_path):
+    cfg = _config(tmp_path)
+    assert cfg.distillation.distillation_loss.policy_loss_mode == "vanilla"
+    assert cfg.distillation.distillation_loss.advantage_source == "current"
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 1
+    result = _launch(tmp_path, PPO_EPOCHS="0")
+    assert result.returncode == 2 and "PPO_EPOCHS" in result.stderr

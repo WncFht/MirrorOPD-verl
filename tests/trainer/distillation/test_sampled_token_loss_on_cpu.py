@@ -281,6 +281,9 @@ def full_config():
         ("actor_rollout_ref.rollout.top_p", 0.9),
         ("actor_rollout_ref.rollout.calculate_log_probs", False),
         ("actor_rollout_ref.rollout.repetition_penalty", 1.2),
+        ("actor_rollout_ref.rollout.engine_kwargs.vllm.logits_processors", ["custom.Processor"]),
+        ("actor_rollout_ref.rollout.engine_kwargs.vllm.override_generation_config", {"min_p": 0.1}),
+        ("actor_rollout_ref.rollout.engine_kwargs.vllm.logprobs_mode", "raw_logprobs"),
         ("actor_rollout_ref.rollout.agent.default_agent_loop", "tool_agent"),
         ("algorithm.rollout_correction.rollout_is", "token"),
         ("algorithm.rollout_correction.bypass_mode", True),
@@ -296,3 +299,30 @@ def test_unsupported_training_configs_fail_without_restricting_vanilla(path, val
         validate_sampled_token_distillation(cfg)
     cfg.distillation.distillation_loss.policy_loss_mode = "vanilla"
     validate_sampled_token_distillation(cfg)
+
+
+@pytest.mark.parametrize("mode", ["token_ppo", "token_is", "reinforce"])
+@pytest.mark.parametrize("source", ["current", "rollout"])
+def test_gradient_is_invariant_to_dp_and_microbatch_partition(mode, source):
+    student = torch.tensor([[-0.4, -1.5], [-0.6, -2.0], [-1.2, -0.8], [-0.5, -0.7]], requires_grad=True)
+    teacher = torch.tensor([[-0.8, -1.0], [-0.9, -0.3], [-0.5, -1.3], [-1.1, -0.4]])
+    behavior = torch.tensor([[-0.7, -1.2], [-0.4, -1.0], [-1.5, -0.5], [-0.8, -0.2]])
+    mask = torch.tensor([[1, 1], [1, 0], [1, 1], [0, 0]], dtype=torch.bool)
+    cfg = loss_config(mode, source)
+    full, _ = evaluate(student, teacher, behavior, cfg, mask=mask)
+    expected = torch.autograd.grad(full, student, retain_graph=True)[0]
+    # Four one-sample micro-batches on two ranks; FSDP averages rank gradients.
+    partitioned = sum(
+        evaluate(
+            student[i : i + 1],
+            teacher[i : i + 1],
+            behavior[i : i + 1],
+            cfg,
+            mask=mask[i : i + 1],
+            dp_size=2,
+            token_count=5,
+        )[0]
+        / 2
+        for i in range(4)
+    )
+    torch.testing.assert_close(torch.autograd.grad(partitioned, student)[0], expected)
