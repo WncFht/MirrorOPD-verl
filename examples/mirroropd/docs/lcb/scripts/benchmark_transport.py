@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Compare the existing spawn+Manager wrapper with lightweight fresh workers.
+"""Measure the installed evaluator wrapper and the full-import AS limit pitfall.
 
 Only a hand-written addition program is executed. A dedicated, owned cgroup
-bounds the entire legacy process tree to 3 GiB and two CPU cores. No GPU work.
+bounds the entire measured process tree to 3 GiB and two CPU cores. No GPU work.
 """
 
 import argparse
@@ -40,7 +40,7 @@ def worker(args):
 
     report = {"import_s": time.monotonic() - started, "after_import": memory(), "runs": []}
     sample = {"input_output": json.dumps({"inputs": ["2 3", "-2 4"], "outputs": ["5", "2"]})}
-    if args.mode == "legacy":
+    if args.mode == "current":
         for _ in range(3):
             start = time.monotonic()
             result = _lcb_eval_single((sample, "a,b=map(int,input().split());print(a+b)", 6))
@@ -164,7 +164,7 @@ def main():
     if a.out is None:
         p.error("--out required")
     rs = []
-    for mode in ["legacy", "full_import_as4g"]:
+    for mode in ["current", "full_import_as4g"]:
         r = run(mode, a.cgroup_parent)
         rs.append(r)
         print(json.dumps(r), flush=True)
