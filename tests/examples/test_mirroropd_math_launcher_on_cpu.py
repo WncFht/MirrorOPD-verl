@@ -86,8 +86,9 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
 def test_default_graph_and_validation_window_keep_training_budget(tmp_path):
     cfg = _config(tmp_path)
     assert not cfg.actor_rollout_ref.rollout.enforce_eager
-    assert list(cfg.actor_rollout_ref.rollout.cudagraph_capture_sizes) == [1, 2, 4, 8, 16, 32]
-    assert cfg.data.val_batch_size == 32
+    assert list(cfg.actor_rollout_ref.rollout.cudagraph_capture_sizes) == [1, 2, 4, 8, 16, 32, 64]
+    assert cfg.actor_rollout_ref.rollout.max_num_seqs == 64
+    assert cfg.data.val_batch_size == 128
     assert cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
     assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
 
@@ -122,6 +123,8 @@ def test_domain_launchers_select_teacher_and_dataset_protocol(tmp_path, domain, 
     assert [Path(p).parent.name for p in cfg.data.val_files] == validation
     assert cfg.data.continuous_token.model_family == "deepseek"
     assert cfg.trainer.n_gpus_per_node == 8 and cfg.distillation.n_gpus_per_node == 0
+    assert cfg.data.val_batch_size == 32
+    assert cfg.actor_rollout_ref.rollout.max_num_seqs == 32
     if domain == "if":
         assert cfg.trainer.test_freq == -1
         assert not cfg.trainer.val_before_train
