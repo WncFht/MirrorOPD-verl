@@ -1,0 +1,75 @@
+{
+  "pid": 1813252,
+  "state": "completed",
+  "jobs": {
+    "kernel": {
+      "returncode": 0,
+      "wall_seconds": 239.75688789784908
+    },
+    "nsys-head": {
+      "returncode": 0,
+      "wall_seconds": 38.308617919683456
+    },
+    "pipeline-baseline": {
+      "returncode": 0,
+      "wall_seconds": 104.89267314970493
+    },
+    "pipeline-fused": {
+      "returncode": 0,
+      "wall_seconds": 90.74955739825964
+    },
+    "pipeline-agreement": {
+      "returncode": 0,
+      "wall_seconds": 2.013186067342758
+    },
+    "pipeline-chunk": {
+      "returncode": 0,
+      "wall_seconds": 88.71699142456055
+    },
+    "pipeline-no-checkpoint": {
+      "returncode": 0,
+      "wall_seconds": 90.72908273339272
+    },
+    "e2e-io0": {
+      "returncode": 0,
+      "wall_seconds": 838.4732661768794
+    },
+    "e2e-io1": {
+      "returncode": 0,
+      "wall_seconds": 824.0005260109901
+    },
+    "analysis": {
+      "returncode": 0,
+      "wall_seconds": 22.16573140025139
+    },
+    "report": {
+      "returncode": 0,
+      "wall_seconds": 2.015543542802334
+    }
+  },
+  "source_commit": "39d8be84a9ebc11d820ef45f995679d8a8df36bb",
+  "updated_at": "2026-10-22T20:36:00.291020+00:00",
+  "gpu_snapshot": {
+    "0": {
+      "uuid": "GPU-cb48e54c-5152-b595-cd31-bde2562e143e",
+      "memory_mib": 1,
+      "utilization": 0
+    },
+    "1": {
+      "uuid": "GPU-563e2493-6610-81f0-59fd-20324f42e71f",
+      "memory_mib": 1,
+      "utilization": 0
+    },
+    "2": {
+      "uuid": "GPU-ecc2a4cb-762d-1079-e78f-08790fec88ce",
+      "memory_mib": 1,
+      "utilization": 0
+    },
+    "3": {
+      "uuid": "GPU-8059084a-ff75-6775-1834-4f2c79cbfb7d",
+      "memory_mib": 1,
+      "utilization": 0
+    }
+  },
+  "current_job": "report"
+}
