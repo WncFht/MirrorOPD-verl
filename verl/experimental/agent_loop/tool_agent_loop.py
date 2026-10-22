@@ -86,6 +86,7 @@ class AgentData:
         self.response_logprobs: list[float] = []
         self.turn_scores: list[float] = []
         self.tool_rewards: list[float] = []
+        self.tool_call_count = 0
         self.user_turns = 0
         self.assistant_turns = 0
 
@@ -209,7 +210,13 @@ class ToolAgentLoop(AgentLoopBase):
             ),
             extra_fields=agent_data.extra_fields,
         )
-        output.extra_fields.update({"turn_scores": agent_data.turn_scores, "tool_rewards": agent_data.tool_rewards})
+        output.extra_fields.update(
+            {
+                "turn_scores": agent_data.turn_scores,
+                "tool_rewards": agent_data.tool_rewards,
+                "tool_call_counts": agent_data.tool_call_count,
+            }
+        )
         return output
 
     async def _handle_pending_state(self, agent_data: AgentData, sampling_params: dict[str, Any]) -> AgentState:
@@ -317,6 +324,7 @@ class ToolAgentLoop(AgentLoopBase):
         for tool_call in agent_data.tool_calls[: self.max_parallel_calls]:
             tasks.append(self._call_tool(tool_call, agent_data.tools_kwargs, agent_data))
 
+        agent_data.tool_call_count = getattr(agent_data, "tool_call_count", 0) + len(tasks)
         with simple_timer("tool_calls", agent_data.metrics):
             responses = await asyncio.gather(*tasks)
 

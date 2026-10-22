@@ -32,7 +32,8 @@ class Trainer(PPOTrainer):
 
 
 @pytest.mark.parametrize("interval,expected_quantiles", [(0, []), (1, [1, 2, 3, 4]), (2, [1, 2, 4])])
-def test_actual_updates_microbatches_scheduler_and_log_coordinates(monkeypatch, interval, expected_quantiles):
+@pytest.mark.parametrize("mode", ["token_is", "vanilla"])
+def test_actual_updates_microbatches_scheduler_and_log_coordinates(monkeypatch, interval, expected_quantiles, mode):
     monkeypatch.setattr(
         engine_workers,
         "get_torch_device",
@@ -67,10 +68,23 @@ def test_actual_updates_microbatches_scheduler_and_log_coordinates(monkeypatch, 
     engine.optimizer_step = optimizer_step
     scheduler = MagicMock(return_value=0.005)
     engine.lr_scheduler_step = scheduler
-    actor_cfg = SimpleNamespace(loss_agg_mode="token-mean", global_batch_info={}, loss_scale_factor=None)
+    actor_cfg = OmegaConf.create(
+        dict(
+            loss_agg_mode="token-mean",
+            global_batch_info={},
+            loss_scale_factor=None,
+            policy_loss={"loss_mode": "vanilla"},
+            clip_ratio=0.2,
+            clip_ratio_low=0.2,
+            clip_ratio_high=0.2,
+            clip_ratio_c=3.0,
+            entropy_coeff=0.0,
+            use_kl_loss=False,
+        )
+    )
     loss_cfg = DistillationLossConfig(
         loss_mode="k1",
-        policy_loss_mode="token_is",
+        policy_loss_mode=mode,
         advantage_source="current",
         use_task_rewards=False,
         use_policy_gradient=True,
@@ -100,6 +114,7 @@ def test_actual_updates_microbatches_scheduler_and_log_coordinates(monkeypatch, 
                     "teacher_logprobs": teacher,
                     "rollout_log_probs": data["behavior"][idx],
                     "old_log_probs": data["behavior"][idx],
+                    "advantages": torch.zeros_like(data["behavior"][idx]),
                 },
                 batch_size=[],
             )

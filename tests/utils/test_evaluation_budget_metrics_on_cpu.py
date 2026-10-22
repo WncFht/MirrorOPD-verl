@@ -127,3 +127,44 @@ def test_default_null_seed_and_numeric_predictions():
     assert not any("/pred/" in k for k in result)
     with pytest.raises(ValueError, match="metric_fields"):
         evaluation_metrics([], [], {}, {("m", "q"): 2}, source_fields={"m": "acc"})
+
+
+def test_tool_counts_and_finish_reasons_are_generation_metrics_not_scores():
+    result = evaluation_metrics(
+        ["m"] * 2,
+        ["q"] * 2,
+        {"acc": [1, 0], "tool_call_counts": [0, 2], "__tool_calls__": [0, 2], "__finish_reason__": ["stop", "length"]},
+    )
+    assert result["eval/m/generation/tool_calls/mean"] == 1
+    assert result["eval/m/generation/finish_reason/length_count"] == 1
+    assert not any("/tool_call_counts/" in k for k in result)
+
+
+def test_observed_budget_curves_have_explicit_failure_conditioning():
+    result = evaluation_metrics(["m"], ["q"], {"acc": [1], "pred": ["yes"]}, {("m", "q"): 2})
+    assert result["eval/m/acc/pass@1"] == 0.5
+    assert result["eval/m/acc_observed/pass@1"] == 1
+    assert result["eval/m/acc_observed/response_count"] == 1
+    assert result["eval/m/acc_observed/prompt_count"] == 1
+    assert "eval/m/acc_observed/pass@2" not in result
+    complete = evaluation_metrics(["m"], ["q"], {"acc": [1]})
+    assert not any("/acc_observed/" in k for k in complete)
+
+
+def test_unknown_tool_counts_are_not_zero_calls():
+    from verl.trainer.ppo.metric_utils import compute_tool_call_metrics
+
+    result = compute_tool_call_metrics([None, 0, 2, float("nan")])
+    assert result["tool_call_counts/known_fraction"] == 0.5
+    assert result["tool_call_counts/mean"] == 1
+    assert compute_tool_call_metrics([None]) == {"tool_call_counts/known_fraction": 0}
+
+
+def test_abstentions_keep_known_voting_curve_but_not_other_sources():
+    result = evaluation_metrics(
+        ["MATH-500"] * 2 + ["code"], ["a"] * 2 + ["b"], {"acc": [0, 0, 1], "pred": [None, None, None]}
+    )
+    assert result["eval/math500/acc/majority@2"] == 0
+    assert result["eval/math500/acc/voting_defined"] == 1
+    assert result["eval/code/acc/voting_defined"] == 0
+    assert "eval/code/acc/majority@1" not in result

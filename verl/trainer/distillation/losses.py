@@ -303,7 +303,13 @@ def distillation_loss(
             config=loss_config,
             rollout_is_weights=rollout_is_weights,
         )
-        pg_metrics = {f"distillation/{k[len('actor/') :]}": v for k, v in pg_metrics.items()}
+        count = response_mask.sum()
+        pg_metrics = {
+            f"distillation/{key.removeprefix('actor/')}": Observation.ratio(
+                torch.where(count > 0, torch.as_tensor(value, device=response_mask.device) * count, 0.0), count
+            )
+            for key, value in pg_metrics.items()
+        }
         distillation_metrics.update(pg_metrics)
     else:
         # Directly backpropagate distillation loss as a supervised loss, as in https://arxiv.org/abs/2306.13649.
@@ -325,6 +331,9 @@ def distillation_loss(
         if behavior is not None and behavior.is_nested:
             behavior = behavior.to_padded_tensor(0.0)
         teacher = no_padding_2_padding(data["teacher_logprobs"], data).squeeze(-1)
+        raw_mask = data.get("metrics_response_mask")
+        if raw_mask is not None and raw_mask.is_nested:
+            raw_mask = raw_mask.to_padded_tensor(False)
         distillation_metrics.update(
             update_observations(
                 log_prob,
@@ -333,6 +342,7 @@ def distillation_loss(
                 -distillation_losses.detach(),
                 response_mask,
                 component="distillation",
+                observation_mask=raw_mask,
                 teacher=teacher,
                 mode="vanilla",
                 quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),
@@ -361,9 +371,6 @@ def distillation_loss(
                 scale=scale,
             )
         )
-        raw_mask = data.get("metrics_response_mask")
-        if raw_mask is not None and raw_mask.is_nested:
-            raw_mask = raw_mask.to_padded_tensor(False)
         if raw_mask is not None:
             distillation_metrics.update(rejection_observations(response_mask, raw_mask))
         if rollout_is_weights is not None:

@@ -430,3 +430,15 @@ def test_critic_records_have_independent_real_counters_and_checkpoint(tmp_path):
     trainer.critic_optimizer_step = 999
     trainer._load_actor_optimizer_progress(tmp_path)
     assert trainer.critic_optimizer_step == 1 and trainer.critic_optimizer_step_attempts == 2
+
+
+def test_variance_proxy_uses_existing_opt_in_and_actual_task_signal():
+    trainer = _progress_trainer()
+    trainer.config.actor_rollout_ref.actor.calculate_sum_pi_squared = True
+    assert trainer._metrics_variance_enabled()
+    trainer.config.distillation = {"enabled": True, "distillation_loss": {"use_task_rewards": False}}
+    assert not trainer._metrics_variance_enabled()
+    trainer.config.distillation.distillation_loss.use_task_rewards = True
+    assert trainer._metrics_variance_enabled()
+    trainer.config.algorithm = {"rollout_correction": {"bypass_mode": True}}
+    assert not trainer._metrics_variance_enabled()
