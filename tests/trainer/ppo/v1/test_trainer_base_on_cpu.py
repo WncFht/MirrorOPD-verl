@@ -313,8 +313,8 @@ def test_actor_rpc_accumulates_once_and_finalizes_token_weighted_diagnostics():
     for _ in range(2):
         trainer._update_actor(SimpleNamespace(extra_info={}), metrics)
     assert trainer.actor_optimizer_step_attempts == 8 and trainer.actor_optimizer_step == 6
-    assert metrics["actor/distillation/ppo_clip_fraction"] == 1.5 / 7
-    assert "actor/distillation/token_observations" not in metrics
+    assert metrics["correction/behavior_ppo/batch_active_fraction"] == 1.5 / 7
+    assert "distill/token_observations" not in metrics
     assert not any(key.startswith("training/actor_optimizer") for key in metrics)
     assert trainer._actor_optimizer_metrics() == {
         "training/actor_optimizer_step_attempts": 8,
@@ -399,3 +399,34 @@ def test_metrics_quantile_interval_is_validated_before_logging(interval):
         pytest.raises(ValueError, match="nonnegative integer"),
     ):
         trainer.fit(None)
+
+
+def test_critic_records_have_independent_real_counters_and_checkpoint(tmp_path):
+    trainer = _progress_trainer()
+    trainer.use_critic = True
+    trainer.global_steps = 5
+    trainer.critic_optimizer_step_attempts = trainer.critic_optimizer_step = 0
+    trainer.config.critic = {"ppo_mini_batch_size": 2, "ppo_epochs": 1, "data_loader_seed": 42, "shuffle": False}
+    trainer.logger = MagicMock()
+    result = tu.get_tensordict(
+        {},
+        {
+            "metrics": {},
+            "optimizer_step_attempts": 2,
+            "optimizer_steps": 1,
+            "update_records": [
+                {"metrics": {"optim/critic/loss": 1.0}, "applied": True},
+                {"metrics": {"optim/critic/loss": 2.0}, "applied": False},
+            ],
+        },
+    )
+    trainer.critic_wg = SimpleNamespace(train_mini_batch=lambda batch: SimpleNamespace(get=lambda: result))
+    trainer._update_critic(SimpleNamespace(extra_info={}), {})
+    rows = [c.kwargs["data"] for c in trainer.logger.log.call_args_list]
+    assert [r["step/critic_update"] for r in rows] == [1, 2]
+    assert [r["step/critic_optimizer"] for r in rows] == [1, 1]
+    assert trainer.actor_optimizer_step == 0
+    trainer._save_actor_optimizer_progress(tmp_path)
+    trainer.critic_optimizer_step = 999
+    trainer._load_actor_optimizer_progress(tmp_path)
+    assert trainer.critic_optimizer_step == 1 and trainer.critic_optimizer_step_attempts == 2

@@ -204,7 +204,7 @@ def test_new_mode_skips_ordinary_ppo_diagnostics():
     assert torch.isfinite(loss) and "distillation/loss" in metrics
 
 
-def test_vanilla_output_gradient_and_diagnostics_remain_legacy():
+def test_vanilla_output_gradient_unchanged_and_unused_task_metrics_omitted():
     student = torch.tensor([[-0.7, -1.5]], requires_grad=True)
     output, data = inputs(student, torch.tensor([[-1.0, -1.0]]), student.detach())
     data["old_log_probs"] = student.detach().clone()
@@ -223,7 +223,7 @@ def test_vanilla_output_gradient_and_diagnostics_remain_legacy():
     with patch("verl.trainer.distillation.losses.ppo_loss", return_value=(torch.tensor(123.0), {"legacy": 1})) as ppo:
         actual, metrics = distillation_ppo_loss(actor, SimpleNamespace(distillation_loss=cfg), output, data)
     ppo.assert_called_once()
-    assert metrics["legacy"] == 1
+    assert "legacy" not in metrics
     torch.testing.assert_close(actual, expected)
     torch.testing.assert_close(
         torch.autograd.grad(actual, student, retain_graph=True)[0], torch.autograd.grad(expected, student)[0]

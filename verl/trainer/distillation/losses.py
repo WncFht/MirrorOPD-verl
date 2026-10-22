@@ -20,7 +20,12 @@ from tensordict import TensorDict
 
 from verl.base_config import BaseConfig
 from verl.trainer.ppo.core_algos import agg_loss, get_policy_loss_fn, kl_penalty
-from verl.trainer.ppo.policy_metrics import update_observations
+from verl.trainer.ppo.policy_metrics import (
+    applied_weight_observations,
+    ppo_clip_observations,
+    rejection_observations,
+    update_observations,
+)
 from verl.utils import tensordict_utils as tu
 from verl.utils.metric import AggregationType, Metric
 from verl.utils.metric.observations import Observation
@@ -118,8 +123,8 @@ def compute_distillation_loss_range(
     else:
         distillation_losses_response = distillation_losses[response_mask.bool()]
     return {
-        "distillation/loss_min": Metric(AggregationType.MIN, distillation_losses_response.min()),
-        "distillation/loss_max": Metric(AggregationType.MAX, distillation_losses_response.max()),
+        "distillation/loss_min": Observation.minimum(distillation_losses_response),
+        "distillation/loss_max": Observation.maximum(distillation_losses_response),
     }
 
 
@@ -220,7 +225,7 @@ def distillation_ppo_loss(
         policy_loss, policy_metrics = ppo_loss(config, model_output, data, dp_group)
         if not distillation_loss_config.use_task_rewards:
             policy_loss = 0.0
-            policy_metrics = {k: v for k, v in policy_metrics.items() if not isinstance(v, Observation)}
+            policy_metrics = {}  # The task objective is not used; do not publish its unused loss or advantage.
 
     # Combine distillation with policy loss
     policy_metrics.update(distill_metrics)
@@ -229,6 +234,10 @@ def distillation_ppo_loss(
     )
     policy_loss += distill_loss * distillation_loss_coef
     policy_metrics["distillation/loss"] = Metric(value=distill_loss, aggregation=AggregationType.SUM)
+    if distillation_loss_config.use_task_rewards:
+        policy_metrics["optim/actor/distillation_loss_weighted"] = Metric(
+            value=distill_loss.detach() * distillation_loss_coef, aggregation=AggregationType.SUM
+        )
 
     return policy_loss, policy_metrics
 
@@ -329,18 +338,41 @@ def distillation_loss(
                 quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),
             )
         )
-        # Same pre-dual-clip event as vanilla's existing pg_clipfrac, now
-        # weighted by the actual response-token count across partitions.
-        ratio = (log_prob.detach() - old_log_prob.detach()).clamp(-20, 20).exp()
-        advantage = -distillation_losses.detach()
         low = loss_config.clip_ratio if loss_config.clip_ratio_low is None else loss_config.clip_ratio_low
         high = loss_config.clip_ratio if loss_config.clip_ratio_high is None else loss_config.clip_ratio_high
-        active = -advantage * ratio.clamp(1 - low, 1 + high) > -advantage * ratio
-        valid = response_mask.bool()
-        finite = torch.isfinite(ratio[valid]).all() & torch.isfinite(advantage[valid]).all()
-        distillation_metrics["correction/anchor_ppo/active_fraction"] = Observation.mean(
-            torch.where(finite, active[valid].double(), float("nan"))
+        scale = torch.ones_like(log_prob)
+        if loss_agg_mode == "seq-mean-token-mean":
+            scale = scale / response_mask.sum(-1, keepdim=True).clamp_min(1)
+        elif loss_agg_mode == "seq-mean-token-sum-norm":
+            scale = scale / (config.loss_scale_factor or response_mask.shape[-1])
+        distillation_metrics.update(
+            ppo_clip_observations(
+                log_prob,
+                old_log_prob,
+                -distillation_losses.detach(),
+                response_mask,
+                low,
+                high,
+                loss_config.get("clip_ratio_c", 3.0),
+                prefix="correction/anchor_ppo/",
+                weights=rollout_is_weights,
+                scale=scale,
+            )
         )
+        raw_mask = data.get("metrics_response_mask")
+        if raw_mask is not None and raw_mask.is_nested:
+            raw_mask = raw_mask.to_padded_tensor(False)
+        if raw_mask is not None:
+            distillation_metrics.update(rejection_observations(response_mask, raw_mask))
+        if rollout_is_weights is not None:
+            distillation_metrics.update(
+                applied_weight_observations(
+                    rollout_is_weights,
+                    response_mask,
+                    response_mask if raw_mask is None else raw_mask,
+                    quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),
+                )
+            )
     return distillation_loss, distillation_metrics
 
 
@@ -464,25 +496,22 @@ def compute_forward_kl_topk(
         # Diagnostics for tracking teacher/student top-k overlap in OPD, following
         # "Rethinking On-Policy Distillation of Large Language Models" (arXiv:2604.13016):
         # overlap ratio and average teacher-token KL contribution on overlapped tokens.
-        overlap_metrics["distillation/overlap_ratio"] = (valid_overlap_count.float().mean() / k).item()
+        overlap_metrics["distillation/overlap_ratio"] = Observation.mean(valid_overlap_count.float() / k)
         overlap_position_mask = response_mask_bool & (overlap_count > 0)
-        if overlap_position_mask.any():
-            overlap_metrics["distillation/overlap_token_advantage"] = (
-                overlap_token_advantage[overlap_position_mask].mean().item()
-            )
-        else:
-            overlap_metrics["distillation/overlap_token_advantage"] = 0.0
+        overlap_metrics["distillation/overlap_token_advantage"] = Observation.mean(
+            overlap_token_advantage[overlap_position_mask]
+        )
 
     # Log amount of mass in the top-k log probabilities for both student and teacher.
     student_mass = student_mass[response_mask_bool]
     teacher_mass = teacher_mass[response_mask_bool]
     distillation_metrics = {
-        "distillation/student_mass": student_mass.mean().item(),
-        "distillation/student_mass_min": Metric(AggregationType.MIN, student_mass.min()),
-        "distillation/student_mass_max": Metric(AggregationType.MAX, student_mass.max()),
-        "distillation/teacher_mass": teacher_mass.mean().item(),
-        "distillation/teacher_mass_min": Metric(AggregationType.MIN, teacher_mass.min()),
-        "distillation/teacher_mass_max": Metric(AggregationType.MAX, teacher_mass.max()),
+        "distillation/student_mass": Observation.mean(student_mass),
+        "distillation/student_mass_min": Observation.minimum(student_mass),
+        "distillation/student_mass_max": Observation.maximum(student_mass),
+        "distillation/teacher_mass": Observation.mean(teacher_mass),
+        "distillation/teacher_mass_min": Observation.minimum(teacher_mass),
+        "distillation/teacher_mass_max": Observation.maximum(teacher_mass),
         **overlap_metrics,
     }
 
@@ -525,6 +554,6 @@ def compute_distillation_loss_reverse_kl_estimator(
     )
     # Since k1 can be negative, log the mean absolute loss.
     metrics = {
-        "distillation/abs_loss": Metric(AggregationType.MEAN, distillation_losses[response_mask_bool].abs().mean()),
+        "distillation/abs_loss": Observation.mean(distillation_losses[response_mask_bool].abs()),
     }
     return distillation_losses, metrics

@@ -239,8 +239,32 @@ class Tracking:
             if backend is not None and default_backend not in backend:
                 continue
             if "step/outer" in data and default_backend == "console":
-                if not any(k.startswith(("perf/", "rollout/", "eval/")) for k in data):
+                # Display selection does not change the payload sent to any other backend.
+                latest = getattr(self, "_console_latest_update", {})
+                for name, value in data.items():
+                    if name.startswith("optim/") and name.rsplit("/", 1)[-1] in ("loss", "lr", "grad_norm_preclip"):
+                        latest[name] = value
+                self._console_latest_update = latest
+                outer_row = "perf/timing/outer_step_seconds" in data or any(k.startswith("eval/") for k in data)
+                abnormal = any(
+                    (k.endswith(("/nonfinite", "_nonfinite", "/update_skipped"))) and v for k, v in data.items()
+                )
+                if not outer_row and not abnormal:
                     continue
+                selected = {
+                    k: v
+                    for k, v in data.items()
+                    if k.startswith("step/")
+                    or k in ("rollout/score_mean", "rollout/response_length_mean", "rollout/response_tokens")
+                    or k.startswith("perf/timing/")
+                    or (k.startswith("eval/") and k.endswith(("/mean", "/failed_count", "/response_count")))
+                    or (k.endswith(("/nonfinite", "_nonfinite", "/update_skipped")) and v)
+                }
+                selected.update(latest)
+                logger_instance.log(data=selected, step=step)
+                if outer_row:
+                    self._console_latest_update = {}
+                continue
             if "step/outer" in data and default_backend in ("tensorboard", "mlflow"):
                 by_step = {}
                 for name, value in data.items():

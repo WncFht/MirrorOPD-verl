@@ -22,6 +22,10 @@ def merge(parts):
 
 def observe(z, mask=None):
     mask = torch.ones_like(z, dtype=torch.bool) if mask is None else mask
+    # These partition tests treat each token as a complete one-token response.
+    # Sequence statistics are invariant to splitting rows, not splitting a response.
+    if z.ndim == 1:
+        z, mask = z.reshape(-1, 1), mask.reshape(-1, 1)
     return pair_observations(z, torch.zeros_like(z), mask, "current_behavior", quantile=True)
 
 
@@ -66,13 +70,15 @@ def test_padding_nan_is_excluded_but_valid_nan_is_observable():
     bad = merge([observe(x, torch.tensor([True, True, False]))])
     assert bad["policy/current_behavior/nonfinite_fraction"] == 0.5
     for key, value in bad.items():
-        if not key.endswith("nonfinite_fraction"):
+        if not key.endswith(("nonfinite_fraction", "valid_token_count")):
             assert math.isnan(value), key
+    assert bad["policy/current_behavior/valid_token_count"] == 1
 
 
 def test_empty_and_zero_denominators_are_undefined():
     result = merge([observe(torch.empty(0))])
-    assert all(math.isnan(value) for value in result.values())
+    assert all(math.isnan(value) for key, value in result.items() if not key.endswith("valid_token_count"))
+    assert result["policy/current_behavior/valid_token_count"] == 0
     assert math.isnan(Observation.ratio(torch.tensor(0.0), 0).aggregate())
 
 
@@ -223,3 +229,46 @@ def test_loss_contributions_and_raw_observations_cannot_share_a_reducer():
         Metric("sum", 1).append(Observation.mean(torch.tensor([2.0])))
     with pytest.raises(ValueError, match="reduction types"):
         Metric.aggregate_dp([Observation.mean(torch.tensor([2.0])), Metric("sum", 1)])
+
+
+def test_sequence_m2_uses_complete_responses_not_flat_tokens():
+    z = torch.tensor([[1.0, -1.0, 0.0], [1.0, 1.0, 1.0]], dtype=torch.float64)
+    mask = torch.tensor([[True, True, False], [True, True, True]])
+    result = merge([observe(z[:1], mask[:1]), observe(z[1:], mask[1:])])
+    assert_equal(result, merge([observe(z, mask)]))
+    assert result["policy/current_behavior/log_ratio_m2"] == 1
+    assert result["policy/current_behavior/sequence_log_ratio_m2"] == 4.5
+    assert result["policy/current_behavior/sequence_mean_log_ratio_m2"] == 0.5
+
+
+def test_std_and_log_moments_merge_with_empty_partitions():
+    z = torch.tensor([-2.0, 0.0, 3.0], dtype=torch.float64)
+    for kind, reference in [("log_mean", z.exp().mean()), ("log_std", z.exp().std(unbiased=False))]:
+        assert Observation.merge_partitions(
+            [
+                Observation.log_moment(z[:1], kind),
+                Observation.log_moment(z[1:], kind),
+                Observation.log_moment(z[:0], kind),
+            ]
+        ) == pytest.approx(reference.item())
+    assert Observation.merge_partitions([Observation.std(z[:1]), Observation.std(z[1:])]) == pytest.approx(
+        z.std(unbiased=False).item()
+    )
+    zero = torch.full((3,), -math.inf)
+    assert Observation.log_moment(zero, "log_mean").aggregate() == 0
+    assert Observation.ess(zero).is_empty()
+
+
+def test_applied_weights_and_rejection_use_original_denominator():
+    from verl.trainer.ppo.policy_metrics import applied_weight_observations, rejection_observations
+
+    w = torch.tensor([[2.0, 3.0], [4.0, 5.0]])
+    raw = torch.ones_like(w, dtype=torch.bool)
+    used = torch.tensor([[True, False], [False, False]])
+    result = merge([applied_weight_observations(w, used, raw), rejection_observations(used, raw)])
+    assert result["correction/is/applied_mean"] == 0.5
+    assert result["correction/is/applied_ess_fraction"] == pytest.approx(0.25)
+    assert result["correction/is/applied_ess"] == pytest.approx(1)
+    assert result["correction/rejection/token_fraction"] == 0.75
+    assert result["correction/rejection/sequence_any_fraction"] == 1
+    assert result["correction/rejection/sequence_all_fraction"] == 0.5

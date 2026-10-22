@@ -155,8 +155,11 @@ trainer:
   # Logging backends to use: "console", "wandb", etc.
   logger: ["console", "wandb"]
 
-  # Exact ratio p99 every N optimizer attempts (first attempt included); 0 disables it.
+  # Exact training quantiles every N optimizer attempts (first included); 0 disables them.
   metrics_quantile_interval: 8
+
+  # Local resampling budget for prompt CIs and subset majority estimates.
+  eval_metrics_resamples: 256
 
   # Number of generations to log during validation
   log_val_generations: 0
