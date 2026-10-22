@@ -1,0 +1,78 @@
+{
+  "gpu_runs": 7,
+  "responses": 35552,
+  "scope": "Validation only; frozen source and initial checkpoint; GPUs 0-3; each condition run once.",
+  "presets": {
+    "speed": {
+      "max_num_seqs": 128,
+      "gpu_memory_utilization": 0.65,
+      "max_num_batched_tokens": 8192,
+      "val_batch_size": null
+    },
+    "balanced": {
+      "max_num_seqs": 96,
+      "gpu_memory_utilization": 0.5,
+      "max_num_batched_tokens": 8192,
+      "val_batch_size": null
+    }
+  },
+  "full_comparisons": {
+    "valid-full-s128-u0.5-t8192-a": {
+      "time_reduction_percent_vs_previous_full64": 12.497457347887975,
+      "tps_gain_percent_vs_previous_full64": 16.25827915863627,
+      "memory_increase_gib_vs_previous_full64": 1.318359375,
+      "quality": {
+        "reference": "historical-full-s64-u0.5-t8192",
+        "mean_score": 0.787719298245614,
+        "paired_difference_pp": -0.31798245614035087,
+        "prompt_cluster_bootstrap_95_percentile_pp": [
+          -1.0197368421052633,
+          0.3837719298245614
+        ],
+        "prompts": 570,
+        "responses_per_prompt": 16
+      }
+    },
+    "valid-full-s128-u0.65-t8192-a": {
+      "time_reduction_percent_vs_previous_full64": 14.570406446444629,
+      "tps_gain_percent_vs_previous_full64": 16.54852642874456,
+      "memory_increase_gib_vs_previous_full64": 13.1875,
+      "quality": {
+        "reference": "historical-full-s64-u0.5-t8192",
+        "mean_score": 0.7925438596491228,
+        "paired_difference_pp": 0.1644736842105263,
+        "prompt_cluster_bootstrap_95_percentile_pp": [
+          -0.4605263157894736,
+          0.7785087719298246
+        ],
+        "prompts": 570,
+        "responses_per_prompt": 16
+      }
+    },
+    "valid-full-s96-u0.5-t8192-a": {
+      "time_reduction_percent_vs_previous_full64": 9.784445716529078,
+      "tps_gain_percent_vs_previous_full64": 10.790470438677424,
+      "memory_increase_gib_vs_previous_full64": 0.078125,
+      "quality": {
+        "reference": "historical-full-s64-u0.5-t8192",
+        "mean_score": 0.7921052631578948,
+        "paired_difference_pp": 0.1206140350877193,
+        "prompt_cluster_bootstrap_95_percentile_pp": [
+          -0.5704495614035086,
+          0.8114035087719298
+        ],
+        "prompts": 570,
+        "responses_per_prompt": 16
+      }
+    }
+  },
+  "checks": [
+    "all seven GPU runs exited zero",
+    "all expected prompts have exactly 16 outputs",
+    "all scoring failed_count fields are zero",
+    "config differences restricted to intended parameters and their interpolation",
+    "all launches pinned to GPUs 0-3 and val_only=True",
+    "figure audits passed and PNGs visually inspected",
+    "launcher Bash syntax and preset dry runs passed"
+  ]
+}

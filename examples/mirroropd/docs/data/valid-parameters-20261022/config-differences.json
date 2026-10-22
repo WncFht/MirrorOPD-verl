@@ -1,0 +1,333 @@
+{
+  "valid-full-s128-u0.5-t8192-a": {
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-full-s128-u0.5-t8192-a/training/checkpoints"
+    ],
+    "data.val_files": [
+      [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/MATH-500.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/AMC23.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/AIME25.parquet"
+      ],
+      [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/MATH-500/test.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AMC23/test.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AIME25/test.parquet"
+      ]
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-full-s128-u0.5-t8192-a"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-full-s128-u0.5-t8192-a/training/validation"
+    ],
+    "trainer.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-full-s128-u0.5-t8192-a"
+    ],
+    "actor_rollout_ref.rollout.max_num_seqs": [
+      64,
+      128
+    ],
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes": [
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128
+      ]
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/vt22-679092",
+      "/tmp/vt22-766414"
+    ]
+  },
+  "valid-full-s128-u0.65-t8192-a": {
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-full-s128-u0.65-t8192-a/training/checkpoints"
+    ],
+    "data.val_files": [
+      [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/MATH-500.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/AMC23.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/AIME25.parquet"
+      ],
+      [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/MATH-500/test.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AMC23/test.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AIME25/test.parquet"
+      ]
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-full-s128-u0.65-t8192-a"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-full-s128-u0.65-t8192-a/training/validation"
+    ],
+    "trainer.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-full-s128-u0.65-t8192-a"
+    ],
+    "actor_rollout_ref.rollout.standalone_gpu_memory_utilization": [
+      0.5,
+      0.65
+    ],
+    "actor_rollout_ref.rollout.max_num_seqs": [
+      64,
+      128
+    ],
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes": [
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128
+      ]
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/vt22-679092",
+      "/tmp/vt22-818766"
+    ],
+    "actor_rollout_ref.rollout.gpu_memory_utilization": [
+      0.5,
+      0.65
+    ]
+  },
+  "valid-full-s96-u0.5-t8192-a": {
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-full-s96-u0.5-t8192-a/training/checkpoints"
+    ],
+    "data.val_files": [
+      [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/MATH-500.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/AMC23.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/subsets/AIME25.parquet"
+      ],
+      [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/MATH-500/test.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AMC23/test.parquet",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AIME25/test.parquet"
+      ]
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-full-s96-u0.5-t8192-a"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-full-s96-u0.5-t8192-a/training/validation"
+    ],
+    "trainer.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-full-s96-u0.5-t8192-a"
+    ],
+    "actor_rollout_ref.rollout.max_num_seqs": [
+      64,
+      96
+    ],
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes": [
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        96
+      ]
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/vt22-679092",
+      "/tmp/vt22-900377"
+    ]
+  },
+  "valid-subset-s128-u0.5-t16384-a": {
+    "actor_rollout_ref.rollout.max_num_batched_tokens": [
+      8192,
+      16384
+    ],
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s128-u0.5-t16384-a/training/checkpoints"
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-subset-s128-u0.5-t16384-a"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s128-u0.5-t16384-a/training/validation"
+    ],
+    "trainer.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-subset-s128-u0.5-t16384-a"
+    ],
+    "actor_rollout_ref.rollout.max_num_seqs": [
+      64,
+      128
+    ],
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes": [
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128
+      ]
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/vt22-679092",
+      "/tmp/vt22-746338"
+    ]
+  },
+  "valid-subset-s128-u0.5-t8192-a": {
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s128-u0.5-t8192-a/training/checkpoints"
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-subset-s128-u0.5-t8192-a"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s128-u0.5-t8192-a/training/validation"
+    ],
+    "trainer.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-subset-s128-u0.5-t8192-a"
+    ],
+    "actor_rollout_ref.rollout.max_num_seqs": [
+      64,
+      128
+    ],
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes": [
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128
+      ]
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/vt22-679092",
+      "/tmp/vt22-720329"
+    ]
+  },
+  "valid-subset-s64-u0.5-t8192-a": {},
+  "valid-subset-s96-u0.5-t8192-a": {
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s96-u0.5-t8192-a/training/checkpoints"
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-subset-s96-u0.5-t8192-a"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s64-u0.5-t8192-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/valid-parameters-20261022/valid-subset-s96-u0.5-t8192-a/training/validation"
+    ],
+    "trainer.experiment_name": [
+      "valid-subset-s64-u0.5-t8192-a",
+      "valid-subset-s96-u0.5-t8192-a"
+    ],
+    "actor_rollout_ref.rollout.max_num_seqs": [
+      64,
+      96
+    ],
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes": [
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        96
+      ]
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/vt22-679092",
+      "/tmp/vt22-699809"
+    ]
+  }
+}
