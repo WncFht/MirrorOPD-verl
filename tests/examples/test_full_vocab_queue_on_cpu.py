@@ -46,6 +46,19 @@ def test_job_budget_and_seed_pairs():
     }
 
 
+def test_ray_socket_path_is_short_and_unique_for_long_run_names(tmp_path):
+    config = plan() | {"name": "full-vocab-production-validation-" * 8}
+    job = next(j for j in queue.make_jobs() if j["kind"] == "preflight")
+    paths = []
+    for _ in range(2):
+        command, _, _ = queue.public_launch(config, job, ROOT, tmp_path)
+        directory = next(a.split("=", 1)[1] for a in command if a.startswith("++ray_kwargs.ray_init._temp_dir="))
+        socket = directory + "/session_2026-10-23_05-38-05_782220_2147483647/sockets/plasma_store"
+        assert len(socket.encode()) <= 107
+        paths.append(directory)
+    assert paths[0] != paths[1]
+
+
 @pytest.mark.parametrize("method", ["vanilla", "full", "token_is"])
 def test_exact_launch_composes_and_uses_matched_budget(tmp_path, method):
     job = next(j for j in queue.make_jobs() if j["kind"] == "quality" and j["method"] == method and j["seed"] == 42)
