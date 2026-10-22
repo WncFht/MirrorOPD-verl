@@ -332,6 +332,23 @@ class FSDPEngine(BaseEngine):
                 use_fused_kernels=use_fused_kernels,
                 fused_kernels_backend=fused_kernels_backend,
             )
+            if self.model_config.enable_full_vocab:
+                from verl.models.transformers.full_vocab import install_full_vocab_adapter
+
+                if (
+                    module.config.model_type != "qwen2"
+                    or module.config.tie_word_embeddings
+                    or self.ulysses_sequence_parallel_size != 1
+                    or self.engine_config.strategy != "fsdp2"
+                    or self.model_config.lora_rank > 0
+                    or use_fused_kernels
+                    or not self.use_remove_padding
+                    or self.pad_to_length
+                ):
+                    raise ValueError(
+                        "full reverse KL requires untied Qwen2, FSDP2, SP=1, packed input, no LoRA/static pad/fused PPO"
+                    )
+                install_full_vocab_adapter(module)
 
             # some parameters may not in torch_dtype
             module.to(torch_dtype)
@@ -1168,6 +1185,58 @@ class EngineTrainModeCtx(BaseEngineCtx):
 
 @EngineRegistry.register(model_type="language_model", backend=["fsdp", "fsdp2"], device=["cuda", "npu"])
 class FSDPEngineWithLMHead(FSDPEngine):
+    def configure_full_vocab(self, config, teacher_path):
+        from verl.trainer.distillation.hidden import FrozenTeacherHead
+
+        self.full_vocab_config = config
+        self.full_vocab_teacher_head = FrozenTeacherHead(teacher_path)
+
+    def _full_vocab_output(self, micro_batch, model_inputs, teacher):
+        from verl.trainer.distillation.full_vocab import full_reverse_kl
+        from verl.trainer.distillation.hidden import prediction_positions
+
+        if not self.model_config.enable_full_vocab:
+            raise ValueError("full-vocab output requires the model head adapter")
+        if not _is_scalar_unit_temperature(tu.get(micro_batch, "temperature", 1.0)):
+            raise ValueError("full reverse KL currently requires temperature=1")
+        positions, packed = prediction_positions(micro_batch["input_ids"], micro_batch["loss_mask"])
+
+        def output(hidden, head):
+            selected = hidden.squeeze(0).index_select(0, packed)
+            if teacher:
+                # Free each micro-batch GPU result instead of retaining the full batch there.
+                chunks = selected.detach().cpu().split([len(p) for p in positions])
+                return {
+                    "teacher_hidden": torch.nested.as_nested_tensor(list(chunks), layout=torch.jagged),
+                    "teacher_positions": torch.nested.as_nested_tensor(
+                        [p.cpu() for p in positions], layout=torch.jagged
+                    ),
+                }
+            actual_positions = micro_batch["teacher_positions"]
+            if any(not torch.equal(a, b) for a, b in zip(positions, actual_positions.unbind(), strict=True)):
+                raise ValueError("Teacher hidden prediction positions do not match student loss mask")
+            teacher_hidden = micro_batch["teacher_hidden"].values()
+            weight = self.full_vocab_teacher_head.get(selected.device, selected.dtype)
+            config = self.full_vocab_config
+
+            def compute(h, w):
+                with torch.autocast(device_type=h.device.type, enabled=False):
+                    return full_reverse_kl(
+                        h,
+                        w.to(h.dtype),
+                        teacher_hidden.to(h.dtype),
+                        weight,
+                        backend=config.backend,
+                        token_chunk=config.token_chunk_size,
+                        vocab_chunk=config.vocab_chunk_size,
+                    )
+
+            # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
+            total = head(selected, full_vocab_callback=compute)
+            return {"full_kl_sum": total, "full_kl_count": packed.numel()}
+
+        return self.module(**model_inputs, use_cache=False, full_vocab_callback=output)
+
     def prepare_model_inputs(self, micro_batch: TensorDict):
         distillation_use_topk = tu.get_non_tensor_data(data=micro_batch, key="distillation_use_topk", default=False)
         score_centering = tu.get_non_tensor_data(data=micro_batch, key="score_centering", default=False)
@@ -1600,14 +1669,18 @@ class FSDPEngineWithLMHead(FSDPEngine):
             else torch.autocast(device_type=device_name, dtype=autocast_dtype)
         )
         with autocast_ctx:
-            raw_output = self.module(
-                **model_inputs,
-                use_cache=False,
-            )  # prevent model thinks we are generating
-
-            model_output = self.prepare_model_outputs(
-                output=raw_output, output_args=output_args, micro_batch=micro_batch, logits_processor_func=loss_function
-            )
+            full_teacher = tu.get_non_tensor_data(micro_batch, "full_vocab_teacher", default=False)
+            full_train = tu.get_non_tensor_data(micro_batch, "full_vocab_train", default=False)
+            if full_teacher or full_train:
+                model_output = self._full_vocab_output(micro_batch, model_inputs, teacher=full_teacher)
+            else:
+                raw_output = self.module(**model_inputs, use_cache=False)
+                model_output = self.prepare_model_outputs(
+                    output=raw_output,
+                    output_args=output_args,
+                    micro_batch=micro_batch,
+                    logits_processor_func=loss_function,
+                )
 
             if loss_function is not None:
                 loss, metrics = loss_function(
@@ -1620,7 +1693,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
 
             # Detach before this lands in forward_backward_batch's output_lst; see detach_tree.
             output = {
-                "model_output": detach_tree(model_output),
+                "model_output": {} if full_train else detach_tree(model_output),
                 "loss": loss.detach().item(),
                 "metrics": metrics,
             }

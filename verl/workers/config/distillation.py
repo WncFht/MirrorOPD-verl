@@ -33,6 +33,19 @@ logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "WARN"))
 
 
 @dataclass
+class FullVocabConfig(BaseConfig):
+    backend: str = "recompute"
+    token_chunk_size: int = 512
+    vocab_chunk_size: int = 8192
+
+    def __post_init__(self):
+        if self.backend not in ("dense", "recompute", "streaming", "precompute", "liger"):
+            raise ValueError(f"Unsupported full-vocab backend: {self.backend}")
+        if min(self.token_chunk_size, self.vocab_chunk_size) <= 0:
+            raise ValueError("full-vocab chunk sizes must be positive")
+
+
+@dataclass
 class DistillationLossConfig(BaseConfig):
     """Configuration for distillation loss settings.
 
@@ -70,6 +83,7 @@ class DistillationLossConfig(BaseConfig):
     """
 
     loss_mode: str = "k3"
+    full_vocab: FullVocabConfig = field(default_factory=FullVocabConfig)
     topk: Optional[int] = 128
     use_task_rewards: bool = True
     distillation_loss_coef: float = 1.0
@@ -110,6 +124,13 @@ class DistillationLossConfig(BaseConfig):
         from verl.trainer.distillation.losses import DistillationLossSettings, get_distillation_loss_settings
 
         self.loss_settings: DistillationLossSettings = get_distillation_loss_settings(self.loss_mode)
+        if isinstance(self.full_vocab, dict):
+            object.__setattr__(self, "full_vocab", FullVocabConfig(**self.full_vocab))
+        if self.loss_mode == "full_reverse_kl":
+            if self.use_policy_gradient or self.use_task_rewards or self.policy_loss_mode != "vanilla":
+                raise ValueError("full_reverse_kl requires direct loss, no task rewards and no sampled PG mode")
+            if self.loss_max_clamp is not None or self.log_prob_min_clamp is not None:
+                raise ValueError("full_reverse_kl requires unclamped loss and log probabilities")
 
         if self.policy_loss_mode not in ("vanilla", "token_ppo", "token_is", "reinforce"):
             raise ValueError(f"Unsupported distillation policy_loss_mode: {self.policy_loss_mode}")
@@ -310,7 +331,9 @@ class DistillationConfig(BaseConfig):
             if self.n_gpus_per_node != 0 or self.nnodes != 0:
                 raise ValueError("shared_sync requires distillation.n_gpus_per_node=0 and nnodes=0")
             loss = self.distillation_loss
-            if loss.loss_mode != "k1" or not loss.use_policy_gradient or loss.use_task_rewards:
+            if loss.loss_mode != "full_reverse_kl" and (
+                loss.loss_mode != "k1" or not loss.use_policy_gradient or loss.use_task_rewards
+            ):
                 raise ValueError("shared_sync currently requires k1 + policy gradient without task rewards")
             engine = self.shared_teacher
             required = {
@@ -332,6 +355,8 @@ class DistillationConfig(BaseConfig):
             if engine.qat.enable or not engine.infer_max_token_len_per_gpu or engine.infer_max_token_len_per_gpu < 1:
                 raise ValueError("shared_sync requires a positive teacher token budget and no QAT")
         self.teacher_models = self._resolve_teacher_models()
+        if self.distillation_loss.loss_mode == "full_reverse_kl" and self.execution_mode != "shared_sync":
+            raise ValueError("full_reverse_kl currently requires shared_sync")
         if self.execution_mode == "shared_sync":
             return
         teacher_world_size_sum = 0

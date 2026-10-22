@@ -448,6 +448,12 @@ class PPOTrainer(ABC):
         config = self.config.get("distillation")
         return is_distillation_enabled(config) and config.get("execution_mode", "standalone") == "shared_sync"
 
+    def _uses_full_vocab(self) -> bool:
+        return (
+            is_distillation_enabled(self.config.get("distillation"))
+            and OmegaConf.select(self.config, "distillation.distillation_loss.loss_mode") == "full_reverse_kl"
+        )
+
     @staticmethod
     def _validate_shared_model(model_config: HFModelConfig):
         """Restrict shared engines to dense text models with compatible class patches."""
@@ -469,6 +475,7 @@ class PPOTrainer(ABC):
             use_fused_kernels=False,
             enable_gradient_checkpointing=False,
             enable_activation_offload=False,
+            enable_full_vocab=self._uses_full_vocab(),
         )
         self._validate_shared_model(model_config)
         if model_config.tokenizer.get_vocab() != self.tokenizer.get_vocab():
@@ -677,8 +684,9 @@ class PPOTrainer(ABC):
             batch = self._compute_shared_teacher_log_probs(batch, timing_raw)
 
         # 4. compute old_log_prob
-        with marked_timer("old_log_prob", timing_raw, color="blue"):
-            batch = self._compute_old_log_prob(batch, metrics=metrics)
+        if not self._uses_full_vocab():
+            with marked_timer("old_log_prob", timing_raw, color="blue"):
+                batch = self._compute_old_log_prob(batch, metrics=metrics)
 
         # 5. [OPTIONAL] compute ref_log_prob
         if self.use_reference_policy:
@@ -1981,6 +1989,7 @@ class PPOTrainer(ABC):
                 "calculate_entropy": False,
                 "distillation_use_topk": False,
                 "disable_auto_offload": True,
+                "full_vocab_teacher": self._uses_full_vocab(),
             },
         )
         try:
@@ -2001,6 +2010,10 @@ class PPOTrainer(ABC):
         else:
             with marked_timer("teacher_transfer", timing_raw):
                 self.shared_teacher_wg.to("cpu", model=True, optimizer=False, grad=False)
+
+        if self._uses_full_vocab():
+            # Workers publish the compact hidden payload directly through the TQ bridge.
+            return batch
 
         data = tq.kv_batch_get(
             keys=batch.keys, partition_id=batch.partition_id, select_fields=["input_ids", "log_probs"]
@@ -2193,7 +2206,10 @@ class PPOTrainer(ABC):
         rollout_corr_config = self.config.algorithm.get("rollout_correction", None)
         bypass_recomputing_logprobs = rollout_corr_config and rollout_corr_config.get("bypass_mode", False)
         rollout_correction = (
-            rollout_corr_config is not None and "rollout_log_probs" in data.batch and not bypass_recomputing_logprobs
+            not self._uses_full_vocab()
+            and rollout_corr_config is not None
+            and "rollout_log_probs" in data.batch
+            and not bypass_recomputing_logprobs
         )
         if rollout_correction:
             if rollout_corr_config.get("rollout_rs"):
@@ -2287,6 +2303,7 @@ class PPOTrainer(ABC):
         )
         extra_info = {
             "calculate_entropy": calculate_entropy,
+            "full_vocab_train": self._uses_full_vocab(),
             "distillation_use_topk": distillation_use_topk,
             "distillation_only": distillation_only,
             "score_centering": score_centering,
