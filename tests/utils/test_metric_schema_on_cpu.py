@@ -118,3 +118,12 @@ def test_invalid_metrics_have_visible_events():
         "optim/actor/loss/nonfinite": 1,
         "policy/pair/m2/undefined": 1,
     }
+
+
+def test_helper_pair_names_follow_measurement_location():
+    from verl.utils.metric.schema import canonical_name
+
+    assert canonical_name("rollout_corr/k3_kl") == "policy/anchor_behavior/k3"
+    assert canonical_name("rollout_corr/k3_kl", role="actor") == "policy/current_behavior/local_summary/k3"
+    assert canonical_name("actor/reward_kl_penalty") == "policy/anchor_reference/reward_kl"
+    assert metric_axis("policy/anchor_reference/reward_kl") == "step/outer"

@@ -95,7 +95,10 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         metric_aggregation = AggregationType.MEAN
 
     metrics = {}
-    if tu.get_non_tensor_data(data, "collect_metrics", default=False):
+    if (
+        tu.get_non_tensor_data(data, "collect_metrics", default=False)
+        and config.policy_loss.get("loss_mode", "vanilla") != "bypass_mode"
+    ):
         from verl.trainer.ppo.policy_metrics import update_observations
 
         def padded(value):
@@ -141,6 +144,8 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
 
     policy_loss_fn = get_policy_loss_fn(loss_mode)
     policy_loss_kwargs = {"sc_correction": sc_outputs["sc_correction"]} if sc_outputs else {}
+    if loss_mode == "bypass_mode":
+        policy_loss_kwargs.update(collect_metrics=collect_metrics, metrics_quantile=quantile)
     pg_loss, pg_metrics = policy_loss_fn(
         old_log_prob=old_log_prob,
         log_prob=log_prob,
@@ -155,7 +160,9 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
     # AggregationType.MEAN for pg metrics: assumes policy_loss_fn normalizes by local_bsz/local_tokens
     # Ex: in compute_policy_loss_vanilla, pg_metrics are pg_clipfrac, ppo_kl, pg_clipfrac_lower
     pg_metrics = {
-        key: Observation.ratio(
+        key: value
+        if isinstance(value, Observation)
+        else Observation.ratio(
             torch.as_tensor(value, device=response_mask.device) * response_mask.sum(), response_mask.sum()
         )
         for key, value in pg_metrics.items()
