@@ -39,6 +39,18 @@ def test_full_reverse_kl_launcher(tmp_path, domain):
     assert not cfg.actor_rollout_ref.rollout.calculate_log_probs
 
 
+def test_full_reverse_kl_smoke_configuration(tmp_path):
+    cfg = _config(tmp_path, script=SCRIPT.parent / "smoke_full_reverse_kl.sh")
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    assert cfg.trainer.total_training_steps == 2
+    assert cfg.trainer.n_gpus_per_node == cfg.ray_kwargs.ray_init.num_gpus == 4
+    assert cfg.distillation.distillation_loss.full_vocab.backend == "precompute"
+    assert cfg.actor_rollout_ref.rollout.engine_kwargs.vllm.attention_config.backend == "TRITON_ATTN"
+    assert cfg.distillation.distillation_loss.full_vocab.async_write
+    assert cfg.distillation.distillation_loss.full_vocab.prefetch
+
+
 def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
     env = os.environ.copy()
     for name in (

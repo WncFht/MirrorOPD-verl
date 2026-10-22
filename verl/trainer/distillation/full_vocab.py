@@ -63,6 +63,7 @@ def row_statistics(hs, ws, ht, wt, token_chunk, vocab_chunk):
             kl[start:stop] = (p * (lp - lt)).sum(-1)
             log_zp[start:stop] = zp.logsumexp(-1)
             mean_gap[start:stop] = (p * (zp - zt)).sum(-1)
+            del zp, zt, lp, lt, p
         else:
             mp, mt = [torch.full((stop - start,), -torch.inf, device=hs.device, dtype=dtype) for _ in range(2)]
             sp, st, gap = [torch.zeros_like(mp) for _ in range(3)]
@@ -75,6 +76,7 @@ def row_statistics(hs, ws, ht, wt, token_chunk, vocab_chunk):
                 sp, st = ap * sp + ep.sum(-1), at * st + et.sum(-1)
                 gap = ap * gap + (ep * (zp - zt)).sum(-1)
                 mp, mt = np, nt
+                del zp, zt, ep, et
             log_zp[start:stop] = mp + sp.log()
             mean_gap[start:stop] = gap / sp
             kl[start:stop] = gap / sp - log_zp[start:stop] + mt + st.log()
@@ -110,7 +112,38 @@ class RecomputedKL(torch.autograd.Function):
                 dz = dz.to(hs.dtype)
                 add_product(dh[start:stop], dz, ws[v:end])
                 add_product(dw[v:end], dz.T, hs[start:stop])
+                del zp, zt, p, dz
         return dh.to(hs.dtype), dw.to(ws.dtype), None, None, None, None
+
+
+class CachedKL(RecomputedKL):
+    """Two-dimensional projection, current-token-block logits cache, backward recomputation."""
+
+    @staticmethod
+    def forward(ctx, hs, ws, ht, wt, token_chunk, vocab_chunk):
+        dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
+        n, vocab = len(hs), len(ws)
+        kl, log_zp, mean_gap = [torch.empty(n, device=hs.device, dtype=dtype) for _ in range(3)]
+        cache_p, cache_t = [torch.empty((min(token_chunk, n), vocab), device=hs.device, dtype=dtype) for _ in range(2)]
+        for start in range(0, n, token_chunk):
+            stop = min(start + token_chunk, n)
+            zp, zt = cache_p[: stop - start], cache_t[: stop - start]
+            for v in range(0, vocab, vocab_chunk):
+                end = min(v + vocab_chunk, vocab)
+                zp[:, v:end] = project(hs[start:stop], ws[v:end])
+                zt[:, v:end] = project(ht[start:stop], wt[v:end])
+            log_zp[start:stop] = zp.logsumexp(-1)
+            log_zt = zt.logsumexp(-1)
+            gap = torch.zeros(stop - start, device=hs.device, dtype=dtype)
+            for v in range(0, vocab, vocab_chunk):
+                end = min(v + vocab_chunk, vocab)
+                p = (zp[:, v:end] - log_zp[start:stop, None]).exp()
+                gap += (p * (zp[:, v:end] - zt[:, v:end])).sum(-1)
+            mean_gap[start:stop] = gap
+            kl[start:stop] = gap - log_zp[start:stop] + log_zt
+        ctx.save_for_backward(hs, ws, ht, wt, log_zp, mean_gap)
+        ctx.token_chunk, ctx.vocab_chunk = token_chunk, vocab_chunk
+        return kl
 
 
 class PrecomputedKL(torch.autograd.Function):
@@ -149,7 +182,7 @@ class PrecomputedKL(torch.autograd.Function):
 
 def full_reverse_kl(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192):
     """Return unnormalized sum; empty local ranks remain attached to both parameters."""
-    if backend not in ("dense", "recompute", "streaming", "precompute", "liger"):
+    if backend not in ("dense", "recompute", "cached", "streaming", "precompute", "liger"):
         raise ValueError(f"Unknown full reverse-KL backend: {backend}")
     if hs.ndim != 2 or ht.ndim != 2 or ws.ndim != 2 or wt.ndim != 2:
         raise ValueError("full KL expects 2-D hidden states and heads")
@@ -168,6 +201,8 @@ def full_reverse_kl(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, voc
         return RecomputedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk if backend == "streaming" else 0).sum()
     if backend == "precompute":
         return PrecomputedKL.apply(hs, ws, ht, wt, token_chunk)
+    if backend == "cached":
+        return CachedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk).sum()
     if backend == "liger":
         from liger_kernel.transformers.fused_linear_jsd import LigerFusedLinearJSD
 

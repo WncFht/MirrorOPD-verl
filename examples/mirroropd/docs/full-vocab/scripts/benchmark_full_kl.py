@@ -23,6 +23,9 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--tokens", nargs="+", type=int, default=[512, 4096])
     parser.add_argument("--chunk", type=int, default=512)
+    choices = ["dense", "recompute", "cached", "streaming", "precompute", "liger"]
+    parser.add_argument("--backends", nargs="+", choices=choices, default=choices)
+    parser.add_argument("--reference-backend", choices=choices, default="dense")
     args = parser.parse_args()
     torch.set_num_threads(4)
     torch.manual_seed(42)
@@ -33,11 +36,11 @@ def main():
         ht = torch.randn_like(hs)
         ws = (torch.randn(151936, 1536, device="cuda", dtype=torch.bfloat16) / 1536**0.5).requires_grad_()
         wt = torch.randn_like(ws) / 1536**0.5
-        exact = mean_kl(hs, ws, ht, wt, "dense", args.chunk)
+        exact = mean_kl(hs, ws, ht, wt, args.reference_backend, args.chunk)
         gradients = torch.autograd.grad(exact, (hs, ws))
         expected, expected_grad = exact.item(), [g.cpu() for g in gradients]
         del exact, gradients
-        for backend in ["dense", "recompute", "streaming", "precompute", "liger"]:
+        for backend in args.backends:
             fn = partial(mean_kl, hs, ws, ht, wt, backend, args.chunk)
             actual = fn()
             gradients = torch.autograd.grad(actual, (hs, ws))
@@ -61,6 +64,7 @@ def main():
         "chunk": args.chunk,
         "vocab": 151936,
         "hidden": 1536,
+        "reference_backend": args.reference_backend,
         "rows": rows,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

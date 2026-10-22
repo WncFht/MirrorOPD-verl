@@ -3,6 +3,10 @@
 set -eo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 export DOMAIN=${DOMAIN:-math}
+if [[ ${DISTILLATION_EXECUTION_MODE:-shared_sync} != shared_sync ]]; then
+    echo "Full reverse KL currently requires DISTILLATION_EXECUTION_MODE=shared_sync" >&2
+    exit 2
+fi
 FULL_KL_BACKEND=${FULL_KL_BACKEND:-recompute}
 FULL_KL_TOKEN_CHUNK=${FULL_KL_TOKEN_CHUNK:-512}
 FULL_KL_VOCAB_CHUNK=${FULL_KL_VOCAB_CHUNK:-8192}

@@ -74,6 +74,45 @@ def test_async_failures_are_not_lost():
     assert not any(t.name.startswith("full-kl-hidden") for t in threading.enumerate())
 
 
+def test_prefetch_reads_next_batch_while_current_is_consumed():
+    started = threading.Event()
+    release = threading.Event()
+    data = batch(["a", "b"])
+    tu.assign_non_tensor(data, full_vocab_train=True, full_vocab_prefetch=True)
+
+    def get(*, keys, **kwargs):
+        if keys == ["b"]:
+            started.set()
+            if not release.wait(timeout=5):
+                raise RuntimeError("prefetch consumer did not release read")
+        return payload(1)
+
+    try:
+        with HiddenBatchIO(data, [batch(["a"]), batch(["b"])], get=get, put=lambda **kw: None) as reader:
+            it = iter(reader)
+            next(it)
+            assert started.wait(timeout=5)
+            release.set()
+            next(it)
+            with pytest.raises(StopIteration):
+                next(it)
+    finally:
+        release.set()
+
+
+def test_prefetch_read_error_propagates():
+    data = batch(["a"])
+    tu.assign_non_tensor(data, full_vocab_train=True, full_vocab_prefetch=True)
+
+    def fail(**kwargs):
+        raise RuntimeError("read failed")
+
+    with pytest.raises(RuntimeError, match="read failed"):
+        with HiddenBatchIO(data, [data], get=fail, put=lambda **kw: None) as reader:
+            list(reader)
+    assert not any(t.name.startswith("full-kl-hidden") for t in threading.enumerate())
+
+
 @pytest.mark.parametrize("role", ["full_vocab_teacher", "full_vocab_train"])
 def test_index_metadata_retains_sample_keys(monkeypatch, role):
     meta = SimpleNamespace(size=2, partition_ids=["train", "train"], global_indexes=[8, 2], extra_info={role: True})

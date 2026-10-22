@@ -13,7 +13,7 @@ from verl.utils import tensordict_utils as tu
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig
 
 
-@pytest.mark.parametrize("backend", ["dense", "recompute", "streaming", "precompute"])
+@pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute"])
 @pytest.mark.parametrize("tokens", [0, 1, 7])
 def test_value_and_vjp(backend, tokens):
     torch.manual_seed(42)
