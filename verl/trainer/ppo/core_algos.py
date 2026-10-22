@@ -2427,6 +2427,8 @@ def compute_policy_loss_bypass_mode(
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
     sc_correction: Optional[torch.Tensor] = None,
+    collect_metrics: bool = False,
+    metrics_quantile: bool = False,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """Bypass mode policy loss supporting both REINFORCE and PPO-clip.
 
@@ -2553,6 +2555,62 @@ def compute_policy_loss_bypass_mode(
     else:
         raise ValueError(f"Invalid loss_type: {loss_type}. Must be 'reinforce' or 'ppo_clip'.")
 
+    if collect_metrics:
+        from verl.trainer.ppo.policy_metrics import (
+            applied_weight_observations,
+            ppo_clip_observations,
+            rejection_observations,
+            update_observations,
+        )
+
+        pg_metrics.update(
+            update_observations(
+                log_prob,
+                rollout_log_prob,
+                None,
+                advantages,
+                effective_mask,
+                component="task",
+                observation_mask=response_mask,
+                quantile=metrics_quantile,
+            )
+        )
+        if rollout_rs is not None:
+            pg_metrics.update(rejection_observations(effective_mask, response_mask))
+        if loss_type == "reinforce" and computed_is_weights is not None:
+            pg_metrics.update(
+                applied_weight_observations(
+                    computed_is_weights, effective_mask, response_mask, quantile=metrics_quantile
+                )
+            )
+        if loss_type == "ppo_clip":
+            low = config.clip_ratio if config.clip_ratio_low is None else config.clip_ratio_low
+            high = config.clip_ratio if config.clip_ratio_high is None else config.clip_ratio_high
+            scale = torch.ones_like(log_prob)
+            if loss_agg_mode == "seq-mean-token-mean":
+                scale = scale / effective_mask.sum(-1, keepdim=True).clamp_min(1)
+            elif loss_agg_mode == "seq-mean-token-sum-norm":
+                scale = scale / (config.get("loss_scale_factor") or effective_mask.shape[-1])
+            pg_metrics.update(
+                ppo_clip_observations(
+                    log_prob,
+                    rollout_log_prob,
+                    advantages,
+                    effective_mask,
+                    low,
+                    high,
+                    config.get("clip_ratio_c", 3.0),
+                    prefix="correction/task_ppo/",
+                    scale=scale,
+                )
+            )
+        if "actor/ppo_kl" in pg_metrics:
+            from verl.utils.metric.observations import Observation
+
+            value = pg_metrics.pop("actor/ppo_kl")
+            pg_metrics["policy/current_behavior/task_ppo_kl"] = Observation.ratio(
+                torch.as_tensor(value, device=effective_mask.device) * effective_mask.sum(), effective_mask.sum()
+            )
     # Merge rollout correction metrics
     pg_metrics.update(rollout_metrics)
 

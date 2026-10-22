@@ -272,3 +272,50 @@ def test_applied_weights_and_rejection_use_original_denominator():
     assert result["correction/rejection/token_fraction"] == 0.75
     assert result["correction/rejection/sequence_any_fraction"] == 1
     assert result["correction/rejection/sequence_all_fraction"] == 0.5
+
+
+@pytest.mark.parametrize("loss_type", ["reinforce", "ppo_clip"])
+def test_bypass_observations_follow_used_weights_without_changing_gradients(loss_type):
+    from omegaconf import OmegaConf
+
+    from verl.trainer.ppo.core_algos import compute_policy_loss_bypass_mode
+
+    config = OmegaConf.create(
+        {
+            "clip_ratio": 0.2,
+            "clip_ratio_low": 0.2,
+            "clip_ratio_high": 0.2,
+            "clip_ratio_c": 3.0,
+            "global_batch_info": {},
+            "policy_loss": {
+                "rollout_correction": {
+                    "loss_type": loss_type,
+                    "rollout_is": "token",
+                    "rollout_is_threshold": 2.0,
+                    "rollout_rs": None,
+                }
+            },
+        }
+    )
+    current = torch.tensor([[-1.0, -0.5], [-1.5, -2.0]], requires_grad=True)
+    behavior = torch.tensor([[-2.0, -1.0], [-1.0, -1.0]])
+    advantage = torch.tensor([[1.0, -1.0], [2.0, -2.0]])
+    mask = torch.ones_like(current, dtype=torch.bool)
+    outputs = []
+    for enabled in [False, True]:
+        loss, metrics = compute_policy_loss_bypass_mode(
+            behavior, current, advantage, mask, config=config, collect_metrics=enabled
+        )
+        grad = torch.autograd.grad(loss, current)[0]
+        outputs.append((loss.detach(), grad, metrics))
+    torch.testing.assert_close(outputs[0][0], outputs[1][0], rtol=0, atol=0)
+    torch.testing.assert_close(outputs[0][1], outputs[1][1], rtol=0, atol=0)
+    metrics = outputs[1][2]
+    assert not any(k.startswith("policy/current_anchor/") for k in metrics)
+    assert "policy/current_behavior/log_ratio_m2" in metrics
+    if loss_type == "reinforce":
+        expected = (current.detach() - behavior).exp().clamp(max=2).mean().item()
+        assert metrics["correction/is/applied_mean"].aggregate() == pytest.approx(expected)
+    else:
+        assert "correction/is/applied_mean" not in metrics  # no second IS weighting in PPO
+        assert "correction/task_ppo/active_fraction" in metrics

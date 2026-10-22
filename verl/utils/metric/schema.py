@@ -11,6 +11,8 @@ from .evaluation import dataset_slug, evaluation_metrics  # noqa: F401
 logger = logging.getLogger(__name__)
 FAMILIES = ("optim/", "policy/", "advantage/", "correction/", "distill/", "rollout/", "eval/", "perf/", "step/")
 OUTER_RENAMES = {
+    "actor/reward_kl_penalty": "policy/anchor_reference/reward_kl",
+    "actor/reward_kl_penalty_coeff": "rollout/reward_kl/coefficient",
     "validation/timing_s/rollout_batch": "perf/timing/validation_rollout_seconds",
     "actor/entropy": "policy/entropy/pre_update",
     "critic/score/mean": "rollout/score_mean",
@@ -109,16 +111,24 @@ def canonical_name(name, *, role=None):
     if name.startswith("variance_proxy/"):
         return "advantage/" + name
     if name.startswith("rollout_corr/"):
+        # Driver helpers see the full batch. In-loss legacy helpers see local
+        # micro-batches; their nonlinear summaries are not global raw moments.
+        # Keep that scope explicit alongside the mergeable applied_* observations.
         sub = name.split("/", 1)[1]
         if sub.startswith("rollout_is_"):
             sub = sub[len("rollout_is_") :]
-            return "correction/is/batch/" + {
+            return ("correction/is/local_summary/" if role == "actor" else "correction/is/batch/") + {
                 "eff_sample_size": "applied_ess_fraction",
                 "batch_norm_factor": "normalization_factor",
             }.get(sub, sub)
         if sub.startswith("rollout_rs_"):
-            return "correction/rejection/batch/" + sub[len("rollout_rs_") :]
-        return "policy/anchor_behavior/" + {"k3_kl": "k3", "kl": "sampled_reverse_log_ratio_mean"}.get(sub, sub)
+            return ("correction/rejection/local_summary/" if role == "actor" else "correction/rejection/batch/") + sub[
+                len("rollout_rs_") :
+            ]
+        return ("policy/current_behavior/local_summary/" if role == "actor" else "policy/anchor_behavior/") + {
+            "k3_kl": "k3",
+            "kl": "sampled_reverse_log_ratio_mean",
+        }.get(sub, sub)
     sub = name.removeprefix("actor/")
     if sub.startswith("distillation/"):
         stat = sub.split("/", 1)[1]
@@ -208,7 +218,7 @@ def metric_axis(name):
     ):
         return "step/update"
     if name.startswith("policy/") and not name.startswith(
-        ("policy/anchor_behavior/", "policy/entropy/pre_update", "policy/critic/")
+        ("policy/anchor_", "policy/entropy/pre_update", "policy/critic/")
     ):
         return "step/update"
     return "step/outer"

@@ -329,7 +329,7 @@ def distillation_loss(
             update_observations(
                 log_prob,
                 behavior,
-                old_log_prob,
+                old_log_prob if tu.get_non_tensor_data(data, "metrics_has_anchor", default=True) else None,
                 -distillation_losses.detach(),
                 response_mask,
                 component="distillation",
@@ -354,7 +354,9 @@ def distillation_loss(
                 low,
                 high,
                 loss_config.get("clip_ratio_c", 3.0),
-                prefix="correction/anchor_ppo/",
+                prefix="correction/anchor_ppo/"
+                if tu.get_non_tensor_data(data, "metrics_has_anchor", default=True)
+                else "correction/distillation_behavior_ppo/",
                 weights=rollout_is_weights,
                 scale=scale,
             )
