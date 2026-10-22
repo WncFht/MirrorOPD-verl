@@ -98,3 +98,33 @@ def test_semantic_attribution_handles_triton_driver_launch(monkeypatch):
     result = analyze.attribute(events)
     assert result["semantic_kernel_sum_ms"] == {"full_vocab/fused_kl": 3.0, "unattributed": 3.0}
     assert load("analyze").category("nvjet_tss_192x192_64x3_2x1_v_badd_coopB_NTN") == "GEMM"
+
+
+def test_allocator_requested_bytes_and_segment_replay():
+    module = load("memory_timeline")
+    snapshot = {
+        "segments": [
+            {
+                "device": 0,
+                "total_size": 1024,
+                "blocks": [
+                    {"state": "active_allocated", "size": 512, "requested_size": 20},
+                    {"state": "inactive", "size": 512, "requested_size": 0},
+                ],
+            }
+        ],
+        "device_traces": [
+            [
+                {"action": "segment_alloc", "size": 2048, "time_us": 0},
+                {"action": "alloc", "size": 100, "time_us": 100},
+                {"action": "free_requested", "size": 100, "time_us": 6000},
+                {"action": "free_completed", "size": 100, "time_us": 7000},
+                {"action": "segment_free", "size": 2048, "time_us": 11000},
+            ]
+        ],
+    }
+    rows = module.reconstruct(snapshot)
+    assert max(r["requested_live_gib"] for r in rows) == 120 / 2**30
+    assert max(r["reserved_gib"] for r in rows) == 3072 / 2**30
+    assert rows[-1]["requested_live_gib"] == 20 / 2**30
+    assert rows[-1]["reserved_gib"] == 1024 / 2**30
