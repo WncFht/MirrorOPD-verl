@@ -376,15 +376,36 @@ def test_vanilla_clip_observations_count_pre_dual_clip_events():
 
 
 def test_vanilla_raw_pair_retains_tokens_removed_by_rejection():
-    student = torch.tensor([[-0.7,-1.5]], requires_grad=True)
-    output,data = inputs(student,torch.tensor([[-1.,-1.]]),student.detach())
-    data['old_log_probs'] = student.detach().clone()
-    data['metrics_response_mask'] = torch.ones(1,2,dtype=torch.bool)
-    data['response_mask'] = torch.tensor([[False,True]])
-    tu.assign_non_tensor(data,collect_metrics=True,metrics_quantile=False)
-    actor = SimpleNamespace(loss_agg_mode='token-mean',global_batch_info={},loss_scale_factor=None)
-    with patch('verl.trainer.distillation.losses.ppo_loss',return_value=(torch.tensor(0.),{})):
-        _,metrics=distillation_ppo_loss(actor,SimpleNamespace(distillation_loss=loss_config('vanilla')),output,data)
-    assert metrics['policy/current_behavior/valid_token_count'].aggregate()==2
-    assert metrics['advantage/distillation/token_count'].aggregate()==1
-    assert metrics['correction/rejection/token_fraction'].aggregate()==0.5
+    student = torch.tensor([[-0.7, -1.5]], requires_grad=True)
+    output, data = inputs(student, torch.tensor([[-1.0, -1.0]]), student.detach())
+    data["old_log_probs"] = student.detach().clone()
+    data["metrics_response_mask"] = torch.ones(1, 2, dtype=torch.bool)
+    data["response_mask"] = torch.tensor([[False, True]])
+    tu.assign_non_tensor(data, collect_metrics=True, metrics_quantile=False)
+    actor = SimpleNamespace(loss_agg_mode="token-mean", global_batch_info={}, loss_scale_factor=None)
+    with patch("verl.trainer.distillation.losses.ppo_loss", return_value=(torch.tensor(0.0), {})):
+        _, metrics = distillation_ppo_loss(
+            actor, SimpleNamespace(distillation_loss=loss_config("vanilla")), output, data
+        )
+    assert metrics["policy/current_behavior/valid_token_count"].aggregate() == 2
+    assert metrics["advantage/distillation/token_count"].aggregate() == 1
+    assert metrics["correction/rejection/token_fraction"].aggregate() == 0.5
+
+
+def test_vanilla_accepts_nested_correction_weights_and_original_mask():
+    student = torch.tensor([[-0.7, -1.5]], requires_grad=True)
+    output, data = inputs(student, torch.tensor([[-1.0, -1.0]]), student.detach())
+    data["old_log_probs"] = student.detach().clone()
+    data["metrics_response_mask"] = torch.ones(1, 2, dtype=torch.bool)
+    data["response_mask"] = torch.tensor([[False, True]])
+    data["rollout_is_weights"] = torch.nested.nested_tensor([torch.tensor([0.5, 1.0])], layout=torch.jagged)
+    tu.assign_non_tensor(data, collect_metrics=True, metrics_quantile=False)
+    actor = SimpleNamespace(loss_agg_mode="token-mean", global_batch_info={}, loss_scale_factor=None)
+    with patch("verl.trainer.distillation.losses.ppo_loss", return_value=(torch.tensor(0.0), {})):
+        loss, metrics = distillation_ppo_loss(
+            actor, SimpleNamespace(distillation_loss=loss_config("vanilla")), output, data
+        )
+    assert torch.isfinite(loss)
+    assert metrics["correction/is/applied_mean"].aggregate() == 0.5
+    assert metrics["correction/is/applied_ess_fraction"].aggregate() == pytest.approx(0.5)
+    assert metrics["correction/rejection/token_fraction"].aggregate() == 0.5

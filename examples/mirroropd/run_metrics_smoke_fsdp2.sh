@@ -21,11 +21,27 @@ fi
 if [[ ! -f "$DATA_ROOT/math/DAPO/train.parquet" && -f "$WORKSPACE/MD-OPD/data/math/DAPO/train.parquet" ]]; then
     export DATA_ROOT="$WORKSPACE/MD-OPD/data"
 fi
-export EXPERIMENT_NAME=${EXPERIMENT_NAME:-metrics-v3-smoke-$(TZ=Asia/Shanghai date +%Y%m%d-%H%M%S)-$$}
+METRICS_SMOKE_MODE=${METRICS_SMOKE_MODE:-e3}
+SMOKE_OVERRIDES=()
+case "$METRICS_SMOKE_MODE" in
+    e3) DEFAULT_STEPS=2; DEFAULT_PPO_EPOCHS=4 ;;
+    is-rs)
+        DEFAULT_STEPS=1; DEFAULT_PPO_EPOCHS=2
+        SMOKE_OVERRIDES=(
+            distillation.distillation_loss.policy_loss_mode=vanilla
+            algorithm.rollout_correction.rollout_is=token
+            algorithm.rollout_correction.rollout_rs=token_k1
+            "algorithm.rollout_correction.rollout_rs_threshold='0.99_1.01'"
+            trainer.val_before_train=False trainer.test_freq=-1 trainer.log_val_generations=0
+        )
+        ;;
+    *) echo "METRICS_SMOKE_MODE must be e3 or is-rs" >&2; exit 2 ;;
+esac
+export EXPERIMENT_NAME=${EXPERIMENT_NAME:-metrics-v3-$METRICS_SMOKE_MODE-smoke-$(TZ=Asia/Shanghai date +%Y%m%d-%H%M%S)-$$}
 METRICS_RUN_ROOT=${METRICS_RUN_ROOT:-$SCRIPT_DIR/outputs/$EXPERIMENT_NAME}
 export RUN_DIR="$METRICS_RUN_ROOT/training"
-export TOTAL_TRAINING_STEPS=${TOTAL_TRAINING_STEPS:-2}
-export TRAIN_BATCH_SIZE=${TRAIN_BATCH_SIZE:-8} PPO_EPOCHS=${PPO_EPOCHS:-4}
+export TOTAL_TRAINING_STEPS=${TOTAL_TRAINING_STEPS:-$DEFAULT_STEPS}
+export TRAIN_BATCH_SIZE=${TRAIN_BATCH_SIZE:-8} PPO_EPOCHS=${PPO_EPOCHS:-$DEFAULT_PPO_EPOCHS}
 export TEST_FREQ=1 SAVE_FREQ=-1
 export MAX_PROMPT_LENGTH=${MAX_PROMPT_LENGTH:-2048}
 export MAX_RESPONSE_LENGTH=${MAX_RESPONSE_LENGTH:-512}
@@ -70,4 +86,4 @@ exec bash "$SCRIPT_DIR/run_math_opd_ablation_fsdp2.sh" E3 \
     "++ray_kwargs.ray_init.runtime_env.env_vars.WANDB_ENTITY='$WANDB_ENTITY'" \
     "++ray_kwargs.ray_init.runtime_env.env_vars.WANDB_BASE_URL='$WANDB_BASE_URL'" \
     "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='$METRICS_RUN_ROOT/metrics.jsonl'" \
-    "$@"
+    "${SMOKE_OVERRIDES[@]}" "$@"
