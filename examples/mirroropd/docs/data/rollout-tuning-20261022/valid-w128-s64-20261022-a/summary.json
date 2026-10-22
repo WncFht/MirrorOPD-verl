@@ -1,0 +1,48 @@
+{
+  "run_id": "egoefigi",
+  "testing_seconds": 507.30212818831205,
+  "rollout_span_seconds": 497.813888746,
+  "tokens": 12974433.0,
+  "output_tokens_per_second": 25575.356930463837,
+  "responses": 2048,
+  "prompt_groups": 128,
+  "responses_per_group": 16,
+  "score_mean": 0.7958984375,
+  "quality_metrics": {
+    "eval/math500/response_count": 1792,
+    "eval/math500/acc_mean": 0.8314732142857143,
+    "eval/aime25/failed_count": 0,
+    "eval/aime25/response_count": 128,
+    "eval/math500/failed_count": 0,
+    "eval/amc23/acc_mean": 0.6171875,
+    "eval/amc23/failed_count": 0,
+    "eval/aime25/acc_mean": 0.4765625,
+    "eval/amc23/response_count": 128
+  },
+  "engine_counters": {
+    "vllm:request_success_total": 2048.0,
+    "vllm:generation_tokens_total": 12974433.0,
+    "vllm:request_generation_tokens_sum": 12974433.0,
+    "vllm:num_preemptions_total": 0.0
+  },
+  "max_engine_waiting": 420.0,
+  "max_kv_fraction": 0.6018922413272272,
+  "gpu_busy_mean": 90.76096033402922,
+  "gpu_memory_mean_gib": 41.93474806624315,
+  "gpu_memory_max_gib": 41.94610595703125,
+  "gpu_probe_rows": 1916,
+  "decode_tail_samples": [
+    {
+      "window_responses": 2048,
+      "completion_90_to_100_seconds": 164.24382162094116
+    }
+  ],
+  "queue_samples": {
+    "count": 209,
+    "active_mean": 176.23444976076556,
+    "fraction_all_waiting_empty": 0.40669856459330145,
+    "fraction_active_lt16": 0.12440191387559808,
+    "fraction_any_idle": 0.12440191387559808
+  },
+  "wall_seconds": 768.0288393497467
+}

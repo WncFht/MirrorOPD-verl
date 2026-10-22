@@ -1,0 +1,127 @@
+{
+  "valid-w128-s32-20261022-a": {
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w32-s32-20261022-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w128-s32-20261022-a/training/checkpoints"
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-w32-s32-20261022-a",
+      "valid-w128-s32-20261022-a"
+    ],
+    "data.val_batch_size": [
+      32,
+      128
+    ],
+    "trainer.experiment_name": [
+      "valid-w32-s32-20261022-a",
+      "valid-w128-s32-20261022-a"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w32-s32-20261022-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w128-s32-20261022-a/training/validation"
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/rt22-v32s32-a",
+      "/tmp/rt22-v128s32-a"
+    ]
+  },
+  "valid-w128-s64-20261022-a": {
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w32-s32-20261022-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w128-s64-20261022-a/training/checkpoints"
+    ],
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes": [
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ]
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-w32-s32-20261022-a",
+      "valid-w128-s64-20261022-a"
+    ],
+    "data.val_batch_size": [
+      32,
+      128
+    ],
+    "trainer.experiment_name": [
+      "valid-w32-s32-20261022-a",
+      "valid-w128-s64-20261022-a"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w32-s32-20261022-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w128-s64-20261022-a/training/validation"
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/rt22-v32s32-a",
+      "/tmp/rt22-v128s64-a"
+    ],
+    "actor_rollout_ref.rollout.max_num_seqs": [
+      32,
+      64
+    ]
+  },
+  "valid-w128-s64-20261022-b": {
+    "trainer.default_local_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w32-s32-20261022-a/training/checkpoints",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w128-s64-20261022-b/training/checkpoints"
+    ],
+    "actor_rollout_ref.rollout.cudagraph_capture_sizes": [
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ]
+    ],
+    "actor_rollout_ref.rollout.trace.experiment_name": [
+      "valid-w32-s32-20261022-a",
+      "valid-w128-s64-20261022-b"
+    ],
+    "data.val_batch_size": [
+      32,
+      128
+    ],
+    "trainer.experiment_name": [
+      "valid-w32-s32-20261022-a",
+      "valid-w128-s64-20261022-b"
+    ],
+    "trainer.validation_data_dir": [
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w32-s32-20261022-a/training/validation",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w128-s64-20261022-b/training/validation"
+    ],
+    "ray_kwargs.ray_init._temp_dir": [
+      "/tmp/rt22-v32s32-a",
+      "/tmp/rt22-v128s64-b"
+    ],
+    "actor_rollout_ref.rollout.max_num_seqs": [
+      32,
+      64
+    ]
+  },
+  "valid-w32-s32-20261022-a": {}
+}
