@@ -9,10 +9,10 @@
 | 内容 | 唯一维护位置 |
 | --- | --- |
 | 符号及理论对应 | [统一符号](../符号约定.md) |
-| KL 数值、baseline、直接梯度及 detach 推导 | [计算图与估计器](../opd-objective/2026-10-21-Reverse-KL实验排序与Top-k支持集.md#2-full-vocab-kl一个真值不同计算图) |
+| KL 数值、baseline、直接梯度及 detach 推导 | [计算图与估计器](../theory/2026-10-22-Full-vocab计算图与四种更新.md#graphs) |
 | 在线分块公式、payload、math 容量与历史步时预算 | [计算与显存预算](2026-10-22-词表蒸馏的计算与显存预算.md) |
 | 用户提供的生产方案原文 | [Full-vocab OPD](reference/fullvocab-opd.md) |
-| 当前独立实验、精度及计时边界 | [算子小实验](2026-10-22-Full-KL算子小实验.md) |
+| 原型独立实验、精度及计时边界 | [算子小实验](2026-10-22-Full-KL算子小实验.md) |
 
 本文只维护接入计划、接口、优化优先级与验收条件。原始参考资料和预算已从 `opd-objective` 迁入本目录；算法调研、top-k 比较与通用估计器审计留在原目录，通过链接复用。
 
@@ -38,26 +38,7 @@
 
 ### 3.1 拟新增配置
 
-当前直接 full reverse-KL 复用已有 `loss_mode`，没有新增重叠的 `objective` 开关。已实现配置如下：
-
-```yaml
-distillation:
-  execution_mode: shared_sync
-  distillation_loss:
-    loss_mode: full_reverse_kl
-    use_policy_gradient: false
-    use_task_rewards: false
-    loss_max_clamp: null
-    log_prob_min_clamp: null
-    full_vocab:
-      backend: recompute
-      token_chunk_size: 512
-      vocab_chunk_size: 8192
-      async_write: false
-      prefetch: false
-```
-
-`backend` 支持 dense、recompute、cached、streaming、precompute、liger。数学目标与实现选择分开，teacher payload 由目标决定。旧 sampled 配置保持原语义。
+直接 full reverse-KL 已复用 `loss_mode=full_reverse_kl` 和 `use_policy_gradient=False`，没有新增重叠的 `objective` 开关。已实现参数、默认值及合法组合统一见[实现文档第 3 节](2026-10-22-Full-KL实现与验收.md#3-启动与配置)，backend 列表见[第 4 节](2026-10-22-Full-KL实现与验收.md#4-算子选择与实际优化)。本计划保留 baseline 的拟议接口，已实现配置不在两处维护。
 
 Baseline 仍是后续计划，应明确 kind 与 current/anchor 刷新来源，并与 current/frozen advantage 的语义分别校验；当前没有可运行的 baseline 开关。
 

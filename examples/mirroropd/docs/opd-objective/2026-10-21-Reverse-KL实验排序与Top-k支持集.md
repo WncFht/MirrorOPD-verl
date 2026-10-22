@@ -1,5 +1,7 @@
 # Reverse-KL 实验排序、数值与梯度实现、Top-k 支持集
 
+2026-10-22 将第 2 节的重复推导迁入[理论目录](../theory/README.md)；本页维护实验排序、支持集选择与作者实现审计。
+
 沿用[统一符号](../符号约定.md)：教师 $T$、冻结学生锚点 $q_k$、当前学生 $p_{k,n}=p_\theta$、实际行为分布 $\beta$，行为 IS 为 $w=p/\beta$。固定一个前缀，省略条件变量，定义
 
 $$
@@ -9,9 +11,18 @@ $$
 
 以下取正概率与完整支持，所有梯度身份均针对固定前缀，不包含前缀访问测度的导数。
 
-本页补充实验决策和支持集审计；基础方法见[估计器对照](2026-10-21-OPD学习信号与梯度估计器对照.md)，hidden-state、分块 softmax 与容量见[工程预算](../full-vocab/2026-10-22-词表蒸馏的计算与显存预算.md)。2026-10-21 核对本机 `One-Shot-OPD` 的干净 checkout `6b6b1782cc3f04749dd077de19353f839f6bc048`，并读取相关论文和固定版本源码。这里只做研究与 CPU 审计，没有启动新增训练实验，也没有修改 One-Shot-OPD。
+本页补充实验决策和支持集审计；基础方法见[条件梯度估计理论](../theory/2026-10-22-条件梯度估计与控制变量.md)，hidden-state、分块 softmax 与容量见[工程预算](../full-vocab/2026-10-22-词表蒸馏的计算与显存预算.md)。2026-10-21 核对本机 `One-Shot-OPD` 的干净 checkout `6b6b1782cc3f04749dd077de19353f839f6bc048`，并读取相关论文和固定版本源码。这里只做研究与 CPU 审计，没有启动新增训练实验，也没有修改 One-Shot-OPD。
 
 ## 1. Reverse-KL 实验优先级
+
+本页维护方法比较的科学问题和控制变量，不维护第二份运行预算。
+
+| 资料 | 维护职责 |
+| --- | --- |
+| 本页第 1、6 节 | 方法比较顺序、必要负对照与支持集数据合同 |
+| [训练配方](../训练配方.md#采样消融与长程复用) | E1–E15 编号、学习率、复用次数、外层预算与评测频率 |
+| [Math 消融队列](../full-vocab/2026-10-22-Math消融队列与对照设计.md) | 已排队的固定 checkout、任务预算、执行状态入口和结果检查 |
+| [估计器审计](2026-10-21-OPD学习信号与梯度估计器对照.md#9-在当前-math-setting-下的实验安排) | 作者实现差异、资源公平性与需记录的量 |
 
 排序依据是解释力、对照必要性与工程成本，不是未经实测的准确率预测。
 
@@ -31,108 +42,11 @@ $$
 
 ### 1.1 第一轮固定什么
 
-保持现有 JustRL→R1-Distill-1.5B、DAPO、batch=mini-batch=64、n=1、LR=$10^{-6}$、采样 temperature=1/top-p=1/top-k=-1。使用一次更新，先排除 clipping、优势冻结、重复复用和额外任务奖励的混杂。
+2026-10-21 的方法筛选方案固定 JustRL→R1-Distill-1.5B、DAPO、batch=mini-batch=64、n=1、LR=$10^{-6}$、采样 temperature=1/top-p=1/top-k=-1。使用一次更新，先排除 clipping、优势冻结、重复复用和额外任务奖励的混杂。
 
 先固定 teacher top-16 支持集比较 baseline/HETS/Res/TA/SC-TA，最大化数据通路复用；此处 baseline 是 **teacher-top-k 变体**。原版 vOPD 的 student-top-k baseline 随后单列，不能换了支持集却沿用“原版复现”的名称。[^vopd-code]
 
-先做固定输入的梯度与数值验收，再做 32 次更新短程验证，最后做 200 次更新和多种子。Full-vocab 组不额外套 sampled PPO ratio；它已对当前 next-token 分布积分。随机估计器的 ratio 数值保护触发和 optimizer 跳步应为零。算法选定后再研究四轮复用；不把整个方法矩阵与 E1–E6、所有支持集立即做笛卡尔积。
-
-## 2. Full-vocab KL：一个真值，不同计算图
-
-### 2.1 只计算数值，作为诊断或 baseline
-
-给定 student 与 teacher 的全部分布，$K=\sum_a p_a\ell_a$ 是精确有限求和，已经没有 next-token Monte Carlo 抽样。它仍只针对给定前缀，不是对所有可能轨迹的枚举。
-
-在诊断或 baseline 路径，使用 `no_grad` / detach 得到 scalar 即可。用于 sampled-token 时，reward advantage 是
-
-$$
-A^{\rm cur}(a)+K=-\ell_a+K,
-$$
-
-其系数停止梯度；这是 sampled-token + full KL baseline。**算出了精确 KL baseline，不等于使用精确 full-vocab 梯度**：最终更新仍依赖 sampled action。
-
-该数值可用 hidden states + LM head 流式计算，只保留每位置 $K,\log Z_p,\log Z_T$，不用保存完整词表的 autograd 图。原配方已有 teacher 和 old-log-prob 阶段，可考虑在无梯度 scoring 阶段算好 baseline，再进入 actor backward；得到的是按该快照计算的 baseline，多次更新后不再是当前精确 KL。
-
-### 2.2 作为训练 loss，直接自动微分
-
-最简单的正确参照是：
-
-```python
-log_p = student_logits.float().log_softmax(-1)
-log_T = teacher_logits.detach().float().log_softmax(-1)
-p = log_p.exp()
-kl_per_token = (p * (log_p - log_T)).sum(-1)
-loss = aggregate_with_global_response_mask(kl_per_token)
-loss.backward()
-```
-
-这里 `p` 和 `log_p` 都保留 student 梯度，teacher 固定。对 student logits $z$，
-
-$$
-\delta_a:=\frac{\partial K}{\partial z_a}
-=p_a(\ell_a-K),\qquad \sum_a\delta_a=0.
-$$
-
-这条路径前向输出真实 KL，反向输出真实条件 KL 梯度。它适合作为小规模 reference，直接物化大词表中间量的显存成本则较高。
-
-### 2.3 只传递精确梯度，可以使用代理或自定义 backward
-
-以下代理具有相同的一阶参数梯度：
-
-$$
-L_{\rm score}=\sum_a\operatorname{sg}(p_a\ell_a)\log p_a,
-\qquad
-L_{\rm logit}=\sum_a\operatorname{sg}(\delta_a)z_a.
-$$
-
-但二者的前向数值通常不是 $K$。应分别记录真实 KL 与梯度代理；或返回
-
-$$
-L=\operatorname{sg}(K)+L_{\rm logit}-\operatorname{sg}(L_{\rm logit}),
-$$
-
-使前向值为真实 KL、一阶 backward 为所需梯度。不能因为这种代理的一阶梯度正确，就把它的二阶导数也当作真实 KL Hessian。
-
-还有一个特殊的 full-vocab 形式：
-
-$$
-L_{\rm gap}=\sum_a p_a\operatorname{sg}(\ell_a).
-$$
-
-它前向数值也等于 $K$，一阶梯度也正确，因为被省略的常数项为 $\sum_a p_a\psi_a=0$。但若只对真子集求和，这个消去不再自动成立；这正是普通 truncated KL、stopped-coefficient head 和 normalized KL 不同的原因。
-
-高效 exact full-vocab 实现可以在 forward 分块累计归一化量与 $K$，在 backward 重建每个词表块并计算 $\delta_a$，然后累加
-
-$$
-\nabla_{h_S}K=\sum_a\delta_aW_{S,a},\qquad
-\nabla_{W_{S,a}}K=\delta_a h_S^\top.
-$$
-
-不需要把全部 logits 留到 backward；student transformer 的 backward 仍只执行一次。详细 online reduction 及数值预算复用工程文档。Nitrobrew 是可参考的 exact chunked 实现；SparseOPD 则进一步稀疏化 $\delta$，后者一般是近似梯度，不能因为它先计算 full KL 就称最终更新完全精确。[^nitro][^sparse]
-
-### 2.4 两个容易写错的 detach
-
-```python
-# 错误：数值仍是 KL，但对完整词表的 student 梯度几乎为零。
-wrong = (p.detach() * (log_p - log_T)).sum(-1)
-```
-
-它的梯度是 $\sum_a p_a\psi_a=0$。另一个错误是直接对固定 sampled action 的 $\ell_a$ 求导，再声称这就是 reverse-KL 梯度；它仅产生 $\psi_a$，在当前分布下期望同样为零。
-
-反过来，**数值无偏与梯度无偏可以同时实现，但要写对计算图**。对 $a\sim\beta$，$w_a=p_a/\beta_a$：
-
-$$
-\widehat K_{\rm IS}=w_a\ell_a,\qquad
-\mathbb E_\beta\widehat K_{\rm IS}=K.
-$$
-
-直接求导得到 $w_a(\ell_a+1)\psi_a$，其期望也是 $\nabla K$，但比常用 stopped-coefficient 梯度多一个零均值随机项。构造
-
-$$
-\widehat K_{\rm corr}=w_a(\ell_a-1)+\frac{T_a}{\beta_a}
-$$
-
-后，数值期望仍为 $K$，逐样本梯度变为 $w_a\ell_a\psi_a$。这里 $T,\beta$ 都冻结、权重未截断。这个例子说明应同时写清“估计什么数值”和“让哪些量参与 backward”，不能只凭记录的 loss 名称判断。
+先做固定输入的梯度与数值验收，再做短程验证和多种子比较；执行步数、验证频率和 seed 在具体实验计划中确定。Full-vocab 组不额外套 sampled PPO ratio；它已对当前 next-token 分布积分。随机估计器的 ratio 数值保护触发和 optimizer 跳步应为零。算法选定后再研究四轮复用；不把整个方法矩阵与 E1–E6、所有支持集立即做笛卡尔积。
 
 ## 3. Top-k 支持集不是只有两种
 
@@ -283,7 +197,7 @@ $$
 - Frozen student / union support：先复用 old-log-prob forward 产生 $S_q$，teacher 返回 union 上的分数；actor 在固定 IDs 上算当前概率。对于 HETS/Res 的精确头部，不需要给每个候选再套 PPO ratio；行为 IS 只用于随机尾项。
 - Current student support：teacher 返回 hidden states 和所需归一化信息，actor 可查询后来新增的 IDs；或付出重新评分成本。只缓存旧 sparse 分数，不能支持任意新的 current top-k。
 
-第一轮继续使用既有三组数学验证集与 `acc/mean@16`，保持验证预算、生成 token 预算与更新数可对照。多次复用、top-k 大小扫参、SparseOPD 风格梯度压缩放在核心方法通过后再做。
+任务评测采用所选实验配方的完整数据集、回答数与长度预算，并保持生成 token 预算与更新数可对照；具体字段以[当前指标字典](../metrics/2026-10-22-指标字典.md)为准。多次复用、top-k 大小扫参、SparseOPD 风格梯度压缩放在核心方法通过后再做。
 
 ## 7. 本轮验证与复现
 
@@ -298,9 +212,25 @@ CUDA_VISIBLE_DEVICES='' python examples/mirroropd/docs/opd-objective/scripts/ver
 
 [完整检索记录](data/support-selection-20261021/paper-search.md)包含 24 条去重结果，保留全部原始排序和总结；两个检索来源零诊断，两个明确 arXiv ID 均解析成功。检索列表包含噪声，不代表全部条目经过正文审阅。
 
+## 旧理论章节索引
+
+原理论章节的锚点集中保留在下表；正文只维护实验与源码证据。
+
+| 原章节 | 现维护位置 |
+| --- | --- |
+| <a id="2-full-vocab-kl一个真值不同计算图"></a>2. Full-vocab KL：一个真值，不同计算图 | [Full-vocab 计算图与四种更新](../theory/2026-10-22-Full-vocab计算图与四种更新.md#1-full-vocab-kl-的计算图) |
+| <a id="21-只计算数值作为诊断或-baseline"></a>2.1 只计算数值，作为诊断或 baseline | [Full-vocab 计算图与四种更新](../theory/2026-10-22-Full-vocab计算图与四种更新.md#11-只计算数值作为诊断或-baseline) |
+| <a id="22-作为训练-loss直接自动微分"></a>2.2 作为训练 loss，直接自动微分 | [Full-vocab 计算图与四种更新](../theory/2026-10-22-Full-vocab计算图与四种更新.md#12-作为训练-loss直接自动微分) |
+| <a id="23-只传递精确梯度可以使用代理或自定义-backward"></a>2.3 只传递精确梯度，可以使用代理或自定义 backward | [Full-vocab 计算图与四种更新](../theory/2026-10-22-Full-vocab计算图与四种更新.md#13-只传递精确梯度可以使用代理或自定义-backward) |
+| <a id="24-两个容易写错的-detach"></a>2.4 两个容易写错的 detach | [Full-vocab 计算图与四种更新](../theory/2026-10-22-Full-vocab计算图与四种更新.md#14-两个容易写错的-detach) |
+
 ### 参考文献
 
+[^vopd-code]: holi-lab. vOPD，`d4146d5015216c6f8e89a7243c24912b634f531a`。[current student top-k baseline](https://github.com/holi-lab/vOPD/blob/d4146d5015216c6f8e89a7243c24912b634f531a/src/opd_trainer.py#L147)。
+
 [^rethinking]: Li et al. Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe. arXiv:2604.13016, 2026，overlap/non-overlap 与 support-size 实验。[论文](https://arxiv.org/html/2604.13016)。
+
+[^manyfaces]: Zhu et al. The Many Faces of On-Policy Distillation: Pitfalls, Mechanisms, and Fixes. arXiv:2605.11182v2, 2026，第 6.1 节与附录 A.6。[论文](https://arxiv.org/html/2605.11182v2)。
 
 [^oneshot-recipe]: Thinking-Space. One-Shot-OPD，`6b6b1782cc3f04749dd077de19353f839f6bc048`。[配方](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/_common.sh)；[README](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/README.md)。
 
@@ -312,10 +242,4 @@ CUDA_VISIBLE_DEVICES='' python examples/mirroropd/docs/opd-objective/scripts/ver
 
 [^oneshot-guard]: 同一版本。[候选漂移校验](https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/trainer/ppo/opd_trainer_mixin.py#L145)。
 
-[^vopd-code]: holi-lab. vOPD，`d4146d5015216c6f8e89a7243c24912b634f531a`。[current student top-k baseline](https://github.com/holi-lab/vOPD/blob/d4146d5015216c6f8e89a7243c24912b634f531a/src/opd_trainer.py#L147)。
-
-[^manyfaces]: Zhu et al. The Many Faces of On-Policy Distillation: Pitfalls, Mechanisms, and Fixes. arXiv:2605.11182v2, 2026，第 6.1 节与附录 A.6。[论文](https://arxiv.org/html/2605.11182v2)。
-
 [^sparse]: Miao et al. Look Before You Select: Rethinking Vocabulary Sparsification in On-Policy Distillation. arXiv:2609.34386v1, 2026，第 2–3 节。[论文](https://arxiv.org/html/2609.34386v1)。
-
-[^nitro]: Tilde Research. Nitrobrew，`17f6f16b7451929209ac495c6b0ea0fcc4d0cedc`。[forward 与自定义 backward](https://github.com/tilde-research/nitrobrew-release/blob/17f6f16b7451929209ac495c6b0ea0fcc4d0cedc/nitrobrew.py)。
