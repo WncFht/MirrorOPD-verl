@@ -1,0 +1,276 @@
+{
+  "cpu_audit": {
+    "cases": [
+      {
+        "seed": 0,
+        "all_masked": false,
+        "token_chunk": 3,
+        "vocab_chunk": 0,
+        "errors": {
+          "value": 8.881784197001252e-16,
+          "hidden_grad": 1.27675647831893e-15,
+          "head_grad": 1.1102230246251565e-15
+        }
+      },
+      {
+        "seed": 0,
+        "all_masked": false,
+        "token_chunk": 3,
+        "vocab_chunk": 4,
+        "errors": {
+          "value": 3.552713678800501e-15,
+          "hidden_grad": 9.992007221626409e-16,
+          "head_grad": 1.1102230246251565e-15
+        }
+      },
+      {
+        "seed": 0,
+        "all_masked": false,
+        "token_chunk": 20,
+        "vocab_chunk": 30,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 2.5951463200613034e-15,
+          "head_grad": 1.9984014443252818e-15
+        }
+      },
+      {
+        "seed": 0,
+        "all_masked": false,
+        "token_chunk": 1,
+        "vocab_chunk": 1,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 3.4833247397614286e-15,
+          "head_grad": 2.4424906541753444e-15
+        }
+      },
+      {
+        "seed": 0,
+        "all_masked": true,
+        "token_chunk": 3,
+        "vocab_chunk": 0,
+        "errors": {
+          "value": 8.881784197001252e-16,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 0,
+        "all_masked": true,
+        "token_chunk": 3,
+        "vocab_chunk": 4,
+        "errors": {
+          "value": 3.552713678800501e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 0,
+        "all_masked": true,
+        "token_chunk": 20,
+        "vocab_chunk": 30,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 0,
+        "all_masked": true,
+        "token_chunk": 1,
+        "vocab_chunk": 1,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 1,
+        "all_masked": false,
+        "token_chunk": 3,
+        "vocab_chunk": 0,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 8.881784197001252e-16,
+          "head_grad": 7.771561172376096e-16
+        }
+      },
+      {
+        "seed": 1,
+        "all_masked": false,
+        "token_chunk": 3,
+        "vocab_chunk": 4,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 1.3322676295501878e-15,
+          "head_grad": 6.661338147750939e-16
+        }
+      },
+      {
+        "seed": 1,
+        "all_masked": false,
+        "token_chunk": 20,
+        "vocab_chunk": 30,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 2.220446049250313e-15,
+          "head_grad": 8.881784197001252e-16
+        }
+      },
+      {
+        "seed": 1,
+        "all_masked": false,
+        "token_chunk": 1,
+        "vocab_chunk": 1,
+        "errors": {
+          "value": 2.6645352591003757e-15,
+          "hidden_grad": 1.887379141862766e-15,
+          "head_grad": 8.291978215169138e-16
+        }
+      },
+      {
+        "seed": 1,
+        "all_masked": true,
+        "token_chunk": 3,
+        "vocab_chunk": 0,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 1,
+        "all_masked": true,
+        "token_chunk": 3,
+        "vocab_chunk": 4,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 1,
+        "all_masked": true,
+        "token_chunk": 20,
+        "vocab_chunk": 30,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 1,
+        "all_masked": true,
+        "token_chunk": 1,
+        "vocab_chunk": 1,
+        "errors": {
+          "value": 2.6645352591003757e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 2,
+        "all_masked": false,
+        "token_chunk": 3,
+        "vocab_chunk": 0,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 3.774758283725532e-15,
+          "head_grad": 2.6645352591003757e-15
+        }
+      },
+      {
+        "seed": 2,
+        "all_masked": false,
+        "token_chunk": 3,
+        "vocab_chunk": 4,
+        "errors": {
+          "value": 1.3322676295501878e-15,
+          "hidden_grad": 3.774758283725532e-15,
+          "head_grad": 3.1086244689504383e-15
+        }
+      },
+      {
+        "seed": 2,
+        "all_masked": false,
+        "token_chunk": 20,
+        "vocab_chunk": 30,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 5.440092820663267e-15,
+          "head_grad": 3.9968028886505635e-15
+        }
+      },
+      {
+        "seed": 2,
+        "all_masked": false,
+        "token_chunk": 1,
+        "vocab_chunk": 1,
+        "errors": {
+          "value": 3.552713678800501e-15,
+          "hidden_grad": 4.773959005888173e-15,
+          "head_grad": 3.1086244689504383e-15
+        }
+      },
+      {
+        "seed": 2,
+        "all_masked": true,
+        "token_chunk": 3,
+        "vocab_chunk": 0,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 2,
+        "all_masked": true,
+        "token_chunk": 3,
+        "vocab_chunk": 4,
+        "errors": {
+          "value": 1.3322676295501878e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 2,
+        "all_masked": true,
+        "token_chunk": 20,
+        "vocab_chunk": 30,
+        "errors": {
+          "value": 1.7763568394002505e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      },
+      {
+        "seed": 2,
+        "all_masked": true,
+        "token_chunk": 1,
+        "vocab_chunk": 1,
+        "errors": {
+          "value": 3.552713678800501e-15,
+          "hidden_grad": 0.0,
+          "head_grad": 0.0
+        }
+      }
+    ],
+    "self_teacher_errors": {
+      "value": 4.440892098500626e-16,
+      "hidden_grad": 0.0,
+      "head_grad": 0.0
+    },
+    "centered_baseline_max_error": 8.881784197001252e-16
+  }
+}
