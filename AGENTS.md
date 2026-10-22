@@ -8,9 +8,9 @@
 | Mac | `/Users/fanghaotian/Desktop/src/MirrorOPD-verl` |
 | 美团开发机 | `/home/hadoop-hmart-poistar/dolphinfs_hdd_hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl` |
 
-- 与开发机之间只能人工上传、下载压缩包；使用根目录 `Makefile` 和 `meituan/` 中的 pack/unpack 脚本。不要假设 Agent 可以 SSH、scp、rsync 到开发机，或开发机可以通过 Git 拉取代码。
-- Git commit/push 用于本项目版本管理；交付到开发机还需要 `make archive-pack`，人工上传生成的包，再在开发机解包。离线依赖 ZIP 位于 `meituan/packages/`，必须随源码包传输。
-- 源码解包替换归档中的顶层路径；`.git`、虚拟环境、模型、训练输出等运行目录不进入默认源码包。`hope/` 由各机器本地维护，不打包同步，解包旧包时也跳过。日志和结果解包采用合并，分卷必须全部传输。
+- 与开发机之间通过人工上传、下载文件传输；使用根目录 `Makefile` 和 `meituan/` 中的 pack/unpack 脚本。不要假设 Agent 可以 SSH、scp、rsync 到开发机，或开发机可以联网拉取 Git 仓库。
+- 源码采用项目 Git commit 的离线 bundle：发送端 `make archive-pack`、接收端 `make archive-unpack`、发送端 `make archive-ack`。默认相对已确认版本累计增量，`FULL=1` 全量；打包后若继续提交，ack 仍确认上次成功打包的提交。未提交内容不进入包；离线依赖 ZIP 继续跟踪在 `meituan/packages/`。
+- 两端都保留正常 Git 工作区，接收仅快进，并记录发送方版本；不同接收端用不同 `TARGET`。`hope/` 已取消 Git 跟踪，各机本地维护；首次从旧跟踪状态迁移时解包工具备份并恢复本地 Hope 文件。日志和结果解包采用合并，分卷必须全部传输。
 - 不假设开发机上的文件已经同步到本机或 Mac；收尾时说明需要传输的包和接收端命令。操作步骤见 [meituan/README.md](meituan/README.md)。
 - 本机执行 Git SSH 操作前，在同一 shell 中执行 `source /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/.ssh/activate.bash`。
 
@@ -24,7 +24,7 @@
 - 资产检查重点是数据；模型只检查必要文件，`generation_config.json` 可选。用户要求项目自有工具不增加文件摘要计算、校验或清单。
 - 2026-10-20 已观察到的开发机配置是 Python 3.12.13、A100 80GB、R535 驱动、PyTorch 2.11.0+cu128、vLLM 0.25.1+cu129；GPU 导入与实际训练验收分别进行，不把安装完成视为训练通过。
 - 脚本保持 Bash 3.2 兼容，使用 `set -eo pipefail`；通用传输逻辑使用 Python 标准库，Mac 和 Linux 共用同一入口。
-- 数学配方将终端 stdout/stderr 同时保存到 `outputs/<实验名>/train.log`，默认离线 W&B run 位于仓库 `wandb/`；同步参数 `WANDB_RUNS_DIR` 指实际 run 目录，SDK 的 `WANDB_DIR` 指其父级根目录。源码和日志 pack 成功后自动清理各自旧包；日志增量包须在下次打包前传回，日志和结果 unpack 保留输入包。
+- 数学配方将终端 stdout/stderr 同时保存到 `outputs/<实验名>/train.log`，默认离线 W&B run 位于仓库 `wandb/`；同步参数 `WANDB_RUNS_DIR` 指实际 run 目录，SDK 的 `WANDB_DIR` 指其父级根目录。源码 pack 清理同 TARGET 的旧自动命名 bundle；接收成功后应先 ack 再生成下一包。日志增量包仍须在下次打包前传回，日志和结果 unpack 保留输入包。
 
 ## 提交
 
