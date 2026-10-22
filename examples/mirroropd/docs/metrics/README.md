@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-22。
 
-当前实现为 **policy-v3**：恢复条件功能的观测，按所有支持的采样预算输出 eval，补齐 token/sequence pair 和实际 IS/RS 统计。固定 64 字段允许列表已移除。E3 已完成四卡实验与云端回读；IS/RS GPU 重跑按用户要求暂缓，详见实现记录。
+当前实现为 **policy-v3**：恢复条件功能的观测，按所有支持的采样预算输出 eval，补齐 token/sequence pair 和实际 IS/RS 统计。固定 64 字段允许列表已移除。E3 与 token IS + token_k1 RS 均已完成四卡实验和云端回读，详见实现记录。
 
 | 文档 | 内容 |
 | --- | --- |
@@ -10,6 +10,7 @@ Last updated: 2026-10-22。
 | [完整实现与验收](2026-10-22-完整指标实现与验收.md) | 代码范围、CPU/GPU 证据和启动脚本 |
 | [原字段至当前映射](data/metrics-v3-20261022/old-to-current.csv) | 493 个旧字段逐项对照 |
 | [E3 实测字段](data/metrics-v3-20261022/observed-fields.csv) | 900 个实际标量字段、横轴和出现次数 |
+| [IS/RS 实测字段](data/metrics-v3-20261022/is-rs-observed-fields.csv) | 289 个实际标量字段、横轴和出现次数 |
 | [需求完成状态](data/metrics-v3-20261022/requirements-status.csv) | 对照最初审计清单，不把未适用或暂缓项算作已测量 |
 | [条件生产端迁移](data/metrics-v3-20261022/conditional-to-current.csv) | critic、top-k、RS、异步等旧运行快照未覆盖的能力 |
 | [第一版迁移审计](2026-10-22-指标迁移审计与补齐清单.md) | 保留当时的 493 字段盘点与问题来源 |
