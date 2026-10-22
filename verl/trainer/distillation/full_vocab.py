@@ -192,7 +192,7 @@ class PrecomputedKL(torch.autograd.Function):
 
 def full_reverse_kl(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192):
     """Return unnormalized sum; empty local ranks remain attached to both parameters."""
-    if backend not in ("dense", "recompute", "cached", "streaming", "precompute", "liger"):
+    if backend not in ("dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"):
         raise ValueError(f"Unknown full reverse-KL backend: {backend}")
     if hs.ndim != 2 or ht.ndim != 2 or ws.ndim != 2 or wt.ndim != 2:
         raise ValueError("full KL expects 2-D hidden states and heads")
@@ -209,6 +209,14 @@ def full_reverse_kl(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, voc
         return dense_rows(hs, ws, ht, wt).sum()
     if backend in ("recompute", "streaming"):
         return RecomputedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk if backend == "streaming" else 0).sum()
+    if backend == "precompute_fused":
+        if hs.is_cuda and hs.dtype == torch.bfloat16:
+            from verl.trainer.distillation.full_vocab_triton import FusedPrecomputedKL
+
+            return FusedPrecomputedKL.apply(hs, ws, ht, wt, token_chunk)
+        # Keep exact CPU/FP64 reference checks and non-BF16 callers available
+        # without importing Triton. The optimized path is BF16 CUDA only.
+        return PrecomputedKL.apply(hs, ws, ht, wt, token_chunk)
     if backend == "precompute":
         return PrecomputedKL.apply(hs, ws, ht, wt, token_chunk)
     if backend == "cached":
