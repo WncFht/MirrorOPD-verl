@@ -68,8 +68,15 @@ case "$DISTILLATION_EXECUTION_MODE" in
 esac
 ROLLOUT_TP=${ROLLOUT_TP:-1}
 TEACHER_TP=${TEACHER_TP:-1}
-ROLLOUT_GPU_MEMORY_UTILIZATION=${ROLLOUT_GPU_MEMORY_UTILIZATION:-0.5}
-ROLLOUT_MAX_NUM_SEQS=${ROLLOUT_MAX_NUM_SEQS:-32}
+# Math defaults come from full 570 x 16 validation on four H800s.
+# These are per-engine limits: keep them fixed when changing the GPU count.
+if [[ $DOMAIN == math ]]; then
+    ROLLOUT_GPU_MEMORY_UTILIZATION=${ROLLOUT_GPU_MEMORY_UTILIZATION:-0.65}
+    ROLLOUT_MAX_NUM_SEQS=${ROLLOUT_MAX_NUM_SEQS:-128}
+else
+    ROLLOUT_GPU_MEMORY_UTILIZATION=${ROLLOUT_GPU_MEMORY_UTILIZATION:-0.5}
+    ROLLOUT_MAX_NUM_SEQS=${ROLLOUT_MAX_NUM_SEQS:-32}
+fi
 ROLLOUT_TOKEN_BUDGET=${ROLLOUT_TOKEN_BUDGET:-8192}
 TEACHER_GPU_MEMORY_UTILIZATION=${TEACHER_GPU_MEMORY_UTILIZATION:-0.4}
 TEACHER_MAX_NUM_SEQS=${TEACHER_MAX_NUM_SEQS:-64}
@@ -103,8 +110,13 @@ PPO_MAX_TOKEN_LEN_PER_GPU=${PPO_MAX_TOKEN_LEN_PER_GPU:-32768}
 # 验证允许更长的回答；VAL_N 是每题采样次数，VAL_BATCH_SIZE 是提交窗口题数。
 MAX_VAL_RESPONSE_LENGTH=${MAX_VAL_RESPONSE_LENGTH:-31744}
 VAL_N=${VAL_N:-16}
-# This is a submission window in prompts, not the per-engine sequence limit.
-VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-32}
+# null submits the full validation set; positive integers retain windowed evaluation.
+# The submission window is independent of the per-engine active sequence limit.
+if [[ $DOMAIN == math ]]; then
+    VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-null}
+else
+    VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-32}
+fi
 TEST_FREQ=${TEST_FREQ:-20}
 SAVE_FREQ=${SAVE_FREQ:-50}
 if [[ $DOMAIN == if ]] && (( TEST_FREQ > 0 )); then
@@ -114,12 +126,16 @@ fi
 
 # ── 4. 启动前检查与派生值 ────────────────────────────────────────────
 for name in STUDENT_GPUS ROLLOUT_TP TEACHER_TP ROLLOUT_MAX_NUM_SEQS TRAIN_BATCH_SIZE PPO_EPOCHS TEACHER_FSDP_TOKEN_BUDGET \
-    MAX_PROMPT_LENGTH MAX_RESPONSE_LENGTH MAX_VAL_RESPONSE_LENGTH VAL_N VAL_BATCH_SIZE PPO_MAX_TOKEN_LEN_PER_GPU; do
+    MAX_PROMPT_LENGTH MAX_RESPONSE_LENGTH MAX_VAL_RESPONSE_LENGTH VAL_N PPO_MAX_TOKEN_LEN_PER_GPU; do
     if [[ ! ${!name} =~ ^[1-9][0-9]*$ ]]; then
         echo "$name must be a positive integer" >&2
         exit 2
     fi
 done
+if [[ $VAL_BATCH_SIZE != null && ! $VAL_BATCH_SIZE =~ ^[1-9][0-9]*$ ]]; then
+    echo "VAL_BATCH_SIZE must be null or a positive integer" >&2
+    exit 2
+fi
 if [[ $DISTILLATION_EXECUTION_MODE == shared_sync ]]; then
     if [[ $TEACHER_GPUS != 0 || $ROLLOUT_TP != 1 ]]; then
         echo "shared_sync requires TEACHER_GPUS=0 and ROLLOUT_TP=1" >&2
