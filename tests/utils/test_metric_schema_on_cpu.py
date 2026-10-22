@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from verl.utils.metric.schema import CANONICAL_FIELDS, evaluation_metrics, metric_axis, outer_metrics
+from verl.utils.metric.schema import evaluation_metrics, metric_axis, outer_metrics
 
 
 def test_every_observed_old_key_is_removed_from_public_projection():
@@ -15,10 +15,17 @@ def test_every_observed_old_key_is_removed_from_public_projection():
         Path(__file__).parents[2]
         / "examples/mirroropd/docs/metrics/data/metrics-system-20261021/current-metric-inventory.csv"
     )
-    old = {row["metric_key"]: 1.0 for row in csv.DictReader(path.open())}
+    old = {
+        row["metric_key"]: 1.0
+        for row in csv.DictReader(path.open())
+        if not row["metric_key"].startswith(("val-core/", "val-aux/"))
+    }
     new = outer_metrics(old)
     assert not new.keys() & old.keys()
-    assert set(new) <= CANONICAL_FIELDS
+    assert all(
+        key.split("/")[0] in {"optim", "policy", "advantage", "correction", "distill", "rollout", "perf", "step"}
+        for key in new
+    )
     assert new["perf/actor/mfu"] == 1
     assert "optim/actor/loss" not in new  # never rename an outer mean to an update observation
 
@@ -30,8 +37,10 @@ def test_failed_sessions_and_unequal_prompt_trial_counts():
         {"acc": [1, 1, 0, 1]},
         {("MATH-500", "a"): 2, ("MATH-500", "b"): 4, ("MATH-500", "c"): 2},
     )
-    assert result == {
-        "eval/math500/acc_mean": (1 + 0.25 + 0) / 3,
+    assert {
+        k: result[k] for k in ("eval/math500/acc/mean", "eval/math500/failed_count", "eval/math500/response_count")
+    } == {
+        "eval/math500/acc/mean": (1 + 0.25 + 0) / 3,
         "eval/math500/failed_count": 4,
         "eval/math500/response_count": 8,
     }
@@ -40,12 +49,14 @@ def test_failed_sessions_and_unequal_prompt_trial_counts():
 def test_wrong_answers_are_not_failed_sessions():
     result = evaluation_metrics(["AMC23"] * 2, ["a", "a"], {"acc": [0, 0]}, {("AMC23", "a"): 2})
     assert result["eval/amc23/failed_count"] == 0
-    assert result["eval/amc23/acc_mean"] == 0
+    assert result["eval/amc23/acc/mean"] == 0
 
 
 def test_all_failed_validation_keeps_the_denominator():
     result = evaluation_metrics([], [], {}, {("AIME25", "a"): 16})
-    assert result == {"eval/aime25/acc_mean": 0, "eval/aime25/failed_count": 16, "eval/aime25/response_count": 16}
+    assert result["eval/aime25/acc/mean"] == 0
+    assert result["eval/aime25/failed_count"] == result["eval/aime25/response_count"] == 16
+    assert result["eval/aime25/acc/pass@16"] == 0
 
 
 def test_dataset_name_collision_and_excess_trials_fail():
@@ -59,7 +70,7 @@ def test_axes_follow_measurement_not_transport_step():
     assert metric_axis("policy/current_behavior/ratio_p99") == "step/update"
     assert metric_axis("policy/anchor_behavior/k3") == "step/outer"
     assert metric_axis("policy/entropy/pre_update") == "step/outer"
-    assert metric_axis("eval/math500/acc_mean") == "step/optimizer"
+    assert metric_axis("eval/math500/acc/mean") == "step/optimizer"
 
 
 def test_validation_mean_matches_the_existing_estimator():
@@ -71,10 +82,39 @@ def test_validation_mean_matches_the_existing_estimator():
     expected = {("math", "a"): 4, ("math", "b"): 4, ("math", "c"): 4}
     reference = process_validation_metrics(sources, uids, infos, expected_acc_counts=expected)
     actual = evaluation_metrics(sources, uids, infos, expected)
-    assert actual["eval/math/acc_mean"] == reference["math"]["acc"]["mean@4"]
+    assert actual["eval/math/acc/mean"] == reference["math"]["acc"]["mean@4"]
 
 
 def test_non_accuracy_reward_is_not_mislabeled_as_accuracy():
     actual = evaluation_metrics(["reward_task"], ["a"], {"reward": [2.5]})
-    assert actual["eval/reward_task/score_mean"] == 2.5
-    assert "eval/reward_task/acc_mean" not in actual
+    assert actual["eval/reward_task/reward/mean"] == 2.5
+    assert "eval/reward_task/acc/mean" not in actual
+
+
+def test_conditional_fields_are_preserved_in_new_namespaces():
+    from verl.utils.metric.schema import canonical_name
+
+    cases = {
+        "actor/pg_loss": "optim/actor/pg_loss",
+        "actor/distillation/student_mass": "distill/topk/student_mass",
+        "critic/vf_loss": "optim/critic/value_loss",
+        "critic/vf_explained_var": "policy/critic/explained_variance",
+        "rollout_corr/rollout_rs_masked_fraction": "correction/rejection/batch/masked_fraction",
+        "rollout_corr/rollout_is_eff_sample_size": "correction/is/batch/applied_ess_fraction",
+        "timing_s/new_stage": "perf/timing/new_stage_seconds",
+        "training/off_policy/trajectory_staleness/max": "rollout/staleness/trajectory_staleness/max",
+        "policy/new_pair/any_stat": "policy/new_pair/any_stat",
+    }
+    for old, new in cases.items():
+        assert canonical_name(old) == new
+        assert outer_metrics({old: 2}) == {new: 2}
+    assert outer_metrics({"extension/custom": 3}) == {"extension/custom": 3}
+
+
+def test_invalid_metrics_have_visible_events():
+    from verl.utils.metric.schema import finite_metrics
+
+    assert finite_metrics({"optim/actor/loss": float("nan"), "policy/pair/m2": None}) == {
+        "optim/actor/loss/nonfinite": 1,
+        "policy/pair/m2/undefined": 1,
+    }

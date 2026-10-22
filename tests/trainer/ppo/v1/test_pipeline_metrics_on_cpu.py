@@ -360,7 +360,8 @@ def test_driver_logs_training_and_validation_in_one_offline_wandb_step(monkeypat
     assert histories[0]["perf/memory/fsdp_allocated_peak_gib"] == 9
     assert histories[0]["perf/timing/validation_rollout_seconds"] == 8
     assert "teacher/request_latency_s/mean" not in histories[0]
-    assert "rollout/preemptions" not in histories[0]
+    assert histories[0]["rollout/preemptions"] == 3
+    assert histories[0]["perf/teacher/request_latency_mean_seconds"] == 4
     assert "timing_s/rollout_batch" not in histories[0]
 
 
@@ -388,9 +389,9 @@ def test_actor_preserves_canonical_memory_key_without_metrics_metadata(has_peak)
     metrics = {}
     trainer._update_actor(batch, metrics)
     assert "opd_metrics" not in batch.extra_info
-    assert metrics["perf/mfu/actor"] == 0.1
-    assert metrics["actor/perf/max_memory_allocated_gb"] == 9
-    assert (pm.FSDP_PEAK_MEMORY in metrics) == has_peak
+    assert metrics["perf/actor/mfu"] == 0.1
+    assert metrics["perf/actor/allocated_peak_gib"] == 9
+    assert ("perf/memory/fsdp_allocated_peak_gib" in metrics) == has_peak
     assert f"actor/{pm.FSDP_PEAK_MEMORY}" not in metrics
     if has_peak:
-        assert metrics[pm.FSDP_PEAK_MEMORY] == 9
+        assert metrics["perf/memory/fsdp_allocated_peak_gib"] == 9

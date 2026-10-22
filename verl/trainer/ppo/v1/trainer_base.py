@@ -83,14 +83,13 @@ from verl.utils.debug import marked_timer
 from verl.utils.debug.metrics import calculate_debug_metrics
 from verl.utils.import_utils import load_extern_type
 from verl.utils.metric import reduce_metrics
-from verl.utils.metric.schema import evaluation_metrics, finite_metrics, outer_metrics
+from verl.utils.metric.evaluation import evaluation_records
+from verl.utils.metric.schema import evaluation_metrics, finite_metrics, outer_metrics, worker_outer_name
 from verl.utils.pipeline_metrics import (
-    FSDP_PEAK_MEMORY,
     aggregate_pipeline_requests,
     aggregate_validation_windows,
     make_rollout_submission,
 )
-from verl.utils.py_functional import rename_dict
 from verl.utils.seqlen_balancing import calculate_workload, get_seqlen_balanced_partitions, log_seqlen_unbalance
 from verl.utils.skip import SkipManager
 from verl.utils.tracking import DapoFilteredRewardTableLogger, Tracking, ValidationGenerationsLogger
@@ -147,6 +146,8 @@ class PPOTrainer(ABC):
         self._restored_tq_prompt_count = 0
         self.actor_optimizer_step_attempts = 0
         self.actor_optimizer_step = 0
+        self.critic_optimizer_step_attempts = 0
+        self.critic_optimizer_step = 0
 
     def _build_replay_buffer(self) -> ReplayBuffer:
         """Instantiate the replay buffer (or a user-provided custom sampler).
@@ -491,7 +492,10 @@ class PPOTrainer(ABC):
         if type(quantile_interval) is not int or quantile_interval < 0:
             raise ValueError("trainer.metrics_quantile_interval must be a nonnegative integer")
         logging_config = OmegaConf.to_container(self.config, resolve=True)
-        logging_config["trainer"]["metrics_format"] = "policy-v2"
+        resamples = self.config.trainer.get("eval_metrics_resamples", 256)
+        if type(resamples) is not int or resamples < 2:
+            raise ValueError("trainer.eval_metrics_resamples must be an integer >= 2")
+        logging_config["trainer"]["metrics_format"] = "policy-v3"
         self.logger = Tracking(
             project_name=self.config.trainer.project_name,
             experiment_name=self.config.trainer.experiment_name,
@@ -956,6 +960,8 @@ class PPOTrainer(ABC):
         self.global_steps = 0
         self.actor_optimizer_step_attempts = 0
         self.actor_optimizer_step = 0
+        self.critic_optimizer_step_attempts = 0
+        self.critic_optimizer_step = 0
 
         # 1. find latest checkpoint folder
         if self.config.trainer.resume_mode == "disable":
@@ -1061,11 +1067,11 @@ class PPOTrainer(ABC):
         if attempts is not None and steps is not None and steps > attempts:
             raise ValueError("Actor optimizer steps cannot exceed attempts")
 
-    def _accumulate_actor_optimizer_steps(self, output):
+    def _accumulate_actor_optimizer_steps(self, output, role="actor"):
         attempts = tu.get(output, "optimizer_step_attempts", default=None)
         steps = tu.get(output, "optimizer_steps", default=None)
         self._validate_actor_optimizer_counts(attempts, steps)
-        for attr, value in (("actor_optimizer_step_attempts", attempts), ("actor_optimizer_step", steps)):
+        for attr, value in ((f"{role}_optimizer_step_attempts", attempts), (f"{role}_optimizer_step", steps)):
             previous = getattr(self, attr, None)
             setattr(self, attr, previous + value if previous is not None and value is not None else None)
 
@@ -1091,9 +1097,17 @@ class PPOTrainer(ABC):
             value = getattr(self, attr, None)
             if value is not None:
                 coordinates[name] = value
+        if getattr(self, "use_critic", False):
+            for name, attr in (
+                ("step/critic_update", "critic_optimizer_step_attempts"),
+                ("step/critic_optimizer", "critic_optimizer_step"),
+            ):
+                value = getattr(self, attr, None)
+                if value is not None:
+                    coordinates[name] = value
         return coordinates
 
-    def _log_update_records(self, records, attempts_before, steps_before):
+    def _log_update_records(self, records, attempts_before, steps_before, role="actor"):
         """Emit each completed update without averaging its time dimension."""
         attempts, steps = attempts_before, steps_before
         for record in records:
@@ -1103,15 +1117,16 @@ class PPOTrainer(ABC):
             attempts = attempts + 1 if attempts is not None else None
             steps = steps + int(applied) if steps is not None and applied is not None else None
             coordinates = {"step/outer": self.global_steps}
+            update_axis = "step/update" if role == "actor" else "step/critic_update"
+            optimizer_axis = "step/optimizer" if role == "actor" else "step/critic_optimizer"
             if attempts is not None:
-                coordinates["step/update"] = attempts
+                coordinates[update_axis] = attempts
             if steps is not None:
-                coordinates["step/optimizer"] = steps
-            values = finite_metrics(record["metrics"])
-            if len(values) != len(record["metrics"]):
-                logger.warning(
-                    "Undefined update observations omitted at outer=%s attempt=%s", self.global_steps, attempts
-                )
+                coordinates[optimizer_axis] = steps
+            metrics = dict(record["metrics"])
+            if attempts is not None and steps is not None:
+                metrics[f"optim/{role}/skipped_updates"] = attempts - steps
+            values = finite_metrics(metrics)
             self.logger.log(data=values | coordinates, step=attempts if attempts is not None else self.global_steps)
 
     def _save_actor_optimizer_progress(self, checkpoint_dir):
@@ -1124,6 +1139,9 @@ class PPOTrainer(ABC):
             "actor_optimizer_step_attempts": attempts,
             "actor_optimizer_step": steps,
         }
+        if getattr(self, "use_critic", False):
+            state["critic_optimizer_step_attempts"] = getattr(self, "critic_optimizer_step_attempts", None)
+            state["critic_optimizer_step"] = getattr(self, "critic_optimizer_step", None)
         temporary_path = None
         try:
             with tempfile.NamedTemporaryFile(mode="w", dir=checkpoint_dir, prefix="trainer_state-", delete=False) as f:
@@ -1139,6 +1157,7 @@ class PPOTrainer(ABC):
         path = os.path.join(checkpoint_dir, "trainer_state.json")
         if not os.path.exists(path):
             self.actor_optimizer_step_attempts = self.actor_optimizer_step = None
+            self.critic_optimizer_step_attempts = self.critic_optimizer_step = None
             logger.warning("Checkpoint has no trainer_state.json; absolute actor optimizer counts are unknown")
             return
         with open(path) as f:
@@ -1152,6 +1171,9 @@ class PPOTrainer(ABC):
         attempts, steps = state["actor_optimizer_step_attempts"], state["actor_optimizer_step"]
         self._validate_actor_optimizer_counts(attempts, steps)
         self.actor_optimizer_step_attempts, self.actor_optimizer_step = attempts, steps
+        self.critic_optimizer_step_attempts = state.get("critic_optimizer_step_attempts")
+        self.critic_optimizer_step = state.get("critic_optimizer_step")
+        self._validate_actor_optimizer_counts(self.critic_optimizer_step_attempts, self.critic_optimizer_step)
 
     def _save_checkpoint(self):
         """Save actor, critic, and dataloader checkpoints to local (and optionally remote) storage."""
@@ -1255,6 +1277,12 @@ class PPOTrainer(ABC):
         session_to_sample_idx: dict[str, int] = {}
         # To avoid failure sessions
         expected_acc_counts: dict[tuple[str, str], int] = {}
+        prompt_metadata = {}
+        source_ordinals = defaultdict(int)
+        sample_indices = []
+        sample_response_lengths = []
+        sample_finish_reasons = []
+        source_fields = defaultdict(set)
         pipeline_windows = []
 
         for batch_dict in self.val_dataloader:
@@ -1267,11 +1295,20 @@ class PPOTrainer(ABC):
             batch_rollout_ns = batch_dict.get(
                 "__rollout_n__", [self.config.actor_rollout_ref.rollout.val_kwargs.n] * batch_size
             )
-            for uid, data_source, rollout_n in zip(
-                batch_dict["uid"], batch_data_sources, batch_rollout_ns, strict=True
+            for row_index, (uid, data_source, rollout_n) in enumerate(
+                zip(batch_dict["uid"], batch_data_sources, batch_rollout_ns, strict=True)
             ):
                 rollout_n = int(rollout_n)
-                expected_acc_counts[(str(data_source), str(uid))] = rollout_n
+                key = (str(data_source), str(uid))
+                specification = batch_dict.get("reward_model", [{}] * batch_size)[row_index]
+                source_fields[str(data_source)].update(specification.get("metric_fields", []))
+                expected_acc_counts[key] = rollout_n
+                source_ordinals[str(data_source)] += 1
+                prompt_metadata[key] = {
+                    "prompt_id": f"{data_source}:{source_ordinals[str(data_source)] - 1}",
+                    "prompt": batch_dict["raw_prompt"][row_index],
+                    "ground_truth": batch_dict.get("reward_model", [{}] * batch_size)[row_index].get("ground_truth"),
+                }
 
             batch = tu.get_tensordict(batch_dict)
             tu.assign_non_tensor_data(batch, "global_steps", self.global_steps)
@@ -1312,6 +1349,7 @@ class PPOTrainer(ABC):
             sorted_sessions = sorted(session_max.items(), key=lambda x: x[1][1])
             final_indices = [pos for _, (_, pos) in sorted_sessions]
             final_keys = [batch.keys[i] for i in final_indices]
+            sample_indices.extend(int(key.rsplit("_", 2)[1]) for key in final_keys)
             base_offset = len(sample_scores)
             session_to_sample_idx.update(
                 {session_key: base_offset + j for j, (session_key, _) in enumerate(sorted_sessions)}
@@ -1320,6 +1358,8 @@ class PPOTrainer(ABC):
             text_data = tq.kv_batch_get(
                 keys=batch.keys, partition_id=batch.partition_id, select_fields=["prompts", "responses"]
             )
+            response_lengths = text_data["responses"].offsets().diff().tolist()
+            sample_response_lengths.extend(response_lengths[i] for i in final_indices)
             text_data["prompts"] = text_data["prompts"].to_padded_tensor(padding=self.tokenizer.pad_token_id)
             text_data["responses"] = text_data["responses"].to_padded_tensor(padding=self.tokenizer.pad_token_id)
             all_inputs = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in text_data["prompts"]]
@@ -1337,6 +1377,14 @@ class PPOTrainer(ABC):
             reward_extra_infos_dict["reward"].extend(scores)
 
             extra_fields_list = data.pop("extra_fields", None)
+            sample_finish_reasons.extend(
+                [
+                    entry.get("finish_reason") if isinstance(entry, dict) else None
+                    for entry in extra_fields_list.tolist()
+                ]
+                if extra_fields_list is not None
+                else [None] * len(final_indices)
+            )
             if extra_fields_list is not None:
                 n_prior = len(reward_extra_infos_dict["reward"]) - len(extra_fields_list.tolist())
                 for extra_field in extra_fields_list.tolist():
@@ -1409,12 +1457,47 @@ class PPOTrainer(ABC):
                 dump_path=val_data_dir,
             )
 
+        if val_data_dir:
+            reward_extra_infos_dict["finish_reason"] = sample_finish_reasons
+            records = evaluation_records(
+                data_sources,
+                sample_uids,
+                reward_extra_infos_dict,
+                expected_acc_counts,
+                sample_indices=sample_indices,
+                prompt_metadata=prompt_metadata,
+                inputs=sample_inputs,
+                outputs=sample_outputs,
+                scores=sample_scores,
+                ground_truths=sample_gts,
+                response_lengths=sample_response_lengths,
+                turns=sample_turns,
+            )
+            record_keys = set().union(*(record.keys() for record in records)) if records else set()
+            self._dump_generations(
+                inputs=[r["input"] for r in records],
+                outputs=[r["output"] for r in records],
+                gts=[r["gts"] for r in records],
+                scores=[r["score"] for r in records],
+                reward_extra_infos_dict={
+                    k: [r.get(k) for r in records] for k in record_keys - {"input", "output", "gts", "score"}
+                },
+                dump_path=os.path.join(val_data_dir, "records"),
+            )
+        reward_extra_infos_dict["__response_length__"] = sample_response_lengths
+        reward_extra_infos_dict["__num_turns__"] = sample_turns
+        reward_extra_infos_dict["__finish_reason__"] = sample_finish_reasons
         val_metrics = self._val_metrics_update(
             data_sources,
             sample_uids,
             reward_extra_infos_dict,
             sample_turns,
             expected_acc_counts=expected_acc_counts,
+            sample_indices=sample_indices,
+            source_fields=source_fields,
+            prompt_ids=[
+                prompt_metadata[(str(s), str(u))]["prompt_id"] for s, u in zip(data_sources, sample_uids, strict=True)
+            ],
         )
         val_metrics.update(aggregate_validation_windows(pipeline_windows))
         return val_metrics
@@ -1565,8 +1648,23 @@ class PPOTrainer(ABC):
         reward_extra_infos_dict,
         sample_turns,
         expected_acc_counts: dict[tuple[str, str], int] | None = None,
+        sample_indices=None,
+        prompt_ids=None,
+        source_fields=None,
     ) -> dict[str, float]:
-        return evaluation_metrics(data_sources, sample_uids, reward_extra_infos_dict, expected_acc_counts)
+        return evaluation_metrics(
+            data_sources,
+            sample_uids,
+            reward_extra_infos_dict,
+            expected_acc_counts,
+            sample_indices=sample_indices,
+            prompt_ids=prompt_ids,
+            source_fields=source_fields,
+            resamples=OmegaConf.select(
+                getattr(self, "config", OmegaConf.create({})), "trainer.eval_metrics_resamples", default=256
+            ),
+            seed=OmegaConf.select(getattr(self, "config", OmegaConf.create({})), "data.seed", default=42),
+        )
 
     def _rollout_server_managers(self) -> list:
         """LLM server managers whose inference engines take part in rollout profiling.
@@ -1973,8 +2071,15 @@ class PPOTrainer(ABC):
                 data.batch["rollout_log_probs"],
                 data.batch["response_mask"],
                 "anchor_behavior",
+                quantile=(
+                    self.config.trainer.get("metrics_quantile_interval", 8) > 0
+                    and (
+                        self.global_steps == 1
+                        or self.global_steps % self.config.trainer.get("metrics_quantile_interval", 8) == 0
+                    )
+                ),
             )
-            metrics.update({key: value.aggregate() for key, value in entry.items()})
+            metrics.update({key: None if value.is_empty() else value.aggregate() for key, value in entry.items()})
 
         return batch
 
@@ -2103,13 +2208,18 @@ class PPOTrainer(ABC):
             "dataloader_kwargs": {"shuffle": self.config.critic.shuffle},
             "temperature": self.config.actor_rollout_ref.rollout.temperature,
         }
+        attempts_before = getattr(self, "critic_optimizer_step_attempts", None)
+        steps_before = getattr(self, "critic_optimizer_step", None)
+        extra_info.update(collect_update_records=True, metrics_role="critic")
         batch.extra_info.update(extra_info)
 
         output: DataProtoFuture = self.critic_wg.train_mini_batch(batch)
         output: TensorDict = output.get()
-        output = rename_dict(output["metrics"], "critic/")
-        output["perf/mfu/critic"] = output.pop("critic/mfu")
-        critic_metrics = reduce_metrics(output)
+        records = tu.get(output, "update_records", default=[])
+        self._accumulate_actor_optimizer_steps(output, role="critic")
+        if records and getattr(self, "logger", None) is not None:
+            self._log_update_records(records, attempts_before, steps_before, role="critic")
+        critic_metrics = {worker_outer_name(k, "critic"): v for k, v in reduce_metrics(output["metrics"]).items()}
         metrics.update(critic_metrics)
 
         return batch
@@ -2149,18 +2259,22 @@ class PPOTrainer(ABC):
             "dataloader_kwargs": {"shuffle": self.config.actor_rollout_ref.actor.shuffle},
             "temperature": self.config.actor_rollout_ref.rollout.temperature,
         }
-        actor = self.config.actor_rollout_ref.actor
-        collect_metrics = (
-            actor.get("strategy", "fsdp2") in ("fsdp", "fsdp2")
-            and actor.get("ulysses_sequence_parallel_size", 1) == 1
-            and actor.get("fsdp_config", {}).get("ulysses_sequence_parallel_size", 1) == 1
-            and getattr(self, "trainer_mode", "sync") == "sync"
-        )
+        # These engines reconstruct full response tensors before invoking the loss.
+        # Other engines retain every legacy diagnostic through canonical_name;
+        # do not pretend unverified CP/TP fragments are complete sequences.
+        strategy = self.config.actor_rollout_ref.actor.get("strategy", "fsdp2")
+        collect_metrics = strategy in ("fsdp", "fsdp2", "fsdp_turbo")
+        if not collect_metrics and not getattr(self, "_metrics_backend_warned", False):
+            logger.warning(
+                "Raw response observations are not verified for %s; existing backend metrics remain logged", strategy
+            )
+            self._metrics_backend_warned = True
         attempts_before = getattr(self, "actor_optimizer_step_attempts", None)
         steps_before = getattr(self, "actor_optimizer_step", None)
         extra_info.update(
             collect_metrics=collect_metrics,
             collect_update_records=True,
+            metrics_role="actor",
             metrics_has_anchor=not OmegaConf.select(
                 self.config, "algorithm.rollout_correction.bypass_mode", default=False
             ),
@@ -2182,26 +2296,19 @@ class PPOTrainer(ABC):
         self._accumulate_actor_optimizer_steps(output)
         if records and getattr(self, "logger", None) is not None:
             self._log_update_records(records, attempts_before, steps_before)
-        output = rename_dict(output["metrics"], "actor/")
-        if "actor/mfu" in output:
-            output["perf/mfu/actor"] = output.pop("actor/mfu")
-        actor_metrics = reduce_metrics(output)
-        # SUM metrics are DP-averaged by the existing worker path. The common
-        # DP/mini-batch factors cancel only when counts share one denominator.
-        denominator = actor_metrics.pop("actor/distillation/token_observations", None)
+        actor_metrics = {worker_outer_name(k, "actor"): v for k, v in reduce_metrics(output["metrics"]).items()}
+        # Legacy worker implementations may still return outer event totals.
+        # Preserve their information with an explicit batch scope, not as an update observation.
+        denominator = actor_metrics.pop("distill/token_observations", None)
         if denominator is not None:
-            if denominator <= 0:
-                raise ValueError("Sampled-token diagnostics require valid response tokens")
-            for event, ratio in (
-                ("advantage_sign_flip_count", "advantage_sign_flip_fraction"),
-                ("log_ratio_guard_count", "log_ratio_guard_fraction"),
-                ("ppo_clip_count", "ppo_clip_fraction"),
+            for event, target in (
+                ("ppo_clip_count", "correction/behavior_ppo/batch_active_fraction"),
+                ("log_ratio_guard_count", "correction/log_ratio_guard/batch_fraction"),
+                ("advantage_sign_flip_count", "distill/advantage/batch_sign_flip_fraction"),
             ):
-                count = actor_metrics.pop(f"actor/distillation/{event}", None)
+                count = actor_metrics.pop("distill/" + event, None)
                 if count is not None:
-                    actor_metrics[f"actor/distillation/{ratio}"] = count / denominator
-        if f"actor/{FSDP_PEAK_MEMORY}" in actor_metrics:
-            actor_metrics[FSDP_PEAK_MEMORY] = actor_metrics.pop(f"actor/{FSDP_PEAK_MEMORY}")
+                    actor_metrics[target] = count / denominator if denominator > 0 else None
         metrics.update(actor_metrics)
 
         return batch
@@ -2284,6 +2391,16 @@ class PPOTrainer(ABC):
             )
         )
         metrics.update(compute_data_metrics(batch=metrics_batch, use_critic=self.use_critic))
+        task_used = (
+            not is_distillation_enabled(self.config.get("distillation"))
+            or self.distillation_config.distillation_loss.use_task_rewards
+        )
+        metrics["advantage/task/batch_used_in_loss"] = float(task_used)
+        for label in ("prompt_length", "response_length"):
+            lengths = metrics_batch.batch[label].float()
+            if lengths.numel():
+                for q, suffix in ((0.5, "p50"), (0.95, "p95"), (0.99, "p99")):
+                    metrics[f"rollout/{label}/{suffix}"] = torch.quantile(lengths, q).item()
         metrics["rollout/response_count"] = int(metrics_batch.batch["responses"].shape[0])
         metrics["rollout/response_tokens"] = int(metrics_batch.batch["response_mask"].sum())
         metrics.update(compute_timing_metrics(batch=batch, timing_raw=timing_raw))

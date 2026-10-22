@@ -93,6 +93,8 @@ class SingleTurnAgentLoop(AgentLoopBase):
         if metrics.get("num_preempted") is None:
             metrics["num_preempted"] = output.num_preempted if output.num_preempted is not None else -1
 
+        metrics["finish_reason"] = output.extra_fields.get("finish_reason", output.stop_reason)
+        output.extra_fields["finish_reason"] = metrics["finish_reason"]
         merge_result, response_mask, response_logprobs = await self.ct_merge_assistant_token(
             prompt_ids,
             output.token_ids,

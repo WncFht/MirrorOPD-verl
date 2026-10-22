@@ -17,9 +17,11 @@ import torch
 from tensordict import TensorDict
 
 from verl.trainer.ppo.core_algos import agg_loss, compute_value_loss, get_policy_loss_fn, kl_penalty
+from verl.trainer.ppo.policy_metrics import applied_weight_observations, ppo_clip_observations, rejection_observations
 from verl.utils import tensordict_utils as tu
 from verl.utils.dataset.dataset_utils import DatasetPadMode
 from verl.utils.metric import AggregationType, Metric
+from verl.utils.metric.observations import Observation
 from verl.utils.torch_functional import masked_mean, masked_sum
 from verl.workers.config import ActorConfig, CriticConfig
 from verl.workers.utils.padding import no_padding_2_padding
@@ -114,6 +116,11 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
             )
         )
 
+    raw_mask = data.get("metrics_response_mask")
+    if raw_mask is not None and raw_mask.is_nested:
+        raw_mask = raw_mask.to_padded_tensor(False)
+    collect_metrics = tu.get_non_tensor_data(data, "collect_metrics", default=False)
+    quantile = tu.get_non_tensor_data(data, "metrics_quantile", default=False)
     # select fields and convert to padded tensor
     fields = ["response_mask", "old_log_probs", "advantages"]
     if "rollout_is_weights" in data:
@@ -147,9 +154,48 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
 
     # AggregationType.MEAN for pg metrics: assumes policy_loss_fn normalizes by local_bsz/local_tokens
     # Ex: in compute_policy_loss_vanilla, pg_metrics are pg_clipfrac, ppo_kl, pg_clipfrac_lower
-    pg_metrics = Metric.from_dict(pg_metrics, aggregation=AggregationType.MEAN)
+    pg_metrics = {
+        key: Observation.ratio(
+            torch.as_tensor(value, device=response_mask.device) * response_mask.sum(), response_mask.sum()
+        )
+        for key, value in pg_metrics.items()
+    }
 
     metrics.update(pg_metrics)
+    if collect_metrics:
+        if raw_mask is not None:
+            metrics.update(rejection_observations(response_mask, raw_mask))
+        if rollout_is_weights is not None:
+            metrics.update(
+                applied_weight_observations(
+                    rollout_is_weights,
+                    response_mask,
+                    response_mask if raw_mask is None else raw_mask,
+                    quantile=quantile,
+                )
+            )
+        if loss_mode == "vanilla":
+            low = config.clip_ratio if config.clip_ratio_low is None else config.clip_ratio_low
+            high = config.clip_ratio if config.clip_ratio_high is None else config.clip_ratio_high
+            scale = torch.ones_like(log_prob)
+            if loss_agg_mode == "seq-mean-token-mean":
+                scale = scale / response_mask.sum(-1, keepdim=True).clamp_min(1)
+            elif loss_agg_mode == "seq-mean-token-sum-norm":
+                scale = scale / (config.loss_scale_factor or response_mask.shape[-1])
+            metrics.update(
+                ppo_clip_observations(
+                    log_prob,
+                    old_log_prob,
+                    advantages,
+                    response_mask,
+                    low,
+                    high,
+                    config.get("clip_ratio_c", 3.0),
+                    prefix="correction/task_ppo/",
+                    weights=rollout_is_weights,
+                    scale=scale,
+                )
+            )
     metrics["actor/pg_loss"] = Metric(value=pg_loss, aggregation=metric_aggregation)
     if sc_outputs:
         for key in (
@@ -187,6 +233,10 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         entropy_coeff = config.entropy_coeff
         policy_loss -= entropy_coeff * entropy_loss
         metrics["actor/entropy_loss"] = Metric(value=entropy_loss, aggregation=metric_aggregation)
+        metrics["optim/actor/entropy_loss_weighted"] = Metric(
+            value=-entropy_coeff * entropy_loss.detach(), aggregation=metric_aggregation
+        )
+        metrics["policy/entropy/update"] = Observation.mean(entropy.detach()[response_mask])
 
     # add kl loss
     if config.use_kl_loss:
@@ -200,6 +250,10 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         policy_loss += kl_loss * config.kl_loss_coef
         metrics["kl_loss"] = Metric(value=kl_loss, aggregation=metric_aggregation)
         metrics["kl_coef"] = config.kl_loss_coef
+        metrics["optim/actor/kl_loss_weighted"] = Metric(
+            value=kl_loss.detach() * config.kl_loss_coef, aggregation=metric_aggregation
+        )
+        metrics["policy/current_reference/sampled_kl"] = Observation.mean(kld.detach()[response_mask])
 
     return policy_loss, metrics
 
@@ -258,8 +312,8 @@ def value_loss(config: CriticConfig, model_output, data: TensorDict, dp_group=No
 
     metrics = {
         "critic/vf_loss": Metric(value=vf_loss, aggregation=metric_aggregation),
-        "critic/vf_clipfrac": vf_clipfrac.detach().item(),
-        "critic/vpred_mean": masked_mean(vpreds, response_mask).detach().item(),
+        "critic/vf_clipfrac": Observation.ratio(vf_clipfrac.detach() * response_mask.sum(), response_mask.sum()),
+        "critic/vpred_mean": Observation.mean(vpreds.detach()[response_mask]),
     }
 
     return vf_loss, metrics
