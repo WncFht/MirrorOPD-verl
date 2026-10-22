@@ -1,0 +1,217 @@
+{
+  "date": "2026-10-22",
+  "format": "policy-v3",
+  "gpu_source_commit": "4b6447950",
+  "latest_code_commit": "94e91aad6",
+  "e3": {
+    "cloud": {
+      "run_id": "ls7cx2p3",
+      "url": "https://forge.coreweave.com/wandb/wncfht/MirrorOPD-verl/runs/ls7cx2p3",
+      "state": "finished",
+      "cloud_history_rows": 16,
+      "scalar_rows": 13,
+      "sample_table_rows": [
+        1,
+        2,
+        3
+      ],
+      "scalar_fields": 900,
+      "local_cloud_values_match": true,
+      "eval_optimizer_steps": [
+        0,
+        4,
+        8
+      ],
+      "format": "policy-v3"
+    },
+    "process": {
+      "exit_code": 0,
+      "wall_seconds": 409.6826910972595
+    },
+    "validations": [
+      {
+        "outer": 0,
+        "optimizer": 0,
+        "datasets": {
+          "AIME25": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 0.25,
+            "pass@K": 0.5,
+            "majority@K": 0.5,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "AMC23": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 0.875,
+            "pass@K": 1.0,
+            "majority@K": 1.0,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "MATH-500": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 0.5,
+            "pass@K": 0.5,
+            "majority@K": 0.5,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          }
+        }
+      },
+      {
+        "outer": 1,
+        "optimizer": 4,
+        "datasets": {
+          "AIME25": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 0.25,
+            "pass@K": 0.5,
+            "majority@K": 0.5,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "AMC23": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 0.875,
+            "pass@K": 1.0,
+            "majority@K": 1.0,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "MATH-500": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 0.625,
+            "pass@K": 1.0,
+            "majority@K": 1.0,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          }
+        }
+      },
+      {
+        "outer": 2,
+        "optimizer": 8,
+        "datasets": {
+          "AIME25": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 0.375,
+            "pass@K": 0.5,
+            "majority@K": 0.5,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "AMC23": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 1.0,
+            "pass@K": 1.0,
+            "majority@K": 1.0,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "MATH-500": {
+            "prompts": 2,
+            "responses": 8,
+            "failed": 0,
+            "mean": 0.5,
+            "pass@K": 0.5,
+            "majority@K": 0.5,
+            "verified_budgets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          }
+        }
+      }
+    ],
+    "optimizer_steps": 8,
+    "family_counts": {
+      "advantage": 15,
+      "correction": 4,
+      "distill": 9,
+      "eval": 669,
+      "optim": 12,
+      "perf": 26,
+      "policy": 106,
+      "rollout": 56,
+      "step": 3
+    }
+  },
+  "is_rs": {
+    "status": "gpu_rerun_deferred_by_user",
+    "attempt_exit_code": 1,
+    "updates_completed": 0,
+    "invalid_threshold": "0.01",
+    "corrected_threshold": "0.99_1.01",
+    "reason": "Invalid ratio bounds failed before updates; this attempt is not GPU acceptance."
+  },
+  "cpu_test_batches": [
+    {
+      "scope": "broad regression",
+      "passed": 290
+    },
+    {
+      "scope": "scalar reduction and optimizer pipeline",
+      "passed": 114
+    },
+    {
+      "scope": "nested correction weights and related regressions",
+      "passed": 93
+    },
+    {
+      "scope": "sample table and tracking",
+      "passed": 12
+    }
+  ],
+  "cpu_counts_overlap": true
+}
