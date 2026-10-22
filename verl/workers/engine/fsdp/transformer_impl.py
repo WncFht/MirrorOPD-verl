@@ -1200,6 +1200,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
     def _full_vocab_output(self, micro_batch, model_inputs, teacher):
         from verl.trainer.distillation.full_vocab import full_reverse_kl
         from verl.trainer.distillation.hidden import prediction_positions
+        from verl.trainer.distillation.profiling import full_kl_range
 
         if not self.model_config.enable_full_vocab:
             raise ValueError("full-vocab output requires the model head adapter")
@@ -1216,7 +1217,8 @@ class FSDPEngineWithLMHead(FSDPEngine):
             selected = hidden.squeeze(0).index_select(0, packed)
             if teacher:
                 # Free each micro-batch GPU result instead of retaining the full batch there.
-                chunks = selected.detach().cpu().split([len(p) for p in positions])
+                with full_kl_range("teacher_hidden_d2h"):
+                    chunks = selected.detach().cpu().split([len(p) for p in positions])
                 return {
                     "teacher_hidden": torch.nested.as_nested_tensor(list(chunks), layout=torch.jagged),
                     "teacher_positions": torch.nested.as_nested_tensor(
@@ -1227,7 +1229,8 @@ class FSDPEngineWithLMHead(FSDPEngine):
             if any(not torch.equal(a, b) for a, b in zip(positions, actual_positions.unbind(), strict=True)):
                 raise ValueError("Teacher hidden prediction positions do not match student loss mask")
             teacher_hidden = micro_batch["teacher_hidden"].values()
-            weight = self.full_vocab_teacher_head.get(selected.device, selected.dtype)
+            with full_kl_range("teacher_head_get"):
+                weight = self.full_vocab_teacher_head.get(selected.device, selected.dtype)
             config = self.full_vocab_config
 
             def compute(h, w):
@@ -1243,10 +1246,12 @@ class FSDPEngineWithLMHead(FSDPEngine):
                     )
 
             # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
-            total = head(selected, full_vocab_callback=compute)
+            with full_kl_range("head_loss"):
+                total = head(selected, full_vocab_callback=compute)
             return {"full_kl_sum": total, "full_kl_count": packed.numel()}
 
-        return self.module(**model_inputs, use_cache=False, full_vocab_callback=output)
+        with full_kl_range("teacher_forward" if teacher else "student_forward"):
+            return self.module(**model_inputs, use_cache=False, full_vocab_callback=output)
 
     def prepare_model_inputs(self, micro_batch: TensorDict):
         distillation_use_topk = tu.get_non_tensor_data(data=micro_batch, key="distillation_use_topk", default=False)
@@ -1666,7 +1671,16 @@ class FSDPEngineWithLMHead(FSDPEngine):
     def forward_step(self, micro_batch: TensorDict, loss_function, forward_only):
         device_name = get_device_name()
         # actually, we should avoid assigning like this...
-        micro_batch = micro_batch.to(get_device_id())
+        full_vocab = tu.get_non_tensor_data(micro_batch, "full_vocab_teacher", default=False) or tu.get_non_tensor_data(
+            micro_batch, "full_vocab_train", default=False
+        )
+        if full_vocab:
+            from verl.trainer.distillation.profiling import full_kl_range
+
+            with full_kl_range("micro_batch_h2d"):
+                micro_batch = micro_batch.to(get_device_id())
+        else:
+            micro_batch = micro_batch.to(get_device_id())
         model_inputs, output_args = self.prepare_model_inputs(micro_batch=micro_batch)
 
         # Honor mixed_precision.param_dtype resolved during FSDP setup. When dtype is fp32,

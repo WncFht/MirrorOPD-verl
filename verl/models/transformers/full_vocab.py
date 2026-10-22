@@ -26,5 +26,8 @@ def full_vocab_forward(self, *args, full_vocab_callback=None, **kwargs):
     if full_vocab_callback is None:
         return self._full_vocab_original_forward(*args, **kwargs)
     kwargs.update(return_dict=True, output_hidden_states=False, use_cache=False)
-    output = self.model(*args, **kwargs)
+    from verl.trainer.distillation.profiling import full_kl_range
+
+    with full_kl_range("backbone"):
+        output = self.model(*args, **kwargs)
     return full_vocab_callback(output.last_hidden_state, self.lm_head)
