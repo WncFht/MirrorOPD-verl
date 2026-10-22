@@ -1,0 +1,73 @@
+{
+  "scope": "Fixed-prefix real-model FSDP2 probe. Direct worker calls; excludes Ray/TQ/vLLM.\n\nRe-tokenized saved math generations provide realistic unequal lengths, not exact\noriginal rollout token IDs. lr=0 keeps all variants on identical model weights;\nAdamW still executes and allocates its ordinary state. Production loss/normalizer,\nhead hooks, checkpointing, micro-batching and model offload are exercised.\n",
+  "arguments": {
+    "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/DeepSeek-R1-Distill-Qwen-1.5B",
+    "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/JustRL-DeepSeek-1.5B",
+    "samples": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/rollout-tuning-20261022/valid-w32-s32-20261022-a/training/validation/0.jsonl",
+    "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/full-kl-profile-20261022/pipeline-fused/pipeline.json",
+    "backend": "fused_candidate",
+    "chunk": 1024,
+    "batch": 32,
+    "max_length": 8192,
+    "budget": 16384,
+    "steps": 4,
+    "no_checkpoint": false,
+    "trace": true,
+    "memory": false
+  },
+  "world_size": 4,
+  "input_tokens": 163573,
+  "loss_tokens": 161701,
+  "records": [
+    {
+      "step": 0,
+      "warmup": true,
+      "profiled": false,
+      "teacher_s": 1.9246917963027954,
+      "actor_s": 8.691816329956055,
+      "wall_s": 10.616795539855957,
+      "peak_allocated_gib": 14.017243385314941,
+      "peak_reserved_gib": 17.58203125,
+      "loss": 0.09630516171455383,
+      "grad_norm": 1.3482646942138672
+    },
+    {
+      "step": 1,
+      "warmup": false,
+      "profiled": false,
+      "teacher_s": 1.7971930503845215,
+      "actor_s": 4.275848388671875,
+      "wall_s": 6.072856426239014,
+      "peak_allocated_gib": 17.46722984313965,
+      "peak_reserved_gib": 21.125,
+      "loss": 0.09630516171455383,
+      "grad_norm": 1.3482530117034912
+    },
+    {
+      "step": 2,
+      "warmup": false,
+      "profiled": false,
+      "teacher_s": 1.5662790536880493,
+      "actor_s": 3.8913919925689697,
+      "wall_s": 5.457484722137451,
+      "peak_allocated_gib": 17.46722984313965,
+      "peak_reserved_gib": 21.125,
+      "loss": 0.09630516171455383,
+      "grad_norm": 1.3482739925384521
+    },
+    {
+      "step": 3,
+      "warmup": false,
+      "profiled": true,
+      "teacher_s": 1.5726871490478516,
+      "actor_s": 3.7006399631500244,
+      "wall_s": 6.330945014953613,
+      "peak_allocated_gib": 17.46722984313965,
+      "peak_reserved_gib": 21.125,
+      "loss": 0.09630516171455383,
+      "grad_norm": 1.3482683897018433
+    }
+  ],
+  "gpu": "NVIDIA H800",
+  "torch": "2.11.0+cu128"
+}
