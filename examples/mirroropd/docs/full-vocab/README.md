@@ -4,6 +4,8 @@
 
 | 内容 | 入口 |
 | --- | --- |
+| 两条训练路径、配置、FSDP 接入、优化阶段和验收 | [实现计划](2026-10-22-Full-baseline与Full-KL实现计划.md) |
+| CPU 正确性与 H800 算子实测、复现命令 | [算子小实验](2026-10-22-Full-KL算子小实验.md) |
 | 共用流式公式、math 配方容量与历史步时模型 | [词表蒸馏的计算与显存预算](2026-10-22-词表蒸馏的计算与显存预算.md) |
 | 用户提供的生产实现参考原文 | [Full-vocab OPD](reference/fullvocab-opd.md) |
 | KL 数值、baseline 与直接梯度的区别 | [数值与梯度实现](../opd-objective/2026-10-21-Reverse-KL实验排序与Top-k支持集.md#2-full-vocab-kl一个真值不同计算图) |
