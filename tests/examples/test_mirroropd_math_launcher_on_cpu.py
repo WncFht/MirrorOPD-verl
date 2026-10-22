@@ -68,6 +68,17 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "ROLLOUT_GPU_MEMORY_UTILIZATION",
         "ROLLOUT_TOKEN_BUDGET",
         "VAL_BATCH_SIZE",
+        "PPO_EPOCHS",
+        "TOTAL_TRAINING_STEPS",
+        "TEST_FREQ",
+        "SAVE_FREQ",
+        "LEARNING_RATE",
+        "SEED",
+        "FULL_KL_BACKEND",
+        "FULL_KL_TOKEN_CHUNK",
+        "FULL_KL_VOCAB_CHUNK",
+        "FULL_KL_ASYNC_WRITE",
+        "FULL_KL_PREFETCH",
     ):
         env.pop(name, None)
     env.update(
@@ -584,6 +595,86 @@ def test_ablation_launcher_accepts_budget_clip_epochs_and_final_overrides(tmp_pa
     assert cfg.actor_rollout_ref.actor.ppo_epochs == 2
     loss = cfg.distillation.distillation_loss
     assert loss.clip_ratio == loss.clip_ratio_low == loss.clip_ratio_high == 0.1
+
+
+@pytest.mark.parametrize("group,lr", [("E13", 1e-6), ("E14", 5e-7), ("E15", 1e-6)])
+def test_single_update_full_kl_and_vanilla_presets(tmp_path, group, lr):
+    script = SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"
+    cfg = _config(tmp_path, command=["bash", str(script), group], DOMAIN="code")
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    distillation = omega_conf_to_dataclass(cfg.distillation)
+    loss = distillation.distillation_loss
+    assert cfg.trainer.n_gpus_per_node == 8 and distillation.execution_mode == "shared_sync"
+    assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 1
+    assert cfg.trainer.total_training_steps == 200
+    assert cfg.trainer.test_freq == 20 and cfg.trainer.save_freq == 100
+    assert cfg.trainer.max_actor_ckpt_to_keep == 2 and not cfg.trainer.val_before_train
+    assert cfg.actor_rollout_ref.actor.optim.lr == pytest.approx(lr)
+    assert cfg.actor_rollout_ref.actor.optim.lr_scheduler_type == "constant"
+    assert cfg.actor_rollout_ref.actor.optim.lr_warmup_steps == 0
+    assert cfg.data.seed == cfg.actor_rollout_ref.rollout.seed == cfg.actor_rollout_ref.actor.fsdp_config.seed == 42
+    assert cfg.actor_rollout_ref.actor.data_loader_seed == 42
+    assert cfg.data.max_response_length == 7168 and cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("JustRL-DeepSeek-1.5B")
+    assert loss.advantage_source == "current" and loss.policy_loss_mode == "vanilla"
+    assert not loss.use_task_rewards
+    assert cfg.algorithm.rollout_correction.rollout_is is None
+    assert not cfg.algorithm.rollout_correction.bypass_mode
+    if group == "E15":
+        assert loss.loss_mode == "k1" and loss.use_policy_gradient
+        assert cfg.actor_rollout_ref.rollout.calculate_log_probs
+    else:
+        assert loss.loss_mode == "full_reverse_kl" and not loss.use_policy_gradient
+        assert loss.full_vocab.backend == "precompute"
+        assert loss.full_vocab.async_write and loss.full_vocab.prefetch
+        assert loss.full_vocab.token_chunk_size == 512 and loss.full_vocab.vocab_chunk_size == 8192
+        assert not cfg.actor_rollout_ref.rollout.calculate_log_probs
+
+
+def test_full_kl_lr_pair_only_changes_learning_rate(tmp_path):
+    script = SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"
+    first = _config(tmp_path, command=["bash", str(script), "E13"])
+    second = _config(tmp_path, command=["bash", str(script), "E14"])
+    second.actor_rollout_ref.actor.optim.lr = first.actor_rollout_ref.actor.optim.lr
+    assert OmegaConf.to_container(first, resolve=True) == OmegaConf.to_container(second, resolve=True)
+
+
+@pytest.mark.parametrize("group", ["E13", "E14", "E15"])
+def test_single_update_presets_preserve_explicit_overrides(tmp_path, group):
+    script = SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"
+    cfg = _config(
+        tmp_path,
+        command=["bash", str(script), group, "actor_rollout_ref.actor.optim.lr=8e-7", "trainer.test_freq=7"],
+        LEARNING_RATE="3e-7",
+        PPO_EPOCHS="2",
+        TOTAL_TRAINING_STEPS="12",
+        TEST_FREQ="6",
+        SAVE_FREQ="12",
+        SEED="43",
+        FULL_KL_BACKEND="streaming",
+        FULL_KL_ASYNC_WRITE="False",
+        FULL_KL_PREFETCH="False",
+    )
+    assert cfg.actor_rollout_ref.actor.optim.lr == pytest.approx(8e-7)
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 2 and cfg.trainer.total_training_steps == 12
+    assert cfg.trainer.test_freq == 7 and cfg.trainer.save_freq == 12
+    assert cfg.data.seed == cfg.actor_rollout_ref.rollout.seed == cfg.actor_rollout_ref.actor.fsdp_config.seed == 43
+    if group != "E15":
+        assert cfg.distillation.distillation_loss.full_vocab.backend == "streaming"
+        assert not cfg.distillation.distillation_loss.full_vocab.async_write
+        assert not cfg.distillation.distillation_loss.full_vocab.prefetch
+
+
+@pytest.mark.parametrize("group", ["E13", "E14"])
+def test_full_kl_presets_require_shared_teacher(tmp_path, group):
+    result = _launch(
+        tmp_path,
+        command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), group],
+        DISTILLATION_EXECUTION_MODE="standalone",
+    )
+    assert result.returncode == 2 and "shared_sync" in result.stderr
 
 
 def test_shared_launcher_remains_vanilla_and_validates_epoch_input(tmp_path):
