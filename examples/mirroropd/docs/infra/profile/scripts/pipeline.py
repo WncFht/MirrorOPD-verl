@@ -78,7 +78,11 @@ def main():
     p.add_argument("--teacher", required=True)
     p.add_argument("--samples", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--backend", default="precompute", choices=["precompute", "fused_candidate", "streaming", "liger"])
+    p.add_argument(
+        "--backend",
+        default="precompute",
+        choices=["precompute", "precompute_fused", "fused_candidate", "streaming", "liger"],
+    )
     p.add_argument("--chunk", type=int, default=512)
     p.add_argument("--batch", type=int, default=32)
     p.add_argument("--max-length", type=int, default=8192)
