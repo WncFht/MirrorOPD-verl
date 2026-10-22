@@ -477,8 +477,10 @@ def compute_data_metrics(batch: DataProto, use_critic: bool = True) -> dict[str,
     sequence_score = batch.batch["token_level_scores"].sum(-1)
     sequence_reward = batch.batch["token_level_rewards"].sum(-1)
 
-    advantages = batch.batch["advantages"]
-    returns = batch.batch["returns"]
+    advantages = batch.batch.get("advantages")
+    returns = batch.batch.get("returns")
+    if use_critic and returns is None:
+        raise ValueError("Critic metrics require returns")
 
     max_prompt_length = batch.batch["prompts"].shape[-1]
     max_response_length = batch.batch["responses"].shape[-1]
@@ -511,15 +513,18 @@ def compute_data_metrics(batch: DataProto, use_critic: bool = True) -> dict[str,
         logger.warning("All samples are aborted, returning default reward metrics")
         reward_mean = reward_max = reward_min = float("nan")
 
-    valid_adv = torch.masked_select(advantages, response_mask)
-    valid_returns = torch.masked_select(returns, response_mask)
+    valid_adv = (
+        torch.masked_select(advantages, response_mask) if advantages is not None else sequence_score.new_empty(0)
+    )
+    valid_returns = torch.masked_select(returns, response_mask) if returns is not None else sequence_score.new_empty(0)
 
     if valid_adv.numel() > 0:
         adv_mean = torch.mean(valid_adv).detach().item()
         adv_max = torch.max(valid_adv).detach().item()
         adv_min = torch.min(valid_adv).detach().item()
     else:
-        logger.warning("Response mask is all False, returning default advantage metrics")
+        if advantages is not None:
+            logger.warning("Response mask is all False, returning default advantage metrics")
         adv_mean = adv_max = adv_min = float("nan")
 
     if valid_returns.numel() > 0:
@@ -527,7 +532,8 @@ def compute_data_metrics(batch: DataProto, use_critic: bool = True) -> dict[str,
         returns_max = torch.max(valid_returns).detach().item()
         returns_min = torch.min(valid_returns).detach().item()
     else:
-        logger.warning("Response mask is all False, returning default return metrics")
+        if returns is not None:
+            logger.warning("Response mask is all False, returning default return metrics")
         returns_mean = returns_max = returns_min = float("nan")
 
     # Aborted samples and non-aborted response length statistics
@@ -615,6 +621,12 @@ def compute_data_metrics(batch: DataProto, use_critic: bool = True) -> dict[str,
         "prompt_length/min": torch.min(prompt_length).detach().item(),
         "prompt_length/clip_ratio": torch.mean(torch.eq(prompt_length, max_prompt_length).float()).detach().item(),
     }
+
+    # Direct distributional objectives do not construct policy advantages/returns.
+    if advantages is None:
+        metrics = {k: v for k, v in metrics.items() if not k.startswith("critic/advantages/")}
+    if returns is None:
+        metrics = {k: v for k, v in metrics.items() if not k.startswith("critic/returns/")}
 
     # multi-turn conversation
     if "__num_turns__" in batch.non_tensor_batch:

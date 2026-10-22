@@ -20,6 +20,25 @@ ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh"
 
 
+@pytest.mark.parametrize("domain", ["math", "code", "if"])
+def test_full_reverse_kl_launcher(tmp_path, domain):
+    cfg = _config(
+        tmp_path,
+        script=SCRIPT.parent / "run_full_reverse_kl.sh",
+        DOMAIN=domain,
+        FULL_KL_BACKEND="streaming",
+        FULL_KL_ASYNC_WRITE="True",
+        FULL_KL_PREFETCH="True",
+    )
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
+    assert loss.loss_mode == "full_reverse_kl" and not loss.use_policy_gradient
+    assert loss.full_vocab.backend == "streaming"
+    assert loss.full_vocab.async_write and loss.full_vocab.prefetch
+    assert not cfg.actor_rollout_ref.rollout.calculate_log_probs
+
+
 def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
     env = os.environ.copy()
     for name in (

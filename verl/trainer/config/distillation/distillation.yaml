@@ -46,6 +46,8 @@ distillation_loss:
     backend: recompute
     token_chunk_size: 512
     vocab_chunk_size: 8192
+    async_write: false
+    prefetch: false
 
   # If distillation loss requires top-k logits, this is the value of k
   topk: 32
