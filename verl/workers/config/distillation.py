@@ -41,7 +41,7 @@ class FullVocabConfig(BaseConfig):
     prefetch: bool = False
 
     def __post_init__(self):
-        if self.backend not in ("dense", "recompute", "streaming", "precompute", "liger"):
+        if self.backend not in ("dense", "recompute", "cached", "streaming", "precompute", "liger"):
             raise ValueError(f"Unsupported full-vocab backend: {self.backend}")
         if any(type(x) is not int or x <= 0 for x in (self.token_chunk_size, self.vocab_chunk_size)):
             raise ValueError("full-vocab chunk sizes must be positive")
