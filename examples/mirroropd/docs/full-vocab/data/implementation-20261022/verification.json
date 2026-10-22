@@ -1,0 +1,38 @@
+{
+  "cpu_regression": {
+    "passed": 259,
+    "log": "cpu-tests.txt"
+  },
+  "later_targeted": {
+    "passed": 55,
+    "log": "/tmp/full-kl-targeted.log"
+  },
+  "kernel_cached_cpu": {
+    "passed": 17,
+    "log": "/tmp/full-kl-cached-tests.log"
+  },
+  "io_overlap_cpu": {
+    "passed": 7,
+    "log": "/tmp/full-kl-io-overlap-tests.log"
+  },
+  "notes": "Counts overlap; do not sum them. End-to-end smoke and final cached GPU checks recorded separately.",
+  "full_smoke": {
+    "world_size": 4,
+    "updates": 2,
+    "exit_code": 0,
+    "result": "smoke4.json"
+  },
+  "cached_four_rank": {
+    "checkpoint_roundtrip": true,
+    "result": "fsdp2-cached4.json"
+  },
+  "capacity": {
+    "tokens": 32768,
+    "backends": [
+      "cached",
+      "streaming",
+      "precompute"
+    ],
+    "result": "capacity-32k.json"
+  }
+}

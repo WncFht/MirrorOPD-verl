@@ -4,7 +4,7 @@
 
 目标是在现有 FSDP2 shared-sync OPD 中实现两条独立训练路径：sampled-token + full KL baseline，以及直接 full-vocab reverse KL。两者共享 teacher hidden-state 数据通路、冻结 LM head 和部分归一化计算；训练目标、反向路径和指标分别维护。Math、code、IF 使用同一套工程实现，按领域验收数据和 mask。
 
-截至 2026-10-22，正式训练仍只接入 sampled teacher log-prob。Full baseline、teacher hidden payload、full reverse-KL loss 和对应 FSDP2 适配均未实现。本文随附的 CPU/GPU 脚本只测试独立算子原型，不加载模型、不启动训练、不代表 FSDP2 集成已通过。
+2026-10-22 后续实施已接通单 teacher hidden payload、full reverse-KL loss、FSDP2 head 适配及有界异步读写，并完成真实模型四卡短程训练。Full baseline 留待后续。已实现接口、支持边界和证据以[实现与验收](2026-10-22-Full-KL实现与验收.md)为准；本页继续维护两条目标的设计背景和后续扩展计划。
 
 | 内容 | 唯一维护位置 |
 | --- | --- |
@@ -16,9 +16,9 @@
 
 本文只维护接入计划、接口、优化优先级与验收条件。原始参考资料和预算已从 `opd-objective` 迁入本目录；算法调研、top-k 比较与通用估计器审计留在原目录，通过链接复用。
 
-## 2. 当前代码入口与接入缺口
+## 2. 接入位置与改动范围
 
-| 文件或入口 | 已有行为 | 拟修改内容 |
+| 文件或入口 | 实施前行为 | 改动方向 |
 | --- | --- | --- |
 | `verl/trainer/ppo/core_algos.py::kl_penalty_forward` | k1/k2/k3 等 sampled 公式；`full` 分支抛出异常 | 保持 sampled 接口；full 分布计算独立实现，不把 hidden/head 塞入 log-prob 接口 |
 | `verl/trainer/distillation/losses.py::DistillationLossSettings` | `use_topk` 与 `use_estimator` 必须二选一 | 增加可表达 hidden payload 的能力描述，并保留旧配置兼容 |
@@ -30,7 +30,7 @@
 | `verl/trainer/distillation/fsdp/losses.py` | 从已物化 logits 计算 top-k loss | 保持现有职责；full head-loss 在新模块中实现 |
 | `examples/mirroropd/_run_single_teacher_fsdp2.sh` | 三个领域共用 sampled 配方 | 新增独立实验 wrapper，默认入口继续复现既有结果 |
 
-最小代码组织建议新增 `verl/trainer/distillation/full_vocab.py`，维护 baseline 数值、backend 选择和能力检查；新增 `verl/trainer/distillation/fsdp/full_vocab.py`，维护 PyTorch 分块参考和 Liger 适配。Teacher payload 与 head 生命周期由已有 worker/engine 管理。后续新增多个估计器后再按职责拆出 `estimators.py`，避免第一版建立多层注册框架。
+实际代码组织为 `distillation/full_vocab.py`（算子）、`distillation/hidden.py`（位置与冻结 head）、`distillation/hidden_io.py`（读写）和 `models/transformers/full_vocab.py`（模型适配）；复用已有 engine/loss/worker。没有新增 trainer 或另一套 optimizer 循环。
 
 现有 `use_liger=True` 模型补丁并不等于启用 full-KL loss；FSDP 引擎还显式关闭该补丁的 fused linear CE。`use_fused_kernels=True` 也不能替代 teacher hidden 通路及 full-KL 目标接入。
 
@@ -38,22 +38,28 @@
 
 ### 3.1 拟新增配置
 
-以下是接口提案，尚不能直接传给现有启动脚本。字段名在实现时应同时进入 dataclass、Hydra 配置和 launcher 测试。
+当前直接 full reverse-KL 复用已有 `loss_mode`，没有新增重叠的 `objective` 开关。已实现配置如下：
 
 ```yaml
 distillation:
+  execution_mode: shared_sync
   distillation_loss:
-    objective: sampled_pg        # sampled_pg | full_reverse_kl
-    baseline_kind: none          # none | full_kl
-    baseline_policy: current     # current | anchor
-    full_vocab_backend: recompute # recompute | streaming | liger
-    full_vocab_token_chunk: 512
-    full_vocab_vocab_chunk: 8192
+    loss_mode: full_reverse_kl
+    use_policy_gradient: false
+    use_task_rewards: false
+    loss_max_clamp: null
+    log_prob_min_clamp: null
+    full_vocab:
+      backend: recompute
+      token_chunk_size: 512
+      vocab_chunk_size: 8192
+      async_write: false
+      prefetch: false
 ```
 
-`sampled_pg + baseline_kind=none` 保持历史行为。`sampled_pg + full_kl` 继续使用 k1 sampled reward；baseline backend 提供每预测位置的无梯度 KL 数值，不改变 PG 类型。`full_reverse_kl` 直接输出可微 loss，要求 `baseline_kind=none`，不经过 sampled PPO clipping 和行为 ratio。第一版关闭 task reward，并保持 temperature=1 与全局 response-token mean。
+`backend` 支持 dense、recompute、cached、streaming、precompute、liger。数学目标与实现选择分开，teacher payload 由目标决定。旧 sampled 配置保持原语义。
 
-`baseline_policy=current` 与 `anchor` 必须出现在实验配置和指标中。第一版 current baseline 仅与 current advantage 配对；已有 frozen/rollout advantage 如需使用 baseline，应单列目标和推导，不默认混配。Legacy vanilla 和 token-IS 等模式都应明确是否支持，不能静默忽略 baseline。
+Baseline 仍是后续计划，应明确 kind 与 current/anchor 刷新来源，并与 current/frozen advantage 的语义分别校验；当前没有可运行的 baseline 开关。
 
 ### 3.2 Full baseline：current 路径
 
@@ -188,7 +194,7 @@ Checkpointing 必须覆盖 projection 与 KL，而不只是已有 backbone。普
 
 每个阶段独立 Conventional Commit，包含对应配置和有针对性的测试。最小可比较组为 sampled、sampled+current full baseline、direct full reverse KL，统一一次更新、batch、学习率、mask、采样和精度；anchor baseline 单独列。任务 reward 和四轮更新在主对照之后扩展。
 
-P5 拟提供 `run_full_baseline.sh` 与 `run_full_reverse_kl.sh`，复用公共配方并接收 `DOMAIN=math|code|if`。在引擎未接通前不发布看似可运行的训练脚本；当前可运行入口仅为独立实验脚本。
+已提供 `run_full_reverse_kl.sh` 与 `smoke_full_reverse_kl.sh`，复用公共配方并接收 `DOMAIN=math|code|if`。Baseline 入口尚未实现。Math 完整短程 smoke、三领域配置和 teacher 重建已验证；code/IF 的端到端训练与正式验证不由这些测试替代。
 
 ## 7. 验收矩阵与决策指标
 
