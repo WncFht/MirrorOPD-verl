@@ -84,7 +84,13 @@ from verl.utils.debug.metrics import calculate_debug_metrics
 from verl.utils.import_utils import load_extern_type
 from verl.utils.metric import reduce_metrics
 from verl.utils.metric.evaluation import evaluation_records
-from verl.utils.metric.schema import evaluation_metrics, finite_metrics, outer_metrics, worker_outer_name
+from verl.utils.metric.schema import (
+    canonical_name,
+    evaluation_metrics,
+    finite_metrics,
+    outer_metrics,
+    worker_outer_name,
+)
 from verl.utils.pipeline_metrics import (
     aggregate_pipeline_requests,
     aggregate_validation_windows,
@@ -1301,7 +1307,10 @@ class PPOTrainer(ABC):
                 rollout_n = int(rollout_n)
                 key = (str(data_source), str(uid))
                 specification = batch_dict.get("reward_model", [{}] * batch_size)[row_index]
-                source_fields[str(data_source)].update(specification.get("metric_fields", []))
+                declared = specification.get("metric_fields", [])
+                if isinstance(declared, str) or any(not isinstance(field, str) for field in declared):
+                    raise ValueError("reward_model.metric_fields must be a collection of score names")
+                source_fields[str(data_source)].update(declared)
                 expected_acc_counts[key] = rollout_n
                 source_ordinals[str(data_source)] += 1
                 prompt_metadata[key] = {
@@ -2162,7 +2171,8 @@ class PPOTrainer(ABC):
             if rollout_corr_config.get("rollout_rs"):
                 data.batch["metrics_response_mask"] = data.batch["response_mask"].clone()
             data, is_metrics = compute_rollout_correction_and_add_to_batch(data, rollout_corr_config)
-            metrics.update(is_metrics)
+            for key, value in is_metrics.items():
+                metrics.setdefault(canonical_name(key), value)
 
         # 3. compute advantages
         data = compute_advantage_for_multi_trajectories(
