@@ -33,7 +33,9 @@ from verl.workers.config.distillation import FullVocabConfig
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--backend", choices=["dense", "recompute", "cached", "streaming", "precompute", "liger"], default="recompute"
+        "--backend",
+        choices=["dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"],
+        default="recompute",
     )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--checkpoint", action="store_true")

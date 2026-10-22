@@ -12,7 +12,7 @@
 - `scripts/run_study.py`：空闲门控、顺序执行、按任务保存退出状态；共用 `/tmp/mirroropd-gpus-0-1-2-3.lock`。
 - `scripts/benchmark.py`：合成 hidden/head 的算子对照与数值检查。
 - `scripts/pipeline.py`：真实模型、固定数学回答、FSDP2、offload、activation checkpointing 的管线对照。
-- `scripts/fused_candidate.py`：实验用 Triton 归一化/梯度融合，生产默认未切换。
+- `scripts/fused_candidate.py`：历史候选名的兼容导入；可选 `precompute_fused` 接入见[融合算子接入与验证](2026-10-23-融合算子接入与验证.md)，生产默认未切换。
 - `scripts/analyze.py`：区间并集分析、实测 CUDA 时间线和吞吐—显存图。
 - `scripts/report.py`：从成功和失败任务生成记录，保留测量范围和未完成项。
 
