@@ -14,6 +14,7 @@
 import asyncio
 import functools
 import logging
+import math
 import os
 from contextlib import nullcontext
 from copy import deepcopy
@@ -41,7 +42,7 @@ from verl.utils.flops_counter import FlopsCounter
 from verl.utils.import_utils import import_external_libs
 from verl.utils.memory_utils import aggressive_empty_cache
 from verl.utils.metric.observations import Observation, observations_to_cpu
-from verl.utils.metric.schema import is_update_metric
+from verl.utils.metric.schema import INTERNAL_COUNTERS, canonical_name, is_update_metric
 from verl.utils.metric.utils import Metric
 from verl.utils.pipeline_metrics import FSDP_PEAK_MEMORY
 from verl.utils.profiler import DistProfiler, DistProfilerExtension, ProfilerConfig, log_gpu_memory_usage
@@ -312,6 +313,7 @@ class TrainingWorker(Worker, DistProfilerExtension):
         dataloader_kwargs = tu.pop(data, key="dataloader_kwargs", default={})
         collect_metrics = tu.pop(data, key="collect_metrics", default=False)
         collect_records = tu.pop(data, key="collect_update_records", default=collect_metrics)
+        metrics_role = tu.pop(data, key="metrics_role", default="actor")
         quantile_interval = tu.pop(data, key="metrics_quantile_interval", default=8)
         attempt_start = tu.pop(data, key="metrics_attempt_start", default=None)
 
@@ -402,7 +404,7 @@ class TrainingWorker(Worker, DistProfilerExtension):
                 metrics = {}
                 optimizer_steps = 0
                 update_records = []
-                for output in actor_output:
+                for update_index, output in enumerate(actor_output):
                     applied = _consume_optimizer_step_status(output, self.engine.get_data_parallel_size())
                     if applied is None:
                         optimizer_steps = None
@@ -411,28 +413,56 @@ class TrainingWorker(Worker, DistProfilerExtension):
                     for key, val in output.items():
                         # flattn dp and micro batch
                         if isinstance(val, list):
-                            output[key] = (
-                                Metric.aggregate_dp(val)
-                                if isinstance(val[0], Metric)
-                                else list(chain.from_iterable(val))
-                            )
+                            if val and isinstance(val[0], Observation):
+                                observation = Observation.merged(val)
+                                output[key] = None if observation.is_empty() else observation.aggregate()
+                            else:
+                                output[key] = (
+                                    Metric.aggregate_dp(val)
+                                    if isinstance(val[0], Metric)
+                                    else list(chain.from_iterable(val))
+                                )
                         elif isinstance(val, Observation):
+                            output[key] = None if val.is_empty() else val.aggregate()
+                        elif isinstance(val, Metric):
                             output[key] = val.aggregate()
                     if collect_records:
-                        record = {k: v for k, v in output.items() if is_update_metric(k)}
-                        for old, new in (
-                            ("loss", "optim/actor/loss"),
-                            ("grad_norm", "optim/actor/grad_norm_preclip"),
-                            ("lr_used", "optim/actor/lr"),
-                        ):
-                            if old in output:
-                                record[new] = output[old]
+                        normalized = {}
+                        for key, value in output.items():
+                            if collect_metrics and key in INTERNAL_COUNTERS:
+                                continue  # consumed by the corresponding raw event observations
+                            name = canonical_name(key, role=metrics_role)
+                            if name not in normalized or name == key:
+                                normalized[name] = value
+                        record = {k: v for k, v in normalized.items() if is_update_metric(k)}
+                        record[f"optim/{metrics_role}/execution_known"] = float(applied is not None)
+                        if applied is not None:
+                            record[f"optim/{metrics_role}/update_applied"] = float(applied)
+                            record[f"optim/{metrics_role}/update_skipped"] = float(not applied)
+                        for stat in ("loss", "grad_norm_preclip"):
+                            value = record.get(f"optim/{metrics_role}/{stat}")
+                            if value is not None:
+                                record[f"optim/{metrics_role}/{stat}_nonfinite"] = float(
+                                    not math.isfinite(float(value))
+                                )
+                        if metrics_role == "actor":
+                            record["optim/actor/observations_available"] = float(collect_metrics)
+                            record["rollout/data_reuse/update_index"] = update_index + 1
+                            record["rollout/data_reuse/epoch_index"] = update_index // (total_num_iterations // epochs)
                         update_records.append({"metrics": record, "applied": applied})
-                        output = {k: v for k, v in output.items() if not is_update_metric(k)}
+                        output = {k: v for k, v in normalized.items() if not is_update_metric(k)}
+                        for key in output:
+                            if key.endswith(("allocated_peak_gib", "reserved_peak_gib")):
+                                output[key] = Metric("max", output[key])
                     append_to_dict(metrics, output)
 
                 if peak_memory is not None:
-                    metrics[FSDP_PEAK_MEMORY] = peak_memory
+                    key = (
+                        canonical_name(FSDP_PEAK_MEMORY)
+                        if metrics_role == "actor"
+                        else "perf/critic/allocated_peak_gib_max"
+                    )
+                    metrics[key if collect_records else FSDP_PEAK_MEMORY] = peak_memory
                 output = tu.get_tensordict(
                     tensor_dict={},
                     non_tensor_dict={

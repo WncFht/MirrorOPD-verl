@@ -104,3 +104,18 @@ def test_real_offline_history_contains_updates_outer_validation_and_table(tmp_pa
     assert not any(k.startswith("val/generations") for r in rows for k in r)
     files = [json.loads(line) for line in (tmp_path / "metrics.jsonl").read_text().splitlines()]
     assert len(files) == 12  # the table is routed only to W&B
+
+
+def test_console_summary_does_not_filter_recorded_metrics():
+    tracking = object.__new__(Tracking)
+    console, file = MagicMock(), MagicMock()
+    tracking.logger = {'console': console, 'file': file}
+    update = {'step/outer': 1, 'step/update': 2, 'optim/actor/loss': 3,
+              'policy/current_behavior/ratio_p99': 4, 'rollout/data_reuse/update_index': 2}
+    tracking.log(update, 2)
+    console.log.assert_not_called()
+    assert file.log.call_args.kwargs['data'] == update
+    outer = {'step/outer': 1, 'perf/timing/outer_step_seconds': 5, 'rollout/staleness/trajectory_spans/max': 1}
+    tracking.log(outer, 1)
+    assert console.log.call_args.kwargs['data']['optim/actor/loss'] == 3
+    assert file.log.call_args.kwargs['data'] == outer

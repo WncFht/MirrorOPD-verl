@@ -333,6 +333,8 @@ class FullyAsyncLLMServerClient(LLMServerClient):
                     previous = np.zeros(len(final_output.token_ids) - len(output.token_ids), dtype=np.bool_)
                 final_output.extra_fields["response_support_complete"] = np.concatenate([previous, current])
             final_output.stop_reason = output.stop_reason
+            if output.extra_fields.get("finish_reason") is not None:
+                final_output.extra_fields["finish_reason"] = output.extra_fields["finish_reason"]
 
             # carry the initial prefill's prefix-cache hit count forward
             if num_cached_tokens is None:
@@ -349,6 +351,7 @@ class FullyAsyncLLMServerClient(LLMServerClient):
                 sampling_params[limit_key] = original_max_tokens - len(final_output.token_ids)
                 if len(final_output.token_ids) >= original_max_tokens:
                     final_output.stop_reason = "length"
+                    final_output.extra_fields["finish_reason"] = "length"
                     break
 
             # 4. check stop reason
