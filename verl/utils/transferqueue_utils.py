@@ -171,6 +171,14 @@ async def _async_meta_to_realdata(meta: BatchMeta | KVBatchMeta) -> TensorDict:
         return empty_td
 
     tq_client = tq.get_client()
+    if hidden_keys is None and (meta_info.get("full_vocab_teacher") or meta_info.get("full_vocab_train")):
+        # DP dispatch may already have converted KVBatchMeta into an index-based BatchMeta.
+        hidden_partition = meta.partition_ids[0]
+        if any(pid != hidden_partition for pid in meta.partition_ids):
+            raise ValueError("full-vocab hidden transfer requires a single TQ partition")
+        hidden_keys = await tq_client.async_kv_retrieve_keys(
+            global_indexes=meta.global_indexes, partition_id=hidden_partition
+        )
     tensordict = await tq_client.async_get_data(meta)
     if hidden_keys is not None:
         tensordict["full_vocab_keys"] = NonTensorStack(*hidden_keys)

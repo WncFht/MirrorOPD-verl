@@ -1,6 +1,9 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
+import asyncio
 import threading
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
 
 import pytest
 import torch
@@ -8,6 +11,7 @@ from tensordict import NonTensorStack, TensorDict
 
 from verl.trainer.distillation.hidden_io import HiddenBatchIO
 from verl.utils import tensordict_utils as tu
+from verl.utils import transferqueue_utils as tqu
 
 
 def batch(keys):
@@ -68,3 +72,17 @@ def test_async_failures_are_not_lost():
         with HiddenBatchIO(data, [data], get=lambda **kw: None, put=fail) as writer:
             writer.publish({"model_output": dict(payload(0).items())}, data)
     assert not any(t.name.startswith("full-kl-hidden") for t in threading.enumerate())
+
+
+@pytest.mark.parametrize("role", ["full_vocab_teacher", "full_vocab_train"])
+def test_index_metadata_retains_sample_keys(monkeypatch, role):
+    meta = SimpleNamespace(size=2, partition_ids=["train", "train"], global_indexes=[8, 2], extra_info={role: True})
+    client = SimpleNamespace(
+        async_kv_retrieve_keys=AsyncMock(return_value=["b", "a"]),
+        async_get_data=AsyncMock(return_value=TensorDict({"input_ids": torch.ones(2, 2)}, batch_size=[2])),
+    )
+    monkeypatch.setattr(tqu.tq, "get_client", lambda: client)
+    result = asyncio.run(tqu._async_meta_to_realdata(meta))
+    assert list(result["full_vocab_keys"]) == ["b", "a"]
+    assert tu.get_non_tensor_data(result, "full_vocab_partition", default=None) == "train"
+    client.async_kv_retrieve_keys.assert_awaited_once_with(global_indexes=[8, 2], partition_id="train")
