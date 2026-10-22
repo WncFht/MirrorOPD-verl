@@ -2,15 +2,17 @@
 
 统一记号见[符号约定](../符号约定.md)，与 `MirrorOPD/theory/core` 对齐。
 
-本目录讨论固定 prefix 下的蒸馏目标、优势估计和重要性采样，不讨论 prefix 分布的校正。
+固定前缀的数学定义和证明集中在[理论目录](../theory/README.md)。本目录维护论文实测、源码审计、实验开关和历史验算；已迁出的数学章节集中到各旧文末尾的跳转索引，原锚点继续可用。
 
 | 内容 | 入口 |
 | --- | --- |
-| 数学推导、论文证据、实现刷新时机、实验建议 | [固定前缀下的优势估计与重要性采样](2026-10-21-固定前缀下的优势估计与重要性采样.md) |
-| 实验开关、更新计数、checkpoint、启动入口与验证状态 | [优势与 IS 消融及更新计数实现方案](2026-10-21-优势与IS消融及更新计数实现方案.md) |
-| Sampled-token、KL baseline、TA-OPD、ResOPD、full-vocab 与组合条件 | [学习信号与梯度估计器对照](2026-10-21-OPD学习信号与梯度估计器对照.md) |
+| OPD 四种目标、full-vocab、镜像下降与控制变量 | [理论阅读入口](../theory/README.md) |
+| 论文证据、实现刷新时机、实验建议 | [固定前缀原审计](2026-10-21-固定前缀下的优势估计与重要性采样.md) |
+| 模式合同、更新计数、checkpoint 与历史验证 | [优势与 IS 消融及更新计数实现方案](2026-10-21-优势与IS消融及更新计数实现方案.md) |
+| Sampled-token、KL baseline、TA-OPD、ResOPD 的源码与实验比较 | [学习信号与梯度估计器审计](2026-10-21-OPD学习信号与梯度估计器对照.md) |
+| E1–E15 编号与学习/评测预算 | [训练配方](../训练配方.md#采样消融与长程复用) |
 | 共用分块算法、math 配方的显存/通信预算与条件步时估算 | [词表蒸馏的计算与显存预算](../full-vocab/2026-10-22-词表蒸馏的计算与显存预算.md) |
-| Reverse-KL 实验排序、full-vocab 计算图、top-k 支持集与 One-Shot 代码审计 | [实验排序与支持集](2026-10-21-Reverse-KL实验排序与Top-k支持集.md) |
+| Reverse-KL 实验排序、top-k 支持集与 One-Shot 代码审计 | [实验排序与支持集](2026-10-21-Reverse-KL实验排序与Top-k支持集.md) |
 | Full-vocab 工程、参考资料与实现计划 | [Full-vocab 目录](../full-vocab/README.md) |
 | CPU 梯度验算 | [verify_fixed_prefix.py](scripts/verify_fixed_prefix.py) |
 | 固定版本上的验算结果 | [gradient-audit.json](data/gradient-audit.json) |
