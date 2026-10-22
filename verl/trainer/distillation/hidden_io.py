@@ -7,6 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 import torch
 from tensordict import TensorDict
 
+from verl.trainer.distillation.profiling import full_kl_range
 from verl.utils import tensordict_utils as tu
 
 
@@ -35,13 +36,14 @@ class HiddenBatchIO:
     def __exit__(self, exc_type, exc, tb):
         try:
             if self.pending_write is not None and exc_type is None:
-                self.pending_write.result()
+                with full_kl_range("hidden_write_flush"):
+                    self.pending_write.result()
         finally:
             if self.pool is not None:
                 self.pool.shutdown(wait=True, cancel_futures=True)
 
     def _read(self, batch):
-        with torch.profiler.record_function("full_vocab/hidden_read"):
+        with full_kl_range("hidden_read"):
             payload = self.get(
                 keys=list(batch["full_vocab_keys"]),
                 partition_id=self.partition,
@@ -57,7 +59,8 @@ class HiddenBatchIO:
             return
         future = self.pool.submit(self._read, self.batches[0]) if self.prefetch and self.batches else None
         for i, batch in enumerate(self.batches):
-            payload = future.result() if future is not None else self._read(batch)
+            with full_kl_range("hidden_read_wait"):
+                payload = future.result() if future is not None else self._read(batch)
             if self.prefetch and i + 1 < len(self.batches):
                 future = self.pool.submit(self._read, self.batches[i + 1])
             else:
@@ -76,13 +79,14 @@ class HiddenBatchIO:
         keys = list(batch["full_vocab_keys"])
 
         def write():
-            with torch.profiler.record_function("full_vocab/hidden_write"):
+            with full_kl_range("hidden_write"):
                 self.put(keys=keys, partition_id=self.partition, fields=payload)
 
         if self.async_write:
             # At most one pending write owns CPU tensors; backpressure before submitting the next.
             if self.pending_write is not None:
-                self.pending_write.result()
+                with full_kl_range("hidden_write_wait"):
+                    self.pending_write.result()
             self.pending_write = self.pool.submit(write)
         else:
             write()

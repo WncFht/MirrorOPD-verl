@@ -8,6 +8,8 @@ or loss normalization lives here. Return a token sum for the engine to normalize
 
 import torch
 
+from verl.trainer.distillation.profiling import full_kl_range
+
 
 class ProjectionFP32(torch.autograd.Function):
     """Ordinary linear VJP for torch.mm(out_dtype=...), which lacks autograd here."""
@@ -157,19 +159,26 @@ class PrecomputedKL(torch.autograd.Function):
         total = torch.zeros((), device=hs.device, dtype=dtype)
         for start in range(0, len(hs), token_chunk):
             stop = min(start + token_chunk, len(hs))
-            zp, zt = project(hs[start:stop], ws), project(ht[start:stop], wt)
-            lp, lt = zp.log_softmax(-1), zt.log_softmax(-1)
-            del zp, zt
-            p = lp.exp()
-            lp.sub_(lt)
-            del lt
-            kl = (p * lp).sum(-1)
-            total += kl.sum()
-            lp.sub_(kl[:, None]).mul_(p)
-            dz = lp.to(hs.dtype)
-            del lp, p
-            add_product(dh[start:stop], dz, ws)
-            add_product(dw, dz.T, hs[start:stop])
+            with full_kl_range("student_projection"):
+                zp = project(hs[start:stop], ws)
+            with full_kl_range("teacher_projection"):
+                zt = project(ht[start:stop], wt)
+            with full_kl_range("normalization_and_kl"):
+                lp, lt = zp.log_softmax(-1), zt.log_softmax(-1)
+                del zp, zt
+                p = lp.exp()
+                lp.sub_(lt)
+                del lt
+                kl = (p * lp).sum(-1)
+                total += kl.sum()
+            with full_kl_range("grad_logits"):
+                lp.sub_(kl[:, None]).mul_(p)
+                dz = lp.to(hs.dtype)
+                del lp, p
+            with full_kl_range("grad_hidden"):
+                add_product(dh[start:stop], dz, ws)
+            with full_kl_range("grad_head"):
+                add_product(dw, dz.T, hs[start:stop])
         ctx.save_for_backward(dh.to(hs.dtype), dw.to(ws.dtype))
         return total
 
@@ -177,7 +186,8 @@ class PrecomputedKL(torch.autograd.Function):
     @torch.autograd.function.once_differentiable
     def backward(ctx, upstream):
         dh, dw = ctx.saved_tensors
-        return dh * upstream, dw * upstream, None, None, None
+        with full_kl_range("backward_apply"):
+            return dh * upstream, dw * upstream, None, None, None
 
 
 def full_reverse_kl(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192):
