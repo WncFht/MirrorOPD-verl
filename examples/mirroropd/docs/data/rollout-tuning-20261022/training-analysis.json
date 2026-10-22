@@ -1,0 +1,31 @@
+{
+  "rollout-tuning-train-graph-20261022-b2": {
+    "perf/memory/cpu_used_gib": 448.79252672195435,
+    "perf/actor/reserved_peak_gib": 20.775390625,
+    "perf/actor/mfu": 0.3043204982221364,
+    "perf/timing/adv_seconds": 0.08415072908004124,
+    "perf/timing/update_weights_seconds": 1.4406266113122304,
+    "rollout/response_tokens": 383889.3333333333,
+    "rollout/score_mean": 0.421875,
+    "perf/memory/fsdp_allocated_peak_gib": 19.847427368164062,
+    "perf/timing/rollout_batch_seconds": 21.246684628,
+    "perf/throughput/tokens_per_gpu_second": 994.1068408888702,
+    "rollout/aborted_fraction": 0,
+    "perf/timing/outer_step_seconds": 98.54740034540494,
+    "perf/timing/teacher_forward_seconds": 1.2865111182133357,
+    "perf/timing/teacher_transfer_seconds": 0.9416067575414976,
+    "rollout/response_count": 64,
+    "rollout/length_limit_fraction": 0.5572916666666666,
+    "rollout/response_length_mean": 5998.270833333333,
+    "perf/timing/rollout_pipeline_seconds": 24.89267774919669,
+    "perf/timing/old_log_prob_seconds": 2.7477615947524705,
+    "perf/timing/update_actor_seconds": 67.05902811139822,
+    "response_tokens_per_second": 3895.4790485372077,
+    "grad_norm_max": 1.2974117994308472,
+    "nonfinite_max": 0,
+    "wall_seconds": 708.5207509994507,
+    "run_id": "9jua8ru3",
+    "outer_steps": 4,
+    "updates": 64
+  }
+}
