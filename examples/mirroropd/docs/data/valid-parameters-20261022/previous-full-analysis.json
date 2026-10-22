@@ -1,0 +1,3968 @@
+{
+  "runs": {
+    "valid-full-w128-s64-20261022-a": {
+      "run_id": "d9er212a",
+      "testing_seconds": 2045.032162360847,
+      "rollout_span_seconds": 2005.538612322,
+      "tokens": 55896266.0,
+      "output_tokens_per_second": 27332.707538189356,
+      "responses": 9120,
+      "prompt_groups": 570,
+      "responses_per_group": 16,
+      "score_mean": 0.79375,
+      "quality_metrics": {
+        "eval/amc23/response_count": 640,
+        "eval/aime25/response_count": 480,
+        "eval/math500/acc_mean": 0.8335,
+        "eval/amc23/acc_mean": 0.7171875,
+        "eval/amc23/failed_count": 0,
+        "eval/aime25/acc_mean": 0.23333333333333334,
+        "eval/aime25/failed_count": 0,
+        "eval/math500/failed_count": 0,
+        "eval/math500/response_count": 8000
+      },
+      "engine_counters": {
+        "vllm:request_success_total": 9120.0,
+        "vllm:generation_tokens_total": 55896266.0,
+        "vllm:request_generation_tokens_sum": 55896266.0,
+        "vllm:num_preemptions_total": 0.0
+      },
+      "max_engine_waiting": 448.0,
+      "max_kv_fraction": 0.6763494000652497,
+      "gpu_busy_mean": 91.41688379364253,
+      "gpu_memory_mean_gib": 41.895688309900585,
+      "gpu_memory_max_gib": 41.89727783203125,
+      "gpu_probe_rows": 7676,
+      "config": {
+        "model_engine": "dp",
+        "actor_rollout_ref": {
+          "actor": {
+            "optim": {
+              "_target_": "verl.workers.config.FSDPOptimizerConfig",
+              "optimizer": "AdamW",
+              "optimizer_impl": "torch.optim",
+              "lr": 1e-06,
+              "lr_warmup_steps_ratio": 0.0,
+              "total_training_steps": -1,
+              "weight_decay": 0.01,
+              "lr_warmup_steps": -1,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "clip_grad": 1.0,
+              "min_lr_ratio": 0.0,
+              "num_cycles": 0.5,
+              "lr_scheduler_type": "constant",
+              "zero_indexed_step": true,
+              "warmup_style": null,
+              "override_optimizer_config": null
+            },
+            "fsdp_config": {
+              "_target_": "verl.workers.config.FSDPEngineConfig",
+              "wrap_policy": {
+                "min_num_params": 0
+              },
+              "param_offload": true,
+              "optimizer_offload": true,
+              "offload_policy": false,
+              "forward_only_cpu_offload": true,
+              "reshard_after_forward": true,
+              "fsdp_size": -1,
+              "forward_prefetch": false,
+              "model_dtype": "fp32",
+              "use_orig_params": false,
+              "seed": 42,
+              "full_determinism": false,
+              "ulysses_sequence_parallel_size": 1,
+              "entropy_from_logits_with_chunking": false,
+              "entropy_from_logits_chunk_size": 2048,
+              "use_torch_compile": true,
+              "entropy_checkpointing": false,
+              "use_no_sync_for_gradient_accumulation": false,
+              "pad_to_length": false,
+              "pad_to_length_bucket": 1024,
+              "forward_only": false,
+              "strategy": "fsdp",
+              "dtype": "bfloat16",
+              "qat": {
+                "_target_": "verl.workers.config.QATEngineConfig",
+                "enable": false,
+                "mode": "w4a16",
+                "group_size": 16,
+                "ignore_patterns": [
+                  "lm_head",
+                  "embed_tokens",
+                  "re:.*mlp.gate$"
+                ],
+                "activation_observer": "static_minmax",
+                "quantization_config_path": null
+              },
+              "turbo_config": {
+                "distributed": {
+                  "fully_shard_parallel_size": 16,
+                  "tensor_parallel_size": 1,
+                  "expert_parallel_size": 1,
+                  "expert_fully_shard_parallel_size": 1,
+                  "ulysses_parallel_size": 1,
+                  "fsdp_plan": {
+                    "param_dtype": "bf16",
+                    "reduce_dtype": "fp32",
+                    "output_dtype": "bf16",
+                    "fsdp_implementation": "native",
+                    "num_to_forward_prefetch": 1,
+                    "num_to_backward_prefetch": 1
+                  }
+                }
+              }
+            },
+            "_target_": "verl.workers.config.FSDPActorConfig",
+            "rollout_n": 1,
+            "strategy": "fsdp2",
+            "ppo_mini_batch_size": 64,
+            "ppo_micro_batch_size": null,
+            "ppo_micro_batch_size_per_gpu": 1,
+            "use_dynamic_bsz": true,
+            "ppo_max_token_len_per_gpu": 32768,
+            "clip_ratio": 0.2,
+            "clip_ratio_low": 0.2,
+            "clip_ratio_high": 0.2,
+            "tau_pos": 1.0,
+            "tau_neg": 1.05,
+            "freeze_vision_tower": false,
+            "policy_loss": {
+              "_target_": "verl.workers.config.PolicyLossConfig",
+              "loss_mode": "vanilla",
+              "clip_cov_ratio": 0.0002,
+              "clip_cov_lb": 1.0,
+              "clip_cov_ub": 5.0,
+              "kl_cov_ratio": 0.0002,
+              "ppo_kl_coef": 0.1,
+              "dro_beta": null
+            },
+            "clip_ratio_c": 3.0,
+            "loss_agg_mode": "token-mean",
+            "loss_scale_factor": null,
+            "entropy_coeff": 0.0,
+            "calculate_entropy": false,
+            "calculate_sum_pi_squared": false,
+            "use_kl_loss": false,
+            "use_prefix_grouper": false,
+            "use_torch_compile": false,
+            "kl_loss_coef": 0.001,
+            "kl_loss_type": "low_var_kl",
+            "ppo_epochs": 1,
+            "shuffle": false,
+            "data_loader_seed": 42,
+            "checkpoint": {
+              "_target_": "verl.trainer.config.CheckpointConfig",
+              "save_contents": [
+                "model",
+                "optimizer",
+                "extra"
+              ],
+              "load_contents": [
+                "model",
+                "optimizer",
+                "extra"
+              ],
+              "async_save": false,
+              "strict": true
+            },
+            "use_fused_kernels": false,
+            "profiler": {
+              "_target_": "verl.utils.profiler.ProfilerConfig",
+              "tool": null,
+              "enable": false,
+              "all_ranks": false,
+              "ranks": [],
+              "save_path": "outputs/profile",
+              "relocate_results": false,
+              "finish_hook_cmd": null,
+              "finish_hook_all_ranks": false,
+              "finish_hook_ranks": [],
+              "tool_config": {
+                "nsys": {
+                  "_target_": "verl.utils.profiler.config.NsightToolConfig",
+                  "discrete": false
+                },
+                "npu": {
+                  "_target_": "verl.utils.profiler.config.NPUToolConfig",
+                  "contents": [],
+                  "level": "level0",
+                  "analysis": true,
+                  "discrete": false
+                },
+                "torch": {
+                  "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+                  "contents": [],
+                  "discrete": false,
+                  "schedule": {
+                    "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+                    "skip_first": 0,
+                    "wait": 0,
+                    "warmup": 0,
+                    "active": 0,
+                    "repeat": 0
+                  }
+                },
+                "torch_memory": {
+                  "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+                  "trace_alloc_max_entries": 100000,
+                  "stack_depth": 32,
+                  "memory_snapshot_num_steps": 1
+                },
+                "precision_debugger": {
+                  "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+                  "config_path": null,
+                  "steps": null,
+                  "stages": null,
+                  "strict": false
+                }
+              }
+            },
+            "qat": {
+              "enable": false,
+              "mode": "w4a16",
+              "group_size": 16,
+              "ignore_patterns": [
+                "lm_head",
+                "embed_tokens",
+                "re:.*mlp.gate$"
+              ],
+              "activation_observer": "static_minmax",
+              "quantization_config_path": null
+            },
+            "grad_clip": 1.0,
+            "ulysses_sequence_parallel_size": 1,
+            "entropy_from_logits_with_chunking": false,
+            "entropy_from_logits_chunk_size": 2048,
+            "entropy_checkpointing": false,
+            "pad_to_length": false,
+            "use_remove_padding": true
+          },
+          "ref": {
+            "rollout_n": 1,
+            "strategy": "fsdp2",
+            "use_torch_compile": false,
+            "log_prob_micro_batch_size": null,
+            "log_prob_micro_batch_size_per_gpu": null,
+            "log_prob_use_dynamic_bsz": true,
+            "log_prob_max_token_len_per_gpu": 32768,
+            "profiler": {
+              "_target_": "verl.utils.profiler.ProfilerConfig",
+              "tool": null,
+              "enable": false,
+              "all_ranks": false,
+              "ranks": [],
+              "save_path": "outputs/profile",
+              "relocate_results": false,
+              "finish_hook_cmd": null,
+              "finish_hook_all_ranks": false,
+              "finish_hook_ranks": [],
+              "tool_config": {
+                "nsys": {
+                  "_target_": "verl.utils.profiler.config.NsightToolConfig",
+                  "discrete": false
+                },
+                "npu": {
+                  "_target_": "verl.utils.profiler.config.NPUToolConfig",
+                  "contents": [],
+                  "level": "level0",
+                  "analysis": true,
+                  "discrete": false
+                },
+                "torch": {
+                  "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+                  "contents": [],
+                  "discrete": false,
+                  "schedule": {
+                    "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+                    "skip_first": 0,
+                    "wait": 0,
+                    "warmup": 0,
+                    "active": 0,
+                    "repeat": 0
+                  }
+                },
+                "torch_memory": {
+                  "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+                  "trace_alloc_max_entries": 100000,
+                  "stack_depth": 32,
+                  "memory_snapshot_num_steps": 1
+                },
+                "precision_debugger": {
+                  "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+                  "config_path": null,
+                  "steps": null,
+                  "stages": null,
+                  "strict": false
+                }
+              }
+            },
+            "fsdp_config": {
+              "_target_": "verl.workers.config.FSDPEngineConfig",
+              "wrap_policy": {
+                "min_num_params": 0
+              },
+              "param_offload": false,
+              "optimizer_offload": false,
+              "offload_policy": false,
+              "forward_only_cpu_offload": true,
+              "reshard_after_forward": true,
+              "fsdp_size": -1,
+              "forward_prefetch": false,
+              "model_dtype": "fp32",
+              "use_orig_params": false,
+              "seed": 42,
+              "full_determinism": false,
+              "ulysses_sequence_parallel_size": 1,
+              "entropy_from_logits_with_chunking": false,
+              "entropy_from_logits_chunk_size": 2048,
+              "use_torch_compile": true,
+              "entropy_checkpointing": false,
+              "use_no_sync_for_gradient_accumulation": false,
+              "pad_to_length": false,
+              "pad_to_length_bucket": 1024,
+              "forward_only": true,
+              "strategy": "fsdp",
+              "dtype": "bfloat16",
+              "qat": {
+                "_target_": "verl.workers.config.QATEngineConfig",
+                "enable": false,
+                "mode": "w4a16",
+                "group_size": 16,
+                "ignore_patterns": [
+                  "lm_head",
+                  "embed_tokens",
+                  "re:.*mlp.gate$"
+                ],
+                "activation_observer": "static_minmax",
+                "quantization_config_path": null
+              },
+              "turbo_config": {
+                "distributed": {
+                  "fully_shard_parallel_size": 16,
+                  "tensor_parallel_size": 1,
+                  "expert_parallel_size": 1,
+                  "expert_fully_shard_parallel_size": 1,
+                  "ulysses_parallel_size": 1,
+                  "fsdp_plan": {
+                    "param_dtype": "bf16",
+                    "reduce_dtype": "fp32",
+                    "output_dtype": "bf16",
+                    "fsdp_implementation": "native",
+                    "num_to_forward_prefetch": 1,
+                    "num_to_backward_prefetch": 1
+                  }
+                }
+              }
+            },
+            "_target_": "verl.workers.config.FSDPActorConfig",
+            "ulysses_sequence_parallel_size": 1,
+            "entropy_from_logits_with_chunking": false,
+            "entropy_from_logits_chunk_size": 2048,
+            "entropy_checkpointing": false,
+            "pad_to_length": false
+          },
+          "rollout": {
+            "_target_": "verl.workers.config.RolloutConfig",
+            "name": "vllm",
+            "mode": "async",
+            "nnodes": 0,
+            "n_gpus_per_node": 4,
+            "temperature": 1.0,
+            "top_k": -1,
+            "top_p": 1.0,
+            "full_determinism": false,
+            "seed": 42,
+            "prompt_length": 4096,
+            "response_length": 7168,
+            "dtype": "bfloat16",
+            "gpu_memory_utilization": 0.5,
+            "standalone_gpu_memory_utilization": 0.5,
+            "ignore_eos": false,
+            "enforce_eager": false,
+            "cudagraph_capture_sizes": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32,
+              64
+            ],
+            "free_cache_engine": true,
+            "tensor_model_parallel_size": 1,
+            "data_parallel_size": 1,
+            "expert_parallel_size": 1,
+            "pipeline_model_parallel_size": 1,
+            "max_num_batched_tokens": 8192,
+            "max_model_len": 35841,
+            "max_num_seqs": 64,
+            "ray_actor_max_concurrency": 1024,
+            "enable_chunked_prefill": true,
+            "enable_prefix_caching": true,
+            "logprobs_mode": "processed_logprobs",
+            "scheduling_policy": "fcfs",
+            "load_format": "dummy",
+            "layered_summon": false,
+            "log_prob_micro_batch_size": null,
+            "log_prob_micro_batch_size_per_gpu": null,
+            "log_prob_use_dynamic_bsz": true,
+            "log_prob_max_token_len_per_gpu": 32768,
+            "disable_log_stats": false,
+            "do_sample": true,
+            "n": 1,
+            "over_sample_rate": 0,
+            "multi_stage_wake_up": false,
+            "engine_kwargs": {
+              "vllm": {},
+              "sglang": {},
+              "trtllm": {}
+            },
+            "val_kwargs": {
+              "_target_": "verl.workers.config.SamplingConfig",
+              "top_k": -1,
+              "top_p": 0.9,
+              "temperature": 0.7,
+              "n": 16,
+              "do_sample": true,
+              "max_tokens": 31744
+            },
+            "router_config_path": null,
+            "multi_turn": {
+              "_target_": "verl.workers.config.MultiTurnConfig",
+              "enable": false,
+              "max_assistant_turns": null,
+              "tool_config_path": null,
+              "function_tool_path": null,
+              "max_user_turns": null,
+              "max_parallel_calls": 1,
+              "max_tool_response_length": 256,
+              "tool_response_truncate_side": "middle",
+              "use_inference_chat_template": false,
+              "tokenization_sanity_check_mode": "strict",
+              "format": "hermes",
+              "num_repeat_rollouts": null
+            },
+            "calculate_log_probs": true,
+            "topk_log_probs": 0,
+            "agent": {
+              "_target_": "verl.workers.config.AgentLoopConfig",
+              "num_workers": 8,
+              "default_agent_loop": "single_turn_agent",
+              "agent_loop_config_path": null,
+              "custom_async_server": {
+                "_target_": "verl.workers.config.CustomAsyncServerConfig",
+                "path": null,
+                "name": null
+              }
+            },
+            "checkpoint_engine": {
+              "_target_": "verl.workers.config.CheckpointEngineConfig",
+              "backend": "naive",
+              "update_weights_bucket_megabytes": 2048,
+              "engine_kwargs": {},
+              "custom_backend_module": null
+            },
+            "trace": {
+              "_target_": "verl.workers.config.TraceConfig",
+              "project_name": "MirrorOPD-verl",
+              "experiment_name": "valid-full-w128-s64-20261022-a",
+              "backend": null,
+              "token2text": false,
+              "max_samples_per_step_per_worker": null
+            },
+            "skip_tokenizer_init": true,
+            "enable_rollout_routing_replay": false,
+            "moe_load_balance_metrics_interval": 0,
+            "profiler": {
+              "_target_": "verl.utils.profiler.ProfilerConfig",
+              "tool": null,
+              "enable": false,
+              "all_ranks": false,
+              "ranks": [],
+              "save_path": "outputs/profile",
+              "relocate_results": false,
+              "finish_hook_cmd": null,
+              "finish_hook_all_ranks": false,
+              "finish_hook_ranks": [],
+              "tool_config": {
+                "npu": {
+                  "_target_": "verl.utils.profiler.config.NPUToolConfig",
+                  "contents": [],
+                  "level": "level0",
+                  "analysis": true,
+                  "discrete": false,
+                  "profile_token_start": null,
+                  "profile_token_end": null
+                },
+                "torch": {
+                  "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+                  "contents": [],
+                  "discrete": false,
+                  "profile_token_start": null,
+                  "profile_token_end": null
+                },
+                "precision_debugger": {
+                  "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+                  "config_path": null,
+                  "steps": null,
+                  "stages": null,
+                  "strict": false
+                }
+              }
+            },
+            "prometheus": {
+              "_target_": "verl.workers.config.PrometheusConfig",
+              "enable": false,
+              "port": 9090,
+              "file": "/tmp/ray/session_latest/metrics/prometheus/prometheus.yml",
+              "served_model_name": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/DeepSeek-R1-Distill-Qwen-1.5B"
+            },
+            "quantization": null,
+            "quantization_config_file": null,
+            "mtp": {
+              "_target_": "verl.workers.config.MtpConfig",
+              "enable": false,
+              "enable_train": false,
+              "enable_rollout": false,
+              "detach_encoder": false,
+              "mtp_loss_scaling_factor": 0.1,
+              "speculative_algorithm": "EAGLE",
+              "speculative_num_steps": 3,
+              "speculative_eagle_topk": 1,
+              "speculative_num_draft_tokens": 4,
+              "method": "mtp",
+              "num_speculative_tokens": 1
+            },
+            "qat": {
+              "_target_": "verl.workers.config.QATEngineConfig",
+              "enable": false,
+              "mode": "w4a16",
+              "group_size": 16,
+              "ignore_patterns": [
+                "lm_head",
+                "embed_tokens",
+                "re:.*mlp.gate$"
+              ],
+              "activation_observer": "static_minmax",
+              "quantization_config_path": null
+            },
+            "disaggregation": {
+              "enabled": false,
+              "prefill_replicas": 1,
+              "decode_replicas": 1,
+              "decode_tensor_model_parallel_size": null,
+              "transfer_backend": "nixl",
+              "bootstrap_port": null,
+              "ib_device": null
+            }
+          },
+          "model": {
+            "_target_": "verl.workers.config.HFModelConfig",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/DeepSeek-R1-Distill-Qwen-1.5B",
+            "hf_config_path": null,
+            "tokenizer_path": null,
+            "use_shm": false,
+            "trust_remote_code": false,
+            "custom_chat_template": null,
+            "external_lib": null,
+            "override_config": {},
+            "enable_gradient_checkpointing": true,
+            "enable_activation_offload": false,
+            "use_remove_padding": true,
+            "lora_rank": 0,
+            "lora_alpha": 16,
+            "target_modules": "all-linear",
+            "exclude_modules": null,
+            "lora_adapter_path": null,
+            "use_liger": false,
+            "use_fused_kernels": false,
+            "fused_kernel_options": {
+              "impl_backend": "torch"
+            },
+            "tiled_mlp": {
+              "enabled": false,
+              "num_shards": 4
+            },
+            "mtp": {
+              "_target_": "verl.workers.config.MtpConfig",
+              "enable": false,
+              "enable_train": false,
+              "enable_rollout": false,
+              "detach_encoder": false,
+              "mtp_loss_scaling_factor": 0.1,
+              "speculative_algorithm": "EAGLE",
+              "speculative_num_steps": 3,
+              "speculative_eagle_topk": 1,
+              "speculative_num_draft_tokens": 4,
+              "method": "mtp",
+              "num_speculative_tokens": 1
+            },
+            "lora": {
+              "type": "lora",
+              "merge": false,
+              "rank": 0,
+              "alpha": 32,
+              "dropout": 0.0,
+              "target_modules": [
+                "linear_qkv",
+                "linear_proj",
+                "linear_fc1",
+                "linear_fc2"
+              ],
+              "exclude_modules": [],
+              "dropout_position": "pre",
+              "lora_A_init_method": "xavier",
+              "lora_B_init_method": "zero",
+              "a2a_experimental": false,
+              "dtype": null,
+              "adapter_path": null,
+              "freeze_vision_model": true,
+              "freeze_vision_projection": true,
+              "freeze_language_model": true
+            }
+          },
+          "hybrid_engine": true,
+          "nccl_timeout": 600
+        },
+        "data": {
+          "tokenizer": null,
+          "use_shm": false,
+          "train_files": [
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/DAPO/train.parquet"
+          ],
+          "val_files": [
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/MATH-500/test.parquet",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AMC23/test.parquet",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AIME25/test.parquet"
+          ],
+          "train_max_samples": -1,
+          "val_max_samples": -1,
+          "prompt_key": "prompt",
+          "reward_fn_key": "data_source",
+          "max_prompt_length": 4096,
+          "max_response_length": 7168,
+          "train_batch_size": 64,
+          "gen_batch_size": null,
+          "val_batch_size": 128,
+          "tool_config_path": null,
+          "function_tool_path": null,
+          "return_raw_input_ids": false,
+          "return_raw_chat": true,
+          "return_full_prompt": false,
+          "shuffle": true,
+          "seed": 42,
+          "dataloader_num_workers": 0,
+          "image_patch_size": 14,
+          "validation_shuffle": false,
+          "filter_overlong_prompts": true,
+          "filter_overlong_prompts_workers": 1,
+          "truncation": "error",
+          "image_key": "images",
+          "video_key": "videos",
+          "audio_key": "audios",
+          "trust_remote_code": false,
+          "custom_cls": {
+            "path": null,
+            "name": null
+          },
+          "return_multi_modal_inputs": true,
+          "apply_chat_template_kwargs": {},
+          "continuous_token": {
+            "model_family": "deepseek"
+          },
+          "mm_processor_kwargs": {}
+        },
+        "critic": {
+          "optim": {
+            "_target_": "verl.workers.config.FSDPOptimizerConfig",
+            "optimizer": "AdamW",
+            "optimizer_impl": "torch.optim",
+            "lr": 1e-05,
+            "lr_warmup_steps_ratio": 0.0,
+            "total_training_steps": -1,
+            "weight_decay": 0.01,
+            "lr_warmup_steps": -1,
+            "betas": [
+              0.9,
+              0.999
+            ],
+            "clip_grad": 1.0,
+            "min_lr_ratio": 0.0,
+            "num_cycles": 0.5,
+            "lr_scheduler_type": "constant",
+            "zero_indexed_step": true,
+            "warmup_style": null,
+            "override_optimizer_config": null
+          },
+          "fsdp": {
+            "_target_": "verl.workers.config.FSDPEngineConfig",
+            "wrap_policy": {
+              "min_num_params": 0
+            },
+            "param_offload": false,
+            "optimizer_offload": false,
+            "offload_policy": false,
+            "forward_only_cpu_offload": true,
+            "reshard_after_forward": true,
+            "fsdp_size": -1,
+            "forward_prefetch": false,
+            "model_dtype": "fp32",
+            "use_orig_params": false,
+            "seed": 42,
+            "full_determinism": false,
+            "ulysses_sequence_parallel_size": 1,
+            "entropy_from_logits_with_chunking": false,
+            "entropy_from_logits_chunk_size": 2048,
+            "use_torch_compile": true,
+            "entropy_checkpointing": false,
+            "use_no_sync_for_gradient_accumulation": false,
+            "pad_to_length": false,
+            "pad_to_length_bucket": 1024,
+            "forward_only": false,
+            "strategy": "fsdp",
+            "dtype": "bfloat16",
+            "qat": {
+              "_target_": "verl.workers.config.QATEngineConfig",
+              "enable": false,
+              "mode": "w4a16",
+              "group_size": 16,
+              "ignore_patterns": [
+                "lm_head",
+                "embed_tokens",
+                "re:.*mlp.gate$"
+              ],
+              "activation_observer": "static_minmax",
+              "quantization_config_path": null
+            },
+            "turbo_config": {
+              "distributed": {
+                "fully_shard_parallel_size": 16,
+                "tensor_parallel_size": 1,
+                "expert_parallel_size": 1,
+                "expert_fully_shard_parallel_size": 1,
+                "ulysses_parallel_size": 1,
+                "fsdp_plan": {
+                  "param_dtype": "bf16",
+                  "reduce_dtype": "fp32",
+                  "output_dtype": "bf16",
+                  "fsdp_implementation": "native",
+                  "num_to_forward_prefetch": 1,
+                  "num_to_backward_prefetch": 1
+                }
+              }
+            }
+          },
+          "_target_": "verl.workers.config.FSDPCriticConfig",
+          "rollout_n": 1,
+          "strategy": "fsdp",
+          "enable": null,
+          "ppo_mini_batch_size": 64,
+          "ppo_micro_batch_size": null,
+          "ppo_micro_batch_size_per_gpu": null,
+          "use_dynamic_bsz": true,
+          "ppo_max_token_len_per_gpu": 32768,
+          "forward_max_token_len_per_gpu": 32768,
+          "ppo_epochs": 1,
+          "shuffle": false,
+          "data_loader_seed": 42,
+          "cliprange_value": 0.5,
+          "loss_agg_mode": "token-mean",
+          "loss_scale_factor": null,
+          "checkpoint": {
+            "_target_": "verl.trainer.config.CheckpointConfig",
+            "save_contents": [
+              "model",
+              "optimizer",
+              "extra"
+            ],
+            "load_contents": [
+              "model",
+              "optimizer",
+              "extra"
+            ],
+            "async_save": false
+          },
+          "profiler": {
+            "_target_": "verl.utils.profiler.ProfilerConfig",
+            "tool": null,
+            "enable": false,
+            "all_ranks": false,
+            "ranks": [],
+            "save_path": "outputs/profile",
+            "relocate_results": false,
+            "finish_hook_cmd": null,
+            "finish_hook_all_ranks": false,
+            "finish_hook_ranks": [],
+            "tool_config": {
+              "nsys": {
+                "_target_": "verl.utils.profiler.config.NsightToolConfig",
+                "discrete": false
+              },
+              "npu": {
+                "_target_": "verl.utils.profiler.config.NPUToolConfig",
+                "contents": [],
+                "level": "level0",
+                "analysis": true,
+                "discrete": false
+              },
+              "torch": {
+                "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+                "contents": [],
+                "discrete": false,
+                "schedule": {
+                  "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+                  "skip_first": 0,
+                  "wait": 0,
+                  "warmup": 0,
+                  "active": 0,
+                  "repeat": 0
+                }
+              },
+              "torch_memory": {
+                "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+                "trace_alloc_max_entries": 100000,
+                "stack_depth": 32,
+                "memory_snapshot_num_steps": 1
+              },
+              "precision_debugger": {
+                "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+                "config_path": null,
+                "steps": null,
+                "stages": null,
+                "strict": false
+              }
+            }
+          },
+          "forward_micro_batch_size": null,
+          "forward_micro_batch_size_per_gpu": null,
+          "ulysses_sequence_parallel_size": 1,
+          "grad_clip": 1.0,
+          "model": {
+            "_target_": "verl.workers.config.HFModelConfig",
+            "path": "~/models/deepseek-llm-7b-chat",
+            "hf_config_path": null,
+            "tokenizer_path": null,
+            "use_shm": false,
+            "trust_remote_code": false,
+            "custom_chat_template": null,
+            "external_lib": null,
+            "override_config": {},
+            "enable_gradient_checkpointing": true,
+            "enable_activation_offload": false,
+            "use_remove_padding": true,
+            "lora_rank": 0,
+            "lora_alpha": 16,
+            "target_modules": "all-linear",
+            "exclude_modules": null,
+            "lora_adapter_path": null,
+            "use_liger": false,
+            "use_fused_kernels": false,
+            "fused_kernel_options": {
+              "impl_backend": "torch"
+            },
+            "tiled_mlp": {
+              "enabled": false,
+              "num_shards": 4
+            },
+            "mtp": {
+              "_target_": "verl.workers.config.MtpConfig",
+              "enable": false,
+              "enable_train": false,
+              "enable_rollout": false,
+              "detach_encoder": false,
+              "mtp_loss_scaling_factor": 0.1,
+              "speculative_algorithm": "EAGLE",
+              "speculative_num_steps": 3,
+              "speculative_eagle_topk": 1,
+              "speculative_num_draft_tokens": 4,
+              "method": "mtp",
+              "num_speculative_tokens": 1
+            },
+            "lora": {
+              "type": "lora",
+              "merge": false,
+              "rank": 0,
+              "alpha": 32,
+              "dropout": 0.0,
+              "target_modules": [
+                "linear_qkv",
+                "linear_proj",
+                "linear_fc1",
+                "linear_fc2"
+              ],
+              "exclude_modules": [],
+              "dropout_position": "pre",
+              "lora_A_init_method": "xavier",
+              "lora_B_init_method": "zero",
+              "a2a_experimental": false,
+              "dtype": null,
+              "adapter_path": null,
+              "freeze_vision_model": true,
+              "freeze_vision_projection": true,
+              "freeze_language_model": true
+            }
+          }
+        },
+        "custom_reward_function": {
+          "path": null,
+          "name": null
+        },
+        "reward_model": {
+          "num_workers": null,
+          "reward_manager": null,
+          "enable": null,
+          "enable_resource_pool": null,
+          "n_gpus_per_node": null,
+          "nnodes": null,
+          "reward_loop_source": null,
+          "reward_loop_module_path": null,
+          "reward_loop_class_name": null,
+          "model": {
+            "path": null,
+            "external_lib": null,
+            "trust_remote_code": null
+          },
+          "rollout": {
+            "name": null,
+            "dtype": null,
+            "gpu_memory_utilization": null,
+            "enforce_eager": null,
+            "cudagraph_capture_sizes": null,
+            "free_cache_engine": null,
+            "data_parallel_size": null,
+            "expert_parallel_size": null,
+            "tensor_model_parallel_size": null,
+            "max_num_batched_tokens": null,
+            "max_model_len": null,
+            "max_num_seqs": null,
+            "load_format": null,
+            "engine_kwargs": null,
+            "limit_images": null,
+            "enable_chunked_prefill": null,
+            "enable_prefix_caching": null,
+            "disable_log_stats": null,
+            "skip_tokenizer_init": null,
+            "prompt_length": null,
+            "response_length": null
+          }
+        },
+        "sandbox_fusion": {
+          "url": null,
+          "max_concurrent": null,
+          "memory_limit_mb": null
+        },
+        "reward": {
+          "_target_": "verl.workers.config.RewardConfig",
+          "num_workers": 8,
+          "custom_reward_function": {
+            "path": "/tmp/mopd-fullval-20261022/examples/mirroropd/reward.py",
+            "name": "reward_func"
+          },
+          "reward_manager": {
+            "_target_": "verl.workers.config.reward.RewardManagerConfig",
+            "source": "register",
+            "name": "naive",
+            "module": {
+              "_target_": "verl.trainer.config.config.ModuleConfig",
+              "path": null,
+              "name": "custom_reward_manager"
+            }
+          },
+          "reward_model": {
+            "_target_": "verl.workers.config.RewardModelConfig",
+            "enable": false,
+            "enable_resource_pool": false,
+            "n_gpus_per_node": 8,
+            "nnodes": 0,
+            "model_path": null,
+            "rollout": {
+              "_target_": "verl.workers.config.RolloutConfig",
+              "name": "???",
+              "dtype": "bfloat16",
+              "gpu_memory_utilization": 0.5,
+              "enforce_eager": true,
+              "cudagraph_capture_sizes": null,
+              "free_cache_engine": true,
+              "data_parallel_size": 1,
+              "expert_parallel_size": 1,
+              "tensor_model_parallel_size": 2,
+              "pipeline_model_parallel_size": 1,
+              "max_num_batched_tokens": 8192,
+              "max_model_len": null,
+              "max_num_seqs": 1024,
+              "load_format": "auto",
+              "layered_summon": false,
+              "scheduling_policy": "fcfs",
+              "full_determinism": false,
+              "seed": 42,
+              "multi_stage_wake_up": false,
+              "engine_kwargs": {},
+              "limit_images": null,
+              "enable_chunked_prefill": true,
+              "enable_prefix_caching": true,
+              "disable_log_stats": true,
+              "skip_tokenizer_init": false,
+              "ignore_eos": false,
+              "temperature": 1.0,
+              "top_k": -1,
+              "top_p": 1,
+              "do_sample": true,
+              "n": 1,
+              "prompt_length": 2048,
+              "response_length": 2048,
+              "quantization": null,
+              "quantization_config_file": null,
+              "mtp": null,
+              "disaggregation": {
+                "enabled": false,
+                "prefill_replicas": 1,
+                "decode_replicas": 1,
+                "decode_tensor_model_parallel_size": null,
+                "transfer_backend": "nixl",
+                "bootstrap_port": null,
+                "ib_device": null
+              }
+            }
+          },
+          "sandbox_fusion": {
+            "_target_": "verl.workers.config.SandboxFusionConfig",
+            "url": null,
+            "max_concurrent": 64,
+            "memory_limit_mb": 1024
+          }
+        },
+        "algorithm": {
+          "rollout_correction": {
+            "rollout_is": null,
+            "rollout_is_threshold": 2.0,
+            "rollout_rs": null,
+            "rollout_rs_threshold": null,
+            "bypass_mode": false,
+            "loss_type": "ppo_clip",
+            "rollout_is_batch_normalize": false,
+            "score_centering": false
+          },
+          "_target_": "verl.trainer.config.AlgoConfig",
+          "gamma": 1.0,
+          "lam": 1.0,
+          "adv_estimator": "grpo",
+          "norm_adv_by_std_in_grpo": true,
+          "filter_groups": {
+            "_target_": "verl.trainer.config.FilterGroupsConfig",
+            "enable": false,
+            "metric": "reward",
+            "max_num_gen_batches": 0,
+            "max_inflight_gen_batches": 1
+          },
+          "use_kl_in_reward": false,
+          "kl_penalty": "kl",
+          "kl_ctrl": {
+            "_target_": "verl.trainer.config.KLControlConfig",
+            "type": "fixed",
+            "kl_coef": 0.001,
+            "horizon": 10000,
+            "target_kl": 0.1
+          },
+          "use_pf_ppo": false,
+          "pf_ppo": {
+            "reweight_method": "pow",
+            "weight_pow": 2.0
+          }
+        },
+        "distillation": {
+          "_target_": "verl.workers.config.DistillationConfig",
+          "enabled": true,
+          "execution_mode": "shared_sync",
+          "shared_teacher": {
+            "_target_": "verl.workers.config.FSDPEngineConfig",
+            "strategy": "fsdp2",
+            "forward_only": true,
+            "model_dtype": "bfloat16",
+            "mixed_precision": {
+              "param_dtype": "bfloat16",
+              "reduce_dtype": "float32"
+            },
+            "param_offload": true,
+            "optimizer_offload": false,
+            "offload_policy": false,
+            "forward_only_cpu_offload": false,
+            "reshard_after_forward": true,
+            "use_dynamic_bsz": true,
+            "infer_max_token_len_per_gpu": 32768,
+            "use_torch_compile": false
+          },
+          "distillation_loss": {
+            "_target_": "verl.workers.config.DistillationLossConfig",
+            "loss_mode": "k1",
+            "topk": 32,
+            "use_task_rewards": false,
+            "distillation_loss_coef": 1.0,
+            "loss_max_clamp": null,
+            "log_prob_min_clamp": null,
+            "use_policy_gradient": true,
+            "policy_loss_mode": "vanilla",
+            "advantage_source": "current",
+            "clip_ratio": 0.2,
+            "clip_ratio_low": 0.2,
+            "clip_ratio_high": 0.2
+          },
+          "n_gpus_per_node": 0,
+          "nnodes": 0,
+          "teacher_models": {
+            "teacher_model": {
+              "_target_": "verl.workers.config.DistillationTeacherModelConfig",
+              "key": null,
+              "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/JustRL-DeepSeek-1.5B",
+              "num_replicas": 0,
+              "inference": {
+                "_target_": "verl.workers.config.RolloutConfig",
+                "name": "vllm",
+                "dtype": "bfloat16",
+                "gpu_memory_utilization": 0.4,
+                "enforce_eager": true,
+                "cudagraph_capture_sizes": null,
+                "free_cache_engine": true,
+                "data_parallel_size": 1,
+                "expert_parallel_size": 1,
+                "tensor_model_parallel_size": 1,
+                "max_num_batched_tokens": 8192,
+                "max_model_len": 11265,
+                "max_num_seqs": 64,
+                "load_format": "auto",
+                "engine_kwargs": {},
+                "limit_images": null,
+                "enable_chunked_prefill": true,
+                "enable_prefix_caching": true,
+                "disable_log_stats": true,
+                "skip_tokenizer_init": true,
+                "prompt_length": 4096,
+                "response_length": 7168,
+                "temperature": 1.0
+              }
+            }
+          },
+          "teacher_key": "data_source"
+        },
+        "transfer_queue": {
+          "enable": false,
+          "backend": {
+            "storage_backend": "SimpleStorage",
+            "SimpleStorage": {
+              "total_storage_size": null,
+              "num_data_storage_units": 8,
+              "ssd_offload": {
+                "enabled": false,
+                "path": null,
+                "threshold_bytes": 1048576
+              }
+            },
+            "MooncakeStore": {
+              "auto_init": false,
+              "metadata_server": "P2PHANDSHAKE",
+              "master_server_address": "localhost:50124",
+              "global_segment_size": 4294967296,
+              "local_buffer_size": 1073741824,
+              "hard_pin": true
+            }
+          }
+        },
+        "trainer": {
+          "balance_batch": true,
+          "total_epochs": 1,
+          "total_training_steps": 1,
+          "project_name": "MirrorOPD-verl",
+          "experiment_name": "valid-full-w128-s64-20261022-a",
+          "logger": [
+            "console",
+            "wandb"
+          ],
+          "metrics_quantile_interval": 8,
+          "log_val_generations": 0,
+          "rollout_data_dir": null,
+          "validation_data_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/full-validation-20261022/valid-full-w128-s64-20261022-a/training/validation",
+          "nnodes": 1,
+          "n_gpus_per_node": 4,
+          "save_freq": -1,
+          "esi_redundant_time": 0,
+          "resume_mode": "disable",
+          "resume_from_path": null,
+          "checkpoint_callback_class": null,
+          "val_before_train": true,
+          "val_only": true,
+          "test_freq": -1,
+          "critic_warmup": 0,
+          "default_hdfs_dir": null,
+          "del_local_ckpt_after_load": false,
+          "default_local_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/full-validation-20261022/valid-full-w128-s64-20261022-a/training/checkpoints",
+          "max_actor_ckpt_to_keep": null,
+          "max_critic_ckpt_to_keep": null,
+          "ray_wait_register_center_timeout": 300,
+          "device": "cuda",
+          "use_v1": true,
+          "v1": {
+            "trainer_mode": "sync",
+            "sync": {},
+            "colocate_async": {
+              "num_warmup_batches": 1
+            },
+            "separate_async": {
+              "num_warmup_batches": 1,
+              "parameter_sync_step": 4,
+              "hybrid_rollout": {
+                "_target_": "verl.trainer.config.HybridRolloutSwitchConfig",
+                "enable_switch": false,
+                "switch_threshold_ratio": 0.4,
+                "adaptive_switch_threshold": true,
+                "switch_threshold_step_up": 0.05,
+                "switch_threshold_step_down": 0.03,
+                "switch_threshold_release_steps": 2,
+                "switch_cost_window_size": 3
+              }
+            },
+            "sampler": {
+              "max_off_policy_threshold": 8,
+              "max_off_policy_strategy": "drop",
+              "sync_refill_failed_groups": false,
+              "custom_sampler": {
+                "path": null,
+                "name": null
+              },
+              "sampler_kwargs": {}
+            }
+          }
+        },
+        "global_profiler": {
+          "_target_": "verl.utils.profiler.ProfilerConfig",
+          "tool": null,
+          "steps": null,
+          "profile_continuous_steps": false,
+          "save_path": "outputs/profile",
+          "relocate_results": false,
+          "finish_hook_cmd": null,
+          "finish_hook_all_ranks": false,
+          "finish_hook_ranks": [],
+          "global_tool_config": {
+            "nsys": {
+              "_target_": "verl.utils.profiler.config.NsightToolConfig",
+              "discrete": false,
+              "controller_nsight_options": {
+                "trace": "cuda,nvtx,cublas,ucx",
+                "cuda-memory-usage": "true",
+                "cuda-graph-trace": "graph"
+              },
+              "worker_nsight_options": {
+                "trace": "cuda,nvtx,cublas,ucx",
+                "cuda-memory-usage": "true",
+                "cuda-graph-trace": "graph",
+                "capture-range": "cudaProfilerApi",
+                "capture-range-end": null,
+                "kill": "none"
+              }
+            },
+            "torch_memory": {
+              "trace_alloc_max_entries": 100000,
+              "stack_depth": 32,
+              "memory_snapshot_num_steps": 1,
+              "context": "all",
+              "stacks": "all",
+              "kw_args": {}
+            },
+            "precision_debugger": {
+              "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+              "config_path": null,
+              "steps": null,
+              "stages": null,
+              "strict": false
+            }
+          }
+        },
+        "skip": {
+          "_target_": "verl.utils.skip.SkipManagerConfig",
+          "rollout": {
+            "enable": false,
+            "dump_dir": "~/.verl/rollout_dump",
+            "steps": [],
+            "action": "cache"
+          },
+          "rollout_tq": {
+            "enable": false,
+            "dump_dir": "~/.verl/rollout_dump",
+            "steps": [],
+            "action": "cache"
+          },
+          "async_rollout": {
+            "enable": false,
+            "dump_dir": "~/.verl/rollout_dump",
+            "steps": [],
+            "action": "cache"
+          }
+        },
+        "ray_kwargs": {
+          "ray_init": {
+            "num_cpus": 64,
+            "runtime_env": {
+              "py_executable": "/root/.local/share/mirroropd/venvs/profile-cu128/bin/python",
+              "env_vars": {
+                "WANDB_DIR": "/tmp/mopd-fullval-20261022",
+                "WANDB_MODE": "offline",
+                "VLLM_LOGGING_LEVEL": "INFO",
+                "PYTHONPATH": "/tmp/mopd-fullval-20261022"
+              }
+            },
+            "num_gpus": 4,
+            "include_dashboard": false,
+            "object_store_memory": 4294967296,
+            "_temp_dir": "/tmp/fv22-128-a"
+          },
+          "timeline_json_file": null
+        }
+      },
+      "history": {
+        "perf/timing/validation_seconds": 2045.032162360847,
+        "eval/amc23/response_count": 640,
+        "eval/aime25/response_count": 480,
+        "step/outer": 0,
+        "step/update": 0,
+        "eval/math500/acc_mean": 0.8335,
+        "eval/amc23/acc_mean": 0.7171875,
+        "eval/amc23/failed_count": 0,
+        "eval/aime25/acc_mean": 0.23333333333333334,
+        "eval/aime25/failed_count": 0,
+        "_runtime": 2045.189565751,
+        "_step": 0,
+        "perf/timing/validation_rollout_seconds": 2005.538612322,
+        "eval/math500/failed_count": 0,
+        "eval/math500/response_count": 8000,
+        "step/optimizer": 0,
+        "_timestamp": 1792646123.2544458
+      },
+      "decode_tail_samples": [
+        {
+          "window_responses": 2048,
+          "completion_90_to_100_seconds": 149.0952866077423
+        },
+        {
+          "window_responses": 2048,
+          "completion_90_to_100_seconds": 151.53725242614746
+        },
+        {
+          "window_responses": 2048,
+          "completion_90_to_100_seconds": 120.6658022403717
+        },
+        {
+          "window_responses": 2048,
+          "completion_90_to_100_seconds": 163.43440914154053
+        },
+        {
+          "window_responses": 928,
+          "completion_90_to_100_seconds": 120.05380749702454
+        }
+      ],
+      "queue_samples": {
+        "count": 851,
+        "active_mean": 174.54054054054055,
+        "fraction_all_waiting_empty": 0.40775558166862513,
+        "fraction_active_lt16": 0.10693301997649823,
+        "fraction_any_idle": 0.13278495887191538,
+        "fraction_idle_with_waiting_elsewhere": 0
+      },
+      "process_peak_rss": {
+        "491048": {
+          "name": "bash",
+          "peak_rss_gib": 0.00368499755859375
+        },
+        "491087": {
+          "name": "python",
+          "peak_rss_gib": 0.8857536315917969
+        },
+        "491088": {
+          "name": "tee",
+          "peak_rss_gib": 0.001018524169921875
+        },
+        "491562": {
+          "name": "gcs_server",
+          "peak_rss_gib": 1.2762107849121094
+        },
+        "491809": {
+          "name": "python",
+          "peak_rss_gib": 0.08771514892578125
+        },
+        "491810": {
+          "name": "python",
+          "peak_rss_gib": 0.133636474609375
+        },
+        "491909": {
+          "name": "python",
+          "peak_rss_gib": 0.08610916137695312
+        },
+        "491910": {
+          "name": "raylet",
+          "peak_rss_gib": 0.06983184814453125
+        },
+        "491979": {
+          "name": "ray::DashboardAgent",
+          "peak_rss_gib": 0.17355728149414062
+        },
+        "491981": {
+          "name": "ray::RuntimeEnvAgent",
+          "peak_rss_gib": 0.08700180053710938
+        },
+        "492159": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08639144897460938
+        },
+        "492160": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08636856079101562
+        },
+        "492161": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08618927001953125
+        },
+        "492162": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08637619018554688
+        },
+        "492164": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.086883544921875
+        },
+        "492165": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08661651611328125
+        },
+        "492166": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.086273193359375
+        },
+        "492167": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08620452880859375
+        },
+        "492168": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.0865478515625
+        },
+        "492169": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08684158325195312
+        },
+        "492170": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08652496337890625
+        },
+        "492171": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.0865631103515625
+        },
+        "492172": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08658599853515625
+        },
+        "492173": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08655929565429688
+        },
+        "492174": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08647537231445312
+        },
+        "492175": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.0865325927734375
+        },
+        "492176": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.086700439453125
+        },
+        "492177": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08673095703125
+        },
+        "492178": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08619308471679688
+        },
+        "492179": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08649826049804688
+        },
+        "492180": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.086822509765625
+        },
+        "492181": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08649063110351562
+        },
+        "492183": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08628463745117188
+        },
+        "492184": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08649063110351562
+        },
+        "492185": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08680343627929688
+        },
+        "492186": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08652877807617188
+        },
+        "492187": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.086578369140625
+        },
+        "492189": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08639144897460938
+        },
+        "492190": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08655166625976562
+        },
+        "492191": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08646774291992188
+        },
+        "492192": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08629989624023438
+        },
+        "492193": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08648300170898438
+        },
+        "492194": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08617782592773438
+        },
+        "492195": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08637619018554688
+        },
+        "492196": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08647918701171875
+        },
+        "492197": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08685684204101562
+        },
+        "492198": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08658218383789062
+        },
+        "492199": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08654022216796875
+        },
+        "492200": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08685684204101562
+        },
+        "492201": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08654022216796875
+        },
+        "492203": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08653640747070312
+        },
+        "492204": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08684158325195312
+        },
+        "495599": {
+          "name": "ray::TaskRunnerV1.run",
+          "peak_rss_gib": 2.1921234130859375
+        },
+        "496141": {
+          "name": "ray::TransferQueueController",
+          "peak_rss_gib": 0.7449264526367188
+        },
+        "496304": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 0.7974205017089844
+        },
+        "496305": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 0.7910423278808594
+        },
+        "496306": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 0.7982826232910156
+        },
+        "496307": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 0.800750732421875
+        },
+        "496308": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 0.7932701110839844
+        },
+        "496309": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 0.79754638671875
+        },
+        "496310": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 0.7971954345703125
+        },
+        "496311": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 0.7932167053222656
+        },
+        "497503": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.13237762451171875
+        },
+        "497658": {
+          "name": "ray::WorkerDict",
+          "peak_rss_gib": 4.959770202636719
+        },
+        "497660": {
+          "name": "ray::WorkerDict",
+          "peak_rss_gib": 4.761348724365234
+        },
+        "497661": {
+          "name": "ray::WorkerDict",
+          "peak_rss_gib": 4.814506530761719
+        },
+        "497662": {
+          "name": "ray::WorkerDict",
+          "peak_rss_gib": 4.783428192138672
+        },
+        "498817": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 1.0076408386230469
+        },
+        "498818": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 1.0118408203125
+        },
+        "498819": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 1.0002822875976562
+        },
+        "498820": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9891853332519531
+        },
+        "498821": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9952163696289062
+        },
+        "498822": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9875335693359375
+        },
+        "498823": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9785919189453125
+        },
+        "498824": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9923362731933594
+        },
+        "499414": {
+          "name": "ray::vLLMHttpServer",
+          "peak_rss_gib": 1.7557640075683594
+        },
+        "499415": {
+          "name": "ray::vLLMHttpServer",
+          "peak_rss_gib": 1.7547340393066406
+        },
+        "499416": {
+          "name": "ray::vLLMHttpServer",
+          "peak_rss_gib": 1.7510719299316406
+        },
+        "499417": {
+          "name": "ray::vLLMHttpServer",
+          "peak_rss_gib": 1.75604248046875
+        },
+        "503033": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.0792961120605469
+        },
+        "503377": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.3033714294433594
+        },
+        "503378": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.3309707641601562
+        },
+        "503383": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.2986679077148438
+        },
+        "503388": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.3241119384765625
+        },
+        "503393": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.32476806640625
+        },
+        "503396": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.306243896484375
+        },
+        "503397": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.3255500793457031
+        },
+        "503398": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.3239898681640625
+        },
+        "500437": {
+          "name": "python",
+          "peak_rss_gib": 0.015102386474609375
+        },
+        "500438": {
+          "name": "VLLM::EngineCore",
+          "peak_rss_gib": 1.1204338073730469
+        },
+        "501364": {
+          "name": "VLLM::Worker",
+          "peak_rss_gib": 1.9159698486328125
+        },
+        "500451": {
+          "name": "python",
+          "peak_rss_gib": 0.015048980712890625
+        },
+        "500452": {
+          "name": "VLLM::EngineCore",
+          "peak_rss_gib": 1.12432861328125
+        },
+        "501333": {
+          "name": "VLLM::Worker",
+          "peak_rss_gib": 1.8954315185546875
+        },
+        "500403": {
+          "name": "python",
+          "peak_rss_gib": 0.015026092529296875
+        },
+        "500404": {
+          "name": "VLLM::EngineCore",
+          "peak_rss_gib": 1.1259651184082031
+        },
+        "501207": {
+          "name": "VLLM::Worker",
+          "peak_rss_gib": 1.9153823852539062
+        },
+        "500444": {
+          "name": "python",
+          "peak_rss_gib": 0.015094757080078125
+        },
+        "500445": {
+          "name": "VLLM::EngineCore",
+          "peak_rss_gib": 1.1177864074707031
+        },
+        "501328": {
+          "name": "VLLM::Worker",
+          "peak_rss_gib": 1.8970069885253906
+        },
+        "504049": {
+          "name": "wandb-core",
+          "peak_rss_gib": 0.046539306640625
+        },
+        "504118": {
+          "name": "wandb-xpu",
+          "peak_rss_gib": 0.02529144287109375
+        },
+        "504609": {
+          "name": "python",
+          "peak_rss_gib": 0.5899238586425781
+        },
+        "504611": {
+          "name": "python",
+          "peak_rss_gib": 0.5904884338378906
+        },
+        "504822": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.0674896240234375
+        },
+        "504805": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.06771469116210938
+        },
+        "504953": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07800674438476562
+        },
+        "505025": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07794570922851562
+        },
+        "505008": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07790374755859375
+        },
+        "505026": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.077880859375
+        },
+        "505027": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07784271240234375
+        },
+        "505028": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07785415649414062
+        },
+        "505152": {
+          "name": "python",
+          "peak_rss_gib": 0.5899238586425781
+        },
+        "505156": {
+          "name": "python",
+          "peak_rss_gib": 0.6007308959960938
+        },
+        "505255": {
+          "name": "python",
+          "peak_rss_gib": 0.5899543762207031
+        },
+        "505257": {
+          "name": "python",
+          "peak_rss_gib": 0.5900497436523438
+        },
+        "505284": {
+          "name": "python",
+          "peak_rss_gib": 0.5899467468261719
+        },
+        "505288": {
+          "name": "python",
+          "peak_rss_gib": 0.5899810791015625
+        },
+        "505423": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07807540893554688
+        },
+        "505416": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07784271240234375
+        },
+        "505453": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07815933227539062
+        },
+        "505425": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.0781097412109375
+        },
+        "505430": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07789993286132812
+        },
+        "505436": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07810211181640625
+        },
+        "505429": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07806015014648438
+        },
+        "505454": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07777023315429688
+        },
+        "505496": {
+          "name": "python",
+          "peak_rss_gib": 0.5898246765136719
+        },
+        "505499": {
+          "name": "python",
+          "peak_rss_gib": 0.5900344848632812
+        },
+        "505953": {
+          "name": "python",
+          "peak_rss_gib": 0.5878067016601562
+        },
+        "505963": {
+          "name": "python",
+          "peak_rss_gib": 0.5825767517089844
+        },
+        "505950": {
+          "name": "python",
+          "peak_rss_gib": 0.5879096984863281
+        },
+        "505961": {
+          "name": "python",
+          "peak_rss_gib": 0.5826377868652344
+        },
+        "505957": {
+          "name": "python",
+          "peak_rss_gib": 0.5849990844726562
+        },
+        "505965": {
+          "name": "python",
+          "peak_rss_gib": 0.5906982421875
+        },
+        "505948": {
+          "name": "python",
+          "peak_rss_gib": 0.5899085998535156
+        },
+        "505959": {
+          "name": "python",
+          "peak_rss_gib": 0.5847358703613281
+        },
+        "510532": {
+          "name": "python",
+          "peak_rss_gib": 0.01513671875
+        },
+        "510533": {
+          "name": "python",
+          "peak_rss_gib": 0.7296142578125
+        },
+        "510776": {
+          "name": "python",
+          "peak_rss_gib": 0.015041351318359375
+        },
+        "510777": {
+          "name": "python",
+          "peak_rss_gib": 0.7288932800292969
+        },
+        "511103": {
+          "name": "python",
+          "peak_rss_gib": 0.0150146484375
+        },
+        "511104": {
+          "name": "python",
+          "peak_rss_gib": 0.7288703918457031
+        },
+        "511288": {
+          "name": "python",
+          "peak_rss_gib": 0.014995574951171875
+        },
+        "511289": {
+          "name": "python",
+          "peak_rss_gib": 0.7288436889648438
+        },
+        "511374": {
+          "name": "python",
+          "peak_rss_gib": 0.729278564453125
+        },
+        "511522": {
+          "name": "python",
+          "peak_rss_gib": 0.0151214599609375
+        },
+        "511525": {
+          "name": "python",
+          "peak_rss_gib": 0.7199172973632812
+        },
+        "511529": {
+          "name": "python",
+          "peak_rss_gib": 0.014934539794921875
+        },
+        "511532": {
+          "name": "python",
+          "peak_rss_gib": 0.7195701599121094
+        },
+        "511519": {
+          "name": "python",
+          "peak_rss_gib": 0.01493072509765625
+        },
+        "511521": {
+          "name": "python",
+          "peak_rss_gib": 0.7188720703125
+        },
+        "512974": {
+          "name": "python",
+          "peak_rss_gib": 0.015071868896484375
+        },
+        "512975": {
+          "name": "python",
+          "peak_rss_gib": 0.7287979125976562
+        },
+        "522013": {
+          "name": "python",
+          "peak_rss_gib": 0.7288284301757812
+        },
+        "522014": {
+          "name": "python",
+          "peak_rss_gib": 0.7285652160644531
+        }
+      },
+      "taskrunner_peak_rss_gib": 2.1921234130859375,
+      "storage_peak_rss_gib": 0.800750732421875,
+      "wall_seconds": 2303.886828184128
+    },
+    "valid-full-wall-s64-20261022-a": {
+      "run_id": "crrzidls",
+      "testing_seconds": 1805.090431086719,
+      "rollout_span_seconds": 1768.354450465,
+      "tokens": 56535980.0,
+      "output_tokens_per_second": 31320.303418795273,
+      "responses": 9120,
+      "prompt_groups": 570,
+      "responses_per_group": 16,
+      "score_mean": 0.7908991228070176,
+      "quality_metrics": {
+        "eval/math500/failed_count": 0,
+        "eval/amc23/failed_count": 0,
+        "eval/aime25/acc_mean": 0.21875,
+        "eval/aime25/failed_count": 0,
+        "eval/aime25/response_count": 480,
+        "eval/amc23/response_count": 640,
+        "eval/math500/acc_mean": 0.83075,
+        "eval/math500/response_count": 8000,
+        "eval/amc23/acc_mean": 0.721875
+      },
+      "engine_counters": {
+        "vllm:request_success_total": 9120.0,
+        "vllm:generation_tokens_total": 56535980.0,
+        "vllm:request_generation_tokens_sum": 56535980.0,
+        "vllm:num_preemptions_total": 0.0
+      },
+      "max_engine_waiting": 960.0,
+      "max_kv_fraction": 0.6282096207059051,
+      "gpu_busy_mean": 93.85032505910165,
+      "gpu_memory_mean_gib": 42.066813295332814,
+      "gpu_memory_max_gib": 42.30743408203125,
+      "gpu_probe_rows": 6768,
+      "config": {
+        "model_engine": "dp",
+        "actor_rollout_ref": {
+          "actor": {
+            "optim": {
+              "_target_": "verl.workers.config.FSDPOptimizerConfig",
+              "optimizer": "AdamW",
+              "optimizer_impl": "torch.optim",
+              "lr": 1e-06,
+              "lr_warmup_steps_ratio": 0.0,
+              "total_training_steps": -1,
+              "weight_decay": 0.01,
+              "lr_warmup_steps": -1,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "clip_grad": 1.0,
+              "min_lr_ratio": 0.0,
+              "num_cycles": 0.5,
+              "lr_scheduler_type": "constant",
+              "zero_indexed_step": true,
+              "warmup_style": null,
+              "override_optimizer_config": null
+            },
+            "fsdp_config": {
+              "_target_": "verl.workers.config.FSDPEngineConfig",
+              "wrap_policy": {
+                "min_num_params": 0
+              },
+              "param_offload": true,
+              "optimizer_offload": true,
+              "offload_policy": false,
+              "forward_only_cpu_offload": true,
+              "reshard_after_forward": true,
+              "fsdp_size": -1,
+              "forward_prefetch": false,
+              "model_dtype": "fp32",
+              "use_orig_params": false,
+              "seed": 42,
+              "full_determinism": false,
+              "ulysses_sequence_parallel_size": 1,
+              "entropy_from_logits_with_chunking": false,
+              "entropy_from_logits_chunk_size": 2048,
+              "use_torch_compile": true,
+              "entropy_checkpointing": false,
+              "use_no_sync_for_gradient_accumulation": false,
+              "pad_to_length": false,
+              "pad_to_length_bucket": 1024,
+              "forward_only": false,
+              "strategy": "fsdp",
+              "dtype": "bfloat16",
+              "qat": {
+                "_target_": "verl.workers.config.QATEngineConfig",
+                "enable": false,
+                "mode": "w4a16",
+                "group_size": 16,
+                "ignore_patterns": [
+                  "lm_head",
+                  "embed_tokens",
+                  "re:.*mlp.gate$"
+                ],
+                "activation_observer": "static_minmax",
+                "quantization_config_path": null
+              },
+              "turbo_config": {
+                "distributed": {
+                  "fully_shard_parallel_size": 16,
+                  "tensor_parallel_size": 1,
+                  "expert_parallel_size": 1,
+                  "expert_fully_shard_parallel_size": 1,
+                  "ulysses_parallel_size": 1,
+                  "fsdp_plan": {
+                    "param_dtype": "bf16",
+                    "reduce_dtype": "fp32",
+                    "output_dtype": "bf16",
+                    "fsdp_implementation": "native",
+                    "num_to_forward_prefetch": 1,
+                    "num_to_backward_prefetch": 1
+                  }
+                }
+              }
+            },
+            "_target_": "verl.workers.config.FSDPActorConfig",
+            "rollout_n": 1,
+            "strategy": "fsdp2",
+            "ppo_mini_batch_size": 64,
+            "ppo_micro_batch_size": null,
+            "ppo_micro_batch_size_per_gpu": 1,
+            "use_dynamic_bsz": true,
+            "ppo_max_token_len_per_gpu": 32768,
+            "clip_ratio": 0.2,
+            "clip_ratio_low": 0.2,
+            "clip_ratio_high": 0.2,
+            "tau_pos": 1.0,
+            "tau_neg": 1.05,
+            "freeze_vision_tower": false,
+            "policy_loss": {
+              "_target_": "verl.workers.config.PolicyLossConfig",
+              "loss_mode": "vanilla",
+              "clip_cov_ratio": 0.0002,
+              "clip_cov_lb": 1.0,
+              "clip_cov_ub": 5.0,
+              "kl_cov_ratio": 0.0002,
+              "ppo_kl_coef": 0.1,
+              "dro_beta": null
+            },
+            "clip_ratio_c": 3.0,
+            "loss_agg_mode": "token-mean",
+            "loss_scale_factor": null,
+            "entropy_coeff": 0.0,
+            "calculate_entropy": false,
+            "calculate_sum_pi_squared": false,
+            "use_kl_loss": false,
+            "use_prefix_grouper": false,
+            "use_torch_compile": false,
+            "kl_loss_coef": 0.001,
+            "kl_loss_type": "low_var_kl",
+            "ppo_epochs": 1,
+            "shuffle": false,
+            "data_loader_seed": 42,
+            "checkpoint": {
+              "_target_": "verl.trainer.config.CheckpointConfig",
+              "save_contents": [
+                "model",
+                "optimizer",
+                "extra"
+              ],
+              "load_contents": [
+                "model",
+                "optimizer",
+                "extra"
+              ],
+              "async_save": false,
+              "strict": true
+            },
+            "use_fused_kernels": false,
+            "profiler": {
+              "_target_": "verl.utils.profiler.ProfilerConfig",
+              "tool": null,
+              "enable": false,
+              "all_ranks": false,
+              "ranks": [],
+              "save_path": "outputs/profile",
+              "relocate_results": false,
+              "finish_hook_cmd": null,
+              "finish_hook_all_ranks": false,
+              "finish_hook_ranks": [],
+              "tool_config": {
+                "nsys": {
+                  "_target_": "verl.utils.profiler.config.NsightToolConfig",
+                  "discrete": false
+                },
+                "npu": {
+                  "_target_": "verl.utils.profiler.config.NPUToolConfig",
+                  "contents": [],
+                  "level": "level0",
+                  "analysis": true,
+                  "discrete": false
+                },
+                "torch": {
+                  "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+                  "contents": [],
+                  "discrete": false,
+                  "schedule": {
+                    "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+                    "skip_first": 0,
+                    "wait": 0,
+                    "warmup": 0,
+                    "active": 0,
+                    "repeat": 0
+                  }
+                },
+                "torch_memory": {
+                  "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+                  "trace_alloc_max_entries": 100000,
+                  "stack_depth": 32,
+                  "memory_snapshot_num_steps": 1
+                },
+                "precision_debugger": {
+                  "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+                  "config_path": null,
+                  "steps": null,
+                  "stages": null,
+                  "strict": false
+                }
+              }
+            },
+            "qat": {
+              "enable": false,
+              "mode": "w4a16",
+              "group_size": 16,
+              "ignore_patterns": [
+                "lm_head",
+                "embed_tokens",
+                "re:.*mlp.gate$"
+              ],
+              "activation_observer": "static_minmax",
+              "quantization_config_path": null
+            },
+            "grad_clip": 1.0,
+            "ulysses_sequence_parallel_size": 1,
+            "entropy_from_logits_with_chunking": false,
+            "entropy_from_logits_chunk_size": 2048,
+            "entropy_checkpointing": false,
+            "pad_to_length": false,
+            "use_remove_padding": true
+          },
+          "ref": {
+            "rollout_n": 1,
+            "strategy": "fsdp2",
+            "use_torch_compile": false,
+            "log_prob_micro_batch_size": null,
+            "log_prob_micro_batch_size_per_gpu": null,
+            "log_prob_use_dynamic_bsz": true,
+            "log_prob_max_token_len_per_gpu": 32768,
+            "profiler": {
+              "_target_": "verl.utils.profiler.ProfilerConfig",
+              "tool": null,
+              "enable": false,
+              "all_ranks": false,
+              "ranks": [],
+              "save_path": "outputs/profile",
+              "relocate_results": false,
+              "finish_hook_cmd": null,
+              "finish_hook_all_ranks": false,
+              "finish_hook_ranks": [],
+              "tool_config": {
+                "nsys": {
+                  "_target_": "verl.utils.profiler.config.NsightToolConfig",
+                  "discrete": false
+                },
+                "npu": {
+                  "_target_": "verl.utils.profiler.config.NPUToolConfig",
+                  "contents": [],
+                  "level": "level0",
+                  "analysis": true,
+                  "discrete": false
+                },
+                "torch": {
+                  "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+                  "contents": [],
+                  "discrete": false,
+                  "schedule": {
+                    "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+                    "skip_first": 0,
+                    "wait": 0,
+                    "warmup": 0,
+                    "active": 0,
+                    "repeat": 0
+                  }
+                },
+                "torch_memory": {
+                  "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+                  "trace_alloc_max_entries": 100000,
+                  "stack_depth": 32,
+                  "memory_snapshot_num_steps": 1
+                },
+                "precision_debugger": {
+                  "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+                  "config_path": null,
+                  "steps": null,
+                  "stages": null,
+                  "strict": false
+                }
+              }
+            },
+            "fsdp_config": {
+              "_target_": "verl.workers.config.FSDPEngineConfig",
+              "wrap_policy": {
+                "min_num_params": 0
+              },
+              "param_offload": false,
+              "optimizer_offload": false,
+              "offload_policy": false,
+              "forward_only_cpu_offload": true,
+              "reshard_after_forward": true,
+              "fsdp_size": -1,
+              "forward_prefetch": false,
+              "model_dtype": "fp32",
+              "use_orig_params": false,
+              "seed": 42,
+              "full_determinism": false,
+              "ulysses_sequence_parallel_size": 1,
+              "entropy_from_logits_with_chunking": false,
+              "entropy_from_logits_chunk_size": 2048,
+              "use_torch_compile": true,
+              "entropy_checkpointing": false,
+              "use_no_sync_for_gradient_accumulation": false,
+              "pad_to_length": false,
+              "pad_to_length_bucket": 1024,
+              "forward_only": true,
+              "strategy": "fsdp",
+              "dtype": "bfloat16",
+              "qat": {
+                "_target_": "verl.workers.config.QATEngineConfig",
+                "enable": false,
+                "mode": "w4a16",
+                "group_size": 16,
+                "ignore_patterns": [
+                  "lm_head",
+                  "embed_tokens",
+                  "re:.*mlp.gate$"
+                ],
+                "activation_observer": "static_minmax",
+                "quantization_config_path": null
+              },
+              "turbo_config": {
+                "distributed": {
+                  "fully_shard_parallel_size": 16,
+                  "tensor_parallel_size": 1,
+                  "expert_parallel_size": 1,
+                  "expert_fully_shard_parallel_size": 1,
+                  "ulysses_parallel_size": 1,
+                  "fsdp_plan": {
+                    "param_dtype": "bf16",
+                    "reduce_dtype": "fp32",
+                    "output_dtype": "bf16",
+                    "fsdp_implementation": "native",
+                    "num_to_forward_prefetch": 1,
+                    "num_to_backward_prefetch": 1
+                  }
+                }
+              }
+            },
+            "_target_": "verl.workers.config.FSDPActorConfig",
+            "ulysses_sequence_parallel_size": 1,
+            "entropy_from_logits_with_chunking": false,
+            "entropy_from_logits_chunk_size": 2048,
+            "entropy_checkpointing": false,
+            "pad_to_length": false
+          },
+          "rollout": {
+            "_target_": "verl.workers.config.RolloutConfig",
+            "name": "vllm",
+            "mode": "async",
+            "nnodes": 0,
+            "n_gpus_per_node": 4,
+            "temperature": 1.0,
+            "top_k": -1,
+            "top_p": 1.0,
+            "full_determinism": false,
+            "seed": 42,
+            "prompt_length": 4096,
+            "response_length": 7168,
+            "dtype": "bfloat16",
+            "gpu_memory_utilization": 0.5,
+            "standalone_gpu_memory_utilization": 0.5,
+            "ignore_eos": false,
+            "enforce_eager": false,
+            "cudagraph_capture_sizes": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32,
+              64
+            ],
+            "free_cache_engine": true,
+            "tensor_model_parallel_size": 1,
+            "data_parallel_size": 1,
+            "expert_parallel_size": 1,
+            "pipeline_model_parallel_size": 1,
+            "max_num_batched_tokens": 8192,
+            "max_model_len": 35841,
+            "max_num_seqs": 64,
+            "ray_actor_max_concurrency": 1024,
+            "enable_chunked_prefill": true,
+            "enable_prefix_caching": true,
+            "logprobs_mode": "processed_logprobs",
+            "scheduling_policy": "fcfs",
+            "load_format": "dummy",
+            "layered_summon": false,
+            "log_prob_micro_batch_size": null,
+            "log_prob_micro_batch_size_per_gpu": null,
+            "log_prob_use_dynamic_bsz": true,
+            "log_prob_max_token_len_per_gpu": 32768,
+            "disable_log_stats": false,
+            "do_sample": true,
+            "n": 1,
+            "over_sample_rate": 0,
+            "multi_stage_wake_up": false,
+            "engine_kwargs": {
+              "vllm": {},
+              "sglang": {},
+              "trtllm": {}
+            },
+            "val_kwargs": {
+              "_target_": "verl.workers.config.SamplingConfig",
+              "top_k": -1,
+              "top_p": 0.9,
+              "temperature": 0.7,
+              "n": 16,
+              "do_sample": true,
+              "max_tokens": 31744
+            },
+            "router_config_path": null,
+            "multi_turn": {
+              "_target_": "verl.workers.config.MultiTurnConfig",
+              "enable": false,
+              "max_assistant_turns": null,
+              "tool_config_path": null,
+              "function_tool_path": null,
+              "max_user_turns": null,
+              "max_parallel_calls": 1,
+              "max_tool_response_length": 256,
+              "tool_response_truncate_side": "middle",
+              "use_inference_chat_template": false,
+              "tokenization_sanity_check_mode": "strict",
+              "format": "hermes",
+              "num_repeat_rollouts": null
+            },
+            "calculate_log_probs": true,
+            "topk_log_probs": 0,
+            "agent": {
+              "_target_": "verl.workers.config.AgentLoopConfig",
+              "num_workers": 8,
+              "default_agent_loop": "single_turn_agent",
+              "agent_loop_config_path": null,
+              "custom_async_server": {
+                "_target_": "verl.workers.config.CustomAsyncServerConfig",
+                "path": null,
+                "name": null
+              }
+            },
+            "checkpoint_engine": {
+              "_target_": "verl.workers.config.CheckpointEngineConfig",
+              "backend": "naive",
+              "update_weights_bucket_megabytes": 2048,
+              "engine_kwargs": {},
+              "custom_backend_module": null
+            },
+            "trace": {
+              "_target_": "verl.workers.config.TraceConfig",
+              "project_name": "MirrorOPD-verl",
+              "experiment_name": "valid-full-wall-s64-20261022-a",
+              "backend": null,
+              "token2text": false,
+              "max_samples_per_step_per_worker": null
+            },
+            "skip_tokenizer_init": true,
+            "enable_rollout_routing_replay": false,
+            "moe_load_balance_metrics_interval": 0,
+            "profiler": {
+              "_target_": "verl.utils.profiler.ProfilerConfig",
+              "tool": null,
+              "enable": false,
+              "all_ranks": false,
+              "ranks": [],
+              "save_path": "outputs/profile",
+              "relocate_results": false,
+              "finish_hook_cmd": null,
+              "finish_hook_all_ranks": false,
+              "finish_hook_ranks": [],
+              "tool_config": {
+                "npu": {
+                  "_target_": "verl.utils.profiler.config.NPUToolConfig",
+                  "contents": [],
+                  "level": "level0",
+                  "analysis": true,
+                  "discrete": false,
+                  "profile_token_start": null,
+                  "profile_token_end": null
+                },
+                "torch": {
+                  "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+                  "contents": [],
+                  "discrete": false,
+                  "profile_token_start": null,
+                  "profile_token_end": null
+                },
+                "precision_debugger": {
+                  "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+                  "config_path": null,
+                  "steps": null,
+                  "stages": null,
+                  "strict": false
+                }
+              }
+            },
+            "prometheus": {
+              "_target_": "verl.workers.config.PrometheusConfig",
+              "enable": false,
+              "port": 9090,
+              "file": "/tmp/ray/session_latest/metrics/prometheus/prometheus.yml",
+              "served_model_name": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/DeepSeek-R1-Distill-Qwen-1.5B"
+            },
+            "quantization": null,
+            "quantization_config_file": null,
+            "mtp": {
+              "_target_": "verl.workers.config.MtpConfig",
+              "enable": false,
+              "enable_train": false,
+              "enable_rollout": false,
+              "detach_encoder": false,
+              "mtp_loss_scaling_factor": 0.1,
+              "speculative_algorithm": "EAGLE",
+              "speculative_num_steps": 3,
+              "speculative_eagle_topk": 1,
+              "speculative_num_draft_tokens": 4,
+              "method": "mtp",
+              "num_speculative_tokens": 1
+            },
+            "qat": {
+              "_target_": "verl.workers.config.QATEngineConfig",
+              "enable": false,
+              "mode": "w4a16",
+              "group_size": 16,
+              "ignore_patterns": [
+                "lm_head",
+                "embed_tokens",
+                "re:.*mlp.gate$"
+              ],
+              "activation_observer": "static_minmax",
+              "quantization_config_path": null
+            },
+            "disaggregation": {
+              "enabled": false,
+              "prefill_replicas": 1,
+              "decode_replicas": 1,
+              "decode_tensor_model_parallel_size": null,
+              "transfer_backend": "nixl",
+              "bootstrap_port": null,
+              "ib_device": null
+            }
+          },
+          "model": {
+            "_target_": "verl.workers.config.HFModelConfig",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/DeepSeek-R1-Distill-Qwen-1.5B",
+            "hf_config_path": null,
+            "tokenizer_path": null,
+            "use_shm": false,
+            "trust_remote_code": false,
+            "custom_chat_template": null,
+            "external_lib": null,
+            "override_config": {},
+            "enable_gradient_checkpointing": true,
+            "enable_activation_offload": false,
+            "use_remove_padding": true,
+            "lora_rank": 0,
+            "lora_alpha": 16,
+            "target_modules": "all-linear",
+            "exclude_modules": null,
+            "lora_adapter_path": null,
+            "use_liger": false,
+            "use_fused_kernels": false,
+            "fused_kernel_options": {
+              "impl_backend": "torch"
+            },
+            "tiled_mlp": {
+              "enabled": false,
+              "num_shards": 4
+            },
+            "mtp": {
+              "_target_": "verl.workers.config.MtpConfig",
+              "enable": false,
+              "enable_train": false,
+              "enable_rollout": false,
+              "detach_encoder": false,
+              "mtp_loss_scaling_factor": 0.1,
+              "speculative_algorithm": "EAGLE",
+              "speculative_num_steps": 3,
+              "speculative_eagle_topk": 1,
+              "speculative_num_draft_tokens": 4,
+              "method": "mtp",
+              "num_speculative_tokens": 1
+            },
+            "lora": {
+              "type": "lora",
+              "merge": false,
+              "rank": 0,
+              "alpha": 32,
+              "dropout": 0.0,
+              "target_modules": [
+                "linear_qkv",
+                "linear_proj",
+                "linear_fc1",
+                "linear_fc2"
+              ],
+              "exclude_modules": [],
+              "dropout_position": "pre",
+              "lora_A_init_method": "xavier",
+              "lora_B_init_method": "zero",
+              "a2a_experimental": false,
+              "dtype": null,
+              "adapter_path": null,
+              "freeze_vision_model": true,
+              "freeze_vision_projection": true,
+              "freeze_language_model": true
+            }
+          },
+          "hybrid_engine": true,
+          "nccl_timeout": 600
+        },
+        "data": {
+          "tokenizer": null,
+          "use_shm": false,
+          "train_files": [
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/DAPO/train.parquet"
+          ],
+          "val_files": [
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/MATH-500/test.parquet",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AMC23/test.parquet",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math/AIME25/test.parquet"
+          ],
+          "train_max_samples": -1,
+          "val_max_samples": -1,
+          "prompt_key": "prompt",
+          "reward_fn_key": "data_source",
+          "max_prompt_length": 4096,
+          "max_response_length": 7168,
+          "train_batch_size": 64,
+          "gen_batch_size": null,
+          "val_batch_size": null,
+          "tool_config_path": null,
+          "function_tool_path": null,
+          "return_raw_input_ids": false,
+          "return_raw_chat": true,
+          "return_full_prompt": false,
+          "shuffle": true,
+          "seed": 42,
+          "dataloader_num_workers": 0,
+          "image_patch_size": 14,
+          "validation_shuffle": false,
+          "filter_overlong_prompts": true,
+          "filter_overlong_prompts_workers": 1,
+          "truncation": "error",
+          "image_key": "images",
+          "video_key": "videos",
+          "audio_key": "audios",
+          "trust_remote_code": false,
+          "custom_cls": {
+            "path": null,
+            "name": null
+          },
+          "return_multi_modal_inputs": true,
+          "apply_chat_template_kwargs": {},
+          "continuous_token": {
+            "model_family": "deepseek"
+          },
+          "mm_processor_kwargs": {}
+        },
+        "critic": {
+          "optim": {
+            "_target_": "verl.workers.config.FSDPOptimizerConfig",
+            "optimizer": "AdamW",
+            "optimizer_impl": "torch.optim",
+            "lr": 1e-05,
+            "lr_warmup_steps_ratio": 0.0,
+            "total_training_steps": -1,
+            "weight_decay": 0.01,
+            "lr_warmup_steps": -1,
+            "betas": [
+              0.9,
+              0.999
+            ],
+            "clip_grad": 1.0,
+            "min_lr_ratio": 0.0,
+            "num_cycles": 0.5,
+            "lr_scheduler_type": "constant",
+            "zero_indexed_step": true,
+            "warmup_style": null,
+            "override_optimizer_config": null
+          },
+          "fsdp": {
+            "_target_": "verl.workers.config.FSDPEngineConfig",
+            "wrap_policy": {
+              "min_num_params": 0
+            },
+            "param_offload": false,
+            "optimizer_offload": false,
+            "offload_policy": false,
+            "forward_only_cpu_offload": true,
+            "reshard_after_forward": true,
+            "fsdp_size": -1,
+            "forward_prefetch": false,
+            "model_dtype": "fp32",
+            "use_orig_params": false,
+            "seed": 42,
+            "full_determinism": false,
+            "ulysses_sequence_parallel_size": 1,
+            "entropy_from_logits_with_chunking": false,
+            "entropy_from_logits_chunk_size": 2048,
+            "use_torch_compile": true,
+            "entropy_checkpointing": false,
+            "use_no_sync_for_gradient_accumulation": false,
+            "pad_to_length": false,
+            "pad_to_length_bucket": 1024,
+            "forward_only": false,
+            "strategy": "fsdp",
+            "dtype": "bfloat16",
+            "qat": {
+              "_target_": "verl.workers.config.QATEngineConfig",
+              "enable": false,
+              "mode": "w4a16",
+              "group_size": 16,
+              "ignore_patterns": [
+                "lm_head",
+                "embed_tokens",
+                "re:.*mlp.gate$"
+              ],
+              "activation_observer": "static_minmax",
+              "quantization_config_path": null
+            },
+            "turbo_config": {
+              "distributed": {
+                "fully_shard_parallel_size": 16,
+                "tensor_parallel_size": 1,
+                "expert_parallel_size": 1,
+                "expert_fully_shard_parallel_size": 1,
+                "ulysses_parallel_size": 1,
+                "fsdp_plan": {
+                  "param_dtype": "bf16",
+                  "reduce_dtype": "fp32",
+                  "output_dtype": "bf16",
+                  "fsdp_implementation": "native",
+                  "num_to_forward_prefetch": 1,
+                  "num_to_backward_prefetch": 1
+                }
+              }
+            }
+          },
+          "_target_": "verl.workers.config.FSDPCriticConfig",
+          "rollout_n": 1,
+          "strategy": "fsdp",
+          "enable": null,
+          "ppo_mini_batch_size": 64,
+          "ppo_micro_batch_size": null,
+          "ppo_micro_batch_size_per_gpu": null,
+          "use_dynamic_bsz": true,
+          "ppo_max_token_len_per_gpu": 32768,
+          "forward_max_token_len_per_gpu": 32768,
+          "ppo_epochs": 1,
+          "shuffle": false,
+          "data_loader_seed": 42,
+          "cliprange_value": 0.5,
+          "loss_agg_mode": "token-mean",
+          "loss_scale_factor": null,
+          "checkpoint": {
+            "_target_": "verl.trainer.config.CheckpointConfig",
+            "save_contents": [
+              "model",
+              "optimizer",
+              "extra"
+            ],
+            "load_contents": [
+              "model",
+              "optimizer",
+              "extra"
+            ],
+            "async_save": false
+          },
+          "profiler": {
+            "_target_": "verl.utils.profiler.ProfilerConfig",
+            "tool": null,
+            "enable": false,
+            "all_ranks": false,
+            "ranks": [],
+            "save_path": "outputs/profile",
+            "relocate_results": false,
+            "finish_hook_cmd": null,
+            "finish_hook_all_ranks": false,
+            "finish_hook_ranks": [],
+            "tool_config": {
+              "nsys": {
+                "_target_": "verl.utils.profiler.config.NsightToolConfig",
+                "discrete": false
+              },
+              "npu": {
+                "_target_": "verl.utils.profiler.config.NPUToolConfig",
+                "contents": [],
+                "level": "level0",
+                "analysis": true,
+                "discrete": false
+              },
+              "torch": {
+                "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+                "contents": [],
+                "discrete": false,
+                "schedule": {
+                  "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+                  "skip_first": 0,
+                  "wait": 0,
+                  "warmup": 0,
+                  "active": 0,
+                  "repeat": 0
+                }
+              },
+              "torch_memory": {
+                "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+                "trace_alloc_max_entries": 100000,
+                "stack_depth": 32,
+                "memory_snapshot_num_steps": 1
+              },
+              "precision_debugger": {
+                "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+                "config_path": null,
+                "steps": null,
+                "stages": null,
+                "strict": false
+              }
+            }
+          },
+          "forward_micro_batch_size": null,
+          "forward_micro_batch_size_per_gpu": null,
+          "ulysses_sequence_parallel_size": 1,
+          "grad_clip": 1.0,
+          "model": {
+            "_target_": "verl.workers.config.HFModelConfig",
+            "path": "~/models/deepseek-llm-7b-chat",
+            "hf_config_path": null,
+            "tokenizer_path": null,
+            "use_shm": false,
+            "trust_remote_code": false,
+            "custom_chat_template": null,
+            "external_lib": null,
+            "override_config": {},
+            "enable_gradient_checkpointing": true,
+            "enable_activation_offload": false,
+            "use_remove_padding": true,
+            "lora_rank": 0,
+            "lora_alpha": 16,
+            "target_modules": "all-linear",
+            "exclude_modules": null,
+            "lora_adapter_path": null,
+            "use_liger": false,
+            "use_fused_kernels": false,
+            "fused_kernel_options": {
+              "impl_backend": "torch"
+            },
+            "tiled_mlp": {
+              "enabled": false,
+              "num_shards": 4
+            },
+            "mtp": {
+              "_target_": "verl.workers.config.MtpConfig",
+              "enable": false,
+              "enable_train": false,
+              "enable_rollout": false,
+              "detach_encoder": false,
+              "mtp_loss_scaling_factor": 0.1,
+              "speculative_algorithm": "EAGLE",
+              "speculative_num_steps": 3,
+              "speculative_eagle_topk": 1,
+              "speculative_num_draft_tokens": 4,
+              "method": "mtp",
+              "num_speculative_tokens": 1
+            },
+            "lora": {
+              "type": "lora",
+              "merge": false,
+              "rank": 0,
+              "alpha": 32,
+              "dropout": 0.0,
+              "target_modules": [
+                "linear_qkv",
+                "linear_proj",
+                "linear_fc1",
+                "linear_fc2"
+              ],
+              "exclude_modules": [],
+              "dropout_position": "pre",
+              "lora_A_init_method": "xavier",
+              "lora_B_init_method": "zero",
+              "a2a_experimental": false,
+              "dtype": null,
+              "adapter_path": null,
+              "freeze_vision_model": true,
+              "freeze_vision_projection": true,
+              "freeze_language_model": true
+            }
+          }
+        },
+        "custom_reward_function": {
+          "path": null,
+          "name": null
+        },
+        "reward_model": {
+          "num_workers": null,
+          "reward_manager": null,
+          "enable": null,
+          "enable_resource_pool": null,
+          "n_gpus_per_node": null,
+          "nnodes": null,
+          "reward_loop_source": null,
+          "reward_loop_module_path": null,
+          "reward_loop_class_name": null,
+          "model": {
+            "path": null,
+            "external_lib": null,
+            "trust_remote_code": null
+          },
+          "rollout": {
+            "name": null,
+            "dtype": null,
+            "gpu_memory_utilization": null,
+            "enforce_eager": null,
+            "cudagraph_capture_sizes": null,
+            "free_cache_engine": null,
+            "data_parallel_size": null,
+            "expert_parallel_size": null,
+            "tensor_model_parallel_size": null,
+            "max_num_batched_tokens": null,
+            "max_model_len": null,
+            "max_num_seqs": null,
+            "load_format": null,
+            "engine_kwargs": null,
+            "limit_images": null,
+            "enable_chunked_prefill": null,
+            "enable_prefix_caching": null,
+            "disable_log_stats": null,
+            "skip_tokenizer_init": null,
+            "prompt_length": null,
+            "response_length": null
+          }
+        },
+        "sandbox_fusion": {
+          "url": null,
+          "max_concurrent": null,
+          "memory_limit_mb": null
+        },
+        "reward": {
+          "_target_": "verl.workers.config.RewardConfig",
+          "num_workers": 8,
+          "custom_reward_function": {
+            "path": "/tmp/mopd-fullval-20261022/examples/mirroropd/reward.py",
+            "name": "reward_func"
+          },
+          "reward_manager": {
+            "_target_": "verl.workers.config.reward.RewardManagerConfig",
+            "source": "register",
+            "name": "naive",
+            "module": {
+              "_target_": "verl.trainer.config.config.ModuleConfig",
+              "path": null,
+              "name": "custom_reward_manager"
+            }
+          },
+          "reward_model": {
+            "_target_": "verl.workers.config.RewardModelConfig",
+            "enable": false,
+            "enable_resource_pool": false,
+            "n_gpus_per_node": 8,
+            "nnodes": 0,
+            "model_path": null,
+            "rollout": {
+              "_target_": "verl.workers.config.RolloutConfig",
+              "name": "???",
+              "dtype": "bfloat16",
+              "gpu_memory_utilization": 0.5,
+              "enforce_eager": true,
+              "cudagraph_capture_sizes": null,
+              "free_cache_engine": true,
+              "data_parallel_size": 1,
+              "expert_parallel_size": 1,
+              "tensor_model_parallel_size": 2,
+              "pipeline_model_parallel_size": 1,
+              "max_num_batched_tokens": 8192,
+              "max_model_len": null,
+              "max_num_seqs": 1024,
+              "load_format": "auto",
+              "layered_summon": false,
+              "scheduling_policy": "fcfs",
+              "full_determinism": false,
+              "seed": 42,
+              "multi_stage_wake_up": false,
+              "engine_kwargs": {},
+              "limit_images": null,
+              "enable_chunked_prefill": true,
+              "enable_prefix_caching": true,
+              "disable_log_stats": true,
+              "skip_tokenizer_init": false,
+              "ignore_eos": false,
+              "temperature": 1.0,
+              "top_k": -1,
+              "top_p": 1,
+              "do_sample": true,
+              "n": 1,
+              "prompt_length": 2048,
+              "response_length": 2048,
+              "quantization": null,
+              "quantization_config_file": null,
+              "mtp": null,
+              "disaggregation": {
+                "enabled": false,
+                "prefill_replicas": 1,
+                "decode_replicas": 1,
+                "decode_tensor_model_parallel_size": null,
+                "transfer_backend": "nixl",
+                "bootstrap_port": null,
+                "ib_device": null
+              }
+            }
+          },
+          "sandbox_fusion": {
+            "_target_": "verl.workers.config.SandboxFusionConfig",
+            "url": null,
+            "max_concurrent": 64,
+            "memory_limit_mb": 1024
+          }
+        },
+        "algorithm": {
+          "rollout_correction": {
+            "rollout_is": null,
+            "rollout_is_threshold": 2.0,
+            "rollout_rs": null,
+            "rollout_rs_threshold": null,
+            "bypass_mode": false,
+            "loss_type": "ppo_clip",
+            "rollout_is_batch_normalize": false,
+            "score_centering": false
+          },
+          "_target_": "verl.trainer.config.AlgoConfig",
+          "gamma": 1.0,
+          "lam": 1.0,
+          "adv_estimator": "grpo",
+          "norm_adv_by_std_in_grpo": true,
+          "filter_groups": {
+            "_target_": "verl.trainer.config.FilterGroupsConfig",
+            "enable": false,
+            "metric": "reward",
+            "max_num_gen_batches": 0,
+            "max_inflight_gen_batches": 1
+          },
+          "use_kl_in_reward": false,
+          "kl_penalty": "kl",
+          "kl_ctrl": {
+            "_target_": "verl.trainer.config.KLControlConfig",
+            "type": "fixed",
+            "kl_coef": 0.001,
+            "horizon": 10000,
+            "target_kl": 0.1
+          },
+          "use_pf_ppo": false,
+          "pf_ppo": {
+            "reweight_method": "pow",
+            "weight_pow": 2.0
+          }
+        },
+        "distillation": {
+          "_target_": "verl.workers.config.DistillationConfig",
+          "enabled": true,
+          "execution_mode": "shared_sync",
+          "shared_teacher": {
+            "_target_": "verl.workers.config.FSDPEngineConfig",
+            "strategy": "fsdp2",
+            "forward_only": true,
+            "model_dtype": "bfloat16",
+            "mixed_precision": {
+              "param_dtype": "bfloat16",
+              "reduce_dtype": "float32"
+            },
+            "param_offload": true,
+            "optimizer_offload": false,
+            "offload_policy": false,
+            "forward_only_cpu_offload": false,
+            "reshard_after_forward": true,
+            "use_dynamic_bsz": true,
+            "infer_max_token_len_per_gpu": 32768,
+            "use_torch_compile": false
+          },
+          "distillation_loss": {
+            "_target_": "verl.workers.config.DistillationLossConfig",
+            "loss_mode": "k1",
+            "topk": 32,
+            "use_task_rewards": false,
+            "distillation_loss_coef": 1.0,
+            "loss_max_clamp": null,
+            "log_prob_min_clamp": null,
+            "use_policy_gradient": true,
+            "policy_loss_mode": "vanilla",
+            "advantage_source": "current",
+            "clip_ratio": 0.2,
+            "clip_ratio_low": 0.2,
+            "clip_ratio_high": 0.2
+          },
+          "n_gpus_per_node": 0,
+          "nnodes": 0,
+          "teacher_models": {
+            "teacher_model": {
+              "_target_": "verl.workers.config.DistillationTeacherModelConfig",
+              "key": null,
+              "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/JustRL-DeepSeek-1.5B",
+              "num_replicas": 0,
+              "inference": {
+                "_target_": "verl.workers.config.RolloutConfig",
+                "name": "vllm",
+                "dtype": "bfloat16",
+                "gpu_memory_utilization": 0.4,
+                "enforce_eager": true,
+                "cudagraph_capture_sizes": null,
+                "free_cache_engine": true,
+                "data_parallel_size": 1,
+                "expert_parallel_size": 1,
+                "tensor_model_parallel_size": 1,
+                "max_num_batched_tokens": 8192,
+                "max_model_len": 11265,
+                "max_num_seqs": 64,
+                "load_format": "auto",
+                "engine_kwargs": {},
+                "limit_images": null,
+                "enable_chunked_prefill": true,
+                "enable_prefix_caching": true,
+                "disable_log_stats": true,
+                "skip_tokenizer_init": true,
+                "prompt_length": 4096,
+                "response_length": 7168,
+                "temperature": 1.0
+              }
+            }
+          },
+          "teacher_key": "data_source"
+        },
+        "transfer_queue": {
+          "enable": false,
+          "backend": {
+            "storage_backend": "SimpleStorage",
+            "SimpleStorage": {
+              "total_storage_size": null,
+              "num_data_storage_units": 8,
+              "ssd_offload": {
+                "enabled": false,
+                "path": null,
+                "threshold_bytes": 1048576
+              }
+            },
+            "MooncakeStore": {
+              "auto_init": false,
+              "metadata_server": "P2PHANDSHAKE",
+              "master_server_address": "localhost:50124",
+              "global_segment_size": 4294967296,
+              "local_buffer_size": 1073741824,
+              "hard_pin": true
+            }
+          }
+        },
+        "trainer": {
+          "balance_batch": true,
+          "total_epochs": 1,
+          "total_training_steps": 1,
+          "project_name": "MirrorOPD-verl",
+          "experiment_name": "valid-full-wall-s64-20261022-a",
+          "logger": [
+            "console",
+            "wandb"
+          ],
+          "metrics_quantile_interval": 8,
+          "log_val_generations": 0,
+          "rollout_data_dir": null,
+          "validation_data_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/full-validation-20261022/valid-full-wall-s64-20261022-a/training/validation",
+          "nnodes": 1,
+          "n_gpus_per_node": 4,
+          "save_freq": -1,
+          "esi_redundant_time": 0,
+          "resume_mode": "disable",
+          "resume_from_path": null,
+          "checkpoint_callback_class": null,
+          "val_before_train": true,
+          "val_only": true,
+          "test_freq": -1,
+          "critic_warmup": 0,
+          "default_hdfs_dir": null,
+          "del_local_ckpt_after_load": false,
+          "default_local_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/full-validation-20261022/valid-full-wall-s64-20261022-a/training/checkpoints",
+          "max_actor_ckpt_to_keep": null,
+          "max_critic_ckpt_to_keep": null,
+          "ray_wait_register_center_timeout": 300,
+          "device": "cuda",
+          "use_v1": true,
+          "v1": {
+            "trainer_mode": "sync",
+            "sync": {},
+            "colocate_async": {
+              "num_warmup_batches": 1
+            },
+            "separate_async": {
+              "num_warmup_batches": 1,
+              "parameter_sync_step": 4,
+              "hybrid_rollout": {
+                "_target_": "verl.trainer.config.HybridRolloutSwitchConfig",
+                "enable_switch": false,
+                "switch_threshold_ratio": 0.4,
+                "adaptive_switch_threshold": true,
+                "switch_threshold_step_up": 0.05,
+                "switch_threshold_step_down": 0.03,
+                "switch_threshold_release_steps": 2,
+                "switch_cost_window_size": 3
+              }
+            },
+            "sampler": {
+              "max_off_policy_threshold": 8,
+              "max_off_policy_strategy": "drop",
+              "sync_refill_failed_groups": false,
+              "custom_sampler": {
+                "path": null,
+                "name": null
+              },
+              "sampler_kwargs": {}
+            }
+          }
+        },
+        "global_profiler": {
+          "_target_": "verl.utils.profiler.ProfilerConfig",
+          "tool": null,
+          "steps": null,
+          "profile_continuous_steps": false,
+          "save_path": "outputs/profile",
+          "relocate_results": false,
+          "finish_hook_cmd": null,
+          "finish_hook_all_ranks": false,
+          "finish_hook_ranks": [],
+          "global_tool_config": {
+            "nsys": {
+              "_target_": "verl.utils.profiler.config.NsightToolConfig",
+              "discrete": false,
+              "controller_nsight_options": {
+                "trace": "cuda,nvtx,cublas,ucx",
+                "cuda-memory-usage": "true",
+                "cuda-graph-trace": "graph"
+              },
+              "worker_nsight_options": {
+                "trace": "cuda,nvtx,cublas,ucx",
+                "cuda-memory-usage": "true",
+                "cuda-graph-trace": "graph",
+                "capture-range": "cudaProfilerApi",
+                "capture-range-end": null,
+                "kill": "none"
+              }
+            },
+            "torch_memory": {
+              "trace_alloc_max_entries": 100000,
+              "stack_depth": 32,
+              "memory_snapshot_num_steps": 1,
+              "context": "all",
+              "stacks": "all",
+              "kw_args": {}
+            },
+            "precision_debugger": {
+              "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+              "config_path": null,
+              "steps": null,
+              "stages": null,
+              "strict": false
+            }
+          }
+        },
+        "skip": {
+          "_target_": "verl.utils.skip.SkipManagerConfig",
+          "rollout": {
+            "enable": false,
+            "dump_dir": "~/.verl/rollout_dump",
+            "steps": [],
+            "action": "cache"
+          },
+          "rollout_tq": {
+            "enable": false,
+            "dump_dir": "~/.verl/rollout_dump",
+            "steps": [],
+            "action": "cache"
+          },
+          "async_rollout": {
+            "enable": false,
+            "dump_dir": "~/.verl/rollout_dump",
+            "steps": [],
+            "action": "cache"
+          }
+        },
+        "ray_kwargs": {
+          "ray_init": {
+            "num_cpus": 64,
+            "runtime_env": {
+              "py_executable": "/root/.local/share/mirroropd/venvs/profile-cu128/bin/python",
+              "env_vars": {
+                "WANDB_DIR": "/tmp/mopd-fullval-20261022",
+                "WANDB_MODE": "offline",
+                "VLLM_LOGGING_LEVEL": "INFO",
+                "PYTHONPATH": "/tmp/mopd-fullval-20261022"
+              }
+            },
+            "num_gpus": 4,
+            "include_dashboard": false,
+            "object_store_memory": 4294967296,
+            "_temp_dir": "/tmp/fv22-all-a"
+          },
+          "timeline_json_file": null
+        }
+      },
+      "history": {
+        "step/optimizer": 0,
+        "eval/math500/failed_count": 0,
+        "eval/amc23/failed_count": 0,
+        "eval/aime25/acc_mean": 0.21875,
+        "eval/aime25/failed_count": 0,
+        "eval/aime25/response_count": 480,
+        "_runtime": 1805.245597509,
+        "perf/timing/validation_rollout_seconds": 1768.354450465,
+        "step/outer": 0,
+        "perf/timing/validation_seconds": 1805.090431086719,
+        "eval/amc23/response_count": 640,
+        "step/update": 0,
+        "_timestamp": 1792648192.9895363,
+        "_step": 0,
+        "eval/math500/acc_mean": 0.83075,
+        "eval/math500/response_count": 8000,
+        "eval/amc23/acc_mean": 0.721875
+      },
+      "decode_tail_samples": [
+        {
+          "window_responses": 9120,
+          "completion_90_to_100_seconds": 540.925862789154
+        }
+      ],
+      "queue_samples": {
+        "count": 751,
+        "active_mean": 226.00133155792278,
+        "fraction_all_waiting_empty": 0.14647137150466044,
+        "fraction_active_lt16": 0.05059920106524634,
+        "fraction_any_idle": 0.09454061251664447,
+        "fraction_idle_with_waiting_elsewhere": 0
+      },
+      "process_peak_rss": {
+        "562977": {
+          "name": "bash",
+          "peak_rss_gib": 0.003604888916015625
+        },
+        "563022": {
+          "name": "python",
+          "peak_rss_gib": 0.8856468200683594
+        },
+        "563023": {
+          "name": "tee",
+          "peak_rss_gib": 0.001018524169921875
+        },
+        "563470": {
+          "name": "gcs_server",
+          "peak_rss_gib": 1.2793312072753906
+        },
+        "563733": {
+          "name": "python",
+          "peak_rss_gib": 0.087799072265625
+        },
+        "563735": {
+          "name": "python",
+          "peak_rss_gib": 0.12180328369140625
+        },
+        "563796": {
+          "name": "python",
+          "peak_rss_gib": 0.08610916137695312
+        },
+        "563797": {
+          "name": "raylet",
+          "peak_rss_gib": 0.06966400146484375
+        },
+        "563877": {
+          "name": "ray::DashboardAgent",
+          "peak_rss_gib": 0.17292404174804688
+        },
+        "563879": {
+          "name": "ray::RuntimeEnvAgent",
+          "peak_rss_gib": 0.08700942993164062
+        },
+        "564088": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08669281005859375
+        },
+        "564089": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08623504638671875
+        },
+        "564090": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08654403686523438
+        },
+        "564091": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08632278442382812
+        },
+        "564092": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08624649047851562
+        },
+        "564093": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08612823486328125
+        },
+        "564094": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08617019653320312
+        },
+        "564095": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08623504638671875
+        },
+        "564096": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08645248413085938
+        },
+        "564097": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08609390258789062
+        },
+        "564098": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08664703369140625
+        },
+        "564099": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08641815185546875
+        },
+        "564100": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08640289306640625
+        },
+        "564101": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08630752563476562
+        },
+        "564103": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08651351928710938
+        },
+        "564104": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08650588989257812
+        },
+        "564105": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.086639404296875
+        },
+        "564106": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08660507202148438
+        },
+        "564107": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08614349365234375
+        },
+        "564108": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.0865478515625
+        },
+        "564109": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08643722534179688
+        },
+        "564110": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08611297607421875
+        },
+        "564111": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08609771728515625
+        },
+        "564112": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08640289306640625
+        },
+        "564113": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.0860748291015625
+        },
+        "564114": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08639144897460938
+        },
+        "564115": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08635330200195312
+        },
+        "564116": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08647918701171875
+        },
+        "564117": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.0864715576171875
+        },
+        "564118": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08624649047851562
+        },
+        "564119": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08620071411132812
+        },
+        "564120": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08664321899414062
+        },
+        "564121": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.086334228515625
+        },
+        "564122": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08640289306640625
+        },
+        "564124": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08660507202148438
+        },
+        "564125": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.0863189697265625
+        },
+        "564131": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.0864105224609375
+        },
+        "564132": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08629226684570312
+        },
+        "564133": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08596420288085938
+        },
+        "564134": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08625411987304688
+        },
+        "564135": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08663177490234375
+        },
+        "564138": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.08604812622070312
+        },
+        "567508": {
+          "name": "ray::TaskRunnerV1.run",
+          "peak_rss_gib": 4.623390197753906
+        },
+        "568068": {
+          "name": "ray::TransferQueueController",
+          "peak_rss_gib": 0.7784919738769531
+        },
+        "568367": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 1.0737800598144531
+        },
+        "568368": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 1.0746612548828125
+        },
+        "568370": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 1.0379562377929688
+        },
+        "568371": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 1.0710830688476562
+        },
+        "568372": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 1.0656623840332031
+        },
+        "568374": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 1.0659828186035156
+        },
+        "568376": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 1.0656013488769531
+        },
+        "568377": {
+          "name": "ray::SimpleStorageUnit",
+          "peak_rss_gib": 1.0667686462402344
+        },
+        "569461": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 0.13270187377929688
+        },
+        "569651": {
+          "name": "ray::WorkerDict",
+          "peak_rss_gib": 4.961738586425781
+        },
+        "569652": {
+          "name": "ray::WorkerDict",
+          "peak_rss_gib": 4.777004241943359
+        },
+        "569653": {
+          "name": "ray::WorkerDict",
+          "peak_rss_gib": 4.757984161376953
+        },
+        "569654": {
+          "name": "ray::WorkerDict",
+          "peak_rss_gib": 4.7618560791015625
+        },
+        "570847": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9928245544433594
+        },
+        "570848": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9916915893554688
+        },
+        "570849": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 1.0112838745117188
+        },
+        "570850": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 1.0061798095703125
+        },
+        "570851": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 1.0090179443359375
+        },
+        "570852": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9952964782714844
+        },
+        "570853": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 1.0108146667480469
+        },
+        "570854": {
+          "name": "ray::RewardLoopWorker",
+          "peak_rss_gib": 0.9935302734375
+        },
+        "571496": {
+          "name": "ray::vLLMHttpServer",
+          "peak_rss_gib": 1.8271560668945312
+        },
+        "571497": {
+          "name": "ray::vLLMHttpServer",
+          "peak_rss_gib": 1.8100204467773438
+        },
+        "571498": {
+          "name": "ray::vLLMHttpServer",
+          "peak_rss_gib": 1.8273353576660156
+        },
+        "571499": {
+          "name": "ray::vLLMHttpServer",
+          "peak_rss_gib": 1.8184852600097656
+        },
+        "574214": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.1276206970214844
+        },
+        "574513": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.4303855895996094
+        },
+        "574514": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.39752197265625
+        },
+        "574515": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.3968162536621094
+        },
+        "574516": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.4566268920898438
+        },
+        "574517": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.4379196166992188
+        },
+        "574518": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.4097404479980469
+        },
+        "574519": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.4276275634765625
+        },
+        "574520": {
+          "name": "ray::IDLE",
+          "peak_rss_gib": 1.4733505249023438
+        },
+        "572492": {
+          "name": "python",
+          "peak_rss_gib": 0.015125274658203125
+        },
+        "572493": {
+          "name": "VLLM::EngineCore",
+          "peak_rss_gib": 1.1394538879394531
+        },
+        "572777": {
+          "name": "VLLM::Worker",
+          "peak_rss_gib": 1.9185028076171875
+        },
+        "572524": {
+          "name": "python",
+          "peak_rss_gib": 0.01503753662109375
+        },
+        "572525": {
+          "name": "VLLM::EngineCore",
+          "peak_rss_gib": 1.131103515625
+        },
+        "572868": {
+          "name": "VLLM::Worker",
+          "peak_rss_gib": 1.9019584655761719
+        },
+        "572540": {
+          "name": "python",
+          "peak_rss_gib": 0.015048980712890625
+        },
+        "572541": {
+          "name": "VLLM::EngineCore",
+          "peak_rss_gib": 1.1371994018554688
+        },
+        "572878": {
+          "name": "VLLM::Worker",
+          "peak_rss_gib": 1.9093170166015625
+        },
+        "572531": {
+          "name": "python",
+          "peak_rss_gib": 0.015163421630859375
+        },
+        "572532": {
+          "name": "VLLM::EngineCore",
+          "peak_rss_gib": 1.1339759826660156
+        },
+        "572867": {
+          "name": "VLLM::Worker",
+          "peak_rss_gib": 1.9024009704589844
+        },
+        "575176": {
+          "name": "wandb-core",
+          "peak_rss_gib": 0.047008514404296875
+        },
+        "575227": {
+          "name": "wandb-xpu",
+          "peak_rss_gib": 0.025390625
+        },
+        "575585": {
+          "name": "python",
+          "peak_rss_gib": 0.5899543762207031
+        },
+        "575592": {
+          "name": "python",
+          "peak_rss_gib": 0.5896759033203125
+        },
+        "575736": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07799911499023438
+        },
+        "575921": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07806015014648438
+        },
+        "575922": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07777023315429688
+        },
+        "575927": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07792282104492188
+        },
+        "575928": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07790756225585938
+        },
+        "575925": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07816314697265625
+        },
+        "575920": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07802963256835938
+        },
+        "575923": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.078033447265625
+        },
+        "576109": {
+          "name": "python",
+          "peak_rss_gib": 0.5899429321289062
+        },
+        "576113": {
+          "name": "python",
+          "peak_rss_gib": 0.5900192260742188
+        },
+        "576430": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07811355590820312
+        },
+        "576440": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07799530029296875
+        },
+        "576455": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07799911499023438
+        },
+        "576443": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07784652709960938
+        },
+        "576439": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.0780029296875
+        },
+        "576421": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.077972412109375
+        },
+        "576412": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.077850341796875
+        },
+        "576478": {
+          "name": "nvidia-smi",
+          "peak_rss_gib": 0.07793807983398438
+        },
+        "576584": {
+          "name": "python",
+          "peak_rss_gib": 0.7237472534179688
+        },
+        "576586": {
+          "name": "python",
+          "peak_rss_gib": 0.6030921936035156
+        },
+        "576625": {
+          "name": "python",
+          "peak_rss_gib": 0.5899543762207031
+        },
+        "576633": {
+          "name": "python",
+          "peak_rss_gib": 0.590728759765625
+        },
+        "576615": {
+          "name": "python",
+          "peak_rss_gib": 0.6039772033691406
+        },
+        "576618": {
+          "name": "python",
+          "peak_rss_gib": 0.6040534973144531
+        },
+        "576637": {
+          "name": "python",
+          "peak_rss_gib": 0.5903358459472656
+        },
+        "576639": {
+          "name": "python",
+          "peak_rss_gib": 0.5906028747558594
+        },
+        "576701": {
+          "name": "python",
+          "peak_rss_gib": 0.5900802612304688
+        },
+        "576703": {
+          "name": "python",
+          "peak_rss_gib": 0.590087890625
+        },
+        "576660": {
+          "name": "python",
+          "peak_rss_gib": 0.5900802612304688
+        },
+        "576662": {
+          "name": "python",
+          "peak_rss_gib": 0.5901908874511719
+        },
+        "576665": {
+          "name": "python",
+          "peak_rss_gib": 0.5901756286621094
+        },
+        "576668": {
+          "name": "python",
+          "peak_rss_gib": 0.5902137756347656
+        },
+        "578006": {
+          "name": "python",
+          "peak_rss_gib": 0.015026092529296875
+        },
+        "578007": {
+          "name": "python",
+          "peak_rss_gib": 0.7300071716308594
+        },
+        "579499": {
+          "name": "python",
+          "peak_rss_gib": 0.015048980712890625
+        },
+        "579500": {
+          "name": "python",
+          "peak_rss_gib": 0.729736328125
+        },
+        "579538": {
+          "name": "python",
+          "peak_rss_gib": 0.01496124267578125
+        },
+        "579539": {
+          "name": "python",
+          "peak_rss_gib": 0.7295875549316406
+        },
+        "581823": {
+          "name": "python",
+          "peak_rss_gib": 0.015102386474609375
+        },
+        "581824": {
+          "name": "python",
+          "peak_rss_gib": 0.7287559509277344
+        },
+        "582120": {
+          "name": "python",
+          "peak_rss_gib": 0.0149993896484375
+        },
+        "582121": {
+          "name": "python",
+          "peak_rss_gib": 0.7291908264160156
+        },
+        "582171": {
+          "name": "python",
+          "peak_rss_gib": 0.014995574951171875
+        },
+        "582172": {
+          "name": "python",
+          "peak_rss_gib": 0.7287216186523438
+        },
+        "582627": {
+          "name": "python",
+          "peak_rss_gib": 0.01505279541015625
+        },
+        "582628": {
+          "name": "python",
+          "peak_rss_gib": 0.7295455932617188
+        },
+        "582925": {
+          "name": "python",
+          "peak_rss_gib": 0.015003204345703125
+        },
+        "582926": {
+          "name": "python",
+          "peak_rss_gib": 0.7291641235351562
+        }
+      },
+      "taskrunner_peak_rss_gib": 4.623390197753906,
+      "storage_peak_rss_gib": 1.0746612548828125,
+      "wall_seconds": 2068.097519159317
+    }
+  }
+}

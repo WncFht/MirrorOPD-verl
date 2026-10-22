@@ -1,0 +1,148 @@
+{
+  "assumptions": {
+    "tp": 1,
+    "dtype_bytes": 2,
+    "runtime_device_gib_rounded": 79.1,
+    "anchor_util": 0.65,
+    "anchor_kv_pool_gib_rounded": 47.22,
+    "anchor_nvml_peak_gib": 55.49493408203125,
+    "non_kv_profile_and_other_allocations_held_constant": true,
+    "concurrency_extrapolation_assumes_unchanged_active_length_distribution": true
+  },
+  "kv_bytes_per_token": 28672,
+  "weight_gib_parameter_data_only": 3.310084342956543,
+  "observed_peak_kv_gib_approx": 39.290331318760856,
+  "capacity_rows": [
+    {
+      "util": 0.5,
+      "kv_pool_gib_estimate": 35.355,
+      "kv_tokens_estimate": 1324014.4457142856,
+      "nvml_peak_gib_estimate_fixed_concurrency128": 43.62993408203125,
+      "mean_live_context_budget_at_C128": 10343.862857142856,
+      "mean_live_context_budget_at_C192": 6895.908571428571
+    },
+    {
+      "util": 0.65,
+      "kv_pool_gib_estimate": 47.22,
+      "kv_tokens_estimate": 1768348.5257142857,
+      "nvml_peak_gib_estimate_fixed_concurrency128": 55.49493408203125,
+      "mean_live_context_budget_at_C128": 13815.222857142857,
+      "mean_live_context_budget_at_C192": 9210.148571428572
+    },
+    {
+      "util": 0.7,
+      "kv_pool_gib_estimate": 51.17499999999999,
+      "kv_tokens_estimate": 1916459.8857142853,
+      "nvml_peak_gib_estimate_fixed_concurrency128": 59.44993408203124,
+      "mean_live_context_budget_at_C128": 14972.342857142854,
+      "mean_live_context_budget_at_C192": 9981.561904761902
+    },
+    {
+      "util": 0.75,
+      "kv_pool_gib_estimate": 55.129999999999995,
+      "kv_tokens_estimate": 2064571.2457142856,
+      "nvml_peak_gib_estimate_fixed_concurrency128": 63.40493408203125,
+      "mean_live_context_budget_at_C128": 16129.462857142857,
+      "mean_live_context_budget_at_C192": 10752.975238095238
+    },
+    {
+      "util": 0.8,
+      "kv_pool_gib_estimate": 59.085,
+      "kv_tokens_estimate": 2212682.6057142857,
+      "nvml_peak_gib_estimate_fixed_concurrency128": 67.35993408203124,
+      "mean_live_context_budget_at_C128": 17286.582857142857,
+      "mean_live_context_budget_at_C192": 11524.388571428572
+    },
+    {
+      "util": 0.85,
+      "kv_pool_gib_estimate": 63.03999999999999,
+      "kv_tokens_estimate": 2360793.9657142856,
+      "nvml_peak_gib_estimate_fixed_concurrency128": 71.31493408203124,
+      "mean_live_context_budget_at_C128": 18443.702857142856,
+      "mean_live_context_budget_at_C192": 12295.801904761904
+    },
+    {
+      "util": 0.9,
+      "kv_pool_gib_estimate": 66.995,
+      "kv_tokens_estimate": 2508905.325714286,
+      "nvml_peak_gib_estimate_fixed_concurrency128": 75.26993408203126,
+      "mean_live_context_budget_at_C128": 19600.82285714286,
+      "mean_live_context_budget_at_C192": 13067.21523809524
+    }
+  ],
+  "sequence_kv_rows": [
+    {
+      "context_tokens": 8192,
+      "kv_gib_one_sequence": 0.21875,
+      "kv_gib_C96": 21.0,
+      "kv_gib_C128": 28.0,
+      "kv_gib_C160": 35.0,
+      "kv_gib_C192": 42.0,
+      "kv_gib_C256": 56.0
+    },
+    {
+      "context_tokens": 16384,
+      "kv_gib_one_sequence": 0.4375,
+      "kv_gib_C96": 42.0,
+      "kv_gib_C128": 56.0,
+      "kv_gib_C160": 70.0,
+      "kv_gib_C192": 84.0,
+      "kv_gib_C256": 112.0
+    },
+    {
+      "context_tokens": 31744,
+      "kv_gib_one_sequence": 0.84765625,
+      "kv_gib_C96": 81.375,
+      "kv_gib_C128": 108.5,
+      "kv_gib_C160": 135.625,
+      "kv_gib_C192": 162.75,
+      "kv_gib_C256": 217.0
+    },
+    {
+      "context_tokens": 35841,
+      "kv_gib_one_sequence": 0.9570579528808594,
+      "kv_gib_C96": 91.8775634765625,
+      "kv_gib_C128": 122.50341796875,
+      "kv_gib_C160": 153.1292724609375,
+      "kv_gib_C192": 183.755126953125,
+      "kv_gib_C256": 245.0068359375
+    }
+  ],
+  "pressure_extrapolation": [
+    {
+      "concurrency": 128,
+      "util": 0.75,
+      "estimated_peak_kv_gib": 39.290331318760856,
+      "estimated_pool_gib": 55.129999999999995,
+      "estimated_pool_fraction": 0.7126851318476485
+    },
+    {
+      "concurrency": 160,
+      "util": 0.75,
+      "estimated_peak_kv_gib": 49.11291414845107,
+      "estimated_pool_gib": 55.129999999999995,
+      "estimated_pool_fraction": 0.8908564148095606
+    },
+    {
+      "concurrency": 192,
+      "util": 0.8,
+      "estimated_peak_kv_gib": 58.93549697814129,
+      "estimated_pool_gib": 59.085,
+      "estimated_pool_fraction": 0.9974696958304355
+    },
+    {
+      "concurrency": 192,
+      "util": 0.85,
+      "estimated_peak_kv_gib": 58.93549697814129,
+      "estimated_pool_gib": 63.03999999999999,
+      "estimated_pool_fraction": 0.9348904977497032
+    },
+    {
+      "concurrency": 256,
+      "util": 0.9,
+      "estimated_peak_kv_gib": 78.58066263752171,
+      "estimated_pool_gib": 66.995,
+      "estimated_pool_fraction": 1.172933243339379
+    }
+  ]
+}

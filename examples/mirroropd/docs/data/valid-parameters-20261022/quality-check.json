@@ -1,0 +1,90 @@
+{
+  "valid-subset-s128-u0.5-t16384-a": {
+    "reference": "valid-subset-s64-u0.5-t8192-a",
+    "mean_score": 0.81298828125,
+    "paired_difference_pp": 2.5390625,
+    "prompt_cluster_bootstrap_95_percentile_pp": [
+      1.07421875,
+      4.00390625
+    ],
+    "prompts": 128,
+    "responses_per_prompt": 16
+  },
+  "valid-subset-s128-u0.5-t8192-a": {
+    "reference": "valid-subset-s64-u0.5-t8192-a",
+    "mean_score": 0.80126953125,
+    "paired_difference_pp": 1.3671875,
+    "prompt_cluster_bootstrap_95_percentile_pp": [
+      -0.1953125,
+      2.978515625
+    ],
+    "prompts": 128,
+    "responses_per_prompt": 16
+  },
+  "valid-subset-s64-u0.5-t8192-a": {
+    "reference": "valid-subset-s64-u0.5-t8192-a",
+    "mean_score": 0.78759765625,
+    "paired_difference_pp": 0.0,
+    "prompt_cluster_bootstrap_95_percentile_pp": [
+      0.0,
+      0.0
+    ],
+    "prompts": 128,
+    "responses_per_prompt": 16
+  },
+  "valid-subset-s96-u0.5-t8192-a": {
+    "reference": "valid-subset-s64-u0.5-t8192-a",
+    "mean_score": 0.80517578125,
+    "paired_difference_pp": 1.7578125,
+    "prompt_cluster_bootstrap_95_percentile_pp": [
+      0.390625,
+      3.173828125
+    ],
+    "prompts": 128,
+    "responses_per_prompt": 16
+  },
+  "valid-full-s128-u0.5-t8192-a": {
+    "reference": "historical-full-s64-u0.5-t8192",
+    "mean_score": 0.787719298245614,
+    "paired_difference_pp": -0.31798245614035087,
+    "prompt_cluster_bootstrap_95_percentile_pp": [
+      -1.0197368421052633,
+      0.3837719298245614
+    ],
+    "prompts": 570,
+    "responses_per_prompt": 16
+  },
+  "valid-full-s128-u0.65-t8192-a": {
+    "reference": "historical-full-s64-u0.5-t8192",
+    "mean_score": 0.7925438596491228,
+    "paired_difference_pp": 0.1644736842105263,
+    "prompt_cluster_bootstrap_95_percentile_pp": [
+      -0.4605263157894736,
+      0.7785087719298246
+    ],
+    "prompts": 570,
+    "responses_per_prompt": 16
+  },
+  "valid-full-s96-u0.5-t8192-a": {
+    "reference": "historical-full-s64-u0.5-t8192",
+    "mean_score": 0.7921052631578948,
+    "paired_difference_pp": 0.1206140350877193,
+    "prompt_cluster_bootstrap_95_percentile_pp": [
+      -0.5704495614035086,
+      0.8114035087719298
+    ],
+    "prompts": 570,
+    "responses_per_prompt": 16
+  },
+  "historical-full-s64-u0.5-t8192": {
+    "reference": "historical-full-s64-u0.5-t8192",
+    "mean_score": 0.7908991228070176,
+    "paired_difference_pp": 0.0,
+    "prompt_cluster_bootstrap_95_percentile_pp": [
+      0.0,
+      0.0
+    ],
+    "prompts": 570,
+    "responses_per_prompt": 16
+  }
+}

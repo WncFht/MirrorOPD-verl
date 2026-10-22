@@ -1,0 +1,7 @@
+{
+  "commit": "b517941798ab617bb3d2609988391115f8ba27ad",
+  "checkout": "/tmp/mopd-vt22",
+  "purpose": "Validation-only parameter experiments, GPUs 0-3, no PR patches or production default changes.",
+  "checkout_removed_after_tests": true,
+  "recreate_with": "bash outputs/valid-parameters-20261022/run_valid.sh"
+}
