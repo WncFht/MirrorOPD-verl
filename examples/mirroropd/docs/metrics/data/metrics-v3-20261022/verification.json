@@ -188,12 +188,69 @@
     }
   },
   "is_rs": {
-    "status": "gpu_rerun_deferred_by_user",
-    "attempt_exit_code": 1,
-    "updates_completed": 0,
-    "invalid_threshold": "0.01",
-    "corrected_threshold": "0.99_1.01",
-    "reason": "Invalid ratio bounds failed before updates; this attempt is not GPU acceptance."
+    "status": "gpu_and_cloud_verified",
+    "gpu_source_commit": "6c3c27d69",
+    "first_failed_attempt": {
+      "status": "failed_invalid_threshold",
+      "attempt_exit_code": 1,
+      "updates_completed": 0,
+      "invalid_threshold": "0.01",
+      "corrected_threshold": "0.99_1.01",
+      "reason": "Invalid ratio bounds failed before updates; this attempt is not GPU acceptance."
+    },
+    "cloud": {
+      "run_id": "43gx44nh",
+      "url": "https://forge.coreweave.com/wandb/wncfht/MirrorOPD-verl/runs/43gx44nh",
+      "state": "finished",
+      "cloud_history_rows": 4,
+      "scalar_rows": 4,
+      "scalar_fields": 289,
+      "local_cloud_values_match": true,
+      "optimizer_steps": [
+        1,
+        2
+      ],
+      "format": "policy-v3"
+    },
+    "process": {
+      "exit_code": 0,
+      "wall_seconds": 323.4255142211914
+    },
+    "independent_checks_passed": true,
+    "updates": [
+      {
+        "step/update": 1,
+        "step/optimizer": 1,
+        "policy/current_behavior/valid_token_count": 4096.0,
+        "policy/current_behavior/ratio_p99": 1.1137407875146412,
+        "policy/current_behavior/ess_fraction": 0.9990629935988208,
+        "correction/rejection/token_fraction": 0.23779296875,
+        "correction/rejection/kept_token_count": 3122.0,
+        "correction/is/applied_zero_fraction": 0.23779296875,
+        "correction/is/applied_ess": 3121.9836386436864,
+        "correction/is/applied_ess_fraction": 0.7622030367782437,
+        "correction/is/applied_max": 1.0100761651992798,
+        "optim/actor/loss": 0.052939578890800476,
+        "optim/actor/grad_norm_preclip": 1.155809760093689,
+        "optim/actor/update_applied": 1.0
+      },
+      {
+        "step/update": 2,
+        "step/optimizer": 2,
+        "policy/current_behavior/valid_token_count": 4096.0,
+        "policy/current_behavior/ratio_p99": 1.1103006426703215,
+        "policy/current_behavior/ess_fraction": 0.9990707784862484,
+        "correction/rejection/token_fraction": 0.23779296875,
+        "correction/rejection/kept_token_count": 3122.0,
+        "correction/is/applied_zero_fraction": 0.23779296875,
+        "correction/is/applied_ess": 3121.9836386436864,
+        "correction/is/applied_ess_fraction": 0.7622030367782437,
+        "correction/is/applied_max": 1.0100761651992798,
+        "optim/actor/loss": 0.05241848900914192,
+        "optim/actor/grad_norm_preclip": 1.13725745677948,
+        "optim/actor/update_applied": 1.0
+      }
+    ]
   },
   "cpu_test_batches": [
     {
