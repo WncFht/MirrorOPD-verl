@@ -109,13 +109,36 @@ def test_real_offline_history_contains_updates_outer_validation_and_table(tmp_pa
 def test_console_summary_does_not_filter_recorded_metrics():
     tracking = object.__new__(Tracking)
     console, file = MagicMock(), MagicMock()
-    tracking.logger = {'console': console, 'file': file}
-    update = {'step/outer': 1, 'step/update': 2, 'optim/actor/loss': 3,
-              'policy/current_behavior/ratio_p99': 4, 'rollout/data_reuse/update_index': 2}
+    tracking.logger = {"console": console, "file": file}
+    update = {
+        "step/outer": 1,
+        "step/update": 2,
+        "optim/actor/loss": 3,
+        "policy/current_behavior/ratio_p99": 4,
+        "rollout/data_reuse/update_index": 2,
+    }
     tracking.log(update, 2)
     console.log.assert_not_called()
-    assert file.log.call_args.kwargs['data'] == update
-    outer = {'step/outer': 1, 'perf/timing/outer_step_seconds': 5, 'rollout/staleness/trajectory_spans/max': 1}
+    assert file.log.call_args.kwargs["data"] == update
+    outer = {"step/outer": 1, "perf/timing/outer_step_seconds": 5, "rollout/staleness/trajectory_spans/max": 1}
     tracking.log(outer, 1)
-    assert console.log.call_args.kwargs['data']['optim/actor/loss'] == 3
-    assert file.log.call_args.kwargs['data'] == outer
+    assert console.log.call_args.kwargs["data"]["optim/actor/loss"] == 3
+    assert file.log.call_args.kwargs["data"] == outer
+
+
+def test_sample_table_survives_empty_and_variable_completion_counts():
+    from types import SimpleNamespace
+
+    import wandb
+
+    logger = ValidationGenerationsLogger(project_name="test", experiment_name="test", tracking=MagicMock())
+    logger.coordinates = {"step/outer": 0}
+    backend = SimpleNamespace(Table=wandb.Table, run=object())
+    logger._log_generations_to_wandb([], 0, backend)
+    logger._log_generations_to_wandb([["q1", "a1", 1], ["q2", "a2", 0]], 1, backend)
+    logger._log_generations_to_wandb([["q3", "a3", 1]], 2, backend)
+    table = logger.validation_table
+    assert len(table.columns) == 7
+    assert len(table.data) == 3
+    assert table.data[0] == [0, None, None, None, None, None, None]
+    assert table.data[2] == [2, "q3", "a3", 1, None, None, None]

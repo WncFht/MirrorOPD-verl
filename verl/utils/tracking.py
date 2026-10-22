@@ -782,18 +782,16 @@ class ValidationGenerationsLogger:
     def _log_generations_to_wandb(self, samples, step, wandb):
         """Log samples to wandb as a table"""
 
-        # Create column names for all samples
-        columns = ["step"] + sum(
-            [[f"input_{i + 1}", f"output_{i + 1}", f"score_{i + 1}"] for i in range(len(samples))], []
+        # Keep the schema stable when a checkpoint has fewer (or no) completed
+        # samples. Old rows are padded if a later checkpoint has more examples.
+        previous = getattr(self, "validation_table", None)
+        previous_width = max(0, (len(previous.columns) - 1) // 3) if previous is not None else 0
+        width = max(len(samples), previous_width)
+        columns = ["step"] + sum([[f"input_{i + 1}", f"output_{i + 1}", f"score_{i + 1}"] for i in range(width)], [])
+        old_rows = (
+            [list(row) + [None] * (len(columns) - len(row)) for row in previous.data] if previous is not None else []
         )
-
-        if not hasattr(self, "validation_table"):
-            # Initialize the table on first call
-            self.validation_table = wandb.Table(columns=columns)
-
-        # Create a new table with same columns and existing data
-        # Workaround for https://github.com/wandb/wandb/issues/2981#issuecomment-1997445737
-        new_table = wandb.Table(columns=columns, data=self.validation_table.data)
+        new_table = wandb.Table(columns=columns, data=old_rows)
 
         # Add new row with all data
         row_data = []
@@ -801,6 +799,7 @@ class ValidationGenerationsLogger:
         for sample in samples:
             row_data.extend(sample)
 
+        row_data.extend([None] * (len(columns) - len(row_data)))
         new_table.add_data(*row_data)
 
         # Update reference and log
