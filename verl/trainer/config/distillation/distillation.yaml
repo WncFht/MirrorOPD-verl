@@ -41,6 +41,11 @@ distillation_loss:
 
   # Loss function mode for distillation
   loss_mode: k3
+  full_vocab:
+    _target_: verl.workers.config.distillation.FullVocabConfig
+    backend: recompute
+    token_chunk_size: 512
+    vocab_chunk_size: 8192
 
   # If distillation loss requires top-k logits, this is the value of k
   topk: 32

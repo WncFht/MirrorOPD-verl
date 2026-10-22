@@ -65,12 +65,17 @@ class DistillationLossSettings(BaseConfig):
     names: str | list[str] = field(default_factory=list)
     use_topk: bool = False
     use_estimator: bool = False
+    payload_kind: str | None = None
 
     _mutable_fields = {"names"}
 
     def __post_init__(self):
         self.names = [self.names] if isinstance(self.names, str) else self.names
-        if sum([self.use_topk, self.use_estimator]) != 1:
+        if self.payload_kind is None:
+            object.__setattr__(self, "payload_kind", "topk" if self.use_topk else "sampled")
+        if self.payload_kind not in ("sampled", "topk", "hidden"):
+            raise ValueError(f"Unknown teacher payload: {self.payload_kind}")
+        if sum([self.use_topk, self.use_estimator, self.payload_kind == "hidden"]) != 1:
             raise ValueError(
                 f"Expected only one of use_estimator, use_topk, but got {self.use_estimator=}, {self.use_topk=}."
             )
@@ -257,6 +262,16 @@ def distillation_loss(
     """
     assert distillation_config is not None
     loss_config: DistillationLossConfig = distillation_config.distillation_loss
+    if loss_config.loss_mode == "full_reverse_kl":
+        if config.loss_agg_mode != "token-mean":
+            raise ValueError("full_reverse_kl currently requires token-mean aggregation")
+        total = model_output["full_kl_sum"]
+        count = model_output["full_kl_count"]
+        denominator = tu.get(data, "batch_num_tokens")
+        if denominator <= 0:
+            raise ValueError("full KL requires positive globally valid token count")
+        loss = total * tu.get(data, "dp_size") / denominator
+        return loss, {"distillation/full_kl": Observation.ratio(total.detach(), count)}
     if loss_config.policy_loss_mode != "vanilla":
         return _sampled_token_loss(config, loss_config, model_output, data)
     distillation_loss_fn = get_distillation_loss_fn(loss_config.loss_mode)
@@ -468,6 +483,11 @@ def _sampled_token_loss(config, loss_config, model_output, data):
             )
         )
     return loss, metrics
+
+
+@register_distillation_loss(DistillationLossSettings(names="full_reverse_kl", payload_kind="hidden"))
+def compute_full_reverse_kl(config, distillation_config, model_output, data):
+    raise RuntimeError("full_reverse_kl must use the head-loss path, not a sampled estimator")
 
 
 @register_distillation_loss(DistillationLossSettings(names=["forward_kl_topk"], use_topk=True))  # type: ignore[arg-type]
