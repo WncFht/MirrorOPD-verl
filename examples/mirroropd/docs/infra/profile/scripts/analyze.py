@@ -27,10 +27,12 @@ def category(name):
     text = name.lower()
     if "nccl" in text:
         return "NCCL"
-    if any(x in text for x in ("gemm", "cublas", "cutlass", "addmm", "nvjet", "xmma", "gemv")):
-        return "GEMM"
     if any(x in text for x in ("flash", "attention", "fmha")):
         return "Attention"
+    # FlashAttention templates also mention cutlass::bfloat16_t; check their
+    # semantic name before this generic GEMM fallback.
+    if any(x in text for x in ("gemm", "cublas", "cutlass", "addmm", "nvjet", "xmma", "gemv")):
+        return "GEMM"
     if any(x in text for x in ("_partials", "_rows", "_gradient")):
         return "Fused KL"
     if any(x in text for x in ("softmax", "reduce", "elementwise", "vectorized", "cast", "copy")):
