@@ -98,6 +98,7 @@ def test_semantic_attribution_handles_triton_driver_launch(monkeypatch):
     result = analyze.attribute(events)
     assert result["semantic_kernel_sum_ms"] == {"full_vocab/fused_kl": 3.0, "unattributed": 3.0}
     assert load("analyze").category("nvjet_tss_192x192_64x3_2x1_v_badd_coopB_NTN") == "GEMM"
+    assert load("analyze").category("void flash::flash_fwd_kernel<cutlass::bfloat16_t>") == "Attention"
 
 
 def test_allocator_requested_bytes_and_segment_replay():

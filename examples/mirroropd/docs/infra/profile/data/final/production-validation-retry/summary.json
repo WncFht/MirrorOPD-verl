@@ -1,0 +1,48 @@
+{
+  "source_commit": "95638a9f995d854d643c6099aa71d835bd61b94b",
+  "backend": "precompute_fused",
+  "scope": "4 GPUs, real Ray/TQ/vLLM, 2 optimizer steps, lr=1e-6, batch=8, prompt cap512, response cap128, eager rollout; smoke not throughput or quality evidence",
+  "metrics": [
+    {
+      "step": 1.0,
+      "perf/timing/rollout_batch_seconds": 36.784550061,
+      "step/outer": 1.0,
+      "rollout/score/mean": 0.0,
+      "rollout/response_length/mean": 128.0,
+      "rollout/response_tokens": 1024.0,
+      "perf/timing/rollout_pipeline_seconds": 22.180199451744556,
+      "perf/timing/teacher_transfer_seconds": 0.967252217233181,
+      "perf/timing/teacher_forward_seconds": 0.5887939408421516,
+      "perf/timing/update_actor_seconds": 6.890622101724148,
+      "perf/timing/update_weights_seconds": 1.0103101134300232,
+      "perf/timing/outer_step_seconds": 61.20778723806143,
+      "step/update": 1.0,
+      "step/optimizer": 1.0,
+      "optim/actor/loss": 0.05522480607032776,
+      "optim/actor/grad_norm_preclip": 1.504401445388794,
+      "optim/actor/lr": 1e-06
+    },
+    {
+      "step": 2.0,
+      "perf/timing/rollout_batch_seconds": 2.075770426,
+      "step/outer": 2.0,
+      "rollout/score/mean": 0.0,
+      "rollout/response_length/mean": 128.0,
+      "rollout/response_tokens": 1024.0,
+      "perf/timing/rollout_pipeline_seconds": 14.269046269357204,
+      "perf/timing/teacher_transfer_seconds": 0.8402836471796036,
+      "perf/timing/teacher_forward_seconds": 0.22700518369674683,
+      "perf/timing/update_actor_seconds": 2.112391009926796,
+      "perf/timing/update_weights_seconds": 1.2154334262013435,
+      "perf/timing/outer_step_seconds": 18.677081793546677,
+      "step/update": 2.0,
+      "step/optimizer": 2.0,
+      "optim/actor/loss": 0.06749100238084793,
+      "optim/actor/grad_norm_preclip": 1.7119234800338745,
+      "optim/actor/lr": 1e-06
+    }
+  ],
+  "original_failure_root": "outputs/full-kl-fused-validation-20261023",
+  "resolved_failure": "Ray AF_UNIX path length; short unique temp prefix",
+  "passed": true
+}

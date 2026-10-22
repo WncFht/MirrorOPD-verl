@@ -360,7 +360,8 @@
         "NCCL": 892.2057459999994,
         "Pointwise/reduce": 927.9901889999999,
         "Other": 22.134138999999994,
-        "GEMM": 1305.3804229999973,
+        "GEMM": 837.1172050000042,
+        "Attention": 468.2632179999998,
         "Fused KL": 0.006047
       },
       "devices": {
@@ -514,9 +515,10 @@
       "source": "outputs/full-kl-profile-20261022/pipeline-fused/pipeline-rank0.json.gz",
       "kernel_sum_ms_by_category": {
         "Pointwise/reduce": 744.1661389999975,
-        "GEMM": 1315.6684179999968,
+        "GEMM": 843.4934290000004,
         "NCCL": 1475.0492590000003,
         "Other": 22.145013,
+        "Attention": 472.17498900000004,
         "Fused KL": 36.44455500000002
       },
       "devices": {

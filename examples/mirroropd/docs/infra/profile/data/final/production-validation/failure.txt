@@ -1,0 +1,3 @@
+OSError: validate_socket_filename failed: AF_UNIX path length cannot exceed 107 bytes.
+Original directory: outputs/full-kl-fused-validation-20261023/e2e-fused
+Retry changes only the generated Ray temporary directory to a short unique prefix.
