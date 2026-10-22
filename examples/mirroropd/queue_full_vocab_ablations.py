@@ -197,7 +197,9 @@ def public_launch(plan, job, source, root, *, eager=False, attempt=1):
         "++ray_kwargs.ray_init.num_cpus=64",
         "++ray_kwargs.ray_init.include_dashboard=False",
         "++ray_kwargs.ray_init.object_store_memory=8589934592",
-        f"++ray_kwargs.ray_init._temp_dir=/tmp/{plan['name']}-{job['id']}-a{attempt}",
+        # Ray appends a timestamped session and socket suffix; descriptive run
+        # names can exceed Linux's 107-byte AF_UNIX path limit.
+        f"++ray_kwargs.ray_init._temp_dir=/tmp/mopd-{uuid.uuid4().hex[:12]}",
         "++actor_rollout_ref.rollout.engine_kwargs.vllm.attention_config.backend=TRITON_ATTN",
     ]
     safe_ray_env = {
