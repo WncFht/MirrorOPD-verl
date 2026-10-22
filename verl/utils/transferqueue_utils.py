@@ -158,7 +158,11 @@ def _find_meta(*args, **kwargs):
 
 
 async def _async_meta_to_realdata(meta: BatchMeta | KVBatchMeta) -> TensorDict:
+    hidden_keys = None
+    hidden_partition = None
     if isinstance(meta, KVBatchMeta):
+        if meta.extra_info.get("full_vocab_teacher") or meta.extra_info.get("full_vocab_train"):
+            hidden_keys, hidden_partition = list(meta.keys), meta.partition_id
         meta = await async_kv_batch_meta2batch_meta(meta)
     meta_info = copy.deepcopy(meta.extra_info)
     if meta.size == 0:
@@ -168,6 +172,9 @@ async def _async_meta_to_realdata(meta: BatchMeta | KVBatchMeta) -> TensorDict:
 
     tq_client = tq.get_client()
     tensordict = await tq_client.async_get_data(meta)
+    if hidden_keys is not None:
+        tensordict["full_vocab_keys"] = NonTensorStack(*hidden_keys)
+        tu.assign_non_tensor_data(tensordict, "full_vocab_partition", hidden_partition)
 
     for key, val in meta_info.items():
         if isinstance(val, (NonTensorData | NonTensorStack)):

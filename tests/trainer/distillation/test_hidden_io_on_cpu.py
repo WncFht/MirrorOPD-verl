@@ -1,0 +1,70 @@
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
+import threading
+
+import pytest
+import torch
+from tensordict import NonTensorStack, TensorDict
+
+from verl.trainer.distillation.hidden_io import HiddenBatchIO
+from verl.utils import tensordict_utils as tu
+
+
+def batch(keys):
+    data = TensorDict({"full_vocab_keys": NonTensorStack(*keys)}, batch_size=[len(keys)])
+    tu.assign_non_tensor(data, full_vocab_partition="test")
+    return data
+
+
+def payload(value):
+    return TensorDict(
+        {
+            "teacher_hidden": torch.nested.nested_tensor([torch.full((1, 3), value)], layout=torch.jagged),
+            "teacher_positions": torch.nested.nested_tensor([torch.tensor([1])], layout=torch.jagged),
+        },
+        batch_size=[1],
+    )
+
+
+@pytest.mark.parametrize("asynchronous", [False, True])
+def test_writer_reader_preserve_key_order(asynchronous):
+    store = {}
+
+    def put(*, keys, partition_id, fields):
+        assert partition_id == "test"
+        store[keys[0]] = fields.clone()
+
+    def get(*, keys, partition_id, select_fields):
+        return store[keys[0]].select(*select_fields)
+
+    data = batch(["a", "b"])
+    tu.assign_non_tensor(data, full_vocab_teacher=True, full_vocab_async_write=asynchronous)
+    batches = [batch(["a"]), batch(["b"])]
+    with HiddenBatchIO(data, batches, get=get, put=put) as writer:
+        for i, mb in enumerate(writer):
+            out = {"model_output": dict(payload(i).items())}
+            writer.publish(out, mb)
+            assert "teacher_hidden" not in out["model_output"]
+    tu.assign_non_tensor(data, full_vocab_teacher=False, full_vocab_train=True, full_vocab_prefetch=asynchronous)
+    with HiddenBatchIO(data, list(reversed(batches)), get=get, put=put) as reader:
+        result = [
+            mb["teacher_hidden"].values().item()
+            if mb["teacher_hidden"].values().numel() == 1
+            else mb["teacher_hidden"].values()[0, 0].item()
+            for mb in reader
+        ]
+    assert result == [1, 0]
+    assert all("teacher_hidden" not in mb for mb in batches)
+
+
+def test_async_failures_are_not_lost():
+    data = batch(["a"])
+    tu.assign_non_tensor(data, full_vocab_teacher=True, full_vocab_async_write=True)
+
+    def fail(**kwargs):
+        raise RuntimeError("write failed")
+
+    with pytest.raises(RuntimeError, match="write failed"):
+        with HiddenBatchIO(data, [data], get=lambda **kw: None, put=fail) as writer:
+            writer.publish({"model_output": dict(payload(0).items())}, data)
+    assert not any(t.name.startswith("full-kl-hidden") for t in threading.enumerate())

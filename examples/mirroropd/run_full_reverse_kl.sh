@@ -6,6 +6,8 @@ export DOMAIN=${DOMAIN:-math}
 FULL_KL_BACKEND=${FULL_KL_BACKEND:-recompute}
 FULL_KL_TOKEN_CHUNK=${FULL_KL_TOKEN_CHUNK:-512}
 FULL_KL_VOCAB_CHUNK=${FULL_KL_VOCAB_CHUNK:-8192}
+FULL_KL_ASYNC_WRITE=${FULL_KL_ASYNC_WRITE:-False}
+FULL_KL_PREFETCH=${FULL_KL_PREFETCH:-False}
 export EXPERIMENT_NAME=${EXPERIMENT_NAME:-full-rkl-${DOMAIN}-${FULL_KL_BACKEND}}
 exec bash "$SCRIPT_DIR/_run_single_teacher_fsdp2.sh" \
     distillation.execution_mode=shared_sync \
@@ -18,6 +20,8 @@ exec bash "$SCRIPT_DIR/_run_single_teacher_fsdp2.sh" \
     "distillation.distillation_loss.full_vocab.backend=$FULL_KL_BACKEND" \
     "distillation.distillation_loss.full_vocab.token_chunk_size=$FULL_KL_TOKEN_CHUNK" \
     "distillation.distillation_loss.full_vocab.vocab_chunk_size=$FULL_KL_VOCAB_CHUNK" \
+    "distillation.distillation_loss.full_vocab.async_write=$FULL_KL_ASYNC_WRITE" \
+    "distillation.distillation_loss.full_vocab.prefetch=$FULL_KL_PREFETCH" \
     actor_rollout_ref.rollout.calculate_log_probs=False \
     actor_rollout_ref.actor.calculate_entropy=False \
     "$@"

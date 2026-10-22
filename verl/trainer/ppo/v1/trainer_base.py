@@ -699,8 +699,9 @@ class PPOTrainer(ABC):
                 batch = self._compute_values(batch, metrics=metrics)
 
         # 7. compute advantage and return
-        with marked_timer("adv", timing_raw, color="brown"):
-            batch = self._compute_advantage(batch, metrics=metrics)
+        if not self._uses_full_vocab():
+            with marked_timer("adv", timing_raw, color="brown"):
+                batch = self._compute_advantage(batch, metrics=metrics)
 
         # 8. [OPTIONAL] update critic
         if self.use_critic:
@@ -806,6 +807,20 @@ class PPOTrainer(ABC):
         model_config: HFModelConfig = omega_conf_to_dataclass(self.config.actor_rollout_ref.model)
         if self._uses_shared_teacher():
             self._validate_shared_model(model_config)
+        if self._uses_full_vocab():
+            actor = self.config.actor_rollout_ref.actor
+            if (
+                actor.strategy != "fsdp2"
+                or actor.loss_agg_mode != "token-mean"
+                or actor.use_kl_loss
+                or actor.entropy_coeff != 0
+                or self.config.algorithm.use_kl_in_reward
+                or self.config.actor_rollout_ref.rollout.temperature != 1.0
+                or self.use_critic
+            ):
+                raise ValueError(
+                    "full_reverse_kl requires FSDP2 token-mean, temperature=1, no critic or auxiliary rewards"
+                )
         self.tokenizer = model_config.tokenizer
         # Used for multimodal LLM, could be None
         self.processor = model_config.processor
@@ -1990,6 +2005,9 @@ class PPOTrainer(ABC):
                 "distillation_use_topk": False,
                 "disable_auto_offload": True,
                 "full_vocab_teacher": self._uses_full_vocab(),
+                "full_vocab_async_write": OmegaConf.select(
+                    self.config, "distillation.distillation_loss.full_vocab.async_write", default=False
+                ),
             },
         )
         try:
@@ -2280,6 +2298,9 @@ class PPOTrainer(ABC):
 
     def _update_actor(self, batch: KVBatchMeta, metrics: dict) -> KVBatchMeta:
         """Update the actor network."""
+        if self._uses_full_vocab():
+            # Only small sample fields enter the bridge; hidden payload is read per micro-batch.
+            batch.fields = ["input_ids", "position_ids", "loss_mask", "response_mask", "prompts", "responses"]
         ppo_mini_batch_size = self.config.actor_rollout_ref.actor.ppo_mini_batch_size
         ppo_mini_batch_size = ppo_mini_batch_size * self.config.actor_rollout_ref.rollout.n
         calculate_entropy = self.config.actor_rollout_ref.actor.calculate_entropy or (
@@ -2304,6 +2325,9 @@ class PPOTrainer(ABC):
         extra_info = {
             "calculate_entropy": calculate_entropy,
             "full_vocab_train": self._uses_full_vocab(),
+            "full_vocab_prefetch": OmegaConf.select(
+                self.config, "distillation.distillation_loss.full_vocab.prefetch", default=False
+            ),
             "distillation_use_topk": distillation_use_topk,
             "distillation_only": distillation_only,
             "score_centering": score_centering,
