@@ -4,39 +4,79 @@
 
 三个 checkout 的固定路径记录在根目录 [AGENTS.md](../AGENTS.md)。脚本从自身位置确定仓库根目录，因此可直接在三处使用。传输工具使用 Bash 和 Python 标准库，需要 Python 3.12 或更新版本；开发机的训练环境使用 Python 3.12。
 
-## 源码上传
+## 源码双向同步
 
-在本机或 Mac 的仓库根目录执行：
+源码使用 Git bundle 传输当前 `HEAD` 的提交历史和对象。两端需要 Git 2.28 或更新版本；操作只读取本地仓库和上传的文件，不连接 GitHub 或其他机器。`make archive-pack` 只包含已提交内容，工作区有未提交修改时会打印提示，不自动提交或暂存。
+
+每次同步按以下顺序执行；反向同步时交换发送端、接收端即可：
 
 ```bash
+# 发送端：先提交需要同步的代码，再打包。
 make archive-pack
+
+# 接收端：人工上传后，导入包并快进更新当前分支。
+make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_peer_....bundle
+
+# 发送端：确认接收成功后执行，不需要输入 commit ID。
+make archive-ack
 ```
 
-输出位于 `transfer_snap/archive_MirrorOPD-verl_*.tar.gz`。超过 10 MiB 时只输出 `.tar.gz.part.000`、`.001` 等分卷。人工上传全部输出文件到开发机。第一次开发机尚未收到本目录时，先用 `tar -xzf <源码包> -C <项目目录>` 解包；分卷先用 `cat <完整包名>.part.* > <完整包名>` 合并。
+`ack` 将上次成功打包的 commit 记录为对方已收到的版本，即使打包后本地又产生新提交，也不会把后来的提交误记为已同步。确认某一包前不要再生成下一包，否则 `ack` 将确认新的上次打包记录。没有成功打包记录时，确认命令报错；重复确认同一个版本可安全执行。
 
-收到 Makefile 和 `meituan/` 后，在开发机仓库根目录执行：
+### 累计增量和全量
+
+首次没有对方版本记录时自动生成全量包。之后相对已确认的版本累计打包：对方确认在 A，本地到 B、C 时分别生成 A..B、A..C，只传最后一个包就包含尚未确认的全部提交。打包本身不推进已确认版本。没有新提交时不生成包，也不改上次打包记录。
 
 ```bash
-make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.gz
-# 分卷：把全部分卷放在同一目录，只指定其中的 .part.000。
-make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.gz.part.000
+make archive-pack FULL=1
 ```
 
-源码包使用当前工作区中的文件，包含尚未提交的修改和 `meituan/packages/` 下的离线 ZIP。有 Git 时读取已跟踪文件和未被忽略的新增文件；无 Git 时扫描源码目录。排除 `hope/`、`.git`、虚拟环境、缓存、`model/`、`models/`、`data/`、`outputs/`、`results/`、`wandb/`、checkpoint 和已有传输包。
+全量 bundle 包含当前提交可达的历史，可以初始化一个没有 Git 仓库的接收端；它不代表强制覆盖分叉历史。增量包缺少前置提交时会报错，需要补传前置包或改传全量包。Git 历史中的旧 Hope 配置、已删除文件仍可能存在于全量包中，当前工作区只部署目标提交的文件。
 
-源码解包沿用 MD-OPD 的替换语义：先完整解包到临时目录，再替换归档涉及的顶层文件或目录，例如 `verl/`、`examples/`、`meituan/`。这些目录中未进入新包的旧文件也会移除；运行目录不参与替换。解包前应保存接收端在这些源码目录里的修改。
+默认输出位于 `transfer_snap/archive_MirrorOPD-verl_peer_*.bundle`；超过 10 MiB 时输出 `.bundle.part.000`、`.001` 等分卷。全部分卷放在同一目录，解包时指定 `.part.000`。`CHUNK_SIZE` 可调整分卷字节数。可通过 `ARCHIVE=自定义名称.bundle` 指定新包名；已有包名不能覆盖。`ARCHIVE_SOURCES` 不再支持，bundle 传输完整的提交范围。
 
-`hope/` 由各机器本地维护，源码打包始终排除；新版解包工具收到包含 `hope/` 的旧包时也跳过该目录，保留接收端现有配置。
+成功打包后，只清理同目录、同 `TARGET` 的旧自动命名 bundle 和分卷；自定义名称、其他接收端的包、旧 tar 包、日志和结果包均保留。成功接收后删除本次输入包及其分卷，设置 `KEEP_ARCHIVE_AFTER_UNPACK=1` 可保留。接收失败保留输入文件。未指定 `ARCHIVE` 时，依次在 `~/Downloads`、当前目录和 `transfer_snap/` 查找最新 bundle；有多个来源时应显式指定文件。
 
-可用 `ARCHIVE_SOURCES="Makefile meituan"` 选择仓库顶层路径，用 `ARCHIVE=自定义名称.tar.gz` 设置包名，用 `DEST=/目标项目目录` 设置源码解包位置。源码包完整生成后，自动清理同目录中 `archive_MirrorOPD-verl*.tar.gz` 及其旧分卷；固定同名包也可重新生成，旧文件在新包完整写入后替换。日志包、结果包和依赖 ZIP 不参与这项清理。
+### 两端版本记录
 
-源码成功解包后，清理输入目录中更旧的源码包，并删除刚使用的包或全部分卷；比当前输入更新的源码包保留。解包失败时保留输入包。需要保留刚解包的输入文件时执行：
+成功 `unpack` 后，接收端记录发送方至少拥有包中的目标提交，可直接作为下一次反向增量的基线。`ack` 则让原发送端知道接收端已经收到。读取旧包或重复确认不会将已知版本倒退。状态保存在本地 Git 的 `refs/archive/peers/<TARGET>/packed` 和 `confirmed` 引用中，不进入源码提交，也不随 bundle 覆盖另一台机器的状态。
+
+默认 `TARGET=peer` 适用于固定的两台机器。如果一个 checkout 向多台机器传包，用不同名称分别记录：
 
 ```bash
-make archive-unpack ARCHIVE=/实际上传目录/archive_MirrorOPD-verl_....tar.gz KEEP_ARCHIVE_AFTER_UNPACK=1
+# Mac 给开发机打包、确认。
+make archive-pack TARGET=dev
+make archive-ack TARGET=dev
+
+# 开发机收到 Mac 的包；这里 TARGET 表示发送方在开发机上的本地名称。
+make archive-unpack TARGET=mac ARCHIVE=/实际上传目录/代码包.bundle
 ```
 
-未指定解包输入时，依次在 `~/Downloads`、当前目录、`transfer_snap/` 中查找匹配的最新包。源码解包清理仅针对源码 archive；日志和结果解包后保留输入包。日志打包端的旧包清理规则见下文。
+接收端只允许快进当前分支，不自动合并分叉，也不覆盖未提交的源码修改或新跟踪路径处已有的本地文件。收到旧版本时保留较新的当前提交。已有 checkout 的分支名称不变；首次初始化创建 `main`。子模块只传输提交引用，不联网更新子模块：`recipe/` 若需要使用，应另行交付其仓库和工作区。
+
+### 首次安装与旧 tar 工作区迁移
+
+全量打包同时生成独立脚本 `transfer_snap/archive_bootstrap.py`。接收端还没有新版命令时，人工上传该脚本和全量 bundle（或全部分卷），直接运行：
+
+```bash
+python3 /实际上传目录/archive_bootstrap.py unpack \
+  /实际上传目录/archive_MirrorOPD-verl_peer_....bundle \
+  /目标项目绝对路径
+```
+
+脚本不依赖仓库中的其他 Python 模块。没有 `.git` 的目标目录会初始化为正常 Git 工作区；旧源码里被覆盖的同名文件会备份到项目同级 `.项目名-before-bundle-时间戳/`。本地 `hope/`、虚拟环境、日志、结果及其他未被目标提交占用的路径保留。旧源码中不再被新提交跟踪的额外文件也保留，可检查备份和 `git status` 后人工整理。新安装不自动配置 GitHub remote、作者或邮箱；需要在开发机提交时，按该机器的用户身份设置 Git。
+
+首次迁移必须使用这个新版脚本，不能用旧 tar 解包器或 `tar -xzf` 处理 bundle。迁移成功后使用常规的 `make archive-unpack`，并在发送端执行 `make archive-ack`。若目标本身是已有 Git 工作区，新脚本按正常快进流程处理。
+
+`hope/` 已加入 `.gitignore` 并取消跟踪，实际运行配置由每台机器维护。旧 Git 工作区收到取消跟踪的提交时，解包工具先将当地 Hope 配置临时保存到 `.git/archive-hope-backup`，再完成 Git 更新并恢复这些文件；不会用发送端的配置替换接收端配置。Hope 下存在已暂存修改时，先提交或取消暂存。若迁移进程被强制终止并遗留备份，脚本会停止后续接收，要求先恢复该备份。使用普通 `git pull` 或手动 checkout 跨越这个删除提交时不会获得脚本的保护，应先自行备份。
+
+旧 `.tar.gz` 包如仍需使用，可调用保留的旧入口；此操作不更新 Git 提交或 bundle 确认记录，已有 Git 工作区中会表现为工作区修改：
+
+```bash
+python3 meituan/transfer.py code unpack /实际上传目录/旧包.tar.gz /目标项目目录
+```
+
+W&B 和结果归档继续使用下文原有命令，不参与 Git bundle 同步。
 
 ## 原生 Python 与离线依赖
 
