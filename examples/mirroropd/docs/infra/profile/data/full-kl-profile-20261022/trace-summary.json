@@ -1,0 +1,202 @@
+[
+  {
+    "source": "outputs/full-kl-profile-20261022/e2e-io0/traces/actor-rollout_train_step3_rank0-of-4_pid2246916_20261023041440580.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 2163.763142999999,
+      "GEMM": 2954.949590999989,
+      "Other": 41.39124200000002,
+      "NCCL": 1091.202747000001,
+      "Fused KL": 0.011200000000000002
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 5120.095230957031,
+        "nccl_union_ms": 1091.20275,
+        "kernel_union_ms": 5376.680424072266,
+        "overlap_ms": 834.6175568847656,
+        "nccl_without_compute_ms": 256.58519311523435,
+        "first_to_last_kernel_ms": 8766.286501220704
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/e2e-io1/traces/actor-rollout_train_step3_rank0-of-4_pid2276309_20261023043107150.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 2113.2297250000092,
+      "GEMM": 2906.1486389999986,
+      "Other": 41.31352900000012,
+      "NCCL": 1462.7277580000002,
+      "Fused KL": 0.008157999999999999
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 5015.649767822266,
+        "nccl_union_ms": 1462.7277561035157,
+        "kernel_union_ms": 5386.506304443359,
+        "overlap_ms": 1091.8712194824218,
+        "nccl_without_compute_ms": 370.85653662109377,
+        "first_to_last_kernel_ms": 8132.065927001953
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/kernel/head-fused_candidate-n32768.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 2.007629,
+      "GEMM": 126.39149000000002,
+      "Fused KL": 29.494284999999998
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 157.89340551757812,
+        "nccl_union_ms": 0.0,
+        "kernel_union_ms": 157.89340551757812,
+        "overlap_ms": 0.0,
+        "nccl_without_compute_ms": 0.0,
+        "first_to_last_kernel_ms": 159.42639916992186
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/kernel/head-fused_candidate-n4096.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 1.7159170000000001,
+      "GEMM": 15.875860999999997,
+      "Fused KL": 3.7515429999999994
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 21.3433212890625,
+        "nccl_union_ms": 0.0,
+        "kernel_union_ms": 21.3433212890625,
+        "overlap_ms": 0.0,
+        "nccl_without_compute_ms": 0.0,
+        "first_to_last_kernel_ms": 21.6061650390625
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/kernel/head-precompute-n32768.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 158.82439300000019,
+      "GEMM": 125.14928899999995
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 283.9736813964844,
+        "nccl_union_ms": 0.0,
+        "kernel_union_ms": 283.9736813964844,
+        "overlap_ms": 0.0,
+        "nccl_without_compute_ms": 0.0,
+        "first_to_last_kernel_ms": 286.4240251464844
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/kernel/head-precompute-n4096.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 21.45273499999999,
+      "GEMM": 15.707743
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 37.160478515625,
+        "nccl_union_ms": 0.0,
+        "kernel_union_ms": 37.160478515625,
+        "overlap_ms": 0.0,
+        "nccl_without_compute_ms": 0.0,
+        "first_to_last_kernel_ms": 37.5206669921875
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/pipeline-baseline/pipeline-rank0.json.gz",
+    "kernel_sum_ms_by_category": {
+      "NCCL": 892.2057459999994,
+      "Pointwise/reduce": 927.9901889999999,
+      "Other": 22.134138999999994,
+      "GEMM": 1305.3804229999973,
+      "Fused KL": 0.006047
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 2237.129462402344,
+        "nccl_union_ms": 892.2057463378907,
+        "kernel_union_ms": 2684.092697998047,
+        "overlap_ms": 445.2425107421875,
+        "nccl_without_compute_ms": 446.9632355957031,
+        "first_to_last_kernel_ms": 5313.954762207031
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/pipeline-chunk/pipeline-rank0.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 930.8141990000013,
+      "GEMM": 1299.9317269999983,
+      "NCCL": 1121.6155929999995,
+      "Other": 22.15076899999999,
+      "Fused KL": 0.005952000000000001
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 2232.3892458496093,
+        "nccl_union_ms": 1121.6155922851563,
+        "kernel_union_ms": 2735.836797607422,
+        "overlap_ms": 618.1680405273438,
+        "nccl_without_compute_ms": 503.4475517578125,
+        "first_to_last_kernel_ms": 4865.997262207031
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/pipeline-fused/pipeline-rank0.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 744.1661389999975,
+      "GEMM": 1315.6684179999968,
+      "NCCL": 1475.0492590000003,
+      "Other": 22.145013,
+      "Fused KL": 36.44455500000002
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 2097.2440102539063,
+        "nccl_union_ms": 1475.0492595214844,
+        "kernel_union_ms": 2934.8952316894533,
+        "overlap_ms": 637.3980380859375,
+        "nccl_without_compute_ms": 837.6512214355469,
+        "first_to_last_kernel_ms": 5011.527313232422
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  },
+  {
+    "source": "outputs/full-kl-profile-20261022/pipeline-no-checkpoint/pipeline-rank0.json.gz",
+    "kernel_sum_ms_by_category": {
+      "Pointwise/reduce": 797.3331969999961,
+      "Other": 21.980600999999993,
+      "GEMM": 1115.9113650000015,
+      "NCCL": 930.9598619999997,
+      "Fused KL": 0.006304000000000001
+    },
+    "devices": {
+      "0": {
+        "compute_union_ms": 1914.4791928710938,
+        "nccl_union_ms": 930.9598623046875,
+        "kernel_union_ms": 2390.9370739746096,
+        "overlap_ms": 454.5019812011719,
+        "nccl_without_compute_ms": 476.4578811035156,
+        "first_to_last_kernel_ms": 5222.848576171875
+      }
+    },
+    "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+  }
+]

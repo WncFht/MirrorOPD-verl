@@ -1,0 +1,214 @@
+{
+  "e2e-io0": {
+    "metrics": [
+      {
+        "step": 1.0,
+        "perf/timing/rollout_batch_seconds": 150.520858177,
+        "step/outer": 1.0,
+        "rollout/score/mean": 0.390625,
+        "rollout/response_length/mean": 6233.703125,
+        "rollout/response_tokens": 398957.0,
+        "perf/timing/rollout_pipeline_seconds": 132.29047641903162,
+        "perf/timing/teacher_transfer_seconds": 1.00202264636755,
+        "perf/timing/teacher_forward_seconds": 2.235961578786373,
+        "perf/timing/update_actor_seconds": 13.887627087533474,
+        "perf/timing/update_weights_seconds": 1.1362393572926521,
+        "perf/timing/outer_step_seconds": 180.77072830498219,
+        "step/update": 1.0,
+        "step/optimizer": 1.0,
+        "optim/actor/loss": 0.11418870091438293,
+        "optim/actor/grad_norm_preclip": 1.2619822025299072,
+        "optim/actor/lr": 1e-06
+      },
+      {
+        "step": 2.0,
+        "perf/timing/rollout_batch_seconds": 114.300417311,
+        "step/outer": 2.0,
+        "rollout/score/mean": 0.40625,
+        "rollout/response_length/mean": 5882.078125,
+        "rollout/response_tokens": 376453.0,
+        "perf/timing/rollout_pipeline_seconds": 124.37217738479376,
+        "perf/timing/teacher_transfer_seconds": 0.752730056643486,
+        "perf/timing/teacher_forward_seconds": 1.748096913099289,
+        "perf/timing/update_actor_seconds": 7.300816610455513,
+        "perf/timing/update_weights_seconds": 1.3198916763067245,
+        "perf/timing/outer_step_seconds": 135.52987998723984,
+        "step/update": 2.0,
+        "step/optimizer": 2.0,
+        "optim/actor/loss": 0.11487749218940735,
+        "optim/actor/grad_norm_preclip": 1.2513067722320557,
+        "optim/actor/lr": 1e-06
+      },
+      {
+        "step": 3.0,
+        "perf/timing/rollout_batch_seconds": 114.458515707,
+        "step/outer": 3.0,
+        "rollout/score/mean": 0.34375,
+        "rollout/response_length/mean": 6223.890625,
+        "rollout/response_tokens": 398329.0,
+        "perf/timing/rollout_pipeline_seconds": 116.29213688522577,
+        "perf/timing/teacher_transfer_seconds": 0.8849688619375229,
+        "perf/timing/teacher_forward_seconds": 1.9761577770113945,
+        "perf/timing/update_actor_seconds": 7.2090821117162704,
+        "perf/timing/update_weights_seconds": 1.2689062729477882,
+        "perf/timing/outer_step_seconds": 138.49177166074514,
+        "step/update": 3.0,
+        "step/optimizer": 3.0,
+        "optim/actor/loss": 0.10839618742465973,
+        "optim/actor/grad_norm_preclip": 1.088439702987671,
+        "optim/actor/lr": 1e-06
+      },
+      {
+        "step": 4.0,
+        "perf/timing/rollout_batch_seconds": 115.080916385,
+        "step/outer": 4.0,
+        "rollout/score/mean": 0.3125,
+        "rollout/response_length/mean": 6532.546875,
+        "rollout/response_tokens": 418083.0,
+        "perf/timing/rollout_pipeline_seconds": 116.36939187347889,
+        "perf/timing/teacher_transfer_seconds": 0.866435743868351,
+        "perf/timing/teacher_forward_seconds": 1.881408154964447,
+        "perf/timing/update_actor_seconds": 7.2374362125992775,
+        "perf/timing/update_weights_seconds": 1.0322403386235237,
+        "perf/timing/outer_step_seconds": 127.42040267586708,
+        "step/update": 4.0,
+        "step/optimizer": 4.0,
+        "optim/actor/loss": 0.11192871630191803,
+        "optim/actor/grad_norm_preclip": 1.3641164302825928,
+        "optim/actor/lr": 1e-06
+      }
+    ],
+    "traces": [
+      {
+        "source": "outputs/full-kl-profile-20261022/e2e-io0/traces/actor-rollout_train_step3_rank0-of-4_pid2246916_20261023041440580.json.gz",
+        "cpu_range_sum_ms": {
+          "hidden_read": 206.68543400000001,
+          "hidden_read_wait": 228.933787,
+          "hidden_write": 222.79951800000003,
+          "hidden_write_wait": null,
+          "hidden_write_flush": null,
+          "teacher_hidden_d2h": 213.74132300000002,
+          "micro_batch_h2d": 63.364869999999996,
+          "teacher_head_get": 61.65505699999999
+        },
+        "count": {
+          "hidden_read": 4,
+          "hidden_read_wait": 4,
+          "hidden_write": 4,
+          "hidden_write_wait": 0,
+          "hidden_write_flush": 0,
+          "teacher_hidden_d2h": 4,
+          "micro_batch_h2d": 8,
+          "teacher_head_get": 4
+        },
+        "absence_note": "Null means no recorded span: async worker thread not captured, or operation disabled; never interpret as zero cost."
+      }
+    ]
+  },
+  "e2e-io1": {
+    "metrics": [
+      {
+        "step": 1.0,
+        "perf/timing/rollout_batch_seconds": 148.867683619,
+        "step/outer": 1.0,
+        "rollout/score/mean": 0.3125,
+        "rollout/response_length/mean": 6057.703125,
+        "rollout/response_tokens": 387693.0,
+        "perf/timing/rollout_pipeline_seconds": 132.28209445625544,
+        "perf/timing/teacher_transfer_seconds": 1.0021959692239761,
+        "perf/timing/teacher_forward_seconds": 1.985554687678814,
+        "perf/timing/update_actor_seconds": 10.429983623325825,
+        "perf/timing/update_weights_seconds": 1.1524964570999146,
+        "perf/timing/outer_step_seconds": 178.02672541886568,
+        "step/update": 1.0,
+        "step/optimizer": 1.0,
+        "optim/actor/loss": 0.11522766947746277,
+        "optim/actor/grad_norm_preclip": 1.2335389852523804,
+        "optim/actor/lr": 1e-06
+      },
+      {
+        "step": 2.0,
+        "perf/timing/rollout_batch_seconds": 112.529858066,
+        "step/outer": 2.0,
+        "rollout/score/mean": 0.40625,
+        "rollout/response_length/mean": 5989.15625,
+        "rollout/response_tokens": 383306.0,
+        "perf/timing/rollout_pipeline_seconds": 114.31688994914293,
+        "perf/timing/teacher_transfer_seconds": 0.9116855710744858,
+        "perf/timing/teacher_forward_seconds": 1.5796672999858856,
+        "perf/timing/update_actor_seconds": 7.874467507004738,
+        "perf/timing/update_weights_seconds": 0.955463282763958,
+        "perf/timing/outer_step_seconds": 125.67142425477505,
+        "step/update": 2.0,
+        "step/optimizer": 2.0,
+        "optim/actor/loss": 0.11188086867332458,
+        "optim/actor/grad_norm_preclip": 1.2687166929244995,
+        "optim/actor/lr": 1e-06
+      },
+      {
+        "step": 3.0,
+        "perf/timing/rollout_batch_seconds": 112.281912818,
+        "step/outer": 3.0,
+        "rollout/score/mean": 0.390625,
+        "rollout/response_length/mean": 6044.5,
+        "rollout/response_tokens": 386848.0,
+        "perf/timing/rollout_pipeline_seconds": 114.26286746561527,
+        "perf/timing/teacher_transfer_seconds": 0.8123816102743149,
+        "perf/timing/teacher_forward_seconds": 1.601288102567196,
+        "perf/timing/update_actor_seconds": 6.979953326284885,
+        "perf/timing/update_weights_seconds": 1.2684895023703575,
+        "perf/timing/outer_step_seconds": 135.79783140867949,
+        "step/update": 3.0,
+        "step/optimizer": 3.0,
+        "optim/actor/loss": 0.10662509500980377,
+        "optim/actor/grad_norm_preclip": 1.080690860748291,
+        "optim/actor/lr": 1e-06
+      },
+      {
+        "step": 4.0,
+        "perf/timing/rollout_batch_seconds": 112.218014367,
+        "step/outer": 4.0,
+        "rollout/score/mean": 0.265625,
+        "rollout/response_length/mean": 6519.25,
+        "rollout/response_tokens": 417232.0,
+        "perf/timing/rollout_pipeline_seconds": 114.33465607464314,
+        "perf/timing/teacher_transfer_seconds": 0.9411929696798325,
+        "perf/timing/teacher_forward_seconds": 1.739759162068367,
+        "perf/timing/update_actor_seconds": 6.90176522731781,
+        "perf/timing/update_weights_seconds": 0.9526089653372765,
+        "perf/timing/outer_step_seconds": 124.9040861800313,
+        "step/update": 4.0,
+        "step/optimizer": 4.0,
+        "optim/actor/loss": 0.1114235520362854,
+        "optim/actor/grad_norm_preclip": 1.37615966796875,
+        "optim/actor/lr": 1e-06
+      }
+    ],
+    "traces": [
+      {
+        "source": "outputs/full-kl-profile-20261022/e2e-io1/traces/actor-rollout_train_step3_rank0-of-4_pid2276309_20261023043107150.json.gz",
+        "cpu_range_sum_ms": {
+          "hidden_read": null,
+          "hidden_read_wait": 68.033691,
+          "hidden_write": null,
+          "hidden_write_wait": 0.076768,
+          "hidden_write_flush": 53.464618,
+          "teacher_hidden_d2h": 197.05577699999998,
+          "micro_batch_h2d": 82.617864,
+          "teacher_head_get": 66.621167
+        },
+        "count": {
+          "hidden_read": 0,
+          "hidden_read_wait": 4,
+          "hidden_write": 0,
+          "hidden_write_wait": 3,
+          "hidden_write_flush": 1,
+          "teacher_hidden_d2h": 4,
+          "micro_batch_h2d": 8,
+          "teacher_head_get": 4
+        },
+        "absence_note": "Null means no recorded span: async worker thread not captured, or operation disabled; never interpret as zero cost."
+      }
+    ]
+  }
+}
