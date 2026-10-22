@@ -33,6 +33,14 @@ def project(hidden, weight):
     return hidden @ weight.T
 
 
+def add_product(accumulator, left, right):
+    """Accumulate directly into FP32 storage instead of allocating a full head gradient per tile."""
+    if left.is_cuda and left.dtype == torch.bfloat16 and accumulator.dtype == torch.float32:
+        torch.addmm(accumulator, left, right, out_dtype=torch.float32, out=accumulator)
+    else:
+        accumulator.addmm_(left, right)
+
+
 def dense_rows(hs, ws, ht, wt):
     lp = project(hs, ws).log_softmax(-1)
     lt = project(ht.detach(), wt.detach()).log_softmax(-1)
@@ -100,8 +108,8 @@ class RecomputedKL(torch.autograd.Function):
                 dz = p * (zp - zt - mean_gap[start:stop, None]) * upstream[start:stop, None]
                 # Match low-precision GEMM inputs used for student gradient products.
                 dz = dz.to(hs.dtype)
-                dh[start:stop] += project(dz, ws[v:end].T)
-                dw[v:end] += project(dz.T.contiguous(), hs[start:stop].T)
+                add_product(dh[start:stop], dz, ws[v:end])
+                add_product(dw[v:end], dz.T, hs[start:stop])
         return dh.to(hs.dtype), dw.to(ws.dtype), None, None, None, None
 
 
@@ -118,12 +126,17 @@ class PrecomputedKL(torch.autograd.Function):
             stop = min(start + token_chunk, len(hs))
             zp, zt = project(hs[start:stop], ws), project(ht[start:stop], wt)
             lp, lt = zp.log_softmax(-1), zt.log_softmax(-1)
+            del zp, zt
             p = lp.exp()
-            kl = (p * (lp - lt)).sum(-1)
+            lp.sub_(lt)
+            del lt
+            kl = (p * lp).sum(-1)
             total += kl.sum()
-            dz = (p * (lp - lt - kl[:, None])).to(hs.dtype)
-            dh[start:stop] = project(dz, ws.T)
-            dw += project(dz.T.contiguous(), hs[start:stop].T)
+            lp.sub_(kl[:, None]).mul_(p)
+            dz = lp.to(hs.dtype)
+            del lp, p
+            add_product(dh[start:stop], dz, ws)
+            add_product(dw, dz.T, hs[start:stop])
         ctx.save_for_backward(dh.to(hs.dtype), dw.to(ws.dtype))
         return total
 
