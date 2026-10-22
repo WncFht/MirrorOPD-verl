@@ -1,0 +1,189 @@
+requirement,previous_status,v3_status,v3_field_or_location,boundary
+advantage/distillation/abs_mean,已实现（限定路径）,已实现或按功能接入,advantage/distillation/abs_mean,当前 64 字段字典中有逐项定义；不是每行都出现
+advantage/distillation/mean,已实现（限定路径）,已实现或按功能接入,advantage/distillation/mean,当前 64 字段字典中有逐项定义；不是每行都出现
+advantage/distillation/positive_fraction,已实现（限定路径）,已实现或按功能接入,advantage/distillation/positive_fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+advantage/distillation/rms,已实现（限定路径）,已实现或按功能接入,advantage/distillation/rms,当前 64 字段字典中有逐项定义；不是每行都出现
+correction/behavior_ppo/active_fraction,已实现（限定路径）,已实现或按功能接入,correction/behavior_ppo/active_fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+correction/behavior_ppo/active_mass,已实现（限定路径）,已实现或按功能接入,correction/behavior_ppo/active_mass,当前 64 字段字典中有逐项定义；不是每行都出现
+correction/is/coeff_change,已实现（限定路径）,已实现或按功能接入,correction/is/coeff_change,当前 64 字段字典中有逐项定义；不是每行都出现
+correction/log_ratio_guard/fraction,已实现（限定路径）,已实现或按功能接入,correction/log_ratio_guard/fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+distill/advantage/sign_flip_fraction,已实现（限定路径）,已实现或按功能接入,distill/advantage/sign_flip_fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+distill/advantage/source_coeff_change,已实现（限定路径）,已实现或按功能接入,distill/advantage/source_coeff_change,当前 64 字段字典中有逐项定义；不是每行都出现
+eval/aime25/acc_mean,已实现（限定路径）,已实现或按功能接入,eval/aime25/acc/mean,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+eval/aime25/failed_count,已实现（限定路径）,已实现或按功能接入,eval/aime25/failed_count,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+eval/aime25/response_count,已实现（限定路径）,已实现或按功能接入,eval/aime25/response_count,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+eval/amc23/acc_mean,已实现（限定路径）,已实现或按功能接入,eval/amc23/acc/mean,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+eval/amc23/failed_count,已实现（限定路径）,已实现或按功能接入,eval/amc23/failed_count,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+eval/amc23/response_count,已实现（限定路径）,已实现或按功能接入,eval/amc23/response_count,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+eval/math500/acc_mean,已实现（限定路径）,已实现或按功能接入,eval/math500/acc/mean,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+eval/math500/failed_count,已实现（限定路径）,已实现或按功能接入,eval/math500/failed_count,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+eval/math500/response_count,已实现（限定路径）,已实现或按功能接入,eval/math500/response_count,当前仅均值/失败数/预期回答分母；无 pass/majority 曲线
+optim/actor/grad_norm_preclip,已实现（限定路径）,已实现或按功能接入,optim/actor/grad_norm_preclip,当前 64 字段字典中有逐项定义；不是每行都出现
+optim/actor/loss,已实现（限定路径）,已实现或按功能接入,optim/actor/loss,当前 64 字段字典中有逐项定义；不是每行都出现
+optim/actor/lr,已实现（限定路径）,已实现或按功能接入,optim/actor/lr,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/actor/mfu,已实现（限定路径）,已实现或按功能接入,perf/actor/mfu,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/actor/reserved_peak_gib,已实现（限定路径）,已实现或按功能接入,perf/actor/reserved_peak_gib,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/memory/cpu_used_gib,已实现（限定路径）,已实现或按功能接入,perf/memory/cpu_used_gib,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/memory/fsdp_allocated_peak_gib,已实现（限定路径）,已实现或按功能接入,perf/memory/fsdp_allocated_peak_gib,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/throughput/tokens_per_gpu_second,已实现（限定路径）,已实现或按功能接入,perf/throughput/tokens_per_gpu_second,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/adv_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/adv_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/old_log_prob_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/old_log_prob_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/outer_step_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/outer_step_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/rollout_batch_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/rollout_batch_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/rollout_pipeline_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/rollout_pipeline_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/save_checkpoint_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/save_checkpoint_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/teacher_forward_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/teacher_forward_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/teacher_transfer_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/teacher_transfer_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/update_actor_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/update_actor_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/update_weights_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/update_weights_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/validation_rollout_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/validation_rollout_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+perf/timing/validation_seconds,已实现（限定路径）,已实现或按功能接入,perf/timing/validation_seconds,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/anchor_behavior/k3,已实现（限定路径）,已实现或按功能接入,policy/anchor_behavior/k3,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/anchor_behavior/log_ratio_abs_max,已实现（限定路径）,已实现或按功能接入,policy/anchor_behavior/log_ratio_abs_max,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/anchor_behavior/log_ratio_abs_mean,已实现（限定路径）,已实现或按功能接入,policy/anchor_behavior/log_ratio_abs_mean,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/anchor_behavior/nonfinite_fraction,已实现（限定路径）,已实现或按功能接入,policy/anchor_behavior/nonfinite_fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/current_anchor/log_ratio_abs_max,已实现（限定路径）,已实现或按功能接入,policy/current_anchor/log_ratio_abs_max,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/current_anchor/log_ratio_m2,已实现（限定路径）,已实现或按功能接入,policy/current_anchor/log_ratio_m2,token 加权 E[z²]，不是 E[(sum_token z)²]
+policy/current_anchor/nonfinite_fraction,已实现（限定路径）,已实现或按功能接入,policy/current_anchor/nonfinite_fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/current_behavior/ess_fraction,已实现（限定路径）,已实现或按功能接入,policy/current_behavior/ess_fraction,原始 token ratio 的 ESS/N；不是实际 TIS/RS 权重 ESS
+policy/current_behavior/log_ratio_abs_max,已实现（限定路径）,已实现或按功能接入,policy/current_behavior/log_ratio_abs_max,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/current_behavior/log_ratio_m2,已实现（限定路径）,已实现或按功能接入,policy/current_behavior/log_ratio_m2,token 加权 E[z²]，不是 E[(sum_token z)²]
+policy/current_behavior/log_ratio_mean,已实现（限定路径）,已实现或按功能接入,policy/current_behavior/log_ratio_mean,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/current_behavior/nonfinite_fraction,已实现（限定路径）,已实现或按功能接入,policy/current_behavior/nonfinite_fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/current_behavior/ratio_gt_2_fraction,已实现（限定路径）,已实现或按功能接入,policy/current_behavior/ratio_gt_2_fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/current_behavior/ratio_lt_half_fraction,已实现（限定路径）,已实现或按功能接入,policy/current_behavior/ratio_lt_half_fraction,当前 64 字段字典中有逐项定义；不是每行都出现
+policy/current_behavior/ratio_p99,已实现（限定路径）,已实现或按功能接入,policy/current_behavior/ratio_p99,仅 current_behavior；首次及每 N 次尝试；0 关闭
+policy/entropy/pre_update,已实现（限定路径）,已实现或按功能接入,policy/entropy/pre_update,当前 64 字段字典中有逐项定义；不是每行都出现
+rollout/aborted_fraction,已实现（限定路径）,已实现或按功能接入,rollout/empty_loss_mask_fraction,按 loss mask 非空判定；RS 全拒也会计入，不冒称后端 abort
+rollout/length_limit_fraction,已实现（限定路径）,已实现或按功能接入,rollout/response_length/padded_width_fraction; rollout/finish_reason/length_count,当前 64 字段字典中有逐项定义；不是每行都出现
+rollout/response_count,已实现（限定路径）,已实现或按功能接入,rollout/response_count,当前 64 字段字典中有逐项定义；不是每行都出现
+rollout/response_length_mean,已实现（限定路径）,已实现或按功能接入,rollout/response_length/mean,当前 64 字段字典中有逐项定义；不是每行都出现
+rollout/response_tokens,已实现（限定路径）,已实现或按功能接入,rollout/response_tokens,当前 64 字段字典中有逐项定义；不是每行都出现
+rollout/score_mean,已实现（限定路径）,已实现或按功能接入,rollout/score/mean,当前 64 字段字典中有逐项定义；不是每行都出现
+step/optimizer,已实现（限定路径）,已实现或按功能接入,step/optimizer,当前 64 字段字典中有逐项定义；不是每行都出现
+step/outer,已实现（限定路径）,已实现或按功能接入,step/outer,当前 64 字段字典中有逐项定义；不是每行都出现
+step/update,已实现（限定路径）,已实现或按功能接入,step/update,当前 64 字段字典中有逐项定义；不是每行都出现
+correction/anchor_ppo/active_fraction,已实现（限定路径）,已实现或按功能接入,correction/anchor_ppo/active_fraction,仅 vanilla/k1/PG 分支；pre-dual-clip 事件，不含 dual-clip 的全部效果
+advantage/task/mean,已实现（限定路径）,已实现或按功能接入,advantage/task/mean,实际 task advantage；纯 OPD 不假造 task 信号
+advantage/task/abs_mean,已实现（限定路径）,已实现或按功能接入,advantage/task/abs_mean,实际 task advantage；纯 OPD 不假造 task 信号
+advantage/task/rms,已实现（限定路径）,已实现或按功能接入,advantage/task/rms,实际 task advantage；纯 OPD 不假造 task 信号
+advantage/task/positive_fraction,已实现（限定路径）,已实现或按功能接入,advantage/task/positive_fraction,实际 task advantage；纯 OPD 不假造 task 信号
+eval/{dataset}/score_mean,已实现（有边界缺口）,已实现或按功能接入,eval/{dataset}/reward/mean,单一 reward-only 输入可用；当前字段选择在整轮 infos 级，混合 acc/reward 数据源需改为逐数据源选择
+eval/samples,已实现（条件表格）,已实现或按功能接入,eval/samples,表格不计入 64 数值字段；依现有配置或 DAPO 数据出现
+rollout/filtered_reward_counts,已实现（条件表格）,已实现或按功能接入,rollout/filtered_reward_counts,表格不计入 64 数值字段；依现有配置或 DAPO 数据出现
+policy/current_behavior/log_ratio_abs_mean,未实现,已实现或按功能接入,policy/current_behavior/log_ratio_abs_mean,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_behavior/log_ratio_p01,未实现,已实现或按功能接入,policy/current_behavior/log_ratio_p01,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_behavior/log_ratio_p50,未实现,已实现或按功能接入,policy/current_behavior/log_ratio_p50,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_behavior/log_ratio_p99,未实现,已实现或按功能接入,policy/current_behavior/log_ratio_p99,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_behavior/sequence_log_ratio_mean,未实现,已实现或按功能接入,policy/current_behavior/sequence_log_ratio_mean,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_behavior/sequence_log_ratio_m2,未实现,已实现或按功能接入,policy/current_behavior/sequence_log_ratio_m2,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_behavior/sequence_log_ratio_abs_max,未实现,已实现或按功能接入,policy/current_behavior/sequence_log_ratio_abs_max,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_behavior/sequence_mean_log_ratio_mean,未实现,已实现或按功能接入,policy/current_behavior/sequence_mean_log_ratio_mean,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_behavior/sequence_mean_log_ratio_m2,未实现,已实现或按功能接入,policy/current_behavior/sequence_mean_log_ratio_m2,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/anchor_behavior/log_ratio_mean,未实现,已实现或按功能接入,policy/anchor_behavior/log_ratio_mean,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/anchor_behavior/log_ratio_m2,未实现,已实现或按功能接入,policy/anchor_behavior/log_ratio_m2,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/anchor_behavior/log_ratio_p01,未实现,已实现或按功能接入,policy/anchor_behavior/log_ratio_p01,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/anchor_behavior/log_ratio_p50,未实现,已实现或按功能接入,policy/anchor_behavior/log_ratio_p50,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/anchor_behavior/log_ratio_p99,未实现,已实现或按功能接入,policy/anchor_behavior/log_ratio_p99,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/anchor_behavior/sequence_log_ratio_mean,未实现,已实现或按功能接入,policy/anchor_behavior/sequence_log_ratio_mean,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/anchor_behavior/sequence_log_ratio_m2,未实现,已实现或按功能接入,policy/anchor_behavior/sequence_log_ratio_m2,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/anchor_behavior/sequence_log_ratio_abs_max,未实现,已实现或按功能接入,policy/anchor_behavior/sequence_log_ratio_abs_max,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/anchor_behavior/sequence_mean_log_ratio_mean,未实现,已实现或按功能接入,policy/anchor_behavior/sequence_mean_log_ratio_mean,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/anchor_behavior/sequence_mean_log_ratio_m2,未实现,已实现或按功能接入,policy/anchor_behavior/sequence_mean_log_ratio_m2,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_anchor/log_ratio_mean,未实现,已实现或按功能接入,policy/current_anchor/log_ratio_mean,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_anchor/log_ratio_abs_mean,未实现,已实现或按功能接入,policy/current_anchor/log_ratio_abs_mean,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_anchor/log_ratio_p01,未实现,已实现或按功能接入,policy/current_anchor/log_ratio_p01,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_anchor/log_ratio_p50,未实现,已实现或按功能接入,policy/current_anchor/log_ratio_p50,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_anchor/log_ratio_p99,未实现,已实现或按功能接入,policy/current_anchor/log_ratio_p99,同一有效 token 集合归约；分位数按频率；样本不是来自 pair 分母时不冒称 KL/IS 校正
+policy/current_anchor/sequence_log_ratio_mean,未实现,已实现或按功能接入,policy/current_anchor/sequence_log_ratio_mean,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_anchor/sequence_log_ratio_m2,未实现,已实现或按功能接入,policy/current_anchor/sequence_log_ratio_m2,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_anchor/sequence_log_ratio_abs_max,未实现,已实现或按功能接入,policy/current_anchor/sequence_log_ratio_abs_max,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_anchor/sequence_mean_log_ratio_mean,未实现,已实现或按功能接入,policy/current_anchor/sequence_mean_log_ratio_mean,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_anchor/sequence_mean_log_ratio_m2,未实现,已实现或按功能接入,policy/current_anchor/sequence_mean_log_ratio_m2,每条完整 response 先求 z 的和或均值，再按 sequence 等权；与 token M2 不等价
+policy/current_behavior/ratio_mean,未实现,已实现或按功能接入,policy/current_behavior/ratio_mean,anchor 的权重用途依入口 correction；ESS 与 applied 权重分开；极端指数用稳定状态
+policy/current_behavior/ratio_std,未实现,已实现或按功能接入,policy/current_behavior/ratio_std,anchor 的权重用途依入口 correction；ESS 与 applied 权重分开；极端指数用稳定状态
+policy/anchor_behavior/ratio_mean,未实现,已实现或按功能接入,policy/anchor_behavior/ratio_mean,anchor 的权重用途依入口 correction；ESS 与 applied 权重分开；极端指数用稳定状态
+policy/anchor_behavior/ratio_std,未实现,已实现或按功能接入,policy/anchor_behavior/ratio_std,anchor 的权重用途依入口 correction；ESS 与 applied 权重分开；极端指数用稳定状态
+policy/anchor_behavior/ess_fraction,未实现,已实现或按功能接入,policy/anchor_behavior/ess_fraction,anchor 的权重用途依入口 correction；ESS 与 applied 权重分开；极端指数用稳定状态
+policy/anchor_behavior/ratio_lt_half_fraction,未实现,已实现或按功能接入,policy/anchor_behavior/ratio_lt_half_fraction,anchor 的权重用途依入口 correction；ESS 与 applied 权重分开；极端指数用稳定状态
+policy/anchor_behavior/ratio_gt_2_fraction,未实现,已实现或按功能接入,policy/anchor_behavior/ratio_gt_2_fraction,anchor 的权重用途依入口 correction；ESS 与 applied 权重分开；极端指数用稳定状态
+policy/anchor_behavior/ratio_p99,未实现,已实现或按功能接入,policy/anchor_behavior/ratio_p99,anchor 的权重用途依入口 correction；ESS 与 applied 权重分开；极端指数用稳定状态
+optim/actor/update_applied,未接入新输出,已实现或按功能接入,optim/actor/update_applied,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/actor/skipped_updates,未接入新输出,已实现或按功能接入,optim/actor/skipped_updates,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/actor/nonfinite_loss_count,未接入新输出,已实现或按功能接入,optim/actor/loss_nonfinite,每次更新0/1事件，不是累计计数；坏值另有/nonfinite事件
+optim/actor/nonfinite_grad_count,未接入新输出,已实现或按功能接入,optim/actor/grad_norm_preclip_nonfinite,每次更新0/1事件；未知不填零
+optim/actor/pg_loss,未接入新输出,已实现或按功能接入,optim/actor/pg_loss,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/actor/distillation_loss,未接入新输出,已实现或按功能接入,optim/actor/distillation_loss,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/actor/entropy_loss,未接入新输出,已实现或按功能接入,optim/actor/entropy_loss,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/actor/kl_loss,未接入新输出,已实现或按功能接入,optim/actor/kl_loss,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/actor/kl_coef,未接入新输出,已实现或按功能接入,optim/actor/kl_coef,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/critic/loss,未接入新输出,已实现或按功能接入,optim/critic/loss,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/critic/grad_norm_preclip,未接入新输出,已实现或按功能接入,optim/critic/grad_norm_preclip,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/critic/lr,未接入新输出,已实现或按功能接入,optim/critic/lr,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/critic/update_applied,未接入新输出,已实现或按功能接入,optim/critic/update_applied,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/critic/skipped_updates,未接入新输出,已实现或按功能接入,optim/critic/skipped_updates,角色及算法适用时记录；loss 分项标注系数是否已应用；NaN 与空分母分开
+optim/critic/nonfinite_loss_count,未接入新输出,已实现或按功能接入,optim/critic/loss_nonfinite,每次更新0/1事件，不是累计计数；坏值另有/nonfinite事件
+optim/critic/nonfinite_grad_count,未接入新输出,已实现或按功能接入,optim/critic/grad_norm_preclip_nonfinite,每次更新0/1事件；未知不填零
+correction/is/applied/{stat},待补齐或迁移,已实现或按功能接入,correction/is/applied_*; correction/is/batch/normalization_factor,实际处理后权重的 mean/std/ESS/归一化因子；明确旧 helper 各字段是否 raw
+correction/rejection/{stat},待补齐或迁移,已实现或按功能接入,correction/rejection/{stat},token、至少部分被拒 sequence、完整被拒 sequence、剩余有效样本量分开
+correction/anchor_ppo/dual_clip_fraction,待补齐或迁移,已实现或按功能接入,correction/anchor_ppo/dual_clip_fraction,通用 PPO dual clip 的实际激活事件
+correction/anchor_ppo/active_mass,待补齐或迁移,已实现或按功能接入,correction/anchor_ppo/active_mass,vanilla 实际系数影响；不能直接套 behavior clip 分母
+correction/score_centering/{stat},待补齐或迁移,已实现或按功能接入,correction/score_centering/{stat},已有 score-centering/support 诊断迁移
+distill/topk/{stat},待补齐或迁移,已实现或按功能接入,distill/topk/{stat},student/teacher mass、min/max、overlap 与 overlap advantage
+distill/loss/{stat},待补齐或迁移,已实现或按功能接入,distill/loss/{stat},已有 sampled abs_loss/min/max；区分 clamp 前后与总 surrogate loss
+distill/student_teacher/sampled_log_gap,待补齐或迁移,已实现或按功能接入,distill/student_teacher/sampled_log_gap,当前 teacher/student gap 与 frozen advantage 分开；不是 full-vocab KL
+policy/current_reference/{stat},待补齐或迁移,已实现或按功能接入,policy/current_reference/sampled_kl,现有reference/kl_loss启用时；无额外forward
+policy/critic/{stat},待补齐或迁移,已实现或按功能接入,policy/critic/{stat},value、return、explained variance 等现有观测
+rollout/staleness/{stat},待补齐或迁移,已实现或按功能接入,rollout/staleness/{stat},权重版本 age/spans/淘汰量；optimizer age 仅有真实元数据时计算；当前记录权重版本lag，不把缺少来源的optimizer age猜出来
+rollout/data_reuse/{stat},待补齐或迁移,已实现或按功能接入,rollout/data_reuse/{stat},批内已使用更新次数与真实训练 token；不把 outer 直接当年龄
+rollout/{length_kind}/{stat},待补齐或迁移,已实现或按功能接入,rollout/{length_kind}/{stat},prompt/response/non-aborted 长度统计；finish_reason 与 padding 宽度区分
+rollout/total_tokens,待补齐或迁移,已实现或按功能接入,rollout/total_tokens,prompt+response 工作量；不能只用 response_tokens
+rollout/num_turns/{stat},待补齐或迁移,已实现或按功能接入,rollout/num_turns/{stat},合并两套旧轮数名字；按适用任务保留
+rollout/reward/{stat},待补齐或迁移,已实现或按功能接入,rollout/reward/{stat},score 与 shaped reward 不默认相同
+rollout/filter/{stat},待补齐或迁移,已实现或按功能接入,rollout/filter/{stat},筛选、淘汰、剩余丢弃及失败分母
+perf/timing/{stage}_seconds,待补齐或迁移,已实现或按功能接入,perf/timing/{stage}_seconds,实际执行阶段动态计时，不受固定 12 阶段限制
+perf/load_balance/{stat},待补齐或迁移,已实现或按功能接入,perf/load_balance/{stat},平衡前后 rank token 工作量
+perf/teacher/request_latency_mean_seconds,待补齐或迁移,已实现或按功能接入,perf/teacher/request_latency_mean_seconds,standalone teacher RPC，不与 shared 阶段跨度混用
+rollout/preemptions,待补齐或迁移,已实现或按功能接入,rollout/preemptions,后端完整报告时记录
+eval/preemptions,待补齐或迁移,已实现或按功能接入,eval/preemptions,所有验证窗口完整报告时记录
+perf/spec_decode/{stat},待补齐或迁移,已实现或按功能接入,perf/spec_decode/{stat},已有接受率/接受长度
+perf/moe/{stat},待补齐或迁移,已实现或按功能接入,perf/moe/{stat},已有 MoE 路由统计；不扩展按层梯度
+perf/async/{stat},待补齐或迁移,已实现或按功能接入,perf/async/{stat},已有异步切换/等待/同步观测
+advantage/task/min,未实现,已实现或按功能接入,advantage/task/min,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/task/max,未实现,已实现或按功能接入,advantage/task/max,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/task/zero_fraction,未实现,已实现或按功能接入,advantage/task/zero_fraction,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/task/nonfinite_fraction,未实现,已实现或按功能接入,advantage/task/nonfinite_fraction,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/task/abs_p99,未实现,已实现或按功能接入,advantage/task/abs_p99,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/distillation/min,未实现,已实现或按功能接入,advantage/distillation/min,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/distillation/max,未实现,已实现或按功能接入,advantage/distillation/max,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/distillation/zero_fraction,未实现,已实现或按功能接入,advantage/distillation/zero_fraction,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/distillation/nonfinite_fraction,未实现,已实现或按功能接入,advantage/distillation/nonfinite_fraction,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+advantage/distillation/abs_p99,未实现,已实现或按功能接入,advantage/distillation/abs_p99,只统计实际 loss 使用的 mask/信号；p99 沿频率控制
+eval/{dataset}/acc/mean,已具备计算；拟改名,已实现或按功能接入,eval/{dataset}/acc/mean,与当前 acc_mean 同一均值；拟统一层级命名
+eval/{dataset}/acc/pass@k,未实现,已实现或按功能接入,eval/{dataset}/acc/pass@k,"所有 1≤k≤K；1-C(N-c,k)/C(N,k) 后按题等权；缺失回答保留失败口径"
+eval/{dataset}/acc/majority@k,未实现；细节待定,已实现或按功能接入,eval/{dataset}/acc/majority@k,所有 1≤k≤K，需答案等价关系；K 直接投票，较小 k 无放回子集；平票与缺失需定稿
+eval/{dataset}/{score}/mean,待恢复,已实现或按功能接入,eval/{dataset}/{score}/mean,独立 reward/score/format，禁止因为 acc 存在就删其余分量
+eval/{dataset}/{score}/within_prompt_std,待重定义恢复,已实现或按功能接入,eval/{dataset}/{score}/within_prompt_std,题内波动，不是整体准确率 CI
+eval/{dataset}/{score}/best@k,待评审适用评分,已实现或按功能接入,eval/{dataset}/{score}/best@k,连续评分的候选最好值；二值 acc 合并到 pass，非原 bootstrap 的改名
+eval/{dataset}/{score}/worst@k,待评审适用评分,已实现或按功能接入,eval/{dataset}/{score}/worst@k,保留最差/一致性研究需求；是否默认展开待评审
+eval/{dataset}/acc/all_correct@k,待评审,已实现或按功能接入,eval/{dataset}/acc/all_correct@k,二值 worst 对应全对事件；替换旧有放回口径需标注
+eval/{dataset}/{metric}/ci_low,未实现；方法待定,已实现或按功能接入,eval/{dataset}/{metric}_ci_low / _ci_high,95%跨题bootstrap；不是旧std，也不是训练seed方差
+eval/{dataset}/{metric}/ci_high,未实现；方法待定,已实现或按功能接入,eval/{dataset}/{metric}_ci_low / _ci_high,95%跨题bootstrap；不是旧std，也不是训练seed方差
+eval/{dataset}/acc_observed/mean,待恢复,已实现或按功能接入,eval/{dataset}/acc/observed_mean; eval/{dataset}/acc_observed/* (有缺失时),只对有效评分回答的诊断口径；不取代包含失败的主指标
+eval/{dataset}/prompt_count,未实现,已实现或按功能接入,eval/{dataset}/prompt_count,参与主指标的题数与高 k 覆盖范围
+eval/{dataset}/observed_response_count,未实现,已实现或按功能接入,eval/{dataset}/observed_response_count,区分预期分母与实际有效评分数
+eval/{dataset}/coverage@k,未实现；不等预算策略待定,已实现或按功能接入,"eval/{dataset}/{prompt_count,samples_per_prompt_min,samples_per_prompt_max}",主曲线只取同一题集共同支持k；coverage恒1不再另写一条常量曲线，observed诊断自带独立题数
+eval/{dataset}/prefix_mean@k,口径选项，尚未决定新增,已实现或按功能接入,eval/{dataset}/{score}/prefix_mean@k,固定 sample index 前 k 个回答均值；不是随机子集期望均值
+eval/{dataset}/generation/{stat},待补齐,已实现或按功能接入,eval/{dataset}/generation/{stat},验证长度、完成/失败类别、轮数与成本
+eval/raw_sample_records,已有 dump，完整记录未完成,已实现或按功能接入,validation/records/<outer>.jsonl,最终session每预算槽一行；显式失败、评分、pred、sample_index、source内稳定顺序ID和声明能力
+architecture/no_silent_drop,未完成,已实现或按功能接入,schema.canonical_name + outer_metrics,移除固定字段白名单；生产端统一命名，未知字段测试检查且运行不可无声丢弃
+architecture/record_vs_display,未完成,已实现或按功能接入,Tracking.log console selection; W&B/file full payload,W&B/结构化记录保留观测；console/workspace 单独选择显示集合
+architecture/undefined_vs_nonfinite,未完成,已实现或按功能接入,<metric>/undefined; <metric>/nonfinite; optim/*/*_nonfinite,无有效样本/零分母/NaN/Inf 分开；异常有标量状态
+architecture/conditional_backend_coverage,未完成,已实现或按功能接入,optim/actor/observations_available; preserved backend diagnostics,完整 raw 观察接入 FSDP/FSDP2；其他 engine 既有字段保留、显式 availability=0，不宣称 CP/TP 已验证
+architecture/metric_semantics_catalog,未完成,已实现或按功能接入,2026-10-22-指标字典.md + mapping CSVs,每项说明单位、mask、权重、时刻、方向、来源、归约与前提；不是新事件总线
+architecture/config_minimality,未完成,已实现或按功能接入,metrics_quantile_interval; eval_metrics_resamples; existing flags,基础指标随功能启用；分位数沿已有频率；eval 重采样次数/seed 是否新增配置待定
+deferred/fixed_prefix_probe,明确暂缓,明确暂缓，不实施,,不作为本轮缺陷或待恢复项
+deferred/full_vocab_teacher_kl,明确暂缓,明确暂缓，不实施,,不作为本轮缺陷或待恢复项
+deferred/per_layer_gradients,明确暂缓,明确暂缓，不实施,,不作为本轮缺陷或待恢复项
+deferred/parameter_update_statistics,明确暂缓,明确暂缓，不实施,,不作为本轮缺陷或待恢复项
+review/variance_proxy,待专项审查,已实现或按功能接入,"advantage/variance_proxy/{available,proxy2_total_power,expected_a_squared,expected_w}",已有开关已接线；仅task且独立anchor；logit-score proxy不冒称参数梯度方差；不输出无来源proxy1/proxy3
