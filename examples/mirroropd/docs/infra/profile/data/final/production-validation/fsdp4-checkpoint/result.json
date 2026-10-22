@@ -1,0 +1,48 @@
+{
+  "backend": "precompute_fused",
+  "world_size": 4,
+  "records": [
+    {
+      "step": 0,
+      "loss": 0.013816207647323608
+    },
+    {
+      "step": 1,
+      "loss": 0.008620738983154297
+    },
+    {
+      "step": 2,
+      "loss": 0.005760133266448975
+    }
+  ],
+  "parameter_delta_norms_rank0": {
+    "model.embed_tokens.weight": 0.030748631805181503,
+    "model.layers.0.self_attn.q_proj.weight": 0.040494222193956375,
+    "model.layers.0.self_attn.q_proj.bias": 0.007148433476686478,
+    "model.layers.0.self_attn.k_proj.weight": 0.027690529823303223,
+    "model.layers.0.self_attn.k_proj.bias": 0.004006932955235243,
+    "model.layers.0.self_attn.v_proj.weight": 0.02857159450650215,
+    "model.layers.0.self_attn.v_proj.bias": 0.0056666424497962,
+    "model.layers.0.self_attn.o_proj.weight": 0.03828495368361473,
+    "model.layers.0.mlp.gate_proj.weight": 0.05874425545334816,
+    "model.layers.0.mlp.up_proj.weight": 0.0572781004011631,
+    "model.layers.0.mlp.down_proj.weight": 0.05739092081785202,
+    "model.layers.0.input_layernorm.weight": 0.007532577961683273,
+    "model.layers.0.post_attention_layernorm.weight": 0.006204188335686922,
+    "model.layers.1.self_attn.q_proj.weight": 0.042278509587049484,
+    "model.layers.1.self_attn.q_proj.bias": 0.00772723276168108,
+    "model.layers.1.self_attn.k_proj.weight": 0.02915712632238865,
+    "model.layers.1.self_attn.k_proj.bias": 0.004766776692122221,
+    "model.layers.1.self_attn.v_proj.weight": 0.028718343004584312,
+    "model.layers.1.self_attn.v_proj.bias": 0.005315147805958986,
+    "model.layers.1.self_attn.o_proj.weight": 0.03782377019524574,
+    "model.layers.1.mlp.gate_proj.weight": 0.05731148645281792,
+    "model.layers.1.mlp.up_proj.weight": 0.05803661048412323,
+    "model.layers.1.mlp.down_proj.weight": 0.055981021374464035,
+    "model.layers.1.input_layernorm.weight": 0.007541344966739416,
+    "model.layers.1.post_attention_layernorm.weight": 0.0057334755547344685,
+    "model.norm.weight": 0.007631930988281965,
+    "lm_head.weight": 0.04306400567293167
+  },
+  "checkpoint_roundtrip": true
+}

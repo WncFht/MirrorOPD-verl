@@ -1,0 +1,516 @@
+{
+  "scope": "H800 x4; fixed prefixes; lr=0; matched chunk=512/budget=16384; 2 independent runs and 18 measured steps per backend. No IID confidence intervals.",
+  "work": [
+    163573,
+    161701,
+    512,
+    16384,
+    4
+  ],
+  "runs": [
+    {
+      "name": "1-precompute",
+      "backend": "precompute",
+      "rows": [
+        {
+          "step": 3,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3420600891113281,
+          "actor_s": 3.774015426635742,
+          "wall_s": 5.1164374351501465,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.348257303237915
+        },
+        {
+          "step": 4,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.319138765335083,
+          "actor_s": 4.220325946807861,
+          "wall_s": 5.539828300476074,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482656478881836
+        },
+        {
+          "step": 5,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3171340227127075,
+          "actor_s": 3.8545103073120117,
+          "wall_s": 5.171993255615234,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.348263144493103
+        },
+        {
+          "step": 6,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.41218900680542,
+          "actor_s": 3.6320409774780273,
+          "wall_s": 5.044126510620117,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482705354690552
+        },
+        {
+          "step": 7,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3384437561035156,
+          "actor_s": 3.5144968032836914,
+          "wall_s": 4.853122234344482,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482670783996582
+        },
+        {
+          "step": 8,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.4251525402069092,
+          "actor_s": 3.8170928955078125,
+          "wall_s": 5.2426018714904785,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482577800750732
+        },
+        {
+          "step": 9,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3570455312728882,
+          "actor_s": 3.9626238346099854,
+          "wall_s": 5.319989204406738,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482650518417358
+        },
+        {
+          "step": 10,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3646482229232788,
+          "actor_s": 3.513190984725952,
+          "wall_s": 4.87814474105835,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482694625854492
+        },
+        {
+          "step": 11,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3265204429626465,
+          "actor_s": 3.4397807121276855,
+          "wall_s": 4.765926361083984,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.348267674446106
+        }
+      ],
+      "median_seconds": {
+        "teacher_s": 1.3420600891113281,
+        "actor_s": 3.774015426635742,
+        "wall_s": 5.1164374351501465
+      },
+      "peak_allocated_gib": 17.031185150146484,
+      "source": "outputs/full-kl-confirmation-20261023/1-precompute/pipeline.json"
+    },
+    {
+      "name": "2-fused_candidate",
+      "backend": "fused_candidate",
+      "rows": [
+        {
+          "step": 3,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.513437032699585,
+          "actor_s": 3.529068946838379,
+          "wall_s": 5.042491912841797,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482654094696045
+        },
+        {
+          "step": 4,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.4304593801498413,
+          "actor_s": 3.4732718467712402,
+          "wall_s": 4.900232315063477,
+          "peak_allocated_gib": 16.60059356689453,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482654094696045
+        },
+        {
+          "step": 5,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.343558669090271,
+          "actor_s": 3.397674322128296,
+          "wall_s": 4.741424083709717,
+          "peak_allocated_gib": 16.60059356689453,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482592105865479
+        },
+        {
+          "step": 6,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3726036548614502,
+          "actor_s": 3.472374677658081,
+          "wall_s": 4.845139026641846,
+          "peak_allocated_gib": 16.60059356689453,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482604026794434
+        },
+        {
+          "step": 7,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.4359545707702637,
+          "actor_s": 3.5788815021514893,
+          "wall_s": 5.01513147354126,
+          "peak_allocated_gib": 16.60059356689453,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.348264455795288
+        },
+        {
+          "step": 8,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.5339813232421875,
+          "actor_s": 3.3082408905029297,
+          "wall_s": 4.841934680938721,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482763767242432
+        },
+        {
+          "step": 9,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.4024925231933594,
+          "actor_s": 4.183410167694092,
+          "wall_s": 5.586195468902588,
+          "peak_allocated_gib": 16.60059356689453,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482575416564941
+        },
+        {
+          "step": 10,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.322548747062683,
+          "actor_s": 3.287019729614258,
+          "wall_s": 4.609861850738525,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482637405395508
+        },
+        {
+          "step": 11,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.4345078468322754,
+          "actor_s": 3.394218683242798,
+          "wall_s": 4.8291015625,
+          "peak_allocated_gib": 16.60059356689453,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.348258376121521
+        }
+      ],
+      "median_seconds": {
+        "teacher_s": 1.4304593801498413,
+        "actor_s": 3.472374677658081,
+        "wall_s": 4.845139026641846
+      },
+      "peak_allocated_gib": 16.60059356689453,
+      "source": "outputs/full-kl-confirmation-20261023/2-fused_candidate/pipeline.json"
+    },
+    {
+      "name": "3-fused_candidate",
+      "backend": "fused_candidate",
+      "rows": [
+        {
+          "step": 3,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3941329717636108,
+          "actor_s": 3.4859843254089355,
+          "wall_s": 4.880029678344727,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482533693313599
+        },
+        {
+          "step": 4,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3616375923156738,
+          "actor_s": 3.4175565242767334,
+          "wall_s": 4.779547214508057,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482599258422852
+        },
+        {
+          "step": 5,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3804153203964233,
+          "actor_s": 3.50856876373291,
+          "wall_s": 4.889316558837891,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482693433761597
+        },
+        {
+          "step": 6,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.323580026626587,
+          "actor_s": 3.4033617973327637,
+          "wall_s": 4.727322101593018,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.348263144493103
+        },
+        {
+          "step": 7,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.4172163009643555,
+          "actor_s": 3.4989185333251953,
+          "wall_s": 4.916428565979004,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482600450515747
+        },
+        {
+          "step": 8,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.2796748876571655,
+          "actor_s": 3.2603540420532227,
+          "wall_s": 4.540290355682373,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.348264455795288
+        },
+        {
+          "step": 9,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.362005591392517,
+          "actor_s": 4.41666316986084,
+          "wall_s": 5.778956890106201,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.34827721118927
+        },
+        {
+          "step": 10,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.4039603471755981,
+          "actor_s": 3.5509777069091797,
+          "wall_s": 4.955045223236084,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482632637023926
+        },
+        {
+          "step": 11,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.9858357906341553,
+          "actor_s": 3.569021224975586,
+          "wall_s": 5.555075168609619,
+          "peak_allocated_gib": 16.598987579345703,
+          "peak_reserved_gib": 20.625,
+          "loss": 0.09630516171455383,
+          "grad_norm": 1.3482651710510254
+        }
+      ],
+      "median_seconds": {
+        "teacher_s": 1.3804153203964233,
+        "actor_s": 3.4989185333251953,
+        "wall_s": 4.889316558837891
+      },
+      "peak_allocated_gib": 16.598987579345703,
+      "source": "outputs/full-kl-confirmation-20261023/3-fused_candidate/pipeline.json"
+    },
+    {
+      "name": "4-precompute",
+      "backend": "precompute",
+      "rows": [
+        {
+          "step": 3,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.4127323627471924,
+          "actor_s": 3.8898472785949707,
+          "wall_s": 5.302623748779297,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482658863067627
+        },
+        {
+          "step": 4,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3856613636016846,
+          "actor_s": 3.965601682662964,
+          "wall_s": 5.351171493530273,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482542037963867
+        },
+        {
+          "step": 5,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3456001281738281,
+          "actor_s": 3.5814974308013916,
+          "wall_s": 4.92744779586792,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482650518417358
+        },
+        {
+          "step": 6,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3507221937179565,
+          "actor_s": 3.5623621940612793,
+          "wall_s": 4.913408279418945,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482658863067627
+        },
+        {
+          "step": 7,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3287194967269897,
+          "actor_s": 3.3978824615478516,
+          "wall_s": 4.7269206047058105,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482671976089478
+        },
+        {
+          "step": 8,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.2874987125396729,
+          "actor_s": 3.6631174087524414,
+          "wall_s": 4.95091438293457,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.348259687423706
+        },
+        {
+          "step": 9,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.2879366874694824,
+          "actor_s": 4.166346549987793,
+          "wall_s": 5.454200267791748,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482722043991089
+        },
+        {
+          "step": 10,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.3730746507644653,
+          "actor_s": 3.834855556488037,
+          "wall_s": 5.208283424377441,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482667207717896
+        },
+        {
+          "step": 11,
+          "warmup": false,
+          "profiled": false,
+          "teacher_s": 1.304076075553894,
+          "actor_s": 3.5047411918640137,
+          "wall_s": 4.808938980102539,
+          "peak_allocated_gib": 17.031185150146484,
+          "peak_reserved_gib": 20.8984375,
+          "loss": 0.0963052287697792,
+          "grad_norm": 1.3482674360275269
+        }
+      ],
+      "median_seconds": {
+        "teacher_s": 1.3456001281738281,
+        "actor_s": 3.6631174087524414,
+        "wall_s": 4.95091438293457
+      },
+      "peak_allocated_gib": 17.031185150146484,
+      "source": "outputs/full-kl-confirmation-20261023/4-precompute/pipeline.json"
+    }
+  ],
+  "pooled_medians_seconds": {
+    "precompute": {
+      "teacher_s": 1.3438301086425781,
+      "actor_s": 3.718566417694092,
+      "wall_s": 5.080281972885132
+    },
+    "fused_candidate": {
+      "teacher_s": 1.398312747478485,
+      "actor_s": 3.479628086090088,
+      "wall_s": 4.884673118591309
+    }
+  },
+  "time_reduction_fraction": {
+    "actor_s": 0.06425549654486773,
+    "wall_s": 0.038503542783223765
+  },
+  "figure_audit": {
+    "actor_s": "[]",
+    "wall_s": "[]"
+  }
+}

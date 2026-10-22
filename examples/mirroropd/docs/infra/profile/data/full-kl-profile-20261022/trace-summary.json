@@ -3,9 +3,10 @@
     "source": "outputs/full-kl-profile-20261022/e2e-io0/traces/actor-rollout_train_step3_rank0-of-4_pid2246916_20261023041440580.json.gz",
     "kernel_sum_ms_by_category": {
       "Pointwise/reduce": 2163.763142999999,
-      "GEMM": 2954.949590999989,
+      "GEMM": 1921.5489360000006,
       "Other": 41.39124200000002,
       "NCCL": 1091.202747000001,
+      "Attention": 1033.4006549999995,
       "Fused KL": 0.011200000000000002
     },
     "devices": {
@@ -24,8 +25,9 @@
     "source": "outputs/full-kl-profile-20261022/e2e-io1/traces/actor-rollout_train_step3_rank0-of-4_pid2276309_20261023043107150.json.gz",
     "kernel_sum_ms_by_category": {
       "Pointwise/reduce": 2113.2297250000092,
-      "GEMM": 2906.1486389999986,
+      "GEMM": 1902.7754539999983,
       "Other": 41.31352900000012,
+      "Attention": 1003.3731850000003,
       "NCCL": 1462.7277580000002,
       "Fused KL": 0.008157999999999999
     },
@@ -121,7 +123,8 @@
       "NCCL": 892.2057459999994,
       "Pointwise/reduce": 927.9901889999999,
       "Other": 22.134138999999994,
-      "GEMM": 1305.3804229999973,
+      "GEMM": 837.1172050000042,
+      "Attention": 468.2632179999998,
       "Fused KL": 0.006047
     },
     "devices": {
@@ -140,9 +143,10 @@
     "source": "outputs/full-kl-profile-20261022/pipeline-chunk/pipeline-rank0.json.gz",
     "kernel_sum_ms_by_category": {
       "Pointwise/reduce": 930.8141990000013,
-      "GEMM": 1299.9317269999983,
+      "GEMM": 833.4547170000012,
       "NCCL": 1121.6155929999995,
       "Other": 22.15076899999999,
+      "Attention": 466.4770099999999,
       "Fused KL": 0.005952000000000001
     },
     "devices": {
@@ -161,9 +165,10 @@
     "source": "outputs/full-kl-profile-20261022/pipeline-fused/pipeline-rank0.json.gz",
     "kernel_sum_ms_by_category": {
       "Pointwise/reduce": 744.1661389999975,
-      "GEMM": 1315.6684179999968,
+      "GEMM": 843.4934290000004,
       "NCCL": 1475.0492590000003,
       "Other": 22.145013,
+      "Attention": 472.17498900000004,
       "Fused KL": 36.44455500000002
     },
     "devices": {
@@ -183,7 +188,8 @@
     "kernel_sum_ms_by_category": {
       "Pointwise/reduce": 797.3331969999961,
       "Other": 21.980600999999993,
-      "GEMM": 1115.9113650000015,
+      "Attention": 384.6964880000004,
+      "GEMM": 731.2148770000007,
       "NCCL": 930.9598619999997,
       "Fused KL": 0.006304000000000001
     },

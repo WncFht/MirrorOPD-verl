@@ -1,0 +1,47 @@
+{
+  "pid": 2324057,
+  "jobs": {
+    "1-precompute": {
+      "returncode": 0,
+      "wall_seconds": 129.03366818279028
+    },
+    "2-fused_candidate": {
+      "returncode": 0,
+      "wall_seconds": 118.98751209676266
+    },
+    "3-fused_candidate": {
+      "returncode": 0,
+      "wall_seconds": 122.95514322072268
+    },
+    "4-precompute": {
+      "returncode": 0,
+      "wall_seconds": 127.01835475862026
+    }
+  },
+  "source_commit": "fc81ec6a9daf62ee637633447586b24743edbe2c",
+  "state": "completed",
+  "updated_at": "2026-10-22T21:32:22.089955+00:00",
+  "current_job": "4-precompute",
+  "gpu_snapshot": {
+    "0": {
+      "uuid": "GPU-cb48e54c-5152-b595-cd31-bde2562e143e",
+      "memory_mib": 1,
+      "utilization": 0
+    },
+    "1": {
+      "uuid": "GPU-563e2493-6610-81f0-59fd-20324f42e71f",
+      "memory_mib": 1,
+      "utilization": 0
+    },
+    "2": {
+      "uuid": "GPU-ecc2a4cb-762d-1079-e78f-08790fec88ce",
+      "memory_mib": 1,
+      "utilization": 0
+    },
+    "3": {
+      "uuid": "GPU-8059084a-ff75-6775-1834-4f2c79cbfb7d",
+      "memory_mib": 1,
+      "utilization": 0
+    }
+  }
+}
