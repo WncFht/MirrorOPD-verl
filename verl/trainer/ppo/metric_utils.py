@@ -426,6 +426,30 @@ class RolloutMoELoadBalanceMetricsAccumulator:
         return metrics
 
 
+def compute_tool_call_metrics(values):
+    """Unknown/custom-loop counts are not zero tool calls."""
+    values = list(values)
+    known = [
+        float(v)
+        for v in values
+        if isinstance(v, (int, float, np.number))
+        and not isinstance(v, (bool, np.bool_))
+        and np.isfinite(v)
+        and v >= 0
+        and float(v).is_integer()
+    ]
+    result = {"tool_call_counts/known_fraction": len(known) / len(values) if values else float("nan")}
+    if known:
+        result.update(
+            {
+                "tool_call_counts/mean": float(np.mean(known)),
+                "tool_call_counts/min": min(known),
+                "tool_call_counts/max": max(known),
+            }
+        )
+    return result
+
+
 def compute_data_metrics(batch: DataProto, use_critic: bool = True) -> dict[str, Any]:
     """
     Computes various metrics from a batch of data for PPO training.
@@ -600,10 +624,7 @@ def compute_data_metrics(batch: DataProto, use_critic: bool = True) -> dict[str,
         metrics["num_turns/mean"] = num_turns.mean()
 
     if "tool_call_counts" in batch.non_tensor_batch:
-        tool_call_counts = batch.non_tensor_batch["tool_call_counts"]
-        metrics["tool_call_counts/min"] = tool_call_counts.min()
-        metrics["tool_call_counts/max"] = tool_call_counts.max()
-        metrics["tool_call_counts/mean"] = tool_call_counts.mean()
+        metrics.update(compute_tool_call_metrics(batch.non_tensor_batch["tool_call_counts"]))
 
     return metrics
 
@@ -799,6 +820,9 @@ def compute_variance_proxy_metrics(batch: DataProto, gradient_norm: float = None
         }
     )
 
+    if gradient_norm is None:
+        metrics.pop("variance_proxy/proxy1_signal_strength", None)
+        metrics.pop("variance_proxy/proxy3_pure_noise", None)
     return metrics
 
 

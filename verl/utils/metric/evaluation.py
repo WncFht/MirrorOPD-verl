@@ -88,6 +88,7 @@ def evaluation_metrics(
     source_fields=None,
     resamples=256,
     seed=42,
+    _include_observed=True,
 ):
     """Report every supported k on the same prompt population.
 
@@ -150,12 +151,22 @@ def evaluation_metrics(
             for field, value in row.items()
             if isinstance(value, Real)
             and not field.startswith("__")
-            and field not in {"pred", "uid", "prompt_id", "sample_index", "step", "response_length", "num_turns"}
+            and field
+            not in {
+                "pred",
+                "uid",
+                "prompt_id",
+                "sample_index",
+                "step",
+                "response_length",
+                "num_turns",
+                "tool_call_counts",
+            }
         }
         declared = (source_fields or {}).get(source, [])
         if isinstance(declared, str) or any(not isinstance(field, str) for field in declared):
             raise ValueError("Source metric_fields must be a collection of score names")
-        numeric_fields.update(declared)
+        numeric_fields.update(field for field in declared if field != "pred")
         if source in ALIASES:
             numeric_fields.add("acc")
         main = (
@@ -193,8 +204,15 @@ def evaluation_metrics(
                 result[prefix + name + "_ci_low"] = float(lower)
                 result[prefix + name + "_ci_high"] = float(upper)
 
-        for raw_field, label in [("__response_length__", "response_length"), ("__num_turns__", "num_turns")]:
+        for raw_field, label in [
+            ("__response_length__", "response_length"),
+            ("__num_turns__", "num_turns"),
+            ("__tool_calls__", "tool_calls"),
+        ]:
+            if raw_field not in infos:
+                continue
             measured = [float(r[raw_field]) for r in all_rows if _finite(r.get(raw_field))]
+            result[prefix + f"generation/{label}/observed_count"] = len(measured)
             if measured:
                 for stat, value in [
                     ("mean", np.mean(measured)),
@@ -240,17 +258,22 @@ def evaluation_metrics(
                         math.comb(int(v.sum()), k) / math.comb(len(v), k) if v.sum() >= k else 0 for v in values
                     ]
                     report(f"acc/all_correct@{k}", all_correct)
+                    report(f"acc/all_correct@{k}_subset_std", [math.sqrt(v * (1 - v)) for v in all_correct], ci=False)
                 else:
                     for label, best in (("best", True), ("worst", False)):
                         moments = [_order_moments(v, k, best) for v in values]
                         report(f"{component}/{label}@{k}", [m[0] for m in moments])
                         report(f"{component}/{label}@{k}_subset_std", [m[1] for m in moments], ci=False)
         # Voting is an accuracy operation, never a generic transformation of all scores.
+        voting_defined = (
+            source in ALIASES or "pred" in declared or any(_prediction_key(r.get("pred")) is not None for r in all_rows)
+        )
         if "acc" in numeric_fields:
+            result[prefix + "acc/voting_defined"] = float(voting_defined)
             result[prefix + "acc/prediction_missing_count"] = sum(
                 _prediction_key(r.get("pred")) is None for r in all_rows
             )
-        if "acc" in numeric_fields and any(_prediction_key(row.get("pred")) is not None for row in all_rows):
+        if "acc" in numeric_fields and voting_defined:
             votes = defaultdict(list)
             variances = defaultdict(list)
             mc_variances = defaultdict(list)
@@ -281,6 +304,42 @@ def evaluation_metrics(
                 report(f"acc/majority@{k}", votes[k])
                 report(f"acc/majority@{k}_subset_std", variances[k], ci=False)
                 result[prefix + f"acc/majority@{k}_mc_se"] = math.sqrt(sum(mc_variances[k])) / len(prompts)
+        # Success-only curves are identical when every score is present. When
+        # failures occur, preserve the conditional view with its own population
+        # counts instead of silently changing the main denominator.
+        if _include_observed:
+            for component, field in field_names.items():
+                missing = result[prefix + component + "/missing_count"]
+                observed_rows = [
+                    (identity, row) for identity, rows, _ in prompts for row in rows if _finite(row.get(field))
+                ]
+                if not missing or not observed_rows:
+                    continue
+                child_source = source + "__observed"
+                child_infos = {field: [row[field] for _, row in observed_rows]}
+                if field == "acc":
+                    child_infos["pred"] = [row.get("pred") for _, row in observed_rows]
+                child = evaluation_metrics(
+                    [child_source] * len(observed_rows),
+                    [identity for identity, _ in observed_rows],
+                    child_infos,
+                    source_fields={child_source: [field] + (["pred"] if field == "acc" and voting_defined else [])},
+                    resamples=resamples,
+                    seed=seed,
+                    _include_observed=False,
+                )
+                child_prefix = f"eval/{dataset_slug(child_source)}/"
+                for name, value in child.items():
+                    suffix = name[len(child_prefix) :]
+                    if suffix.startswith(component + "/"):
+                        result[prefix + component + "_observed/" + suffix[len(component) + 1 :]] = value
+                    elif suffix in (
+                        "prompt_count",
+                        "response_count",
+                        "samples_per_prompt_min",
+                        "samples_per_prompt_max",
+                    ):
+                        result[prefix + component + "_observed/" + suffix] = value
     return result
 
 
@@ -315,6 +374,7 @@ def evaluation_records(
         row.update(
             data_source=source,
             prompt_id=metadata["prompt_id"],
+            metric_fields=metadata.get("metric_fields", []),
             sample_index=int(index),
             uid=f"{uid}_{index}",
             input=inputs[i],
@@ -337,6 +397,7 @@ def evaluation_records(
                 dict(
                     data_source=source,
                     prompt_id=metadata["prompt_id"],
+                    metric_fields=metadata.get("metric_fields", []),
                     sample_index=index,
                     uid=f"{uid}_{index}",
                     input="",
