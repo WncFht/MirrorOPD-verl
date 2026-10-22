@@ -1,0 +1,230 @@
+{
+  "scope": "production operators only; BF16 input, FP32 logits/accumulation, no backbone/FSDP/TQ",
+  "torch": "2.11.0+cu128",
+  "gpu": "NVIDIA H800",
+  "chunk": 512,
+  "vocab": 151936,
+  "hidden": 1536,
+  "rows": [
+    {
+      "tokens": 512,
+      "backend": "dense",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.0,
+        "head_relative_l2": 0.0
+      },
+      "value": 0.9991413950920105,
+      "wall_ms_median": 4.946894943714142,
+      "wall_ms_samples": [
+        5.350768566131592,
+        5.086719989776611,
+        4.946894943714142,
+        4.941821098327637,
+        4.942715167999268
+      ],
+      "resident_gib": 0.9365234375,
+      "peak_allocated_gib": 2.3855061531066895,
+      "incremental_peak_gib": 1.4489827156066895,
+      "peak_reserved_gib": 2.927734375
+    },
+    {
+      "tokens": 512,
+      "backend": "recompute",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.00018953453400172293,
+        "head_relative_l2": 0.00014290136459749192
+      },
+      "value": 0.9991413950920105,
+      "wall_ms_median": 9.600967168807983,
+      "wall_ms_samples": [
+        14.479152858257294,
+        9.600967168807983,
+        9.830497205257416,
+        9.558066725730896,
+        9.57777351140976
+      ],
+      "resident_gib": 0.9365234375,
+      "peak_allocated_gib": 3.8374080657958984,
+      "incremental_peak_gib": 2.9008846282958984,
+      "peak_reserved_gib": 4.81640625
+    },
+    {
+      "tokens": 512,
+      "backend": "streaming",
+      "errors": {
+        "value_abs": 5.960464477539063e-08,
+        "hidden_relative_l2": 0.00042182509787380695,
+        "head_relative_l2": 0.0001530908775748685
+      },
+      "value": 0.9991414546966553,
+      "wall_ms_median": 10.971345007419586,
+      "wall_ms_samples": [
+        13.402484357357025,
+        10.97600907087326,
+        10.971345007419586,
+        10.963201522827148,
+        10.962583124637604
+      ],
+      "resident_gib": 0.9365234375,
+      "peak_allocated_gib": 2.2760066986083984,
+      "incremental_peak_gib": 1.3394832611083984,
+      "peak_reserved_gib": 2.634765625
+    },
+    {
+      "tokens": 512,
+      "backend": "precompute",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.00011839787475764751,
+        "head_relative_l2": 8.164229802787304e-05
+      },
+      "value": 0.9991413950920105,
+      "wall_ms_median": 7.476523518562317,
+      "wall_ms_samples": [
+        18.3175727725029,
+        7.509633898735046,
+        7.476523518562317,
+        7.471546530723572,
+        7.471896708011627
+      ],
+      "resident_gib": 0.9365234375,
+      "peak_allocated_gib": 4.416995048522949,
+      "incremental_peak_gib": 3.480471611022949,
+      "peak_reserved_gib": 4.81640625
+    },
+    {
+      "tokens": 512,
+      "backend": "liger",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.000289847725071013,
+        "head_relative_l2": 0.00014658496365882456
+      },
+      "value": 0.9991413950920105,
+      "wall_ms_median": 112.48061060905457,
+      "wall_ms_samples": [
+        137.93285191059113,
+        112.39995807409286,
+        113.58579993247986,
+        111.71792447566986,
+        112.48061060905457
+      ],
+      "resident_gib": 0.9365234375,
+      "peak_allocated_gib": 2.268073081970215,
+      "incremental_peak_gib": 1.3315496444702148,
+      "peak_reserved_gib": 2.634765625
+    },
+    {
+      "tokens": 4096,
+      "backend": "dense",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.0,
+        "head_relative_l2": 0.0
+      },
+      "value": 0.9998020529747009,
+      "wall_ms_median": 37.56366670131683,
+      "wall_ms_samples": [
+        66.53162837028503,
+        37.53383457660675,
+        37.5543013215065,
+        37.61240094900131,
+        37.56366670131683
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 12.54884386062622,
+      "incremental_peak_gib": 11.59181261062622,
+      "peak_reserved_gib": 12.900390625
+    },
+    {
+      "tokens": 4096,
+      "backend": "recompute",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.0008240142487920821,
+        "head_relative_l2": 0.0002449123130645603
+      },
+      "value": 0.9998020529747009,
+      "wall_ms_median": 70.39530575275421,
+      "wall_ms_samples": [
+        79.38829809427261,
+        70.36923617124557,
+        70.5166831612587,
+        70.39530575275421,
+        70.38777321577072
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 3.878450393676758,
+      "incremental_peak_gib": 2.921419143676758,
+      "peak_reserved_gib": 4.796875
+    },
+    {
+      "tokens": 4096,
+      "backend": "streaming",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.0009225003886967897,
+        "head_relative_l2": 0.00025392250972799957
+      },
+      "value": 0.9998020529747009,
+      "wall_ms_median": 81.53136819601059,
+      "wall_ms_samples": [
+        84.488146007061,
+        81.55599981546402,
+        81.53136819601059,
+        81.48400485515594,
+        81.42296224832535
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 2.327058792114258,
+      "incremental_peak_gib": 1.3700275421142578,
+      "peak_reserved_gib": 2.615234375
+    },
+    {
+      "tokens": 4096,
+      "backend": "precompute",
+      "errors": {
+        "value_abs": 5.960464477539063e-08,
+        "hidden_relative_l2": 0.0008236989961005747,
+        "head_relative_l2": 0.00018571809050627053
+      },
+      "value": 0.9998021125793457,
+      "wall_ms_median": 48.37673902511597,
+      "wall_ms_samples": [
+        143.62835884094238,
+        48.28520119190216,
+        48.37673902511597,
+        48.44220727682114,
+        48.35054278373718
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 4.458010673522949,
+      "incremental_peak_gib": 3.500979423522949,
+      "peak_reserved_gib": 5.66796875
+    },
+    {
+      "tokens": 4096,
+      "backend": "liger",
+      "errors": {
+        "value_abs": 2.384185791015625e-07,
+        "hidden_relative_l2": 0.000903370208106935,
+        "head_relative_l2": 0.00024069154460448772
+      },
+      "value": 0.9998018145561218,
+      "wall_ms_median": 130.69120794534683,
+      "wall_ms_samples": [
+        135.1507604122162,
+        130.69120794534683,
+        130.45524060726166,
+        130.55067509412766,
+        131.71133399009705
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 2.4747166633605957,
+      "incremental_peak_gib": 1.5176854133605957,
+      "peak_reserved_gib": 2.689453125
+    }
+  ]
+}
