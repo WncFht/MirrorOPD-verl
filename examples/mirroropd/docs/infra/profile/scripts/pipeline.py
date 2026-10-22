@@ -84,10 +84,13 @@ def main():
     p.add_argument("--max-length", type=int, default=8192)
     p.add_argument("--budget", type=int, default=16384)
     p.add_argument("--steps", type=int, default=4)
+    p.add_argument("--warmup-steps", type=int, default=1)
     p.add_argument("--no-checkpoint", action="store_true")
     p.add_argument("--trace", action="store_true")
     p.add_argument("--memory", action="store_true")
     args = p.parse_args()
+    if not 0 <= args.warmup_steps < args.steps - int(args.trace):
+        p.error("warmup must leave at least one unprofiled measured step")
     if args.backend == "fused_candidate":
         from fused_candidate import FusedPrecomputedKL
 
@@ -189,7 +192,7 @@ def main():
         metrics = tu.get(output, "metrics")
         row = dict(
             step=step,
-            warmup=step == 0,
+            warmup=step < args.warmup_steps,
             profiled=capture,
             teacher_s=elapsed[0].item(),
             actor_s=elapsed[1].item(),

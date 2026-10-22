@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "step": 0,
+      "key": "loss",
+      "absolute_delta": 6.705522537231445e-08,
+      "tolerance": 0.0021261045753955842
+    },
+    {
+      "step": 0,
+      "key": "grad_norm",
+      "absolute_delta": 3.933906555175781e-06,
+      "tolerance": 0.02716521520614624
+    },
+    {
+      "step": 1,
+      "key": "loss",
+      "absolute_delta": 6.705522537231445e-08,
+      "tolerance": 0.0021261045753955842
+    },
+    {
+      "step": 1,
+      "key": "grad_norm",
+      "absolute_delta": 8.463859558105469e-06,
+      "tolerance": 0.027165229511260984
+    },
+    {
+      "step": 2,
+      "key": "loss",
+      "absolute_delta": 6.705522537231445e-08,
+      "tolerance": 0.0021261045753955842
+    },
+    {
+      "step": 2,
+      "key": "grad_norm",
+      "absolute_delta": 1.0609626770019531e-05,
+      "tolerance": 0.02716526765823364
+    },
+    {
+      "step": 3,
+      "key": "loss",
+      "absolute_delta": 6.705522537231445e-08,
+      "tolerance": 0.0021261045753955842
+    },
+    {
+      "step": 3,
+      "key": "grad_norm",
+      "absolute_delta": 1.1920928955078125e-07,
+      "tolerance": 0.027165365409851074
+    }
+  ]
+}

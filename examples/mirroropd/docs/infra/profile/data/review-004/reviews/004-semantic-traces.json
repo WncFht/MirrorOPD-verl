@@ -1,0 +1,536 @@
+[
+  {
+    "semantic_kernel_sum_ms": {
+      "full_vocab/normalization_and_kl": 111.72303299999994,
+      "full_vocab/grad_logits": 45.50841500000001,
+      "full_vocab/grad_hidden": 19.702187,
+      "full_vocab/grad_head": 61.008588000000024,
+      "full_vocab/student_projection": 22.24367399999999,
+      "full_vocab/teacher_projection": 22.194840000000003,
+      "unattributed": 0.559643,
+      "full_vocab/backward_apply": 1.033302
+    },
+    "semantic_kernel_count": {
+      "full_vocab/normalization_and_kl": 508,
+      "full_vocab/grad_logits": 192,
+      "full_vocab/grad_hidden": 128,
+      "full_vocab/grad_head": 64,
+      "full_vocab/student_projection": 63,
+      "full_vocab/teacher_projection": 63,
+      "unattributed": 5,
+      "full_vocab/backward_apply": 2
+    },
+    "top_kernels": [
+      {
+        "name": "nvjet_tss_192x192_64x3_2x1_v_badd_coopB_NTN",
+        "sum_ms": 61.008588000000024,
+        "count": 64
+      },
+      {
+        "name": "void at::native::(anonymous namespace)::cunn_SoftMaxForward<4, float, float, float, at::native::(anonymous namespace)::LogSoftMaxForwardEpilogue>(float*, float const*, int)",
+        "sum_ms": 52.43144599999997,
+        "count": 126
+      },
+      {
+        "name": "nvjet_tss_256x128_64x4_1x2_h_bz_coopA_TNT",
+        "sum_ms": 44.438514000000005,
+        "count": 126
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+        "sum_ms": 38.89784900000002,
+        "count": 128
+      },
+      {
+        "name": "nvjet_tss_192x128_64x5_1x2_h_bx_coopB_splitK_NNT",
+        "sum_ms": 19.302088,
+        "count": 64
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<float>, std::array<char*, 3ul> >(int, at::native::CUDAFunctor_add<float>, std::array<char*, 3ul>)",
+        "sum_ms": 19.235947,
+        "count": 127
+      },
+      {
+        "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<float> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<float> const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<float> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<float> const&)::{lambda(int)#1})",
+        "sum_ms": 16.220522999999996,
+        "count": 64
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::exp_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::exp_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+        "sum_ms": 12.982988999999998,
+        "count": 63
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<8, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+        "sum_ms": 10.386656999999998,
+        "count": 66
+      },
+      {
+        "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>)",
+        "sum_ms": 7.6299519999999985,
+        "count": 128
+      },
+      {
+        "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+        "sum_ms": 1.033302,
+        "count": 2
+      },
+      {
+        "name": "void cublasLt::splitKreduce_kernel<32, 16, int, float, float, float, float, false, float, float, float, true, false, false>(cublasLt::cublasSplitKParams<float>, float const*, float const*, float*, float*, float const*, float const*, float const*, float const*, float*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)",
+        "sum_ms": 0.40009899999999987,
+        "count": 64
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul> >(int, at::native::BUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul>)",
+        "sum_ms": 0.003584,
+        "count": 2
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)",
+        "sum_ms": 0.002144,
+        "count": 1
+      }
+    ],
+    "trace_statistics": {
+      "source": "outputs/full-kl-profile-20261022/kernel/head-precompute-n32768.json.gz",
+      "kernel_sum_ms_by_category": {
+        "Pointwise/reduce": 158.82439300000019,
+        "GEMM": 125.14928899999995
+      },
+      "devices": {
+        "0": {
+          "compute_union_ms": 283.9736813964844,
+          "nccl_union_ms": 0.0,
+          "kernel_union_ms": 283.9736813964844,
+          "overlap_ms": 0.0,
+          "nccl_without_compute_ms": 0.0,
+          "first_to_last_kernel_ms": 286.4240251464844
+        }
+      },
+      "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+    },
+    "source": "outputs/full-kl-profile-20261022/kernel/head-precompute-n32768.json.gz"
+  },
+  {
+    "semantic_kernel_sum_ms": {
+      "full_vocab/fused_kl_and_grad_logits": 29.878857000000007,
+      "full_vocab/grad_hidden": 20.13021399999999,
+      "full_vocab/grad_head": 61.081233999999995,
+      "full_vocab/student_projection": 22.719668000000006,
+      "full_vocab/teacher_projection": 22.460373999999998,
+      "unattributed": 0.560667,
+      "full_vocab/backward_apply": 1.06239
+    },
+    "semantic_kernel_count": {
+      "full_vocab/fused_kl_and_grad_logits": 316,
+      "full_vocab/grad_hidden": 128,
+      "full_vocab/grad_head": 64,
+      "full_vocab/student_projection": 63,
+      "full_vocab/teacher_projection": 63,
+      "unattributed": 5,
+      "full_vocab/backward_apply": 2
+    },
+    "top_kernels": [
+      {
+        "name": "nvjet_tss_192x192_64x3_2x1_v_badd_coopB_NTN",
+        "sum_ms": 61.081233999999995,
+        "count": 64
+      },
+      {
+        "name": "nvjet_tss_256x128_64x4_1x2_h_bz_coopA_TNT",
+        "sum_ms": 45.180041999999986,
+        "count": 126
+      },
+      {
+        "name": "nvjet_tss_192x128_64x5_1x2_h_bx_coopB_splitK_NNT",
+        "sum_ms": 19.725006,
+        "count": 64
+      },
+      {
+        "name": "_gradient",
+        "sum_ms": 15.880268999999998,
+        "count": 63
+      },
+      {
+        "name": "_partials",
+        "sum_ms": 13.340356000000002,
+        "count": 63
+      },
+      {
+        "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+        "sum_ms": 1.06239,
+        "count": 2
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<8, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+        "sum_ms": 0.555195,
+        "count": 2
+      },
+      {
+        "name": "void cublasLt::splitKreduce_kernel<32, 16, int, float, float, float, float, false, float, float, float, true, false, false>(cublasLt::cublasSplitKParams<float>, float const*, float const*, float*, float*, float const*, float const*, float const*, float const*, float*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)",
+        "sum_ms": 0.4052080000000001,
+        "count": 64
+      },
+      {
+        "name": "_rows",
+        "sum_ms": 0.27366000000000007,
+        "count": 63
+      },
+      {
+        "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>)",
+        "sum_ms": 0.259197,
+        "count": 63
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<float>, std::array<char*, 3ul> >(int, at::native::CUDAFunctor_add<float>, std::array<char*, 3ul>)",
+        "sum_ms": 0.12537500000000007,
+        "count": 64
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul> >(int, at::native::BUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul>)",
+        "sum_ms": 0.003872,
+        "count": 2
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>)",
+        "sum_ms": 0.0016,
+        "count": 1
+      }
+    ],
+    "trace_statistics": {
+      "source": "outputs/full-kl-profile-20261022/kernel/head-fused_candidate-n32768.json.gz",
+      "kernel_sum_ms_by_category": {
+        "Pointwise/reduce": 2.007629,
+        "GEMM": 126.39149000000002,
+        "Fused KL": 29.494284999999998
+      },
+      "devices": {
+        "0": {
+          "compute_union_ms": 157.89340551757812,
+          "nccl_union_ms": 0.0,
+          "kernel_union_ms": 157.89340551757812,
+          "overlap_ms": 0.0,
+          "nccl_without_compute_ms": 0.0,
+          "first_to_last_kernel_ms": 159.42639916992186
+        }
+      },
+      "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+    },
+    "source": "outputs/full-kl-profile-20261022/kernel/head-fused_candidate-n32768.json.gz"
+  },
+  {
+    "semantic_kernel_sum_ms": {
+      "full_vocab/teacher_phase_including_offload": 33.218413999999996,
+      "full_vocab/teacher_forward": 17.009491,
+      "full_vocab/backbone": 990.9222819999983,
+      "full_vocab/actor_phase_including_offload": 178.40188,
+      "full_vocab/student_forward": 16.989719,
+      "full_vocab/head_loss": 11.427596,
+      "full_vocab/student_projection": 27.793667999999993,
+      "full_vocab/teacher_projection": 27.861098,
+      "full_vocab/normalization_and_kl": 137.5297349999999,
+      "full_vocab/grad_logits": 55.313719000000006,
+      "full_vocab/grad_hidden": 24.08263400000002,
+      "full_vocab/grad_head": 75.247908,
+      "unattributed": 1549.1229729999975,
+      "full_vocab/backward_apply": 2.795427
+    },
+    "semantic_kernel_count": {
+      "full_vocab/teacher_phase_including_offload": 172,
+      "full_vocab/teacher_forward": 12,
+      "full_vocab/backbone": 9858,
+      "full_vocab/actor_phase_including_offload": 435,
+      "full_vocab/student_forward": 34,
+      "full_vocab/head_loss": 39,
+      "full_vocab/student_projection": 79,
+      "full_vocab/teacher_projection": 79,
+      "full_vocab/normalization_and_kl": 632,
+      "full_vocab/grad_logits": 237,
+      "full_vocab/grad_hidden": 158,
+      "full_vocab/grad_head": 79,
+      "unattributed": 12851,
+      "full_vocab/backward_apply": 6
+    },
+    "top_kernels": [
+      {
+        "name": "ncclDevKernel_AllGather_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+        "sum_ms": 547.3701360000003,
+        "count": 276
+      },
+      {
+        "name": "void flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::bfloat16_t> >, false, true, false, false, false, true, false, false>(flash::Flash_fwd_params)",
+        "sum_ms": 246.9238299999999,
+        "count": 252
+      },
+      {
+        "name": "void flash::flash_bwd_dq_dk_dv_loop_seqk_parallel_kernel<Flash_bwd_kernel_traits<128, 64, 128, 8, 2, 4, 2, false, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 64, 128, 8, cutlass::bfloat16_t> >, false, true, false, false, false, true, false>(flash::Flash_bwd_params)",
+        "sum_ms": 212.602357,
+        "count": 84
+      },
+      {
+        "name": "ncclDevKernel_AllReduce_Sum_u64_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+        "sum_ms": 162.392405,
+        "count": 8
+      },
+      {
+        "name": "ncclDevKernel_ReduceScatter_Sum_f32_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+        "sum_ms": 149.090552,
+        "count": 31
+      },
+      {
+        "name": "nvjet_tst_256x160_64x4_1x1_h_bz_coopA_TNT",
+        "sum_ms": 146.29928800000008,
+        "count": 336
+      },
+      {
+        "name": "nvjet_tst_192x192_64x4_1x2_h_bz_coopB_TNN",
+        "sum_ms": 138.166784,
+        "count": 308
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<8, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+        "sum_ms": 106.4982880000001,
+        "count": 591
+      },
+      {
+        "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+        "sum_ms": 91.38413300000025,
+        "count": 2025
+      },
+      {
+        "name": "nvjet_tst_192x192_64x3_1x2_h_bz_coopB_NTN",
+        "sum_ms": 79.68723399999999,
+        "count": 168
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+        "sum_ms": 76.19261199999998,
+        "count": 671
+      },
+      {
+        "name": "nvjet_tss_192x192_64x3_2x1_v_badd_coopB_NTN",
+        "sum_ms": 75.247908,
+        "count": 79
+      },
+      {
+        "name": "void at::native::(anonymous namespace)::cunn_SoftMaxForward<4, float, float, float, at::native::(anonymous namespace)::LogSoftMaxForwardEpilogue>(float*, float const*, int)",
+        "sum_ms": 64.808203,
+        "count": 158
+      },
+      {
+        "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+        "sum_ms": 56.02810300000005,
+        "count": 1029
+      },
+      {
+        "name": "nvjet_tss_256x128_64x4_1x2_h_bz_coopA_TNT",
+        "sum_ms": 54.072253999999994,
+        "count": 152
+      },
+      {
+        "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+        "sum_ms": 51.54029800000001,
+        "count": 681
+      },
+      {
+        "name": "nvjet_tst_192x192_64x3_1x2_h_bz_coopB_NNN",
+        "sum_ms": 46.32366200000002,
+        "count": 140
+      },
+      {
+        "name": "nvjet_tst_192x192_64x3_2x1_v_bz_coopB_NTN",
+        "sum_ms": 45.714029000000004,
+        "count": 84
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<8, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+        "sum_ms": 42.866015999999924,
+        "count": 778
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<8, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1}, std::array<char*, 2ul>)",
+        "sum_ms": 42.831333999999984,
+        "count": 252
+      }
+    ],
+    "trace_statistics": {
+      "source": "outputs/full-kl-profile-20261022/pipeline-baseline/pipeline-rank0.json.gz",
+      "kernel_sum_ms_by_category": {
+        "NCCL": 892.2057459999994,
+        "Pointwise/reduce": 927.9901889999999,
+        "Other": 22.134138999999994,
+        "GEMM": 1305.3804229999973,
+        "Fused KL": 0.006047
+      },
+      "devices": {
+        "0": {
+          "compute_union_ms": 2237.129462402344,
+          "nccl_union_ms": 892.2057463378907,
+          "kernel_union_ms": 2684.092697998047,
+          "overlap_ms": 445.2425107421875,
+          "nccl_without_compute_ms": 446.9632355957031,
+          "first_to_last_kernel_ms": 5313.954762207031
+        }
+      },
+      "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+    },
+    "source": "outputs/full-kl-profile-20261022/pipeline-baseline/pipeline-rank0.json.gz"
+  },
+  {
+    "semantic_kernel_sum_ms": {
+      "full_vocab/backbone": 1044.9397170000054,
+      "full_vocab/student_forward": 112.99781100000003,
+      "full_vocab/head_loss": 12.486626,
+      "full_vocab/student_projection": 28.178978,
+      "full_vocab/teacher_projection": 28.149884,
+      "full_vocab/fused_kl_and_grad_logits": 36.68094000000002,
+      "full_vocab/grad_hidden": 23.286897000000007,
+      "full_vocab/grad_head": 44.461653999999996,
+      "full_vocab/actor_phase_including_offload": 355.9478469999998,
+      "unattributed": 1731.7797370000064,
+      "full_vocab/backward_apply": 2.95885,
+      "full_vocab/teacher_phase_including_offload": 167.11130499999996,
+      "full_vocab/teacher_forward": 4.493138000000001
+    },
+    "semantic_kernel_count": {
+      "full_vocab/backbone": 9858,
+      "full_vocab/student_forward": 34,
+      "full_vocab/head_loss": 39,
+      "full_vocab/student_projection": 40,
+      "full_vocab/teacher_projection": 40,
+      "full_vocab/fused_kl_and_grad_logits": 200,
+      "full_vocab/grad_hidden": 80,
+      "full_vocab/grad_head": 40,
+      "full_vocab/actor_phase_including_offload": 435,
+      "unattributed": 12851,
+      "full_vocab/backward_apply": 6,
+      "full_vocab/teacher_phase_including_offload": 172,
+      "full_vocab/teacher_forward": 12
+    },
+    "top_kernels": [
+      {
+        "name": "ncclDevKernel_AllGather_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+        "sum_ms": 711.8822950000005,
+        "count": 276
+      },
+      {
+        "name": "ncclDevKernel_AllReduce_Sum_u64_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+        "sum_ms": 295.931645,
+        "count": 8
+      },
+      {
+        "name": "ncclDevKernel_ReduceScatter_Sum_f32_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+        "sum_ms": 255.98782899999998,
+        "count": 31
+      },
+      {
+        "name": "void flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::bfloat16_t> >, false, true, false, false, false, true, false, false>(flash::Flash_fwd_params)",
+        "sum_ms": 245.8477729999999,
+        "count": 252
+      },
+      {
+        "name": "void flash::flash_bwd_dq_dk_dv_loop_seqk_parallel_kernel<Flash_bwd_kernel_traits<128, 64, 128, 8, 2, 4, 2, false, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 64, 128, 8, cutlass::bfloat16_t> >, false, true, false, false, false, true, false>(flash::Flash_bwd_params)",
+        "sum_ms": 217.53248599999998,
+        "count": 84
+      },
+      {
+        "name": "ncclDevKernel_AllReduce_Sum_f32_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+        "sum_ms": 211.24749,
+        "count": 3
+      },
+      {
+        "name": "nvjet_tst_256x160_64x4_1x1_h_bz_coopA_TNT",
+        "sum_ms": 153.93424900000002,
+        "count": 336
+      },
+      {
+        "name": "nvjet_tst_192x192_64x4_1x2_h_bz_coopB_TNN",
+        "sum_ms": 138.21372100000002,
+        "count": 308
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<8, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+        "sum_ms": 105.8056029999999,
+        "count": 591
+      },
+      {
+        "name": "nvjet_tst_192x192_64x3_1x2_h_bz_coopB_NTN",
+        "sum_ms": 94.08673900000002,
+        "count": 168
+      },
+      {
+        "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+        "sum_ms": 93.28021900000012,
+        "count": 2025
+      },
+      {
+        "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+        "sum_ms": 57.85532700000002,
+        "count": 1029
+      },
+      {
+        "name": "nvjet_tss_320x128_64x3_1x2_h_bz_coopB_TNT",
+        "sum_ms": 53.65250500000001,
+        "count": 74
+      },
+      {
+        "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+        "sum_ms": 53.33024699999999,
+        "count": 681
+      },
+      {
+        "name": "nvjet_tst_192x192_64x3_1x2_h_bz_coopB_NNN",
+        "sum_ms": 52.328935999999985,
+        "count": 140
+      },
+      {
+        "name": "nvjet_tst_192x192_64x3_2x1_v_bz_coopB_NTN",
+        "sum_ms": 49.910045,
+        "count": 84
+      },
+      {
+        "name": "nvjet_tss_192x192_64x3_2x1_v_badd_coopB_NTN",
+        "sum_ms": 44.461653999999996,
+        "count": 40
+      },
+      {
+        "name": "void at::native::vectorized_elementwise_kernel<8, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1}, std::array<char*, 2ul>)",
+        "sum_ms": 41.88837800000002,
+        "count": 252
+      },
+      {
+        "name": "nvjet_tst_256x128_64x4_1x2_h_bz_coopA_TNT",
+        "sum_ms": 40.39494200000002,
+        "count": 140
+      },
+      {
+        "name": "nvjet_tst_256x128_64x4_1x2_h_bz_coopA_NNT",
+        "sum_ms": 38.18036600000001,
+        "count": 168
+      }
+    ],
+    "trace_statistics": {
+      "source": "outputs/full-kl-profile-20261022/pipeline-fused/pipeline-rank0.json.gz",
+      "kernel_sum_ms_by_category": {
+        "Pointwise/reduce": 744.1661389999975,
+        "GEMM": 1315.6684179999968,
+        "NCCL": 1475.0492590000003,
+        "Other": 22.145013,
+        "Fused KL": 36.44455500000002
+      },
+      "devices": {
+        "0": {
+          "compute_union_ms": 2097.2440102539063,
+          "nccl_union_ms": 1475.0492595214844,
+          "kernel_union_ms": 2934.8952316894533,
+          "overlap_ms": 637.3980380859375,
+          "nccl_without_compute_ms": 837.6512214355469,
+          "first_to_last_kernel_ms": 5011.527313232422
+        }
+      },
+      "note": "Kernel sums are GPU work, not additive wall time. NCCL without compute is not necessarily critical-path wait."
+    },
+    "source": "outputs/full-kl-profile-20261022/pipeline-fused/pipeline-rank0.json.gz"
+  }
+]

@@ -27,7 +27,7 @@ def category(name):
     text = name.lower()
     if "nccl" in text:
         return "NCCL"
-    if any(x in text for x in ("gemm", "cublas", "cutlass", "addmm")):
+    if any(x in text for x in ("gemm", "cublas", "cutlass", "addmm", "nvjet", "xmma", "gemv")):
         return "GEMM"
     if any(x in text for x in ("flash", "attention", "fmha")):
         return "Attention"
@@ -172,23 +172,31 @@ def main():
             "NCCL": base[1],
             "Attention": base[2],
             "Fused KL": base[3],
-            "Pointwise/reduce": base[3],
-            "Other": fv.NEUTRALS["baseline"],
+            "Pointwise/reduce": fv.NEUTRALS["baseline"],
+            "Other": fv.NEUTRALS["vmist"],
         }
-        fig, ax = plt.subplots(figsize=(11, max(2.5, len(lanes) * 0.45)))
-        for e in selected:
-            lane = lanes.index(str(e.get("args", {}).get("stream", e["tid"])))
-            ax.broken_barh(
-                [((e["ts"] - origin) / 1000, min(e["dur"], origin + 80000 - e["ts"]) / 1000)],
-                (lane - 0.35, 0.7),
-                facecolors=color_map[category(e["name"])],
-            )
+        from matplotlib.collections import PolyCollection
+
+        fig, ax = plt.subplots(figsize=(7, max(3.0, len(lanes) * 0.45)))
+        # One collection per semantic category, not one series per CUDA launch.
+        for kind in kinds:
+            vertices = []
+            for e in selected:
+                if category(e["name"]) != kind:
+                    continue
+                lane = lanes.index(str(e.get("args", {}).get("stream", e["tid"])))
+                left = (e["ts"] - origin) / 1000
+                right = left + min(e["dur"], origin + 80000 - e["ts"]) / 1000
+                vertices.append([(left, lane - 0.35), (right, lane - 0.35), (right, lane + 0.35), (left, lane + 0.35)])
+            ax.add_collection(PolyCollection(vertices, facecolors=color_map[kind], edgecolors="none"))
+        ax.set_ylim(-0.65, len(lanes) - 0.35)
         from matplotlib.patches import Patch
 
         ax.legend(
             handles=[Patch(color=color_map[k], label=k) for k in kinds],
-            loc="upper left",
-            bbox_to_anchor=(1, 1),
+            loc="lower center",
+            bbox_to_anchor=(0.5, 1.02),
+            ncol=3,
             frameon=False,
         )
         ax.set_yticks(range(len(lanes)), ["stream " + x for x in lanes])
@@ -199,7 +207,7 @@ def main():
         save(
             fig,
             path.parent.name + "-" + path.name.split(".")[0],
-            "Measured trace window; category colors describe kernel names, not SM utilization",
+            "GPU kernels: first 80 ms; full trace available separately",
         )
     (args.root / "trace-summary.json").write_text(json.dumps(stats, indent=2) + "\n")
     (args.root / "figure-audit.json").write_text(json.dumps(audits, indent=2) + "\n")
