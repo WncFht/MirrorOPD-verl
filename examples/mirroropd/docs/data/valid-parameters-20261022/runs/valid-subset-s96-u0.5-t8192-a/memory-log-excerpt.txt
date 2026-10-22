@@ -1,0 +1,20 @@
+(WorkerDict pid=705787) Before FSDP, memory allocated (GB): 0.00, memory reserved (GB): 0.00, device memory used/total (GB): 0.51/79.10
+(WorkerDict pid=705787) After FSDP, memory allocated (GB): 1.68, memory reserved (GB): 2.74, device memory used/total (GB): 4.01/79.10
+(WorkerDict pid=705787) Before FSDP, memory allocated (GB): 0.00, memory reserved (GB): 0.00, device memory used/total (GB): 1.28/79.10
+(WorkerDict pid=705787) After FSDP, memory allocated (GB): 0.83, memory reserved (GB): 1.38, device memory used/total (GB): 2.66/79.10
+(vLLMHttpServer pid=707216) (Worker pid=708069) INFO 10-22 14:46:56 [model_runner.py:302] Model loading took 3.45 GiB and 4.441742 seconds
+(vLLMHttpServer pid=707215) (Worker pid=708091) INFO 10-22 14:47:00 [model_runner.py:302] Model loading took 3.45 GiB and 4.403540 seconds
+(vLLMHttpServer pid=707214) (Worker pid=708120) INFO 10-22 14:47:02 [model_runner.py:302] Model loading took 3.45 GiB and 4.057520 seconds
+(vLLMHttpServer pid=707213) (Worker pid=708140) INFO 10-22 14:47:03 [model_runner.py:302] Model loading took 3.45 GiB and 4.051771 seconds
+(vLLMHttpServer pid=707216) (Worker pid=708069) INFO 10-22 14:47:13 [gpu_worker.py:538] Available KV cache memory: 35.31 GiB
+(vLLMHttpServer pid=707216) (EngineCore pid=707851) INFO 10-22 14:47:13 [kv_cache_utils.py:2146] GPU KV cache size: 1,321,766 tokens
+(vLLMHttpServer pid=707214) (Worker pid=708120) INFO 10-22 14:47:13 [gpu_worker.py:538] Available KV cache memory: 35.36 GiB
+(vLLMHttpServer pid=707214) (EngineCore pid=707965) INFO 10-22 14:47:13 [kv_cache_utils.py:2146] GPU KV cache size: 1,323,606 tokens
+(vLLMHttpServer pid=707215) (Worker pid=708091) INFO 10-22 14:47:13 [gpu_worker.py:538] Available KV cache memory: 35.36 GiB
+(vLLMHttpServer pid=707215) (EngineCore pid=707948) INFO 10-22 14:47:13 [kv_cache_utils.py:2146] GPU KV cache size: 1,323,606 tokens
+(vLLMHttpServer pid=707213) (Worker pid=708140) INFO 10-22 14:47:14 [gpu_worker.py:538] Available KV cache memory: 35.36 GiB
+(vLLMHttpServer pid=707213) (EngineCore pid=707972) INFO 10-22 14:47:14 [kv_cache_utils.py:2146] GPU KV cache size: 1,323,606 tokens
+(vLLMHttpServer pid=707216) (Worker pid=708069) INFO 10-22 14:47:14 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.19 GiB
+(vLLMHttpServer pid=707214) (Worker pid=708120) INFO 10-22 14:47:14 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.19 GiB
+(vLLMHttpServer pid=707215) (Worker pid=708091) INFO 10-22 14:47:14 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.19 GiB
+(vLLMHttpServer pid=707213) (Worker pid=708140) INFO 10-22 14:47:15 [model_runner.py:722] Graph capturing finished in 1 secs, took 0.19 GiB
