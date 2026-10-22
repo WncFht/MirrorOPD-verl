@@ -42,3 +42,9 @@ python scripts/analyze.py \
 ```
 
 绘图依赖 matplotlib 和 figure-viz 的 `fvstyle`，输出 PNG、PDF、SVG 及审计记录。时间线图仅展示首个 GPU kernel 开始的 80 ms 局部窗口；原始 `.json.gz` 可用 Perfetto 检查完整过程。内核分类按名称进行，未知内核保留 Other；分类求和不等同于整步墙钟时间。
+
+## 每小时会话检查
+
+2026-10-23 根据用户要求启用 `scripts/hourly_monitor.py`，每 3600 秒通过本机 `codex queue` 给原会话发送后续检查任务。它使用现有会话上下文与权限，不另建模型会话、不占 GPU，也不代替实验队列。该方式是本机后台定时进程，不属于网页 Scheduled 列表；依赖本机和 Codex daemon 持续运行。
+
+状态在运行目录的 `hourly-monitor.json`，历史在 `hourly-history.jsonl`。每条检查开始时，会话写 `hourly-ack.json`；未收到开始确认时不再积压消息。检查包括失败修复、结果分析、必要补实验、文档与阶段提交。队列退出不自动终止检查；审阅确认可做工作已完成后写 `REVIEW_DONE.json` 才结束。创建 `MONITOR_STOP` 可单独停止每小时触发，不会结束正在运行的实验。停止后已经入队的消息仍须遵守用户最新停止指令。
