@@ -255,7 +255,7 @@ class Tracking:
                     k: v
                     for k, v in data.items()
                     if k.startswith("step/")
-                    or k in ("rollout/score_mean", "rollout/response_length_mean", "rollout/response_tokens")
+                    or k in ("rollout/score/mean", "rollout/response_length/mean", "rollout/response_tokens")
                     or k.startswith("perf/timing/")
                     or (k.startswith("eval/") and k.endswith(("/mean", "/failed_count", "/response_count")))
                     or (k.endswith(("/nonfinite", "_nonfinite", "/update_skipped")) and v)

@@ -19,7 +19,6 @@ import os
 from contextlib import nullcontext
 from copy import deepcopy
 from functools import partial
-from itertools import chain
 from typing import Optional
 
 import psutil
@@ -43,7 +42,7 @@ from verl.utils.import_utils import import_external_libs
 from verl.utils.memory_utils import aggressive_empty_cache
 from verl.utils.metric.observations import Observation, observations_to_cpu
 from verl.utils.metric.schema import INTERNAL_COUNTERS, canonical_name, is_update_metric
-from verl.utils.metric.utils import Metric
+from verl.utils.metric.utils import Metric, reduce_metrics
 from verl.utils.pipeline_metrics import FSDP_PEAK_MEMORY
 from verl.utils.profiler import DistProfiler, DistProfilerExtension, ProfilerConfig, log_gpu_memory_usage
 from verl.utils.py_functional import append_to_dict
@@ -120,6 +119,14 @@ def _with_routing_replay_flag(enabled: bool):
         return wrapper
 
     return decorator
+
+
+def _flatten_metric_scalars(values):
+    for value in values:
+        if isinstance(value, (list, tuple)):
+            yield from _flatten_metric_scalars(value)
+        else:
+            yield value
 
 
 class TrainingWorker(Worker, DistProfilerExtension):
@@ -416,11 +423,14 @@ class TrainingWorker(Worker, DistProfilerExtension):
                             if val and isinstance(val[0], Observation):
                                 observation = Observation.merged(val)
                                 output[key] = None if observation.is_empty() else observation.aggregate()
+                            elif val and isinstance(val[0], Metric):
+                                output[key] = Metric.aggregate_dp(val)
                             else:
+                                flattened = list(_flatten_metric_scalars(val))
                                 output[key] = (
-                                    Metric.aggregate_dp(val)
-                                    if isinstance(val[0], Metric)
-                                    else list(chain.from_iterable(val))
+                                    (reduce_metrics({key: flattened})[key] if flattened else None)
+                                    if collect_records
+                                    else flattened
                                 )
                         elif isinstance(val, Observation):
                             output[key] = None if val.is_empty() else val.aggregate()

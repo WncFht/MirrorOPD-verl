@@ -11,13 +11,15 @@ from .evaluation import dataset_slug, evaluation_metrics  # noqa: F401
 logger = logging.getLogger(__name__)
 FAMILIES = ("optim/", "policy/", "advantage/", "correction/", "distill/", "rollout/", "eval/", "perf/", "step/")
 OUTER_RENAMES = {
+    "actor/perf/cpu_memory_used_gb": "perf/memory/cpu_used_gib",
+    "critic/perf/cpu_memory_used_gb": "perf/memory/cpu_used_gib",
     "actor/reward_kl_penalty": "policy/anchor_reference/reward_kl",
     "actor/reward_kl_penalty_coeff": "rollout/reward_kl/coefficient",
     "validation/timing_s/rollout_batch": "perf/timing/validation_rollout_seconds",
     "actor/entropy": "policy/entropy/pre_update",
-    "critic/score/mean": "rollout/score_mean",
-    "response/aborted_ratio": "rollout/aborted_fraction",
-    "response_length/mean": "rollout/response_length_mean",
+    "critic/score/mean": "rollout/score/mean",
+    "response/aborted_ratio": "rollout/empty_loss_mask_fraction",
+    "response_length/mean": "rollout/response_length/mean",
     "response_length/clip_ratio": "rollout/response_length/padded_width_fraction",
     "memory/fsdp_worker_peak_allocated_gib_max": "perf/memory/fsdp_allocated_peak_gib",
     "perf/throughput": "perf/throughput/tokens_per_gpu_second",
@@ -97,7 +99,8 @@ def canonical_name(name, *, role=None):
     for kind in ("prompt_length", "response_length", "response_length_non_aborted"):
         if name.startswith(kind + "/"):
             stat = name.split("/", 1)[1].replace("clip_ratio", "padded_width_fraction")
-            return f"rollout/{kind}/{stat}"
+            obj = "response_length_nonempty_loss_mask" if kind == "response_length_non_aborted" else kind
+            return f"rollout/{obj}/{stat}"
     if name.startswith("training/off_policy/"):
         return name.replace("training/off_policy/", "rollout/staleness/", 1)
     if name.startswith("training/filter_groups/"):

@@ -163,7 +163,10 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         key: value
         if isinstance(value, Observation)
         else Observation.ratio(
-            torch.as_tensor(value, device=response_mask.device) * response_mask.sum(), response_mask.sum()
+            torch.where(
+                response_mask.sum() > 0, torch.as_tensor(value, device=response_mask.device) * response_mask.sum(), 0.0
+            ),
+            response_mask.sum(),
         )
         for key, value in pg_metrics.items()
     }

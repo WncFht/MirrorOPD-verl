@@ -1288,6 +1288,7 @@ class PPOTrainer(ABC):
         sample_indices = []
         sample_response_lengths = []
         sample_finish_reasons = []
+        sample_tool_counts = []
         source_fields = defaultdict(set)
         pipeline_windows = []
 
@@ -1315,6 +1316,7 @@ class PPOTrainer(ABC):
                 source_ordinals[str(data_source)] += 1
                 prompt_metadata[key] = {
                     "prompt_id": f"{data_source}:{source_ordinals[str(data_source)] - 1}",
+                    "metric_fields": list(declared),
                     "prompt": batch_dict["raw_prompt"][row_index],
                     "ground_truth": batch_dict.get("reward_model", [{}] * batch_size)[row_index].get("ground_truth"),
                 }
@@ -1386,6 +1388,14 @@ class PPOTrainer(ABC):
             reward_extra_infos_dict["reward"].extend(scores)
 
             extra_fields_list = data.pop("extra_fields", None)
+            sample_tool_counts.extend(
+                [
+                    entry.get("tool_call_counts") if isinstance(entry, dict) else None
+                    for entry in extra_fields_list.tolist()
+                ]
+                if extra_fields_list is not None
+                else [None] * len(final_indices)
+            )
             sample_finish_reasons.extend(
                 [
                     entry.get("finish_reason") if isinstance(entry, dict) else None
@@ -1468,6 +1478,7 @@ class PPOTrainer(ABC):
 
         if val_data_dir:
             reward_extra_infos_dict["finish_reason"] = sample_finish_reasons
+            reward_extra_infos_dict["tool_call_counts"] = sample_tool_counts
             records = evaluation_records(
                 data_sources,
                 sample_uids,
@@ -1496,6 +1507,7 @@ class PPOTrainer(ABC):
         reward_extra_infos_dict["__response_length__"] = sample_response_lengths
         reward_extra_infos_dict["__num_turns__"] = sample_turns
         reward_extra_infos_dict["__finish_reason__"] = sample_finish_reasons
+        reward_extra_infos_dict["__tool_calls__"] = sample_tool_counts
         val_metrics = self._val_metrics_update(
             data_sources,
             sample_uids,
@@ -2017,6 +2029,17 @@ class PPOTrainer(ABC):
         tq.kv_batch_put(keys=batch.keys, partition_id=batch.partition_id, fields=fields)
         return batch
 
+    def _metrics_task_rewards_used(self):
+        return not is_distillation_enabled(self.config.get("distillation")) or bool(
+            OmegaConf.select(self.config, "distillation.distillation_loss.use_task_rewards", default=False)
+        )
+
+    def _metrics_variance_enabled(self):
+        return bool(self.config.actor_rollout_ref.actor.get("calculate_sum_pi_squared", False)) and (
+            self._metrics_task_rewards_used()
+            and not OmegaConf.select(self.config, "algorithm.rollout_correction.bypass_mode", default=False)
+        )
+
     def _compute_old_log_prob(self, batch: KVBatchMeta, metrics: dict) -> KVBatchMeta:
         """Compute the old log prob of the batch."""
         # Operating Mode Selection:
@@ -2037,6 +2060,7 @@ class PPOTrainer(ABC):
         batch.extra_info.update(
             {
                 "calculate_entropy": True,
+                "calculate_sum_pi_squared": self._metrics_variance_enabled(),
                 "compute_loss": False,
                 "temperature": self.config.actor_rollout_ref.rollout.temperature,
             }
@@ -2045,6 +2069,8 @@ class PPOTrainer(ABC):
         assert len(output) == len(batch)
 
         fields = ["entropy", "log_probs", "response_mask"]
+        if self._metrics_variance_enabled():
+            fields.append("sum_pi_squared")
         if self.config.actor_rollout_ref.rollout.calculate_log_probs:
             fields.extend(["responses", "rollout_log_probs"])
         data = tq.kv_batch_get(keys=batch.keys, partition_id=batch.partition_id, select_fields=fields)
@@ -2052,9 +2078,11 @@ class PPOTrainer(ABC):
         # 2. write old_log_probs and entropy back to TransferQueue
         data["old_log_probs"] = response_from_nested(data.pop("log_probs"), data["response_mask"])
         data["entropy"] = response_from_nested(data.pop("entropy"), data["response_mask"])
-        batch = tq.kv_batch_put(
-            keys=batch.keys, partition_id=batch.partition_id, fields=data.select("old_log_probs", "entropy")
-        )
+        stored_fields = ["old_log_probs", "entropy"]
+        if self._metrics_variance_enabled():
+            data["sum_pi_squared"] = response_from_nested(data.pop("sum_pi_squared"), data["response_mask"])
+            stored_fields.append("sum_pi_squared")
+        batch = tq.kv_batch_put(keys=batch.keys, partition_id=batch.partition_id, fields=data.select(*stored_fields))
 
         data = DataProto(batch=data.to_padded_tensor())
 
@@ -2337,7 +2365,18 @@ class PPOTrainer(ABC):
             "rm_scores",
             "token_level_rewards",
             "num_turns",
+            "extra_fields",
         ]
+        if (
+            OmegaConf.select(self.config, "algorithm.rollout_correction.rollout_rs") is not None
+            and not OmegaConf.select(self.config, "algorithm.rollout_correction.bypass_mode", default=False)
+            and OmegaConf.select(self.config, "actor_rollout_ref.rollout.calculate_log_probs", default=False)
+        ):
+            fields.append("metrics_response_mask")
+        if self._metrics_variance_enabled():
+            fields.extend(["old_log_probs", "sum_pi_squared"])
+            if OmegaConf.select(self.config, "algorithm.rollout_correction.rollout_is") is not None:
+                fields.append("rollout_is_weights")
         moe_lb_metrics_interval = self.config.actor_rollout_ref.rollout.get("moe_load_balance_metrics_interval", 0)
         data = get_metric_data_with_optional_routed_experts(
             keys=batch.keys,
@@ -2349,6 +2388,13 @@ class PPOTrainer(ABC):
             kv_batch_get=tq.kv_batch_get,
         )
 
+        extra_fields = data.pop("extra_fields", None)
+        tool_counts = None
+        if extra_fields is not None:
+            rows = extra_fields.tolist()
+            counts = [row.get("tool_call_counts") if isinstance(row, dict) else None for row in rows]
+            if any(isinstance(row, dict) and "tool_call_counts" in row for row in rows):
+                tool_counts = np.asarray(counts, dtype=object)
         num_turns = np.array(data.pop("num_turns").tolist())
         prompt_length = data["prompts"].offsets().diff()
         response_length = data["responses"].offsets().diff()
@@ -2390,6 +2436,10 @@ class PPOTrainer(ABC):
         num_turns_for_metrics = num_turns[non_padding_mask] if non_padding_mask.any() else num_turns
         metrics_batch.non_tensor_batch["__num_turns__"] = np.asarray(num_turns_for_metrics, dtype=np.int32)
 
+        if tool_counts is not None:
+            metrics_batch.non_tensor_batch["tool_call_counts"] = (
+                tool_counts[non_padding_mask] if non_padding_mask.any() else tool_counts
+            )
         # 2. compute metrics
         metrics.update({"training/global_step": global_steps, "training/epoch": epoch})
         metrics.update(
@@ -2401,10 +2451,7 @@ class PPOTrainer(ABC):
             )
         )
         metrics.update(compute_data_metrics(batch=metrics_batch, use_critic=self.use_critic))
-        task_used = (
-            not is_distillation_enabled(self.config.get("distillation"))
-            or self.distillation_config.distillation_loss.use_task_rewards
-        )
+        task_used = self._metrics_task_rewards_used()
         metrics["advantage/task/batch_used_in_loss"] = float(task_used)
         for label in ("prompt_length", "response_length"):
             lengths = metrics_batch.batch[label].float()
@@ -2412,12 +2459,15 @@ class PPOTrainer(ABC):
                 for q, suffix in ((0.5, "p50"), (0.95, "p95"), (0.99, "p99")):
                     metrics[f"rollout/{label}/{suffix}"] = torch.quantile(lengths, q).item()
         metrics["rollout/response_count"] = int(metrics_batch.batch["responses"].shape[0])
-        metrics["rollout/response_tokens"] = int(metrics_batch.batch["response_mask"].sum())
+        generation_mask = metrics_batch.batch.get("metrics_response_mask", metrics_batch.batch["response_mask"])
+        metrics["rollout/response_tokens"] = int(generation_mask.sum())
         metrics.update(compute_timing_metrics(batch=batch, timing_raw=timing_raw))
         n_gpus = self._get_n_gpus_for_throughput()
         metrics.update(compute_throughout_metrics(batch=batch, timing_raw=timing_raw, n_gpus=n_gpus))
-        gradient_norm = metrics.get("actor/grad_norm", None)
-        metrics.update(compute_variance_proxy_metrics(batch=metrics_batch, gradient_norm=gradient_norm))
+        if self._metrics_variance_enabled():
+            metrics.update(compute_variance_proxy_metrics(batch=metrics_batch, gradient_norm=None))
+        if self.config.actor_rollout_ref.actor.get("calculate_sum_pi_squared", False):
+            metrics["advantage/variance_proxy/available"] = float(self._metrics_variance_enabled())
 
         # 3. other auxiliary metrics
         if non_padding_mask.any():
