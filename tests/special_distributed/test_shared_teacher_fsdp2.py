@@ -63,9 +63,11 @@ def teacher_policy_loss(model_output, data, dp_group, *, config, distillation_co
     return distillation_loss(config, distillation_config, model_output, data)
 
 
-def make_worker(path, world_size, *, teacher):
+def make_worker(path, world_size, *, teacher, full_vocab=False):
     """Use the production worker and engine constructors."""
-    model = HFModelConfig(path=str(path), enable_gradient_checkpointing=False, use_fused_kernels=False)
+    model = HFModelConfig(
+        path=str(path), enable_gradient_checkpointing=False, use_fused_kernels=False, enable_full_vocab=full_vocab
+    )
     engine = FSDPEngineConfig(
         strategy="fsdp2",
         forward_only=teacher,
