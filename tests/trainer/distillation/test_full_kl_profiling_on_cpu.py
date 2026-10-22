@@ -63,3 +63,38 @@ def test_select_chunk_ignores_oom_and_wrong_length():
     }
     assert select(result, "precompute") == 512
     assert select(result, "fused_candidate") is None
+
+
+def test_semantic_attribution_handles_triton_driver_launch(monkeypatch):
+    monkeypatch.syspath_prepend(str(SCRIPTS))
+    analyze = load("semantic_trace")
+    events = [
+        dict(
+            ph="X",
+            cat="user_annotation",
+            name="full_vocab/head_loss",
+            pid=1,
+            tid=1,
+            ts=0,
+            dur=100,
+            args={"External id": 1},
+        ),
+        dict(
+            ph="X",
+            cat="user_annotation",
+            name="full_vocab/fused_kl",
+            pid=1,
+            tid=1,
+            ts=10,
+            dur=20,
+            args={"External id": 2},
+        ),
+        dict(ph="X", cat="cpu_op", name="aten::sum", pid=1, tid=1, ts=11, dur=1, args={"External id": 3}),
+        dict(ph="X", cat="cuda_driver", name="cuLaunchKernelEx", pid=1, tid=1, ts=12, dur=1, args={"correlation": 77}),
+        dict(cat="kernel", name="_partials", ts=200, dur=1000, args={"External id": 1, "correlation": 77}),
+        dict(cat="kernel", name="reduce", ts=1200, dur=2000, args={"External id": 3}),
+        dict(cat="kernel", name="unmapped", ts=3200, dur=3000, args={}),
+    ]
+    result = analyze.attribute(events)
+    assert result["semantic_kernel_sum_ms"] == {"full_vocab/fused_kl": 3.0, "unattributed": 3.0}
+    assert load("analyze").category("nvjet_tss_192x192_64x3_2x1_v_badd_coopB_NTN") == "GEMM"
