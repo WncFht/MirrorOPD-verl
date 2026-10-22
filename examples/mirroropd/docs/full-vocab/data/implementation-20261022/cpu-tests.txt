@@ -1,0 +1,39 @@
+........................................................................ [ 27%]
+........................................................................ [ 55%]
+........................................................................ [ 83%]
+...........................................                              [100%]
+=============================== warnings summary ===============================
+../../../../../../../root/.local/share/mirroropd/venvs/profile-cu128/lib/python3.12/site-packages/ray/util/state/util.py:55
+  /root/.local/share/mirroropd/venvs/profile-cu128/lib/python3.12/site-packages/ray/util/state/util.py:55: DeprecationWarning: Ray state API is no longer experimental. Please import from `ray.util.state`. instead. Importing from `ray.experimental` will be deprecated in future releases.
+    warnings.warn(
+
+verl/workers/engine/__init__.py:32
+  /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/verl/workers/engine/__init__.py:32: UserWarning: torchtitan engine is not available: ModuleNotFoundError("No module named 'torchtitan'")
+    warnings.warn(f"torchtitan engine is not available: {e!r}", stacklevel=1)
+
+verl/workers/engine/__init__.py:41
+  /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/verl/workers/engine/__init__.py:41: UserWarning: veomni engine is not available: ModuleNotFoundError("No module named 'veomni.arguments'")
+    warnings.warn(f"veomni engine is not available: {e!r}", stacklevel=1)
+
+verl/workers/engine/__init__.py:50
+  /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/verl/workers/engine/__init__.py:50: UserWarning: automodel engine is not available: ModuleNotFoundError("No module named 'nemo_automodel'")
+    warnings.warn(f"automodel engine is not available: {e!r}", stacklevel=1)
+
+verl/workers/engine/__init__.py:60
+  /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/verl/workers/engine/__init__.py:60: UserWarning: mindspeed engine is not available: ModuleNotFoundError("No module named 'megatron.core'")
+    warnings.warn(f"mindspeed engine is not available: {e!r}", stacklevel=1)
+
+verl/workers/engine/__init__.py:69
+  /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/verl/workers/engine/__init__.py:69: UserWarning: megatron engine is not available: ModuleNotFoundError("No module named 'megatron.core'")
+    warnings.warn(f"megatron engine is not available: {e!r}", stacklevel=1)
+
+tests/trainer/ppo/test_metric_utils_on_cpu.py::TestReduceMetrics::test_reduce_metrics_empty
+  /root/.local/share/mirroropd/venvs/profile-cu128/lib/python3.12/site-packages/numpy/_core/fromnumeric.py:3860: RuntimeWarning: Mean of empty slice.
+    return _methods._mean(a, axis=axis, dtype=dtype,
+
+tests/trainer/ppo/test_metric_utils_on_cpu.py::TestReduceMetrics::test_reduce_metrics_empty
+  /root/.local/share/mirroropd/venvs/profile-cu128/lib/python3.12/site-packages/numpy/_core/_methods.py:144: RuntimeWarning: invalid value encountered in scalar divide
+    ret = ret.dtype.type(ret / rcount)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+259 passed, 8 warnings in 136.28s (0:02:16)

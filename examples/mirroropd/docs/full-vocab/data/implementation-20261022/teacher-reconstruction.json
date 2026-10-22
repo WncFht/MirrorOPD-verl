@@ -1,0 +1,51 @@
+{
+  "dtype": "bfloat16",
+  "attention": "sdpa",
+  "records": [
+    {
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "tokens": 13,
+      "max_logit_error": 0.0
+    },
+    {
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "tokens": 11,
+      "max_logit_error": 0.0
+    },
+    {
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "tokens": 10,
+      "max_logit_error": 0.0
+    },
+    {
+      "teacher": "DeepCoder-1.5B-Preview",
+      "tokens": 14,
+      "max_logit_error": 0.0
+    },
+    {
+      "teacher": "DeepCoder-1.5B-Preview",
+      "tokens": 12,
+      "max_logit_error": 0.0
+    },
+    {
+      "teacher": "DeepCoder-1.5B-Preview",
+      "tokens": 11,
+      "max_logit_error": 0.0
+    },
+    {
+      "teacher": "UltraData-IF-1.5B",
+      "tokens": 14,
+      "max_logit_error": 0.0
+    },
+    {
+      "teacher": "UltraData-IF-1.5B",
+      "tokens": 12,
+      "max_logit_error": 0.0
+    },
+    {
+      "teacher": "UltraData-IF-1.5B",
+      "tokens": 11,
+      "max_logit_error": 0.0
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "scope": "production operators only; BF16 input, FP32 logits/accumulation, no backbone/FSDP/TQ",
+  "torch": "2.11.0+cu128",
+  "gpu": "NVIDIA H800",
+  "chunk": 512,
+  "vocab": 151936,
+  "hidden": 1536,
+  "reference_backend": "streaming",
+  "rows": [
+    {
+      "tokens": 32768,
+      "backend": "cached",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.00014268983795773238,
+        "head_relative_l2": 0.0001830771507229656
+      },
+      "value": 1.0000051259994507,
+      "wall_ms_median": 567.3621892929077,
+      "wall_ms_samples": [
+        633.3871856331825,
+        567.2573298215866,
+        567.4493089318275,
+        567.3556625843048,
+        567.3621892929077
+      ],
+      "resident_gib": 1.12109375,
+      "peak_allocated_gib": 2.707521438598633,
+      "incremental_peak_gib": 1.5864276885986328,
+      "peak_reserved_gib": 3.67578125
+    },
+    {
+      "tokens": 32768,
+      "backend": "streaming",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.0,
+        "head_relative_l2": 0.0
+      },
+      "value": 1.0000051259994507,
+      "wall_ms_median": 562.7948939800262,
+      "wall_ms_samples": [
+        569.1086500883102,
+        562.7948939800262,
+        562.8394037485123,
+        562.7270042896271,
+        562.5863075256348
+      ],
+      "resident_gib": 1.12109375,
+      "peak_allocated_gib": 2.707521438598633,
+      "incremental_peak_gib": 1.5864276885986328,
+      "peak_reserved_gib": 2.802734375
+    },
+    {
+      "tokens": 32768,
+      "backend": "precompute",
+      "errors": {
+        "value_abs": 1.1920928955078125e-07,
+        "hidden_relative_l2": 0.0004239648988004774,
+        "head_relative_l2": 0.00023185099416878074
+      },
+      "value": 1.0000052452087402,
+      "wall_ms_median": 287.99663484096527,
+      "wall_ms_samples": [
+        291.8837070465088,
+        287.9784479737282,
+        287.95869648456573,
+        287.99663484096527,
+        288.0418077111244
+      ],
+      "resident_gib": 1.12109375,
+      "peak_allocated_gib": 3.482058525085449,
+      "incremental_peak_gib": 2.360964775085449,
+      "peak_reserved_gib": 4.2578125
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "backend": "recompute",
+  "world_size": 2,
+  "records": [
+    {
+      "step": 0,
+      "loss": 0.013866033405065536
+    },
+    {
+      "step": 1,
+      "loss": 0.008273805491626263
+    },
+    {
+      "step": 2,
+      "loss": 0.005689265206456184
+    }
+  ],
+  "parameter_delta_norms_rank0": {
+    "model.embed_tokens.weight": 0.03770183399319649,
+    "model.layers.0.self_attn.q_proj.weight": 0.05558856949210167,
+    "model.layers.0.self_attn.q_proj.bias": 0.010051930323243141,
+    "model.layers.0.self_attn.k_proj.weight": 0.03956994786858559,
+    "model.layers.0.self_attn.k_proj.bias": 0.005836113356053829,
+    "model.layers.0.self_attn.v_proj.weight": 0.03975643217563629,
+    "model.layers.0.self_attn.v_proj.bias": 0.007428177632391453,
+    "model.layers.0.self_attn.o_proj.weight": 0.054245829582214355,
+    "model.layers.0.mlp.gate_proj.weight": 0.08154575526714325,
+    "model.layers.0.mlp.up_proj.weight": 0.08109864592552185,
+    "model.layers.0.mlp.down_proj.weight": 0.07995838671922684,
+    "model.layers.0.input_layernorm.weight": 0.010765917599201202,
+    "model.layers.0.post_attention_layernorm.weight": 0.009220477193593979,
+    "model.layers.1.self_attn.q_proj.weight": 0.05641160160303116,
+    "model.layers.1.self_attn.q_proj.bias": 0.009094099514186382,
+    "model.layers.1.self_attn.k_proj.weight": 0.040626104921102524,
+    "model.layers.1.self_attn.k_proj.bias": 0.0057105449959635735,
+    "model.layers.1.self_attn.v_proj.weight": 0.040251027792692184,
+    "model.layers.1.self_attn.v_proj.bias": 0.007335843984037638,
+    "model.layers.1.self_attn.o_proj.weight": 0.054695963859558105,
+    "model.layers.1.mlp.gate_proj.weight": 0.08055391907691956,
+    "model.layers.1.mlp.up_proj.weight": 0.0801229476928711,
+    "model.layers.1.mlp.down_proj.weight": 0.07958520948886871,
+    "model.layers.1.input_layernorm.weight": 0.009962085634469986,
+    "model.layers.1.post_attention_layernorm.weight": 0.007743154652416706,
+    "model.norm.weight": 0.01072766538709402,
+    "lm_head.weight": 0.06012558192014694
+  }
+}

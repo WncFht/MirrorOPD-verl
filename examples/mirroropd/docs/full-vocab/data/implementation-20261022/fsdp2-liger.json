@@ -1,0 +1,47 @@
+{
+  "backend": "liger",
+  "world_size": 2,
+  "records": [
+    {
+      "step": 0,
+      "loss": 0.013866032473742962
+    },
+    {
+      "step": 1,
+      "loss": 0.008271453902125359
+    },
+    {
+      "step": 2,
+      "loss": 0.005692421458661556
+    }
+  ],
+  "parameter_delta_norms_rank0": {
+    "model.embed_tokens.weight": 0.037698227912187576,
+    "model.layers.0.self_attn.q_proj.weight": 0.055614836513996124,
+    "model.layers.0.self_attn.q_proj.bias": 0.010056001134216785,
+    "model.layers.0.self_attn.k_proj.weight": 0.03959258273243904,
+    "model.layers.0.self_attn.k_proj.bias": 0.005838410463184118,
+    "model.layers.0.self_attn.v_proj.weight": 0.03975788131356239,
+    "model.layers.0.self_attn.v_proj.bias": 0.007419431582093239,
+    "model.layers.0.self_attn.o_proj.weight": 0.05423211306333542,
+    "model.layers.0.mlp.gate_proj.weight": 0.08154324442148209,
+    "model.layers.0.mlp.up_proj.weight": 0.08110944926738739,
+    "model.layers.0.mlp.down_proj.weight": 0.07998337596654892,
+    "model.layers.0.input_layernorm.weight": 0.010770673863589764,
+    "model.layers.0.post_attention_layernorm.weight": 0.009220482781529427,
+    "model.layers.1.self_attn.q_proj.weight": 0.05641888454556465,
+    "model.layers.1.self_attn.q_proj.bias": 0.009086626581847668,
+    "model.layers.1.self_attn.k_proj.weight": 0.0406225360929966,
+    "model.layers.1.self_attn.k_proj.bias": 0.005982995964586735,
+    "model.layers.1.self_attn.v_proj.weight": 0.04025784134864807,
+    "model.layers.1.self_attn.v_proj.bias": 0.007341122720390558,
+    "model.layers.1.self_attn.o_proj.weight": 0.05469103530049324,
+    "model.layers.1.mlp.gate_proj.weight": 0.08054337650537491,
+    "model.layers.1.mlp.up_proj.weight": 0.08013127744197845,
+    "model.layers.1.mlp.down_proj.weight": 0.07958388328552246,
+    "model.layers.1.input_layernorm.weight": 0.00995685625821352,
+    "model.layers.1.post_attention_layernorm.weight": 0.007746987976133823,
+    "model.norm.weight": 0.010729055851697922,
+    "lm_head.weight": 0.0601247176527977
+  }
+}
