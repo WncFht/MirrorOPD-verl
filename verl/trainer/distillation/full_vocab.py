@@ -136,12 +136,16 @@ class PrecomputedKL(torch.autograd.Function):
 
 def full_reverse_kl(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192):
     """Return unnormalized sum; empty local ranks remain attached to both parameters."""
+    if backend not in ("dense", "recompute", "streaming", "precompute", "liger"):
+        raise ValueError(f"Unknown full reverse-KL backend: {backend}")
     if hs.ndim != 2 or ht.ndim != 2 or ws.ndim != 2 or wt.ndim != 2:
         raise ValueError("full KL expects 2-D hidden states and heads")
     if len(hs) != len(ht) or len(ws) != len(wt) or hs.shape[1] != ws.shape[1] or ht.shape[1] != wt.shape[1]:
         raise ValueError("full KL hidden/head shapes are incompatible")
     if min(token_chunk, vocab_chunk) <= 0:
         raise ValueError("full KL chunk sizes must be positive")
+    if not len(ws):
+        raise ValueError("full KL requires a nonempty vocabulary")
     if len(hs) == 0:
         return hs.sum() * 0 + ws.sum() * 0
     ht, wt = ht.detach(), wt.detach()

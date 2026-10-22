@@ -36,6 +36,7 @@ def main():
         "--backend", choices=["dense", "recompute", "streaming", "precompute", "liger"], default="recompute"
     )
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--checkpoint", action="store_true")
     args = parser.parse_args()
     torch.set_num_threads(1)
     _, rank, world = initialize_global_process_group(timeout_second=180)
@@ -146,7 +147,17 @@ def main():
     assert any(v > 0 for n, v in deltas.items() if "lm_head" in n)
     assert any(v > 0 for n, v in deltas.items() if "layers" in n)
     actor.engine.full_vocab_teacher_head.release()
+    if args.checkpoint:
+        saved = {n: p.detach().to_local().clone() for n, p in actor.engine.module.named_parameters()}
+        actor.save_checkpoint(str(root / "checkpoint"), global_step=3)
+        with torch.no_grad():
+            for p in actor.engine.module.parameters():
+                p.to_local().add_(0.5)
+        actor.load_checkpoint(str(root / "checkpoint"))
+        for n, p in actor.engine.module.named_parameters():
+            torch.testing.assert_close(p.detach().to_local(), saved[n], atol=0, rtol=0)
     result = {"backend": args.backend, "world_size": world, "records": records, "parameter_delta_norms_rank0": deltas}
+    result["checkpoint_roundtrip"] = args.checkpoint
     if rank == 0:
         print(json.dumps(result), flush=True)
         if args.output:

@@ -37,11 +37,13 @@ class FullVocabConfig(BaseConfig):
     backend: str = "recompute"
     token_chunk_size: int = 512
     vocab_chunk_size: int = 8192
+    async_write: bool = False
+    prefetch: bool = False
 
     def __post_init__(self):
         if self.backend not in ("dense", "recompute", "streaming", "precompute", "liger"):
             raise ValueError(f"Unsupported full-vocab backend: {self.backend}")
-        if min(self.token_chunk_size, self.vocab_chunk_size) <= 0:
+        if any(type(x) is not int or x <= 0 for x in (self.token_chunk_size, self.vocab_chunk_size)):
             raise ValueError("full-vocab chunk sizes must be positive")
 
 
@@ -131,6 +133,8 @@ class DistillationLossConfig(BaseConfig):
                 raise ValueError("full_reverse_kl requires direct loss, no task rewards and no sampled PG mode")
             if self.loss_max_clamp is not None or self.log_prob_min_clamp is not None:
                 raise ValueError("full_reverse_kl requires unclamped loss and log probabilities")
+            if self.advantage_source != "current":
+                raise ValueError("full_reverse_kl evaluates the current student distribution")
 
         if self.policy_loss_mode not in ("vanilla", "token_ppo", "token_is", "reinforce"):
             raise ValueError(f"Unsupported distillation policy_loss_mode: {self.policy_loss_mode}")

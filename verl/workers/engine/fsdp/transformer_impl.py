@@ -771,32 +771,38 @@ class FSDPEngine(BaseEngine):
         # and _build_fsdp_module, so self.scaler may not be set.
         scaler = getattr(self, "scaler", None)
 
-        for micro_batch_idx, micro_batch in enumerate(micro_batches):
-            sync_ctx = (
-                nullcontext()
-                if forward_only
-                else self._gradient_sync_context(is_last_micro_batch=micro_batch_idx == len(micro_batches) - 1)
-            )
-            # Name each micro-batch in the trace. Without this a forward-only stage
-            # (compute_log_prob / compute_ref_log_prob) is a single row with anonymous forwards
-            # inside; here every micro-batch forward (and, when training, its backward) becomes a
-            # distinguishable "micro_batch<i>" row -- nested under the update loop's "mini_batch<i>"
-            # when training, or directly under the stage for log-prob.
-            with ctx, sync_ctx, torch.profiler.record_function(f"micro_batch{micro_batch_idx}"):
-                loss, meta_info = self.forward_step(micro_batch, loss_function=loss_function, forward_only=forward_only)
+        from verl.trainer.distillation.hidden_io import HiddenBatchIO
 
-                if not forward_only:
-                    if scaler is not None:
-                        scaler.scale(loss).backward()
-                    else:
-                        loss.backward()
-                    if not return_model_output:
-                        # Standard training discards model_output (train_batch pops it); keeping it accumulates
-                        # full-length nested tensors across the mini-batch (∝ ppo_mini_batch * rollout_n) → OOM.
-                        # Specialized callers such as Tinker may opt in when their response requires these outputs.
-                        meta_info.pop("model_output", None)
+        with HiddenBatchIO(data, micro_batches) as hidden_io:
+            for micro_batch_idx, micro_batch in enumerate(hidden_io):
+                sync_ctx = (
+                    nullcontext()
+                    if forward_only
+                    else self._gradient_sync_context(is_last_micro_batch=micro_batch_idx == len(micro_batches) - 1)
+                )
+                # Name each micro-batch in the trace. Without this a forward-only stage
+                # (compute_log_prob / compute_ref_log_prob) is a single row with anonymous forwards
+                # inside; here every micro-batch forward (and, when training, its backward) becomes a
+                # distinguishable "micro_batch<i>" row -- nested under the update loop's "mini_batch<i>"
+                # when training, or directly under the stage for log-prob.
+                with ctx, sync_ctx, torch.profiler.record_function(f"micro_batch{micro_batch_idx}"):
+                    loss, meta_info = self.forward_step(
+                        micro_batch, loss_function=loss_function, forward_only=forward_only
+                    )
 
-            output_lst.append(meta_info)
+                    if not forward_only:
+                        if scaler is not None:
+                            scaler.scale(loss).backward()
+                        else:
+                            loss.backward()
+                        if not return_model_output:
+                            # Standard training discards model_output (train_batch pops it); keeping it accumulates
+                            # full-length nested tensors across the mini-batch (∝ ppo_mini_batch * rollout_n) → OOM.
+                            # Specialized callers such as Tinker may opt in when their response requires these outputs.
+                            meta_info.pop("model_output", None)
+
+                hidden_io.publish(meta_info, micro_batch)
+                output_lst.append(meta_info)
 
         # postprocess and return
         return postprocess_batch_func(output_lst=output_lst, indices=indices, data=data)
@@ -1199,6 +1205,11 @@ class FSDPEngineWithLMHead(FSDPEngine):
             raise ValueError("full-vocab output requires the model head adapter")
         if not _is_scalar_unit_temperature(tu.get(micro_batch, "temperature", 1.0)):
             raise ValueError("full reverse KL currently requires temperature=1")
+        if any(
+            tu.get_non_tensor_data(micro_batch, key, default=False)
+            for key in ("calculate_entropy", "calculate_sum_pi_squared", "score_centering")
+        ):
+            raise ValueError("full reverse KL does not enable sampled-policy diagnostics or entropy objectives")
         positions, packed = prediction_positions(micro_batch["input_ids"], micro_batch["loss_mask"])
 
         def output(hidden, head):
