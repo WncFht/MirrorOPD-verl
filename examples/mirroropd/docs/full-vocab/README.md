@@ -5,6 +5,7 @@
 | 内容 | 入口 |
 | --- | --- |
 | 当前 Full-KL 完整调用链、具体源码行号、默认与可选优化 | [全流程源码走读](2026-10-23-Full-KL全流程源码走读.md) |
+| η、κ 目标的理论与拟议 Full-vocab 接入 | [形状与插值专题](../mirror-descent/README.md) |
 | E13/E14 Full-KL、E15 sampled、E16/E17 Full-KL 批内复用 | [数学对照预设](../训练配方.md#full-kl-与-sampled-对照入口) |
 | 2026-10-22 初次接入的数值、多卡与 smoke 验收结果 | [实现与验收](2026-10-22-Full-KL实现与验收.md) |
 | Full baseline 后续设计与原始实施阶段 | [实现计划](2026-10-22-Full-baseline与Full-KL实现计划.md) |

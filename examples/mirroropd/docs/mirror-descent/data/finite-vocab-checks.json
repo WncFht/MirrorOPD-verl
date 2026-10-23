@@ -1,0 +1,40 @@
+{
+  "scope": "CPU FP64 finite-vocabulary identities; not a language-model training or quality result",
+  "seed": 2310,
+  "random_cases": 120,
+  "comparisons": 2348,
+  "maximum_errors": {
+    "target_normalized": 4.440892098500626e-16,
+    "MDPO_value_constant": 2.886579864025407e-15,
+    "MDPO_fit_gradient": 1.3322676295501878e-15,
+    "MDPO_action_IS": 1.7763568394002505e-15,
+    "MDPO_ratio_autograd": 1.3322676295501878e-15,
+    "MDPO_center_cancels": 1.3322676295501878e-15,
+    "current_J_gradient": 2.220446049250313e-15,
+    "refreshed_detached_target_J_gradient": 2.1094237467877974e-15,
+    "current_NoIS_potential": 1.3322676295501878e-15,
+    "geometric_MDPO": 8.881784197001252e-16,
+    "J_reverse_KL_endpoint": 2.886579864025407e-15,
+    "current_NoIS_log_square_endpoint": 1.7763568394002505e-15,
+    "Mean_BPO_identity": 8.881784197001252e-16,
+    "Part_q_over_beta": 4.440892098500626e-16,
+    "BPO_q_over_beta": 1.8318679906315083e-15,
+    "Mean_q_over_beta": 2.220446049250313e-16,
+    "whole_NoIS_regression": 8.881784197001252e-16,
+    "MDPO_stationary_at_m": 5.396229867534553e-16,
+    "Part_stationary_at_m": 1.7133513988358906e-16,
+    "BPO_stationary_at_m": 3.5469646492591385e-16,
+    "initial_MDPO_equals_J": 1.1102230246251565e-15,
+    "arithmetic_target": 1.1102230246251565e-16,
+    "J_scaled_JS": 1.5543122344752192e-15,
+    "kappa0_single_update_eta_independent": 2.3592239273284576e-16
+  },
+  "counterexamples": {
+    "whole_NoIS_gradient_at_m": 0.09466527299354252,
+    "Mean_gradient_at_m": 0.010297858137362777,
+    "PPO_clip_gradient_difference": 0.23963362100725016,
+    "refreshed_target_without_detach_gradient_difference": 0.5130095523624798
+  },
+  "anchor_teacher_detached": true,
+  "J_oracle": "64-point Gauss-Legendre quadrature in log probability ratio"
+}
