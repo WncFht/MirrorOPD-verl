@@ -140,7 +140,10 @@ def main():
                 "returncode": code,
                 "start_ns": started,
                 "end_ns": time.monotonic_ns(),
-                "note": "Observer RSS sums can include shared pages; all host metrics are descriptive, no CPU or GPU synchronization inserted.",
+                "note": (
+                    "Observer RSS sums can include shared pages; all host metrics are descriptive. "
+                    "No CPU or GPU synchronization inserted."
+                ),
             },
             indent=2,
         )

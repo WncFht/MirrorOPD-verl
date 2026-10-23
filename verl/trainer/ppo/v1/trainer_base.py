@@ -96,6 +96,7 @@ from verl.utils.pipeline_metrics import (
     aggregate_validation_windows,
     make_rollout_submission,
 )
+from verl.utils.profiler.timeline import observe_sync, span
 from verl.utils.seqlen_balancing import calculate_workload, get_seqlen_balanced_partitions, log_seqlen_unbalance
 from verl.utils.skip import SkipManager
 from verl.utils.tracking import DapoFilteredRewardTableLogger, Tracking, ValidationGenerationsLogger
@@ -112,8 +113,6 @@ def apply_greedy_sampling_params(params: dict[str, Any]) -> None:
     params["top_k"] = -1
     params["temperature"] = 0
 
-
-from verl.utils.profiler.timeline import observe_sync, span
 
 logger = logging.getLogger(__name__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "INFO"))

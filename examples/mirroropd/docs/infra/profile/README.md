@@ -4,6 +4,8 @@
 
 ## 当前状态
 
+2026-10-23 新增[四卡单轮数学 reasoning 全流程观察](e2e-4gpu/README.md)，覆盖正式 graph rollout、teacher、actor、权重同步、checkpoint 与小验证窗口。该工作独立于下述已完成的算子优化轮次，目前进入测量准备与等待 GPU 阶段；详见[现状说明与离线交互入口](e2e-4gpu/2026-10-23-全流程测量与现状说明.md)。
+
 2026-10-23 已完成初始 profile、同 chunk ABBA 复测、可选融合 backend 接入、四卡更新/恢复和两步非零学习率完整训练验收。最终结论、证据边界和启动命令见[Full-KL 优化结论与启动](2026-10-23-Full-KL优化结论与启动.md)。默认 E13/E14 不变；融合版本使用 `FULL_KL_BACKEND=precompute_fused`。
 
 本机可执行的这轮测量和工程验证已完成，审阅完成后通过 `REVIEW_DONE.json` 停止每小时检查。集群八卡/A100、graph rollout 整步性能与长程准确率不包含在这轮已完成的证据中。
