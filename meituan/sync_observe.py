@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 """Local operation journals and subprocess diagnostics for manual transfers."""
 
+import codecs
 import json
 import os
 import platform
 import re
+import selectors
 import shlex
 import signal
 import subprocess
@@ -211,47 +213,110 @@ def skip(name, reason):
         _active.emit(f"SKIP {name}: {reason}")
 
 
+def stop_process(process):
+    if process.poll() is None:
+        try:
+            os.killpg(process.pid, signal.SIGTERM)
+            process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            os.killpg(process.pid, signal.SIGKILL)
+            process.wait()
+        except ProcessLookupError:
+            process.wait()
+
+
+def streamed(command, journal, **kwargs):
+    check = kwargs.pop("check", False)
+    timeout = kwargs.pop("timeout", None)
+    on_output = kwargs.pop("on_output", None)
+    process = subprocess.Popen(
+        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, start_new_session=True, **kwargs
+    )
+    started = time.monotonic()
+    decoder = codecs.getincrementaldecoder("utf-8")("replace")
+    pending = ""
+    tail = ""
+    secrets = [
+        v
+        for k, v in {**os.environ, **kwargs.get("env", {})}.items()
+        if len(v) >= 8 and re.search(r"TOKEN|PASSWORD|SECRET|API_KEY", k, re.I)
+    ]
+
+    def emit(text):
+        for value in secrets:
+            text = text.replace(value, "[REDACTED]")
+        if journal:
+            journal.write(text, journal.console)
+        else:
+            sys.stdout.write(redact(text))
+            sys.stdout.flush()
+
+    try:
+        with selectors.DefaultSelector() as selector:
+            selector.register(process.stdout, selectors.EVENT_READ)
+            while selector.get_map():
+                if timeout is not None and time.monotonic() - started >= timeout:
+                    raise subprocess.TimeoutExpired(command, timeout)
+                events = selector.select(timeout=0.2)
+                for key, _ in events:
+                    chunk = os.read(key.fd, 65536)
+                    if not chunk:
+                        pending += decoder.decode(b"", final=True)
+                        selector.unregister(key.fileobj)
+                        break
+                    decoded = decoder.decode(chunk)
+                    if on_output:
+                        on_output(decoded)
+                    tail = (tail + decoded)[-65536:]
+                    pending += decoded
+                # Display progress that uses carriage returns or no newline, while retaining split credential prefixes.
+                for secret in secrets:
+                    pending = pending.replace(secret, "[REDACTED]")
+                held = 0
+                for secret in secrets:
+                    for length in range(1, min(len(secret), len(pending) + 1)):
+                        if pending.endswith(secret[:length]):
+                            held = max(held, length)
+                if len(pending) > held:
+                    emit(pending[:-held] if held else pending)
+                    pending = pending[-held:] if held else ""
+            emit(pending)
+        remaining = None if timeout is None else max(0.001, timeout - (time.monotonic() - started))
+        result = subprocess.CompletedProcess(command, process.wait(timeout=remaining), stdout=tail)
+    except BaseException:
+        stop_process(process)
+        raise
+    finally:
+        process.stdout.close()
+    if check and result.returncode:
+        raise subprocess.CalledProcessError(result.returncode, command, output=tail)
+    return result
+
+
 def run(command, *, stream=False, **kwargs):
-    """Keep captured Git probes quiet; tee long-running uploader output into the invocation log."""
+    """Capture diagnostics and stream partial lines with a real subprocess deadline."""
     journal = _active
-    if journal is None:
+    if journal is None and not stream:
         return subprocess.run(command, **kwargs)
     started = time.monotonic()
     label = shlex.join(str(arg) for arg in command)
-    journal.emit(f"COMMAND {label}", console=stream)
-    if not stream:
-        try:
+    if journal:
+        journal.emit(f"COMMAND {label}", console=stream)
+    try:
+        if stream:
+            result = streamed(command, journal, **kwargs)
+        else:
             result = subprocess.run(command, **kwargs)
-        except subprocess.CalledProcessError as error:
+            for output in (result.stdout, result.stderr):
+                if output:
+                    journal.write(output.decode(errors="replace") if isinstance(output, bytes) else output)
+    except subprocess.CalledProcessError as error:
+        if journal:
             for output in (error.stdout, error.stderr):
                 if output:
                     journal.write(output.decode(errors="replace") if isinstance(output, bytes) else output)
-            raise
-        for output in (result.stdout, result.stderr):
-            if output:
-                journal.write(output.decode(errors="replace") if isinstance(output, bytes) else output)
-    else:
-        check = kwargs.pop("check", False)
-        process = subprocess.Popen(
-            command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, start_new_session=True, **kwargs
-        )
-        try:
-            for line in process.stdout:
-                journal.write(line.decode(errors="replace"), journal.console)
-            result = subprocess.CompletedProcess(command, process.wait())
-        except BaseException:
-            if process.poll() is None:
-                os.killpg(process.pid, signal.SIGTERM)
-                try:
-                    process.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    os.killpg(process.pid, signal.SIGKILL)
-                    process.wait()
-            raise
-        finally:
-            process.stdout.close()
-        if check and result.returncode:
-            journal.emit(f"COMMAND FAILED exit={result.returncode}: {label}")
-            raise subprocess.CalledProcessError(result.returncode, command)
-    journal.emit(f"EXIT {result.returncode} in {time.monotonic() - started:.2f}s: {label}", console=False)
+            journal.emit(f"COMMAND FAILED exit={error.returncode}: {label}")
+        raise
+    if journal:
+        journal.emit(f"EXIT {result.returncode} in {time.monotonic() - started:.2f}s: {label}", console=False)
     return result

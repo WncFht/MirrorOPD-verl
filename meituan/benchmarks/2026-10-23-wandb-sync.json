@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-23",
+  "environment": "local Linux; Mac network not benchmarked",
+  "sdk": {
+    "legacy": "0.23.1",
+    "core": "0.31.0"
+  },
+  "partial_snapshot_comparison": [
+    {
+      "engine": "core",
+      "cli": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/.venv-wandb-sync/bin/wandb",
+      "run_id": "syncee8844980714",
+      "status": "completed",
+      "exit_code": 0,
+      "seconds": 17.432290755212307,
+      "marker_files": [],
+      "upload_complete": false,
+      "source": "offline-run-20261023_065408-jt2r9h88",
+      "input_bytes": 3538944,
+      "metric_records": 2237,
+      "history_records": 119
+    },
+    {
+      "engine": "legacy",
+      "cli": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/miniconda3/envs/rllm/bin/wandb",
+      "run_id": "syncc5f8a870eb18",
+      "status": "timeout",
+      "exit_code": -15,
+      "seconds": 60.10954064130783,
+      "marker_files": [],
+      "upload_complete": false,
+      "source": "offline-run-20261023_065408-jt2r9h88",
+      "input_bytes": 3538944,
+      "metric_records": 2237,
+      "history_records": 119
+    }
+  ],
+  "finished_run": {
+    "run_id": "syncee9651336ed2",
+    "source": "offline-run-20261022_231109-krkmq098",
+    "seconds": 18.662056237459183,
+    "status": "completed",
+    "exit_code": 0,
+    "markers": [
+      "offline-run-20261022_231109-krkmq098/run-krkmq098.wandb.synced"
+    ],
+    "cloud_history_rows": 600,
+    "cloud_state": "finished",
+    "cloud_step_min": 0,
+    "cloud_step_max": 599,
+    "upload_complete": true,
+    "input_bytes": 16361752,
+    "metric_records": 2380,
+    "history_records": 600
+  },
+  "history_comparison": {
+    "source_rows": 600,
+    "cloud_rows": 600,
+    "scalar_values_checked": 66696,
+    "missing_count": 0,
+    "mismatch_count": 0,
+    "missing_examples": [],
+    "mismatch_examples": []
+  },
+  "durable_queue": {
+    "upload_seconds": 22.372671462595463,
+    "repeat_seconds": 0.1607035994529724,
+    "jobs": [
+      {
+        "run": "offline-run-20261022_231109-krkmq098",
+        "status": "succeeded",
+        "attempts": 1,
+        "tree": "542fc9244e76c9bf7b92eead44dca3dfd6c8be71"
+      }
+    ]
+  },
+  "notes": [
+    "The core CLI exited zero on a truncated source file but emitted an incomplete-record error and no synced marker. This is not complete success.",
+    "Legacy execution was bounded to 60 seconds; no completed legacy timing is available.",
+    "Validation used the separate wncfht/MirrorOPD-sync-validation project. Original project runs were not overwritten.",
+    "History scalar comparisons use relative and absolute tolerance 1e-8 for finite numeric values."
+  ],
+  "incomplete_queue_verification": {
+    "seconds": 21.373244151473045,
+    "status": "incomplete",
+    "attempts": 1,
+    "error": "Run file has an incomplete record; receive a newer source snapshot",
+    "sdk_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/transfer_snap/wandb-queue-e2e-xhqerog0/logs-repo/.git/mirroropd-upload/attempts/ac31880a21984a0cbb77b135fec046ec"
+  }
+}
