@@ -7,11 +7,17 @@ import fcntl
 import os
 import re
 import shutil
-import subprocess
 import tempfile
 from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
+
+# BEGIN OBSERVE IMPORT
+try:
+    from meituan import sync_observe as observe
+except ModuleNotFoundError:
+    import sync_observe as observe
+# END OBSERVE IMPORT
 
 ROOT = Path(__file__).resolve().parent.parent
 PREFIX = "archive_MirrorOPD-verl"
@@ -21,7 +27,7 @@ INCOMING_REF = "refs/archive/incoming"
 
 def git(repo, *args, check=True):
     """Run only local Git operations, without recursive submodule updates or deployment hooks."""
-    result = subprocess.run(
+    result = observe.run(
         ["git", "-c", "submodule.recurse=false", "-c", "core.hooksPath=/dev/null", "-C", str(repo), *args],
         capture_output=True,
     )
@@ -90,6 +96,18 @@ def check_hope_removed(repo, commit):
         raise ValueError("Commit still tracks hope/. Add /hope/ to .gitignore, git rm -r --cached hope, then commit")
 
 
+def write_bootstrap(path):
+    """Embed the shared journal so first-time receivers still need only one Python script."""
+    source = Path(__file__).read_text()
+    before, _, remaining = source.partition("# BEGIN OBSERVE IMPORT\n")
+    _, _, after = remaining.partition("# END OBSERVE IMPORT\n")
+    if not after:
+        raise ValueError("Generate full packs from the installed meituan/code_archive.py, not the bootstrap copy")
+    helper = Path(observe.__file__).read_text()
+    embedded = f'import types\nobserve = types.ModuleType("sync_observe")\nexec({helper!r}, observe.__dict__)\n'
+    path.write_text(before + embedded + after)
+
+
 def publish(packed, archive, chunk_size):
     """Stage every part before publishing; existing names are never overwritten."""
     if archive.exists() or list(archive.parent.glob(archive.name + ".part.*")):
@@ -121,6 +139,7 @@ def cleanup(directory, target, keep):
     for path in directory.glob(f"{PREFIX}_{target}_*.bundle*"):
         if path not in keep and path.is_file() and pattern.fullmatch(path.name):
             path.unlink()
+            observe.note("Removed old bundle", path=str(path))
 
 
 def pack(repo, snap, target, supplied="", full=False):
@@ -132,12 +151,17 @@ def pack(repo, snap, target, supplied="", full=False):
         if git(repo, "status", "--porcelain", "--untracked-files=normal").stdout:
             print("Note: packaging committed HEAD only; uncommitted and untracked files are not included.")
         base = ref(repo, confirmed_ref)
+        observe.update(head=commit, baseline=base, target=target)
         if base and not ancestor(repo, base, commit):
             raise ValueError("HEAD diverges from the peer baseline; resolve history or use a separate TARGET")
         if base == commit and not full:
+            observe.update(outcome="no_changes")
             print(f"Nothing to package: {target} already has {commit}. No new pack or ack is needed.")
             return []
         full = full or base is None
+        observe.note(
+            "Bundle plan", mode="full" if full else "incremental", head=commit, baseline=None if full else base
+        )
         name = supplied or f"{PREFIX}_{target}_{datetime.now():%Y%m%d_%H%M%S_%f}.bundle"
         archive = Path(name).expanduser()
         archive = archive if archive.is_absolute() else snap / archive
@@ -152,17 +176,23 @@ def pack(repo, snap, target, supplied="", full=False):
             git(repo, "update-ref", EXPORT_REF, commit)
             try:
                 revisions = [EXPORT_REF] if full else [EXPORT_REF, f"^{base}"]
-                git(repo, "bundle", "create", str(bundle), *revisions)
+                with observe.stage("bundle.create", mode="full" if full else "incremental"):
+                    git(repo, "bundle", "create", str(bundle), *revisions)
             finally:
                 git(repo, "update-ref", "-d", EXPORT_REF)
             if full:
                 bootstrap = archive.parent / "archive_bootstrap.py"
                 staged_script = Path(temp) / "archive_bootstrap.py"
-                shutil.copy2(__file__, staged_script)
+                write_bootstrap(staged_script)
                 staged_script.replace(bootstrap)
-            outputs = publish(bundle, archive, chunk_size)
+            with observe.stage("bundle.publish", archive=str(archive), chunk_size=chunk_size):
+                outputs = publish(bundle, archive, chunk_size)
+                observe.update(
+                    outputs=[str(path) for path in outputs], bytes=sum(path.stat().st_size for path in outputs)
+                )
         # This ref describes an actually published pack, never a later HEAD.
         git(repo, "update-ref", packed_ref, commit)
+        observe.note("Last packed ref updated; peer confirmation is unchanged", packed=commit, confirmed=base)
         cleanup(archive.parent, target, set(outputs))
         print(f"Packed {'full' if full else 'incremental'} commit {commit}; base: {base if not full else 'none'}")
         print("Manually transfer all of:")
@@ -183,25 +213,32 @@ def ack(repo, target):
         if not commit:
             raise ValueError(f"No successful pack recorded for TARGET={target}")
         known = remember_peer(repo, target, commit)
+        observe.update(packed=commit, confirmed=known, head=value(repo, "rev-parse", "HEAD"))
         print(f"Confirmed {target} has {known} (last packed commit: {commit})")
 
 
 def find_archive(supplied, snap):
     if supplied:
-        return Path(supplied).expanduser().resolve()
+        source = Path(supplied).expanduser().resolve()
+        observe.note("Using explicit archive", path=str(source))
+        return source
     for directory in (Path.home() / "Downloads", Path.cwd(), snap):
         candidates = list(directory.glob(f"{PREFIX}_*.bundle"))
         candidates += list(directory.glob(f"{PREFIX}_*.bundle.part.000"))
         if candidates:
-            return max(candidates, key=lambda path: path.stat().st_mtime_ns).resolve()
+            source = max(candidates, key=lambda path: path.stat().st_mtime_ns).resolve()
+            observe.note("Automatically selected archive", searched_directory=str(directory), selected=str(source))
+            return source
     raise FileNotFoundError("No source bundle found; pass ARCHIVE=/path/to/file.bundle explicitly")
 
 
 @contextmanager
 def joined(source):
+    observe.update(archive=str(source))
     if not source.is_file():
         raise FileNotFoundError(source)
     if source.name.endswith(".bundle"):
+        observe.note("Reading single bundle", bytes=source.stat().st_size)
         yield source, [source]
         return
     match = re.fullmatch(r"(.+\.bundle)\.part\.\d+", source.name)
@@ -214,10 +251,13 @@ def joined(source):
     )
     with tempfile.TemporaryDirectory(prefix="archive-join-") as temp:
         bundle = Path(temp) / "source.bundle"
-        with bundle.open("wb") as output:
+        with observe.stage("bundle.join", parts=len(parts)), bundle.open("wb") as output:
             for index, part in enumerate(parts):
                 if int(part.name[len(prefix) :]) != index:
                     raise ValueError(f"Missing archive part: {prefix}{index:03d}")
+                observe.note(
+                    "Joining part", part=str(part), index=index + 1, total=len(parts), bytes=part.stat().st_size
+                )
                 with part.open("rb") as stream:
                     shutil.copyfileobj(stream, output)
         yield bundle, parts
@@ -225,13 +265,18 @@ def joined(source):
 
 def receive(repo, bundle):
     """Verify prerequisites and import objects without updating the working branch."""
-    git(repo, "bundle", "verify", str(bundle))
+    with observe.stage(
+        "bundle.verify", hint="Missing prerequisites require a full bundle; truncated packs require all parts."
+    ):
+        git(repo, "bundle", "verify", str(bundle))
     heads = value(repo, "bundle", "list-heads", str(bundle)).splitlines()
     if len(heads) != 1 or heads[0].split()[1] != EXPORT_REF:
         raise ValueError("Expected exactly one archive export ref in the bundle")
-    git(repo, "fetch", "--no-tags", "--no-recurse-submodules", str(bundle), f"+{EXPORT_REF}:{INCOMING_REF}")
+    with observe.stage("bundle.import", repository=str(repo)):
+        git(repo, "fetch", "--no-tags", "--no-recurse-submodules", str(bundle), f"+{EXPORT_REF}:{INCOMING_REF}")
     commit = value(repo, "rev-parse", f"{INCOMING_REF}^{{commit}}")
     check_hope_removed(repo, commit)
+    observe.update(incoming_commit=commit)
     return commit
 
 
@@ -266,7 +311,7 @@ def preserve_hope(repo):
 
 def update_checkout(repo, bundle, target):
     require_checkout(repo)
-    with locked(repo):
+    with locked(repo), observe.stage("checkout.update", repository=str(repo)):
         backup = git_dir(repo) / "archive-hope-backup"
         if backup.exists() or backup.is_symlink():
             raise ValueError(
@@ -277,13 +322,21 @@ def update_checkout(repo, bundle, target):
         commit = receive(repo, bundle)
         current = value(repo, "rev-parse", "HEAD")
         previous = ref(repo, refs(target)[1])
+        observe.update(head_before=current, peer_before=previous)
         if previous and not ancestor(repo, previous, commit) and not ancestor(repo, commit, previous):
             raise ValueError("Peer history diverged; use a separate TARGET for this history")
         if not ancestor(repo, current, commit) and not ancestor(repo, commit, current):
             raise ValueError("Source and destination histories diverged; no merge or overwrite was performed")
         changes = git(repo, "status", "--porcelain", "--untracked-files=no", "--", ".", ":(exclude)hope").stdout
         if changes:
-            raise ValueError("Destination has uncommitted source changes; commit or save them before unpack")
+            listing = changes.decode(errors="replace").strip()
+            observe.note("Uncommitted source paths (full list)", paths=listing, console=False)
+            preview = "\n".join(listing.splitlines()[:30])
+            raise ValueError(
+                "Destination has uncommitted source changes; commit or save them before unpack.\n"
+                f"{preview}\nInspect: git --no-pager diff --stat HEAD -- . ':(exclude)hope'\n"
+                "A checkout previously overwritten by tar may need legacy migration; do not reset or commit it blindly."
+            )
         if ancestor(repo, current, commit) and current != commit:
             # Git can overwrite ignored files on checkout. Preserve any newly tracked local paths as well.
             added = git(repo, "diff", "--name-only", "--diff-filter=A", "--no-renames", "-z", current, commit).stdout
@@ -292,9 +345,13 @@ def update_checkout(repo, bundle, target):
                     path = repo / os.fsdecode(name)
                     if path.exists() or path.is_symlink():
                         raise ValueError(f"New tracked path would overwrite a local file: {path}")
-            with preserve_hope(repo):
+            with (
+                observe.stage("checkout.fast_forward", hint="Input is retained. Preserve local edits before retrying."),
+                preserve_hope(repo),
+            ):
                 git(repo, "merge", "--ff-only", "--no-autostash", commit)
         known = remember_peer(repo, target, commit)
+        observe.update(head_after=value(repo, "rev-parse", "HEAD"), peer_after=known)
         print(f"Checkout at {value(repo, 'rev-parse', 'HEAD')}; {target} is known to have {known}")
 
 
@@ -338,20 +395,28 @@ def bootstrap(destination, bundle, target):
         shutil.move(str(staging / ".git"), destination / ".git")
         if backup.exists():
             print(f"Preserved replaced legacy files at {backup}")
+            observe.update(legacy_backup=str(backup))
+        observe.update(head_after=commit, peer_after=commit)
         print(f"Initialized checkout at {commit}; {target} is known to have this commit")
 
 
 def unpack(destination, source, target):
     refs(target)
+    observe.update(destination=str(destination), target=target)
     with joined(source) as (bundle, consumed):
         if (destination / ".git").exists() or (destination / ".git").is_symlink():
             update_checkout(destination, bundle, target)
         else:
-            bootstrap(destination, bundle, target)
+            with observe.stage("checkout.bootstrap", destination=str(destination)):
+                bootstrap(destination, bundle, target)
     print(f"Unpacked into {destination}. Run make archive-ack on the sender to confirm its last pack.")
     if os.environ.get("KEEP_ARCHIVE_AFTER_UNPACK", "0") != "1":
-        for path in consumed:
-            path.unlink()
+        with observe.stage("archive.cleanup", files=len(consumed)):
+            for path in consumed:
+                path.unlink()
+        observe.note("Removed consumed source archives", files=len(consumed))
+    else:
+        observe.skip("archive.cleanup", "KEEP_ARCHIVE_AFTER_UNPACK=1")
 
 
 def main():
@@ -364,22 +429,39 @@ def main():
     snap = Path(os.environ.get("MIRROROPD_SNAP_DIR", "transfer_snap")).expanduser()
     snap = snap if snap.is_absolute() else ROOT / snap
     try:
-        if args.action == "pack":
-            if args.paths:
-                raise ValueError("ARCHIVE_SOURCES is no longer supported: bundles carry the committed project")
-            pack(ROOT, snap, target, args.archive, os.environ.get("MIRROROPD_ARCHIVE_FULL", "0") == "1")
-        elif args.action == "ack":
-            if args.archive or args.paths:
-                raise ValueError("ack uses the last successful pack; no commit or archive argument is needed")
-            ack(ROOT, target)
-        else:
-            if len(args.paths) > 1:
-                raise ValueError("unpack accepts only one destination")
-            destination = Path(args.paths[0]).expanduser() if args.paths else ROOT
-            destination = destination if destination.is_absolute() else ROOT / destination
-            unpack(destination.resolve(), find_archive(args.archive, snap), target)
+        destination = Path(args.paths[0]).expanduser() if args.action == "unpack" and args.paths else ROOT
+        destination = destination if destination.is_absolute() else ROOT / destination
+        receiving_snap = Path(os.environ.get("MIRROROPD_SNAP_DIR", "transfer_snap")).expanduser()
+        receiving_snap = receiving_snap if receiving_snap.is_absolute() else destination / receiving_snap
+        default_log = receiving_snap / "operations" if args.action == "unpack" else snap / "operations"
+        log_dir = Path(os.environ.get("MIRROROPD_OPERATION_DIR") or default_log).expanduser()
+        with observe.operation(
+            log_dir,
+            f"archive-{args.action}",
+            repository=str(destination if args.action == "unpack" else ROOT),
+            entrypoint=str(Path(__file__).resolve()),
+            target=target,
+            archive=args.archive,
+            full=os.environ.get("MIRROROPD_ARCHIVE_FULL", "0"),
+            keep_archive=os.environ.get("KEEP_ARCHIVE_AFTER_UNPACK", "0"),
+        ):
+            with observe.stage(f"archive.{args.action}"):
+                if args.action == "pack":
+                    if args.paths:
+                        raise ValueError("ARCHIVE_SOURCES is no longer supported: bundles carry the committed project")
+                    pack(ROOT, snap, target, args.archive, os.environ.get("MIRROROPD_ARCHIVE_FULL", "0") == "1")
+                elif args.action == "ack":
+                    if args.archive or args.paths:
+                        raise ValueError("ack uses the last successful pack; no commit or archive argument is needed")
+                    ack(ROOT, target)
+                else:
+                    if len(args.paths) > 1:
+                        raise ValueError("unpack accepts only one destination")
+                    unpack(destination.resolve(), find_archive(args.archive, snap), target)
+    except KeyboardInterrupt:
+        parser.exit(130, "archive: interrupted; see the operation log before retrying\n")
     except (OSError, ValueError) as error:
-        parser.exit(1, f"archive: {error}\n")
+        parser.exit(1, observe.redact(f"archive: {error}\n"))
 
 
 if __name__ == "__main__":

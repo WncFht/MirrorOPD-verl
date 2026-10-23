@@ -171,6 +171,7 @@ class LogPublishTest(unittest.TestCase):
                 "sync-log-unpack",
                 f"LOG_ARCHIVE={self.archive}",
                 f"WANDB_LOGS_REPO={self.logs}",
+                f"OPERATION_DIR={self.base / 'operations'}",
             ],
             env=env,
             capture_output=True,

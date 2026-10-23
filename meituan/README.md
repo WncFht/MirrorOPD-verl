@@ -78,6 +78,38 @@ python3 meituan/transfer.py code unpack /实际上传目录/旧包.tar.gz /目�
 
 W&B 和结果归档继续使用下文原有命令，不参与 Git bundle 同步。
 
+## 状态与故障定位
+
+在源码仓库查看本机状态：
+
+```bash
+make sync-status
+make archive-status TARGET=peer
+make sync-log-status
+python3 meituan/sync_status.py --json
+```
+
+这些命令只读取本地文件和 Git 状态，不打包、不上传、不推送，也不联网查询远程。代码部分显示当前 HEAD、上次打包提交、已确认的对方提交、相对基线的 ahead/behind 和未提交文件。日志部分显示打包源、实际接收目录、run 数量、打包状态文件、日志仓库的本地提交状态，以及最近八次相关操作。没有记录的历史状态显示 unknown；本地已知的 peer/upstream 位置可能落后于远程实际状态。
+
+`archive-pack`、`archive-unpack`、`archive-ack` 和日志、结果 pack/unpack 都会在启动时打印诊断日志路径。默认每次生成独立的 `transfer_snap/operations/<时间戳>_<操作>_<唯一编号>.log` 与同名 `.json`。文本日志保留命令输出和异常栈；JSON 报告记录入口脚本、机器、进程、Python 版本、输入输出路径、相关提交、各阶段状态及耗时。输入包的自动清理不会删除这些诊断记录；记录不自动过期，可在排障结束后手动归档。
+
+接收源码到其他 `DEST` 时，日志默认放在接收目录的 `transfer_snap/operations/`；设置 `SNAP_DIR` 时使用对应目录。所有入口均可通过 `OPERATION_DIR=/绝对诊断目录` 覆盖，查看状态时使用同一参数。独立 `archive_bootstrap.py` 已内嵌日志模块，仍只需上传一个 Python 文件。
+
+```bash
+make sync-log-unpack LOG_ARCHIVE=/下载目录/日志包.tar.gz OPERATION_DIR=/tmp/mirroropd-sync
+make sync-log-status OPERATION_DIR=/tmp/mirroropd-sync
+# 实时查看启动消息中给出的具体日志文件。
+tail -f /tmp/mirroropd-sync/具体操作.log
+```
+
+运行时显示阶段开始、成功或失败、分卷路径与大小、W&B run 名及进度、Git 提交和推送结果；长时间操作每 15 秒显示等待提示。未提交源码导致接收停止时，终端显示前 30 行文件状态，完整列表及恢复提示保存在日志。源码仍按原有快进规则处理，不因为增加诊断而自动覆盖或提交本地变化。
+
+日志接收报告分别记录 `logs.merge`、每个 run 的 `wandb.copy` / `wandb.upload`、`logs.git_commit` 和 `logs.git_push`。例如第二个 run 上传失败时，第一个 run 的成功记录会保留，Git 推送不会执行；Git 推送失败时，报告中会保留已经创建的本地日志提交 ID。原始 run 和输入包继续保留，可排除故障后重跑原命令。重跑产生新报告，不覆盖旧的失败记录。
+
+`WANDB_SYNC=0` 或 `WANDB_GIT_SYNC=0` 对应阶段显示 skipped，不能解读为云端上传或 Git 推送成功。整体 success 仅表示该次命令启用的阶段全部完成。报告记录的是 W&B CLI 的退出结果，不是实时云端状态，也不是日志传输回执；`logs_state.json` 仍然只表示已打包，不代表送达。原有“日志包必须在下一次打包前传回”的规则不变。
+
+正常异常记录 failed，Ctrl-C 记录 interrupted。机器掉电、进程被强制终止或磁盘无法继续写入时，报告可能停留在 running；状态页显示最后更新时间，不能仅凭 running 判断进程仍活着。日志不保存完整环境变量，并遮蔽已知密钥环境值、常见 token/password 字段和 URL 密码；诊断文件仍包含本机路径和工具输出，默认文件权限为仅当前用户可读写。
+
 ## 原生 Python 与离线依赖
 
 仓库包含 `packages/mirroropd-native-deps-20261020.zip`，内容是 PyPI 官方发布的 TransferQueue 0.1.11、liger-kernel 0.8.4 wheel、来源说明，以及环境检查脚本。两个 wheel 都是 `py3-none-any`，无需编译 CUDA 扩展。[^transferqueue] [^liger]
@@ -216,21 +248,22 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `PYTHON` | `python3` | 运行传输工具与 ZIP 解包 |
 | `SYSTEM_PYTHON` | `/bin/python3` | 创建开发机原生虚拟环境 |
 | `SNAP_DIR` | `transfer_snap` | 压缩包与增量状态目录 |
+| `OPERATION_DIR` | `SNAP_DIR/operations` | 每次操作的文本日志与 JSON 报告目录；状态命令使用相同参数 |
 | `CHUNK_SIZE` | `10485760` | 分卷大小，单位为字节 |
 | `MAX_FILE_MB` | `100` | 结果文件大小上限，单位为 MiB |
 | `WANDB_RUNS_DIR` | 留空，按操作选择 | 覆盖实际 run 目录；打包默认 `wandb`，解包默认独立日志仓库 |
 | `WANDB_LOGS_REPO` | 同级 Git 仓库 `../wandb-logs`，不存在则 `~/src/wandb-logs` | 接收端日志仓库，run 合并到其中的 `MirrorOPD-verl/wandb/` |
 | `WANDB_SYNC` | `1` | 解包后从临时副本上传 W&B；设为 `0` 跳过上传 |
 | `WANDB_GIT_SYNC` | `1` | 上传完成后提交并推送该项目接收目录的全部日志变化；设为 `0` 跳过 Git 操作 |
-| `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；更旧源码包仍清理 |
+| `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；日志和结果输入包始终保留 |
 | `MODEL_ROOT`、`DATA_ROOT` | `../model`、`../data` 的绝对路径 | 数学资产检查目录 |
 | `LOG_ACTION`、`ACTION` | `unpack` | `make sync-log`、`make sync-results` 的操作 |
 
-三个 shell 脚本保留 `pack`、`unpack` 命令行入口，调用同一套 `transfer.py` 逻辑。直接调用 shell 时用 `MIRROROPD_*` 环境变量设置参数；通常使用 Makefile 即可。
+源码 shell 入口调用 `code_archive.py`；日志、结果入口调用 `transfer.py`。两者共用 `sync_observe.py` 保存运行诊断，`sync_status.py` 读取状态。直接调用 shell 或独立 bootstrap 时用 `MIRROROPD_*` 环境变量设置参数，诊断目录对应 `MIRROROPD_OPERATION_DIR`；通常使用 Makefile 即可。
 
 ## 验证
 
-源码包内容可用 `tar -tzf <源码包>` 查看，应包含 `Makefile`、`AGENTS.md`、`meituan/`、`verl/` 等源码，包含离线 ZIP，排除虚拟环境、模型和训练输出。分卷需要全部上传后再解包。
+完整源码 bundle 可用 `git bundle list-heads <源码包.bundle>` 查看目标提交；源码与依赖 ZIP 以该提交的 Git 跟踪内容为准。日志和结果 tar 包可用 `tar -tzf <日志或结果包>` 查看。分卷需要全部传输后再解包。
 
 开发机先运行 `make native-check`，确认本仓库源码路径、两个补充依赖和 vLLM 扩展导入正确；运行 `make assets-check` 检查模型及四份数据。再单独测试 GPU 张量运算；上述检查不替代完整训练验收。
 

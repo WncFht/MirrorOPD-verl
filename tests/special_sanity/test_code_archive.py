@@ -3,6 +3,7 @@
 """Exercise offline source exchange with real Git repositories and no network or training dependencies."""
 
 import importlib.util
+import json
 import os
 import shutil
 import subprocess
@@ -171,6 +172,21 @@ class CodeArchiveTest(unittest.TestCase):
             archive.unpack(self.receiver, bundle, "peer")
         self.assertEqual((self.receiver / "src/code.py").read_text(), "local edit\n")
 
+    def test_dirty_receiver_report_names_files_and_preserves_peer_baseline(self):
+        bundle = self.initialize()
+        self.write(self.receiver, "src/code.py", "local edit\n")
+        reports = self.base / "operations"
+        with self.assertRaisesRegex(ValueError, "src/code.py"):
+            with archive.observe.operation(reports, "archive-unpack"):
+                archive.unpack(self.receiver, bundle, "peer")
+        report = json.loads(next(reports.glob("*.json")).read_text())
+        self.assertEqual(report["failed_stage"], "checkout.update")
+        self.assertEqual(report["details"]["head_before"], self.first)
+        self.assertEqual(report["details"]["peer_before"], self.first)
+        self.assertNotIn("head_after", report["details"])
+        self.assertIn("src/code.py", Path(report["log"]).read_text())
+        self.assertTrue(bundle.exists())
+
     def test_ignored_local_file_is_not_overwritten(self):
         self.initialize()
         self.write(self.sender, "outputs/new.py", "tracked\n")
@@ -326,7 +342,7 @@ class CodeArchiveTest(unittest.TestCase):
         self.assertEqual(archive.ref(self.receiver, archive.refs("peer")[1]), newer)
 
     def test_standalone_bootstrap_and_make_entrypoints(self):
-        for name in ("Makefile", "meituan/archive.sh", "meituan/code_archive.py"):
+        for name in ("Makefile", "meituan/archive.sh", "meituan/code_archive.py", "meituan/sync_observe.py"):
             self.write(self.sender, name, (ROOT / name).read_bytes())
         self.commit(self.sender)
         subprocess.run(["make", "archive-pack", f"PYTHON={sys.executable}"], cwd=self.sender, check=True)

@@ -21,6 +21,7 @@ KEEP_ARCHIVE_AFTER_UNPACK ?= 0
 RESULTS_REMOTE_DIR ?= outputs
 RESULTS_LOCAL_DIR ?= results
 SNAP_DIR ?= transfer_snap
+OPERATION_DIR ?=
 CHUNK_SIZE ?= 10485760
 MAX_FILE_MB ?= 100
 MODEL_ROOT ?= $(abspath ../model)
@@ -31,6 +32,7 @@ HOPE_FILE ?= mirroropd.hope
 
 export MIRROROPD_PYTHON = $(PYTHON)
 export MIRROROPD_SNAP_DIR = $(SNAP_DIR)
+export MIRROROPD_OPERATION_DIR = $(OPERATION_DIR)
 export MIRROROPD_CHUNK_SIZE = $(CHUNK_SIZE)
 export MIRROROPD_ARCHIVE_FULL = $(FULL)
 export MIRROROPD_ARCHIVE_TARGET = $(TARGET)
@@ -46,8 +48,11 @@ export MIRROROPD_MAX_FILE_MB = $(MAX_FILE_MB)
 .PHONY: help archive archive-pack archive-unpack archive-ack sync-log sync-log-pack sync-log-unpack
 .PHONY: sync-results sync-results-pack sync-results-unpack native-env native-unpack native-install native-check wandb-check assets-check
 .PHONY: opd-submit
+.PHONY: sync-status archive-status sync-log-status
 
 help:
+	@echo '同步状态：make sync-status（只读）；archive-status / sync-log-status 分别查看代码、日志'
+	@echo '诊断记录：默认 transfer_snap/operations/*.log 和 *.json；OPERATION_DIR 可指定目录'
 	@echo '源码打包：make archive-pack [FULL=1] [TARGET=peer] [ARCHIVE=...]（Git 提交，默认累计增量）'
 	@echo '源码接收：make archive-unpack [ARCHIVE=包.bundle或.part.000] [DEST=.] [TARGET=peer]'
 	@echo '同步确认：接收成功后，在发送端执行 make archive-ack [TARGET=peer]，确认上次打包的提交'
@@ -70,6 +75,15 @@ archive-unpack:
 
 archive-ack:
 	@bash meituan/archive.sh ack
+
+sync-status:
+	@$(PYTHON) meituan/sync_status.py
+
+archive-status:
+	@$(PYTHON) meituan/sync_status.py --section code
+
+sync-log-status:
+	@$(PYTHON) meituan/sync_status.py --section logs
 
 sync-log:
 	@bash meituan/sync-log.sh "$(LOG_ACTION)" "$(LOG_ARCHIVE)"

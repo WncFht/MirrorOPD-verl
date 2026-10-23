@@ -12,6 +12,11 @@ import tempfile
 from datetime import datetime
 from pathlib import Path, PurePosixPath
 
+try:
+    from meituan import sync_observe as observe
+except ModuleNotFoundError:
+    import sync_observe as observe
+
 ROOT = Path(__file__).resolve().parent.parent
 PREFIXES = {
     "code": "archive_MirrorOPD-verl",
@@ -74,7 +79,7 @@ def wandb_runs_dir(action):
 
 def wandb_git_repo(destination):
     """Find the receiving Git checkout without accidentally committing training sources."""
-    result = subprocess.run(
+    result = observe.run(
         ["git", "-C", str(destination), "rev-parse", "--show-toplevel"],
         capture_output=True,
         text=True,
@@ -88,37 +93,60 @@ def wandb_git_repo(destination):
 
 def sync_wandb_runs(runs):
     """Upload disposable copies because W&B may rewrite config, summary and sync state."""
-    for run in runs:
-        with tempfile.TemporaryDirectory(prefix="mirroropd-wandb-sync-") as temp:
+    for index, run in enumerate(runs, start=1):
+        with (
+            observe.stage(
+                "wandb.run",
+                run=run.name,
+                index=index,
+                total=len(runs),
+                hint="Logs and archive retained. Fix the error, then retry the same sync-log-unpack.",
+            ),
+            tempfile.TemporaryDirectory(prefix="mirroropd-wandb-sync-") as temp,
+        ):
             copied = Path(temp) / run.name
-            shutil.copytree(run, copied)
+            with observe.stage("wandb.copy", run=run.name):
+                shutil.copytree(run, copied)
             # A new package can extend an already-synced run; replay this snapshot.
             for pattern in ("*.wandb.synced", "*.wandb.syncstate"):
                 for marker in copied.glob(pattern):
                     marker.unlink()
-            subprocess.run(
-                ["wandb", "sync", str(copied)],
-                cwd=temp,
-                env={**os.environ, "WANDB_DIR": temp},
-                check=True,
-            )
+            with observe.stage("wandb.upload", run=run.name):
+                observe.run(
+                    ["wandb", "sync", str(copied)],
+                    stream=True,
+                    cwd=temp,
+                    env={**os.environ, "WANDB_DIR": temp},
+                    check=True,
+                )
 
 
 def publish_wandb_logs(repo, destination):
     """Commit the project's log directory, including changes missed by earlier imports."""
     paths = [str(destination.resolve().relative_to(repo))]
     git = ["git", "--literal-pathspecs", "-C", str(repo)]
-    subprocess.run([*git, "add", "-A", "--", *paths], check=True)
-    diff = subprocess.run([*git, "diff", "--cached", "--quiet", "--", *paths])
+    with observe.stage("logs.git_stage", repository=str(repo), paths=paths):
+        observe.run([*git, "add", "-A", "--", *paths], stream=True, check=True)
+        diff = observe.run([*git, "diff", "--cached", "--quiet", "--", *paths])
     if diff.returncode == 1:
-        subprocess.run(
-            [*git, "commit", "--only", "-m", "chore(logs): sync W&B run archive", "--", *paths],
-            check=True,
-        )
+        with observe.stage("logs.git_commit", repository=str(repo)):
+            observe.run(
+                [*git, "commit", "--only", "-m", "chore(logs): sync W&B run archive", "--", *paths],
+                stream=True,
+                check=True,
+            )
     else:
         diff.check_returncode()
+        observe.skip("logs.git_commit", "No new staged changes; push will still be retried")
         print("No new log changes to commit; retrying Git push")
-    subprocess.run([*git, "push"], check=True)
+    commit = observe.run([*git, "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    observe.update(logs_commit=commit, logs_repository=str(repo))
+    with observe.stage(
+        "logs.git_push",
+        commit=commit,
+        hint="Local commit retained. Fix authentication/upstream or divergence, then retry without force push.",
+    ):
+        observe.run([*git, "push"], stream=True, check=True)
 
 
 def excluded(path):
@@ -170,6 +198,9 @@ def incremental_files(kind, snap_dir):
     if not source.is_dir():
         raise FileNotFoundError(source)
     state_path = snap_dir / f"{kind}_state.json"
+    observe.note(
+        "Scanning incremental files", source=str(source), state=str(state_path), state_exists=state_path.exists()
+    )
     previous = json.loads(state_path.read_text()) if state_path.exists() else {}
     state, candidates = {}, []
     max_bytes = int(os.environ.get("MIRROROPD_MAX_FILE_MB", "100")) * 1024 * 1024
@@ -204,6 +235,12 @@ def incremental_files(kind, snap_dir):
         selected = [(path, "results/" + key) for path, key in candidates if key in changed]
     if skipped:
         print(f"Skipped {skipped} result files larger than {max_bytes} bytes")
+    observe.update(source=str(source), state_path=str(state_path), scanned_files=len(state), changed_files=len(changed))
+    observe.note(
+        "Selected archive payload", files=len(selected), bytes=sum(path.stat().st_size for path, _ in selected)
+    )
+    if kind == "logs":
+        observe.note("Selected W&B runs", runs=sorted({PurePosixPath(member).parts[1] for _, member in selected}))
     return selected, state_path, state
 
 
@@ -222,6 +259,7 @@ def clean_archives(kind, archive, keep, older_than=None):
         if older_than is not None and path.stat().st_mtime_ns >= older_than:
             continue
         path.unlink()
+        observe.note("Removed old archive", path=str(path))
         removed += 1
     if removed:
         print(f"Removed {removed} old {kind} archive file(s) from {archive.parent}")
@@ -237,6 +275,7 @@ def pack(args, snap_dir):
             raise ValueError("log/result pack accepts only an optional archive path")
         files, state_path, state = incremental_files(args.kind, snap_dir)
     if not files:
+        observe.update(outcome="no_changes")
         print("Nothing to package: no new or updated files")
         return
     name = args.archive or f"{PREFIXES[args.kind]}_{datetime.now():%Y%m%d_%H%M%S_%f}.tar.gz"
@@ -253,7 +292,10 @@ def pack(args, snap_dir):
         raise ValueError("CHUNK_SIZE must be positive")
     with tempfile.TemporaryDirectory(prefix=".mirroropd-pack-", dir=archive.parent) as temp:
         packed = Path(temp) / archive.name
-        with tarfile.open(packed, "w:gz", format=tarfile.PAX_FORMAT) as output:
+        with (
+            observe.stage("archive.compress", files=len(files)),
+            tarfile.open(packed, "w:gz", format=tarfile.PAX_FORMAT) as output,
+        ):
             for path, member in files:
                 output.add(path, arcname=member, recursive=False)
         if packed.stat().st_size <= chunk_size:
@@ -270,6 +312,8 @@ def pack(args, snap_dir):
                     outputs.append(archive.parent / part.name)
             for path in outputs:
                 (Path(temp) / path.name).replace(path)
+    observe.update(outputs=[str(path) for path in outputs], bytes=sum(path.stat().st_size for path in outputs))
+    observe.note("Archive published", parts=len(outputs))
     if args.kind in ("code", "logs"):
         clean_archives(args.kind, archive, set(outputs))
     if state_path is not None:
@@ -277,6 +321,7 @@ def pack(args, snap_dir):
         next_state = state_path.with_suffix(".tmp")
         next_state.write_text(json.dumps(state, sort_keys=True) + "\n")
         next_state.replace(state_path)
+        observe.note("Packing state advanced; this does not acknowledge delivery", state=str(state_path))
     print(f"Packed {len(files)} files. Manually transfer all of:")
     for path in outputs:
         print(path)
@@ -285,18 +330,23 @@ def pack(args, snap_dir):
 def find_archive(kind, supplied, snap_dir):
     """Prefer an explicit input, then the newest matching download, checkout file or snapshot."""
     if supplied:
-        return Path(supplied).expanduser().absolute()
+        source = Path(supplied).expanduser().absolute()
+        observe.note("Using explicit archive", path=str(source))
+        return source
     for directory in (Path.home() / "Downloads", Path.cwd(), snap_dir):
         candidates = list(directory.glob(PREFIXES[kind] + "*.tar.gz"))
         candidates += list(directory.glob(PREFIXES[kind] + "*.tar.gz.part.000*"))
         if candidates:
-            return max(candidates, key=lambda path: path.stat().st_mtime_ns)
+            source = max(candidates, key=lambda path: path.stat().st_mtime_ns)
+            observe.note("Automatically selected archive", selected=str(source), searched_directory=str(directory))
+            return source
     raise FileNotFoundError(f"No {PREFIXES[kind]} archive found; pass its path explicitly")
 
 
 def unpack(args, snap_dir):
     """Replace archived source paths, or merge logs/results, after validating the full archive."""
     source = find_archive(args.kind, args.archive, snap_dir)
+    observe.update(archive=str(source))
     if not source.is_file():
         raise FileNotFoundError(source)
     if args.kind != "code" and args.paths or len(args.paths) > 1:
@@ -315,15 +365,18 @@ def unpack(args, snap_dir):
             consumed = parts
             archive_base = source.with_name(source.name.rsplit(".part.", 1)[0])
             archive = Path(temp) / "joined.tar.gz"
-            with archive.open("wb") as output:
+            with observe.stage("archive.join", parts=len(parts)), archive.open("wb") as output:
                 for index, part in enumerate(parts):
                     if int(part.name.rsplit(".", 1)[1]) != index:
                         raise ValueError(f"Missing archive part: {prefix}{index:03d}")
+                    observe.note(
+                        "Joining part", path=str(part), index=index + 1, total=len(parts), bytes=part.stat().st_size
+                    )
                     with part.open("rb") as stream:
                         shutil.copyfileobj(stream, output)
         extracted = Path(temp) / "extracted"
         extracted.mkdir()
-        with tarfile.open(archive, "r:gz") as bundle:
+        with observe.stage("archive.extract"), tarfile.open(archive, "r:gz") as bundle:
             members = []
             for member in bundle.getmembers():
                 path = PurePosixPath(member.name)
@@ -339,6 +392,7 @@ def unpack(args, snap_dir):
                     raise ValueError(f"Expected {expected}/ in archive, found: {member.name}")
                 members.append(member)
             bundle.extractall(extracted, members=members, filter="data")
+            observe.note("Extracted archive", members=len(members), bytes=sum(member.size for member in members))
         if args.kind == "code":
             destination = repo_path(args.paths[0]) if args.paths else ROOT
             destination.mkdir(parents=True, exist_ok=True)
@@ -359,16 +413,24 @@ def unpack(args, snap_dir):
             incoming = extracted / logical
             if not incoming.is_dir():
                 raise ValueError(f"Archive contains no {logical}/ directory")
-            shutil.copytree(incoming, destination, dirs_exist_ok=True)
+            observe.update(destination=str(destination))
+            with observe.stage("logs.merge" if args.kind == "logs" else "results.merge", destination=str(destination)):
+                shutil.copytree(incoming, destination, dirs_exist_ok=True)
             if args.kind == "logs":
                 runs = [destination / run.name for run in sorted(incoming.glob("offline-run-*")) if run.is_dir()]
-                git_repo = (
-                    wandb_git_repo(destination) if os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1" else None
-                )
+                observe.update(runs=[run.name for run in runs])
+                with observe.stage("logs.destination", destination=str(destination)):
+                    git_repo = (
+                        wandb_git_repo(destination) if os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1" else None
+                    )
                 if os.environ.get("MIRROROPD_WANDB_SYNC", "1") == "1":
                     sync_wandb_runs(runs)
+                else:
+                    observe.skip("wandb.upload", "WANDB_SYNC=0; cloud upload was not attempted")
                 if git_repo is not None:
                     publish_wandb_logs(git_repo, destination)
+                else:
+                    observe.skip("logs.git_publish", "WANDB_GIT_SYNC=0; Git commit/push were not attempted")
     print(f"Unpacked into {destination}")
     if args.kind == "code":
         clean_archives(args.kind, archive_base, set(consumed), older_than=source_mtime)
@@ -395,10 +457,27 @@ def main():
     )
     args = parser.parse_args()
     snap_dir = repo_path(os.environ.get("MIRROROPD_SNAP_DIR", "transfer_snap"))
-    if args.action == "pack":
-        pack(args, snap_dir)
-    else:
-        unpack(args, snap_dir)
+    log_dir = Path(os.environ.get("MIRROROPD_OPERATION_DIR") or snap_dir / "operations").expanduser()
+    try:
+        with observe.operation(
+            log_dir,
+            f"{args.kind}-{args.action}",
+            repository=str(ROOT),
+            entrypoint=str(Path(__file__).resolve()),
+            snap_dir=str(snap_dir),
+            archive=args.archive,
+            wandb_sync=os.environ.get("MIRROROPD_WANDB_SYNC", "1"),
+            wandb_git_sync=os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1"),
+        ):
+            with observe.stage(f"{args.kind}.{args.action}"):
+                if args.action == "pack":
+                    pack(args, snap_dir)
+                else:
+                    unpack(args, snap_dir)
+    except KeyboardInterrupt:
+        parser.exit(130, "transfer: interrupted; see the operation log before retrying\n")
+    except (OSError, ValueError, tarfile.TarError, subprocess.CalledProcessError) as error:
+        parser.exit(1, observe.redact(f"transfer: {error}\n"))
 
 
 if __name__ == "__main__":
