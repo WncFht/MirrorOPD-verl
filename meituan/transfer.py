@@ -411,6 +411,8 @@ def main():
                     unpack(args, snap_dir)
     except KeyboardInterrupt:
         parser.exit(130, "transfer: interrupted; see the operation log before retrying\n")
+    except observe.PartialResultError as error:
+        parser.exit(2, observe.redact(f"transfer: {error}\n"))
     except (OSError, ValueError, tarfile.TarError, subprocess.CalledProcessError) as error:
         parser.exit(1, observe.redact(f"transfer: {error}\n"))
 

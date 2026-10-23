@@ -21,6 +21,59 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 _active = None
+ANSI = re.compile(r"\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))")
+PALETTE = {
+    "START": "1;36",
+    "BEGIN": "36",
+    "SUCCESS": "32",
+    "DONE": "1;32",
+    "SUCCEEDED": "32",
+    "FAIL": "1;31",
+    "FAILED": "31",
+    "ERROR": "31",
+    "PARTIAL": "1;33",
+    "INCOMPLETE": "33",
+    "WARN": "33",
+    "WAIT": "34",
+    "PENDING": "34",
+    "RUNNING": "36",
+    "INTERRUPTED": "33",
+    "SKIP": "90",
+    "SKIPPED": "90",
+    "SUPERSEDED": "90",
+}
+
+
+class PartialResultError(ValueError):
+    """Some inputs need newer data; keep a nonzero exit without calling this a transport failure."""
+
+    partial = True
+    returncode = 2
+
+
+def color_enabled(console):
+    mode = os.environ.get("MIRROROPD_COLOR", "auto").lower()
+    if "NO_COLOR" in os.environ or mode == "never":
+        return False
+    if mode == "always":
+        return True
+    return bool(getattr(console, "isatty", lambda: False)()) and os.environ.get("TERM") != "dumb"
+
+
+def paint(text, console):
+    text = ANSI.sub("", text)
+    if not color_enabled(console):
+        return text
+    text = re.sub(r"^\[[^\]\n]+\]", lambda m: f"\033[2m{m[0]}\033[0m", text)
+    pattern = r"\b(" + "|".join(PALETTE) + r")\b"
+    return re.sub(pattern, lambda m: f"\033[{PALETTE[m[0].upper()]}m{m[0]}\033[0m", text, flags=re.I)
+
+
+def console_print(message=""):
+    if _active:
+        _active.emit(str(message))
+    else:
+        print(paint(redact(message), sys.stdout))
 
 
 def now():
@@ -29,7 +82,7 @@ def now():
 
 def redact(text):
     """Mask common credential forms and known secret environment values, without logging the environment."""
-    text = str(text)
+    text = ANSI.sub("", str(text))
     for key, value in os.environ.items():
         if len(value) >= 8 and re.search(r"TOKEN|PASSWORD|SECRET|API_KEY", key, re.I):
             text = text.replace(value, "[REDACTED]")
@@ -94,9 +147,9 @@ class Journal:
         with self.mutex:
             text = redact(text)
             if console is not None:
-                console.write(text)
+                console.write(paint(text, console))
                 console.flush()
-            self.stream.write(text)
+            self.stream.write(ANSI.sub("", text).replace("\r", "\n"))
 
     def emit(self, message, console=True):
         self.write(f"[{now()}] {message}\n", self.console if console else None)
@@ -130,19 +183,24 @@ def operation(directory, action, **details):
     heartbeat = threading.Thread(target=journal.heartbeat, args=(stop,), daemon=True)
     try:
         journal.emit(f"START {action} | log: {journal.log_path}")
-        journal.emit("Context: " + json.dumps(details, ensure_ascii=False, default=str))
+        journal.emit("Context: " + json.dumps(details, ensure_ascii=False, default=str), console=False)
         heartbeat.start()
         with redirect_stdout(Tee(sys.stdout, journal)), redirect_stderr(Tee(sys.stderr, journal)):
             try:
                 yield journal
             except BaseException as error:
-                journal.data["status"] = "interrupted" if isinstance(error, KeyboardInterrupt) else "failed"
+                journal.data["status"] = (
+                    "interrupted"
+                    if isinstance(error, KeyboardInterrupt)
+                    else ("partial" if getattr(error, "partial", False) else "failed")
+                )
                 journal.data["exit_code"] = (
                     130 if isinstance(error, KeyboardInterrupt) else getattr(error, "returncode", 1)
                 )
                 journal.data["error"] = f"{type(error).__name__}: {error}"
                 journal.write(traceback.format_exc())
-                journal.emit(f"FAIL {action}: {type(error).__name__}: {error}")
+                label = "PARTIAL" if getattr(error, "partial", False) else "FAIL"
+                journal.emit(f"{label} {action}: {error}")
                 raise
             else:
                 journal.data["status"] = "success"
@@ -175,9 +233,13 @@ def stage(name, hint=None, **details):
     try:
         yield
     except BaseException as error:
-        record["status"] = "interrupted" if isinstance(error, KeyboardInterrupt) else "failed"
+        record["status"] = (
+            "interrupted"
+            if isinstance(error, KeyboardInterrupt)
+            else ("partial" if getattr(error, "partial", False) else "failed")
+        )
         record["error"] = str(error)
-        journal.data.setdefault("failed_stage", name)
+        journal.data.setdefault("partial_stage" if getattr(error, "partial", False) else "failed_stage", name)
         if hint:
             record["hint"] = hint
             journal.emit(f"Recovery: {hint}")
@@ -301,7 +363,10 @@ def run(command, *, stream=False, **kwargs):
     started = time.monotonic()
     label = shlex.join(str(arg) for arg in command)
     if journal:
-        journal.emit(f"COMMAND {label}", console=stream)
+        journal.emit(f"COMMAND {label}", console=False)
+        if stream:
+            short = shlex.join([Path(str(command[0])).name, *(str(arg) for arg in command[1:3])])
+            journal.emit(f"RUN {short} … (full command in log)")
     try:
         if stream:
             result = streamed(command, journal, **kwargs)

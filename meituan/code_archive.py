@@ -133,32 +133,75 @@ def publish(packed, archive, chunk_size):
     return outputs
 
 
-def cleanup(directory, target, keep):
-    """Only prune this peer's automatic bundle names; never prune logs, custom names or other peers."""
+def archive_stamp(path):
+    """Read supported automatic filenames, including older names without microseconds."""
+    match = re.fullmatch(
+        rf"{re.escape(PREFIX)}_(?:[A-Za-z0-9_-]+_)?"
+        r"(\d{8}_\d{6}(?:_\d{6})?)\.(bundle|tar\.gz|tgz|zip)(?:\.part\.\d+)?",
+        path.name,
+    )
+    if not match:
+        return None
+    try:
+        stamp = datetime.strptime(match[1], "%Y%m%d_%H%M%S_%f" if len(match[1]) > 15 else "%Y%m%d_%H%M%S")
+        return stamp, match[2]
+    except ValueError:
+        return None
+
+
+def cleanup(directory, target, keep, current):
+    """Prune only older bundles for this peer, preserving future deliveries and custom names."""
     pattern = re.compile(rf"{re.escape(PREFIX + '_' + target)}_\d{{8}}_\d{{6}}_\d{{6}}\.bundle(?:\.part\.\d+)?")
+    cutoff = archive_stamp(current)
+    current_mtime = min(path.stat().st_mtime_ns for path in keep)
     for path in directory.glob(f"{PREFIX}_{target}_*.bundle*"):
-        if path not in keep and path.is_file() and pattern.fullmatch(path.name):
+        if path in keep or not path.is_file() or path.is_symlink() or not pattern.fullmatch(path.name):
+            continue
+        stamp = archive_stamp(path)
+        older = stamp[0] < cutoff[0] if stamp and cutoff else path.stat().st_mtime_ns < current_mtime
+        if older:
             path.unlink()
             observe.note("Removed old bundle", path=str(path))
 
 
-def cleanup_legacy_archives(source):
-    """Retire older automatically named tar deliveries beside a successfully applied bundle."""
-    incoming = re.fullmatch(
-        rf"{re.escape(PREFIX)}_[A-Za-z0-9_-]+_(\d{{8}}_\d{{6}}_\d{{6}})\.bundle(?:\.part\.\d+)?",
-        source.name,
-    )
-    if not incoming:
-        observe.note("Legacy cleanup skipped: input has no automatic bundle timestamp", archive=str(source))
-        return []
-    pattern = re.compile(rf"{re.escape(PREFIX)}_(\d{{8}}_\d{{6}}_\d{{6}})\.tar\.gz(?:\.part\.\d+)?")
-    removed = []
-    for path in sorted(source.parent.glob(f"{PREFIX}_*.tar.gz*")):
-        match = pattern.fullmatch(path.name)
-        if match and match[1] < incoming[1] and path.is_file() and not path.is_symlink():
+def cleanup_legacy_archives(source, destination=None):
+    """Retire old source packages in the input folder, checkout root and configured snapshot folder."""
+    folders = {source.parent.resolve()}
+    protected = set()
+    if destination is not None:
+        destination = destination.resolve()
+        snap = Path(os.environ.get("MIRROROPD_SNAP_DIR", "transfer_snap")).expanduser()
+        folders.update((destination, (snap if snap.is_absolute() else destination / snap).resolve()))
+        tracked = git(destination, "ls-files", "-z").stdout.split(b"\0")
+        protected = {destination / os.fsdecode(name) for name in tracked if name}
+    incoming = archive_stamp(source)
+    source_mtime = source.stat().st_mtime_ns
+    fallback_time = datetime.fromtimestamp(source_mtime / 1e9)
+    removed, kept = [], []
+    for folder in sorted(folders):
+        for path in sorted(folder.glob(f"{PREFIX}_*")):
+            if not re.search(r"\.(?:tar\.gz|tgz|zip)(?:\.part\.\d+)?$", path.name):
+                continue
+            stamp = archive_stamp(path)
+            reason = None
+            if path.is_symlink() or not path.is_file():
+                reason = "not a regular archive file"
+            elif path in protected:
+                reason = "tracked by Git"
+            elif stamp is None:
+                reason = "not an automatic source archive name"
+            elif incoming and stamp[0] >= incoming[0]:
+                reason = "same age or newer than the received bundle"
+            elif not incoming and (stamp[0] >= fallback_time or path.stat().st_mtime_ns >= source_mtime):
+                reason = "custom bundle: archive is not provably older by both filename and modification time"
+            if reason:
+                kept.append({"path": str(path), "reason": reason})
+                observe.note("Kept source archive", path=str(path), reason=reason)
+                continue
             path.unlink()
             removed.append(str(path))
             observe.note("Removed obsolete legacy source archive", path=str(path))
+    observe.update(cleanup_directories=[str(folder) for folder in sorted(folders)], kept_legacy_archives=kept)
     return removed
 
 
@@ -213,7 +256,7 @@ def pack(repo, snap, target, supplied="", full=False):
         # This ref describes an actually published pack, never a later HEAD.
         git(repo, "update-ref", packed_ref, commit)
         observe.note("Last packed ref updated; peer confirmation is unchanged", packed=commit, confirmed=base)
-        cleanup(archive.parent, target, set(outputs))
+        cleanup(archive.parent, target, set(outputs), archive)
         print(f"Packed {'full' if full else 'incremental'} commit {commit}; base: {base if not full else 'none'}")
         print("Manually transfer all of:")
         for output in outputs:
@@ -433,7 +476,7 @@ def unpack(destination, source, target):
     if os.environ.get("KEEP_ARCHIVE_AFTER_UNPACK", "0") != "1":
         with observe.stage("archive.cleanup", files=len(consumed)):
             # Keep this input available for retry if retiring an old package fails.
-            legacy = cleanup_legacy_archives(source)
+            legacy = cleanup_legacy_archives(source, destination)
             for path in consumed:
                 path.unlink()
             observe.update(removed_input_archives=[str(path) for path in consumed], removed_legacy_archives=legacy)
