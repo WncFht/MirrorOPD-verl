@@ -179,7 +179,9 @@ make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.
 
 直接调用 `meituan/sync-log.sh unpack` 的默认行为相同，对应覆盖参数为 `MIRROROPD_WANDB_DIR`、`MIRROROPD_WANDB_LOGS_REPO`、`MIRROROPD_WANDB_SYNC` 和 `MIRROROPD_WANDB_GIT_SYNC`。上传过程要求整个 run 的附属文件可读；未打包且只存在于开发机的 artifact 外部引用无法通过临时复制恢复。
 
-原源码目录的 `wandb` 可保留为指向新接收目录的软链接，以兼容旧工具。已启动的旧 `wandb sync` 进程仍可能写原目录，应等其退出后再使用新流程；上传临时副本不会隔离其他进程对原目录的写入。
+Mac 和本机的接收、分析流程直接使用独立日志仓库，不在源码仓库维护 `wandb` 目录或兼容软链接。Mac 如果执行过旧的软链接迁移命令，可以在源码仓库执行 `test ! -L wandb || unlink wandb`，只移除链接，目标日志不受影响。真实目录中的旧 run 应先迁入日志仓库，再移除空目录。已启动的旧 `wandb sync` 进程仍可能写原目录，应等其退出后再迁移；上传临时副本不会隔离其他进程对原目录的写入。
+
+本地解码工具位于 `wandb-logs/tools/wandb_local.py`，不依赖训练仓库或 W&B 云端。首次在日志仓库执行 `make setup`，之后用 `make refresh` 拉取 Git 更新并解码；只分析现有文件用 `make decode`，按 run 导出 CSV 用 `make csv RUN=<run-id>`。原始日志位于 `MirrorOPD-verl/wandb/`，生成的 history、系统监控、配置和 summary 位于被 Git 忽略的 `derived/MirrorOPD-verl/<run目录>/`。上传 W&B 和本地解码是独立路径；本地解码不调用 login、sync 或 Public API。
 
 打包端仍默认扫描源码仓库的 `wandb/`；`WANDB_LOGS_REPO` 只影响接收端。显式设置 `WANDB_RUNS_DIR=自定义目录` 可以覆盖打包源或接收位置。这个参数表示实际 run 目录；SDK 的 `WANDB_DIR` 表示其父级写入根目录，两个参数分开设置。
 
