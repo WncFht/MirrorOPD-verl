@@ -35,7 +35,7 @@ make archive-pack FULL=1
 
 默认输出位于 `transfer_snap/archive_MirrorOPD-verl_peer_*.bundle`；超过 10 MiB 时输出 `.bundle.part.000`、`.001` 等分卷。全部分卷放在同一目录，解包时指定 `.part.000`。`CHUNK_SIZE` 可调整分卷字节数。可通过 `ARCHIVE=自定义名称.bundle` 指定新包名；已有包名不能覆盖。`ARCHIVE_SOURCES` 不再支持，bundle 传输完整的提交范围。
 
-成功打包后，只清理同目录、同 `TARGET` 的旧自动命名 bundle 和分卷；自定义名称、其他接收端的包、旧 tar 包、日志和结果包均保留。成功接收后删除本次输入包及其分卷，设置 `KEEP_ARCHIVE_AFTER_UNPACK=1` 可保留。接收失败保留输入文件。未指定 `ARCHIVE` 时，依次在 `~/Downloads`、当前目录和 `transfer_snap/` 查找最新 bundle；有多个来源时应显式指定文件。
+成功打包后，只清理同目录、同 `TARGET` 的旧自动命名 bundle 和分卷。成功接收后删除本次输入包及其分卷，并清理输入包同目录内、文件名时间早于本次 bundle 的旧自动命名源码 `.tar.gz` 及其分卷。按生成文件名判断先后，上传时的修改时间不影响清理；自定义 bundle 名称没有可靠的生成时间，因此只删除本次输入，不清理历史 tar。其他目录、自定义名称、其他 bundle、较新的 tar、日志和结果包均保留。`KEEP_ARCHIVE_AFTER_UNPACK=1` 保留输入包及历史 tar；接收失败也全部保留。终端和诊断记录会列出清理结果。`archive_bootstrap.py` 是安装工具，不属于压缩包，保留供恢复使用。未指定 `ARCHIVE` 时，依次在 `~/Downloads`、当前目录和 `transfer_snap/` 查找最新 bundle；有多个来源时应显式指定文件。
 
 ### 两端版本记录
 

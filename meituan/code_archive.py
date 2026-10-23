@@ -142,6 +142,26 @@ def cleanup(directory, target, keep):
             observe.note("Removed old bundle", path=str(path))
 
 
+def cleanup_legacy_archives(source):
+    """Retire older automatically named tar deliveries beside a successfully applied bundle."""
+    incoming = re.fullmatch(
+        rf"{re.escape(PREFIX)}_[A-Za-z0-9_-]+_(\d{{8}}_\d{{6}}_\d{{6}})\.bundle(?:\.part\.\d+)?",
+        source.name,
+    )
+    if not incoming:
+        observe.note("Legacy cleanup skipped: input has no automatic bundle timestamp", archive=str(source))
+        return []
+    pattern = re.compile(rf"{re.escape(PREFIX)}_(\d{{8}}_\d{{6}}_\d{{6}})\.tar\.gz(?:\.part\.\d+)?")
+    removed = []
+    for path in sorted(source.parent.glob(f"{PREFIX}_*.tar.gz*")):
+        match = pattern.fullmatch(path.name)
+        if match and match[1] < incoming[1] and path.is_file() and not path.is_symlink():
+            path.unlink()
+            removed.append(str(path))
+            observe.note("Removed obsolete legacy source archive", path=str(path))
+    return removed
+
+
 def pack(repo, snap, target, supplied="", full=False):
     require_checkout(repo)
     packed_ref, confirmed_ref = refs(target)
@@ -412,9 +432,13 @@ def unpack(destination, source, target):
     print(f"Unpacked into {destination}. Run make archive-ack on the sender to confirm its last pack.")
     if os.environ.get("KEEP_ARCHIVE_AFTER_UNPACK", "0") != "1":
         with observe.stage("archive.cleanup", files=len(consumed)):
+            # Keep this input available for retry if retiring an old package fails.
+            legacy = cleanup_legacy_archives(source)
             for path in consumed:
                 path.unlink()
+            observe.update(removed_input_archives=[str(path) for path in consumed], removed_legacy_archives=legacy)
         observe.note("Removed consumed source archives", files=len(consumed))
+        print(f"Removed {len(consumed)} consumed bundle file(s) and {len(legacy)} older legacy source archive file(s)")
     else:
         observe.skip("archive.cleanup", "KEEP_ARCHIVE_AFTER_UNPACK=1")
 
