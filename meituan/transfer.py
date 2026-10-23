@@ -13,8 +13,10 @@ from datetime import datetime
 from pathlib import Path, PurePosixPath
 
 try:
+    from meituan import log_sync
     from meituan import sync_observe as observe
 except ModuleNotFoundError:
+    import log_sync
     import sync_observe as observe
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -75,78 +77,6 @@ def wandb_runs_dir(action):
     if (sibling / ".git").exists():
         return sibling / "MirrorOPD-verl/wandb"
     return Path.home() / "src/wandb-logs/MirrorOPD-verl/wandb"
-
-
-def wandb_git_repo(destination):
-    """Find the receiving Git checkout without accidentally committing training sources."""
-    result = observe.run(
-        ["git", "-C", str(destination), "rev-parse", "--show-toplevel"],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    repo = Path(result.stdout.strip()).resolve()
-    if repo == ROOT.resolve():
-        raise ValueError("Receive logs in the separate wandb-logs repository, or set WANDB_GIT_SYNC=0")
-    return repo
-
-
-def sync_wandb_runs(runs):
-    """Upload disposable copies because W&B may rewrite config, summary and sync state."""
-    for index, run in enumerate(runs, start=1):
-        with (
-            observe.stage(
-                "wandb.run",
-                run=run.name,
-                index=index,
-                total=len(runs),
-                hint="Logs and archive retained. Fix the error, then retry the same sync-log-unpack.",
-            ),
-            tempfile.TemporaryDirectory(prefix="mirroropd-wandb-sync-") as temp,
-        ):
-            copied = Path(temp) / run.name
-            with observe.stage("wandb.copy", run=run.name):
-                shutil.copytree(run, copied)
-            # A new package can extend an already-synced run; replay this snapshot.
-            for pattern in ("*.wandb.synced", "*.wandb.syncstate"):
-                for marker in copied.glob(pattern):
-                    marker.unlink()
-            with observe.stage("wandb.upload", run=run.name):
-                observe.run(
-                    ["wandb", "sync", str(copied)],
-                    stream=True,
-                    cwd=temp,
-                    env={**os.environ, "WANDB_DIR": temp},
-                    check=True,
-                )
-
-
-def publish_wandb_logs(repo, destination):
-    """Commit the project's log directory, including changes missed by earlier imports."""
-    paths = [str(destination.resolve().relative_to(repo))]
-    git = ["git", "--literal-pathspecs", "-C", str(repo)]
-    with observe.stage("logs.git_stage", repository=str(repo), paths=paths):
-        observe.run([*git, "add", "-A", "--", *paths], stream=True, check=True)
-        diff = observe.run([*git, "diff", "--cached", "--quiet", "--", *paths])
-    if diff.returncode == 1:
-        with observe.stage("logs.git_commit", repository=str(repo)):
-            observe.run(
-                [*git, "commit", "--only", "-m", "chore(logs): sync W&B run archive", "--", *paths],
-                stream=True,
-                check=True,
-            )
-    else:
-        diff.check_returncode()
-        observe.skip("logs.git_commit", "No new staged changes; push will still be retried")
-        print("No new log changes to commit; retrying Git push")
-    commit = observe.run([*git, "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
-    observe.update(logs_commit=commit, logs_repository=str(repo))
-    with observe.stage(
-        "logs.git_push",
-        commit=commit,
-        hint="Local commit retained. Fix authentication/upstream or divergence, then retry without force push.",
-    ):
-        observe.run([*git, "push"], stream=True, check=True)
 
 
 def excluded(path):
@@ -414,23 +344,28 @@ def unpack(args, snap_dir):
             if not incoming.is_dir():
                 raise ValueError(f"Archive contains no {logical}/ directory")
             observe.update(destination=str(destination))
-            with observe.stage("logs.merge" if args.kind == "logs" else "results.merge", destination=str(destination)):
-                shutil.copytree(incoming, destination, dirs_exist_ok=True)
-            if args.kind == "logs":
-                runs = [destination / run.name for run in sorted(incoming.glob("offline-run-*")) if run.is_dir()]
-                observe.update(runs=[run.name for run in runs])
-                with observe.stage("logs.destination", destination=str(destination)):
-                    git_repo = (
-                        wandb_git_repo(destination) if os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1" else None
+            if args.kind == "logs" and os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1":
+                repo = log_sync.receive(incoming, destination, ROOT)
+                if os.environ.get("MIRROROPD_WANDB_SYNC", "0") == "1":
+                    log_sync.upload(
+                        repo,
+                        concurrency=int(os.environ.get("MIRROROPD_UPLOAD_JOBS", "2")),
+                        timeout=float(os.environ.get("MIRROROPD_UPLOAD_TIMEOUT", "900")),
                     )
-                if os.environ.get("MIRROROPD_WANDB_SYNC", "1") == "1":
-                    sync_wandb_runs(runs)
                 else:
-                    observe.skip("wandb.upload", "WANDB_SYNC=0; cloud upload was not attempted")
-                if git_repo is not None:
-                    publish_wandb_logs(git_repo, destination)
-                else:
-                    observe.skip("logs.git_publish", "WANDB_GIT_SYNC=0; Git commit/push were not attempted")
+                    observe.skip(
+                        "wandb.upload", "Queued for make sync-log-upload; cloud upload is not on the receive path"
+                    )
+            else:
+                if args.kind == "logs" and os.environ.get("MIRROROPD_WANDB_SYNC", "0") == "1":
+                    raise ValueError("Durable uploads require a log Git snapshot; receive with WANDB_GIT_SYNC=1 first")
+                with observe.stage(
+                    "logs.merge" if args.kind == "logs" else "results.merge", destination=str(destination)
+                ):
+                    shutil.copytree(incoming, destination, dirs_exist_ok=True)
+                if args.kind == "logs":
+                    observe.skip("logs.enqueue", "WANDB_GIT_SYNC=0: files only; use sync-log-enqueue later")
+                    observe.skip("wandb.upload", "WANDB_SYNC=0")
     print(f"Unpacked into {destination}")
     if args.kind == "code":
         clean_archives(args.kind, archive_base, set(consumed), older_than=source_mtime)
@@ -466,7 +401,7 @@ def main():
             entrypoint=str(Path(__file__).resolve()),
             snap_dir=str(snap_dir),
             archive=args.archive,
-            wandb_sync=os.environ.get("MIRROROPD_WANDB_SYNC", "1"),
+            wandb_sync=os.environ.get("MIRROROPD_WANDB_SYNC", "0"),
             wandb_git_sync=os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1"),
         ):
             with observe.stage(f"{args.kind}.{args.action}"):

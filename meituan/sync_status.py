@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import subprocess
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -70,6 +71,20 @@ def logs_status(snap):
     source = transfer.wandb_runs_dir("pack")
     destination = transfer.wandb_runs_dir("unpack")
     toplevel = query(destination, "rev-parse", "--show-toplevel") if destination.exists() else None
+    queue = {"status": "not_initialized", "jobs": [], "counts": {}}
+    if toplevel:
+        gitdir = query(Path(toplevel), "rev-parse", "--absolute-git-dir")
+        if gitdir:
+            path = Path(gitdir) / "mirroropd-upload/queue.json"
+            queue["path"] = str(path)
+            if path.exists():
+                try:
+                    data = json.loads(path.read_text())
+                    queue.update(
+                        status="available", jobs=data["jobs"], counts=dict(Counter(j["status"] for j in data["jobs"]))
+                    )
+                except (OSError, ValueError, KeyError, TypeError) as error:
+                    queue.update(status="unreadable", error=str(error))
     return {
         "source": str(source),
         "source_runs": sum(1 for path in source.glob("offline-run-*") if path.is_dir()),
@@ -77,6 +92,7 @@ def logs_status(snap):
         "destination_runs": sum(1 for path in destination.glob("offline-run-*") if path.is_dir()),
         "packing_state": state,
         "git": repository_status(Path(toplevel)) if toplevel else None,
+        "upload_queue": queue,
         "cloud_status": "unknown: only recorded CLI upload outcomes are available; no live cloud query",
     }
 
@@ -124,6 +140,14 @@ def display(state):
         print(f"W&B destination: {logs['destination']} ({logs['destination_runs']} run directories)")
         print("  Packing state: " + json.dumps(logs["packing_state"], ensure_ascii=False))
         print("  Cloud: " + logs["cloud_status"])
+        queue = logs["upload_queue"]
+        print(f"  Upload queue: {queue['status']} {queue.get('path', '')}")
+        print("  Tasks: " + json.dumps(queue["counts"]))
+        for job in queue["jobs"]:
+            if job["status"] not in ("succeeded", "superseded"):
+                print(f"    {job['run']}: {job['status']}, attempts={job['attempts']}, tree={job['tree'][:12]}")
+                if job.get("error"):
+                    print(f"      {job['error']}")
         if logs["git"]:
             print(f"  Log Git HEAD: {logs['git']['head'] or 'unknown'}")
             print(f"  Log Git state: {logs['git']['branch_status'] or 'unknown'}")
@@ -139,7 +163,14 @@ def display(state):
         if details.get("archive"):
             print(f"    Archive: {details['archive']}")
         for step in report.get("stages", []):
-            if step["name"] in ("logs.merge", "wandb.upload", "logs.git_commit", "logs.git_push", "logs.git_publish"):
+            if step["name"] in (
+                "logs.merge",
+                "logs.enqueue",
+                "wandb.upload",
+                "wandb.batch",
+                "logs.git_commit",
+                "logs.git_push",
+            ):
                 print(f"    {step['name']}: {step['status']} {step.get('details', {}).get('run', '')}")
         if report.get("action") == "logs-unpack" and report["status"] != "success":
             seen = {step["name"] for step in report.get("stages", [])}
