@@ -257,7 +257,11 @@ def main():
         p.add_argument("--gpus", type=int, default=8)
         p.add_argument("--batch", type=int, default=64)
         if command != "summarize":
-            p.add_argument("--run", default="wncfht/MirrorOPD-verl/b38hw8v0")
+            p.add_argument(
+                "--run",
+                required=command == "export",
+                help="explicit entity/project/run for export; omit for console logs with unknown run identity",
+            )
         if command == "import-log":
             p.add_argument("--log", type=Path, required=True)
         if command == "export":
