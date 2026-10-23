@@ -60,6 +60,7 @@ from verl.utils.fsdp_utils import (
     replace_lora_wrapper,
 )
 from verl.utils.model import convert_weight_keys, extract_multi_modal_inputs
+from verl.utils.profiler.timeline import enabled, observe_sync, span
 from verl.utils.py_functional import convert_to_regular_types
 from verl.utils.seqlen_balancing import ceildiv
 from verl.utils.torch_functional import logprobs_from_logits
@@ -204,6 +205,7 @@ class FSDPEngine(BaseEngine):
             is_collect = True
         return is_collect
 
+    @observe_sync("engine/initialize", "fsdp")
     def initialize(self):
         """
         Build the model, optimizer, and learning rate scheduler under FSDP.
@@ -785,7 +787,23 @@ class FSDPEngine(BaseEngine):
                 # inside; here every micro-batch forward (and, when training, its backward) becomes a
                 # distinguishable "micro_batch<i>" row -- nested under the update loop's "mini_batch<i>"
                 # when training, or directly under the stage for log-prob.
-                with ctx, sync_ctx, torch.profiler.record_function(f"micro_batch{micro_batch_idx}"):
+                with (
+                    ctx,
+                    sync_ctx,
+                    torch.profiler.record_function(f"micro_batch{micro_batch_idx}"),
+                    span(
+                        "engine/micro_batch",
+                        role="teacher" if forward_only else "actor",
+                        micro_batch=micro_batch_idx,
+                        sequences=len(micro_batch),
+                        input_tokens=(
+                            micro_batch["input_ids"].values().numel()
+                            if enabled() and micro_batch["input_ids"].is_nested
+                            else None
+                        ),
+                        rank=self.get_data_parallel_rank(),
+                    ),
+                ):
                     loss, meta_info = self.forward_step(
                         micro_batch, loss_function=loss_function, forward_only=forward_only
                     )
@@ -874,6 +892,7 @@ class FSDPEngine(BaseEngine):
         lr = self.lr_scheduler.get_last_lr()[0]  # only return the first group
         return lr
 
+    @observe_sync("engine/transfer", "fsdp")
     def to(self, device: str, model: bool = True, optimizer: bool = True, grad: bool = True):
         """
         Move FSDP model and/or optimizer to CPU or GPU with offload support.

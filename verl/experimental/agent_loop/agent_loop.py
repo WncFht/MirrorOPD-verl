@@ -54,6 +54,7 @@ from verl.utils.dataset.rl_dataset import RLHFDataset, get_dataset_class
 from verl.utils.import_utils import resolve_config_path
 from verl.utils.model import compute_position_id_with_mask
 from verl.utils.profiler import simple_timer
+from verl.utils.profiler.timeline import observe
 from verl.utils.ray_utils import auto_await, get_event_loop
 from verl.utils.rollout_trace import (
     RolloutTraceConfig,
@@ -701,6 +702,7 @@ class AgentLoopWorker:
         )
         return output
 
+    @observe("rollout/sample", "agent_loop")
     async def _run_agent_loop(
         self,
         sampling_params: dict[str, Any],
