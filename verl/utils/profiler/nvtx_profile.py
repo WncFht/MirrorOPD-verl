@@ -40,6 +40,17 @@ logger = logging.getLogger(__name__)
 RAY_NSIGHT_LOG_DIR = "/tmp/ray/session_latest/logs/nsight"
 
 
+def ray_nsight_log_dir() -> str:
+    """Resolve this worker's Ray session, including clusters using a custom temp dir."""
+    import ray
+
+    if ray.is_initialized():
+        node = getattr(ray._private.worker, "_global_node", None)
+        if node is not None:
+            return os.path.join(node.get_logs_dir_path(), "nsight")
+    return RAY_NSIGHT_LOG_DIR
+
+
 def mark_start_range(
     message: Optional[str] = None,
     color: Optional[str] = None,
@@ -184,7 +195,7 @@ class NsightSystemsProfiler(DistProfiler):
             logger.warning("nsys relocate_results: save_path is not set, skipping relocation (rank=%s)", rank)
             return []
 
-        src_dir = source_dir or RAY_NSIGHT_LOG_DIR
+        src_dir = source_dir or ray_nsight_log_dir()
         pid = os.getpid()
         # nsys may emit worker_process_<pid>.nsys-rep and, in discrete/capture-range mode,
         # worker_process_<pid>.<range_id>.nsys-rep, plus intermediate .qdstrm files.

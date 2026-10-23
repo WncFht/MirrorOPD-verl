@@ -6,6 +6,7 @@ import argparse
 import importlib.util
 import json
 import os
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -91,7 +92,17 @@ for name, steps, tool in [("baseline", 14, None), ("torch-profile", 5, "torch"),
         cmd += [
             "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FULL_KL_NVTX='1'",
             "global_profiler.global_tool_config.nsys.worker_nsight_options.trace='cuda,nvtx'",
-            "global_profiler.global_tool_config.nsys.controller_nsight_options.trace='cuda,nvtx'",
+            "global_profiler.global_tool_config.nsys.controller_nsight_options.trace=none",
+            "++global_profiler.global_tool_config.nsys.controller_nsight_options.sample=none",
+            "++global_profiler.global_tool_config.nsys.controller_nsight_options.cpuctxsw=none",
+            "global_profiler.global_tool_config.nsys.worker_nsight_options.capture-range-end=stop-shutdown",
+            "global_profiler.finish_hook_all_ranks=True",
+            "global_profiler.finish_hook_cmd="
+            + json.dumps(
+                shlex.join(
+                    [python, str(source / "examples/mirroropd/docs/infra/profile/e2e-4gpu/scripts/finish_nsys.py")]
+                )
+            ),
         ]
     (root / name).mkdir(parents=True, exist_ok=True)
     # Config export is CPU only and does not allocate Ray resources.

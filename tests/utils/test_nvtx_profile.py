@@ -356,6 +356,13 @@ class TestProfilerFinishHook(unittest.TestCase):
 class TestNsightRelocateResults(unittest.TestCase):
     """Tests for moving Ray's fixed-location Nsight reports into save_path."""
 
+    def test_custom_ray_session_directory(self):
+        from verl.utils.profiler.nvtx_profile import ray_nsight_log_dir
+
+        with patch("ray.is_initialized", return_value=True), patch("ray._private.worker._global_node") as node:
+            node.get_logs_dir_path.return_value = "/tmp/isolated-ray/session-test/logs"
+            self.assertEqual(ray_nsight_log_dir(), "/tmp/isolated-ray/session-test/logs/nsight")
+
     def _make_profiler(self):
         from verl.utils.profiler.nvtx_profile import NsightSystemsProfiler
 

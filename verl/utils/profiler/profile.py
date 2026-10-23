@@ -286,9 +286,9 @@ class DistProfiler:
         if self.save_file_prefix:
             env["VERL_PROFILE_ROLE"] = str(self.save_file_prefix)
         if self._tool == "nsys":
-            from .nvtx_profile import RAY_NSIGHT_LOG_DIR
+            from .nvtx_profile import ray_nsight_log_dir
 
-            env["VERL_PROFILE_RAY_NSIGHT_DIR"] = RAY_NSIGHT_LOG_DIR
+            env["VERL_PROFILE_RAY_NSIGHT_DIR"] = ray_nsight_log_dir()
 
         _hook_print(f"rank {self.rank}: running command: {cmd}")
         _hook_print(f"rank {self.rank}: VERL_PROFILE_SAVE_PATH={env['VERL_PROFILE_SAVE_PATH']}")
