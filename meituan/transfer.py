@@ -104,17 +104,15 @@ def sync_wandb_runs(runs):
             )
 
 
-def publish_wandb_logs(repo, runs):
-    """Commit only the received runs, then push even when retrying an existing commit."""
-    if not runs:
-        return
-    paths = [str(run.resolve().relative_to(repo)) for run in runs]
+def publish_wandb_logs(repo, destination):
+    """Commit the project's log directory, including changes missed by earlier imports."""
+    paths = [str(destination.resolve().relative_to(repo))]
     git = ["git", "--literal-pathspecs", "-C", str(repo)]
-    subprocess.run([*git, "add", "--", *paths], check=True)
+    subprocess.run([*git, "add", "-A", "--", *paths], check=True)
     diff = subprocess.run([*git, "diff", "--cached", "--quiet", "--", *paths])
     if diff.returncode == 1:
         subprocess.run(
-            [*git, "commit", "--only", "-m", f"chore(logs): import {len(runs)} W&B run(s)", "--", *paths],
+            [*git, "commit", "--only", "-m", "chore(logs): sync W&B run archive", "--", *paths],
             check=True,
         )
     else:
@@ -370,7 +368,7 @@ def unpack(args, snap_dir):
                 if os.environ.get("MIRROROPD_WANDB_SYNC", "1") == "1":
                     sync_wandb_runs(runs)
                 if git_repo is not None:
-                    publish_wandb_logs(git_repo, runs)
+                    publish_wandb_logs(git_repo, destination)
     print(f"Unpacked into {destination}")
     if args.kind == "code":
         clean_archives(args.kind, archive_base, set(consumed), older_than=source_mtime)
