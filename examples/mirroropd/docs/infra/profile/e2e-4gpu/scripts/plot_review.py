@@ -37,6 +37,8 @@ def main():
         audits.append(dict(figure=name, issues=issues))
         for ext in ("png", "pdf", "svg"):
             fig.savefig(args.output / f"{name}.{ext}", dpi=180, bbox_inches="tight")
+        svg = args.output / f"{name}.svg"
+        svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
         plt.close(fig)
 
     rows = review["rollout_boundaries"]

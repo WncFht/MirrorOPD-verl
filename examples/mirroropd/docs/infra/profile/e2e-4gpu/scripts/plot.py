@@ -70,6 +70,8 @@ def main():
     )
     for extension in ("png", "pdf", "svg"):
         fig.savefig(args.output.with_suffix("." + extension), dpi=180, bbox_inches="tight")
+    svg = args.output.with_suffix(".svg")
+    svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
     plt.close(fig)
     print(json.dumps({"audit": issues, "requires_visual_review": True}))
 
