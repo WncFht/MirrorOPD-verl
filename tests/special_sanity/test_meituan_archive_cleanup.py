@@ -221,5 +221,67 @@ class SourceArchiveCleanupTest(unittest.TestCase):
             self.assertEqual((self.snap / "logs_state.json").read_bytes(), state)
 
 
+class LogRepositoryTransferTest(unittest.TestCase):
+    """Receive logs separately without changing the producer or uploading implicitly."""
+
+    def test_pack_and_unpack_across_destination_settings(self):
+        """Exercise real archives, merge existing runs, and preserve explicit overrides."""
+        for mode in ("home", "sibling", "configured", "legacy"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as temp:
+                base = Path(temp)
+                repo = base / "source"
+                source = repo / "wandb"
+                run = source / "offline-run-first"
+                run.mkdir(parents=True)
+                (run / "run-first.wandb").write_bytes(b"raw run")
+                (run / "files").mkdir()
+                (run / "files/output.log").write_text("console output")
+                home = base / "home"
+                destination = home / "src/wandb-logs/MirrorOPD-verl/wandb"
+                env = {"MIRROROPD_WANDB_DIR": "", "MIRROROPD_WANDB_LOGS_REPO": ""}
+                if mode == "sibling":
+                    (base / "wandb-logs/.git").mkdir(parents=True)
+                    destination = base / "wandb-logs/MirrorOPD-verl/wandb"
+                elif mode in ("configured", "legacy"):
+                    env["MIRROROPD_WANDB_LOGS_REPO"] = "../custom logs"
+                    destination = base / "custom logs/MirrorOPD-verl/wandb"
+                destination.mkdir(parents=True)
+                (destination / "keep-existing-run.txt").write_text("keep")
+                snap = repo / "transfer_snap"
+                args = argparse.Namespace(kind="logs", archive="log_MirrorOPD-verl_test.tar.gz", paths=[])
+                with (
+                    patch.object(transfer, "ROOT", repo),
+                    patch.object(Path, "home", return_value=home),
+                    patch.dict(os.environ, env, clear=True),
+                    patch.object(transfer.subprocess, "run") as upload,
+                ):
+                    transfer.pack(args, snap)
+                    archive = snap / args.archive
+                    with tarfile.open(archive) as bundle:
+                        self.assertEqual(
+                            set(bundle.getnames()),
+                            {"wandb/offline-run-first/run-first.wandb", "wandb/offline-run-first/files/output.log"},
+                        )
+                    if mode == "legacy":
+                        destination = base / "legacy runs"
+                        os.environ["MIRROROPD_WANDB_DIR"] = str(destination)
+                    args.archive = str(archive)
+                    transfer.unpack(args, snap)
+                    upload.assert_not_called()
+                    self.assertTrue(archive.is_file())
+                    self.assertEqual((run / "run-first.wandb").read_bytes(), b"raw run")
+                    self.assertEqual((destination / "offline-run-first/run-first.wandb").read_bytes(), b"raw run")
+                    self.assertEqual((destination / "offline-run-first/files/output.log").read_text(), "console output")
+                    if mode != "legacy":
+                        self.assertEqual((destination / "keep-existing-run.txt").read_text(), "keep")
+                    with patch.dict(os.environ, MIRROROPD_WANDB_SYNC="1"):
+                        transfer.unpack(args, snap)
+                    upload.assert_called_once()
+                    command = upload.call_args.args[0]
+                    self.assertEqual(command[:2], ["wandb", "sync"])
+                    self.assertEqual(Path(command[2]).resolve(), destination / "offline-run-first")
+                    self.assertEqual(upload.call_args.kwargs, {"check": True})
+
+
 if __name__ == "__main__":
     unittest.main()
