@@ -330,6 +330,57 @@ class CodeArchiveTest(unittest.TestCase):
         archive.ack(self.sender, "peer")
         self.assertIsNone(archive.ref(self.sender, archive.refs("peer_other")[1]))
 
+    def test_unpack_retires_older_legacy_source_parts_only(self):
+        downloads = self.base / "downloads"
+        downloads.mkdir()
+        source = downloads / "archive_MirrorOPD-verl_peer_20261023_151924_520190.bundle"
+        shutil.copy2(self.pack()[0], source)
+        old = [
+            self.write(downloads, f"archive_MirrorOPD-verl_20261022_220146_190191.tar.gz.part.{i:03d}", "old")
+            for i in range(3)
+        ]
+        old.append(self.write(downloads, "archive_MirrorOPD-verl_20261021_220146_190191.tar.gz", "old"))
+        preserved = [
+            self.write(downloads, name, "keep")
+            for name in (
+                "archive_MirrorOPD-verl_20261024_220146_190191.tar.gz.part.000",
+                "archive_MirrorOPD-verl_custom.tar.gz",
+                "archive_MirrorOPD-verl_peer_20261021_220146_190191.bundle",
+                "log_MirrorOPD-verl_20261021_220146_190191.tar.gz",
+                "MirrorOPD_results_20261021_220146_190191.tar.gz",
+                "archive_bootstrap.py",
+            )
+        ]
+        # Upload mtimes do not describe package generation order.
+        for path in old:
+            os.utime(path, (2200000000, 2200000000))
+        elsewhere = self.write(self.receiver, "archive_MirrorOPD-verl_20261021_220146_190191.tar.gz", "elsewhere")
+        with patch.dict(os.environ, KEEP_ARCHIVE_AFTER_UNPACK="0"):
+            archive.unpack(self.receiver, source, "peer")
+        self.assertTrue(all(not path.exists() for path in [source, *old]))
+        self.assertTrue(all(path.exists() for path in [elsewhere, *preserved]))
+
+    def test_legacy_cleanup_respects_keep_and_failed_updates(self):
+        source = self.pack()[0]
+        old = self.write(source.parent, "archive_MirrorOPD-verl_20000101_000000_000000.tar.gz", "old")
+        archive.unpack(self.receiver, source, "peer")
+        self.assertTrue(source.exists())
+        self.assertTrue(old.exists())
+        self.write(self.receiver, "src/code.py", "local change\n")
+        with patch.dict(os.environ, KEEP_ARCHIVE_AFTER_UNPACK="0"):
+            with self.assertRaisesRegex(ValueError, "uncommitted"):
+                archive.unpack(self.receiver, source, "peer")
+        self.assertTrue(source.exists())
+        self.assertTrue(old.exists())
+
+    def test_custom_bundle_does_not_guess_legacy_archive_age(self):
+        source = self.pack(supplied="custom.bundle")[0]
+        old = self.write(source.parent, "archive_MirrorOPD-verl_20000101_000000_000000.tar.gz", "old")
+        with patch.dict(os.environ, KEEP_ARCHIVE_AFTER_UNPACK="0"):
+            archive.unpack(self.receiver, source, "peer")
+        self.assertFalse(source.exists())
+        self.assertTrue(old.exists())
+
     def test_old_bundle_does_not_rewind_checkout_or_peer(self):
         first_bundle = self.initialize()
         saved = self.base / "first.bundle"
