@@ -597,8 +597,11 @@ def test_ablation_launcher_accepts_budget_clip_epochs_and_final_overrides(tmp_pa
     assert loss.clip_ratio == loss.clip_ratio_low == loss.clip_ratio_high == 0.1
 
 
-@pytest.mark.parametrize("group,lr", [("E13", 1e-6), ("E14", 5e-7), ("E15", 1e-6)])
-def test_single_update_full_kl_and_vanilla_presets(tmp_path, group, lr):
+@pytest.mark.parametrize(
+    "group,lr,epochs",
+    [("E13", 1e-6, 1), ("E14", 5e-7, 1), ("E15", 1e-6, 1), ("E16", 1e-6, 4), ("E17", 1e-6, 16)],
+)
+def test_full_kl_and_vanilla_presets(tmp_path, group, lr, epochs):
     script = SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"
     cfg = _config(tmp_path, command=["bash", str(script), group], DOMAIN="code")
     OmegaConf.resolve(cfg)
@@ -607,7 +610,7 @@ def test_single_update_full_kl_and_vanilla_presets(tmp_path, group, lr):
     loss = distillation.distillation_loss
     assert cfg.trainer.n_gpus_per_node == 8 and distillation.execution_mode == "shared_sync"
     assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
-    assert cfg.actor_rollout_ref.actor.ppo_epochs == 1
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == epochs
     assert cfg.trainer.total_training_steps == 200
     assert cfg.trainer.test_freq == 20 and cfg.trainer.save_freq == 100
     assert cfg.trainer.max_actor_ckpt_to_keep == 2 and not cfg.trainer.val_before_train
@@ -633,16 +636,18 @@ def test_single_update_full_kl_and_vanilla_presets(tmp_path, group, lr):
         assert not cfg.actor_rollout_ref.rollout.calculate_log_probs
 
 
-def test_full_kl_lr_pair_only_changes_learning_rate(tmp_path):
+@pytest.mark.parametrize("group,field", [("E14", "optim.lr"), ("E16", "ppo_epochs"), ("E17", "ppo_epochs")])
+def test_full_kl_pairs_only_change_the_ablation_factor(tmp_path, group, field):
     script = SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"
     first = _config(tmp_path, command=["bash", str(script), "E13"])
-    second = _config(tmp_path, command=["bash", str(script), "E14"])
-    second.actor_rollout_ref.actor.optim.lr = first.actor_rollout_ref.actor.optim.lr
+    second = _config(tmp_path, command=["bash", str(script), group])
+    key = "actor_rollout_ref.actor." + field
+    OmegaConf.update(second, key, OmegaConf.select(first, key))
     assert OmegaConf.to_container(first, resolve=True) == OmegaConf.to_container(second, resolve=True)
 
 
-@pytest.mark.parametrize("group", ["E13", "E14", "E15"])
-def test_single_update_presets_preserve_explicit_overrides(tmp_path, group):
+@pytest.mark.parametrize("group", ["E13", "E14", "E15", "E16", "E17"])
+def test_full_kl_and_vanilla_presets_preserve_explicit_overrides(tmp_path, group):
     script = SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"
     cfg = _config(
         tmp_path,
@@ -667,7 +672,7 @@ def test_single_update_presets_preserve_explicit_overrides(tmp_path, group):
         assert not cfg.distillation.distillation_loss.full_vocab.prefetch
 
 
-@pytest.mark.parametrize("group", ["E13", "E14"])
+@pytest.mark.parametrize("group", ["E13", "E14", "E16", "E17"])
 def test_full_kl_presets_require_shared_teacher(tmp_path, group):
     result = _launch(
         tmp_path,
