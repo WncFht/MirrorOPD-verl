@@ -15,7 +15,8 @@ LOG_ARCHIVE ?=
 RESULTS_ARCHIVE ?=
 WANDB_RUNS_DIR ?=
 WANDB_LOGS_REPO ?=
-WANDB_SYNC ?= 0
+WANDB_SYNC ?= 1
+WANDB_GIT_SYNC ?= 1
 KEEP_ARCHIVE_AFTER_UNPACK ?= 0
 RESULTS_REMOTE_DIR ?= outputs
 RESULTS_LOCAL_DIR ?= results
@@ -36,6 +37,7 @@ export MIRROROPD_ARCHIVE_TARGET = $(TARGET)
 export MIRROROPD_WANDB_DIR = $(WANDB_RUNS_DIR)
 export MIRROROPD_WANDB_LOGS_REPO = $(WANDB_LOGS_REPO)
 export MIRROROPD_WANDB_SYNC = $(WANDB_SYNC)
+export MIRROROPD_WANDB_GIT_SYNC = $(WANDB_GIT_SYNC)
 export KEEP_ARCHIVE_AFTER_UNPACK
 export MIRROROPD_RESULTS_SOURCE = $(RESULTS_REMOTE_DIR)
 export MIRROROPD_RESULTS_DEST = $(RESULTS_LOCAL_DIR)
@@ -49,7 +51,8 @@ help:
 	@echo '源码打包：make archive-pack [FULL=1] [TARGET=peer] [ARCHIVE=...]（Git 提交，默认累计增量）'
 	@echo '源码接收：make archive-unpack [ARCHIVE=包.bundle或.part.000] [DEST=.] [TARGET=peer]'
 	@echo '同步确认：接收成功后，在发送端执行 make archive-ack [TARGET=peer]，确认上次打包的提交'
-	@echo '日志下载：make sync-log-pack；传回后 make sync-log-unpack [LOG_ARCHIVE=...]（默认合并到 wandb-logs，WANDB_SYNC=1 上传 W&B）'
+	@echo '日志下载：make sync-log-pack；传回后 make sync-log-unpack [LOG_ARCHIVE=...]（默认上传 W&B 并 Git commit/push）'
+	@echo '仅解包：make sync-log-unpack WANDB_SYNC=0 WANDB_GIT_SYNC=0；上传使用临时副本，保留原始日志'
 	@echo '结果下载：make sync-results-pack [RESULTS_REMOTE_DIR=outputs]；传回后 make sync-results-unpack [RESULTS_ARCHIVE=...]'
 	@echo '离线环境：make native-install；make native-check（开发机，系统 Python 3.12）'
 	@echo 'W&B 验证：make wandb-check（只写一条离线日志，不加载模型）'

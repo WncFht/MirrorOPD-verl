@@ -36,7 +36,15 @@ class SourceArchiveCleanupTest(unittest.TestCase):
         root = patch.object(transfer, "ROOT", self.repo)
         root.start()
         self.addCleanup(root.stop)
-        env = patch.dict(os.environ, {"KEEP_ARCHIVE_AFTER_UNPACK": "0", "MIRROROPD_CHUNK_SIZE": "10485760"})
+        env = patch.dict(
+            os.environ,
+            {
+                "KEEP_ARCHIVE_AFTER_UNPACK": "0",
+                "MIRROROPD_CHUNK_SIZE": "10485760",
+                "MIRROROPD_WANDB_SYNC": "0",
+                "MIRROROPD_WANDB_GIT_SYNC": "0",
+            },
+        )
         env.start()
         self.addCleanup(env.stop)
 
@@ -222,7 +230,7 @@ class SourceArchiveCleanupTest(unittest.TestCase):
 
 
 class LogRepositoryTransferTest(unittest.TestCase):
-    """Receive logs separately without changing the producer or uploading implicitly."""
+    """Receive logs separately without changing the producer, with publishing disabled."""
 
     def test_pack_and_unpack_across_destination_settings(self):
         """Exercise real archives, merge existing runs, and preserve explicit overrides."""
@@ -238,7 +246,12 @@ class LogRepositoryTransferTest(unittest.TestCase):
                 (run / "files/output.log").write_text("console output")
                 home = base / "home"
                 destination = home / "src/wandb-logs/MirrorOPD-verl/wandb"
-                env = {"MIRROROPD_WANDB_DIR": "", "MIRROROPD_WANDB_LOGS_REPO": ""}
+                env = {
+                    "MIRROROPD_WANDB_DIR": "",
+                    "MIRROROPD_WANDB_LOGS_REPO": "",
+                    "MIRROROPD_WANDB_SYNC": "0",
+                    "MIRROROPD_WANDB_GIT_SYNC": "0",
+                }
                 if mode == "sibling":
                     (base / "wandb-logs/.git").mkdir(parents=True)
                     destination = base / "wandb-logs/MirrorOPD-verl/wandb"
@@ -279,8 +292,13 @@ class LogRepositoryTransferTest(unittest.TestCase):
                     upload.assert_called_once()
                     command = upload.call_args.args[0]
                     self.assertEqual(command[:2], ["wandb", "sync"])
-                    self.assertEqual(Path(command[2]).resolve(), destination / "offline-run-first")
-                    self.assertEqual(upload.call_args.kwargs, {"check": True})
+                    copied = Path(command[2])
+                    self.assertEqual(copied.name, "offline-run-first")
+                    self.assertNotEqual(copied, destination / "offline-run-first")
+                    self.assertFalse(copied.exists())
+                    self.assertTrue(upload.call_args.kwargs["check"])
+                    self.assertEqual(upload.call_args.kwargs["cwd"], str(copied.parent))
+                    self.assertEqual(upload.call_args.kwargs["env"]["WANDB_DIR"], str(copied.parent))
 
 
 if __name__ == "__main__":
