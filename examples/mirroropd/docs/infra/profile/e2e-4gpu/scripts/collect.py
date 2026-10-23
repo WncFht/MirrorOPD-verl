@@ -62,6 +62,7 @@ def collect_job(path):
         yaml.safe_load((path / "resolved_config.yaml").read_text()) if (path / "resolved_config.yaml").exists() else {}
     )
     observation = json.loads((path / "observation.json").read_text()) if (path / "observation.json").exists() else {}
+    result["versions"] = json.loads((path / "versions.json").read_text()) if (path / "versions.json").exists() else None
     raw = [x for p in sorted((path / "events").glob("*.jsonl")) for x in jsonl(p)]
     domains = sorted({(x["host"], x["clock_domain"]) for x in raw})
     assert len(domains) <= 1, "Cross-clock-domain spans must not be merged"
@@ -215,6 +216,9 @@ def collect_job(path):
             traces.append({"path": str(file), "error": str(exc)[:200]})
     result["traces"] = traces
     result["nsys_files"] = [str(p) for p in (path / "traces").rglob("*.nsys-rep")]
+    result["nsys_review"] = (
+        json.loads((path / "nsys-review.json").read_text()) if (path / "nsys-review.json").exists() else None
+    )
     if result["steps"]:
         result["startup_to_first_step_seconds"] = result["steps"][0]["start"]
     return result
@@ -224,6 +228,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--root", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--nsys-retry-root", type=Path)
     args = p.parse_args()
     data = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -238,6 +243,11 @@ def main():
             if (args.root / name / "resolved_config.yaml").exists()
         },
     }
+    if args.nsys_retry_root:
+        data["jobs"]["nsys-retry"] = collect_job(args.nsys_retry_root / "nsys-profile")
+        data["previous_run_status"] = data["run_status"]
+        data["run_status"] = json.loads((args.nsys_retry_root / "status.json").read_text())
+        data["run_status"]["current_job"] = "nsys-retry"
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(data, ensure_ascii=False, allow_nan=False) + "\n")
     print({k: v["coverage"] for k, v in data["jobs"].items()})

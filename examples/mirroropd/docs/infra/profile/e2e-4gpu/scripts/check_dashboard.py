@@ -4,6 +4,7 @@
 
 import importlib.util
 import json
+import shutil
 import tempfile
 from pathlib import Path
 
@@ -28,12 +29,14 @@ with tempfile.TemporaryDirectory() as temporary, sync_playwright() as pw:
     }
     render(data, root / "synthetic.html")
     browser = pw.chromium.launch(headless=True, args=["--disable-gpu"])
-    page = browser.new_page(viewport={"width": 1440, "height": 1100})
+    context = browser.new_context(viewport={"width": 1440, "height": 1100}, offline=True)
+    page = context.new_page()
     errors = []
     network = []
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.on("request", lambda r: network.append(r.url) if r.url.startswith("http") else None)
-    for file in [docs / "dashboard.html", root / "synthetic.html"]:
+    shutil.copyfile(docs / "dashboard.html", root / "report.html")
+    for file in [root / "report.html", root / "synthetic.html"]:
         page.goto(file.as_uri())
         page.wait_for_timeout(1200)
         for tab in ["overview", "rollout", "training", "evidence"]:
@@ -51,11 +54,11 @@ with tempfile.TemporaryDirectory() as temporary, sync_playwright() as pw:
             assert "快照时间" in page.locator("#state").inner_text()
             page.locator("button[data-tab=overview]").click()
             page.wait_for_timeout(300)
-            page.screenshot(path=str(out / "waiting-desktop.png"), full_page=True)
+            page.screenshot(path=str(out / "report-desktop.png"), full_page=True)
             page.set_viewport_size({"width": 390, "height": 844})
             page.wait_for_timeout(300)
             assert page.evaluate("document.documentElement.scrollWidth") <= 390
-            page.screenshot(path=str(out / "waiting-mobile.png"), full_page=True)
+            page.screenshot(path=str(out / "report-mobile.png"), full_page=True)
             page.set_viewport_size({"width": 1440, "height": 1100})
     browser.close()
     assert not errors, errors

@@ -23,8 +23,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--review", type=Path, help="Embed reviewed measurements in the same offline HTML")
     args = parser.parse_args()
-    render(json.loads(args.data.read_text()), args.output)
+    data = json.loads(args.data.read_text())
+    if args.review:
+        data["review"] = json.loads(args.review.read_text())
+    render(data, args.output)
     print(args.output)
 
 

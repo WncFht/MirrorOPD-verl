@@ -1,0 +1,258 @@
+{
+  "data": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/infra/profile/e2e-4gpu/data.json",
+  "steps": [
+    {
+      "step": 1,
+      "start": 254.681289059,
+      "end": 344.635732524,
+      "seconds": 89.954443465,
+      "phases": {
+        "gen": 44.221408196,
+        "reward": 0,
+        "teacher_transfer": 1.080141065,
+        "teacher_forward": 1.932884074,
+        "update_actor": 10.427600106,
+        "update_weights": 1.274005853,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 31.018404171,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 90.090609602
+    },
+    {
+      "step": 2,
+      "start": 344.771898661,
+      "end": 382.968008701,
+      "seconds": 38.19611004,
+      "phases": {
+        "gen": 24.302213608,
+        "reward": 0,
+        "teacher_transfer": 1.7824321349999999,
+        "teacher_forward": 2.787054067,
+        "update_actor": 8.00389259,
+        "update_weights": 1.284733561,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.03578407900000258,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 38.297344144
+    },
+    {
+      "step": 3,
+      "start": 383.069242805,
+      "end": 419.474440889,
+      "seconds": 36.405198084,
+      "phases": {
+        "gen": 20.238395602,
+        "reward": 0,
+        "teacher_transfer": 2.105806534,
+        "teacher_forward": 3.190632003,
+        "update_actor": 9.571372957,
+        "update_weights": 1.264065189,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.03492579899999981,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 36.491891859
+    },
+    {
+      "step": 4,
+      "start": 419.561134664,
+      "end": 452.317820858,
+      "seconds": 32.756686194,
+      "phases": {
+        "gen": 22.293687579,
+        "reward": 0,
+        "teacher_transfer": 0.655005052,
+        "teacher_forward": 1.806417626,
+        "update_actor": 7.071766092,
+        "update_weights": 0.896070699,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.033739145999994946,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 32.84436243
+    },
+    {
+      "step": 5,
+      "start": 452.405497094,
+      "end": 482.759983993,
+      "seconds": 30.354486899,
+      "phases": {
+        "gen": 20.196558139,
+        "reward": 0,
+        "teacher_transfer": 0.6451744669999999,
+        "teacher_forward": 1.611884976,
+        "update_actor": 6.812227683,
+        "update_weights": 1.055194534,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.03344710000000006,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 30.43813101
+    },
+    {
+      "step": 6,
+      "start": 482.843628104,
+      "end": 523.666712072,
+      "seconds": 40.823083968,
+      "phases": {
+        "gen": 30.207120965,
+        "reward": 0,
+        "teacher_transfer": 0.6533978380000001,
+        "teacher_forward": 1.683448739,
+        "update_actor": 7.043039344,
+        "update_weights": 1.197925621,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.03815146099999822,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 40.908885214
+    },
+    {
+      "step": 7,
+      "start": 523.752513318,
+      "end": 553.912252293,
+      "seconds": 30.159738975,
+      "phases": {
+        "gen": 20.192581136,
+        "reward": 0,
+        "teacher_transfer": 0.7361991320000001,
+        "teacher_forward": 1.613994437,
+        "update_actor": 6.707407554,
+        "update_weights": 0.876462411,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.03309430499999877,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 30.241135233
+    },
+    {
+      "step": 8,
+      "start": 553.993648551,
+      "end": 586.679139993,
+      "seconds": 32.685491442,
+      "phases": {
+        "gen": 22.203811715,
+        "reward": 0,
+        "teacher_transfer": 0.638809794,
+        "teacher_forward": 1.781230241,
+        "update_actor": 6.871772493,
+        "update_weights": 1.155425391,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.034441807999996854,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 32.768215171
+    },
+    {
+      "step": 9,
+      "start": 586.761863722,
+      "end": 627.495603611,
+      "seconds": 40.733739889,
+      "phases": {
+        "gen": 30.329788494,
+        "reward": 0,
+        "teacher_transfer": 0.788581778,
+        "teacher_forward": 1.612667392,
+        "update_actor": 6.769390889,
+        "update_weights": 1.198141702,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.03516963399999895,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 40.813503684
+    },
+    {
+      "step": 10,
+      "start": 627.575367406,
+      "end": 660.009901974,
+      "seconds": 32.434534568,
+      "phases": {
+        "gen": 22.375471474,
+        "reward": 0,
+        "teacher_transfer": 1.381774129,
+        "teacher_forward": 1.697108362,
+        "update_actor": 6.09698649,
+        "update_weights": 0.849880511,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.033313601999999776,
+      "phase_overlap_seconds": 7.105427357601002e-15,
+      "start_to_next_start_seconds": 32.520857944
+    },
+    {
+      "step": 11,
+      "start": 660.09622535,
+      "end": 690.051987529,
+      "seconds": 29.955762179,
+      "phases": {
+        "gen": 20.217958412,
+        "reward": 0,
+        "teacher_transfer": 0.60265206,
+        "teacher_forward": 1.634074137,
+        "update_actor": 6.518977227,
+        "update_weights": 0.945919471,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.0361808719999992,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 30.040150993
+    },
+    {
+      "step": 12,
+      "start": 690.136376343,
+      "end": 723.662286701,
+      "seconds": 33.525910358,
+      "phases": {
+        "gen": 22.217675606,
+        "reward": 0,
+        "teacher_transfer": 0.650605135,
+        "teacher_forward": 1.696613572,
+        "update_actor": 8.067598127,
+        "update_weights": 0.858726952,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.034690965999999435,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 33.60989609
+    },
+    {
+      "step": 13,
+      "start": 723.746272433,
+      "end": 756.637602364,
+      "seconds": 32.891329931,
+      "phases": {
+        "gen": 22.236276459,
+        "reward": 0,
+        "teacher_transfer": 0.6635856520000001,
+        "teacher_forward": 2.314548683,
+        "update_actor": 6.699791528,
+        "update_weights": 0.943844497,
+        "save_checkpoint": 0
+      },
+      "unattributed_seconds": 0.03328311199999945,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": 32.975148045
+    },
+    {
+      "step": 14,
+      "start": 756.721420478,
+      "end": 799.14701246,
+      "seconds": 42.425591982,
+      "phases": {
+        "gen": 22.195634012,
+        "reward": 0,
+        "teacher_transfer": 0.7094594670000001,
+        "teacher_forward": 1.73001662,
+        "update_actor": 6.809822895,
+        "update_weights": 0.808323071,
+        "save_checkpoint": 10.138602162
+      },
+      "unattributed_seconds": 0.03373375500000009,
+      "phase_overlap_seconds": 0,
+      "start_to_next_start_seconds": null
+    }
+  ],
+  "audit": []
+}

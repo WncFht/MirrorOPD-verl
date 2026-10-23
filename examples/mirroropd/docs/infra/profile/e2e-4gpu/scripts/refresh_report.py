@@ -22,6 +22,8 @@ def main():
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--style-dir", type=Path)
+    parser.add_argument("--base-root", type=Path, help="Merge baseline/Torch evidence with this queue's Nsight retry")
+    parser.add_argument("--review", type=Path, help="Embed the existing reviewed analysis in the offline snapshot")
     parser.add_argument("--watch", action="store_true")
     args = parser.parse_args()
     root = args.root.resolve()
@@ -45,28 +47,34 @@ def main():
                     "review": "pending",
                 }
                 try:
-                    subprocess.run(
-                        [
-                            sys.executable,
-                            str(scripts / "collect.py"),
-                            "--root",
-                            str(root),
-                            "--output",
-                            str(output / "data.json"),
-                        ],
-                        check=True,
-                    )
-                    subprocess.run(
-                        [
-                            sys.executable,
-                            str(scripts / "render.py"),
-                            "--data",
-                            str(output / "data.json"),
-                            "--output",
-                            str(output / "dashboard.html"),
-                        ],
-                        check=True,
-                    )
+                    if args.base_root and status.get("jobs", {}).get("nsys-profile", {}).get("returncode") == 0:
+                        check = subprocess.run(
+                            [sys.executable, str(scripts / "inspect_nsys.py"), "--job", str(root / "nsys-profile")],
+                            check=False,
+                        )
+                        report_status["nsys_artifacts_accepted"] = check.returncode == 0
+                    collect_command = [
+                        sys.executable,
+                        str(scripts / "collect.py"),
+                        "--root",
+                        str(args.base_root.resolve() if args.base_root else root),
+                        "--output",
+                        str(output / "data.json"),
+                    ]
+                    if args.base_root:
+                        collect_command += ["--nsys-retry-root", str(root)]
+                    subprocess.run(collect_command, check=True)
+                    render_command = [
+                        sys.executable,
+                        str(scripts / "render.py"),
+                        "--data",
+                        str(output / "data.json"),
+                        "--output",
+                        str(output / "dashboard.html"),
+                    ]
+                    if args.review:
+                        render_command += ["--review", str(args.review.resolve())]
+                    subprocess.run(render_command, check=True)
                     if status.get("jobs", {}).get("baseline", {}).get("returncode") == 0:
                         plot_command = [
                             sys.executable,

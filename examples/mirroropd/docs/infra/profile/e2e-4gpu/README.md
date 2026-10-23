@@ -3,6 +3,7 @@
 本专题先测量当前完整训练过程，交付现状报告和离线交互 HTML，再决定是否优化。单 teacher、FSDP2 shared-sync、SP=1、原 `precompute`、async write/prefetch 开启，使用正式 graph rollout；不改变目标、全局 batch、训练 token 长度预算或学习率，缩短总训练步数以做工程测量。GPU 仅限本机 0–3。
 
 - [详细说明：配置、生命周期、计时边界与分析判据](2026-10-23-全流程测量与现状说明.md)。
+- [第一轮实测结果](2026-10-23-四卡全流程实测.md)：14 步基线、四 rank / 四 rollout Torch trace、瓶颈排序和采集边界。
 - [离线交互页面](dashboard.html)：本机生成文件，随采集阶段结束更新；没有实测数据时明确显示缺失。
 - [聚合脚本](scripts/collect.py)、[HTML 模板](scripts/dashboard.html)、[静态绘图](scripts/plot.py)。
 
@@ -22,7 +23,7 @@
 
 ## 本机运行与复现
 
-以下命令从仓库根目录执行，使用现有 profile 环境。当前 GPU 队列已经挂起等待，不要重复启动。
+以下命令从仓库根目录执行，使用现有 profile 环境。原队列的 baseline 和 Torch 已完成；Nsight 的补采使用独立目录，不要重复启动。
 
 ```bash
 PROFILE_PY=/root/.local/share/mirroropd/venvs/profile-cu128/bin/python
@@ -69,4 +70,26 @@ cat "$PROFILE_RUN/report-status.json"
 "$PROFILE_PY" "$PROFILE_DOC/scripts/check_dashboard.py"
 ```
 
-GPU 实际运行、trace 覆盖和性能结论尚待硬件空闲后的检查；CPU 通过不替代这些验证。
+14 步 GPU 基线和 Torch trace 已在实测报告中审阅；Nsight 的最终补采仍需四 rank CUDA/NVTX 产物验收。
+
+## 实测结果复核与重画
+
+实测文档与 `review.json` 是本轮分析入口，交互页面包含同一份嵌入数据。最终 Nsight 队列位于 `outputs/reasoning-e2e-nsys-final-20261023`，继续使用共享 GPU 锁；前两次尝试的失败证据分别保留。
+
+```bash
+"$PROFILE_PY" "$PROFILE_DOC/scripts/collect.py" \
+  --root "$PROFILE_RUN" --output "$PROFILE_DOC/data.json"
+"$PROFILE_PY" "$PROFILE_DOC/scripts/analyze_cycle.py" \
+  --root "$PROFILE_RUN" --data "$PROFILE_DOC/data.json" --output "$PROFILE_DOC/review.json"
+"$PROFILE_PY" "$PROFILE_DOC/scripts/render.py" \
+  --data "$PROFILE_DOC/data.json" --review "$PROFILE_DOC/review.json" --output "$PROFILE_DOC/dashboard.html"
+"$PROFILE_PY" "$PROFILE_DOC/scripts/plot_review.py" \
+  --data "$PROFILE_DOC/data.json" --review "$PROFILE_DOC/review.json" --output "$PROFILE_DOC/figures" \
+  --style-dir /absolute/figure-viz/assets/mpl
+```
+
+`collect.py --nsys-retry-root /absolute/retry-directory` 可以将补采作为独立运行加入 HTML，保留原失败记录。`render.py --review` 将分析摘要也写进 HTML；下载成品后无需 JSON、Python、网络或图表服务。
+
+新的 Nsight 计划固定 Python PATH、使用单区间 `stop-shutdown`，并在每 rank 的 finish hook 中等待 `.nsys-rep` 最终落盘，再允许 Ray 清理。自定义 Ray 临时目录按当前 worker session 解析。训练退出码为 0 仍需检查四份 `capture-rank*.json` 和实际 CUDA kernel 表。
+
+`refresh_report.py --root <最终补采目录> --base-root <原始基线目录> --review <review.json> --output-dir <本目录> --watch` 会在补采结束后自动检查四 rank Nsight 文件、合并数据并刷新单文件 HTML。这个 CPU 后处理不启动训练，也不代替原始 trace 的人工审阅。
