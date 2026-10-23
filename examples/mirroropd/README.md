@@ -14,7 +14,7 @@ MirrorOPD 自有文档、调研和配套图片、数据统一放在 `examples/mi
 | [LCB 判分隔离调研](docs/lcb/README.md) | 内存故障来源、受控 CPU 实验、轻量执行器与资源隔离方案 |
 | [训练基础设施](docs/infra/README.md) | 运行与调度、实测报告、batch/rollout 调优、指标/MFU、模型扩展和上游调研的统一入口 |
 | [OPD 目标与消融](docs/opd-objective/README.md) | 固定 prefix 推导、优势/IS 语义及更新计数的待实施方案 |
-| [分析复现](docs/分析复现.md) | W&B 只读导出、历史日志解析、统计和图表重建 |
+| [分析复现](docs/分析复现.md) | 本地 W&B 归档解码、项目快照、统计与图表；云端回读仅作显式核对或补救 |
 | [训练指标](docs/metrics/README.md) | 当前字段字典、统计归约、更新横轴、调研及测试边界 |
 
 ## 启动入口

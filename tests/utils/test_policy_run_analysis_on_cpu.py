@@ -87,15 +87,17 @@ def test_timers_do_not_double_count_nested_regions(analyze):
     assert result["checkpoint_seconds_included_in_outer"] == 2
 
 
-def test_lossless_archive_and_no_overwrite(analyze, tmp_path):
+@pytest.mark.parametrize("system_name", ["system-sampled.jsonl.gz", "system.jsonl.gz"])
+def test_lossless_archive_and_no_overwrite(analyze, tmp_path, system_name):
     source, target = tmp_path / "source", tmp_path / "snapshot"
     source.mkdir()
     raw = b'{"step/outer": 1, "value": null}\n'
     (source / "history.jsonl").write_bytes(raw)
-    for name in ("config.json", "source.json", "hardware.json", "package-versions.txt", "system-sampled.jsonl.gz"):
+    for name in ("config.json", "source.json", "hardware.json", "package-versions.txt", system_name):
         (source / name).write_bytes(b"fixture")
     analyze.snapshot(source, target)
     assert gzip.decompress((target / "history.jsonl.gz").read_bytes()) == raw
+    assert (target / system_name).read_bytes() == b"fixture"
     with pytest.raises(FileExistsError):
         analyze.snapshot(source, target)
 
