@@ -56,6 +56,22 @@ def repo_path(value):
     return path if path.is_absolute() else ROOT / path
 
 
+def wandb_runs_dir(action):
+    """Keep training logs local and receive downloads in the separate logs repository."""
+    override = os.environ.get("MIRROROPD_WANDB_DIR")
+    if override:
+        return repo_path(override)
+    if action == "pack":
+        return ROOT / "wandb"
+    logs_repo = os.environ.get("MIRROROPD_WANDB_LOGS_REPO")
+    if logs_repo:
+        return repo_path(logs_repo) / "MirrorOPD-verl/wandb"
+    sibling = ROOT.parent / "wandb-logs"
+    if (sibling / ".git").exists():
+        return sibling / "MirrorOPD-verl/wandb"
+    return Path.home() / "src/wandb-logs/MirrorOPD-verl/wandb"
+
+
 def excluded(path):
     """Keep environments, training artifacts and prior transfer archives out of code snapshots."""
     return (
@@ -100,9 +116,7 @@ def source_files(selections):
 def incremental_files(kind, snap_dir):
     """Select changed result files or complete changed W&B runs; advance state only after packing."""
     source = (
-        repo_path(os.environ.get("MIRROROPD_WANDB_DIR", "wandb"))
-        if kind == "logs"
-        else repo_path(os.environ.get("MIRROROPD_RESULTS_SOURCE", "outputs"))
+        wandb_runs_dir("pack") if kind == "logs" else repo_path(os.environ.get("MIRROROPD_RESULTS_SOURCE", "outputs"))
     )
     if not source.is_dir():
         raise FileNotFoundError(source)
@@ -287,14 +301,17 @@ def unpack(args, snap_dir):
                     shutil.rmtree(target)
                 shutil.move(str(child), target)
         else:
-            setting = "MIRROROPD_WANDB_DIR" if args.kind == "logs" else "MIRROROPD_RESULTS_DEST"
             logical = "wandb" if args.kind == "logs" else "results"
-            destination = repo_path(os.environ.get(setting, logical))
+            destination = (
+                wandb_runs_dir("unpack")
+                if args.kind == "logs"
+                else repo_path(os.environ.get("MIRROROPD_RESULTS_DEST", logical))
+            )
             incoming = extracted / logical
             if not incoming.is_dir():
                 raise ValueError(f"Archive contains no {logical}/ directory")
             shutil.copytree(incoming, destination, dirs_exist_ok=True)
-            if args.kind == "logs" and os.environ.get("MIRROROPD_WANDB_SYNC", "1") == "1":
+            if args.kind == "logs" and os.environ.get("MIRROROPD_WANDB_SYNC", "0") == "1":
                 for run in sorted(incoming.glob("offline-run-*")):
                     if run.is_dir():
                         subprocess.run(["wandb", "sync", str(destination / run.name)], check=True)
