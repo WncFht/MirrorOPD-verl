@@ -288,17 +288,9 @@ class LogRepositoryTransferTest(unittest.TestCase):
                     if mode != "legacy":
                         self.assertEqual((destination / "keep-existing-run.txt").read_text(), "keep")
                     with patch.dict(os.environ, MIRROROPD_WANDB_SYNC="1"):
-                        transfer.unpack(args, snap)
-                    upload.assert_called_once()
-                    command = upload.call_args.args[0]
-                    self.assertEqual(command[:2], ["wandb", "sync"])
-                    copied = Path(command[2])
-                    self.assertEqual(copied.name, "offline-run-first")
-                    self.assertNotEqual(copied, destination / "offline-run-first")
-                    self.assertFalse(copied.exists())
-                    self.assertTrue(upload.call_args.kwargs["check"])
-                    self.assertEqual(upload.call_args.kwargs["cwd"], str(copied.parent))
-                    self.assertEqual(upload.call_args.kwargs["env"]["WANDB_DIR"], str(copied.parent))
+                        with self.assertRaisesRegex(ValueError, "Durable uploads require"):
+                            transfer.unpack(args, snap)
+                    upload.assert_not_called()
 
 
 if __name__ == "__main__":

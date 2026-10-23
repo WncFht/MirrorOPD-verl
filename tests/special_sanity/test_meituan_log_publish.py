@@ -12,6 +12,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from meituan import log_sync
+
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location("log_publish_transfer", ROOT / "meituan/transfer.py")
 transfer = importlib.util.module_from_spec(SPEC)
@@ -52,6 +54,7 @@ class LogPublishTest(unittest.TestCase):
         self.destination = self.logs / "MirrorOPD-verl/wandb" / self.run_name
         env = {key: value for key, value in os.environ.items() if not key.startswith(("MIRROROPD_", "WANDB_"))}
         env["MIRROROPD_WANDB_LOGS_REPO"] = str(self.logs)
+        env["MIRROROPD_WANDB_BIN"] = str(self.base / "must-not-upload")
         environment = patch.dict(os.environ, env, clear=True)
         environment.start()
         self.addCleanup(environment.stop)
@@ -61,33 +64,19 @@ class LogPublishTest(unittest.TestCase):
     def git(self, repo, *args):
         return self.real_run(["git", "-C", str(repo), *args], capture_output=True, text=True, check=True).stdout.strip()
 
-    def fake_sync(self, command, **kwargs):
-        if command[0] != "wandb":
-            return self.real_run(command, **kwargs)
-        copied = Path(command[2])
-        self.uploaded.append(copied)
-        self.assertNotEqual(copied, self.destination)
-        self.assertFalse((copied / "run-test.wandb.synced").exists())
-        self.assertFalse((copied / "run-test.wandb.syncstate").exists())
-        (copied / "files/config.yaml").write_text("rewritten config")
-        (copied / "files/wandb-summary.json").write_text("rewritten summary")
-        (copied / "run-test.wandb.syncstate").write_text("new sync state")
-        if self.upload_error:
-            raise subprocess.CalledProcessError(1, command)
-        return subprocess.CompletedProcess(command, 0)
-
     def unpack(self):
         args = argparse.Namespace(kind="logs", archive=str(self.archive), paths=[])
-        with patch.object(transfer.subprocess, "run", side_effect=self.fake_sync):
-            transfer.unpack(args, self.base / "snap")
+        transfer.unpack(args, self.base / "snap")
 
-    def test_defaults_upload_copies_and_push_only_project_logs(self):
+    def jobs(self):
+        return log_sync.load(log_sync.queue_dir(self.logs))["jobs"]
+
+    def test_defaults_queue_and_push_only_project_logs(self):
         unrelated = self.logs / "unrelated.txt"
         unrelated.write_text("staged elsewhere")
         self.git(self.logs, "add", "unrelated.txt")
         self.unpack()
-        self.assertEqual(len(self.uploaded), 1)
-        self.assertFalse(self.uploaded[0].exists())
+        self.assertEqual(self.jobs()[0]["status"], "pending")
         self.assertEqual((self.destination / "files/config.yaml").read_text(), "original config")
         self.assertEqual((self.destination / "files/wandb-summary.json").read_text(), '{"loss": 1}')
         self.assertEqual((self.destination / "run-test.wandb").read_bytes(), b"original run")
@@ -124,16 +113,16 @@ class LogPublishTest(unittest.TestCase):
         self.assertIn("run-forgotten.wandb", published)
         self.assertNotIn("obsolete.txt", published)
         self.assertNotIn(".syncstate", published)
-        self.assertEqual([run.name for run in self.uploaded], [self.run_name])
+        self.assertEqual(len(self.jobs()), 3)
 
-    def test_upload_failure_keeps_inputs_and_does_not_publish(self):
-        self.upload_error = True
-        with self.assertRaises(subprocess.CalledProcessError):
-            self.unpack()
-        self.assertTrue(self.archive.exists())
-        self.assertTrue((self.destination / "run-test.wandb").is_file())
-        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), self.initial)
-        self.assertEqual(self.git(self.remote, "rev-parse", "main"), self.initial)
+    def test_repeated_receipt_does_not_duplicate_queue_or_commit(self):
+        self.unpack()
+        commit = self.git(self.logs, "rev-parse", "HEAD")
+        first = self.jobs()[0]["id"]
+        self.unpack()
+        self.assertEqual(len(self.jobs()), 1)
+        self.assertEqual(self.jobs()[0]["id"], first)
+        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), commit)
 
     def test_failed_push_retries_without_duplicate_commit(self):
         hook = self.remote / "hooks/pre-receive"
@@ -145,6 +134,7 @@ class LogPublishTest(unittest.TestCase):
         self.assertNotEqual(commit, self.initial)
         self.assertEqual(self.git(self.remote, "rev-parse", "main"), self.initial)
         self.assertTrue(self.archive.exists())
+        self.assertEqual(self.jobs()[0]["status"], "pending")
         hook.unlink()
         self.unpack()
         self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), commit)
@@ -172,6 +162,7 @@ class LogPublishTest(unittest.TestCase):
                 f"LOG_ARCHIVE={self.archive}",
                 f"WANDB_LOGS_REPO={self.logs}",
                 f"OPERATION_DIR={self.base / 'operations'}",
+                f"WANDB_BIN={fake_cli}",
             ],
             env=env,
             capture_output=True,

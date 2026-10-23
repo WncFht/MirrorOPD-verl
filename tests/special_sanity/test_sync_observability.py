@@ -21,6 +21,24 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class JournalTest(unittest.TestCase):
+    def test_streaming_timeout_stops_a_child_without_newlines(self):
+        with tempfile.TemporaryDirectory() as temp, redirect_stdout(io.StringIO()):
+            with self.assertRaises(subprocess.TimeoutExpired):
+                with observe.operation(Path(temp), "deadline-test"):
+                    observe.run(
+                        [
+                            sys.executable,
+                            "-c",
+                            "import time; print('partial progress',end='',flush=True); time.sleep(20)",
+                        ],
+                        stream=True,
+                        timeout=0.3,
+                        check=True,
+                    )
+            report = json.loads(next(Path(temp).glob("*.json")).read_text())
+            self.assertEqual(report["status"], "failed")
+            self.assertIn("partial progress", Path(report["log"]).read_text())
+
     def test_failed_command_keeps_output_and_redacts_secrets(self):
         with tempfile.TemporaryDirectory() as temp:
             directory = Path(temp)
@@ -97,7 +115,7 @@ class LogObservabilityTest(unittest.TestCase):
             "MIRROROPD_OPERATION_DIR": str(self.opdir),
             "MIRROROPD_WANDB_LOGS_REPO": str(self.logs),
             "MIRROROPD_WANDB_DIR": "",
-            "MIRROROPD_WANDB_SYNC": "1",
+            "MIRROROPD_WANDB_SYNC": "0",
             "MIRROROPD_WANDB_GIT_SYNC": "1",
         }
         self.git(self.base, "init", "--bare", str(self.remote))
@@ -112,10 +130,19 @@ class LogObservabilityTest(unittest.TestCase):
         binary.mkdir()
         cli = binary / "wandb"
         cli.write_text(
-            "#!/bin/sh\necho 'fake upload started'\necho 'fake stderr diagnostic' >&2\n"
-            'case "$2" in *z-bad*) if [ "${FAIL_UPLOAD:-0}" = 1 ]; then exit 7; fi;; esac\n'
-            "echo 'fake upload completed'\n"
+            f"#!{sys.executable}\n"
+            "import os,sys\nfrom pathlib import Path\n"
+            "if '--version' in sys.argv: print('wandb, version 0.31.0'); raise SystemExit\n"
+            "if '--help' in sys.argv: print('--verbose --yes --skip-synced'); raise SystemExit\n"
+            "print('fake stderr diagnostic',file=sys.stderr)\nfailed=False\n"
+            "for arg in sys.argv[1:]:\n"
+            " p=Path(arg)\n"
+            " if not p.is_dir() or not p.name.startswith('offline-run-'): continue\n"
+            " if 'z-bad' in p.name and os.environ.get('FAIL_UPLOAD')=='1': failed=True; continue\n"
+            " f=next(p.glob('*.wandb')); f.with_name(f.name+'.synced').write_text('')\n"
+            "raise SystemExit(7 if failed else 0)\n"
         )
+        self.env["MIRROROPD_WANDB_BIN"] = str(cli)
         cli.chmod(0o755)
         self.env["PATH"] = str(binary) + os.pathsep + os.environ["PATH"]
         self.bundle = self.base / "logs.tar.gz"
@@ -142,23 +169,32 @@ class LogObservabilityTest(unittest.TestCase):
         report = max(reports, key=lambda item: Path(item["log"]).stat().st_mtime_ns)
         return result, report
 
+    def upload(self, **settings):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "meituan/log_sync.py"), "upload"],
+            env={**self.env, **settings},
+            capture_output=True,
+            text=True,
+        )
+        reports = [json.loads(path.read_text()) for path in self.opdir.glob("*.json")]
+        return result, max(reports, key=lambda item: Path(item["log"]).stat().st_mtime_ns)
+
     def test_partial_upload_failure_is_durable_and_retry_records_success(self):
-        result, report = self.unpack(FAIL_UPLOAD="1")
+        self.assertEqual(self.unpack()[0].returncode, 0)
+        committed = self.git(self.logs, "rev-parse", "HEAD")
+        result, report = self.upload(FAIL_UPLOAD="1")
         self.assertNotEqual(result.returncode, 0)
-        self.assertEqual(report["failed_stage"], "wandb.upload")
-        uploads = [step for step in report["stages"] if step["name"] == "wandb.upload"]
-        self.assertEqual([step["status"] for step in uploads], ["success", "failed"])
-        self.assertEqual(uploads[-1]["details"]["run"], "offline-run-z-bad")
+        self.assertEqual(report["failed_stage"], "wandb.batch")
+        queue = json.loads((self.logs / ".git/mirroropd-upload/queue.json").read_text())
+        self.assertEqual([job["status"] for job in queue["jobs"]], ["succeeded", "failed"])
         self.assertIn("fake stderr diagnostic", Path(report["log"]).read_text())
-        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), self.initial)
+        self.assertNotEqual(committed, self.initial)
+        self.assertEqual(self.git(self.remote, "rev-parse", "main"), committed)
         self.assertTrue(self.bundle.exists())
-        result, report = self.unpack()
+        result, report = self.upload(MIRROROPD_UPLOAD_RETRY="1")
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         self.assertEqual(report["status"], "success")
-        self.assertTrue(
-            any(step["name"] == "logs.git_push" and step["status"] == "success" for step in report["stages"])
-        )
-        self.assertEqual(len(list(self.opdir.glob("*.json"))), 2)
+        self.assertEqual(len(list(self.opdir.glob("*.json"))), 3)
 
     def test_push_failure_records_commit_and_disabled_upload_is_not_success(self):
         hook = self.remote / "hooks/pre-receive"
@@ -181,7 +217,8 @@ class LogObservabilityTest(unittest.TestCase):
         self.assertEqual(self.git(self.remote, "rev-parse", "main"), committed)
 
     def test_status_json_exposes_failure_without_contacting_remote(self):
-        self.unpack(FAIL_UPLOAD="1")
+        self.unpack()
+        self.upload(FAIL_UPLOAD="1")
         result = subprocess.run(
             [sys.executable, str(ROOT / "meituan/sync_status.py"), "--section", "logs", "--json"],
             env=self.env,

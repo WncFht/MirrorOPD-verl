@@ -15,8 +15,13 @@ LOG_ARCHIVE ?=
 RESULTS_ARCHIVE ?=
 WANDB_RUNS_DIR ?=
 WANDB_LOGS_REPO ?=
-WANDB_SYNC ?= 1
+WANDB_SYNC ?= 0
 WANDB_GIT_SYNC ?= 1
+WANDB_BIN ?=
+WANDB_UPLOAD_JOBS ?= 2
+WANDB_UPLOAD_TIMEOUT ?= 900
+RUN ?=
+RETRY ?= 0
 KEEP_ARCHIVE_AFTER_UNPACK ?= 0
 RESULTS_REMOTE_DIR ?= outputs
 RESULTS_LOCAL_DIR ?= results
@@ -40,6 +45,11 @@ export MIRROROPD_WANDB_DIR = $(WANDB_RUNS_DIR)
 export MIRROROPD_WANDB_LOGS_REPO = $(WANDB_LOGS_REPO)
 export MIRROROPD_WANDB_SYNC = $(WANDB_SYNC)
 export MIRROROPD_WANDB_GIT_SYNC = $(WANDB_GIT_SYNC)
+export MIRROROPD_WANDB_BIN = $(WANDB_BIN)
+export MIRROROPD_UPLOAD_JOBS = $(WANDB_UPLOAD_JOBS)
+export MIRROROPD_UPLOAD_TIMEOUT = $(WANDB_UPLOAD_TIMEOUT)
+export MIRROROPD_UPLOAD_RUN = $(RUN)
+export MIRROROPD_UPLOAD_RETRY = $(RETRY)
 export KEEP_ARCHIVE_AFTER_UNPACK
 export MIRROROPD_RESULTS_SOURCE = $(RESULTS_REMOTE_DIR)
 export MIRROROPD_RESULTS_DEST = $(RESULTS_LOCAL_DIR)
@@ -49,6 +59,7 @@ export MIRROROPD_MAX_FILE_MB = $(MAX_FILE_MB)
 .PHONY: sync-results sync-results-pack sync-results-unpack native-env native-unpack native-install native-check wandb-check assets-check
 .PHONY: opd-submit
 .PHONY: sync-status archive-status sync-log-status
+.PHONY: sync-log-upload sync-log-enqueue sync-log-push sync-log-setup
 
 help:
 	@echo '同步状态：make sync-status（只读）；archive-status / sync-log-status 分别查看代码、日志'
@@ -56,8 +67,10 @@ help:
 	@echo '源码打包：make archive-pack [FULL=1] [TARGET=peer] [ARCHIVE=...]（Git 提交，默认累计增量）'
 	@echo '源码接收：make archive-unpack [ARCHIVE=包.bundle或.part.000] [DEST=.] [TARGET=peer]'
 	@echo '同步确认：接收成功后，在发送端执行 make archive-ack [TARGET=peer]，确认上次打包的提交'
-	@echo '日志下载：make sync-log-pack；传回后 make sync-log-unpack [LOG_ARCHIVE=...]（默认上传 W&B 并 Git commit/push）'
-	@echo '仅解包：make sync-log-unpack WANDB_SYNC=0 WANDB_GIT_SYNC=0；上传使用临时副本，保留原始日志'
+	@echo '日志接收：make sync-log-unpack [LOG_ARCHIVE=...]（提交、登记持久队列并推送 Git，默认不等待 W&B）'
+	@echo '云端上传：make sync-log-upload [RUN=run-id] [RETRY=1]；首次 make sync-log-setup 安装独立上传环境'
+	@echo '旧日志入队：make sync-log-enqueue；Git 推送重试：make sync-log-push'
+	@echo '仅解包：make sync-log-unpack WANDB_SYNC=0 WANDB_GIT_SYNC=0（不提交、不入队）'
 	@echo '结果下载：make sync-results-pack [RESULTS_REMOTE_DIR=outputs]；传回后 make sync-results-unpack [RESULTS_ARCHIVE=...]'
 	@echo '离线环境：make native-install；make native-check（开发机，系统 Python 3.12）'
 	@echo 'W&B 验证：make wandb-check（只写一条离线日志，不加载模型）'
@@ -93,6 +106,19 @@ sync-log-pack:
 
 sync-log-unpack:
 	@bash meituan/sync-log.sh unpack "$(LOG_ARCHIVE)"
+
+sync-log-upload:
+	@$(PYTHON) meituan/log_sync.py upload
+
+sync-log-enqueue:
+	@$(PYTHON) meituan/log_sync.py enqueue
+
+sync-log-push:
+	@$(PYTHON) meituan/log_sync.py push
+
+sync-log-setup:
+	$(PYTHON) -m venv .venv-wandb-sync
+	.venv-wandb-sync/bin/python -m pip install -r meituan/requirements-wandb-sync.txt
 
 sync-results:
 	@bash meituan/sync_results_from_remote.sh "$(ACTION)" "$(RESULTS_ARCHIVE)"

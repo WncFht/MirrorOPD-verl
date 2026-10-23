@@ -104,9 +104,9 @@ tail -f /tmp/mirroropd-sync/具体操作.log
 
 运行时显示阶段开始、成功或失败、分卷路径与大小、W&B run 名及进度、Git 提交和推送结果；长时间操作每 15 秒显示等待提示。未提交源码导致接收停止时，终端显示前 30 行文件状态，完整列表及恢复提示保存在日志。源码仍按原有快进规则处理，不因为增加诊断而自动覆盖或提交本地变化。
 
-日志接收报告分别记录 `logs.merge`、每个 run 的 `wandb.copy` / `wandb.upload`、`logs.git_commit` 和 `logs.git_push`。例如第二个 run 上传失败时，第一个 run 的成功记录会保留，Git 推送不会执行；Git 推送失败时，报告中会保留已经创建的本地日志提交 ID。原始 run 和输入包继续保留，可排除故障后重跑原命令。重跑产生新报告，不覆盖旧的失败记录。
+日志接收报告记录 `logs.merge`、`logs.git_commit`、`logs.enqueue` 和 `logs.git_push`；上传报告记录 `wandb.batch`，逐 run 结果持久保存在上传队列中。批次中部分 run 成功时，成功任务不会随失败任务一起重传。Git 推送和云端上传可以分别重试，重跑产生新报告，不覆盖旧记录。
 
-`WANDB_SYNC=0` 或 `WANDB_GIT_SYNC=0` 对应阶段显示 skipped，不能解读为云端上传或 Git 推送成功。整体 success 仅表示该次命令启用的阶段全部完成。报告记录的是 W&B CLI 的退出结果，不是实时云端状态，也不是日志传输回执；`logs_state.json` 仍然只表示已打包，不代表送达。原有“日志包必须在下一次打包前传回”的规则不变。
+接收默认 `WANDB_SYNC=0`，云端阶段显示 skipped/queued，不能解读为已经上传。整体 success 仅表示该次命令启用的阶段全部完成。上传器联合 CLI 结果与 SDK 完成标记记录快照结果；状态命令不实时查询云端，也不充当日志传输回执；`logs_state.json` 仍然只表示已打包，不代表送达。原有“日志包必须在下一次打包前传回”的规则不变。
 
 正常异常记录 failed，Ctrl-C 记录 interrupted。机器掉电、进程被强制终止或磁盘无法继续写入时，报告可能停留在 running；状态页显示最后更新时间，不能仅凭 running 判断进程仍活着。日志不保存完整环境变量，并遮蔽已知密钥环境值、常见 token/password 字段和 URL 密码；诊断文件仍包含本机路径和工具输出，默认文件权限为仅当前用户可读写。
 
@@ -169,59 +169,72 @@ fanghaotian/
 
 `make archive-pack` 只负责源码；上述模型和数据需要另行准备并人工传输一次。已有文件无需随每次代码同步重传。
 
-## 日志下载
+## 日志接收与云端上传
 
-在开发机执行：
+开发机仍执行 `make sync-log-pack`，扫描源码仓库的 `wandb/offline-run-*`，将发生变化的 run 整个目录打包。超过 10 MiB 分卷，人工传回全部分卷。打包端仍按大小、修改时间记录 `logs_state.json`，成功后清理旧自动命名日志包；每个包必须在下一次打包前传回。这个打包状态不代表云端已经收到数据。
 
-```bash
-make sync-log-pack
-```
-
-日志新包完整生成后，自动清理同目录中 `log_MirrorOPD-verl*.tar.gz` 及其旧分卷；打包失败或没有新增、修改文件时保留旧包。自定义名称的历史包不参与按前缀清理。日志仍按增量打包，因此每个包应在下一次打包前传回接收端。原始 `wandb/` 日志保留。
-
-它扫描 `wandb/offline-run-*`，对有新增或修改文件的 run 打包完整目录，以便接收端合并。`.wandb` 旁文件一并纳入。人工下载生成的 `transfer_snap/log_MirrorOPD-verl_*.tar.gz` 或全部分卷后，在本机或 Mac 执行：
+Mac 或分析机接收到独立的 `wandb-logs` Git 仓库：
 
 ```bash
-make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.gz
+make sync-log-unpack LOG_ARCHIVE=/下载目录/log_MirrorOPD-verl_....tar.gz
 ```
 
-日志接收使用独立的 `WncFht/wandb-logs` Git 仓库。Mac 上的仓库位于 `~/src/wandb-logs`；本机可将它 clone 到源码仓库同级。默认接收目录按以下顺序确定：
+默认依次完成：合并原始文件、本地 Git 提交、登记持久上传队列、Git push。云端上传已从默认接收路径分离，W&B 故障不会挡住本地提交。Git push 失败时，本地提交和队列保留，执行 `make sync-log-push` 重试推送；也可以先运行云端上传命令。输入日志包始终保留。
 
-1. 显式设置的 `WANDB_RUNS_DIR`，直接作为实际 run 目录。
-2. 显式设置的 `WANDB_LOGS_REPO` 下的 `MirrorOPD-verl/wandb/`。
-3. 如果源码仓库同级存在 `wandb-logs/.git`，使用该仓库的 `MirrorOPD-verl/wandb/`。
-4. 否则使用 `~/src/wandb-logs/MirrorOPD-verl/wandb/`。
+接收目录仍按以下优先级选择：显式 `WANDB_RUNS_DIR`；`WANDB_LOGS_REPO/MirrorOPD-verl/wandb/`；源码仓库同级的 `wandb-logs/MirrorOPD-verl/wandb/`；最后回退到 `~/src/wandb-logs/MirrorOPD-verl/wandb/`。接收端日志仓库需要配置提交身份及 Git upstream。自动提交只包含该项目的日志路径，其他目录的暂存修改保留。
 
-解包默认依次执行：合并到日志仓库、上传 W&B、Git commit、Git push。接收端需提前安装并登录 `wandb`，日志仓库需配置 Git 提交身份、远端及当前分支的 upstream。每个 run 先复制到临时目录，再执行 `wandb sync`；同步产生的 config、summary 改写和同步状态留在临时目录，日志仓库保留收到的原始文件。临时副本会移除 `.wandb.synced` 和 `.wandb.syncstate`，以便重新上传增量包中的 run 快照；这可能重传已有记录，run ID 保持不变。
+### 首次安装上传环境
 
-Mac 接收并推送日志：
+在实际上传机器上执行一次：
 
 ```bash
-make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.gz
+make sync-log-setup
 ```
 
-W&B 上传只处理本次包内的 run；Git 自动提交覆盖整个接收目录，默认是日志仓库中的 `MirrorOPD-verl/wandb/`。这个目录里以前漏提交的新增文件、修改和删除都会一起提交；`.gitignore` 排除的未跟踪文件仍不提交，其他项目或目录的暂存修改保留。没有文件变化时跳过 commit，但仍执行 push，以支持上次提交成功、推送失败后的重试。脚本使用普通 `git push`，不自动拉取、变基或强制推送；遇到远端分歧时先处理 Git 分歧，再重跑。W&B 上传失败时停止后续提交和推送；Git 推送失败时保留本地提交。两种失败都保留已解包日志及输入包。
+命令使用 Python venv 和 pip 创建 `.venv-wandb-sync`，固定安装本机验证过的 `wandb==0.31.0`；需要联网，Python 至少 3.10。它不升级训练环境或独立日志仓库的解码环境。新版 SDK 已移除旧的内部 DataStore 接口，因此不要直接替换本地解码器所用的 SDK。
 
-`WANDB_SYNC=0` 只关闭 W&B 上传；`WANDB_GIT_SYNC=0` 关闭自动 Git 提交和推送。仅解包时同时设置两项：
+上传入口优先使用此独立环境，也可以通过 `WANDB_BIN=/绝对路径/wandb` 指定上传 CLI。启动时记录执行路径、版本和引擎；拒绝低于 0.31.0 的 SDK，要求 `wandb beta sync` 所需参数可用，不自动退回旧 Python 同步器。认证复用已有 `.netrc` 或 `WANDB_API_KEY`，必要时用 `.venv-wandb-sync/bin/wandb login` 登录。
+
+### 队列、重试和状态
 
 ```bash
-make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.gz \
-  WANDB_SYNC=0 WANDB_GIT_SYNC=0
+make sync-log-upload                  # 处理整个接收历史中已入队的待传任务
+make sync-log-status                  # 查看 pending / running / succeeded / failed / incomplete
+make sync-log-upload RUN=krkmq098     # 只处理指定 run
+make sync-log-upload RETRY=1          # 排障后忽略冷却与尝试次数限制，仍只尝试一轮
+make sync-log-enqueue                 # 将迁移前已收到的日志提交并登记入队；不上传、不推送
+make sync-log-push                    # 单独重试日志仓库推送
 ```
 
-直接调用 `meituan/sync-log.sh unpack` 的默认行为相同，对应覆盖参数为 `MIRROROPD_WANDB_DIR`、`MIRROROPD_WANDB_LOGS_REPO`、`MIRROROPD_WANDB_SYNC` 和 `MIRROROPD_WANDB_GIT_SYNC`。上传过程要求整个 run 的附属文件可读；未打包且只存在于开发机的 artifact 外部引用无法通过临时复制恢复。
+每次接收会检查该项目日志目录中所有已提交 run，因此此前收到但没有上传的 run 也能入队。队列以 run 路径、Git tree ID 和云端目标区分快照；原始文件内容未变时复用原任务，其他 run 的更新不会触发重传。成功快照再次执行 upload 会直接跳过。首次启用时没有历史上传回执，不能推断旧日志已经上云，现有日志可能需要重新同步一次。
 
-Mac 和本机的接收、分析流程直接使用独立日志仓库，不在源码仓库维护 `wandb` 目录或兼容软链接。Mac 如果执行过旧的软链接迁移命令，可以在源码仓库执行 `test ! -L wandb || unlink wandb`，只移除链接，目标日志不受影响。真实目录中的旧 run 应先迁入日志仓库，再移除空目录。已启动的旧 `wandb sync` 进程仍可能写原目录，应等其退出后再迁移；上传临时副本不会隔离其他进程对原目录的写入。
+队列位于独立日志仓库的 `.git/mirroropd-upload/queue.json`；该目录还保存 `cache/` 上传副本与 `attempts/` 中的尝试目录。SDK 对 config、summary 和同步标记的写入留在副本中，原始日志不变。失败和中断后保留同一快照的副本，重试不从原始目录重新覆盖，也不删除其同步状态。新的 run 快照使用独立副本；尚未开始或失败的旧快照标为 superseded，原始 Git 历史仍保留。正在上传的快照先完成，同一 run 不并发上传。
 
-本地解码工具位于 `wandb-logs/tools/wandb_local.py`，不依赖训练仓库或 W&B 云端。首次在日志仓库执行 `make setup`，之后用 `make refresh` 拉取 Git 更新并解码；只分析现有文件用 `make decode`，按 run 导出 CSV 用 `make csv RUN=<run-id>`。原始日志位于 `MirrorOPD-verl/wandb/`，生成的 history、系统监控、配置和 summary 位于被 Git 忽略的 `derived/MirrorOPD-verl/<run目录>/`。上传 W&B 和本地解码是独立路径；本地解码不调用 login、sync 或 Public API。
+每个任务引用对应的日志提交，防止 Git GC 回收待传对象。状态、锁、SDK 标记和缓存只属于当前接收机器，不随源码 bundle 或日志仓库的普通 Git push 传输。不要手动删除失败任务的缓存来重试；这会失去可复用状态。
 
-MirrorOPD 的统计和绘图使用 `examples/mirroropd/docs/scripts/analyze_run.py export` 从本地日志准备项目快照；它委托独立仓库解码，不另维护解析器。旧云端回读改为显式 `export-cloud`，仅用于核对或补救。具体使用步骤和历史数据边界见[分析复现](../examples/mirroropd/docs/分析复现.md)。
+默认并发两个不同 run，每批最多等待 900 秒。一次 upload 对每个就绪任务只尝试一次，失败会记录错误并继续处理其他批次；自动重试资格最多三次，并有从 60 秒开始的指数冷却。`RETRY=1` 是显式排障后的一轮重试，不跳过已经成功的快照。参数可调整：
 
-打包端仍默认扫描源码仓库的 `wandb/`；`WANDB_LOGS_REPO` 只影响接收端。显式设置 `WANDB_RUNS_DIR=自定义目录` 可以覆盖打包源或接收位置。这个参数表示实际 run 目录；SDK 的 `WANDB_DIR` 表示其父级写入根目录，两个参数分开设置。
+```bash
+make sync-log-upload WANDB_UPLOAD_JOBS=1 WANDB_UPLOAD_TIMEOUT=300
+```
 
-本项目的数学配方默认启用 `console` 和 `wandb`，设置 `WANDB_MODE=offline`、`WANDB_DIR=<仓库根目录>`，并将这些环境变量显式传给 Ray 训练进程。W&B 实际记录位于 `<仓库>/wandb/offline-run-*/`，与同步脚本的默认扫描目录一致。运行输出和 checkpoint 仍保存在 `outputs/<实验名>/`。
+上传器持有进程锁，启动的 SDK CLI 也继承该锁；上次 SDK 仍在运行时，不允许另一个 worker 并发处理同一队列。被正常中断或超时的进程组会终止，队列结果保留。进程异常退出后，下一次获得锁的 worker 会恢复未完成任务。
 
-完整终端 stdout/stderr 同时保存到 `outputs/<实验名>/train.log`，用 `tail -f outputs/<实验名>/train.log` 查看。这个文本日志通过 `make sync-results-pack` 随实验结果打包；`make sync-log-pack` 负责 W&B 离线 run。
+### 不完整离线文件
+
+新版 SDK 实测可能打印同步错误但仍返回退出码 0。工具还会检查每个副本是否生成 SDK 的 `.wandb.synced` 完成标记，不能仅凭退出码将任务标为成功。
+
+训练仍在写入时打包，可能截到 `.wandb` 的半条记录。新版引擎可以上传此前完整的数据，但会报告 incomplete record。队列将这种快照标为 incomplete，等待后续更完整的日志包；不会不断重试同一份不可变化的半条记录，也不会裁剪原始日志或伪造结束记录。云端可能已有部分数据，不代表这个快照完整同步成功。静态归档不使用 `--live`，避免等待一个永远不会继续写入的副本。
+
+### 兼容参数和本地分析
+
+`WANDB_SYNC=1` 可在接收、提交、入队和推送后立即处理队列，适合仍想一键执行的情况。只复制文件、不提交、不入队时，使用 `WANDB_SYNC=0 WANDB_GIT_SYNC=0`；随后可用 `make sync-log-enqueue` 登记。持久上传依赖已提交快照，因此不支持 `WANDB_SYNC=1 WANDB_GIT_SYNC=0`。
+
+原始日志默认保持原来的 entity/project/run ID。测试或迁移时可以通过环境变量 `MIRROROPD_UPLOAD_ENTITY`、`MIRROROPD_UPLOAD_PROJECT` 明确覆盖云端目标；该目标在入队时固定，之后改变环境变量不会悄悄改变已排队任务的目的地。
+
+本地解码工具仍位于独立仓库的 `wandb-logs/tools/wandb_local.py`。在该仓库使用 `make setup`、`make decode`、`make csv RUN=<run-id>`，无需等待云端上传。原始数据位于 `MirrorOPD-verl/wandb/`，派生数据位于 `derived/MirrorOPD-verl/`。MirrorOPD 的分析入口继续委托这个解码器，见[分析复现](../examples/mirroropd/docs/分析复现.md)。
+
+终端 stdout/stderr 保存到 `outputs/<实验名>/train.log`，通过 `sync-results-pack` 传回；`sync-log-pack` 负责 W&B 离线 run。本机验证结果与已知边界见 [W&B 上传重构验证](docs/2026-10-24-W&B上传重构与本机验证.md)。
 
 ## 结果下载
 
@@ -253,13 +266,17 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `MAX_FILE_MB` | `100` | 结果文件大小上限，单位为 MiB |
 | `WANDB_RUNS_DIR` | 留空，按操作选择 | 覆盖实际 run 目录；打包默认 `wandb`，解包默认独立日志仓库 |
 | `WANDB_LOGS_REPO` | 同级 Git 仓库 `../wandb-logs`，不存在则 `~/src/wandb-logs` | 接收端日志仓库，run 合并到其中的 `MirrorOPD-verl/wandb/` |
-| `WANDB_SYNC` | `1` | 解包后从临时副本上传 W&B；设为 `0` 跳过上传 |
-| `WANDB_GIT_SYNC` | `1` | 上传完成后提交并推送该项目接收目录的全部日志变化；设为 `0` 跳过 Git 操作 |
+| `WANDB_SYNC` | `0` | 接收默认只入队；设为 `1` 在接收完成后立即处理上传队列 |
+| `WANDB_GIT_SYNC` | `1` | 接收后提交、入队并推送日志；设为 `0` 只合并原始文件 |
+| `WANDB_BIN` | 优先 `.venv-wandb-sync/bin/wandb` | 独立上传 CLI 路径 |
+| `WANDB_UPLOAD_JOBS` | `2` | 同时上传的不同 run 数，范围 1–8 |
+| `WANDB_UPLOAD_TIMEOUT` | `900` | 每批上传总时限，秒 |
+| `RUN`、`RETRY` | 空、`0` | 上传 run 选择；显式覆盖冷却/尝试次数限制 |
 | `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；日志和结果输入包始终保留 |
 | `MODEL_ROOT`、`DATA_ROOT` | `../model`、`../data` 的绝对路径 | 数学资产检查目录 |
 | `LOG_ACTION`、`ACTION` | `unpack` | `make sync-log`、`make sync-results` 的操作 |
 
-源码 shell 入口调用 `code_archive.py`；日志、结果入口调用 `transfer.py`。两者共用 `sync_observe.py` 保存运行诊断，`sync_status.py` 读取状态。直接调用 shell 或独立 bootstrap 时用 `MIRROROPD_*` 环境变量设置参数，诊断目录对应 `MIRROROPD_OPERATION_DIR`；通常使用 Makefile 即可。
+源码 shell 入口调用 `code_archive.py`；日志、结果入口调用 `transfer.py`。日志的提交与持久上传队列由 `log_sync.py` 维护；各入口共用 `sync_observe.py` 保存运行诊断，`sync_status.py` 读取状态。直接调用 shell 或独立 bootstrap 时用 `MIRROROPD_*` 环境变量设置参数，诊断目录对应 `MIRROROPD_OPERATION_DIR`；通常使用 Makefile 即可。
 
 ## 验证
 
@@ -274,7 +291,7 @@ make wandb-check
 make sync-log-pack
 ```
 
-预期产生 `wandb/offline-run-*/run-*.wandb` 和日志包。人工传回 Mac 后运行 `make sync-log-unpack LOG_ARCHIVE=<下载包>`，确认 `~/src/wandb-logs/MirrorOPD-verl/wandb/` 出现对应 run，W&B 上传和 Git 推送均成功。显式指定了接收路径或存在同级日志仓库时，检查实际接收目录。仅验证本地解包时添加 `WANDB_SYNC=0 WANDB_GIT_SYNC=0`，无需安装、登录 W&B。
+预期产生 `wandb/offline-run-*/run-*.wandb` 和日志包。人工传回 Mac 后运行 `make sync-log-unpack LOG_ARCHIVE=<下载包>`，确认 `~/src/wandb-logs/MirrorOPD-verl/wandb/` 出现对应 run，Git 提交、推送及队列登记成功；再执行 `make sync-log-upload` 检查云端结果。显式指定了接收路径或存在同级日志仓库时，检查实际接收目录。仅验证本地解包时添加 `WANDB_SYNC=0 WANDB_GIT_SYNC=0`，无需安装、登录 W&B。
 
 ### 参考文献
 
