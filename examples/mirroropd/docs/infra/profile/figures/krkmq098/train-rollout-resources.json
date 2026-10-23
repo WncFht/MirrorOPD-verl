@@ -1,0 +1,109 @@
+{
+  "rows": [
+    {
+      "seconds": 5.097289800643921,
+      "gpu_mean": 100,
+      "gpu_min": 100,
+      "memory_gib_mean": 53.130859375
+    },
+    {
+      "seconds": 20.088648796081543,
+      "gpu_mean": 100,
+      "gpu_min": 100,
+      "memory_gib_mean": 53.130859375
+    },
+    {
+      "seconds": 35.10515475273132,
+      "gpu_mean": 100,
+      "gpu_min": 100,
+      "memory_gib_mean": 4.456787109375
+    },
+    {
+      "seconds": 50.12396287918091,
+      "gpu_mean": 41.25,
+      "gpu_min": 8,
+      "memory_gib_mean": 4.498779296875
+    },
+    {
+      "seconds": 66.38982486724854,
+      "gpu_mean": 100,
+      "gpu_min": 100,
+      "memory_gib_mean": 53.13232421875
+    },
+    {
+      "seconds": 80.1105318069458,
+      "gpu_mean": 100,
+      "gpu_min": 100,
+      "memory_gib_mean": 53.13232421875
+    },
+    {
+      "seconds": 95.09576988220215,
+      "gpu_mean": 90.125,
+      "gpu_min": 52,
+      "memory_gib_mean": 10.961669921875
+    },
+    {
+      "seconds": 110.11580181121826,
+      "gpu_mean": 100,
+      "gpu_min": 100,
+      "memory_gib_mean": 53.13623046875
+    },
+    {
+      "seconds": 125.0902099609375,
+      "gpu_mean": 100,
+      "gpu_min": 100,
+      "memory_gib_mean": 53.13623046875
+    },
+    {
+      "seconds": 140.34822583198547,
+      "gpu_mean": 100,
+      "gpu_min": 100,
+      "memory_gib_mean": 53.13623046875
+    },
+    {
+      "seconds": 155.82273483276367,
+      "gpu_mean": 14.875,
+      "gpu_min": 0,
+      "memory_gib_mean": 15.866455078125
+    }
+  ],
+  "windows": [
+    {
+      "phase": "train_rollout",
+      "start": 1792688196.5967062,
+      "end": 1792688231.0338922,
+      "step": 51
+    },
+    {
+      "phase": "actor_update",
+      "start": 1792688238.9187403,
+      "end": 1792688246.9689524,
+      "step": 51
+    },
+    {
+      "phase": "train_rollout",
+      "start": 1792688249.7974656,
+      "end": 1792688284.3098454,
+      "step": 52
+    },
+    {
+      "phase": "actor_update",
+      "start": 1792688292.8622096,
+      "end": 1792688303.523285,
+      "step": 52
+    },
+    {
+      "phase": "train_rollout",
+      "start": 1792688306.2758179,
+      "end": 1792688338.8411353,
+      "step": 53
+    },
+    {
+      "phase": "actor_update",
+      "start": 1792688347.0335414,
+      "end": 1792688355.7977278,
+      "step": 53
+    }
+  ],
+  "audit": "[]"
+}
