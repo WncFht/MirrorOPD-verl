@@ -7,6 +7,7 @@ GPU groups are physical indices, not an asserted Ray rank-to-device mapping.
 """
 
 import argparse
+import json
 from statistics import mean, median
 
 from analyze_run import is_number, read_rows, write_json
@@ -35,7 +36,11 @@ def main():
     p.add_argument("--data", type=Path, required=True)
     args = p.parse_args()
     history = read_rows(args.data / "history.jsonl")
-    system = read_rows(args.data / "system-sampled.jsonl.gz")
+    system_path = args.data / "system.jsonl.gz"
+    if not system_path.is_file():
+        system_path = args.data / "system-sampled.jsonl.gz"
+    system = read_rows(system_path)
+    source = json.loads((args.data / "source.json").read_text())
     gpu_rows = [r for r in system if is_number(r.get("system.gpu.0.gpu"))]
     times = sorted(r["_timestamp"] for r in gpu_rows)
     val = [
@@ -55,7 +60,8 @@ def main():
     }
     result = {
         "method": (
-            "sample means; system API sampling completeness unknown; timestamp-derived phase boundaries approximate"
+            source.get("system_method", "system API sampling completeness unknown")
+            + "; sample means; timestamp-derived phase boundaries approximate"
         ),
         "gpu_rows": len(gpu_rows),
         "stream_rows": len(system),

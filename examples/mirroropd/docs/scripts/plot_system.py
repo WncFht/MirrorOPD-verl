@@ -22,7 +22,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from analyze_run import read_rows
+from analyze_run import is_number, read_rows
 from matplotlib.patches import Patch
 from plot_run import save
 
@@ -33,7 +33,10 @@ def main():
     p.add_argument("--out", type=Path, required=True)
     args = p.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
-    rows = [r for r in read_rows(args.data / "system-sampled.jsonl.gz") if "system.gpu.0.gpu" in r]
+    system_path = args.data / "system.jsonl.gz"
+    if not system_path.is_file():
+        system_path = args.data / "system-sampled.jsonl.gz"
+    rows = [r for r in read_rows(system_path) if is_number(r.get("system.gpu.0.gpu"))]
     analysis = json.loads((args.data / "system-analysis.json").read_text())
     source = json.loads((args.data / "source.json").read_text())
     t0 = rows[0]["_timestamp"]

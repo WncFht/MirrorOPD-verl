@@ -1,0 +1,1295 @@
+{
+  "data": {
+    "seed": 42,
+    "shuffle": true,
+    "use_shm": false,
+    "audio_key": "audios",
+    "image_key": "images",
+    "tokenizer": null,
+    "val_files": [
+      "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/data/math/MATH-500/test.parquet",
+      "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/data/math/AMC23/test.parquet",
+      "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/data/math/AIME25/test.parquet"
+    ],
+    "video_key": "videos",
+    "custom_cls": {
+      "name": null,
+      "path": null
+    },
+    "prompt_key": "prompt",
+    "truncation": "error",
+    "train_files": [
+      "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/data/math/DAPO/train.parquet"
+    ],
+    "reward_fn_key": "data_source",
+    "gen_batch_size": null,
+    "val_batch_size": null,
+    "return_raw_chat": true,
+    "val_max_samples": -1,
+    "continuous_token": {
+      "model_family": "deepseek"
+    },
+    "image_patch_size": 14,
+    "tool_config_path": null,
+    "train_batch_size": 64,
+    "max_prompt_length": 4096,
+    "train_max_samples": -1,
+    "trust_remote_code": false,
+    "function_tool_path": null,
+    "return_full_prompt": false,
+    "validation_shuffle": false,
+    "max_response_length": 7168,
+    "mm_processor_kwargs": {},
+    "return_raw_input_ids": false,
+    "dataloader_num_workers": 0,
+    "filter_overlong_prompts": true,
+    "return_multi_modal_inputs": true,
+    "apply_chat_template_kwargs": {},
+    "filter_overlong_prompts_workers": 1
+  },
+  "skip": {
+    "rollout": {
+      "steps": [],
+      "action": "cache",
+      "enable": false,
+      "dump_dir": "~/.verl/rollout_dump"
+    },
+    "_target_": "verl.utils.skip.SkipManagerConfig",
+    "rollout_tq": {
+      "steps": [],
+      "action": "cache",
+      "enable": false,
+      "dump_dir": "~/.verl/rollout_dump"
+    },
+    "async_rollout": {
+      "steps": [],
+      "action": "cache",
+      "enable": false,
+      "dump_dir": "~/.verl/rollout_dump"
+    }
+  },
+  "critic": {
+    "fsdp": {
+      "qat": {
+        "mode": "w4a16",
+        "enable": false,
+        "_target_": "verl.workers.config.QATEngineConfig",
+        "group_size": 16,
+        "ignore_patterns": [
+          "lm_head",
+          "embed_tokens",
+          "re:.*mlp.gate$"
+        ],
+        "activation_observer": "static_minmax",
+        "quantization_config_path": null
+      },
+      "seed": 42,
+      "dtype": "bfloat16",
+      "_target_": "verl.workers.config.FSDPEngineConfig",
+      "strategy": "fsdp",
+      "fsdp_size": -1,
+      "model_dtype": "fp32",
+      "wrap_policy": {
+        "min_num_params": 0
+      },
+      "forward_only": false,
+      "turbo_config": {
+        "distributed": {
+          "fsdp_plan": {
+            "param_dtype": "bf16",
+            "output_dtype": "bf16",
+            "reduce_dtype": "fp32",
+            "fsdp_implementation": "native",
+            "num_to_forward_prefetch": 1,
+            "num_to_backward_prefetch": 1
+          },
+          "expert_parallel_size": 1,
+          "tensor_parallel_size": 1,
+          "ulysses_parallel_size": 1,
+          "fully_shard_parallel_size": 16,
+          "expert_fully_shard_parallel_size": 1
+        }
+      },
+      "pad_to_length": false,
+      "param_offload": false,
+      "offload_policy": false,
+      "use_orig_params": false,
+      "forward_prefetch": false,
+      "full_determinism": false,
+      "optimizer_offload": false,
+      "use_torch_compile": true,
+      "pad_to_length_bucket": 1024,
+      "entropy_checkpointing": false,
+      "reshard_after_forward": true,
+      "forward_only_cpu_offload": true,
+      "entropy_from_logits_chunk_size": 2048,
+      "ulysses_sequence_parallel_size": 1,
+      "entropy_from_logits_with_chunking": false,
+      "use_no_sync_for_gradient_accumulation": false
+    },
+    "model": {
+      "mtp": {
+        "enable": false,
+        "method": "mtp",
+        "_target_": "verl.workers.config.MtpConfig",
+        "enable_train": false,
+        "detach_encoder": false,
+        "enable_rollout": false,
+        "speculative_algorithm": "EAGLE",
+        "speculative_num_steps": 3,
+        "num_speculative_tokens": 1,
+        "speculative_eagle_topk": 1,
+        "mtp_loss_scaling_factor": 0.1,
+        "speculative_num_draft_tokens": 4
+      },
+      "lora": {
+        "rank": 0,
+        "type": "lora",
+        "alpha": 32,
+        "dtype": null,
+        "merge": false,
+        "dropout": 0,
+        "adapter_path": null,
+        "target_modules": [
+          "linear_qkv",
+          "linear_proj",
+          "linear_fc1",
+          "linear_fc2"
+        ],
+        "exclude_modules": [],
+        "a2a_experimental": false,
+        "dropout_position": "pre",
+        "lora_A_init_method": "xavier",
+        "lora_B_init_method": "zero",
+        "freeze_vision_model": true,
+        "freeze_language_model": true,
+        "freeze_vision_projection": true
+      },
+      "path": "~/models/deepseek-llm-7b-chat",
+      "use_shm": false,
+      "_target_": "verl.workers.config.HFModelConfig",
+      "lora_rank": 0,
+      "tiled_mlp": {
+        "enabled": false,
+        "num_shards": 4
+      },
+      "use_liger": false,
+      "lora_alpha": 16,
+      "external_lib": null,
+      "hf_config_path": null,
+      "target_modules": "all-linear",
+      "tokenizer_path": null,
+      "exclude_modules": null,
+      "override_config": {},
+      "enable_full_vocab": false,
+      "lora_adapter_path": null,
+      "trust_remote_code": false,
+      "use_fused_kernels": false,
+      "use_remove_padding": true,
+      "custom_chat_template": null,
+      "fused_kernel_options": {
+        "impl_backend": "torch"
+      },
+      "enable_activation_offload": false,
+      "enable_gradient_checkpointing": true
+    },
+    "optim": {
+      "lr": 1e-05,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "_target_": "verl.workers.config.FSDPOptimizerConfig",
+      "clip_grad": 1,
+      "optimizer": "AdamW",
+      "num_cycles": 0.5,
+      "min_lr_ratio": 0,
+      "warmup_style": null,
+      "weight_decay": 0.01,
+      "optimizer_impl": "torch.optim",
+      "lr_warmup_steps": -1,
+      "lr_scheduler_type": "constant",
+      "zero_indexed_step": true,
+      "total_training_steps": 200,
+      "lr_warmup_steps_ratio": 0,
+      "override_optimizer_config": null
+    },
+    "enable": null,
+    "shuffle": false,
+    "_target_": "verl.workers.config.FSDPCriticConfig",
+    "profiler": {
+      "tool": null,
+      "ranks": [],
+      "enable": false,
+      "_target_": "verl.utils.profiler.ProfilerConfig",
+      "all_ranks": false,
+      "save_path": "outputs/profile",
+      "tool_config": {
+        "npu": {
+          "level": "level0",
+          "_target_": "verl.utils.profiler.config.NPUToolConfig",
+          "analysis": true,
+          "contents": [],
+          "discrete": false
+        },
+        "nsys": {
+          "_target_": "verl.utils.profiler.config.NsightToolConfig",
+          "discrete": false
+        },
+        "torch": {
+          "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+          "contents": [],
+          "discrete": false,
+          "schedule": {
+            "wait": 0,
+            "active": 0,
+            "repeat": 0,
+            "warmup": 0,
+            "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+            "skip_first": 0
+          }
+        },
+        "torch_memory": {
+          "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+          "stack_depth": 32,
+          "trace_alloc_max_entries": 100000,
+          "memory_snapshot_num_steps": 1
+        },
+        "precision_debugger": {
+          "steps": null,
+          "stages": null,
+          "strict": false,
+          "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+          "config_path": null
+        }
+      },
+      "finish_hook_cmd": null,
+      "relocate_results": false,
+      "finish_hook_ranks": [],
+      "finish_hook_all_ranks": false
+    },
+    "strategy": "fsdp",
+    "grad_clip": 1,
+    "rollout_n": 1,
+    "checkpoint": {
+      "_target_": "verl.trainer.config.CheckpointConfig",
+      "async_save": false,
+      "load_contents": [
+        "model",
+        "optimizer",
+        "extra"
+      ],
+      "save_contents": [
+        "model",
+        "optimizer",
+        "extra"
+      ]
+    },
+    "ppo_epochs": 1,
+    "loss_agg_mode": "token-mean",
+    "cliprange_value": 0.5,
+    "use_dynamic_bsz": true,
+    "data_loader_seed": 42,
+    "loss_scale_factor": null,
+    "ppo_mini_batch_size": 64,
+    "ppo_micro_batch_size": null,
+    "forward_micro_batch_size": null,
+    "ppo_max_token_len_per_gpu": 32768,
+    "ppo_micro_batch_size_per_gpu": null,
+    "forward_max_token_len_per_gpu": 32768,
+    "ulysses_sequence_parallel_size": 1,
+    "forward_micro_batch_size_per_gpu": null
+  },
+  "reward": {
+    "_target_": "verl.workers.config.RewardConfig",
+    "num_workers": 8,
+    "reward_model": {
+      "enable": false,
+      "nnodes": 1,
+      "rollout": {
+        "n": 1,
+        "mtp": null,
+        "name": "???",
+        "seed": 42,
+        "dtype": "bfloat16",
+        "top_k": -1,
+        "top_p": 1,
+        "_target_": "verl.workers.config.RolloutConfig",
+        "do_sample": true,
+        "ignore_eos": false,
+        "load_format": "auto",
+        "temperature": 1,
+        "limit_images": null,
+        "max_num_seqs": 1024,
+        "quantization": null,
+        "enforce_eager": true,
+        "engine_kwargs": {},
+        "max_model_len": null,
+        "prompt_length": 2048,
+        "disaggregation": {
+          "enabled": false,
+          "ib_device": null,
+          "bootstrap_port": null,
+          "decode_replicas": 1,
+          "prefill_replicas": 1,
+          "transfer_backend": "nixl",
+          "decode_tensor_model_parallel_size": null
+        },
+        "layered_summon": false,
+        "response_length": 2048,
+        "full_determinism": false,
+        "disable_log_stats": true,
+        "free_cache_engine": true,
+        "scheduling_policy": "fcfs",
+        "data_parallel_size": 1,
+        "multi_stage_wake_up": false,
+        "skip_tokenizer_init": false,
+        "expert_parallel_size": 1,
+        "enable_prefix_caching": true,
+        "enable_chunked_prefill": true,
+        "gpu_memory_utilization": 0.5,
+        "max_num_batched_tokens": 8192,
+        "cudagraph_capture_sizes": null,
+        "quantization_config_file": null,
+        "tensor_model_parallel_size": 2,
+        "pipeline_model_parallel_size": 1
+      },
+      "_target_": "verl.workers.config.RewardModelConfig",
+      "model_path": null,
+      "n_gpus_per_node": 8,
+      "enable_resource_pool": false
+    },
+    "reward_manager": {
+      "name": "naive",
+      "module": {
+        "name": "custom_reward_manager",
+        "path": null,
+        "_target_": "verl.trainer.config.config.ModuleConfig"
+      },
+      "source": "register",
+      "_target_": "verl.workers.config.reward.RewardManagerConfig"
+    },
+    "sandbox_fusion": {
+      "url": null,
+      "_target_": "verl.workers.config.SandboxFusionConfig",
+      "max_concurrent": 64,
+      "memory_limit_mb": 1024
+    },
+    "custom_reward_function": {
+      "name": "reward_func",
+      "path": "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl/examples/mirroropd/reward.py"
+    }
+  },
+  "trainer": {
+    "v1": {
+      "sync": {},
+      "sampler": {
+        "custom_sampler": {
+          "name": null,
+          "path": null
+        },
+        "sampler_kwargs": {},
+        "max_off_policy_strategy": "drop",
+        "max_off_policy_threshold": 8,
+        "sync_refill_failed_groups": false
+      },
+      "trainer_mode": "sync",
+      "colocate_async": {
+        "num_warmup_batches": 1
+      },
+      "separate_async": {
+        "hybrid_rollout": {
+          "_target_": "verl.trainer.config.HybridRolloutSwitchConfig",
+          "enable_switch": false,
+          "switch_threshold_ratio": 0.4,
+          "switch_cost_window_size": 3,
+          "switch_threshold_step_up": 0.05,
+          "adaptive_switch_threshold": true,
+          "switch_threshold_step_down": 0.03,
+          "switch_threshold_release_steps": 2
+        },
+        "num_warmup_batches": 1,
+        "parameter_sync_step": 4
+      }
+    },
+    "device": "cuda",
+    "logger": [
+      "console",
+      "wandb"
+    ],
+    "nnodes": 1,
+    "use_v1": true,
+    "val_only": false,
+    "save_freq": 100,
+    "test_freq": 20,
+    "resume_mode": "disable",
+    "project_name": "MirrorOPD-verl",
+    "total_epochs": 1,
+    "balance_batch": true,
+    "critic_warmup": 0,
+    "metrics_format": "policy-v3",
+    "experiment_name": "math-opd-E15-20261022-230525-2558",
+    "n_gpus_per_node": 8,
+    "default_hdfs_dir": null,
+    "resume_from_path": null,
+    "rollout_data_dir": null,
+    "val_before_train": false,
+    "default_local_dir": "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl/outputs/math-opd-E15-20261022-230525-2558/checkpoints",
+    "esi_redundant_time": 0,
+    "log_val_generations": 0,
+    "validation_data_dir": "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl/outputs/math-opd-E15-20261022-230525-2558/validation",
+    "total_training_steps": 200,
+    "eval_metrics_resamples": 256,
+    "max_actor_ckpt_to_keep": 2,
+    "max_critic_ckpt_to_keep": null,
+    "checkpoint_callback_class": null,
+    "del_local_ckpt_after_load": false,
+    "metrics_quantile_interval": 8,
+    "ray_wait_register_center_timeout": 300
+  },
+  "algorithm": {
+    "lam": 1,
+    "gamma": 1,
+    "pf_ppo": {
+      "weight_pow": 2,
+      "reweight_method": "pow"
+    },
+    "kl_ctrl": {
+      "type": "fixed",
+      "horizon": 10000,
+      "kl_coef": 0.001,
+      "_target_": "verl.trainer.config.KLControlConfig",
+      "target_kl": 0.1
+    },
+    "_target_": "verl.trainer.config.AlgoConfig",
+    "kl_penalty": "kl",
+    "use_pf_ppo": false,
+    "adv_estimator": "grpo",
+    "filter_groups": {
+      "enable": false,
+      "metric": "reward",
+      "_target_": "verl.trainer.config.FilterGroupsConfig",
+      "max_num_gen_batches": 0,
+      "max_inflight_gen_batches": 1
+    },
+    "use_kl_in_reward": false,
+    "rollout_correction": {
+      "loss_type": "ppo_clip",
+      "rollout_is": null,
+      "rollout_rs": null,
+      "bypass_mode": false,
+      "score_centering": false,
+      "rollout_is_threshold": 2,
+      "rollout_rs_threshold": null,
+      "rollout_is_batch_normalize": false
+    },
+    "norm_adv_by_std_in_grpo": true
+  },
+  "ray_kwargs": {
+    "ray_init": {
+      "num_cpus": null,
+      "runtime_env": {
+        "env_vars": {
+          "WANDB_DIR": "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl",
+          "WANDB_MODE": "offline"
+        },
+        "py_executable": "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl/.venv-native/bin/python"
+      }
+    },
+    "timeline_json_file": null
+  },
+  "distillation": {
+    "nnodes": 0,
+    "enabled": true,
+    "_target_": "verl.workers.config.DistillationConfig",
+    "teacher_key": "data_source",
+    "execution_mode": "shared_sync",
+    "shared_teacher": {
+      "_target_": "verl.workers.config.FSDPEngineConfig",
+      "strategy": "fsdp2",
+      "model_dtype": "bfloat16",
+      "forward_only": true,
+      "param_offload": true,
+      "offload_policy": false,
+      "mixed_precision": {
+        "param_dtype": "bfloat16",
+        "reduce_dtype": "float32"
+      },
+      "use_dynamic_bsz": true,
+      "optimizer_offload": false,
+      "use_torch_compile": false,
+      "reshard_after_forward": true,
+      "forward_only_cpu_offload": false,
+      "infer_max_token_len_per_gpu": 32768
+    },
+    "teacher_models": {
+      "teacher_model": {
+        "key": null,
+        "_target_": "verl.workers.config.DistillationTeacherModelConfig",
+        "inference": {
+          "name": "vllm",
+          "dtype": "bfloat16",
+          "_target_": "verl.workers.config.RolloutConfig",
+          "load_format": "auto",
+          "temperature": 1,
+          "limit_images": null,
+          "max_num_seqs": 64,
+          "enforce_eager": true,
+          "engine_kwargs": {},
+          "max_model_len": 11265,
+          "prompt_length": 4096,
+          "response_length": 7168,
+          "disable_log_stats": true,
+          "free_cache_engine": true,
+          "data_parallel_size": 1,
+          "skip_tokenizer_init": true,
+          "expert_parallel_size": 1,
+          "enable_prefix_caching": true,
+          "enable_chunked_prefill": true,
+          "gpu_memory_utilization": 0.4,
+          "max_num_batched_tokens": 8192,
+          "cudagraph_capture_sizes": null,
+          "tensor_model_parallel_size": 1
+        },
+        "model_path": "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/model/JustRL-DeepSeek-1.5B",
+        "num_replicas": 0
+      }
+    },
+    "n_gpus_per_node": 0,
+    "distillation_loss": {
+      "topk": 32,
+      "_target_": "verl.workers.config.DistillationLossConfig",
+      "loss_mode": "k1",
+      "clip_ratio": 0.2,
+      "full_vocab": {
+        "backend": "recompute",
+        "_target_": "verl.workers.config.distillation.FullVocabConfig",
+        "prefetch": false,
+        "async_write": false,
+        "token_chunk_size": 512,
+        "vocab_chunk_size": 8192
+      },
+      "clip_ratio_low": 0.2,
+      "loss_max_clamp": null,
+      "clip_ratio_high": 0.2,
+      "advantage_source": "current",
+      "policy_loss_mode": "vanilla",
+      "use_task_rewards": false,
+      "log_prob_min_clamp": null,
+      "use_policy_gradient": true,
+      "distillation_loss_coef": 1
+    }
+  },
+  "model_engine": "dp",
+  "reward_model": {
+    "model": {
+      "path": null,
+      "external_lib": null,
+      "trust_remote_code": null
+    },
+    "enable": null,
+    "nnodes": null,
+    "rollout": {
+      "name": null,
+      "dtype": null,
+      "load_format": null,
+      "limit_images": null,
+      "max_num_seqs": null,
+      "enforce_eager": null,
+      "engine_kwargs": null,
+      "max_model_len": null,
+      "prompt_length": null,
+      "response_length": null,
+      "disable_log_stats": null,
+      "free_cache_engine": null,
+      "data_parallel_size": null,
+      "skip_tokenizer_init": null,
+      "expert_parallel_size": null,
+      "enable_prefix_caching": null,
+      "enable_chunked_prefill": null,
+      "gpu_memory_utilization": null,
+      "max_num_batched_tokens": null,
+      "cudagraph_capture_sizes": null,
+      "tensor_model_parallel_size": null
+    },
+    "num_workers": null,
+    "reward_manager": null,
+    "n_gpus_per_node": null,
+    "reward_loop_source": null,
+    "enable_resource_pool": null,
+    "reward_loop_class_name": null,
+    "reward_loop_module_path": null
+  },
+  "sandbox_fusion": {
+    "url": null,
+    "max_concurrent": null,
+    "memory_limit_mb": null
+  },
+  "transfer_queue": {
+    "enable": true,
+    "backend": {
+      "MooncakeStore": {
+        "hard_pin": true,
+        "auto_init": false,
+        "metadata_server": "P2PHANDSHAKE",
+        "local_buffer_size": 1073741824,
+        "global_segment_size": 4294967296,
+        "master_server_address": "localhost:50124"
+      },
+      "SimpleStorage": {
+        "ssd_offload": {
+          "path": null,
+          "enabled": false,
+          "threshold_bytes": 1048576
+        },
+        "total_storage_size": null,
+        "num_data_storage_units": 8
+      },
+      "storage_backend": "SimpleStorage"
+    }
+  },
+  "global_profiler": {
+    "tool": null,
+    "steps": null,
+    "_target_": "verl.utils.profiler.ProfilerConfig",
+    "save_path": "outputs/profile",
+    "finish_hook_cmd": null,
+    "relocate_results": false,
+    "finish_hook_ranks": [],
+    "global_tool_config": {
+      "nsys": {
+        "_target_": "verl.utils.profiler.config.NsightToolConfig",
+        "discrete": false,
+        "worker_nsight_options": {
+          "kill": "none",
+          "trace": "cuda,nvtx,cublas,ucx",
+          "capture-range": "cudaProfilerApi",
+          "cuda-graph-trace": "graph",
+          "capture-range-end": null,
+          "cuda-memory-usage": "true"
+        },
+        "controller_nsight_options": {
+          "trace": "cuda,nvtx,cublas,ucx",
+          "cuda-graph-trace": "graph",
+          "cuda-memory-usage": "true"
+        }
+      },
+      "torch_memory": {
+        "stacks": "all",
+        "context": "all",
+        "kw_args": {},
+        "stack_depth": 32,
+        "trace_alloc_max_entries": 100000,
+        "memory_snapshot_num_steps": 1
+      },
+      "precision_debugger": {
+        "steps": null,
+        "stages": null,
+        "strict": false,
+        "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+        "config_path": null
+      }
+    },
+    "finish_hook_all_ranks": false,
+    "profile_continuous_steps": false
+  },
+  "actor_rollout_ref": {
+    "ref": {
+      "_target_": "verl.workers.config.FSDPActorConfig",
+      "profiler": {
+        "tool": null,
+        "ranks": [],
+        "enable": false,
+        "_target_": "verl.utils.profiler.ProfilerConfig",
+        "all_ranks": false,
+        "save_path": "outputs/profile",
+        "tool_config": {
+          "npu": {
+            "level": "level0",
+            "_target_": "verl.utils.profiler.config.NPUToolConfig",
+            "analysis": true,
+            "contents": [],
+            "discrete": false
+          },
+          "nsys": {
+            "_target_": "verl.utils.profiler.config.NsightToolConfig",
+            "discrete": false
+          },
+          "torch": {
+            "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+            "contents": [],
+            "discrete": false,
+            "schedule": {
+              "wait": 0,
+              "active": 0,
+              "repeat": 0,
+              "warmup": 0,
+              "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+              "skip_first": 0
+            }
+          },
+          "torch_memory": {
+            "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+            "stack_depth": 32,
+            "trace_alloc_max_entries": 100000,
+            "memory_snapshot_num_steps": 1
+          },
+          "precision_debugger": {
+            "steps": null,
+            "stages": null,
+            "strict": false,
+            "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+            "config_path": null
+          }
+        },
+        "finish_hook_cmd": null,
+        "relocate_results": false,
+        "finish_hook_ranks": [],
+        "finish_hook_all_ranks": false
+      },
+      "strategy": "fsdp2",
+      "rollout_n": 1,
+      "fsdp_config": {
+        "qat": {
+          "mode": "w4a16",
+          "enable": false,
+          "_target_": "verl.workers.config.QATEngineConfig",
+          "group_size": 16,
+          "ignore_patterns": [
+            "lm_head",
+            "embed_tokens",
+            "re:.*mlp.gate$"
+          ],
+          "activation_observer": "static_minmax",
+          "quantization_config_path": null
+        },
+        "seed": 42,
+        "dtype": "bfloat16",
+        "_target_": "verl.workers.config.FSDPEngineConfig",
+        "strategy": "fsdp",
+        "fsdp_size": -1,
+        "model_dtype": "fp32",
+        "wrap_policy": {
+          "min_num_params": 0
+        },
+        "forward_only": true,
+        "turbo_config": {
+          "distributed": {
+            "fsdp_plan": {
+              "param_dtype": "bf16",
+              "output_dtype": "bf16",
+              "reduce_dtype": "fp32",
+              "fsdp_implementation": "native",
+              "num_to_forward_prefetch": 1,
+              "num_to_backward_prefetch": 1
+            },
+            "expert_parallel_size": 1,
+            "tensor_parallel_size": 1,
+            "ulysses_parallel_size": 1,
+            "fully_shard_parallel_size": 16,
+            "expert_fully_shard_parallel_size": 1
+          }
+        },
+        "pad_to_length": false,
+        "param_offload": false,
+        "offload_policy": false,
+        "use_orig_params": false,
+        "forward_prefetch": false,
+        "full_determinism": false,
+        "optimizer_offload": false,
+        "use_torch_compile": true,
+        "pad_to_length_bucket": 1024,
+        "entropy_checkpointing": false,
+        "reshard_after_forward": true,
+        "forward_only_cpu_offload": true,
+        "entropy_from_logits_chunk_size": 2048,
+        "ulysses_sequence_parallel_size": 1,
+        "entropy_from_logits_with_chunking": false,
+        "use_no_sync_for_gradient_accumulation": false
+      },
+      "pad_to_length": false,
+      "use_torch_compile": false,
+      "entropy_checkpointing": false,
+      "log_prob_use_dynamic_bsz": true,
+      "log_prob_micro_batch_size": null,
+      "entropy_from_logits_chunk_size": 2048,
+      "log_prob_max_token_len_per_gpu": 32768,
+      "ulysses_sequence_parallel_size": 1,
+      "entropy_from_logits_with_chunking": false,
+      "log_prob_micro_batch_size_per_gpu": null
+    },
+    "actor": {
+      "qat": {
+        "mode": "w4a16",
+        "enable": false,
+        "group_size": 16,
+        "ignore_patterns": [
+          "lm_head",
+          "embed_tokens",
+          "re:.*mlp.gate$"
+        ],
+        "activation_observer": "static_minmax",
+        "quantization_config_path": null
+      },
+      "optim": {
+        "lr": 1e-06,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "_target_": "verl.workers.config.FSDPOptimizerConfig",
+        "clip_grad": 1,
+        "optimizer": "AdamW",
+        "num_cycles": 0.5,
+        "min_lr_ratio": 0,
+        "warmup_style": null,
+        "weight_decay": 0.01,
+        "optimizer_impl": "torch.optim",
+        "lr_warmup_steps": 0,
+        "lr_scheduler_type": "constant",
+        "zero_indexed_step": true,
+        "total_training_steps": 200,
+        "lr_warmup_steps_ratio": 0,
+        "override_optimizer_config": null
+      },
+      "shuffle": false,
+      "tau_neg": 1.05,
+      "tau_pos": 1,
+      "_target_": "verl.workers.config.FSDPActorConfig",
+      "profiler": {
+        "tool": null,
+        "ranks": [],
+        "enable": false,
+        "_target_": "verl.utils.profiler.ProfilerConfig",
+        "all_ranks": false,
+        "save_path": "outputs/profile",
+        "tool_config": {
+          "npu": {
+            "level": "level0",
+            "_target_": "verl.utils.profiler.config.NPUToolConfig",
+            "analysis": true,
+            "contents": [],
+            "discrete": false
+          },
+          "nsys": {
+            "_target_": "verl.utils.profiler.config.NsightToolConfig",
+            "discrete": false
+          },
+          "torch": {
+            "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+            "contents": [],
+            "discrete": false,
+            "schedule": {
+              "wait": 0,
+              "active": 0,
+              "repeat": 0,
+              "warmup": 0,
+              "_target_": "verl.utils.profiler.config.TorchProfilerScheduleConfig",
+              "skip_first": 0
+            }
+          },
+          "torch_memory": {
+            "_target_": "verl.utils.profiler.config.TorchMemoryToolConfig",
+            "stack_depth": 32,
+            "trace_alloc_max_entries": 100000,
+            "memory_snapshot_num_steps": 1
+          },
+          "precision_debugger": {
+            "steps": null,
+            "stages": null,
+            "strict": false,
+            "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+            "config_path": null
+          }
+        },
+        "finish_hook_cmd": null,
+        "relocate_results": false,
+        "finish_hook_ranks": [],
+        "finish_hook_all_ranks": false
+      },
+      "strategy": "fsdp2",
+      "grad_clip": 1,
+      "rollout_n": 1,
+      "checkpoint": {
+        "strict": true,
+        "_target_": "verl.trainer.config.CheckpointConfig",
+        "async_save": false,
+        "load_contents": [
+          "model",
+          "optimizer",
+          "extra"
+        ],
+        "save_contents": [
+          "model",
+          "optimizer",
+          "extra"
+        ]
+      },
+      "clip_ratio": 0.2,
+      "ppo_epochs": 1,
+      "fsdp_config": {
+        "qat": {
+          "mode": "w4a16",
+          "enable": false,
+          "_target_": "verl.workers.config.QATEngineConfig",
+          "group_size": 16,
+          "ignore_patterns": [
+            "lm_head",
+            "embed_tokens",
+            "re:.*mlp.gate$"
+          ],
+          "activation_observer": "static_minmax",
+          "quantization_config_path": null
+        },
+        "seed": 42,
+        "dtype": "bfloat16",
+        "_target_": "verl.workers.config.FSDPEngineConfig",
+        "strategy": "fsdp",
+        "fsdp_size": -1,
+        "model_dtype": "fp32",
+        "wrap_policy": {
+          "min_num_params": 0
+        },
+        "forward_only": false,
+        "turbo_config": {
+          "distributed": {
+            "fsdp_plan": {
+              "param_dtype": "bf16",
+              "output_dtype": "bf16",
+              "reduce_dtype": "fp32",
+              "fsdp_implementation": "native",
+              "num_to_forward_prefetch": 1,
+              "num_to_backward_prefetch": 1
+            },
+            "expert_parallel_size": 1,
+            "tensor_parallel_size": 1,
+            "ulysses_parallel_size": 1,
+            "fully_shard_parallel_size": 16,
+            "expert_fully_shard_parallel_size": 1
+          }
+        },
+        "pad_to_length": false,
+        "param_offload": true,
+        "offload_policy": false,
+        "use_orig_params": false,
+        "forward_prefetch": false,
+        "full_determinism": false,
+        "optimizer_offload": true,
+        "use_torch_compile": true,
+        "pad_to_length_bucket": 1024,
+        "entropy_checkpointing": false,
+        "reshard_after_forward": true,
+        "forward_only_cpu_offload": true,
+        "entropy_from_logits_chunk_size": 2048,
+        "ulysses_sequence_parallel_size": 1,
+        "entropy_from_logits_with_chunking": false,
+        "use_no_sync_for_gradient_accumulation": false
+      },
+      "policy_loss": {
+        "_target_": "verl.workers.config.PolicyLossConfig",
+        "dro_beta": null,
+        "loss_mode": "vanilla",
+        "clip_cov_lb": 1,
+        "clip_cov_ub": 5,
+        "ppo_kl_coef": 0.1,
+        "kl_cov_ratio": 0.0002,
+        "clip_cov_ratio": 0.0002
+      },
+      "use_kl_loss": false,
+      "clip_ratio_c": 3,
+      "kl_loss_coef": 0.001,
+      "kl_loss_type": "low_var_kl",
+      "entropy_coeff": 0,
+      "loss_agg_mode": "token-mean",
+      "pad_to_length": false,
+      "clip_ratio_low": 0.2,
+      "clip_ratio_high": 0.2,
+      "use_dynamic_bsz": true,
+      "data_loader_seed": 42,
+      "calculate_entropy": false,
+      "loss_scale_factor": null,
+      "use_fused_kernels": false,
+      "use_torch_compile": false,
+      "use_prefix_grouper": false,
+      "use_remove_padding": true,
+      "freeze_vision_tower": false,
+      "ppo_mini_batch_size": 64,
+      "ppo_micro_batch_size": null,
+      "entropy_checkpointing": false,
+      "calculate_sum_pi_squared": false,
+      "ppo_max_token_len_per_gpu": 32768,
+      "ppo_micro_batch_size_per_gpu": 1,
+      "entropy_from_logits_chunk_size": 2048,
+      "ulysses_sequence_parallel_size": 1,
+      "entropy_from_logits_with_chunking": false
+    },
+    "model": {
+      "mtp": {
+        "enable": false,
+        "method": "mtp",
+        "_target_": "verl.workers.config.MtpConfig",
+        "enable_train": false,
+        "detach_encoder": false,
+        "enable_rollout": false,
+        "speculative_algorithm": "EAGLE",
+        "speculative_num_steps": 3,
+        "num_speculative_tokens": 1,
+        "speculative_eagle_topk": 1,
+        "mtp_loss_scaling_factor": 0.1,
+        "speculative_num_draft_tokens": 4
+      },
+      "lora": {
+        "rank": 0,
+        "type": "lora",
+        "alpha": 32,
+        "dtype": null,
+        "merge": false,
+        "dropout": 0,
+        "adapter_path": null,
+        "target_modules": [
+          "linear_qkv",
+          "linear_proj",
+          "linear_fc1",
+          "linear_fc2"
+        ],
+        "exclude_modules": [],
+        "a2a_experimental": false,
+        "dropout_position": "pre",
+        "lora_A_init_method": "xavier",
+        "lora_B_init_method": "zero",
+        "freeze_vision_model": true,
+        "freeze_language_model": true,
+        "freeze_vision_projection": true
+      },
+      "path": "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/model/DeepSeek-R1-Distill-Qwen-1.5B",
+      "use_shm": false,
+      "_target_": "verl.workers.config.HFModelConfig",
+      "lora_rank": 0,
+      "tiled_mlp": {
+        "enabled": false,
+        "num_shards": 4
+      },
+      "use_liger": false,
+      "lora_alpha": 16,
+      "external_lib": null,
+      "hf_config_path": null,
+      "target_modules": "all-linear",
+      "tokenizer_path": null,
+      "exclude_modules": null,
+      "override_config": {},
+      "enable_full_vocab": false,
+      "lora_adapter_path": null,
+      "trust_remote_code": false,
+      "use_fused_kernels": false,
+      "use_remove_padding": true,
+      "custom_chat_template": null,
+      "fused_kernel_options": {
+        "impl_backend": "torch"
+      },
+      "enable_activation_offload": false,
+      "enable_gradient_checkpointing": true
+    },
+    "rollout": {
+      "n": 1,
+      "mtp": {
+        "enable": false,
+        "method": "mtp",
+        "_target_": "verl.workers.config.MtpConfig",
+        "enable_train": false,
+        "detach_encoder": false,
+        "enable_rollout": false,
+        "speculative_algorithm": "EAGLE",
+        "speculative_num_steps": 3,
+        "num_speculative_tokens": 1,
+        "speculative_eagle_topk": 1,
+        "mtp_loss_scaling_factor": 0.1,
+        "speculative_num_draft_tokens": 4
+      },
+      "qat": {
+        "mode": "w4a16",
+        "enable": false,
+        "_target_": "verl.workers.config.QATEngineConfig",
+        "group_size": 16,
+        "ignore_patterns": [
+          "lm_head",
+          "embed_tokens",
+          "re:.*mlp.gate$"
+        ],
+        "activation_observer": "static_minmax",
+        "quantization_config_path": null
+      },
+      "mode": "async",
+      "name": "vllm",
+      "seed": 42,
+      "agent": {
+        "_target_": "verl.workers.config.AgentLoopConfig",
+        "num_workers": 8,
+        "default_agent_loop": "single_turn_agent",
+        "custom_async_server": {
+          "name": null,
+          "path": null,
+          "_target_": "verl.workers.config.CustomAsyncServerConfig"
+        },
+        "agent_loop_config_path": null
+      },
+      "dtype": "bfloat16",
+      "top_k": -1,
+      "top_p": 1,
+      "trace": {
+        "backend": null,
+        "_target_": "verl.workers.config.TraceConfig",
+        "token2text": false,
+        "project_name": "MirrorOPD-verl",
+        "experiment_name": "math-opd-E15-20261022-230525-2558",
+        "max_samples_per_step_per_worker": null
+      },
+      "nnodes": 0,
+      "_target_": "verl.workers.config.RolloutConfig",
+      "profiler": {
+        "tool": null,
+        "ranks": [],
+        "enable": false,
+        "_target_": "verl.utils.profiler.ProfilerConfig",
+        "all_ranks": false,
+        "save_path": "outputs/profile",
+        "tool_config": {
+          "npu": {
+            "level": "level0",
+            "_target_": "verl.utils.profiler.config.NPUToolConfig",
+            "analysis": true,
+            "contents": [],
+            "discrete": false,
+            "profile_token_end": null,
+            "profile_token_start": null
+          },
+          "torch": {
+            "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+            "contents": [],
+            "discrete": false,
+            "profile_token_end": null,
+            "profile_token_start": null
+          },
+          "precision_debugger": {
+            "steps": null,
+            "stages": null,
+            "strict": false,
+            "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+            "config_path": null
+          }
+        },
+        "finish_hook_cmd": null,
+        "relocate_results": false,
+        "finish_hook_ranks": [],
+        "finish_hook_all_ranks": false
+      },
+      "do_sample": true,
+      "ignore_eos": false,
+      "multi_turn": {
+        "enable": false,
+        "format": "hermes",
+        "_target_": "verl.workers.config.MultiTurnConfig",
+        "max_user_turns": null,
+        "tool_config_path": null,
+        "function_tool_path": null,
+        "max_parallel_calls": 1,
+        "max_assistant_turns": null,
+        "num_repeat_rollouts": null,
+        "max_tool_response_length": 256,
+        "tool_response_truncate_side": "middle",
+        "use_inference_chat_template": false,
+        "tokenization_sanity_check_mode": "strict"
+      },
+      "prometheus": {
+        "file": "/tmp/ray/session_latest/metrics/prometheus/prometheus.yml",
+        "port": 9090,
+        "enable": false,
+        "_target_": "verl.workers.config.PrometheusConfig",
+        "served_model_name": "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/model/DeepSeek-R1-Distill-Qwen-1.5B"
+      },
+      "val_kwargs": {
+        "n": 16,
+        "top_k": -1,
+        "top_p": 0.9,
+        "_target_": "verl.workers.config.SamplingConfig",
+        "do_sample": true,
+        "max_tokens": 31744,
+        "temperature": 0.7
+      },
+      "load_format": "dummy",
+      "temperature": 1,
+      "max_num_seqs": 128,
+      "quantization": null,
+      "enforce_eager": false,
+      "engine_kwargs": {
+        "vllm": {},
+        "sglang": {},
+        "trtllm": {}
+      },
+      "logprobs_mode": "processed_logprobs",
+      "max_model_len": 35841,
+      "prompt_length": 4096,
+      "disaggregation": {
+        "enabled": false,
+        "ib_device": null,
+        "bootstrap_port": null,
+        "decode_replicas": 1,
+        "prefill_replicas": 1,
+        "transfer_backend": "nixl",
+        "decode_tensor_model_parallel_size": null
+      },
+      "layered_summon": false,
+      "topk_log_probs": 0,
+      "n_gpus_per_node": 8,
+      "response_length": 7168,
+      "full_determinism": false,
+      "over_sample_rate": 0,
+      "checkpoint_engine": {
+        "backend": "naive",
+        "_target_": "verl.workers.config.CheckpointEngineConfig",
+        "engine_kwargs": {},
+        "custom_backend_module": null,
+        "update_weights_bucket_megabytes": 2048
+      },
+      "disable_log_stats": true,
+      "free_cache_engine": true,
+      "scheduling_policy": "fcfs",
+      "data_parallel_size": 1,
+      "router_config_path": null,
+      "calculate_log_probs": true,
+      "multi_stage_wake_up": false,
+      "skip_tokenizer_init": true,
+      "expert_parallel_size": 1,
+      "enable_prefix_caching": true,
+      "enable_chunked_prefill": true,
+      "gpu_memory_utilization": 0.65,
+      "max_num_batched_tokens": 8192,
+      "cudagraph_capture_sizes": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128
+      ],
+      "log_prob_use_dynamic_bsz": true,
+      "quantization_config_file": null,
+      "log_prob_micro_batch_size": null,
+      "ray_actor_max_concurrency": 1024,
+      "tensor_model_parallel_size": 1,
+      "pipeline_model_parallel_size": 1,
+      "enable_rollout_routing_replay": false,
+      "log_prob_max_token_len_per_gpu": 32768,
+      "log_prob_micro_batch_size_per_gpu": null,
+      "moe_load_balance_metrics_interval": 0,
+      "standalone_gpu_memory_utilization": 0.65
+    },
+    "nccl_timeout": 600,
+    "hybrid_engine": true
+  },
+  "custom_reward_function": {
+    "name": null,
+    "path": null
+  }
+}

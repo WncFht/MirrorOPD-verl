@@ -183,6 +183,8 @@ Mac 和本机的接收、分析流程直接使用独立日志仓库，不在源�
 
 本地解码工具位于 `wandb-logs/tools/wandb_local.py`，不依赖训练仓库或 W&B 云端。首次在日志仓库执行 `make setup`，之后用 `make refresh` 拉取 Git 更新并解码；只分析现有文件用 `make decode`，按 run 导出 CSV 用 `make csv RUN=<run-id>`。原始日志位于 `MirrorOPD-verl/wandb/`，生成的 history、系统监控、配置和 summary 位于被 Git 忽略的 `derived/MirrorOPD-verl/<run目录>/`。上传 W&B 和本地解码是独立路径；本地解码不调用 login、sync 或 Public API。
 
+MirrorOPD 的统计和绘图使用 `examples/mirroropd/docs/scripts/analyze_run.py export` 从本地日志准备项目快照；它委托独立仓库解码，不另维护解析器。旧云端回读改为显式 `export-cloud`，仅用于核对或补救。具体使用步骤和历史数据边界见[分析复现](../examples/mirroropd/docs/分析复现.md)。
+
 打包端仍默认扫描源码仓库的 `wandb/`；`WANDB_LOGS_REPO` 只影响接收端。显式设置 `WANDB_RUNS_DIR=自定义目录` 可以覆盖打包源或接收位置。这个参数表示实际 run 目录；SDK 的 `WANDB_DIR` 表示其父级写入根目录，两个参数分开设置。
 
 本项目的数学配方默认启用 `console` 和 `wandb`，设置 `WANDB_MODE=offline`、`WANDB_DIR=<仓库根目录>`，并将这些环境变量显式传给 Ray 训练进程。W&B 实际记录位于 `<仓库>/wandb/offline-run-*/`，与同步脚本的默认扫描目录一致。运行输出和 checkpoint 仍保存在 `outputs/<实验名>/`。

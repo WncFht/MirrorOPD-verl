@@ -13,6 +13,8 @@
 - 两端都保留正常 Git 工作区，接收仅快进，并记录发送方版本；不同接收端用不同 `TARGET`。`hope/` 已取消 Git 跟踪，各机本地维护；首次从旧跟踪状态迁移时解包工具备份并恢复本地 Hope 文件。日志和结果解包采用合并，分卷必须全部传输。
 - 不假设开发机上的文件已经同步到本机或 Mac；收尾时说明需要传输的包和接收端命令。操作步骤见 [meituan/README.md](meituan/README.md)。
 - 本机执行 Git SSH 操作前，在同一 shell 中执行 `source /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/.ssh/activate.bash`。
+- 日常分析以独立 `wandb-logs` 仓库的原始日志为数据源，通用解码器只在该仓库维护；本仓库保留 MirrorOPD 专用的快照适配、统计和绘图。工具分工与命令见 [分析复现](examples/mirroropd/docs/分析复现.md)。
+- `analyze_run.py export` 默认读取本地日志；云端回读只通过显式 `export-cloud` 用于核对或补救，不因本地缺失自动回退。既有报告的 API 来源、采样口径和冻结数据保持原样。
 
 ## 开发机环境
 
@@ -24,7 +26,7 @@
 - 资产检查重点是数据；模型只检查必要文件，`generation_config.json` 可选。用户要求项目自有工具不增加文件摘要计算、校验或清单。
 - 2026-10-20 已观察到的开发机配置是 Python 3.12.13、A100 80GB、R535 驱动、PyTorch 2.11.0+cu128、vLLM 0.25.1+cu129；GPU 导入与实际训练验收分别进行，不把安装完成视为训练通过。
 - 脚本保持 Bash 3.2 兼容，使用 `set -eo pipefail`；通用传输逻辑使用 Python 标准库，Mac 和 Linux 共用同一入口。
-- 数学配方将终端 stdout/stderr 同时保存到 `outputs/<实验名>/train.log`，默认离线 W&B run 位于仓库 `wandb/`；同步参数 `WANDB_RUNS_DIR` 指实际 run 目录，SDK 的 `WANDB_DIR` 指其父级根目录。源码 pack 清理同 TARGET 的旧自动命名 bundle；接收成功后应先 ack 再生成下一包。日志增量包仍须在下次打包前传回，日志和结果 unpack 保留输入包。
+- 数学配方将终端 stdout/stderr 同时保存到 `outputs/<实验名>/train.log`，训练端的离线 W&B run 位于仓库 `wandb/`；Mac 与分析机直接接收到独立日志仓库，不维护源码目录内的兼容链接。同步参数 `WANDB_RUNS_DIR` 指实际 run 目录，SDK 的 `WANDB_DIR` 指其父级根目录。源码 pack 清理同 TARGET 的旧自动命名 bundle；接收成功后应先 ack 再生成下一包。日志增量包仍须在下次打包前传回，日志和结果 unpack 保留输入包。
 
 ## 提交
 
