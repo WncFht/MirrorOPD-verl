@@ -81,7 +81,7 @@ class LogPublishTest(unittest.TestCase):
         with patch.object(transfer.subprocess, "run", side_effect=self.fake_sync):
             transfer.unpack(args, self.base / "snap")
 
-    def test_defaults_upload_copies_and_push_only_received_runs(self):
+    def test_defaults_upload_copies_and_push_only_project_logs(self):
         unrelated = self.logs / "unrelated.txt"
         unrelated.write_text("staged elsewhere")
         self.git(self.logs, "add", "unrelated.txt")
@@ -98,6 +98,33 @@ class LogPublishTest(unittest.TestCase):
         self.assertNotIn(".synced", published)
         self.assertIn("run-test.wandb", published)
         self.assertEqual(self.git(self.remote, "rev-parse", "main"), self.git(self.logs, "rev-parse", "HEAD"))
+
+    def test_import_also_commits_forgotten_changes_in_older_runs(self):
+        old_run = self.logs / "MirrorOPD-verl/wandb/offline-run-older"
+        old_run.mkdir(parents=True)
+        config = old_run / "config.yaml"
+        config.write_text("before")
+        obsolete = old_run / "obsolete.txt"
+        obsolete.write_text("remove later")
+        self.git(self.logs, "add", "MirrorOPD-verl/wandb")
+        self.git(self.logs, "commit", "-m", "older run")
+        self.git(self.logs, "push")
+        config.write_text("forgotten update")
+        obsolete.unlink()
+        forgotten = self.logs / "MirrorOPD-verl/wandb/offline-run-forgotten"
+        forgotten.mkdir()
+        (forgotten / "run-forgotten.wandb").write_bytes(b"forgotten run")
+        (forgotten / "run-forgotten.wandb.syncstate").write_text("local state")
+        self.unpack()
+        prefix = "MirrorOPD-verl/wandb/"
+        self.assertEqual(
+            self.git(self.remote, "show", "main:" + prefix + "offline-run-older/config.yaml"), "forgotten update"
+        )
+        published = self.git(self.remote, "ls-tree", "-r", "--name-only", "main")
+        self.assertIn("run-forgotten.wandb", published)
+        self.assertNotIn("obsolete.txt", published)
+        self.assertNotIn(".syncstate", published)
+        self.assertEqual([run.name for run in self.uploaded], [self.run_name])
 
     def test_upload_failure_keeps_inputs_and_does_not_publish(self):
         self.upload_error = True
