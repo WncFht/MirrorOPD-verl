@@ -113,6 +113,8 @@ def apply_greedy_sampling_params(params: dict[str, Any]) -> None:
     params["temperature"] = 0
 
 
+from verl.utils.profiler.timeline import observe_sync, span
+
 logger = logging.getLogger(__name__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "INFO"))
 
@@ -604,7 +606,8 @@ class PPOTrainer(ABC):
                 self._log_rollout_data(batch, self.timing_raw, rollout_data_dir)
 
             # 7. cleanup transfer queue
-            tq.kv_clear(keys=batch.keys, partition_id=batch.partition_id)
+            with span("driver/tq_cleanup", role="driver", step=self.global_steps):
+                tq.kv_clear(keys=batch.keys, partition_id=batch.partition_id)
 
             dapo_filtered_reward_counts = metrics.pop(DAPO_FILTERED_REWARD_COUNTS_KEY, None)
             self.logger.log(data=outer_metrics(metrics) | self._metric_coordinates(), step=self.global_steps)
@@ -802,6 +805,7 @@ class PPOTrainer(ABC):
         """
         return self.resource_pool_manager.get_n_gpus()
 
+    @observe_sync("driver/tokenizer_init", "driver")
     def _init_tokenizer(self):
         """Initialize tokenizer and processor from the model config."""
         model_config: HFModelConfig = omega_conf_to_dataclass(self.config.actor_rollout_ref.model)
@@ -825,6 +829,7 @@ class PPOTrainer(ABC):
         # Used for multimodal LLM, could be None
         self.processor = model_config.processor
 
+    @observe_sync("driver/data_init", "driver")
     def _init_dataloader(self):
         """Initialize train and validate dataloader."""
         self.train_dataset = create_rl_dataset(

@@ -20,6 +20,7 @@ from uuid import uuid4
 from verl.experimental.agent_loop.agent_loop import AgentLoopBase, AgentLoopOutput, register
 from verl.utils.pipeline_metrics import monotonic_clock_domain
 from verl.utils.profiler import simple_timer
+from verl.utils.profiler.timeline import span
 from verl.utils.rollout_trace import rollout_trace_op
 from verl.workers.rollout.replica import TokenOutput
 
@@ -58,13 +59,14 @@ class SingleTurnAgentLoop(AgentLoopBase):
         # Multimodal inputs require a VL builder + processor; fail loudly otherwise.
         self._assert_mm_supported(bool(multi_modal_data))
         mm_inputs = {}
-        prompt_ids = await self.ct_build_initial_tokens(
-            messages,
-            images=images,
-            videos=videos,
-            audios=audios,
-            mm_inputs_out=mm_inputs,
-        )
+        with span("rollout/tokenize", role="agent_loop"):
+            prompt_ids = await self.ct_build_initial_tokens(
+                messages,
+                images=images,
+                videos=videos,
+                audios=audios,
+                mm_inputs_out=mm_inputs,
+            )
 
         # Capture the processor features so SGLang can be handed the video (see
         # AgentLoopBase.build_sglang_video_payload); without this they are computed and dropped.

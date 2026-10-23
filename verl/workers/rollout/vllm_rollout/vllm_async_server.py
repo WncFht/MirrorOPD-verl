@@ -51,6 +51,7 @@ from verl.utils.profiler import (
     relocate_rollout_traces,
     rollout_profiler_global_ranks,
 )
+from verl.utils.profiler.timeline import emit, enabled, observe
 from verl.utils.tokenizer import normalize_token_ids
 from verl.utils.tracking import RLInsightLogger
 from verl.utils.vllm.vllm_quant_utils import apply_vllm_quant_patches
@@ -290,6 +291,7 @@ class vLLMHttpServer:
         self._pd_prefill_side_channel_port = prefill_side_channel_port
         self._pd_prefill_engine_id = prefill_engine_id
 
+    @observe("rollout/initialize", "vllm")
     async def launch_server(self, master_address: str = None, master_port: int = None, dp_rpc_port: int = None):
         if self.node_rank != 0:
             assert master_address and master_port and dp_rpc_port, (
@@ -571,6 +573,7 @@ class vLLMHttpServer:
         self.task = asyncio.create_task(asyncio.to_thread(run_headless_wrapper))
         self.task.add_done_callback(on_run_headless_done)
 
+    @observe("rollout/request", "vllm")
     async def generate(
         self,
         prompt_ids: list[int],
@@ -1506,6 +1509,30 @@ class vLLMHttpServer:
         Runs after the admission counter is released, so an exception fails only this
         request. Requests rejected at the admission gate never reach this hook.
         """
+        if enabled():
+            metrics = getattr(final_res, "metrics", None)
+            fields = {
+                k: getattr(metrics, k, None)
+                for k in (
+                    "arrival_time",
+                    "first_scheduled_time",
+                    "first_token_time",
+                    "last_token_time",
+                    "finished_time",
+                    "time_in_queue",
+                )
+            }
+            emit(
+                "rollout/backend_metrics",
+                role="vllm",
+                replica=self.replica_rank,
+                request_id=final_res.request_id,
+                step=self.global_steps,
+                input_tokens=len(final_res.prompt_token_ids or []),
+                output_tokens=len(output.token_ids),
+                backend_times=fields,
+                cached_tokens=getattr(final_res, "num_cached_tokens", None),
+            )
         return output
 
     async def _sleep_hybrid(self):
