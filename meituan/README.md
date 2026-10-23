@@ -168,7 +168,7 @@ Mac 接收并推送日志：
 make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.gz
 ```
 
-自动提交只包含包内各 run 的目录，保留其他路径的暂存修改。没有文件变化时跳过 commit，但仍执行 push，以支持上次提交成功、推送失败后的重试。脚本使用普通 `git push`，不自动拉取、变基或强制推送；遇到远端分歧时先处理 Git 分歧，再重跑。W&B 上传失败时停止后续提交和推送；Git 推送失败时保留本地提交。两种失败都保留已解包日志及输入包。
+W&B 上传只处理本次包内的 run；Git 自动提交覆盖整个接收目录，默认是日志仓库中的 `MirrorOPD-verl/wandb/`。这个目录里以前漏提交的新增文件、修改和删除都会一起提交；`.gitignore` 排除的未跟踪文件仍不提交，其他项目或目录的暂存修改保留。没有文件变化时跳过 commit，但仍执行 push，以支持上次提交成功、推送失败后的重试。脚本使用普通 `git push`，不自动拉取、变基或强制推送；遇到远端分歧时先处理 Git 分歧，再重跑。W&B 上传失败时停止后续提交和推送；Git 推送失败时保留本地提交。两种失败都保留已解包日志及输入包。
 
 `WANDB_SYNC=0` 只关闭 W&B 上传；`WANDB_GIT_SYNC=0` 关闭自动 Git 提交和推送。仅解包时同时设置两项：
 
@@ -217,7 +217,7 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `WANDB_RUNS_DIR` | 留空，按操作选择 | 覆盖实际 run 目录；打包默认 `wandb`，解包默认独立日志仓库 |
 | `WANDB_LOGS_REPO` | 同级 Git 仓库 `../wandb-logs`，不存在则 `~/src/wandb-logs` | 接收端日志仓库，run 合并到其中的 `MirrorOPD-verl/wandb/` |
 | `WANDB_SYNC` | `1` | 解包后从临时副本上传 W&B；设为 `0` 跳过上传 |
-| `WANDB_GIT_SYNC` | `1` | 上传完成后提交并推送收到的 run；设为 `0` 跳过 Git 操作 |
+| `WANDB_GIT_SYNC` | `1` | 上传完成后提交并推送该项目接收目录的全部日志变化；设为 `0` 跳过 Git 操作 |
 | `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；更旧源码包仍清理 |
 | `MODEL_ROOT`、`DATA_ROOT` | `../model`、`../data` 的绝对路径 | 数学资产检查目录 |
 | `LOG_ACTION`、`ACTION` | `unpack` | `make sync-log`、`make sync-results` 的操作 |
