@@ -160,18 +160,26 @@ make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.
 3. 如果源码仓库同级存在 `wandb-logs/.git`，使用该仓库的 `MirrorOPD-verl/wandb/`。
 4. 否则使用 `~/src/wandb-logs/MirrorOPD-verl/wandb/`。
 
-解包默认只合并本地文件，保留输入包；Git commit 和 push 由接收者执行。需要上传 W&B 云端时，显式添加 `WANDB_SYNC=1`，并提前安装、登录 `wandb`。直接调用 `meituan/sync-log.sh unpack` 的默认行为相同，对应覆盖参数为 `MIRROROPD_WANDB_DIR`、`MIRROROPD_WANDB_LOGS_REPO` 和 `MIRROROPD_WANDB_SYNC`。
+解包默认依次执行：合并到日志仓库、上传 W&B、Git commit、Git push。接收端需提前安装并登录 `wandb`，日志仓库需配置 Git 提交身份、远端及当前分支的 upstream。每个 run 先复制到临时目录，再执行 `wandb sync`；同步产生的 config、summary 改写和同步状态留在临时目录，日志仓库保留收到的原始文件。临时副本会移除 `.wandb.synced` 和 `.wandb.syncstate`，以便重新上传增量包中的 run 快照；这可能重传已有记录，run ID 保持不变。
 
 Mac 接收并推送日志：
 
 ```bash
 make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.gz
-git -C "$HOME/src/wandb-logs" add MirrorOPD-verl/wandb/
-git -C "$HOME/src/wandb-logs" commit -m "chore(logs): update MirrorOPD W&B runs"
-git -C "$HOME/src/wandb-logs" push
 ```
 
-没有文件变化时跳过 commit。日志仍在被写入时，等待写入结束后再提交。原源码目录的 `wandb` 可保留为指向新接收目录的软链接，以兼容旧工具。
+自动提交只包含包内各 run 的目录，保留其他路径的暂存修改。没有文件变化时跳过 commit，但仍执行 push，以支持上次提交成功、推送失败后的重试。脚本使用普通 `git push`，不自动拉取、变基或强制推送；遇到远端分歧时先处理 Git 分歧，再重跑。W&B 上传失败时停止后续提交和推送；Git 推送失败时保留本地提交。两种失败都保留已解包日志及输入包。
+
+`WANDB_SYNC=0` 只关闭 W&B 上传；`WANDB_GIT_SYNC=0` 关闭自动 Git 提交和推送。仅解包时同时设置两项：
+
+```bash
+make sync-log-unpack LOG_ARCHIVE=/实际下载目录/log_MirrorOPD-verl_....tar.gz \
+  WANDB_SYNC=0 WANDB_GIT_SYNC=0
+```
+
+直接调用 `meituan/sync-log.sh unpack` 的默认行为相同，对应覆盖参数为 `MIRROROPD_WANDB_DIR`、`MIRROROPD_WANDB_LOGS_REPO`、`MIRROROPD_WANDB_SYNC` 和 `MIRROROPD_WANDB_GIT_SYNC`。上传过程要求整个 run 的附属文件可读；未打包且只存在于开发机的 artifact 外部引用无法通过临时复制恢复。
+
+原源码目录的 `wandb` 可保留为指向新接收目录的软链接，以兼容旧工具。已启动的旧 `wandb sync` 进程仍可能写原目录，应等其退出后再使用新流程；上传临时副本不会隔离其他进程对原目录的写入。
 
 打包端仍默认扫描源码仓库的 `wandb/`；`WANDB_LOGS_REPO` 只影响接收端。显式设置 `WANDB_RUNS_DIR=自定义目录` 可以覆盖打包源或接收位置。这个参数表示实际 run 目录；SDK 的 `WANDB_DIR` 表示其父级写入根目录，两个参数分开设置。
 
@@ -208,7 +216,8 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `MAX_FILE_MB` | `100` | 结果文件大小上限，单位为 MiB |
 | `WANDB_RUNS_DIR` | 留空，按操作选择 | 覆盖实际 run 目录；打包默认 `wandb`，解包默认独立日志仓库 |
 | `WANDB_LOGS_REPO` | 同级 Git 仓库 `../wandb-logs`，不存在则 `~/src/wandb-logs` | 接收端日志仓库，run 合并到其中的 `MirrorOPD-verl/wandb/` |
-| `WANDB_SYNC` | `0` | 日志解包后只合并到本地；设为 `1` 上传 W&B |
+| `WANDB_SYNC` | `1` | 解包后从临时副本上传 W&B；设为 `0` 跳过上传 |
+| `WANDB_GIT_SYNC` | `1` | 上传完成后提交并推送收到的 run；设为 `0` 跳过 Git 操作 |
 | `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；更旧源码包仍清理 |
 | `MODEL_ROOT`、`DATA_ROOT` | `../model`、`../data` 的绝对路径 | 数学资产检查目录 |
 | `LOG_ACTION`、`ACTION` | `unpack` | `make sync-log`、`make sync-results` 的操作 |
@@ -228,7 +237,7 @@ make wandb-check
 make sync-log-pack
 ```
 
-预期产生 `wandb/offline-run-*/run-*.wandb` 和日志包。人工传回 Mac 后运行 `make sync-log-unpack LOG_ARCHIVE=<下载包>`，确认 `~/src/wandb-logs/MirrorOPD-verl/wandb/` 出现对应 run。显式指定了接收路径或存在同级日志仓库时，检查实际接收目录。离线解包无需安装、登录 W&B。
+预期产生 `wandb/offline-run-*/run-*.wandb` 和日志包。人工传回 Mac 后运行 `make sync-log-unpack LOG_ARCHIVE=<下载包>`，确认 `~/src/wandb-logs/MirrorOPD-verl/wandb/` 出现对应 run，W&B 上传和 Git 推送均成功。显式指定了接收路径或存在同级日志仓库时，检查实际接收目录。仅验证本地解包时添加 `WANDB_SYNC=0 WANDB_GIT_SYNC=0`，无需安装、登录 W&B。
 
 ### 参考文献
 
