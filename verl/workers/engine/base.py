@@ -123,11 +123,16 @@ class BaseEngine:
         """
         maybe_fix_3d_position_ids(data)
 
-        self.optimizer_zero_grad()
-        outputs = self.forward_backward_batch(data, loss_function, forward_only=False)
+        from verl.utils.profiler.timeline import span
+
+        with span("actor/zero_grad", role="fsdp"):
+            self.optimizer_zero_grad()
+        with span("actor/forward_backward", role="fsdp"):
+            outputs = self.forward_backward_batch(data, loss_function, forward_only=False)
         # Optional fact about this attempt, never a persistent engine counter.
         self._optimizer_step_applied = None
-        grad_norm = self.optimizer_step()
+        with span("actor/optimizer_step", role="fsdp"):
+            grad_norm = self.optimizer_step()
         if self.is_mp_src_rank_with_outputs():
             assert "grad_norm" not in outputs["metrics"]
             outputs["metrics"]["grad_norm"] = grad_norm
