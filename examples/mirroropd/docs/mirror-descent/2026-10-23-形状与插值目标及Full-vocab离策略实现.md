@@ -318,75 +318,17 @@ Clip 生效时截去一部分 score 更新，因此不再等于 $\nabla L_{\rm M
 
 <a id="implementation"></a>
 
-### 9.1 小词表正确性参照
+### 9.1 固定目标 MDPO 的具体接入
 
-下面是建议的固定目标 MDPO 参照计算。`log_q/log_T` 必须来自同一前缀、同一词表语义，且在本轮冻结：
+Sampled-token 与 full-vocab 的缓存字段、detach 计算图、anchor scoring、head 快照、normalizer、precompute/fused 扩展及文件职责统一见 [MDPO 的采样与全词表实现方案](2026-10-23-MDPO的采样与全词表实现方案.md)。该方案覆盖一般 $0<\kappa<1,0<\eta<1$，并复用同一个稳定信号函数；不依赖端点才能成立。
 
-```python
-# Semantics: full-vocabulary MDPO on fixed prefixes; reference, not a launcher.
-log_p = student_logits.log_softmax(-1)
-with torch.no_grad():
-    log_q = anchor_logits.log_softmax(-1)
-    log_T = teacher_logits.log_softmax(-1)
-    f = mirror_signal(log_T - log_q, kappa, eta)
-    log_h = log_q + f
-    log_m = log_h - log_h.logsumexp(-1, keepdim=True)
-kl_sum = (log_p.exp() * (log_p - log_m)).sum()
-loss_sum = kl_sum / eta
-# Existing loss/engine then applies global valid-token normalization once.
-```
+### 9.2 Current-J 与固定目标路径的工程差异
 
-代码中的 `mirror_signal` 数值参照见 [verify_mirror_targets.py](scripts/verify_mirror_targets.py)。大形状生产实现应复用当前[hidden/head 分块管线](../full-vocab/2026-10-23-Full-KL全流程源码走读.md)，而非先物化全 batch 的三个完整词表分布。
+若选择 current-J，可以从当前 student 分布构造 detached $m(p)$，不需要额外冻结 anchor backbone/hidden。这更接近现有两模型数据通路，但实现的是第 5 节的另一目标。它的 detached target KL 前向值一般不是 $J$；必须明确是梯度代理，不能将该曲线当作真实 $J$。一般形状的 $J$ 积分 oracle 仅用于当前的小词表验算。
 
-数值计算使用 `log_h=log_q+f(log_T-log_q)`。$\kappa>0$ 的信号可用 `logaddexp(log1p(-eta), log(eta)+kappa*r)/kappa`；接近零的 `kappa*r` 可改用 `log1p(eta*expm1(kappa*r))/kappa` 避免消去误差。$\kappa=0$ 和 $\eta=1$ 使用解析分支。不要在 BF16 概率上先做除法/幂，也不要把双方未归一化 logits 直接混合后冒充幂均值概率。
+### 9.3 单次更新时的复用限制
 
-作为 sampled 对照，未中心化 MDPO score 只需要实际动作的 `log T`、冻结 `log q`、行为 `log beta` 和当前 `log p`：计算 $f(\log T-\log q)$、$U=\log p-\log q$，再用 $p/\beta$ 加权残差即可。它不必显式构造全词表 $m$ 或 `log Z`；这是去掉动作无关常数后的期望梯度等价，不是每个样本的 loss 数值相同。若额外加入精确中心控制变量，则需要相应条件积分。
-
-### 9.2 固定锚点需要新增的数据
-
-当前 Full-KL 有 current student hidden/head 与 frozen teacher hidden/head。一般 $\eta<1$ 的固定目标还需要 **冻结 anchor 的完整分布信息**；每个实际 token 的 `old_log_probs` 不足以构造全词表 $m$。
-
-建议按每轮保存 anchor 有效预测行 hidden 和该轮冻结 anchor head 快照。无需常驻第二份完整 anchor backbone，但必须在任何 optimizer 更新之前取得整个本轮所需 anchor 信息。
-
-Anchor head 快照必须拥有独立存储；仅对可更新的 student weight 调用 `detach()` 仍会共享底层数据，后续 optimizer step 会改变所谓的冻结目标。获取完整 head 时仍需遵循现有 FSDP head hooks，不能直接把外层可见的分片当成完整权重。
-
-```mermaid
-flowchart TD
-    A[固定本轮 q 与训练前缀] --> B[Anchor no-grad forward / 保存有效行 hidden 与 head 快照]
-    B --> C[Teacher forward / 保存 teacher hidden]
-    C --> D[Actor 当前 forward]
-    D --> E[分块重建 p、q、T 的 logits / normalizer]
-    E --> F[冻结 q、T 构造 log h 与 log m]
-    F --> G[KL 到 m 除以 eta / 精确 student VJP]
-    G --> H[Backward / optimizer]
-    H --> I{本轮还有 inner update?}
-    I -->|有| D
-    I -->|无| J[释放本轮 anchor 缓存 / 更新外层锚点]
-```
-
-调度可以复用现有 student scoring 框架，但输出应是 anchor hidden，不能把旧 sampled log-prob 当成完整 anchor。若多个 mini-batch 分别在更新之后才取“anchor hidden”，它们已经来自不同学生参数，不再是整轮冻结 $q_k$。
-
-单次全局 mini-batch 更新、所有 micro-batch 在同一次 optimizer step 前处理时，可以研究复用当前学生第一次 forward 的 detached hidden/head 作为 $q$；需同时保证 eval/train 随机性、dropout、精度和 head 快照一致。该捷径不自动适用于多个 inner updates，也不能因参数初值相同就让梯度穿过 $q$。
-
-若选择 current-J，则可以从当前 student 分布构造 detached $m(p)$，不需要额外冻结 anchor backbone/hidden；这更接近现有两模型数据通路，但实现的是第 5 节的另一目标，应明确命名并正确记录 loss 数值。
-
-### 9.3 对现有算子的最小扩展
-
-保留 `full_vocab` 的数值后端概念，新增“目标构造”和“anchor 生命周期”职责，不将 $\kappa,\eta$ 塞进 unrelated PPO clip 配置。可以为 MDPO 提供独立目标选择，复用现有 IO、FSDP hooks、全局归一化和 optimizer；具体配置名尚未落地。
-
-对一个 token 块，令 student 未归一化 logits 为 $z^p$，目标未归一化 log-weight 为 $b=\log h$。定义 $\mu=\sum_ap_a(z^p_a-b_a)$，则
-
-$$
-K(p,m)=\mu-\log Z_p+\log\sum_ae^{b_a},\qquad
-\frac{\partial L_{\rm fit}}{\partial z^p_a}
-=\frac1\eta p_a(z^p_a-b_a-\mu).
-$$
-
-这个形式可复用现有 precompute / Triton KL 归约的结构：将第二组线性 teacher logits 替换为分块构造的 $b$，再对 VJP 乘 $1/\eta$。但 $b$ 是 q/T 的非线性、逐前缀变换，不能预先存成一张固定的“m head”矩阵。
-
-一般 $\kappa>0$ 构造 $b$ 需要 q/T 各自的 normalizer；只有最终目标 normalizer 在 student 的 logit 梯度中作为公共常数消去。真实 target KL 指标仍需要它。$\kappa=0$ 可用 $D_T+(1/\eta-1)D_q$ 共用 student projection；$\eta=1$ 则直接走当前原 teacher Full-KL 快速路径，无需 anchor。
-
-MDPO 最小接入应保持 `loss_sum/eta` 和现有 DP/global-token 缩放各执行一次。若使用 raw `KL(p||m)`，虽有相同最优点，梯度会多一个 $\eta$ 因子；不能在学习率不变时把两种尺度的有限步实验混称同配方。Current-J 若用 detached target KL 代理，需另记真实 $J$ 或明确其只是代理指标；一般 $\kappa$ 的 $J$ 积分数值不应假装由这个代理 KL 给出。
+单次全局 mini-batch 更新、所有 micro-batch 在同一次 optimizer step 前处理时，可以研究复用当前学生第一次 forward 的 detached hidden/head 作为 q；需同时保证 eval/train 随机性、dropout、精度和快照一致。该捷径不自动适用于多个 inner updates，也不能因参数初值相同就让梯度穿过 q。通用方案仍须在本轮任何参数更新前取得完整 anchor 信息。
 
 ### 9.4 新增资源成本
 
