@@ -123,7 +123,7 @@ def timing(series):
     }
 
 
-def summarize(rows, series, system_rows):
+def summarize(rows, series, system_rows, source=None):
     catalog = {key: stats(series, key) for key in series}
     result = {
         "history_events": len(rows),
@@ -185,9 +185,17 @@ def summarize(rows, series, system_rows):
         system[key] = {"count": len(vals), "min": min(vals), "max": max(vals), "sample_mean": statistics.mean(vals)}
     result["system"] = {
         "rows": len(system_rows),
-        "complete": False,
+        "complete": bool(
+            source and source.get("kind") == "wandb-offline" and source.get("decoder_status") == "finished"
+        ),
+        "api_sampled": not source or source.get("kind") != "wandb-offline",
         "statistics": system,
-        "note": "API sampled stream; sample means are not time-weighted full-run means.",
+        "note": (
+            "All decoded periodic records; completeness refers to logs, not continuous monitoring. "
+            if source and source.get("kind") == "wandb-offline"
+            else "API sampled stream; "
+        )
+        + "Sample means are not time-weighted full-run means.",
     }
     return result
 
@@ -197,8 +205,15 @@ def snapshot(source, destination):
         raise FileExistsError("Raw snapshot already exists; omit --snapshot-from to recompute analysis")
     destination.mkdir(parents=True, exist_ok=True)
     # Only already-scrubbed exporter outputs; intentionally exclude legacy analysis.json.
-    for name in ("config.json", "source.json", "hardware.json", "package-versions.txt", "system-sampled.jsonl.gz"):
+    for name in ("config.json", "source.json", "hardware.json", "package-versions.txt"):
         shutil.copyfile(source / name, destination / name)
+    system = source / "system.jsonl.gz"
+    if not system.is_file():
+        system = source / "system-sampled.jsonl.gz"
+    shutil.copyfile(system, destination / system.name)
+    for name in ("summary.json", "metric-definitions.jsonl"):
+        if (source / name).is_file():
+            shutil.copyfile(source / name, destination / name)
     gzip_bytes(destination / "history.jsonl.gz", (source / "history.jsonl").read_bytes())
 
 
@@ -221,7 +236,11 @@ def main():
         write_json(axis_path, axis_map)
     series = normalize(rows, axis_map)
     gzip_bytes(args.data / "series.json.gz", json.dumps(series, allow_nan=False).encode())
-    result = summarize(rows, series, read_rows(args.data / "system-sampled.jsonl.gz"))
+    system = args.data / "system.jsonl.gz"
+    if not system.is_file():
+        system = args.data / "system-sampled.jsonl.gz"
+    source = json.loads((args.data / "source.json").read_text())
+    result = summarize(rows, series, read_rows(system), source)
     write_json(args.data / "analysis.json", result)
     with (args.data / "metric-catalog.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=["metric", *next(iter(result["statistics"].values()))])

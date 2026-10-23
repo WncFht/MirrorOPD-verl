@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Export read-only W&B snapshots or extract numeric metrics from a console log.
+"""Prepare analysis snapshots from the local log archive by default.
 
-No login/sync/upload occurs. Training history uses scan_history without a keys
-intersection; system history is explicitly a sampled SDK export. Credentials
-come from the SDK's usual environment/netrc or --api-key-file, never output.
+The explicit export-cloud command retains read-only API access for audits or
+runs absent from the archive. No command logs in, uploads, or starts training.
 """
 
 import argparse
@@ -12,14 +11,17 @@ import gzip
 import json
 import math
 import netrc
+import os
 import re
+import shutil
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import mean, median
 
 
-def write_json(path, obj):
-    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
+def write_json(path, obj, allow_nan=False):
+    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2, allow_nan=allow_nan) + "\n")
 
 
 def read_rows(path):
@@ -28,22 +30,24 @@ def read_rows(path):
         return [json.loads(s) for s in stream if s.strip()]
 
 
-def write_rows(path, rows):
+def write_rows(path, rows, allow_nan=False):
     opener = gzip.open if path.suffix == ".gz" else open
     with opener(path, "wt", encoding="utf-8") as stream:
         for row in rows:
-            stream.write(json.dumps(row, ensure_ascii=False, allow_nan=False) + "\n")
+            stream.write(json.dumps(row, ensure_ascii=False, allow_nan=allow_nan) + "\n")
 
 
-def scrub(obj):
+def scrub(obj, nonfinite_to_none=True):
     if isinstance(obj, dict):
         return {
-            k: "[REDACTED]" if re.search(r"api.?key|password|secret|credential|access.?token", k, re.I) else scrub(v)
+            k: "[REDACTED]"
+            if re.search(r"api.?key|password|secret|credential|access.?token", k, re.I)
+            else scrub(v, nonfinite_to_none)
             for k, v in obj.items()
         }
     if isinstance(obj, list):
-        return [scrub(v) for v in obj]
-    if isinstance(obj, float) and not math.isfinite(obj):
+        return [scrub(v, nonfinite_to_none) for v in obj]
+    if nonfinite_to_none and isinstance(obj, float) and not math.isfinite(obj):
         return None
     return obj
 
@@ -85,6 +89,125 @@ def import_log(args):
 
 
 def export(args):
+    """Delegate decoding to wandb-logs, then adapt its output for project analysis."""
+    if args.out.exists():
+        raise FileExistsError(f"Snapshot already exists: {args.out}")
+    parts = args.run.split("/")
+    if len(parts) != 3 or any(not part or part in (".", "..") for part in parts):
+        raise SystemExit("--run must be entity/project/run_id")
+    entity, project, run_id = parts
+    sibling = Path(__file__).resolve().parents[4].parent / "wandb-logs"
+    logs_repo = args.logs_repo or os.environ.get("WANDB_LOGS_REPO")
+    logs_repo = (
+        Path(logs_repo).expanduser()
+        if logs_repo
+        else (sibling if (sibling / ".git").exists() else Path.home() / "src/wandb-logs")
+    )
+    logs_repo = logs_repo.resolve()
+    candidates = sorted((logs_repo / project / "wandb").glob(f"*/run-{run_id}.wandb"))
+    candidates = [p for p in candidates if not p.parent.is_symlink() and not p.is_symlink()]
+    if len(candidates) != 1:
+        raise SystemExit(f"Expected one local run, found {len(candidates)} in {logs_repo}; no cloud fallback")
+    raw_run = candidates[0].parent
+    python = logs_repo / ".venv/bin/python"
+    decoder = logs_repo / "tools/wandb_local.py"
+    if not python.is_file() or not decoder.is_file():
+        raise SystemExit(f"Initialize the local reader first: make -C {logs_repo} setup")
+    subprocess.run([str(python), str(decoder), "decode", "--project", project, "--run", run_id], check=True)
+    decoded = logs_repo / "derived" / project / raw_run.name
+    record = json.loads((decoded / "run.json").read_text())
+    identity = record["run"]
+    if identity.get("run_id") != run_id or identity.get("project") != project:
+        raise ValueError("Decoded run identity does not match --run")
+    if identity.get("entity") and identity["entity"] != entity:
+        raise ValueError("Decoded entity does not match --run")
+    if record["status"] not in ("finished", "snapshot", "partial_snapshot"):
+        raise ValueError(f"Cannot analyze decoder status {record['status']}")
+    if not record["history_rows"]:
+        raise ValueError("Local run has no decoded history records")
+    args.out.mkdir(parents=True, exist_ok=False)
+    shutil.copyfile(decoded / "history.jsonl", args.out / "history.jsonl")
+    for name in ("config.json", "summary.json"):
+        write_json(args.out / name, scrub(json.loads((decoded / name).read_text()), False), allow_nan=True)
+    shutil.copyfile(decoded / "metric-definitions.jsonl", args.out / "metric-definitions.jsonl")
+    system = []
+    for row in read_rows(decoded / "system.jsonl.gz"):
+        ns = timestamp_ns(row["timestamp"])
+        system.append(
+            {
+                "_timestamp": ns / 1e9,
+                "_timestamp_ns": ns,
+                **{"system." + key: value for key, value in row["metrics"].items()},
+            }
+        )
+    write_rows(args.out / "system.jsonl.gz", system, allow_nan=True)
+    metadata_file = raw_run / "files/wandb-metadata.json"
+    requirements_file = raw_run / "files/requirements.txt"
+    metadata = json.loads(metadata_file.read_text()) if metadata_file.is_file() else {}
+    requirements = requirements_file.read_text() if requirements_file.is_file() else ""
+    write_environment(args.out, metadata, requirements)
+    write_json(
+        args.out / "source.json",
+        {
+            "kind": "wandb-offline",
+            "run": args.run,
+            "identity_source": "explicit --run, checked against recorded project and run_id",
+            "entity_recorded": identity.get("entity"),
+            "raw_run": str(raw_run),
+            "decoded_run": str(decoded),
+            "decoder_status": record["status"],
+            "exit_code": record["exit_code"],
+            "rows": record["history_rows"],
+            "step_range": record["step_range"],
+            "fetched_at_utc": datetime.now(timezone.utc).isoformat(),
+            "history_method": "local .wandb records; sparse rows preserved without sampling",
+            "online_history_retrieved": False,
+            "system_metrics_available": bool(system),
+            "system_rows": len(system),
+            "system_api_sampled": False,
+            "system_method": "all decoded stats records; timestamps retain integer nanoseconds",
+            "hardware_metadata_available": bool(metadata),
+            "requirements_available": requirements_file.is_file(),
+            "note": (
+                "No exit or an unfinished tail does not prove a complete run; "
+                "telemetry is periodic, not a continuous trace."
+            ),
+        },
+    )
+    print(
+        f"Local snapshot: {args.out}; status={record['status']}, history={record['history_rows']}, system={len(system)}"
+    )
+
+
+def timestamp_ns(value):
+    """Convert a protobuf UTC timestamp without dropping its nanosecond remainder."""
+    if not value.endswith("Z"):
+        raise ValueError("Expected a UTC protobuf timestamp")
+    seconds, _, fractional = value[:-1].partition(".")
+    epoch = int(datetime.strptime(seconds, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
+    return epoch * 10**9 + int(fractional.ljust(9, "0"))
+
+
+def write_environment(out, metadata, requirements):
+    """Use the run's recorded environment only; empty inputs remain visibly absent."""
+    selected = {
+        k: metadata[k] for k in ("gpu", "gpu_count", "gpu_nvidia", "cuda", "python", "os", "git") if k in metadata
+    }
+    if "gpu_nvidia" in selected:
+        selected["gpu_nvidia"] = [
+            {k: v for k, v in gpu.items() if k in ("name", "memory_total", "cuda_cores", "architecture")}
+            for gpu in selected["gpu_nvidia"]
+        ]
+    if "git" in selected:
+        selected["git"] = {"commit": selected["git"].get("commit")}
+    write_json(out / "hardware.json", scrub(selected))
+    names = {"torch", "vllm", "transformers", "transfer-queue", "liger-kernel", "flash-attn", "triton", "wandb", "ray"}
+    versions = [s for s in requirements.splitlines() if s.split("==")[0].lower().replace("_", "-") in names]
+    (out / "package-versions.txt").write_text("\n".join(versions) + "\n")
+
+
+def export_cloud(args):
+    """Explicit cloud audit/recovery entry; never invoked as an automatic fallback."""
     import wandb
 
     kwargs = {"overrides": {"base_url": args.base_url}, "timeout": 30}
@@ -164,7 +287,7 @@ def export(args):
         (args.out / "package-versions.txt").write_text("\n".join(versions) + "\n")
     except Exception as exc:
         print("Package metadata unavailable:", type(exc).__name__)
-    summarize(args.out, args.gpus, args.batch)
+    print(f"Cloud snapshot: {args.out}; system history is API sampled")
 
 
 def download_file(base_url, run_path, name, api_key):
@@ -249,7 +372,7 @@ def summarize(directory, gpus, batch):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
-    for command in ("import-log", "export", "summarize"):
+    for command in ("import-log", "export", "export-cloud", "summarize"):
         p = sub.add_parser(command)
         p.add_argument(
             "--out", type=Path, required=True, help="new snapshot directory, or existing directory for summarize"
@@ -259,12 +382,14 @@ def main():
         if command != "summarize":
             p.add_argument(
                 "--run",
-                required=command == "export",
+                required=command in ("export", "export-cloud"),
                 help="explicit entity/project/run for export; omit for console logs with unknown run identity",
             )
         if command == "import-log":
             p.add_argument("--log", type=Path, required=True)
         if command == "export":
+            p.add_argument("--logs-repo", type=Path, help="local wandb-logs checkout (otherwise auto-detected)")
+        if command == "export-cloud":
             auth = p.add_mutually_exclusive_group()
             auth.add_argument("--api-key-file", type=Path)
             auth.add_argument("--netrc-file", type=Path)
@@ -277,6 +402,8 @@ def main():
         summarize(args.out, args.gpus, args.batch)
     elif args.command == "import-log":
         import_log(args)
+    elif args.command == "export-cloud":
+        export_cloud(args)
     else:
         export(args)
 
