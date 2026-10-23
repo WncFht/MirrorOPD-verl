@@ -6,6 +6,7 @@
 | 阅读目的 | 入口 | 维护内容 |
 | --- | --- | --- |
 | 理解 OPD、full-vocab 与 Mirror Descent | [理论结论与阅读顺序](theory/README.md) | 目标、计算图、四种更新、控制变量和证明 |
+| 提取 η、κ 的目标与实现选择 | [MirrorOPD 形状与插值](mirror-descent/README.md) | 固定 state 的 full-vocab、动作 IS、current/frozen、clipping 与接入计划 |
 | 核对数学符号 | [符号约定](符号约定.md) | 教师、学生、锚点、行为策略及工程数量 |
 | 准备模型与数据 | [资产准备](资产准备.md) | 路径、导入与检查 |
 | 选择领域、实验预设与训练预算 | [训练配方](训练配方.md) | Math/Coding/IF、E1–E15、长度与默认参数 |
