@@ -354,7 +354,9 @@ class CodeArchiveTest(unittest.TestCase):
         # Upload mtimes do not describe package generation order.
         for path in old:
             os.utime(path, (2200000000, 2200000000))
-        elsewhere = self.write(self.receiver, "archive_MirrorOPD-verl_20261021_220146_190191.tar.gz", "elsewhere")
+        elsewhere = self.write(
+            self.base / "unrelated", "archive_MirrorOPD-verl_20261021_220146_190191.tar.gz", "elsewhere"
+        )
         with patch.dict(os.environ, KEEP_ARCHIVE_AFTER_UNPACK="0"):
             archive.unpack(self.receiver, source, "peer")
         self.assertTrue(all(not path.exists() for path in [source, *old]))
@@ -380,6 +382,44 @@ class CodeArchiveTest(unittest.TestCase):
             archive.unpack(self.receiver, source, "peer")
         self.assertFalse(source.exists())
         self.assertTrue(old.exists())
+
+    def test_cleanup_covers_checkout_and_snap_formats_without_deleting_tracked_files(self):
+        tracked = "archive_MirrorOPD-verl_20000101_000000.zip"
+        self.write(self.sender, tracked, "tracked content")
+        self.commit(self.sender)
+        source = self.pack()[0]
+        old = [
+            self.write(self.receiver, "archive_MirrorOPD-verl_20000101_010000.tar.gz.part.000", "old"),
+            self.write(self.receiver / "transfer_snap", "archive_MirrorOPD-verl_peer_20000101_010000.zip", "old"),
+            self.write(self.receiver / "transfer_snap", "archive_MirrorOPD-verl_20000101_010000.tgz", "old"),
+        ]
+        with patch.dict(os.environ, KEEP_ARCHIVE_AFTER_UNPACK="0"):
+            archive.unpack(self.receiver, source, "peer")
+        self.assertTrue(all(not path.exists() for path in old))
+        self.assertEqual((self.receiver / tracked).read_text(), "tracked content")
+        self.assertEqual(self.git(self.receiver, "status", "--porcelain"), "")
+
+    def test_custom_bundle_cleanup_uses_conservative_age_and_keeps_symlinks(self):
+        source = self.pack(supplied="custom.bundle")[0]
+        old = self.write(source.parent, "archive_MirrorOPD-verl_20000101_000000.tar.gz", "old")
+        os.utime(old, (1, 1))
+        target = self.write(self.base, "retained.bin", "keep")
+        link = source.parent / "archive_MirrorOPD-verl_20000101_000001.tar.gz"
+        link.symlink_to(target)
+        with patch.dict(os.environ, KEEP_ARCHIVE_AFTER_UNPACK="0"):
+            archive.unpack(self.receiver, source, "peer")
+        self.assertFalse(old.exists())
+        self.assertTrue(link.is_symlink())
+        self.assertEqual(target.read_text(), "keep")
+
+    def test_pack_keeps_future_dated_delivery_and_dangling_link(self):
+        snap = self.sender / "transfer_snap"
+        future = self.write(snap, "archive_MirrorOPD-verl_peer_20990101_000000_000000.bundle", "future")
+        link = snap / "archive_MirrorOPD-verl_peer_20000101_000000_000000.bundle"
+        link.symlink_to(self.base / "missing")
+        self.pack()
+        self.assertTrue(future.exists())
+        self.assertTrue(link.is_symlink())
 
     def test_old_bundle_does_not_rewind_checkout_or_peer(self):
         first_bundle = self.initialize()

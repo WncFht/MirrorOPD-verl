@@ -5,6 +5,7 @@
 import argparse
 import importlib.util
 import os
+import shutil
 import subprocess
 import tarfile
 import tempfile
@@ -177,6 +178,50 @@ class LogPublishTest(unittest.TestCase):
             self.unpack()
         self.assertEqual(self.uploaded, [])
         self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), self.initial)
+
+    def test_enqueue_automatically_pushes_and_upload_retries_missed_push(self):
+        shutil.copytree(self.source, self.destination)
+        log_sync.enqueue_logs(self.logs, self.destination.parent)
+        self.assertEqual(self.git(self.remote, "rev-parse", "main"), self.git(self.logs, "rev-parse", "HEAD"))
+        (self.destination / "files/config.yaml").write_text("new raw config")
+        log_sync.enqueue_logs(self.logs, self.destination.parent, push=False)
+        pending = self.git(self.logs, "rev-parse", "HEAD")
+        self.assertNotEqual(self.git(self.remote, "rev-parse", "main"), pending)
+        with patch.object(log_sync, "upload", return_value={"succeeded": 1}) as cloud:
+            log_sync.upload_and_push(self.logs)
+            cloud.assert_called_once()
+        self.assertEqual(self.git(self.remote, "rev-parse", "main"), pending)
+
+    def test_failed_auto_push_does_not_block_cloud_attempt(self):
+        shutil.copytree(self.source, self.destination)
+        log_sync.enqueue_logs(self.logs, self.destination.parent, push=False)
+        hook = self.remote / "hooks/pre-receive"
+        hook.write_text("#!/bin/sh\nexit 1\n")
+        hook.chmod(0o755)
+        with patch.object(log_sync, "upload", return_value={"succeeded": 1}) as cloud:
+            with self.assertRaisesRegex(ValueError, "Git push failed"):
+                log_sync.upload_and_push(self.logs)
+            cloud.assert_called_once()
+        self.assertEqual(self.git(self.remote, "rev-parse", "main"), self.initial)
+        self.assertNotEqual(self.git(self.logs, "rev-parse", "HEAD"), self.initial)
+
+    def test_push_does_not_rebase_or_force_a_diverged_remote(self):
+        other = self.base / "other"
+        self.git(self.base, "clone", "-b", "main", str(self.remote), str(other))
+        self.git(other, "config", "user.name", "Test")
+        self.git(other, "config", "user.email", "test@example.invalid")
+        (other / "remote-only.txt").write_text("remote data")
+        self.git(other, "add", "remote-only.txt")
+        self.git(other, "commit", "-m", "remote update")
+        self.git(other, "push")
+        remote_head = self.git(self.remote, "rev-parse", "main")
+        shutil.copytree(self.source, self.destination)
+        log_sync.enqueue_logs(self.logs, self.destination.parent, push=False)
+        local_head = self.git(self.logs, "rev-parse", "HEAD")
+        with self.assertRaises(subprocess.CalledProcessError):
+            log_sync.push_logs(self.logs)
+        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), local_head)
+        self.assertEqual(self.git(self.remote, "rev-parse", "main"), remote_head)
 
 
 if __name__ == "__main__":

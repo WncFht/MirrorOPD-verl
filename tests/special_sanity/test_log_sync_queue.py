@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Validate durable upload jobs with real local Git repositories and a fake core CLI."""
 
+import json
 import os
 import subprocess
 import sys
@@ -254,6 +255,25 @@ class QueueTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid queue state"):
             log_sync.upload(self.repo)
         self.assertEqual(state.read_text(), "[]")
+
+    def test_incomplete_snapshot_reports_partial_with_summary(self):
+        self.write_run()
+        self.enqueue()
+        reports = self.base / "reports"
+        with patch.dict(os.environ, FAKE_INCOMPLETE="1"):
+            with self.assertRaises(log_sync.observe.PartialResultError):
+                with log_sync.observe.operation(reports, "logs-upload"):
+                    log_sync.upload(self.repo)
+        report = json.loads(next(reports.glob("*.json")).read_text())
+        self.assertEqual(report["status"], "partial")
+        self.assertEqual(report["exit_code"], 2)
+        self.assertEqual(report["details"]["upload_summary"]["queue_counts"], {"incomplete": 1})
+        self.assertNotIn("failed_stage", report)
+
+    def test_nonfinite_timeouts_fail_before_starting_a_worker(self):
+        for timeout in (float("nan"), float("inf"), -1):
+            with self.subTest(timeout=timeout), self.assertRaises(ValueError):
+                log_sync.upload(self.repo, timeout=timeout)
 
 
 if __name__ == "__main__":

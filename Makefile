@@ -20,6 +20,7 @@ WANDB_GIT_SYNC ?= 1
 WANDB_BIN ?=
 WANDB_UPLOAD_JOBS ?= 2
 WANDB_UPLOAD_TIMEOUT ?= 900
+GIT_PUSH_TIMEOUT ?= 120
 RUN ?=
 RETRY ?= 0
 KEEP_ARCHIVE_AFTER_UNPACK ?= 0
@@ -27,6 +28,7 @@ RESULTS_REMOTE_DIR ?= outputs
 RESULTS_LOCAL_DIR ?= results
 SNAP_DIR ?= transfer_snap
 OPERATION_DIR ?=
+COLOR ?= auto
 CHUNK_SIZE ?= 10485760
 MAX_FILE_MB ?= 100
 MODEL_ROOT ?= $(abspath ../model)
@@ -38,6 +40,7 @@ HOPE_FILE ?= mirroropd.hope
 export MIRROROPD_PYTHON = $(PYTHON)
 export MIRROROPD_SNAP_DIR = $(SNAP_DIR)
 export MIRROROPD_OPERATION_DIR = $(OPERATION_DIR)
+export MIRROROPD_COLOR = $(COLOR)
 export MIRROROPD_CHUNK_SIZE = $(CHUNK_SIZE)
 export MIRROROPD_ARCHIVE_FULL = $(FULL)
 export MIRROROPD_ARCHIVE_TARGET = $(TARGET)
@@ -48,6 +51,7 @@ export MIRROROPD_WANDB_GIT_SYNC = $(WANDB_GIT_SYNC)
 export MIRROROPD_WANDB_BIN = $(WANDB_BIN)
 export MIRROROPD_UPLOAD_JOBS = $(WANDB_UPLOAD_JOBS)
 export MIRROROPD_UPLOAD_TIMEOUT = $(WANDB_UPLOAD_TIMEOUT)
+export MIRROROPD_GIT_PUSH_TIMEOUT = $(GIT_PUSH_TIMEOUT)
 export MIRROROPD_UPLOAD_RUN = $(RUN)
 export MIRROROPD_UPLOAD_RETRY = $(RETRY)
 export KEEP_ARCHIVE_AFTER_UNPACK
@@ -64,12 +68,14 @@ export MIRROROPD_MAX_FILE_MB = $(MAX_FILE_MB)
 help:
 	@echo '同步状态：make sync-status（只读）；archive-status / sync-log-status 分别查看代码、日志'
 	@echo '诊断记录：默认 transfer_snap/operations/*.log 和 *.json；OPERATION_DIR 可指定目录'
+	@echo '终端颜色：COLOR=auto|always|never；NO_COLOR 可关闭；日志与 JSON 始终为纯文本'
 	@echo '源码打包：make archive-pack [FULL=1] [TARGET=peer] [ARCHIVE=...]（Git 提交，默认累计增量）'
 	@echo '源码接收：make archive-unpack [ARCHIVE=包.bundle或.part.000] [DEST=.] [TARGET=peer]'
 	@echo '同步确认：接收成功后，在发送端执行 make archive-ack [TARGET=peer]，确认上次打包的提交'
 	@echo '日志接收：make sync-log-unpack [LOG_ARCHIVE=...]（提交、登记持久队列并推送 Git，默认不等待 W&B）'
 	@echo '云端上传：make sync-log-upload [RUN=run-id] [RETRY=1]；首次 make sync-log-setup 安装独立上传环境'
-	@echo '旧日志入队：make sync-log-enqueue；Git 推送重试：make sync-log-push'
+	@echo '旧日志入队并推送：make sync-log-enqueue；upload 也自动重试 Git push，WANDB_GIT_SYNC=0 可关闭'
+	@echo '仅重试 Git 推送：make sync-log-push [GIT_PUSH_TIMEOUT=120]'
 	@echo '仅解包：make sync-log-unpack WANDB_SYNC=0 WANDB_GIT_SYNC=0（不提交、不入队）'
 	@echo '结果下载：make sync-results-pack [RESULTS_REMOTE_DIR=outputs]；传回后 make sync-results-unpack [RESULTS_ARCHIVE=...]'
 	@echo '离线环境：make native-install；make native-check（开发机，系统 Python 3.12）'
