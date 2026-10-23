@@ -4,7 +4,7 @@
 
 目标是在现有 FSDP2 shared-sync OPD 中实现两条独立训练路径：sampled-token + full KL baseline，以及直接 full-vocab reverse KL。两者共享 teacher hidden-state 数据通路、冻结 LM head 和部分归一化计算；训练目标、反向路径和指标分别维护。Math、code、IF 使用同一套工程实现，按领域验收数据和 mask。
 
-2026-10-22 后续实施已接通单 teacher hidden payload、full reverse-KL loss、FSDP2 head 适配及有界异步读写，并完成真实模型四卡短程训练。Full baseline 留待后续。已实现接口、支持边界和证据以[实现与验收](2026-10-22-Full-KL实现与验收.md)为准；本页继续维护两条目标的设计背景和后续扩展计划。
+2026-10-22 后续实施已接通单 teacher hidden payload、full reverse-KL loss、FSDP2 head 适配及有界异步读写，并完成真实模型四卡短程训练。Full baseline 留待后续。当前接口、调用链和优化状态以[源码走读](2026-10-23-Full-KL全流程源码走读.md)为准；初次验收证据见[验收记录](2026-10-22-Full-KL实现与验收.md)。本页保留 2026-10-22 的设计背景、baseline 待实现部分和原始阶段划分，不再复制已实现 Full-KL 的流程。
 
 | 内容 | 唯一维护位置 |
 | --- | --- |
@@ -18,29 +18,15 @@
 
 ## 2. 接入位置与改动范围
 
-| 文件或入口 | 实施前行为 | 改动方向 |
-| --- | --- | --- |
-| `verl/trainer/ppo/core_algos.py::kl_penalty_forward` | k1/k2/k3 等 sampled 公式；`full` 分支抛出异常 | 保持 sampled 接口；full 分布计算独立实现，不把 hidden/head 塞入 log-prob 接口 |
-| `verl/trainer/distillation/losses.py::DistillationLossSettings` | `use_topk` 与 `use_estimator` 必须二选一 | 增加可表达 hidden payload 的能力描述，并保留旧配置兼容 |
-| 同文件 `distillation_loss` | 非 vanilla 直接进入 `_sampled_token_loss`，绕过 loss 注册表 | 先选择 sampled 或 direct-full 目标，再选择 baseline、PG 模式和 backend |
-| 同文件 `_sampled_token_loss` | 构造 current/frozen advantage，使用行为 IS、PPO 或 REINFORCE | 增加 detached baseline；两个 PG 入口使用相同 baseline 构造函数 |
-| `verl/workers/config/distillation.py` 与 `verl/trainer/config/distillation/distillation.yaml` | shared-sync 限制 k1 + PG；没有 hidden/full 配置 | 增加合法组合检查、payload/backend/刷新策略，拒绝不支持的模型变换 |
-| `verl/trainer/ppo/v1/trainer_base.py::_compute_shared_teacher_log_probs` | Teacher 推理、offload，driver 取 sampled 分数并重新写入 TQ | 增加 hidden 输出模式；大 payload 留在 worker/TQ 数据路径，避免 driver 拉取再发布 |
-| `verl/workers/engine/fsdp/transformer_impl.py::forward_step` | 完整模型 forward 后处理 logits | 在 LM head 前接入 final hidden 和 loss 算子，保持 FSDP hooks 与梯度语义 |
-| `verl/trainer/distillation/fsdp/losses.py` | 从已物化 logits 计算 top-k loss | 保持现有职责；full head-loss 在新模块中实现 |
-| `examples/mirroropd/_run_single_teacher_fsdp2.sh` | 三个领域共用 sampled 配方 | 新增独立实验 wrapper，默认入口继续复现既有结果 |
+已实现的 direct-full 模块职责与源码入口统一见[源码阅读顺序](2026-10-23-Full-KL全流程源码走读.md#reading-order)。未来 full baseline 需要补充的是无梯度条件 KL 数值接口、sampled score 与 baseline 的联合输出，以及 `_sampled_token_loss`/legacy PG 两个入口共享的 baseline 构造；不把 hidden/head 塞入现有 `kl_penalty_forward(log_prob, ref_log_prob)` 的 sampled 标量接口。
 
-实际代码组织为 `distillation/full_vocab.py`（算子）、`distillation/hidden.py`（位置与冻结 head）、`distillation/hidden_io.py`（读写）和 `models/transformers/full_vocab.py`（模型适配）；复用已有 engine/loss/worker。没有新增 trainer 或另一套 optimizer 循环。
-
-现有 `use_liger=True` 模型补丁并不等于启用 full-KL loss；FSDP 引擎还显式关闭该补丁的 fused linear CE。`use_fused_kernels=True` 也不能替代 teacher hidden 通路及 full-KL 目标接入。
+目标选择与数值后端应分开配置。Baseline 的 kind、current/anchor 刷新来源需要独立校验，不能从已有 `use_liger` 或 fused PPO 模型补丁推断 baseline 已经启用。
 
 ## 3. 配置与两条训练路径
 
 ### 3.1 拟新增配置
 
-直接 full reverse-KL 已复用 `loss_mode=full_reverse_kl` 和 `use_policy_gradient=False`，没有新增重叠的 `objective` 开关。已实现参数、默认值及合法组合统一见[实现文档第 3 节](2026-10-22-Full-KL实现与验收.md#3-启动与配置)，backend 列表见[第 4 节](2026-10-22-Full-KL实现与验收.md#4-算子选择与实际优化)。本计划保留 baseline 的拟议接口，已实现配置不在两处维护。
-
-Baseline 仍是后续计划，应明确 kind 与 current/anchor 刷新来源，并与 current/frozen advantage 的语义分别校验；当前没有可运行的 baseline 开关。
+已实现 Full-KL 参数只在[配置入口](2026-10-23-Full-KL全流程源码走读.md#configuration)维护。Baseline 仍是后续计划，应明确 kind 与 current/anchor 刷新来源，并与 current/frozen advantage 的语义分别校验；当前没有可运行的 baseline 开关。
 
 ### 3.2 Full baseline：current 路径
 
@@ -72,97 +58,47 @@ Baseline 的无偏控制变量解释要求完整支持、正确行为 IS 和停�
 
 ### 3.4 Full reverse KL：直接梯度路径
 
-```mermaid
-flowchart TD
-    R["Rollout：固定训练前缀"] --> T["Teacher backbone"]
-    T --> Q["响应预测行 hidden 与冻结 head"]
-    R --> S["Student backbone：可微 hidden"]
-    Q --> F["分块 head projection 与 reverse KL"]
-    S --> F
-    F --> K["按全局有效 token 数聚合 loss"]
-    K --> G["Head-loss backward：student hidden 和 head 梯度"]
-    G --> B["Student backbone backward 与更新"]
-```
-
-该目标不需要 sampled old-log-prob 或行为 ratio；若为诊断保留对应 forward，必须计入额外成本。Rollout 前缀仍来自行为分布，全词表积分只消除了固定前缀下的动作抽样。
-
-Student hidden 和 LM head 都必须有梯度，teacher hidden/head 固定。第一版只承诺一阶梯度；自定义 VJP 不默认支持 Hessian 或高阶自动微分。
+该路径已实现。完整 Mermaid、teacher/actor 阶段、old-log-prob 跳过条件与真实梯度路径统一见[完整调度](2026-10-23-Full-KL全流程源码走读.md#pipeline)和[算子实现](2026-10-23-Full-KL全流程源码走读.md#operators)。与上面的 baseline 方案区别在于 direct-full 对当前条件 KL 直接求导，baseline 仅提供 detached 条件标量。
 
 ## 4. Teacher 数据与模型适配
 
-### 4.1 Payload 与预测位置
+现有预测位置、TQ keys、冻结 head 与模型限制统一见[数据合同](2026-10-23-Full-KL全流程源码走读.md#hidden-io)及[初始化](2026-10-23-Full-KL全流程源码走读.md#initialization)。三份实际 teacher 的 hidden/head 重建证据已进入[初次验收](2026-10-22-Full-KL实现与验收.md#5-验收证据)，不再保留“尚需 P1 验证”的旧状态。
 
-每条样本保存经过 final norm、进入 LM head 前的 teacher hidden，及其对应的预测位置。已有 sample key 与 teacher 路由元数据继续复用；增加响应预测位置或可恢复的 offsets，标明 teacher 版本及 dtype。跨 rank 平衡、packing、micro-batch 重排后仍须按 sample key 和位置恢复对应关系。
+Baseline 扩展还需要 sampled teacher score，可与重建统计共算，或在首版额外提供该小 payload。Current baseline 必须随 student 更新重新计算；anchor baseline 可以只保留条件 scalar 并提前释放大 hidden，但必须标明其快照来源。多 teacher 的版本标记、head 缓存和路由属于后续接口设计，当前单 teacher payload 不包含这些扩展元数据。
 
-对自回归输入 $x_0,\ldots,x_{L-1}$，第 $i$ 行 hidden 预测 $x_{i+1}$。筛选的是预测目标的 loss mask；首个 response token 使用最后一个 prompt 位置的 hidden。保留完整上下文输入，处理 EOS、工具结果、截断和最终无目标行。多轮 IF 按实际 assistant 监督 mask 选择，不按一个连续 response 区间猜测。
-
-Teacher worker 直接写出 hidden，避免 trainer driver 拉取大张量再写回；sampled baseline 还需要 teacher sampled score，可与重建统计共算，或在首版额外提供该小 payload。纯 full loss 不应为了无用 sampled score 在 teacher 侧执行完整 head。
-
-### 4.2 Teacher head 生命周期
-
-当前单 teacher 时，actor 更新阶段每 rank 保留一份约 0.435 GiB 的 BF16 teacher head；可跨同批多个 epoch 复用 hidden。Teacher backbone 评分后继续 offload。Teacher head 单独管理，不加入 student optimizer，不进入 student 权重同步或模型导出。未来多 teacher 的 head 缓存策略独立扩展。
-
-重计算 backward 仍需 teacher hidden/head，释放时间必须晚于相关 backward 完成。预计算梯度 backend 的生命周期不同，应由 backend 能力说明，而不是所有模式统一提前释放。
-
-### 4.3 本机三个 teacher 的适配证据
-
-2026-10-22 读取本机 `../models/` 中实际配置：student、JustRL-DeepSeek-1.5B、DeepCoder-1.5B-Preview、UltraData-IF-1.5B 均为 `qwen2`，hidden size=1536、vocab size=151936、`tie_word_embeddings=False`。三个 teacher 的 `tokenizer.json` 中 token-to-ID 映射与 added tokens 均与 student 相同。开发机启动默认路径仍是 `../model/`；不据此假定另一台机器已具备同一资产。
-
-这些证据支持共用 Qwen2 adapter，但不是权重前向一致性测试。P1 仍需分别比较原模型 logits 与 final-hidden/head 重建值，以及各领域 causal mask。不同模板的文本编码、训练样本和多轮 IF 对话语义不由词表相等保证。
-
-首版只支持已验收的 Qwen2 线性输出头。取得 final hidden 时不请求保存全部层的 `output_hidden_states`；对 HF backbone 调用、LM head 和 FSDP hook 使用显式 adapter，禁止通过绕过 sharded module 的参数访问破坏 all-gather/reshard。扩展模型需检查 bias、temperature、softcap、logit scaling、tied embeddings、LoRA 和词表 TP。
+多轮 IF 的模板、监督 mask 和正式验证协议需要独立接入；已有单轮 Qwen2 重建检查不替代多轮验收。
 
 ## 5. 算子与显存优化计划
 
-### 5.1 两种接口，三个候选 backend
+### 5.1 数值接口与训练接口
 
-数值接口返回每位置 detached KL，必要时附 sampled teacher score；训练接口返回可微每位置 KL，或附明确 reduction 语义的标量。两种接口使用同一 mask、温度、输出变换和精度约定。
+Direct-full 的现有 backend 与 Liger 接入统一见[算子列表](2026-10-23-Full-KL全流程源码走读.md#operators)。本计划只保留 baseline 的数值接口：返回每位置 detached KL，必要时附 sampled teacher score；它不能直接复用一个只返回可微标量 full loss 的接口。
 
-| Backend | 内存策略 | 优先用途 | 待验收事项 |
-| --- | --- | --- | --- |
-| PyTorch token 分块 | 每次持有 $[C_{\rm tok},V]$，数值路径 no-grad；训练路径 custom backward 重计算 | 可读的第一版与正确性参照 | chunk 边界真正释放；student head 全参数梯度 |
-| 在线词表分块 | 双维 tile，在线归一化与加权统计；反向再次投影 | 显存受限、长 micro-batch | 小 GEMM、Python/kernel 启动开销、FP32 累积 |
-| Liger fused linear JSD/rKL | 分块并在 forward 提前计算 student 梯度 | full loss 的性能候选 | KL 方向、归约、dtype、head 可训练、FSDP 生命周期 |
-
-Liger 在已核对接口中 `jsd_beta=1` 表示 reverse KL；默认 `0.5` 是另一目标。不同入口有 hard/soft loss 混合参数，必须关闭额外 hard CE 并避免默认混合系数改变学习率尺度。Liger 实现与版本固定后再接入。[^liger-interface][^liger-implementation]
-
-本机小实验支持将无梯度在线归约作为 full baseline 的优先候选，将 token 重计算作为 full loss 的初始 backend。当前 Liger 入口未获得速度优势，FP32 head 梯度累积还会增加开销；先保留为可选对照，再通过 chunk/入口适配和实际训练 profile 决定默认值，数值与测量见实验文档。
-
-参考文档的 Chunked cuBLAS 保留当前 token 块的完整 logits，然后在 backward 重算。我们的 token 原型没有复现其二维融合 kernel；在线原型也不是 Nitrobrew 的性能复现。实现名称和测量结果须保持区分。
+Liger 的具体方向与归约需按固定版本核对；历史接口来源见文末引用。[^liger-interface][^liger-implementation] 初始小实验未获得 Liger 的速度优势，证据保留在[算子小实验](2026-10-22-Full-KL算子小实验.md)，不由库名推断当前管线收益。
 
 ### 5.2 精度与进一步可省的工作
 
-当前容量按 BF16 hidden/head 计算。归一化、KL 统计和 head 梯度累积优先 FP32；GEMM 输出 BF16 后再转 FP32，与直接输出 FP32 不等价，尤其在 student 接近 teacher 时。所有 backend 应比较相同数值合同，实际模型重建还需对齐已有 teacher scoring 的精度。
+当前 Full-KL 的 FP32 projection、归约与梯度累积见[算子实现](2026-10-23-Full-KL全流程源码走读.md#operators)。Baseline 后续可以将 sampled score 与条件 KL 统计合并，以共享 projection；不能为 baseline 再执行一次完整 student backbone。
 
-令已处理温度和输出变换的 logits 差为 $d_a=z^p_a-z^T_a$，$\mu=\sum_a p_a d_a$。由 $\log p_a-\log T_a=d_a-\log Z_p+\log Z_T$ 得
+对经过相同温度与输出变换的 logits，current baseline 的中心化系数可用 logit gap 的条件均值减去 sampled logit gap 表示；流式公式由[共用预算第 5 节](2026-10-22-词表蒸馏的计算与显存预算.md#5-精确-kl-的流式算法)维护。若只需要中心化系数，可研究省去 teacher normalizer；真实 KL 指标仍需要该 normalizer。Softcap 等非线性变换不能套用未变换 logits 的梯度。
 
-$$
-K=\mu-\log Z_p+\log Z_T,
-\qquad
-\frac{\partial K}{\partial z^p_a}=p_a(d_a-\mu).
-$$
-
-因此 reverse-KL 梯度不需要 teacher normalizer；current full baseline 的中心化系数也可写为 $\mu-d_a$。真实 KL 指标仍需要 $\log Z_T$。若存在 softcap 等非线性输出变换，还要将该 logit 梯度通过变换回传到线性投影，不能直接套用原始 head 梯度公式。完整在线归约与 running maximum 推导只在共用预算文档维护。
-
-先用数值接口和梯度接口分别完成正确性，再优化共享 projection、normalizer 复用与 buffer 生命周期。不改变 full 目标的情况下，SVD/低秩 teacher head、top-k 截断不属于这一阶段；它们是独立近似实验。
+SVD/低秩 teacher head、量化和 top-k 截断是改变数值目标的独立近似实验，不作为 exact baseline/full loss 的透明优化。
 
 ### 5.3 与 FSDP、mask 和 loss reduction 的衔接
 
-保持全局 response-token mean。某个 Liger 入口若只返回本 rank/micro-batch 的 mean，需恢复局部有效 token sum，并结合全局 token 数和 FSDP 梯度归约语义缩放；不能把各 micro-batch mean 等权相加。不要同时套两次 `agg_loss` 缩放。
+Direct-full 的全局 token-mean、空局部 mask 和 head hooks 已在[当前实现](2026-10-23-Full-KL全流程源码走读.md#normalization)中统一处理。Baseline 新接口必须沿用相同有效位置，并由 sampled PG 的既有归约负责缩放，避免把数值接口的 mean 再当 sum 使用。
 
-纯 full loss 不应为采样 log-prob、entropy 或未使用的 top-k 诊断再生成完整 logits。诊断可以复用分块统计，但每项新增 GEMM 或大 buffer 都要单独计时。第一版只计算必要 KL、有效 token 数和基本梯度指标。
-
-Checkpointing 必须覆盖 projection 与 KL，而不只是已有 backbone。普通 Python 循环累加可微块 loss 会保留所有块的计算图，不能用它证明训练显存降为 $O(C_{\rm tok}V)$。自定义 backward 或梯度预计算需要用实测峰值随 token 数的变化验收。
+若 baseline 初版保留 student 完整 logits，应明确该内存成本并限制实验预算；后续 head 前接入需用独立 dense oracle 验证可微 sampled score 和 detached baseline 两条路径，不能只比较 loss 标量。
 
 ### 5.4 I/O 与调度优化
 
-单 teacher、SP=1 时先保留同步 TQ 路径测基线；大 payload 避免经过 driver。同步正确后，teacher 侧按 micro-batch 异步写出，actor 侧只预取下一 micro-batch，采用有界队列和明确的完成事件。异步任务完成前不复用 host/device buffer；head/hidden offload 等待所有依赖者结束。
+单 teacher 的有界 async write/prefetch 已实现，真实重叠范围和同步边界见[IO 走读](2026-10-23-Full-KL全流程源码走读.md#hidden-io)。Baseline 可复用这条通路，但 head/hidden 的释放时间要按 current/anchor 生命周期决定。
 
-共享 GPU 的 teacher 与 actor 仍分阶段运行。可重叠的是 teacher 写入与后续 teacher 计算、actor 读取与当前 actor 计算；不预设双方 backbone 同时驻留。采样生成期和 actor 更新期显存分别测量。
-
-参考文档中 async write 的单独增量是 teacher 55.17→51.06 秒，下降 7.45%；prefetch 与 SP 合并后 actor 123.24→110.21 秒，下降 10.57%。后者不能归因为 prefetch 单项。SP=1 和单 teacher 下暂不实现 SP leader 读取与 teacher-aware packing。
+参考文档中 async write 的单独增量是 teacher 55.17→51.06 秒，下降 7.45%；prefetch 与 SP 合并后 actor 123.24→110.21 秒，下降 10.57%。后者不能归因为 prefetch 单项。这些是[参考原文](reference/fullvocab-opd.md)报告的数字，不是本机复现。SP leader 读取、teacher-aware packing 和异步 GPU copy stream 仍未接入。
 
 ## 6. 分阶段实施与提交边界
+
+下表保留原始设计阶段，不代表当前执行顺序：P1、P3 和 direct-full 的部分 P4 已完成，P2 baseline 未实现；实际验收状态以链接的证据为准。
 
 | 阶段 | 交付内容 | 验收后才进入下一阶段 |
 | --- | --- | --- |
