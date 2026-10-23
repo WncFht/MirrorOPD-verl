@@ -287,7 +287,10 @@ def main():
     axes[0].set(ylabel="GiB (process allocator)", ylim=(0, None))
     plot_metric(axes[1], series, "perf/actor/mfu", "Actor MFU estimate", colors[0], 100)
     axes[1].set(ylabel="Model FLOP utilization (%)", ylim=(0, 100))
-    system = read_rows(args.data / "system-sampled.jsonl.gz")
+    system_path = args.data / "system.jsonl.gz"
+    if not system_path.is_file():
+        system_path = args.data / "system-sampled.jsonl.gz"
+    system = read_rows(system_path)
     start = min(r["_timestamp"] for r in system)
     for ax, suffix, scale, label, ylabel in [
         (axes[2], "memoryAllocatedBytes", 1 / 2**30, "Device memory (8 GPUs)", "GiB (device-wide)"),

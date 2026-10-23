@@ -36,7 +36,10 @@ def main():
     assert windows and all(w["phase"] != "validation" for w in windows)
     start = min(w["start"] for w in windows)
     end = max(w["end"] for w in windows) + 4
-    with gzip.open(args.data / "system-sampled.jsonl.gz", "rt") as f:
+    system_path = args.data / "system.jsonl.gz"
+    if not system_path.is_file():
+        system_path = args.data / "system-sampled.jsonl.gz"
+    with gzip.open(system_path, "rt") as f:
         samples = [json.loads(x) for x in f]
     samples = [r for r in samples if start <= r["_timestamp"] <= end and r.get("system.gpu.0.gpu") is not None]
     rows = [

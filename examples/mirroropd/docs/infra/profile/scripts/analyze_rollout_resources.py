@@ -22,7 +22,10 @@ def main():
     parser.add_argument("--data", type=Path, required=True)
     r = parser.parse_args().data
     h = [json.loads(x) for x in (r / "history.jsonl").read_text().splitlines()]
-    with gzip.open(r / "system-sampled.jsonl.gz", "rt") as f:
+    system_path = r / "system.jsonl.gz"
+    if not system_path.is_file():
+        system_path = r / "system-sampled.jsonl.gz"
+    with gzip.open(system_path, "rt") as f:
         sys = [json.loads(x) for x in f]
     g = [x for x in sys if isinstance(x.get("system.gpu.0.gpu"), (int, float))]
     by = collections.defaultdict(list)
