@@ -1,6 +1,6 @@
 # One-Shot历史运行只读快照
 
-结果与统计边界见[八卡历史运行对照](../../infra/2026-10-22-训练与验证性能实测.md#47-one-shot历史训练与当前路径)。数据抓取日期为2026-10-21，各run的精确UTC时间在`source.json`；只读API导出，没有登录切换、上传或启动训练。
+结果与统计边界见[八卡历史运行对照](../../archive/2026-10-23-历史八卡与One-Shot运行对照.md#47-one-shot历史训练与当前路径)。数据抓取日期为2026-10-21，各run的精确UTC时间在`source.json`；只读API导出，没有登录切换、上传或启动训练。
 
 `catalog.json`保留21个run的名称/状态；`selection.json`记录选择理由。`mdxt04lm`、`mzwm9q04`、`5aub1k4h`分别为full-data直接优势、full-data折扣优势、one-shot直接优势。重新读取的本仓`rcxtujbi`仍只有12步，无完整验证。
 
