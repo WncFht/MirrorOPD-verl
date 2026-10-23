@@ -11,9 +11,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 try:
-    from meituan import code_archive, sync_observe, transfer
+    from meituan import code_archive, log_sync, sync_observe, transfer
 except ModuleNotFoundError:
     import code_archive
+    import log_sync
     import sync_observe
     import transfer
 
@@ -79,7 +80,7 @@ def logs_status(snap):
             queue["path"] = str(path)
             if path.exists():
                 try:
-                    data = json.loads(path.read_text())
+                    data = log_sync.load(path.parent)
                     queue.update(
                         status="available", jobs=data["jobs"], counts=dict(Counter(j["status"] for j in data["jobs"]))
                     )
@@ -102,7 +103,7 @@ def reports(directory, section, limit=8):
     for path in sorted(directory.glob("*.json"), reverse=True):
         try:
             report = json.loads(path.read_text())
-            if report.get("status") not in ("running", "success", "failed", "interrupted"):
+            if report.get("status") not in ("running", "success", "failed", "interrupted", "partial"):
                 raise ValueError("Missing or unknown operation status")
             if not isinstance(report.get("stages"), list) or any(
                 not isinstance(step, dict) or "name" not in step or "status" not in step for step in report["stages"]
@@ -123,45 +124,55 @@ def reports(directory, section, limit=8):
 
 
 def display(state):
-    print("Local synchronization status (no network queries; peer and upstream versions may be stale)")
+    sync_observe.console_print(
+        "Local synchronization status (no network queries; peer and upstream versions may be stale)"
+    )
     if "code" in state:
         code = state["code"]
-        print(f"\nCode: {code['path']} | target={code['target']}")
+        sync_observe.console_print(f"\nCode: {code['path']} | target={code['target']}")
         for key in ("head", "packed", "confirmed"):
-            print(f"  {key}: {code[key] or 'unknown / no record'}")
+            sync_observe.console_print(f"  {key}: {code[key] or 'unknown / no record'}")
         if code["relative_to_peer"]:
             behind, ahead = code["relative_to_peer"].split()
-            print(f"  Relative to known peer: behind={behind}, ahead={ahead}")
+            sync_observe.console_print(f"  Relative to known peer: behind={behind}, ahead={ahead}")
         working = "unavailable" if code["working_tree"] is None else (code["working_tree"] or "clean")
-        print("  Working tree: " + working)
+        sync_observe.console_print("  Working tree: " + working)
     if "logs" in state:
         logs = state["logs"]
-        print(f"\nW&B source: {logs['source']} ({logs['source_runs']} run directories)")
-        print(f"W&B destination: {logs['destination']} ({logs['destination_runs']} run directories)")
-        print("  Packing state: " + json.dumps(logs["packing_state"], ensure_ascii=False))
-        print("  Cloud: " + logs["cloud_status"])
+        sync_observe.console_print(f"\nW&B source: {logs['source']} ({logs['source_runs']} run directories)")
+        sync_observe.console_print(
+            f"W&B destination: {logs['destination']} ({logs['destination_runs']} run directories)"
+        )
+        sync_observe.console_print("  Packing state: " + json.dumps(logs["packing_state"], ensure_ascii=False))
+        sync_observe.console_print("  Cloud: " + logs["cloud_status"])
         queue = logs["upload_queue"]
-        print(f"  Upload queue: {queue['status']} {queue.get('path', '')}")
-        print("  Tasks: " + json.dumps(queue["counts"]))
+        sync_observe.console_print(f"  Upload queue: {queue['status']} {queue.get('path', '')}")
+        sync_observe.console_print("  Tasks: " + json.dumps(queue["counts"]))
         for job in queue["jobs"]:
             if job["status"] not in ("succeeded", "superseded"):
-                print(f"    {job['run']}: {job['status']}, attempts={job['attempts']}, tree={job['tree'][:12]}")
+                sync_observe.console_print(
+                    f"    {job['run']}: {job['status']}, attempts={job['attempts']}, tree={job['tree'][:12]}"
+                )
                 if job.get("error"):
-                    print(f"      {job['error']}")
+                    sync_observe.console_print(f"      {job['error']}")
         if logs["git"]:
-            print(f"  Log Git HEAD: {logs['git']['head'] or 'unknown'}")
-            print(f"  Log Git state: {logs['git']['branch_status'] or 'unknown'}")
-            print(f"  Log Git changes: {logs['git']['working_tree'] or 'clean'}")
-    print(f"\nRecent operations: {state['operation_dir']}")
+            sync_observe.console_print(f"  Log Git HEAD: {logs['git']['head'] or 'unknown'}")
+            sync_observe.console_print(f"  Log Git state: {logs['git']['branch_status'] or 'unknown'}")
+            sync_observe.console_print(f"  Log Git changes: {logs['git']['working_tree'] or 'clean'}")
+    sync_observe.console_print(f"\nRecent operations: {state['operation_dir']}")
     if not state["operations"]:
-        print("  No recorded operations. Earlier successes/failures cannot be reconstructed from these reports.")
+        sync_observe.console_print(
+            "  No recorded operations. Earlier successes/failures cannot be reconstructed from these reports."
+        )
     for report in state["operations"]:
-        print(f"  {report.get('started_at', '?')} {report.get('action', '?')}: {report['status']}")
+        sync_observe.console_print(f"  {report.get('started_at', '?')} {report.get('action', '?')}: {report['status']}")
         if report["status"] == "running":
-            print(f"    Running or interrupted without final report; last heartbeat {report.get('updated_at', '?')}")
+            sync_observe.console_print(
+                f"    Running or interrupted without final report; last heartbeat {report.get('updated_at', '?')}"
+            )
         details = report.get("details", {})
         if details.get("archive"):
-            print(f"    Archive: {details['archive']}")
+            sync_observe.console_print(f"    Archive: {details['archive']}")
         for step in report.get("stages", []):
             if step["name"] in (
                 "logs.merge",
@@ -171,17 +182,21 @@ def display(state):
                 "logs.git_commit",
                 "logs.git_push",
             ):
-                print(f"    {step['name']}: {step['status']} {step.get('details', {}).get('run', '')}")
+                sync_observe.console_print(
+                    f"    {step['name']}: {step['status']} {step.get('details', {}).get('run', '')}"
+                )
         if report.get("action") == "logs-unpack" and report["status"] != "success":
             seen = {step["name"] for step in report.get("stages", [])}
             if "logs.git_push" not in seen:
-                print("    Git push: not reached in this invocation (or disabled)")
+                sync_observe.console_print("    Git push: not reached in this invocation (or disabled)")
         if report.get("failed_stage"):
-            print(f"    Failed stage: {report['failed_stage']}")
+            sync_observe.console_print(f"    Failed stage: {report['failed_stage']}")
         if report.get("error"):
-            print(f"    Error: {report['error']}")
-        print(f"    Log: {report.get('log', '?')}")
-        print(f"    Report: {report['report']}")
+            sync_observe.console_print(
+                f"    {'Waiting' if report['status'] == 'partial' else 'Error'}: {report['error']}"
+            )
+        sync_observe.console_print(f"    Log: {report.get('log', '?')}")
+        sync_observe.console_print(f"    Report: {report['report']}")
 
 
 def main():

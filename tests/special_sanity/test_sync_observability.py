@@ -21,6 +21,27 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class JournalTest(unittest.TestCase):
+    def test_color_is_console_only_and_no_color_is_honored(self):
+        with tempfile.TemporaryDirectory() as temp:
+            console = io.StringIO()
+            env = {key: value for key, value in os.environ.items() if key != "NO_COLOR"}
+            env["MIRROROPD_COLOR"] = "always"
+            with patch.dict(os.environ, env, clear=True), redirect_stdout(console):
+                with observe.operation(Path(temp), "color-test"):
+                    with observe.stage("sample"):
+                        print("\x1b[31mSDK output\x1b[0m")
+            self.assertIn("\x1b[", console.getvalue())
+            self.assertNotIn("\x1b", next(Path(temp).glob("*.log")).read_text())
+            report = json.loads(next(Path(temp).glob("*.json")).read_text())
+            self.assertEqual(report["status"], "success")
+            self.assertNotIn("\x1b", json.dumps(report))
+            with patch.dict(os.environ, NO_COLOR="1", MIRROROPD_COLOR="always"):
+                self.assertEqual(observe.paint("SUCCESS", console), "SUCCESS")
+
+    def test_auto_color_disables_escape_codes_in_pipes(self):
+        with patch.dict(os.environ, MIRROROPD_COLOR="auto"):
+            self.assertEqual(observe.paint("FAILED", io.StringIO()), "FAILED")
+
     def test_streaming_timeout_stops_a_child_without_newlines(self):
         with tempfile.TemporaryDirectory() as temp, redirect_stdout(io.StringIO()):
             with self.assertRaises(subprocess.TimeoutExpired):

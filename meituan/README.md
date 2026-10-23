@@ -35,7 +35,9 @@ make archive-pack FULL=1
 
 默认输出位于 `transfer_snap/archive_MirrorOPD-verl_peer_*.bundle`；超过 10 MiB 时输出 `.bundle.part.000`、`.001` 等分卷。全部分卷放在同一目录，解包时指定 `.part.000`。`CHUNK_SIZE` 可调整分卷字节数。可通过 `ARCHIVE=自定义名称.bundle` 指定新包名；已有包名不能覆盖。`ARCHIVE_SOURCES` 不再支持，bundle 传输完整的提交范围。
 
-成功打包后，只清理同目录、同 `TARGET` 的旧自动命名 bundle 和分卷。成功接收后删除本次输入包及其分卷，并清理输入包同目录内、文件名时间早于本次 bundle 的旧自动命名源码 `.tar.gz` 及其分卷。按生成文件名判断先后，上传时的修改时间不影响清理；自定义 bundle 名称没有可靠的生成时间，因此只删除本次输入，不清理历史 tar。其他目录、自定义名称、其他 bundle、较新的 tar、日志和结果包均保留。`KEEP_ARCHIVE_AFTER_UNPACK=1` 保留输入包及历史 tar；接收失败也全部保留。终端和诊断记录会列出清理结果。`archive_bootstrap.py` 是安装工具，不属于压缩包，保留供恢复使用。未指定 `ARCHIVE` 时，依次在 `~/Downloads`、当前目录和 `transfer_snap/` 查找最新 bundle；有多个来源时应显式指定文件。
+成功打包后，只清理同目录、同 `TARGET`、生成时间更早的自动命名 bundle 和分卷，保留未来时间戳的包。成功接收后删除本次输入包及其分卷，并在输入目录、接收项目根目录和接收端 `SNAP_DIR` 中清理旧自动命名源码包。支持 `.tar.gz`、`.tgz`、`.zip` 及其数字分卷，兼容有无微秒的文件名时间戳。
+
+旧源码包的文件名时间须早于收到的 bundle；自动命名 bundle 按生成时间判断，上传修改时间不影响清理。自定义 bundle 则要求旧包的文件名时间和修改时间都早于输入包修改时间。Git 跟踪文件、符号链接、自定义名称、同时间或更新的包、其他 bundle、日志和结果包保留。`KEEP_ARCHIVE_AFTER_UNPACK=1` 保留输入包及历史源码包；更新失败也全部保留。终端和诊断记录列出删除结果、保留原因及扫描目录。`archive_bootstrap.py` 是安装工具，保留供恢复使用。未指定 `ARCHIVE` 时，依次在 `~/Downloads`、当前目录和 `transfer_snap/` 查找最新 bundle；有多个来源时应显式指定文件。
 
 ### 两端版本记录
 
@@ -67,6 +69,8 @@ python3 /实际上传目录/archive_bootstrap.py unpack \
 脚本不依赖仓库中的其他 Python 模块。没有 `.git` 的目标目录会初始化为正常 Git 工作区；旧源码里被覆盖的同名文件会备份到项目同级 `.项目名-before-bundle-时间戳/`。本地 `hope/`、虚拟环境、日志、结果及其他未被目标提交占用的路径保留。旧源码中不再被新提交跟踪的额外文件也保留，可检查备份和 `git status` 后人工整理。新安装不自动配置 GitHub remote、作者或邮箱；需要在开发机提交时，按该机器的用户身份设置 Git。
 
 首次迁移必须使用这个新版脚本，不能用旧 tar 解包器或 `tar -xzf` 处理 bundle。迁移成功后使用常规的 `make archive-unpack`，并在发送端执行 `make archive-ack`。若目标本身是已有 Git 工作区，新脚本按正常快进流程处理。
+
+升级解包器本身时，本次 `make archive-unpack` 运行的是启动时加载的旧代码，新清理规则通常要到下次解包才生效。如果需要升级当次就使用新规则，在已更新的发送端执行 `make archive-pack FULL=1`，同时传输新生成的 bootstrap，并按上面的 Python 命令接收。
 
 `hope/` 已加入 `.gitignore` 并取消跟踪，实际运行配置由每台机器维护。旧 Git 工作区收到取消跟踪的提交时，解包工具先将当地 Hope 配置临时保存到 `.git/archive-hope-backup`，再完成 Git 更新并恢复这些文件；不会用发送端的配置替换接收端配置。Hope 下存在已暂存修改时，先提交或取消暂存。若迁移进程被强制终止并遗留备份，脚本会停止后续接收，要求先恢复该备份。使用普通 `git pull` 或手动 checkout 跨越这个删除提交时不会获得脚本的保护，应先自行备份。
 
@@ -104,11 +108,13 @@ tail -f /tmp/mirroropd-sync/具体操作.log
 
 运行时显示阶段开始、成功或失败、分卷路径与大小、W&B run 名及进度、Git 提交和推送结果；长时间操作每 15 秒显示等待提示。未提交源码导致接收停止时，终端显示前 30 行文件状态，完整列表及恢复提示保存在日志。源码仍按原有快进规则处理，不因为增加诊断而自动覆盖或提交本地变化。
 
+交互终端默认使用颜色：成功为绿色，错误为红色，不完整快照和警告为黄色。`COLOR=always` 强制启用，`COLOR=never` 或 `NO_COLOR=1` 关闭；管道输出默认不带颜色。实现只依赖标准库，独立 bootstrap 同样可用。文本日志与 JSON 报告不含颜色控制码；完整命令和详细上下文写入日志，终端保留阶段进度和结果。
+
 日志接收报告记录 `logs.merge`、`logs.git_commit`、`logs.enqueue` 和 `logs.git_push`；上传报告记录 `wandb.batch`，逐 run 结果持久保存在上传队列中。批次中部分 run 成功时，成功任务不会随失败任务一起重传。Git 推送和云端上传可以分别重试，重跑产生新报告，不覆盖旧记录。
 
 接收默认 `WANDB_SYNC=0`，云端阶段显示 skipped/queued，不能解读为已经上传。整体 success 仅表示该次命令启用的阶段全部完成。上传器联合 CLI 结果与 SDK 完成标记记录快照结果；状态命令不实时查询云端，也不充当日志传输回执；`logs_state.json` 仍然只表示已打包，不代表送达。原有“日志包必须在下一次打包前传回”的规则不变。
 
-正常异常记录 failed，Ctrl-C 记录 interrupted。机器掉电、进程被强制终止或磁盘无法继续写入时，报告可能停留在 running；状态页显示最后更新时间，不能仅凭 running 判断进程仍活着。日志不保存完整环境变量，并遮蔽已知密钥环境值、常见 token/password 字段和 URL 密码；诊断文件仍包含本机路径和工具输出，默认文件权限为仅当前用户可读写。
+实际失败记录 failed，Ctrl-C 记录 interrupted。上传没有实际失败、但仍有不完整快照等待新数据时，记录 partial，命令退出码为 2；成功快照保留，不会因整体未完成而重传。`make` 仍会显示非零退出提示，应结合汇总和状态区分等待新数据与上传故障。机器掉电、进程被强制终止或磁盘无法继续写入时，报告可能停留在 running；状态页显示最后更新时间，不能仅凭 running 判断进程仍活着。日志不保存完整环境变量，并遮蔽已知密钥环境值、常见 token/password 字段和 URL 密码；诊断文件仍包含本机路径和工具输出，默认文件权限为仅当前用户可读写。
 
 ## 原生 Python 与离线依赖
 
@@ -181,6 +187,8 @@ make sync-log-unpack LOG_ARCHIVE=/下载目录/log_MirrorOPD-verl_....tar.gz
 
 默认依次完成：合并原始文件、本地 Git 提交、登记持久上传队列、Git push。云端上传已从默认接收路径分离，W&B 故障不会挡住本地提交。Git push 失败时，本地提交和队列保留，执行 `make sync-log-push` 重试推送；也可以先运行云端上传命令。输入日志包始终保留。
 
+`sync-log-enqueue` 也默认在入队后推送 Git；`sync-log-upload` 先尝试推送已有本地提交，再处理云端队列。上传入口的 Git 推送失败不阻止云端上传，但命令最终仍报告 Git 失败。默认推送超时为 120 秒，可用 `GIT_PUSH_TIMEOUT` 调整。诊断记录保存本地 HEAD、upstream、推送输出及恢复提示；远程分叉时不会自动 rebase 或强制推送。
+
 接收目录仍按以下优先级选择：显式 `WANDB_RUNS_DIR`；`WANDB_LOGS_REPO/MirrorOPD-verl/wandb/`；源码仓库同级的 `wandb-logs/MirrorOPD-verl/wandb/`；最后回退到 `~/src/wandb-logs/MirrorOPD-verl/wandb/`。接收端日志仓库需要配置提交身份及 Git upstream。自动提交只包含该项目的日志路径，其他目录的暂存修改保留。
 
 ### 首次安装上传环境
@@ -202,7 +210,7 @@ make sync-log-upload                  # 处理整个接收历史中已入队的�
 make sync-log-status                  # 查看 pending / running / succeeded / failed / incomplete
 make sync-log-upload RUN=krkmq098     # 只处理指定 run
 make sync-log-upload RETRY=1          # 排障后忽略冷却与尝试次数限制，仍只尝试一轮
-make sync-log-enqueue                 # 将迁移前已收到的日志提交并登记入队；不上传、不推送
+make sync-log-enqueue                 # 将迁移前已收到的日志提交、登记入队并推送 Git
 make sync-log-push                    # 单独重试日志仓库推送
 ```
 
@@ -226,9 +234,13 @@ make sync-log-upload WANDB_UPLOAD_JOBS=1 WANDB_UPLOAD_TIMEOUT=300
 
 训练仍在写入时打包，可能截到 `.wandb` 的半条记录。新版引擎可以上传此前完整的数据，但会报告 incomplete record。队列将这种快照标为 incomplete，等待后续更完整的日志包；不会不断重试同一份不可变化的半条记录，也不会裁剪原始日志或伪造结束记录。云端可能已有部分数据，不代表这个快照完整同步成功。静态归档不使用 `--live`，避免等待一个永远不会继续写入的副本。
 
+上传结束显示本次尝试数及选中队列的 succeeded、incomplete、failed、pending 数量，JSON 报告保存同一汇总。后者包含此前已完成的快照，不一定等于本次尝试数。仅剩 incomplete 时再次运行会直接报告 partial，等待接收更新的源日志；如果源文件本身已截断，重新上传同一文件不能补回缺失数据。
+
 ### 兼容参数和本地分析
 
 `WANDB_SYNC=1` 可在接收、提交、入队和推送后立即处理队列，适合仍想一键执行的情况。只复制文件、不提交、不入队时，使用 `WANDB_SYNC=0 WANDB_GIT_SYNC=0`；随后可用 `make sync-log-enqueue` 登记。持久上传依赖已提交快照，因此不支持 `WANDB_SYNC=1 WANDB_GIT_SYNC=0`。
+
+单独运行 `sync-log-enqueue` 或 `sync-log-upload` 时，`WANDB_GIT_SYNC=0` 只关闭自动 push：enqueue 仍需创建本地提交才能登记快照，upload 继续处理已经提交的队列。
 
 原始日志默认保持原来的 entity/project/run ID。测试或迁移时可以通过环境变量 `MIRROROPD_UPLOAD_ENTITY`、`MIRROROPD_UPLOAD_PROJECT` 明确覆盖云端目标；该目标在入队时固定，之后改变环境变量不会悄悄改变已排队任务的目的地。
 
@@ -262,12 +274,14 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `SYSTEM_PYTHON` | `/bin/python3` | 创建开发机原生虚拟环境 |
 | `SNAP_DIR` | `transfer_snap` | 压缩包与增量状态目录 |
 | `OPERATION_DIR` | `SNAP_DIR/operations` | 每次操作的文本日志与 JSON 报告目录；状态命令使用相同参数 |
+| `COLOR` | `auto` | 终端颜色：`auto`、`always`、`never`；`NO_COLOR` 优先关闭 |
 | `CHUNK_SIZE` | `10485760` | 分卷大小，单位为字节 |
 | `MAX_FILE_MB` | `100` | 结果文件大小上限，单位为 MiB |
 | `WANDB_RUNS_DIR` | 留空，按操作选择 | 覆盖实际 run 目录；打包默认 `wandb`，解包默认独立日志仓库 |
 | `WANDB_LOGS_REPO` | 同级 Git 仓库 `../wandb-logs`，不存在则 `~/src/wandb-logs` | 接收端日志仓库，run 合并到其中的 `MirrorOPD-verl/wandb/` |
 | `WANDB_SYNC` | `0` | 接收默认只入队；设为 `1` 在接收完成后立即处理上传队列 |
-| `WANDB_GIT_SYNC` | `1` | 接收后提交、入队并推送日志；设为 `0` 只合并原始文件 |
+| `WANDB_GIT_SYNC` | `1` | 接收后提交、入队并推送日志；接收设为 `0` 只合并文件，独立 enqueue/upload 设为 `0` 只关闭 push |
+| `GIT_PUSH_TIMEOUT` | `120` | 日志仓库 Git 推送时限，秒 |
 | `WANDB_BIN` | 优先 `.venv-wandb-sync/bin/wandb` | 独立上传 CLI 路径 |
 | `WANDB_UPLOAD_JOBS` | `2` | 同时上传的不同 run 数，范围 1–8 |
 | `WANDB_UPLOAD_TIMEOUT` | `900` | 每批上传总时限，秒 |

@@ -5,6 +5,7 @@
 import argparse
 import fcntl
 import json
+import math
 import os
 import re
 import shutil
@@ -13,6 +14,7 @@ import tarfile
 import tempfile
 import time
 import uuid
+from collections import Counter
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -172,8 +174,87 @@ def receive(incoming, destination, source_root, *, push=True):
 
 
 def push_logs(repo):
+    timeout = float(os.environ.get("MIRROROPD_GIT_PUSH_TIMEOUT", "120"))
+    if not math.isfinite(timeout) or timeout <= 0:
+        raise ValueError("GIT_PUSH_TIMEOUT must be a finite positive number")
     with observe.stage("logs.git_push", hint="Local commit and upload queue are retained. Retry make sync-log-push."):
-        observe.run(["git", "-C", str(repo), "push"], stream=True, check=True)
+        head = git(repo, "rev-parse", "HEAD").stdout.strip()
+        upstream = git(repo, "rev-parse", "--abbrev-ref", "@{upstream}", check=False).stdout.strip()
+        observe.update(git_push_head=head, git_push_upstream=upstream or None, git_push_status="running")
+        try:
+            observe.run(
+                ["git", "-C", str(repo), "push"],
+                stream=True,
+                check=True,
+                timeout=timeout,
+            )
+        except (OSError, subprocess.SubprocessError) as error:
+            output = str(getattr(error, "stdout", "") or "")
+            lowered = output.lower()
+            if any(word in lowered for word in ("non-fast-forward", "fetch first", "remote contains work")):
+                hint = "Inspect and reconcile the remote history, then retry; no automatic rebase or force push."
+            elif "upstream" in lowered:
+                hint = "Configure the intended Git upstream in the log repository, then retry make sync-log-push."
+            elif any(word in lowered for word in ("permission denied", "authentication", "could not read username")):
+                hint = "Fix Git credentials/SSH access on this machine, then retry make sync-log-push."
+            else:
+                hint = "Inspect the Git output in this log, then retry make sync-log-push; local commits are retained."
+            observe.update(git_push_status="failed", git_push_hint=hint)
+            observe.note("WARN Git push needs attention", repository=str(repo), hint=hint)
+            raise
+        observe.update(git_push_status="success")
+        observe.console_print(f"SUCCESS log repository pushed: {head[:12]}")
+
+
+def enqueue_logs(repo, destination, *, push=True):
+    with lock(queue_dir(repo), "receive.lock", blocking=False):
+        enqueue(repo, destination, commit_logs(repo, destination))
+    if push:
+        push_logs(repo)
+
+
+def upload_and_push(repo, *, push=True, **settings):
+    """Retry a pending Git publication independently of the cloud queue."""
+    push_error = None
+    if push:
+        try:
+            push_logs(repo)
+        except (OSError, subprocess.SubprocessError) as error:
+            push_error = error
+            observe.note("WARN Git push failed; continuing cloud uploads from committed local snapshots")
+    else:
+        observe.skip("logs.git_push", "WANDB_GIT_SYNC=0")
+    try:
+        result = upload(repo, **settings)
+    except observe.PartialResultError as error:
+        if push_error:
+            raise ValueError(
+                f"{error}; Git push also failed. Retry make sync-log-push after fixing Git access"
+            ) from push_error
+        raise
+    if push_error:
+        raise ValueError("Cloud queue processed, but Git push failed; retry make sync-log-push") from push_error
+    return result
+
+
+def upload_summary(directory, run, attempted):
+    with lock(directory, "queue.lock"):
+        jobs = [job for job in load(directory)["jobs"] if selected(job, run) and job["status"] != "superseded"]
+    counts = Counter(job["status"] for job in jobs)
+    observe.update(upload_summary={"attempted_this_call": attempted, "queue_counts": dict(counts)})
+    message = (
+        f"Upload summary: attempted={attempted}; succeeded={counts['succeeded']}, "
+        f"incomplete={counts['incomplete']}, failed={counts['failed']}, "
+        f"pending={counts['pending'] + counts['running']}"
+    )
+    observe.console_print(message)
+    if counts["failed"]:
+        raise ValueError(f"{message}. Failed jobs remain unresolved; inspect sync-log-status before RETRY=1")
+    if counts["incomplete"] or counts["pending"] or counts["running"]:
+        raise observe.PartialResultError(
+            f"{message}. Some unresolved snapshots await newer source data or another queue pass"
+        )
+    return dict(counts)
 
 
 def materialize(repo, directory, job):
@@ -232,7 +313,7 @@ def selected(job, run):
 
 
 def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
-    if concurrency < 1 or concurrency > 8 or timeout <= 0:
+    if concurrency < 1 or concurrency > 8 or not math.isfinite(timeout) or timeout <= 0:
         raise ValueError("Use WANDB_UPLOAD_JOBS=1..8 and a positive WANDB_UPLOAD_TIMEOUT")
     directory = queue_dir(repo)
     with lock(directory, "worker.lock", blocking=False) as worker_fd:
@@ -257,14 +338,16 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
                 j for j in state["jobs"] if selected(j, run) and j["status"] in ("pending", "failed", "incomplete")
             ]
             if unresolved:
+                if all(job["status"] == "incomplete" for job in unresolved):
+                    return upload_summary(directory, run, 0)
                 raise ValueError(
                     f"{len(unresolved)} unresolved jobs. Incomplete files need a newer snapshot. "
                     "Use RETRY=1 to override cooldown after inspecting status."
                 )
             print("No pending uploads for this selection")
-            return
+            return upload_summary(directory, run, 0)
         command = sdk_command()
-        failed = []
+        attempted = 0
         while ready:
             batch = []
             for job in ready[:]:
@@ -280,7 +363,7 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
                     prepared.append((job, copied, file))
                 except (OSError, ValueError, tarfile.TarError, subprocess.CalledProcessError) as error:
                     finish_job(directory, job, "failed", str(error))
-                    failed.append(job["run"])
+                    attempted += 1
             if not prepared:
                 continue
             with lock(directory, "queue.lock"):
@@ -295,6 +378,7 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
                 save(directory, state)
             if not prepared:
                 continue
+            attempted += len(prepared)
             target = prepared[0][0]["cloud"]
             attempt_dir = directory / "attempts" / uuid.uuid4().hex
             (attempt_dir / "tmp").mkdir(parents=True)
@@ -344,7 +428,13 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
                         on_output=inspect_output,
                     )
                     output = result.stdout or ""
-                    if any(not file.with_name(file.name + ".synced").is_file() for _, _, file in prepared):
+                    inspect_output("\n")
+                    missing = [job for job, _, file in prepared if not file.with_name(file.name + ".synced").is_file()]
+                    if missing and all(job["run"] in incomplete_names for job in missing):
+                        raise observe.PartialResultError(
+                            "Complete prefixes uploaded; these snapshots need newer source data"
+                        )
+                    if missing:
                         raise ValueError("SDK returned 0 without completing every snapshot; no completion marker")
             except KeyboardInterrupt:
                 interrupted = True
@@ -370,15 +460,10 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
                     )
                 )
                 finish_job(directory, job, status, message, cache=str(copied), sdk_directory=str(attempt_dir))
-                print(f"{job['run']}: {status}; snapshot={job['tree'][:12]}; cache={copied}")
-                if not complete:
-                    failed.append(job["run"])
+                observe.console_print(f"{job['run']}: {status}; snapshot={job['tree'][:12]}")
             if interrupted:
                 raise KeyboardInterrupt()
-        if failed:
-            raise ValueError(
-                f"{len(failed)} upload(s) incomplete: {', '.join(failed)}. Cache retained; use sync-log-status"
-            )
+        return upload_summary(directory, run, attempted)
 
 
 def finish_job(directory, job, status, error, **extra):
@@ -427,13 +512,13 @@ def main():
         with observe.operation(diagnostics, f"logs-{args.action}", destination=str(destination)):
             repo = repository(destination)
             if args.action == "enqueue":
-                with lock(queue_dir(repo), "receive.lock", blocking=False):
-                    enqueue(repo, destination, commit_logs(repo, destination))
+                enqueue_logs(repo, destination, push=os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1")
             elif args.action == "push":
                 push_logs(repo)
             else:
-                upload(
+                upload_and_push(
                     repo,
+                    push=os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1",
                     run=os.environ.get("MIRROROPD_UPLOAD_RUN", ""),
                     concurrency=int(os.environ.get("MIRROROPD_UPLOAD_JOBS", "2")),
                     timeout=float(os.environ.get("MIRROROPD_UPLOAD_TIMEOUT", "900")),
@@ -441,6 +526,8 @@ def main():
                 )
     except KeyboardInterrupt:
         parser.exit(130, "upload interrupted; queue and cached copies retained\n")
+    except observe.PartialResultError as error:
+        parser.exit(2, observe.redact(f"log-sync: {error}\n"))
     except (OSError, ValueError, subprocess.SubprocessError) as error:
         parser.exit(1, observe.redact(f"log-sync: {error}\n"))
 
