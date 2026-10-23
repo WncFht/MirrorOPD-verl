@@ -72,6 +72,57 @@ def wandb_runs_dir(action):
     return Path.home() / "src/wandb-logs/MirrorOPD-verl/wandb"
 
 
+def wandb_git_repo(destination):
+    """Find the receiving Git checkout without accidentally committing training sources."""
+    result = subprocess.run(
+        ["git", "-C", str(destination), "rev-parse", "--show-toplevel"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    repo = Path(result.stdout.strip()).resolve()
+    if repo == ROOT.resolve():
+        raise ValueError("Receive logs in the separate wandb-logs repository, or set WANDB_GIT_SYNC=0")
+    return repo
+
+
+def sync_wandb_runs(runs):
+    """Upload disposable copies because W&B may rewrite config, summary and sync state."""
+    for run in runs:
+        with tempfile.TemporaryDirectory(prefix="mirroropd-wandb-sync-") as temp:
+            copied = Path(temp) / run.name
+            shutil.copytree(run, copied)
+            # A new package can extend an already-synced run; replay this snapshot.
+            for pattern in ("*.wandb.synced", "*.wandb.syncstate"):
+                for marker in copied.glob(pattern):
+                    marker.unlink()
+            subprocess.run(
+                ["wandb", "sync", str(copied)],
+                cwd=temp,
+                env={**os.environ, "WANDB_DIR": temp},
+                check=True,
+            )
+
+
+def publish_wandb_logs(repo, runs):
+    """Commit only the received runs, then push even when retrying an existing commit."""
+    if not runs:
+        return
+    paths = [str(run.resolve().relative_to(repo)) for run in runs]
+    git = ["git", "--literal-pathspecs", "-C", str(repo)]
+    subprocess.run([*git, "add", "--", *paths], check=True)
+    diff = subprocess.run([*git, "diff", "--cached", "--quiet", "--", *paths])
+    if diff.returncode == 1:
+        subprocess.run(
+            [*git, "commit", "--only", "-m", f"chore(logs): import {len(runs)} W&B run(s)", "--", *paths],
+            check=True,
+        )
+    else:
+        diff.check_returncode()
+        print("No new log changes to commit; retrying Git push")
+    subprocess.run([*git, "push"], check=True)
+
+
 def excluded(path):
     """Keep environments, training artifacts and prior transfer archives out of code snapshots."""
     return (
@@ -311,10 +362,15 @@ def unpack(args, snap_dir):
             if not incoming.is_dir():
                 raise ValueError(f"Archive contains no {logical}/ directory")
             shutil.copytree(incoming, destination, dirs_exist_ok=True)
-            if args.kind == "logs" and os.environ.get("MIRROROPD_WANDB_SYNC", "0") == "1":
-                for run in sorted(incoming.glob("offline-run-*")):
-                    if run.is_dir():
-                        subprocess.run(["wandb", "sync", str(destination / run.name)], check=True)
+            if args.kind == "logs":
+                runs = [destination / run.name for run in sorted(incoming.glob("offline-run-*")) if run.is_dir()]
+                git_repo = (
+                    wandb_git_repo(destination) if os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1" else None
+                )
+                if os.environ.get("MIRROROPD_WANDB_SYNC", "1") == "1":
+                    sync_wandb_runs(runs)
+                if git_repo is not None:
+                    publish_wandb_logs(git_repo, runs)
     print(f"Unpacked into {destination}")
     if args.kind == "code":
         clean_archives(args.kind, archive_base, set(consumed), older_than=source_mtime)
