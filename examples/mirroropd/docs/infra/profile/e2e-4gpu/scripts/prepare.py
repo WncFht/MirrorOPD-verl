@@ -53,6 +53,8 @@ for name, steps, tool in [("baseline", 14, None), ("torch-profile", 5, "torch"),
         FULL_KL_BACKEND="precompute",
         FULL_KL_TOKEN_CHUNK="512",
         VERL_E2E_TIMELINE_DIR=str(root / name / "events"),
+        # Ray's Nsight plugin launches bare `python`, overriding py_executable.
+        PATH=str(Path(python).parent) + os.pathsep + os.environ.get("PATH", ""),
     )
     cmd += [
         "trainer.logger=[console,file]",
