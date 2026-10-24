@@ -1,0 +1,51 @@
+{
+  "model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-4B",
+  "max_num_seqs": 12,
+  "gpu_memory_utilization": 0.65,
+  "token_budget": 8192,
+  "max_model_len": 35840,
+  "response_cap": 31744,
+  "prefix_caching": true,
+  "initialization_seconds": 59.71457788348198,
+  "subset_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/cde-validation-resources-20261024/subsets",
+  "samples_per_prompt": 8,
+  "scope": "One isolated TP1 replica per GPU; excludes Ray/FSDP startup and grading. Not four-GPU throughput.",
+  "cache_config": {
+    "block_size": 16,
+    "num_gpu_blocks": 19492,
+    "cache_dtype": "auto"
+  },
+  "natural": {
+    "seconds": 23.15039113163948,
+    "requests": 48,
+    "output_tokens": 38480,
+    "input_tokens": 4136,
+    "output_tps": 1662.1749404229136,
+    "length_count": 0,
+    "stop_count": 48,
+    "peak_gpu_MiB": 53291.25,
+    "peak_kv_fraction": 0.04012108152480631,
+    "max_running": 12.0,
+    "preemptions": {
+      "vllm:num_preemptions": 0
+    },
+    "observation_errors": []
+  },
+  "stress": {
+    "seconds": 132.83704901486635,
+    "requests": 48,
+    "output_tokens": 49152,
+    "input_tokens": 1376256,
+    "output_tps": 370.0172532024495,
+    "length_count": 48,
+    "stop_count": 0,
+    "peak_gpu_MiB": 54357.25,
+    "peak_kv_fraction": 0.9514134728849213,
+    "max_running": 10.0,
+    "preemptions": {
+      "vllm:num_preemptions": 0
+    },
+    "observation_errors": []
+  },
+  "complete": true
+}

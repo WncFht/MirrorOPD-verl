@@ -21,9 +21,7 @@
 
 ### 1.1 模型与权重准备
 
-本机已有 A/B 所需的两份 1.5B 权重。2026-10-24 已下载 R1-Distill-7B、Qwen3-1.7B-Base 至同级 `model/`，D teacher 复用上级 `zkn_data/models/Qwen3-8B`。不需要为首轮准备 30B／235B 教师。
-
-本机原有 1.5B 资产位于 `models/`，新下载资产位于 `model/`；短测通过显式路径选择，具体命令见适配记录。开发机约定统一使用同级 `model/`。模型名称和 checkpoint 角色必须明确，不能用同名的本地实验输出替代公开初始权重。本机与开发机的资产状态分别核对。
+2026-10-24 本机 A–F 所需的 8 个 checkpoint 已全部实体放入仓库同级 `model/`：两个原有 1.5B 模型、R1-Distill-7B、Qwen3-1.7B-Base、Qwen3-1.7B、Qwen3-4B、Qwen3-8B、Qwen3-4B-Instruct-2507。原分散目录保留作来源，运行入口统一使用 `MODEL_ROOT`。无需额外准备 30B／235B 教师。开发机资产状态需独立核对；导入／下载及分片检查见[资产准备](../资产准备.md)。
 
 ### 1.2 统一训练设置：采用我们的协议
 
@@ -62,7 +60,7 @@
 
 **训练 response cap：A/C/D/E 为 7168，B 为 15360，F 为 4096；验证 response cap 统一 31744。** F 保留 Semi-OPD 主曲线的 4K 条件，不能把它换成表 1 的 16K OPD 后仍称为匹配长度对照。不随训练 cap 缩短验证回答预算，否则可能隐藏长序列退化。
 
-A/B/C 沿用 DeepSeek 模型的上下文配置。D/E 的 Qwen3-1.7B-Base 声明总上下文 32768，因此适配 D/E 时须把 prompt 预算控制在 1024 以内，并显式处理总窗口 32768 及启动脚本额外加 1 的逻辑。不能原样沿用 4096 prompt＋31744 response。若 D/E 因长度过滤改变可用记录数，单独记录；各组内部 sampled/full 使用同一过滤结果。F 的 Qwen3-1.7B 配置窗口为 40960，4096 prompt＋31744 response 可以容纳；仍需核对实际生成引擎窗口。[^qwen-configs]
+A/B/C 沿用 DeepSeek 模型的上下文配置。D/E 的 Qwen3-1.7B-Base 声明总上下文 32768，因此适配 D/E 时须把 prompt 预算控制在 1024 以内，启动脚本已修正为 student 窗口等于 prompt＋最大 response，不再额外加 1，因此 1024＋31744 恰好为 32768。不能原样沿用 4096 prompt＋31744 response。若 D/E 因长度过滤改变可用记录数，单独记录；各组内部 sampled/full 使用同一过滤结果。F 的 Qwen3-1.7B 配置窗口为 40960，4096 prompt＋31744 response 可以容纳；仍需核对实际生成引擎窗口。[^qwen-configs]
 
 这项上下文适配不要求现在降低所有模型的验证 response cap。DeepSeek 与 Qwen 模型还应分别使用正确的 chat 协议；D/E 不得以 post-trained `Qwen3-1.7B` 替代 Base 初始化。F 使用 post-trained student，训练与验证均固定 Non-thinking。E 的 teacher 独立评测也固定 Non-thinking；teacher 评分时接收 student 的同一词元前缀，不另行生成一段 thinking 内容。
 

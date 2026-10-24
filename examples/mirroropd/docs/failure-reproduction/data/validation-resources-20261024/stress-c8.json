@@ -1,0 +1,1322 @@
+{
+  "model": "../model/Qwen3-1.7B-Base",
+  "max_num_seqs": 8,
+  "requests": 48,
+  "prompt_tokens": 28672,
+  "response_tokens": 1024,
+  "gpu_memory_utilization": 0.65,
+  "token_budget": 8192,
+  "prefix_caching": false,
+  "elapsed_seconds": 81.74970775842667,
+  "output_tokens_per_second": 601.2498557823097,
+  "preemption_metrics": {
+    "vllm:num_preemptions": 0
+  },
+  "snapshots": [
+    {
+      "time": 1792847398.1545107,
+      "vllm:num_requests_running": 0.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.0,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847398.656307,
+      "vllm:num_requests_running": 2.0,
+      "vllm:num_requests_waiting": 46.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.1109586567972558,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847399.1579063,
+      "vllm:num_requests_running": 4.0,
+      "vllm:num_requests_waiting": 44.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.203430222061744,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847399.6595697,
+      "vllm:num_requests_running": 5.0,
+      "vllm:num_requests_waiting": 43.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.3143888788589998,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847400.1612535,
+      "vllm:num_requests_running": 7.0,
+      "vllm:num_requests_waiting": 41.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.406824336522838,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847400.6629028,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5178191009207438,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847401.1645777,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5186495757356924,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847401.6662161,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.519480050550641,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847402.1679177,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5203105253655895,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847402.6695824,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.521141000180538,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847403.1727362,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5220075825961366,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847403.674322,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.522801949810435,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847404.1760182,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5236324246253836,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847404.677658,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5244628994403322,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847405.1793242,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5252933742552808,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847405.6809943,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5261599566708792,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847406.1826513,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5269904314858278,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847406.6843128,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5278209063007764,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847407.1859336,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5286513811157248,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847407.6876583,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5294457483300234,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847408.1893303,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.530276223144972,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847408.6910028,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5311066979599206,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847409.1926816,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5319371727748692,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847409.6951652,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5327676475898177,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847410.1968868,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5335981224047662,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847410.6984801,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5344285972197147,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847411.2001114,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5352229644340134,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847411.7018178,
+      "vllm:num_requests_running": 7.0,
+      "vllm:num_requests_waiting": 40.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.46900162484202923,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847412.2035284,
+      "vllm:num_requests_running": 7.0,
+      "vllm:num_requests_waiting": 38.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.45520852139375334,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847412.7051787,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 36.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.4806282722513089,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847413.2068312,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 35.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5060480231088644,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847413.7086086,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 33.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.4644520671601372,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847414.2103283,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5083950171511102,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847414.712012,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5185773605343924,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847415.2136836,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.519407835349341,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847415.715386,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5202383101642896,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847416.217088,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5210687849792381,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847416.7188542,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5219353673948366,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847417.220551,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5227658422097852,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847417.7228427,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5235602094240838,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847418.2245522,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5244267918396823,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847418.726217,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5252572666546308,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847419.2278867,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5260877414695794,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847419.7295825,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5269182162845278,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847420.2313046,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5277486910994764,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847420.7329865,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.528579165914425,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847421.2346752,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5294096407293736,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847421.7363973,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5302040079436721,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847422.2382069,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5310705903592706,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847422.7398975,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5319010651742192,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847423.2415805,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5326954323885178,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847423.7433043,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5335259072034664,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847424.2449958,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.534356382018415,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847424.7466543,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5351507492327134,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847425.2483435,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 32.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.535981224047662,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847425.7501132,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 30.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5037371366672685,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847426.2518446,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 28.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.471456941686225,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847426.753582,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 27.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.4968766925437804,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847427.2553508,
+      "vllm:num_requests_running": 7.0,
+      "vllm:num_requests_waiting": 26.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.4552807365950533,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847427.757067,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.49918757898537647,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847428.2588744,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5184329301317927,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847428.760555,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5192995125473912,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847429.2621188,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5200938797616899,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847429.763822,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5209604621772883,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847430.2655332,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5217909369922369,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847430.7671924,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5226214118071855,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847431.2688751,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5234518866221339,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847431.7705755,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5243184690377325,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847432.2722638,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5251489438526811,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847432.7738855,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5259433110669796,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847433.2753541,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.526809893482578,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847433.7771528,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5276042606968767,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847434.2788157,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5284347355118253,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847434.780387,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5292652103267738,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847435.2820535,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5300956851417223,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847435.7837183,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5309261599566708,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847436.2854297,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5317205271709695,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847436.7871184,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.532587109586568,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847437.2887902,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5333814768008666,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847437.790518,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5342119516158151,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847438.292222,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5350424264307636,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847438.7938292,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 24.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5358729012457122,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847439.2957952,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 22.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.48525004513450076,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847439.7975214,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 21.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.51998555695974,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847440.299201,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 19.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.48766925437804653,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847440.8008788,
+      "vllm:num_requests_running": 7.0,
+      "vllm:num_requests_waiting": 18.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.4460732984293194,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847441.3025403,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.47149304928687485,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847441.8042789,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5183607149304928,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847442.3059843,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5191911897454414,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847442.8077333,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5200216645603899,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847443.3094118,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5208521393753385,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847443.8116744,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.521682614190287,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847444.3133748,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5225130890052356,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847444.8149958,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5233435638201842,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847445.3166568,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5242101462357827,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847445.8183544,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5250045134500813,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847446.3201027,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5258710958656797,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847446.8217807,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5267015706806283,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847447.3234596,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5275320454955768,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847447.825151,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5283264127098755,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847448.327,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5291929951254739,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847448.8287203,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5299873623397725,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847449.3304152,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5307817295540711,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847449.8321261,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5316483119696696,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847450.3338015,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5324787867846181,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847450.835426,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5333092615995667,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847451.3370082,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5341036288138653,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847451.8387294,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5349341036288139,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847452.340458,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 16.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5357645784437624,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847452.8420126,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 14.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.48525004513450076,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847453.3436935,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 13.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.51998555695974,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847453.845395,
+      "vllm:num_requests_running": 7.0,
+      "vllm:num_requests_waiting": 12.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.45997472467954503,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847454.3470874,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 10.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5039176746705181,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847454.8485885,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.46232171872179095,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847455.350236,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5182162845278931,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847455.8519547,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5190828669434916,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847456.3536317,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5198772341577902,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847456.8553293,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5207438165733886,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847457.3569746,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5216103989889872,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847457.8586621,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5224047662032858,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847458.3603766,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5232713486188842,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847458.8624048,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.524065715833183,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847459.364346,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5249322982487814,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847459.8662517,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.52576277306373,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847460.3682153,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5265932478786784,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847460.8701673,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.527387615092977,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847461.3720913,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5282541975085755,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847461.874007,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5290485647228742,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847462.3758833,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5299151471384727,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847462.8777754,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5307095143527712,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847463.379523,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5315760967683698,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847463.88135,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5323704639826683,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847464.3832457,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.533164831196967,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847464.8852036,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5340314136125655,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847465.387433,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.534825780826864,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847465.88956,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 8.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5356562556418126,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847466.391514,
+      "vllm:num_requests_running": 7.0,
+      "vllm:num_requests_waiting": 7.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.4666907384004333,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847466.893396,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 5.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5014984654269723,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847467.3953004,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 4.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.517710778118794,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847467.897307,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 2.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.49474634410543417,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847468.3992019,
+      "vllm:num_requests_running": 7.0,
+      "vllm:num_requests_waiting": 1.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.45315038815670694,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847468.9011,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5181440693265933,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847469.4030137,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5190106517421917,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847469.9049208,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5198050189564903,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847470.406842,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5206716013720889,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847470.908794,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5215020761870374,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847471.4106724,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.522332551001986,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847471.912602,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5231991334175844,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847472.4145,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.523993500631883,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847472.9164038,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5248600830474814,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847473.4183362,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5256544502617801,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847473.920281,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5265210326773786,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847474.4221601,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5273153998916772,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847474.9240782,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5281819823072758,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847475.425954,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5289763495215742,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847475.9279618,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5298429319371728,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847476.42988,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5306372991514714,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847476.9318008,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.53143166636577,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847477.433701,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5322982487813686,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847477.9356675,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.533092615995667,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847478.43766,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5339591984112655,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847478.9396048,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5347535656255642,
+      "vllm:num_preemptions": 0
+    },
+    {
+      "time": 1792847479.4418185,
+      "vllm:num_requests_running": 8.0,
+      "vllm:num_requests_waiting": 0.0,
+      "vllm:num_requests_waiting_by_reason": 0.0,
+      "vllm:kv_cache_usage_perc": 0.5355479328398628,
+      "vllm:num_preemptions": 0
+    }
+  ],
+  "scope": "Synthetic long-prefix scheduler pressure; not a task-quality benchmark or full validation."
+}

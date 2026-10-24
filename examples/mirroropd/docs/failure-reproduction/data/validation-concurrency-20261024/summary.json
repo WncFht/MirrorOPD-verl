@@ -1,0 +1,718 @@
+[
+  {
+    "run": "DeepSeek-R1-Distill-Qwen-1.5B-c128",
+    "model": "DeepSeek-R1-Distill-Qwen-1.5B",
+    "cap": 128,
+    "complete": true,
+    "natural": {
+      "seconds": 144.59,
+      "tps": 4512.8,
+      "output_tokens": 652523,
+      "requests": 96,
+      "truncated": 2,
+      "KV_percent": 14.56,
+      "preemptions": 0,
+      "peak_GiB": 52.6
+    },
+    "stress": {
+      "seconds": 94.52,
+      "tps": 1733.3,
+      "output_tokens": 163840,
+      "requests": 160,
+      "truncated": 160,
+      "KV_percent": 99.99,
+      "preemptions": 4,
+      "peak_GiB": 53.01
+    }
+  },
+  {
+    "run": "DeepSeek-R1-Distill-Qwen-1.5B-c64",
+    "model": "DeepSeek-R1-Distill-Qwen-1.5B",
+    "cap": 64,
+    "complete": true,
+    "natural": {
+      "seconds": 124.2,
+      "tps": 4059.3,
+      "output_tokens": 504152,
+      "requests": 96,
+      "truncated": 1,
+      "KV_percent": 9.97,
+      "preemptions": 0,
+      "peak_GiB": 52.41
+    },
+    "stress": {
+      "seconds": 95.15,
+      "tps": 1721.9,
+      "output_tokens": 163840,
+      "requests": 160,
+      "truncated": 160,
+      "KV_percent": 100.0,
+      "preemptions": 4,
+      "peak_GiB": 53.01
+    }
+  },
+  {
+    "run": "DeepSeek-R1-Distill-Qwen-7B-c16",
+    "model": "DeepSeek-R1-Distill-Qwen-7B",
+    "cap": 16,
+    "complete": true,
+    "natural": {
+      "seconds": 177.06,
+      "tps": 1214.3,
+      "output_tokens": 215008,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 12.46,
+      "preemptions": 0,
+      "peak_GiB": 51.7
+    },
+    "stress": {
+      "seconds": 114.81,
+      "tps": 570.8,
+      "output_tokens": 65536,
+      "requests": 64,
+      "truncated": 64,
+      "KV_percent": 70.93,
+      "preemptions": 0,
+      "peak_GiB": 53.09
+    }
+  },
+  {
+    "run": "DeepSeek-R1-Distill-Qwen-7B-c24",
+    "model": "DeepSeek-R1-Distill-Qwen-7B",
+    "cap": 24,
+    "complete": true,
+    "natural": {
+      "seconds": 142.63,
+      "tps": 1384.8,
+      "output_tokens": 197511,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 10.47,
+      "preemptions": 0,
+      "peak_GiB": 51.72
+    },
+    "stress": {
+      "seconds": 111.57,
+      "tps": 587.4,
+      "output_tokens": 65536,
+      "requests": 64,
+      "truncated": 64,
+      "KV_percent": 99.99,
+      "preemptions": 2,
+      "peak_GiB": 53.11
+    }
+  },
+  {
+    "run": "DeepSeek-R1-Distill-Qwen-7B-c32",
+    "model": "DeepSeek-R1-Distill-Qwen-7B",
+    "cap": 32,
+    "complete": true,
+    "natural": {
+      "seconds": 125.79,
+      "tps": 1605.7,
+      "output_tokens": 201979,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 11.75,
+      "preemptions": 0,
+      "peak_GiB": 51.74
+    },
+    "stress": {
+      "seconds": 112.35,
+      "tps": 583.3,
+      "output_tokens": 65536,
+      "requests": 64,
+      "truncated": 64,
+      "KV_percent": 99.98,
+      "preemptions": 2,
+      "peak_GiB": 53.13
+    }
+  },
+  {
+    "run": "JustRL-DeepSeek-1.5B-c128",
+    "model": "JustRL-DeepSeek-1.5B",
+    "cap": 128,
+    "complete": true,
+    "natural": {
+      "seconds": 54.71,
+      "tps": 6401.9,
+      "output_tokens": 350243,
+      "requests": 96,
+      "truncated": 0,
+      "KV_percent": 9.19,
+      "preemptions": 0,
+      "peak_GiB": 52.6
+    },
+    "stress": {
+      "seconds": 95.41,
+      "tps": 1717.2,
+      "output_tokens": 163840,
+      "requests": 160,
+      "truncated": 160,
+      "KV_percent": 100.0,
+      "preemptions": 4,
+      "peak_GiB": 53.01
+    }
+  },
+  {
+    "run": "JustRL-DeepSeek-1.5B-c64",
+    "model": "JustRL-DeepSeek-1.5B",
+    "cap": 64,
+    "complete": true,
+    "natural": {
+      "seconds": 50.88,
+      "tps": 7123.0,
+      "output_tokens": 362409,
+      "requests": 96,
+      "truncated": 0,
+      "KV_percent": 8.0,
+      "preemptions": 0,
+      "peak_GiB": 52.41
+    },
+    "stress": {
+      "seconds": 94.51,
+      "tps": 1733.6,
+      "output_tokens": 163840,
+      "requests": 160,
+      "truncated": 160,
+      "KV_percent": 99.99,
+      "preemptions": 4,
+      "peak_GiB": 53.01
+    }
+  },
+  {
+    "run": "Qwen3-1.7B-Base-c12",
+    "model": "Qwen3-1.7B-Base",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 728.49,
+      "tps": 1101.0,
+      "output_tokens": 802055,
+      "requests": 48,
+      "truncated": 25,
+      "KV_percent": 84.78,
+      "preemptions": 0,
+      "peak_GiB": 52.21
+    },
+    "stress": {
+      "seconds": 80.74,
+      "tps": 608.7,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 80.36,
+      "preemptions": 0,
+      "peak_GiB": 52.65
+    }
+  },
+  {
+    "run": "Qwen3-1.7B-Base-c16",
+    "model": "Qwen3-1.7B-Base",
+    "cap": 16,
+    "complete": true,
+    "natural": {
+      "seconds": 570.93,
+      "tps": 1196.9,
+      "output_tokens": 683320,
+      "requests": 48,
+      "truncated": 21,
+      "KV_percent": 100.0,
+      "preemptions": 5,
+      "peak_GiB": 52.61
+    },
+    "stress": {
+      "seconds": 79.57,
+      "tps": 617.8,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 99.96,
+      "preemptions": 3,
+      "peak_GiB": 52.61
+    }
+  },
+  {
+    "run": "Qwen3-1.7B-Base-c8",
+    "model": "Qwen3-1.7B-Base",
+    "cap": 8,
+    "complete": true,
+    "natural": {
+      "seconds": 795.85,
+      "tps": 1008.4,
+      "output_tokens": 802544,
+      "requests": 48,
+      "truncated": 25,
+      "KV_percent": 56.83,
+      "preemptions": 0,
+      "peak_GiB": 52.18
+    },
+    "stress": {
+      "seconds": 81.16,
+      "tps": 605.6,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 53.6,
+      "preemptions": 0,
+      "peak_GiB": 52.62
+    }
+  },
+  {
+    "run": "Qwen3-1.7B-c12",
+    "model": "Qwen3-1.7B",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 20.15,
+      "tps": 2468.9,
+      "output_tokens": 49746,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 4.53,
+      "preemptions": 0,
+      "peak_GiB": 52.21
+    },
+    "stress": {
+      "seconds": 77.14,
+      "tps": 637.2,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 80.37,
+      "preemptions": 0,
+      "peak_GiB": 52.65
+    }
+  },
+  {
+    "run": "Qwen3-1.7B-c24",
+    "model": "Qwen3-1.7B",
+    "cap": 24,
+    "complete": true,
+    "natural": {
+      "seconds": 21.92,
+      "tps": 2436.8,
+      "output_tokens": 53425,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 5.23,
+      "preemptions": 0,
+      "peak_GiB": 52.24
+    },
+    "stress": {
+      "seconds": 78.4,
+      "tps": 627.0,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 100.0,
+      "preemptions": 3,
+      "peak_GiB": 52.68
+    }
+  },
+  {
+    "run": "Qwen3-1.7B-c8",
+    "model": "Qwen3-1.7B",
+    "cap": 8,
+    "complete": true,
+    "natural": {
+      "seconds": 29.65,
+      "tps": 1811.1,
+      "output_tokens": 53701,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 4.03,
+      "preemptions": 0,
+      "peak_GiB": 52.18
+    },
+    "stress": {
+      "seconds": 82.16,
+      "tps": 598.2,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 53.59,
+      "preemptions": 0,
+      "peak_GiB": 52.62
+    }
+  },
+  {
+    "run": "Qwen3-4B-Instruct-2507-c12",
+    "model": "Qwen3-4B-Instruct-2507",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 63.17,
+      "tps": 1231.2,
+      "output_tokens": 77773,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 11.49,
+      "preemptions": 0,
+      "peak_GiB": 51.99
+    },
+    "stress": {
+      "seconds": 132.18,
+      "tps": 371.9,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 95.32,
+      "preemptions": 0,
+      "peak_GiB": 53.03
+    }
+  },
+  {
+    "run": "Qwen3-4B-Instruct-2507-c24",
+    "model": "Qwen3-4B-Instruct-2507",
+    "cap": 24,
+    "complete": true,
+    "natural": {
+      "seconds": 183.25,
+      "tps": 564.5,
+      "output_tokens": 103452,
+      "requests": 48,
+      "truncated": 1,
+      "KV_percent": 14.06,
+      "preemptions": 0,
+      "peak_GiB": 52.02
+    },
+    "stress": {
+      "seconds": 132.92,
+      "tps": 369.8,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 95.36,
+      "preemptions": 0,
+      "peak_GiB": 53.06
+    }
+  },
+  {
+    "run": "Qwen3-4B-Instruct-2507-c8",
+    "model": "Qwen3-4B-Instruct-2507",
+    "cap": 8,
+    "complete": true,
+    "natural": {
+      "seconds": 67.84,
+      "tps": 1136.1,
+      "output_tokens": 77079,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 13.46,
+      "preemptions": 0,
+      "peak_GiB": 51.96
+    },
+    "stress": {
+      "seconds": 128.73,
+      "tps": 381.8,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 76.3,
+      "preemptions": 0,
+      "peak_GiB": 53.0
+    }
+  },
+  {
+    "run": "Qwen3-4B-c12",
+    "model": "Qwen3-4B",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 23.15,
+      "tps": 1662.2,
+      "output_tokens": 38480,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 4.01,
+      "preemptions": 0,
+      "peak_GiB": 52.04
+    },
+    "stress": {
+      "seconds": 132.84,
+      "tps": 370.0,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 95.14,
+      "preemptions": 0,
+      "peak_GiB": 53.08
+    }
+  },
+  {
+    "run": "Qwen3-4B-c24",
+    "model": "Qwen3-4B",
+    "cap": 24,
+    "complete": true,
+    "natural": {
+      "seconds": 29.92,
+      "tps": 1308.9,
+      "output_tokens": 39167,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 3.83,
+      "preemptions": 0,
+      "peak_GiB": 52.08
+    },
+    "stress": {
+      "seconds": 132.45,
+      "tps": 371.1,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 95.15,
+      "preemptions": 0,
+      "peak_GiB": 53.11
+    }
+  },
+  {
+    "run": "Qwen3-4B-c8",
+    "model": "Qwen3-4B",
+    "cap": 8,
+    "complete": true,
+    "natural": {
+      "seconds": 39.17,
+      "tps": 1190.0,
+      "output_tokens": 46610,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 4.71,
+      "preemptions": 0,
+      "peak_GiB": 52.02
+    },
+    "stress": {
+      "seconds": 130.14,
+      "tps": 377.7,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 76.15,
+      "preemptions": 0,
+      "peak_GiB": 53.06
+    }
+  },
+  {
+    "run": "Qwen3-8B-c12",
+    "model": "Qwen3-8B",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 52.27,
+      "tps": 848.2,
+      "output_tokens": 44333,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 4.53,
+      "preemptions": 0,
+      "peak_GiB": 51.52
+    },
+    "stress": {
+      "seconds": 156.47,
+      "tps": 314.1,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 94.18,
+      "preemptions": 0,
+      "peak_GiB": 52.55
+    }
+  },
+  {
+    "run": "Qwen3-8B-c6",
+    "model": "Qwen3-8B",
+    "cap": 6,
+    "complete": true,
+    "natural": {
+      "seconds": 72.85,
+      "tps": 623.4,
+      "output_tokens": 45412,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 5.41,
+      "preemptions": 0,
+      "peak_GiB": 51.49
+    },
+    "stress": {
+      "seconds": 186.46,
+      "tps": 263.6,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 70.64,
+      "preemptions": 0,
+      "peak_GiB": 52.52
+    }
+  },
+  {
+    "run": "Qwen3-8B-c8",
+    "model": "Qwen3-8B",
+    "cap": 8,
+    "complete": true,
+    "natural": {
+      "seconds": 57.0,
+      "tps": 793.9,
+      "output_tokens": 45250,
+      "requests": 48,
+      "truncated": 0,
+      "KV_percent": 5.23,
+      "preemptions": 0,
+      "peak_GiB": 51.5
+    },
+    "stress": {
+      "seconds": 156.35,
+      "tps": 314.4,
+      "output_tokens": 49152,
+      "requests": 48,
+      "truncated": 48,
+      "KV_percent": 94.18,
+      "preemptions": 0,
+      "peak_GiB": 52.53
+    }
+  },
+  {
+    "run": "confirm-Qwen3-1.7B-c12",
+    "model": "Qwen3-1.7B",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 136.42,
+      "tps": 1494.7,
+      "output_tokens": 203909,
+      "requests": 96,
+      "truncated": 2,
+      "KV_percent": 14.26,
+      "preemptions": 0,
+      "peak_GiB": 52.43,
+      "queue_fed_seconds": 49.89,
+      "queue_fed_tps": 3056.0
+    }
+  },
+  {
+    "run": "confirm-Qwen3-1.7B-c32",
+    "model": "Qwen3-1.7B",
+    "cap": 32,
+    "complete": true,
+    "natural": {
+      "seconds": 177.85,
+      "tps": 1519.3,
+      "output_tokens": 270204,
+      "requests": 96,
+      "truncated": 4,
+      "KV_percent": 28.61,
+      "preemptions": 0,
+      "peak_GiB": 52.27,
+      "queue_fed_seconds": 12.55,
+      "queue_fed_tps": 7723.7
+    }
+  },
+  {
+    "run": "confirm-Qwen3-4B-Instruct-2507-c12",
+    "model": "Qwen3-4B-Instruct-2507",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 367.44,
+      "tps": 1006.6,
+      "output_tokens": 369866,
+      "requests": 96,
+      "truncated": 3,
+      "KV_percent": 28.57,
+      "preemptions": 0,
+      "peak_GiB": 52.19,
+      "queue_fed_seconds": 132.78,
+      "queue_fed_tps": 1821.1
+    }
+  },
+  {
+    "run": "confirm-Qwen3-4B-Instruct-2507-c32",
+    "model": "Qwen3-4B-Instruct-2507",
+    "cap": 32,
+    "complete": true,
+    "natural": {
+      "seconds": 303.23,
+      "tps": 1223.2,
+      "output_tokens": 370925,
+      "requests": 96,
+      "truncated": 4,
+      "KV_percent": 39.78,
+      "preemptions": 0,
+      "peak_GiB": 52.06,
+      "queue_fed_seconds": 25.85,
+      "queue_fed_tps": 4600.1
+    }
+  },
+  {
+    "run": "confirm-Qwen3-4B-c12",
+    "model": "Qwen3-4B",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 238.05,
+      "tps": 828.0,
+      "output_tokens": 197105,
+      "requests": 96,
+      "truncated": 2,
+      "KV_percent": 19.87,
+      "preemptions": 0,
+      "peak_GiB": 52.18,
+      "queue_fed_seconds": 56.37,
+      "queue_fed_tps": 2100.3
+    }
+  },
+  {
+    "run": "confirm-Qwen3-4B-c32",
+    "model": "Qwen3-4B",
+    "cap": 32,
+    "complete": true,
+    "natural": {
+      "seconds": 68.41,
+      "tps": 2165.7,
+      "output_tokens": 148159,
+      "requests": 96,
+      "truncated": 0,
+      "KV_percent": 15.44,
+      "preemptions": 0,
+      "peak_GiB": 52.12,
+      "queue_fed_seconds": 15.07,
+      "queue_fed_tps": 5090.3
+    }
+  },
+  {
+    "run": "confirm-Qwen3-8B-c12",
+    "model": "Qwen3-8B",
+    "cap": 12,
+    "complete": true,
+    "natural": {
+      "seconds": 389.2,
+      "tps": 597.3,
+      "output_tokens": 232486,
+      "requests": 96,
+      "truncated": 3,
+      "KV_percent": 36.01,
+      "preemptions": 0,
+      "peak_GiB": 52.02,
+      "queue_fed_seconds": 85.45,
+      "queue_fed_tps": 1520.3
+    }
+  },
+  {
+    "run": "confirm-Qwen3-8B-c32",
+    "model": "Qwen3-8B",
+    "cap": 32,
+    "complete": true,
+    "natural": {
+      "seconds": 362.48,
+      "tps": 699.9,
+      "output_tokens": 253710,
+      "requests": 96,
+      "truncated": 4,
+      "KV_percent": 48.43,
+      "preemptions": 0,
+      "peak_GiB": 51.64,
+      "queue_fed_seconds": 21.59,
+      "queue_fed_tps": 3809.8
+    }
+  }
+]
