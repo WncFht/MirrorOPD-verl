@@ -24,6 +24,7 @@ from verl.utils.metric import AggregationType, Metric
 from verl.utils.metric.observations import Observation
 from verl.utils.torch_functional import masked_mean, masked_sum
 from verl.workers.config import ActorConfig, CriticConfig
+from verl.workers.utils.loss_context import LossContext
 from verl.workers.utils.padding import as_padded_response, no_padding_2_padding
 
 
@@ -75,11 +76,9 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         if key in model_output
     }
 
-    # global batch info for loss aggregation
-    config.global_batch_info["dp_size"] = data["dp_size"]
-    config.global_batch_info["batch_num_tokens"] = data["batch_num_tokens"]
-    config.global_batch_info["global_batch_size"] = data["global_batch_size"]
-    config.global_batch_info["loss_scale_factor"] = config.loss_scale_factor
+    # The upstream policy-loss ABI reads global_batch_info from its config.
+    # Bind a per-call view so batch state never leaks into the shared settings.
+    config = LossContext.from_batch(data, config).bind_legacy_config(config)
 
     # assumes that if any of the global batch info is set, the policy_loss_fn will
     # normalize using dp_size/global_bsz/global_token; in this case, metric aggregation should be SUM

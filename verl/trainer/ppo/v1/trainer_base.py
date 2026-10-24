@@ -450,10 +450,12 @@ class PPOTrainer(ABC):
         return is_distillation_enabled(config) and config.get("execution_mode", "standalone") == "shared_sync"
 
     def _uses_full_vocab(self) -> bool:
-        return (
-            is_distillation_enabled(self.config.get("distillation"))
-            and OmegaConf.select(self.config, "distillation.distillation_loss.loss_mode") == "full_reverse_kl"
-        )
+        if not is_distillation_enabled(self.config.get("distillation")):
+            return False
+        from verl.trainer.distillation.specs import get_distillation_loss_settings
+
+        mode = OmegaConf.select(self.config, "distillation.distillation_loss.loss_mode")
+        return mode is not None and get_distillation_loss_settings(mode).payload_kind == "hidden"
 
     @staticmethod
     def _validate_shared_model(model_config: HFModelConfig):
