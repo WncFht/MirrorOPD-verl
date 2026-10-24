@@ -1,0 +1,53 @@
+{
+  "backend": "precompute_fused",
+  "world_size": 4,
+  "records": [
+    {
+      "step": 0,
+      "loss": 0.21702197194099426
+    },
+    {
+      "step": 1,
+      "loss": 0.21027550101280212
+    },
+    {
+      "step": 2,
+      "loss": 0.20679578185081482
+    }
+  ],
+  "parameter_delta_norms_rank0": {
+    "model.embed_tokens.weight": 0.031788937747478485,
+    "model.layers.0.self_attn.q_proj.weight": 0.04282134398818016,
+    "model.layers.0.self_attn.q_proj.bias": 0.007969120517373085,
+    "model.layers.0.self_attn.k_proj.weight": 0.02883683703839779,
+    "model.layers.0.self_attn.k_proj.bias": 0.0034255594946444035,
+    "model.layers.0.self_attn.v_proj.weight": 0.029005153104662895,
+    "model.layers.0.self_attn.v_proj.bias": 0.005177196115255356,
+    "model.layers.0.self_attn.o_proj.weight": 0.04184470698237419,
+    "model.layers.0.mlp.gate_proj.weight": 0.05846628174185753,
+    "model.layers.0.mlp.up_proj.weight": 0.05881652608513832,
+    "model.layers.0.mlp.down_proj.weight": 0.06064903363585472,
+    "model.layers.0.input_layernorm.weight": 0.0070323823019862175,
+    "model.layers.0.post_attention_layernorm.weight": 0.006628695409744978,
+    "model.layers.1.self_attn.q_proj.weight": 0.04042035713791847,
+    "model.layers.1.self_attn.q_proj.bias": 0.007320155389606953,
+    "model.layers.1.self_attn.k_proj.weight": 0.028853781521320343,
+    "model.layers.1.self_attn.k_proj.bias": 0.004893255885690451,
+    "model.layers.1.self_attn.v_proj.weight": 0.02761174365878105,
+    "model.layers.1.self_attn.v_proj.bias": 0.00373476673848927,
+    "model.layers.1.self_attn.o_proj.weight": 0.04105643555521965,
+    "model.layers.1.mlp.gate_proj.weight": 0.057632919400930405,
+    "model.layers.1.mlp.up_proj.weight": 0.0577193982899189,
+    "model.layers.1.mlp.down_proj.weight": 0.058455683290958405,
+    "model.layers.1.input_layernorm.weight": 0.008161426521837711,
+    "model.layers.1.post_attention_layernorm.weight": 0.0070497822016477585,
+    "model.norm.weight": 0.007383111398667097,
+    "lm_head.weight": 0.04372396692633629
+  },
+  "checkpoint_roundtrip": true,
+  "model_type": "qwen2",
+  "tied_student": false,
+  "tied_teacher": false,
+  "teacher_extra_rows": 7,
+  "teacher_hidden_size": 64
+}

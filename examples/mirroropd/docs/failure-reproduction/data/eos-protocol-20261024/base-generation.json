@@ -1,0 +1,244 @@
+{
+  "label": "base-generation",
+  "model": "../model/Qwen3-1.7B-Base",
+  "generation_config": {
+    "bos_token_id": 151643,
+    "do_sample": false,
+    "eos_token_id": 151643,
+    "max_new_tokens": 2048,
+    "transformers_version": "4.37.0"
+  },
+  "tokenizer_eos": 151643,
+  "pad_token_id": 151643,
+  "additional_chat_stop_ids": [
+    151645
+  ],
+  "forced": [
+    {
+      "policy": "native",
+      "forced_id": 17,
+      "token": "2",
+      "output_ids": [
+        17,
+        17,
+        17,
+        17
+      ],
+      "finish_reason": "length",
+      "stop_reason": null,
+      "response_mask": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "padded_ids": [
+        17,
+        17,
+        17,
+        17,
+        151643,
+        151643
+      ],
+      "correct_padded_mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "incorrect_id_based_mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "policy": "native",
+      "forced_id": 151643,
+      "token": "<|endoftext|>",
+      "output_ids": [
+        151643
+      ],
+      "finish_reason": "stop",
+      "stop_reason": null,
+      "response_mask": [
+        1
+      ],
+      "padded_ids": [
+        151643,
+        151643,
+        151643
+      ],
+      "correct_padded_mask": [
+        1,
+        0,
+        0
+      ],
+      "incorrect_id_based_mask": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "policy": "native",
+      "forced_id": 151645,
+      "token": "<|im_end|>",
+      "output_ids": [
+        151645,
+        151645,
+        151645,
+        151645
+      ],
+      "finish_reason": "length",
+      "stop_reason": null,
+      "response_mask": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "padded_ids": [
+        151645,
+        151645,
+        151645,
+        151645,
+        151643,
+        151643
+      ],
+      "correct_padded_mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "incorrect_id_based_mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "policy": "chat",
+      "forced_id": 17,
+      "token": "2",
+      "output_ids": [
+        17,
+        17,
+        17,
+        17
+      ],
+      "finish_reason": "length",
+      "stop_reason": null,
+      "response_mask": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "padded_ids": [
+        17,
+        17,
+        17,
+        17,
+        151643,
+        151643
+      ],
+      "correct_padded_mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "incorrect_id_based_mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "policy": "chat",
+      "forced_id": 151643,
+      "token": "<|endoftext|>",
+      "output_ids": [
+        151643
+      ],
+      "finish_reason": "stop",
+      "stop_reason": null,
+      "response_mask": [
+        1
+      ],
+      "padded_ids": [
+        151643,
+        151643,
+        151643
+      ],
+      "correct_padded_mask": [
+        1,
+        0,
+        0
+      ],
+      "incorrect_id_based_mask": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "policy": "chat",
+      "forced_id": 151645,
+      "token": "<|im_end|>",
+      "output_ids": [
+        151645
+      ],
+      "finish_reason": "stop",
+      "stop_reason": 151645,
+      "response_mask": [
+        1
+      ],
+      "padded_ids": [
+        151645,
+        151643,
+        151643
+      ],
+      "correct_padded_mask": [
+        1,
+        0,
+        0
+      ],
+      "incorrect_id_based_mask": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "natural": [],
+  "scope": "vLLM eager, actual model weights, no optimizer updates; max 1024 generated tokens",
+  "exported_generation_config": "examples/mirroropd/docs/failure-reproduction/data/eos-protocol-20261024/base-generation-generation",
+  "generation_overrides": {
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "top_k": -1,
+    "repetition_penalty": 1.0,
+    "eos_token_id": [
+      151643,
+      151645
+    ]
+  }
+}

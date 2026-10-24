@@ -1,0 +1,50 @@
+{
+  "backend": "precompute",
+  "world_size": 4,
+  "records": [
+    {
+      "step": 0,
+      "loss": 0.02214471995830536
+    },
+    {
+      "step": 1,
+      "loss": 0.01458022277802229
+    },
+    {
+      "step": 2,
+      "loss": 0.01040025893598795
+    }
+  ],
+  "parameter_delta_norms_rank0": {
+    "model.embed_tokens.weight": 0.04085696116089821,
+    "model.layers.0.self_attn.q_proj.weight": 0.0383869893848896,
+    "model.layers.0.self_attn.k_proj.weight": 0.025927893817424774,
+    "model.layers.0.self_attn.v_proj.weight": 0.024353966116905212,
+    "model.layers.0.self_attn.o_proj.weight": 0.039201296865940094,
+    "model.layers.0.self_attn.q_norm.weight": 0.0034287660382688046,
+    "model.layers.0.self_attn.k_norm.weight": 0.003393427236005664,
+    "model.layers.0.mlp.gate_proj.weight": 0.05685839802026749,
+    "model.layers.0.mlp.up_proj.weight": 0.05645862594246864,
+    "model.layers.0.mlp.down_proj.weight": 0.05519717186689377,
+    "model.layers.0.input_layernorm.weight": 0.00586188118904829,
+    "model.layers.0.post_attention_layernorm.weight": 0.007057507988065481,
+    "model.layers.1.self_attn.q_proj.weight": 0.03755877539515495,
+    "model.layers.1.self_attn.k_proj.weight": 0.027937231585383415,
+    "model.layers.1.self_attn.v_proj.weight": 0.026242351159453392,
+    "model.layers.1.self_attn.o_proj.weight": 0.037997327744960785,
+    "model.layers.1.self_attn.q_norm.weight": 0.0015520368469879031,
+    "model.layers.1.self_attn.k_norm.weight": 0.0027599020395427942,
+    "model.layers.1.mlp.gate_proj.weight": 0.05444705858826637,
+    "model.layers.1.mlp.up_proj.weight": 0.0563570111989975,
+    "model.layers.1.mlp.down_proj.weight": 0.05602100491523743,
+    "model.layers.1.input_layernorm.weight": 0.006658710539340973,
+    "model.layers.1.post_attention_layernorm.weight": 0.0074202874675393105,
+    "model.norm.weight": 0.007909967564046383
+  },
+  "checkpoint_roundtrip": true,
+  "model_type": "qwen3",
+  "tied_student": true,
+  "tied_teacher": false,
+  "teacher_extra_rows": 0,
+  "teacher_hidden_size": 64
+}

@@ -1,0 +1,593 @@
+{
+  "r1": {
+    "forced": [
+      {
+        "policy": "native",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      }
+    ],
+    "natural": {
+      "simple/native": {
+        "count": 8,
+        "mean_length": 204.375,
+        "stopped": 8,
+        "length_capped": 0,
+        "has_im_end": 0
+      },
+      "simple/chat": {
+        "count": 8,
+        "mean_length": 205.875,
+        "stopped": 8,
+        "length_capped": 0,
+        "has_im_end": 0
+      },
+      "dapo/native": {
+        "count": 16,
+        "mean_length": 1024.0,
+        "stopped": 0,
+        "length_capped": 16,
+        "has_im_end": 0
+      },
+      "dapo/chat": {
+        "count": 16,
+        "mean_length": 1024.0,
+        "stopped": 0,
+        "length_capped": 16,
+        "has_im_end": 0
+      }
+    },
+    "paired_prefix_matches": 22
+  },
+  "base": {
+    "forced": [
+      {
+        "policy": "native",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151645,
+        "output_ids": [
+          151645,
+          151645,
+          151645,
+          151645
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151645,
+        "output_ids": [
+          151645
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      }
+    ],
+    "natural": {
+      "simple/native": {
+        "count": 8,
+        "mean_length": 429.875,
+        "stopped": 6,
+        "length_capped": 2,
+        "has_im_end": 0
+      },
+      "simple/chat": {
+        "count": 8,
+        "mean_length": 429.875,
+        "stopped": 6,
+        "length_capped": 2,
+        "has_im_end": 0
+      },
+      "dapo/native": {
+        "count": 16,
+        "mean_length": 327.125,
+        "stopped": 12,
+        "length_capped": 4,
+        "has_im_end": 0
+      },
+      "dapo/chat": {
+        "count": 16,
+        "mean_length": 327.125,
+        "stopped": 12,
+        "length_capped": 4,
+        "has_im_end": 0
+      }
+    },
+    "paired_prefix_matches": 24
+  },
+  "instruct": {
+    "forced": [
+      {
+        "policy": "native",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151645,
+        "output_ids": [
+          151645
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151645,
+        "output_ids": [
+          151645
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      }
+    ],
+    "natural": {
+      "simple/native": {
+        "count": 8,
+        "mean_length": 9.625,
+        "stopped": 8,
+        "length_capped": 0,
+        "has_im_end": 8
+      },
+      "simple/chat": {
+        "count": 8,
+        "mean_length": 9.625,
+        "stopped": 8,
+        "length_capped": 0,
+        "has_im_end": 8
+      },
+      "dapo/native": {
+        "count": 16,
+        "mean_length": 955.5625,
+        "stopped": 4,
+        "length_capped": 12,
+        "has_im_end": 4
+      },
+      "dapo/chat": {
+        "count": 16,
+        "mean_length": 955.5625,
+        "stopped": 4,
+        "length_capped": 12,
+        "has_im_end": 4
+      }
+    },
+    "paired_prefix_matches": 23
+  },
+  "base-generation": {
+    "forced": [
+      {
+        "policy": "native",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151645,
+        "output_ids": [
+          151645,
+          151645,
+          151645,
+          151645
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151645,
+        "output_ids": [
+          151645
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      }
+    ],
+    "natural": null,
+    "paired_prefix_matches": 0
+  },
+  "instruct-forced": {
+    "forced": [
+      {
+        "policy": "native",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151645,
+        "output_ids": [
+          151645
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151645,
+        "output_ids": [
+          151645
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      }
+    ],
+    "natural": null,
+    "paired_prefix_matches": 0
+  },
+  "base-standard-config": {
+    "forced": [
+      {
+        "policy": "native",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "native",
+        "forced_id": 151645,
+        "output_ids": [
+          151645
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 17,
+        "output_ids": [
+          17,
+          17,
+          17,
+          17
+        ],
+        "finish_reason": "length",
+        "response_mask": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151643,
+        "output_ids": [
+          151643
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      },
+      {
+        "policy": "chat",
+        "forced_id": 151645,
+        "output_ids": [
+          151645
+        ],
+        "finish_reason": "stop",
+        "response_mask": [
+          1
+        ]
+      }
+    ],
+    "natural": null,
+    "paired_prefix_matches": 0
+  },
+  "tokenizer_roundtrip": {
+    "A": {
+      "count": 24,
+      "preserved_equal": 20,
+      "stripped_equal": 0
+    },
+    "B": {
+      "count": 24,
+      "preserved_equal": 20,
+      "stripped_equal": 0
+    },
+    "C": {
+      "count": 24,
+      "preserved_equal": 20,
+      "stripped_equal": 0
+    },
+    "D": {
+      "count": 24,
+      "preserved_equal": 15,
+      "stripped_equal": 0
+    },
+    "E": {
+      "count": 24,
+      "preserved_equal": 15,
+      "stripped_equal": 0
+    },
+    "F": {
+      "count": 24,
+      "preserved_equal": 23,
+      "stripped_equal": 0
+    }
+  }
+}
