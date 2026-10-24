@@ -17,7 +17,7 @@
 | Qwen2.5-7B-Instruct student，OpenThinker3-7B teacher | Revisiting 的局部负迁移与不稳定；teacher-top-32 有改善 | 可以直接比较 sampled、teacher-top-32、full-rKL | 两者是 untied Qwen2、输出维数相同；缺权重与完整验证数据，需核 token-ID 和特殊标记 |
 | Qwen3-1.7B Non-thinking student，Qwen3-4B-Instruct-2507 teacher | Semi-OPD 中低重叠配置：在线采样不如初始学生缓存 | 检验 full-vocab 能否缓解在线前缀退化 | 需 Qwen3/tied-head 适配，且 DAPO 过滤口径不同 |
 
-表内保留原始候选范围。当前A–F选择、sampled→full顺序和后置设置由[新方案](../failure-reproduction/2026-10-24-Sampled-token与Full-vocab失败复现方案.md)统一维护。R1的跨规模模型仍需要词表对齐，不能只把 `TEACHER_MODEL` 换成7B就直接跑现有full-KL。
+表内保留原始候选范围。当前A–F选择、sampled→full顺序和后置设置由[新方案](../failure-reproduction/2026-10-25-Sampled-token与Full-vocab失败复现方案.md)统一维护。R1的跨规模模型仍需要词表对齐，不能只把 `TEACHER_MODEL` 换成7B就直接跑现有full-KL。
 
 这些是不同的失败：不提升、覆盖学生已有能力、长序列崩溃、某个基准退化，应该分别报告。只要 full-KL 有收益，不能就声称它解释了所有 OPD failure。
 

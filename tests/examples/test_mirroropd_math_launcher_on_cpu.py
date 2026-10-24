@@ -112,7 +112,7 @@ def _config(tmp_path, **overrides):
 
 
 FAILURE_PAIRS = [
-    ("E21", "E22", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 7168, 4096, 128, 64),
+    ("E15", "E13", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 7168, 4096, 128, 64),
     ("E23", "E24", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 15360, 4096, 128, 64),
     ("E25", "E26", "DeepSeek-R1-Distill-Qwen-1.5B", "DeepSeek-R1-Distill-Qwen-7B", 7168, 4096, 128, 32),
     ("E27", "E28", "Qwen3-1.7B-Base", "Qwen3-8B", 7168, 1024, 12, 32),
@@ -147,7 +147,7 @@ def test_failure_training_presets_preserve_pair_protocol_and_update_budget(
     assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 64
     assert actor.ppo_epochs == rollout.n == 1
     assert cfg.trainer.total_training_steps == 250 and cfg.trainer.total_epochs == 1
-    assert cfg.trainer.test_freq == cfg.trainer.save_freq == 20 and cfg.trainer.val_before_train
+    assert cfg.trainer.test_freq == 20 and cfg.trainer.save_freq == 100 and cfg.trainer.val_before_train
     assert cfg.trainer.max_actor_ckpt_to_keep == 4 and cfg.trainer.resume_mode == "disable"
     assert actor.optim.lr == 1e-6 and actor.optim.lr_warmup_steps == 0
     assert actor.fsdp_config.seed == actor.data_loader_seed == rollout.seed == cfg.data.seed == 42
@@ -238,28 +238,66 @@ def test_failure_smoke_reuses_formal_pair_and_stop_protocol(tmp_path, setting):
     assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == ([151645] if setting == "E27" else [])
 
 
-@pytest.mark.parametrize("preset", ["E21-unknown", "E33", "A", "A-full"])
+@pytest.mark.parametrize("preset", ["E21-unknown", "E44", "E43-unknown", "A", "A-full"])
 def test_unknown_failure_preset_fails_without_launching(tmp_path, preset):
     result = _launch(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
     assert result.returncode == 2
 
 
-@pytest.mark.parametrize("legacy,aligned,loss_mode", [("E13", "E22", "full_reverse_kl"), ("E15", "E21", "k1")])
-def test_failure_baseline_repeats_preserve_objective_but_align_observation_budget(tmp_path, legacy, aligned, loss_mode):
+@pytest.mark.parametrize("canonical,alias", [("E13", "E22"), ("E15", "E21")])
+@pytest.mark.parametrize("suffix", ["", "-valid-student", "-valid-teacher"])
+def test_failure_baseline_aliases_resolve_to_identical_configs(tmp_path, canonical, alias, suffix):
+    configs = [
+        _config(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset + suffix])
+        for preset in (canonical, alias)
+    ]
+    assert OmegaConf.to_container(configs[0], resolve=True) == OmegaConf.to_container(configs[1], resolve=True)
+
+
+REUSE_PRESETS = [
+    ("E15", "E33"),
+    ("E13", "E17"),
+    ("E23", "E34"),
+    ("E24", "E35"),
+    ("E25", "E36"),
+    ("E26", "E37"),
+    ("E27", "E38"),
+    ("E28", "E39"),
+    ("E29", "E40"),
+    ("E30", "E41"),
+    ("E31", "E42"),
+    ("E32", "E43"),
+]
+
+
+@pytest.mark.parametrize("base,reuse", REUSE_PRESETS)
+def test_failure_reuse16_changes_only_actor_reuse_and_retains_rollout_budget(tmp_path, base, reuse):
     configs = [
         _config(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
-        for preset in (legacy, aligned)
+        for preset in (base, reuse)
     ]
-    old, new = configs
-    assert old.actor_rollout_ref.model.path == new.actor_rollout_ref.model.path
-    assert old.distillation.teacher_models == new.distillation.teacher_models
-    assert old.distillation.distillation_loss.loss_mode == new.distillation.distillation_loss.loss_mode == loss_mode
-    assert old.data.max_response_length == new.data.max_response_length == 7168
-    assert old.actor_rollout_ref.actor.optim.lr == new.actor_rollout_ref.actor.optim.lr == 1e-6
-    assert old.trainer.total_training_steps == 200 and new.trainer.total_training_steps == 250
-    assert not old.trainer.val_before_train and new.trainer.val_before_train
-    assert old.trainer.save_freq == 100 and new.trainer.save_freq == 20
-    assert old.trainer.max_actor_ckpt_to_keep == 2 and new.trainer.max_actor_ckpt_to_keep == 4
+    first, repeated = configs
+    assert first.actor_rollout_ref.actor.ppo_epochs == 1
+    assert repeated.actor_rollout_ref.actor.ppo_epochs == 16
+    assert repeated.trainer.total_training_steps == 250
+    assert repeated.trainer.total_training_steps * repeated.actor_rollout_ref.actor.ppo_epochs == 4000
+    assert repeated.trainer.save_freq == 100 and repeated.trainer.test_freq == 20
+    assert repeated.trainer.val_before_train
+    OmegaConf.update(repeated, "actor_rollout_ref.actor.ppo_epochs", 1)
+    assert OmegaConf.to_container(first, resolve=True) == OmegaConf.to_container(repeated, resolve=True)
+
+
+@pytest.mark.parametrize("preset", ["E33", "E43"])
+def test_failure_reuse_presets_allow_explicit_epoch_and_budget_overrides(tmp_path, preset):
+    cfg = _config(
+        tmp_path,
+        command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset],
+        PPO_EPOCHS="2",
+        TOTAL_TRAINING_STEPS="3",
+        SAVE_FREQ="-1",
+    )
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 2 and cfg.trainer.total_training_steps == 3
+    assert cfg.trainer.save_freq == -1
 
 
 def test_launcher_composes_native_single_teacher_baseline(tmp_path):
@@ -777,9 +815,9 @@ def test_full_kl_and_vanilla_presets(tmp_path, group, lr, epochs):
     assert cfg.trainer.n_gpus_per_node == 8 and distillation.execution_mode == "shared_sync"
     assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
     assert cfg.actor_rollout_ref.actor.ppo_epochs == epochs
-    assert cfg.trainer.total_training_steps == 200
+    assert cfg.trainer.total_training_steps == 250
     assert cfg.trainer.test_freq == 20 and cfg.trainer.save_freq == 100
-    assert cfg.trainer.max_actor_ckpt_to_keep == 2 and not cfg.trainer.val_before_train
+    assert cfg.trainer.max_actor_ckpt_to_keep == 4 and cfg.trainer.val_before_train
     assert cfg.actor_rollout_ref.actor.optim.lr == pytest.approx(lr)
     assert cfg.actor_rollout_ref.actor.optim.lr_scheduler_type == "constant"
     assert cfg.actor_rollout_ref.actor.optim.lr_warmup_steps == 0

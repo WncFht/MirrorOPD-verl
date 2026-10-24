@@ -9,31 +9,33 @@ if [[ ${1:-} == --help || ${1:-} == -h || $# == 0 ]]; then
     cat <<'HELP'
 Usage: bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh PRESET [Hydra overrides...]
 
-E21-E32 paired failure experiments:
-  Sampled Full  Student                    Teacher                       Train cap
-  E21     E22   R1-Distill-Qwen-1.5B       JustRL-DeepSeek-1.5B            7168
-  E23     E24   R1-Distill-Qwen-1.5B       JustRL-DeepSeek-1.5B           15360
-  E25     E26   R1-Distill-Qwen-1.5B       R1-Distill-Qwen-7B              7168
-  E27     E28   Qwen3-1.7B-Base           Qwen3-8B                        7168
-  E29     E30   Qwen3-1.7B-Base           Qwen3-4B                        7168
-  E31     E32   Qwen3-1.7B                Qwen3-4B-Instruct-2507          4096
-  Odd IDs use sampled k1 + current + vanilla; even IDs use full reverse KL.
-  Full KL is already implemented: these presets select the existing backend.
-  Train: DAPO, batch=mini=64, n=1, PPO_EPOCHS=1, LR=1e-6, 250 steps.
-  Validate before training, every 20 steps, and at the final step; save every 20.
+Model/length pairs (all 250 outer steps; save every 100 outer steps):
+  Sampled Full  Sampled-r16 Full-r16 Student                 Teacher                      Train cap
+  E15     E13   E33         E17     R1-Distill-Qwen-1.5B    JustRL-DeepSeek-1.5B           7168
+  E23     E24   E34         E35     R1-Distill-Qwen-1.5B    JustRL-DeepSeek-1.5B          15360
+  E25     E26   E36         E37     R1-Distill-Qwen-1.5B    R1-Distill-Qwen-7B             7168
+  E27     E28   E38         E39     Qwen3-1.7B-Base        Qwen3-8B                       7168
+  E29     E30   E40         E41     Qwen3-1.7B-Base        Qwen3-4B                       7168
+  E31     E32   E42         E43     Qwen3-1.7B             Qwen3-4B-Instruct-2507         4096
+  E21 is an alias for E15; E22 is an alias for E13, including validation suffixes.
+  E14 is the E13 LR=5e-7 variant; E16 is the E13 reuse=4 variant.
+  Sampled uses k1 + current + vanilla; full uses the implemented full reverse KL.
+  Reuse=16 sets PPO_EPOCHS=16: one rollout/teacher batch, 16 actor updates.
+  Batch=mini=64, n=1, LR=1e-6. Default update attempts: 250 (reuse1), 4000
+  (reuse16), or 1000 (E16 reuse4). Reuse does not add fresh rollouts or delay D.
+  Validate before training, every 20 outer steps, and at the final step.
+  Save at outer steps 100, 200 and final 250; retain the latest 4 checkpoints.
   Valid: MATH-500/AMC23/AIME25, n=16, temperature=0.7, top-p=0.9, cap31744.
-  Add -valid-student or -valid-teacher to independently evaluate that model,
-  e.g. E25-valid-teacher. Both IDs in a sampled/full pair share the same models.
-  Qwen3 uses non-thinking. Base student prompt cap1024 + runtime stop151645;
-  other generators use prompt cap4096 and their native EOS configuration.
+  Add -valid-student or -valid-teacher for independent model validation.
+  Qwen3 uses non-thinking; Base student uses prompt cap1024 + stop151645.
+  Other generators use prompt cap4096 and native EOS. Original weights are used.
   Per-engine concurrency starting points: R1 student128, Base12, Qwen student32;
   JustRL teacher64, other teachers32. These are bounded-pilot choices, not optima.
-  E22 shares E13's model pair, loss and train cap, but uses 250 steps and initial
-  validation; E13 retains 200 steps and no initial validation. E21 likewise
-  repeats E15 with the new budget. Existing E1-E20 defaults are unchanged.
-  Environment/Hydra overrides remain supported, including FULL_KL_*.
+  E13-E17 now share the 250-step/initial-validation budget. Historical runs
+  retain their recorded configs; E18-E20 keep their separate equal-update design.
+  Environment/Hydra overrides remain supported, including PPO_EPOCHS and FULL_KL_*.
 
-Legacy E1..E20 algorithm/reuse ablations:
+Other algorithm/reuse ablations:
   Short  Long   Algorithm
   E1     E7     rollout advantage + token PPO
   E2     E8     rollout advantage + token IS (no PPO/dual clip)
@@ -53,10 +55,6 @@ E1-E6 defaults:  PPO_EPOCHS=4, TOTAL_TRAINING_STEPS=32,
                  TEST_FREQ=SAVE_FREQ=TOTAL_TRAINING_STEPS.
 E7-E12 defaults: PPO_EPOCHS=16, TOTAL_TRAINING_STEPS=200,
                  TEST_FREQ=50, SAVE_FREQ=100 (outer steps).
-E13-E15 defaults: PPO_EPOCHS=1, TOTAL_TRAINING_STEPS=200,
-                  TEST_FREQ=20, SAVE_FREQ=100, keep the latest 2 checkpoints.
-E16/E17 defaults: PPO_EPOCHS=4/16; other settings match E13 (200 outer steps,
-                  TEST_FREQ=20, SAVE_FREQ=100, keep the latest 2 checkpoints).
 E18-E20 defaults: one data epoch, original DAPO data, LR=1e-6;
                   test every 512 updates, save every 1024 updates.
                   TEST_FREQ=8/16/32, SAVE_FREQ=16/32/64 (outer steps).
@@ -66,12 +64,11 @@ FULL_KL_BACKEND/FULL_KL_* environment variables can override those choices.
 E15 keeps the legacy vanilla ratio against FSDP old_log_probs; no rollout IS.
 E16/E17 use the existing exact full reverse-KL loss: current + untruncated IS
 at fixed prefixes, with no extra sampled-token ratio or PPO clipping.
-E1-E20 common: D=0 (no delayed queue), batch=mini-batch=64, no initial validation,
+E1-E12/E18-E20 common: D=0, batch=mini-batch=64, no initial validation,
         OPD_CLIP_EPS=0.2, constant LR, zero warmup, synchronous checkpoint.
 E7-E12 reuse each fresh batch 16 times; they do not set delay D=16.
-Without skipped updates, 200 outer steps give 3200 updates in E7-E12,
-and 200 updates in E13-E15. E13-E15 also align rollout/actor seeds with SEED.
-E16/E17 give 800/3200 updates by default, with the same seed alignment as E13.
+Without skipped updates, E7-E12 give 3200 updates; E13-E17 budgets are listed above.
+E13-E17 align data/actor/rollout seeds with SEED.
 PPO_EPOCHS can override these reuse counts; batch reuse does not add delay D.
 Set CUDA_VISIBLE_DEVICES and STUDENT_GPUS together for fewer than eight shared GPUs.
 Set PYTHON_BIN to the native Python executable if .venv-native is not present.
@@ -83,28 +80,50 @@ HELP
 fi
 ABLATION=$1
 shift
+# Canonical names prevent duplicate short-window experiments and run labels.
+case "$ABLATION" in
+    E21|E21-*) ABLATION="E15${ABLATION#E21}" ;;
+    E22|E22-*) ABLATION="E13${ABLATION#E22}" ;;
+esac
 run_failure_preset() {
     local experiment=${ABLATION%%-*} mode=sampled
+    local base=$experiment reuse=1 lr=1e-6
+    case "$experiment" in
+        E14) base=E13; lr=5e-7 ;;
+        E16) base=E13; reuse=4 ;;
+        E17) base=E13; reuse=16 ;;
+        E33) base=E15; reuse=16 ;;
+        E34) base=E23; reuse=16 ;;
+        E35) base=E24; reuse=16 ;;
+        E36) base=E25; reuse=16 ;;
+        E37) base=E26; reuse=16 ;;
+        E38) base=E27; reuse=16 ;;
+        E39) base=E28; reuse=16 ;;
+        E40) base=E29; reuse=16 ;;
+        E41) base=E30; reuse=16 ;;
+        E42) base=E31; reuse=16 ;;
+        E43) base=E32; reuse=16 ;;
+    esac
     local student=DeepSeek-R1-Distill-Qwen-1.5B teacher=JustRL-DeepSeek-1.5B
     local family=deepseek response=7168 prompt=4096 student_seqs=128 teacher_seqs=64
     local entry="$SCRIPT_DIR/run_math_deepseek_r1_1_5b_fsdp2.sh"
     local workspace
     workspace=$(cd -- "$SCRIPT_DIR/../../.." && pwd)
-    case "$experiment" in E22|E24|E26|E28|E30|E32) mode=full ;; esac
+    case "$base" in E13|E24|E26|E28|E30|E32) mode=full ;; esac
     if [[ $ABLATION != "$experiment" ]]; then
         mode=${ABLATION#*-}
         case "$mode" in
             valid-student|valid-teacher) ;;
-            *) echo "Expected E21-E32, optionally followed by -valid-student or -valid-teacher" >&2; exit 2 ;;
+            *) echo "Expected a model preset, optionally followed by -valid-student or -valid-teacher" >&2; exit 2 ;;
         esac
     fi
-    case "$experiment" in
-        E21|E22) ;;
+    case "$base" in
+        E13|E15) ;;
         E23|E24) response=15360 ;;
         E25|E26) teacher=DeepSeek-R1-Distill-Qwen-7B; teacher_seqs=32 ;;
         E27|E28|E29|E30)
             student=Qwen3-1.7B-Base
-            if [[ $experiment == E27 || $experiment == E28 ]]; then teacher=Qwen3-8B; else teacher=Qwen3-4B; fi
+            if [[ $base == E27 || $base == E28 ]]; then teacher=Qwen3-8B; else teacher=Qwen3-4B; fi
             family=qwen3; prompt=1024; student_seqs=12; teacher_seqs=32
             ;;
         E31|E32)
@@ -145,10 +164,10 @@ run_failure_preset() {
             exec bash "$SCRIPT_DIR/run_math_validation_fsdp2.sh" "${mode#valid-}" "${overrides[@]}" "$@"
             ;;
     esac
-    export TRAIN_BATCH_SIZE=${TRAIN_BATCH_SIZE:-64} PPO_EPOCHS=${PPO_EPOCHS:-1}
-    export TOTAL_EPOCHS=${TOTAL_EPOCHS:-1} LEARNING_RATE=${LEARNING_RATE:-1e-6}
+    export TRAIN_BATCH_SIZE=${TRAIN_BATCH_SIZE:-64} PPO_EPOCHS=${PPO_EPOCHS:-$reuse}
+    export TOTAL_EPOCHS=${TOTAL_EPOCHS:-1} LEARNING_RATE=${LEARNING_RATE:-$lr}
     export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=vanilla
-    export TEST_FREQ=${TEST_FREQ:-20} SAVE_FREQ=${SAVE_FREQ:-20}
+    export TEST_FREQ=${TEST_FREQ:-20} SAVE_FREQ=${SAVE_FREQ:-100}
     local steps=${TOTAL_TRAINING_STEPS:-250}
     if [[ ! $steps =~ ^[1-9][0-9]*$ ]]; then
         echo "TOTAL_TRAINING_STEPS must be a positive integer" >&2
@@ -173,7 +192,7 @@ run_failure_preset() {
 }
 
 case "$ABLATION" in
-    E2[1-9]|E3[0-2]|E2[1-9]-*|E3[0-2]-*) run_failure_preset "$@" ;;
+    E1[3-7]|E2[3-9]|E3[0-9]|E4[0-3]|E1[3-7]-*|E2[3-9]-*|E3[0-9]-*|E4[0-3]-*) run_failure_preset "$@" ;;
 esac
 
 ENTRY="$SCRIPT_DIR/run_math_deepseek_r1_1_5b_fsdp2.sh"
@@ -185,8 +204,8 @@ case "$ABLATION" in
     E4|E10) export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=token_is ;;
     E5|E11) export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=reinforce ;;
     E6|E12) export OPD_ADVANTAGE_SOURCE=rollout OPD_POLICY_LOSS_MODE=reinforce ;;
-    E13|E14|E15|E16|E17|E18|E19|E20) export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=vanilla ;;
-    *) echo "Unknown ablation: $ABLATION; expected E1 through E32 (E21-E32 also support -valid-student/-valid-teacher)" >&2; exit 2 ;;
+    E18|E19|E20) export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=vanilla ;;
+    *) echo "Unknown ablation: $ABLATION; expected E1 through E43 (model presets also support -valid-student/-valid-teacher)" >&2; exit 2 ;;
 esac
 # Equal-update presets use the same file and seeded sampler, stopping at nested
 # prefixes of one data epoch. Explicit overrides remain supported for smoke runs.
@@ -211,46 +230,29 @@ case "$ABLATION" in
         export TEST_FREQ=${TEST_FREQ:-50}
         export SAVE_FREQ=${SAVE_FREQ:-100}
         ;;
-    E13|E14|E15|E16|E17|E18|E19|E20)
-        if [[ $ABLATION == E16 ]]; then
-            export PPO_EPOCHS=${PPO_EPOCHS:-4}
-        elif [[ $ABLATION == E17 ]]; then
-            export PPO_EPOCHS=${PPO_EPOCHS:-16}
-        else
-            export PPO_EPOCHS=${PPO_EPOCHS:-1}
-        fi
+    E18|E19|E20)
+        export PPO_EPOCHS=${PPO_EPOCHS:-1}
         TOTAL_TRAINING_STEPS=${TOTAL_TRAINING_STEPS:-200}
         export TEST_FREQ=${TEST_FREQ:-20}
         export SAVE_FREQ=${SAVE_FREQ:-100}
         export SEED=${SEED:-42}
-        if [[ $ABLATION == E14 ]]; then
-            export LEARNING_RATE=${LEARNING_RATE:-5e-7}
-        else
-            export LEARNING_RATE=${LEARNING_RATE:-1e-6}
-        fi
+        export LEARNING_RATE=${LEARNING_RATE:-1e-6}
         PRESET_OVERRIDES=(
-            trainer.max_actor_ckpt_to_keep=2
+            trainer.max_actor_ckpt_to_keep=4
             "actor_rollout_ref.actor.fsdp_config.seed=$SEED"
             "actor_rollout_ref.actor.data_loader_seed=$SEED"
             "actor_rollout_ref.rollout.seed=$SEED"
         )
-        case "$ABLATION" in
-            E18|E19|E20)
-                PRESET_OVERRIDES+=(
-                    trainer.max_actor_ckpt_to_keep=4
-                    data.train_max_samples=-1
-                    algorithm.filter_groups.enable=False
-                    trainer.v1.sampler.sync_refill_failed_groups=False
-                )
-                ;;
-        esac
-        if [[ $ABLATION != E15 ]]; then
-            export DOMAIN=math
-            export FULL_KL_BACKEND=${FULL_KL_BACKEND:-precompute}
-            export FULL_KL_ASYNC_WRITE=${FULL_KL_ASYNC_WRITE:-True}
-            export FULL_KL_PREFETCH=${FULL_KL_PREFETCH:-True}
-            ENTRY="$SCRIPT_DIR/run_full_reverse_kl.sh"
-        fi
+        PRESET_OVERRIDES+=(
+            data.train_max_samples=-1
+            algorithm.filter_groups.enable=False
+            trainer.v1.sampler.sync_refill_failed_groups=False
+        )
+        export DOMAIN=math
+        export FULL_KL_BACKEND=${FULL_KL_BACKEND:-precompute}
+        export FULL_KL_ASYNC_WRITE=${FULL_KL_ASYNC_WRITE:-True}
+        export FULL_KL_PREFETCH=${FULL_KL_PREFETCH:-True}
+        ENTRY="$SCRIPT_DIR/run_full_reverse_kl.sh"
         ;;
 esac
 TOTAL_TRAINING_STEPS=${TOTAL_TRAINING_STEPS:-32}
