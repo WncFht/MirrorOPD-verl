@@ -1,0 +1,66 @@
+{
+  "C": {
+    "run_dir": "outputs/failure-C-sampled-smoke-20261024-a",
+    "exit_code": 0,
+    "updates": [
+      {
+        "step/optimizer": 1,
+        "optim/actor/loss": 0.15809690952301025,
+        "optim/actor/grad_norm_preclip": 2.540127754211426,
+        "optim/actor/loss_nonfinite": 0.0,
+        "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+        "correction/anchor_ppo/active_fraction": 0.0,
+        "perf/actor/allocated_peak_gib": 8.339775562286377,
+        "rollout/response_length/mean": 512.0
+      },
+      {
+        "step/optimizer": 2,
+        "optim/actor/loss": 0.15763714909553528,
+        "optim/actor/grad_norm_preclip": 2.46492600440979,
+        "optim/actor/loss_nonfinite": 0.0,
+        "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+        "correction/anchor_ppo/active_fraction": 0.0,
+        "perf/actor/allocated_peak_gib": 8.339937210083008,
+        "rollout/response_length/mean": 512.0
+      }
+    ],
+    "eval_sources": [
+      "aime25",
+      "amc23",
+      "math500"
+    ],
+    "all_numeric_metrics_finite": true
+  },
+  "D": {
+    "run_dir": "outputs/failure-D-sampled-smoke-20261024-a",
+    "exit_code": 0,
+    "updates": [
+      {
+        "step/optimizer": 1,
+        "optim/actor/loss": 0.8160277009010315,
+        "optim/actor/grad_norm_preclip": 30.83083724975586,
+        "optim/actor/loss_nonfinite": 0.0,
+        "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+        "correction/anchor_ppo/active_fraction": 0.0,
+        "perf/actor/allocated_peak_gib": 8.07469367980957,
+        "rollout/response_length/mean": 316.375
+      },
+      {
+        "step/optimizer": 2,
+        "optim/actor/loss": 0.7909429669380188,
+        "optim/actor/grad_norm_preclip": 27.242822647094727,
+        "optim/actor/loss_nonfinite": 0.0,
+        "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+        "correction/anchor_ppo/active_fraction": 0.0,
+        "perf/actor/allocated_peak_gib": 8.688511371612549,
+        "rollout/response_length/mean": 281.25
+      }
+    ],
+    "eval_sources": [
+      "aime25",
+      "amc23",
+      "math500"
+    ],
+    "all_numeric_metrics_finite": true
+  }
+}

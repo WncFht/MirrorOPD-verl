@@ -1,0 +1,1987 @@
+{
+  "models": {
+    "r1": {
+      "path": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
+      "tokenizer_size": 151665,
+      "vocab_size": 151936,
+      "hidden_size": 1536,
+      "eos_id": 151643,
+      "eos_token": "<｜end▁of▁sentence｜>",
+      "pad_id": 151643,
+      "generation_eos": 151643
+    },
+    "just": {
+      "path": "../models/JustRL-DeepSeek-1.5B",
+      "tokenizer_size": 151665,
+      "vocab_size": 151936,
+      "hidden_size": 1536,
+      "eos_id": 151643,
+      "eos_token": "<｜end▁of▁sentence｜>",
+      "pad_id": 151643,
+      "generation_eos": 151643
+    },
+    "r7": {
+      "path": "../model/DeepSeek-R1-Distill-Qwen-7B",
+      "tokenizer_size": 151665,
+      "vocab_size": 152064,
+      "hidden_size": 3584,
+      "eos_id": 151643,
+      "eos_token": "<｜end▁of▁sentence｜>",
+      "pad_id": 151643,
+      "generation_eos": 151643
+    },
+    "base": {
+      "path": "../model/Qwen3-1.7B-Base",
+      "tokenizer_size": 151669,
+      "vocab_size": 151936,
+      "hidden_size": 2048,
+      "eos_id": 151643,
+      "eos_token": "<|endoftext|>",
+      "pad_id": 151643,
+      "generation_eos": 151643
+    },
+    "q8": {
+      "path": "../../models/Qwen3-8B",
+      "tokenizer_size": 151669,
+      "vocab_size": 151936,
+      "hidden_size": 4096,
+      "eos_id": 151645,
+      "eos_token": "<|im_end|>",
+      "pad_id": 151643,
+      "generation_eos": [
+        151645,
+        151643
+      ]
+    },
+    "q4": {
+      "path": "../../models/Qwen3-4B",
+      "tokenizer_size": 151669,
+      "vocab_size": 151936,
+      "hidden_size": 2560,
+      "eos_id": 151645,
+      "eos_token": "<|im_end|>",
+      "pad_id": 151643,
+      "generation_eos": [
+        151645,
+        151643
+      ]
+    },
+    "q17": {
+      "path": "../../models/Qwen3-1.7B",
+      "tokenizer_size": 151669,
+      "vocab_size": 151936,
+      "hidden_size": 2048,
+      "eos_id": 151645,
+      "eos_token": "<|im_end|>",
+      "pad_id": 151643,
+      "generation_eos": [
+        151645,
+        151643
+      ]
+    },
+    "q4i": {
+      "path": "../model/Qwen3-4B-Instruct-2507",
+      "tokenizer_size": 151669,
+      "vocab_size": 151936,
+      "hidden_size": 2560,
+      "eos_id": 151645,
+      "eos_token": "<|im_end|>",
+      "pad_id": 151643,
+      "generation_eos": [
+        151645,
+        151643
+      ]
+    }
+  },
+  "pairs": {
+    "A": {
+      "student": "r1",
+      "teacher": "just",
+      "token_to_id_equal": true,
+      "prompt_probes": [
+        {
+          "question": "What is 1+1?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 1+1?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 1+1?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "What is 7*8?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 7*8?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 7*8?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "What is 100-37?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 100-37?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 100-37?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "Solve x+3=5.",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>Solve x+3=5.<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>Solve x+3=5.<｜Assistant｜><think>\n"
+        }
+      ]
+    },
+    "B": {
+      "student": "r1",
+      "teacher": "just",
+      "token_to_id_equal": true,
+      "prompt_probes": [
+        {
+          "question": "What is 1+1?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 1+1?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 1+1?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "What is 7*8?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 7*8?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 7*8?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "What is 100-37?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 100-37?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 100-37?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "Solve x+3=5.",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>Solve x+3=5.<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>Solve x+3=5.<｜Assistant｜><think>\n"
+        }
+      ]
+    },
+    "C": {
+      "student": "r1",
+      "teacher": "r7",
+      "token_to_id_equal": true,
+      "prompt_probes": [
+        {
+          "question": "What is 1+1?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 1+1?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 1+1?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "What is 7*8?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 7*8?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 7*8?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "What is 100-37?",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 100-37?<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>What is 100-37?<｜Assistant｜><think>\n"
+        },
+        {
+          "question": "Solve x+3=5.",
+          "student_prompt_ids": [
+            151646,
+            151644,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            151648,
+            198
+          ],
+          "teacher_prompt_ids": [
+            151646,
+            151644,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            151648,
+            198
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>Solve x+3=5.<｜Assistant｜><think>\n",
+          "teacher_prompt_text": "<｜begin▁of▁sentence｜><｜User｜>Solve x+3=5.<｜Assistant｜><think>\n"
+        }
+      ]
+    },
+    "D": {
+      "student": "base",
+      "teacher": "q8",
+      "token_to_id_equal": true,
+      "prompt_probes": [
+        {
+          "question": "What is 1+1?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 1+1?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 1+1?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        },
+        {
+          "question": "What is 7*8?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 7*8?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 7*8?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        },
+        {
+          "question": "What is 100-37?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 100-37?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 100-37?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        },
+        {
+          "question": "Solve x+3=5.",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nSolve x+3=5.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nSolve x+3=5.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        }
+      ]
+    },
+    "E": {
+      "student": "base",
+      "teacher": "q4",
+      "token_to_id_equal": true,
+      "prompt_probes": [
+        {
+          "question": "What is 1+1?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 1+1?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 1+1?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        },
+        {
+          "question": "What is 7*8?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 7*8?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 7*8?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        },
+        {
+          "question": "What is 100-37?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 100-37?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 100-37?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        },
+        {
+          "question": "Solve x+3=5.",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "same_prompt": true,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nSolve x+3=5.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nSolve x+3=5.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        }
+      ]
+    },
+    "F": {
+      "student": "q17",
+      "teacher": "q4i",
+      "token_to_id_equal": true,
+      "prompt_probes": [
+        {
+          "question": "What is 1+1?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            10,
+            16,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198
+          ],
+          "same_prompt": false,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 1+1?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 1+1?<|im_end|>\n<|im_start|>assistant\n"
+        },
+        {
+          "question": "What is 7*8?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            22,
+            9,
+            23,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198
+          ],
+          "same_prompt": false,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 7*8?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 7*8?<|im_end|>\n<|im_start|>assistant\n"
+        },
+        {
+          "question": "What is 100-37?",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            3838,
+            374,
+            220,
+            16,
+            15,
+            15,
+            12,
+            18,
+            22,
+            30,
+            151645,
+            198,
+            151644,
+            77091,
+            198
+          ],
+          "same_prompt": false,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nWhat is 100-37?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nWhat is 100-37?<|im_end|>\n<|im_start|>assistant\n"
+        },
+        {
+          "question": "Solve x+3=5.",
+          "student_prompt_ids": [
+            151644,
+            872,
+            198,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            198,
+            151644,
+            77091,
+            198,
+            151667,
+            271,
+            151668,
+            271
+          ],
+          "teacher_prompt_ids": [
+            151644,
+            872,
+            198,
+            50,
+            3948,
+            856,
+            10,
+            18,
+            28,
+            20,
+            13,
+            151645,
+            198,
+            151644,
+            77091,
+            198
+          ],
+          "same_prompt": false,
+          "preserving_roundtrip_equal": true,
+          "stripping_roundtrip_equal": false,
+          "student_prompt_text": "<|im_start|>user\nSolve x+3=5.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+          "teacher_prompt_text": "<|im_start|>user\nSolve x+3=5.<|im_end|>\n<|im_start|>assistant\n"
+        }
+      ]
+    }
+  },
+  "boundary_scores": {
+    "A": [
+      {
+        "example": 0,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999999895871073,
+          "p_151645": 4.533324351029531e-15,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999999895871073,
+          "p_151645": 4.533324351029531e-15,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 0,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.06964091403707899,
+          "p_151645": 8.899135201021994e-08,
+          "top1_id": 151649
+        },
+        "teacher_prompt": {
+          "p_151643": 0.06964091403707899,
+          "p_151645": 8.899135201021994e-08,
+          "top1_id": 151649
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999999902408504,
+          "p_151645": 1.0790805513256183e-15,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999999902408504,
+          "p_151645": 1.0790805513256183e-15,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.004101346326193032,
+          "p_151645": 2.5963026595714534e-08,
+          "top1_id": 151649
+        },
+        "teacher_prompt": {
+          "p_151643": 0.004101346326193032,
+          "p_151645": 2.5963026595714534e-08,
+          "top1_id": 151649
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999999867469416,
+          "p_151645": 1.5855474394285304e-15,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999999867469416,
+          "p_151645": 1.5855474394285304e-15,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.0024088728268100235,
+          "p_151645": 2.309309352098026e-08,
+          "top1_id": 151649
+        },
+        "teacher_prompt": {
+          "p_151643": 0.0024088728268100235,
+          "p_151645": 2.309309352098026e-08,
+          "top1_id": 151649
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999999930017724,
+          "p_151645": 5.334188877788007e-16,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999999930017724,
+          "p_151645": 5.334188877788007e-16,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.0007084734322308563,
+          "p_151645": 2.470049136463498e-08,
+          "top1_id": 151649
+        },
+        "teacher_prompt": {
+          "p_151643": 0.0007084734322308563,
+          "p_151645": 2.470049136463498e-08,
+          "top1_id": 151649
+        },
+        "prompt_change_max_logit_difference": 0.0
+      }
+    ],
+    "C": [
+      {
+        "example": 0,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999938444886196,
+          "p_151645": 2.5175754557632677e-13,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999938444886196,
+          "p_151645": 2.5175754557632677e-13,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 0,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 8.121723445922687e-05,
+          "p_151645": 1.80576888882346e-08,
+          "top1_id": 785
+        },
+        "teacher_prompt": {
+          "p_151643": 8.121723445922687e-05,
+          "p_151645": 1.80576888882346e-08,
+          "top1_id": 785
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999941532327135,
+          "p_151645": 1.516625240862395e-13,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999941532327135,
+          "p_151645": 1.516625240862395e-13,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 4.4005456844731115e-05,
+          "p_151645": 6.72220569837329e-09,
+          "top1_id": 334
+        },
+        "teacher_prompt": {
+          "p_151643": 4.4005456844731115e-05,
+          "p_151645": 6.72220569837329e-09,
+          "top1_id": 334
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999975220689972,
+          "p_151645": 6.097827442133023e-14,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999975220689972,
+          "p_151645": 6.097827442133023e-14,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.00028008190455057675,
+          "p_151645": 4.413974967630901e-09,
+          "top1_id": 334
+        },
+        "teacher_prompt": {
+          "p_151643": 0.00028008190455057675,
+          "p_151645": 4.413974967630901e-09,
+          "top1_id": 334
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999544770856458,
+          "p_151645": 2.725823436011734e-12,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999544770856458,
+          "p_151645": 2.725823436011734e-12,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.0014281266956993452,
+          "p_151645": 1.0239449981415144e-08,
+          "top1_id": 334
+        },
+        "teacher_prompt": {
+          "p_151643": 0.0014281266956993452,
+          "p_151645": 1.0239449981415144e-08,
+          "top1_id": 334
+        },
+        "prompt_change_max_logit_difference": 0.0
+      }
+    ],
+    "D": [
+      {
+        "example": 0,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 1.7602624286197466e-12,
+          "p_151645": 0.9999942622611533,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 1.7602624286197466e-12,
+          "p_151645": 0.9999942622611533,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 0,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 5.896931384549053e-13,
+          "p_151645": 2.3045277354201773e-05,
+          "top1_id": 785
+        },
+        "teacher_prompt": {
+          "p_151643": 5.896931384549053e-13,
+          "p_151645": 2.3045277354201773e-05,
+          "top1_id": 785
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 2.511795089655663e-12,
+          "p_151645": 0.9999985294182058,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 2.511795089655663e-12,
+          "p_151645": 0.9999985294182058,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 1.77251779690558e-12,
+          "p_151645": 1.4293777432178382e-05,
+          "top1_id": 22
+        },
+        "teacher_prompt": {
+          "p_151643": 1.77251779690558e-12,
+          "p_151645": 1.4293777432178382e-05,
+          "top1_id": 22
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 1.6212997014167574e-11,
+          "p_151645": 0.9999964428153536,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 1.6212997014167574e-11,
+          "p_151645": 0.9999964428153536,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 8.65233215181911e-12,
+          "p_151645": 3.739781774091068e-05,
+          "top1_id": 16
+        },
+        "teacher_prompt": {
+          "p_151643": 8.65233215181911e-12,
+          "p_151645": 3.739781774091068e-05,
+          "top1_id": 16
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 6.671482509659511e-11,
+          "p_151645": 0.9897361139855662,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 6.671482509659511e-11,
+          "p_151645": 0.9897361139855662,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 9.49315739275387e-13,
+          "p_151645": 2.7286944720951833e-06,
+          "top1_id": 59
+        },
+        "teacher_prompt": {
+          "p_151643": 9.49315739275387e-13,
+          "p_151645": 2.7286944720951833e-06,
+          "top1_id": 59
+        },
+        "prompt_change_max_logit_difference": 0.0
+      }
+    ],
+    "E": [
+      {
+        "example": 0,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 8.147882176147859e-10,
+          "p_151645": 0.999998157052631,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 8.147882176147859e-10,
+          "p_151645": 0.999998157052631,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 0,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 2.616307382597079e-14,
+          "p_151645": 1.7642305145897488e-07,
+          "top1_id": 785
+        },
+        "teacher_prompt": {
+          "p_151643": 2.616307382597079e-14,
+          "p_151645": 1.7642305145897488e-07,
+          "top1_id": 785
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 1.7914889669466505e-08,
+          "p_151645": 0.9999975808242514,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 1.7914889669466505e-08,
+          "p_151645": 0.9999975808242514,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 1.0664214308094575e-14,
+          "p_151645": 6.843260530038455e-11,
+          "top1_id": 22
+        },
+        "teacher_prompt": {
+          "p_151643": 1.0664214308094575e-14,
+          "p_151645": 6.843260530038455e-11,
+          "top1_id": 22
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 1.1269489252300379e-08,
+          "p_151645": 0.9999958905853279,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 1.1269489252300379e-08,
+          "p_151645": 0.9999958905853279,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 6.938535209768815e-13,
+          "p_151645": 1.7789837957311834e-07,
+          "top1_id": 16
+        },
+        "teacher_prompt": {
+          "p_151643": 6.938535209768815e-13,
+          "p_151645": 1.7789837957311834e-07,
+          "top1_id": 16
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 2.4093837845393427e-09,
+          "p_151645": 0.9834151047956549,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 2.4093837845393427e-09,
+          "p_151645": 0.9834151047956549,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 1.301263134074779e-12,
+          "p_151645": 2.544072863614828e-06,
+          "top1_id": 785
+        },
+        "teacher_prompt": {
+          "p_151643": 1.301263134074779e-12,
+          "p_151645": 2.544072863614828e-06,
+          "top1_id": 785
+        },
+        "prompt_change_max_logit_difference": 0.0
+      }
+    ],
+    "F": [
+      {
+        "example": 0,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 3.933653030590707e-15,
+          "p_151645": 0.999728889741789,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 1.4370486901043254e-13,
+          "p_151645": 0.9976259511850087,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 6.569236755371094
+      },
+      {
+        "example": 0,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 1.2013890408366773e-11,
+          "p_151645": 0.9946840351462157,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 3.4523652358885866e-12,
+          "p_151645": 0.0034818602099195694,
+          "top1_id": 16
+        },
+        "prompt_change_max_logit_difference": 9.826714515686035
+      },
+      {
+        "example": 1,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 5.516248470496089e-15,
+          "p_151645": 0.9999596084337113,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 1.6361960479152494e-13,
+          "p_151645": 0.9999533312522771,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 6.010633945465088
+      },
+      {
+        "example": 1,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 5.864137841626299e-11,
+          "p_151645": 0.993772203876952,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 3.385783580566435e-10,
+          "p_151645": 0.4807305701102181,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 9.980835914611816
+      },
+      {
+        "example": 2,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 3.7223938056567506e-15,
+          "p_151645": 0.9999293349733991,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 1.7193084676379764e-13,
+          "p_151645": 0.9998302630656515,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 5.600048065185547
+      },
+      {
+        "example": 2,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 7.03873699091898e-11,
+          "p_151645": 0.9944680453061202,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 2.056925261207209e-10,
+          "p_151645": 0.44715973363844397,
+          "top1_id": 16
+        },
+        "prompt_change_max_logit_difference": 8.739139556884766
+      },
+      {
+        "example": 3,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 2.4341707209557342e-14,
+          "p_151645": 0.9999405011374402,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 4.911575556765712e-13,
+          "p_151645": 0.9960405944984332,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 6.607098579406738
+      },
+      {
+        "example": 3,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 4.0973266365013215e-10,
+          "p_151645": 0.9991944468170768,
+          "top1_id": 151645
+        },
+        "teacher_prompt": {
+          "p_151643": 3.5978035021384612e-09,
+          "p_151645": 0.44988417529582886,
+          "top1_id": 151645
+        },
+        "prompt_change_max_logit_difference": 11.953330039978027
+      }
+    ],
+    "B": [
+      {
+        "example": 0,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999999895871073,
+          "p_151645": 4.533324351029531e-15,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999999895871073,
+          "p_151645": 4.533324351029531e-15,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 0,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.06964091403707899,
+          "p_151645": 8.899135201021994e-08,
+          "top1_id": 151649
+        },
+        "teacher_prompt": {
+          "p_151643": 0.06964091403707899,
+          "p_151645": 8.899135201021994e-08,
+          "top1_id": 151649
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999999902408504,
+          "p_151645": 1.0790805513256183e-15,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999999902408504,
+          "p_151645": 1.0790805513256183e-15,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 1,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.004101346326193032,
+          "p_151645": 2.5963026595714534e-08,
+          "top1_id": 151649
+        },
+        "teacher_prompt": {
+          "p_151643": 0.004101346326193032,
+          "p_151645": 2.5963026595714534e-08,
+          "top1_id": 151649
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999999867469416,
+          "p_151645": 1.5855474394285304e-15,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999999867469416,
+          "p_151645": 1.5855474394285304e-15,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 2,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.0024088728268100235,
+          "p_151645": 2.309309352098026e-08,
+          "top1_id": 151649
+        },
+        "teacher_prompt": {
+          "p_151643": 0.0024088728268100235,
+          "p_151645": 2.309309352098026e-08,
+          "top1_id": 151649
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "''",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.9999999930017724,
+          "p_151645": 5.334188877788007e-16,
+          "top1_id": 151643
+        },
+        "teacher_prompt": {
+          "p_151643": 0.9999999930017724,
+          "p_151645": 5.334188877788007e-16,
+          "top1_id": 151643
+        },
+        "prompt_change_max_logit_difference": 0.0
+      },
+      {
+        "example": 3,
+        "ending": "'\\n'",
+        "generation_eos_forward_difference": 0.0,
+        "student_prompt": {
+          "p_151643": 0.0007084734322308563,
+          "p_151645": 2.470049136463498e-08,
+          "top1_id": 151649
+        },
+        "teacher_prompt": {
+          "p_151643": 0.0007084734322308563,
+          "p_151645": 2.470049136463498e-08,
+          "top1_id": 151649
+        },
+        "prompt_change_max_logit_difference": 0.0
+      }
+    ]
+  },
+  "scope": "Four controlled completed answers, two endings each. Teacher-forced boundaries, not accuracy or training."
+}

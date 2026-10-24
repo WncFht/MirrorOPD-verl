@@ -1,0 +1,43 @@
+{
+  "records": [
+    {
+      "policy": "native",
+      "forced_id": 151643,
+      "output_ids": [
+        151643
+      ]
+    },
+    {
+      "policy": "native",
+      "forced_id": 151645,
+      "output_ids": [
+        151645,
+        151645,
+        151645,
+        151645
+      ]
+    },
+    {
+      "policy": "standard_config",
+      "forced_id": 151643,
+      "output_ids": [
+        151643
+      ]
+    },
+    {
+      "policy": "standard_config",
+      "forced_id": 151645,
+      "output_ids": [
+        151645
+      ]
+    }
+  ],
+  "model_name_or_path": "outputs/eos-protocol-20261024/base-chatml",
+  "checkpoint_eos_readback": [
+    151643,
+    151645
+  ],
+  "source_generation_eos_unchanged": 151643,
+  "tokenizer_vocab_equal": true,
+  "all_weight_links_resolve_to_source": true
+}

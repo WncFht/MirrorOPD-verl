@@ -1,0 +1,296 @@
+{
+  "model": "../model/Qwen3-1.7B-Base",
+  "cases": [
+    {
+      "validate": false,
+      "configured": null,
+      "target": 151643,
+      "requested": [],
+      "token_ids": [
+        151643
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": true
+    },
+    {
+      "validate": false,
+      "configured": null,
+      "target": 151645,
+      "requested": [],
+      "token_ids": [
+        151645,
+        151645,
+        151645,
+        151645
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "finish_reason": "length",
+      "has_logprobs": true
+    },
+    {
+      "validate": false,
+      "configured": null,
+      "target": 17,
+      "requested": [],
+      "token_ids": [
+        17,
+        17,
+        17,
+        17
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "finish_reason": "length",
+      "has_logprobs": true
+    },
+    {
+      "validate": false,
+      "configured": null,
+      "target": 17,
+      "requested": [
+        17
+      ],
+      "token_ids": [
+        17
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": true
+    },
+    {
+      "validate": false,
+      "configured": [
+        151645
+      ],
+      "target": 151643,
+      "requested": [],
+      "token_ids": [
+        151643
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": true
+    },
+    {
+      "validate": false,
+      "configured": [
+        151645
+      ],
+      "target": 151645,
+      "requested": [],
+      "token_ids": [
+        151645
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": true
+    },
+    {
+      "validate": false,
+      "configured": [
+        151645
+      ],
+      "target": 17,
+      "requested": [],
+      "token_ids": [
+        17,
+        17,
+        17,
+        17
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "finish_reason": "length",
+      "has_logprobs": true
+    },
+    {
+      "validate": false,
+      "configured": [
+        151645
+      ],
+      "target": 17,
+      "requested": [
+        17
+      ],
+      "token_ids": [
+        17
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": true
+    },
+    {
+      "validate": true,
+      "configured": null,
+      "target": 151643,
+      "requested": [],
+      "token_ids": [
+        151643
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": false
+    },
+    {
+      "validate": true,
+      "configured": null,
+      "target": 151645,
+      "requested": [],
+      "token_ids": [
+        151645,
+        151645,
+        151645,
+        151645,
+        151645
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "finish_reason": "length",
+      "has_logprobs": false
+    },
+    {
+      "validate": true,
+      "configured": null,
+      "target": 17,
+      "requested": [],
+      "token_ids": [
+        17,
+        17,
+        17,
+        17,
+        17
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "finish_reason": "length",
+      "has_logprobs": false
+    },
+    {
+      "validate": true,
+      "configured": null,
+      "target": 17,
+      "requested": [
+        17
+      ],
+      "token_ids": [
+        17
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": false
+    },
+    {
+      "validate": true,
+      "configured": [
+        151645
+      ],
+      "target": 151643,
+      "requested": [],
+      "token_ids": [
+        151643
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": false
+    },
+    {
+      "validate": true,
+      "configured": [
+        151645
+      ],
+      "target": 151645,
+      "requested": [],
+      "token_ids": [
+        151645
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": false
+    },
+    {
+      "validate": true,
+      "configured": [
+        151645
+      ],
+      "target": 17,
+      "requested": [],
+      "token_ids": [
+        17,
+        17,
+        17,
+        17,
+        17
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "finish_reason": "length",
+      "has_logprobs": false
+    },
+    {
+      "validate": true,
+      "configured": [
+        151645
+      ],
+      "target": 17,
+      "requested": [
+        17
+      ],
+      "token_ids": [
+        17
+      ],
+      "mask": [
+        1
+      ],
+      "finish_reason": "stop",
+      "has_logprobs": false
+    }
+  ],
+  "passed": 16
+}
