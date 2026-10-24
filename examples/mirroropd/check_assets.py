@@ -25,8 +25,15 @@ MODELS = {
         "repo": "hbx/JustRL-DeepSeek-1.5B",
         "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
     },
+    "DeepSeek-R1-Distill-Qwen-7B": {"repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"},
+    "Qwen3-1.7B-Base": {"repo": "Qwen/Qwen3-1.7B-Base"},
+    "Qwen3-8B": {"repo": "Qwen/Qwen3-8B"},
+    "Qwen3-4B": {"repo": "Qwen/Qwen3-4B"},
+    "Qwen3-1.7B": {"repo": "Qwen/Qwen3-1.7B"},
+    "Qwen3-4B-Instruct-2507": {"repo": "Qwen/Qwen3-4B-Instruct-2507"},
 }
-MODEL_FILES = ("config.json", "tokenizer.json", "tokenizer_config.json", "model.safetensors")
+DEFAULT_MODELS = ("DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B")
+MODEL_FILES = ("config.json", "tokenizer.json", "tokenizer_config.json")
 OPTIONAL_MODEL_FILES = ("generation_config.json", "chat_template.jinja", "README.md")
 DATASETS = {
     "DAPO": {"path": "math/DAPO/train.parquet", "rows": 17917, "split": "train"},
@@ -124,7 +131,10 @@ def check_data(path, name, tokenizer=None, max_prompt_length=4096):
         lengths = []
         for start in range(0, len(rows), 128):
             tokens = tokenizer.apply_chat_template(
-                [row["prompt"] for row in rows[start : start + 128]], add_generation_prompt=True, tokenize=True
+                [row["prompt"] for row in rows[start : start + 128]],
+                add_generation_prompt=True,
+                tokenize=True,
+                return_dict=False,
             )
             lengths.extend(len(item) for item in tokens)
         report.update(
@@ -134,6 +144,29 @@ def check_data(path, name, tokenizer=None, max_prompt_length=4096):
         )
     print(f"OK {name}: {len(rows)} rows, {report['duplicate_prompt_rows']} duplicate prompt rows", flush=True)
     return report, counts
+
+
+def selected_models(names):
+    if "all" in names:
+        if names != ["all"]:
+            raise ValueError("Use --models all without additional model names")
+        return list(MODELS)
+    return list(dict.fromkeys(names))
+
+
+def model_weight_files(folder):
+    """Resolve standard safetensors layouts from metadata, without reading weights."""
+    folder = Path(folder)
+    index = folder / "model.safetensors.index.json"
+    if index.is_file():
+        files = sorted(set(json.loads(index.read_text())["weight_map"].values()))
+        if not files:
+            raise ValueError(f"Empty weight map: {index}")
+        for name in files:
+            if Path(name).is_absolute() or ".." in Path(name).parts:
+                raise ValueError(f"Weight shard must be inside the model directory: {name}")
+        return files
+    return ["model.safetensors"]
 
 
 def check_model(folder, name):
@@ -146,10 +179,13 @@ def check_model(folder, name):
         if filename.endswith(".json"):
             json.loads(path.read_text())
     config = json.loads((folder / "config.json").read_text())
-    weights = folder / "model.safetensors"
+    weights = [folder / filename for filename in model_weight_files(folder)]
+    for path in weights:
+        if not path.is_file() or path.stat().st_size == 0:
+            raise FileNotFoundError(f"Missing or empty model file: {path}")
     report = {
         "path": str(folder.resolve()),
-        "weight_bytes": weights.stat().st_size,
+        "weight_bytes": sum(path.stat().st_size for path in weights),
         "model_type": config.get("model_type"),
     }
     print(f"OK model {name}: required files present", flush=True)
@@ -162,6 +198,7 @@ def main():
     parser.add_argument("--model-root", type=Path, default=MODEL_ROOT)
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     parser.add_argument("--data-only", action="store_true", help="skip models and prompt tokenization")
+    parser.add_argument("--models", nargs="+", choices=[*MODELS, "all"], default=list(DEFAULT_MODELS))
     parser.add_argument("--max-prompt-length", type=int, default=4096)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
@@ -170,9 +207,9 @@ def main():
     if not args.data_only:
         from transformers import AutoTokenizer
 
-        for name in MODELS:
+        for name in selected_models(args.models):
             report["models"][name] = check_model(args.model_root / name, name)
-        student = args.model_root / next(iter(MODELS))
+        student = args.model_root / selected_models(args.models)[0]
         tokenizer = AutoTokenizer.from_pretrained(student, local_files_only=True, trust_remote_code=False)
     prompt_sets = {}
     for name, spec in DATASETS.items():
