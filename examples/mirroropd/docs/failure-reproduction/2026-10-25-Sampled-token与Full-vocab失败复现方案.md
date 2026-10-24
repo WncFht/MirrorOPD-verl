@@ -1,27 +1,27 @@
 # Sampled-token 与 Full-vocab 失败复现方案
 
-更新：2026-10-24。状态：E21–E32 的 sampled/full 与独立师生验证已接入[统一入口](#failure-launcher)；E25/E27 的两步 sampled-token 短测及 Full-KL 接入测试已完成，见[短测验收](2026-10-24-OPD实现验收与对齐诊断.md#smoke-validation)。正式 250 步 failure 观察尚未启动。
+更新：2026-10-25。状态：模型／长度对照的 sampled/full、reuse16 与独立师生验证已接入[统一入口](#failure-launcher)；E25/E27 的两步 sampled-token 短测及 Full-KL 接入测试已完成，见[短测验收](2026-10-24-OPD实现验收与对齐诊断.md#smoke-validation)。正式 250 步 failure 观察尚未启动。
 
-目标是采用论文中的模型对与失败诱因，在我们统一的 **DAPO → MATH-500／AMC23／AIME25** 协议下，先运行 sampled-token OPD，确认是否出现停滞、退化或长窗口失稳，再调用已接入的 full-vocab reverse-KL 实现进行配对实验。**首轮只比较 sampled-token 与 full-vocab，不加入 top-k 蒸馏、任务奖励 RL、OPSD 或批内多次复用。** 原论文中的 top-k 只作为来源设置记录。
+目标是采用论文中的模型对与失败诱因，在我们统一的 **DAPO → MATH-500／AMC23／AIME25** 协议下，先运行 sampled-token OPD，确认是否出现停滞、退化或长窗口失稳，再调用已接入的 full-vocab reverse-KL 实现进行配对实验。**比较 sampled-token 与 full-vocab，并为每种模型／长度／目标增加16次批内复用版本；不加入 top-k 蒸馏、任务奖励 RL 或 OPSD。** 原论文中的 top-k 只作为来源设置记录。
 
 ## 1. 首轮实验矩阵
 
-| Sampled / Full | Student：更新对象 | Teacher：冻结监督者 | Train response cap | 研究问题 |
-| --- | --- | --- | ---: | --- |
-| E21/E22，成功对照 | `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B` | `hbx/JustRL-DeepSeek-1.5B` | **7168** | 当前模型对在短窗口下应能正常学习，作为方法与管线对照 |
-| E23/E24，长窗口 | 同 E21/E22 | 同 E21/E22 | **15360** | 拉长学生轨迹后，sampled-token 是否后期失稳，full-vocab 是否改善 |
-| E25/E26，强教师不奏效 | `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B` | `deepseek-ai/DeepSeek-R1-Distill-Qwen-7B` | **7168** | 换成更大同系列教师后，是否出现收益很小／停滞 |
-| E27/E28，强师生失配 | `Qwen/Qwen3-1.7B-Base` | `Qwen/Qwen3-8B` | **7168** | 是否出现 TIDE 报告的学习停滞、重复生成和答案缺失 |
-| E29/E30，初始思考模式不兼容 | `Qwen/Qwen3-1.7B-Base` | `Qwen/Qwen3-4B`，Non-thinking | **7168** | 对齐较低的 Base 初始化下，sampled 是否学习受限，full 是否改善 |
-| E31/E32，低重叠在线学习受限 | `Qwen/Qwen3-1.7B`，Non-thinking | `Qwen/Qwen3-4B-Instruct-2507` | **4096** | 在原论文匹配 4K 的条件下，full 是否缓解 sampled 在线轨迹的弱收益 |
+| Sampled / Full | Reuse16：Sampled / Full | Student：更新对象 | Teacher：冻结监督者 | Train response cap | 研究问题 |
+| --- | --- | --- | --- | ---: | --- |
+| E15/E13，成功对照 | E33/E17 | `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B` | `hbx/JustRL-DeepSeek-1.5B` | **7168** | 当前模型对在短窗口下应能正常学习，作为方法与管线对照 |
+| E23/E24，长窗口 | E34/E35 | 同 E15/E13 | 同 E15/E13 | **15360** | 拉长学生轨迹后，sampled-token 是否后期失稳，full-vocab 是否改善 |
+| E25/E26，强教师不奏效 | E36/E37 | `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B` | `deepseek-ai/DeepSeek-R1-Distill-Qwen-7B` | **7168** | 换成更大同系列教师后，是否出现收益很小／停滞 |
+| E27/E28，强师生失配 | E38/E39 | `Qwen/Qwen3-1.7B-Base` | `Qwen/Qwen3-8B` | **7168** | 是否出现 TIDE 报告的学习停滞、重复生成和答案缺失 |
+| E29/E30，初始思考模式不兼容 | E40/E41 | `Qwen/Qwen3-1.7B-Base` | `Qwen/Qwen3-4B`，Non-thinking | **7168** | 对齐较低的 Base 初始化下，sampled 是否学习受限，full 是否改善 |
+| E31/E32，低重叠在线学习受限 | E42/E43 | `Qwen/Qwen3-1.7B`，Non-thinking | `Qwen/Qwen3-4B-Instruct-2507` | **4096** | 在原论文匹配 4K 的条件下，full 是否缓解 sampled 在线轨迹的弱收益 |
 
-主实验现有六个设置，每组预留 sampled-token／full-vocab 配对，全部跑齐共十二个训练 run。先运行 sampled，full 优先覆盖确认出现 failure 的设置及 E21/E22 成功对照。不同 student 的绝对分数不直接用来判断 loss 优劣，核心是同一设置内部的 sampled／full 比较。
+主实验有六组模型／长度设置，每组包含 sampled-token／full-vocab 及各自的 reuse16 版本，全部跑齐共24个训练 run。先运行 sampled，full 优先覆盖确认出现 failure 的设置及 E15/E13 成功对照。不同 student 的绝对分数不直接用来判断 loss 优劣，核心是同一设置内部的 sampled／full 比较。
 
 终止协议和 teacher 输入的实验结论见 [运行时终止协议方案](2026-10-24-OPD实现验收与对齐诊断.md#runtime-eos)。E27–E30 的原生 EOS 与 ChatML-stop 必须区分记录，同一个 sampled/full 配对使用相同协议。受集群限制，运行时追加停止 ID 已接入训练配置，并通过 105 项回归和 16 个真实引擎用例；公共入口默认仍不追加；E27–E30 的实验预设显式追加，正式训练尚未启动。
 
 ### 1.1 模型与权重准备
 
-2026-10-24 本机 E21–E32 所需的 8 个 checkpoint 已全部实体放入仓库同级 `model/`：两个原有 1.5B 模型、R1-Distill-7B、Qwen3-1.7B-Base、Qwen3-1.7B、Qwen3-4B、Qwen3-8B、Qwen3-4B-Instruct-2507。原分散目录保留作来源，运行入口统一使用 `MODEL_ROOT`。无需额外准备 30B／235B 教师。开发机资产状态需独立核对；导入／下载及分片检查见[资产准备](../资产准备.md)。
+2026-10-24，本机已将这些实验所需的8个checkpoint实体放入仓库同级 `model/`：两个原有 1.5B 模型、R1-Distill-7B、Qwen3-1.7B-Base、Qwen3-1.7B、Qwen3-4B、Qwen3-8B、Qwen3-4B-Instruct-2507。原分散目录保留作来源，运行入口统一使用 `MODEL_ROOT`。无需额外准备 30B／235B 教师。开发机资产状态需独立核对；导入／下载及分片检查见[资产准备](../资产准备.md)。
 
 ### 1.2 统一训练设置：采用我们的协议
 
@@ -35,7 +35,7 @@
 | Rollouts per prompt | **1** |
 | 每批生成回答数 | **64** |
 | PPO mini-batch 配置 | **64** |
-| PPO epochs／复用 | **1**，每批 fresh rollout 只做一次 optimizer update |
+| PPO epochs／复用 | 基础版 **1**；reuse版 **16**，对同一批轨迹执行16次actor更新，不额外生成rollout |
 | LR | **1e-6** |
 | Optimizer | **AdamW，β=(0.9,0.999)，weight decay=0.01** |
 | Scheduler／warmup | **constant／0** |
@@ -48,9 +48,11 @@
 | Full 分支 | `full_reverse_kl`，对完整条件分布直接求梯度；不另加 sampled ratio 或 PPO clipping |
 | 初步种子 | **42**；正式结论补至少 3 个种子，所有方法用相同的种子集合 |
 | 数据顺序 | 沿用本项目训练 shuffle 设置；相同数据 seed，设置内部保持一致 |
-| 观察预算 | **统一 250 次 optimizer 更新**；当前 E23/E24=M、n=1、epochs=1，因此也是 250 个 outer steps |
+| 观察预算 | **统一250个outer steps**；batch=mini-batch=64、n=1，无跳过更新时基础版250次、reuse16版4000次optimizer更新 |
 | 验证节点 | 训练前、每 20 步、最终 250 步；同组方法一致 |
-| Checkpoint | 入口默认每 20 步保存、最多保留最近 4 个；可通过 `trainer.max_actor_ckpt_to_keep` 覆盖 |
+| Checkpoint | 每100个outer steps保存，并在最终250步保存；最多保留最近4个，可通过 `trainer.max_actor_ckpt_to_keep` 覆盖 |
+
+此处比较固定rollout批次数与新增prompt预算，不是固定optimizer更新次数；reuse16会增加反向计算量。等更新预算的 E18–E20 保留原定义，见[等预算实验](../2026-10-24-师生验证与等更新预算实验.md)。实际成功更新数以日志中的跳过更新记录为准。
 
 选择 250 步是为了覆盖原文图 12 中约 200 步后出现的长窗口异常；如果在 200 步结束，可能刚好错过失稳。预算是预先设定的，不根据哪个 checkpoint 最差来挑 failure。250 批会消费 16000 条训练记录，少于当前 DAPO 的 17917 条；实际仍以过滤后可用数据量和成功更新计数为准。
 
@@ -58,9 +60,9 @@
 
 ### 1.3 Response cap 与上下文窗口
 
-**训练 response cap：E21/E22、E25–E30 为 7168，E23/E24 为 15360，E31/E32 为 4096；验证 response cap 统一 31744。** E31/E32 保留 Semi-OPD 主曲线的 4K 条件，不能把它换成表 1 的 16K OPD 后仍称为匹配长度对照。不随训练 cap 缩短验证回答预算，否则可能隐藏长序列退化。
+**训练 response cap：E15/E13、E25–E30 为 7168，E23/E24 为 15360，E31/E32 为 4096；验证 response cap 统一 31744。** E31/E32 保留 Semi-OPD 主曲线的 4K 条件，不能把它换成表 1 的 16K OPD 后仍称为匹配长度对照。不随训练 cap 缩短验证回答预算，否则可能隐藏长序列退化。
 
-E21–E26 沿用 DeepSeek 模型的上下文配置。E27–E30 的 Qwen3-1.7B-Base 声明总上下文 32768，因此适配 E27–E30 时须把 prompt 预算控制在 1024 以内，启动脚本已修正为 student 窗口等于 prompt＋最大 response，不再额外加 1，因此 1024＋31744 恰好为 32768。不能原样沿用 4096 prompt＋31744 response。若 E27–E30 因长度过滤改变可用记录数，单独记录；各组内部 sampled/full 使用同一过滤结果。E31/E32 的 Qwen3-1.7B 配置窗口为 40960，4096 prompt＋31744 response 可以容纳；仍需核对实际生成引擎窗口。[^qwen-configs]
+E15/E13、E23–E26 沿用 DeepSeek 模型的上下文配置。E27–E30 的 Qwen3-1.7B-Base 声明总上下文 32768，因此适配 E27–E30 时须把 prompt 预算控制在 1024 以内，启动脚本已修正为 student 窗口等于 prompt＋最大 response，不再额外加 1，因此 1024＋31744 恰好为 32768。不能原样沿用 4096 prompt＋31744 response。若 E27–E30 因长度过滤改变可用记录数，单独记录；各组内部 sampled/full 使用同一过滤结果。E31/E32 的 Qwen3-1.7B 配置窗口为 40960，4096 prompt＋31744 response 可以容纳；仍需核对实际生成引擎窗口。[^qwen-configs]
 
 这项上下文适配不要求现在降低所有模型的验证 response cap。DeepSeek 与 Qwen 模型还应分别使用正确的 chat 协议；E27–E30 不得以 post-trained `Qwen3-1.7B` 替代 Base 初始化。E31/E32 使用 post-trained student，训练与验证均固定 Non-thinking。E29/E30 的 teacher 独立评测也固定 Non-thinking；teacher 评分时接收 student 的同一词元前缀，不另行生成一段 thinking 内容。
 
@@ -85,7 +87,9 @@ E21–E26 沿用 DeepSeek 模型的上下文配置。E27–E30 的 Qwen3-1.7B-Ba
 <a id="failure-launcher"></a>
 ### 1.5 统一入口与资源设置
 
-[run_math_opd_ablation_fsdp2.sh](../../run_math_opd_ablation_fsdp2.sh) 接受 E21–E32：奇数编号为 sampled-token，偶数编号为 full-vocab reverse KL；在编号后追加 `-valid-student` 或 `-valid-teacher` 可独立验证对应原始模型。原有 E1–E20 的配置保持原行为。
+[run_math_opd_ablation_fsdp2.sh](../../run_math_opd_ablation_fsdp2.sh) 使用上表编号。短窗基础版直接复用 E15（sampled）与 E13（full），E21/E22 分别为二者的兼容入口，生成的默认实验名也使用规范编号。短窗 full reuse16 复用 E17，其他 reuse16 配置为 E33–E43。编号不再遵循通用奇偶规则，以表中方法为准。
+
+在模型实验编号后追加 `-valid-student` 或 `-valid-teacher` 可独立验证对应原始模型；reuse版本共享相同初始权重，不需要重复评测。E14保留低学习率变体、E16保留reuse4变体，二者也使用250步和100步保存。E1–E12及等更新预算E18–E20保持各自原有定义。
 
 ```bash
 # 先检查配置；去掉 DRY_RUN=1 后才会运行。
@@ -97,41 +101,36 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 STUDENT_GPUS=4 DRY_RUN=1 \
   bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E27-valid-teacher
 ```
 
-Full-vocab KL 已经适配完成，偶数编号直接调用现有 `run_full_reverse_kl.sh`。设置好本机 `PYTHON_BIN`、`MODEL_ROOT`、`DATA_ROOT` 后，例如 E22 的实际启动命令为：
+Full-vocab KL 已适配完成，基础版 E13/E24/E26/E28/E30/E32 与 reuse16版 E17/E35/E37/E39/E41/E43 均调用现有 `run_full_reverse_kl.sh`。设置好本机 `PYTHON_BIN`、`MODEL_ROOT`、`DATA_ROOT` 后，例如：
 
 ```bash
+# 短窗 full，250批rollout，每批更新一次。
 CUDA_VISIBLE_DEVICES=0,1,2,3 STUDENT_GPUS=4 \
-FULL_KL_BACKEND=precompute FULL_KL_ASYNC_WRITE=True FULL_KL_PREFETCH=True \
-  bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E22
+  bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E13
+
+# 相同模型、数据、长度和学习率，每批复用16次，共4000次更新尝试。
+CUDA_VISIBLE_DEVICES=0,1,2,3 STUDENT_GPUS=4 \
+  bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E17
 ```
 
-将末尾编号换成 E24、E26、E28、E30、E32 即运行其他 full-KL 模型／长度组合；对应 sampled 编号分别为 E23、E25、E27、E29、E31。以上仅记录启动方式，正式训练尚未执行。
+2026-10-25 起，E13与E22不再区分为不同运行预算，E15与E21亦相同。此前已运行实验的冻结配置仍记录当时的200步等参数，不能按今天的默认值重新解释历史曲线。以上仅记录启动方式，正式训练尚未执行。
 
-E22 与原 E13 的 student、teacher、full reverse-KL 目标、7168训练长度和1e-6学习率相同。新编号表示统一预算的复跑，差别如下；E21 与 E15 的 sampled 基线也采用相同区分。
-
-| 配置 | 原 E13 | E22 |
-| --- | ---: | ---: |
-| 训练步数 | 200 | 250 |
-| 初始验证 | 关闭 | 开启 |
-| 保存间隔 | 100步 | 20步 |
-| 最近 checkpoint 保留数 | 2 | 4 |
-
-训练入口默认 DAPO、64×1、每批更新一次、LR=1e-6、250步；训练前、每20步及最终步验证。Full 分支复用现有 `precompute + async_write + prefetch` 实现，仍可用 `FULL_KL_*` 环境变量覆盖。环境变量覆盖预设默认，命令末尾的 Hydra 参数最后生效；修改 batch、复用次数或步数后，更新预算也会随之变化。
+训练入口默认 DAPO、64×1、LR=1e-6、250个outer steps；每批更新次数由基础版1或reuse版16决定；训练前、每20步及最终步验证。Full 分支复用现有 `precompute + async_write + prefetch` 实现，仍可用 `FULL_KL_*` 环境变量覆盖。环境变量覆盖预设默认，命令末尾的 Hydra 参数最后生效；修改 batch、复用次数或步数后，更新预算也会随之变化。
 
 | 设置 | 学生训练／验证并发上限 | 教师独立验证并发上限 | 协议 |
 | --- | ---: | ---: | --- |
-| E21–E24 | 128 | 64 | DeepSeek；E23/E24 仅训练 response cap 更长 |
+| E15/E13、E23/E24 | 128 | 64 | DeepSeek；E23/E24 仅训练 response cap 更长 |
 | E25/E26 | 128 | 32 | DeepSeek |
 | E27–E30 | 12 | 32 | Qwen Non-thinking；仅 Base student 追加 stop ID151645、prompt cap1024 |
 | E31/E32 | 32 | 32 | Qwen Non-thinking；prompt cap4096 |
 
 并发是每个TP1实例的上限；共享训练期间训练与验证复用同一个rollout引擎。显存比例0.65、token budget8192、Graph沿用公共配置。以上只是[已测的资源起点](2026-10-24-OPD实现验收与对齐诊断.md#concurrency-calibration)，尚未找到高并发吞吐上限；后续调优已暂停。教师独立验证将教师作为生成模型，使用自己的4096 prompt预算；这些并发值不控制shared-sync训练中的FSDP teacher评分。
 
-原始基线共有8个不同checkpoint。运行 `E21-valid-student`、`E27-valid-student`、`E31-valid-student` 和 `E21-valid-teacher`、`E25-valid-teacher`、`E27-valid-teacher`、`E29-valid-teacher`、`E31-valid-teacher` 即可覆盖；E21–E26共享student，E27–E30共享student，E21–E24共享teacher，无需重复生成。独立验证关闭蒸馏及checkpoint保存，不执行optimizer更新。
+原始基线共有8个不同checkpoint。运行 `E15-valid-student`、`E27-valid-student`、`E31-valid-student` 和 `E15-valid-teacher`、`E25-valid-teacher`、`E27-valid-teacher`、`E29-valid-teacher`、`E31-valid-teacher` 即可覆盖；E15/E13、E23–E26共享student，E27–E30共享student，E15/E13、E23/E24共享teacher，无需重复生成。独立验证关闭蒸馏及checkpoint保存，不执行optimizer更新。
 
 <a id="ac-teacher-pairs"></a>
 
-## 2. E21/E22 与 E25/E26：同一个学生，成功教师与不奏效教师
+## 2. E15/E13 与 E25/E26：同一个学生，成功教师与不奏效教师
 
 ### 2.1 论文原始现象
 
@@ -145,13 +144,13 @@ Rethinking OPD §4.1 固定 R1-Distill-1.5B 学生，对比 JustRL-1.5B 与 R1-D
 
 ### 2.2 我们怎样检验
 
-| 项目 | E21/E22 | E25/E26 |
+| 项目 | E15/E13 | E25/E26 |
 | --- | --- | --- |
 | Student | 同一个 R1-Distill-1.5B 初始 checkpoint | 同左 |
 | Teacher | JustRL-1.5B | R1-Distill-7B |
 | Train response cap | 7168 | 7168 |
 | 本轮验证 | MATH-500／AMC23／AIME25，avg@16 | 同左 |
-| 判断 | 作为正常学习对照 | 检查相对于 step 0 及 E21/E22 是否出现弱收益或停滞 |
+| 判断 | 作为正常学习对照 | 检查相对于 step 0 及 E15/E13 是否出现弱收益或停滞 |
 
 原文的 student-top-k 现象迁移到 sampled-token 后是否仍成立，需要实测。若 E25/E26 在我们的协议中能正常学习，应记录“未复现该 failure”，不要通过换验证集或挑差 checkpoint 强行制造失败。Full-vocab 的比较继续固定 E25/E26 的 student、teacher 与长度，不把 teacher 换回 JustRL。
 
@@ -173,7 +172,7 @@ Rethinking OPD §6.1 固定 R1-Distill-1.5B student 和 JustRL-1.5B teacher，�
 
 ### 3.2 我们怎样检验
 
-E21/E22 与 E23/E24 只改变训练 response cap：7168 → 15360。训练数据、模型对、LR、batch、n、验证和 250 次更新预算相同。先看 E23/E24 的 sampled-token 是否相较 E21/E22 出现持续退化、重复或长回答异常，再用 E24 比较。
+E15/E13 与 E23/E24 只改变训练 response cap：7168 → 15360。训练数据、模型对、LR、batch、n、验证和 250 次更新预算相同。先看 E23/E24 的 sampled-token 是否相较 E15/E13 出现持续退化、重复或长回答异常，再用 E24 比较。
 
 Full-vocab 可能减少局部动作抽样噪声，却不会保证长前缀上的教师分布仍然可靠。因此可能出现三种结果：
 
@@ -252,7 +251,7 @@ E27/E28 的训练 response cap 仍用 7168。原文在这一训练 cap 下就观
 | Prompt／response cap | 1024／7168 | 同左 |
 | 蒸馏目标 | 默认 student-top-16 | sampled-token，然后 full-vocab RKL |
 | 验证 | AIME24/AIME25/AMC23；avg@16，T=0.7、p=0.95、cap31744 | MATH-500/AMC23/AIME25；avg@16，T=0.7、p=0.9、cap31744 |
-| 观察预算 | 原文一轮训练，图 2 展示至 200 步 | 统一 250 次更新 |
+| 观察预算 | 原文一轮训练，图 2 展示至 200 步 | 统一250批；基础版250次、reuse16版4000次更新尝试 |
 
 E29/E30 直接从 Base 开始，不加入 SFT 冷启动；冷启动曲线用于证明初始化对后续 OPD 的影响。检查低初始对齐下 sampled 是否出现平台、波动或明显弱收益，再看 full 是否能继续推进。与 E27/E28 相比，E29/E30 保持学生与本轮 cap 相同，换成原版 4B Non-thinking teacher；这不是只改变参数量的教师规模消融。
 
@@ -303,9 +302,9 @@ E29/E30 直接从 Base 开始，不加入 SFT 冷启动；冷启动曲线用于�
 ## 7. 从 Sampled-token 到 Full-vocab 的执行顺序
 
 1. **建立参考。** 对每个模型对，使用同一三 valid 协议评测初始 student 与 teacher。
-2. **先跑 E21/E23 的 sampled。** 现成资产可检验 7K 成功对照和 15K 长窗现象，两组均完成预设 250 步观察，不只保留最好点。
+2. **先跑 E15/E23 的 sampled。** 现成资产可检验 7K 成功对照和 15K 长窗现象，两组均完成预设 250 步观察，不只保留最好点。
 3. **补 E25/E27/E29/E31 的 sampled。** E27/E29/E31 是初始失配的重点；E25 保留强教师停滞对照。E25/E27 工程短测已有记录，其余组合核对权重、模式、上下文和 tokenizer 后运行。
-4. **运行 E22/E24/E26/E28/E30/E32 的 full-vocab 配对。** 复用已接入实现，优先覆盖出现 failure 的设置及 E22 成功对照，固定相同初始化、数据和预算，每批更新一次。
+4. **运行 E13/E24/E26/E28/E30/E32 的 full-vocab 配对。** 复用已接入实现，优先覆盖出现 failure 的设置及 E13 成功对照，基础版固定相同初始化、数据和预算，每批更新一次；随后按表运行各自reuse16版本，固定250个outer steps。
 5. **报告分项与轨迹。** 同时展示 step 0、step 200、最终 250 及完整验证曲线；准确率、长度和答案缺失一起解释。
 
 具体代码边界、已实现能力和未完成验收统一见[实现状态](2026-10-24-OPD实现验收与对齐诊断.md)与[E25/E27 短测](2026-10-24-OPD实现验收与对齐诊断.md#smoke-validation)。E25/E27 短测、E25/E26、E29–E32 前向探针及 EOS 边界验证不能替代本方案的正式 failure 观察。
@@ -342,17 +341,17 @@ Teacher 独立 accuracy 评估的是它从问题开始自行生成完整解答�
 
 原文§6.2 另有一个相关但不同的对照：student 是 R1-Distill-1.5B，成功 teacher 为 JustRL-1.5B、失败 teacher 为 R1-Distill-7B。两种 teacher 的轨迹均值奖励区分正确／错误回答的 AUROC 分别约为 0.73、0.75；失败教师并非没有全局正确性信息。作者提出局部梯度方向不一致、聚合后抵消的假说，但明确未直接验证。**这些 AUROC 属于§4.1 的 student 配置，不能当作图 5 中 JustRL student 的测量值。**[^rethinking]
 
-这组仍是有价值的 failure 候选。它暂列附录，仅表示首轮 E21–E32 尚未增加 JustRL 作为 student 的实验臂，不表示它因教师弱而应被排除，也不表示 full-vocab 已被证明救不回。若后续纳入，train response cap7168，继续使用本轮 DAPO／三 valid 协议，先 sampled 再 full；词表对齐需求与 E25/E26 相同。
+这组仍是有价值的 failure 候选。它暂列附录，仅表示这些模型／长度组合 尚未增加 JustRL 作为 student 的实验臂，不表示它因教师弱而应被排除，也不表示 full-vocab 已被证明救不回。若后续纳入，train response cap7168，继续使用本轮 DAPO／三 valid 协议，先 sampled 再 full；词表对齐需求与 E25/E26 相同。
 
 <a id="appendix-excluded"></a>
 
 ## 附录 B：排除与后置的设置
 
-“后置”表示有研究价值，但不进入首轮 E21–E32；“排除替换”表示不能把它当作所选 setting 的等价替代。原文参数如需追查，见[核对档案](../research/2026-10-24-OPD失败复现设置与Full-vocab对照.md)。
+“后置”表示有研究价值，但不进入这些模型／长度组合；“排除替换”表示不能把它当作所选 setting 的等价替代。原文参数如需追查，见[核对档案](../research/2026-10-24-OPD失败复现设置与Full-vocab对照.md)。
 
 | 设置 | 状态 | 原始现象／研究方向 | 本轮处理理由 |
 | --- | --- | --- | --- |
-| JustRL-1.5B student ← R1-Distill-7B teacher | 后置，非排除 | 更高分 teacher 仍使 student 下降，指标见附录 A | 首轮 E21–E32 尚未增加这一 student 初始化；不能以“teacher 较弱”或“full 必然无效”为排除理由 |
+| JustRL-1.5B student ← R1-Distill-7B teacher | 后置，非排除 | 更高分 teacher 仍使 student 下降，指标见附录 A | 这些模型／长度组合 尚未增加这一 student 初始化；不能以“teacher 较弱”或“full 必然无效”为排除理由 |
 | Qwen2.5-7B-Instruct ← OpenThinker3-7B | 后置 | Revisiting 中 AIME24 负迁移，但五项均分上涨 | 最直接的退化基准 AIME24 不在我们的三 valid 中；7B 学生也增加成本[^revisiting] |
 | Qwen3 Thinking 学生 ← 30B-A3B／235B 教师 | 后置 | Semi-OPD 的部分低重叠配置出现在线退化 | 先用 dense 8B 教师测失配，控制成本及 MoE 适配范围[^semi] |
 | Demystifying 中的作者自训 1.7B／4B-GRPO 教师 | 暂不做精确复现 | 教师失配与长度异常 | 原始 checkpoint 与部分训练参数不完整，不能拿另一篇同名 GRPO 模型替代[^demystifying] |
@@ -365,7 +364,7 @@ Teacher 独立 accuracy 评估的是它从问题开始自行生成完整解答�
 
 ## 附录 C：高一致失败证据索引
 
-Rethinking 的 overlap 动态、TIDE 的低 KL 循环／matched-only 消融、KAT 的低效后缀和理论解释已合并到[论文证据](2026-10-24-OPD实现验收与对齐诊断.md#alignment-evidence)，本处保留入口。原始论文图和 E21–E32 设置仍由本方案维护。
+Rethinking 的 overlap 动态、TIDE 的低 KL 循环／matched-only 消融、KAT 的低效后缀和理论解释已合并到[论文证据](2026-10-24-OPD实现验收与对齐诊断.md#alignment-evidence)，本处保留入口。原始论文图和当前模型／长度设置仍由本方案维护。
 
 ### 参考文献
 

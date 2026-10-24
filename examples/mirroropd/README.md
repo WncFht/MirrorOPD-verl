@@ -55,7 +55,7 @@ make opd-submit
 DRY_RUN=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
 ```
 
-数学消融统一使用 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)：E1–E20 保留原有算法／复用实验；E21–E32 接入模型／长度配对实验，奇数为 sampled-token，偶数为已实现的 full-vocab reverse KL。`E21-valid-student`／`E21-valid-teacher` 分别独立验证原始模型。每次调用运行一个选项，GPU 数量由 `STUDENT_GPUS` 与 `CUDA_VISIBLE_DEVICES` 明确指定。完整配置见[实验矩阵与运行方式](docs/failure-reproduction/2026-10-24-Sampled-token与Full-vocab失败复现方案.md#failure-launcher)。
+数学消融统一使用 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)。短窗基础版为 E15（sampled）／E13（full），其他模型／长度基础版为 E23–E32；对应reuse16版本为 E33–E43及已有E17。E21/E22分别兼容映射到E15/E13。当前模型对照均跑250个outer steps，每100步及最终步保存；基础版每批更新1次，reuse版16次。`E15-valid-student`／`E15-valid-teacher` 可独立验证原始模型。每次调用运行一个选项，GPU数量由 `STUDENT_GPUS` 与 `CUDA_VISIBLE_DEVICES` 明确指定；完整编号、模型和预算见[实验方案](docs/failure-reproduction/2026-10-25-Sampled-token与Full-vocab失败复现方案.md#failure-launcher)。
 
 ```bash
 # 只检查 E28 的命令，不启动 GPU 作业。

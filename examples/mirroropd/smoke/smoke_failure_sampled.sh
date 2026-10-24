@@ -5,12 +5,12 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 EXAMPLE_DIR=$(cd -- "$SCRIPT_DIR/.." && pwd)
 REPO_ROOT=$(cd -- "$EXAMPLE_DIR/../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO_ROOT")
-SETTING=${1:?Usage: smoke_failure_sampled.sh E21|E23|E25|E27|E29|E31 [Hydra overrides...]}
+SETTING=${1:?Usage: smoke_failure_sampled.sh E15|E21|E23|E25|E27|E29|E31 [Hydra overrides...]}
 shift
 export MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
 case "$SETTING" in
-    E21|E23|E25|E27|E29|E31) ;;
-    *) echo 'Expected a sampled preset: E21, E23, E25, E27, E29 or E31' >&2; exit 2 ;;
+    E15|E21|E23|E25|E27|E29|E31) ;;
+    *) echo 'Expected a sampled preset: E15 (E21 alias), E23, E25, E27, E29 or E31' >&2; exit 2 ;;
 esac
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3}
 export STUDENT_GPUS=4 TEACHER_GPUS=0 DISTILLATION_EXECUTION_MODE=shared_sync VERL_USE_UV=0
