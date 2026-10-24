@@ -70,6 +70,9 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "VAL_BATCH_SIZE",
         "PPO_EPOCHS",
         "TOTAL_TRAINING_STEPS",
+        "TOTAL_EPOCHS",
+        "STUDENT_MODEL",
+        "TEACHER_MODEL",
         "TEST_FREQ",
         "SAVE_FREQ",
         "LEARNING_RATE",
@@ -699,3 +702,101 @@ def test_code_launcher_forwards_lcb_policy_and_audit_directory(tmp_path):
     assert env.MIRROROPD_LCB_MAX_CONCURRENT == "2"
     assert env.MIRROROPD_LCB_RUN_ID == "test"
     assert env.MIRROROPD_LCB_AUDIT_DIR == str(tmp_path / "run" / "lcb-audit")
+
+
+@pytest.mark.parametrize(
+    "group,epochs,outer,test,save",
+    [
+        ("E18", 64, 64, 8, 16),
+        ("E19", 32, 128, 16, 32),
+        ("E20", 16, 256, 32, 64),
+    ],
+)
+def test_equal_update_presets_use_one_original_data_pass(tmp_path, group, epochs, outer, test, save):
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), group])
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
+    assert cfg.data.train_files[0].endswith("/math/DAPO/train.parquet")
+    assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
+    assert cfg.data.train_max_samples == -1 and cfg.data.shuffle and cfg.data.seed == 42
+    assert cfg.trainer.total_epochs == 1 and cfg.trainer.total_training_steps == outer
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == epochs and outer * epochs == 4096
+    assert cfg.trainer.test_freq == test and test * epochs == 512
+    assert cfg.trainer.save_freq == save and save * epochs == 1024
+    assert cfg.trainer.max_actor_ckpt_to_keep == 4
+    assert not cfg.trainer.val_before_train and cfg.trainer.resume_mode == "disable"
+    assert not cfg.algorithm.filter_groups.enable and not cfg.trainer.v1.sampler.sync_refill_failed_groups
+    assert outer * 64 <= 17917
+    assert loss.loss_mode == "full_reverse_kl" and not loss.use_task_rewards
+    assert loss.full_vocab.backend == "precompute" and loss.full_vocab.async_write and loss.full_vocab.prefetch
+    assert cfg.actor_rollout_ref.actor.optim.lr == 1e-6
+
+
+@pytest.mark.parametrize(
+    "target,model",
+    [
+        ("student", "DeepSeek-R1-Distill-Qwen-1.5B"),
+        ("teacher", "JustRL-DeepSeek-1.5B"),
+    ],
+)
+def test_standalone_validation_uses_selected_generator_without_distillation(tmp_path, target, model):
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_validation_fsdp2.sh"), target])
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    assert cfg.actor_rollout_ref.model.path.endswith("/" + model)
+    assert not cfg.distillation.enabled and cfg.distillation.n_gpus_per_node == 0
+    assert cfg.trainer.val_only and cfg.trainer.val_before_train
+    assert cfg.trainer.resume_mode == "disable" and cfg.trainer.save_freq == -1
+    assert not cfg.actor_rollout_ref.rollout.calculate_log_probs
+    assert cfg.actor_rollout_ref.rollout.seed == cfg.data.seed == 42
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.max_tokens == 31744
+    assert cfg.data.val_batch_size is None
+    assert cfg.actor_rollout_ref.rollout.max_num_seqs == 128
+    assert cfg.actor_rollout_ref.rollout.gpu_memory_utilization == 0.65
+    assert not cfg.actor_rollout_ref.rollout.enforce_eager
+
+
+def test_teacher_validation_selects_teacher_override_and_retains_hydra_precedence(tmp_path):
+    script = SCRIPT.parent / "run_math_validation_fsdp2.sh"
+    cfg = _config(
+        tmp_path,
+        command=["bash", str(script), "teacher"],
+        STUDENT_MODEL="/unused/student",
+        TEACHER_MODEL="/teacher with spaces",
+        STUDENT_GPUS="4",
+    )
+    assert cfg.actor_rollout_ref.model.path == "/teacher with spaces"
+    assert cfg.trainer.n_gpus_per_node == 4
+    cfg = _config(
+        tmp_path,
+        command=[
+            "bash",
+            str(script),
+            "student",
+            "actor_rollout_ref.model.path=/checkpoint",
+            "actor_rollout_ref.rollout.val_kwargs.n=2",
+        ],
+        SEED="43",
+    )
+    assert cfg.actor_rollout_ref.model.path == "/checkpoint"
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.n == 2 and cfg.actor_rollout_ref.rollout.seed == 43
+    result = _launch(tmp_path, command=["bash", str(script), "unknown"])
+    assert result.returncode == 2
+
+
+@pytest.mark.parametrize("group", ["E18", "E19", "E20"])
+def test_equal_update_presets_allow_explicit_smoke_overrides(tmp_path, group):
+    cfg = _config(
+        tmp_path,
+        command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), group, "trainer.test_freq=1"],
+        PPO_EPOCHS="2",
+        TOTAL_TRAINING_STEPS="2",
+        TRAIN_BATCH_SIZE="8",
+        TEST_FREQ="2",
+        SAVE_FREQ="-1",
+    )
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == cfg.trainer.total_training_steps == 2
+    assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 8
+    assert cfg.trainer.test_freq == 1 and cfg.trainer.save_freq == -1
