@@ -148,6 +148,11 @@ def display(state):
         queue = logs["upload_queue"]
         sync_observe.console_print(f"  Upload queue: {queue['status']} {queue.get('path', '')}")
         sync_observe.console_print("  Tasks: " + json.dumps(queue["counts"]))
+        if queue["counts"].get("incomplete"):
+            sync_observe.console_print(
+                f"  WAITING {queue['counts']['incomplete']} snapshot(s) for newer source data; "
+                "incomplete does not by itself mean an upload failure or prove training is still running"
+            )
         for job in queue["jobs"]:
             if job["status"] not in ("succeeded", "superseded"):
                 sync_observe.console_print(
@@ -173,6 +178,11 @@ def display(state):
         details = report.get("details", {})
         if details.get("archive"):
             sync_observe.console_print(f"    Archive: {details['archive']}")
+        summary = details.get("upload_summary", {})
+        if summary.get("waiting_for_snapshot"):
+            sync_observe.console_print(
+                f"    WAITING {summary['waiting_for_snapshot']} snapshot(s) for newer source data"
+            )
         for step in report.get("stages", []):
             if step["name"] in (
                 "logs.merge",
