@@ -1,0 +1,215 @@
+diff --git a/examples/mirroropd/docs/infra/profile/scripts/fused_candidate.py b/examples/mirroropd/docs/infra/profile/scripts/fused_candidate.py
+index 2ba3780fb..b25b3b393 100644
+--- a/examples/mirroropd/docs/infra/profile/scripts/fused_candidate.py
++++ b/examples/mirroropd/docs/infra/profile/scripts/fused_candidate.py
+@@ -7,9 +7,18 @@ original standalone source. Existing benchmark commands remain reproducible.
+ """
+ 
+ from verl.trainer.distillation.full_vocab_triton import (  # noqa: F401
+-    FusedPrecomputedKL,
+     _gradient,
+     _partials,
+     _rows,
+     fused_rows,
+ )
++
++
++class FusedPrecomputedKL:
++    """Keep the archived scalar probe API without duplicating the production VJP."""
++
++    @staticmethod
++    def apply(hs, ws, ht, wt, token_chunk):
++        from verl.trainer.distillation.full_vocab import full_reverse_kl
++
++        return full_reverse_kl(hs, ws, ht, wt, backend="precompute_fused", token_chunk=token_chunk)
+diff --git a/tests/special_distributed/test_full_vocab_fsdp2.py b/tests/special_distributed/test_full_vocab_fsdp2.py
+index d73f1c646..13af72ee1 100644
+--- a/tests/special_distributed/test_full_vocab_fsdp2.py
++++ b/tests/special_distributed/test_full_vocab_fsdp2.py
+@@ -8,6 +8,7 @@ unequal output supports; no Ray or vLLM.
+ """
+ 
+ import argparse
++import copy
+ import json
+ import shutil
+ import tempfile
+@@ -32,6 +33,22 @@ from verl.workers.config import DistillationConfig, DistillationLossConfig
+ from verl.workers.config.distillation import FullVocabConfig
+ 
+ 
++def local_snapshot(value):
++    """Copy full optimizer containers, comparing each rank's actual shard."""
++    if isinstance(value, torch.Tensor):
++        value = value.detach()
++        if hasattr(value, "to_local"):
++            value = value.to_local()
++        return value.cpu().clone()
++    if isinstance(value, dict):
++        return {k: local_snapshot(v) for k, v in value.items()}
++    if isinstance(value, list):
++        return [local_snapshot(v) for v in value]
++    if isinstance(value, tuple):
++        return tuple(local_snapshot(v) for v in value)
++    return copy.deepcopy(value)
++
++
+ def main():
+     parser = argparse.ArgumentParser()
+     parser.add_argument(
+@@ -41,6 +58,7 @@ def main():
+     )
+     parser.add_argument("--output", type=Path)
+     parser.add_argument("--checkpoint", action="store_true")
++    parser.add_argument("--state-output", type=Path)
+     parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
+     parser.add_argument("--tied-student", action="store_true")
+     parser.add_argument("--tied-teacher", action="store_true")
+@@ -165,6 +183,15 @@ def main():
+         n: (p.detach().to_local() - original[n]).float().norm().item()
+         for n, p in actor.engine.module.named_parameters()
+     }
++    if args.state_output:
++        args.state_output.mkdir(parents=True, exist_ok=True)
++        torch.save(
++            {
++                "parameters": local_snapshot(dict(actor.engine.module.named_parameters())),
++                "optimizer": local_snapshot(actor.engine.optimizer.state_dict()),
++            },
++            args.state_output / f"rank{rank}.pt",
++        )
+     head_name = "embed_tokens" if args.tied_student else "lm_head"
+     assert any(v > 0 for n, v in deltas.items() if head_name in n)
+     if args.tied_student:
+@@ -173,15 +200,33 @@ def main():
+     actor.engine.full_vocab_teacher_head.release()
+     if args.checkpoint:
+         saved = {n: p.detach().to_local().clone() for n, p in actor.engine.module.named_parameters()}
++        # Scheduler invocations are an independent clock, not inferred from updates.
++        actor.engine.lr_scheduler_step()
++        actor.engine.lr_scheduler_step()
++        scheduler_state = copy.deepcopy(actor.engine.lr_scheduler.state_dict())
++        optimizer_state = local_snapshot(actor.engine.optimizer.state_dict())
+         actor.save_checkpoint(str(root / "checkpoint"), global_step=3)
+-        with torch.no_grad():
+-            for p in actor.engine.module.parameters():
+-                p.to_local().add_(0.5)
++        actor.train_batch(data)
++        actor.engine.lr_scheduler_step()
++        assert actor.engine.lr_scheduler.state_dict() != scheduler_state
++        next_parameters = {n: p.detach().to_local().cpu().clone() for n, p in actor.engine.module.named_parameters()}
++        next_optimizer = local_snapshot(actor.engine.optimizer.state_dict())
++        next_scheduler = copy.deepcopy(actor.engine.lr_scheduler.state_dict())
+         actor.load_checkpoint(str(root / "checkpoint"))
+         for n, p in actor.engine.module.named_parameters():
+             torch.testing.assert_close(p.detach().to_local(), saved[n], atol=0, rtol=0)
++        assert actor.engine.lr_scheduler.state_dict() == scheduler_state
++        torch.testing.assert_close(local_snapshot(actor.engine.optimizer.state_dict()), optimizer_state, atol=0, rtol=0)
++        actor.train_batch(data)
++        actor.engine.lr_scheduler_step()
++        for n, p in actor.engine.module.named_parameters():
++            torch.testing.assert_close(p.detach().to_local().cpu(), next_parameters[n], atol=0, rtol=0)
++        torch.testing.assert_close(local_snapshot(actor.engine.optimizer.state_dict()), next_optimizer, atol=0, rtol=0)
++        assert actor.engine.lr_scheduler.state_dict() == next_scheduler
+     result = {"backend": args.backend, "world_size": world, "records": records, "parameter_delta_norms_rank0": deltas}
+     result["checkpoint_roundtrip"] = args.checkpoint
++    result["scheduler_optimizer_roundtrip"] = args.checkpoint
++    result["resumed_next_update_equivalent"] = args.checkpoint
+     result.update(
+         model_type=args.model_type,
+         tied_student=args.tied_student,
+diff --git a/tests/trainer/ppo/v1/test_pipeline_metrics_on_cpu.py b/tests/trainer/ppo/v1/test_pipeline_metrics_on_cpu.py
+index cca818b54..c8bcaee42 100644
+--- a/tests/trainer/ppo/v1/test_pipeline_metrics_on_cpu.py
++++ b/tests/trainer/ppo/v1/test_pipeline_metrics_on_cpu.py
+@@ -87,15 +87,24 @@ def test_unverified_clocks_omit_span_but_preserve_counts(problem):
+ 
+ 
+ @pytest.mark.parametrize("unknown", [-1, None])
+-def test_unknown_preemptions_are_not_zero_and_warn_once(caplog, unknown):
++def test_unknown_preemptions_are_not_zero_and_warn_once(caplog, monkeypatch, unknown):
++    import logging
++
+     pm._warn_once.cache_clear()
+-    rows = _requests()
+-    rows[1]["num_preempted"] = unknown
+-    for _ in range(2):
+-        metrics = pm.aggregate_pipeline_requests(["a_0_0", "a_1_0", "b_0_0"], rows)
+-        assert "rollout/preemptions" not in metrics
+-        assert metrics["timing_s/rollout_batch"] == 6
+-    assert sum("unknown is not zero" in record.message for record in caplog.records) == 1
++    monkeypatch.setattr(pm.logger, "disabled", False)
++    monkeypatch.setattr(pm.logger, "propagate", False)
++    pm.logger.addHandler(caplog.handler)
++    try:
++        with caplog.at_level(logging.WARNING, logger=pm.logger.name):
++            rows = _requests()
++            rows[1]["num_preempted"] = unknown
++            for _ in range(2):
++                metrics = pm.aggregate_pipeline_requests(["a_0_0", "a_1_0", "b_0_0"], rows)
++                assert "rollout/preemptions" not in metrics
++                assert metrics["timing_s/rollout_batch"] == 6
++        assert sum("unknown is not zero" in record.message for record in caplog.records) == 1
++    finally:
++        pm.logger.removeHandler(caplog.handler)
+ 
+ 
+ def test_validation_sums_windows_and_omits_any_partially_missing_metric():
+diff --git a/tests/trainer/ppo/v1/test_v1_async_warmup_on_cpu.py b/tests/trainer/ppo/v1/test_v1_async_warmup_on_cpu.py
+index f940946f9..993a58405 100644
+--- a/tests/trainer/ppo/v1/test_v1_async_warmup_on_cpu.py
++++ b/tests/trainer/ppo/v1/test_v1_async_warmup_on_cpu.py
+@@ -119,6 +119,7 @@ def test_loaded_prompt_count_drives_on_train_begin_top_up(monkeypatch, tmp_path)
+     stub.use_critic = False
+     stub.actor_rollout_wg = MagicMock()
+     stub.train_dataloader = MagicMock()
++    stub._load_actor_optimizer_progress = MagicMock()
+     stub._load_checkpoint = PPOTrainer._load_checkpoint.__get__(stub)
+     stub.on_train_begin = PPOTrainerColocateAsync.on_train_begin.__get__(stub)
+ 
+diff --git a/tests/workers/test_engine_detach_tree_on_cpu.py b/tests/workers/test_engine_detach_tree_on_cpu.py
+index 16030d1c2..bd1b15263 100644
+--- a/tests/workers/test_engine_detach_tree_on_cpu.py
++++ b/tests/workers/test_engine_detach_tree_on_cpu.py
+@@ -139,8 +139,16 @@ def test_backend_publishes_model_output_through_detach_tree(relpath):
+                     published.append(value)
+ 
+     assert published, f"{relpath}: no model_output publication found; did the engine move?"
++
++    def safe_publication(value):
++        if isinstance(value, ast.Dict) and not value.keys:
++            return True  # Full-KL training deliberately publishes no model tensors.
++        if isinstance(value, ast.IfExp):
++            return safe_publication(value.body) and safe_publication(value.orelse)
++        return isinstance(value, ast.Call) and getattr(value.func, "id", None) == "detach_tree"
++
+     for value in published:
+-        assert isinstance(value, ast.Call) and getattr(value.func, "id", None) == "detach_tree", (
++        assert safe_publication(value), (
+             f"{relpath}:{value.lineno}: model_output must be published through detach_tree, "
+             "otherwise every micro-batch's autograd graph stays alive for the whole batch"
+         )
+diff --git a/tests/workers/test_engine_return_model_output_on_cpu.py b/tests/workers/test_engine_return_model_output_on_cpu.py
+index a3269a150..d8701f27d 100644
+--- a/tests/workers/test_engine_return_model_output_on_cpu.py
++++ b/tests/workers/test_engine_return_model_output_on_cpu.py
+@@ -68,6 +68,7 @@ def test_fsdp_forward_backward_honors_return_model_output(monkeypatch, return_mo
+         scaler=None,
+         get_data_parallel_group=lambda: None,
+         get_data_parallel_size=lambda: 1,
++        get_data_parallel_rank=lambda: 0,
+         _gradient_sync_context=lambda **kwargs: nullcontext(),
+         forward_step=lambda micro_batch, loss_function, forward_only: (
+             loss,
+diff --git a/tests/workers/test_fsdp_gradient_accumulation_sync_on_cpu.py b/tests/workers/test_fsdp_gradient_accumulation_sync_on_cpu.py
+index bb5c1896c..112ce3f7d 100644
+--- a/tests/workers/test_fsdp_gradient_accumulation_sync_on_cpu.py
++++ b/tests/workers/test_fsdp_gradient_accumulation_sync_on_cpu.py
+@@ -130,6 +130,7 @@ def test_forward_backward_batch_syncs_only_final_micro_batch(monkeypatch):
+     engine.scaler = None
+     engine.get_data_parallel_group = lambda: None
+     engine.get_data_parallel_size = lambda: 1
++    engine.get_data_parallel_rank = lambda: 0
+     sync_states = []
+ 
+     @contextmanager

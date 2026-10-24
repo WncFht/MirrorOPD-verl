@@ -1,0 +1,81 @@
+{
+  "implementation_base": "dc7037eb0",
+  "suites": {
+    "main_cpu": {
+      "passed": 893,
+      "skipped": 14,
+      "seconds": 209.77
+    },
+    "real_tq_replay": {
+      "passed": 59,
+      "skipped": 0,
+      "seconds": 52.08
+    },
+    "tq_contract_and_shared": {
+      "passed": 57,
+      "skipped": 0,
+      "seconds": 69.36
+    }
+  },
+  "distinct_cpu_passes": 961,
+  "real_tq_contract_cases": 9,
+  "unavailable_modules": {
+    "reason": "megatron.core is not installed",
+    "modules": [
+      "tests/workers/test_megatron_ddp_config_on_cpu.py",
+      "tests/workers/test_megatron_distillation_only_on_cpu.py",
+      "tests/workers/test_megatron_liger_fused_kernels_on_cpu.py",
+      "tests/workers/test_megatron_value_head_cp_layout_on_cpu.py"
+    ]
+  },
+  "sampled_distributed": {
+    "current_is_reuse4": "token_is/current, optimizer steps after resume=14",
+    "frozen_ppo_reuse2": "token_ppo/rollout, optimizer steps after resume=8"
+  },
+  "smoke_runs": {
+    "sampled": {
+      "outer_steps": 2,
+      "optimizer_attempts": 4,
+      "optimizer_applied": 4,
+      "lr_next_recorded_at_updates": [
+        2,
+        4
+      ],
+      "losses": [
+        0.07320521771907806,
+        0.07116398960351944,
+        0.08063984662294388,
+        0.08016259968280792
+      ],
+      "source_commit": "3310ee7425dee699def3c671df37f60d4e3037f7",
+      "validation": {
+        "math500": 0.0,
+        "amc23": 0.0,
+        "aime25": 0.0
+      }
+    },
+    "full": {
+      "outer_steps": 2,
+      "optimizer_attempts": 4,
+      "optimizer_applied": 4,
+      "lr_next_recorded_at_updates": [
+        2,
+        4
+      ],
+      "losses": [
+        0.09043635427951813,
+        0.09000182151794434,
+        0.07284235954284668,
+        0.0726688876748085
+      ],
+      "source_commit": "6c2c5708b2076f0bd40c6bc32ad76b0339ef539b",
+      "validation": {
+        "math500": 0.0,
+        "amc23": 0.0,
+        "aime25": 0.0
+      },
+      "position_reconstruction_max_abs_error": 1.3573876050942957e-09
+    }
+  },
+  "independent_review": "approve after checkpoint and profiling-alias fixes"
+}
