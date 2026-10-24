@@ -173,7 +173,8 @@ def _gloo_worker(rank, path):
         metrics = tu.get(output, "metrics")
         assert metrics["lr_used"] == 0.01
         assert metrics["loss"] == 1.5
-        assert metrics["_optimizer_step_applied"] == [True, True]
+        assert tu.get(output, "optimizer_step_applied") is True
+        assert "_optimizer_step_applied" not in metrics
         assert_equal({k: Metric.aggregate_dp(metrics[k]) for k in local}, merge([observe(all_z)]))
     finally:
         dist.destroy_process_group()
