@@ -1,0 +1,26 @@
+{
+  "kind": "wandb-offline",
+  "run": "wncfht/MirrorOPD-verl/cix5i2x2",
+  "identity_source": "explicit --run, checked against recorded project and run_id",
+  "entity_recorded": null,
+  "raw_run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/wandb/offline-run-20261024_000719-cix5i2x2",
+  "decoded_run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/offline-run-20261024_000719-cix5i2x2",
+  "decoder_status": "partial_snapshot",
+  "exit_code": null,
+  "rows": 3025,
+  "step_range": [
+    0,
+    3024
+  ],
+  "fetched_at_utc": "2026-10-24T01:44:55.293364+00:00",
+  "history_method": "local .wandb records; sparse rows preserved without sampling",
+  "online_history_retrieved": false,
+  "system_metrics_available": true,
+  "system_rows": 4520,
+  "system_api_sampled": false,
+  "system_method": "all decoded stats records; timestamps retain integer nanoseconds",
+  "hardware_metadata_available": true,
+  "environment_metadata_source": "local .wandb environment records",
+  "requirements_available": true,
+  "note": "No exit or an unfinished tail does not prove a complete run; telemetry is periodic, not a continuous trace."
+}
