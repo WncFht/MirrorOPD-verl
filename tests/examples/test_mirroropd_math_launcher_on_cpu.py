@@ -120,7 +120,7 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
     assert cfg.actor_rollout_ref.rollout.response_length == 7168
     assert cfg.actor_rollout_ref.rollout.val_kwargs.max_tokens == 31744
     assert cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
-    assert cfg.actor_rollout_ref.rollout.max_model_len == 35841
+    assert cfg.actor_rollout_ref.rollout.max_model_len == 35840
     assert cfg.distillation.teacher_models.teacher_model.inference.max_model_len == 11265
     assert cfg.distillation.distillation_loss.loss_mode == "k1"
     assert not cfg.distillation.distillation_loss.use_task_rewards
@@ -205,7 +205,7 @@ def test_domain_launchers_select_teacher_and_dataset_protocol(tmp_path, domain, 
     if domain == "if":
         assert cfg.trainer.test_freq == -1
         assert not cfg.trainer.val_before_train
-        assert cfg.actor_rollout_ref.rollout.max_model_len == 11265
+        assert cfg.actor_rollout_ref.rollout.max_model_len == 11264
 
 
 def test_performance_controls_reach_student_and_teacher(tmp_path):
@@ -299,6 +299,12 @@ def test_validation_context_checked_before_worker_startup(tmp_path):
     cfg.actor_rollout_ref.rollout.max_model_len = 11265
     with pytest.raises(ValueError, match="prompt_length"):
         validate_config(cfg, use_reference_policy=False, use_critic=False)
+
+
+def test_qwen3_base_32k_validation_window_fits_exactly(tmp_path):
+    cfg = _config(tmp_path, MAX_PROMPT_LENGTH="1024", MAX_VAL_RESPONSE_LENGTH="31744")
+    assert cfg.actor_rollout_ref.rollout.max_model_len == 32768
+    assert cfg.distillation.teacher_models.teacher_model.inference.max_model_len == 8193
 
 
 def test_validation_budget_rejects_default_multiturn_agent(tmp_path):

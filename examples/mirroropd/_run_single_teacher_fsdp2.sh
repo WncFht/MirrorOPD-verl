@@ -171,8 +171,9 @@ if [[ -n ${CUDA_VISIBLE_DEVICES:-} ]]; then
     fi
 fi
 
-# Student 同时容纳训练与验证；teacher 只评分训练轨迹。额外预留一个 token。
-STUDENT_CONTEXT=$((MAX_PROMPT_LENGTH + (MAX_RESPONSE_LENGTH > MAX_VAL_RESPONSE_LENGTH ? MAX_RESPONSE_LENGTH : MAX_VAL_RESPONSE_LENGTH) + 1))
+# Student generation needs prompt + response. The scoring-only vLLM teacher
+# requests one dummy output token after the complete training trajectory.
+STUDENT_CONTEXT=$((MAX_PROMPT_LENGTH + (MAX_RESPONSE_LENGTH > MAX_VAL_RESPONSE_LENGTH ? MAX_RESPONSE_LENGTH : MAX_VAL_RESPONSE_LENGTH)))
 TEACHER_CONTEXT=$((MAX_PROMPT_LENGTH + MAX_RESPONSE_LENGTH + 1))
 # Bound capture to the configured decode concurrency rather than unrelated
 # context/token budgets. Native Hydra overrides at the end can still replace it.
