@@ -16,18 +16,20 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--roundtrip-only", action="store_true")
+    parser.add_argument("--model-root", type=Path, default=Path(__file__).resolve().parents[6] / "model")
     args = parser.parse_args()
     torch.set_num_threads(1)
     paths = {
-        "r1": "../models/DeepSeek-R1-Distill-Qwen-1.5B",
-        "just": "../models/JustRL-DeepSeek-1.5B",
-        "r7": "../model/DeepSeek-R1-Distill-Qwen-7B",
-        "base": "../model/Qwen3-1.7B-Base",
-        "q8": "../../models/Qwen3-8B",
-        "q4": "../../models/Qwen3-4B",
-        "q17": "../../models/Qwen3-1.7B",
-        "q4i": "../model/Qwen3-4B-Instruct-2507",
+        "r1": "DeepSeek-R1-Distill-Qwen-1.5B",
+        "just": "JustRL-DeepSeek-1.5B",
+        "r7": "DeepSeek-R1-Distill-Qwen-7B",
+        "base": "Qwen3-1.7B-Base",
+        "q8": "Qwen3-8B",
+        "q4": "Qwen3-4B",
+        "q17": "Qwen3-1.7B",
+        "q4i": "Qwen3-4B-Instruct-2507",
     }
+    paths = {key: str(args.model_root / name) for key, name in paths.items()}
     pairs = {
         "A": ("r1", "just"),
         "B": ("r1", "just"),

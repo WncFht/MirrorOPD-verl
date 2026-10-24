@@ -187,7 +187,9 @@ def test_local_model_prepare_materializes_symlinks_without_generation_config(tmp
         weights.rename(shared)
         weights.symlink_to(shared)
     monkeypatch.setattr(
-        sys, "argv", ["prepare_models.py", "--source-root", str(source), "--model-root", str(destination)]
+        sys,
+        "argv",
+        ["prepare_models.py", "--source-root", str(source), "--model-root", str(destination), "--models", "all"],
     )
     prepare_models.main()
     for name in assets.MODELS:
@@ -199,7 +201,9 @@ def test_local_model_prepare_materializes_symlinks_without_generation_config(tmp
 
         tokenizer = AutoTokenizer.from_pretrained(destination / name, local_files_only=True)
         assert tokenizer.apply_chat_template([{"role": "user", "content": "1 + 1"}], tokenize=False) == "1 + 1"
-    assert (destination / "model_manifest.json").is_file()
+    assert not (destination / "model_manifest.json").exists()
+    # Reusing an already prepared model must not recopy or overwrite it.
+    prepare_models.main()
 
 
 def test_missing_weight_file_is_rejected(tmp_path):
@@ -210,3 +214,64 @@ def test_missing_weight_file_is_rejected(tmp_path):
     weights.unlink()
     with pytest.raises(FileNotFoundError, match="model.safetensors"):
         assets.check_model(folder, name)
+
+
+def test_sharded_model_check_requires_every_indexed_shard(tmp_path):
+    folder = tmp_path / "Qwen3-8B"
+    make_tiny_model(folder)
+    (folder / "model.safetensors").unlink()
+    (folder / "model.safetensors.index.json").write_text(
+        json.dumps(
+            {
+                "weight_map": {
+                    "a": "model-00001-of-00002.safetensors",
+                    "b": "model-00002-of-00002.safetensors",
+                }
+            }
+        )
+    )
+    (folder / "model-00001-of-00002.safetensors").write_bytes(b"first")
+    with pytest.raises(FileNotFoundError, match="model-00002"):
+        assets.check_model(folder, folder.name)
+    (folder / "model-00002-of-00002.safetensors").write_bytes(b"second")
+    assert assets.check_model(folder, folder.name)["weight_bytes"] == 11
+
+
+def test_selected_sharded_model_import_from_hf_cache_path(tmp_path, monkeypatch):
+    source = tmp_path / ".cache" / "downloads"
+    folder = source / "Qwen3-8B"
+    make_tiny_model(folder)
+    (folder / "model.safetensors").rename(folder / "model-00001-of-00001.safetensors")
+    (folder / "model.safetensors.index.json").write_text(
+        json.dumps(
+            {
+                "weight_map": {
+                    "weight": "model-00001-of-00001.safetensors",
+                }
+            }
+        )
+    )
+    target = tmp_path / "model"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["prepare_models.py", "--source-root", str(source), "--model-root", str(target), "--models", "Qwen3-8B"],
+    )
+    prepare_models.main()
+    assert sorted(p.name for p in target.iterdir()) == ["Qwen3-8B"]
+    assert (target / "Qwen3-8B/model.safetensors.index.json").is_file()
+    assert (target / "Qwen3-8B/model-00001-of-00001.safetensors").is_file()
+
+
+def test_prompt_length_check_uses_token_rows_not_batch_encoding_keys(tmp_path, monkeypatch):
+    from transformers import AutoTokenizer
+
+    model = tmp_path / "tiny"
+    make_tiny_model(model)
+    tokenizer = AutoTokenizer.from_pretrained(model)
+    monkeypatch.setitem(assets.DATASETS["DAPO"], "rows", 1)
+    path = tmp_path / "train.parquet"
+    write_rows(path, [prepare_data.make_row("1 + 1", "2", "DAPO", 0)])
+    report, _ = assets.check_data(path, "DAPO", tokenizer, max_prompt_length=2)
+    assert report["max_prompt_tokens"] == 3
+    assert report["overlong_prompts"] == 1

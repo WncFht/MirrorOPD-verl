@@ -15,9 +15,6 @@ if [[ ! -x "$PYTHON_BIN" && -x /root/.local/share/mirroropd/venvs/profile-cu128/
 fi
 export MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
 export DATA_ROOT=${DATA_ROOT:-$WORKSPACE/data}
-if [[ ! -d "$MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B" && -d "$WORKSPACE/models/DeepSeek-R1-Distill-Qwen-1.5B" ]]; then
-    export MODEL_ROOT="$WORKSPACE/models"
-fi
 if [[ ! -f "$DATA_ROOT/math/DAPO/train.parquet" && -f "$WORKSPACE/MD-OPD/data/math/DAPO/train.parquet" ]]; then
     export DATA_ROOT="$WORKSPACE/MD-OPD/data"
 fi
