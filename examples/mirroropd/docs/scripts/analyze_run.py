@@ -144,6 +144,11 @@ def export(args):
     metadata_file = raw_run / "files/wandb-metadata.json"
     requirements_file = raw_run / "files/requirements.txt"
     metadata = json.loads(metadata_file.read_text()) if metadata_file.is_file() else {}
+    environment_source = "wandb-metadata.json" if metadata else None
+    environment_file = decoded / "environment.jsonl"
+    if not metadata and environment_file.is_file():
+        metadata = environment_records_metadata(read_rows(environment_file))
+        environment_source = "local .wandb environment records" if metadata else None
     requirements = requirements_file.read_text() if requirements_file.is_file() else ""
     write_environment(args.out, metadata, requirements)
     write_json(
@@ -167,6 +172,7 @@ def export(args):
             "system_api_sampled": False,
             "system_method": "all decoded stats records; timestamps retain integer nanoseconds",
             "hardware_metadata_available": bool(metadata),
+            "environment_metadata_source": environment_source,
             "requirements_available": requirements_file.is_file(),
             "note": (
                 "No exit or an unfinished tail does not prove a complete run; "
@@ -186,6 +192,20 @@ def timestamp_ns(value):
     seconds, _, fractional = value[:-1].partition(".")
     epoch = int(datetime.strptime(seconds, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
     return epoch * 10**9 + int(fractional.ljust(9, "0"))
+
+
+def environment_records_metadata(rows):
+    """Combine partial records for one writer; never conflate different machines."""
+    writers = {r.get("writer_id") for r in rows if r.get("writer_id")}
+    if len(writers) > 1:
+        raise ValueError("Multiple environment writers require explicit hardware attribution")
+    merged = {}
+    for row in rows:
+        merged.update(row)
+    for source, target in (("gpu_type", "gpu"), ("cuda_version", "cuda")):
+        if source in merged:
+            merged[target] = merged.pop(source)
+    return merged
 
 
 def write_environment(out, metadata, requirements):

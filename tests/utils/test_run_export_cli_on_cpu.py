@@ -72,6 +72,22 @@ def test_local_export_never_falls_back_to_cloud(cli, monkeypatch, tmp_path):
     assert not out.exists()
 
 
+def test_environment_updates_keep_initial_fields_and_reject_mixed_writers(cli, tmp_path):
+    result = cli.environment_records_metadata(
+        [
+            {"writer_id": "driver", "python": "3.12", "git": {"commit": "abc"}, "host": "private"},
+            {"writer_id": "driver", "gpu_type": "NVIDIA A800", "gpu_count": 8, "cuda_version": "12.8"},
+        ]
+    )
+    cli.write_environment(tmp_path, result, "torch==2.11.0\n")
+    saved = json.loads((tmp_path / "hardware.json").read_text())
+    assert saved["python"] == "3.12" and saved["gpu_count"] == 8
+    assert saved["gpu"] == "NVIDIA A800" and saved["cuda"] == "12.8"
+    assert "host" not in saved and "writer_id" not in saved
+    with pytest.raises(ValueError, match="Multiple environment writers"):
+        cli.environment_records_metadata([{"writer_id": "a"}, {"writer_id": "b"}])
+
+
 @pytest.mark.parametrize("status", ["finished", "snapshot", "partial_snapshot"])
 def test_local_export_preserves_history_and_marks_recorded_system_data(cli, monkeypatch, tmp_path, status):
     logs = tmp_path / "logs"
