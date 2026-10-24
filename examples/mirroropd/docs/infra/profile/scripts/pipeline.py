@@ -95,12 +95,6 @@ def main():
     args = p.parse_args()
     if not 0 <= args.warmup_steps < args.steps - int(args.trace):
         p.error("warmup must leave at least one unprofiled measured step")
-    if args.backend == "fused_candidate":
-        from fused_candidate import FusedPrecomputedKL
-
-        import verl.trainer.distillation.full_vocab as fv
-
-        fv.PrecomputedKL = FusedPrecomputedKL  # process-local experimental substitution only
     torch.set_num_threads(1)
     _, rank, world = initialize_global_process_group(timeout_second=600)
     assert args.batch % world == 0
@@ -136,7 +130,7 @@ def main():
     actor = worker(args.student, world, False, args.budget, not args.no_checkpoint)
     teacher = worker(args.teacher, world, True, args.budget, False)
     config = FullVocabConfig(
-        backend="precompute" if args.backend == "fused_candidate" else args.backend, token_chunk_size=args.chunk
+        backend="precompute_fused" if args.backend == "fused_candidate" else args.backend, token_chunk_size=args.chunk
     )
     actor.engine.configure_full_vocab(config, args.teacher)
     dcfg = DistillationConfig(
@@ -216,6 +210,7 @@ def main():
             result = {
                 "scope": __doc__,
                 "arguments": vars(args) | {"samples": str(args.samples), "output": str(args.output)},
+                "effective_backend": config.backend,
                 "world_size": world,
                 "input_tokens": sum(len(a) + len(b) for a, b in samples),
                 "loss_tokens": sum(len(b) for a, b in samples),
