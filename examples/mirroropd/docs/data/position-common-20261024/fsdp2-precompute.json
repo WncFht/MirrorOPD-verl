@@ -1,0 +1,125 @@
+{
+  "backend": "precompute",
+  "world_size": 2,
+  "records": [
+    {
+      "step": 0,
+      "loss": 0.1288147270679474,
+      "position_kl_sums": [
+        0.0,
+        0.273968368768692,
+        0.2427721619606018,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2650146484375,
+        0.24876270443201065,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        2.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        2.0,
+        0.0
+      ]
+    },
+    {
+      "step": 1,
+      "loss": 0.12430256605148315,
+      "position_kl_sums": [
+        0.0,
+        0.13065269589424133,
+        0.1179702877998352,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.12706294655799866,
+        0.12152434140443802,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "step": 2,
+      "loss": 0.12156003713607788,
+      "position_kl_sums": [
+        0.0,
+        0.25381048023700714,
+        0.23360100388526917,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2471500039100647,
+        0.23791877925395966,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        2.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        2.0,
+        0.0
+      ]
+    }
+  ],
+  "parameter_delta_norms_rank0": {
+    "model.embed_tokens.weight": 0.03724735975265503,
+    "model.layers.0.self_attn.q_proj.weight": 0.05803671479225159,
+    "model.layers.0.self_attn.q_proj.bias": 0.010019767098128796,
+    "model.layers.0.self_attn.k_proj.weight": 0.04140328988432884,
+    "model.layers.0.self_attn.k_proj.bias": 0.006643308792263269,
+    "model.layers.0.self_attn.v_proj.weight": 0.038668058812618256,
+    "model.layers.0.self_attn.v_proj.bias": 0.0069214836694300175,
+    "model.layers.0.self_attn.o_proj.weight": 0.05367361754179001,
+    "model.layers.0.mlp.gate_proj.weight": 0.08117854595184326,
+    "model.layers.0.mlp.up_proj.weight": 0.08004824072122574,
+    "model.layers.0.mlp.down_proj.weight": 0.0790855810046196,
+    "model.layers.0.input_layernorm.weight": 0.00967060960829258,
+    "model.layers.0.post_attention_layernorm.weight": 0.010065117850899696,
+    "model.layers.1.self_attn.q_proj.weight": 0.05887911096215248,
+    "model.layers.1.self_attn.q_proj.bias": 0.01004385482519865,
+    "model.layers.1.self_attn.k_proj.weight": 0.04172347113490105,
+    "model.layers.1.self_attn.k_proj.bias": 0.006659355480223894,
+    "model.layers.1.self_attn.v_proj.weight": 0.039792440831661224,
+    "model.layers.1.self_attn.v_proj.bias": 0.006671026349067688,
+    "model.layers.1.self_attn.o_proj.weight": 0.05573594570159912,
+    "model.layers.1.mlp.gate_proj.weight": 0.07898277044296265,
+    "model.layers.1.mlp.up_proj.weight": 0.07605189085006714,
+    "model.layers.1.mlp.down_proj.weight": 0.07652103155851364,
+    "model.layers.1.input_layernorm.weight": 0.010391744785010815,
+    "model.layers.1.post_attention_layernorm.weight": 0.009286236017942429,
+    "model.norm.weight": 0.010674978606402874,
+    "lm_head.weight": 0.058979637920856476
+  },
+  "checkpoint_roundtrip": false,
+  "model_type": "qwen2",
+  "tied_student": false,
+  "tied_teacher": false,
+  "teacher_extra_rows": 4,
+  "teacher_hidden_size": 32
+}
