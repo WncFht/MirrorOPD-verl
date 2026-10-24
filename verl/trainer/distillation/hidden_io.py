@@ -14,10 +14,13 @@ from verl.utils import tensordict_utils as tu
 class HiddenBatchIO:
     def __init__(self, data, batches, *, get=None, put=None):
         self.batches = batches
-        self.active = "full_vocab_keys" in data
+        # Old direct callers remain supported at this payload-specific boundary.
+        self.keys_field = "sample_keys" if "sample_keys" in data else "full_vocab_keys"
+        self.active = self.keys_field in data
         self.teacher = self.active and tu.get_non_tensor_data(data, "full_vocab_teacher", default=False)
         self.student = self.active and tu.get_non_tensor_data(data, "full_vocab_train", default=False)
-        self.partition = tu.get_non_tensor_data(data, "full_vocab_partition", default=None)
+        partition_field = "sample_partition" if self.keys_field == "sample_keys" else "full_vocab_partition"
+        self.partition = tu.get_non_tensor_data(data, partition_field, default=None)
         self.async_write = self.teacher and tu.get_non_tensor_data(data, "full_vocab_async_write", default=False)
         self.prefetch = self.student and tu.get_non_tensor_data(data, "full_vocab_prefetch", default=False)
         self.pool = None
@@ -45,7 +48,7 @@ class HiddenBatchIO:
     def _read(self, batch):
         with full_kl_range("hidden_read"):
             payload = self.get(
-                keys=list(batch["full_vocab_keys"]),
+                keys=list(batch[self.keys_field]),
                 partition_id=self.partition,
                 select_fields=["teacher_hidden", "teacher_positions"],
             )
@@ -76,7 +79,7 @@ class HiddenBatchIO:
             return
         model_output = output["model_output"]
         payload = TensorDict(model_output, batch_size=[len(batch)])
-        keys = list(batch["full_vocab_keys"])
+        keys = list(batch[self.keys_field])
 
         def write():
             with full_kl_range("hidden_write"):

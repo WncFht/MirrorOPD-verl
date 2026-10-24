@@ -113,15 +113,20 @@ def test_prefetch_read_error_propagates():
     assert not any(t.name.startswith("full-kl-hidden") for t in threading.enumerate())
 
 
-@pytest.mark.parametrize("role", ["full_vocab_teacher", "full_vocab_train"])
+@pytest.mark.parametrize("role", ["full_vocab_teacher", "full_vocab_train", "unrelated_consumer"])
 def test_index_metadata_retains_sample_keys(monkeypatch, role):
-    meta = SimpleNamespace(size=2, partition_ids=["train", "train"], global_indexes=[8, 2], extra_info={role: True})
+    meta = SimpleNamespace(
+        size=2,
+        partition_ids=["train", "train"],
+        global_indexes=[8, 2],
+        extra_info={role: True, "retain_sample_identity": True},
+    )
     client = SimpleNamespace(
         async_kv_retrieve_keys=AsyncMock(return_value=["b", "a"]),
         async_get_data=AsyncMock(return_value=TensorDict({"input_ids": torch.ones(2, 2)}, batch_size=[2])),
     )
     monkeypatch.setattr(tqu.tq, "get_client", lambda: client)
     result = asyncio.run(tqu._async_meta_to_realdata(meta))
-    assert list(result["full_vocab_keys"]) == ["b", "a"]
-    assert tu.get_non_tensor_data(result, "full_vocab_partition", default=None) == "train"
+    assert list(result["sample_keys"]) == ["b", "a"]
+    assert tu.get_non_tensor_data(result, "sample_partition", default=None) == "train"
     client.async_kv_retrieve_keys.assert_awaited_once_with(global_indexes=[8, 2], partition_id="train")

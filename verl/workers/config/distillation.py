@@ -123,7 +123,7 @@ class DistillationLossConfig(BaseConfig):
 
     def __post_init__(self):
         self._mutable_fields.add("loss_settings")
-        from verl.trainer.distillation.specs import DistillationLossSettings, get_distillation_loss_settings
+        from verl.workers.config.distillation_spec import DistillationLossSettings, get_distillation_loss_settings
 
         self.loss_settings: DistillationLossSettings = get_distillation_loss_settings(self.loss_mode)
         if isinstance(self.full_vocab, dict):

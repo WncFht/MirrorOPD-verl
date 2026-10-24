@@ -457,7 +457,7 @@ class PPOTrainer(ABC):
     def _uses_full_vocab(self) -> bool:
         if not is_distillation_enabled(self.config.get("distillation")):
             return False
-        from verl.trainer.distillation.specs import get_distillation_loss_settings
+        from verl.workers.config.distillation_spec import get_distillation_loss_settings
 
         mode = OmegaConf.select(self.config, "distillation.distillation_loss.loss_mode")
         return mode is not None and get_distillation_loss_settings(mode).payload_kind == "hidden"
@@ -1935,73 +1935,19 @@ class PPOTrainer(ABC):
         return batch
 
     def _compute_shared_teacher_log_probs(self, batch: KVBatchMeta, timing_raw: dict) -> KVBatchMeta:
-        """Score a completed rollout batch, release teacher, then publish aligned labels."""
-        teacher_batch = KVBatchMeta(
-            keys=list(batch.keys),
-            tags=list(batch.tags),
-            partition_id=batch.partition_id,
-            fields=["input_ids", "position_ids", "loss_mask"],
-            extra_info={
-                "temperature": 1.0,
-                "compute_loss": False,
-                "calculate_entropy": False,
-                "distillation_use_topk": False,
-                "disable_auto_offload": True,
-                "full_vocab_teacher": self._uses_full_vocab(),
-                "full_vocab_async_write": OmegaConf.select(
-                    self.config, "distillation.distillation_loss.full_vocab.async_write", default=False
-                ),
-            },
-        )
-        try:
-            with marked_timer("teacher_transfer", timing_raw):
-                self.shared_teacher_wg.to("device", model=True, optimizer=False, grad=False)
-            with marked_timer("teacher_forward", timing_raw):
-                output = self.shared_teacher_wg.infer_batch(teacher_batch)
-                # KVBatchMeta is not supported by DataProtoFuture.get().
-                ray.get(output.futures)
-        except BaseException:
-            # Preserve the primary error. Distributed process failures are fatal;
-            # this is best-effort cleanup, not a recovery/barrier protocol.
-            try:
-                self.shared_teacher_wg.to("cpu", model=True, optimizer=False, grad=False)
-            except Exception:
-                logger.exception("Shared teacher cleanup failed after scoring failure")
-            raise
-        else:
-            with marked_timer("teacher_transfer", timing_raw):
-                self.shared_teacher_wg.to("cpu", model=True, optimizer=False, grad=False)
+        from verl.trainer.distillation.shared_teacher import SharedTeacherScorer
 
-        if self._uses_full_vocab():
-            # Workers publish the compact hidden payload directly through the TQ bridge.
-            return batch
-
-        data = tq.kv_batch_get(
-            keys=batch.keys, partition_id=batch.partition_id, select_fields=["input_ids", "log_probs"]
+        scorer = SharedTeacherScorer(
+            self.shared_teacher_wg,
+            payload_kind="hidden" if self._uses_full_vocab() else "sampled",
+            async_write=OmegaConf.select(
+                self.config, "distillation.distillation_loss.full_vocab.async_write", default=False
+            ),
+            get=tq.kv_batch_get,
+            put=tq.kv_batch_put,
+            wait=ray.get,
         )
-        teacher_ids, teacher_logprobs = [], []
-        if len(data) != len(batch):
-            raise ValueError("Incomplete shared teacher output batch")
-        for tokens, log_probs in zip(data["input_ids"].unbind(), data["log_probs"].unbind(), strict=True):
-            if log_probs.shape != tokens.shape or tokens.numel() == 0:
-                raise ValueError("Shared teacher output must match each full token sequence")
-            probs = log_probs.float().clone()
-            if not torch.isfinite(probs[:-1]).all():
-                raise ValueError("Shared teacher returned non-finite token log probabilities")
-            # FSDP already scores x[i+1] at position i. Only the final dummy is replaced.
-            probs[-1] = 0
-            ids = torch.cat((tokens[1:].to(torch.int32), tokens.new_zeros(1, dtype=torch.int32)))
-            teacher_ids.append(ids.unsqueeze(-1))
-            teacher_logprobs.append(probs.unsqueeze(-1))
-        fields = TensorDict(
-            {
-                "teacher_ids": torch.nested.nested_tensor(teacher_ids, layout=torch.jagged),
-                "teacher_logprobs": torch.nested.nested_tensor(teacher_logprobs, layout=torch.jagged),
-            },
-            batch_size=[len(batch)],
-        )
-        tq.kv_batch_put(keys=batch.keys, partition_id=batch.partition_id, fields=fields)
-        return batch
+        return scorer.score(batch, timing_raw)
 
     def _metrics_task_rewards_used(self):
         return not is_distillation_enabled(self.config.get("distillation")) or bool(
@@ -2268,6 +2214,7 @@ class PPOTrainer(ABC):
         extra_info = {
             "calculate_entropy": calculate_entropy,
             "full_vocab_train": self._uses_full_vocab(),
+            "retain_sample_identity": self._uses_full_vocab(),
             "full_vocab_prefetch": OmegaConf.select(
                 self.config, "distillation.distillation_loss.full_vocab.prefetch", default=False
             ),

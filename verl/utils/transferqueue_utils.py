@@ -158,11 +158,11 @@ def _find_meta(*args, **kwargs):
 
 
 async def _async_meta_to_realdata(meta: BatchMeta | KVBatchMeta) -> TensorDict:
-    hidden_keys = None
-    hidden_partition = None
+    sample_keys = None
+    sample_partition = None
     if isinstance(meta, KVBatchMeta):
-        if meta.extra_info.get("full_vocab_teacher") or meta.extra_info.get("full_vocab_train"):
-            hidden_keys, hidden_partition = list(meta.keys), meta.partition_id
+        if meta.extra_info.get("retain_sample_identity", False):
+            sample_keys, sample_partition = list(meta.keys), meta.partition_id
         meta = await async_kv_batch_meta2batch_meta(meta)
     meta_info = copy.deepcopy(meta.extra_info)
     if meta.size == 0:
@@ -171,18 +171,18 @@ async def _async_meta_to_realdata(meta: BatchMeta | KVBatchMeta) -> TensorDict:
         return empty_td
 
     tq_client = tq.get_client()
-    if hidden_keys is None and (meta_info.get("full_vocab_teacher") or meta_info.get("full_vocab_train")):
+    if sample_keys is None and meta_info.get("retain_sample_identity", False):
         # DP dispatch may already have converted KVBatchMeta into an index-based BatchMeta.
-        hidden_partition = meta.partition_ids[0]
-        if any(pid != hidden_partition for pid in meta.partition_ids):
-            raise ValueError("full-vocab hidden transfer requires a single TQ partition")
-        hidden_keys = await tq_client.async_kv_retrieve_keys(
-            global_indexes=meta.global_indexes, partition_id=hidden_partition
+        sample_partition = meta.partition_ids[0]
+        if any(pid != sample_partition for pid in meta.partition_ids):
+            raise ValueError("retained sample identity requires a single TQ partition")
+        sample_keys = await tq_client.async_kv_retrieve_keys(
+            global_indexes=meta.global_indexes, partition_id=sample_partition
         )
     tensordict = await tq_client.async_get_data(meta)
-    if hidden_keys is not None:
-        tensordict["full_vocab_keys"] = NonTensorStack(*hidden_keys)
-        tu.assign_non_tensor_data(tensordict, "full_vocab_partition", hidden_partition)
+    if sample_keys is not None:
+        tensordict["sample_keys"] = NonTensorStack(*sample_keys)
+        tu.assign_non_tensor_data(tensordict, "sample_partition", sample_partition)
 
     for key, val in meta_info.items():
         if isinstance(val, (NonTensorData | NonTensorStack)):

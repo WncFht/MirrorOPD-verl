@@ -17,11 +17,6 @@ from typing import Any, Callable, Optional
 import torch
 from tensordict import TensorDict
 
-from verl.trainer.distillation.specs import (
-    DISTILLATION_SETTINGS_REGISTRY,
-    DistillationLossSettings,
-    get_distillation_loss_settings,
-)
 from verl.trainer.ppo.core_algos import get_policy_loss_fn, kl_penalty
 from verl.trainer.ppo.policy_metrics import (
     applied_weight_observations,
@@ -33,6 +28,11 @@ from verl.utils import tensordict_utils as tu
 from verl.utils.metric import AggregationType, Metric
 from verl.utils.metric.observations import Observation
 from verl.workers.config import ActorConfig, DistillationConfig, DistillationLossConfig
+from verl.workers.config.distillation_spec import (
+    DISTILLATION_SETTINGS_REGISTRY,
+    DistillationLossSettings,
+    get_distillation_loss_settings,
+)
 from verl.workers.utils.loss_context import LossContext
 from verl.workers.utils.losses import ppo_loss
 from verl.workers.utils.padding import as_padded_response, no_padding_2_padding
