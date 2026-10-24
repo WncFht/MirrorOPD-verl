@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from omegaconf import OmegaConf
 
-SCRIPT = Path(__file__).resolve().parents[2] / "examples/mirroropd/verify_math_update_budget.py"
+SCRIPT = Path(__file__).resolve().parents[2] / "examples/mirroropd/tools/verify_math_update_budget.py"
 spec = importlib.util.spec_from_file_location("verify_budget", SCRIPT)
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)

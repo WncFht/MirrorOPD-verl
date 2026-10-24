@@ -40,7 +40,7 @@ def test_full_reverse_kl_launcher(tmp_path, domain):
 
 
 def test_full_reverse_kl_smoke_configuration(tmp_path):
-    cfg = _config(tmp_path, script=SCRIPT.parent / "smoke_full_reverse_kl.sh")
+    cfg = _config(tmp_path, script=SCRIPT.parent / "smoke/smoke_full_reverse_kl.sh")
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     assert cfg.trainer.total_training_steps == 2
@@ -131,7 +131,7 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
 
 
 @pytest.mark.parametrize("gpus", [4, 8])
-@pytest.mark.parametrize("entry", ["run_math_deepseek_r1_1_5b_fsdp2.sh", "_run_single_teacher_fsdp2.sh"])
+@pytest.mark.parametrize("entry", ["run_math_deepseek_r1_1_5b_fsdp2.sh", "launchers/_run_single_teacher_fsdp2.sh"])
 def test_default_graph_and_validation_window_keep_training_budget(tmp_path, gpus, entry):
     cfg = _config(tmp_path, script=SCRIPT.parent / entry, STUDENT_GPUS=str(gpus))
     assert not cfg.actor_rollout_ref.rollout.enforce_eager
@@ -393,7 +393,8 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(
     script = checkout / "examples/mirroropd" / entry.name
     script.parent.mkdir(parents=True)
     shutil.copy2(entry, script)
-    shutil.copy2(SCRIPT.parent / "_run_single_teacher_fsdp2.sh", script.parent)
+    (script.parent / "launchers").mkdir()
+    shutil.copy2(SCRIPT.parent / "launchers/_run_single_teacher_fsdp2.sh", script.parent / "launchers")
     datasets = {
         "math": ["math/DAPO/train", "math/MATH-500/test", "math/AMC23/test", "math/AIME25/test"],
         "code": ["code/TACO/train", "code/LCBv6/test"],
@@ -426,7 +427,7 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(
         CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7",
         OPENCOMPASS_ROOT=str(checker),
         MUTATE_LAUNCHER="1" if append_source else "0",
-        LAUNCHER_TO_CHANGE=str(script.parent / "_run_single_teacher_fsdp2.sh"),
+        LAUNCHER_TO_CHANGE=str(script.parent / "launchers/_run_single_teacher_fsdp2.sh"),
     )
     assert result.returncode == exit_code, result.stderr
     assert not (tmp_path / "run/unexpected").exists()

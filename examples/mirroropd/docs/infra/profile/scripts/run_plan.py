@@ -27,7 +27,7 @@ def main():
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source, text=True).strip()
     if head != plan["source_commit"]:
         raise RuntimeError("Confirmation plan source commit mismatch")
-    helpers = load_module(source / "examples/mirroropd/queue_full_vocab_ablations.py", "helpers")
+    helpers = load_module(source / "examples/mirroropd/tools/queue_full_vocab_ablations.py", "helpers")
     state = {"pid": os.getpid(), "jobs": {}, "source_commit": head}
 
     def status(**updates):

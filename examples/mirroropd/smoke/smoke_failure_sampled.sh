@@ -2,7 +2,8 @@
 # C/D sampled-token integration check; short responses are not a failure reproduction.
 set -eo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT=$(cd -- "$SCRIPT_DIR/../.." && pwd)
+EXAMPLE_DIR=$(cd -- "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd -- "$EXAMPLE_DIR/../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO_ROOT")
 SETTING=${1:?Usage: smoke_failure_sampled.sh C|D [Hydra overrides...]}
 shift
@@ -53,7 +54,7 @@ EXTRA=()
 if [[ $SETTING == D ]]; then
     EXTRA+=(+data.apply_chat_template_kwargs.enable_thinking=False)
 fi
-exec bash "$SCRIPT_DIR/run_math_deepseek_r1_1_5b_fsdp2.sh" \
+exec bash "$EXAMPLE_DIR/run_math_deepseek_r1_1_5b_fsdp2.sh" \
     trainer.total_training_steps=2 data.train_max_samples=64 data.filter_overlong_prompts_workers=1 \
     trainer.metrics_quantile_interval=1 trainer.eval_metrics_resamples=16 \
     'trainer.logger=[console,file]' \

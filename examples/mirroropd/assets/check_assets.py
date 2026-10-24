@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-WORKSPACE = Path(__file__).resolve().parents[3]
+WORKSPACE = Path(__file__).resolve().parents[4]
 MODEL_ROOT = Path(os.environ.get("MODEL_ROOT", WORKSPACE / "model"))
 DATA_ROOT = Path(os.environ.get("DATA_ROOT", WORKSPACE / "data"))
 MODELS = {

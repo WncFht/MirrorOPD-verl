@@ -4,7 +4,8 @@
 # DRY_RUN=1 prints the command without creating subsets or starting Ray.
 set -eo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT=$(cd -- "$SCRIPT_DIR/../.." && pwd)
+EXAMPLE_DIR=$(cd -- "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd -- "$EXAMPLE_DIR/../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO_ROOT")
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3}
 export STUDENT_GPUS=${STUDENT_GPUS:-4}
@@ -35,7 +36,7 @@ case "$METRICS_SMOKE_MODE" in
     *) echo "METRICS_SMOKE_MODE must be e3 or is-rs" >&2; exit 2 ;;
 esac
 export EXPERIMENT_NAME=${EXPERIMENT_NAME:-metrics-v3-$METRICS_SMOKE_MODE-smoke-$(TZ=Asia/Shanghai date +%Y%m%d-%H%M%S)-$$}
-METRICS_RUN_ROOT=${METRICS_RUN_ROOT:-$SCRIPT_DIR/outputs/$EXPERIMENT_NAME}
+METRICS_RUN_ROOT=${METRICS_RUN_ROOT:-$EXAMPLE_DIR/outputs/$EXPERIMENT_NAME}
 export RUN_DIR="$METRICS_RUN_ROOT/training"
 export TOTAL_TRAINING_STEPS=${TOTAL_TRAINING_STEPS:-$DEFAULT_STEPS}
 export TRAIN_BATCH_SIZE=${TRAIN_BATCH_SIZE:-8} PPO_EPOCHS=${PPO_EPOCHS:-$DEFAULT_PPO_EPOCHS}
@@ -71,7 +72,7 @@ fi
 export MATH_FILE="$METRICS_RUN_ROOT/subsets/MATH-500.parquet"
 export AMC_FILE="$METRICS_RUN_ROOT/subsets/AMC23.parquet"
 export AIME_FILE="$METRICS_RUN_ROOT/subsets/AIME25.parquet"
-exec bash "$SCRIPT_DIR/run_math_opd_ablation_fsdp2.sh" E3 \
+exec bash "$EXAMPLE_DIR/run_math_opd_ablation_fsdp2.sh" E3 \
     data.train_max_samples=64 trainer.val_before_train=True trainer.log_val_generations=3 \
     trainer.metrics_quantile_interval=1 trainer.eval_metrics_resamples=256 \
     'trainer.logger=[console,wandb,file]' \

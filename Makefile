@@ -155,7 +155,7 @@ wandb-check:
 	$(NATIVE_PYTHON) meituan/check_wandb.py
 
 assets-check:
-	$(NATIVE_PYTHON) examples/mirroropd/check_assets.py --model-root "$(MODEL_ROOT)" --data-root "$(DATA_ROOT)" $(ASSET_CHECK_ARGS)
+	$(NATIVE_PYTHON) examples/mirroropd/assets/check_assets.py --model-root "$(MODEL_ROOT)" --data-root "$(DATA_ROOT)" $(ASSET_CHECK_ARGS)
 
 opd-submit:
 	@test -f "$(HOPE_DIR)/$(HOPE_FILE)" || { echo "Hope file not found: $(HOPE_DIR)/$(HOPE_FILE)" >&2; exit 1; }

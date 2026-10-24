@@ -58,7 +58,7 @@ def main():
     args = p.parse_args()
     source, root = args.source.resolve(), args.root.resolve()
     scripts = source / "examples/mirroropd/docs/infra/profile/scripts"
-    helpers = load_module(source / "examples/mirroropd/queue_full_vocab_ablations.py", "queue_helpers")
+    helpers = load_module(source / "examples/mirroropd/tools/queue_full_vocab_ablations.py", "queue_helpers")
     state = {
         "pid": os.getpid(),
         "state": "starting",

@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def load_asset_scripts():
     """Import the same sibling modules used by the direct Python command-line scripts."""
-    sys.path.insert(0, str(ROOT / "examples/mirroropd"))
+    sys.path.insert(0, str(ROOT / "examples/mirroropd/assets"))
     try:
         return tuple(importlib.import_module(name) for name in ("check_assets", "prepare_math_data", "prepare_models"))
     finally:

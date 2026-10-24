@@ -156,7 +156,7 @@ def test_real_multiif_checkers_and_threaded_loading():
 
 def test_hydra_path_entry_point():
     root = Path(__file__).resolve().parents[3]
-    spec = importlib.util.spec_from_file_location("custom_reward_function", root / "examples/mirroropd/reward.py")
+    spec = importlib.util.spec_from_file_location("custom_reward_function", root / "examples/mirroropd/rewards/reward.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     assert module.reward_func("xlam", "[]", [])["score"] == 1.0

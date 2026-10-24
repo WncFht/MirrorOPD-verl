@@ -2,6 +2,22 @@
 
 这里维护 math、coding 与 instruction following（IF）的单教师 sampled-token OPD 配方，以及数学、代码、IF 和函数调用 verifier。当前 math 基线使用 DeepSeek-R1-Distill-Qwen-1.5B student 与 JustRL-DeepSeek-1.5B teacher，采用 verl V1 同步训练和 `k1 + policy gradient` 蒸馏。
 
+## 脚本目录
+
+顶层保留领域训练、数学消融、独立验证和 full-vocab 入口。辅助脚本按用途组织：
+
+| 目录 | 内容 |
+| --- | --- |
+| `assets/` | `check_assets.py`、`prepare_models.py`、`prepare_math_data.py` |
+| `launchers/` | 公共 `_run_single_teacher_fsdp2.sh`，由顶层入口调用 |
+| `benchmarks/` | Decode、并发、KV 容量和限时吞吐测量 |
+| `smoke/` | Sampled、full-vocab 和指标链路的短测入口 |
+| `tools/` | Full-vocab 作业队列、更新预算和指标验收工具 |
+| `rewards/` | `reward.py` 自定义判分路由 |
+| `docs/` | 文档、冻结实验记录和对应研究探针 |
+
+辅助命令使用新路径，例如 `python examples/mirroropd/assets/prepare_models.py --help`、`bash examples/mirroropd/smoke/smoke_full_reverse_kl.sh`。Makefile、当前启动脚本和测试已同步迁移；历史实验记录保留运行时的路径，重跑历史版本时使用记录中的源码版本。
+
 ## 文档入口
 
 MirrorOPD 自有文档、调研和配套图片、数据统一放在 `examples/mirroropd/docs/`；仓库根 `docs/` 保留上游文档。训练指标集中维护在 `docs/metrics/`。
@@ -27,7 +43,7 @@ make assets-check
 make opd-submit
 ```
 
-调用关系为 `make opd-submit` → Hope `worker.script` → `run_${DOMAIN}_deepseek_r1_1_5b_fsdp2.sh` → `_run_single_teacher_fsdp2.sh`，`DOMAIN` 默认 `math`，也可为 `code` 或 `if`。具体领域脚本如下；旧的无领域前缀入口已删除。
+调用关系为 `make opd-submit` → Hope `worker.script` → `run_${DOMAIN}_deepseek_r1_1_5b_fsdp2.sh` → `launchers/_run_single_teacher_fsdp2.sh`，`DOMAIN` 默认 `math`，也可为 `code` 或 `if`。具体领域脚本如下；旧的无领域前缀入口已删除。
 
 - [Math](run_math_deepseek_r1_1_5b_fsdp2.sh)
 - [Coding](run_code_deepseek_r1_1_5b_fsdp2.sh)
