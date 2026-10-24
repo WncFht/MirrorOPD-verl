@@ -7,7 +7,7 @@ set -eo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 if [[ ${1:-} == --help || ${1:-} == -h || $# == 0 ]]; then
     cat <<'HELP'
-Usage: bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E1..E17 [Hydra overrides...]
+Usage: bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E1..E20 [Hydra overrides...]
   Short  Long   Algorithm
   E1     E7     rollout advantage + token PPO
   E2     E8     rollout advantage + token IS (no PPO/dual clip)
@@ -20,6 +20,9 @@ Usage: bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E1..E17 [Hydra ove
   E15          original sampled k1 + current signal + vanilla PPO, LR=1e-6
   E16          full-vocab current + IS, 4 updates per batch, LR=1e-6
   E17          full-vocab current + IS, 16 updates per batch, LR=1e-6
+  E18          full-vocab, 64 updates x 64 outer steps = 4096 updates
+  E19          full-vocab, 32 updates x 128 outer steps = 4096 updates
+  E20          full-vocab, 16 updates x 256 outer steps = 4096 updates
 E1-E6 defaults:  PPO_EPOCHS=4, TOTAL_TRAINING_STEPS=32,
                  TEST_FREQ=SAVE_FREQ=TOTAL_TRAINING_STEPS.
 E7-E12 defaults: PPO_EPOCHS=16, TOTAL_TRAINING_STEPS=200,
@@ -28,7 +31,11 @@ E13-E15 defaults: PPO_EPOCHS=1, TOTAL_TRAINING_STEPS=200,
                   TEST_FREQ=20, SAVE_FREQ=100, keep the latest 2 checkpoints.
 E16/E17 defaults: PPO_EPOCHS=4/16; other settings match E13 (200 outer steps,
                   TEST_FREQ=20, SAVE_FREQ=100, keep the latest 2 checkpoints).
-E13/E14/E16/E17 use shared_sync, precompute, async write and prefetch by default.
+E18-E20 defaults: one data epoch, original DAPO data, LR=1e-6;
+                  test every 512 updates, save every 1024 updates.
+                  TEST_FREQ=8/16/32, SAVE_FREQ=16/32/64 (outer steps).
+                  Batch=mini-batch=64; retain the last 4 checkpoints.
+E13/E14/E16-E20 use shared_sync, precompute, async write and prefetch by default.
 FULL_KL_BACKEND/FULL_KL_* environment variables can override those choices.
 E15 keeps the legacy vanilla ratio against FSDP old_log_probs; no rollout IS.
 E16/E17 use the existing exact full reverse-KL loss: current + untruncated IS
@@ -59,8 +66,24 @@ case "$ABLATION" in
     E4|E10) export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=token_is ;;
     E5|E11) export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=reinforce ;;
     E6|E12) export OPD_ADVANTAGE_SOURCE=rollout OPD_POLICY_LOSS_MODE=reinforce ;;
-    E13|E14|E15|E16|E17) export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=vanilla ;;
-    *) echo "Unknown ablation: $ABLATION; expected E1 through E17" >&2; exit 2 ;;
+    E13|E14|E15|E16|E17|E18|E19|E20) export OPD_ADVANTAGE_SOURCE=current OPD_POLICY_LOSS_MODE=vanilla ;;
+    *) echo "Unknown ablation: $ABLATION; expected E1 through E20" >&2; exit 2 ;;
+esac
+# Equal-update presets use the same file and seeded sampler, stopping at nested
+# prefixes of one data epoch. Explicit overrides remain supported for smoke runs.
+case "$ABLATION" in
+    E18|E19|E20)
+        case "$ABLATION" in
+            E18) ABLATION_REUSE=64; ABLATION_OUTER=64; ABLATION_TEST=8; ABLATION_SAVE=16 ;;
+            E19) ABLATION_REUSE=32; ABLATION_OUTER=128; ABLATION_TEST=16; ABLATION_SAVE=32 ;;
+            E20) ABLATION_REUSE=16; ABLATION_OUTER=256; ABLATION_TEST=32; ABLATION_SAVE=64 ;;
+        esac
+        export PPO_EPOCHS=${PPO_EPOCHS:-$ABLATION_REUSE}
+        TOTAL_TRAINING_STEPS=${TOTAL_TRAINING_STEPS:-$ABLATION_OUTER}
+        export TOTAL_EPOCHS=${TOTAL_EPOCHS:-1}
+        export TEST_FREQ=${TEST_FREQ:-$ABLATION_TEST}
+        export SAVE_FREQ=${SAVE_FREQ:-$ABLATION_SAVE}
+        ;;
 esac
 case "$ABLATION" in
     E7|E8|E9|E10|E11|E12)
@@ -69,7 +92,7 @@ case "$ABLATION" in
         export TEST_FREQ=${TEST_FREQ:-50}
         export SAVE_FREQ=${SAVE_FREQ:-100}
         ;;
-    E13|E14|E15|E16|E17)
+    E13|E14|E15|E16|E17|E18|E19|E20)
         if [[ $ABLATION == E16 ]]; then
             export PPO_EPOCHS=${PPO_EPOCHS:-4}
         elif [[ $ABLATION == E17 ]]; then
@@ -92,6 +115,16 @@ case "$ABLATION" in
             "actor_rollout_ref.actor.data_loader_seed=$SEED"
             "actor_rollout_ref.rollout.seed=$SEED"
         )
+        case "$ABLATION" in
+            E18|E19|E20)
+                PRESET_OVERRIDES+=(
+                    trainer.max_actor_ckpt_to_keep=4
+                    data.train_max_samples=-1
+                    algorithm.filter_groups.enable=False
+                    trainer.v1.sampler.sync_refill_failed_groups=False
+                )
+                ;;
+        esac
         if [[ $ABLATION != E15 ]]; then
             export DOMAIN=math
             export FULL_KL_BACKEND=${FULL_KL_BACKEND:-precompute}
