@@ -130,6 +130,7 @@ def test_forward_backward_batch_syncs_only_final_micro_batch(monkeypatch):
     engine.scaler = None
     engine.get_data_parallel_group = lambda: None
     engine.get_data_parallel_size = lambda: 1
+    engine.get_data_parallel_rank = lambda: 0
     sync_states = []
 
     @contextmanager
