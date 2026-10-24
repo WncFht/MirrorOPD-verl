@@ -13,6 +13,7 @@
 | 部署共享资源池及调整吞吐 | [基础设施](infra/README.md) | 启动与架构、参数机制、性能实测、MFU |
 | 查指标定义与当前验收 | [训练指标](metrics/README.md) | policy-v3 字典、完整验收、历史字段迁移 |
 | 比较 Full-KL、学习率和批内复用 | [五组 Math 实验对比](research/2026-10-24-五组Math实验对比分析.md) | E13–E17、完整指标目录、共同预算比较与离线 HTML |
+| 判断蒸馏收敛与师生差距 | [Full-KL 收敛与师生参考](research/2026-10-24-Full-KL收敛与师生参考评测.md) | current + IS、历史基线、长度/熵覆盖及条件 KL 与序列 KL 的区别 |
 | 阅读 E15 的完整训练指标 | [E15 训练动态与指标分析](research/2026-10-23-E15训练动态与指标分析.md) | 2377 个指标快照、八组图、验证预算与运行成本 |
 | 使用 full-vocab 训练 | [Full-vocab 工程](full-vocab/README.md) | 已实现接口、算子、数据通路、预算与实验队列 |
 | 查算法消融及源码审计 | [OPD 实验与审计](opd-objective/README.md) | E 系列接口、支持集、作者实现与历史证据 |

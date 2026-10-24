@@ -13,10 +13,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--references", type=Path, help="Optional explicitly labeled historical reference data")
     args = parser.parse_args()
     with gzip.open(args.data / "comparison.json.gz", "rt") as stream:
         bundle = json.load(stream)
     bundle["config_differences"] = json.loads((args.data / "config-differences.json").read_text())
+    if args.references:
+        bundle["references"] = json.loads(args.references.read_text())
     template = Path(__file__).with_name("policy_comparison.html").read_text()
     payload = json.dumps(bundle, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
     document = template.replace("/*__PLOTLY__*/", get_plotlyjs()).replace("/*__DATA__*/", payload)
