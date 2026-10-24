@@ -199,7 +199,7 @@ class LogPublishTest(unittest.TestCase):
         hook.write_text("#!/bin/sh\nexit 1\n")
         hook.chmod(0o755)
         with patch.object(log_sync, "upload", return_value={"succeeded": 1}) as cloud:
-            with self.assertRaisesRegex(ValueError, "Git push failed"):
+            with self.assertRaisesRegex(ValueError, "Git synchronization failed"):
                 log_sync.upload_and_push(self.logs)
             cloud.assert_called_once()
         self.assertEqual(self.git(self.remote, "rev-parse", "main"), self.initial)
@@ -222,6 +222,124 @@ class LogPublishTest(unittest.TestCase):
             log_sync.push_logs(self.logs)
         self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), local_head)
         self.assertEqual(self.git(self.remote, "rev-parse", "main"), remote_head)
+
+    def other_checkout(self):
+        other = self.base / "other"
+        self.git(self.base, "clone", "-b", "main", str(self.remote), str(other))
+        self.git(other, "config", "user.name", "Test")
+        self.git(other, "config", "user.email", "test@example.invalid")
+        return other
+
+    def publish_remote_run(self, other):
+        run = other / "MirrorOPD-verl/wandb/offline-run-remote"
+        run.mkdir(parents=True)
+        (run / "run-remote.wandb").write_bytes(b"remote log")
+        self.git(other, "add", ".")
+        self.git(other, "commit", "-m", "remote log")
+        self.git(other, "push")
+        return self.git(other, "rev-parse", "HEAD")
+
+    def test_upload_fetches_fast_forwards_and_enqueues_remote_runs(self):
+        remote_head = self.publish_remote_run(self.other_checkout())
+
+        def upload_queued(*args, **kwargs):
+            self.assertEqual([job["run"] for job in self.jobs()], ["offline-run-remote"])
+            self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), remote_head)
+
+        with patch.object(log_sync, "upload", side_effect=upload_queued):
+            log_sync.upload_and_push(self.logs)
+        self.assertEqual(self.git(self.logs, "status", "--porcelain"), "")
+
+    def test_upload_merges_diverged_histories_and_enqueues_both_sides(self):
+        remote_head = self.publish_remote_run(self.other_checkout())
+        shutil.copytree(self.source, self.destination)
+        log_sync.enqueue_logs(self.logs, self.destination.parent, push=False)
+        local_head = self.git(self.logs, "rev-parse", "HEAD")
+        with patch.object(log_sync, "upload"):
+            log_sync.upload_and_push(self.logs)
+        self.assertEqual(
+            set(self.git(self.logs, "show", "-s", "--format=%P", "HEAD").split()), {local_head, remote_head}
+        )
+        self.assertEqual({job["run"] for job in self.jobs()}, {self.run_name, "offline-run-remote"})
+        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), self.git(self.remote, "rev-parse", "main"))
+
+    def test_sync_uses_configured_upstream_for_fetch_and_push(self):
+        remote_head = self.publish_remote_run(self.other_checkout())
+        self.git(self.logs, "remote", "rename", "origin", "logs-origin")
+        self.git(self.logs, "config", "remote.pushDefault", "not-the-log-remote")
+        with patch.object(log_sync, "upload"):
+            log_sync.upload_and_push(self.logs)
+        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), remote_head)
+        self.assertEqual(self.git(self.logs, "rev-parse", "@{upstream}"), remote_head)
+
+    def test_binary_conflict_aborts_only_automatic_merge_and_keeps_queue(self):
+        self.unpack()
+        other = self.other_checkout()
+        (other / self.destination.relative_to(self.logs) / "run-test.wandb").write_bytes(b"\0remote")
+        self.git(other, "add", ".")
+        self.git(other, "commit", "-m", "remote snapshot")
+        self.git(other, "push")
+        remote_head = self.git(other, "rev-parse", "HEAD")
+        (self.destination / "run-test.wandb").write_bytes(b"\0local")
+        log_sync.enqueue_logs(self.logs, self.destination.parent, push=False)
+        local_head = self.git(self.logs, "rev-parse", "HEAD")
+        queue = self.jobs()
+        with patch.object(log_sync, "upload") as cloud:
+            with self.assertRaisesRegex(ValueError, "Automatic merge conflicted and was aborted"):
+                log_sync.upload_and_push(self.logs)
+            cloud.assert_called_once()
+        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), local_head)
+        self.assertEqual(self.git(self.remote, "rev-parse", "main"), remote_head)
+        self.assertEqual((self.destination / "run-test.wandb").read_bytes(), b"\0local")
+        self.assertEqual(self.git(self.logs, "status", "--porcelain"), "")
+        self.assertFalse((self.logs / ".git/MERGE_HEAD").exists())
+        self.assertEqual(self.jobs(), queue)
+
+    def test_remote_update_does_not_overwrite_unrelated_staged_changes(self):
+        remote_head = self.publish_remote_run(self.other_checkout())
+        (self.logs / "notes.txt").write_text("user staged content")
+        self.git(self.logs, "add", "notes.txt")
+        with patch.object(log_sync, "upload"):
+            with self.assertRaisesRegex(ValueError, "Commit or stash local changes"):
+                log_sync.upload_and_push(self.logs)
+        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), self.initial)
+        self.assertEqual(self.git(self.logs, "diff", "--cached", "--name-only"), "notes.txt")
+        self.assertEqual(self.git(self.remote, "rev-parse", "main"), remote_head)
+
+    def test_existing_merge_is_not_aborted_or_received_over(self):
+        (self.logs / ".git/MERGE_HEAD").write_text(self.initial + "\n")
+        with self.assertRaisesRegex(ValueError, "existing Git operation"):
+            self.unpack()
+        self.assertTrue((self.logs / ".git/MERGE_HEAD").exists())
+        self.assertFalse(self.destination.exists())
+
+    def test_merge_preserves_ignored_local_file_when_remote_starts_tracking_it(self):
+        other = self.other_checkout()
+        (other / "local-cache.txt").write_text("remote tracked file")
+        self.git(other, "add", ".")
+        self.git(other, "commit", "-m", "track file")
+        self.git(other, "push")
+        (self.logs / ".git/info/exclude").write_text("local-cache.txt\n")
+        (self.logs / "local-cache.txt").write_text("local ignored data")
+        with patch.object(log_sync, "upload"):
+            with self.assertRaisesRegex(ValueError, "Git synchronization failed"):
+                log_sync.upload_and_push(self.logs)
+        self.assertEqual((self.logs / "local-cache.txt").read_text(), "local ignored data")
+        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), self.initial)
+
+    def test_fetch_failure_still_processes_existing_queue_and_disable_skips_network(self):
+        shutil.copytree(self.source, self.destination)
+        log_sync.enqueue_logs(self.logs, self.destination.parent, push=False)
+        self.git(self.logs, "remote", "set-url", "origin", str(self.base / "missing.git"))
+        with patch.object(log_sync, "upload") as cloud:
+            with self.assertRaisesRegex(ValueError, "Git synchronization failed"):
+                log_sync.upload_and_push(self.logs)
+            cloud.assert_called_once()
+        self.assertEqual(len(self.jobs()), 1)
+        with patch.object(log_sync, "fetch_and_merge", side_effect=AssertionError("network disabled")):
+            with patch.object(log_sync, "upload") as cloud:
+                log_sync.upload_and_push(self.logs, push=False)
+                cloud.assert_called_once()
 
 
 if __name__ == "__main__":

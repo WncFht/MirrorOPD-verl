@@ -113,6 +113,9 @@ def commit_logs(repo, destination):
 def enqueue(repo, destination, commit):
     """Recover old backlog as well as this receipt; reuse Git tree IDs instead of custom file hashes."""
     relative = destination.resolve().relative_to(repo.resolve()).as_posix()
+    if not git(repo, "ls-tree", commit, "--", relative).stdout.strip():
+        observe.note("No committed run directory to enqueue", destination=str(destination))
+        return
     listing = git(repo, "ls-tree", "-z", f"{commit}:{relative}").stdout
     directory = queue_dir(repo)
     target = cloud_target()
@@ -162,37 +165,123 @@ def receive(incoming, destination, source_root, *, push=True):
     repo = repository(destination, source_root)
     directory = queue_dir(repo)
     with lock(directory, "receive.lock", blocking=False):
+        require_settled_git(repo)
         with observe.stage("logs.merge", destination=str(destination)):
             shutil.copytree(incoming, destination, dirs_exist_ok=True)
         commit = commit_logs(repo, destination)
         with observe.stage("logs.enqueue"):
             enqueue(repo, destination, commit)
-    # A failed Git push must not erase queued uploads or block later cloud-only retries.
-    if push:
-        push_logs(repo)
+        if push:
+            synchronize_logs(repo, destination)
     return repo
 
 
-def push_logs(repo):
+def git_timeout():
     timeout = float(os.environ.get("MIRROROPD_GIT_PUSH_TIMEOUT", "120"))
     if not math.isfinite(timeout) or timeout <= 0:
         raise ValueError("GIT_PUSH_TIMEOUT must be a finite positive number")
+    return timeout
+
+
+def require_settled_git(repo):
+    """Do not adopt or abort a merge/rebase started by the user."""
+    for name in ("MERGE_HEAD", "rebase-merge", "rebase-apply", "CHERRY_PICK_HEAD", "REVERT_HEAD", "sequencer"):
+        path = Path(git(repo, "rev-parse", "--git-path", name).stdout.strip())
+        if (path if path.is_absolute() else repo / path).exists():
+            raise ValueError(f"Finish or abort the existing Git operation in {repo} before synchronizing ({name})")
+
+
+def fetch_and_merge(repo):
+    """Fetch the configured upstream and merge it without rewriting either side's commits."""
+    with observe.stage(
+        "logs.git_fetch", hint="Local snapshots are retained. Retry make sync-log-upload after fixing Git access."
+    ):
+        require_settled_git(repo)
+        branch = git(repo, "symbolic-ref", "--quiet", "HEAD").stdout.strip()
+        fields = (
+            git(repo, "for-each-ref", "--format=%(upstream:remotename)%00%(upstream:remoteref)", branch)
+            .stdout.strip()
+            .split("\0")
+        )
+        if len(fields) != 2 or not all(fields) or fields[0] == "." or not fields[1].startswith("refs/heads/"):
+            raise ValueError(f"Configure a remote branch as the Git upstream in {repo} before synchronizing")
+        remote, remote_ref = fields
+        observe.update(git_sync_remote=remote, git_sync_branch=remote_ref)
+        observe.run(
+            ["git", "-C", str(repo), "fetch", "--no-tags", "--", remote, remote_ref],
+            stream=True,
+            check=True,
+            timeout=git_timeout(),
+        )
+        incoming = git(repo, "rev-parse", "FETCH_HEAD^{commit}").stdout.strip()
+    with observe.stage("logs.git_merge", incoming=incoming):
+        before = git(repo, "rev-parse", "HEAD").stdout.strip()
+        observe.update(git_merge_before=before, git_merge_incoming=incoming)
+        ancestor = git(repo, "merge-base", "--is-ancestor", incoming, before, check=False)
+        if ancestor.returncode == 0:
+            observe.note("Upstream already included; no merge needed")
+        else:
+            if ancestor.returncode != 1:
+                ancestor.check_returncode()
+            dirty = git(repo, "status", "--porcelain", "--untracked-files=normal").stdout.strip()
+            if dirty:
+                observe.note("Local changes prevent automatic merge", files=dirty)
+                raise ValueError(f"Commit or stash local changes in {repo} before merging upstream; no automatic stash")
+            try:
+                git(
+                    repo,
+                    "-c",
+                    "merge.autoStash=false",
+                    "merge",
+                    "--ff",
+                    "--no-edit",
+                    "--no-gpg-sign",
+                    "--no-overwrite-ignore",
+                    incoming,
+                )
+            except (OSError, subprocess.SubprocessError, KeyboardInterrupt) as error:
+                conflicts = git(repo, "diff", "--name-only", "--diff-filter=U").stdout.strip()
+                if git(repo, "rev-parse", "--verify", "MERGE_HEAD", check=False).returncode == 0:
+                    git(repo, "merge", "--abort")
+                observe.update(git_merge_conflicts=conflicts.splitlines())
+                if conflicts:
+                    raise ValueError(
+                        f"Automatic merge conflicted and was aborted; both histories are retained. "
+                        f"In {repo}, merge {incoming} manually. Conflicting files:\n{conflicts}"
+                    ) from error
+                raise
+        observe.update(git_merge_after=git(repo, "rev-parse", "HEAD").stdout.strip())
+    return remote, remote_ref
+
+
+def synchronize_logs(repo, destination):
+    """Caller holds receive.lock across Git updates, queue registration and publication."""
+    remote, remote_ref = fetch_and_merge(repo)
+    with observe.stage("logs.enqueue"):
+        enqueue(repo, destination, git(repo, "rev-parse", "HEAD").stdout.strip())
+    push_logs(repo, remote=remote, remote_ref=remote_ref)
+
+
+def push_logs(repo, *, remote=None, remote_ref=None):
     with observe.stage("logs.git_push", hint="Local commit and upload queue are retained. Retry make sync-log-push."):
         head = git(repo, "rev-parse", "HEAD").stdout.strip()
         upstream = git(repo, "rev-parse", "--abbrev-ref", "@{upstream}", check=False).stdout.strip()
         observe.update(git_push_head=head, git_push_upstream=upstream or None, git_push_status="running")
         try:
             observe.run(
-                ["git", "-C", str(repo), "push"],
+                ["git", "-C", str(repo), "push", *(["--", remote, f"HEAD:{remote_ref}"] if remote else [])],
                 stream=True,
                 check=True,
-                timeout=timeout,
+                timeout=git_timeout(),
             )
         except (OSError, subprocess.SubprocessError) as error:
             output = str(getattr(error, "stdout", "") or "")
             lowered = output.lower()
             if any(word in lowered for word in ("non-fast-forward", "fetch first", "remote contains work")):
-                hint = "Inspect and reconcile the remote history, then retry; no automatic rebase or force push."
+                hint = (
+                    "Remote may have advanced during synchronization. "
+                    "Retry make sync-log-upload to fetch and merge again."
+                )
             elif "upstream" in lowered:
                 hint = "Configure the intended Git upstream in the log repository, then retry make sync-log-push."
             elif any(word in lowered for word in ("permission denied", "authentication", "could not read username")):
@@ -208,32 +297,38 @@ def push_logs(repo):
 
 def enqueue_logs(repo, destination, *, push=True):
     with lock(queue_dir(repo), "receive.lock", blocking=False):
+        require_settled_git(repo)
         enqueue(repo, destination, commit_logs(repo, destination))
-    if push:
-        push_logs(repo)
+        if push:
+            synchronize_logs(repo, destination)
 
 
-def upload_and_push(repo, *, push=True, **settings):
-    """Retry a pending Git publication independently of the cloud queue."""
-    push_error = None
+def upload_and_push(repo, *, destination=None, push=True, **settings):
+    """Refresh remote snapshots before upload; Git failures retain an independently usable queue."""
+    destination = destination if destination is not None else repo / "MirrorOPD-verl/wandb"
+    sync_error = None
     if push:
         try:
-            push_logs(repo)
-        except (OSError, subprocess.SubprocessError) as error:
-            push_error = error
-            observe.note("WARN Git push failed; continuing cloud uploads from committed local snapshots")
+            with lock(queue_dir(repo), "receive.lock", blocking=False):
+                synchronize_logs(repo, destination)
+        except (OSError, ValueError, subprocess.SubprocessError) as error:
+            sync_error = error
+            observe.note(
+                "WARN Git synchronization failed; continuing existing committed upload tasks", error=str(error)
+            )
     else:
-        observe.skip("logs.git_push", "WANDB_GIT_SYNC=0")
+        for stage in ("logs.git_fetch", "logs.git_merge", "logs.git_push"):
+            observe.skip(stage, "WANDB_GIT_SYNC=0")
     try:
         result = upload(repo, **settings)
     except observe.PartialResultError as error:
-        if push_error:
+        if sync_error:
             raise ValueError(
-                f"{error}; Git push also failed. Retry make sync-log-push after fixing Git access"
-            ) from push_error
+                f"{error}; Git synchronization also failed. Inspect the Git stage and retry make sync-log-upload"
+            ) from sync_error
         raise
-    if push_error:
-        raise ValueError("Cloud queue processed, but Git push failed; retry make sync-log-push") from push_error
+    if sync_error:
+        raise ValueError(f"Cloud queue processed, but Git synchronization failed: {sync_error}") from sync_error
     return result
 
 
@@ -521,10 +616,12 @@ def main():
             if args.action == "enqueue":
                 enqueue_logs(repo, destination, push=os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1")
             elif args.action == "push":
-                push_logs(repo)
+                with lock(queue_dir(repo), "receive.lock", blocking=False):
+                    synchronize_logs(repo, destination)
             else:
                 upload_and_push(
                     repo,
+                    destination=destination,
                     push=os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1",
                     run=os.environ.get("MIRROROPD_UPLOAD_RUN", ""),
                     concurrency=int(os.environ.get("MIRROROPD_UPLOAD_JOBS", "2")),

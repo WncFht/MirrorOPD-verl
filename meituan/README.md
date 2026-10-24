@@ -110,7 +110,7 @@ tail -f /tmp/mirroropd-sync/具体操作.log
 
 交互终端默认使用颜色：成功为绿色，错误为红色，不完整快照和警告为黄色。`COLOR=always` 强制启用，`COLOR=never` 或 `NO_COLOR=1` 关闭；管道输出默认不带颜色。实现只依赖标准库，独立 bootstrap 同样可用。文本日志与 JSON 报告不含颜色控制码；完整命令和详细上下文写入日志，终端保留阶段进度和结果。
 
-日志接收报告记录 `logs.merge`、`logs.git_commit`、`logs.enqueue` 和 `logs.git_push`；上传报告记录 `wandb.batch`，逐 run 结果持久保存在上传队列中。批次中部分 run 成功时，成功任务不会随失败任务一起重传。Git 推送和云端上传可以分别重试，重跑产生新报告，不覆盖旧记录。
+日志接收报告记录 `logs.merge`、`logs.git_commit`、`logs.enqueue`、`logs.git_fetch`、`logs.git_merge` 和 `logs.git_push`；上传报告记录 `wandb.batch`，逐 run 结果持久保存在上传队列中。批次中部分 run 成功时，成功任务不会随失败任务一起重传。Git 推送和云端上传可以分别重试，重跑产生新报告，不覆盖旧记录。
 
 接收默认 `WANDB_SYNC=0`，云端阶段显示 skipped/queued，不能解读为已经上传。整体 success 表示该次命令已正常处理可执行任务；训练中的快照仍可能等待更新，须结合队列汇总判断数据完整性。上传器联合 CLI 结果与 SDK 完成标记记录快照结果；状态命令不实时查询云端，也不充当日志传输回执；`logs_state.json` 仍然只表示已打包，不代表送达。原有“日志包必须在下一次打包前传回”的规则不变。
 
@@ -185,9 +185,15 @@ Mac 或分析机接收到独立的 `wandb-logs` Git 仓库：
 make sync-log-unpack LOG_ARCHIVE=/下载目录/log_MirrorOPD-verl_....tar.gz
 ```
 
-默认依次完成：合并原始文件、本地 Git 提交、登记持久上传队列、Git push。云端上传已从默认接收路径分离，W&B 故障不会挡住本地提交。Git push 失败时，本地提交和队列保留，执行 `make sync-log-push` 重试推送；也可以先运行云端上传命令。输入日志包始终保留。
+默认先合并原始文件、创建本地 Git 提交并登记持久上传队列，再获取远程 upstream、快进或合并、登记远程带回的 run，最后推送 Git。先保存本地提交和队列，因此远程故障不会丢失刚收到的日志。云端上传已从默认接收路径分离，W&B 故障不会挡住本地提交。Git push 失败时，本地提交和队列保留，执行 `make sync-log-push` 重试推送；也可以先运行云端上传命令。输入日志包始终保留。
 
-`sync-log-enqueue` 也默认在入队后推送 Git；`sync-log-upload` 先尝试推送已有本地提交，再处理云端队列。上传入口的 Git 推送失败不阻止云端上传，但命令最终仍报告 Git 失败。默认推送超时为 120 秒，可用 `GIT_PUSH_TIMEOUT` 调整。诊断记录保存本地 HEAD、upstream、推送输出及恢复提示；远程分叉时不会自动 rebase 或强制推送。
+`sync-log-upload` 默认自动完成 fetch → 快进或 merge → 登记新快照 → push → W&B 上传。其他机器新推送的 run 会自动入队，无需先手动 pull 或 enqueue。`sync-log-enqueue` 先提交本地日志再执行同一 Git 同步流程；`sync-log-push` 也执行获取、合并、入队和推送，但不上传 W&B。upload 和 push 不自动提交工作区修改；本地未提交日志需要先 enqueue 或 unpack。
+
+获取和推送都使用当前分支配置的 upstream remote/branch；不会默认为 origin/main，也不会使用另一个 pushDefault 目标。历史分叉时允许无冲突的普通 merge，保留双方提交，不 rebase、不 force push。需要合并而工作区存在未提交或未跟踪文件时会停止 Git 同步，不自动 stash；其他目录的暂存修改不会被夹带进提交。已有 merge/rebase 等操作也须先处理，工具不会接管。
+
+自动合并冲突时记录冲突文件并执行 merge --abort，恢复合并前的干净工作区，双方提交保留；终端提示可用于手动重做合并的提交 ID。同一个 `.wandb` 文件在两边分别修改时，需判断应保留哪份原始数据，不自动选 ours/theirs。若远程在 fetch 与 push 之间再次前进，推送可能仍被拒绝，重新运行命令即可再获取、合并；不会无限循环重试。
+
+上传入口的 Git 获取、合并或推送失败不阻止已有队列上传，但命令最终仍报告 Git 失败。默认每次 fetch/push 时限为 120 秒，兼容参数 `GIT_PUSH_TIMEOUT` 同时控制两者。诊断记录保存获取目标、合并前后提交、冲突路径、Git 输出及恢复提示。
 
 接收目录仍按以下优先级选择：显式 `WANDB_RUNS_DIR`；`WANDB_LOGS_REPO/MirrorOPD-verl/wandb/`；源码仓库同级的 `wandb-logs/MirrorOPD-verl/wandb/`；最后回退到 `~/src/wandb-logs/MirrorOPD-verl/wandb/`。接收端日志仓库需要配置提交身份及 Git upstream。自动提交只包含该项目的日志路径，其他目录的暂存修改保留。
 
@@ -212,7 +218,7 @@ make sync-log-upload RUN=krkmq098     # 只处理指定 run
 make sync-log-upload RUN=krkmq098 STRICT=1  # 要求所选快照全部同步完成
 make sync-log-upload RETRY=1          # 排障后忽略冷却与尝试次数限制，仍只尝试一轮
 make sync-log-enqueue                 # 将迁移前已收到的日志提交、登记入队并推送 Git
-make sync-log-push                    # 单独重试日志仓库推送
+make sync-log-push                    # 获取、合并、入队并推送日志仓库，不上传 W&B
 ```
 
 每次接收会检查该项目日志目录中所有已提交 run，因此此前收到但没有上传的 run 也能入队。队列以 run 路径、Git tree ID 和云端目标区分快照；原始文件内容未变时复用原任务，其他 run 的更新不会触发重传。成功快照再次执行 upload 会直接跳过。首次启用时没有历史上传回执，不能推断旧日志已经上云，现有日志可能需要重新同步一次。
@@ -243,7 +249,7 @@ make sync-log-upload WANDB_UPLOAD_JOBS=1 WANDB_UPLOAD_TIMEOUT=300
 
 `WANDB_SYNC=1` 可在接收、提交、入队和推送后立即处理队列，适合仍想一键执行的情况。只复制文件、不提交、不入队时，使用 `WANDB_SYNC=0 WANDB_GIT_SYNC=0`；随后可用 `make sync-log-enqueue` 登记。持久上传依赖已提交快照，因此不支持 `WANDB_SYNC=1 WANDB_GIT_SYNC=0`。
 
-单独运行 `sync-log-enqueue` 或 `sync-log-upload` 时，`WANDB_GIT_SYNC=0` 只关闭自动 push：enqueue 仍需创建本地提交才能登记快照，upload 继续处理已经提交的队列。
+单独运行 `sync-log-enqueue` 或 `sync-log-upload` 时，`WANDB_GIT_SYNC=0` 关闭自动 fetch/merge/push：enqueue 仍需创建本地提交才能登记快照，upload 只处理已有队列，不发现远程的新日志。显式 `sync-log-push` 始终执行 Git 同步。
 
 原始日志默认保持原来的 entity/project/run ID。测试或迁移时可以通过环境变量 `MIRROROPD_UPLOAD_ENTITY`、`MIRROROPD_UPLOAD_PROJECT` 明确覆盖云端目标；该目标在入队时固定，之后改变环境变量不会悄悄改变已排队任务的目的地。
 
@@ -283,8 +289,8 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `WANDB_RUNS_DIR` | 留空，按操作选择 | 覆盖实际 run 目录；打包默认 `wandb`，解包默认独立日志仓库 |
 | `WANDB_LOGS_REPO` | 同级 Git 仓库 `../wandb-logs`，不存在则 `~/src/wandb-logs` | 接收端日志仓库，run 合并到其中的 `MirrorOPD-verl/wandb/` |
 | `WANDB_SYNC` | `0` | 接收默认只入队；设为 `1` 在接收完成后立即处理上传队列 |
-| `WANDB_GIT_SYNC` | `1` | 接收后提交、入队并推送日志；接收设为 `0` 只合并文件，独立 enqueue/upload 设为 `0` 只关闭 push |
-| `GIT_PUSH_TIMEOUT` | `120` | 日志仓库 Git 推送时限，秒 |
+| `WANDB_GIT_SYNC` | `1` | 接收后提交、入队并推送日志；接收设为 `0` 只合并文件，独立 enqueue/upload 设为 `0` 关闭 fetch/merge/push |
+| `GIT_PUSH_TIMEOUT` | `120` | 日志仓库每次 Git fetch/push 时限，秒 |
 | `WANDB_BIN` | 优先 `.venv-wandb-sync/bin/wandb` | 独立上传 CLI 路径 |
 | `WANDB_UPLOAD_JOBS` | `2` | 同时上传的不同 run 数，范围 1–8 |
 | `WANDB_UPLOAD_TIMEOUT` | `900` | 每批上传总时限，秒 |

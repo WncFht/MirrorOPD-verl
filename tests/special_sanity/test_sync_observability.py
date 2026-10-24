@@ -202,6 +202,24 @@ class LogObservabilityTest(unittest.TestCase):
         reports = [json.loads(path.read_text()) for path in self.opdir.glob("*.json")]
         return result, max(reports, key=lambda item: Path(item["log"]).stat().st_mtime_ns)
 
+    def test_upload_cli_fetches_and_uploads_new_remote_run_without_manual_enqueue(self):
+        self.assertEqual(self.unpack()[0].returncode, 0)
+        other = self.base / "other"
+        self.git(self.base, "clone", "-b", "main", str(self.remote), str(other))
+        run = other / "MirrorOPD-verl/wandb/offline-run-remote"
+        run.mkdir()
+        (run / "run-remote.wandb").write_bytes(b"remote snapshot")
+        self.git(other, "add", ".")
+        self.git(other, "commit", "-m", "remote run")
+        self.git(other, "push")
+        remote_head = self.git(other, "rev-parse", "HEAD")
+        result, report = self.upload()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(report["details"]["upload_summary"]["queue_counts"], {"succeeded": 3})
+        self.assertEqual(report["details"]["git_merge_after"], remote_head)
+        self.assertEqual(self.git(self.logs, "rev-parse", "HEAD"), remote_head)
+        self.assertEqual(self.git(self.logs, "status", "--porcelain"), "")
+
     def test_waiting_snapshots_exit_zero_and_strict_checks_exit_two(self):
         self.assertEqual(self.unpack()[0].returncode, 0)
         result, report = self.upload(INCOMPLETE_UPLOAD="1", MIRROROPD_UPLOAD_STRICT="0")
