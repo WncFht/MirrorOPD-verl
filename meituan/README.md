@@ -112,9 +112,9 @@ tail -f /tmp/mirroropd-sync/具体操作.log
 
 日志接收报告记录 `logs.merge`、`logs.git_commit`、`logs.enqueue` 和 `logs.git_push`；上传报告记录 `wandb.batch`，逐 run 结果持久保存在上传队列中。批次中部分 run 成功时，成功任务不会随失败任务一起重传。Git 推送和云端上传可以分别重试，重跑产生新报告，不覆盖旧记录。
 
-接收默认 `WANDB_SYNC=0`，云端阶段显示 skipped/queued，不能解读为已经上传。整体 success 仅表示该次命令启用的阶段全部完成。上传器联合 CLI 结果与 SDK 完成标记记录快照结果；状态命令不实时查询云端，也不充当日志传输回执；`logs_state.json` 仍然只表示已打包，不代表送达。原有“日志包必须在下一次打包前传回”的规则不变。
+接收默认 `WANDB_SYNC=0`，云端阶段显示 skipped/queued，不能解读为已经上传。整体 success 表示该次命令已正常处理可执行任务；训练中的快照仍可能等待更新，须结合队列汇总判断数据完整性。上传器联合 CLI 结果与 SDK 完成标记记录快照结果；状态命令不实时查询云端，也不充当日志传输回执；`logs_state.json` 仍然只表示已打包，不代表送达。原有“日志包必须在下一次打包前传回”的规则不变。
 
-实际失败记录 failed，Ctrl-C 记录 interrupted。上传没有实际失败、但仍有不完整快照等待新数据时，记录 partial，命令退出码为 2；成功快照保留，不会因整体未完成而重传。`make` 仍会显示非零退出提示，应结合汇总和状态区分等待新数据与上传故障。机器掉电、进程被强制终止或磁盘无法继续写入时，报告可能停留在 running；状态页显示最后更新时间，不能仅凭 running 判断进程仍活着。日志不保存完整环境变量，并遮蔽已知密钥环境值、常见 token/password 字段和 URL 密码；诊断文件仍包含本机路径和工具输出，默认文件权限为仅当前用户可读写。
+实际失败记录 failed，Ctrl-C 记录 interrupted。上传仅剩不完整快照等待新数据时，默认记录 success、退出码为 0，并显示黄色 WAITING 提示；队列仍保留 incomplete 状态。`STRICT=1` 时这种情况记录 partial、退出码为 2，Make 会显示 `Error 2`。真正的上传或 Git 故障仍返回失败；成功快照不会重传。机器掉电、进程被强制终止或磁盘无法继续写入时，报告可能停留在 running；状态页显示最后更新时间，不能仅凭 running 判断进程仍活着。日志不保存完整环境变量，并遮蔽已知密钥环境值、常见 token/password 字段和 URL 密码；诊断文件仍包含本机路径和工具输出，默认文件权限为仅当前用户可读写。
 
 ## 原生 Python 与离线依赖
 
@@ -209,6 +209,7 @@ make sync-log-setup
 make sync-log-upload                  # 处理整个接收历史中已入队的待传任务
 make sync-log-status                  # 查看 pending / running / succeeded / failed / incomplete
 make sync-log-upload RUN=krkmq098     # 只处理指定 run
+make sync-log-upload RUN=krkmq098 STRICT=1  # 要求所选快照全部同步完成
 make sync-log-upload RETRY=1          # 排障后忽略冷却与尝试次数限制，仍只尝试一轮
 make sync-log-enqueue                 # 将迁移前已收到的日志提交、登记入队并推送 Git
 make sync-log-push                    # 单独重试日志仓库推送
@@ -234,7 +235,9 @@ make sync-log-upload WANDB_UPLOAD_JOBS=1 WANDB_UPLOAD_TIMEOUT=300
 
 训练仍在写入时打包，可能截到 `.wandb` 的半条记录。新版引擎可以上传此前完整的数据，但会报告 incomplete record。队列将这种快照标为 incomplete，等待后续更完整的日志包；不会不断重试同一份不可变化的半条记录，也不会裁剪原始日志或伪造结束记录。云端可能已有部分数据，不代表这个快照完整同步成功。静态归档不使用 `--live`，避免等待一个永远不会继续写入的副本。
 
-上传结束显示本次尝试数及选中队列的 succeeded、incomplete、failed、pending 数量，JSON 报告保存同一汇总。后者包含此前已完成的快照，不一定等于本次尝试数。仅剩 incomplete 时再次运行会直接报告 partial，等待接收更新的源日志；如果源文件本身已截断，重新上传同一文件不能补回缺失数据。
+上传结束显示本次尝试数及选中队列的 succeeded、incomplete、failed、pending 数量，JSON 报告保存同一汇总。后者包含此前已完成的快照，不一定等于本次尝试数。仅剩 incomplete 时再次运行会显示 WAITING 并正常退出，不重新启动 SDK 上传同一快照；下一次接收更完整的文件后，新快照自动入队。报告中的 `waiting_for_snapshot` 保存等待数量，相关批次标为 waiting。SDK 原始输出可能仍含 `ERROR ... incomplete record`，应结合最终汇总判断；如果源文件本身已截断，重新上传同一文件不能补回缺失数据。
+
+默认行为适合训练中的持续同步。训练结束后可用 `make sync-log-upload RUN=<run-id> STRICT=1` 要求所选快照全部同步完成；严格模式不会强制重试未变化的 incomplete 快照，也不会检查训练退出记录或判断训练成功。某次 SDK 调用失败、超时或缺少无法解释的完成标记时仍报告失败，不因同时出现 incomplete 提示而忽略真实故障。仅凭 incomplete 也不能判断训练是否仍在运行。
 
 ### 兼容参数和本地分析
 
@@ -286,6 +289,7 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 | `WANDB_UPLOAD_JOBS` | `2` | 同时上传的不同 run 数，范围 1–8 |
 | `WANDB_UPLOAD_TIMEOUT` | `900` | 每批上传总时限，秒 |
 | `RUN`、`RETRY` | 空、`0` | 上传 run 选择；显式覆盖冷却/尝试次数限制 |
+| `STRICT` | `0` | 设为 `1` 时，所选快照仍有 incomplete 则退出 2；独立上传及 `WANDB_SYNC=1` 接收均生效 |
 | `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；日志和结果输入包始终保留 |
 | `MODEL_ROOT`、`DATA_ROOT` | `../model`、`../data` 的绝对路径 | 数学资产检查目录 |
 | `LOG_ACTION`、`ACTION` | `unpack` | `make sync-log`、`make sync-results` 的操作 |

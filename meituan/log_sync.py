@@ -237,23 +237,37 @@ def upload_and_push(repo, *, push=True, **settings):
     return result
 
 
-def upload_summary(directory, run, attempted):
+def upload_summary(directory, run, attempted, *, strict=False, batch_errors=()):
     with lock(directory, "queue.lock"):
         jobs = [job for job in load(directory)["jobs"] if selected(job, run) and job["status"] != "superseded"]
     counts = Counter(job["status"] for job in jobs)
-    observe.update(upload_summary={"attempted_this_call": attempted, "queue_counts": dict(counts)})
+    observe.update(
+        upload_summary={
+            "attempted_this_call": attempted,
+            "queue_counts": dict(counts),
+            "waiting_for_snapshot": counts["incomplete"],
+            "batch_errors": list(batch_errors),
+        }
+    )
     message = (
-        f"Upload summary: attempted={attempted}; succeeded={counts['succeeded']}, "
+        f"Upload summary: attempted_this_call={attempted}; queue totals: succeeded={counts['succeeded']}, "
         f"incomplete={counts['incomplete']}, failed={counts['failed']}, "
         f"pending={counts['pending'] + counts['running']}"
     )
     observe.console_print(message)
+    if batch_errors:
+        raise ValueError(f"{message}. SDK batch failed: {'; '.join(batch_errors)}")
     if counts["failed"]:
         raise ValueError(f"{message}. Failed jobs remain unresolved; inspect sync-log-status before RETRY=1")
-    if counts["incomplete"] or counts["pending"] or counts["running"]:
-        raise observe.PartialResultError(
-            f"{message}. Some unresolved snapshots await newer source data or another queue pass"
+    if counts["pending"] or counts["running"]:
+        raise observe.PartialResultError(f"{message}. Unprocessed snapshots remain; run another queue pass")
+    if counts["incomplete"]:
+        observe.console_print(
+            f"WAITING {counts['incomplete']} snapshot(s) for newer source data; "
+            "expected when packing during training. Unchanged incomplete snapshots are not retried."
         )
+        if strict:
+            raise observe.PartialResultError(f"{message}. STRICT=1 requires every selected snapshot to finish syncing")
     return dict(counts)
 
 
@@ -312,10 +326,11 @@ def selected(job, run):
     return not run or job["run"] == run or job["run"].endswith("-" + run)
 
 
-def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
+def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=False):
     if concurrency < 1 or concurrency > 8 or not math.isfinite(timeout) or timeout <= 0:
         raise ValueError("Use WANDB_UPLOAD_JOBS=1..8 and a positive WANDB_UPLOAD_TIMEOUT")
     directory = queue_dir(repo)
+    observe.update(upload_strict=strict)
     with lock(directory, "worker.lock", blocking=False) as worker_fd:
         with lock(directory, "queue.lock"):
             state = load(directory)
@@ -334,20 +349,11 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
         if run and not any(selected(job, run) for job in state["jobs"]):
             raise ValueError(f"No queued run matches {run!r}; use make sync-log-status")
         if not ready:
-            unresolved = [
-                j for j in state["jobs"] if selected(j, run) and j["status"] in ("pending", "failed", "incomplete")
-            ]
-            if unresolved:
-                if all(job["status"] == "incomplete" for job in unresolved):
-                    return upload_summary(directory, run, 0)
-                raise ValueError(
-                    f"{len(unresolved)} unresolved jobs. Incomplete files need a newer snapshot. "
-                    "Use RETRY=1 to override cooldown after inspecting status."
-                )
-            print("No pending uploads for this selection")
-            return upload_summary(directory, run, 0)
+            print("No uploads ready for this selection")
+            return upload_summary(directory, run, 0, strict=strict)
         command = sdk_command()
         attempted = 0
+        batch_errors = []
         while ready:
             batch = []
             for job in ready[:]:
@@ -416,7 +422,7 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
                     runs=[job["run"] for job, _, _ in prepared],
                     timeout=timeout,
                     sdk_directory=str(attempt_dir),
-                ):
+                ) as batch_stage:
                     result = observe.run(
                         args,
                         stream=True,
@@ -431,16 +437,16 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
                     inspect_output("\n")
                     missing = [job for job, _, file in prepared if not file.with_name(file.name + ".synced").is_file()]
                     if missing and all(job["run"] in incomplete_names for job in missing):
-                        raise observe.PartialResultError(
-                            "Complete prefixes uploaded; these snapshots need newer source data"
-                        )
-                    if missing:
+                        if batch_stage is not None:
+                            batch_stage.update(status="waiting", reason="Awaiting newer source snapshots")
+                    elif missing:
                         raise ValueError("SDK returned 0 without completing every snapshot; no completion marker")
             except KeyboardInterrupt:
                 interrupted = True
                 error_text = "Interrupted by user"
             except (OSError, ValueError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
                 error_text = str(error)
+                batch_errors.append(error_text)
                 output = getattr(error, "stdout", "") or output
                 if isinstance(output, bytes):
                     output = output.decode(errors="replace")
@@ -448,7 +454,8 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
             for job, copied, file in prepared:
                 # A zero exit code alone is insufficient (e.g. skipped authentication or a missing run).
                 complete = file.with_name(file.name + ".synced").is_file()
-                incomplete = not complete and job["run"] in incomplete_names
+                # A batch error can include transport failures after the incomplete-record warning.
+                incomplete = not complete and not error_text and job["run"] in incomplete_names
                 status = "succeeded" if complete else ("incomplete" if incomplete else "failed")
                 message = (
                     ""
@@ -463,7 +470,7 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False):
                 observe.console_print(f"{job['run']}: {status}; snapshot={job['tree'][:12]}")
             if interrupted:
                 raise KeyboardInterrupt()
-        return upload_summary(directory, run, attempted)
+        return upload_summary(directory, run, attempted, strict=strict, batch_errors=batch_errors)
 
 
 def finish_job(directory, job, status, error, **extra):
@@ -523,6 +530,7 @@ def main():
                     concurrency=int(os.environ.get("MIRROROPD_UPLOAD_JOBS", "2")),
                     timeout=float(os.environ.get("MIRROROPD_UPLOAD_TIMEOUT", "900")),
                     retry=os.environ.get("MIRROROPD_UPLOAD_RETRY", "0") == "1",
+                    strict=os.environ.get("MIRROROPD_UPLOAD_STRICT", "0") == "1",
                 )
     except KeyboardInterrupt:
         parser.exit(130, "upload interrupted; queue and cached copies retained\n")

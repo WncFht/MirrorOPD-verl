@@ -148,14 +148,14 @@ class QueueTest(unittest.TestCase):
     def test_incomplete_record_waits_for_new_snapshot(self):
         self.write_run()
         self.enqueue()
-        with patch.dict(os.environ, FAKE_INCOMPLETE="1"), self.assertRaises(ValueError):
+        with patch.dict(os.environ, FAKE_INCOMPLETE="1"):
             log_sync.upload(self.repo)
         self.assertEqual(self.jobs()[0]["status"], "incomplete")
         with patch.object(
             log_sync, "sdk_command", side_effect=AssertionError("do not retry an immutable partial file")
         ):
-            with self.assertRaisesRegex(ValueError, "unresolved"):
-                log_sync.upload(self.repo)
+            log_sync.upload(self.repo)
+        self.assertEqual(self.jobs()[0]["attempts"], 1)
         self.write_run(payload=b"complete snapshot")
         self.enqueue()
         self.assertEqual([j["status"] for j in self.jobs()], ["superseded", "pending"])
@@ -177,8 +177,16 @@ class QueueTest(unittest.TestCase):
         self.write_run("offline-run-z-bad")
         self.enqueue()
         with patch.dict(os.environ, FAKE_INCOMPLETE="1", FAKE_FAIL="1"), self.assertRaises(ValueError):
-            log_sync.upload(self.repo)
+            log_sync.upload(self.repo, concurrency=1)
         self.assertEqual([j["status"] for j in self.jobs()], ["incomplete", "failed"])
+
+    def test_batch_failure_is_not_hidden_by_incomplete_warning(self):
+        self.write_run()
+        self.enqueue()
+        self.cli.write_text(self.cli.read_text().replace("raise SystemExit(7 if failed else 0)", "raise SystemExit(7)"))
+        with patch.dict(os.environ, FAKE_INCOMPLETE="1"), self.assertRaisesRegex(ValueError, "SDK batch failed"):
+            log_sync.upload(self.repo)
+        self.assertEqual(self.jobs()[0]["status"], "failed")
 
     def test_superseded_snapshot_is_not_uploaded(self):
         self.write_run()
@@ -256,19 +264,40 @@ class QueueTest(unittest.TestCase):
             log_sync.upload(self.repo)
         self.assertEqual(state.read_text(), "[]")
 
-    def test_incomplete_snapshot_reports_partial_with_summary(self):
+    def test_incomplete_snapshot_reports_success_with_waiting_summary(self):
+        self.write_run()
+        self.enqueue()
+        reports = self.base / "reports"
+        with patch.dict(os.environ, FAKE_INCOMPLETE="1"):
+            with log_sync.observe.operation(reports, "logs-upload"):
+                log_sync.upload(self.repo)
+        report = json.loads(next(reports.glob("*.json")).read_text())
+        self.assertEqual(report["status"], "success")
+        self.assertEqual(report["exit_code"], 0)
+        self.assertEqual(report["stages"][0]["status"], "waiting")
+        self.assertEqual(report["details"]["upload_summary"]["waiting_for_snapshot"], 1)
+        self.assertEqual(report["details"]["upload_summary"]["queue_counts"], {"incomplete": 1})
+        self.assertNotIn("error", report)
+        self.assertNotIn("failed_stage", report)
+        self.assertNotIn("Traceback", Path(report["log"]).read_text())
+
+    def test_strict_incomplete_snapshot_reports_partial_with_summary(self):
         self.write_run()
         self.enqueue()
         reports = self.base / "reports"
         with patch.dict(os.environ, FAKE_INCOMPLETE="1"):
             with self.assertRaises(log_sync.observe.PartialResultError):
                 with log_sync.observe.operation(reports, "logs-upload"):
-                    log_sync.upload(self.repo)
+                    log_sync.upload(self.repo, strict=True)
         report = json.loads(next(reports.glob("*.json")).read_text())
         self.assertEqual(report["status"], "partial")
         self.assertEqual(report["exit_code"], 2)
         self.assertEqual(report["details"]["upload_summary"]["queue_counts"], {"incomplete": 1})
         self.assertNotIn("failed_stage", report)
+        with patch.object(log_sync, "sdk_command", side_effect=AssertionError("strict check must not retry")):
+            with self.assertRaises(log_sync.observe.PartialResultError):
+                log_sync.upload(self.repo, strict=True)
+        self.assertEqual(self.jobs()[0]["attempts"], 1)
 
     def test_nonfinite_timeouts_fail_before_starting_a_worker(self):
         for timeout in (float("nan"), float("inf"), -1):

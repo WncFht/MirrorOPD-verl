@@ -35,6 +35,7 @@ PALETTE = {
     "INCOMPLETE": "33",
     "WARN": "33",
     "WAIT": "34",
+    "WAITING": "33",
     "PENDING": "34",
     "RUNNING": "36",
     "INTERRUPTED": "33",
@@ -221,7 +222,7 @@ def operation(directory, action, **details):
 def stage(name, hint=None, **details):
     journal = _active
     if journal is None:
-        yield
+        yield None
         return
     record = {"name": name, "status": "running", "started_at": now(), "details": details}
     started = time.monotonic()
@@ -231,7 +232,7 @@ def stage(name, hint=None, **details):
         journal.save()
     journal.emit(f"BEGIN {name}" + (" | " + json.dumps(details, ensure_ascii=False, default=str) if details else ""))
     try:
-        yield
+        yield record
     except BaseException as error:
         record["status"] = (
             "interrupted"
@@ -245,7 +246,8 @@ def stage(name, hint=None, **details):
             journal.emit(f"Recovery: {hint}")
         raise
     else:
-        record["status"] = "success"
+        if record["status"] == "running":
+            record["status"] = "success"
     finally:
         with journal.mutex:
             record["elapsed_seconds"] = round(time.monotonic() - started, 3)
