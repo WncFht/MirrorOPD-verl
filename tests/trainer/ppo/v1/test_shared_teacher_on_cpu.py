@@ -184,6 +184,12 @@ def test_teacher_model_config_is_fresh_and_uses_teacher_path(config, monkeypatch
     assert worker.engine_config.fsdp_size == 8
     assert trainer.distillation_config.shared_teacher.fsdp_size == -1
     assert worker.optimizer_config is None
+    # Base and instruction models can assign different default EOS roles to the
+    # same vocabulary. The scoring-only teacher consumes student IDs and masks.
+    trainer.tokenizer = SimpleNamespace(
+        get_vocab=lambda: {"a": 0, "b": 1}, bos_token_id=None, eos_token_id=0, pad_token_id=0
+    )
+    assert trainer._make_shared_teacher_config().model_config is model
     tokenizer.get_vocab = lambda: {"wrong": 0}
     trainer.tokenizer = SimpleNamespace(get_vocab=lambda: {"a": 0, "b": 1})
     with pytest.raises(ValueError, match="vocabularies"):

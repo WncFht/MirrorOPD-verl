@@ -338,9 +338,7 @@ class FSDPEngine(BaseEngine):
                 from verl.models.transformers.full_vocab import install_full_vocab_adapter
 
                 if (
-                    module.config.model_type != "qwen2"
-                    or module.config.tie_word_embeddings
-                    or self.ulysses_sequence_parallel_size != 1
+                    self.ulysses_sequence_parallel_size != 1
                     or self.engine_config.strategy != "fsdp2"
                     or self.model_config.lora_rank > 0
                     or use_fused_kernels
@@ -348,7 +346,7 @@ class FSDPEngine(BaseEngine):
                     or self.pad_to_length
                 ):
                     raise ValueError(
-                        "full reverse KL requires untied Qwen2, FSDP2, SP=1, packed input, no LoRA/static pad/fused PPO"
+                        "full reverse KL requires FSDP2, SP=1, packed input, no LoRA/static pad/fused PPO"
                     )
                 install_full_vocab_adapter(module)
 
@@ -1217,9 +1215,10 @@ class FSDPEngineWithLMHead(FSDPEngine):
         self.full_vocab_teacher_head = FrozenTeacherHead(teacher_path)
 
     def _full_vocab_output(self, micro_batch, model_inputs, teacher):
-        from verl.trainer.distillation.full_vocab import full_reverse_kl
+        from verl.trainer.distillation.full_vocab import full_reverse_kl_result
         from verl.trainer.distillation.hidden import prediction_positions
         from verl.trainer.distillation.profiling import full_kl_range
+        from verl.utils.metric.position import position_statistics, relative_position_bins
 
         if not self.model_config.enable_full_vocab:
             raise ValueError("full-vocab output requires the model head adapter")
@@ -1254,7 +1253,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
 
             def compute(h, w):
                 with torch.autocast(device_type=h.device.type, enabled=False):
-                    return full_reverse_kl(
+                    return full_reverse_kl_result(
                         h,
                         w.to(h.dtype),
                         teacher_hidden.to(h.dtype),
@@ -1266,8 +1265,21 @@ class FSDPEngineWithLMHead(FSDPEngine):
 
             # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
             with full_kl_range("head_loss"):
-                total = head(selected, full_vocab_callback=compute)
-            return {"full_kl_sum": total, "full_kl_count": packed.numel()}
+                result = head(selected, full_vocab_callback=compute)
+            model_output = {"full_kl_sum": result.loss_sum, "full_kl_count": packed.numel()}
+            if result.token_kl is not None:
+                # Prediction-state indices become target coordinates in the original
+                # response. Masked gaps are retained; prompt tokens never enter bins.
+                targets, lengths = [], []
+                for ids, response, prediction in zip(
+                    micro_batch["input_ids"].unbind(), micro_batch["responses"].unbind(), positions, strict=True
+                ):
+                    targets.append(prediction + 1 - (len(ids) - len(response)))
+                    lengths.append(torch.full_like(prediction, len(response)))
+                bins = relative_position_bins(torch.cat(targets), torch.cat(lengths))
+                sums, counts = position_statistics(result.token_kl, bins)
+                model_output.update(full_kl_position_sums=sums, full_kl_position_counts=counts)
+            return model_output
 
         with full_kl_range("teacher_forward" if teacher else "student_forward"):
             return self.module(**model_inputs, use_cache=False, full_vocab_callback=output)

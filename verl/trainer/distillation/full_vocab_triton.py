@@ -11,7 +11,7 @@ import torch
 import triton
 import triton.language as tl
 
-from verl.trainer.distillation.full_vocab import add_product, project
+from verl.trainer.distillation.full_vocab import project
 from verl.trainer.distillation.profiling import full_kl_range
 
 
@@ -78,34 +78,13 @@ def fused_rows(zp, zt, dtype):
     return kl, dz
 
 
-class FusedPrecomputedKL(torch.autograd.Function):
-    @staticmethod
-    def forward(ctx, hs, ws, ht, wt, token_chunk):
-        if not hs.is_cuda or hs.dtype != torch.bfloat16:
-            raise ValueError("fused precompute requires BF16 CUDA")
-        dh = torch.zeros(hs.shape, device=hs.device, dtype=torch.float32)
-        dw = torch.zeros(ws.shape, device=ws.device, dtype=torch.float32)
-        total = torch.zeros((), device=hs.device, dtype=torch.float32)
-        for start in range(0, len(hs), token_chunk):
-            stop = min(start + token_chunk, len(hs))
-            with full_kl_range("student_projection"):
-                zp = project(hs[start:stop], ws)
-            with full_kl_range("teacher_projection"):
-                zt = project(ht[start:stop], wt)
-            with full_kl_range("fused_kl_and_grad_logits"):
-                kl, dz = fused_rows(zp, zt, hs.dtype)
-                total += kl.sum()
-                del zp, zt
-            with full_kl_range("grad_hidden"):
-                add_product(dh[start:stop], dz, ws)
-            with full_kl_range("grad_head"):
-                add_product(dw, dz.T, hs[start:stop])
-        ctx.save_for_backward(dh.to(hs.dtype), dw.to(ws.dtype))
-        return total
-
-    @staticmethod
-    @torch.autograd.function.once_differentiable
-    def backward(ctx, upstream):
-        dh, dw = ctx.saved_tensors
-        with full_kl_range("backward_apply"):
-            return dh * upstream, dw * upstream, None, None, None
+def fused_kl_rows(hs, ws, ht, wt):
+    """Fused block reduction; allocation and gradient accumulation live in the caller."""
+    if not hs.is_cuda or hs.dtype != torch.bfloat16:
+        raise ValueError("fused precompute requires BF16 CUDA")
+    with full_kl_range("student_projection"):
+        zp = project(hs, ws)
+    with full_kl_range("teacher_projection"):
+        zt = project(ht, wt)
+    with full_kl_range("fused_kl_and_grad_logits"):
+        return fused_rows(zp, zt, hs.dtype)

@@ -30,16 +30,16 @@ def prediction_positions(input_ids, loss_mask):
 
 
 class FrozenTeacherHead:
-    """Load only an untied Qwen2 safetensors head; never register on the student."""
+    """Load a dense Qwen safetensors output weight; never register on the student."""
 
     def __init__(self, path):
         from verl.utils.fs import copy_to_local
 
         root = Path(copy_to_local(path))
         config = json.loads((root / "config.json").read_text())
-        if config.get("model_type") != "qwen2" or config.get("tie_word_embeddings", False):
-            raise ValueError("full reverse KL requires an untied Qwen2 teacher head")
-        key = "lm_head.weight"
+        if config.get("model_type") not in ("qwen2", "qwen3"):
+            raise ValueError("full reverse KL requires a dense Qwen2/Qwen3 teacher head")
+        key = "model.embed_tokens.weight" if config.get("tie_word_embeddings", False) else "lm_head.weight"
         index = root / "model.safetensors.index.json"
         files = (
             [root / json.loads(index.read_text())["weight_map"][key]]
