@@ -51,6 +51,10 @@ standalone_gpu_memory_utilization: ${oc.select:actor_rollout_ref.rollout.gpu_mem
 # Whether to ignore EOS and continue generating after EOS is hit.
 ignore_eos: False
 
+# Additional vLLM stop token IDs for both training and validation.
+# Native model EOS is preserved. External evaluation must reuse this setting.
+stop_token_ids: null
+
 # Whether to disable CUDA graph. Default False to best performance.
 enforce_eager: False
 
