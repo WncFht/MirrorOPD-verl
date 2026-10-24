@@ -345,9 +345,7 @@ class FSDPEngine(BaseEngine):
                     or not self.use_remove_padding
                     or self.pad_to_length
                 ):
-                    raise ValueError(
-                        "full reverse KL requires FSDP2, SP=1, packed input, no LoRA/static pad/fused PPO"
-                    )
+                    raise ValueError("full reverse KL requires FSDP2, SP=1, packed input, no LoRA/static pad/fused PPO")
                 install_full_vocab_adapter(module)
 
             # some parameters may not in torch_dtype
@@ -1216,9 +1214,9 @@ class FSDPEngineWithLMHead(FSDPEngine):
 
     def _full_vocab_output(self, micro_batch, model_inputs, teacher):
         from verl.trainer.distillation.full_vocab import full_reverse_kl_result
-        from verl.trainer.distillation.hidden import prediction_positions
         from verl.trainer.distillation.profiling import full_kl_range
         from verl.utils.metric.position import position_statistics, relative_position_bins
+        from verl.workers.utils.padding import prediction_positions, response_target_coordinates
 
         if not self.model_config.enable_full_vocab:
             raise ValueError("full-vocab output requires the model head adapter")
@@ -1270,13 +1268,10 @@ class FSDPEngineWithLMHead(FSDPEngine):
             if result.token_kl is not None:
                 # Prediction-state indices become target coordinates in the original
                 # response. Masked gaps are retained; prompt tokens never enter bins.
-                targets, lengths = [], []
-                for ids, response, prediction in zip(
-                    micro_batch["input_ids"].unbind(), micro_batch["responses"].unbind(), positions, strict=True
-                ):
-                    targets.append(prediction + 1 - (len(ids) - len(response)))
-                    lengths.append(torch.full_like(prediction, len(response)))
-                bins = relative_position_bins(torch.cat(targets), torch.cat(lengths))
+                targets, lengths = response_target_coordinates(
+                    micro_batch["input_ids"], micro_batch["responses"], positions
+                )
+                bins = relative_position_bins(targets, lengths)
                 sums, counts = position_statistics(result.token_kl, bins)
                 model_output.update(full_kl_position_sums=sums, full_kl_position_counts=counts)
             return model_output

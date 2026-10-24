@@ -31,7 +31,7 @@ from verl.utils.metric import AggregationType, Metric
 from verl.utils.metric.observations import Observation
 from verl.workers.config import ActorConfig, DistillationConfig, DistillationLossConfig
 from verl.workers.utils.losses import ppo_loss
-from verl.workers.utils.padding import no_padding_2_padding
+from verl.workers.utils.padding import as_padded_response, no_padding_2_padding
 
 DistillationLossFn = Callable[
     [
@@ -424,12 +424,8 @@ def _sampled_token_loss(config, loss_config, model_output, data):
     teacher = no_padding_2_padding(data["teacher_logprobs"], data).squeeze(-1).detach().float()
     behavior = data["rollout_log_probs"].detach()
     mask = data["response_mask"]
-    if mask.is_nested:
-        mask = mask.to_padded_tensor(False)
-    if behavior.is_nested:
-        behavior = behavior.to_padded_tensor(0.0)
-    mask = mask.bool()
-    behavior = behavior.float()
+    mask = as_padded_response(mask, False).bool()
+    behavior = as_padded_response(behavior).float()
     if not (log_prob.shape == teacher.shape == behavior.shape == mask.shape):
         raise ValueError("Sampled-token log probabilities must match the response mask shape")
     log_prob = log_prob.masked_fill(~mask, 0.0)
@@ -469,9 +465,7 @@ def _sampled_token_loss(config, loss_config, model_output, data):
         loss_scale_factor=config.loss_scale_factor,
     )
     if tu.get_non_tensor_data(data, "collect_metrics", default=False):
-        anchor = data.get("old_log_probs")
-        if anchor is not None and anchor.is_nested:
-            anchor = anchor.to_padded_tensor(0.0)
+        anchor = as_padded_response(data.get("old_log_probs"))
         coefficient_scale = torch.ones_like(log_prob)
         if config.loss_agg_mode == "seq-mean-token-mean":
             coefficient_scale = coefficient_scale / (mask.sum(-1, keepdim=True).float() + 1e-8)

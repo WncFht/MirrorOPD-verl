@@ -20,6 +20,51 @@ from verl.utils import tensordict_utils as tu
 from verl.utils.attention_utils import index_first_axis, unpad_input
 
 
+def as_padded_response(value: torch.Tensor | None, fill_value=0.0):
+    """Pad an already response-aligned value; never apply a next-token shift.
+
+    Behavior log-probs, anchor log-probs and masks already use this layout.
+    Model/teacher prediction-position outputs use no_padding_2_padding instead.
+    """
+    if value is None:
+        return None
+    return value.to_padded_tensor(fill_value) if value.is_nested else value
+
+
+def prediction_positions(input_ids, loss_mask):
+    """Per-sample positions predicting the masked response, then packed positions.
+
+    loss_mask uses the response layout, including masked tool-result positions.
+    A full-sequence mask is also accepted if its first target is masked out.
+    """
+    positions, packed = [], []
+    offset = 0
+    for ids, mask in zip(input_ids.unbind(), loss_mask.unbind(), strict=True):
+        if mask.ndim != 1 or len(mask) > len(ids) or not torch.all((mask == 0) | (mask == 1)):
+            raise ValueError("loss_mask must be a binary response/full-sequence mask")
+        local = mask.bool().nonzero().flatten() + len(ids) - len(mask) - 1
+        if local.numel() and (local.min() < 0 or local.max() >= len(ids) - 1):
+            raise ValueError("A valid next-token target must have a preceding input position")
+        positions.append(local)
+        packed.append(local + offset)
+        offset += len(ids)
+    return positions, torch.cat(packed)
+
+
+def response_target_coordinates(input_ids, responses, predictions):
+    """Map per-sample prediction-state indices to original response coordinates.
+
+    Return aligned flat target positions and per-token response lengths. Masked
+    gaps keep their original positions; this function does not select a mask.
+    """
+    targets, lengths = [], []
+    for ids, response, prediction in zip(input_ids.unbind(), responses.unbind(), predictions, strict=True):
+        targets.append(prediction + 1 - (len(ids) - len(response)))
+        lengths.append(torch.full_like(prediction, len(response)))
+    empty = torch.empty(0, dtype=torch.long, device=input_ids.device)
+    return (torch.cat(targets), torch.cat(lengths)) if targets else (empty, empty)
+
+
 def left_right_2_no_padding(data: TensorDict) -> TensorDict:
     """
     Convert TensorDict from left-right padding to no-padding format.
