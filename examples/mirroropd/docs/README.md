@@ -19,6 +19,7 @@
 | 使用 full-vocab 训练 | [Full-vocab 工程](full-vocab/README.md) | 已实现接口、算子、数据通路、预算与实验队列 |
 | 查算法消融及源码审计 | [OPD 实验与审计](opd-objective/README.md) | E 系列接口、支持集、作者实现与历史证据 |
 | 查论文实验与 stale-data 诊断 | [研究与实验对照](research/README.md) | 论文设置、原图、结果及跨实验比较边界 |
+| 复刻OPD failure并比较完整词表 | [失败复现方案](failure-reproduction/README.md) | 固定DAPO与三个valid，A–F模型／长度设置、sampled→full对照、原论文图表及排除设置附录 |
 | 配置任务判分 | [判分器与依赖](判分器与依赖.md)、[LiveCodeBench 隔离](lcb/README.md) | 领域依赖、执行资源限制与验收 |
 | 导入本地日志及复算图表 | [分析复现](分析复现.md) | 独立日志仓库、解码、项目快照、统计与绘图；保留历史 API 快照 |
 
