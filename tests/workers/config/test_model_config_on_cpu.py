@@ -94,3 +94,15 @@ class TestHFModelConfigCPU:
         merged_config = OmegaConf.merge(base_config, invalid_cli_config)
         with pytest.raises(TypeError):
             OmegaConf.to_object(merged_config)
+
+
+@pytest.mark.parametrize("invalid", [123, {}, [1], ["q_proj", None]])
+def test_invalid_target_modules_fails_before_asset_io(monkeypatch, invalid):
+    import verl.workers.config.model as model_config
+
+    def unexpected_io(*args, **kwargs):
+        raise AssertionError("invalid local config reached model I/O")
+
+    monkeypatch.setattr(model_config, "copy_to_local", unexpected_io)
+    with pytest.raises(TypeError):
+        HFModelConfig(path="/unused/model", target_modules=invalid)
