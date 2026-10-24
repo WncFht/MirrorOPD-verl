@@ -14,7 +14,6 @@
 import asyncio
 import functools
 import logging
-import math
 import os
 from contextlib import nullcontext
 from copy import deepcopy
@@ -40,9 +39,9 @@ from verl.utils.distributed import initialize_global_process_group_ray, set_numa
 from verl.utils.flops_counter import FlopsCounter
 from verl.utils.import_utils import import_external_libs
 from verl.utils.memory_utils import aggressive_empty_cache
-from verl.utils.metric.observations import Observation, observations_to_cpu
-from verl.utils.metric.schema import INTERNAL_COUNTERS, canonical_name, is_update_metric
-from verl.utils.metric.utils import Metric, reduce_metrics
+from verl.utils.metric.observations import observations_to_cpu
+from verl.utils.metric.schema import canonical_name
+from verl.utils.metric.utils import Metric
 from verl.utils.pipeline_metrics import FSDP_PEAK_MEMORY
 from verl.utils.profiler import DistProfiler, DistProfilerExtension, ProfilerConfig, log_gpu_memory_usage
 from verl.utils.py_functional import append_to_dict
@@ -58,23 +57,18 @@ from verl.workers.config import (
     TrainingWorkerConfig,
 )
 from verl.workers.rollout.base import BaseRollout, get_rollout_class
+from verl.workers.update_records import (
+    UpdateResult,
+    execution_consensus,
+    finalize_update,
+    merge_rank_metrics,
+    take_engine_execution,
+)
+from verl.workers.update_records import consume_legacy_status as _consume_optimizer_step_status  # noqa: F401
 from verl.workers.utils.losses import ppo_loss
 
 logger = logging.getLogger(__file__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "WARN"))
-
-
-def _consume_optimizer_step_status(metrics: dict, dp_size: int) -> Optional[bool]:
-    """Consume the already gathered execution facts before metric flattening."""
-    status = metrics.pop("_optimizer_step_applied", None)
-    if status is None:
-        return None  # backend does not report execution
-    statuses = status if isinstance(status, list) else [status]
-    if len(statuses) != dp_size or any(type(value) is not bool for value in statuses):
-        raise RuntimeError(f"Incomplete optimizer execution status across {dp_size} DP ranks: {statuses}")
-    if any(value != statuses[0] for value in statuses):
-        raise RuntimeError(f"Inconsistent optimizer execution status across DP ranks: {statuses}")
-    return statuses[0]
 
 
 def _plan_liger_flsce_capacity(config: DictConfig, role: str) -> Optional[tuple[int, int]]:
@@ -119,14 +113,6 @@ def _with_routing_replay_flag(enabled: bool):
         return wrapper
 
     return decorator
-
-
-def _flatten_metric_scalars(values):
-    for value in values:
-        if isinstance(value, (list, tuple)):
-            yield from _flatten_metric_scalars(value)
-        else:
-            yield value
 
 
 class TrainingWorker(Worker, DistProfilerExtension):
@@ -262,9 +248,13 @@ class TrainingWorker(Worker, DistProfilerExtension):
         lr_used = metrics.pop("lr_used", None)
 
         observations_to_cpu(metrics)
-
-        # For other metrics, we perform all gather in dp group (only if DP > 1)
-        if dp_group is not None:
+        applied = None if forward_only else take_engine_execution(output, metrics)
+        # Facts share the existing object collective, outside the metric map.
+        if dp_group is not None and not forward_only:
+            gathered = allgather_dict_into_dict(data={"metrics": metrics, "applied": applied}, group=dp_group)
+            final_metrics = merge_rank_metrics(gathered["metrics"])
+            applied = execution_consensus(gathered["applied"], torch.distributed.get_world_size(dp_group))
+        elif dp_group is not None:
             final_metrics = allgather_dict_into_dict(data=metrics, group=dp_group)
         else:
             final_metrics = metrics
@@ -297,7 +287,10 @@ class TrainingWorker(Worker, DistProfilerExtension):
         # model outputs
         model_output = output.pop("model_output", {})
         # We only return final_metrics
-        final_output = tu.get_tensordict(tensor_dict=model_output, non_tensor_dict={"metrics": final_metrics})
+        metadata = {"metrics": final_metrics}
+        if not forward_only:
+            metadata["optimizer_step_applied"] = applied
+        final_output = tu.get_tensordict(tensor_dict=model_output, non_tensor_dict=metadata)
         return final_output
 
     @register(dispatch_mode=make_nd_compute_dataproto_dispatch_fn(mesh_name="train"), blocking=False)
@@ -407,64 +400,26 @@ class TrainingWorker(Worker, DistProfilerExtension):
                 peak_memory = Metric("max", peak_memory.item())
 
             if self.engine.is_mp_src_rank_with_outputs():
-                actor_output = [tu.get(output, "metrics") for output in output_lst]
                 metrics = {}
                 optimizer_steps = 0
                 update_records = []
-                for update_index, output in enumerate(actor_output):
-                    applied = _consume_optimizer_step_status(output, self.engine.get_data_parallel_size())
-                    if applied is None:
+                for update_index, output in enumerate(output_lst):
+                    result = UpdateResult.from_worker_output(output, self.engine.get_data_parallel_size())
+                    if result.applied is None:
                         optimizer_steps = None
                     elif optimizer_steps is not None:
-                        optimizer_steps += int(applied)
-                    for key, val in output.items():
-                        # flattn dp and micro batch
-                        if isinstance(val, list):
-                            if val and isinstance(val[0], Observation):
-                                observation = Observation.merged(val)
-                                output[key] = None if observation.is_empty() else observation.aggregate()
-                            elif val and isinstance(val[0], Metric):
-                                output[key] = Metric.aggregate_dp(val)
-                            else:
-                                flattened = list(_flatten_metric_scalars(val))
-                                output[key] = (
-                                    (reduce_metrics({key: flattened})[key] if flattened else None)
-                                    if collect_records
-                                    else flattened
-                                )
-                        elif isinstance(val, Observation):
-                            output[key] = None if val.is_empty() else val.aggregate()
-                        elif isinstance(val, Metric):
-                            output[key] = val.aggregate()
-                    if collect_records:
-                        normalized = {}
-                        for key, value in output.items():
-                            if collect_metrics and key in INTERNAL_COUNTERS:
-                                continue  # consumed by the corresponding raw event observations
-                            name = canonical_name(key, role=metrics_role)
-                            if name not in normalized or name == key:
-                                normalized[name] = value
-                        record = {k: v for k, v in normalized.items() if is_update_metric(k)}
-                        record[f"optim/{metrics_role}/execution_known"] = float(applied is not None)
-                        if applied is not None:
-                            record[f"optim/{metrics_role}/update_applied"] = float(applied)
-                            record[f"optim/{metrics_role}/update_skipped"] = float(not applied)
-                        for stat in ("loss", "grad_norm_preclip"):
-                            value = record.get(f"optim/{metrics_role}/{stat}")
-                            if value is not None:
-                                record[f"optim/{metrics_role}/{stat}_nonfinite"] = float(
-                                    not math.isfinite(float(value))
-                                )
-                        if metrics_role == "actor":
-                            record["optim/actor/observations_available"] = float(collect_metrics)
-                            record["rollout/data_reuse/update_index"] = update_index + 1
-                            record["rollout/data_reuse/epoch_index"] = update_index // (total_num_iterations // epochs)
-                        update_records.append({"metrics": record, "applied": applied})
-                        output = {k: v for k, v in normalized.items() if not is_update_metric(k)}
-                        for key in output:
-                            if key.endswith(("allocated_peak_gib", "reserved_peak_gib")):
-                                output[key] = Metric("max", output[key])
-                    append_to_dict(metrics, output)
+                        optimizer_steps += int(result.applied)
+                    outer, record = finalize_update(
+                        result,
+                        role=metrics_role,
+                        collect_records=collect_records,
+                        collect_metrics=collect_metrics,
+                        update_index=update_index,
+                        minibatches_per_epoch=total_num_iterations // epochs,
+                    )
+                    if record is not None:
+                        update_records.append(record)
+                    append_to_dict(metrics, outer)
 
                 if peak_memory is not None:
                     key = (
