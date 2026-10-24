@@ -190,6 +190,8 @@ def display(state):
                 "wandb.upload",
                 "wandb.batch",
                 "logs.git_commit",
+                "logs.git_fetch",
+                "logs.git_merge",
                 "logs.git_push",
             ):
                 sync_observe.console_print(
