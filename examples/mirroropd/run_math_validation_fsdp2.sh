@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Evaluate either original model through the same optimized math validation path.
+set -eo pipefail
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+WORKSPACE=$(cd -- "$SCRIPT_DIR/../../.." && pwd)
+if [[ $# == 0 || ${1:-} == --help || ${1:-} == -h ]]; then
+    cat <<'HELP'
+Usage: bash examples/mirroropd/run_math_validation_fsdp2.sh student|teacher [Hydra overrides...]
+  student: STUDENT_MODEL, or MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B
+  teacher: TEACHER_MODEL, or MODEL_ROOT/JustRL-DeepSeek-1.5B
+Both use the selected model as the generator; distillation is disabled.
+Math validation defaults: 570 prompts x 16, temperature=0.7, top-p=0.9,
+max response=31744, full submission, Graph, TP1, concurrency128/util0.65.
+Set CUDA_VISIBLE_DEVICES and STUDENT_GPUS to the allocated devices (default 8).
+MODEL_ROOT/DATA_ROOT/PYTHON_BIN and execution overrides use the common launcher.
+Use DRY_RUN=1 or CONFIG_ONLY=1 without starting Ray or GPU work.
+Final Hydra arguments take precedence, including model and validation options.
+HELP
+    exit 0
+fi
+TARGET=$1
+shift
+MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
+case "$TARGET" in
+    student) export STUDENT_MODEL=${STUDENT_MODEL:-$MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B} ;;
+    teacher) export STUDENT_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/JustRL-DeepSeek-1.5B} ;;
+    *) echo "Expected student or teacher; got $TARGET" >&2; exit 2 ;;
+esac
+export DISTILLATION_EXECUTION_MODE=shared_sync TEACHER_GPUS=0
+export SEED=${SEED:-42}
+export EXPERIMENT_NAME=${EXPERIMENT_NAME:-math-valid-$TARGET-$(date +%Y%m%d-%H%M%S)-$$}
+exec bash "$SCRIPT_DIR/run_math_deepseek_r1_1_5b_fsdp2.sh" \
+    distillation.enabled=False \
+    actor_rollout_ref.rollout.calculate_log_probs=False \
+    "actor_rollout_ref.rollout.seed=$SEED" \
+    "actor_rollout_ref.actor.fsdp_config.seed=$SEED" \
+    "actor_rollout_ref.actor.data_loader_seed=$SEED" \
+    trainer.val_only=True \
+    trainer.val_before_train=True \
+    trainer.resume_mode=disable \
+    trainer.save_freq=-1 \
+    "$@"
