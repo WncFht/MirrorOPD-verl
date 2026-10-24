@@ -16,7 +16,6 @@ import json
 import logging
 import math
 import os
-import tempfile
 import uuid
 from abc import ABC, abstractmethod
 from collections import defaultdict
@@ -72,6 +71,12 @@ from verl.trainer.ppo.utils import (
     need_critic,
     need_reference_policy,
     need_teacher_policy,
+)
+from verl.trainer.ppo.v1.progress import (
+    OptimizerProgress,
+    load_optimizer_progress,
+    save_optimizer_progress,
+    update_log_events,
 )
 from verl.trainer.ppo.v1.replay_buffer import DAPO_FILTERED_REWARD_COUNTS_KEY, ReplayBuffer, ReplayBufferAsync
 from verl.trainer.ppo.v1.utils import MetricsAggregator, compute_advantage_for_multi_trajectories
@@ -1097,119 +1102,50 @@ class PPOTrainer(ABC):
 
     @staticmethod
     def _validate_actor_optimizer_counts(attempts, steps):
-        for name, value in (("attempts", attempts), ("steps", steps)):
-            if value is not None and (type(value) is not int or value < 0):
-                raise ValueError(f"Invalid actor optimizer {name}: {value!r}")
-        if attempts is not None and steps is not None and steps > attempts:
-            raise ValueError("Actor optimizer steps cannot exceed attempts")
+        OptimizerProgress(attempts, steps)
+
+    def _optimizer_progress(self, role="actor"):
+        return OptimizerProgress(
+            getattr(self, f"{role}_optimizer_step_attempts", None), getattr(self, f"{role}_optimizer_step", None)
+        )
+
+    def _set_optimizer_progress(self, progress, role="actor"):
+        for name, value in progress.checkpoint_fields(role).items():
+            setattr(self, name, value)
 
     def _accumulate_actor_optimizer_steps(self, output, role="actor"):
-        attempts = tu.get(output, "optimizer_step_attempts", default=None)
-        steps = tu.get(output, "optimizer_steps", default=None)
-        self._validate_actor_optimizer_counts(attempts, steps)
-        for attr, value in ((f"{role}_optimizer_step_attempts", attempts), (f"{role}_optimizer_step", steps)):
-            previous = getattr(self, attr, None)
-            setattr(self, attr, previous + value if previous is not None and value is not None else None)
+        progress = self._optimizer_progress(role).advance(
+            tu.get(output, "optimizer_step_attempts", default=None), tu.get(output, "optimizer_steps", default=None)
+        )
+        self._set_optimizer_progress(progress, role)
 
     def _actor_optimizer_metrics(self):
-        attempts = getattr(self, "actor_optimizer_step_attempts", None)
-        steps = getattr(self, "actor_optimizer_step", None)
-        metrics = {}
-        if attempts is not None:
-            metrics["training/actor_optimizer_step_attempts"] = attempts
-        if steps is not None:
-            metrics["training/actor_optimizer_step"] = steps
-        if attempts is not None and steps is not None:
-            metrics["training/actor_optimizer_skipped_updates"] = attempts - steps
-        return metrics
+        return self._optimizer_progress().legacy_metrics()
 
     def _metric_coordinates(self):
-        """Expose existing execution counters as independent business axes."""
-        coordinates = {"step/outer": self.global_steps}
-        for name, attr in (
-            ("step/update", "actor_optimizer_step_attempts"),
-            ("step/optimizer", "actor_optimizer_step"),
-        ):
-            value = getattr(self, attr, None)
-            if value is not None:
-                coordinates[name] = value
+        coordinates = {"step/outer": self.global_steps} | self._optimizer_progress().coordinates()
         if getattr(self, "use_critic", False):
-            for name, attr in (
-                ("step/critic_update", "critic_optimizer_step_attempts"),
-                ("step/critic_optimizer", "critic_optimizer_step"),
-            ):
-                value = getattr(self, attr, None)
-                if value is not None:
-                    coordinates[name] = value
+            coordinates.update(self._optimizer_progress("critic").coordinates("critic"))
         return coordinates
 
     def _log_update_records(self, records, attempts_before, steps_before, role="actor"):
-        """Emit each completed update without averaging its time dimension."""
-        attempts, steps = attempts_before, steps_before
-        for record in records:
-            applied = record["applied"]
-            if applied is not None and type(applied) is not bool:
-                raise ValueError("Invalid per-update optimizer execution fact")
-            attempts = attempts + 1 if attempts is not None else None
-            steps = steps + int(applied) if steps is not None and applied is not None else None
-            coordinates = {"step/outer": self.global_steps}
-            update_axis = "step/update" if role == "actor" else "step/critic_update"
-            optimizer_axis = "step/optimizer" if role == "actor" else "step/critic_optimizer"
-            if attempts is not None:
-                coordinates[update_axis] = attempts
-            if steps is not None:
-                coordinates[optimizer_axis] = steps
-            metrics = dict(record["metrics"])
-            if attempts is not None and steps is not None:
-                metrics[f"optim/{role}/skipped_updates"] = attempts - steps
-            values = finite_metrics(metrics)
-            self.logger.log(data=values | coordinates, step=attempts if attempts is not None else self.global_steps)
+        for values, step in update_log_events(
+            records, OptimizerProgress(attempts_before, steps_before), self.global_steps, role
+        ):
+            self.logger.log(data=values, step=step)
 
     def _save_actor_optimizer_progress(self, checkpoint_dir):
-        attempts = getattr(self, "actor_optimizer_step_attempts", None)
-        steps = getattr(self, "actor_optimizer_step", None)
-        self._validate_actor_optimizer_counts(attempts, steps)
-        state = {
-            "schema_version": 1,
-            "global_step": self.global_steps,
-            "actor_optimizer_step_attempts": attempts,
-            "actor_optimizer_step": steps,
-        }
-        if getattr(self, "use_critic", False):
-            state["critic_optimizer_step_attempts"] = getattr(self, "critic_optimizer_step_attempts", None)
-            state["critic_optimizer_step"] = getattr(self, "critic_optimizer_step", None)
-        temporary_path = None
-        try:
-            with tempfile.NamedTemporaryFile(mode="w", dir=checkpoint_dir, prefix="trainer_state-", delete=False) as f:
-                temporary_path = f.name
-                json.dump(state, f, indent=2, allow_nan=False)
-                f.write("\n")
-            os.replace(temporary_path, os.path.join(checkpoint_dir, "trainer_state.json"))
-        finally:
-            if temporary_path is not None and os.path.exists(temporary_path):
-                os.unlink(temporary_path)
+        save_optimizer_progress(
+            checkpoint_dir,
+            self.global_steps,
+            self._optimizer_progress(),
+            self._optimizer_progress("critic") if getattr(self, "use_critic", False) else None,
+        )
 
     def _load_actor_optimizer_progress(self, checkpoint_dir):
-        path = os.path.join(checkpoint_dir, "trainer_state.json")
-        if not os.path.exists(path):
-            self.actor_optimizer_step_attempts = self.actor_optimizer_step = None
-            self.critic_optimizer_step_attempts = self.critic_optimizer_step = None
-            logger.warning("Checkpoint has no trainer_state.json; absolute actor optimizer counts are unknown")
-            return
-        with open(path) as f:
-            state = json.load(f)
-        if not isinstance(state, dict) or type(state.get("schema_version")) is not int or state["schema_version"] != 1:
-            raise ValueError(f"Invalid trainer state schema in {path}")
-        if type(state.get("global_step")) is not int or state["global_step"] != self.global_steps:
-            raise ValueError(f"Trainer state global_step does not match checkpoint directory: {path}")
-        if "actor_optimizer_step_attempts" not in state or "actor_optimizer_step" not in state:
-            raise ValueError(f"Missing actor optimizer counts in {path}")
-        attempts, steps = state["actor_optimizer_step_attempts"], state["actor_optimizer_step"]
-        self._validate_actor_optimizer_counts(attempts, steps)
-        self.actor_optimizer_step_attempts, self.actor_optimizer_step = attempts, steps
-        self.critic_optimizer_step_attempts = state.get("critic_optimizer_step_attempts")
-        self.critic_optimizer_step = state.get("critic_optimizer_step")
-        self._validate_actor_optimizer_counts(self.critic_optimizer_step_attempts, self.critic_optimizer_step)
+        actor, critic = load_optimizer_progress(checkpoint_dir, self.global_steps)
+        self._set_optimizer_progress(actor)
+        self._set_optimizer_progress(critic, "critic")
 
     def _save_checkpoint(self):
         """Save actor, critic, and dataloader checkpoints to local (and optionally remote) storage."""
