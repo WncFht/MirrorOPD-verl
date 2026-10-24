@@ -271,7 +271,18 @@ def distillation_loss(
         if denominator <= 0:
             raise ValueError("full KL requires positive globally valid token count")
         loss = total * tu.get(data, "dp_size") / denominator
-        return loss, {"distillation/full_kl": Observation.ratio(total.detach(), count)}
+        metrics = {"distillation/full_kl": Observation.ratio(total.detach(), count)}
+        if "full_kl_position_sums" in model_output:
+            from verl.utils.metric.position import position_observations
+
+            metrics.update(
+                position_observations(
+                    model_output["full_kl_position_sums"],
+                    model_output["full_kl_position_counts"],
+                    prefix="distillation/full_kl_position",
+                )
+            )
+        return loss, metrics
     if loss_config.policy_loss_mode != "vanilla":
         return _sampled_token_loss(config, loss_config, model_output, data)
     distillation_loss_fn = get_distillation_loss_fn(loss_config.loss_mode)

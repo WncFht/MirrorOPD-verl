@@ -42,6 +42,29 @@ def test_shift_mask_and_sample_boundaries():
         prediction_positions(ids, torch.nested.nested_tensor([torch.ones(6), torch.ones(4)], layout=torch.jagged))
 
 
+@pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute", "precompute_fused"])
+def test_teacher_extra_rows_preserve_full_normalizer_and_student_gradient(backend):
+    torch.manual_seed(23)
+    hs = torch.randn(7, 5, dtype=torch.float64, requires_grad=True)
+    ws = torch.randn(19, 5, dtype=torch.float64, requires_grad=True)
+    ht = torch.randn(7, 8, dtype=torch.float64, requires_grad=True)
+    wt = torch.randn(23, 8, dtype=torch.float64, requires_grad=True)
+    lp = (hs @ ws.T).log_softmax(-1)
+    lq = (ht.detach() @ wt.detach().T).log_softmax(-1)[:, :19]
+    expected = (lp.exp() * (lp - lq)).sum()
+    actual = full_reverse_kl(hs, ws, ht, wt, backend=backend, token_chunk=3, vocab_chunk=4)
+    torch.testing.assert_close(actual, expected, atol=1e-10, rtol=1e-10)
+    expected_grad = torch.autograd.grad(expected, (hs, ws))
+    actual_grad = torch.autograd.grad(actual, (hs, ws, ht, wt), allow_unused=True)
+    for a, e in zip(actual_grad[:2], expected_grad, strict=True):
+        torch.testing.assert_close(a, e, atol=1e-10, rtol=1e-10)
+    assert actual_grad[2:] == (None, None)
+    cropped = full_reverse_kl(hs, ws, ht, wt[:19], backend=backend, token_chunk=3, vocab_chunk=4)
+    assert actual > cropped
+    with pytest.raises(ValueError, match="cover every student"):
+        full_reverse_kl(hs, ws, ht, wt[:18])
+
+
 def test_global_token_normalization():
     config = SimpleNamespace(loss_agg_mode="token-mean")
     loss_config = DistillationLossConfig(

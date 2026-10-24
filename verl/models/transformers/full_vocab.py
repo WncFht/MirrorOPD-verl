@@ -1,13 +1,17 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Per-instance Qwen2 output adapter; preserve root AND LM-head FSDP hooks."""
+"""Per-instance dense Qwen output adapter; preserve root AND head FSDP hooks."""
 
 from types import MethodType
 
 
 def install_full_vocab_adapter(model):
-    if model.config.model_type != "qwen2" or hasattr(model, "_full_vocab_original_forward"):
+    if hasattr(model, "_full_vocab_original_forward"):
         return
+    if model.config.model_type not in ("qwen2", "qwen3"):
+        raise ValueError("full reverse KL supports dense Qwen2/Qwen3 models")
+    if model.lm_head.bias is not None:
+        raise ValueError("full reverse KL requires a bias-free LM head")
     model._full_vocab_original_forward = model.forward
     model.lm_head._full_vocab_original_forward = model.lm_head.forward
     model.forward = MethodType(full_vocab_forward, model)

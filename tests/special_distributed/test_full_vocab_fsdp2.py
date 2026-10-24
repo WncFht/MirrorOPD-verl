@@ -3,7 +3,8 @@
 """torchrun --standalone --nproc-per-node=2 ... --backend recompute.
 
 Actual FSDP2 head hooks, offload, packed positions, uneven tokens, empty local
-mask, and repeated updates. Synthetic small Qwen2; no Ray or vLLM.
+mask, and repeated updates. Synthetic Qwen2/Qwen3, optional tied parameters and
+unequal output supports; no Ray or vLLM.
 """
 
 import argparse
@@ -20,12 +21,13 @@ from tensordict import TensorDict
 from test_shared_teacher_fsdp2 import assert_on_cpu, make_worker, nested, teacher_policy_loss
 from tokenizers import Tokenizer
 from tokenizers.models import WordLevel
-from transformers import AutoModelForCausalLM, PreTrainedTokenizerFast, Qwen2Config
+from transformers import AutoModelForCausalLM, PreTrainedTokenizerFast, Qwen2Config, Qwen3Config
 
 from verl.trainer.distillation.full_vocab import full_reverse_kl
 from verl.trainer.distillation.hidden import prediction_positions
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
+from verl.utils.metric.observations import Observation
 from verl.workers.config import DistillationConfig, DistillationLossConfig
 from verl.workers.config.distillation import FullVocabConfig
 
@@ -39,6 +41,11 @@ def main():
     )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--checkpoint", action="store_true")
+    parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
+    parser.add_argument("--tied-student", action="store_true")
+    parser.add_argument("--tied-teacher", action="store_true")
+    parser.add_argument("--teacher-extra-rows", type=int, default=0)
+    parser.add_argument("--teacher-hidden-size", type=int, default=32)
     args = parser.parse_args()
     torch.set_num_threads(1)
     _, rank, world = initialize_global_process_group(timeout_second=180)
@@ -55,16 +62,18 @@ def main():
         )
         for i, name in enumerate(("student", "teacher")):
             torch.manual_seed(100 + i)
+            hidden_size = args.teacher_hidden_size if name == "teacher" else 32
             model = AutoModelForCausalLM.from_config(
-                Qwen2Config(
-                    vocab_size=32,
-                    hidden_size=32,
+                (Qwen3Config if args.model_type == "qwen3" else Qwen2Config)(
+                    vocab_size=32 + (args.teacher_extra_rows if name == "teacher" else 0),
+                    hidden_size=hidden_size,
                     intermediate_size=64,
                     num_hidden_layers=2,
                     num_attention_heads=4,
                     num_key_value_heads=2,
+                    head_dim=hidden_size // 4,
                     max_position_embeddings=64,
-                    tie_word_embeddings=False,
+                    tie_word_embeddings=args.tied_student if name == "student" else args.tied_teacher,
                     eos_token_id=1,
                     pad_token_id=0,
                 )
@@ -141,12 +150,25 @@ def main():
         assert torch.isfinite(torch.tensor(loss)), metrics
         if step == 0:
             assert abs(loss - expected_loss) < 5e-4, (loss, expected_loss)
-        records.append({"step": step, "loss": loss})
+        record = {"step": step, "loss": loss}
+        if args.backend != "liger":
+            prefixes = [f"distillation/full_kl_position/p{i * 10:02d}_{(i + 1) * 10:02d}/" for i in range(10)]
+            sums = [Observation.merge_partitions(metrics[p + "sum"]) for p in prefixes]
+            counts = [Observation.merge_partitions(metrics[p + "token_count"]) for p in prefixes]
+            assert sum(counts) == (4 if step == 1 else 8), counts
+            multiplier = 1 if step == 1 else 2
+            assert counts == [multiplier * c for c in [0, 1, 1, 0, 0, 0, 0, 1, 1, 0]], counts
+            assert abs(sum(sums) / sum(counts) - Observation.merge_partitions(metrics["distillation/full_kl"])) < 1e-7
+            record.update(position_kl_sums=sums, position_token_counts=counts)
+        records.append(record)
     deltas = {
         n: (p.detach().to_local() - original[n]).float().norm().item()
         for n, p in actor.engine.module.named_parameters()
     }
-    assert any(v > 0 for n, v in deltas.items() if "lm_head" in n)
+    head_name = "embed_tokens" if args.tied_student else "lm_head"
+    assert any(v > 0 for n, v in deltas.items() if head_name in n)
+    if args.tied_student:
+        assert actor.engine.module.lm_head.weight is actor.engine.module.model.embed_tokens.weight
     assert any(v > 0 for n, v in deltas.items() if "layers" in n)
     actor.engine.full_vocab_teacher_head.release()
     if args.checkpoint:
@@ -160,6 +182,13 @@ def main():
             torch.testing.assert_close(p.detach().to_local(), saved[n], atol=0, rtol=0)
     result = {"backend": args.backend, "world_size": world, "records": records, "parameter_delta_norms_rank0": deltas}
     result["checkpoint_roundtrip"] = args.checkpoint
+    result.update(
+        model_type=args.model_type,
+        tied_student=args.tied_student,
+        tied_teacher=args.tied_teacher,
+        teacher_extra_rows=args.teacher_extra_rows,
+        teacher_hidden_size=args.teacher_hidden_size,
+    )
     if rank == 0:
         print(json.dumps(result), flush=True)
         if args.output:

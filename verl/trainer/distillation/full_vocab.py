@@ -6,9 +6,18 @@ Teacher is frozen; gradients are first-order only. No distributed communication
 or loss normalization lives here. Return a token sum for the engine to normalize.
 """
 
+from typing import NamedTuple
+
 import torch
 
 from verl.trainer.distillation.profiling import full_kl_range
+
+
+class FullKLResult(NamedTuple):
+    """One differentiable objective and optional detached token diagnostics."""
+
+    loss_sum: torch.Tensor
+    token_kl: torch.Tensor | None
 
 
 class ProjectionFP32(torch.autograd.Function):
@@ -148,83 +157,140 @@ class CachedKL(RecomputedKL):
         return kl
 
 
+def precompute_kl_rows(hs, ws, ht, wt):
+    """One block's exact KL and logit VJP; release logits before gradient GEMMs."""
+    with full_kl_range("student_projection"):
+        zp = project(hs, ws)
+    with full_kl_range("teacher_projection"):
+        zt = project(ht, wt)
+    with full_kl_range("normalization_and_kl"):
+        lp, lt = zp.log_softmax(-1), zt.log_softmax(-1)
+        del zp, zt
+        p = lp.exp()
+        lp.sub_(lt)
+        del lt
+        kl = (p * lp).sum(-1)
+    with full_kl_range("grad_logits"):
+        lp.sub_(kl[:, None]).mul_(p)
+        dz = lp.to(hs.dtype)
+    return kl, dz
+
+
 class PrecomputedKL(torch.autograd.Function):
-    """Keep only one token block's logits; accumulate gradients during forward."""
+    """Shared accumulation/VJP for ordinary and fused block reductions."""
 
     @staticmethod
-    def forward(ctx, hs, ws, ht, wt, token_chunk):
+    def forward(ctx, hs, ws, ht, wt, token_chunk, row_kernel):
         dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
         dh = torch.zeros(hs.shape, device=hs.device, dtype=dtype)
         dw = torch.zeros(ws.shape, device=ws.device, dtype=dtype)
         total = torch.zeros((), device=hs.device, dtype=dtype)
+        token_kl = torch.empty(len(hs), device=hs.device, dtype=dtype)
         for start in range(0, len(hs), token_chunk):
             stop = min(start + token_chunk, len(hs))
-            with full_kl_range("student_projection"):
-                zp = project(hs[start:stop], ws)
-            with full_kl_range("teacher_projection"):
-                zt = project(ht[start:stop], wt)
-            with full_kl_range("normalization_and_kl"):
-                lp, lt = zp.log_softmax(-1), zt.log_softmax(-1)
-                del zp, zt
-                p = lp.exp()
-                lp.sub_(lt)
-                del lt
-                kl = (p * lp).sum(-1)
-                total += kl.sum()
-            with full_kl_range("grad_logits"):
-                lp.sub_(kl[:, None]).mul_(p)
-                dz = lp.to(hs.dtype)
-                del lp, p
+            kl, dz = row_kernel(hs[start:stop], ws, ht[start:stop], wt)
+            total += kl.sum()
+            token_kl[start:stop] = kl
             with full_kl_range("grad_hidden"):
                 add_product(dh[start:stop], dz, ws)
             with full_kl_range("grad_head"):
                 add_product(dw, dz.T, hs[start:stop])
+            del kl, dz
         ctx.save_for_backward(dh.to(hs.dtype), dw.to(ws.dtype))
-        return total
+        ctx.mark_non_differentiable(token_kl)
+        return total, token_kl
 
     @staticmethod
     @torch.autograd.function.once_differentiable
-    def backward(ctx, upstream):
+    def backward(ctx, upstream, _token_kl_grad):
         dh, dw = ctx.saved_tensors
         with full_kl_range("backward_apply"):
-            return dh * upstream, dw * upstream, None, None, None
+            return dh * upstream, dw * upstream, None, None, None, None
+
+
+@torch.no_grad()
+def teacher_support_correction(ht, wt, student_vocab, token_chunk, vocab_chunk):
+    """Sum log(Z_teacher / Z_teacher_on_student_support), with bounded memory.
+
+    Token IDs must be aligned by the caller. The student's distribution has zero
+    mass on extra teacher rows. This frozen correction preserves the exact loss
+    while allowing every equal-support backend to keep its existing VJP.
+    """
+    total = ht.new_zeros((), dtype=torch.float64 if ht.dtype == torch.float64 else torch.float32)
+    rows = torch.empty(len(ht), device=ht.device, dtype=total.dtype)
+    for start in range(0, len(ht), token_chunk):
+        hidden = ht[start : start + token_chunk]
+        partitions = []
+        for begin, end in ((0, student_vocab), (student_vocab, len(wt))):
+            log_z = total.new_full((len(hidden),), -torch.inf)
+            for v in range(begin, end, vocab_chunk):
+                logits = project(hidden, wt[v : min(v + vocab_chunk, end)])
+                log_z = torch.logaddexp(log_z, logits.logsumexp(-1))
+            partitions.append(log_z)
+        correction = torch.nn.functional.softplus(partitions[1] - partitions[0])
+        total += correction.sum()
+        rows[start : start + len(hidden)] = correction
+    return FullKLResult(total, rows)
 
 
 def full_reverse_kl(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192):
-    """Return unnormalized sum; empty local ranks remain attached to both parameters."""
+    """Scalar loss interface; preserve existing callers and the original objective."""
+    return full_reverse_kl_result(
+        hs, ws, ht, wt, backend=backend, token_chunk=token_chunk, vocab_chunk=vocab_chunk
+    ).loss_sum
+
+
+def full_reverse_kl_result(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192) -> FullKLResult:
+    """Compute the loss and reuse detached token rows when the backend exposes them.
+
+    Kernel capability is represented by token_kl=None, not by engine-side backend
+    checks. Diagnostics never contribute gradients or trigger extra projections.
+    """
     if backend not in ("dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"):
         raise ValueError(f"Unknown full reverse-KL backend: {backend}")
     if hs.ndim != 2 or ht.ndim != 2 or ws.ndim != 2 or wt.ndim != 2:
         raise ValueError("full KL expects 2-D hidden states and heads")
-    if len(hs) != len(ht) or len(ws) != len(wt) or hs.shape[1] != ws.shape[1] or ht.shape[1] != wt.shape[1]:
+    if len(hs) != len(ht) or hs.shape[1] != ws.shape[1] or ht.shape[1] != wt.shape[1]:
         raise ValueError("full KL hidden/head shapes are incompatible")
+    if len(ws) > len(wt):
+        raise ValueError("full reverse KL requires teacher support to cover every student output row")
     if min(token_chunk, vocab_chunk) <= 0:
         raise ValueError("full KL chunk sizes must be positive")
     if not len(ws):
         raise ValueError("full KL requires a nonempty vocabulary")
     if len(hs) == 0:
-        return hs.sum() * 0 + ws.sum() * 0
+        total = hs.sum() * 0 + ws.sum() * 0
+        rows = None if backend == "liger" else hs.new_empty(0).detach()
+        return FullKLResult(total, rows)
     ht, wt = ht.detach(), wt.detach()
-    if backend == "dense":
-        return dense_rows(hs, ws, ht, wt).sum()
-    if backend in ("recompute", "streaming"):
-        return RecomputedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk if backend == "streaming" else 0).sum()
-    if backend == "precompute_fused":
-        if hs.is_cuda and hs.dtype == torch.bfloat16:
-            from verl.trainer.distillation.full_vocab_triton import FusedPrecomputedKL
+    if len(wt) > len(ws):
+        correction = teacher_support_correction(ht, wt, len(ws), token_chunk, vocab_chunk)
+        result = full_reverse_kl_result(
+            hs, ws, ht, wt[: len(ws)], backend=backend, token_chunk=token_chunk, vocab_chunk=vocab_chunk
+        )
+        rows = None if result.token_kl is None else correction.token_kl + result.token_kl
+        return FullKLResult(correction.loss_sum + result.loss_sum, rows)
 
-            return FusedPrecomputedKL.apply(hs, ws, ht, wt, token_chunk)
-        # Keep exact CPU/FP64 reference checks and non-BF16 callers available
-        # without importing Triton. The optimized path is BF16 CUDA only.
-        return PrecomputedKL.apply(hs, ws, ht, wt, token_chunk)
-    if backend == "precompute":
-        return PrecomputedKL.apply(hs, ws, ht, wt, token_chunk)
+    def finish(rows):
+        return FullKLResult(rows.sum(), rows.detach())
+
+    if backend == "dense":
+        return finish(dense_rows(hs, ws, ht, wt))
+    if backend in ("recompute", "streaming"):
+        return finish(RecomputedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk if backend == "streaming" else 0))
+    if backend in ("precompute", "precompute_fused"):
+        row_kernel = precompute_kl_rows
+        if backend == "precompute_fused" and hs.is_cuda and hs.dtype == torch.bfloat16:
+            from verl.trainer.distillation.full_vocab_triton import fused_kl_rows
+
+            row_kernel = fused_kl_rows
+        return FullKLResult(*PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel))
     if backend == "cached":
-        return CachedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk).sum()
+        return finish(CachedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk))
     if backend == "liger":
         from liger_kernel.transformers.fused_linear_jsd import LigerFusedLinearJSD
 
         loss = LigerFusedLinearJSD(jsd_beta=1.0, temperature=1.0, accum_dtype=torch.float32)
         labels = torch.zeros(len(hs), dtype=torch.long, device=hs.device)
-        return loss(hs, ws, ht, wt, labels) * len(hs)
+        return FullKLResult(loss(hs, ws, ht, wt, labels) * len(hs), None)
     raise ValueError(f"Unknown full reverse-KL backend: {backend}")

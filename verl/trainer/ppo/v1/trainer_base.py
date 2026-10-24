@@ -481,9 +481,10 @@ class PPOTrainer(ABC):
         self._validate_shared_model(model_config)
         if model_config.tokenizer.get_vocab() != self.tokenizer.get_vocab():
             raise ValueError("shared_sync requires identical student/teacher token-to-ID vocabularies")
-        for name in ("bos_token_id", "eos_token_id", "pad_token_id"):
-            if getattr(model_config.tokenizer, name) != getattr(self.tokenizer, name):
-                raise ValueError(f"shared_sync requires matching tokenizer {name}")
+        # The teacher scores the student's already-tokenized trajectory and masks;
+        # it neither renders prompts nor generates/stops/pads sequences. Different
+        # default special-token roles (e.g. Qwen3 Base vs Instruct EOS) are valid
+        # when every token has the same ID. Keep the vocabulary check above strict.
         engine_config = replace(self.distillation_config.shared_teacher, fsdp_size=self.config.trainer.n_gpus_per_node)
         return TrainingWorkerConfig(model_type="language_model", model_config=model_config, engine_config=engine_config)
 
