@@ -68,6 +68,11 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "ROLLOUT_GPU_MEMORY_UTILIZATION",
         "ROLLOUT_TOKEN_BUDGET",
         "VAL_BATCH_SIZE",
+        "VAL_N",
+        "CONTINUOUS_TOKEN_MODEL_FAMILY",
+        "MAX_PROMPT_LENGTH",
+        "MAX_RESPONSE_LENGTH",
+        "MAX_VAL_RESPONSE_LENGTH",
         "PPO_EPOCHS",
         "TOTAL_TRAINING_STEPS",
         "TOTAL_EPOCHS",
@@ -104,6 +109,157 @@ def _config(tmp_path, **overrides):
     command = shlex.split(result.stdout)
     with initialize_config_dir(config_dir=str(ROOT / "verl/trainer/config"), version_base=None):
         return compose(config_name="ppo_trainer", overrides=command[command.index("verl.trainer.main_ppo") + 1 :])
+
+
+FAILURE_PAIRS = [
+    ("E21", "E22", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 7168, 4096, 128, 64),
+    ("E23", "E24", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 15360, 4096, 128, 64),
+    ("E25", "E26", "DeepSeek-R1-Distill-Qwen-1.5B", "DeepSeek-R1-Distill-Qwen-7B", 7168, 4096, 128, 32),
+    ("E27", "E28", "Qwen3-1.7B-Base", "Qwen3-8B", 7168, 1024, 12, 32),
+    ("E29", "E30", "Qwen3-1.7B-Base", "Qwen3-4B", 7168, 1024, 12, 32),
+    ("E31", "E32", "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", 4096, 4096, 32, 32),
+]
+
+
+@pytest.mark.parametrize(
+    "sampled_preset,full_preset,student,teacher,response,prompt,student_seqs,teacher_seqs", FAILURE_PAIRS
+)
+@pytest.mark.parametrize("mode", ["sampled", "full"])
+def test_failure_training_presets_preserve_pair_protocol_and_update_budget(
+    tmp_path, sampled_preset, full_preset, student, teacher, response, prompt, student_seqs, teacher_seqs, mode
+):
+    cfg = _config(
+        tmp_path,
+        command=[
+            "bash",
+            str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"),
+            full_preset if mode == "full" else sampled_preset,
+        ],
+    )
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    actor, rollout = cfg.actor_rollout_ref.actor, cfg.actor_rollout_ref.rollout
+    assert cfg.actor_rollout_ref.model.path.endswith("/" + student)
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/" + teacher)
+    assert (cfg.data.max_prompt_length, cfg.data.max_response_length) == (prompt, response)
+    assert rollout.max_model_len == prompt + 31744
+    assert rollout.max_num_seqs == student_seqs
+    assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 64
+    assert actor.ppo_epochs == rollout.n == 1
+    assert cfg.trainer.total_training_steps == 250 and cfg.trainer.total_epochs == 1
+    assert cfg.trainer.test_freq == cfg.trainer.save_freq == 20 and cfg.trainer.val_before_train
+    assert cfg.trainer.max_actor_ckpt_to_keep == 4 and cfg.trainer.resume_mode == "disable"
+    assert actor.optim.lr == 1e-6 and actor.optim.lr_warmup_steps == 0
+    assert actor.fsdp_config.seed == actor.data_loader_seed == rollout.seed == cfg.data.seed == 42
+    assert rollout.val_kwargs.n == 16 and rollout.val_kwargs.max_tokens == 31744
+    assert cfg.data.val_batch_size is None and len(cfg.data.val_files) == 3
+    loss = cfg.distillation.distillation_loss
+    assert loss.loss_mode == ("full_reverse_kl" if mode == "full" else "k1")
+    assert loss.use_policy_gradient == (mode == "sampled")
+    assert loss.advantage_source == "current" and loss.policy_loss_mode == "vanilla"
+    assert not loss.use_task_rewards and not actor.use_kl_loss and actor.entropy_coeff == 0
+    if mode == "full":
+        assert loss.full_vocab.backend == "precompute" and loss.full_vocab.async_write and loss.full_vocab.prefetch
+        assert not rollout.calculate_log_probs and not actor.calculate_entropy
+    if student.startswith("Qwen3"):
+        assert cfg.data.continuous_token.model_family == "qwen3"
+        assert cfg.data.apply_chat_template_kwargs.enable_thinking is False
+    else:
+        assert cfg.data.continuous_token.model_family == "deepseek"
+    assert list(rollout.stop_token_ids or []) == ([151645] if student.endswith("Base") else [])
+
+
+@pytest.mark.parametrize(
+    "sampled_preset,full_preset,student,teacher,response,prompt,student_seqs,teacher_seqs", FAILURE_PAIRS
+)
+@pytest.mark.parametrize("target", ["student", "teacher"])
+def test_failure_validation_selects_generator_resources_without_training(
+    tmp_path, sampled_preset, full_preset, student, teacher, response, prompt, student_seqs, teacher_seqs, target
+):
+    cfg = _config(
+        tmp_path,
+        command=[
+            "bash",
+            str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"),
+            f"{full_preset if target == 'teacher' else sampled_preset}-valid-{target}",
+        ],
+    )
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    model = teacher if target == "teacher" else student
+    assert cfg.actor_rollout_ref.model.path.endswith("/" + model)
+    assert cfg.trainer.val_only and cfg.trainer.val_before_train and cfg.trainer.save_freq == -1
+    assert not cfg.distillation.enabled and cfg.distillation.n_gpus_per_node == 0
+    rollout = cfg.actor_rollout_ref.rollout
+    assert rollout.max_num_seqs == (teacher_seqs if target == "teacher" else student_seqs)
+    assert cfg.data.max_prompt_length == (4096 if target == "teacher" else prompt)
+    assert rollout.max_model_len == cfg.data.max_prompt_length + 31744
+    assert list(rollout.stop_token_ids or []) == ([151645] if model.endswith("Base") else [])
+    assert not rollout.calculate_log_probs
+    if model.startswith("Qwen3"):
+        assert cfg.data.apply_chat_template_kwargs.enable_thinking is False
+
+
+def test_numbered_failure_preset_and_explicit_overrides(tmp_path):
+    cfg = _config(
+        tmp_path,
+        command=[
+            "bash",
+            str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"),
+            "E27",
+            "trainer.test_freq=1",
+            "actor_rollout_ref.rollout.stop_token_ids=[]",
+        ],
+        STUDENT_MODEL="/custom student",
+        TEACHER_MODEL="/custom teacher",
+        MAX_RESPONSE_LENGTH="1024",
+        ROLLOUT_MAX_NUM_SEQS="8",
+        SEED="43",
+        TOTAL_TRAINING_STEPS="2",
+        TEST_FREQ="10",
+    )
+    assert cfg.actor_rollout_ref.model.path == "/custom student"
+    assert cfg.distillation.teacher_models.teacher_model.model_path == "/custom teacher"
+    assert cfg.distillation.distillation_loss.loss_mode == "k1"
+    assert cfg.trainer.total_training_steps == 2 and cfg.trainer.test_freq == 1
+    assert cfg.actor_rollout_ref.rollout.max_num_seqs == 8
+    assert cfg.data.max_response_length == 1024 and cfg.data.seed == 43
+    assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == []
+
+
+@pytest.mark.parametrize("setting", ["E25", "E27"])
+def test_failure_smoke_reuses_formal_pair_and_stop_protocol(tmp_path, setting):
+    cfg = _config(
+        tmp_path,
+        command=["bash", str(SCRIPT.parent / "smoke/smoke_failure_sampled.sh"), setting],
+    )
+    assert cfg.trainer.total_training_steps == 2 and not cfg.trainer.val_before_train
+    assert cfg.actor_rollout_ref.rollout.max_num_seqs == 8 and cfg.data.max_response_length == 512
+    assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == ([151645] if setting == "E27" else [])
+
+
+@pytest.mark.parametrize("preset", ["E21-unknown", "E33", "A", "A-full"])
+def test_unknown_failure_preset_fails_without_launching(tmp_path, preset):
+    result = _launch(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
+    assert result.returncode == 2
+
+
+@pytest.mark.parametrize("legacy,aligned,loss_mode", [("E13", "E22", "full_reverse_kl"), ("E15", "E21", "k1")])
+def test_failure_baseline_repeats_preserve_objective_but_align_observation_budget(tmp_path, legacy, aligned, loss_mode):
+    configs = [
+        _config(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
+        for preset in (legacy, aligned)
+    ]
+    old, new = configs
+    assert old.actor_rollout_ref.model.path == new.actor_rollout_ref.model.path
+    assert old.distillation.teacher_models == new.distillation.teacher_models
+    assert old.distillation.distillation_loss.loss_mode == new.distillation.distillation_loss.loss_mode == loss_mode
+    assert old.data.max_response_length == new.data.max_response_length == 7168
+    assert old.actor_rollout_ref.actor.optim.lr == new.actor_rollout_ref.actor.optim.lr == 1e-6
+    assert old.trainer.total_training_steps == 200 and new.trainer.total_training_steps == 250
+    assert not old.trainer.val_before_train and new.trainer.val_before_train
+    assert old.trainer.save_freq == 100 and new.trainer.save_freq == 20
+    assert old.trainer.max_actor_ckpt_to_keep == 2 and new.trainer.max_actor_ckpt_to_keep == 4
 
 
 def test_launcher_composes_native_single_teacher_baseline(tmp_path):

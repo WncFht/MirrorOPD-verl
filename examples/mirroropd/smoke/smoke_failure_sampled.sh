@@ -1,25 +1,16 @@
 #!/usr/bin/env bash
-# C/D sampled-token integration check; short responses are not a failure reproduction.
+# Sampled-token integration check; short responses are not a failure reproduction.
 set -eo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 EXAMPLE_DIR=$(cd -- "$SCRIPT_DIR/.." && pwd)
 REPO_ROOT=$(cd -- "$EXAMPLE_DIR/../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO_ROOT")
-SETTING=${1:?Usage: smoke_failure_sampled.sh C|D [Hydra overrides...]}
+SETTING=${1:?Usage: smoke_failure_sampled.sh E21|E23|E25|E27|E29|E31 [Hydra overrides...]}
 shift
 export MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
 case "$SETTING" in
-    C)
-        export STUDENT_MODEL=${STUDENT_MODEL:-$MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B}
-        export TEACHER_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/DeepSeek-R1-Distill-Qwen-7B}
-        export CONTINUOUS_TOKEN_MODEL_FAMILY=deepseek
-        ;;
-    D)
-        export STUDENT_MODEL=${STUDENT_MODEL:-$MODEL_ROOT/Qwen3-1.7B-Base}
-        export TEACHER_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/Qwen3-8B}
-        export CONTINUOUS_TOKEN_MODEL_FAMILY=qwen3
-        ;;
-    *) echo 'Expected C or D' >&2; exit 2 ;;
+    E21|E23|E25|E27|E29|E31) ;;
+    *) echo 'Expected a sampled preset: E21, E23, E25, E27, E29 or E31' >&2; exit 2 ;;
 esac
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3}
 export STUDENT_GPUS=4 TEACHER_GPUS=0 DISTILLATION_EXECUTION_MODE=shared_sync VERL_USE_UV=0
@@ -50,16 +41,13 @@ for name in ('MATH-500', 'AMC23', 'AIME25'):
 PY
 fi
 export MATH_FILE="$SUBSETS/MATH-500.parquet" AMC_FILE="$SUBSETS/AMC23.parquet" AIME_FILE="$SUBSETS/AIME25.parquet"
-EXTRA=()
-if [[ $SETTING == D ]]; then
-    EXTRA+=(+data.apply_chat_template_kwargs.enable_thinking=False)
-fi
-exec bash "$EXAMPLE_DIR/run_math_deepseek_r1_1_5b_fsdp2.sh" \
-    trainer.total_training_steps=2 data.train_max_samples=64 data.filter_overlong_prompts_workers=1 \
+exec bash "$EXAMPLE_DIR/run_math_opd_ablation_fsdp2.sh" "$SETTING" \
+    trainer.total_training_steps=2 trainer.val_before_train=False \
+    data.train_max_samples=64 data.filter_overlong_prompts_workers=1 \
     trainer.metrics_quantile_interval=1 trainer.eval_metrics_resamples=16 \
     'trainer.logger=[console,file]' \
     ++ray_kwargs.ray_init.num_gpus=4 ++ray_kwargs.ray_init.num_cpus=24 \
     ++ray_kwargs.ray_init.include_dashboard=False ++ray_kwargs.ray_init.object_store_memory=2147483648 \
     "++ray_kwargs.ray_init._temp_dir=/tmp/cd-smoke-$$" \
     "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='$RUN_DIR/metrics.jsonl'" \
-    "${EXTRA[@]}" "$@"
+    "$@"

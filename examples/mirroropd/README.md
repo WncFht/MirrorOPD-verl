@@ -26,7 +26,7 @@ MirrorOPD 自有文档、调研和配套图片、数据统一放在 `examples/mi
 | --- | --- |
 | [资产准备](docs/资产准备.md) | 模型、数学数据目录、导入与 CPU 检查 |
 | [训练配方](docs/训练配方.md) | Math / coding / IF 入口、GPU 资源池、训练与验证预算、Hope 启动 |
-| [OPD失败复现方案](docs/failure-reproduction/README.md) | DAPO与三valid下的模型／长度设置、sampled→full对照、原论文图表与排除设置附录 |
+| [OPD 失败复现方案](docs/failure-reproduction/README.md) | DAPO 与三 valid 下的模型／长度设置、sampled→full 对照、原论文图表与排除设置附录 |
 | [判分器与依赖](docs/判分器与依赖.md) | 四领域 reward 路由、依赖、迁入来源和检查范围 |
 | [LCB 判分隔离调研](docs/lcb/README.md) | 内存故障来源、受控 CPU 实验、轻量执行器与资源隔离方案 |
 | [训练基础设施](docs/infra/README.md) | 运行与调度、实测报告、batch/rollout 调优、指标/MFU、模型扩展和上游调研的统一入口 |
@@ -53,6 +53,14 @@ make opd-submit
 
 ```bash
 DRY_RUN=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
+```
+
+数学消融统一使用 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)：E1–E20 保留原有算法／复用实验；E21–E32 接入模型／长度配对实验，奇数为 sampled-token，偶数为已实现的 full-vocab reverse KL。`E21-valid-student`／`E21-valid-teacher` 分别独立验证原始模型。每次调用运行一个选项，GPU 数量由 `STUDENT_GPUS` 与 `CUDA_VISIBLE_DEVICES` 明确指定。完整配置见[实验矩阵与运行方式](docs/failure-reproduction/2026-10-24-Sampled-token与Full-vocab失败复现方案.md#failure-launcher)。
+
+```bash
+# 只检查 E28 的命令，不启动 GPU 作业。
+CUDA_VISIBLE_DEVICES=0,1,2,3 STUDENT_GPUS=4 DRY_RUN=1 \
+  bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E28
 ```
 
 `hope/` 由各机器本地维护，不进入源码包。Worker 直接调用随源码更新的领域脚本，入口迁移见[决策记录](docs/infra/2026-10-22-共享八卡运行与架构.md#hope-直连入口)。部署、日志传回和默认 W&B 同步流程见[开发机同步说明](../../meituan/README.md)，Hope 设置见 [Hope 文档](../../hope/README.md)。
