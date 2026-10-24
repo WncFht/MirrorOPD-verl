@@ -1,0 +1,194 @@
+{
+  "status": "Calibration completed; full eight-model validation not started; launcher defaults unchanged.",
+  "hardware": "GPU 0-3, H800 80GB; one TP1 replica per GPU, concurrent independent runs.",
+  "common": {
+    "gpu_memory_utilization": 0.65,
+    "max_num_batched_tokens": 8192,
+    "tensor_parallel_size": 1,
+    "enforce_eager": false,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "response_cap": 31744,
+    "seed": 42
+  },
+  "limits": [
+    "These are selected starting configurations, not global optima or full-validation measurements.",
+    "Natural throughput includes prefill, decode and tail but excludes model initialization and grading; output lengths vary with numerical sampling differences.",
+    "Queue-fed throughput uses adjacent telemetry samples with waiting requests at both endpoints. Compared intervals need not contain identical token-length distributions; do not extrapolate its ratio to full-run speedup.",
+    "Synthetic long-prefix tests use 28672 input tokens and 1024 forced output tokens; they are not accuracy tests or guarantees for every maximum-length workload.",
+    "R1 student concurrency128 also has earlier 570x16 four-GPU full-validation evidence; JustRL64 is selected from this bounded pilot.",
+    "Teacher entries concern independent autoregressive validation, not shared-sync FSDP scoring during training."
+  ],
+  "models": {
+    "DeepSeek-R1-Distill-Qwen-1.5B": {
+      "role": "student A/B/C",
+      "max_num_seqs": 128,
+      "source_run": "DeepSeek-R1-Distill-Qwen-1.5B-c128",
+      "natural_metrics": {
+        "seconds": 144.59,
+        "tps": 4512.8,
+        "output_tokens": 652523,
+        "requests": 96,
+        "truncated": 2,
+        "KV_percent": 14.56,
+        "preemptions": 0,
+        "peak_GiB": 52.6
+      },
+      "prompt_cap": 4096,
+      "family": "deepseek",
+      "enable_thinking": null,
+      "extra_stop_token_ids": []
+    },
+    "Qwen3-1.7B-Base": {
+      "role": "student D/E",
+      "max_num_seqs": 12,
+      "source_run": "Qwen3-1.7B-Base-c12",
+      "natural_metrics": {
+        "seconds": 728.49,
+        "tps": 1101.0,
+        "output_tokens": 802055,
+        "requests": 48,
+        "truncated": 25,
+        "KV_percent": 84.78,
+        "preemptions": 0,
+        "peak_GiB": 52.21
+      },
+      "prompt_cap": 1024,
+      "family": "qwen3",
+      "enable_thinking": false,
+      "extra_stop_token_ids": [
+        151645
+      ]
+    },
+    "Qwen3-1.7B": {
+      "role": "student F",
+      "max_num_seqs": 32,
+      "source_run": "confirm-Qwen3-1.7B-c32",
+      "natural_metrics": {
+        "seconds": 177.85,
+        "tps": 1519.3,
+        "output_tokens": 270204,
+        "requests": 96,
+        "truncated": 4,
+        "KV_percent": 28.61,
+        "preemptions": 0,
+        "peak_GiB": 52.27,
+        "queue_fed_seconds": 12.55,
+        "queue_fed_tps": 7723.7
+      },
+      "prompt_cap": 4096,
+      "family": "qwen3",
+      "enable_thinking": false,
+      "extra_stop_token_ids": [
+        151645
+      ]
+    },
+    "JustRL-DeepSeek-1.5B": {
+      "role": "teacher A/B",
+      "max_num_seqs": 64,
+      "source_run": "JustRL-DeepSeek-1.5B-c64",
+      "natural_metrics": {
+        "seconds": 50.88,
+        "tps": 7123.0,
+        "output_tokens": 362409,
+        "requests": 96,
+        "truncated": 0,
+        "KV_percent": 8.0,
+        "preemptions": 0,
+        "peak_GiB": 52.41
+      },
+      "prompt_cap": 4096,
+      "family": "deepseek",
+      "enable_thinking": null,
+      "extra_stop_token_ids": []
+    },
+    "DeepSeek-R1-Distill-Qwen-7B": {
+      "role": "teacher C",
+      "max_num_seqs": 32,
+      "source_run": "DeepSeek-R1-Distill-Qwen-7B-c32",
+      "natural_metrics": {
+        "seconds": 125.79,
+        "tps": 1605.7,
+        "output_tokens": 201979,
+        "requests": 48,
+        "truncated": 0,
+        "KV_percent": 11.75,
+        "preemptions": 0,
+        "peak_GiB": 51.74
+      },
+      "prompt_cap": 4096,
+      "family": "deepseek",
+      "enable_thinking": null,
+      "extra_stop_token_ids": []
+    },
+    "Qwen3-8B": {
+      "role": "teacher D",
+      "max_num_seqs": 32,
+      "source_run": "confirm-Qwen3-8B-c32",
+      "natural_metrics": {
+        "seconds": 362.48,
+        "tps": 699.9,
+        "output_tokens": 253710,
+        "requests": 96,
+        "truncated": 4,
+        "KV_percent": 48.43,
+        "preemptions": 0,
+        "peak_GiB": 51.64,
+        "queue_fed_seconds": 21.59,
+        "queue_fed_tps": 3809.8
+      },
+      "prompt_cap": 4096,
+      "family": "qwen3",
+      "enable_thinking": false,
+      "extra_stop_token_ids": [
+        151645
+      ]
+    },
+    "Qwen3-4B": {
+      "role": "teacher E",
+      "max_num_seqs": 32,
+      "source_run": "confirm-Qwen3-4B-c32",
+      "natural_metrics": {
+        "seconds": 68.41,
+        "tps": 2165.7,
+        "output_tokens": 148159,
+        "requests": 96,
+        "truncated": 0,
+        "KV_percent": 15.44,
+        "preemptions": 0,
+        "peak_GiB": 52.12,
+        "queue_fed_seconds": 15.07,
+        "queue_fed_tps": 5090.3
+      },
+      "prompt_cap": 4096,
+      "family": "qwen3",
+      "enable_thinking": false,
+      "extra_stop_token_ids": [
+        151645
+      ]
+    },
+    "Qwen3-4B-Instruct-2507": {
+      "role": "teacher F",
+      "max_num_seqs": 32,
+      "source_run": "confirm-Qwen3-4B-Instruct-2507-c32",
+      "natural_metrics": {
+        "seconds": 303.23,
+        "tps": 1223.2,
+        "output_tokens": 370925,
+        "requests": 96,
+        "truncated": 4,
+        "KV_percent": 39.78,
+        "preemptions": 0,
+        "peak_GiB": 52.06,
+        "queue_fed_seconds": 25.85,
+        "queue_fed_tps": 4600.1
+      },
+      "prompt_cap": 4096,
+      "family": "qwen3",
+      "enable_thinking": false,
+      "extra_stop_token_ids": [
+        151645
+      ]
+    }
+  }
+}

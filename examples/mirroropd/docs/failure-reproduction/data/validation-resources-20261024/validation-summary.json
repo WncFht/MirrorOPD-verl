@@ -1,0 +1,88 @@
+{
+  "C": {
+    "run_dir": "outputs/failure-C-valid31k-n16-20261024",
+    "validation_seconds": 130.64563346654177,
+    "generation_seconds": 120.316758717,
+    "peak_gpu_MiB_2s_samples": [
+      54629.0,
+      54553.0,
+      54573.0,
+      54573.0
+    ],
+    "datasets": {
+      "math500": {
+        "response_count": 32.0,
+        "failed_count": 0.0,
+        "acc/mean": 0.90625,
+        "format/mean": 0.96875,
+        "generation/response_length/mean": 7129.625,
+        "generation/response_length/max": 31744.0,
+        "generation/finish_reason/stop_count": 31.0,
+        "generation/finish_reason/length_count": 1.0
+      },
+      "amc23": {
+        "response_count": 32.0,
+        "failed_count": 0.0,
+        "acc/mean": 1.0,
+        "format/mean": 1.0,
+        "generation/response_length/mean": 2016.5625,
+        "generation/response_length/max": 9717.0,
+        "generation/finish_reason/stop_count": 32.0,
+        "generation/finish_reason/length_count": 0.0
+      },
+      "aime25": {
+        "response_count": 32.0,
+        "failed_count": 0.0,
+        "acc/mean": 0.625,
+        "format/mean": 1.0,
+        "generation/response_length/mean": 10376.96875,
+        "generation/response_length/max": 28292.0,
+        "generation/finish_reason/stop_count": 32.0,
+        "generation/finish_reason/length_count": 0.0
+      }
+    }
+  },
+  "DE": {
+    "run_dir": "outputs/failure-DE-valid31k-n16-c128-20261024",
+    "validation_seconds": 362.05793710798025,
+    "generation_seconds": 359.984971821,
+    "peak_gpu_MiB_2s_samples": [
+      54785.0,
+      54785.0,
+      54785.0,
+      54491.0
+    ],
+    "datasets": {
+      "math500": {
+        "response_count": 32.0,
+        "failed_count": 0.0,
+        "acc/mean": 0.3125,
+        "format/mean": 0.3125,
+        "generation/response_length/mean": 17598.96875,
+        "generation/response_length/max": 31744.0,
+        "generation/finish_reason/stop_count": 15.0,
+        "generation/finish_reason/length_count": 17.0
+      },
+      "amc23": {
+        "response_count": 32.0,
+        "failed_count": 0.0,
+        "acc/mean": 0.4375,
+        "format/mean": 0.46875,
+        "generation/response_length/mean": 12158.34375,
+        "generation/response_length/max": 31744.0,
+        "generation/finish_reason/stop_count": 20.0,
+        "generation/finish_reason/length_count": 12.0
+      },
+      "aime25": {
+        "response_count": 32.0,
+        "failed_count": 0.0,
+        "acc/mean": 0.0625,
+        "format/mean": 0.3125,
+        "generation/response_length/mean": 15364.75,
+        "generation/response_length/max": 31744.0,
+        "generation/finish_reason/stop_count": 17.0,
+        "generation/finish_reason/length_count": 15.0
+      }
+    }
+  }
+}

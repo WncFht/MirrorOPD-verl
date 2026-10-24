@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "/root/.local/share/mirroropd/venvs/profile-cu128/bin/python",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/failure-reproduction/scripts/benchmark_validation_concurrency.py",
+    "--model",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-4B",
+    "--max-num-seqs",
+    "8",
+    "--output",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/validation-concurrency-calibration-20261024/Qwen3-4B-c8",
+    "--subset-dir",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/cde-validation-resources-20261024/subsets",
+    "--samples",
+    "8",
+    "--stress-requests",
+    "48"
+  ],
+  "gpu": 3
+}
