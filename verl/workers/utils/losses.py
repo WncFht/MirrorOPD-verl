@@ -24,7 +24,7 @@ from verl.utils.metric import AggregationType, Metric
 from verl.utils.metric.observations import Observation
 from verl.utils.torch_functional import masked_mean, masked_sum
 from verl.workers.config import ActorConfig, CriticConfig
-from verl.workers.utils.padding import no_padding_2_padding
+from verl.workers.utils.padding import as_padded_response, no_padding_2_padding
 
 
 def sft_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None):
@@ -101,20 +101,17 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
     ):
         from verl.trainer.ppo.policy_metrics import update_observations
 
-        def padded(value):
-            return value.to_padded_tensor(0.0) if value is not None and value.is_nested else value
-
         metrics.update(
             update_observations(
                 log_prob,
-                padded(data.get("rollout_log_probs")),
-                padded(data["old_log_probs"])
+                as_padded_response(data.get("rollout_log_probs")),
+                as_padded_response(data["old_log_probs"])
                 if tu.get_non_tensor_data(data, "metrics_has_anchor", default=True)
                 else None,
-                padded(data["advantages"]),
-                padded(data["response_mask"]),
+                as_padded_response(data["advantages"]),
+                as_padded_response(data["response_mask"]),
                 component="task",
-                observation_mask=padded(data.get("metrics_response_mask")),
+                observation_mask=as_padded_response(data.get("metrics_response_mask")),
                 quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),
             )
         )

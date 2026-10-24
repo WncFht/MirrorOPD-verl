@@ -75,3 +75,20 @@ def test_shapes_and_bin_contract_are_checked():
         position_statistics(torch.ones(2), torch.tensor([0]))
     with pytest.raises(ValueError, match="range"):
         position_statistics(torch.ones(1), torch.tensor([10]))
+
+
+def test_response_prediction_coordinates_preserve_prompt_offsets_and_masked_gaps():
+    from verl.workers.utils.padding import as_padded_response, prediction_positions, response_target_coordinates
+
+    ids = torch.nested.nested_tensor([torch.arange(6), torch.arange(4)], layout=torch.jagged)
+    responses = torch.nested.nested_tensor([torch.arange(3), torch.arange(2)], layout=torch.jagged)
+    masks = torch.nested.nested_tensor([torch.tensor([1, 0, 1]), torch.tensor([0, 1])], layout=torch.jagged)
+    predictions, packed = prediction_positions(ids, masks)
+    target, lengths = response_target_coordinates(ids, responses, predictions)
+    assert target.tolist() == [0, 2, 1]
+    assert lengths.tolist() == [3, 3, 2]
+    assert packed.tolist() == [2, 4, 8]
+    values = torch.tensor([[1.0, 2.0, 3.0]])
+    assert as_padded_response(values) is values
+    assert as_padded_response(None) is None
+    assert as_padded_response(masks, False).tolist() == [[1, 0, 1], [0, 1, 0]]
