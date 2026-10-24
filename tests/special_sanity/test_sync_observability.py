@@ -160,6 +160,8 @@ class LogObservabilityTest(unittest.TestCase):
             " p=Path(arg)\n"
             " if not p.is_dir() or not p.name.startswith('offline-run-'): continue\n"
             " if 'z-bad' in p.name and os.environ.get('FAIL_UPLOAD')=='1': failed=True; continue\n"
+            " if os.environ.get('INCOMPLETE_UPLOAD')=='1':\n"
+            "  print(f'Failed to sync all data from \"{p.name}\": the file ends with an incomplete record'); continue\n"
             " f=next(p.glob('*.wandb')); f.with_name(f.name+'.synced').write_text('')\n"
             "raise SystemExit(7 if failed else 0)\n"
         )
@@ -199,6 +201,32 @@ class LogObservabilityTest(unittest.TestCase):
         )
         reports = [json.loads(path.read_text()) for path in self.opdir.glob("*.json")]
         return result, max(reports, key=lambda item: Path(item["log"]).stat().st_mtime_ns)
+
+    def test_waiting_snapshots_exit_zero_and_strict_checks_exit_two(self):
+        self.assertEqual(self.unpack()[0].returncode, 0)
+        result, report = self.upload(INCOMPLETE_UPLOAD="1", MIRROROPD_UPLOAD_STRICT="0")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(report["status"], "success")
+        self.assertIn("WAITING 2", result.stdout)
+        self.assertEqual(report["details"]["upload_summary"]["waiting_for_snapshot"], 2)
+        result, report = self.upload(MIRROROPD_UPLOAD_STRICT="1")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertEqual(report["status"], "partial")
+        self.assertIn("STRICT=1", result.stderr)
+        self.assertEqual(report["details"]["upload_summary"]["attempted_this_call"], 0)
+        result, report = self.upload(MIRROROPD_UPLOAD_STRICT="0")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(report["details"]["upload_summary"]["attempted_this_call"], 0)
+
+    def test_inline_upload_uses_same_waiting_and_strict_policy(self):
+        result, report = self.unpack(MIRROROPD_WANDB_SYNC="1", INCOMPLETE_UPLOAD="1", MIRROROPD_UPLOAD_STRICT="0")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(report["status"], "success")
+        self.assertTrue(self.bundle.exists())
+        result, report = self.unpack(MIRROROPD_WANDB_SYNC="1", MIRROROPD_UPLOAD_STRICT="1")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertEqual(report["status"], "partial")
+        self.assertTrue(self.bundle.exists())
 
     def test_partial_upload_failure_is_durable_and_retry_records_success(self):
         self.assertEqual(self.unpack()[0].returncode, 0)

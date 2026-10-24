@@ -23,6 +23,7 @@ WANDB_UPLOAD_TIMEOUT ?= 900
 GIT_PUSH_TIMEOUT ?= 120
 RUN ?=
 RETRY ?= 0
+STRICT ?= 0
 KEEP_ARCHIVE_AFTER_UNPACK ?= 0
 RESULTS_REMOTE_DIR ?= outputs
 RESULTS_LOCAL_DIR ?= results
@@ -54,6 +55,7 @@ export MIRROROPD_UPLOAD_TIMEOUT = $(WANDB_UPLOAD_TIMEOUT)
 export MIRROROPD_GIT_PUSH_TIMEOUT = $(GIT_PUSH_TIMEOUT)
 export MIRROROPD_UPLOAD_RUN = $(RUN)
 export MIRROROPD_UPLOAD_RETRY = $(RETRY)
+export MIRROROPD_UPLOAD_STRICT = $(STRICT)
 export KEEP_ARCHIVE_AFTER_UNPACK
 export MIRROROPD_RESULTS_SOURCE = $(RESULTS_REMOTE_DIR)
 export MIRROROPD_RESULTS_DEST = $(RESULTS_LOCAL_DIR)
@@ -74,6 +76,7 @@ help:
 	@echo '同步确认：接收成功后，在发送端执行 make archive-ack [TARGET=peer]，确认上次打包的提交'
 	@echo '日志接收：make sync-log-unpack [LOG_ARCHIVE=...]（提交、登记持久队列并推送 Git，默认不等待 W&B）'
 	@echo '云端上传：make sync-log-upload [RUN=run-id] [RETRY=1]；首次 make sync-log-setup 安装独立上传环境'
+	@echo '训练中不完整快照默认等待更新并正常退出；STRICT=1 要求所选快照全部同步完成'
 	@echo '旧日志入队并推送：make sync-log-enqueue；upload 也自动重试 Git push，WANDB_GIT_SYNC=0 可关闭'
 	@echo '仅重试 Git 推送：make sync-log-push [GIT_PUSH_TIMEOUT=120]'
 	@echo '仅解包：make sync-log-unpack WANDB_SYNC=0 WANDB_GIT_SYNC=0（不提交、不入队）'
