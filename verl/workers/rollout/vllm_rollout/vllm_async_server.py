@@ -648,6 +648,11 @@ class vLLMHttpServer:
             sampling_params["flat_logprobs"] = True
         sampling_params.setdefault("repetition_penalty", self.config.get("repetition_penalty", 1.0))
         sampling_params.setdefault("ignore_eos", self.config.get("ignore_eos", False))
+        if self.config.stop_token_ids:
+            # Both training and validation use this entrypoint. Keep request
+            # stops too; vLLM subsequently adds the model's native EOS IDs.
+            requested_stops = sampling_params.get("stop_token_ids") or []
+            sampling_params["stop_token_ids"] = sorted(set(requested_stops) | set(self.config.stop_token_ids))
         # Inject per-request seed for deterministic sampling when full_determinism is enabled.
         if self.config.full_determinism:
             sampling_params.setdefault("seed", self.replica_rank + self.config.seed)
@@ -1292,6 +1297,17 @@ class vLLMHttpServer:
 
     def _validate_configs(self) -> None:
         """Validate config/model_config after initialisation."""
+        if self.config.stop_token_ids:
+            tokenizer = self.model_config.tokenizer
+            if tokenizer is None:
+                raise ValueError("rollout.stop_token_ids requires a tokenizer for token-ID validation")
+            vocab_ids = set(tokenizer.get_vocab().values())
+            vocab_size = self.model_config.hf_config.get_text_config().vocab_size
+            invalid_ids = sorted({i for i in self.config.stop_token_ids if i not in vocab_ids or i >= vocab_size})
+            if invalid_ids:
+                raise ValueError(
+                    f"rollout.stop_token_ids contains IDs outside the tokenizer/model vocabulary: {invalid_ids}"
+                )
         max_position_embeddings = get_max_position_embeddings(self.model_config.hf_config)
         if self.config.max_model_len is None:
             self.config.max_model_len = max_position_embeddings

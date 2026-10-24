@@ -28,6 +28,7 @@ _preprocess_sampling_params before admission, _postprocess_output after release.
 """
 
 import asyncio
+from dataclasses import replace
 from types import SimpleNamespace
 
 import pytest
@@ -335,10 +336,53 @@ def test_default_request_hooks_leave_generate_output_unchanged(monkeypatch):
 
         assert server.engine.sampling_params[0].logprob_token_ids is None
         assert output.token_ids == [5, 9] and output.stop_reason == "completed"
-        assert output.extra_fields == {"global_steps": 7, "num_cached_tokens": 0}
+        assert output.extra_fields == {"global_steps": 7, "num_cached_tokens": 0, "finish_reason": "stop"}
         assert server._admitting == 0
 
     asyncio.run(main())
+
+
+@pytest.mark.parametrize("temperature,budget", [(1.0, 16), (0.7, 32)])
+@pytest.mark.parametrize("configured", [None, [], [9, 9]])
+@pytest.mark.parametrize("requested", [None, [], [7, 9]])
+def test_stop_ids_merge_at_shared_train_validation_request_entry(
+    monkeypatch, temperature, budget, configured, requested
+):
+    async def main():
+        server = _make_generating_server(monkeypatch, vllm_async_server.vLLMHttpServer, [_request_output([5, 9])])
+        server.config = replace(server.config, stop_token_ids=configured)
+        original_configured_ids = None if configured is None else list(configured)
+        params = {"temperature": temperature, "max_tokens": budget}
+        original_request_ids = None if requested is None else list(requested)
+        if requested is not None:
+            params["stop_token_ids"] = requested
+        output = await server.generate([1, 2, 3], params, "stopping")
+        actual = server.engine.sampling_params[-1]
+        assert set(actual.stop_token_ids) == set(configured or []) | set(requested or [])
+        assert actual.temperature == temperature and actual.max_tokens == budget
+        assert requested == original_request_ids
+        assert server.config.stop_token_ids == original_configured_ids
+        # The downstream vLLM input processor adds native EOS to these request IDs.
+        actual.update_from_generation_config({"eos_token_id": [2, 3]}, eos_token_id=2)
+        assert actual.all_stop_token_ids == set(configured or []) | set(requested or []) | {2, 3}
+        assert output.token_ids == [5, 9]
+
+    asyncio.run(main())
+
+
+@pytest.mark.parametrize("stop_id,tokenizer_has_id,head_size", [(9, False, 16), (9, True, 8)])
+def test_configured_stop_ids_must_exist_in_tokenizer_and_head(stop_id, tokenizer_has_id, head_size):
+    server = _make_server()
+    server.config = RolloutConfig(name="vllm", stop_token_ids=[stop_id])
+    vocab = {"a": 0, "eos": 2}
+    if tokenizer_has_id:
+        vocab["extra"] = stop_id
+    server.model_config = SimpleNamespace(
+        tokenizer=SimpleNamespace(get_vocab=lambda: vocab),
+        hf_config=SimpleNamespace(get_text_config=lambda: SimpleNamespace(vocab_size=head_size)),
+    )
+    with pytest.raises(ValueError, match="outside the tokenizer/model vocabulary"):
+        server._validate_configs()
 
 
 def test_request_hooks_add_selected_token_scores_without_overriding_generate(monkeypatch):

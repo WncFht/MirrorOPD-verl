@@ -192,6 +192,9 @@ class RolloutConfig(BaseConfig):
     gpu_memory_utilization: float = 0.5
     standalone_gpu_memory_utilization: Optional[float] = None
     ignore_eos: bool = False
+    # Additional request-level stop IDs; native model EOS remains active.
+    # Shared by training and validation. Currently implemented by vLLM only.
+    stop_token_ids: Optional[list[int]] = None
     enforce_eager: bool = False
     cudagraph_capture_sizes: Optional[list] = None
     free_cache_engine: bool = True
@@ -290,6 +293,13 @@ class RolloutConfig(BaseConfig):
 
     def __post_init__(self):
         """Validate the rollout config"""
+        if self.stop_token_ids is not None:
+            if not isinstance(self.stop_token_ids, list) or any(
+                type(token_id) is not int or token_id < 0 for token_id in self.stop_token_ids
+            ):
+                raise ValueError("rollout.stop_token_ids must be a list of nonnegative integers or null")
+            if self.stop_token_ids and self.name != "vllm":
+                raise ValueError("rollout.stop_token_ids currently requires rollout.name='vllm'")
         # Deprecation warning for mode field - only async mode is supported
         if self.mode == "sync":
             raise ValueError(
