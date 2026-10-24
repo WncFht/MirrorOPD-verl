@@ -13,7 +13,7 @@ FULL_KL_VOCAB_CHUNK=${FULL_KL_VOCAB_CHUNK:-8192}
 FULL_KL_ASYNC_WRITE=${FULL_KL_ASYNC_WRITE:-False}
 FULL_KL_PREFETCH=${FULL_KL_PREFETCH:-False}
 export EXPERIMENT_NAME=${EXPERIMENT_NAME:-full-rkl-${DOMAIN}-${FULL_KL_BACKEND}}
-exec bash "$SCRIPT_DIR/_run_single_teacher_fsdp2.sh" \
+exec bash "$SCRIPT_DIR/launchers/_run_single_teacher_fsdp2.sh" \
     distillation.execution_mode=shared_sync \
     distillation.distillation_loss.loss_mode=full_reverse_kl \
     distillation.distillation_loss.use_policy_gradient=False \

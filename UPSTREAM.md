@@ -19,7 +19,7 @@ MirrorOPD 与 OPD-State 是拟迁移的算法和实验实现来源，初始化�
 
 ## 数学资产准备来源
 
-数学资产准备规则参考本机 MD-OPD commit `cef14fa0b552b40033f8b7296ce3853d10bf479b` 的 `data/prep/prepare_dapo_math500.py`、`prepare_amc23_aime25.py` 和 schema，来源许可为 Apache-2.0。本仓的 `examples/mirroropd/prepare_math_data.py` 独立实现相同转换，并补充离线导入和逐行数据检查；运行时不依赖相邻 checkout。2026-10-20 从原始缓存重建的 18487 行与固定参考逐行一致。
+数学资产准备规则参考本机 MD-OPD commit `cef14fa0b552b40033f8b7296ce3853d10bf479b` 的 `data/prep/prepare_dapo_math500.py`、`prepare_amc23_aime25.py` 和 schema，来源许可为 Apache-2.0。本仓的 `examples/mirroropd/assets/prepare_math_data.py` 独立实现相同转换，并补充离线导入和逐行数据检查；运行时不依赖相邻 checkout。2026-10-20 从原始缓存重建的 18487 行与固定参考逐行一致。
 
 ## 版本更新
 

@@ -5,4 +5,4 @@ set -eo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 export DOMAIN=math
 # Math execution defaults and override handling live in the shared launcher.
-exec bash "$SCRIPT_DIR/_run_single_teacher_fsdp2.sh" "$@"
+exec bash "$SCRIPT_DIR/launchers/_run_single_teacher_fsdp2.sh" "$@"

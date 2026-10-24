@@ -15,7 +15,7 @@ from hydra import compose, initialize_config_dir
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location(
-    "ablation_queue", ROOT / "examples/mirroropd/queue_full_vocab_ablations.py"
+    "ablation_queue", ROOT / "examples/mirroropd/tools/queue_full_vocab_ablations.py"
 )
 queue = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(queue)

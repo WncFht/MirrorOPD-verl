@@ -24,7 +24,7 @@ python = sys.executable
 if (root / "plan.json").exists():
     raise SystemExit("Refusing to overwrite an existing plan; use a new evidence directory.")
 subprocess.run(["git", "diff", "--exit-code", "HEAD", "--"], cwd=source, check=True, stdout=subprocess.DEVNULL)
-spec = importlib.util.spec_from_file_location("q", repo / "examples/mirroropd/queue_full_vocab_ablations.py")
+spec = importlib.util.spec_from_file_location("q", repo / "examples/mirroropd/tools/queue_full_vocab_ablations.py")
 q = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(q)
 plan = {

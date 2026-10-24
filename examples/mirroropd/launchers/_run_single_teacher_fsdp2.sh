@@ -9,7 +9,8 @@
 set -eo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT=$(cd -- "$SCRIPT_DIR/../.." && pwd)
+EXAMPLE_DIR=$(cd -- "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd -- "$EXAMPLE_DIR/../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO_ROOT")
 cd "$REPO_ROOT"
 
@@ -267,7 +268,7 @@ VALIDATION_ARGS=(
     actor_rollout_ref.rollout.val_kwargs.temperature=0.7
     actor_rollout_ref.rollout.val_kwargs.top_p=0.9
     "actor_rollout_ref.rollout.val_kwargs.max_tokens=$MAX_VAL_RESPONSE_LENGTH"
-    "reward.custom_reward_function.path='$SCRIPT_DIR/reward.py'"
+    "reward.custom_reward_function.path='$EXAMPLE_DIR/rewards/reward.py'"
     reward.custom_reward_function.name=reward_func
 )
 

@@ -2,6 +2,7 @@
 # Small real-model rollout -> teacher hidden -> full-KL update check.
 set -eo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+EXAMPLE_DIR=$(cd -- "$SCRIPT_DIR/.." && pwd)
 export STUDENT_GPUS=${STUDENT_GPUS:-4}
 export TRAIN_BATCH_SIZE=${TRAIN_BATCH_SIZE:-$((2 * STUDENT_GPUS))}
 export MAX_PROMPT_LENGTH=${MAX_PROMPT_LENGTH:-256}
@@ -20,7 +21,7 @@ export TEST_FREQ=-1 SAVE_FREQ=-1
 export EXPERIMENT_NAME=${EXPERIMENT_NAME:-full-rkl-smoke-$(date +%Y%m%d-%H%M%S)}
 export NVTX_INJECTION64_PATH=${NVTX_INJECTION64_PATH:-/nonexistent/verl-disabled-nvtx-injection.so}
 SMOKE_RAY_TMPDIR=${SMOKE_RAY_TMPDIR:-/tmp/mirroropd-full-kl-smoke-$$}
-exec bash "$SCRIPT_DIR/run_full_reverse_kl.sh" \
+exec bash "$EXAMPLE_DIR/run_full_reverse_kl.sh" \
     "trainer.total_training_steps=${SMOKE_STEPS:-2}" \
     'trainer.logger=[console]' \
     "++ray_kwargs.ray_init.num_gpus=$STUDENT_GPUS" \
