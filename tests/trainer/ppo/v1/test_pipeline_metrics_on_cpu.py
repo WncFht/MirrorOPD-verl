@@ -87,15 +87,24 @@ def test_unverified_clocks_omit_span_but_preserve_counts(problem):
 
 
 @pytest.mark.parametrize("unknown", [-1, None])
-def test_unknown_preemptions_are_not_zero_and_warn_once(caplog, unknown):
+def test_unknown_preemptions_are_not_zero_and_warn_once(caplog, monkeypatch, unknown):
+    import logging
+
     pm._warn_once.cache_clear()
-    rows = _requests()
-    rows[1]["num_preempted"] = unknown
-    for _ in range(2):
-        metrics = pm.aggregate_pipeline_requests(["a_0_0", "a_1_0", "b_0_0"], rows)
-        assert "rollout/preemptions" not in metrics
-        assert metrics["timing_s/rollout_batch"] == 6
-    assert sum("unknown is not zero" in record.message for record in caplog.records) == 1
+    monkeypatch.setattr(pm.logger, "disabled", False)
+    monkeypatch.setattr(pm.logger, "propagate", False)
+    pm.logger.addHandler(caplog.handler)
+    try:
+        with caplog.at_level(logging.WARNING, logger=pm.logger.name):
+            rows = _requests()
+            rows[1]["num_preempted"] = unknown
+            for _ in range(2):
+                metrics = pm.aggregate_pipeline_requests(["a_0_0", "a_1_0", "b_0_0"], rows)
+                assert "rollout/preemptions" not in metrics
+                assert metrics["timing_s/rollout_batch"] == 6
+        assert sum("unknown is not zero" in record.message for record in caplog.records) == 1
+    finally:
+        pm.logger.removeHandler(caplog.handler)
 
 
 def test_validation_sums_windows_and_omits_any_partially_missing_metric():
@@ -273,10 +282,9 @@ def test_driver_logs_training_and_validation_in_one_offline_wandb_step(monkeypat
     """Use the actual fit/logger path and inspect the offline history, without cloud access."""
     import json
 
+    import wandb
     from wandb.proto import wandb_internal_pb2
     from wandb.sdk.internal.datastore import DataStore
-
-    import wandb
 
     monkeypatch.setenv("WANDB_MODE", "offline")
     monkeypatch.setenv("WANDB_DIR", str(tmp_path))

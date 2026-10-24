@@ -8,6 +8,7 @@ unequal output supports; no Ray or vLLM.
 """
 
 import argparse
+import copy
 import json
 import shutil
 import tempfile
@@ -32,6 +33,22 @@ from verl.workers.config import DistillationConfig, DistillationLossConfig
 from verl.workers.config.distillation import FullVocabConfig
 
 
+def local_snapshot(value):
+    """Copy full optimizer containers, comparing each rank's actual shard."""
+    if isinstance(value, torch.Tensor):
+        value = value.detach()
+        if hasattr(value, "to_local"):
+            value = value.to_local()
+        return value.cpu().clone()
+    if isinstance(value, dict):
+        return {k: local_snapshot(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [local_snapshot(v) for v in value]
+    if isinstance(value, tuple):
+        return tuple(local_snapshot(v) for v in value)
+    return copy.deepcopy(value)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -41,6 +58,7 @@ def main():
     )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--checkpoint", action="store_true")
+    parser.add_argument("--state-output", type=Path)
     parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
     parser.add_argument("--tied-student", action="store_true")
     parser.add_argument("--tied-teacher", action="store_true")
@@ -165,6 +183,15 @@ def main():
         n: (p.detach().to_local() - original[n]).float().norm().item()
         for n, p in actor.engine.module.named_parameters()
     }
+    if args.state_output:
+        args.state_output.mkdir(parents=True, exist_ok=True)
+        torch.save(
+            {
+                "parameters": local_snapshot(dict(actor.engine.module.named_parameters())),
+                "optimizer": local_snapshot(actor.engine.optimizer.state_dict()),
+            },
+            args.state_output / f"rank{rank}.pt",
+        )
     head_name = "embed_tokens" if args.tied_student else "lm_head"
     assert any(v > 0 for n, v in deltas.items() if head_name in n)
     if args.tied_student:
@@ -173,15 +200,33 @@ def main():
     actor.engine.full_vocab_teacher_head.release()
     if args.checkpoint:
         saved = {n: p.detach().to_local().clone() for n, p in actor.engine.module.named_parameters()}
+        # Scheduler invocations are an independent clock, not inferred from updates.
+        actor.engine.lr_scheduler_step()
+        actor.engine.lr_scheduler_step()
+        scheduler_state = copy.deepcopy(actor.engine.lr_scheduler.state_dict())
+        optimizer_state = local_snapshot(actor.engine.optimizer.state_dict())
         actor.save_checkpoint(str(root / "checkpoint"), global_step=3)
-        with torch.no_grad():
-            for p in actor.engine.module.parameters():
-                p.to_local().add_(0.5)
+        actor.train_batch(data)
+        actor.engine.lr_scheduler_step()
+        assert actor.engine.lr_scheduler.state_dict() != scheduler_state
+        next_parameters = {n: p.detach().to_local().cpu().clone() for n, p in actor.engine.module.named_parameters()}
+        next_optimizer = local_snapshot(actor.engine.optimizer.state_dict())
+        next_scheduler = copy.deepcopy(actor.engine.lr_scheduler.state_dict())
         actor.load_checkpoint(str(root / "checkpoint"))
         for n, p in actor.engine.module.named_parameters():
             torch.testing.assert_close(p.detach().to_local(), saved[n], atol=0, rtol=0)
+        assert actor.engine.lr_scheduler.state_dict() == scheduler_state
+        torch.testing.assert_close(local_snapshot(actor.engine.optimizer.state_dict()), optimizer_state, atol=0, rtol=0)
+        actor.train_batch(data)
+        actor.engine.lr_scheduler_step()
+        for n, p in actor.engine.module.named_parameters():
+            torch.testing.assert_close(p.detach().to_local().cpu(), next_parameters[n], atol=0, rtol=0)
+        torch.testing.assert_close(local_snapshot(actor.engine.optimizer.state_dict()), next_optimizer, atol=0, rtol=0)
+        assert actor.engine.lr_scheduler.state_dict() == next_scheduler
     result = {"backend": args.backend, "world_size": world, "records": records, "parameter_delta_norms_rank0": deltas}
     result["checkpoint_roundtrip"] = args.checkpoint
+    result["scheduler_optimizer_roundtrip"] = args.checkpoint
+    result["resumed_next_update_equivalent"] = args.checkpoint
     result.update(
         model_type=args.model_type,
         tied_student=args.tied_student,

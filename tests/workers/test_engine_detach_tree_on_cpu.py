@@ -139,8 +139,16 @@ def test_backend_publishes_model_output_through_detach_tree(relpath):
                     published.append(value)
 
     assert published, f"{relpath}: no model_output publication found; did the engine move?"
+
+    def safe_publication(value):
+        if isinstance(value, ast.Dict) and not value.keys:
+            return True  # Full-KL training deliberately publishes no model tensors.
+        if isinstance(value, ast.IfExp):
+            return safe_publication(value.body) and safe_publication(value.orelse)
+        return isinstance(value, ast.Call) and getattr(value.func, "id", None) == "detach_tree"
+
     for value in published:
-        assert isinstance(value, ast.Call) and getattr(value.func, "id", None) == "detach_tree", (
+        assert safe_publication(value), (
             f"{relpath}:{value.lineno}: model_output must be published through detach_tree, "
             "otherwise every micro-batch's autograd graph stays alive for the whole batch"
         )
