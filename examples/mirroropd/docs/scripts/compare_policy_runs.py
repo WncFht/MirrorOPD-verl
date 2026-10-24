@@ -378,13 +378,13 @@ def main():
     (args.data / "comparison.json.gz").write_bytes(gzip.compress(json.dumps(bundle, allow_nan=False).encode(), mtime=0))
     with (args.data / "metric-catalog.csv").open("w", newline="") as stream:
         fields = ["run", "metric", *next(iter(next(iter(catalogs.values())).values())).keys()]
-        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for label, catalog in catalogs.items():
             for key, record in catalog.items():
                 writer.writerow({"run": label, "metric": key, **record})
     with (args.data / "metric-coverage.csv").open("w", newline="") as stream:
-        writer = csv.writer(stream)
+        writer = csv.writer(stream, lineterminator="\n")
         writer.writerow(["metric", *runs])
         for key in sorted(union):
             writer.writerow([key, *[catalogs[label].get(key, {}).get("count", "missing") for label in runs]])

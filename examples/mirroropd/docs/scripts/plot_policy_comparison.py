@@ -75,6 +75,8 @@ def main():
             raise ValueError((name, lines))
         for ext in ("png", "pdf", "svg"):
             fig.savefig(args.out / f"{name}.{ext}", dpi=150, facecolor=fv.NEUTRALS["paper"])
+        svg = args.out / f"{name}.svg"
+        svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
         plt.close(fig)
 
     def line(ax, key, metric, scale=1, smooth=1):
