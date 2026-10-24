@@ -1,0 +1,28 @@
+{
+  "implementation_base": "dc7037eb0",
+  "suites": [
+    {
+      "suite": "baseline",
+      "passed": 162,
+      "seconds": 46.34
+    },
+    {
+      "suite": "mask_contract",
+      "passed": 6,
+      "seconds": 41.05
+    }
+  ],
+  "mask_contract": {
+    "original_tokens": 6,
+    "retained_tokens": 3,
+    "loss": 0.5,
+    "gradient": 0.5,
+    "microbatch_sizes": [
+      1,
+      2
+    ],
+    "real_tq": true,
+    "real_gloo": true,
+    "forward": "controlled CPU toy"
+  }
+}
