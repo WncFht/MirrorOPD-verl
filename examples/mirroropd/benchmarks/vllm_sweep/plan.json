@@ -1,6 +1,11 @@
 {
-  "schema_version": 1,
-  "gpus": [0, 1, 2, 3],
+  "schema_version": 2,
+  "gpus": [
+    0,
+    1,
+    2,
+    3
+  ],
   "seed": 42,
   "samples_per_prompt": 16,
   "response_cap": 31744,
@@ -9,13 +14,137 @@
   "client_concurrency": 2048,
   "candidate2_improvement": 0.03,
   "models": [
-    {"id":"qwen17","directory":"Qwen3-1.7B","family":"qwen3","prompt_cap":4096,"extra_stop_ids":[],"candidates":[[32,0.65,8192],[64,0.65,8192],[128,0.80,8192]]},
-    {"id":"qwen4","directory":"Qwen3-4B","family":"qwen3","prompt_cap":4096,"extra_stop_ids":[],"candidates":[[32,0.65,8192],[64,0.65,8192],[128,0.80,8192]]},
-    {"id":"justrl","directory":"JustRL-DeepSeek-1.5B","family":"deepseek","prompt_cap":4096,"extra_stop_ids":[],"candidates":[[64,0.65,8192],[128,0.65,8192],[256,0.80,8192]]},
-    {"id":"r1_15","directory":"DeepSeek-R1-Distill-Qwen-1.5B","family":"deepseek","prompt_cap":4096,"extra_stop_ids":[],"candidates":[[128,0.65,8192],[192,0.80,8192],[256,0.80,8192]]},
-    {"id":"qwen4_2507","directory":"Qwen3-4B-Instruct-2507","family":"qwen3","prompt_cap":4096,"extra_stop_ids":[],"candidates":[[32,0.65,8192],[64,0.65,8192],[128,0.80,8192]]},
-    {"id":"r1_7","directory":"DeepSeek-R1-Distill-Qwen-7B","family":"deepseek","prompt_cap":4096,"extra_stop_ids":[],"candidates":[[32,0.65,8192],[64,0.65,8192],[128,0.80,8192]]},
-    {"id":"qwen8","directory":"Qwen3-8B","family":"qwen3","prompt_cap":4096,"extra_stop_ids":[],"candidates":[[32,0.65,8192],[64,0.65,8192],[128,0.80,8192]]},
-    {"id":"base17","directory":"Qwen3-1.7B-Base","family":"qwen3","prompt_cap":1024,"extra_stop_ids":[151645],"candidates":[[12,0.65,8192],[16,0.80,8192],[24,0.80,8192]]}
-  ]
+    {
+      "id": "qwen17",
+      "directory": "Qwen3-1.7B",
+      "family": "qwen3",
+      "prompt_cap": 4096,
+      "extra_stop_ids": [],
+      "candidates": [
+        [32, 0.65, 8192],
+        [64, 0.65, 8192],
+        [128, 0.8, 8192]
+      ],
+      "aggressive": [
+        [128, 0.9, 8192],
+        [256, 0.9, 8192]
+      ]
+    },
+    {
+      "id": "qwen4",
+      "directory": "Qwen3-4B",
+      "family": "qwen3",
+      "prompt_cap": 4096,
+      "extra_stop_ids": [],
+      "candidates": [
+        [32, 0.65, 8192],
+        [64, 0.65, 8192],
+        [128, 0.8, 8192]
+      ],
+      "aggressive": [
+        [128, 0.9, 8192],
+        [256, 0.9, 8192]
+      ]
+    },
+    {
+      "id": "justrl",
+      "directory": "JustRL-DeepSeek-1.5B",
+      "family": "deepseek",
+      "prompt_cap": 4096,
+      "extra_stop_ids": [],
+      "candidates": [
+        [64, 0.65, 8192],
+        [128, 0.65, 8192],
+        [256, 0.8, 8192]
+      ],
+      "aggressive": [
+        [128, 0.9, 8192],
+        [256, 0.9, 8192]
+      ]
+    },
+    {
+      "id": "r1_15",
+      "directory": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "family": "deepseek",
+      "prompt_cap": 4096,
+      "extra_stop_ids": [],
+      "candidates": [
+        [128, 0.65, 8192],
+        [192, 0.8, 8192],
+        [256, 0.8, 8192]
+      ],
+      "aggressive": [
+        [128, 0.9, 8192],
+        [256, 0.9, 8192]
+      ]
+    },
+    {
+      "id": "qwen4_2507",
+      "directory": "Qwen3-4B-Instruct-2507",
+      "family": "qwen3",
+      "prompt_cap": 4096,
+      "extra_stop_ids": [],
+      "candidates": [
+        [32, 0.65, 8192],
+        [64, 0.65, 8192],
+        [128, 0.8, 8192]
+      ],
+      "aggressive": [
+        [128, 0.9, 8192],
+        [256, 0.9, 8192]
+      ]
+    },
+    {
+      "id": "r1_7",
+      "directory": "DeepSeek-R1-Distill-Qwen-7B",
+      "family": "deepseek",
+      "prompt_cap": 4096,
+      "extra_stop_ids": [],
+      "candidates": [
+        [32, 0.65, 8192],
+        [64, 0.65, 8192],
+        [128, 0.8, 8192]
+      ],
+      "aggressive": [
+        [128, 0.9, 8192],
+        [256, 0.9, 8192]
+      ]
+    },
+    {
+      "id": "qwen8",
+      "directory": "Qwen3-8B",
+      "family": "qwen3",
+      "prompt_cap": 4096,
+      "extra_stop_ids": [],
+      "candidates": [
+        [32, 0.65, 8192],
+        [64, 0.65, 8192],
+        [128, 0.8, 8192]
+      ],
+      "aggressive": [
+        [128, 0.9, 8192],
+        [256, 0.9, 8192]
+      ]
+    },
+    {
+      "id": "base17",
+      "directory": "Qwen3-1.7B-Base",
+      "family": "qwen3",
+      "prompt_cap": 1024,
+      "extra_stop_ids": [
+        151645
+      ],
+      "candidates": [
+        [12, 0.65, 8192],
+        [16, 0.8, 8192],
+        [24, 0.8, 8192]
+      ],
+      "aggressive": [
+        [24, 0.9, 8192],
+        [32, 0.9, 8192]
+      ]
+    }
+  ],
+  "priority_aggressive": true,
+  "memory_headroom_budget": 0.9
 }

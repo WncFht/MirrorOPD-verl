@@ -1,3 +1,5 @@
+import copy
+import gzip
 import importlib.util
 import json
 import shlex
@@ -18,6 +20,148 @@ finally:
     sys.path.pop(0)
 
 PLAN = json.loads((SCRIPTS / "plan.json").read_text())
+
+
+def test_plan_extension_keeps_workload_and_historical_candidates():
+    old = copy.deepcopy(PLAN)
+    for profile in old["models"]:
+        profile.pop("aggressive")
+    runner.validate_plan_extension(old, PLAN)
+    for mutation in ("response_cap", "temperature", "candidate", "model"):
+        changed = copy.deepcopy(PLAN)
+        if mutation in ("response_cap", "temperature"):
+            changed[mutation] = 1
+        elif mutation == "candidate":
+            changed["models"][0]["candidates"][0][0] = 256
+        else:
+            changed["models"][0]["directory"] = "another-model"
+        with pytest.raises(ValueError):
+            runner.validate_plan_extension(old, changed)
+
+
+def test_reports_preserve_long_tails_and_exclude_failed_placeholders(tmp_path):
+    row = {
+        "candidate": [128, 0.9, 8192],
+        "log": str(tmp_path / "run.log"),
+        "status": "complete",
+        "observed_peak_kv": 0.75,
+        "preemptions": 8,
+        "total_output_tokens": 2_000_000,
+    }
+    result = {
+        "output_lens": [100, 200, 31744, 0],
+        "errors": ["", "", "", "failed"],
+        "mean_ttft_ms": 10,
+        "p99_ttft_ms": float("nan"),
+    }
+    report = runner.build_report(row, result)
+    assert report["p50_output_tokens"] == 200
+    assert report["cap_hit_pct"] == pytest.approx(100 / 3)
+    assert report["preemptions_per_million_tokens"] == 4
+    assert report["kv_peak_pct"] == 75 and "p99_ttft_ms" not in report
+
+
+def test_gpu_report_excludes_startup_but_keeps_idle_gaps_and_tail(tmp_path):
+    path = tmp_path / "telemetry.jsonl.gz"
+    samples = []
+    for running, waiting, busy in [(0, 0, 99), (1, 0, 99), (8, 20, 80), (0, 0, 0), (1, 0, 20), (0, 0, 99)]:
+        samples.append(
+            {
+                "gpu": [{"gpu": i, "utilization": busy if i == 0 else 0, "used_MiB": 1024} for i in range(4)],
+                "engine_metrics": [
+                    f'vllm:num_requests_running{{engine="0"}} {running}',
+                    f'vllm:num_requests_waiting{{engine="0"}} {waiting}',
+                    'vllm:num_requests_waiting_by_reason{engine="0",reason="capacity"} 1000',
+                ],
+            }
+        )
+    with gzip.open(path, "wt") as stream:
+        for sample in samples:
+            stream.write(json.dumps(sample) + "\n")
+    report = runner.build_report({"candidate": [2, 0.9, 8192], "log": str(tmp_path / "run.log"), "status": "complete"})
+    assert report["gpu_window_samples"] == 3
+    assert report["gpu_busy_mean_pct"] == pytest.approx(100 / 12)
+    assert report["gpu0_busy_pct"] == pytest.approx(100 / 3)
+    assert report["gpu1_busy_pct"] == 0
+    assert report["mean_running_requests"] == 3
+    assert report["waiting_sample_pct"] == pytest.approx(100 / 3)
+
+
+def test_search_prioritizes_ready_models_and_adds_memory_control():
+    queue = object.__new__(runner.Queue)
+    queue.plan = PLAN
+    queue.profiles = [PLAN["models"][0], PLAN["models"][1], PLAN["models"][-1]]
+    queue.args = SimpleNamespace(retry_failed=False)
+    queue.state = {"jobs": {}}
+    calls = []
+
+    def sweep(profile, stage, candidate):
+        key = profile["id"] + "/" + stage
+        if key in queue.state["jobs"]:
+            return queue.state["jobs"][key]
+        calls.append((profile["id"], stage, candidate))
+        row = {
+            "model": profile["id"],
+            "stage": stage,
+            "candidate": candidate,
+            "kind": "sweep",
+            "status": "complete",
+            "duration": 100,
+            "output_throughput": 1,
+            "preemptions": 1 if profile["id"] == "qwen4" else 0,
+        }
+        queue.state["jobs"][key] = row
+        return row
+
+    queue.sweep = sweep
+    for profile in queue.profiles[:2]:
+        for index in (0, 1):
+            sweep(profile, f"candidate{index}", profile["candidates"][index])
+    calls.clear()
+    queue.search_all()
+    base_start = next(i for i, call in enumerate(calls) if call[0] == "base17")
+    assert ("qwen17", "aggressive-c256-u090-t8192", [256, 0.9, 8192]) in calls[:base_start]
+    assert ("qwen4", "memory-c64-u090-t8192", [64, 0.9, 8192]) in calls[:base_start]
+    assert len(calls) == len({(model, tuple(candidate)) for model, _, candidate in calls})
+
+
+def test_original_validation_falls_back_to_tested_candidate():
+    queue = object.__new__(runner.Queue)
+    profile = PLAN["models"][0]
+    queue.state = {
+        "jobs": {
+            "fast": {
+                "model": profile["id"],
+                "kind": "sweep",
+                "status": "complete",
+                "stage": "candidate2",
+                "candidate": [256, 0.9, 8192],
+                "duration": 80,
+                "total_output_tokens": 1000,
+            },
+            "usable": {
+                "model": profile["id"],
+                "kind": "sweep",
+                "status": "complete",
+                "stage": "candidate0",
+                "candidate": [64, 0.65, 8192],
+                "duration": 100,
+                "total_output_tokens": 1000,
+            },
+        }
+    }
+    queue.save = lambda: None
+    attempted = []
+
+    def validate(profile, selected):
+        candidate = selected["candidate"]
+        attempted.append(candidate)
+        return {"status": "complete" if candidate[1] == 0.65 else "failed", "candidate": candidate}
+
+    queue.original_validation = validate
+    queue.confirm(profile)
+    assert attempted == [[256, 0.9, 8192], [64, 0.65, 8192]]
+    assert queue.state["jobs"][profile["id"] + "/verl-validation"]["candidate"] == [64, 0.65, 8192]
 
 
 def test_queue_keeps_venv_python_path_instead_of_resolving_to_base_python(tmp_path):
@@ -42,11 +186,13 @@ def argument(command, name):
 
 
 @pytest.mark.parametrize("profile", PLAN["models"], ids=lambda p: p["id"])
-def test_full_sweep_preserves_all_requests_sampling_and_per_replica_resources(tmp_path, profile):
+@pytest.mark.parametrize("point", ["baseline", "aggressive"])
+def test_full_sweep_preserves_all_requests_sampling_and_per_replica_resources(tmp_path, profile, point):
+    candidate = profile["candidates"][1] if point == "baseline" else profile["aggressive"][-1]
     command = runner.build_commands(
         PLAN,
         profile,
-        profile["candidates"][1],
+        candidate,
         tmp_path / "models with spaces",
         tmp_path / "all prompts.jsonl",
         tmp_path / "run",
@@ -57,6 +203,9 @@ def test_full_sweep_preserves_all_requests_sampling_and_per_replica_resources(tm
     bench = shlex.split(argument(command, "--bench-cmd"))
     assert argument(serve, "--data-parallel-size") == "4"
     assert argument(serve, "--tensor-parallel-size") == "1"
+    parameters = json.loads((tmp_path / "run/serve-params.json").read_text())
+    assert parameters[0]["max_num_seqs"] == candidate[0]
+    assert parameters[0]["gpu_memory_utilization"] == candidate[1]
     assert int(argument(serve, "--max-model-len")) == profile["prompt_cap"] + 31744
     assert argument(bench, "--num-prompts") == "0" and argument(bench, "--request-rate") == "inf"
     assert "--ignore-eos" not in bench and argument(bench, "--custom-output-len") == "-1"
@@ -67,10 +216,7 @@ def test_full_sweep_preserves_all_requests_sampling_and_per_replica_resources(tm
     assert extra.get("stop_token_ids", []) == profile["extra_stop_ids"]
     assert argument(command, "--num-runs") == "1" and "--show-stdout" in command
     assert "--logits-processors" not in serve and argument(serve, "--worker-cls").endswith("ProtocolWorker")
-    assert (
-        json.loads(argument(serve, "--compilation-config"))["cudagraph_capture_sizes"][-1]
-        == profile["candidates"][1][0]
-    )
+    assert json.loads(argument(serve, "--compilation-config"))["cudagraph_capture_sizes"][-1] == candidate[0]
 
 
 def test_preflight_is_separate_from_full_measurements(tmp_path):
