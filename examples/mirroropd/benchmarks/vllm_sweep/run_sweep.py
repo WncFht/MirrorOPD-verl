@@ -180,6 +180,10 @@ def build_commands(plan, profile, candidate, model_root, data_file, run_dir, vll
     ]
     if preflight:
         bench += ["--custom-output-len", "64"]
+    else:
+        # CustomDataset's CLI default is 256, which overrides JSONL output_tokens.
+        # -1 is required to honor every record's explicit 31744-token budget.
+        bench += ["--custom-output-len", "-1"]
     params = [
         {
             "_benchmark_name": "configured",
@@ -295,7 +299,7 @@ class Queue:
             if not target.exists() or not any(r.get("kind") == "sweep" for r in self.state["jobs"].values()):
                 shutil.copyfile(Path(__file__).with_name(name), target)
         target = source / "vllm_sweep_worker.py"
-        if not target.exists():
+        if not target.exists() or not any(r.get("kind") == "sweep" for r in self.state["jobs"].values()):
             shutil.copyfile(Path(__file__).with_name("worker.py"), target)
         snapshot = {
             "plan": self.plan,
@@ -442,7 +446,10 @@ class Queue:
                 row[name] = result.get(name)
             row["result"] = str(paths[0])
             expected = 4 if preflight else 570 * self.plan["samples_per_prompt"]
-            if eligible(result, expected):
+            with (directory / "run.log").open() as stream:
+                cap_verified = any(f"custom_output_len={64 if preflight else -1}," in line for line in stream)
+            row["response_cap_verified"] = cap_verified
+            if eligible(result, expected) and cap_verified:
                 row["status"] = "complete"
         metrics = directory / "final-metrics.txt"
         if metrics.exists():

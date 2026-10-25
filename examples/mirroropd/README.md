@@ -20,7 +20,7 @@
 
 ### 完整验证负载的 vLLM sweep
 
-[`benchmarks/vllm_sweep/`](benchmarks/vllm_sweep/) 管理八个原始模型的推理参数扫描：`prepare_data.py` 复用现有 prompt builder 导出每模型570题×16请求，核对token回编码；`plan.json` 保存基线及候选；`run_sweep.py` 调用原生 `vllm bench sweep serve`，按四卡DP4/TP1排队执行。`worker.py` 保留当前verl对词表外token的屏蔽，原始模型文件不变。正常EOS、温度0.7、top-p0.9和31744回答上限用于全部正式测量。
+[`benchmarks/vllm_sweep/`](benchmarks/vllm_sweep/) 管理八个原始模型的推理参数扫描：`prepare_data.py` 复用现有 prompt builder 导出每模型570题×16请求，核对token回编码；`plan.json` 保存基线及候选；`run_sweep.py` 调用原生 `vllm bench sweep serve`，按四卡DP4/TP1排队执行。`worker.py` 保留当前verl对词表外token的屏蔽，原始模型文件不变。正常EOS、温度0.7、top-p0.9和31744回答上限用于全部正式测量；必须显式传 `--custom-output-len -1`，否则原生CLI的256默认值会覆盖JSONL预算。
 
 ```bash
 PYTHONPATH=. "$PYTHON_BIN" examples/mirroropd/benchmarks/vllm_sweep/run_sweep.py run \

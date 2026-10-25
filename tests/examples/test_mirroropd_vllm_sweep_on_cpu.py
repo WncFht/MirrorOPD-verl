@@ -59,13 +59,14 @@ def test_full_sweep_preserves_all_requests_sampling_and_per_replica_resources(tm
     assert argument(serve, "--tensor-parallel-size") == "1"
     assert int(argument(serve, "--max-model-len")) == profile["prompt_cap"] + 31744
     assert argument(bench, "--num-prompts") == "0" and argument(bench, "--request-rate") == "inf"
-    assert "--ignore-eos" not in bench and "--custom-output-len" not in bench
+    assert "--ignore-eos" not in bench and argument(bench, "--custom-output-len") == "-1"
     assert "--skip-chat-template" in bench and "--disable-shuffle" in bench and "--no-oversample" in bench
     assert argument(bench, "--temperature") == "0.7" and argument(bench, "--top-p") == "0.9"
     extra = json.loads(argument(bench, "--extra-body"))
     assert extra["add_special_tokens"] is False
     assert extra.get("stop_token_ids", []) == profile["extra_stop_ids"]
     assert argument(command, "--num-runs") == "1" and "--show-stdout" in command
+    assert "--logits-processors" not in serve and argument(serve, "--worker-cls").endswith("ProtocolWorker")
     assert (
         json.loads(argument(serve, "--compilation-config"))["cudagraph_capture_sizes"][-1]
         == profile["candidates"][1][0]
@@ -86,6 +87,24 @@ def test_preflight_is_separate_from_full_measurements(tmp_path):
     )
     bench = shlex.split(argument(command, "--bench-cmd"))
     assert argument(bench, "--num-prompts") == "4" and argument(bench, "--custom-output-len") == "64"
+
+
+def test_native_custom_dataset_honors_explicit_jsonl_budget(tmp_path):
+    from vllm.benchmarks.datasets import CustomDataset
+
+    path = tmp_path / "data.jsonl"
+    path.write_text(json.dumps({"prompt": "2+2", "output_tokens": 31744}) + "\n")
+    dataset = CustomDataset(dataset_path=str(path), random_seed=42, disable_shuffle=True)
+    requests = dataset.sample(
+        lambda text: SimpleNamespace(input_ids=[1, 2, 3]), num_requests=0, output_len=-1, skip_chat_template=True
+    )
+    assert len(requests) == 1 and requests[0].expected_output_len == 31744
+
+
+def test_explicit_request_budget_overrides_base_model_default():
+    from vllm.entrypoints.serve.utils.api_utils import get_max_tokens
+
+    assert get_max_tokens(32768, 31744, 803, {"max_tokens": 2048}, None) == 31744
 
 
 @pytest.mark.parametrize(
@@ -127,3 +146,26 @@ def test_export_repeats_inputs_without_leaking_ground_truth():
     assert metadata[0]["ground_truth"] == "ANSWER"
     with pytest.raises(ValueError, match="Overlong"):
         runner.prepare.__globals__["render_rows"](rows, Tokenizer(), Builder(), 2, 16, 31744)
+
+
+def test_worker_preserves_verl_replica_seed_and_token_support(monkeypatch):
+    import torch
+
+    spec = importlib.util.spec_from_file_location("sweep_protocol_worker", SCRIPTS / "worker.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    observed = []
+    monkeypatch.setattr(module.Worker, "__init__", lambda self, cfg, *a, **kw: observed.append(cfg.model_config.seed))
+    cfg = SimpleNamespace(model_config=SimpleNamespace(seed=42), parallel_config=SimpleNamespace(data_parallel_index=3))
+    module.ProtocolWorker(cfg)
+    assert observed == [45]
+
+    class Model:
+        def compute_logits(self, hidden):
+            return hidden.clone()
+
+    model = Model()
+    module.mask_tokenizer_tail(model, 3)
+    result = model.compute_logits(torch.arange(8, dtype=torch.float32).reshape(2, 4))
+    assert result[:, :3].tolist() == [[0, 1, 2], [4, 5, 6]]
+    assert torch.isneginf(result[:, 3]).all()
