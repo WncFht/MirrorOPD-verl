@@ -1,6 +1,23 @@
 # 指标观测、位置分桶与更新出口
 
+统一入口不会把不同目标的 loss 合并成同一个统计口径：MDPO/BPO objective 保留各自定义及 1/eta，target KL、原 teacher KL 单独记录。普通 Full-KL endpoint 保留旧指标。Mirror 的指标开关、BPO 诊断成本和 anchor 准备耗时见[指标约定](../mirror-descent/实现方案.md#metrics)。
+
 本页解释数据怎样变成指标，字段含义和命名仍以[当前指标字典](../experiments/metrics/指标字典.md)为准。更新计数和恢复见[进度与 checkpoint](progress-checkpoint.md)。
+
+## 按训练阶段解释日志
+
+| 观测阶段 | 数据来源 | 能回答的问题 | 比较时的边界 |
+| --- | --- | --- | --- |
+| Rollout/teacher | 新生成轨迹、冻结教师评分 | 生成长度、任务得分、教师阶段开销 | 固定轨迹在 reuse 中不会重新生成 |
+| Sampled anchor | 更新前 FSDP log-prob 与 behavior | 训练 engine 与 rollout 概率是否一致 | 每批入口一次；Full-KL 跳过这一阶段 |
+| Sampled update | 本次 current forward、teacher、behavior/anchor | 当前信号、IS ratio、PPO clipping、更新 surrogate | surrogate 数值并非完整 KL；可能为负 |
+| Full-KL update | kernel 的 `loss_sum/count` 和可选行 KL | 当前 student 在缓存前缀上的条件 KL、位置差异 | 来自更新前 forward；prefix 总体仍是缓存轨迹 |
+| Optimizer | engine 返回的执行事实和梯度范数 | 是否实际 step、梯度是否有限 | 不能从有限 loss 推断 optimizer 成功 |
+| 验证 | 同步后的 student 重新生成 | 新参数下的任务表现 | 使用独立采样温度、长度和样本预算 |
+
+例如一次 outer step 有四次 reuse 更新，四条 Full-KL update 记录使用同一批 teacher hidden，却对应四组不同的 student 参数。第 4 条描述第 4 次更新之前的 forward；该次更新之后的验证则重新生成轨迹，二者既不在同一参数时刻，也不在同一前缀总体。
+
+Full-KL 训练标量包含 `dp_size/batch_num_tokens` 的反向缩放，原始 KL 均值则通过未缩放的 sum/count 汇集。观察不同 GPU 数的曲线应读取规范化后的全局观测，不拿单个 rank/micro-batch 返回的局部 loss 作比较。
 
 ## 从局部观测到日志
 

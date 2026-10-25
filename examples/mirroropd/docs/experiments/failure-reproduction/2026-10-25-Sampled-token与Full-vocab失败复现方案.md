@@ -101,7 +101,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 STUDENT_GPUS=4 DRY_RUN=1 \
   bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E27-valid-teacher
 ```
 
-Full-vocab KL 已适配完成，基础版 E13/E24/E26/E28/E30/E32 与 reuse16版 E17/E35/E37/E39/E41/E43 均调用现有 `run_full_reverse_kl.sh`。设置好本机 `PYTHON_BIN`、`MODEL_ROOT`、`DATA_ROOT` 后，例如：
+Full-vocab KL 已适配完成，基础版 E13/E24/E26/E28/E30/E32 与 reuse16版 E17/E35/E37/E39/E41/E43 均通过统一入口选择 `full_kl`，解析为 MDPO/full_vocab/eta=1。设置好本机 `PYTHON_BIN`、`MODEL_ROOT`、`DATA_ROOT` 后，例如：
 
 ```bash
 # 短窗 full，250批rollout，每批更新一次。

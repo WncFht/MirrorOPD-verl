@@ -111,7 +111,7 @@ Direct-full 的全局 token-mean、空局部 mask 和 head hooks 已在[当前�
 
 每个阶段独立 Conventional Commit，包含对应配置和有针对性的测试。最小可比较组为 sampled、sampled+current full baseline、direct full reverse KL，统一一次更新、batch、学习率、mask、采样和精度；anchor baseline 单独列。任务 reward 和四轮更新在主对照之后扩展。
 
-已提供 `run_full_reverse_kl.sh` 与 `smoke_full_reverse_kl.sh`，复用公共配方并接收 `DOMAIN=math|code|if`。Baseline 入口尚未实现。Math 完整短程 smoke、三领域配置和 teacher 重建已验证；code/IF 的端到端训练与正式验证不由这些测试替代。
+该阶段的 Full-KL 启动配置现已并入统一训练入口，smoke 工具也复用它；领域由 `DOMAIN=math|code|if` 选择。Baseline 入口尚未实现。Math 完整短程 smoke、三领域配置和 teacher 重建已验证；code/IF 的端到端训练与正式验证不由这些测试替代。
 
 ## 7. 验收矩阵与决策指标
 

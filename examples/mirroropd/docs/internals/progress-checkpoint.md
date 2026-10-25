@@ -1,5 +1,7 @@
 # 更新事实、进度与 checkpoint
 
+Mirror 共用本文的更新计数、scheduler 与 outer checkpoint。Anchor 是 actor 调用级临时状态，不进入 checkpoint；恢复后的新调用重新建立 q。已验证两卡 engine 的后续更新一致，V1/Ray 进程冷启动恢复仍列在[待验证范围](../mirror-descent/实现方案.md#remaining-validation)，不据此承诺 inner-update 中途恢复。
+
 本页负责更新事件和持久状态的含义。空间维度的指标归约由[指标系统](metrics.md)负责，完整训练时序见[训练循环](training-loop.md)。
 
 ## 四种独立事件
@@ -22,6 +24,8 @@ Engine 通过 `optimizer_step_applied` 提供 `True/False/None`。`None` 表示�
 [update_log_events](../../../../verl/trainer/ppo/v1/progress.py) 为每条更新记录附加 `step/outer`、`step/update` 和已知时的 `step/optimizer`。Critic 使用独立坐标。旧 checkpoint 缺少绝对计数时，日志仍可继续，但不伪造绝对 update 轴。
 
 例如一次 actor 调用有四次尝试，其中第三次跳过，则 attempts 增加 4、applied 增加 3。Scheduler 是否推进由实际调用位置决定，不能从 4 或 3 推算。当前 mini-batch 迭代器只在末次更新调用后请求推进 scheduler；日志分别记录用于本次更新的 LR 和推进后的下一轮 LR。
+
+在这条例子中，如果最后一次 `train_batch` 正常返回，scheduler 调用一次。即使最后一次也因为非有限梯度跳过，worker 仍按末次迭代标记调用 scheduler；如果计算抛异常而没有到达调用点，则不能记作已推进。`ppo_epochs` 增加的是 optimizer 尝试次数，学习率调度并不自动改为同样的频率。
 
 ## 保存和恢复的分工
 

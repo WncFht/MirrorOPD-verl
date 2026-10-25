@@ -132,6 +132,21 @@ def main():
                 G = f - (q * f).sum()
                 part = (q * (R + log_z).square()).sum() / 2
                 bpo = (q * C_R.square()).sum() / (2 * eta)
+                # Independent row formulas proposed for the shared full-vocab backend.
+                b = lq + f
+                d = z - b
+                mu_p, mu_q = (p * d).sum(), (q * d).sum()
+                md_row = (mu_p - z.logsumexp(-1)) / eta
+                bpo_row = (q * (d - mu_q).square()).sum() / (2 * eta)
+                check("MDPO_logit_row_value", md_row, md)
+                check("MDPO_logit_row_VJP", p * (d - mu_p) / eta, grad(md, z))
+                check("BPO_logit_row_value", bpo_row, bpo)
+                check("BPO_logit_row_VJP", q * (d - mu_q) / eta, grad(bpo, z))
+                shifted_d = z - (b + 3.7)
+                shifted_bpo = (q * (shifted_d - (q * shifted_d).sum()).square()).sum() / (2 * eta)
+                check("BPO_target_shift_invariant", shifted_bpo, bpo)
+                if eta == 1:
+                    check("MDPO_eta1_value", md, (p * (lp - lt)).sum())
                 mean = (q * (U - G).square()).sum() / 2
                 Ks = -(q * U).sum()
                 check("Mean_BPO_identity", mean, eta * bpo + Ks.square() / 2)
@@ -161,6 +176,32 @@ def main():
                 initial_md = (lpq.exp() * (lpq - lm)).sum() / eta
                 initial_J = teacher_objective(lpq, lt, kappa, eta)
                 check("initial_MDPO_equals_J", grad(initial_md, zq), grad(initial_J, zq))
+                initial_h = lpq - lq - f
+                initial_bpo = (q * (initial_h - (q * initial_h).sum()).square()).sum() / (2 * eta)
+                check("initial_BPO_equals_MDPO", grad(initial_bpo, zq), grad(initial_md, zq))
+
+    # Verify that both row VJPs feed the same hidden/head products and eta scale.
+    hs = torch.randn(2, 3, generator=rng, dtype=torch.float64, requires_grad=True)
+    ws = torch.randn(7, 3, generator=rng, dtype=torch.float64, requires_grad=True)
+    lq = torch.randn(2, 7, generator=rng, dtype=torch.float64).log_softmax(-1)
+    lt = torch.randn(2, 7, generator=rng, dtype=torch.float64).log_softmax(-1)
+    eta = 0.3
+    _, f, _ = frozen_target(lq, lt, 0.5, eta)
+    b, z = lq + f, hs @ ws.T
+    lp, q = z.log_softmax(-1), lq.exp()
+    p, d = lp.exp(), z - b
+    h = lp - b
+    for name, loss, dz in (
+        ("MDPO", (p * h).sum() / eta, p * (d - (p * d).sum(-1, keepdim=True))),
+        (
+            "BPO",
+            (q * (h - (q * h).sum(-1, keepdim=True)).square()).sum() / (2 * eta),
+            q * (d - (q * d).sum(-1, keepdim=True)),
+        ),
+    ):
+        gh, gw = torch.autograd.grad(loss, (hs, ws), retain_graph=True)
+        check(name + "_shared_hidden_VJP", dz @ ws / eta, gh)
+        check(name + "_shared_head_VJP", dz.T @ hs / eta, gw)
 
     q = torch.tensor([0.5, 0.3, 0.2], dtype=torch.float64)
     T = torch.tensor([0.1, 0.2, 0.7], dtype=torch.float64)
@@ -195,6 +236,40 @@ def main():
         (grad(wrong_loss, z) - grad(J, z)).norm().item()
     )
     assert counterexamples["refreshed_target_without_detach_gradient_difference"] > 1e-5
+    # eta=1 simplifies the target, but BPO still uses q and is not reverse KL.
+    h1 = lp - T.log()
+    bpo1 = (q * (h1 - (q * h1).sum()).square()).sum() / 2
+    kl1 = (lp.exp() * h1).sum()
+    counterexamples["BPO_eta1_not_FullKL_gradient_difference"] = (grad(bpo1, z) - grad(kl1, z)).norm().item()
+    assert counterexamples["BPO_eta1_not_FullKL_gradient_difference"] > 1e-5
+
+    # Frozen full teacher probabilities must precede nonlinear target fusion.
+    support_q = torch.tensor([0.2, 0.3, 0.5], dtype=torch.float64)
+    support_T = torch.tensor([0.05, 0.2, 0.35, 0.4], dtype=torch.float64)
+    support_z = torch.tensor([0.3, 0.4, 0.3], dtype=torch.float64).log().requires_grad_()
+    support_lp = support_z.log_softmax(-1)
+    support_lt = support_T[:3].log()
+    support_lq = support_q.log()
+    support_b = support_lq + signal(support_lt - support_lq, 0.5, 0.3)
+    support_md = (support_lp.exp() * (support_lp - support_b)).sum() / 0.3
+    support_d = support_z - support_b
+    support_p = support_lp.exp()
+    check(
+        "extra_teacher_MDPO_row_VJP",
+        support_p * (support_d - (support_p * support_d).sum()) / 0.3,
+        grad(support_md, support_z),
+    )
+    cropped_b = support_lq + signal(support_lt - support_lt.logsumexp(-1) - support_lq, 0.5, 0.3)
+    cropped_md = (support_p * (support_lp - cropped_b)).sum() / 0.3
+    counterexamples["cropped_teacher_fusion_gradient_difference"] = (
+        (grad(cropped_md, support_z) - grad(support_md, support_z)).abs().max().item()
+    )
+    assert counterexamples["cropped_teacher_fusion_gradient_difference"] > 1e-5
+    endpoint_b = support_lq + signal(support_lt - support_lq, 0.5, 1.0)
+    endpoint_md = (support_p * (support_lp - endpoint_b)).sum()
+    original_kl = (support_p * (support_lp - support_lt)).sum()
+    check("extra_teacher_eta1_value", endpoint_md, original_kl)
+    check("extra_teacher_eta1_gradient", grad(endpoint_md, support_z), grad(original_kl, support_z))
     qz, tz = [v.log().requires_grad_() for v in (q, T)]
     frozen, _, _ = frozen_target(qz.log_softmax(-1), tz.log_softmax(-1), kappa, eta)
     loss = (lp.exp() * (lp - frozen)).sum() / eta

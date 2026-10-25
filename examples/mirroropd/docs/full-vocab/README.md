@@ -7,7 +7,7 @@
 | 2026-10-24 Qwen3 tied head、输出支持修正、运行时 EOS 配置与保存的验收结果 | [实现验收与对齐诊断](../failure-reproduction/2026-10-24-OPD实现验收与对齐诊断.md) |
 | 当前 Full-KL 调用链、数据协议、梯度、backend 与模型支持 | [Full-vocab 走读](../internals/full-vocab.md) |
 | 2026-10-23 阶段的调用链和优化背景 | [历史全流程源码走读](2026-10-23-Full-KL全流程源码走读.md) |
-| η、κ 目标的理论与拟议 Full-vocab 接入 | [形状与插值专题](../mirror-descent/README.md) |
+| 已实现的 weighted teacher、MDPO/BPO 与统一实验入口 | [形状与插值专题](../mirror-descent/README.md) |
 | E13/E14 Full-KL、E15 sampled、E16/E17 Full-KL 批内复用 | [数学对照预设](../experiments/full-kl-comparison/README.md) |
 | 2026-10-22 初次接入的数值、多卡与 smoke 验收结果 | [实现与验收](2026-10-22-Full-KL实现与验收.md) |
 | Full baseline 后续设计与原始实施阶段 | [实现计划](2026-10-22-Full-baseline与Full-KL实现计划.md) |
