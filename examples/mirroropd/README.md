@@ -28,7 +28,7 @@ PYTHONPATH=. "$PYTHON_BIN" examples/mirroropd/benchmarks/vllm_sweep/run_sweep.py
   --output outputs/vllm-sweep/20261025-full
 ```
 
-使用 `preflight --models qwen17` 做4请求、64输出token的启动验收，该结果不会参与正式排名；`dry-run` 只打印原生命令。正式执行先覆盖八模型的基线和候选1；耗时或TPS改善超过3%时继续候选2，再测较优配置的16384 token预算、重复测量和原verl完整valid。完整耗时用于排名，同时保留输出token数及TPS；自然生成长度变化不等同于纯调度收益。
+使用 `preflight --models qwen17` 做4请求、64输出token的启动验收，该结果不会参与正式排名；`dry-run` 只打印原生命令。正式执行先覆盖八模型的基线和候选1；耗时或TPS改善超过3%时继续候选2，再测较优配置的16384 token预算、重复测量和原verl完整valid。原生benchmark的整批生成耗时用于排名（不含模型加载、编译和判分），原verl复核另行保存验证指标；同时保留输出token数及TPS；自然生成长度变化不等同于纯调度收益。
 
 同一 `--output` 目录可恢复队列：已完成且样本完整的作业跳过，失败结果不会被选为推荐值。输出包含 `resolved_plan.json`、逐模型 `data/`、`runs/` 下的原生结果与日志、`state.json`、`summary.csv` 和 `selected_params.json`；推荐值在全部原valid复核完成前标为 provisional。模型支持较大并发的结论以实测为准，运行入口不自动改写训练参数。执行仅占用GPU0–3；如发现其他进程占用则停止，不终止外部进程。
 

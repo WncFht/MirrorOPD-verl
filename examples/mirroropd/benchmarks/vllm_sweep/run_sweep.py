@@ -255,6 +255,36 @@ def choose_best(rows):
     return min(ranked, key=lambda x: (x["mean_duration"], -x["pooled_output_tps"]))
 
 
+def validate_original_outputs(directory):
+    records = directory / "validation/records/0.jsonl"
+    count = sum(1 for _ in records.open()) if records.exists() else 0
+    metrics = {}
+    history = directory / "metrics.jsonl"
+    if history.exists():
+        with history.open() as stream:
+            for line in stream:
+                metrics.update(json.loads(line).get("data", {}))
+    expected = {"math500": 8000, "amc23": 640, "aime25": 480}
+    checks = {}
+    for name, responses in expected.items():
+        prefix = f"eval/{name}/"
+        checks[name] = {
+            "response_count": metrics.get(prefix + "response_count"),
+            "failed_count": metrics.get(prefix + "failed_count"),
+            "acc_mean": metrics.get(prefix + "acc/mean"),
+        }
+    valid = count == 9120 and all(
+        checks[name]["response_count"] == responses
+        and checks[name]["failed_count"] == 0
+        and isinstance(checks[name]["acc_mean"], (int, float))
+        and math.isfinite(checks[name]["acc_mean"])
+        for name, responses in expected.items()
+    )
+    report = {"valid": valid, "record_count": count, "datasets": checks}
+    write_json(directory / "validation_summary.json", report)
+    return report
+
+
 class Queue:
     def __init__(self, args):
         self.args = args
@@ -517,16 +547,15 @@ class Queue:
         self.save()
         print("START " + json.dumps(self.state["active"]), flush=True)
         code, _ = self.execute(command, directory, env=env)
-        records = directory / "validation/records/0.jsonl"
-        count = sum(1 for _ in records.open()) if records.exists() else 0
+        report = validate_original_outputs(directory)
         row = {
             "model": profile["id"],
             "stage": "verl-validation",
             "kind": "validation",
             "candidate": selected["candidate"],
             "exit_code": code,
-            "records": count,
-            "status": "complete" if code == 0 and count == 9120 else "failed",
+            "records": report["record_count"],
+            "status": "complete" if code == 0 and report["valid"] else "failed",
             "log": str(directory / "run.log"),
         }
         self.state["jobs"][key] = row

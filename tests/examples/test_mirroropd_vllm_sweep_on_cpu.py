@@ -169,3 +169,20 @@ def test_worker_preserves_verl_replica_seed_and_token_support(monkeypatch):
     result = model.compute_logits(torch.arange(8, dtype=torch.float32).reshape(2, 4))
     assert result[:, :3].tolist() == [[0, 1, 2], [4, 5, 6]]
     assert torch.isneginf(result[:, 3]).all()
+
+
+def test_original_validation_rejects_materialized_failure_placeholders(tmp_path):
+    records = tmp_path / "validation/records/0.jsonl"
+    records.parent.mkdir(parents=True)
+    records.write_text("{}\n" * 9120)
+    data = {}
+    for name, count in [("math500", 8000), ("amc23", 640), ("aime25", 480)]:
+        data[f"eval/{name}/response_count"] = count
+        data[f"eval/{name}/failed_count"] = 0
+        data[f"eval/{name}/acc/mean"] = 0.5
+    metrics = tmp_path / "metrics.jsonl"
+    metrics.write_text(json.dumps({"data": data}) + "\n")
+    assert runner.validate_original_outputs(tmp_path)["valid"]
+    data["eval/aime25/failed_count"] = 1
+    metrics.write_text(json.dumps({"data": data}) + "\n")
+    assert not runner.validate_original_outputs(tmp_path)["valid"]
