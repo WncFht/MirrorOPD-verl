@@ -10,7 +10,7 @@
 | --- | --- | --- | --- |
 | [Sampled 消融 E1–E12](sampled-ablation/README.md) | rollout/current 信号与 IS、PPO、NoIS 如何影响复用训练？ | E2–E5 各完成 128 次更新；E8–E11 各完成 3200 次更新；E1/E6/E7/E12 未发现运行记录 | 已整理末次验证；尚缺完整学习曲线、共同预算与跨 seed 分析 |
 | [Full-KL 对照 E13–E17](full-kl-comparison/README.md) | 完整词表、学习率与复用次数如何影响结果？ | 五个主 run 均完成 200 outer；E15 另一次执行为 failed | 四篇详细分析使用原冻结快照；E17 已补齐，完整 200-step 末点见系列入口，旧报告的截断边界保留 |
-| [等更新预算 E18–E20](equal-update-budget/README.md) | 固定 4096 次更新时，复用和新增轨迹如何取舍？ | E18/E19 各完成 4096 更新；E20 到 3024 更新，云端 failed | 已记录末次结果；E20 尚缺完整预算，三臂等预算结论未形成 |
+| [等更新预算 E18–E20](equal-update-budget/README.md) | 固定 4096 次更新时，复用和新增轨迹如何取舍？ | E18/E19 各完成 4096 更新；E20 到 3024 更新，云端 failed | 已完成 2235 指标分析、共同 2560-update 对照和八组图；E20 后三轮验证与跨 seed 证据仍缺 |
 | [失败复现模型／长度矩阵](failure-reproduction/README.md) | 长窗口、强教师、师生失配下，full-vocab 能否改善 sampled 的失效？ | E23–E43 未发现正式 run；E13/E15/E17 只有旧 200-step 对照 | 正式方案采用 250 outer；已有短测仅作为实现证据，不能登记为正式复现完成 |
 
 “未发现记录”只覆盖上述项目清单和本地日志提交；不能据此判断其他机器、项目或尚未传回的作业。计划中的多 seed 和师生重测不计入已完成实验。
