@@ -1,0 +1,124 @@
+{
+  "backend": "precompute_fused",
+  "world_size": 4,
+  "records": [
+    {
+      "step": 0,
+      "loss": 0.13324858248233795,
+      "position_kl_sums": [
+        0.0,
+        0.5610417723655701,
+        0.5274882912635803,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5171846747398376,
+        0.5262624770402908,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        4.0,
+        4.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.0,
+        4.0,
+        0.0
+      ]
+    },
+    {
+      "step": 1,
+      "loss": 0.12729758024215698,
+      "position_kl_sums": [
+        0.0,
+        0.41595160961151123,
+        0.3658529967069626,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.36749012768268585,
+        0.37827618420124054,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        3.0,
+        3.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0,
+        3.0,
+        0.0
+      ]
+    },
+    {
+      "step": 2,
+      "loss": 0.12330648303031921,
+      "position_kl_sums": [
+        0.0,
+        0.5403043627738953,
+        0.470586359500885,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4706405997276306,
+        0.4913723096251488,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        4.0,
+        4.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.0,
+        4.0,
+        0.0
+      ]
+    }
+  ],
+  "parameter_delta_norms_rank0": {
+    "model.embed_tokens.weight": 0.0398925356566906,
+    "model.layers.0.self_attn.q_proj.weight": 0.03808975592255592,
+    "model.layers.0.self_attn.k_proj.weight": 0.025409214198589325,
+    "model.layers.0.self_attn.v_proj.weight": 0.026682868599891663,
+    "model.layers.0.self_attn.o_proj.weight": 0.038641784340143204,
+    "model.layers.0.self_attn.q_norm.weight": 0.003980823326855898,
+    "model.layers.0.self_attn.k_norm.weight": 0.0030664398800581694,
+    "model.layers.0.mlp.gate_proj.weight": 0.05633537098765373,
+    "model.layers.0.mlp.up_proj.weight": 0.055015094578266144,
+    "model.layers.0.mlp.down_proj.weight": 0.054868780076503754,
+    "model.layers.0.input_layernorm.weight": 0.006809968501329422,
+    "model.layers.0.post_attention_layernorm.weight": 0.006112570408731699,
+    "model.layers.1.self_attn.q_proj.weight": 0.03842367231845856,
+    "model.layers.1.self_attn.k_proj.weight": 0.025925321504473686,
+    "model.layers.1.self_attn.v_proj.weight": 0.028368201106786728,
+    "model.layers.1.self_attn.o_proj.weight": 0.03864904120564461,
+    "model.layers.1.self_attn.q_norm.weight": 0.0038332652766257524,
+    "model.layers.1.self_attn.k_norm.weight": 0.003911368083208799,
+    "model.layers.1.mlp.gate_proj.weight": 0.05341212451457977,
+    "model.layers.1.mlp.up_proj.weight": 0.05604606494307518,
+    "model.layers.1.mlp.down_proj.weight": 0.05502835288643837,
+    "model.layers.1.input_layernorm.weight": 0.006856224499642849,
+    "model.layers.1.post_attention_layernorm.weight": 0.006892690900713205,
+    "model.norm.weight": 0.0072218673303723335
+  },
+  "checkpoint_roundtrip": true,
+  "scheduler_optimizer_roundtrip": true,
+  "resumed_next_update_equivalent": true,
+  "model_type": "qwen3",
+  "tied_student": true,
+  "tied_teacher": true,
+  "teacher_extra_rows": 4,
+  "teacher_hidden_size": 64
+}
