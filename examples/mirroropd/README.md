@@ -18,6 +18,20 @@
 
 辅助命令使用新路径，例如 `python examples/mirroropd/assets/prepare_models.py --help`、`bash examples/mirroropd/smoke/smoke_full_reverse_kl.sh`。Makefile、当前启动脚本和测试已同步迁移；历史实验记录保留运行时的路径，重跑历史版本时使用记录中的源码版本。
 
+### 完整验证负载的 vLLM sweep
+
+[`benchmarks/vllm_sweep/`](benchmarks/vllm_sweep/) 管理八个原始模型的推理参数扫描：`prepare_data.py` 复用现有 prompt builder 导出每模型570题×16请求，核对token回编码；`plan.json` 保存基线及候选；`run_sweep.py` 调用原生 `vllm bench sweep serve`，按四卡DP4/TP1排队执行。`worker.py` 保留当前verl对词表外token的屏蔽，原始模型文件不变。正常EOS、温度0.7、top-p0.9和31744回答上限用于全部正式测量。
+
+```bash
+PYTHONPATH=. "$PYTHON_BIN" examples/mirroropd/benchmarks/vllm_sweep/run_sweep.py run \
+  --model-root "$MODEL_ROOT" --data-root "$DATA_ROOT" \
+  --output outputs/vllm-sweep/20261025-full
+```
+
+使用 `preflight --models qwen17` 做4请求、64输出token的启动验收，该结果不会参与正式排名；`dry-run` 只打印原生命令。正式执行先覆盖八模型的基线和候选1；耗时或TPS改善超过3%时继续候选2，再测较优配置的16384 token预算、重复测量和原verl完整valid。完整耗时用于排名，同时保留输出token数及TPS；自然生成长度变化不等同于纯调度收益。
+
+同一 `--output` 目录可恢复队列：已完成且样本完整的作业跳过，失败结果不会被选为推荐值。输出包含 `resolved_plan.json`、逐模型 `data/`、`runs/` 下的原生结果与日志、`state.json`、`summary.csv` 和 `selected_params.json`；推荐值在全部原valid复核完成前标为 provisional。模型支持较大并发的结论以实测为准，运行入口不自动改写训练参数。执行仅占用GPU0–3；如发现其他进程占用则停止，不终止外部进程。
+
 ## 文档入口
 
 MirrorOPD 自有文档、调研与展示图位于 `examples/mirroropd/docs/`；正式实验数据与报告快照存放在独立 `wandb-logs` 仓库。仓库根 `docs/` 保留上游文档。指标定义统一维护在 `docs/experiments/metrics/`，实现走读位于 `docs/internals/metrics.md`。
