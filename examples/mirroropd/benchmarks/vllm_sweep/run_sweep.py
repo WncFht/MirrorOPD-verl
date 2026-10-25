@@ -21,6 +21,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from prepare_data import prepare, write_json
+from report import SUMMARY_FIELDS, build_report
 
 REPO = Path(__file__).resolve().parents[4]
 MODEL_DEFAULT = REPO.parent / "model"
@@ -234,13 +235,13 @@ def eligible(result, expected=9120):
     )
 
 
-def choose_best(rows):
+def rank_candidates(rows):
     groups = {}
     for row in rows:
         if row.get("status") == "complete":
             groups.setdefault(tuple(row["candidate"]), []).append(row)
     if not groups:
-        return None
+        return []
     ranked = []
     for candidate, repeats in groups.items():
         ranked.append(
@@ -252,7 +253,45 @@ def choose_best(rows):
                 / sum(r["duration"] for r in repeats),
             }
         )
-    return min(ranked, key=lambda x: (x["mean_duration"], -x["pooled_output_tps"]))
+    return sorted(ranked, key=lambda x: (x["mean_duration"], -x["pooled_output_tps"]))
+
+
+def choose_best(rows):
+    ranked = rank_candidates(rows)
+    return ranked[0] if ranked else None
+
+
+def candidate_slug(candidate):
+    seqs, memory, tokens = candidate
+    return f"c{seqs}-u{round(memory * 100):03d}-t{tokens}"
+
+
+def validate_plan_extension(old, new):
+    """Permit new search points without changing the workload or historical points."""
+    mutable = {"schema_version", "priority_aggressive", "memory_headroom_budget", "models"}
+    for key in (old.keys() | new.keys()) - mutable:
+        if old.get(key) != new.get(key):
+            raise ValueError(f"Cannot change workload field {key} in an existing campaign")
+    old_models = {p["id"]: p for p in old["models"]}
+    new_models = {p["id"]: p for p in new["models"]}
+    if old_models.keys() != new_models.keys():
+        raise ValueError("An extension must retain the same model collection")
+    for name, previous in old_models.items():
+        current = new_models[name]
+        for key in (previous.keys() | current.keys()) - {"candidates", "aggressive"}:
+            if previous.get(key) != current.get(key):
+                raise ValueError(f"Cannot change model protocol {name}.{key}")
+        for key in ("candidates", "aggressive"):
+            before, after = previous.get(key, []), current.get(key, [])
+            if after[: len(before)] != before:
+                raise ValueError(f"Cannot replace historical candidates {name}.{key}")
+            for cap, memory, tokens in after:
+                if type(cap) is not int or cap <= 0 or not 0 < memory < 1 or type(tokens) is not int or tokens <= 0:
+                    raise ValueError(f"Invalid resource candidate for {name}")
+
+
+def is_search_stage(stage):
+    return stage.startswith(("candidate", "aggressive-", "memory-"))
 
 
 def validate_original_outputs(directory):
@@ -324,7 +363,7 @@ class Queue:
         self.active = None
         source = self.root / "source"
         source.mkdir(exist_ok=True)
-        for name in ("run_sweep.py", "prepare_data.py", "plan.json"):
+        for name in ("run_sweep.py", "prepare_data.py", "report.py", "plan.json"):
             target = source / name
             if not target.exists() or not any(r.get("kind") == "sweep" for r in self.state["jobs"].values()):
                 shutil.copyfile(Path(__file__).with_name(name), target)
@@ -338,32 +377,51 @@ class Queue:
         }
         saved = self.root / "resolved_plan.json"
         if saved.exists() and json.loads(saved.read_text()) != snapshot:
-            raise ValueError("Existing run uses a different plan or asset roots; choose a fresh run directory")
+            previous = json.loads(saved.read_text())
+            if not getattr(args, "extend_plan", False):
+                raise ValueError("Plan changed; use --extend-plan for additive resource candidates")
+            if any(previous[key] != snapshot[key] for key in ("model_root", "data_root")):
+                raise ValueError("Cannot change asset roots in an existing campaign")
+            validate_plan_extension(previous["plan"], snapshot["plan"])
+            stamp = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y%m%d-%H%M%S-%f")
+            write_json(self.root / "plan_history" / f"resolved-{stamp}.json", previous)
         write_json(saved, snapshot)
 
     def save(self):
         self.state["updated"] = now()
         write_json(self.state_path, self.state)
         rows = [r for r in self.state["jobs"].values() if r.get("kind") == "sweep"]
-        fields = [
-            "model",
-            "stage",
-            "status",
-            "candidate",
-            "completed",
-            "failed",
-            "duration",
-            "total_output_tokens",
-            "output_throughput",
-            "observed_peak_kv",
-            "preemptions",
-            "log",
-        ]
         with (self.root / "summary.csv").open("w") as stream:
-            writer = csv.DictWriter(stream, fieldnames=fields, extrasaction="ignore")
+            writer = csv.DictWriter(stream, fieldnames=SUMMARY_FIELDS, extrasaction="ignore")
             writer.writeheader()
             writer.writerows(rows)
-        selected = {p["id"]: choose_best([r for r in rows if r["model"] == p["id"]]) for p in self.profiles}
+        selected = {}
+        for profile in self.profiles:
+            model = profile["id"]
+            ranked = rank_candidates([r for r in rows if r["model"] == model])
+            native = ranked[0] if ranked else None
+            verification = self.state["jobs"].get(model + "/verl-validation", {})
+            usable = next(
+                (
+                    r
+                    for r in ranked
+                    if verification.get("status") == "complete" and r["candidate"] == verification.get("candidate")
+                ),
+                None,
+            )
+            if native is not None:
+                choice = dict(usable or native)
+                choice.update(native_best=native, original_verl_verified=usable is not None)
+                choice.update(
+                    zip(
+                        ("max_num_seqs", "gpu_memory_utilization", "max_num_batched_tokens"),
+                        choice["candidate"],
+                        strict=True,
+                    )
+                )
+                selected[model] = choice
+            else:
+                selected[model] = None
         write_json(
             self.root / "selected_params.json", {"provisional": self.state["status"] != "complete", "models": selected}
         )
@@ -396,7 +454,7 @@ class Queue:
         def monitor():
             with gzip.open(directory / "telemetry.jsonl.gz", "at") as stream:
                 while not stop.is_set():
-                    entry = {"time": now(), "gpu": gpu_snapshot(self.plan["gpus"])}
+                    entry = {"time": now(), "monotonic_time": time.monotonic(), "gpu": gpu_snapshot(self.plan["gpus"])}
                     if url:
                         try:
                             response = requests.get(url + "/metrics", timeout=2)
@@ -432,8 +490,25 @@ class Queue:
             if self.state["jobs"][key]["candidate"] != candidate:
                 raise ValueError(f"Completed stage {key} has different parameters")
             return self.state["jobs"][key]
+        previous = self.state["jobs"].get(key, {})
+        if previous.get("status") == "failed" and not getattr(self.args, "retry_failed", False):
+            return previous
         directory = self.root / "runs" / key
         directory.mkdir(parents=True, exist_ok=True)
+        if (directory / "run.log").exists():
+            attempt = directory / "attempts" / datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y%m%d-%H%M%S-%f")
+            attempt.mkdir(parents=True)
+            for name in (
+                "native",
+                "run.log",
+                "telemetry.jsonl.gz",
+                "final-metrics.txt",
+                "command.json",
+                "derived_metrics.json",
+            ):
+                path = directory / name
+                if path.exists():
+                    path.rename(attempt / name)
         command = build_commands(
             self.plan,
             profile,
@@ -470,6 +545,7 @@ class Queue:
             "observed_peak_kv": telemetry["peak_kv"],
         }
         paths = list(directory.glob("native/measurement/**/run=0.json"))
+        result = None
         if code == 0 and len(paths) == 1:
             result = json.loads(paths[0].read_text())
             for name in ("completed", "failed", "duration", "total_output_tokens", "output_throughput"):
@@ -488,6 +564,9 @@ class Queue:
                 for x in metrics.read_text().splitlines()
                 if re.match(r"vllm:num_preemptions(_total)?\{", x)
             )
+        if not preflight:
+            row.update(build_report(row, result, self.plan["response_cap"]))
+            write_json(directory / "derived_metrics.json", row)
         self.state["jobs"][key] = row
         self.state["active"] = None
         self.save()
@@ -495,11 +574,14 @@ class Queue:
         return row
 
     def original_validation(self, profile, selected):
-        key = profile["id"] + "/verl-validation"
+        stage = "verl-validation-" + candidate_slug(selected["candidate"])
+        key = profile["id"] + "/" + stage
         if self.state["jobs"].get(key, {}).get("status") == "complete":
             if self.state["jobs"][key]["candidate"] != selected["candidate"]:
                 raise ValueError(f"Validated stage {key} has different parameters")
-            return
+            return self.state["jobs"][key]
+        if self.state["jobs"].get(key, {}).get("status") == "failed" and not getattr(self.args, "retry_failed", False):
+            return self.state["jobs"][key]
         seqs, memory, tokens = selected["candidate"]
         directory = self.root / "runs" / key
         directory.mkdir(parents=True, exist_ok=True)
@@ -514,6 +596,10 @@ class Queue:
             MAX_PROMPT_LENGTH=str(profile["prompt_cap"]),
             MAX_VAL_RESPONSE_LENGTH="31744",
             VAL_N="16",
+            VAL_BATCH_SIZE="null",
+            ROLLOUT_TP="1",
+            ROLLOUT_ENFORCE_EAGER="False",
+            SEED=str(self.plan["seed"]),
             ROLLOUT_MAX_NUM_SEQS=str(seqs),
             ROLLOUT_GPU_MEMORY_UTILIZATION=str(memory),
             ROLLOUT_TOKEN_BUDGET=str(tokens),
@@ -531,7 +617,7 @@ class Queue:
             "++ray_kwargs.ray_init.num_cpus=32",
             "++ray_kwargs.ray_init.include_dashboard=False",
             "++ray_kwargs.ray_init.object_store_memory=8589934592",
-            f"++ray_kwargs.ray_init._temp_dir=/tmp/mopd-sweep-{os.getpid()}-{profile['id']}",
+            f"++ray_kwargs.ray_init._temp_dir=/tmp/mopd-sweep-{os.getpid()}-{profile['id']}-{stage}",
             f"++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH={directory / 'metrics.jsonl'}",
         ]
         if profile["family"] == "qwen3":
@@ -540,17 +626,18 @@ class Queue:
             command += ["actor_rollout_ref.rollout.stop_token_ids=" + json.dumps(profile["extra_stop_ids"])]
         self.state["active"] = {
             "model": profile["id"],
-            "stage": "verl-validation",
+            "stage": stage,
             "started": now(),
             "log": str(directory / "run.log"),
         }
+        self.state["status"] = "running"
         self.save()
         print("START " + json.dumps(self.state["active"]), flush=True)
         code, _ = self.execute(command, directory, env=env)
         report = validate_original_outputs(directory)
         row = {
             "model": profile["id"],
-            "stage": "verl-validation",
+            "stage": stage,
             "kind": "validation",
             "candidate": selected["candidate"],
             "exit_code": code,
@@ -562,6 +649,78 @@ class Queue:
         self.state["active"] = None
         self.save()
         print("FINISH " + json.dumps(row), flush=True)
+        return row
+
+    def model_rows(self, profile):
+        return [r for r in self.state["jobs"].values() if r.get("model") == profile["id"] and r.get("kind") == "sweep"]
+
+    def search(self, profile, stage, candidate):
+        for row in self.model_rows(profile):
+            if row["candidate"] == candidate and is_search_stage(row["stage"]):
+                if row["status"] == "complete" or not getattr(self.args, "retry_failed", False):
+                    return row
+        return self.sweep(profile, stage, candidate)
+
+    def expand(self, profile):
+        first = self.state["jobs"].get(profile["id"] + "/candidate0", {})
+        second = self.state["jobs"].get(profile["id"] + "/candidate1", {})
+        budget = self.plan.get("memory_headroom_budget", 0.9)
+        if (
+            second.get("status") == "complete"
+            and second["candidate"][1] < budget
+            and (second.get("preemptions", 0) > 0 or second.get("observed_peak_kv", 0) > 0.85)
+        ):
+            candidate = [second["candidate"][0], budget, second["candidate"][2]]
+            self.search(profile, "memory-" + candidate_slug(candidate), candidate)
+        threshold = self.plan["candidate2_improvement"]
+        if self.plan.get("priority_aggressive") or (
+            second.get("status") == "complete"
+            and (
+                first.get("status") != "complete"
+                or second["duration"] < first["duration"] * (1 - threshold)
+                or second["output_throughput"] > first["output_throughput"] * (1 + threshold)
+            )
+        ):
+            self.search(profile, "candidate2", profile["candidates"][2])
+        for candidate in profile.get("aggressive", []):
+            self.search(profile, "aggressive-" + candidate_slug(candidate), candidate)
+
+    def search_all(self):
+        # Snapshot eligibility before new jobs: finish the ready models' extensions
+        # before waiting for the remaining models' first full validations.
+        if self.plan.get("priority_aggressive"):
+            ready = [
+                p
+                for p in self.profiles
+                if all(
+                    self.state["jobs"].get(f"{p['id']}/candidate{i}", {}).get("status") == "complete" for i in (0, 1)
+                )
+            ]
+            for profile in ready:
+                self.expand(profile)
+        for profile in self.profiles:
+            for index in (0, 1):
+                self.sweep(profile, f"candidate{index}", profile["candidates"][index])
+            self.expand(profile)
+
+    def refresh_reports(self):
+        for row in self.state["jobs"].values():
+            if row.get("kind") != "sweep":
+                continue
+            result = json.loads(Path(row["result"]).read_text()) if row.get("result") else None
+            row.update(build_report(row, result, self.plan["response_cap"]))
+            del result
+            write_json(Path(row["log"]).parent / "derived_metrics.json", row)
+            print(f"REPORT {row['model']}/{row['stage']}", flush=True)
+        self.save()
+
+    def confirm(self, profile):
+        for selected in rank_candidates(self.model_rows(profile)):
+            row = self.original_validation(profile, selected)
+            if row["status"] == "complete":
+                self.state["jobs"][profile["id"] + "/verl-validation"] = dict(row)
+                self.save()
+                return
 
     def run(self):
         signal.signal(signal.SIGINT, self.stop)
@@ -569,6 +728,9 @@ class Queue:
         lock_path = Path("/tmp/mirroropd-gpus-0-1-2-3.lock")
         with lock_path.open("w") as lock:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            if self.args.action == "report":
+                self.refresh_reports()
+                return
             if not (self.root / "data/preparation.json").exists():
                 prepare(self.plan, self.args.model_root.resolve(), self.args.data_root.resolve(), self.root / "data")
             if self.args.action in ("preflight", "dry-run"):
@@ -579,39 +741,18 @@ class Queue:
                 self.state["status"] = "preflight-complete" if self.args.action == "preflight" else "prepared"
                 self.save()
                 return
-            # Every checkpoint gets the first two full measurements before follow-ups.
+            self.search_all()
             for profile in self.profiles:
-                for index in (0, 1):
-                    self.sweep(profile, f"candidate{index}", profile["candidates"][index])
-            for profile in self.profiles:
-                first = self.state["jobs"][profile["id"] + "/candidate0"]
-                second = self.state["jobs"][profile["id"] + "/candidate1"]
-                threshold = self.plan["candidate2_improvement"]
-                if second["status"] == "complete" and (
-                    first["status"] != "complete"
-                    or second["duration"] < first["duration"] * (1 - threshold)
-                    or second["output_throughput"] > first["output_throughput"] * (1 + threshold)
-                ):
-                    self.sweep(profile, "candidate2", profile["candidates"][2])
-                rows = [
-                    r
-                    for r in self.state["jobs"].values()
-                    if r["model"] == profile["id"] and r["kind"] == "sweep" and r["stage"].startswith("candidate")
-                ]
+                rows = [r for r in self.model_rows(profile) if is_search_stage(r["stage"])]
                 selected = choose_best(rows)
                 if selected is None:
                     continue
                 higher_tokens = selected["candidate"][:2] + [16384]
-                self.sweep(profile, "token16384", higher_tokens)
-                rows = [
-                    r
-                    for r in self.state["jobs"].values()
-                    if r["model"] == profile["id"] and r["kind"] == "sweep" and r["stage"] != "repeat"
-                ]
+                self.sweep(profile, "token16384-" + candidate_slug(higher_tokens), higher_tokens)
+                rows = [r for r in self.model_rows(profile) if not r["stage"].startswith("repeat")]
                 selected = choose_best(rows)
-                self.sweep(profile, "repeat", selected["candidate"])
-                rows = [r for r in self.state["jobs"].values() if r["model"] == profile["id"] and r["kind"] == "sweep"]
-                self.original_validation(profile, choose_best(rows))
+                self.sweep(profile, "repeat-" + candidate_slug(selected["candidate"]), selected["candidate"])
+                self.confirm(profile)
             all_validated = all(
                 self.state["jobs"].get(p["id"] + "/verl-validation", {}).get("status") == "complete"
                 for p in self.profiles
@@ -627,13 +768,15 @@ def main():
         capture_metrics(sys.argv[2], sys.argv[3])
         return
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["preflight", "dry-run", "run"])
+    parser.add_argument("action", choices=["preflight", "dry-run", "run", "report"])
     parser.add_argument("--plan", type=Path, default=Path(__file__).with_name("plan.json"))
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model-root", type=Path, default=MODEL_DEFAULT)
     parser.add_argument("--data-root", type=Path, required=True)
     parser.add_argument("--python", type=Path, default=Path(sys.executable))
     parser.add_argument("--models", nargs="*")
+    parser.add_argument("--extend-plan", action="store_true", help="Accept additive resource candidates only")
+    parser.add_argument("--retry-failed", action="store_true", help="Retry previously failed configurations")
     args = parser.parse_args()
     queue = Queue(args)
     try:
