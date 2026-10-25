@@ -21,7 +21,7 @@ export TEST_FREQ=-1 SAVE_FREQ=-1
 export EXPERIMENT_NAME=${EXPERIMENT_NAME:-full-rkl-smoke-$(date +%Y%m%d-%H%M%S)}
 export NVTX_INJECTION64_PATH=${NVTX_INJECTION64_PATH:-/nonexistent/verl-disabled-nvtx-injection.so}
 SMOKE_RAY_TMPDIR=${SMOKE_RAY_TMPDIR:-/tmp/mirroropd-full-kl-smoke-$$}
-exec bash "$EXAMPLE_DIR/run_full_reverse_kl.sh" \
+exec bash "$EXAMPLE_DIR/run_math_opd_ablation_fsdp2.sh" custom --method full_kl \
     "trainer.total_training_steps=${SMOKE_STEPS:-2}" \
     'trainer.logger=[console]' \
     "++ray_kwargs.ray_init.num_gpus=$STUDENT_GPUS" \

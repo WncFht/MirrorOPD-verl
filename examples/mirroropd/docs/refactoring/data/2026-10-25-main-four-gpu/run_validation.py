@@ -150,14 +150,11 @@ for mode in ["sampled", "full"]:
         "AMC_FILE": str(subsets / "AMC23.parquet"),
         "AIME_FILE": str(subsets / "AIME25.parquet"),
     }
-    script = (
-        "examples/mirroropd/run_full_reverse_kl.sh"
-        if mode == "full"
-        else "examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh"
-    )
+    script = "examples/mirroropd/run_math_opd_ablation_fsdp2.sh"
     args = [
         "bash",
         script,
+        "custom", "--method", "full_kl" if mode == "full" else "sampled",
         "trainer.total_training_steps=2",
         "trainer.val_before_train=False",
         "data.train_max_samples=64",

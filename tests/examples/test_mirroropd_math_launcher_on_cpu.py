@@ -15,16 +15,24 @@ from hydra import compose, initialize_config_dir
 from omegaconf import OmegaConf
 
 from verl.utils.config import omega_conf_to_dataclass, validate_config
+from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / "examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh"
+SCRIPT = ROOT / "examples/mirroropd/run_math_opd_ablation_fsdp2.sh"
+
+
+def _assert_full_kl(loss):
+    assert loss.loss_mode == "mirror"
+    spec = resolve_distillation_spec(loss)
+    assert spec.teacher_only_kl and spec.anchor_payload is None
+    assert spec.eta == 1 and not loss.use_policy_gradient
 
 
 @pytest.mark.parametrize("domain", ["math", "code", "if"])
-def test_full_reverse_kl_launcher(tmp_path, domain):
+def test_full_kl_method(tmp_path, domain):
     cfg = _config(
         tmp_path,
-        script=SCRIPT.parent / "run_full_reverse_kl.sh",
+        command=["bash", str(SCRIPT), "custom", "--method", "full_kl"],
         DOMAIN=domain,
         FULL_KL_BACKEND="streaming",
         FULL_KL_ASYNC_WRITE="True",
@@ -33,7 +41,7 @@ def test_full_reverse_kl_launcher(tmp_path, domain):
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
-    assert loss.loss_mode == "full_reverse_kl" and not loss.use_policy_gradient
+    _assert_full_kl(loss)
     assert loss.full_vocab.backend == "streaming"
     assert loss.full_vocab.async_write and loss.full_vocab.prefetch
     assert not cfg.actor_rollout_ref.rollout.calculate_log_probs
@@ -82,6 +90,15 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "SAVE_FREQ",
         "LEARNING_RATE",
         "SEED",
+        "EXPERIMENT_METHOD",
+        "EXPERIMENT_PRESET",
+        "MIRROR_OBJECTIVE",
+        "MIRROR_ESTIMATOR",
+        "MIRROR_KAPPA",
+        "MIRROR_ETA",
+        "MIRROR_DIAGNOSTICS",
+        "OPD_ADVANTAGE_SOURCE",
+        "OPD_POLICY_LOSS_MODE",
         "FULL_KL_BACKEND",
         "FULL_KL_TOKEN_CHUNK",
         "FULL_KL_VOCAB_CHUNK",
@@ -100,7 +117,8 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         TRAIN_BATCH_SIZE="64",
     )
     env.update(overrides)
-    return subprocess.run(command or ["bash", str(script)], env=env, capture_output=True, text=True)
+    default_args = ["custom"] if script.name == SCRIPT.name else []
+    return subprocess.run(command or ["bash", str(script), *default_args], env=env, capture_output=True, text=True)
 
 
 def _config(tmp_path, **overrides):
@@ -154,7 +172,10 @@ def test_failure_training_presets_preserve_pair_protocol_and_update_budget(
     assert rollout.val_kwargs.n == 16 and rollout.val_kwargs.max_tokens == 31744
     assert cfg.data.val_batch_size is None and len(cfg.data.val_files) == 3
     loss = cfg.distillation.distillation_loss
-    assert loss.loss_mode == ("full_reverse_kl" if mode == "full" else "k1")
+    if mode == "full":
+        _assert_full_kl(loss)
+    else:
+        assert loss.loss_mode == "k1"
     assert loss.use_policy_gradient == (mode == "sampled")
     assert loss.advantage_source == "current" and loss.policy_loss_mode == "vanilla"
     assert not loss.use_task_rewards and not actor.use_kl_loss and actor.entropy_coeff == 0
@@ -238,7 +259,7 @@ def test_failure_smoke_reuses_formal_pair_and_stop_protocol(tmp_path, setting):
     assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == ([151645] if setting == "E27" else [])
 
 
-@pytest.mark.parametrize("preset", ["E21-unknown", "E44", "E43-unknown", "A", "A-full"])
+@pytest.mark.parametrize("preset", ["E21-unknown", "E48", "E43-unknown", "A", "A-full"])
 def test_unknown_failure_preset_fails_without_launching(tmp_path, preset):
     result = _launch(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
     assert result.returncode == 2
@@ -325,7 +346,7 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
 
 
 @pytest.mark.parametrize("gpus", [4, 8])
-@pytest.mark.parametrize("entry", ["run_math_deepseek_r1_1_5b_fsdp2.sh", "launchers/_run_single_teacher_fsdp2.sh"])
+@pytest.mark.parametrize("entry", ["run_math_opd_ablation_fsdp2.sh", "launchers/_run_single_teacher_fsdp2.sh"])
 def test_default_graph_and_validation_window_keep_training_budget(tmp_path, gpus, entry):
     cfg = _config(tmp_path, script=SCRIPT.parent / entry, STUDENT_GPUS=str(gpus))
     assert not cfg.actor_rollout_ref.rollout.enforce_eager
@@ -348,7 +369,13 @@ def test_validation_environment_and_final_hydra_overrides(tmp_path):
     assert cfg.actor_rollout_ref.rollout.cudagraph_capture_sizes[-1] == 96
     cfg = _config(
         tmp_path,
-        command=["bash", str(SCRIPT), "data.val_batch_size=64", "actor_rollout_ref.rollout.gpu_memory_utilization=0.6"],
+        command=[
+            "bash",
+            str(SCRIPT),
+            "custom",
+            "data.val_batch_size=64",
+            "actor_rollout_ref.rollout.gpu_memory_utilization=0.6",
+        ],
         VAL_BATCH_SIZE="null",
         ROLLOUT_GPU_MEMORY_UTILIZATION="0.5",
     )
@@ -543,7 +570,7 @@ def test_default_launch_uses_absolute_native_interpreter():
     ):
         env.pop(name, None)
     env["DRY_RUN"] = "1"
-    result = subprocess.run(["bash", str(SCRIPT)], env=env, capture_output=True, text=True)
+    result = subprocess.run(["bash", str(SCRIPT), "custom"], env=env, capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
     command = shlex.split(result.stdout)
     expected = str(ROOT / ".venv-native/bin/python")
@@ -587,8 +614,7 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(
     script = checkout / "examples/mirroropd" / entry.name
     script.parent.mkdir(parents=True)
     shutil.copy2(entry, script)
-    (script.parent / "launchers").mkdir()
-    shutil.copy2(SCRIPT.parent / "launchers/_run_single_teacher_fsdp2.sh", script.parent / "launchers")
+    shutil.copytree(SCRIPT.parent / "launchers", script.parent / "launchers")
     datasets = {
         "math": ["math/DAPO/train", "math/MATH-500/test", "math/AMC23/test", "math/AIME25/test"],
         "code": ["code/TACO/train", "code/LCBv6/test"],
@@ -833,7 +859,7 @@ def test_full_kl_and_vanilla_presets(tmp_path, group, lr, epochs):
         assert loss.loss_mode == "k1" and loss.use_policy_gradient
         assert cfg.actor_rollout_ref.rollout.calculate_log_probs
     else:
-        assert loss.loss_mode == "full_reverse_kl" and not loss.use_policy_gradient
+        _assert_full_kl(loss)
         assert loss.full_vocab.backend == "precompute"
         assert loss.full_vocab.async_write and loss.full_vocab.prefetch
         assert loss.full_vocab.token_chunk_size == 512 and loss.full_vocab.vocab_chunk_size == 8192
@@ -929,7 +955,8 @@ def test_equal_update_presets_use_one_original_data_pass(tmp_path, group, epochs
     assert not cfg.trainer.val_before_train and cfg.trainer.resume_mode == "disable"
     assert not cfg.algorithm.filter_groups.enable and not cfg.trainer.v1.sampler.sync_refill_failed_groups
     assert outer * 64 <= 17917
-    assert loss.loss_mode == "full_reverse_kl" and not loss.use_task_rewards
+    _assert_full_kl(loss)
+    assert not loss.use_task_rewards
     assert loss.full_vocab.backend == "precompute" and loss.full_vocab.async_write and loss.full_vocab.prefetch
     assert cfg.actor_rollout_ref.actor.optim.lr == 1e-6
 

@@ -17,10 +17,10 @@ from datetime import datetime, timedelta, timezone
 from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
-from build_inventory import select
+from build_inventory import family, method_label, select
 
 DATASETS = {"math500": "MATH-500", "amc23": "AMC23", "aime25": "AIME25"}
-PATTERN = re.compile(r"math-opd-(E\d+)(?:-(valid-student|valid-teacher))?-\d{8}-")
+PATTERN = re.compile(r"math-opd-(E\d+|custom)(?:-(valid-student|valid-teacher))?(?:-(.+?))?-\d{8}-")
 FIELDS = [
     "mean",
     "ci_low",
@@ -108,21 +108,11 @@ def read_run(path):
             point["datasets"][dataset] = data
     evaluations = sorted(points.values(), key=lambda x: (x["update"], x["outer"]))
     # Keep incomplete latest evaluations explicit rather than borrowing older dataset scores.
-    loss = select(config, "distillation.distillation_loss.loss_mode")
-    method = (
-        "Full-KL"
-        if loss == "full_reverse_kl"
-        else "/".join(
-            str(select(config, k))
-            for k in [
-                "distillation.distillation_loss.advantage_source",
-                "distillation.distillation_loss.policy_loss_mode",
-            ]
-        )
-    )
+    method = method_label(config)
     return {
         "preset": match[1],
         "role": match[2],
+        "variant": match[3],
         "id": meta["run"]["run_id"],
         "name": meta["run"]["display_name"],
         "source_directory": path.name,
@@ -150,7 +140,8 @@ def read_run(path):
 
 
 def label(run):
-    return run["preset"] + (" / " + run["role"] if run["role"] else "") + " · `" + run["id"] + "`"
+    variant = " / " + run["variant"] if run.get("variant") else ""
+    return run["preset"] + variant + (" / " + run["role"] if run["role"] else "") + " · `" + run["id"] + "`"
 
 
 def latest(run):
@@ -163,8 +154,12 @@ def triple(point, key):
 
 def render(runs, logs_commit, raw_commit, references):
     date = datetime.now(timezone(timedelta(hours=8))).date().isoformat()
-    seen = {r["preset"] for r in runs if not r["role"]}
-    missing = "、".join(f"E{i}" for i in range(1, 44) if i not in [21, 22] and f"E{i}" not in seen) or "无"
+    seen = {
+        r["preset"]
+        for r in runs
+        if not r["role"] and (not r.get("variant") or family(r["name"]) == "mirror-comparison")
+    }
+    missing = "、".join(f"E{i}" for i in range(1, 48) if i not in [21, 22] and f"E{i}" not in seen) or "无"
     lines = [
         "# 数学消融实验验证结果汇总",
         "",
@@ -289,7 +284,7 @@ def render(runs, logs_commit, raw_commit, references):
         "| --- | ---: | --- | --- | --- |",
     ]
     for r in runs:
-        if r["preset"] not in ["E18", "E19", "E20"]:
+        if r.get("variant") or r["preset"] not in ["E18", "E19", "E20"]:
             continue
         p = next((p for p in r["evaluations"] if p["update"] == 2560), None)
         if p:
@@ -373,7 +368,7 @@ def main():
     if result.returncode:
         raise SystemExit(result.stdout + result.stderr)
     runs = [r for p in (logs / "derived/MirrorOPD-verl").glob("*/run.json") if (r := read_run(p.parent))]
-    runs.sort(key=lambda r: (int(r["preset"][1:]), r["name"]))
+    runs.sort(key=lambda r: (int(r["preset"][1:]) if r["preset"].startswith("E") else 999, r["name"]))
     if len({r["id"] for r in runs}) != len(runs):
         raise ValueError("Duplicate local directories for a run ID")
     references = []

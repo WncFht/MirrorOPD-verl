@@ -74,7 +74,10 @@ def test_exact_launch_composes_and_uses_matched_budget(tmp_path, method):
     assert cfg.actor_rollout_ref.actor.ppo_epochs == 1
     assert cfg.actor_rollout_ref.rollout.seed == cfg.data.seed == 42
     assert cfg.data.max_response_length == 7168 and cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
-    assert cfg.distillation.distillation_loss.loss_mode == ("full_reverse_kl" if method == "full" else "k1")
+    assert cfg.distillation.distillation_loss.loss_mode == ("mirror" if method == "full" else "k1")
+    if method == "full":
+        target = cfg.distillation.distillation_loss.mirror
+        assert target.objective == "mdpo" and target.estimator == "full_vocab" and target.eta == 1
     assert cfg.distillation.distillation_loss.policy_loss_mode == ("token_is" if method == "token_is" else "vanilla")
 
 

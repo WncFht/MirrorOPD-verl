@@ -18,6 +18,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from analyze_policy_run import finite, metric_names, normalize, read_rows, stats, write_json
+from build_inventory import is_full_kl
 
 
 def get(config, path, default=None):
@@ -227,7 +228,7 @@ def analyze(path, label):
     outer = [r for r in rows if "perf/timing/outer_step_seconds" in r]
     evals = [r for r in rows if "eval/math500/acc/mean" in r]
     epochs = get(config, "actor_rollout_ref.actor.ppo_epochs")
-    full = get(config, "distillation.distillation_loss.loss_mode") == "full_reverse_kl"
+    full = is_full_kl(config)
     if any(r["optim/actor/update_applied"] != 1 or r.get("optim/actor/update_skipped") != 0 for r in updates):
         raise ValueError("This comparison requires a separate treatment of skipped/unknown updates")
     update_steps = [r["step/update"] for r in updates]

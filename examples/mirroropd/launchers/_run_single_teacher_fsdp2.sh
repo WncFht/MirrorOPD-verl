@@ -4,8 +4,8 @@
 # DISTILLATION_EXECUTION_MODE=standalone 可恢复原 student 4 + teacher 4 路径。
 # 所有常用参数均可由同名环境变量覆盖；末尾还可追加原生 Hydra overrides。
 # 用法：
-#   DRY_RUN=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
-#   CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
+#   DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
+#   CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 VERL_USE_UV=0 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
 set -eo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
@@ -101,6 +101,7 @@ PPO_EPOCHS=${PPO_EPOCHS:-1}
 OPD_ADVANTAGE_SOURCE=${OPD_ADVANTAGE_SOURCE:-current}
 OPD_POLICY_LOSS_MODE=${OPD_POLICY_LOSS_MODE:-vanilla}
 OPD_CLIP_EPS=${OPD_CLIP_EPS:-0.2}
+source "$SCRIPT_DIR/_distillation_args.sh"
 LEARNING_RATE=${LEARNING_RATE:-1e-6}
 TOTAL_EPOCHS=${TOTAL_EPOCHS:-1}
 SEED=${SEED:-42}
@@ -256,7 +257,7 @@ ROLLOUT_ARGS=(
     actor_rollout_ref.rollout.temperature=1.0
     actor_rollout_ref.rollout.top_p=1.0
     actor_rollout_ref.rollout.top_k=-1
-    actor_rollout_ref.rollout.calculate_log_probs=True
+    "actor_rollout_ref.rollout.calculate_log_probs=$OPD_CALCULATE_LOG_PROBS"
     actor_rollout_ref.rollout.log_prob_use_dynamic_bsz=True
     "actor_rollout_ref.rollout.log_prob_max_token_len_per_gpu=$PPO_MAX_TOKEN_LEN_PER_GPU"
 )
@@ -287,16 +288,7 @@ DISTILLATION_ARGS=(
     "distillation.teacher_models.teacher_model.inference.max_model_len=$TEACHER_CONTEXT"
     "distillation.teacher_models.teacher_model.inference.max_num_batched_tokens=$TEACHER_TOKEN_BUDGET"
     "distillation.teacher_models.teacher_model.inference.max_num_seqs=$TEACHER_MAX_NUM_SEQS"
-    distillation.distillation_loss.loss_mode=k1
-    distillation.distillation_loss.use_policy_gradient=True
-    distillation.distillation_loss.use_task_rewards=False
-    distillation.distillation_loss.loss_max_clamp=null
-    distillation.distillation_loss.log_prob_min_clamp=null
-    "distillation.distillation_loss.advantage_source=$OPD_ADVANTAGE_SOURCE"
-    "distillation.distillation_loss.policy_loss_mode=$OPD_POLICY_LOSS_MODE"
-    "distillation.distillation_loss.clip_ratio=$OPD_CLIP_EPS"
-    "distillation.distillation_loss.clip_ratio_low=$OPD_CLIP_EPS"
-    "distillation.distillation_loss.clip_ratio_high=$OPD_CLIP_EPS"
+    "${DISTILLATION_OBJECTIVE_ARGS[@]}"
 )
 if [[ $DISTILLATION_EXECUTION_MODE == shared_sync ]]; then
     DISTILLATION_ARGS+=(
