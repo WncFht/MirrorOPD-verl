@@ -85,6 +85,21 @@ def test_gpu_report_excludes_startup_but_keeps_idle_gaps_and_tail(tmp_path):
     assert report["gpu1_busy_pct"] == 0
     assert report["mean_running_requests"] == 3
     assert report["waiting_sample_pct"] == pytest.approx(100 / 3)
+    assert report["resource_isolated"]
+    samples[0]["gpu"][0]["pids"] = [100, 200]
+    with gzip.open(path, "wt") as stream:
+        for sample in samples:
+            stream.write(json.dumps(sample) + "\n")
+    row = {"candidate": [2, 0.9, 8192], "log": str(tmp_path / "run.log"), "status": "complete"}
+    assert runner.build_report(row)["resource_isolated"]
+    samples[2]["gpu"][0]["pids"] = [100, 200]
+    with gzip.open(path, "wt") as stream:
+        for sample in samples:
+            stream.write(json.dumps(sample) + "\n")
+    report = runner.build_report(row)
+    assert not report["resource_isolated"] and report["shared_gpu_samples"] == 1
+    contaminated = {**row, **report, "duration": 1, "total_output_tokens": 1000, "stage": "candidate0"}
+    assert runner.choose_best([contaminated]) is None
 
 
 def test_search_prioritizes_ready_models_and_adds_memory_control():
@@ -162,6 +177,36 @@ def test_original_validation_falls_back_to_tested_candidate():
     queue.confirm(profile)
     assert attempted == [[256, 0.9, 8192], [64, 0.65, 8192]]
     assert queue.state["jobs"][profile["id"] + "/verl-validation"]["candidate"] == [64, 0.65, 8192]
+
+
+def test_shared_gpu_result_is_archived_before_automatic_remeasurement(tmp_path, monkeypatch):
+    queue = object.__new__(runner.Queue)
+    profile = PLAN["models"][0]
+    candidate = profile["candidates"][0]
+    key = profile["id"] + "/candidate0"
+    queue.state = {"jobs": {key: {"status": "complete", "resource_isolated": False, "candidate": candidate}}}
+    queue.root = tmp_path
+    queue.args = SimpleNamespace(action="run", model_root=tmp_path)
+    queue.plan = PLAN
+    queue.python = Path(sys.executable)
+    queue.vllm = Path("/vllm")
+    queue.env = {}
+    directory = tmp_path / "runs" / key
+    directory.mkdir(parents=True)
+    (directory / "run.log").write_text("original measurement")
+    monkeypatch.setattr(runner, "build_commands", lambda *args: ["vllm"])
+    invoked = []
+
+    def execute(command, directory, url):
+        invoked.append(command)
+        return 1, {"peak_kv": 0}
+
+    queue.execute = execute
+    queue.save = lambda: None
+    assert queue.sweep(profile, "candidate0", candidate)["status"] == "failed"
+    assert invoked == [["vllm"]]
+    archived = list(directory.glob("attempts/*/run.log"))
+    assert len(archived) == 1 and archived[0].read_text() == "original measurement"
 
 
 def test_queue_keeps_venv_python_path_instead_of_resolving_to_base_python(tmp_path):

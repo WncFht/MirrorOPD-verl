@@ -238,7 +238,7 @@ def eligible(result, expected=9120):
 def rank_candidates(rows):
     groups = {}
     for row in rows:
-        if row.get("status") == "complete":
+        if row.get("status") == "complete" and row.get("resource_isolated") is not False:
             groups.setdefault(tuple(row["candidate"]), []).append(row)
     if not groups:
         return []
@@ -486,7 +486,10 @@ class Queue:
 
     def sweep(self, profile, stage, candidate, preflight=False):
         key = profile["id"] + "/" + stage
-        if self.state["jobs"].get(key, {}).get("status") == "complete":
+        if (
+            self.state["jobs"].get(key, {}).get("status") == "complete"
+            and self.state["jobs"][key].get("resource_isolated") is not False
+        ):
             if self.state["jobs"][key]["candidate"] != candidate:
                 raise ValueError(f"Completed stage {key} has different parameters")
             return self.state["jobs"][key]
@@ -495,7 +498,7 @@ class Queue:
             return previous
         directory = self.root / "runs" / key
         directory.mkdir(parents=True, exist_ok=True)
-        if (directory / "run.log").exists():
+        if self.args.action != "dry-run" and (directory / "run.log").exists():
             attempt = directory / "attempts" / datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y%m%d-%H%M%S-%f")
             attempt.mkdir(parents=True)
             for name in (
@@ -657,6 +660,8 @@ class Queue:
     def search(self, profile, stage, candidate):
         for row in self.model_rows(profile):
             if row["candidate"] == candidate and is_search_stage(row["stage"]):
+                if row.get("resource_isolated") is False:
+                    continue
                 if row["status"] == "complete" or not getattr(self.args, "retry_failed", False):
                     return row
         return self.sweep(profile, stage, candidate)
@@ -693,7 +698,9 @@ class Queue:
                 p
                 for p in self.profiles
                 if all(
-                    self.state["jobs"].get(f"{p['id']}/candidate{i}", {}).get("status") == "complete" for i in (0, 1)
+                    self.state["jobs"].get(f"{p['id']}/candidate{i}", {}).get("status") == "complete"
+                    and self.state["jobs"].get(f"{p['id']}/candidate{i}", {}).get("resource_isolated") is not False
+                    for i in (0, 1)
                 )
             ]
             for profile in ready:
@@ -707,7 +714,13 @@ class Queue:
         for row in self.state["jobs"].values():
             if row.get("kind") != "sweep":
                 continue
-            result = json.loads(Path(row["result"]).read_text()) if row.get("result") else None
+            # Existing length/latency columns need no expensive reread of token
+            # traces when only resource interpretation has changed.
+            result = (
+                json.loads(Path(row["result"]).read_text())
+                if row.get("result") and not row.get("report_schema")
+                else None
+            )
             row.update(build_report(row, result, self.plan["response_cap"]))
             del result
             write_json(Path(row["log"]).parent / "derived_metrics.json", row)
