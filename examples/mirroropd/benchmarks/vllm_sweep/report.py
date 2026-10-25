@@ -44,6 +44,8 @@ SUMMARY_FIELDS = [
     "mean_e2el_ms",
     "p99_e2el_ms",
     "gpu_window_samples",
+    "shared_gpu_samples",
+    "resource_isolated",
     "failure_reason",
     "log",
 ]
@@ -86,6 +88,11 @@ def resource_report(path, cap, gpus=4):
     window = samples[begin : end + 1]
     queue_window = queues[begin : end + 1]
     result["gpu_window_samples"] = len(window)
+    # Native DP4/TP1 uses one GPU worker per card. Multiple compute PIDs
+    # during generation make this a shared-GPU measurement, even if all
+    # requests succeed. Do not infer isolation from utilization alone.
+    result["shared_gpu_samples"] = sum(any(len(gpu.get("pids", [])) > 1 for gpu in row["gpu"]) for row in window)
+    result["resource_isolated"] = result["shared_gpu_samples"] == 0
     values = [gpu["utilization"] for row in window for gpu in row["gpu"]]
     result["gpu_busy_mean_pct"] = statistics.fmean(values)
     for index in range(gpus):
