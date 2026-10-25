@@ -52,7 +52,7 @@ $$
 
 ## 观测与扩展
 
-训练 surrogate、sampled log-ratio 和完整词表 KL 是不同量。逐 update 指标描述产生该次更新的 forward，不代表更新后对同一 batch 的重测结果。字段定义见[指标字典](../metrics/2026-10-22-指标字典.md)，统计出口见[指标系统](metrics.md)。
+训练 surrogate、sampled log-ratio 和完整词表 KL 是不同量。逐 update 指标描述产生该次更新的 forward，不代表更新后对同一 batch 的重测结果。字段定义见[指标字典](../experiments/metrics/指标字典.md)，统计出口见[指标系统](metrics.md)。
 
 新增 sampled 变体应优先复用 `_sampled_token_loss` 的布局、detach 和归一化规则，保持原有模式数值不变。
 

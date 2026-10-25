@@ -20,7 +20,7 @@ $$
 | 资料 | 维护职责 |
 | --- | --- |
 | 本页第 1、6 节 | 方法比较顺序、必要负对照与支持集数据合同 |
-| [训练配方](../训练配方.md#采样消融与长程复用) | E1–E15 编号、学习率、复用次数、外层预算与评测频率 |
+| [训练配方](../experiments/sampled-ablation/README.md) | E1–E15 编号、学习率、复用次数、外层预算与评测频率 |
 | [Math 消融队列](../full-vocab/2026-10-22-Math消融队列与对照设计.md) | 已排队的固定 checkout、任务预算、执行状态入口和结果检查 |
 | [估计器审计](2026-10-21-OPD学习信号与梯度估计器对照.md#9-在当前-math-setting-下的实验安排) | 作者实现差异、资源公平性与需记录的量 |
 
@@ -197,7 +197,7 @@ $$
 - Frozen student / union support：先复用 old-log-prob forward 产生 $S_q$，teacher 返回 union 上的分数；actor 在固定 IDs 上算当前概率。对于 HETS/Res 的精确头部，不需要给每个候选再套 PPO ratio；行为 IS 只用于随机尾项。
 - Current student support：teacher 返回 hidden states 和所需归一化信息，actor 可查询后来新增的 IDs；或付出重新评分成本。只缓存旧 sparse 分数，不能支持任意新的 current top-k。
 
-任务评测采用所选实验配方的完整数据集、回答数与长度预算，并保持生成 token 预算与更新数可对照；具体字段以[当前指标字典](../metrics/2026-10-22-指标字典.md)为准。多次复用、top-k 大小扫参、SparseOPD 风格梯度压缩放在核心方法通过后再做。
+任务评测采用所选实验配方的完整数据集、回答数与长度预算，并保持生成 token 预算与更新数可对照；具体字段以[当前指标字典](../experiments/metrics/指标字典.md)为准。多次复用、top-k 大小扫参、SparseOPD 风格梯度压缩放在核心方法通过后再做。
 
 ## 7. 本轮验证与复现
 

@@ -5,13 +5,17 @@
 import gzip
 import importlib.util
 import json
+import os
 from pathlib import Path
 
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPTS = ROOT / "examples/mirroropd/docs/scripts"
-DATA = ROOT / "examples/mirroropd/docs/data/e15-krkmq098-20261023"
+SCRIPTS = ROOT / "examples/mirroropd/docs/experiments/scripts"
+DATA = (
+    Path(os.environ.get("WANDB_LOGS_REPO", ROOT.parent / "wandb-logs"))
+    / "MirrorOPD-verl/analysis/e15-krkmq098-20261023"
+)
 
 
 @pytest.fixture
@@ -102,6 +106,7 @@ def test_lossless_archive_and_no_overwrite(analyze, tmp_path, system_name):
         analyze.snapshot(source, target)
 
 
+@pytest.mark.skipif(not DATA.is_dir(), reason="Optional integration evidence requires wandb-logs analysis archive")
 def test_frozen_e15_axes_and_accounting(analyze):
     rows = analyze.read_rows(DATA / "history.jsonl.gz")
     axes = json.loads((DATA / "metric-axes.json").read_text())
@@ -122,6 +127,7 @@ def test_frozen_e15_axes_and_accounting(analyze):
 def test_gpu_missing_observations_not_zero_filled(monkeypatch):
     pytest.importorskip("matplotlib")
     monkeypatch.syspath_prepend(str(SCRIPTS))
+    monkeypatch.syspath_prepend(str(ROOT / "examples/mirroropd/docs/scripts"))
     # Plot styling is an optional external dependency, but data selection is tested when available.
     import fvlocate
 

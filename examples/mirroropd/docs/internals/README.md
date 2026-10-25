@@ -14,7 +14,7 @@
 | 6 | [指标系统](metrics.md) | Observation 跨卡归约、位置分桶、逐 update 日志 |
 | 7 | [进度与 checkpoint](progress-checkpoint.md) | 更新是否执行、计数未知、scheduler 和恢复状态 |
 
-预算和字段定义分别由[训练配方](../训练配方.md)及[指标字典](../metrics/2026-10-22-指标字典.md)维护。
+预算和字段定义分别由[训练配方](../训练配方.md)及[指标字典](../experiments/metrics/指标字典.md)维护。
 
 ## 维护约定
 

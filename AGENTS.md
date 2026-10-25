@@ -13,7 +13,7 @@
 - 两端都保留正常 Git 工作区，接收仅快进，并记录发送方版本；不同接收端用不同 `TARGET`。`hope/` 已取消 Git 跟踪，各机本地维护；首次从旧跟踪状态迁移时解包工具备份并恢复本地 Hope 文件。日志和结果解包采用合并，分卷必须全部传输。
 - 不假设开发机上的文件已经同步到本机或 Mac；收尾时说明需要传输的包和接收端命令。操作步骤见 [meituan/README.md](meituan/README.md)。
 - 本机执行 Git SSH 操作前，在同一 shell 中执行 `source /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/.ssh/activate.bash`。
-- 日常分析以独立 `wandb-logs` 仓库的原始日志为数据源，通用解码器只在该仓库维护；本仓库保留 MirrorOPD 专用的快照适配、统计和绘图。工具分工与命令见 [分析复现](examples/mirroropd/docs/分析复现.md)。
+- 日常分析以独立 `wandb-logs` 仓库的原始日志为数据源，通用解码器只在该仓库维护；本仓库保留 MirrorOPD 专用的快照适配、统计和绘图。工具分工与命令见 [分析复现](examples/mirroropd/docs/experiments/复现与维护.md)。
 - 日志接收默认先提交、登记持久队列并推送 Git，云端另用 `make sync-log-upload`。上传 SDK 隔离在 `.venv-wandb-sync`，由 `make sync-log-setup` 安装；不要替换训练或日志解码环境。任务成功依据 SDK 完成标记，不只看退出码；不完整快照等待下一次接收，原始日志始终保留。
 - `analyze_run.py export` 默认读取本地日志；云端回读只通过显式 `export-cloud` 用于核对或补救，不因本地缺失自动回退。既有报告的 API 来源、采样口径和冻结数据保持原样。
 

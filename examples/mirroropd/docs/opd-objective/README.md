@@ -12,7 +12,7 @@
 | 论文证据、实现刷新时机、实验建议 | [固定前缀原审计](2026-10-21-固定前缀下的优势估计与重要性采样.md) |
 | 模式合同、更新计数、checkpoint 与历史验证 | [优势与 IS 消融及更新计数实现方案](2026-10-21-优势与IS消融及更新计数实现方案.md) |
 | Sampled-token、KL baseline、TA-OPD、ResOPD 的源码与实验比较 | [学习信号与梯度估计器审计](2026-10-21-OPD学习信号与梯度估计器对照.md) |
-| E1–E15 编号与学习/评测预算 | [训练配方](../训练配方.md#采样消融与长程复用) |
+| E1–E15 编号与学习/评测预算 | [训练配方](../experiments/sampled-ablation/README.md) |
 | 共用分块算法、math 配方的显存/通信预算与条件步时估算 | [词表蒸馏的计算与显存预算](../full-vocab/2026-10-22-词表蒸馏的计算与显存预算.md) |
 | Reverse-KL 实验排序、top-k 支持集与 One-Shot 代码审计 | [实验排序与支持集](2026-10-21-Reverse-KL实验排序与Top-k支持集.md) |
 | Full-vocab 工程、参考资料与实现计划 | [Full-vocab 目录](../full-vocab/README.md) |

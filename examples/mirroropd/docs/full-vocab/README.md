@@ -8,7 +8,7 @@
 | 当前 Full-KL 调用链、数据协议、梯度、backend 与模型支持 | [Full-vocab 走读](../internals/full-vocab.md) |
 | 2026-10-23 阶段的调用链和优化背景 | [历史全流程源码走读](2026-10-23-Full-KL全流程源码走读.md) |
 | η、κ 目标的理论与拟议 Full-vocab 接入 | [形状与插值专题](../mirror-descent/README.md) |
-| E13/E14 Full-KL、E15 sampled、E16/E17 Full-KL 批内复用 | [数学对照预设](../训练配方.md#full-kl-与-sampled-对照入口) |
+| E13/E14 Full-KL、E15 sampled、E16/E17 Full-KL 批内复用 | [数学对照预设](../experiments/full-kl-comparison/README.md) |
 | 2026-10-22 初次接入的数值、多卡与 smoke 验收结果 | [实现与验收](2026-10-22-Full-KL实现与验收.md) |
 | Full baseline 后续设计与原始实施阶段 | [实现计划](2026-10-22-Full-baseline与Full-KL实现计划.md) |
 | CPU 正确性与 H800 算子实测、复现命令 | [算子小实验](2026-10-22-Full-KL算子小实验.md) |
@@ -28,7 +28,7 @@
 
 2026-10-22 的冻结任务、旧 sampled 参考与对照计划见[Math 历史消融队列](../archive/2026-10-23-Math历史消融队列与对照设计.md)。当前 E13–E17 配置从上表的数学预设进入；该旧队列不作为新的默认启动说明。
 
-位置诊断：Full-KL 新增 response 相对位置十分桶的 sum/count/mean，复用原始 KL 计算且不改梯度；字段及精度验收见[KL精度与位置分桶](../research/2026-10-24-评测预算语义与KL精度及位置分桶.md)。
+位置诊断：Full-KL 新增 response 相对位置十分桶的 sum/count/mean，复用原始 KL 计算且不改梯度；字段及精度验收见[KL精度与位置分桶](../experiments/metrics/2026-10-24-评测预算语义与KL精度及位置分桶.md)。
 
 诊断接口使用统一 `FullKLResult`，普通／fused precompute共用分块和VJP；精度误差推导、验证与代码走读见[KL精度模型](../research/2026-10-24-KL精度误差模型与诊断接口走读.md)。
 
