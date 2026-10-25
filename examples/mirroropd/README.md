@@ -1,10 +1,14 @@
-# sampled-token OPD 领域配方
+# MirrorOPD 统一实验配方
 
 这里维护 math、coding 与 instruction following（IF）的单教师 sampled-token OPD 配方，以及数学、代码、IF 和函数调用 verifier。当前 math 基线使用 DeepSeek-R1-Distill-Qwen-1.5B student 与 JustRL-DeepSeek-1.5B teacher，采用 verl V1 同步训练和 `k1 + policy gradient` 蒸馏。
 
+统一实验入口为 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)：E1–E47 或 custom 选择模型/预算，`--method sampled/full_kl/mdpo/bpo` 选择算法。Full-KL 生成 MDPO eta=1 的规范配置；旧 sampled 保留原信号、PPO、IS/NoIS。Math 只维护这一个训练入口。用法见[训练配方](docs/训练配方.md)，目标与验证缺口见[实现说明](docs/mirror-descent/实现方案.md)。
+
+[E44–E47 正式对照](docs/训练配方.md#mirror-comparison)已包含 Full-KL、MDPO、BPO 和 weighted teacher 形状设置；直接调用编号，默认 256 outer × 16 reuse、每 32 outer 验证、每 128 outer 保存。
+
 ## 脚本目录
 
-顶层保留领域训练、数学消融、独立验证和 full-vocab 入口。辅助脚本按用途组织：
+Math 训练只保留统一入口；独立验证和 smoke 是专项工具。辅助脚本按用途组织：
 
 | 目录 | 内容 |
 | --- | --- |
@@ -58,7 +62,7 @@ MirrorOPD 自有文档、调研与展示图位于 `examples/mirroropd/docs/`；�
 | [判分器与依赖](docs/判分器与依赖.md) | 四领域 reward 路由、依赖、迁入来源和检查范围 |
 | [LCB 判分隔离调研](docs/lcb/README.md) | 内存故障来源、受控 CPU 实验、轻量执行器与资源隔离方案 |
 | [训练基础设施](docs/infra/README.md) | 运行与调度、实测报告、batch/rollout 调优、指标/MFU、模型扩展和上游调研的统一入口 |
-| [OPD 目标与消融](docs/opd-objective/README.md) | 固定 prefix 推导、优势/IS 语义及更新计数的待实施方案 |
+| [OPD 目标与消融](docs/opd-objective/README.md) | 固定 prefix 推导、优势/IS 语义及实现审计 |
 | [分析复现](docs/experiments/复现与维护.md) | 本地 W&B 归档解码、项目快照、统计与图表；云端回读仅作显式核对或补救 |
 | [实验指标](docs/experiments/metrics/README.md) | 当前字段字典、更新横轴与比较口径；实现见指标系统走读 |
 
@@ -71,16 +75,18 @@ make assets-check
 make opd-submit
 ```
 
-调用关系为 `make opd-submit` → Hope `worker.script` → `run_${DOMAIN}_deepseek_r1_1_5b_fsdp2.sh` → `launchers/_run_single_teacher_fsdp2.sh`，`DOMAIN` 默认 `math`，也可为 `code` 或 `if`。具体领域脚本如下；旧的无领域前缀入口已删除。
+Math 调度器直接调用 `run_math_opd_ablation_fsdp2.sh`。入口将配置交给标准库规划器，再由共享参数构造与资源 launcher 执行。`DOMAIN` 默认 `math`，也可为 `code` 或 `if`。具体领域脚本如下；旧的无领域前缀入口已删除。
 
-- [Math](run_math_deepseek_r1_1_5b_fsdp2.sh)
+- [Math](run_math_opd_ablation_fsdp2.sh)
 - [Coding](run_code_deepseek_r1_1_5b_fsdp2.sh)
 - [IF](run_if_deepseek_r1_1_5b_fsdp2.sh)
 
-只查看命令时可在仓库根目录执行：
+查看从预设表生成的清单或最终命令：
 
 ```bash
-DRY_RUN=1 bash examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh
+bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh --overview
+bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh --list-presets
+DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
 ```
 
 数学消融统一使用 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)。短窗基础版为 E15（sampled）／E13（full），其他模型／长度基础版为 E23–E32；对应reuse16版本为 E33–E43及已有E17。E21/E22分别兼容映射到E15/E13。当前模型对照均跑250个outer steps，每100步及最终步保存；基础版每批更新1次，reuse版16次。`E15-valid-student`／`E15-valid-teacher` 可独立验证原始模型。每次调用运行一个选项，GPU数量由 `STUDENT_GPUS` 与 `CUDA_VISIBLE_DEVICES` 明确指定；完整编号、模型和预算见[实验方案](docs/experiments/failure-reproduction/2026-10-25-Sampled-token与Full-vocab失败复现方案.md#failure-launcher)。

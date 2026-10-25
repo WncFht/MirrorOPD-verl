@@ -31,7 +31,32 @@ def select(config, key):
     return config
 
 
+def is_full_kl(config):
+    mode = select(config, "distillation.distillation_loss.loss_mode")
+    return mode == "full_reverse_kl" or (
+        mode == "mirror"
+        and select(config, "distillation.distillation_loss.mirror.objective") == "mdpo"
+        and select(config, "distillation.distillation_loss.mirror.estimator") == "full_vocab"
+        and select(config, "distillation.distillation_loss.mirror.eta") == 1
+    )
+
+
+def method_label(config):
+    if is_full_kl(config):
+        return "Full-KL"
+    if select(config, "distillation.distillation_loss.loss_mode") == "mirror":
+        m = select(config, "distillation.distillation_loss.mirror") or {}
+        return f"{str(m.get('objective')).upper()}/{m.get('estimator')} (κ={m.get('kappa')}, η={m.get('eta')})"
+    return "/".join(
+        str(select(config, "distillation.distillation_loss." + key)) for key in ("advantage_source", "policy_loss_mode")
+    )
+
+
 def family(name):
+    if re.match(r"math-opd-E(44|45|46|47)-", name):
+        return "mirror-comparison"
+    if name.startswith("math-opd-custom-") or re.match(r"math-opd-E\d+-(mdpo|bpo|sampled|full_kl)-", name):
+        return "method-overrides"
     match = re.match(r"math-opd-E(\d+)-", name)
     if match:
         number = int(match[1])
@@ -90,6 +115,7 @@ def inspect(directory, cloud):
         "run_id": run_id,
         "name": name,
         "family": family(name),
+        "method": method_label(config),
         "cloud_state": cloud.get("state"),
         "local_status": meta["status"],
         "exit_code": meta.get("exit_code"),
@@ -150,6 +176,8 @@ def render(inventory):
         "equal-update-budget": "等更新预算 E18–E20",
         "failure-reproduction": "失败复现正式训练",
         "other-runs": "历史 Math / Coding / IF",
+        "method-overrides": "统一入口的方法变体与 custom 实验",
+        "mirror-comparison": "Full-KL / MDPO / BPO 正式对照 E44–E47",
     }
     lines = [
         "# 实际运行记录",
@@ -181,10 +209,8 @@ def render(inventory):
         for r in selected:
             experiment = re.search(r"E\d+", r["name"])
             label = experiment[0] if experiment else r["name"].split("-2026")[0]
-            setting = (
-                f"{r['loss_mode']} / {r['advantage_source']} / {r['policy_loss_mode']}；"
-                f"reuse={r['reuse_epochs']}；LR={r['lr']}"
-            )
+            legacy_method = " / ".join(str(r.get(k)) for k in ("loss_mode", "advantage_source", "policy_loss_mode"))
+            setting = f"{r.get('method', legacy_method)}；reuse={r['reuse_epochs']}；LR={r['lr']}"
             score = " / ".join(
                 "—" if r[f"{ds}_mean_pct"] is None else f"{r[f'{ds}_mean_pct']:.2f}"
                 for ds in ["math500", "amc23", "aime25"]

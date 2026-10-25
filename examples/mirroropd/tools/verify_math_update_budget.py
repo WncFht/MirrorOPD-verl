@@ -44,7 +44,14 @@ def verify(config, rows, expected_updates):
     require(not get("algorithm.filter_groups.enable", False), "Group filtering changes prompt consumption")
     require(not get("trainer.v1.sampler.sync_refill_failed_groups", False), "Refill changes prompt consumption")
     require(get("distillation.enabled") is True, "Expected enabled distillation")
-    require(get("distillation.distillation_loss.loss_mode") == "full_reverse_kl", "Expected Full-KL loss")
+    mode = get("distillation.distillation_loss.loss_mode")
+    is_full_kl = mode == "full_reverse_kl" or (
+        mode == "mirror"
+        and get("distillation.distillation_loss.mirror.objective") == "mdpo"
+        and get("distillation.distillation_loss.mirror.estimator") == "full_vocab"
+        and get("distillation.distillation_loss.mirror.eta") == 1
+    )
+    require(is_full_kl, "Expected Full-KL loss (legacy or MDPO/full_vocab/eta=1)")
     require(outer * epochs == expected_updates, "Configured update budget does not match expected_updates")
 
     updates, completed, evaluations = {}, {}, {}

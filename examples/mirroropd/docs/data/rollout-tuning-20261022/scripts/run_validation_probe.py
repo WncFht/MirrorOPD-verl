@@ -22,7 +22,7 @@ env=os.environ.copy();settings={
 settings.update({k:str(root/'outputs/rollout-tuning-20261022/subsets'/v) for k,v in [('MATH_FILE','MATH-500.parquet'),('AMC_FILE','AMC23.parquet'),('AIME_FILE','AIME25.parquet')]})
 settings['ROLLOUT_MAX_NUM_SEQS']=str(args.seqs)
 env.update(settings)
-cmd=['bash','examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh',
+cmd=['bash','examples/mirroropd/run_math_opd_ablation_fsdp2.sh','custom','--method','sampled',
  'trainer.total_training_steps=1','trainer.val_before_train=True','trainer.val_only=True','actor_rollout_ref.rollout.disable_log_stats=False',
  '++ray_kwargs.ray_init.runtime_env.env_vars.VLLM_LOGGING_LEVEL=INFO',
  '++ray_kwargs.ray_init.num_gpus=4','++ray_kwargs.ray_init.num_cpus=64',

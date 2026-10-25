@@ -31,10 +31,10 @@ case "$TARGET" in
     teacher) export STUDENT_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/JustRL-DeepSeek-1.5B} ;;
     *) echo "Expected student or teacher; got $TARGET" >&2; exit 2 ;;
 esac
-export DISTILLATION_EXECUTION_MODE=shared_sync TEACHER_GPUS=0
+export DOMAIN=math DISTILLATION_EXECUTION_MODE=shared_sync TEACHER_GPUS=0 EXPERIMENT_METHOD=sampled
 export SEED=${SEED:-42}
 export EXPERIMENT_NAME=${EXPERIMENT_NAME:-math-valid-$TARGET-$(date +%Y%m%d-%H%M%S)-$$}
-exec bash "$SCRIPT_DIR/run_math_deepseek_r1_1_5b_fsdp2.sh" \
+exec bash "$SCRIPT_DIR/launchers/_run_single_teacher_fsdp2.sh" \
     distillation.enabled=False \
     actor_rollout_ref.rollout.calculate_log_probs=False \
     "actor_rollout_ref.rollout.seed=$SEED" \

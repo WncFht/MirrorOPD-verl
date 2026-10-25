@@ -181,10 +181,12 @@ def public_launch(plan, job, source, root, *, eager=False, attempt=1):
         "TOKENIZERS_PARALLELISM": "false",
         "NVTX_INJECTION64_PATH": "/nonexistent/verl-disabled-nvtx-injection.so",
     }
-    entry = "run_full_reverse_kl.sh" if job["method"] == "full" else "run_math_deepseek_r1_1_5b_fsdp2.sh"
     command = [
         "bash",
-        str(source / "examples/mirroropd" / entry),
+        str(source / "examples/mirroropd/run_math_opd_ablation_fsdp2.sh"),
+        "custom",
+        "--method",
+        "full_kl" if job["method"] == "full" else "sampled",
         f"trainer.total_training_steps={job['steps']}",
         "trainer.val_before_train=False",
         "trainer.max_actor_ckpt_to_keep=1",

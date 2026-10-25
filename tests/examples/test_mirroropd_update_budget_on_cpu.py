@@ -100,3 +100,25 @@ def test_invalid_or_partial_run_cannot_pass(run, mutation, match):
 def test_identical_repeated_log_row_is_not_an_extra_update(run):
     cfg, rows = run
     assert module.verify(cfg, rows + [rows[0].copy()], 6)["successful_updates"] == 6
+
+
+def test_canonical_full_kl_budget(run):
+    cfg, rows = run
+    cfg.distillation.distillation_loss = {
+        "loss_mode": "mirror",
+        "mirror": {"objective": "mdpo", "estimator": "full_vocab", "eta": 1},
+    }
+    assert module.verify(cfg, rows, 6)["successful_updates"] == 6
+
+
+@pytest.mark.parametrize(
+    "objective,estimator,eta", [("mdpo", "full_vocab", 0.3), ("bpo", "full_vocab", 1), ("mdpo", "sampled", 1)]
+)
+def test_other_mirror_objectives_are_not_full_kl_budget_runs(run, objective, estimator, eta):
+    cfg, rows = run
+    cfg.distillation.distillation_loss = {
+        "loss_mode": "mirror",
+        "mirror": {"objective": objective, "estimator": estimator, "eta": eta},
+    }
+    with pytest.raises(ValueError, match="Full-KL"):
+        module.verify(cfg, rows, 6)
