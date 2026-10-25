@@ -38,6 +38,12 @@ repos:
         language: python
         pass_filenames: false
 
+      - id: check-mirroropd-docs
+        name: Check MirrorOPD architecture and code-reading references
+        entry: python3 examples/mirroropd/tools/check_docs.py
+        language: python
+        pass_filenames: false
+
       - id: check-device-api-usage
         name: Check device API usage
         entry: python3 tests/special_sanity/check_device_api_usage.py --directory ./verl

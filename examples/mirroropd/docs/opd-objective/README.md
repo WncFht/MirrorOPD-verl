@@ -1,5 +1,7 @@
 # OPD 目标与梯度估计
 
+当前实现接口统一见[Sampled OPD](../internals/sampled-opd.md)和[进度与 checkpoint](../internals/progress-checkpoint.md)；本目录保留理论审计和实施记录。
+
 统一记号见[符号约定](../符号约定.md)，与 `MirrorOPD/theory/core` 对齐。
 
 固定前缀的数学定义和证明集中在[理论目录](../theory/README.md)。本目录维护论文实测、源码审计、实验开关和历史验算；已迁出的数学章节集中到各旧文末尾的跳转索引，原锚点继续可用。

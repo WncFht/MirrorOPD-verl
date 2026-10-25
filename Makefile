@@ -64,10 +64,12 @@ export MIRROROPD_MAX_FILE_MB = $(MAX_FILE_MB)
 .PHONY: help archive archive-pack archive-unpack archive-ack sync-log sync-log-pack sync-log-unpack
 .PHONY: sync-results sync-results-pack sync-results-unpack native-env native-unpack native-install native-check wandb-check assets-check
 .PHONY: opd-submit
+.PHONY: docs-check
 .PHONY: sync-status archive-status sync-log-status
 .PHONY: sync-log-upload sync-log-enqueue sync-log-push sync-log-setup
 
 help:
+	@echo '代码走读检查：make docs-check（本地链接、源码符号和 Python 示例语法；无需 GPU）'
 	@echo '同步状态：make sync-status（只读）；archive-status / sync-log-status 分别查看代码、日志'
 	@echo '诊断记录：默认 transfer_snap/operations/*.log 和 *.json；OPERATION_DIR 可指定目录'
 	@echo '终端颜色：COLOR=auto|always|never；NO_COLOR 可关闭；日志与 JSON 始终为纯文本'
@@ -88,6 +90,9 @@ help:
 	@echo '压缩包默认放在 transfer_snap/，超过 10 MiB 分卷；上传下载由人工完成。'
 	@echo '日志打包成功后清理旧日志包及分卷；增量包请在下次打包前传回。'
 	@echo '源码打包成功后清理同 TARGET 的旧自动命名 bundle；解包后删除输入包，KEEP_ARCHIVE_AFTER_UNPACK=1 可保留。'
+
+docs-check:
+	@$(PYTHON) examples/mirroropd/tools/check_docs.py
 
 archive archive-pack:
 	@bash meituan/archive.sh pack "$(ARCHIVE)" $(ARCHIVE_SOURCES)
