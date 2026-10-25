@@ -3,6 +3,7 @@
 import gzip
 import json
 import math
+import re
 import statistics
 from pathlib import Path
 
@@ -26,6 +27,8 @@ SUMMARY_FIELDS = [
     "cap_hit_count",
     "cap_hit_pct",
     "kv_peak_pct",
+    "kv_capacity_tokens_min",
+    "kv_capacity_tokens_max",
     "preemptions",
     "preemptions_per_million_tokens",
     "gpu_mem_peak_gib",
@@ -135,8 +138,11 @@ def build_report(row, result=None, response_cap=31744):
         derived["preemptions_per_million_tokens"] = row["preemptions"] * 1e6 / row["total_output_tokens"]
     directory = Path(row["log"]).parent
     derived.update(resource_report(directory / "telemetry.jsonl.gz", cap))
+    log = Path(row["log"]).read_text(errors="replace") if Path(row["log"]).exists() else ""
+    capacities = [int(value.replace(",", "")) for value in re.findall(r"GPU KV cache size: ([\d,]+) tokens", log)]
+    if capacities:
+        derived.update(kv_capacity_tokens_min=min(capacities), kv_capacity_tokens_max=max(capacities))
     if row.get("status") != "complete":
-        log = Path(row["log"]).read_text(errors="replace") if Path(row["log"]).exists() else ""
         if "out of memory" in log.lower() or "less than desired GPU memory" in log:
             derived["failure_reason"] = "memory_error"
         elif row.get("response_cap_verified") is False:

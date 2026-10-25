@@ -40,6 +40,7 @@ def test_plan_extension_keeps_workload_and_historical_candidates():
 
 
 def test_reports_preserve_long_tails_and_exclude_failed_placeholders(tmp_path):
+    (tmp_path / "run.log").write_text("GPU KV cache size: 313,216 tokens\nGPU KV cache size: 311,872 tokens\n")
     row = {
         "candidate": [128, 0.9, 8192],
         "log": str(tmp_path / "run.log"),
@@ -59,6 +60,7 @@ def test_reports_preserve_long_tails_and_exclude_failed_placeholders(tmp_path):
     assert report["cap_hit_pct"] == pytest.approx(100 / 3)
     assert report["preemptions_per_million_tokens"] == 4
     assert report["kv_peak_pct"] == 75 and "p99_ttft_ms" not in report
+    assert report["kv_capacity_tokens_min"] == 311872 and report["kv_capacity_tokens_max"] == 313216
 
 
 def test_gpu_report_excludes_startup_but_keeps_idle_gaps_and_tail(tmp_path):
