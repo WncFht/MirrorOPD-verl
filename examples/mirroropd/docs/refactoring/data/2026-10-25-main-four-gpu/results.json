@@ -1,0 +1,139 @@
+[
+  {
+    "name": "full-qwen2",
+    "exit_code": 0,
+    "seconds": 40.397181272506714,
+    "command": [
+      "/root/.local/share/mirroropd/venvs/profile-cu128/bin/torchrun",
+      "--standalone",
+      "--nproc-per-node=4",
+      "tests/special_distributed/test_full_vocab_fsdp2.py",
+      "--backend",
+      "precompute",
+      "--teacher-extra-rows",
+      "4",
+      "--checkpoint",
+      "--output",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/main-four-gpu-20261025-0f02312b/full-qwen2.json"
+    ]
+  },
+  {
+    "name": "full-qwen3-fused",
+    "exit_code": 0,
+    "seconds": 43.33377003669739,
+    "command": [
+      "/root/.local/share/mirroropd/venvs/profile-cu128/bin/torchrun",
+      "--standalone",
+      "--nproc-per-node=4",
+      "tests/special_distributed/test_full_vocab_fsdp2.py",
+      "--backend",
+      "precompute_fused",
+      "--model-type",
+      "qwen3",
+      "--tied-student",
+      "--tied-teacher",
+      "--teacher-extra-rows",
+      "4",
+      "--teacher-hidden-size",
+      "64",
+      "--checkpoint",
+      "--output",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/main-four-gpu-20261025-0f02312b/full-qwen3-fused.json"
+    ]
+  },
+  {
+    "name": "sampled-current-is",
+    "exit_code": 0,
+    "seconds": 42.69481539726257,
+    "command": [
+      "/root/.local/share/mirroropd/venvs/profile-cu128/bin/torchrun",
+      "--standalone",
+      "--nproc-per-node=4",
+      "tests/special_distributed/test_shared_teacher_fsdp2.py",
+      "--policy-loss-mode",
+      "token_is",
+      "--advantage-source",
+      "current",
+      "--ppo-epochs",
+      "4",
+      "--tie-word-embeddings"
+    ]
+  },
+  {
+    "name": "sampled-frozen-ppo",
+    "exit_code": 0,
+    "seconds": 43.025596618652344,
+    "command": [
+      "/root/.local/share/mirroropd/venvs/profile-cu128/bin/torchrun",
+      "--standalone",
+      "--nproc-per-node=4",
+      "tests/special_distributed/test_shared_teacher_fsdp2.py",
+      "--policy-loss-mode",
+      "token_ppo",
+      "--advantage-source",
+      "rollout",
+      "--ppo-epochs",
+      "2"
+    ]
+  },
+  {
+    "name": "prepare-validation",
+    "exit_code": 0,
+    "seconds": 1.3445277214050293,
+    "command": [
+      "/root/.local/share/mirroropd/venvs/profile-cu128/bin/python",
+      "-c",
+      "from pathlib import Path; import pyarrow.parquet as pq; out=Path('/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/main-four-gpu-20261025-0f02312b/validation-subsets'); out.mkdir(); root=Path('/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data/math'); [(pq.write_table(pq.read_table(root/n/'test.parquet').slice(0,1),out/(n+'.parquet'))) for n in ('MATH-500','AMC23','AIME25')]"
+    ]
+  },
+  {
+    "name": "real-sampled",
+    "exit_code": 0,
+    "seconds": 349.844069480896,
+    "command": [
+      "bash",
+      "examples/mirroropd/run_math_deepseek_r1_1_5b_fsdp2.sh",
+      "trainer.total_training_steps=2",
+      "trainer.val_before_train=False",
+      "data.train_max_samples=64",
+      "data.shuffle=False",
+      "data.filter_overlong_prompts_workers=1",
+      "actor_rollout_ref.actor.use_torch_compile=False",
+      "trainer.metrics_quantile_interval=1",
+      "trainer.eval_metrics_resamples=16",
+      "trainer.logger=[console,file]",
+      "++ray_kwargs.ray_init.num_gpus=4",
+      "++ray_kwargs.ray_init.num_cpus=24",
+      "++ray_kwargs.ray_init.include_dashboard=False",
+      "++ray_kwargs.ray_init.object_store_memory=2147483648",
+      "++ray_kwargs.ray_init._temp_dir=/tmp/m4g-d927009c",
+      "++ray_kwargs.ray_init.runtime_env.env_vars.PYTHONPATH='/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl'",
+      "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/main-four-gpu-20261025-0f02312b/real-sampled/metrics.jsonl'"
+    ]
+  },
+  {
+    "name": "real-full",
+    "exit_code": 0,
+    "seconds": 340.9800064563751,
+    "command": [
+      "bash",
+      "examples/mirroropd/run_full_reverse_kl.sh",
+      "trainer.total_training_steps=2",
+      "trainer.val_before_train=False",
+      "data.train_max_samples=64",
+      "data.shuffle=False",
+      "data.filter_overlong_prompts_workers=1",
+      "actor_rollout_ref.actor.use_torch_compile=False",
+      "trainer.metrics_quantile_interval=1",
+      "trainer.eval_metrics_resamples=16",
+      "trainer.logger=[console,file]",
+      "++ray_kwargs.ray_init.num_gpus=4",
+      "++ray_kwargs.ray_init.num_cpus=24",
+      "++ray_kwargs.ray_init.include_dashboard=False",
+      "++ray_kwargs.ray_init.object_store_memory=2147483648",
+      "++ray_kwargs.ray_init._temp_dir=/tmp/m4g-6a04ceaf",
+      "++ray_kwargs.ray_init.runtime_env.env_vars.PYTHONPATH='/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl'",
+      "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/main-four-gpu-20261025-0f02312b/real-full/metrics.jsonl'"
+    ]
+  }
+]

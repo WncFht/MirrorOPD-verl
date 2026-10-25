@@ -1,0 +1,19 @@
+{
+  "python": "3.12.11 (main, Oct  7 2025, 15:34:39) [Clang 20.1.4 ]",
+  "executable": "/root/.local/share/mirroropd/venvs/profile-cu128/bin/python",
+  "packages": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.12.1",
+    "vllm": "0.25.1+cu129",
+    "ray": "2.56.1",
+    "flash-attn": "2.8.3",
+    "tensordict": "0.10.0"
+  },
+  "gpus": [
+    "0, NVIDIA H800, 81559 MiB, 550.163.01",
+    "1, NVIDIA H800, 81559 MiB, 550.163.01",
+    "2, NVIDIA H800, 81559 MiB, 550.163.01",
+    "3, NVIDIA H800, 81559 MiB, 550.163.01"
+  ],
+  "cuda_visible_devices": "0,1,2,3"
+}

@@ -173,8 +173,8 @@ def main():
             prefixes = [f"distillation/full_kl_position/p{i * 10:02d}_{(i + 1) * 10:02d}/" for i in range(10)]
             sums = [Observation.merge_partitions(metrics[p + "sum"]) for p in prefixes]
             counts = [Observation.merge_partitions(metrics[p + "token_count"]) for p in prefixes]
-            assert sum(counts) == (4 if step == 1 else 8), counts
-            multiplier = 1 if step == 1 else 2
+            assert sum(counts) == 4 * (world - 1 if step == 1 else world), counts
+            multiplier = world - 1 if step == 1 else world
             assert counts == [multiplier * c for c in [0, 1, 1, 0, 0, 0, 0, 1, 1, 0]], counts
             assert abs(sum(sums) / sum(counts) - Observation.merge_partitions(metrics["distillation/full_kl"])) < 1e-7
             record.update(position_kl_sums=sums, position_token_counts=counts)
