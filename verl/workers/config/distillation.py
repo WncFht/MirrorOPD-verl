@@ -86,6 +86,7 @@ class DistillationLossConfig(BaseConfig):
 
     loss_mode: str = "k3"
     full_vocab: FullVocabConfig = field(default_factory=FullVocabConfig)
+    mirror: Optional[dict] = None
     topk: Optional[int] = 128
     use_task_rewards: bool = True
     distillation_loss_coef: float = 1.0
@@ -123,11 +124,27 @@ class DistillationLossConfig(BaseConfig):
 
     def __post_init__(self):
         self._mutable_fields.add("loss_settings")
-        from verl.workers.config.distillation_spec import DistillationLossSettings, get_distillation_loss_settings
+        from verl.workers.config.distillation_spec import DistillationLossSettings, resolve_distillation_spec
 
-        self.loss_settings: DistillationLossSettings = get_distillation_loss_settings(self.loss_mode)
+        self.loss_settings: DistillationLossSettings = resolve_distillation_spec(self)
         if isinstance(self.full_vocab, dict):
             object.__setattr__(self, "full_vocab", FullVocabConfig(**self.full_vocab))
+        if self.loss_mode == "mirror":
+            spec = self.loss_settings
+            sampled = spec.payload_kind == "sampled"
+            if self.use_policy_gradient != sampled or self.policy_loss_mode != ("token_is" if sampled else "vanilla"):
+                raise ValueError("mirror requires token_is + PG for sampled, direct vanilla for full_vocab")
+            if self.use_task_rewards or self.loss_max_clamp is not None or self.log_prob_min_clamp is not None:
+                raise ValueError("mirror requires pure distillation with no clamps")
+            if self.advantage_source != "current":
+                raise ValueError("mirror does not use the legacy advantage_source switch; require current")
+            if (
+                not sampled
+                and not spec.teacher_only_kl
+                and self.full_vocab.backend not in ("dense", "precompute", "precompute_fused")
+            ):
+                raise ValueError("mirror full_vocab supports dense/precompute/precompute_fused")
+            return
         if self.loss_mode == "full_reverse_kl":
             if self.use_policy_gradient or self.use_task_rewards or self.policy_loss_mode != "vanilla":
                 raise ValueError("full_reverse_kl requires direct loss, no task rewards and no sampled PG mode")
@@ -335,7 +352,7 @@ class DistillationConfig(BaseConfig):
             if self.n_gpus_per_node != 0 or self.nnodes != 0:
                 raise ValueError("shared_sync requires distillation.n_gpus_per_node=0 and nnodes=0")
             loss = self.distillation_loss
-            if loss.loss_mode != "full_reverse_kl" and (
+            if loss.loss_settings.objective is None and (
                 loss.loss_mode != "k1" or not loss.use_policy_gradient or loss.use_task_rewards
             ):
                 raise ValueError("shared_sync currently requires k1 + policy gradient without task rewards")
@@ -359,8 +376,8 @@ class DistillationConfig(BaseConfig):
             if engine.qat.enable or not engine.infer_max_token_len_per_gpu or engine.infer_max_token_len_per_gpu < 1:
                 raise ValueError("shared_sync requires a positive teacher token budget and no QAT")
         self.teacher_models = self._resolve_teacher_models()
-        if self.distillation_loss.loss_mode == "full_reverse_kl" and self.execution_mode != "shared_sync":
-            raise ValueError("full_reverse_kl currently requires shared_sync")
+        if self.distillation_loss.loss_settings.objective is not None and self.execution_mode != "shared_sync":
+            raise ValueError("full_reverse_kl/mirror currently requires shared_sync")
         if self.execution_mode == "shared_sync":
             return
         teacher_world_size_sum = 0

@@ -127,6 +127,28 @@ def validate_sampled_token_distillation(config, *, use_reference_policy=False, u
     """
     if not OmegaConf.select(config, "distillation.enabled", default=False):
         return
+    mirror = OmegaConf.select(config, "distillation.distillation_loss.loss_mode") == "mirror"
+    if mirror:
+        from verl.workers.config import DistillationLossConfig
+
+        loss = omega_conf_to_dataclass(config.distillation.distillation_loss, DistillationLossConfig)
+        if OmegaConf.select(config, "actor_rollout_ref.actor.loss_agg_mode", default="token-mean") != "token-mean":
+            raise ValueError("mirror requires token-mean aggregation")
+        for key in (
+            "algorithm.rollout_correction.bypass_mode",
+            "algorithm.rollout_correction.rollout_is",
+            "algorithm.rollout_correction.rollout_rs",
+            "algorithm.rollout_correction.score_centering",
+            "actor_rollout_ref.actor.policy_loss.rollout_correction.score_centering",
+            "actor_rollout_ref.actor.use_kl_loss",
+            "algorithm.use_kl_in_reward",
+            "actor_rollout_ref.actor.entropy_coeff",
+            "actor_rollout_ref.actor.calculate_sum_pi_squared",
+        ):
+            if OmegaConf.select(config, key, default=False):
+                raise ValueError(f"mirror does not support {key}")
+        if loss.loss_settings.payload_kind == "hidden":
+            return  # shared-sync and full-vocab runtime constraints are checked by the trainer.
     if OmegaConf.select(config, "distillation.distillation_loss.policy_loss_mode", default="vanilla") == "vanilla":
         return
     from verl.workers.config import DistillationLossConfig

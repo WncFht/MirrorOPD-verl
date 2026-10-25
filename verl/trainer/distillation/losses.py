@@ -32,6 +32,7 @@ from verl.workers.config.distillation_spec import (
     DISTILLATION_SETTINGS_REGISTRY,
     DistillationLossSettings,
     get_distillation_loss_settings,
+    resolve_distillation_spec,
 )
 from verl.workers.utils.loss_context import LossContext
 from verl.workers.utils.losses import ppo_loss
@@ -229,7 +230,26 @@ def distillation_loss(
     """
     assert distillation_config is not None
     loss_config: DistillationLossConfig = distillation_config.distillation_loss
-    if loss_config.loss_mode == "full_reverse_kl":
+    spec = getattr(loss_config, "loss_settings", None) or resolve_distillation_spec(loss_config)
+    if "mirror_objective_sum" in model_output:
+        total = model_output["mirror_objective_sum"]
+        count = model_output["mirror_count"]
+        loss = LossContext.from_batch(data, config).normalize_token_sum(total) / spec.eta
+        metrics = {f"distillation/{spec.objective}/objective": Observation.ratio(total.detach() / spec.eta, count)}
+        for name, value in model_output.get("mirror_statistics", {}).items():
+            metrics[f"distillation/{name}"] = Observation.ratio(value, count)
+        if "mirror_position_sums" in model_output:
+            from verl.utils.metric.position import position_observations
+
+            metrics.update(
+                position_observations(
+                    model_output["mirror_position_sums"] / spec.eta,
+                    model_output["mirror_position_counts"],
+                    prefix=f"distillation/{spec.objective}/objective_position",
+                )
+            )
+        return loss, metrics
+    if spec.payload_kind == "hidden":
         if config.loss_agg_mode != "token-mean":
             raise ValueError("full_reverse_kl currently requires token-mean aggregation")
         total = model_output["full_kl_sum"]
@@ -247,6 +267,8 @@ def distillation_loss(
                 )
             )
         return loss, metrics
+    if spec.objective is not None:
+        return _mirror_sampled_loss(config, spec, model_output, data)
     if loss_config.policy_loss_mode != "vanilla":
         return _sampled_token_loss(config, loss_config, model_output, data)
     distillation_loss_fn = get_distillation_loss_fn(loss_config.loss_mode)
@@ -367,6 +389,50 @@ def distillation_loss(
     return distillation_loss, distillation_metrics
 
 
+def _sampled_inputs(model_output, data):
+    """One response alignment/masking boundary for explicit OPD and MDPO."""
+    mask = as_padded_response(data["response_mask"], False).bool()
+    lp = no_padding_2_padding(model_output["log_probs"], data).float()
+    lt = no_padding_2_padding(data["teacher_logprobs"], data).squeeze(-1).detach().float()
+    lb = as_padded_response(data["rollout_log_probs"]).detach().float()
+    if any(v.shape != mask.shape for v in (lp, lt, lb)):
+        raise ValueError("Sampled-token log probabilities must match the response mask shape")
+    return *(v.masked_fill(~mask, 0.0) for v in (lp, lt, lb)), mask
+
+
+def _mirror_sampled_loss(config, spec, model_output, data):
+    from verl.trainer.distillation.objectives import mdpo_sampled_terms
+    from verl.trainer.distillation.targets import build_log_weights
+
+    if spec.objective != "mdpo" or spec.payload_kind != "sampled":
+        raise ValueError("Only MDPO supports sampled mirror estimation")
+    lp, lt, lb, mask = _sampled_inputs(model_output, data)
+    lq = as_padded_response(data["old_log_probs"]).detach().float() if spec.anchor_payload else None
+    if lq is not None:
+        if lq.shape != mask.shape:
+            raise ValueError("Mirror anchor probabilities must match response mask")
+        lq = lq.masked_fill(~mask, 0.0)
+    if any(not torch.isfinite(v).all() for v in (lp, lt, lb) + (() if lq is None else (lq,))):
+        raise ValueError("Non-finite valid sampled mirror log probability")
+    b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
+    terms = mdpo_sampled_terms(lp, lb, b)
+    loss = LossContext.from_batch(data, config).aggregate(terms, mask, "token-mean") / spec.eta
+    metrics = {"distillation/mdpo/objective": Observation.ratio((terms.detach() * mask).sum() / spec.eta, mask.sum())}
+    if tu.get_non_tensor_data(data, "collect_metrics", default=False):
+        metrics.update(
+            update_observations(
+                lp,
+                lb,
+                lq,
+                (b - lp).detach() / spec.eta,
+                mask,
+                component="mdpo",
+                quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),
+            )
+        )
+    return loss, metrics
+
+
 def _sampled_token_loss(config, loss_config, model_output, data):
     """Response-token surrogate with a generation-time behavior denominator.
 
@@ -374,17 +440,9 @@ def _sampled_token_loss(config, loss_config, model_output, data):
     reinforce differentiates log pi directly. Mask before arithmetic so padded
     NaNs/infinities neither contaminate the objective nor its gradients.
     """
-    log_prob = no_padding_2_padding(model_output["log_probs"], data).float()
-    teacher = no_padding_2_padding(data["teacher_logprobs"], data).squeeze(-1).detach().float()
-    behavior = data["rollout_log_probs"].detach()
-    mask = data["response_mask"]
-    mask = as_padded_response(mask, False).bool()
-    behavior = as_padded_response(behavior).float()
-    if not (log_prob.shape == teacher.shape == behavior.shape == mask.shape):
-        raise ValueError("Sampled-token log probabilities must match the response mask shape")
-    log_prob = log_prob.masked_fill(~mask, 0.0)
-    teacher = teacher.masked_fill(~mask, 0.0)
-    behavior = behavior.masked_fill(~mask, 0.0)
+    from verl.trainer.distillation.objectives import sampled_policy_terms
+
+    log_prob, teacher, behavior, mask = _sampled_inputs(model_output, data)
     current_advantage = (teacher - log_prob).detach()
     frozen_advantage = teacher - behavior
     advantage = current_advantage if loss_config.advantage_source == "current" else frozen_advantage
@@ -394,21 +452,21 @@ def _sampled_token_loss(config, loss_config, model_output, data):
             "sum", ((current_advantage * frozen_advantage < 0) & mask).sum()
         ),
     }
-    clip_active = None
-    if loss_config.policy_loss_mode == "reinforce":
-        loss_mat = -advantage * log_prob
-    else:
-        log_ratio = log_prob - behavior
-        ratio = log_ratio.clamp(-20.0, 20.0).exp()
-        loss_mat = -ratio * advantage
-        metrics["distillation/log_ratio_guard_count"] = Metric("sum", ((log_ratio.abs() > 20) & mask).sum())
-        if loss_config.policy_loss_mode == "token_ppo":
-            low = loss_config.clip_ratio if loss_config.clip_ratio_low is None else loss_config.clip_ratio_low
-            high = loss_config.clip_ratio if loss_config.clip_ratio_high is None else loss_config.clip_ratio_high
-            clipped_loss = -ratio.clamp(1 - low, 1 + high) * advantage
-            clip_active = clipped_loss > loss_mat
-            metrics["distillation/ppo_clip_count"] = Metric("sum", (clip_active & mask).sum())
-            loss_mat = torch.maximum(loss_mat, clipped_loss)
+    low = loss_config.clip_ratio if loss_config.clip_ratio_low is None else loss_config.clip_ratio_low
+    high = loss_config.clip_ratio if loss_config.clip_ratio_high is None else loss_config.clip_ratio_high
+    loss_mat, clip_active, guarded = sampled_policy_terms(
+        log_prob,
+        behavior,
+        advantage,
+        mode=loss_config.policy_loss_mode,
+        log_ratio_guard=20.0,
+        clip_low=low,
+        clip_high=high,
+    )
+    if guarded is not None:
+        metrics["distillation/log_ratio_guard_count"] = Metric("sum", (guarded & mask).sum())
+    if clip_active is not None:
+        metrics["distillation/ppo_clip_count"] = Metric("sum", (clip_active & mask).sum())
     loss = LossContext.from_batch(data, config).aggregate(loss_mat, mask, config.loss_agg_mode)
     if tu.get_non_tensor_data(data, "collect_metrics", default=False):
         anchor = as_padded_response(data.get("old_log_probs"))
