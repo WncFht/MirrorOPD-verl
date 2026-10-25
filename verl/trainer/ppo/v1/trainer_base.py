@@ -457,10 +457,22 @@ class PPOTrainer(ABC):
     def _uses_full_vocab(self) -> bool:
         if not is_distillation_enabled(self.config.get("distillation")):
             return False
-        from verl.workers.config.distillation_spec import get_distillation_loss_settings
+        return self._distillation_spec().payload_kind == "hidden"
 
-        mode = OmegaConf.select(self.config, "distillation.distillation_loss.loss_mode")
-        return mode is not None and get_distillation_loss_settings(mode).payload_kind == "hidden"
+    def _distillation_spec(self):
+        from verl.workers.config.distillation_spec import resolve_distillation_spec
+
+        parsed = getattr(self, "distillation_config", None)
+        if parsed is not None and parsed.distillation_loss.loss_mode == self.config.distillation.distillation_loss.get(
+            "loss_mode", "k3"
+        ):
+            return parsed.distillation_loss.loss_settings
+        return resolve_distillation_spec(self.config.distillation.distillation_loss)
+
+    def _uses_mirror(self):
+        return (
+            is_distillation_enabled(self.config.get("distillation")) and self._distillation_spec().objective is not None
+        )
 
     @staticmethod
     def _validate_shared_model(model_config: HFModelConfig):
@@ -694,7 +706,7 @@ class PPOTrainer(ABC):
             batch = self._compute_shared_teacher_log_probs(batch, timing_raw)
 
         # 4. compute old_log_prob
-        if not self._uses_full_vocab():
+        if not self._uses_mirror():
             with marked_timer("old_log_prob", timing_raw, color="blue"):
                 batch = self._compute_old_log_prob(batch, metrics=metrics)
 
@@ -709,7 +721,7 @@ class PPOTrainer(ABC):
                 batch = self._compute_values(batch, metrics=metrics)
 
         # 7. compute advantage and return
-        if not self._uses_full_vocab():
+        if not self._uses_mirror():
             with marked_timer("adv", timing_raw, color="brown"):
                 batch = self._compute_advantage(batch, metrics=metrics)
 
@@ -818,7 +830,7 @@ class PPOTrainer(ABC):
         model_config: HFModelConfig = omega_conf_to_dataclass(self.config.actor_rollout_ref.model)
         if self._uses_shared_teacher():
             self._validate_shared_model(model_config)
-        if self._uses_full_vocab():
+        if self._uses_mirror():
             actor = self.config.actor_rollout_ref.actor
             if (
                 actor.strategy != "fsdp2"
@@ -2190,6 +2202,17 @@ class PPOTrainer(ABC):
         if self._uses_full_vocab():
             # Only small sample fields enter the bridge; hidden payload is read per micro-batch.
             batch.fields = ["input_ids", "position_ids", "loss_mask", "response_mask", "prompts", "responses"]
+        elif self._uses_mirror():
+            batch.fields = [
+                "input_ids",
+                "position_ids",
+                "loss_mask",
+                "response_mask",
+                "prompts",
+                "responses",
+                "teacher_logprobs",
+                "rollout_log_probs",
+            ]
         ppo_mini_batch_size = self.config.actor_rollout_ref.actor.ppo_mini_batch_size
         ppo_mini_batch_size = ppo_mini_batch_size * self.config.actor_rollout_ref.rollout.n
         calculate_entropy = self.config.actor_rollout_ref.actor.calculate_entropy or (
@@ -2215,6 +2238,9 @@ class PPOTrainer(ABC):
             "calculate_entropy": calculate_entropy,
             "full_vocab_train": self._uses_full_vocab(),
             "retain_sample_identity": self._uses_full_vocab(),
+            "full_vocab_async_write": OmegaConf.select(
+                self.config, "distillation.distillation_loss.full_vocab.async_write", default=False
+            ),
             "full_vocab_prefetch": OmegaConf.select(
                 self.config, "distillation.distillation_loss.full_vocab.prefetch", default=False
             ),
@@ -2250,6 +2276,8 @@ class PPOTrainer(ABC):
             metrics_quantile_interval=OmegaConf.select(self.config, "trainer.metrics_quantile_interval", default=8),
             metrics_attempt_start=attempts_before,
         )
+        if self._uses_mirror():
+            extra_info.update(mirror_anchor_version=(self.global_steps, getattr(self, "local_trigger_step", 0)))
         batch.extra_info.update(extra_info)
         if getattr(self, "logger", None) is not None:
             entry = {key: metrics.pop(key) for key in list(metrics) if key.startswith("policy/anchor_behavior/")}

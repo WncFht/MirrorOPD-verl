@@ -762,7 +762,8 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
                 self.loss_fn = partial(ppo_loss, config=actor_config)
             self.actor = self.actor_worker_cls(config=actor_training_config)
             full_vocab = (
-                self.distillation_enabled and distillation_config.distillation_loss.loss_mode == "full_reverse_kl"
+                self.distillation_enabled
+                and distillation_config.distillation_loss.loss_settings.payload_kind == "hidden"
             )
             if full_vocab:
                 object.__setattr__(actor_training_config.model_config, "enable_full_vocab", True)
@@ -771,7 +772,11 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
                 self.actor.engine.configure_full_vocab(
                     distillation_config.distillation_loss.full_vocab,
                     next(iter(distillation_config.teacher_models.values())).model_path,
+                    spec=distillation_config.distillation_loss.loss_settings,
                 )
+            self.mirror_spec = (
+                distillation_config.distillation_loss.loss_settings if self.distillation_enabled else None
+            )
             self.actor.set_loss_fn(self.loss_fn)
             self.set_dispatch_collect(mesh_name="actor", **self.actor.get_dispatch_collect())
 
@@ -840,12 +845,24 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
     @DistProfiler.annotate(color="red", role="actor_update", scheduled=True)
     @_with_routing_replay_flag(enabled=True)
     def update_actor(self, data: TensorDict) -> TensorDict:
+        from verl.trainer.distillation.anchor import anchor_scope
+
         try:
-            output = self.actor.train_mini_batch(data=data)
+            with anchor_scope(self.actor, data, getattr(self, "mirror_spec", None)) as anchor_seconds:
+                output = self.actor.train_mini_batch(data=data)
         finally:
             head = getattr(self.actor.engine, "full_vocab_teacher_head", None)
             if head is not None:
                 head.release()
+        if getattr(self, "mirror_spec", None) is not None and self.mirror_spec.anchor_payload:
+            if torch.distributed.is_initialized():
+                elapsed = torch.tensor(anchor_seconds, device=self.actor.device_name)
+                torch.distributed.all_reduce(
+                    elapsed, op=torch.distributed.ReduceOp.MAX, group=self.actor.engine.get_data_parallel_group()
+                )
+                anchor_seconds = elapsed.item()
+            if output is not None:
+                tu.get(output, "metrics")["perf/anchor/prepare_seconds_max"] = Metric("max", anchor_seconds)
         return output.cpu() if output is not None else None
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)

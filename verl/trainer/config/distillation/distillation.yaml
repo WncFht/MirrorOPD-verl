@@ -41,6 +41,9 @@ distillation_loss:
 
   # Loss function mode for distillation
   loss_mode: k3
+
+  # Optional MirrorConfig: objective, estimator, kappa, eta, diagnostics.
+  mirror: null
   full_vocab:
     _target_: verl.workers.config.distillation.FullVocabConfig
     backend: recompute

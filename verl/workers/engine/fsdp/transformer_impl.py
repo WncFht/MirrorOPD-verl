@@ -1206,14 +1206,16 @@ class EngineTrainModeCtx(BaseEngineCtx):
 
 @EngineRegistry.register(model_type="language_model", backend=["fsdp", "fsdp2"], device=["cuda", "npu"])
 class FSDPEngineWithLMHead(FSDPEngine):
-    def configure_full_vocab(self, config, teacher_path):
+    def configure_full_vocab(self, config, teacher_path, spec=None):
         from verl.trainer.distillation.hidden import FrozenTeacherHead
+        from verl.workers.config.distillation_spec import get_distillation_loss_settings
 
+        self.full_vocab_spec = spec or get_distillation_loss_settings("full_reverse_kl")
         self.full_vocab_config = config
         self.full_vocab_teacher_head = FrozenTeacherHead(teacher_path)
 
     def _full_vocab_output(self, micro_batch, model_inputs, teacher):
-        from verl.trainer.distillation.full_vocab import full_reverse_kl_result
+        from verl.trainer.distillation.full_vocab import full_vocab_objective_result
         from verl.trainer.distillation.profiling import full_kl_range
         from verl.utils.metric.position import position_statistics, relative_position_bins
         from verl.workers.utils.padding import prediction_positions, response_target_coordinates
@@ -1229,18 +1231,36 @@ class FSDPEngineWithLMHead(FSDPEngine):
             raise ValueError("full reverse KL does not enable sampled-policy diagnostics or entropy objectives")
         positions, packed = prediction_positions(micro_batch["input_ids"], micro_batch["loss_mask"])
 
+        capture = "teacher" if teacher else tu.get_non_tensor_data(micro_batch, "full_vocab_capture", default=None)
+
         def output(hidden, head):
             selected = hidden.squeeze(0).index_select(0, packed)
-            if teacher:
+            if capture:
+                if capture == "anchor" and getattr(self, "mirror_anchor_head", None) is None:
+                    from verl.trainer.distillation.anchor import FrozenAnchorHead
+
+                    version = tu.get(micro_batch, "mirror_anchor_version")
+
+                    def snapshot(h, w):
+                        self.mirror_anchor_head = FrozenAnchorHead(w, version)
+                        return h
+
+                    head(selected, full_vocab_callback=snapshot)
                 # Free each micro-batch GPU result instead of retaining the full batch there.
                 with full_kl_range("teacher_hidden_d2h"):
                     chunks = selected.detach().cpu().split([len(p) for p in positions])
-                return {
-                    "teacher_hidden": torch.nested.as_nested_tensor(list(chunks), layout=torch.jagged),
-                    "teacher_positions": torch.nested.as_nested_tensor(
+                payload = {
+                    f"{capture}_hidden": torch.nested.as_nested_tensor(list(chunks), layout=torch.jagged),
+                    f"{capture}_positions": torch.nested.as_nested_tensor(
                         [p.cpu() for p in positions], layout=torch.jagged
                     ),
                 }
+                if capture == "anchor":
+                    version = tu.get(micro_batch, "mirror_anchor_version")
+                    payload["anchor_version"] = (
+                        torch.tensor(version, dtype=torch.int64).expand(len(positions), -1).clone()
+                    )
+                return payload
             actual_positions = micro_batch["teacher_positions"]
             if any(not torch.equal(a, b) for a, b in zip(positions, actual_positions.unbind(), strict=True)):
                 raise ValueError("Teacher hidden prediction positions do not match student loss mask")
@@ -1248,14 +1268,35 @@ class FSDPEngineWithLMHead(FSDPEngine):
             with full_kl_range("teacher_head_get"):
                 weight = self.full_vocab_teacher_head.get(selected.device, selected.dtype)
             config = self.full_vocab_config
+            spec = self.full_vocab_spec
+            anchor_hidden = anchor_weight = None
+            if spec.anchor_payload:
+                saved_positions = micro_batch["anchor_positions"]
+                if any(not torch.equal(a, b) for a, b in zip(positions, saved_positions.unbind(), strict=True)):
+                    raise ValueError("Anchor hidden prediction positions do not match student loss mask")
+                version = tuple(tu.get(micro_batch, "mirror_anchor_version"))
+                head_snapshot = getattr(self, "mirror_anchor_head", None)
+                actual_version = micro_batch["anchor_version"]
+                expected_version = torch.tensor(version, device=actual_version.device, dtype=actual_version.dtype)
+                if (
+                    head_snapshot is None
+                    or head_snapshot.version != version
+                    or any(not torch.equal(v, expected_version) for v in actual_version.unbind())
+                ):
+                    raise ValueError("Anchor payload/head version does not match this actor call")
+                anchor_hidden = micro_batch["anchor_hidden"].values().to(selected.dtype)
+                anchor_weight = head_snapshot.get(selected.device, selected.dtype)
 
             def compute(h, w):
                 with torch.autocast(device_type=h.device.type, enabled=False):
-                    return full_reverse_kl_result(
+                    return full_vocab_objective_result(
                         h,
                         w.to(h.dtype),
                         teacher_hidden.to(h.dtype),
                         weight,
+                        spec=spec,
+                        hq=anchor_hidden,
+                        wq=anchor_weight,
                         backend=config.backend,
                         token_chunk=config.token_chunk_size,
                         vocab_chunk=config.vocab_chunk_size,
@@ -1264,19 +1305,28 @@ class FSDPEngineWithLMHead(FSDPEngine):
             # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
             with full_kl_range("head_loss"):
                 result = head(selected, full_vocab_callback=compute)
-            model_output = {"full_kl_sum": result.loss_sum, "full_kl_count": packed.numel()}
-            if result.token_kl is not None:
+            if spec.teacher_only_kl:
+                model_output = {"full_kl_sum": result.loss_sum, "full_kl_count": packed.numel()}
+                prefix = "full_kl"
+            else:
+                model_output = {
+                    "mirror_objective_sum": result.loss_sum,
+                    "mirror_count": packed.numel(),
+                    "mirror_statistics": {k: v.sum() for k, v in result.token_diagnostics.items()},
+                }
+                prefix = "mirror"
+            if result.token_objective is not None:
                 # Prediction-state indices become target coordinates in the original
                 # response. Masked gaps are retained; prompt tokens never enter bins.
                 targets, lengths = response_target_coordinates(
                     micro_batch["input_ids"], micro_batch["responses"], positions
                 )
                 bins = relative_position_bins(targets, lengths)
-                sums, counts = position_statistics(result.token_kl, bins)
-                model_output.update(full_kl_position_sums=sums, full_kl_position_counts=counts)
+                sums, counts = position_statistics(result.token_objective, bins)
+                model_output.update({f"{prefix}_position_sums": sums, f"{prefix}_position_counts": counts})
             return model_output
 
-        with full_kl_range("teacher_forward" if teacher else "student_forward"):
+        with full_kl_range(f"{capture}_forward" if capture else "student_forward"):
             return self.module(**model_inputs, use_cache=False, full_vocab_callback=output)
 
     def prepare_model_inputs(self, micro_batch: TensorDict):
@@ -1700,6 +1750,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
         full_vocab = tu.get_non_tensor_data(micro_batch, "full_vocab_teacher", default=False) or tu.get_non_tensor_data(
             micro_batch, "full_vocab_train", default=False
         )
+        full_vocab = full_vocab or bool(tu.get_non_tensor_data(micro_batch, "full_vocab_capture", default=None))
         if full_vocab:
             from verl.trainer.distillation.profiling import full_kl_range
 
@@ -1722,7 +1773,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
         with autocast_ctx:
             full_teacher = tu.get_non_tensor_data(micro_batch, "full_vocab_teacher", default=False)
             full_train = tu.get_non_tensor_data(micro_batch, "full_vocab_train", default=False)
-            if full_teacher or full_train:
+            if full_teacher or full_train or tu.get_non_tensor_data(micro_batch, "full_vocab_capture", default=None):
                 model_output = self._full_vocab_output(micro_batch, model_inputs, teacher=full_teacher)
             else:
                 raw_output = self.module(**model_inputs, use_cache=False)

@@ -88,3 +88,48 @@ def fused_kl_rows(hs, ws, ht, wt):
         zt = project(ht, wt)
     with full_kl_range("fused_kl_and_grad_logits"):
         return fused_rows(zp, zt, hs.dtype)
+
+
+@triton.jit
+def _bpo_partial_mean(Z, BIAS, LQ, PART, V: tl.constexpr, P: tl.constexpr, B: tl.constexpr):
+    row, part = tl.program_id(0), tl.program_id(1)
+    col = part * B + tl.arange(0, B)
+    valid = col < V
+    ix = row * V + col
+    q = tl.where(valid, tl.exp(tl.load(LQ + ix, valid, -float("inf"))), 0.0)
+    d = tl.load(Z + ix, valid, 0).to(tl.float32) - tl.load(BIAS + ix, valid, 0).to(tl.float32)
+    tl.store(PART + row * P + part, tl.sum(q * d, 0))
+
+
+@triton.jit
+def _bpo_mean(PART, MU, P: tl.constexpr, B: tl.constexpr):
+    row = tl.program_id(0)
+    j = tl.arange(0, B)
+    tl.store(MU + row, tl.sum(tl.load(PART + row * P + j, j < P, 0), 0))
+
+
+@triton.jit
+def _bpo_gradient(Z, BIAS, LQ, MU, DZ, LOSS, V: tl.constexpr, P: tl.constexpr, B: tl.constexpr):
+    row, part = tl.program_id(0), tl.program_id(1)
+    col = part * B + tl.arange(0, B)
+    valid = col < V
+    ix = row * V + col
+    q = tl.where(valid, tl.exp(tl.load(LQ + ix, valid, -float("inf"))), 0.0)
+    d = tl.load(Z + ix, valid, 0).to(tl.float32) - tl.load(BIAS + ix, valid, 0).to(tl.float32)
+    centered = d - tl.load(MU + row)
+    tl.store(DZ + ix, q * centered, valid)
+    tl.store(LOSS + row * P + part, 0.5 * tl.sum(q * centered * centered, 0))
+
+
+def fused_bpo_rows(z, b, log_q, dtype):
+    """Stable centered variance under frozen q; no student softmax or second-moment subtraction."""
+    assert z.is_cuda and z.is_contiguous() and b.is_contiguous() and log_q.is_contiguous()
+    n, v = z.shape
+    parts = triton.cdiv(v, 4096)
+    partial = torch.empty((n, parts), device=z.device, dtype=torch.float32)
+    mu = torch.empty(n, device=z.device, dtype=torch.float32)
+    dz = torch.empty_like(z, dtype=dtype)
+    _bpo_partial_mean[(n, parts)](z, b, log_q, partial, v, parts, 4096)
+    _bpo_mean[(n,)](partial, mu, parts, triton.next_power_of_2(parts))
+    _bpo_gradient[(n, parts)](z, b, log_q, mu, dz, partial, v, parts, 4096)
+    return partial.sum(-1), dz

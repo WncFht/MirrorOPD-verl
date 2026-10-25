@@ -17,11 +17,22 @@ class HiddenBatchIO:
         # Old direct callers remain supported at this payload-specific boundary.
         self.keys_field = "sample_keys" if "sample_keys" in data else "full_vocab_keys"
         self.active = self.keys_field in data
-        self.teacher = self.active and tu.get_non_tensor_data(data, "full_vocab_teacher", default=False)
+        self.capture = tu.get_non_tensor_data(data, "full_vocab_capture", default=None)
+        if tu.get_non_tensor_data(data, "full_vocab_teacher", default=False):
+            self.capture = "teacher"
+        if self.capture not in (None, "teacher", "anchor"):
+            raise ValueError(f"Unknown hidden capture source: {self.capture}")
+        self.writer = self.active and self.capture is not None
+        sources = tu.get_non_tensor_data(data, "full_vocab_sources", default=("teacher",))
+        if any(source not in ("teacher", "anchor") for source in sources):
+            raise ValueError("Unknown frozen hidden source")
+        self.fields = [field for source in sources for field in (f"{source}_hidden", f"{source}_positions")]
+        if "anchor" in sources:
+            self.fields.append("anchor_version")
         self.student = self.active and tu.get_non_tensor_data(data, "full_vocab_train", default=False)
         partition_field = "sample_partition" if self.keys_field == "sample_keys" else "full_vocab_partition"
         self.partition = tu.get_non_tensor_data(data, partition_field, default=None)
-        self.async_write = self.teacher and tu.get_non_tensor_data(data, "full_vocab_async_write", default=False)
+        self.async_write = self.writer and tu.get_non_tensor_data(data, "full_vocab_async_write", default=False)
         self.prefetch = self.student and tu.get_non_tensor_data(data, "full_vocab_prefetch", default=False)
         self.pool = None
         self.pending_write = None
@@ -50,10 +61,10 @@ class HiddenBatchIO:
             payload = self.get(
                 keys=list(batch[self.keys_field]),
                 partition_id=self.partition,
-                select_fields=["teacher_hidden", "teacher_positions"],
+                select_fields=self.fields,
             )
-            if len(payload) != len(batch):
-                raise ValueError("Incomplete teacher hidden payload")
+            if len(payload) != len(batch) or any(field not in payload for field in self.fields):
+                raise ValueError("Incomplete teacher/anchor hidden payload")
             return payload
 
     def __iter__(self):
@@ -69,13 +80,15 @@ class HiddenBatchIO:
             else:
                 future = None
             batch.update(payload)
-            yield batch
-            # Do not keep completed payloads in the micro-batch list for the whole update.
-            batch.pop("teacher_hidden", None)
-            batch.pop("teacher_positions", None)
+            try:
+                yield batch
+            finally:
+                # Release every injected source even when forward/backward raises.
+                for field in self.fields:
+                    batch.pop(field, None)
 
     def publish(self, output, batch):
-        if not self.teacher:
+        if not self.writer:
             return
         model_output = output["model_output"]
         payload = TensorDict(model_output, batch_size=[len(batch)])
@@ -94,7 +107,7 @@ class HiddenBatchIO:
         else:
             write()
         output["model_output"] = {
-            "teacher_payload_ready": torch.nested.nested_tensor(
+            f"{self.capture}_payload_ready": torch.nested.nested_tensor(
                 [torch.ones(1, dtype=torch.bool) for _ in keys], layout=torch.jagged
             )
         }

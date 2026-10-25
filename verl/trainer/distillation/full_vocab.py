@@ -180,15 +180,23 @@ class PrecomputedKL(torch.autograd.Function):
     """Shared accumulation/VJP for ordinary and fused block reductions."""
 
     @staticmethod
-    def forward(ctx, hs, ws, ht, wt, token_chunk, row_kernel):
+    def forward(ctx, hs, ws, ht, wt, token_chunk, row_kernel, hq=None, wq=None, spec=None):
+        ctx.input_count = len(ctx.needs_input_grad)
         dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
         dh = torch.zeros(hs.shape, device=hs.device, dtype=dtype)
         dw = torch.zeros(ws.shape, device=ws.device, dtype=dtype)
         total = torch.zeros((), device=hs.device, dtype=dtype)
         token_kl = torch.empty(len(hs), device=hs.device, dtype=dtype)
+        diagnostics = torch.empty(
+            (len(hs), 4 if spec is not None and spec.diagnostics else 0), device=hs.device, dtype=dtype
+        )
         for start in range(0, len(hs), token_chunk):
             stop = min(start + token_chunk, len(hs))
-            kl, dz = row_kernel(hs[start:stop], ws, ht[start:stop], wt)
+            if spec is None:
+                kl, dz = row_kernel(hs[start:stop], ws, ht[start:stop], wt)
+            else:
+                kl, dz, info = row_kernel(hs[start:stop], ws, ht[start:stop], wt, hq[start:stop], wq, spec)
+                diagnostics[start:stop] = info
             total += kl.sum()
             token_kl[start:stop] = kl
             with full_kl_range("grad_hidden"):
@@ -197,15 +205,18 @@ class PrecomputedKL(torch.autograd.Function):
                 add_product(dw, dz.T, hs[start:stop])
             del kl, dz
         ctx.save_for_backward(dh.to(hs.dtype), dw.to(ws.dtype))
-        ctx.mark_non_differentiable(token_kl)
-        return total, token_kl
+        if spec is None:
+            ctx.mark_non_differentiable(token_kl)
+            return total, token_kl
+        ctx.mark_non_differentiable(token_kl, diagnostics)
+        return total, token_kl, diagnostics
 
     @staticmethod
     @torch.autograd.function.once_differentiable
-    def backward(ctx, upstream, _token_kl_grad):
+    def backward(ctx, upstream, *unused):
         dh, dw = ctx.saved_tensors
         with full_kl_range("backward_apply"):
-            return dh * upstream, dw * upstream, None, None, None, None
+            return (dh * upstream, dw * upstream) + (None,) * (ctx.input_count - 2)
 
 
 @torch.no_grad()
@@ -294,3 +305,92 @@ def full_reverse_kl_result(hs, ws, ht, wt, *, backend="recompute", token_chunk=5
         labels = torch.zeros(len(hs), dtype=torch.long, device=hs.device)
         return FullKLResult(loss(hs, ws, ht, wt, labels) * len(hs), None)
     raise ValueError(f"Unknown full reverse-KL backend: {backend}")
+
+
+class FullVocabObjectiveResult(NamedTuple):
+    """Unscaled objective sum and detached rows; final loss applies 1/eta once."""
+
+    loss_sum: torch.Tensor
+    token_objective: torch.Tensor | None
+    token_diagnostics: dict[str, torch.Tensor]
+
+
+_MIRROR_DIAGNOSTICS = ("target_kl", "target_log_z", "anchor_kl", "teacher_kl")
+
+
+def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False):
+    from verl.trainer.distillation.objectives import full_vocab_rows
+    from verl.trainer.distillation.targets import build_log_weights
+
+    with torch.no_grad():
+        # Normalize the FULL teacher before restricting to the student's support.
+        lt = project(ht, wt).log_softmax(-1)[:, : len(ws)]
+        lq = project(hq, wq).log_softmax(-1)
+        b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
+    z = project(hs, ws)
+    if fused:
+        from verl.trainer.distillation.full_vocab_triton import fused_bpo_rows, fused_rows
+
+        if spec.objective == "mdpo":
+            kl, dz = fused_rows(z.contiguous(), b.contiguous(), hs.dtype)
+            rows = kl - b.logsumexp(-1)
+        else:
+            rows, dz = fused_bpo_rows(z.contiguous(), b.contiguous(), lq.contiguous(), hs.dtype)
+        # No extra projection for diagnostics; enable softmax only when requested.
+        info = full_vocab_rows(z, b, lq, objective=spec.objective, diagnostics=True)[2] if spec.diagnostics else {}
+    else:
+        rows, dz, info = full_vocab_rows(z, b, lq, objective=spec.objective, diagnostics=spec.diagnostics)
+        dz = dz.to(hs.dtype)
+    if spec.diagnostics:
+        lp = z.log_softmax(-1)
+        info["teacher_kl"] = (lp.exp() * (lp - lt)).sum(-1).detach()
+        diag = torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS], dim=-1)
+    else:
+        diag = z.new_empty((len(hs), 0))
+    return rows, dz, diag
+
+
+def full_vocab_objective_result(
+    hs, ws, ht, wt, *, spec, hq=None, wq=None, backend="precompute", token_chunk=512, vocab_chunk=8192
+):
+    """One dispatcher for teacher-only KL, weighted-target MDPO, and full BPO."""
+    if spec.teacher_only_kl:
+        result = full_reverse_kl_result(
+            hs, ws, ht, wt, backend=backend, token_chunk=token_chunk, vocab_chunk=vocab_chunk
+        )
+        return FullVocabObjectiveResult(result.loss_sum, result.token_kl, {})
+    if spec.payload_kind != "hidden" or spec.objective not in ("mdpo", "bpo"):
+        raise ValueError("Full-vocab mirror objective requires MDPO or BPO with hidden payload")
+    if backend not in ("dense", "precompute", "precompute_fused"):
+        raise ValueError(f"Unsupported mirror full-vocab backend: {backend}")
+    if hq is None or wq is None:
+        raise ValueError("Mirror full-vocab objective requires frozen anchor hidden/head")
+    if any(x.ndim != 2 for x in (hs, ws, ht, wt, hq, wq)):
+        raise ValueError("full-vocab expects 2-D hidden states and heads")
+    if (
+        len(hs) != len(ht)
+        or len(hs) != len(hq)
+        or len(wq) != len(ws)
+        or len(wt) < len(ws)
+        or hs.shape[1] != ws.shape[1]
+        or ht.shape[1] != wt.shape[1]
+        or hq.shape[1] != wq.shape[1]
+    ):
+        raise ValueError("Mirror hidden/head shapes or teacher/anchor support are incompatible")
+    if min(token_chunk, vocab_chunk, len(ws)) <= 0:
+        raise ValueError("Positive chunk sizes and nonempty vocabulary required")
+    ht, wt, hq, wq = (x.detach() for x in (ht, wt, hq, wq))
+    if len(hs) == 0:
+        return FullVocabObjectiveResult(hs.sum() * 0 + ws.sum() * 0, hs.new_empty(0), {})
+    if backend == "dense":
+        rows, _, diag = _mirror_rows(hs, ws, ht, wt, hq, wq, spec)
+        total = rows.sum()
+    else:
+        from functools import partial
+
+        row_kernel = partial(
+            _mirror_rows, fused=backend == "precompute_fused" and hs.is_cuda and hs.dtype == torch.bfloat16
+        )
+        total, rows, diag = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
+    info = {k: diag[:, i].detach() for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if spec.diagnostics else {}
+    return FullVocabObjectiveResult(total, rows.detach(), info)
