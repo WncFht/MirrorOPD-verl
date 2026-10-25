@@ -1,6 +1,6 @@
 # 指标观测、位置分桶与更新出口
 
-本页解释数据怎样变成指标，字段含义和命名仍以[当前指标字典](../metrics/2026-10-22-指标字典.md)为准。更新计数和恢复见[进度与 checkpoint](progress-checkpoint.md)。
+本页解释数据怎样变成指标，字段含义和命名仍以[当前指标字典](../experiments/metrics/指标字典.md)为准。更新计数和恢复见[进度与 checkpoint](progress-checkpoint.md)。
 
 ## 从局部观测到日志
 
@@ -55,4 +55,4 @@ Full-KL 的调用者负责预测 state→response target 的换算、业务 name
 
 训练分位数由 `trainer.metrics_quantile_interval` 控制；评测重采样由 `trainer.eval_metrics_resamples` 控制。完整日志与 Console 展示分别处理，不通过删除原始字段来限制面板数量。条件功能在实际启用后产生对应观测。
 
-字段定义和比较口径统一由[实验指标](../metrics/README.md)维护。2026-10-22 的 policy-v3 实现、E3 与 IS/RS 验收、旧字段映射和设计背景归入[指标工程档案](../archive/README.md#指标系统历史)，其数值只描述当时的代码和测试范围。
+字段定义和比较口径统一由[实验指标](../experiments/metrics/README.md)维护。2026-10-22 的 policy-v3 实现、E3 与 IS/RS 验收、旧字段映射和设计背景归入[指标工程档案](../archive/README.md#指标系统历史)，其数值只描述当时的代码和测试范围。

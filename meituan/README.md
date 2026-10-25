@@ -253,7 +253,7 @@ make sync-log-upload WANDB_UPLOAD_JOBS=1 WANDB_UPLOAD_TIMEOUT=300
 
 原始日志默认保持原来的 entity/project/run ID。测试或迁移时可以通过环境变量 `MIRROROPD_UPLOAD_ENTITY`、`MIRROROPD_UPLOAD_PROJECT` 明确覆盖云端目标；该目标在入队时固定，之后改变环境变量不会悄悄改变已排队任务的目的地。
 
-本地解码工具仍位于独立仓库的 `wandb-logs/tools/wandb_local.py`。在该仓库使用 `make setup`、`make decode`、`make csv RUN=<run-id>`，无需等待云端上传。原始数据位于 `MirrorOPD-verl/wandb/`，派生数据位于 `derived/MirrorOPD-verl/`。MirrorOPD 的分析入口继续委托这个解码器，见[分析复现](../examples/mirroropd/docs/分析复现.md)。
+本地解码工具仍位于独立仓库的 `wandb-logs/tools/wandb_local.py`。在该仓库使用 `make setup`、`make decode`、`make csv RUN=<run-id>`，无需等待云端上传。原始数据位于 `MirrorOPD-verl/wandb/`，派生数据位于 `derived/MirrorOPD-verl/`。MirrorOPD 的分析入口继续委托这个解码器，见[分析复现](../examples/mirroropd/docs/experiments/复现与维护.md)。
 
 终端 stdout/stderr 保存到 `outputs/<实验名>/train.log`，通过 `sync-results-pack` 传回；`sync-log-pack` 负责 W&B 离线 run。本机验证结果与已知边界见 [W&B 上传重构验证](docs/2026-10-24-W&B上传重构与本机验证.md)。
 

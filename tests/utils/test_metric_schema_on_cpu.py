@@ -13,7 +13,8 @@ from verl.utils.metric.schema import evaluation_metrics, metric_axis, outer_metr
 def test_every_observed_old_key_is_removed_from_public_projection():
     path = (
         Path(__file__).parents[2]
-        / "examples/mirroropd/docs/metrics/data/metrics-system-20261021/current-metric-inventory.csv"
+        / "examples/mirroropd/docs/archive/metric-implementation/data/metrics-system-20261021"
+        / "current-metric-inventory.csv"
     )
     old = {
         row["metric_key"]: 1.0
