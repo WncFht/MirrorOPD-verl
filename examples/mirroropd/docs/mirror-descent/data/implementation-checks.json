@@ -1,0 +1,620 @@
+{
+  "date": "2026-10-25",
+  "source_base": "cfd6ee38c",
+  "scope": "Correctness and short training integration; no quality or throughput claim",
+  "cpu": {
+    "passed": 302,
+    "skipped": 7,
+    "note": "7 CUDA tests skipped here and passed separately; includes 4 real TQ cases"
+  },
+  "cuda": {
+    "passed": 7,
+    "dtype": "BF16",
+    "vocab_sizes": [
+      31,
+      8193,
+      151936
+    ]
+  },
+  "fsdp": [
+    {
+      "objective": "bpo",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": true,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.0032511453609913588,
+            0.0019186657154932618,
+            0.0008959150873124599
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.0016000892501324415,
+            0.0008509043254889548,
+            0.000313136144541204
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0007620464311912656,
+            0.00020349177066236734,
+            0.00028197828214615583
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0007620464311912656,
+            0.00020349177066236734,
+            0.00028197828214615583
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_legacy_equal": false,
+      "actor_wrapper_and_timing": true,
+      "evidence": "outputs/mirror-acceptance/bpo-fused.json"
+    },
+    {
+      "objective": "mdpo",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.0980791449546814,
+            0.09646226465702057,
+            0.09528467804193497
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.0938493013381958,
+            0.09296993166208267,
+            0.09234825521707535
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0917704850435257,
+            0.09117573499679565,
+            0.09130080044269562
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0917704850435257,
+            0.09117573499679565,
+            0.09130080044269562
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "evidence": "outputs/mirror-acceptance/mdpo-fused.json"
+    },
+    {
+      "objective": "mdpo",
+      "estimator": "sampled",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": true,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.10187782347202301,
+            -0.10284288227558136,
+            -0.13626596331596375
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.030431535094976425,
+            0.12213891744613647,
+            0.08587582409381866
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.04552688077092171,
+            0.006192771717905998,
+            -0.014520584605634212
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.04552688077092171,
+            0.006192771717905998,
+            -0.014520584605634212
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "evidence": "outputs/mirror-acceptance/mdpo-sampled.json"
+    },
+    {
+      "objective": "mdpo",
+      "estimator": "full_vocab",
+      "eta": 1.0,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.1044764518737793,
+            0.09963423013687134,
+            0.0967555046081543
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 1,
+          "loss": [
+            0.1044764518737793,
+            0.09963423013687134,
+            0.0967555046081543
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.09518835693597794,
+            0.09415129572153091,
+            0.09341851621866226
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.09325119853019714,
+            0.09292331337928772,
+            0.09263452887535095
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.09325119853019714,
+            0.09292331337928772,
+            0.09263452887535095
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_legacy_equal": true,
+      "evidence": "outputs/mirror-acceptance/mdpo-endpoint.json"
+    },
+    {
+      "objective": "bpo",
+      "estimator": "full_vocab",
+      "eta": 1.0,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": false,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.01309945434331894,
+            0.008284671232104301,
+            0.005450094118714333
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.0040243081748485565,
+            0.002995355986058712,
+            0.0022637019865214825
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_legacy_equal": false,
+      "evidence": "outputs/mirror-acceptance/bpo-eta1.json"
+    },
+    {
+      "objective": "bpo",
+      "model_type": "qwen3",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.0035188551992177963,
+            0.006133739370852709,
+            0.0018692768644541502
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.0019096732139587402,
+            0.0016567402053624392,
+            0.0009533377597108483
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0011228732764720917,
+            0.0003552921989466995,
+            0.000281070068012923
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0011228732764720917,
+            0.0003552921989466995,
+            0.000281070068012923
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_legacy_equal": false,
+      "actor_wrapper_and_timing": true,
+      "evidence": "outputs/mirror-acceptance/bpo-qwen3.json"
+    }
+  ],
+  "real_model": [
+    {
+      "name": "real-bpo",
+      "exit_code": 0,
+      "objective": "bpo",
+      "estimator": "full_vocab",
+      "kappa": 0.5,
+      "eta": 0.3,
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "gpus": 4,
+      "outer_steps": 2,
+      "ppo_epochs": 2,
+      "optimizer_steps": 4,
+      "response_cap": 64,
+      "parameter_dtype": "bfloat16",
+      "optimizer_overrides": {
+        "foreach": false
+      },
+      "losses": [
+        0.017709052190184593,
+        0.01706586219370365,
+        0.017326492816209793,
+        0.017615843564271927
+      ],
+      "gradient_norms": [
+        1.9921875,
+        1.9375,
+        1.9609375,
+        1.96875
+      ],
+      "metrics": "outputs/mirror-acceptance/real-bpo/metrics.jsonl",
+      "command": "outputs/mirror-acceptance/real-bpo/command.sh"
+    },
+    {
+      "name": "real-mdpo",
+      "exit_code": 0,
+      "objective": "mdpo",
+      "estimator": "full_vocab",
+      "kappa": 0.5,
+      "eta": 0.3,
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "gpus": 2,
+      "outer_steps": 2,
+      "ppo_epochs": 2,
+      "optimizer_steps": 4,
+      "response_cap": 64,
+      "parameter_dtype": "fp32",
+      "optimizer_overrides": null,
+      "losses": [
+        0.053750403225421906,
+        0.05360934138298035,
+        0.027284076437354088,
+        0.027308814227581024
+      ],
+      "gradient_norms": [
+        2.9192988872528076,
+        2.929056167602539,
+        1.9631268978118896,
+        1.9540627002716064
+      ],
+      "metrics": "outputs/mirror-acceptance/real-mdpo/metrics.jsonl",
+      "command": "outputs/mirror-acceptance/real-mdpo/command.sh"
+    },
+    {
+      "name": "real-sampled",
+      "exit_code": 0,
+      "objective": "mdpo",
+      "estimator": "sampled",
+      "kappa": 0.5,
+      "eta": 0.3,
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "gpus": 2,
+      "outer_steps": 2,
+      "ppo_epochs": 2,
+      "optimizer_steps": 4,
+      "response_cap": 64,
+      "parameter_dtype": "fp32",
+      "optimizer_overrides": null,
+      "losses": [
+        0.08133040368556976,
+        0.08220730721950531,
+        0.059179652482271194,
+        0.05748672038316727
+      ],
+      "gradient_norms": [
+        6.0357818603515625,
+        4.885189056396484,
+        4.494350433349609,
+        4.577014923095703
+      ],
+      "metrics": "outputs/mirror-acceptance/real-sampled/metrics.jsonl",
+      "command": "outputs/mirror-acceptance/real-sampled/command.sh"
+    }
+  ],
+  "io_final_recheck": {
+    "passed": 12,
+    "note": "After capture-role naming cleanup; overlaps the main CPU suite"
+  },
+  "unified_entry": {
+    "entry": "examples/mirroropd/run_math_opd_ablation_fsdp2.sh",
+    "presets_checked": 43,
+    "allowed_representation_changes": [
+      "distillation.distillation_loss.loss_mode",
+      "distillation.distillation_loss.mirror"
+    ],
+    "models_budgets_validation_defaults_unchanged": true,
+    "launcher_objective_budget_suite": {
+      "passed": 343
+    },
+    "final_targeted_suite": {
+      "passed": 185,
+      "note": "Overlaps earlier suite; includes queue, labels and guard distinction"
+    },
+    "sampled_fsdp_losses_match_before_refactor": true,
+    "sampled_fsdp_evidence": "outputs/mirror-acceptance/unified-sampled-fsdp.json",
+    "real_bpo": {
+      "preset": "E13",
+      "method": "bpo",
+      "eta": 0.3,
+      "kappa": 0.5,
+      "gpus": 2,
+      "parameter_dtype": "fp32",
+      "optimizer_overrides": null,
+      "outer_steps": 2,
+      "ppo_epochs": 2,
+      "optimizer_steps": 4,
+      "exit_code": 0,
+      "losses": [
+        0.018250033259391785,
+        0.01802957057952881,
+        0.007793380878865719,
+        0.007589301094412804
+      ],
+      "anchor_timing_reported": true,
+      "metrics": "outputs/mirror-acceptance/unified-entry-bpo/metrics.jsonl",
+      "command": "outputs/mirror-acceptance/unified-entry-bpo/command.sh"
+    },
+    "final_launcher_suite": {
+      "passed": 37,
+      "note": "Final aliases, environment precedence and custom-domain names"
+    },
+    "documentation_links_checked": 384
+  },
+  "entry_refactor": {
+    "public_entry": "examples/mirroropd/run_math_opd_ablation_fsdp2.sh",
+    "planner": "examples/mirroropd/launchers/math_experiment.py",
+    "resolved_plans_compared": 194,
+    "resolved_plans_match": true,
+    "launcher_and_planner_tests_passed": 232,
+    "pure_planner_tests_passed": 15,
+    "native_config_only": {
+      "preset": "E17",
+      "objective": "bpo",
+      "eta": 0.3,
+      "ppo_epochs": 16
+    },
+    "scope": "Entry/planning refactor only; no training-target or kernel changes",
+    "local_hope_migrated": true,
+    "remote_deployment_performed": false,
+    "overview": {
+      "generated_comment": true,
+      "command": "--overview",
+      "planner_and_unified_tests_passed": 51,
+      "extra_dependencies": []
+    }
+  },
+  "numerical_kernel_optimization": {
+    "cpu_passed": 197,
+    "cpu_cuda_skipped": 35,
+    "cuda_passed": 35,
+    "cpu_evidence": "outputs/mirror-performance/cpu-tests.log",
+    "cuda_evidence": "outputs/mirror-performance/gpu-tests.log",
+    "performance": "full-vocab-performance.json",
+    "fsdp_evidence": [
+      "outputs/mirror-performance/fsdp-mdpo.json",
+      "outputs/mirror-performance/fsdp-bpo.json"
+    ],
+    "real_model_smoke": [
+      {
+        "objective": "mdpo",
+        "world_size": 4,
+        "outer_steps": 2,
+        "updates_per_outer": 2,
+        "optimizer_steps": 4,
+        "dtype": "default FP32 model/Adam, BF16 mixed precision",
+        "backend": "precompute_fused",
+        "diagnostics": true,
+        "token_chunk": 128,
+        "prompt_cap": 512,
+        "response_cap": 64,
+        "train_batch_size": 8,
+        "eta": 0.3,
+        "kappa": 0.5,
+        "all_objective_diagnostics_grad_norm_finite": true,
+        "records": [
+          {
+            "update": 1,
+            "distill/mdpo/objective": 0.03445178084075451,
+            "distill/target_kl": 0.00461384718073532,
+            "distill/target_log_z": -0.005721687630284578,
+            "distill/anchor_kl": 6.370246410369873e-07,
+            "distill/teacher_kl": 0.05837094411253929,
+            "optim/actor/grad_norm_preclip": 1.6850401163101196
+          },
+          {
+            "update": 2,
+            "distill/mdpo/objective": 0.03419237770140171,
+            "distill/target_kl": 0.0045360258664004505,
+            "distill/target_log_z": -0.005721687630284578,
+            "distill/anchor_kl": 7.792934775352478e-05,
+            "distill/teacher_kl": 0.0578947439789772,
+            "optim/actor/grad_norm_preclip": 1.647205114364624
+          },
+          {
+            "update": 3,
+            "distill/mdpo/objective": 0.03494650078937411,
+            "distill/target_kl": 0.004737867275252938,
+            "distill/target_log_z": -0.0057460833340883255,
+            "distill/anchor_kl": 3.46451997756958e-07,
+            "distill/teacher_kl": 0.05820760875940323,
+            "optim/actor/grad_norm_preclip": 1.7606823444366455
+          },
+          {
+            "update": 4,
+            "distill/mdpo/objective": 0.03436963865533471,
+            "distill/target_kl": 0.004564808681607246,
+            "distill/target_log_z": -0.0057460833340883255,
+            "distill/anchor_kl": 0.000105295330286026,
+            "distill/teacher_kl": 0.057296935468912125,
+            "optim/actor/grad_norm_preclip": 1.7131199836730957
+          }
+        ],
+        "command": "outputs/mirror-performance/real-mdpo/command.sh",
+        "config": "outputs/mirror-performance/real-mdpo/resolved_config.yaml",
+        "metrics": "outputs/mirror-performance/real-mdpo/metrics.jsonl",
+        "log": "outputs/mirror-performance/real-mdpo/train.log"
+      },
+      {
+        "objective": "bpo",
+        "world_size": 4,
+        "outer_steps": 2,
+        "updates_per_outer": 2,
+        "optimizer_steps": 4,
+        "dtype": "default FP32 model/Adam, BF16 mixed precision",
+        "backend": "precompute_fused",
+        "diagnostics": true,
+        "token_chunk": 128,
+        "prompt_cap": 512,
+        "response_cap": 64,
+        "train_batch_size": 8,
+        "eta": 0.3,
+        "kappa": 0.5,
+        "all_objective_diagnostics_grad_norm_finite": true,
+        "records": [
+          {
+            "update": 1,
+            "distill/bpo/objective": 0.015042731305584311,
+            "distill/target_kl": 0.004881006549112499,
+            "distill/target_log_z": -0.006063050823286176,
+            "distill/anchor_kl": 5.550682544708252e-07,
+            "distill/teacher_kl": 0.06265198811888695,
+            "optim/actor/grad_norm_preclip": 1.8441725969314575
+          },
+          {
+            "update": 2,
+            "distill/bpo/objective": 0.014265223173424602,
+            "distill/target_kl": 0.004647073277737945,
+            "distill/target_log_z": -0.006063050823286176,
+            "distill/anchor_kl": 9.169802069664001e-05,
+            "distill/teacher_kl": 0.06140102446079254,
+            "optim/actor/grad_norm_preclip": 1.7306936979293823
+          },
+          {
+            "update": 3,
+            "distill/bpo/objective": 0.013242942281067371,
+            "distill/target_kl": 0.004231664817780256,
+            "distill/target_log_z": -0.005223185173235834,
+            "distill/anchor_kl": 1.043081283569336e-07,
+            "distill/teacher_kl": 0.05463084578514099,
+            "optim/actor/grad_norm_preclip": 1.7414120435714722
+          },
+          {
+            "update": 4,
+            "distill/bpo/objective": 0.01309722033329308,
+            "distill/target_kl": 0.004191856482066214,
+            "distill/target_log_z": -0.005223185173235834,
+            "distill/anchor_kl": 0.00010176002979278564,
+            "distill/teacher_kl": 0.05428445711731911,
+            "optim/actor/grad_norm_preclip": 1.708241581916809
+          }
+        ],
+        "command": "outputs/mirror-performance/real-bpo/command.sh",
+        "config": "outputs/mirror-performance/real-bpo/resolved_config.yaml",
+        "metrics": "outputs/mirror-performance/real-bpo/metrics.jsonl",
+        "log": "outputs/mirror-performance/real-bpo/train.log"
+      }
+    ]
+  }
+}

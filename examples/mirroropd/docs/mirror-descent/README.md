@@ -1,10 +1,14 @@
-# η、κ 控制的 MirrorOPD 目标与实现
+# MirrorOPD 目标与实现
 
-本目录提取相邻 `MirrorOPD/theory/core` 中的形状与插值理论，并说明它如何接到本仓 full-vocab 管线。它讨论一般 $\kappa,\eta$，已有 `theory/` 文档继续维护普通对数 OPD、IS 四格和通用估计器的证明；`full-vocab/` 继续维护已经运行的工程实现。
+本目录维护一般 $\kappa,\eta$ 的融合目标与 MDPO/BPO 实现。所有方法从[统一实验入口](../../run_math_opd_ablation_fsdp2.sh)选择模型预算和算法，设置见[训练配方](../训练配方.md)。普通对数 OPD 的 IS 四格推导见[理论目录](../theory/README.md)，现有训练链路见[内部实现说明](../internals/README.md)。
 
-- [形状与插值目标及 Full-vocab 离策略实现](2026-10-23-形状与插值目标及Full-vocab离策略实现.md)：目标教师、MDPO/Part/BPO/Mean、current/frozen、固定 state 下的动作 IS、clipping、内存与接入计划。
-- [MDPO 的采样与全词表实现方案](2026-10-23-MDPO的采样与全词表实现方案.md)：聚焦一般形状的 scalar 缓存、detach、anchor hidden/head、分块算子和最小接入。
-- [CPU FP64 验算](scripts/verify_mirror_targets.py)和[结果](data/finite-vocab-checks.json)：枚举完整小词表检查目标、梯度与反例，无语言模型训练。
-- [现有 Full-KL 源码走读](../full-vocab/2026-10-23-Full-KL全流程源码走读.md)：已有 teacher hidden、head、FSDP、分块算子和 IO 优化。
+| 入口 | 内容 |
+| --- | --- |
+| [形状与插值目标](形状与插值目标.md) | 融合教师、原教师目标、MDPO/Part/BPO/Mean、current/frozen、动作 IS 与参数性质 |
+| [统一实现方案](实现方案.md) | Sampled MDPO、full-vocab MDPO/BPO、eta=1 Full-KL 统一、配置、目标、数据与算子 |
+| [E44–E47 正式对照](../训练配方.md#mirror-comparison) | Full-KL / MDPO / BPO / 融合形状；256 outer、4096 updates，每 128 outer 保存；尚未运行正式实验 |
+| [实现验收结果](data/implementation-checks.json) | CPU、真实 TQ、CUDA、两卡 FSDP2 和 1.5B 短训练证据 |
+| [Full-vocab 优化与实测](实现方案.md#85-已完成的数值层优化与实测)与[数据](data/full-vocab-performance.json) | Target/诊断融合、固定输入 A/B、时间与峰值显存、剩余边界 |
+| [数值验证脚本](scripts/verify_mirror_targets.py)与[结果](data/finite-vocab-checks.json) | CPU FP64 小词表上的目标、梯度和反例检查 |
 
-当前生产代码只支持直接拟合原 teacher 的 full reverse KL；本目录新增的是理论、可运行数值参照与接入设计，尚未增加可启动的 `kappa/eta` 训练配置。
+已实现 sampled MDPO、full-vocab MDPO/BPO；普通 Full-KL 是 MDPO eta=1 的直接执行分支。配置、运行约束和验证范围在统一实现方案中维护。
