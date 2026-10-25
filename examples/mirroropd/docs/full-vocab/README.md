@@ -1,11 +1,12 @@
 # Full-vocab 蒸馏工程
 
-本目录维护 full baseline 与 full-vocab reverse KL 的数据通路、算子、资源预算和实现验收。数学目标与计算图由[理论目录](../theory/README.md)维护，支持集选择、源码审计和实验比较由 [OPD 审计目录](../opd-objective/README.md)维护，符号遵循[统一约定](../符号约定.md)。
+本目录维护 full baseline 与 full-vocab reverse KL 的资源预算、设计记录和实现验收。当前数据通路与算子由[统一走读](../internals/full-vocab.md)维护。数学目标与计算图由[理论目录](../theory/README.md)维护，支持集选择、源码审计和实验比较由 [OPD 审计目录](../opd-objective/README.md)维护，符号遵循[统一约定](../符号约定.md)。
 
 | 内容 | 入口 |
 | --- | --- |
 | 2026-10-24 Qwen3 tied head、输出支持修正、运行时 EOS 配置与保存的验收结果 | [实现验收与对齐诊断](../failure-reproduction/2026-10-24-OPD实现验收与对齐诊断.md) |
-| 2026-10-23 Full-KL 调用链、默认与可选优化；模型和词表边界以上方合并文档为准 | [全流程源码走读](2026-10-23-Full-KL全流程源码走读.md) |
+| 当前 Full-KL 调用链、数据协议、梯度、backend 与模型支持 | [Full-vocab 走读](../internals/full-vocab.md) |
+| 2026-10-23 阶段的调用链和优化背景 | [历史全流程源码走读](2026-10-23-Full-KL全流程源码走读.md) |
 | η、κ 目标的理论与拟议 Full-vocab 接入 | [形状与插值专题](../mirror-descent/README.md) |
 | E13/E14 Full-KL、E15 sampled、E16/E17 Full-KL 批内复用 | [数学对照预设](../训练配方.md#full-kl-与-sampled-对照入口) |
 | 2026-10-22 初次接入的数值、多卡与 smoke 验收结果 | [实现与验收](2026-10-22-Full-KL实现与验收.md) |
@@ -21,7 +22,7 @@
 
 已有估计器与数学审计脚本保留在 `opd-objective/scripts/`，它们服务多种 OPD 方法。本目录新增实验仅维护实现决策所需的算子证据。
 
-流程、数据合同和算子机制在源码走读中维护；2026-10-24 的模型适配与不等长输出支持由上方合并文档补充。验收部分保留各自实验的原始结果，profile 文档维护测量、图表与性能结论，历史设计保留未实现的 baseline 方案。外部参考原文不改写。
+流程、数据合同和算子机制统一在[当前走读](../internals/full-vocab.md)维护，2026-10-24 的模型适配与输出支持文档保留对应实验依据。验收部分保留各自实验的原始结果，profile 文档维护测量、图表与性能结论，历史设计保留未实现的 baseline 方案。外部参考原文不改写。
 
 ## 历史队列
 
@@ -31,4 +32,4 @@
 
 诊断接口使用统一 `FullKLResult`，普通／fused precompute共用分块和VJP；精度误差推导、验证与代码走读见[KL精度模型](../research/2026-10-24-KL精度误差模型与诊断接口走读.md)。
 
-当前计算图与公共指标分层：[KL计算与位置指标分层](2026-10-24-KL计算与位置指标分层.md)，含Mermaid、训练／诊断分支及通用token指标接口。
+当前训练计算见[Full-vocab](../internals/full-vocab.md)，公共指标接口见[指标系统](../internals/metrics.md)。[KL 计算与位置指标分层](2026-10-24-KL计算与位置指标分层.md)保留接入时的设计和验收。

@@ -24,6 +24,8 @@ MirrorOPD 自有文档、调研和配套图片、数据统一放在 `examples/mi
 
 | 文档 | 内容 |
 | --- | --- |
+| [架构总览](docs/architecture.md) | 当前模块职责、跨模块执行顺序和扩展边界 |
+| [代码走读](docs/internals/README.md) | 训练、教师、目标、指标和 checkpoint 的当前实现；`make docs-check` 检查引用 |
 | [资产准备](docs/资产准备.md) | 模型、数学数据目录、导入与 CPU 检查 |
 | [训练配方](docs/训练配方.md) | Math / coding / IF 入口、GPU 资源池、训练与验证预算、Hope 启动 |
 | [OPD 失败复现方案](docs/failure-reproduction/README.md) | DAPO 与三 valid 下的模型／长度设置、sampled→full 对照、原论文图表与排除设置附录 |
@@ -63,4 +65,4 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 STUDENT_GPUS=4 DRY_RUN=1 \
   bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E28
 ```
 
-`hope/` 由各机器本地维护，不进入源码包。Worker 直接调用随源码更新的领域脚本，入口迁移见[决策记录](docs/infra/2026-10-22-共享八卡运行与架构.md#hope-直连入口)。部署、日志传回和默认 W&B 同步流程见[开发机同步说明](../../meituan/README.md)，Hope 设置见 [Hope 文档](../../hope/README.md)。
+`hope/` 由各机器本地维护，不进入源码包。Worker 直接调用随源码更新的领域脚本，入口迁移见[决策记录](docs/infra/2026-10-22-共享八卡运行与架构.md#hope-直连入口)。部署、日志传回和默认 W&B 同步流程见[开发机同步说明](../../meituan/README.md)。
