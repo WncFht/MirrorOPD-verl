@@ -48,3 +48,77 @@ def test_fused_bpo_small_variance_does_not_subtract_second_moments():
     assert (value >= 0).all()
     torch.testing.assert_close(value, expected, atol=1e-12, rtol=1e-4)
     torch.testing.assert_close(dz, q * residual, atol=1e-10, rtol=1e-4)
+
+
+@pytest.mark.parametrize("kappa", [0.0, 1e-7, 0.5, 1.0])
+@pytest.mark.parametrize("eta", [1e-6, 0.3, 1.0])
+def test_fused_target_extremes_and_strided_teacher(kappa, eta):
+    from verl.trainer.distillation.full_vocab_triton import fused_log_weights
+    from verl.trainer.distillation.targets import build_log_weights
+
+    torch.manual_seed(31)
+    # Include the small-x branch boundary, both log tails and non-contiguous
+    # teacher support. FP64 oracle starts from the exact same FP32 inputs.
+    lt = (torch.randn(3, 8200, device="cuda") * 80).log_softmax(-1)[:, :8193]
+    lq = (torch.randn_like(lt) * 80).log_softmax(-1)
+    wanted = build_log_weights(lt.double(), lq.double(), kappa=kappa, eta=eta)
+    got = fused_log_weights(lt, lq, kappa=kappa, eta=eta)
+    assert torch.isfinite(got).all()
+    torch.testing.assert_close(got.double(), wanted, atol=1e-4, rtol=2e-6)
+
+
+@pytest.mark.parametrize("objective", ["mdpo", "bpo"])
+@pytest.mark.parametrize("diagnostics", [False, True])
+@pytest.mark.parametrize("vocab", [31, 8193, 151936])
+def test_fused_mirror_rows_and_diagnostics(objective, diagnostics, vocab):
+    from verl.trainer.distillation.full_vocab_triton import fused_mirror_rows
+    from verl.trainer.distillation.objectives import full_vocab_rows
+
+    torch.manual_seed(33)
+    z = torch.randn(3, vocab, device="cuda")
+    lt = torch.randn(3, vocab + 3, device="cuda").log_softmax(-1)[:, :vocab]
+    lq = torch.randn_like(z).log_softmax(-1)
+    b = (lq + lt) / 2
+    expected, gradient, info = full_vocab_rows(
+        z.double(), b.double(), lq.double(), objective=objective, diagnostics=diagnostics, log_teacher=lt.double()
+    )
+    actual, dz, diag = fused_mirror_rows(z, b, lq, lt, torch.float32, objective=objective, diagnostics=diagnostics)
+    torch.testing.assert_close(actual.double(), expected, atol=3e-6, rtol=3e-5)
+    torch.testing.assert_close(dz.double(), gradient, atol=2e-8, rtol=3e-4)
+    assert diag.shape == (3, 4 if diagnostics else 0)
+    for i, key in enumerate(("target_kl", "target_log_z", "anchor_kl", "teacher_kl") if diagnostics else ()):
+        torch.testing.assert_close(diag[:, i].double(), info[key], atol=3e-6, rtol=3e-5)
+
+
+@pytest.mark.parametrize("objective", ["mdpo", "bpo"])
+@pytest.mark.parametrize("eta", [0.3, 1.0])
+def test_diagnostics_do_not_change_precomputed_vjp(objective, eta):
+    torch.manual_seed(37)
+    hs, ws = [
+        (torch.randn(*shape, device="cuda", dtype=torch.bfloat16) * 0.2).requires_grad_()
+        for shape in [(7, 32), (8193, 32)]
+    ]
+    ht, wt, hq, wq = [torch.randn_like(t) * 0.2 for t in (hs, ws, hs, ws)]
+    results = []
+    for diagnostics in (False, True):
+        spec = resolve_distillation_spec(
+            {
+                "loss_mode": "mirror",
+                "mirror": {
+                    "objective": objective,
+                    "eta": eta,
+                    "diagnostics": diagnostics,
+                },
+            }
+        )
+        actual = full_vocab_objective_result(
+            hs, ws, ht, wt, hq=hq, wq=wq, spec=spec, backend="precompute_fused", token_chunk=3
+        )
+        reference = full_vocab_objective_result(hs, ws, ht, wt, hq=hq, wq=wq, spec=spec, backend="dense")
+        torch.testing.assert_close(actual.loss_sum, reference.loss_sum, atol=2e-5, rtol=2e-4)
+        for key, value in actual.token_diagnostics.items():
+            torch.testing.assert_close(value, reference.token_diagnostics[key], atol=3e-6, rtol=3e-4)
+        gradients = torch.autograd.grad(actual.loss_sum / eta, (hs, ws))
+        results.append((actual.loss_sum, *gradients))
+    for a, b in zip(*results, strict=True):
+        torch.testing.assert_close(a, b, atol=1e-7, rtol=1e-5)
