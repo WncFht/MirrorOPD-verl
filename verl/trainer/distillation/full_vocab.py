@@ -324,29 +324,35 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False):
 
     with torch.no_grad():
         # Normalize the FULL teacher before restricting to the student's support.
-        lt = project(ht, wt).log_softmax(-1)[:, : len(ws)]
-        lq = project(hq, wq).log_softmax(-1)
-        b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
-    z = project(hs, ws)
-    if fused:
-        from verl.trainer.distillation.full_vocab_triton import fused_bpo_rows, fused_rows
+        with full_kl_range("teacher_projection_and_normalization"):
+            lt = project(ht, wt).log_softmax(-1)[:, : len(ws)]
+        with full_kl_range("anchor_projection_and_normalization"):
+            lq = project(hq, wq).log_softmax(-1)
+        with full_kl_range("mirror_target"):
+            if fused:
+                from verl.trainer.distillation.full_vocab_triton import fused_log_weights
 
-        if spec.objective == "mdpo":
-            kl, dz = fused_rows(z.contiguous(), b.contiguous(), hs.dtype)
-            rows = kl - b.logsumexp(-1)
-        else:
-            rows, dz = fused_bpo_rows(z.contiguous(), b.contiguous(), lq.contiguous(), hs.dtype)
-        # No extra projection for diagnostics; enable softmax only when requested.
-        info = full_vocab_rows(z, b, lq, objective=spec.objective, diagnostics=True)[2] if spec.diagnostics else {}
-    else:
-        rows, dz, info = full_vocab_rows(z, b, lq, objective=spec.objective, diagnostics=spec.diagnostics)
+                b = fused_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
+            else:
+                b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
+        if not spec.diagnostics:
+            lt = None
+            if spec.objective == "mdpo":
+                lq = None
+    with full_kl_range("student_projection"):
+        z = project(hs, ws)
+    with full_kl_range("mirror_rows"):
+        if fused:
+            from verl.trainer.distillation.full_vocab_triton import fused_mirror_rows
+
+            return fused_mirror_rows(z, b, lq, lt, hs.dtype, objective=spec.objective, diagnostics=spec.diagnostics)
+        rows, dz, info = full_vocab_rows(
+            z, b, lq, objective=spec.objective, diagnostics=spec.diagnostics, log_teacher=lt
+        )
         dz = dz.to(hs.dtype)
-    if spec.diagnostics:
-        lp = z.log_softmax(-1)
-        info["teacher_kl"] = (lp.exp() * (lp - lt)).sum(-1).detach()
-        diag = torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS], dim=-1)
-    else:
-        diag = z.new_empty((len(hs), 0))
+    diag = (
+        torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS], dim=-1) if spec.diagnostics else z.new_empty((len(hs), 0))
+    )
     return rows, dz, diag
 
 

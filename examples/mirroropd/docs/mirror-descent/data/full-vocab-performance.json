@@ -1,0 +1,217 @@
+{
+  "date": "2026-10-25",
+  "scope": "Fixed synthetic BF16 hidden/head; three projections, weighted target, full objective and hidden/head VJP. Excludes backbone, IO, optimizer, rollout and startup.",
+  "hardware": "NVIDIA H800 80GB; GPUs 0–3, one independent objective/diagnostics combination per GPU; GPUs 4–7 had unrelated jobs.",
+  "baseline": "Pre-optimization working tree copied to outputs/mirror-performance/baseline/mirror_perf_baseline with isolated imports; not git HEAD.",
+  "benchmark": "examples/mirroropd/docs/infra/profile/scripts/benchmark_mirror.py",
+  "protocol": {
+    "tokens": 512,
+    "vocab": 151936,
+    "width": 1536,
+    "dtype": "bfloat16",
+    "backend": "precompute_fused",
+    "kappa": 0.5,
+    "eta": 0.3,
+    "seed": 71,
+    "warmup_per_variant": 2,
+    "paired_rounds": 9,
+    "order": "alternating AB/BA",
+    "statistic": "median wall time; CUDA event samples also retained in raw JSON",
+    "memory": "peak allocated minus live input allocation; includes VJP workspaces and outputs, not CUDA context or total training memory",
+    "torch": "2.11.0+cu128"
+  },
+  "cases": [
+    {
+      "objective": "mdpo",
+      "diagnostics": false,
+      "chunk": 32,
+      "before_wall_ms": 42.073436081409454,
+      "after_wall_ms": 30.107274651527405,
+      "speedup": 1.3974508343376402,
+      "before_peak_extra_mib": 1340.75244140625,
+      "after_peak_extra_mib": 1340.75244140625,
+      "loss_abs_diff": 3.0517578125e-05,
+      "vjp_relative_l2": [
+        2.2459871615865268e-05,
+        1.791377508197911e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/mdpo-plain.json"
+    },
+    {
+      "objective": "mdpo",
+      "diagnostics": false,
+      "chunk": 128,
+      "before_wall_ms": 18.130235373973846,
+      "after_wall_ms": 10.324515402317047,
+      "speedup": 1.75603741846373,
+      "before_peak_extra_mib": 1627.67138671875,
+      "after_peak_extra_mib": 1340.75244140625,
+      "loss_abs_diff": 3.0517578125e-05,
+      "vjp_relative_l2": [
+        2.2459871615865268e-05,
+        1.7932625269168057e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/mdpo-plain.json"
+    },
+    {
+      "objective": "mdpo",
+      "diagnostics": false,
+      "chunk": 512,
+      "before_wall_ms": 12.650400400161743,
+      "after_wall_ms": 5.6572481989860535,
+      "speedup": 2.236140249676348,
+      "before_peak_extra_mib": 3829.6240234375,
+      "after_peak_extra_mib": 1783.50244140625,
+      "loss_abs_diff": 2.288818359375e-05,
+      "vjp_relative_l2": [
+        2.233457053080201e-05,
+        1.800973950594198e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/mdpo-plain.json"
+    },
+    {
+      "objective": "mdpo",
+      "diagnostics": true,
+      "chunk": 32,
+      "before_wall_ms": 49.31817948818207,
+      "after_wall_ms": 30.380181968212128,
+      "speedup": 1.6233668231410017,
+      "before_peak_extra_mib": 1340.7607421875,
+      "after_peak_extra_mib": 1340.7607421875,
+      "loss_abs_diff": 3.0517578125e-05,
+      "vjp_relative_l2": [
+        2.2459871615865268e-05,
+        1.791377508197911e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/mdpo-diag.json"
+    },
+    {
+      "objective": "mdpo",
+      "diagnostics": true,
+      "chunk": 128,
+      "before_wall_ms": 24.65812861919403,
+      "after_wall_ms": 10.536141693592072,
+      "speedup": 2.340337605196668,
+      "before_peak_extra_mib": 1672.2333984375,
+      "after_peak_extra_mib": 1340.76220703125,
+      "loss_abs_diff": 3.0517578125e-05,
+      "vjp_relative_l2": [
+        2.2459871615865268e-05,
+        1.7932625269168057e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/mdpo-diag.json"
+    },
+    {
+      "objective": "mdpo",
+      "diagnostics": true,
+      "chunk": 512,
+      "before_wall_ms": 18.77981424331665,
+      "after_wall_ms": 5.900725722312927,
+      "speedup": 3.1826278880075556,
+      "before_peak_extra_mib": 4009.14501953125,
+      "after_peak_extra_mib": 2229.16845703125,
+      "loss_abs_diff": 2.288818359375e-05,
+      "vjp_relative_l2": [
+        2.233457053080201e-05,
+        1.800973950594198e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/mdpo-diag.json"
+    },
+    {
+      "objective": "bpo",
+      "diagnostics": false,
+      "chunk": 32,
+      "before_wall_ms": 39.896056056022644,
+      "after_wall_ms": 30.353859066963196,
+      "speedup": 1.3143652004184558,
+      "before_peak_extra_mib": 1340.75244140625,
+      "after_peak_extra_mib": 1340.75244140625,
+      "loss_abs_diff": 0.0,
+      "vjp_relative_l2": [
+        2.554217826400418e-05,
+        3.528128581820056e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/bpo-plain.json"
+    },
+    {
+      "objective": "bpo",
+      "diagnostics": false,
+      "chunk": 128,
+      "before_wall_ms": 17.467856407165527,
+      "after_wall_ms": 10.540395975112915,
+      "speedup": 1.657229619115747,
+      "before_peak_extra_mib": 1627.67138671875,
+      "after_peak_extra_mib": 1340.75244140625,
+      "loss_abs_diff": 0.0,
+      "vjp_relative_l2": [
+        2.554217826400418e-05,
+        3.529261448420584e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/bpo-plain.json"
+    },
+    {
+      "objective": "bpo",
+      "diagnostics": false,
+      "chunk": 512,
+      "before_wall_ms": 12.167118489742279,
+      "after_wall_ms": 5.879566073417664,
+      "speedup": 2.069390553284453,
+      "before_peak_extra_mib": 3829.6240234375,
+      "after_peak_extra_mib": 1931.95556640625,
+      "loss_abs_diff": 0.0,
+      "vjp_relative_l2": [
+        3.749771349248476e-05,
+        3.5301291063660756e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/bpo-plain.json"
+    },
+    {
+      "objective": "bpo",
+      "diagnostics": true,
+      "chunk": 32,
+      "before_wall_ms": 48.4626442193985,
+      "after_wall_ms": 30.821777880191803,
+      "speedup": 1.5723507063018558,
+      "before_peak_extra_mib": 1340.7607421875,
+      "after_peak_extra_mib": 1340.7607421875,
+      "loss_abs_diff": 0.0,
+      "vjp_relative_l2": [
+        2.554217826400418e-05,
+        3.528128581820056e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/bpo-diag.json"
+    },
+    {
+      "objective": "bpo",
+      "diagnostics": true,
+      "chunk": 128,
+      "before_wall_ms": 24.285629391670227,
+      "after_wall_ms": 10.81656664609909,
+      "speedup": 2.2452253276161938,
+      "before_peak_extra_mib": 1820.60791015625,
+      "after_peak_extra_mib": 1340.76220703125,
+      "loss_abs_diff": 0.0,
+      "vjp_relative_l2": [
+        2.554217826400418e-05,
+        3.529261448420584e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/bpo-diag.json"
+    },
+    {
+      "objective": "bpo",
+      "diagnostics": true,
+      "chunk": 512,
+      "before_wall_ms": 18.43300461769104,
+      "after_wall_ms": 6.157442927360535,
+      "speedup": 2.993613556007831,
+      "before_peak_extra_mib": 4602.64306640625,
+      "after_peak_extra_mib": 2229.24462890625,
+      "loss_abs_diff": 0.0,
+      "vjp_relative_l2": [
+        3.749771349248476e-05,
+        3.5301291063660756e-05
+      ],
+      "raw_evidence": "outputs/mirror-performance/bpo-diag.json"
+    }
+  ]
+}

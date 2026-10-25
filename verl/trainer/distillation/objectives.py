@@ -39,7 +39,7 @@ def mdpo_sampled_terms(log_p, log_beta, b):
     return terms
 
 
-def full_vocab_rows(z, b, log_q=None, *, objective, diagnostics=False):
+def full_vocab_rows(z, b, log_q=None, *, objective, diagnostics=False, log_teacher=None):
     """Return raw objective rows, analytic first-order dZ, detached diagnostic rows.
 
     Dense references differentiate the returned scalar normally. Optimized kernels
@@ -68,6 +68,8 @@ def full_vocab_rows(z, b, log_q=None, *, objective, diagnostics=False):
     if diagnostics:
         lz = b.logsumexp(-1)
         info = {"target_kl": (p * (lp - b)).sum(-1).detach() + lz, "target_log_z": lz}
+        if log_teacher is not None:
+            info["teacher_kl"] = (p * (lp - log_teacher.detach())).sum(-1).detach()
         if log_q is not None:
             info["anchor_kl"] = (p * (lp - log_q.detach())).sum(-1).detach()
     return rows, dz, {k: v.detach() for k, v in info.items()}

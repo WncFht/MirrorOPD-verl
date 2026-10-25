@@ -1,15 +1,16 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Optional BF16 CUDA reverse-KL reduction with bounded logits storage.
+"""BF16 CUDA full-vocab kernels: teacher KL, weighted targets and MDPO/BPO.
 
-Three Triton passes replace full-vocabulary softmax intermediates. cuBLAS still
-does projections and gradient products. The public dispatcher falls back to
-ordinary precompute for other devices/dtypes.
+Tiled reductions share diagnostics without dense softmax intermediates. cuBLAS
+still does projections and gradient products. The public dispatcher falls back
+to ordinary precompute for other devices/dtypes.
 """
 
 import torch
 import triton
 import triton.language as tl
+from triton.language.extra.cuda import libdevice
 
 from verl.trainer.distillation.full_vocab import project
 from verl.trainer.distillation.profiling import full_kl_range
@@ -133,3 +134,203 @@ def fused_bpo_rows(z, b, log_q, dtype):
     _bpo_mean[(n,)](partial, mu, parts, triton.next_power_of_2(parts))
     _bpo_gradient[(n, parts)](z, b, log_q, mu, dz, partial, v, parts, 4096)
     return partial.sum(-1), dz
+
+
+@triton.jit
+def _target_weights(
+    LT,
+    LQ,
+    OUT,
+    V: tl.constexpr,
+    TS: tl.constexpr,
+    K: tl.constexpr,
+    ETA: tl.constexpr,
+    LOG_ETA: tl.constexpr,
+    LOG_ONE_MINUS_ETA: tl.constexpr,
+    B: tl.constexpr,
+):
+    row, part = tl.program_id(0), tl.program_id(1)
+    col = part * B + tl.arange(0, B)
+    t = tl.load(LT + row * TS + col, col < V, 0)
+    q = tl.load(LQ + row * V + col, col < V, 0)
+    if K == 0:
+        b = q + ETA * (t - q)
+    else:
+        x = K * (t - q)
+        # Clamp the unselected expm1 branch: both branches execute on GPU.
+        near = libdevice.log1p(ETA * libdevice.expm1(tl.minimum(tl.maximum(x, -0.5), 0.5)))
+        a, c = x + LOG_ETA, LOG_ONE_MINUS_ETA
+        far = tl.maximum(a, c) + libdevice.log1p(tl.exp(-tl.abs(a - c)))
+        b = q + tl.where(tl.abs(x) < 0.5, near, far) / K
+    tl.store(OUT + row * V + col, b, col < V)
+
+
+def fused_log_weights(log_teacher, log_anchor, *, kappa, eta):
+    """Frozen FP32 target; teacher normalization must already include extra rows."""
+    import math
+
+    if eta == 1:
+        return log_teacher.detach().contiguous()
+    n, v = log_anchor.shape
+    out = torch.empty_like(log_anchor)
+    _target_weights[(n, triton.cdiv(v, 1024))](
+        log_teacher,
+        log_anchor,
+        out,
+        v,
+        log_teacher.stride(0),
+        kappa,
+        eta,
+        math.log(eta),
+        math.log1p(-eta),
+        1024,
+    )
+    return out
+
+
+@triton.jit
+def _mirror_partials(
+    Z,
+    BIAS,
+    LQ,
+    LT,
+    MP,
+    SP,
+    GAP,
+    MB,
+    SB,
+    GQ,
+    GT,
+    QG,
+    V: tl.constexpr,
+    TS: tl.constexpr,
+    P: tl.constexpr,
+    BPO: tl.constexpr,
+    DIAG: tl.constexpr,
+    B: tl.constexpr,
+):
+    row, part = tl.program_id(0), tl.program_id(1)
+    col = part * B + tl.arange(0, B)
+    valid = col < V
+    ix = row * V + col
+    z = tl.load(Z + ix, valid, 0).to(tl.float32)
+    b = tl.load(BIAS + ix, valid, 0).to(tl.float32)
+    j = row * P + part
+    # This kernel is used for MDPO or diagnostics. BPO without diagnostics uses
+    # the existing q-only mean/centered-variance kernel and never forms p.
+    mp = tl.max(tl.where(valid, z, -float("inf")), 0)
+    ep = tl.where(valid, tl.exp(z - mp), 0.0)
+    tl.store(MP + j, mp)
+    tl.store(SP + j, tl.sum(ep, 0))
+    tl.store(GAP + j, tl.sum(ep * (z - b), 0))
+    if DIAG:
+        q = tl.load(LQ + ix, valid, 0)
+        t = tl.load(LT + row * TS + col, valid, 0)
+        mb = tl.max(tl.where(valid, b, -float("inf")), 0)
+        tl.store(MB + j, mb)
+        tl.store(SB + j, tl.sum(tl.where(valid, tl.exp(b - mb), 0.0), 0))
+        tl.store(GQ + j, tl.sum(ep * (z - q), 0))
+        tl.store(GT + j, tl.sum(ep * (z - t), 0))
+        if BPO:
+            eq = tl.where(valid, tl.exp(q), 0.0)
+            tl.store(QG + j, tl.sum(eq * (z - b), 0))
+
+
+@triton.jit
+def _mirror_reduce(
+    MP,
+    SP,
+    GAP,
+    MB,
+    SB,
+    GQ,
+    GT,
+    QG,
+    LZ,
+    MU,
+    LOSS,
+    DIAGNOSTICS,
+    P: tl.constexpr,
+    BPO: tl.constexpr,
+    DIAG: tl.constexpr,
+    B: tl.constexpr,
+):
+    row = tl.program_id(0)
+    j = tl.arange(0, B)
+    ix = row * P + j
+    mp = tl.load(MP + ix, j < P, -float("inf"))
+    maximum = tl.max(mp, 0)
+    ap = tl.exp(mp - maximum)
+    sp = tl.sum(ap * tl.load(SP + ix, j < P, 0), 0)
+    mu = tl.sum(ap * tl.load(GAP + ix, j < P, 0), 0) / sp
+    lzp = maximum + tl.log(sp)
+    tl.store(LZ + row, lzp)
+    if BPO:
+        tl.store(MU + row, tl.sum(tl.load(QG + ix, j < P, 0), 0))
+    else:
+        tl.store(MU + row, mu)
+        # Raw MDPO, without computing and then subtracting the frozen log Z_m.
+        tl.store(LOSS + row, mu - lzp)
+    if DIAG:
+        mb = tl.load(MB + ix, j < P, -float("inf"))
+        maximum_b = tl.max(mb, 0)
+        sb = tl.sum(tl.exp(mb - maximum_b) * tl.load(SB + ix, j < P, 0), 0)
+        lzb = maximum_b + tl.log(sb)
+        qgap = tl.sum(ap * tl.load(GQ + ix, j < P, 0), 0) / sp
+        tgap = tl.sum(ap * tl.load(GT + ix, j < P, 0), 0) / sp
+        tl.store(DIAGNOSTICS + row * 4, mu - lzp + lzb)
+        tl.store(DIAGNOSTICS + row * 4 + 1, lzb)
+        tl.store(DIAGNOSTICS + row * 4 + 2, qgap - lzp)
+        tl.store(DIAGNOSTICS + row * 4 + 3, tgap - lzp)
+
+
+def fused_mirror_rows(z, b, log_q, log_teacher, dtype, *, objective, diagnostics):
+    """Raw MDPO/BPO and optional KL diagnostics, sharing row statistics.
+
+    No dense p/dZ diagnostic temporaries. Order: target KL, log Z_m, anchor KL,
+    teacher KL. q/T/b are frozen and all returned values are unscaled by eta.
+    """
+    n, v = z.shape
+    diag = torch.empty((n, 4 if diagnostics else 0), device=z.device, dtype=torch.float32)
+    if objective == "bpo" and not diagnostics:
+        rows, dz = fused_bpo_rows(z, b, log_q, dtype)
+        return rows, dz, diag
+    parts = triton.cdiv(v, 4096)
+    # Unused optional statistics share a dummy pointer; constexpr removes access.
+    count = 8 if objective == "bpo" and diagnostics else 7 if diagnostics else 3
+    buffers = [torch.empty((n, parts), device=z.device, dtype=torch.float32) for _ in range(count)]
+    buffers += [buffers[0]] * (8 - count)
+    lz, mu, rows = [torch.empty(n, device=z.device, dtype=torch.float32) for _ in range(3)]
+    dz = torch.empty_like(z, dtype=dtype)
+    bpo = objective == "bpo"
+    _mirror_partials[(n, parts)](
+        z,
+        b,
+        log_q,
+        log_teacher,
+        *buffers,
+        v,
+        log_teacher.stride(0) if diagnostics else v,
+        parts,
+        bpo,
+        diagnostics,
+        4096,
+    )
+    _mirror_reduce[(n,)](
+        *buffers,
+        lz,
+        mu,
+        rows,
+        diag,
+        parts,
+        bpo,
+        diagnostics,
+        triton.next_power_of_2(parts),
+    )
+    if bpo:
+        partial = buffers[0]
+        _bpo_gradient[(n, parts)](z, b, log_q, mu, dz, partial, v, parts, 4096)
+        rows = partial.sum(-1)
+    else:
+        _gradient[(n, parts)](z, b, lz, mu, dz, v, 4096)
+    return rows, dz, diag
