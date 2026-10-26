@@ -22,7 +22,11 @@ def mirror_signal(log_ratio, kappa, eta):
 
 
 def build_log_weights(log_teacher, log_anchor=None, *, kappa, eta):
-    """Return canonical b=log(q)+f, not normalized log(m); no teacher/anchor gradients."""
+    """Return canonical b=log(q)+f, not normalized log(m); frozen value interface.
+
+    A materialized b cannot retain increments below its dtype spacing. Training
+    uses numerics.split_target (full vocabulary) or a separated sampled residual.
+    """
     if eta == 1:
         return log_teacher.detach()
     if log_anchor is None:

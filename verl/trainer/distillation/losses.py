@@ -408,7 +408,7 @@ def _sampled_inputs(model_output, data):
 
 def _mirror_sampled_loss(config, spec, model_output, data):
     from verl.trainer.distillation.objectives import mdpo_sampled_terms
-    from verl.trainer.distillation.targets import build_log_weights
+    from verl.trainer.distillation.targets import mirror_signal
 
     if spec.objective != "mdpo" or spec.payload_kind != "sampled":
         raise ValueError("Only MDPO supports sampled mirror estimation")
@@ -420,8 +420,8 @@ def _mirror_sampled_loss(config, spec, model_output, data):
         lq = lq.masked_fill(~mask, 0.0)
     if any(not torch.isfinite(v).all() for v in (lp, lt, lb) + (() if lq is None else (lq,))):
         raise ValueError("Non-finite valid sampled mirror log probability")
-    b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
-    terms = mdpo_sampled_terms(lp, lb, b)
+    residual = lt - lp if lq is None else (lq - lp) + mirror_signal(lt - lq, spec.kappa, spec.eta)
+    terms = mdpo_sampled_terms(lp, lb, residual=residual)
     loss = LossContext.from_batch(data, config).aggregate(terms, mask, "token-mean") / spec.eta
     metrics = {"distillation/mdpo/objective": Observation.ratio((terms.detach() * mask).sum() / spec.eta, mask.sum())}
     if tu.get_non_tensor_data(data, "collect_metrics", default=False):
@@ -430,7 +430,7 @@ def _mirror_sampled_loss(config, spec, model_output, data):
                 lp,
                 lb,
                 lq,
-                (b - lp).detach() / spec.eta,
+                residual.detach() / spec.eta,
                 mask,
                 component="mdpo",
                 quantile=tu.get_non_tensor_data(data, "metrics_quantile", default=False),

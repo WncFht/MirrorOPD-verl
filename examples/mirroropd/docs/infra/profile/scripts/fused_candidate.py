@@ -2,16 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 """Compatibility import for the original profile candidate name.
 
-The implementation now lives in verl; archived experiment worktrees retain the
-original standalone source. Existing benchmark commands remain reproducible.
+The implementation lives in verl. Historical implementations are retained in
+Git; this compatibility name always benchmarks the current production path.
 """
 
-from verl.trainer.distillation.full_vocab_triton import (  # noqa: F401
-    _gradient,
-    _partials,
-    _rows,
-    fused_rows,
-)
+from verl.trainer.distillation.full_vocab_triton import fused_rows  # noqa: F401
 
 
 class FusedPrecomputedKL:
