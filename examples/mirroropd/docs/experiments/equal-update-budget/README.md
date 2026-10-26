@@ -6,7 +6,7 @@
 
 最清楚的优化差异是：**高复用把同批前缀拟合得更深，更多新轨迹使新批起点 KL 更低。** 两种排序相反，因此不能用整条 update 曲线的最低 loss 判断训练分布上的收敛，更不能直接替代任务指标。后期 KL 仍下降，但首个验证点已接近末点水平，之后提升不一致；继续降低训练 KL 尚未转化为一致的验证收益。
 
-[离线交互页面](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/dashboard.html)包含三组全部 **2235 个数值指标**，可搜索、切换原始轴／optimizer 轴、查看任意批内复用曲线和下载单项 CSV。页面与统计数据存放在 `wandb-logs`；正文图表及复算脚本留在源码仓库。完整数值见[统计结果](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/analysis.json)、[验证表](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/evaluation.csv)、[字段目录](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/metric-catalog.csv)和[覆盖表](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/metric-coverage.csv)。
+归档数据保留三组全部 **2235 个数值指标**；正文使用静态图表。完整数值见[统计结果](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/analysis.json)、[验证表](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/evaluation.csv)、[字段目录](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/metric-catalog.csv)和[覆盖表](../../../../../../wandb-logs/MirrorOPD-verl/analysis/equal-update-budget-20261025/metric-coverage.csv)。
 
 ## 1. 实际 setting 与可比性
 
@@ -286,8 +286,6 @@ ANALYSIS_PY=/root/.local/share/mirroropd/venvs/profile-cu128/bin/python
 export FIGURE_VIZ_MPL=/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/dotfiles/.agents/skills/figure-viz/assets/mpl
 "$ANALYSIS_PY" examples/mirroropd/docs/experiments/scripts/plot_equal_budget.py \
   --data "$ANALYSIS" --out examples/mirroropd/docs/experiments/equal-update-budget/figures/20261025
-"$ANALYSIS_PY" examples/mirroropd/docs/experiments/scripts/render_equal_budget.py \
-  --data "$ANALYSIS" --output "$ANALYSIS/dashboard.html"
 ```
 
 这些命令只分析与绘图，不启动训练。后续原始日志变化时应使用新的分析日期目录，并保留本文的输入边界。八组图均提供 PNG/PDF 和实际机器审计记录；不同数据集或指标使用独立纵轴的警告已结合图面检查，CI 图的端帽和横线被审计器重复计为系列，实际只有三个实验。没有 error 级图形审计问题。字段与预算的统计校验见 `tests/utils/test_equal_budget_analysis_on_cpu.py`；更新计数另由附录 D 的预算验收工具核对。

@@ -23,7 +23,7 @@ def main():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--style-dir", type=Path)
     parser.add_argument("--base-root", type=Path, help="Merge baseline/Torch evidence with this queue's Nsight retry")
-    parser.add_argument("--review", type=Path, help="Embed the existing reviewed analysis in the offline snapshot")
+    parser.add_argument("--review", type=Path, help="Include reviewed analysis in the JSON measurement snapshot")
     parser.add_argument("--watch", action="store_true")
     args = parser.parse_args()
     root = args.root.resolve()
@@ -64,17 +64,13 @@ def main():
                     if args.base_root:
                         collect_command += ["--nsys-retry-root", str(root)]
                     subprocess.run(collect_command, check=True)
-                    render_command = [
-                        sys.executable,
-                        str(scripts / "render.py"),
-                        "--data",
-                        str(output / "data.json"),
-                        "--output",
-                        str(output / "dashboard.html"),
-                    ]
                     if args.review:
-                        render_command += ["--review", str(args.review.resolve())]
-                    subprocess.run(render_command, check=True)
+                        data_path = output / "data.json"
+                        data = json.loads(data_path.read_text())
+                        data["review"] = json.loads(args.review.read_text())
+                        temporary = data_path.with_suffix(".tmp")
+                        temporary.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+                        temporary.replace(data_path)
                     if status.get("jobs", {}).get("baseline", {}).get("returncode") == 0:
                         plot_command = [
                             sys.executable,

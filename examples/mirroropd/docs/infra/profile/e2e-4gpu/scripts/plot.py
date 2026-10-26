@@ -32,7 +32,7 @@ def main():
 
     fv.apply_rc("paper")
     colors = fv.series_colors("paper", 4)
-    # Four broad, disjoint groups keep the static overview legible; HTML has all phases.
+    # Four broad, disjoint groups keep the static overview legible; data.json retains all phases.
     values = []
     for r in rows:
         p = r["phases"]
