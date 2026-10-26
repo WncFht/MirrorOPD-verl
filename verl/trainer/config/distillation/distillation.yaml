@@ -51,6 +51,9 @@ distillation_loss:
     vocab_chunk_size: 8192
     async_write: false
     prefetch: false
+    # Empty keeps vocabulary KL. Nonempty coarsens this class of stopping actions.
+    # Only teacher-only full KL with precompute and single-turn generation is supported.
+    termination_token_ids: []
 
   # If distillation loss requires top-k logits, this is the value of k
   topk: 32

@@ -366,6 +366,10 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
     if preset and (args.method or env.get("EXPERIMENT_METHOD") or default_method) in ("mdpo", "bpo"):
         defaults(env, MIRROR_KAPPA=preset.kappa, MIRROR_ETA=preset.eta)
     method, estimator, label = method_options(args, env, default_method)
+    if name == "E41" and method == "full_kl":
+        # Both IDs already terminate this single-turn Base rollout. Coarsen
+        # their loss identity only for the model/objective tested in E41.
+        defaults(env, FULL_KL_TERMINATION_TOKEN_IDS="[151643,151645]")
     # Preserve preset IO defaults, including inactive full-vocab fields in sampled MDPO.
     if preset and (preset.method == "full_kl" or estimator == "full_vocab"):
         defaults(env, FULL_KL_BACKEND="precompute", FULL_KL_ASYNC_WRITE="True", FULL_KL_PREFETCH="True")
@@ -468,6 +472,7 @@ def preset_overview() -> str:
             + "E44–E47 沿用 E20 预算、每 128 outer 保存；"
             "其他探索可用 --method/--kappa/--eta 覆盖；custom 不加载编号预算。\n"
             + "model 预设可加 -valid-student/-valid-teacher，独立验证原始模型。",
+            "E41 Full-KL 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表 KL。",
         ]
     )
 

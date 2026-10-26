@@ -254,8 +254,14 @@ def distillation_loss(
             raise ValueError("full_reverse_kl currently requires token-mean aggregation")
         total = model_output["full_kl_sum"]
         count = model_output["full_kl_count"]
-        loss = LossContext.from_batch(data, config).normalize_token_sum(total)
+        objective_total = model_output.get("termination_kl_sum", total)
+        loss = LossContext.from_batch(data, config).normalize_token_sum(objective_total)
         metrics = {"distillation/full_kl": Observation.ratio(total.detach(), count)}
+        if "termination_kl_sum" in model_output:
+            metrics["distillation/termination_equiv_kl"] = Observation.ratio(objective_total.detach(), count)
+            metrics["distillation/eos_identity_kl"] = Observation.ratio(
+                total.detach() - objective_total.detach(), count
+            )
         if "full_kl_position_sums" in model_output:
             from verl.utils.metric.position import position_observations
 

@@ -32,6 +32,8 @@ case "$TARGET" in
     *) echo "Expected student or teacher; got $TARGET" >&2; exit 2 ;;
 esac
 export DOMAIN=math DISTILLATION_EXECUTION_MODE=shared_sync TEACHER_GPUS=0 EXPERIMENT_METHOD=sampled
+# Validation has no distillation objective, even if the caller exported a training preset.
+unset FULL_KL_TERMINATION_TOKEN_IDS
 export SEED=${SEED:-42}
 export EXPERIMENT_NAME=${EXPERIMENT_NAME:-math-valid-$TARGET-$(date +%Y%m%d-%H%M%S)-$$}
 exec bash "$SCRIPT_DIR/launchers/_run_single_teacher_fsdp2.sh" \

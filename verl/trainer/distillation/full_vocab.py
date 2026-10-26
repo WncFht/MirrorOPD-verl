@@ -6,6 +6,7 @@ Teacher is frozen; gradients are first-order only. No distributed communication
 or loss normalization lives here. Return a token sum for the engine to normalize.
 """
 
+from functools import partial
 from typing import NamedTuple
 
 import torch
@@ -14,7 +15,11 @@ from verl.trainer.distillation.profiling import full_kl_range
 
 
 class FullKLResult(NamedTuple):
-    """One differentiable objective and optional detached token diagnostics."""
+    """Differentiable objective and detached raw vocabulary-KL diagnostics.
+
+    With termination equivalence, loss_sum optimizes the coarsened action space;
+    token_kl deliberately retains the original vocabulary metric.
+    """
 
     loss_sum: torch.Tensor
     token_kl: torch.Tensor | None
@@ -176,6 +181,27 @@ def precompute_kl_rows(hs, ws, ht, wt):
     return kl, dz
 
 
+def termination_equivalent_kl_rows(hs, ws, ht, wt, *, termination_token_ids):
+    """Coarsen a stopping-action class while preserving raw KL diagnostics.
+
+    The class log-ratio is log(P(E)/Q(E)); its contribution to each member's
+    logit VJP is p_i * (class_log_ratio - coarsened_KL). No stopping mass is
+    dropped or reassigned to a preferred token ID.
+    """
+    lp = project(hs, ws).log_softmax(-1)
+    lt = project(ht, wt).log_softmax(-1)
+    ids = termination_token_ids
+    stop_gap = lp[:, ids].logsumexp(-1) - lt[:, ids].logsumexp(-1)
+    p = lp.exp()
+    lp.sub_(lt)
+    del lt
+    raw_kl = (p * lp).sum(-1)
+    lp[:, ids] = stop_gap[:, None]
+    coarse_kl = (p * lp).sum(-1)
+    lp.sub_(coarse_kl[:, None]).mul_(p)
+    return coarse_kl, lp.to(hs.dtype), raw_kl
+
+
 class PrecomputedKL(torch.autograd.Function):
     """Shared accumulation/VJP for ordinary and fused block reductions."""
 
@@ -193,12 +219,16 @@ class PrecomputedKL(torch.autograd.Function):
         for start in range(0, len(hs), token_chunk):
             stop = min(start + token_chunk, len(hs))
             if spec is None:
-                kl, dz = row_kernel(hs[start:stop], ws, ht[start:stop], wt)
+                output = row_kernel(hs[start:stop], ws, ht[start:stop], wt)
+                kl, dz = output[:2]
+                diagnostic_kl = output[2] if len(output) == 3 else kl
+                del output
             else:
                 kl, dz, info = row_kernel(hs[start:stop], ws, ht[start:stop], wt, hq[start:stop], wq, spec)
                 diagnostics[start:stop] = info
+                diagnostic_kl = kl
             total += kl.sum()
-            token_kl[start:stop] = kl
+            token_kl[start:stop] = diagnostic_kl
             with full_kl_range("grad_hidden"):
                 add_product(dh[start:stop], dz, ws)
             with full_kl_range("grad_head"):
@@ -244,14 +274,25 @@ def teacher_support_correction(ht, wt, student_vocab, token_chunk, vocab_chunk):
     return FullKLResult(total, rows)
 
 
-def full_reverse_kl(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192):
-    """Scalar loss interface; preserve existing callers and the original objective."""
+def full_reverse_kl(
+    hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192, termination_token_ids=()
+):
+    """Scalar optimization interface; empty termination IDs preserve vocabulary KL."""
     return full_reverse_kl_result(
-        hs, ws, ht, wt, backend=backend, token_chunk=token_chunk, vocab_chunk=vocab_chunk
+        hs,
+        ws,
+        ht,
+        wt,
+        backend=backend,
+        token_chunk=token_chunk,
+        vocab_chunk=vocab_chunk,
+        termination_token_ids=termination_token_ids,
     ).loss_sum
 
 
-def full_reverse_kl_result(hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192) -> FullKLResult:
+def full_reverse_kl_result(
+    hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192, termination_token_ids=()
+) -> FullKLResult:
     """Compute the loss and reuse detached token rows when the backend exposes them.
 
     Kernel capability is represented by token_kl=None, not by engine-side backend
@@ -269,6 +310,12 @@ def full_reverse_kl_result(hs, ws, ht, wt, *, backend="recompute", token_chunk=5
         raise ValueError("full KL chunk sizes must be positive")
     if not len(ws):
         raise ValueError("full KL requires a nonempty vocabulary")
+    ids = tuple(termination_token_ids)
+    if ids:
+        if len(ids) < 2 or len(set(ids)) != len(ids) or any(type(i) is not int or not 0 <= i < len(ws) for i in ids):
+            raise ValueError("termination equivalence requires distinct supported token IDs")
+        if backend != "precompute" or len(ws) != len(wt):
+            raise ValueError("termination equivalence requires precompute and equal vocabulary widths")
     if len(hs) == 0:
         total = hs.sum() * 0 + ws.sum() * 0
         rows = None if backend == "liger" else hs.new_empty(0).detach()
@@ -290,7 +337,7 @@ def full_reverse_kl_result(hs, ws, ht, wt, *, backend="recompute", token_chunk=5
     if backend in ("recompute", "streaming"):
         return finish(RecomputedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk if backend == "streaming" else 0))
     if backend in ("precompute", "precompute_fused"):
-        row_kernel = precompute_kl_rows
+        row_kernel = partial(termination_equivalent_kl_rows, termination_token_ids=ids) if ids else precompute_kl_rows
         if backend == "precompute_fused" and hs.is_cuda and hs.dtype == torch.bfloat16:
             from verl.trainer.distillation.full_vocab_triton import fused_kl_rows
 
@@ -308,7 +355,11 @@ def full_reverse_kl_result(hs, ws, ht, wt, *, backend="recompute", token_chunk=5
 
 
 class FullVocabObjectiveResult(NamedTuple):
-    """Unscaled objective sum and detached rows; final loss applies 1/eta once."""
+    """Unscaled objective sum and detached rows; final loss applies 1/eta once.
+
+    For teacher-only KL, token_objective retains raw vocabulary KL even when
+    loss_sum uses termination equivalence, so position metrics stay comparable.
+    """
 
     loss_sum: torch.Tensor
     token_objective: torch.Tensor | None
@@ -357,14 +408,34 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False):
 
 
 def full_vocab_objective_result(
-    hs, ws, ht, wt, *, spec, hq=None, wq=None, backend="precompute", token_chunk=512, vocab_chunk=8192
+    hs,
+    ws,
+    ht,
+    wt,
+    *,
+    spec,
+    hq=None,
+    wq=None,
+    backend="precompute",
+    token_chunk=512,
+    vocab_chunk=8192,
+    termination_token_ids=(),
 ):
     """One dispatcher for teacher-only KL, weighted-target MDPO, and full BPO."""
     if spec.teacher_only_kl:
         result = full_reverse_kl_result(
-            hs, ws, ht, wt, backend=backend, token_chunk=token_chunk, vocab_chunk=vocab_chunk
+            hs,
+            ws,
+            ht,
+            wt,
+            backend=backend,
+            token_chunk=token_chunk,
+            vocab_chunk=vocab_chunk,
+            termination_token_ids=termination_token_ids,
         )
         return FullVocabObjectiveResult(result.loss_sum, result.token_kl, {})
+    if termination_token_ids:
+        raise ValueError("termination equivalence supports only teacher-only full reverse KL")
     if spec.payload_kind != "hidden" or spec.objective not in ("mdpo", "bpo"):
         raise ValueError("Full-vocab mirror objective requires MDPO or BPO with hidden payload")
     if backend not in ("dense", "precompute", "precompute_fused"):

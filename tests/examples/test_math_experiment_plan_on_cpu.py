@@ -77,6 +77,13 @@ def test_base_memory_default_preserves_explicit_environment_override():
     assert result.environment["ROLLOUT_GPU_MEMORY_UTILIZATION"] == "0.55"
 
 
+def test_e41_termination_alignment_is_scoped_and_can_be_disabled():
+    assert plan(["E41"]).environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[151643,151645]"
+    assert plan(["E41"], {"FULL_KL_TERMINATION_TOKEN_IDS": "[]"}).environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[]"
+    for args in (["E30"], ["E39"], ["E44"], ["E41-valid-student"], ["E41", "--method", "sampled"]):
+        assert "FULL_KL_TERMINATION_TOKEN_IDS" not in plan(args).environment
+
+
 def test_empty_environment_matches_shell_default_semantics():
     result = plan(["E13"], {"PPO_EPOCHS": "", "TOTAL_TRAINING_STEPS": "", "TEST_FREQ": ""})
     assert result.environment["PPO_EPOCHS"] == "1" and result.environment["TEST_FREQ"] == "20"
