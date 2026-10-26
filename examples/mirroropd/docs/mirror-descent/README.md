@@ -10,6 +10,7 @@
 | [实现验收结果](data/implementation-checks.json) | CPU、真实 TQ、CUDA、两卡 FSDP2 和 1.5B 短训练证据 |
 | [Full-vocab 优化与实测](实现方案.md#85-已完成的数值层优化与实测)与[数据](data/full-vocab-performance.json) | Target/诊断融合、固定输入 A/B、时间与峰值显存、剩余边界 |
 | [内层 KL 反弹审计](2026-10-26-MDPO内层KL反弹与数值链路审计.md) | 近目标梯度修正、真实四卡固定前缀重放、Adam 与计算精度对照 |
+| [生产数值修复与验收](2026-10-27-蒸馏数值修复与验收.md) | BPO/Full-KL 稳定归约、分离 target、近零标量、sampled CE、回归与成本 |
 | [优化器历史与前向精度对照](2026-10-27-MDPO优化器历史与前向精度因果对照.md) | 零当前梯度、等参数范数、固定更新缩放、位置与精度控制 |
 | [数值验证脚本](scripts/verify_mirror_targets.py)与[结果](data/finite-vocab-checks.json) | CPU FP64 小词表上的目标、梯度和反例检查 |
 
