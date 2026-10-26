@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Four-rank real-teacher MDPO diagnostic on four fixed math continuations.
+"""Four-rank real-teacher mirror diagnostic on four fixed math continuations.
 
 Requires four GPUs and saved fixed-prefix records. Packed SDPA comparisons are
 valid here only because each rank/micro-batch contains exactly one sequence.
@@ -30,6 +30,7 @@ from tensordict import TensorDict
 import verl.trainer.distillation.full_vocab as kernels
 from verl.trainer.distillation.anchor import anchor_scope
 from verl.trainer.distillation.losses import distillation_loss
+from verl.trainer.distillation.targets import build_log_weights
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
 from verl.workers.config import (
@@ -96,15 +97,22 @@ def reference(hs, ws, ht, wt, *, spec, hq, wq, **kwargs):
     lp = zp.log_softmax(-1)
     lt = zt.log_softmax(-1)[:, : len(ws)]
     lq = zq.log_softmax(-1)
-    b = lq + spec.eta * (lt - lq)
+    b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
     p = lp.exp()
-    rows = (p * (lp - b)).sum(-1)
+    gap = lp - b
+    raw_mdpo = (p * gap).sum(-1)
+    if spec.objective == "bpo":
+        q = lq.exp()
+        centered = gap - (q * gap).sum(-1, keepdim=True)
+        rows = (q * centered.square()).sum(-1) / 2
+    else:
+        rows = raw_mdpo
     lz = b.logsumexp(-1)
     return kernels.FullVocabObjectiveResult(
         rows.sum(),
         rows,
         {
-            "target_kl": rows + lz,
+            "target_kl": raw_mdpo + lz,
             "target_log_z": lz,
             "anchor_kl": (p * (lp - lq)).sum(-1),
             "teacher_kl": (p * (lp - lt)).sum(-1),
@@ -146,6 +154,9 @@ def scalar_metrics(records):
 def main(extra_kernels=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--objective", choices=["mdpo", "bpo"], default="mdpo")
+    parser.add_argument("--kappa", type=float, default=0.0)
+    parser.add_argument("--eta", type=float, default=0.3)
     parser.add_argument("--warm-outers", type=int, default=32)
     parser.add_argument("--resume-checkpoint", type=Path)
     parser.add_argument("--start-branch", type=int, default=0)
@@ -161,6 +172,8 @@ def main(extra_kernels=None):
     parser.add_argument("--adapt", action="store_true", help="Warm from resume state and save a new checkpoint")
     parser.add_argument("--stop-at-low-kl", action="store_true", help="Stop warming below 1e-3 even without rebound")
     args = parser.parse_args()
+    if not 0 < args.eta < 1 or not 0 <= args.kappa <= 1:
+        parser.error("This anchored replay requires 0 < eta < 1 and 0 <= kappa <= 1")
     if args.warm_precision == "float32" and args.warm_attention != "sdpa":
         parser.error("FP32 requires SDPA")
     if args.adapt and not args.resume_checkpoint:
@@ -204,7 +217,13 @@ def main(extra_kernels=None):
     config = DistillationConfig(
         distillation_loss=DistillationLossConfig(
             loss_mode="mirror",
-            mirror={"objective": "mdpo", "estimator": "full_vocab", "kappa": 0.0, "eta": 0.3, "diagnostics": True},
+            mirror={
+                "objective": args.objective,
+                "estimator": "full_vocab",
+                "kappa": args.kappa,
+                "eta": args.eta,
+                "diagnostics": True,
+            },
             full_vocab=FullVocabConfig(backend="precompute_fused", token_chunk_size=128),
             use_task_rewards=False,
             use_policy_gradient=False,
@@ -260,8 +279,9 @@ def main(extra_kernels=None):
                         "response_cap": 128,
                         "arguments": {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
                         "warmup_kernel": args.warm_kernel,
-                        "kappa": 0.0,
-                        "eta": 0.3,
+                        "objective": args.objective,
+                        "kappa": args.kappa,
+                        "eta": args.eta,
                         "warmup": warm,
                         "branches": branches,
                         "checkpoint": str(checkpoint),
