@@ -861,7 +861,18 @@ class FSDPEngine(BaseEngine):
 
         if scaler is not None:
             # scaler handles inf/nan skipping internally via _check_inf_per_device.
-            scaler.step(self.optimizer)
+            self._optimizer_step_applied = False
+
+            def mark_applied(optimizer, args, kwargs):
+                # Fused AMP optimizers may be invoked even on overflow and
+                # perform the skip inside their kernel using found_inf.
+                found_inf = getattr(optimizer, "found_inf", None)
+                self._optimizer_step_applied = found_inf is None or found_inf.item() == 0
+
+            # Optimizer.step commonly returns None even on success. Its post
+            # hook runs only when GradScaler actually invokes the update.
+            with self.optimizer.register_step_post_hook(mark_applied):
+                scaler.step(self.optimizer)
             scaler.update()
         else:
             # if grad_norm is not finite, skip the update
