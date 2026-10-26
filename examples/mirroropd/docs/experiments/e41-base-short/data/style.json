@@ -1,0 +1,69 @@
+{
+  "source": "figure-viz paper theme",
+  "hues": {
+    "vteal": "#4F8FA5",
+    "vorange": "#EE995B",
+    "vcoral": "#C95B5B",
+    "vviolet": "#8A74B5",
+    "vgreen": "#6FA287",
+    "vgold": "#D9A93C",
+    "vblue": "#5478A0",
+    "vrose": "#B9748F",
+    "vgray": "#85898F"
+  },
+  "neutrals": {
+    "vink": "#3A3F45",
+    "vmist": "#D8DBDE",
+    "paper": "#FFFFFF",
+    "baseline": "#85898F"
+  },
+  "rc": {
+    "figure.facecolor": "#FFFFFF",
+    "axes.facecolor": "#FFFFFF",
+    "savefig.facecolor": "#FFFFFF",
+    "svg.fonttype": "none",
+    "axes.edgecolor": "#3A3F45",
+    "axes.linewidth": 0.9,
+    "axes.labelcolor": "#3A3F45",
+    "xtick.color": "#3A3F45",
+    "ytick.color": "#3A3F45",
+    "text.color": "#3A3F45",
+    "grid.color": "#D8DBDE",
+    "legend.frameon": false,
+    "font.family": [
+      "STIXGeneral",
+      "DejaVu Serif"
+    ],
+    "font.serif": [
+      "DejaVu Serif",
+      "Bitstream Vera Serif",
+      "Computer Modern Roman",
+      "New Century Schoolbook",
+      "Century Schoolbook L",
+      "Utopia",
+      "ITC Bookman",
+      "Bookman",
+      "Nimbus Roman No9 L",
+      "Times New Roman",
+      "Times",
+      "Palatino",
+      "Charter",
+      "serif"
+    ],
+    "font.sans-serif": [
+      "DejaVu Sans",
+      "Bitstream Vera Sans",
+      "Computer Modern Sans Serif",
+      "Lucida Grande",
+      "Verdana",
+      "Geneva",
+      "Lucid",
+      "Arial",
+      "Helvetica",
+      "Avant Garde",
+      "sans-serif"
+    ],
+    "font.size": 8.5,
+    "mathtext.fontset": "stix"
+  }
+}

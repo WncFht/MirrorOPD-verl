@@ -1,0 +1,32 @@
+[
+  {
+    "outer": 16,
+    "prompt": "user\nA library has six identical copies of a certain book. At any given time, some of these copies are at the library and some are checked out. How many different ways are there for some of the books to be in the library and the rest to be checked out if at least one book is in the library and at least one is checked out?  (The books should be considered indistinguishable.)\nassistant\n<think>\n\n</think>\n\n",
+    "ground_truth": "5",
+    "baseline": {
+      "score": 1.0,
+      "length": 7168,
+      "ending": "✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. �"
+    },
+    "aligned": {
+      "score": 1.0,
+      "length": 488,
+      "ending": "he possible values of $x$ are integers from 1 to 5 (since $x = 0$ would make $y = 6$, and $x = 6$ would make $y = 0$, which is not allowed).\n\nLet’s list the possible pairs:\n\n- $x = 1, y = 5$\n- $x = 2, y = 4$\n- $x = 3, y = 3$\n- $x = 4, y = 2$\n- $x = 5, y = 1$\n\nSo there are **5** such pairs.\n\n---\n\n### Step 3: Count the number of ways\n\nEach pair $(x, y)$ corresponds to a different way of distributing the books:\n- $x$ books in the library\n- $y$ books checked out\n\nSince the books are **indistinguishable**, and the same number of books are in the library and checked out, each **pair is a distinct way**.\n\nSo, the number of different ways is:\n\n$$\n\\boxed{5}\n$$\n\n---\n\n### Final Answer:\n\n$$\n\\boxed{5}\n$$"
+    }
+  },
+  {
+    "outer": 16,
+    "prompt": "user\nA $24$-hour digital clock shows times $h : m : s$, where $h$, $m$, and $s$ are integers with $0 \\leq h \\leq 23$, $0 \\leq m \\leq 59$, and $0 \\leq s \\leq 59$. How many times $h : m : s$ satisfy $h + m = s$?\nassistant\n<think>\n\n</think>\n\n",
+    "ground_truth": "1164",
+    "baseline": {
+      "score": 0.0,
+      "length": 7168,
+      "ending": "✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅. ✅"
+    },
+    "aligned": {
+      "score": 0.0,
+      "length": 1542,
+      "ending": "w m \\leq 58 \\Rightarrow 59 $ values\n- ...\n- For $ h = 23 \\Rightarrow m \\leq 36 \\Rightarrow 37 $ values\n\nSo the total number of valid times is:\n\n$$\n\\sum_{h=0}^{23} \\max(0, 59 - h)\n$$\n\nThis is the same as:\n\n$$\n\\sum_{h=0}^{23} (59 - h)\n$$\n\nLet’s compute this sum.\n\n---\n\n### Step 2: Compute the sum $ \\sum_{h=0}^{23} (59 - h) $\n\nLet’s rewrite the sum:\n\n$$\n\\sum_{h=0}^{23} (59 - h) = \\sum_{h=0}^{23} 59 - \\sum_{h=0}^{23} h\n$$\n\nCompute the two parts:\n\n- $ \\sum_{h=0}^{23} 59 = 59 \\cdot 24 = 1416 $\n- $ \\sum_{h=0}^{23} h = \\frac{23 \\cdot 24}{2} = 276 $\n\nSo the total is:\n\n$$\n1416 - 276 = 1140\n$$\n\n---\n\n### Final Answer:\n\n$$\n\\boxed{1140}\n$$\n\nSo there are **1140** times $ h : m : s $ such that $ h + m = s $."
+    }
+  }
+]
