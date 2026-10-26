@@ -9,7 +9,7 @@
 | 盘点实验与后续缺口 | [实验目录](experiments/README.md) | E 系列、历史 Math/Coding、运行与分析进度、待跑项 |
 | 查看实际 run 与结果 | [运行记录](experiments/运行记录.md) | 实际配置、状态、更新数、最后验证坐标与分数 |
 | 查指标定义与比较口径 | [实验指标](experiments/metrics/README.md) | policy-v3、历史字段、验证预算、KL 与位置统计 |
-| 复算分析与更新实验记录 | [复现与维护](experiments/复现与维护.md) | 独立日志仓库、快照、运行表、统计、绘图及离线 HTML |
+| 复算分析与更新实验记录 | [复现与维护](experiments/复现与维护.md) | 独立日志仓库、快照、运行表、统计与静态绘图 |
 | 理解 OPD、full-vocab 与 Mirror Descent | [理论结论与阅读顺序](theory/README.md) | 目标、计算图、四种更新、控制变量和证明 |
 | 理解 η、κ 的目标与实现 | [MirrorOPD 形状与插值](mirror-descent/README.md) | 固定 state、动作 IS、current/frozen、clipping |
 | 核对数学符号 | [符号约定](符号约定.md) | 教师、学生、锚点、行为策略与工程数量 |
