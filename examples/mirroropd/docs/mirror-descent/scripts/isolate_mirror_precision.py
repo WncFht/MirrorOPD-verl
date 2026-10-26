@@ -4,7 +4,8 @@
 """Diagnostic precision interventions for replay_fixed_prefix.py.
 
 Same CLI and branch JSON, with additional kernel names row64/head64 and precision
-names bf16_weights_fp32_compute, fp32_residual, residual_only, fp32_norm and
+names bf16_weights_fp32_compute, bf16_gemm_fp32_outputs, bf16_mlp_fp32_outputs,
+bf16_attention_fp32_outputs, fp32_residual, residual_only, fp32_norm and
 fp32_final_norm. These Qwen2-only interventions are NOT production configuration.
 Each precision branch captures its own q. For identical-displacement evidence,
 use probe_mirror_forward.py instead. No Ray/vLLM/TQ is started here.
@@ -86,7 +87,14 @@ def head64_result(hs, ws, ht, wt, *, spec, hq, wq, **kwargs):
 def make_worker(path, world, teacher=False, precision="bfloat16", attention="flash_attention_2"):
     import verl.workers.engine.fsdp.transformer_impl as implementation
 
-    promoted_residual = precision in ("bf16_weights_fp32_compute", "fp32_residual", "residual_only")
+    promoted_residual = precision in (
+        "bf16_weights_fp32_compute",
+        "bf16_gemm_fp32_outputs",
+        "bf16_mlp_fp32_outputs",
+        "bf16_attention_fp32_outputs",
+        "fp32_residual",
+        "residual_only",
+    )
     norm_only = precision in ("fp32_norm", "fp32_final_norm")
     special = promoted_residual or norm_only
     original_policy = implementation.MixedPrecisionPolicy
@@ -106,16 +114,32 @@ def make_worker(path, world, teacher=False, precision="bfloat16", attention="fla
         raise ValueError("Precision interventions were audited only on Qwen2")
     if promoted_residual:
         worker.engine.module.model.embed_tokens.register_forward_hook(lambda module, args, out: out.float())
-    if precision == "bf16_weights_fp32_compute":
-        worker.engine._autocast_dtype = torch.float32
+    if precision in (
+        "bf16_weights_fp32_compute",
+        "bf16_gemm_fp32_outputs",
+        "bf16_mlp_fp32_outputs",
+        "bf16_attention_fp32_outputs",
+    ):
+        if precision in ("bf16_weights_fp32_compute", "bf16_gemm_fp32_outputs"):
+            worker.engine._autocast_dtype = torch.float32
 
         def linear_fp32(module, inputs):
+            if precision in ("bf16_gemm_fp32_outputs", "bf16_mlp_fp32_outputs", "bf16_attention_fp32_outputs"):
+                with torch.autocast(inputs.device.type, enabled=False):
+                    flat = inputs.reshape(-1, inputs.shape[-1]).to(torch.bfloat16)
+                    output = kernels.project(flat, module.weight)
+                    output = output.reshape(*inputs.shape[:-1], module.weight.shape[0])
+                    return output if module.bias is None else output + module.bias.float()
             return torch.nn.functional.linear(
                 inputs.float(), module.weight.float(), None if module.bias is None else module.bias.float()
             )
 
         for name, module in worker.engine.module.named_modules():
             if isinstance(module, torch.nn.Linear) and name != "lm_head":
+                if precision == "bf16_mlp_fp32_outputs" and ".mlp." not in name:
+                    continue
+                if precision == "bf16_attention_fp32_outputs" and ".self_attn." not in name:
+                    continue
                 module.forward = MethodType(linear_fp32, module)
     elif precision == "residual_only":
         for module in worker.engine.module.modules():

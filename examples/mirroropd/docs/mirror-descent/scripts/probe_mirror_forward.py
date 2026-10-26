@@ -76,6 +76,59 @@ def patch_layers(actor):
     return selected
 
 
+def forward_error_decomposition(lp0, lp1, ref0, ref1):
+    """Exact variance decomposition of centered log-ratio motion, plus true KL.
+
+    The variance is a local quadratic KL approximation; its components are not
+    an additive causal decomposition of the actual training objective.
+    """
+    w = lp0.exp()
+
+    def center(v):
+        return v - (w * v).sum(-1, keepdim=True)
+
+    motion = center(lp1 - lp0)
+    signal = center(ref1 - ref0)
+    change = motion - signal
+    e0, e1 = center(lp0 - ref0), center(lp1 - ref1)
+    per_row = [
+        0.5 * (w * motion.square()).sum(-1),
+        0.5 * (w * signal.square()).sum(-1),
+        0.5 * (w * change.square()).sum(-1),
+        (w * signal * change).sum(-1),
+        (w * e0.square()).sum(-1),
+        (w * e1.square()).sum(-1),
+        (w * e0 * e1).sum(-1),
+        (lp1.exp() * (lp1 - lp0)).sum(-1),
+        (ref1.exp() * (ref1 - ref0)).sum(-1),
+    ]
+    totals = torch.stack([x.sum() for x in per_row] + [lp0.new_tensor(len(lp0))])
+    if dist.is_initialized():
+        dist.all_reduce(totals)
+    values = (totals[:-1] / totals[-1]).tolist()
+    denom = (values[4] * values[5]) ** 0.5
+    return dict(
+        zip(
+            [
+                "quadratic_motion",
+                "quadratic_reference_motion",
+                "quadratic_error_change",
+                "cross_term",
+                "initial_error_energy",
+                "final_error_energy",
+                "error_inner_product",
+                "actual_policy_kl",
+                "reference_policy_kl",
+            ],
+            values,
+            strict=True,
+        )
+    ) | {
+        "error_correlation": values[6] / denom if denom else None,
+        "decomposition_residual": values[0] - values[1] - values[2] - values[3],
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, required=True)
@@ -88,8 +141,28 @@ def main():
     parser.add_argument("--mode", choices=["movement", "layers"], default="movement")
     parser.add_argument("--lrs", type=float, nargs="+", default=[1e-6, 1e-7])
     parser.add_argument("--layer-counts", type=int, nargs="+", default=[1, 4, 8, 14, 28])
+    parser.add_argument("--memory-fraction", type=float, default=0.30)
     parser.add_argument("--math-attention", action="store_true", help="Force the same SDPA math backend across dtypes")
+    parser.add_argument(
+        "--forward-precisions",
+        nargs="+",
+        default=["bfloat16", "float32"],
+        choices=[
+            "bfloat16",
+            "float32",
+            "bf16_weights_fp32_compute",
+            "bf16_gemm_fp32_outputs",
+            "bf16_mlp_fp32_outputs",
+            "bf16_attention_fp32_outputs",
+            "fp32_residual",
+            "residual_only",
+            "fp32_norm",
+            "fp32_final_norm",
+        ],
+    )
     args = parser.parse_args()
+    if args.forward_precisions[0] != "bfloat16":
+        parser.error("The first forward precision must be bfloat16 as the baseline")
     if args.mode == "layers" and not args.snapshots:
         parser.error("layers requires --snapshots")
     args.out.mkdir(parents=True, exist_ok=True)
@@ -100,7 +173,7 @@ def main():
         torch.backends.cuda.enable_math_sdp(True)
     torch.set_num_threads(1)
     torch.cuda.set_device(int(os.environ["LOCAL_RANK"]))
-    torch.cuda.set_per_process_memory_fraction(0.30)
+    torch.cuda.set_per_process_memory_fraction(args.memory_fraction)
     torch.backends.cuda.matmul.allow_tf32 = False
     _, rank, world = initialize_global_process_group(timeout_second=600)
     ckpt = args.checkpoint
@@ -149,7 +222,10 @@ def main():
         if args.mode == "layers":
             impl.MixedPrecisionPolicy = lambda **kw: old_policy(**(kw | {"cast_forward_inputs": False}))
         try:
-            a = replay.make_worker(student_path, world, precision=dtype, attention=attn)
+            factory = replay.make_worker
+            if dtype not in ("bfloat16", "float16", "float32"):
+                from isolate_mirror_precision import make_worker as factory
+            a = factory(student_path, world, precision=dtype, attention=attn)
         finally:
             impl.MixedPrecisionPolicy = old_policy
         a.engine.configure_full_vocab(cfg.distillation_loss.full_vocab, str(teacher_path), spec=spec)
@@ -162,6 +238,8 @@ def main():
     initial_activations = {}
     current_mode = [None]
     current_snapshot = [None]
+    saved_logps = {}
+    error_records = []
 
     def fixed_reference(hs, ws, ht, wt, *, hq, wq, spec, **kwargs):
         z = kernels.project(hs, ws).double()
@@ -176,6 +254,8 @@ def main():
         mode_kl = (
             (p * (lp - mode_anchor[current_mode[0]])).sum(-1) if current_mode[0] is not None else lp.new_zeros(len(lp))
         )
+        if args.mode == "movement" and current_mode[0] is not None:
+            saved_logps[(current_mode[0], current_snapshot[0])] = lp.detach().cpu()
         b = frozen["b"]
         rows = (p * (lp - b)).sum(-1)
         lz = b.logsumexp(-1)
@@ -208,6 +288,7 @@ def main():
                         "fixed_target": True,
                         "step_statistics": stats,
                         "evaluations": evaluations,
+                        "forward_error_decomposition": error_records,
                     },
                     indent=2,
                 )
@@ -344,18 +425,24 @@ def main():
             *[(f"first{n}", list(range(n))) for n in args.layer_counts if n < depth],
         ]
     else:
-        modes = [("bfloat16", []), ("float32", [])]
+        modes = [(dtype, []) for dtype in args.forward_precisions]
+    actor_precision = "bfloat16"
     for dtype, indices in modes:
         rounded = args.mode == "movement" and dtype == "float32"
-        attn = "sdpa" if args.mode == "layers" or dtype == "float32" else "flash_attention_2"
+        attn = (
+            "sdpa"
+            if args.mode == "layers" or dtype in ("float32", "bf16_weights_fp32_compute")
+            else "flash_attention_2"
+        )
         if args.mode == "layers":
             selected.clear()
             selected.update(indices)
-        elif dtype == "float32":
+        elif dtype != actor_precision:
             del actor
             gc.collect()
             torch.cuda.empty_cache()
             actor = actor_for(dtype, attn)
+            actor_precision = dtype
         current_mode[0] = dtype
         handles = []
         for name, module in actor.engine.module.named_modules():
@@ -401,6 +488,16 @@ def main():
                 "layer_changes": layer_changes,
             }
             evaluations.append(row)
+            if args.mode == "movement" and dtype == "float32":
+                for mode in args.forward_precisions:
+                    if mode == "float32" or (mode, name) not in saved_logps:
+                        continue
+                    tensors = [
+                        saved_logps[key].to("cuda")
+                        for key in [(mode, "initial"), (mode, name), ("float32", "initial"), ("float32", name)]
+                    ]
+                    error_records.append({"precision": mode, "snapshot": name, **forward_error_decomposition(*tensors)})
+                    del tensors
             output()
             if rank == 0:
                 print("EVAL", dtype, name, metrics, flush=True)
