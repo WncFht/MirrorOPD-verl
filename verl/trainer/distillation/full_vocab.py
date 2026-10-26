@@ -201,7 +201,7 @@ def termination_equivalent_kl_rows(hs, ws, ht, wt, *, termination_token_ids):
     lp[:, ids] = stop_gap[:, None]
     coarse_kl = (p * lp).sum(-1)
     lp.sub_(coarse_kl[:, None]).mul_(p)
-    return coarse_kl, lp.to(hs.dtype), raw_kl
+    return coarse_kl, lp if hs.dtype == torch.float16 else lp.to(hs.dtype), raw_kl
 
 
 class PrecomputedKL(torch.autograd.Function):
