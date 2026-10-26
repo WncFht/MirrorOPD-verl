@@ -37,7 +37,7 @@ class ProjectionFP32(torch.autograd.Function):
 
 
 def project(hidden, weight):
-    if hidden.is_cuda and hidden.dtype == torch.bfloat16:
+    if hidden.is_cuda and hidden.dtype in (torch.float16, torch.bfloat16):
         if torch.is_grad_enabled() and (hidden.requires_grad or weight.requires_grad):
             return ProjectionFP32.apply(hidden, weight)
         return torch.mm(hidden, weight.T, out_dtype=torch.float32)
@@ -46,10 +46,10 @@ def project(hidden, weight):
 
 def add_product(accumulator, left, right):
     """Accumulate directly into FP32 storage instead of allocating a full head gradient per tile."""
-    if left.is_cuda and left.dtype == torch.bfloat16 and accumulator.dtype == torch.float32:
+    if left.is_cuda and left.dtype in (torch.float16, torch.bfloat16) and accumulator.dtype == torch.float32:
         torch.addmm(accumulator, left, right, out_dtype=torch.float32, out=accumulator)
     else:
-        accumulator.addmm_(left, right)
+        accumulator.addmm_(left.to(accumulator.dtype), right.to(accumulator.dtype))
 
 
 def dense_rows(hs, ws, ht, wt):
@@ -172,7 +172,9 @@ def precompute_kl_rows(hs, ws, ht, wt):
         kl = (p * lp).sum(-1)
     with full_kl_range("grad_logits"):
         lp.sub_(kl[:, None]).mul_(p)
-        dz = lp.to(hs.dtype)
+        # Precomputed VJPs run before GradScaler supplies its upstream scale.
+        # FP16 cannot represent many of these unscaled small gradients.
+        dz = lp if hs.dtype == torch.float16 else lp.to(hs.dtype)
     return kl, dz
 
 
@@ -204,7 +206,11 @@ class PrecomputedKL(torch.autograd.Function):
             with full_kl_range("grad_head"):
                 add_product(dw, dz.T, hs[start:stop])
             del kl, dz
-        ctx.save_for_backward(dh.to(hs.dtype), dw.to(ws.dtype))
+        ctx.hdtype, ctx.wdtype = hs.dtype, ws.dtype
+        ctx.save_for_backward(
+            dh if hs.dtype == torch.float16 else dh.to(hs.dtype),
+            dw if ws.dtype == torch.float16 else dw.to(ws.dtype),
+        )
         if spec is None:
             ctx.mark_non_differentiable(token_kl)
             return total, token_kl
@@ -216,7 +222,7 @@ class PrecomputedKL(torch.autograd.Function):
     def backward(ctx, upstream, *unused):
         dh, dw = ctx.saved_tensors
         with full_kl_range("backward_apply"):
-            return (dh * upstream, dw * upstream) + (None,) * (ctx.input_count - 2)
+            return ((dh * upstream).to(ctx.hdtype), (dw * upstream).to(ctx.wdtype)) + (None,) * (ctx.input_count - 2)
 
 
 @torch.no_grad()
@@ -349,7 +355,8 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False):
         rows, dz, info = full_vocab_rows(
             z, b, lq, objective=spec.objective, diagnostics=spec.diagnostics, log_teacher=lt
         )
-        dz = dz.to(hs.dtype)
+        if hs.dtype != torch.float16:
+            dz = dz.to(hs.dtype)
     diag = (
         torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS], dim=-1) if spec.diagnostics else z.new_empty((len(hs), 0))
     )
