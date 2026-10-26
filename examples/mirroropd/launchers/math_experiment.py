@@ -29,6 +29,8 @@ class ModelPair:
     student_sequences: int = 128
     teacher_sequences: int = 64
     stop_token: int | None = None
+    student_memory_utilization: float = 0.65
+    teacher_memory_utilization: float = 0.65
 
 
 @dataclass(frozen=True)
@@ -65,8 +67,9 @@ QWEN_BASE = ModelPair(
     teacher="Qwen3-8B",
     family="qwen3",
     prompt=1024,
-    student_sequences=12,
-    teacher_sequences=32,
+    student_sequences=24,
+    student_memory_utilization=0.8,
+    teacher_sequences=64,
     stop_token=151645,
 )
 QWEN_CHAT = ModelPair(
@@ -74,8 +77,8 @@ QWEN_CHAT = ModelPair(
     teacher="Qwen3-4B-Instruct-2507",
     family="qwen3",
     response=4096,
-    student_sequences=32,
-    teacher_sequences=32,
+    student_sequences=64,
+    teacher_sequences=64,
 )
 # sampled / full / sampled-reuse16 / full-reuse16; one row owns each model protocol.
 MODEL_MATRIX = (
@@ -144,6 +147,12 @@ def preset_catalog() -> dict[str, Preset]:
             eta=eta,
             environment=MIRROR_COMPARISON_ENV,
         )
+    # Polaris cross-origin teacher, retaining E20's optimizer and rollout budget.
+    presets["E48"] = replace(
+        presets["E20"],
+        budget=replace(presets["E20"].budget, initial_validation=True),
+        pair=replace(DEFAULT_PAIR, teacher="Polaris-7B-Preview", teacher_sequences=32),
+    )
     return presets
 
 
@@ -215,6 +224,9 @@ def model_defaults(env: dict[str, str], pair: ModelPair, role: str | None, root:
         VAL_N=16,
         VAL_BATCH_SIZE="null",
         ROLLOUT_MAX_NUM_SEQS=pair.teacher_sequences if role == "teacher" else pair.student_sequences,
+        ROLLOUT_GPU_MEMORY_UTILIZATION=(
+            pair.teacher_memory_utilization if role == "teacher" else pair.student_memory_utilization
+        ),
         SEED=42,
     )
     overrides = []
@@ -445,6 +457,8 @@ def preset_overview() -> str:
                 comparison,
             )
             + "\nE44–E47：batch=64，seed=42，IO async/prefetch 开启；MDPO/BPO 开启诊断，Full-KL 沿用 endpoint 指标。",
+            "E48：R1-1.5B student / Polaris-7B-Preview teacher；沿用 E20 Full-KL、reuse16 与预算，开启初始验证。\n"
+            "Teacher FSDP token budget 沿用公共默认 32768；支持 E48-valid-student / E48-valid-teacher。",
             "训练预算：Eval/Save 均按 outer step；Updates*=默认 batch==mini-batch 时的更新尝试数。\n"
             + _aligned_table(("Presets", "Reuse", "Outer", "Updates*", "LR", "Eval/Save", "Initial val"), budgets),
             "shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。\n"

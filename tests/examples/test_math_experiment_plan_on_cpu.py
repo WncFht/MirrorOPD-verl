@@ -24,7 +24,7 @@ def plan(argv, env=None):
 
 
 def test_catalog_covers_every_number_without_alias_duplication():
-    assert set(planner.PRESETS) | set(planner.ALIASES) == {f"E{i}" for i in range(1, 48)}
+    assert set(planner.PRESETS) | set(planner.ALIASES) == {f"E{i}" for i in range(1, 49)}
     assert set(planner.PRESETS).isdisjoint(planner.ALIASES)
     assert len(planner.MODEL_MATRIX) == 6
     with pytest.raises(FrozenInstanceError):
@@ -61,13 +61,20 @@ def test_full_defaults_and_validation_do_not_leak_training_budget():
     result = plan(["E28-valid-teacher"])
     assert result.entry.name == "run_math_validation_fsdp2.sh"
     assert result.environment["MAX_PROMPT_LENGTH"] == "4096"
-    assert result.environment["ROLLOUT_MAX_NUM_SEQS"] == "32"
+    assert result.environment["ROLLOUT_MAX_NUM_SEQS"] == "64"
+    assert result.environment["ROLLOUT_GPU_MEMORY_UTILIZATION"] == "0.65"
     assert not any(x.startswith("trainer.total_training_steps=") for x in result.arguments)
     assert "PPO_EPOCHS" not in result.environment
     full = plan(["E18"])
     assert full.environment["FULL_KL_PREFETCH"] == "True"
     assert "trainer.total_training_steps=64" in full.arguments
     assert full.environment["PPO_EPOCHS"] == "64"
+
+
+def test_base_memory_default_preserves_explicit_environment_override():
+    assert plan(["E27"]).environment["ROLLOUT_GPU_MEMORY_UTILIZATION"] == "0.8"
+    result = plan(["E27-valid-student"], {"ROLLOUT_GPU_MEMORY_UTILIZATION": "0.55"})
+    assert result.environment["ROLLOUT_GPU_MEMORY_UTILIZATION"] == "0.55"
 
 
 def test_empty_environment_matches_shell_default_semantics():
@@ -78,6 +85,27 @@ def test_empty_environment_matches_shell_default_semantics():
         plan(["custom"], {"OPD_ADVANTAGE_SOURCE": "", "OPD_POLICY_LOSS_MODE": ""}).environment["EXPERIMENT_METHOD"]
         == "sampled"
     )
+
+
+def test_polaris_e48_retains_e20_budget_and_supports_independent_validation():
+    from dataclasses import replace
+
+    e48 = planner.PRESETS["E48"]
+    assert e48.budget == replace(planner.PRESETS["E20"].budget, initial_validation=True)
+    training = plan(["E48"])
+    assert training.environment["TEACHER_MODEL"].endswith("/Polaris-7B-Preview")
+    assert training.environment["STUDENT_MODEL"].endswith("/DeepSeek-R1-Distill-Qwen-1.5B")
+    assert training.environment["PPO_EPOCHS"] == "16"
+    assert training.environment["LEARNING_RATE"] == "1e-6"
+    assert training.environment["FULL_KL_BACKEND"] == "precompute"
+    assert "TEACHER_FSDP_TOKEN_BUDGET" not in training.environment
+    assert "trainer.total_training_steps=256" in training.arguments
+    assert "trainer.val_before_train=True" in training.arguments
+    assert "algorithm.filter_groups.enable=False" in training.arguments
+    teacher = plan(["E48-valid-teacher"])
+    assert teacher.entry.name == "run_math_validation_fsdp2.sh"
+    assert teacher.environment["ROLLOUT_MAX_NUM_SEQS"] == "32"
+    assert "PPO_EPOCHS" not in teacher.environment
 
 
 def test_exec_preserves_literal_arguments_and_separator(monkeypatch, tmp_path):
@@ -102,7 +130,7 @@ def test_listing_is_derived_from_catalog_and_never_launches(monkeypatch, capsys)
     "args",
     [
         ["E1-valid-student"],
-        ["E48"],
+        ["E49"],
         ["E13", "--method", "bpo", "--estimator", "sampled"],
         ["E13-valid-teacher", "--eta", ".3"],
         ["E13", "--method", "sampled", "--eta", ".3"],

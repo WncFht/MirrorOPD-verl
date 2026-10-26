@@ -26,6 +26,7 @@ MODELS = {
         "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
     },
     "DeepSeek-R1-Distill-Qwen-7B": {"repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"},
+    "Polaris-7B-Preview": {"repo": "POLARIS-Project/Polaris-7B-Preview"},
     "Qwen3-1.7B-Base": {"repo": "Qwen/Qwen3-1.7B-Base"},
     "Qwen3-8B": {"repo": "Qwen/Qwen3-8B"},
     "Qwen3-4B": {"repo": "Qwen/Qwen3-4B"},
