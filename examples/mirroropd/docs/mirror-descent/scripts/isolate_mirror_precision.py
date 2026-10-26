@@ -21,6 +21,8 @@ from verl.trainer.distillation.full_vocab_triton import fused_log_weights
 
 def rows64(hs, ws, ht, wt, hq, wq, spec):
     """Native projections and exact original FP32 b; only row arithmetic changes."""
+    if spec.objective != "mdpo":
+        raise ValueError("The row64/head64 oracle implements MDPO only")
     z = kernels.project(hs, ws)
     lt = kernels.project(ht, wt).log_softmax(-1)[:, : len(ws)]
     lq = kernels.project(hq, wq).log_softmax(-1)
