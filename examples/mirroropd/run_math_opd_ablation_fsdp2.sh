@@ -31,6 +31,9 @@
 # E47     mdpo     full_vocab  0.5    0.3  R1-1.5B  JustRL-1.5B  16     precompute_fused  128
 # E44–E47：batch=64，seed=42，IO async/prefetch 开启；MDPO/BPO 开启诊断，Full-KL 沿用 endpoint 指标。
 #
+# E48：R1-1.5B student / Polaris-7B-Preview teacher；沿用 E20 Full-KL、reuse16 与预算，开启初始验证。
+# Teacher FSDP token budget 沿用公共默认 32768；支持 E48-valid-student / E48-valid-teacher。
+#
 # 训练预算：Eval/Save 均按 outer step；Updates*=默认 batch==mini-batch 时的更新尝试数。
 # Presets          Reuse  Outer  Updates*  LR      Eval/Save  Initial val
 # E1-E6            4      32     128       shared  32/32      no
@@ -43,6 +46,7 @@
 # E19              32     128    4096      1e-6    16/32      no
 # E20              16     256    4096      1e-6    32/64      no
 # E44-E47          16     256    4096      1e-6    32/128     no
+# E48              16     256    4096      1e-6    32/64      yes
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
 # 编号别名：E21=E15; E22=E13。

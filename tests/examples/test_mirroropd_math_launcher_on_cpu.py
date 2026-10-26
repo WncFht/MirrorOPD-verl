@@ -28,6 +28,26 @@ def _assert_full_kl(loss):
     assert spec.eta == 1 and not loss.use_policy_gradient
 
 
+def test_polaris_e48_resolves_full_e20_protocol_and_unchanged_teacher_budget(tmp_path):
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT), "E48"], STUDENT_GPUS="4")
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    _assert_full_kl(omega_conf_to_dataclass(cfg.distillation).distillation_loss)
+    actor, rollout = cfg.actor_rollout_ref.actor, cfg.actor_rollout_ref.rollout
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/Polaris-7B-Preview")
+    assert cfg.distillation.shared_teacher.infer_max_token_len_per_gpu == 32768
+    assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 64
+    assert actor.ppo_epochs == 16 and rollout.n == 1
+    assert cfg.trainer.total_training_steps == 256
+    assert cfg.trainer.n_gpus_per_node == 4 and cfg.trainer.val_before_train
+    assert (cfg.trainer.test_freq, cfg.trainer.save_freq) == (32, 64)
+    assert actor.optim.lr == 1e-6
+    assert (cfg.data.max_prompt_length, cfg.data.max_response_length) == (4096, 7168)
+    assert rollout.val_kwargs.max_tokens == 31744 and rollout.val_kwargs.n == 16
+    assert cfg.distillation.distillation_loss.full_vocab.backend == "precompute"
+    assert cfg.distillation.distillation_loss.full_vocab.token_chunk_size == 512
+
+
 @pytest.mark.parametrize("domain", ["math", "code", "if"])
 def test_full_kl_method(tmp_path, domain):
     cfg = _config(
@@ -133,9 +153,9 @@ FAILURE_PAIRS = [
     ("E15", "E13", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 7168, 4096, 128, 64),
     ("E23", "E24", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 15360, 4096, 128, 64),
     ("E25", "E26", "DeepSeek-R1-Distill-Qwen-1.5B", "DeepSeek-R1-Distill-Qwen-7B", 7168, 4096, 128, 32),
-    ("E27", "E28", "Qwen3-1.7B-Base", "Qwen3-8B", 7168, 1024, 12, 32),
-    ("E29", "E30", "Qwen3-1.7B-Base", "Qwen3-4B", 7168, 1024, 12, 32),
-    ("E31", "E32", "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", 4096, 4096, 32, 32),
+    ("E27", "E28", "Qwen3-1.7B-Base", "Qwen3-8B", 7168, 1024, 24, 64),
+    ("E29", "E30", "Qwen3-1.7B-Base", "Qwen3-4B", 7168, 1024, 24, 64),
+    ("E31", "E32", "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", 4096, 4096, 64, 64),
 ]
 
 
@@ -162,6 +182,7 @@ def test_failure_training_presets_preserve_pair_protocol_and_update_budget(
     assert (cfg.data.max_prompt_length, cfg.data.max_response_length) == (prompt, response)
     assert rollout.max_model_len == prompt + 31744
     assert rollout.max_num_seqs == student_seqs
+    assert rollout.gpu_memory_utilization == (0.8 if student == "Qwen3-1.7B-Base" else 0.65)
     assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 64
     assert actor.ppo_epochs == rollout.n == 1
     assert cfg.trainer.total_training_steps == 250 and cfg.trainer.total_epochs == 1
@@ -213,6 +234,7 @@ def test_failure_validation_selects_generator_resources_without_training(
     assert not cfg.distillation.enabled and cfg.distillation.n_gpus_per_node == 0
     rollout = cfg.actor_rollout_ref.rollout
     assert rollout.max_num_seqs == (teacher_seqs if target == "teacher" else student_seqs)
+    assert rollout.gpu_memory_utilization == (0.8 if target == "student" and student == "Qwen3-1.7B-Base" else 0.65)
     assert cfg.data.max_prompt_length == (4096 if target == "teacher" else prompt)
     assert rollout.max_model_len == cfg.data.max_prompt_length + 31744
     assert list(rollout.stop_token_ids or []) == ([151645] if model.endswith("Base") else [])
@@ -230,11 +252,13 @@ def test_numbered_failure_preset_and_explicit_overrides(tmp_path):
             "E27",
             "trainer.test_freq=1",
             "actor_rollout_ref.rollout.stop_token_ids=[]",
+            "actor_rollout_ref.rollout.gpu_memory_utilization=0.6",
         ],
         STUDENT_MODEL="/custom student",
         TEACHER_MODEL="/custom teacher",
         MAX_RESPONSE_LENGTH="1024",
         ROLLOUT_MAX_NUM_SEQS="8",
+        ROLLOUT_GPU_MEMORY_UTILIZATION="0.55",
         SEED="43",
         TOTAL_TRAINING_STEPS="2",
         TEST_FREQ="10",
@@ -244,6 +268,7 @@ def test_numbered_failure_preset_and_explicit_overrides(tmp_path):
     assert cfg.distillation.distillation_loss.loss_mode == "k1"
     assert cfg.trainer.total_training_steps == 2 and cfg.trainer.test_freq == 1
     assert cfg.actor_rollout_ref.rollout.max_num_seqs == 8
+    assert cfg.actor_rollout_ref.rollout.gpu_memory_utilization == 0.6
     assert cfg.data.max_response_length == 1024 and cfg.data.seed == 43
     assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == []
 
@@ -259,7 +284,7 @@ def test_failure_smoke_reuses_formal_pair_and_stop_protocol(tmp_path, setting):
     assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == ([151645] if setting == "E27" else [])
 
 
-@pytest.mark.parametrize("preset", ["E21-unknown", "E48", "E43-unknown", "A", "A-full"])
+@pytest.mark.parametrize("preset", ["E21-unknown", "E49", "E43-unknown", "A", "A-full"])
 def test_unknown_failure_preset_fails_without_launching(tmp_path, preset):
     result = _launch(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
     assert result.returncode == 2
