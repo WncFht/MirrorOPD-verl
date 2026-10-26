@@ -143,7 +143,7 @@ def scalar_metrics(records):
     ]
 
 
-def main():
+def main(extra_kernels=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--warm-outers", type=int, default=32)
@@ -155,7 +155,7 @@ def main():
     parser.add_argument("--baseline-dir", type=Path, required=True)
     parser.add_argument("--memory-fraction", type=float, default=0.30)
     parser.add_argument("--branch-config", type=Path)
-    parser.add_argument("--warm-precision", choices=["bfloat16", "float32"], default="bfloat16")
+    parser.add_argument("--warm-precision", choices=["bfloat16", "float16", "float32"], default="bfloat16")
     parser.add_argument("--warm-attention", choices=["flash_attention_2", "sdpa"], default="flash_attention_2")
     parser.add_argument("--warm-kernel", choices=["baseline", "fixed"], default="baseline")
     parser.add_argument("--adapt", action="store_true", help="Warm from resume state and save a new checkpoint")
@@ -175,6 +175,7 @@ def main():
     sys.path.insert(0, str(args.baseline_dir.resolve()))
     baseline = importlib.import_module("mirror_perf_baseline.full_vocab").full_vocab_objective_result
     fixed = kernels.full_vocab_objective_result
+    implementations = {"baseline": baseline, "fixed": fixed, **(extra_kernels or {})}
     records = json.loads(args.prefixes.read_text())["records"]
     r = records[rank]
     prompt = r["positions"][0] + 1
@@ -278,8 +279,8 @@ def main():
             out = actor.train_mini_batch(b)
         actor.engine.full_vocab_teacher_head.release()
         updates = scalar_metrics(tu.get(out, "update_records"))
-        assert len(updates) == 16 and tu.get(out, "optimizer_steps") == 16
-        entry = {"outer": outer, "updates": updates}
+        assert len(updates) == 16
+        entry = {"outer": outer, "updates": updates, "optimizer_steps": tu.get(out, "optimizer_steps")}
         warm.append(entry)
         save_result()
         first, last = updates[0], updates[-1]
@@ -347,7 +348,7 @@ def main():
         for group in actor.engine.optimizer.param_groups:
             group["lr"] = lr
         actor.engine.lr_scheduler.base_lrs = [lr] * len(actor.engine.optimizer.param_groups)
-        kernels.full_vocab_objective_result = baseline if kernel == "baseline" else fixed
+        kernels.full_vocab_objective_result = implementations[kernel]
         steps = [
             (v["step"].to_local() if hasattr(v["step"], "to_local") else v["step"]).item()
             for v in actor.engine.optimizer.state.values()
@@ -400,7 +401,7 @@ def main():
             actor.engine.optimizer_step = original_step
             actor.engine.full_vocab_teacher_head.release()
         updates = scalar_metrics(tu.get(out, "update_records"))
-        assert tu.get(out, "optimizer_steps") == 16
+        assert len(updates) == 16
         branch = {
             "kernel": kernel,
             "lr": lr,
@@ -408,6 +409,7 @@ def main():
             "precision": dtype,
             "attention": attn,
             "optimizer_start": optimizer_start,
+            "optimizer_steps": tu.get(out, "optimizer_steps"),
             "before_fp64_rows": before,
             "after_fp64_rows": after,
             "updates": updates,
