@@ -32,7 +32,7 @@ from transformers import PreTrainedTokenizer
 from verl.utils.device import get_device_name, get_torch_device
 
 try:
-    from flash_attn.ops.triton.cross_entropy import cross_entropy_loss
+    from flash_attn.ops.triton.cross_entropy import cross_entropy_loss  # noqa: F401
 
     FLAH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE = True
 except ImportError:
@@ -74,8 +74,8 @@ def logprobs_from_logits(logits, labels, inplace_backward=True):
     """
     Compute per-token log-probabilities for the given labels.
 
-    Uses a Flash-Attention–based cross-entropy (if available) for efficient backward,
-    otherwise falls back to a standard log-softmax+gather approach.
+    Uses stable tiled CUDA cross-entropy on the optional Flash-Attention path,
+    otherwise a stable Torch fallback. NPU keeps its native implementation.
 
     See: https://github.com/pytorch/pytorch/issues/563#issuecomment-330103591
 
@@ -87,11 +87,8 @@ def logprobs_from_logits(logits, labels, inplace_backward=True):
     Returns:
         Tensor: Log-probabilities of the target labels, shape logits.shape[:-1].
     """
-    # The flash-attn Triton cross-entropy kernel's reduction may be non-deterministic
-    # and is NOT controlled by FLASH_ATTENTION_DETERMINISTIC (that only governs the
-    # attention kernels) nor by torch.use_deterministic_algorithms (Triton custom ops
-    # don't trigger warn_only). Set VERL_DISABLE_FLASH_ATTN_CE=1 to force the pure
-    # PyTorch log_softmax+gather path for bitwise-reproducible log_probs.
+    # Preserve the existing backend override. CUDA reductions now use the
+    # project stable kernel; the override selects the stable Torch implementation.
     _use_flash_ce = FLAH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE and os.environ.get("VERL_DISABLE_FLASH_ATTN_CE", "0") != "1"
     if _use_flash_ce:
         batch_dim = logits.shape[:-1]
@@ -99,7 +96,7 @@ def logprobs_from_logits(logits, labels, inplace_backward=True):
         logits = logits.reshape(-1, last_dim)
         labels = labels.reshape(-1)
         output = logprobs_from_logits_flash_attn(logits, labels, inplace_backward=inplace_backward)
-        output = output.view(*batch_dim)
+        output = output.reshape(batch_dim)
     elif NPU_CROSS_ENTROPY_LOSS_AVAILABLE:
         output = logprobs_from_logits_torch_npu(logits, labels)
     else:
@@ -110,27 +107,14 @@ def logprobs_from_logits(logits, labels, inplace_backward=True):
 def logprobs_from_logits_flash_attn(
     logits: torch.Tensor, labels: torch.Tensor, inplace_backward: bool = True
 ) -> torch.Tensor:
-    """Compute log-probabilities using Flash Attention's optimized cross-entropy.
+    """Compatibility entry point using stable tiled CUDA CE rather than p_target-1.
 
-    Uses the Flash Attention library's Triton-based cross-entropy implementation
-    for efficient computation on NVIDIA GPUs.
-
-    Args:
-        logits: Model output logits of shape (batch_size, vocab_size).
-        labels: Target token indices of shape (batch_size,).
-        inplace_backward: If True, perform backward pass in-place for memory efficiency.
-
-    Returns:
-        torch.Tensor: Log-probabilities for target labels, shape (batch_size,).
-
-    Raises:
-        AssertionError: If flash-attn version < 2.4.3 (different return format).
+    The FlashAttention package itself is not patched. The project consumer uses
+    its own value/VJP, preserving the optional in-place backward contract.
     """
-    output = cross_entropy_loss(logits, labels, inplace_backward=inplace_backward)
-    assert isinstance(output, tuple), (
-        "please make sure flash-attn>=2.4.3 where cross_entropy_loss returns Tuple[losses, z_losses]."
-    )
-    return -output[0]
+    from verl.utils.stable_logprobs import selected_logprobs
+
+    return selected_logprobs(logits, labels, inplace_backward=inplace_backward)
 
 
 def logprobs_from_logits_torch_npu(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
@@ -171,40 +155,19 @@ def logprobs_from_logits_naive(logits: torch.Tensor, labels: torch.Tensor) -> to
 
 
 def logprobs_from_logits_v2(logits: torch.FloatTensor, labels: torch.Tensor) -> torch.Tensor:
-    """Memory-efficient log-probability computation using row-wise processing.
+    """Memory-bounded stable Torch log probabilities and selected-token VJP.
 
-    Computes log-probabilities by processing one row at a time to reduce peak
-    memory consumption. Uses logsumexp for float32/float64, falls back to
-    log_softmax for bfloat16 due to numerical stability concerns.
-
-    The mathematical identity used is: log_softmax(x_i) = x_i - logsumexp(x)
-
-    Args:
-        logits: Model output logits of shape (batch_size, seq_len, vocab_size)
-            or (batch_size, vocab_size).
-        labels: Target token indices matching logits shape without vocab dimension.
-
-    Returns:
-        torch.Tensor: Log-probabilities for target labels.
-
-    Note:
-        This implementation trades compute for memory by iterating over batch
-        dimension, making it suitable for large vocabulary sizes.
+    The batch loop limits temporary allocation. Each row computes a target-vs-
+    others margin, preserving the target gradient at high confidence. This is
+    also the deterministic fallback selected by VERL_DISABLE_FLASH_ATTN_CE.
     """
-    if logits.dtype in [torch.float32, torch.float64]:
-        logits_labels = torch.gather(logits, dim=-1, index=labels.unsqueeze(-1)).squeeze(-1)
-        # loop to reduce peak mem consumption
-        logsumexp_values = torch.stack([torch.logsumexp(logit, dim=-1) for logit in logits])
-        logprobs_labels = logits_labels - logsumexp_values  # log_softmax(x_i) = x_i - logsumexp(x)
-    else:
-        # logsumexp approach is unstable with bfloat16, fall back to slightly less efficent approach
-        logprobs_labels = []
-        for row_logits, row_labels in zip(logits, labels, strict=True):  # loop to reduce peak mem consumption
-            row_logprobs = F.log_softmax(row_logits, dim=-1)
-            row_logprobs_labels = row_logprobs.gather(dim=-1, index=row_labels.unsqueeze(-1)).squeeze(-1)
-            logprobs_labels.append(row_logprobs_labels)
-        logprobs_labels = torch.stack(logprobs_labels)
-    return logprobs_labels
+    from verl.utils.stable_logprobs import selected_logprobs
+
+    # Keep the batch loop's bounded temporary footprint and deterministic Torch
+    # fallback; each row now preserves high-confidence target gradients too.
+    if logits.ndim <= 2 or logits.shape[0] == 0:
+        return selected_logprobs(logits, labels, fused=False)
+    return torch.stack([selected_logprobs(x, y, fused=False) for x, y in zip(logits, labels, strict=True)])
 
 
 def clip_by_value(x: torch.Tensor, tensor_min: torch.Tensor, tensor_max: torch.Tensor) -> torch.Tensor:
