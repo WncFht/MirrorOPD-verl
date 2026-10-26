@@ -48,7 +48,7 @@ def test_optimizer_exception_never_reports_success():
     assert worker._optimizer_step_applied is None
 
 
-def test_base_resets_status_every_attempt_and_does_not_guess_scaler_or_unknown_backend():
+def test_base_resets_status_and_scaler_hook_observes_no_update():
     worker = SimpleNamespace(
         optimizer_zero_grad=lambda: None,
         is_mp_src_rank_with_outputs=lambda: True,
@@ -65,7 +65,7 @@ def test_base_resets_status_every_attempt_and_does_not_guess_scaler_or_unknown_b
     for parameter in scaled.module.parameters():
         parameter.grad = torch.ones_like(parameter)
     FSDPEngine.optimizer_step(scaled)
-    assert scaled._optimizer_step_applied is None
+    assert scaled._optimizer_step_applied is False
 
 
 def test_global_empty_training_batch_is_rejected_before_forward(monkeypatch):
@@ -75,3 +75,23 @@ def test_global_empty_training_batch_is_rejected_before_forward(monkeypatch):
     data = TensorDict({"loss_mask": torch.zeros(2, 3)}, batch_size=[2])
     with pytest.raises(ValueError, match="zero globally valid"):
         FSDPEngine.forward_backward_batch(worker, data, lambda: None)
+
+
+@pytest.mark.parametrize("overflow", [False, True])
+@pytest.mark.parametrize("fused", [False, True])
+def test_actual_grad_scaler_reports_applied_and_skipped_steps(overflow, fused):
+    worker = engine()
+    worker.optimizer = torch.optim.AdamW(worker.module.parameters(), lr=0.01, fused=fused)
+    worker.scaler = torch.amp.GradScaler("cpu", init_scale=32.0)
+    before = [p.detach().clone() for p in worker.module.parameters()]
+    loss = worker.module(torch.ones(1, 2)).square().sum()
+    worker.scaler.scale(loss).backward()
+    if overflow:
+        for p in worker.module.parameters():
+            p.grad.fill_(float("inf"))
+    worker._optimizer_step_applied = None
+    FSDPEngine.optimizer_step(worker)
+    assert worker._optimizer_step_applied is (not overflow)
+    changed = any(not torch.equal(p, old) for p, old in zip(worker.module.parameters(), before, strict=True))
+    assert changed is (not overflow)
+    assert worker.scaler.get_scale() == (16.0 if overflow else 32.0)
