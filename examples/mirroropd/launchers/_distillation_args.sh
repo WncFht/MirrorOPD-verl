@@ -8,6 +8,7 @@ DISTILLATION_OBJECTIVE_ARGS=(
     "distillation.distillation_loss.clip_ratio=$OPD_CLIP_EPS"
     "distillation.distillation_loss.clip_ratio_low=$OPD_CLIP_EPS"
     "distillation.distillation_loss.clip_ratio_high=$OPD_CLIP_EPS"
+    "distillation.distillation_loss.full_vocab.termination_token_ids=${FULL_KL_TERMINATION_TOKEN_IDS:-[]}"
 )
 OPD_CALCULATE_LOG_PROBS=True
 case "${EXPERIMENT_METHOD:-sampled}" in
