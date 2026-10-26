@@ -1,0 +1,1582 @@
+{
+  "scope": "Production numerical repair. Independent high-precision arithmetic checks, native CUDA/FSDP2 integration and paired shared-GPU head microbenchmarks; not a formal training-quality comparison.",
+  "code_revision": "fae735de6401e58ec4eb51fa1506cdc530156a38",
+  "baseline_revision": "c4b5812bb",
+  "tests": {
+    "cpu_passed": 304,
+    "cuda_tests_skipped_on_cpu": 98,
+    "cuda_passed": 118,
+    "finite_vocab_comparisons": 3105
+  },
+  "distributed": {
+    "fsdp-mdpo": {
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": true,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.09265612065792084,
+            0.09132277965545654,
+            0.090306356549263
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.08860143274068832,
+            0.08784230053424835,
+            0.0873294472694397
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.08708822727203369,
+            0.086541086435318,
+            0.0866149514913559
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.08708822727203369,
+            0.086541086435318,
+            0.0866149514913559
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_legacy_equal": false,
+      "actor_wrapper_and_timing": true
+    },
+    "fsdp-bpo": {
+      "objective": "bpo",
+      "model_type": "qwen3",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.0035188549663871527,
+            0.006125288549810648,
+            0.0018644758965820074
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.0019108722917735577,
+            0.0016396279679611325,
+            0.0009505297639407218
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0011240624589845538,
+            0.00035602558637037873,
+            0.000280817155726254
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0011240624589845538,
+            0.00035602558637037873,
+            0.000280817155726254
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_legacy_equal": false,
+      "actor_wrapper_and_timing": true
+    },
+    "fsdp-sampled": {
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "sampled",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.0928836241364479,
+            -0.15240150690078735,
+            -0.16734644770622253
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.03600679337978363,
+            0.14946526288986206,
+            0.13429127633571625
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0434601828455925,
+            -0.0184711292386055,
+            -0.04903888702392578
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0434601828455925,
+            -0.0184711292386055,
+            -0.04903888702392578
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_legacy_equal": false,
+      "actor_wrapper_and_timing": true
+    },
+    "fsdp-endpoint": {
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 1.0,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": false,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.1044764369726181,
+            0.09963425248861313,
+            0.09675547480583191
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 1,
+          "loss": [
+            0.1044764369726181,
+            0.09963425248861313,
+            0.09675547480583191
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.09518828243017197,
+            0.09415125846862793,
+            0.09341847151517868
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_legacy_equal": true,
+      "actor_wrapper_and_timing": true
+    }
+  },
+  "real_replays": {
+    "real-mdpo": {
+      "scope": "Four-rank real-teacher mirror diagnostic on four fixed math continuations.\n\nRequires four GPUs and saved fixed-prefix records. Packed SDPA comparisons are\nvalid here only because each rank/micro-batch contains exactly one sequence.\nUse on an allocated GPU pool; the memory cap is not a scheduler reservation.\n\nUses the production FSDP2 engine, global token normalization, anchor scope and\nAdamW. This creates a local low-KL state, not a reconstruction of the original\non-policy E45/E47 history. Pre/post evaluation uses FP64 row arithmetic.\n",
+      "world_size": 4,
+      "batch_size": 4,
+      "response_cap": 128,
+      "arguments": {
+        "out": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/real-mdpo",
+        "objective": "mdpo",
+        "kappa": 0.5,
+        "eta": 0.3,
+        "warm_outers": 32,
+        "resume_checkpoint": "outputs/mirror-kl-review-20261026/fixed-prefix/warm-checkpoint",
+        "start_branch": 0,
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/JustRL-DeepSeek-1.5B",
+        "prefixes": "examples/mirroropd/docs/mirror-descent/data/near-target-prefixes.json",
+        "baseline_dir": "outputs/mirror-kl-review-20261026/perf-baseline",
+        "memory_fraction": 0.15,
+        "branch_config": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/one-branch.json",
+        "warm_precision": "bfloat16",
+        "warm_attention": "flash_attention_2",
+        "warm_kernel": "baseline",
+        "adapt": false,
+        "stop_at_low_kl": false
+      },
+      "warmup_kernel": "baseline",
+      "objective": "mdpo",
+      "kappa": 0.5,
+      "eta": 0.3,
+      "warmup": [],
+      "branches": [
+        {
+          "kernel": "fixed",
+          "lr": 1e-06,
+          "optimizer_state": "keep",
+          "precision": "bfloat16",
+          "attention": "flash_attention_2",
+          "optimizer_start": {
+            "state_entries": 339,
+            "min_step": 144.0,
+            "max_step": 144.0
+          },
+          "optimizer_steps": 16,
+          "before_fp64_rows": {
+            "distill/mdpo/objective": 0.0004883858413202367,
+            "distill/target_kl": 6.703324417780372e-05,
+            "distill/target_log_z": -7.94825082182673e-05,
+            "distill/anchor_kl": 0.0,
+            "distill/teacher_kl": 0.0007394095665335192
+          },
+          "after_fp64_rows": {
+            "distill/mdpo/objective": 0.0006264469947616528,
+            "distill/target_kl": 0.00010845159021022856,
+            "distill/target_log_z": -7.94825082182673e-05,
+            "distill/anchor_kl": 0.00013589115077293699,
+            "distill/teacher_kl": 0.0005656485151636762
+          },
+          "updates": [
+            {
+              "distill/mdpo/objective": 0.000488385820062831,
+              "distill/target_kl": 6.703323560941499e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.0,
+              "distill/teacher_kl": 0.0007394094500341453,
+              "optim/actor/loss": 0.0004883857909590006,
+              "optim/actor/grad_norm_preclip": 0.15447966754436493,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 1,
+              "rollout/data_reuse/epoch_index": 0
+            },
+            {
+              "distill/mdpo/objective": 0.0006588964897673577,
+              "distill/target_kl": 0.00011818644816230517,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010185178689425811,
+              "distill/teacher_kl": 0.0006736063951393589,
+              "optim/actor/loss": 0.0006588964606635273,
+              "optim/actor/grad_norm_preclip": 0.22079238295555115,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 2,
+              "rollout/data_reuse/epoch_index": 1
+            },
+            {
+              "distill/mdpo/objective": 0.0006257853747229092,
+              "distill/target_kl": 0.00010825311801454518,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010309447861800436,
+              "distill/teacher_kl": 0.0006378374237101525,
+              "optim/actor/loss": 0.0006257853819988668,
+              "optim/actor/grad_norm_preclip": 0.20714019238948822,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 3,
+              "rollout/data_reuse/epoch_index": 2
+            },
+            {
+              "distill/mdpo/objective": 0.0006220224313437939,
+              "distill/target_kl": 0.00010712422044889536,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011111419735243544,
+              "distill/teacher_kl": 0.0006158827818580903,
+              "optim/actor/loss": 0.0006220224313437939,
+              "optim/actor/grad_norm_preclip": 0.21511924266815186,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 4,
+              "rollout/data_reuse/epoch_index": 3
+            },
+            {
+              "distill/mdpo/objective": 0.0006390458365785889,
+              "distill/target_kl": 0.00011223125784454169,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.0001358286517643137,
+              "distill/teacher_kl": 0.0005761750508099794,
+              "optim/actor/loss": 0.0006390458438545465,
+              "optim/actor/grad_norm_preclip": 0.2418169379234314,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 5,
+              "rollout/data_reuse/epoch_index": 4
+            },
+            {
+              "distill/mdpo/objective": 0.0006356938174576499,
+              "distill/target_kl": 0.0001112256522901589,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.0001450025665690191,
+              "distill/teacher_kl": 0.0005536252865567803,
+              "optim/actor/loss": 0.0006356937810778618,
+              "optim/actor/grad_norm_preclip": 0.21305415034294128,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 6,
+              "rollout/data_reuse/epoch_index": 5
+            },
+            {
+              "distill/mdpo/objective": 0.0006771052212570794,
+              "distill/target_kl": 0.00012364905887807254,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00014674599515274167,
+              "distill/teacher_kl": 0.0005899781972402707,
+              "optim/actor/loss": 0.0006771052139811218,
+              "optim/actor/grad_norm_preclip": 0.2542097568511963,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 7,
+              "rollout/data_reuse/epoch_index": 6
+            },
+            {
+              "distill/mdpo/objective": 0.0007142344620660879,
+              "distill/target_kl": 0.00013478783876053058,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00014884913798596244,
+              "distill/teacher_kl": 0.0006233328604139388,
+              "optim/actor/loss": 0.0007142344838939607,
+              "optim/actor/grad_norm_preclip": 0.3176208734512329,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 8,
+              "rollout/data_reuse/epoch_index": 7
+            },
+            {
+              "distill/mdpo/objective": 0.0005652626787195913,
+              "distill/target_kl": 9.00963059393689e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010501440192456357,
+              "distill/teacher_kl": 0.0005771627475041896,
+              "optim/actor/loss": 0.000565262685995549,
+              "optim/actor/grad_norm_preclip": 0.19186970591545105,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 9,
+              "rollout/data_reuse/epoch_index": 8
+            },
+            {
+              "distill/mdpo/objective": 0.0005972984436084516,
+              "distill/target_kl": 9.970703467843123e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010961177031276748,
+              "distill/teacher_kl": 0.000598250851908233,
+              "optim/actor/loss": 0.000597298436332494,
+              "optim/actor/grad_norm_preclip": 0.22341544926166534,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 10,
+              "rollout/data_reuse/epoch_index": 9
+            },
+            {
+              "distill/mdpo/objective": 0.000615304263192229,
+              "distill/target_kl": 0.00010510877109481953,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.0001157610986410873,
+              "distill/teacher_kl": 0.0006015590406605043,
+              "optim/actor/loss": 0.0006153042777441442,
+              "optim/actor/grad_norm_preclip": 0.2383086234331131,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 11,
+              "rollout/data_reuse/epoch_index": 10
+            },
+            {
+              "distill/mdpo/objective": 0.000626048531557899,
+              "distill/target_kl": 0.00010833206124516437,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011449235898908228,
+              "distill/teacher_kl": 0.0006143543214420788,
+              "optim/actor/loss": 0.0006260485388338566,
+              "optim/actor/grad_norm_preclip": 0.23710870742797852,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 12,
+              "rollout/data_reuse/epoch_index": 11
+            },
+            {
+              "distill/mdpo/objective": 0.0006086783760110848,
+              "distill/target_kl": 0.00010312099402653985,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010682152060326189,
+              "distill/teacher_kl": 0.0006157218740554526,
+              "optim/actor/loss": 0.0006086783832870424,
+              "optim/actor/grad_norm_preclip": 0.24912169575691223,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 13,
+              "rollout/data_reuse/epoch_index": 12
+            },
+            {
+              "distill/mdpo/objective": 0.0006322044428088702,
+              "distill/target_kl": 0.00011017883025488118,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010817832844622899,
+              "distill/teacher_kl": 0.0006367940950440243,
+              "optim/actor/loss": 0.0006322044646367431,
+              "optim/actor/grad_norm_preclip": 0.25562065839767456,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 14,
+              "rollout/data_reuse/epoch_index": 13
+            },
+            {
+              "distill/mdpo/objective": 0.0005579324351856485,
+              "distill/target_kl": 8.789723415247863e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010855879645532696,
+              "distill/teacher_kl": 0.0005632338579744101,
+              "optim/actor/loss": 0.0005579324206337333,
+              "optim/actor/grad_norm_preclip": 0.18300122022628784,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 15,
+              "rollout/data_reuse/epoch_index": 14
+            },
+            {
+              "distill/mdpo/objective": 0.0005689391909982078,
+              "distill/target_kl": 9.119926926359767e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011220715987292351,
+              "distill/teacher_kl": 0.0005645178025588393,
+              "optim/actor/loss": 0.0005689391982741654,
+              "optim/actor/grad_norm_preclip": 0.19022352993488312,
+              "optim/actor/lr_next": 1e-06,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 16,
+              "rollout/data_reuse/epoch_index": 15
+            }
+          ],
+          "step_statistics": [
+            {
+              "update": 1,
+              "grad_dot_delta": -0.0001101076658373077,
+              "parameter_delta_norm": 0.0037279639827728452,
+              "grad_norm": 0.15447966754436493
+            },
+            {
+              "update": 16,
+              "grad_dot_delta": -6.728681519677871e-05,
+              "parameter_delta_norm": 0.0035352315836787835,
+              "grad_norm": 0.19022352993488312
+            }
+          ]
+        }
+      ],
+      "checkpoint": "outputs/mirror-kl-review-20261026/fixed-prefix/warm-checkpoint",
+      "elapsed_seconds": 37.178091041743755
+    },
+    "real-bpo": {
+      "scope": "Four-rank real-teacher mirror diagnostic on four fixed math continuations.\n\nRequires four GPUs and saved fixed-prefix records. Packed SDPA comparisons are\nvalid here only because each rank/micro-batch contains exactly one sequence.\nUse on an allocated GPU pool; the memory cap is not a scheduler reservation.\n\nUses the production FSDP2 engine, global token normalization, anchor scope and\nAdamW. This creates a local low-KL state, not a reconstruction of the original\non-policy E45/E47 history. Pre/post evaluation uses FP64 row arithmetic.\n",
+      "world_size": 4,
+      "batch_size": 4,
+      "response_cap": 128,
+      "arguments": {
+        "out": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/real-bpo",
+        "objective": "bpo",
+        "kappa": 0.5,
+        "eta": 0.3,
+        "warm_outers": 32,
+        "resume_checkpoint": "outputs/mirror-kl-review-20261026/fixed-prefix/warm-checkpoint",
+        "start_branch": 0,
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models/JustRL-DeepSeek-1.5B",
+        "prefixes": "examples/mirroropd/docs/mirror-descent/data/near-target-prefixes.json",
+        "baseline_dir": "outputs/mirror-kl-review-20261026/perf-baseline",
+        "memory_fraction": 0.15,
+        "branch_config": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/one-branch.json",
+        "warm_precision": "bfloat16",
+        "warm_attention": "flash_attention_2",
+        "warm_kernel": "baseline",
+        "adapt": false,
+        "stop_at_low_kl": false
+      },
+      "warmup_kernel": "baseline",
+      "objective": "bpo",
+      "kappa": 0.5,
+      "eta": 0.3,
+      "warmup": [],
+      "branches": [
+        {
+          "kernel": "fixed",
+          "lr": 1e-06,
+          "optimizer_state": "keep",
+          "precision": "bfloat16",
+          "attention": "flash_attention_2",
+          "optimizer_start": {
+            "state_entries": 339,
+            "min_step": 144.0,
+            "max_step": 144.0
+          },
+          "optimizer_steps": 16,
+          "before_fp64_rows": {
+            "distill/bpo/objective": 0.0002170324054081968,
+            "distill/target_kl": 6.703324417780372e-05,
+            "distill/target_log_z": -7.94825082182673e-05,
+            "distill/anchor_kl": 0.0,
+            "distill/teacher_kl": 0.0007394095665335192
+          },
+          "after_fp64_rows": {
+            "distill/bpo/objective": 0.000289749123756857,
+            "distill/target_kl": 8.832243050601286e-05,
+            "distill/target_log_z": -7.94825082182673e-05,
+            "distill/anchor_kl": 0.00011336564141690847,
+            "distill/teacher_kl": 0.0005505191248821211
+          },
+          "updates": [
+            {
+              "distill/bpo/objective": 0.00021703240417991765,
+              "distill/target_kl": 6.703323742840439e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.0,
+              "distill/teacher_kl": 0.0007394094500341453,
+              "optim/actor/loss": 0.00021703241509385407,
+              "optim/actor/grad_norm_preclip": 0.15449078381061554,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 1,
+              "rollout/data_reuse/epoch_index": 0
+            },
+            {
+              "distill/bpo/objective": 0.00042600411325111054,
+              "distill/target_kl": 0.00013029274123255163,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011491213899716968,
+              "distill/teacher_kl": 0.000683348291204311,
+              "optim/actor/loss": 0.00042600411688908935,
+              "optim/actor/grad_norm_preclip": 0.24726493656635284,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 2,
+              "rollout/data_reuse/epoch_index": 1
+            },
+            {
+              "distill/bpo/objective": 0.0003771642477659043,
+              "distill/target_kl": 0.00011539430397533579,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.0001197118936033803,
+              "distill/teacher_kl": 0.0006244667238206603,
+              "optim/actor/loss": 0.0003771642514038831,
+              "optim/actor/grad_norm_preclip": 0.23156306147575378,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 3,
+              "rollout/data_reuse/epoch_index": 2
+            },
+            {
+              "distill/bpo/objective": 0.0003452363598626107,
+              "distill/target_kl": 0.00010564166950643994,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010987054156430531,
+              "distill/teacher_kl": 0.0006139533943496644,
+              "optim/actor/loss": 0.0003452363598626107,
+              "optim/actor/grad_norm_preclip": 0.2321949601173401,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 4,
+              "rollout/data_reuse/epoch_index": 3
+            },
+            {
+              "distill/bpo/objective": 0.000350365608028369,
+              "distill/target_kl": 0.00010652579840098042,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00012946699825988617,
+              "distill/teacher_kl": 0.0005716992527595721,
+              "optim/actor/loss": 0.000350365589838475,
+              "optim/actor/grad_norm_preclip": 0.2065393328666687,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 5,
+              "rollout/data_reuse/epoch_index": 4
+            },
+            {
+              "distill/bpo/objective": 0.0004600772117555607,
+              "distill/target_kl": 0.0001387673200952122,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00015968540719768498,
+              "distill/teacher_kl": 0.0006103537889430299,
+              "optim/actor/loss": 0.0004600771935656667,
+              "optim/actor/grad_norm_preclip": 0.2887994349002838,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 6,
+              "rollout/data_reuse/epoch_index": 5
+            },
+            {
+              "distill/bpo/objective": 0.0003703166003106162,
+              "distill/target_kl": 0.000113925206278509,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.0001313445609412156,
+              "distill/teacher_kl": 0.0005943122087046504,
+              "optim/actor/loss": 0.0003703166148625314,
+              "optim/actor/grad_norm_preclip": 0.24214611947536469,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 7,
+              "rollout/data_reuse/epoch_index": 6
+            },
+            {
+              "distill/bpo/objective": 0.0003297552502772305,
+              "distill/target_kl": 0.00010047383329947479,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011033462396881077,
+              "distill/teacher_kl": 0.0005977099062874913,
+              "optim/actor/loss": 0.0003297552466392517,
+              "optim/actor/grad_norm_preclip": 0.20519398152828217,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 8,
+              "rollout/data_reuse/epoch_index": 7
+            },
+            {
+              "distill/bpo/objective": 0.0003320465657452587,
+              "distill/target_kl": 0.00010175840452575358,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00012186000276415143,
+              "distill/teacher_kl": 0.0005765063251601532,
+              "optim/actor/loss": 0.00033204659121111035,
+              "optim/actor/grad_norm_preclip": 0.20041204988956451,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 9,
+              "rollout/data_reuse/epoch_index": 8
+            },
+            {
+              "distill/bpo/objective": 0.00032894853211473674,
+              "distill/target_kl": 0.00010125361950485967,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011134657688671723,
+              "distill/teacher_kl": 0.0006009589415043592,
+              "optim/actor/loss": 0.00032894854666665196,
+              "optim/actor/grad_norm_preclip": 0.2303633838891983,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 10,
+              "rollout/data_reuse/epoch_index": 9
+            },
+            {
+              "distill/bpo/objective": 0.00037475461067515425,
+              "distill/target_kl": 0.0001146743770732428,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00012583860097947763,
+              "distill/teacher_kl": 0.0006114994612289593,
+              "optim/actor/loss": 0.00037475459976121783,
+              "optim/actor/grad_norm_preclip": 0.25770050287246704,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 11,
+              "rollout/data_reuse/epoch_index": 10
+            },
+            {
+              "distill/bpo/objective": 0.0003202145962859504,
+              "distill/target_kl": 9.778085586731322e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00010812152777361916,
+              "distill/teacher_kl": 0.000596802456129808,
+              "optim/actor/loss": 0.00032021457445807755,
+              "optim/actor/grad_norm_preclip": 0.19769085943698883,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 12,
+              "rollout/data_reuse/epoch_index": 11
+            },
+            {
+              "distill/bpo/objective": 0.00032137942980625667,
+              "distill/target_kl": 9.839347239903873e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011148408157168888,
+              "distill/teacher_kl": 0.0005901385302422568,
+              "optim/actor/loss": 0.00032137942616827786,
+              "optim/actor/grad_norm_preclip": 0.20437535643577576,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 13,
+              "rollout/data_reuse/epoch_index": 12
+            },
+            {
+              "distill/bpo/objective": 0.0003281605568190571,
+              "distill/target_kl": 0.000100510212178051,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011812491175078321,
+              "distill/teacher_kl": 0.0005818077916046605,
+              "optim/actor/loss": 0.0003281605604570359,
+              "optim/actor/grad_norm_preclip": 0.22232557833194733,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 14,
+              "rollout/data_reuse/epoch_index": 13
+            },
+            {
+              "distill/bpo/objective": 0.0003053702530451119,
+              "distill/target_kl": 9.357967610412743e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.00011067946252296679,
+              "distill/teacher_kl": 0.0005751834542024881,
+              "optim/actor/loss": 0.0003053702530451119,
+              "optim/actor/grad_norm_preclip": 0.21415871381759644,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 15,
+              "rollout/data_reuse/epoch_index": 14
+            },
+            {
+              "distill/bpo/objective": 0.00031247602237272076,
+              "distill/target_kl": 9.506995593255851e-05,
+              "distill/target_log_z": -7.948250731715234e-05,
+              "distill/anchor_kl": 0.0001192313757201191,
+              "distill/teacher_kl": 0.0005601146331173368,
+              "optim/actor/loss": 0.00031247601145878434,
+              "optim/actor/grad_norm_preclip": 0.21411412954330444,
+              "optim/actor/lr_next": 1e-06,
+              "optim/actor/lr": 1e-06,
+              "optim/actor/execution_known": 1.0,
+              "optim/actor/update_applied": 1.0,
+              "optim/actor/update_skipped": 0.0,
+              "optim/actor/loss_nonfinite": 0.0,
+              "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+              "optim/actor/observations_available": 1.0,
+              "rollout/data_reuse/update_index": 16,
+              "rollout/data_reuse/epoch_index": 15
+            }
+          ],
+          "step_statistics": [
+            {
+              "update": 1,
+              "grad_dot_delta": -0.00011009950882131126,
+              "parameter_delta_norm": 0.003727917380386805,
+              "grad_norm": 0.15449078381061554
+            },
+            {
+              "update": 16,
+              "grad_dot_delta": -0.0001395287366971075,
+              "parameter_delta_norm": 0.003482141205228998,
+              "grad_norm": 0.21411412954330444
+            }
+          ]
+        }
+      ],
+      "checkpoint": "outputs/mirror-kl-review-20261026/fixed-prefix/warm-checkpoint",
+      "elapsed_seconds": 35.688203543424606
+    }
+  },
+  "real_logits": {
+    "scope": "128 saved real prefixes, interpolated native logits; p=q so ideal MDPO and BPO first gradients coincide. FP64 reference retains the target increment separately. Not a late-model replay.",
+    "results": [
+      {
+        "alpha": 0.03,
+        "kappa": 0.0,
+        "eta": 0.3,
+        "objective": "mdpo",
+        "before": {
+          "absolute_error_norm": 3.918837297339329e-05,
+          "gradient_norm": 0.022344493044119458,
+          "relative_l2": 0.001753751213903698,
+          "row_p90": 0.002429440480957629,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.4745154707866779e-05
+        },
+        "after": {
+          "absolute_error_norm": 3.918831978645028e-05,
+          "gradient_norm": 0.022344503054566565,
+          "relative_l2": 0.0017537488336909258,
+          "row_p90": 0.002429440480954243,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.476003765395889e-05
+        },
+        "new_value_mean": 2.7615571532041995e-05,
+        "new_target_kl_mean": 8.299593115713342e-06
+      },
+      {
+        "alpha": 0.03,
+        "kappa": 0.0,
+        "eta": 0.3,
+        "objective": "bpo",
+        "before": {
+          "absolute_error_norm": 5.295143358637792e-05,
+          "gradient_norm": 0.02234114855801919,
+          "relative_l2": 0.0023696732955231525,
+          "row_p90": 1.0288282294419477,
+          "rows_error_gt1": 13,
+          "sum_residual_max": 2.290429156168841e-05
+        },
+        "after": {
+          "absolute_error_norm": 3.918831978645028e-05,
+          "gradient_norm": 0.022344503054566565,
+          "relative_l2": 0.0017537488336909258,
+          "row_p90": 0.002429440480954243,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.476003765395889e-05
+        },
+        "new_value_mean": 8.306170458556668e-06,
+        "new_target_kl_mean": 8.299593064321187e-06
+      },
+      {
+        "alpha": 0.03,
+        "kappa": 0.5,
+        "eta": 0.3,
+        "objective": "mdpo",
+        "before": {
+          "absolute_error_norm": 3.457973049624163e-05,
+          "gradient_norm": 0.02229393431502096,
+          "relative_l2": 0.001550478398775058,
+          "row_p90": 0.0022774183094238874,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.564234983906349e-05
+        },
+        "after": {
+          "absolute_error_norm": 3.4579679272426714e-05,
+          "gradient_norm": 0.022293928265402083,
+          "relative_l2": 0.0015504761020128394,
+          "row_p90": 0.002277417609729391,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.5642198525138342e-05
+        },
+        "new_value_mean": 1.7929254416743228e-05,
+        "new_target_kl_mean": 8.276434883866377e-06
+      },
+      {
+        "alpha": 0.03,
+        "kappa": 0.5,
+        "eta": 0.3,
+        "objective": "bpo",
+        "before": {
+          "absolute_error_norm": 4.7217293020326074e-05,
+          "gradient_norm": 0.022300757135716828,
+          "relative_l2": 0.0021171186653581586,
+          "row_p90": 1.021999855403847,
+          "rows_error_gt1": 13,
+          "sum_residual_max": 3.522795069415678e-05
+        },
+        "after": {
+          "absolute_error_norm": 3.4579679272426714e-05,
+          "gradient_norm": 0.022293928265402083,
+          "relative_l2": 0.0015504761020128394,
+          "row_p90": 0.002277417609729391,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.5642198525138342e-05
+        },
+        "new_value_mean": 8.281958105166374e-06,
+        "new_target_kl_mean": 8.27643479600031e-06
+      },
+      {
+        "alpha": 0.003,
+        "kappa": 0.0,
+        "eta": 0.3,
+        "objective": "mdpo",
+        "before": {
+          "absolute_error_norm": 3.53324177536231e-06,
+          "gradient_norm": 0.0022133874209060204,
+          "relative_l2": 0.0015957930430896333,
+          "row_p90": 0.0023375711447354173,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.3055195781255696e-06
+        },
+        "after": {
+          "absolute_error_norm": 3.531296791662709e-06,
+          "gradient_norm": 0.002213360147190674,
+          "relative_l2": 0.001594914588782207,
+          "row_p90": 0.0022683430725392003,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.3055775863360727e-06
+        },
+        "new_value_mean": 2.749189085922569e-07,
+        "new_target_kl_mean": 8.248951936724683e-08
+      },
+      {
+        "alpha": 0.003,
+        "kappa": 0.0,
+        "eta": 0.3,
+        "objective": "bpo",
+        "before": {
+          "absolute_error_norm": 2.9585937424840595e-05,
+          "gradient_norm": 0.0022152800640724752,
+          "relative_l2": 0.013362525441951809,
+          "row_p90": 10.983763712825764,
+          "rows_error_gt1": 19,
+          "sum_residual_max": 1.2630738654579497e-05
+        },
+        "after": {
+          "absolute_error_norm": 3.531296791662709e-06,
+          "gradient_norm": 0.002213360147190674,
+          "relative_l2": 0.001594914588782207,
+          "row_p90": 0.0022683430725392003,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.3055775863360727e-06
+        },
+        "new_value_mean": 8.249546973244845e-08,
+        "new_target_kl_mean": 8.248951912806599e-08
+      },
+      {
+        "alpha": 0.003,
+        "kappa": 0.5,
+        "eta": 0.3,
+        "objective": "mdpo",
+        "before": {
+          "absolute_error_norm": 3.566043033278601e-06,
+          "gradient_norm": 0.002213066149156102,
+          "relative_l2": 0.0016108980998129983,
+          "row_p90": 0.0024669420660114656,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.3056045087022732e-06
+        },
+        "after": {
+          "absolute_error_norm": 3.565191895723488e-06,
+          "gradient_norm": 0.0022130495288245323,
+          "relative_l2": 0.0016105136131824623,
+          "row_p90": 0.00242308128805738,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.305604166232203e-06
+        },
+        "new_value_mean": 1.7867874011254118e-07,
+        "new_target_kl_mean": 8.246867562460515e-08
+      },
+      {
+        "alpha": 0.003,
+        "kappa": 0.5,
+        "eta": 0.3,
+        "objective": "bpo",
+        "before": {
+          "absolute_error_norm": 2.919952267959913e-05,
+          "gradient_norm": 0.0022139608987092703,
+          "relative_l2": 0.01319037800751574,
+          "row_p90": 10.97352324267459,
+          "rows_error_gt1": 19,
+          "sum_residual_max": 1.2642723158437746e-05
+        },
+        "after": {
+          "absolute_error_norm": 3.565191895723488e-06,
+          "gradient_norm": 0.0022130495288245323,
+          "relative_l2": 0.0016105136131824623,
+          "row_p90": 0.00242308128805738,
+          "rows_error_gt1": 0,
+          "sum_residual_max": 1.305604166232203e-06
+        },
+        "new_value_mean": 8.24745229776195e-08,
+        "new_target_kl_mean": 8.246867651562384e-08
+      },
+      {
+        "alpha": 0.0,
+        "kappa": 0.0,
+        "eta": 0.3,
+        "objective": "mdpo",
+        "before": {
+          "absolute_error_norm": 5.7360625436154387e-08,
+          "gradient_norm": 5.7360625436154387e-08,
+          "relative_l2": null,
+          "row_p90": null,
+          "rows_error_gt1": null,
+          "sum_residual_max": 4.3773980355981755e-09
+        },
+        "after": {
+          "absolute_error_norm": 0.0,
+          "gradient_norm": 0.0,
+          "relative_l2": null,
+          "row_p90": null,
+          "rows_error_gt1": null,
+          "sum_residual_max": 0.0
+        },
+        "new_value_mean": 0.0,
+        "new_target_kl_mean": 0.0
+      },
+      {
+        "alpha": 0.0,
+        "kappa": 0.0,
+        "eta": 0.3,
+        "objective": "bpo",
+        "before": {
+          "absolute_error_norm": 2.8124417241857554e-05,
+          "gradient_norm": 2.8124417241857554e-05,
+          "relative_l2": null,
+          "row_p90": null,
+          "rows_error_gt1": null,
+          "sum_residual_max": 7.63907147110906e-06
+        },
+        "after": {
+          "absolute_error_norm": 0.0,
+          "gradient_norm": 0.0,
+          "relative_l2": null,
+          "row_p90": null,
+          "rows_error_gt1": null,
+          "sum_residual_max": 0.0
+        },
+        "new_value_mean": 0.0,
+        "new_target_kl_mean": 0.0
+      },
+      {
+        "alpha": 0.0,
+        "kappa": 0.5,
+        "eta": 0.3,
+        "objective": "mdpo",
+        "before": {
+          "absolute_error_norm": 5.7360625436154387e-08,
+          "gradient_norm": 5.7360625436154387e-08,
+          "relative_l2": null,
+          "row_p90": null,
+          "rows_error_gt1": null,
+          "sum_residual_max": 4.3773980355981755e-09
+        },
+        "after": {
+          "absolute_error_norm": 0.0,
+          "gradient_norm": 0.0,
+          "relative_l2": null,
+          "row_p90": null,
+          "rows_error_gt1": null,
+          "sum_residual_max": 0.0
+        },
+        "new_value_mean": 0.0,
+        "new_target_kl_mean": 0.0
+      },
+      {
+        "alpha": 0.0,
+        "kappa": 0.5,
+        "eta": 0.3,
+        "objective": "bpo",
+        "before": {
+          "absolute_error_norm": 2.8124417241857554e-05,
+          "gradient_norm": 2.8124417241857554e-05,
+          "relative_l2": null,
+          "row_p90": null,
+          "rows_error_gt1": null,
+          "sum_residual_max": 7.63907147110906e-06
+        },
+        "after": {
+          "absolute_error_norm": 0.0,
+          "gradient_norm": 0.0,
+          "relative_l2": null,
+          "row_p90": null,
+          "rows_error_gt1": null,
+          "sum_residual_max": 0.0
+        },
+        "new_value_mean": 0.0,
+        "new_target_kl_mean": 0.0
+      }
+    ]
+  },
+  "identities": {
+    "scope": "CPU FP64 finite-vocabulary identities; not a language-model training or quality result",
+    "seed": 2310,
+    "random_cases": 120,
+    "comparisons": 3105,
+    "maximum_errors": {
+      "target_normalized": 4.440892098500626e-16,
+      "MDPO_value_constant": 2.886579864025407e-15,
+      "MDPO_fit_gradient": 1.3322676295501878e-15,
+      "MDPO_action_IS": 1.7763568394002505e-15,
+      "MDPO_ratio_autograd": 1.3322676295501878e-15,
+      "MDPO_center_cancels": 1.3322676295501878e-15,
+      "current_J_gradient": 2.220446049250313e-15,
+      "refreshed_detached_target_J_gradient": 2.1094237467877974e-15,
+      "current_NoIS_potential": 1.3322676295501878e-15,
+      "geometric_MDPO": 8.881784197001252e-16,
+      "J_reverse_KL_endpoint": 2.886579864025407e-15,
+      "current_NoIS_log_square_endpoint": 1.7763568394002505e-15,
+      "MDPO_logit_row_value": 3.552713678800501e-15,
+      "MDPO_logit_row_VJP": 1.7763568394002505e-15,
+      "BPO_logit_row_value": 1.3322676295501878e-15,
+      "BPO_logit_row_VJP": 9.575673587391975e-16,
+      "BPO_target_shift_invariant": 1.7763568394002505e-15,
+      "Mean_BPO_identity": 8.881784197001252e-16,
+      "Part_q_over_beta": 4.440892098500626e-16,
+      "BPO_q_over_beta": 1.8318679906315083e-15,
+      "Mean_q_over_beta": 2.220446049250313e-16,
+      "whole_NoIS_regression": 8.881784197001252e-16,
+      "MDPO_stationary_at_m": 5.396229867534553e-16,
+      "Part_stationary_at_m": 1.7133513988358906e-16,
+      "BPO_stationary_at_m": 3.5469646492591385e-16,
+      "initial_MDPO_equals_J": 1.1102230246251565e-15,
+      "initial_BPO_equals_MDPO": 4.996003610813204e-16,
+      "MDPO_eta1_value": 2.220446049250313e-16,
+      "arithmetic_target": 1.1102230246251565e-16,
+      "J_scaled_JS": 1.5543122344752192e-15,
+      "MDPO_shared_hidden_VJP": 2.220446049250313e-15,
+      "MDPO_shared_head_VJP": 2.6645352591003757e-15,
+      "BPO_shared_hidden_VJP": 4.440892098500626e-16,
+      "BPO_shared_head_VJP": 2.220446049250313e-16,
+      "extra_teacher_MDPO_row_VJP": 6.106226635438361e-16,
+      "extra_teacher_eta1_value": 0,
+      "extra_teacher_eta1_gradient": 0,
+      "kappa0_single_update_eta_independent": 2.3592239273284576e-16
+    },
+    "counterexamples": {
+      "whole_NoIS_gradient_at_m": 0.09466527299354252,
+      "Mean_gradient_at_m": 0.010297858137362777,
+      "PPO_clip_gradient_difference": 0.23963362100725016,
+      "refreshed_target_without_detach_gradient_difference": 0.5130095523624798,
+      "BPO_eta1_not_FullKL_gradient_difference": 0.23503106104044325,
+      "cropped_teacher_fusion_gradient_difference": 0.03246739796513343
+    },
+    "anchor_teacher_detached": true,
+    "J_oracle": "64-point Gauss-Legendre quadrature in log probability ratio"
+  },
+  "performance": {
+    "benchmark-mdpo-diag1": {
+      "scope": "three head projections + target + full objective/VJP; excludes backbone, IO, optimizer",
+      "device": "NVIDIA H800",
+      "torch": "2.11.0+cu128",
+      "seed": 71,
+      "dtype": "bfloat16",
+      "eta": 0.3,
+      "kappa": 0.5,
+      "arguments": {
+        "baseline_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/baseline",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/benchmark-mdpo-diag1.json",
+        "objective": "mdpo",
+        "diagnostics": true,
+        "tokens": 128,
+        "width": 1536,
+        "vocab": 151936,
+        "chunks": [
+          128
+        ],
+        "rounds": 9
+      },
+      "cases": [
+        {
+          "chunk": 128,
+          "loss_abs_diff": 1.52587890625e-05,
+          "vjp_relative_l2": [
+            0.00022930611157789826,
+            0.00020822964143007994
+          ],
+          "before": {
+            "cuda_ms": [
+              8.578975677490234,
+              4.317728042602539,
+              4.2578558921813965,
+              6.5043840408325195,
+              6.398015975952148,
+              6.51632022857666,
+              6.532639980316162,
+              8.632896423339844,
+              6.910751819610596
+            ],
+            "wall_ms": [
+              13.182096183300018,
+              4.341930150985718,
+              4.485130310058594,
+              9.106449782848358,
+              8.97083431482315,
+              9.073697030544281,
+              9.056150913238525,
+              13.305671513080597,
+              9.658917784690857
+            ],
+            "peak_extra_mib": 1337.38037109375,
+            "median_cuda_ms": 6.51632022857666,
+            "median_wall_ms": 9.073697030544281
+          },
+          "after": {
+            "cuda_ms": [
+              12.205216407775879,
+              9.959360122680664,
+              13.01529598236084,
+              17.064128875732422,
+              13.529536247253418,
+              13.495519638061523,
+              13.469440460205078,
+              13.488256454467773,
+              15.970975875854492
+            ],
+            "wall_ms": [
+              16.834639012813568,
+              10.169856250286102,
+              15.401512384414673,
+              19.612960517406464,
+              15.977472066879272,
+              16.0212442278862,
+              16.004011034965515,
+              16.0551518201828,
+              19.05069500207901
+            ],
+            "peak_extra_mib": 1337.38037109375,
+            "median_cuda_ms": 13.488256454467773,
+            "median_wall_ms": 16.0212442278862
+          },
+          "speedup": 0.566354079713161
+        }
+      ]
+    },
+    "benchmark-bpo-diag1": {
+      "scope": "three head projections + target + full objective/VJP; excludes backbone, IO, optimizer",
+      "device": "NVIDIA H800",
+      "torch": "2.11.0+cu128",
+      "seed": 71,
+      "dtype": "bfloat16",
+      "eta": 0.3,
+      "kappa": 0.5,
+      "arguments": {
+        "baseline_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/baseline",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/benchmark-bpo-diag1.json",
+        "objective": "bpo",
+        "diagnostics": true,
+        "tokens": 128,
+        "width": 1536,
+        "vocab": 151936,
+        "chunks": [
+          128
+        ],
+        "rounds": 9
+      },
+      "cases": [
+        {
+          "chunk": 128,
+          "loss_abs_diff": 9.5367431640625e-07,
+          "vjp_relative_l2": [
+            0.00034419875009916723,
+            0.0005214368575252593
+          ],
+          "before": {
+            "cuda_ms": [
+              4.74073600769043,
+              6.752287864685059,
+              6.74832010269165,
+              6.773759841918945,
+              6.761312007904053,
+              4.428031921386719,
+              4.575839996337891,
+              7.462719917297363,
+              7.090303897857666
+            ],
+            "wall_ms": [
+              6.129249930381775,
+              9.382642805576324,
+              10.275125503540039,
+              9.417928755283356,
+              10.123692452907562,
+              4.8882365226745605,
+              5.532160401344299,
+              10.170713067054749,
+              9.809359908103943
+            ],
+            "peak_extra_mib": 1337.38037109375,
+            "median_cuda_ms": 6.752287864685059,
+            "median_wall_ms": 9.417928755283356
+          },
+          "after": {
+            "cuda_ms": [
+              13.879199981689453,
+              16.045024871826172,
+              15.946816444396973,
+              16.505727767944336,
+              16.0281925201416,
+              10.297760009765625,
+              11.803071975708008,
+              15.977984428405762,
+              16.382720947265625
+            ],
+            "wall_ms": [
+              16.3668692111969,
+              20.712725818157196,
+              19.02497559785843,
+              19.238784909248352,
+              19.139744341373444,
+              13.389140367507935,
+              12.736476957798004,
+              19.45444941520691,
+              19.03538405895233
+            ],
+            "peak_extra_mib": 1337.38037109375,
+            "median_cuda_ms": 15.977984428405762,
+            "median_wall_ms": 19.03538405895233
+          },
+          "speedup": 0.49475906165676276
+        }
+      ]
+    },
+    "benchmark-bpo-diag0": {
+      "scope": "three head projections + target + full objective/VJP; excludes backbone, IO, optimizer",
+      "device": "NVIDIA H800",
+      "torch": "2.11.0+cu128",
+      "seed": 71,
+      "dtype": "bfloat16",
+      "eta": 0.3,
+      "kappa": 0.5,
+      "arguments": {
+        "baseline_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/baseline",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/outputs/numerical-repair-20261026/benchmark-bpo-diag0.json",
+        "objective": "bpo",
+        "diagnostics": false,
+        "tokens": 128,
+        "width": 1536,
+        "vocab": 151936,
+        "chunks": [
+          128
+        ],
+        "rounds": 9
+      },
+      "cases": [
+        {
+          "chunk": 128,
+          "loss_abs_diff": 9.5367431640625e-07,
+          "vjp_relative_l2": [
+            0.00034419875009916723,
+            0.0005214368575252593
+          ],
+          "before": {
+            "cuda_ms": [
+              6.330656051635742,
+              6.420639991760254,
+              6.408959865570068,
+              6.504159927368164,
+              6.476448059082031,
+              6.4991679191589355,
+              6.474495887756348,
+              6.478879928588867,
+              8.596863746643066
+            ],
+            "wall_ms": [
+              8.71671736240387,
+              8.962705731391907,
+              9.00048017501831,
+              9.03744250535965,
+              9.010136127471924,
+              9.029090404510498,
+              9.00750607252121,
+              9.028926491737366,
+              13.256043195724487
+            ],
+            "peak_extra_mib": 1337.37646484375,
+            "median_cuda_ms": 6.476448059082031,
+            "median_wall_ms": 9.010136127471924
+          },
+          "after": {
+            "cuda_ms": [
+              6.712831974029541,
+              6.64569616317749,
+              6.575488090515137,
+              6.744927883148193,
+              6.740255832672119,
+              6.7391037940979,
+              6.716576099395752,
+              6.717535972595215,
+              7.082240104675293
+            ],
+            "wall_ms": [
+              9.093664586544037,
+              9.17595624923706,
+              9.167797863483429,
+              9.26574319601059,
+              9.274519979953766,
+              9.270265698432922,
+              9.261146187782288,
+              9.202294051647186,
+              10.530941188335419
+            ],
+            "peak_extra_mib": 1337.37646484375,
+            "median_cuda_ms": 6.717535972595215,
+            "median_wall_ms": 9.261146187782288
+          },
+          "speedup": 0.972896436875005
+        }
+      ]
+    }
+  },
+  "performance_conditions": {
+    "shared_gpu": true,
+    "gpu": "H800",
+    "tokens": 128,
+    "vocab": 151936,
+    "hidden": 1536,
+    "dtype": "bfloat16",
+    "chunk": 128,
+    "rounds": 9,
+    "excludes": [
+      "backbone",
+      "rollout",
+      "TQ/IO",
+      "optimizer"
+    ],
+    "end_to_end_speed_claim": false
+  },
+  "remaining": [
+    "BF16 near-target inner-solver rebound persists in real replay",
+    "formal on-policy quality and long-sequence pressure not validated",
+    "third-party Liger and native NPU CE not rewritten/validated"
+  ]
+}

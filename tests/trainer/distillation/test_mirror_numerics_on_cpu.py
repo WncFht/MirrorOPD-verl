@@ -27,7 +27,9 @@ def test_mdpo_gradient_ignores_large_row_constant(offset):
 def test_self_target_has_no_analytic_logit_gradient():
     torch.manual_seed(12)
     z = torch.randn(4, 8193) * 4 + 32
-    target = z.log_softmax(-1).detach()
-    rows, dz, _ = full_vocab_rows(z, target, objective="mdpo")
+    from verl.trainer.distillation.numerics import mirror_logits_rows
+
+    # The raw-logit interface preserves the self-target before log-weight encoding.
+    rows, dz, _ = mirror_logits_rows(z, z, z, objective="mdpo", kappa=0.5, eta=0.3)
     torch.testing.assert_close(rows, torch.zeros_like(rows), atol=0, rtol=0)
     torch.testing.assert_close(dz, torch.zeros_like(dz), atol=0, rtol=0)
