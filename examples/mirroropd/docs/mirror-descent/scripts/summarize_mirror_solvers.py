@@ -24,6 +24,7 @@ SOLVER_RUNS = [
     "second-mixed",
     "residual-control",
     "second-fp32-arithmetic",
+    "current-main-confirm",
 ]
 FORWARD_RUNS = ["mixed-fixed-step", "projection-fixed-step", "residual-fixed-step"]
 
@@ -59,7 +60,11 @@ def summarize(root):
         assert status["returncode"] == 0, (run, status)
         data = json.loads((root / run / "result.json").read_text())
         finite(data)
-        protocols[run] = {"arguments": data["arguments"], "checkpoint": data.get("checkpoint")}
+        protocols[run] = {
+            "arguments": data["arguments"],
+            "checkpoint": data.get("checkpoint"),
+            "production_base_commit": "de018d89f" if run == "current-main-confirm" else "fd5f4a479",
+        }
         for r in data["branches"]:
             assert r["optimizer_steps"] == r["steps"]
             actual = sorted({u["optim/actor/lr"] for u in r["updates"]})
@@ -153,6 +158,13 @@ def summarize(root):
     finite(forward)
     warm = json.loads((root / "second-state/warmup.json").read_text())
     warm_steps = sum(len(r["updates"]) for r in warm["records"])
+    muon_references = {}
+    for device in ("cpu", "gpu"):
+        reference = json.loads((root / f"muon-{device}.json").read_text())
+        assert reference["world_size"] == 4 and reference["resume"]
+        assert [case["shape"] for case in reference["cases"]] == [[13, 7], [7, 13]]
+        assert all(error == 0 for case in reference["cases"] for step in case["errors"] for error in step)
+        muon_references[device] = reference
     return {
         "scope": (
             "Two fixed-prefix states; full-vocabulary MDPO kappa=0 eta=0.3. "
@@ -160,6 +172,7 @@ def summarize(root):
             "Precision comparisons use their own frozen initial policy. No formal task-quality or throughput claim."
         ),
         "base_commit": "fd5f4a479",
+        "integrated_confirmation_commit": "f2b0b3c01",
         "torch": "2.11.0+cu128",
         "post_series_columns": columns,
         "protocols": protocols,
@@ -172,8 +185,8 @@ def summarize(root):
             "warmup_successful_updates": warm_steps,
             "aligned_native_gold_max_abs": max_alignment,
             "kl_identity_max_abs": max_identity,
-            "muon_cpu_reference": json.loads((root / "muon-cpu.json").read_text()),
-            "muon_gpu_reference": json.loads((root / "muon-gpu.json").read_text()),
+            "muon_cpu_reference": muon_references["cpu"],
+            "muon_gpu_reference": muon_references["gpu"],
         },
     }
 
