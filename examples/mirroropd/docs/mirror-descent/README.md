@@ -6,9 +6,10 @@
 | --- | --- |
 | [形状与插值目标](形状与插值目标.md) | 融合教师、原教师目标、MDPO/Part/BPO/Mean、current/frozen、动作 IS 与参数性质 |
 | [统一实现方案](实现方案.md) | Sampled MDPO、full-vocab MDPO/BPO、eta=1 Full-KL 统一、配置、目标、数据与算子 |
-| [E44–E47 正式对照](../训练配方.md#mirror-comparison) | Full-KL / MDPO / BPO / 融合形状；256 outer、4096 updates，每 128 outer 保存；尚未运行正式实验 |
+| [E44–E47 正式对照](../训练配方.md#mirror-comparison) | Full-KL / MDPO / BPO / 融合形状；256 outer、4096 updates，每 128 outer 保存；E45/E47 的已有结果见实验目录 |
 | [实现验收结果](data/implementation-checks.json) | CPU、真实 TQ、CUDA、两卡 FSDP2 和 1.5B 短训练证据 |
 | [Full-vocab 优化与实测](实现方案.md#85-已完成的数值层优化与实测)与[数据](data/full-vocab-performance.json) | Target/诊断融合、固定输入 A/B、时间与峰值显存、剩余边界 |
+| [内层 KL 反弹审计](2026-10-26-MDPO内层KL反弹与数值链路审计.md) | 近目标梯度修正、真实四卡固定前缀重放、Adam 与计算精度对照 |
 | [数值验证脚本](scripts/verify_mirror_targets.py)与[结果](data/finite-vocab-checks.json) | CPU FP64 小词表上的目标、梯度和反例检查 |
 
 已实现 sampled MDPO、full-vocab MDPO/BPO；普通 Full-KL 是 MDPO eta=1 的直接执行分支。配置、运行约束和验证范围在统一实现方案中维护。
