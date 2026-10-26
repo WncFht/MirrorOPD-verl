@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "baseline": {
+      "updates": 320,
+      "responses": 1280,
+      "outer_steps": 20,
+      "max_position_reconstruction_error": 6.220674836354689e-08,
+      "actual_updates": 320.0,
+      "no_validation": true
+    },
+    "aligned": {
+      "updates": 320,
+      "responses": 1280,
+      "outer_steps": 20,
+      "max_position_reconstruction_error": 2.1975436637067247e-08,
+      "actual_updates": 320.0,
+      "no_validation": true
+    }
+  },
+  "matched_prompt_batches": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "position_rows": 6400,
+  "response_rows": 2560,
+  "source_scope": "All reconstruction uses the compressed raw archives in this directory",
+  "passed": true
+}

@@ -52,6 +52,8 @@
 # 编号别名：E21=E15; E22=E13。
 # E44–E47 沿用 E20 预算、每 128 outer 保存；其他探索可用 --method/--kappa/--eta 覆盖；custom 不加载编号预算。
 # model 预设可加 -valid-student/-valid-teacher，独立验证原始模型。
+#
+# E41 Full-KL 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表 KL。
 # END GENERATED EXPERIMENT OVERVIEW
 # Single public training entry. Planning uses Python's standard library only;
 # PYTHON_BIN continues to select the training/Ray interpreter in the shared launcher.

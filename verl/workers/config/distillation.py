@@ -39,12 +39,33 @@ class FullVocabConfig(BaseConfig):
     vocab_chunk_size: int = 8192
     async_write: bool = False
     prefetch: bool = False
+    # Explicit equivalence class of tokens that all terminate this single-turn rollout.
+    termination_token_ids: list[int] = field(default_factory=list)
 
     def __post_init__(self):
         if self.backend not in ("dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"):
             raise ValueError(f"Unsupported full-vocab backend: {self.backend}")
         if any(type(x) is not int or x <= 0 for x in (self.token_chunk_size, self.vocab_chunk_size)):
             raise ValueError("full-vocab chunk sizes must be positive")
+        ids = self.termination_token_ids
+        if not isinstance(ids, list) or any(type(i) is not int or i < 0 for i in ids):
+            raise ValueError("full_vocab.termination_token_ids must be a list of nonnegative integers")
+        if ids and (len(ids) < 2 or len(set(ids)) != len(ids)):
+            raise ValueError("termination equivalence requires at least two distinct token IDs")
+        if ids and self.backend != "precompute":
+            raise ValueError("termination equivalence currently requires full_vocab.backend=precompute")
+
+    def validate_termination_support(self, *, eos_token_ids, stop_token_ids, vocab_ids, vocab_size):
+        """Check real model/tokenizer and generation semantics after loading metadata."""
+        ids = set(self.termination_token_ids)
+        if not ids:
+            return
+        native = [eos_token_ids] if isinstance(eos_token_ids, int) else list(eos_token_ids or [])
+        allowed = set(native) | set(stop_token_ids or [])
+        if not ids <= allowed:
+            raise ValueError("termination_token_ids must all be effective rollout stopping tokens")
+        if not ids <= set(vocab_ids) or max(ids) >= vocab_size:
+            raise ValueError("termination_token_ids must be within tokenizer and model vocabulary")
 
 
 @dataclass
@@ -129,6 +150,8 @@ class DistillationLossConfig(BaseConfig):
         self.loss_settings: DistillationLossSettings = resolve_distillation_spec(self)
         if isinstance(self.full_vocab, dict):
             object.__setattr__(self, "full_vocab", FullVocabConfig(**self.full_vocab))
+        if self.full_vocab.termination_token_ids and not self.loss_settings.teacher_only_kl:
+            raise ValueError("termination equivalence supports only the teacher-only full reverse-KL objective")
         if self.loss_mode == "mirror":
             spec = self.loss_settings
             sampled = spec.payload_kind == "sampled"
@@ -435,6 +458,10 @@ class DistillationConfig(BaseConfig):
         """Reject unsupported shared lifecycles before creating Ray workers."""
         if not self.enabled or self.execution_mode != "shared_sync":
             return
+        if self.distillation_loss.full_vocab.termination_token_ids and OmegaConf.select(
+            config, "actor_rollout_ref.rollout.ignore_eos", default=False
+        ):
+            raise ValueError("termination equivalence requires rollout.ignore_eos=False")
         required = {
             "trainer.use_v1": True,
             "trainer.nnodes": 1,

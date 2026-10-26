@@ -286,6 +286,7 @@ actor_rollout_ref:
     gpu_memory_utilization: 0.5
     standalone_gpu_memory_utilization: ${oc.select:actor_rollout_ref.rollout.gpu_memory_utilization}
     ignore_eos: false
+    stop_token_ids: null
     enforce_eager: false
     cudagraph_capture_sizes: null
     free_cache_engine: true
@@ -435,6 +436,7 @@ actor_rollout_ref:
     exclude_modules: null
     lora_adapter_path: null
     use_liger: false
+    enable_full_vocab: false
     use_fused_kernels: false
     fused_kernel_options:
       impl_backend: torch
@@ -668,6 +670,7 @@ critic:
     exclude_modules: null
     lora_adapter_path: null
     use_liger: false
+    enable_full_vocab: false
     use_fused_kernels: false
     fused_kernel_options:
       impl_backend: torch
@@ -877,6 +880,15 @@ distillation:
   distillation_loss:
     _target_: verl.workers.config.DistillationLossConfig
     loss_mode: k3
+    mirror: null
+    full_vocab:
+      _target_: verl.workers.config.distillation.FullVocabConfig
+      backend: recompute
+      token_chunk_size: 512
+      vocab_chunk_size: 8192
+      async_write: false
+      prefetch: false
+      termination_token_ids: []
     topk: 32
     use_task_rewards: true
     distillation_loss_coef: 1.0

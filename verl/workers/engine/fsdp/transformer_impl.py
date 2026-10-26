@@ -1311,6 +1311,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
                         backend=config.backend,
                         token_chunk=config.token_chunk_size,
                         vocab_chunk=config.vocab_chunk_size,
+                        termination_token_ids=getattr(config, "termination_token_ids", ()),
                     )
 
             # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
@@ -1318,6 +1319,9 @@ class FSDPEngineWithLMHead(FSDPEngine):
                 result = head(selected, full_vocab_callback=compute)
             if spec.teacher_only_kl:
                 model_output = {"full_kl_sum": result.loss_sum, "full_kl_count": packed.numel()}
+                if getattr(config, "termination_token_ids", ()):
+                    model_output["termination_kl_sum"] = result.loss_sum
+                    model_output["full_kl_sum"] = result.token_objective.sum()
                 prefix = "full_kl"
             else:
                 model_output = {
