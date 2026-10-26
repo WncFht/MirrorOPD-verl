@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 from hydra import compose, initialize_config_dir
+from hydra.errors import InstantiationException
 from omegaconf import OmegaConf
 
 from verl.utils.config import omega_conf_to_dataclass, validate_config
@@ -124,6 +125,7 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "FULL_KL_VOCAB_CHUNK",
         "FULL_KL_ASYNC_WRITE",
         "FULL_KL_PREFETCH",
+        "FULL_KL_TERMINATION_TOKEN_IDS",
     ):
         env.pop(name, None)
     env.update(
@@ -317,7 +319,7 @@ REUSE_PRESETS = [
 
 
 @pytest.mark.parametrize("base,reuse", REUSE_PRESETS)
-def test_failure_reuse16_changes_only_actor_reuse_and_retains_rollout_budget(tmp_path, base, reuse):
+def test_failure_reuse16_preserves_budget_and_declares_e41_termination_override(tmp_path, base, reuse):
     configs = [
         _config(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
         for preset in (base, reuse)
@@ -330,7 +332,43 @@ def test_failure_reuse16_changes_only_actor_reuse_and_retains_rollout_budget(tmp
     assert repeated.trainer.save_freq == 100 and repeated.trainer.test_freq == 20
     assert repeated.trainer.val_before_train
     OmegaConf.update(repeated, "actor_rollout_ref.actor.ppo_epochs", 1)
+    if reuse == "E41":
+        assert list(repeated.distillation.distillation_loss.full_vocab.termination_token_ids) == [151643, 151645]
+        OmegaConf.update(repeated, "distillation.distillation_loss.full_vocab.termination_token_ids", [])
     assert OmegaConf.to_container(first, resolve=True) == OmegaConf.to_container(repeated, resolve=True)
+
+
+def test_e41_termination_configuration_and_override_precedence(tmp_path):
+    command = ["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), "E41"]
+    cfg = _config(tmp_path, command=command)
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    assert list(cfg.distillation.distillation_loss.full_vocab.termination_token_ids) == [151643, 151645]
+    disabled = _config(tmp_path, command=command, FULL_KL_TERMINATION_TOKEN_IDS="[]")
+    assert not disabled.distillation.distillation_loss.full_vocab.termination_token_ids
+    disabled = _config(
+        tmp_path, command=command + ["distillation.distillation_loss.full_vocab.termination_token_ids=[]"]
+    )
+    assert not disabled.distillation.distillation_loss.full_vocab.termination_token_ids
+    for override in [
+        "actor_rollout_ref.rollout.ignore_eos=True",
+        "distillation.distillation_loss.full_vocab.backend=dense",
+    ]:
+        invalid = _config(tmp_path, command=command + [override])
+        with pytest.raises(ValueError):
+            validate_config(invalid, use_reference_policy=False, use_critic=False)
+    validation = _config(
+        tmp_path,
+        command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), "E41-valid-student"],
+        FULL_KL_TERMINATION_TOKEN_IDS="[151643,151645]",
+    )
+    assert not validation.distillation.enabled
+    assert not validation.distillation.distillation_loss.full_vocab.termination_token_ids
+    invalid = _config(
+        tmp_path, command=command + ["--method", "sampled"], FULL_KL_TERMINATION_TOKEN_IDS="[151643,151645]"
+    )
+    with pytest.raises(InstantiationException, match="termination equivalence"):
+        validate_config(invalid, use_reference_policy=False, use_critic=False)
 
 
 @pytest.mark.parametrize("preset", ["E33", "E43"])

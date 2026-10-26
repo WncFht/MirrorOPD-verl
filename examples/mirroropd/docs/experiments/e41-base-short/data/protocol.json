@@ -1,0 +1,20 @@
+{
+  "stop_ids": [
+    151643,
+    151645
+  ],
+  "stop_tokens": [
+    "<|endoftext|>",
+    "<|im_end|>"
+  ],
+  "tokenizer_vocab_equal": true,
+  "tokenizer_width": 151669,
+  "selection": "Deterministic sample of early native endings, late exact loops, and early clean correct outputs; diagnostic cases are not prevalence estimates",
+  "models": [
+    "initial student",
+    "trained student at outer20",
+    "teacher"
+  ],
+  "precision": "BF16 backbone/head inputs; FP32 head projection and normalization, matching training head kernel",
+  "hypothesis": "Distinct EOS token identities may create a loss gradient against a behaviorally valid stop action; evaluate before choosing any modification"
+}

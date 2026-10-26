@@ -767,6 +767,18 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
             )
             if full_vocab:
                 object.__setattr__(actor_training_config.model_config, "enable_full_vocab", True)
+                full_config = distillation_config.distillation_loss.full_vocab
+                if full_config.termination_token_ids:
+                    generation = model_config.generation_config
+                    eos_ids = getattr(generation, "eos_token_id", None)
+                    if eos_ids is None:
+                        eos_ids = model_config.hf_config.get_text_config().eos_token_id
+                    full_config.validate_termination_support(
+                        eos_token_ids=eos_ids,
+                        stop_token_ids=self.config.rollout.get("stop_token_ids"),
+                        vocab_ids=model_config.tokenizer.get_vocab().values(),
+                        vocab_size=model_config.hf_config.get_text_config().vocab_size,
+                    )
             self.actor.reset()
             if full_vocab:
                 self.actor.engine.configure_full_vocab(
