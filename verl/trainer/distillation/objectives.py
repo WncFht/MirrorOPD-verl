@@ -46,17 +46,20 @@ def full_vocab_rows(z, b, log_q=None, *, objective, diagnostics=False, log_teach
     consume dZ under no_grad. q and b are always frozen. No 1/eta here.
     """
     b = b.detach()
-    d = z - b
     info = {}
     if objective == "mdpo":
         lp = z.log_softmax(-1)
         p = lp.exp()
-        rows = (p * (lp - b)).sum(-1)
-        dz = p * (d - (p * d).sum(-1, keepdim=True))
+        # Remove the student log-normalizer before centering; z-b loses small
+        # gradients when subtracting its large row-wise constant in FP32.
+        gap = lp - b
+        rows = (p * gap).sum(-1)
+        dz = p * (gap - rows[:, None])
     elif objective == "bpo":
         if log_q is None:
             raise ValueError("BPO requires a frozen anchor, including eta=1")
         q = log_q.detach().exp()
+        d = z - b
         residual = d - (q * d).sum(-1, keepdim=True)
         rows = (q * residual.square()).sum(-1) / 2
         dz = q * residual

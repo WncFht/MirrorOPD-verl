@@ -202,6 +202,7 @@ def _mirror_partials(
     GQ,
     GT,
     QG,
+    BREF,
     V: tl.constexpr,
     TS: tl.constexpr,
     P: tl.constexpr,
@@ -216,24 +217,35 @@ def _mirror_partials(
     z = tl.load(Z + ix, valid, 0).to(tl.float32)
     b = tl.load(BIAS + ix, valid, 0).to(tl.float32)
     j = row * P + part
-    # This kernel is used for MDPO or diagnostics. BPO without diagnostics uses
-    # the existing q-only mean/centered-variance kernel and never forms p.
-    mp = tl.max(tl.where(valid, z, -float("inf")), 0)
+    masked_z = tl.where(valid, z, -float("inf"))
+    mp = tl.max(masked_z, 0)
     ep = tl.where(valid, tl.exp(z - mp), 0.0)
     tl.store(MP + j, mp)
     tl.store(SP + j, tl.sum(ep, 0))
-    tl.store(GAP + j, tl.sum(ep * (z - b), 0))
+    if BPO:
+        tl.store(GAP + j, tl.sum(ep * (z - b), 0))
+    else:
+        # Form differences before subtraction: never materialize z-b, whose
+        # large common log-normalizer can dominate near-target gradients.
+        pivot = tl.argmax(masked_z, 0)
+        bref = tl.load(BIAS + row * V + part * B + pivot)
+        centered = (z - mp) - (b - bref)
+        tl.store(BREF + j, bref)
+        tl.store(GAP + j, tl.sum(ep * centered, 0))
     if DIAG:
         q = tl.load(LQ + ix, valid, 0)
         t = tl.load(LT + row * TS + col, valid, 0)
         mb = tl.max(tl.where(valid, b, -float("inf")), 0)
         tl.store(MB + j, mb)
         tl.store(SB + j, tl.sum(tl.where(valid, tl.exp(b - mb), 0.0), 0))
-        tl.store(GQ + j, tl.sum(ep * (z - q), 0))
-        tl.store(GT + j, tl.sum(ep * (z - t), 0))
         if BPO:
+            tl.store(GQ + j, tl.sum(ep * (z - q), 0))
+            tl.store(GT + j, tl.sum(ep * (z - t), 0))
             eq = tl.where(valid, tl.exp(q), 0.0)
             tl.store(QG + j, tl.sum(eq * (z - b), 0))
+        else:
+            tl.store(GQ + j, tl.sum(ep * ((z - mp) - q), 0))
+            tl.store(GT + j, tl.sum(ep * ((z - mp) - t), 0))
 
 
 @triton.jit
@@ -246,10 +258,13 @@ def _mirror_reduce(
     GQ,
     GT,
     QG,
+    BREF,
     LZ,
     MU,
     LOSS,
     DIAGNOSTICS,
+    MAXZ,
+    BZERO,
     P: tl.constexpr,
     BPO: tl.constexpr,
     DIAG: tl.constexpr,
@@ -261,27 +276,62 @@ def _mirror_reduce(
     mp = tl.load(MP + ix, j < P, -float("inf"))
     maximum = tl.max(mp, 0)
     ap = tl.exp(mp - maximum)
-    sp = tl.sum(ap * tl.load(SP + ix, j < P, 0), 0)
-    mu = tl.sum(ap * tl.load(GAP + ix, j < P, 0), 0) / sp
-    lzp = maximum + tl.log(sp)
-    tl.store(LZ + row, lzp)
+    partial_sp = tl.load(SP + ix, j < P, 0)
+    sp = tl.sum(ap * partial_sp, 0)
+    log_sp = tl.log(sp)
+    gap = tl.load(GAP + ix, j < P, 0)
     if BPO:
+        mu = tl.sum(ap * gap, 0) / sp
+        lzp = maximum + log_sp
+        raw = mu - lzp
+        tl.store(LZ + row, lzp)
         tl.store(MU + row, tl.sum(tl.load(QG + ix, j < P, 0), 0))
     else:
+        pivot_part = tl.argmax(mp, 0)
+        bref = tl.load(BREF + ix, j < P, 0)
+        bzero = tl.sum(tl.where(j == pivot_part, bref, 0), 0)
+        # Translate tile moments into the global-max frame. Mask padded
+        # offsets before multiplication to avoid 0 * -inf.
+        offset = tl.where(j < P, (mp - maximum) - (bref - bzero), 0.0)
+        mu = tl.sum(ap * (gap + partial_sp * offset), 0) / sp
+        raw = (mu - log_sp) - bzero
+        tl.store(LZ + row, log_sp)
         tl.store(MU + row, mu)
-        # Raw MDPO, without computing and then subtracting the frozen log Z_m.
-        tl.store(LOSS + row, mu - lzp)
+        tl.store(MAXZ + row, maximum)
+        tl.store(BZERO + row, bzero)
+        tl.store(LOSS + row, raw)
     if DIAG:
         mb = tl.load(MB + ix, j < P, -float("inf"))
         maximum_b = tl.max(mb, 0)
         sb = tl.sum(tl.exp(mb - maximum_b) * tl.load(SB + ix, j < P, 0), 0)
         lzb = maximum_b + tl.log(sb)
-        qgap = tl.sum(ap * tl.load(GQ + ix, j < P, 0), 0) / sp
-        tgap = tl.sum(ap * tl.load(GT + ix, j < P, 0), 0) / sp
-        tl.store(DIAGNOSTICS + row * 4, mu - lzp + lzb)
+        gq = tl.load(GQ + ix, j < P, 0)
+        gt = tl.load(GT + ix, j < P, 0)
+        if BPO:
+            qkl = tl.sum(ap * gq, 0) / sp - lzp
+            tkl = tl.sum(ap * gt, 0) / sp - lzp
+        else:
+            offset = tl.where(j < P, mp - maximum, 0.0)
+            qkl = tl.sum(ap * (gq + partial_sp * offset), 0) / sp - log_sp
+            tkl = tl.sum(ap * (gt + partial_sp * offset), 0) / sp - log_sp
+        tl.store(DIAGNOSTICS + row * 4, raw + lzb)
         tl.store(DIAGNOSTICS + row * 4 + 1, lzb)
-        tl.store(DIAGNOSTICS + row * 4 + 2, qgap - lzp)
-        tl.store(DIAGNOSTICS + row * 4 + 3, tgap - lzp)
+        tl.store(DIAGNOSTICS + row * 4 + 2, qkl)
+        tl.store(DIAGNOSTICS + row * 4 + 3, tkl)
+
+
+@triton.jit
+def _mirror_gradient(Z, BIAS, LZ, MU, MAXZ, BZERO, DZ, V: tl.constexpr, B: tl.constexpr):
+    row, part = tl.program_id(0), tl.program_id(1)
+    col = part * B + tl.arange(0, B)
+    ix = row * V + col
+    z = tl.load(Z + ix, col < V, 0).to(tl.float32)
+    b = tl.load(BIAS + ix, col < V, 0).to(tl.float32)
+    # LZ is relative to the row maximum, not the absolute log-normalizer.
+    relative_z = z - tl.load(MAXZ + row)
+    centered = relative_z - (b - tl.load(BZERO + row))
+    p = tl.exp(relative_z - tl.load(LZ + row))
+    tl.store(DZ + ix, p * (centered - tl.load(MU + row)), col < V)
 
 
 def fused_mirror_rows(z, b, log_q, log_teacher, dtype, *, objective, diagnostics):
@@ -303,12 +353,15 @@ def fused_mirror_rows(z, b, log_q, log_teacher, dtype, *, objective, diagnostics
     lz, mu, rows = [torch.empty(n, device=z.device, dtype=torch.float32) for _ in range(3)]
     dz = torch.empty_like(z, dtype=dtype)
     bpo = objective == "bpo"
+    bref = buffers[0] if bpo else torch.empty_like(buffers[0])
+    maxz, bzero = (mu, mu) if bpo else (torch.empty_like(mu), torch.empty_like(mu))
     _mirror_partials[(n, parts)](
         z,
         b,
         log_q,
         log_teacher,
         *buffers,
+        bref,
         v,
         log_teacher.stride(0) if diagnostics else v,
         parts,
@@ -318,10 +371,13 @@ def fused_mirror_rows(z, b, log_q, log_teacher, dtype, *, objective, diagnostics
     )
     _mirror_reduce[(n,)](
         *buffers,
+        bref,
         lz,
         mu,
         rows,
         diag,
+        maxz,
+        bzero,
         parts,
         bpo,
         diagnostics,
@@ -332,5 +388,5 @@ def fused_mirror_rows(z, b, log_q, log_teacher, dtype, *, objective, diagnostics
         _bpo_gradient[(n, parts)](z, b, log_q, mu, dz, partial, v, parts, 4096)
         rows = partial.sum(-1)
     else:
-        _gradient[(n, parts)](z, b, lz, mu, dz, v, 4096)
+        _mirror_gradient[(n, parts)](z, b, lz, mu, maxz, bzero, dz, v, 4096)
     return rows, dz, diag
