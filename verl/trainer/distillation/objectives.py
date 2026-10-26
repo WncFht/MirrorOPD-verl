@@ -31,9 +31,16 @@ def sampled_policy_terms(log_p, log_beta, advantage, *, mode, log_ratio_guard=No
     return terms, active, guarded
 
 
-def mdpo_sampled_terms(log_p, log_beta, b):
-    """Unclipped MDPO: same surrogate primitive, with the refreshed mirror residual."""
-    terms, _, _ = sampled_policy_terms(log_p, log_beta, b - log_p, mode="token_is")
+def mdpo_sampled_terms(log_p, log_beta, b=None, *, residual=None):
+    """Unclipped MDPO with a stopped, refreshed mirror residual.
+
+    Encoded b is retained for callers supplying that representation. Production
+    passes residual directly so small target increments never need to enter b.
+    """
+    if (b is None) == (residual is None):
+        raise ValueError("Provide either encoded b or a separated target residual")
+    signal = b - log_p if residual is None else residual
+    terms, _, _ = sampled_policy_terms(log_p, log_beta, signal, mode="token_is")
     if not torch.isfinite(terms).all():
         raise ValueError("Non-finite sampled MDPO residual/importance weight")
     return terms
@@ -45,34 +52,29 @@ def full_vocab_rows(z, b, log_q=None, *, objective, diagnostics=False, log_teach
     Dense references differentiate the returned scalar normally. Optimized kernels
     consume dZ under no_grad. q and b are always frozen. No 1/eta here.
     """
+    from verl.trainer.distillation.numerics import centered_vjp, kl_rows, log_softmax, mean, relative_difference
+
     b = b.detach()
-    info = {}
+    target_kl, dz = kl_rows(z, b)
+    log_z = b.logsumexp(-1)
     if objective == "mdpo":
-        lp = z.log_softmax(-1)
-        p = lp.exp()
-        # Remove the student log-normalizer before centering; z-b loses small
-        # gradients when subtracting its large row-wise constant in FP32.
-        gap = lp - b
-        rows = (p * gap).sum(-1)
-        dz = p * (gap - rows[:, None])
+        rows = target_kl - log_z
     elif objective == "bpo":
         if log_q is None:
             raise ValueError("BPO requires a frozen anchor, including eta=1")
-        q = log_q.detach().exp()
-        d = z - b
-        residual = d - (q * d).sum(-1, keepdim=True)
-        rows = (q * residual.square()).sum(-1) / 2
-        dz = q * residual
-        if diagnostics:
-            lp = z.log_softmax(-1)
-            p = lp.exp()
+        lq = log_softmax(log_q.detach())
+        pivot = lq.argmax(-1, keepdim=True)
+        residual = relative_difference(z, b, pivot)
+        dz, centered = centered_vjp(lq, residual)
+        rows = mean(lq, centered.square()).squeeze(-1) / 2
     else:
         raise ValueError(f"Unknown mirror objective: {objective}")
+    info = {}
     if diagnostics:
-        lz = b.logsumexp(-1)
-        info = {"target_kl": (p * (lp - b)).sum(-1).detach() + lz, "target_log_z": lz}
+        info = {"target_kl": target_kl, "target_log_z": log_z}
         if log_teacher is not None:
-            info["teacher_kl"] = (p * (lp - log_teacher.detach())).sum(-1).detach()
+            teacher = log_teacher.detach()
+            info["teacher_kl"] = kl_rows(z, teacher)[0] - teacher.logsumexp(-1)
         if log_q is not None:
-            info["anchor_kl"] = (p * (lp - log_q.detach())).sum(-1).detach()
+            info["anchor_kl"] = kl_rows(z, log_q.detach())[0]
     return rows, dz, {k: v.detach() for k, v in info.items()}

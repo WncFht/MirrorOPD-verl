@@ -1,11 +1,13 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""BF16 CUDA full-vocab kernels: teacher KL, weighted targets and MDPO/BPO.
+"""Tiled stable row reductions shared by full KL, MDPO and BPO.
 
-Tiled reductions share diagnostics without dense softmax intermediates. cuBLAS
-still does projections and gradient products. The public dispatcher falls back
-to ordinary precompute for other devices/dtypes.
+Logit differences are formed before centering. Small KL values use exponential
+remainders; the pivot VJP is reconstructed before its final low-precision cast.
+Projection and dH/dW accumulation remain in the common precompute engine.
 """
+
+import math
 
 import torch
 import triton
@@ -17,70 +19,227 @@ from verl.trainer.distillation.profiling import full_kl_range
 
 
 @triton.jit
-def _partials(ZP, ZT, MP, MT, SP, ST, GAP, V: tl.constexpr, P: tl.constexpr, B: tl.constexpr):
-    row, part = tl.program_id(0), tl.program_id(1)
-    col = part * B + tl.arange(0, B)
-    valid = col < V
-    a = tl.load(ZP + row * V + col, valid, 0).to(tl.float32)
-    b = tl.load(ZT + row * V + col, valid, 0).to(tl.float32)
-    ma = tl.max(tl.where(valid, a, -float("inf")), 0)
-    mb = tl.max(tl.where(valid, b, -float("inf")), 0)
-    ea = tl.where(valid, tl.exp(a - ma), 0.0)
-    eb = tl.where(valid, tl.exp(b - mb), 0.0)
-    ix = row * P + part
-    tl.store(MP + ix, ma)
-    tl.store(MT + ix, mb)
-    tl.store(SP + ix, tl.sum(ea, 0))
-    tl.store(ST + ix, tl.sum(eb, 0))
-    tl.store(GAP + ix, tl.sum(ea * (a - b), 0))
+def _expm1mx(x):
+    s = tl.minimum(tl.maximum(x, -0.125), 0.125)
+    # Through x^12; both value and first derivative retain the near-zero term.
+    p = 1.0 / 479001600
+    p = 1.0 / 39916800 + s * p
+    p = 1.0 / 3628800 + s * p
+    p = 1.0 / 362880 + s * p
+    p = 1.0 / 40320 + s * p
+    p = 1.0 / 5040 + s * p
+    p = 1.0 / 720 + s * p
+    p = 1.0 / 120 + s * p
+    p = 1.0 / 24 + s * p
+    p = 1.0 / 6 + s * p
+    p = 0.5 + s * p
+    safe = tl.minimum(tl.maximum(x, -80.0), 80.0)
+    return tl.where(tl.abs(x) < 0.125, s * s * p, libdevice.expm1(safe) - safe)
 
 
 @triton.jit
-def _rows(MP, MT, SP, ST, GAP, LZ, MU, KL, P: tl.constexpr, B: tl.constexpr):
+def _log1pmx(x):
+    s = tl.minimum(tl.maximum(x, -0.0625), 0.0625)
+    p = -1.0 / 14
+    for n in tl.static_range(13, 1, -1):
+        sign = 1.0 if n % 2 == 1 else -1.0
+        p = sign / n + s * p
+    safe = tl.maximum(x, -0.5)
+    return tl.where(tl.abs(x) < 0.0625, s * s * p, libdevice.log1p(safe) - safe)
+
+
+@triton.jit
+def _weighted_partials(Z, R, PART, V: tl.constexpr, P: tl.constexpr, B: tl.constexpr):
+    row, part = tl.program_id(0), tl.program_id(1)
+    c = part * B + tl.arange(0, B)
+    z = tl.load(Z + row * V + c, c < V, -float("inf")).to(tl.float32)
+    r = tl.load(R + row * V + c, c < V, 0).to(tl.float32)
+    pivot = tl.argmax(z, 0)
+    maximum = tl.max(z, 0)
+    ref = tl.sum(tl.where(tl.arange(0, B) == pivot, r, 0), 0)
+    w = tl.exp(z - maximum)
+    tail = tl.sum(tl.where(tl.arange(0, B) == pivot, 0.0, w), 0)
+    moment = tl.sum(w * (r - ref), 0)
+    ix = (row * P + part) * 4
+    tl.store(PART + ix, maximum)
+    tl.store(PART + ix + 1, tail)
+    tl.store(PART + ix + 2, moment)
+    tl.store(PART + ix + 3, ref)
+
+
+@triton.jit
+def _weighted_reduce(Z, PART, STATS, PIVOT, V: tl.constexpr, P: tl.constexpr, B: tl.constexpr):
     row = tl.program_id(0)
     j = tl.arange(0, B)
-    ix = row * P + j
-    mp = tl.load(MP + ix, j < P, -float("inf"))
-    mt = tl.load(MT + ix, j < P, -float("inf"))
-    ap = tl.exp(mp - tl.max(mp, 0))
-    at = tl.exp(mt - tl.max(mt, 0))
-    sp = tl.sum(ap * tl.load(SP + ix, j < P, 0), 0)
-    st = tl.sum(at * tl.load(ST + ix, j < P, 0), 0)
-    mu = tl.sum(ap * tl.load(GAP + ix, j < P, 0), 0) / sp
-    lzp = tl.max(mp, 0) + tl.log(sp)
-    lzt = tl.max(mt, 0) + tl.log(st)
-    tl.store(LZ + row, lzp)
-    tl.store(MU + row, mu)
-    tl.store(KL + row, mu - lzp + lzt)
+    ix = (row * P + j) * 4
+    mx = tl.load(PART + ix, j < P, -float("inf"))
+    tail = tl.load(PART + ix + 1, j < P, 0)
+    moment = tl.load(PART + ix + 2, j < P, 0)
+    ref = tl.load(PART + ix + 3, j < P, 0)
+    maximum = tl.max(mx, 0)
+    first = tl.argmax(mx, 0)
+    r0 = tl.sum(tl.where(j == first, ref, 0), 0)
+    weight = tl.exp(mx - maximum)
+    others = tl.sum(weight * (tail + tl.where(j == first, 0.0, 1.0)), 0)
+    mu = tl.sum(weight * (moment + (1 + tail) * (ref - r0)), 0) / (1 + others)
+    tl.store(STATS + row * 4, maximum)
+    tl.store(STATS + row * 4 + 1, libdevice.log1p(others))
+    tl.store(STATS + row * 4 + 2, mu)
+    tl.store(STATS + row * 4 + 3, r0)
+    # Select the first maximum within its tile without storing dense indices.
+    c = first * 4096 + tl.arange(0, 4096)
+    z = tl.load(Z + row * V + c, c < V, -float("inf"))
+    tl.store(PIVOT + row, first * 4096 + tl.argmax(z, 0))
 
 
 @triton.jit
-def _gradient(ZP, ZT, LZ, MU, DZ, V: tl.constexpr, B: tl.constexpr):
+def _weighted_apply(
+    Z,
+    R,
+    STATS,
+    PIVOT,
+    DZ,
+    PART,
+    V: tl.constexpr,
+    P: tl.constexpr,
+    VARIANCE: tl.constexpr,
+    GRAD: tl.constexpr,
+    B: tl.constexpr,
+):
     row, part = tl.program_id(0), tl.program_id(1)
-    col = part * B + tl.arange(0, B)
-    ix = row * V + col
-    a = tl.load(ZP + ix, col < V, 0)
-    b = tl.load(ZT + ix, col < V, 0)
-    p = tl.exp(a - tl.load(LZ + row))
-    dz = p * (a - b - tl.load(MU + row))
-    tl.store(DZ + ix, dz, col < V)
+    c = part * B + tl.arange(0, B)
+    valid = c < V
+    z = tl.load(Z + row * V + c, valid, 0).to(tl.float32)
+    r = tl.load(R + row * V + c, valid, 0).to(tl.float32)
+    maximum = tl.load(STATS + row * 4)
+    ln = tl.load(STATS + row * 4 + 1)
+    mu = tl.load(STATS + row * 4 + 2)
+    ref = tl.load(STATS + row * 4 + 3)
+    lp = tl.where(valid, (z - maximum) - ln, -float("inf"))
+    w = tl.exp(lp)
+    centered = tl.where(valid, (r - ref) - mu, 0.0)
+    pivot = tl.load(PIVOT + row)
+    g = tl.where(c == pivot, 0.0, w * centered)
+    if GRAD:
+        tl.store(DZ + row * V + c, g, valid)
+    ix = (row * P + part) * 7
+    tl.store(PART + ix, tl.sum(g, 0))
+    tl.store(PART + ix + 1, tl.sum(w, 0))
+    if VARIANCE:
+        tl.store(PART + ix + 2, 0.5 * tl.sum(w * centered * centered, 0))
+    else:
+        x = -centered
+        exponent = lp + x
+        rem = tl.where(tl.abs(x) < 0.125, w * _expm1mx(x), tl.exp(tl.minimum(exponent, 40.0)) - w * (1 + x))
+        mx = tl.max(exponent, 0)
+        tl.store(PART + ix + 2, tl.sum(w * x, 0))
+        tl.store(PART + ix + 3, tl.sum(rem, 0))
+        tl.store(PART + ix + 4, mx)
+        tl.store(PART + ix + 5, tl.sum(tl.exp(exponent - mx), 0))
+
+
+@triton.jit
+def _weighted_finish(
+    PART,
+    PIVOT,
+    DZ,
+    VALUE,
+    V: tl.constexpr,
+    P: tl.constexpr,
+    VARIANCE: tl.constexpr,
+    GRAD: tl.constexpr,
+    B: tl.constexpr,
+):
+    row = tl.program_id(0)
+    j = tl.arange(0, B)
+    ix = (row * P + j) * 7
+    mass = tl.sum(tl.load(PART + ix + 1, j < P, 0), 0)
+    if GRAD:
+        pivot = tl.load(PIVOT + row)
+        tl.store(DZ + row * V + pivot, -tl.sum(tl.load(PART + ix, j < P, 0), 0))
+    if VARIANCE:
+        value = tl.sum(tl.load(PART + ix + 2, j < P, 0), 0) / mass
+    else:
+        a = tl.sum(tl.load(PART + ix + 2, j < P, 0), 0) / mass
+        b = tl.sum(tl.load(PART + ix + 3, j < P, 0), 0) / mass
+        mx = tl.load(PART + ix + 4, j < P, -float("inf"))
+        maximum = tl.max(mx, 0)
+        total = tl.sum(tl.exp(mx - maximum) * tl.load(PART + ix + 5, j < P, 0), 0)
+        safe_a = tl.minimum(tl.maximum(a, -0.5), 0.5)
+        safe_b = tl.minimum(tl.maximum(b, -0.5), 0.5)
+        close = libdevice.log1p(safe_b / (1 + safe_a)) + _log1pmx(safe_a)
+        far = maximum + tl.log(total) - tl.log(mass) - a
+        value = tl.where((maximum < 40) & (tl.abs(a) < 0.5) & (tl.abs(b) < 0.5), close, far)
+    tl.store(VALUE + row, value)
+
+
+def weighted_rows(logits, residual, dtype, *, variance=False, gradient=True):
+    n, v = logits.shape
+    parts = triton.cdiv(v, 4096)
+    partial = torch.empty((n, parts, 4), device=logits.device, dtype=torch.float32)
+    stats = torch.empty((n, 4), device=logits.device, dtype=torch.float32)
+    pivot = torch.empty(n, dtype=torch.int32, device=logits.device)
+    values = torch.empty(n, device=logits.device, dtype=torch.float32)
+    dz = torch.empty_like(logits, dtype=dtype) if gradient else values
+    tail = torch.empty((n, parts, 7), device=logits.device, dtype=torch.float32)
+    _weighted_partials[(n, parts)](logits, residual, partial, v, parts, 4096, enable_fp_fusion=False)
+    _weighted_reduce[(n,)](
+        logits, partial, stats, pivot, v, parts, triton.next_power_of_2(parts), enable_fp_fusion=False
+    )
+    _weighted_apply[(n, parts)](
+        logits, residual, stats, pivot, dz, tail, v, parts, variance, gradient, 4096, enable_fp_fusion=False
+    )
+    _weighted_finish[(n,)](
+        tail, pivot, dz, values, v, parts, variance, gradient, triton.next_power_of_2(parts), enable_fp_fusion=False
+    )
+    return values, dz if gradient else None, stats
+
+
+@triton.jit
+def _difference(
+    Z, T, A, PIVOT, OUT, V: tl.constexpr, TS: tl.constexpr, ETA: tl.constexpr, ANCHOR: tl.constexpr, B: tl.constexpr
+):
+    row, part = tl.program_id(0), tl.program_id(1)
+    c = part * B + tl.arange(0, B)
+    p = tl.load(PIVOT + row)
+    z0 = tl.load(Z + row * V + p).to(tl.float64)
+    t0 = tl.load(T + row * TS + p).to(tl.float64)
+    z = tl.load(Z + row * V + c, c < V, 0).to(tl.float64)
+    t = tl.load(T + row * TS + c, c < V, 0).to(tl.float64)
+    if ANCHOR:
+        a0 = tl.load(A + row * V + p).to(tl.float64)
+        a = tl.load(A + row * V + c, c < V, 0).to(tl.float64)
+        result = ((z - z0) - (a - a0)) - ETA * ((t - t0) - (a - a0))
+    else:
+        result = (z - z0) - (t - t0)
+    tl.store(OUT + row * V + c, result, c < V)
+
+
+def difference(z, teacher, pivot=None, *, anchor=None, eta=1.0):
+    pivot = z.argmax(-1) if pivot is None else pivot.reshape(-1)
+    r = torch.empty_like(z)
+    _difference[(len(z), triton.cdiv(z.shape[1], 1024))](
+        z,
+        teacher,
+        z if anchor is None else anchor,
+        pivot,
+        r,
+        z.shape[1],
+        teacher.stride(0),
+        eta,
+        anchor is not None,
+        1024,
+        enable_fp_fusion=False,
+    )
+    return r
 
 
 def fused_rows(zp, zt, dtype):
-    assert zp.is_cuda and zp.is_contiguous() and zt.is_contiguous()
-    n, v = zp.shape
-    parts = triton.cdiv(v, 4096)
-    buffers = [torch.empty((n, parts), device=zp.device, dtype=torch.float32) for _ in range(5)]
-    lz, mu, kl = [torch.empty(n, device=zp.device, dtype=torch.float32) for _ in range(3)]
-    dz = torch.empty_like(zp, dtype=dtype)
-    _partials[(n, parts)](zp, zt, *buffers, v, parts, 4096)
-    _rows[(n,)](*buffers, lz, mu, kl, parts, triton.next_power_of_2(parts))
-    _gradient[(n, parts)](zp, zt, lz, mu, dz, v, 4096)
-    return kl, dz
+    value, gradient, _ = weighted_rows(zp, difference(zp, zt), dtype)
+    return value, gradient
 
 
 def fused_kl_rows(hs, ws, ht, wt):
-    """Fused block reduction; allocation and gradient accumulation live in the caller."""
     if not hs.is_cuda or hs.dtype != torch.bfloat16:
         raise ValueError("fused precompute requires BF16 CUDA")
     with full_kl_range("student_projection"):
@@ -91,49 +250,241 @@ def fused_kl_rows(hs, ws, ht, wt):
         return fused_rows(zp, zt, hs.dtype)
 
 
-@triton.jit
-def _bpo_partial_mean(Z, BIAS, LQ, PART, V: tl.constexpr, P: tl.constexpr, B: tl.constexpr):
-    row, part = tl.program_id(0), tl.program_id(1)
-    col = part * B + tl.arange(0, B)
-    valid = col < V
-    ix = row * V + col
-    q = tl.where(valid, tl.exp(tl.load(LQ + ix, valid, -float("inf"))), 0.0)
-    d = tl.load(Z + ix, valid, 0).to(tl.float32) - tl.load(BIAS + ix, valid, 0).to(tl.float32)
-    tl.store(PART + row * P + part, tl.sum(q * d, 0))
-
-
-@triton.jit
-def _bpo_mean(PART, MU, P: tl.constexpr, B: tl.constexpr):
-    row = tl.program_id(0)
-    j = tl.arange(0, B)
-    tl.store(MU + row, tl.sum(tl.load(PART + row * P + j, j < P, 0), 0))
-
-
-@triton.jit
-def _bpo_gradient(Z, BIAS, LQ, MU, DZ, LOSS, V: tl.constexpr, P: tl.constexpr, B: tl.constexpr):
-    row, part = tl.program_id(0), tl.program_id(1)
-    col = part * B + tl.arange(0, B)
-    valid = col < V
-    ix = row * V + col
-    q = tl.where(valid, tl.exp(tl.load(LQ + ix, valid, -float("inf"))), 0.0)
-    d = tl.load(Z + ix, valid, 0).to(tl.float32) - tl.load(BIAS + ix, valid, 0).to(tl.float32)
-    centered = d - tl.load(MU + row)
-    tl.store(DZ + ix, q * centered, valid)
-    tl.store(LOSS + row * P + part, 0.5 * tl.sum(q * centered * centered, 0))
-
-
 def fused_bpo_rows(z, b, log_q, dtype):
-    """Stable centered variance under frozen q; no student softmax or second-moment subtraction."""
-    assert z.is_cuda and z.is_contiguous() and b.is_contiguous() and log_q.is_contiguous()
+    r = difference(z, b, log_q.argmax(-1))
+    value, gradient, _ = weighted_rows(log_q, r, dtype, variance=True)
+    return value, gradient
+
+
+def fused_mirror_rows(z, b, log_q, log_teacher, dtype, *, objective, diagnostics):
+    """Compatibility for callers that already encoded b; cannot recover lost increments."""
+    if objective == "bpo":
+        value, gradient = fused_bpo_rows(z, b, log_q, dtype)
+    else:
+        value, gradient = fused_rows(z, b, dtype)
+        value = value - b.logsumexp(-1)
+    info = z.new_empty((len(z), 0))
+    if diagnostics:
+        target, _, _ = weighted_rows(z, difference(z, b), dtype, gradient=False)
+        anchor, _, _ = weighted_rows(z, difference(z, log_q), dtype, gradient=False)
+        teacher, _, _ = weighted_rows(z, difference(z, log_teacher), dtype, gradient=False)
+        info = torch.stack([target, b.logsumexp(-1), anchor, teacher - log_teacher.logsumexp(-1)], -1)
+    return value, gradient, info
+
+
+@triton.jit
+def _power(x, eta, K: tl.constexpr):
+    if K == 0:
+        return eta * x
+    y = K * x
+    near = libdevice.log1p(eta * libdevice.expm1(tl.minimum(tl.maximum(y, -0.5), 0.5)))
+    a = tl.log(eta) + y
+    b = libdevice.log1p(-eta)
+    far = tl.maximum(a, b) + libdevice.log1p(tl.exp(-tl.abs(a - b)))
+    return tl.where(tl.abs(y) < 0.5, near, far) / K
+
+
+@triton.jit
+def _exp_wide(x):
+    if x.dtype == tl.float64:
+        return libdevice.exp(x)
+    return tl.exp(x)
+
+
+@triton.jit
+def _logadd(a, b):
+    return tl.maximum(a, b) + libdevice.log1p(_exp_wide(-tl.abs(a - b)))
+
+
+@triton.jit
+def _softplus_wide(x):
+    return tl.maximum(x, 0.0) + libdevice.log1p(_exp_wide(-tl.abs(x)))
+
+
+@triton.jit
+def _power_static(x, K: tl.constexpr, ETA: tl.constexpr, LE: tl.constexpr, LC: tl.constexpr):
+    if K == 0 or ETA == 1:
+        return ETA * x
+    y = K * x
+    near = libdevice.log1p(ETA * libdevice.expm1(tl.minimum(tl.maximum(y, -0.5), 0.5)))
+    return tl.where(tl.abs(y) < 0.5, near, _logadd(y + LE, tl.full(y.shape, LC, y.dtype))) / K
+
+
+@triton.jit
+def _power_remainder(x, K: tl.constexpr, ETA: tl.constexpr, LE: tl.constexpr, LC: tl.constexpr):
+    if K == 0 or ETA == 1:
+        return tl.full(x.shape, 0.0, x.dtype)
+    if ETA <= 0.5:
+        e, y, le, lc = ETA, K * x, LE, LC
+    else:
+        e, y, le, lc = 1 - ETA, -K * x, LC, LE
+    safe = tl.minimum(tl.maximum(y, -0.5), 0.5)
+    a = e * libdevice.expm1(safe)
+    near = e * _expm1mx(safe) + _log1pmx(a)
+    far = _logadd(y + le, tl.full(y.shape, lc, y.dtype)) - e * y
+    return tl.where(tl.abs(y) < 0.5, near, far) / K
+
+
+@triton.jit
+def _factored_h(y, a, l0, l1):
+    near = libdevice.log1p(a * libdevice.expm1(-tl.minimum(y, 0.5)))
+    return tl.where(y < 0.5, near, _logadd(l0, l1 - y))
+
+
+@triton.jit
+def _power_gap(x, K: tl.constexpr, ETA: tl.constexpr, LE: tl.constexpr, LC: tl.constexpr, COEFF: tl.constexpr):
+    if K == 1 or ETA == 1:
+        return tl.full(x.shape, 0.0, tl.float32)
+    small = tl.minimum(tl.maximum(x if ETA <= 0.5 else -x, -0.5), 0.5)
+    polynomial = tl.full(x.shape, COEFF[14], tl.float32)
+    for j in tl.static_range(13, -1, -1):
+        polynomial = COEFF[j] + small * polynomial
+    polynomial = small * small * polynomial
+    wide = x.to(tl.float64) if K > 0.99 else x
+    far = _power_remainder(wide, 1.0, ETA, LE, LC) - _power_remainder(wide, K, ETA, LE, LC)
+    if K > 0:
+        absx = tl.abs(wide)
+        a = tl.where(wide >= 0, tl.full(wide.shape, 1 - ETA, wide.dtype), tl.full(wide.shape, ETA, wide.dtype))
+        l0 = tl.where(wide >= 0, tl.full(wide.shape, LE, wide.dtype), tl.full(wide.shape, LC, wide.dtype))
+        l1 = tl.where(wide >= 0, tl.full(wide.shape, LC, wide.dtype), tl.full(wide.shape, LE, wide.dtype))
+        factored = _factored_h(absx, a, l0, l1) - _factored_h(K * absx, a, l0, l1) / K
+        far = tl.where(absx > 40, factored, far)
+        if K > 0.99:
+            mid = (1 + K) / 2
+            odds = LE - LC + mid * wide
+            lp, lcp = -_softplus_wide(-odds), -_softplus_wide(odds)
+            divergence = _exp_wide(lp) * (lp - LE) + _exp_wide(lcp) * (lcp - LC)
+            divided = (1 - K) / (mid * mid) * divergence
+            far = tl.where((1 - K) * absx < 1e-4, divided, far)
+    return tl.where(tl.abs(x) < 0.5, polynomial, far.to(tl.float32))
+
+
+@triton.jit
+def _split_residual(
+    Z,
+    Q,
+    T,
+    PIVOT,
+    QSTATS,
+    QT,
+    R,
+    NORM,
+    V: tl.constexpr,
+    TS: tl.constexpr,
+    P: tl.constexpr,
+    K: tl.constexpr,
+    ETA: tl.constexpr,
+    LE: tl.constexpr,
+    LC: tl.constexpr,
+    COEFF: tl.constexpr,
+    NORMALIZER: tl.constexpr,
+    B: tl.constexpr,
+):
+    row, part = tl.program_id(0), tl.program_id(1)
+    c = part * B + tl.arange(0, B)
+    a = tl.load(PIVOT + row)
+    q0, t0, z0 = tl.load(Q + row * V + a), tl.load(T + row * TS + a), tl.load(Z + row * V + a)
+    q = tl.load(Q + row * V + c, c < V, 0)
+    t = tl.load(T + row * TS + c, c < V, 0)
+    z = tl.load(Z + row * V + c, c < V, 0)
+    dq = q.to(tl.float64) - q0.to(tl.float64)
+    dt = t.to(tl.float64) - t0.to(tl.float64)
+    dz = z.to(tl.float64) - z0.to(tl.float64)
+    delta = dt - dq
+    if ETA == 1:
+        residual = dz - dt
+    elif K == 0:
+        residual = (dz - dq) - ETA * delta
+    else:
+        ra = tl.load(QSTATS + row * 4 + 2) - tl.load(QT + row)
+        odds = LE - LC + K * ra
+        choose_teacher = odds > 0
+        small_weight = tl.sigmoid(-tl.abs(odds))
+        increment = _power(tl.where(choose_teacher, -delta, delta).to(tl.float32), small_weight, K)
+        residual = (dz - tl.where(choose_teacher, dt, dq)) - increment
+    tl.store(R + row * V + c, residual, c < V)
+    if NORMALIZER:
+        ra = tl.load(QSTATS + row * 4 + 2) - tl.load(QT + row)
+        log_ratio = delta.to(tl.float32) + ra
+        lp = (q - tl.load(QSTATS + row * 4)) - tl.load(QSTATS + row * 4 + 1)
+        gap = _power_gap(log_ratio, K, ETA, LE, LC, COEFF)
+        log_mix = lp + _power_static(log_ratio, 1.0, ETA, LE, LC)
+        deficit = tl.sum(tl.where(c < V, tl.exp(log_mix) * (-libdevice.expm1(-gap)), 0.0), 0)
+        log_target = tl.where(c < V, lp + _power_static(log_ratio, K, ETA, LE, LC), -float("inf"))
+        maximum = tl.max(log_target, 0)
+        log_sum = maximum + tl.log(tl.sum(tl.exp(log_target - maximum), 0))
+        tl.store(NORM + (row * P + part) * 2, deficit)
+        tl.store(NORM + (row * P + part) * 2 + 1, log_sum)
+
+
+def fused_mirror_logits(z, anchor, teacher, dtype, *, spec):
+    """Production split-target path: raw logits in, stable value/VJP out."""
+    from verl.trainer.distillation.numerics import power_gap_coefficients, support_correction
+
     n, v = z.shape
-    parts = triton.cdiv(v, 4096)
-    partial = torch.empty((n, parts), device=z.device, dtype=torch.float32)
-    mu = torch.empty(n, device=z.device, dtype=torch.float32)
-    dz = torch.empty_like(z, dtype=dtype)
-    _bpo_partial_mean[(n, parts)](z, b, log_q, partial, v, parts, 4096)
-    _bpo_mean[(n,)](partial, mu, parts, triton.next_power_of_2(parts))
-    _bpo_gradient[(n, parts)](z, b, log_q, mu, dz, partial, v, parts, 4096)
-    return partial.sum(-1), dz
+    pivot = anchor.argmax(-1)
+    normalizer = spec.objective == "mdpo" or spec.diagnostics
+    need_qt = spec.eta != 1 and (normalizer or spec.kappa != 0)
+    correction = support_correction(teacher, v) if (need_qt or normalizer) else z.new_zeros(n)
+    if need_qt:
+        qt, _, stats = weighted_rows(anchor, difference(anchor, teacher, pivot), dtype, gradient=False)
+        qt = qt + correction
+    else:
+        qt, stats = z.new_empty(n), z.new_empty((n, 4))
+    residual = torch.empty_like(z)
+    parts = triton.cdiv(v, 1024)
+    partial = z.new_empty((n, parts, 2))
+    need_deficit = normalizer and spec.kappa != 1 and spec.eta != 1
+    _split_residual[(n, parts)](
+        z,
+        anchor,
+        teacher,
+        pivot,
+        stats,
+        qt,
+        residual,
+        partial,
+        v,
+        teacher.stride(0),
+        parts,
+        spec.kappa,
+        spec.eta,
+        math.log(spec.eta),
+        math.log1p(-spec.eta) if spec.eta < 1 else 0.0,
+        power_gap_coefficients(spec.kappa, spec.eta),
+        need_deficit,
+        1024,
+        enable_fp_fusion=False,
+    )
+    if normalizer:
+        if spec.eta == 1:
+            log_z = -correction
+        else:
+            near_mass = torch.log1p(spec.eta * torch.expm1(-correction.clamp(max=0.5)))
+            far_mass = torch.logaddexp(correction.new_tensor(math.log1p(-spec.eta)), math.log(spec.eta) - correction)
+            log_mass = torch.where(correction < 0.5, near_mass, far_mass)
+            if spec.kappa == 1:
+                log_z = log_mass
+            else:
+                ratio = partial[:, :, 0].sum(-1) / log_mass.exp()
+                close = log_mass + torch.log1p(-ratio.clamp(max=0.5))
+                log_z = torch.where(ratio < 0.5, close, partial[:, :, 1].logsumexp(-1))
+    del partial
+    value, gradient, _ = weighted_rows(
+        z if spec.objective == "mdpo" else anchor, residual, dtype, variance=spec.objective == "bpo"
+    )
+    if spec.objective == "mdpo":
+        target = value
+        value = value - log_z
+    info = z.new_empty((n, 0))
+    if spec.diagnostics:
+        if spec.objective == "bpo":
+            target, _, _ = weighted_rows(z, residual, dtype, gradient=False)
+        del residual
+        aq, _, _ = weighted_rows(z, difference(z, anchor), dtype, gradient=False)
+        at, _, _ = weighted_rows(z, difference(z, teacher), dtype, gradient=False)
+        info = torch.stack([target, log_z, aq, at + correction], -1)
+    return value, gradient, info
 
 
 @triton.jit
@@ -186,207 +537,3 @@ def fused_log_weights(log_teacher, log_anchor, *, kappa, eta):
         1024,
     )
     return out
-
-
-@triton.jit
-def _mirror_partials(
-    Z,
-    BIAS,
-    LQ,
-    LT,
-    MP,
-    SP,
-    GAP,
-    MB,
-    SB,
-    GQ,
-    GT,
-    QG,
-    BREF,
-    V: tl.constexpr,
-    TS: tl.constexpr,
-    P: tl.constexpr,
-    BPO: tl.constexpr,
-    DIAG: tl.constexpr,
-    B: tl.constexpr,
-):
-    row, part = tl.program_id(0), tl.program_id(1)
-    col = part * B + tl.arange(0, B)
-    valid = col < V
-    ix = row * V + col
-    z = tl.load(Z + ix, valid, 0).to(tl.float32)
-    b = tl.load(BIAS + ix, valid, 0).to(tl.float32)
-    j = row * P + part
-    masked_z = tl.where(valid, z, -float("inf"))
-    mp = tl.max(masked_z, 0)
-    ep = tl.where(valid, tl.exp(z - mp), 0.0)
-    tl.store(MP + j, mp)
-    tl.store(SP + j, tl.sum(ep, 0))
-    if BPO:
-        tl.store(GAP + j, tl.sum(ep * (z - b), 0))
-    else:
-        # Form differences before subtraction: never materialize z-b, whose
-        # large common log-normalizer can dominate near-target gradients.
-        pivot = tl.argmax(masked_z, 0)
-        bref = tl.load(BIAS + row * V + part * B + pivot)
-        centered = (z - mp) - (b - bref)
-        tl.store(BREF + j, bref)
-        tl.store(GAP + j, tl.sum(ep * centered, 0))
-    if DIAG:
-        q = tl.load(LQ + ix, valid, 0)
-        t = tl.load(LT + row * TS + col, valid, 0)
-        mb = tl.max(tl.where(valid, b, -float("inf")), 0)
-        tl.store(MB + j, mb)
-        tl.store(SB + j, tl.sum(tl.where(valid, tl.exp(b - mb), 0.0), 0))
-        if BPO:
-            tl.store(GQ + j, tl.sum(ep * (z - q), 0))
-            tl.store(GT + j, tl.sum(ep * (z - t), 0))
-            eq = tl.where(valid, tl.exp(q), 0.0)
-            tl.store(QG + j, tl.sum(eq * (z - b), 0))
-        else:
-            tl.store(GQ + j, tl.sum(ep * ((z - mp) - q), 0))
-            tl.store(GT + j, tl.sum(ep * ((z - mp) - t), 0))
-
-
-@triton.jit
-def _mirror_reduce(
-    MP,
-    SP,
-    GAP,
-    MB,
-    SB,
-    GQ,
-    GT,
-    QG,
-    BREF,
-    LZ,
-    MU,
-    LOSS,
-    DIAGNOSTICS,
-    MAXZ,
-    BZERO,
-    P: tl.constexpr,
-    BPO: tl.constexpr,
-    DIAG: tl.constexpr,
-    B: tl.constexpr,
-):
-    row = tl.program_id(0)
-    j = tl.arange(0, B)
-    ix = row * P + j
-    mp = tl.load(MP + ix, j < P, -float("inf"))
-    maximum = tl.max(mp, 0)
-    ap = tl.exp(mp - maximum)
-    partial_sp = tl.load(SP + ix, j < P, 0)
-    sp = tl.sum(ap * partial_sp, 0)
-    log_sp = tl.log(sp)
-    gap = tl.load(GAP + ix, j < P, 0)
-    if BPO:
-        mu = tl.sum(ap * gap, 0) / sp
-        lzp = maximum + log_sp
-        raw = mu - lzp
-        tl.store(LZ + row, lzp)
-        tl.store(MU + row, tl.sum(tl.load(QG + ix, j < P, 0), 0))
-    else:
-        pivot_part = tl.argmax(mp, 0)
-        bref = tl.load(BREF + ix, j < P, 0)
-        bzero = tl.sum(tl.where(j == pivot_part, bref, 0), 0)
-        # Translate tile moments into the global-max frame. Mask padded
-        # offsets before multiplication to avoid 0 * -inf.
-        offset = tl.where(j < P, (mp - maximum) - (bref - bzero), 0.0)
-        mu = tl.sum(ap * (gap + partial_sp * offset), 0) / sp
-        raw = (mu - log_sp) - bzero
-        tl.store(LZ + row, log_sp)
-        tl.store(MU + row, mu)
-        tl.store(MAXZ + row, maximum)
-        tl.store(BZERO + row, bzero)
-        tl.store(LOSS + row, raw)
-    if DIAG:
-        mb = tl.load(MB + ix, j < P, -float("inf"))
-        maximum_b = tl.max(mb, 0)
-        sb = tl.sum(tl.exp(mb - maximum_b) * tl.load(SB + ix, j < P, 0), 0)
-        lzb = maximum_b + tl.log(sb)
-        gq = tl.load(GQ + ix, j < P, 0)
-        gt = tl.load(GT + ix, j < P, 0)
-        if BPO:
-            qkl = tl.sum(ap * gq, 0) / sp - lzp
-            tkl = tl.sum(ap * gt, 0) / sp - lzp
-        else:
-            offset = tl.where(j < P, mp - maximum, 0.0)
-            qkl = tl.sum(ap * (gq + partial_sp * offset), 0) / sp - log_sp
-            tkl = tl.sum(ap * (gt + partial_sp * offset), 0) / sp - log_sp
-        tl.store(DIAGNOSTICS + row * 4, raw + lzb)
-        tl.store(DIAGNOSTICS + row * 4 + 1, lzb)
-        tl.store(DIAGNOSTICS + row * 4 + 2, qkl)
-        tl.store(DIAGNOSTICS + row * 4 + 3, tkl)
-
-
-@triton.jit
-def _mirror_gradient(Z, BIAS, LZ, MU, MAXZ, BZERO, DZ, V: tl.constexpr, B: tl.constexpr):
-    row, part = tl.program_id(0), tl.program_id(1)
-    col = part * B + tl.arange(0, B)
-    ix = row * V + col
-    z = tl.load(Z + ix, col < V, 0).to(tl.float32)
-    b = tl.load(BIAS + ix, col < V, 0).to(tl.float32)
-    # LZ is relative to the row maximum, not the absolute log-normalizer.
-    relative_z = z - tl.load(MAXZ + row)
-    centered = relative_z - (b - tl.load(BZERO + row))
-    p = tl.exp(relative_z - tl.load(LZ + row))
-    tl.store(DZ + ix, p * (centered - tl.load(MU + row)), col < V)
-
-
-def fused_mirror_rows(z, b, log_q, log_teacher, dtype, *, objective, diagnostics):
-    """Raw MDPO/BPO and optional KL diagnostics, sharing row statistics.
-
-    No dense p/dZ diagnostic temporaries. Order: target KL, log Z_m, anchor KL,
-    teacher KL. q/T/b are frozen and all returned values are unscaled by eta.
-    """
-    n, v = z.shape
-    diag = torch.empty((n, 4 if diagnostics else 0), device=z.device, dtype=torch.float32)
-    if objective == "bpo" and not diagnostics:
-        rows, dz = fused_bpo_rows(z, b, log_q, dtype)
-        return rows, dz, diag
-    parts = triton.cdiv(v, 4096)
-    # Unused optional statistics share a dummy pointer; constexpr removes access.
-    count = 8 if objective == "bpo" and diagnostics else 7 if diagnostics else 3
-    buffers = [torch.empty((n, parts), device=z.device, dtype=torch.float32) for _ in range(count)]
-    buffers += [buffers[0]] * (8 - count)
-    lz, mu, rows = [torch.empty(n, device=z.device, dtype=torch.float32) for _ in range(3)]
-    dz = torch.empty_like(z, dtype=dtype)
-    bpo = objective == "bpo"
-    bref = buffers[0] if bpo else torch.empty_like(buffers[0])
-    maxz, bzero = (mu, mu) if bpo else (torch.empty_like(mu), torch.empty_like(mu))
-    _mirror_partials[(n, parts)](
-        z,
-        b,
-        log_q,
-        log_teacher,
-        *buffers,
-        bref,
-        v,
-        log_teacher.stride(0) if diagnostics else v,
-        parts,
-        bpo,
-        diagnostics,
-        4096,
-    )
-    _mirror_reduce[(n,)](
-        *buffers,
-        bref,
-        lz,
-        mu,
-        rows,
-        diag,
-        maxz,
-        bzero,
-        parts,
-        bpo,
-        diagnostics,
-        triton.next_power_of_2(parts),
-    )
-    if bpo:
-        partial = buffers[0]
-        _bpo_gradient[(n, parts)](z, b, log_q, mu, dz, partial, v, parts, 4096)
-        rows = partial.sum(-1)
-    else:
-        _mirror_gradient[(n, parts)](z, b, lz, mu, maxz, bzero, dz, v, 4096)
-    return rows, dz, diag

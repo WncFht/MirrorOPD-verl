@@ -58,106 +58,126 @@ def add_product(accumulator, left, right):
 
 
 def dense_rows(hs, ws, ht, wt):
-    lp = project(hs, ws).log_softmax(-1)
-    lt = project(ht.detach(), wt.detach()).log_softmax(-1)
-    return (lp.exp() * (lp - lt)).sum(-1)
+    from verl.trainer.distillation.numerics import kl_rows
+
+    return kl_rows(project(hs, ws), project(ht.detach(), wt.detach()))[0]
 
 
 @torch.no_grad()
-def row_statistics(hs, ws, ht, wt, token_chunk, vocab_chunk):
-    """Return per-row KL, student log-normalizer, and mean logit gap."""
-    n, vocab = hs.shape[0], ws.shape[0]
-    dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
-    kl, log_zp, mean_gap = [torch.empty(n, device=hs.device, dtype=dtype) for _ in range(3)]
+def row_statistics(hs, ws, ht, wt, token_chunk, vocab_chunk, *, cached=False):
+    """Bounded-memory relative statistics; only row/tile arithmetic uses FP64.
+
+    Streaming never allocates a token-by-full-vocabulary cache. Cached/recompute
+    reuse projected logits within the current token block, not across updates.
+    """
+    from verl.trainer.distillation.numerics import expm1_minus_x, log1p_minus_x
+
+    n, vocab = len(hs), len(ws)
+    values = hs.new_empty(n, dtype=torch.float64 if hs.dtype == torch.float64 else torch.float32)
+    statistics = hs.new_empty((n, 7), dtype=torch.float64)
+    width = vocab_chunk or vocab
     for start in range(0, n, token_chunk):
         stop = min(start + token_chunk, n)
         sh, th = hs[start:stop], ht[start:stop]
-        if vocab_chunk == 0:
-            zp, zt = project(sh, ws), project(th, wt)
-            lp, lt = zp.log_softmax(-1), zt.log_softmax(-1)
-            p = lp.exp()
-            kl[start:stop] = (p * (lp - lt)).sum(-1)
-            log_zp[start:stop] = zp.logsumexp(-1)
-            mean_gap[start:stop] = (p * (zp - zt)).sum(-1)
-            del zp, zt, lp, lt, p
-        else:
-            mp, mt = [torch.full((stop - start,), -torch.inf, device=hs.device, dtype=dtype) for _ in range(2)]
-            sp, st, gap = [torch.zeros_like(mp) for _ in range(3)]
-            for v in range(0, vocab, vocab_chunk):
-                zp = project(sh, ws[v : v + vocab_chunk])
-                zt = project(th, wt[v : v + vocab_chunk])
-                np, nt = torch.maximum(mp, zp.max(-1).values), torch.maximum(mt, zt.max(-1).values)
-                ap, at = (mp - np).exp(), (mt - nt).exp()
-                ep, et = (zp - np[:, None]).exp(), (zt - nt[:, None]).exp()
-                sp, st = ap * sp + ep.sum(-1), at * st + et.sum(-1)
-                gap = ap * gap + (ep * (zp - zt)).sum(-1)
-                mp, mt = np, nt
-                del zp, zt, ep, et
-            log_zp[start:stop] = mp + sp.log()
-            mean_gap[start:stop] = gap / sp
-            kl[start:stop] = gap / sp - log_zp[start:stop] + mt + st.log()
-    return kl, log_zp, mean_gap
+        zp_cache = zt_cache = None
+        if cached or not vocab_chunk:
+            zp_cache = hs.new_empty((stop - start, vocab), dtype=values.dtype)
+            zt_cache = torch.empty_like(zp_cache)
+            for v in range(0, vocab, width):
+                end = min(v + width, vocab)
+                zp_cache[:, v:end] = project(sh, ws[v:end])
+                zt_cache[:, v:end] = project(th, wt[v:end])
+
+        def blocks(sh=sh, th=th, zp_cache=zp_cache, zt_cache=zt_cache):
+            for v in range(0, vocab, width):
+                end = min(v + width, vocab)
+                zp = project(sh, ws[v:end]) if zp_cache is None else zp_cache[:, v:end]
+                zt = project(th, wt[v:end]) if zt_cache is None else zt_cache[:, v:end]
+                yield v, zp.double(), zt.double()
+
+        maximum = sh.new_full((len(sh),), -torch.inf, dtype=torch.float64)
+        pivot = sh.new_zeros(len(sh), dtype=torch.float64)
+        teacher_pivot = torch.zeros_like(maximum)
+        lzp, lzt = maximum.clone(), maximum.clone()
+        for v, zp, zt in blocks():
+            m, i = zp.max(-1)
+            take = m > maximum
+            pivot = torch.where(take, i + v, pivot)
+            teacher_pivot = torch.where(take, zt.gather(-1, i[:, None]).squeeze(-1), teacher_pivot)
+            maximum = torch.maximum(maximum, m)
+            lzp = torch.logaddexp(lzp, zp.logsumexp(-1))
+            lzt = torch.logaddexp(lzt, zt.logsumexp(-1))
+        mass, moment = torch.zeros_like(maximum), torch.zeros_like(maximum)
+        for _, zp, zt in blocks():
+            w = (zp - lzp[:, None]).exp()
+            residual = (zp - maximum[:, None]) - (zt - teacher_pivot[:, None])
+            mass += w.sum(-1)
+            moment += (w * residual).sum(-1)
+        mu = moment / mass
+        a, b, other_grad = [torch.zeros_like(maximum) for _ in range(3)]
+        exp_max = maximum.new_full(maximum.shape, -torch.inf)
+        for v, zp, zt in blocks():
+            lp = zp - lzp[:, None]
+            w = lp.exp()
+            residual = (zp - maximum[:, None]) - (zt - teacher_pivot[:, None])
+            x = -(residual - mu[:, None])
+            remainder = torch.where(x.abs() < 0.125, w * expm1_minus_x(x), (lp + x).clamp(max=40).exp() - w * (1 + x))
+            a += (w * x).sum(-1)
+            b += remainder.sum(-1)
+            exp_max = torch.maximum(exp_max, (lp + x).amax(-1))
+            columns = torch.arange(v, v + zp.shape[1], device=hs.device)
+            other_grad += torch.where(columns[None, :] == pivot[:, None], 0.0, -w * x / mass[:, None]).sum(-1)
+        a, b = a / mass, b / mass
+        sa, sb = a.clamp(-0.5, 0.5), b.clamp(-0.5, 0.5)
+        close = torch.log1p(sb / (1 + sa)) + log1p_minus_x(sa)
+        far = (lzt - teacher_pivot) - (lzp - maximum) + mu
+        value = torch.where((exp_max < 40) & (a.abs() < 0.5) & (b.abs() < 0.5), close, far)
+        values[start:stop] = value
+        statistics[start:stop] = torch.stack([maximum, teacher_pivot, lzp, mu, mass, pivot, -other_grad], -1)
+    return values, statistics
 
 
 class RecomputedKL(torch.autograd.Function):
-    """First-order custom VJP; teacher frozen, head and hidden both trainable."""
+    """Recompute native projections; stable row statistics do not retain a graph."""
 
     @staticmethod
     def forward(ctx, hs, ws, ht, wt, token_chunk, vocab_chunk):
-        kl, log_zp, mean_gap = row_statistics(hs, ws, ht, wt, token_chunk, vocab_chunk)
-        ctx.save_for_backward(hs, ws, ht, wt, log_zp, mean_gap)
+        kl, stats = row_statistics(hs, ws, ht, wt, token_chunk, vocab_chunk)
+        ctx.save_for_backward(hs, ws, ht, wt, stats)
         ctx.token_chunk, ctx.vocab_chunk = token_chunk, vocab_chunk or ws.shape[0]
         return kl
 
     @staticmethod
     @torch.autograd.function.once_differentiable
     def backward(ctx, upstream):
-        hs, ws, ht, wt, log_zp, mean_gap = ctx.saved_tensors
-        dtype = log_zp.dtype
+        hs, ws, ht, wt, statistics = ctx.saved_tensors
+        dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
         dh = torch.zeros(hs.shape, device=hs.device, dtype=dtype)
         dw = torch.zeros(ws.shape, device=ws.device, dtype=dtype)
         for start in range(0, len(hs), ctx.token_chunk):
             stop = min(start + ctx.token_chunk, len(hs))
+            maximum, reference, lzp, mu, mass, pivot, pivot_grad = statistics[start:stop].unbind(-1)
             for v in range(0, len(ws), ctx.vocab_chunk):
                 end = min(v + ctx.vocab_chunk, len(ws))
-                zp = project(hs[start:stop], ws[v:end])
-                zt = project(ht[start:stop], wt[v:end])
-                p = (zp - log_zp[start:stop, None]).exp()
-                dz = p * (zp - zt - mean_gap[start:stop, None]) * upstream[start:stop, None]
-                # Match low-precision GEMM inputs used for student gradient products.
-                dz = dz.to(hs.dtype)
+                zp = project(hs[start:stop], ws[v:end]).double()
+                zt = project(ht[start:stop], wt[v:end]).double()
+                residual = (zp - maximum[:, None]) - (zt - reference[:, None])
+                g = (zp - lzp[:, None]).exp() * (residual - mu[:, None]) / mass[:, None]
+                columns = torch.arange(v, end, device=hs.device)
+                g = torch.where(columns[None, :] == pivot[:, None], pivot_grad[:, None], g)
+                dz = (g * upstream[start:stop, None]).to(hs.dtype)
                 add_product(dh[start:stop], dz, ws[v:end])
                 add_product(dw[v:end], dz.T, hs[start:stop])
-                del zp, zt, p, dz
         return dh.to(hs.dtype), dw.to(ws.dtype), None, None, None, None
 
 
 class CachedKL(RecomputedKL):
-    """Two-dimensional projection, current-token-block logits cache, backward recomputation."""
+    """Cache only the current token block, preserving vocab-chunk GEMM shapes."""
 
     @staticmethod
     def forward(ctx, hs, ws, ht, wt, token_chunk, vocab_chunk):
-        dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
-        n, vocab = len(hs), len(ws)
-        kl, log_zp, mean_gap = [torch.empty(n, device=hs.device, dtype=dtype) for _ in range(3)]
-        cache_p, cache_t = [torch.empty((min(token_chunk, n), vocab), device=hs.device, dtype=dtype) for _ in range(2)]
-        for start in range(0, n, token_chunk):
-            stop = min(start + token_chunk, n)
-            zp, zt = cache_p[: stop - start], cache_t[: stop - start]
-            for v in range(0, vocab, vocab_chunk):
-                end = min(v + vocab_chunk, vocab)
-                zp[:, v:end] = project(hs[start:stop], ws[v:end])
-                zt[:, v:end] = project(ht[start:stop], wt[v:end])
-            log_zp[start:stop] = zp.logsumexp(-1)
-            log_zt = zt.logsumexp(-1)
-            gap = torch.zeros(stop - start, device=hs.device, dtype=dtype)
-            for v in range(0, vocab, vocab_chunk):
-                end = min(v + vocab_chunk, vocab)
-                p = (zp[:, v:end] - log_zp[start:stop, None]).exp()
-                gap += (p * (zp[:, v:end] - zt[:, v:end])).sum(-1)
-            mean_gap[start:stop] = gap
-            kl[start:stop] = gap - log_zp[start:stop] + log_zt
-        ctx.save_for_backward(hs, ws, ht, wt, log_zp, mean_gap)
+        kl, stats = row_statistics(hs, ws, ht, wt, token_chunk, vocab_chunk, cached=True)
+        ctx.save_for_backward(hs, ws, ht, wt, stats)
         ctx.token_chunk, ctx.vocab_chunk = token_chunk, vocab_chunk
         return kl
 
@@ -168,19 +188,11 @@ def precompute_kl_rows(hs, ws, ht, wt):
         zp = project(hs, ws)
     with full_kl_range("teacher_projection"):
         zt = project(ht, wt)
+    from verl.trainer.distillation.numerics import kl_rows
+
     with full_kl_range("normalization_and_kl"):
-        lp, lt = zp.log_softmax(-1), zt.log_softmax(-1)
-        del zp, zt
-        p = lp.exp()
-        lp.sub_(lt)
-        del lt
-        kl = (p * lp).sum(-1)
-    with full_kl_range("grad_logits"):
-        lp.sub_(kl[:, None]).mul_(p)
-        # Precomputed VJPs run before GradScaler supplies its upstream scale.
-        # FP16 cannot represent many of these unscaled small gradients.
-        dz = lp if hs.dtype == torch.float16 else lp.to(hs.dtype)
-    return kl, dz
+        kl, dz = kl_rows(zp, zt)
+    return kl, dz if hs.dtype == torch.float16 else dz.to(hs.dtype)
 
 
 def termination_equivalent_kl_rows(hs, ws, ht, wt, *, termination_token_ids):
@@ -190,18 +202,27 @@ def termination_equivalent_kl_rows(hs, ws, ht, wt, *, termination_token_ids):
     logit VJP is p_i * (class_log_ratio - coarsened_KL). No stopping mass is
     dropped or reassigned to a preferred token ID.
     """
-    lp = project(hs, ws).log_softmax(-1)
-    lt = project(ht, wt).log_softmax(-1)
-    ids = termination_token_ids
-    stop_gap = lp[:, ids].logsumexp(-1) - lt[:, ids].logsumexp(-1)
-    p = lp.exp()
-    lp.sub_(lt)
-    del lt
-    raw_kl = (p * lp).sum(-1)
-    lp[:, ids] = stop_gap[:, None]
-    coarse_kl = (p * lp).sum(-1)
-    lp.sub_(coarse_kl[:, None]).mul_(p)
-    return coarse_kl, lp if hs.dtype == torch.float16 else lp.to(hs.dtype), raw_kl
+    from verl.trainer.distillation.numerics import kl_rows, log_softmax
+
+    zp, zt = project(hs, ws), project(ht, wt)
+    raw_kl, _ = kl_rows(zp, zt)
+    ids = tuple(termination_token_ids)
+    keep = torch.ones(len(ws), dtype=torch.bool, device=hs.device)
+    keep[list(ids)] = False
+    # Only this optional coarsened-action path promotes its row algebra. The
+    # aggregated class logit must retain small within-class normalizer changes.
+    student, teacher = zp.double(), zt.double()
+    zs = torch.cat([student[:, keep], student[:, ids].logsumexp(-1, keepdim=True)], -1)
+    ts = torch.cat([teacher[:, keep], teacher[:, ids].logsumexp(-1, keepdim=True)], -1)
+    coarse_kl, gc = kl_rows(zs, ts)
+    gradient = torch.empty_like(student)
+    gradient[:, keep] = gc[:, :-1]
+    gradient[:, ids] = gc[:, -1:] * log_softmax(student[:, ids]).exp()
+    pivot = zp.argmax(-1, keepdim=True)
+    nonpivot = gradient.scatter(-1, pivot, 0.0)
+    gradient = nonpivot.scatter(-1, pivot, -nonpivot.sum(-1, keepdim=True))
+    dtype = torch.float32 if hs.dtype == torch.float16 else hs.dtype
+    return coarse_kl.to(zp.dtype), gradient.to(dtype), raw_kl
 
 
 class PrecomputedKL(torch.autograd.Function):
@@ -376,35 +397,21 @@ _MIRROR_DIAGNOSTICS = ("target_kl", "target_log_z", "anchor_kl", "teacher_kl")
 
 
 def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False):
-    from verl.trainer.distillation.objectives import full_vocab_rows
-    from verl.trainer.distillation.targets import build_log_weights
-
-    with torch.no_grad():
-        # Normalize the FULL teacher before restricting to the student's support.
-        with full_kl_range("teacher_projection_and_normalization"):
-            lt = project(ht, wt).log_softmax(-1)[:, : len(ws)]
-        with full_kl_range("anchor_projection_and_normalization"):
-            lq = project(hq, wq).log_softmax(-1)
-        with full_kl_range("mirror_target"):
-            if fused:
-                from verl.trainer.distillation.full_vocab_triton import fused_log_weights
-
-                b = fused_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
-            else:
-                b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
-        if not spec.diagnostics:
-            lt = None
-            if spec.objective == "mdpo":
-                lq = None
+    with full_kl_range("teacher_projection_and_normalization"):
+        zt = project(ht, wt)
+    with full_kl_range("anchor_projection_and_normalization"):
+        zq = project(hq, wq)
     with full_kl_range("student_projection"):
         z = project(hs, ws)
     with full_kl_range("mirror_rows"):
         if fused:
-            from verl.trainer.distillation.full_vocab_triton import fused_mirror_rows
+            from verl.trainer.distillation.full_vocab_triton import fused_mirror_logits
 
-            return fused_mirror_rows(z, b, lq, lt, hs.dtype, objective=spec.objective, diagnostics=spec.diagnostics)
-        rows, dz, info = full_vocab_rows(
-            z, b, lq, objective=spec.objective, diagnostics=spec.diagnostics, log_teacher=lt
+            return fused_mirror_logits(z, zq, zt, hs.dtype, spec=spec)
+        from verl.trainer.distillation.numerics import mirror_logits_rows
+
+        rows, dz, info = mirror_logits_rows(
+            z, zq, zt, objective=spec.objective, kappa=spec.kappa, eta=spec.eta, diagnostics=spec.diagnostics
         )
         if hs.dtype != torch.float16:
             dz = dz.to(hs.dtype)
