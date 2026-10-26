@@ -68,3 +68,27 @@ def test_fp16_precompute_preserves_small_vjp_until_upstream_scaling(eta, backend
     for gradient, wanted in zip(gradients, reference, strict=True):
         relative = (gradient.double() / scale - wanted).norm() / wanted.norm()
         assert relative < 0.02, relative.item()
+
+
+def test_fp16_termination_vjp_keeps_small_gradients_before_amp_scale():
+    from verl.trainer.distillation.full_vocab import full_reverse_kl_result
+
+    torch.manual_seed(94)
+    hs, ws = [
+        (torch.randn(*shape, device="cuda", dtype=torch.float16) * 0.2).requires_grad_()
+        for shape in [(5, 16), (8193, 16)]
+    ]
+    ht = hs.detach().clone()
+    wt = ws.detach() + torch.randn_like(ws) * 2e-4
+    rh, rw = [x.detach().double().requires_grad_() for x in (hs, ws)]
+    lp, lt = (rh @ rw.T).log_softmax(-1), (ht.double() @ wt.double().T).log_softmax(-1)
+    gap = lp - lt
+    gap[:, [2, 3]] = (lp[:, [2, 3]].logsumexp(-1) - lt[:, [2, 3]].logsumexp(-1))[:, None]
+    expected = (lp.exp() * gap).sum()
+    reference = torch.autograd.grad(expected, (rh, rw))
+    actual = full_reverse_kl_result(hs, ws, ht, wt, backend="precompute", token_chunk=2, termination_token_ids=(2, 3))
+    scale = 1024.0
+    gradients = torch.autograd.grad(actual.loss_sum * scale, (hs, ws))
+    for gradient, wanted in zip(gradients, reference, strict=True):
+        relative = (gradient.double() / scale - wanted).norm() / wanted.norm()
+        assert relative < 0.02, relative.item()
