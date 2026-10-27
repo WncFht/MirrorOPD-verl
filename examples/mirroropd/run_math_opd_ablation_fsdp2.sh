@@ -35,6 +35,13 @@
 # Teacher FSDP token budget 沿用公共默认 32768；支持 E48-valid-student / E48-valid-teacher。
 # E49：沿用 E48 模型、预算和验证；改为 full-vocab Forward KL，precompute_fused，teacher 支持显式条件化到 student 输出行。
 #
+# 精度对照：复用 E44/E45 的模型、256 outer / reuse16 / save128，教师与 rollout 保持原配置。
+# Full-KL  MDPO  Actor/anchor precision
+# E44      E45   BF16 baseline
+# E50      E51   FP16 + GradScaler
+# E52      E53   BF16 GEMM / FP32 intermediates
+# --precision bf16|fp16|bf16_fp32 可覆盖预设；fp32 是较慢的 packed math attention 参考。
+#
 # 训练预算：Eval/Save 均按 outer step；Updates*=默认 batch==mini-batch 时的更新尝试数。
 # Presets          Reuse  Outer  Updates*  LR      Eval/Save  Initial val
 # E1-E6            4      32     128       shared  32/32      no
@@ -46,7 +53,7 @@
 # E18              64     64     4096      1e-6    8/16       no
 # E19              32     128    4096      1e-6    16/32      no
 # E20              16     256    4096      1e-6    32/64      no
-# E44-E47          16     256    4096      1e-6    32/128     no
+# E44-E47,E50-E53  16     256    4096      1e-6    32/128     no
 # E48-E49          16     256    4096      1e-6    32/64      yes
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
