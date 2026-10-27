@@ -24,7 +24,7 @@ def plan(argv, env=None):
 
 
 def test_catalog_covers_every_number_without_alias_duplication():
-    assert set(planner.PRESETS) | set(planner.ALIASES) == {f"E{i}" for i in range(1, 50)}
+    assert set(planner.PRESETS) | set(planner.ALIASES) == {f"E{i}" for i in range(1, 55)}
     assert set(planner.PRESETS).isdisjoint(planner.ALIASES)
     assert len(planner.MODEL_MATRIX) == 6
     with pytest.raises(FrozenInstanceError):
@@ -137,7 +137,7 @@ def test_listing_is_derived_from_catalog_and_never_launches(monkeypatch, capsys)
     "args",
     [
         ["E1-valid-student"],
-        ["E50"],
+        ["E99"],
         ["E13", "--method", "bpo", "--estimator", "sampled"],
         ["E13-valid-teacher", "--eta", ".3"],
         ["E13", "--method", "sampled", "--eta", ".3"],
@@ -194,3 +194,17 @@ def test_registered_defaults_preserve_override_precedence_and_endpoint_switch():
     endpoint = plan(["E45", "--method", "full_kl"])
     assert endpoint.environment["EXPERIMENT_METHOD"] == "full_kl"
     assert "MIRROR_KAPPA" not in endpoint.environment and "MIRROR_ETA" not in endpoint.environment
+
+
+def test_e54_moe_teacher_keeps_e41_training_protocol():
+    from dataclasses import replace
+
+    assert planner.PRESETS["E54"] == replace(
+        planner.PRESETS["E41"],
+        pair=replace(planner.PRESETS["E41"].pair, teacher="Qwen3-30B-A3B-Instruct-2507"),
+    )
+    result = plan(["E54"])
+    assert result.environment["TEACHER_MODEL"].endswith("/Qwen3-30B-A3B-Instruct-2507")
+    assert result.environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[151643,151645]"
+    assert not planner.PRESETS["E54"].budget.initial_validation
+    assert "trainer.total_training_steps=100" in result.arguments

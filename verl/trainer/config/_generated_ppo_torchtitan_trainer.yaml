@@ -854,6 +854,7 @@ distillation:
       vocab_chunk_size: 8192
       async_write: false
       prefetch: false
+      forward_teacher_support: equal
       termination_token_ids: []
     topk: 32
     use_task_rewards: true

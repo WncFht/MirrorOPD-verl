@@ -36,6 +36,7 @@ actor_rollout_ref:
       fsdp_size: -1
       forward_prefetch: false
       model_dtype: fp32
+      forward_precision: null
       use_orig_params: false
       seed: 42
       full_determinism: false
@@ -245,6 +246,7 @@ actor_rollout_ref:
       fsdp_size: -1
       forward_prefetch: false
       model_dtype: fp32
+      forward_precision: null
       use_orig_params: false
       seed: 42
       full_determinism: false
@@ -573,6 +575,7 @@ critic:
     fsdp_size: -1
     forward_prefetch: false
     model_dtype: fp32
+    forward_precision: null
     use_orig_params: false
     seed: 42
     full_determinism: false
@@ -920,6 +923,7 @@ distillation:
       vocab_chunk_size: 8192
       async_write: false
       prefetch: false
+      forward_teacher_support: equal
       termination_token_ids: []
     topk: 32
     use_task_rewards: true
