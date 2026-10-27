@@ -90,12 +90,15 @@ def make_worker(path, world, teacher=False, precision="bfloat16", attention="fla
     return w
 
 
-def reference(hs, ws, ht, wt, *, spec, hq, wq, **kwargs):
+def reference(hs, ws, ht, wt, *, spec, hq=None, wq=None, **kwargs):
     zp = kernels.project(hs, ws).double()
     zt = kernels.project(ht, wt).double()
-    zq = kernels.project(hq, wq).double()
     lp = zp.log_softmax(-1)
     lt = zt.log_softmax(-1)[:, : len(ws)]
+    if spec.teacher_only_kl:
+        rows = (lp.exp() * (lp - lt)).sum(-1)
+        return kernels.FullVocabObjectiveResult(rows.sum(), rows, {})
+    zq = kernels.project(hq, wq).double()
     lq = zq.log_softmax(-1)
     b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
     p = lp.exp()
