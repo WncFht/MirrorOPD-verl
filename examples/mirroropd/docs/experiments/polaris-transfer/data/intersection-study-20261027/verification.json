@@ -1,0 +1,234 @@
+{
+  "prompt_split_disjoint": true,
+  "normalized_prompts_disjoint": true,
+  "reference_panels_complete": true,
+  "fresh_evaluation_unrestricted": true,
+  "max_probability_partition_error": 1.5116529539227486e-07,
+  "main_training": [
+    {
+      "arm": "justrl-student-k16",
+      "updates": 64,
+      "prompts": 128,
+      "new_tokens": 131072,
+      "training_token_visits": 2097152
+    },
+    {
+      "arm": "polaris-student-k16",
+      "updates": 64,
+      "prompts": 128,
+      "new_tokens": 131072,
+      "training_token_visits": 2097152
+    },
+    {
+      "arm": "polaris-teacher-k16",
+      "updates": 64,
+      "prompts": 128,
+      "new_tokens": 131072,
+      "training_token_visits": 2097152
+    },
+    {
+      "arm": "polaris-intersection-k16",
+      "updates": 64,
+      "prompts": 128,
+      "new_tokens": 130744,
+      "training_token_visits": 2091904
+    },
+    {
+      "arm": "polaris-topk-k16",
+      "updates": 64,
+      "prompts": 128,
+      "new_tokens": 131072,
+      "training_token_visits": 2097152
+    }
+  ],
+  "selection_updates": 48,
+  "total_updates": 368,
+  "selection_equal_position_budget": true,
+  "decomposition_identity": true,
+  "task_panels": [
+    {
+      "arm": "initial",
+      "responses": 32
+    },
+    {
+      "arm": "justrl-student-k16",
+      "responses": 32
+    },
+    {
+      "arm": "polaris-student-k16",
+      "responses": 32
+    },
+    {
+      "arm": "polaris-teacher-k16",
+      "responses": 32
+    },
+    {
+      "arm": "polaris-intersection-k16",
+      "responses": 32
+    },
+    {
+      "arm": "polaris-topk-k16",
+      "responses": 32
+    }
+  ],
+  "smoke": {
+    "metric_partitions": true,
+    "identity": true,
+    "decoding": {
+      "student": [
+        {
+          "tokens": 16,
+          "categories": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "rejected": 0.0
+        },
+        {
+          "tokens": 16,
+          "categories": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "rejected": 0.0
+        }
+      ],
+      "topk": [
+        {
+          "tokens": 16,
+          "categories": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "rejected": 0.0
+        },
+        {
+          "tokens": 16,
+          "categories": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "rejected": 0.0
+        }
+      ],
+      "intersection": [
+        {
+          "tokens": 16,
+          "categories": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "rejected": 0.0
+        },
+        {
+          "tokens": 16,
+          "categories": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "rejected": 0.0
+        }
+      ]
+    },
+    "peak_gib": 25.483652591705322
+  },
+  "divergence_reference_check": {
+    "js_max_abs_error": 5.960464477539063e-08,
+    "tv_max_abs_error": 1.1920928955078125e-07
+  },
+  "document_checks": {
+    "pages": 2,
+    "local_links": 5,
+    "symbols": 0,
+    "python_examples": 0
+  },
+  "figure_audit": {
+    "fixed-and-fresh": [],
+    "method-contrasts": []
+  },
+  "script_syntax_valid": true
+}

@@ -39,10 +39,14 @@ class FullVocabConfig(BaseConfig):
     vocab_chunk_size: int = 8192
     async_write: bool = False
     prefetch: bool = False
+    # Equal is strict. Student explicitly conditions a wider teacher on student rows.
+    forward_teacher_support: str = "equal"
     # Explicit equivalence class of tokens that all terminate this single-turn rollout.
     termination_token_ids: list[int] = field(default_factory=list)
 
     def __post_init__(self):
+        if self.forward_teacher_support not in ("equal", "student"):
+            raise ValueError("forward_teacher_support must be equal or student")
         if self.backend not in ("dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"):
             raise ValueError(f"Unsupported full-vocab backend: {self.backend}")
         if any(type(x) is not int or x <= 0 for x in (self.token_chunk_size, self.vocab_chunk_size)):
@@ -168,13 +172,20 @@ class DistillationLossConfig(BaseConfig):
             ):
                 raise ValueError("mirror full_vocab supports dense/precompute/precompute_fused")
             return
-        if self.loss_mode == "full_reverse_kl":
+        if self.loss_mode in ("full_reverse_kl", "full_forward_kl"):
             if self.use_policy_gradient or self.use_task_rewards or self.policy_loss_mode != "vanilla":
-                raise ValueError("full_reverse_kl requires direct loss, no task rewards and no sampled PG mode")
+                raise ValueError(f"{self.loss_mode} requires direct loss, no task rewards and no sampled PG mode")
             if self.loss_max_clamp is not None or self.log_prob_min_clamp is not None:
-                raise ValueError("full_reverse_kl requires unclamped loss and log probabilities")
+                raise ValueError(f"{self.loss_mode} requires unclamped loss and log probabilities")
             if self.advantage_source != "current":
-                raise ValueError("full_reverse_kl evaluates the current student distribution")
+                raise ValueError(f"{self.loss_mode} evaluates the current student distribution")
+            if self.loss_mode == "full_forward_kl" and self.full_vocab.backend not in (
+                "dense",
+                "recompute",
+                "precompute",
+                "precompute_fused",
+            ):
+                raise ValueError("full_forward_kl supports dense/recompute/precompute/precompute_fused")
 
         if self.policy_loss_mode not in ("vanilla", "token_ppo", "token_is", "reinforce"):
             raise ValueError(f"Unsupported distillation policy_loss_mode: {self.policy_loss_mode}")

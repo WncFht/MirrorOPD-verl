@@ -24,7 +24,7 @@ def plan(argv, env=None):
 
 
 def test_catalog_covers_every_number_without_alias_duplication():
-    assert set(planner.PRESETS) | set(planner.ALIASES) == {f"E{i}" for i in range(1, 49)}
+    assert set(planner.PRESETS) | set(planner.ALIASES) == {f"E{i}" for i in range(1, 50)}
     assert set(planner.PRESETS).isdisjoint(planner.ALIASES)
     assert len(planner.MODEL_MATRIX) == 6
     with pytest.raises(FrozenInstanceError):
@@ -137,7 +137,7 @@ def test_listing_is_derived_from_catalog_and_never_launches(monkeypatch, capsys)
     "args",
     [
         ["E1-valid-student"],
-        ["E49"],
+        ["E50"],
         ["E13", "--method", "bpo", "--estimator", "sampled"],
         ["E13-valid-teacher", "--eta", ".3"],
         ["E13", "--method", "sampled", "--eta", ".3"],

@@ -1,0 +1,17 @@
+{
+  "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/intersection-study-20261027/checkpoints/polaris-student-k16",
+  "teacher": "polaris",
+  "direction": "reverse",
+  "train_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "steps": 16,
+  "lr": 1e-06,
+  "clip": 1,
+  "optimizer": "fresh GPU AdamW FP32",
+  "target": "teacher conditioned on student output support",
+  "forward_context": "fixed complete frozen reference for train and eval; loss only early selected states"
+}

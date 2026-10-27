@@ -1,0 +1,107 @@
+[
+  {
+    "arm": "justrl-student-k16",
+    "old_model_old_states": 115.22352197737493,
+    "old_model_new_states": 103.9815576100122,
+    "new_model_old_states": 31.326991252180036,
+    "new_model_new_states": 31.44310872502157,
+    "parameter_gain_on_old_states": 83.89653072519489,
+    "visitation_cost_at_new_model": 0.11611747284153362,
+    "net_gain": 83.78041325235336,
+    "offset_fraction": 0.0013840557152700295,
+    "parameter_gain_ci": [
+      76.95450461412493,
+      90.2773756260343
+    ],
+    "visitation_cost_ci": [
+      -1.5885645687678909,
+      1.931717921711495
+    ],
+    "old_diagonal_scoring_minus_decode": 0.019206374595540865,
+    "new_diagonal_scoring_minus_decode": 0.005924018691271016
+  },
+  {
+    "arm": "polaris-student-k16",
+    "old_model_old_states": 232.20491090212943,
+    "old_model_new_states": 271.48576608811794,
+    "new_model_old_states": 185.94414615070852,
+    "new_model_new_states": 195.3973671985991,
+    "parameter_gain_on_old_states": 46.2607647514209,
+    "visitation_cost_at_new_model": 9.453221047890608,
+    "net_gain": 36.80754370353029,
+    "offset_fraction": 0.20434640669446028,
+    "parameter_gain_ci": [
+      39.00909901083316,
+      53.582307679724394
+    ],
+    "visitation_cost_ci": [
+      -2.497746536557402,
+      22.16892079651794
+    ],
+    "old_diagonal_scoring_minus_decode": -0.004769774330839027,
+    "new_diagonal_scoring_minus_decode": -0.016766826974617288
+  },
+  {
+    "arm": "polaris-teacher-k16",
+    "old_model_old_states": 232.20491090212943,
+    "old_model_new_states": 279.22144483118626,
+    "new_model_old_states": 214.89423267484676,
+    "new_model_new_states": 205.93237749769094,
+    "parameter_gain_on_old_states": 17.31067822728266,
+    "visitation_cost_at_new_model": -8.961855177155826,
+    "net_gain": 26.272533404438487,
+    "offset_fraction": -0.5177067622360058,
+    "parameter_gain_ci": [
+      8.053247435801474,
+      26.868271037874948
+    ],
+    "visitation_cost_ci": [
+      -24.43451776802872,
+      5.490716785082171
+    ],
+    "old_diagonal_scoring_minus_decode": -0.004769774330839027,
+    "new_diagonal_scoring_minus_decode": -0.05233003662226565
+  },
+  {
+    "arm": "polaris-intersection-k16",
+    "old_model_old_states": 232.20491090212943,
+    "old_model_new_states": 264.3423047589198,
+    "new_model_old_states": 186.88996762798533,
+    "new_model_new_states": 186.5400505555466,
+    "parameter_gain_on_old_states": 45.3149432741441,
+    "visitation_cost_at_new_model": -0.3499170724387137,
+    "net_gain": 45.66486034658281,
+    "offset_fraction": -0.007721891437043245,
+    "parameter_gain_ci": [
+      37.881196262512994,
+      52.77589438212965
+    ],
+    "visitation_cost_ci": [
+      -12.484168409277768,
+      11.442629781430437
+    ],
+    "old_diagonal_scoring_minus_decode": -0.004769774330839027,
+    "new_diagonal_scoring_minus_decode": 0.12858348019869936
+  },
+  {
+    "arm": "polaris-topk-k16",
+    "old_model_old_states": 232.20491090212943,
+    "old_model_new_states": 260.2827361876762,
+    "new_model_old_states": 186.7335985739288,
+    "new_model_new_states": 188.41013797488094,
+    "parameter_gain_on_old_states": 45.47131232820064,
+    "visitation_cost_at_new_model": 1.6765394009521701,
+    "net_gain": 43.79477292724847,
+    "offset_fraction": 0.03687026644076875,
+    "parameter_gain_ci": [
+      37.986576331550886,
+      53.04853185147424
+    ],
+    "visitation_cost_ci": [
+      -10.13417134889789,
+      14.61917829873093
+    ],
+    "old_diagonal_scoring_minus_decode": -0.004769774330839027,
+    "new_diagonal_scoring_minus_decode": -0.21471825871586248
+  }
+]

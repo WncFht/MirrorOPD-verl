@@ -1,0 +1,96 @@
+{
+  "JustRL-DeepSeek-1.5B": {
+    "means": {
+      "kl": 0.08111228268701741,
+      "student_entropy": 0.3555584009663586,
+      "teacher_entropy": 0.34426088924683923,
+      "extra_mass": 0.0,
+      "support_floor": 0.0,
+      "student_next_logp": -0.22239450133255148,
+      "teacher_next_logp": -0.3058592911014632,
+      "top1_agree": 0.9243421052631579,
+      "student_stop": 2.5328858504466667e-08,
+      "teacher_stop": 6.4149418999035255e-09,
+      "grad_norm": 0.09876021893811307,
+      "tail_grad_abs_fraction": 0.008272945032929758,
+      "tail_student_mass": 0.0006007098209603966
+    },
+    "count": 304,
+    "max_support_floor": 0.0,
+    "largest_31_positions_kl_fraction": 0.7097596360080141,
+    "top1_agreement_positions_kl_fraction": 0.5888117668507304,
+    "temperature_counterfactuals": [
+      {
+        "teacher_temperature": 1.0,
+        "mean_kl": 0.08111228268701741,
+        "mean_teacher_entropy": 0.3442608862338244,
+        "pooled_tail32_abs_logit_gradient_fraction": 0.0034167229918233935
+      },
+      {
+        "teacher_temperature": 1.25,
+        "mean_kl": 0.07323725748512872,
+        "mean_teacher_entropy": 0.4555330745878707,
+        "pooled_tail32_abs_logit_gradient_fraction": 0.005069008030764837
+      },
+      {
+        "teacher_temperature": 1.5,
+        "mean_kl": 0.09103890451616231,
+        "mean_teacher_entropy": 0.6364458433240663,
+        "pooled_tail32_abs_logit_gradient_fraction": 0.009000055064327994
+      },
+      {
+        "teacher_temperature": 2.0,
+        "mean_kl": 0.2586594070148988,
+        "mean_teacher_entropy": 1.9014024871652702,
+        "pooled_tail32_abs_logit_gradient_fraction": 0.013303961318992629
+      }
+    ]
+  },
+  "Polaris-7B-Preview": {
+    "means": {
+      "kl": 0.27770796775436485,
+      "student_entropy": 0.3555584009663586,
+      "teacher_entropy": 0.2308353198721158,
+      "extra_mass": 2.0665013295974998e-10,
+      "support_floor": 2.0665013295974998e-10,
+      "student_next_logp": -0.22239450133255148,
+      "teacher_next_logp": -0.3089945627172457,
+      "top1_agree": 0.9046052631578947,
+      "student_stop": 2.5328858504466667e-08,
+      "teacher_stop": 6.594763917717256e-11,
+      "grad_norm": 0.22489899899892532,
+      "tail_grad_abs_fraction": 0.01067075932617192,
+      "tail_student_mass": 0.0006007098209603966
+    },
+    "count": 304,
+    "max_support_floor": 3.551564731196777e-08,
+    "largest_31_positions_kl_fraction": 0.721835526612856,
+    "top1_agreement_positions_kl_fraction": 0.4872110767977599,
+    "temperature_counterfactuals": [
+      {
+        "teacher_temperature": 1.0,
+        "mean_kl": 0.27770796775436485,
+        "mean_teacher_entropy": 0.23083531722828057,
+        "pooled_tail32_abs_logit_gradient_fraction": 0.007687964985532159
+      },
+      {
+        "teacher_temperature": 1.25,
+        "mean_kl": 0.20348090975285354,
+        "mean_teacher_entropy": 0.2950125827997751,
+        "pooled_tail32_abs_logit_gradient_fraction": 0.005946033664316458
+      },
+      {
+        "teacher_temperature": 1.5,
+        "mean_kl": 0.16629915009810095,
+        "mean_teacher_entropy": 0.38528396927019226,
+        "pooled_tail32_abs_logit_gradient_fraction": 0.005108452509271103
+      },
+      {
+        "teacher_temperature": 2.0,
+        "mean_kl": 0.1863746675820044,
+        "mean_teacher_entropy": 0.9530236879127906,
+        "pooled_tail32_abs_logit_gradient_fraction": 0.006197893017516048
+      }
+    ]
+  }
+}

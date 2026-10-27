@@ -249,6 +249,26 @@ def distillation_loss(
                 )
             )
         return loss, metrics
+    if spec.teacher_only_forward_kl:
+        if config.loss_agg_mode != "token-mean":
+            raise ValueError("full_forward_kl requires token-mean aggregation")
+        total, count = model_output["full_forward_kl_sum"], model_output["full_forward_kl_count"]
+        loss = LossContext.from_batch(data, config).normalize_token_sum(total)
+        metrics = {"distillation/full_forward_kl": Observation.ratio(total.detach(), count)}
+        for name, value in model_output["forward_statistics"].items():
+            metrics[f"distillation/{name}"] = Observation.ratio(value.detach(), count)
+        from verl.utils.metric.position import position_observations
+
+        for prefix in ("full_forward_kl", "full_kl"):
+            if f"{prefix}_position_sums" in model_output:
+                metrics.update(
+                    position_observations(
+                        model_output[f"{prefix}_position_sums"],
+                        model_output[f"{prefix}_position_counts"],
+                        prefix=f"distillation/{prefix}_position",
+                    )
+                )
+        return loss, metrics
     if spec.payload_kind == "hidden":
         if config.loss_agg_mode != "token-mean":
             raise ValueError("full_reverse_kl currently requires token-mean aggregation")

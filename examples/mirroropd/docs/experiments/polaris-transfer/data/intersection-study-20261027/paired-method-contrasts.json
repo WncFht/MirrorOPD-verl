@@ -1,0 +1,62 @@
+[
+  {
+    "left": "polaris-intersection-k16",
+    "right": "polaris-student-k16",
+    "step": 64,
+    "metric": "fresh sequence KL, left minus right; negative favors left",
+    "prompts": 32,
+    "mean_difference": -9.00266695022583,
+    "paired_prompt_ci": [
+      -22.092503428459167,
+      2.89962375164032
+    ]
+  },
+  {
+    "left": "polaris-intersection-k16",
+    "right": "polaris-topk-k16",
+    "step": 64,
+    "metric": "fresh sequence KL, left minus right; negative favors left",
+    "prompts": 32,
+    "mean_difference": -2.2133891582489014,
+    "paired_prompt_ci": [
+      -15.425994038581848,
+      10.111340284347534
+    ]
+  },
+  {
+    "left": "polaris-teacher-k16",
+    "right": "polaris-student-k16",
+    "step": 64,
+    "metric": "fresh sequence KL, left minus right; negative favors left",
+    "prompts": 32,
+    "mean_difference": 10.570573508739471,
+    "paired_prompt_ci": [
+      -5.652412593364716,
+      26.139786779880524
+    ]
+  },
+  {
+    "left": "selection-high",
+    "right": "selection-random",
+    "step": 16,
+    "metric": "fresh sequence KL, left minus right; negative favors left",
+    "prompts": 32,
+    "mean_difference": 0.9673306345939636,
+    "paired_prompt_ci": [
+      -9.75797164440155,
+      11.146862387657166
+    ]
+  },
+  {
+    "left": "selection-low",
+    "right": "selection-random",
+    "step": 16,
+    "metric": "fresh sequence KL, left minus right; negative favors left",
+    "prompts": 32,
+    "mean_difference": 1.9826955795288086,
+    "paired_prompt_ci": [
+      -9.120389103889465,
+      14.371777296066284
+    ]
+  }
+]

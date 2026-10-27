@@ -1,0 +1,16 @@
+{
+  "teacher": "polaris",
+  "source": "polaris",
+  "train_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "steps": 16,
+  "lr": 1e-06,
+  "teacher_temperature": 1.0,
+  "optimizer": "CPU AdamW exact FP32 states",
+  "params": 1777088000,
+  "frozen_rollouts": true
+}

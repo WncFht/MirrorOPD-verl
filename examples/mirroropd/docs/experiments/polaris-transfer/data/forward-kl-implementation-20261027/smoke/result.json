@@ -1,0 +1,76 @@
+{
+  "budget": {
+    "status": "pass",
+    "outer_steps": 1,
+    "ppo_epochs": 16,
+    "successful_updates": 16,
+    "skipped_updates": 0,
+    "configured_prompt_records": 64,
+    "validation_optimizer_steps": [
+      16
+    ],
+    "scope": "Update/validation budget only; not a data-uniqueness, checkpoint-file or model-quality audit."
+  },
+  "physical_gpus": [
+    0,
+    3
+  ],
+  "world_size": 2,
+  "batch": 64,
+  "reuse": 16,
+  "train_response_cap": 128,
+  "validation_responses": 6,
+  "optimizer_foreach": false,
+  "all_updates_finite": true,
+  "position_reconstruction_max_abs_error": {
+    "full_forward_kl": 6.210970376896441e-09,
+    "full_kl": 1.0111688680813913e-08
+  },
+  "first": {
+    "distill/full_forward_kl": 0.1328389011323452,
+    "distill/full_kl": 0.20523177832365036,
+    "distill/teacher_outside_student_mass": 2.9432735415557687e-10,
+    "distill/student_entropy": 0.3793633133172989,
+    "distill/teacher_entropy": 0.27329277992248535,
+    "distill/js": 0.029132060706615448,
+    "distill/tv": 0.09718094766139984,
+    "optim/actor/distillation_loss": 0.1328389011323452,
+    "optim/actor/loss": 0.1328389048576355,
+    "optim/actor/grad_norm_preclip": 0.8928340673446655,
+    "optim/actor/lr": 1e-06,
+    "optim/actor/execution_known": 1.0,
+    "optim/actor/update_applied": 1.0,
+    "optim/actor/update_skipped": 0.0,
+    "optim/actor/loss_nonfinite": 0.0,
+    "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+    "optim/actor/observations_available": 1.0,
+    "optim/actor/skipped_updates": 0.0,
+    "step/outer": 1,
+    "step/update": 1,
+    "step/optimizer": 1
+  },
+  "last": {
+    "distill/full_forward_kl": 0.118899617344141,
+    "distill/full_kl": 0.1895844116806984,
+    "distill/teacher_outside_student_mass": 2.9432735415557687e-10,
+    "distill/student_entropy": 0.38165389001369476,
+    "distill/teacher_entropy": 0.27329277992248535,
+    "distill/js": 0.026876239106059074,
+    "distill/tv": 0.09256843850016594,
+    "optim/actor/distillation_loss": 0.118899617344141,
+    "optim/actor/loss": 0.11889961361885071,
+    "optim/actor/grad_norm_preclip": 0.762324333190918,
+    "optim/actor/lr_next": 1e-06,
+    "optim/actor/lr": 1e-06,
+    "optim/actor/execution_known": 1.0,
+    "optim/actor/update_applied": 1.0,
+    "optim/actor/update_skipped": 0.0,
+    "optim/actor/loss_nonfinite": 0.0,
+    "optim/actor/grad_norm_preclip_nonfinite": 0.0,
+    "optim/actor/observations_available": 1.0,
+    "optim/actor/skipped_updates": 0.0,
+    "step/outer": 1,
+    "step/update": 16,
+    "step/optimizer": 16
+  }
+}

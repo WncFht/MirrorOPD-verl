@@ -1,0 +1,46 @@
+{
+  "seed": 2026102702,
+  "models": {
+    "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+    "justrl": "JustRL-DeepSeek-1.5B",
+    "polaris": "Polaris-7B-Preview"
+  },
+  "cap": 1024,
+  "training_prompts": 128,
+  "heldout": {
+    "math": 64,
+    "code": 16,
+    "if": 16
+  },
+  "training_batch": 32,
+  "reuse": 16,
+  "outers": 4,
+  "updates": 64,
+  "lr": 1e-06,
+  "betas": [
+    0.9,
+    0.999
+  ],
+  "weight_decay": 0.01,
+  "clip": 1.0,
+  "loss": "full-vocabulary reverse KL, all response positions",
+  "precision": "FP32 student parameters and LM head; BF16 backbone autocast; BF16 frozen teacher with FP32 head projection",
+  "fixed_reference_sources": [
+    "student",
+    "justrl",
+    "polaris"
+  ],
+  "fresh_panel": "first 32 heldout math prompts, two generation seeds",
+  "sampling": "temperature=1, unrestricted student proposals; k=16 conditional resampling for constrained arms",
+  "categories": [
+    "neither",
+    "teacher_only",
+    "student_only",
+    "both"
+  ],
+  "teacher": "polaris",
+  "mode": "teacher",
+  "k": 16,
+  "arm": "polaris-teacher-k16",
+  "parameter_count": 1777088000
+}

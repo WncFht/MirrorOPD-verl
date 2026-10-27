@@ -13,6 +13,8 @@
 | [等更新预算 E18–E20](equal-update-budget/README.md) | 固定 4096 次更新时，复用和新增轨迹如何取舍？ | E18/E19 各完成 4096 更新；E20 到 3024 更新，云端 failed | 已完成 2235 指标分析、共同 2560-update 对照和八组图；E20 后三轮验证与跨 seed 证据仍缺 |
 | [失败复现模型／长度矩阵](failure-reproduction/README.md) | 长窗口、强教师、师生失配下，full-vocab 能否改善 sampled 的失效？ | E23–E43 未发现正式 run；E13/E15/E17 只有旧 200-step 对照 | 正式方案采用 250 outer；已有短测仅作为实现证据，不能登记为正式复现完成 |
 | [Full-KL / MDPO / BPO 对照 E44–E47](../训练配方.md#mirror-comparison) | Anchor 约束、内层拟合目标和 weighted teacher 形状的作用 | 已补充预设，正式训练未启动；各 256 outer × 16 reuse | 计划同版本、同预算比较，已有短测仅验证实现 |
+| [Polaris 跨源教师 E48](polaris-transfer/README.md) | 同源/异源迁移与KL方向如何影响拟合？ | 已完成256 outer/4096更新；[完整平台与FKL分析](polaris-transfer/2026-10-27-E48后期平台与Forward-KL及知识迁移.md) | 新批KL约0.1875；FKL短对照部分改善，尚未证明任务能力恢复 |
+| [Polaris Forward KL E49](../full-vocab/forward-kl.md) | 保持E48预算时，改变KL方向能否改善迁移？ | 生产入口已接入，工程验收见[证据](polaris-transfer/data/forward-kl-implementation-20261027/README.md)；正式256 outer尚未启动 | 同时比较FKL、原生RKL、JS/TV、entropy及任务表现 |
 
 “未发现记录”只覆盖上述项目清单和本地日志提交；不能据此判断其他机器、项目或尚未传回的作业。计划中的多 seed 和师生重测不计入已完成实验。
 

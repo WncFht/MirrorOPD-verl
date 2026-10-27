@@ -1,0 +1,127 @@
+{
+  "backend": "precompute_fused",
+  "world_size": 4,
+  "records": [
+    {
+      "step": 0,
+      "loss": 0.01794837787747383,
+      "position_kl_sums": [
+        0.0,
+        0.06751372292637825,
+        0.045119237154722214,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.11248800158500671,
+        0.06205309368669987,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        4.0,
+        4.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.0,
+        4.0,
+        0.0
+      ]
+    },
+    {
+      "step": 1,
+      "loss": 0.01192079484462738,
+      "position_kl_sums": [
+        0.0,
+        0.03630276210606098,
+        0.02010751375928521,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.05657726526260376,
+        0.030061987228691578,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        3.0,
+        3.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0,
+        3.0,
+        0.0
+      ]
+    },
+    {
+      "step": 2,
+      "loss": 0.008000495843589306,
+      "position_kl_sums": [
+        0.0,
+        0.03372351685538888,
+        0.019465409219264984,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04757115989923477,
+        0.027247846126556396,
+        0.0
+      ],
+      "position_token_counts": [
+        0.0,
+        4.0,
+        4.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.0,
+        4.0,
+        0.0
+      ]
+    }
+  ],
+  "parameter_delta_norms_rank0": {
+    "model.embed_tokens.weight": 0.033041805028915405,
+    "model.layers.0.self_attn.q_proj.weight": 0.03998592123389244,
+    "model.layers.0.self_attn.q_proj.bias": 0.007603599224239588,
+    "model.layers.0.self_attn.k_proj.weight": 0.028604663908481598,
+    "model.layers.0.self_attn.k_proj.bias": 0.00377159402705729,
+    "model.layers.0.self_attn.v_proj.weight": 0.03058496303856373,
+    "model.layers.0.self_attn.v_proj.bias": 0.0043012527748942375,
+    "model.layers.0.self_attn.o_proj.weight": 0.040111295878887177,
+    "model.layers.0.mlp.gate_proj.weight": 0.0596226267516613,
+    "model.layers.0.mlp.up_proj.weight": 0.06023864075541496,
+    "model.layers.0.mlp.down_proj.weight": 0.057197995483875275,
+    "model.layers.0.input_layernorm.weight": 0.00791256781667471,
+    "model.layers.0.post_attention_layernorm.weight": 0.0051212855614721775,
+    "model.layers.1.self_attn.q_proj.weight": 0.04084092378616333,
+    "model.layers.1.self_attn.q_proj.bias": 0.007590135559439659,
+    "model.layers.1.self_attn.k_proj.weight": 0.02859346568584442,
+    "model.layers.1.self_attn.k_proj.bias": 0.004651553928852081,
+    "model.layers.1.self_attn.v_proj.weight": 0.02927159145474434,
+    "model.layers.1.self_attn.v_proj.bias": 0.005380044225603342,
+    "model.layers.1.self_attn.o_proj.weight": 0.040919769555330276,
+    "model.layers.1.mlp.gate_proj.weight": 0.05613785237073898,
+    "model.layers.1.mlp.up_proj.weight": 0.059580788016319275,
+    "model.layers.1.mlp.down_proj.weight": 0.05474062263965607,
+    "model.layers.1.input_layernorm.weight": 0.007485790643841028,
+    "model.layers.1.post_attention_layernorm.weight": 0.007385937497019768,
+    "model.norm.weight": 0.0074533275328576565,
+    "lm_head.weight": 0.04322095587849617
+  },
+  "checkpoint_roundtrip": false,
+  "scheduler_optimizer_roundtrip": false,
+  "resumed_next_update_equivalent": false,
+  "model_type": "qwen2",
+  "tied_student": false,
+  "tied_teacher": false,
+  "teacher_extra_rows": 4,
+  "teacher_hidden_size": 48
+}

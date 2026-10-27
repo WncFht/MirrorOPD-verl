@@ -1,0 +1,33 @@
+{
+  "same_training_and_validation_protocol": true,
+  "differences": {
+    "distillation.distillation_loss.full_vocab.forward_teacher_support": {
+      "E48": "equal",
+      "E49": "student"
+    },
+    "distillation.distillation_loss.loss_mode": {
+      "E48": "mirror",
+      "E49": "full_forward_kl"
+    },
+    "distillation.distillation_loss.mirror.diagnostics": {
+      "E48": false,
+      "E49": null
+    },
+    "distillation.distillation_loss.mirror.estimator": {
+      "E48": "full_vocab",
+      "E49": null
+    },
+    "distillation.distillation_loss.mirror.eta": {
+      "E48": 1,
+      "E49": null
+    },
+    "distillation.distillation_loss.mirror.kappa": {
+      "E48": 0,
+      "E49": null
+    },
+    "distillation.distillation_loss.mirror.objective": {
+      "E48": "mdpo",
+      "E49": null
+    }
+  }
+}

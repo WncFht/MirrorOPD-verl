@@ -1,0 +1,122 @@
+[
+  {
+    "arm": "justrl-student-k16",
+    "k": 16,
+    "tokens": 65536,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      294.0,
+      34.0,
+      86.0,
+      65122.0
+    ],
+    "fractions": [
+      0.004486083984375,
+      0.000518798828125,
+      0.001312255859375,
+      0.993682861328125
+    ],
+    "overlap": 0.8842353820800781
+  },
+  {
+    "arm": "polaris-student-k16",
+    "k": 16,
+    "tokens": 65318,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      49.0,
+      13.0,
+      152.0,
+      65104.0
+    ],
+    "fractions": [
+      0.0007501760617287731,
+      0.00019902630209130714,
+      0.002327076762913745,
+      0.9967237208732662
+    ],
+    "overlap": 0.7047751002786368
+  },
+  {
+    "arm": "polaris-teacher-k16",
+    "k": 16,
+    "tokens": 65536,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      14.0,
+      5.0,
+      89.0,
+      65428.0
+    ],
+    "fractions": [
+      0.000213623046875,
+      7.62939453125e-05,
+      0.0013580322265625,
+      0.99835205078125
+    ],
+    "overlap": 0.6782169342041016
+  },
+  {
+    "arm": "polaris-intersection-k16",
+    "k": 16,
+    "tokens": 65318,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      45.0,
+      10.0,
+      145.0,
+      65118.0
+    ],
+    "fractions": [
+      0.0006889371995468324,
+      0.00015309715545485164,
+      0.0022199087540953487,
+      0.996938056890903
+    ],
+    "overlap": 0.7033943553078784
+  },
+  {
+    "arm": "polaris-topk-k16",
+    "k": 16,
+    "tokens": 65318,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      45.0,
+      19.0,
+      134.0,
+      65120.0
+    ],
+    "fractions": [
+      0.0006889371995468324,
+      0.00029088459536421815,
+      0.002051501883095012,
+      0.9969686763219939
+    ],
+    "overlap": 0.7046344422670627
+  }
+]

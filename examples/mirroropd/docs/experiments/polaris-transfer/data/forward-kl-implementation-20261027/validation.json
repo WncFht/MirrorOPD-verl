@@ -1,0 +1,26 @@
+{
+  "cpu_focused_tests": {
+    "passed": 83,
+    "seconds": 13.72
+  },
+  "gpu_tests": {
+    "passed": 8,
+    "seconds": 16.69
+  },
+  "launcher_e49_smoke_tests": {
+    "passed": 2,
+    "seconds": 14.65
+  },
+  "config_adapter_regression": "259 passed initially; two E49 catalog expectations updated; all 24 catalog tests then passed",
+  "four_gpu_fsdp": "passed",
+  "tied_checkpoint_resume": "passed",
+  "real_model_successful_updates": 16,
+  "docs": {
+    "pages": 15,
+    "local_links": 67,
+    "symbols": 1,
+    "python_examples": 0
+  },
+  "storage": "five evidence directories in docs; three large caches in outputs; old analysis/cache paths removed",
+  "gpu_work_status": "finished; further GPU experiments await user notice"
+}
