@@ -35,6 +35,9 @@ forward_prefetch: False
 # model dtype of fsdp
 model_dtype: fp32
 
+# Shared execution profile: null (legacy), bf16, fp16, fp32 (reference), bf16_fp32.
+forward_precision: null
+
 # Whether to use original parameters in fsdp. Only avaiable in fsdp1
 use_orig_params: false
 

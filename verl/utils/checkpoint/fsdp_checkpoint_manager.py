@@ -77,6 +77,7 @@ class FSDPCheckpointManager(BaseCheckpointManager):
         per_tensor_param_fn: Callable with the engine ``get_per_tensor_param`` contract yielding the full
             HF-format weights streamed into the 'hf_model' export; required when 'hf_model' is saved. It is called
             collectively on every rank.
+        grad_scaler: Optional AMP scaler saved and restored with extra training state.
         hf_export_dtype: Optional dtype the forward computes parameters in (the mixed-precision param_dtype).
             fp32 parameters are exported in this dtype; buffers and parameters of modules excluded from mixed
             precision keep their dtype, as the forward uses them unconverted.
@@ -94,6 +95,7 @@ class FSDPCheckpointManager(BaseCheckpointManager):
             Callable[[], tuple[Generator[tuple[str, torch.Tensor], None, None], Optional[dict]]]
         ] = None,
         hf_export_dtype: Optional[torch.dtype] = None,
+        grad_scaler=None,
         **kwargs,
     ):
         if processing_class is None and "tokenizer" in kwargs:
@@ -114,6 +116,7 @@ class FSDPCheckpointManager(BaseCheckpointManager):
             raise ValueError("Saving 'hf_model' requires `per_tensor_param_fn` to stream the full HF weights.")
         self.per_tensor_param_fn = per_tensor_param_fn
         self.hf_export_dtype = hf_export_dtype
+        self.grad_scaler = grad_scaler
 
     def _to_export_names(self, unwrap_model: torch.nn.Module, names) -> set[str]:
         """Map module FQNs to the HF names ``per_tensor_param_fn`` yields."""
@@ -331,6 +334,12 @@ class FSDPCheckpointManager(BaseCheckpointManager):
             )
             local_extra_state_path = copy_to_local(remote_extra_state_path)
             extra_state_dict = torch.load(local_extra_state_path, weights_only=False)
+            if self.grad_scaler is not None:
+                scaler_state = extra_state_dict.get("grad_scaler")
+                if scaler_state is not None:
+                    self.grad_scaler.load_state_dict(scaler_state)
+                else:
+                    warnings.warn("Checkpoint has no GradScaler state; using a fresh scaler", stacklevel=2)
             # recover random state
             if "rng" in extra_state_dict:
                 # 'rng' may not exist for backward compatibility
@@ -445,6 +454,7 @@ class FSDPCheckpointManager(BaseCheckpointManager):
                     extra_state_dict = {
                         "lr_scheduler": lr_scheduler_state_dict,
                         "rng": self.get_rng_state(),
+                        "grad_scaler": self.grad_scaler.state_dict() if self.grad_scaler is not None else None,
                     }
                     torch.save(extra_state_dict, extra_path)
                     log_with_rank(f"Saved extra_state to {os.path.abspath(extra_path)}", rank=self.rank, logger=logger)

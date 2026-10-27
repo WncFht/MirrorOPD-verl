@@ -63,13 +63,19 @@ def teacher_policy_loss(model_output, data, dp_group, *, config, distillation_co
     return distillation_loss(config, distillation_config, model_output, data)
 
 
-def make_worker(path, world_size, *, teacher, full_vocab=False):
+def make_worker(
+    path, world_size, *, teacher, full_vocab=False, precision=None, gradient_checkpointing=False, token_budget=6
+):
     """Use the production worker and engine constructors."""
     model = HFModelConfig(
-        path=str(path), enable_gradient_checkpointing=False, use_fused_kernels=False, enable_full_vocab=full_vocab
+        path=str(path),
+        enable_gradient_checkpointing=gradient_checkpointing,
+        use_fused_kernels=False,
+        enable_full_vocab=full_vocab,
     )
     engine = FSDPEngineConfig(
         strategy="fsdp2",
+        forward_precision=precision,
         forward_only=teacher,
         forward_only_cpu_offload=False,
         model_dtype="bfloat16" if teacher else "float32",
@@ -77,8 +83,8 @@ def make_worker(path, world_size, *, teacher, full_vocab=False):
         param_offload=True,
         optimizer_offload=not teacher,
         use_torch_compile=False,
-        infer_max_token_len_per_gpu=6,
-        max_token_len_per_gpu=6,
+        infer_max_token_len_per_gpu=token_budget,
+        max_token_len_per_gpu=token_budget,
         use_no_sync_for_gradient_accumulation=False,
     )
     optimizer = None if teacher else FSDPOptimizerConfig(lr=1e-3, total_training_steps=3)

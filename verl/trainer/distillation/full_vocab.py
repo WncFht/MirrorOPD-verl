@@ -12,6 +12,7 @@ from typing import NamedTuple
 import torch
 
 from verl.trainer.distillation.profiling import full_kl_range
+from verl.utils.linear import ProjectionFP32, project  # noqa: F401
 
 
 class FullKLResult(NamedTuple):
@@ -23,30 +24,6 @@ class FullKLResult(NamedTuple):
 
     loss_sum: torch.Tensor
     token_kl: torch.Tensor | None
-
-
-class ProjectionFP32(torch.autograd.Function):
-    """Ordinary linear VJP for torch.mm(out_dtype=...), which lacks autograd here."""
-
-    @staticmethod
-    def forward(ctx, hidden, weight):
-        ctx.save_for_backward(hidden, weight)
-        return torch.mm(hidden, weight.T, out_dtype=torch.float32)
-
-    @staticmethod
-    @torch.autograd.function.once_differentiable
-    def backward(ctx, upstream):
-        hidden, weight = ctx.saved_tensors
-        dz = upstream.to(hidden.dtype)
-        return dz @ weight, dz.T @ hidden
-
-
-def project(hidden, weight):
-    if hidden.is_cuda and hidden.dtype in (torch.float16, torch.bfloat16):
-        if torch.is_grad_enabled() and (hidden.requires_grad or weight.requires_grad):
-            return ProjectionFP32.apply(hidden, weight)
-        return torch.mm(hidden, weight.T, out_dtype=torch.float32)
-    return hidden @ weight.T
 
 
 def add_product(accumulator, left, right):
@@ -365,7 +342,7 @@ def full_reverse_kl_result(
         return finish(RecomputedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk if backend == "streaming" else 0))
     if backend in ("precompute", "precompute_fused"):
         row_kernel = partial(termination_equivalent_kl_rows, termination_token_ids=ids) if ids else precompute_kl_rows
-        if backend == "precompute_fused" and hs.is_cuda and hs.dtype == torch.bfloat16:
+        if backend == "precompute_fused" and hs.is_cuda and hs.dtype in (torch.float16, torch.bfloat16, torch.float32):
             from verl.trainer.distillation.full_vocab_triton import fused_kl_rows
 
             row_kernel = fused_kl_rows
@@ -407,7 +384,7 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False):
         if fused:
             from verl.trainer.distillation.full_vocab_triton import fused_mirror_logits
 
-            return fused_mirror_logits(z, zq, zt, hs.dtype, spec=spec)
+            return fused_mirror_logits(z, zq, zt, torch.float32 if hs.dtype == torch.float16 else hs.dtype, spec=spec)
         from verl.trainer.distillation.numerics import mirror_logits_rows
 
         rows, dz, info = mirror_logits_rows(
@@ -489,7 +466,10 @@ def full_vocab_objective_result(
         from functools import partial
 
         row_kernel = partial(
-            _mirror_rows, fused=backend == "precompute_fused" and hs.is_cuda and hs.dtype == torch.bfloat16
+            _mirror_rows,
+            fused=backend == "precompute_fused"
+            and hs.is_cuda
+            and hs.dtype in (torch.float16, torch.bfloat16, torch.float32),
         )
         total, rows, diag = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
     info = {k: diag[:, i].detach() for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if spec.diagnostics else {}
