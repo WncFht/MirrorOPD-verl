@@ -21,29 +21,30 @@
   "total_training_arms": 45,
   "zero_lr_calls": 1,
   "document_checks": {
-    "pages": 14,
-    "local_links": 147,
+    "pages": 9,
+    "local_links": 104,
     "symbols": 0,
     "python_examples": 0
   },
   "document_errors": [],
   "original_report_lines": 1038,
-  "canonical_report_lines": 429,
-  "old_paths_preserved": 4,
-  "full_reports_archived": 4,
+  "canonical_report_lines": 601,
+  "old_paths_preserved": 0,
+  "full_reports_archived": 0,
   "new_training": false,
-  "figure_count_new": 8,
-  "figure_count_reused": 2,
+  "figure_count_new": 11,
+  "figure_count_reused": 4,
   "figure_audit": {
-    "single-batch-transfer": [],
-    "independent-coverage": [],
-    "source-transfer": [],
-    "gradient-transfer": [],
-    "overlap-residual": [],
-    "state-feedback": [],
-    "batch-budgets": [],
-    "fresh-contrasts": []
+    "blocked-batch-curves": [],
+    "within-cross-block-gains": [],
+    "matched-schedules": []
   },
-  "visual_review": "All eight new figures inspected; labels, legends, probability denominators, axis units and paired interval meanings checked.",
-  "passed": true
+  "visual_review": "Three new multi-batch figures inspected. All A-H curves, active blocks and three-way path allocation checked.",
+  "passed": true,
+  "obsolete_report_paths_deleted": 4,
+  "archive_files_deleted": 5,
+  "figures_total": 15,
+  "new_multibatch_figures": 3,
+  "restored_multibatch_figures": 2,
+  "multibatch_curve_and_path_arithmetic": true
 }

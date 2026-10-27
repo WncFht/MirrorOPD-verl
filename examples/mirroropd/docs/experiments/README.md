@@ -18,7 +18,8 @@
 | [Qwen3教师对照 E41/E54/E43](e41-e43/README.md) | Base与后训练student在100步内的蒸馏表现 | E41完成；E43运行中；E54修复启动检查后等待补跑，每组8卡 | 均为100 outer、reuse16、7168训练cap；每10步valid，E41/E54无初始验证，E43有初始验证；后两组默认五集 |
 | [Full-KL / MDPO / BPO 对照 E44–E47](../训练配方.md#mirror-comparison) | Anchor 约束、内层拟合目标和 weighted teacher 形状的作用 | 已补充预设，正式训练未启动；各 256 outer × 16 reuse | 计划同版本、同预算比较，已有短测仅验证实现 |
 | [Polaris 跨源教师 E48](polaris-transfer/README.md) | 同源/异源迁移与KL方向如何影响拟合？ | 已完成256 outer/4096更新；[完整平台与FKL分析](polaris-transfer/2026-10-27-E48后期平台与Forward-KL及知识迁移.md) | 新批KL约0.1874；[批大小与阶段对照](polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md#series-n)显示增大batch能降噪，但短程内未解除泛化平台 |
-| [本机40批单遍迁移](polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md#long-pass) | 新批只训练一次能否持续泛化？ | 两teacher各20批/320更新；每批后复测全部40批 | J/P数学留出下降93.60%/25.67%；P后期批内仍下降，独立收益显著放缓 |
+| [本机40批单遍迁移](polaris-transfer/2026-10-27-双来源Rollout跨批次迁移实验.md#long-pass) | 新批只训练一次能否持续泛化？ | 两teacher各20批/320更新；每批后复测全部40批 | J/P数学留出下降93.60%/25.67%；P后期批内仍下降，独立收益显著放缓 |
+| [双来源 Rollout 重跑](polaris-transfer/2026-10-27-双来源Rollout跨批次迁移实验.md#protocol) | 改变训练来源能否改善跨题目与当前学生分布的迁移？ | 协议确定，等待用户通知有卡；四分支共1280次计划更新 | 每批评估40批×两来源，增加同题独立轨迹、全holdout fresh与完整checkpoint |
 | [Polaris Forward KL E49](../full-vocab/forward-kl.md) | 保持E48预算时，改变KL方向能否改善迁移？ | 生产入口已接入，工程验收见[证据](polaris-transfer/data/forward-kl-implementation-20261027/README.md)；正式256 outer尚未启动 | 同时比较FKL、原生RKL、JS/TV、entropy及任务表现 |
 
 “未发现记录”只覆盖上述项目清单和本地日志提交；不能据此判断其他机器、项目或尚未传回的作业。计划中的多 seed 和师生重测不计入已完成实验。
