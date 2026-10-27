@@ -54,7 +54,7 @@
 # E18              64     64     4096      1e-6    8/16       no
 # E19              32     128    4096      1e-6    16/32      no
 # E20              16     256    4096      1e-6    32/64      no
-# E41              16     100    1600      1e-6    10/50      no
+# E41,E54          16     100    1600      1e-6    10/50      no
 # E43              16     100    1600      1e-6    10/50      yes
 # E44-E47,E50-E53  16     256    4096      1e-6    32/128     no
 # E48-E49          16     256    4096      1e-6    32/64      yes
@@ -64,7 +64,9 @@
 # E44–E47 沿用 E20 预算、每 128 outer 保存；其他探索可用 --method/--kappa/--eta 覆盖；custom 不加载编号预算。
 # model 预设可加 -valid-student/-valid-teacher，独立验证原始模型。
 #
-# E41 Full-KL 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表 KL。
+# E54：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；沿用 E41 的 100 outer/reuse16，无初始验证。
+#
+# E41/E54 Full-KL 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表 KL。
 # END GENERATED EXPERIMENT OVERVIEW
 # Single public training entry. Planning uses Python's standard library only;
 # PYTHON_BIN continues to select the training/Ray interpreter in the shared launcher.

@@ -6,14 +6,16 @@ import copy
 
 import pytest
 import torch
-from transformers import AutoModelForCausalLM, Qwen2Config, Qwen3Config
+from transformers import AutoModelForCausalLM, Qwen2Config, Qwen3Config, Qwen3MoeConfig
 
 from verl.models.transformers.full_vocab import install_full_vocab_adapter
 from verl.trainer.distillation.full_vocab import full_reverse_kl
 from verl.trainer.distillation.hidden import FrozenTeacherHead
 
 
-@pytest.mark.parametrize("config_cls,tied", [(Qwen2Config, False), (Qwen3Config, False), (Qwen3Config, True)])
+@pytest.mark.parametrize(
+    "config_cls,tied", [(Qwen2Config, False), (Qwen3Config, False), (Qwen3Config, True), (Qwen3MoeConfig, False)]
+)
 def test_adapter_matches_dense_model_value_and_all_gradients(config_cls, tied, tmp_path):
     torch.manual_seed(7)
     config = config_cls(
@@ -26,8 +28,12 @@ def test_adapter_matches_dense_model_value_and_all_gradients(config_cls, tied, t
         head_dim=8,
         tie_word_embeddings=tied,
         attention_dropout=0.0,
+        num_experts=4,
+        num_experts_per_tok=2,
+        moe_intermediate_size=16,
     )
     config._attn_implementation = "eager"
+    config._experts_implementation = "eager"
     reference = AutoModelForCausalLM.from_config(config).double().eval()
     adapted = copy.deepcopy(reference)
     adapted.save_pretrained(tmp_path)

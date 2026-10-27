@@ -12,15 +12,15 @@ from verl.workers.utils.padding import prediction_positions  # noqa: F401
 
 
 class FrozenTeacherHead:
-    """Load a dense Qwen safetensors output weight; never register on the student."""
+    """Load a Qwen safetensors output weight; never register on the student."""
 
     def __init__(self, path):
         from verl.utils.fs import copy_to_local
 
         root = Path(copy_to_local(path))
         config = json.loads((root / "config.json").read_text())
-        if config.get("model_type") not in ("qwen2", "qwen3"):
-            raise ValueError("full reverse KL requires a dense Qwen2/Qwen3 teacher head")
+        if config.get("model_type") not in ("qwen2", "qwen3", "qwen3_moe"):
+            raise ValueError("full reverse KL requires a Qwen2/Qwen3/Qwen3-MoE teacher head")
         key = "model.embed_tokens.weight" if config.get("tie_word_embeddings", False) else "lm_head.weight"
         index = root / "model.safetensors.index.json"
         files = (

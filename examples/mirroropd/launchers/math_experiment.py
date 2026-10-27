@@ -177,6 +177,7 @@ def preset_catalog() -> dict[str, Preset]:
             presets[f"E{number}"] = replace(
                 presets[base], environment=(*presets[base].environment, ("TRAIN_PRECISION", precision))
             )
+    presets["E54"] = replace(presets["E41"], pair=replace(presets["E41"].pair, teacher="Qwen3-30B-A3B-Instruct-2507"))
     return presets
 
 
@@ -405,9 +406,9 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
         env["TRAIN_PRECISION"] = precision
         label += f"-{precision}"
 
-    if name == "E41" and method == "full_kl":
+    if name in ("E41", "E54") and method == "full_kl":
         # Both IDs already terminate this single-turn Base rollout. Coarsen
-        # their loss identity only for the model/objective tested in E41.
+        # their loss identity only for the Base student protocol used in E41 and E54.
         defaults(env, FULL_KL_TERMINATION_TOKEN_IDS="[151643,151645]")
     # Preserve preset IO defaults, including inactive full-vocab fields in sampled MDPO.
     if preset and (preset.method == "full_kl" or estimator == "full_vocab"):
@@ -527,7 +528,8 @@ def preset_overview() -> str:
             + "E44–E47 沿用 E20 预算、每 128 outer 保存；"
             "其他探索可用 --method/--kappa/--eta 覆盖；custom 不加载编号预算。\n"
             + "model 预设可加 -valid-student/-valid-teacher，独立验证原始模型。",
-            "E41 Full-KL 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表 KL。",
+            "E54：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；沿用 E41 的 100 outer/reuse16，无初始验证。",
+            "E41/E54 Full-KL 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表 KL。",
         ]
     )
 

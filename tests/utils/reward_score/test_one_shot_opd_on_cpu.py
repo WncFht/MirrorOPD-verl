@@ -15,7 +15,7 @@ import pytest
 from verl.utils.reward_score.one_shot_opd import CODE_SOURCES, FC_SOURCES, IF_SOURCES, MATH_SOURCES, reward_func
 
 
-@pytest.mark.parametrize("source", ["DAPO", "MATH-500", "AMC23", "AIME25"])
+@pytest.mark.parametrize("source", ["DAPO", "MATH-500", "AMC23", "AIME24", "AIME25", "AIME26"])
 @pytest.mark.parametrize("answer,expected", [(r"\boxed{42}", 1.0), (r"\boxed{43}", 0.0)])
 def test_boxed_math(source, answer, expected):
     result = reward_func(source, answer, "42")
@@ -156,7 +156,9 @@ def test_real_multiif_checkers_and_threaded_loading():
 
 def test_hydra_path_entry_point():
     root = Path(__file__).resolve().parents[3]
-    spec = importlib.util.spec_from_file_location("custom_reward_function", root / "examples/mirroropd/rewards/reward.py")
+    spec = importlib.util.spec_from_file_location(
+        "custom_reward_function", root / "examples/mirroropd/rewards/reward.py"
+    )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     assert module.reward_func("xlam", "[]", [])["score"] == 1.0

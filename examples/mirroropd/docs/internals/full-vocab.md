@@ -33,8 +33,8 @@ Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前�
 | --- | --- |
 | `use_policy_gradient=False`、`use_task_rewards=False`、`policy_loss_mode=vanilla`、`advantage_source=current`，两个 clamp 为 `null` | [DistillationLossConfig](../../../../verl/workers/config/distillation.py) |
 | `execution_mode=shared_sync`、V1 sync、单节点、FSDP2、无 ref/critic，师生轮流使用同池 | [DistillationConfig.validate_shared_sync](../../../../verl/workers/config/distillation.py) |
-| Dense Qwen2/Qwen3、无 bias 的 student head | [install_full_vocab_adapter](../../../../verl/models/transformers/full_vocab.py) |
-| Dense Qwen2/Qwen3 safetensors teacher head | [FrozenTeacherHead](../../../../verl/trainer/distillation/hidden.py) |
+| Qwen2/Qwen3/Qwen3-MoE、无 bias 的 student head | [install_full_vocab_adapter](../../../../verl/models/transformers/full_vocab.py) |
+| Qwen2/Qwen3/Qwen3-MoE safetensors teacher head | [FrozenTeacherHead](../../../../verl/trainer/distillation/hidden.py) |
 | 温度为 1，无 entropy、sum-pi-squared 或 score-centering 计算 | [FSDPEngineWithLMHead._full_vocab_output](../../../../verl/workers/engine/fsdp/transformer_impl.py) |
 | `loss_agg_mode=token-mean` | [distillation_loss](../../../../verl/trainer/distillation/losses.py) |
 
