@@ -22,6 +22,22 @@ FLOAT_LIST = [32, "32", "fp32", "float32", torch.float32]
 BFLOAT_LIST = ["bf16", "bfloat16", torch.bfloat16]
 
 
+def cast_module_parameters(module: torch.nn.Module, dtype: torch.dtype) -> torch.nn.Module:
+    """Harmonize parameter/gradient dtype without rounding initialized buffers.
+
+    HF models may deliberately construct buffers (e.g. RoPE frequencies) in
+    FP32 even when weights load in BF16. A whole-module dtype cast would lose
+    those values irreversibly. Device movement and explicit runtime buffer
+    policies remain the caller's responsibility.
+    """
+    buffers = [(child, name, value) for child in module.modules() for name, value in child._buffers.items()]
+    try:
+        return module.to(dtype=dtype)
+    finally:
+        for child, name, value in buffers:
+            child._buffers[name] = value
+
+
 class PrecisionType:
     """Type of precision used.
 

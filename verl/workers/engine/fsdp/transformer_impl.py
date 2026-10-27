@@ -259,7 +259,7 @@ class FSDPEngine(BaseEngine):
 
     def _build_module(self):
         from verl.utils.model import get_hf_auto_model_class
-        from verl.utils.torch_dtypes import PrecisionType
+        from verl.utils.torch_dtypes import PrecisionType, cast_module_parameters
 
         torch_dtype = self.engine_config.model_dtype
 
@@ -348,8 +348,9 @@ class FSDPEngine(BaseEngine):
                     raise ValueError("full reverse KL requires FSDP2, SP=1, packed input, no LoRA/static pad/fused PPO")
                 install_full_vocab_adapter(module)
 
-            # some parameters may not in torch_dtype
-            module.to(torch_dtype)
+            # Harmonize parameters while preserving intentionally FP32 buffers,
+            # including RoPE frequencies that cannot be recovered after rounding.
+            cast_module_parameters(module, torch_dtype)
 
             if self.model_config.enable_gradient_checkpointing:
                 module.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
