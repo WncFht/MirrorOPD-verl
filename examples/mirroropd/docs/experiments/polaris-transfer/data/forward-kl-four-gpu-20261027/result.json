@@ -1,0 +1,99 @@
+{
+  "status": "pass",
+  "physical_gpus": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "successful_updates": 32,
+  "source_commit": "a6c1ee729d2e06fe51b79e0d867019b088eb1d55",
+  "skipped_updates": 0,
+  "validation_enabled": true,
+  "validation_responses": 6,
+  "validation_failed": 0,
+  "train_response_cap": 512,
+  "validation_response_cap": 512,
+  "optimizer_overrides": null,
+  "grad_norm_preclip_range": [
+    0.4353099465370178,
+    0.7840472459793091
+  ],
+  "teacher_outside_student_mass_range": [
+    7.795352557904422e-10,
+    8.300918147297054e-10
+  ],
+  "position_reconstruction_max_abs_error": {
+    "full_forward_kl": 1.0228860952699037e-08,
+    "full_kl": 1.6367516536552884e-08
+  },
+  "gpu_sampled_peak_mib": {
+    "0": 53861.0,
+    "1": 57953.0,
+    "2": 53865.0,
+    "3": 57953.0
+  },
+  "rounds": [
+    {
+      "outer": 1,
+      "first": {
+        "full_forward_kl": 0.1759296990931034,
+        "full_kl": 0.26195956766605377,
+        "js": 0.038938296027481556,
+        "tv": 0.1285988837480545,
+        "student_entropy": 0.5790456980466843,
+        "teacher_entropy": 0.43238793313503265
+      },
+      "last": {
+        "full_forward_kl": 0.16772712022066116,
+        "full_kl": 0.2535231336951256,
+        "js": 0.0376473618671298,
+        "tv": 0.1260521039366722,
+        "student_entropy": 0.5824397057294846,
+        "teacher_entropy": 0.43238793313503265
+      },
+      "timing_seconds": {
+        "perf/timing/rollout_batch_seconds": 76.412815238,
+        "perf/timing/rollout_pipeline_seconds": 44.24831338971853,
+        "perf/timing/teacher_transfer_seconds": 6.450175456702709,
+        "perf/timing/teacher_forward_seconds": 1.9086522459983826,
+        "perf/timing/update_actor_seconds": 26.498210608959198,
+        "perf/timing/update_weights_seconds": 1.3323325365781784,
+        "perf/timing/outer_step_seconds": 125.02337949723005
+      },
+      "actor_peak_gib": 9.947904586791992
+    },
+    {
+      "outer": 2,
+      "first": {
+        "full_forward_kl": 0.17006545513868332,
+        "full_kl": 0.24629618972539902,
+        "js": 0.03764873277395964,
+        "tv": 0.1269016359001398,
+        "student_entropy": 0.6012174040079117,
+        "teacher_entropy": 0.4519089460372925
+      },
+      "last": {
+        "full_forward_kl": 0.14499859139323235,
+        "full_kl": 0.21907418221235275,
+        "js": 0.03348726686090231,
+        "tv": 0.11847291700541973,
+        "student_entropy": 0.6064062863588333,
+        "teacher_entropy": 0.4519089460372925
+      },
+      "timing_seconds": {
+        "perf/timing/validation_rollout_seconds": 8.328672562,
+        "perf/timing/rollout_batch_seconds": 31.766627436,
+        "perf/timing/rollout_pipeline_seconds": 32.14503017067909,
+        "perf/timing/teacher_transfer_seconds": 5.56866429746151,
+        "perf/timing/teacher_forward_seconds": 0.6443708762526512,
+        "perf/timing/update_actor_seconds": 22.339205138385296,
+        "perf/timing/update_weights_seconds": 1.2456922754645348,
+        "perf/timing/outer_step_seconds": 61.97960864007473,
+        "perf/timing/validation_seconds": 10.108765192329884
+      },
+      "actor_peak_gib": 9.948066711425781
+    }
+  ],
+  "scope": "Two rollout rounds on the same 64 prompts; engineering acceptance, not an accuracy or long-context comparison."
+}

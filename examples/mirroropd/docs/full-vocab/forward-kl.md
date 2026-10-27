@@ -110,6 +110,8 @@ E48 原路径不额外计算 FKL、JS 和 TV。跨目标比较这些量时，应
 
 真实 DS-distill-1.5B/Polaris-7B 链路已在 GPU0、3 完成一次 batch64、reuse16 更新及 6 条短验证：16 次更新全部执行，FKL 为 0.13284→0.11890，原生 RKL 为 0.20523→0.18958，loss/grad 有限，验证评分失败数为 0。该验收将 response cap 设为 128、validation n 设为 1，并关闭 AdamW foreach 临时批量运算以适应共享显存；正式 E49 默认不改该优化器选项。它不是 256-outer 或完整任务准确率验收。
 
+随后在物理 GPU0–3 完成了[四卡默认优化器验收](../experiments/polaris-transfer/data/forward-kl-four-gpu-20261027/README.md)：batch64、reuse16、两个 outer、回答 cap512，未覆盖 AdamW 选项。32 次更新全部执行，末轮 6 条验证记录全部完成评分；第二轮 FKL 为 0.17007→0.14500，原生 RKL 为 0.24630→0.21907。两套位置指标重建误差均小于 1.7e-8。四卡 tied-Qwen3 的模型、Adam、scheduler 恢复及下一次更新一致性也通过。该验收补齐了四卡真实链路，正式长窗预算仍需单独运行。
+
 同一 H800 共享 GPU 上，512 token、student head151936×1536、teacher head152064×3584、BF16 输入的 head 阶段测量为：
 
 | Forward 后端 | 中位时间 | 峰值 allocated 显存 |
