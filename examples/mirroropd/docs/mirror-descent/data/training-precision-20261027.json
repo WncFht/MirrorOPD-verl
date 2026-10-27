@@ -1,0 +1,493 @@
+{
+  "scope": "Implementation acceptance; no formal accuracy or throughput comparison. CPU suites overlap.",
+  "environment": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.12.1",
+    "flash_attention": "2.8.3",
+    "gpu": "H800"
+  },
+  "test_suites": {
+    "cpu-final": {
+      "passed": 205,
+      "log": "outputs/training-precision-20261027/cpu-final.log"
+    },
+    "regression-cpu": {
+      "passed": 357,
+      "log": "outputs/training-precision-20261027/regression-cpu.log"
+    },
+    "profiles-cpu": {
+      "passed": 11,
+      "log": "outputs/training-precision-20261027/profiles-cpu.log"
+    },
+    "cuda": {
+      "passed": 108,
+      "log": "outputs/training-precision-20261027/cuda.log"
+    }
+  },
+  "distributed": [
+    {
+      "name": "mixed-mdpo-final",
+      "precision": "bf16_fp32",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "sequence_length": 129,
+      "world_size": 2,
+      "tied": false,
+      "endpoint_legacy_equal": false,
+      "updates_including_resume_comparison": 12,
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float32"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.norm": [
+          "torch.float32"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "scaler": null,
+      "checkpoint_next_updates_exact": true
+    },
+    {
+      "name": "fp16-mdpo-final",
+      "precision": "fp16",
+      "model_type": "qwen3",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "sequence_length": 129,
+      "world_size": 2,
+      "tied": false,
+      "endpoint_legacy_equal": false,
+      "updates_including_resume_comparison": 12,
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float16"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float16"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float16"
+        ],
+        "model.norm": [
+          "torch.float16"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "scaler": {
+        "scale": 512.0,
+        "growth_factor": 2.0,
+        "backoff_factor": 0.5,
+        "growth_interval": 2,
+        "_growth_tracker": 1
+      },
+      "checkpoint_next_updates_exact": true
+    },
+    {
+      "name": "mixed-opd-qwen3",
+      "precision": "bf16_fp32",
+      "model_type": "qwen3",
+      "estimator": "full_vocab",
+      "eta": 1.0,
+      "sequence_length": 1025,
+      "world_size": 2,
+      "tied": true,
+      "endpoint_legacy_equal": true,
+      "updates_including_resume_comparison": 15,
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float32"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.norm": [
+          "torch.float32"
+        ]
+      },
+      "teacher_projection_dtypes": null,
+      "scaler": null,
+      "checkpoint_next_updates_exact": true
+    },
+    {
+      "name": "fp16-opd-qwen2",
+      "precision": "fp16",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 1.0,
+      "sequence_length": 1025,
+      "world_size": 2,
+      "tied": false,
+      "endpoint_legacy_equal": true,
+      "updates_including_resume_comparison": 15,
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float16"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float16"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float16"
+        ],
+        "model.norm": [
+          "torch.float16"
+        ]
+      },
+      "teacher_projection_dtypes": null,
+      "scaler": {
+        "scale": 512.0,
+        "growth_factor": 2.0,
+        "backoff_factor": 0.5,
+        "growth_interval": 2,
+        "_growth_tracker": 1
+      },
+      "checkpoint_next_updates_exact": true
+    },
+    {
+      "name": "fp32-qwen2",
+      "precision": "fp32",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "sequence_length": 129,
+      "world_size": 2,
+      "tied": false,
+      "endpoint_legacy_equal": false,
+      "updates_including_resume_comparison": 12,
+      "activation_dtypes": null,
+      "teacher_projection_dtypes": null,
+      "scaler": null,
+      "checkpoint_next_updates_exact": true
+    },
+    {
+      "name": "fp32-opd-qwen3",
+      "precision": "fp32",
+      "model_type": "qwen3",
+      "estimator": "full_vocab",
+      "eta": 1.0,
+      "sequence_length": 129,
+      "world_size": 2,
+      "tied": false,
+      "endpoint_legacy_equal": true,
+      "updates_including_resume_comparison": 15,
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float32"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.norm": [
+          "torch.float32"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "scaler": null,
+      "checkpoint_next_updates_exact": true
+    },
+    {
+      "name": "mixed-sampled",
+      "precision": "bf16_fp32",
+      "model_type": "qwen2",
+      "estimator": "sampled",
+      "eta": 0.3,
+      "sequence_length": 129,
+      "world_size": 2,
+      "tied": false,
+      "endpoint_legacy_equal": false,
+      "updates_including_resume_comparison": 12,
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float32"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.norm": [
+          "torch.float32"
+        ]
+      },
+      "teacher_projection_dtypes": [],
+      "scaler": null,
+      "checkpoint_next_updates_exact": true
+    }
+  ],
+  "real_training": [
+    {
+      "preset": "E50",
+      "gpus": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "outer_steps": 2,
+      "successful_updates": 4,
+      "weight_sync_outer_steps": 2,
+      "teacher_dtype": "bfloat16",
+      "rollout_dtype": "bfloat16",
+      "observations_are_pre_update_training_values": true,
+      "observations": [
+        {
+          "step/outer": 1,
+          "step/update": 1,
+          "step/optimizer": 1,
+          "optim/actor/loss": 0.08974618464708328,
+          "optim/actor/grad_norm_preclip": 2.244366407394409,
+          "distill/full_kl": 0.08974618837237358
+        },
+        {
+          "step/outer": 1,
+          "step/update": 2,
+          "step/optimizer": 2,
+          "optim/actor/loss": 0.08688899129629135,
+          "optim/actor/grad_norm_preclip": 2.1788206100463867,
+          "distill/full_kl": 0.08688899502158165
+        },
+        {
+          "step/outer": 2,
+          "step/update": 3,
+          "step/optimizer": 3,
+          "optim/actor/loss": 0.07973559945821762,
+          "optim/actor/grad_norm_preclip": 2.359037399291992,
+          "distill/full_kl": 0.07973559945821762
+        },
+        {
+          "step/outer": 2,
+          "step/update": 4,
+          "step/optimizer": 4,
+          "optim/actor/loss": 0.07654473185539246,
+          "optim/actor/grad_norm_preclip": 2.2387874126434326,
+          "distill/full_kl": 0.0765447374433279
+        }
+      ],
+      "command": "outputs/training-precision-20261027/real-e50/command.sh",
+      "config": "outputs/training-precision-20261027/real-e50/resolved_config.yaml",
+      "precision": "fp16",
+      "batch": 8,
+      "reuse": 2,
+      "prompt_cap": 1024,
+      "response_cap": 128
+    },
+    {
+      "preset": "E51",
+      "gpus": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "outer_steps": 2,
+      "successful_updates": 4,
+      "weight_sync_outer_steps": 2,
+      "teacher_dtype": "bfloat16",
+      "rollout_dtype": "bfloat16",
+      "observations_are_pre_update_training_values": true,
+      "observations": [
+        {
+          "step/outer": 1,
+          "step/update": 1,
+          "step/optimizer": 1,
+          "optim/actor/loss": 0.08929705619812012,
+          "optim/actor/grad_norm_preclip": 2.0447471141815186,
+          "distill/target_kl": 0.007920588133856654,
+          "distill/teacher_kl": 0.08929705992341042,
+          "distill/anchor_kl": 0.0
+        },
+        {
+          "step/outer": 1,
+          "step/update": 2,
+          "step/optimizer": 2,
+          "optim/actor/loss": 0.08691107481718063,
+          "optim/actor/grad_norm_preclip": 1.9267159700393677,
+          "distill/target_kl": 0.00720479351002723,
+          "distill/teacher_kl": 0.08684110641479492,
+          "distill/anchor_kl": 2.9988137612235732e-05
+        },
+        {
+          "step/outer": 2,
+          "step/update": 3,
+          "step/optimizer": 3,
+          "optim/actor/loss": 0.06480645388364792,
+          "optim/actor/grad_norm_preclip": 1.9000827074050903,
+          "distill/target_kl": 0.006145563325844705,
+          "distill/teacher_kl": 0.06480646319687366,
+          "distill/anchor_kl": 0.0
+        },
+        {
+          "step/outer": 2,
+          "step/update": 4,
+          "step/optimizer": 4,
+          "optim/actor/loss": 0.062207408249378204,
+          "optim/actor/grad_norm_preclip": 1.7173126935958862,
+          "distill/target_kl": 0.0053658499382436275,
+          "distill/teacher_kl": 0.062093837186694145,
+          "distill/anchor_kl": 4.8676596179575427e-05
+        }
+      ],
+      "command": "outputs/training-precision-20261027/real-e51/command.sh",
+      "config": "outputs/training-precision-20261027/real-e51/resolved_config.yaml",
+      "precision": "fp16",
+      "batch": 8,
+      "reuse": 2,
+      "prompt_cap": 1024,
+      "response_cap": 128
+    },
+    {
+      "preset": "E52",
+      "gpus": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "outer_steps": 2,
+      "successful_updates": 4,
+      "weight_sync_outer_steps": 2,
+      "teacher_dtype": "bfloat16",
+      "rollout_dtype": "bfloat16",
+      "observations_are_pre_update_training_values": true,
+      "observations": [
+        {
+          "step/outer": 1,
+          "step/update": 1,
+          "step/optimizer": 1,
+          "optim/actor/loss": 0.08158230781555176,
+          "optim/actor/grad_norm_preclip": 2.022690773010254,
+          "distill/full_kl": 0.08158230781555176
+        },
+        {
+          "step/outer": 1,
+          "step/update": 2,
+          "step/optimizer": 2,
+          "optim/actor/loss": 0.08116502314805984,
+          "optim/actor/grad_norm_preclip": 2.0202548503875732,
+          "distill/full_kl": 0.08116502221673727
+        },
+        {
+          "step/outer": 2,
+          "step/update": 3,
+          "step/optimizer": 3,
+          "optim/actor/loss": 0.08305574953556061,
+          "optim/actor/grad_norm_preclip": 2.244314670562744,
+          "distill/full_kl": 0.08305574767291546
+        },
+        {
+          "step/outer": 2,
+          "step/update": 4,
+          "step/optimizer": 4,
+          "optim/actor/loss": 0.08226486295461655,
+          "optim/actor/grad_norm_preclip": 2.210334300994873,
+          "distill/full_kl": 0.08226486295461655
+        }
+      ],
+      "command": "outputs/training-precision-20261027/real-e52/command.sh",
+      "config": "outputs/training-precision-20261027/real-e52/resolved_config.yaml",
+      "precision": "bf16_fp32",
+      "batch": 8,
+      "reuse": 2,
+      "prompt_cap": 1024,
+      "response_cap": 128
+    },
+    {
+      "preset": "E53",
+      "gpus": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "outer_steps": 2,
+      "successful_updates": 4,
+      "weight_sync_outer_steps": 2,
+      "teacher_dtype": "bfloat16",
+      "rollout_dtype": "bfloat16",
+      "observations_are_pre_update_training_values": true,
+      "observations": [
+        {
+          "step/outer": 1,
+          "step/update": 1,
+          "step/optimizer": 1,
+          "optim/actor/loss": 0.0778500884771347,
+          "optim/actor/grad_norm_preclip": 1.8659162521362305,
+          "distill/target_kl": 0.007021581521257758,
+          "distill/teacher_kl": 0.07785009406507015,
+          "distill/anchor_kl": 0.0
+        },
+        {
+          "step/outer": 1,
+          "step/update": 2,
+          "step/optimizer": 2,
+          "optim/actor/loss": 0.07739584147930145,
+          "optim/actor/grad_norm_preclip": 1.845988392829895,
+          "distill/target_kl": 0.006885307026095688,
+          "distill/teacher_kl": 0.07735617086291313,
+          "distill/anchor_kl": 1.7003354514599778e-05
+        },
+        {
+          "step/outer": 2,
+          "step/update": 3,
+          "step/optimizer": 3,
+          "optim/actor/loss": 0.07693599909543991,
+          "optim/actor/grad_norm_preclip": 2.09059739112854,
+          "distill/target_kl": 0.007448220043443143,
+          "distill/teacher_kl": 0.07693600840866566,
+          "distill/anchor_kl": 0.0
+        },
+        {
+          "step/outer": 2,
+          "step/update": 4,
+          "step/optimizer": 4,
+          "optim/actor/loss": 0.07640452682971954,
+          "optim/actor/grad_norm_preclip": 2.0582549571990967,
+          "distill/target_kl": 0.007288779481314123,
+          "distill/teacher_kl": 0.07633567601442337,
+          "distill/anchor_kl": 2.9511118100344902e-05
+        }
+      ],
+      "command": "outputs/training-precision-20261027/real-e53/command.sh",
+      "config": "outputs/training-precision-20261027/real-e53/resolved_config.yaml",
+      "precision": "bf16_fp32",
+      "batch": 8,
+      "reuse": 2,
+      "prompt_cap": 1024,
+      "response_cap": 128
+    }
+  ],
+  "formal_protocol": {
+    "outer": 256,
+    "reuse": 16,
+    "updates": 4096,
+    "save_every_outer": 128,
+    "val_n": 16
+  },
+  "limitations": [
+    "Full 256-outer and multi-seed training not run.",
+    "Real short runs cap prompts/responses at 1024/128 and use eager rollout.",
+    "Exact distributed resume checks use deterministic FA2 backward.",
+    "FP32 reference has not run full Ray/vLLM training.",
+    "Scaler growth boundary exercised with test interval 2; production interval remains 400."
+  ]
+}
