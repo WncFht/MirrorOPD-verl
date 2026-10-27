@@ -216,6 +216,8 @@ class FSDPEngine(BaseEngine):
         # This is used to import external_lib into the huggingface systems
         self._build_model_optimizer()
 
+        from verl.utils.torch_dtypes import PrecisionType
+
         self.checkpoint_manager = FSDPCheckpointManager(
             model=self.module,
             optimizer=self.optimizer,
@@ -224,7 +226,10 @@ class FSDPEngine(BaseEngine):
             checkpoint_config=self.checkpoint_config,
             trust_remote_code=self.model_config.trust_remote_code,
             per_tensor_param_fn=self._get_hf_export_per_tensor_param,
-            hf_export_dtype=self._autocast_dtype,
+            hf_export_dtype=PrecisionType.to_dtype(
+                (self.engine_config.mixed_precision or {}).get("param_dtype", "bf16")
+            ),
+            grad_scaler=self.scaler,
         )
         if self._qat_enabled and self.checkpoint_manager.should_save_hf_model:
             raise NotImplementedError("Saving 'hf_model' in checkpoints is not supported with QAT enabled.")
@@ -258,9 +263,11 @@ class FSDPEngine(BaseEngine):
         self.use_ulysses_sp = self.ulysses_sequence_parallel_size > 1
 
     def _build_module(self):
+        from verl.models.transformers.precision import prepare_precision_config
         from verl.utils.model import get_hf_auto_model_class
         from verl.utils.torch_dtypes import PrecisionType, cast_module_parameters
 
+        prepare_precision_config(self.model_config, self.engine_config)
         torch_dtype = self.engine_config.model_dtype
 
         if torch_dtype is None:
@@ -334,6 +341,9 @@ class FSDPEngine(BaseEngine):
                 use_fused_kernels=use_fused_kernels,
                 fused_kernels_backend=fused_kernels_backend,
             )
+            from verl.models.transformers.precision import install_precision_adapter
+
+            install_precision_adapter(module, self.engine_config.forward_precision)
             if self.model_config.enable_full_vocab:
                 from verl.models.transformers.full_vocab import install_full_vocab_adapter
 
@@ -418,9 +428,19 @@ class FSDPEngine(BaseEngine):
             reduce_dtype = torch.float32
             buffer_dtype = torch.float32
 
+        if self.engine_config.forward_precision is not None:
+            logger.info(
+                "Execution precision: profile=%s param=%s reduce=%s attention=%s",
+                self.engine_config.forward_precision,
+                param_dtype,
+                reduce_dtype,
+                self.model_config.hf_config._attn_implementation,
+            )
         mixed_precision = MixedPrecision(param_dtype=param_dtype, reduce_dtype=reduce_dtype, buffer_dtype=buffer_dtype)
 
         self._autocast_dtype = param_dtype
+        if self.engine_config.forward_precision == "bf16_fp32":
+            self._autocast_dtype = torch.float32
         # fp16 training requires loss scaling to avoid gradient underflow. Mirror the pattern
         # landed in #4036 for the legacy dp_actor path. bf16 / fp32 do not need a scaler.
         if param_dtype == torch.float16:
@@ -473,7 +493,9 @@ class FSDPEngine(BaseEngine):
             # - ref: CPUOffloadPolicy(pin_memory=True)
             assert CPUOffloadPolicy is not None, "PyTorch version >= 2.4 is required for using fully_shard API (FSDP2)"
             mp_policy = MixedPrecisionPolicy(
-                param_dtype=param_dtype, reduce_dtype=reduce_dtype, cast_forward_inputs=True
+                param_dtype=param_dtype,
+                reduce_dtype=reduce_dtype,
+                cast_forward_inputs=self.engine_config.forward_precision != "bf16_fp32",
             )
             offload_policy = None
             if self.engine_config.offload_policy or (
@@ -1278,7 +1300,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
                 raise ValueError("Teacher hidden prediction positions do not match student loss mask")
             teacher_hidden = micro_batch["teacher_hidden"].values()
             with full_kl_range("teacher_head_get"):
-                weight = self.full_vocab_teacher_head.get(selected.device, selected.dtype)
+                weight = self.full_vocab_teacher_head.get(selected.device, teacher_hidden.dtype)
             config = self.full_vocab_config
             spec = self.full_vocab_spec
             anchor_hidden = anchor_weight = None
@@ -1304,7 +1326,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
                     return full_vocab_objective_result(
                         h,
                         w.to(h.dtype),
-                        teacher_hidden.to(h.dtype),
+                        teacher_hidden,
                         weight,
                         spec=spec,
                         hq=anchor_hidden,

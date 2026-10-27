@@ -33,6 +33,9 @@ from verl.workers.engine_workers import ActorRolloutRefWorker
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--precision", choices=["bf16", "fp16", "fp32", "bf16_fp32"])
+    parser.add_argument("--sequence-length", type=int, default=5)
+    parser.add_argument("--gradient-checkpointing", action="store_true")
     parser.add_argument("--objective", choices=["mdpo", "bpo"], default="mdpo")
     parser.add_argument("--estimator", choices=["full_vocab", "sampled"], default="full_vocab")
     parser.add_argument("--backend", default="precompute_fused")
@@ -78,8 +81,28 @@ def main():
             model.save_pretrained(root / name)
             tokenizer.save_pretrained(root / name)
     dist.barrier()
-    actor = make_worker(root / "student", world, teacher=False, full_vocab=full)
-    teacher = make_worker(root / "teacher", world, teacher=True, full_vocab=full)
+    actor = make_worker(
+        root / "student",
+        world,
+        teacher=False,
+        full_vocab=full,
+        precision=args.precision,
+        gradient_checkpointing=args.gradient_checkpointing,
+        token_budget=2 * args.sequence_length,
+    )
+    teacher = make_worker(root / "teacher", world, teacher=True, full_vocab=full, token_budget=2 * args.sequence_length)
+    observed_dtypes = {}
+
+    def record_dtype(name):
+        def capture(module, inputs, output):
+            observed_dtypes.setdefault(name, set()).add(str(output.dtype))
+
+        return capture
+
+    if args.precision:
+        for name, module in actor.engine.module.named_modules():
+            if name.endswith(("embed_tokens", "mlp.gate_proj", "model.norm")):
+                module.register_forward_hook(record_dtype(name))
     loss_cfg = DistillationLossConfig(
         loss_mode="mirror",
         mirror=dict(objective=args.objective, estimator=args.estimator, eta=args.eta, kappa=0.5, diagnostics=full),
@@ -91,8 +114,16 @@ def main():
         log_prob_min_clamp=None,
     )
     spec = loss_cfg.loss_settings
+    teacher_projection_dtypes = set()
     if full:
         actor.engine.configure_full_vocab(loss_cfg.full_vocab, str(root / "teacher"), spec=spec)
+        original_get = actor.engine.full_vocab_teacher_head.get
+
+        def checked_teacher_head(device, dtype):
+            teacher_projection_dtypes.add(str(dtype))
+            return original_get(device, dtype)
+
+        actor.engine.full_vocab_teacher_head.get = checked_teacher_head
     actor.set_loss_fn(
         partial(
             teacher_policy_loss,
@@ -100,12 +131,21 @@ def main():
             distillation_config=DistillationConfig(distillation_loss=loss_cfg),
         )
     )
-    rows = [torch.tensor([3 + rank, 7, 8, 9, 1]), torch.tensor([4, 10, 11, 1])]
+    rows = [
+        torch.cat((torch.arange(args.sequence_length - 1).remainder(28) + 3, torch.tensor([1]))),
+        torch.cat((torch.arange(args.sequence_length - 2).remainder(28) + 3, torch.tensor([1]))),
+    ]
+    # Keep both unequal sequences in one packed micro-batch.
+    if actor.engine.scaler is not None:
+        # Cross growth and resume boundaries quickly; production interval stays 400.
+        actor.engine.scaler.set_growth_interval(2)
+        actor.engine.scaler._init_scale = 32.0
     all_records = []
     snapshots = []
 
     def run_outer(version, empty=False):
-        masks = [torch.tensor([1, 0, 1]), torch.tensor([1, 1])]
+        masks = [torch.ones(len(r) - 2, dtype=torch.long) for r in rows]
+        masks[0][1] = 0
         if empty and rank == 0:
             masks = [torch.zeros_like(m) for m in masks]
         data = TensorDict(
@@ -172,6 +212,10 @@ def main():
         assert len(records) == 3
         values = [entry["metrics"]["optim/actor/loss"] for entry in records]
         assert torch.isfinite(torch.as_tensor(values)).all(), values
+        if full and spec.anchor_payload:
+            assert abs(records[0]["metrics"]["distill/anchor_kl"]) < 1e-7
+        if full:
+            assert teacher_projection_dtypes == {"torch.bfloat16"}, teacher_projection_dtypes
         assert getattr(actor.engine, "mirror_anchor_head", None) is None
         assert_on_cpu(actor)
         if spec.anchor_payload:
@@ -235,6 +279,7 @@ def main():
         expected = local_snapshot(dict(actor.engine.module.named_parameters()))
         expected_opt = local_snapshot(actor.engine.optimizer.state_dict())
         expected_sched = local_snapshot(actor.engine.lr_scheduler.state_dict())
+        expected_scaler = actor.engine.scaler.state_dict() if actor.engine.scaler else None
         actor.load_checkpoint(str(root / "checkpoint"))
         run_outer(3)
         torch.testing.assert_close(
@@ -242,7 +287,21 @@ def main():
         )
         torch.testing.assert_close(local_snapshot(actor.engine.optimizer.state_dict()), expected_opt, atol=0, rtol=0)
         assert local_snapshot(actor.engine.lr_scheduler.state_dict()) == expected_sched
+        assert (actor.engine.scaler.state_dict() if actor.engine.scaler else None) == expected_scaler
+    if args.precision:
+        expected_dtype = {
+            "bf16": "torch.bfloat16",
+            "fp16": "torch.float16",
+            "fp32": "torch.float32",
+            "bf16_fp32": "torch.float32",
+        }[args.precision]
+        assert observed_dtypes and all(v == {expected_dtype} for v in observed_dtypes.values()), observed_dtypes
     result = dict(
+        activation_dtypes={k: sorted(v) for k, v in observed_dtypes.items()},
+        teacher_projection_dtypes=sorted(teacher_projection_dtypes),
+        precision=args.precision,
+        sequence_length=args.sequence_length,
+        scaler=actor.engine.scaler.state_dict() if actor.engine.scaler else None,
         objective=args.objective,
         model_type=args.model_type,
         estimator=args.estimator,

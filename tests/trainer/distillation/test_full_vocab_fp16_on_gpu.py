@@ -14,14 +14,14 @@ pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA requ
 @pytest.mark.parametrize("objective,eta", [("mdpo", 1.0), ("mdpo", 0.3), ("bpo", 0.3)])
 @pytest.mark.parametrize("backend", ["dense", "precompute", "precompute_fused"])
 @pytest.mark.parametrize("vocab", [31, 8193])
-def test_fp16_full_vocab_matches_fp64_hidden_and_head_vjp(objective, eta, backend, vocab):
+@pytest.mark.parametrize("dtype", [torch.float16, torch.float32])
+def test_fp16_full_vocab_matches_fp64_hidden_and_head_vjp(objective, eta, backend, vocab, dtype):
     torch.manual_seed(87)
     hs, ws = [
-        (torch.randn(*shape, device="cuda", dtype=torch.float16) * 0.2).requires_grad_()
-        for shape in [(5, 16), (vocab, 16)]
+        (torch.randn(*shape, device="cuda", dtype=dtype) * 0.2).requires_grad_() for shape in [(5, 16), (vocab, 16)]
     ]
     ht, wt, hq, wq = [
-        torch.randn(*shape, device="cuda", dtype=torch.float16) * 0.2
+        torch.randn(*shape, device="cuda", dtype=torch.bfloat16) * 0.2
         for shape in [(5, 12), (vocab + 3, 12), (5, 16), (vocab, 16)]
     ]
     spec = resolve_distillation_spec(

@@ -240,14 +240,14 @@ def fused_rows(zp, zt, dtype):
 
 
 def fused_kl_rows(hs, ws, ht, wt):
-    if not hs.is_cuda or hs.dtype != torch.bfloat16:
-        raise ValueError("fused precompute requires BF16 CUDA")
+    if not hs.is_cuda or hs.dtype not in (torch.float16, torch.bfloat16, torch.float32):
+        raise ValueError("fused precompute requires FP16/BF16/FP32 CUDA")
     with full_kl_range("student_projection"):
         zp = project(hs, ws)
     with full_kl_range("teacher_projection"):
         zt = project(ht, wt)
     with full_kl_range("fused_kl_and_grad_logits"):
-        return fused_rows(zp, zt, hs.dtype)
+        return fused_rows(zp, zt, torch.float32 if hs.dtype == torch.float16 else hs.dtype)
 
 
 def fused_bpo_rows(z, b, log_q, dtype):

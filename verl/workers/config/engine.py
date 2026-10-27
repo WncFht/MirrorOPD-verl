@@ -250,6 +250,7 @@ class FSDPEngineConfig(EngineConfig):
             in distributed training. Important: this will negatively impact performance, so only use it for
             debugging.
         mixed_precision (Optional[dict[str, Any]]): Mixed precision configuration for FSDP, default None
+        forward_precision (Optional[str]): Shared execution profile; None preserves legacy mixed precision.
         dtype (str): Mixed precision training param dtype, default "bfloat16"
         use_no_sync_for_gradient_accumulation (bool): Whether to defer FSDP gradient synchronization until the
             final micro-batch. Disabling this reduces peak memory by synchronizing and resharding gradients after
@@ -285,6 +286,8 @@ class FSDPEngineConfig(EngineConfig):
     model_dtype: str = "fp32"
     use_orig_params: bool = False
     mixed_precision: Optional[dict[str, Any]] = None
+    # Optional shared execution profile; None preserves legacy mixed_precision settings.
+    forward_precision: Optional[str] = None
     ulysses_sequence_parallel_size: int = 1
     entropy_from_logits_with_chunking: bool = False
     entropy_from_logits_chunk_size: int = 2048
@@ -300,6 +303,22 @@ class FSDPEngineConfig(EngineConfig):
     def __post_init__(self):
         super().__post_init__()
         assert self.strategy in ["fsdp", "fsdp2", "fsdp_turbo"], f"strategy {self.strategy} not supported"
+        if self.forward_precision not in (None, "bf16", "fp16", "fp32", "bf16_fp32"):
+            raise ValueError(f"Unknown forward_precision: {self.forward_precision}")
+        if self.forward_precision is not None:
+            expected = {"bf16": "bfloat16", "fp16": "float16", "fp32": "float32", "bf16_fp32": "bfloat16"}[
+                self.forward_precision
+            ]
+            from verl.utils.torch_dtypes import PrecisionType
+
+            requested = (self.mixed_precision or {}).get("param_dtype", expected)
+            if PrecisionType.to_dtype(requested) != PrecisionType.to_dtype(expected):
+                raise ValueError("forward_precision conflicts with mixed_precision.param_dtype")
+            object.__setattr__(
+                self,
+                "mixed_precision",
+                {"reduce_dtype": "float32", **(self.mixed_precision or {}), "param_dtype": expected},
+            )
 
 
 @dataclass
@@ -373,6 +392,7 @@ class VeOmniEngineConfig(EngineConfig):
             in distributed training. Important: this will negatively impact performance, so only use it for
             debugging.
         mixed_precision (Optional[dict[str, Any]]): Mixed precision configuration for FSDP, default None
+        forward_precision (Optional[str]): Shared execution profile; None preserves legacy mixed precision.
         pad_to_length (bool): Round every packed micro-batch up to a multiple of
             ``pad_to_length_bucket`` tokens, so the packed shape only takes a handful of distinct
             values instead of a new one per micro-batch, which avoids repeated kernel
