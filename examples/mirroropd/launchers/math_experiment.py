@@ -109,6 +109,12 @@ MIRROR_COMPARISON_METHODS = (
 )
 
 
+PRECISION_COMPARISONS = (
+    (50, 51, "fp16", "FP16 + GradScaler"),
+    (52, 53, "bf16_fp32", "BF16 GEMM / FP32 intermediates"),
+)
+
+
 SAMPLED_SIGNALS = (
     ("rollout", "token_ppo"),
     ("rollout", "token_is"),
@@ -158,6 +164,11 @@ def preset_catalog() -> dict[str, Preset]:
         method="full_forward_kl",
         environment=(("FULL_KL_BACKEND", "precompute_fused"), ("FULL_KL_FORWARD_TEACHER_SUPPORT", "student")),
     )
+    for opd, mdpo, precision, _ in PRECISION_COMPARISONS:
+        for number, base in ((opd, "E44"), (mdpo, "E45")):
+            presets[f"E{number}"] = replace(
+                presets[base], environment=(*presets[base].environment, ("TRAIN_PRECISION", precision))
+            )
     return presets
 
 
@@ -179,6 +190,11 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("preset", nargs="?", help=f"E1–E{max(int(k[1:]) for k in PRESETS)} or custom")
     result.add_argument("--list-presets", action="store_true", help="list every preset without launching")
     result.add_argument("--overview", action="store_true", help="show grouped comparison tables without launching")
+    result.add_argument(
+        "--precision",
+        choices=("bf16", "fp16", "fp32", "bf16_fp32"),
+        help="actor/anchor execution profile; teacher and rollout keep their own precision",
+    )
     result.add_argument("--method", choices=("sampled", "full_kl", "full", "full_forward_kl", "mdpo", "bpo"))
     result.add_argument("--estimator", choices=("sampled", "full_vocab"))
     result.add_argument("--kappa", help="MDPO/BPO target shape (preset default, otherwise 0.5)")
@@ -355,7 +371,8 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S") + f"-{os.getpid()}"
     if role:
         if any(
-            getattr(args, k) is not None for k in ("method", "estimator", "kappa", "eta", "advantage", "policy_loss")
+            getattr(args, k) is not None
+            for k in ("method", "estimator", "kappa", "eta", "advantage", "policy_loss", "precision")
         ) or env.get("EXPERIMENT_METHOD"):
             raise ValueError("Independent validation does not accept method options")
         defaults(env, EXPERIMENT_NAME=f"math-opd-{name}-valid-{role}-{stamp}")
@@ -372,6 +389,14 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
     if preset and (args.method or env.get("EXPERIMENT_METHOD") or default_method) in ("mdpo", "bpo"):
         defaults(env, MIRROR_KAPPA=preset.kappa, MIRROR_ETA=preset.eta)
     method, estimator, label = method_options(args, env, default_method)
+    precision = args.precision or env.get("TRAIN_PRECISION")
+    if precision:
+        if precision not in ("bf16", "fp16", "fp32", "bf16_fp32"):
+            raise ValueError(f"Unknown TRAIN_PRECISION: {precision}")
+        options.append(f"actor_rollout_ref.actor.fsdp_config.forward_precision={precision}")
+        env["TRAIN_PRECISION"] = precision
+        label += f"-{precision}"
+
     if name == "E41" and method == "full_kl":
         # Both IDs already terminate this single-turn Base rollout. Coarsen
         # their loss identity only for the model/objective tested in E41.
@@ -471,6 +496,15 @@ def preset_overview() -> str:
             "Teacher FSDP token budget 沿用公共默认 32768；支持 E48-valid-student / E48-valid-teacher。\n"
             "E49：沿用 E48 模型、预算和验证；改为 full-vocab Forward KL，precompute_fused，"
             "teacher 支持显式条件化到 student 输出行。",
+            "精度对照：复用 E44/E45 的模型、256 outer / reuse16 / save128，教师与 rollout 保持原配置。\n"
+            + _aligned_table(
+                ("Full-KL", "MDPO", "Actor/anchor precision"),
+                [
+                    ("E44", "E45", "BF16 baseline"),
+                    *((f"E{opd}", f"E{mdpo}", label) for opd, mdpo, _, label in PRECISION_COMPARISONS),
+                ],
+            )
+            + "\n--precision bf16|fp16|bf16_fp32 可覆盖预设；fp32 是较慢的 packed math attention 参考。",
             "训练预算：Eval/Save 均按 outer step；Updates*=默认 batch==mini-batch 时的更新尝试数。\n"
             + _aligned_table(("Presets", "Reuse", "Outer", "Updates*", "LR", "Eval/Save", "Initial val"), budgets),
             "shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。\n"

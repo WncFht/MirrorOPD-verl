@@ -286,7 +286,7 @@ def test_failure_smoke_reuses_formal_pair_and_stop_protocol(tmp_path, setting):
     assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == ([151645] if setting == "E27" else [])
 
 
-@pytest.mark.parametrize("preset", ["E21-unknown", "E50", "E43-unknown", "A", "A-full"])
+@pytest.mark.parametrize("preset", ["E21-unknown", "E54", "E43-unknown", "A", "A-full"])
 def test_unknown_failure_preset_fails_without_launching(tmp_path, preset):
     result = _launch(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
     assert result.returncode == 2
@@ -1133,3 +1133,36 @@ def test_forward_smoke_is_small_and_records_file_metrics(tmp_path):
     assert list(cfg.trainer.logger) == ["console", "file"]
     assert cfg.data.train_batch_size == 8 and cfg.actor_rollout_ref.actor.ppo_epochs == 2
     assert cfg.distillation.shared_teacher.infer_max_token_len_per_gpu == 32768
+
+
+@pytest.mark.parametrize(
+    "preset,profile,eta", [("E50", "fp16", 1), ("E51", "fp16", 0.3), ("E52", "bf16_fp32", 1), ("E53", "bf16_fp32", 0.3)]
+)
+def test_precision_presets_preserve_protocol_and_teacher(tmp_path, preset, profile, eta):
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT), preset], STUDENT_GPUS="4")
+    OmegaConf.resolve(cfg)
+    engine = omega_conf_to_dataclass(cfg.actor_rollout_ref.actor.fsdp_config)
+    assert engine.forward_precision == profile
+    assert engine.mixed_precision["param_dtype"] == ("float16" if profile == "fp16" else "bfloat16")
+    assert cfg.distillation.shared_teacher.model_dtype == "bfloat16"
+    assert cfg.actor_rollout_ref.rollout.dtype == "bfloat16"
+    assert cfg.distillation.distillation_loss.mirror.eta == eta
+    assert cfg.trainer.total_training_steps == 256
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 16
+    assert cfg.trainer.save_freq == 128 and cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
+
+
+def test_precision_option_and_hydra_override_precedence(tmp_path):
+    cfg = _config(
+        tmp_path,
+        command=[
+            "bash",
+            str(SCRIPT),
+            "E52",
+            "--precision",
+            "fp16",
+            "actor_rollout_ref.actor.fsdp_config.forward_precision=bf16",
+        ],
+        TRAIN_PRECISION="fp32",
+    )
+    assert cfg.actor_rollout_ref.actor.fsdp_config.forward_precision == "bf16"
