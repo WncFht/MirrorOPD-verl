@@ -76,6 +76,7 @@ def validate_arm(arm):
         "aux_lr",
         "momentum",
         "weight_decay",
+        "save_checkpoint",
     }
     if set(arm) - allowed:
         raise ValueError(f"Unsupported branch keys: {set(arm) - allowed}")
@@ -93,6 +94,56 @@ def validate_arm(arm):
         raise ValueError("aux_lr and momentum apply only to the Muon adapter")
     if arm["solver"] in ("sgd", "muon") and arm.get("weight_decay", 0) != 0:
         raise ValueError("SGD/Muon controls use zero weight decay")
+    if arm.get("save_checkpoint") and arm["solver"] != "adam_saved":
+        raise ValueError("Reusable worker checkpoints require the native saved Adam optimizer")
+
+
+def canonical_score(metrics, spec):
+    """Expose comparable objective fields without inventing an OPD anchor KL."""
+    if spec.teacher_only_kl:
+        value = metrics["distill/full_kl"]
+        return metrics | {
+            "distill/teacher_kl": value,
+            "distill/target_kl": value,
+            "distill/objective": value,
+            "distill/target_log_z": 0.0,
+        }
+    return metrics | {"distill/objective": metrics["distill/mdpo/objective"]}
+
+
+def rope_buffer_summary(worker):
+    rope = getattr(getattr(worker.engine.module, "model", None), "rotary_emb", None)
+    if rope is None or not hasattr(rope, "original_inv_freq"):
+        return None
+    current = rope.inv_freq.detach().float().cpu()
+    original = rope.original_inv_freq.detach().float().cpu()
+    return {
+        "dtype": str(rope.inv_freq.dtype),
+        "original_dtype": str(rope.original_inv_freq.dtype),
+        "max_abs_change": (current - original).abs().max().item(),
+        "values": current.tolist(),
+        "original_values": original.tolist(),
+    }
+
+
+def set_teacher_rope(worker, mode):
+    """Diagnostic control of nonpersistent Qwen2 RoPE buffers, never weights."""
+    if mode == "native":
+        return
+    module = worker.engine.module
+    if module.config.model_type != "qwen2":
+        raise ValueError("The teacher buffer control is audited only for Qwen2")
+    rope = module.model.rotary_emb
+    if mode == "canonical":
+        fresh = type(rope)(rope.config, device="cpu")
+        device = rope.inv_freq.device
+        rope.inv_freq = fresh.inv_freq.to(device)
+        rope.original_inv_freq = fresh.original_inv_freq.to(device)
+    elif mode == "rounded_bf16":
+        rope.inv_freq = rope.inv_freq.bfloat16()
+        rope.original_inv_freq = rope.original_inv_freq.bfloat16()
+    else:
+        raise ValueError(mode)
 
 
 def main():
@@ -110,7 +161,12 @@ def main():
     parser.add_argument("--start", type=int, default=0)
     parser.add_argument("--response-start", type=int, default=0)
     parser.add_argument("--response-count", type=int, default=128)
+    parser.add_argument("--eta", type=float, default=0.3, help="eta=1 uses the native ordinary full-KL endpoint")
+    parser.add_argument("--teacher-rope", choices=("native", "canonical", "rounded_bf16"), default="native")
+    parser.add_argument("--monitor-canonical-teacher", action="store_true")
     args = parser.parse_args()
+    if not math.isfinite(args.eta) or not 0 < args.eta <= 1:
+        parser.error("Require 0 < eta <= 1")
     if bool(args.checkpoint) == bool(args.warm_outers):
         parser.error("Choose exactly one of checkpoint and warm-outers")
     arms = json.loads(args.branches.read_text())
@@ -146,16 +202,32 @@ def main():
         batch_size=[1],
     )
     teacher = replay.make_worker(args.teacher, world, True)
+    set_teacher_rope(teacher, args.teacher_rope)
     tu.assign_non_tensor(data, temperature=1.0, compute_loss=False, full_vocab_teacher=True, global_token_num=None)
     payload = teacher.infer_batch(data)
     data.update(payload.select("teacher_hidden", "teacher_positions"))
+    teacher_buffers = rope_buffer_summary(teacher)
+    canonical_payload = None
+    teacher_equals_canonical = None
+    if args.monitor_canonical_teacher:
+        if args.teacher_rope == "canonical":
+            canonical_payload = payload.select("teacher_hidden", "teacher_positions")
+        else:
+            set_teacher_rope(teacher, "canonical")
+            canonical_payload = teacher.infer_batch(data).select("teacher_hidden", "teacher_positions")
+        equal = torch.tensor(
+            int(torch.equal(payload["teacher_hidden"].values(), canonical_payload["teacher_hidden"].values())),
+            device="cuda",
+        )
+        dist.all_reduce(equal, op=dist.ReduceOp.MIN)
+        teacher_equals_canonical = bool(equal.item())
     del teacher, payload
     gc.collect()
     torch.cuda.empty_cache()
     cfg = DistillationConfig(
         distillation_loss=DistillationLossConfig(
             loss_mode="mirror",
-            mirror={"objective": "mdpo", "estimator": "full_vocab", "kappa": 0.0, "eta": 0.3, "diagnostics": True},
+            mirror={"objective": "mdpo", "estimator": "full_vocab", "kappa": 0.0, "eta": args.eta, "diagnostics": True},
             full_vocab=FullVocabConfig(backend="precompute_fused", token_chunk_size=128),
             use_task_rewards=False,
             use_policy_gradient=False,
@@ -235,6 +307,8 @@ def main():
                     {
                         "scope": __doc__,
                         "checkpoint": str(checkpoint),
+                        "teacher_rope": teacher_buffers,
+                        "teacher_equals_canonical": teacher_equals_canonical,
                         "arguments": {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
                         "branches": results,
                     },
@@ -331,7 +405,10 @@ def main():
             **arm,
             "post_updates": [],
             "steps": steps,
+            "eta": args.eta,
+            "objective": "full_reverse_kl" if spec.teacher_only_kl else "mdpo",
             "partition": getattr(actor.engine.optimizer, "partition", None),
+            "actor_rope": rope_buffer_summary(actor),
         }
         results.append(row)
         counter = [0]
@@ -350,21 +427,37 @@ def main():
             training = actor.engine.module.training
             previous_mode = actor.engine.mode
             kernels.full_vocab_objective_result = replay.reference
-            try:
+
+            def evaluate_once(probe):
                 out = actor.infer_batch(probe)
+                _, record = finalize_update(
+                    UpdateResult(None, tu.get(out, "metrics")),
+                    role="actor",
+                    collect_records=True,
+                    collect_metrics=True,
+                    update_index=counter[0],
+                    minibatches_per_epoch=1,
+                )
+                metrics = {
+                    k: v for k, v in record["metrics"].items() if k.startswith("distill/") and "_position/" not in k
+                }
+                return canonical_score(metrics, spec)
+
+            try:
+                metrics = evaluate_once(probe)
+                if canonical_payload is not None:
+                    if args.teacher_rope == "canonical":
+                        canonical_kl = metrics["distill/teacher_kl"]
+                    else:
+                        canonical_probe = probe.clone()
+                        canonical_probe.update(canonical_payload)
+                        canonical_kl = evaluate_once(canonical_probe)["distill/teacher_kl"]
+                    metrics["distill/canonical_teacher_kl"] = canonical_kl
             finally:
                 kernels.full_vocab_objective_result = old
                 actor.engine.module.train(training)
                 actor.engine.mode = previous_mode
-            _, record = finalize_update(
-                UpdateResult(None, tu.get(out, "metrics")),
-                role="actor",
-                collect_records=True,
-                collect_metrics=True,
-                update_index=counter[0],
-                minibatches_per_epoch=1,
-            )
-            return {k: v for k, v in record["metrics"].items() if k.startswith("distill/") and "_position/" not in k}
+            return metrics
 
         trainable = arm.get("trainable", "all")
         if trainable != "all" and actor.engine.module.config.tie_word_embeddings:
@@ -481,6 +574,12 @@ def main():
         assert row["optimizer_steps"] == steps
         assert all(r["optim/actor/lr"] == lr for r in row["updates"]), "Actual LR differs from requested LR"
         assert abs(row["before"]["distill/target_log_z"] - row["after"]["distill/target_log_z"]) < 1e-12
+        if arm.get("save_checkpoint"):
+            destination = args.out / f"checkpoint-arm{index}"
+            actor.engine.checkpoint_manager.optimizer = actor.engine.optimizer
+            actor.engine.checkpoint_manager.lr_scheduler = actor.engine.lr_scheduler
+            actor.save_checkpoint(str(destination), global_step=steps)
+            row["saved_checkpoint"] = str(destination)
         save()
         if rank == 0:
             print(
