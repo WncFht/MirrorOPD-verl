@@ -159,7 +159,7 @@ Backward 只将缓存梯度乘上上游标量，并传回 `hs/ws`；它没有提
 
 ### 生产精度
 
-CUDA BF16 hidden/head 的投影由 [project](../../../../verl/trainer/distillation/full_vocab.py) 使用 BF16 输入、FP32 输出；该路径的 log-softmax、KL 与行统计在 FP32 中计算。Precompute 的 `dh/dw` 用 FP32 缓冲累计，保存前转换回输入 dtype；logit VJP 也会转换为 hidden dtype 再参与梯度 GEMM。普通 CUDA BF16 投影的 autograd 兼容入口是 [ProjectionFP32](../../../../verl/trainer/distillation/full_vocab.py)。
+CUDA BF16 hidden/head 的投影由 [project](../../../../verl/utils/linear.py) 使用 BF16 输入、FP32 输出；该路径的 log-softmax、KL 与行统计在 FP32 中计算。Precompute 的 `dh/dw` 用 FP32 缓冲累计，保存前转换回输入 dtype；logit VJP 也会转换为 hidden dtype 再参与梯度 GEMM。普通 CUDA BF16 投影的 autograd 兼容入口是 [ProjectionFP32](../../../../verl/utils/linear.py)。
 
 因此 FP32 loss 不表示 backbone、投影输入和所有梯度存储都是 FP32。CPU BF16 等回退路径也不自动具有 CUDA `out_dtype=float32` 的性质。理论上 KL 非负，浮点误差下很小的负值应按[精度研究](../research/2026-10-24-KL精度误差模型与诊断接口走读.md)分析；生产 Full-KL 没有用 loss clamp 把它强行截为零。
 
