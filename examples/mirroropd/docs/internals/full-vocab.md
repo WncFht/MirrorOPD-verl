@@ -164,3 +164,6 @@ Teacher hidden 运输规模约为有效预测行数乘 $d_t$；需要 full ancho
 | 真实 FSDP2 分片、head 更新、不等长/空 rank、checkpoint 与下一次更新等价 | [test_full_vocab_fsdp2.py](../../../../tests/special_distributed/test_full_vocab_fsdp2.py) |
 
 CPU 数学测试不等同于 CUDA BF16/Triton 精度验收。已有 GPU 证据见[主分支四卡验收](../refactoring/2026-10-25-主分支四卡验收.md)，性能测量从 [profile](../infra/profile/README.md)进入。
+
+
+共享训练入口对 Qwen3 MoE 的放行限定为 full-vocab teacher，采用与上述输出适配器一致的 `qwen3_moe` 类型；student 和其他 MoE 架构继续受共享入口原有限制。入口层回归测试覆盖正式 teacher 配置构建，补充独立 FSDP2 数值验收未覆盖的主训练初始化检查。
