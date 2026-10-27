@@ -21,6 +21,8 @@ from pathlib import Path
 import replay_fixed_prefix as replay
 import torch
 import torch.distributed as dist
+from factor_mirror_precision import MODES as FACTOR_PRECISIONS
+from factor_mirror_precision import reset_interventions
 from tensordict import TensorDict
 
 from verl.trainer.distillation import full_vocab as kernels
@@ -158,6 +160,7 @@ def main():
             "residual_only",
             "fp32_norm",
             "fp32_final_norm",
+            *FACTOR_PRECISIONS,
         ],
     )
     args = parser.parse_args()
@@ -218,12 +221,15 @@ def main():
     def actor_for(dtype, attn):
         import verl.workers.engine.fsdp.transformer_impl as impl
 
+        reset_interventions()
         old_policy = impl.MixedPrecisionPolicy
         if args.mode == "layers":
             impl.MixedPrecisionPolicy = lambda **kw: old_policy(**(kw | {"cast_forward_inputs": False}))
         try:
             factory = replay.make_worker
-            if dtype not in ("bfloat16", "float16", "float32"):
+            if dtype in FACTOR_PRECISIONS:
+                from factor_mirror_precision import make_worker as factory
+            elif dtype not in ("bfloat16", "float16", "float32"):
                 from isolate_mirror_precision import make_worker as factory
             a = factory(student_path, world, precision=dtype, attention=attn)
         finally:
