@@ -64,3 +64,14 @@ def test_default_library_uses_tracked_documents(tmp_path):
     (directory / "draft.md").write_text("[unfinished](missing.md)\n")
     subprocess.run(["git", "-C", str(tmp_path), "add", str(tracked)], check=True)
     assert docs.maintained_pages(tmp_path) == [tracked]
+
+
+def test_ignored_local_output_does_not_hide_missing_source(tmp_path, monkeypatch):
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    (tmp_path / ".gitignore").write_text("/outputs/\n")
+    page = tmp_path / "page.md"
+    page.write_text("[local evidence](outputs/run/README.md)\n[source](missing.md)\n")
+    monkeypatch.setattr(docs, "ROOT", tmp_path)
+    _, errors = docs.check_pages([page])
+    assert len(errors) == 1
+    assert "missing.md" in errors[0]

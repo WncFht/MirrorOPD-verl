@@ -8,6 +8,7 @@
 | 沿源码理解训练实现 | [代码走读文档库](internals/README.md) | 教师、布局、目标、指标、更新和恢复 |
 | 盘点实验与后续缺口 | [实验目录](experiments/README.md) | E 系列、历史 Math/Coding、运行与分析进度、待跑项 |
 | 查看实际 run 与结果 | [运行记录](experiments/运行记录.md) | 实际配置、状态、更新数、最后验证坐标与分数 |
+| 查看 Qwen3-Base 完整蒸馏结果 | [Qwen3-1.7B-Base ← Qwen3-8B](experiments/e39-base-8b/README.md) | 200步完整验证、重复与长度、KL、样本错误和资源分析 |
 | 查指标定义与比较口径 | [实验指标](experiments/metrics/README.md) | policy-v3、历史字段、验证预算、KL 与位置统计 |
 | 复算分析与更新实验记录 | [复现与维护](experiments/复现与维护.md) | 独立日志仓库、快照、运行表、统计与静态绘图 |
 | 理解 OPD、full-vocab 与 Mirror Descent | [理论结论与阅读顺序](theory/README.md) | 目标、计算图、四种更新、控制变量和证明 |
@@ -16,6 +17,7 @@
 | 准备模型与数据 | [资产准备](资产准备.md) | 路径、导入与检查 |
 | 启动训练与选择当前预设 | [训练配方](训练配方.md) | 领域入口、公共长度、资源和参数；实验矩阵链接到各系列 |
 | 部署共享资源池及调整吞吐 | [基础设施](infra/README.md) | 运行架构、性能实测、MFU、资源分析 |
+| 比较 Full-KL、MDPO/BPO 的速度与显存 | [Full-vocab 性能](infra/profile/README.md) | 统一测量口径、算子与训练结果、原始证据 |
 | 核对指标实现与验收 | [指标工程](internals/metrics.md) | 实现、迁移、CPU/GPU 验收证据 |
 | 阅读架构重构与验收 | [架构重构](refactoring/README.md) | 实施边界、测试与覆盖限制 |
 | 使用 full-vocab 训练 | [Full-vocab 工程](full-vocab/README.md) | 调用链、算子、数据通路与实现验收 |

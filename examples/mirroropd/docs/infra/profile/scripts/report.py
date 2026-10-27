@@ -24,7 +24,7 @@ def main():
         "",
         "这份文档由测量文件自动生成。算子测试使用合成 BF16 hidden；固定输入管线使用真实"
         "模型和历史数学回答重新分词，lr=0 保持对照权重一致；完整"
-        "训练另走 Ray/TQ/vLLM。候选融合算子仍在实验目录，未替换生产默认。",
+        "训练另走 Ray/TQ/vLLM。本摘要只描述记录中的源码和测量条件，不推断生产默认配置。",
         "",
         "## 执行状态",
         "",
@@ -98,9 +98,9 @@ def main():
     (args.root / "report.md").write_text(report)
     if args.publish_dir:
         args.publish_dir.mkdir(parents=True, exist_ok=True)
-        (args.publish_dir / "2026-10-23-Full-KL分层测量记录.md").write_text(report)
         destination = args.publish_dir / "data" / args.root.name
         destination.mkdir(parents=True, exist_ok=True)
+        (destination / "report.md").write_text(report)
         for pattern in (
             "kernel*/benchmark.json",
             "pipeline-*/pipeline.json",
