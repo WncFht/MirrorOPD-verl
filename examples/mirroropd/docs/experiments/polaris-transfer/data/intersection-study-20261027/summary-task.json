@@ -1,0 +1,50 @@
+[
+  {
+    "arm": "initial",
+    "n": 32,
+    "correct": 21,
+    "stop": 21,
+    "mean_length": 2818.84375,
+    "prediction_missing": 11
+  },
+  {
+    "arm": "justrl-student-k16",
+    "n": 32,
+    "correct": 22,
+    "stop": 23,
+    "mean_length": 2558,
+    "prediction_missing": 8
+  },
+  {
+    "arm": "polaris-intersection-k16",
+    "n": 32,
+    "correct": 22,
+    "stop": 18,
+    "mean_length": 2815.21875,
+    "prediction_missing": 12
+  },
+  {
+    "arm": "polaris-student-k16",
+    "n": 32,
+    "correct": 20,
+    "stop": 18,
+    "mean_length": 2931.15625,
+    "prediction_missing": 12
+  },
+  {
+    "arm": "polaris-teacher-k16",
+    "n": 32,
+    "correct": 23,
+    "stop": 22,
+    "mean_length": 2372.4375,
+    "prediction_missing": 8
+  },
+  {
+    "arm": "polaris-topk-k16",
+    "n": 32,
+    "correct": 21,
+    "stop": 18,
+    "mean_length": 2766.0625,
+    "prediction_missing": 11
+  }
+]

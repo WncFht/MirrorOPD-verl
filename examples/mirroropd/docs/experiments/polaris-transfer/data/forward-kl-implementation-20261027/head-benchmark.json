@@ -1,0 +1,82 @@
+{
+  "device": "NVIDIA H800",
+  "torch": "2.11.0+cu128",
+  "tokens": 512,
+  "student_shape": [
+    151936,
+    1536
+  ],
+  "teacher_shape": [
+    152064,
+    3584
+  ],
+  "dtype": "bfloat16 projections / FP32 accumulation",
+  "shared_gpu": true,
+  "scope": "Native BF16 head-stage benchmark, with interleaved methods on shared GPUs.\n\nIncludes projections, row diagnostics, dH/dW and backward application. Excludes\nbackbones, rollout, IO and distributed collectives; not an end-to-end speed claim.\n",
+  "results": {
+    "forward_torch_512": {
+      "median_ms": 69.69866901636124,
+      "min_ms": 47.98464477062225,
+      "max_ms": 108.08540135622025,
+      "samples_ms": [
+        47.98464477062225,
+        69.69866901636124,
+        108.08540135622025,
+        58.29532444477081,
+        100.17699748277664,
+        59.148289263248444,
+        89.74198997020721
+      ],
+      "peak_allocated_gib": 6.561550140380859,
+      "loss_sum": 5.123188495635986
+    },
+    "forward_fused_512": {
+      "median_ms": 11.462919414043427,
+      "min_ms": 6.781294941902161,
+      "max_ms": 16.650311648845673,
+      "samples_ms": [
+        6.781518459320068,
+        6.781294941902161,
+        16.59008115530014,
+        11.462919414043427,
+        16.650311648845673,
+        8.925661444664001,
+        16.60943031311035
+      ],
+      "peak_allocated_gib": 3.5195083618164062,
+      "loss_sum": 5.123188495635986
+    },
+    "forward_fused_128": {
+      "median_ms": 26.625163853168488,
+      "min_ms": 11.886268854141235,
+      "max_ms": 26.913568377494812,
+      "samples_ms": [
+        11.886268854141235,
+        11.928126215934753,
+        26.64971351623535,
+        14.691263437271118,
+        26.625163853168488,
+        26.913568377494812,
+        26.7564058303833
+      ],
+      "peak_allocated_gib": 2.795668125152588,
+      "loss_sum": 5.123188495635986
+    },
+    "reverse_fused_512": {
+      "median_ms": 16.96895807981491,
+      "min_ms": 7.334895431995392,
+      "max_ms": 17.005719244480133,
+      "samples_ms": [
+        7.339172065258026,
+        7.334895431995392,
+        17.005719244480133,
+        16.96895807981491,
+        16.973212361335754,
+        16.77798479795456,
+        16.992375254631042
+      ],
+      "peak_allocated_gib": 3.3743486404418945,
+      "loss_sum": 5.554165840148926
+    }
+  }
+}

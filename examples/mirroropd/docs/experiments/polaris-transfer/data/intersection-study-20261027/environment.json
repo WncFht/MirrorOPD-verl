@@ -1,0 +1,18 @@
+{
+  "python": "3.12.11 (main, Oct  7 2025, 15:34:39) [Clang 20.1.4 ]",
+  "packages": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.12.1",
+    "flash-attn": "2.8.3",
+    "pyarrow": "26.0.0"
+  },
+  "gpu_model": "NVIDIA H800 80GB",
+  "used_physical_gpus": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "source_repository_head_at_completion": "ba9f2aa607c0e473857c2aff3297ffa8bd2705d9",
+  "note": "Task scripts are delivered as working-tree artifacts; this HEAD is not a claim that the whole worktree was clean."
+}

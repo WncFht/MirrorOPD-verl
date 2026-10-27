@@ -153,6 +153,11 @@ def preset_catalog() -> dict[str, Preset]:
         budget=replace(presets["E20"].budget, initial_validation=True),
         pair=replace(DEFAULT_PAIR, teacher="Polaris-7B-Preview", teacher_sequences=32),
     )
+    presets["E49"] = replace(
+        presets["E48"],
+        method="full_forward_kl",
+        environment=(("FULL_KL_BACKEND", "precompute_fused"), ("FULL_KL_FORWARD_TEACHER_SUPPORT", "student")),
+    )
     return presets
 
 
@@ -174,7 +179,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("preset", nargs="?", help=f"E1–E{max(int(k[1:]) for k in PRESETS)} or custom")
     result.add_argument("--list-presets", action="store_true", help="list every preset without launching")
     result.add_argument("--overview", action="store_true", help="show grouped comparison tables without launching")
-    result.add_argument("--method", choices=("sampled", "full_kl", "full", "mdpo", "bpo"))
+    result.add_argument("--method", choices=("sampled", "full_kl", "full", "full_forward_kl", "mdpo", "bpo"))
     result.add_argument("--estimator", choices=("sampled", "full_vocab"))
     result.add_argument("--kappa", help="MDPO/BPO target shape (preset default, otherwise 0.5)")
     result.add_argument("--eta", help="MDPO/BPO strength (preset default, otherwise 0.3); full_kl fixes eta=1")
@@ -283,7 +288,7 @@ def budget_overrides(env: dict[str, str], budget: Budget) -> list[str]:
 def method_options(args, env: dict[str, str], default_method: str) -> tuple[str, str, str]:
     method = args.method or env.get("EXPERIMENT_METHOD") or default_method
     method = "full_kl" if method == "full" else method
-    if method not in ("sampled", "full_kl", "mdpo", "bpo"):
+    if method not in ("sampled", "full_kl", "full_forward_kl", "mdpo", "bpo"):
         raise ValueError(f"Unknown method: {method}")
     mirror = method in ("mdpo", "bpo")
     if not mirror and (args.kappa is not None or args.eta is not None):
@@ -308,6 +313,7 @@ def method_options(args, env: dict[str, str], default_method: str) -> tuple[str,
     allowed = {
         "sampled": ("sampled",),
         "full_kl": ("full_vocab",),
+        "full_forward_kl": ("full_vocab",),
         "mdpo": ("sampled", "full_vocab"),
         "bpo": ("full_vocab",),
     }
@@ -462,7 +468,9 @@ def preset_overview() -> str:
             )
             + "\nE44–E47：batch=64，seed=42，IO async/prefetch 开启；MDPO/BPO 开启诊断，Full-KL 沿用 endpoint 指标。",
             "E48：R1-1.5B student / Polaris-7B-Preview teacher；沿用 E20 Full-KL、reuse16 与预算，开启初始验证。\n"
-            "Teacher FSDP token budget 沿用公共默认 32768；支持 E48-valid-student / E48-valid-teacher。",
+            "Teacher FSDP token budget 沿用公共默认 32768；支持 E48-valid-student / E48-valid-teacher。\n"
+            "E49：沿用 E48 模型、预算和验证；改为 full-vocab Forward KL，precompute_fused，"
+            "teacher 支持显式条件化到 student 输出行。",
             "训练预算：Eval/Save 均按 outer step；Updates*=默认 batch==mini-batch 时的更新尝试数。\n"
             + _aligned_table(("Presets", "Reuse", "Outer", "Updates*", "LR", "Eval/Save", "Initial val"), budgets),
             "shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。\n"

@@ -1,0 +1,66 @@
+[
+  {
+    "arm": "justrl-student-k16",
+    "updates": 64,
+    "clip_count": 30,
+    "last_kl": 0.02311442160862498,
+    "max_grad": 1.5643692016601562,
+    "peak_gib": 41.397197246551514
+  },
+  {
+    "arm": "polaris-intersection-k16",
+    "updates": 64,
+    "clip_count": 26,
+    "last_kl": 0.1368773158174008,
+    "max_grad": 1.3917484283447266,
+    "peak_gib": 53.603944301605225
+  },
+  {
+    "arm": "polaris-student-k16",
+    "updates": 64,
+    "clip_count": 25,
+    "last_kl": 0.1348409509519115,
+    "max_grad": 1.308064579963684,
+    "peak_gib": 53.603947162628174
+  },
+  {
+    "arm": "polaris-teacher-k16",
+    "updates": 64,
+    "clip_count": 56,
+    "last_kl": 0.19087997393216938,
+    "max_grad": 3.230215549468994,
+    "peak_gib": 53.603947162628174
+  },
+  {
+    "arm": "polaris-topk-k16",
+    "updates": 64,
+    "clip_count": 25,
+    "last_kl": 0.1380056634079665,
+    "max_grad": 1.3420590162277222,
+    "peak_gib": 53.603947162628174
+  },
+  {
+    "arm": "selection-high",
+    "updates": 16,
+    "clip_count": 16,
+    "last_kl": 0.18832854088395834,
+    "max_grad": 1.63426673412323,
+    "peak_gib": null
+  },
+  {
+    "arm": "selection-low",
+    "updates": 16,
+    "clip_count": 16,
+    "last_kl": 0.17782158171758056,
+    "max_grad": 1.5806909799575806,
+    "peak_gib": null
+  },
+  {
+    "arm": "selection-random",
+    "updates": 16,
+    "clip_count": 16,
+    "last_kl": 0.1948825605213642,
+    "max_grad": 1.454524040222168,
+    "peak_gib": null
+  }
+]

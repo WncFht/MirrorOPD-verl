@@ -64,6 +64,7 @@ def main():
     parser.add_argument("--tied-teacher", action="store_true")
     parser.add_argument("--teacher-extra-rows", type=int, default=0)
     parser.add_argument("--teacher-hidden-size", type=int, default=32)
+    parser.add_argument("--direction", choices=["reverse", "forward"], default="reverse")
     args = parser.parse_args()
     torch.set_num_threads(1)
     _, rank, world = initialize_global_process_group(timeout_second=180)
@@ -101,11 +102,20 @@ def main():
     dist.barrier()
     actor = make_worker(root / "student", world, teacher=False, full_vocab=True)
     teacher = make_worker(root / "teacher", world, teacher=True, full_vocab=True)
-    full_config = FullVocabConfig(backend=args.backend, token_chunk_size=2, vocab_chunk_size=7)
-    actor.engine.configure_full_vocab(full_config, str(root / "teacher"))
+    full_config = FullVocabConfig(
+        backend=args.backend,
+        token_chunk_size=2,
+        vocab_chunk_size=7,
+        forward_teacher_support="student" if args.teacher_extra_rows else "equal",
+    )
+    from verl.workers.config.distillation_spec import get_distillation_loss_settings
+
+    actor.engine.configure_full_vocab(
+        full_config, str(root / "teacher"), spec=get_distillation_loss_settings(f"full_{args.direction}_kl")
+    )
     distill = DistillationConfig(
         distillation_loss=DistillationLossConfig(
-            loss_mode="full_reverse_kl",
+            loss_mode=f"full_{args.direction}_kl",
             use_policy_gradient=False,
             use_task_rewards=False,
             loss_max_clamp=None,
@@ -148,6 +158,18 @@ def main():
             with torch.no_grad():
                 for ids, pos, th in zip(rows, positions, data["teacher_hidden"].unbind(), strict=True):
                     h = reference.model(ids.cuda()[None], use_cache=False).last_hidden_state[0, pos.cuda()]
+                    if args.direction == "forward":
+                        from verl.trainer.distillation.forward_vocab import full_forward_kl_result
+
+                        total += full_forward_kl_result(
+                            h,
+                            reference.lm_head.weight,
+                            th.cuda().float(),
+                            actor.engine.full_vocab_teacher_head.get(h.device, h.dtype),
+                            backend="dense",
+                            teacher_support="student",
+                        ).loss_sum
+                        continue
                     total += full_reverse_kl(
                         h,
                         reference.lm_head.weight,
@@ -170,13 +192,17 @@ def main():
             assert abs(loss - expected_loss) < 5e-4, (loss, expected_loss)
         record = {"step": step, "loss": loss}
         if args.backend != "liger":
-            prefixes = [f"distillation/full_kl_position/p{i * 10:02d}_{(i + 1) * 10:02d}/" for i in range(10)]
+            metric = "full_forward_kl" if args.direction == "forward" else "full_kl"
+            prefixes = [f"distillation/{metric}_position/p{i * 10:02d}_{(i + 1) * 10:02d}/" for i in range(10)]
             sums = [Observation.merge_partitions(metrics[p + "sum"]) for p in prefixes]
             counts = [Observation.merge_partitions(metrics[p + "token_count"]) for p in prefixes]
             assert sum(counts) == 4 * (world - 1 if step == 1 else world), counts
             multiplier = world - 1 if step == 1 else world
             assert counts == [multiplier * c for c in [0, 1, 1, 0, 0, 0, 0, 1, 1, 0]], counts
-            assert abs(sum(sums) / sum(counts) - Observation.merge_partitions(metrics["distillation/full_kl"])) < 1e-7
+            assert abs(sum(sums) / sum(counts) - Observation.merge_partitions(metrics[f"distillation/{metric}"])) < 1e-7
+            if args.direction == "forward":
+                assert "distillation/full_kl" in metrics
+                assert "distillation/teacher_outside_student_mass" in metrics
             record.update(position_kl_sums=sums, position_token_counts=counts)
         records.append(record)
     deltas = {
@@ -223,7 +249,13 @@ def main():
             torch.testing.assert_close(p.detach().to_local().cpu(), next_parameters[n], atol=0, rtol=0)
         torch.testing.assert_close(local_snapshot(actor.engine.optimizer.state_dict()), next_optimizer, atol=0, rtol=0)
         assert actor.engine.lr_scheduler.state_dict() == next_scheduler
-    result = {"backend": args.backend, "world_size": world, "records": records, "parameter_delta_norms_rank0": deltas}
+    result = {
+        "backend": args.backend,
+        "direction": args.direction,
+        "world_size": world,
+        "records": records,
+        "parameter_delta_norms_rank0": deltas,
+    }
     result["checkpoint_roundtrip"] = args.checkpoint
     result["scheduler_optimizer_roundtrip"] = args.checkpoint
     result["resumed_next_update_equivalent"] = args.checkpoint

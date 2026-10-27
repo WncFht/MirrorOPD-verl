@@ -1,0 +1,98 @@
+{
+  "completed_arms": [
+    {
+      "arm": "initial-justrl-forward-fold0",
+      "steps": 16,
+      "clipped": 16,
+      "peak_gib": 33.53673791885376
+    },
+    {
+      "arm": "initial-justrl-forward-fold1",
+      "steps": 16,
+      "clipped": 16,
+      "peak_gib": 33.605082511901855
+    },
+    {
+      "arm": "initial-justrl-reverse-fold0",
+      "steps": 16,
+      "clipped": 16,
+      "peak_gib": 33.542126178741455
+    },
+    {
+      "arm": "initial-justrl-reverse-fold1",
+      "steps": 16,
+      "clipped": 16,
+      "peak_gib": 33.60865116119385
+    },
+    {
+      "arm": "initial-polaris-forward-fold0",
+      "steps": 16,
+      "clipped": 16,
+      "peak_gib": 33.53675317764282
+    },
+    {
+      "arm": "initial-polaris-forward-fold1",
+      "steps": 16,
+      "clipped": 16,
+      "peak_gib": 33.60509777069092
+    },
+    {
+      "arm": "initial-polaris-reverse-fold0",
+      "steps": 16,
+      "clipped": 16,
+      "peak_gib": 33.54214143753052
+    },
+    {
+      "arm": "initial-polaris-reverse-fold1",
+      "steps": 16,
+      "clipped": 16,
+      "peak_gib": 33.60866641998291
+    },
+    {
+      "arm": "warm64-polaris-forward-fold0",
+      "steps": 16,
+      "clipped": 7,
+      "peak_gib": 33.53675317764282
+    },
+    {
+      "arm": "warm64-polaris-forward-fold1",
+      "steps": 16,
+      "clipped": 7,
+      "peak_gib": 33.60509777069092
+    },
+    {
+      "arm": "warm64-polaris-reverse-fold0",
+      "steps": 16,
+      "clipped": 5,
+      "peak_gib": 33.54214143753052
+    },
+    {
+      "arm": "warm64-polaris-reverse-fold1",
+      "steps": 16,
+      "clipped": 11,
+      "peak_gib": 33.60866641998291
+    }
+  ],
+  "optimizer_calls": 192,
+  "identical_initial_evaluations": true,
+  "fixed_inputs_across_updates": true,
+  "unequal_support_gradient_error": {
+    "reverse": 2.220446049250313e-16,
+    "forward": 1.1102230246251565e-16
+  },
+  "native_forward_kl_with_zero_extended_student_is_infinite": true,
+  "e48_optimizer_axis_continuous": true,
+  "document_checks": {
+    "pages": 2,
+    "local_links": 7,
+    "symbols": 0,
+    "python_examples": 0
+  },
+  "script_syntax": true,
+  "lineage_identity_verified": true,
+  "figure_audit": {
+    "complete-run": [],
+    "direction-initial": [],
+    "direction-warm64": []
+  }
+}

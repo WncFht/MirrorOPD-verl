@@ -1,0 +1,158 @@
+[
+  {
+    "teacher": "justrl",
+    "k": 8,
+    "tokens": 65536,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      1024.0,
+      180.0,
+      572.0,
+      63760.0
+    ],
+    "fractions": [
+      0.015625,
+      0.00274658203125,
+      0.00872802734375,
+      0.972900390625
+    ],
+    "overlap": 0.8195285797119141,
+    "common_student_mass": 0.9734282335266471,
+    "common_teacher_mass": 0.9743992509320378
+  },
+  {
+    "teacher": "justrl",
+    "k": 16,
+    "tokens": 65536,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      406.0,
+      66.0,
+      259.0,
+      64805.0
+    ],
+    "fractions": [
+      0.006195068359375,
+      0.001007080078125,
+      0.0039520263671875,
+      0.9888458251953125
+    ],
+    "overlap": 0.8242635726928711,
+    "common_student_mass": 0.989557865075767,
+    "common_teacher_mass": 0.9905072674155235
+  },
+  {
+    "teacher": "justrl",
+    "k": 64,
+    "tokens": 65536,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      62.0,
+      13.0,
+      30.0,
+      65431.0
+    ],
+    "fractions": [
+      0.000946044921875,
+      0.0001983642578125,
+      0.000457763671875,
+      0.9983978271484375
+    ],
+    "overlap": 0.8279023170471191,
+    "common_student_mass": 0.9983688788488507,
+    "common_teacher_mass": 0.9986716751009226
+  },
+  {
+    "teacher": "polaris",
+    "k": 8,
+    "tokens": 65536,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      1012.0,
+      192.0,
+      870.0,
+      63462.0
+    ],
+    "fractions": [
+      0.01544189453125,
+      0.0029296875,
+      0.013275146484375,
+      0.968353271484375
+    ],
+    "overlap": 0.7360363006591797,
+    "common_student_mass": 0.9686831720173359,
+    "common_teacher_mass": 0.9790352508425713
+  },
+  {
+    "teacher": "polaris",
+    "k": 16,
+    "tokens": 65536,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      397.0,
+      75.0,
+      434.0,
+      64630.0
+    ],
+    "fractions": [
+      0.0060577392578125,
+      0.0011444091796875,
+      0.006622314453125,
+      0.986175537109375
+    ],
+    "overlap": 0.7160100936889648,
+    "common_student_mass": 0.986561506986618,
+    "common_teacher_mass": 0.992438230663538
+  },
+  {
+    "teacher": "polaris",
+    "k": 64,
+    "tokens": 65536,
+    "category_order": [
+      "neither",
+      "teacher_only",
+      "student_only",
+      "both"
+    ],
+    "counts": [
+      63.0,
+      12.0,
+      94.0,
+      65367.0
+    ],
+    "fractions": [
+      0.0009613037109375,
+      0.00018310546875,
+      0.001434326171875,
+      0.9974212646484375
+    ],
+    "overlap": 0.6715083122253418,
+    "common_student_mass": 0.9974832078441978,
+    "common_teacher_mass": 0.9990564985200763
+  }
+]

@@ -1,0 +1,210 @@
+[
+  {
+    "teacher": "justrl",
+    "prompt_id": 0,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      6.40367705122728,
+      2.7761397174658153,
+      13.266433973658291,
+      10.62950470594619
+    ],
+    "coherence": 0.30103583424012226,
+    "norm_weighted_pairwise_cosine": 0.0911520593407302
+  },
+  {
+    "teacher": "justrl",
+    "prompt_id": 1,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      10.015868021578015,
+      45.17666640949746,
+      16.528006695054287,
+      29.427699397973164
+    ],
+    "coherence": 0.2730011136577061,
+    "norm_weighted_pairwise_cosine": 0.0434228218850831
+  },
+  {
+    "teacher": "justrl",
+    "prompt_id": 2,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      14.064449476378538,
+      0.17219630397831462,
+      14.916637292994524,
+      11.486961249964597
+    ],
+    "coherence": 0.2689229129978345,
+    "norm_weighted_pairwise_cosine": 0.038026726770535604
+  },
+  {
+    "teacher": "justrl",
+    "prompt_id": 3,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      24.430328566367187,
+      0.15197872153118827,
+      2.835868550549653,
+      10.54158969443714
+    ],
+    "coherence": 0.25758003125120377,
+    "norm_weighted_pairwise_cosine": 0.029948662017688803
+  },
+  {
+    "teacher": "justrl",
+    "prompt_id": 4,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      8.745311044625286,
+      7.899820124534531,
+      13.698146259981296,
+      11.28929410840348
+    ],
+    "coherence": 0.26947834802331905,
+    "norm_weighted_pairwise_cosine": 0.02764859060468005
+  },
+  {
+    "teacher": "justrl",
+    "prompt_id": 5,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      0.9923499981390927,
+      6.267570845201667,
+      16.98328594730715,
+      6.5484569731814295
+    ],
+    "coherence": 0.2651698145064921,
+    "norm_weighted_pairwise_cosine": 0.03910759227230043
+  },
+  {
+    "teacher": "justrl",
+    "prompt_id": 6,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      0.8420528008342385,
+      6.770199194008291,
+      15.891086009698132,
+      2.8280445292734475
+    ],
+    "coherence": 0.24943664308152785,
+    "norm_weighted_pairwise_cosine": -0.0017913722035863768
+  },
+  {
+    "teacher": "justrl",
+    "prompt_id": 7,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      16.039865408583843,
+      2.9199950917867143,
+      6.436686598579898,
+      23.443568531503033
+    ],
+    "coherence": 0.2557254646616585,
+    "norm_weighted_pairwise_cosine": 0.012837978807279576
+  },
+  {
+    "teacher": "polaris",
+    "prompt_id": 0,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      9.53783555192799,
+      5.504147078481598,
+      28.832323516531858,
+      55.19361010193271
+    ],
+    "coherence": 0.23830677878991896,
+    "norm_weighted_pairwise_cosine": -0.03216209879795873
+  },
+  {
+    "teacher": "polaris",
+    "prompt_id": 1,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      17.423019681054456,
+      23.463372624601135,
+      20.27988251195151,
+      19.197386336412585
+    ],
+    "coherence": 0.24591949778638306,
+    "norm_weighted_pairwise_cosine": -0.005527844766127786
+  },
+  {
+    "teacher": "polaris",
+    "prompt_id": 2,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      12.157214048111742,
+      0.6446752415949001,
+      29.541222250541647,
+      7.784346043921549
+    ],
+    "coherence": 0.2527335018439429,
+    "norm_weighted_pairwise_cosine": 0.008261939896055575
+  },
+  {
+    "teacher": "polaris",
+    "prompt_id": 3,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      79.68227999628202,
+      0.5907046428223586,
+      14.722477977049595,
+      17.7387391037847
+    ],
+    "coherence": 0.25547299591771644,
+    "norm_weighted_pairwise_cosine": 0.02584765154172313
+  },
+  {
+    "teacher": "polaris",
+    "prompt_id": 4,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      9.646458970081595,
+      17.07800582487475,
+      39.151848214282666,
+      12.453542386627168
+    ],
+    "coherence": 0.26627164317072005,
+    "norm_weighted_pairwise_cosine": 0.03320365984626873
+  },
+  {
+    "teacher": "polaris",
+    "prompt_id": 5,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      8.486494649493974,
+      20.688827002527912,
+      32.761118889804074,
+      29.057553981398176
+    ],
+    "coherence": 0.2517628506748478,
+    "norm_weighted_pairwise_cosine": 0.002908116698332439
+  },
+  {
+    "teacher": "polaris",
+    "prompt_id": 6,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      1.6947303962257525,
+      1.8138224201374276,
+      28.97996651302117,
+      22.143452908716394
+    ],
+    "coherence": 0.2501287338704544,
+    "norm_weighted_pairwise_cosine": 0.00041747085419342907
+  },
+  {
+    "teacher": "polaris",
+    "prompt_id": 7,
+    "units": "four consecutive 64-token spans; eight scored states each",
+    "gradient_norms": [
+      6.601020588932378,
+      5.9161587800951425,
+      8.689517929130778,
+      26.880227658410668
+    ],
+    "coherence": 0.2512092767569289,
+    "norm_weighted_pairwise_cosine": 0.002953456518310992
+  }
+]

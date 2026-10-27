@@ -21,7 +21,7 @@ case "${EXPERIMENT_METHOD:-sampled}" in
             "distillation.distillation_loss.policy_loss_mode=$OPD_POLICY_LOSS_MODE"
         )
         ;;
-    full_kl|mdpo|bpo)
+    full_kl|full_forward_kl|mdpo|bpo)
         if [[ $DISTILLATION_EXECUTION_MODE != shared_sync ]]; then
             echo 'Full-KL and mirror currently require DISTILLATION_EXECUTION_MODE=shared_sync' >&2
             exit 2
@@ -30,7 +30,7 @@ case "${EXPERIMENT_METHOD:-sampled}" in
         _opd_estimator=${MIRROR_ESTIMATOR:-full_vocab}
         _opd_kappa=${MIRROR_KAPPA:-0.5}
         _opd_eta=${MIRROR_ETA:-0.3}
-        if [[ $EXPERIMENT_METHOD == full_kl ]]; then
+        if [[ $EXPERIMENT_METHOD == full_kl || $EXPERIMENT_METHOD == full_forward_kl ]]; then
             _opd_objective=mdpo; _opd_estimator=full_vocab; _opd_kappa=0; _opd_eta=1
         fi
         case "$_opd_objective/$_opd_estimator" in
@@ -51,6 +51,13 @@ case "${EXPERIMENT_METHOD:-sampled}" in
             "distillation.distillation_loss.full_vocab.prefetch=${FULL_KL_PREFETCH:-False}"
             actor_rollout_ref.actor.calculate_entropy=False
         )
+        if [[ $EXPERIMENT_METHOD == full_forward_kl ]]; then
+            DISTILLATION_OBJECTIVE_ARGS+=(
+                distillation.distillation_loss.loss_mode=full_forward_kl
+                distillation.distillation_loss.mirror=null
+                "distillation.distillation_loss.full_vocab.forward_teacher_support=${FULL_KL_FORWARD_TEACHER_SUPPORT:-equal}"
+            )
+        fi
         ;;
     *) echo "Unknown EXPERIMENT_METHOD: $EXPERIMENT_METHOD" >&2; exit 2 ;;
 esac

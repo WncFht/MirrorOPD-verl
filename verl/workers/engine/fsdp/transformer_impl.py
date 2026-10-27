@@ -1312,12 +1312,20 @@ class FSDPEngineWithLMHead(FSDPEngine):
                         token_chunk=config.token_chunk_size,
                         vocab_chunk=config.vocab_chunk_size,
                         termination_token_ids=getattr(config, "termination_token_ids", ()),
+                        forward_teacher_support=getattr(config, "forward_teacher_support", "equal"),
                     )
 
             # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
             with full_kl_range("head_loss"):
                 result = head(selected, full_vocab_callback=compute)
-            if spec.teacher_only_kl:
+            if spec.teacher_only_forward_kl:
+                model_output = {
+                    "full_forward_kl_sum": result.loss_sum,
+                    "full_forward_kl_count": packed.numel(),
+                    "forward_statistics": {k: v.sum() for k, v in result.token_diagnostics.items()},
+                }
+                prefix = "full_forward_kl"
+            elif spec.teacher_only_kl:
                 model_output = {"full_kl_sum": result.loss_sum, "full_kl_count": packed.numel()}
                 if getattr(config, "termination_token_ids", ()):
                     model_output["termination_kl_sum"] = result.loss_sum
@@ -1339,6 +1347,9 @@ class FSDPEngineWithLMHead(FSDPEngine):
                 bins = relative_position_bins(targets, lengths)
                 sums, counts = position_statistics(result.token_objective, bins)
                 model_output.update({f"{prefix}_position_sums": sums, f"{prefix}_position_counts": counts})
+                if spec.teacher_only_forward_kl:
+                    reverse_sums, _ = position_statistics(result.token_diagnostics["full_kl"], bins)
+                    model_output.update(full_kl_position_sums=reverse_sums, full_kl_position_counts=counts)
             return model_output
 
         with full_kl_range(f"{capture}_forward" if capture else "student_forward"):

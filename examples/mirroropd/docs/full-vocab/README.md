@@ -4,6 +4,7 @@
 
 | 内容 | 入口 |
 | --- | --- |
+| 运行Full-vocab Forward KL / E49 | [目标、支持集、优化和运行命令](forward-kl.md) |
 | 2026-10-24 Qwen3 tied head、输出支持修正、运行时 EOS 配置与保存的验收结果 | [实现验收与对齐诊断](../failure-reproduction/2026-10-24-OPD实现验收与对齐诊断.md) |
 | 当前 Full-KL 调用链、数据协议、梯度、backend 与模型支持 | [Full-vocab 走读](../internals/full-vocab.md) |
 | 2026-10-23 阶段的调用链和优化背景 | [历史全流程源码走读](2026-10-23-Full-KL全流程源码走读.md) |

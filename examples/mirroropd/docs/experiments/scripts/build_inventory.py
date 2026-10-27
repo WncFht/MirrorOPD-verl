@@ -33,7 +33,7 @@ def select(config, key):
 
 def is_full_kl(config):
     mode = select(config, "distillation.distillation_loss.loss_mode")
-    return mode == "full_reverse_kl" or (
+    return mode in ("full_reverse_kl", "full_forward_kl") or (
         mode == "mirror"
         and select(config, "distillation.distillation_loss.mirror.objective") == "mdpo"
         and select(config, "distillation.distillation_loss.mirror.estimator") == "full_vocab"
@@ -42,6 +42,8 @@ def is_full_kl(config):
 
 
 def method_label(config):
+    if select(config, "distillation.distillation_loss.loss_mode") == "full_forward_kl":
+        return "Full-Forward-KL"
     if is_full_kl(config):
         return "Full-KL"
     if select(config, "distillation.distillation_loss.loss_mode") == "mirror":
@@ -53,9 +55,13 @@ def method_label(config):
 
 
 def family(name):
+    if re.match(r"math-opd-E(48|49)-", name):
+        return "polaris-transfer"
     if re.match(r"math-opd-E(44|45|46|47)-", name):
         return "mirror-comparison"
-    if name.startswith("math-opd-custom-") or re.match(r"math-opd-E\d+-(mdpo|bpo|sampled|full_kl)-", name):
+    if name.startswith("math-opd-custom-") or re.match(
+        r"math-opd-E\d+-(mdpo|bpo|sampled|full_kl|full_forward_kl)-", name
+    ):
         return "method-overrides"
     match = re.match(r"math-opd-E(\d+)-", name)
     if match:
@@ -178,6 +184,7 @@ def render(inventory):
         "other-runs": "历史 Math / Coding / IF",
         "method-overrides": "统一入口的方法变体与 custom 实验",
         "mirror-comparison": "Full-KL / MDPO / BPO 正式对照 E44–E47",
+        "polaris-transfer": "Polaris 跨源教师 E48–E49",
     }
     lines = [
         "# 实际运行记录",

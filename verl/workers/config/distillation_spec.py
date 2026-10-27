@@ -40,13 +40,17 @@ class DistillationLossSettings(BaseConfig):
 
     @property
     def anchor_payload(self):
-        if self.objective is None or (self.objective == "mdpo" and self.eta == 1):
+        if self.objective in (None, "forward_kl") or (self.objective == "mdpo" and self.eta == 1):
             return None
         return "hidden" if self.payload_kind == "hidden" else "scalar"
 
     @property
     def teacher_only_kl(self):
         return self.objective == "mdpo" and self.eta == 1 and self.payload_kind == "hidden"
+
+    @property
+    def teacher_only_forward_kl(self):
+        return self.objective == "forward_kl" and self.payload_kind == "hidden"
 
     _mutable_fields = {"names"}
 
@@ -61,6 +65,7 @@ class DistillationLossSettings(BaseConfig):
 
 
 _BUILTINS = (
+    DistillationLossSettings(names="full_forward_kl", payload_kind="hidden", objective="forward_kl"),
     DistillationLossSettings(names="full_reverse_kl", payload_kind="hidden", objective="mdpo"),
     DistillationLossSettings(names="forward_kl_topk", use_topk=True),
     DistillationLossSettings(names=["kl", "k1", "abs", "mse", "k2", "low_var_kl", "k3"], use_estimator=True),

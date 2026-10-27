@@ -1,0 +1,100 @@
+{
+  "prompts": 24,
+  "rollouts": 72,
+  "states": 3376,
+  "target_comparisons": 6752,
+  "same_inputs_for_pre_post": true,
+  "no_train_eval_prompt_overlap": true,
+  "noop_max_kl_change": 0.0,
+  "completed_arms": [
+    {
+      "arm": "justrl-justrl-split0-t1-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.798198699951172
+    },
+    {
+      "arm": "justrl-justrl-split1-t1-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.859264850616455
+    },
+    {
+      "arm": "justrl-student-split0-t1-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.798198699951172
+    },
+    {
+      "arm": "justrl-student-split1-t1-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.859264850616455
+    },
+    {
+      "arm": "polaris-polaris-split0-t1-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.798229217529297
+    },
+    {
+      "arm": "polaris-polaris-split1-t1-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.85929536819458
+    },
+    {
+      "arm": "polaris-student-split0-t1-lr0",
+      "steps": 1,
+      "parameter_count": 1777088000,
+      "clipped_updates": 1,
+      "peak_gib": 18.798229217529297
+    },
+    {
+      "arm": "polaris-student-split0-t1-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.79189395904541
+    },
+    {
+      "arm": "polaris-student-split0-t1.5-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.798229217529297
+    },
+    {
+      "arm": "polaris-student-split1-t1-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.85929536819458
+    },
+    {
+      "arm": "polaris-student-split1-t1.5-lr1e-06",
+      "steps": 16,
+      "parameter_count": 1777088000,
+      "clipped_updates": 16,
+      "peak_gib": 18.85929536819458
+    }
+  ],
+  "geometry_fixed_input": true,
+  "finite_losses_and_gradients": true,
+  "document_checks": {
+    "pages": 2,
+    "local_links": 7,
+    "symbols": 0,
+    "python_examples": 0
+  },
+  "figure_audit": {
+    "source-mismatch": [],
+    "heldout-transfer": []
+  }
+}

@@ -434,8 +434,17 @@ def full_vocab_objective_result(
     token_chunk=512,
     vocab_chunk=8192,
     termination_token_ids=(),
+    forward_teacher_support="equal",
 ):
     """One dispatcher for teacher-only KL, weighted-target MDPO, and full BPO."""
+    if spec.teacher_only_forward_kl:
+        if termination_token_ids:
+            raise ValueError("forward KL does not support termination equivalence")
+        from verl.trainer.distillation.forward_vocab import full_forward_kl_result
+
+        return full_forward_kl_result(
+            hs, ws, ht, wt, backend=backend, token_chunk=token_chunk, teacher_support=forward_teacher_support
+        )
     if spec.teacher_only_kl:
         result = full_reverse_kl_result(
             hs,

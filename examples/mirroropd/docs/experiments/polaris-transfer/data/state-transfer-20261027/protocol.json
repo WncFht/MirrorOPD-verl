@@ -1,0 +1,24 @@
+{
+  "seed": 20261027,
+  "models": {
+    "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+    "justrl": "JustRL-DeepSeek-1.5B",
+    "polaris": "Polaris-7B-Preview"
+  },
+  "max_new_tokens": 768,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_prompt_tokens": 384,
+  "domains": {
+    "math": 16,
+    "code": 4,
+    "if": 4
+  },
+  "train_prompt_count": 8,
+  "generation_dtype": "bfloat16",
+  "attention": "flash_attention_2",
+  "early_positions": "0:256:8",
+  "late_positions": "512:768:16",
+  "note": "Short fixed-prefix mechanism probe; no final task-accuracy claim or long-horizon reproduction.",
+  "selection": "seeded shuffled prompts, 32..384 tokens, English/no CJK, excludes external URLs and interactive code tasks"
+}

@@ -1,0 +1,106 @@
+[
+  {
+    "teacher": "justrl",
+    "region": "early",
+    "metric": "kl",
+    "comparison": "teacher-source minus student-source",
+    "prompt_count": 16,
+    "mean_delta": 0.0035923275554702525,
+    "prompt_paired_ci": [
+      -0.020785807261677676,
+      0.02572073456939545
+    ],
+    "positive_prompt_count": 9
+  },
+  {
+    "teacher": "justrl",
+    "region": "early",
+    "metric": "overlap64",
+    "comparison": "teacher-source minus student-source",
+    "prompt_count": 16,
+    "mean_delta": -0.002105712890625,
+    "prompt_paired_ci": [
+      -0.008544921875,
+      0.00433349609375
+    ],
+    "positive_prompt_count": 8
+  },
+  {
+    "teacher": "justrl",
+    "region": "late",
+    "metric": "kl",
+    "comparison": "teacher-source minus student-source",
+    "prompt_count": 16,
+    "mean_delta": -0.012010656543744114,
+    "prompt_paired_ci": [
+      -0.05452908618034624,
+      0.026848400422207153
+    ],
+    "positive_prompt_count": 9
+  },
+  {
+    "teacher": "justrl",
+    "region": "late",
+    "metric": "overlap64",
+    "comparison": "teacher-source minus student-source",
+    "prompt_count": 16,
+    "mean_delta": -0.00152587890625,
+    "prompt_paired_ci": [
+      -0.013427734375,
+      0.0087890625
+    ],
+    "positive_prompt_count": 11
+  },
+  {
+    "teacher": "polaris",
+    "region": "early",
+    "metric": "kl",
+    "comparison": "teacher-source minus student-source",
+    "prompt_count": 16,
+    "mean_delta": 0.14715836221180062,
+    "prompt_paired_ci": [
+      0.05787794275251884,
+      0.23692201277259395
+    ],
+    "positive_prompt_count": 12
+  },
+  {
+    "teacher": "polaris",
+    "region": "early",
+    "metric": "overlap64",
+    "comparison": "teacher-source minus student-source",
+    "prompt_count": 16,
+    "mean_delta": -0.026092529296875,
+    "prompt_paired_ci": [
+      -0.03515625,
+      -0.01702880859375
+    ],
+    "positive_prompt_count": 2
+  },
+  {
+    "teacher": "polaris",
+    "region": "late",
+    "metric": "kl",
+    "comparison": "teacher-source minus student-source",
+    "prompt_count": 16,
+    "mean_delta": 0.35645593723265984,
+    "prompt_paired_ci": [
+      0.18997715710502255,
+      0.5516351203435184
+    ],
+    "positive_prompt_count": 14
+  },
+  {
+    "teacher": "polaris",
+    "region": "late",
+    "metric": "overlap64",
+    "comparison": "teacher-source minus student-source",
+    "prompt_count": 16,
+    "mean_delta": -0.1256103515625,
+    "prompt_paired_ci": [
+      -0.14654541015625,
+      -0.10443115234375
+    ],
+    "positive_prompt_count": 0
+  }
+]

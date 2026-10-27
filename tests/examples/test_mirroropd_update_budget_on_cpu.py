@@ -122,3 +122,19 @@ def test_other_mirror_objectives_are_not_full_kl_budget_runs(run, objective, est
     }
     with pytest.raises(ValueError, match="Full-KL"):
         module.verify(cfg, rows, 6)
+
+
+def test_forward_budget_requires_objective_and_reverse_diagnostic(run):
+    cfg, rows = run
+    cfg.distillation.distillation_loss.loss_mode = 'full_forward_kl'
+    for row in rows:
+        if 'optim/actor/update_applied' in row:
+            row['distill/full_forward_kl'] = 2 / row['step/update']
+    assert module.verify(cfg, rows, 6)['successful_updates'] == 6
+    rows[0]['distill/full_forward_kl'] = float('nan')
+    with pytest.raises(ValueError, match='nonfinite KL'):
+        module.verify(cfg, rows, 6)
+    rows[0]['distill/full_forward_kl'] = 2.
+    rows[0].pop('distill/full_kl')
+    with pytest.raises(ValueError, match='native reverse-KL'):
+        module.verify(cfg, rows, 6)

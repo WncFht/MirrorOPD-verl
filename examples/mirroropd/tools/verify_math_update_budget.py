@@ -45,13 +45,14 @@ def verify(config, rows, expected_updates):
     require(not get("trainer.v1.sampler.sync_refill_failed_groups", False), "Refill changes prompt consumption")
     require(get("distillation.enabled") is True, "Expected enabled distillation")
     mode = get("distillation.distillation_loss.loss_mode")
-    is_full_kl = mode == "full_reverse_kl" or (
+    is_full_kl = mode in ("full_reverse_kl", "full_forward_kl") or (
         mode == "mirror"
         and get("distillation.distillation_loss.mirror.objective") == "mdpo"
         and get("distillation.distillation_loss.mirror.estimator") == "full_vocab"
         and get("distillation.distillation_loss.mirror.eta") == 1
     )
-    require(is_full_kl, "Expected Full-KL loss (legacy or MDPO/full_vocab/eta=1)")
+    require(is_full_kl, "Expected Full-KL loss (forward/reverse or MDPO/full_vocab/eta=1)")
+    objective_metric = "distill/full_forward_kl" if mode == "full_forward_kl" else "distill/full_kl"
     require(outer * epochs == expected_updates, "Configured update budget does not match expected_updates")
 
     updates, completed, evaluations = {}, {}, {}
@@ -68,10 +69,15 @@ def verify(config, rows, expected_updates):
                 row.get("step/optimizer"),
                 row["optim/actor/update_applied"],
                 row.get("optim/actor/update_skipped"),
-                row.get("distill/full_kl"),
+                row.get(objective_metric),
             )
             require(update not in updates or updates[update] == signature, f"Conflicting update {update}")
             updates[update] = signature
+            if mode == "full_forward_kl":
+                reverse = row.get("distill/full_kl")
+                require(
+                    isinstance(reverse, (int, float)) and math.isfinite(reverse), "Missing native reverse-KL diagnostic"
+                )
         if "perf/timing/outer_step_seconds" in row:
             signature = (row.get("step/update"), row.get("step/optimizer"))
             require(step not in completed or completed[step] == signature, f"Conflicting outer {step}")

@@ -286,7 +286,7 @@ def test_failure_smoke_reuses_formal_pair_and_stop_protocol(tmp_path, setting):
     assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == ([151645] if setting == "E27" else [])
 
 
-@pytest.mark.parametrize("preset", ["E21-unknown", "E49", "E43-unknown", "A", "A-full"])
+@pytest.mark.parametrize("preset", ["E21-unknown", "E50", "E43-unknown", "A", "A-full"])
 def test_unknown_failure_preset_fails_without_launching(tmp_path, preset):
     result = _launch(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
     assert result.returncode == 2
@@ -1091,3 +1091,45 @@ def test_equal_update_presets_allow_explicit_smoke_overrides(tmp_path, group):
     assert cfg.actor_rollout_ref.actor.ppo_epochs == cfg.trainer.total_training_steps == 2
     assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 8
     assert cfg.trainer.test_freq == 1 and cfg.trainer.save_freq == -1
+
+
+def test_e49_forward_preserves_e48_protocol_and_explicit_support(tmp_path):
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT), "E49"], STUDENT_GPUS="4")
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
+    assert loss.loss_mode == "full_forward_kl"
+    assert loss.loss_settings.anchor_payload is None
+    assert loss.loss_settings.teacher_only_forward_kl
+    assert loss.full_vocab.forward_teacher_support == "student"
+    assert loss.full_vocab.backend == "precompute_fused"
+    assert loss.full_vocab.token_chunk_size == 512
+    assert loss.full_vocab.async_write and loss.full_vocab.prefetch
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/Polaris-7B-Preview")
+    assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 16
+    assert cfg.trainer.total_training_steps == 256 and cfg.trainer.val_before_train
+    assert (cfg.trainer.test_freq, cfg.trainer.save_freq) == (32, 64)
+    assert cfg.actor_rollout_ref.actor.optim.lr == 1e-6
+    assert cfg.data.max_response_length == 7168
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.max_tokens == 31744
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
+    assert not cfg.actor_rollout_ref.rollout.calculate_log_probs
+
+
+def test_forward_smoke_is_small_and_records_file_metrics(tmp_path):
+    cfg = _config(
+        tmp_path,
+        script=SCRIPT.parent / "smoke/smoke_full_forward_kl.sh",
+        TRAIN_BATCH_SIZE="8",
+        PPO_EPOCHS="2",
+        STUDENT_GPUS="4",
+    )
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    assert cfg.distillation.distillation_loss.loss_mode == "full_forward_kl"
+    assert cfg.distillation.distillation_loss.full_vocab.forward_teacher_support == "student"
+    assert cfg.trainer.total_training_steps == 2 and not cfg.trainer.val_before_train
+    assert list(cfg.trainer.logger) == ["console", "file"]
+    assert cfg.data.train_batch_size == 8 and cfg.actor_rollout_ref.actor.ppo_epochs == 2
+    assert cfg.distillation.shared_teacher.infer_max_token_len_per_gpu == 32768

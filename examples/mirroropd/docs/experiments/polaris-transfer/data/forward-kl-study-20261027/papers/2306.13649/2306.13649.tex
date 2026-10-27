@@ -1,0 +1,1437 @@
+% \documentclass{article}
+
+% \documentclass{article} % For LaTeX2e
+% \usepackage[pdftex,dvipsnames]{xcolor}  % Coloured text etc.
+% \usepackage{iclr2024_conference,times}
+
+
+% \input{math_commands.tex}
+
+% \usepackage{booktabs}
+
+% % # PACKAGES
+% \usepackage[utf8]{inputenc} % allow utf-8 input
+% \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+% % \usepackage{algorithmic}
+% \usepackage[noend]{algorithmic}
+
+
+% \usepackage{booktabs}
+
+
+% \usepackage{url}
+% \usepackage{natbib}
+% \usepackage{wrapfig}
+% \usepackage{algorithm}
+% \usepackage{placeins}
+% \usepackage{bbold}
+% % \usepackage{xcolor}
+% \usepackage{amssymb}
+% \usepackage{bm}
+% \usepackage{mathtools}
+% \usepackage{amsmath}
+% \usepackage{verbatim}
+
+
+
+\documentclass{article} % For LaTeX2e
+% \usepackage[dvipsnames]{xcolor} % load before iclr to avoid option clash
+\usepackage[pdftex,dvipsnames]{xcolor}  % Coloured text etc.
+\usepackage{iclr2024_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+%%%%% NEW MATH DEFINITIONS %%%%%
+
+\usepackage{amsmath,amsfonts,bm}
+
+% Mark sections of captions for referring to divisions of figures
+\newcommand{\figleft}{{\em (Left)}}
+\newcommand{\figcenter}{{\em (Center)}}
+\newcommand{\figright}{{\em (Right)}}
+\newcommand{\figtop}{{\em (Top)}}
+\newcommand{\figbottom}{{\em (Bottom)}}
+\newcommand{\captiona}{{\em (a)}}
+\newcommand{\captionb}{{\em (b)}}
+\newcommand{\captionc}{{\em (c)}}
+\newcommand{\captiond}{{\em (d)}}
+
+% Highlight a newly defined term
+\newcommand{\newterm}[1]{{\bf #1}}
+
+
+% Figure reference, lower-case.
+\def\figref#1{figure~\ref{#1}}
+% Figure reference, capital. For start of sentence
+\def\Figref#1{Figure~\ref{#1}}
+\def\twofigref#1#2{figures \ref{#1} and \ref{#2}}
+\def\quadfigref#1#2#3#4{figures \ref{#1}, \ref{#2}, \ref{#3} and \ref{#4}}
+% Section reference, lower-case.
+\def\secref#1{section~\ref{#1}}
+% Section reference, capital.
+\def\Secref#1{Section~\ref{#1}}
+% Reference to two sections.
+\def\twosecrefs#1#2{sections \ref{#1} and \ref{#2}}
+% Reference to three sections.
+\def\secrefs#1#2#3{sections \ref{#1}, \ref{#2} and \ref{#3}}
+% Reference to an equation, lower-case.
+\def\eqref#1{equation~\ref{#1}}
+% Reference to an equation, upper case
+\def\Eqref#1{Equation~\ref{#1}}
+% A raw reference to an equation---avoid using if possible
+\def\plaineqref#1{\ref{#1}}
+% Reference to a chapter, lower-case.
+\def\chapref#1{chapter~\ref{#1}}
+% Reference to an equation, upper case.
+\def\Chapref#1{Chapter~\ref{#1}}
+% Reference to a range of chapters
+\def\rangechapref#1#2{chapters\ref{#1}--\ref{#2}}
+% Reference to an algorithm, lower-case.
+\def\algref#1{algorithm~\ref{#1}}
+% Reference to an algorithm, upper case.
+\def\Algref#1{Algorithm~\ref{#1}}
+\def\twoalgref#1#2{algorithms \ref{#1} and \ref{#2}}
+\def\Twoalgref#1#2{Algorithms \ref{#1} and \ref{#2}}
+% Reference to a part, lower case
+\def\partref#1{part~\ref{#1}}
+% Reference to a part, upper case
+\def\Partref#1{Part~\ref{#1}}
+\def\twopartref#1#2{parts \ref{#1} and \ref{#2}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\1{\bm{1}}
+\newcommand{\train}{\mathcal{D}}
+\newcommand{\valid}{\mathcal{D_{\mathrm{valid}}}}
+\newcommand{\test}{\mathcal{D_{\mathrm{test}}}}
+
+\def\eps{{\epsilon}}
+
+
+% Random variables
+\def\reta{{\textnormal{$\eta$}}}
+\def\ra{{\textnormal{a}}}
+\def\rb{{\textnormal{b}}}
+\def\rc{{\textnormal{c}}}
+\def\rd{{\textnormal{d}}}
+\def\re{{\textnormal{e}}}
+\def\rf{{\textnormal{f}}}
+\def\rg{{\textnormal{g}}}
+\def\rh{{\textnormal{h}}}
+\def\ri{{\textnormal{i}}}
+\def\rj{{\textnormal{j}}}
+\def\rk{{\textnormal{k}}}
+\def\rl{{\textnormal{l}}}
+% rm is already a command, just don't name any random variables m
+\def\rn{{\textnormal{n}}}
+\def\ro{{\textnormal{o}}}
+\def\rp{{\textnormal{p}}}
+\def\rq{{\textnormal{q}}}
+\def\rr{{\textnormal{r}}}
+\def\rs{{\textnormal{s}}}
+\def\rt{{\textnormal{t}}}
+\def\ru{{\textnormal{u}}}
+\def\rv{{\textnormal{v}}}
+\def\rw{{\textnormal{w}}}
+\def\rx{{\textnormal{x}}}
+\def\ry{{\textnormal{y}}}
+\def\rz{{\textnormal{z}}}
+
+% Random vectors
+\def\rvepsilon{{\mathbf{\epsilon}}}
+\def\rvtheta{{\mathbf{\theta}}}
+\def\rva{{\mathbf{a}}}
+\def\rvb{{\mathbf{b}}}
+\def\rvc{{\mathbf{c}}}
+\def\rvd{{\mathbf{d}}}
+\def\rve{{\mathbf{e}}}
+\def\rvf{{\mathbf{f}}}
+\def\rvg{{\mathbf{g}}}
+\def\rvh{{\mathbf{h}}}
+\def\rvu{{\mathbf{i}}}
+\def\rvj{{\mathbf{j}}}
+\def\rvk{{\mathbf{k}}}
+\def\rvl{{\mathbf{l}}}
+\def\rvm{{\mathbf{m}}}
+\def\rvn{{\mathbf{n}}}
+\def\rvo{{\mathbf{o}}}
+\def\rvp{{\mathbf{p}}}
+\def\rvq{{\mathbf{q}}}
+\def\rvr{{\mathbf{r}}}
+\def\rvs{{\mathbf{s}}}
+\def\rvt{{\mathbf{t}}}
+\def\rvu{{\mathbf{u}}}
+\def\rvv{{\mathbf{v}}}
+\def\rvw{{\mathbf{w}}}
+\def\rvx{{\mathbf{x}}}
+\def\rvy{{\mathbf{y}}}
+\def\rvz{{\mathbf{z}}}
+
+% Elements of random vectors
+\def\erva{{\textnormal{a}}}
+\def\ervb{{\textnormal{b}}}
+\def\ervc{{\textnormal{c}}}
+\def\ervd{{\textnormal{d}}}
+\def\erve{{\textnormal{e}}}
+\def\ervf{{\textnormal{f}}}
+\def\ervg{{\textnormal{g}}}
+\def\ervh{{\textnormal{h}}}
+\def\ervi{{\textnormal{i}}}
+\def\ervj{{\textnormal{j}}}
+\def\ervk{{\textnormal{k}}}
+\def\ervl{{\textnormal{l}}}
+\def\ervm{{\textnormal{m}}}
+\def\ervn{{\textnormal{n}}}
+\def\ervo{{\textnormal{o}}}
+\def\ervp{{\textnormal{p}}}
+\def\ervq{{\textnormal{q}}}
+\def\ervr{{\textnormal{r}}}
+\def\ervs{{\textnormal{s}}}
+\def\ervt{{\textnormal{t}}}
+\def\ervu{{\textnormal{u}}}
+\def\ervv{{\textnormal{v}}}
+\def\ervw{{\textnormal{w}}}
+\def\ervx{{\textnormal{x}}}
+\def\ervy{{\textnormal{y}}}
+\def\ervz{{\textnormal{z}}}
+
+% Random matrices
+\def\rmA{{\mathbf{A}}}
+\def\rmB{{\mathbf{B}}}
+\def\rmC{{\mathbf{C}}}
+\def\rmD{{\mathbf{D}}}
+\def\rmE{{\mathbf{E}}}
+\def\rmF{{\mathbf{F}}}
+\def\rmG{{\mathbf{G}}}
+\def\rmH{{\mathbf{H}}}
+\def\rmI{{\mathbf{I}}}
+\def\rmJ{{\mathbf{J}}}
+\def\rmK{{\mathbf{K}}}
+\def\rmL{{\mathbf{L}}}
+\def\rmM{{\mathbf{M}}}
+\def\rmN{{\mathbf{N}}}
+\def\rmO{{\mathbf{O}}}
+\def\rmP{{\mathbf{P}}}
+\def\rmQ{{\mathbf{Q}}}
+\def\rmR{{\mathbf{R}}}
+\def\rmS{{\mathbf{S}}}
+\def\rmT{{\mathbf{T}}}
+\def\rmU{{\mathbf{U}}}
+\def\rmV{{\mathbf{V}}}
+\def\rmW{{\mathbf{W}}}
+\def\rmX{{\mathbf{X}}}
+\def\rmY{{\mathbf{Y}}}
+\def\rmZ{{\mathbf{Z}}}
+
+% Elements of random matrices
+\def\ermA{{\textnormal{A}}}
+\def\ermB{{\textnormal{B}}}
+\def\ermC{{\textnormal{C}}}
+\def\ermD{{\textnormal{D}}}
+\def\ermE{{\textnormal{E}}}
+\def\ermF{{\textnormal{F}}}
+\def\ermG{{\textnormal{G}}}
+\def\ermH{{\textnormal{H}}}
+\def\ermI{{\textnormal{I}}}
+\def\ermJ{{\textnormal{J}}}
+\def\ermK{{\textnormal{K}}}
+\def\ermL{{\textnormal{L}}}
+\def\ermM{{\textnormal{M}}}
+\def\ermN{{\textnormal{N}}}
+\def\ermO{{\textnormal{O}}}
+\def\ermP{{\textnormal{P}}}
+\def\ermQ{{\textnormal{Q}}}
+\def\ermR{{\textnormal{R}}}
+\def\ermS{{\textnormal{S}}}
+\def\ermT{{\textnormal{T}}}
+\def\ermU{{\textnormal{U}}}
+\def\ermV{{\textnormal{V}}}
+\def\ermW{{\textnormal{W}}}
+\def\ermX{{\textnormal{X}}}
+\def\ermY{{\textnormal{Y}}}
+\def\ermZ{{\textnormal{Z}}}
+
+% Vectors
+\def\vzero{{\bm{0}}}
+\def\vone{{\bm{1}}}
+\def\vmu{{\bm{\mu}}}
+\def\vtheta{{\bm{\theta}}}
+\def\va{{\bm{a}}}
+\def\vb{{\bm{b}}}
+\def\vc{{\bm{c}}}
+\def\vd{{\bm{d}}}
+\def\ve{{\bm{e}}}
+\def\vf{{\bm{f}}}
+\def\vg{{\bm{g}}}
+\def\vh{{\bm{h}}}
+\def\vi{{\bm{i}}}
+\def\vj{{\bm{j}}}
+\def\vk{{\bm{k}}}
+\def\vl{{\bm{l}}}
+\def\vm{{\bm{m}}}
+\def\vn{{\bm{n}}}
+\def\vo{{\bm{o}}}
+\def\vp{{\bm{p}}}
+\def\vq{{\bm{q}}}
+\def\vr{{\bm{r}}}
+\def\vs{{\bm{s}}}
+\def\vt{{\bm{t}}}
+\def\vu{{\bm{u}}}
+\def\vv{{\bm{v}}}
+\def\vw{{\bm{w}}}
+\def\vx{{\bm{x}}}
+\def\vy{{\bm{y}}}
+\def\vz{{\bm{z}}}
+
+% Elements of vectors
+\def\evalpha{{\alpha}}
+\def\evbeta{{\beta}}
+\def\evepsilon{{\epsilon}}
+\def\evlambda{{\lambda}}
+\def\evomega{{\omega}}
+\def\evmu{{\mu}}
+\def\evpsi{{\psi}}
+\def\evsigma{{\sigma}}
+\def\evtheta{{\theta}}
+\def\eva{{a}}
+\def\evb{{b}}
+\def\evc{{c}}
+\def\evd{{d}}
+\def\eve{{e}}
+\def\evf{{f}}
+\def\evg{{g}}
+\def\evh{{h}}
+\def\evi{{i}}
+\def\evj{{j}}
+\def\evk{{k}}
+\def\evl{{l}}
+\def\evm{{m}}
+\def\evn{{n}}
+\def\evo{{o}}
+\def\evp{{p}}
+\def\evq{{q}}
+\def\evr{{r}}
+\def\evs{{s}}
+\def\evt{{t}}
+\def\evu{{u}}
+\def\evv{{v}}
+\def\evw{{w}}
+\def\evx{{x}}
+\def\evy{{y}}
+\def\evz{{z}}
+
+% Matrix
+\def\mA{{\bm{A}}}
+\def\mB{{\bm{B}}}
+\def\mC{{\bm{C}}}
+\def\mD{{\bm{D}}}
+\def\mE{{\bm{E}}}
+\def\mF{{\bm{F}}}
+\def\mG{{\bm{G}}}
+\def\mH{{\bm{H}}}
+\def\mI{{\bm{I}}}
+\def\mJ{{\bm{J}}}
+\def\mK{{\bm{K}}}
+\def\mL{{\bm{L}}}
+\def\mM{{\bm{M}}}
+\def\mN{{\bm{N}}}
+\def\mO{{\bm{O}}}
+\def\mP{{\bm{P}}}
+\def\mQ{{\bm{Q}}}
+\def\mR{{\bm{R}}}
+\def\mS{{\bm{S}}}
+\def\mT{{\bm{T}}}
+\def\mU{{\bm{U}}}
+\def\mV{{\bm{V}}}
+\def\mW{{\bm{W}}}
+\def\mX{{\bm{X}}}
+\def\mY{{\bm{Y}}}
+\def\mZ{{\bm{Z}}}
+\def\mBeta{{\bm{\beta}}}
+\def\mPhi{{\bm{\Phi}}}
+\def\mLambda{{\bm{\Lambda}}}
+\def\mSigma{{\bm{\Sigma}}}
+
+% Tensor
+\DeclareMathAlphabet{\mathsfit}{\encodingdefault}{\sfdefault}{m}{sl}
+\SetMathAlphabet{\mathsfit}{bold}{\encodingdefault}{\sfdefault}{bx}{n}
+\newcommand{\tens}[1]{\bm{\mathsfit{#1}}}
+\def\tA{{\tens{A}}}
+\def\tB{{\tens{B}}}
+\def\tC{{\tens{C}}}
+\def\tD{{\tens{D}}}
+\def\tE{{\tens{E}}}
+\def\tF{{\tens{F}}}
+\def\tG{{\tens{G}}}
+\def\tH{{\tens{H}}}
+\def\tI{{\tens{I}}}
+\def\tJ{{\tens{J}}}
+\def\tK{{\tens{K}}}
+\def\tL{{\tens{L}}}
+\def\tM{{\tens{M}}}
+\def\tN{{\tens{N}}}
+\def\tO{{\tens{O}}}
+\def\tP{{\tens{P}}}
+\def\tQ{{\tens{Q}}}
+\def\tR{{\tens{R}}}
+\def\tS{{\tens{S}}}
+\def\tT{{\tens{T}}}
+\def\tU{{\tens{U}}}
+\def\tV{{\tens{V}}}
+\def\tW{{\tens{W}}}
+\def\tX{{\tens{X}}}
+\def\tY{{\tens{Y}}}
+\def\tZ{{\tens{Z}}}
+
+
+% Graph
+\def\gA{{\mathcal{A}}}
+\def\gB{{\mathcal{B}}}
+\def\gC{{\mathcal{C}}}
+\def\gD{{\mathcal{D}}}
+\def\gE{{\mathcal{E}}}
+\def\gF{{\mathcal{F}}}
+\def\gG{{\mathcal{G}}}
+\def\gH{{\mathcal{H}}}
+\def\gI{{\mathcal{I}}}
+\def\gJ{{\mathcal{J}}}
+\def\gK{{\mathcal{K}}}
+\def\gL{{\mathcal{L}}}
+\def\gM{{\mathcal{M}}}
+\def\gN{{\mathcal{N}}}
+\def\gO{{\mathcal{O}}}
+\def\gP{{\mathcal{P}}}
+\def\gQ{{\mathcal{Q}}}
+\def\gR{{\mathcal{R}}}
+\def\gS{{\mathcal{S}}}
+\def\gT{{\mathcal{T}}}
+\def\gU{{\mathcal{U}}}
+\def\gV{{\mathcal{V}}}
+\def\gW{{\mathcal{W}}}
+\def\gX{{\mathcal{X}}}
+\def\gY{{\mathcal{Y}}}
+\def\gZ{{\mathcal{Z}}}
+
+% Sets
+\def\sA{{\mathbb{A}}}
+\def\sB{{\mathbb{B}}}
+\def\sC{{\mathbb{C}}}
+\def\sD{{\mathbb{D}}}
+% Don't use a set called E, because this would be the same as our symbol
+% for expectation.
+\def\sF{{\mathbb{F}}}
+\def\sG{{\mathbb{G}}}
+\def\sH{{\mathbb{H}}}
+\def\sI{{\mathbb{I}}}
+\def\sJ{{\mathbb{J}}}
+\def\sK{{\mathbb{K}}}
+\def\sL{{\mathbb{L}}}
+\def\sM{{\mathbb{M}}}
+\def\sN{{\mathbb{N}}}
+\def\sO{{\mathbb{O}}}
+\def\sP{{\mathbb{P}}}
+\def\sQ{{\mathbb{Q}}}
+\def\sR{{\mathbb{R}}}
+\def\sS{{\mathbb{S}}}
+\def\sT{{\mathbb{T}}}
+\def\sU{{\mathbb{U}}}
+\def\sV{{\mathbb{V}}}
+\def\sW{{\mathbb{W}}}
+\def\sX{{\mathbb{X}}}
+\def\sY{{\mathbb{Y}}}
+\def\sZ{{\mathbb{Z}}}
+
+% Entries of a matrix
+\def\emLambda{{\Lambda}}
+\def\emA{{A}}
+\def\emB{{B}}
+\def\emC{{C}}
+\def\emD{{D}}
+\def\emE{{E}}
+\def\emF{{F}}
+\def\emG{{G}}
+\def\emH{{H}}
+\def\emI{{I}}
+\def\emJ{{J}}
+\def\emK{{K}}
+\def\emL{{L}}
+\def\emM{{M}}
+\def\emN{{N}}
+\def\emO{{O}}
+\def\emP{{P}}
+\def\emQ{{Q}}
+\def\emR{{R}}
+\def\emS{{S}}
+\def\emT{{T}}
+\def\emU{{U}}
+\def\emV{{V}}
+\def\emW{{W}}
+\def\emX{{X}}
+\def\emY{{Y}}
+\def\emZ{{Z}}
+\def\emSigma{{\Sigma}}
+
+% entries of a tensor
+% Same font as tensor, without \bm wrapper
+\newcommand{\etens}[1]{\mathsfit{#1}}
+\def\etLambda{{\etens{\Lambda}}}
+\def\etA{{\etens{A}}}
+\def\etB{{\etens{B}}}
+\def\etC{{\etens{C}}}
+\def\etD{{\etens{D}}}
+\def\etE{{\etens{E}}}
+\def\etF{{\etens{F}}}
+\def\etG{{\etens{G}}}
+\def\etH{{\etens{H}}}
+\def\etI{{\etens{I}}}
+\def\etJ{{\etens{J}}}
+\def\etK{{\etens{K}}}
+\def\etL{{\etens{L}}}
+\def\etM{{\etens{M}}}
+\def\etN{{\etens{N}}}
+\def\etO{{\etens{O}}}
+\def\etP{{\etens{P}}}
+\def\etQ{{\etens{Q}}}
+\def\etR{{\etens{R}}}
+\def\etS{{\etens{S}}}
+\def\etT{{\etens{T}}}
+\def\etU{{\etens{U}}}
+\def\etV{{\etens{V}}}
+\def\etW{{\etens{W}}}
+\def\etX{{\etens{X}}}
+\def\etY{{\etens{Y}}}
+\def\etZ{{\etens{Z}}}
+
+% The true underlying data generating distribution
+\newcommand{\pdata}{p_{\rm{data}}}
+% The empirical distribution defined by the training set
+\newcommand{\ptrain}{\hat{p}_{\rm{data}}}
+\newcommand{\Ptrain}{\hat{P}_{\rm{data}}}
+% The model distribution
+\newcommand{\pmodel}{p_{\rm{model}}}
+\newcommand{\Pmodel}{P_{\rm{model}}}
+\newcommand{\ptildemodel}{\tilde{p}_{\rm{model}}}
+% Stochastic autoencoder distributions
+\newcommand{\pencode}{p_{\rm{encoder}}}
+\newcommand{\pdecode}{p_{\rm{decoder}}}
+\newcommand{\precons}{p_{\rm{reconstruct}}}
+
+\newcommand{\laplace}{\mathrm{Laplace}} % Laplace distribution
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Ls}{\mathcal{L}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\emp}{\tilde{p}}
+\newcommand{\lr}{\alpha}
+\newcommand{\reg}{\lambda}
+\newcommand{\rect}{\mathrm{rectifier}}
+\newcommand{\softmax}{\mathrm{softmax}}
+\newcommand{\sigmoid}{\sigma}
+\newcommand{\softplus}{\zeta}
+\newcommand{\KL}{D_{\mathrm{KL}}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\standarderror}{\mathrm{SE}}
+\newcommand{\Cov}{\mathrm{Cov}}
+% Wolfram Mathworld says $L^2$ is for function spaces and $\ell^2$ is for vectors
+% But then they seem to use $L^2$ for vectors throughout the site, and so does
+% wikipedia.
+\newcommand{\normlzero}{L^0}
+\newcommand{\normlone}{L^1}
+\newcommand{\normltwo}{L^2}
+\newcommand{\normlp}{L^p}
+\newcommand{\normmax}{L^\infty}
+
+\newcommand{\parents}{Pa} % See usage in notation.tex. Chosen to match Daphne's book.
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Tr}{Tr}
+\let\ab\allowbreak
+
+
+% \usepackage[utf8]{inputenc} % allow utf-8 input
+% \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amssymb} % http://ctan.org/pkg/amssymb
+\usepackage{pifont} % http://ctan.org/pkg/pifont
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{setspace} % for \onehalfspacing and \singlespacing macros
+\usepackage{etoolbox}
+\usepackage{xspace} % For space after algname
+\usepackage{wrapfig} % For wrapping text around figures
+\usepackage{array}
+\usepackage{calc}
+\usepackage{amsthm}
+\usepackage{tabularx}
+\usepackage{placeins}
+
+\usepackage[symbol]{footmisc}
+\usepackage[bb=dsserif]{mathalpha}
+\usepackage[mathscr]{euscript}
+
+
+\usepackage[colorlinks=true,citecolor=blue, linkcolor=magenta, urlcolor=blue]{hyperref}
+% \usepackage{cleveref}
+\usepackage[font=small]{caption}
+\usepackage{mathtools}
+% \mathtoolsset{showonlyrefs=true}
+
+% # OPERATORS
+\DeclareMathOperator{\fifo}{FIFO}
+\def\D{\mathcal{D}}
+\def\L{\mathcal{L}}
+\def\KL{\mathcal{D}_{KL}}
+\def\RKL{\mathcal{D}_{RKL}}
+\DeclareMathOperator{\rand}{random()}
+\DeclareMathOperator{\kl}{KL}
+\DeclareMathOperator{\FC}{FC}
+\DeclareMathOperator{\Conv}{Conv}
+\DeclareMathOperator*{\avg}{\hat{\mathbb{E}}}
+\DeclareMathOperator*{\sm}{sm}
+\newcommand{\stu}[0]{p_{\text{S}}}
+\newcommand{\tea}[0]{p_{\text{T}}}
+
+\def\fullalgname{Generalized Knowledge Distillation}
+
+\def\alg{GKD}
+
+\newcommand{\nino}[1]{{\color{blue}[nino: #1]}}
+\newcommand{\rishabh}[1]{{\color{red}[rishabh: #1]}}
+\newcommand{\ofb}[1]{{\color{green}[bachem: #1]}}
+\newcommand{\mfg}[1]{{\color{purple}[mfg: #1]}}
+% \newcommand{\revise}[1]{{\color{red} #1}}
+% \newcommand{\addtext}[1]{{\color{purple} #1}}
+\newcommand{\revise}[1]{#1}
+\newcommand{\addtext}[1]{#1}
+
+\title{On-policy Distillation of Language Models: Learning from Self-Generated Mistakes}
+
+
+\author{
+Rishabh Agarwal$^{12}$\thanks{denotes equal contribution. $^\dagger$denotes infrastructure contribution. Correspondence to Rishabh Agarwal \texttt{<rishabhagarwal@google.com>} and Nino Vieillard \texttt{<vieillard@google.com>}.} \And Nino Vieillard$^{1*}$ \And Yongchao Zhou$^{13}$ \AND 
+Piotr Stanczyk$^{1\dagger}$ \And Sabela Ramos$^{1\dagger}$ \And Matthieu Geist$^1$ \And Olivier Bachem$^1$ \And 
+\quad  \qquad \qquad  $^1$Google DeepMind \qquad $^2$Mila \qquad $^3$University of Toronto }
+
+\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+
+\begin{document}
+
+\maketitle
+
+\vspace{-0.4cm}
+\begin{abstract}
+% Knowledge distillation is widely used for compressing neural networks to reduce their inference cost and memory footprint. However, current distillation methods for auto-regressive models, such as generative language models (LMs), suffer from two issues: (1) distribution mismatch between fixed output sequences during training and the sequences generated by the student during its deployment, (2) model under-specification, where the student model may not be expressive enough to fit the teacher's distribution. To address these issues, we propose \fullalgname~(\alg). \alg\ mitigates distribution mismatch by training the student on its own output sequences and leveraging feedback from the teacher on these sequences. Furthermore, \alg\ can handle under-specification by optimizing alternative divergences, such as reverse KL or generalized JSD, that focus on generating samples from the student that are likely under the teacher's distribution. Furthermore, \alg\ facilitates the seamless integration of distillation with RL fine-tuning (RLHF), a combination that has not been previously explored. Finally, we demonstrate the efficacy of \alg\ for distilling LMs on summarization, translation, and arithmetic reasoning tasks. 
+
+
+Knowledge distillation~(KD) is widely used for compressing a teacher model to reduce its inference cost and memory footprint, by training a smaller student model. However, current KD methods for auto-regressive sequence models suffer from distribution mismatch between output sequences seen during training and those generated by the student during inference. To address this issue, we introduce Generalized Knowledge Distillation~(GKD). Instead of solely relying on a fixed set of output sequences, GKD trains the student on its self-generated  output sequences by leveraging feedback from the teacher on such sequences. Unlike supervised KD approaches, GKD also offers the flexibility to employ alternative loss functions between the student and teacher, which may be useful when the student lacks the expressivity to mimic the teacher's distribution. Furthermore, GKD facilitates the seamless integration of distillation with RL fine-tuning of language models. We demonstrate the efficacy of GKD for distilling auto-regressive T5 language models for task-specific distillation on summarization, translation, and reasoning tasks, \addtext{and task-agnostic distillation for instruction tuning.} 
+
+\end{abstract}
+
+\vspace{-0.3cm}
+\section{Introduction}
+\vspace{-0.25cm}
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.99\linewidth]{figures_new/intro_fig_gkd.pdf}
+    \vspace{-0.12cm}
+    \caption{\textbf{Comparing GKD with KD approaches} across different student model sizes. We use the T5 models~\citep{raffel2020exploring} trained with supervised FT as students. We use supervised FT T5-XL~($\sim$3B params) as the teacher, whose performance is indicated by the horizontal line. Supervised KD and FT use ground-truth output sequences for training while SeqKD trains on output sequences generated by the teacher. %However, Supervised KD uses token-level teacher probabilities while FT and SeqKD do not. 
+    On-policy GKD trains on output sequences sampled from the student. For GKD, we use JSD~(0.1) on WMT and forward KL on other tasks. For evaluation, we use greedy sampling for XSum and GSM8K and beam search for WMT. }
+    \label{fig:intro_figure}
+    \vspace{-0.16cm}
+\end{figure}
+
+
+
+% \begin{wrapfigure}{r}{0.51\textwidth}
+%     \vspace{-0.3cm}
+% \centering
+%     \includegraphics[width=0.51\textwidth]{figures/model_size_years.pdf}
+%   \vspace{-0.55cm}
+%   \caption{Number of params in LMs over the years.}
+%   \label{fig:llm_param}
+% \end{wrapfigure}
+Auto-regressive sequence models, such as language models~(LMs), have shown impressive capabilities in numerous tasks, where the key to this success is often scaling the amount of training data as well as the number of model parameters~\citep{kaplan2020scaling}. However, scaling parameter count comes at a cost, and the deployment of such models is limited by either their inference cost or memory footprint. Thus, a crucial goal for practical use of large capable models is to compress them by reducing their parameter count, while retaining as much as possible of their performance.
+
+One of the prevalent techniques for compressing  models is knowledge distillation~\citep{hinton2015distilling}. Distillation is the process of training a model -- the student --  to replicate the knowledge of another model -- the teacher -- on a specific set of tasks. Typically, the student has fewer parameters than the teacher and as such, distillation can improve task-specific performance while maintaining lower inference cost and memory footprint than the teacher. Current distillation methods for auto-regressive sequence models either require generating a fixed set of output sequences from the teacher model~\citep{kim2016sequence}, which can be expensive, or a fixed dataset of sequences that the teacher can label by assigning token-level probabilities~\citep{sanh2019distilbert}. However, using a fixed dataset can lead to distribution mismatch between output sequences seen during training and the sequences generated by the student auto-regressively during inference, a well-known problem in imitation learning~\citep{pomerleau1991efficient, ross2010efficient}. Furthermore, the common objective for distillation is to minimize the forward KL between the teacher and the student distributions. However, the student may not be expressive enough to fit the teacher's distribution, which can result in student-generated samples that are unlikely to be generated by the teacher~(\emph{e.g.}, Figure~\ref{fig:kl}).
+
+In this paper, we propose Generalized KD~(\alg) to mitigate the above issues. First, we recognize that KD for auto-regressive sequence models can be viewed as an imitation learning problem with an interactive expert~\citep{ross2011reduction}. Using this insight, \alg\ trains the student on its self-generated sequences that are on-policy, instead of a fixed set of outputs sequences, using teacher probabilities as expert labels on these sequences. Our idea is further supported by the recent success of fine-tuning large language models on their own output sequences~\citep{ouyang2022training, singh2023beyond}. Furthermore, \alg\ provides the flexibility to optimize alternative divergence measures, such as reverse KL and generalized JSD~(Section~\ref{sec:back}), that can use student's limited capacity to focus on generating samples that are likely under the teacher. 
+
+\addtext{\alg\ unifies some existing KD methods for autoregressive LMs while instantiating new on-policy methods that substantially outperform prevalent approaches.} In terms of performance gains over the initial student from on-policy GKD, averaged across T5 student models of different sizes, we see relative gains of $\mathbf{2.1}\times$ on summarization, $\mathbf{1.7}\times$ on machine translation, and $\mathbf{1.9}\times$ on arithmetic reasoning tasks, compared to the performance improvements achieved with baseline KD methods~(Figure~\ref{fig:intro_figure}). \addtext{Additionally, we exhibit GKD's efficacy in task-agnostic distillation, resulting in 2\% and 1\% \textbf{absolute} accuracy improvement on the held-out BBH and MMLU  benchmark suites~(Figure~\ref{fig:flan_agnostic})}.
+
+% Additionally, we demonstrate that on-policy GKD allows for seamlessly combining distillation and RL fine-tuning~(e.g., RLHF) of language models, a combination that has not been previously explored~(Figure~\ref{fig:xsum_rl_ablation}).
+
+\addtext{Our key contributions are:
+\begin{itemize}[topsep=2pt,itemsep=2pt, parsep=2pt, leftmargin=16pt]
+    \item To tackle discrepancy during training and inference for auto-regressive LMs, we present \alg\ that leverages on-policy student-generated outputs for distillation, guided by the token-level teacher probabilities over these outputs. \alg\ substantially outperforms commonly-used methods in task-specific~(Figure~\ref{fig:intro_figure}) and task-agnostic KD~(Figure~\ref{fig:flan_agnostic}).
+    
+    \item We demonstrate that on-policy GKD can be seamlessly combined with RL fine-tuning~(e.g., RLAIF) of language models, a combination that has not been previously explored~(Figure~\ref{fig:xsum_rl_ablation}).
+
+    \item Through a systematic evaluation of design choices in GKD, we offer practical insights about the importance of using student-generated on-policy output sequences during distillation and the task-dependent nature of optimal divergence between the student and the teacher.
+
+
+\end{itemize}
+}
+
+
+\vspace{-0.35cm}
+\section{Preliminaries}
+\vspace{-0.25cm}
+\label{sec:back}
+%In probability theory and statistics, 
+% \vspace{-0.1cm}
+% \subsection{Auto-regressive Generative Sequence Models}
+% \vspace{-0.1cm}
+\textbf{Auto-regressive Generative Sequence Models}. We denote the input and output sequence as $x, y$ respectively. Let $\mathbb{V}$ denote the vocabulary comprising of $M$ tokens, $y_{<n+1} = (y_1, y_2, \dots, y_{n})$ denote the generated output sequence up to the $n^{th}$ token, and $L_y$ denote the length of sequence $y$. %We define the token-wise generative process as a deterministic MDP, where
+% the initial state corresponds to the input $x$, the state at the $n^{th}$ token generation is the output sequence generated thus
+% far, $y_{<n}$, and the action space is defined over the vocabulary $\mathbb{V}$. 
+% \mfg{What about just considering the context as the initial state (which is consistent with the MDP modeling)? The think is that in contextual MDPs the context is typically unobserved (and if it's known it's just an MDP).}
+%% RA: Good idea
+A token-level auto-regressive policy $p(. | y_{<n}, x) \in (0,1)^{M}$ outputs a next-token probability distribution over all tokens in $\mathbb{V}$, conditioned on the input $x$ and output sequence $y_{<n}$.  Furthermore, $y \sim p(\cdot|x)$ corresponds to a sampled output sequence $y$ given the input $x$. For ease of notation, we define $p(y_n|x) := p(y_n | y_{<n}, x)$. %Note that if we can not compute logits but are given only samples from a policy (\emph{e.g.}, accessing GPT-3~\citep{brown2020language} through its API), then $p(\cdot|y_{<n}, x)$ corresponds to the one-hot distribution on the sampled tokens $y_n$ given  $y_{<n}$ and input $x$.
+% \mfg{No (or the empirical distribution maybe)}
+Auto-regressive generation involves predicting tokens one at a time, based on the previously generated tokens. The probability of predicting $n^{th}$ token $y_n$, $p(y_n|x)$, is determined using a softmax with temperature $\gamma$: $p(y_n|x) = \frac{\exp(z_{n}/\gamma)}{\sum_{i=1}^{M} \exp(z_i /\gamma)}$, where $z_n$
+is the logit score for the token $y_n$. Higher values of $\gamma$ introduces more randomness, while a lower value makes the output more deterministic by favoring the most probable words. During training, the student's temperature is kept at 1. For evaluation, we use \emph{greedy sampling}~($\gamma \rightarrow 0$) or \emph{temperature sampling}~($\gamma > 0$).
+
+
+
+% \vspace{-0.1cm}
+% \subsection{KL-Based Divergences} 
+% \vspace{-0.1cm}
+\textbf{KL-Based Divergences}. The divergence between two probability distributions is a measure of the similarity of the distributions, with KL divergence a prevalent measure. The KL divergence between two discrete distributions $P(\mathcal{C})$ and $Q(\mathcal{C})$ is given by:
+$\KL(P\|Q) = \sum_{c \in \mathcal{C}} P(c) \log \frac{P(c)}{Q(c)}$.
+    %\label{eq:forward_kl}
+
+The KL divergence is not symmetric: $\KL(P\|Q) \neq  \KL(Q\|P)$. As such, we refer to $\KL(P\|Q)$ as the \textbf{forward KL} while $\KL(Q\|P)$ as the \textbf{reverse KL} between $P$ and $Q$. Forward KL under an empirical data distribution corresponds to maximum likelihood, which we optimize in supervised learning. Given model capacity mismatch, when approximating $P(\mathcal{C})$ using a distribution $Q_\theta(\mathcal{C})$, minimizing the reverse and forward KL results in mean and mode-seeking behavior~(Figure~\ref{fig:kl}). 
+
+
+
+
+% One issue with the KL divergence is that 
+% %it is only finite when the support of $P$ is contained in the support of $Q$. This means that 
+% if there is a point $c$ where $Q(c)=0$ and $P(c)>0$, then $\KL(P\|Q) \rightarrow \infty$. 
+
+While KL divergence can be unbounded, a well-known divergence that is \emph{bounded} even for probability distributions with disjoint supports %, albeit not as common as the KL divergence,
+is the \textbf{generalized JSD}~(Jensen-Shannon divergence).  JSD($\beta$) interpolates between the forward and reverse KL using the bounded coefficient $ 0 < \beta < 1$:
+\begin{equation}
+\D_{{JSD}(\beta)}(P\|Q) = \beta  \KL\Big(P \Big \| \beta P + (1- \beta)Q \Big) + (1 - \beta) \KL\Big(Q \Big \| \beta P + (1 - \beta) Q\Big) 
+\end{equation}
+\citet{huszar2015not} show that $ \lim_{\beta\to 0} \D_{{JSD}(\beta)}(P\|Q)/{\beta} = \KL(P\|Q)$.
+As such, gradients of JSD$(\beta)$ behave similarly to forward KL and reverse KL when $\beta$ is close to 0 and 1 respectively. %Similarly, JSD$(\beta)$ has similar behavior to reverse KL for $\beta$ close to 1, since $D_{{JSD}(\beta)}(P\|Q) = \D_{{JSD}(1-\beta)}(Q\|P)$.
+% \mfg{Background only on (KL-based) divergences? If so, maybe rename the section?}
+
+% \begin{figure}[t]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{figures_new/reverse_forward_kl.pdf}
+%     \vspace{-0.1cm}
+%     \caption{\textbf{Mode-seeking \emph{vs} Model-covering KL with capacity mismatch}. We show the learned distribution $Q_\theta$ when minimizing the forward and reverse KL w.r.t $Q$ between a mixture distribution $P$ and a unimodal Gaussian $Q_\theta$. Reverse KL is mode-seeking as it forces $Q_\theta$ to be zero where $P$ is zero and hence makes it concentrate on one of the modes (last plot). However, forward KL is mode-covering as it ensures that there is some mass under $Q_\theta$ wherever there is some mass under $P$. See \citet{le2017reverse} to replicate this plot.}
+%     \label{fig:kl}
+%     \vspace{-0.25cm}
+% \end{figure}
+
+
+
+
+% {\color{red}{TODO: Define  distillation as commonly done.}}
+\vspace{-0.2cm}
+\section{Distillation for Auto-regressive Sequence Models}
+\label{sec:methods}
+\vspace{-0.2cm}
+
+\textbf{Problem Setup}. We are given two auto-regressive sequence models of different capacity, where $\stu$ and $\tea$ refers to the student and teacher respectively. We assume that the student has learnable parameters $\theta$ and $\stu^\theta$ is differentiable w.r.t  $\theta$. We are also given a dataset of inputs $X$. Optionally, we can also assume access to a dataset of input-output sequence pairs $(X,Y)$. If not given, such a dataset can be generated by sampling sequences from the teacher. %, that is $ \{(x, y) \ \mathrm{s.t.} \, x \in X, y \sim p_T(\cdot|x)\}$. 
+For a divergence $\D$, we define the discrepancy between token-level distributions of $p_T$ and $p_S$ as
+\begin{equation}
+  \D\big(\tea \| \stu^\theta\big)(y|x) := \frac{1}{L_y} \sum_{n=1}^{L_y} \D\big(\tea(\cdot|y_{<n},x) \| \stu^\theta(\cdot|y_{<n}, x)\big),\label{eq:div}
+\end{equation}
+for an input $x$ and output sequence $y$. For example, using  JSD($\beta$) as $\D$ in \eqref{eq:div} results in $\D_{JSD(\beta)}\big(\tea || \stu^\theta\big)(y|x) = \frac{1}{L_y} \sum_n \D_{JSD(\beta)} \big( \tea(\cdot|y_{<n},x)\big \|\stu^\theta(\cdot|y_{<n}, x))$.
+
+\textbf{Supervised FT}. If we are only given a fixed dataset of ground-truth output sequences but not query access to the teacher policy, then a simple approach is to minimize the negative log-likelihood of such sequences under the student policy:  $L_{SFT}(\theta) = \E_{(x, y) \sim (X, Y)} \big[-\log\stu^\theta(y|x)\big]$. 
+
+
+\textbf{Sequence-Level KD}~\citep{kim2016sequence}. SeqKD maximizes the likelihood of high probability sequences generated by the teacher, and can be viewed as supervised FT on teacher-generated outputs. 
+
+
+\textbf{Supervised KD}~\citep{hinton2015distilling, sanh2019distilbert} is a widely used technique where the student is trained to imitate the token-level probability distributions of the teacher. The student $p_S$ is trained with the supervised objective $L_{SD}$ over the target token-level probabilities of the teacher $p_T$: 
+\begin{equation}
+L_{SD}(\theta) := %\E_{(x, y) \sim (X, Y)}  \Big[-\frac{1}{L_y} \sum_{n=1}^{L_y} \tea(\cdot| y_{<n}, x)  \log \stu(\cdot|y_{<n}, x)\Big]\\ 
+\E_{(x, y) \sim (X, Y)} \Big[ \KL\big(\tea \| \stu^\theta\big)(y|x)\Big],
+\label{eq:sd}
+\end{equation}
+where the expectation is over the samples from the dataset. This supervised objective results in a rich training signal by leveraging the full token-level distribution of the teacher. %Note that supervised KD reduces to supervised FT if we only have access to the empirical distribution of teacher-generated sequences and not the teacher policy. 
+
+%Following \citet{hinton2015distilling}, we use a softmax temperature $\gamma$: $p_T^{(v)} = \frac{\exp(z_v/\gamma)}{\sum_{i=1}^{N} \exp(z_i /\gamma)}$ where $\gamma$ controls the smoothness of the token-level teacher distribution and $z_v$ is the logit score of this distribution for the vocabulary token $v$. 
+
+
+\subsection{Generalized Knowledge Distillation~(GKD)}
+
+As discussed above, commonly-used KD approaches use a fixed dataset of output sequences, either using ground-truth targets or teacher-generated sequences. However, distilling auto-regressive student models using such approaches results in train-\revise{inference} distribution mismatch. This is because the partial sequences encountered by the student during the auto-regressive generation phase at inference can be quite different from the ones seen during the training phase. Since predictions at any step are contingent upon previous steps in auto-regressive models, this mismatch can have a cascading effect where error in prediction at early step can affect the future predictions, resulting in poor quality text generation. To address this mismatch, we draw heavily from imitation learning~(IL). In particular, on-policy imitation approaches ~\citep[\emph{e.g.}][]{ross2011reduction}  iteratively collect sequences using the student policy, obtain expert labels for those sequences, and then retrain the student on this dataset. Despite their popularity \revise{in robotics and deep RL}~\citep{parisotto2015actor, kelly2019hg, agarwal2022reincarnating}, on-policy approaches are typically not used for distilling auto-regressive models. 
+
+Extending on-policy imitation to distillation, we present \textbf{on-policy KD}.  \addtext{When using  on-policy data during distillation, the student receives token-specific feedback from the teacher's logits on the erroneous tokens in its self-generated output sequences. This enables a form of feedback loop akin to what we observe in RL, which helps minimize the train-inference distribution mismatch. Moreover, as the student evolves during training, the data it generates also improves in quality}. Given an input $x$, the student generates the output sequence $y$ and imitates the teacher token-level distributions, $p_T(y_n | x)$, on intermediate states $y_{<n}$. Specifically, the on-policy loss $\L_{OD}$ is given by
+\begin{equation}
+L_{OD}(\theta) := \E_{x \sim X} \Big[\E_{y \sim \stu(\cdot|x)} \big[\KL\big(\tea \| \stu^\theta\big)(y|x)\big] \Big],
+\label{eq:on_d}
+\end{equation}
+where we do \emph{not} backpropagate through the student's sampling distribution $\stu(\cdot|x)$, similar to on-policy imitation. Not backpropagating through the sampling makes the training stable and computationally efficient. In on-policy KD, the training is done on output sequences that the student is likely to generate. During training, we use a temperature of $\gamma = 1$ to encourage diversity in student generated sequences. Moreover, given unlabeled input prompts, generating sequences using the student is computationally cheaper than the teacher, due to differences in their model sizes. 
+
+% , given the disparity in their model sizes.
+
+
+% \textbf{On-policy KD} is a class of imitation learning approaches for knowledge transfer from a teacher policy to another policy. In such approaches~\citep[\emph{e.g.}][]{ross2011reduction}, we iteratively train a student policy using forward KL on a non-stationary dataset with self-generated outputs. Given an input context $x$, the student generates the output sequence $y$ and imitates the teacher generated action distribution, $p_T(\cdot | y_{<n}, x)$, on intermediate states $y_{<n}$.
+
+% One simple way to mitigate this issue is to sample output sequences from the student during training itself, akin to on-policy KD. 
+% Furthermore, if we only have access to an unlabeled dataset $X$ of input contexts, generating sequences from the student rather than the teacher is much less expensive due to the difference in their model sizes. 
+% Particularly, when only using student-generated sequences~($\lambda=1$), GKD generalizes on-policy KD to arbitrary divergences:
+
+% \textbf{On-policy KD} is a class of imitation learning approaches for knowledge transfer from a teacher policy to another policy. In such approaches~\citep[\emph{e.g.}][]{ross2011reduction}, we iteratively train a student policy using forward KL on a non-stationary dataset with self-generated outputs. 
+
+%, with the exception of ImitKD~\citep{lin2020autoregressive} that can be instantiated using GKD as we discuss below.
+% \mfg{Well, indeed imitKD is rather GKD with a schedule on $\lambda$ and the forward KL.}
+%RA: Fixed
+
+% \vspace{-0.85cm}
+% \begin{minipage}{0.55\textwidth}
+\begin{algorithm}[t]
+\caption{Generalized Knowledge Distillation~(GKD)}\label{alg1}
+\begin{algorithmic}[1]
+  \STATE \textbf{Given}: Teacher model $\tea$, Student Model $\stu^\theta$, Dataset $(X, Y)$ containing (input, output) pairs
+  %contain input contexts $x$ and possibly output sequences $y$.
+  \STATE \textbf{Hyperparameters}: Student data fraction $\lambda \in [0, 1]$, Divergence $\D$, Learning rate $\eta$
+  \FOR{each step $k = 1, \ldots, K$}
+  \STATE Generate a random value $u \sim Uniform(0,1)$
+  \IF{$u \leq \lambda$}
+    \STATE Sample inputs $x$ from $X$ and generate outputs $y \sim \stu^\theta(\cdot | x)$  to obtain $B = \{(x_b, y_b)\}_{b=1}^{B}$
+  \ELSE
+    \STATE Sample batch of inputs and outputs from $(X, Y)$ to obtain $B = \{(x_b, y_b)\}_{b=1}^{B}$.
+  \ENDIF
+  \STATE Update $\theta$ to minimize $L_{\mathrm{GKD}}$: $\theta \gets \theta - \eta \frac{1}{B} \sum_{(x, y) \in B} \nabla_\theta \D(\tea \| \stu^\theta) (y|x)$
+  % \STATE Minimize the loss $\gL_{\mathrm{CME}}$ w.r.t. $\theta$
+  \ENDFOR
+\end{algorithmic}
+\vspace{-0.1cm}
+\end{algorithm}
+
+Building further upon on-policy KD, we unify supervised and on-policy approaches and propose a more general approach, which we call Generalized KD~(\textbf{GKD}).
+In GKD, we can choose both the divergence to optimize as well as the output sequences to train on. Specifically, we can optimize any divergence between the  teacher and student token-level probability distributions. For output sequences, GKD uses a mixture of fixed dataset, either teacher-generated or ground-truth, and on-policy student-generated sequences. Abstractly, GKD minimizes an objective of the form:
+\begin{equation*}
+    \boxed{L_\mathrm{GKD}(\theta) := (1 - \lambda)  \E_{(x, y) \sim (X, Y)} \big[ \D(\tea \| \stu^\theta)(y|x) \big] + \lambda \E_{x\sim X} \Big[\E_{y \sim \stu(\cdot|x)} \big[\D(\tea \| \stu^\theta)(y|x)\big]\Big]},
+% \label{eq:objective}
+\end{equation*}
+where $D(\tea, \stu)(y|x)$ is a divergence between teacher and student distributions~(\eqref{eq:div}), and $\lambda \in [0, 1]$ is a hyper-parameter that controls the \emph{student data fraction}, that is, the fraction of on-policy student-generated outputs. Akin to on-policy KD, we do not backpropagate gradients through the student's sampling process. On-policy and supervised KD are instantiations of GKD with divergence $\D$ set to forward KL and student data fractions $\lambda$ to $1$ and $0$ respectively.
+That said, GKD allows for other choices for the fraction $\lambda$ and the divergence, which we explore in this work. 
+
+
+\textbf{Remark}. As opposed to a randomly initialized student, we assume access to a student that can generate sequences of adequate quality, which the teacher can provide feedback upon. In our experiments, we start from student models that have undergone supervised FT. \addtext{This is analogous to two-stage RLHF training, which is widely used for LMs, where we first run SFT followed by the online RL fine-tuning. As such, GKD can leverage hyperparameter tuning insights from RLHF and can be combined with RLHF with small compute overhead and no additional hyperparameters.}
+
+
+
+\emph{Choice of Divergence in GKD}. While forward KL is commonly-used for distillation, it requires the student to cover the entire support of the teacher token-level distribution $\tea(.|y_{<n}, x)$. In doing so, the student might end up assigning probability mass to tokens $v$ which have low probability under $\tea(.|y_{<n}, x)$, which can result in hallucination and low-quality generations. 
+% \mfg{Same as before, maybe the discussion about sequence/level could be more precise. Anyway, wit a stop-gradient at the expectation level, it's not the KL at the sequence level which is optimized (or at leat this is not obvious).}
+When the student has much lower model capacity than the teacher, this issue is likely to happen with temperature sampling~(\emph{e.g.}, Figure~\ref{fig:kl}). Alternatively, mode-seeking divergences, such as reverse KL, prioritize the tokens where the teacher assigns high probability, which can avoid low-quality generations but at the expense of less diverse generations for a given input. Our experiments indicate that optimal divergence seems to be task-dependent. Overall, the diversity and performance trade-offs for a particular task needs to be considered when choosing the GKD divergence~(\emph{e.g.}, Figure~\ref{fig:xsum_tradeoff}, \addtext{\ref{fig:flan_agnostic}}). 
+
+% \emph{Choosing student data fraction}. It is well-known that using only a fixed dataset of ground-truth outputs ($\lambda=0$) for training autoregressive models, which is a common practice, can lead to train-test distribution mismatch. This is because the distribution of partial sequences seen during the auto-regressive generation phase can be very different from the ones encountered during the model's training. One simple way to mitigate this issue is to sampling output sequences from the student during training itself, akin to on-policy KD. Furthermore, if we only have access to an unlabeled dataset $X$ of input contexts, generating sequences from the student rather than the teacher is much less expensive due to the difference in their model sizes. 
+% Particularly, when only using student-generated sequences~($\lambda=1$), GKD generalizes on-policy KD to arbitrary divergences:
+% \begin{equation*}
+% L_\mathrm{OnGKD}(\theta) := \E_{x\sim X} \Big[\E_{y \sim \stu(\cdot|x)} \big[\D(\tea \| \stu^\theta)(y|x)\big]\Big].    
+% \end{equation*}
+
+
+
+\subsection{RL Fine-tuning + On-policy GKD}
+\label{sec:rl_gkd}
+In some tasks, it is plausible that distilling from a teacher model only provides a proxy to our main objective, which can also be non-differentiable. We can directly optimize this objective with reinforcement learning~(RL). Conveniently, on-policy GKD can be easily combined with RL fine-tuning from human~(RLHF) or AI feedback~(RLAIF), as it only requires output samples from the student. Indeed, consider that one wants to optimize the student policy for a scalar reward $r$, while staying close to a teacher policy, then we get a regularized RL fine-tuning objective of the form:
+\begin{equation}
+% \label{eq:objective-rl}
+     \E_{x\sim X} \Big[(1-\alpha) \underbrace{E_{y \sim \stu^\theta(\cdot|x)} \left[r(y)\right]}_{\text{RL objective}} - \alpha \underbrace{\E_{y \sim \stu(\cdot|x)} \big[\D(\tea \| \stu^\theta)(y|x)\big]}_{\text{Generalized On-Policy Distillation}} \Big],
+    %  \E_{x\sim X} \Big[(1-\alpha) \underbrace{E_{y \sim \stu^\theta(\cdot|x)} \left[r(y)\right]}_{\text{RL objective}} - \alpha \underbrace{\E_{y \sim \stu(\cdot|x)} \big[\D_{KL}\big(\stu^\theta(y|x) \| \tea(y|x)) \big]}_{\text{Generalized On-Policy KD}} \Big],
+     \label{eq:rl_with_gkd}
+\end{equation}
+where $\alpha \in [0, 1]$ controls the strength of the distillation loss compared to the RL objective. With $\alpha=1$, it will perform only distillation.  The above objective allows us to maximize reward while improving other model capabilities via distillation, which can possibly reduce the ``alignment tax'' decrease in general model capabilities when aligning language models with human preferences~\citep{ouyang2022training}. We apply the above idea to mitigate hallucination using RLAIF, while simultaneously improving downstream performance via distillation~(Figure~\ref{fig:xsum_rl_ablation}).
+
+\textbf{Remark}. In RLHF or RLAIF, we typically use reverse KL to constrain the learned policy to stay close to the initial policy. If one wants to only make slight modifications to existing RL fine-tuning workflows, we recommend using reverse KL or JSD~$(0.9)$ when integrating GKD with RL. 
+
+% One practical downside of this particular RL approach over distillation is that it requires two copies of the student network: one each for the policy  and value baseline network. 
+
+
+
+
+\vspace{-0.2cm}
+\section{Experiments}
+\vspace{-0.2cm}
+
+\label{sec:res}
+In this section, we evaluate GKD for distilling language models, a typical class of auto-regressive sequence models, on abstractive summarization, machine translation, and arithmetic reasoning.  %Our goal is evaluate the efficacy of different variants of GKD and compare it to commonly-used distillation approaches. 
+% goal is to bring the student’s performance closer to the teacher's.
+
+\textbf{Student / Teacher Models}. Our experiments start from student and teacher models with different sizes, specifically open-sourced T5 models~\citep{raffel2020exploring}, that are pretrained on the same datasets. We use supervised fine-tuned T5-XL~($\sim3$B params) as the teacher. For students, we use T5-small~(77M params), T5-base~(250M params), and T5-large~(800M params), which are smaller than the teacher by a factor of $38\times$, $12\times$ and $3.8\times$ respectively. See Appendix~\ref{sec:app_t5} for more details. 
+
+\textbf{GKD Variants}. For choice of divergence $\D$ in GKD in Algorithm~\ref{alg1}, we use forward KL, reverse KL and three variants of JSD$(\beta)$: JSD~$(0.1)$, JSD~$(0.5)$ and JSD~$(0.9)$. For student data fraction $\lambda$, we try $\lambda=1$~(\textbf{On-policy}), $\lambda=0.5$~(\textbf{Mixed}) and $\lambda=0$~(\textbf{Supervised}). In particular, we are interested in the on-policy variants~($\lambda=\revise{1}$), which have not been previously explored. 
+
+\textbf{Baselines}. We compare to the widely-used KD methods discussed in Section~\ref{sec:methods}: SeqKD and Supervised KD. We also evaluate ImitKD~\citep{lin2020autoregressive} and f-distill~\citep{wen2023f}, which can be viewed as ``mixed'' data variants of GKD ($\lambda=0.5$) with forward KL and total variation distance as divergence. \revise{All the baselines start from the same supervised fine-tuned student checkpoint as GKD.}
+% We compare to sevaral baselines,
+% \begin{itemize}
+%     \item \textbf{Supervised FT}: See Section~\ref{sec:methods}
+%     \item \textbf{SeqKD}: See Section~\ref{sec:methods} It directly fine-tunes the student on either ground-truth or teacher-generated outputs. 
+%     \item \textbf{Supervised KD}: See Eq~\eqref{eq:sd}, GKD with $\lambda=0$ and forward KL as divergence $\D$.
+%     \item \textbf{On-policy KD}: See Eq~\eqref{eq:on_d}, GKD with $\lambda=1$ and forward KL as divergence. Note that purely on-policy distillation hasn't been employed for auto-regressive models.
+%     \item \textbf{ImitKD}~\citep{lin2020autoregressive}: . 
+% \end{itemize}
+
+
+
+
+
+\begin{figure}[t]
+\centering
+\begin{minipage}{.5\textwidth}
+    \centering
+    \vspace{-0.25cm}
+    \includegraphics[width=0.99\textwidth]{figures_new/xsum_bar_Large.pdf}
+    \caption{\textbf{Comparing GKD to baselines} on distillation from T5-XL to T5-large on XSum. On-policy GKD variants generally outperform baselines.}
+    % \jf{I think the NLP-versed reader will wonder why ROUGE-2 only is reported. It would be nice to report either all flavors (in Appendix) or make a decent case as to why in particular ROUGE-2.}}
+    \label{fig:xsum_baselines}
+\end{minipage}~~~~
+\begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=0.99\textwidth]{figures_new/data_scaling_xsum_v2.pdf}
+    \vspace{-0.5cm}
+\caption{\textbf{Scaling training data}. We evaluate distilled T5-small using temperature sampling~($\gamma=1$). GKD is more data efficient than baselines.}
+    \label{fig:xsum_data_scaling_main}
+\end{minipage}
+\vspace{-0.3cm}
+\end{figure}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{figures_new/diversity_vs_performance_long.pdf}
+\vspace{-0.25cm}
+\caption{\textbf{Effect of Divergence on Performance and Diversity}. Utilizing on-policy GKD with different divergences, we evaluate the trade-off between the distilled student's generation quality and diversity, by varying the sampling temperature. We quantify diversity using Self-BLEU~\citep{zhu2018texygen}, where a score of 100 indicates deterministic outputs and 0 signifies maximum diversity. Transitioning from forward KL to reverse KL, through generalized JSD, leads to decreased diversity, attributed to the enhanced mode-seeking characteristic of the divergence. Mode-seeking divergences often yield superior quality, especially at high temperatures ($\gamma=1$). Reducing the temperature curtails diversity while narrowing performance differences among divergences.}
+\label{fig:xsum_tradeoff}
+\vspace{-0.5cm}
+\end{figure}
+
+
+
+\subsection{Case Study: Abstractive Summarization}
+We start by evaluating GKD on an abstractive summarization task of generating a summary that captures salient ideas of the input document. To do so, we use the XSum dataset~\citep{narayan2018don}, which consists of news articles paired with human-written summaries. Following PaLM~\citep{chowdhery2022palm}, we evaluate performance using ROUGE-2 score~\citep{lin2004rouge} of predicted summaries on the validation split of XSum but observe similar trends in ROUGE-L and ROUGE-1. We use T5 models supervised fine-tuned on XSum as students for distillation while the fine-tuned T5-XL as the teacher. 
+ %When evaluating using temperature sampling~($\gamma=1$), we set teacher softmax-temperature to 0.1 and a temperature of 1.0 elsewhere unl. 
+ See Appendix~\ref{app:xsum} for additional experimental details. 
+
+
+% \begin{figure*}[t]
+%     \centering
+%     \vspace{-0.2cm}
+%     \includegraphics[width=0.99\linewidth]{figures_new/xsum_scaling_v2.pdf}
+%     \vspace{-0.2cm}
+%     \caption{\textbf{Comparing GKD with common distillation methods on XSum summarization}~\citep{narayan2018don}. We use the T5 models~\citep{raffel2020exploring} trained with supervised fine-tuning~(FT) as the student models for distillation. Supervised KD and supervised FT use the training dataset with ground-truth summaries but KD queries the teacher to get token probabilities while FT does not. Furthermore, on-policy approaches sample summaries from the student while `Mixed' refers to uniform sampling from the ground-truth and student-generated summaries. ImitKD~\citep{lin2020autoregressive} corresponds to `Mixed' sampling with Forward KL. On-policy GKD with forward KL or JSD (0.9), as discussed in Section~\ref{sec:back}, outperform other approaches. \textnbf}
+%     \label{fig:xsum_figure}
+%     \vspace{-0.1cm}
+% \end{figure*}
+
+\textbf{Comparison to baselines}. First, we explore how GKD compares to widely-used KD approaches, namely SeqKD and Supervised KD, across different student model sizes. As shown in Figure~\ref{fig:intro_figure}, we observe consistent improvements with GKD, which demonstrates the scalability of GKD with respect to the student capacity. Notably, GKD allows us to surpass the few-shot performance of PaLM~(540B) using a $7000\times$ smaller T5 model. We also compare GKD variants with ImitKD and f-distill, and evaluate performance with greedy sampling and temperature sampling ($\gamma=1$) in Figure~\ref{fig:xsum_baselines}. On-policy GKD with JSD~(0.9) outperforms these additional baselines in both scenarios. 
+
+
+\textbf{Data efficiency and scaling}. 
+To evaluate the efficiency and scalability of GKD, we distilled the T5-XL teacher using subsampled XSum training datasets: 1K (0.5\%), 10K (5\%), and 50K (25\%) examples.
+We used T5-small as the student and report data scaling curves in Figure~\ref{fig:xsum_data_scaling_main}. Notably, on-policy GKD on the 5\% subsampled dataset, without any ground-truth summaries, outperforms supervised KD and ImitKD with entire training dataset with ground-truth summaries.
+
+\textbf{GKD Ablations}. We ablated different divergences and student data fractions in GKD for various student sizes in Figure~\ref{fig:xsum_ablate_temp} and \ref{fig:xsum_ablate_greedy}. On-policy and mixed variants consistently outperform supervised variants. Mode-seeking divergences perform better when evaluation is done using temperature sampling while the choice of divergence doesn't affect performance much with greedy sampling. 
+
+
+
+
+
+\textbf{Choosing GKD Divergence}. The divergence chosen for distillation is crucial in determining the trade-off between summarization quality and diversity. As the sampling temperature can also be adjusted to balance summary quality and diversity, the optimal choice of divergence is temperature-dependent. To understand this dependence, we evaluate T5-small distilled using on-policy GKD with different divergences. As shown in Figure~\ref{fig:xsum_tradeoff}, certain divergences, like JSD~(0.5) and JSD~(0.9), offer better quality but less diversity at high temperatures. However, as temperature decreases, the difference in quality among divergences narrows, while diversity also drops.
+
+
+\textbf{On-policy GKD with RL}. In summarization, we want model-generated summaries to be factually consistent with their input documents. However, distillation alone might not improve factual consistency as even large models halluncinate and generate inconsistent summaries. Recently, \citet{roit2023factually} mitigate hallucination on summarization tasks by using RL with textual entailment feedback as the reward~(RLEF), as faithful summaries must be textually entailed from their input documents. Inspired by their success, we explore combining RL fine-tuning using a REINFORCE-like objective with on-policy GKD, as described in Section~\ref{sec:rl_gkd}. As shown in Figure~\ref{fig:xsum_rl_ablation}, GKD with RL fine-tuning substantially improves factual consistency compared to the teacher model while obtaining large improvements in summarization quality for the distilled student model. 
+
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/tradeoff_rl_xsum.pdf}
+    \vspace{-0.1cm}
+    \caption{\textbf{RLAIF + On-policy GKD}. We show the trade-off between reward maximization and summarization performance on XSum. We report improvements relative to the original T5-base student. Following \citet{roit2023factually}, we use the textual entailment score from a T5-XXL NLI classifier as the reward.
+    $\alpha$ controls the strength of the on-policy \alg\ loss with JSD (0.9). As $\alpha$ increases, ROUGE-2 increases while improvement in factual consistency decreases. For comparison, we show the relative performance of the $12\times$ larger T5-XL teacher. RLEF* corresponds to RLAIF method from \citet{roit2023factually}, where the student is regularized towards the original student model itself instead of the teacher. On-policy GKD + RL achieves higher ROUGE-2 compared to RLEF* while generating more factually consistent summaries compared to the teacher.}
+    \label{fig:xsum_rl_ablation}
+    \vspace{-0.15cm}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.505\textwidth]{figures_new/wmt_bleu_distill_raw_small_v2.pdf}
+    \hfill
+    \includegraphics[width=0.485\textwidth]{figures_new/wmt_bleu_distill_raw_base_v2.pdf}
+    \vspace{-0.55cm}
+    \caption{\textbf{Varying student data fraction and divergence in GKD on WMT en $\rightarrow$ de}. For evaluation, we use beam search and report the improvement in BLEU score of distilled student relative to the original student. Results are averaged across three seeds. We observe that using only student-generated output samples outperform other GKD variants. We use the T5-XL ($\sim$3B params) supervised fine-tuned on WMT as the teacher, which obtains a BLEU score of 28. \textbf{(Left)} We use T5-small (77M params) as the student, which obtain a BLEU score of 25.58. \textbf{(Right)} Student corresponds to T5-base (250M params) with a BLEU score of 26.98. }
+    \label{fig:wmt_ablation}
+    \vspace{-0.4cm}
+\end{figure}
+
+
+\vspace{-0.15cm}
+\subsection{Machine Translation}
+\vspace{-0.1cm}
+
+To evaluate GKD beyond summarization, we consider the task on translating English to  German using WMT14 en-de~\citep{bojar2014findings}. %, a task that requires translating text in English into German, preserving the content, semantics and style of the input.
+% First, we test variations of GKD on WMT14 en-de, a machine translation task for English to German. %It consists of \nino{details}. 
+We report performance on the validation split using the BLEU score, which measures the similarity of machine-translated text to high quality reference translations. We use supervised fine-tuned T5-XL as the teacher with a softmax-temperature of $1.0$ (BLEU score of 28). See Appendix~\ref{app:wmt} for additional experimental details. 
+
+\textbf{Results}. Figure~\ref{fig:intro_figure} and \ref{fig:wmt_comparison} show that on-policy GKD outperforms commonly-used KD approaches. Furthermore, we ablate GKD variants using T5-small and T5-base as students in  Figure~\ref{fig:wmt_ablation}. We observe that generalized JSD divergences perform better than forward or reverse KL but their performance gap reduces when using a larger student. Moreover, using purely on-policy and mixed data distributions consistently outperform GKD variants only using a fixed supervised dataset, showing the importance of generating on-policy output sequences from the student. The efficacy of on-policy data on WMT aligns with our findings on XSum. 
+
+
+
+
+
+
+
+
+
+\vspace{-0.15cm}
+\subsection{Arithmetic Reasoning}
+\vspace{-0.1cm}
+
+\citet{wei2022chain} show that reasoning abilities only appear to emerge in LLMs with at least several billions parameters, making KD important for improving reasoning abilities of smaller models. To this end, we evaluate \alg\ on GSM8K~\citep{cobbe2021training}, a high-quality dataset of grade school math word problems requiring multi-step logical inference. Here, we explore GKD in conjunction with chain-of-thought~(CoT)~\citep{wei2022chain}, a common approach to improve reasoning abilities of LLMs by prompting them to produce intermediate reasoning steps before giving the final answer.
+
+\textbf{Setup}. We perform few-shot prompting by prepending the math problems in GSM8K with the first 4 CoT input-output exemplars from \citet{wei2022chain}. For evaluation, we report accuracy on the test split by checking whether the target answer matches the final answer given an external calculator, akin to \citet{cobbe2021training}. 
+For supervised training, we use the CoT outputs generated by  \citet{magister2022teaching}, resulting in around 5.3K (problem, CoTs) pairs in the original training split of GSM8K. We use Flan-T5 models~\citep{chung2022scaling} supervised fine-tuned for 10K steps on the above CoT dataset as a starting point for distillation. We use the fine-tuned FLAN T5-XL as the teacher, 
+% \begin{wrapfigure}{r}{0.51\textwidth}
+%     \centering
+%     \vspace{-0.4cm}
+%     \includegraphics[width=0.5\textwidth]{figures/gsm8k_bar_gkd_variants.pdf}
+%     \vspace{-0.35cm}
+%     \caption{\small{Ablating GKD variants on GSM8K.}}
+%     \label{fig:app_gsm8k}
+% \end{wrapfigure}
+which obtains a test accuracy of 27.9. See additional experimental in Appendix~\ref{app:gsm8k}.
+% \mfg{Would benefit from more details.}
+
+
+
+
+
+\begin{figure}[t]
+\centering
+\begin{minipage}{.49\textwidth}
+    \centering
+    % \vspace{-0.05cm}
+    \includegraphics[width=0.98\linewidth]{figures_new/gsm8k_calc_base_labeled.pdf}
+    \vspace{-0.2cm}
+    \caption{\textbf{Ablating GKD on GSM8K.} We distill fine-tuned T5-XL to T5-Base, which obtain an accuracy of 27.9 and 10.16 with greedy sampling.}
+    % \jf{I think the NLP-versed reader will wonder why ROUGE-2 only is reported. It would be nice to report either all flavors (in Appendix) or make a decent case as to why in particular ROUGE-2.}}
+    \label{fig:gsm8k_ablate_main}
+\end{minipage}~~~~
+\begin{minipage}{.5\textwidth}
+    % \vspace{-0.15cm}
+    \includegraphics[width=\textwidth]{figures_new/gsm8k_data_vary.pdf}
+    \vspace{-0.4cm}
+    \caption{\textbf{Varying on-policy data on GSM8K}. As we increase fraction of student-generated data beyond 25\%, performance typically improves.}
+    \label{fig:gsm8k_student_data}
+\end{minipage}
+\vspace{-0.1cm}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures_new/gsm8k_baselines.pdf}
+    % \includegraphics[width=0.41\textwidth]{figures/gsm8k_with_cot_bar.pdf}
+    \vspace{-0.1cm}
+    \caption{\textbf{Distillation on GSM8K with few-shot CoT prompting}. On-policy GKD substantially outperform other approaches. As a reference, we provide GPT-3 davinci-002 results as well as PaLM (540B) results (without a calculator). We use forward KL and reverse KL respectively for on-policy and supervised GKD. %The teacher FLAN T5-XL achieves a test accuracy of 27.9. %Supervised FT corresponds to the approach of \citet{magister2022teaching}
+    }
+    \label{fig:gsm8k_baselines}
+    \vspace{-0.25cm}
+\end{figure}
+
+
+
+\textbf{Results}. We first ablate GKD variants and report results in Figure~\ref{fig:gsm8k_ablate_main} and \ref{fig:gsm8k_ablate_appendix}. We observe that when using only the fixed CoT dataset or mixing it with student-generated CoTs, performance consistently falls short of using solely the student-generated CoTs. Furthermore, forward KL performs quite well, similar to our findings on XSum with greedy sampling. Notably, reverse KL also performs well, especially when training using only a fixed dataset. Additionally, Figure~\ref{fig:gsm8k_student_data} shows that performance consistently improves as the proportion of on-policy data increases, provided that at least 25\% of the data is on-policy.
+Moreover, we demonstrate that on-policy GKD have superior performance compared to baseline KD methods, across all student sizes, as shown in Figure~\ref{fig:gsm8k_baselines}. Finally, we observe promising results with GKD for self-distillation on GSM8k, as shown in Appendix~\ref{self_distill}.
+
+
+% We also evaluated whether GKD can improve self-distillation, where we use FLAN-T5 large as the student and teacher except that the teacher is supervised fine-tuned on GSM8K. As shown in Appendix~\ref{self_distill}, we observe promising that using student-generated data outperforms supervised KD, with on-policy GKD performing the best for self-distillation.
+
+
+
+
+% \subsection{Task-agnostic Distillation: Instruction Tuning}
+% \label{inst_tuning}
+
+% To explore the generality of GKD, we added a task-agnostic distillation experiment in Appendix A.5. Specifically, we distill using the FLAN instruction tuning dataset (5.36M examples) and evaluate it on two held-out benchmarks: MMLU (57 tasks) and Big-Bench Hard (23 tasks). On-policy GKD with reverse KL outperforms common KD approaches (Figure A.16).
+
+% \begin{figure}[t]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{figures_new/appendix_figures/mmlu_bbh_delta_app.pdf}
+%     % \includegraphics[width=0.41\textwidth]{figures/gsm8k_with_cot_bar.pdf}
+%     \vspace{-0.1cm}
+%     \caption{\addtext{\textbf{Task-agnostic Distillation on FLAN}~\citep{chung2022scaling}. On-policy GKD with reverse KL outperforms other approaches. The evaluation metric on both the MMLU and BBH 
+%     benchmark suites is few-shot prompted accuracy (exact match), where we take an unweighted average over all tasks. These evaluation benchmarks are held-out (not included in the distillation data). Here, we do not run SeqKD due to its computational inefficiency for generating data from the teacher during training.
+%     The teacher FLAN T5-XL achieves an accuracy of 52.4\% on MMLU and 41\% on BBH, while the student T5-large model obtains an accuracy of 35.6\% on MMLU and 31.25\% on BBH.}} %Other GKD variants ablated in Figure~\ref{fig:flan_agnostic_app}.}
+%     \label{fig:flan_agnostic}
+%     \vspace{-0.2cm}
+% \end{figure}
+
+
+\vspace{-0.2cm}
+\subsection{Task-agnostic Distillation: Instruction Tuning}
+\vspace{-0.1cm}
+\label{inst_tuning}
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures_new/appendix_figures/mmlu_bbh_delta_app.pdf}
+    % \includegraphics[width=0.41\textwidth]{figures/gsm8k_with_cot_bar.pdf}
+    \vspace{-0.1cm}
+    \caption{\addtext{\textbf{Task-agnostic Distillation on FLAN}~\citep{chung2022scaling}. On-policy GKD with reverse KL outperforms other approaches. The evaluation metric on both the MMLU and BBH 
+    benchmark suites is few-shot prompted accuracy (exact match), where we take an unweighted average over all tasks. These evaluation benchmarks are held-out (not included in the distillation data). Here, we do not run SeqKD due to its computational inefficiency for generating data from the teacher during training.
+    The teacher FLAN T5-XL achieves an accuracy of 52.4\% on MMLU and 41\% on BBH, while the student T5-large model obtains an accuracy of 35.6\% on MMLU and 31.25\% on BBH.}} %Other GKD variants ablated in Figure~\ref{fig:flan_agnostic_app}.}
+    \label{fig:flan_agnostic}
+    \vspace{-0.5cm}
+\end{figure}
+
+
+
+\addtext{
+While task-specific distillation provides optimized performance for predefined tasks, which is often crucial for deployment purposes,  task-agnostic distillation offers a compelling alternative in scenarios where the exact nature of the task is not known beforehand and can vary during deployment. As highlighted by \citet{sanh2019distilbert}, the allure of task-agnostic distillation lies in its efficiency: once distilled, a model can be re-purposed for multiple downstream tasks via prompting or fine-tuning. 
+
+\textbf{Setup}. To study task-agnostic KD, we focus on instruction tuning~\citep{chung2022scaling}. Our aim is to enhance the distilled model's proficiency to handle diverse tasks presented in the form of instructions. To achieve this, we employ the FLAN T5-XL model as our teacher and distill its knowledge into the FLAN T5-Base, as introduced by \citet{chung2022scaling}. Our distillation process utilizes the comprehensive \href{https://huggingface.co/datasets/conceptofmind/flan2021_submix_original}{FLAN2021} 
+instruction tuning dataset, which boasts 5.36 million examples spanning 62 distinct language understanding and generation tasks. For hyperparameter details, see Table~\ref{app:flan_hparams}.
+
+\textbf{Evaluation}. To gauge the versatility of a task-agnostic model, it is essential to test it across a diverse set of tasks. In line with \citet{chung2022scaling}, we evaluate our distilled T5-base student on two held-out benchmark suites: (1) \textbf{MMLU}~(Massive Multitask Language Understanding) includes exam questions from 57 tasks such as mathematics, history, law, and medicine, and (2) \textbf{BBH}~(BIG-Bench Hard) includes 23 tasks from BIG-Bench for which PaLM 540B~\citep{chowdhery2022palm} performs below average human raters. For performance, we report the distilled model's ability to directly predict the answer via standard few-shot prompting, averaged across tasks in MMLU and BBH.
+
+\textbf{Results}. We report the performance of distilled checkpoints obtained after 50K training steps for various methods in Figure~\ref{fig:flan_agnostic}. We find that on-policy GKD with reverse KL substantially outperforms supervised KD and ImitKD. Notably, in the context of instruction tuning, we
+find that using reverse KL performs much better than forward KL. We hypothesize that the efficacy of reverse KL in instruction tuning may stem from its mode-seeking nature as it ensures that the model zeroes in on the main intent or behavior specified by the instruction. As a result, the model might prioritize core behaviors over less relevant details, leading to better performance on held-out tasks.
+}
+
+
+\vspace{-0.25cm}
+\section{Related work}
+\vspace{-0.25cm}
+\textbf{Knowledge distillation.} Supervised KD~\citep{bucilua2006model, hinton2015distilling} is a classic approach and has been successfully used for distilling auto-regressive models~\citep{sanh2019distilbert}. Another approach for distilling such models is sequence-level KD~\citep{kim2016sequence}. On-policy GKD substantially outperforms supervised KD and SeqKD~(Figure~\ref{fig:intro_figure}). 
+%, which maximizes the log-likelihood of the student on sequences generated by the teacher. 
+Other KD approaches train the student to match different quantities obtained from the teacher, such as hidden states \citep{jiao2020tinybert} or attention scores \citep{wang2020minilm}. However, none of these approaches make the connection between distillation and imitation learning, and a purely supervised approach can suffer from train-\revise{inference} mismatch, also known as exposure bias~\citep{ranzato2015sequence, bengio2015scheduled}. \addtext{While \citet{he2019exposure} argue that this mismatch may not be critical, several papers demonstrate that exposure bias leads to poor text generation~\citep{zhang-etal-2019-bridging, chiang2021relating, arora2022exposure}.}
+
+
+ImitKD~\citep{lin2020autoregressive} identifies this connection by sampling sequences from both the student and a fixed dataset but does not push the idea further. Unlike GKD, ImitKD does not explore purely on-policy data collection, nor does it integrate RL fine-tuning. Moreover, ImitKD keeps the forward KL at the token level, which is not necessary when one has access to the teacher's log-probabilities, rather than just samples. Furthermore, GKD demonstrates the scalability of the idea, handling student models roughly $26\times$ larger than those explored by ImitKD. ImitKD can be viewed as GKD with forward KL and a non-increasing schedule on $\lambda$, a simple choice being $\lambda = 0.5$.   More recently, f-distill~\citep{wen2023f} formulates sequence-level KD as minimizing an f-divergence and propose an tractable objective based on
+total variation distance between the token-level student and teacher distributions. In essence, both ImitKD and f-distill are specific instances of \alg, which we demonstrate lead to worse empirical results than on-policy GKD~(Figure~\ref{fig:xsum_baselines}, \ref{fig:gsm8k_baselines}).
+
+%Also, they do not combine distillation with RL fine-tuning, which is one of our main contributions. 
+
+The concurrent work on MiniLLM~\citep{gu2023knowledge} also exploits the link to imitation and frame distillation as an RL problem. In particular, MiniLLM optimizes reverse KL between the teacher and the student at the sequence level (while likelihood maximization is the forward one) using a policy gradient approach. 
+%while also recognizing the limitation of forward KL. 
+% and frame distillation as an RL problem with the reward being the reverse KL between the teacher and the student, this being equivalent to the reverse KL at the sequence level (while likelihood maximization is the forward one), and solve it using a policy gradient approach. 
+However, we argue that GKD is simpler and more stable, being closer to supervised training, since it does not backpropagate through the student's sampling process. Indeed, MiniLLM relies on a number of stabilizing tricks, to tackle high variance, reward hacking, and generation length bias. GKD is also more general as it can also be used with other divergences such as forward KL or JSD, which can perform better than reverse KL~(Figure~\ref{fig:wmt_ablation}, \ref{fig:gsm8k_ablate_main}). %, and can be easily combined with online RL fine-tuning.
+
+\textbf{RL fine-tuning.} There are now numerous examples of language models being fine-tuned with RL, be the reward optimizing for some metric~\citep{wu2018study}, or learned using human feedback~\citep{ouyang2022training}. In these approaches, it is typical to regularize the RL fine-tuned model towards the initial (usually supervised fine-tuned) model. However, as far as we know, we are the first to perform distillation and RL fine-tuning at the same time~(Figure~\ref{fig:xsum_rl_ablation}). If it may seem natural, it is quite different from an optimization perspective, as it changes the regularization towards the initial policy to towards the teacher policy, and we show empirically that it is a viable approach.
+
+
+\textbf{Distillation with reasoning traces or rationales}. Chain-of-Thought prompting~\citep{nye2021show, wei2022chain} has recently demonstrated that LLMs can solve complex reasoning tasks, step by step, just by prompting. This idea was quickly adapted to KD, by extending the teacher dataset with CoT prompts for fine-tuning the student \citep{magister2022teaching,ho2022large,hsieh2023distilling}. The distillation is still done in a supervised way, and other kind of enhanced prompts could be considered \citep{li2022explanations, mukherjee2023orca}. We adopt the same approach, but combine it with on-policy distillation with various divergences. % for the first time to the best of our knowledge. 
+It shows the versatility of GKD, and improves upon the purely supervised approaches, as seen in our results on GSM8K~(Figure~\ref{fig:gsm8k_baselines}).
+
+\textbf{Application to speculative decoding}.  \citet{zhou2023distillspec} and \citet{liu2023online} apply GKD to improve the alignment between draft and target model for better inference speedup from speculative decoding. 
+
+\vspace{-0.45cm}
+\section{Conclusion}
+\vspace{-0.35cm}
+In this work, we proposed GKD to address the train-inference distribution mismatch when distilling auto-regressive language models. GKD consistently outperformed commonly-used knowledge distillation approaches on three language generation tasks: abstractive summarization, machine translation, and arithmetic reasoning. We further showed that GKD can be combined with reinforcement learning to optimize a sequence-level reward in addition to distilling the knowledge of a large teacher model, which we believe can improve the widely-used RLHF training phase for language models. One interesting direction for future work would be extending GKD  to auto-regressive sequence models for audio~\citep{radford2023robust}, video~\citep{villegas2022phenaki} and text-to-image generation~\citep{yu2022scaling}. We hope that our work will be valuable for researchers and practitioners who are working on improving performance and efficiency of generative auto-regressive sequence models.
+
+
+% \section*{Acknowledgments}
+% We are thankful to Johan Ferret, L\'eonard Hussenot and Ramki Gummadi for providing feedback on an early draft of this work. We are especially thankful to Nikola Momchev, and Sertan Girgin, for key contributions to our research infrastructure and general support for infrastructure-related queries. We'd also like to acknowledge Guillaume Desjardins, Aleksandra Faust, Olivier Pietquin, Dale Schuurmans, Aaron Courville, L\'eonard Hussenot, Robert Dadashi, Adrien Ali Taiga, Yongchan Zhou, and Max Schwarzer for helpful discussions.
+
+% We would also like to thank the Python community \cite{van1995python, 4160250}
+% for developing tools that enabled this work, including NumPy \cite{harris2020array}, Matplotlib \cite{hunter2007matplotlib} and JAX \cite{bradbury2018jax}.
+
+\bibliography{references}
+\bibliographystyle{iclr2024_conference}
+
+\newpage
+
+\FloatBarrier
+\appendix
+
+
+\section{Appendix}
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+\counterwithin{equation}{section}
+
+
+\subsection{Self-Distillation}
+\label{self_distill}
+
+\begin{figure}[h]
+% \begin{wrapfigure}{r}{0.5\linewidth}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures_new/appendix_figures/self_distill_gsm8k.pdf}
+    % \includegraphics[width=0.41\textwidth]{figures/gsm8k_with_cot_bar.pdf}
+    \vspace{-0.1cm}
+    \caption{\addtext{\textbf{Self-Distillation on GSM8K}. Here, GKD corresponds to on-policy GKD~($\lambda=1$). On-policy GKD variants outperform other approaches including supervised KD. The teacher FLAN T5-Large is supervised fine-tuned on GSM8K and achieves an accuracy of 20.5\% while the student FLAN T5-large (not trained on GSM8K) obtains an accuracy of 14.4\% on the test set.}}
+    \label{fig:self_distill_gkd}
+    \vspace{-0.2cm}
+\end{figure}
+
+\textbf{Self-Distillation}. We investigate whether GKD works for self-distillation~\citep{yim2017gift}, where we want to transfer knowledge from a teacher model to a student model with the same architecture and size. To investigate this, we consider self-distillation on GSM8K with FLAN-T5 large as the student and teacher, where the teacher is supervised fine-tuned on GSM8K. As shown in Figure~\ref{fig:self_distill_gkd}, self-distilled students surpass surpasses the teacher's performance on the test set. Moreover, distillation using student-generated data outperforms supervised KD, with on-policy GKD performing the best.
+
+
+
+
+
+\subsection{T5 Models}
+\label{sec:app_t5}
+
+As base checkpoints, we start from \href{https://github.com/google-research/text-to-text-transfer-transformer/blob/main/released\_checkpoints.md#lm-adapted-t511lm100k}{LM-adapted T5v1.1 models}.  These LM-adapted models are initialized from T5v1.1 and trained for an additional 100K steps on the LM objective discussed in the T5 paper~\citep{raffel2020exploring}.  These checkpoints are open-sourced at \url{https://console.cloud.google.com/storage/browser/t5-data/pretrained_models}. 
+
+
+
+In our experiments, we initialize both the student and teacher models for distillation by running further supervised FT on the original training dataset, as described below: 
+
+\begin{itemize}
+    \item \textbf{XSum}. For small, base, large and XL models, we use LM-Adapted T5v1.1 models supervised fine-tuned for 100K, 50K, 38k and 8K steps respectively. 
+    \item \textbf{WMT}. For small, base, large and XL models, we use LM-Adapted T5v1.1 models supervised fine-tuned for 250K, 250K, 110k and 50K steps respectively.
+    \item \textbf{GSM8K}. All models were supervised fine-tuned starting from \href{https://github.com/google-research/t5x/blob/main/docs/models.md#flan-t5-checkpoints}{FLAN-T5} models on the Palm-540 generated CoT dataset for 10K steps. 
+\end{itemize}
+
+
+Similar to T5 and FLAN-T5, our experiments use the Adafactor optimizer~\citep{shazeer2018adafactor}.
+
+\addtext{
+\textbf{Computational cost of GKD}. All methods including baselines start from the supervised fine-tuned student checkpoint, which requires training for a few hours on the smallest TPUv3 (8 cores). On GSM8K, the computational overhead from student sampling is approximately $1.8\times$, $2\times$ and $2.2\times$ compared to sampling from a fixed dataset of outputs, for a student-teacher ratio of $38\times$, $12\times$ and $3.8\times$. For RLHF + GKD, the computational overhead is somewhat small as we are only running inference to get teacher logits instead of student logits. 
+
+
+Moreover, the majority of cost in real world use cases is due to serving cost at inference time and not due to fine tuning. Concretely, if it is too costly to sample from the student during fine-tuning, it might also be too expensive to serve this model to users (which may range from tens of thousands to billions). Overall, performance benefits from on-policy GKD might be worth the compute cost, especially when combined with RLHF. }
+
+
+\subsection{XSum}
+\label{app:xsum}
+
+
+\textbf{Learning rate sweep}. We performed a sweep over the learning rate in \{0.0001, 0.0003, 0.001\} and found 0.0003 to be the best for T5-base, T5-large and 0.001 leads to best performance for T5-small. As such, by default we use an LR of 0.0003 except when reporting results for T5-small, which uses 0.001. We found that reverse KL was more sensitive to higher LRs and we default to using 0.0003 for all models when using reverse KL.
+
+\textbf{Teacher Softmax-temperature}. When using greedy sampling for evaluation, we set the teacher temperature to 1. However, when reporting student performance with temperature sampling~($\gamma=1$), as done in Figures~\ref{fig:xsum_baselines} and \ref{fig:xsum_data_scaling_main}, we set teacher temperature to 0.1 for the student. %This is based on our preliminary experiment shown in Figure~\ref{fig:teacher_temp}. 
+
+\begin{table}[h]
+    \centering
+    \caption{Hyperparameter Details for experiments on XSum.}
+    \begin{tabularx}{0.65\textwidth}{lX}
+        \toprule
+        \textbf{Hyperparameter} & \textbf{Value} \\
+        \midrule
+        Training Steps & 40,000 \\
+        Batch size & 32 \\
+        Eval Split & Validation \\
+        Dropout & 0.0 \\
+        Learning Rate~(LR) & 0.0003\\
+        LR Warmup Steps & 2,000 \\
+        LR Cooldown (Begin, End) & (30,000, 40,000) \\
+        Warmup Schedule & Linear (from 0 to LR)\\
+        Cooldown Schedule & Linear (from LR to 0)\\
+        Max Input Length & 1024 \\
+        Max Output Length & 64 \\
+        Evaluation & Greedy \& Temp. Sampling \\
+        \bottomrule
+    \end{tabularx}
+    \label{tab:hparams_xsum}
+\end{table}
+
+
+\textbf{GKD Ablations}. We ablated different divergences and student data fractions in GKD for various student sizes in Figure~\ref{fig:xsum_ablate_temp} and \ref{fig:xsum_ablate_greedy}. On-policy and mixed variants consistently outperform supervised variants. Mode-seeking divergences perform better when evaluation is done using temperature sampling while the choice of divergence doesn't affect performance much with greedy sampling. 
+
+% \textbf{Varying Teacher Temperature}. Contrary to conventional wisdom in supervised learning, Figure~\ref{fig:teacher_temp} shows that when evaluating the student at a fixed temperature of 1, setting teacher's softmax-temperature lower than 1 can lead to performance improvements. This result makes intuitive sense as sampling from a teacher at lower temperature often results in better performance. As such, lower temperatures corresponds to a better performing teacher distribution and the distilled student is trained to match this distribution. However, when using greedy sampling for evaluation, we simply set the student and teacher temperature to 1.
+
+
+\begin{figure}[h]
+    \centering
+    \vspace{-0.2cm}
+    \includegraphics[width=0.45\linewidth]{figures_new/appendix_figures/xsum_small_ablate_temp.pdf}
+    \includegraphics[width=0.45\linewidth]{figures_new/appendix_figures/xsum_base_ablate_temp.pdf}
+    \includegraphics[width=0.46\linewidth]{figures_new/appendix_figures/xsum_large_ablate_temp.pdf}
+    \caption{\textbf{Ablating GKD on XSum with evaluation via temperature sampling}~($\gamma=1$). We distill supervised fine-tuned T5-XL model to different sized student T5 models. Here, we evaluate using temperature sampling and teacher temperature to 0.1 during training. In the plots above, we report the ROUGE-2 score of the student post distillation. On-policy GKD approaches with reverse KL and JSD~(0.9) performs the best, while forward KL performs poorly.}
+    \label{fig:xsum_ablate_temp}
+    % \vspace{-0.5cm}
+\end{figure}
+
+
+% \begin{figure}[h]
+%     \centering
+%     \vspace{-0.3cm}
+%     \includegraphics[width=0.4\linewidth]{figures/temp_ablation.pdf}
+%     \vspace{-0.2cm}
+%     \caption{\textbf{Effect of teacher softmax-temperature}. We plot the performance on XSum for the distilled student using temperature sampling with \revise{the training and evaluation student temperature} of 1, for varying teacher temperature. \revise{This deviates from the standard KD setup where teacher and student training temperatures are fixed to 1 and the student evaluation temperature is set to 0 for greedy sampling.}}
+%     \label{fig:teacher_temp}
+% \end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \vspace{-0.25cm}
+    \includegraphics[width=0.45\linewidth]{figures_new/appendix_figures/xsum_small_ablate.pdf}
+    \includegraphics[width=0.45\linewidth]{figures_new/appendix_figures/xsum_base_ablate.pdf}
+    \includegraphics[width=0.45\linewidth]{figures_new/appendix_figures/xsum_large_ablate.pdf}
+    \caption{\textbf{Ablating GKD on XSum with evaluation via greedy sampling.} We distill supervised fine-tuned T5-XL model to different sized student T5 models. Here, we evaluate using greedy sampling and set student and teacher temperature to 1 during training. When evaluated using greedy sampling, the teacher model obtains a ROUGE-2 score of 22 while the student T5-small, base and large models obtain score of 13.4, 17.9, and 19.6 respectively. In the plots above, we report the ROUGE-2 score of the student post distillation. On-policy GKD approaches performs the best, with small differences among different divergences. Furthermore, on-policy and mixed variants strongly outperform supervised variants.}
+    \label{fig:xsum_ablate_greedy}
+\end{figure}
+
+
+
+
+
+\vspace{-0.2cm}
+\subsection{GSM8K}
+\vspace{-0.2cm}
+\label{app:gsm8k}
+
+
+For training, we use the CoT outputs generated from Palm-540B by \citet{magister2022teaching}. 
+We report accuracy on the original test split of the GSM8K dataset~\citep{cobbe2021training}. We use checkpoints at the end of training after distillation for reporting results, which are averaged across 3 seeds. 
+
+\begin{table}[H]
+    \centering
+    \caption{Hyperparameter Details for experiments on GSM8K.}
+    \begin{tabularx}{0.65\textwidth}{lX}
+        \toprule
+        \textbf{Hyperparameter} & \textbf{Value} \\
+        \midrule
+        Training Steps & 40,000 \\
+        Batch size & 32 \\
+        Evaluation Split & Test \\
+        Dropout & 0.05 \\
+        Learning Rate~(LR) & 0.0003 \\
+        LR Warmup Steps & 2,000 \\
+        LR Cooldown (Begin, End) & (30,000, 40,000) \\
+        Warmup Schedule & Linear (from 0 to LR)\\
+        Cooldown Schedule & Linear (from LR to 0)\\
+        Max Input Length & 512 \\
+        Max Output Length & 320 \\
+        Checkpoint & Flan-T5 \\
+        Teacher softmax temperature & 0.1 \\
+        Evaluation & Greedy Sampling \\
+        \bottomrule
+    \end{tabularx}
+    \label{tab:hparams_xsum}
+\end{table}
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.505\textwidth]{figures_new/gsm8k_calc_small.pdf}
+    \hfill
+    \includegraphics[width=0.485\textwidth]{figures_new/gsm8k_calc_large.pdf}
+    \vspace{-0.25cm}
+    \caption{\textbf{Ablating GKD variants on GSM8K with 4-shot CoT}. For evaluation, we use greedy sampling and report improvement in test accuracy of the student after distillation. Results are averaged across three seeds. Using only student-generated output samples typically outperform other GKD variants. We use the supervised fine-tuned T5-XL as the teacher, which obtains an accuracy of 27.9. \textbf{(Left)} We use T5-small as the student, which obtains an accuracy of 4.585. \textbf{(Right)} Student corresponds to T5-base with an accuracy of 20.5.}
+    \label{fig:gsm8k_ablate_appendix}
+    \vspace{-0.1cm}
+\end{figure}
+
+
+\textbf{Few-shot CoT Prompt}. Here, we specify the 4-shot CoT prompt used for the experiments:
+
+Q: There are 15 trees in the grove. Grove workers will plant trees in the grove today. After they are done, there will be 21 trees. How many trees did the grove workers plant today?
+
+A: There are 15 trees originally. Then there were 21 trees after some more were planted. So there must have been 21 - 15 = 6. The answer is 6.
+
+Q: If there are 3 cars in the parking lot and 2 more cars arrive, how many cars are in the parking lot?
+
+A: There are originally 3 cars. 2 more cars arrive. 3 + 2 = 5. The answer is 5.
+
+Q: Leah had 32 chocolates and her sister had 42. If they ate 35, how many pieces do they have left in total?
+
+A: Originally, Leah had 32 chocolates. Her sister had 42. So in total they had 32 + 42 = 74. After eating 35, they had 74 - 35 = 39. The answer is 39.
+
+Q: Jason had 20 lollipops. He gave Denny some lollipops. Now Jason has 12 lollipops. How many lollipops did Jason give to Denny?
+
+A: Jason started with 20 lollipops. Then he had 12 after giving some to Denny. So he gave Denny 20 - 12 = 8. The answer is 8.
+
+
+
+\subsection{WMT}
+\label{app:wmt}
+
+For evaluation, we use beam search with same hyperparameters as \citet{raffel2020exploring}. We report performance of the final checkpoints obtained after training. To reduce the variance in results, we report the results averaged across 3 seeds.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\linewidth]{figures_new/appendix_figures/wmt_bleu_distill_compare.pdf}
+    \caption{\addtext{Comparing GKD to ImitKD and f-distill on WMT. Here, GKD corresponds to best performing variant on WMT, with $\lambda = 1$ (on-policy) and JSD (0.1).  On-policy GKD leads to 53\% higher BLEU improvement over ImitKD and 162\% over f-distill, averaged across small and base models.}}
+    \label{fig:wmt_comparison}
+\end{figure}
+
+\begin{table}[h]
+    \centering
+    \caption{Hyperparameter Details for WMT en-de experiments.}
+    \begin{tabularx}{0.65\textwidth}{lX}
+        \toprule
+        \textbf{Hyperparameter} & \textbf{Value} \\
+        \midrule
+        Training Steps & 100,000 \\
+        Batch size & 32 \\
+        Seqio Task Name & 'wmt\_t2t\_ende\_v003' \\
+        Eval Split & Validation \\
+        Dropout & 0.0 \\
+        Warmup Steps & 5,000 \\
+        Warmup Schedule & Linear (from 0 to LR)\\
+        Learning Rate~(LR) & 0.0003 \\
+        Input Length (Tokenized) & 80 \\
+        Output Length (Tokenized) & 80 \\
+        Teacher softmax temperature & 1.0 \\
+        Evaluation & Beam Search \\
+        \bottomrule
+    \end{tabularx}
+    \label{tab:hparams}
+\end{table}
+
+
+
+
+
+\subsection{Instruction Tuning}
+
+\begin{table}[H]
+    \centering
+    \caption{Hyperparameter Details for FLAN Instruction Tuning.}
+    \begin{tabularx}{0.65\textwidth}{lX}
+        \toprule
+        \textbf{Hyperparameter} & \textbf{Value} \\
+        \midrule
+        Training Steps & 50,000 \\
+        Batch size & 128 \\
+        Task & \href{https://huggingface.co/datasets/conceptofmind/flan2021_submix_original}{FLAN2021}  \\
+        Dropout & 0.0 \\
+        Warmup Schedule & No Warmup \\
+        Learning Rate~(LR) & 0.0001 \\
+        Input Length (Tokenized) & 2048 \\
+        Output Length (Tokenized) & 256 \\
+        Teacher softmax temperature & 1.0 \\
+        Evaluation & Greedy Sampling \\
+        \bottomrule
+    \end{tabularx}
+    \label{app:flan_hparams}
+\end{table}
+
+\subsection{Mode-seeking vs Mode-covering KL}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures_new/reverse_forward_kl.pdf}
+    \vspace{-0.1cm}
+    \caption{\textbf{Mode-seeking \emph{vs} Model-covering KL with capacity mismatch}. We show the learned distribution $Q_\theta$ when minimizing the forward and reverse KL w.r.t $Q$ between a mixture distribution $P$ and a unimodal Gaussian $Q_\theta$. Reverse KL is mode-seeking as it forces $Q_\theta$ to be zero where $P$ is zero and hence makes it concentrate on one of the modes (last plot). However, forward KL is mode-covering as it ensures that there is some mass under $Q_\theta$ wherever there is some mass under $P$. See \citet{le2017reverse} to replicate this plot.}
+    \label{fig:kl}
+    \vspace{-0.25cm}
+\end{figure}
+
+
+\end{document}
+

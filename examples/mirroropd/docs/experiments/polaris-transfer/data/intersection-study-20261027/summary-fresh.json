@@ -1,0 +1,301 @@
+[
+  {
+    "arm": "justrl-student-k16",
+    "teacher": "justrl",
+    "step": 32,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 115.20431560277939,
+    "sequence_kl_after": 64.12963244318962,
+    "conditional_js_horizon_after": 0.013982425007270649,
+    "conditional_tv_horizon_after": 0.07688136823708192,
+    "sample_gap_after": 65.93545067310333,
+    "conditional_minus_sample_gap_ci": [
+      -4.6709083914756775,
+      1.2221881747245789
+    ],
+    "absolute_drop_ci": [
+      44.518710255622864,
+      57.33922499418259
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "justrl-student-k16",
+    "teacher": "justrl",
+    "step": 64,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 115.20431560277939,
+    "sequence_kl_after": 31.4371847063303,
+    "conditional_js_horizon_after": 0.007294967865163926,
+    "conditional_tv_horizon_after": 0.05488409195095301,
+    "sample_gap_after": 32.68471088819206,
+    "conditional_minus_sample_gap_ci": [
+      -3.5470550935715437,
+      1.0549019575119019
+    ],
+    "absolute_drop_ci": [
+      75.982975050807,
+      91.00751626491547
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "polaris-intersection-k16",
+    "teacher": "polaris",
+    "step": 32,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 197.05250948667526,
+    "conditional_js_horizon_after": 0.03215231071226299,
+    "conditional_tv_horizon_after": 0.1087905983440578,
+    "sample_gap_after": 203.58128464221954,
+    "conditional_minus_sample_gap_ci": [
+      -12.563664197921753,
+      -1.0047594904899597
+    ],
+    "absolute_drop_ci": [
+      22.75859671831131,
+      49.275032222270966
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "polaris-intersection-k16",
+    "teacher": "polaris",
+    "step": 64,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 186.4114670753479,
+    "conditional_js_horizon_after": 0.0313261578703532,
+    "conditional_tv_horizon_after": 0.10152575850952417,
+    "sample_gap_after": 182.79787683486938,
+    "conditional_minus_sample_gap_ci": [
+      -0.4318307638168335,
+      8.098961114883423
+    ],
+    "absolute_drop_ci": [
+      32.07387888431549,
+      60.131731033325195
+    ],
+    "length_before": 1024,
+    "length_after": 1020.59375,
+    "stop_fraction": 0.015625
+  },
+  {
+    "arm": "polaris-student-k16",
+    "teacher": "polaris",
+    "step": 32,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 197.34302878379822,
+    "conditional_js_horizon_after": 0.03154238087881822,
+    "conditional_tv_horizon_after": 0.10670284635853022,
+    "sample_gap_after": 194.07192069292068,
+    "conditional_minus_sample_gap_ci": [
+      -5.326253592967987,
+      10.654942214488983
+    ],
+    "absolute_drop_ci": [
+      23.149584770202637,
+      45.32082664966583
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "polaris-student-k16",
+    "teacher": "polaris",
+    "step": 64,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 195.41413402557373,
+    "conditional_js_horizon_after": 0.03239718913391698,
+    "conditional_tv_horizon_after": 0.1045482472400181,
+    "sample_gap_after": 197.32550567388535,
+    "conditional_minus_sample_gap_ci": [
+      -9.147399187088013,
+      5.187834978103638
+    ],
+    "absolute_drop_ci": [
+      22.76052677631378,
+      50.345717549324036
+    ],
+    "length_before": 1024,
+    "length_after": 1020.59375,
+    "stop_fraction": 0.015625
+  },
+  {
+    "arm": "polaris-teacher-k16",
+    "teacher": "polaris",
+    "step": 32,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 211.72393137216568,
+    "conditional_js_horizon_after": 0.03411198149842676,
+    "conditional_tv_horizon_after": 0.11130496981786564,
+    "sample_gap_after": 212.98204946517944,
+    "conditional_minus_sample_gap_ci": [
+      -9.05166906118393,
+      5.68046110868454
+    ],
+    "absolute_drop_ci": [
+      8.88185441493988,
+      32.847786009311676
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "polaris-teacher-k16",
+    "teacher": "polaris",
+    "step": 64,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 205.9847075343132,
+    "conditional_js_horizon_after": 0.03745516795606818,
+    "conditional_tv_horizon_after": 0.1077061421237886,
+    "sample_gap_after": 209.04788839817047,
+    "conditional_minus_sample_gap_ci": [
+      -8.396918892860413,
+      2.04720276594162
+    ],
+    "absolute_drop_ci": [
+      9.769410848617554,
+      44.716015338897705
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "polaris-topk-k16",
+    "teacher": "polaris",
+    "step": 32,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 198.7330026626587,
+    "conditional_js_horizon_after": 0.032018897778471,
+    "conditional_tv_horizon_after": 0.1086065138806589,
+    "sample_gap_after": 196.67965078353882,
+    "conditional_minus_sample_gap_ci": [
+      -4.202366232872009,
+      8.283522963523865
+    ],
+    "absolute_drop_ci": [
+      22.157988488674164,
+      45.057892203330994
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "polaris-topk-k16",
+    "teacher": "polaris",
+    "step": 64,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 188.6248562335968,
+    "conditional_js_horizon_after": 0.0318061367579503,
+    "conditional_tv_horizon_after": 0.10312584054190665,
+    "sample_gap_after": 188.140162140131,
+    "conditional_minus_sample_gap_ci": [
+      -5.567977070808411,
+      6.699645489454269
+    ],
+    "absolute_drop_ci": [
+      28.699886322021484,
+      58.531564116477966
+    ],
+    "length_before": 1024,
+    "length_after": 1020.59375,
+    "stop_fraction": 0.015625
+  },
+  {
+    "arm": "selection-high",
+    "teacher": "polaris",
+    "step": 16,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 218.97264099121094,
+    "conditional_js_horizon_after": 0.034843120418372564,
+    "conditional_tv_horizon_after": 0.12029013957362622,
+    "sample_gap_after": 224.710855782032,
+    "conditional_minus_sample_gap_ci": [
+      -12.232243061065674,
+      1.3662163615226746
+    ],
+    "absolute_drop_ci": [
+      0.8994848728179932,
+      26.749167680740356
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "selection-low",
+    "teacher": "polaris",
+    "step": 16,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 219.98800593614578,
+    "conditional_js_horizon_after": 0.0346411290083779,
+    "conditional_tv_horizon_after": 0.11956641566939652,
+    "sample_gap_after": 222.65310686826706,
+    "conditional_minus_sample_gap_ci": [
+      -9.140163123607635,
+      3.9438679814338684
+    ],
+    "absolute_drop_ci": [
+      0.6215615272521973,
+      22.719571828842163
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  },
+  {
+    "arm": "selection-random",
+    "teacher": "polaris",
+    "step": 16,
+    "prompts": 32,
+    "responses": 64,
+    "sequence_kl_before": 232.20968067646027,
+    "sequence_kl_after": 218.00531035661697,
+    "conditional_js_horizon_after": 0.034599710124894045,
+    "conditional_tv_horizon_after": 0.1193373792921193,
+    "sample_gap_after": 224.13641786575317,
+    "conditional_minus_sample_gap_ci": [
+      -12.553756952285767,
+      0.17055350542068481
+    ],
+    "absolute_drop_ci": [
+      -0.02378934621810913,
+      26.992405831813812
+    ],
+    "length_before": 1024,
+    "length_after": 1024,
+    "stop_fraction": 0
+  }
+]

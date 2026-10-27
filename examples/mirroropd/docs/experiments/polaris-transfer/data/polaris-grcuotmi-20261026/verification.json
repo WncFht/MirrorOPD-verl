@@ -1,0 +1,21 @@
+{
+  "continuous_updates_and_optimizer": true,
+  "outer_reuse_mapping": true,
+  "position_counts_equal_response_tokens": true,
+  "eval_budgets_and_failures": true,
+  "all_updates_finite_and_applied": true,
+  "all_within_batch_observations_strictly_decrease": true,
+  "loss_full_kl_max_abs_error": 3.5518609858842254e-08,
+  "script_ast_parse": true,
+  "document_links": {
+    "pages": 2,
+    "local_links": 7,
+    "symbols": 0,
+    "python_examples": 0
+  },
+  "figure_audit": {
+    "convergence": [],
+    "positions": [],
+    "validation-length": []
+  }
+}

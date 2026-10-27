@@ -1,0 +1,35 @@
+{
+  "math": {
+    "count": 768,
+    "student_to_base_reverse": 0.11170423325325583,
+    "student_to_polaris_reverse": 0.18649525206530582,
+    "polaris_to_base_reverse": 0.02239008872185297,
+    "base_gradient_projection_on_total": 0.6022717114326994,
+    "delta_gradient_projection_on_total": 0.3977283190144384,
+    "base_to_total_gradient_cosine": 0.9020113121474962,
+    "delta_to_total_gradient_cosine": 0.8097064568491051,
+    "delta_identity_max_error": 2.980232238769531e-07
+  },
+  "code": {
+    "count": 192,
+    "student_to_base_reverse": 0.20887540634718485,
+    "student_to_polaris_reverse": 0.27170457521788166,
+    "polaris_to_base_reverse": 0.017949988409332485,
+    "base_gradient_projection_on_total": 0.80023364245683,
+    "delta_gradient_projection_on_total": 0.1997664316090107,
+    "base_to_total_gradient_cosine": 0.9600434075299938,
+    "delta_to_total_gradient_cosine": 0.6504595136191099,
+    "delta_identity_max_error": 1.8440186977386475e-07
+  },
+  "if": {
+    "count": 171,
+    "student_to_base_reverse": 1.0528716851038098,
+    "student_to_polaris_reverse": 1.2389075929968705,
+    "polaris_to_base_reverse": 0.020611937489518922,
+    "base_gradient_projection_on_total": 0.8539232012167055,
+    "delta_gradient_projection_on_total": 0.146077343546298,
+    "base_to_total_gradient_cosine": 0.9891429725420444,
+    "delta_to_total_gradient_cosine": 0.7549992768146455,
+    "delta_identity_max_error": 3.650784492492676e-07
+  }
+}
