@@ -84,4 +84,4 @@ CUDA_VISIBLE_DEVICES='' python -m pytest -q \
 
 重构的历史回归在临时数据副本中执行，不覆盖原始证据。三套公共指标在 FP32/FP64 上与重构前逐项完全一致；L 的 99 个文件比较一致，I/B/N 的统计回归分别比较 135/220/173 个证据文件也一致；L 的九张 PNG 与重构前文件内容完全一致。35 项公共接口与既有精度／优化器 CPU 测试通过。后续新增协议的 GPU 数值和性能检查在有卡后单独执行，CPU 验证不替代实际训练验收。
 
-相关研究：[跨源泛化总览](../docs/experiments/polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md)、[后续研究方向](../docs/experiments/polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md#next)、[浮点精度报告](../docs/mirror-descent/2026-10-27-MDPO反弹机制与浮点精度研究报告.md)。
+相关研究：[跨源泛化总览](../docs/experiments/polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md)、[双来源 R 协议与跨批历史结果](../docs/experiments/polaris-transfer/2026-10-27-双来源Rollout跨批次迁移实验.md)、[浮点精度报告](../docs/mirror-descent/2026-10-27-MDPO反弹机制与浮点精度研究报告.md)。
