@@ -155,8 +155,8 @@ FAILURE_PAIRS = [
     ("E15", "E13", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 7168, 4096, 128, 64),
     ("E23", "E24", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 15360, 4096, 128, 64),
     ("E25", "E26", "DeepSeek-R1-Distill-Qwen-1.5B", "DeepSeek-R1-Distill-Qwen-7B", 7168, 4096, 128, 32),
-    ("E27", "E28", "Qwen3-1.7B-Base", "Qwen3-8B", 7168, 1024, 24, 64),
-    ("E29", "E30", "Qwen3-1.7B-Base", "Qwen3-4B", 7168, 1024, 24, 64),
+    ("E27", "E28", "Qwen3-1.7B-Base", "Qwen3-8B", 7168, 1024, 64, 64),
+    ("E29", "E30", "Qwen3-1.7B-Base", "Qwen3-4B", 7168, 1024, 64, 64),
     ("E31", "E32", "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", 4096, 4096, 64, 64),
 ]
 
@@ -327,10 +327,31 @@ def test_failure_reuse16_preserves_budget_and_declares_e41_termination_override(
     first, repeated = configs
     assert first.actor_rollout_ref.actor.ppo_epochs == 1
     assert repeated.actor_rollout_ref.actor.ppo_epochs == 16
-    assert repeated.trainer.total_training_steps == 250
-    assert repeated.trainer.total_training_steps * repeated.actor_rollout_ref.actor.ppo_epochs == 4000
-    assert repeated.trainer.save_freq == 100 and repeated.trainer.test_freq == 20
-    assert repeated.trainer.val_before_train
+    shortened = reuse in ("E41", "E43")
+    assert repeated.trainer.total_training_steps == (100 if shortened else 250)
+    assert repeated.trainer.total_training_steps * repeated.actor_rollout_ref.actor.ppo_epochs == (
+        1600 if shortened else 4000
+    )
+    assert repeated.trainer.save_freq == (50 if shortened else 100)
+    assert repeated.trainer.test_freq == (10 if shortened else 20)
+    assert repeated.trainer.val_before_train == (reuse != "E41")
+    if shortened:
+        assert repeated.data.max_response_length == 7168
+        assert repeated.actor_rollout_ref.rollout.max_num_seqs == 64
+        assert repeated.actor_rollout_ref.rollout.gpu_memory_utilization == 0.8
+        for field in ("total_training_steps", "save_freq", "test_freq", "val_before_train"):
+            OmegaConf.update(repeated, f"trainer.{field}", first.trainer[field])
+        OmegaConf.update(repeated, "data.max_response_length", first.data.max_response_length)
+        OmegaConf.update(
+            repeated,
+            "actor_rollout_ref.rollout.gpu_memory_utilization",
+            first.actor_rollout_ref.rollout.gpu_memory_utilization,
+        )
+        OmegaConf.update(
+            repeated,
+            "distillation.teacher_models.teacher_model.inference.max_model_len",
+            first.distillation.teacher_models.teacher_model.inference.max_model_len,
+        )
     OmegaConf.update(repeated, "actor_rollout_ref.actor.ppo_epochs", 1)
     if reuse == "E41":
         assert list(repeated.distillation.distillation_loss.full_vocab.termination_token_ids) == [151643, 151645]

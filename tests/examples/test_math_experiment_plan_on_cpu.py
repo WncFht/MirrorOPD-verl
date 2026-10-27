@@ -24,7 +24,9 @@ def plan(argv, env=None):
 
 
 def test_catalog_covers_every_number_without_alias_duplication():
-    assert set(planner.PRESETS) | set(planner.ALIASES) == {f"E{i}" for i in range(1, 55)}
+    catalog = set(planner.PRESETS) | set(planner.ALIASES)
+    highest = max(int(name[1:]) for name in catalog)
+    assert catalog == {f"E{i}" for i in range(1, highest + 1)}
     assert set(planner.PRESETS).isdisjoint(planner.ALIASES)
     assert len(planner.MODEL_MATRIX) == 6
     with pytest.raises(FrozenInstanceError):

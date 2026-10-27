@@ -13,8 +13,9 @@ Both use the selected model as the generator; distillation is disabled.
 Math validation defaults: 570 prompts x 16, temperature=0.7, top-p=0.9,
 max response=31744, full submission, Graph, TP1, concurrency128/util0.65.
 These concurrency defaults were tuned for R1-1.5B. For Qwen3-Base, set
-MAX_PROMPT_LENGTH=1024, CONTINUOUS_TOKEN_MODEL_FAMILY=qwen3 and consider
-ROLLOUT_MAX_NUM_SEQS=12. Add +data.apply_chat_template_kwargs.enable_thinking=False
+MAX_PROMPT_LENGTH=1024, CONTINUOUS_TOKEN_MODEL_FAMILY=qwen3,
+ROLLOUT_MAX_NUM_SEQS=64 and ROLLOUT_GPU_MEMORY_UTILIZATION=0.8.
+Add +data.apply_chat_template_kwargs.enable_thinking=False
 and actor_rollout_ref.rollout.stop_token_ids=[151645] for the ChatML-stop arm.
 Set CUDA_VISIBLE_DEVICES and STUDENT_GPUS to the allocated devices (default 8).
 MODEL_ROOT/DATA_ROOT/PYTHON_BIN and execution overrides use the common launcher.
