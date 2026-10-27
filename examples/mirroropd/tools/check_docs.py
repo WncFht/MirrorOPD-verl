@@ -69,7 +69,7 @@ def python_symbols(text):
 
     def visit(node, prefix=""):
         for child in ast.iter_child_nodes(node):
-            if isinstance(child, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
+            if isinstance(child, ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
                 name = prefix + child.name
                 symbols.add(name)
                 visit(child, name + ".")
@@ -82,10 +82,14 @@ def python_symbols(text):
 
 def maintained_pages(root):
     docs = root / DOCS
-    return (
-        [root / "examples/mirroropd/README.md", docs / "README.md", docs / "architecture.md"]
-        + sorted((docs / "internals").glob("*.md"))
+    pages = [root / "examples/mirroropd/README.md", docs / "README.md", docs / "architecture.md"] + sorted(
+        (docs / "internals").glob("*.md")
     )
+    tracked = subprocess.check_output(
+        ["git", "-C", str(root), "ls-files", "-z", "--", "examples/mirroropd/README.md", str(DOCS)], text=True
+    ).split("\0")
+    tracked_paths = set(tracked)
+    return [page for page in pages if page.relative_to(root).as_posix() in tracked_paths]
 
 
 def check_pages(pages):

@@ -92,6 +92,11 @@ DEFAULT_IGNORE_DIRS = (
     # MTP scripts encode async/multinode dispatch in the filename; they pre-
     # date this convention. Migrate separately rather than block this hook.
     "examples/mtp_trainer",
+    # Research evidence and smoke harnesses have their own entry/record names.
+    "examples/mirroropd/docs",
+    "examples/mirroropd/smoke",
+    "examples/mirroropd/launchers",  # private fragments behind the public run entry
+    "examples/mirroropd/outputs",  # local generated commands, not source entry points
 )
 
 # Individual files that are exempt. Use sparingly and document why.

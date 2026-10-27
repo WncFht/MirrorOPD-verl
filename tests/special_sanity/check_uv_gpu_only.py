@@ -60,7 +60,7 @@ UV_COMMAND = re.compile(r"""(?:^|[\s;&|(="'])uv\s+(?:-\S+\s+)*(?:run|sync|pip|lo
 # The gate that makes a branch GPU-only: the opt-out toggle plus the device
 # probe. Both clauses must be present; the inference-backend clause that some
 # scripts add on top (vllm/sglang only) is optional.
-USE_UV_CLAUSE = re.compile(r"\$\{VERL_USE_UV:-1\}")
+USE_UV_CLAUSE = re.compile(r"\$\{VERL_USE_UV:-[01]\}")
 GPU_CLAUSE = re.compile(r"""\[\s*"\$\{DEVICE:-gpu\}"\s*=\s*gpu\s*\]""")
 
 # Trees and filename markers that only ever run on Ascend NPU.

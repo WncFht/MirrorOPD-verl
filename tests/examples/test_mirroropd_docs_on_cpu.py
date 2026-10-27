@@ -3,6 +3,7 @@
 """The documentation check must reject broken references without importing code."""
 
 import importlib.util
+import subprocess
 from pathlib import Path
 
 SCRIPT = Path(__file__).resolve().parents[2] / "examples/mirroropd/tools/check_docs.py"
@@ -52,3 +53,14 @@ def test_unclosed_fence_is_an_error(tmp_path):
     _, errors = docs.check_pages([page])
     assert len(errors) == 1
     assert "unclosed code fence at line 2" in errors[0]
+
+
+def test_default_library_uses_tracked_documents(tmp_path):
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    directory = tmp_path / "examples/mirroropd/docs/internals"
+    directory.mkdir(parents=True)
+    tracked = directory / "tracked.md"
+    tracked.write_text("# Ready\n")
+    (directory / "draft.md").write_text("[unfinished](missing.md)\n")
+    subprocess.run(["git", "-C", str(tmp_path), "add", str(tracked)], check=True)
+    assert docs.maintained_pages(tmp_path) == [tracked]
