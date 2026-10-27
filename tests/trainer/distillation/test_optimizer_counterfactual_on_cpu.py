@@ -4,7 +4,6 @@
 
 import copy
 import importlib
-from pathlib import Path
 
 import pytest
 import torch
@@ -12,9 +11,7 @@ import torch
 
 @pytest.fixture
 def probe(monkeypatch):
-    scripts = Path(__file__).resolve().parents[3] / "examples/mirroropd/docs/mirror-descent/scripts"
-    monkeypatch.syspath_prepend(str(scripts))
-    return importlib.import_module("audit_optimizer_history")
+    return importlib.import_module("examples.mirroropd.research.precision.audit_optimizer_history")
 
 
 def warm(weight_decay=0.0):

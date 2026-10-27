@@ -43,7 +43,7 @@
 | FP32 master 与实际更新、BF16 舍入比例 | 正式训练未形成上述完整诊断 | 新增有采样范围标记的诊断 |
 | 固定前缀 teacher KL / step KL / initial-student KL | 普通 Full-KL 不自动提供这三种比较 | 新增独立 probe；不改变训练目标 |
 | Muon + auxiliary AdamW | Megatron 有相关配置；当前 FSDP optimizer 直接接收 `module.parameters()` | 新增语义分组与分布式适配，不能只改 optimizer 类名 |
-| optimizer 状态反事实重放 | [audit_optimizer_history.py](../../mirror-descent/scripts/audit_optimizer_history.py)已有 FSDP2 基础设施 | 复用状态捕获；把原 MDPO 目标切换并验收为纯 Full-KL |
+| optimizer 状态反事实重放 | [audit_optimizer_history.py](../../../research/precision/audit_optimizer_history.py)已有 FSDP2 基础设施 | 复用状态捕获；把原 MDPO 目标切换并验收为纯 Full-KL |
 
 普通 Full-KL 是 eta=1 的端点，不建立训练 anchor；打开 mirror diagnostics 不会自动得到所需的 step KL。当前 Full-KL 的 `calculate_entropy=False` 约束也不能靠开启 sampled entropy 绕过。完整词表熵应在独立 probe 中计算，或以后复用 KL 核已有中间量新增 detached 统计。
 

@@ -90,7 +90,7 @@ $$
 
 [audit.py](audit.py) 使用 FP64 独立 dense oracle，对照生产 KL 值、解析 logits VJP、零和性质、匹配点 Hessian，以及冷启动 Adam 的 beta1 不变性。还验证逐矩阵执行原生 Muon 与整体调用一致。
 
-[study.py](study.py) 参考已有 [状态迁移小实验](../polaris-transfer/scripts/state_transfer_probe.py)的低显存 FP32 master / CPU state 方式，直接调用生产 Full-KL endpoint。使用 DeepSeek-R1-Distill-Qwen-1.5B 学生和 JustRL-DeepSeek-1.5B 教师；全参数可训练，模型前反向 BF16，CPU FP32 masters 长期累积，optimizer 状态 FP32。每个 mini-batch 的梯度在 CPU FP32 累积后做统一 global norm 1 裁剪。
+[study.py](study.py) 参考已有 [状态迁移小实验](../../../research/transfer/state_transfer_probe.py)的低显存 FP32 master / CPU state 方式，直接调用生产 Full-KL endpoint。使用 DeepSeek-R1-Distill-Qwen-1.5B 学生和 JustRL-DeepSeek-1.5B 教师；全参数可训练，模型前反向 BF16，CPU FP32 masters 长期累积，optimizer 状态 FP32。每个 mini-batch 的梯度在 CPU FP32 累积后做统一 global norm 1 裁剪。
 
 从 DAPO 选择短 prompt：4 条用于更新，另 4 条只作固定初始学生前缀上的条件 KL probe。Teacher 始终冻结，所有生成位置都进入完整词表求和，无 token 子采样或 top-k。短 response 上限会截断推理，故不把输出正确率当作能力指标。
 

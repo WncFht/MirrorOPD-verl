@@ -39,46 +39,45 @@
 
 ```bash
 PROBE_PY=/root/.local/share/mirroropd/venvs/profile-cu128/bin/python
-PROBE_SCRIPTS=examples/mirroropd/docs/experiments/polaris-transfer/scripts
 PROBE_OUT=examples/mirroropd/docs/experiments/polaris-transfer/data/state-transfer-20261027
 PROBE_CACHE=outputs/polaris-transfer-cache/state-transfer-20261027
 
-python3 "$PROBE_SCRIPTS/summarize_state_transfer.py" --data "$PROBE_OUT"
-python3 "$PROBE_SCRIPTS/audit_state_transfer.py" --data "$PROBE_OUT"
+python3 -m examples.mirroropd.research.transfer.summarize_state_transfer --data "$PROBE_OUT"
+python3 -m examples.mirroropd.research.transfer.audit_state_transfer --data "$PROBE_OUT"
 
 # 以下以一张被分配的GPU为例；代码里的cuda:0指CUDA_VISIBLE_DEVICES映射后的设备。
 export CUDA_VISIBLE_DEVICES=1
 export OPENBLAS_NUM_THREADS=8 OMP_NUM_THREADS=8 TOKENIZERS_PARALLELISM=false
 
 # 新目录首次准备和生成：先三种来源全部生成，再评分。
-"$PROBE_PY" "$PROBE_SCRIPTS/state_transfer_probe.py" prepare \
+"$PROBE_PY" -m examples.mirroropd.research.transfer.state_transfer_probe prepare \
   --models ../model --data ../MD-OPD/data --out "$PROBE_OUT" --cache "$PROBE_CACHE"
 for PROBE_SOURCE in student justrl polaris
 do
-  "$PROBE_PY" "$PROBE_SCRIPTS/state_transfer_probe.py" generate \
+  "$PROBE_PY" -m examples.mirroropd.research.transfer.state_transfer_probe generate \
     --models ../model --out "$PROBE_OUT" --cache "$PROBE_CACHE" --source "$PROBE_SOURCE"
 done
 for PROBE_SOURCE in student justrl polaris
 do
-  "$PROBE_PY" "$PROBE_SCRIPTS/state_transfer_probe.py" score \
+  "$PROBE_PY" -m examples.mirroropd.research.transfer.state_transfer_probe score \
     --models ../model --out "$PROBE_OUT" --cache "$PROBE_CACHE" --source "$PROBE_SOURCE"
 done
-"$PROBE_PY" "$PROBE_SCRIPTS/state_transfer_probe.py" diagnose \
+"$PROBE_PY" -m examples.mirroropd.research.transfer.state_transfer_probe diagnose \
   --models ../model --out "$PROBE_OUT" --cache "$PROBE_CACHE"
 
 # 示例主训练臂。teacher取justrl/polaris；source取student或对应teacher；split取0/1。
-"$PROBE_PY" "$PROBE_SCRIPTS/state_transfer_probe.py" train \
+"$PROBE_PY" -m examples.mirroropd.research.transfer.state_transfer_probe train \
   --models ../model --out "$PROBE_OUT" --cache "$PROBE_CACHE" \
   --teacher polaris --source student --split 0 --steps 16
 # 温度消融追加 --temperature 1.5；无更新对照使用 --lr 0 --steps 1。
-"$PROBE_PY" "$PROBE_SCRIPTS/state_transfer_probe.py" geometry \
+"$PROBE_PY" -m examples.mirroropd.research.transfer.state_transfer_probe geometry \
   --models ../model --out "$PROBE_OUT" --cache "$PROBE_CACHE"
 
 FIGURE_VIZ_MPL=../dotfiles/.agents/skills/figure-viz/assets/mpl \
-  "$PROBE_PY" "$PROBE_SCRIPTS/plot_state_transfer.py" \
+  "$PROBE_PY" -m examples.mirroropd.research.transfer.plot_state_transfer \
   --data "$PROBE_OUT" --out examples/mirroropd/docs/experiments/polaris-transfer/figures/state-transfer-20261027
 ```
 
 图形中误差范围表示两个训练fold的范围。审计仅对held-out图豁免`palette-overflow`：Matplotlib将4组errorbar的帽线/范围线计成16个artist，实际只有2个teacher色相与2种来源线型；其他规则仍检查。
 
-正式长训练的六组对照及判断标准见正文第9节。尚未实现或运行生产trainer的固定cache切换，不能把上述短probe命令当成完整Semi-OPD训练入口。
+后续正式对照及判断标准见[统一总览的研究路线](../../2026-10-27-跨源蒸馏泛化研究总览.md#next)。尚未实现或运行生产trainer的固定cache切换，不能把上述短probe命令当成完整Semi-OPD训练入口。

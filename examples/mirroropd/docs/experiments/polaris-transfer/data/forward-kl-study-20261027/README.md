@@ -43,29 +43,28 @@ Teacher 明确在 student 输出行上条件化并重新归一化。因为 Polar
 
 ```bash
 DIRECTION_PY=/root/.local/share/mirroropd/venvs/profile-cu128/bin/python
-DIRECTION_SCRIPTS=examples/mirroropd/docs/experiments/polaris-transfer/scripts
 DIRECTION_OUT=examples/mirroropd/docs/experiments/polaris-transfer/data/forward-kl-study-20261027
 STATE_DATA=examples/mirroropd/docs/experiments/polaris-transfer/data/state-transfer-20261027
 STATE_CACHE=outputs/polaris-transfer-cache/state-transfer-20261027
 
-CUDA_VISIBLE_DEVICES='' "$DIRECTION_PY" "$DIRECTION_SCRIPTS/kl_direction_probe.py" diagnostic \
+CUDA_VISIBLE_DEVICES='' "$DIRECTION_PY" -m examples.mirroropd.research.transfer.kl_direction_probe diagnostic \
   --models ../model --data "$STATE_DATA" --cache "$STATE_CACHE" --out "$DIRECTION_OUT"
 
 # 示例：同一个初始student，Polaris监督，FKL，训练fold0。
 # teacher=justrl/polaris；direction=reverse/forward；fold=0/1。
-CUDA_VISIBLE_DEVICES=0 "$DIRECTION_PY" "$DIRECTION_SCRIPTS/kl_direction_probe.py" train \
+CUDA_VISIBLE_DEVICES=0 "$DIRECTION_PY" -m examples.mirroropd.research.transfer.kl_direction_probe train \
   --models ../model --data "$STATE_DATA" --cache "$STATE_CACHE" --out "$DIRECTION_OUT" \
   --teacher polaris --direction forward --fold 0 --steps 16
 
 # Warm64另加：
 # --tag warm64 --checkpoint outputs/polaris-transfer-cache/intersection-study-20261027/checkpoints/polaris-student-k16
 
-python3 "$DIRECTION_SCRIPTS/analyze_forward_study.py" --data "$DIRECTION_OUT"
-CUDA_VISIBLE_DEVICES='' "$DIRECTION_PY" "$DIRECTION_SCRIPTS/audit_forward_study.py" --data "$DIRECTION_OUT"
-CUDA_VISIBLE_DEVICES=0 "$DIRECTION_PY" "$DIRECTION_SCRIPTS/probe_teacher_lineage.py" \
+python3 -m examples.mirroropd.research.transfer.analyze_forward_study --data "$DIRECTION_OUT"
+CUDA_VISIBLE_DEVICES='' "$DIRECTION_PY" -m examples.mirroropd.research.transfer.audit_forward_study --data "$DIRECTION_OUT"
+CUDA_VISIBLE_DEVICES=0 "$DIRECTION_PY" -m examples.mirroropd.research.transfer.probe_teacher_lineage \
   --models ../model --data "$STATE_DATA" --cache "$STATE_CACHE" --out "$DIRECTION_OUT"
 FIGURE_VIZ_MPL=../dotfiles/.agents/skills/figure-viz/assets/mpl \
-  "$DIRECTION_PY" "$DIRECTION_SCRIPTS/plot_forward_study.py" \
+  "$DIRECTION_PY" -m examples.mirroropd.research.transfer.plot_forward_study \
   --data "$DIRECTION_OUT" --out examples/mirroropd/docs/experiments/polaris-transfer/figures/forward-kl-study-20261027
 ```
 
