@@ -1,6 +1,6 @@
 # 交集采样与扩大held-out实验，2026-10-27
 
-正文位于源码仓库 `examples/mirroropd/docs/experiments/polaris-transfer/2026-10-27-交集采样与扩大前缀评估.md`。
+正文位于源码仓库 `examples/mirroropd/docs/experiments/polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md`。
 
 ## 完成范围
 

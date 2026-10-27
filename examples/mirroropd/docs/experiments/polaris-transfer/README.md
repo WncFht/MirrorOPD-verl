@@ -2,18 +2,16 @@
 
 更新：2026-10-27。正式E48 `grcuotmi` 已完成256个outer、4096次真实更新，本地exit=0、云端finished。末段首次/第16次KL约为0.1875/0.1628。完整日志、RL/SFT迁移文献及Forward/Reverse KL短训练对照见[后期平台与KL方向分析](2026-10-27-E48后期平台与Forward-KL及知识迁移.md)。此前58-outer分析保留其原冻结边界。
 
-2026-10-27 补充：[State分布与跨源迁移的受控实验](2026-10-27-State分布与跨源迁移的受控实验.md)核对三篇论文，并完成不同rollout来源、固定held-out、teacher温度及梯度几何的小规模对照。
-
-2026-10-27 扩大验证：[交集采样与扩大前缀评估](2026-10-27-交集采样与扩大前缀评估.md)完成5组在线短训练、3组state选择对照、固定/无约束fresh评估与交叉分解，共368次更新。重点区分采样token命中交集、state集合overlap、概率距离及实际任务表现。
+研究入口：[跨源蒸馏泛化研究总览](2026-10-27-跨源蒸馏泛化研究总览.md)统一四个实验系列的setting、45个训练分支与2744次更新，配十五幅关键结果图，并给出后续探索的优先级和判别标准。四份旧文及其归档、跳转文件已删除，统一维护该总览。
 
 ## 运行与研究入口
 
 | 要做的事 | 入口 |
 | --- | --- |
 | 启动E49并与E48对比 | [Forward KL实现、支持集、指标和命令](../../full-vocab/forward-kl.md) |
-| 查看全部研究证据与复算输入 | [本地data目录](data/README.md)，已从wandb-logs迁入docs |
+| 查找研究数据与复算命令 | [统一数据索引](2026-10-27-跨源蒸馏泛化研究总览.md#reproduction)，早期快照另见[本地data目录](data/README.md) |
 | 理解E48后期平台与KL方向 | [完整日志、文献和FKL短对照](2026-10-27-E48后期平台与Forward-KL及知识迁移.md) |
-| 区分固定state迁移、rollout反馈和交集 | [受控state实验](2026-10-27-State分布与跨源迁移的受控实验.md)、[扩大前缀与fresh评估](2026-10-27-交集采样与扩大前缀评估.md) |
+| 理解state迁移、交集与batch作用 | [统一设置、结果图与研究路线](2026-10-27-跨源蒸馏泛化研究总览.md) |
 | 检查生产实现和性能证据 | [Forward KL实现验收](data/forward-kl-implementation-20261027/README.md) |
 
 E49沿用下述E48的模型、训练与验证预算，目标改为full-vocab Forward KL，默认`precompute_fused`、chunk512、async/prefetch开启，并显式设置`forward_teacher_support=student`。它保留原生Reverse KL及位置指标作为诊断，不建立anchor。正式256-outer E49需要由使用者启动，小规模工程验收不代表任务效果已经优于E48。
@@ -88,7 +86,7 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E48
 
 三个训练批的平均回答长度约为 6.2–6.5 千 token，最长回答均达到 7 Ki token 上限。该负载下 teacher 预算无需降低；3 步结果不能证明长程收敛，也不能保证所有后续长度分布下都不会 OOM。
 
-代码采用独立快照。GPU 占用工具完成四卡启动、重复启动保护、心跳与计算进展、停止释放和重新启动验证后，停止占用并启动训练；GPU4–7 不参与。详细结果见[短训练报告](../../../../../outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/result.md)、[逐项验收](../../../../../outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/result.json)和[最终解析配置](../../../../../outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/resolved-config.yaml)。
+代码采用独立快照。GPU 占用工具完成四卡启动、重复启动保护、心跳与计算进展、停止释放和重新启动验证后，停止占用并启动训练；GPU4–7 不参与。详细结果见短训练报告（本地证据：`outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/result.md`）、[逐项验收](../../../../../outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/result.json)和最终解析配置（本地证据：`outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/resolved-config.yaml`）。
 
 上述表格仅覆盖四卡短训练。正式 E48 `grcuotmi` 在8张A100 80GB上正常完成256/256 outer；正式run的指标、边界与诊断见[完整训练与后期平台分析](2026-10-27-E48完整训练与后期平台分析.md)。
 

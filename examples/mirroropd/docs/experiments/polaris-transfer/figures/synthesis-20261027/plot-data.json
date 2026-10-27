@@ -1,0 +1,945 @@
+{
+  "sources": [
+    "MirrorOPD-verl/examples/mirroropd/docs/experiments/polaris-transfer/data/intersection-study-20261027/paired-method-contrasts.json",
+    "MirrorOPD-verl/examples/mirroropd/docs/experiments/polaris-transfer/data/intersection-study-20261027/summary-fixed.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-size-stage-20261027/fresh-summary.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-size-stage-20261027/overlap-cross-summary.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-size-stage-20261027/overlap-mass-warm128-fresh-warm128.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-size-stage-20261027/overlap-mass-warm128.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-size-stage-20261027/trajectory-summary.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/coverage-gradient-summary.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/fixed-gradient-case-0.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/fixed-gradient-case-1.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/fixed-gradient-case-2.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/fixed-gradient-case-3.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/fixed-gradient-case-4.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/paired-controls.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/polaris-rich-lr1/fresh-128.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/polaris-roundrobin/fresh-128.json",
+    "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/transfer-summary.json"
+  ],
+  "figures": {
+    "single-batch-transfer": [
+      {
+        "teacher": "justrl",
+        "drop_percent": [
+          98.56191862002225,
+          74.28522465396577,
+          73.30967353804822,
+          68.13976621083913,
+          44.31404895207557
+        ]
+      },
+      {
+        "teacher": "polaris",
+        "drop_percent": [
+          86.17736955169723,
+          20.955918480198477,
+          22.130164295960054,
+          12.444033253423637,
+          4.14828937015449
+        ]
+      }
+    ],
+    "independent-coverage": {
+      "series": [
+        {
+          "arm": "polaris-roundrobin",
+          "fixed": [
+            {
+              "arm": "polaris-roundrobin",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 16,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": false,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.23530632642017996,
+              "rkl_drop": 0.043727813193885634,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.17033201212871404,
+              "fkl_shared_drop": 0.010860644380355167,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03747024864315018,
+              "js_drop": 0.02447360208167615,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.12853441423162681,
+              "tv_drop": 0.019346124148713395,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.622252220179846,
+              "hp_drop": 0.03014592512297032,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.009544163115030046,
+                0.011916283981781708
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-roundrobin",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 32,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": false,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.21525233546079442,
+              "rkl_drop": 0.12522614806941168,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.16937685454030124,
+              "fkl_shared_drop": 0.016407364281743497,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.035885330764560436,
+              "js_drop": 0.06573645154450303,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.1239165839893925,
+              "tv_drop": 0.054577880189626726,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.5774671959085441,
+              "hp_drop": 0.09994871067259059,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.027415240721685365,
+                0.03414500053692009
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-roundrobin",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 48,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": false,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.1992307145651361,
+              "rkl_drop": 0.1903371490490936,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.17558873097239688,
+              "fkl_shared_drop": -0.019665781185409292,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03511282520880422,
+              "js_drop": 0.08584839607296613,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.12087564452887058,
+              "tv_drop": 0.07777874111093608,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.5220127756170891,
+              "hp_drop": 0.18638101857832456,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.041805631275644115,
+                0.051810771933843425
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-roundrobin",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 64,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": false,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.19386682756455118,
+              "rkl_drop": 0.2121356957769488,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.1784028584410717,
+              "fkl_shared_drop": -0.03600777231326102,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03484309710821671,
+              "js_drop": 0.09287068420586286,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11965535391727093,
+              "tv_drop": 0.08708895367216996,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.5043031622460855,
+              "hp_drop": 0.2139835568021342,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.04664143086784241,
+                0.0575670683883686
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-roundrobin",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 80,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": false,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.18786921120859001,
+              "rkl_drop": 0.23650968433728037,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.18894477823303205,
+              "fkl_shared_drop": -0.09722602259808699,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03507228303302747,
+              "js_drop": 0.08690389914891095,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11911452932503544,
+              "tv_drop": 0.09121517726529793,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.4716853191687787,
+              "hp_drop": 0.26482234370607227,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.05197156808231493,
+                0.06443749488518263
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-roundrobin",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 96,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": false,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.1862070198907415,
+              "rkl_drop": 0.243264739973017,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.18946842188137822,
+              "fkl_shared_drop": -0.10026688693372376,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03494316005564246,
+              "js_drop": 0.09026557614808184,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11862977905963001,
+              "tv_drop": 0.09491358153649276,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.46955907301160427,
+              "hp_drop": 0.2681363511661521,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.053423422562210915,
+                0.0662043265604391
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-roundrobin",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 112,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": false,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.18577922535422572,
+              "rkl_drop": 0.24500327383719867,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.1870737749990967,
+              "fkl_shared_drop": -0.08636087217775024,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.034709547883113694,
+              "js_drop": 0.09634759720289865,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11813768940727629,
+              "tv_drop": 0.098667981692527,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.4755185066352684,
+              "hp_drop": 0.2588478652493009,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.05383493466282631,
+                0.06653515008411047
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-roundrobin",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 128,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": false,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.1855091851667838,
+              "rkl_drop": 0.2461007025570262,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.18765385571568274,
+              "fkl_shared_drop": -0.08972947364637918,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03471056234435099,
+              "js_drop": 0.09632118601662454,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11804512212770042,
+              "tv_drop": 0.09937422415712871,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.47517825912024675,
+              "hp_drop": 0.2593781814590449,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.05404373020728887,
+                0.0668418129308459
+              ],
+              "improved_prompt_fraction": 1
+            }
+          ],
+          "fresh": 208.95141565799713
+        },
+        {
+          "arm": "polaris-rich-lr1",
+          "fixed": [
+            {
+              "arm": "polaris-rich-lr1",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 16,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": true,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.23643015283066776,
+              "rkl_drop": 0.03916064343055081,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.17036094276262642,
+              "fkl_shared_drop": 0.010692640561060562,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03754892397818649,
+              "js_drop": 0.022425313933819857,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.12875248829758326,
+              "tv_drop": 0.017682327108198947,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.6247089858053059,
+              "hp_drop": 0.02631676377071135,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.008505356882014925,
+                0.01075142063275705
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-rich-lr1",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 32,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": true,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.21894844514579037,
+              "rkl_drop": 0.11020535817005761,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.1690088895871955,
+              "fkl_shared_drop": 0.018544182910590346,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03613481191352552,
+              "js_drop": 0.05924128656931882,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.12471165043457022,
+              "tv_drop": 0.048511917266904736,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.5873765841117924,
+              "hp_drop": 0.08450375086886186,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.02405647294411351,
+                0.030061881429745942
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-rich-lr1",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 48,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": true,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.20065994885776106,
+              "rkl_drop": 0.18452881816713418,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.17386732728362983,
+              "fkl_shared_drop": -0.009669374085012672,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.035101087963200855,
+              "js_drop": 0.08615397165198024,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.12107332283912625,
+              "tv_drop": 0.07627055357779322,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.5298646610828223,
+              "hp_drop": 0.174142921441109,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.04050737594138985,
+                0.05022860961235237
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-rich-lr1",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 64,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": true,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.19379061241354426,
+              "rkl_drop": 0.21244543002944405,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.17837338498679273,
+              "fkl_shared_drop": -0.035836616268022814,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.034872777968990305,
+              "js_drop": 0.0920979521251839,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11986314463327667,
+              "tv_drop": 0.08550361349510471,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.5036900426684944,
+              "hp_drop": 0.21493917656760775,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.046687478300526095,
+                0.05773172460784306
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-rich-lr1",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 80,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": true,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.18738444801927504,
+              "rkl_drop": 0.2384797357259607,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.1885091829950082,
+              "fkl_shared_drop": -0.0946964664232659,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03507147714467272,
+              "js_drop": 0.08692488020434297,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.1193190992927314,
+              "tv_drop": 0.08965440980155626,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.46987222667760653,
+              "hp_drop": 0.2676482639417349,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.0523521828407396,
+                0.06500419724184688
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-rich-lr1",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 96,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": true,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.18482908566520348,
+              "rkl_drop": 0.2488645901562938,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.19288998891217984,
+              "fkl_shared_drop": -0.12013635577730808,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03514890186564507,
+              "js_drop": 0.08490915140896449,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11909770525634683,
+              "tv_drop": 0.09134353657098038,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.45756744523661075,
+              "hp_drop": 0.2868267289339078,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.05470183576577806,
+                0.06787381710988545
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-rich-lr1",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 112,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": true,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.18314794154687988,
+              "rkl_drop": 0.25569666894832277,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.19042872900117097,
+              "fkl_shared_drop": -0.10584351080963361,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03480818104473804,
+              "js_drop": 0.09377971317866796,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11833188206369219,
+              "tv_drop": 0.09718638797060808,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.4610516002776266,
+              "hp_drop": 0.2813962590144017,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.05630792017189882,
+                0.06957225748880193
+              ],
+              "improved_prompt_fraction": 1
+            },
+            {
+              "arm": "polaris-rich-lr1",
+              "teacher": "polaris",
+              "schedule": "roundrobin",
+              "step": 128,
+              "group": "held_math",
+              "prompts": 64,
+              "direction": "reverse",
+              "lr": 1e-06,
+              "rich": true,
+              "evaluation_scope": "held_math",
+              "warm": false,
+              "rkl_before": 0.2460662661392333,
+              "rkl_after": 0.1819136476674743,
+              "rkl_drop": 0.2607127725320101,
+              "fkl_shared_before": 0.1722022394124737,
+              "fkl_shared_after": 0.18991423858079193,
+              "fkl_shared_drop": -0.10285580041670017,
+              "js_before": 0.038410286716082674,
+              "js_after": 0.03465309527166487,
+              "js_drop": 0.09781732357766126,
+              "tv_before": 0.13107011290813345,
+              "tv_after": 0.11793630557142362,
+              "tv_drop": 0.10020444054942768,
+              "hp_before": 0.6415936544461527,
+              "hp_after": 0.4612099989172697,
+              "hp_drop": 0.2811493758999172,
+              "hq_before": 0.49497913663920773,
+              "hq_after": 0.49497913663920773,
+              "hq_drop": 0.0,
+              "rkl_absolute_drop_ci": [
+                0.05745335028544597,
+                0.07077766697682582
+              ],
+              "improved_prompt_fraction": 1
+            }
+          ],
+          "fresh": 190.7869313955307
+        }
+      ],
+      "paired_fresh": {
+        "left": "polaris-rich-lr1",
+        "right": "polaris-roundrobin",
+        "step": 128,
+        "domain": "math",
+        "measure": "fresh",
+        "metric": "sequence_rkl",
+        "mean_difference": -18.16448426246643,
+        "paired_prompt_ci": [
+          -30.343688130378723,
+          -4.8819273710250854
+        ],
+        "prompts": 32,
+        "length_difference": -6.6875
+      }
+    },
+    "source-transfer": {
+      "arms": [
+        "justrl-student-k16",
+        "polaris-student-k16",
+        "polaris-teacher-k16",
+        "polaris-intersection-k16",
+        "polaris-topk-k16"
+      ],
+      "matrix": [
+        [
+          73.30149204928743,
+          71.14014938315637,
+          72.95208635340984
+        ],
+        [
+          20.581505768924867,
+          23.37101265978596,
+          36.17807322822605
+        ],
+        [
+          8.13780470595481,
+          10.838363201713952,
+          42.90251750816445
+        ],
+        [
+          20.121018110563327,
+          22.775442532202828,
+          36.87644543307318
+        ],
+        [
+          20.279038249900495,
+          22.941786193237647,
+          36.520285879741664
+        ]
+      ]
+    },
+    "gradient-transfer": {
+      "justrl": [
+        0.971926757976091,
+        0.6733329237820802,
+        0.9509742436234047
+      ],
+      "polaris": [
+        0.9210185640395327,
+        0.04844794705733019,
+        0.04844794705733019
+      ],
+      "coverage": [
+        0.04842788242574412,
+        0.27435403830217564,
+        0.5030588880858371
+      ]
+    },
+    "overlap-residual": {
+      "rank_mass": [
+        82.98830107122014,
+        14.06621090429786,
+        1.9402796562489055,
+        0.6849527293086429
+      ],
+      "rank_membership": [
+        99.95356037151703,
+        96.5861714779408,
+        84.42647058823529,
+        53.933049535603715
+      ],
+      "kl_allocation": [
+        [
+          1.9751613246859474,
+          2.1276272603390067,
+          7.0301687087049025,
+          88.86704455566857
+        ],
+        [
+          1.2697376331189438,
+          1.2565722635529881,
+          6.3701458112787535,
+          91.10354214051118
+        ]
+      ]
+    },
+    "state-feedback": {
+      "overlap": [
+        [
+          71.54546749626527,
+          70.15181147680106
+        ],
+        [
+          72.39983597973233,
+          71.64456325510345
+        ]
+      ],
+      "rkl_per_token": [
+        [
+          0.23940167504552215,
+          0.27597910546866855
+        ],
+        [
+          0.1868640241226452,
+          0.19890209526711067
+        ]
+      ]
+    },
+    "batch-budgets": [
+      {
+        "batch": [
+          16,
+          64,
+          128
+        ],
+        "steps": [
+          16,
+          16,
+          16
+        ],
+        "drop_percent": [
+          1.2748227436911286,
+          1.876462951551694,
+          2.1941466028757795
+        ]
+      },
+      {
+        "batch": [
+          16,
+          64,
+          128,
+          512
+        ],
+        "steps": [
+          128,
+          32,
+          16,
+          4
+        ],
+        "drop_percent": [
+          4.098599473281695,
+          2.849061215855231,
+          2.1941466028757795,
+          1.0091041582135918
+        ]
+      }
+    ],
+    "fresh-contrasts": {
+      "intersection": [
+        {
+          "left": "polaris-intersection-k16",
+          "right": "polaris-student-k16",
+          "step": 64,
+          "metric": "fresh sequence KL, left minus right; negative favors left",
+          "prompts": 32,
+          "mean_difference": -9.00266695022583,
+          "paired_prompt_ci": [
+            -22.092503428459167,
+            2.89962375164032
+          ]
+        },
+        {
+          "left": "polaris-intersection-k16",
+          "right": "polaris-topk-k16",
+          "step": 64,
+          "metric": "fresh sequence KL, left minus right; negative favors left",
+          "prompts": 32,
+          "mean_difference": -2.2133891582489014,
+          "paired_prompt_ci": [
+            -15.425994038581848,
+            10.111340284347534
+          ]
+        },
+        {
+          "left": "polaris-teacher-k16",
+          "right": "polaris-student-k16",
+          "step": 64,
+          "metric": "fresh sequence KL, left minus right; negative favors left",
+          "prompts": 32,
+          "mean_difference": 10.570573508739471,
+          "paired_prompt_ci": [
+            -5.652412593364716,
+            26.139786779880524
+          ]
+        },
+        {
+          "left": "selection-high",
+          "right": "selection-random",
+          "step": 16,
+          "metric": "fresh sequence KL, left minus right; negative favors left",
+          "prompts": 32,
+          "mean_difference": 0.9673306345939636,
+          "paired_prompt_ci": [
+            -9.75797164440155,
+            11.146862387657166
+          ]
+        },
+        {
+          "left": "selection-low",
+          "right": "selection-random",
+          "step": 16,
+          "metric": "fresh sequence KL, left minus right; negative favors left",
+          "prompts": 32,
+          "mean_difference": 1.9826955795288086,
+          "paired_prompt_ci": [
+            -9.120389103889465,
+            14.371777296066284
+          ]
+        }
+      ],
+      "batch": [
+        {
+          "arm": "polaris-warm128-b16",
+          "teacher": "polaris",
+          "phase": "warm128",
+          "batch": 16,
+          "step": 128,
+          "examples": 2048,
+          "sequence_rkl": 198.89922678470612,
+          "mean_length": 1024,
+          "token_rkl": 0.19423752615693957,
+          "baseline_sequence_rkl": 201.29410994052887,
+          "difference_from_baseline": -2.394883155822754,
+          "paired_prompt_ci": [
+            -15.566588997840881,
+            11.35308587551117
+          ]
+        },
+        {
+          "arm": "polaris-warm128-b64",
+          "teacher": "polaris",
+          "phase": "warm128",
+          "batch": 64,
+          "step": 32,
+          "examples": 2048,
+          "sequence_rkl": 206.51293694972992,
+          "mean_length": 1024,
+          "token_rkl": 0.20167278998997062,
+          "baseline_sequence_rkl": 201.29410994052887,
+          "difference_from_baseline": 5.21882700920105,
+          "paired_prompt_ci": [
+            -6.766939997673035,
+            17.389333486557007
+          ]
+        },
+        {
+          "arm": "polaris-warm128-b128",
+          "teacher": "polaris",
+          "phase": "warm128",
+          "batch": 128,
+          "step": 16,
+          "examples": 2048,
+          "sequence_rkl": 202.3583779335022,
+          "mean_length": 1012.640625,
+          "token_rkl": 0.19983237185798486,
+          "baseline_sequence_rkl": 201.29410994052887,
+          "difference_from_baseline": 1.0642679929733276,
+          "paired_prompt_ci": [
+            -10.59728455543518,
+            12.361804127693176
+          ]
+        },
+        {
+          "arm": "polaris-warm128-b512",
+          "teacher": "polaris",
+          "phase": "warm128",
+          "batch": 512,
+          "step": 4,
+          "examples": 2048,
+          "sequence_rkl": 200.53541254997253,
+          "mean_length": 1012.640625,
+          "token_rkl": 0.19803216224904321,
+          "baseline_sequence_rkl": 201.29410994052887,
+          "difference_from_baseline": -0.7586973905563354,
+          "paired_prompt_ci": [
+            -8.849984049797058,
+            7.290996432304382
+          ]
+        },
+        {
+          "arm": "polaris-warm128-b512",
+          "teacher": "polaris",
+          "phase": "warm128",
+          "batch": 512,
+          "step": 8,
+          "examples": 4096,
+          "sequence_rkl": 203.90919768810272,
+          "mean_length": 1012.640625,
+          "token_rkl": 0.20136383298675453,
+          "baseline_sequence_rkl": 201.29410994052887,
+          "difference_from_baseline": 2.6150877475738525,
+          "paired_prompt_ci": [
+            -6.215141177177429,
+            11.268917441368103
+          ]
+        }
+      ]
+    }
+  }
+}

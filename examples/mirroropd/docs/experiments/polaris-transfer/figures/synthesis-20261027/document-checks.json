@@ -1,0 +1,49 @@
+{
+  "experiment_counts": {
+    "S": {
+      "arms": 10,
+      "updates": 160
+    },
+    "I": {
+      "arms": 8,
+      "updates": 368
+    },
+    "B": {
+      "arms": 14,
+      "updates": 1504
+    },
+    "N": {
+      "arms": 13,
+      "updates": 712
+    }
+  },
+  "total_nonzero_updates": 2744,
+  "total_training_arms": 45,
+  "zero_lr_calls": 1,
+  "document_checks": {
+    "pages": 14,
+    "local_links": 147,
+    "symbols": 0,
+    "python_examples": 0
+  },
+  "document_errors": [],
+  "original_report_lines": 1038,
+  "canonical_report_lines": 429,
+  "old_paths_preserved": 4,
+  "full_reports_archived": 4,
+  "new_training": false,
+  "figure_count_new": 8,
+  "figure_count_reused": 2,
+  "figure_audit": {
+    "single-batch-transfer": [],
+    "independent-coverage": [],
+    "source-transfer": [],
+    "gradient-transfer": [],
+    "overlap-residual": [],
+    "state-feedback": [],
+    "batch-budgets": [],
+    "fresh-contrasts": []
+  },
+  "visual_review": "All eight new figures inspected; labels, legends, probability denominators, axis units and paired interval meanings checked.",
+  "passed": true
+}

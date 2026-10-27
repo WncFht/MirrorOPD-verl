@@ -1,6 +1,6 @@
 # State 分布与跨源迁移实验，2026-10-27
 
-正文：源码仓库 `examples/mirroropd/docs/experiments/polaris-transfer/2026-10-27-State分布与跨源迁移的受控实验.md`。这是 E48 问题的独立局部机制实验，不是 E48 checkpoint 回放，也不是正式 benchmark 准确率评测。
+正文：源码仓库 `examples/mirroropd/docs/experiments/polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md`。这是 E48 问题的独立局部机制实验，不是 E48 checkpoint 回放，也不是正式 benchmark 准确率评测。
 
 ## 数据和完成范围
 
