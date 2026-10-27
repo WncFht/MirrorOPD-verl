@@ -31,7 +31,9 @@ case "$DOMAIN" in
         MATH_FILE=${MATH_FILE:-$DATA_ROOT/math/MATH-500/test.parquet}
         AMC_FILE=${AMC_FILE:-$DATA_ROOT/math/AMC23/test.parquet}
         AIME_FILE=${AIME_FILE:-$DATA_ROOT/math/AIME25/test.parquet}
-        VAL_FILES=("$MATH_FILE" "$AMC_FILE" "$AIME_FILE")
+        AIME24_FILE=${AIME24_FILE:-$DATA_ROOT/math/AIME24/test.parquet}
+        AIME26_FILE=${AIME26_FILE:-$DATA_ROOT/math/AIME26/test.parquet}
+        VAL_FILES=("$MATH_FILE" "$AMC_FILE" "$AIME24_FILE" "$AIME_FILE" "$AIME26_FILE")
         ;;
     code)
         TEACHER_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/DeepCoder-1.5B-Preview}

@@ -22,7 +22,7 @@ from tensordict import TensorDict
 from test_shared_teacher_fsdp2 import assert_on_cpu, make_worker, nested, teacher_policy_loss
 from tokenizers import Tokenizer
 from tokenizers.models import WordLevel
-from transformers import AutoModelForCausalLM, PreTrainedTokenizerFast, Qwen2Config, Qwen3Config
+from transformers import AutoModelForCausalLM, PreTrainedTokenizerFast, Qwen2Config, Qwen3Config, Qwen3MoeConfig
 
 from verl.trainer.distillation.full_vocab import full_reverse_kl
 from verl.trainer.distillation.hidden import prediction_positions
@@ -60,6 +60,7 @@ def main():
     parser.add_argument("--checkpoint", action="store_true")
     parser.add_argument("--state-output", type=Path)
     parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
+    parser.add_argument("--moe-teacher", action="store_true")
     parser.add_argument("--tied-student", action="store_true")
     parser.add_argument("--tied-teacher", action="store_true")
     parser.add_argument("--teacher-extra-rows", type=int, default=0)
@@ -83,10 +84,19 @@ def main():
             torch.manual_seed(100 + i)
             hidden_size = args.teacher_hidden_size if name == "teacher" else 32
             model = AutoModelForCausalLM.from_config(
-                (Qwen3Config if args.model_type == "qwen3" else Qwen2Config)(
+                (
+                    Qwen3MoeConfig
+                    if name == "teacher" and args.moe_teacher
+                    else Qwen3Config
+                    if args.model_type == "qwen3"
+                    else Qwen2Config
+                )(
                     vocab_size=32 + (args.teacher_extra_rows if name == "teacher" else 0),
                     hidden_size=hidden_size,
                     intermediate_size=64,
+                    num_experts=16,
+                    num_experts_per_tok=2,
+                    moe_intermediate_size=32,
                     num_hidden_layers=2,
                     num_attention_heads=4,
                     num_key_value_heads=2,
@@ -261,6 +271,7 @@ def main():
     result["resumed_next_update_equivalent"] = args.checkpoint
     result.update(
         model_type=args.model_type,
+        moe_teacher=args.moe_teacher,
         tied_student=args.tied_student,
         tied_teacher=args.tied_teacher,
         teacher_extra_rows=args.teacher_extra_rows,

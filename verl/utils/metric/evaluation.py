@@ -16,7 +16,7 @@ from numbers import Real
 
 import numpy as np
 
-ALIASES = {"MATH-500": "math500", "AMC23": "amc23", "AIME25": "aime25"}
+ALIASES = {"MATH-500": "math500", "AMC23": "amc23", "AIME24": "aime24", "AIME25": "aime25", "AIME26": "aime26"}
 
 
 def dataset_slug(name):
@@ -100,7 +100,7 @@ def evaluation_metrics(
     if type(resamples) is not int or resamples < 2:
         raise ValueError("eval_metrics_resamples must be an integer >= 2")
     seed = 42 if seed is None else seed
-    if isinstance(seed, bool) or not isinstance(seed, (int, np.integer)) or seed < 0:
+    if isinstance(seed, bool) or not isinstance(seed, int | np.integer) or seed < 0:
         raise ValueError("Evaluation seed must be a nonnegative integer or None")
     n_rows = len(data_sources)
     if len(uids) != n_rows or any(len(v) != n_rows for v in infos.values()):

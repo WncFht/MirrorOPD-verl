@@ -63,6 +63,27 @@ def raw_math(tmp_path, monkeypatch):
         (raw / f"aime2025-{part}.jsonl").write_text(
             "".join(json.dumps({"question": f"{part}-{index}", "answer": index}) + "\n" for index in range(15))
         )
+    for name, spec in prepare_data.AIME_FILES.items():
+        filename, _, _, _, problem_key, answer_key, id_key = spec
+        ids = (
+            [f"2024-{part}-{i}" for part in ("I", "II") for i in range(1, 16)]
+            if name == "AIME24"
+            else list(range(1, 31))
+        )
+        pq.write_table(
+            pa.Table.from_pylist(
+                [
+                    {
+                        problem_key: f"{name} question {i}",
+                        answer_key: i,
+                        id_key: identifier,
+                        "Solution": "must not leak",
+                    }
+                    for i, identifier in enumerate(ids)
+                ]
+            ),
+            raw / filename,
+        )
     return raw
 
 
@@ -275,3 +296,30 @@ def test_prompt_length_check_uses_token_rows_not_batch_encoding_keys(tmp_path, m
     report, _ = assets.check_data(path, "DAPO", tokenizer, max_prompt_length=2)
     assert report["max_prompt_tokens"] == 3
     assert report["overlong_prompts"] == 1
+
+
+def test_new_aime_subset_preserves_membership_and_does_not_leak_solution(raw_math):
+    rows = dict(prepare_data.build_rows(raw_math, ["AIME24", "AIME26"]))
+    assert set(rows) == {"AIME24", "AIME26"}
+    for name, items in rows.items():
+        assert len(items) == 30
+        assert len({r["extra_info"]["index"] for r in items}) == 30
+        assert all("must not leak" not in r["prompt"][0]["content"] for r in items)
+        assert all(r["data_source"] == name for r in items)
+
+
+@pytest.mark.parametrize("bad", ["duplicate", "missing", "answer", "wrong_ids"])
+def test_new_aime_rejects_invalid_competition(raw_math, bad):
+    path = raw_math / "aime2026.parquet"
+    rows = pq.read_table(path).to_pylist()
+    if bad == "duplicate":
+        rows[-1]["problem_idx"] = rows[0]["problem_idx"]
+    elif bad == "missing":
+        rows.pop()
+    elif bad == "answer":
+        rows[0]["answer"] = 1000
+    else:
+        rows[-1]["problem_idx"] = 31
+    pq.write_table(pa.Table.from_pylist(rows), path)
+    with pytest.raises(ValueError):
+        list(prepare_data.build_rows(raw_math, ["AIME26"]))

@@ -193,7 +193,7 @@ def test_failure_training_presets_preserve_pair_protocol_and_update_budget(
     assert actor.optim.lr == 1e-6 and actor.optim.lr_warmup_steps == 0
     assert actor.fsdp_config.seed == actor.data_loader_seed == rollout.seed == cfg.data.seed == 42
     assert rollout.val_kwargs.n == 16 and rollout.val_kwargs.max_tokens == 31744
-    assert cfg.data.val_batch_size is None and len(cfg.data.val_files) == 3
+    assert cfg.data.val_batch_size is None and len(cfg.data.val_files) == 5
     loss = cfg.distillation.distillation_loss
     if mode == "full":
         _assert_full_kl(loss)
@@ -286,7 +286,7 @@ def test_failure_smoke_reuses_formal_pair_and_stop_protocol(tmp_path, setting):
     assert list(cfg.actor_rollout_ref.rollout.stop_token_ids or []) == ([151645] if setting == "E27" else [])
 
 
-@pytest.mark.parametrize("preset", ["E21-unknown", "E54", "E43-unknown", "A", "A-full"])
+@pytest.mark.parametrize("preset", ["E21-unknown", "E99", "E43-unknown", "A", "A-full"])
 def test_unknown_failure_preset_fails_without_launching(tmp_path, preset):
     result = _launch(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_opd_ablation_fsdp2.sh"), preset])
     assert result.returncode == 2
@@ -424,7 +424,7 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
     assert cfg.distillation.distillation_loss.loss_mode == "k1"
     assert not cfg.distillation.distillation_loss.use_task_rewards
     assert cfg.distillation.distillation_loss.loss_max_clamp is None
-    assert [Path(p).parent.name for p in cfg.data.val_files] == ["MATH-500", "AMC23", "AIME25"]
+    assert [Path(p).parent.name for p in cfg.data.val_files] == ["MATH-500", "AMC23", "AIME24", "AIME25", "AIME26"]
     assert cfg.actor_rollout_ref.model.path.endswith("models with spaces/DeepSeek-R1-Distill-Qwen-1.5B")
     assert not (tmp_path / "run").exists()
 
@@ -700,7 +700,14 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(
     shutil.copy2(entry, script)
     shutil.copytree(SCRIPT.parent / "launchers", script.parent / "launchers")
     datasets = {
-        "math": ["math/DAPO/train", "math/MATH-500/test", "math/AMC23/test", "math/AIME25/test"],
+        "math": [
+            "math/DAPO/train",
+            "math/MATH-500/test",
+            "math/AMC23/test",
+            "math/AIME24/test",
+            "math/AIME25/test",
+            "math/AIME26/test",
+        ],
         "code": ["code/TACO/train", "code/LCBv6/test"],
         "if": ["if/MultiIF/train"],
     }

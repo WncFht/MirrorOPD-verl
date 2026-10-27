@@ -168,3 +168,12 @@ def test_abstentions_keep_known_voting_curve_but_not_other_sources():
     assert result["eval/math500/acc/voting_defined"] == 1
     assert result["eval/code/acc/voting_defined"] == 0
     assert "eval/code/acc/majority@1" not in result
+
+
+@pytest.mark.parametrize("source,slug", [("AIME24", "aime24"), ("AIME26", "aime26")])
+def test_new_aime_benchmarks_report_accuracy_and_failures(source, slug):
+    metrics = evaluation_metrics([source] * 2, ["question"] * 2, {"acc": [1, 0], "pred": ["42", "43"]})
+    assert metrics[f"eval/{slug}/acc/mean"] == 0.5
+    assert metrics[f"eval/{slug}/acc/pass@2"] == 1
+    assert metrics[f"eval/{slug}/response_count"] == 2
+    assert metrics[f"eval/{slug}/failed_count"] == 0

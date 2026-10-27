@@ -9,7 +9,7 @@ and protocol boundaries. These scores do not define the distillation loss.
 
 from importlib import import_module
 
-MATH_SOURCES = frozenset({"DAPO", "MATH-500", "AMC23", "AIME25", "math", "math_dapo"})
+MATH_SOURCES = frozenset({"DAPO", "MATH-500", "AMC23", "AIME24", "AIME25", "AIME26", "math", "math_dapo"})
 CODE_SOURCES = frozenset(
     {
         "livecodebench",

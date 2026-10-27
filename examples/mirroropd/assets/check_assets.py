@@ -32,6 +32,10 @@ MODELS = {
     "Qwen3-4B": {"repo": "Qwen/Qwen3-4B"},
     "Qwen3-1.7B": {"repo": "Qwen/Qwen3-1.7B"},
     "Qwen3-4B-Instruct-2507": {"repo": "Qwen/Qwen3-4B-Instruct-2507"},
+    "Qwen3-30B-A3B-Instruct-2507": {
+        "repo": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+        "revision": "0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+    },
 }
 DEFAULT_MODELS = ("DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B")
 MODEL_FILES = ("config.json", "tokenizer.json", "tokenizer_config.json")
@@ -40,7 +44,9 @@ DATASETS = {
     "DAPO": {"path": "math/DAPO/train.parquet", "rows": 17917, "split": "train"},
     "MATH-500": {"path": "math/MATH-500/test.parquet", "rows": 500, "split": "test"},
     "AMC23": {"path": "math/AMC23/test.parquet", "rows": 40, "split": "test"},
+    "AIME24": {"path": "math/AIME24/test.parquet", "rows": 30, "split": "test"},
     "AIME25": {"path": "math/AIME25/test.parquet", "rows": 30, "split": "test"},
+    "AIME26": {"path": "math/AIME26/test.parquet", "rows": 30, "split": "test"},
 }
 SCHEMA = pa.schema(
     [

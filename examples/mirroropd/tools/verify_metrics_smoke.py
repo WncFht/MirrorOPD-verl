@@ -37,7 +37,7 @@ def verify(root, correction=False):
     keys = sorted(set().union(*(r.keys() for r in rows)))
     assert all(math.isfinite(value) for row in rows for value in row.values())
     validations = []
-    aliases = {"MATH-500": "math500", "AMC23": "amc23", "AIME25": "aime25"}
+    aliases = {"MATH-500": "math500", "AMC23": "amc23", "AIME24": "aime24", "AIME25": "aime25", "AIME26": "aime26"}
     for file in sorted((root / "training/validation/records").glob("*.jsonl"), key=lambda p: int(p.stem)):
         outer = int(file.stem)
         matched = [r for r in rows if r.get("step/outer") == outer and "eval/math500/acc/mean" in r]
@@ -58,7 +58,7 @@ def verify(root, correction=False):
             prefix = f"eval/{aliases[source]}/"
             expected = sum(len(p) for p in prompts)
             observed = sum(
-                isinstance(r.get("acc"), (int, float)) and math.isfinite(r["acc"]) for p in prompts for r in p
+                isinstance(r.get("acc"), int | float) and math.isfinite(r["acc"]) for p in prompts for r in p
             )
             close(logged[prefix + "response_count"], expected, prefix + "response_count")
             close(logged[prefix + "failed_count"], expected - observed, prefix + "failed_count")
@@ -67,7 +67,7 @@ def verify(root, correction=False):
                 estimates = defaultdict(list)
                 for prompt in prompts:
                     acc = [
-                        float(r["acc"]) if isinstance(r.get("acc"), (int, float)) and math.isfinite(r["acc"]) else 0
+                        float(r["acc"]) if isinstance(r.get("acc"), int | float) and math.isfinite(r["acc"]) else 0
                         for r in prompt
                     ]
                     pred = [

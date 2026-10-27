@@ -15,7 +15,7 @@
 | [等更新预算 E18–E20](equal-update-budget/README.md) | 固定 4096 次更新时，复用和新增轨迹如何取舍？ | E18/E19 各完成 4096 更新；E20 到 3024 更新，云端 failed | 已完成 2235 指标分析、共同 2560-update 对照和八组图；E20 后三轮验证与跨 seed 证据仍缺 |
 | [失败复现模型／长度矩阵](failure-reproduction/README.md) | 长窗口、强教师、师生失配下，full-vocab 能否改善 sampled 的失效？ | 原250-step矩阵尚待补齐；E39的200-step终止对齐变体已完成，见下行 | 变体结果与原始词表KL方案分别登记，不将单臂结果计作整个矩阵完成 |
 | [Qwen3-Base 终止动作对齐](e39-base-8b/README.md) | 能否缓解Base的重复、过长输出并提高验证准确率？ | 200 outer / 3200更新 / 21轮完整验证，exit=0 | 最终MATH/AMC/AIME为68.39%/41.72%/8.54%；主要收益在前10步，完整teacher参考仍缺 |
-| [Qwen3-4B教师后续 E41/E43](e41-e43/README.md) | Base与后训练student在100步内的蒸馏表现 | E41已启动，E43自动接续；每组使用8卡 | 均为100 outer、reuse16、7168训练cap；每10步valid，E41无初始验证，E43有初始验证 |
+| [Qwen3教师对照 E41/E54/E43](e41-e43/README.md) | Base与后训练student在100步内的蒸馏表现 | E41已启动，随后 E54（30B MoE teacher）、E43；每组使用8卡 | 均为100 outer、reuse16、7168训练cap；每10步valid，E41/E54无初始验证，E43有初始验证；后两组默认五集 |
 | [Full-KL / MDPO / BPO 对照 E44–E47](../训练配方.md#mirror-comparison) | Anchor 约束、内层拟合目标和 weighted teacher 形状的作用 | 已补充预设，正式训练未启动；各 256 outer × 16 reuse | 计划同版本、同预算比较，已有短测仅验证实现 |
 | [Polaris 跨源教师 E48](polaris-transfer/README.md) | 同源/异源迁移与KL方向如何影响拟合？ | 已完成256 outer/4096更新；[完整平台与FKL分析](polaris-transfer/2026-10-27-E48后期平台与Forward-KL及知识迁移.md) | 新批KL约0.1874；[批大小与阶段对照](polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md#series-n)显示增大batch能降噪，但短程内未解除泛化平台 |
 | [Polaris Forward KL E49](../full-vocab/forward-kl.md) | 保持E48预算时，改变KL方向能否改善迁移？ | 生产入口已接入，工程验收见[证据](polaris-transfer/data/forward-kl-implementation-20261027/README.md)；正式256 outer尚未启动 | 同时比较FKL、原生RKL、JS/TV、entropy及任务表现 |
