@@ -28,7 +28,7 @@
 - 6条验证记录全部完成评分，`failed_count=0`；短cap下的任务分数不用于效果比较。
 - 已记录actor allocated峰值15.62GiB；该值不是整卡总占用，也不是正式长窗峰值。
 
-`smoke/result.json`保留验收统计；`history.jsonl`、`resolved_config.yaml`、`command.sh`、`train.log`是本次实际运行证据。此前在共享GPU上有多次显存不足的尝试，不计作成功；没有终止其他任务。后续GPU实验按用户要求等待重新通知。
+`smoke/result.json`保留验收统计；`history.jsonl`、`resolved_config.yaml`、`command.sh`、`train.log`是本次实际运行证据。此前在共享GPU上有多次显存不足的尝试，不计作成功；没有终止其他任务。用户重新分配 GPU0–3 后完成的默认优化器、两个 outer 与末轮评分验收见[四卡记录](../forward-kl-four-gpu-20261027/README.md)。
 
 ## Head阶段性能
 
