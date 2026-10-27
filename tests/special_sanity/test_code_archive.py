@@ -480,6 +480,35 @@ class CodeArchiveTest(unittest.TestCase):
         subprocess.run(["make", "archive-ack", f"PYTHON={sys.executable}"], cwd=self.sender, check=True)
         self.assertEqual(self.git(self.receiver, "rev-parse", "HEAD"), self.git(self.sender, "rev-parse", "HEAD"))
 
+    def test_standalone_requires_destination_before_touching_parent_or_input(self):
+        bundle = self.pack()[0]
+        source = self.sender / "transfer_snap/archive_bootstrap.py"
+        script = self.base / "uploaded-project/archive_bootstrap.py"
+        script.parent.mkdir()
+        shutil.copy2(source, script)
+        sentinel = self.write(self.base, "model/keep.txt", "local model asset\n")
+        for arguments in (["unpack"], ["unpack", str(bundle)], ["pack"], ["ack"]):
+            with self.subTest(arguments=arguments):
+                result = subprocess.run(
+                    [sys.executable, str(script), *arguments], cwd=script.parent, capture_output=True, text=True
+                )
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("unpack ARCHIVE DESTINATION", result.stderr)
+                self.assertTrue(bundle.exists())
+                self.assertFalse((self.base / ".git").exists())
+                self.assertFalse((self.base / "transfer_snap").exists())
+                self.assertFalse((script.parent / ".git").exists())
+                self.assertEqual(sentinel.read_text(), "local model asset\n")
+
+    def test_standalone_relative_destination_uses_callers_directory(self):
+        bundle = self.pack()[0]
+        script = self.sender / "transfer_snap/archive_bootstrap.py"
+        caller = self.base / "caller"
+        caller.mkdir()
+        subprocess.run([sys.executable, str(script), "unpack", str(bundle), "fresh"], cwd=caller, check=True)
+        self.assertEqual(self.git(caller / "fresh", "rev-parse", "HEAD"), self.first)
+        self.assertFalse((self.sender / "fresh").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

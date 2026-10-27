@@ -68,6 +68,10 @@ python3 /实际上传目录/archive_bootstrap.py unpack \
   /目标项目绝对路径
 ```
 
+独立 `archive_bootstrap.py` 必须同时指定包和目标目录；省略参数会在读取包、写文件或清理分卷前退出。相对目标目录按运行命令时的当前目录解释，通常建议使用绝对路径。仓库内的 `make archive-unpack` 仍默认更新当前项目。执行完应对照输出中的 `Unpacked into` 路径，并在该目录运行 `git --no-pager log -1 --oneline`，确认查看和运行的是实际更新的 checkout。
+
+旧 bootstrap 若被复制到项目根目录，再以 `python3 archive_bootstrap.py unpack` 无参数执行，会把项目父目录当成默认目标。它可能在父目录安装了新 checkout，而原项目子目录仍停留在旧提交。遇到这种情况，先分别检查两个目录的 Git 根路径与 HEAD；若父目录确实包含所需新版本，可以用 `git clone --no-local --branch main /已确认的新版本目录 /新的项目目录` 在本机恢复一个独立 checkout，无需重新上传已经消费的分卷。旧项目、父目录的模型和环境文件先保留，恢复正确 checkout 后再迁移本地配置。
+
 脚本不依赖仓库中的其他 Python 模块。没有 `.git` 的目标目录会初始化为正常 Git 工作区；旧源码里被覆盖的同名文件会备份到项目同级 `.项目名-before-bundle-时间戳/`。本地 `hope/`、虚拟环境、日志、结果及其他未被目标提交占用的路径保留。旧源码中不再被新提交跟踪的额外文件也保留，可检查备份和 `git status` 后人工整理。新安装不自动配置 GitHub remote、作者或邮箱；需要在开发机提交时，按该机器的用户身份设置 Git。
 
 首次迁移必须使用这个新版脚本，不能用旧 tar 解包器或 `tar -xzf` 处理 bundle。迁移成功后使用常规的 `make archive-unpack`，并在发送端执行 `make archive-ack`。若目标本身是已有 Git 工作区，新脚本按正常快进流程处理。
