@@ -368,3 +368,36 @@ def test_phase_transfer_completion_and_legacy_behavior(monkeypatch, forward_only
     engine.to("cuda", model=True, optimizer=False, grad=False)
     engine.to("cpu", model=True, optimizer=False, grad=False)
     assert events == expected
+
+
+@pytest.mark.parametrize("full_vocab", [False, True])
+def test_qwen3_moe_teacher_enters_shared_setup_only_with_full_vocab(config, monkeypatch, full_vocab):
+    trainer = _trainer(config)
+    tokenizer = SimpleNamespace(get_vocab=lambda: {"a": 0, "b": 1})
+    trainer.tokenizer = tokenizer
+    model = SimpleNamespace(tokenizer=tokenizer, hf_config=SimpleNamespace(model_type="qwen3_moe", num_experts=128))
+    monkeypatch.setattr(trainer_base, "HFModelConfig", MagicMock(return_value=model))
+    monkeypatch.setattr(trainer, "_uses_full_vocab", lambda: full_vocab)
+    if full_vocab:
+        worker = trainer._make_shared_teacher_config()
+        assert worker.model_config is model and worker.engine_config.fsdp_size == 8
+    else:
+        with pytest.raises(ValueError, match="dense text"):
+            trainer._make_shared_teacher_config()
+    # MoE students remain outside this teacher-only compatibility change.
+    with pytest.raises(ValueError, match="dense text"):
+        trainer._validate_shared_model(model)
+
+
+@pytest.mark.parametrize(
+    "attributes",
+    [
+        {"model_type": "mixtral", "num_local_experts": 8},
+        {"model_type": "qwen3_moe", "num_experts": 128, "vision_config": {}},
+        {"model_type": "qwen3_moe", "num_experts": 128, "is_encoder_decoder": True},
+    ],
+)
+def test_moe_teacher_exception_preserves_other_architecture_guards(attributes):
+    model = SimpleNamespace(hf_config=SimpleNamespace(**attributes))
+    with pytest.raises(ValueError, match="dense text"):
+        PPOTrainerSync._validate_shared_model(model, allow_qwen3_moe=True)

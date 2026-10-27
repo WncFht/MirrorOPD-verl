@@ -475,15 +475,19 @@ class PPOTrainer(ABC):
         )
 
     @staticmethod
-    def _validate_shared_model(model_config: HFModelConfig):
-        """Restrict shared engines to dense text models with compatible class patches."""
+    def _validate_shared_model(model_config: HFModelConfig, *, allow_qwen3_moe=False):
+        """Allow dense text models and the validated Qwen3 MoE full-vocabulary teacher."""
         hf_config = model_config.hf_config
+        supported_moe = allow_qwen3_moe and getattr(hf_config, "model_type", None) == "qwen3_moe"
         if (
             any(getattr(hf_config, name, None) is not None for name in ("vision_config", "audio_config"))
             or getattr(hf_config, "is_encoder_decoder", False)
-            or any(getattr(hf_config, name, 0) for name in ("num_local_experts", "num_experts", "n_routed_experts"))
+            or (
+                any(getattr(hf_config, name, 0) for name in ("num_local_experts", "num_experts", "n_routed_experts"))
+                and not supported_moe
+            )
         ):
-            raise ValueError("shared_sync currently supports dense text models only")
+            raise ValueError("shared_sync requires dense text models or a supported Qwen3 MoE full-vocabulary teacher")
 
     def _make_shared_teacher_config(self) -> TrainingWorkerConfig:
         """Construct an independent teacher model config without student cached state."""
@@ -497,7 +501,7 @@ class PPOTrainer(ABC):
             enable_activation_offload=False,
             enable_full_vocab=self._uses_full_vocab(),
         )
-        self._validate_shared_model(model_config)
+        self._validate_shared_model(model_config, allow_qwen3_moe=self._uses_full_vocab())
         if model_config.tokenizer.get_vocab() != self.tokenizer.get_vocab():
             raise ValueError("shared_sync requires identical student/teacher token-to-ID vocabularies")
         # The teacher scores the student's already-tokenized trajectory and masks;
