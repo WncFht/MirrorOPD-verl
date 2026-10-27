@@ -20,6 +20,7 @@ except ModuleNotFoundError:
 # END OBSERVE IMPORT
 
 ROOT = Path(__file__).resolve().parent.parent
+STANDALONE_BOOTSTRAP = False
 PREFIX = "archive_MirrorOPD-verl"
 EXPORT_REF = "refs/archive/export"
 INCOMING_REF = "refs/archive/incoming"
@@ -171,7 +172,8 @@ def write_bootstrap(path):
         raise ValueError("Generate full packs from the installed meituan/code_archive.py, not the bootstrap copy")
     helper = Path(observe.__file__).read_text()
     embedded = f'import types\nobserve = types.ModuleType("sync_observe")\nexec({helper!r}, observe.__dict__)\n'
-    path.write_text(before + embedded + after)
+    standalone = (before + embedded + after).replace("STANDALONE_BOOTSTRAP = False", "STANDALONE_BOOTSTRAP = True", 1)
+    path.write_text(standalone)
 
 
 def publish(packed, archive, chunk_size):
@@ -457,7 +459,11 @@ def update_checkout(repo, bundle, target):
         previous = ref(repo, refs(target)[1])
         observe.update(head_before=current, peer_before=previous)
         if previous and not ancestor(repo, previous, commit) and not ancestor(repo, commit, previous):
-            raise ValueError("Peer history diverged; use a separate TARGET for this history")
+            raise ValueError(
+                "Peer history diverged; use a separate TARGET for this history. "
+                "If the checkout also has old history, install the full bundle into a new directory with "
+                "archive_bootstrap.py unpack ARCHIVE NEW_DESTINATION; changing TARGET alone cannot migrate a checkout."
+            )
         if not ancestor(repo, current, commit) and not ancestor(repo, commit, current):
             raise ValueError("Source and destination histories diverged; no merge or overwrite was performed")
         changes = git(repo, "status", "--porcelain", "--untracked-files=no", "--", ".", ":(exclude)hope").stdout
@@ -564,6 +570,11 @@ def main():
     parser.add_argument("archive", nargs="?", default="")
     parser.add_argument("paths", nargs="*")
     args = parser.parse_args()
+    if STANDALONE_BOOTSTRAP and (args.action != "unpack" or not args.archive or len(args.paths) != 1):
+        parser.error(
+            "Standalone bootstrap requires: unpack ARCHIVE DESTINATION. "
+            "Specify the archive and destination explicitly; no default destination is used."
+        )
     if args.action == "check-source":
         try:
             if args.archive or args.paths:
@@ -580,7 +591,8 @@ def main():
     snap = snap if snap.is_absolute() else ROOT / snap
     try:
         destination = Path(args.paths[0]).expanduser() if args.action == "unpack" and args.paths else ROOT
-        destination = destination if destination.is_absolute() else ROOT / destination
+        destination_root = Path.cwd() if STANDALONE_BOOTSTRAP else ROOT
+        destination = destination if destination.is_absolute() else destination_root / destination
         receiving_snap = Path(os.environ.get("MIRROROPD_SNAP_DIR", "transfer_snap")).expanduser()
         receiving_snap = receiving_snap if receiving_snap.is_absolute() else destination / receiving_snap
         default_log = receiving_snap / "operations" if args.action == "unpack" else snap / "operations"
