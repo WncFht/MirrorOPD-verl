@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
 """Fixed-state batch-transfer and schedule controls with matched exposure.
 
 A-D are four independently grouped student-generated math batches. E-H are
@@ -81,6 +83,10 @@ def prepare(a):
             matched="blocked/roundrobin/mixed use exactly the same trajectory multiset per 64 updates",
             selection_seed=2026102704,
             reference_input="complete fixed input for every loss/evaluation; all response positions",
+            loss_normalizer=(
+                "16 * H for every update, zero contribution after refe"
+                "rence EOS; matched per-token weights across schedules"
+            ),
         ),
     )
 
@@ -108,7 +114,7 @@ def generate(a):
             pad_token_id=tok.pad_token_id,
             use_cache=True,
         )
-        for r, ids in zip(rs, y[:, enc.input_ids.shape[1] :].tolist()):
+        for r, ids in zip(rs, y[:, enc.input_ids.shape[1] :].tolist(), strict=False):
             stop = tok.eos_token_id in ids
             if stop:
                 ids = ids[: ids.index(tok.eos_token_id) + 1]
@@ -181,7 +187,7 @@ def generate_rich(a):
             eos_token_id=tok.eos_token_id,
             pad_token_id=tok.pad_token_id,
         )
-        for r, ids in zip(batch, y[:, enc.input_ids.shape[1] :].tolist()):
+        for r, ids in zip(batch, y[:, enc.input_ids.shape[1] :].tolist(), strict=False):
             stop = tok.eos_token_id in ids
             if stop:
                 ids = ids[: ids.index(tok.eos_token_id) + 1]
@@ -387,7 +393,7 @@ def run(a):
         if measure:
             with torch.no_grad():
                 delta = torch.zeros((), device="cuda")
-                for old, param in zip(before, p.parameters()):
+                for old, param in zip(before, p.parameters(), strict=False):
                     delta += (param - old).square().sum()
             row["parameter_step_norm"] = float(delta.sqrt())
             del before, delta
