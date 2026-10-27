@@ -67,7 +67,7 @@ QWEN_BASE = ModelPair(
     teacher="Qwen3-8B",
     family="qwen3",
     prompt=1024,
-    student_sequences=24,
+    student_sequences=64,
     student_memory_utilization=0.8,
     teacher_sequences=64,
     stop_token=151645,
@@ -138,6 +138,14 @@ def preset_catalog() -> dict[str, Preset]:
             (full16, "full_kl", 16),
         ):
             presets[f"E{number}"] = Preset(replace(MODEL, reuse=reuse), method=method, pair=pair)
+    # Follow-up Qwen runs use the same 100-step validation/rollout protocol.
+    # Keep the longer budgets and chat-model cap of the other arms intact.
+    for name in ("E41", "E43"):
+        presets[name] = replace(
+            presets[name],
+            budget=replace(MODEL, reuse=16, steps=100, test=10, save=50, initial_validation=name == "E43"),
+            pair=replace(presets[name].pair, response=7168, student_sequences=64, student_memory_utilization=0.8),
+        )
     presets["E14"] = replace(presets["E13"], budget=replace(MODEL, lr="5e-7"))
     presets["E16"] = replace(presets["E13"], budget=replace(MODEL, reuse=4))
     for number, reuse, steps, test, save in ((18, 64, 64, 8, 16), (19, 32, 128, 16, 32), (20, 16, 256, 32, 64)):
@@ -434,10 +442,15 @@ def _preset_ranges(numbers):
 
 def preset_overview() -> str:
     """Compact human reference, shared by --overview and the public entry comment."""
-    pairs = [
-        (f"E{s}", f"E{f}", f"E{s16}", f"E{f16}", _short_model(pair.student), _short_model(pair.teacher), pair.response)
-        for s, f, s16, f16, pair in MODEL_MATRIX
-    ]
+    pairs = []
+    for sampled, full, sampled16, full16, pair in MODEL_MATRIX:
+        names = [f"E{i}" for i in (sampled, full, sampled16, full16)]
+        # A selected arm may override the family's rollout cap.
+        for cap in dict.fromkeys(PRESETS[name].pair.response for name in names):
+            pairs.append(
+                tuple(name if PRESETS[name].pair.response == cap else "-" for name in names)
+                + (_short_model(pair.student), _short_model(pair.teacher), cap)
+            )
     signals = [
         (f"E{i}", f"E{i + len(SAMPLED_SIGNALS)}", PRESETS[f"E{i}"].advantage, PRESETS[f"E{i}"].policy)
         for i in range(1, len(SAMPLED_SIGNALS) + 1)
