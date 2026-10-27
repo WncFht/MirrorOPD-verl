@@ -3,7 +3,6 @@
 """Independent teacher-only scoring for the precision-transfer experiments."""
 
 import importlib
-from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -12,9 +11,9 @@ import torch
 
 @pytest.fixture
 def modules(monkeypatch):
-    path = Path(__file__).resolve().parents[3] / "examples/mirroropd/docs/mirror-descent/scripts"
-    monkeypatch.syspath_prepend(str(path))
-    return importlib.import_module("replay_fixed_prefix"), importlib.import_module("audit_mirror_solvers")
+    return importlib.import_module("examples.mirroropd.research.precision.engine"), importlib.import_module(
+        "examples.mirroropd.research.precision.audit_mirror_solvers"
+    )
 
 
 def test_eta_one_reference_uses_complete_teacher_normalizer_without_anchor(modules):

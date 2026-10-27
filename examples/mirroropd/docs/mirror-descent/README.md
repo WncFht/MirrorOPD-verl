@@ -1,5 +1,7 @@
 # MirrorOPD 目标与实现
 
+研究代码与命令已统一迁至 [research 包](../../research/README.md)；公共算法、缓存身份、执行入口与维护约定见该文档。
+
 本目录维护一般 $\kappa,\eta$ 的融合目标与 MDPO/BPO 实现。所有方法从[统一实验入口](../../run_math_opd_ablation_fsdp2.sh)选择模型预算和算法，设置见[训练配方](../训练配方.md)。普通对数 OPD 的 IS 四格推导见[理论目录](../theory/README.md)，现有训练链路见[内部实现说明](../internals/README.md)。
 
 | 入口 | 内容 |
@@ -15,6 +17,6 @@
 | [生产数值修复与验收](2026-10-27-蒸馏数值修复与验收.md) | BPO/Full-KL 稳定归约、分离 target、近零标量、sampled CE、回归与成本 |
 | [Softmax 上游修复调研](2026-10-27-Softmax上游修复调研.md) | Barron 论文、FlashAttention/PyTorch/Liger/verl/Unsloth 等修复状态及本机对应关系 |
 | [优化器历史与前向精度对照](2026-10-27-MDPO优化器历史与前向精度因果对照.md) | 零梯度与固定更新控制；Adam/SGD/Muon 多步求解、最佳状态及中间精度干预 |
-| [数值验证脚本](scripts/verify_mirror_targets.py)与[结果](data/finite-vocab-checks.json) | CPU FP64 小词表上的目标、梯度和反例检查 |
+| [数值验证脚本](../../research/precision/verify_mirror_targets.py)与[结果](data/finite-vocab-checks.json) | CPU FP64 小词表上的目标、梯度和反例检查 |
 
 已实现 sampled MDPO、full-vocab MDPO/BPO；普通 Full-KL 是 MDPO eta=1 的直接执行分支。配置、运行约束和验证范围在统一实现方案中维护。

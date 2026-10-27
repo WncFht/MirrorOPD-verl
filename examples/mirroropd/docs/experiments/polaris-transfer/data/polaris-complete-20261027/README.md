@@ -23,13 +23,12 @@
 ```bash
 COMPLETE_DATA=examples/mirroropd/docs/experiments/polaris-transfer/data/polaris-complete-20261027
 EARLY_DATA=examples/mirroropd/docs/experiments/polaris-transfer/data/polaris-grcuotmi-20261026
-COMPLETE_SCRIPTS=examples/mirroropd/docs/experiments/polaris-transfer/scripts
-python3 "$COMPLETE_SCRIPTS/analyze_completed_transfer.py" \
+python3 -m examples.mirroropd.research.transfer.analyze_completed_transfer \
   --data "$COMPLETE_DATA" --old "$EARLY_DATA"
 
 FIGURE_VIZ_MPL=../dotfiles/.agents/skills/figure-viz/assets/mpl \
   /root/.local/share/mirroropd/venvs/profile-cu128/bin/python \
-  "$COMPLETE_SCRIPTS/plot_completed_transfer.py" \
+  -m examples.mirroropd.research.transfer.plot_completed_transfer \
   --data "$COMPLETE_DATA" \
   --out examples/mirroropd/docs/experiments/polaris-transfer/figures/completed-20261027
 ```

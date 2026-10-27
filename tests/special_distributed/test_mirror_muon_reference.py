@@ -6,7 +6,6 @@ import argparse
 import copy
 import json
 import os
-import sys
 from pathlib import Path
 
 import torch
@@ -14,8 +13,7 @@ import torch.distributed as dist
 from torch.distributed.device_mesh import init_device_mesh
 from torch.distributed.tensor import Shard, distribute_tensor
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "examples/mirroropd/docs/mirror-descent/scripts"))
-from solver_optimizers import FullMatrixMuonAdamW
+from examples.mirroropd.research.precision.solver_optimizers import FullMatrixMuonAdamW
 
 
 def main():

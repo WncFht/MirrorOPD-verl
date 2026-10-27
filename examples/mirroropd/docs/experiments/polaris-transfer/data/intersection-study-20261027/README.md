@@ -50,29 +50,28 @@ Teacher固定前缀hidden和endpoint权重属于可再生的大缓存，位于 `
 
 ```bash
 STUDY_PY=/root/.local/share/mirroropd/venvs/profile-cu128/bin/python
-STUDY_SCRIPTS=examples/mirroropd/docs/experiments/polaris-transfer/scripts
 STUDY_OUT=examples/mirroropd/docs/experiments/polaris-transfer/data/intersection-study-20261027
 STUDY_CACHE=outputs/polaris-transfer-cache/intersection-study-20261027
 
-python3 "$STUDY_SCRIPTS/summarize_intersection.py" --data "$STUDY_OUT"
-python3 "$STUDY_SCRIPTS/analyze_intersection_controls.py" --data "$STUDY_OUT"
-python3 "$STUDY_SCRIPTS/audit_intersection_study.py" --data "$STUDY_OUT"
+python3 -m examples.mirroropd.research.transfer.summarize_intersection --data "$STUDY_OUT"
+python3 -m examples.mirroropd.research.transfer.analyze_intersection_controls --data "$STUDY_OUT"
+python3 -m examples.mirroropd.research.transfer.audit_intersection_study --data "$STUDY_OUT"
 
 # 以下为从新目录重新执行的设置；CUDA_VISIBLE_DEVICES按实际分配填写。
 export CUDA_VISIBLE_DEVICES=0
 export OPENBLAS_NUM_THREADS=8 OMP_NUM_THREADS=8 TOKENIZERS_PARALLELISM=false
-"$STUDY_PY" "$STUDY_SCRIPTS/intersection_study.py" prepare \
+"$STUDY_PY" -m examples.mirroropd.research.transfer.intersection_study prepare \
   --models ../model --data ../MD-OPD/data --out "$STUDY_OUT" --cache "$STUDY_CACHE"
 for STUDY_SOURCE in student justrl polaris
 do
-  "$STUDY_PY" "$STUDY_SCRIPTS/intersection_study.py" reference \
+  "$STUDY_PY" -m examples.mirroropd.research.transfer.intersection_study reference \
     --models ../model --out "$STUDY_OUT" --cache "$STUDY_CACHE" --source "$STUDY_SOURCE"
 done
 
 # 所有参考生成完成后再训练。这里给出单卡顺序复算写法。
 for STUDY_PAIR in justrl:student polaris:student polaris:teacher polaris:intersection polaris:topk
 do
-  "$STUDY_PY" "$STUDY_SCRIPTS/intersection_study.py" run \
+  "$STUDY_PY" -m examples.mirroropd.research.transfer.intersection_study run \
     --models ../model --out "$STUDY_OUT" --cache "$STUDY_CACHE" \
     --teacher "${STUDY_PAIR%%:*}" --mode "${STUDY_PAIR#*:}" --k 16 --save
 done
@@ -80,28 +79,28 @@ done
 
 for STUDY_SELECTION in high random low
 do
-  "$STUDY_PY" "$STUDY_SCRIPTS/intersection_study.py" selection \
+  "$STUDY_PY" -m examples.mirroropd.research.transfer.intersection_study selection \
     --models ../model --out "$STUDY_OUT" --cache "$STUDY_CACHE" --selection "$STUDY_SELECTION"
 done
 
 # 所有endpoint保存以后执行交叉分解。
-"$STUDY_PY" "$STUDY_SCRIPTS/intersection_study.py" decompose \
+"$STUDY_PY" -m examples.mirroropd.research.transfer.intersection_study decompose \
   --models ../model --out "$STUDY_OUT" --cache "$STUDY_CACHE"
 
 # 初始任务评测不传checkpoint。
-"$STUDY_PY" "$STUDY_SCRIPTS/intersection_study.py" task_eval \
+"$STUDY_PY" -m examples.mirroropd.research.transfer.intersection_study task_eval \
   --models ../model --out "$STUDY_OUT" --cache "$STUDY_CACHE" --teacher polaris \
   --tag initial
 for STUDY_PAIR in justrl:student polaris:student polaris:teacher polaris:intersection polaris:topk
 do
   STUDY_ARM="${STUDY_PAIR%%:*}-${STUDY_PAIR#*:}-k16"
-  "$STUDY_PY" "$STUDY_SCRIPTS/intersection_study.py" task_eval \
+  "$STUDY_PY" -m examples.mirroropd.research.transfer.intersection_study task_eval \
     --models ../model --out "$STUDY_OUT" --cache "$STUDY_CACHE" --teacher "${STUDY_PAIR%%:*}" \
     --tag "$STUDY_ARM" --checkpoint "$STUDY_CACHE/checkpoints/$STUDY_ARM"
 done
 
 FIGURE_VIZ_MPL=../dotfiles/.agents/skills/figure-viz/assets/mpl \
-  "$STUDY_PY" "$STUDY_SCRIPTS/plot_intersection_study.py" \
+  "$STUDY_PY" -m examples.mirroropd.research.transfer.plot_intersection_study \
   --data "$STUDY_OUT" --out examples/mirroropd/docs/experiments/polaris-transfer/figures/intersection-study-20261027
 ```
 

@@ -6,7 +6,6 @@ import argparse
 import json
 import os
 import shutil
-import sys
 import tempfile
 from pathlib import Path
 
@@ -18,11 +17,9 @@ from tokenizers.models import WordLevel
 from transformers import PreTrainedTokenizerFast, Qwen2Config, Qwen2ForCausalLM
 from transformers.models.qwen2.modeling_qwen2 import Qwen2RotaryEmbedding
 
+from examples.mirroropd.research.precision import engine as replay
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "examples/mirroropd/docs/mirror-descent/scripts"))
-import replay_fixed_prefix as replay
 
 
 def main():
