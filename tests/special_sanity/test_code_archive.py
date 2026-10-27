@@ -139,6 +139,41 @@ class CodeArchiveTest(unittest.TestCase):
         self.assertEqual((self.receiver / "src/code.py").read_text(), "version = 1\n")
         self.assertFalse((self.receiver / "untracked.py").exists())
 
+    def test_source_policy_checks_staged_blob_not_working_file(self):
+        path = self.write(self.sender, "large.bin", b"x" * (2 * 1024 * 1024 + 1))
+        self.git(self.sender, "add", "large.bin")
+        path.write_bytes(b"small working copy")
+        with self.assertRaisesRegex(ValueError, "2 MiB"):
+            archive.check_source_artifacts(self.sender, staged=True)
+
+    def test_source_policy_rejects_raw_evidence_but_accepts_small_summary(self):
+        name = "examples/mirroropd/docs/experiments/demo/data/summary.json"
+        self.write(self.sender, name, '{"loss": 0.1}\n')
+        self.commit(self.sender)
+        archive.check_source_artifacts(self.sender)
+        raw = "examples/mirroropd/docs/experiments/demo/data/history.jsonl"
+        self.write(self.sender, raw, '{"loss": 0.1}\n')
+        self.git(self.sender, "add", raw)
+        with self.assertRaisesRegex(ValueError, "raw experiment artifact"):
+            archive.check_source_artifacts(self.sender, staged=True)
+
+    def test_pack_rejects_large_blob_even_after_later_deletion(self):
+        path = self.write(self.sender, "large.bin", b"x" * (2 * 1024 * 1024 + 1))
+        self.commit(self.sender)
+        path.unlink()
+        self.commit(self.sender)
+        archive.check_source_artifacts(self.sender)
+        with self.assertRaisesRegex(ValueError, "2 MiB"):
+            self.pack()
+        self.assertIsNone(archive.ref(self.sender, archive.refs("peer")[0]))
+
+    def test_source_policy_caps_experiment_summary_size(self):
+        name = "examples/mirroropd/docs/experiments/demo/data/summary.json"
+        self.write(self.sender, name, b"x" * (1024 * 1024 + 1))
+        self.commit(self.sender)
+        with self.assertRaisesRegex(ValueError, "1 MiB summary"):
+            archive.check_source_artifacts(self.sender)
+
     def test_missing_baseline_is_rejected(self):
         self.initialize()
         self.write(self.sender, "later.py", "later\n")

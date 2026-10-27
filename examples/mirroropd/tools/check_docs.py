@@ -11,6 +11,7 @@ id anchors used by this library; historical pages are targets, not audited sourc
 import argparse
 import ast
 import re
+import subprocess
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -114,7 +115,37 @@ def check_pages(pages):
             path = (page.parent / unquote(parsed.path)).resolve() if parsed.path else page
             error = None
             if not path.exists():
-                error = f"missing local target: {target}"
+                # Raw evidence remains locally available but is deliberately absent from source clones.
+                ignored = False
+                if path.is_relative_to(ROOT) and path.suffix in {
+                    "",
+                    ".json",
+                    ".jsonl",
+                    ".gz",
+                    ".log",
+                    ".csv",
+                    ".tex",
+                    ".pdf",
+                    ".parquet",
+                    ".txt",
+                }:
+                    ignored = (
+                        subprocess.run(
+                            [
+                                "git",
+                                "-C",
+                                str(ROOT),
+                                "check-ignore",
+                                "--quiet",
+                                "--",
+                                str(path.relative_to(ROOT)) + ("/" if parsed.path.endswith("/") else ""),
+                            ],
+                            capture_output=True,
+                        ).returncode
+                        == 0
+                    )
+                if not ignored:
+                    error = f"missing local target: {target}"
             elif path.suffix == ".md" and parsed.fragment:
                 if path not in anchor_cache:
                     anchor_cache[path] = markdown_anchors(path.read_text())

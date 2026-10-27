@@ -25,11 +25,12 @@ EXPORT_REF = "refs/archive/export"
 INCOMING_REF = "refs/archive/incoming"
 
 
-def git(repo, *args, check=True):
+def git(repo, *args, check=True, input_data=None):
     """Run only local Git operations, without recursive submodule updates or deployment hooks."""
     result = observe.run(
         ["git", "-c", "submodule.recurse=false", "-c", "core.hooksPath=/dev/null", "-C", str(repo), *args],
         capture_output=True,
+        input=input_data,
     )
     if check and result.returncode:
         raise ValueError(result.stderr.decode(errors="replace").strip() or f"git {args[0]} failed")
@@ -94,6 +95,71 @@ def remember_peer(repo, target, commit):
 def check_hope_removed(repo, commit):
     if git(repo, "ls-tree", "-r", "--name-only", commit, "--", "hope").stdout:
         raise ValueError("Commit still tracks hope/. Add /hope/ to .gitignore, git rm -r --cached hope, then commit")
+
+
+def source_artifact_reason(path, size):
+    """Keep source bundles bounded while retaining small reports and test fixtures."""
+    if size > 2 * 1024 * 1024:
+        return "file exceeds the 2 MiB source limit"
+    if not path.startswith("examples/mirroropd/docs/"):
+        return None
+    if re.search(r"\.(?:jsonl(?:\.gz)?|json\.gz|log|parquet|pt|npy|npz)$", path):
+        return "raw experiment artifact belongs in local storage"
+    if re.search(r"/papers/[^/]+\.(?:tex|pdf|zip|gz|txt)$", path):
+        return "downloaded paper source belongs in local storage"
+    if "/data/" in path:
+        name = path.rsplit("/", 1)[-1]
+        if re.fullmatch(r"(?:evaluation|initial-state-metrics|lineage-state-metrics|cases)\.json", name):
+            return "per-state experiment details belong in local storage"
+        if re.fullmatch(r"(?:rollouts?(?:[-_].*)?|fresh(?:[-_].*)?|task-.*)\.json", name):
+            return "rollout details belong in local storage"
+        if size > 1024 * 1024 and name.endswith((".json", ".csv")):
+            return "experiment data exceeds the 1 MiB summary limit"
+    return None
+
+
+def check_source_artifacts(repo, revision="HEAD", *, staged=False, history=False):
+    """Inspect Git blobs, so unstaged edits cannot hide staged or historical data."""
+    if staged and history:
+        raise ValueError("Choose either --staged or --history")
+    entries = []
+    if history:
+        objects = git(repo, "rev-list", "--objects", revision).stdout.splitlines()
+        names = {}
+        for line in objects:
+            oid, _, path = line.partition(b" ")
+            names[oid] = os.fsdecode(path)
+        sizes = git(
+            repo,
+            "cat-file",
+            "--batch-check=%(objectname) %(objecttype) %(objectsize)",
+            input_data=b"\n".join(names) + b"\n",
+        ).stdout.splitlines()
+        for line in sizes:
+            oid, kind, size = line.split()
+            if kind == b"blob":
+                entries.append((names[oid], int(size)))
+    else:
+        tree = value(repo, "write-tree") if staged else revision
+        for entry in git(repo, "ls-tree", "-r", "-l", "-z", tree).stdout.split(b"\0"):
+            if not entry:
+                continue
+            metadata, name = entry.split(b"\t", 1)
+            _, kind, _, size = metadata.split()
+            if kind == b"blob":
+                entries.append((os.fsdecode(name), int(size)))
+    errors = []
+    for path, size in entries:
+        reason = source_artifact_reason(path, size)
+        if reason:
+            errors.append(f"{path}: {reason} ({size} bytes)")
+    if errors:
+        detail = "\n".join(errors[:20])
+        raise ValueError(
+            f"Source artifact policy rejected {len(errors)} blob(s):\n{detail}\n"
+            "Keep raw data locally; deleting it in a later commit does not remove it from bundle history."
+        )
+    return len(entries)
 
 
 def write_bootstrap(path):
@@ -211,6 +277,10 @@ def pack(repo, snap, target, supplied="", full=False):
     with locked(repo):
         commit = value(repo, "rev-parse", "HEAD^{commit}")
         check_hope_removed(repo, commit)
+        with observe.stage("source.artifacts"):
+            check_source_artifacts(repo, commit)
+            checked = check_source_artifacts(repo, commit, history=True)
+            observe.note("Source artifact policy passed", blobs=checked)
         if git(repo, "status", "--porcelain", "--untracked-files=normal").stdout:
             print("Note: packaging committed HEAD only; uncommitted and untracked files are not included.")
         base = ref(repo, confirmed_ref)
@@ -488,10 +558,23 @@ def unpack(destination, source, target):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("pack", "unpack", "ack"))
+    parser.add_argument("action", choices=("pack", "unpack", "ack", "check-source"))
+    parser.add_argument("--staged", action="store_true", help="check the index instead of HEAD")
+    parser.add_argument("--history", action="store_true", help="check all objects reachable from HEAD")
     parser.add_argument("archive", nargs="?", default="")
     parser.add_argument("paths", nargs="*")
     args = parser.parse_args()
+    if args.action == "check-source":
+        try:
+            if args.archive or args.paths:
+                raise ValueError("check-source accepts only --staged or --history")
+            count = check_source_artifacts(ROOT, staged=args.staged, history=args.history)
+            print(f"Source artifact policy passed: {count} blobs")
+            return
+        except (OSError, ValueError) as error:
+            parser.exit(1, f"archive: {error}\n")
+    if args.staged or args.history:
+        parser.error("--staged and --history require check-source")
     target = os.environ.get("MIRROROPD_ARCHIVE_TARGET", "peer")
     snap = Path(os.environ.get("MIRROROPD_SNAP_DIR", "transfer_snap")).expanduser()
     snap = snap if snap.is_absolute() else ROOT / snap
