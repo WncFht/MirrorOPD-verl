@@ -147,7 +147,7 @@ $$
 
 在固定经验前缀测度 $\widehat d$ 上，完整训练目标为 $\mathbb E_{s\sim\widehat d}K(s;\theta)$。旧轨迹决定了 $\widehat d$，直接 backward 对这个目标是精确的。full-vocab 仅消除当前动作积分误差，不恢复缺失前缀，也不包含轨迹采样分布的导数。固定序列求条件散度梯度与 GKD 的计算约定一致；MiniLLM 的整序列推导还包含未来影响，超出本篇范围。[^gkd][^minillm]
 
-本仓 head-loss 路径使用当前 student hidden/head 和冻结 teacher hidden/head，反向同时更新学生 head 与 backbone。配置、token-mean 聚合及数值验收见[Full-KL 实现与验收](../full-vocab/2026-10-22-Full-KL实现与验收.md)。词表分块与重计算是实现选择，不改变本篇的目标。
+本仓 head-loss 路径使用当前 student hidden/head 和冻结 teacher hidden/head，反向同时更新学生 head 与 backbone。配置、token-mean 聚合及数值验收见[Full-KL 实现与验收](../full-vocab/validation.md)。词表分块与重计算是实现选择，不改变本篇的目标。
 
 ## 5. 验算
 

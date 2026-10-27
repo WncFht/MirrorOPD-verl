@@ -6,17 +6,11 @@ Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前�
 
 ## 统一目标分派
 
-[full_vocab_objective_result](../../../../verl/trainer/distillation/full_vocab.py) 是 full-vocab 的统一数值入口，返回未除 eta 的 `loss_sum`、detached `token_objective` 和可选命名诊断。MDPO eta=1 直接调用原 `full_reverse_kl_result`；MDPO eta<1 与 BPO 在 q/T 分块投影后构造 b，再执行各自的行归约，共用 precompute 的 hidden/head 梯度累计。最终 loss 层统一除 eta 和应用 LossContext。
+方法与数学目标的对应关系见[三方法比较](full-kl-walkthrough.md#71-梯度与极小值对照)；配置解析和数值分派分别沿[执行路线第 2 项](full-kl-execution-walkthrough.md#阅读顺序)与[算子 dispatcher](full-kl-kernel-walkthrough.md#1-dispatcher-的逐段阅读)阅读。本页维护 full-vocab 在 engine 中的接入合同、hidden 运输和 head 调用边界。
 
-| 设置 | q 数据 | 目标权重与归约 | Backend |
-| --- | --- | --- | --- |
-| MDPO eta=1，普通 Full-KL | 不需要 | 当前 p 加权 $\mathrm{KL}(p\Vert T)$ | 保留全部原 backend |
-| MDPO eta<1 | 冻结 hidden/head | 当前 p 加权 mirror residual | dense / precompute / precompute_fused |
-| BPO，包括 eta=1 | 冻结 hidden/head | q 加权中心化 logits residual 方差 | dense / precompute / precompute_fused |
+### 训练行值与诊断的分工
 
-BPO 的 loss/VJP 无需 student softmax，KL 诊断按需增加归一化。所有 q/T 输入冻结，只有当前学生 hidden/head 参与反传。Anchor scope、版本校验、支持集和精确目标见[统一实现说明](../mirror-descent/实现方案.md#kernels)。下文展开原教师 endpoint 的底层算子；这部分仍是统一执行链路的直接分支。
-
-一般融合的 `precompute_fused` 现已融合 weighted target，并让 MDPO 直接计算 $\mathbb E_p[z-b]-\operatorname{LSE}(z)$。诊断复用分块统计量，不重算 loss/VJP；teacher KL 使用完整 teacher 支持上的 log T。BPO 关闭诊断时仍沿 q 加权方差路径，不生成 student softmax。PyTorch 回退也复用 log p/p 计算 teacher KL。H800 固定输入速度与显存数据、启用方式和仍未优化的部分统一维护在[实现方案第 8.5 节](../mirror-descent/实现方案.md#85-已完成的数值层优化与实测)，不将数值层加速当作整轮吞吐结论。
+训练 objective、四项 mirror 诊断以及 eta 缩放的字段定义统一见[指标矩阵](metrics.md#当前目标的指标矩阵)。行值的数学含义见[目标与梯度](full-kl-walkthrough.md)，从 row kernel 到 detached 诊断的代码对应见[数值参考](full-kl-kernel-walkthrough.md#2-dense-reference-与解析-logits-vjp)。
 
 ## 接口与运行约束
 
@@ -30,6 +24,8 @@ BPO 的 loss/VJP 无需 student softmax，KL 诊断按需增加归一化。所�
 | `ws` | `[V_s, d_s]` | 当前 student LM head | 是 |
 | `ht` | `[n, d_t]` | TQ 中的冻结 teacher hidden | 否 |
 | `wt` | `[V_t, d_t]` | 独立加载的冻结 teacher head | 否 |
+
+一般 MDPO/BPO 还传入冻结 `hq[n,d_s]` 与 `wq[V_s,d_s]`；调用方按样本身份和版本读取它们，kernel 再检查 token 行数、head 宽度及 anchor/student 支持相同。
 
 师生 hidden 宽度可以不同；前缀与 token ID 必须对齐，且 $V_t\ge V_s$。Tokenizer 的 token→ID 词表相同，不要求模型 head 的总行数相同：head 可以包含 tokenizer 常规词表之外的额外输出行。
 
@@ -79,7 +75,7 @@ flowchart TD
 
 [FSDPEngineWithLMHead._full_vocab_output](../../../../verl/workers/engine/fsdp/transformer_impl.py) 用 `prediction_positions(input_ids, loss_mask)` 同时得到每条序列的局部预测下标与拼接序列的 packed 下标。Teacher backbone 仍看到完整的 prompt+response，随后只取 mask 有效 target 对应的预测 hidden 行。Teacher 的 LM head 在这个 forward 中不执行完整投影。
 
-例如 `prompt=[p0,p1,p2], response=[r0,r1,r2], loss_mask=[1,0,1]`，只保存预测 `r0,r2` 的 hidden，即完整序列位置 `[2,4]`，每条样本 payload 为 `teacher_hidden[2,d_t]`、`teacher_positions=[2,4]`。Mask 空洞不会改变 token 上下文，也不会被当成更短的 response。
+完整的 shift 公式、mask 空洞与 packed 坐标例子统一见[预测坐标](data-and-loss.md#两种布局与预测坐标)。
 
 选中 hidden 立即 detach、转到 CPU，按样本拆分并由 [HiddenBatchIO.publish](../../../../verl/trainer/distillation/hidden_io.py) 写入 TQ。Worker 返回轻量 `teacher_payload_ready` 标记，避免在整轮推理结果中继续持有所有 hidden。Actor 阶段仍需等全部 teacher futures 完成及 teacher 成功卸载。
 
@@ -87,9 +83,9 @@ flowchart TD
 
 [PPOTrainer._update_actor](../../../../verl/trainer/ppo/v1/trainer_base.py) 只把 `input_ids/position_ids/loss_mask/response_mask/prompts/responses` 交给普通 bridge，同时设置 `retain_sample_identity=True`。`sample_keys/sample_partition` 随数据进入 worker，并跟随 shuffle、mini-batch 和 micro-batch 切分移动。
 
-[HiddenBatchIO.__iter__](../../../../verl/trainer/distillation/hidden_io.py) 在 actor micro-batch 执行前按这些 key 取回 `teacher_hidden/teacher_positions`，结束后从 micro-batch 容器移除 payload。Student engine 校验保存的每条位置数组与当前 `loss_mask` 推导的位置完全一致。Teacher 与 actor 可以采用不同的动态分批边界，不能用“第几个 teacher micro-batch”匹配 student。
+[HiddenBatchIO.__iter__](../../../../verl/trainer/distillation/hidden_io.py) 在 actor micro-batch 执行前按这些 key 取回 `teacher_hidden/teacher_positions`，结束后从 micro-batch 容器移除 payload。Full mirror 通过 `full_vocab_sources=("teacher", "anchor")` 让同一 IO 对象同时读取两类 payload；engine 校验它们的位置、anchor version 和 head holder 一致。Student engine 校验保存的每条位置数组与当前 `loss_mask` 推导的位置完全一致。Teacher 与 actor 可以采用不同的动态分批边界，不能用“第几个 teacher micro-batch”匹配 student。
 
-每次 reuse 都读取冻结 teacher hidden，重新计算 student backbone。Teacher hidden 来自当前完整前缀的 teacher forward，只有 student hidden 随 optimizer 更新。
+每次 reuse 都重新读取冻结 teacher 和存在的 anchor hidden，再计算当前 student backbone。q/T backbone 不会重跑，但它们的 head 投影、归一化及 b 构造仍随每次 inner update 重做。当前没有整轮 hidden GPU 驻留缓存或 target/logits cache。
 
 ### Head adapter 与 FSDP hooks
 
@@ -105,104 +101,54 @@ Kernel 返回 `loss_sum`，engine 附上有效行数 `full_kl_count`，可用时
 
 [ActorRolloutRefWorker.update_actor](../../../../verl/workers/engine_workers.py) 在整个 mini-batch/epochs 迭代结束后通过 `finally` 释放 teacher head 的 GPU 引用。同一次 actor 调用内部可以复用该缓存。Teacher scorer 只管理 teacher 模型驻留，不能在 actor 更新前释放 actor 自己拥有的 head。
 
+Full mirror 的 [FrozenAnchorHead](../../../../verl/trainer/distillation/anchor.py) 则来自当前 student wrapped head 的独立复制，CPU/GPU 缓存都属于一次 anchor scope；不是长期存活的 teacher checkpoint 副本。它在普通 Full-KL endpoint 中完全省略，具体准备与释放见[anchor 生命周期](teacher.md#anchor-准备与模型驻留)。
+
 | 开关 | 实际重叠的工作 | 没有改变的边界 |
 | --- | --- | --- |
-| `full_vocab.async_write` | 上一个 teacher micro-batch 的 CPU→TQ 写与后续 teacher 计算 | D2H 在提交写之前执行；提交下一笔写之前等待上一笔，正常退出 flush 最后一笔 |
+| `full_vocab.async_write` | 上一个 teacher/anchor micro-batch 的 CPU→TQ 写与后续评分计算 | D2H 在提交写之前执行；提交下一笔写之前等待上一笔，正常退出 flush 最后一笔 |
 | `full_vocab.prefetch` | 下一 actor micro-batch 的 TQ→CPU 读与当前 actor 计算 | payload 随 `micro_batch.to(device)` 上卡，没有专用 CUDA H2D stream |
 
 两者使用单线程 executor，限制待处理 IO 数量；不会使 teacher 和 student backbone 同时在 GPU 上执行。详细异常与卸载行为见[教师评分顺序](teacher.md#评分顺序)。
 
-Hidden 运输规模约为有效预测行数乘 $d_t$，避免跨阶段传递有效行数乘 $V_t$ 的 logits。Actor 阶段仍需容纳当前 student 激活、完整冻结 teacher head、KL 临时块与 student 梯度；不能仅按 hidden payload 大小估计训练显存。
+Teacher hidden 运输规模约为有效预测行数乘 $d_t$；需要 full anchor 时，再增加有效行数乘 $d_s$ 的 payload 和位置/version。运输 hidden 避免了跨阶段传递有效行数乘词表大小的 logits。Actor 阶段仍需容纳当前 student 激活、完整冻结 teacher head、按需存在的 anchor head、目标临时块与 student 梯度；不能仅按 hidden payload 大小估计训练显存。
 
 ## 梯度与精度
 
 ### 条件 KL 与 logit 梯度
 
-以下先取相同输出支持。对某个固定前缀，令 student logits 为 $z_v$，teacher logits 为 $u_v$，$p_v=\operatorname{softmax}(z)_v$、$T_v=\operatorname{softmax}(u)_v$。目标为：
-
-$$
-K=\sum_v p_v(\log p_v-\log T_v).
-$$
-
-由 $\partial p_v/\partial z_j=p_v(\mathbf1_{v=j}-p_j)$ 和 $\sum_v\partial p_v/\partial z_j=0$：
-
-$$
-\begin{aligned}
-\frac{\partial K}{\partial z_j}
-&=\sum_v\frac{\partial p_v}{\partial z_j}(\log p_v-\log T_v+1)\\
-&=p_j\left(\log\frac{p_j}{T_j}-\sum_v p_v\log\frac{p_v}{T_v}\right)\\
-&=p_j\left(\log\frac{p_j}{T_j}-K\right).
-\end{aligned}
-$$
-
-代码还使用等价的 logit-gap 表达。设 $g=\sum_v p_v(z_v-u_v)$、$Z_p=\sum_v e^{z_v}$、$Z_T=\sum_v e^{u_v}$，则：
-
-$$
-K=g-\log Z_p+\log Z_T,\qquad
-\frac{\partial K}{\partial z_v}=p_v(z_v-u_v-g).
-$$
-
-[RecomputedKL](../../../../verl/trainer/distillation/full_vocab.py) 保存 `log_zp/mean_gap`，backward 重新计算 logit 块，正是使用后一表达式。对矩阵 $Z_s=H_sW_s^\top$，记 $G=\partial\sum_iK_i/\partial Z_s$，则：
-
-$$
-\frac{\partial L}{\partial H_s}=GW_s,\qquad
-\frac{\partial L}{\partial W_s}=G^\top H_s.
-$$
-
-Hidden 梯度继续传入 student backbone，head 梯度由 FSDP 处理。Teacher hidden/head 已 detach，没有对应训练梯度。全局归一化的上游标量会同时缩放这两路梯度。
+完整 softmax 求导维护在[OPD 梯度推导](full-kl-walkthrough.md#4-full-kl-opd从-kl-到每个-logit-的梯度)；MDPO/BPO 的推导紧随其后。由 logits 梯度到 hidden/head 的链式法则见[线性 head 的两个反传出口](full-kl-kernel-walkthrough.md#31-线性-head-的两个反传出口)。
 
 ### Precompute 的前反向分工
 
-[PrecomputedKL](../../../../verl/trainer/distillation/full_vocab.py) 在自定义 autograd forward 内按 token 块执行以下工作：计算师生 logits → log-softmax 与逐行 KL → 计算 $G$ → 累积 `dh/dw` → 释放当前块 logits/VJP 临时量。Forward 最后保存的是 `dh/dw`，返回可微 token sum 和不可微行诊断。
-
-Backward 只将缓存梯度乘上上游标量，并传回 `hs/ws`；它没有提前执行 optimizer，也没有提前完成 backbone backward。`precompute_fused` 共用这套累积与 backward，只替换每个 token 块的行归约实现。自定义 backward 使用 `once_differentiable`，只保证一阶梯度，不能据此做二阶优化。
+逐行代码、分块流程图与 upstream 缩放见[Precompute 的前向与反向分工](full-kl-kernel-walkthrough.md#4-precompute-的前向与反向分工)。
 
 ### 生产精度
 
-CUDA BF16 hidden/head 的投影由 [project](../../../../verl/utils/linear.py) 使用 BF16 输入、FP32 输出；该路径的 log-softmax、KL 与行统计在 FP32 中计算。Precompute 的 `dh/dw` 用 FP32 缓冲累计，保存前转换回输入 dtype；logit VJP 也会转换为 hidden dtype 再参与梯度 GEMM。普通 CUDA BF16 投影的 autograd 兼容入口是 [ProjectionFP32](../../../../verl/utils/linear.py)。
-
-因此 FP32 loss 不表示 backbone、投影输入和所有梯度存储都是 FP32。CPU BF16 等回退路径也不自动具有 CUDA `out_dtype=float32` 的性质。理论上 KL 非负，浮点误差下很小的负值应按[精度研究](../research/2026-10-24-KL精度误差模型与诊断接口走读.md)分析；生产 Full-KL 没有用 loss clamp 把它强行截为零。
+投影、归约、梯度 GEMM 与缓存 dtype 的完整链条见[CUDA BF16 精度链](full-kl-kernel-walkthrough.md#81-cuda-bf16-路径的精度链)；target、小方差及 MDPO 小残差的稳定求值见[数值稳定性](full-kl-kernel-walkthrough.md#6-target-与小残差的数值稳定性)。
 
 ## Backend 与输出支持
 
 ### Backend 的实际工作分配
 
-| Backend | Forward | Backward 与保存内容 |
-| --- | --- | --- |
-| `dense` | 所有选中行的完整 logits 与普通 autograd | 保留普通计算图；适合小规模数值参考 |
-| `recompute` | 按 token 块投影整个词表，保存每行 KL、student log-normalizer、mean gap | 保存 hidden/head 和行统计，按块重算 logits/VJP |
-| `streaming` | token、vocab 双重分块，在线累计归一化常数和 gap | 保存 hidden/head 和行统计；按 token/vocab 块重算 |
-| `cached` | 双重分块投影到当前 token 块的两个 FP32 logits 缓冲，再分块归约 | 仍复用 `RecomputedKL.backward`；logits 缓冲不跨 forward/backward 保留 |
-| `precompute` | token 块投影整个词表，普通行计算，预先累计 `dh/dw` | 保存 `dh/dw`，backward 只施加上游缩放 |
-| `precompute_fused` | CUDA BF16 时以 Triton 融合行计算，其余条件回退普通行计算 | 与 `precompute` 相同 |
-| `liger` | 调用外部 `LigerFusedLinearJSD(jsd_beta=1, temperature=1)` 并转换成 token sum | 使用外部实现；当前不提供 `token_kl` |
-
-`cached` 的缓存旨在避免 forward 归约重复投影，不是缓存 logits 供 backward 直接使用。Precompute 主路径的最大 logits 块仍是 `[token_chunk,V_s]`，`vocab_chunk_size` 不会把它变成 `[token_chunk,vocab_chunk]`；该参数控制 streaming/cached 的词表分块及额外 teacher 支持修正。`recompute` 的主体前反向都使用整词表宽度。
-
-所有 backend 都给出同一数学条件 KL，浮点运算次序、临时显存和计算量不同。除 `liger` 外，本地后端均暴露 detached 行值供位置统计复用；`token_kl=None` 表示缺少这项能力，不表示 KL 为零。全局位置日志不会为此另做一次投影。
+各 backend 的 forward/backward 分工、支持矩阵和 chunk 参数含义维护在[Backend 对照](full-kl-kernel-walkthrough.md#5-backend-的实际差别)。
 
 ### 教师多出的输出行
 
-当 $V_t>V_s$，令 $S=\{0,\ldots,V_s-1\}$，student 在 $S$ 外的概率为零。只把 teacher head 截到 $S$ 后重新 softmax，会得到 $T_S$，它与完整 teacher $T$ 的关系为：
-
-$$
-T(v)=T_S(v)\frac{Z_{T,S}}{Z_T},\qquad v\in S.
-$$
-
-因此：
-
-$$
-D_{KL}(p\Vert T)
-=D_{KL}(p\Vert T_S)+\log\frac{Z_T}{Z_{T,S}}.
-$$
-
-[teacher_support_correction](../../../../verl/trainer/distillation/full_vocab.py) 分块计算公共支持与额外支持的 log-normalizer，用 `softplus(log_Z_extra-log_Z_shared)` 得到修正，再补到标量和逐行 KL。固定前缀下修正与 student 参数无关，原先 equal-support backend 的 VJP 可以继续使用。$V_t<V_s$ 则明确报错。
-
-这里处理的是按相同 token ID 排列的 head 行数差异；代码没有实现任意 tokenizer 词表之间的语义映射。
+支持修正的数学关系及其对 MDPO/BPO 的影响见[Teacher 额外输出行](full-kl-walkthrough.md#8-teacher-额外输出行的影响)；分块 softplus 实现见[支持修正实现](full-kl-kernel-walkthrough.md#82-teacher-支持修正的实现)。
 
 ### 默认值与空行
 
-[统一入口](../../run_math_opd_ablation_fsdp2.sh) 的 `custom --method full_kl` 默认使用 precompute、token_chunk_size=512、vocab_chunk_size=8192，异步写与预取关闭；编号 full 预设保持异步写与预取开启。Python 数值 API 的默认 backend 仍为 recompute；不要把数值函数默认值或历史脚本默认值当作当前训练入口默认。
+默认值取决于调用层，以下均指没有额外覆盖时：
+
+| 入口 | Backend | Token chunk | Hidden async write / prefetch |
+| --- | --- | --- | --- |
+| `FullVocabConfig`；原 `full_reverse_kl/full_reverse_kl_result` 数值 API | recompute | 512 | 配置类为 False/False；数值 API 不管理 IO |
+| `full_vocab_objective_result` 数值 API | precompute | 512 | 不管理 IO |
+| 统一入口 `custom --method full_kl/mdpo/bpo` 的 full-vocab 设置 | precompute | 512 | False/False |
+| E13–E43 中的 full 预设 | precompute | 512 | True/True |
+| E44–E47 | precompute_fused | 128 | True/True |
+
+这些入口的 vocab chunk 默认都是 8192，其实际用途仍受 backend 限制。当前 E44–E47 的完整设置见[训练配方](../训练配方.md#mirror-comparison)；环境与 Hydra 可以覆盖，最终以解析配置为准。
 
 某个 rank 没有有效预测行时，kernel 返回 `hs.sum()*0 + ws.sum()*0`，保留 student 两路梯度连接，让它参与同一次分布式更新。整个 mini-batch 的全局有效 token 数为零则由 engine 拒绝训练。有效 token mask 和 DP 缩放见[数据与归一化](data-and-loss.md#三种-mask-与分母)。
 

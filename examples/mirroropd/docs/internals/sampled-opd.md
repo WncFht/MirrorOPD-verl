@@ -9,11 +9,11 @@ Sampled OPD 在 student 已生成的动作上读取 teacher 概率，并在 acto
 | 概率 | 字段或来源 | 同一批复用时 | 用途 |
 | --- | --- | --- | --- |
 | 行为策略 $\beta$ | `rollout_log_probs`，生成时记录 | 固定 | 显式 IS/PPO 分母、rollout advantage |
-| 更新前锚点 $q$ | `old_log_probs`，通常由 actor 在更新前重算 | 固定 | vanilla PPO 分母、入口诊断 |
+| 更新前锚点 $q$ | `old_log_probs`，通常由 actor 在更新前重算 | 固定 | vanilla PPO 分母、旧模式诊断，以及 sampled MDPO 的冻结目标 |
 | 当前 student $p_\theta$ | `model_output['log_probs']`，本次 forward | 随参数变化 | 可微 loss 输入、current advantage 的数值 |
 | Teacher $T$ | `teacher_logprobs`，冻结 teacher 评分 | 固定 | 蒸馏监督 |
 
-Behavior 与 anchor 即使来自同一份 student 参数，也分别由 vLLM 和训练 engine 计算，数值不保证完全相同。`bypass_mode=True` 才会显式将 `old_log_probs` 赋为 rollout 概率；显式 sampled 模式禁止 bypass，vanilla 保留这条兼容路径。
+Behavior 与 anchor 即使来自同一份 student 参数，也分别由 vLLM 和训练 engine 计算，数值不保证完全相同。`bypass_mode=True` 才会显式将 `old_log_probs` 赋为 rollout 概率；Legacy 显式 sampled 与 sampled MDPO 都禁止 bypass；vanilla 保留这条兼容路径。
 
 显式 sampled 配置要求训练采样 `temperature=1, top_p=1, top_k=-1, do_sample=True, repetition_penalty=1`，并记录 `processed_logprobs`。这些约束使分母对应实际的无截断 token 采样分布，避免把另一种采样器的概率直接代入 IS。校验入口为 [validate_sampled_token_distillation](../../../../verl/utils/config.py)；它还禁止外部 rollout IS/RS、ref/critic、额外 entropy/KL 目标及自定义 logits processor。数值实现差异仍应通过 anchor/behavior 指标检查。
 
@@ -36,7 +36,7 @@ Legacy sampled 路径要求 `loss_mode=k1`、`use_policy_gradient=True`、`use_t
 
 `--method mdpo --estimator sampled` 使用 b=log q+f(log T-log q)，每次更新构造 h=log p-b。训练项为 `(p/beta) * stopgrad(h) / eta`，只让 ratio 求导。eta<1 的 q 在 worker 调用内冻结，eta=1 直接令 b=log T，无需 anchor 评分。
 
-当前实现保留 1/eta，不使用 PPO clip、NoIS 或 ±20 guard。其期望梯度在正确行为概率及支持条件下对应 full MDPO；日志中的 surrogate 数值与 target KL 相差冻结常数。完整目标与范围见[实现说明](../mirror-descent/实现方案.md#objectives)。
+当前实现保留 1/eta，不使用 PPO clip、NoIS 或 ±20 guard。其期望梯度在正确行为概率及支持条件下对应 full MDPO。固定前缀上，surrogate 的动作期望为 $(\mathrm{KL}(p\Vert m)-\log Z_m)/\eta$；实际有限样本日志还有采样误差，不能把每条 sampled loss 都解释成精确 target KL 减去冻结常数。完整目标与范围见[实现说明](../mirror-descent/实现方案.md#objectives)。当前所有 mirror 设置均要求 `token-mean`；后文 legacy sampled 的其他聚合选择不能直接套到 sampled MDPO。
 
 ## 显式 sampled 分支
 
@@ -111,34 +111,7 @@ flowchart TD
 
 ## 与 Full-KL 的梯度关系
 
-以下推导固定一个前缀 $s$，假定 teacher 冻结、$\beta$ 覆盖 $p_\theta$ 的支持、没有 ratio guard/PPO clipping，也没有额外动作筛选。Full-KL 在该前缀的目标是：
-
-$$
-K_s(\theta)=\sum_a p_\theta(a\mid s)\log\frac{p_\theta(a\mid s)}{T(a\mid s)}.
-$$
-
-对参数求导，利用 $\nabla p=p\nabla\log p$ 及 $\sum_a\nabla p_\theta(a\mid s)=0$：
-
-$$
-\begin{aligned}
-\nabla K_s
-&=\sum_a \nabla p_\theta(a\mid s)\left(\log\frac{p_\theta(a\mid s)}{T(a\mid s)}+1\right)\\
-&=\sum_a p_\theta(a\mid s)\log\frac{p_\theta(a\mid s)}{T(a\mid s)}\nabla\log p_\theta(a\mid s).
-\end{aligned}
-$$
-
-Current token-IS 的 advantage 已 detach，因而其梯度期望为：
-
-$$
-\begin{aligned}
-\mathbb E_{a\sim\beta}[\nabla(-rA_{current})]
-&=\sum_a\beta(a\mid s)\frac{p_\theta(a\mid s)}{\beta(a\mid s)}
-\log\frac{p_\theta(a\mid s)}{T(a\mid s)}\nabla\log p_\theta(a\mid s)\\
-&=\nabla K_s.
-\end{aligned}
-$$
-
-这给出 current-IS 与 Full-KL 的对应关系：前者对动作采样估计梯度，后者在当前前缀上求完整动作和。有限 batch 的梯度不会逐次相同；反复使用同一批固定动作也不会产生新的独立样本。
+固定前缀、正确 behavior 概率、支持覆盖且无 ratio guard/PPO clipping 时，current token-IS 的动作期望梯度等于 full MDPO；令 b=log T 即为普通 Full-KL。完整求导统一见[与 sampled current-IS 的精确联系](full-kl-walkthrough.md#73-与-sampled-current-is-的精确联系)。有限 batch 的梯度不会逐次相同；复用固定动作也不会产生新的独立样本。
 
 其他组合在复用时有不同含义：
 
@@ -160,7 +133,7 @@ $$
 Vanilla 比值的分母为 anchor：
 
 $$
-r_{old}=\exp\left(\operatorname{clip}(\log p_\theta-\logq,-20,20)\right).
+r_{old}=\exp\left(\operatorname{clip}(\log p_\theta-\log q,-20,20)\right).
 $$
 
 先定义普通 PPO token loss $u=\max(-r_{old}A,-\operatorname{clip}(r_{old},1-\epsilon_l,1+\epsilon_h)A)$。现有 vanilla 还对负 advantage 应用 dual-clip：
@@ -182,6 +155,8 @@ Vanilla 的 `old_log_probs` 在 batch 入口计算一次，current advantage 在
 Sampled surrogate、单动作 $\log p_\theta-\log T$ 和完整词表 KL 是不同观测。Sampled 值允许为负，reinforce 的显示值也不是上述 log-prob MSE 的函数值，虽然 detach 后的梯度可与 MSE 一致。不能仅比较这些模式的 `loss` 高低来判定蒸馏质量。
 
 `_sampled_token_loss` 记录有效 token 数、current/rollout 信号异号数、IS guard 数和生效的 PPO clip 数；启用原始观测时还记录 current/behavior/anchor/teacher 的差异。逐 update 指标来自产生该次梯度的 forward，参数更新后没有自动在同一 batch 上再测一遍。规范字段与统计出口分别见[指标字典](../experiments/metrics/指标字典.md)和[指标系统](metrics.md)。
+
+Sampled MDPO 的 `distill/mdpo/objective` 已除 eta；按需采集 current/behavior、存在的 current/anchor 和 `advantage/mdpo/*`。它没有完整词表的 teacher/target/anchor KL 或 target log Z，也没有自动位置分桶。不要将 sampled pair 的 log-ratio 估计与 full-vocab 精确条件 KL 混用。当前 full MDPO/BPO 的位置 namespace 与诊断开关见[指标矩阵](metrics.md#当前目标的指标矩阵)。
 
 新增 sampled 变体应复用现有布局、mask、detach 和 `LossContext`。若改变数据采样、比值分母或教师信号，需同时修改配置约束与梯度测试，不能只改一个 mode 名称。
 

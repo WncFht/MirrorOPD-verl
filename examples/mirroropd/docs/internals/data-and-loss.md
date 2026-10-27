@@ -10,23 +10,25 @@
 | --- | --- | --- | --- |
 | `prompts/responses` | `[P]`、`[L]` token IDs | AgentLoop | teacher/actor 输入与 response 切片；本轮固定 |
 | `input_ids/position_ids` | 完整输入 `[N]` | AgentLoop TQ postprocess | 师生 backbone；本轮固定 |
-| `loss_mask` | response target `[L]` | postprocess 初始赋为 `response_mask` | 全局分母；Full-KL 选行 |
+| `loss_mask` | response target `[L]` | postprocess 初始赋为 `response_mask` | 全局分母；所有 full-vocab 目标选行 |
 | `response_mask` | response target `[L]` | AgentLoop，vanilla correction 可改写 | sampled loss 实际应用位置 |
-| `rollout_log_probs` | response target `[L]`，FP32 | vLLM 返回，经 `AgentLoopOutput.as_dict` 存储 | behavior；显式 sampled 必需；Full-KL 入口关闭收集 |
+| `rollout_log_probs` | response target `[L]`，FP32 | vLLM 返回，经 `AgentLoopOutput.as_dict` 存储 | behavior；显式 sampled 与 sampled MDPO 必需；full-vocab 入口关闭收集 |
 | `teacher_ids/teacher_logprobs` | 完整预测位置 `[N,1]` | shared teacher scorer | sampled 教师监督；本轮固定 |
 | `old_log_probs` | response target `[L]` | Legacy 由 Trainer 评分；sampled MDPO eta<1 由 worker scope 评分；bypass 仅用于 legacy | vanilla 分母、旧模式诊断或 MDPO 冻结 q；本轮固定 |
 | `advantages/returns` | response target `[L]` | Trainer 的通用 advantage 步骤 | 任务 PPO；当前纯 OPD 最终目标不使用 |
-| `teacher_hidden/teacher_positions` | `[n,d_t]`、`[n]` | Full-KL teacher engine | actor 按样本读取；本轮固定 |
+| `teacher_hidden/teacher_positions` | `[n,d_t]`、`[n]` | full-vocab teacher engine | actor 按样本读取；本轮固定 |
 | `anchor_hidden/anchor_positions/anchor_version` | `[n,d_s]`、`[n]`、调用标识 | actor 调用开始时的 no-grad capture，经 TQ 保存 | full MDPO eta<1 与所有 BPO；版本和位置均需匹配 |
-| `anchor_head` | `[V_s,d_s]` | wrapped head callback 内独立复制 | 调用级 holder，未注册为模型参数，不进入 TQ/checkpoint |
+| `engine.mirror_anchor_head` | `[V_s,d_s]` | wrapped head callback 内独立复制 | 调用级 holder，未注册为模型参数，不进入 TQ/checkpoint |
 | `mirror_objective_sum/mirror_count` | 未除 eta 的标量 sum/有效行数 | full objective dispatcher | loss 层只除一次 eta，再沿用全局分母 |
+| `mirror_statistics` | 各诊断的未除 eta 标量 sum | engine 汇总 `token_diagnostics` | loss 层构造全局 ratio 观测；当前没有诊断位置桶 |
+| `mirror_position_sums/counts` | `[10]`，原始 objective sum / 有效 token count | engine 按 response 相对位置分桶 | loss 层对 sums 除 eta；不进入反传 |
 | `sample_keys/sample_partition` | 样本身份/partition metadata | TQ bridge | shuffle 后定位 hidden；不参与数值计算 |
 | `model_output['log_probs']` | 完整预测位置，packed/nested | 每次 student forward | sampled loss；该次 forward 的计算图 |
 | `full_kl_sum/full_kl_count` | 标量 sum/有效行数 | Full-KL head 回调 | 训练归一化与原始 KL 观测 |
 
 `teacher_ids` 保持通用教师输出协议；当前 sampled k1 loss 使用已对齐的 `teacher_logprobs`，不再按 `teacher_ids` 做一次 gather。当前 student 与 teacher 的 sampled log-prob 都已由各自 forward 按下一 token target 取出。
 
-Sampled 路径的 OPD advantage 是 loss 内部临时张量，不写回 TQ 的任务 `advantages`。普通 Full-KL endpoint 不创建上述任务 advantage 或 anchor；其他 mirror 设置不创建任务 advantage，按 spec 准备自己的 q，详见[两套 advantage 的消费者](training-loop.md#两套-advantage-的消费者)。
+Sampled 路径的 OPD advantage 是 loss 内部临时张量，不写回 TQ 的任务 `advantages`。所有 mirror 设置都不创建任务 advantage；MDPO eta=1（包括 sampled）也不准备 q，其余设置按 spec 准备 q，详见[两套 advantage 的消费者](training-loop.md#两套-advantage-的消费者)。
 
 ## 样本身份
 
@@ -107,7 +109,7 @@ $$
 \ell_r=\frac{D}{N}S_r.
 $$
 
-DP 梯度平均后得到全局 token-mean 的梯度。显式 sequence 分母同样保留配置的全局 batch 数，包括零贡献序列。
+上式直接对应 Full-KL endpoint。对 full MDPO/BPO，如果 $S_r^{\mathrm{raw}}$ 是 kernel 返回的未除 eta 的 sum，则局部训练标量为 $DS_r^{\mathrm{raw}}/(N\eta)$；sampled MDPO 在 `aggregate` 后同样只除一次 eta。DP 梯度平均后得到相应全局 token-mean 梯度。Frozen q/T 不接收梯度，日志 numerator 也不乘 DP 大小。显式 sequence 分母同样保留配置的全局 batch 数，包括零贡献序列。
 
 若 rank $r$ 有多个 micro-batch，其 token loss sum 为 $S_{r,k}$，梯度累积与 DP 平均为：
 
@@ -120,11 +122,11 @@ $$
 
 拒绝采样后被拒绝 token 是原总体中的零贡献。例如原来 6 个 token，保留 3 个，保留位置的单位 loss 得到均值 $3/6$，而不是 $3/3$。全部被拒绝但原总体非空时可以产生零 loss；这本身不等于跳过 optimizer，动量或 weight decay 仍可能改变参数。
 
-这里的拒绝筛选对应既有 vanilla correction 路径；显式 sampled 校验禁止外部 RS，Full-KL 主链跳过 correction。Full-KL 的选行依据是 `loss_mask`，不能通过只改 `response_mask` 来改变它的训练位置。
+这里的拒绝筛选对应既有 vanilla correction 路径；显式 sampled 校验禁止外部 RS，Full-KL 主链跳过 correction。所有 full-vocab 目标的选行依据都是 `loss_mask`，不能通过只改 `response_mask` 来改变它们的训练位置。
 
 ### 其他 sampled 聚合模式
 
-公共配方与 Full-KL 使用 `token-mean`。Sampled 可沿用 [agg_loss](../../../../verl/trainer/ppo/core_algos.py) 的其他模式。设全局序列数为 $B_g$、序列 $i$ 的有效 token 数为 $L_i$、token loss 为 $\ell_{it}$、mask 为 $m_{it}$，下表给出 DP 平均后的目标；空序列贡献为零。
+公共配方、Full-KL 与所有 mirror 设置使用 `token-mean`。只有 legacy sampled 可沿用 [agg_loss](../../../../verl/trainer/ppo/core_algos.py) 的其他模式。设全局序列数为 $B_g$、序列 $i$ 的有效 token 数为 $L_i$、token loss 为 $\ell_{it}$、mask 为 $m_{it}$，下表给出 DP 平均后的目标；空序列贡献为零。
 
 | 模式 | 全局聚合目标 |
 | --- | --- |

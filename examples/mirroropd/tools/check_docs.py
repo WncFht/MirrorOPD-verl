@@ -82,8 +82,11 @@ def python_symbols(text):
 
 def maintained_pages(root):
     docs = root / DOCS
-    pages = [root / "examples/mirroropd/README.md", docs / "README.md", docs / "architecture.md"] + sorted(
-        (docs / "internals").glob("*.md")
+    pages = (
+        [root / "examples/mirroropd/README.md", docs / "README.md", docs / "architecture.md"]
+        + sorted((docs / "internals").glob("*.md"))
+        + sorted((docs / "infra" / "profile").glob("*.md"))
+        + sorted((docs / "full-vocab").glob("*.md"))
     )
     tracked = subprocess.check_output(
         ["git", "-C", str(root), "ls-files", "-z", "--", "examples/mirroropd/README.md", str(DOCS)], text=True
@@ -121,18 +124,23 @@ def check_pages(pages):
             if not path.exists():
                 # Raw evidence remains locally available but is deliberately absent from source clones.
                 ignored = False
-                if path.is_relative_to(ROOT) and path.suffix in {
-                    "",
-                    ".json",
-                    ".jsonl",
-                    ".gz",
-                    ".log",
-                    ".csv",
-                    ".tex",
-                    ".pdf",
-                    ".parquet",
-                    ".txt",
-                }:
+                local_output = path.is_relative_to(ROOT / "outputs")
+                if path.is_relative_to(ROOT) and (
+                    local_output
+                    or path.suffix
+                    in {
+                        "",
+                        ".json",
+                        ".jsonl",
+                        ".gz",
+                        ".log",
+                        ".csv",
+                        ".tex",
+                        ".pdf",
+                        ".parquet",
+                        ".txt",
+                    }
+                ):
                     ignored = (
                         subprocess.run(
                             [

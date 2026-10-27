@@ -27,6 +27,14 @@ Engine 通过 `optimizer_step_applied` 提供 `True/False/None`。`None` 表示�
 
 在这条例子中，如果最后一次 `train_batch` 正常返回，scheduler 调用一次。即使最后一次也因为非有限梯度跳过，worker 仍按末次迭代标记调用 scheduler；如果计算抛异常而没有到达调用点，则不能记作已推进。`ppo_epochs` 增加的是 optimizer 尝试次数，学习率调度并不自动改为同样的频率。
 
+## 完成进度与云端状态
+
+`step/outer=k` 出现在 update 记录中，只说明这次更新属于第 k 轮。根据 [PPOTrainer.fit](../../../../verl/trainer/ppo/v1/trainer_base.py) 的顺序，actor 更新之后还有按需 checkpoint、权重同步、验证、TQ 清理及 outer 日志。因此，最后一条 update 已到本轮预期次数，也不代表整轮收尾已经完成。
+
+核对进度时分别报告最后的 update attempt/applied 计数、最后完整 outer 汇总和最后验证坐标。例如每轮 16 次更新，第 k 轮已经记录 16 次更新而 outer 汇总仍停在 k−1 时，应保留这一差别，不能补造已完成 outer。只有完整 outer、无跳步且 batch=mini-batch，并满足完整轨迹和无额外填充等条件时，才能用 outer×reuse 校验成功更新数。
+
+云端 summary 各字段可能来自不同记录：最后的训练 loss、上一轮 rollout 长度和更早的验证分数不一定共享同一坐标。离线日志的上传/同步时间也可能晚于事件时间。判断实时训练是否运行、成功退出或为何失败，需要结合训练端进程、退出结果和异常日志；W&B 的 `running/failed/finished` 或某个有限 loss 不能独立证明这些事实。按同一 history 事件及其坐标比较指标，缺失尾段明确标为未同步或未记录。
+
 ## 保存和恢复的分工
 
 | 状态 | 所属路径 |
@@ -34,6 +42,7 @@ Engine 通过 `optimizer_step_applied` 提供 `True/False/None`。`None` 表示�
 | Student 参数、optimizer、scheduler | Engine checkpoint 保存和加载 |
 | Outer step、actor/critic 尝试与成功计数 | Trainer 的 `trainer_state.json` |
 | Teacher | 从配置的固定模型重新初始化；不并入 student checkpoint |
+| Mirror anchor、q/T hidden/head 缓存 | 调用级或 outer 级临时状态，不写入 student checkpoint；恢复后按新调用重建 |
 | Rollout 权重 | 恢复 student 后经 checkpoint manager 同步 |
 | 未完成 prompt | Trainer 的 inflight 重发流程 |
 
@@ -41,8 +50,10 @@ Engine 通过 `optimizer_step_applied` 提供 `True/False/None`。`None` 表示�
 
 Scheduler 状态由 engine 保存与恢复，Trainer 不根据 optimizer 计数重建 scheduler。Student 的冻结 teacher head 缓存也不属于 checkpoint 参数。
 
+`trainer.save_freq/test_freq` 都按 outer step 判断。只有对应频率大于 0 才启用周期执行，并在正常到达最后一个训练 step 时执行一次；负值不会因为到达最后 step 而自动保存或验证。`val_before_train` 独立控制初始验证。[E44–E47](../训练配方.md#mirror-comparison) 的正式默认值是 256 outer、每 32 outer 验证、每 128 outer 保存，不做初始验证。预计保存点不是保存成功的证据，仍需检查对应日志和文件。
+
 ## 恢复保证与验证
 
 [test_progress_on_cpu.py](../../../../tests/trainer/ppo/v1/test_progress_on_cpu.py) 覆盖计数、未知传播和文件校验；[test_update_records_on_cpu.py](../../../../tests/workers/test_update_records_on_cpu.py) 覆盖执行事实一致性；[test_full_vocab_fsdp2.py](../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 保存参数、完整 Adam 和 scheduler，再恢复并对同一 batch 执行下一次更新，逐 rank 精确比较状态。
 
-这种下一次更新等价验证不意味着随机生成、数据排队或任意故障点的端到端训练能够逐 token 重放。真实 1.5B 短训练和小模型恢复测试的覆盖范围分别见[验收报告](../refactoring/2026-10-25-主分支四卡验收.md)。
+这种下一次更新等价验证不意味着随机生成、数据排队或任意故障点的端到端训练能够逐 token 重放。原 Full-KL 验收见[四卡报告](../refactoring/2026-10-25-主分支四卡验收.md)；sampled/full MDPO 和 full BPO 的恢复测试由 [test_mirror_fsdp2.py](../../../../tests/special_distributed/test_mirror_fsdp2.py) 及[mirror 验收结果](../mirror-descent/实现方案.md#validation)维护。

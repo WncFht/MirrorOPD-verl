@@ -13,7 +13,7 @@
 | 模式合同、更新计数、checkpoint 与历史验证 | [优势与 IS 消融及更新计数实现方案](2026-10-21-优势与IS消融及更新计数实现方案.md) |
 | Sampled-token、KL baseline、TA-OPD、ResOPD 的源码与实验比较 | [学习信号与梯度估计器审计](2026-10-21-OPD学习信号与梯度估计器对照.md) |
 | E1–E15 编号与学习/评测预算 | [训练配方](../experiments/sampled-ablation/README.md) |
-| 共用分块算法、math 配方的显存/通信预算与条件步时估算 | [词表蒸馏的计算与显存预算](../full-vocab/2026-10-22-词表蒸馏的计算与显存预算.md) |
+| Full-vocab 算子性能、payload 与工作区容量 | [算子性能与容量](../infra/profile/operators.md#容量预算) |
 | Reverse-KL 实验排序、top-k 支持集与 One-Shot 代码审计 | [实验排序与支持集](2026-10-21-Reverse-KL实验排序与Top-k支持集.md) |
 | Full-vocab 工程、参考资料与实现计划 | [Full-vocab 目录](../full-vocab/README.md) |
 | CPU 梯度验算 | [verify_fixed_prefix.py](scripts/verify_fixed_prefix.py) |
