@@ -1,0 +1,197 @@
+{
+  "date": "2026-10-27",
+  "scope": "Numerical probes and launcher configuration tests; no training or timing benchmark",
+  "liger_pr_head": "740a415a55bdc6bc981f970e6494737fc0891126",
+  "installed": {
+    "torch": "2.11.0+cu128",
+    "triton": "3.6.0",
+    "flash-attn": "2.8.3",
+    "liger-kernel": "0.8.4"
+  },
+  "devices": {
+    "cpu": {
+      "groups": {
+        "random": {
+          "cases": 27,
+          "rows": 6912,
+          "elements": 891648,
+          "max_production_abs_error": 9.094947017729282e-13,
+          "max_candidate_abs_error": 7.450580596923828e-09,
+          "different_elements": 6277
+        },
+        "saved": {
+          "cases": 16,
+          "rows": 128,
+          "elements": 19447808,
+          "max_production_abs_error": 0.0,
+          "max_candidate_abs_error": 9.5367431640625e-07,
+          "different_elements": 299948
+        }
+      },
+      "tiny_witness": {
+        "case": "tiny_input_below_fp64_pivot_ulp",
+        "rows": 1,
+        "vocab": 3,
+        "production_max_abs_error": 9.999999682655225e-21,
+        "candidate_max_abs_error": 0.0,
+        "different_elements": 1,
+        "candidate_zero_but_reference_nonzero": 0,
+        "production_zero_but_reference_nonzero": 1
+      },
+      "geometric_witness": {
+        "production": [
+          [
+            0.0,
+            1.1920929132713809e-08
+          ]
+        ],
+        "naive_fp32_extension": [
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "reference": [
+          [
+            0.0,
+            1.1920928966180355e-08
+          ]
+        ]
+      }
+    },
+    "cuda": {
+      "groups": {
+        "random": {
+          "cases": 27,
+          "rows": 6912,
+          "elements": 891648,
+          "max_production_abs_error": 3.637978807091713e-12,
+          "max_candidate_abs_error": 7.450580596923828e-09,
+          "different_elements": 6394
+        },
+        "saved": {
+          "cases": 16,
+          "rows": 128,
+          "elements": 19447808,
+          "max_production_abs_error": 0.0,
+          "max_candidate_abs_error": 9.5367431640625e-07,
+          "different_elements": 299948
+        }
+      },
+      "tiny_witness": {
+        "case": "tiny_input_below_fp64_pivot_ulp",
+        "rows": 1,
+        "vocab": 3,
+        "production_max_abs_error": 9.999999682655225e-21,
+        "candidate_max_abs_error": 0.0,
+        "different_elements": 1,
+        "candidate_zero_but_reference_nonzero": 0,
+        "production_zero_but_reference_nonzero": 1
+      },
+      "geometric_witness": {
+        "production": [
+          [
+            0.0,
+            1.1920929132713809e-08
+          ]
+        ],
+        "naive_fp32_extension": [
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "reference": [
+          [
+            0.0,
+            1.1920928966180355e-08
+          ]
+        ]
+      }
+    }
+  },
+  "external_losses": [
+    {
+      "backend": "flash_attn_ce",
+      "value": 0.0,
+      "gradient": [
+        [
+          0.0,
+          1.5229991490173234e-08,
+          1.5229991490173234e-08
+        ]
+      ]
+    },
+    {
+      "backend": "project_ce",
+      "value": 3.045998298034647e-08,
+      "gradient": [
+        [
+          -3.045998298034647e-08,
+          1.5229991490173234e-08,
+          1.5229991490173234e-08
+        ]
+      ]
+    },
+    {
+      "backend": "precompute",
+      "offset": 0.0,
+      "value": 1.8175143397139264e-14,
+      "gradient": [
+        [
+          1.0303822682231067e-12,
+          -1.132566371415955e-12,
+          1.0218411674537548e-13
+        ]
+      ]
+    },
+    {
+      "backend": "liger",
+      "offset": 0.0,
+      "value": -1.0303822682231067e-12,
+      "gradient": [
+        [
+          0.0,
+          -1.1325662629957378e-12,
+          1.0218432003328282e-13
+        ]
+      ]
+    },
+    {
+      "backend": "precompute",
+      "offset": 32.0,
+      "value": 1.8175143397139264e-14,
+      "gradient": [
+        [
+          1.0303822682231067e-12,
+          -1.132566371415955e-12,
+          1.0218411674537548e-13
+        ]
+      ]
+    },
+    {
+      "backend": "liger",
+      "offset": 32.0,
+      "value": -1.0303822682231067e-12,
+      "gradient": [
+        [
+          0.0,
+          -1.1325662629957378e-12,
+          1.0218432003328282e-13
+        ]
+      ]
+    }
+  ],
+  "liger_patch_scope": {
+    "before_norm": "Qwen2RMSNorm",
+    "actor_forward_root": "Qwen2ForCausalLM.forward",
+    "module_rope_changed": true,
+    "new_teacher_norm": "LigerRMSNorm",
+    "new_teacher_mlp": "LigerSwiGLUMLP",
+    "note": "CPU construction only; no model forward, no explicit teacher Liger patch"
+  },
+  "launcher_tests": {
+    "passed": 18,
+    "duration_seconds": 37.15
+  }
+}
