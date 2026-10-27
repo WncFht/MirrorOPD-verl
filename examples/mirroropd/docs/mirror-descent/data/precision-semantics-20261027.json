@@ -1,0 +1,46 @@
+{
+  "scope": "CPU checks of installed Qwen2 dtype semantics, not a GPU training experiment.\n\nThe small tensors validate dtype propagation and rounding examples. They do not\nmeasure the contribution of an operator to the real checkpoint's KL rebound.\n",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.12.1",
+  "fresh_process_bf16_reduced_precision_reduction": true,
+  "qwen2_dtype_propagation": [
+    {
+      "embedding_output": "torch.bfloat16",
+      "frequency_buffer": "torch.float32",
+      "cos_sin_output": "torch.bfloat16",
+      "query_input": "torch.bfloat16",
+      "rotated_query": "torch.bfloat16",
+      "rmsnorm_output": "torch.bfloat16"
+    },
+    {
+      "embedding_output": "torch.float32",
+      "frequency_buffer": "torch.float32",
+      "cos_sin_output": "torch.float32",
+      "query_input": "torch.bfloat16",
+      "rotated_query": "torch.float32",
+      "rmsnorm_output": "torch.float32"
+    }
+  ],
+  "rope_buffer_bf16_then_fp32_max_error": 0.00017848610877990723,
+  "illustrative_addition_one_plus_0_001": [
+    {
+      "dtype": "torch.bfloat16",
+      "eps": 0.0078125,
+      "realized_residual_increment": 0.0
+    },
+    {
+      "dtype": "torch.float16",
+      "eps": 0.0009765625,
+      "realized_residual_increment": 0.0009765625
+    },
+    {
+      "dtype": "torch.float32",
+      "eps": 1.1920928955078125e-07,
+      "realized_residual_increment": 0.001000046730041504
+    }
+  ],
+  "source": {
+    "rope_forward": "    @torch.no_grad()\n    @dynamic_rope_update  # power user: used with advanced RoPE types (e.g. dynamic rope)\n    def forward(self, x, position_ids):\n        inv_freq_expanded = self.inv_freq[None, :, None].float().expand(position_ids.shape[0], -1, 1).to(x.device)\n        position_ids_expanded = position_ids[:, None, :].float()\n\n        device_type = x.device.type if isinstance(x.device.type, str) and x.device.type != \"mps\" else \"cpu\"\n        with maybe_autocast(device_type=device_type, enabled=False):  # Force float32\n            freqs = (inv_freq_expanded.float() @ position_ids_expanded.float()).transpose(1, 2)\n            emb = torch.cat((freqs, freqs), dim=-1)\n            cos = emb.cos() * self.attention_scaling\n            sin = emb.sin() * self.attention_scaling\n\n        return cos.to(dtype=x.dtype), sin.to(dtype=x.dtype)\n",
+    "rmsnorm_forward": "    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:\n        input_dtype = hidden_states.dtype\n        hidden_states = hidden_states.to(torch.float32)\n        variance = hidden_states.pow(2).mean(-1, keepdim=True)\n        hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)\n        return self.weight * hidden_states.to(input_dtype)\n"
+  }
+}
