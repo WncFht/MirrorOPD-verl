@@ -1,6 +1,6 @@
 # 训练执行
 
-[当前架构](../architecture/README.md)维护编排与生命周期；[训练设置](../../settings/训练设置.md)解释公共配方，实际run以解析config为准。
+[当前架构](../architecture/README.md)维护编排与生命周期；[训练设置](../../settings/训练设置.md)解释公共配方，实际 run 以解析 config 为准。
 
 - [模型与数据准备](资产准备.md)。
 - [共享资源池运行方式](2026-10-22-共享八卡运行与架构.md)。

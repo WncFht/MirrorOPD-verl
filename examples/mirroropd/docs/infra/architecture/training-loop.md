@@ -6,19 +6,19 @@
 
 [统一实验入口](../../../run_math_opd_ablation_fsdp2.sh) 用 E 编号选择包含默认算法的完整预设，`custom` 使用公共默认；`--method` 可覆盖为 sampled、Full-KL、MDPO 或 BPO。环境、方法选项与末尾 Hydra 参数按优先级覆盖。算法设置只由 [\_distillation_args.sh](../../../launchers/_distillation_args.sh) 构造，公共 launcher 管理数据、资源、teacher、optimizer 和运行记录。Math 只保留统一训练入口，预设和参数合并由标准库 [math_experiment.py](../../../launchers/math_experiment.py) 负责。E44–E47 已登记完整 Full-KL/MDPO/BPO 对照，可直接调用编号；模型、预算、验证和保存设置见[正式对照表](../../settings/训练设置.md#mirror-comparison)。E 编号及自动名称表示预设来源，覆盖后的真实设置以 `resolved_config.yaml` 为准，当前尚未实现对所有覆盖项的自动衍生标记。
 
-| 配置层 | 决定的行为 | 核对入口 |
-| --- | --- | --- |
-| `distillation.execution_mode` | 共享 FSDP teacher 或独立服务 | [DistillationConfig](../../../../../verl/workers/config/distillation.py) |
-| `distillation.distillation_loss.loss_mode` | 新命令使用 `k1` 或 `mirror`；旧 `full_reverse_kl` 配置仍可解析 | [resolve_distillation_spec](../../../../../verl/workers/config/distillation_spec.py) |
-| `distillation.distillation_loss.mirror` | objective、estimator、kappa/eta，推导 payload 与 anchor 需求 | [目标与支持矩阵](../numerics/mirror-objectives/实现方案.md#settings) |
-| `distillation.distillation_loss.policy_loss_mode` | `vanilla/reinforce/token_is/token_ppo` | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py) |
-| `distillation.distillation_loss.advantage_source` | sampled 使用 current 或冻结 rollout 信号 | [Sampled OPD](sampled-opd.md#显式-sampled-分支) |
-| `data.train_batch_size`、`rollout.n` | 每轮 prompt 数、每个 prompt 的 response 数 | [批次和更新预算](#从一次-actor-调用到实际更新) |
-| `actor.ppo_mini_batch_size`、`actor.ppo_epochs` | 每次更新的规模、同批数据复用次数 | [TrainingWorker.train_mini_batch](../../../../../verl/workers/engine_workers.py) |
-| `actor.ppo_max_token_len_per_gpu` | actor 每个 micro-batch 的动态 token 预算 | [FSDPEngine.forward_backward_batch](../../../../../verl/workers/engine/fsdp/transformer_impl.py) |
-| `distillation.shared_teacher.infer_max_token_len_per_gpu` | teacher forward 的独立 token 预算 | [教师生命周期](teacher.md) |
-| `rollout.log_prob_max_token_len_per_gpu` | actor engine 的无梯度评分预算，也用于 mirror anchor | [anchor 准备](teacher.md#anchor-准备与模型驻留) |
-| `distillation.distillation_loss.full_vocab.token_chunk_size` | head-loss 内部每块有效预测行数 | [Full-vocab](full-vocab.md#precompute-的前反向分工) |
+| 配置层                                                       | 决定的行为                                                     | 核对入口                                                                                         |
+| ------------------------------------------------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `distillation.execution_mode`                                | 共享 FSDP teacher 或独立服务                                   | [DistillationConfig](../../../../../verl/workers/config/distillation.py)                         |
+| `distillation.distillation_loss.loss_mode`                   | 新命令使用 `k1` 或 `mirror`；旧 `full_reverse_kl` 配置仍可解析 | [resolve_distillation_spec](../../../../../verl/workers/config/distillation_spec.py)             |
+| `distillation.distillation_loss.mirror`                      | objective、estimator、kappa/eta，推导 payload 与 anchor 需求   | [目标与支持矩阵](../numerics/mirror-objectives/实现方案.md#settings)                             |
+| `distillation.distillation_loss.policy_loss_mode`            | `vanilla/reinforce/token_is/token_ppo`                         | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py)                     |
+| `distillation.distillation_loss.advantage_source`            | sampled 使用 current 或冻结 rollout 信号                       | [Sampled OPD](sampled-opd.md#显式-sampled-分支)                                                  |
+| `data.train_batch_size`、`rollout.n`                         | 每轮 prompt 数、每个 prompt 的 response 数                     | [批次和更新预算](#从一次-actor-调用到实际更新)                                                   |
+| `actor.ppo_mini_batch_size`、`actor.ppo_epochs`              | 每次更新的规模、同批数据复用次数                               | [TrainingWorker.train_mini_batch](../../../../../verl/workers/engine_workers.py)                 |
+| `actor.ppo_max_token_len_per_gpu`                            | actor 每个 micro-batch 的动态 token 预算                       | [FSDPEngine.forward_backward_batch](../../../../../verl/workers/engine/fsdp/transformer_impl.py) |
+| `distillation.shared_teacher.infer_max_token_len_per_gpu`    | teacher forward 的独立 token 预算                              | [教师生命周期](teacher.md)                                                                       |
+| `rollout.log_prob_max_token_len_per_gpu`                     | actor engine 的无梯度评分预算，也用于 mirror anchor            | [anchor 准备](teacher.md#anchor-准备与模型驻留)                                                  |
+| `distillation.distillation_loss.full_vocab.token_chunk_size` | head-loss 内部每块有效预测行数                                 | [Full-vocab](full-vocab.md#precompute-的前反向分工)                                              |
 
 表中 `actor` 和 `rollout` 分别缩写 `actor_rollout_ref.actor` 与 `actor_rollout_ref.rollout`。vLLM 的调度预算、teacher/anchor 的无梯度评分预算、actor 的 forward/backward 预算，以及 head-loss 的 token chunk 具有不同消费者。前几项按输入序列工作量分批，head chunk 处理的是选中的有效预测行；它们都不直接决定 optimizer 更新次数。
 
@@ -84,15 +84,15 @@ flowchart TD
 
 [PPOTrainer.fit](../../../../../verl/trainer/ppo/v1/trainer_base.py) 管理 outer step；`step` 按 `parameter_sync_step` 调用 `_step_once`。Shared-sync 要求该值为 1。一次 [PPOTrainer._step_once](../../../../../verl/trainer/ppo/v1/trainer_base.py) 的实际顺序如下：
 
-| 阶段 | Sampled OPD | Full-vocab KL |
-| --- | --- | --- |
-| 取样 | `ReplayBuffer.sample` 等待并返回可训练样本 metadata | 相同 |
-| 释放生成资源 | `on_sample_end` 休眠 vLLM 副本，丢弃驻留权重与 KV cache | 相同 |
-| Reward 与分发 | 必要时完成 colocated reward，随后 `_balance_batch` | 相同 |
-| 教师评分 | teacher forward 得到已生成动作的 log-prob，发布 `teacher_ids/teacher_logprobs` | teacher backbone 得到有效预测位置的 `teacher_hidden/teacher_positions` |
-| 更新前 anchor | `_compute_old_log_prob` 重算 `old_log_probs`；bypass 时直接复制 rollout 概率 | 跳过 |
-| 通用 advantage | `_compute_advantage` 计算任务奖励对应的 `advantages/returns`，可执行既有 rollout correction | 跳过 |
-| Actor | `_update_actor` 传入 sampled 字段及调用元数据 | 仅传小字段与样本 key，hidden 按 micro-batch 读取 |
+| 阶段           | Sampled OPD                                                                                 | Full-vocab KL                                                          |
+| -------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 取样           | `ReplayBuffer.sample` 等待并返回可训练样本 metadata                                         | 相同                                                                   |
+| 释放生成资源   | `on_sample_end` 休眠 vLLM 副本，丢弃驻留权重与 KV cache                                     | 相同                                                                   |
+| Reward 与分发  | 必要时完成 colocated reward，随后 `_balance_batch`                                          | 相同                                                                   |
+| 教师评分       | teacher forward 得到已生成动作的 log-prob，发布 `teacher_ids/teacher_logprobs`              | teacher backbone 得到有效预测位置的 `teacher_hidden/teacher_positions` |
+| 更新前 anchor  | `_compute_old_log_prob` 重算 `old_log_probs`；bypass 时直接复制 rollout 概率                | 跳过                                                                   |
+| 通用 advantage | `_compute_advantage` 计算任务奖励对应的 `advantages/returns`，可执行既有 rollout correction | 跳过                                                                   |
+| Actor          | `_update_actor` 传入 sampled 字段及调用元数据                                               | 仅传小字段与样本 key，hidden 按 micro-batch 读取                       |
 
 通用 Trainer 的 ref/critic 分支仍存在，当前 shared-sync 校验禁止启用。显式 sampled 的非 vanilla 模式也禁止外部 rollout IS/RS 与 bypass；表中的可选 correction 是 vanilla 兼容路径的能力。
 
@@ -119,12 +119,12 @@ $$
 
 DP 大小为 $D$ 时，每个 rank 的 mini-batch 大小为 $Mn/D$。例如 `B=64,n=1,M=16,E=4,D=4`，每轮共有 16 次更新尝试，每次各 rank 处理 4 条序列。公共 launcher 默认 `M=B,n=1`，因而每轮尝试数就是 `PPO_EPOCHS`。失败轨迹填充等特殊情况应以 worker 实际记录为准。
 
-| 粒度 | 执行动作 | 参数是否变化 |
-| --- | --- | --- |
-| Outer step | 一次取样、teacher 评分、actor 调用及收尾 | 内部可有多次更新 |
-| Mini-batch update | 清梯度、累计所有 micro-batch 梯度、裁剪并尝试 optimizer step | 成功执行时变化 |
-| Micro-batch | 一部分序列的 forward/backward | 此阶段仅累积梯度 |
-| `ppo_epochs` | 遍历同一批固定轨迹多次 | 每次 mini-batch 更新后 current student 改变 |
+| 粒度              | 执行动作                                                     | 参数是否变化                                |
+| ----------------- | ------------------------------------------------------------ | ------------------------------------------- |
+| Outer step        | 一次取样、teacher 评分、actor 调用及收尾                     | 内部可有多次更新                            |
+| Mini-batch update | 清梯度、累计所有 micro-batch 梯度、裁剪并尝试 optimizer step | 成功执行时变化                              |
+| Micro-batch       | 一部分序列的 forward/backward                                | 此阶段仅累积梯度                            |
+| `ppo_epochs`      | 遍历同一批固定轨迹多次                                       | 每次 mini-batch 更新后 current student 改变 |
 
 Engine 在拆 micro-batch 前归约该次 mini-batch 的全局有效 token 数；每个 micro-batch 都使用同一个分母，见[归一化推导](data-and-loss.md#三种-mask-与分母)。动态切分按输入 token 工作量安排，分母按有效 response loss token 统计，这两个数量用途不同。
 

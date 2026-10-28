@@ -41,17 +41,17 @@ python -m examples.mirroropd.research transfer analyze_long_batch_transfer \
 
 ## 常用实验入口
 
-| 系列 | 准备／运行 | 统计／核验／绘图 |
-| --- | --- | --- |
-| S：稀疏 state 来源 | `state_transfer_probe` | `summarize_state_transfer`、`audit_state_transfer`、`plot_state_transfer` |
-| I：在线来源与交集 | `intersection_study` 的各子命令 | `summarize_intersection`、`analyze_intersection_controls`、`audit_intersection_study`、`plot_intersection_study` |
-| B：跨批、覆盖与顺序 | `batch_generalization`、`batch_gradient_geometry` | `summarize_batch_generalization`、`analyze_batch_controls`、`audit_batch_generalization`、`plot_batch_transfer_detail` |
-| N：batch 与阶段 | `batch_size_stage`、`probe_overlap_mass` | `analyze_batch_size_stage`、`audit_batch_size_stage`、`plot_batch_size_stage` |
-| L：40 批单遍 | `prepare_long_batch_transfer`、`long_batch_transfer`、`cross_score_long_transfer` | `analyze_long_batch_transfer`、`audit_long_batch_transfer`、`plot_long_batch_transfer` |
-| 筛选假说 | `prepare_filter_study`、`filter_train`、`filter_transfer_proxy`、`filter_synthetic`、`filter_if_eval` | `analyze_filter_study`、`analyze_filter_controls`、`audit_filter_study`、`plot_filter_study`；独立 CPU checker：`grade_filter_if.py` |
-| 生产 E48 与 KL 方向 | `analyze_completed_transfer`、`kl_direction_probe` | `analyze_forward_study`、`audit_forward_study`、对应 `plot_*` |
-| FSDP2 精度与 solver | `replay_fixed_prefix`、`audit_mirror_solvers`、`factor_mirror_precision` | `summarize_mirror_solvers`、`summarize_precision_localization`、`summarize_opd_transfer`、`plot_precision_report` |
-| 优化器历史与实际位移 | `audit_optimizer_history`、`probe_mirror_forward` | `summarize_optimizer_history` |
+| 系列                 | 准备／运行                                                                                            | 统计／核验／绘图                                                                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| S：稀疏 state 来源   | `state_transfer_probe`                                                                                | `summarize_state_transfer`、`audit_state_transfer`、`plot_state_transfer`                                                            |
+| I：在线来源与交集    | `intersection_study` 的各子命令                                                                       | `summarize_intersection`、`analyze_intersection_controls`、`audit_intersection_study`、`plot_intersection_study`                     |
+| B：跨批、覆盖与顺序  | `batch_generalization`、`batch_gradient_geometry`                                                     | `summarize_batch_generalization`、`analyze_batch_controls`、`audit_batch_generalization`、`plot_batch_transfer_detail`               |
+| N：batch 与阶段      | `batch_size_stage`、`probe_overlap_mass`                                                              | `analyze_batch_size_stage`、`audit_batch_size_stage`、`plot_batch_size_stage`                                                        |
+| L：40 批单遍         | `prepare_long_batch_transfer`、`long_batch_transfer`、`cross_score_long_transfer`                     | `analyze_long_batch_transfer`、`audit_long_batch_transfer`、`plot_long_batch_transfer`                                               |
+| 筛选假说             | `prepare_filter_study`、`filter_train`、`filter_transfer_proxy`、`filter_synthetic`、`filter_if_eval` | `analyze_filter_study`、`analyze_filter_controls`、`audit_filter_study`、`plot_filter_study`；独立 CPU checker：`grade_filter_if.py` |
+| 生产 E48 与 KL 方向  | `analyze_completed_transfer`、`kl_direction_probe`                                                    | `analyze_forward_study`、`audit_forward_study`、对应 `plot_*`                                                                        |
+| FSDP2 精度与 solver  | `replay_fixed_prefix`、`audit_mirror_solvers`、`factor_mirror_precision`                              | `summarize_mirror_solvers`、`summarize_precision_localization`、`summarize_opd_transfer`、`plot_precision_report`                    |
+| 优化器历史与实际位移 | `audit_optimizer_history`、`probe_mirror_forward`                                                     | `summarize_optimizer_history`                                                                                                        |
 
 前七行使用 `transfer`，后两行使用 `precision`。绘图需要设置 `FIGURE_VIZ_MPL` 为 figure-viz 的 `assets/mpl`；该依赖在解析命令参数后才加载，所以 `--help` 不要求安装或配置绘图 skill。`plot_precision_report` 保留原 `--figure-skill` 参数。
 
@@ -90,4 +90,4 @@ CUDA_VISIBLE_DEVICES='' python -m pytest -q \
 
 ## 文档工具迁移
 
-通用分析由 `analysis` 包维护，CLI 使用 `python -m examples.mirroropd.research.analysis.<模块>`；终止动作、Qwen和共享机制统计使用各自子包。当前双表入口为 `analysis.refresh_tables --logs-repo ../wandb-logs`，不读取人工catalog。数学核验归 `objectives` 与 `rollout_policy`；工程测量归 `examples.mirroropd.benchmarks`。冻结源码仍随证据保留。
+通用分析由 `analysis` 包维护，CLI 使用 `python -m examples.mirroropd.research.analysis.<模块>`；终止动作、Qwen 和共享机制统计使用各自子包。当前双表入口为 `analysis.refresh_tables --logs-repo ../wandb-logs`，不读取人工 catalog。数学核验归 `objectives` 与 `rollout_policy`；工程测量归 `examples.mirroropd.benchmarks`。冻结源码仍随证据保留。

@@ -10,12 +10,12 @@
 
 ## 主对照矩阵
 
-| 组别 | Objective | Estimator | eta / kappa | 每批 reuse | Anchor |
-| --- | --- | --- | --- | ---: | --- |
-| S1 | mdpo | sampled | 1 / 0 | 1 | 无 |
-| F1 | mdpo | full_vocab | 1 / 0 | 1 | 无 |
-| S16 | mdpo | sampled | 1 / 0 | 16 | 无 |
-| F16 | mdpo | full_vocab | 1 / 0 | 16 | 无 |
+| 组别 | Objective | Estimator  | eta / kappa | 每批 reuse | Anchor |
+| ---- | --------- | ---------- | ----------- | ---------: | ------ |
+| S1   | mdpo      | sampled    | 1 / 0       |          1 | 无     |
+| F1   | mdpo      | full_vocab | 1 / 0       |          1 | 无     |
+| S16  | mdpo      | sampled    | 1 / 0       |         16 | 无     |
+| F16  | mdpo      | full_vocab | 1 / 0       |         16 | 无     |
 
 S 使用 current residual、生成时行为概率作分母的未截断 token-IS；F 使用原教师 reverse KL endpoint。固定前缀、正确行为概率、完整支持及相同 p/T 数值定义下，S 的动作期望梯度对应 F；有限样本梯度和 loss 不要求逐次相等。[数学条件](../../architecture/full-kl-walkthrough.md#73-与-sampled-current-is-的精确联系)。
 
@@ -25,10 +25,10 @@ S 使用 current residual、生成时行为概率作分母的未截断 token-IS�
 
 ## 两层测量与工具选择
 
-| 层次 | 要回答的问题 | 工具决定 | 当前状态 |
-| --- | --- | --- | --- |
-| 固定前缀 | 相同 token/mask、模型初态下，teacher→actor 与 actor 的成本差多少 | 需补双 estimator 回放工具，复用现有 worker/engine/loss | 待实现；不提供虚假的可运行命令 |
-| 自然生成训练 | 两条实际生产路径每个 outer 的成本与工作量如何变化 | 直接使用 [run_math_opd_ablation_fsdp2.sh](../../../../run_math_opd_ablation_fsdp2.sh) | 已支持；命令见下文 |
+| 层次         | 要回答的问题                                                     | 工具决定                                                                              | 当前状态                       |
+| ------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------ |
+| 固定前缀     | 相同 token/mask、模型初态下，teacher→actor 与 actor 的成本差多少 | 需补双 estimator 回放工具，复用现有 worker/engine/loss                                | 待实现；不提供虚假的可运行命令 |
+| 自然生成训练 | 两条实际生产路径每个 outer 的成本与工作量如何变化                | 直接使用 [run_math_opd_ablation_fsdp2.sh](../../../../run_math_opd_ablation_fsdp2.sh) | 已支持；命令见下文             |
 
 完整训练不另写 launcher、不复制 Hydra 配置和 loss。使用 `custom --method mdpo --estimator sampled/full_vocab --eta 1 --kappa 0`，其余参数统一覆盖。不要使用 `--method sampled --policy-loss vanilla` 或只切到 legacy `token_is` 来代表已经精简的 sampled 主线；后者仍会进入 Trainer 的旧准备阶段。
 
@@ -57,20 +57,20 @@ S 使用 current residual、生成时行为概率作分母的未截断 token-IS�
 
 ## 共同配置
 
-| 项目 | 固定值 |
-| --- | --- |
-| 本机资源 | 同一组 4 张 H800；只使用已分配的 GPU 0–3，shared-sync、FSDP2、TP=1 |
-| 模型 | DeepSeek-R1-Distill-Qwen-1.5B student / JustRL-DeepSeek-1.5B teacher |
-| 数据 | DAPO，global prompt batch=mini-batch=64，n=1，seed=42 |
-| 长度 | Prompt cap4096、response cap7168；保留自然停止 |
-| 采样 | T=1、top-p=1、top-k=-1、do_sample=True、repetition_penalty=1 |
-| 数值 | Actor FP32 参数、BF16 mixed precision、FP32 归约；teacher BF16 |
-| Optimizer | AdamW，LR=1e-6（自然生成层）、betas=(0.9,0.999)、weight decay=0.01、clip_grad=1 |
-| 调度 | Constant LR、warmup=0；参数与 optimizer offload 开启；activation checkpointing 开启 |
-| 分批 | Actor/teacher token budget32768；主对照均关闭 gradient accumulation no-sync |
-| Full 实现 | precompute_fused，token chunk128、vocab chunk8192，hidden async write/prefetch开启 |
-| 诊断 | Entropy、mirror KL diagnostics、分位数关闭；保留生产默认的基本更新记录 |
-| 日志 | Console+file，两侧相同；运行目录不复用，不恢复旧 checkpoint |
+| 项目      | 固定值                                                                              |
+| --------- | ----------------------------------------------------------------------------------- |
+| 本机资源  | 同一组 4 张 H800；只使用已分配的 GPU 0–3，shared-sync、FSDP2、TP=1                  |
+| 模型      | DeepSeek-R1-Distill-Qwen-1.5B student / JustRL-DeepSeek-1.5B teacher                |
+| 数据      | DAPO，global prompt batch=mini-batch=64，n=1，seed=42                               |
+| 长度      | Prompt cap4096、response cap7168；保留自然停止                                      |
+| 采样      | T=1、top-p=1、top-k=-1、do_sample=True、repetition_penalty=1                        |
+| 数值      | Actor FP32 参数、BF16 mixed precision、FP32 归约；teacher BF16                      |
+| Optimizer | AdamW，LR=1e-6（自然生成层）、betas=(0.9,0.999)、weight decay=0.01、clip_grad=1     |
+| 调度      | Constant LR、warmup=0；参数与 optimizer offload 开启；activation checkpointing 开启 |
+| 分批      | Actor/teacher token budget32768；主对照均关闭 gradient accumulation no-sync         |
+| Full 实现 | precompute_fused，token chunk128、vocab chunk8192，hidden async write/prefetch开启  |
+| 诊断      | Entropy、mirror KL diagnostics、分位数关闭；保留生产默认的基本更新记录              |
+| 日志      | Console+file，两侧相同；运行目录不复用，不恢复旧 checkpoint                         |
 
 这是“同预算下的当前实现”主对照。Full 的必要 objective 位置统计与 sampled 基本观测不完全相同，要记录其差别，不能称为零诊断纯 kernel 测试。后续分块/融合 sampled head 优化作为单独 A/B，不悄悄并入本矩阵。也可另做两侧各自调优后的容量/吞吐比较，但必须与主表分开。
 
@@ -143,14 +143,14 @@ DRY_RUN=1 run_perf_case full_vocab 16 preview
 
 测量边界、显存定义和统计协议直接沿用[统一测量方法](../full-vocab/methodology.md)。结果按以下字段组织，尚无数值时留空，不以旧 E14/E15 填充。
 
-| 维度 | 必须记录 |
-| --- | --- |
-| 身份 | Estimator、reuse、trial、实际源码/配置、GPU/依赖、初态与输入来源 |
-| 工作量 | Prompt/response/input/有效loss token、长度分布、每 rank micro-batch 数 |
-| 速度 | Teacher 含搬运、anchor/old-log-prob/任务 advantage 是否执行、actor、每次更新、权重同步、完整 outer |
-| 显存 | Actor 窗口 allocated/reserved 峰值；同窗口 NVML 采样峰值；整卡峰值另列 |
-| 健康 | Expected/attempted/applied updates、非有限值、skip、退出码；全局 token 分母 |
-| 统计 | 预热/采集窗口、每个进程结果、配对顺序；token/s 是否包含 reuse |
+| 维度   | 必须记录                                                                                           |
+| ------ | -------------------------------------------------------------------------------------------------- |
+| 身份   | Estimator、reuse、trial、实际源码/配置、GPU/依赖、初态与输入来源                                   |
+| 工作量 | Prompt/response/input/有效loss token、长度分布、每 rank micro-batch 数                             |
+| 速度   | Teacher 含搬运、anchor/old-log-prob/任务 advantage 是否执行、actor、每次更新、权重同步、完整 outer |
+| 显存   | Actor 窗口 allocated/reserved 峰值；同窗口 NVML 采样峰值；整卡峰值另列                             |
+| 健康   | Expected/attempted/applied updates、非有限值、skip、退出码；全局 token 分母                        |
+| 统计   | 预热/采集窗口、每个进程结果、配对顺序；token/s 是否包含 reuse                                      |
 
 主路径必须确认没有 anchor forward、旧 log-prob 评分和任务 advantage；不能只因日志字段缺失就记为零成本，应结合 resolved spec、调用路径及需要时的 trace。Sampled 必须保留真实 behavior score，full 应关闭不需要的 rollout log-prob 采集。两侧输出 head 与 teacher 数值路径的精度差异同时记录。
 
@@ -158,13 +158,13 @@ DRY_RUN=1 run_perf_case full_vocab 16 preview
 
 ## 实施顺序与状态
 
-| 工作 | 状态 |
-| --- | --- |
-| 方案、四组自然生成命令、统一启动器覆盖核对 | 已准备 |
+| 工作                                         | 状态   |
+| -------------------------------------------- | ------ |
+| 方案、四组自然生成命令、统一启动器覆盖核对   | 已准备 |
 | 原始 token/behavior 导出与固定前缀双分支工具 | 待实现 |
-| 两侧短程功能检查 | 未执行 |
-| 固定输入 S/F 配对测量，reuse=1/16 | 未执行 |
-| 自然生成完整周期测量与独立 profile | 未执行 |
-| 对照分析与优化后 sampled 复测 | 未执行 |
+| 两侧短程功能检查                             | 未执行 |
+| 固定输入 S/F 配对测量，reuse=1/16            | 未执行 |
+| 自然生成完整周期测量与独立 profile           | 未执行 |
+| 对照分析与优化后 sampled 复测                | 未执行 |
 
 计划与运行状态在本页维护。真正完成测量后将小型结果和分析放入本目录，公共性能结论仅链接本实验，不在两个目录复制同一份数据表。

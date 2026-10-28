@@ -4,12 +4,12 @@
 
 ## 测量层级
 
-| 层级 | 包含 | 不包含 | 回答的问题 |
-| --- | --- | --- | --- |
-| Head-loss | 给定 hidden/head 的投影、目标、归约、student hidden/head VJP | Backbone、TQ、optimizer、rollout | 数值 kernel 的计算与工作区代价 |
-| 固定输入管线 | 真实模型、固定 token/mask、FSDP、teacher/actor、optimizer 与明确的上下卡范围 | 未接入的 Ray/TQ/vLLM | 优化能否传递到真实更新 |
-| 自然生成 outer | Rollout、评分、teacher、actor、权重同步；按实际 timer 说明周期任务 | 初始化及 timer 外工作单列 | 训练配方的实际周期成本 |
-| 完整任务 | 初始化、训练、验证、保存、清理 | 未记录的成本标为缺失 | 给定实验预算的墙钟消耗 |
+| 层级           | 包含                                                                         | 不包含                           | 回答的问题                     |
+| -------------- | ---------------------------------------------------------------------------- | -------------------------------- | ------------------------------ |
+| Head-loss      | 给定 hidden/head 的投影、目标、归约、student hidden/head VJP                 | Backbone、TQ、optimizer、rollout | 数值 kernel 的计算与工作区代价 |
+| 固定输入管线   | 真实模型、固定 token/mask、FSDP、teacher/actor、optimizer 与明确的上下卡范围 | 未接入的 Ray/TQ/vLLM             | 优化能否传递到真实更新         |
+| 自然生成 outer | Rollout、评分、teacher、actor、权重同步；按实际 timer 说明周期任务           | 初始化及 timer 外工作单列        | 训练配方的实际周期成本         |
+| 完整任务       | 初始化、训练、验证、保存、清理                                               | 未记录的成本标为缺失             | 给定实验预算的墙钟消耗         |
 
 `lr=0` 的固定输入实验仍可执行 optimizer 计算，目的是控制权重与轨迹；它不提供训练收敛证据。Head-loss 的耗时减少不能直接换算成完整任务的加速。
 
@@ -46,14 +46,14 @@ $$
 
 ## 显存口径
 
-| 名称 | 范围 | 使用限制 |
-| --- | --- | --- |
-| Allocated peak | PyTorch allocator 已分配张量的峰值 | 说明 reset 位置、进程/rank 和测量窗口 |
-| Extra allocated peak | 峰值减调用前 live input allocation | 适合算子工作区比较，不能与总 allocated 混用 |
-| Reserved peak | PyTorch allocator 保留的内存 | 包含空闲缓存，不等于活跃 tensor |
-| Requested bytes | Snapshot 中请求字节的回放 | 可能不含 allocator 对齐，范围取决于 snapshot |
-| NVML 整卡采样峰值 | 同卡所有进程及外部库分配 | 采样可能漏掉短峰值，不能归因于单个 kernel |
-| 日志累计高水位 | 进程自启动以来的累计计数 | 不能当成当前 actor 或 teacher 阶段峰值 |
+| 名称                 | 范围                               | 使用限制                                     |
+| -------------------- | ---------------------------------- | -------------------------------------------- |
+| Allocated peak       | PyTorch allocator 已分配张量的峰值 | 说明 reset 位置、进程/rank 和测量窗口        |
+| Extra allocated peak | 峰值减调用前 live input allocation | 适合算子工作区比较，不能与总 allocated 混用  |
+| Reserved peak        | PyTorch allocator 保留的内存       | 包含空闲缓存，不等于活跃 tensor              |
+| Requested bytes      | Snapshot 中请求字节的回放          | 可能不含 allocator 对齐，范围取决于 snapshot |
+| NVML 整卡采样峰值    | 同卡所有进程及外部库分配           | 采样可能漏掉短峰值，不能归因于单个 kernel    |
+| 日志累计高水位       | 进程自启动以来的累计计数           | 不能当成当前 actor 或 teacher 阶段峰值       |
 
 显存统一用 GiB/MiB，分别为 $2^{30}$/$2^{20}$ bytes；容量公式不等于实测峰值。推理引擎预留的 KV 池可能决定整卡最大值，而 actor 优化只降低训练阶段峰值。禁止用两种不同口径的差值直接估计碎片或可用训练容量。
 
@@ -111,14 +111,14 @@ mkdir -p "$RECHECK_DIR"
 
 先选择冻结源码、输入和单项变量，再建立新的运行目录。工具入口如下；实际参数以各脚本 `--help` 为准。
 
-| 工作 | 工具 |
-| --- | --- |
-| Endpoint synthetic head-loss | [benchmark.py](../../../../benchmarks/profile/benchmark.py) |
-| MDPO/BPO 优化前后固定输入 A/B | [benchmark_mirror.py](../../../../benchmarks/profile/benchmark_mirror.py) |
-| 真实模型固定输入管线 | [pipeline.py](../../../../benchmarks/profile/pipeline.py) |
-| 分层实验队列 | [run_study.py](../../../../benchmarks/profile/run_study.py) |
-| 完整 graph 训练计划与执行 | [prepare.py](../../../../benchmarks/profile/e2e_4gpu/prepare.py)、[run_plan.py](../../../../benchmarks/profile/run_plan.py) |
-| CPU 聚合快照刷新 | [refresh_report.py](../../../../benchmarks/profile/e2e_4gpu/refresh_report.py) |
+| 工作                          | 工具                                                                                                                        |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Endpoint synthetic head-loss  | [benchmark.py](../../../../benchmarks/profile/benchmark.py)                                                                 |
+| MDPO/BPO 优化前后固定输入 A/B | [benchmark_mirror.py](../../../../benchmarks/profile/benchmark_mirror.py)                                                   |
+| 真实模型固定输入管线          | [pipeline.py](../../../../benchmarks/profile/pipeline.py)                                                                   |
+| 分层实验队列                  | [run_study.py](../../../../benchmarks/profile/run_study.py)                                                                 |
+| 完整 graph 训练计划与执行     | [prepare.py](../../../../benchmarks/profile/e2e_4gpu/prepare.py)、[run_plan.py](../../../../benchmarks/profile/run_plan.py) |
+| CPU 聚合快照刷新              | [refresh_report.py](../../../../benchmarks/profile/e2e_4gpu/refresh_report.py)                                              |
 
 本机测量限获分配的物理 GPU 0–3，沿用 `/tmp/mirroropd-gpus-0-1-2-3.lock`。启动前确认无计算进程、每卡显存低于 1 GiB、利用率低于 10%，持续 120 秒；共享锁不替代运行期间的干扰记录。队列停止使用所属运行目录的 `STOP`，不终止其他任务。
 

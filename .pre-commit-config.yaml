@@ -52,9 +52,13 @@ repos:
         types: [python]
 
       - id: check-mirroropd-docs
-        name: Check MirrorOPD architecture and code-reading references
-        entry: python3 examples/mirroropd/tools/check_docs.py
+        name: Check MirrorOPD staged documentation and maintenance contracts
+        entry: python3 examples/mirroropd/tools/maintenance/pipeline.py check --staged
         language: python
+        additional_dependencies:
+          - markdown-it-py==4.0.0
+          - mdit-py-plugins==0.5.0
+          - PyYAML==6.0.3
         pass_filenames: false
 
       - id: check-device-api-usage

@@ -23,8 +23,10 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 \
 
 W&B 默认在线上传到 `wncfht/MirrorOPD-verl`，使用工作区 `.secrets/netrc`；设置 `WANDB_MODE=offline` 可保留离线记录。运行目录会在终端打印，集中包含 `train.log`、`resolved_config.yaml`、`metrics.jsonl` 和 `validation/records/0.jsonl`。测完保留这些文件及 W&B 链接，即可分析整体与分数据集的准确率、长度、截断、样本分布和 teacher–student 差距。
 
-### 参考文献
+## 参考文献
 
 [^tide]: Zichao Yu 等。Mismatch Matters: On-Policy Distillation Beyond Token Agreement. arXiv:2608.09836v1, 2026. [表 1 与附录 D.4](https://arxiv.org/html/2608.09836v1).
+
 [^qwen3]: Qwen Team. Qwen3 Technical Report. arXiv:2505.09388v1, 2025. [第 4.3 节与表 18](https://arxiv.org/html/2505.09388v1).
+
 [^semi]: When Do We Need On-Policy Distillation? Distilling on Offline Student Rollouts Is Often Better. arXiv:2610.11291, 2026. [表 3 与附录 A](https://arxiv.org/html/2610.11291).

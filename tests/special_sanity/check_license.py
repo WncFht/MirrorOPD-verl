@@ -36,6 +36,7 @@ license_head_baai = "Copyright (c) 2026 BAAI. All rights reserved."
 license_head_google = "Copyright (c) 2026 Google LLC. All rights reserved."
 license_head_mirroropd = "Copyright 2026 MirrorOPD-verl contributors"
 license_headers = [
+    "Copyright (c) 2026 DeepSeek",  # MIT maintenance helpers retain upstream attribution.
     license_head_bytedance,
     license_head_bytedance_25,
     license_head_bytedance_26,

@@ -14,15 +14,15 @@
 
 令 prompt 为 $x$，student rollout 得到 $y=(y_1,\ldots,y_L)$。第 $t$ 个训练状态是已有前缀 $s_t=(x,y_{<t})$。在这个状态上，full-vocab 路径计算所有输出 token 的概率，而不只读取已经生成的 $y_t$。
 
-| 符号 | 定义 | actor 调用内是否变化 |
-| --- | --- | --- |
-| $\beta$ | 实际生成这些轨迹的行为策略 | 轨迹已固定，full loss 不消费行为 log-prob |
-| $q$ | actor 开始更新前捕获的学生 anchor | 需要时建立，整个调用冻结 |
-| $p=p_\theta$ | 本次 forward 的当前学生条件分布 | 每次 optimizer 更新后重算 |
-| $T$ | 固定教师的条件分布 | 参数冻结，在相同 token 前缀上评分 |
-| $z$ | 当前 student 的 logits | 有梯度，$p=\operatorname{softmax}(z)$ |
-| $b$ | 由 $q,T,\kappa,\eta$ 构造的未归一化目标 log-weight | 无梯度；同一前缀、同一次 actor 调用内固定 |
-| $m$ | 归一化目标，$m=\operatorname{softmax}(b)$ | 同上 |
+| 符号         | 定义                                               | actor 调用内是否变化                      |
+| ------------ | -------------------------------------------------- | ----------------------------------------- |
+| $\beta$      | 实际生成这些轨迹的行为策略                         | 轨迹已固定，full loss 不消费行为 log-prob |
+| $q$          | actor 开始更新前捕获的学生 anchor                  | 需要时建立，整个调用冻结                  |
+| $p=p_\theta$ | 本次 forward 的当前学生条件分布                    | 每次 optimizer 更新后重算                 |
+| $T$          | 固定教师的条件分布                                 | 参数冻结，在相同 token 前缀上评分         |
+| $z$          | 当前 student 的 logits                             | 有梯度，$p=\operatorname{softmax}(z)$     |
+| $b$          | 由 $q,T,\kappa,\eta$ 构造的未归一化目标 log-weight | 无梯度；同一前缀、同一次 actor 调用内固定 |
+| $m$          | 归一化目标，$m=\operatorname{softmax}(b)$          | 同上                                      |
 
 下文先省略状态下标，并假设 student 输出集合 $\mathcal V_s$ 上 $p_i,q_i,T_i>0$、logits 有限。Teacher 可以具有额外输出行；此时 $T$ 在完整 teacher 词表上归一化，$\sum_{i\in\mathcal V_s}T_i\leq1$。$p,q,m$ 都在 student 支持上归一化。额外行的影响见第 8 节。
 
@@ -344,15 +344,15 @@ $$
 
 ### 7.1 梯度与极小值对照
 
-| 项目 | Full-KL OPD | Full MDPO | Full BPO |
-| --- | --- | --- | --- |
-| 目标 log-weight | $b=\log T$ | power-mean b | 与 MDPO 相同 |
-| 梯度使用的权重 | 当前 p | 当前 p | 冻结 q |
-| 中心化总体 | p | p | q |
-| anchor 依赖 | 无 | $\eta<1$ 时需要 | 包括 $\eta=1$ 都需要 |
-| 自由 logits 下最优分布 | teacher 在 student 支持上的条件分布 | m | q 严格正时为 m |
-| 最小 loss | 同支持时为 0 | $-\log Z/\eta$ | 0 |
-| 训练时 student softmax | 需要 | 需要 | objective 不需要；KL 诊断需要 |
+| 项目                   | Full-KL OPD                         | Full MDPO       | Full BPO                      |
+| ---------------------- | ----------------------------------- | --------------- | ----------------------------- |
+| 目标 log-weight        | $b=\log T$                          | power-mean b    | 与 MDPO 相同                  |
+| 梯度使用的权重         | 当前 p                              | 当前 p          | 冻结 q                        |
+| 中心化总体             | p                                   | p               | q                             |
+| anchor 依赖            | 无                                  | $\eta<1$ 时需要 | 包括 $\eta=1$ 都需要          |
+| 自由 logits 下最优分布 | teacher 在 student 支持上的条件分布 | m               | q 严格正时为 m                |
+| 最小 loss              | 同支持时为 0                        | $-\log Z/\eta$  | 0                             |
+| 训练时 student softmax | 需要                                | 需要            | objective 不需要；KL 诊断需要 |
 
 MDPO 与 BPO 的最优分布可相同，loss 值与离开 q 后的梯度仍不同。对于同一 b，当 $p=q$ 时：
 

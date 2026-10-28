@@ -18,25 +18,25 @@ Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前�
 
 设一个 micro-batch 中选出的有效预测行数为 $n$：
 
-| 参数 | 形状 | 来源 | 是否参与 student 反传 |
-| --- | --- | --- | --- |
-| `hs` | `[n, d_s]` | 当前 student backbone 的选中行 | 是 |
-| `ws` | `[V_s, d_s]` | 当前 student LM head | 是 |
-| `ht` | `[n, d_t]` | TQ 中的冻结 teacher hidden | 否 |
-| `wt` | `[V_t, d_t]` | 独立加载的冻结 teacher head | 否 |
+| 参数 | 形状         | 来源                           | 是否参与 student 反传 |
+| ---- | ------------ | ------------------------------ | --------------------- |
+| `hs` | `[n, d_s]`   | 当前 student backbone 的选中行 | 是                    |
+| `ws` | `[V_s, d_s]` | 当前 student LM head           | 是                    |
+| `ht` | `[n, d_t]`   | TQ 中的冻结 teacher hidden     | 否                    |
+| `wt` | `[V_t, d_t]` | 独立加载的冻结 teacher head    | 否                    |
 
 一般 MDPO/BPO 还传入冻结 `hq[n,d_s]` 与 `wq[V_s,d_s]`；调用方按样本身份和版本读取它们，kernel 再检查 token 行数、head 宽度及 anchor/student 支持相同。
 
 师生 hidden 宽度可以不同；前缀与 token ID 必须对齐，且 $V_t\ge V_s$。Tokenizer 的 token→ID 词表相同，不要求模型 head 的总行数相同：head 可以包含 tokenizer 常规词表之外的额外输出行。
 
-| 约束 | 执行检查的位置 |
-| --- | --- |
-| `use_policy_gradient=False`、`use_task_rewards=False`、`policy_loss_mode=vanilla`、`advantage_source=current`，两个 clamp 为 `null` | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py) |
-| `execution_mode=shared_sync`、V1 sync、单节点、FSDP2、无 ref/critic，师生轮流使用同池 | [DistillationConfig.validate_shared_sync](../../../../../verl/workers/config/distillation.py) |
-| Qwen2/Qwen3/Qwen3-MoE、无 bias 的 student head | [install_full_vocab_adapter](../../../../../verl/models/transformers/full_vocab.py) |
-| Qwen2/Qwen3/Qwen3-MoE safetensors teacher head | [FrozenTeacherHead](../../../../../verl/trainer/distillation/hidden.py) |
-| 温度为 1，无 entropy、sum-pi-squared 或 score-centering 计算 | [FSDPEngineWithLMHead._full_vocab_output](../../../../../verl/workers/engine/fsdp/transformer_impl.py) |
-| `loss_agg_mode=token-mean` | [distillation_loss](../../../../../verl/trainer/distillation/losses.py) |
+| 约束                                                                                                                                | 执行检查的位置                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `use_policy_gradient=False`、`use_task_rewards=False`、`policy_loss_mode=vanilla`、`advantage_source=current`，两个 clamp 为 `null` | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py)                           |
+| `execution_mode=shared_sync`、V1 sync、单节点、FSDP2、无 ref/critic，师生轮流使用同池                                               | [DistillationConfig.validate_shared_sync](../../../../../verl/workers/config/distillation.py)          |
+| Qwen2/Qwen3/Qwen3-MoE、无 bias 的 student head                                                                                      | [install_full_vocab_adapter](../../../../../verl/models/transformers/full_vocab.py)                    |
+| Qwen2/Qwen3/Qwen3-MoE safetensors teacher head                                                                                      | [FrozenTeacherHead](../../../../../verl/trainer/distillation/hidden.py)                                |
+| 温度为 1，无 entropy、sum-pi-squared 或 score-centering 计算                                                                        | [FSDPEngineWithLMHead._full_vocab_output](../../../../../verl/workers/engine/fsdp/transformer_impl.py) |
+| `loss_agg_mode=token-mean`                                                                                                          | [distillation_loss](../../../../../verl/trainer/distillation/losses.py)                                |
 
 这些检查分布在配置解析、模型构建与运行时，不能把 Hydra 配置解析成功视为全部通过。`use_fused_kernels=False` 是通用模型 forward 路径的限制，与下面专用 `precompute_fused` KL backend 是不同开关。
 
@@ -83,7 +83,7 @@ flowchart TD
 
 [PPOTrainer._update_actor](../../../../../verl/trainer/ppo/v1/trainer_base.py) 只把 `input_ids/position_ids/loss_mask/response_mask/prompts/responses` 交给普通 bridge，同时设置 `retain_sample_identity=True`。`sample_keys/sample_partition` 随数据进入 worker，并跟随 shuffle、mini-batch 和 micro-batch 切分移动。
 
-[HiddenBatchIO.__iter__](../../../../../verl/trainer/distillation/hidden_io.py) 在 actor micro-batch 执行前按这些 key 取回 `teacher_hidden/teacher_positions`，结束后从 micro-batch 容器移除 payload。Full mirror 通过 `full_vocab_sources=("teacher", "anchor")` 让同一 IO 对象同时读取两类 payload；engine 校验它们的位置、anchor version 和 head holder 一致。Student engine 校验保存的每条位置数组与当前 `loss_mask` 推导的位置完全一致。Teacher 与 actor 可以采用不同的动态分批边界，不能用“第几个 teacher micro-batch”匹配 student。
+[`HiddenBatchIO.__iter__`](../../../../../verl/trainer/distillation/hidden_io.py) 在 actor micro-batch 执行前按这些 key 取回 `teacher_hidden/teacher_positions`，结束后从 micro-batch 容器移除 payload。Full mirror 通过 `full_vocab_sources=("teacher", "anchor")` 让同一 IO 对象同时读取两类 payload；engine 校验它们的位置、anchor version 和 head holder 一致。Student engine 校验保存的每条位置数组与当前 `loss_mask` 推导的位置完全一致。Teacher 与 actor 可以采用不同的动态分批边界，不能用“第几个 teacher micro-batch”匹配 student。
 
 每次 reuse 都重新读取冻结 teacher 和存在的 anchor hidden，再计算当前 student backbone。q/T backbone 不会重跑，但它们的 head 投影、归一化及 b 构造仍随每次 inner update 重做。当前没有整轮 hidden GPU 驻留缓存或 target/logits cache。
 
@@ -103,10 +103,10 @@ Kernel 返回 `loss_sum`，engine 附上有效行数 `full_kl_count`，可用时
 
 Full mirror 的 [FrozenAnchorHead](../../../../../verl/trainer/distillation/anchor.py) 则来自当前 student wrapped head 的独立复制，CPU/GPU 缓存都属于一次 anchor scope；不是长期存活的 teacher checkpoint 副本。它在普通 Full-KL endpoint 中完全省略，具体准备与释放见[anchor 生命周期](teacher.md#anchor-准备与模型驻留)。
 
-| 开关 | 实际重叠的工作 | 没有改变的边界 |
-| --- | --- | --- |
+| 开关                     | 实际重叠的工作                                               | 没有改变的边界                                                            |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------- |
 | `full_vocab.async_write` | 上一个 teacher/anchor micro-batch 的 CPU→TQ 写与后续评分计算 | D2H 在提交写之前执行；提交下一笔写之前等待上一笔，正常退出 flush 最后一笔 |
-| `full_vocab.prefetch` | 下一 actor micro-batch 的 TQ→CPU 读与当前 actor 计算 | payload 随 `micro_batch.to(device)` 上卡，没有专用 CUDA H2D stream |
+| `full_vocab.prefetch`    | 下一 actor micro-batch 的 TQ→CPU 读与当前 actor 计算         | payload 随 `micro_batch.to(device)` 上卡，没有专用 CUDA H2D stream        |
 
 两者使用单线程 executor，限制待处理 IO 数量；不会使 teacher 和 student backbone 同时在 GPU 上执行。详细异常与卸载行为见[教师评分顺序](teacher.md#评分顺序)。
 
@@ -140,13 +140,13 @@ Teacher hidden 运输规模约为有效预测行数乘 $d_t$；需要 full ancho
 
 默认值取决于调用层，以下均指没有额外覆盖时：
 
-| 入口 | Backend | Token chunk | Hidden async write / prefetch |
-| --- | --- | --- | --- |
-| `FullVocabConfig`；原 `full_reverse_kl/full_reverse_kl_result` 数值 API | recompute | 512 | 配置类为 False/False；数值 API 不管理 IO |
-| `full_vocab_objective_result` 数值 API | precompute | 512 | 不管理 IO |
-| 统一入口 `custom --method full_kl/mdpo/bpo` 的 full-vocab 设置 | precompute | 512 | False/False |
-| E13–E43 中的 full 预设 | precompute | 512 | True/True |
-| E44–E47 | precompute_fused | 128 | True/True |
+| 入口                                                                    | Backend          | Token chunk | Hidden async write / prefetch            |
+| ----------------------------------------------------------------------- | ---------------- | ----------- | ---------------------------------------- |
+| `FullVocabConfig`；原 `full_reverse_kl/full_reverse_kl_result` 数值 API | recompute        | 512         | 配置类为 False/False；数值 API 不管理 IO |
+| `full_vocab_objective_result` 数值 API                                  | precompute       | 512         | 不管理 IO                                |
+| 统一入口 `custom --method full_kl/mdpo/bpo` 的 full-vocab 设置          | precompute       | 512         | False/False                              |
+| E13–E43 中的 full 预设                                                  | precompute       | 512         | True/True                                |
+| E44–E47                                                                 | precompute_fused | 128         | True/True                                |
 
 这些入口的 vocab chunk 默认都是 8192，其实际用途仍受 backend 限制。当前 E44–E47 的完整设置见[训练配方](../../settings/训练设置.md#mirror-comparison)；环境与 Hydra 可以覆盖，最终以解析配置为准。
 
@@ -156,14 +156,13 @@ Teacher hidden 运输规模约为有效预测行数乘 $d_t$；需要 full ancho
 
 新增 weighted target 与 BPO 的 CPU/CUDA/FSDP/真实短训练证据见[验收结果](../numerics/mirror-objectives/实现方案.md#validation)，未覆盖范围见[验证缺口](../numerics/mirror-objectives/实现方案.md#remaining-validation)。下表保留原 Full-KL 基础设施的验证入口。
 
-| 检查对象 | 测试入口 |
-| --- | --- |
-| 不同 backend 的 KL 与 hidden/head VJP、额外 teacher 支持 | [test_full_vocab_on_cpu.py](../../../../../tests/trainer/distillation/test_full_vocab_on_cpu.py) |
-| Qwen adapter、正常 forward 回退与 head 回调 | [test_full_vocab_adapter_on_cpu.py](../../../../../tests/trainer/distillation/test_full_vocab_adapter_on_cpu.py) |
-| 行值到相对 response 位置诊断 | [test_full_vocab_position_on_cpu.py](../../../../../tests/trainer/distillation/test_full_vocab_position_on_cpu.py) |
-| 真实 FSDP2 分片、head 更新、不等长/空 rank、checkpoint 与下一次更新等价 | [test_full_vocab_fsdp2.py](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) |
+| 检查对象                                                                | 测试入口                                                                                                           |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 不同 backend 的 KL 与 hidden/head VJP、额外 teacher 支持                | [test_full_vocab_on_cpu.py](../../../../../tests/trainer/distillation/test_full_vocab_on_cpu.py)                   |
+| Qwen adapter、正常 forward 回退与 head 回调                             | [test_full_vocab_adapter_on_cpu.py](../../../../../tests/trainer/distillation/test_full_vocab_adapter_on_cpu.py)   |
+| 行值到相对 response 位置诊断                                            | [test_full_vocab_position_on_cpu.py](../../../../../tests/trainer/distillation/test_full_vocab_position_on_cpu.py) |
+| 真实 FSDP2 分片、head 更新、不等长/空 rank、checkpoint 与下一次更新等价 | [test_full_vocab_fsdp2.py](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py)                      |
 
 CPU 数学测试不等同于 CUDA BF16/Triton 精度验收。已有 GPU 证据见[主分支四卡验收](../../archive/engineering/2026-10-25-主分支四卡验收.md)，性能测量从 [profile](../performance/full-vocab/README.md)进入。
-
 
 共享训练入口对 Qwen3 MoE 的放行限定为 full-vocab teacher，采用与上述输出适配器一致的 `qwen3_moe` 类型；student 和其他 MoE 架构继续受共享入口原有限制。入口层回归测试覆盖正式 teacher 配置构建，补充独立 FSDP2 数值验收未覆盖的主训练初始化检查。

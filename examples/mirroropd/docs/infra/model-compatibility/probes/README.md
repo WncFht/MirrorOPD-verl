@@ -2,11 +2,11 @@
 
 本目录保留 EOS／tokenizer 协议、teacher 输入、输出词表、真实概率探针和短测验收。正式训练设置、论文原图、运行进度与待跑项集中在[失败复现实验系列](../../../experiments/teacher-transfer/teacher-comparison/failure-matrix/README.md)。
 
-| 入口 | 内容 |
-| --- | --- |
-| [实现、验收与对齐诊断](2026-10-24-OPD实现验收与对齐诊断.md) | 运行时停止配置、原始 IDs、词表修正、短测与低 KL 诊断 |
-| [E41/E43 完整结果与论文对照](../../../experiments/teacher-transfer/teacher-comparison/qwen-teachers/2026-10-28-E41与E43完整结果及论文对照.md) | 100步 Full-r16 的准确率、长度、KL，以及与原论文的比较边界 |
-| [实验数据](data) | 已保存的探针与接口验证结果 |
-| [探针脚本](../../../../benchmarks/model_compatibility) | EOS、teacher tokenizer 与输出支持检查 |
+| 入口                                                                                                                                          | 内容                                                       |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| [实现、验收与对齐诊断](2026-10-24-OPD实现验收与对齐诊断.md)                                                                                   | 运行时停止配置、原始 IDs、词表修正、短测与低 KL 诊断       |
+| [E41/E43 完整结果与论文对照](../../../experiments/teacher-transfer/teacher-comparison/qwen-teachers/2026-10-28-E41与E43完整结果及论文对照.md) | 100 步 Full-r16 的准确率、长度、KL，以及与原论文的比较边界 |
+| [实验数据](data)                                                                                                                              | 已保存的探针与接口验证结果                                 |
+| [探针脚本](../../../../benchmarks/model_compatibility)                                                                                        | EOS、teacher tokenizer 与输出支持检查                      |
 
 本目录中的两步训练、CPU／四卡检查和自然生成探针只用于实现诊断。正式 250-step sampled/full 配对训练的状态由实验系列维护。

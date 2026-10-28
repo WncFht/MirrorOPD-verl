@@ -14,23 +14,23 @@
 
 ## 2. 实现对照与阅读快照
 
-| 项目 | 公开实现的性质 | vLLM 版本依据 | 对本项目的价值 | 主要限制 |
-| --- | --- | --- | --- | --- |
-| CoS，ICML 2025 | 修改 vLLM，含普通 ensemble 与 speculative ensemble | 安装说明指定 0.6.5 预编译 wheel | 有明确的 raw-logits 融合分支与共享请求执行 | 老 worker/sampler 接口；默认 weighted ensemble 是概率平均 |
-| vllm-logits | 外部注册的单引擎双 backbone | 依赖限定 0.15.x；作者称测试于 0.15.1 | 直接实现加权 logits；独立 KV 层编号 | 两侧复用同一主体配置，只改层数；默认改写 EOS |
-| CoDIT，COLM 2026 | 两个 vLLM 引擎，patch sampler 和 scheduler | README 和 patch 指定 0.11.0 | 有 Qwen3 dense/MoE 脚本，显式回传同一 token | 每步 CPU/ZeroMQ 传输分布，锁步调度 |
-| DoubtLess，2026-10 | 单个 vLLM 请求驱动大模型与小模型两个视图 | 依赖固定 0.29.0 | 独立模型尺寸、GPU 融合、CUDA stream、decode graph | 原算法为三路 contrast；含专用 attention/state/scheduler 逻辑 |
-| Co-LLM，2024 | vLLM logits 服务与外部逐步协调 | 依赖固定 0.2.1.post1 | 历史实现，可参考 raw logits 输出 | 接口老，基于服务调用，不优先迁移 |
+| 项目               | 公开实现的性质                                     | vLLM 版本依据                        | 对本项目的价值                                    | 主要限制                                                     |
+| ------------------ | -------------------------------------------------- | ------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------ |
+| CoS，ICML 2025     | 修改 vLLM，含普通 ensemble 与 speculative ensemble | 安装说明指定 0.6.5 预编译 wheel      | 有明确的 raw-logits 融合分支与共享请求执行        | 老 worker/sampler 接口；默认 weighted ensemble 是概率平均    |
+| vllm-logits        | 外部注册的单引擎双 backbone                        | 依赖限定 0.15.x；作者称测试于 0.15.1 | 直接实现加权 logits；独立 KV 层编号               | 两侧复用同一主体配置，只改层数；默认改写 EOS                 |
+| CoDIT，COLM 2026   | 两个 vLLM 引擎，patch sampler 和 scheduler         | README 和 patch 指定 0.11.0          | 有 Qwen3 dense/MoE 脚本，显式回传同一 token       | 每步 CPU/ZeroMQ 传输分布，锁步调度                           |
+| DoubtLess，2026-10 | 单个 vLLM 请求驱动大模型与小模型两个视图           | 依赖固定 0.29.0                      | 独立模型尺寸、GPU 融合、CUDA stream、decode graph | 原算法为三路 contrast；含专用 attention/state/scheduler 逻辑 |
+| Co-LLM，2024       | vLLM logits 服务与外部逐步协调                     | 依赖固定 0.2.1.post1                 | 历史实现，可参考 raw logits 输出                  | 接口老，基于服务调用，不优先迁移                             |
 
 上述版本均来自仓库依赖或安装说明，不代表与当前任意 vLLM 版本兼容。[^cos-readme][^vl-package][^codit-readme][^dl-package][^collm-req]
 
-| 仓库 | 阅读的提交 | 提交日期（UTC） |
-| --- | --- | --- |
-| Kamichanw/CoS | `b7c555324539bb476d39a4002922973e296d1e18` | 2025-06-15 |
-| NizarIslah/vllm-logits | `a987755aad1a94689745843676d491bc77201e51` | 2026-08-19 |
-| Tatsuya736482/contrastive_decoding_public | `a73844a928ba0017605a388425e088b9047a7836` | 2026-07-26 |
-| leoluolol/DoubtLess | `4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372` | 2026-10-15 |
-| clinicalml/co-llm | `d83ab8cf19ceb49c7814383a897089e51cdeebfe` | 2024-05-04 |
+| 仓库                                      | 阅读的提交                                 | 提交日期（UTC） |
+| ----------------------------------------- | ------------------------------------------ | --------------- |
+| Kamichanw/CoS                             | `b7c555324539bb476d39a4002922973e296d1e18` | 2025-06-15      |
+| NizarIslah/vllm-logits                    | `a987755aad1a94689745843676d491bc77201e51` | 2026-08-19      |
+| Tatsuya736482/contrastive_decoding_public | `a73844a928ba0017605a388425e088b9047a7836` | 2026-07-26      |
+| leoluolol/DoubtLess                       | `4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372` | 2026-10-15      |
+| clinicalml/co-llm                         | `d83ab8cf19ceb49c7814383a897089e51cdeebfe` | 2024-05-04      |
 
 ## 3. CoS：已有通用 raw-logits ensemble 接口
 
@@ -38,11 +38,11 @@ CoS 的 `EnsembleDecodeWorker` 将同一 `ExecuteModelRequest` 交给多个 work
 
 `EnsembleSampler` 明确区分三种融合位置：[^cos-sampler]
 
-| 参数 | 实际顺序 | 对本项目的适用性 |
-| --- | --- | --- |
+| 参数         | 实际顺序                                                       | 对本项目的适用性                                               |
+| ------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
 | `raw-logits` | 先 ensemble，再公共 penalty/temperature/filter，最后归一化采样 | 与现有 raw-token logit fusion 目标相符；仍需统一精度和合法词表 |
-| `logits` | 各模型分别做处理，再 ensemble | 有过滤时与本项目目标不同 |
-| `probs` | 各模型分别处理并 softmax，再 ensemble | 属于概率层融合 |
+| `logits`     | 各模型分别做处理，再 ensemble                                  | 有过滤时与本项目目标不同                                       |
+| `probs`      | 各模型分别处理并 softmax，再 ensemble                          | 属于概率层融合                                                 |
 
 默认 `configs/method/we.yaml` 选择 `probs`，计算 $(1-\lambda)p_0+\lambda p_1$。它还把第一个模型的 `logprobs[0]` 原样返回，因此默认配置返回的 log-prob 不能作为混合行为策略的概率。raw-logits 分支则在融合后重新计算 softmax/log-softmax。迁移时应选择该分支，并核对实际采样实现中最终过滤与 log-prob 的一致性。[^cos-we][^cos-sampler]
 
@@ -88,13 +88,13 @@ $$
 
 源码中的迁移重点如下：
 
-| 项目 | 已核实实现 | 本项目需要的处理 |
-| --- | --- | --- |
-| 分布传输 | `.cpu()` → NumPy → ZeroMQ → tensor 上 GPU | 优先同执行侧融合；确需跨 GPU 时使用设备侧通信并实测 |
-| 调度 | patch Scheduler 与 KVCacheManager，通过共享内存/信号量协调 running 与 preemption | 明确共同请求计划、重排、取消及排空协议 |
-| 请求身份 | running IDs 转为数值并放入 float32 数组；sampler hash 基于嵌套列表形状和 step | 使用稳定 request/session ID，不把形状相同视为身份一致 |
-| 初始阶段 | 根据“全部 output IDs 为空且达到历史最大 batch”跳过同步 | 单独检查真实第一 token 与 warmup 是否会混淆 |
-| 参数规模 | 启动脚本共用两边 TP 参数 | 异构 GPU 子组和不同 TP 必须扩展 |
+| 项目     | 已核实实现                                                                       | 本项目需要的处理                                      |
+| -------- | -------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 分布传输 | `.cpu()` → NumPy → ZeroMQ → tensor 上 GPU                                        | 优先同执行侧融合；确需跨 GPU 时使用设备侧通信并实测   |
+| 调度     | patch Scheduler 与 KVCacheManager，通过共享内存/信号量协调 running 与 preemption | 明确共同请求计划、重排、取消及排空协议                |
+| 请求身份 | running IDs 转为数值并放入 float32 数组；sampler hash 基于嵌套列表形状和 step    | 使用稳定 request/session ID，不把形状相同视为身份一致 |
+| 初始阶段 | 根据“全部 output IDs 为空且达到历史最大 batch”跳过同步                           | 单独检查真实第一 token 与 warmup 是否会混淆           |
+| 参数规模 | 启动脚本共用两边 TP 参数                                                         | 异构 GPU 子组和不同 TP 必须扩展                       |
 
 上述事实分别见 sampler 和 scheduler patch。[^codit-sample][^codit-scheduler]
 
@@ -126,12 +126,12 @@ vLLM 官方支持外部模型注册，也有批级 logits processor。processor 
 
 其他来源的作用如下：
 
-| 来源 | 可确认的关联 | 不能据此推断的能力 |
-| --- | --- | --- |
-| Co-LLM | 提供 vLLM raw-logits server，contrastive/proxy 基线在外部协调 | 不等于现代引擎内、低通信开销的双模型执行 |
-| ThinkMerge | 论文说明两阶段 vLLM pipeline，答案阶段平均 pre-softmax logits并反馈同一 token；one-step 版本当时用 HF | 主要是同一模型多个推理前缀；未核实到可直接移植的公开 one-step vLLM 仓库 |
-| UltraFuser | 论文提出多专家 token-level gating，并讨论高效推理 | 不据论文描述认定已找到可运行的现代 vLLM 交付包 |
-| TRB | 提供行为分布构造方法 | 此次未定位到可核实的作者 vLLM 双模型实现 |
+| 来源       | 可确认的关联                                                                                           | 不能据此推断的能力                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| Co-LLM     | 提供 vLLM raw-logits server，contrastive/proxy 基线在外部协调                                          | 不等于现代引擎内、低通信开销的双模型执行                                |
+| ThinkMerge | 论文说明两阶段 vLLM pipeline，答案阶段平均 pre-softmax logits 并反馈同一 token；one-step 版本当时用 HF | 主要是同一模型多个推理前缀；未核实到可直接移植的公开 one-step vLLM 仓库 |
+| UltraFuser | 论文提出多专家 token-level gating，并讨论高效推理                                                      | 不据论文描述认定已找到可运行的现代 vLLM 交付包                          |
+| TRB        | 提供行为分布构造方法                                                                                   | 此次未定位到可核实的作者 vLLM 双模型实现                                |
 
 Co-LLM 的接口与依赖见作者仓库；ThinkMerge 的 one-step 发布承诺见论文第 4.1 节；UltraFuser 与 TRB 仅在这里作为方法相关来源。[^collm-readme][^collm-server][^thinkmerge][^ultrafuser][^trb]
 
@@ -141,15 +141,15 @@ Co-LLM 的接口与依赖见作者仓库；ThinkMerge 的 one-step 发布承诺�
 
 首选候选使用一个调度器和组合模型类。Teacher 与 student 分别从完整配置构建，使用独立参数命名与 KV 身份，输入相同真实 token IDs。在生成执行侧计算 FP32 加权 logits，之后只有一套公共温度、top-k/top-p 与 sampler。这个建议依据 DoubtLess 与 vllm-logits 的代码结构，不是已完成的本地设计或性能结论。
 
-| 实施事项 | 可参考来源 | 必须补齐的项目要求 |
-| --- | --- | --- |
-| 外部模型类注册 | vllm-logits、DoubtLess、官方 registry | 在 actor/Ray/vLLM 子进程中一致加载；固定 vLLM 版本 |
-| 两份独立模型配置 | DoubtLess | 1.7B + 8B，以及 dense + MoE；分别处理 hidden size、KV heads、TP |
-| 同前缀与统一采样 | CoS raw-logits 分支 | 合法 token-ID 映射、FP32 融合、公共过滤、最终 behavior log-prob |
-| current 权重更新 | 本地命名 target 协议；DoubtLess 的子模块权重路由 | 仅更新 student；完整接收后发布版本；失败保持不可用 |
-| KV 与请求生命周期 | 单引擎结构；CoDIT 调度同步作为对照 | batch 重排、preemption、取消、refit 清 KV、恢复不串请求 |
-| 资源切换 | 本地 shared-sync runtime | sleep/wake、teacher scoring、validation 引擎和训练内存预算 |
-| 正式吞吐 | 原计划 G7 | 两组配对、batch64/cap7168、重复完整批测量、全部同步/切换成本 |
+| 实施事项          | 可参考来源                                       | 必须补齐的项目要求                                              |
+| ----------------- | ------------------------------------------------ | --------------------------------------------------------------- |
+| 外部模型类注册    | vllm-logits、DoubtLess、官方 registry            | 在 actor/Ray/vLLM 子进程中一致加载；固定 vLLM 版本              |
+| 两份独立模型配置  | DoubtLess                                        | 1.7B + 8B，以及 dense + MoE；分别处理 hidden size、KV heads、TP |
+| 同前缀与统一采样  | CoS raw-logits 分支                              | 合法 token-ID 映射、FP32 融合、公共过滤、最终 behavior log-prob |
+| current 权重更新  | 本地命名 target 协议；DoubtLess 的子模块权重路由 | 仅更新 student；完整接收后发布版本；失败保持不可用              |
+| KV 与请求生命周期 | 单引擎结构；CoDIT 调度同步作为对照               | batch 重排、preemption、取消、refit 清 KV、恢复不串请求         |
+| 资源切换          | 本地 shared-sync runtime                         | sleep/wake、teacher scoring、validation 引擎和训练内存预算      |
+| 正式吞吐          | 原计划 G7                                        | 两组配对、batch64/cap7168、重复完整批测量、全部同步/切换成本    |
 
 如果组合模型在所选版本上不能可靠处理异构 KV 或所需 GPU 布局，再比较双引擎方案。该候选需要一个共同调度决定、设备侧 logits 传输、一次采样和 token 广播。不能让两个独立 continuous-batching scheduler 只凭 batch 行号对应请求。
 
@@ -164,27 +164,51 @@ Co-LLM 的接口与依赖见作者仓库；ThinkMerge 的 one-step 发布承诺�
 ### 参考文献
 
 [^cos-readme]: Jiale Fu et al. CoS README，阅读提交 b7c5553，2025. [安装、方法与代码入口](https://github.com/Kamichanw/CoS/blob/b7c555324539bb476d39a4002922973e296d1e18/readme.md).
+
 [^cos-worker]: CoS. EnsembleDecodeWorker，阅读提交 b7c5553. [执行与 KV 预算源码](https://github.com/Kamichanw/CoS/blob/b7c555324539bb476d39a4002922973e296d1e18/vllm/vllm/ensemble_decode/ensemble_decode_worker.py).
+
 [^cos-sampler]: CoS. EnsembleSampler，阅读提交 b7c5553. [三种融合位置与 sampler 源码](https://github.com/Kamichanw/CoS/blob/b7c555324539bb476d39a4002922973e296d1e18/vllm/vllm/ensemble_decode/ensemble_sampler.py).
+
 [^cos-we]: CoS. Weighted ensemble 配置，阅读提交 b7c5553. [we.yaml](https://github.com/Kamichanw/CoS/blob/b7c555324539bb476d39a4002922973e296d1e18/configs/method/we.yaml).
+
 [^vl-package]: Nizar Islah. vllm-logits 包配置，阅读提交 a987755，2026. [依赖与插件注册](https://github.com/NizarIslah/vllm-logits/blob/a987755aad1a94689745843676d491bc77201e51/pyproject.toml).
+
 [^vl-backbones]: Nizar Islah. vllm-logits 双模型实现，阅读提交 a987755. [backbones.py](https://github.com/NizarIslah/vllm-logits/blob/a987755aad1a94689745843676d491bc77201e51/src/vllm_logits/backbones.py).
+
 [^codit-readme]: Tatsuya Ichinose et al. CoDIT README，阅读提交 a73844a，2026. [安装、支持模型与使用说明](https://github.com/Tatsuya736482/contrastive_decoding_public/blob/a73844a928ba0017605a388425e088b9047a7836/README.md).
+
 [^codit-sample]: CoDIT. vLLM sampler patch，阅读提交 a73844a. [分布交换、融合与 token 回传](https://github.com/Tatsuya736482/contrastive_decoding_public/blob/a73844a928ba0017605a388425e088b9047a7836/src/patch_vllm_sample.py).
+
 [^codit-scheduler]: CoDIT. vLLM scheduler patch，阅读提交 a73844a. [调度、请求身份与 preemption](https://github.com/Tatsuya736482/contrastive_decoding_public/blob/a73844a928ba0017605a388425e088b9047a7836/src/patch_vllm_scheduler.py).
+
 [^codit-script]: CoDIT. Qwen3-30B-A3B 脚本，阅读提交 a73844a. [模型、TP、batch 与 cap](https://github.com/Tatsuya736482/contrastive_decoding_public/blob/a73844a928ba0017605a388425e088b9047a7836/scripts/run_Qwen3-30B-A3B.sh).
+
 [^dl-readme]: Minghao Luo, Liang Chen. DoubtLess README，阅读提交 4f2b3f9，2026. [双后端与模型配对](https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/README.md).
+
 [^dl-package]: DoubtLess. 包配置，阅读提交 4f2b3f9. [固定 vLLM 0.29.0](https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/pyproject.toml).
+
 [^dl-model]: DoubtLess. 组合模型、attention 与权重加载，阅读提交 4f2b3f9. [model.py](https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/doubtless/vllm/model.py).
+
 [^dl-engine]: DoubtLess. 引擎与请求配置，阅读提交 4f2b3f9. [engine.py](https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/doubtless/vllm/engine.py).
+
 [^dl-sched]: DoubtLess. preemption replay hook，阅读提交 4f2b3f9. [sched.py](https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/doubtless/vllm/sched.py).
+
 [^dl-paper]: Minghao Luo, Liang Chen. DoubtLess: Training-Free Contrastive Decoding for Efficient Reasoning. arXiv:2610.18862v1，2026，附录 D. [实现细节](https://arxiv.org/html/2610.18862v1#A4).
+
 [^collm-readme]: Shannon Zejiang Shen et al. Co-LLM README，阅读提交 d83ab8c，2024. [服务与推理流程](https://github.com/clinicalml/co-llm/blob/d83ab8cf19ceb49c7814383a897089e51cdeebfe/README.md).
+
 [^collm-req]: Co-LLM. requirements，阅读提交 d83ab8c. [vLLM 版本依赖](https://github.com/clinicalml/co-llm/blob/d83ab8cf19ceb49c7814383a897089e51cdeebfe/requirements.txt).
+
 [^collm-server]: Co-LLM. raw logits 服务，阅读提交 d83ab8c. [api_server_logits.py](https://github.com/clinicalml/co-llm/blob/d83ab8cf19ceb49c7814383a897089e51cdeebfe/collm/inference/api_server_logits.py).
-[^vllm-registration]: vLLM 官方文档. Registering a Model，2026-10-28 访问. [外部模型注册](https://docs.vllm.ai/en/latest/contributing/model/registration/).
-[^vllm-logits]: vLLM 官方文档. Logits Processors，2026-10-28 访问. [批级接口与 BatchUpdate](https://docs.vllm.ai/en/latest/design/logits_processors/).
-[^vllm-issue]: vLLM. Support for Controlled Decoding，issue #9541，2024 创建，2026-10-28 访问. [需求与状态](https://github.com/vllm-project/vllm/issues/9541).
-[^thinkmerge]: Haonan Wang et al. Think in Parallel, Answer as One: Logit Averaging for Open-Ended Reasoning. arXiv:2512.02874v1，2025，第 4.1 节. [实现说明](https://arxiv.org/html/2512.02874v1#S4.SS1).
+
+[^vllm-registration]: vLLM 官方文档。Registering a Model，2026-10-28 访问。[外部模型注册](https://docs.vllm.ai/en/latest/contributing/model/registration/).
+
+[^vllm-logits]: vLLM 官方文档。Logits Processors，2026-10-28 访问。[批级接口与 BatchUpdate](https://docs.vllm.ai/en/latest/design/logits_processors/).
+
+[^vllm-issue]: vLLM. Support for Controlled Decoding，issue #9541，2024 创建，2026-10-28 访问。[需求与状态](https://github.com/vllm-project/vllm/issues/9541).
+
+[^thinkmerge]: Haonan Wang et al. Think in Parallel, Answer as One: Logit Averaging for Open-Ended Reasoning. arXiv:2512.02874v1，2025，第 4.1 节。[实现说明](https://arxiv.org/html/2512.02874v1#S4.SS1).
+
 [^ultrafuser]: Ning Ding et al. Fusing Highly Specialized Language Models for Comprehensive Expertise. ACL，2025. [论文与作者信息](https://aclanthology.org/2025.acl-long.42/).
+
 [^trb]: Daniil Plyusov et al. Trust-Region Behavior Blending for On-Policy Distillation. arXiv:2605.31159v1，2026. [论文](https://arxiv.org/html/2605.31159v1).

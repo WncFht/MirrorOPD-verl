@@ -4,15 +4,15 @@
 
 主文围绕一个问题展开：已知 student 和 teacher 的完整下一 token 分布，如何定义并求解一个用于采集训练轨迹的分布。它将目标聚合、divergence、局部最优条件和工程实现分开，统一使用 student 指数权重 $\alpha$，并区分数学证明、CPU 数值核验和待验证的学习效果。
 
-| 阅读目的 | 主文位置 |
-| --- | --- |
-| 理解变量、约束、Pareto 取舍及 sum / minimax / 平滑目标 | 第 1–2 节 |
-| 比较两种 KL 方向、Hellinger 等中心 | 第 3–4 节 |
-| 推导 Chernoff 系数、唯一性、停止条件 | 第 5 节 |
-| 判断求解 minimax 相比固定中点是否值得 | 第 6 节 |
-| 核对公开代码、EOS、温度与 GPU 求解边界 | 第 7 节 |
-| 区分局部与序列目标、解释二阶矩的适用范围 | 第 8 节 |
-| 查相关论文的实际结论和实验建议 | 第 9–10 节 |
+| 阅读目的                                               | 主文位置   |
+| ------------------------------------------------------ | ---------- |
+| 理解变量、约束、Pareto 取舍及 sum / minimax / 平滑目标 | 第 1–2 节  |
+| 比较两种 KL 方向、Hellinger 等中心                     | 第 3–4 节  |
+| 推导 Chernoff 系数、唯一性、停止条件                   | 第 5 节    |
+| 判断求解 minimax 相比固定中点是否值得                  | 第 6 节    |
+| 核对公开代码、EOS、温度与 GPU 求解边界                 | 第 7 节    |
+| 区分局部与序列目标、解释二阶矩的适用范围               | 第 8 节    |
+| 查相关论文的实际结论和实验建议                         | 第 9–10 节 |
 
 ## 证据与复算
 
@@ -30,11 +30,11 @@ python -m examples.mirroropd.research.rollout_policy.audit_aggregation --out /tm
 
 ## 完整检索记录
 
-| 报告 | 单轮去重条数 | 来源诊断 |
-| --- | ---: | --- |
-| [第一轮](../../literature/rollout-policy/data/2026-10-28-论文检索原始报告.md) | 76 | [stderr](../../literature/rollout-policy/data/search.stderr.txt) |
-| [定向补充](../../literature/rollout-policy/data/2026-10-28-定向补充检索原始报告.md) | 59 | [stderr](../../literature/rollout-policy/data/targeted-search.stderr.txt) |
-| [聚合目标补充](../../literature/rollout-policy/data/2026-10-28-聚合目标补充检索原始报告.md) | 58 | [stderr](../../literature/rollout-policy/data/aggregation-search.stderr.txt) |
+| 报告                                                                                        | 单轮去重条数 | 来源诊断                                                                     |
+| ------------------------------------------------------------------------------------------- | -----------: | ---------------------------------------------------------------------------- |
+| [第一轮](../../literature/rollout-policy/data/2026-10-28-论文检索原始报告.md)               |           76 | [stderr](../../literature/rollout-policy/data/search.stderr.txt)             |
+| [定向补充](../../literature/rollout-policy/data/2026-10-28-定向补充检索原始报告.md)         |           59 | [stderr](../../literature/rollout-policy/data/targeted-search.stderr.txt)    |
+| [聚合目标补充](../../literature/rollout-policy/data/2026-10-28-聚合目标补充检索原始报告.md) |           58 | [stderr](../../literature/rollout-policy/data/aggregation-search.stderr.txt) |
 
 报告之间没有跨轮去重。原始报告保留全部命中，包括无关结果；正文的文献评价以已核对来源为准。
 

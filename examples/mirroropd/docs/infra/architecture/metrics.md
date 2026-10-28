@@ -4,15 +4,15 @@
 
 ## 按训练阶段解释日志
 
-| 观测阶段 | 数据来源 | 能回答的问题 | 比较时的边界 |
-| --- | --- | --- | --- |
-| Rollout/teacher | 新生成轨迹、冻结教师评分 | 生成长度、任务得分、教师阶段开销 | 固定轨迹在 reuse 中不会重新生成 |
-| Legacy sampled anchor | Trainer 在更新前计算的 FSDP log-prob 与 behavior | 训练 engine 与 rollout 概率是否一致 | 每批入口一次；不作为 mirror 的 q 准备入口 |
-| Mirror anchor | actor 调用内的 scalar 或 hidden/head capture | q 准备时间、当前学生相对 q 的漂移 | MDPO eta<1 与所有 BPO 需要；MDPO eta=1 跳过 |
-| Sampled update | current forward、teacher、behavior/anchor | 当前信号、IS ratio、surrogate，以及旧模式的 clipping | 单动作 surrogate 不等于完整 KL；可能为负 |
-| Full-vocab update | kernel 的 objective sum、行值与可选诊断 | 固定前缀上的当前目标、KL 与位置差异 | 来自产生本次梯度的 forward；不同目标不直接比较原始 loss |
-| Optimizer | engine 返回的执行事实和梯度范数 | 是否实际 step、梯度是否有限 | 不能从有限 loss 推断 optimizer 成功 |
-| 验证 | 同步后的 student 重新生成 | 新参数下的任务表现 | 使用独立采样温度、长度和样本预算 |
+| 观测阶段              | 数据来源                                         | 能回答的问题                                         | 比较时的边界                                            |
+| --------------------- | ------------------------------------------------ | ---------------------------------------------------- | ------------------------------------------------------- |
+| Rollout/teacher       | 新生成轨迹、冻结教师评分                         | 生成长度、任务得分、教师阶段开销                     | 固定轨迹在 reuse 中不会重新生成                         |
+| Legacy sampled anchor | Trainer 在更新前计算的 FSDP log-prob 与 behavior | 训练 engine 与 rollout 概率是否一致                  | 每批入口一次；不作为 mirror 的 q 准备入口               |
+| Mirror anchor         | actor 调用内的 scalar 或 hidden/head capture     | q 准备时间、当前学生相对 q 的漂移                    | MDPO eta<1 与所有 BPO 需要；MDPO eta=1 跳过             |
+| Sampled update        | current forward、teacher、behavior/anchor        | 当前信号、IS ratio、surrogate，以及旧模式的 clipping | 单动作 surrogate 不等于完整 KL；可能为负                |
+| Full-vocab update     | kernel 的 objective sum、行值与可选诊断          | 固定前缀上的当前目标、KL 与位置差异                  | 来自产生本次梯度的 forward；不同目标不直接比较原始 loss |
+| Optimizer             | engine 返回的执行事实和梯度范数                  | 是否实际 step、梯度是否有限                          | 不能从有限 loss 推断 optimizer 成功                     |
+| 验证                  | 同步后的 student 重新生成                        | 新参数下的任务表现                                   | 使用独立采样温度、长度和样本预算                        |
 
 例如一次 outer step 有四次 reuse 更新，四条 update 记录使用同一批 teacher 和存在的 anchor，却对应四组 student 参数。第 4 条描述第 4 次更新之前的 forward；更新之后的验证会重新生成轨迹，不属于同一参数时刻或前缀总体。
 
@@ -43,13 +43,13 @@ Loss 侧的 `distillation/...` 经规范命名变成日志中的 `distill/...`�
 
 以下是当前代码的生成能力。一个历史 run 是否具有这些字段，要查它实际部署的版本、配置和 history，不能由当前代码反推。
 
-| 路径 | 全局目标 | Full-vocab KL 诊断 | 自动位置分桶 |
-| --- | --- | --- | --- |
-| 普通 Full-KL，包括 MDPO eta=1 | `distill/full_kl` | 此标量已经是原教师 KL；不准备 anchor，也不增加 mirror 四项诊断 | `distill/full_kl_position/*`，前提是 backend 返回行值；Liger 当前不返回 |
-| Full MDPO，eta<1 | `distill/mdpo/objective` | diagnostics 开启时生成下表四项 | `distill/mdpo/objective_position/*` |
-| Full BPO，包括 eta=1 | `distill/bpo/objective` | diagnostics 开启时生成下表四项 | `distill/bpo/objective_position/*` |
-| Sampled MDPO | `distill/mdpo/objective`，行为 IS 估计 | 不计算完整词表 KL 或 target log Z | 当前未接入 |
-| Legacy sampled OPD | sampled estimator / surrogate，字段随模式而异 | 单动作 log-gap 不等于 full-vocab KL | 当前未接入 |
+| 路径                          | 全局目标                                      | Full-vocab KL 诊断                                             | 自动位置分桶                                                            |
+| ----------------------------- | --------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 普通 Full-KL，包括 MDPO eta=1 | `distill/full_kl`                             | 此标量已经是原教师 KL；不准备 anchor，也不增加 mirror 四项诊断 | `distill/full_kl_position/*`，前提是 backend 返回行值；Liger 当前不返回 |
+| Full MDPO，eta<1              | `distill/mdpo/objective`                      | diagnostics 开启时生成下表四项                                 | `distill/mdpo/objective_position/*`                                     |
+| Full BPO，包括 eta=1          | `distill/bpo/objective`                       | diagnostics 开启时生成下表四项                                 | `distill/bpo/objective_position/*`                                      |
+| Sampled MDPO                  | `distill/mdpo/objective`，行为 IS 估计        | 不计算完整词表 KL 或 target log Z                              | 当前未接入                                                              |
+| Legacy sampled OPD            | sampled estimator / surrogate，字段随模式而异 | 单动作 log-gap 不等于 full-vocab KL                            | 当前未接入                                                              |
 
 令 p 为当前学生、q 为本轮冻结 anchor、T 为原教师，b 为冻结的未归一化目标 log-weight，$Z_m=\sum_a e^{b_a}$、$m_a=e^{b_a}/Z_m$。每个固定前缀上的原始目标为：
 
@@ -58,12 +58,12 @@ $$
 \ell_{\mathrm{BPO}}=\frac{\operatorname{Var}_q[\log p-b]}{2\eta}.
 $$
 
-| Full mirror 诊断 | 含义 | 缩放 |
-| --- | --- | --- |
-| `distill/teacher_kl` | $\mathrm{KL}(p\Vert T)$，保留教师完整输出支持 | 不除 eta |
-| `distill/target_kl` | $\mathrm{KL}(p\Vert m)$ | 不除 eta |
-| `distill/anchor_kl` | $\mathrm{KL}(p\Vert q)$ | 不除 eta |
-| `distill/target_log_z` | $\log Z_m$，本轮每个前缀的冻结量 | 不除 eta |
+| Full mirror 诊断       | 含义                                          | 缩放     |
+| ---------------------- | --------------------------------------------- | -------- |
+| `distill/teacher_kl`   | $\mathrm{KL}(p\Vert T)$，保留教师完整输出支持 | 不除 eta |
+| `distill/target_kl`    | $\mathrm{KL}(p\Vert m)$                       | 不除 eta |
+| `distill/anchor_kl`    | $\mathrm{KL}(p\Vert q)$                       | 不除 eta |
+| `distill/target_log_z` | $\log Z_m$，本轮每个前缀的冻结量              | 不除 eta |
 
 例如 κ=0 时，full MDPO objective 等于 $\mathrm{KL}(p\Vert T)+(1/\eta-1)\mathrm{KL}(p\Vert q)$；它的位置均值不能直接当作原教师 KL 的位置均值。MDPO 与 BPO 使用同一 target 时，目标函数和当前梯度也可能不同。Sampled MDPO 只有动作期望对应上述 raw MDPO；有限样本的日志还含采样误差。
 

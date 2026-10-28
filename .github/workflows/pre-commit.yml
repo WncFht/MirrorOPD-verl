@@ -33,6 +33,14 @@ jobs:
         run: |
           pip install pre-commit hydra-core
           pip install --no-deps -e .
+      - name: Set up Node for MirrorOPD documentation
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install scoped documentation dependencies
+        run: |
+          npm --prefix examples/mirroropd/tools/maintenance ci --ignore-scripts
+          python -m pip install -r examples/mirroropd/tools/maintenance/requirements.txt
       - name: Set ruff --output-format=github
         run: |
           sed -i 's/--output-format=full/--output-format=github/' .pre-commit-config.yaml
