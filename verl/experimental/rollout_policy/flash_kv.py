@@ -50,7 +50,9 @@ def flash_kv_context(model, mask, *, splits=0, cache=None):
         raise ValueError("Flash KV fusion requires CUDA and a 2D prefix padding mask")
     leftpad = (mask == 0).sum(-1, dtype=torch.int32).to(device, non_blocking=True)
     lengths = torch.full((mask.shape[0],), mask.shape[1], dtype=torch.int32, device=device)
-    capacity = cache.layers[0].capacity if cache is not None else None
+    # DynamicCache exposes only the current prefix. AppendCache exposes a view
+    # into fixed storage whose full capacity can be used for graph replay.
+    capacity = getattr(cache.layers[0], "capacity", None) if cache is not None else None
     with flash_kv_state(model, lengths, leftpad, splits=splits, capacity=capacity):
         yield
 

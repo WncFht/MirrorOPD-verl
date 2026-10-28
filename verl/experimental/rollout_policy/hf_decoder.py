@@ -65,8 +65,8 @@ class HFFusionDecoder:
         self.graphs = {}
         if cuda_graph and not flash_kv:
             raise ValueError("CUDA decode graphs require Flash KV attention")
-        if flash_kv and not preallocate_kv:
-            raise ValueError("Flash KV decode requires append-only KV storage")
+        if cuda_graph and not preallocate_kv:
+            raise ValueError("CUDA decode graphs require append-only KV storage")
         self.metrics = {}
         for model in (student, teacher):
             if model is not None:

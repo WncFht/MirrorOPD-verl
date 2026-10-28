@@ -110,16 +110,21 @@ def worker(rank, source, args):
     for path in sorted(args.trajectory.glob("rank-*.jsonl")):
         for line in path.open():
             value = json.loads(line)
-            if value["kind"] == "measurement" and value["repeat"] == 0 and value["compact"] == 2:
+            if value["kind"] == "measurement" and value["repeat"] == 0 and value["compact"] == args.source_compact:
                 histories.update({item["request_id"]: item["token_ids"] for item in value["results"]})
                 break
     if len(histories) != cfg["batch"]:
         raise ValueError("Incomplete source trajectory batch")
     config = SamplingConfig(max_tokens=max(args.points) + 1, legal_ids=legal)
     decoder = HistoryProbe(
-        *models, pad_id=tokenizer.pad_token_id, preallocate_kv=True, flash_kv=True, flash_kv_splits=1, cuda_graph=True
+        *models,
+        pad_id=tokenizer.pad_token_id,
+        preallocate_kv=args.executor == "optimized",
+        flash_kv=True,
+        flash_kv_splits=1,
+        cuda_graph=args.executor == "optimized",
     )
-    ordered = sorted(requests, key=lambda item: len(item.prompt_ids))
+    ordered = sorted(requests, key=lambda item: len(item.prompt_ids)) if args.source_compact else requests
     microbatch = cfg["microbatch"][0]
     chunks = [ordered[i : i + microbatch] for i in range(0, len(ordered), microbatch)]
     records = []
@@ -147,6 +152,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--trajectory", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--executor", choices=["optimized", "reference"], default="optimized")
+    parser.add_argument("--source-compact", type=int, choices=[0, 1, 2], default=2)
     parser.add_argument("--precision", choices=["stable", "stable_moe", "stable_moe_attention"], default="stable")
     parser.add_argument("--points", type=int, nargs="+", default=[0, 1, 2, 128, 512, 1024, 2048, 4096, 6144, 7167])
     args = parser.parse_args()
@@ -159,15 +166,22 @@ def main():
         parser.error("Probe requires the colocated alpha=0.5 acceptance workload")
     if source["args"]["gpus"] != 4 or len(source["args"]["microbatch"]) != 1:
         parser.error("Probe requires four replicas and one microbatch setting")
+    if args.source_compact not in source["args"]["compact"]:
+        parser.error("Requested source compaction is absent from the trajectory run")
     if any(step < 0 or step >= source["args"]["cap"] for step in args.points):
         parser.error("Probe points must lie inside the response cap")
     args.out.mkdir(parents=True)
     import torch.multiprocessing as mp
+    from fingerprint import source_fingerprint
 
+    executor_source = source_fingerprint()
     mp.spawn(worker, args=(source, args), nprocs=4, join=True)
     reports = [json.loads(path.read_text()) for path in sorted(args.out.glob("rank-*.json"))]
     result = {
         "trajectory": str(args.trajectory),
+        "executor": args.executor,
+        "source_compact": args.source_compact,
+        "source": executor_source,
         "precision": args.precision,
         "tolerances": {key: TOLERANCES[key] for key in ("logits_abs", "probability_abs", "selected_logprob_abs")},
         "checks": sum(len(row["checks"]) for row in reports),

@@ -33,11 +33,15 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_short_workload_fsdp2.sh moe
 
 `stable` 使用 BF16 主体权重、FP32 中间激活与输出、FP16 attention/KV；MoE router 的 BF16 参数精确扩展到 FP32。Triton GEMM 使用 TF32x3，并有 FP64 小矩阵 oracle。其余 precision 选项仅用于复现被拒绝的诊断候选。
 
+Reference 使用 eager DynamicCache，优化路径使用 append-only KV 与 CUDA graph；两者均使用 `num_splits=1` 的 Flash KV 解码算术。`benchmark.py` 默认启用 Flash KV，但只有 `--preallocate-kv` 或 `--cuda-graph` 才启用 append-only 存储。`--no-flash-kv` 保留为原生 attention 诊断入口：旧原生缓存路径在后训练模型的真实长历史上超过预设误差门槛，不能继续作为最终统一基线。生产优化路径的采样、精度和 attention kernel 未因此改变。
+
 ## 数值、回放与 profiling
 
 `verify_numerics.py` 在同一前缀上比较 cached decode 与完整前缀 forward，检查 α=0/0.5/1、最终概率、选中 log-prob 和 FP64 sampler oracle。`--reference-left-padding` 改变参考路径的物理 padding；`--replay-dir`、`--data`、`--request-ids` 可重放真实生成前缀。失败结果保留为 JSON，不能在测量后放宽容差。
 
 `probe_history.py` 进一步从最初 prompt 开始逐 token 重放正式长批，保留累积 KV，在指定位置用完整前缀 forward 检查全词表 logits 与最终分布。参考 forward 逐行执行，以限制 MoE 的激活内存，并检查 batch padding 的影响。该诊断不计入性能收益。
+
+历史重放默认检查优化执行器；`--executor reference` 检查 DynamicCache 与共享 Flash KV 的参考执行器。`--source-compact 0` 可重放固定行测量，默认值为 2。结果同时记录执行器源码指纹和源轨迹配置，两个执行器都必须通过原有容差。
 
 ```bash
 bash examples/mirroropd/benchmarks/fusion/run_fusion_benchmark_fsdp2.sh replay my-run

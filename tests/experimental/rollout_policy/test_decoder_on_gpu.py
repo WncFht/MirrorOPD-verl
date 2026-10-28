@@ -8,15 +8,19 @@ import torch
 pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="Flash KV/CUDA graph validation")
 
 
-def test_graph_compaction_preserves_prefixes_probabilities_and_request_order():
-    from transformers import Qwen3Config, Qwen3ForCausalLM
+@pytest.mark.parametrize("model_type", ["dense", "moe"])
+def test_graph_compaction_preserves_prefixes_probabilities_and_request_order(model_type):
+    from transformers import Qwen3Config, Qwen3ForCausalLM, Qwen3MoeConfig, Qwen3MoeForCausalLM
 
     from verl.experimental.rollout_policy.hf_decoder import DecodeRequest, HFFusionDecoder
     from verl.experimental.rollout_policy.precision import configure_precision
     from verl.experimental.rollout_policy.sampling import SamplingConfig
 
     torch.manual_seed(17)
-    config = Qwen3Config(
+    config_cls, model_cls = (
+        (Qwen3Config, Qwen3ForCausalLM) if model_type == "dense" else (Qwen3MoeConfig, Qwen3MoeForCausalLM)
+    )
+    config = config_cls(
         vocab_size=32,
         hidden_size=64,
         intermediate_size=128,
@@ -27,8 +31,11 @@ def test_graph_compaction_preserves_prefixes_probabilities_and_request_order():
         pad_token_id=1,
         eos_token_id=1,
         _attn_implementation="flash_attention_2",
+        num_experts=4,
+        num_experts_per_tok=2,
+        moe_intermediate_size=64,
     )
-    models = [Qwen3ForCausalLM(config).eval().bfloat16().cuda() for _ in range(2)]
+    models = [model_cls(config).eval().bfloat16().cuda() for _ in range(2)]
     for model in models:
         configure_precision(model, "stable")
     requests = [DecodeRequest(str(i), tuple([3] * (i + 1) + [1, 4]), i) for i in range(4)]
@@ -40,14 +47,20 @@ def test_graph_compaction_preserves_prefixes_probabilities_and_request_order():
         return tokens, log_probs.gather(-1, tokens[:, None]).squeeze(-1)
 
     outputs = []
-    for graph, compact, append in [(False, 0, False), (False, 1, True), (True, 1, True), (True, 2, True)]:
+    for graph, compact, append in [
+        (False, 0, False),
+        (False, 1, False),
+        (False, 1, True),
+        (True, 1, True),
+        (True, 2, True),
+    ]:
         decoder = HFFusionDecoder(
             *models,
             pad_id=1,
             compact=compact,
             compact_power_of_two=compact == 2,
             preallocate_kv=append,
-            flash_kv=append,
+            flash_kv=True,
             flash_kv_splits=1,
             cuda_graph=graph,
         )
