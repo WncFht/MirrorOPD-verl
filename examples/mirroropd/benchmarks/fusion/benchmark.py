@@ -63,7 +63,7 @@ def worker(rank, args, barrier):
         prompt_tokenizer,
         model_family="qwen3",
         hf_model_type=student_config.model_type,
-        chat_template_kwargs={},
+        chat_template_kwargs=args.chat_template_kwargs,
     )
     import pyarrow.parquet as pq
 
@@ -133,11 +133,17 @@ def worker(rank, args, barrier):
                 if model is not None
             },
             "prompt_lengths": [len(r.prompt_ids) for r in requests],
+            "prompt_tokens_sha256": hashlib.sha256(
+                json.dumps([r.prompt_ids for r in requests], separators=(",", ":")).encode()
+            ).hexdigest(),
+            "prompt_source_sha256": hashlib.sha256(
+                json.dumps(rows, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()
+            ).hexdigest(),
             "cold_load_seconds": time.monotonic() - cold_start,
             "versions": {name: importlib.metadata.version(name) for name in ["torch", "transformers"]},
             "stop_ids": stop_ids,
             "native_eos": {"student": student_tokenizer.eos_token_id, "teacher": teacher_tokenizer.eos_token_id},
-            "chat_template_kwargs": {},
+            "chat_template_kwargs": args.chat_template_kwargs,
             "profiler": args.profile,
             "cache_policy": (
                 "retain weights and CUDA allocator cache; reset both KV and rebuild graphs for every microbatch"
@@ -338,6 +344,9 @@ def main():
     parser.add_argument("--student", required=True)
     parser.add_argument("--teacher", required=True)
     parser.add_argument("--prompt-model")
+    parser.add_argument(
+        "--chat-template-kwargs", type=json.loads, default={}, help="Explicit prompt protocol as a JSON object"
+    )
     parser.add_argument("--stop-ids", type=int, nargs="+", default=[151643, 151645])
     parser.add_argument("--data", required=True)
     parser.add_argument("--out", required=True)
@@ -364,6 +373,8 @@ def main():
     parser.add_argument("--stop-diagnostics", action="store_true")
     parser.add_argument("--deadline", type=float, default=7200)
     args = parser.parse_args()
+    if not isinstance(args.chat_template_kwargs, dict):
+        parser.error("--chat-template-kwargs must be a JSON object")
     if args.warmup_cap and (not args.profile or args.warmup_cap < 1):
         parser.error("Shortened warmup is allowed only for separate profiler diagnostics")
     if args.cuda_graph:

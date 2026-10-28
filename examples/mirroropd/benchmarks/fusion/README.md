@@ -18,6 +18,15 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_benchmark_fsdp2.sh moe-post
 
 正式自然生成使用 DAPO 的前 64 条 prompt、response cap7168、α=0.5、temperature=1、top-p=1、top-k=-1，以及 `[151643,151645]` raw stop set。初始 Base 与官方后训练 Qwen3-1.7B 分别测量；后者只是另一组工作负载，不是本次 OPD 训练所得 checkpoint，也不改变 `initial` 的绑定。两者均使用原始 Base 的 prompt 协议。
 
+`benchmark.py --chat-template-kwargs '{"enable_thinking":false}'` 显式选择非思考模式提示协议；默认仍为 `{}`。原始问题不变，模板在 assistant 前缀后添加空思考段。每份记录保存模板参数、实际输入 token 的 SHA-256 和原始 prompt 行的 SHA-256；reference 与优化实现必须使用相同协议。以下补充入口先运行 batch8/cap512 检查，再运行 batch64/cap7168 的三次 reference 测量，以及固定行和活跃行压紧两种优化配置：
+
+```bash
+bash examples/mirroropd/benchmarks/fusion/run_fusion_short_workload_fsdp2.sh dense my-nonthinking-run
+bash examples/mirroropd/benchmarks/fusion/run_fusion_short_workload_fsdp2.sh moe my-nonthinking-run
+```
+
+非思考模式是单独标注的负载协议，不能与 `{}` 协议直接计算系统加速比。是否覆盖短响应场景，仍须根据自然 EOS、长度分布和 cap 命中率判断；入口名称和 checkpoint 名称均不构成验收证据。
+
 每个最终对照先预热一个完整批，再测三个完整批。每轮重建请求、双 KV 和 CUDA graph，保留模型权重、CUDA allocator 缓存与磁盘 JIT 缓存。`cold_load_seconds` 只计 checkpoint 加载及模型准备，不能当作整个 Python/Ray 进程的启动耗时。原 trainer 的完整生命周期成本由训练入口另测。
 
 `--compact 0` 保持固定行；`1` 同时做长度分桶和即时删除结束行；`2` 做长度分桶并按 2 的幂次缩小行数。参考与优化主对照使用同一个值，避免把分组变化当作 kernel 收益。每个请求的 RNG 独立，分组不会重置 seed；浮点差异仍可能使自然采样轨迹分叉，因此必须同时报告有效 token 数、长度和墙钟。
