@@ -211,7 +211,7 @@ class ServerAdapter(BaseRollout):
                 compact=self.settings.get("compact", True),
                 compact_power_of_two=self.settings.get("compact_power_of_two", True),
                 preallocate_kv=not self.settings.get("reference", False),
-                flash_kv=not self.settings.get("reference", False),
+                flash_kv=True,
                 flash_kv_splits=1,
                 cuda_graph=not self.settings.get("reference", False),
             )

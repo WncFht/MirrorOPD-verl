@@ -61,6 +61,12 @@ def test_first_token_eos_and_cap_one():
         assert output.finish_reason == ("eos" if stop else "length")
 
 
+def test_graph_rejects_dynamic_kv_storage():
+    student, teacher = models()
+    with pytest.raises(ValueError, match="graphs require append-only"):
+        HFFusionDecoder(student, teacher, pad_id=0, flash_kv=True, cuda_graph=True, preallocate_kv=False)
+
+
 @pytest.mark.parametrize("power_of_two", [False, True])
 def test_microbatch_streams_and_compaction_preserve_requests(power_of_two):
     student, teacher = models()

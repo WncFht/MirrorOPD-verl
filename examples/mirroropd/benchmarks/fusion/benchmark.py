@@ -360,8 +360,13 @@ def main():
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--alpha", type=float, default=0.5)
     parser.add_argument("--cuda-graph", action="store_true")
-    parser.add_argument("--flash-kv", action="store_true")
-    parser.add_argument("--flash-kv-splits", type=int, default=0)
+    parser.add_argument(
+        "--flash-kv",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Shared decode arithmetic for reference and optimized paths; disable only for native-kernel diagnostics",
+    )
+    parser.add_argument("--flash-kv-splits", type=int, default=1)
     parser.add_argument("--preallocate-kv", action="store_true")
     parser.add_argument("--profile", action="store_true")
     parser.add_argument("--profile-start", type=int, default=0)
@@ -378,8 +383,8 @@ def main():
     if args.warmup_cap and (not args.profile or args.warmup_cap < 1):
         parser.error("Shortened warmup is allowed only for separate profiler diagnostics")
     if args.cuda_graph:
-        args.flash_kv = True
-    if args.flash_kv:
+        if not args.flash_kv:
+            parser.error("CUDA graphs require Flash KV decode")
         args.preallocate_kv = True
     if os.environ.get("CUDA_VISIBLE_DEVICES") != "0,1,2,3":
         parser.error("Set CUDA_VISIBLE_DEVICES=0,1,2,3 explicitly")
