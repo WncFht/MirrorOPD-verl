@@ -24,10 +24,13 @@ def main():
     parser.add_argument("--teacher", type=Path, required=True)
     parser.add_argument("--prefixes", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--memory-fraction", type=float, default=0.12)
     args = parser.parse_args()
     torch.set_num_threads(1)
     torch.cuda.set_device(0)
-    torch.cuda.set_per_process_memory_fraction(0.12)
+    if not 0 < args.memory_fraction <= 1:
+        raise ValueError("memory-fraction must be in (0, 1]")
+    torch.cuda.set_per_process_memory_fraction(args.memory_fraction)
     torch.backends.cuda.matmul.allow_tf32 = False
     model = (
         AutoModelForCausalLM.from_pretrained(
