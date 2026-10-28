@@ -113,6 +113,53 @@ class AgentLoopWorkerTQ(AgentLoopWorker):
             self.background_tasks.add(task)
             task.add_done_callback(self.background_tasks.discard)
 
+    async def generate_sessions(self, sessions: list[dict], client, deadline: float, drain: float):
+        """Block through scoring and TQ publication; never publish parent status."""
+        from verl.experimental.rollout_policy.collector import settle_with_deadline
+
+        async def run(session):
+            prompt = dict(session["prompt"])
+            params = dict(session["sampling"])
+            request = session["request"]
+            prompt["session_id"] = request.response_index
+            prompt["__rollout_policy__"] = session["metadata"]
+            prompt.setdefault("agent_name", self.config.actor_rollout_ref.rollout.agent.default_agent_loop)
+            trajectory = {
+                "step": prompt["global_steps"],
+                "sample_index": request.row,
+                "rollout_n": request.response_index,
+                "validate": False,
+            }
+            try:
+                await self._run_agent_loop(params, trajectory, trace=False, rollout_client=client, **prompt)
+            except BaseException:
+                # A failed tokenization/scorer must release peers waiting for the
+                # planned microbatch admission count, while GPU work still drains.
+                if hasattr(client, "abort"):
+                    await client.abort(f"Rollout session failed: {request.key}")
+                raise
+            return request.key, request.source
+
+        tasks = [asyncio.create_task(run(session)) for session in sessions]
+        if not hasattr(self, "background_tasks"):
+            self.background_tasks = set()
+        self.background_tasks.update(tasks)
+        for task in tasks:
+            task.add_done_callback(self.background_tasks.discard)
+        return await settle_with_deadline(tasks, deadline, drain)
+
+    async def drain_sessions(self, timeout):
+        """A separate acknowledgement survives cancellation of the submission RPC."""
+        from verl.experimental.rollout_policy.collector import UnsafeDrainError
+
+        tasks = list(getattr(self, "background_tasks", ()))
+        if tasks:
+            _, pending = await asyncio.wait(tasks, timeout=timeout)
+            if pending:
+                raise UnsafeDrainError("Agent session writers did not drain")
+            await asyncio.gather(*tasks, return_exceptions=True)
+        return len(tasks)
+
     async def _run_prompt(self, prompt: dict, sampling_params: dict, trajectory: dict, trace: bool = False) -> None:
         """Spawn multiple agent loops in parallel according to rollout.n or rollout.val_kwargs.n."""
         uid, partition_id = prompt["uid"], "train" if not trajectory["validate"] else "val"
@@ -163,12 +210,29 @@ class AgentLoopWorkerTQ(AgentLoopWorker):
         uid, session_id = kwargs["uid"], kwargs["session_id"]
         outputs = output if isinstance(output, list) else [output]
         if not outputs:
+            if "__rollout_policy__" in kwargs:
+                raise RuntimeError(f"Empty rollout output for {uid}_{session_id}")
             logger.warning(f"Empty output for prompt {uid}_{session_id}")
             return
+
+        if "__rollout_policy__" in kwargs:
+            final = outputs[-1]
+            if (
+                not final.response_ids
+                or not any(final.response_mask)
+                or final.extra_fields.get("finish_reason") in {"abort", "aborted", "error"}
+            ):
+                raise RuntimeError(f"Incomplete rollout session: {uid}_{session_id}")
+            if kwargs["__rollout_policy__"].get("temperature") == 0 and final.response_logprobs is not None:
+                # vLLM reports softmax scores for greedy tokens; the actual
+                # deterministic behavior distribution assigns them probability 1.
+                final.response_logprobs = [0.0] * len(final.response_logprobs)
 
         await self._compute_score(outputs, kwargs=kwargs)
 
         final_output = outputs[-1]
+        if "__rollout_policy__" in kwargs:
+            final_output.extra_fields["rollout_policy"] = kwargs["__rollout_policy__"]
         # TODO: Support output:list[AgentLoopOutput]
         await self._compute_teacher_logprobs(
             final_output,
@@ -227,6 +291,20 @@ class AgentLoopWorkerTQ(AgentLoopWorker):
                     "max_global_steps": field["extra_fields"].get("max_global_steps"),
                 }
             )
+
+        if "__rollout_policy__" in kwargs:
+            policy = kwargs["__rollout_policy__"]
+            has_current = policy["student"] == "current" and (
+                policy["source"] == "student" or (policy["source"] == "fusion" and policy["teacher_weight"] < 1)
+            )
+            for tag in tags:
+                tag["rollout_has_current_component"] = has_current
+                if has_current:
+                    expected = policy["actor_version"][0]
+                    if tag["min_global_steps"] != expected or tag["max_global_steps"] != expected:
+                        raise RuntimeError("Rollout returned a different current actor version than the batch plan")
+                else:
+                    tag["min_global_steps"] = tag["max_global_steps"] = None
 
         await tq.async_kv_batch_put(
             keys=keys,

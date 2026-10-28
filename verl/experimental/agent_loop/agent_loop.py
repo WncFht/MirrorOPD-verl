@@ -710,6 +710,7 @@ class AgentLoopWorker:
         *,
         agent_name: str,
         trace: bool = True,
+        rollout_client=None,
         **kwargs,
     ) -> _InternalAgentLoopOutput:
         if trajectory["validate"] and "max_tokens" in sampling_params and agent_name != "single_turn_agent":
@@ -730,7 +731,7 @@ class AgentLoopWorker:
             agent_loop = hydra.utils.instantiate(
                 config=agent_loop_config,
                 trainer_config=DictConfigWrap(config=self.config),
-                server_manager=self.llm_client,
+                server_manager=rollout_client if rollout_client is not None else self.llm_client,
                 tokenizer=self.tokenizer,
                 processor=self.processor,
                 hf_model_type=self.hf_model_type,

@@ -888,7 +888,45 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         self.actor.save_checkpoint(local_path, hdfs_path, global_step, max_ckpt_to_keep)
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
-    async def update_weights(self, global_steps: int = None, mode: str = "auto"):
+    def configure_fusion(self, settings):
+        from verl.workers.rollout.hf_fusion import ServerAdapter
+
+        self.fusion_rollout = ServerAdapter(self.config.rollout, self.config.model, settings=settings)
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
+    def initialize_fusion_student(self):
+        # Loading must finish on every receiver before any rank enters export collectives.
+        self.fusion_rollout._ensure_student()
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
+    async def prepare_fusion(self, alpha, version, phase_token=None):
+        await self.fusion_rollout.prepare(alpha, version, phase_token=phase_token)
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
+    async def release_fusion(self):
+        await self.fusion_rollout.release()
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
+    def fusion_metrics(self):
+        return {
+            "microbatches": self.fusion_rollout.batch_metrics,
+            "peak_allocated_bytes": get_torch_device().max_memory_allocated(),
+            "peak_reserved_bytes": get_torch_device().max_memory_reserved(),
+            "loaded_version": self.fusion_rollout.loaded_version,
+            "load_seconds_total": self.fusion_rollout.metrics.get("load_seconds", 0.0),
+            "residency": self.fusion_rollout.residency_metrics,
+            "resolved_precision": {
+                name: getattr(getattr(self.fusion_rollout, name), "_fusion_precision", None)
+                for name in ("student", "teacher")
+            },
+        }
+
+    @register(dispatch_mode=Dispatch.DIRECT_ROLLOUT_METHOD)
+    def fusion_generate_batch(self, rows):
+        return self.fusion_rollout.generate_batch(rows)
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
+    async def update_weights(self, global_steps: int = None, mode: str = "auto", target: str = "student", version=None):
         """Update weights from trainer to rollout.
 
         1. For sync training with colocated trainer and rollout, update rollout directly from model engine.
@@ -913,6 +951,27 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
                   transfer via checkpoint engine, suitable for disaggregated
                   trainer/rollout deployments.
         """
+
+        if target == "fusion_student":
+            if mode not in ("auto", "naive") or self.config.rollout.checkpoint_engine.backend != "naive":
+                raise ValueError("Fusion current refit requires the same-topology naive transport")
+            weights, peft = self.actor.engine.get_per_tensor_param(
+                layered_summon=self.layered_summon, base_sync_done=True
+            )
+            if peft is not None:
+                raise ValueError("Fusion refit requires a full-parameter dense actor")
+            error = await self.fusion_rollout.update_weights(weights, version=version)
+            errors = [None] * torch.distributed.get_world_size()
+            torch.distributed.all_gather_object(errors, error)
+            if self.actor.engine.is_param_offload_enabled:
+                self.actor.engine.to("cpu", model=True, optimizer=False, grad=False)
+            if any(errors):
+                raise RuntimeError(f"Fusion refit failed on at least one rank: {errors}")
+            torch.distributed.barrier()
+            self.fusion_rollout.commit_version(version)
+            return {}
+        if target != "student":
+            raise ValueError(f"Unknown rollout weight target: {target}")
 
         # Resolve mode: "auto" falls back to config, explicit values take precedence
         effective_mode = mode if mode != "auto" else self.config.rollout.checkpoint_engine.backend

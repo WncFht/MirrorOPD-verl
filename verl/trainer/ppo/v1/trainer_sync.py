@@ -14,6 +14,9 @@
 import logging
 import os
 
+import transfer_queue as tq
+
+from verl.experimental.rollout_policy.plan import RolloutPolicyConfig
 from verl.trainer.ppo.v1.trainer_base import PPOTrainer, register_trainer
 from verl.utils.debug import marked_timer
 
@@ -28,17 +31,50 @@ class PPOTrainerSync(PPOTrainer):
     2. Partial rollout is disabled
     """
 
+    rollout_policy = RolloutPolicyConfig()
+
     def on_init_end(self):
+        if not self.rollout_policy.default_path:
+            from verl.experimental.rollout_policy.runtime import RolloutRuntime
+
+            self.rollout_runtime = RolloutRuntime(self)
+            return
         # update weights after loading checkpoint
         self.checkpoint_manager.update_weights(self.global_steps)
 
     def on_step_end(self):
+        if not self.rollout_policy.default_path:
+            return
         with marked_timer("update_weights", self.timing_raw, color="red"):
             # wake up all replicas to update weights
             self.checkpoint_manager.update_weights(self.global_steps)
 
     def on_sample_end(self):
         # sleep all replicas to discard weights and kv cache
-        self.checkpoint_manager.sleep_replicas()
+        if self.rollout_policy.default_path:
+            self.checkpoint_manager.sleep_replicas()
         if self.curr_step_profile:
             self._stop_rollout_profiling()
+
+    def on_validate_begin(self):
+        if not self.rollout_policy.default_path:
+            self.rollout_runtime.sync_validation()
+
+    def on_validate_end(self):
+        if not self.rollout_policy.default_path:
+            self.rollout_runtime.sleep_validation()
+
+    def _submit_batch_to_rollout(self, batch):
+        if self.rollout_policy.default_path:
+            return super()._submit_batch_to_rollout(batch)
+        tags = [{"is_prompt": True, "status": "pending", "global_steps": self.global_steps} for _ in range(len(batch))]
+        tq.kv_batch_put(keys=list(batch["uid"]), partition_id="train", tags=tags)
+        self._stamp_rollout_submission(batch)
+        self._policy_metrics = self.rollout_runtime.collect(batch)
+        return len(batch)
+
+    def prepare_step(self):
+        result = super().prepare_step()
+        if not self.rollout_policy.default_path:
+            result.update(self._policy_metrics)
+        return result

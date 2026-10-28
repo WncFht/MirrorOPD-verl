@@ -62,6 +62,12 @@ CUDA_KEYWORD_CHECK_WHITELIST = [
     "verl/trainer/distillation/forward_vocab_triton.py",  # Triton CUDA libdevice kernels
     "verl/trainer/distillation/profiling.py",  # CUDA NVTX profiling ranges
     "verl/utils/stable_logprobs_triton.py",  # Triton CUDA libdevice kernels
+    "verl/experimental/rollout_policy/cuda_graph.py",  # CUDA graph and stream implementation
+    "verl/experimental/rollout_policy/flash_kv.py",  # FlashAttention CUDA KV backend
+    "verl/experimental/rollout_policy/hf_decoder.py",  # CUDA-only optimized path and event profiling
+    "verl/experimental/rollout_policy/math_context.py",  # scoped CUDA GEMM and SDPA arithmetic
+    "verl/experimental/rollout_policy/validation.py",  # CUDA backend capability checks
+    "verl/workers/rollout/hf_fusion/adapter.py",  # CUDA inference residency and event measurements
 ]
 
 # directory or file path must contain keyword "nccl"

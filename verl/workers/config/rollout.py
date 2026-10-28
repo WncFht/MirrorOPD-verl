@@ -193,7 +193,7 @@ class RolloutConfig(BaseConfig):
     standalone_gpu_memory_utilization: Optional[float] = None
     ignore_eos: bool = False
     # Additional request-level stop IDs; native model EOS remains active.
-    # Shared by training and validation. Currently implemented by vLLM only.
+    # Shared by training and validation; supported by vLLM and the local HF fusion decoder.
     stop_token_ids: Optional[list[int]] = None
     enforce_eager: bool = False
     cudagraph_capture_sizes: Optional[list] = None
@@ -298,8 +298,8 @@ class RolloutConfig(BaseConfig):
                 type(token_id) is not int or token_id < 0 for token_id in self.stop_token_ids
             ):
                 raise ValueError("rollout.stop_token_ids must be a list of nonnegative integers or null")
-            if self.stop_token_ids and self.name != "vllm":
-                raise ValueError("rollout.stop_token_ids currently requires rollout.name='vllm'")
+            if self.stop_token_ids and self.name not in {"vllm", "hf_fusion"}:
+                raise ValueError("rollout.stop_token_ids requires rollout.name='vllm' or 'hf_fusion'")
         # Deprecation warning for mode field - only async mode is supported
         if self.mode == "sync":
             raise ValueError(
