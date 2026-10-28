@@ -19,23 +19,23 @@ $$
 
 IS 修正积分测度，current/frozen 决定学习信号。两者分别变化时，对应的目标如下。正则列始终对 $cD_q$ 精确求导，NoIS 只作用于 OPD 项。
 
-| 信号 | 积分测度 | 普通 OPD 目标 | 加精确 $cD_q$ 后的目标 |
-| --- | --- | --- | --- |
-| Current + IS | $p$ | $D_T$ | $D_T+cD_q$ |
-| Frozen + IS | $p$ | $D_T-D_q$ | $D_T+(c-1)D_q$ |
-| Current + NoIS | $\beta$ | $\frac12\mathbb E_\beta[(U-r)^2]$ | $\frac12\mathbb E_\beta[(U-r)^2]+cD_q$ |
-| Frozen + NoIS | $\beta$ | $-\mathbb E_\beta[r\log p]$ | $-\mathbb E_\beta[r\log p]+cD_q$ |
+| 信号           | 积分测度 | 普通 OPD 目标                     | 加精确 $cD_q$ 后的目标                 |
+| -------------- | -------- | --------------------------------- | -------------------------------------- |
+| Current + IS   | $p$      | $D_T$                             | $D_T+cD_q$                             |
+| Frozen + IS    | $p$      | $D_T-D_q$                         | $D_T+(c-1)D_q$                         |
+| Current + NoIS | $\beta$  | $\frac12\mathbb E_\beta[(U-r)^2]$ | $\frac12\mathbb E_\beta[(U-r)^2]+cD_q$ |
+| Frozen + NoIS  | $\beta$  | $-\mathbb E_\beta[r\log p]$       | $-\mathbb E_\beta[r\log p]+cD_q$       |
 
 这些是真实标量目标，不是 detached surrogate 的前向值。完整支持且 $q\ne T$ 时，最后一行的目标无下界，有限系数的 $D_q$ 正则无法阻止负权重动作的概率趋于零。逐格证明见[OPD 四格](2026-10-22-固定前缀下的OPD目标与梯度.md#four-cases)及[精确正则四格](2026-10-22-镜像下降与离策略四种更新.md#exact-regularizer)。
 
 ### Full-vocab 的含义
 
-| 计算方式 | 固定前缀下的含义 |
-| --- | --- |
-| 对 $D_T$ 直接 backward | 等于 current + 精确 IS 的期望梯度；当前动作已完整求和，无需额外 action IS 或 advantage 模块 |
-| 完整求和 $p$ 加权的 score | 与 sampled-token 的 IS 分支对应，省去 ratio 的显式计算 |
-| 完整求和 $\beta$ 加权的 score | 与 NoIS 分支对应，需要全词表行为分布；目标见上表 |
-| 直接把 KL 外部的 $p$ 换成 $\beta$ | 得到 $\mathbb E_\beta\log(p/T)$，不等于上表的 NoIS score 目标 |
+| 计算方式                          | 固定前缀下的含义                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------------- |
+| 对 $D_T$ 直接 backward            | 等于 current + 精确 IS 的期望梯度；当前动作已完整求和，无需额外 action IS 或 advantage 模块 |
+| 完整求和 $p$ 加权的 score         | 与 sampled-token 的 IS 分支对应，省去 ratio 的显式计算                                      |
+| 完整求和 $\beta$ 加权的 score     | 与 NoIS 分支对应，需要全词表行为分布；目标见上表                                            |
+| 直接把 KL 外部的 $p$ 换成 $\beta$ | 得到 $\mathbb E_\beta\log(p/T)$，不等于上表的 NoIS score 目标                               |
 
 完整词表消除动作抽样方差，仍保留不同目标之间的差异；精确 KL baseline 用于 sampled-token 时仍有动作噪声。计算图与 detach 位置见[Full-vocab 篇](2026-10-22-Full-vocab计算图与四种更新.md#graphs)。
 
@@ -63,37 +63,37 @@ $$
 
 ## 阅读顺序
 
-| 文档 | 内容 |
-| --- | --- |
-| [统一符号](符号约定.md) | 教师 $T$、锚点 $q$、当前学生 $p$、行为策略 $\beta$，以及冻结中心与当前中心的区别 |
-| [固定前缀下的 OPD 目标与梯度](2026-10-22-固定前缀下的OPD目标与梯度.md) | Current/frozen × IS/NoIS 四种目标；正确计算图；clipping、支持和有限缓存边界 |
-| [Full-vocab 计算图与四种更新](2026-10-22-Full-vocab计算图与四种更新.md) | KL 数值、一阶梯度代理和直接 backward；四格的完整求和；直接替换概率的不同含义 |
-| [镜像下降与离策略四种更新](2026-10-22-镜像下降与离策略四种更新.md) | $1/\eta$ KL 正则；MD 与 KL 近端点；两种 NoIS 定义；归一化、中心化及 Part/BPO/Mean |
-| [条件梯度估计与控制变量](2026-10-22-条件梯度估计与控制变量.md) | KL baseline、最优标量 baseline、top-k、TA、HETS、ResOPD、SC-TA 与离策略残差 |
+| 文档                                                                    | 内容                                                                              |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [统一符号](符号约定.md)                                                 | 教师 $T$、锚点 $q$、当前学生 $p$、行为策略 $\beta$，以及冻结中心与当前中心的区别  |
+| [固定前缀下的 OPD 目标与梯度](2026-10-22-固定前缀下的OPD目标与梯度.md)  | Current/frozen × IS/NoIS 四种目标；正确计算图；clipping、支持和有限缓存边界       |
+| [Full-vocab 计算图与四种更新](2026-10-22-Full-vocab计算图与四种更新.md) | KL 数值、一阶梯度代理和直接 backward；四格的完整求和；直接替换概率的不同含义      |
+| [镜像下降与离策略四种更新](2026-10-22-镜像下降与离策略四种更新.md)      | $1/\eta$ KL 正则；MD 与 KL 近端点；两种 NoIS 定义；归一化、中心化及 Part/BPO/Mean |
+| [条件梯度估计与控制变量](2026-10-22-条件梯度估计与控制变量.md)          | KL baseline、最优标量 baseline、top-k、TA、HETS、ResOPD、SC-TA 与离策略残差       |
 
 前三篇构成普通 OPD 到 Mirror Descent 的理论主线；第四篇是估计器扩展。各篇文末保留实际引用的论文及版本，实验结果和代码审计则引用原资料。
 
 ## 主要论文与资料位置
 
-| 来源 | 在本组推导中的作用 | 本地证据入口 |
-| --- | --- | --- |
-| AsyncOPD | 固定前缀下的 current advantage、IS、clipping 及有限缓存 | [原论文与实现审计](../literature/learning-signal/2026-10-21-固定前缀下的优势估计与重要性采样.md#6-论文与实现证据) |
-| Semi-OPD、Lightning OPD | 固定学生轨迹、信号刷新与离线 surrogate 的实例 | [陈旧数据研究第 5–6 节](../literature/learning-signal/2026-10-21-陈旧数据训练的指标与实验对照.md#5-lightning-opd年龄大也可能漂移有限) |
-| GKD、MiniLLM | 条件分布拟合与单步词表积分；局部梯度的适用边界 | [Full-vocab 篇](2026-10-22-Full-vocab计算图与四种更新.md#4-固定前缀与实现范围) |
-| PPO | 冻结 advantage 的局部策略改进背景 | [MD 篇](2026-10-22-镜像下降与离策略四种更新.md#9-论文关系与验算) |
-| vOPD、TA-OPD、ResOPD、TT-OPD | baseline、支持集与尾部控制变量 | [条件估计篇](2026-10-22-条件梯度估计与控制变量.md) |
-| MirrorOPD 核心稿 | 冻结信号、一般 $f_{\kappa,\eta}$、MDPO/Part/BPO/Mean | [镜像问题](../../../../../MirrorOPD/theory/core/sections/01_mirror.tex)、[内层拟合](../../../../../MirrorOPD/theory/core/sections/04_inner.tex) |
+| 来源                         | 在本组推导中的作用                                      | 本地证据入口                                                                                                                                    |
+| ---------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| AsyncOPD                     | 固定前缀下的 current advantage、IS、clipping 及有限缓存 | [原论文与实现审计](../literature/learning-signal/2026-10-21-固定前缀下的优势估计与重要性采样.md#6-论文与实现证据)                               |
+| Semi-OPD、Lightning OPD      | 固定学生轨迹、信号刷新与离线 surrogate 的实例           | [陈旧数据研究第 5–6 节](../literature/learning-signal/2026-10-21-陈旧数据训练的指标与实验对照.md#5-lightning-opd年龄大也可能漂移有限)           |
+| GKD、MiniLLM                 | 条件分布拟合与单步词表积分；局部梯度的适用边界          | [Full-vocab 篇](2026-10-22-Full-vocab计算图与四种更新.md#4-固定前缀与实现范围)                                                                  |
+| PPO                          | 冻结 advantage 的局部策略改进背景                       | [MD 篇](2026-10-22-镜像下降与离策略四种更新.md#9-论文关系与验算)                                                                                |
+| vOPD、TA-OPD、ResOPD、TT-OPD | baseline、支持集与尾部控制变量                          | [条件估计篇](2026-10-22-条件梯度估计与控制变量.md)                                                                                              |
+| MirrorOPD 核心稿             | 冻结信号、一般 $f_{\kappa,\eta}$、MDPO/Part/BPO/Mean    | [镜像问题](../../../../../MirrorOPD/theory/core/sections/01_mirror.tex)、[内层拟合](../../../../../MirrorOPD/theory/core/sections/04_inner.tex) |
 
 MD 篇的四格分类与两种 NoIS 定义由本目录的标量目标独立推导，不将其记作上述论文已经完成的端到端效果验证。核心稿链接指向相邻仓库；本目录已写出本组推导所需定义，单独阅读时不依赖该仓库存在。
 
 ## 验算
 
-| 范围 | 脚本与证据 |
-| --- | --- |
-| 基础四格、两种正则 NoIS、几何目标与归一化修正 | [verify_offpolicy_objectives.py](../../research/objectives/verify_offpolicy_objectives.py)、[FP64 结果](data/offpolicy-objectives.json) |
-| 原 sampled-token 与 clipping 对照 | [verify_fixed_prefix.py](../../research/objectives/verify_fixed_prefix.py)、[历史结果](../literature/learning-signal/data/gradient-audit.json) |
-| Full-vocab 计算图与支持集 | [verify_fullkl_and_support.py](../../research/objectives/verify_fullkl_and_support.py)、[历史结果](../literature/learning-signal/data/support-selection-20261021/audit.json) |
-| Baseline 与稀疏估计器 | [verify_reward_estimators.py](../../research/objectives/verify_reward_estimators.py)、[历史结果](../literature/learning-signal/data/reward-research-20261021/estimator-audit.json) |
+| 范围                                          | 脚本与证据                                                                                                                                                                         |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 基础四格、两种正则 NoIS、几何目标与归一化修正 | [verify_offpolicy_objectives.py](../../research/objectives/verify_offpolicy_objectives.py)、[FP64 结果](data/offpolicy-objectives.json)                                            |
+| 原 sampled-token 与 clipping 对照             | [verify_fixed_prefix.py](../../research/objectives/verify_fixed_prefix.py)、[历史结果](../literature/learning-signal/data/gradient-audit.json)                                     |
+| Full-vocab 计算图与支持集                     | [verify_fullkl_and_support.py](../../research/objectives/verify_fullkl_and_support.py)、[历史结果](../literature/learning-signal/data/support-selection-20261021/audit.json)       |
+| Baseline 与稀疏估计器                         | [verify_reward_estimators.py](../../research/objectives/verify_reward_estimators.py)、[历史结果](../literature/learning-signal/data/reward-research-20261021/estimator-audit.json) |
 
 新增脚本只使用 CPU 张量，完整枚举小词表，不加载语言模型。证明给出解析条件，脚本检查公式与反向计算图的一致性。
 

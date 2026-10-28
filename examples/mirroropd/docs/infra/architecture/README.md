@@ -4,15 +4,17 @@
 
 ## 模块职责
 
-| 层 | 负责的内容 | 详细定义 |
-| --- | --- | --- |
-| 统一实验入口与配置 | 声明式 ModelPair/Budget/Preset 生成 LaunchPlan，method 选择算法，resolver 描述 teacher/anchor 数据需求 | [配置到执行](training-loop.md#配置入口) |
-| V1 Trainer | 采样、评分、更新、验证、checkpoint 和权重同步的编排 | [训练循环](training-loop.md) |
-| 教师协调 | shared-sync 教师上卡、评分、等待、卸载和发布 | [教师生命周期](teacher.md) |
-| TransferQueue 与布局工具 | 按样本身份传递数据，将模型预测位置映射到 response target | [数据与归一化](data-and-loss.md) |
-| Worker 与 Engine | 分布式分发、微批执行、反向、optimizer 和执行事实 | [训练循环](training-loop.md#从一次-actor-调用到实际更新) |
-| 目标与拟合 | Weighted teacher 构造、sampled surrogate、full MDPO/BPO 行归约；共用 LossContext | [Sampled OPD](sampled-opd.md)、[Full-vocab](full-vocab.md) |
-| 指标与进度 | 合并观测、逐次更新日志、尝试与成功计数、恢复 | [指标系统](metrics.md)、[进度与恢复](progress-checkpoint.md) |
+| 层                       | 负责的内容                                                                                             | 详细定义                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| 统一实验入口与配置       | 声明式 ModelPair/Budget/Preset 生成 LaunchPlan，method 选择算法，resolver 描述 teacher/anchor 数据需求 | [配置到执行](training-loop.md#配置入口)                      |
+| V1 Trainer               | 采样、评分、更新、验证、checkpoint 和权重同步的编排                                                    | [训练循环](training-loop.md)                                 |
+| 教师协调                 | shared-sync 教师上卡、评分、等待、卸载和发布                                                           | [教师生命周期](teacher.md)                                   |
+| TransferQueue 与布局工具 | 按样本身份传递数据，将模型预测位置映射到 response target                                               | [数据与归一化](data-and-loss.md)                             |
+| Worker 与 Engine         | 分布式分发、微批执行、反向、optimizer 和执行事实                                                       | [训练循环](training-loop.md#从一次-actor-调用到实际更新)     |
+| 目标与拟合               | Weighted teacher 构造、sampled surrogate、full MDPO/BPO 行归约；共用 LossContext                       | [Sampled OPD](sampled-opd.md)、[Full-vocab](full-vocab.md)   |
+| 指标与进度               | 合并观测、逐次更新日志、尝试与成功计数、恢复                                                           | [指标系统](metrics.md)、[进度与恢复](progress-checkpoint.md) |
+
+默认 student 来源的 shared-sync 路径如下。非默认来源、initial/checkpoint 绑定及双模型混合的控制与验收由[Rollout 实现](../rollout/fusion/README.md)维护；其学习效果与工程验收分别报告。
 
 ## 一轮 shared-sync 训练
 

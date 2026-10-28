@@ -136,10 +136,10 @@ $$
 
 若从标量 $\sum_a p_a\log(p_a/T_a)$ 出发，替换外部权重和内部对数中的概率，并对保留的当前 $p$ 普通求导，则得到：
 
-| 外部权重 | 当前对数差 $\log(p/T)$ | 冻结对数差 $\log(q/T)$ |
-| --- | --- | --- |
-| $p$ | $\mathrm{KL}(p\Vert T)$ | $\mathrm{KL}(p\Vert T)-\mathrm{KL}(p\Vert q)$ |
-| $\beta$ | $\mathrm{KL}(\beta\Vert T)-\mathrm{KL}(\beta\Vert p)$ | 常数 $\mathbb E_\beta\log(q/T)$ |
+| 外部权重 | 当前对数差 $\log(p/T)$                                | 冻结对数差 $\log(q/T)$                        |
+| -------- | ----------------------------------------------------- | --------------------------------------------- |
+| $p$      | $\mathrm{KL}(p\Vert T)$                               | $\mathrm{KL}(p\Vert T)-\mathrm{KL}(p\Vert q)$ |
+| $\beta$  | $\mathrm{KL}(\beta\Vert T)-\mathrm{KL}(\beta\Vert p)$ | 常数 $\mathbb E_\beta\log(q/T)$               |
 
 下排不是四种 score 更新中的 NoIS 两格。其当前列的梯度是 $\mathbb E_\beta\psi$，教师只贡献常数；冻结列的梯度为零。要复现 NoIS score 更新，应使用 OPD 目标篇中的平方误差或带符号交叉熵，而非直接替换 KL 的权重。
 

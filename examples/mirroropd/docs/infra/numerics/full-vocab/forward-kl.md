@@ -11,14 +11,14 @@ L_F=\frac1N\sum_{t\in\mathrm{valid}}
 \sum_{v\in S}q_S(v\mid s_t)\left[\log q_S(v\mid s_t)-\log p_\theta(v\mid s_t)\right].
 $$
 
-N 是全局有效 response token 数。Teacher 冻结，每次 inner update 使用当前 student 分布；梯度是$p-q_S$，通过 backbone 和 lm_head 更新所有 student 参数。
+N 是全局有效 response token 数。Teacher 冻结，每次 inner update 使用当前 student 分布；梯度是 $p-q_S$，通过 backbone 和 lm_head 更新所有 student 参数。
 
 `full_vocab.forward_teacher_support`有两个值：
 
-| 值 | 语义 |
-| --- | --- |
-| `equal`，默认 | 要求 teacher 和 student head 行数一致，使用原生 teacher 分布 |
-| `student` | 明确使用$q_S=q(\cdot\mid S)$，将 teacher 在 student 输出行上重新归一化 |
+| 值            | 语义                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| `equal`，默认 | 要求 teacher 和 student head 行数一致，使用原生 teacher 分布            |
+| `student`     | 明确使用 $q_S=q(\cdot\mid S)$，将 teacher 在 student 输出行上重新归一化 |
 
 E49 使用`student`：Polaris head 有 152064 行，student 有 151936 行，共享 token 映射已由已有模型接入检查。若 teacher 在额外行有正概率，而 student 在这些行的概率为 0，原生 FKL 为无穷，不能把直接裁掉这些项称为原生 FKL。当前实现要求 teacher 覆盖全部 student 输出行，并记录`distill/teacher_outside_student_mass`以监控裁掉的概率质量。
 
@@ -34,11 +34,11 @@ $$
 
 实现位于[full_forward_kl_result](../../../../../../verl/trainer/distillation/forward_vocab.py)、[融合行运算](../../../../../../verl/trainer/distillation/forward_vocab_triton.py)。现有的 shared teacher、hidden 写入、异步 prefetch、FSDP2 head hooks、DP token 归一化和 checkpoint 通路继续复用。
 
-| Backend | 行为 |
-| --- | --- |
-| `dense` | 可微参考实现，用于小输入与正确性检查 |
-| `recompute` | 按 token 块计算，backward 时重新计算块的 VJP |
-| `precompute` | Torch 稳定行运算；forward 预计算 dH/dW，backward 仅施加上游缩放 |
+| Backend            | 行为                                                                 |
+| ------------------ | -------------------------------------------------------------------- |
+| `dense`            | 可微参考实现，用于小输入与正确性检查                                 |
+| `recompute`        | 按 token 块计算，backward 时重新计算块的 VJP                         |
+| `precompute`       | Torch 稳定行运算；forward 预计算 dH/dW，backward 仅施加上游缩放      |
 | `precompute_fused` | CUDA FP32 logits 使用 Triton 融合行运算，其他设备/dtype 使用参考路径 |
 
 Forward 暂不接入`cached/streaming/liger`；不支持终止 token 类别合并。配置会明确拒绝这些组合。已有 Reverse KL 和 MDPO/BPO 的行为保持原有语义。
@@ -51,16 +51,16 @@ Forward 暂不接入`cached/streaming/liger`；不支持终止 token 类别合�
 
 全部标量使用真实有效 token 的 sum/count 归约。两套位置桶使用相同 mask 和相对位置定义，保留 mask 空洞。
 
-| W&B / file 字段 | 含义 |
-| --- | --- |
-| `optim/actor/loss`、`distill/full_forward_kl` | 实际优化的 FKL |
-| `distill/full_kl` | 对原生完整 teacher 的 Reverse KL，沿用 E48 口径 |
-| `distill/full_forward_kl_position/p00_10/...` 至 `p90_100` | FKL 位置 sum/count/mean |
-| `distill/full_kl_position/...` | 同一批位置上的原生 RKL |
-| `distill/teacher_outside_student_mass` | 原生 teacher 在 student 输出行之外的概率质量 |
-| `distill/student_entropy` | Student entropy |
-| `distill/teacher_entropy` | 目标$q_S$的 entropy |
-| `distill/js`、`distill/tv` | p 和$q_S$的 JS、TV |
+| W&B / file 字段                                            | 含义                                            |
+| ---------------------------------------------------------- | ----------------------------------------------- |
+| `optim/actor/loss`、`distill/full_forward_kl`              | 实际优化的 FKL                                  |
+| `distill/full_kl`                                          | 对原生完整 teacher 的 Reverse KL，沿用 E48 口径 |
+| `distill/full_forward_kl_position/p00_10/...` 至 `p90_100` | FKL 位置 sum/count/mean                         |
+| `distill/full_kl_position/...`                             | 同一批位置上的原生 RKL                          |
+| `distill/teacher_outside_student_mass`                     | 原生 teacher 在 student 输出行之外的概率质量    |
+| `distill/student_entropy`                                  | Student entropy                                 |
+| `distill/teacher_entropy`                                  | 目标 $q_S$ 的 entropy                           |
+| `distill/js`、`distill/tv`                                 | p 和 $q_S$ 的 JS、TV                            |
 
 它们复用已有投影，不新增 teacher backbone 前向；诊断量不贡献梯度。Step 轴、实际更新计数、nonfinite/skip 等沿用 policy-v3。
 
@@ -114,10 +114,10 @@ E48 原路径不额外计算 FKL、JS 和 TV。跨目标比较这些量时，应
 
 同一 H800 共享 GPU 上，512 token、student head151936×1536、teacher head152064×3584、BF16 输入的 head 阶段测量为：
 
-| Forward 后端 | 中位时间 | 峰值 allocated 显存 |
-| --- | ---: | ---: |
-| Torch precompute，chunk512 | 69.70 ms | 6.56 GiB |
-| Fused precompute，chunk512 | 11.46 ms | 3.52 GiB |
-| Fused precompute，chunk128 | 26.63 ms | 2.80 GiB |
+| Forward 后端               | 中位时间 | 峰值 allocated 显存 |
+| -------------------------- | -------: | ------------------: |
+| Torch precompute，chunk512 | 69.70 ms |            6.56 GiB |
+| Fused precompute，chunk512 | 11.46 ms |            3.52 GiB |
+| Fused precompute，chunk128 | 26.63 ms |            2.80 GiB |
 
 方法交错测量 7 次，已排除首次编译。此数值包含 head 投影、行诊断、dH/dW 和 backward 应用，不包含 backbone、rollout、IO 与通信；共享 GPU 的时间有波动，不能称为端到端 6 倍提速。原始样本和分布式结果见[实现数据](data/forward-kl-implementation-20261027/README.md)。

@@ -6,12 +6,12 @@ Mirror 共用本文的更新计数、scheduler 与 outer checkpoint。Anchor 是
 
 ## 四种独立事件
 
-| 事件 | 所属模块 | 含义 |
-| --- | --- | --- |
-| Outer step | Trainer | 一轮外层调度 |
-| Update attempt | TrainingWorker | 一次 optimizer 更新尝试 |
-| Applied update | Engine | optimizer 实际执行 |
-| Scheduler call | Engine / worker 调用边界 | scheduler 实际推进 |
+| 事件           | 所属模块                 | 含义                    |
+| -------------- | ------------------------ | ----------------------- |
+| Outer step     | Trainer                  | 一轮外层调度            |
+| Update attempt | TrainingWorker           | 一次 optimizer 更新尝试 |
+| Applied update | Engine                   | optimizer 实际执行      |
+| Scheduler call | Engine / worker 调用边界 | scheduler 实际推进      |
 
 Engine 通过 `optimizer_step_applied` 提供 `True/False/None`。`None` 表示未知，不用梯度范数或 loss 是否有限推断。Worker 在 DP 汇集时用 [execution_consensus](../../../../../verl/workers/update_records.py) 要求各 rank 事实一致；数量不完整、非法类型或 rank 间冲突会报错。
 
@@ -37,14 +37,14 @@ Engine 通过 `optimizer_step_applied` 提供 `True/False/None`。`None` 表示�
 
 ## 保存和恢复的分工
 
-| 状态 | 所属路径 |
-| --- | --- |
-| Student 参数、optimizer、scheduler | Engine checkpoint 保存和加载 |
-| Outer step、actor/critic 尝试与成功计数 | Trainer 的 `trainer_state.json` |
-| Teacher | 从配置的固定模型重新初始化；不并入 student checkpoint |
-| Mirror anchor、q/T hidden/head 缓存 | 调用级或 outer 级临时状态，不写入 student checkpoint；恢复后按新调用重建 |
-| Rollout 权重 | 恢复 student 后经 checkpoint manager 同步 |
-| 未完成 prompt | Trainer 的 inflight 重发流程 |
+| 状态                                    | 所属路径                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------------ |
+| Student 参数、optimizer、scheduler      | Engine checkpoint 保存和加载                                             |
+| Outer step、actor/critic 尝试与成功计数 | Trainer 的 `trainer_state.json`                                          |
+| Teacher                                 | 从配置的固定模型重新初始化；不并入 student checkpoint                    |
+| Mirror anchor、q/T hidden/head 缓存     | 调用级或 outer 级临时状态，不写入 student checkpoint；恢复后按新调用重建 |
+| Rollout 权重                            | 恢复 student 后经 checkpoint manager 同步                                |
+| 未完成 prompt                           | Trainer 的 inflight 重发流程                                             |
 
 [save_optimizer_progress](../../../../../verl/trainer/ppo/v1/progress.py) 写临时文件后原子替换 `trainer_state.json`，schema version 为 1。[load_optimizer_progress](../../../../../verl/trainer/ppo/v1/progress.py) 校验 schema、计数和 checkpoint 的 global step；文件缺失时返回未知计数并警告，损坏或不一致时拒绝加载。
 

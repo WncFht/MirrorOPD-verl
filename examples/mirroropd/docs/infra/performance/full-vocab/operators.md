@@ -4,13 +4,13 @@
 
 ## 证据范围
 
-| 测量 | 输入与实现身份 | 原始证据 |
-| --- | --- | --- |
-| Endpoint backend 比较 | 2026-10-22 的生产实现快照；H800 单卡，synthetic BF16，V=151936、d=1536 | [kernel-final.json](../../numerics/full-vocab/data/implementation-20261022/kernel-final.json)、[32K 容量](../../numerics/full-vocab/data/implementation-20261022/capacity-32k.json) |
-| Precompute 四 backend 复测 | 2026-10-26 工作区模块快照；共享 H800，N=4096、V=151936、d=1536、chunk=512；探索性测量 | [原始样本](data/precompute-20261026/benchmark.json)、[协议与源码身份](data/precompute-20261026/README.md) |
-| Endpoint 融合 | `39d8be84a` 冻结源码，H800、N=32768；相同 chunk 对比 precompute 与融合候选 | [benchmark.json](data/review-004/kernel/benchmark.json)、[kernel 归因](data/review-004/reviews/004-semantic-traces.json) |
-| MDPO/BPO target 与诊断融合 | 2026-10-25 优化前工作区模块快照，imports 隔离；四张 H800 各运行一个独立组合 | [完整对照](../../../experiments/teacher-transfer/optimizer-precision/mechanism/data/full-vocab-performance.json) |
-| 原型与 value-only 数值接口 | 2026-10-22 prototype，H800 单卡，N=512/4096，含自有原型和本机 Liger | [CPU 审计](../../numerics/full-vocab/data/probe-20261022/cpu.json)、[GPU 样本](../../numerics/full-vocab/data/probe-20261022/h800.json) |
+| 测量                       | 输入与实现身份                                                                        | 原始证据                                                                                                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Endpoint backend 比较      | 2026-10-22 的生产实现快照；H800 单卡，synthetic BF16，V=151936、d=1536                | [kernel-final.json](../../numerics/full-vocab/data/implementation-20261022/kernel-final.json)、[32K 容量](../../numerics/full-vocab/data/implementation-20261022/capacity-32k.json) |
+| Precompute 四 backend 复测 | 2026-10-26 工作区模块快照；共享 H800，N=4096、V=151936、d=1536、chunk=512；探索性测量 | [原始样本](data/precompute-20261026/benchmark.json)、[协议与源码身份](data/precompute-20261026/README.md)                                                                           |
+| Endpoint 融合              | `39d8be84a` 冻结源码，H800、N=32768；相同 chunk 对比 precompute 与融合候选            | [benchmark.json](data/review-004/kernel/benchmark.json)、[kernel 归因](data/review-004/reviews/004-semantic-traces.json)                                                            |
+| MDPO/BPO target 与诊断融合 | 2026-10-25 优化前工作区模块快照，imports 隔离；四张 H800 各运行一个独立组合           | [完整对照](../../../experiments/teacher-transfer/optimizer-precision/mechanism/data/full-vocab-performance.json)                                                                    |
+| 原型与 value-only 数值接口 | 2026-10-22 prototype，H800 单卡，N=512/4096，含自有原型和本机 Liger                   | [CPU 审计](../../numerics/full-vocab/data/probe-20261022/cpu.json)、[GPU 样本](../../numerics/full-vocab/data/probe-20261022/h800.json)                                             |
 
 这些是不同实现阶段的测量，不能把同名 backend 的不同结果当成独立重复样本。它们都不包含 backbone、FSDP 通信、TQ、optimizer 或 rollout。2026-10-26 复测对应明确保存的工作区模块；其他批次仍按各自的历史源码解释，后续代码变化不自动刷新这些结论。
 
@@ -18,24 +18,24 @@
 
 4096 个位置、token chunk=512、vocab chunk=8192 的 head-loss 前反向中位数如下。显存为包含常驻输入的 allocated 峰值。
 
-| Backend | 时间（ms） | Allocated 峰值（GiB） |
-| --- | ---: | ---: |
-| dense | 37.40 | 12.55 |
-| recompute | 61.87 | 3.30 |
-| cached | 71.59 | 2.30 |
-| streaming | 70.93 | 2.30 |
-| precompute | 37.40 | 3.15 |
-| liger | 130.58 | 2.47 |
+| Backend    | 时间（ms） | Allocated 峰值（GiB） |
+| ---------- | ---------: | --------------------: |
+| dense      |      37.40 |                 12.55 |
+| recompute  |      61.87 |                  3.30 |
+| cached     |      71.59 |                  2.30 |
+| streaming  |      70.93 |                  2.30 |
+| precompute |      37.40 |                  3.15 |
+| liger      |     130.58 |                  2.47 |
 
 该形状下 precompute 达到接近 dense 的耗时，allocated 峰值低约 75%。Cached/streaming 的峰值接近，是因为梯度累计与返回缓冲仍占固定容量。Liger 数字对应本机特定入口、chunk 与 FP32 累积设置，不能推广为库整体的速度排名。
 
 在 N=32768 的容量测量中，dense 未作为性能参照，以 streaming 检查大形状的一致性，小规模独立 dense/FP64 仍负责数学验证：
 
-| Backend | 时间（ms） | Allocated 峰值（GiB） |
-| --- | ---: | ---: |
-| cached | 567.36 | 2.71 |
-| streaming | 562.79 | 2.71 |
-| precompute | 288.00 | 3.48 |
+| Backend    | 时间（ms） | Allocated 峰值（GiB） |
+| ---------- | ---------: | --------------------: |
+| cached     |     567.36 |                  2.71 |
+| streaming  |     562.79 |                  2.71 |
+| precompute |     288.00 |                  3.48 |
 
 更低的 head 工作区不保证更短的模型更新；选择时还需加入实际 backbone、冻结 head 与 optimizer 状态。
 
@@ -49,12 +49,12 @@
 
 每个 backend 预热 2 次，然后执行 9 轮交替正序/逆序测量，wall time 前后显式 CUDA synchronize；报告全部样本的中位数和范围，不裁剪异常值。显存另做一次调用前 reset，报告本进程包含常驻输入的 allocated 峰值，不是 NVML 整卡显存。完整数据见 [benchmark.json](data/precompute-20261026/benchmark.json)。
 
-| Backend | Wall time 中位数（ms） | 最小—最大（ms） | Allocated 峰值（GiB） |
-| --- | ---: | ---: | ---: |
-| dense | 53.81 | 51.40—60.21 | 12.55 |
-| recompute | 86.92 | 83.98—132.78 | 3.30 |
-| precompute | 54.61 | 51.49—86.19 | 3.01 |
-| precompute_fused | 30.74 | 29.05—47.23 | 2.57 |
+| Backend          | Wall time 中位数（ms） | 最小—最大（ms） | Allocated 峰值（GiB） |
+| ---------------- | ---------------------: | --------------: | --------------------: |
+| dense            |                  53.81 |     51.40—60.21 |                 12.55 |
+| recompute        |                  86.92 |    83.98—132.78 |                  3.30 |
+| precompute       |                  54.61 |     51.49—86.19 |                  3.01 |
+| precompute_fused |                  30.74 |     29.05—47.23 |                  2.57 |
 
 在这组观测中，precompute 与 dense 耗时接近，allocated 峰值减少约 76.0%；相对 recompute，precompute 耗时减少约 37.2%。Fused 相对普通 precompute 的中位数速度为 1.78×，耗时减少约 43.7%，allocated 峰值再减少约 0.434 GiB。这些比值只使用同一批测量，不能与 2026-10-22 的读数拼接成版本加速。
 
@@ -68,12 +68,12 @@
 
 H800、BF16 hidden/head、FP32 logits/梯度累计，V=151936、d=1536、N=32768；每个配置先核对 loss/VJP，再计时 7 次，报告中位数。`fused_candidate` 是数据中的实现标签，对应后来接入的 `precompute_fused` endpoint。
 
-| Backend | Chunk | 时间（ms） | Allocated 峰值（GiB） |
-| --- | ---: | ---: | ---: |
-| precompute | 512 | 287.785 | 3.917 |
-| fused | 512 | 162.675 | 3.482 |
-| precompute | 1024 | 260.098 | 5.223 |
-| fused | 1024 | 137.127 | 4.353 |
+| Backend    | Chunk | 时间（ms） | Allocated 峰值（GiB） |
+| ---------- | ----: | ---------: | --------------------: |
+| precompute |   512 |    287.785 |                 3.917 |
+| fused      |   512 |    162.675 |                 3.482 |
+| precompute |  1024 |    260.098 |                 5.223 |
+| fused      |  1024 |    137.127 |                 4.353 |
 
 同 chunk=512 时耗时减少 43.5%，速度约 1.77×，allocated 峰值减少 0.434 GiB。Chunk=1024 的耗时减少 47.3%，同时使用更多显存。不能把改变 chunk 的收益合并进同 chunk 融合收益。
 
@@ -90,11 +90,11 @@ H800、BF16 hidden/head、FP32 logits/梯度累计，V=151936、d=1536、N=32768
 优化范围是 weighted target、行归约、诊断复用与临时张量生命周期，不包括模型或调度。下表时间包含三组 head 投影、target、objective 与 hidden/head VJP；显存为扣除 live input 后的额外 allocated 峰值。
 
 | 目标 | 诊断 | Chunk | 优化前→后（ms） | 速度倍率 | 额外峰值前→后（MiB） |
-| --- | --- | ---: | ---: | ---: | ---: |
-| MDPO | 关 | 512 | 12.65→5.66 | 2.24× | 3829.6→1783.5 |
-| MDPO | 开 | 512 | 18.78→5.90 | 3.18× | 4009.1→2229.2 |
-| BPO | 关 | 512 | 12.17→5.88 | 2.07× | 3829.6→1932.0 |
-| BPO | 开 | 512 | 18.43→6.16 | 2.99× | 4602.6→2229.2 |
+| ---- | ---- | ----: | --------------: | -------: | -------------------: |
+| MDPO | 关   |   512 |      12.65→5.66 |    2.24× |        3829.6→1783.5 |
+| MDPO | 开   |   512 |      18.78→5.90 |    3.18× |        4009.1→2229.2 |
+| BPO  | 关   |   512 |      12.17→5.88 |    2.07× |        3829.6→1932.0 |
+| BPO  | 开   |   512 |      18.43→6.16 |    2.99× |        4602.6→2229.2 |
 
 Chunk=128 的四种组合速度倍率为 1.66–2.34×，优化后额外峰值约 1340.8 MiB；chunk=32 为 1.31–1.62×，峰值受固定 head 梯度缓冲限制，前后未下降。12 个比较中，BF16 hidden/head VJP 相对 L2 差异最大约 $3.75\times10^{-5}$。完整样本见[测量 JSON](../../../experiments/teacher-transfer/optimizer-precision/mechanism/data/full-vocab-performance.json)。
 
@@ -115,16 +115,16 @@ Teacher hidden 按样本分布在 CPU/TQ，actor 按 micro-batch 读取；冻结
 
 以 64 条满长回答、每条 7168 个有效位置、V=151936、$d_T=d_s=1536$ 为例：
 
-| 对象 | 容量 | 范围 |
-| --- | ---: | --- |
-| Sampled FP32 log-prob | 1.75 MiB | 全局有效位置；复用已有 response ID |
-| Sampled INT32 ID + FP32 log-prob | 3.50 MiB | 全局有效位置；实际 sampled 序列布局还可能含 prompt/dummy |
-| BF16 teacher hidden | 1.3125 GiB | 全局 payload；不代表同时全量驻留 GPU |
-| BF16 teacher head | 0.4347 GiB | 每个持有完整 head 的 actor rank |
-| BF16 完整 logits | 129.8281 GiB | 全局有效位置 |
-| FP32 完整 target | 259.6563 GiB | 全局有效位置 |
-| 一份 FP32 token tile，C=512 | 0.2898 GiB | 当前块，仍覆盖完整词表 |
-| FP32 student head 梯度累计 | 0.8694 GiB | 完整 head 工作缓冲 |
+| 对象                             |         容量 | 范围                                                     |
+| -------------------------------- | -----------: | -------------------------------------------------------- |
+| Sampled FP32 log-prob            |     1.75 MiB | 全局有效位置；复用已有 response ID                       |
+| Sampled INT32 ID + FP32 log-prob |     3.50 MiB | 全局有效位置；实际 sampled 序列布局还可能含 prompt/dummy |
+| BF16 teacher hidden              |   1.3125 GiB | 全局 payload；不代表同时全量驻留 GPU                     |
+| BF16 teacher head                |   0.4347 GiB | 每个持有完整 head 的 actor rank                          |
+| BF16 完整 logits                 | 129.8281 GiB | 全局有效位置                                             |
+| FP32 完整 target                 | 259.6563 GiB | 全局有效位置                                             |
+| 一份 FP32 token tile，C=512      |   0.2898 GiB | 当前块，仍覆盖完整词表                                   |
+| FP32 student head 梯度累计       |   0.8694 GiB | 完整 head 工作缓冲                                       |
 
 若保存 top-k 反馈，INT32 ID 与 FP32 log-prob 的容量为 $8NK$ bytes；额外 sampled 项是否可以复用取决于反馈协议。这只描述监督 payload，不减少 student softmax 对全词表的依赖，也不能用 V/K 推导整个训练加速。
 

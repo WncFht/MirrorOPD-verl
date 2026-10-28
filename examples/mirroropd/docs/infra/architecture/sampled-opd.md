@@ -6,12 +6,12 @@ Sampled OPD 在 student 已生成的动作上读取 teacher 概率，并在 acto
 
 令 $s_t=(x,y_{<t})$ 为一条已采样轨迹中的前缀，$a_t=y_t$ 为该位置实际生成的 token。以下所有概率均以同一个 $s_t$ 为条件：
 
-| 概率 | 字段或来源 | 同一批复用时 | 用途 |
-| --- | --- | --- | --- |
-| 行为策略 $\beta$ | `rollout_log_probs`，生成时记录 | 固定 | 显式 IS/PPO 分母、rollout advantage |
-| 更新前锚点 $q$ | `old_log_probs`，通常由 actor 在更新前重算 | 固定 | vanilla PPO 分母、旧模式诊断，以及 sampled MDPO 的冻结目标 |
-| 当前 student $p_\theta$ | `model_output['log_probs']`，本次 forward | 随参数变化 | 可微 loss 输入、current advantage 的数值 |
-| Teacher $T$ | `teacher_logprobs`，冻结 teacher 评分 | 固定 | 蒸馏监督 |
+| 概率                    | 字段或来源                                 | 同一批复用时 | 用途                                                       |
+| ----------------------- | ------------------------------------------ | ------------ | ---------------------------------------------------------- |
+| 行为策略 $\beta$        | `rollout_log_probs`，生成时记录            | 固定         | 显式 IS/PPO 分母、rollout advantage                        |
+| 更新前锚点 $q$          | `old_log_probs`，通常由 actor 在更新前重算 | 固定         | vanilla PPO 分母、旧模式诊断，以及 sampled MDPO 的冻结目标 |
+| 当前 student $p_\theta$ | `model_output['log_probs']`，本次 forward  | 随参数变化   | 可微 loss 输入、current advantage 的数值                   |
+| Teacher $T$             | `teacher_logprobs`，冻结 teacher 评分      | 固定         | 蒸馏监督                                                   |
 
 Behavior 与 anchor 即使来自同一份 student 参数，也分别由 vLLM 和训练 engine 计算，数值不保证完全相同。`bypass_mode=True` 才会显式将 `old_log_probs` 赋为 rollout 概率；Legacy 显式 sampled 与 sampled MDPO 都禁止 bypass；vanilla 保留这条兼容路径。
 
@@ -63,11 +63,11 @@ $$
 
 两种 advantage 均无梯度。`current` 每次 forward 更新数值，`rollout` 在数据复用期间保持不变。Teacher 更偏好当前动作时 $A>0$，最小化下面的 loss 会推动该动作概率上升；$A<0$ 则相反。
 
-| `policy_loss_mode` | 每个有效 token 的 surrogate | 对 $\ell$ 的导数，未触发保护/裁剪时 |
-| --- | --- | --- |
-| `reinforce` | $-A\ell$ | $-A$ |
-| `token_is` | $-rA$ | $-rA$ |
-| `token_ppo` | $\max(-rA,-\operatorname{clip}(r,1-\epsilon_l,1+\epsilon_h)A)$ | 活跃未裁剪分支为 $-rA$，严格裁剪区间为 0 |
+| `policy_loss_mode` | 每个有效 token 的 surrogate                                    | 对 $\ell$ 的导数，未触发保护/裁剪时      |
+| ------------------ | -------------------------------------------------------------- | ---------------------------------------- |
+| `reinforce`        | $-A\ell$                                                       | $-A$                                     |
+| `token_is`         | $-rA$                                                          | $-rA$                                    |
+| `token_ppo`        | $\max(-rA,-\operatorname{clip}(r,1-\epsilon_l,1+\epsilon_h)A)$ | 活跃未裁剪分支为 $-rA$，严格裁剪区间为 0 |
 
 实现中的比值带有数值保护：
 
@@ -115,12 +115,12 @@ flowchart TD
 
 其他组合在复用时有不同含义：
 
-| 组合 | 固定前缀、无裁剪时的含义 |
-| --- | --- |
-| current + `reinforce` | 梯度等于 $\frac12\mathbb E_\beta[(\log p_\theta-\log T)^2]$ 的梯度；在 $p_\theta=\beta$ 的点与 reverse-KL 梯度一致，离开该点后缺少动作 IS |
-| rollout + `reinforce` | 固定系数 $\log T-\log\beta$ 乘当前 score；信号不会因 current 已追上 teacher 而自动改变 |
-| rollout + `token_is` | 梯度对应 $\mathbb E_{a\sim p_\theta}[\log\beta(a\mid s)-\log T(a\mid s)]$；相当于优化冻结信号，不等于持续重算 current reverse-KL |
-| 任一信号 + `token_ppo` | 进一步加入 PPO 裁剪，改变已触发裁剪的梯度 |
+| 组合                   | 固定前缀、无裁剪时的含义                                                                                                                  |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| current + `reinforce`  | 梯度等于 $\frac12\mathbb E_\beta[(\log p_\theta-\log T)^2]$ 的梯度；在 $p_\theta=\beta$ 的点与 reverse-KL 梯度一致，离开该点后缺少动作 IS |
+| rollout + `reinforce`  | 固定系数 $\log T-\log\beta$ 乘当前 score；信号不会因 current 已追上 teacher 而自动改变                                                    |
+| rollout + `token_is`   | 梯度对应 $\mathbb E_{a\sim p_\theta}[\log\beta(a\mid s)-\log T(a\mid s)]$；相当于优化冻结信号，不等于持续重算 current reverse-KL          |
+| 任一信号 + `token_ppo` | 进一步加入 PPO 裁剪，改变已触发裁剪的梯度                                                                                                 |
 
 例如一个已采样动作的 `teacher=-2, behavior=-3`。初次 current 为 `-3` 时两种 advantage 都为 `+1`；若后续 current 变为 `-1.5`，current advantage 为 `-0.5`，rollout advantage 仍为 `+1`。这对应 `advantage_sign_flip_count` 的观测情形。
 

@@ -17,24 +17,24 @@ $$
 
 本页维护方法比较的科学问题和控制变量，不维护第二份运行预算。
 
-| 资料 | 维护职责 |
-| --- | --- |
-| 本页第 1、6 节 | 方法比较顺序、必要负对照与支持集数据合同 |
-| [训练配方](../../experiments/learning-signal/sampled-controls/README.md) | E1–E15 编号、学习率、复用次数、外层预算与评测频率 |
-| [Full-KL 数学对照](../../experiments/learning-signal/sampled-vs-full/README.md) | 对照设置、实际运行与结果分析 |
-| [估计器审计](2026-10-21-OPD学习信号与梯度估计器对照.md#9-在当前-math-setting-下的实验安排) | 作者实现差异、资源公平性与需记录的量 |
+| 资料                                                                                       | 维护职责                                          |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| 本页第 1、6 节                                                                             | 方法比较顺序、必要负对照与支持集数据合同          |
+| [训练配方](../../experiments/learning-signal/sampled-controls/README.md)                   | E1–E15 编号、学习率、复用次数、外层预算与评测频率 |
+| [Full-KL 数学对照](../../experiments/learning-signal/sampled-vs-full/README.md)            | 对照设置、实际运行与结果分析                      |
+| [估计器审计](2026-10-21-OPD学习信号与梯度估计器对照.md#9-在当前-math-setting-下的实验安排) | 作者实现差异、资源公平性与需记录的量              |
 
 排序依据是解释力、对照必要性与工程成本，不是未经实测的准确率预测。
 
-| 顺序 | 方法 | 为什么重要 |
-| --- | --- | --- |
-| 1 | Sampled-token，current signal + 正确行为 IS | 最便宜且已有实现的参照；本仓对应 E4，但首轮显式 `PPO_EPOCHS=1` |
-| 2 | 精确 full-vocab rKL | 固定前缀的数值/梯度 oracle；先做小批审计，再评估流式端到端组 |
-| 3 | Sampled-token + KL baseline | 最直接检验“只降低抽样噪声是否足够”；区分 full baseline 与 top-k 近似 baseline |
-| 4 | ResOPD，并配套 HETS | 同一 sparse payload 下检验尾部向量控制；HETS 是归因所必需的消融 |
-| 5 | TA-OPD | 检验只匹配头部与尾部总质量是否已经足够；它是粗粒度目标，不是完整 rKL 的无偏梯度 |
-| 6 | SC-TA | 与 ResOPD 具有相同完整 rKL 期望，但随机残差不同；补充这一边界对照 |
-| 7 | Normalized / truncated top-k 与更多支持集 | 机制对照和论文复现，放在主线明确之后；不同 top-k loss 不能混名 |
+| 顺序 | 方法                                        | 为什么重要                                                                      |
+| ---- | ------------------------------------------- | ------------------------------------------------------------------------------- |
+| 1    | Sampled-token，current signal + 正确行为 IS | 最便宜且已有实现的参照；本仓对应 E4，但首轮显式 `PPO_EPOCHS=1`                  |
+| 2    | 精确 full-vocab rKL                         | 固定前缀的数值/梯度 oracle；先做小批审计，再评估流式端到端组                    |
+| 3    | Sampled-token + KL baseline                 | 最直接检验“只降低抽样噪声是否足够”；区分 full baseline 与 top-k 近似 baseline   |
+| 4    | ResOPD，并配套 HETS                         | 同一 sparse payload 下检验尾部向量控制；HETS 是归因所必需的消融                 |
+| 5    | TA-OPD                                      | 检验只匹配头部与尾部总质量是否已经足够；它是粗粒度目标，不是完整 rKL 的无偏梯度 |
+| 6    | SC-TA                                       | 与 ResOPD 具有相同完整 rKL 期望，但随机残差不同；补充这一边界对照               |
+| 7    | Normalized / truncated top-k 与更多支持集   | 机制对照和论文复现，放在主线明确之后；不同 top-k loss 不能混名                  |
 
 预算只够四种方法时，保留 **sampled、full-vocab、sampled+baseline、ResOPD**。如果 full-vocab 暂时只能做固定前缀审计，端到端先用 HETS 占第四组，与 sampled、baseline、Res 配对。要正式解释 Res 的控制项收益，必须增加 HETS；完整第一轮建议六组为 sampled、full-vocab、baseline、HETS、Res、TA，再补 SC-TA。
 
@@ -58,17 +58,17 @@ S_q=\operatorname{TopK}(q_k,K_{\rm head}),\quad
 S_p=\operatorname{TopK}(p_{k,n},K_{\rm head}).
 $$
 
-| 支持集 | 定义 | 倾向与遗漏 |
-| --- | --- | --- |
-| Teacher top-k | $S_T$ | 包含 teacher 偏好的候选；可能遗漏 student 过度集中的错误候选 |
-| Student anchor top-k | $S_q$ | 关注 rollout/update 起点的高概率候选，便于缓存；多次更新后可能过时 |
-| Student current top-k | $S_p$ | 随当前学生刷新；新候选需要可取得 teacher 分数 |
-| 交集 | $S_q\cap S_T$ | 聚焦共同高概率区域；会丢弃双方不一致处，可能为空或仅一项 |
-| 并集 | $S_q\cup S_T$ | 同时覆盖 student 和 teacher 的主要模式；去重后大小在 $K_{\rm head}$ 到 $2K_{\rm head}$ 之间 |
-| 对称差 | $(S_q\cup S_T)\setminus(S_q\cap S_T)$ | 只研究不一致区域，适合作机制消融，不是默认主方案 |
-| Student-only / teacher-only | $S_q\setminus S_T$ / $S_T\setminus S_q$ | 能进一步区分“压低 student 多余质量”和“补 teacher 偏好” |
-| 固定预算混合集 | $\operatorname{TopK}((q_k+T)/2,K_{\rm budget})$，或去重后按固定规则补齐配额 | 保持统一查询预算；混合分布仅用于选集，不自动改变 teacher 目标 |
-| Correction-aware | 根据 $\lvert\delta_a\rvert$ 或其正负部分选择 | 更直接面向 logit 梯度；需要额外 teacher 信息，不能当作廉价 top-k 查询 |
+| 支持集                      | 定义                                                                        | 倾向与遗漏                                                                                  |
+| --------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Teacher top-k               | $S_T$                                                                       | 包含 teacher 偏好的候选；可能遗漏 student 过度集中的错误候选                                |
+| Student anchor top-k        | $S_q$                                                                       | 关注 rollout/update 起点的高概率候选，便于缓存；多次更新后可能过时                          |
+| Student current top-k       | $S_p$                                                                       | 随当前学生刷新；新候选需要可取得 teacher 分数                                               |
+| 交集                        | $S_q\cap S_T$                                                               | 聚焦共同高概率区域；会丢弃双方不一致处，可能为空或仅一项                                    |
+| 并集                        | $S_q\cup S_T$                                                               | 同时覆盖 student 和 teacher 的主要模式；去重后大小在 $K_{\rm head}$ 到 $2K_{\rm head}$ 之间 |
+| 对称差                      | $(S_q\cup S_T)\setminus(S_q\cap S_T)$                                       | 只研究不一致区域，适合作机制消融，不是默认主方案                                            |
+| Student-only / teacher-only | $S_q\setminus S_T$ / $S_T\setminus S_q$                                     | 能进一步区分“压低 student 多余质量”和“补 teacher 偏好”                                      |
+| 固定预算混合集              | $\operatorname{TopK}((q_k+T)/2,K_{\rm budget})$，或去重后按固定规则补齐配额 | 保持统一查询预算；混合分布仅用于选集，不自动改变 teacher 目标                               |
+| Correction-aware            | 根据 $\lvert\delta_a\rvert$ 或其正负部分选择                                | 更直接面向 logit 梯度；需要额外 teacher 信息，不能当作廉价 top-k 查询                       |
 
 上表的集合运算也可使用 $S_p$，但必须在实验名中注明 current / anchor，以及选集刷新频率。Student vLLM 的 top-k 是 $\beta$ 的支持，又是一个需要辨认的版本，不应笼统标为“student top-k”。
 
@@ -111,15 +111,15 @@ $$
 
 ### 4.2 从字段生产到 loss
 
-| 位置 | 审阅到的行为 |
-| --- | --- |
-| `FSDPEngineWithLMHead._emit_opd_student_top_k()` | 从该次 student logits 重新取 top-k，并保存完整词表归一化的 log-prob |
-| `ray_trainer.py` 的 old-log-prob 处理 | 将这些 IDs 与 log-probs 作为冻结候选字段传给 teacher |
-| `compute_top_k_teacher_log_probs()` | 计算 teacher 自己的 top-k；通常 gather student IDs 上的 teacher 分数，intersection 分支屏蔽不重合项 |
-| `TeacherWorker._forward_micro_batch()` | 曾返回 teacher 自己的 IDs/分数，但与 student 候选上的 teacher 分数是不同字段 |
-| `TeacherWorker.compute_rm_score()` | 汇总并传给 reward helper 的仍是 student 候选上的 K 列分数；未完整接入 teacher-only 候选列 |
-| `compute_top_k_reward()` | 构造权重和 mask；union/symmetric-difference 构造 2K mask 后，按输入分数宽度切片 |
-| `token_reward_direct` / `vanilla_topk` | 固定 reward 为 advantage，对候选轴逐项 PPO ratio/clip，再沿候选轴求和 |
+| 位置                                             | 审阅到的行为                                                                                        |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| `FSDPEngineWithLMHead._emit_opd_student_top_k()` | 从该次 student logits 重新取 top-k，并保存完整词表归一化的 log-prob                                 |
+| `ray_trainer.py` 的 old-log-prob 处理            | 将这些 IDs 与 log-probs 作为冻结候选字段传给 teacher                                                |
+| `compute_top_k_teacher_log_probs()`              | 计算 teacher 自己的 top-k；通常 gather student IDs 上的 teacher 分数，intersection 分支屏蔽不重合项 |
+| `TeacherWorker._forward_micro_batch()`           | 曾返回 teacher 自己的 IDs/分数，但与 student 候选上的 teacher 分数是不同字段                        |
+| `TeacherWorker.compute_rm_score()`               | 汇总并传给 reward helper 的仍是 student 候选上的 K 列分数；未完整接入 teacher-only 候选列           |
+| `compute_top_k_reward()`                         | 构造权重和 mask；union/symmetric-difference 构造 2K mask 后，按输入分数宽度切片                     |
+| `token_reward_direct` / `vanilla_topk`           | 固定 reward 为 advantage，对候选轴逐项 PPO ratio/clip，再沿候选轴求和                               |
 
 关键文件分别见固定版本引用。[^oneshot-worker][^oneshot-engine][^oneshot-loss]
 
@@ -127,13 +127,13 @@ $$
 
 在该调用链的 K 列输入下：
 
-| 开关 | 意图 | 当前源码路径的行为 |
-| --- | --- | --- |
-| `only_stu` | Student 支持 | 与实际 student 候选输入一致 |
-| `only_tch` | Teacher 支持 | helper 与 `only_stu` 使用相同全真 mask，调用方又未切换到 teacher 候选，因此仍作用于 student 候选 |
-| `intersection` | 交集 | 在 student 列上应用交集 mask；这一集合选择可以实现 |
-| `union` | 去重并集 | 2K mask 被截到 K 列，teacher-only 列缺失；在审计例子中与 `only_stu` 输出相同 |
-| `union-intersection` | 对称差 | teacher-only 半边缺失，剩余 student-only 候选；还关闭了概率权重归一化 |
+| 开关                 | 意图         | 当前源码路径的行为                                                                               |
+| -------------------- | ------------ | ------------------------------------------------------------------------------------------------ |
+| `only_stu`           | Student 支持 | 与实际 student 候选输入一致                                                                      |
+| `only_tch`           | Teacher 支持 | helper 与 `only_stu` 使用相同全真 mask，调用方又未切换到 teacher 候选，因此仍作用于 student 候选 |
+| `intersection`       | 交集         | 在 student 列上应用交集 mask；这一集合选择可以实现                                               |
+| `union`              | 去重并集     | 2K mask 被截到 K 列，teacher-only 列缺失；在审计例子中与 `only_stu` 输出相同                     |
+| `union-intersection` | 对称差       | teacher-only 半边缺失，剩余 student-only 候选；还关闭了概率权重归一化                            |
 
 这是针对**当前固定版本的字段链路和 helper 输入形状**的结论，不是对论文全部实验或普通 sampled-token 实现的评价。Helper 若收到正确拼接的 2K 列分数，可以表达去重 union；缺的是当前路径完整提供并消费这些列，不能只改一个策略字符串。
 
@@ -170,14 +170,14 @@ $$
 
 ## 5. 相关论文与实现证据
 
-| 来源 | 对支持集问题的贡献 | 本轮边界 |
-| --- | --- | --- |
-| Rethinking OPD Part I，2604.13016 | 同一 JustRL/R1-Distill 配对上比较 student、交集、对称差；交集接近 student，对称差较弱 | 经验结论限于该配方；论文定义与现有代码的 weighted-PG 需要分别核对 |
-| One-Shot OPD Part II 仓库 | 提供五种策略名、概率权重、reward/metric 两种开关 | 本轮核对当前公开 checkout，不以它自动证明所有历史论文实验的实现 |
-| vOPD，2605.07865 | 原版 baseline 在 current student top-k 上将双方归一化 | Baseline 与直接 subset KL 目标不同；teacher-top-k 变体另列 |
-| TA-OPD / ResOPD | 原版使用 teacher top-k，分别补粗尾部和随机尾部残差 | 正确补偿可推广到其他固定集合，但效果和 API 不会自动相同 |
-| Many Faces，2605.11182v2 | 区分普通截断、stop-gradient、归一化 top-k；讨论跨位置查询 union 膨胀和交集方案 | 本轮读取论文；未核验其完整作者训练实现 |
-| SparseOPD，2609.34386v1 | 先形成完整 $\delta_a=p_a(\ell_a-K)$，再按修正幅度/正负质量选取并补偿 sparse logits | 需要完整 teacher correction 信息；保留总正负质量不等于恢复每个坐标的精确梯度；本轮未核验到作者发布代码 |
+| 来源                              | 对支持集问题的贡献                                                                    | 本轮边界                                                                                               |
+| --------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Rethinking OPD Part I，2604.13016 | 同一 JustRL/R1-Distill 配对上比较 student、交集、对称差；交集接近 student，对称差较弱 | 经验结论限于该配方；论文定义与现有代码的 weighted-PG 需要分别核对                                      |
+| One-Shot OPD Part II 仓库         | 提供五种策略名、概率权重、reward/metric 两种开关                                      | 本轮核对当前公开 checkout，不以它自动证明所有历史论文实验的实现                                        |
+| vOPD，2605.07865                  | 原版 baseline 在 current student top-k 上将双方归一化                                 | Baseline 与直接 subset KL 目标不同；teacher-top-k 变体另列                                             |
+| TA-OPD / ResOPD                   | 原版使用 teacher top-k，分别补粗尾部和随机尾部残差                                    | 正确补偿可推广到其他固定集合，但效果和 API 不会自动相同                                                |
+| Many Faces，2605.11182v2          | 区分普通截断、stop-gradient、归一化 top-k；讨论跨位置查询 union 膨胀和交集方案        | 本轮读取论文；未核验其完整作者训练实现                                                                 |
+| SparseOPD，2609.34386v1           | 先形成完整 $\delta_a=p_a(\ell_a-K)$，再按修正幅度/正负质量选取并补偿 sparse logits    | 需要完整 teacher correction 信息；保留总正负质量不等于恢复每个坐标的精确梯度；本轮未核验到作者发布代码 |
 
 SparseOPD 提醒我们：大概率并不一定意味着大梯度，teacher-only 的低 student 概率候选也不能一律忽略。但同一个 reverse-KL 目标仍有 $p_a$ 权重，使用 teacher 集合不会自动变成 mode-covering 的 forward KL。评价支持集可额外记录
 
@@ -216,13 +216,13 @@ CUDA_VISIBLE_DEVICES='' python -m examples.mirroropd.research.objectives.verify_
 
 原理论章节的锚点集中保留在下表；正文只维护实验与源码证据。
 
-| 原章节 | 现维护位置 |
-| --- | --- |
-| <a id="2-full-vocab-kl一个真值不同计算图"></a>2. Full-vocab KL：一个真值，不同计算图 | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#1-full-vocab-kl-的计算图) |
-| <a id="21-只计算数值作为诊断或-baseline"></a>2.1 只计算数值，作为诊断或 baseline | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#11-只计算数值作为诊断或-baseline) |
-| <a id="22-作为训练-loss直接自动微分"></a>2.2 作为训练 loss，直接自动微分 | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#12-作为训练-loss直接自动微分) |
+| 原章节                                                                                                       | 现维护位置                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="2-full-vocab-kl一个真值不同计算图"></a>2. Full-vocab KL：一个真值，不同计算图                         | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#1-full-vocab-kl-的计算图)                       |
+| <a id="21-只计算数值作为诊断或-baseline"></a>2.1 只计算数值，作为诊断或 baseline                             | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#11-只计算数值作为诊断或-baseline)               |
+| <a id="22-作为训练-loss直接自动微分"></a>2.2 作为训练 loss，直接自动微分                                     | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#12-作为训练-loss直接自动微分)                   |
 | <a id="23-只传递精确梯度可以使用代理或自定义-backward"></a>2.3 只传递精确梯度，可以使用代理或自定义 backward | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#13-只传递精确梯度可以使用代理或自定义-backward) |
-| <a id="24-两个容易写错的-detach"></a>2.4 两个容易写错的 detach | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#14-两个容易写错的-detach) |
+| <a id="24-两个容易写错的-detach"></a>2.4 两个容易写错的 detach                                               | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#14-两个容易写错的-detach)                       |
 
 ### 参考文献
 

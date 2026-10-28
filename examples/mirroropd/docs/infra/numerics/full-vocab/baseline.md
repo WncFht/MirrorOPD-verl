@@ -16,14 +16,14 @@ $$
 
 ## Current 与 anchor 两种生命周期
 
-| 选择 | 数值来源 | Reuse 中的行为 |
-| --- | --- | --- |
-| Current | 当前 student hidden/head 与冻结 T | 每次更新重算 KL；可融合 sampled score 与 KL 统计 |
-| Anchor | 更新前 q 与 T | 整个 actor 调用固定 scalar，后续不再等于 current KL |
+| 选择    | 数值来源                          | Reuse 中的行为                                      |
+| ------- | --------------------------------- | --------------------------------------------------- |
+| Current | 当前 student hidden/head 与冻结 T | 每次更新重算 KL；可融合 sampled score 与 KL 统计    |
+| Anchor  | 更新前 q 与 T                     | 整个 actor 调用固定 scalar，后续不再等于 current KL |
 
 Current 首版可以复用已有 student logits，再分块重建 teacher；必须记录保留完整 student logits 的内存代价。优化版在 head 前接入，联合返回可微 sampled score 与 detached KL，共享投影/归一化。若从 detached hidden 重投影，额外 head 成本需单列。
 
-Anchor 版可在更新前评分中产生 $K(q,T)$，随后仅保留每位置 scalar并释放不再需要的 hidden/head。该方案必须保留 q 的版本、预测位置和样本身份；不能因为首次 p=q 就把其来源标为 current。
+Anchor 版可在更新前评分中产生 $K(q,T)$，随后仅保留每位置 scalar 并释放不再需要的 hidden/head。该方案必须保留 q 的版本、预测位置和样本身份；不能因为首次 p=q 就把其来源标为 current。
 
 ## 接入边界
 
@@ -33,6 +33,6 @@ Teacher 同时需要 sampled score，可与 KL 重建统计共算或以独立小
 
 ## 验收与资源判断
 
-按独立 dense oracle检查数值与 sampled score 梯度，枚举有限动作验证行为 IS 的期望梯度，确认 baseline detached，核对 current/anchor 的刷新、mask/shift、空 rank、FSDP hooks和恢复边界。然后比较固定输入单步参数变化、短训练以及完整任务质量。
+按独立 dense oracle 检查数值与 sampled score 梯度，枚举有限动作验证行为 IS 的期望梯度，确认 baseline detached，核对 current/anchor 的刷新、mask/shift、空 rank、FSDP hooks 和恢复边界。然后比较固定输入单步参数变化、短训练以及完整任务质量。
 
 资源公式、value-only 原型与原始数据见[算子性能](../../performance/full-vocab/operators.md#value-only-与近似方案的边界)。Value-only 时间未包含 sampled backward，完整训练收益仍待测。无可运行 baseline 配置前，不把它加入生产性能排名。

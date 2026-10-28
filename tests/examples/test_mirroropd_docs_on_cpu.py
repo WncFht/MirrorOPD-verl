@@ -24,7 +24,7 @@ def test_valid_links_symbols_and_examples(tmp_path):
     )
     counts, errors = docs.check_pages([page])
     assert not errors
-    assert counts == {"pages": 1, "local_links": 3, "symbols": 1, "python_examples": 1}
+    assert counts == {"pages": 1, "local_links": 3, "symbols": 1, "python_examples": 1, "unavailable_evidence": 0}
 
 
 def test_missing_target_anchor_and_qualified_symbol_are_errors(tmp_path):

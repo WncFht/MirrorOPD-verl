@@ -4,10 +4,10 @@
 
 ## 两种执行方式
 
-| 方式 | 入口 | 职责 |
-| --- | --- | --- |
-| `shared_sync` | [SharedTeacherScorer](../../../../../verl/trainer/distillation/shared_teacher.py) | 师生共用资源池，teacher 与 actor 分阶段执行 |
-| `standalone` | [teacher_manager.py](../../../../../verl/experimental/teacher_loop/teacher_manager.py) | 既有独立教师服务与请求路径 |
+| 方式          | 入口                                                                                   | 职责                                        |
+| ------------- | -------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `shared_sync` | [SharedTeacherScorer](../../../../../verl/trainer/distillation/shared_teacher.py)      | 师生共用资源池，teacher 与 actor 分阶段执行 |
+| `standalone`  | [teacher_manager.py](../../../../../verl/experimental/teacher_loop/teacher_manager.py) | 既有独立教师服务与请求路径                  |
 
 [PPOTrainer._make_shared_teacher_config](../../../../../verl/trainer/ppo/v1/trainer_base.py) 创建独立 teacher 模型配置，校验 tokenizer 协议；`_compute_shared_teacher_log_probs` 是调用协调器的薄入口。Teacher 采用 forward-only engine，没有 optimizer；推理在无梯度上下文中执行。共享路径的配置约束由 [DistillationConfig.validate_shared_sync](../../../../../verl/workers/config/distillation.py) 负责。
 
@@ -56,10 +56,10 @@ Sampled teacher 计算 teacher forcing 下的下一 token log-prob：整条输�
 
 Legacy sampled 的 `old_log_probs` 由 Trainer 的更新前评分步骤产生。Mirror 跳过该步骤，在 [ActorRolloutRefWorker.update_actor](../../../../../verl/workers/engine_workers.py) 内通过 [anchor_scope](../../../../../verl/trainer/distillation/anchor.py) 复用现有 student engine 的 `infer_batch`，不增加第三个模型或独立 worker。
 
-| 设置 | Anchor 准备 | actor 调用期间保留 |
-| --- | --- | --- |
-| MDPO eta=1，sampled/full 均适用 | 跳过 | 不建立 q |
-| Sampled MDPO eta<1 | 完整序列的无梯度 log-prob，再按 response 对齐 | 冻结的 `old_log_probs` |
+| 设置                                    | Anchor 准备                                                   | actor 调用期间保留                                 |
+| --------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------- |
+| MDPO eta=1，sampled/full 均适用         | 跳过                                                          | 不建立 q                                           |
+| Sampled MDPO eta<1                      | 完整序列的无梯度 log-prob，再按 response 对齐                 | 冻结的 `old_log_probs`                             |
 | Full MDPO eta<1 / Full BPO 任意合法 eta | 选中 hidden/positions，并在 wrapped head callback 内复制 head | TQ 的 anchor payload、version 和调用级 head holder |
 
 [FrozenAnchorHead](../../../../../verl/trainer/distillation/anchor.py) 对完整 head 做独立 CPU 副本，首次使用时再创建 GPU 缓存；它不能引用随后会被 optimizer 改写的 student 权重。位置和 version 在每次消费时检查，scope 的 `finally` 释放 holder 并移除调用级字段。实际 TQ payload 随 outer step 的样本 keys 一起清理。当前实现要求相关 dropout 为零，q 在整个 actor 调用内冻结，下一次调用重新建立。
@@ -72,13 +72,13 @@ Legacy sampled 的 `old_log_probs` 由 Trainer 的更新前评分步骤产生。
 
 教师 scorer 只管理 teacher backbone 的阶段性驻留。Student engine 的 `FrozenTeacherHead` 由 actor worker 在 `update_actor` 的 `finally` 中释放 GPU 缓存，不能交给 scorer 提前释放。教师标签和 hidden 保存在 TQ 中，按原样本身份被复用；Trainer 在本轮结束时清理。
 
-| 阶段 | 主要 GPU 执行者 | 保留用于后续训练的数据 |
-| --- | --- | --- |
-| Rollout | student vLLM 副本 | 原始 token、mask、可选 behavior log-prob |
-| Teacher 评分 | 冻结 teacher FSDP2 | sampled 标签或选中 hidden/positions |
-| Anchor（按目标选择） | student FSDP2 无梯度 forward | legacy/scalar anchor 的 `old_log_probs`，或 full mirror 的 hidden/positions/version 与 head 快照 |
-| Actor 更新 | student FSDP2；full-vocab 另驻留冻结 teacher head，需要 q 时还驻留 anchor head | student 参数、optimizer/scheduler 状态；q/T 在调用内固定 |
-| 同步与验证 | 权重同步后使用 student rollout 副本 | 指标、checkpoint 和可选生成记录 |
+| 阶段                 | 主要 GPU 执行者                                                                | 保留用于后续训练的数据                                                                           |
+| -------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| Rollout              | student vLLM 副本                                                              | 原始 token、mask、可选 behavior log-prob                                                         |
+| Teacher 评分         | 冻结 teacher FSDP2                                                             | sampled 标签或选中 hidden/positions                                                              |
+| Anchor（按目标选择） | student FSDP2 无梯度 forward                                                   | legacy/scalar anchor 的 `old_log_probs`，或 full mirror 的 hidden/positions/version 与 head 快照 |
+| Actor 更新           | student FSDP2；full-vocab 另驻留冻结 teacher head，需要 q 时还驻留 anchor head | student 参数、optimizer/scheduler 状态；q/T 在调用内固定                                         |
+| 同步与验证           | 权重同步后使用 student rollout 副本                                            | 指标、checkpoint 和可选生成记录                                                                  |
 
 这里说明执行阶段与主要状态所有权，不表示某阶段只存在一份模型内存。Offload、FSDP 分片、rollout sleep 和 allocator 缓存共同影响实际显存；阶段性能应结合[性能记录](../performance/full-vocab/README.md)核对。
 
