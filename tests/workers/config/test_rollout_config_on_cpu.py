@@ -32,8 +32,9 @@ def test_max_num_batched_tokens_raised_when_chunked_prefill_disabled():
 
 
 @pytest.mark.parametrize("value", [None, [], [0], [151645, 151645]])
-def test_additional_stop_ids_accept_optional_integer_list(value):
-    assert RolloutConfig(name="vllm", stop_token_ids=value).stop_token_ids == value
+@pytest.mark.parametrize("backend", ["vllm", "hf_fusion"])
+def test_additional_stop_ids_accept_optional_integer_list(value, backend):
+    assert RolloutConfig(name=backend, stop_token_ids=value).stop_token_ids == value
 
 
 @pytest.mark.parametrize("value", [151645, "151645", ["151645"], [True], [-1], [1.5], {1: 2}])

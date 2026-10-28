@@ -87,6 +87,7 @@ class BaseRollout(ABC):
 
 
 _ROLLOUT_REGISTRY = {
+    ("hf_fusion", "async"): "verl.workers.rollout.hf_fusion.ServerAdapter",
     ("vllm", "async"): "verl.workers.rollout.vllm_rollout.ServerAdapter",
     ("sglang", "async"): "verl.workers.rollout.sglang_rollout.sglang_rollout.ServerAdapter",
     ("trtllm", "async"): "verl.workers.rollout.trtllm_rollout.trtllm_rollout.ServerAdapter",

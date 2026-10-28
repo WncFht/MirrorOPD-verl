@@ -380,7 +380,14 @@ def _load_trtllm():
     return TRTLLMReplica
 
 
+def _load_hf_fusion():
+    from verl.workers.rollout.hf_fusion.replica import HFFusionReplica
+
+    return HFFusionReplica
+
+
 # Register built-in types
+RolloutReplicaRegistry.register("hf_fusion", _load_hf_fusion)
 RolloutReplicaRegistry.register("vllm", _load_vllm)
 RolloutReplicaRegistry.register("sglang", _load_sglang)
 RolloutReplicaRegistry.register("trtllm", _load_trtllm)

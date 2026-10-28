@@ -39,6 +39,9 @@ defaults:
   # Rollout correction config.
   - algorithm@algorithm.rollout_correction: rollout_correction
 
+  # Local rollout source policy.
+  - rollout_policy@rollout_policy: local
+
   # distillation config
   - distillation@distillation: distillation
 

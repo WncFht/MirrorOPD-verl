@@ -1,0 +1,18 @@
+# Local rollout source policy. Default delegates to the existing vLLM path.
+mode: single
+
+source: student
+
+student: current
+
+teacher_weight: 0.5
+
+teacher_model_path: null
+
+model_path: null
+
+micro_batch_size: 4
+
+deadline_seconds: 3600.0
+
+drain_seconds: 60.0

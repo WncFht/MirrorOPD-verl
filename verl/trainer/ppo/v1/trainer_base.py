@@ -140,6 +140,9 @@ class PPOTrainer(ABC):
 
     def __init__(self, config: DictConfig):
         self.config = config
+        from verl.experimental.rollout_policy.validation import validate_policy
+
+        self.rollout_policy = validate_policy(config)
         self.checkpoint_callback = build_checkpoint_callback(config)
         self.use_critic = need_critic(self.config)
         self.use_reference_policy = need_reference_policy(self.config)
@@ -2362,8 +2365,7 @@ class PPOTrainer(ABC):
         prompt_length = data["prompts"].offsets().diff()
         response_length = data["responses"].offsets().diff()
         global_token_num = (prompt_length + response_length).tolist()
-        min_global_steps = np.array([tag["min_global_steps"] for tag in batch.tags], dtype=int)[non_padding_mask]
-        max_global_steps = np.array([tag["max_global_steps"] for tag in batch.tags], dtype=int)[non_padding_mask]
+        version_tags = [tag for tag, keep in zip(batch.tags, non_padding_mask, strict=True) if keep]
 
         # Only fetch speculative decoding stats when rollout writes them.
         spec_drafts = spec_accepts = spec_verifies = None
@@ -2459,22 +2461,9 @@ class PPOTrainer(ABC):
         #     so the lag is a range: the freshest weights used give the lower bound
         #     (global_steps - max_global_steps) and the oldest weights the worst case
         #     (global_steps - min_global_steps). We log the lower bound as the primary metric.
-        trajectory_spans = max_global_steps - min_global_steps + 1
-        trajectory_staleness = (global_steps - 1) - max_global_steps
-        trajectory_staleness_worst = (global_steps - 1) - min_global_steps
-        metrics.update(
-            {
-                "training/off_policy/trajectory_spans/mean": trajectory_spans.mean(),
-                "training/off_policy/trajectory_spans/max": trajectory_spans.max(),
-                "training/off_policy/trajectory_spans/min": trajectory_spans.min(),
-                "training/off_policy/trajectory_staleness/mean": trajectory_staleness.mean(),
-                "training/off_policy/trajectory_staleness/max": trajectory_staleness.max(),
-                "training/off_policy/trajectory_staleness/min": trajectory_staleness.min(),
-                "training/off_policy/trajectory_staleness_worst/mean": trajectory_staleness_worst.mean(),
-                "training/off_policy/trajectory_staleness_worst/max": trajectory_staleness_worst.max(),
-                "training/off_policy/trajectory_staleness_worst/min": trajectory_staleness_worst.min(),
-            }
-        )
+        from verl.experimental.rollout_policy.version_metrics import rollout_version_metrics
+
+        metrics.update(rollout_version_metrics(version_tags, global_steps))
 
 
 TRAINER_REGISTRY: dict[str, type[PPOTrainer]] = {}
