@@ -99,7 +99,7 @@ def public_launch(plan, job, source, root, *, eager=False, attempt=1):
             backends.append("liger")
         command = [
             plan["python"],
-            str(source / "examples/mirroropd/docs/full-vocab/scripts/benchmark_full_kl.py"),
+            str(source / "examples/mirroropd/benchmarks/full_vocab/benchmark_full_kl.py"),
             "--tokens",
             "4096",
             "32768",

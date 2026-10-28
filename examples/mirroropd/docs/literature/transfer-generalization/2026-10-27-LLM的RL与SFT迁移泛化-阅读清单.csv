@@ -1,0 +1,33 @@
+﻿编号,优先阅读排名,参考文献,论文链接
+A1,1,"Maggie Huan et al. Does Math Reasoning Improve General LLM Capabilities? Understanding Transferability of LLM Reasoning. arXiv, 2025.",https://arxiv.org/abs/2507.00432
+A2,2,"Qihan Ren et al. Rethinking Generalization in Reasoning SFT: A Conditional Analysis on Optimization, Data, and Model Capability. COLM, 2026.",https://arxiv.org/abs/2604.06628
+A3,3,"Tianzhe Chu et al. SFT Memorizes, RL Generalizes: A Comparative Study of Foundation Model Post-training. ICML, 2025.",https://proceedings.mlr.press/v267/chu25c.html
+A4,4,"Xiaofeng Lin et al. Debunk the Myth of SFT Generalization. arXiv, 2025.",https://arxiv.org/abs/2510.00237
+A5,6,"Hangzhan Jin et al. RL Fine-Tuning Heals OOD Forgetting in SFT. arXiv, 2025; v3, 2026.",https://arxiv.org/abs/2509.12235
+A6,,"Robert Kirk et al. Understanding the Effects of RLHF on LLM Generalisation and Diversity. arXiv, 2023.",https://arxiv.org/abs/2310.06452
+B1,5,"Yang Yue et al. Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model? NeurIPS, 2025.",https://arxiv.org/abs/2504.13837
+B2,7,"Sitao Cheng et al. Atomic Skills are the Prerequisite: When Reinforcement Learning Synthesizes Compositional Reasoning, and When It Only Amplifies. arXiv, 2025.",https://arxiv.org/abs/2512.01970
+B3,,"Lingjing Kong et al. From Reasoning Traces to Reusable Modules: Understanding Compositional Generalization in Language Model Reasoning. ICML, 2026.",https://proceedings.mlr.press/v306/kong26c.html
+B4,,"Sumeet Ramesh Motwani et al. h1: Bootstrapping LLMs to Reason over Longer Horizons via Reinforcement Learning. arXiv, 2025.",https://arxiv.org/abs/2510.07312
+B5,,"Yiping Wang et al. Reinforcement Learning for Reasoning in Large Language Models with One Training Example. arXiv, 2025.",https://arxiv.org/abs/2504.20571
+B6,,"Rulin Shao et al. Spurious Rewards: Rethinking Training Signals in RLVR. arXiv, 2025; ICML, 2026.",https://arxiv.org/abs/2506.10947
+C1,10,"Wang Yang et al. When Domains Interact: Asymmetric and Order-Sensitive Cross-Domain Effects in Reinforcement Learning for Reasoning. arXiv, 2026.",https://arxiv.org/abs/2602.01365
+C2,,"Yongjin Yang et al. Transferability for General Reasoning: An Automated Curriculum for Multi-Domain RLVR. arXiv, 2026.",https://arxiv.org/abs/2606.25178
+C3,,"Andrew Zhao et al. Absolute Zero: Reinforced Self-play Reasoning with Zero Data. arXiv, 2025.",https://arxiv.org/abs/2505.03335
+C4,,"Zhengyu Chen et al. Can Tool-Integrated Reinforcement Learning Generalize Across Diverse Domains? arXiv, 2025.",https://arxiv.org/abs/2510.11184
+C5,,"Daniil Gurgurov et al. ReasonXL: Shifting LLM Reasoning Language Without Sacrificing Performance. arXiv, 2026.",https://arxiv.org/abs/2604.12378
+D1,8,"Dan Shi et al. Why Does Reinforcement Learning Generalize? A Feature-Level Mechanistic Study of Post-Training in Large Language Models. ACL, 2026.",https://aclanthology.org/2026.acl-long.1808/
+D2,,"Wenhong Zhu et al. Proximal Supervised Fine-Tuning. arXiv, 2025; ICLR, 2026.",https://arxiv.org/abs/2508.17784
+D3,,"SFT Doesn’t Always Hurt General Capabilities: Revisiting Domain-Specific Fine-Tuning in LLMs. ICLR, 2026.",https://proceedings.iclr.cc/paper_files/paper/2026/hash/4e447acb68f57e29234bc0eb19896f11-Abstract-Conference.html
+D4,,"Tian-Shuo Liu et al. Clipping Low-Probability Tokens in SFT Yields a Generalizable Initialization for RL. ICML, 2026.",https://proceedings.mlr.press/v306/liu26bm.html
+D5,,"Kejian Zhu et al. SFT Conflicts, RL Coexists: A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs. arXiv, 2026.",https://arxiv.org/abs/2608.03573
+E1,9,"Dylan Zhang et al. Selecting Diverse SFT Traces Improves Post-RL Generalization. arXiv, 2026.",https://arxiv.org/abs/2609.33780
+E2,,"Lu Ma et al. Learning What Reinforcement Learning Can’t: Interleaved Online Fine-Tuning for Hardest Questions. arXiv, 2025; ICLR, 2026.",https://arxiv.org/abs/2506.07527
+E3,,"Runze Liu et al. When RL Fails after SFT: Rejuvenating Model Plasticity for Robust SFT-to-RL Handoff. arXiv, 2026.",https://arxiv.org/abs/2606.09932
+E4,,"Aayush Karan, Sitan Chen, Yilun Du. Finetuning with Sampling: SFT Learns Better Than You Think. arXiv, 2026.",https://arxiv.org/abs/2610.02140
+E5,,"Yuxuan Gu et al. What Should SFT Learn? Conditional Information Gain for Generalizable Post-Training. arXiv, 2026.",https://arxiv.org/abs/2610.12995
+F1,,"Trung Quoc Luong et al. ReFT: Reasoning with Reinforced Fine-Tuning. ACL, 2024.",https://arxiv.org/abs/2401.08967
+F2,,"DeepSeek-AI et al. DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning. arXiv, 2025.",https://arxiv.org/abs/2501.12948
+F3,,"Victor Sanh et al. Multitask Prompted Training Enables Zero-Shot Task Generalization. ICLR, 2022.",https://arxiv.org/abs/2110.08207
+F4,,"Hyung Won Chung et al. Scaling Instruction-Finetuned Language Models. arXiv, 2022.",https://arxiv.org/abs/2210.11416
+F5,,"Eric Zelikman et al. STaR: Bootstrapping Reasoning With Reasoning. arXiv, 2022.",https://arxiv.org/abs/2203.14465

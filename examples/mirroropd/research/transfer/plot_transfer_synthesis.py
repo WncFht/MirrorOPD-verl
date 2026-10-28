@@ -38,7 +38,7 @@ def main():
     fv = load_style()
     a.out.mkdir(parents=True, exist_ok=True)
     root = a.workspace.resolve()
-    doc = root / "MirrorOPD-verl/examples/mirroropd/docs/experiments/polaris-transfer"
+    doc = root / "MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism"
     paths = {
         "I": doc / "data/intersection-study-20261027",
         "B": root / "wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027",

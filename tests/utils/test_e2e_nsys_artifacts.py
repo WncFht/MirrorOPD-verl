@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/docs/infra/profile/e2e-4gpu/scripts"
+SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/benchmarks/profile/e2e_4gpu"
 
 
 @pytest.mark.parametrize("missing_gpu_rank", [None, 3])

@@ -55,6 +55,8 @@ python -m examples.mirroropd.research transfer analyze_long_batch_transfer \
 
 前七行使用 `transfer`，后两行使用 `precision`。绘图需要设置 `FIGURE_VIZ_MPL` 为 figure-viz 的 `assets/mpl`；该依赖在解析命令参数后才加载，所以 `--help` 不要求安装或配置绘图 skill。`plot_precision_report` 保留原 `--figure-skill` 参数。
 
+筛选假说另有 `filter_calibration` 和 `filter_continue_math` 两个冻结权重诊断入口；完整设置、已完成结果和复算命令见 [OPD 能力筛选假说报告](../docs/experiments/teacher-transfer/transfer-mechanism/capability-filter/2026-10-28-OPD能力筛选假说的受控实验.md)。
+
 ## 缓存、恢复与配置
 
 `common/cache.py` 的 `HiddenCache` 使用来源、题目、重复编号、seed、生成 checkpoint 等身份区分路径，并在 payload 中保存完整 prompt/response token IDs 与模型路径、dtype、attention 实现和 hidden 协议。读取时逐项核对，长度相同而 token 不同也会拒绝。模型路径必须代表不可变的权重版本；不能在同一路径覆盖权重后继续复用缓存。
@@ -84,4 +86,8 @@ CUDA_VISIBLE_DEVICES='' python -m pytest -q \
 
 重构的历史回归在临时数据副本中执行，不覆盖原始证据。三套公共指标在 FP32/FP64 上与重构前逐项完全一致；L 的 99 个文件比较一致，I/B/N 的统计回归分别比较 135/220/173 个证据文件也一致；L 的九张 PNG 与重构前文件内容完全一致。35 项公共接口与既有精度／优化器 CPU 测试通过。后续新增协议的 GPU 数值和性能检查在有卡后单独执行，CPU 验证不替代实际训练验收。
 
-相关研究：[跨源泛化总览](../docs/experiments/polaris-transfer/2026-10-27-跨源蒸馏泛化研究总览.md)、[双来源 R 协议与跨批历史结果](../docs/experiments/polaris-transfer/2026-10-27-双来源Rollout跨批次迁移实验.md)、[浮点精度报告](../docs/mirror-descent/2026-10-27-MDPO反弹机制与浮点精度研究报告.md)。
+相关研究：[跨源泛化总览](../docs/experiments/teacher-transfer/transfer-mechanism/2026-10-27-跨源蒸馏泛化研究总览.md)、[双来源 R 协议与跨批历史结果](../docs/experiments/teacher-transfer/transfer-mechanism/README.md)、[浮点精度报告](../docs/experiments/teacher-transfer/optimizer-precision/mechanism/2026-10-27-MDPO反弹机制与浮点精度研究报告.md)。
+
+## 文档工具迁移
+
+通用分析由 `analysis` 包维护，CLI 使用 `python -m examples.mirroropd.research.analysis.<模块>`；终止动作、Qwen和共享机制统计使用各自子包。当前双表入口为 `analysis.refresh_tables --logs-repo ../wandb-logs`，不读取人工catalog。数学核验归 `objectives` 与 `rollout_policy`；工程测量归 `examples.mirroropd.benchmarks`。冻结源码仍随证据保留。

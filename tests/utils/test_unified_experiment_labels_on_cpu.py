@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/docs/experiments/scripts"
+SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis"
 sys.path.insert(0, str(SCRIPTS))
 import build_inventory as inventory  # noqa: E402
 import summarize_validation as summary  # noqa: E402
@@ -73,11 +73,14 @@ def test_run_names_keep_variants_separate(tmp_path, name, preset, role, variant)
         assert inventory.family(name) == "method-overrides"
 
 
-@pytest.mark.parametrize("name", [
-    "math-opd-E44-20261025-123",
-    "math-opd-E45-mdpo-full_vocab-k0-eta0.3-20261025-123",
-    "math-opd-E46-bpo-full_vocab-k0-eta0.3-20261025-123",
-    "math-opd-E47-mdpo-full_vocab-k0.5-eta0.3-20261025-123",
-])
+@pytest.mark.parametrize(
+    "name",
+    [
+        "math-opd-E44-20261025-123",
+        "math-opd-E45-mdpo-full_vocab-k0-eta0.3-20261025-123",
+        "math-opd-E46-bpo-full_vocab-k0-eta0.3-20261025-123",
+        "math-opd-E47-mdpo-full_vocab-k0.5-eta0.3-20261025-123",
+    ],
+)
 def test_registered_mirror_comparison_family(name):
     assert inventory.family(name) == "mirror-comparison"

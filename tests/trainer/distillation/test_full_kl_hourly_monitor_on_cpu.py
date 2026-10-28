@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 
 def monitor(monkeypatch, root, pending=False):
-    path = Path(__file__).resolve().parents[3] / "examples/mirroropd/docs/infra/profile/scripts/hourly_monitor.py"
+    path = Path(__file__).resolve().parents[3] / "examples/mirroropd/benchmarks/profile/hourly_monitor.py"
     spec = importlib.util.spec_from_file_location("hourly_monitor_test", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

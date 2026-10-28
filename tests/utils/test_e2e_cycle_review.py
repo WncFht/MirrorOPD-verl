@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/docs/infra/profile/e2e-4gpu/scripts"
+SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/benchmarks/profile/e2e_4gpu"
 sys.path.insert(0, str(SCRIPTS))
 spec = importlib.util.spec_from_file_location("cycle_review", SCRIPTS / "analyze_cycle.py")
 review = importlib.util.module_from_spec(spec)

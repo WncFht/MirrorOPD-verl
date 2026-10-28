@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPTS = ROOT / "examples/mirroropd/docs/experiments/scripts"
+SCRIPTS = ROOT / "examples/mirroropd/research/analysis"
 DATA = (
     Path(os.environ.get("WANDB_LOGS_REPO", ROOT.parent / "wandb-logs"))
     / "MirrorOPD-verl/analysis/e15-krkmq098-20261023"
@@ -127,7 +127,7 @@ def test_frozen_e15_axes_and_accounting(analyze):
 def test_gpu_missing_observations_not_zero_filled(monkeypatch):
     pytest.importorskip("matplotlib")
     monkeypatch.syspath_prepend(str(SCRIPTS))
-    monkeypatch.syspath_prepend(str(ROOT / "examples/mirroropd/docs/scripts"))
+    monkeypatch.syspath_prepend(str(ROOT / "examples/mirroropd/research/analysis/legacy"))
     # Plot styling is an optional external dependency, but data selection is tested when available.
     import fvlocate
 

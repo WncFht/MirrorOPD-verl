@@ -50,14 +50,14 @@ Run the following commands from the repository root.
 sky launch -c verl-ppo examples/tutorial/skypilot/verl-ppo.yaml \
   --secret WANDB_API_KEY -y
 ```
-Runs PPO training on GSM8K dataset using Qwen2.5-0.5B-Instruct model across 2 nodes with H100 GPUs. Based on examples in [`../../ppo_trainer/`](../../ppo_trainer/).
+Runs PPO training on GSM8K dataset using Qwen2.5-0.5B-Instruct model across 2 nodes with H100 GPUs. Based on examples in [`../../ppo_trainer/`](../../ppo_trainer).
 
 ### GRPO Training  
 ```bash
 sky launch -c verl-grpo examples/tutorial/skypilot/verl-grpo.yaml \
   --secret WANDB_API_KEY -y
 ```
-Runs GRPO (Group Relative Policy Optimization) training on MATH dataset using Qwen2.5-7B-Instruct model. Memory-optimized configuration for 2 nodes. Based on examples in [`../../grpo_trainer/`](../../grpo_trainer/).
+Runs GRPO (Group Relative Policy Optimization) training on MATH dataset using Qwen2.5-7B-Instruct model. Memory-optimized configuration for 2 nodes. Based on examples in [`../../grpo_trainer/`](../../grpo_trainer).
 
 ### Agent Loop and Tool-Use Training
 

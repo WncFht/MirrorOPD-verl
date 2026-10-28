@@ -55,15 +55,22 @@ def test_unclosed_fence_is_an_error(tmp_path):
     assert "unclosed code fence at line 2" in errors[0]
 
 
-def test_default_library_uses_tracked_documents(tmp_path):
+def test_default_library_includes_untracked_authored_documents(tmp_path):
     subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
-    directory = tmp_path / "examples/mirroropd/docs/internals"
+    directory = tmp_path / "examples/mirroropd/docs/infra/architecture"
     directory.mkdir(parents=True)
     tracked = directory / "tracked.md"
     tracked.write_text("# Ready\n")
     (directory / "draft.md").write_text("[unfinished](missing.md)\n")
     subprocess.run(["git", "-C", str(tmp_path), "add", str(tracked)], check=True)
-    assert docs.maintained_pages(tmp_path) == [tracked]
+    for excluded in ("archive", "literature/sources", "infra/numerics/data"):
+        source = tmp_path / "examples/mirroropd/docs" / excluded / "frozen.md"
+        source.parent.mkdir(parents=True, exist_ok=True)
+        source.write_text("[original](missing.md)\n")
+    pages = docs.maintained_pages(tmp_path)
+    assert set(pages) == {tracked, directory / "draft.md"}
+    _, errors = docs.check_pages(pages)
+    assert len(errors) == 1 and "missing.md" in errors[0]
 
 
 def test_ignored_local_output_does_not_hide_missing_source(tmp_path, monkeypatch):

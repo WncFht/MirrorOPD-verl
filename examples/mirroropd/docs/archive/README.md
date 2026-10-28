@@ -1,6 +1,6 @@
 # 历史记录
 
-这里集中旧 run、冻结队列和已被替代的指标设计入口。历史文档保留当时的配置、结论和证据，不随当前默认值改写；当前阅读从[文档导航](../README.md)或 [E15 主报告](../experiments/full-kl-comparison/2026-10-23-E15训练动态与指标分析.md)开始。
+这里集中旧 run、冻结队列和已被替代的指标设计入口。历史文档保留当时的配置、结论和证据，不随当前默认值改写；当前阅读从[文档导航](../README.md)或 [E15 主报告](../experiments/learning-signal/sampled-vs-full/2026-10-23-E15训练动态与指标分析.md)开始。
 
 ## 旧运行与复现
 
@@ -14,16 +14,16 @@
 
 ## 指标系统历史
 
-以下入口按历史用途集中导航；当前定义与验收分别见[指标字典](../experiments/metrics/指标字典.md)和[完整验收](metric-implementation/2026-10-22-完整指标实现与验收.md)。
+以下入口按历史用途集中导航；当前定义与验收分别见[指标字典](../settings/指标口径.md)和[完整验收](metric-implementation/2026-10-22-完整指标实现与验收.md)。
 
 | 文档 | 保留范围 |
 | --- | --- |
 | [第一版迁移审计](metric-implementation/2026-10-22-指标迁移审计与补齐清单.md) | 原字段盘点与需求来源 |
-| [第一版指标字典](../experiments/metrics/history/2026-10-22-第一版指标字典.md) | 当时的 64 字段口径 |
+| [第一版指标字典](metrics/2026-10-22-第一版指标字典.md) | 当时的 64 字段口径 |
 | [第一版实现与验证](metric-implementation/2026-10-22-实现与验证.md) | 第一版提交与测试证据 |
 | [设计与调研](metric-implementation/2026-10-22-训练指标系统设计与调研.md) | 框架参考与历史取舍 |
 | [历史性能口径与验收](metric-implementation/2026-10-22-历史性能口径与验收.md) | 旧 timer、MFU、内存和 GPU 验收范围 |
-| [旧 Correction 辅助统计](../experiments/metrics/history/2026-10-22-旧Correction辅助字段.md) | 旧统计公式；仍用于解释保留的历史诊断字段 |
+| [旧 Correction 辅助统计](metrics/2026-10-22-旧Correction辅助字段.md) | 旧统计公式；仍用于解释保留的历史诊断字段 |
 
 ## 维护约定
 

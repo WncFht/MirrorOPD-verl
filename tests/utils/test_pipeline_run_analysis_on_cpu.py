@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/docs/scripts"
+SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis/legacy"
 
 
 @pytest.fixture

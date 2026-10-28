@@ -192,7 +192,7 @@ def parser() -> argparse.ArgumentParser:
         + ". Model presets accept -valid-student/-valid-teacher.\n"
         "Precedence: preset < environment < method options < final Hydra overrides.\n"
         "custom uses shared defaults without an E budget; DRY_RUN=1 prints the final command.\n"
-        "Use --list-presets for the catalog; see examples/mirroropd/docs/训练配方.md for protocols.",
+        "Use --list-presets for the catalog; see examples/mirroropd/docs/settings/训练设置.md for protocols.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         allow_abbrev=False,
     )

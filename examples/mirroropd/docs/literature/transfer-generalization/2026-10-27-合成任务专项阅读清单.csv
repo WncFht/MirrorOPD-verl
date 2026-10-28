@@ -1,0 +1,17 @@
+﻿阅读顺序,来源,arXiv ID,论文,合成方式,研究对象,链接
+1,新增,2509.25123,From f(x) and g(x) to f(g(x)): LLMs Learn New Skills in RL by Composing Old Ones,字符串变换与随机函数名,新组合、难度外推、跨任务迁移,https://arxiv.org/abs/2509.25123
+2,新增,2602.04811,SE-Bench: Benchmarking Self-Evolution with Knowledge Internalization,随机命名的 NumPy API 包装库,参数内化与撤除文档后的新知识调用,https://arxiv.org/abs/2602.04811
+3,原 B2,2512.01970,"Atomic Skills are the Prerequisite: When Reinforcement Learning Synthesizes Compositional Reasoning, and When It Only Amplifies",合成传记与知识图谱,参数知识和上下文知识组合,https://arxiv.org/abs/2512.01970
+4,原 B3,2606.18089,From Reasoning Traces to Reusable Modules: Understanding Compositional Generalization in Language Model Reasoning,字符串技能和路由组合,可复用模块与数据支持集,https://arxiv.org/abs/2606.18089
+5,新增,2505.22756,Decomposing Elements of Problem Solving: What Math Does RL Teach?,状态转移和解题树,规划、执行、验证及覆盖,https://arxiv.org/abs/2505.22756
+6,新增,2506.18110,RL for Reasoning by Adaptively Revealing Rationales,Chain-of-Parities 递归 XOR,稀疏奖励与部分轨迹监督,https://arxiv.org/abs/2506.18110
+7,新增,2603.02091,Learning from Synthetic Data Improves Multi-hop Reasoning,虚构关系世界、逻辑题及计算图,合成到真实多跳问答的迁移,https://arxiv.org/abs/2603.02091
+8,原 B4,2510.07312,h1: Bootstrapping LLMs to Reason over Longer Horizons via Reinforcement Learning,短题组合成长依赖链,长度与难度外推,https://arxiv.org/abs/2510.07312
+9,原 A4,2510.00237,Debunk the Myth of SFT Generalization,Sokoban 和 General Points,提示变化与难度变化,https://arxiv.org/abs/2510.00237
+10,原 E1,2609.33780,Selecting Diverse SFT Traces Improves Post-RL Generalization,RLVE、Sokoban、程序模拟及路线选择,初始化多样性与后续 RL 覆盖,https://arxiv.org/abs/2609.33780
+11,新增,2502.14768,Logic-RL: Unleashing LLM Reasoning with Rule-Based Reinforcement Learning,可验证合成逻辑谜题,逻辑训练向数学迁移,https://arxiv.org/abs/2502.14768
+12,新增,2511.07317,RLVE: Scaling Up Reinforcement Learning for Language Models with Adaptive Verifiable Environments,400 个程序生成可验证环境,环境规模与自适应课程,https://arxiv.org/abs/2511.07317
+13,原 C3,2505.03335,Absolute Zero: Reinforced Self-play Reasoning with Zero Data,模型提出并由执行器验证的代码任务,自生成课程与泛化,https://arxiv.org/abs/2505.03335
+14,原 A3,2501.17161,"SFT Memorizes, RL Generalizes: A Comparative Study of Foundation Model Post-training",GeneralPoints 规则和卡牌；另含真实视觉环境,规则与视觉 OOD,https://arxiv.org/abs/2501.17161
+15,原 A5,2509.12235,RL Fine-Tuning Heals OOD Forgetting in SFT,卡牌、导航规则、秩和行列式任务等,遗忘恢复与 checkpoint 动态,https://arxiv.org/abs/2509.12235
+16,原 A2（子实验）,2604.06628,"Rethinking Generalization in Reasoning SFT: A Conditional Analysis on Optimization, Data, and Model Capability",Countdown-CoT 子实验,简单合成过程的 SFT 迁移,https://arxiv.org/abs/2604.06628

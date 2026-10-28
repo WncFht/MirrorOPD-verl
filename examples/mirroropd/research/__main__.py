@@ -15,7 +15,7 @@ def commands(family):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("family", choices=("transfer", "precision"))
+    parser.add_argument("family", choices=("transfer", "precision", "analysis", "objectives", "rollout_policy"))
     parser.add_argument("command", nargs="?", help="Module name; omit to list available experiments")
     parser.add_argument("arguments", nargs=argparse.REMAINDER)
     args = parser.parse_args()

@@ -1,0 +1,715 @@
+[
+  {
+    "reference": "Qwen--Qwen2.5-1.5B",
+    "candidate": "hkust-nlp--Qwen-2.5-1.5B-SimpleRL-Zoo",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "max_position_embeddings": {
+        "reference": 131072,
+        "candidate": 32768
+      }
+    }
+  },
+  {
+    "reference": "Qwen--Qwen2.5-1.5B",
+    "candidate": "nvidia--OpenReasoning-Nemotron-1.5B",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {}
+  },
+  {
+    "reference": "Qwen--Qwen2.5-1.5B",
+    "candidate": "Qwen--Qwen2.5-Coder-1.5B",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "max_position_embeddings": {
+        "reference": 131072,
+        "candidate": 32768
+      }
+    }
+  },
+  {
+    "reference": "Qwen--Qwen2.5-1.5B",
+    "candidate": "Qwen--Qwen2.5-Coder-1.5B-Instruct",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "max_position_embeddings": {
+        "reference": 131072,
+        "candidate": 32768
+      }
+    }
+  },
+  {
+    "reference": "Qwen--Qwen2.5-1.5B",
+    "candidate": "nebularaid--Qwen2.5-1.5B_Math-CoT-20k_lr5e-5_ep8_bs256-modelscope/step640",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {}
+  },
+  {
+    "reference": "Qwen--Qwen2.5-1.5B",
+    "candidate": "nebularaid--Qwen2.5-7B_Math-CoT-20k_lr5e-5_ep8_bs256-modelscope/step640",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "hidden_size": {
+        "reference": 1536,
+        "candidate": 3584
+      },
+      "intermediate_size": {
+        "reference": 8960,
+        "candidate": 18944
+      },
+      "num_attention_heads": {
+        "reference": 12,
+        "candidate": 28
+      },
+      "num_key_value_heads": {
+        "reference": 2,
+        "candidate": 4
+      },
+      "vocab_size": {
+        "reference": 151936,
+        "candidate": 152064
+      },
+      "tie_word_embeddings": {
+        "reference": true,
+        "candidate": false
+      }
+    }
+  },
+  {
+    "reference": "Qwen--Qwen2.5-1.5B",
+    "candidate": "Qwen--Qwen3-1.7B-Base",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "model_type": {
+        "reference": "qwen2",
+        "candidate": "qwen3"
+      },
+      "hidden_size": {
+        "reference": 1536,
+        "candidate": 2048
+      },
+      "intermediate_size": {
+        "reference": 8960,
+        "candidate": 6144
+      },
+      "num_attention_heads": {
+        "reference": 12,
+        "candidate": 16
+      },
+      "num_key_value_heads": {
+        "reference": 2,
+        "candidate": 8
+      },
+      "max_position_embeddings": {
+        "reference": 131072,
+        "candidate": 32768
+      }
+    }
+  },
+  {
+    "reference": "Qwen--Qwen2.5-1.5B",
+    "candidate": "Qwen--Qwen3-30B-A3B-Base",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "model_type": {
+        "reference": "qwen2",
+        "candidate": "qwen3_moe"
+      },
+      "hidden_size": {
+        "reference": 1536,
+        "candidate": 2048
+      },
+      "intermediate_size": {
+        "reference": 8960,
+        "candidate": 6144
+      },
+      "num_hidden_layers": {
+        "reference": 28,
+        "candidate": 48
+      },
+      "num_attention_heads": {
+        "reference": 12,
+        "candidate": 32
+      },
+      "num_key_value_heads": {
+        "reference": 2,
+        "candidate": 4
+      },
+      "tie_word_embeddings": {
+        "reference": true,
+        "candidate": false
+      },
+      "max_position_embeddings": {
+        "reference": 131072,
+        "candidate": 32768
+      }
+    }
+  },
+  {
+    "reference": "Qwen--Qwen3-4B-Base",
+    "candidate": "jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/step640",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [
+      151665,
+      151666,
+      151667,
+      151668
+    ],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": false,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {}
+  },
+  {
+    "reference": "Qwen--Qwen3-4B-Base",
+    "candidate": "TIGER-Lab--General-Reasoner-Qwen3-4B",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {}
+  },
+  {
+    "reference": "Qwen--Qwen3-4B-Base",
+    "candidate": "Qwen--Qwen3-30B-A3B-Base",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "model_type": {
+        "reference": "qwen3",
+        "candidate": "qwen3_moe"
+      },
+      "hidden_size": {
+        "reference": 2560,
+        "candidate": 2048
+      },
+      "intermediate_size": {
+        "reference": 9728,
+        "candidate": 6144
+      },
+      "num_hidden_layers": {
+        "reference": 36,
+        "candidate": 48
+      },
+      "num_key_value_heads": {
+        "reference": 8,
+        "candidate": 4
+      },
+      "tie_word_embeddings": {
+        "reference": true,
+        "candidate": false
+      }
+    }
+  },
+  {
+    "reference": "jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/step640",
+    "candidate": "jasonrqh--Qwen3-8B_Math-CoT-20k_lr5e-5_ep8_bs256/step640",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "hidden_size": {
+        "reference": 2560,
+        "candidate": 4096
+      },
+      "intermediate_size": {
+        "reference": 9728,
+        "candidate": 12288
+      },
+      "tie_word_embeddings": {
+        "reference": true,
+        "candidate": false
+      }
+    }
+  },
+  {
+    "reference": "allenai--Olmo-3-7B-Instruct-SFT",
+    "candidate": "allenai--Olmo-Hybrid-Instruct-SFT-7B",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "model_type": {
+        "reference": "olmo3",
+        "candidate": "olmo_hybrid"
+      },
+      "hidden_size": {
+        "reference": 4096,
+        "candidate": 3840
+      },
+      "num_attention_heads": {
+        "reference": 32,
+        "candidate": 30
+      },
+      "num_key_value_heads": {
+        "reference": 32,
+        "candidate": 30
+      },
+      "vocab_size": {
+        "reference": 100278,
+        "candidate": 100352
+      },
+      "rope_theta": {
+        "reference": 500000,
+        "candidate": null
+      },
+      "rope_scaling": {
+        "reference": {
+          "attention_factor": 1.2079441541679836,
+          "beta_fast": 32,
+          "beta_slow": 1,
+          "factor": 8.0,
+          "original_max_position_embeddings": 8192,
+          "rope_type": "yarn"
+        },
+        "candidate": null
+      },
+      "max_position_embeddings": {
+        "reference": 65536,
+        "candidate": 32768
+      },
+      "layer_types": {
+        "reference": [
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention"
+        ],
+        "candidate": [
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention"
+        ]
+      }
+    }
+  },
+  {
+    "reference": "allenai--Olmo-3-7B-Instruct-SFT",
+    "candidate": "allenai--Olmo-3.1-32B-Instruct-SFT",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "hidden_size": {
+        "reference": 4096,
+        "candidate": 5120
+      },
+      "intermediate_size": {
+        "reference": 11008,
+        "candidate": 27648
+      },
+      "num_hidden_layers": {
+        "reference": 32,
+        "candidate": 64
+      },
+      "num_attention_heads": {
+        "reference": 32,
+        "candidate": 40
+      },
+      "num_key_value_heads": {
+        "reference": 32,
+        "candidate": 8
+      },
+      "layer_types": {
+        "reference": [
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention"
+        ],
+        "candidate": [
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention"
+        ]
+      }
+    }
+  },
+  {
+    "reference": "allenai--Olmo-3-7B-Instruct-SFT",
+    "candidate": "allenai--Olmo-3-7B-Instruct-DPO",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {}
+  },
+  {
+    "reference": "allenai--Olmo-3-7B-Instruct-SFT",
+    "candidate": "allenai--Olmo-3-7B-Instruct",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {}
+  },
+  {
+    "reference": "allenai--Llama-3.1-Tulu-3-8B-SFT",
+    "candidate": "allenai--Llama-3.1-Tulu-3-70B-SFT",
+    "id_mismatches": [],
+    "reference_only_ids": [],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": true,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "hidden_size": {
+        "reference": 4096,
+        "candidate": 8192
+      },
+      "intermediate_size": {
+        "reference": 14336,
+        "candidate": 28672
+      },
+      "num_hidden_layers": {
+        "reference": 32,
+        "candidate": 80
+      },
+      "num_attention_heads": {
+        "reference": 32,
+        "candidate": 64
+      }
+    }
+  },
+  {
+    "reference": "allenai--Llama-3.1-Tulu-3-8B-SFT",
+    "candidate": "marin-community--marin-8b-base",
+    "id_mismatches": [],
+    "reference_only_ids": [
+      128256
+    ],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": false,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "vocab_size": {
+        "reference": 128264,
+        "candidate": 128256
+      },
+      "max_position_embeddings": {
+        "reference": 131072,
+        "candidate": 4096
+      }
+    }
+  },
+  {
+    "reference": "allenai--Llama-3.1-Tulu-3-8B-SFT",
+    "candidate": "JunxiongWang--Llama3.1-Mamba2-8B-distill",
+    "id_mismatches": [],
+    "reference_only_ids": [
+      128256
+    ],
+    "candidate_only_ids": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "added_tokens": false,
+      "normalized_bpe_model": true
+    },
+    "config_differences": {
+      "vocab_size": {
+        "reference": 128264,
+        "candidate": 128256
+      }
+    }
+  }
+]

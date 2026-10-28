@@ -1,0 +1,697 @@
+{
+  "captured_at": "2026-10-28T10:41:19.263686+08:00",
+  "git_head": "b94ad661c6d4dd93ce9a6d12fa0f6e2d761fa1b2",
+  "note": "Includes dirty/untracked working tree files, not solely git HEAD.",
+  "files": {
+    "verl/experimental/rollout_policy/__init__.py": {
+      "sha256": "7a95f54440f33d79c458b0d09b9472898b8581cf42933cf42bf2225ab838bafe",
+      "lines": 3
+    },
+    "verl/experimental/rollout_policy/collector.py": {
+      "sha256": "62b0270a625e3a8aecbfb522d6ff6e880fd686017eb53d9613dc083906325559",
+      "lines": 73
+    },
+    "verl/experimental/rollout_policy/cuda_graph.py": {
+      "sha256": "1b449ef977e786d38f700025eb5e100de125d81162ed0904a1b65e0dc6c6566a",
+      "lines": 83
+    },
+    "verl/experimental/rollout_policy/flash_kv.py": {
+      "sha256": "3908e4b896dc3b5bd651582b608ee8e943dcdc7c56548456caa44895805329af",
+      "lines": 67
+    },
+    "verl/experimental/rollout_policy/grouped_mm.py": {
+      "sha256": "12e020772db84ff702a4e5e0b0259185609d949f8d6751a8c396398f73d21d3b",
+      "lines": 71
+    },
+    "verl/experimental/rollout_policy/hf_decoder.py": {
+      "sha256": "cda097c827b66ffed3100d7fac542bf218abd5436e777a526da61341d69b67d1",
+      "lines": 311
+    },
+    "verl/experimental/rollout_policy/kv_cache.py": {
+      "sha256": "90f9fedbe7fea74cd6f87f43917815879e1bfee028c3f0e0b67b092707b1151f",
+      "lines": 89
+    },
+    "verl/experimental/rollout_policy/math_context.py": {
+      "sha256": "1436ea72a9e379f2cb1113af730292f345fb87047b80317715659f59c7656138",
+      "lines": 49
+    },
+    "verl/experimental/rollout_policy/plan.py": {
+      "sha256": "f0d01e4258b4b3794a6454238cdeb9ce34e14208d1a8b337cee0b93dd96b58cd",
+      "lines": 223
+    },
+    "verl/experimental/rollout_policy/precision.py": {
+      "sha256": "7250ff7c1118f55a5bebb54646f5ff831c780e324ac0a4daa0551766002ac63a",
+      "lines": 112
+    },
+    "verl/experimental/rollout_policy/runtime.py": {
+      "sha256": "db98627f4168071d858f9ee4d5ca0b03e5e1988f4822fd563eaad58c390d16cd",
+      "lines": 445
+    },
+    "verl/experimental/rollout_policy/sampling.py": {
+      "sha256": "4963c790386149c1531b015ed938e47df20129ea5aa22b6f98fdf0509a03f269",
+      "lines": 128
+    },
+    "verl/experimental/rollout_policy/validation.py": {
+      "sha256": "880f8ee0969be8e0efaa5e568bb079e6a41df6818d95188b8535e0b86c251fc4",
+      "lines": 180
+    },
+    "verl/experimental/rollout_policy/version_metrics.py": {
+      "sha256": "39b9ed2bb790a48d5e65c64e90b41cf4f85fc8e056ead080470ee43989511a4b",
+      "lines": 32
+    },
+    "verl/experimental/rollout_policy/vllm_support.py": {
+      "sha256": "62b1f3350f54d9f3d1e3bb07c7bc3e3a38d5f2ad37a6c5d1904efbeacc262953",
+      "lines": 34
+    },
+    "verl/workers/rollout/hf_fusion/__init__.py": {
+      "sha256": "7a51926bfdc21b4874a5aa8e1e20a5758f42ac9e7efd3f6a268ad574361ce8f0",
+      "lines": 5
+    },
+    "verl/workers/rollout/hf_fusion/adapter.py": {
+      "sha256": "e01ba2c067e67a665f18e43732f8ae1643fe453c51a93f0158c25478dbaeefa7",
+      "lines": 246
+    },
+    "verl/workers/rollout/hf_fusion/replica.py": {
+      "sha256": "703b821719f35143e22aa79840c582efe3d22dc2085d2be6c23ee1a029be7113",
+      "lines": 135
+    },
+    "examples/mirroropd/benchmarks/fusion/benchmark.py": {
+      "sha256": "e427b9035c63ceb052fe2f69fd44c489c116f49704ad9cbcd0fbfdfc59d57140",
+      "lines": 411
+    },
+    "examples/mirroropd/benchmarks/fusion/fingerprint.py": {
+      "sha256": "44541224fc371dad718f9184faabf9b5271610a25eea1ecd07204b4498d4e37c",
+      "lines": 22
+    },
+    "examples/mirroropd/benchmarks/fusion/monitor.py": {
+      "sha256": "88b56e9f5ab2062438bcda22d52fb1a21878ea9470b7f3e9b0f84b600c7cab60",
+      "lines": 74
+    },
+    "examples/mirroropd/benchmarks/fusion/paired_reference.py": {
+      "sha256": "ae833572484a29c6be880b770ed1b24296ad5654c9e5f638695156f9669f3ff2",
+      "lines": 39
+    },
+    "examples/mirroropd/benchmarks/fusion/summarize.py": {
+      "sha256": "6a373e4f336a922d67a600b21087da512dade38c75521e49c8b6c763a486a814",
+      "lines": 122
+    },
+    "examples/mirroropd/benchmarks/fusion/verify_numerics.py": {
+      "sha256": "53a003d86c9eb3b73cfdea1d2c473a07fca7ba7b282a24e2dc5c0e187c76042b",
+      "lines": 244
+    },
+    "tests/experimental/rollout_policy/refit_distributed.py": {
+      "sha256": "6880ba789bdf2ad100fd180d47b77d795a5a741a5107472c68e7c90c8b40cad1",
+      "lines": 108
+    },
+    "tests/experimental/rollout_policy/test_collector_on_cpu.py": {
+      "sha256": "c9a31706bdf9a4041d696f3244c3aee3e941f4c81cbad46ee546809e4b24d579",
+      "lines": 163
+    },
+    "tests/experimental/rollout_policy/test_decoder_on_cpu.py": {
+      "sha256": "f429d37eeac0c1eeabb8575bc71044fceaf0330f4d9ebdfd32c22308c701da60",
+      "lines": 74
+    },
+    "tests/experimental/rollout_policy/test_decoder_on_gpu.py": {
+      "sha256": "8ab1b2bec1ffa11571c0dcd633391b6b3393edecf6216e3403677a71441bade5",
+      "lines": 64
+    },
+    "tests/experimental/rollout_policy/test_grouped_mm_on_gpu.py": {
+      "sha256": "a6b14d90a88c2206d102ec4b952a59947c9c76a346b423797fb19c28c19b7e8b",
+      "lines": 48
+    },
+    "tests/experimental/rollout_policy/test_kv_cache_on_cpu.py": {
+      "sha256": "752ee384d006df773aa77f26c232b76e60040fd1332f5f4acefb52c2f7b0a3e5",
+      "lines": 77
+    },
+    "tests/experimental/rollout_policy/test_math_context_on_cpu.py": {
+      "sha256": "226fd7b7972071709993b603409dbc3a1801cf093dc92d4a0e7ce43d2ee4c6b2",
+      "lines": 57
+    },
+    "tests/experimental/rollout_policy/test_plan_on_cpu.py": {
+      "sha256": "f9d49b7f65c65ad7685c73b5934891a62432575e24b25075ca69762cad5b05b9",
+      "lines": 109
+    },
+    "tests/experimental/rollout_policy/test_postprocess_on_cpu.py": {
+      "sha256": "52f3b3e76c786db57330571ce01e2824434a72a5806000cd5edba80940b7bf2d",
+      "lines": 103
+    },
+    "tests/experimental/rollout_policy/test_precision_on_cpu.py": {
+      "sha256": "0fdafaf1188774d23746afc75f81918c238065c7750da6011b4e1838ad0c73fd",
+      "lines": 39
+    },
+    "tests/experimental/rollout_policy/test_preflight_on_cpu.py": {
+      "sha256": "209798bd3cc6b285f52c143c9e2fbbaa38184b9afe7dbf7773ccd8fe6a90eef6",
+      "lines": 23
+    },
+    "tests/experimental/rollout_policy/test_refit_on_cpu.py": {
+      "sha256": "8b008a85d3401d466cc6769759c4410c5a9ffe55ccf0cb1cf044fc9ae4a4aec5",
+      "lines": 117
+    },
+    "tests/experimental/rollout_policy/test_runtime_on_cpu.py": {
+      "sha256": "16cfdbfcbdcd2c83fdecf89fa8a88e074b6c945021ae99f68020e8d373ab66d4",
+      "lines": 56
+    },
+    "tests/experimental/rollout_policy/test_sampling_on_cpu.py": {
+      "sha256": "aa54af6551681fe1f64e2e4f5ba66c0ce476557dc0ca3ab6cae94dec1adcdd3e",
+      "lines": 75
+    },
+    "tests/experimental/rollout_policy/test_server_on_cpu.py": {
+      "sha256": "a3f48c243c03ba3a8bd2c5373a96273a35e169b14457392d6bfc4b357473138e",
+      "lines": 141
+    },
+    "tests/experimental/rollout_policy/test_tq_integration_on_cpu.py": {
+      "sha256": "cafaaa4d2867c80a0c957395b0a4ccaa84960de53e912e6138ddecc374a77590",
+      "lines": 144
+    },
+    "tests/experimental/rollout_policy/test_version_metrics_on_cpu.py": {
+      "sha256": "247b46323269e322c5915f9f08eaef6216622ce2e6b569b2119e83b7fa25b5a0",
+      "lines": 24
+    },
+    "tests/experimental/rollout_policy/test_vllm_support_on_cpu.py": {
+      "sha256": "1de2ce4b96d4c110941b890e1366d9c13fcde2d86574ffc0299f664813d588ea",
+      "lines": 34
+    },
+    "verl/workers/engine_workers.py": {
+      "sha256": "0d7bede2831021b1a8f922c9352ba58c1e5d02f6fa0a8aa0b4a0d5377fede097",
+      "lines": 1063
+    },
+    "verl/checkpoint_engine/base.py": {
+      "sha256": "97b51131a5770892007b7fb07264a2657fe83255b085927acd08c952a5682f64",
+      "lines": 633
+    },
+    "verl/workers/rollout/vllm_rollout/vllm_rollout.py": {
+      "sha256": "e82e1c6782573e03c871b982eb0653801f54cb1647367a604aa8b1c5454773cb",
+      "lines": 341
+    },
+    "verl/workers/rollout/vllm_rollout/vllm_async_server.py": {
+      "sha256": "4a63bf9c79f647daf8288131ecdd5b1fb43cc83ba40e3012ba9d216fdcf98ddd",
+      "lines": 1754
+    },
+    "verl/workers/rollout/vllm_rollout/utils.py": {
+      "sha256": "0fb6ab8eb7a0f7579e96133062ea387e0886d773633a8f6abbe305c639eb0da5",
+      "lines": 587
+    },
+    "verl/workers/rollout/replica.py": {
+      "sha256": "84e3c27fc0fae264004daf0652a24feb2db0ed996dcd4f315430df94b8626406",
+      "lines": 421
+    },
+    "verl/trainer/ppo/v1/agent_loop_tq.py": {
+      "sha256": "ed37097874d62eb456b26592e932f4c8173ae3add5ea3531a63186a19c496925",
+      "lines": 344
+    },
+    "verl/trainer/ppo/v1/trainer_sync.py": {
+      "sha256": "658973d70c6976f0952eb8c26c215a1c47413d8639f6b168c6924e5baeadfc62",
+      "lines": 80
+    },
+    "verl/trainer/ppo/v1/trainer_base.py": {
+      "sha256": "131a031a567c24acfe27f1a7454d1ffdfbd5b3503eb4d9d6496d1d0d3280c43e",
+      "lines": 2496
+    },
+    "verl/trainer/config/rollout_policy/local.yaml": {
+      "sha256": "faf896fbffc0008228b78c18c830c02d252ece206d659322f6dec3a9e115c56d",
+      "lines": 18
+    },
+    "examples/mirroropd/docs/refactoring/2026-10-28-Rollout双融合实现与验收记录.md": {
+      "sha256": "8684417a0dbd4d64f42adaafaa5375989d5ca0a11d01af7de2ed6a88ff663ee9",
+      "lines": 78
+    },
+    "verl/workers/engine/fsdp/transformer_impl.py": {
+      "sha256": "24aa7d138cdeedc2fccae0dd782dbc169d700b1cbcdf568cf57446a7edbc9c55",
+      "lines": 1905
+    }
+  },
+  "review_date": "2026-10-28",
+  "scope": "Source review and historical JSON inspection only; no new GPU experiment. Local model hashes cover config.json only.",
+  "local_cited_artifacts": {
+    "local-record": {
+      "path": "MirrorOPD-verl/examples/mirroropd/docs/refactoring/2026-10-28-Rollout双融合实现与验收记录.md",
+      "sha256": "8684417a0dbd4d64f42adaafaa5375989d5ca0a11d01af7de2ed6a88ff663ee9",
+      "bytes": 9686
+    },
+    "local-hf": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/hf_decoder.py",
+      "sha256": "cda097c827b66ffed3100d7fac542bf218abd5436e777a526da61341d69b67d1",
+      "bytes": 14627
+    },
+    "local-precision": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/precision.py",
+      "sha256": "7250ff7c1118f55a5bebb54646f5ff831c780e324ac0a4daa0551766002ac63a",
+      "bytes": 5245
+    },
+    "local-trainer": {
+      "path": "MirrorOPD-verl/verl/trainer/ppo/v1/trainer_sync.py",
+      "sha256": "658973d70c6976f0952eb8c26c215a1c47413d8639f6b168c6924e5baeadfc62",
+      "bytes": 3015
+    },
+    "local-plan": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/plan.py",
+      "sha256": "f0d01e4258b4b3794a6454238cdeb9ce34e14208d1a8b337cee0b93dd96b58cd",
+      "bytes": 8642
+    },
+    "local-collector": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/collector.py",
+      "sha256": "62b0270a625e3a8aecbfb522d6ff6e880fd686017eb53d9613dc083906325559",
+      "bytes": 3172
+    },
+    "local-agent": {
+      "path": "MirrorOPD-verl/verl/trainer/ppo/v1/agent_loop_tq.py",
+      "sha256": "ed37097874d62eb456b26592e932f4c8173ae3add5ea3531a63186a19c496925",
+      "bytes": 15714
+    },
+    "local-hf-server": {
+      "path": "MirrorOPD-verl/verl/workers/rollout/hf_fusion/replica.py",
+      "sha256": "703b821719f35143e22aa79840c582efe3d22dc2085d2be6c23ee1a029be7113",
+      "bytes": 5631
+    },
+    "local-tests": {
+      "path": "MirrorOPD-verl/tests/experimental/rollout_policy",
+      "type": "directory"
+    },
+    "local-benchmark": {
+      "path": "MirrorOPD-verl/examples/mirroropd/benchmarks/fusion/benchmark.py",
+      "sha256": "e427b9035c63ceb052fe2f69fd44c489c116f49704ad9cbcd0fbfdfc59d57140",
+      "bytes": 19831
+    },
+    "local-fingerprint": {
+      "path": "MirrorOPD-verl/examples/mirroropd/benchmarks/fusion/fingerprint.py",
+      "sha256": "44541224fc371dad718f9184faabf9b5271610a25eea1ecd07204b4498d4e37c",
+      "bytes": 772
+    },
+    "local-numerics": {
+      "path": "MirrorOPD-verl/examples/mirroropd/benchmarks/fusion/verify_numerics.py",
+      "sha256": "53a003d86c9eb3b73cfdea1d2c473a07fca7ba7b282a24e2dc5c0e187c76042b",
+      "bytes": 11951
+    },
+    "local-runtime": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/runtime.py",
+      "sha256": "db98627f4168071d858f9ee4d5ca0b03e5e1988f4822fd563eaad58c390d16cd",
+      "bytes": 22190
+    },
+    "local-worker": {
+      "path": "MirrorOPD-verl/verl/workers/engine_workers.py",
+      "sha256": "0d7bede2831021b1a8f922c9352ba58c1e5d02f6fa0a8aa0b4a0d5377fede097",
+      "bytes": 52879
+    },
+    "local-validation": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/validation.py",
+      "sha256": "880f8ee0969be8e0efaa5e568bb079e6a41df6818d95188b8535e0b86c251fc4",
+      "bytes": 8928
+    },
+    "local-replica": {
+      "path": "MirrorOPD-verl/verl/workers/rollout/replica.py",
+      "sha256": "84e3c27fc0fae264004daf0652a24feb2db0ed996dcd4f315430df94b8626406",
+      "bytes": 17182
+    },
+    "local-sampling": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/sampling.py",
+      "sha256": "4963c790386149c1531b015ed938e47df20129ea5aa22b6f98fdf0509a03f269",
+      "bytes": 5641
+    },
+    "local-vllm-server": {
+      "path": "MirrorOPD-verl/verl/workers/rollout/vllm_rollout/vllm_async_server.py",
+      "sha256": "4a63bf9c79f647daf8288131ecdd5b1fb43cc83ba40e3012ba9d216fdcf98ddd",
+      "bytes": 82308
+    },
+    "local-refit-tests": {
+      "path": "MirrorOPD-verl/tests/experimental/rollout_policy/refit_distributed.py",
+      "sha256": "6880ba789bdf2ad100fd180d47b77d795a5a741a5107472c68e7c90c8b40cad1",
+      "bytes": 4422
+    },
+    "local-fsdp": {
+      "path": "MirrorOPD-verl/verl/workers/engine/fsdp/transformer_impl.py",
+      "sha256": "24aa7d138cdeedc2fccae0dd782dbc169d700b1cbcdf568cf57446a7edbc9c55",
+      "bytes": 91637
+    },
+    "local-vllm-adapter": {
+      "path": "MirrorOPD-verl/verl/workers/rollout/vllm_rollout/vllm_rollout.py",
+      "sha256": "e82e1c6782573e03c871b982eb0653801f54cb1647367a604aa8b1c5454773cb",
+      "bytes": 14738
+    },
+    "local-vllm-extension": {
+      "path": "MirrorOPD-verl/verl/workers/rollout/vllm_rollout/utils.py",
+      "sha256": "0fb6ab8eb7a0f7579e96133062ea387e0886d773633a8f6abbe305c639eb0da5",
+      "bytes": 27772
+    },
+    "local-hf-adapter": {
+      "path": "MirrorOPD-verl/verl/workers/rollout/hf_fusion/adapter.py",
+      "sha256": "e01ba2c067e67a665f18e43732f8ae1643fe453c51a93f0158c25478dbaeefa7",
+      "bytes": 11962
+    },
+    "local-kv": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/kv_cache.py",
+      "sha256": "90f9fedbe7fea74cd6f87f43917815879e1bfee028c3f0e0b67b092707b1151f",
+      "bytes": 3699
+    },
+    "local-graph": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/cuda_graph.py",
+      "sha256": "1b449ef977e786d38f700025eb5e100de125d81162ed0904a1b65e0dc6c6566a",
+      "bytes": 3563
+    },
+    "local-kernels": {
+      "path": "MirrorOPD-verl/verl/experimental/rollout_policy/grouped_mm.py",
+      "sha256": "12e020772db84ff702a4e5e0b0259185609d949f8d6751a8c396398f73d21d3b",
+      "bytes": 3310
+    },
+    "model-small": {
+      "path": "model/Qwen3-1.7B-Base/config.json",
+      "sha256": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+      "bytes": 727
+    },
+    "model-dense": {
+      "path": "model/Qwen3-8B/config.json",
+      "sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30",
+      "bytes": 728
+    },
+    "model-moe": {
+      "path": "model/Qwen3-30B-A3B-Instruct-2507/config.json",
+      "sha256": "a1ee086a68d0cbfc87316da00ba4b8507bd1292978108e2496201a30a450f438",
+      "bytes": 963
+    },
+    "dense-ref": {
+      "path": "runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-reference/summary.json",
+      "sha256": "f4320cf9a23dd9f82e83058f24975558136d7bec5a60ed57680567d9d8241327",
+      "bytes": 604
+    },
+    "dense-opt": {
+      "path": "runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-optimized/summary.json",
+      "sha256": "109367b7260f1e2f8602857796877aa5ac3fe558ab6df163f8f8d7d9596ff756",
+      "bytes": 609
+    },
+    "failed-compaction": {
+      "path": "runs/rollout-fusion-20261028/dense-base-optimized-long/compaction_equivalence.json",
+      "sha256": "90d37b2a3e8dc92b20ec17d8d57e0c55adaca639f1be9b64368494246de2b8a6",
+      "bytes": 432
+    },
+    "dense-numerics": {
+      "path": "runs/rollout-fusion-20261028/dense-numerics-stable-long7168.json",
+      "sha256": "da61eadb40e6815484dc832ffa49b5d985c3bc70602753f32ab9d0c379ab8ca8",
+      "bytes": 7891
+    },
+    "moe-numerics": {
+      "path": "runs/rollout-fusion-20261028/moe-numerics-stable-long7168.json",
+      "sha256": "75596492e03c110171eeb61dd637f49e6e6b71aa37fe7e8a97273aa8f07d45e7",
+      "bytes": 8053
+    }
+  },
+  "external_sources": [
+    {
+      "citation": "cos-worker",
+      "repository": "Kamichanw/CoS",
+      "commit": "b7c555324539bb476d39a4002922973e296d1e18",
+      "path": "vllm/vllm/ensemble_decode/ensemble_decode_worker.py",
+      "url": "https://github.com/Kamichanw/CoS/blob/b7c555324539bb476d39a4002922973e296d1e18/vllm/vllm/ensemble_decode/ensemble_decode_worker.py",
+      "sha256": "73f77a3c60a02f70af4d8c6908191f0135883f48e5fe2f8902ef80c238d19fb8"
+    },
+    {
+      "citation": "cos-sampler",
+      "repository": "Kamichanw/CoS",
+      "commit": "b7c555324539bb476d39a4002922973e296d1e18",
+      "path": "vllm/vllm/ensemble_decode/ensemble_sampler.py",
+      "url": "https://github.com/Kamichanw/CoS/blob/b7c555324539bb476d39a4002922973e296d1e18/vllm/vllm/ensemble_decode/ensemble_sampler.py",
+      "sha256": "a4455633e7c9c0649630e85541c2bfc3b0aa894d81e33fb29264abc53a1a8879"
+    },
+    {
+      "citation": "cos-we",
+      "repository": "Kamichanw/CoS",
+      "commit": "b7c555324539bb476d39a4002922973e296d1e18",
+      "path": "configs/method/we.yaml",
+      "url": "https://github.com/Kamichanw/CoS/blob/b7c555324539bb476d39a4002922973e296d1e18/configs/method/we.yaml",
+      "sha256": "aa6a0ea07fc90420f5be12fda65e0f361883c16bfa82dad50a22368a7599340c"
+    },
+    {
+      "citation": "vl-backbones",
+      "repository": "NizarIslah/vllm-logits",
+      "commit": "a987755aad1a94689745843676d491bc77201e51",
+      "path": "src/vllm_logits/backbones.py",
+      "url": "https://github.com/NizarIslah/vllm-logits/blob/a987755aad1a94689745843676d491bc77201e51/src/vllm_logits/backbones.py",
+      "sha256": "63879cc159a7b7a949bbded5ea2a7014b9869cbdc9801e2a7848a661a5d97336"
+    },
+    {
+      "citation": "dl-model",
+      "repository": "leoluolol/DoubtLess",
+      "commit": "4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372",
+      "path": "doubtless/vllm/model.py",
+      "url": "https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/doubtless/vllm/model.py",
+      "sha256": "9a6cb716f8c71971de805f0a2290af6a1f2829af14bc71b35d27a69b72f14a5f"
+    },
+    {
+      "citation": "dl-engine",
+      "repository": "leoluolol/DoubtLess",
+      "commit": "4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372",
+      "path": "doubtless/vllm/engine.py",
+      "url": "https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/doubtless/vllm/engine.py",
+      "sha256": "fa35417293ee2928c253a299790a2a768bcba0c236e751e54fea043e8ac5e0e9"
+    },
+    {
+      "citation": "dl-state",
+      "repository": "leoluolol/DoubtLess",
+      "commit": "4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372",
+      "path": "doubtless/vllm/state.py",
+      "url": "https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/doubtless/vllm/state.py",
+      "sha256": "7a776d65d1cfc53919eabd0191c978aa4f1d464c06e517f91bda298eee2aafd8"
+    },
+    {
+      "citation": "dl-package",
+      "repository": "leoluolol/DoubtLess",
+      "commit": "4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372",
+      "path": "pyproject.toml",
+      "url": "https://github.com/leoluolol/DoubtLess/blob/4f2b3f9e4cf4a5ea6c6ace4b148f5699895bb372/pyproject.toml",
+      "sha256": "661ca63c560940e905a7efbde03d5cccaab6102de55e5a0377e4cf24c426a346"
+    },
+    {
+      "citation": "codit-sample",
+      "repository": "Tatsuya736482/contrastive_decoding_public",
+      "commit": "a73844a928ba0017605a388425e088b9047a7836",
+      "path": "src/patch_vllm_sample.py",
+      "url": "https://github.com/Tatsuya736482/contrastive_decoding_public/blob/a73844a928ba0017605a388425e088b9047a7836/src/patch_vllm_sample.py",
+      "sha256": "4bea2312d1c1a60d6dfb7a7194c9ea3ed2bbdde17309dd783e1030ebe8db80fd"
+    },
+    {
+      "citation": "codit-scheduler",
+      "repository": "Tatsuya736482/contrastive_decoding_public",
+      "commit": "a73844a928ba0017605a388425e088b9047a7836",
+      "path": "src/patch_vllm_scheduler.py",
+      "url": "https://github.com/Tatsuya736482/contrastive_decoding_public/blob/a73844a928ba0017605a388425e088b9047a7836/src/patch_vllm_scheduler.py",
+      "sha256": "f7a0811fdeac9f9103dbf3298c744082c2003a49425edce2908f5468bbae347d"
+    },
+    {
+      "citation": "vllm-model-utils",
+      "repository": "vllm-project/vllm",
+      "commit": "752a3a504485790a2e8491cacbb35c137339ad34",
+      "path": "vllm/model_executor/models/utils.py",
+      "url": "https://github.com/vllm-project/vllm/blob/752a3a504485790a2e8491cacbb35c137339ad34/vllm/model_executor/models/utils.py",
+      "sha256": "66360fc4bb3ecfb7c90620826257e5974a509b4f03aad4c35da69d64a025365e"
+    },
+    {
+      "citation": "vllm-config",
+      "repository": "vllm-project/vllm",
+      "commit": "752a3a504485790a2e8491cacbb35c137339ad34",
+      "path": "vllm/config/vllm.py",
+      "url": "https://github.com/vllm-project/vllm/blob/752a3a504485790a2e8491cacbb35c137339ad34/vllm/config/vllm.py",
+      "sha256": "6b6637d960914045c366ff997e017bf7354a95a30f692ca1e0ab7902b6ea7e1d"
+    },
+    {
+      "citation": "vllm-qwen",
+      "repository": "vllm-project/vllm",
+      "commit": "752a3a504485790a2e8491cacbb35c137339ad34",
+      "path": "vllm/model_executor/models/qwen3.py",
+      "url": "https://github.com/vllm-project/vllm/blob/752a3a504485790a2e8491cacbb35c137339ad34/vllm/model_executor/models/qwen3.py",
+      "sha256": "fe7fc688ce6269b4be523382af6d3c1962c3c78b1f8aab793755460131552b26"
+    },
+    {
+      "citation": "vllm-qwen-moe",
+      "repository": "vllm-project/vllm",
+      "commit": "752a3a504485790a2e8491cacbb35c137339ad34",
+      "path": "vllm/model_executor/models/qwen3_moe.py",
+      "url": "https://github.com/vllm-project/vllm/blob/752a3a504485790a2e8491cacbb35c137339ad34/vllm/model_executor/models/qwen3_moe.py",
+      "sha256": "13c6a1cc70fec1c659e710b83acbf916732165118d4f5281703c96d53ee94178"
+    },
+    {
+      "citation": "vllm-kv",
+      "repository": "vllm-project/vllm",
+      "commit": "752a3a504485790a2e8491cacbb35c137339ad34",
+      "path": "vllm/v1/core/kv_cache_utils.py",
+      "url": "https://github.com/vllm-project/vllm/blob/752a3a504485790a2e8491cacbb35c137339ad34/vllm/v1/core/kv_cache_utils.py",
+      "sha256": "73724ade5a67c3d45a811a5caba4478885fa6b329edf673fc0cd2ab8d19422d6"
+    },
+    {
+      "citation": "vllm-sampler",
+      "repository": "vllm-project/vllm",
+      "commit": "752a3a504485790a2e8491cacbb35c137339ad34",
+      "path": "vllm/v1/sample/sampler.py",
+      "url": "https://github.com/vllm-project/vllm/blob/752a3a504485790a2e8491cacbb35c137339ad34/vllm/v1/sample/sampler.py",
+      "sha256": "c2441d339d6fcb71ce21e4e40302ccea9087edb13d1303f7ecf9b338d98f0062"
+    },
+    {
+      "citation": "vllm-topkp",
+      "repository": "vllm-project/vllm",
+      "commit": "752a3a504485790a2e8491cacbb35c137339ad34",
+      "path": "vllm/v1/sample/ops/topk_topp_sampler.py",
+      "url": "https://github.com/vllm-project/vllm/blob/752a3a504485790a2e8491cacbb35c137339ad34/vllm/v1/sample/ops/topk_topp_sampler.py",
+      "sha256": "ef3ac3a5ef14df60b577f26df0013fcb3c46326fb68bdd76731200c7cb8e7610"
+    }
+  ],
+  "historical_measurement_source_drift": {
+    "dense-base-reference": {
+      "metadata_sha256": "e1eec46e69c694105ef5ee66a9c0a83bae9ebc4be55d07794a0ee4e06bdbe4ea",
+      "arguments": {
+        "attention_dtype": "fp16",
+        "replay": false,
+        "attention": "flash_attention_2",
+        "precision": "stable",
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-8B",
+        "prompt_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "stop_ids": [
+          151643,
+          151645
+        ],
+        "data": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/DAPO/train.parquet",
+        "out": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-reference",
+        "layout": "colocated",
+        "gpus": 4,
+        "batch": 64,
+        "cap": 7168,
+        "microbatch": [
+          16
+        ],
+        "compact": [
+          2
+        ],
+        "repeats": 3,
+        "seed": 42,
+        "alpha": 0.5,
+        "cuda_graph": false,
+        "flash_kv": false,
+        "flash_kv_splits": 0,
+        "preallocate_kv": false,
+        "profile": false,
+        "profile_start": 0,
+        "profile_steps": 32,
+        "warmup_cap": 0,
+        "allow_cudnn": false,
+        "stop_diagnostics": false,
+        "deadline": 7200,
+        "replicas": 4
+      },
+      "source": {
+        "git_head": "b94ad661c6d4dd93ce9a6d12fa0f6e2d761fa1b2",
+        "sha256": {
+          "verl/experimental/rollout_policy/__init__.py": "7a95f54440f33d79c458b0d09b9472898b8581cf42933cf42bf2225ab838bafe",
+          "verl/experimental/rollout_policy/collector.py": "62b0270a625e3a8aecbfb522d6ff6e880fd686017eb53d9613dc083906325559",
+          "verl/experimental/rollout_policy/cuda_graph.py": "1b449ef977e786d38f700025eb5e100de125d81162ed0904a1b65e0dc6c6566a",
+          "verl/experimental/rollout_policy/flash_kv.py": "3908e4b896dc3b5bd651582b608ee8e943dcdc7c56548456caa44895805329af",
+          "verl/experimental/rollout_policy/grouped_mm.py": "12e020772db84ff702a4e5e0b0259185609d949f8d6751a8c396398f73d21d3b",
+          "verl/experimental/rollout_policy/hf_decoder.py": "dfa327dab1d0f0df9dea92d045fec9f89643af9824c0819afb176be5cd72217e",
+          "verl/experimental/rollout_policy/kv_cache.py": "90f9fedbe7fea74cd6f87f43917815879e1bfee028c3f0e0b67b092707b1151f",
+          "verl/experimental/rollout_policy/math_context.py": "1436ea72a9e379f2cb1113af730292f345fb87047b80317715659f59c7656138",
+          "verl/experimental/rollout_policy/plan.py": "f0d01e4258b4b3794a6454238cdeb9ce34e14208d1a8b337cee0b93dd96b58cd",
+          "verl/experimental/rollout_policy/precision.py": "7250ff7c1118f55a5bebb54646f5ff831c780e324ac0a4daa0551766002ac63a",
+          "verl/experimental/rollout_policy/runtime.py": "b0c157da1dbcec6f86819f3bfab50a2a74a74662a3cbb7362e2d81a558f2f300",
+          "verl/experimental/rollout_policy/sampling.py": "4963c790386149c1531b015ed938e47df20129ea5aa22b6f98fdf0509a03f269",
+          "verl/experimental/rollout_policy/validation.py": "7d9df96df8a9a3349825ecab503d1a40b24caf56a7227d5b4640b10b2d99dc7a",
+          "verl/experimental/rollout_policy/version_metrics.py": "39b9ed2bb790a48d5e65c64e90b41cf4f85fc8e056ead080470ee43989511a4b",
+          "verl/experimental/rollout_policy/vllm_support.py": "62b1f3350f54d9f3d1e3bb07c7bc3e3a38d5f2ad37a6c5d1904efbeacc262953",
+          "verl/workers/rollout/hf_fusion/__init__.py": "7a51926bfdc21b4874a5aa8e1e20a5758f42ac9e7efd3f6a268ad574361ce8f0",
+          "verl/workers/rollout/hf_fusion/adapter.py": "7d198406df3b98296f8b34b5087001377a1e36311039b5da94fe4d06138152e2",
+          "verl/workers/rollout/hf_fusion/replica.py": "703b821719f35143e22aa79840c582efe3d22dc2085d2be6c23ee1a029be7113",
+          "examples/mirroropd/benchmarks/fusion/benchmark.py": "05d826fffe856e7aa3db02ff7396258ca70657b812455cac7b2ecb52a7d90dc0",
+          "examples/mirroropd/benchmarks/fusion/fingerprint.py": "44541224fc371dad718f9184faabf9b5271610a25eea1ecd07204b4498d4e37c",
+          "examples/mirroropd/benchmarks/fusion/monitor.py": "88b56e9f5ab2062438bcda22d52fb1a21878ea9470b7f3e9b0f84b600c7cab60",
+          "examples/mirroropd/benchmarks/fusion/paired_reference.py": "ae833572484a29c6be880b770ed1b24296ad5654c9e5f638695156f9669f3ff2",
+          "examples/mirroropd/benchmarks/fusion/summarize.py": "6a373e4f336a922d67a600b21087da512dade38c75521e49c8b6c763a486a814",
+          "examples/mirroropd/benchmarks/fusion/verify_numerics.py": "2adfe0fc67b6e0b0272088209f8b5bc376a33875675f8716634c1903e51b367a"
+        }
+      },
+      "changed_files_at_review": [
+        "verl/experimental/rollout_policy/hf_decoder.py",
+        "verl/experimental/rollout_policy/runtime.py",
+        "verl/experimental/rollout_policy/validation.py",
+        "verl/workers/rollout/hf_fusion/adapter.py",
+        "examples/mirroropd/benchmarks/fusion/benchmark.py",
+        "examples/mirroropd/benchmarks/fusion/verify_numerics.py"
+      ]
+    },
+    "dense-base-optimized": {
+      "metadata_sha256": "b1b7972718fe4a83137ae8b4f1c0026bb5fd5610902bb4b5111049dfad832874",
+      "arguments": {
+        "attention_dtype": "fp16",
+        "replay": false,
+        "attention": "flash_attention_2",
+        "precision": "stable",
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-8B",
+        "prompt_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "stop_ids": [
+          151643,
+          151645
+        ],
+        "data": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/DAPO/train.parquet",
+        "out": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-optimized",
+        "layout": "colocated",
+        "gpus": 4,
+        "batch": 64,
+        "cap": 7168,
+        "microbatch": [
+          16
+        ],
+        "compact": [
+          2
+        ],
+        "repeats": 3,
+        "seed": 42,
+        "alpha": 0.5,
+        "cuda_graph": true,
+        "flash_kv": true,
+        "flash_kv_splits": 1,
+        "preallocate_kv": true,
+        "profile": false,
+        "profile_start": 0,
+        "profile_steps": 32,
+        "warmup_cap": 0,
+        "allow_cudnn": false,
+        "stop_diagnostics": false,
+        "deadline": 7200,
+        "replicas": 4
+      },
+      "source": {
+        "git_head": "b94ad661c6d4dd93ce9a6d12fa0f6e2d761fa1b2",
+        "sha256": {
+          "verl/experimental/rollout_policy/__init__.py": "7a95f54440f33d79c458b0d09b9472898b8581cf42933cf42bf2225ab838bafe",
+          "verl/experimental/rollout_policy/collector.py": "62b0270a625e3a8aecbfb522d6ff6e880fd686017eb53d9613dc083906325559",
+          "verl/experimental/rollout_policy/cuda_graph.py": "1b449ef977e786d38f700025eb5e100de125d81162ed0904a1b65e0dc6c6566a",
+          "verl/experimental/rollout_policy/flash_kv.py": "3908e4b896dc3b5bd651582b608ee8e943dcdc7c56548456caa44895805329af",
+          "verl/experimental/rollout_policy/grouped_mm.py": "12e020772db84ff702a4e5e0b0259185609d949f8d6751a8c396398f73d21d3b",
+          "verl/experimental/rollout_policy/hf_decoder.py": "dd2861d656fe3ce86e6c575df94be682563fb568e067ed38ac4714a864f9f043",
+          "verl/experimental/rollout_policy/kv_cache.py": "90f9fedbe7fea74cd6f87f43917815879e1bfee028c3f0e0b67b092707b1151f",
+          "verl/experimental/rollout_policy/math_context.py": "1436ea72a9e379f2cb1113af730292f345fb87047b80317715659f59c7656138",
+          "verl/experimental/rollout_policy/plan.py": "8d07a2ccafdcbfaf794989a82e5bb14a40b03e808887715cc0d003324eb2cfc9",
+          "verl/experimental/rollout_policy/precision.py": "7250ff7c1118f55a5bebb54646f5ff831c780e324ac0a4daa0551766002ac63a",
+          "verl/experimental/rollout_policy/runtime.py": "b0c157da1dbcec6f86819f3bfab50a2a74a74662a3cbb7362e2d81a558f2f300",
+          "verl/experimental/rollout_policy/sampling.py": "e76d81eee6bd6d1328764ea429516571e2d5624b3448e9650c5ae4b3d39f58e1",
+          "verl/experimental/rollout_policy/validation.py": "7d9df96df8a9a3349825ecab503d1a40b24caf56a7227d5b4640b10b2d99dc7a",
+          "verl/experimental/rollout_policy/version_metrics.py": "39b9ed2bb790a48d5e65c64e90b41cf4f85fc8e056ead080470ee43989511a4b",
+          "verl/experimental/rollout_policy/vllm_support.py": "62b1f3350f54d9f3d1e3bb07c7bc3e3a38d5f2ad37a6c5d1904efbeacc262953",
+          "verl/workers/rollout/hf_fusion/__init__.py": "7a51926bfdc21b4874a5aa8e1e20a5758f42ac9e7efd3f6a268ad574361ce8f0",
+          "verl/workers/rollout/hf_fusion/adapter.py": "a4a2bf885d49dcca45b3e31af4bb3f95b85398ae408ceed542dc79616bbdd7dd",
+          "verl/workers/rollout/hf_fusion/replica.py": "703b821719f35143e22aa79840c582efe3d22dc2085d2be6c23ee1a029be7113",
+          "examples/mirroropd/benchmarks/fusion/benchmark.py": "428d8d06ee23f23a9b6204ac5dec44769a7a8bcbb54afe074a1b39538803ae13",
+          "examples/mirroropd/benchmarks/fusion/fingerprint.py": "44541224fc371dad718f9184faabf9b5271610a25eea1ecd07204b4498d4e37c",
+          "examples/mirroropd/benchmarks/fusion/monitor.py": "88b56e9f5ab2062438bcda22d52fb1a21878ea9470b7f3e9b0f84b600c7cab60",
+          "examples/mirroropd/benchmarks/fusion/paired_reference.py": "ae833572484a29c6be880b770ed1b24296ad5654c9e5f638695156f9669f3ff2",
+          "examples/mirroropd/benchmarks/fusion/verify_numerics.py": "2adfe0fc67b6e0b0272088209f8b5bc376a33875675f8716634c1903e51b367a"
+        }
+      },
+      "changed_files_at_review": [
+        "verl/experimental/rollout_policy/hf_decoder.py",
+        "verl/experimental/rollout_policy/plan.py",
+        "verl/experimental/rollout_policy/runtime.py",
+        "verl/experimental/rollout_policy/sampling.py",
+        "verl/experimental/rollout_policy/validation.py",
+        "verl/workers/rollout/hf_fusion/adapter.py",
+        "examples/mirroropd/benchmarks/fusion/benchmark.py",
+        "examples/mirroropd/benchmarks/fusion/verify_numerics.py"
+      ]
+    }
+  }
+}

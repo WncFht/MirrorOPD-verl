@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/docs/infra/profile/e2e-4gpu/scripts"
+SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/benchmarks/profile/e2e_4gpu"
 spec = importlib.util.spec_from_file_location("e2e_collect", SCRIPTS / "collect.py")
 collect = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(collect)

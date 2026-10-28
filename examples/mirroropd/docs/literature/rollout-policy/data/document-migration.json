@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-28",
+  "original_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-divergence-research-20261028",
+  "canonical_document": "2026-10-28-Rollout策略的目标设计与求解.md",
+  "files": [
+    {
+      "source": "README.md",
+      "destination": "README.md",
+      "source_sha256": "066b92d75ea0b9d781243ff5093d03f0beb683b7e9be59d8488763ba1a48d0aa"
+    },
+    {
+      "source": "2026-10-28-Rollout策略的目标设计与求解.md",
+      "destination": "2026-10-28-Rollout策略的目标设计与求解.md",
+      "source_sha256": "82b907085d01033d3ecde843eb077221252d558452ba6725aa922d245c7f9db6"
+    },
+    {
+      "source": "2026-10-28-Rollout分布中心与Chernoff系数调研.md",
+      "destination": "2026-10-28-Rollout分布中心与Chernoff系数调研.md",
+      "source_sha256": "a9d3cc65be1762ee2dbd5586a6229a147b4f258d213cdd34741526b029391bf6"
+    },
+    {
+      "source": "2026-10-28-Sum与Minimax聚合目标选择.md",
+      "destination": "2026-10-28-Sum与Minimax聚合目标选择.md",
+      "source_sha256": "bc6a75c1ec5c86e191664208fe40f262b7b9ce47751aae130ec29436927b4d0a"
+    },
+    {
+      "source": "2026-10-28-定向补充检索原始报告.md",
+      "destination": "data/2026-10-28-定向补充检索原始报告.md",
+      "source_sha256": "291a0e554b8dd9013353fd2654c056f77924102966505d4f736f2a0750969dc8"
+    },
+    {
+      "source": "2026-10-28-聚合目标补充检索原始报告.md",
+      "destination": "data/2026-10-28-聚合目标补充检索原始报告.md",
+      "source_sha256": "fa1d2c4632effaf61ec0e20cb9dbee9355a3eb477fcacd9ef5067fe234f9600b"
+    },
+    {
+      "source": "2026-10-28-论文检索原始报告.md",
+      "destination": "data/2026-10-28-论文检索原始报告.md",
+      "source_sha256": "aa6302e4ffab552f0de64e5f980707fc25bb588c6f7dd697e4fa848e16bf306c"
+    },
+    {
+      "source": "aggregation-audit.json",
+      "destination": "data/aggregation-audit.json",
+      "source_sha256": "eed3bcc070a23cabfba498d1928ee9576db59a2d01abb52c3acbb0581118dcdf"
+    },
+    {
+      "source": "aggregation-search.stderr.txt",
+      "destination": "data/aggregation-search.stderr.txt",
+      "source_sha256": "4941f00090a577786788d10b1cd8d16e2ddf48e9cd40dadf275aeaad7dfa959f"
+    },
+    {
+      "source": "document-refactor.json",
+      "destination": "data/document-refactor.json",
+      "source_sha256": "9642e27ad89e8b31574211c7b76f775c5b5f356343af7453c6efcd572a89a6da"
+    },
+    {
+      "source": "java-audit.txt",
+      "destination": "data/java-audit.txt",
+      "source_sha256": "8e48790a94a0de722e7c7f6edb38a68799b7f762043b940e5619ef08b66b5137"
+    },
+    {
+      "source": "numerical-audit.json",
+      "destination": "data/numerical-audit.json",
+      "source_sha256": "4ea211886ea0a9416bf8ef34606aff5c7d53977f814c1eb6bfb2708b59475dca"
+    },
+    {
+      "source": "search.stderr.txt",
+      "destination": "data/search.stderr.txt",
+      "source_sha256": "90aec829ec38e98a809084b3d279ccd17799946d5401eec1ffdd147812dd4a63"
+    },
+    {
+      "source": "targeted-search.stderr.txt",
+      "destination": "data/targeted-search.stderr.txt",
+      "source_sha256": "75145b863f110d68a7052f4260a49aa6886b525b0ebc862b7cff25d659277a4c"
+    },
+    {
+      "source": "archive/2026-10-28-Rollout分布中心与Chernoff系数调研.md",
+      "destination": "archive/2026-10-28-Rollout分布中心与Chernoff系数调研.md",
+      "source_sha256": "6d7dfaec2d1ac80c7c1c88084a577f92b47d549fcc405bb22e794e09003e0c02"
+    },
+    {
+      "source": "archive/2026-10-28-Sum与Minimax聚合目标选择.md",
+      "destination": "archive/2026-10-28-Sum与Minimax聚合目标选择.md",
+      "source_sha256": "f05850c880bb64c321833c28ee9c150b194475d5eb2e4dbf144208144d432441"
+    },
+    {
+      "source": "code/audit_centers.py",
+      "destination": "scripts/audit_centers.py",
+      "source_sha256": "4b410cd756ebaeeaf0b5e588f3b9510fe061ec1150f5036e598fb0bcfe5c57a5"
+    },
+    {
+      "source": "code/audit_aggregation.py",
+      "destination": "scripts/audit_aggregation.py",
+      "source_sha256": "0c169668764d5481783fb07895dc581692b098794619557644f20553cb438d5c"
+    },
+    {
+      "source": "code/BernoulliExpFam.java",
+      "destination": "scripts/BernoulliExpFam.java",
+      "source_sha256": "6a8f423085ee109c5ac8fa0a04d5fbadf8e79fd8888af3e75efdc1cfde08fbd7"
+    },
+    {
+      "source": "code/RunBernoulliAudit.java",
+      "destination": "scripts/RunBernoulliAudit.java",
+      "source_sha256": "b6ee989b88914a923b548beb51f0c65349854c6c417fad52f570faec58bf606c"
+    }
+  ],
+  "download_cache": "Third-party source trees and downloaded papers remain in the original directory; canonical source URLs are cited in the document."
+}
