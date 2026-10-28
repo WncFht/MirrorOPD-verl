@@ -4,13 +4,16 @@ repos:
     hooks:
       - id: ruff
         args: ["--fix", "--show-fixes", "--output-format=full"]
-        exclude: ^.*\.(ipynb)$
+        # Source snapshots under docs are immutable; active tools live in code packages.
+        exclude: ^.*\.ipynb$|^examples/mirroropd/docs/.*\.py$
       - id: ruff-format
+        exclude: ^examples/mirroropd/docs/.*\.py$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: "v1.17.0"
     hooks:
       - id: mypy
+        exclude: ^examples/mirroropd/docs/.*\.py$
         # Standalone research scripts can share a basename in different directories.
         entry: bash -c 'status=0; for file; do mypy "$file" || status=1; done; exit "$status"' --
         args: []
@@ -43,6 +46,7 @@ repos:
 
       - id: check-license
         name: Check license
+        exclude: ^examples/mirroropd/docs/.*\.py$
         entry: python3 tests/special_sanity/check_license.py --directories
         language: python
         types: [python]
@@ -73,7 +77,7 @@ repos:
 
       - id: check-naming-conventions
         name: Check naming conventions
-        entry: sh -c 'if git grep -nI -E "veRL|Sglang|sgLang|sglAng|sglaNg|sglanG" -- . ":(exclude).pre-commit-config.yaml" ":(exclude).github/**" ":(exclude,glob)**/ascend_sglang_best_practices.rst"; then echo "Please use verl and SGLang or sglang"; exit 1; fi'
+        entry: sh -c 'if git grep -nI -E "veRL|Sglang|sgLang|sglAng|sglaNg|sglanG" -- . ":(exclude).pre-commit-config.yaml" ":(exclude).github/**" ":(exclude,glob)examples/mirroropd/docs/**/sources/**" ":(exclude,glob)examples/mirroropd/docs/archive/**" ":(exclude,glob)**/ascend_sglang_best_practices.rst"; then echo "Please use verl and SGLang or sglang"; exit 1; fi'
         language: system
         pass_filenames: false
 
@@ -94,4 +98,4 @@ repos:
         entry: python3 -W error -m compileall -q
         language: python
         types: [python]
-        exclude: ^verl/experimental/vla/
+        exclude: ^verl/experimental/vla/|^examples/mirroropd/docs/.*\.py$

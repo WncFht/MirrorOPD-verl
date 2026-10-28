@@ -1,0 +1,144 @@
+{
+  "status": "incomplete: final performance and training matrix is running",
+  "implementation_commit": "d56e081d82eb26e00bc8636df090c691ddae3352",
+  "gpu_scope": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "cpu_tests": {
+    "passed": 255,
+    "gpu_tests_skipped": 15,
+    "source": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-cpu-tests.log",
+      "sha256": "671ab33b411c01f2f75872006869a99924d8a1a6ea18a408cdf17143e70d1593"
+    }
+  },
+  "gpu_tests": {
+    "passed": 15,
+    "source": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-gpu-tests.log",
+      "sha256": "54ec2cd373b8bc680668345c46f5ad6e18ec69c36c97314a50e4313ebb30b3cb"
+    }
+  },
+  "distributed_refit": {
+    "ranks": 4,
+    "success_and_failure_each_rank": true,
+    "teacher_unchanged": true,
+    "tensors_consumed_each_case": 13,
+    "sources": [
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-four-rank-refit/rank-0.json",
+        "sha256": "e6319514a09c63fdc6a07080aac4bc3d5ace76af3eb1baaa6e6e9125e82c9ad1"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-four-rank-refit/rank-1.json",
+        "sha256": "ffb42fd62c1c7dbc3431ac41329057637e718a9dd02269d91f3187ae1451fa4a"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-four-rank-refit/rank-2.json",
+        "sha256": "6d6d9d132d2461542354f86abc6749ff187140f39896651e866272eba157f690"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-four-rank-refit/rank-3.json",
+        "sha256": "f6aa0d6ec352ac532f962402a893d5ce8681c8d130ae14585ae1df92737c0b33"
+      }
+    ]
+  },
+  "dense_history": {
+    "summary": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-history-probe/summary.json",
+      "sha256": "5a8559cbe16b58be2d65ab9a20e6252539805a365d35f980e0c5437d563ae9f8"
+    },
+    "checks": 637,
+    "max_errors": {
+      "student_logits_abs": 0.03607654571533203,
+      "teacher_logits_abs": 0.02781355381011963,
+      "probability_abs": 0.0005519986152648926,
+      "selected_logprob_abs": 0.0029249191284179688
+    },
+    "tolerances": {
+      "logits_abs": 0.25,
+      "probability_abs": 0.01,
+      "selected_logprob_abs": 0.125
+    }
+  },
+  "moe_history": {
+    "summary": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/g7-stable-v2-20261028/moe-history-invariant-probe/summary.json",
+      "sha256": "be786be634615217917c2ceb516de6d86dc40b02c952df85b7478fbc73c4b198"
+    },
+    "checks": 598,
+    "max_errors": {
+      "student_logits_abs": 0.03837394714355469,
+      "teacher_logits_abs": 0.0,
+      "probability_abs": 0.0007878243923187256,
+      "selected_logprob_abs": 0.002781391143798828
+    },
+    "tolerances": {
+      "logits_abs": 0.25,
+      "probability_abs": 0.01,
+      "selected_logprob_abs": 0.125
+    }
+  },
+  "reference_contract": "The HF full-prefix reference and optimized decoder share fixed arithmetic. Independent FP64 kernel oracles validate the arithmetic; full-prefix recomputation validates accumulated KV. These checks do not assert bitwise parity with unmodified native BF16 HF execution.",
+  "environment": {
+    "python": "3.12.15 (main, Oct  6 2026, 23:50:18) [GCC 15.3.0]",
+    "platform": "Linux-5.15.0-124-generic-x86_64-with-glibc2.35",
+    "packages": {
+      "torch": "2.11.0+cu129",
+      "transformers": "5.12.1",
+      "vllm": "0.25.1+cu129",
+      "TransferQueue": "0.1.11",
+      "ray": "2.59.0",
+      "triton": "3.6.0",
+      "flash_attn": "2.8.3",
+      "wandb": "0.22.2",
+      "torchcodec": "0.17.0+cpu",
+      "tensordict": "0.10.0"
+    },
+    "wheel_sources": {
+      "vllm": {
+        "url": "file:///mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/cache/fusion-runtime/vllm-0.25.1+cu129-cp38-abi3-manylinux_2_28_x86_64.whl",
+        "archive_info": {}
+      }
+    },
+    "gpus": [
+      "0, NVIDIA H800, 81559 MiB, 550.163.01",
+      "1, NVIDIA H800, 81559 MiB, 550.163.01",
+      "2, NVIDIA H800, 81559 MiB, 550.163.01",
+      "3, NVIDIA H800, 81559 MiB, 550.163.01"
+    ]
+  },
+  "pending": [
+    "frozen-source full-cap performance matrix",
+    "layout and profiler comparisons",
+    "final real train/validation/save/restore matrix",
+    "final completion audit"
+  ],
+  "partial_final_performance": {
+    "dense_base_optimized": {
+      "source_commit": "d56e081d82eb26e00bc8636df090c691ddae3352",
+      "global_batch": 64,
+      "response_cap": 7168,
+      "teacher_weight": 0.5,
+      "microbatch": 16,
+      "repeats": 3,
+      "median_seconds": 344.25135942548513,
+      "range_seconds": [
+        342.4253106713295,
+        344.32955199480057
+      ],
+      "effective_tokens": [
+        456835,
+        456835,
+        456835
+      ],
+      "median_effective_tokens_per_second": 1327.0390587924,
+      "max_allocated_bytes": 51497351680,
+      "raw_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-d56e081/dense-base-optimized",
+      "scope": "optimized path only; reference and full G7 audit still pending"
+    }
+  }
+}

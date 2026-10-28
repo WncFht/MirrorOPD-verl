@@ -1,0 +1,70 @@
+{
+  "upstream_commit": "6f375e4d38e8ff798801bf5d34572ed52b1fadbb",
+  "random_cases": 40,
+  "max_upstream_alpha_error": 3.1551428136822324e-12,
+  "max_hellinger_closed_form_radius_error_vs_slsqp": 4.391625951782885e-13,
+  "example": {
+    "student": [
+      0.8,
+      0.19,
+      0.01
+    ],
+    "teacher": [
+      0.1,
+      0.2,
+      0.7
+    ],
+    "chernoff_alpha": 0.42361104522852777,
+    "chernoff_Q": [
+      0.43655015492212357,
+      0.3540533615740885,
+      0.20939648350378787
+    ],
+    "chernoff_radius": 0.5928586801843493,
+    "forward_minimax_weight": 0.5366135270421066,
+    "forward_minimax_Q": [
+      0.47562946892947466,
+      0.19463386472957894,
+      0.3297366663409464
+    ],
+    "hellinger_Q": [
+      0.46933635143032654,
+      0.24972764732778813,
+      0.28093600124188545
+    ],
+    "hellinger_radius": 0.1164150855678313,
+    "upstream_alpha": 0.423611045229336,
+    "upstream_dissimilarity_value": 2.1875124569034057,
+    "scaled_opposite_exponent_value": 2.187512456903406
+  },
+  "rare_shared_event_counterexample": {
+    "student": [
+      0.999,
+      1e-12,
+      0.000999999999
+    ],
+    "teacher": [
+      1e-12,
+      0.999,
+      0.000999999999
+    ],
+    "chernoff_alpha": 0.5,
+    "chernoff_Q": [
+      0.000997505861966398,
+      0.000997505861966398,
+      0.9980049882760671
+    ],
+    "chernoff_radius": 6.905758275571584,
+    "hellinger_Q": [
+      0.4990010009970008,
+      0.4990010009970008,
+      0.001997998005998485
+    ],
+    "arithmetic_Q": [
+      0.4995000000005,
+      0.4995000000005,
+      0.000999999999
+    ]
+  },
+  "scope": "CPU FP64 probability examples; no model training or GPU performance claims"
+}

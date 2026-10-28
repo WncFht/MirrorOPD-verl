@@ -1,31 +1,13 @@
-# OPD 训练基础设施
+# Infra：正确实现与执行效率
 
-当前训练编排与教师生命周期从[代码走读](../internals/README.md)进入；本目录负责运行设置与性能证据。
-
-更新日期：2026-10-26。运行入口、参数解释、测量证据和指标定义分别维护，历史实验按各自冻结源码与硬件解释。数学目标见[theory](../theory/README.md)，优势/IS 实现审计见[opd-objective](../opd-objective/README.md)，模型、数据与领域预算见[训练配方](../训练配方.md)。
-
-## 文档职责
-
-| 文档 | 内容 |
+| 职责 | 入口 |
 | --- | --- |
-| [运行与架构](2026-10-22-共享八卡运行与架构.md) | 启动方法、四卡到八卡的参数迁移、shared_sync 生命周期、资源池与 Hope 入口 |
-| [训练与验证性能实测](2026-10-22-训练与验证性能实测.md) | H800 本机完整验证、子集筛选和训练优化的冻结测量 |
-| [Full-vocab 性能](profile/README.md) | 测量方法、算子与容量、完整训练和 full/sample 成本；按配置区分证据 |
-| [E15 分阶段资源分析](2026-10-23-E15训练Rollout资源分析.md) | 同一运行内的 rollout/actor 阶段窗口、GPU、显存与功耗；全程指标链接到 E15 主报告 |
-| [OPD 数值精度与后期收敛](2026-10-25-OPD数值精度与后期收敛核查.md) | E15/E18–E20 日志、真实数学前缀的 FP64 对照，以及 sampled/Full-KL 的梯度精度边界 |
-| [批量大小与 GPU 利用率调优](2026-10-22-批量大小与GPU利用率调优.md) | prompt/mini/micro与推理并发的区别，KV容量计算、TPS机制及可选调优方法 |
-| [MFU 与利用率口径](2026-10-22-MFU与利用率口径.md) | 模型参数/FLOPs 推导、训练 MFU 分母、GPU busy 与显存口径 |
-| [训练指标](../internals/metrics.md) | 当前字段、日志横轴、归约方式、实现与验证 |
-| [调度备选与模型扩展](2026-10-21-调度备选与模型扩展.md) | S0–S6 及算法调度备选、大模型与不同并行方式的容量边界 |
-| [上游实现与论文基线](2026-10-21-上游实现与论文基线.md) | 上游 PR/issue、其他项目和论文基线；状态以各自快照日期为准 |
+| 当前架构、调用链、数据和进度合同 | [architecture](architecture/README.md) |
+| 启动、资产与共享资源执行 | [training](training/README.md) |
+| 模板、tokenizer、EOS及Qwen诊断 | [model-compatibility](model-compatibility/README.md) |
+| Full-vocab、目标与精度的正确实现 | [numerics](numerics/README.md) |
+| Rollout来源/混合执行与验收 | [rollout](rollout/README.md) |
+| 判分器与验证执行 | [evaluation](evaluation/README.md) |
+| 算子、生成、验证与资源测量 | [performance](performance/README.md) |
 
-本机参数测量和当前运行分析分别从上表进入。旧 4+4、共享八卡与 One-Shot 对照集中在[历史记录](../archive/README.md)，不再与当前入口共用长篇正文。原始数据、图表、复算脚本保留原路径，说明见[分析复现](../experiments/复现与维护.md)。
-
-## 当前参数与证据边界
-
-- 领域默认、推理 profile、E 系列学习与验证预算：[训练配方](../训练配方.md)。
-- Shared/standalone、四卡/八卡、val-only 与 checkpoint 恢复：[运行与架构](2026-10-22-共享八卡运行与架构.md#启动与配置)。
-- 已完成的速度、显存和质量比较：[统一实测](2026-10-22-训练与验证性能实测.md#1-完整验证与参数对照)。
-- 尚未实测的容量候选：[调优扩展](2026-10-22-批量大小与GPU利用率调优.md#已验证配置与后续扩展)。
-
-每卡执行参数不按设备数量乘除，训练与评测工作量按所选配方保持。四卡初始模型实测不自动覆盖目标八卡的训练/验证切换，也不覆盖 Coding/IF 的 CPU 判分成本。
+工程通过只覆盖对应设置；短smoke、数学oracle和正式任务成绩分开报告。优化器/精度改变学习效果的实验归研究线，数值实现验收归这里。

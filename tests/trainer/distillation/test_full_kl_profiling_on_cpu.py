@@ -9,7 +9,7 @@ import torch
 
 from verl.trainer.distillation.profiling import full_kl_range
 
-SCRIPTS = Path(__file__).resolve().parents[3] / "examples/mirroropd/docs/infra/profile/scripts"
+SCRIPTS = Path(__file__).resolve().parents[3] / "examples/mirroropd/benchmarks/profile"
 
 
 def load(name):

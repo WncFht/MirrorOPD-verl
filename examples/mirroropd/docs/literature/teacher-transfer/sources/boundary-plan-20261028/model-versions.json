@@ -1,0 +1,220 @@
+{
+  "checked_date": "2026-10-28",
+  "scope": "Hub metadata and file presence; no weight download or inference",
+  "models": [
+    {
+      "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "requested_revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "base_model": null,
+      "weight_files": [
+        "model.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B/revision/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+    },
+    {
+      "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "requested_revision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "revision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "base_model": null,
+      "weight_files": [
+        "model-00001-of-000002.safetensors",
+        "model-00002-of-000002.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/revision/916b56a44061fd5cd7d6a8fb632557ed4f724f60"
+    },
+    {
+      "repo": "hbx/JustRL-DeepSeek-1.5B",
+      "requested_revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+      ],
+      "weight_files": [
+        "model.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/hbx/JustRL-DeepSeek-1.5B/revision/0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+    },
+    {
+      "repo": "POLARIS-Project/Polaris-7B-Preview",
+      "requested_revision": "faea72cf7123681069668e8da45c1c074e378830",
+      "revision": "faea72cf7123681069668e8da45c1c074e378830",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+      ],
+      "weight_files": [
+        "model-00001-of-00004.safetensors",
+        "model-00002-of-00004.safetensors",
+        "model-00003-of-00004.safetensors",
+        "model-00004-of-00004.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/POLARIS-Project/Polaris-7B-Preview/revision/faea72cf7123681069668e8da45c1c074e378830"
+    },
+    {
+      "repo": "Skywork/Skywork-OR1-Math-7B",
+      "requested_revision": "main",
+      "revision": "fcef970f1d10682f13c182b280146a194ed57d1e",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+      ],
+      "weight_files": [
+        "model-00001-of-00004.safetensors",
+        "model-00002-of-00004.safetensors",
+        "model-00003-of-00004.safetensors",
+        "model-00004-of-00004.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/Skywork/Skywork-OR1-Math-7B/revision/main"
+    },
+    {
+      "repo": "qihoo360/Light-R1-7B-DS",
+      "requested_revision": "main",
+      "revision": "06c9338cdbec28416e15f28a325b1439729ec237",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+      ],
+      "weight_files": [
+        "model-00001-of-00004.safetensors",
+        "model-00002-of-00004.safetensors",
+        "model-00003-of-00004.safetensors",
+        "model-00004-of-00004.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/qihoo360/Light-R1-7B-DS/revision/main"
+    },
+    {
+      "repo": "oumi-ai/MiniMath-R1-1.5B",
+      "requested_revision": "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "revision": "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+      ],
+      "weight_files": [
+        "model.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/oumi-ai/MiniMath-R1-1.5B/revision/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+    },
+    {
+      "repo": "Qwen/Qwen3-4B-Base",
+      "requested_revision": "906bfd4b4dc7f14ee4320094d8b41684abff8539",
+      "revision": "906bfd4b4dc7f14ee4320094d8b41684abff8539",
+      "base_model": null,
+      "weight_files": [
+        "model-00001-of-00003.safetensors",
+        "model-00002-of-00003.safetensors",
+        "model-00003-of-00003.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/Qwen/Qwen3-4B-Base/revision/906bfd4b4dc7f14ee4320094d8b41684abff8539"
+    },
+    {
+      "repo": "Qwen/Qwen3-1.7B-Base",
+      "requested_revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "base_model": null,
+      "weight_files": [
+        "model.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/Qwen/Qwen3-1.7B-Base/revision/ea980cb0a6c2ae4b936e82123acc929f1cec04c1"
+    },
+    {
+      "repo": "Qwen/Qwen3-1.7B",
+      "requested_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "base_model": [
+        "Qwen/Qwen3-1.7B-Base"
+      ],
+      "weight_files": [
+        "model-00001-of-00002.safetensors",
+        "model-00002-of-00002.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/Qwen/Qwen3-1.7B/revision/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
+    },
+    {
+      "repo": "Qwen/Qwen3-4B",
+      "requested_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "base_model": [
+        "Qwen/Qwen3-4B-Base"
+      ],
+      "weight_files": [
+        "model-00001-of-00003.safetensors",
+        "model-00002-of-00003.safetensors",
+        "model-00003-of-00003.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/Qwen/Qwen3-4B/revision/1cfa9a7208912126459214e8b04321603b3df60c"
+    },
+    {
+      "repo": "Qwen/Qwen3-4B-Instruct-2507",
+      "requested_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "base_model": null,
+      "weight_files": [
+        "model-00001-of-00003.safetensors",
+        "model-00002-of-00003.safetensors",
+        "model-00003-of-00003.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/Qwen/Qwen3-4B-Instruct-2507/revision/cdbee75f17c01a7cc42f958dc650907174af0554"
+    },
+    {
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "requested_revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "base_model": null,
+      "weight_files": [
+        "step10/model-00001-of-00002.safetensors",
+        "step10/model-00002-of-00002.safetensors",
+        "step160/model-00001-of-00002.safetensors",
+        "step160/model-00002-of-00002.safetensors",
+        "step20/model-00001-of-00002.safetensors",
+        "step20/model-00002-of-00002.safetensors",
+        "step320/model-00001-of-00002.safetensors",
+        "step320/model-00002-of-00002.safetensors",
+        "step40/model-00001-of-00002.safetensors",
+        "step40/model-00002-of-00002.safetensors",
+        "step480/model-00001-of-00002.safetensors",
+        "step480/model-00002-of-00002.safetensors",
+        "step640/model-00001-of-00002.safetensors",
+        "step640/model-00002-of-00002.safetensors",
+        "step80/model-00001-of-00002.safetensors",
+        "step80/model-00002-of-00002.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/revision/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8"
+    },
+    {
+      "repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "requested_revision": "3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "revision": "3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+      ],
+      "weight_files": [
+        "model-00001-of-00002.safetensors",
+        "model-00002-of-00002.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/nvidia/Nemotron-Research-Reasoning-Qwen-1.5B/revision/3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+    },
+    {
+      "repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "requested_revision": "b89048893f95246c6b5749b287f0049e6df42ee9",
+      "revision": "b89048893f95246c6b5749b287f0049e6df42ee9",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+      ],
+      "weight_files": [
+        "model.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/nvidia/Nemotron-Research-Reasoning-Qwen-1.5B/revision/b89048893f95246c6b5749b287f0049e6df42ee9"
+    },
+    {
+      "repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "requested_revision": "a8e647c7a46f04e84ce732d6fa3fa627ba343b8d",
+      "revision": "a8e647c7a46f04e84ce732d6fa3fa627ba343b8d",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+      ],
+      "weight_files": [
+        "model-00001-of-00002.safetensors",
+        "model-00002-of-00002.safetensors"
+      ],
+      "source": "https://huggingface.co/api/models/nvidia/Nemotron-Research-Reasoning-Qwen-1.5B/revision/a8e647c7a46f04e84ce732d6fa3fa627ba343b8d"
+    }
+  ]
+}

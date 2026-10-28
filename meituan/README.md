@@ -149,7 +149,7 @@ python -m verl.trainer.main_ppo --help
 
 ## 提交 8 卡任务
 
-开发机安装、数据检查完成，且本地已有 `hope/mirroropd/mirroropd.hope` 后，在仓库根目录执行 `make opd-submit`。它提交接收端保留的 Hope 配置，默认由集群 worker 使用现有 `.venv-native` 执行单机共享 8 卡训练：student rollout、冻结 teacher 评分、actor 更新顺序共池执行，student 推理 TP=1。旧 4+4 可通过 `DISTILLATION_EXECUTION_MODE=standalone` 选择。`hope/` 不随源码同步，调度配置由开发机本地维护；worker 直接执行随源码更新的领域脚本。旧入口的一次性迁移见[Hope 直连入口](../examples/mirroropd/docs/infra/2026-10-22-共享八卡运行与架构.md#hope-直连入口)。
+开发机安装、数据检查完成，且本地已有 `hope/mirroropd/mirroropd.hope` 后，在仓库根目录执行 `make opd-submit`。它提交接收端保留的 Hope 配置，默认由集群 worker 使用现有 `.venv-native` 执行单机共享 8 卡训练：student rollout、冻结 teacher 评分、actor 更新顺序共池执行，student 推理 TP=1。旧 4+4 可通过 `DISTILLATION_EXECUTION_MODE=standalone` 选择。`hope/` 不随源码同步，调度配置由开发机本地维护；worker 直接执行随源码更新的领域脚本。旧入口的一次性迁移见[Hope 直连入口](../examples/mirroropd/docs/infra/training/2026-10-22-共享八卡运行与架构.md#hope-直连入口)。
 
 ## 模型与数据布局
 
@@ -177,7 +177,7 @@ fanghaotian/
 
 `MODEL_ROOT`、`DATA_ROOT` 只指定目录；student、teacher 和四个 parquet 文件名由配方拼接。默认会自动定位仓库相邻的 `model/`、`data/`。需要不同文件时分别覆盖 `STUDENT_MODEL`、`TEACHER_MODEL`、`TRAIN_FILE`、`MATH_FILE`、`AMC_FILE`、`AIME_FILE`。
 
-模型和数据准备后执行 `make assets-check`；模型仅检查必要文件，重点检查四份数据的字段、行数、空答案、重复题、题面重叠和 prompt 长度。只查数据可用 `make assets-check ASSET_CHECK_ARGS=--data-only`，会跳过模型与 token 长度计算。检查报告写到 `data/asset_check.json`。准备方式及检查范围见 [数学资产说明](../examples/mirroropd/docs/资产准备.md)。这些检查在 CPU 完成，不加载模型 tensor，不启动 GPU 训练。
+模型和数据准备后执行 `make assets-check`；模型仅检查必要文件，重点检查四份数据的字段、行数、空答案、重复题、题面重叠和 prompt 长度。只查数据可用 `make assets-check ASSET_CHECK_ARGS=--data-only`，会跳过模型与 token 长度计算。检查报告写到 `data/asset_check.json`。准备方式及检查范围见 [数学资产说明](../examples/mirroropd/docs/infra/training/资产准备.md)。这些检查在 CPU 完成，不加载模型 tensor，不启动 GPU 训练。
 
 `make archive-pack` 只负责源码；上述模型和数据需要另行准备并人工传输一次。已有文件无需随每次代码同步重传。
 
@@ -259,7 +259,7 @@ make sync-log-upload WANDB_UPLOAD_JOBS=1 WANDB_UPLOAD_TIMEOUT=300
 
 原始日志默认保持原来的 entity/project/run ID。测试或迁移时可以通过环境变量 `MIRROROPD_UPLOAD_ENTITY`、`MIRROROPD_UPLOAD_PROJECT` 明确覆盖云端目标；该目标在入队时固定，之后改变环境变量不会悄悄改变已排队任务的目的地。
 
-本地解码工具仍位于独立仓库的 `wandb-logs/tools/wandb_local.py`。在该仓库使用 `make setup`、`make decode`、`make csv RUN=<run-id>`，无需等待云端上传。原始数据位于 `MirrorOPD-verl/wandb/`，派生数据位于 `derived/MirrorOPD-verl/`。MirrorOPD 的分析入口继续委托这个解码器，见[分析复现](../examples/mirroropd/docs/experiments/复现与维护.md)。
+本地解码工具仍位于独立仓库的 `wandb-logs/tools/wandb_local.py`。在该仓库使用 `make setup`、`make decode`、`make csv RUN=<run-id>`，无需等待云端上传。原始数据位于 `MirrorOPD-verl/wandb/`，派生数据位于 `derived/MirrorOPD-verl/`。MirrorOPD 的分析入口继续委托这个解码器，见[分析复现](../examples/mirroropd/docs/experiments/维护说明.md)。
 
 终端 stdout/stderr 保存到 `outputs/<实验名>/train.log`，通过 `sync-results-pack` 传回；`sync-log-pack` 负责 W&B 离线 run。本机验证结果与已知边界见 [W&B 上传重构验证](docs/2026-10-24-W&B上传重构与本机验证.md)。
 

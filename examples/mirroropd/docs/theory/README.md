@@ -2,7 +2,7 @@
 
 本目录集中维护固定前缀上的蒸馏目标、离策略梯度与镜像下降推导。前缀集合及权重固定；完整词表求和仅消除条件动作积分误差。本目录不处理前缀分布 IS 或整序列 KL 的完整梯度。
 
-一般 $\kappa,\eta$ 的核心稿提取与 Full-vocab 接入选择见 [MirrorOPD 形状与插值专题](../mirror-descent/README.md)。本目录的普通对数 OPD 四格仍按 $\kappa=0$ 维护，非线性信号的目标、刷新与冻结不能直接照搬正则系数换算。
+一般 $\kappa,\eta$ 的核心稿提取与 Full-vocab 接入选择见 [MirrorOPD 形状与插值专题](mirror-descent/README.md)。本目录的普通对数 OPD 四格仍按 $\kappa=0$ 维护，非线性信号的目标、刷新与冻结不能直接照搬正则系数换算。
 
 ## 结论速览
 
@@ -65,7 +65,7 @@ $$
 
 | 文档 | 内容 |
 | --- | --- |
-| [统一符号](../符号约定.md) | 教师 $T$、锚点 $q$、当前学生 $p$、行为策略 $\beta$，以及冻结中心与当前中心的区别 |
+| [统一符号](符号约定.md) | 教师 $T$、锚点 $q$、当前学生 $p$、行为策略 $\beta$，以及冻结中心与当前中心的区别 |
 | [固定前缀下的 OPD 目标与梯度](2026-10-22-固定前缀下的OPD目标与梯度.md) | Current/frozen × IS/NoIS 四种目标；正确计算图；clipping、支持和有限缓存边界 |
 | [Full-vocab 计算图与四种更新](2026-10-22-Full-vocab计算图与四种更新.md) | KL 数值、一阶梯度代理和直接 backward；四格的完整求和；直接替换概率的不同含义 |
 | [镜像下降与离策略四种更新](2026-10-22-镜像下降与离策略四种更新.md) | $1/\eta$ KL 正则；MD 与 KL 近端点；两种 NoIS 定义；归一化、中心化及 Part/BPO/Mean |
@@ -77,8 +77,8 @@ $$
 
 | 来源 | 在本组推导中的作用 | 本地证据入口 |
 | --- | --- | --- |
-| AsyncOPD | 固定前缀下的 current advantage、IS、clipping 及有限缓存 | [原论文与实现审计](../opd-objective/2026-10-21-固定前缀下的优势估计与重要性采样.md#6-论文与实现证据) |
-| Semi-OPD、Lightning OPD | 固定学生轨迹、信号刷新与离线 surrogate 的实例 | [陈旧数据研究第 5–6 节](../research/2026-10-21-陈旧数据训练的指标与实验对照.md#5-lightning-opd年龄大也可能漂移有限) |
+| AsyncOPD | 固定前缀下的 current advantage、IS、clipping 及有限缓存 | [原论文与实现审计](../literature/learning-signal/2026-10-21-固定前缀下的优势估计与重要性采样.md#6-论文与实现证据) |
+| Semi-OPD、Lightning OPD | 固定学生轨迹、信号刷新与离线 surrogate 的实例 | [陈旧数据研究第 5–6 节](../literature/learning-signal/2026-10-21-陈旧数据训练的指标与实验对照.md#5-lightning-opd年龄大也可能漂移有限) |
 | GKD、MiniLLM | 条件分布拟合与单步词表积分；局部梯度的适用边界 | [Full-vocab 篇](2026-10-22-Full-vocab计算图与四种更新.md#4-固定前缀与实现范围) |
 | PPO | 冻结 advantage 的局部策略改进背景 | [MD 篇](2026-10-22-镜像下降与离策略四种更新.md#9-论文关系与验算) |
 | vOPD、TA-OPD、ResOPD、TT-OPD | baseline、支持集与尾部控制变量 | [条件估计篇](2026-10-22-条件梯度估计与控制变量.md) |
@@ -90,10 +90,10 @@ MD 篇的四格分类与两种 NoIS 定义由本目录的标量目标独立推�
 
 | 范围 | 脚本与证据 |
 | --- | --- |
-| 基础四格、两种正则 NoIS、几何目标与归一化修正 | [verify_offpolicy_objectives.py](scripts/verify_offpolicy_objectives.py)、[FP64 结果](data/offpolicy-objectives.json) |
-| 原 sampled-token 与 clipping 对照 | [verify_fixed_prefix.py](../opd-objective/scripts/verify_fixed_prefix.py)、[历史结果](../opd-objective/data/gradient-audit.json) |
-| Full-vocab 计算图与支持集 | [verify_fullkl_and_support.py](../opd-objective/scripts/verify_fullkl_and_support.py)、[历史结果](../opd-objective/data/support-selection-20261021/audit.json) |
-| Baseline 与稀疏估计器 | [verify_reward_estimators.py](../opd-objective/scripts/verify_reward_estimators.py)、[历史结果](../opd-objective/data/reward-research-20261021/estimator-audit.json) |
+| 基础四格、两种正则 NoIS、几何目标与归一化修正 | [verify_offpolicy_objectives.py](../../research/objectives/verify_offpolicy_objectives.py)、[FP64 结果](data/offpolicy-objectives.json) |
+| 原 sampled-token 与 clipping 对照 | [verify_fixed_prefix.py](../../research/objectives/verify_fixed_prefix.py)、[历史结果](../literature/learning-signal/data/gradient-audit.json) |
+| Full-vocab 计算图与支持集 | [verify_fullkl_and_support.py](../../research/objectives/verify_fullkl_and_support.py)、[历史结果](../literature/learning-signal/data/support-selection-20261021/audit.json) |
+| Baseline 与稀疏估计器 | [verify_reward_estimators.py](../../research/objectives/verify_reward_estimators.py)、[历史结果](../literature/learning-signal/data/reward-research-20261021/estimator-audit.json) |
 
 新增脚本只使用 CPU 张量，完整枚举小词表，不加载语言模型。证明给出解析条件，脚本检查公式与反向计算图的一致性。
 
@@ -101,8 +101,8 @@ MD 篇的四格分类与两种 NoIS 定义由本目录的标量目标独立推�
 
 2026-10-22 将原固定前缀文档的第 1–5 节、支持集文档的第 2 节、估计器文档的第 2–5 节中的数学内容集中到本目录。原路径及章节锚点通过旧文末尾的索引保留，以便已有链接跳转；重复证明已替换为新章节链接。
 
-- [OPD 实验与审计](../opd-objective/README.md)继续维护论文实测、作者源码、实验预设和历史验算。
-- [Full-vocab 工程](../full-vocab/README.md)继续维护算子、hidden-state 数据通路、预算和训练验收。
-- [陈旧数据研究](../research/README.md)继续维护论文设置、原图、指标和实验解释。
+- [OPD 实验与审计](../literature/learning-signal/README.md)继续维护论文实测、作者源码、实验预设和历史验算。
+- [Full-vocab 工程](../infra/numerics/full-vocab/README.md)继续维护算子、hidden-state 数据通路、预算和训练验收。
+- [陈旧数据研究](../literature/README.md)继续维护论文设置、原图、指标和实验解释。
 
 理论更新直接修改本目录；旧文只更新实现、实验信息与引用，避免重新复制完整推导。

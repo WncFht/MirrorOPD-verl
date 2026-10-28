@@ -1,0 +1,48 @@
+{
+  "random_cases": 100,
+  "max_gap_identity_error": 2.983724378680108e-16,
+  "largest_observed_mean_center_worst_radius_ratio": 1.4157515544612203,
+  "max_clipped_alpha_objective_excess_vs_grid": 0.0,
+  "example": [
+    {
+      "name": "mean",
+      "student_weight": 0.5,
+      "Q": [
+        0.50377670647268,
+        0.3472041341093433,
+        0.14901915941797658
+      ],
+      "KL_student": 0.37891328158548926,
+      "KL_teacher": 0.7755710591305157,
+      "mean": 0.5772421703580025,
+      "maximum": 0.7755710591305157
+    },
+    {
+      "name": "rho=0.1",
+      "student_weight": 0.45,
+      "Q": [
+        0.46028298839648984,
+        0.3528905657485694,
+        0.18682644585494068
+      ],
+      "KL_student": 0.5110079531907493,
+      "KL_teacher": 0.6563073342117098,
+      "mean": 0.5836576437012295,
+      "maximum": 0.6563073342117098
+    },
+    {
+      "name": "minimax",
+      "student_weight": 0.42361104522852777,
+      "Q": [
+        0.43655015492212357,
+        0.35405336157408857,
+        0.20939648350378792
+      ],
+      "KL_student": 0.5928586801843495,
+      "KL_teacher": 0.5928586801843497,
+      "mean": 0.5928586801843496,
+      "maximum": 0.5928586801843497
+    }
+  ],
+  "scope": "CPU FP64 synthetic distributions only"
+}

@@ -101,6 +101,8 @@ DEFAULT_IGNORE_DIRS = (
 
 # Individual files that are exempt. Use sparingly and document why.
 DEFAULT_IGNORE_FILES = (
+    # Teacher-only validation moved out of docs; it never starts trainer updates.
+    "examples/mirroropd/research/analysis/qwen_base/run_teacher_validation.sh",
     # Inference-only entry point — no train-backend in the name.
     "examples/generation/run_deepseek_llm_7b.sh",
     # Diffusion (flow-grpo) example using the vllm_omni rollout; the ``omni``

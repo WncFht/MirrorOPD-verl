@@ -31,7 +31,7 @@ def main():
     args = parser.parse_args()
     fv = load_style(args.figure_skill / "assets/mpl")
 
-    root = Path(__file__).resolve().parents[2] / "docs/mirror-descent"
+    root = Path(__file__).resolve().parents[2] / "docs/experiments/teacher-transfer/optimizer-precision/mechanism"
     old = json.loads((root / "data/localization-20261027.json").read_text())
     new = json.loads((root / "data/opd-transfer-20261027.json").read_text())
     out = root / "figures/precision-report-20261027"

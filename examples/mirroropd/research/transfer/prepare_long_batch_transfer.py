@@ -22,8 +22,16 @@ def prepare(a):
     norm = lambda s: re.sub(r"\s+", " ", s).strip()
     excluded = set()
     earlier = [
-        a.repo / "examples/mirroropd/docs/experiments/polaris-transfer/data/state-transfer-20261027/prompts.json",
-        a.repo / "examples/mirroropd/docs/experiments/polaris-transfer/data/intersection-study-20261027/prompts.json",
+        a.repo
+        / (
+            "examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism/"
+            "data/state-transfer-20261027/prompts.json"
+        ),
+        a.repo
+        / (
+            "examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism/"
+            "data/intersection-study-20261027/prompts.json"
+        ),
         a.old / "bank.json",
     ] + [a.old / f"rich-shard-{i}.json" for i in range(4)]
     for path in earlier:

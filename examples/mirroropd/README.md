@@ -2,9 +2,9 @@
 
 这里维护 math、coding 与 instruction following（IF）的单教师 sampled-token OPD 配方，以及数学、代码、IF 和函数调用 verifier。当前 math 基线使用 DeepSeek-R1-Distill-Qwen-1.5B student 与 JustRL-DeepSeek-1.5B teacher，采用 verl V1 同步训练和 `k1 + policy gradient` 蒸馏。
 
-统一实验入口为 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)：E1–E47 或 custom 选择模型/预算，`--method sampled/full_kl/mdpo/bpo` 选择算法。Full-KL 生成 MDPO eta=1 的规范配置；旧 sampled 保留原信号、PPO、IS/NoIS。Math 只维护这一个训练入口。用法见[训练配方](docs/训练配方.md)，目标与验证缺口见[实现说明](docs/mirror-descent/实现方案.md)。
+统一实验入口为 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)：E1–E47 或 custom 选择模型/预算，`--method sampled/full_kl/mdpo/bpo` 选择算法。Full-KL 生成 MDPO eta=1 的规范配置；旧 sampled 保留原信号、PPO、IS/NoIS。Math 只维护这一个训练入口。用法见[训练配方](docs/settings/训练设置.md)，目标与验证缺口见[实现说明](docs/infra/numerics/mirror-objectives/实现方案.md)。
 
-[E44–E47 正式对照](docs/训练配方.md#mirror-comparison)已包含 Full-KL、MDPO、BPO 和 weighted teacher 形状设置；直接调用编号，默认 256 outer × 16 reuse、每 32 outer 验证、每 128 outer 保存。
+[E44–E47 正式对照](docs/settings/训练设置.md#mirror-comparison)已包含 Full-KL、MDPO、BPO 和 weighted teacher 形状设置；直接调用编号，默认 256 outer × 16 reuse、每 32 outer 验证、每 128 outer 保存。
 
 ## 脚本目录
 
@@ -24,7 +24,7 @@ Math 训练只保留统一入口；独立验证和 smoke 是专项工具。辅�
 
 ### 完整验证负载的 vLLM sweep
 
-[`benchmarks/vllm_sweep/`](benchmarks/vllm_sweep/) 管理八个原始模型的推理参数扫描：`prepare_data.py` 复用现有 prompt builder 导出每模型570题×16请求，核对token回编码；`plan.json` 保存基线及候选；`run_sweep.py` 调用原生 `vllm bench sweep serve`，按四卡DP4/TP1排队执行。`worker.py` 保留当前verl对词表外token的屏蔽，原始模型文件不变。正常EOS、温度0.7、top-p0.9和31744回答上限用于全部正式测量；必须显式传 `--custom-output-len -1`，否则原生CLI的256默认值会覆盖JSONL预算。
+[`benchmarks/vllm_sweep/`](benchmarks/vllm_sweep) 管理八个原始模型的推理参数扫描：`prepare_data.py` 复用现有 prompt builder 导出每模型570题×16请求，核对token回编码；`plan.json` 保存基线及候选；`run_sweep.py` 调用原生 `vllm bench sweep serve`，按四卡DP4/TP1排队执行。`worker.py` 保留当前verl对词表外token的屏蔽，原始模型文件不变。正常EOS、温度0.7、top-p0.9和31744回答上限用于全部正式测量；必须显式传 `--custom-output-len -1`，否则原生CLI的256默认值会覆盖JSONL预算。
 
 ```bash
 PYTHONPATH=. "$PYTHON_BIN" examples/mirroropd/benchmarks/vllm_sweep/run_sweep.py run \
@@ -54,17 +54,17 @@ MirrorOPD 自有文档、调研与展示图位于 `examples/mirroropd/docs/`；�
 
 | 文档 | 内容 |
 | --- | --- |
-| [架构总览](docs/architecture.md) | 当前模块职责、跨模块执行顺序和扩展边界 |
-| [代码走读](docs/internals/README.md) | 训练、教师、目标、指标和 checkpoint 的当前实现；`make docs-check` 检查引用 |
-| [资产准备](docs/资产准备.md) | 模型、数学数据目录、导入与 CPU 检查 |
-| [训练配方](docs/训练配方.md) | Math / coding / IF 入口、GPU 资源池、训练与验证预算、Hope 启动 |
-| [OPD 失败复现方案](docs/failure-reproduction/README.md) | DAPO 与三 valid 下的模型／长度设置、sampled→full 对照、原论文图表与排除设置附录 |
-| [判分器与依赖](docs/判分器与依赖.md) | 四领域 reward 路由、依赖、迁入来源和检查范围 |
-| [LCB 判分隔离调研](docs/lcb/README.md) | 内存故障来源、受控 CPU 实验、轻量执行器与资源隔离方案 |
+| [架构总览](docs/infra/architecture/README.md) | 当前模块职责、跨模块执行顺序和扩展边界 |
+| [代码走读](docs/infra/architecture/代码走读.md) | 训练、教师、目标、指标和 checkpoint 的当前实现；`make docs-check` 检查引用 |
+| [资产准备](docs/infra/training/资产准备.md) | 模型、数学数据目录、导入与 CPU 检查 |
+| [训练配方](docs/settings/训练设置.md) | Math / coding / IF 入口、GPU 资源池、训练与验证预算、Hope 启动 |
+| [OPD 失败复现方案](docs/infra/model-compatibility/probes/README.md) | DAPO 与三 valid 下的模型／长度设置、sampled→full 对照、原论文图表与排除设置附录 |
+| [判分器与依赖](docs/infra/evaluation/判分器与依赖.md) | 四领域 reward 路由、依赖、迁入来源和检查范围 |
+| [LCB 判分隔离调研](docs/infra/evaluation/lcb/README.md) | 内存故障来源、受控 CPU 实验、轻量执行器与资源隔离方案 |
 | [训练基础设施](docs/infra/README.md) | 运行与调度、实测报告、batch/rollout 调优、指标/MFU、模型扩展和上游调研的统一入口 |
-| [OPD 目标与消融](docs/opd-objective/README.md) | 固定 prefix 推导、优势/IS 语义及实现审计 |
-| [分析复现](docs/experiments/复现与维护.md) | 本地 W&B 归档解码、项目快照、统计与图表；云端回读仅作显式核对或补救 |
-| [实验指标](docs/experiments/metrics/README.md) | 当前字段字典、更新横轴与比较口径；实现见指标系统走读 |
+| [OPD 目标与消融](docs/literature/learning-signal/README.md) | 固定 prefix 推导、优势/IS 语义及实现审计 |
+| [分析复现](docs/experiments/维护说明.md) | 本地 W&B 归档解码、项目快照、统计与图表；云端回读仅作显式核对或补救 |
+| [实验指标](docs/settings/metrics/README.md) | 当前字段字典、更新横轴与比较口径；实现见指标系统走读 |
 
 ## 启动入口
 
@@ -89,7 +89,7 @@ bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh --list-presets
 DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
 ```
 
-数学消融统一使用 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)。短窗基础版为 E15（sampled）／E13（full），其他模型／长度基础版为 E23–E32；对应reuse16版本为 E33–E43及已有E17。E21/E22分别兼容映射到E15/E13。当前模型对照均跑250个outer steps，每100步及最终步保存；基础版每批更新1次，reuse版16次。`E15-valid-student`／`E15-valid-teacher` 可独立验证原始模型。每次调用运行一个选项，GPU数量由 `STUDENT_GPUS` 与 `CUDA_VISIBLE_DEVICES` 明确指定；完整编号、模型和预算见[实验方案](docs/experiments/failure-reproduction/2026-10-25-Sampled-token与Full-vocab失败复现方案.md#failure-launcher)。
+数学消融统一使用 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)。短窗基础版为 E15（sampled）／E13（full），其他模型／长度基础版为 E23–E32；对应reuse16版本为 E33–E43及已有E17。E21/E22分别兼容映射到E15/E13。当前模型对照均跑250个outer steps，每100步及最终步保存；基础版每批更新1次，reuse版16次。`E15-valid-student`／`E15-valid-teacher` 可独立验证原始模型。每次调用运行一个选项，GPU数量由 `STUDENT_GPUS` 与 `CUDA_VISIBLE_DEVICES` 明确指定；完整编号、模型和预算见[实验方案](docs/experiments/teacher-transfer/teacher-comparison/failure-matrix/2026-10-25-Sampled-token与Full-vocab失败复现方案.md#failure-launcher)。
 
 ```bash
 # 只检查 E28 的命令，不启动 GPU 作业。
@@ -97,4 +97,4 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 STUDENT_GPUS=4 DRY_RUN=1 \
   bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E28
 ```
 
-`hope/` 由各机器本地维护，不进入源码包。Worker 直接调用随源码更新的领域脚本，入口迁移见[决策记录](docs/infra/2026-10-22-共享八卡运行与架构.md#hope-直连入口)。部署、日志传回和默认 W&B 同步流程见[开发机同步说明](../../meituan/README.md)。
+`hope/` 由各机器本地维护，不进入源码包。Worker 直接调用随源码更新的领域脚本，入口迁移见[决策记录](docs/infra/training/2026-10-22-共享八卡运行与架构.md#hope-直连入口)。部署、日志传回和默认 W&B 同步流程见[开发机同步说明](../../meituan/README.md)。

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/docs/experiments/scripts"
+SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis"
 sys.path.insert(0, str(SCRIPTS))
 spec = importlib.util.spec_from_file_location("policy_comparison", SCRIPTS / "compare_policy_runs.py")
 module = importlib.util.module_from_spec(spec)

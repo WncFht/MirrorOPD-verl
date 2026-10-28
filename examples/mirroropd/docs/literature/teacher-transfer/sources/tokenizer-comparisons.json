@@ -1,0 +1,521 @@
+[
+  {
+    "family": "R1",
+    "reference": "model/DeepSeek-R1-Distill-Qwen-1.5B",
+    "model": "oumi-ai/MiniMath-R1-1.5B",
+    "reference_ids": 151665,
+    "candidate_ids": 151665,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": true,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "R1",
+    "reference": "model/DeepSeek-R1-Distill-Qwen-1.5B",
+    "model": "UCSC-VLAA/STAR1-R1-Distill-1.5B",
+    "reference_ids": 151665,
+    "candidate_ids": 151665,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": false,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Qwen2.5",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen2.5-7B-Instruct",
+    "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "reference_ids": 151665,
+    "candidate_ids": 151665,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": true,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Qwen2.5",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen2.5-7B-Instruct",
+    "model": "open-thoughts/OpenThinker-7B",
+    "reference_ids": 151665,
+    "candidate_ids": 151665,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Qwen2.5",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen2.5-7B-Instruct",
+    "model": "open-thoughts/OpenThinker-32B",
+    "reference_ids": 151665,
+    "candidate_ids": 151665,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Qwen2.5",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen2.5-7B-Instruct",
+    "model": "open-thoughts/OpenThinker2-7B",
+    "reference_ids": 151665,
+    "candidate_ids": 151665,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Qwen2.5",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen2.5-7B-Instruct",
+    "model": "open-thoughts/OpenThinker2-32B",
+    "reference_ids": 151665,
+    "candidate_ids": 151665,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Qwen3",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen3-4B",
+    "model": "Qwen/Qwen3-4B-Base",
+    "reference_ids": 151669,
+    "candidate_ids": 151665,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [
+      151665,
+      151666,
+      151667,
+      151668
+    ],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": false
+    }
+  },
+  {
+    "family": "Qwen3",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen3-4B",
+    "model": "Qwen/Qwen3-8B",
+    "reference_ids": 151669,
+    "candidate_ids": 151669,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": true,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Qwen3",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen3-4B",
+    "model": "Qwen/Qwen3-30B-A3B",
+    "reference_ids": 151669,
+    "candidate_ids": 151669,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": true,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Qwen3",
+    "reference": "/tmp/teacher-lineage-20261028/Qwen--Qwen3-4B",
+    "model": "Qwen/Qwen3-32B",
+    "reference_ids": 151669,
+    "candidate_ids": 151669,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": true,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Olmo3",
+    "reference": "/tmp/teacher-lineage-20261028/allenai--Olmo-3-7B-Think-SFT",
+    "model": "allenai/Olmo-3-1025-7B",
+    "reference_ids": 100278,
+    "candidate_ids": 100278,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Olmo3",
+    "reference": "/tmp/teacher-lineage-20261028/allenai--Olmo-3-7B-Think-SFT",
+    "model": "allenai/Olmo-3-7B-Think-DPO",
+    "reference_ids": 100278,
+    "candidate_ids": 100278,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Olmo3",
+    "reference": "/tmp/teacher-lineage-20261028/allenai--Olmo-3-7B-Think-SFT",
+    "model": "allenai/Olmo-3-7B-Think",
+    "reference_ids": 100278,
+    "candidate_ids": 100278,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Olmo3",
+    "reference": "/tmp/teacher-lineage-20261028/allenai--Olmo-3-7B-Think-SFT",
+    "model": "allenai/Olmo-3-7B-Instruct-SFT",
+    "reference_ids": 100278,
+    "candidate_ids": 100278,
+    "id_mismatch_count": 10,
+    "mismatches": [
+      {
+        "id": 100266,
+        "student": "<|extra_id_1|>",
+        "teacher": "<functions>"
+      },
+      {
+        "id": 100267,
+        "student": "<|extra_id_2|>",
+        "teacher": "</functions>"
+      },
+      {
+        "id": 100268,
+        "student": "<|extra_id_3|>",
+        "teacher": "<function_calls>"
+      },
+      {
+        "id": 100269,
+        "student": "<|extra_id_4|>",
+        "teacher": "</function_calls>"
+      },
+      {
+        "id": 100270,
+        "student": "<|extra_id_5|>",
+        "teacher": "<|extra_id_1|>"
+      },
+      {
+        "id": 100271,
+        "student": "<|extra_id_6|>",
+        "teacher": "<|extra_id_2|>"
+      },
+      {
+        "id": 100272,
+        "student": "<|extra_id_7|>",
+        "teacher": "<|extra_id_3|>"
+      },
+      {
+        "id": 100273,
+        "student": "<|extra_id_8|>",
+        "teacher": "<|extra_id_4|>"
+      },
+      {
+        "id": 100274,
+        "student": "<|extra_id_9|>",
+        "teacher": "<|extra_id_5|>"
+      },
+      {
+        "id": 100275,
+        "student": "<|extra_id_10|>",
+        "teacher": "<|extra_id_6|>"
+      }
+    ],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": false
+    }
+  },
+  {
+    "family": "Olmo3",
+    "reference": "/tmp/teacher-lineage-20261028/allenai--Olmo-3-7B-Think-SFT",
+    "model": "allenai/Olmo-3-32B-Think-SFT",
+    "reference_ids": 100278,
+    "candidate_ids": 100278,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": true,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Olmo3",
+    "reference": "/tmp/teacher-lineage-20261028/allenai--Olmo-3-7B-Think-SFT",
+    "model": "allenai/Olmo-3-32B-Think",
+    "reference_ids": 100278,
+    "candidate_ids": 100278,
+    "id_mismatch_count": 0,
+    "mismatches": [],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": true
+    }
+  },
+  {
+    "family": "Olmo3",
+    "reference": "/tmp/teacher-lineage-20261028/allenai--Olmo-3-7B-Think-SFT",
+    "model": "allenai/Olmo-Hybrid-Think-SFT-7B",
+    "reference_ids": 100278,
+    "candidate_ids": 100278,
+    "id_mismatch_count": 10,
+    "mismatches": [
+      {
+        "id": 100266,
+        "student": "<|extra_id_1|>",
+        "teacher": "<functions>"
+      },
+      {
+        "id": 100267,
+        "student": "<|extra_id_2|>",
+        "teacher": "</functions>"
+      },
+      {
+        "id": 100268,
+        "student": "<|extra_id_3|>",
+        "teacher": "<function_calls>"
+      },
+      {
+        "id": 100269,
+        "student": "<|extra_id_4|>",
+        "teacher": "</function_calls>"
+      },
+      {
+        "id": 100270,
+        "student": "<|extra_id_5|>",
+        "teacher": "<|extra_id_1|>"
+      },
+      {
+        "id": 100271,
+        "student": "<|extra_id_6|>",
+        "teacher": "<|extra_id_2|>"
+      },
+      {
+        "id": 100272,
+        "student": "<|extra_id_7|>",
+        "teacher": "<|extra_id_3|>"
+      },
+      {
+        "id": 100273,
+        "student": "<|extra_id_8|>",
+        "teacher": "<|extra_id_4|>"
+      },
+      {
+        "id": 100274,
+        "student": "<|extra_id_9|>",
+        "teacher": "<|extra_id_5|>"
+      },
+      {
+        "id": 100275,
+        "student": "<|extra_id_10|>",
+        "teacher": "<|extra_id_6|>"
+      }
+    ],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": false
+    }
+  },
+  {
+    "family": "Olmo3",
+    "reference": "/tmp/teacher-lineage-20261028/allenai--Olmo-3-7B-Think-SFT",
+    "model": "allenai/Olmo-Hybrid-Instruct-SFT-7B",
+    "reference_ids": 100278,
+    "candidate_ids": 100278,
+    "id_mismatch_count": 10,
+    "mismatches": [
+      {
+        "id": 100266,
+        "student": "<|extra_id_1|>",
+        "teacher": "<functions>"
+      },
+      {
+        "id": 100267,
+        "student": "<|extra_id_2|>",
+        "teacher": "</functions>"
+      },
+      {
+        "id": 100268,
+        "student": "<|extra_id_3|>",
+        "teacher": "<function_calls>"
+      },
+      {
+        "id": 100269,
+        "student": "<|extra_id_4|>",
+        "teacher": "</function_calls>"
+      },
+      {
+        "id": 100270,
+        "student": "<|extra_id_5|>",
+        "teacher": "<|extra_id_1|>"
+      },
+      {
+        "id": 100271,
+        "student": "<|extra_id_6|>",
+        "teacher": "<|extra_id_2|>"
+      },
+      {
+        "id": 100272,
+        "student": "<|extra_id_7|>",
+        "teacher": "<|extra_id_3|>"
+      },
+      {
+        "id": 100273,
+        "student": "<|extra_id_8|>",
+        "teacher": "<|extra_id_4|>"
+      },
+      {
+        "id": 100274,
+        "student": "<|extra_id_9|>",
+        "teacher": "<|extra_id_5|>"
+      },
+      {
+        "id": 100275,
+        "student": "<|extra_id_10|>",
+        "teacher": "<|extra_id_6|>"
+      }
+    ],
+    "reference_only": [],
+    "candidate_only": [],
+    "component_equal": {
+      "normalizer": true,
+      "pre_tokenizer": true,
+      "post_processor": true,
+      "decoder": true,
+      "model": false,
+      "added_tokens": false
+    }
+  }
+]

@@ -81,18 +81,12 @@ def python_symbols(text):
 
 
 def maintained_pages(root):
+    """All authored current pages, including untracked additions; sources stay immutable."""
     docs = root / DOCS
-    pages = (
-        [root / "examples/mirroropd/README.md", docs / "README.md", docs / "architecture.md"]
-        + sorted((docs / "internals").glob("*.md"))
-        + sorted((docs / "infra" / "profile").glob("*.md"))
-        + sorted((docs / "full-vocab").glob("*.md"))
-    )
-    tracked = subprocess.check_output(
-        ["git", "-C", str(root), "ls-files", "-z", "--", "examples/mirroropd/README.md", str(DOCS)], text=True
-    ).split("\0")
-    tracked_paths = set(tracked)
-    return [page for page in pages if page.relative_to(root).as_posix() in tracked_paths]
+    excluded = {"archive", "history", "data", "sources", "graph-expansion-sources"}
+    pages = [root / "examples/mirroropd/README.md"]
+    pages.extend(page for page in sorted(docs.rglob("*.md")) if not excluded.intersection(page.relative_to(docs).parts))
+    return [page for page in pages if page.is_file()]
 
 
 def check_pages(pages):
