@@ -16,6 +16,7 @@ if nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | rg -Fxq "$EX
 fi
 export CUDA_VISIBLE_DEVICES=7 STUDENT_GPUS=1 RAY_ADDRESS=local
 export FUSION_RESOURCE_PARENT=$$
+export VERL_ROLLOUT_IPC_NAMESPACE="fusion-gpu7-${BASHPID}-$(date +%s)"
 export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_PLUGINS=mirroropd_fusion
 export VLLM_WORKER_MULTIPROC_METHOD=spawn OMP_NUM_THREADS=1
 unset PYTHONDONTWRITEBYTECODE
