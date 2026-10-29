@@ -835,6 +835,12 @@ rollout_policy:
   micro_batch_size: 4
   deadline_seconds: 3600.0
   drain_seconds: 60.0
+  execution:
+    backend: hf_fusion
+    tensor_parallel_size: 1
+    max_num_seqs: 2
+    kv_cache_memory_bytes: 1073741824
+    enforce_eager: true
 distillation:
   _target_: verl.workers.config.DistillationConfig
   enabled: false

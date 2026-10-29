@@ -192,6 +192,12 @@ class RolloutRuntime:
         return self.clients[source]
 
     async def fusion_client(self, plan):
+        if self.policy.execution.backend == "vllm_fusion":
+            from .execution import NativeVLLMExecutor
+
+            if not hasattr(self, "fusion_executor"):
+                self.fusion_executor = NativeVLLMExecutor(self)
+            return await self.fusion_executor.prepare(plan)
         wg = self.trainer.actor_rollout_wg
         if not self.initialized_fusion:
             setup_tick = time.monotonic()
@@ -326,14 +332,18 @@ class RolloutRuntime:
         results = await self.wait(self.active_refs)
         self.active_refs = []
         if phase.decoder == "fusion":
-            rank_metrics = await self.wait(self.trainer.actor_rollout_wg.fusion_metrics())
+            rank_metrics = (
+                await self.fusion_executor.metrics()
+                if hasattr(self, "fusion_executor")
+                else await self.wait(self.trainer.actor_rollout_wg.fusion_metrics())
+            )
             for rank, values in enumerate(rank_metrics):
                 self.metrics[f"perf/memory/fusion_gpu_{rank}_allocated_peak_bytes"] = values["peak_allocated_bytes"]
                 self.metrics[f"perf/memory/fusion_gpu_{rank}_reserved_peak_bytes"] = values["peak_reserved_bytes"]
-                self.metrics[f"perf/memory/fusion_gpu_{rank}_kv_peak_bytes"] = max(
-                    (row["kv_peak_bytes"] for row in values["microbatches"]),
-                    default=0,
-                )
+                if "microbatches" in values:
+                    self.metrics[f"perf/memory/fusion_gpu_{rank}_kv_peak_bytes"] = max(
+                        (row["kv_peak_bytes"] for row in values["microbatches"]), default=0
+                    )
             self.rank_metrics = rank_metrics
         self.metrics[f"perf/timing/rollout_policy_{phase.decoder}_generate_seconds"] = time.monotonic() - tick
         return [item for result in results for item in result]
@@ -351,12 +361,16 @@ class RolloutRuntime:
         except BaseException as exc:
             raise UnsafeDrainError("Cannot confirm all session writers stopped; terminate run") from exc
         self.active_refs = []
-        if "fusion" in self.replicas:
+        if hasattr(self, "fusion_executor"):
+            await self.fusion_executor.release()
+        elif "fusion" in self.replicas:
             await self.guarded(asyncio.gather(*(r.sleep() for r in self.replicas["fusion"])), self.policy.drain_seconds)
 
     async def release(self, phase):
         tick = time.monotonic()
-        if phase.decoder == "student" and self.policy.student == "current":
+        if phase.decoder == "fusion" and hasattr(self, "fusion_executor"):
+            await self.fusion_executor.release()
+        elif phase.decoder == "student" and self.policy.student == "current":
             await self.guarded(asyncio.to_thread(self.trainer.checkpoint_manager.sleep_replicas))
         else:
             await self.guarded(
@@ -368,7 +382,10 @@ class RolloutRuntime:
 
     async def release_all(self):
         await self.guarded(asyncio.to_thread(self.trainer.checkpoint_manager.sleep_replicas))
-        for replicas in self.replicas.values():
+        for source, replicas in self.replicas.items():
+            if source == "fusion" and hasattr(self, "fusion_executor"):
+                await self.fusion_executor.release()
+                continue
             await self.guarded(asyncio.gather(*(r.sleep() for r in replicas)), self.policy.drain_seconds)
         if self.initialized_fusion:
             await self.wait(self.trainer.actor_rollout_wg.release_fusion())

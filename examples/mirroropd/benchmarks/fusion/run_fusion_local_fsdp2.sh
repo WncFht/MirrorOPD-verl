@@ -16,7 +16,9 @@ if nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | rg -Fxq "$EX
 fi
 export CUDA_VISIBLE_DEVICES=7 STUDENT_GPUS=1 RAY_ADDRESS=local
 export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_PLUGINS=mirroropd_fusion
-export VLLM_WORKER_MULTIPROC_METHOD=spawn OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
+export VLLM_WORKER_MULTIPROC_METHOD=spawn OMP_NUM_THREADS=1
+unset PYTHONDONTWRITEBYTECODE
+export PYTHONPYCACHEPREFIX=/root/.cache/mirroropd-fusion/pycache
 export PYTHON_BIN="$WORKSPACE/envs/mirroropd-fusion/bin/python"
 export PYTHONPATH="$REPO${PYTHONPATH:+:$PYTHONPATH}"
 export VERL_USE_UV=0
