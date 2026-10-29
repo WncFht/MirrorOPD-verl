@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-# Fixed-weight default single path: one warmup and three complete measured batches.
+# Fixed-weight default single path: one warmup plus an explicit measured batch count.
 set -euo pipefail
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 CURRENT=$(cd -- "$HERE/../../../.." && pwd)
 WORKSPACE=$(dirname -- "$CURRENT")
+REPEATS=${FUSION_REGRESSION_REPEATS:-3}
+[[ $REPEATS =~ ^[1-9][0-9]*$ ]] || { echo "Positive integer repeat count required" >&2; exit 2; }
+case "${FUSION_GPUS:-7}" in 6|7) ;; *) echo "Default regression requires exactly one allocated GPU (6 or 7)" >&2; exit 2 ;; esac
 if [[ ${1:-} == worker ]]; then
     ROOT=${2:?source root}
     export RUN_DIR=${3:?output directory}
@@ -16,7 +19,7 @@ if [[ ${1:-} == worker ]]; then
     export TRAIN_BATCH_SIZE=64 MAX_PROMPT_LENGTH=4096 MAX_RESPONSE_LENGTH=7168 MAX_VAL_RESPONSE_LENGTH=128
     export ROLLOUT_ENFORCE_EAGER=False ROLLOUT_MAX_NUM_SEQS=32 ROLLOUT_GPU_MEMORY_UTILIZATION=0.65
     export ROLLOUT_TOKEN_BUDGET=8192 PPO_MAX_TOKEN_LEN_PER_GPU=11264 TEACHER_FSDP_TOKEN_BUDGET=11264
-    export SMOKE_STEPS=$((1 + ${FUSION_REGRESSION_REPEATS:-3})) PPO_EPOCHS=1
+    export SMOKE_STEPS=$((1 + REPEATS)) PPO_EPOCHS=1
     export EXPERIMENT_NAME="$(basename -- "$RUN_DIR")" VERL_FILE_LOGGER_PATH="$RUN_DIR/metrics.jsonl"
     [[ ! -e $RUN_DIR ]] || { echo "Refusing existing regression run" >&2; exit 2; }
     if [[ ${DRY_RUN:-0} != 1 ]]; then
@@ -41,10 +44,12 @@ if [[ ${1:-} == worker ]]; then
 fi
 BASELINE=${1:?isolated baseline source with the common IPC isolation patch}
 PREFIX=${2:?unique regression prefix}
-SUPPORT="$WORKSPACE/runs/vllm-fusion-20261029/default-regression-support"
+SOURCE_SUPPORT="$WORKSPACE/runs/vllm-fusion-20261029/default-regression-support"
 OUT="$WORKSPACE/runs/vllm-fusion-20261029/$PREFIX"
-[[ -f $SUPPORT/prompts.parquet && -f $SUPPORT/baseline.json ]] || exit 2
 mkdir "$OUT"
+SUPPORT="$OUT/support"
+CUDA_VISIBLE_DEVICES='' "$WORKSPACE/envs/mirroropd-fusion/bin/python" "$HERE/prepare_default_regression.py" \
+    --source "$SOURCE_SUPPORT" --out "$SUPPORT" --batches "$((REPEATS + 1))" > "$OUT/prepare.log"
 for variant in baseline current; do
     ROOT=$CURRENT
     if [[ $variant == baseline ]]; then ROOT=$BASELINE; fi
