@@ -1,9 +1,10 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Low-overhead NVML and process RSS sampling for a single four-GPU acceptance run."""
+"""Low-overhead NVML and process RSS sampling for one explicitly allocated acceptance run."""
 
 import argparse
 import json
+import os
 import time
 from pathlib import Path
 
@@ -19,7 +20,16 @@ def main():
     parent = psutil.Process(args.parent)
     output = Path(args.out)
     pynvml.nvmlInit()
-    handles = [pynvml.nvmlDeviceGetHandleByIndex(i) for i in range(4)]
+    devices = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")
+    if not devices or any(not item or item == "-1" for item in devices):
+        raise ValueError("Monitor requires explicit CUDA_VISIBLE_DEVICES")
+    handles = [
+        pynvml.nvmlDeviceGetHandleByUUID(item)
+        if item.startswith("GPU-")
+        else pynvml.nvmlDeviceGetHandleByIndex(int(item))
+        for item in devices
+    ]
+    indices = [pynvml.nvmlDeviceGetIndex(handle) for handle in handles]
     start = time.time()
     stream = None
     try:
@@ -32,7 +42,8 @@ def main():
                         {
                             "kind": "metadata",
                             "start_epoch": start,
-                            "physical_gpus": [0, 1, 2, 3],
+                            "physical_gpus": indices,
+                            "gpu_uuids": [pynvml.nvmlDeviceGetUUID(handle) for handle in handles],
                             "interval_seconds": 0.5,
                         }
                     )
@@ -40,7 +51,7 @@ def main():
                 )
             if stream is not None:
                 row = {"kind": "sample", "epoch": time.time(), "gpus": []}
-                for index, handle in enumerate(handles):
+                for index, handle in zip(indices, handles, strict=True):
                     util = pynvml.nvmlDeviceGetUtilizationRates(handle)
                     row["gpus"].append(
                         {
