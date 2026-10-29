@@ -87,6 +87,27 @@ def test_local_rpc_starts_receiver_before_blocking_sender_handshake():
         rpc.pool.shutdown()
 
 
+def test_checkpoint_audit_requires_actual_values_to_change(tmp_path):
+    from examples.mirroropd.benchmarks.fusion.audit_native_lifecycle import checkpoint_delta
+
+    before, after = tmp_path / "before", tmp_path / "after"
+    before.mkdir()
+    after.mkdir()
+    filename = "model_world_size_1_rank_0.pt"
+    torch.save({"weight": torch.ones(2)}, before / filename)
+    torch.save({"weight": torch.ones(2)}, after / filename)
+    with pytest.raises(ValueError, match="did not change"):
+        checkpoint_delta(before, after, 1)
+    # A real FP32 update need not cross a BF16 rounding boundary.
+    torch.save({"weight": torch.ones(2) + 1e-6}, after / filename)
+    report = checkpoint_delta(before, after, 1)["ranks"][0]
+    assert report["changed_state_elements"] == 2
+    assert report["changed_bf16_state_elements"] == 0
+    torch.save({"weight": torch.tensor([float("nan"), 1.0])}, after / filename)
+    with pytest.raises(ValueError, match="Invalid checkpoint"):
+        checkpoint_delta(before, after, 1)
+
+
 def test_component_acceptance_cannot_ignore_later_rows(tmp_path, monkeypatch):
     from examples.mirroropd.benchmarks.fusion import compare_native_components as compare
 
