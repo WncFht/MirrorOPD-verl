@@ -218,8 +218,8 @@ def build_plan(
         )
     requests = tuple(requests)
     if policy.mode == "token_mixture":
-        # Endpoints skip the inactive model inside the same numerical executor.
-        # Switching to another backend here would also change inference precision.
+        # Keep endpoints in their numerical executor. Backend-specific resource
+        # shortcuts require separate acceptance and must not change precision.
         phases = (RolloutPhase("fusion", requests),)
     else:
         sources = (policy.source,) if policy.mode == "single" else ("student", "teacher")

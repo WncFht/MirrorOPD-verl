@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Native vLLM server with phase admission and persistent frozen weights."""
 
+import math
+
 import ray
 
 from verl.workers.rollout.vllm_rollout.vllm_async_server import vLLMHttpServer, vLLMReplica
@@ -48,10 +50,19 @@ class FusionServer(vLLMHttpServer):
         if cap < 1 or len(prompt_ids) + cap > self.config.max_model_len:
             raise ValueError("Fusion prompt plus declared cap exceeds context; cap will not be silently shortened")
         self.fusion_seen.add(request_id)
+        # The fusion API returns the probability of the actual sampled token,
+        # even when a full-vocab learner does not consume rollout log-probs.
+        params["logprobs"] = True
         output = await super().generate(request_id=request_id, prompt_ids=prompt_ids, sampling_params=params, **kwargs)
         if output.stop_reason == "aborted":
             raise RuntimeError("Fusion request was aborted")
-        if sampling_params.get("temperature") == 0 and output.log_probs is not None:
+        if (
+            output.log_probs is None
+            or len(output.log_probs) != len(output.token_ids)
+            or any(not math.isfinite(value) for value in output.log_probs)
+        ):
+            raise RuntimeError("Fusion response is missing finite selected-token behavior probabilities")
+        if sampling_params.get("temperature") == 0:
             output.log_probs = [0.0] * len(output.token_ids)
         output.extra_fields.update(
             output_metadata(
