@@ -109,7 +109,7 @@ def validate_policy(config):
     tokenizers = [AutoTokenizer.from_pretrained(path, local_files_only=True) for path in paths]
     for tokenizer, model_config in zip(tokenizers[1:], model_configs[1:], strict=True):
         validate_tokenizers(tokenizers[0], tokenizer, model_configs[0].vocab_size, model_config.vocab_size)
-    if policy.mode == "token_mixture":
+    if policy.mode == "token_mixture" and policy.execution.backend == "hf_fusion":
         import importlib.util
 
         import torch
@@ -134,6 +134,21 @@ def validate_policy(config):
             raise ValueError("Production token fusion requires FlashAttention 2 and Triton")
         if not hasattr(torch.backends.cuda.matmul, "allow_bf16_reduced_precision_reduction_split_k"):
             raise ValueError("Production token fusion requires Torch >=2.10 with independent split-K control")
+    if policy.mode == "token_mixture" and policy.execution.backend == "vllm_fusion":
+        from importlib.metadata import version
+
+        from packaging.version import Version
+
+        if Version(version("vllm")).base_version != "0.25.1":
+            raise ValueError("vllm_fusion currently requires the pinned vLLM 0.25.1/V1 runtime")
+        if config.trainer.n_gpus_per_node != 1:
+            raise ValueError("vllm_fusion multi-GPU transport is pending separate acceptance")
+        if model_configs[0].model_type != "qwen3" or any(
+            model.model_type not in {"qwen3", "qwen3_moe"} for model in model_configs[1:]
+        ):
+            raise ValueError("vllm_fusion requires a Qwen3 dense learner and dense/MoE teacher")
+        if any(getattr(model, "quantization_config", None) for model in model_configs):
+            raise ValueError("vllm_fusion requires unquantized checkpoints")
     if policy.mode == "token_mixture" and config.actor_rollout_ref.rollout.checkpoint_engine.backend != "naive":
         raise ValueError("Token fusion currently requires naive same-topology weight transport")
     import os

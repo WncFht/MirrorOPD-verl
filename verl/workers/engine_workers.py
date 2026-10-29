@@ -889,7 +889,10 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
     def configure_fusion(self, settings):
-        from verl.workers.rollout.hf_fusion import ServerAdapter
+        if settings.get("backend") == "vllm_fusion":
+            from verl.workers.rollout.vllm_fusion.adapter import ServerAdapter
+        else:
+            from verl.workers.rollout.hf_fusion import ServerAdapter
 
         self.fusion_rollout = ServerAdapter(self.config.rollout, self.config.model, settings=settings)
 
@@ -968,7 +971,10 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
             if any(errors):
                 raise RuntimeError(f"Fusion refit failed on at least one rank: {errors}")
             torch.distributed.barrier()
-            self.fusion_rollout.commit_version(version)
+            if self.fusion_rollout.settings.get("backend") == "vllm_fusion":
+                await self.fusion_rollout.commit_version(version)
+            else:
+                self.fusion_rollout.commit_version(version)
             return {}
         if target != "student":
             raise ValueError(f"Unknown rollout weight target: {target}")

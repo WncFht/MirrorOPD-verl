@@ -61,6 +61,26 @@ class CoefficientRule:
 
 
 @dataclass(frozen=True)
+class FusionExecutionConfig:
+    backend: str = "hf_fusion"
+    tensor_parallel_size: int = 1
+    max_num_seqs: int = 2
+    kv_cache_memory_bytes: int = 1073741824
+    enforce_eager: bool = True
+
+    def __post_init__(self):
+        if self.backend not in {"hf_fusion", "vllm_fusion"}:
+            raise ValueError("Unknown fusion execution backend")
+        if self.tensor_parallel_size != 1:
+            raise ValueError("Fusion TP>1 is pending separate multi-GPU acceptance")
+        for name in ("max_num_seqs", "kv_cache_memory_bytes"):
+            if type(getattr(self, name)) is not int or getattr(self, name) < 1:
+                raise ValueError(f"{name} must be a positive integer")
+        if type(self.enforce_eager) is not bool:
+            raise ValueError("enforce_eager must be a boolean")
+
+
+@dataclass(frozen=True)
 class RolloutPolicyConfig:
     mode: str = "single"
     source: str = "student"
@@ -71,6 +91,7 @@ class RolloutPolicyConfig:
     micro_batch_size: int = 4
     deadline_seconds: float = 3600.0
     drain_seconds: float = 60.0
+    execution: FusionExecutionConfig = FusionExecutionConfig()
 
     def __post_init__(self):
         if self.mode not in {"single", "trajectory_mixture", "token_mixture"}:
@@ -92,6 +113,7 @@ class RolloutPolicyConfig:
     def parse(cls, values=None):
         values = dict(values or {})
         values["teacher_weight"] = CoefficientRule.parse(values.get("teacher_weight", 0.5))
+        values["execution"] = FusionExecutionConfig(**values.get("execution", {}))
         return cls(**values)
 
     @property
