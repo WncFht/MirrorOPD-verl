@@ -1,8 +1,10 @@
 # Sampled-token 与 Full-vocab 失败复现方案
 
-更新：2026-10-25。状态：模型／长度对照的 sampled/full、reuse16 与独立师生验证已接入[统一入口](#failure-launcher)；E25/E27 的两步 sampled-token 短测及 Full-KL 接入测试已完成，见[短测验收](../../../../infra/model-compatibility/probes/2026-10-24-OPD实现验收与对齐诊断.md#smoke-validation)。正式 250 步 failure 观察尚未启动。
+更新：2026-10-25。状态：模型／长度对照的 sampled/full、reuse16 与独立师生验证已接入[统一入口](#failure-launcher)；E25/E27 的两步 sampled-token 短测及 Full-KL 接入测试已完成，见[短测验收](../../../../infra/model-compatibility/probes/2026-10-24-OPD实现验收与对齐诊断.md#smoke-validation)。当时正式 250 步 failure 观察尚未启动；后续完成结果见下方实验映射。
 
 目标是采用论文中的模型对与失败诱因，在我们统一的 **DAPO → MATH-500／AMC23／AIME25** 协议下，先运行 sampled-token OPD，确认是否出现停滞、退化或长窗口失稳，再调用已接入的 full-vocab reverse-KL 实现进行配对实验。**比较 sampled-token 与 full-vocab，并为每种模型／长度／目标增加 16 次批内复用版本；不加入 top-k 蒸馏、任务奖励 RL 或 OPSD。** 原论文中的 top-k 只作为来源设置记录。
+
+本文保留 2026-10-25 的初始设计与参数依据。矩阵用于挂接后续实验和查看 setting，不要求补齐全部组合或统一跑满 250 步。实际运行和结果以[实验映射](2026-10-28-矩阵与已运行变体映射.md)及各专题报告为准；训练时长按分析问题和实际进展确定。
 
 ## 1. 首轮实验矩阵
 
