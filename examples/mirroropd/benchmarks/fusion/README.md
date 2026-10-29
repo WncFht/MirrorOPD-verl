@@ -125,7 +125,7 @@ CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusi
 
 `CONFIG_ONLY=1` 只解析配置，不占用 GPU、不创建训练目录；`DRY_RUN=1` 只打印命令。实际执行仍由分配入口检查 UUID、GPU 占用及锁。当前入口保持单任务独占所选 GPU，多任务共置尚未实现，不能用内部 worker 模式绕过占用保护。
 
-`FUSION_MAX_NUM_SEQS/FUSION_KV_BYTES/FUSION_TP` 控制 LM 执行；其他来源使用 TP1 replica。`PREFIX_PPO_TOKEN_BUDGET`、`PREFIX_TEACHER_TOKEN_BUDGET`、`PREFIX_ROLLOUT_SEQS`、`PREFIX_ROLLOUT_MEMORY_FRACTION`、`PREFIX_RAY_CPUS`、`PREFIX_OBJECT_STORE_BYTES` 和 full-vocab 的 `PREFIX_FULL_KL_BACKEND/PREFIX_TOKEN_CHUNK/PREFIX_VOCAB_CHUNK` 是待实测的执行参数。默认值是候选，不是已确认的最优配置；学习超参数由入口固定。
+`FUSION_MAX_NUM_SEQS/FUSION_KV_BYTES/FUSION_TP` 控制 LM 执行；其他来源使用 TP1 replica。`PREFIX_PPO_TOKEN_BUDGET`、`PREFIX_TEACHER_TOKEN_BUDGET`、`PREFIX_ROLLOUT_SEQS`、`PREFIX_ROLLOUT_MEMORY_FRACTION`、`PREFIX_RAY_CPUS`、`PREFIX_AGENT_WORKERS`、`PREFIX_REWARD_WORKERS`、`PREFIX_STORAGE_UNITS`、`PREFIX_OBJECT_STORE_BYTES` 和 full-vocab 的 `PREFIX_FULL_KL_BACKEND/PREFIX_TOKEN_CHUNK/PREFIX_VOCAB_CHUNK` 是待实测的执行参数。默认值是候选，不是已确认的最优配置；学习超参数由入口固定。
 
 融合接口始终返回有限、完整的选中 token 行为 log-prob，即使 full-vocab learner 关闭了 rollout log-prob 收集。缺失、长度不符或非有限值会拒绝该响应；greedy 的行为 log-prob 在完整性检查后写为 0。此修复已做 CPU 协议回归，仍需实际服务调用复验。
 
