@@ -555,3 +555,6 @@ explicit = true
 name = "verl-wheelhouse"
 url = "https://verl-project.github.io/verl-wheelhouse/cu130/torch2.13/simple/"
 explicit = true
+
+[project.entry-points."vllm.general_plugins"]
+mirroropd_fusion = "verl.workers.rollout.vllm_fusion:register_models"
