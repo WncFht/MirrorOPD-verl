@@ -2,6 +2,12 @@
 
 本页只比较给定 hidden/head 后的投影、目标、归约与一阶 VJP。真实模型更新与完整训练见[训练性能](training.md)，统计与显存定义见[测量方法](methodology.md)。数值实现及推导由[算子走读](../../architecture/full-kl-kernel-walkthrough.md)维护。
 
+## 当前算子复测入口
+
+[benchmark_full_kl.py](../../../../benchmarks/full_vocab/benchmark_full_kl.py) 用合成 BF16 hidden/head 比较生产实现，student 固定为 hidden1536、vocab151936。`--teacher-hidden`、`--teacher-vocab` 可分别选择 JustRL 的 1536/151936 或 Polaris 的 3584/152064；后者保留额外 teacher 输出行的归一化贡献。`--backends precompute precompute_fused --reference-backend dense` 比较普通与 fused 归约，`--chunk` 控制 token 分块。
+
+工具在每个 backend 计时前检查 loss 和 hidden/head VJP，沿用绝对 loss 误差小于 1e-4、梯度相对 L2 误差小于 0.02 的随机输入门槛；近目标和小梯度仍由独立 FP64 CUDA 测试覆盖，不能用随机输入检查代替。每个形状预热两次、测量五次，已有输出文件会被拒绝。`--profile` 在计时结束后另做一次 CPU/CUDA trace，输出独立的 `.trace.json.gz`，trace 时间不混入性能样本。扩展的异构形状与 trace 入口正在 GPU 验证，下面的历史性能数字保持原测量身份。
+
 ## 证据范围
 
 | 测量                       | 输入与实现身份                                                                        | 原始证据                                                                                                                                                                            |
