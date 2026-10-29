@@ -110,7 +110,7 @@ Fusion 训练服务与独立组件探针统一固定 `TRITON_ATTN`，实际各�
 
 默认 single 的追加回归使用 `run_fusion_default_regression_fsdp2.sh`，限定一张物理 GPU 6 或 7。`FUSION_REGRESSION_REPEATS=6` 表示一批预热后测六批；入口调用 `prepare_default_regression.py`，核对原始 parquet 中所有 64 条批次相同，再在本次独立 `support/` 中重复足够批次。原始 256 行数据保持不变，追加输入为 448 行，文件哈希及批次数写入 `workload.json`。
 
-追加运行成功退出后，`audit_default_regression.py --original <原三次测量目录> --additional <追加六次目录> --additional-exit-code 0 --out <新报告路径>` 检查全部请求、对应批次的输入/输出/答案/评分、零 optimizer 更新、冻结 baseline 源码与配置、资源结束记录，然后合并每个版本的九个样本。门槛保持 5%，只排除每个进程预先声明的首批预热，不删除测量异常值。门控延续原来的 `rollout_batch` 计时，即提交到最后一个生成 token；评分、teacher、权重传输和完整 outer 的成本另外保留，不能把该门控数值称为全部训练阶段墙钟。输入准备与审计反例检查已通过，追加 GPU 测量仍待执行。
+追加运行成功退出后，`audit_default_regression.py --original <原三次测量目录> --additional <追加六次目录> --additional-exit-code 0 --baseline-identity <已核对源码树的报告> --out <新报告路径>` 检查全部请求、对应批次的输入/输出/答案/评分、零 optimizer 更新、冻结 baseline 源码与配置、资源结束记录，然后合并每个版本的九个样本。门槛保持 5%，只排除每个进程预先声明的首批预热，不删除测量异常值。门控延续原来的 `rollout_batch` 计时，即提交到最后一个生成 token；评分、teacher、权重传输和完整 outer 的成本另外保留，不能把该门控数值称为全部训练阶段墙钟。输入准备与审计反例检查已通过，追加 GPU 测量已启动，合并判定仍待完成。源码归档没有可用的 Git 工作树状态时，应另外逐文件核对声明的 commit 与隔离补丁，不能把空 diff 当成原样证明。
 
 `audit_native_lifecycle.py --previous-actor-checkpoint <恢复前 actor 目录>` 可同时核对恢复前后保存的 CPU 参数分片。它检查真实数值变化并分别报告 FP32 状态和 BF16 推理视图中的变化，不能仅以更新计数推进推断权重已变化。`probe_hf_reference.py` 提供独立 HF BF16/FlashAttention 全前缀参考；其分布距离与选中概率差异用于跨后端诊断，不沿用旧 HF 阈值作为 native 引擎门槛，该新增工具仍待 GPU 执行。
 
