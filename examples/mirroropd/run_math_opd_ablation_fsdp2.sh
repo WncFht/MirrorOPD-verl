@@ -58,6 +58,7 @@
 # E43              16     100    1600      1e-6    10/50      yes
 # E44-E47,E50-E53  16     256    4096      1e-6    32/128     no
 # E48-E49          16     256    4096      1e-6    32/64      yes
+# E55-E58          16     100    1600      1e-6    10/-1      no
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
 # 编号别名：E21=E15; E22=E13。
@@ -65,6 +66,16 @@
 # model 预设可加 -valid-student/-valid-teacher，独立验证原始模型。
 #
 # E54：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；沿用 E41 的 100 outer/reuse16，无初始验证。
+#
+# E55–E58：同一 Base ← 30B-A3B-Instruct-2507 长程对照，从初始权重开始。
+# Preset  Method   Kappa  Eta
+# E55     mdpo     0      0.1
+# E56     mdpo     0.5    0.1
+# E57     mdpo     1      0.1
+# E58     full_kl  -      1
+# 统一 8 卡 shared_sync、batch64、reuse16、100 outer、LR=1e-6、train cap=16384；每 10 outer 验证五个数学 bench，val n=16、cap=31744，无初始验证。
+# 原生共同前缀 enable_thinking=null；EOS 合并 [151643,151645]；precompute/chunk512。
+# 不保存任何 checkpoint（save_freq=-1，包括最后一步）；E54 保留原 7k/旧前缀协议。
 #
 # E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。
 # END GENERATED EXPERIMENT OVERVIEW

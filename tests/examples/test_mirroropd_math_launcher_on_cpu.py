@@ -151,6 +151,36 @@ def _config(tmp_path, **overrides):
         return compose(config_name="ppo_trainer", overrides=command[command.index("verl.trainer.main_ppo") + 1 :])
 
 
+@pytest.mark.parametrize("preset,kappa,eta", [("E55", 0, 0.1), ("E56", 0.5, 0.1), ("E57", 1, 0.1), ("E58", 0, 1)])
+def test_moe_long_presets_resolve_native_full_vocab_without_checkpoint_saving(tmp_path, preset, kappa, eta):
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT), preset])
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
+    assert loss.loss_settings.kappa == kappa and loss.loss_settings.eta == eta
+    assert loss.loss_settings.teacher_only_kl == (preset == "E58")
+    assert not loss.use_policy_gradient and not loss.use_task_rewards
+    assert loss.full_vocab.termination_token_ids == [151643, 151645]
+    assert loss.full_vocab.backend == "precompute" and loss.full_vocab.token_chunk_size == 512
+    assert cfg.actor_rollout_ref.model.path.endswith("/Qwen3-1.7B-Base")
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/Qwen3-30B-A3B-Instruct-2507")
+    assert cfg.distillation.execution_mode == "shared_sync" and cfg.trainer.n_gpus_per_node == 8
+    assert cfg.data.apply_chat_template_kwargs.enable_thinking is None
+    assert (cfg.data.max_prompt_length, cfg.data.max_response_length) == (1024, 16384)
+    actor, rollout = cfg.actor_rollout_ref.actor, cfg.actor_rollout_ref.rollout
+    assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 64
+    assert actor.ppo_epochs == 16 and actor.optim.lr == 1e-6 and actor.loss_agg_mode == "token-mean"
+    assert rollout.n == 1 and rollout.temperature == rollout.top_p == 1
+    assert rollout.max_num_seqs == 64 and rollout.gpu_memory_utilization == 0.8
+    assert cfg.trainer.total_training_steps == 100
+    assert cfg.trainer.save_freq == -1 and cfg.trainer.test_freq == 10
+    assert not cfg.trainer.val_before_train and cfg.trainer.resume_mode == "disable"
+    assert rollout.val_kwargs.n == 16 and rollout.val_kwargs.max_tokens == 31744
+    assert (rollout.val_kwargs.temperature, rollout.val_kwargs.top_p) == (0.7, 0.9)
+    assert [Path(p).parent.name for p in cfg.data.val_files] == ["MATH-500", "AMC23", "AIME24", "AIME25", "AIME26"]
+    assert not (tmp_path / "run").exists()
+
+
 FAILURE_PAIRS = [
     ("E15", "E13", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 7168, 4096, 128, 64),
     ("E23", "E24", "DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", 15360, 4096, 128, 64),

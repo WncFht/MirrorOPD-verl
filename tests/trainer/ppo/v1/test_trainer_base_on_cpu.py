@@ -390,6 +390,52 @@ def test_fit_logs_optimizer_progress_after_step_aggregation_and_initial_validati
     assert [entry["data"]["step/optimizer"] for entry in logged] == [0, 4, 8]
 
 
+def test_no_checkpoint_protocol_still_validates_every_tenth_and_final_outer(tmp_path):
+    trainer = _progress_trainer()
+    trainer.config.trainer = {
+        "project_name": "test",
+        "experiment_name": "no-checkpoints",
+        "logger": ["console"],
+        "val_before_train": False,
+        "total_epochs": 1,
+        "save_freq": -1,
+        "test_freq": 10,
+        "default_local_dir": str(tmp_path / "checkpoints"),
+    }
+    trainer.config.global_profiler = {"steps": None}
+    trainer.global_steps = 0
+    trainer.steps_per_epoch = trainer.total_training_steps = 100
+    validations = []
+
+    def validate():
+        validations.append(trainer.global_steps)
+        return {"val/acc": 0.5}
+
+    trainer._validate = validate
+    for name in (
+        "_shutdown_dump_executor",
+        "_reissue_inflight_prompts",
+        "_start_profiling",
+        "_stop_profiling",
+        "_save_checkpoint",
+        "_compute_metrics",
+    ):
+        setattr(trainer, name, MagicMock())
+    trainer.step = MagicMock(return_value=SimpleNamespace(keys=[], partition_id="train"))
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.SkipManager"),
+        patch("verl.trainer.ppo.v1.trainer_base.Tracking"),
+        patch("verl.trainer.ppo.v1.trainer_base.ValidationGenerationsLogger"),
+        patch("verl.trainer.ppo.v1.trainer_base.DapoFilteredRewardTableLogger"),
+        patch("verl.trainer.ppo.v1.trainer_base.tq.kv_clear"),
+    ):
+        trainer.fit(None)
+    trainer._save_checkpoint.assert_not_called()
+    assert trainer.step.call_count == 100
+    assert validations == list(range(10, 101, 10))
+    assert not (tmp_path / "checkpoints").exists()
+
+
 @pytest.mark.parametrize("interval", [-1, True, 1.5, "8"])
 def test_metrics_quantile_interval_is_validated_before_logging(interval):
     trainer = _StubTrainer.__new__(_StubTrainer)
