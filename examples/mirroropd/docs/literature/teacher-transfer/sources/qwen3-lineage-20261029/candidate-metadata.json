@@ -1,0 +1,370 @@
+[
+  {
+    "repo": "Qwen/Qwen3-1.7B",
+    "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "weights": [
+      {
+        "name": "model-00001-of-00002.safetensors",
+        "size": 3441185608,
+        "sha256": "169ad53ec313c3a34b06c0809216e4fc072cce444a5d4ff2b59690d064130ed5"
+      },
+      {
+        "name": "model-00002-of-00002.safetensors",
+        "size": 622329984,
+        "sha256": "912becff8d60672aa8628ef08c05898d9adf17c2ad4ae3caf99b065622fdeff9"
+      }
+    ],
+    "card": {
+      "base_model": [
+        "Qwen/Qwen3-1.7B-Base"
+      ],
+      "library_name": "transformers",
+      "license": "apache-2.0",
+      "license_link": "https://huggingface.co/Qwen/Qwen3-1.7B/blob/main/LICENSE",
+      "pipeline_tag": "text-generation"
+    },
+    "files": {
+      "README.md": "257e52c419dac2258852643f18af6c974f21f8c6c1b6f371b6cca6201cf29091",
+      "config.json": "1ddb5b89ebc90dcb417a45c213d818577e65976454d29385c8f6140771d95197",
+      "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2"
+    }
+  },
+  {
+    "repo": "Qwen/Qwen3-1.7B-Base",
+    "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "weights": [
+      {
+        "name": "model.safetensors",
+        "size": 3441185608,
+        "sha256": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+      }
+    ],
+    "card": {
+      "library_name": "transformers",
+      "license": "apache-2.0"
+    },
+    "files": {
+      "README.md": "579b9d7052fa567f439114f01feceed2b06f47d830d06c8ac829f389fd2e39a4",
+      "config.json": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+      "tokenizer_config.json": "3c04ed3ca964ea2f6b2b5faf0dc4d31aec1cb1e8b4bcf63f402d295046b422b5",
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "generation_config.json": "8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8"
+    }
+  },
+  {
+    "repo": "CMU-AIRe/e3-1.7B",
+    "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+    "weights": [
+      {
+        "name": "model.safetensors",
+        "size": 3441185608,
+        "sha256": "4f01b1de1af4f5c46533f6507752cd5c5d56ea2b9371db104d619defa741bb18"
+      }
+    ],
+    "card": {
+      "datasets": [
+        "CMU-AIRe/e3-math-easy",
+        "CMU-AIRe/e3-math-medhard",
+        "CMU-AIRe/hmmt-aime-2025"
+      ],
+      "license": "mit"
+    },
+    "files": {
+      "README.md": "6bcfc431e90f4b54962739c260b7233d448e4830f8fe2025696255b14b2d3644",
+      "config.json": "4be0e512dfb91b3cd859d47d3a26a2c679c3010924de04b046997ae8bd798fb0",
+      "tokenizer_config.json": "253153d0738ceb4c668d2eff957714dd2bea0b56de772a9fdccd96cbf517e6a0",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+      "generation_config.json": "a52b5c482438cc48a8bd0ded9b282f6bb5990be8071e944e9cd57e60921b8550"
+    }
+  },
+  {
+    "repo": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning",
+    "revision": "851ee853018af52495d73a95e3de51470af6f17b",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+    "weights": [
+      {
+        "name": "model.safetensors",
+        "size": 3441185608,
+        "sha256": "e16a475e32c2323376f7bf6a1e5bdabc385849ba3c7678736a4f9be5e3e8a584"
+      }
+    ],
+    "card": {
+      "base_model": "Qwen/Qwen3-1.7B",
+      "datasets": [
+        "gsm8k_train",
+        "math_train"
+      ],
+      "library_name": "transformers",
+      "license": "apache-2.0",
+      "pipeline_tag": "text-generation",
+      "tags": [
+        "reinforcement-learning",
+        "grpo",
+        "math-reasoning",
+        "pipelinerl"
+      ]
+    },
+    "files": {
+      "README.md": "04b9cd4c78cdfd0d0a6da0e1a5bf1e6f0ad2c7dc692b404d93dae794a1b5ea0a",
+      "config.json": "bf19f85f40c5a4aec09eeabfa233ccf56119510fe2653c188caf20b8bdfdc7e5",
+      "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+      "generation_config.json": "787409d8b23543ca6a24affbca01de9251ec48e5b0f268911ca92daabde329bf",
+      "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8"
+    }
+  },
+  {
+    "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+    "revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+    "weights": [
+      {
+        "name": "model.safetensors",
+        "size": 3441185608,
+        "sha256": "535513050c629f4c788e2b360d7f272ebdc421f2c3c31c13eac9d34c0af5416e"
+      }
+    ],
+    "card": {
+      "base_model": [
+        "Qwen/Qwen3-1.7B"
+      ],
+      "datasets": [
+        "openai/gsm8k"
+      ],
+      "library_name": "transformers",
+      "license": "apache-2.0",
+      "tags": [
+        "small-lm",
+        "math",
+        "reasoning",
+        "slm"
+      ]
+    },
+    "files": {
+      "README.md": "e4c23350ef65973e89541a6be78f3b6edf276fd6a79b991edb346f50a70c7a16",
+      "config.json": "a4a451865e8d45a519133031f19cda7d347813159fde1756d63e2beaf67f2288",
+      "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+      "generation_config.json": "3b101cd89b140b757d0bca469e75570e75789a2423ada90a33ec17707dfacf08",
+      "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8"
+    }
+  },
+  {
+    "repo": "Thinking-Space/Qwen3-1.7B-SFT",
+    "revision": "f0065babe7440257d7db331a5aa442ef7c3cf266",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+    "weights": [
+      {
+        "name": "model.safetensors",
+        "size": 4063515640,
+        "sha256": "e894f9b220e27940e535c8a459a3cef9e5d9ad43f76e0fc2f503f972c88b82cb"
+      }
+    ],
+    "card": {
+      "base_model": "Qwen/Qwen3-1.7B-Base",
+      "datasets": [
+        "lllyx/OpenThought3-Qwen3-4B"
+      ],
+      "language": [
+        "en",
+        "zh"
+      ],
+      "license": "other",
+      "pipeline_tag": "text-generation",
+      "tags": [
+        "qwen",
+        "qwen3",
+        "math",
+        "sft",
+        "supervised-fine-tuning",
+        "full-finetuning",
+        "reasoning"
+      ]
+    },
+    "files": {
+      "README.md": "99aefc047ddb9270d384a8810ddc303220b2263a019e574bd7ac395617fe4288",
+      "config.json": "3e3852ec621106cabd4c6d4a40bcf8b506ef8e701f2dbd0bfca906059cd476de",
+      "tokenizer_config.json": "cd5c1909da4950a610a9e3a6cb6763cff0381d91c6f0838855db8d5ae83d6c9f",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+      "generation_config.json": "ed27a766e44393aaccb3f78a72bf95bb2e0248d93d4a0f1a2d7662a38f4961b9",
+      "chat_template.jinja": "87a2728cb8dc9fe424d624542f6060ec05a1d285ebbec578bb078900e33396b5"
+    }
+  },
+  {
+    "repo": "Thinking-Space/Qwen3-1.7B-Base-OPD",
+    "revision": "4ad294531545b51fbcfbd1b0ded387ba237db57c",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
+    "weights": [
+      {
+        "name": "model.safetensors",
+        "size": 3441185608,
+        "sha256": "82092879b1403402bc728372eddc370c05d5ae3400f8c97c0ad3f126cc661219"
+      }
+    ],
+    "card": {
+      "base_model": "Qwen/Qwen3-1.7B-Base",
+      "datasets": [
+        "BytedTsinghua-SIA/DAPO-Math-17k"
+      ],
+      "language": [
+        "en",
+        "zh"
+      ],
+      "library_name": "transformers",
+      "license": "other",
+      "pipeline_tag": "text-generation",
+      "tags": [
+        "qwen",
+        "qwen3",
+        "math",
+        "dapo",
+        "opd",
+        "on-policy-distillation",
+        "knowledge-distillation",
+        "reasoning",
+        "safetensors",
+        "arxiv:2604.13016"
+      ],
+      "base_model_relation": "finetune"
+    },
+    "files": {
+      "README.md": "dc93fb2d1958678034c8789a56746d827b12283b2f7b463893b35b7562829e36",
+      "config.json": "259c65af9971168831dab70a8017a7610729bbb4bb0fa3aca7d0e189c5d1c180",
+      "tokenizer_config.json": "67e5a0a11cd35f9c00ee52e0af4cdc0baa75fea0cb5fce7d1beb251b4621d15c",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "special_tokens_map.json": "6676f091c8bc4d1b50146427cfde92073402866b87b6e39223227931b70083e9",
+      "generation_config.json": "ce8f331663b06a8432e8531185822a55f95cc92cde3ff9518e05e0c73d6918d3",
+      "chat_template.jinja": "87a2728cb8dc9fe424d624542f6060ec05a1d285ebbec578bb078900e33396b5"
+    }
+  },
+  {
+    "repo": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+    "weights": [
+      {
+        "name": "model-00001-of-00003.safetensors",
+        "size": 3957900840,
+        "sha256": "328a91d3122359d5547f9d79521205bc0a46e1f79a792dfe650e99fc2d651223"
+      },
+      {
+        "name": "model-00002-of-00003.safetensors",
+        "size": 3987450520,
+        "sha256": "6cd087b316306a68c562436b5492edbcf6e16c6dba3a1308279caa5a58e21ca5"
+      },
+      {
+        "name": "model-00003-of-00003.safetensors",
+        "size": 99630640,
+        "sha256": "e4bf436957184f4eeb86a80e9db394503f1f56446b2e6b7edeac5b81470f4ca1"
+      }
+    ],
+    "card": {
+      "base_model": [
+        "Qwen/Qwen3-4B-Base"
+      ],
+      "library_name": "transformers",
+      "license": "apache-2.0",
+      "license_link": "https://huggingface.co/Qwen/Qwen3-4B/blob/main/LICENSE",
+      "pipeline_tag": "text-generation"
+    },
+    "files": {
+      "README.md": "71add1cd091c309b1cb1a6b943f2476eb2b004124b3bd1d32dcd0b24cc1abc47",
+      "config.json": "8ba006f74fecfaaeb392872a60f4a480e7ec9860153d2e1b769ec81f9a147f8a",
+      "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2"
+    }
+  },
+  {
+    "repo": "Qwen/Qwen3-8B",
+    "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+    "weights": [
+      {
+        "name": "model-00001-of-00005.safetensors",
+        "size": 3996250744,
+        "sha256": "31d6a825ae35f11fb85b195b4c42c146c051e446433125a215336abdf95cbf5f"
+      },
+      {
+        "name": "model-00002-of-00005.safetensors",
+        "size": 3993160032,
+        "sha256": "5991236cea6fe21f3d43cab0f0e84448734fbbe0789816202989f2ddc9d18282"
+      },
+      {
+        "name": "model-00003-of-00005.safetensors",
+        "size": 3959604768,
+        "sha256": "c5185c4794be2d8a9784d5753c9922db38df478ce11f9ed0b415b7304d896836"
+      },
+      {
+        "name": "model-00004-of-00005.safetensors",
+        "size": 3187841392,
+        "sha256": "b5ee7de71fbf17db3d5704e0c8f2bc7d005ca9e1d7ca2aeb19827b0cfcaa917a"
+      },
+      {
+        "name": "model-00005-of-00005.safetensors",
+        "size": 1244659840,
+        "sha256": "20c2d6366ab85c90786ccdd829cd2b9e7d30ef3b2ebbb998280e7e4014b542ff"
+      }
+    ],
+    "card": {
+      "base_model": [
+        "Qwen/Qwen3-8B-Base"
+      ],
+      "library_name": "transformers",
+      "license": "apache-2.0",
+      "license_link": "https://huggingface.co/Qwen/Qwen3-8B/blob/main/LICENSE",
+      "pipeline_tag": "text-generation"
+    },
+    "files": {
+      "README.md": "0f36caaff9c2516411a7738db384606263ba653c1e63e61d72f511606164d5a6",
+      "config.json": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30",
+      "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2"
+    }
+  },
+  {
+    "repo": "Qwen/Qwen3-4B-Thinking-2507",
+    "revision": "768f209d9ea81521153ed38c47d515654e938aea",
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/discovery/models/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea",
+    "weights": [
+      {
+        "name": "model-00001-of-00003.safetensors",
+        "size": 3957900840,
+        "sha256": "98178c1cddbca8ad76102afdbf76e4df79b64b82377ad4dca34c755cac00571a"
+      },
+      {
+        "name": "model-00002-of-00003.safetensors",
+        "size": 3987450520,
+        "sha256": "57b5bd1f667d420350f169342a90b50e5ffc2aa202ba1819da1af3367ff2261f"
+      },
+      {
+        "name": "model-00003-of-00003.safetensors",
+        "size": 99630640,
+        "sha256": "e3cccb84e8926f3f18c334465639939a68af310b0729938fccc2de66a9a31953"
+      }
+    ],
+    "card": {
+      "library_name": "transformers",
+      "license": "apache-2.0",
+      "license_link": "https://huggingface.co/Qwen/Qwen3-4B-Thinking-2507/blob/main/LICENSE",
+      "pipeline_tag": "text-generation"
+    },
+    "files": {
+      "README.md": "6a608c737decd22569edf9609499d142021a65e942999890704a880bc804d163",
+      "config.json": "5beea1a4a34c62782bfb2f911c606741a3bab8f92d80a118fa053c28af12e8ba",
+      "tokenizer_config.json": "60adcfc35f5f251e19a196ec977b4ca0fcfb534852911b3196d68d5e3b146aa0",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2"
+    }
+  }
+]

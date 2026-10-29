@@ -8,4 +8,6 @@
 - `rollout-policy/`：生成分布设计的原始检索与数值参考。
 - `infra/`：公开工程实现及后端审阅。
 
+师生迁移研究可从[蒸馏边界的论文对照与预算依据](teacher-transfer/2026-10-28-蒸馏边界实验的论文对照与预算依据.md)进入：已有配对实验、早期分化、step 含义，以及完整原始检索记录。
+
 项目自己的数学推导归[theory](../theory/README.md)，实验计划与结果归[experiments](../experiments/README.md)，当前接口归[infra](../infra/README.md)。第三方来源快照保持原文，不因文档重构改写内容。
