@@ -16,6 +16,7 @@ import threading
 import time
 import traceback
 import uuid
+from collections import deque
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
 from datetime import datetime, timezone
 from pathlib import Path
@@ -95,9 +96,9 @@ def redact(text):
 def scrub(value):
     if isinstance(value, dict):
         return {key: scrub(item) for key, item in value.items()}
-    if isinstance(value, (list, tuple)):
+    if isinstance(value, list | tuple):
         return [scrub(item) for item in value]
-    return redact(value) if isinstance(value, (str, Path)) else value
+    return redact(value) if isinstance(value, str | Path) else value
 
 
 class Tee:
@@ -169,7 +170,15 @@ class Journal:
         while not stop.wait(15):
             with self.mutex:
                 phase = self.stack[-1]["name"] if self.stack else self.data["action"]
-                self.emit(f"WAIT {phase}; total elapsed {time.monotonic() - self.started:.0f}s")
+                current = time.monotonic()
+                progress = getattr(self, "process_progress", None)
+                suffix = ""
+                if progress:
+                    suffix = (
+                        f"; command elapsed {current - progress['started']:.0f}s"
+                        f"; no new output {current - progress['last']:.0f}s"
+                    )
+                self.emit(f"WAIT {phase}; total elapsed {current - self.started:.0f}s{suffix}")
                 self.save()
 
 
@@ -292,11 +301,17 @@ def stop_process(process):
 def streamed(command, journal, **kwargs):
     check = kwargs.pop("check", False)
     timeout = kwargs.pop("timeout", None)
+    idle_timeout = kwargs.pop("idle_timeout", None)
     on_output = kwargs.pop("on_output", None)
     process = subprocess.Popen(
         command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, start_new_session=True, **kwargs
     )
     started = time.monotonic()
+    last_progress = started
+    if journal:
+        journal.process_progress = {"started": started, "last": started}
+    progress_lines = deque(maxlen=256)
+    progress_buffer = ""
     decoder = codecs.getincrementaldecoder("utf-8")("replace")
     pending = ""
     tail = ""
@@ -320,7 +335,14 @@ def streamed(command, journal, **kwargs):
             selector.register(process.stdout, selectors.EVENT_READ)
             while selector.get_map():
                 if timeout is not None and time.monotonic() - started >= timeout:
-                    raise subprocess.TimeoutExpired(command, timeout)
+                    raise subprocess.TimeoutExpired(command, timeout, output=tail)
+                if idle_timeout is not None and time.monotonic() - last_progress >= idle_timeout:
+                    raise subprocess.TimeoutExpired(
+                        command,
+                        idle_timeout,
+                        output=tail,
+                        stderr=f"No new SDK output for {idle_timeout}s (idle timeout)",
+                    )
                 events = selector.select(timeout=0.2)
                 for key, _ in events:
                     chunk = os.read(key.fd, 65536)
@@ -329,6 +351,16 @@ def streamed(command, journal, **kwargs):
                         selector.unregister(key.fileobj)
                         break
                     decoded = decoder.decode(chunk)
+                    progress_buffer += decoded
+                    lines = re.split(r"[\r\n]", progress_buffer)
+                    progress_buffer = lines.pop()[-8192:]
+                    for line in lines:
+                        line = ANSI.sub("", line).strip()
+                        if line and line not in progress_lines:
+                            last_progress = time.monotonic()
+                            if journal:
+                                journal.process_progress["last"] = last_progress
+                            progress_lines.append(line)
                     if on_output:
                         on_output(decoded)
                     tail = (tail + decoded)[-65536:]
@@ -352,6 +384,8 @@ def streamed(command, journal, **kwargs):
         raise
     finally:
         process.stdout.close()
+        if journal:
+            journal.process_progress = None
     if check and result.returncode:
         raise subprocess.CalledProcessError(result.returncode, command, output=tail)
     return result

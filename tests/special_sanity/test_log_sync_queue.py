@@ -75,6 +75,19 @@ class QueueTest(unittest.TestCase):
         setting = patch.dict(os.environ, MIRROROPD_WANDB_BIN=str(self.cli))
         setting.start()
         self.addCleanup(setting.stop)
+        probe = patch.object(log_sync, "cloud_probe", side_effect=self.fake_probe)
+        probe.start()
+        self.addCleanup(probe.stop)
+
+    @staticmethod
+    def fake_probe(command, file, target, directory, worker_fd):
+        complete = file.with_name(file.name + ".synced").exists()
+        return {
+            "action": "covered" if complete else "upload",
+            "reason": "test cloud",
+            "target": {**target, "entity": "test", "project": "test"},
+            "exit_code": 0,
+        }
 
     def write_run(self, name="offline-run-a-good", payload=b"data"):
         run = self.destination / name
@@ -115,7 +128,7 @@ class QueueTest(unittest.TestCase):
     def test_failed_task_survives_a_new_archive_and_reuses_cache(self):
         self.write_run("offline-run-z-bad")
         self.enqueue()
-        with patch.dict(os.environ, FAKE_FAIL="1"), self.assertRaisesRegex(ValueError, "incomplete"):
+        with patch.dict(os.environ, FAKE_FAIL="1"), self.assertRaisesRegex(ValueError, "SDK batch failed"):
             log_sync.upload(self.repo)
         failed = self.jobs()[0]
         cache = Path(failed["cache"])
@@ -303,6 +316,55 @@ class QueueTest(unittest.TestCase):
         for timeout in (float("nan"), float("inf"), -1):
             with self.subTest(timeout=timeout), self.assertRaises(ValueError):
                 log_sync.upload(self.repo, timeout=timeout)
+
+    def test_other_machine_history_is_adopted_without_calling_sdk(self):
+        self.write_run()
+        self.enqueue()
+        proof = {"action": "covered", "reason": "all rows match", "duplicate_rows": 0, "exit_code": 0}
+        with patch.object(log_sync, "cloud_probe", return_value=proof):
+            log_sync.upload(self.repo)
+        self.assertEqual(self.jobs()[0]["status"], "covered")
+        self.assertFalse((Path(self.jobs()[0]["cache"]) / "sdk-attempt.txt").exists())
+
+    def test_existing_partial_run_is_never_replayed_even_with_retry(self):
+        self.write_run()
+        self.enqueue()
+        with patch.object(log_sync, "cloud_probe", return_value={"action": "blocked", "reason": "missing rows"}):
+            with self.assertRaisesRegex(ValueError, "unresolved"):
+                log_sync.upload(self.repo, retry=True)
+        self.assertEqual(self.jobs()[0]["status"], "failed")
+        self.assertFalse((Path(self.jobs()[0]["cache"]) / "sdk-attempt.txt").exists())
+
+    def test_preflight_network_failure_stops_before_cloud_writes(self):
+        self.write_run()
+        self.write_run("offline-run-z-bad")
+        self.enqueue()
+        with patch.object(log_sync, "cloud_probe", side_effect=ValueError("401 unauthorized")):
+            with self.assertRaisesRegex(ValueError, "preflight failed"):
+                log_sync.upload(self.repo)
+        self.assertEqual([j["status"] for j in self.jobs()], ["failed", "pending"])
+
+    def test_post_upload_check_is_required(self):
+        self.write_run()
+        self.enqueue()
+        with patch.object(
+            log_sync,
+            "cloud_probe",
+            side_effect=[
+                {"action": "upload", "target": {"entity": "e", "project": "p", "base_url": "https://api.wandb.ai"}},
+                {"action": "blocked"},
+            ],
+        ):
+            with self.assertRaises(ValueError):
+                log_sync.upload(self.repo)
+        self.assertEqual(self.jobs()[0]["status"], "failed")
+
+    def test_explicit_netrc_overrides_ambient_key(self):
+        path = self.base / "netrc"
+        path.write_text("machine api.wandb.ai login user password explicit-test-value\n")
+        with patch.dict(os.environ, MIRROROPD_UPLOAD_NETRC=str(path), WANDB_API_KEY="ambient-test-value"):
+            env = log_sync.upload_environment({"base_url": "https://api.wandb.ai"})
+        self.assertEqual(env["WANDB_API_KEY"], "explicit-test-value")
 
 
 if __name__ == "__main__":

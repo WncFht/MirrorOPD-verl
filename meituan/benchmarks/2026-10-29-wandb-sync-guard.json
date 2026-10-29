@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-29",
+  "platform": "Linux",
+  "sdk": "0.31.0",
+  "scope": "sync transport validation, no training",
+  "read_only_experiments": [
+    {
+      "target": {
+        "entity": "wncfht",
+        "project": "MirrorOPD-verl",
+        "base_url": "https://api.wandb.ai",
+        "run_id": "7rwc1ioz"
+      },
+      "partial": false,
+      "exit_code": 0,
+      "local_rows": 4352,
+      "cloud_rows": 4352,
+      "duplicate_rows": 0,
+      "missing_rows": 0,
+      "conflicting_steps": [],
+      "covered": true,
+      "url": "https://forge.coreweave.com/wandb/wncfht/MirrorOPD-verl/runs/7rwc1ioz",
+      "cloud_state": "finished",
+      "action": "covered",
+      "reason": "Cloud history covers every local row; no SDK replay",
+      "elapsed_seconds": 41.68987130373716
+    },
+    {
+      "target": {
+        "entity": "wncfht",
+        "project": "MirrorOPD-verl",
+        "base_url": "https://api.wandb.ai",
+        "run_id": "6vv5o9b8"
+      },
+      "partial": false,
+      "exit_code": 0,
+      "local_rows": 4352,
+      "cloud_rows": 4352,
+      "duplicate_rows": 0,
+      "missing_rows": 0,
+      "conflicting_steps": [],
+      "covered": false,
+      "cloud_history_line_count": 8653,
+      "unaccounted_rows": 4301,
+      "url": "https://forge.coreweave.com/wandb/wncfht/MirrorOPD-verl/runs/6vv5o9b8",
+      "cloud_state": "finished",
+      "action": "blocked",
+      "reason": "Existing cloud history has duplicate/unaccounted/missing/conflicting rows. Full replay would append duplicates; preserve the raw log and repair this run separately. RETRY=1 does not bypass this check.",
+      "elapsed_seconds": 25.523825578391552
+    },
+    {
+      "target": {
+        "entity": "wncfht",
+        "project": "MirrorOPD-verl",
+        "base_url": "https://api.wandb.ai",
+        "run_id": "k7db6qxl"
+      },
+      "partial": true,
+      "exit_code": null,
+      "action": "incomplete",
+      "reason": "Wait for a snapshot with complete records and an exit record",
+      "elapsed_seconds": 5.569622293114662
+    }
+  ],
+  "independent_queues_e2e": {
+    "run": "g726us24",
+    "results": [
+      {
+        "machine": "a",
+        "counts": {
+          "succeeded": 1
+        },
+        "elapsed_seconds": 31.52384428679943
+      },
+      {
+        "machine": "b",
+        "counts": {
+          "covered": 1
+        },
+        "elapsed_seconds": 12.673509337008
+      }
+    ],
+    "entity": "wncfht",
+    "project": "MirrorOPD-sync-validation",
+    "expected_history_rows": 3,
+    "expected_duplicate_rows": 0
+  },
+  "limitations": [
+    "Mac network was not reproduced",
+    "E51 server count differs from core scan; upload blocked, existing cloud history unchanged",
+    "covered verifies history only, not console/system/artifact delivery",
+    "Cross-machine simultaneous uploads are not atomically locked"
+  ],
+  "mac_log_observations": {
+    "receive_seconds": 15.4,
+    "first_batch_timeout_seconds": 900,
+    "E49_append_offset": 4353,
+    "E50_append_offset": 4352,
+    "E51_append_offset": 8653
+  },
+  "rejected_preflight_approaches": [
+    "Unfiltered wide history scan used excessive memory",
+    "Small step windows over sparse evaluations caused empty requests",
+    "Core scan alone hid repeated physical history rows"
+  ],
+  "automated_tests": {
+    "total": 69,
+    "failures": 0,
+    "suites": {
+      "queue": 25,
+      "observability": 14,
+      "git_publish": 18,
+      "preflight": 12
+    }
+  }
+}

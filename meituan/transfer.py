@@ -351,6 +351,7 @@ def unpack(args, snap_dir):
                         repo,
                         concurrency=int(os.environ.get("MIRROROPD_UPLOAD_JOBS", "2")),
                         timeout=float(os.environ.get("MIRROROPD_UPLOAD_TIMEOUT", "900")),
+                        idle_timeout=float(os.environ.get("MIRROROPD_UPLOAD_IDLE_TIMEOUT", "120")),
                         strict=os.environ.get("MIRROROPD_UPLOAD_STRICT", "0") == "1",
                     )
                 else:
