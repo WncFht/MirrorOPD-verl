@@ -8,6 +8,21 @@
 
 工具在每个 backend 计时前检查 loss 和 hidden/head VJP，沿用绝对 loss 误差小于 1e-4、梯度相对 L2 误差小于 0.02 的随机输入门槛；近目标和小梯度仍由独立 FP64 CUDA 测试覆盖，不能用随机输入检查代替。每个形状预热两次、测量五次，已有输出文件会被拒绝。`--profile` 在计时结束后另做一次 CPU/CUDA trace，输出独立的 `.trace.json.gz`，trace 时间不混入性能样本。扩展的异构形状与 trace 入口正在 GPU 验证，下面的历史性能数字保持原测量身份。
 
+## R1 配对的算子开发测量
+
+2026-10-30，在物理 GPU 6 的独占开发队列中复测当前 precompute 与 fused 实现。Learner head 为 vocab151936、hidden1536，BF16 输入与 FP32 归约；先通过 79 项 CUDA 数值测试，覆盖近目标、小梯度、BF16、非整齐词表和额外 teacher 输出行等案例。运行证据位于工作区 `runs/vllm-fusion-20261029/r1-fused-operator-checks-01/` 与 `r1-fused-shapes-02/`。
+
+4096 位置的一次性 dense autograd 参考在 80GB H800 上 OOM，原始失败保留。后续用 512 位置的 dense autograd 检查 loss/VJP，大规模以普通 precompute 检查系统一致性；后者共享部分实现，不能单独充当独立数学 oracle。原误差门槛保持不变。
+
+| JustRL head 形状，4096 位置 | 中位墙钟（ms） | Allocated 峰值（GiB） |
+| --------------------------- | -------------: | --------------------: |
+| precompute，chunk512        |        165.861 |                 5.731 |
+| fused，chunk512             |         26.491 |                 2.834 |
+| precompute，chunk1024       |        159.188 |                 9.649 |
+| fused，chunk1024            |         23.234 |                 3.850 |
+
+每个 backend 预热两次、测量五次，保留全部样本。单独的 chunk512 trace 中，GPU kernel 数为 1299/115，kernel duration 总和为 157.774/26.070 ms；这是 head-only trace，不是完整 outer 时间。512 位置的独立 dense 对照及 4096 位置的一致性检查均通过。Polaris 的 hidden3584/vocab152064 异构 head 也完成全部对照：4096 位置、chunk512 的普通/fused 中位数为 185.635/46.651 ms，chunk1024 为 176.078/40.662 ms；fused allocated 峰值分别为 3.429/4.447 GiB。两组 × 两种 chunk × 512/4096 位置共八组均通过所声明范围的检查。真实模型更新、端到端吞吐和最终参数尚未据此验收，J 的 fused/chunk1024 完整训练 profile 已启动。
+
 ## 证据范围
 
 | 测量                       | 输入与实现身份                                                                        | 原始证据                                                                                                                                                                            |
