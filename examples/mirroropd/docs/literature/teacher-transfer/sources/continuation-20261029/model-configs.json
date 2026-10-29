@@ -1,0 +1,295 @@
+{
+  "date": "2026-10-29",
+  "scope": "Model metadata/config only; no weights, tokenizer audit or GPU execution",
+  "models": [
+    {
+      "repo": "Qwen/Qwen2.5-Math-1.5B",
+      "revision": "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2",
+      "base_model": "Qwen/Qwen2.5-1.5B",
+      "config": {
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "attention_dropout": 0.0,
+        "bos_token_id": 151643,
+        "eos_token_id": 151643,
+        "hidden_act": "silu",
+        "hidden_size": 1536,
+        "initializer_range": 0.02,
+        "intermediate_size": 8960,
+        "max_position_embeddings": 4096,
+        "max_window_layers": 21,
+        "model_type": "qwen2",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 2,
+        "rms_norm_eps": 1e-06,
+        "rope_theta": 10000,
+        "sliding_window": 4096,
+        "tie_word_embeddings": true,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.44.0",
+        "use_cache": true,
+        "use_mrope": false,
+        "use_sliding_window": false,
+        "vocab_size": 151936
+      },
+      "source": "https://huggingface.co/Qwen/Qwen2.5-Math-1.5B/resolve/4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2/config.json"
+    },
+    {
+      "repo": "Qwen/Qwen2.5-Math-7B",
+      "revision": "b101308fe89651ea5ce025f25317fea6fc07e96e",
+      "base_model": "Qwen/Qwen2.5-7B",
+      "config": {
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "attention_dropout": 0.0,
+        "bos_token_id": 151643,
+        "eos_token_id": 151643,
+        "hidden_act": "silu",
+        "hidden_size": 3584,
+        "initializer_range": 0.02,
+        "intermediate_size": 18944,
+        "max_position_embeddings": 4096,
+        "max_window_layers": 28,
+        "model_type": "qwen2",
+        "num_attention_heads": 28,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 4,
+        "rms_norm_eps": 1e-06,
+        "rope_theta": 10000,
+        "sliding_window": 4096,
+        "tie_word_embeddings": false,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.44.0",
+        "use_cache": true,
+        "use_mrope": false,
+        "use_sliding_window": false,
+        "vocab_size": 152064
+      },
+      "source": "https://huggingface.co/Qwen/Qwen2.5-Math-7B/resolve/b101308fe89651ea5ce025f25317fea6fc07e96e/config.json"
+    },
+    {
+      "repo": "agentica-org/DeepScaleR-1.5B-Preview",
+      "revision": "e3f524ce413a296b4d388e7560dd5c82c1c56725",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+      ],
+      "config": {
+        "_name_or_path": "agentica-org/DeepScaleR-1.5B-Preview",
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "attention_dropout": 0.0,
+        "bos_token_id": 151646,
+        "eos_token_id": 151643,
+        "hidden_act": "silu",
+        "hidden_size": 1536,
+        "initializer_range": 0.02,
+        "intermediate_size": 8960,
+        "max_position_embeddings": 131072,
+        "max_window_layers": 21,
+        "model_type": "qwen2",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 2,
+        "pad_token_id": 151643,
+        "rms_norm_eps": 1e-06,
+        "rope_scaling": null,
+        "rope_theta": 10000,
+        "sliding_window": null,
+        "tie_word_embeddings": false,
+        "torch_dtype": "float32",
+        "transformers_version": "4.47.1",
+        "use_cache": true,
+        "use_mrope": false,
+        "use_sliding_window": false,
+        "vocab_size": 151936
+      },
+      "source": "https://huggingface.co/agentica-org/DeepScaleR-1.5B-Preview/resolve/e3f524ce413a296b4d388e7560dd5c82c1c56725/config.json"
+    },
+    {
+      "repo": "agentica-org/DeepCoder-1.5B-Preview",
+      "revision": "103033da54f104b0d0a3570547fb3721fba99962",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+      ],
+      "config": {
+        "_name_or_path": "agentica-org/DeepCoder-1.5B-Preview",
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "attention_dropout": 0.0,
+        "bos_token_id": 151646,
+        "eos_token_id": 151643,
+        "hidden_act": "silu",
+        "hidden_size": 1536,
+        "initializer_range": 0.02,
+        "intermediate_size": 8960,
+        "max_position_embeddings": 131072,
+        "max_window_layers": 21,
+        "model_type": "qwen2",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 2,
+        "pad_token_id": 151643,
+        "rms_norm_eps": 1e-06,
+        "rope_scaling": null,
+        "rope_theta": 10000,
+        "sliding_window": null,
+        "tie_word_embeddings": false,
+        "torch_dtype": "float32",
+        "transformers_version": "4.49.0",
+        "use_cache": true,
+        "use_mrope": false,
+        "use_sliding_window": false,
+        "vocab_size": 151936
+      },
+      "source": "https://huggingface.co/agentica-org/DeepCoder-1.5B-Preview/resolve/103033da54f104b0d0a3570547fb3721fba99962/config.json"
+    },
+    {
+      "repo": "UCSC-VLAA/STAR1-R1-Distill-1.5B",
+      "revision": "f865d7ac5136370518986a5273f4d731d7a0f254",
+      "base_model": [
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+      ],
+      "config": {
+        "_name_or_path": "UCSC-VLAA/STAR1-R1-Distill-1.5B",
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "attention_dropout": 0.0,
+        "bos_token_id": 151643,
+        "eos_token_id": 151643,
+        "hidden_act": "silu",
+        "hidden_size": 1536,
+        "initializer_range": 0.02,
+        "intermediate_size": 8960,
+        "max_position_embeddings": 131072,
+        "max_window_layers": 21,
+        "model_type": "qwen2",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 2,
+        "rms_norm_eps": 1e-06,
+        "rope_scaling": null,
+        "rope_theta": 10000,
+        "sliding_window": null,
+        "tie_word_embeddings": false,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.48.3",
+        "use_cache": true,
+        "use_mrope": false,
+        "use_sliding_window": false,
+        "vocab_size": 151936
+      },
+      "source": "https://huggingface.co/UCSC-VLAA/STAR1-R1-Distill-1.5B/resolve/f865d7ac5136370518986a5273f4d731d7a0f254/config.json"
+    },
+    {
+      "repo": "nvidia/OpenMath-Nemotron-1.5B",
+      "revision": "59280da0e5508b98f4ae90e8886442f28ed561cb",
+      "base_model": [
+        "Qwen/Qwen2.5-Math-1.5B"
+      ],
+      "config": {
+        "_name_or_path": "nvidia/OpenMath-Nemotron-1.5B",
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "attention_dropout": 0.0,
+        "bos_token_id": 151643,
+        "eos_token_id": 151645,
+        "hidden_act": "silu",
+        "hidden_size": 1536,
+        "initializer_range": 0.02,
+        "intermediate_size": 8960,
+        "max_position_embeddings": 131072,
+        "max_window_layers": 21,
+        "model_type": "qwen2",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 2,
+        "rms_norm_eps": 1e-06,
+        "rope_scaling": null,
+        "rope_theta": 500000.0,
+        "sliding_window": null,
+        "tie_word_embeddings": true,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.47.1",
+        "use_cache": true,
+        "use_sliding_window": false,
+        "vocab_size": 151936
+      },
+      "source": "https://huggingface.co/nvidia/OpenMath-Nemotron-1.5B/resolve/59280da0e5508b98f4ae90e8886442f28ed561cb/config.json"
+    },
+    {
+      "repo": "WeiboAI/VibeThinker-1.5B",
+      "revision": "9614bcb0264f03f18f2fa2406c4a9754635f51de",
+      "base_model": [
+        "Qwen/Qwen2.5-Math-1.5B"
+      ],
+      "config": {
+        "_attn_implementation_autoset": true,
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "attention_dropout": 0.0,
+        "dtype": "bfloat16",
+        "eos_token_id": 151643,
+        "hidden_act": "silu",
+        "hidden_size": 1536,
+        "initializer_range": 0.02,
+        "intermediate_size": 8960,
+        "layer_types": [
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention",
+          "full_attention"
+        ],
+        "max_position_embeddings": 131072,
+        "max_window_layers": 21,
+        "model_type": "qwen2",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 2,
+        "pad_token_id": 151643,
+        "rms_norm_eps": 1e-06,
+        "rope_scaling": null,
+        "rope_theta": 640000,
+        "sliding_window": null,
+        "tie_word_embeddings": true,
+        "transformers_version": "4.56.1",
+        "use_cache": false,
+        "use_mrope": false,
+        "use_sliding_window": false,
+        "vocab_size": 151936
+      },
+      "source": "https://huggingface.co/WeiboAI/VibeThinker-1.5B/resolve/9614bcb0264f03f18f2fa2406c4a9754635f51de/config.json"
+    }
+  ]
+}
