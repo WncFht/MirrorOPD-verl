@@ -2,9 +2,9 @@
 
 这些工具服务于[双融合实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)。当前验收尚未全部完成；工具可运行不等于对应 gate 已通过。
 
-所有 GPU 入口限定物理 GPU 0–3。模型和数据均从本地加载，输出目录必须是新目录。推荐通过 shell 入口运行；它们设置了本机隔离 Python 环境与 CUDA 兼容库。
+当前开发使用下文“原生 vLLM 开发入口”，只分配物理 GPU 6、7。模型和数据均从本地加载，输出目录必须是新目录。旧 HF 性能、回归及短负载脚本仍保留历史 GPU 0–3 绑定，当前资源条件下不要运行；下面的旧 HF 命令仅说明历史证据的生成方式。
 
-## 正式性能矩阵
+## 历史 HF 性能矩阵
 
 ```bash
 bash examples/mirroropd/benchmarks/fusion/run_fusion_benchmark_fsdp2.sh dense-base my-run
@@ -110,7 +110,7 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_native_lifecycle_fsdp2.sh \
 
 `audit_native_lifecycle.py --previous-actor-checkpoint <恢复前 actor 目录>` 可同时核对恢复前后保存的 CPU 参数分片。它检查真实数值变化并分别报告 FP32 状态和 BF16 推理视图中的变化，不能仅以更新计数推进推断权重已变化。`probe_hf_reference.py` 提供独立 HF BF16/FlashAttention 全前缀参考；其分布距离与选中概率差异用于跨后端诊断，不沿用旧 HF 阈值作为 native 引擎门槛，该新增工具仍待 GPU 执行。
 
-Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已核对，组合模型保留不同宽度的原生 head，只对生成视图对齐并施加共同合法支持。RKL scorer 的完整 teacher head 不变。相关 CPU 检查已通过，真实 Qwen2 GPU 生成、refit 与训练仍待验收。R1 的独立生成探针须显式传入 `--stop-token-ids 151643`，不能沿用 Qwen3 的默认停止集合。实验设置见[E20 五种前缀对照](../../docs/experiments/rollout-policy/2026-10-30-E20设置下的五种前缀对照.md)。
+Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已核对，组合模型保留不同宽度的原生 head，只对生成视图对齐并施加共同合法支持。RKL scorer 的完整 teacher head 不变。两组真实配对已通过短生成、采样 oracle、独立 native 组件对照、定向 refit 与 batch2/cap32/reuse16 两轮训练；正式负载和全部五种来源仍待验收，证据见[当前验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md#qwen2-实验配对)。R1 的独立生成探针须显式传入 `--stop-token-ids 151643`，不能沿用 Qwen3 的默认停止集合。实验设置见[E20 五种前缀对照](../../docs/experiments/rollout-policy/2026-10-30-E20设置下的五种前缀对照.md)。
 
 ## E20 五种前缀入口
 
@@ -127,7 +127,7 @@ CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusi
 
 `FUSION_MAX_NUM_SEQS/FUSION_KV_BYTES/FUSION_TP` 控制 LM 执行；其他来源使用 TP1 replica。`PREFIX_PPO_TOKEN_BUDGET`、`PREFIX_TEACHER_TOKEN_BUDGET`、`PREFIX_ROLLOUT_SEQS`、`PREFIX_ROLLOUT_MEMORY_FRACTION`、`PREFIX_RAY_CPUS`、`PREFIX_AGENT_WORKERS`、`PREFIX_REWARD_WORKERS`、`PREFIX_STORAGE_UNITS`、`PREFIX_OBJECT_STORE_BYTES` 和 full-vocab 的 `PREFIX_FULL_KL_BACKEND/PREFIX_TOKEN_CHUNK/PREFIX_VOCAB_CHUNK` 是待实测的执行参数。默认值是候选，不是已确认的最优配置；学习超参数由入口固定。
 
-融合接口始终返回有限、完整的选中 token 行为 log-prob，即使 full-vocab learner 关闭了 rollout log-prob 收集。缺失、长度不符或非有限值会拒绝该响应；greedy 的行为 log-prob 在完整性检查后写为 0。此修复已做 CPU 协议回归，仍需实际服务调用复验。
+融合接口始终返回有限、完整的选中 token 行为 log-prob，即使 full-vocab learner 关闭了 rollout log-prob 收集。缺失、长度不符或非有限值会拒绝该响应；greedy 的行为 log-prob 在完整性检查后写为 0。此修复已通过 CPU 协议回归与两组真实短训练的服务调用；完整负载复验仍在进行。
 
 独立 native 推理 trace 使用 `probe_vllm.py --profile --alphas 0.5 --repeats 1 --skip-lifecycle-audit`：先完整预热一批，再按 `--profile-delay` 与 `--profile-iterations` 记录有限的 engine 迭代窗口。迭代编号不是每条请求的 token 位置，不能据此声称所有请求都处在同一历史长度。Profile 时间不计为正式吞吐验收。
 
@@ -136,3 +136,15 @@ CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusi
 `PREFIX_TEACHER_LAYER_OFFLOAD=true` 是已有 FSDP2 自动逐层 CPU offload 的对照开关，默认 false 保留 E20。它会把搬运移入 forward，可能在每个计算微批重复 H2D；应比较完整 teacher 阶段及 outer，不能只看独立 transfer 字段下降。以上 profiler 与 offload 对照入口已解析配置，GPU 效果仍待实际测量。
 
 资源监控额外记录可用的 SM/显存时钟、功耗和 NVML PCIe KB/s 计数；不支持的可选计数写为 null，设备故障仍报错。容器 CPU 配额与节流计数属于共享容器，不归因于单个实验，用于解释同期资源竞争。
+
+完成运行后执行 `audit_prefix_study.py`，从每次更新记录、每轮 plan、接收版本与资源区间核对结果。`--exit-code` 必须填写运行控制器实际观测的退出码；不能根据日志末尾推定为 0。`--mode smoke` 只接受 batch2/cap32、两轮及 reuse16，`profile` 接受完整负载预跑，只有通过 `formal` 的 40 轮/640 次更新才设置 `formal_complete=true`。以下命令已核对完成的 J 组短训练；输出路径须唯一：
+
+```bash
+CUDA_VISIBLE_DEVICES='' PYTHONPATH=. ../envs/mirroropd-fusion/bin/python \
+  examples/mirroropd/benchmarks/fusion/audit_prefix_study.py outputs/prefix-smoke-J-LM-r1-wire02 \
+  --reference ../wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/E20/config.json \
+  --pair J --arm LM --mode smoke --exit-code 0 \
+  --out ../runs/vllm-fusion-20261029/r1-J-wire02-completion-audit.json
+```
+
+审计同时拒绝意外验证、模型 checkpoint、跳过更新和非有限 loss/梯度，保留证据文件 SHA-256、逐更新曲线和阶段耗时。嵌套时间区间不能直接相加；短训练审计不能替代长负载性能验收。

@@ -14,7 +14,7 @@ from verl.workers.config import RolloutConfig
 from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 
-def check(config, reference, pair, arm, outers=40):
+def check(config, reference, pair, arm, outers=40, *, smoke=False):
     errors = []
     try:
         omega_conf_to_dataclass(OmegaConf.create(config["actor_rollout_ref"]["rollout"]), dataclass_type=RolloutConfig)
@@ -59,16 +59,25 @@ def check(config, reference, pair, arm, outers=40):
         "algorithm.filter_groups.enable",
         "algorithm.use_kl_in_reward",
     ]
+    smoke_budget = {
+        "data.train_batch_size": 2,
+        "data.max_prompt_length": 1024,
+        "data.max_response_length": 32,
+        "actor_rollout_ref.actor.ppo_mini_batch_size": 2,
+    }
     for path in paths:
-        if get(config, path) != get(reference, path):
-            errors.append(f"{path}: {get(config, path)!r} != E20 {get(reference, path)!r}")
+        expected_value = smoke_budget[path] if smoke and path in smoke_budget else get(reference, path)
+        if get(config, path) != expected_value:
+            errors.append(f"{path}: {get(config, path)!r} != expected {expected_value!r}")
+    if smoke and outers != 2:
+        errors.append("Wiring smoke must use two outers and is not formal acceptance")
     required = {
         "trainer.total_training_steps": outers,
         "trainer.val_before_train": False,
         "trainer.test_freq": -1,
         "trainer.save_freq": -1,
         "trainer.resume_mode": "disable",
-        "actor_rollout_ref.rollout.max_model_len": 11264,
+        "actor_rollout_ref.rollout.max_model_len": 1056 if smoke else 11264,
         "actor_rollout_ref.rollout.stop_token_ids": [151643],
         "actor_rollout_ref.rollout.seed": 42,
         "actor_rollout_ref.actor.fsdp_config.seed": 42,
@@ -110,6 +119,7 @@ def check(config, reference, pair, arm, outers=40):
         "arm": arm,
         "outers": outers,
         "expected_updates": outers * 16,
+        "scope": "short wiring only" if smoke else "E20-derived learning settings",
         "full_vocab_execution": config["distillation"]["distillation_loss"]["full_vocab"],
     }
 
