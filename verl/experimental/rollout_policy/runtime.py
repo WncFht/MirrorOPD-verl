@@ -401,7 +401,7 @@ class RolloutRuntime:
             "top_p": rollout.top_p,
             "top_k": rollout.top_k,
             "max_tokens": rollout.response_length,
-            "logprobs": rollout.calculate_log_probs,
+            "logprobs": rollout.calculate_log_probs or self.policy.mode == "token_mixture",
             "repetition_penalty": 1.0,
         }
         stop_ids = list(

@@ -111,3 +111,20 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_native_lifecycle_fsdp2.sh \
 `audit_native_lifecycle.py --previous-actor-checkpoint <恢复前 actor 目录>` 可同时核对恢复前后保存的 CPU 参数分片。它检查真实数值变化并分别报告 FP32 状态和 BF16 推理视图中的变化，不能仅以更新计数推进推断权重已变化。`probe_hf_reference.py` 提供独立 HF BF16/FlashAttention 全前缀参考；其分布距离与选中概率差异用于跨后端诊断，不沿用旧 HF 阈值作为 native 引擎门槛，该新增工具仍待 GPU 执行。
 
 Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已核对，组合模型保留不同宽度的原生 head，只对生成视图对齐并施加共同合法支持。RKL scorer 的完整 teacher head 不变。相关 CPU 检查已通过，真实 Qwen2 GPU 生成、refit 与训练仍待验收。R1 的独立生成探针须显式传入 `--stop-token-ids 151643`，不能沿用 Qwen3 的默认停止集合。实验设置见[E20 五种前缀对照](../../docs/experiments/rollout-policy/2026-10-30-E20设置下的五种前缀对照.md)。
+
+## E20 五种前缀入口
+
+`run_fusion_prefix_study_fsdp2.sh <J|P> <S0|S|LM|TM|T> <唯一标签> [formal|profile]` 复用 E20 公共配方，固定 batch64、reuse16、训练 cap7168，关闭全部验证与模型保存。`formal` 为 40 outer，`profile` 默认 2 outer，可用 `PREFIX_PROFILE_OUTERS` 指定预跑轮数。配置与运行目录使用不同模式前缀；当前仅完成配置检查，正式性能参数和十组训练尚未验收。
+
+```bash
+CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusion_prefix_study_fsdp2.sh P LM review > /tmp/prefix-P-LM.yaml
+../envs/mirroropd-fusion/bin/python examples/mirroropd/benchmarks/fusion/check_prefix_study_config.py /tmp/prefix-P-LM.yaml \
+  --reference ../wandb-logs/MirrorOPD-verl/analysis/batch-transfer-20261027/E20/config.json \
+  --pair P --arm LM --out /tmp/prefix-P-LM-audit.json
+```
+
+`CONFIG_ONLY=1` 只解析配置，不占用 GPU、不创建训练目录；`DRY_RUN=1` 只打印命令。实际执行仍由分配入口检查 UUID、GPU 占用及锁。当前入口保持单任务独占所选 GPU，多任务共置尚未实现，不能用内部 worker 模式绕过占用保护。
+
+`FUSION_MAX_NUM_SEQS/FUSION_KV_BYTES/FUSION_TP` 控制 LM 执行；其他来源使用 TP1 replica。`PREFIX_PPO_TOKEN_BUDGET`、`PREFIX_TEACHER_TOKEN_BUDGET`、`PREFIX_ROLLOUT_SEQS`、`PREFIX_ROLLOUT_MEMORY_FRACTION`、`PREFIX_RAY_CPUS`、`PREFIX_OBJECT_STORE_BYTES` 和 full-vocab 的 `PREFIX_FULL_KL_BACKEND/PREFIX_TOKEN_CHUNK/PREFIX_VOCAB_CHUNK` 是待实测的执行参数。默认值是候选，不是已确认的最优配置；学习超参数由入口固定。
+
+融合接口始终返回有限、完整的选中 token 行为 log-prob，即使 full-vocab learner 关闭了 rollout log-prob 收集。缺失、长度不符或非有限值会拒绝该响应；greedy 的行为 log-prob 在完整性检查后写为 0。此修复已做 CPU 协议回归，仍需实际服务调用复验。
