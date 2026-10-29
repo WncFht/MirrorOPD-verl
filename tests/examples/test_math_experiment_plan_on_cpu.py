@@ -210,3 +210,15 @@ def test_e54_moe_teacher_keeps_e41_training_protocol():
     assert result.environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[151643,151645]"
     assert not planner.PRESETS["E54"].budget.initial_validation
     assert "trainer.total_training_steps=100" in result.arguments
+
+
+@pytest.mark.parametrize("name", ["E55", "E56", "E57", "E58"])
+def test_moe_long_native_template_is_shared_with_independent_validation(name):
+    training = plan([name])
+    assert training.environment["SAVE_FREQ"] == "-1"
+    assert training.environment["TEST_FREQ"] == "10"
+    assert "trainer.max_actor_ckpt_to_keep=4" not in training.arguments
+    for selector in (name, name + "-valid-student", name + "-valid-teacher"):
+        assert "+data.apply_chat_template_kwargs.enable_thinking=null" in plan([selector]).arguments
+    for old in ("E41", "E43", "E54"):
+        assert "+data.apply_chat_template_kwargs.enable_thinking=False" in plan([old]).arguments

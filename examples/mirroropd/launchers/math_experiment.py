@@ -31,6 +31,7 @@ class ModelPair:
     stop_token: int | None = None
     student_memory_utilization: float = 0.65
     teacher_memory_utilization: float = 0.65
+    enable_thinking: bool | None = False
 
 
 @dataclass(frozen=True)
@@ -108,6 +109,25 @@ MIRROR_COMPARISON_METHODS = (
     (47, "mdpo", "0.5", "0.3"),
 )
 
+QWEN_MOE_LONG_METHODS = (
+    (55, "mdpo", "0", "0.1"),
+    (56, "mdpo", "0.5", "0.1"),
+    (57, "mdpo", "1", "0.1"),
+    (58, "full_kl", None, None),
+)
+QWEN_MOE_LONG_ENV = (
+    ("STUDENT_GPUS", "8"),
+    ("TEACHER_GPUS", "0"),
+    ("DISTILLATION_EXECUTION_MODE", "shared_sync"),
+    ("VAL_N", "16"),
+    ("FULL_KL_BACKEND", "precompute"),
+    ("FULL_KL_TOKEN_CHUNK", "512"),
+    ("FULL_KL_ASYNC_WRITE", "True"),
+    ("FULL_KL_PREFETCH", "True"),
+    ("FULL_KL_TERMINATION_TOKEN_IDS", "[151643,151645]"),
+    ("MIRROR_DIAGNOSTICS", "True"),
+)
+
 
 PRECISION_COMPARISONS = (
     (50, 51, "fp16", "FP16 + GradScaler"),
@@ -178,6 +198,15 @@ def preset_catalog() -> dict[str, Preset]:
                 presets[base], environment=(*presets[base].environment, ("TRAIN_PRECISION", precision))
             )
     presets["E54"] = replace(presets["E41"], pair=replace(presets["E41"].pair, teacher="Qwen3-30B-A3B-Instruct-2507"))
+    for number, method, kappa, eta in QWEN_MOE_LONG_METHODS:
+        presets[f"E{number}"] = Preset(
+            replace(presets["E54"].budget, save=-1, keep=None),
+            method=method,
+            pair=replace(presets["E54"].pair, response=16384, enable_thinking=None),
+            kappa=kappa,
+            eta=eta,
+            environment=QWEN_MOE_LONG_ENV,
+        )
     return presets
 
 
@@ -261,7 +290,8 @@ def model_defaults(env: dict[str, str], pair: ModelPair, role: str | None, root:
     )
     overrides = []
     if pair.family == "qwen3":
-        overrides.append("+data.apply_chat_template_kwargs.enable_thinking=False")
+        thinking = "null" if pair.enable_thinking is None else str(pair.enable_thinking)
+        overrides.append(f"+data.apply_chat_template_kwargs.enable_thinking={thinking}")
     if pair.stop_token is not None and role != "teacher":
         overrides.append(f"actor_rollout_ref.rollout.stop_token_ids=[{pair.stop_token}]")
     return overrides
@@ -529,6 +559,15 @@ def preset_overview() -> str:
             "其他探索可用 --method/--kappa/--eta 覆盖；custom 不加载编号预算。\n"
             + "model 预设可加 -valid-student/-valid-teacher，独立验证原始模型。",
             "E54：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；沿用 E41 的 100 outer/reuse16，无初始验证。",
+            "E55–E58：同一 Base ← 30B-A3B-Instruct-2507 长程对照，从初始权重开始。\n"
+            + _aligned_table(
+                ("Preset", "Method", "Kappa", "Eta"),
+                [(f"E{n}", method, kappa or "-", eta or "1") for n, method, kappa, eta in QWEN_MOE_LONG_METHODS],
+            )
+            + "\n统一 8 卡 shared_sync、batch64、reuse16、100 outer、LR=1e-6、train cap=16384；"
+            "每 10 outer 验证五个数学 bench，val n=16、cap=31744，无初始验证。\n"
+            "原生共同前缀 enable_thinking=null；EOS 合并 [151643,151645]；precompute/chunk512。\n"
+            "不保存任何 checkpoint（save_freq=-1，包括最后一步）；E54 保留原 7k/旧前缀协议。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
         ]
