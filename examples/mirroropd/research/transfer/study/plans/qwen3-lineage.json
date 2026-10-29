@@ -1,0 +1,230 @@
+{
+  "name": "qwen3-lineage-20261029",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "q3-base": {
+      "name": "q3-base",
+      "repo": "Qwen/Qwen3-1.7B-Base",
+      "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "parent": null,
+      "method": "pretraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B-Base/blob/ea980cb0a6c2ae4b936e82123acc929f1cec04c1/README.md"
+      ],
+      "lineage_note": "Initialization revision not established."
+    },
+    "e3": {
+      "name": "e3",
+      "repo": "CMU-AIRe/e3-1.7B",
+      "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "path": "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/CMU-AIRe/e3-1.7B/blob/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df/README.md",
+        "https://arxiv.org/abs/2506.09026v2"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "grpo-kl": {
+      "name": "grpo-kl",
+      "repo": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning",
+      "revision": "851ee853018af52495d73a95e3de51470af6f17b",
+      "path": "model/teacher-study/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning/blob/851ee853018af52495d73a95e3de51470af6f17b/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "sft-gsm8k": {
+      "name": "sft-gsm8k",
+      "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+      "revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "path": "model/teacher-study/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/SamsungSAILMontreal/Qwen3-1.7B-Math/blob/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "sft-deepmath": {
+      "name": "sft-deepmath",
+      "repo": "Thinking-Space/Qwen3-1.7B-SFT",
+      "revision": "f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/Thinking-Space/Qwen3-1.7B-SFT/blob/f0065babe7440257d7db331a5aa442ef7c3cf266/README.md",
+        "https://arxiv.org/abs/2604.13016v2"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "base-opd": {
+      "name": "base-opd",
+      "repo": "Thinking-Space/Qwen3-1.7B-Base-OPD",
+      "revision": "4ad294531545b51fbcfbd1b0ded387ba237db57c",
+      "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "opd",
+      "sources": [
+        "https://huggingface.co/Thinking-Space/Qwen3-1.7B-Base-OPD/blob/4ad294531545b51fbcfbd1b0ded387ba237db57c/README.md",
+        "https://arxiv.org/abs/2604.13016v2"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "q3-4": {
+      "name": "q3-4",
+      "repo": "Qwen/Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "path": "model/teacher-study/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-4B/blob/1cfa9a7208912126459214e8b04321603b3df60c/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "q3-8": {
+      "name": "q3-8",
+      "repo": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "path": "model/teacher-study/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+      "parent": "Qwen/Qwen3-8B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-8B/blob/b968826d9c46dd6066d109eabc6255188de91218/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "q3-4-thinking2507": {
+      "name": "q3-4-thinking2507",
+      "repo": "Qwen/Qwen3-4B-Thinking-2507",
+      "revision": "768f209d9ea81521153ed38c47d515654e938aea",
+      "path": "model/teacher-study/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea",
+      "parent": null,
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-4B-Thinking-2507/blob/768f209d9ea81521153ed38c47d515654e938aea/README.md"
+      ],
+      "lineage_note": "Initialization revision not established."
+    }
+  },
+  "arms": [
+    {
+      "name": "Q3-q3-base",
+      "teacher": "q3-base",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    },
+    {
+      "name": "Q3-e3",
+      "teacher": "e3",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    },
+    {
+      "name": "Q3-grpo-kl",
+      "teacher": "grpo-kl",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    },
+    {
+      "name": "Q3-sft-gsm8k",
+      "teacher": "sft-gsm8k",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    },
+    {
+      "name": "Q3-sft-deepmath",
+      "teacher": "sft-deepmath",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    },
+    {
+      "name": "Q3-base-opd",
+      "teacher": "base-opd",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    },
+    {
+      "name": "Q3-q3-4",
+      "teacher": "q3-4",
+      "updates": 64,
+      "evaluate_at": [
+        64
+      ]
+    },
+    {
+      "name": "Q3-q3-8",
+      "teacher": "q3-8",
+      "updates": 64,
+      "evaluate_at": [
+        64
+      ]
+    },
+    {
+      "name": "Q3-q3-4-thinking2507",
+      "teacher": "q3-4-thinking2507",
+      "updates": 64,
+      "evaluate_at": [
+        64
+      ]
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": true,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    4,
+    5,
+    6,
+    7
+  ]
+}
