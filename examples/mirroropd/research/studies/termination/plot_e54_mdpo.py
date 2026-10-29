@@ -5,7 +5,7 @@
 Semantic ledger: rollout plots use one batch per outer, colors encode eta;
 optimization plots hold eta=.1 and facet kappa, colors encode outer; positions
 are response-relative deciles of the MDPO objective, not teacher KL. Evaluation
-bars use 64 questions per dataset and colors encode dataset. Missing results
+heatmaps use 64 questions per dataset; untested combinations stay masked. Missing results
 stay absent. All optimizer observations precede their corresponding update.
 Geometry ledger: rollout facets share y scales, teacher-KL facets share y scales;
 MDPO objective and position facets deliberately have distinct scales because
@@ -64,13 +64,13 @@ def rollout_plot(data, out, fv, plt):
             ax.grid(axis="y", alpha=0.25)
     axes[0, 0].set_ylabel("Mean response length (k)")
     axes[1, 0].set_ylabel("Responses at 16k cap (%)")
-    fig.legend(legend.values(), legend.keys(), loc="lower center", bbox_to_anchor=(0.54, 0.10), ncol=3, frameon=False)
+    fig.legend(legend.values(), legend.keys(), loc="lower center", bbox_to_anchor=(0.54, 0.10), ncol=4, frameon=False)
     fig.suptitle(data["models"] + "\nTraining rollouts across MDPO settings", y=0.95)
     fig.text(
         0.5,
         0.035,
         "64 new responses per outer; these are training batches, not validation.\n"
-        "Open markers: unfinished arm; missing future points are not imputed.",
+        "All ten arms completed; each restores the same outer-2 model and optimizer.",
         ha="center",
         fontsize=10,
     )
@@ -126,49 +126,110 @@ def optimization_plot(data, out, fv, plt):
 
 
 def evaluation_plot(data, out, fv, plt):
-    order = ["k0-eta01", "k1-eta01", "k0-eta02", "k1-eta02"]
-    lookup = {(r["arm"], r["dataset"]): r for r in data["evaluation"]}
-    assert all((arm, dataset) in lookup for arm in order for dataset in ("math", "dapo"))
+    import numpy as np
+    from matplotlib.colors import LinearSegmentedColormap, to_rgb
+
     specs = [
-        ("Accuracy", "accuracy", 100, "Correct (%)", 100),
-        ("Correct and stopped", "correct_and_stopped", 100 / 64, "Responses (%)", 100),
-        ("Mean length", "mean_length", 0.001, "Response length (k)", 32),
-        ("Median length", "median_length", 0.001, "Response length (k)", 32),
-        ("Response cap hits", "cap_count", 100 / 64, "Responses (%)", 100),
-        ("Repeated 8-grams", "repeat8_mean", 100, "Repeated windows (%)", 100),
+        ("accuracy", 100, "Accuracy (%)", 100, "vteal", ".1f"),
+        ("cap_count", 100 / 64, "Cap hits (%)", 100, "vorange", ".1f"),
+        ("mean_length", 0.001, "Mean length (k)", 32, "vviolet", ".2f"),
     ]
-    fig, axes = plt.subplots(2, 3, figsize=(9, 6.7))
-    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.29, top=0.82, wspace=0.42, hspace=0.55)
-    for ax, (title, metric, scale, ylabel, upper) in zip(axes.flat, specs, strict=True):
-        for offset, dataset, label, color in [
-            (-0.18, "math", "MATH (64)", fv.HUES["vteal"]),
-            (0.18, "dapo", "DAPO (64)", fv.HUES["vorange"]),
-        ]:
-            ys = [lookup[(arm, dataset)][metric] * scale for arm in order]
-            ax.bar([i + offset for i in range(4)], ys, width=0.34, label=label, color=color)
-        ax.set(
-            title=title,
-            ylabel=ylabel,
-            ylim=(0, upper),
-            xticks=range(4),
-            xticklabels=["0/.1", "1/.1", "0/.2", "1/.2"],
-            xlabel="kappa / eta",
-        )
-        ax.grid(axis="y", alpha=0.2)
-    fig.legend(
-        *axes[0, 0].get_legend_handles_labels(), loc="lower center", bbox_to_anchor=(0.5, 0.11), ncol=2, frameon=False
-    )
-    fig.suptitle(data["models"] + "\nFinal-checkpoint evaluation: first four arms", y=0.95)
+    kappas, etas = [0, 0.5, 1], [0.05, 0.1, 0.2, 0.3]
+    lookup = {(r["kappa"], r["eta"], r["dataset"]): r for r in data["evaluation"]}
+    fig, axes = plt.subplots(2, 3, figsize=(9, 6.8))
+    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.20, top=0.81, wspace=0.40, hspace=0.55)
+    for row, dataset in enumerate(["math", "dapo"]):
+        for col, (metric, scale, title, high, hue, number_format) in enumerate(specs):
+            ax = axes[row, col]
+            matrix = np.full((3, 4), np.nan)
+            for i, kappa in enumerate(kappas):
+                for j, eta in enumerate(etas):
+                    if (kappa, eta, dataset) in lookup:
+                        matrix[i, j] = lookup[(kappa, eta, dataset)][metric] * scale
+            endpoint = tuple(0.65 * channel + 0.35 for channel in to_rgb(fv.HUES[hue]))
+            cmap = LinearSegmentedColormap.from_list(metric, ["white", endpoint])
+            cmap.set_bad((0.92, 0.92, 0.92, 1))
+            ax.imshow(np.ma.masked_invalid(matrix), vmin=0, vmax=high, cmap=cmap, aspect="auto")
+            for i in range(3):
+                for j in range(4):
+                    value = matrix[i, j]
+                    ax.text(
+                        j,
+                        i,
+                        "—" if np.isnan(value) else format(value, number_format),
+                        ha="center",
+                        va="center",
+                        color=fv.NEUTRALS["vink"],
+                    )
+            ax.set(
+                title=f"{dataset.upper()}: {title}",
+                xlabel="eta",
+                ylabel="kappa",
+                xticks=range(4),
+                xticklabels=[".05", ".1", ".2", ".3"],
+                yticks=range(3),
+                yticklabels=["0", ".5", "1"],
+            )
+    fig.suptitle(data["models"] + "\nCompleted grid: final-checkpoint evaluation", y=0.96)
     fig.text(
         0.5,
-        0.035,
-        "Outer 5 / 80 updates; 64 questions per dataset, one response each; cap 31,744.\n"
-        "Single-seed pilot; sweep-arm evaluation has not run yet.",
+        0.045,
+        "64 questions per dataset; one response each; cap 31,744. Gray cells were not tested.\n"
+        "Color scales: accuracy/cap 0–100%; length 0–32k. Single-seed exploratory comparison.",
         ha="center",
         fontsize=10,
     )
-    # These panels measure different outcomes, not replicated facets.
     save(fig, out, "final-evaluation", fv, different_objectives=True)
+    plt.close(fig)
+
+
+def paired_plot(data, out, fv, plt):
+    fig, axes = plt.subplots(2, 2, figsize=(10, 7.8))
+    fig.subplots_adjust(left=0.22, right=0.98, bottom=0.25, top=0.83, wspace=0.85, hspace=0.50)
+    labels = [
+        "k1 - k0; eta=.1",
+        "k.5 - k0; eta=.1",
+        "k1 - k0; eta=.2",
+        "k.5 - k0; eta=.2",
+        "k1; eta .05 - .1",
+        "k.5; eta .05 - .1",
+    ]
+    specs = [
+        ("accuracy", "Accuracy difference (pp)", 100),
+        ("correct_stopped", "Correct-and-stopped difference (pp)", 100),
+        ("cap_rate", "Cap-rate difference (pp)", 100),
+        ("mean_length", "Mean-length difference (k tokens)", 0.001),
+    ]
+    for ax, (metric, title, scale) in zip(axes.flat, specs, strict=True):
+        for prefix, label, hue in [("k1-", "Candidate kappa=1", "vviolet"), ("k05-", "Candidate kappa=0.5", "vorange")]:
+            positions, points, lows, highs = [], [], [], []
+            for i, comparison in enumerate(data["paired_comparisons"]):
+                if not comparison["candidate"].startswith(prefix):
+                    continue
+                v = comparison["metrics"][metric]
+                point = v["difference"] * scale
+                low, high = [x * scale for x in v["ci95"]]
+                positions.append(i)
+                points.append(point)
+                lows.append(point - low)
+                highs.append(high - point)
+            ax.errorbar(points, positions, xerr=[lows, highs], fmt="o", color=fv.HUES[hue], capsize=3, label=label)
+        ax.axvline(0, color=fv.NEUTRALS["baseline"], lw=1, ls=":")
+        ax.set(xlabel=title, yticks=range(6), yticklabels=labels, ylim=(5.6, -0.6))
+        ax.grid(axis="x", alpha=0.2)
+    fig.suptitle("Paired-question differences with 95% bootstrap intervals", y=0.95)
+    fig.legend(
+        *axes[0, 0].get_legend_handles_labels(), loc="lower center", bbox_to_anchor=(0.55, 0.10), ncol=2, frameon=False
+    )
+    fig.text(
+        0.5,
+        0.035,
+        "Candidate minus control; 10,000 resamples, stratified by MATH/DAPO.\n"
+        "Intervals exclude training-seed uncertainty and do not adjust for screening or multiple comparisons.",
+        ha="center",
+        fontsize=10,
+    )
+    save(fig, out, "paired-intervals", fv, different_objectives=True)
     plt.close(fig)
 
 
@@ -186,7 +247,7 @@ def main():
     fv.apply_rc("paper", fontsize=12)
     data = json.loads(args.data.read_text())
     args.out.mkdir(parents=True, exist_ok=True)
-    for plot in (rollout_plot, optimization_plot, evaluation_plot):
+    for plot in (rollout_plot, optimization_plot, evaluation_plot, paired_plot):
         plot(data, args.out, fv, plt)
 
 
