@@ -15,6 +15,7 @@ if nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | rg -Fxq "$EX
     exit 2
 fi
 export CUDA_VISIBLE_DEVICES=7 STUDENT_GPUS=1 RAY_ADDRESS=local
+export FUSION_RESOURCE_PARENT=$$
 export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_PLUGINS=mirroropd_fusion
 export VLLM_WORKER_MULTIPROC_METHOD=spawn OMP_NUM_THREADS=1
 unset PYTHONDONTWRITEBYTECODE
@@ -29,4 +30,17 @@ if (( $# == 0 )); then
     echo "Usage: bash run_fusion_local_fsdp2.sh <command> [args...]" >&2
     exit 2
 fi
-"$@"
+status=0
+"$@" || status=$?
+# Ray/vLLM children may release CUDA contexts shortly after their driver exits.
+# Wait only: never kill another process or treat a failed NVML query as idle.
+for attempt in {1..120}; do
+    processes=$(nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader) || exit 2
+    if ! rg -Fxq "$EXPECTED_UUID" <<< "$processes"; then
+        exit "$status"
+    fi
+    sleep 0.5
+done
+echo "GPU 7 is still occupied after driver exit; refusing the next stage" >&2
+if (( status == 0 )); then status=2; fi
+exit "$status"

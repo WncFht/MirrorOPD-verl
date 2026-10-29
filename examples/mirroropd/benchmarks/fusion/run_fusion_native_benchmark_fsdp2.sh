@@ -28,4 +28,4 @@ bash "$HERE/run_fusion_local_fsdp2.sh" "$WORKSPACE/envs/mirroropd-fusion/bin/pyt
     --data "$WORKSPACE/data/math/DAPO/train.parquet" \
     --out "$WORKSPACE/runs/vllm-fusion-20261029/$PREFIX" \
     --batch 64 --cap 7168 --max-model-len 11264 --alphas 0.5 --repeats 3 \
-    --max-num-seqs "$SEQS" --kv-gib "$KV" "${EXTRA[@]}"
+    --max-num-seqs "$SEQS" --kv-gib "$KV" --skip-lifecycle-audit "${EXTRA[@]}"

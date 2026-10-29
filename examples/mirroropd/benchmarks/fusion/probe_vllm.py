@@ -24,6 +24,7 @@ def main():
     parser.add_argument("--alphas", nargs="+", type=float, default=[0.0, 0.5, 1.0])
     parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument("--graph", action="store_true")
+    parser.add_argument("--skip-lifecycle-audit", action="store_true")
     parser.add_argument("--data")
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--top-p", type=float, default=1.0)
@@ -40,7 +41,7 @@ def main():
             sys.executable,
             str(Path(__file__).with_name("monitor.py")),
             "--parent",
-            str(os.getpid()),
+            os.environ.get("FUSION_RESOURCE_PARENT", str(os.getpid())),
             "--out",
             str(out / "resources.jsonl"),
         ]
@@ -163,27 +164,30 @@ def main():
                     ),
                     flush=True,
                 )
-        before = llm.collective_rpc("fusion_weight_digests")
-        llm.sleep(level=1)
-        llm.wake_up()
-        after = llm.collective_rpc("fusion_weight_digests")
-        if before != after:
-            raise RuntimeError("Fusion weights changed across sleep/wake")
-        resumed = llm.generate(prompts, params, use_tqdm=False)
-        same_tokens = [list(item.outputs[0].token_ids) for item in resumed] == [
-            item["token_ids"] for item in row["responses"]
-        ]
-        stream.write(
-            json.dumps(
-                {
-                    "sleep_wake_audit": llm.collective_rpc("fusion_audit"),
-                    "weight_digests_before": before,
-                    "weight_digests_after": after,
-                    "resumed_tokens_equal": same_tokens,
-                }
+        if args.skip_lifecycle_audit:
+            stream.write(json.dumps({"lifecycle_audit": "not requested for this workload measurement"}) + "\n")
+        else:
+            before = llm.collective_rpc("fusion_weight_digests")
+            llm.sleep(level=1)
+            llm.wake_up()
+            after = llm.collective_rpc("fusion_weight_digests")
+            if before != after:
+                raise RuntimeError("Fusion weights changed across sleep/wake")
+            resumed = llm.generate(prompts, params, use_tqdm=False)
+            same_tokens = [list(item.outputs[0].token_ids) for item in resumed] == [
+                item["token_ids"] for item in row["responses"]
+            ]
+            stream.write(
+                json.dumps(
+                    {
+                        "sleep_wake_audit": llm.collective_rpc("fusion_audit"),
+                        "weight_digests_before": before,
+                        "weight_digests_after": after,
+                        "resumed_tokens_equal": same_tokens,
+                    }
+                )
+                + "\n"
             )
-            + "\n"
-        )
 
 
 if __name__ == "__main__":
