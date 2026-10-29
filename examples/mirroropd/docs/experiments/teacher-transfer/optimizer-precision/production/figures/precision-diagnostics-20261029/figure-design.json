@@ -1,0 +1,18 @@
+{
+  "print_slot": "native figure width; no forced downscaling to a single paper column",
+  "scoped_exceptions": {
+    "accuracy": "facet-ylim-mismatch: distinct benchmarks",
+    "sampling-coverage": "facet-ylim-mismatch: distinct benchmarks"
+  },
+  "source_tables": "wandb-logs/MirrorOPD-verl/analysis/e50-e53-20261029/diagnostics",
+  "source_table_sha256": {
+    "training": "cbd2c85a27b5e93f6022d0453e50b1540ffac36923ea77110ef08d2b8a3c9ea0",
+    "inner": "d73ce28feec753aca5574c47e11629dc0077ea28e5358a522d724ef41092644a",
+    "evaluation": "1d7a9735276e632cd8e64df1f5e7ac31a37a22196e5ac67173dbae8ccc23ab56",
+    "sampling": "6be996740fcd26bb2f12455d4324b6e83e5869d160c09eb2fd3d22430b33a54f",
+    "positions": "2f9ebe0d949223c67daacc10f5d24253f0257b579c489068c1402c94ba2db7bb",
+    "trajectories": "1bf85eee8b0614d2b2489865d151ce35c6814f4c582ae8f07a9010048cf043ac",
+    "inventory": "03283a9a55dbae1aab09ce2a59520dc44fddead9e1a2e81da3cebe518f3bfa42"
+  },
+  "ledger": "Audit and plot E50\u2013E53 diagnostics from local records.\n\nSemantic ledger: each color denotes one run throughout. Training curves are\nnonoverlapping 16-outer means, not independent seeds. Evaluation points retain\ntheir actual checkpoints. Positions are deciles of each observed response,\nnot absolute token positions or guaranteed answer spans. Position gains use\nsum/count aggregation, never an unweighted mean of per-token-bin means.\nGeometric ledger: equally sized panels; common outer axis 1..256, E53 stops at\n103. Reuse coordinates 1..16 are PRE-update observations (15 intervening\nattempts). Probability axes are percent; log axes contain positive values.\nPlots consume exported aggregation rows. No cloud calls or training occur.\n"
+}
