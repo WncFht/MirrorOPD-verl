@@ -12,7 +12,9 @@ from vllm.model_executor.model_loader.default_loader import DefaultModelLoader
 from vllm.model_executor.models.interfaces import MixtureOfExperts
 from vllm.model_executor.models.utils import init_vllm_registered_model
 
-from .compat import component_config
+from verl.experimental.rollout_policy.sampling import validate_tokenizers
+
+from .compat import component_config, validate_component_families
 
 
 class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
@@ -37,21 +39,19 @@ class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
         self.teacher_path = outer.fusion_teacher_path
         student_config = AutoConfig.from_pretrained(self.student_path, local_files_only=True)
         teacher_config = AutoConfig.from_pretrained(self.teacher_path, local_files_only=True)
-        if student_config.model_type != "qwen3" or teacher_config.model_type not in {"qwen3", "qwen3_moe"}:
-            raise ValueError("Fusion requires a Qwen3 dense student and Qwen3 dense/MoE teacher")
+        validate_component_families(student_config, teacher_config)
         for config in (student_config, teacher_config):
             if vllm_config.model_config.max_model_len > config.max_position_embeddings:
                 raise ValueError("Declared fusion context exceeds one component's native context")
             if getattr(config, "quantization_config", None):
                 raise ValueError("Fusion checkpoints must be unquantized")
-        if student_config.vocab_size != teacher_config.vocab_size:
-            raise ValueError("Fusion output heads must have the same vocabulary size")
-        student_vocab = AutoTokenizer.from_pretrained(self.student_path, local_files_only=True).get_vocab()
-        teacher_vocab = AutoTokenizer.from_pretrained(self.teacher_path, local_files_only=True).get_vocab()
-        if student_vocab != teacher_vocab:
-            raise ValueError("Fusion requires identical token-ID mappings")
+        student_tokenizer = AutoTokenizer.from_pretrained(self.student_path, local_files_only=True)
+        teacher_tokenizer = AutoTokenizer.from_pretrained(self.teacher_path, local_files_only=True)
+        legal = validate_tokenizers(
+            student_tokenizer, teacher_tokenizer, student_config.vocab_size, teacher_config.vocab_size
+        )
         mask = torch.zeros(student_config.vocab_size, dtype=torch.bool)
-        mask[list(student_vocab.values())] = True
+        mask[list(legal)] = True
         self.register_buffer("legal_tokens", mask, persistent=False)
         self.student_width = student_config.hidden_size
         self.student = init_vllm_registered_model(
@@ -110,12 +110,24 @@ class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
             if student is not None or teacher is not None:
                 raise RuntimeError("Fusion component head collectives disagree on their output rank")
             return None
+        # Only align the sampling view. Both native heads/configs remain intact,
+        # including teacher-only padding rows used by the independent RKL scorer.
+        width = self.legal_tokens.numel()
+        if student.shape[-1] != width:
+            raise RuntimeError("Native student head disagrees with the declared sampling output width")
+        teacher_view = teacher
+        if teacher.shape[-1] > width:
+            teacher_view = teacher[..., :width]
+        elif teacher.shape[-1] < width:
+            teacher_view = torch.nn.functional.pad(teacher, (0, width - teacher.shape[-1]), value=-torch.inf)
         if self.alpha == 0:
             logits = student.float()
         elif self.alpha == 1:
-            logits = teacher.float()
+            logits = teacher_view.float()
         else:
-            logits = student.float().mul(1 - self.alpha).add_(teacher.float(), alpha=self.alpha)
+            logits = student.float().mul(1 - self.alpha).add_(teacher_view.float(), alpha=self.alpha)
+        if getattr(self, "capture_components", False) and self.alpha in {0, 1}:
+            logits = logits.clone()
         logits.masked_fill_(~self.legal_tokens, -torch.inf)
         if getattr(self, "capture_components", False):
             self.component_logits = {

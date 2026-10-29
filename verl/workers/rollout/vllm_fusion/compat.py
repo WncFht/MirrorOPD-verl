@@ -5,6 +5,16 @@
 import copy
 
 
+def validate_component_families(student, teacher):
+    """Keep the tested dense learner families and native teacher combinations explicit."""
+    if (student.model_type, teacher.model_type) not in {
+        ("qwen2", "qwen2"),
+        ("qwen3", "qwen3"),
+        ("qwen3", "qwen3_moe"),
+    }:
+        raise ValueError("Native fusion requires Qwen2 dense pairs or a Qwen3 dense learner with dense/MoE teacher")
+
+
 def decode_graph_config(max_num_seqs):
     """Capture native decode shapes while keeping prefill and model arithmetic eager."""
     sizes = []
