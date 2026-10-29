@@ -116,6 +116,16 @@ def main():
         attention_config={"backend": "TRITON_ATTN"},
     )
     startup = time.monotonic() - tick
+
+    def controlled_generate(params):
+        core = llm.llm_engine.engine_core
+        core.call_utility("pause_scheduler", "keep", False)
+        try:
+            llm.enqueue(prompts, params, use_tqdm=False)
+        finally:
+            core.call_utility("resume_scheduler")
+        return llm.wait_for_completion(use_tqdm=False)
+
     with (out / "results.jsonl").open("x") as stream:
         for alpha in args.alphas:
             audit = llm.collective_rpc("fusion_prepare", args=(alpha,))
@@ -173,15 +183,16 @@ def main():
         if args.skip_lifecycle_audit:
             stream.write(json.dumps({"lifecycle_audit": "not requested for this workload measurement"}) + "\n")
         else:
+            reference = controlled_generate(params)
             before = llm.collective_rpc("fusion_weight_digests")
             llm.sleep(level=1)
             llm.wake_up()
             after = llm.collective_rpc("fusion_weight_digests")
             if before != after:
                 raise RuntimeError("Fusion weights changed across sleep/wake")
-            resumed = llm.generate(prompts, params, use_tqdm=False)
+            resumed = controlled_generate(params)
             same_tokens = [list(item.outputs[0].token_ids) for item in resumed] == [
-                item["token_ids"] for item in row["responses"]
+                list(item.outputs[0].token_ids) for item in reference
             ]
             stream.write(
                 json.dumps(
@@ -190,10 +201,15 @@ def main():
                         "weight_digests_before": before,
                         "weight_digests_after": after,
                         "resumed_tokens_equal": same_tokens,
+                        "arrival_mode": "synchronized for both lifecycle audit generations",
+                        "reference_tokens": [list(item.outputs[0].token_ids) for item in reference],
+                        "resumed_tokens": [list(item.outputs[0].token_ids) for item in resumed],
                     }
                 )
                 + "\n"
             )
+            if not same_tokens:
+                raise RuntimeError("Matched-admission generation changed across sleep/wake")
 
 
 if __name__ == "__main__":

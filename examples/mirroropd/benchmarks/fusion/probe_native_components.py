@@ -6,6 +6,8 @@ import argparse
 import dataclasses
 import json
 import os
+import subprocess
+import sys
 from pathlib import Path
 
 
@@ -22,12 +24,27 @@ def main():
     parser.add_argument("--graph", action="store_true")
     parser.add_argument("--tensor-parallel-size", type=int, choices=[1, 2], default=1)
     parser.add_argument("--kv-gib", type=float, default=4.0)
+    parser.add_argument("--num-gpu-blocks", type=int, help="Match native and composite KV capacity in pressure probes")
+    parser.add_argument(
+        "--allow-batch-changes", action="store_true", help="Permit scheduler preemption after admission"
+    )
     parser.add_argument("--arrival-mode", choices=["synchronized", "asynchronous"], default="synchronized")
     args = parser.parse_args()
     if len(os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")) != args.tensor_parallel_size:
         raise ValueError("Allocate exactly one GPU per TP rank for this probe")
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=False)
+    monitor = subprocess.Popen(
+        [
+            sys.executable,
+            str(Path(__file__).with_name("monitor.py")),
+            "--parent",
+            os.environ.get("FUSION_RESOURCE_PARENT", str(os.getpid())),
+            "--out",
+            str(out / "resources.jsonl"),
+        ]
+    )
+    assert monitor.pid > 0
     workloads = json.loads(Path(args.workload).read_text())
     capacity = args.batch if args.engine_max_num_seqs is None else args.engine_max_num_seqs
     if capacity < args.batch:
@@ -52,6 +69,7 @@ def main():
         max_num_batched_tokens=args.max_model_len * args.batch,
         max_num_seqs=capacity,
         kv_cache_memory_bytes=int(args.kv_gib * 1024**3),
+        num_gpu_blocks_override=args.num_gpu_blocks,
         enable_prefix_caching=False,
         enable_chunked_prefill=False,
         attention_config={"backend": "TRITON_ATTN"},
@@ -87,7 +105,7 @@ def main():
         shapes = output_ranks[0]["batch_shapes"]
         if args.batch > 1 and max(shapes) < args.batch:
             raise RuntimeError("The calibration run never exercised the requested batch width")
-        if args.arrival_mode == "synchronized" and set(shapes) != {args.batch}:
+        if args.arrival_mode == "synchronized" and not args.allow_batch_changes and set(shapes) != {args.batch}:
             raise RuntimeError("Synchronized numerical replay changed its batch width")
         manifest["cases"].append(
             {

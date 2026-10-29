@@ -17,6 +17,7 @@ class PrefixProbe:
         self.probe_steps = {}
         self.probe_requests = requests
         self.probe_batch_shapes = []
+        self.probe_schedule = []
         self.probe_saved = {}
         self.probe_output_rank = None
         if components:
@@ -31,6 +32,9 @@ class PrefixProbe:
             if len(ids) != logits.shape[0]:
                 raise RuntimeError("Probe cannot align native request IDs and sampled logits")
             self.probe_batch_shapes.append(len(ids))
+            self.probe_schedule.append(
+                {"request_ids": list(ids), "steps": [self.probe_steps.get(key, 0) for key in ids]}
+            )
             forced = torch.full_like(logits, -torch.inf)
             for row, request_id in enumerate(ids):
                 step = self.probe_steps.get(request_id, 0)
@@ -65,4 +69,9 @@ class PrefixProbe:
                 for name in ordered[0]
             }
         torch.save(saved, path)
-        return {"output_rank": True, "batch_shapes": self.probe_batch_shapes, "requests": self.probe_requests}
+        return {
+            "output_rank": True,
+            "batch_shapes": self.probe_batch_shapes,
+            "schedule": self.probe_schedule,
+            "requests": self.probe_requests,
+        }
