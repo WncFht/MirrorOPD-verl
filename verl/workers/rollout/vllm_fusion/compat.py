@@ -5,6 +5,17 @@
 import copy
 
 
+def decode_graph_config(max_num_seqs):
+    """Capture native decode shapes while keeping prefill and model arithmetic eager."""
+    sizes = []
+    size = 1
+    while size < max_num_seqs:
+        sizes.append(size)
+        size *= 2
+    sizes.append(max_num_seqs)
+    return {"mode": 0, "cudagraph_mode": "FULL_DECODE_ONLY", "cudagraph_capture_sizes": sizes}
+
+
 def fusion_hf_overrides(teacher_path):
     """Expose teacher experts before vLLM initializes its model-parallel groups."""
     from transformers import AutoConfig

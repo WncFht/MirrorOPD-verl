@@ -55,7 +55,7 @@ def main():
     from vllm import LLM, SamplingParams
 
     from verl.workers.rollout.vllm_fusion import register_models
-    from verl.workers.rollout.vllm_fusion.compat import fusion_hf_overrides
+    from verl.workers.rollout.vllm_fusion.compat import decode_graph_config, fusion_hf_overrides
 
     register_models()
     tokenizer = AutoTokenizer.from_pretrained(args.student, local_files_only=True)
@@ -96,6 +96,7 @@ def main():
         tensor_parallel_size=1,
         dtype="bfloat16",
         enforce_eager=not args.graph,
+        compilation_config=decode_graph_config(args.max_num_seqs) if args.graph else None,
         enable_prefix_caching=False,
         enable_chunked_prefill=False,
         max_model_len=args.max_model_len,
