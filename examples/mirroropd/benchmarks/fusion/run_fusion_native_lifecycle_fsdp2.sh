@@ -18,13 +18,18 @@ DATA="$WORKSPACE/runs/vllm-fusion-20261029/lifecycle-data"
 [[ -f $DATA/manifest.json ]] || { echo "Run prepare_vllm_workload.py first" >&2; exit 2; }
 export TRAIN_FILE="$DATA/DAPO.parquet" MATH_FILE="$DATA/MATH-500.parquet" AMC_FILE="$DATA/AMC23.parquet"
 export AIME24_FILE="$DATA/AIME24.parquet" AIME_FILE="$DATA/AIME25.parquet" AIME26_FILE="$DATA/AIME26.parquet"
-export TRAIN_BATCH_SIZE=2 PPO_EPOCHS=1 VAL_N=1 SMOKE_RAY_CPUS=12
-export MAX_PROMPT_LENGTH=1024 MAX_RESPONSE_LENGTH=32 MAX_VAL_RESPONSE_LENGTH=32
+fusion_cpus=12
+if [[ ${FUSION_GPUS:-7} == 6,7 ]]; then fusion_cpus=24; fi
+export TRAIN_BATCH_SIZE=${FUSION_TRAIN_BATCH_SIZE:-2} PPO_EPOCHS=1 VAL_N=1 SMOKE_RAY_CPUS=${SMOKE_RAY_CPUS:-$fusion_cpus}
+export MAX_PROMPT_LENGTH=1024 MAX_RESPONSE_LENGTH=${FUSION_RESPONSE_CAP:-32} MAX_VAL_RESPONSE_LENGTH=32
 export PARAM_OFFLOAD=True OPTIMIZER_OFFLOAD=True
 export WANDB_MODE=offline
 mkdir -p "$WORKSPACE/runs/vllm-fusion-20261029/$PREFIX"
 POLICY=('rollout_policy.execution.backend=vllm_fusion'
-    "rollout_policy.execution.enforce_eager=${FUSION_ENFORCE_EAGER:-true}")
+    "rollout_policy.execution.enforce_eager=${FUSION_ENFORCE_EAGER:-true}"
+    "rollout_policy.execution.tensor_parallel_size=${FUSION_TP:-1}"
+    "rollout_policy.execution.max_num_seqs=${FUSION_MAX_NUM_SEQS:-2}"
+    "rollout_policy.execution.kv_cache_memory_bytes=${FUSION_KV_BYTES:-1073741824}")
 if [[ $BINDING == initial ]]; then
     POLICY+=('rollout_policy.teacher_weight={kind:linear,start:1.0,end:0.0,steps:2,clock:outer_step}')
 fi

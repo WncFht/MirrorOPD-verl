@@ -26,6 +26,8 @@ class FusionWorkerExtension:
 
     def fusion_save_logits(self, path):
         """Save the last sampling position outside the timed generation path."""
+        if self.local_rank != 0:
+            return
         values = self._fusion_model().component_logits
         if values is None:
             raise RuntimeError("No fusion logits were captured")
@@ -87,10 +89,14 @@ class FusionWorkerExtension:
                     errors.append(f"Duplicate fusion weight: {name}")
                     continue
                 if tied and canonical == "model.embed_tokens.weight" and canonical in canonical_seen:
-                    if not torch.equal(
-                        tensor.to(model.model.embed_tokens.weight.dtype), model.model.embed_tokens.weight
-                    ):
-                        errors.append("Conflicting tied fusion embedding/head")
+                    before = model.model.embed_tokens.weight.detach().clone()
+                    try:
+                        # Let the native loader select this rank's vocab shard.
+                        loaded.update(model.load_weights([(canonical, tensor)]))
+                        if not torch.equal(before, model.model.embed_tokens.weight):
+                            errors.append("Conflicting tied fusion embedding/head")
+                    except Exception as exc:
+                        errors.append(f"Tied fusion alias loader failed: {exc}")
                     seen.add(name)
                     continue
                 seen.add(name)
@@ -130,8 +136,11 @@ class FusionWorkerExtension:
             if not self.fusion_valid or (self.fusion_current and self.fusion_version != tuple(version)):
                 raise RuntimeError("Fusion student version is invalid or stale")
         self._fusion_model().set_alpha(alpha)
-        sampler = self.model_runner.sampler
-        sampler.topk_topp_sampler = FusionTopKTopPSampler(getattr(sampler.topk_topp_sampler, "use_fp64_gumbel", False))
+        sampler = getattr(self.model_runner, "sampler", None)
+        if sampler is not None:
+            sampler.topk_topp_sampler = FusionTopKTopPSampler(
+                getattr(sampler.topk_topp_sampler, "use_fp64_gumbel", False)
+            )
         if not hasattr(self, "fusion_version"):
             self.fusion_version = version
         return self.fusion_audit()
@@ -140,6 +149,8 @@ class FusionWorkerExtension:
         model = self._fusion_model()
         layers = self.model_runner.vllm_config.compilation_config.static_forward_context
         return {
+            "tp_rank": self.local_rank,
+            "tensor_parallel_size": self.model_runner.vllm_config.parallel_config.tensor_parallel_size,
             "alpha": model.alpha,
             "version": getattr(self, "fusion_version", None),
             "student_path": model.student_path,

@@ -18,10 +18,13 @@ class CaptureSampler(FusionTopKTopPSampler):
 class MathProbeWorker(FusionWorkerExtension):
     def fusion_prepare(self, alpha, version=None):
         audit = super().fusion_prepare(alpha, version)
-        self.model_runner.sampler.topk_topp_sampler = CaptureSampler()
+        if self.model_runner.sampler is not None:
+            self.model_runner.sampler.topk_topp_sampler = CaptureSampler()
         return audit
 
     def fusion_save_logits(self, path):
+        if self.local_rank != 0:
+            return
         values = dict(self._fusion_model().component_logits)
         values["processed_log_probs"] = self.model_runner.sampler.topk_topp_sampler.captured_log_probs
         torch.save({name: value.cpu() for name, value in values.items()}, path)

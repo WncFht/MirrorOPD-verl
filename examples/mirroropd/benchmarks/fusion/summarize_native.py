@@ -55,11 +55,15 @@ def summarize(root):
     ):
         raise ValueError("Missing measured repeats")
     resources = [json.loads(line) for line in (root / "resources.jsonl").read_text().splitlines()]
-    if resources[0]["physical_gpus"] != [7] or resources[-1]["kind"] != "end":
+    allocated = resources[0]["physical_gpus"]
+    if not allocated or not set(allocated) <= {6, 7} or resources[-1]["kind"] != "end":
         raise ValueError("Incomplete single-GPU resource interval")
     gpu_rows = [gpu for row in resources if row["kind"] == "sample" for gpu in row["gpus"]]
-    if any(gpu["index"] != 7 for gpu in gpu_rows):
+    if any(gpu["index"] not in allocated for gpu in gpu_rows):
         raise ValueError("Unexpected GPU in measurement")
+    for values in groups.values():
+        for row in values:
+            row["gpu_hours_per_million_tokens"] *= len(allocated)
     summary = {}
     for alpha, values in groups.items():
         summary[alpha] = {
@@ -76,6 +80,7 @@ def summarize(root):
         "formal_generation_complete": config["batch"] == 64 and config["cap"] == 7168 and config["repeats"] >= 3,
         "groups": summary,
         "resource_scope": "Full monitored process lifetime; allocator and device contexts included",
+        "physical_gpus": allocated,
         "nvml_peak_bytes": max(row["memory_used"] for row in gpu_rows),
         "process_wall_seconds": resources[-1]["wall_seconds"],
         "preemptions": "unavailable",

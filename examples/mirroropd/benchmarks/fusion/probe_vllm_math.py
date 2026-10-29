@@ -4,6 +4,7 @@
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 import torch
@@ -33,7 +34,10 @@ def main():
     parser.add_argument("--teacher", required=True)
     parser.add_argument("--out", required=True)
     parser.add_argument("--graph", action="store_true")
+    parser.add_argument("--tensor-parallel-size", type=int, choices=[1, 2], default=1)
     args = parser.parse_args()
+    if len(os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")) != args.tensor_parallel_size:
+        raise ValueError("Allocate exactly one GPU per TP rank for this probe")
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=False)
     from transformers import AutoTokenizer
@@ -49,6 +53,7 @@ def main():
     )
     llm = LLM(
         model=args.student,
+        tensor_parallel_size=args.tensor_parallel_size,
         hf_overrides=fusion_hf_overrides(args.teacher),
         dtype="bfloat16",
         enforce_eager=not args.graph,

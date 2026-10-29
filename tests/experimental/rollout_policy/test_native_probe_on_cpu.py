@@ -43,6 +43,26 @@ def test_distribution_metric_ignores_logit_shift_and_masked_tail():
     assert measure(reference, candidate, torch.tensor([0, 1, 2]), 1)["total_variation"] > 0.1
 
 
+def test_non_output_tp_rank_does_not_overwrite_saved_logits(tmp_path):
+    calls = []
+
+    def collective_logits(hidden):
+        calls.append(hidden)
+        return None
+
+    model = SimpleNamespace(compute_logits=collective_logits)
+    probe = PrefixProbe()
+    probe.model_runner = SimpleNamespace(get_model=lambda: model)
+    probe.configure_probe([1], [0])
+    hidden = torch.zeros(1, 2)
+    assert model.compute_logits(hidden) is None
+    assert len(calls) == 1
+    path = tmp_path / "shared-output.pt"
+    path.write_bytes(b"output-rank-evidence")
+    assert probe.save_probe(path) == {"output_rank": False}
+    assert path.read_bytes() == b"output-rank-evidence"
+
+
 def test_component_acceptance_cannot_ignore_later_rows(tmp_path, monkeypatch):
     from examples.mirroropd.benchmarks.fusion import compare_native_components as compare
 

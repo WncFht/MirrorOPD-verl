@@ -78,3 +78,30 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_regression_fsdp2.sh /absolu
 - `summarize.py`：汇总已完整结束的运行；缺少 replica 或请求数量不符时拒绝生成报告。
 
 Tokens/s 只计有效 response token，不把两模型的 forward token 相加。RSS 汇总是各进程峰值之和，不是节点去重后的物理内存。后端不提供的 preemption/recompute 字段保留为 `unavailable`。
+
+## 原生 vLLM 单卡开发
+
+原生后端选择 `rollout_policy.execution.backend=vllm_fusion`；旧配置继续使用 HF。已验证的训练范围为单 actor rank、TP1、Qwen3 dense learner 与 dense/MoE teacher；双 actor rank 与 TP2 的开发入口已加入，GPU 验收尚未完成。原生模型保留各自配置、head 和 KV；公共 sampler 保留原策略的 top-p 边界。正式支持范围以[实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)为准。
+
+本机入口 `run_fusion_local_fsdp2.sh` 默认使用物理 GPU 7；`FUSION_GPUS=6`、`7` 或 `6,7` 选择已分配的卡，逐卡核对 UUID、取得排他锁并拒绝既有计算任务。它不清理其他 Ray 作业。环境位于仓外 `envs/mirroropd-fusion`；在仓库根目录运行：
+
+```bash
+bash examples/mirroropd/benchmarks/fusion/run_fusion_setup_fsdp2.sh
+../envs/mirroropd-fusion/bin/python examples/mirroropd/benchmarks/fusion/prepare_vllm_workload.py \
+  --data-root ../data --student ../model/Qwen3-1.7B-Base \
+  --out ../runs/vllm-fusion-20261029/lifecycle-data
+bash examples/mirroropd/benchmarks/fusion/run_fusion_native_lifecycle_fsdp2.sh \
+  dense current my-unique-lifecycle-run
+```
+
+数据准备与运行目录必须不存在，已有 `lifecycle-data/manifest.json` 时直接复用。`dense` 可换成 `moe`，`current` 可换成 `initial`；initial 的三轮生成覆盖 α=1、0.5、0。`FUSION_RESUME_FROM` 指定现有 checkpoint 时只执行恢复后的第三轮，运行名仍须唯一。该入口默认 batch2、cap32、五来源各 2 条验证样本。`FUSION_RESPONSE_CAP`、`FUSION_TRAIN_BATCH_SIZE`、`FUSION_KV_BYTES` 和 `FUSION_MAX_NUM_SEQS` 分别设置训练响应上限、全局 batch、每卡 KV 字节预算及活跃请求上限；`FUSION_TP=2` 配合 `FUSION_GPUS=6,7` 选择一个 TP2 replica，TP1 则创建两个 replica。增加 cap 后必须重新检查训练切换容量，短验证不用于任务准确率结论。
+
+`probe_vllm.py` 执行独立生成与全参数 sleep/wake 哈希检查，并保存配置、源码指纹、输入 token、响应、选中概率和 所选 GPU 的资源曲线。哈希检查与首次启动不计入生成计时。`run_fusion_native_benchmark_fsdp2.sh <dense|moe> <唯一目录名> <eager|graph>` 固定 batch64/cap7168、α=0.5、预热和三次测量；`FUSION_MAX_NUM_SEQS`、`FUSION_KV_GIB` 控制并发与 KV 预算。默认值是待测候选，不能由脚本存在推断容量或性能已通过。
+
+数值工具按问题分工：`probe_vllm_math.py` 从真实采样位置取得两侧 logits 和实际过滤后的分布，与独立 FP64 oracle 比较；`probe_native_components.py` 通过独立 native student、teacher 和组合模型重放同一 token 历史。后者使用专用诊断 worker 强制后续 token，不能用于生成吞吐或研究结果。它按请求身份记录检查点，并要求批宽校准确实执行目标批宽。两个数值探针均接受 `--tensor-parallel-size 2`，所有 rank 参与模型计算，仅输出 rank 保存词表结果；不能用 TP1 限值自动宣布 TP2 通过。
+
+`compare_native_components.py --calibrate` 将独立 native 批宽差异的最大概率误差、总变差和选中 log-prob 误差分别加 2e-6 作为数值余量，写入不可覆盖的限值文件；候选检查要求不同的冻结工作负载。该范围仅用于对应精度、输入和执行设置，不能无限外推到长历史、graph 或其他 TP。超标样例保留，不自动放宽限值。完整训练的产物由 `audit_native_lifecycle.py` 检查成功更新次数、来源版本、验证覆盖、checkpoint 分片和所声明的 GPU 资源区间。
+
+图候选使用原生 `FULL_DECODE_ONLY`，prefill 保持 eager，并关闭模型的 torch.compile 改写；两侧模型仍各自 forward。`FUSION_ENFORCE_EAGER=false` 可让生命周期入口选择该图候选，默认仍为 eager。α 在图外的 logits 融合阶段生效，端点目前只保证数学语义，不宣称释放或跳过另一侧模型。图模式的训练与正式性能必须单独验收。
+
+固定前缀数值探针默认 `--arrival-mode synchronized`：通过所选版本的调度暂停接口完整提交请求后统一开始，要求每一步实际批宽与声明值一致。`asynchronous` 仅用于复现到达时序差异。组件比较覆盖所有批内行；只检查首行的早期结果不能代替全批验收，失败结果保留且限值不回写。

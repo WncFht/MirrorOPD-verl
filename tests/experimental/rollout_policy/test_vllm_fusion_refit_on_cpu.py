@@ -87,3 +87,51 @@ def test_frozen_student_rejects_refit():
     target.fusion_current = False
     with pytest.raises(ValueError, match="Frozen"):
         target.fusion_receive_weights((1, 1))
+
+
+@pytest.mark.parametrize("conflict", [False, True])
+def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflict):
+    from verl.workers.rollout.vllm_fusion import worker_extension
+    from verl.workers.rollout.vllm_rollout import bucketed_weight_transfer as transport
+
+    source = torch.ones(4, 2)
+    alias = source.clone()
+    if conflict:
+        alias[3] = 2
+
+    class ShardedStudent(torch.nn.Module):
+        def __init__(self, rank):
+            super().__init__()
+            self.rank = rank
+            self.model = torch.nn.Module()
+            self.model.embed_tokens = torch.nn.Embedding(2, 2)
+            self.lm_head = self.model.embed_tokens
+            self.config = SimpleNamespace(tie_word_embeddings=True)
+
+        def load_weights(self, weights):
+            with torch.no_grad():
+                for _, value in weights:
+                    self.model.embed_tokens.weight.copy_(value[self.rank * 2 : (self.rank + 1) * 2])
+            return {"model.embed_tokens.weight"}
+
+    class Receiver:
+        def __init__(self, **kwargs):
+            pass
+
+        def receive_weights(self, callback):
+            callback([("model.embed_tokens.weight", source)], False)
+            callback([("lm_head.weight", alias)], True)
+
+    monkeypatch.setattr(transport, "BucketedWeightReceiver", Receiver)
+    monkeypatch.setattr(worker_extension, "get_torch_device", lambda: SimpleNamespace(synchronize=lambda: None))
+    errors = []
+    for rank in range(2):
+        target = FusionWorkerExtension()
+        target.model_runner = SimpleNamespace(model=SimpleNamespace(student=ShardedStudent(rank)))
+        target.fusion_current = True
+        target.fusion_shapes = {"model.embed_tokens.weight": (4, 2)}
+        target.device, target.local_rank = torch.device("cpu"), rank
+        errors.append(target.fusion_receive_weights((2, 2)))
+        assert not target.fusion_valid and target.fusion_version is None
+    assert errors[0] is None
+    assert (errors[1] is not None) == conflict

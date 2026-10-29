@@ -24,6 +24,7 @@ def main():
     parser.add_argument("--alphas", nargs="+", type=float, default=[0.0, 0.5, 1.0])
     parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument("--graph", action="store_true")
+    parser.add_argument("--tensor-parallel-size", type=int, choices=[1, 2], default=1)
     parser.add_argument("--skip-lifecycle-audit", action="store_true")
     parser.add_argument("--data")
     parser.add_argument("--temperature", type=float, default=1.0)
@@ -33,6 +34,8 @@ def main():
     args = parser.parse_args()
     if not os.environ.get("CUDA_VISIBLE_DEVICES"):
         raise ValueError("Set CUDA_VISIBLE_DEVICES explicitly")
+    if len(os.environ["CUDA_VISIBLE_DEVICES"].split(",")) != args.tensor_parallel_size:
+        raise ValueError("Allocate exactly one GPU per TP rank for this standalone probe")
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=False)
     (out / "config.json").write_text(json.dumps(vars(args), indent=2) + "\n")
@@ -94,7 +97,7 @@ def main():
         model=args.student,
         tokenizer=args.student,
         hf_overrides=fusion_hf_overrides(args.teacher),
-        tensor_parallel_size=1,
+        tensor_parallel_size=args.tensor_parallel_size,
         dtype="bfloat16",
         enforce_eager=not args.graph,
         compilation_config=decode_graph_config(args.max_num_seqs) if args.graph else None,
