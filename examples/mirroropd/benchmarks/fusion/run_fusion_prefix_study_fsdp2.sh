@@ -70,6 +70,8 @@ if [[ $MODE == profile ]]; then export TOTAL_TRAINING_STEPS=${PREFIX_PROFILE_OUT
 if [[ $MODE == smoke ]]; then
     export TOTAL_TRAINING_STEPS=2 TRAIN_BATCH_SIZE=2 MAX_PROMPT_LENGTH=1024 MAX_RESPONSE_LENGTH=32
 fi
+# RolloutConfig validates this window even when no validation is requested.
+export MAX_VAL_RESPONSE_LENGTH=$MAX_RESPONSE_LENGTH
 context=$((MAX_PROMPT_LENGTH + MAX_RESPONSE_LENGTH))
 export EXPERIMENT_NAME="prefix-${MODE}-${PAIR}-${ARM}-${LABEL}"
 export RUN_DIR="$REPO/outputs/$EXPERIMENT_NAME"
