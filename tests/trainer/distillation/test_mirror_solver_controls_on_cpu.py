@@ -10,8 +10,8 @@ import torch
 
 @pytest.fixture
 def modules(monkeypatch):
-    return importlib.import_module("examples.mirroropd.research.precision.solver_optimizers"), importlib.import_module(
-        "examples.mirroropd.research.precision.audit_mirror_solvers"
+    return importlib.import_module("examples.mirroropd.research.backends.solver_optimizers"), importlib.import_module(
+        "examples.mirroropd.research.studies.precision.audit_mirror_solvers"
     )
 
 
@@ -63,7 +63,7 @@ def test_muon_partition_excludes_embeddings_heads_and_norms(modules):
 
 
 def test_forward_error_decomposition_is_zero_for_unchanged_policy(monkeypatch):
-    probe = importlib.import_module("examples.mirroropd.research.precision.probe_mirror_forward")
+    probe = importlib.import_module("examples.mirroropd.research.studies.precision.probe_mirror_forward")
     z = torch.tensor([[2.0, 0.0, -1.0], [0.0, 1.0, 2.0]], dtype=torch.float64)
     ref = z.log_softmax(-1)
     observed = (z + torch.tensor([0.01, -0.02, 0.01])).log_softmax(-1)
@@ -75,7 +75,7 @@ def test_forward_error_decomposition_is_zero_for_unchanged_policy(monkeypatch):
 
 
 def test_fixed_logit_error_does_not_invent_error_motion(monkeypatch):
-    probe = importlib.import_module("examples.mirroropd.research.precision.probe_mirror_forward")
+    probe = importlib.import_module("examples.mirroropd.research.studies.precision.probe_mirror_forward")
     z = torch.tensor([[2.0, 0.0, -1.0]], dtype=torch.float64)
     dz = torch.tensor([[0.001, -0.002, 0.003]], dtype=torch.float64)
     error = torch.tensor([[0.2, -0.1, 0.1]], dtype=torch.float64)
@@ -87,7 +87,7 @@ def test_fixed_logit_error_does_not_invent_error_motion(monkeypatch):
 
 
 def test_changing_arithmetic_error_is_separated_from_reference_motion(monkeypatch):
-    probe = importlib.import_module("examples.mirroropd.research.precision.probe_mirror_forward")
+    probe = importlib.import_module("examples.mirroropd.research.studies.precision.probe_mirror_forward")
     z = torch.tensor([[2.0, 0.0, -1.0]], dtype=torch.float64)
     e = torch.tensor([[0.01, -0.01, 0.0]], dtype=torch.float64)
     r = probe.forward_error_decomposition(

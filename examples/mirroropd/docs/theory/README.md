@@ -88,12 +88,12 @@ MD 篇的四格分类与两种 NoIS 定义由本目录的标量目标独立推�
 
 ## 验算
 
-| 范围                                          | 脚本与证据                                                                                                                                                                         |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 基础四格、两种正则 NoIS、几何目标与归一化修正 | [verify_offpolicy_objectives.py](../../research/objectives/verify_offpolicy_objectives.py)、[FP64 结果](data/offpolicy-objectives.json)                                            |
-| 原 sampled-token 与 clipping 对照             | [verify_fixed_prefix.py](../../research/objectives/verify_fixed_prefix.py)、[历史结果](../literature/learning-signal/data/gradient-audit.json)                                     |
-| Full-vocab 计算图与支持集                     | [verify_fullkl_and_support.py](../../research/objectives/verify_fullkl_and_support.py)、[历史结果](../literature/learning-signal/data/support-selection-20261021/audit.json)       |
-| Baseline 与稀疏估计器                         | [verify_reward_estimators.py](../../research/objectives/verify_reward_estimators.py)、[历史结果](../literature/learning-signal/data/reward-research-20261021/estimator-audit.json) |
+| 范围                                          | 脚本与证据                                                                                                                                                                                |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 基础四格、两种正则 NoIS、几何目标与归一化修正 | [verify_offpolicy_objectives.py](../../research/checks/objectives/verify_offpolicy_objectives.py)、[FP64 结果](data/offpolicy-objectives.json)                                            |
+| 原 sampled-token 与 clipping 对照             | [verify_fixed_prefix.py](../../research/checks/objectives/verify_fixed_prefix.py)、[历史结果](../literature/learning-signal/data/gradient-audit.json)                                     |
+| Full-vocab 计算图与支持集                     | [verify_fullkl_and_support.py](../../research/checks/objectives/verify_fullkl_and_support.py)、[历史结果](../literature/learning-signal/data/support-selection-20261021/audit.json)       |
+| Baseline 与稀疏估计器                         | [verify_reward_estimators.py](../../research/checks/objectives/verify_reward_estimators.py)、[历史结果](../literature/learning-signal/data/reward-research-20261021/estimator-audit.json) |
 
 新增脚本只使用 CPU 张量，完整枚举小词表，不加载语言模型。证明给出解析条件，脚本检查公式与反向计算图的一致性。
 

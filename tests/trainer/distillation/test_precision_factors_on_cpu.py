@@ -10,7 +10,7 @@ import torch
 
 @pytest.fixture
 def factors(monkeypatch):
-    return importlib.import_module("examples.mirroropd.research.precision.factor_mirror_precision")
+    return importlib.import_module("examples.mirroropd.research.studies.precision.factor_mirror_precision")
 
 
 @pytest.mark.parametrize("heads,kv_heads", [(4, 4), (4, 2), (4, 1), (12, 2)])
@@ -49,7 +49,7 @@ def test_backward_oracle_preserves_supplied_forward_exactly(factors):
 
 
 def test_capture_analysis_recognizes_cast_only_errors(factors, tmp_path):
-    analysis = importlib.import_module("examples.mirroropd.research.precision.analyze_attention_capture")
+    analysis = importlib.import_module("examples.mirroropd.research.studies.precision.analyze_attention_capture")
     torch.manual_seed(8)
     q, k, v = [torch.randn(1, 2, 7, 5).bfloat16() for _ in range(3)]
     inputs = [x.double().requires_grad_() for x in (q, k, v)]

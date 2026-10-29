@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPT = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis/legacy/summarize_decode_trace.py"
+SCRIPT = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/studies/pipeline/summarize_decode_trace.py"
 spec = importlib.util.spec_from_file_location("decode_trace", SCRIPT)
 trace = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(trace)

@@ -165,7 +165,9 @@ class MaintenanceTests(unittest.TestCase):
             exclude = hooks[name]["exclude"]
             self.assertRegex("examples/mirroropd/docs/archive/source.py", exclude)
             self.assertRegex("examples/mirroropd/docs/literature/sources/model.py", exclude)
-            self.assertIsNone(re.search(exclude, "examples/mirroropd/research/analysis/analyze_equal_budget.py"))
+            self.assertIsNone(
+                re.search(exclude, "examples/mirroropd/research/studies/production/analyze_equal_budget.py")
+            )
 
     def test_rules_hard_limit_and_missing_skill_fail(self):
         self.fixture()

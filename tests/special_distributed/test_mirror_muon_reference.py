@@ -13,7 +13,7 @@ import torch.distributed as dist
 from torch.distributed.device_mesh import init_device_mesh
 from torch.distributed.tensor import Shard, distribute_tensor
 
-from examples.mirroropd.research.precision.solver_optimizers import FullMatrixMuonAdamW
+from examples.mirroropd.research.backends.solver_optimizers import FullMatrixMuonAdamW
 
 
 def main():

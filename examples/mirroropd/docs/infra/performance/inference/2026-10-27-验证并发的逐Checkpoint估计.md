@@ -53,4 +53,4 @@ $$
 
 当前长程实验的并发未修改。本记录是离线估计，没有增加 GPU benchmark。
 
-数据与复算入口：[逐 checkpoint 表](../../../../../../../wandb-logs/MirrorOPD-verl/analysis/e39-concurrency-estimate-20261027/checkpoint-estimates.csv)、[估计与回放结果](../../../../../../../wandb-logs/MirrorOPD-verl/analysis/e39-concurrency-estimate-20261027/analysis.json)、[逐请求长度](../../../../../../../wandb-logs/MirrorOPD-verl/analysis/e39-concurrency-estimate-20261027/request-lengths.json.gz)、[计算脚本](../../../../research/analysis/qwen_base/estimate_validation_concurrency.py)。历史实测参见[学生推理性能记录](../2026-10-27-学生模型推理性能与参数选择.md#qwen3-17b-base)。
+数据与复算入口：[逐 checkpoint 表](../../../../../../../wandb-logs/MirrorOPD-verl/analysis/e39-concurrency-estimate-20261027/checkpoint-estimates.csv)、[估计与回放结果](../../../../../../../wandb-logs/MirrorOPD-verl/analysis/e39-concurrency-estimate-20261027/analysis.json)、[逐请求长度](../../../../../../../wandb-logs/MirrorOPD-verl/analysis/e39-concurrency-estimate-20261027/request-lengths.json.gz)、[计算脚本](../../../../research/studies/qwen_base/estimate_validation_concurrency.py)。历史实测参见[学生推理性能记录](../2026-10-27-学生模型推理性能与参数选择.md#qwen3-17b-base)。

@@ -12,7 +12,7 @@ import torch
 @pytest.mark.parametrize("heads,kv_heads,head_dim", [(4, 1, 32), (4, 2, 32), (4, 4, 32), (12, 2, 128)])
 def test_native_cuda_forward_is_bitwise_preserved(monkeypatch, heads, kv_heads, head_dim):
     torch.cuda.set_per_process_memory_fraction(0.04)
-    factors = importlib.import_module("examples.mirroropd.research.precision.factor_mirror_precision")
+    factors = importlib.import_module("examples.mirroropd.research.studies.precision.factor_mirror_precision")
     from flash_attn import flash_attn_func
 
     torch.manual_seed(37)
@@ -37,7 +37,7 @@ def test_native_cuda_forward_is_bitwise_preserved(monkeypatch, heads, kv_heads, 
     for grad, ref in zip(gradients, reference, strict=True):
         assert torch.equal(grad, ref.bfloat16())
     native_gradients = torch.autograd.grad(expected, (q, k, v), go)
-    analysis = importlib.import_module("examples.mirroropd.research.precision.analyze_attention_capture")
+    analysis = importlib.import_module("examples.mirroropd.research.studies.precision.analyze_attention_capture")
     record = {
         "layer": 0,
         "native_kwargs": {"scaling": 0.2, "dropout": 0.0},
@@ -52,7 +52,7 @@ def test_native_cuda_forward_is_bitwise_preserved(monkeypatch, heads, kv_heads, 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
 def test_native_norm_forward_is_bitwise_preserved(monkeypatch):
     torch.cuda.set_per_process_memory_fraction(0.04)
-    factors = importlib.import_module("examples.mirroropd.research.precision.factor_mirror_precision")
+    factors = importlib.import_module("examples.mirroropd.research.studies.precision.factor_mirror_precision")
     from transformers.models.qwen2.modeling_qwen2 import Qwen2RMSNorm
 
     torch.manual_seed(42)

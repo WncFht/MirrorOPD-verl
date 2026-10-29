@@ -40,7 +40,7 @@ S 使用 current residual、生成时行为概率作分母的未截断 token-IS�
 
 现有 [pipeline.py](../../../../benchmarks/profile/pipeline.py)可复用 worker 初始化、同步计时、显存归约和输出结构，但不能直接完成本实验：它仅支持 full、从 input/output 文本重新分词、没有 behavior log-prob，并逐次调用 `train_batch`。直接重复调用 16 次会重复 load/offload，不等于生产 `train_mini_batch` 的一次驻留内 16 次 reuse。
 
-现有 [replay_fixed_prefix.py](../../../../research/precision/replay_fixed_prefix.py)针对 MDPO 数值审计和多个精度分支，也不能作为 S/F 性能工具直接复用。普通 rollout JSONL 只保存解码文本与分数，不能恢复原 token/behavior；不能用重新分词和事后 student log-prob 冒充实际行为概率。
+现有 [replay_fixed_prefix.py](../../../../research/studies/precision/replay_fixed_prefix.py)针对 MDPO 数值审计和多个精度分支，也不能作为 S/F 性能工具直接复用。普通 rollout JSONL 只保存解码文本与分数，不能恢复原 token/behavior；不能用重新分词和事后 student log-prob 冒充实际行为概率。
 
 待实现工具放在 `examples/mirroropd/benchmarks/` 的对应专题中，职责限制如下，不建立新的训练框架：
 

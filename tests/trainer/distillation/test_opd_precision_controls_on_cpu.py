@@ -11,8 +11,8 @@ import torch
 
 @pytest.fixture
 def modules(monkeypatch):
-    return importlib.import_module("examples.mirroropd.research.precision.engine"), importlib.import_module(
-        "examples.mirroropd.research.precision.audit_mirror_solvers"
+    return importlib.import_module("examples.mirroropd.research.backends.fsdp"), importlib.import_module(
+        "examples.mirroropd.research.studies.precision.audit_mirror_solvers"
     )
 
 

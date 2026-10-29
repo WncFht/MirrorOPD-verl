@@ -2,17 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 """Protect equal-update windows, nonoverlapping cost and pre-update semantics."""
 
-import importlib.util
-import sys
-from pathlib import Path
-
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis"
-sys.path.insert(0, str(SCRIPTS))
-spec = importlib.util.spec_from_file_location("equal_budget", SCRIPTS / "analyze_equal_budget.py")
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
+from examples.mirroropd.research.studies.production import analyze_equal_budget as module
 
 
 def test_budget_caps_outer_and_does_not_double_count_actor_or_checkpoint():

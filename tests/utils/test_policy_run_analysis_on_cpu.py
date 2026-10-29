@@ -10,8 +10,11 @@ from pathlib import Path
 
 import pytest
 
+from examples.mirroropd.research.core import logs
+from examples.mirroropd.research.core.io import read_rows
+
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPTS = ROOT / "examples/mirroropd/research/analysis"
+SCRIPTS = ROOT / "examples/mirroropd/research/studies/production"
 DATA = (
     Path(os.environ.get("WANDB_LOGS_REPO", ROOT.parent / "wandb-logs"))
     / "MirrorOPD-verl/analysis/e15-krkmq098-20261023"
@@ -50,18 +53,18 @@ def test_preupdate_axis_and_missing_values(analyze):
             "optim/actor/loss": None,
         },
     ]
-    series = analyze.normalize(rows, {"policy/anchor_behavior/k3": "step/outer", "optim/actor/loss": "step/update"})
+    series = logs.normalize(rows, {"policy/anchor_behavior/k3": "step/outer", "optim/actor/loss": "step/update"})
     assert series["policy/anchor_behavior/k3"]["points"] == [(1, 0.1)]
     assert series["optim/actor/loss"]["points"] == [(1, 0.2)]
 
 
 def test_conflicting_duplicate_and_missing_axis_fail(analyze):
     with pytest.raises(ValueError, match="Conflicting"):
-        analyze.normalize(
+        logs.normalize(
             [{"step/update": 1, "optim/loss": 0}, {"step/update": 1, "optim/loss": 1}], {"optim/loss": "step/update"}
         )
     with pytest.raises(ValueError, match="Missing axis"):
-        analyze.normalize([{"optim/loss": 0}], {"optim/loss": "step/update"})
+        logs.normalize([{"optim/loss": 0}], {"optim/loss": "step/update"})
 
 
 def test_timers_do_not_double_count_nested_regions(analyze):
@@ -85,7 +88,7 @@ def test_timers_do_not_double_count_nested_regions(analyze):
         "rollout_batch": [(1, 1000), (2, 1000), (3, 1000)],
     }.items():
         series[prefix + name + "_seconds"] = {"points": points}
-    result = analyze.timing(series)
+    result = logs.timing(series)
     assert result["accounted_seconds"] == 137
     assert result["regular_steps"] == [2]
     assert result["checkpoint_seconds_included_in_outer"] == 2
@@ -108,9 +111,9 @@ def test_lossless_archive_and_no_overwrite(analyze, tmp_path, system_name):
 
 @pytest.mark.skipif(not DATA.is_dir(), reason="Optional integration evidence requires wandb-logs analysis archive")
 def test_frozen_e15_axes_and_accounting(analyze):
-    rows = analyze.read_rows(DATA / "history.jsonl.gz")
+    rows = read_rows(DATA / "history.jsonl.gz")
     axes = json.loads((DATA / "metric-axes.json").read_text())
-    series = analyze.normalize(rows, axes)
+    series = logs.normalize(rows, axes)
     result = analyze.summarize(rows, series, [])
     assert (result["history_events"], result["outer_steps"], result["last_optimizer_step"]) == (600, 200, 200)
     assert result["numeric_metrics_excluding_axes_and_internal"] == 2377
@@ -125,17 +128,7 @@ def test_frozen_e15_axes_and_accounting(analyze):
 
 
 def test_gpu_missing_observations_not_zero_filled(monkeypatch):
-    pytest.importorskip("matplotlib")
-    monkeypatch.syspath_prepend(str(SCRIPTS))
-    monkeypatch.syspath_prepend(str(ROOT / "examples/mirroropd/research/analysis/legacy"))
-    # Plot styling is an optional external dependency, but data selection is tested when available.
-    import fvlocate
-
-    try:
-        fvlocate.ensure()
-    except FileNotFoundError:
-        pytest.skip("figure-viz style package is not installed")
-    import plot_policy_run
+    from examples.mirroropd.research.studies.production import plot_policy_run
 
     full = {"_timestamp": 1, **{f"system.gpu.{i}.gpu": 50 for i in range(8)}}
     partial = {"_timestamp": 2, "system.gpu.0.gpu": 0}

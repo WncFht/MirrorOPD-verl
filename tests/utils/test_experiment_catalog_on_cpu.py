@@ -3,15 +3,11 @@
 """Evidence boundaries for the local experiment catalog; no model dependencies."""
 
 import json
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis"
-sys.path.insert(0, str(SCRIPTS))
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from examples.mirroropd.research.analysis import refresh_tables as catalog  # noqa: E402
+from examples.mirroropd.research.studies.production import refresh_tables as catalog
 
 
 class CatalogEvidenceTests(unittest.TestCase):

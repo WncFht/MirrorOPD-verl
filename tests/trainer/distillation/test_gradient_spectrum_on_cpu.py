@@ -5,7 +5,7 @@
 import numpy as np
 import pytest
 
-from examples.mirroropd.research.transfer.analyze_gradient_spectrum import eigensystem, projection_curve
+from examples.mirroropd.research.studies.spectral.analyze_gradient_spectrum import eigensystem, projection_curve
 
 
 def test_projection_matches_explicit_parameter_space():

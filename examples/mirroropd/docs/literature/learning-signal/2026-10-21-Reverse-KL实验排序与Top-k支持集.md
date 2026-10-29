@@ -201,12 +201,12 @@ $$
 
 ## 7. 本轮验证与复现
 
-[脚本](../../../research/objectives/verify_fullkl_and_support.py)包含 20 个 FP64 分布案例，检查 dense KL、stopped-gap、score surrogate 和 analytic-logit VJP 的一阶梯度相等，验证两种 IS 数值估计的期望梯度，以及错误 detach 和 singleton normalized KL 的零梯度。最大正确梯度误差约 $2.22\times10^{-16}$。
+[脚本](../../../research/checks/objectives/verify_fullkl_and_support.py)包含 20 个 FP64 分布案例，检查 dense KL、stopped-gap、score surrogate 和 analytic-logit VJP 的一阶梯度相等，验证两种 IS 数值估计的期望梯度，以及错误 detach 和 singleton normalized KL 的零梯度。最大正确梯度误差约 $2.22\times10^{-16}$。
 
 可选从已审阅 One-Shot checkout 抽取三个纯 tensor helper，按生产调用链的 K 列形状构造上述反例，并验证正确 2K 输入能恢复 teacher-only 列。没有运行作者的 Ray/FSDP GPU 栈，未将这个测试包装成端到端性能结论。
 
 ```bash
-CUDA_VISIBLE_DEVICES='' python -m examples.mirroropd.research.objectives.verify_fullkl_and_support \
+CUDA_VISIBLE_DEVICES='' python -m examples.mirroropd.research.checks.objectives.verify_fullkl_and_support \
   --oneshot-root ../One-Shot-OPD --output /tmp/fullkl-support-audit.json
 ```
 

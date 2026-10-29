@@ -16,16 +16,16 @@
 
 ## 证据与复算
 
-- [中心与公开实现核验结果](../../literature/rollout-policy/data/numerical-audit.json)，对应[脚本](../../../research/rollout_policy/audit_centers.py)。
-- [聚合目标恒等式核验结果](../../literature/rollout-policy/data/aggregation-audit.json)，对应[脚本](../../../research/rollout_policy/audit_aggregation.py)。
+- [中心与公开实现核验结果](../../literature/rollout-policy/data/numerical-audit.json)，对应[脚本](../../../research/checks/rollout_policy/audit_centers.py)。
+- [聚合目标恒等式核验结果](../../literature/rollout-policy/data/aggregation-audit.json)，对应[脚本](../../../research/checks/rollout_policy/audit_aggregation.py)。
 - [作者 Bernoulli Java 示例输出](../../literature/rollout-policy/data/java-audit.txt)，源码与启动器在 `scripts/`。
 - `data/` 保存检索记录与数值证据，`scripts/` 保存复算入口。第三方源码与 PDF 下载缓存保留在原研究目录；主文已引用原始来源。中心核验脚本通过 uv 安装固定 commit 的 pyBregMan，无需依赖该缓存。上述核验均为 CPU 合成分布，不代表 LLM 训练或 GPU 性能结果。
 
 在本目录运行：
 
 ```bash
-python -m examples.mirroropd.research.rollout_policy.audit_centers --out /tmp/centers-recheck.json
-python -m examples.mirroropd.research.rollout_policy.audit_aggregation --out /tmp/aggregation-recheck.json
+python -m examples.mirroropd.research.checks.rollout_policy.audit_centers --out /tmp/centers-recheck.json
+python -m examples.mirroropd.research.checks.rollout_policy.audit_aggregation --out /tmp/aggregation-recheck.json
 ```
 
 ## 完整检索记录

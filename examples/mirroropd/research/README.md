@@ -1,82 +1,70 @@
 # MirrorOPD 研究代码
 
-研究代码统一放在这个 Python 包；文档目录保留报告、图和证据索引。运行命令从 `MirrorOPD-verl` 仓库根目录执行。原 `docs/experiments/polaris-transfer/scripts/` 与 `docs/mirror-descent/scripts/` 的实现已迁走，旧目录没有转发脚本。
+从仓库根目录运行。`studies` 按研究问题组织实验、分析和绘图；`core` 提供公共 IO、指标、统计和证据身份；`backends` 负责 HF、FSDP2 与评测的执行；`runtime` 管理进程和运行源码；`checks` 保存独立数学核验。文档仍位于原来的 `docs` 目录。
 
-## 结构与依赖
-
-```text
-research/
-  common/       指标、轨迹缓存、JSON、bootstrap、固定批次配置、绘图样式加载
-    native.py   HF 模型加载、完整前缀前向与学生/教师/交集解码
-  transfer/     state 来源、跨批迁移、覆盖、batch、目标方向与筛选实验
-  precision/
-    engine.py   FSDP2 worker、独立 FP64 评分、参数快照
-    ...         精度、VJP、优化器与 solver 干预及相应统计
-  __main__.py   列出和运行实验，发现命令时不导入模型后端
-```
-
-依赖方向为“实验 → 公共函数或对应执行后端”。纯 JSON 统计只依赖标准库或 NumPy；列出实验不导入 Torch。HF 和 FSDP2 使用各自的执行实现，独立 FP64/VJP 核验保留自己的参考公式。没有插件注册表、统一 Trainer 基类或第二套任务调度器。
-
-历史实验的区别由具体模块明确保留，例如 S 系列对 head 的 BF16 舍入、早期 KL-direction probe 在共享支持上的距离、I/B/L 的不同归一化。公共 `metrics.py` 只负责给定 state 的原生支持分布距离，不替调用者选择轨迹来源或归一化分母。解码历史 profile 的 top-k 按概率取值，L 的固定评分按 logits 取值，保留各自数值行为；新的指标协议须显式定义 ties 和支持集。
-
-## 统一入口
+## 查找与运行
 
 ```bash
-# 列出两类可执行模块，不启动训练
-python -m examples.mirroropd.research transfer
-python -m examples.mirroropd.research precision
+# 根据源码发现全部可执行模块，不导入模型或启动任务
+python -m examples.mirroropd.research
 
-# 查看某个实验的参数；原有实验子命令继续保留
-python -m examples.mirroropd.research transfer long_batch_transfer --help
-python -m examples.mirroropd.research transfer intersection_study --help
+# 查看固定状态迁移和单遍跨批研究的参数
+python -m examples.mirroropd.research fixed_transfer --help
+python -m examples.mirroropd.research cross_batch.long_batch_transfer --help
 
-# CPU 重算已有 L 统计：输出写到显式指定的数据目录
-python -m examples.mirroropd.research transfer analyze_long_batch_transfer \
+# 重算已有统计，使用明确的数据目录
+python -m examples.mirroropd.research cross_batch.analyze_long_batch_transfer \
   --data ../wandb-logs/MirrorOPD-verl/analysis/twenty-batch-pass-20261027
+
+# 从同一次本地日志读取生成运行表和验证表
+python -m examples.mirroropd.research production.refresh_tables --logs-repo ../wandb-logs
 ```
 
-也可以直接用完整模块名：`python -m examples.mirroropd.research.transfer.analyze_long_batch_transfer ...`。分布式入口使用 `torchrun --nproc-per-node=2 --module examples.mirroropd.research.transfer.long_batch_transfer ...`；不能再将模块文件路径直接交给 Python。模块名维持原文件 stem，历史参数保留，已有文档中的命令和源码链接同步迁移。
+命令名是 `studies` 下的相对模块名；数学核验使用 `checks.objectives.verify_fixed_prefix` 等名称。包内含 `__main__.py` 时直接使用包名，例如 `fixed_transfer`。命令由 Python 源码发现，不维护注册表或 manifest。也可以直接运行完整模块名，例如 `python -m examples.mirroropd.research.studies.cross_batch.long_batch_transfer --help`；分布式入口使用 `torchrun --nproc-per-node=2 --module examples.mirroropd.research.studies.cross_batch.long_batch_transfer ...`。
 
-`audit_` 表示核验目的，并不保证只读或只使用 CPU；precision 的 solver/optimizer 干预可能执行真实训练。是否启动模型以模块 docstring 和 `--help` 为准。当前重构仅运行 CPU 核验与历史统计复算，双来源 R 实验尚未启动。
+旧的 `transfer`、`precision`、`analysis`、`common`、`objectives`、`rollout_policy` 顶层包和旧的两段式 CLI 已删除，没有转发模块。活动文档使用新路径。冻结证据中的命令描述当时执行的源码，不是当前入口。
 
-## 常用实验入口
+`audit` 表示核验目的，部分核验执行真实模型更新。运行前阅读模块说明和参数；列出命令不会调用实验。纯统计使用标准库或 NumPy；绘图通过 `core.plotting.load_style` 加载 `FIGURE_VIZ_MPL` 指定的 figure-viz `assets/mpl` 目录。
 
-| 系列                 | 准备／运行                                                                                            | 统计／核验／绘图                                                                                                                     |
-| -------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| S：稀疏 state 来源   | `state_transfer_probe`                                                                                | `summarize_state_transfer`、`audit_state_transfer`、`plot_state_transfer`                                                            |
-| I：在线来源与交集    | `intersection_study` 的各子命令                                                                       | `summarize_intersection`、`analyze_intersection_controls`、`audit_intersection_study`、`plot_intersection_study`                     |
-| B：跨批、覆盖与顺序  | `batch_generalization`、`batch_gradient_geometry`                                                     | `summarize_batch_generalization`、`analyze_batch_controls`、`audit_batch_generalization`、`plot_batch_transfer_detail`               |
-| N：batch 与阶段      | `batch_size_stage`、`probe_overlap_mass`                                                              | `analyze_batch_size_stage`、`audit_batch_size_stage`、`plot_batch_size_stage`                                                        |
-| L：40 批单遍         | `prepare_long_batch_transfer`、`long_batch_transfer`、`cross_score_long_transfer`                     | `analyze_long_batch_transfer`、`audit_long_batch_transfer`、`plot_long_batch_transfer`                                               |
-| 筛选假说             | `prepare_filter_study`、`filter_train`、`filter_transfer_proxy`、`filter_synthetic`、`filter_if_eval` | `analyze_filter_study`、`analyze_filter_controls`、`audit_filter_study`、`plot_filter_study`；独立 CPU checker：`grade_filter_if.py` |
-| 生产 E48 与 KL 方向  | `analyze_completed_transfer`、`kl_direction_probe`                                                    | `analyze_forward_study`、`audit_forward_study`、对应 `plot_*`                                                                        |
-| FSDP2 精度与 solver  | `replay_fixed_prefix`、`audit_mirror_solvers`、`factor_mirror_precision`                              | `summarize_mirror_solvers`、`summarize_precision_localization`、`summarize_opd_transfer`、`plot_precision_report`                    |
-| 优化器历史与实际位移 | `audit_optimizer_history`、`probe_mirror_forward`                                                     | `summarize_optimizer_history`                                                                                                        |
+## 研究与报告
 
-前七行使用 `transfer`，后两行使用 `precision`。绘图需要设置 `FIGURE_VIZ_MPL` 为 figure-viz 的 `assets/mpl`；该依赖在解析命令参数后才加载，所以 `--help` 不要求安装或配置绘图 skill。`plot_precision_report` 保留原 `--figure-skill` 参数。
+| 研究包                                   | 主要用途                                 | 文档入口                                                                                                                          |
+| ---------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `state_sources`                          | S/I 来源、在线交集与固定输入控制         | [跨源泛化总览](../docs/experiments/teacher-transfer/transfer-mechanism/2026-10-27-跨源蒸馏泛化研究总览.md)                        |
+| `cross_batch`                            | B/N/L 跨批、覆盖、batch 与单遍训练       | [跨批结果](../docs/experiments/teacher-transfer/transfer-mechanism/cross-batch/2026-10-28-跨批次迁移与单遍训练结果.md)            |
+| `capability_filter`                      | 筛选、温度、功能保持与续写控制           | [能力筛选假说](../docs/experiments/teacher-transfer/transfer-mechanism/capability-filter/2026-10-28-OPD能力筛选假说的受控实验.md) |
+| `spectral`                               | 梯度谱与教师候选核对                     | [谱与同架构诊断](../docs/experiments/teacher-transfer/transfer-mechanism/spectral/README.md)                                      |
+| `polaris_transfer`                       | E48、KL 方向和教师谱系探针               | [Polaris 迁移](../docs/experiments/teacher-transfer/cross-origin/polaris/README.md)                                               |
+| `boundary`                               | R1 边界与续训实验的明确协议              | [运行说明](studies/boundary/README.md)                                                                                            |
+| `fixed_transfer`                         | 按既有计划组织模型、冻结银行、训练和评测 | [固定状态迁移](studies/fixed_transfer/README.md)                                                                                  |
+| `precision`、`polaris`、`rkl_optimizers` | 精度、优化器与反弹机制                   | [优化器与精度](../docs/experiments/teacher-transfer/optimizer-precision/README.md)                                                |
+| `termination`                            | 终止动作、E54 长度和目标干预             | [E54 诊断](../docs/infra/model-compatibility/qwen-e54/2026-10-29-E54长度膨胀诊断.md)                                              |
+| `qwen_base`、`qwen_teachers`             | Qwen 教师与生产运行分析                  | [教师对比](../docs/experiments/teacher-transfer/teacher-comparison/README.md)                                                     |
+| `production`、`production_precision`     | 运行表、预算、生产精度与 KL 轨迹         | [实验维护说明](../docs/experiments/维护说明.md)                                                                                   |
+| `pipeline`                               | 已记录流水线、性能与旧运行证据分析       | [性能研究](../docs/infra/performance/README.md)                                                                                   |
 
-筛选假说另有 `filter_calibration` 和 `filter_continue_math` 两个冻结权重诊断入口；完整设置、已完成结果和复算命令见 [OPD 能力筛选假说报告](../docs/experiments/teacher-transfer/transfer-mechanism/capability-filter/2026-10-28-OPD能力筛选假说的受控实验.md)。
+## 公共实现与实验差异
 
-## 缓存、恢复与配置
+IO 统一从 `core.io` 导入，包含严格 JSON、JSONL/gzip、原子替换与 CSV。产物指纹、完整回执和追加记录修复位于 `core.artifacts`；这些是自动生成的运行证据，不是人工登记目录。通用日志坐标和统计位于 `core.logs`，实验 inventory 的读取位于 `core.inventory`；运行与验证 Markdown 只由 `production.refresh_tables` 生成。
 
-`common/cache.py` 的 `HiddenCache` 使用来源、题目、重复编号、seed、生成 checkpoint 等身份区分路径，并在 payload 中保存完整 prompt/response token IDs 与模型路径、dtype、attention 实现和 hidden 协议。读取时逐项核对，长度相同而 token 不同也会拒绝。模型路径必须代表不可变的权重版本；不能在同一路径覆盖权重后继续复用缓存。
+`core.metrics` 计算原生支持上的分布距离，调用者决定轨迹和聚合分母。条件共享支持、原生完整支持、概率排序和 logits 排序有不同含义，协议显式保留。`core.statistics` 与 `core.transfer_metrics` 分别实现已有配对统计和 GapRecovery，不把不同实验的置信区间规则混用。
 
-新缓存写入 `validated-hidden-v1/`。历史纯 tensor 缓存无法证明对应哪条完整轨迹，因此保留原文件，首次运行时重新计算新格式；不自动升级或删除旧缓存。没有生成文件摘要或 hash 清单。历史 filter 的内存字典仍限定“一题一来源一轨迹”，重复键会明确报错；需要同题多 rollout 的新实验应直接使用完整轨迹身份。
+固定状态迁移与边界实验共享 `backends.hf_rkl` 的原生 RKL VJP 和 teacher 概率缓存计算；完整前缀 HF 执行位于 `backends.hf_models`。稀疏来源和在线探针使用 `backends.hf_native` 的原有解码协议。FSDP2 干预使用 `backends.fsdp`，独立 FP64/自动微分参考保留独立计算。评测的请求重试与聚合在 `backends.evaluation`，判分在 `core.math_grading`；采样数通过参数传入。
 
-L 的训练、准备、统计和核验通过 `common/protocol.py` 使用冻结的 `LONG_PASS` 设置。统计和训练入口核对 `protocol.json`，避免把 H 或 batch 改了却仍使用旧分母；新的双来源 R 使用自己的明确协议，不假装是旧 L 的一个无差别重跑。
+L 的具体设置放在 `studies/cross_batch/protocol.py`，核对归一化和恢复身份。不同研究的预算、模型和数据选择由研究包负责，不增加统一 Trainer、任意插件或另一门配置语言。扩展已有固定状态实验使用已有计划；只有新数学或执行协议才增加实现。
 
-新保存的 L checkpoint 包含 teacher、模型目录、完整轨迹身份、协议与 world size；恢复时验证一致性、步数及继续训练范围，分别保存和恢复各 rank 的 Torch/CUDA/Python RNG。旧 checkpoint 缺少这些身份字段，改后的训练入口明确拒绝恢复；它们仍可供只读评分。新研究从初始模型重跑，旧权重不被改写或删除。
+## 源码、缓存与恢复
 
-## 修改与验证约定
+固定状态队列将研究代码和实际依赖的 `verl` 源码复制到执行目录，worker 和 guard 都从该目录启动。`MIRROROPD_WORKSPACE` 保持数据、模型与资源控制位于原工作区；模型执行代码的变化参与 teacher 缓存和数值检查身份。未完成训练与评测分别恢复，权重读出不被解释为包含 Adam 的连续恢复状态。
 
-增加实验时先复用 `common` 或对应后端中的函数，实验模块负责设置、数据选择和执行顺序。只有相同数学与精度协议的实现才合并；历史特殊行为在模块和报告中写明。独立 oracle 不调用被核验函数来计算期待值。
+GPU 归属由运行资源配置核对；科学参数不绑定某组物理卡。当前固定状态队列仍使用本机已有的 GPU4–7 分配。所有身份不匹配均报错，重算使用新的输出位置，不覆盖冻结证据。
 
-格式与静态检查沿用仓库 Ruff 配置。公共 CPU 测试覆盖 teacher 额外输出行、原生 RKL 梯度、集合/质量区别、同题多 seed 缓存、前缀与模型错配、原子 JSON、配对统计、checkpoint 身份及评分失败后的内核恢复。运行：
+## 验证
+
+使用具备项目依赖的 Python 环境。纯 CPU 回归包括：
 
 ```bash
-ruff check examples/mirroropd/research
-ruff format --check examples/mirroropd/research
-CUDA_VISIBLE_DEVICES='' python -m pytest -q \
+CUDA_VISIBLE_DEVICES='' python -m pytest -q tests/examples/research \
   tests/trainer/distillation/test_research_common_on_cpu.py \
   tests/trainer/distillation/test_precision_factors_on_cpu.py \
   tests/trainer/distillation/test_opd_precision_controls_on_cpu.py \
@@ -84,10 +72,4 @@ CUDA_VISIBLE_DEVICES='' python -m pytest -q \
   tests/trainer/distillation/test_optimizer_counterfactual_on_cpu.py
 ```
 
-重构的历史回归在临时数据副本中执行，不覆盖原始证据。三套公共指标在 FP32/FP64 上与重构前逐项完全一致；L 的 99 个文件比较一致，I/B/N 的统计回归分别比较 135/220/173 个证据文件也一致；L 的九张 PNG 与重构前文件内容完全一致。35 项公共接口与既有精度／优化器 CPU 测试通过。后续新增协议的 GPU 数值和性能检查在有卡后单独执行，CPU 验证不替代实际训练验收。
-
-相关研究：[跨源泛化总览](../docs/experiments/teacher-transfer/transfer-mechanism/2026-10-27-跨源蒸馏泛化研究总览.md)、[双来源 R 协议与跨批历史结果](../docs/experiments/teacher-transfer/transfer-mechanism/README.md)、[浮点精度报告](../docs/experiments/teacher-transfer/optimizer-precision/mechanism/2026-10-27-MDPO反弹机制与浮点精度研究报告.md)。
-
-## 文档工具迁移
-
-通用分析由 `analysis` 包维护，CLI 使用 `python -m examples.mirroropd.research.analysis.<模块>`；终止动作、Qwen 和共享机制统计使用各自子包。当前双表入口为 `analysis.refresh_tables --logs-repo ../wandb-logs`，不读取人工 catalog。数学核验归 `objectives` 与 `rollout_policy`；工程测量归 `examples.mirroropd.benchmarks`。冻结源码仍随证据保留。
+研究测试集中放在 `tests/examples/research` 并使用 `_on_cpu.py` 命名，进入现有 CPU CI。验证覆盖源码隔离、无后端命令发现、缓存错配、评测续接、完整参数梯度与 tied-weight 保存。真实模型数值与性能检查仍由对应 GPU 核验入口执行；CPU 通过不代替 GPU 验收。
