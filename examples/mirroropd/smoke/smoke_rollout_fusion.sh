@@ -35,4 +35,5 @@ exec bash "$SCRIPT_DIR/smoke_full_reverse_kl.sh" \
     '++actor_rollout_ref.rollout.engine_kwargs.vllm.logits_processors=["verl.experimental.rollout_policy.vllm_support:TokenizerSupport"]' \
     "rollout_policy.micro_batch_size=${FUSION_MICRO_BATCH_SIZE:-2}" \
     'trainer.logger=[console,file]' \
+    "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_ROLLOUT_IPC_NAMESPACE='${VERL_ROLLOUT_IPC_NAMESPACE:-}'" \
     "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='$VERL_FILE_LOGGER_PATH'" "$@"

@@ -8,6 +8,7 @@ import os
 import ray
 
 from verl.workers.rollout.base import BaseRollout
+from verl.workers.rollout.ipc_identity import ipc_job_key
 from verl.workers.rollout.vllm_rollout.bucketed_weight_transfer import BucketedWeightSender
 
 
@@ -18,7 +19,7 @@ class ServerAdapter(BaseRollout):
         self.server = settings["server"]
         self.loaded_version = None
         self.pending_version = None
-        job = ray.get_runtime_context().get_job_id()
+        job = ipc_job_key(ray.get_runtime_context().get_job_id())
         self.address = f"ipc:///tmp/rl-colocate-zmq-{job}-replica-{settings['replica_rank']}-rank-0.sock"
 
     async def resume(self, tags=None):
