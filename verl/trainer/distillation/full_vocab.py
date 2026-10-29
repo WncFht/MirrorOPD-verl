@@ -373,7 +373,11 @@ class FullVocabObjectiveResult(NamedTuple):
 _MIRROR_DIAGNOSTICS = ("target_kl", "target_log_z", "anchor_kl", "teacher_kl")
 
 
-def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False):
+def _coarsen_logits(logits, ids, keep):
+    return torch.cat([logits[:, keep], logits[:, ids].logsumexp(-1, keepdim=True)], dim=-1)
+
+
+def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, termination_token_ids=()):
     with full_kl_range("teacher_projection_and_normalization"):
         zt = project(ht, wt)
     with full_kl_range("anchor_projection_and_normalization"):
@@ -387,11 +391,35 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False):
             return fused_mirror_logits(z, zq, zt, torch.float32 if hs.dtype == torch.float16 else hs.dtype, spec=spec)
         from verl.trainer.distillation.numerics import mirror_logits_rows
 
-        rows, dz, info = mirror_logits_rows(
-            z, zq, zt, objective=spec.objective, kappa=spec.kappa, eta=spec.eta, diagnostics=spec.diagnostics
-        )
-        if hs.dtype != torch.float16:
-            dz = dz.to(hs.dtype)
+        ids = tuple(termination_token_ids)
+        if ids:
+            # Construct the power-mean target in action space. Aggregation and
+            # geometric mixing do not commute; coarsen q and teacher first.
+            student, anchor, teacher = z.double(), zq.double(), zt.double()
+            keep = torch.ones(len(ws), device=z.device, dtype=torch.bool)
+            keep[list(ids)] = False
+            rows, coarse_dz, info = mirror_logits_rows(
+                _coarsen_logits(student, ids, keep),
+                _coarsen_logits(anchor, ids, keep),
+                _coarsen_logits(teacher, ids, keep),
+                objective=spec.objective,
+                kappa=spec.kappa,
+                eta=spec.eta,
+                diagnostics=spec.diagnostics,
+            )
+            # d logsumexp(z_E) / d z_i = p_i / P(E). The anchor and teacher
+            # remain detached inside mirror_logits_rows; only learner logits chain back.
+            dz = torch.empty_like(student)
+            dz[:, keep] = coarse_dz[:, :-1]
+            dz[:, ids] = coarse_dz[:, -1:] * student[:, ids].softmax(-1)
+            pivot = z.argmax(-1, keepdim=True)
+            others = dz.scatter(-1, pivot, 0.0)
+            dz = others.scatter(-1, pivot, -others.sum(-1, keepdim=True))
+        else:
+            rows, dz, info = mirror_logits_rows(
+                z, zq, zt, objective=spec.objective, kappa=spec.kappa, eta=spec.eta, diagnostics=spec.diagnostics
+            )
+        dz = dz.float() if hs.dtype == torch.float16 else dz.to(hs.dtype)
     diag = (
         torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS], dim=-1) if spec.diagnostics else z.new_empty((len(hs), 0))
     )
@@ -413,7 +441,7 @@ def full_vocab_objective_result(
     termination_token_ids=(),
     forward_teacher_support="equal",
 ):
-    """One dispatcher for teacher-only KL, weighted-target MDPO, and full BPO."""
+    """Dispatch teacher KL, MDPO and BPO; MDPO EOS diagnostics use coarsened actions."""
     if spec.teacher_only_forward_kl:
         if termination_token_ids:
             raise ValueError("forward KL does not support termination equivalence")
@@ -435,7 +463,13 @@ def full_vocab_objective_result(
         )
         return FullVocabObjectiveResult(result.loss_sum, result.token_kl, {})
     if termination_token_ids:
-        raise ValueError("termination equivalence supports only teacher-only full reverse KL")
+        ids = tuple(termination_token_ids)
+        if spec.objective != "mdpo" or backend not in ("dense", "precompute"):
+            raise ValueError("Mirror termination equivalence requires MDPO with dense/precompute backend")
+        if len(wt) != len(ws) or len(ids) < 2 or len(set(ids)) != len(ids):
+            raise ValueError("Mirror termination equivalence requires equal vocabularies and distinct stop IDs")
+        if any(type(i) is not int or i < 0 or i >= len(ws) for i in ids):
+            raise ValueError("Mirror termination token IDs must be within the shared vocabulary")
     if spec.payload_kind != "hidden" or spec.objective not in ("mdpo", "bpo"):
         raise ValueError("Full-vocab mirror objective requires MDPO or BPO with hidden payload")
     if backend not in ("dense", "precompute", "precompute_fused"):
@@ -460,7 +494,7 @@ def full_vocab_objective_result(
     if len(hs) == 0:
         return FullVocabObjectiveResult(hs.sum() * 0 + ws.sum() * 0, hs.new_empty(0), {})
     if backend == "dense":
-        rows, _, diag = _mirror_rows(hs, ws, ht, wt, hq, wq, spec)
+        rows, _, diag = _mirror_rows(hs, ws, ht, wt, hq, wq, spec, termination_token_ids=termination_token_ids)
         total = rows.sum()
     else:
         from functools import partial
@@ -470,6 +504,7 @@ def full_vocab_objective_result(
             fused=backend == "precompute_fused"
             and hs.is_cuda
             and hs.dtype in (torch.float16, torch.bfloat16, torch.float32),
+            termination_token_ids=termination_token_ids,
         )
         total, rows, diag = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
     info = {k: diag[:, i].detach() for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if spec.diagnostics else {}

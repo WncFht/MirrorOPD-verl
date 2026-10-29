@@ -406,7 +406,7 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
         env["TRAIN_PRECISION"] = precision
         label += f"-{precision}"
 
-    if name in ("E41", "E54") and method == "full_kl":
+    if name in ("E41", "E54") and (method == "full_kl" or (method == "mdpo" and estimator == "full_vocab")):
         # Both IDs already terminate this single-turn Base rollout. Coarsen
         # their loss identity only for the Base student protocol used in E41 and E54.
         defaults(env, FULL_KL_TERMINATION_TOKEN_IDS="[151643,151645]")
@@ -529,7 +529,8 @@ def preset_overview() -> str:
             "其他探索可用 --method/--kappa/--eta 覆盖；custom 不加载编号预算。\n"
             + "model 预设可加 -valid-student/-valid-teacher，独立验证原始模型。",
             "E54：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；沿用 E41 的 100 outer/reuse16，无初始验证。",
-            "E41/E54 Full-KL 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表 KL。",
+            "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
+            "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
         ]
     )
 
