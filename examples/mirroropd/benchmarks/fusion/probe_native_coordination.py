@@ -11,6 +11,7 @@ import asyncio
 import inspect
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from pathlib import Path
 from types import SimpleNamespace
@@ -22,9 +23,12 @@ import torch.distributed as dist
 class LocalRPC:
     def __init__(self, llm):
         self.llm = llm
+        self.pool = ThreadPoolExecutor(max_workers=1)
 
-    async def remote(self, method, **kwargs):
-        return await asyncio.to_thread(self.llm.collective_rpc, method, timeout=180, **kwargs)
+    def remote(self, method, **kwargs):
+        # Ray starts a remote receiver immediately; start this local stand-in
+        # before the IPC sender enters its blocking socket handshake as well.
+        return asyncio.wrap_future(self.pool.submit(self.llm.collective_rpc, method, timeout=180, **kwargs))
 
 
 def main():
@@ -93,6 +97,7 @@ def main():
         )
         llm.collective_rpc("fusion_initialize", args=(True,))
         before = llm.collective_rpc("fusion_weight_digests")
+    torch.cuda.set_device(rank)
     dist.barrier()
 
     target = object.__new__(ServerAdapter)

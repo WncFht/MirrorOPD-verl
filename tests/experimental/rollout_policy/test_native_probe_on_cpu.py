@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 """Keep diagnostic prefixes aligned when requests enter and leave a native batch."""
 
+import asyncio
 import json
 import sys
+import threading
 from types import SimpleNamespace
 
 import pytest
@@ -61,6 +63,28 @@ def test_non_output_tp_rank_does_not_overwrite_saved_logits(tmp_path):
     path.write_bytes(b"output-rank-evidence")
     assert probe.save_probe(path) == {"output_rank": False}
     assert path.read_bytes() == b"output-rank-evidence"
+
+
+def test_local_rpc_starts_receiver_before_blocking_sender_handshake():
+    from examples.mirroropd.benchmarks.fusion.probe_native_coordination import LocalRPC
+
+    started = threading.Event()
+
+    def collective_rpc(method, **kwargs):
+        started.set()
+        return [None]
+
+    rpc = LocalRPC(SimpleNamespace(collective_rpc=collective_rpc))
+
+    async def handshake():
+        receiving = rpc.remote("receive")
+        assert started.wait(timeout=2), "IPC sender must not block an unscheduled receiver coroutine"
+        assert await receiving == [None]
+
+    try:
+        asyncio.run(handshake())
+    finally:
+        rpc.pool.shutdown()
 
 
 def test_component_acceptance_cannot_ignore_later_rows(tmp_path, monkeypatch):
