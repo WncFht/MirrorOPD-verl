@@ -133,6 +133,9 @@ class AgentLoopWorkerTQ(AgentLoopWorker):
             try:
                 await self._run_agent_loop(params, trajectory, trace=False, rollout_client=client, **prompt)
             except BaseException:
+                # Drain failures can replace the original remote exception in
+                # Ray's serialized traceback. Preserve the triggering failure.
+                logger.exception("Rollout session failed before drain: %s", request.key)
                 # A failed tokenization/scorer must release peers waiting for the
                 # planned microbatch admission count, while GPU work still drains.
                 if hasattr(client, "abort"):
