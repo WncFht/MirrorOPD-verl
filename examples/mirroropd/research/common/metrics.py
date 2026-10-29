@@ -34,6 +34,13 @@ def _measure(sp, tq, *, shared_fkl=False):
     return out, lp, lq, p, q
 
 
+def native_metrics(sp, tq):
+    """Native-support distances without top-k sorting or conditional FKL diagnostics."""
+    out, _, _, _, q = _measure(sp, tq)
+    out["extra_teacher_mass"] = q[:, sp.shape[-1] :].sum(-1)
+    return out
+
+
 def distances(sp, tq):
     return _measure(sp, tq, shared_fkl=True)[0]
 
