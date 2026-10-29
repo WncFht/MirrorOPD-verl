@@ -154,8 +154,11 @@ class DistillationLossConfig(BaseConfig):
         self.loss_settings: DistillationLossSettings = resolve_distillation_spec(self)
         if isinstance(self.full_vocab, dict):
             object.__setattr__(self, "full_vocab", FullVocabConfig(**self.full_vocab))
-        if self.full_vocab.termination_token_ids and not self.loss_settings.teacher_only_kl:
-            raise ValueError("termination equivalence supports only the teacher-only full reverse-KL objective")
+        if self.full_vocab.termination_token_ids and not (
+            self.loss_settings.teacher_only_kl
+            or (self.loss_settings.objective == "mdpo" and self.loss_settings.payload_kind == "hidden")
+        ):
+            raise ValueError("termination equivalence supports teacher-only full reverse-KL and full-vocabulary MDPO")
         if self.loss_mode == "mirror":
             spec = self.loss_settings
             sampled = spec.payload_kind == "sampled"

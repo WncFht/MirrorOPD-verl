@@ -66,7 +66,7 @@
 #
 # E54：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；沿用 E41 的 100 outer/reuse16，无初始验证。
 #
-# E41/E54 Full-KL 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表 KL。
+# E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。
 # END GENERATED EXPERIMENT OVERVIEW
 # Single public training entry. Planning uses Python's standard library only;
 # PYTHON_BIN continues to select the training/Ray interpreter in the shared launcher.
