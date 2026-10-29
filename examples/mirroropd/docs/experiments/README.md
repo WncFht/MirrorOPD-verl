@@ -20,3 +20,5 @@
 日志仓库 `31775eb` 对应的生成表包含 35 个已识别运行，其中 27 个正常完成、7 个证据不完整、1 个非零退出。[E50–E53 对照](teacher-transfer/optimizer-precision/production/2026-10-29-E50至E53完整结果与混合精度对照.md)新增 E51 完整终点、E52 完整训练及 E53 前期结果，分别讨论目标净下降、任务准确率和运行成本。E53 最后训练为 outer103、验证为 outer96，不能作 256 轮终点比较。该报告已补充位置分桶、梯度跳步、多次采样覆盖、完成行为与成本的九幅图，并逐项回答 motivation 中已解决和仍未解决的问题。
 
 训练信号线已有 sampled/full 与 IS/NoIS/PPO 对照；预算线已有 reuse1/4/16、4096 次等更新及长 response cap 对照；迁移线已有 Polaris RKL/FKL、Qwen 配对和固定 state/跨 batch 研究。Rollout 来源与混合线目前仍以方案和工程验收为主，尚未建立长程最终 accuracy 对照。各线沿用自己的实际协议，不将总表作为跨模型统一排名。
+
+[KL 轨迹与 κ 选择](teacher-transfer/optimizer-precision/production/2026-10-29-KL轨迹与κ选择分析.md)补充未平滑的 outer 曲线和覆盖全部 inner 的 145 页图册，区分 optimizer 学习率、η、执行精度与目标形状，并按固定 η 分析 E54 的 κ 对照。
