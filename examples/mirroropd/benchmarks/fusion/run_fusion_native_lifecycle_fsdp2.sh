@@ -7,6 +7,7 @@ WORKSPACE=$(dirname -- "$REPO")
 PAIR=${1:?dense or moe}
 BINDING=${2:?current or initial}
 PREFIX=${3:?unique run prefix}
+RESUME_FROM=${FUSION_RESUME_FROM:-}
 case "$PAIR" in
     dense) export TEACHER_MODEL="$WORKSPACE/model/Qwen3-8B" ;;
     moe) export TEACHER_MODEL="$WORKSPACE/model/Qwen3-30B-A3B-Instruct-2507" ;;
@@ -39,6 +40,11 @@ run() {
         'data.train_max_samples=-1' 'data.val_max_samples=-1' "$@" \
         > "$WORKSPACE/runs/vllm-fusion-20261029/$PREFIX/$name.log" 2>&1
 }
-run "$PREFIX" 'trainer.total_training_steps=2'
-run "$PREFIX-resume" 'trainer.total_training_steps=3' 'trainer.resume_mode=resume_path' \
-    "trainer.resume_from_path=$REPO/outputs/$PREFIX/checkpoints/global_step_2"
+if [[ -n $RESUME_FROM ]]; then
+    run "$PREFIX" 'trainer.total_training_steps=3' 'trainer.resume_mode=resume_path' \
+        "trainer.resume_from_path=$RESUME_FROM"
+else
+    run "$PREFIX" 'trainer.total_training_steps=2'
+    run "$PREFIX-resume" 'trainer.total_training_steps=3' 'trainer.resume_mode=resume_path' \
+        "trainer.resume_from_path=$REPO/outputs/$PREFIX/checkpoints/global_step_2"
+fi

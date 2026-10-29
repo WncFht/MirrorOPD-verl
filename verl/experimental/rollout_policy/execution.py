@@ -27,6 +27,9 @@ class NativeVLLMExecutor:
         wg = rt.trainer.actor_rollout_wg
         execution = rt.policy.execution
         tick = time.monotonic()
+        await rt.wait(wg.park_fusion_actor())
+        rt.metrics["perf/timing/fusion_actor_park_seconds"] = time.monotonic() - tick
+        tick = time.monotonic()
         if self.replica is None:
             rollout = copy.deepcopy(rt.config.actor_rollout_ref.rollout)
             rollout.load_format = "auto"
