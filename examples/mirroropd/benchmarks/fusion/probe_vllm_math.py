@@ -59,7 +59,7 @@ def main():
         kv_cache_memory_bytes=1024**3,
         logprobs_mode="processed_logprobs",
         attention_config={"backend": "TRITON_ATTN"},
-        worker_extension_cls="verl.workers.rollout.vllm_fusion.worker_extension.FusionWorkerExtension",
+        worker_extension_cls="examples.mirroropd.benchmarks.fusion.math_probe_worker.MathProbeWorker",
     )
     llm.collective_rpc("fusion_capture", args=(True,))
     results = []
@@ -89,6 +89,9 @@ def main():
         token = response.token_ids[0]
         measured = response.logprobs[0][token].logprob
         error = abs(measured - expected[token].item())
+        actual = values["processed_log_probs"][0].double()
+        probability_error = (actual.exp() - expected.exp()).abs().max().item()
+        support_equal = torch.equal(torch.isfinite(actual), torch.isfinite(expected))
         results.append(
             {
                 "alpha": alpha,
@@ -99,7 +102,9 @@ def main():
                 "actual_logprob": measured,
                 "oracle_logprob": expected[token].item(),
                 "absolute_error": error,
-                "passed": error <= 2e-6,
+                "probability_error": probability_error,
+                "support_equal": support_equal,
+                "passed": error <= 2e-6 and probability_error <= 2e-6 and support_equal,
             }
         )
         (out / "summary.json").write_text(json.dumps({"cases": results, "tolerance": 2e-6}, indent=2) + "\n")
