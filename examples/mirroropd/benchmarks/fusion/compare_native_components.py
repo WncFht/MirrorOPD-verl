@@ -46,9 +46,20 @@ def main():
         if reference.keys() != candidate.keys() or set(reference) != set(case["checkpoints"]):
             raise ValueError("Replay checkpoint coverage differs")
         for step in sorted(reference):
-            left = reference[step]["raw"][0]
-            right = candidate[step]["raw" if args.calibrate else args.component][0]
-            checks.append({"case": index, "step": step, **measure(left, right, legal, case["suffix_ids"][step])})
+            left = reference[step]["raw"]
+            right = candidate[step]["raw" if args.calibrate else args.component]
+            if left.shape[0] != right.shape[0] and not (args.calibrate and left.shape[0] == 1):
+                raise ValueError("Reference and candidate request coverage differs")
+            for row in range(right.shape[0]):
+                reference_row = 0 if args.calibrate and left.shape[0] == 1 else row
+                checks.append(
+                    {
+                        "case": index,
+                        "step": step,
+                        "row": row,
+                        **measure(left[reference_row], right[row], legal, case["suffix_ids"][step]),
+                    }
+                )
     if not checks:
         raise ValueError("Empty numerical comparison")
     metrics = ["probability_abs", "total_variation", "selected_logprob_abs"]
