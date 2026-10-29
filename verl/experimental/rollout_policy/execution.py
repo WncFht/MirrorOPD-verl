@@ -49,6 +49,9 @@ class NativeVLLMExecutor:
             with open_dict(rollout.engine_kwargs.vllm):
                 rollout.engine_kwargs.vllm.hf_overrides = fusion_hf_overrides(plan.teacher_binding.path)
                 rollout.engine_kwargs.vllm.kv_cache_memory_bytes = execution.kv_cache_memory_bytes
+                # Match the independently checked component/KV probes. Automatic
+                # backend selection is not covered by their numerical evidence.
+                rollout.engine_kwargs.vllm.attention_config = {"backend": "TRITON_ATTN"}
                 if not execution.enforce_eager:
                     compilation = decode_graph_config(execution.max_num_seqs)
                     rollout.engine_kwargs.vllm.compilation_config = compilation

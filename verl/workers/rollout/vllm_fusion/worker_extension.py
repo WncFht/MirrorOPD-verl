@@ -156,6 +156,9 @@ class FusionWorkerExtension:
             "student_path": model.student_path,
             "teacher_path": model.teacher_path,
             "attention_layers": sorted(layers),
+            "attention_backends": {
+                name: layer.attn_backend.get_name() for name, layer in layers.items() if hasattr(layer, "attn_backend")
+            },
             "student_parameters": sum(p.numel() for p in model.student.parameters()),
             "teacher_parameters": sum(p.numel() for p in model.teacher.parameters()),
             "peak_allocated_bytes": get_torch_device().max_memory_allocated(),
