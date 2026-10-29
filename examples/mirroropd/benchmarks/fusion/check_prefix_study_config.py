@@ -7,12 +7,19 @@ import json
 from pathlib import Path
 
 import yaml
+from omegaconf import OmegaConf
 
+from verl.utils import omega_conf_to_dataclass
+from verl.workers.config import RolloutConfig
 from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 
 def check(config, reference, pair, arm, outers=40):
     errors = []
+    try:
+        omega_conf_to_dataclass(OmegaConf.create(config["actor_rollout_ref"]["rollout"]), dataclass_type=RolloutConfig)
+    except (ValueError, TypeError, AssertionError) as exc:
+        errors.append(f"RolloutConfig construction failed: {exc}")
 
     def get(mapping, path):
         for key in path.split("."):
