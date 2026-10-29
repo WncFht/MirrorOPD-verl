@@ -48,7 +48,26 @@ def test_staggered_batch_and_request_weighted_mean():
         "timing_s/rollout_batch": 6,
         "teacher/request_latency_s/mean": 4,
         "rollout/preemptions": 3,
+        "perf/request_latency/generate_sequences/min_seconds": 2,
+        "perf/request_latency/generate_sequences/max_seconds": 2,
+        "perf/request_latency/generate_sequences/mean_seconds": 2,
     }
+
+
+@pytest.mark.parametrize("invalid", [None, -1, float("nan"), float("inf"), True])
+def test_request_stage_latencies_require_every_request(invalid):
+    rows = _requests()
+    for row, latency in zip(rows, (1.0, 2.0, 9.0), strict=True):
+        row["compute_score"] = latency
+    keys = ["a_0_0", "a_1_0", "b_0_0"]
+    metrics = pm.aggregate_pipeline_requests(keys, rows)
+    assert metrics["perf/request_latency/compute_score/mean_seconds"] == 4
+    assert metrics["perf/request_latency/compute_score/max_seconds"] == 9
+    assert metrics["perf/request_latency/compute_score/min_seconds"] == 1
+    rows[1]["compute_score"] = invalid
+    metrics = pm.aggregate_pipeline_requests(keys, rows)
+    assert not any(key.startswith("perf/request_latency/compute_score/") for key in metrics)
+    assert metrics["timing_s/rollout_batch"] == 6
 
 
 @pytest.mark.parametrize("problem", ["missing", "duplicate", "multi_turn", "mixed_submission", "no_telemetry"])
