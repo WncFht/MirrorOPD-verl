@@ -42,6 +42,10 @@ def main():
     rank = int(os.environ["RANK"])
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", timeout=timedelta(seconds=300))
+    control = dist.new_group(backend="gloo", timeout=timedelta(seconds=300))
+    # The actor group already joined torchrun's store. Nested vLLM owns a new
+    # rendezvous port and must create its own server rather than reuse the agent.
+    os.environ.pop("TORCHELASTIC_USE_AGENT_STORE", None)
     from transformers import AutoConfig, Qwen3ForCausalLM
     from vllm import LLM
 
@@ -54,6 +58,7 @@ def main():
         root.mkdir(parents=True, exist_ok=False)
         config = AutoConfig.from_pretrained(args.tokenizer, local_files_only=True)
         config.hidden_size, config.intermediate_size, config.num_hidden_layers = 128, 256, 1
+        config.layer_types = ["full_attention"]
         config.num_attention_heads = config.num_key_value_heads = 2
         config.head_dim, config.max_position_embeddings = 64, 1024
         for name in ["student", "teacher"]:
@@ -70,7 +75,7 @@ def main():
                 source = args.tokenizer.resolve() / filename
                 if source.exists():
                     (path / filename).symlink_to(source)
-    dist.barrier()
+    dist.barrier(group=control)
     student, teacher = root / "student", root / "teacher"
     replica, tp_rank = rank // args.tp, rank % args.tp
     job = f"coordination-{os.environ['MASTER_PORT']}"
@@ -98,7 +103,7 @@ def main():
         llm.collective_rpc("fusion_initialize", args=(True,))
         before = llm.collective_rpc("fusion_weight_digests")
     torch.cuda.set_device(rank)
-    dist.barrier()
+    dist.barrier(group=control)
 
     target = object.__new__(ServerAdapter)
     target.settings = {"backend": "vllm_fusion", "current": True, "deadline_seconds": 180}
