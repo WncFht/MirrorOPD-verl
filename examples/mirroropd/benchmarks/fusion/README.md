@@ -134,3 +134,5 @@ CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusi
 训练 profile 模式可设置 `PREFIX_TORCH_TRACE=1`，默认在 outer2 记录 rank0 的 actor 进程 trace，并保留更新前的进程事件与前两次更新。`PREFIX_TRACE_OUTER/PREFIX_TRACE_UPDATES` 选择窗口；需要后段更新时使用 `PREFIX_TRACE_DISCRETE=true` 与 `PREFIX_TRACE_SKIP`，此时 trace 的范围是对应阶段而非完整 outer。Native fusion 推理使用独立推理 trace，不能把默认 rollout manager 的 trace 当成融合引擎证据。正式模式拒绝开启该 profiler。
 
 `PREFIX_TEACHER_LAYER_OFFLOAD=true` 是已有 FSDP2 自动逐层 CPU offload 的对照开关，默认 false 保留 E20。它会把搬运移入 forward，可能在每个计算微批重复 H2D；应比较完整 teacher 阶段及 outer，不能只看独立 transfer 字段下降。以上 profiler 与 offload 对照入口已解析配置，GPU 效果仍待实际测量。
+
+资源监控额外记录可用的 SM/显存时钟、功耗和 NVML PCIe KB/s 计数；不支持的可选计数写为 null，设备故障仍报错。容器 CPU 配额与节流计数属于共享容器，不归因于单个实验，用于解释同期资源竞争。

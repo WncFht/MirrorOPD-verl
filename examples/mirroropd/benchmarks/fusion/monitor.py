@@ -12,6 +12,30 @@ import psutil
 import pynvml
 
 
+def optional_nvml(function, *args):
+    """Keep unsupported counters optional without hiding device failures."""
+    try:
+        return function(*args)
+    except pynvml.NVMLError as exc:
+        if exc.value in {
+            pynvml.NVML_ERROR_NOT_SUPPORTED,
+            pynvml.NVML_ERROR_NO_PERMISSION,
+            pynvml.NVML_ERROR_FUNCTION_NOT_FOUND,
+        }:
+            return None
+        raise
+
+
+def container_cpu_path():
+    """Resolve this container's shared CPU counters, not the host root group."""
+    for line in Path("/proc/self/cgroup").read_text().splitlines():
+        if line.startswith("0::"):
+            path = Path("/sys/fs/cgroup") / line[3:].lstrip("/")
+            if (path / "cpu.stat").is_file():
+                return path
+    return None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--parent", type=int, required=True)
@@ -43,6 +67,7 @@ def main():
             }
         )
     psutil.cpu_percent(interval=None)
+    cpu_group = container_cpu_path()
 
     start = time.time()
     stream = None
@@ -61,6 +86,12 @@ def main():
                             "interval_seconds": 0.5,
                             "other_gpu_load_at_start": background,
                             "other_gpu_scope": "read-only context, not allocated to this run",
+                            "container_cpu_scope": "Shared by all jobs in this container, not attributed to this run",
+                            "container_cpu_quota": (
+                                (cpu_group / "cpu.max").read_text().strip()
+                                if cpu_group is not None and (cpu_group / "cpu.max").is_file()
+                                else None
+                            ),
                         }
                     )
                     + "\n"
@@ -81,8 +112,24 @@ def main():
                             "memory_used": pynvml.nvmlDeviceGetMemoryInfo(handle).used,
                             "utilization": util.gpu,
                             "memory_utilization": util.memory,
+                            "sm_clock_mhz": optional_nvml(pynvml.nvmlDeviceGetClockInfo, handle, pynvml.NVML_CLOCK_SM),
+                            "memory_clock_mhz": optional_nvml(
+                                pynvml.nvmlDeviceGetClockInfo, handle, pynvml.NVML_CLOCK_MEM
+                            ),
+                            "power_mw": optional_nvml(pynvml.nvmlDeviceGetPowerUsage, handle),
+                            "pcie_tx_kb_per_second": optional_nvml(
+                                pynvml.nvmlDeviceGetPcieThroughput, handle, pynvml.NVML_PCIE_UTIL_TX_BYTES
+                            ),
+                            "pcie_rx_kb_per_second": optional_nvml(
+                                pynvml.nvmlDeviceGetPcieThroughput, handle, pynvml.NVML_PCIE_UTIL_RX_BYTES
+                            ),
                         }
                     )
+                if cpu_group is not None:
+                    row["shared_container_cpu"] = {
+                        key: int(value)
+                        for key, value in (line.split() for line in (cpu_group / "cpu.stat").read_text().splitlines())
+                    }
                 processes = [parent] + parent.children(recursive=True)
                 rss = 0
                 for process in processes:
