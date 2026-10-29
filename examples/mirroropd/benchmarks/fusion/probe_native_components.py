@@ -18,6 +18,7 @@ def main():
     parser.add_argument("--max-model-len", type=int, default=8192)
     parser.add_argument("--graph", action="store_true")
     parser.add_argument("--kv-gib", type=float, default=4.0)
+    parser.add_argument("--arrival-mode", choices=["synchronized", "asynchronous"], default="synchronized")
     args = parser.parse_args()
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -54,13 +55,25 @@ def main():
             "configure_probe", args=(suffix, workload["checkpoints"], args.component == "fusion", args.batch)
         )
         params = SamplingParams(temperature=0, max_tokens=len(suffix), ignore_eos=True, logprobs=0)
-        outputs = llm.generate([{"prompt_token_ids": prompt}] * args.batch, params, use_tqdm=False)
+        prompts = [{"prompt_token_ids": prompt}] * args.batch
+        if args.arrival_mode == "synchronized":
+            core = llm.llm_engine.engine_core
+            core.call_utility("pause_scheduler", "keep", False)
+            try:
+                llm.enqueue(prompts, params, use_tqdm=False)
+            finally:
+                core.call_utility("resume_scheduler")
+            outputs = llm.wait_for_completion(use_tqdm=False)
+        else:
+            outputs = llm.generate(prompts, params, use_tqdm=False)
         if any(list(output.outputs[0].token_ids) != suffix for output in outputs):
             raise RuntimeError("Replay changed the prescribed prefix")
         path = out / f"case-{index}.pt"
         audit = llm.collective_rpc("save_probe", args=(str(path),))
         if args.batch > 1 and max(audit[0]["batch_shapes"]) < args.batch:
             raise RuntimeError("The calibration run never exercised the requested batch width")
+        if args.arrival_mode == "synchronized" and set(audit[0]["batch_shapes"]) != {args.batch}:
+            raise RuntimeError("Synchronized numerical replay changed its batch width")
         manifest["cases"].append(
             {
                 "index": index,

@@ -2,8 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 """Keep diagnostic prefixes aligned when requests enter and leave a native batch."""
 
+import json
+import sys
 from types import SimpleNamespace
 
+import pytest
 import torch
 
 from examples.mirroropd.benchmarks.fusion.compare_native_components import measure
@@ -38,3 +41,58 @@ def test_distribution_metric_ignores_logit_shift_and_masked_tail():
     assert all(value < 1e-12 for value in metrics.values())
     candidate[1] += 2
     assert measure(reference, candidate, torch.tensor([0, 1, 2]), 1)["total_variation"] > 0.1
+
+
+def test_component_acceptance_cannot_ignore_later_rows(tmp_path, monkeypatch):
+    from examples.mirroropd.benchmarks.fusion import compare_native_components as compare
+
+    reference, candidate = tmp_path / "reference", tmp_path / "candidate"
+    reference.mkdir()
+    candidate.mkdir()
+    torch.save({0: {"raw": torch.zeros(2, 3)}}, reference / "case-0.pt")
+    torch.save({0: {"teacher": torch.tensor([[0.0, 0, 0], [-1.0, 1, -1]])}}, candidate / "case-0.pt")
+    workload = tmp_path / "workload.json"
+    workload.write_text(json.dumps([{"suffix_ids": [1], "checkpoints": [0]}]))
+    limits = tmp_path / "limits.json"
+    limits.write_text(
+        json.dumps(
+            {
+                "component": "teacher",
+                "calibration_workload_sha256": "different-calibration-input",
+                "limits": {key: 1e-6 for key in ["probability_abs", "total_variation", "selected_logprob_abs"]},
+            }
+        )
+    )
+    monkeypatch.setattr(
+        compare.AutoTokenizer,
+        "from_pretrained",
+        lambda *a, **k: SimpleNamespace(get_vocab=lambda: {"a": 0, "b": 1, "c": 2}),
+    )
+    out = tmp_path / "result.json"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "compare",
+            "--reference",
+            str(reference),
+            "--candidate",
+            str(candidate),
+            "--student",
+            "unused",
+            "--workload",
+            str(workload),
+            "--component",
+            "teacher",
+            "--limits",
+            str(limits),
+            "--out",
+            str(out),
+        ],
+    )
+    with pytest.raises(RuntimeError, match="frozen error envelope"):
+        compare.main()
+    report = json.loads(out.read_text())
+    assert report["checks"] == 2
+    assert not report["passed"]
+    assert [failure["row"] for failure in report["failures"]] == [1]
