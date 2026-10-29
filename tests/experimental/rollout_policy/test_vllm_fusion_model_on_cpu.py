@@ -10,13 +10,13 @@ from verl.workers.rollout.vllm_fusion.model import MirrorOPDFusionForCausalLM
 
 
 class Branch(torch.nn.Module):
-    def __init__(self, width, offset):
+    def __init__(self, width, offset, vocab_size=5):
         super().__init__()
         self.table = torch.nn.Embedding(5, width)
-        self.head = torch.nn.Linear(width, 5, bias=False)
+        self.head = torch.nn.Linear(width, vocab_size, bias=False)
         with torch.no_grad():
             self.table.weight.fill_(offset)
-            self.head.weight.copy_(torch.arange(5 * width).view(5, width) / 10)
+            self.head.weight.copy_(torch.arange(vocab_size * width).view(vocab_size, width) / 10)
 
     def embed_input_ids(self, input_ids):
         return self.table(input_ids)
@@ -62,6 +62,43 @@ def test_independent_embeddings_heads_and_fusion(alpha):
 def test_invalid_alpha_rejected(alpha):
     with pytest.raises(ValueError, match="alpha"):
         composite().set_alpha(alpha)
+
+
+@pytest.mark.parametrize("teacher_vocab", [4, 7])
+@pytest.mark.parametrize("alpha", [0.0, 0.5, 1.0])
+def test_unequal_heads_condition_sampling_without_mutating_components(teacher_vocab, alpha):
+    model = composite()
+    model.teacher = Branch(3, 0.5, teacher_vocab)
+    model.capture_components = True
+    model.set_alpha(alpha)
+    ids = torch.tensor([1, 2])
+    student = model.student.compute_logits(model.student.embed_input_ids(ids)).double()
+    teacher = model.teacher.compute_logits(model.teacher.embed_input_ids(ids)).double()
+    before = model.teacher.head.weight.detach().clone()
+    # Normalize each COMPLETE native head first, then condition the geometric
+    # mixture on the common legal IDs. Extra teacher rows must remain present.
+    expected = (1 - alpha) * student.log_softmax(-1)[:, :4] + alpha * teacher.log_softmax(-1)[:, :4]
+    expected = expected.log_softmax(-1)
+    actual = model.compute_logits(model(ids, torch.tensor([0, 1])))
+    assert actual.shape == (2, 5)
+    assert torch.isneginf(actual[:, 4]).all()
+    torch.testing.assert_close(actual.double().log_softmax(-1)[:, :4], expected, atol=2e-6, rtol=0)
+    torch.testing.assert_close(model.component_logits["teacher"].double(), teacher, atol=0, rtol=0)
+    torch.testing.assert_close(model.component_logits["student"].double(), student, atol=0, rtol=0)
+    torch.testing.assert_close(model.teacher.head.weight, before, atol=0, rtol=0)
+    assert model.teacher.head.out_features == teacher_vocab
+
+
+def test_native_family_contract_keeps_qwen2_and_qwen3_pairs_explicit():
+    from types import SimpleNamespace
+
+    from verl.workers.rollout.vllm_fusion.compat import validate_component_families
+
+    for student, teacher in [("qwen2", "qwen2"), ("qwen3", "qwen3"), ("qwen3", "qwen3_moe")]:
+        validate_component_families(SimpleNamespace(model_type=student), SimpleNamespace(model_type=teacher))
+    for student, teacher in [("qwen2", "qwen3"), ("qwen3_moe", "qwen3_moe"), ("llama", "llama")]:
+        with pytest.raises(ValueError, match="requires"):
+            validate_component_families(SimpleNamespace(model_type=student), SimpleNamespace(model_type=teacher))
 
 
 def test_child_configuration_replaces_both_hf_views(monkeypatch):

@@ -159,10 +159,10 @@ def validate_policy(config):
         from .topology import FusionTopology
 
         FusionTopology(config.trainer.n_gpus_per_node, policy.execution.tensor_parallel_size)
-        if model_configs[0].model_type != "qwen3" or any(
-            model.model_type not in {"qwen3", "qwen3_moe"} for model in model_configs[1:]
-        ):
-            raise ValueError("vllm_fusion requires a Qwen3 dense learner and dense/MoE teacher")
+        from verl.workers.rollout.vllm_fusion.compat import validate_component_families
+
+        for teacher_config in model_configs[1:]:
+            validate_component_families(model_configs[0], teacher_config)
         if any(getattr(model, "quantization_config", None) for model in model_configs):
             raise ValueError("vllm_fusion requires unquantized checkpoints")
     if policy.mode == "token_mixture" and config.actor_rollout_ref.rollout.checkpoint_engine.backend != "naive":

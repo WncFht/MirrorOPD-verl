@@ -13,8 +13,9 @@ import torch
 
 
 def oracle(student, teacher, legal, alpha, temperature, top_k, top_p):
-    logits = student.double() * (1 - alpha) + teacher.double() * alpha
-    logits[~legal] = -torch.inf
+    ids = legal.nonzero().flatten()
+    logits = torch.full_like(student, -torch.inf, dtype=torch.float64)
+    logits[ids] = student[ids].double() * (1 - alpha) + teacher[ids].double() * alpha
     logits /= temperature
     if top_k > 0:
         threshold = sorted(logits.tolist(), reverse=True)[min(top_k, logits.numel()) - 1]

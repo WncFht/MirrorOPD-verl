@@ -109,3 +109,5 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_native_lifecycle_fsdp2.sh \
 `probe_vllm_refit.py` 使用真实 checkpoint 和 IPC 检查 student 更新、teacher 哈希及输出不变、错误版本和损坏参数流；`probe_native_coordination.py` 用两个 actor rank 调用生产权重协调方法，在小型 Qwen3 checkpoint 上检查带 collective 的参数流排空和跨 rank 版本提交。前者不替代 trainer 协调，后者不替代真实配对的容量与训练检查。两者仅是验收工具。生成与组件探针保存原生累计后端指标，`summarize_native.py` 从相邻快照计算各批抢占次数；旧记录缺少计数时仍标为 `unavailable`。
 
 `audit_native_lifecycle.py --previous-actor-checkpoint <恢复前 actor 目录>` 可同时核对恢复前后保存的 CPU 参数分片。它检查真实数值变化并分别报告 FP32 状态和 BF16 推理视图中的变化，不能仅以更新计数推进推断权重已变化。`probe_hf_reference.py` 提供独立 HF BF16/FlashAttention 全前缀参考；其分布距离与选中概率差异用于跨后端诊断，不沿用旧 HF 阈值作为 native 引擎门槛，该新增工具仍待 GPU 执行。
+
+Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已核对，组合模型保留不同宽度的原生 head，只对生成视图对齐并施加共同合法支持。RKL scorer 的完整 teacher head 不变。相关 CPU 检查已通过，真实 Qwen2 GPU 生成、refit 与训练仍待验收。R1 的独立生成探针须显式传入 `--stop-token-ids 151643`，不能沿用 Qwen3 的默认停止集合。实验设置见[E20 五种前缀对照](../../docs/experiments/rollout-policy/2026-10-30-E20设置下的五种前缀对照.md)。

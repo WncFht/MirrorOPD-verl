@@ -32,6 +32,7 @@ def main():
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--top-k", type=int, default=-1)
     parser.add_argument("--chat-template-kwargs", default="{}")
+    parser.add_argument("--stop-token-ids", nargs="+", type=int, default=[151643, 151645])
     args = parser.parse_args()
     if not os.environ.get("CUDA_VISIBLE_DEVICES"):
         raise ValueError("Set CUDA_VISIBLE_DEVICES explicitly")
@@ -136,7 +137,7 @@ def main():
                         top_p=args.top_p,
                         top_k=args.top_k,
                         max_tokens=args.cap,
-                        stop_token_ids=[151643, 151645],
+                        stop_token_ids=args.stop_token_ids,
                         logprobs=0,
                         seed=42 + i,
                     )
