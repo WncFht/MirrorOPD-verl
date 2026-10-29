@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Formal single-GPU workload; overrides change concurrency, never the declared cap.
+# Formal workload; overrides change topology/concurrency, never the declared cap.
 set -euo pipefail
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO=$(cd -- "$HERE/../../../.." && pwd)
@@ -28,4 +28,5 @@ bash "$HERE/run_fusion_local_fsdp2.sh" "$WORKSPACE/envs/mirroropd-fusion/bin/pyt
     --data "$WORKSPACE/data/math/DAPO/train.parquet" \
     --out "$WORKSPACE/runs/vllm-fusion-20261029/$PREFIX" \
     --batch 64 --cap 7168 --max-model-len 11264 --alphas 0.5 --repeats 3 \
+    --tensor-parallel-size "${FUSION_TP:-1}" \
     --max-num-seqs "$SEQS" --kv-gib "$KV" --skip-lifecycle-audit "${EXTRA[@]}"
