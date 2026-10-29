@@ -20,6 +20,11 @@ WANDB_GIT_SYNC ?= 1
 WANDB_BIN ?=
 WANDB_UPLOAD_JOBS ?= 2
 WANDB_UPLOAD_TIMEOUT ?= 900
+WANDB_UPLOAD_IDLE_TIMEOUT ?= 120
+WANDB_UPLOAD_CHECK_TIMEOUT ?= 120
+WANDB_ENTITY ?= wncfht
+WANDB_PROJECT ?= MirrorOPD-verl
+WANDB_NETRC ?=
 GIT_PUSH_TIMEOUT ?= 120
 RUN ?=
 RETRY ?= 0
@@ -52,6 +57,11 @@ export MIRROROPD_WANDB_GIT_SYNC = $(WANDB_GIT_SYNC)
 export MIRROROPD_WANDB_BIN = $(WANDB_BIN)
 export MIRROROPD_UPLOAD_JOBS = $(WANDB_UPLOAD_JOBS)
 export MIRROROPD_UPLOAD_TIMEOUT = $(WANDB_UPLOAD_TIMEOUT)
+export MIRROROPD_UPLOAD_IDLE_TIMEOUT = $(WANDB_UPLOAD_IDLE_TIMEOUT)
+export MIRROROPD_UPLOAD_CHECK_TIMEOUT = $(WANDB_UPLOAD_CHECK_TIMEOUT)
+export MIRROROPD_UPLOAD_ENTITY = $(WANDB_ENTITY)
+export MIRROROPD_UPLOAD_PROJECT = $(WANDB_PROJECT)
+export MIRROROPD_UPLOAD_NETRC = $(WANDB_NETRC)
 export MIRROROPD_GIT_PUSH_TIMEOUT = $(GIT_PUSH_TIMEOUT)
 export MIRROROPD_UPLOAD_RUN = $(RUN)
 export MIRROROPD_UPLOAD_RETRY = $(RETRY)
@@ -66,7 +76,7 @@ export MIRROROPD_MAX_FILE_MB = $(MAX_FILE_MB)
 .PHONY: opd-submit
 .PHONY: docs-check docs-format docs-setup maintenance-check
 .PHONY: sync-status archive-status sync-log-status
-.PHONY: sync-log-upload sync-log-enqueue sync-log-push sync-log-setup
+.PHONY: sync-log-upload sync-log-enqueue sync-log-push sync-log-setup sync-log-audit
 
 help:
 	@echo '文档维护：make docs-setup / docs-format / docs-check / maintenance-check（无需 GPU）'
@@ -78,6 +88,10 @@ help:
 	@echo '同步确认：接收成功后，在发送端执行 make archive-ack [TARGET=peer]，确认上次打包的提交'
 	@echo '日志接收：make sync-log-unpack [LOG_ARCHIVE=...]（提交、登记持久队列并推送 Git，默认不等待 W&B）'
 	@echo '云端上传：make sync-log-upload [RUN=run-id] [RETRY=1]；首次 make sync-log-setup 安装独立上传环境'
+	@echo '上传前核对云端 history；已有完整指标直接跳过，已有缺测/冲突阻止整份重传；中途快照等待结束记录'
+	@echo '目标：WANDB_ENTITY=wncfht WANDB_PROJECT=MirrorOPD-verl；WANDB_NETRC 可显式覆盖环境 API key'
+	@echo '超时：WANDB_UPLOAD_IDLE_TIMEOUT=120（无新输出）、WANDB_UPLOAD_TIMEOUT=900（总时限）'
+	@echo '云端只读核验：make sync-log-audit [RUN=run-id]（不上传、不修改队列结果、不同步 Git）'
 	@echo '训练中不完整快照默认等待更新并正常退出；STRICT=1 要求所选快照全部同步完成'
 	@echo '日志 Git 自动同步：获取 upstream、快进或无冲突合并、新 run 入队、推送；WANDB_GIT_SYNC=0 可关闭'
 	@echo '旧日志提交入队：make sync-log-enqueue；仅同步 Git 并入队：make sync-log-push [GIT_PUSH_TIMEOUT=120]'
@@ -133,6 +147,9 @@ sync-log-unpack:
 
 sync-log-upload:
 	@$(PYTHON) meituan/log_sync.py upload
+
+sync-log-audit:
+	@$(PYTHON) meituan/log_sync.py audit
 
 sync-log-enqueue:
 	@$(PYTHON) meituan/log_sync.py enqueue

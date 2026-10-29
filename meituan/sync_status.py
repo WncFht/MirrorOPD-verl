@@ -94,7 +94,7 @@ def logs_status(snap):
         "packing_state": state,
         "git": repository_status(Path(toplevel)) if toplevel else None,
         "upload_queue": queue,
-        "cloud_status": "unknown: only recorded CLI upload outcomes are available; no live cloud query",
+        "cloud_status": "recorded preflight/verification only; this status command makes no live cloud query",
     }
 
 
@@ -154,12 +154,23 @@ def display(state):
                 "incomplete does not by itself mean an upload failure or prove training is still running"
             )
         for job in queue["jobs"]:
-            if job["status"] not in ("succeeded", "superseded"):
+            if job["status"] not in ("succeeded", "covered", "superseded"):
                 sync_observe.console_print(
                     f"    {job['run']}: {job['status']}, attempts={job['attempts']}, tree={job['tree'][:12]}"
                 )
                 if job.get("error"):
                     sync_observe.console_print(f"      {job['error']}")
+            proof = job.get("cloud_check") or {}
+            if proof.get("duplicate_rows"):
+                sync_observe.console_print(
+                    f"    WARN {job['run']}: cloud history has {proof['duplicate_rows']} duplicate rows; "
+                    "upload skipped, existing data not deleted"
+                )
+            if proof.get("unaccounted_rows"):
+                sync_observe.console_print(
+                    f"    WARN {job['run']}: server history count and scanned rows disagree; "
+                    "inspect the cloud audit before attempting repair"
+                )
         if logs["git"]:
             sync_observe.console_print(f"  Log Git HEAD: {logs['git']['head'] or 'unknown'}")
             sync_observe.console_print(f"  Log Git state: {logs['git']['branch_status'] or 'unknown'}")

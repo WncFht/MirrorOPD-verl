@@ -21,6 +21,22 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class JournalTest(unittest.TestCase):
+    def test_idle_timeout_keeps_tail_and_ignores_repeated_output(self):
+        with redirect_stdout(io.StringIO()), self.assertRaises(subprocess.TimeoutExpired) as caught:
+            observe.run(
+                [
+                    sys.executable,
+                    "-c",
+                    "import time\nfor _ in range(100):\n print('same progress',flush=True); time.sleep(.03)",
+                ],
+                stream=True,
+                check=True,
+                timeout=8,
+                idle_timeout=1.0,
+            )
+        self.assertIn("same progress", caught.exception.output)
+        self.assertIn("idle timeout", caught.exception.stderr)
+
     def test_color_is_console_only_and_no_color_is_honored(self):
         with tempfile.TemporaryDirectory() as temp:
             console = io.StringIO()
@@ -167,6 +183,16 @@ class LogObservabilityTest(unittest.TestCase):
         )
         self.env["MIRROROPD_WANDB_BIN"] = str(cli)
         cli.chmod(0o755)
+        helper = binary / "python"
+        helper.write_text(
+            f"#!{sys.executable}\n"
+            "import sys,json\nfrom pathlib import Path\n"
+            "f=Path(sys.argv[2]); complete=f.with_name(f.name+'.synced').exists()\n"
+            "result={'action':'covered' if complete else 'upload','reason':'test cloud','exit_code':0,"
+            "'target':{'base_url':'https://api.wandb.ai','entity':'test','project':'test'}}\n"
+            "Path(sys.argv[sys.argv.index('--output')+1]).write_text(json.dumps(result))\n"
+        )
+        helper.chmod(0o755)
         self.env["PATH"] = str(binary) + os.pathsep + os.environ["PATH"]
         self.bundle = self.base / "logs.tar.gz"
         with tarfile.open(self.bundle, "w:gz") as tar:
@@ -295,7 +321,7 @@ class LogObservabilityTest(unittest.TestCase):
         )
         status = json.loads(result.stdout)
         self.assertEqual(status["operations"][0]["status"], "failed")
-        self.assertIn("unknown", status["logs"]["cloud_status"])
+        self.assertIn("no live cloud query", status["logs"]["cloud_status"])
         self.assertEqual(status["logs"]["destination_runs"], 2)
 
 

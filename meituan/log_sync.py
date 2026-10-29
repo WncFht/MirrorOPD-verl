@@ -6,6 +6,7 @@ import argparse
 import fcntl
 import json
 import math
+import netrc
 import os
 import re
 import shutil
@@ -17,6 +18,7 @@ import uuid
 from collections import Counter
 from contextlib import contextmanager
 from pathlib import Path
+from urllib.parse import urlsplit
 
 try:
     from meituan import sync_observe as observe
@@ -65,7 +67,7 @@ def load(directory):
     if not isinstance(state, dict) or state.get("version") != 1 or not isinstance(state.get("jobs"), list):
         raise ValueError(f"Invalid queue state: {path}; keep it for recovery instead of deleting it")
     required = {"id", "path", "run", "tree", "commit", "cloud", "status", "attempts", "enqueued_at"}
-    statuses = {"pending", "running", "failed", "incomplete", "succeeded", "superseded"}
+    statuses = {"pending", "running", "failed", "incomplete", "succeeded", "covered", "superseded"}
     if any(
         not isinstance(job, dict)
         or not required.issubset(job)
@@ -158,7 +160,7 @@ def enqueue(repo, destination, commit):
             added += 1
         save(directory, state)
     observe.update(upload_queue=str(directory / "queue.json"), queued_snapshots=added)
-    print(f"Queued {added} new run snapshot(s); existing completed snapshots are not uploaded again.")
+    print(f"Queued {added} new local snapshot task(s); cloud history is checked before upload.")
 
 
 def receive(incoming, destination, source_root, *, push=True):
@@ -346,6 +348,7 @@ def upload_summary(directory, run, attempted, *, strict=False, batch_errors=()):
     )
     message = (
         f"Upload summary: attempted_this_call={attempted}; queue totals: succeeded={counts['succeeded']}, "
+        f"cloud_covered={counts['covered']}, "
         f"incomplete={counts['incomplete']}, failed={counts['failed']}, "
         f"pending={counts['pending'] + counts['running']}"
     )
@@ -421,9 +424,106 @@ def selected(job, run):
     return not run or job["run"] == run or job["run"].endswith("-" + run)
 
 
-def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=False):
+def upload_environment(target):
+    environment = {**os.environ, "WANDB_BASE_URL": target["base_url"], "WANDB_MODE": "online"}
+    explicit = os.environ.get("MIRROROPD_UPLOAD_NETRC")
+    if explicit:
+        auth = netrc.netrc(explicit).authenticators(urlsplit(target["base_url"]).hostname)
+        if not auth or not auth[2]:
+            raise ValueError("Explicit WANDB_NETRC has no credential for the upload host")
+        environment["WANDB_API_KEY"] = auth[2]
+        source = "explicit WANDB_NETRC (overrides environment API key)"
+    else:
+        source = "WANDB_API_KEY" if environment.get("WANDB_API_KEY") else "SDK netrc/settings"
+    observe.note("Upload credentials", source=source, base_url=target["base_url"])
+    return environment
+
+
+def cloud_probe(command, file, target, directory, worker_fd):
+    """Use the CLI's own Python/dependencies; network errors abort before any SDK write."""
+    interpreter = Path(command[0]).parent / "python"
+    if not interpreter.is_file():
+        raise ValueError("Uploader needs its sibling bin/python; run make sync-log-setup")
+    report = directory / f"preflight-{uuid.uuid4().hex}.json"
+    timeout = float(os.environ.get("MIRROROPD_UPLOAD_CHECK_TIMEOUT", "120"))
+    if not math.isfinite(timeout) or timeout <= 0:
+        raise ValueError("WANDB_UPLOAD_CHECK_TIMEOUT must be finite and positive")
+    with observe.stage("wandb.preflight", run=file.parent.name, report=str(report)):
+        observe.run(
+            [
+                str(interpreter),
+                str(ROOT / "meituan/wandb_preflight.py"),
+                str(file),
+                "--entity",
+                target["entity"],
+                "--project",
+                target["project"],
+                "--base-url",
+                target["base_url"],
+                "--output",
+                str(report),
+            ],
+            stream=True,
+            check=True,
+            timeout=timeout,
+            env=upload_environment(target),
+            pass_fds=(worker_fd,),
+        )
+    result = json.loads(report.read_text())
+    if result.get("action") not in ("upload", "covered", "incomplete", "blocked"):
+        raise ValueError(f"Invalid preflight response: {report}")
+    return result
+
+
+def audit(repo, run=""):
+    """Read cloud evidence without uploading, changing job status or synchronizing Git."""
+    directory = queue_dir(repo)
+    with lock(directory, "worker.lock", blocking=False) as descriptor:
+        with lock(directory, "queue.lock"):
+            jobs = [j for j in load(directory)["jobs"] if selected(j, run) and j["status"] != "superseded"]
+        latest = {}
+        for job in jobs:
+            latest[(job["path"], json.dumps(job["cloud"], sort_keys=True))] = job
+        if not latest:
+            raise ValueError("No queued snapshots to audit; receive/enqueue logs first")
+        command = sdk_command()
+        for job in latest.values():
+            _, file = materialize(repo, directory, job)
+            proof = cloud_probe(command, file, job["cloud"], directory, descriptor)
+            observe.note("Cloud audit", run=job["run"], **proof)
+            observe.console_print(f"{job['run']}: {proof['action']}; {proof['reason']}")
+
+
+def sdk_diagnostics(directory):
+    """Report error categories and source paths without echoing signed URLs or credentials."""
+    categories = {
+        "dns": ("no such host", "name resolution"),
+        "tls": ("certificate", "tls handshake", "ssl"),
+        "proxy": ("proxyconnect", "proxy error"),
+        "authentication": ("unauthorized", "forbidden", "status 401", "status 403"),
+        "rate_limit": ("status 429", "rate limit"),
+        "timeout": ("timeout", "timed out", "deadline exceeded"),
+    }
+    paths, found = [], set()
+    for path in directory.rglob("*.log"):
+        paths.append(str(path))
+        with path.open("rb") as stream:
+            stream.seek(max(0, path.stat().st_size - 65536))
+            tail = stream.read().decode(errors="replace").lower()
+        found.update(name for name, tokens in categories.items() if any(token in tail for token in tokens))
+    observe.note(
+        "SDK failure diagnostics",
+        logs=paths,
+        categories=sorted(found),
+        hint="No category proves a healthy network. Inspect SDK logs; retry first with WANDB_UPLOAD_JOBS=1.",
+    )
+
+
+def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=False, idle_timeout=120):
     if concurrency < 1 or concurrency > 8 or not math.isfinite(timeout) or timeout <= 0:
         raise ValueError("Use WANDB_UPLOAD_JOBS=1..8 and a positive WANDB_UPLOAD_TIMEOUT")
+    if not math.isfinite(idle_timeout) or idle_timeout <= 0:
+        raise ValueError("WANDB_UPLOAD_IDLE_TIMEOUT must be finite and positive")
     directory = queue_dir(repo)
     observe.update(upload_strict=strict)
     with lock(directory, "worker.lock", blocking=False) as worker_fd:
@@ -461,10 +561,29 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=Fals
             for job in batch:
                 try:
                     copied, file = materialize(repo, directory, job)
-                    prepared.append((job, copied, file))
                 except (OSError, ValueError, tarfile.TarError, subprocess.CalledProcessError) as error:
                     finish_job(directory, job, "failed", str(error))
                     attempted += 1
+                    continue
+                try:
+                    proof = cloud_probe(command, file, job["cloud"], directory, worker_fd)
+                except (OSError, ValueError, subprocess.SubprocessError) as error:
+                    finish_job(directory, job, "failed", f"Cloud preflight failed: {error}", cache=str(copied))
+                    raise ValueError(
+                        "Cloud preflight failed; remaining jobs were not uploaded. Check authentication/network."
+                    ) from error
+                if proof["action"] != "upload":
+                    status = {"covered": "covered", "incomplete": "incomplete", "blocked": "failed"}[proof["action"]]
+                    if status == "covered" and (proof.get("partial") or proof.get("exit_code") is None):
+                        status = "incomplete"
+                    finish_job(directory, job, status, proof["reason"], cache=str(copied), cloud_check=proof)
+                    observe.console_print(f"{job['run']}: {status}; {proof['reason']}")
+                    continue
+                job["resolved_cloud"] = proof["target"]
+                # The cloud run is absent. Old local flags must not prevent a fresh upload.
+                for suffix in (".synced", ".syncstate"):
+                    file.with_name(file.name + suffix).unlink(missing_ok=True)
+                prepared.append((job, copied, file))
             if not prepared:
                 continue
             with lock(directory, "queue.lock"):
@@ -480,7 +599,13 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=Fals
             if not prepared:
                 continue
             attempted += len(prepared)
-            target = prepared[0][0]["cloud"]
+            target = prepared[0][0]["resolved_cloud"]
+            if any(
+                job["resolved_cloud"][key] != target[key]
+                for job, _, _ in prepared
+                for key in ("entity", "project", "base_url")
+            ):
+                raise ValueError("Batch resolved to different destinations; use WANDB_UPLOAD_JOBS=1")
             attempt_dir = directory / "attempts" / uuid.uuid4().hex
             (attempt_dir / "tmp").mkdir(parents=True)
             args = [*command, "-n", str(concurrency)]
@@ -489,9 +614,7 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=Fals
                     args.extend(["--" + key, target[key]])
             args.extend(str(copied) for _, copied, _ in prepared)
             environment = {
-                **os.environ,
-                "WANDB_BASE_URL": target["base_url"],
-                "WANDB_MODE": "online",
+                **upload_environment(target),
                 "WANDB_DIR": str(attempt_dir),
                 "TMPDIR": str(attempt_dir / "tmp"),
             }
@@ -523,6 +646,7 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=Fals
                         stream=True,
                         check=True,
                         timeout=timeout,
+                        idle_timeout=idle_timeout,
                         cwd=str(attempt_dir),
                         env=environment,
                         pass_fds=(worker_fd,),
@@ -541,6 +665,10 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=Fals
                 error_text = "Interrupted by user"
             except (OSError, ValueError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
                 error_text = str(error)
+                if isinstance(error, subprocess.TimeoutExpired):
+                    error_text += (
+                        f"; {getattr(error, 'stderr', '') or 'total deadline reached'}; SDK logs: {attempt_dir}"
+                    )
                 batch_errors.append(error_text)
                 output = getattr(error, "stdout", "") or output
                 if isinstance(output, bytes):
@@ -549,6 +677,18 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=Fals
             for job, copied, file in prepared:
                 # A zero exit code alone is insufficient (e.g. skipped authentication or a missing run).
                 complete = file.with_name(file.name + ".synced").is_file()
+                proof = None
+                if complete:
+                    try:
+                        proof = cloud_probe(command, file, target, directory, worker_fd)
+                        if proof["action"] != "covered" or proof.get("duplicate_rows", 0):
+                            complete = False
+                            error_text = "Post-upload cloud history verification failed; do not replay blindly"
+                            batch_errors.append(error_text)
+                    except (OSError, ValueError, subprocess.SubprocessError) as error:
+                        complete = False
+                        error_text = f"Post-upload cloud verification unavailable: {error}"
+                        batch_errors.append(error_text)
                 # A batch error can include transport failures after the incomplete-record warning.
                 incomplete = not complete and not error_text and job["run"] in incomplete_names
                 status = "succeeded" if complete else ("incomplete" if incomplete else "failed")
@@ -561,10 +701,22 @@ def upload(repo, *, run="", concurrency=2, timeout=900, retry=False, strict=Fals
                         else (error_text or "SDK exited without a completion marker; inspect SDK logs")
                     )
                 )
-                finish_job(directory, job, status, message, cache=str(copied), sdk_directory=str(attempt_dir))
+                finish_job(
+                    directory,
+                    job,
+                    status,
+                    message,
+                    cache=str(copied),
+                    sdk_directory=str(attempt_dir),
+                    cloud_check=proof,
+                )
                 observe.console_print(f"{job['run']}: {status}; snapshot={job['tree'][:12]}")
             if interrupted:
                 raise KeyboardInterrupt()
+            if batch_errors:
+                sdk_diagnostics(attempt_dir)
+                observe.note("Stopping this queue pass after SDK failure; remaining jobs stay pending")
+                break
         return upload_summary(directory, run, attempted, strict=strict, batch_errors=batch_errors)
 
 
@@ -605,7 +757,7 @@ def main():
     except ModuleNotFoundError:
         import transfer
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("enqueue", "upload", "push"))
+    parser.add_argument("action", choices=("enqueue", "upload", "push", "audit"))
     args = parser.parse_args()
     destination = transfer.wandb_runs_dir("unpack")
     snap = transfer.repo_path(os.environ.get("MIRROROPD_SNAP_DIR", "transfer_snap"))
@@ -615,6 +767,8 @@ def main():
             repo = repository(destination)
             if args.action == "enqueue":
                 enqueue_logs(repo, destination, push=os.environ.get("MIRROROPD_WANDB_GIT_SYNC", "1") == "1")
+            elif args.action == "audit":
+                audit(repo, run=os.environ.get("MIRROROPD_UPLOAD_RUN", ""))
             elif args.action == "push":
                 with lock(queue_dir(repo), "receive.lock", blocking=False):
                     synchronize_logs(repo, destination)
@@ -626,6 +780,7 @@ def main():
                     run=os.environ.get("MIRROROPD_UPLOAD_RUN", ""),
                     concurrency=int(os.environ.get("MIRROROPD_UPLOAD_JOBS", "2")),
                     timeout=float(os.environ.get("MIRROROPD_UPLOAD_TIMEOUT", "900")),
+                    idle_timeout=float(os.environ.get("MIRROROPD_UPLOAD_IDLE_TIMEOUT", "120")),
                     retry=os.environ.get("MIRROROPD_UPLOAD_RETRY", "0") == "1",
                     strict=os.environ.get("MIRROROPD_UPLOAD_STRICT", "0") == "1",
                 )

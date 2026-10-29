@@ -116,7 +116,7 @@ tail -f /tmp/mirroropd-sync/具体操作.log
 
 交互终端默认使用颜色：成功为绿色，错误为红色，不完整快照和警告为黄色。`COLOR=always` 强制启用，`COLOR=never` 或 `NO_COLOR=1` 关闭；管道输出默认不带颜色。实现只依赖标准库，独立 bootstrap 同样可用。文本日志与 JSON 报告不含颜色控制码；完整命令和详细上下文写入日志，终端保留阶段进度和结果。
 
-日志接收报告记录 `logs.merge`、`logs.git_commit`、`logs.enqueue`、`logs.git_fetch`、`logs.git_merge` 和 `logs.git_push`；上传报告记录 `wandb.batch`，逐 run 结果持久保存在上传队列中。批次中部分 run 成功时，成功任务不会随失败任务一起重传。Git 推送和云端上传可以分别重试，重跑产生新报告，不覆盖旧记录。
+日志接收报告记录 `logs.merge`、`logs.git_commit`、`logs.enqueue`、`logs.git_fetch`、`logs.git_merge` 和 `logs.git_push`；上传报告记录 `wandb.preflight` 与 `wandb.batch`，逐 run 结果持久保存在上传队列中。批次中部分 run 成功时，成功任务不会随失败任务一起重传。Git 推送和云端上传可以分别重试，重跑产生新报告，不覆盖旧记录。
 
 接收默认 `WANDB_SYNC=0`，云端阶段显示 skipped/queued，不能解读为已经上传。整体 success 表示该次命令已正常处理可执行任务；训练中的快照仍可能等待更新，须结合队列汇总判断数据完整性。上传器联合 CLI 结果与 SDK 完成标记记录快照结果；状态命令不实时查询云端，也不充当日志传输回执；`logs_state.json` 仍然只表示已打包，不代表送达。原有“日志包必须在下一次打包前传回”的规则不变。
 
@@ -213,13 +213,14 @@ make sync-log-setup
 
 命令使用 Python venv 和 pip 创建 `.venv-wandb-sync`，固定安装本机验证过的 `wandb==0.31.0`；需要联网，Python 至少 3.10。它不升级训练环境或独立日志仓库的解码环境。新版 SDK 已移除旧的内部 DataStore 接口，因此不要直接替换本地解码器所用的 SDK。
 
-上传入口优先使用此独立环境，也可以通过 `WANDB_BIN=/绝对路径/wandb` 指定上传 CLI。启动时记录执行路径、版本和引擎；拒绝低于 0.31.0 的 SDK，要求 `wandb beta sync` 所需参数可用，不自动退回旧 Python 同步器。认证复用已有 `.netrc` 或 `WANDB_API_KEY`，必要时用 `.venv-wandb-sync/bin/wandb login` 登录。
+上传入口优先使用此独立环境，也可以通过 `WANDB_BIN=/绝对路径/wandb` 指定上传 CLI。启动时记录执行路径、版本和引擎；拒绝低于 0.31.0 的 SDK，要求 `wandb beta sync` 所需参数可用，不自动退回旧 Python 同步器。认证默认复用已有 `.netrc` 或 `WANDB_API_KEY`。`WANDB_NETRC=/绝对路径/netrc` 可显式指定凭据文件，并覆盖环境中的 API key；日志只记录凭据来源，不输出密钥。上传前检查与实际上传使用同一凭据和显式目标。默认目标为 `WANDB_ENTITY=wncfht WANDB_PROJECT=MirrorOPD-verl`；其他账户应明确设置这两个参数。
 
 ### 队列、重试和状态
 
 ```bash
 make sync-log-upload                  # 处理整个接收历史中已入队的待传任务
-make sync-log-status                  # 查看 pending / running / succeeded / failed / incomplete
+make sync-log-status                  # 查看本地队列及已有核验结果，不联网
+make sync-log-audit RUN=krkmq098       # 只读核对云端 history，包括重复、缺失与冲突
 make sync-log-upload RUN=krkmq098     # 只处理指定 run
 make sync-log-upload RUN=krkmq098 STRICT=1  # 要求所选快照全部同步完成
 make sync-log-upload RETRY=1          # 排障后忽略冷却与尝试次数限制，仍只尝试一轮
@@ -227,29 +228,42 @@ make sync-log-enqueue                 # 将迁移前已收到的日志提交、�
 make sync-log-push                    # 获取、合并、入队并推送日志仓库，不上传 W&B
 ```
 
-每次接收会检查该项目日志目录中所有已提交 run，因此此前收到但没有上传的 run 也能入队。队列以 run 路径、Git tree ID 和云端目标区分快照；原始文件内容未变时复用原任务，其他 run 的更新不会触发重传。成功快照再次执行 upload 会直接跳过。首次启用时没有历史上传回执，不能推断旧日志已经上云，现有日志可能需要重新同步一次。
+每次接收会检查该项目日志目录中所有已提交 offline run，因此此前收到但没有上传的 run 也能入队。队列以 run 路径、Git tree ID 和云端目标区分快照。Git 推送传递原始日志，`.git/mirroropd-upload/queue.json`、锁和 SDK 标记仍只属于本机；另一台机器的上传结果通过云端核验识别，不能从本地队列或 `.synced` 推断。
 
-队列位于独立日志仓库的 `.git/mirroropd-upload/queue.json`；该目录还保存 `cache/` 上传副本与 `attempts/` 中的尝试目录。SDK 对 config、summary 和同步标记的写入留在副本中，原始日志不变。失败和中断后保留同一快照的副本，重试不从原始目录重新覆盖，也不删除其同步状态。新的 run 快照使用独立副本；尚未开始或失败的旧快照标为 superseded，原始 Git 历史仍保留。正在上传的快照先完成，同一 run 不并发上传。
+每个待处理任务先从已提交快照读取 run 身份、退出记录及 history。未完成快照直接等待，不联网；完整快照再在明确指定的云端项目中查询同 ID 的 run。检查使用独立上传环境的 Python，按稀疏字段组合分组读取云端历史，比较本地每个 `_step` 的实际字段和值，浮点容差为 `1e-8`；只忽略 SDK 运行耗时 `_runtime`。云端额外字段允许保留。还会核对服务端 history 行数与扫描结果；新版 SDK 的视图可能隐藏重复物理行，因此计数不一致也会阻止上传。只检查最后 step、summary、云端 finished 状态或文件大小都不足以确认覆盖。
 
-每个任务引用对应的日志提交，防止 Git GC 回收待传对象。状态、锁、SDK 标记和缓存只属于当前接收机器，不随源码 bundle 或日志仓库的普通 Git push 传输。不要手动删除失败任务的缓存来重试；这会失去可复用状态。
+| 证据                                                   | 行为与队列结果                                                                  |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| 云端覆盖本地全部 history，且没有重复或值冲突           | 不调用 sync，记录 `covered`                                                     |
+| 云端已有同 ID，但计数不一致、重复、缺行或值冲突        | 记录 failed 并保留重复/缺失数量及冲突位置；阻止整份重传，`RETRY=1` 也不绕过检查 |
+| 可访问的项目中不存在该 run，且本地有完整记录和退出记录 | 调用 core sync；SDK 完成标记与上传后云端 history 核验都通过，才记录 succeeded   |
+| 本地没有退出记录，或尾部记录未写完                     | 记录 incomplete，等待更新的源快照，不启动云端上传                               |
+| 认证、项目权限、DNS 或查询超时                         | 不把错误当作 run 不存在；停止当前队列轮次，未处理任务保留 pending               |
 
-默认并发两个不同 run，每批最多等待 900 秒。一次 upload 对每个就绪任务只尝试一次，失败会记录错误并继续处理其他批次；自动重试资格最多三次，并有从 60 秒开始的指数冷却。`RETRY=1` 是显式排障后的一轮重试，不跳过已经成功的快照。参数可调整：
+`covered` 只证明训练/验证指标已存在，不能补证早期上传的 system、console、附件完整性。它可以用于接管其他机器或旧版工具上传的历史。已经存在重复行的云端 run 不会被自动删除或重建；分析优先使用原始本地日志。已有部分云端历史的 run 需要独立修复，本入口暂不实现历史裁剪或增量补写。新的未完成训练可先在本地解码分析，完成后再上传；这是为避免新快照整份追加而采用的默认策略。
+
+队列位于独立日志仓库的 `.git/mirroropd-upload/queue.json`；`cache/` 保存不可变 Git 快照的上传副本，`attempts/` 保存 SDK 尝试目录，`preflight-*.json` 保存云端比对结果。SDK 改写的 config、summary 和标记留在副本，原始日志不变。任务持有 Git ref 防止 GC 回收待传对象。不要删除队列或缓存来重试；删除本机状态不能撤回已上传的历史。
+
+新快照会替代尚未开始或失败的旧任务；已有 succeeded/covered 快照在本机直接跳过。若需要核查云端后来是否被删除或改动，使用 `sync-log-audit`。audit 不上传、不修改任务结果、不 fetch/push，但会创建本地核验报告和需要的快照缓存。一次只应在一台机器上执行 upload；本机锁不能协调两台机器同时检查“run 不存在”后又同时创建它的竞争。
+
+### 超时与重试
+
+默认并发两个不同 run，每批总时限 900 秒，连续 120 秒没有新的 SDK 输出就中止；相同进度行反复打印不重置无进展计时。无新输出只是可观察的停滞信号，不等于能证明网络没有传输。确有长时间静默的上传可提高 `WANDB_UPLOAD_IDLE_TIMEOUT`。云端检查单独受 `WANDB_UPLOAD_CHECK_TIMEOUT=120` 约束。
 
 ```bash
-make sync-log-upload WANDB_UPLOAD_JOBS=1 WANDB_UPLOAD_TIMEOUT=300
+make sync-log-upload RUN=7rwc1ioz WANDB_UPLOAD_JOBS=1
+make sync-log-upload RUN=7rwc1ioz RETRY=1 WANDB_UPLOAD_IDLE_TIMEOUT=180
 ```
 
-上传器持有进程锁，启动的 SDK CLI 也继承该锁；上次 SDK 仍在运行时，不允许另一个 worker 并发处理同一队列。被正常中断或超时的进程组会终止，队列结果保留。进程异常退出后，下一次获得锁的 worker 会恢复未完成任务。
+SDK 超时或失败后停止后续批次，避免把同一网络故障重复等待多个 900 秒。诊断保留最后输出、尝试目录和 SDK 日志路径；可识别时列出 DNS、TLS、代理、认证、限流或 timeout 类别，没有匹配到类别也不代表网络正常。排查先选一个 run、并发 1，对照 `wandb.preflight` 与 `wandb.batch` 的耗时。Git fetch/push 正常只能证明 Git 路径可用，不能证明 W&B API、文件流或对象上传路径正常。
 
-### 不完整离线文件
+失败任务默认最多三次尝试，并有从 60 秒开始的指数冷却。`RETRY=1` 忽略冷却和尝试次数限制，但仍先核验云端；中断后已经传完的 history 可以被接管，缺行的旧 run 会明确停止，不再盲目追加。上传器的本机 worker 锁由 SDK 子进程继承；正常中断或超时会终止进程组。
 
-新版 SDK 实测可能打印同步错误但仍返回退出码 0。工具还会检查每个副本是否生成 SDK 的 `.wandb.synced` 完成标记，不能仅凭退出码将任务标为成功。
+### 不完整快照与完成含义
 
-训练仍在写入时打包，可能截到 `.wandb` 的半条记录。新版引擎可以上传此前完整的数据，但会报告 incomplete record。队列将这种快照标为 incomplete，等待后续更完整的日志包；不会不断重试同一份不可变化的半条记录，也不会裁剪原始日志或伪造结束记录。云端可能已有部分数据，不代表这个快照完整同步成功。静态归档不使用 `--live`，避免等待一个永远不会继续写入的副本。
+日志尾部未写完、没有退出记录时，默认等待后续快照，期间仍可本地分析。退出码非零的 run 也可以是完整日志；日志传输完成与训练成功分开判断。不会裁剪原始日志、补造退出记录或对静态归档使用 `--live`。
 
-上传结束显示本次尝试数及选中队列的 succeeded、incomplete、failed、pending 数量，JSON 报告保存同一汇总。后者包含此前已完成的快照，不一定等于本次尝试数。仅剩 incomplete 时再次运行会显示 WAITING 并正常退出，不重新启动 SDK 上传同一快照；下一次接收更完整的文件后，新快照自动入队。报告中的 `waiting_for_snapshot` 保存等待数量，相关批次标为 waiting。SDK 原始输出可能仍含 `ERROR ... incomplete record`，应结合最终汇总判断；如果源文件本身已截断，重新上传同一文件不能补回缺失数据。
-
-默认行为适合训练中的持续同步。训练结束后可用 `make sync-log-upload RUN=<run-id> STRICT=1` 要求所选快照全部同步完成；严格模式不会强制重试未变化的 incomplete 快照，也不会检查训练退出记录或判断训练成功。某次 SDK 调用失败、超时或缺少无法解释的完成标记时仍报告失败，不因同时出现 incomplete 提示而忽略真实故障。仅凭 incomplete 也不能判断训练是否仍在运行。
+只剩 incomplete 时命令显示 WAITING 并正常退出；`STRICT=1` 要求选中任务没有等待项。严格模式和 `RETRY=1` 都不会补回缺失的源数据。若 SDK 在上传前检查后仍报告 incomplete，保留原有完成标记检查与等待逻辑。SDK 退出码 0 不能单独证明成功，上传后还须核对云端行和值。
 
 ### 兼容参数和本地分析
 
@@ -257,11 +271,11 @@ make sync-log-upload WANDB_UPLOAD_JOBS=1 WANDB_UPLOAD_TIMEOUT=300
 
 单独运行 `sync-log-enqueue` 或 `sync-log-upload` 时，`WANDB_GIT_SYNC=0` 关闭自动 fetch/merge/push：enqueue 仍需创建本地提交才能登记快照，upload 只处理已有队列，不发现远程的新日志。显式 `sync-log-push` 始终执行 Git 同步。
 
-原始日志默认保持原来的 entity/project/run ID。测试或迁移时可以通过环境变量 `MIRROROPD_UPLOAD_ENTITY`、`MIRROROPD_UPLOAD_PROJECT` 明确覆盖云端目标；该目标在入队时固定，之后改变环境变量不会悄悄改变已排队任务的目的地。
+run ID 保持原始身份，entity/project 由 `WANDB_ENTITY`、`WANDB_PROJECT` 明确设置并在入队时固定。直接调用 Python 时使用对应的 `MIRROROPD_UPLOAD_ENTITY`、`MIRROROPD_UPLOAD_PROJECT`。旧队列空目标优先采用原 run 身份，缺失时采用当前显式设置，最终解析目标写入核验报告并传给 SDK；不会使用凭据账户的默认 entity。
 
 本地解码工具仍位于独立仓库的 `wandb-logs/tools/wandb_local.py`。在该仓库使用 `make setup`、`make decode`、`make csv RUN=<run-id>`，无需等待云端上传。原始数据位于 `MirrorOPD-verl/wandb/`，派生数据位于 `derived/MirrorOPD-verl/`。MirrorOPD 的分析入口继续委托这个解码器，见[分析复现](../examples/mirroropd/docs/experiments/维护说明.md)。
 
-终端 stdout/stderr 保存到 `outputs/<实验名>/train.log`，通过 `sync-results-pack` 传回；`sync-log-pack` 负责 W&B 离线 run。本机验证结果与已知边界见 [W&B 上传重构验证](docs/2026-10-24-W&B上传重构与本机验证.md)。
+终端 stdout/stderr 保存到 `outputs/<实验名>/train.log`，通过 `sync-results-pack` 传回；`sync-log-pack` 负责 W&B 离线 run。重复上传与 Mac 超时的证据、当前验证及限制见 [重复上传与超时分析](docs/2026-10-29-W&B重复上传与超时分析.md)；早期新 run 上传性能见 [2026-10-23 验证记录](docs/2026-10-24-W&B上传重构与本机验证.md)，其旧版本队列行为不作为当前重试依据。
 
 ## 结果下载
 
@@ -283,28 +297,32 @@ make sync-results-unpack RESULTS_ARCHIVE=/实际下载目录/MirrorOPD_results_.
 
 ## 参数与入口
 
-| Make 参数 | 默认值 | 用途 |
-| --- | --- | --- |
-| `PYTHON` | `python3` | 运行传输工具与 ZIP 解包 |
-| `SYSTEM_PYTHON` | `/bin/python3` | 创建开发机原生虚拟环境 |
-| `SNAP_DIR` | `transfer_snap` | 压缩包与增量状态目录 |
-| `OPERATION_DIR` | `SNAP_DIR/operations` | 每次操作的文本日志与 JSON 报告目录；状态命令使用相同参数 |
-| `COLOR` | `auto` | 终端颜色：`auto`、`always`、`never`；`NO_COLOR` 优先关闭 |
-| `CHUNK_SIZE` | `10485760` | 分卷大小，单位为字节 |
-| `MAX_FILE_MB` | `100` | 结果文件大小上限，单位为 MiB |
-| `WANDB_RUNS_DIR` | 留空，按操作选择 | 覆盖实际 run 目录；打包默认 `wandb`，解包默认独立日志仓库 |
-| `WANDB_LOGS_REPO` | 同级 Git 仓库 `../wandb-logs`，不存在则 `~/src/wandb-logs` | 接收端日志仓库，run 合并到其中的 `MirrorOPD-verl/wandb/` |
-| `WANDB_SYNC` | `0` | 接收默认只入队；设为 `1` 在接收完成后立即处理上传队列 |
-| `WANDB_GIT_SYNC` | `1` | 接收后提交、入队并推送日志；接收设为 `0` 只合并文件，独立 enqueue/upload 设为 `0` 关闭 fetch/merge/push |
-| `GIT_PUSH_TIMEOUT` | `120` | 日志仓库每次 Git fetch/push 时限，秒 |
-| `WANDB_BIN` | 优先 `.venv-wandb-sync/bin/wandb` | 独立上传 CLI 路径 |
-| `WANDB_UPLOAD_JOBS` | `2` | 同时上传的不同 run 数，范围 1–8 |
-| `WANDB_UPLOAD_TIMEOUT` | `900` | 每批上传总时限，秒 |
-| `RUN`、`RETRY` | 空、`0` | 上传 run 选择；显式覆盖冷却/尝试次数限制 |
-| `STRICT` | `0` | 设为 `1` 时，所选快照仍有 incomplete 则退出 2；独立上传及 `WANDB_SYNC=1` 接收均生效 |
-| `KEEP_ARCHIVE_AFTER_UNPACK` | `0` | 设为 `1` 保留刚解包的源码输入包；日志和结果输入包始终保留 |
-| `MODEL_ROOT`、`DATA_ROOT` | `../model`、`../data` 的绝对路径 | 数学资产检查目录 |
-| `LOG_ACTION`、`ACTION` | `unpack` | `make sync-log`、`make sync-results` 的操作 |
+| Make 参数                       | 默认值                                                     | 用途                                                                                                    |
+| ------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `PYTHON`                        | `python3`                                                  | 运行传输工具与 ZIP 解包                                                                                 |
+| `SYSTEM_PYTHON`                 | `/bin/python3`                                             | 创建开发机原生虚拟环境                                                                                  |
+| `SNAP_DIR`                      | `transfer_snap`                                            | 压缩包与增量状态目录                                                                                    |
+| `OPERATION_DIR`                 | `SNAP_DIR/operations`                                      | 每次操作的文本日志与 JSON 报告目录；状态命令使用相同参数                                                |
+| `COLOR`                         | `auto`                                                     | 终端颜色：`auto`、`always`、`never`；`NO_COLOR` 优先关闭                                                |
+| `CHUNK_SIZE`                    | `10485760`                                                 | 分卷大小，单位为字节                                                                                    |
+| `MAX_FILE_MB`                   | `100`                                                      | 结果文件大小上限，单位为 MiB                                                                            |
+| `WANDB_RUNS_DIR`                | 留空，按操作选择                                           | 覆盖实际 run 目录；打包默认 `wandb`，解包默认独立日志仓库                                               |
+| `WANDB_LOGS_REPO`               | 同级 Git 仓库 `../wandb-logs`，不存在则 `~/src/wandb-logs` | 接收端日志仓库，run 合并到其中的 `MirrorOPD-verl/wandb/`                                                |
+| `WANDB_SYNC`                    | `0`                                                        | 接收默认只入队；设为 `1` 在接收完成后立即处理上传队列                                                   |
+| `WANDB_GIT_SYNC`                | `1`                                                        | 接收后提交、入队并推送日志；接收设为 `0` 只合并文件，独立 enqueue/upload 设为 `0` 关闭 fetch/merge/push |
+| `GIT_PUSH_TIMEOUT`              | `120`                                                      | 日志仓库每次 Git fetch/push 时限，秒                                                                    |
+| `WANDB_BIN`                     | 优先 `.venv-wandb-sync/bin/wandb`                          | 独立上传 CLI 路径                                                                                       |
+| `WANDB_UPLOAD_JOBS`             | `2`                                                        | 同时上传的不同 run 数，范围 1–8                                                                         |
+| `WANDB_UPLOAD_TIMEOUT`          | `900`                                                      | 每批上传总时限，秒                                                                                      |
+| `WANDB_UPLOAD_IDLE_TIMEOUT`     | `120`                                                      | SDK 无新输出的最长等待，秒                                                                              |
+| `WANDB_UPLOAD_CHECK_TIMEOUT`    | `120`                                                      | 每个快照云端核验总时限，秒                                                                              |
+| `WANDB_ENTITY`、`WANDB_PROJECT` | `wncfht`、`MirrorOPD-verl`                                 | 入队时固定的显式云端目标                                                                                |
+| `WANDB_NETRC`                   | 空                                                         | 指定 netrc 文件，覆盖环境 API key                                                                       |
+| `RUN`、`RETRY`                  | 空、`0`                                                    | 上传 run 选择；显式覆盖冷却/尝试次数限制                                                                |
+| `STRICT`                        | `0`                                                        | 设为 `1` 时，所选快照仍有 incomplete 则退出 2；独立上传及 `WANDB_SYNC=1` 接收均生效                     |
+| `KEEP_ARCHIVE_AFTER_UNPACK`     | `0`                                                        | 设为 `1` 保留刚解包的源码输入包；日志和结果输入包始终保留                                               |
+| `MODEL_ROOT`、`DATA_ROOT`       | `../model`、`../data` 的绝对路径                           | 数学资产检查目录                                                                                        |
+| `LOG_ACTION`、`ACTION`          | `unpack`                                                   | `make sync-log`、`make sync-results` 的操作                                                             |
 
 源码 shell 入口调用 `code_archive.py`；日志、结果入口调用 `transfer.py`。日志的提交与持久上传队列由 `log_sync.py` 维护；各入口共用 `sync_observe.py` 保存运行诊断，`sync_status.py` 读取状态。直接调用 shell 或独立 bootstrap 时用 `MIRROROPD_*` 环境变量设置参数，诊断目录对应 `MIRROROPD_OPERATION_DIR`；通常使用 Makefile 即可。
 
@@ -326,4 +344,5 @@ make sync-log-pack
 ### 参考文献
 
 [^transferqueue]: TransferQueue contributors. TransferQueue 0.1.11 release files. PyPI, 2026. [发布页](https://pypi.org/project/TransferQueue/0.1.11/)。wheel 来源保存在 ZIP 内的 `sources.json`。
+
 [^liger]: Liger Kernel contributors. liger-kernel 0.8.4 release files. PyPI, 2026. [发布页](https://pypi.org/project/liger-kernel/0.8.4/)。wheel 来源保存在 ZIP 内的 `sources.json`。
