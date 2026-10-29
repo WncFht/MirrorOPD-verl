@@ -1,0 +1,10 @@
+{
+  "ledger": "Compare historical BF16 baselines with E50/E52 using local Full-RKL logs.\n\nLedger: one color per run; thin lines show every observed outer, thick lines\nshow nonoverlapping 16-outer means (terminal short block retained). First and\nlast values are pre-update observations. Applied-update coordinates count only\nupdates BEFORE the corresponding last observation. Timing uses cumulative\nlogged outer-stage time associated with each batch, not exact loss timestamps\nor total experiment wall-clock. Historical teacher/code/backend/hardware\ndifferences prohibit interpreting the curves as a pure dtype intervention.\n",
+  "series": {
+    "E17": "E17: historical BF16 / A100",
+    "E20": "E20: historical BF16 / A800",
+    "E50": "E50: FP16 / A100",
+    "E52": "E52: BF16 GEMM + FP32 / A100"
+  },
+  "data_sha256": "2d016eb13f4a437e8b71b7326dea5b671904f4ff6ece5e427699dffec97af7ef"
+}
