@@ -4,6 +4,10 @@ set -eo pipefail
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO=$(cd -- "$HERE/../../../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO")
+if [[ -z ${FUSION_RESOURCE_PARENT:-} ]]; then
+    exec bash "$HERE/run_fusion_local_fsdp2.sh" bash "$0" "$@"
+fi
+case "$CUDA_VISIBLE_DEVICES" in 6|7|6,7) ;; *) echo "Use the protected GPU 6/7 allocation entry" >&2; exit 2 ;; esac
 PAIR=${1:?Choose dense or moe}
 PREFIX=${2:-fusion-nonthinking-$(date +%Y%m%d-%H%M%S)}
 case "$PAIR" in
@@ -14,9 +18,9 @@ esac
 OUT=$WORKSPACE/runs/rollout-fusion-20261028/$PREFIX
 mkdir -p "$OUT"
 cd "$REPO"
-export CUDA_VISIBLE_DEVICES=0,1,2,3 OMP_NUM_THREADS=1 PYTHONPATH=$REPO
+export OMP_NUM_THREADS=1 PYTHONPATH=$REPO
 export LD_LIBRARY_PATH=$WORKSPACE/cache/fusion-runtime/cuda-compat-12-9/usr/local/cuda-12.9/compat:${LD_LIBRARY_PATH:-}
-PYTHON_BIN=${PYTHON_BIN:-/tmp/mirroropd-fusion-venv/bin/python}
+PYTHON_BIN=${PYTHON_BIN:-$WORKSPACE/envs/mirroropd-fusion/bin/python}
 run() {
     local name=$1
     shift
@@ -29,7 +33,7 @@ run() {
         --prompt-model "$WORKSPACE/model/Qwen3-1.7B-Base" \
         --chat-template-kwargs '{"enable_thinking":false}' \
         --data "$WORKSPACE/data/math/DAPO/train.parquet" --out "$OUT/$name" \
-        --batch 64 --cap 7168 --alpha 0.5 --microbatch "$MICRO" --compact 2 --repeats 3 \
+        --gpus "$STUDENT_GPUS" --batch 64 --cap 7168 --alpha 0.5 --microbatch "$MICRO" --compact 2 --repeats 3 \
         "$@" > "$OUT/$name.log" 2>&1
 }
 {

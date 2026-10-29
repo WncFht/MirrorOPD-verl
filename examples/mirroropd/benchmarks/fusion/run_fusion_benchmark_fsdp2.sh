@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
-# Run one explicitly named four-GPU performance block; never overwrite evidence.
+# Run one explicitly named legacy HF block on the protected local allocation.
 set -eo pipefail
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO=$(cd -- "$HERE/../../../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO")
+if [[ -z ${FUSION_RESOURCE_PARENT:-} ]]; then
+    exec bash "$HERE/run_fusion_local_fsdp2.sh" bash "$0" "$@"
+fi
+case "$CUDA_VISIBLE_DEVICES" in 6|7|6,7) ;; *) echo "Use the protected GPU 6/7 allocation entry" >&2; exit 2 ;; esac
 BLOCK=${1:?Choose dense-base, dense-reference, dense-post, moe-scan, moe-base, moe-reference, moe-post, layouts, replay, profile, or singles}
 PREFIX=${2:-g7-$(date +%Y%m%d-%H%M%S)}
+if [[ $BLOCK == layouts || $BLOCK == profile ]]; then
+    (( STUDENT_GPUS == 2 )) || { echo "This block includes paired runs; allocate FUSION_GPUS=6,7" >&2; exit 2; }
+fi
 OUT=$WORKSPACE/runs/rollout-fusion-20261028/$PREFIX
 mkdir -p "$OUT"
 cd "$REPO"
-export CUDA_VISIBLE_DEVICES=0,1,2,3 OMP_NUM_THREADS=1 PYTHONPATH=$REPO
+export OMP_NUM_THREADS=1 PYTHONPATH=$REPO
 export LD_LIBRARY_PATH=$WORKSPACE/cache/fusion-runtime/cuda-compat-12-9/usr/local/cuda-12.9/compat:${LD_LIBRARY_PATH:-}
-PYTHON_BIN=${PYTHON_BIN:-/tmp/mirroropd-fusion-venv/bin/python}
+PYTHON_BIN=${PYTHON_BIN:-$WORKSPACE/envs/mirroropd-fusion/bin/python}
 BASE=$WORKSPACE/model/Qwen3-1.7B-Base
 POST=$WORKSPACE/model/Qwen3-1.7B
 DENSE=$WORKSPACE/model/Qwen3-8B
@@ -28,7 +35,7 @@ run() {
     "$PYTHON_BIN" "$HERE/benchmark.py" --student "$student" --teacher "$teacher" --prompt-model "$BASE" \
         --data "$WORKSPACE/data/math/DAPO/train.parquet" --out "$OUT/$name" \
         --precision stable --attention flash_attention_2 --attention-dtype fp16 \
-        --batch 64 --cap 7168 --compact 2 --repeats 3 "$@" > "$OUT/$name.log" 2>&1
+        --gpus "$STUDENT_GPUS" --batch 64 --cap 7168 --compact 2 --repeats 3 "$@" > "$OUT/$name.log" 2>&1
 }
 
 # Parse the entire execution block before running long jobs.

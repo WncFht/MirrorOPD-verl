@@ -128,7 +128,7 @@ def worker(rank, source, args):
     microbatch = cfg["microbatch"][0]
     chunks = [ordered[i : i + microbatch] for i in range(0, len(ordered), microbatch)]
     records = []
-    for chunk in chunks[rank::4]:
+    for chunk in chunks[rank :: args.replay_replicas]:
         decoder.set_replay(chunk, histories, set(args.points), config)
         decoder.generate(chunk, 0.5, config, deadline_seconds=7200)
         records.extend(decoder.checks)
@@ -157,15 +157,17 @@ def main():
     parser.add_argument("--precision", choices=["stable", "stable_moe", "stable_moe_attention"], default="stable")
     parser.add_argument("--points", type=int, nargs="+", default=[0, 1, 2, 128, 512, 1024, 2048, 4096, 6144, 7167])
     args = parser.parse_args()
-    if os.environ.get("CUDA_VISIBLE_DEVICES") != "0,1,2,3":
-        parser.error("Set CUDA_VISIBLE_DEVICES=0,1,2,3")
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES", "")
+    if visible not in {"6", "7", "6,7"}:
+        parser.error("Allocate CUDA_VISIBLE_DEVICES=6, 7, or 6,7 through run_fusion_local_fsdp2.sh")
+    args.replay_replicas = len(visible.split(","))
     if args.out.exists():
         parser.error("Probe output must be a new directory")
     source = json.loads((args.trajectory / "rank-0.jsonl").open().readline())
     if source["args"]["layout"] != "colocated" or source["args"]["alpha"] != 0.5:
         parser.error("Probe requires the colocated alpha=0.5 acceptance workload")
-    if source["args"]["gpus"] != 4 or len(source["args"]["microbatch"]) != 1:
-        parser.error("Probe requires four replicas and one microbatch setting")
+    if len(source["args"]["microbatch"]) != 1:
+        parser.error("Probe requires one frozen microbatch setting; replay never changes its groups")
     if args.source_compact not in source["args"]["compact"]:
         parser.error("Requested source compaction is absent from the trajectory run")
     if any(step < 0 or step >= source["args"]["cap"] for step in args.points):
@@ -175,10 +177,13 @@ def main():
     from fingerprint import source_fingerprint
 
     executor_source = source_fingerprint()
-    mp.spawn(worker, args=(source, args), nprocs=4, join=True)
+    mp.spawn(worker, args=(source, args), nprocs=args.replay_replicas, join=True)
     reports = [json.loads(path.read_text()) for path in sorted(args.out.glob("rank-*.json"))]
     result = {
         "trajectory": str(args.trajectory),
+        "source_replicas": source["args"]["gpus"],
+        "replay_replicas": args.replay_replicas,
+        "physical_gpus": [int(device) for device in visible.split(",")],
         "executor": args.executor,
         "source_compact": args.source_compact,
         "source": executor_source,
@@ -187,7 +192,7 @@ def main():
         "checks": sum(len(row["checks"]) for row in reports),
         "failures": [x for row in reports for x in row["failures"]],
     }
-    result["passed"] = len(reports) == 4 and not result["failures"]
+    result["passed"] = len(reports) == args.replay_replicas and not result["failures"]
     (args.out / "summary.json").write_text(json.dumps(result, indent=2) + "\n")
     if not result["passed"]:
         raise SystemExit(1)
