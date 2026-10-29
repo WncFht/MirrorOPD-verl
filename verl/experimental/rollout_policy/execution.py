@@ -2,19 +2,21 @@
 # SPDX-License-Identifier: Apache-2.0
 """Native fusion lifecycle without changing the global plan or TQ collector."""
 
+import asyncio
 import copy
 import time
 
 from omegaconf import open_dict
 
 from verl.experimental.rollout_policy.plan import stable_seed
+from verl.experimental.rollout_policy.topology import FusionTopology
 from verl.workers.rollout.replica import RolloutMode
 
 
 class NativeVLLMExecutor:
     def __init__(self, runtime):
         self.runtime = runtime
-        self.replica = None
+        self.replicas = []
         self.current_version = None
         self.awake = False
 
@@ -26,13 +28,16 @@ class NativeVLLMExecutor:
         rt = self.runtime
         wg = rt.trainer.actor_rollout_wg
         execution = rt.policy.execution
+        topology = FusionTopology(wg.world_size, execution.tensor_parallel_size)
         tick = time.monotonic()
         await rt.wait(wg.park_fusion_actor())
         rt.metrics["perf/timing/fusion_actor_park_seconds"] = time.monotonic() - tick
         tick = time.monotonic()
-        if self.replica is None:
+        if not self.replicas:
             rollout = copy.deepcopy(rt.config.actor_rollout_ref.rollout)
             rollout.load_format = "auto"
+            rollout.tensor_model_parallel_size = topology.tensor_parallel_size
+            rollout.expert_parallel_size = 1
             rollout.max_model_len = rollout.max_model_len or (rollout.prompt_length + rollout.response_length)
             rollout.max_num_seqs = execution.max_num_seqs
             rollout.max_num_batched_tokens = rollout.max_model_len
@@ -48,30 +53,43 @@ class NativeVLLMExecutor:
                     compilation = decode_graph_config(execution.max_num_seqs)
                     rollout.engine_kwargs.vllm.compilation_config = compilation
                     rollout["cudagraph_capture_sizes"] = compilation["cudagraph_capture_sizes"]
-            self.replica = VLLMFusionReplica(
-                4000, rollout, rt.config.actor_rollout_ref.model, gpus_per_node=1, name_suffix="policy_fusion"
-            )
-            self.replica.rollout_mode = RolloutMode.COLOCATED
-            self.replica.workers = wg.workers
-            await rt.guarded(self.replica.launch_servers())
+            for index in range(topology.replica_count):
+                replica = VLLMFusionReplica(
+                    4000 + index,
+                    rollout,
+                    rt.config.actor_rollout_ref.model,
+                    gpus_per_node=rt.config.trainer.n_gpus_per_node,
+                    name_suffix="policy_fusion",
+                )
+                replica.rollout_mode = RolloutMode.COLOCATED
+                replica.workers = wg.workers[topology.worker_slice(index)]
+                self.replicas.append(replica)
+            await rt.guarded(asyncio.gather(*(replica.launch_servers() for replica in self.replicas)))
             self.awake = True
-            server = self.replica._server_handle
-            await rt.guarded(server.collective_rpc.remote("fusion_initialize", args=(rt.policy.student == "current",)))
+            servers = [replica._server_handle for replica in self.replicas]
+            await rt.guarded(
+                asyncio.gather(
+                    *(
+                        server.collective_rpc.remote("fusion_initialize", args=(rt.policy.student == "current",))
+                        for server in servers
+                    )
+                )
+            )
             await rt.wait(
                 wg.configure_fusion(
                     {
                         "backend": "vllm_fusion",
-                        "server": server,
-                        "replica_rank": 4000,
+                        "servers": servers,
+                        "tp_size": topology.tensor_parallel_size,
                         "current": rt.policy.student == "current",
                         "deadline_seconds": rt.policy.deadline_seconds,
                     }
                 )
             )
-            rt.replicas["fusion"] = [self.replica]
-            rt.clients["fusion"] = LocalPhaseClient(rt.config, [server], fusion=True)
+            rt.replicas["fusion"] = self.replicas
+            rt.clients["fusion"] = LocalPhaseClient(rt.config, servers, fusion=True)
         elif not self.awake:
-            await rt.guarded(self.replica.wake_up())
+            await rt.guarded(asyncio.gather(*(replica.wake_up() for replica in self.replicas)))
             self.awake = True
         rt.metrics["perf/timing/fusion_prepare_residency_seconds"] = time.monotonic() - tick
         if rt.policy.student == "current" and self.current_version != plan.actor_version:
@@ -84,18 +102,36 @@ class NativeVLLMExecutor:
             self.current_version = plan.actor_version
             rt.metrics["perf/timing/fusion_current_refit_seconds"] = time.monotonic() - tick
         rt.phase_token = str(stable_seed("fusion-phase", plan.collection_step, [r.uid for r in plan.requests]))
+        counts = [0] * topology.replica_count
+        n = rt.config.actor_rollout_ref.rollout.n
+        for request in plan.requests:
+            counts[(request.row * n + request.response_index) % topology.replica_count] += 1
         await rt.guarded(
-            self.replica._server_handle.prepare.remote(
-                len(plan.requests), rt.phase_token, plan.resolved_control, plan.actor_version
+            asyncio.gather(
+                *(
+                    replica._server_handle.prepare.remote(
+                        count, rt.phase_token, plan.resolved_control, plan.actor_version
+                    )
+                    for replica, count in zip(self.replicas, counts, strict=True)
+                )
             )
         )
-        await rt.guarded(self.replica._server_handle.set_global_steps.remote(plan.actor_version[0]))
+        await rt.guarded(
+            asyncio.gather(
+                *(replica._server_handle.set_global_steps.remote(plan.actor_version[0]) for replica in self.replicas)
+            )
+        )
         return rt.clients["fusion"]
 
     async def release(self):
-        if self.replica is not None and self.awake:
-            await self.runtime.guarded(self.replica.sleep(), self.runtime.policy.drain_seconds)
+        if self.replicas and self.awake:
+            await self.runtime.guarded(
+                asyncio.gather(*(replica.sleep() for replica in self.replicas)), self.runtime.policy.drain_seconds
+            )
             self.awake = False
 
     async def metrics(self):
-        return await self.runtime.guarded(self.replica._server_handle.collective_rpc.remote("fusion_audit"))
+        groups = await self.runtime.guarded(
+            asyncio.gather(*(replica._server_handle.collective_rpc.remote("fusion_audit") for replica in self.replicas))
+        )
+        return [dict(row, replica=index) for index, group in enumerate(groups) for row in group]

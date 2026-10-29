@@ -27,7 +27,7 @@ export EXPERIMENT_NAME=${EXPERIMENT_NAME:-fusion-$MODE-$BINDING-$(date +%Y%m%d-%
 export VERL_FILE_LOGGER_PATH=${VERL_FILE_LOGGER_PATH:-$REPO_ROOT/outputs/$EXPERIMENT_NAME/metrics.jsonl}
 if [[ ${FUSION_MONITOR:-1} == 1 ]]; then
     "$PYTHON_BIN" "$REPO_ROOT/examples/mirroropd/benchmarks/fusion/monitor.py" \
-        --parent "${FUSION_RESOURCE_PARENT:-$$}" --out "$REPO_ROOT/outputs/$EXPERIMENT_NAME/resources.jsonl" >/dev/null 2>&1 9>&- &
+        --parent "${FUSION_RESOURCE_PARENT:-$$}" --out "$REPO_ROOT/outputs/$EXPERIMENT_NAME/resources.jsonl" >/dev/null 2>&1 8>&- 9>&- &
 fi
 exec bash "$SCRIPT_DIR/smoke_full_reverse_kl.sh" \
     "rollout_policy.mode=$MODE" "rollout_policy.student=$BINDING" \

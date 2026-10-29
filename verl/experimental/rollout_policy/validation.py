@@ -16,6 +16,21 @@ def validate_policy(config):
         )
     if policy.default_path:
         return policy
+    if policy.mode == "token_mixture" and policy.execution.backend == "vllm_fusion":
+        for key in (
+            "actor_rollout_ref.rollout.quantization",
+            "actor_rollout_ref.rollout.quantization_config_file",
+            "actor_rollout_ref.rollout.engine_kwargs.vllm.quantization",
+            "actor_rollout_ref.rollout.engine_kwargs.vllm.speculative_config",
+            "actor_rollout_ref.rollout.engine_kwargs.vllm.enable_eplb",
+        ):
+            if OmegaConf.select(config, key):
+                raise ValueError(f"Native fusion has not accepted {key}")
+        cache_dtype = OmegaConf.select(
+            config, "actor_rollout_ref.rollout.engine_kwargs.vllm.kv_cache_dtype", default="auto"
+        )
+        if cache_dtype not in {None, "auto", "bfloat16"}:
+            raise ValueError("Native fusion requires BF16 KV, without KV quantization")
     required = {
         "trainer.v1.trainer_mode": "sync",
         "trainer.nnodes": 1,
@@ -141,8 +156,9 @@ def validate_policy(config):
 
         if Version(version("vllm")).base_version != "0.25.1":
             raise ValueError("vllm_fusion currently requires the pinned vLLM 0.25.1/V1 runtime")
-        if config.trainer.n_gpus_per_node != 1:
-            raise ValueError("vllm_fusion multi-GPU transport is pending separate acceptance")
+        from .topology import FusionTopology
+
+        FusionTopology(config.trainer.n_gpus_per_node, policy.execution.tensor_parallel_size)
         if model_configs[0].model_type != "qwen3" or any(
             model.model_type not in {"qwen3", "qwen3_moe"} for model in model_configs[1:]
         ):

@@ -18,11 +18,15 @@ class PrefixProbe:
         self.probe_requests = requests
         self.probe_batch_shapes = []
         self.probe_saved = {}
+        self.probe_output_rank = None
         if components:
             model.capture_components = True
 
         def compute(hidden):
             logits = self.probe_original_logits(hidden)
+            self.probe_output_rank = logits is not None
+            if logits is None:
+                return None
             ids = self.model_runner.input_batch.req_ids
             if len(ids) != logits.shape[0]:
                 raise RuntimeError("Probe cannot align native request IDs and sampled logits")
@@ -45,6 +49,8 @@ class PrefixProbe:
         model.compute_logits = compute
 
     def save_probe(self, path):
+        if self.probe_output_rank is False:
+            return {"output_rank": False}
         if len(self.probe_steps) != self.probe_requests or any(
             steps != len(self.probe_suffix) for steps in self.probe_steps.values()
         ):
@@ -59,4 +65,4 @@ class PrefixProbe:
                 for name in ordered[0]
             }
         torch.save(saved, path)
-        return {"batch_shapes": self.probe_batch_shapes, "requests": self.probe_requests}
+        return {"output_rank": True, "batch_shapes": self.probe_batch_shapes, "requests": self.probe_requests}

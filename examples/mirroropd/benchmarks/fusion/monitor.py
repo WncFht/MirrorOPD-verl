@@ -30,6 +30,20 @@ def main():
         for item in devices
     ]
     indices = [pynvml.nvmlDeviceGetIndex(handle) for handle in handles]
+    background = []
+    for index in range(pynvml.nvmlDeviceGetCount()):
+        if index in indices:
+            continue
+        handle = pynvml.nvmlDeviceGetHandleByIndex(index)
+        background.append(
+            {
+                "index": index,
+                "memory_used": pynvml.nvmlDeviceGetMemoryInfo(handle).used,
+                "utilization": pynvml.nvmlDeviceGetUtilizationRates(handle).gpu,
+            }
+        )
+    psutil.cpu_percent(interval=None)
+
     start = time.time()
     stream = None
     try:
@@ -45,12 +59,20 @@ def main():
                             "physical_gpus": indices,
                             "gpu_uuids": [pynvml.nvmlDeviceGetUUID(handle) for handle in handles],
                             "interval_seconds": 0.5,
+                            "other_gpu_load_at_start": background,
+                            "other_gpu_scope": "read-only context, not allocated to this run",
                         }
                     )
                     + "\n"
                 )
             if stream is not None:
-                row = {"kind": "sample", "epoch": time.time(), "gpus": []}
+                row = {
+                    "kind": "sample",
+                    "epoch": time.time(),
+                    "gpus": [],
+                    "host_cpu_percent": psutil.cpu_percent(interval=None),
+                    "host_memory_available": psutil.virtual_memory().available,
+                }
                 for index, handle in zip(indices, handles, strict=True):
                     util = pynvml.nvmlDeviceGetUtilizationRates(handle)
                     row["gpus"].append(

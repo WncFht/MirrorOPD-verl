@@ -16,13 +16,22 @@ from .compat import component_config
 
 
 class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
-    """TP1 text model; the runner schedules both components as one request."""
+    """Text model with one TP group and one request driving both components."""
 
     def __init__(self, *, vllm_config, prefix=""):
         super().__init__()
         outer = vllm_config.model_config.hf_config
-        if vllm_config.parallel_config.tensor_parallel_size != 1:
-            raise ValueError("vllm_fusion TP>1 requires separate refit and KV acceptance")
+        if vllm_config.quant_config is not None or vllm_config.speculative_config is not None:
+            raise ValueError("Native fusion has not accepted quantization or speculative decoding")
+        if vllm_config.model_config.dtype != torch.bfloat16 or vllm_config.cache_config.cache_dtype not in {
+            "auto",
+            "bfloat16",
+        }:
+            raise ValueError("Native fusion requires BF16 weights and KV")
+        if vllm_config.parallel_config.enable_eplb:
+            raise ValueError("Native fusion has not accepted expert load balancing")
+        if vllm_config.parallel_config.tensor_parallel_size not in {1, 2}:
+            raise ValueError("Native fusion currently supports TP1/TP2")
         self.config = outer
         self.student_path = vllm_config.model_config.model
         self.teacher_path = outer.fusion_teacher_path
@@ -96,6 +105,11 @@ class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
     def compute_logits(self, hidden_states):
         student = self.student.compute_logits(hidden_states[:, : self.student_width].contiguous())
         teacher = self.teacher.compute_logits(hidden_states[:, self.student_width :].contiguous())
+        # Every TP rank enters BOTH head collectives before a non-output rank returns.
+        if student is None or teacher is None:
+            if student is not None or teacher is not None:
+                raise RuntimeError("Fusion component head collectives disagree on their output rank")
+            return None
         if self.alpha == 0:
             logits = student.float()
         elif self.alpha == 1:
