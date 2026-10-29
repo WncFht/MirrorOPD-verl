@@ -351,7 +351,7 @@ def main():
     parser.add_argument("--data", required=True)
     parser.add_argument("--out", required=True)
     parser.add_argument("--layout", choices=["colocated", "paired"], default="colocated")
-    parser.add_argument("--gpus", type=int, default=4)
+    parser.add_argument("--gpus", type=int, help="Must match the explicitly allocated visible GPUs")
     parser.add_argument("--batch", type=int, default=64)
     parser.add_argument("--cap", type=int, default=7168)
     parser.add_argument("--microbatch", type=int, nargs="+", default=[2, 4, 8])
@@ -386,8 +386,13 @@ def main():
         if not args.flash_kv:
             parser.error("CUDA graphs require Flash KV decode")
         args.preallocate_kv = True
-    if os.environ.get("CUDA_VISIBLE_DEVICES") != "0,1,2,3":
-        parser.error("Set CUDA_VISIBLE_DEVICES=0,1,2,3 explicitly")
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES", "")
+    if visible not in {"6", "7", "6,7"}:
+        parser.error("Allocate CUDA_VISIBLE_DEVICES=6, 7, or 6,7 through run_fusion_local_fsdp2.sh")
+    allocated = len(visible.split(","))
+    args.gpus = allocated if args.gpus is None else args.gpus
+    if args.gpus != allocated:
+        parser.error("--gpus must match the protected visible allocation")
     if not 1 <= args.gpus <= 4 or args.batch % args.gpus or min(args.microbatch) < 1:
         parser.error("Invalid GPU/batch/microbatch combination")
     if args.layout == "paired" and args.gpus % 2:

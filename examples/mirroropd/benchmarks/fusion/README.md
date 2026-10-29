@@ -2,7 +2,7 @@
 
 这些工具服务于[双融合实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)。当前验收尚未全部完成；工具可运行不等于对应 gate 已通过。
 
-当前开发使用下文“原生 vLLM 开发入口”，只分配物理 GPU 6、7。模型和数据均从本地加载，输出目录必须是新目录。旧 HF 性能、回归及短负载脚本仍保留历史 GPU 0–3 绑定，当前资源条件下不要运行；下面的旧 HF 命令仅说明历史证据的生成方式。
+当前开发使用下文“原生 vLLM 开发入口”，只分配物理 GPU 6、7。模型和数据均从本地加载，输出目录必须是新目录。旧 HF 性能、回归及短负载脚本也已接入同一个受保护的 GPU 6/7 分配入口，默认单卡；Python 工具校验可见设备与声明数量一致。下面的 HF 命令保留历史工作负载定义，使用当前资源重跑不等于复现原四卡性能。
 
 ## 历史 HF 性能矩阵
 
@@ -41,12 +41,12 @@ Reference 使用 eager DynamicCache，优化路径使用 append-only KV 与 CUDA
 
 `probe_history.py` 进一步从最初 prompt 开始逐 token 重放正式长批，保留累积 KV，在指定位置用完整前缀 forward 检查全词表 logits 与最终分布。参考 forward 逐行执行，以限制 MoE 的激活内存，并检查 batch padding 的影响。该诊断不计入性能收益。
 
-历史重放默认检查优化执行器；`--executor reference` 检查 DynamicCache 与共享 Flash KV 的参考执行器。`--source-compact 0` 可重放固定行测量，默认值为 2。结果同时记录执行器源码指纹和源轨迹配置，两个执行器都必须通过原有容差。
+历史重放可把冻结的微批分配给当前一张或两张卡，保留每个微批、token 历史及检查位置，记录原生成 replica 数与当前回放 replica 数；不能将这种诊断调度当作原四卡吞吐复现。历史重放默认检查优化执行器；`--executor reference` 检查 DynamicCache 与共享 Flash KV 的参考执行器。`--source-compact 0` 可重放固定行测量，默认值为 2。结果同时记录执行器源码指纹和源轨迹配置，两个执行器都必须通过原有容差。
 
 ```bash
 bash examples/mirroropd/benchmarks/fusion/run_fusion_benchmark_fsdp2.sh replay my-run
-bash examples/mirroropd/benchmarks/fusion/run_fusion_benchmark_fsdp2.sh profile my-run
-bash examples/mirroropd/benchmarks/fusion/run_fusion_benchmark_fsdp2.sh layouts my-run
+FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusion_benchmark_fsdp2.sh profile my-run
+FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusion_benchmark_fsdp2.sh layouts my-run
 ```
 
 固定回放使用确定的十进制 token 前缀，关闭自然 EOS 和随机抽样，只用于同工作量的算子/KV 对照。它不能代替自然生成吞吐。
