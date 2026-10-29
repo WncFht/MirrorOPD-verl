@@ -888,6 +888,17 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         self.actor.save_checkpoint(local_path, hdfs_path, global_step, max_ckpt_to_keep)
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
+    def park_fusion_actor(self):
+        """Finish checkpoint/optimizer offload before a separate fusion engine allocates."""
+        self.actor.engine.to(
+            "cpu",
+            model=self.actor.engine.is_param_offload_enabled,
+            optimizer=self.actor.engine.is_optimizer_offload_enabled,
+            grad=True,
+        )
+        aggressive_empty_cache(force_sync=True)
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
     def configure_fusion(self, settings):
         if settings.get("backend") == "vllm_fusion":
             from verl.workers.rollout.vllm_fusion.adapter import ServerAdapter
