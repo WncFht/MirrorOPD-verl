@@ -1,7 +1,8 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Fixed 64-question MATH diagnostic for E54 recovery, using the production cap.
+"""Fixed 64-question E54 diagnostics, using the production response cap.
 
+Preparation selects MATH-500; generation also accepts explicit prompt files.
 Preparation uses a predeclared random seed without reading model outcomes.
 Generate and grade are separate processes; grading never shares CUDA state.
 """
@@ -51,12 +52,14 @@ def prepare(args):
             "scope": "64 fixed MATH-500 questions, one sample each; diagnostic, not full benchmark",
             "selection_seed": 20261028,
             "indices": indices,
-            "temperature": 0.7,
-            "top_p": 0.9,
+            "temperature": args.temperature,
+            "top_p": args.top_p,
             "top_k": -1,
             "response_cap": 31744,
             "max_context": 32768,
             "stop_ids": [151643, 151645],
+            "max_num_seqs": 16,
+            "gpu_memory_utilization": 0.8,
             "template": "Base enable_thinking=False; unchanged from E54 training",
         },
     )
@@ -72,7 +75,7 @@ def generate(args):
         dtype="bfloat16",
         max_model_len=32768,
         gpu_memory_utilization=0.8,
-        max_num_seqs=64,
+        max_num_seqs=16,
         max_num_batched_tokens=8192,
         enable_prefix_caching=True,
         seed=42,
@@ -81,8 +84,8 @@ def generate(args):
         [{"prompt_token_ids": r["prompt_ids"]} for r in prompts],
         sampling_params=[
             SamplingParams(
-                temperature=0.7,
-                top_p=0.9,
+                temperature=args.temperature,
+                top_p=args.top_p,
                 top_k=-1,
                 max_tokens=31744,
                 stop_token_ids=[151643, 151645],
@@ -105,6 +108,8 @@ def generate(args):
                 "response_length": len(response.token_ids),
                 "finish_reason": response.finish_reason,
                 "stop_reason": response.stop_reason,
+                "temperature": args.temperature,
+                "top_p": args.top_p,
             }
             stream.write(json.dumps(record, ensure_ascii=False) + "\n")
     write(args.output / "generation-time.json", {"including_model_load_seconds": time.time() - started})
@@ -142,6 +147,8 @@ def main():
     parser.add_argument("--data", type=Path)
     parser.add_argument("--prompts", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--temperature", type=float, default=0.7)
+    parser.add_argument("--top-p", type=float, default=0.9)
     args = parser.parse_args()
     if args.action == "prepare" and (args.model is None or args.data is None):
         parser.error("prepare requires --model and --data")
