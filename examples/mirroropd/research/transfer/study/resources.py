@@ -1,0 +1,160 @@
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
+"""Identity-checked back-four GPU ownership and independent occupation recovery."""
+
+import fcntl
+import importlib.util
+import json
+import os
+import signal
+import socket
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+from .artifacts import read, write
+from .spec import WORK
+
+TAG = "MIRROROPD_STUDY_RUN"
+
+
+def identity(pid):
+    try:
+        fields = Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()
+        return [int(pid), fields[19]] if fields[0] not in ("Z", "X") else None
+    except (FileNotFoundError, ProcessLookupError):
+        return None
+
+
+def tagged(tag):
+    result = []
+    for path in Path("/proc").iterdir():
+        if not path.name.isdigit():
+            continue
+        try:
+            if f"{TAG}={tag}".encode() in (path / "environ").read_bytes().split(b"\0"):
+                value = identity(int(path.name))
+                if value:
+                    result.append(value)
+        except (FileNotFoundError, ProcessLookupError, PermissionError):
+            continue
+    return result
+
+
+def send(record, sig):
+    spec = importlib.util.spec_from_file_location("study_occupy_control", WORK / "cluster_tools/gpu_occupy_ctl.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    expected = module.identity(record[0])
+    if expected and expected["start_ticks"] == record[1]:
+        module.signal_process({"identity": expected}, sig)
+
+
+class Resource:
+    def __init__(self):
+        self.path = WORK / "wandb-logs/locks" / socket.gethostname() / "teacher-studies.json"
+        self.config = read(self.path)
+        assert self.config["gpus"] == [4, 5, 6, 7]
+        self.script = WORK / "cluster_tools/gpu_occupy.sh"
+
+    def environment(self):
+        env = dict(
+            os.environ,
+            CUDA_VISIBLE_DEVICES="4,5,6,7",
+            GPU_OCCUPY_PYTHON=sys.executable,
+            GPU_OCCUPY_STATE_DIR=self.config["state_dir"],
+        )
+        env.pop(TAG, None)
+        return env
+
+    def status(self):
+        return json.loads(
+            subprocess.check_output(
+                ["bash", str(self.script), "status", "--json"], env=self.environment(), text=True, timeout=20
+            )
+        )
+
+    def acquire(self):
+        lock = Path(self.config["lock"]).open("a")
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        return lock
+
+    def prepare(self):
+        state = self.status()
+        if state.get("process_state") == "alive":
+            assert state["status"]["cuda_visible_devices"] == "4,5,6,7"
+            subprocess.run(["bash", str(self.script), "stop", "--timeout", "30"], env=self.environment(), check=True)
+        memory = subprocess.check_output(
+            ["nvidia-smi", "--query-gpu=index,memory.used", "--format=csv,noheader,nounits"], text=True
+        )
+        assert all(
+            int(line.split(",")[1]) < 1024
+            for line in memory.splitlines()
+            if int(line.split(",")[0]) in self.config["gpus"]
+        ), memory
+
+    @staticmethod
+    def restored(state):
+        value = state.get("status", {})
+        return (
+            state.get("health") == "running"
+            and value.get("cuda_visible_devices") == "4,5,6,7"
+            and set(value.get("workers", {})) == {"0", "1", "2", "3"}
+            and all(w["phase"] == "running" and w["allocated_mib"] > 1000 for w in value["workers"].values())
+        )
+
+    def recover(self, directory, tag):
+        with (directory / "recovery.lock").open("a") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            if (directory / "recovered.json").exists():
+                return
+            for sig, seconds in [(signal.SIGTERM, 20), (signal.SIGKILL, 5)]:
+                for record in tagged(tag):
+                    send(record, sig)
+                deadline = time.monotonic() + seconds
+                while tagged(tag) and time.monotonic() < deadline:
+                    time.sleep(1)
+            with (directory / "recovery.log").open("a") as stream:
+                while True:
+                    state = self.status()
+                    if self.restored(state):
+                        time.sleep(6)
+                        state = self.status()
+                        if self.restored(state):
+                            write(directory / "recovered.json", state)
+                            return
+                    if state.get("process_state") != "alive":
+                        subprocess.run(
+                            [
+                                "bash",
+                                str(self.script),
+                                "start",
+                                "--gpus",
+                                "0,1,2,3",
+                                "--memory-fraction",
+                                "0.95",
+                                "--heartbeat",
+                                "5",
+                            ],
+                            env=self.environment(),
+                            stdout=stream,
+                            stderr=subprocess.STDOUT,
+                            timeout=60,
+                        )
+                    elif state.get("status", {}).get("cuda_visible_devices") != "4,5,6,7":
+                        self.config["state_dir"] = str(Path(self.config["state_dir"]).with_name("uid-0-study-back4"))
+                        write(self.path, self.config)
+                    time.sleep(5)
+
+
+def guard(directory):
+    directory = Path(directory)
+    owner = read(directory / "owner.json")
+    resource = Resource()
+    write(directory / "guard-ready.json", dict(identity=identity(os.getpid())))
+    while identity(owner["identity"][0]) == owner["identity"]:
+        if (directory / "recovered.json").exists():
+            return
+        time.sleep(3)
+    resource.recover(directory, owner["tag"])
