@@ -23,7 +23,8 @@ export MAX_PROMPT_LENGTH=1024 MAX_RESPONSE_LENGTH=32 MAX_VAL_RESPONSE_LENGTH=32
 export PARAM_OFFLOAD=True OPTIMIZER_OFFLOAD=True
 export WANDB_MODE=offline
 mkdir -p "$WORKSPACE/runs/vllm-fusion-20261029/$PREFIX"
-POLICY=('rollout_policy.execution.backend=vllm_fusion')
+POLICY=('rollout_policy.execution.backend=vllm_fusion'
+    "rollout_policy.execution.enforce_eager=${FUSION_ENFORCE_EAGER:-true}")
 if [[ $BINDING == initial ]]; then
     POLICY+=('rollout_policy.teacher_weight={kind:linear,start:1.0,end:0.0,steps:2,clock:outer_step}')
 fi

@@ -32,6 +32,7 @@ def main():
     parser.add_argument("--student", required=True)
     parser.add_argument("--teacher", required=True)
     parser.add_argument("--out", required=True)
+    parser.add_argument("--graph", action="store_true")
     args = parser.parse_args()
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -39,7 +40,7 @@ def main():
     from vllm import LLM, SamplingParams
 
     from verl.workers.rollout.vllm_fusion import register_models
-    from verl.workers.rollout.vllm_fusion.compat import fusion_hf_overrides
+    from verl.workers.rollout.vllm_fusion.compat import decode_graph_config, fusion_hf_overrides
 
     register_models()
     tokenizer = AutoTokenizer.from_pretrained(args.student, local_files_only=True)
@@ -50,7 +51,8 @@ def main():
         model=args.student,
         hf_overrides=fusion_hf_overrides(args.teacher),
         dtype="bfloat16",
-        enforce_eager=True,
+        enforce_eager=not args.graph,
+        compilation_config=decode_graph_config(1) if args.graph else None,
         enable_prefix_caching=False,
         enable_chunked_prefill=False,
         max_model_len=1024,
@@ -77,7 +79,8 @@ def main():
             temperature=temperature,
             top_k=top_k,
             top_p=top_p,
-            max_tokens=1,
+            max_tokens=2 if args.graph else 1,
+            ignore_eos=args.graph,
             seed=42,
             logprobs=0,
         )
@@ -86,8 +89,8 @@ def main():
         llm.collective_rpc("fusion_save_logits", args=(str(path),))
         values = torch.load(path, map_location="cpu", weights_only=True)
         expected = oracle(values["student"][0], values["teacher"][0], values["legal"], alpha, temperature, top_k, top_p)
-        token = response.token_ids[0]
-        measured = response.logprobs[0][token].logprob
+        token = response.token_ids[-1]
+        measured = response.logprobs[-1][token].logprob
         error = abs(measured - expected[token].item())
         actual = values["processed_log_probs"][0].double()
         probability_error = (actual.exp() - expected.exp()).abs().max().item()

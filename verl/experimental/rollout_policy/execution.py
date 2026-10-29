@@ -20,7 +20,7 @@ class NativeVLLMExecutor:
 
     async def prepare(self, plan):
         from verl.experimental.rollout_policy.runtime import LocalPhaseClient
-        from verl.workers.rollout.vllm_fusion.compat import fusion_hf_overrides
+        from verl.workers.rollout.vllm_fusion.compat import decode_graph_config, fusion_hf_overrides
         from verl.workers.rollout.vllm_fusion.replica import VLLMFusionReplica
 
         rt = self.runtime
@@ -44,6 +44,10 @@ class NativeVLLMExecutor:
             with open_dict(rollout.engine_kwargs.vllm):
                 rollout.engine_kwargs.vllm.hf_overrides = fusion_hf_overrides(plan.teacher_binding.path)
                 rollout.engine_kwargs.vllm.kv_cache_memory_bytes = execution.kv_cache_memory_bytes
+                if not execution.enforce_eager:
+                    compilation = decode_graph_config(execution.max_num_seqs)
+                    rollout.engine_kwargs.vllm.compilation_config = compilation
+                    rollout["cudagraph_capture_sizes"] = compilation["cudagraph_capture_sizes"]
             self.replica = VLLMFusionReplica(
                 4000, rollout, rt.config.actor_rollout_ref.model, gpus_per_node=1, name_suffix="policy_fusion"
             )

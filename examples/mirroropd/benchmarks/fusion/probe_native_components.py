@@ -17,6 +17,7 @@ def main():
     parser.add_argument("--batch", type=int, default=1)
     parser.add_argument("--max-model-len", type=int, default=8192)
     parser.add_argument("--graph", action="store_true")
+    parser.add_argument("--kv-gib", type=float, default=4.0)
     args = parser.parse_args()
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -25,7 +26,7 @@ def main():
     from vllm import LLM, SamplingParams
 
     from verl.workers.rollout.vllm_fusion import register_models
-    from verl.workers.rollout.vllm_fusion.compat import fusion_hf_overrides
+    from verl.workers.rollout.vllm_fusion.compat import decode_graph_config, fusion_hf_overrides
 
     register_models()
     model_path = args.teacher if args.component == "teacher" else args.student
@@ -33,11 +34,12 @@ def main():
         model=model_path,
         dtype="bfloat16",
         enforce_eager=not args.graph,
+        compilation_config=decode_graph_config(args.batch) if args.graph else None,
         hf_overrides=fusion_hf_overrides(args.teacher) if args.component == "fusion" else {},
         max_model_len=args.max_model_len,
         max_num_batched_tokens=args.max_model_len * args.batch,
         max_num_seqs=args.batch,
-        kv_cache_memory_bytes=4 * 1024**3,
+        kv_cache_memory_bytes=int(args.kv_gib * 1024**3),
         enable_prefix_caching=False,
         enable_chunked_prefill=False,
         attention_config={"backend": "TRITON_ATTN"},
