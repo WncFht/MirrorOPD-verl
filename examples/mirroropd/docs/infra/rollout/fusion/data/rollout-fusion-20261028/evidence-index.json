@@ -1,5 +1,5 @@
 {
-  "status": "incomplete: final performance and training matrix is running",
+  "status": "incomplete: native reference numerical error reproduced; shared-Flash-KV reference fix under regression tests",
   "implementation_commit": "d56e081d82eb26e00bc8636df090c691ddae3352",
   "gpu_scope": [
     0,
@@ -115,7 +115,8 @@
     "frozen-source full-cap performance matrix",
     "layout and profiler comparisons",
     "final real train/validation/save/restore matrix",
-    "final completion audit"
+    "final completion audit",
+    "empirical short-response workload and posttrained history checks"
   ],
   "partial_final_performance": {
     "dense_base_optimized": {
@@ -138,7 +139,7 @@
       "median_effective_tokens_per_second": 1327.0390587924,
       "max_allocated_bytes": 51497351680,
       "raw_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-d56e081/dense-base-optimized",
-      "scope": "optimized path only; reference and full G7 audit still pending"
+      "scope": "Optimized path result; see pair comparison for reference. Full G7 and training lifecycle still pending."
     },
     "moe_base_optimized": {
       "source_commit": "d56e081d82eb26e00bc8636df090c691ddae3352",
@@ -160,7 +161,7 @@
       "median_effective_tokens_per_second": 561.7604522233095,
       "max_allocated_bytes": 78250965504,
       "raw_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-d56e081/moe-base-optimized",
-      "scope": "optimized path only; reference and full G7 audit still pending"
+      "scope": "Optimized path result; see pair comparison for reference. Full G7 and training lifecycle still pending."
     },
     "dense_base_comparison": {
       "source_commit": "d56e081d82eb26e00bc8636df090c691ddae3352",
@@ -182,9 +183,60 @@
         456835,
         456835
       ],
-      "scope": "Dense Base natural generation only; does not include training/scoring/validation costs or other G7 workloads",
+      "scope": "Historical comparison against the old native cached reference. Corrected shared-Flash-KV reference measurements required before final unified G7 conclusions.",
       "reference_median_gpu_hours_per_million_effective_tokens": 2.2888550279198903,
       "candidate_median_gpu_hours_per_million_effective_tokens": 0.8372859138918018
+    },
+    "moe_base_comparison": {
+      "source_commit": "d56e081d82eb26e00bc8636df090c691ddae3352",
+      "batch": 64,
+      "response_cap": 7168,
+      "gpus": 4,
+      "repeats_each": 3,
+      "reference_median_seconds": 1546.0047704204917,
+      "optimized_median_seconds": 742.9287667870522,
+      "reference_range_seconds": [
+        1543.9602793082595,
+        1561.4762406349182
+      ],
+      "optimized_range_seconds": [
+        742.4831525087357,
+        743.5187764540315
+      ],
+      "wall_speedup": 2.080959628345671,
+      "effective_token_throughput_ratio": 2.1338104841658065,
+      "reference_effective_tokens": [
+        407011,
+        407011,
+        407011
+      ],
+      "optimized_effective_tokens": [
+        417348,
+        417348,
+        417348
+      ],
+      "reference_median_gpu_hours_per_million_effective_tokens": 4.2204831767323014,
+      "candidate_median_gpu_hours_per_million_effective_tokens": 1.977909101136627,
+      "scope": "Historical comparison against the old native cached reference. Corrected shared-Flash-KV reference measurements required before final unified G7 conclusions."
+    },
+    "dense_post_reference": {
+      "scope": "Official posttrained checkpoint with original prompt protocol; remains a long-response workload. Optimized comparison and history checks pending.",
+      "median_seconds": 935.5402138009667,
+      "range_seconds": [
+        933.8197415545583,
+        937.3186262175441
+      ],
+      "effective_tokens": [
+        449904,
+        449904,
+        449904
+      ],
+      "eos_each": 7,
+      "median_length": 7168,
+      "source": {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-d56e081/dense-post-reference-audit.json",
+        "sha256": "c17a8e088c717f9812c979fbb5e5306a64fcc853500a73b0483fc8be416e30ae"
+      }
     }
   },
   "fixed_snapshot_dense_history": {
@@ -206,7 +258,7 @@
   },
   "partial_final_resources": {
     "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-d56e081/base-resource-audit.json",
-    "sha256": "7c96dbd9adbc960b9df66b300432731babdee0ba303010459fa4a55b0561a94c",
+    "sha256": "365644343704e0d05ffaf9d16bfb09ca3d4df84bc016964e7a7da7b924b45bdb",
     "scope": "Standalone Base generation only; train/validation/restore capacity remains unverified."
   },
   "fixed_snapshot_moe_history": {
@@ -254,5 +306,37 @@
     "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-d56e081/moe-reference-repeat-0-audit.json",
     "sha256": "d79bc59dd5ed8b65f5ab17667c495249904369c5fbae7231ef3246c85c4f6303",
     "scope": "First MoE reference repeat only; not three-repeat performance acceptance. Common-prefix selected probabilities do not replace full-distribution numerical checks."
+  },
+  "short_response_protocol_followup": {
+    "base_commit": "d56e081d82eb26e00bc8636df090c691ddae3352",
+    "followup_commit": "49ddc684bafd45ea74ba00c60a62529413315739",
+    "changed_paths": [
+      "examples/mirroropd/benchmarks/fusion/README.md",
+      "examples/mirroropd/benchmarks/fusion/benchmark.py",
+      "examples/mirroropd/benchmarks/fusion/run_fusion_short_workload_fsdp2.sh",
+      "examples/mirroropd/benchmarks/fusion/summarize.py"
+    ],
+    "runtime_and_training_unchanged": true,
+    "checks": {
+      "ruff": "passed",
+      "ruff_format": "passed",
+      "all_commit_hooks": "passed",
+      "shell_syntax": "passed",
+      "pseudocode": "0 blocks,0errors,0warnings",
+      "cli_json_validation": "null,array,malformed JSON rejected before GPU initialization"
+    },
+    "cpu_prompt_evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/nonthinking-prompt-protocol-audit.json",
+    "gpu_status": "queued; no nonthinking performance or short-length claim"
+  },
+  "posttrained_fixed_row_failure": {
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-d56e081/dense-post-compact0-failures.json",
+    "sha256": "da1b2c89d025d9fd50c62d022b69ace9fccc2b94c888452b804bb6126a32c11f",
+    "probability_tolerance": 0.01,
+    "max_observed_probability_error": 0.03940293677379608,
+    "source_commit": "d56e081d82eb26e00bc8636df090c691ddae3352"
+  },
+  "reference_root_cause": {
+    "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/post-reference-root-cause.json",
+    "sha256": "5e18f236e536a157139cf2fc4480190eef8cd4ef3e48b0e7cd69903731ba685a"
   }
 }
