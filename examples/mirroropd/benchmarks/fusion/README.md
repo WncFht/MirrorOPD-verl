@@ -81,7 +81,7 @@ Tokens/s 只计有效 response token，不把两模型的 forward token 相加�
 
 ## 原生 vLLM 单卡开发
 
-原生后端选择 `rollout_policy.execution.backend=vllm_fusion`；旧配置继续使用 HF。已验证的训练范围为单 actor rank、TP1、Qwen3 dense learner 与 dense/MoE teacher；双 actor rank 与 TP2 的开发入口已加入，GPU 验收尚未完成。原生模型保留各自配置、head 和 KV；公共 sampler 保留原策略的 top-p 边界。正式支持范围以[实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)为准。
+原生后端选择 `rollout_policy.execution.backend=vllm_fusion`；旧配置继续使用 HF。已验证的短训练范围包括单 actor rank 的 Dense/MoE current/initial，以及双 actor rank 的 Dense current（一个 TP2 或两个 TP1 replica）；其他双卡组合仍在验收。Learner 限 Qwen3 dense，teacher 可为 dense/MoE。原生模型保留各自配置、head 和 KV；公共 sampler 保留原策略的 top-p 边界。正式支持范围以[实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)为准。
 
 本机入口 `run_fusion_local_fsdp2.sh` 默认使用物理 GPU 7；`FUSION_GPUS=6`、`7` 或 `6,7` 选择已分配的卡，逐卡核对 UUID、取得排他锁并拒绝既有计算任务。它不清理其他 Ray 作业。环境位于仓外 `envs/mirroropd-fusion`；在仓库根目录运行：
 
@@ -107,3 +107,5 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_native_lifecycle_fsdp2.sh \
 固定前缀数值探针默认 `--arrival-mode synchronized`：通过所选版本的调度暂停接口完整提交请求后统一开始，要求每一步实际批宽与声明值一致。`asynchronous` 仅用于复现到达时序差异。组件比较覆盖所有批内行；只检查首行的早期结果不能代替全批验收，失败结果保留且限值不回写。
 
 `probe_vllm_refit.py` 使用真实 checkpoint 和 IPC 检查 student 更新、teacher 哈希及输出不变、错误版本和损坏参数流；`probe_native_coordination.py` 用两个 actor rank 调用生产权重协调方法，在小型 Qwen3 checkpoint 上检查带 collective 的参数流排空和跨 rank 版本提交。前者不替代 trainer 协调，后者不替代真实配对的容量与训练检查。两者仅是验收工具。生成与组件探针保存原生累计后端指标，`summarize_native.py` 从相邻快照计算各批抢占次数；旧记录缺少计数时仍标为 `unavailable`。
+
+`audit_native_lifecycle.py --previous-actor-checkpoint <恢复前 actor 目录>` 可同时核对恢复前后保存的 CPU 参数分片。它检查真实数值变化并分别报告 FP32 状态和 BF16 推理视图中的变化，不能仅以更新计数推进推断权重已变化。`probe_hf_reference.py` 提供独立 HF BF16/FlashAttention 全前缀参考；其分布距离与选中概率差异用于跨后端诊断，不沿用旧 HF 阈值作为 native 引擎门槛，该新增工具仍待 GPU 执行。

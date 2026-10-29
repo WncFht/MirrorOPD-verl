@@ -9,9 +9,51 @@ import math
 from collections import Counter
 from pathlib import Path
 
+import yaml
+
+
+def checkpoint_delta(before, after, world_size):
+    """Read CPU shard storage without reconstructing distributed collectives."""
+    import torch
+
+    records = []
+    for rank in range(world_size):
+        filename = f"model_world_size_{world_size}_rank_{rank}.pt"
+        left = torch.load(before / filename, map_location="cpu", weights_only=False, mmap=True)
+        right = torch.load(after / filename, map_location="cpu", weights_only=False, mmap=True)
+        if left.keys() != right.keys():
+            raise ValueError("Checkpoint parameter keys changed across restore/update")
+        changed, changed_bf16, maximum = 0, 0, 0.0
+        for name in left:
+            a = getattr(left[name], "_local_tensor", left[name])
+            b = getattr(right[name], "_local_tensor", right[name])
+            if a.shape != b.shape or not torch.isfinite(a).all() or not torch.isfinite(b).all():
+                raise ValueError(f"Invalid checkpoint shard tensor: rank {rank}, {name}")
+            changed += int(torch.count_nonzero(a != b))
+            changed_bf16 += int(torch.count_nonzero(a.bfloat16() != b.bfloat16()))
+            maximum = max(maximum, float((a.float() - b.float()).abs().max()))
+        if not changed:
+            raise ValueError(f"Rank {rank} checkpoint weights did not change after the resumed update")
+        records.append(
+            {
+                "rank": rank,
+                "changed_state_elements": changed,
+                "changed_bf16_state_elements": changed_bf16,
+                "max_absolute_change": maximum,
+            }
+        )
+    return {"scope": "Checkpoint state entries, including tied aliases", "ranks": records}
+
 
 def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_size=1, physical_gpus=(7,), requests=2):
     errors, witnesses = [], []
+    config_path = run / "resolved_config.yaml"
+    raw_config = config_path.read_bytes()
+    config = yaml.safe_load(raw_config)
+    witnesses.append({"path": str(config_path.resolve()), "sha256": hashlib.sha256(raw_config).hexdigest()})
+    tp = int(config["rollout_policy"]["execution"]["tensor_parallel_size"])
+    if config["trainer"]["n_gpus_per_node"] != world_size or world_size % tp:
+        errors.append("Declared actor world size differs from the launch topology")
 
     def read(relative, lines=False):
         path = run / relative
@@ -50,6 +92,13 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
         expected_loaded = version if binding == "current" else ["checkpoint", str(Path(student).resolve())]
         if len(ranks) != world_size or any(rank["version"] != expected_loaded for rank in ranks):
             errors.append(f"Outer {outer}: receiver version mismatch")
+        if world_size > 1:
+            expected_receivers = {(rank // tp, rank % tp, tp) for rank in range(world_size)}
+            actual_receivers = {
+                (rank.get("replica"), rank.get("tp_rank"), rank.get("tensor_parallel_size")) for rank in ranks
+            }
+            if actual_receivers != expected_receivers:
+                errors.append(f"Outer {outer}: receiver replica/TP mapping differs from the launch topology")
         validation = read(f"validation/records/{outer}.jsonl", lines=True)
         sources = Counter(row["data_source"] for row in validation)
         if len(validation) != 10 or len(sources) != 5 or any(count != 2 for count in sources.values()):
@@ -63,6 +112,9 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
                 "outer": outer,
                 "alpha": alpha,
                 "receiver_version": ranks[0]["version"],
+                "receiver_topology": [
+                    {key: rank.get(key) for key in ["replica", "tp_rank", "tensor_parallel_size"]} for rank in ranks
+                ],
                 "validation_sources": dict(sources),
             }
         )
@@ -92,10 +144,28 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
         "source_commit": source_commit,
         "outers": summaries,
         "applied_updates": [row["step/optimizer"] for row in updates],
+        "timing_scope": "Last emitted value per outer/key; nested intervals must not be summed",
+        "timing_by_outer": [
+            {
+                "outer": outer,
+                "seconds": {
+                    key: value
+                    for row in metrics
+                    if row.get("step/outer") == outer
+                    for key, value in row.items()
+                    if key.startswith("perf/timing/")
+                },
+            }
+            for outer in outers
+        ],
         "resources": {
             "physical_gpus": list(physical_gpus),
             "wall_seconds": resources[-1].get("wall_seconds"),
             "nvml_peak_bytes": max(row["memory_used"] for row in gpu_rows),
+            "nvml_peak_bytes_by_gpu": {
+                str(index): max(row["memory_used"] for row in gpu_rows if row["index"] == index)
+                for index in physical_gpus
+            },
             "cpu_rss_sum_peak_bytes": max(row["process_tree_rss_sum"] for row in samples),
         },
         "witnesses": witnesses,
@@ -114,6 +184,7 @@ def main():
     parser.add_argument("--world-size", type=int, default=1)
     parser.add_argument("--physical-gpus", nargs="+", type=int, choices=[6, 7], default=[7])
     parser.add_argument("--requests", type=int, default=2)
+    parser.add_argument("--previous-actor-checkpoint", type=Path, help="Compare saved actor shard values after resume")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     report = inspect_run(
@@ -128,6 +199,18 @@ def main():
         args.physical_gpus,
         args.requests,
     )
+    if args.previous_actor_checkpoint is not None:
+        if args.save is None:
+            raise ValueError("Checkpoint delta needs --save")
+        try:
+            report["checkpoint_delta"] = checkpoint_delta(
+                args.previous_actor_checkpoint,
+                args.run / f"checkpoints/global_step_{args.save}/actor",
+                args.world_size,
+            )
+        except (ValueError, RuntimeError, OSError) as exc:
+            report["errors"].append(f"Checkpoint delta failed: {exc}")
+            report["passed"] = False
     with args.out.open("x") as stream:
         json.dump(report, stream, indent=2)
     print(json.dumps({key: report[key] for key in ["passed", "errors", "applied_updates"]}))
