@@ -1,0 +1,25 @@
+{
+  "ledger": "Freeze and render every recorded outer/inner KL observation.\n\nLedger: metric colors are teacher=teal, anchor=orange, target=violet. Each\natlas panel is exactly one outer and its 16 pre-update observations, without\nsmoothing or interpolation across batches. First/last outer curves connect\ndifferent rollout populations, not repeated evaluation of fixed states.\nEta=1 target KL is a declared alias of teacher KL; missing anchor is never zero.\nHeatmaps encode log10(target/first target) for each batch; missing cells remain\nmasked. Kappa comparisons fix eta within a figure and use the coarsened EOS\naction space for E54. Source inputs are read-only; no training is launched.\n",
+  "exceptions": {
+    "facet-ylim-mismatch": "Outer metric panels and atlas panels use explicit independent scales"
+  },
+  "observed_at": "2026-10-29T15:32:35.320103+08:00",
+  "snapshot_sha256": "4ff540ab8d2501fd788afa8bff483ab7c93270d9e8d7b684fd1fe32065614973",
+  "groups": {
+    "E45": 256,
+    "E50": 256,
+    "E51": 256,
+    "E52": 256,
+    "E53": 103,
+    "E54/k1-eta01": 3,
+    "E54/k0-eta01": 3,
+    "E54/k1-eta02": 3,
+    "E54/k0-eta02": 3,
+    "E54/k05-eta005": 3,
+    "E54/k05-eta01": 3,
+    "E54/k05-eta02": 3,
+    "E54/k05-eta03": 3,
+    "E54/k1-eta005": 3,
+    "E54/k1-eta03": 3
+  }
+}
