@@ -13,7 +13,7 @@ MODE=${4:-formal}
 [[ $LABEL =~ ^[a-zA-Z0-9_-]+$ ]] || { echo 'Run label must contain only letters, numbers, underscores or hyphens' >&2; exit 2; }
 case "$PAIR" in J|P) ;; *) exit 2 ;; esac
 case "$ARM" in S0|S|LM|TM|T) ;; *) exit 2 ;; esac
-case "$MODE" in formal|profile) ;; *) exit 2 ;; esac
+case "$MODE" in formal|profile|smoke) ;; *) exit 2 ;; esac
 FUSION_GPUS=${FUSION_GPUS:-7}
 case "$FUSION_GPUS" in 6|7|6,7) ;; *) echo 'Use allocated GPUs 6, 7, or 6,7' >&2; exit 2 ;; esac
 read_only=false
@@ -67,6 +67,10 @@ export WANDB_MODE=${WANDB_MODE:-offline} VERL_USE_UV=0
 unset TRAIN_PRECISION
 export TOTAL_TRAINING_STEPS=40
 if [[ $MODE == profile ]]; then export TOTAL_TRAINING_STEPS=${PREFIX_PROFILE_OUTERS:-2}; fi
+if [[ $MODE == smoke ]]; then
+    export TOTAL_TRAINING_STEPS=2 TRAIN_BATCH_SIZE=2 MAX_PROMPT_LENGTH=1024 MAX_RESPONSE_LENGTH=32
+fi
+context=$((MAX_PROMPT_LENGTH + MAX_RESPONSE_LENGTH))
 export EXPERIMENT_NAME="prefix-${MODE}-${PAIR}-${ARM}-${LABEL}"
 export RUN_DIR="$REPO/outputs/$EXPERIMENT_NAME"
 export VERL_FILE_LOGGER_PATH="$RUN_DIR/metrics.jsonl"
@@ -123,7 +127,7 @@ exec bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E20 --method full_kl
     'actor_rollout_ref.actor.fsdp_config.model_dtype=fp32' \
     'actor_rollout_ref.actor.fsdp_config.dtype=bfloat16' \
     'actor_rollout_ref.actor.fsdp_config.seed=42' 'actor_rollout_ref.actor.data_loader_seed=42' \
-    'actor_rollout_ref.rollout.seed=42' 'actor_rollout_ref.rollout.max_model_len=11264' \
+    'actor_rollout_ref.rollout.seed=42' "actor_rollout_ref.rollout.max_model_len=$context" \
     'actor_rollout_ref.rollout.temperature=1.0' 'actor_rollout_ref.rollout.top_p=1.0' \
     'actor_rollout_ref.rollout.top_k=-1' 'actor_rollout_ref.rollout.n=1' \
     'actor_rollout_ref.rollout.logprobs_mode=processed_logprobs' \

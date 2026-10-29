@@ -114,7 +114,7 @@ Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已�
 
 ## E20 五种前缀入口
 
-`run_fusion_prefix_study_fsdp2.sh <J|P> <S0|S|LM|TM|T> <唯一标签> [formal|profile]` 复用 E20 公共配方，固定 batch64、reuse16、训练 cap7168，关闭全部验证与模型保存。`formal` 为 40 outer，`profile` 默认 2 outer，可用 `PREFIX_PROFILE_OUTERS` 指定预跑轮数。配置与运行目录使用不同模式前缀；当前仅完成配置检查，正式性能参数和十组训练尚未验收。
+`run_fusion_prefix_study_fsdp2.sh <J|P> <S0|S|LM|TM|T> <唯一标签> [formal|profile|smoke]` 复用 E20 公共配方，固定 batch64、reuse16、训练 cap7168，关闭全部验证与模型保存。`formal` 为 40 outer，`profile` 默认 2 outer，可用 `PREFIX_PROFILE_OUTERS` 指定预跑轮数。`smoke` 单独使用 batch2/cap32、两轮及 reuse16 检查接线和版本推进，不能作为正式负载证据。配置与运行目录使用不同模式前缀；正式性能参数和十组训练尚未验收。
 
 ```bash
 CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusion_prefix_study_fsdp2.sh P LM review > /tmp/prefix-P-LM.yaml
