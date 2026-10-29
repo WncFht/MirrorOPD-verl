@@ -8,11 +8,11 @@ from types import SimpleNamespace
 import pytest
 import torch
 
-from examples.mirroropd.research.common.cache import HiddenCache
-from examples.mirroropd.research.common.io import dump, read
-from examples.mirroropd.research.common.metrics import distances, vectors
-from examples.mirroropd.research.common.protocol import LONG_PASS, validate_long_pass, validate_resume
-from examples.mirroropd.research.common.statistics import mean_ci, ratio_ci
+from examples.mirroropd.research.core.cache import HiddenCache
+from examples.mirroropd.research.core.io import dump, read
+from examples.mirroropd.research.core.metrics import distances, vectors
+from examples.mirroropd.research.core.statistics import mean_ci, ratio_ci
+from examples.mirroropd.research.studies.cross_batch.protocol import LONG_PASS, validate_long_pass, validate_resume
 
 
 def test_native_teacher_extra_mass_is_not_conditioned_away():
@@ -143,7 +143,7 @@ def test_resume_requires_same_teacher_protocol_and_trajectories():
 
 
 def test_fsdp_evaluation_restores_kernel_even_if_forward_fails(monkeypatch):
-    from examples.mirroropd.research.precision import engine
+    from examples.mirroropd.research.backends import fsdp as engine
 
     original = engine.kernels.full_vocab_objective_result
     custom = lambda *args, **kwargs: None

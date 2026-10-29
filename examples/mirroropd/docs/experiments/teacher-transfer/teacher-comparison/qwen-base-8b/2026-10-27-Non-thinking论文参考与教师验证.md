@@ -10,11 +10,11 @@ Semi-OPD 论文表 3 的 pair (e) 也测过 Qwen3-1.7B ← Qwen3-8B non-thinking
 
 完整检索输出原样保存于[论文检索报告](../../../../../../../../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-validation-20261027-step140/2026-10-27-paper-search-original.md)，含三个条目与来源统计；三个 arXiv 标识均成功解析。
 
-完整 teacher 验证入口是 [run_teacher_validation.sh](../../../../../research/analysis/qwen_base/run_teacher_validation.sh)。从仓库根目录运行：
+完整 teacher 验证入口是 [run_teacher_validation.sh](../../../../../research/studies/qwen_base/run_teacher_validation.sh)。从仓库根目录运行：
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1,2,3 \
-  bash examples/mirroropd/research/analysis/qwen_base/run_teacher_validation.sh
+  bash examples/mirroropd/research/studies/qwen_base/run_teacher_validation.sh
 ```
 
 默认 4 张可见 GPU，脚本按 `CUDA_VISIBLE_DEVICES` 自动计算卡数；使用 8 卡时改为 `0,1,2,3,4,5,6,7`。资源起点是每卡并发 16、显存比例 0.8、TP1、Graph。模型固定 Qwen3-8B；完整数据为 MATH-500 500 题、AMC23 40 题、AIME25 30 题，每题 16 次，共 9,120 条。温度 0.7、top-p 0.9、top-k -1、最大回答 31,744 token，thinking 关闭。只验证，不更新参数。并发和显存比例是资源设置，不是论文成绩复现协议。

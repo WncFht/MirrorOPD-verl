@@ -18,6 +18,6 @@
 | [生产数值修复与验收](../../infra/numerics/precision/2026-10-27-蒸馏数值修复与验收.md)                                                                                                                          | BPO/Full-KL 稳定归约、分离 target、近零标量、sampled CE、回归与成本                                       |
 | [Softmax 上游修复调研](../../literature/optimization/2026-10-27-Softmax上游修复调研.md)                                                                                                                        | Barron 论文、FlashAttention/PyTorch/Liger/verl/Unsloth 等修复状态及本机对应关系                           |
 | [优化器历史与前向精度对照](../../experiments/teacher-transfer/optimizer-precision/mechanism/2026-10-27-MDPO优化器历史与前向精度因果对照.md)                                                                    | 零梯度与固定更新控制；Adam/SGD/Muon 多步求解、最佳状态及中间精度干预                                      |
-| [数值验证脚本](../../../research/precision/verify_mirror_targets.py)与[结果](../../experiments/teacher-transfer/optimizer-precision/mechanism/data/finite-vocab-checks.json)                                   | CPU FP64 小词表上的目标、梯度和反例检查                                                                   |
+| [数值验证脚本](../../../research/checks/objectives/verify_mirror_targets.py)与[结果](../../experiments/teacher-transfer/optimizer-precision/mechanism/data/finite-vocab-checks.json)                           | CPU FP64 小词表上的目标、梯度和反例检查                                                                   |
 
 已实现 sampled MDPO、full-vocab MDPO/BPO；普通 Full-KL 是 MDPO eta=1 的直接执行分支。配置、运行约束和验证范围在统一实现方案中维护。

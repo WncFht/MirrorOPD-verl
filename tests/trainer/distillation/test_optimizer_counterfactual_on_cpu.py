@@ -11,7 +11,7 @@ import torch
 
 @pytest.fixture
 def probe(monkeypatch):
-    return importlib.import_module("examples.mirroropd.research.precision.audit_optimizer_history")
+    return importlib.import_module("examples.mirroropd.research.studies.precision.audit_optimizer_history")
 
 
 def warm(weight_decay=0.0):

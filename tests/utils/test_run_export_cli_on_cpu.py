@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPT = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis/legacy/analyze_run.py"
+SCRIPT = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/studies/pipeline/analyze_run.py"
 
 
 @pytest.fixture

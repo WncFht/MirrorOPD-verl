@@ -151,7 +151,7 @@ $$
 
 ## 5. 验算
 
-[既有 full-KL 审计](../../research/objectives/verify_fullkl_and_support.py)检查数值、logit 梯度与支持集；[统一四格验算](../../research/objectives/verify_offpolicy_objectives.py)检查当前分布加权、行为分布加权与直接替换概率之间的差别。验算固定词表并完整枚举，不加载语言模型。
+[既有 full-KL 审计](../../research/checks/objectives/verify_fullkl_and_support.py)检查数值、logit 梯度与支持集；[统一四格验算](../../research/checks/objectives/verify_offpolicy_objectives.py)检查当前分布加权、行为分布加权与直接替换概率之间的差别。验算固定词表并完整枚举，不加载语言模型。
 
 ### 参考文献
 

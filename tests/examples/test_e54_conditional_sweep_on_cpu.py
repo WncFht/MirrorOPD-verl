@@ -4,7 +4,7 @@
 
 import pytest
 
-from examples.mirroropd.research.transfer.queue_e54_mdpo_sweep import decide
+from examples.mirroropd.research.studies.termination.queue_e54_mdpo_sweep import decide
 
 
 def summary(improved=True):

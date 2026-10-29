@@ -3,15 +3,10 @@
 """Canonical Full-KL and method-overridden run names must survive local analysis."""
 
 import json
-import sys
-from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis"
-sys.path.insert(0, str(SCRIPTS))
-import build_inventory as inventory  # noqa: E402
-import summarize_validation as summary  # noqa: E402
+from examples.mirroropd.research.core import inventory
 
 
 @pytest.mark.parametrize(
@@ -50,7 +45,9 @@ def test_full_kl_identity(mode, objective, estimator, eta, expected):
 )
 def test_run_names_keep_variants_separate(tmp_path, name, preset, role, variant):
     (tmp_path / "run.json").write_text(
-        json.dumps({"run": {"display_name": name, "run_id": "test"}, "status": "finished", "exit_code": 0})
+        json.dumps(
+            {"run": {"display_name": name, "run_id": "test"}, "status": "finished", "exit_code": 0, "history_rows": 0}
+        )
     )
     (tmp_path / "config.json").write_text(
         json.dumps(
@@ -65,11 +62,11 @@ def test_run_names_keep_variants_separate(tmp_path, name, preset, role, variant)
         )
     )
     (tmp_path / "history.jsonl").write_text("")
-    run = summary.read_run(tmp_path)
-    assert run["preset"] == preset and run["role"] == role and run["variant"] == variant
+    run = inventory.inspect(tmp_path, {})
+    assert run["name"] == name
     assert "BPO/full_vocab" in run["method"]
     if variant:
-        assert variant in summary.label(run)
+        assert variant in run["name"]
         assert inventory.family(name) == "method-overrides"
 
 

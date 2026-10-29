@@ -17,7 +17,7 @@ from tokenizers.models import WordLevel
 from transformers import PreTrainedTokenizerFast, Qwen2Config, Qwen2ForCausalLM
 from transformers.models.qwen2.modeling_qwen2 import Qwen2RotaryEmbedding
 
-from examples.mirroropd.research.precision import engine as replay
+from examples.mirroropd.research.backends import fsdp as replay
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
 

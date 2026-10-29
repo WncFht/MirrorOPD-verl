@@ -2,17 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 """Guard comparison semantics: native axes, nested timers and reuse boundaries."""
 
-import importlib.util
-import sys
-from pathlib import Path
-
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / "examples/mirroropd/research/analysis"
-sys.path.insert(0, str(SCRIPTS))
-spec = importlib.util.spec_from_file_location("policy_comparison", SCRIPTS / "compare_policy_runs.py")
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
+from examples.mirroropd.research.studies.production import compare_policy_runs as module
 
 
 def test_recorded_axis_preserves_within_batch_updates():
