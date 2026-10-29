@@ -44,7 +44,7 @@ def _warn_once(reason: str):
 
 
 def _nonnegative(value) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and value >= 0
+    return isinstance(value, int | float) and not isinstance(value, bool) and math.isfinite(value) and value >= 0
 
 
 def aggregate_pipeline_requests(keys: list[str], rows: list[dict]) -> dict[str, float]:
@@ -78,6 +78,18 @@ def aggregate_pipeline_requests(keys: list[str], rows: list[dict]) -> dict[str, 
     if not complete:
         _warn_once("not one complete single-turn submission (unsupported mode, missing or duplicate requests)")
         return metrics
+
+    # These are overlapping request latencies, not additive GPU/outer costs.
+    # The TQ payload already carries them; no extra RPC or synchronization is needed.
+    for stage in ("generate_sequences", "compute_score"):
+        values = [row.get(stage) for row in rows]
+        if all(_nonnegative(value) for value in values):
+            prefix = f"perf/request_latency/{stage}"
+            metrics[f"{prefix}/min_seconds"] = min(values)
+            metrics[f"{prefix}/max_seconds"] = max(values)
+            metrics[f"{prefix}/mean_seconds"] = sum(values) / len(values)
+        elif any(value is not None for value in values):
+            _warn_once(f"incomplete {stage} request latency")
 
     # Counts do not need synchronized clocks, but do need every request to report them.
     preemptions = [row.get("num_preempted") for row in rows]

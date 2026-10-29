@@ -148,3 +148,5 @@ CUDA_VISIBLE_DEVICES='' PYTHONPATH=. ../envs/mirroropd-fusion/bin/python \
 ```
 
 审计同时拒绝意外验证、模型 checkpoint、跳过更新和非有限 loss/梯度，保留证据文件 SHA-256、逐更新曲线和阶段耗时。嵌套时间区间不能直接相加；短训练审计不能替代长负载性能验收。
+
+完整单轮 batch 的已有 TQ telemetry 还汇总 `perf/request_latency/generate_sequences` 与 `perf/request_latency/compute_score` 下的 `min_seconds/max_seconds/mean_seconds`。这些字段包含请求排队和 RPC 等待，是可重叠的请求延迟；不能求和作为 GPU 时间，也不能从两项最大值重建完整 batch 墙钟。任一请求缺失或提供非法值时省略该项汇总，避免以部分请求伪装完整测量。
