@@ -148,7 +148,8 @@ def main():
         raise RuntimeError(f"Valid checkpoint refit failed: {errors}")
     llm.collective_rpc("fusion_commit_version", args=([1, 1],))
     audit = llm.collective_rpc("fusion_prepare", args=(0.5, [1, 1]))
-    if any(row["version"] != (1, 1) for row in audit):
+    (out / "success-versions.json").write_text(json.dumps(audit, indent=2) + "\n")
+    if any(tuple(row["version"]) != (1, 1) for row in audit):
         raise RuntimeError("TP ranks did not publish the same version")
     llm.generate([{"prompt_token_ids": prompt}], params, use_tqdm=False)
     llm.collective_rpc("fusion_save_logits", args=(str(out / "after.pt"),))

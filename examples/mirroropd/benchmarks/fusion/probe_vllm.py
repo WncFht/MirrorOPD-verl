@@ -3,6 +3,7 @@
 """Run native fusion on an explicitly allocated GPU and retain request evidence."""
 
 import argparse
+import dataclasses
 import json
 import os
 import subprocess
@@ -95,6 +96,7 @@ def main():
     tick = time.monotonic()
     llm = LLM(
         model=args.student,
+        disable_log_stats=False,
         tokenizer=args.student,
         hf_overrides=fusion_hf_overrides(args.teacher),
         tensor_parallel_size=args.tensor_parallel_size,
@@ -139,6 +141,7 @@ def main():
                     "seconds": elapsed,
                     "startup_seconds": startup,
                     "audit": audit,
+                    "backend_metrics_cumulative": [dataclasses.asdict(metric) for metric in llm.get_metrics()],
                     "responses": [],
                 }
                 for output in outputs:

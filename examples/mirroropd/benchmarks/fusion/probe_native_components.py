@@ -3,6 +3,7 @@
 """Replay identical prefixes with independent native models or the composite."""
 
 import argparse
+import dataclasses
 import json
 import os
 from pathlib import Path
@@ -42,6 +43,7 @@ def main():
     llm = LLM(
         model=model_path,
         tensor_parallel_size=args.tensor_parallel_size,
+        disable_log_stats=False,
         dtype="bfloat16",
         enforce_eager=not args.graph,
         compilation_config=decode_graph_config(capacity) if args.graph else None,
@@ -93,6 +95,7 @@ def main():
                 "path": str(path),
                 "checkpoints": workload["checkpoints"],
                 "audit": audit,
+                "backend_metrics_cumulative": [dataclasses.asdict(metric) for metric in llm.get_metrics()],
             }
         )
         (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
