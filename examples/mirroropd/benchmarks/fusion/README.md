@@ -105,3 +105,5 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_native_lifecycle_fsdp2.sh \
 图候选使用原生 `FULL_DECODE_ONLY`，prefill 保持 eager，并关闭模型的 torch.compile 改写；两侧模型仍各自 forward。`FUSION_ENFORCE_EAGER=false` 可让生命周期入口选择该图候选，默认仍为 eager。α 在图外的 logits 融合阶段生效，端点目前只保证数学语义，不宣称释放或跳过另一侧模型。图模式的训练与正式性能必须单独验收。
 
 固定前缀数值探针默认 `--arrival-mode synchronized`：通过所选版本的调度暂停接口完整提交请求后统一开始，要求每一步实际批宽与声明值一致。`asynchronous` 仅用于复现到达时序差异。组件比较覆盖所有批内行；只检查首行的早期结果不能代替全批验收，失败结果保留且限值不回写。
+
+`probe_vllm_refit.py` 使用真实 checkpoint 和 IPC 检查 student 更新、teacher 哈希及输出不变、错误版本和损坏参数流；`probe_native_coordination.py` 用两个 actor rank 调用生产权重协调方法，在小型 Qwen3 checkpoint 上检查带 collective 的参数流排空和跨 rank 版本提交。前者不替代 trainer 协调，后者不替代真实配对的容量与训练检查。两者仅是验收工具。生成与组件探针保存原生累计后端指标，`summarize_native.py` 从相邻快照计算各批抢占次数；旧记录缺少计数时仍标为 `unavailable`。

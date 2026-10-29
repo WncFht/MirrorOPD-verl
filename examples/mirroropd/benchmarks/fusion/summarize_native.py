@@ -20,6 +20,18 @@ def percentile(values, fraction):
 def summarize(root):
     config = json.loads((root / "config.json").read_text())
     rows = [json.loads(line) for line in (root / "results.jsonl").read_text().splitlines()]
+    previous_preemptions = 0
+    for row in rows:
+        counters = [
+            metric["value"]
+            for metric in row.get("backend_metrics_cumulative", [])
+            if metric["name"] == "vllm:num_preemptions"
+        ]
+        row["preemptions"] = sum(counters) - previous_preemptions if counters else "unavailable"
+        if counters:
+            if row["preemptions"] < 0:
+                raise ValueError("Backend preemption counter went backwards")
+            previous_preemptions = sum(counters)
     samples = [row for row in rows if row.get("repeat", -1) >= 0]
     groups = {}
     for row in samples:
@@ -48,6 +60,7 @@ def summarize(root):
                 "cap_hits": sum(r["finish_reason"] == "length" for r in responses),
                 "length_at_cap": sum(n == config["cap"] for n in lengths),
                 "eos": sum(r["finish_reason"] == "stop" for r in responses),
+                "preemptions": row["preemptions"],
             }
         )
     if {float(alpha) for alpha in groups} != set(config["alphas"]) or any(
@@ -57,7 +70,7 @@ def summarize(root):
     resources = [json.loads(line) for line in (root / "resources.jsonl").read_text().splitlines()]
     allocated = resources[0]["physical_gpus"]
     if not allocated or not set(allocated) <= {6, 7} or resources[-1]["kind"] != "end":
-        raise ValueError("Incomplete single-GPU resource interval")
+        raise ValueError("Incomplete allocated-GPU resource interval")
     gpu_rows = [gpu for row in resources if row["kind"] == "sample" for gpu in row["gpus"]]
     if any(gpu["index"] not in allocated for gpu in gpu_rows):
         raise ValueError("Unexpected GPU in measurement")
@@ -82,8 +95,16 @@ def summarize(root):
         "resource_scope": "Full monitored process lifetime; allocator and device contexts included",
         "physical_gpus": allocated,
         "nvml_peak_bytes": max(row["memory_used"] for row in gpu_rows),
+        "nvml_peak_bytes_by_gpu": {
+            str(index): max(row["memory_used"] for row in gpu_rows if row["index"] == index) for index in allocated
+        },
+        "cpu_rss_sum_peak_bytes": max(row["process_tree_rss_sum"] for row in resources if row["kind"] == "sample"),
         "process_wall_seconds": resources[-1]["wall_seconds"],
-        "preemptions": "unavailable",
+        "preemptions": (
+            sum(row["preemptions"] for row in samples)
+            if all(isinstance(row["preemptions"], int | float) for row in samples)
+            else "unavailable"
+        ),
         "recompute": "unavailable",
     }
 
