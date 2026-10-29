@@ -12,7 +12,7 @@ from pathlib import Path
 import yaml
 
 
-def audit(original, additional, exit_code):
+def audit(original, additional, exit_code, baseline_identity_file):
     errors, witnesses, records = [], [], {}
     reference_behavior = reference_config = baseline_identity = None
     paired_behavior = {}
@@ -26,7 +26,13 @@ def audit(original, additional, exit_code):
             return yaml.safe_load(raw)
         if kind == "text":
             return raw.decode().strip()
+        if kind == "json":
+            return json.loads(raw)
         return [json.loads(line) for line in raw.splitlines()]
+
+    identity = read(baseline_identity_file, "json")
+    if not identity.get("passed") or identity.get("errors") or identity.get("checked_tracked_blobs", 0) < 1:
+        errors.append("Baseline archive identity has not been verified against its declared source and patch")
 
     def setting(config, path):
         for key in path.split("."):
@@ -164,9 +170,10 @@ def main():
     parser.add_argument("--original", type=Path, required=True)
     parser.add_argument("--additional", type=Path, required=True)
     parser.add_argument("--additional-exit-code", type=int, required=True)
+    parser.add_argument("--baseline-identity", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
-    result = audit(args.original, args.additional, args.additional_exit_code)
+    result = audit(args.original, args.additional, args.additional_exit_code, args.baseline_identity)
     with args.out.open("x") as stream:
         json.dump(result, stream, indent=2)
     print(json.dumps({key: result[key] for key in ("passed", "errors", "relative_median_change")}))

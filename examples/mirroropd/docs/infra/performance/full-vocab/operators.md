@@ -6,7 +6,7 @@
 
 [benchmark_full_kl.py](../../../../benchmarks/full_vocab/benchmark_full_kl.py) 用合成 BF16 hidden/head 比较生产实现，student 固定为 hidden1536、vocab151936。`--teacher-hidden`、`--teacher-vocab` 可分别选择 JustRL 的 1536/151936 或 Polaris 的 3584/152064；后者保留额外 teacher 输出行的归一化贡献。`--backends precompute precompute_fused --reference-backend dense` 比较普通与 fused 归约，`--chunk` 控制 token 分块。
 
-工具在每个 backend 计时前检查 loss 和 hidden/head VJP，沿用绝对 loss 误差小于 1e-4、梯度相对 L2 误差小于 0.02 的随机输入门槛；近目标和小梯度仍由独立 FP64 CUDA 测试覆盖，不能用随机输入检查代替。每个形状预热两次、测量五次，已有输出文件会被拒绝。`--profile` 在计时结束后另做一次 CPU/CUDA trace，输出独立的 `.trace.json.gz`，trace 时间不混入性能样本。扩展的异构形状与 trace 入口正在 GPU 验证，下面的历史性能数字保持原测量身份。
+工具在每个 backend 计时前检查 loss 和 hidden/head VJP，沿用绝对 loss 误差小于 1e-4、梯度相对 L2 误差小于 0.02 的随机输入门槛；近目标和小梯度仍由独立 FP64 CUDA 测试覆盖，不能用随机输入检查代替。每个形状预热两次、测量五次，已有输出文件会被拒绝。`--profile` 在计时结束后另做一次 CPU/CUDA trace，输出独立的 `.trace.json.gz`，trace 时间不混入性能样本。扩展的异构形状与 trace 入口已完成下述开发检查；历史性能数字保持原测量身份。
 
 ## R1 配对的算子开发测量
 
@@ -21,7 +21,7 @@
 | precompute，chunk1024       |        159.188 |                 9.649 |
 | fused，chunk1024            |         23.234 |                 3.850 |
 
-每个 backend 预热两次、测量五次，保留全部样本。单独的 chunk512 trace 中，GPU kernel 数为 1299/115，kernel duration 总和为 157.774/26.070 ms；这是 head-only trace，不是完整 outer 时间。512 位置的独立 dense 对照及 4096 位置的一致性检查均通过。Polaris 的 hidden3584/vocab152064 异构 head 也完成全部对照：4096 位置、chunk512 的普通/fused 中位数为 185.635/46.651 ms，chunk1024 为 176.078/40.662 ms；fused allocated 峰值分别为 3.429/4.447 GiB。两组 × 两种 chunk × 512/4096 位置共八组均通过所声明范围的检查。真实模型更新、端到端吞吐和最终参数尚未据此验收，J 的 fused/chunk1024 完整训练 profile 已启动。
+每个 backend 预热两次、测量五次，保留全部样本。单独的 chunk512 trace 中，GPU kernel 数为 1299/115，kernel duration 总和为 157.774/26.070 ms；这是 head-only trace，不是完整 outer 时间。512 位置的独立 dense 对照及 4096 位置的一致性检查均通过。Polaris 的 hidden3584/vocab152064 异构 head 也完成全部对照：4096 位置、chunk512 的普通/fused 中位数为 185.635/46.651 ms，chunk1024 为 176.078/40.662 ms；fused allocated 峰值分别为 3.429/4.447 GiB。两组 × 两种 chunk × 512/4096 位置共八组均通过所声明范围的检查。J 的 fused/chunk1024 两轮完整训练 profile 已完成，更新计数和版本审计通过；端到端观测与差异范围见[融合验收记录](../../rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md#qwen2-实验配对)。最终参数仍需结合其他来源检查、正式重复及剩余候选验收确定。
 
 ## 证据范围
 
