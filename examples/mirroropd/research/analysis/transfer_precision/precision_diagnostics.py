@@ -175,7 +175,7 @@ def collect(logs, out):
                 counts = [row[f"{position_prefix}/p{b:02d}_{b + 10:02d}/token_count"] for b in range(0, 100, 10)]
                 expected = row.get("distill/mdpo/objective", row[teacher])
                 audit[label]["position_reconstruction_max_error"] = max(
-                    audit[label]["position_reconstruction_max_error"], abs(sum(sums) / sum(counts) - expected)
+                    audit[label]["position_reconstruction_max_error"], abs(math.fsum(sums) / sum(counts) - expected)
                 )
                 for b in range(0, 100, 10):
                     key = f"{position_prefix}/p{b:02d}_{b + 10:02d}/token_count"
@@ -197,7 +197,9 @@ def collect(logs, out):
             for b in range(0, 100, 10):
                 prefix = f"{position_prefix}/p{b:02d}_{b + 10:02d}/"
                 n = sum(rows[0][prefix + "token_count"] for rows in selected)
-                initial = sum(rows[0][prefix + "sum"] for rows in selected) / n
+                # Python 3.12 changed built-in float sum; fsum keeps frozen
+                # aggregates consistent with the Python 3.10 decoding host.
+                initial = math.fsum(rows[0][prefix + "sum"] for rows in selected) / n
                 tables["positions"].append(
                     {
                         "run": label,
@@ -205,8 +207,8 @@ def collect(logs, out):
                         "bin_start": b,
                         "count": n,
                         "first": initial,
-                        "first_step_gain": initial - sum(rows[1][prefix + "sum"] for rows in selected) / n,
-                        "net_gain": initial - sum(rows[-1][prefix + "sum"] for rows in selected) / n,
+                        "first_step_gain": initial - math.fsum(rows[1][prefix + "sum"] for rows in selected) / n,
+                        "net_gain": initial - math.fsum(rows[-1][prefix + "sum"] for rows in selected) / n,
                     }
                 )
         audit[label]["skipped_events"] = [
