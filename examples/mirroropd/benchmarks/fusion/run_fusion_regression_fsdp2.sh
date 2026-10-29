@@ -28,7 +28,7 @@ export EXPERIMENT_NAME="fusion-default-regression-$(basename -- "$RUN_DIR")"
 export VERL_FILE_LOGGER_PATH="$RUN_DIR/metrics.jsonl"
 [[ ! -e $RUN_DIR ]] || { echo "Refusing existing regression run" >&2; exit 2; }
 export OMP_NUM_THREADS=1 PYTHONHASHSEED=0
-export VLLM_USE_V2_MODEL_RUNNER=0
+export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_PLUGINS=""
 export PYTHON_BIN=${PYTHON_BIN:-$WORKSPACE/envs/mirroropd-fusion/bin/python}
 export LD_LIBRARY_PATH=$WORKSPACE/cache/fusion-runtime/cuda-compat-12-9/usr/local/cuda-12.9/compat:${LD_LIBRARY_PATH:-}
 export STUDENT_MODEL=$WORKSPACE/model/Qwen3-1.7B-Base TEACHER_MODEL=$WORKSPACE/model/Qwen3-8B
@@ -51,4 +51,5 @@ exec bash "$ROOT/examples/mirroropd/smoke/smoke_full_reverse_kl.sh" \
         "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_ROLLOUT_IPC_NAMESPACE='$VERL_ROLLOUT_IPC_NAMESPACE'" \
         "trainer.rollout_data_dir=$RUN_DIR/generations" \
         "++ray_kwargs.ray_init.runtime_env.env_vars.PYTHONHASHSEED='0'" \
+        "++ray_kwargs.ray_init.runtime_env.env_vars.VLLM_PLUGINS=''" \
         "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='$VERL_FILE_LOGGER_PATH'"
