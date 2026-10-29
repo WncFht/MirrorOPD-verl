@@ -5,6 +5,8 @@
 import argparse
 import json
 import os
+import subprocess
+import sys
 from pathlib import Path
 
 import torch
@@ -40,6 +42,21 @@ def main():
         raise ValueError("Allocate exactly one GPU per TP rank for this probe")
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=False)
+    from fingerprint import source_fingerprint
+
+    (out / "config.json").write_text(json.dumps(vars(args), indent=2) + "\n")
+    (out / "source.json").write_text(json.dumps(source_fingerprint(), indent=2) + "\n")
+    monitor = subprocess.Popen(
+        [
+            sys.executable,
+            str(Path(__file__).with_name("monitor.py")),
+            "--parent",
+            os.environ.get("FUSION_RESOURCE_PARENT", str(os.getpid())),
+            "--out",
+            str(out / "resources.jsonl"),
+        ]
+    )
+    assert monitor.pid > 0
     from transformers import AutoTokenizer
     from vllm import LLM, SamplingParams
 
