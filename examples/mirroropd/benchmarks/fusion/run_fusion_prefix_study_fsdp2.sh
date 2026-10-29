@@ -88,6 +88,25 @@ case "$ARM" in
     TM) policy_mode=trajectory_mixture; weight=0.5 ;;
     T) source=teacher; weight=1 ;;
 esac
+PROFILE_ARGS=()
+if [[ ${PREFIX_TORCH_TRACE:-0} == 1 ]]; then
+    [[ $MODE == profile ]] || { echo 'Torch traces are only allowed in dedicated profile runs' >&2; exit 2; }
+    trace_outer=${PREFIX_TRACE_OUTER:-2}
+    [[ $trace_outer =~ ^[1-9][0-9]*$ ]] && (( trace_outer <= TOTAL_TRAINING_STEPS )) || exit 2
+    PROFILE_ARGS=(
+        'global_profiler.tool=torch' "global_profiler.steps=[$trace_outer]"
+        "global_profiler.save_path=$RUN_DIR/traces"
+        'actor_rollout_ref.actor.profiler.enable=True'
+        'actor_rollout_ref.actor.profiler.all_ranks=False'
+        'actor_rollout_ref.actor.profiler.ranks=[0]'
+        'actor_rollout_ref.actor.profiler.tool_config.torch.contents=[cuda,shapes]'
+        "actor_rollout_ref.actor.profiler.tool_config.torch.discrete=${PREFIX_TRACE_DISCRETE:-false}"
+        "actor_rollout_ref.actor.profiler.tool_config.torch.schedule.skip_first=${PREFIX_TRACE_SKIP:-0}"
+        "actor_rollout_ref.actor.profiler.tool_config.torch.schedule.active=${PREFIX_TRACE_UPDATES:-2}"
+        'actor_rollout_ref.actor.profiler.tool_config.torch.schedule.repeat=1'
+        'actor_rollout_ref.rollout.profiler.enable=False'
+    )
+fi
 if ! $read_only; then
     [[ ! -e $RUN_DIR ]] || { echo "Run already exists: $RUN_DIR" >&2; exit 2; }
     "$PYTHON_BIN" "$HERE/monitor.py" --parent "$FUSION_RESOURCE_PARENT" \
@@ -110,6 +129,7 @@ exec bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E20 --method full_kl
     'actor_rollout_ref.rollout.logprobs_mode=processed_logprobs' \
     'actor_rollout_ref.rollout.stop_token_ids=[151643]' \
     'actor_rollout_ref.rollout.full_determinism=False' \
+    "++distillation.shared_teacher.forward_only_cpu_offload=${PREFIX_TEACHER_LAYER_OFFLOAD:-false}" \
     "rollout_policy.mode=$policy_mode" "rollout_policy.source=$source" \
     "rollout_policy.student=$binding" "rollout_policy.teacher_weight=$weight" \
     'rollout_policy.execution.backend=vllm_fusion' \
@@ -123,4 +143,5 @@ exec bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E20 --method full_kl
     "++ray_kwargs.ray_init.object_store_memory=${PREFIX_OBJECT_STORE_BYTES:-17179869184}" \
     "++ray_kwargs.ray_init._temp_dir=${SMOKE_RAY_TMPDIR:-/tmp/mirroropd-prefix-config-$$}" \
     "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_ROLLOUT_IPC_NAMESPACE='$VERL_ROLLOUT_IPC_NAMESPACE'" \
-    "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='$VERL_FILE_LOGGER_PATH'"
+    "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='$VERL_FILE_LOGGER_PATH'" \
+    "${PROFILE_ARGS[@]}"

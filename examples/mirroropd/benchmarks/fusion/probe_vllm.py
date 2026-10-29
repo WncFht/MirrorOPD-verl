@@ -33,7 +33,18 @@ def main():
     parser.add_argument("--top-k", type=int, default=-1)
     parser.add_argument("--chat-template-kwargs", default="{}")
     parser.add_argument("--stop-token-ids", nargs="+", type=int, default=[151643, 151645])
+    parser.add_argument(
+        "--profile", action="store_true", help="Dedicated trace run; timings are not throughput evidence"
+    )
+    parser.add_argument(
+        "--profile-delay", type=int, default=0, help="Engine iterations to skip, not per-request tokens"
+    )
+    parser.add_argument("--profile-iterations", type=int, default=32)
     args = parser.parse_args()
+    if args.profile and (len(args.alphas) != 1 or args.repeats != 1 or not args.skip_lifecycle_audit):
+        raise ValueError("Profile one alpha with one measured batch after warmup and --skip-lifecycle-audit")
+    if args.profile_delay < 0 or args.profile_iterations < 1:
+        raise ValueError("Invalid profiler iteration window")
     if not os.environ.get("CUDA_VISIBLE_DEVICES"):
         raise ValueError("Set CUDA_VISIBLE_DEVICES explicitly")
     if len(os.environ["CUDA_VISIBLE_DEVICES"].split(",")) != args.tensor_parallel_size:
@@ -115,6 +126,19 @@ def main():
         logprobs_mode="processed_logprobs",
         worker_extension_cls="verl.workers.rollout.vllm_fusion.worker_extension.FusionWorkerExtension",
         attention_config={"backend": "TRITON_ATTN"},
+        profiler_config=(
+            {
+                "profiler": "torch",
+                "torch_profiler_dir": str((out / "traces").resolve()),
+                "torch_profiler_with_stack": False,
+                "torch_profiler_record_shapes": True,
+                "ignore_frontend": True,
+                "delay_iterations": args.profile_delay,
+                "max_iterations": args.profile_iterations,
+            }
+            if args.profile
+            else None
+        ),
     )
     startup = time.monotonic() - tick
 
@@ -143,9 +167,16 @@ def main():
                     )
                     for i in range(args.batch)
                 ]
-                tick = time.monotonic()
-                outputs = llm.generate(prompts, params, use_tqdm=False)
-                elapsed = time.monotonic() - tick
+                profiling = args.profile and repeat == 0
+                if profiling:
+                    llm.start_profile()
+                try:
+                    tick = time.monotonic()
+                    outputs = llm.generate(prompts, params, use_tqdm=False)
+                    elapsed = time.monotonic() - tick
+                finally:
+                    if profiling:
+                        llm.stop_profile()
                 row = {
                     "alpha": alpha,
                     "repeat": repeat,
