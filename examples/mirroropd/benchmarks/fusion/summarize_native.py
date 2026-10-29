@@ -90,7 +90,13 @@ def summarize(root):
         "config": config,
         "source": json.loads((root / "source.json").read_text()),
         "prompt_sha256": hashlib.sha256((root / "prompts.json").read_bytes()).hexdigest(),
-        "formal_generation_complete": config["batch"] == 64 and config["cap"] == 7168 and config["repeats"] >= 3,
+        "formal_generation_complete": (
+            config["batch"] == 64
+            and config["cap"] == 7168
+            and config["repeats"] >= 3
+            and not config.get("profile", False)
+        ),
+        "profiled": config.get("profile", False),
         "groups": summary,
         "resource_scope": "Full monitored process lifetime; allocator and device contexts included",
         "physical_gpus": allocated,

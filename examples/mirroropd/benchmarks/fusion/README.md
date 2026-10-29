@@ -128,3 +128,9 @@ CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusi
 `FUSION_MAX_NUM_SEQS/FUSION_KV_BYTES/FUSION_TP` 控制 LM 执行；其他来源使用 TP1 replica。`PREFIX_PPO_TOKEN_BUDGET`、`PREFIX_TEACHER_TOKEN_BUDGET`、`PREFIX_ROLLOUT_SEQS`、`PREFIX_ROLLOUT_MEMORY_FRACTION`、`PREFIX_RAY_CPUS`、`PREFIX_OBJECT_STORE_BYTES` 和 full-vocab 的 `PREFIX_FULL_KL_BACKEND/PREFIX_TOKEN_CHUNK/PREFIX_VOCAB_CHUNK` 是待实测的执行参数。默认值是候选，不是已确认的最优配置；学习超参数由入口固定。
 
 融合接口始终返回有限、完整的选中 token 行为 log-prob，即使 full-vocab learner 关闭了 rollout log-prob 收集。缺失、长度不符或非有限值会拒绝该响应；greedy 的行为 log-prob 在完整性检查后写为 0。此修复已做 CPU 协议回归，仍需实际服务调用复验。
+
+独立 native 推理 trace 使用 `probe_vllm.py --profile --alphas 0.5 --repeats 1 --skip-lifecycle-audit`：先完整预热一批，再按 `--profile-delay` 与 `--profile-iterations` 记录有限的 engine 迭代窗口。迭代编号不是每条请求的 token 位置，不能据此声称所有请求都处在同一历史长度。Profile 时间不计为正式吞吐验收。
+
+训练 profile 模式可设置 `PREFIX_TORCH_TRACE=1`，默认在 outer2 记录 rank0 的 actor 进程 trace，并保留更新前的进程事件与前两次更新。`PREFIX_TRACE_OUTER/PREFIX_TRACE_UPDATES` 选择窗口；需要后段更新时使用 `PREFIX_TRACE_DISCRETE=true` 与 `PREFIX_TRACE_SKIP`，此时 trace 的范围是对应阶段而非完整 outer。Native fusion 推理使用独立推理 trace，不能把默认 rollout manager 的 trace 当成融合引擎证据。正式模式拒绝开启该 profiler。
+
+`PREFIX_TEACHER_LAYER_OFFLOAD=true` 是已有 FSDP2 自动逐层 CPU offload 的对照开关，默认 false 保留 E20。它会把搬运移入 forward，可能在每个计算微批重复 H2D；应比较完整 teacher 阶段及 outer，不能只看独立 transfer 字段下降。以上 profiler 与 offload 对照入口已解析配置，GPU 效果仍待实际测量。
