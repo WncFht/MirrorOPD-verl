@@ -6,6 +6,8 @@ Semantic ledger: a row is one recorded optimizer attempt; a curve is one prefix 
 Geometry ledger: x is applied optimizer step (or actual cumulative loss-token count),
 y is observed pre-update RKL. Missing arms produce no synthetic points or zero curves.
 Teacher pairs use separate panels; colors identify arms consistently in every figure.
+The outer-level panel compares observations 1 and 16 of the same fixed batch;
+it does not compare different batches or claim a post-sixteenth-update evaluation.
 """
 
 import argparse
@@ -21,6 +23,65 @@ from pathlib import Path
 import yaml
 
 ARMS = {"S0": "Initial student", "S": "Current student", "LM": "Logit mix", "TM": "Trajectory mix", "T": "Teacher"}
+
+
+def summarize_outers(rows):
+    """Compare observations 1 and 16 on one fixed batch, spanning 15 updates."""
+    groups = {}
+    for row in rows:
+        groups.setdefault((row["pair"], row["arm"], row["outer"]), []).append(row)
+    result = []
+    for (pair, arm, outer), batch in groups.items():
+        complete = (
+            len(batch) == 16
+            and [r["reuse_index"] for r in batch] == list(range(1, 17))
+            and all(r["valid_update"] for r in batch)
+        )
+        first, last = (batch[0]["rkl"], batch[-1]["rkl"]) if complete else (None, None)
+        counts = [r["loss_tokens"] for r in batch]
+        result.append(
+            {
+                "pair": pair,
+                "arm": arm,
+                "outer": outer,
+                "recorded_updates": len(batch),
+                "complete_reuse16": complete,
+                "first_rkl": first,
+                "sixteenth_rkl": last,
+                "within_batch_reduction_pct": 100 * (first - last) / first if first and first > 0 else None,
+                "reused_loss_tokens": sum(counts) if all(c is not None for c in counts) else None,
+                "batch_loss_tokens": counts[0] if complete and len(set(counts)) == 1 else None,
+            }
+        )
+    return result
+
+
+def load_snapshot(directory):
+    """Read a frozen export without touching its live experiment paths."""
+    summary = json.loads((directory / "status.json").read_text())
+    raw = (directory / "updates.csv").read_bytes()
+    expected = summary.get("updates_csv_sha256")
+    if expected is not None and hashlib.sha256(raw).hexdigest() != expected:
+        raise ValueError("Frozen update CSV does not match its recorded hash")
+    rows = []
+    for record in csv.DictReader(raw.decode().splitlines()):
+        if record["valid_update"] not in ("True", "False"):
+            raise ValueError("Invalid update-validity marker in snapshot")
+        row = {}
+        for key, value in record.items():
+            row[key] = (
+                value
+                if key in ("pair", "arm", "run")
+                else value == "True"
+                if key == "valid_update"
+                else float(value)
+                if value
+                else None
+            )
+        rows.append(row)
+    if len(rows) != summary["recorded_update_rows"]:
+        raise ValueError("Frozen snapshot row count differs from status")
+    return rows, summary
 
 
 def snapshot(workspace, out):
@@ -176,6 +237,7 @@ def snapshot(workspace, out):
         "all_ten_complete": len(states) == 10 and all(s["formal_complete"] for s in states),
         "recorded_update_rows": len(rows),
         "invalid_update_rows": sum(not r["valid_update"] for r in rows),
+        "updates_csv_sha256": hashlib.sha256((out / "updates.csv").read_bytes()).hexdigest(),
     }
     (out / "status.json").write_text(json.dumps(summary, indent=2) + "\n")
     return rows, summary
@@ -190,38 +252,57 @@ def render(rows, summary, directory, style_dir):
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    from matplotlib.ticker import MaxNLocator
 
     fv.apply_rc("paper", fontsize=10)
     palette = fv.series_colors("paper", 4)
     colors = dict(zip(["S", "LM", "TM", "T"], palette, strict=True))
     colors["S0"] = fv.NEUTRALS["baseline"]
-    directory.mkdir(parents=True, exist_ok=True)
+    directory.mkdir(parents=True, exist_ok=False)
+    outer_rows = summarize_outers(rows)
+    with (directory / "outers.csv").open("w") as stream:
+        writer = csv.DictWriter(stream, list(outer_rows[0]))
+        writer.writeheader()
+        writer.writerows(outer_rows)
     outputs = []
     for name, field, label in [
         ("formal-rkl-by-update", "rkl", "Full-vocab RKL (pre-update)"),
         ("formal-gradient-by-update", "grad_norm_preclip", "Preclip gradient norm"),
+        ("formal-within-batch-reduction", "within_batch_reduction_pct", "Within-batch RKL reduction (%)"),
     ]:
+        by_outer = field == "within_batch_reduction_pct"
+        plot_rows = [r for r in outer_rows if r["complete_reuse16"]] if by_outer else rows
+        if not plot_rows:
+            continue
+        xfield = "outer" if by_outer else "optimizer_step"
         fig, axes = plt.subplots(1, 2, figsize=(9, 4.3), sharex=True, sharey=True)
         handles = {}
         for ax, pair, title in zip(axes, ("J", "P"), ("JustRL-1.5B", "Polaris-7B-Preview"), strict=True):
             for arm in ARMS:
-                data = [r for r in rows if r["pair"] == pair and r["arm"] == arm]
+                data = [r for r in plot_rows if r["pair"] == pair and r["arm"] == arm]
                 if not data:
                     continue
                 (line,) = ax.plot(
-                    [r["optimizer_step"] for r in data],
-                    [r[field] if r["valid_update"] else math.nan for r in data],
+                    [r[xfield] for r in data],
+                    [r[field] if r.get("valid_update", True) else math.nan for r in data],
                     color=colors[arm],
                     label=ARMS[arm],
                     linewidth=1.4,
+                    marker="o" if by_outer else None,
+                    markersize=3,
                 )
                 handles.setdefault(arm, line)
             ax.set_title(title)
-            ax.set_xlabel("Successful optimizer step")
+            ax.set_xlabel("Outer (observations 1 to 16)" if by_outer else "Successful optimizer step")
             ax.grid(axis="y", alpha=0.18)
         axes[0].set_ylabel(label)
-        maximum = max(r["optimizer_step"] or 0 for r in rows)
-        axes[0].set_xlim(0, max(1, maximum))
+        maximum = max(r[xfield] or 0 for r in plot_rows)
+        axes[0].set_xlim((0.5, maximum + 0.5) if by_outer else (0, max(1, maximum)))
+        if by_outer:
+            if maximum == 1:
+                axes[0].set_xticks([1])
+            else:
+                axes[0].xaxis.set_major_locator(MaxNLocator(nbins=6, integer=True))
         if field == "rkl":
             axes[0].set_ylim(bottom=0)
         ordered = [arm for arm in ARMS if arm in handles]
@@ -271,12 +352,14 @@ def render(rows, summary, directory, style_dir):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--workspace", type=Path, required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--workspace", type=Path)
+    source.add_argument("--replot", action="store_true", help="Read --snapshot without consulting live runs")
     parser.add_argument("--snapshot", type=Path, required=True)
     parser.add_argument("--figures", type=Path, required=True)
     parser.add_argument("--style-dir", type=Path, default=os.environ.get("FIGURE_VIZ_MPL"))
     args = parser.parse_args()
-    rows, summary = snapshot(args.workspace.resolve(), args.snapshot)
+    rows, summary = load_snapshot(args.snapshot) if args.replot else snapshot(args.workspace.resolve(), args.snapshot)
     if rows and args.style_dir is None:
         parser.error("Set --style-dir or FIGURE_VIZ_MPL to render actual observations")
     outputs = render(rows, summary, args.figures, args.style_dir) if rows else []
