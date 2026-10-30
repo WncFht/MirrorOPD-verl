@@ -49,6 +49,10 @@ def main():
     capacity = args.batch if args.engine_max_num_seqs is None else args.engine_max_num_seqs
     if capacity < args.batch:
         raise ValueError("Engine capacity must cover the controlled batch")
+    # Each case replays its suffix one decode step at a time. Reserving the
+    # entire history for every row needlessly inflates the runner's prefill
+    # workspace; admission only needs the complete initial prompt batch.
+    prefill_budget = max(args.max_model_len, args.batch * max(len(case["prompt_ids"]) for case in workloads))
     from fingerprint import source_fingerprint
     from vllm import LLM, SamplingParams
 
@@ -66,7 +70,7 @@ def main():
         compilation_config=decode_graph_config(capacity) if args.graph else None,
         hf_overrides=fusion_hf_overrides(args.teacher) if args.component == "fusion" else {},
         max_model_len=args.max_model_len,
-        max_num_batched_tokens=args.max_model_len * args.batch,
+        max_num_batched_tokens=prefill_budget,
         max_num_seqs=capacity,
         kv_cache_memory_bytes=int(args.kv_gib * 1024**3),
         num_gpu_blocks_override=args.num_gpu_blocks,
@@ -75,7 +79,12 @@ def main():
         attention_config={"backend": "TRITON_ATTN"},
         worker_extension_cls="examples.mirroropd.benchmarks.fusion.probe_worker.PrefixProbe",
     )
-    manifest = {"config": vars(args), "source": source_fingerprint(), "cases": []}
+    manifest = {
+        "config": vars(args),
+        "effective_max_num_batched_tokens": prefill_budget,
+        "source": source_fingerprint(),
+        "cases": [],
+    }
     for index, workload in enumerate(workloads):
         prompt, suffix = workload["prompt_ids"], workload["suffix_ids"]
         if not suffix or len(prompt) + len(suffix) > args.max_model_len:
