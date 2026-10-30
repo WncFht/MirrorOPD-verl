@@ -102,6 +102,10 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "MAX_PROMPT_LENGTH",
         "MAX_RESPONSE_LENGTH",
         "MAX_VAL_RESPONSE_LENGTH",
+        "VAL_REPETITION_DETECTION",
+        "VAL_REPETITION_MIN_PATTERN",
+        "VAL_REPETITION_MAX_PATTERN",
+        "VAL_REPETITION_MIN_COUNT",
         "PPO_EPOCHS",
         "TOTAL_TRAINING_STEPS",
         "TOTAL_EPOCHS",
@@ -151,6 +155,56 @@ def _config(tmp_path, **overrides):
         return compose(config_name="ppo_trainer", overrides=command[command.index("verl.trainer.main_ppo") + 1 :])
 
 
+@pytest.mark.parametrize("domain,enabled", [("math", True), ("code", False), ("if", False)])
+def test_validation_repetition_default_scope(tmp_path, domain, enabled):
+    cfg = _config(tmp_path, DOMAIN=domain)
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    params = cfg.actor_rollout_ref.rollout.val_kwargs.repetition_detection
+    assert (params is not None) == enabled
+    if enabled:
+        assert dict(params) == {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}
+
+
+def test_validation_repetition_explicit_enable_uses_selected_parameters(tmp_path):
+    cfg = _config(tmp_path, VAL_REPETITION_DETECTION="true")
+    assert dict(cfg.actor_rollout_ref.rollout.val_kwargs.repetition_detection) == {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8,
+    }
+
+
+def test_validation_repetition_can_be_tuned_and_disabled(tmp_path):
+    cfg = _config(
+        tmp_path,
+        VAL_REPETITION_DETECTION="true",
+        VAL_REPETITION_MIN_PATTERN="8",
+        VAL_REPETITION_MAX_PATTERN="128",
+        VAL_REPETITION_MIN_COUNT="6",
+    )
+    assert dict(cfg.actor_rollout_ref.rollout.val_kwargs.repetition_detection) == {
+        "min_pattern_size": 8,
+        "max_pattern_size": 128,
+        "min_count": 6,
+    }
+    cfg = _config(tmp_path, VAL_REPETITION_DETECTION="false")
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.repetition_detection is None
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"VAL_REPETITION_MIN_COUNT": "1"},
+        {"VAL_REPETITION_MIN_PATTERN": "512"},
+        {"VAL_REPETITION_DETECTION": "maybe"},
+        {"VAL_REPETITION_MAX_PATTERN": "oops"},
+    ],
+)
+def test_validation_repetition_invalid_environment_fails_before_launch(tmp_path, overrides):
+    assert _launch(tmp_path, **({"VAL_REPETITION_DETECTION": "true"} | overrides)).returncode == 2
+
+
 @pytest.mark.parametrize("preset,kappa,eta", [("E55", 0, 0.1), ("E56", 0.5, 0.1), ("E57", 1, 0.1), ("E58", 0, 1)])
 def test_moe_long_presets_resolve_native_full_vocab_without_checkpoint_saving(tmp_path, preset, kappa, eta):
     cfg = _config(tmp_path, command=["bash", str(SCRIPT), preset])
@@ -174,6 +228,12 @@ def test_moe_long_presets_resolve_native_full_vocab_without_checkpoint_saving(tm
     assert rollout.max_num_seqs == 64 and rollout.gpu_memory_utilization == 0.8
     assert cfg.trainer.total_training_steps == 100
     assert cfg.trainer.save_freq == -1 and cfg.trainer.test_freq == 10
+    assert dict(rollout.val_kwargs.repetition_detection) == {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8,
+    }
+    assert "repetition_detection" not in rollout
     assert not cfg.trainer.val_before_train and cfg.trainer.resume_mode == "disable"
     assert rollout.val_kwargs.n == 16 and rollout.val_kwargs.max_tokens == 31744
     assert (rollout.val_kwargs.temperature, rollout.val_kwargs.top_p) == (0.7, 0.9)
@@ -650,7 +710,8 @@ def test_validation_budget_rejects_default_multiturn_agent(tmp_path):
 
 
 def test_validation_budget_rejects_backend_that_overwrites_request_limit(tmp_path):
-    cfg = _config(tmp_path, DISTILLATION_EXECUTION_MODE="standalone")
+    # Isolate the response-budget guard from the validation repetition backend guard.
+    cfg = _config(tmp_path, DISTILLATION_EXECUTION_MODE="standalone", VAL_REPETITION_DETECTION="false")
     cfg.actor_rollout_ref.rollout.name = "trtllm"
     with pytest.raises(ValueError, match="vllm or sglang"):
         validate_config(cfg, use_reference_policy=False, use_critic=False)

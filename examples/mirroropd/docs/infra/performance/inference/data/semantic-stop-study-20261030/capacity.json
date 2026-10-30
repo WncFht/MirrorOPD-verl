@@ -1,0 +1,17 @@
+{
+  "throughput_assumption_tokens_per_second": 5500,
+  "observed_e56": 5641,
+  "observed_e57": 5431,
+  "check_arrival_rates": {
+    "64": 85.9375,
+    "128": 42.96875,
+    "256": 21.484375,
+    "512": 10.7421875
+  },
+  "capacity_target": "service utilization <= 0.5 at measured production batch size; target not a result",
+  "suggested_semantic_interval_tokens": 256,
+  "candidate_fraction_example": 0.1,
+  "candidate_checks_per_second_example": 2.1484375,
+  "response_latency_target_seconds": 0.5,
+  "scope": "historical outer10 validation, not live GPU telemetry; semantic detector not implemented or benchmarked"
+}

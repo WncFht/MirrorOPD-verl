@@ -672,6 +672,14 @@ class vLLMHttpServer:
             sampling_params.setdefault("detokenize", False)
 
         self._preprocess_sampling_params(sampling_params)
+        if sampling_params.get("repetition_detection") is not None:
+            from vllm.sampling_params import RepetitionDetectionParams
+
+            from verl.workers.config.rollout import validate_repetition_detection
+
+            sampling_params["repetition_detection"] = RepetitionDetectionParams(
+                **validate_repetition_detection(sampling_params["repetition_detection"])
+            )
         sampling_params = SamplingParams(max_tokens=max_tokens, **sampling_params)
         validate_topk_logprob_request(sampling_params)
         budget_warnings = getattr(self, "_topk_budget_warnings", set())
@@ -802,6 +810,8 @@ class vLLMHttpServer:
         # Determine stop reason from finish_reason
         finish_reason = final_res.outputs[0].finish_reason
         extra_fields["finish_reason"] = finish_reason
+        if finish_reason == "repetition":
+            extra_fields["backend_stop_reason"] = final_res.outputs[0].stop_reason
         if finish_reason == "abort":
             stop_reason = "aborted"
         elif finish_reason in ("stop", "length"):
