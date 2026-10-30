@@ -14,11 +14,8 @@
 import logging
 import os
 
-import transfer_queue as tq
-
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig
 from verl.trainer.ppo.v1.trainer_base import PPOTrainer, register_trainer
-from verl.utils.debug import marked_timer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "INFO"))
@@ -34,47 +31,29 @@ class PPOTrainerSync(PPOTrainer):
     rollout_policy = RolloutPolicyConfig()
 
     def on_init_end(self):
-        if not self.rollout_policy.default_path:
-            from verl.experimental.rollout_policy.runtime import RolloutRuntime
+        from verl.experimental.rollout_policy.service import create_rollout_service
 
-            self.rollout_runtime = RolloutRuntime(self)
-            return
-        # update weights after loading checkpoint
-        self.checkpoint_manager.update_weights(self.global_steps)
+        self.rollout_service = create_rollout_service(self, super()._submit_batch_to_rollout)
+        self.rollout_service.initialize()
 
     def on_step_end(self):
-        if not self.rollout_policy.default_path:
-            return
-        with marked_timer("update_weights", self.timing_raw, color="red"):
-            # wake up all replicas to update weights
-            self.checkpoint_manager.update_weights(self.global_steps)
+        self.rollout_service.after_update()
 
     def on_sample_end(self):
-        # sleep all replicas to discard weights and kv cache
-        if self.rollout_policy.default_path:
-            self.checkpoint_manager.sleep_replicas()
+        self.rollout_service.after_sample()
         if self.curr_step_profile:
             self._stop_rollout_profiling()
 
     def on_validate_begin(self):
-        if not self.rollout_policy.default_path:
-            self.rollout_runtime.sync_validation()
+        self.rollout_service.validation_begin()
 
     def on_validate_end(self):
-        if not self.rollout_policy.default_path:
-            self.rollout_runtime.sleep_validation()
+        self.rollout_service.validation_end()
 
     def _submit_batch_to_rollout(self, batch):
-        if self.rollout_policy.default_path:
-            return super()._submit_batch_to_rollout(batch)
-        tags = [{"is_prompt": True, "status": "pending", "global_steps": self.global_steps} for _ in range(len(batch))]
-        tq.kv_batch_put(keys=list(batch["uid"]), partition_id="train", tags=tags)
-        self._stamp_rollout_submission(batch)
-        self._policy_metrics = self.rollout_runtime.collect(batch)
-        return len(batch)
+        return self.rollout_service.submit(batch)
 
     def prepare_step(self):
         result = super().prepare_step()
-        if not self.rollout_policy.default_path:
-            result.update(self._policy_metrics)
+        result.update(self.rollout_service.metrics)
         return result

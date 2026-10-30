@@ -81,12 +81,12 @@ class HFReferenceExecutor:
         self.phase_token = str(stable_seed("fusion-phase", plan.collection_step, [r.uid for r in plan.requests]))
         if first.kind == "current" and self.fusion_version != plan.actor_version:
             tick = time.monotonic()
-            await self.context.wait(wg.initialize_fusion_student())
+            await self.context.wait(wg.initialize_rollout_receiver(target="policy_current"))
             self.timings["perf/timing/fusion_student_initialize_seconds"] = time.monotonic() - tick
             tick = time.monotonic()
             await self.context.wait(
                 wg.update_weights(
-                    global_steps=plan.collection_step, target="fusion_student", version=plan.actor_version
+                    global_steps=plan.collection_step, target="policy_current", version=plan.actor_version
                 )
             )
             self.timings["perf/timing/fusion_current_refit_seconds"] = time.monotonic() - tick

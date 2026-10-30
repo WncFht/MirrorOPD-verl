@@ -175,6 +175,21 @@ class ServerAdapter(BaseRollout):
         self.loaded_version = tuple(version)
         self.valid = True
 
+    def audit(self):
+        from verl.utils.device import get_torch_device
+
+        return {
+            "microbatches": self.batch_metrics,
+            "peak_allocated_bytes": get_torch_device().max_memory_allocated(),
+            "peak_reserved_bytes": get_torch_device().max_memory_reserved(),
+            "loaded_version": self.loaded_version,
+            "load_seconds_total": self.metrics.get("load_seconds", 0.0),
+            "residency": self.residency_metrics,
+            "resolved_precision": {
+                name: getattr(getattr(self, name), "_fusion_precision", None) for name in ("student", "teacher")
+            },
+        }
+
     def generate_batch(self, rows):
         if self.generating or self.alpha is None:
             raise RuntimeError("Fusion decoder is busy or unprepared")

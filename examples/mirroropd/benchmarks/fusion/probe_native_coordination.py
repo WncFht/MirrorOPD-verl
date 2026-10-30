@@ -50,8 +50,8 @@ def main():
     from vllm import LLM
 
     from verl.workers.engine_workers import ActorRolloutRefWorker
-    from verl.workers.rollout.vllm_fusion.adapter import ServerAdapter
     from verl.workers.rollout.vllm_fusion.compat import fusion_hf_overrides
+    from verl.workers.rollout.vllm_fusion.weights import NativeWeightTarget
 
     root = args.out.resolve()
     if rank == 0:
@@ -105,7 +105,7 @@ def main():
     torch.cuda.set_device(rank)
     dist.barrier(group=control)
 
-    target = object.__new__(ServerAdapter)
+    target = object.__new__(NativeWeightTarget)
     target.settings = {"backend": "vllm_fusion", "current": True, "deadline_seconds": 180}
     target.config = SimpleNamespace(checkpoint_engine=SimpleNamespace(update_weights_bucket_megabytes=16))
     target.leader, target.tp_rank = tp_rank == 0, tp_rank
@@ -138,14 +138,14 @@ def main():
                     get_per_tensor_param=lambda **kwargs: (stream(), None), is_param_offload_enabled=False
                 )
             ),
-            fusion_rollout=target,
+            rollout_weight_targets={"policy_current": target},
             layered_summon=False,
         )
         error = None
         version = (2, 2) if fail else (1, 1)
         try:
             asyncio.run(
-                inspect.unwrap(ActorRolloutRefWorker.update_weights)(worker, target="fusion_student", version=version)
+                inspect.unwrap(ActorRolloutRefWorker.update_weights)(worker, target="policy_current", version=version)
             )
         except RuntimeError as exc:
             error = str(exc)

@@ -8,14 +8,13 @@ import os
 import ray
 
 from verl.experimental.rollout_policy.topology import FusionTopology
-from verl.workers.rollout.base import BaseRollout
 from verl.workers.rollout.ipc_identity import ipc_job_key
 from verl.workers.rollout.vllm_rollout.bucketed_weight_transfer import BucketedWeightSender
 
 
-class ServerAdapter(BaseRollout):
-    def __init__(self, config, model_config, device_mesh=None, *, settings):
-        super().__init__(config, model_config, device_mesh)
+class NativeWeightTarget:
+    def __init__(self, config, *, settings):
+        self.config = config
         self.settings = dict(settings)
         topology = FusionTopology(int(os.environ.get("WORLD_SIZE", "1")), settings.get("tp_size", 1))
         replica, self.tp_rank = topology.receiver(int(os.environ.get("RANK", "0")))
@@ -30,14 +29,12 @@ class ServerAdapter(BaseRollout):
             f"ipc:///tmp/rl-colocate-zmq-{job}-replica-{self.settings['replica_rank']}-rank-{self.tp_rank}.sock"
         )
 
-    async def resume(self, tags=None):
-        await self.server.wake_up.remote(tags=tags)
+    async def initialize(self):
+        # Native model initialization is completed by the executor before registration.
+        pass
 
-    async def release(self):
-        await self.server.sleep.remote()
-
-    async def update_weights(self, weights, wire_format="named_tensors", version=None, **kwargs):
-        if wire_format != "named_tensors" or not self.settings["current"]:
+    async def receive(self, weights, version):
+        if not self.settings["current"]:
             raise ValueError("Fusion receiver requires named tensors and current student")
         self.loaded_version = self.pending_version = None
         result = (
@@ -67,7 +64,7 @@ class ServerAdapter(BaseRollout):
             self.pending_version = tuple(version)
         return "; ".join(errors) if errors else None
 
-    async def commit_version(self, version):
+    async def commit(self, version):
         if self.pending_version != tuple(version):
             raise RuntimeError("Cannot commit incomplete native fusion weights")
         if self.leader:
