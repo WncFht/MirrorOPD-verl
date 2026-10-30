@@ -162,7 +162,7 @@ class vLLMColocateWorkerExtension:
 
     def configure_rollout_policy_sampler(self, enabled):
         """Switch a drained engine through a named, serializable control RPC."""
-        from verl.workers.rollout.vllm_fusion.sampling import configure_policy_sampler
+        from verl.workers.rollout.vllm_rollout.policy_sampling import configure_policy_sampler
 
         return configure_policy_sampler(self, enabled)
 

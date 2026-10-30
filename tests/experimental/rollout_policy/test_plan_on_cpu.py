@@ -4,6 +4,7 @@ import dataclasses
 
 import pytest
 
+from verl.experimental.rollout_policy.lifecycle import ComponentLayout
 from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import CoefficientRule, RolloutPolicyConfig, build_plan
 
@@ -99,13 +100,13 @@ def test_extra_checkpoint_is_bound_in_the_immutable_plan(tmp_path):
 def test_single_source_has_canonical_control(tmp_path, kind):
     result = plan(tmp_path, RolloutPolicyConfig.parse({"model": {"kind": kind}}))
     assert result.resolved_control == 0
-    assert [p.decoder for p in result.phases] == ["model"]
+    assert [p.source for p in result.phases] == ["model"]
 
 
 @pytest.mark.parametrize("alpha,source", [(0.0, "left"), (1.0, "right")])
 def test_token_endpoints_are_single_executors(tmp_path, alpha, source):
     result = plan(tmp_path, RolloutPolicyConfig.parse({"mode": "token_mixture", "right_weight": alpha}))
-    assert [phase.decoder for phase in result.phases] == [source]
+    assert [phase.source for phase in result.phases] == [source]
     assert result.resolved_mode == "single"
     assert result.normalization == "endpoint"
     assert all(request.source == source for request in result.requests)
@@ -130,9 +131,10 @@ def test_arbitrary_fixed_pair_and_current_right(tmp_path, mode):
     dynamic = plan(tmp_path, RolloutPolicyConfig.parse(policy))
     assert dynamic.binding("right").kind == "current"
     if mode == "token_mixture":
-        first, second, weight = dynamic.fusion_components
+        layout = ComponentLayout.from_plan(dynamic)
+        first, second = layout.first, layout.second
         assert first.kind == "current" and second.path == str(a)
-        assert weight == pytest.approx(0.7)
+        assert layout.reversed and dynamic.resolved_control == 0.3
     else:
         assert sum(r.source == "right" for r in dynamic.requests) == 19
         assert all(dynamic.has_current(r.source) == (r.source == "right") for r in dynamic.requests)
@@ -141,7 +143,6 @@ def test_arbitrary_fixed_pair_and_current_right(tmp_path, mode):
 def test_same_fixed_binding_folds_but_current_initial_do_not(tmp_path):
     policy = {"mode": "token_mixture", "left": {"kind": "initial"}, "right": {"kind": "initial"}}
     parsed = RolloutPolicyConfig.parse(policy)
-    assert not parsed.requires_fusion
     same = plan(tmp_path, parsed)
     assert same.normalization == "same_binding" and same.resolved_mode == "single"
     policy["left"] = {"kind": "current"}

@@ -90,12 +90,12 @@ class ServerAdapter(BaseRollout):
             self.residency_metrics[name + "_host_seconds"] = time.monotonic() - tick
 
         torch.cuda.reset_peak_memory_stats()
-        if alpha < 1:
+        if alpha > 0 if self.settings.get("reverse_components", False) else alpha < 1:
             self._ensure_student()
             if not self.valid or (self.settings["current"] and self.loaded_version != tuple(version)):
                 raise RuntimeError("Fusion student has no valid weights for the requested actor version")
             move(self.student, "student_h2d")
-        if alpha > 0:
+        if alpha < 1 if self.settings.get("reverse_components", False) else alpha > 0:
             if self.teacher is None:
                 self.teacher = self._load(self.settings["teacher_path"])
                 self.teacher_cpu_parameters = self._cpu_parameters(self.teacher)
@@ -180,7 +180,7 @@ class ServerAdapter(BaseRollout):
             raise RuntimeError("Fusion decoder is busy or unprepared")
         self.generating = True
         try:
-            if self.alpha < 1 and (
+            if self.settings["current"] and (
                 not self.valid or (self.settings["current"] and self.loaded_version != self.version)
             ):
                 raise RuntimeError("Fusion student is stale or partially refitted")
@@ -205,9 +205,14 @@ class ServerAdapter(BaseRollout):
                 legal_ids=self.legal_ids,
                 fusion_space=self.settings.get("fusion_space", "logit"),
             )
+            left, right = (
+                (self.teacher, self.student)
+                if self.settings.get("reverse_components", False)
+                else (self.student, self.teacher)
+            )
             decoder = HFFusionDecoder(
-                self.student,
-                self.teacher,
+                left,
+                right,
                 pad_id=self.model_config.tokenizer.pad_token_id,
                 compact=self.settings.get("compact", True),
                 compact_power_of_two=self.settings.get("compact_power_of_two", True),
@@ -234,11 +239,11 @@ class ServerAdapter(BaseRollout):
                         if self.settings.get("reference", False)
                         else "hf_dual_kv_graph_stable",
                         "finish_reason": result.finish_reason,
-                        "global_steps": self.version[0] if self.settings["current"] and self.alpha < 1 else None,
-                        "actor_version": self.loaded_version if self.settings["current"] and self.alpha < 1 else None,
+                        "global_steps": self.version[0] if self.settings["current"] else None,
+                        "actor_version": self.loaded_version if self.settings["current"] else None,
                         "student_version": self.loaded_version if self.alpha < 1 else None,
                         "teacher_path": self.settings["teacher_path"],
-                        "teacher_weight": self.alpha,
+                        "right_weight": self.alpha,
                         "fusion_space": self.settings.get("fusion_space", "logit"),
                     },
                 )

@@ -20,6 +20,8 @@ def server():
     instance.fusion_expected = 1
     instance.fusion_loaded_version = (0, 0)
     instance.fusion_alpha = 0.5
+    instance.fusion_current = True
+    instance.reverse_components = False
     instance.fusion_teacher_path = "teacher"
     instance.fusion_space = "logit"
     instance.config = SimpleNamespace(response_length=2, max_model_len=16)
@@ -57,7 +59,9 @@ def test_probability_phase_never_opens_against_a_geometric_engine(spaces):
 
     async def rpc(name, args):
         assert name == "fusion_prepare"
-        return [{"version": (0, 0), "teacher_path": "teacher", "fusion_space": value} for value in spaces]
+        return [
+            {"version": (0, 0), "teacher_path": "teacher", "fusion_space": value, "current": True} for value in spaces
+        ]
 
     instance.wait_for_requests_to_drain = instance.clear_kv_cache = idle
     instance.resume_generation = resume

@@ -4,13 +4,13 @@ from types import SimpleNamespace
 
 import torch
 
-from verl.experimental.rollout_policy.vllm_support import TokenizerSupport
+from verl.workers.rollout.vllm_rollout.tokenizer_support import TokenizerSupport
 
 
 def test_tokenizer_support_masks_unmapped_head_rows_and_padding(monkeypatch):
     tokenizer = SimpleNamespace(get_vocab=lambda: {"a": 0, "b": 2, "end": 4})
     monkeypatch.setattr(
-        "verl.experimental.rollout_policy.vllm_support.AutoTokenizer.from_pretrained", lambda *a, **kw: tokenizer
+        "verl.workers.rollout.vllm_rollout.tokenizer_support.AutoTokenizer.from_pretrained", lambda *a, **kw: tokenizer
     )
     config = SimpleNamespace(
         model_config=SimpleNamespace(
@@ -30,5 +30,5 @@ def test_tokenizer_support_masks_unmapped_head_rows_and_padding(monkeypatch):
 def test_processor_resolves_through_vllm_loader():
     from vllm.v1.sample.logits_processor import _load_logitsprocs_by_fqcns
 
-    loaded = _load_logitsprocs_by_fqcns(("verl.experimental.rollout_policy.vllm_support:TokenizerSupport",))
+    loaded = _load_logitsprocs_by_fqcns(("verl.workers.rollout.vllm_rollout.tokenizer_support:TokenizerSupport",))
     assert TokenizerSupport in loaded

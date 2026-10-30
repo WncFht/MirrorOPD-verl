@@ -26,16 +26,20 @@ class FusionServer(vLLMHttpServer):
     def _resolve_sleep_level(self):
         return 1
 
-    async def prepare(self, expected_requests, phase_token, alpha, version, fusion_space="logit"):
+    async def prepare(
+        self, expected_requests, phase_token, alpha, version, fusion_space="logit", reverse_components=False
+    ):
         self.fusion_accepting = False
         await self.wait_for_requests_to_drain()
         await self.clear_kv_cache()
-        audit = await self.engine.collective_rpc("fusion_prepare", args=(alpha, version))
+        audit = await self.engine.collective_rpc("fusion_prepare", args=(alpha, version, reverse_components))
         if {row.get("fusion_space", "logit") for row in audit} != {fusion_space}:
             raise RuntimeError("Native fusion space disagrees with the requested plan")
         self.fusion_space = fusion_space
         self.fusion_loaded_version = audit[0]["version"]
         self.fusion_alpha = alpha
+        self.fusion_current = audit[0]["current"]
+        self.reverse_components = reverse_components
         self.fusion_teacher_path = audit[0]["teacher_path"]
         self.fusion_phase = phase_token
         self.fusion_seen = set()
@@ -75,6 +79,8 @@ class FusionServer(vLLMHttpServer):
                 self.fusion_alpha,
                 self.fusion_teacher_path,
                 self.fusion_space,
+                has_current=self.fusion_current,
+                reverse_components=self.reverse_components,
             )
         )
         return output

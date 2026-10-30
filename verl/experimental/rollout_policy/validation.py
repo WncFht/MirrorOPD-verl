@@ -168,7 +168,7 @@ def policy_engine_config(rollout):
     """Build an independent engine config; validation never mutates caller state."""
     import copy
 
-    from .vllm_support import TokenizerSupport
+    from verl.workers.rollout.vllm_rollout.tokenizer_support import TokenizerSupport
 
     rollout = copy.deepcopy(rollout)
     processor = TokenizerSupport.__module__ + ":" + TokenizerSupport.__name__

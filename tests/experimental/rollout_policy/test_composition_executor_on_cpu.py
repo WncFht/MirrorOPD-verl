@@ -9,10 +9,10 @@ from unittest.mock import AsyncMock
 import pytest
 from omegaconf import OmegaConf
 
-from verl.experimental.rollout_policy.execution import NativeVLLMExecutor
+from verl.experimental.rollout_policy.lifecycle import ComponentLayout, ExecutionContext
 from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
-from verl.experimental.rollout_policy.runtime import RolloutRuntime
+from verl.workers.rollout.vllm_fusion.execution import NativeVLLMExecutor
 
 
 @pytest.mark.parametrize("current_side", [None, "left", "right"])
@@ -75,8 +75,8 @@ def test_native_loading_and_refit_target_are_independent_of_learner_initializati
             },
         }
     )
-    runtime = RolloutRuntime(SimpleNamespace(config=config, rollout_policy=policy, actor_rollout_wg=wg))
-    executor = NativeVLLMExecutor(runtime)
+    context = ExecutionContext(config, policy, wg)
+    executor = NativeVLLMExecutor(context)
 
     async def run():
         await executor.prepare(plan)
@@ -85,11 +85,13 @@ def test_native_loading_and_refit_target_are_independent_of_learner_initializati
         await executor.release()
 
     asyncio.run(run())
-    first, second, weight = plan.fusion_components
+    layout = ComponentLayout.from_plan(plan)
+    first, second, weight = layout.first, layout.second, plan.resolved_control
     assert len(replicas) == 1
     assert replicas[0].model.path == first.path
     assert replicas[0].rollout.engine_kwargs.vllm.hf_overrides.second_path == second.path
     assert server.prepare.remote.call_args.args[2] == weight
+    assert server.prepare.remote.call_args.args[-1] == layout.reversed
     assert replicas[0].wake_up.await_count == 1
     assert replicas[0].sleep.await_count == 2
     if current_side:

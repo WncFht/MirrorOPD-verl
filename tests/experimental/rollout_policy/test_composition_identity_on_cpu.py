@@ -90,4 +90,4 @@ def test_identical_fixed_content_folds_across_distinct_directories(tmp_path):
         seed=0,
     )
     assert plan.normalization == "same_binding"
-    assert [phase.decoder for phase in plan.phases] == ["left"]
+    assert [phase.source for phase in plan.phases] == ["left"]

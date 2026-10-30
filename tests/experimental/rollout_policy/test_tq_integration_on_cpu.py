@@ -16,7 +16,7 @@ from omegaconf import OmegaConf
 from verl.experimental.rollout_policy.collector import collect_plan
 from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
-from verl.experimental.rollout_policy.runtime import TQPublisher
+from verl.experimental.rollout_policy.sessions import TQPublisher
 from verl.trainer.ppo.v1.agent_loop_tq import AgentLoopWorkerTQ
 
 
@@ -94,7 +94,7 @@ def test_real_tq_cross_source_sessions_and_delayed_failure(tq_runtime, tmp_path,
             meta = (await tq.async_kv_list("train"))["train"]
             assert all(meta[uid]["status"] == "running" for uid in uids)
 
-        async def generate(self, phase, plan):
+        async def generate(self, phase, plan, prepared):
             sessions = [
                 {
                     "request": request,
@@ -107,7 +107,7 @@ def test_real_tq_cross_source_sessions_and_delayed_failure(tq_runtime, tmp_path,
             refs = [
                 worker.generate_sessions.remote(sessions[i::2], None, 30.0, 5.0) for i, worker in enumerate(workers)
             ]
-            if fail == "cancel" and phase.decoder == "right":
+            if fail == "cancel" and phase.source == "right":
                 await asyncio.sleep(0.02)
                 ray.cancel(refs[0])
             results = await asyncio.gather(*refs, return_exceptions=True)
