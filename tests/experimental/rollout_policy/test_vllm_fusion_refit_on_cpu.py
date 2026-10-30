@@ -90,7 +90,8 @@ def test_frozen_student_rejects_refit():
 
 
 @pytest.mark.parametrize("conflict", [False, True])
-def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflict):
+@pytest.mark.parametrize("snapshot_failure", [False, True])
+def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflict, snapshot_failure):
     from verl.workers.rollout.vllm_fusion import worker_extension
     from verl.workers.rollout.vllm_rollout import bucketed_weight_transfer as transport
 
@@ -98,6 +99,21 @@ def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflic
     alias = source.clone()
     if conflict:
         alias[3] = 2
+    snapshots, drained = [], []
+    original_to = torch.Tensor.to
+
+    def host_snapshot(tensor, *args, **kwargs):
+        assert kwargs.get("device") == "cpu" and kwargs.get("copy") is True
+        snapshots.append(tensor.shape)
+        if snapshot_failure:
+            raise torch.OutOfMemoryError("injected snapshot allocation failure")
+        return original_to(tensor, *args, **kwargs)
+
+    def forbid_device_clone(tensor, *args, **kwargs):
+        raise AssertionError("Alias checking must not clone a full device embedding")
+
+    monkeypatch.setattr(torch.Tensor, "to", host_snapshot)
+    monkeypatch.setattr(torch.Tensor, "clone", forbid_device_clone)
 
     class ShardedStudent(torch.nn.Module):
         def __init__(self, rank):
@@ -120,7 +136,9 @@ def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflic
 
         def receive_weights(self, callback):
             callback([("model.embed_tokens.weight", source)], False)
-            callback([("lm_head.weight", alias)], True)
+            callback([("lm_head.weight", alias)], False)
+            callback([], True)
+            drained.append(True)
 
     monkeypatch.setattr(transport, "BucketedWeightReceiver", Receiver)
     monkeypatch.setattr(worker_extension, "get_torch_device", lambda: SimpleNamespace(synchronize=lambda: None))
@@ -133,5 +151,9 @@ def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflic
         target.device, target.local_rank = torch.device("cpu"), rank
         errors.append(target.fusion_receive_weights((2, 2)))
         assert not target.fusion_valid and target.fusion_version is None
-    assert errors[0] is None
-    assert (errors[1] is not None) == conflict
+        if errors[-1]:
+            with pytest.raises(RuntimeError, match="incomplete"):
+                target.fusion_commit_version((2, 2))
+    assert len(drained) == len(snapshots) == 2
+    assert (errors[0] is not None) == snapshot_failure
+    assert (errors[1] is not None) == (conflict or snapshot_failure)
