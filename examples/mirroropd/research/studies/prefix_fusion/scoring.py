@@ -4,6 +4,9 @@
 
 import argparse
 import os
+import subprocess
+import sys
+import time
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -270,6 +273,23 @@ def main():
             p.add_argument("--outer", type=int, required=True)
             p.add_argument("--long-panel", action="store_true")
     args = parser.parse_args()
+    require_allocated_gpu()
+    from examples.mirroropd.benchmarks.fusion.fingerprint import source_fingerprint
+
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    tag = args.out.parent / f"{args.out.name}-run-{time.time_ns()}"
+    dump(
+        str(tag) + "-source.json",
+        dict(
+            source=source_fingerprint(),
+            command=vars(args) | {key: str(value) for key, value in vars(args).items() if isinstance(value, Path)},
+        ),
+    )
+    monitor = Path(__file__).resolve().parents[3] / "benchmarks/fusion/monitor.py"
+    observer = subprocess.Popen(
+        [sys.executable, str(monitor), "--parent", str(os.getpid()), "--out", str(tag) + "-resources.jsonl"]
+    )
+    assert observer.pid > 0
     if args.command == "cache-teacher":
         cache_teacher(args.assets, args.banks, args.pair, args.out)
     else:
