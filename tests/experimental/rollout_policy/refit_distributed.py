@@ -17,6 +17,7 @@ from transformers import Qwen3Config, Qwen3ForCausalLM
 
 from verl.workers.engine_workers import ActorRolloutRefWorker
 from verl.workers.rollout.hf_fusion.adapter import ServerAdapter
+from verl.workers.rollout.weight_target import HFWeightTarget
 
 
 def main():
@@ -65,14 +66,14 @@ def main():
             worker = SimpleNamespace(
                 config=SimpleNamespace(rollout=SimpleNamespace(checkpoint_engine=SimpleNamespace(backend="naive"))),
                 actor=SimpleNamespace(engine=engine),
-                fusion_rollout=target,
+                rollout_weight_targets={"policy_current": HFWeightTarget(target)},
                 layered_summon=False,
             )
             error = None
             try:
                 asyncio.run(
                     inspect.unwrap(ActorRolloutRefWorker.update_weights)(
-                        worker, target="fusion_student", version=(3, 16)
+                        worker, target="policy_current", version=(3, 16)
                     )
                 )
             except RuntimeError as exc:

@@ -110,7 +110,7 @@ class NativeVLLMExecutor:
             tick = time.monotonic()
             await ctx.wait(
                 wg.update_weights(
-                    global_steps=plan.collection_step, target="fusion_student", version=plan.actor_version
+                    global_steps=plan.collection_step, target="policy_current", version=plan.actor_version
                 )
             )
             self.current_version = plan.actor_version

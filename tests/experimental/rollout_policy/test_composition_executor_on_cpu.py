@@ -95,7 +95,7 @@ def test_native_loading_and_refit_target_are_independent_of_learner_initializati
     assert replicas[0].wake_up.await_count == 1
     assert replicas[0].sleep.await_count == 2
     if current_side:
-        wg.update_weights.assert_awaited_once_with(global_steps=3, target="fusion_student", version=(2, 2))
+        wg.update_weights.assert_awaited_once_with(global_steps=3, target="policy_current", version=(2, 2))
         assert first.path == paths["learner"]
     else:
         wg.update_weights.assert_not_called()
