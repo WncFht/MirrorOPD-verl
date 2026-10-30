@@ -12,6 +12,7 @@ from examples.mirroropd.benchmarks.fusion.report_prefix_study import (
     STUDY_COMMIT,
     completion_matches,
     load_snapshot,
+    snapshot,
     summarize_outers,
 )
 
@@ -66,6 +67,16 @@ def test_zero_baseline_has_no_relative_reduction():
     assert result["within_batch_reduction_pct"] is None
 
 
+def test_expanded_study_requires_all_twelve_runs(tmp_path):
+    rows, status = snapshot(tmp_path, tmp_path / "export")
+    assert not rows and not status["all_runs_complete"]
+    assert status["expected_runs"] == len(status["states"]) == 12
+    assert sum(s["target_updates"] for s in status["states"]) == 7680
+    assert {(s["pair"], s["arm"]) for s in status["states"]} == {
+        (pair, arm) for pair in ["J", "P"] for arm in ["S0", "S", "PM", "LM", "TM", "T"]
+    }
+
+
 def test_frozen_replay_is_independent_of_live_sources_and_detects_changed_data(tmp_path):
     rows = batch(1, 16)
     rows[0]["valid_update"] = False
@@ -89,7 +100,8 @@ def test_frozen_replay_is_independent_of_live_sources_and_detects_changed_data(t
 
 
 @pytest.mark.parametrize(
-    "fault", [None, "missing_exit", "failed_exit", "stale_data", "wrong_arm", "wrong_mode", "failed"]
+    "fault",
+    [None, "missing_exit", "failed_exit", "stale_data", "wrong_arm", "wrong_mode", "failed", "unvalidated_probability"],
 )
 def test_completion_requires_exit_and_matching_formal_evidence(fault):
     sources = {"/run/metrics.jsonl": "metrics-hash", "/run/resolved_config.yaml": "config-hash"}
@@ -106,6 +118,7 @@ def test_completion_requires_exit_and_matching_formal_evidence(fault):
         witnesses=[dict(path=path, sha256=digest) for path, digest in sources.items()],
     )
     exit_code = 0
+    requested_arm = "S0"
     if fault == "missing_exit":
         exit_code = None
     elif fault == "failed_exit":
@@ -118,4 +131,6 @@ def test_completion_requires_exit_and_matching_formal_evidence(fault):
         audit["mode"] = "profile"
     elif fault == "failed":
         audit["passed"] = False
-    assert completion_matches(audit, "J", "S0", exit_code, sources) == (fault is None)
+    elif fault == "unvalidated_probability":
+        audit["arm"] = requested_arm = "PM"
+    assert completion_matches(audit, "J", requested_arm, exit_code, sources) == (fault is None)

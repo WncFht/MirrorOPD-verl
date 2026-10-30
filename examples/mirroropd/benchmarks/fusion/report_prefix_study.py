@@ -22,12 +22,22 @@ from pathlib import Path
 
 import yaml
 
-ARMS = {"S0": "Initial student", "S": "Current student", "LM": "Logit mix", "TM": "Trajectory mix", "T": "Teacher"}
+ARMS = {
+    "S0": "Initial student",
+    "S": "Current student",
+    "PM": "Probability mix",
+    "LM": "Logit mix",
+    "TM": "Trajectory mix",
+    "T": "Teacher",
+}
 STUDY_COMMIT = "91674e68941c1be634cf62231711a1df753e28a9"
+# Filled only after the probability implementation is frozen and GPU-validated.
+PROBABILITY_STUDY_COMMIT = None
 
 
 def completion_matches(audit, pair, arm, exit_code, source_hashes):
     """Require a successful formal audit of the exact metrics/config being exported."""
+    expected_commit = PROBABILITY_STUDY_COMMIT if arm == "PM" else STUDY_COMMIT
     witnesses = {item["path"]: item["sha256"] for item in audit.get("witnesses", [])}
     return (
         exit_code == 0
@@ -36,7 +46,8 @@ def completion_matches(audit, pair, arm, exit_code, source_hashes):
         and audit.get("formal_complete") is True
         and audit.get("mode") == "formal"
         and (audit.get("pair"), audit.get("arm")) == (pair, arm)
-        and audit.get("source_commit") == STUDY_COMMIT
+        and expected_commit is not None
+        and audit.get("source_commit") == expected_commit
         and audit.get("applied_updates") == 640
         and audit.get("errors") == []
         and len(source_hashes) == 2
@@ -106,11 +117,11 @@ def load_snapshot(directory):
 def snapshot(workspace, out):
     out.mkdir(parents=True, exist_ok=False)
     rows, states, sources = [], [], []
-    repo = workspace / "MirrorOPD-verl-vllm-fusion"
     root = workspace / "runs/vllm-fusion-20261029"
     for pair in ("J", "P"):
         control = root / f"formal-prefix-study-{pair}-01"
         for arm in ARMS:
+            repo = workspace / ("MirrorOPD-verl-vllm-probability" if arm == "PM" else "MirrorOPD-verl-vllm-fusion")
             name = f"prefix-formal-{pair}-{arm}-study40x16-v1"
             run = repo / "outputs" / name
             path = run / "metrics.jsonl"
@@ -141,11 +152,14 @@ def snapshot(workspace, out):
                     "S0": ("single", "student", "initial", 0),
                     "S": ("trajectory_mixture", "student", "current", 0),
                     "LM": ("token_mixture", "student", "current", 0.5),
+                    "PM": ("token_mixture", "student", "current", 0.5),
                     "TM": ("trajectory_mixture", "student", "current", 0.5),
                     "T": ("single", "teacher", "current", 1),
                 }[arm]
                 if tuple(policy[k] for k in ["mode", "source", "student", "teacher_weight"]) != expected_policy:
                     raise ValueError(f"Wrong prefix arm: {name}")
+                if policy.get("fusion_space", "logit") != ("probability" if arm == "PM" else "logit"):
+                    raise ValueError(f"Wrong fusion space: {name}")
                 mirror = config["distillation"]["distillation_loss"]["mirror"]
                 if (
                     trainer["total_training_steps"] != 40
@@ -266,7 +280,8 @@ def snapshot(workspace, out):
         "scope": "Formal 40x16 study only; live partial snapshot, no extrapolation",
         "states": states,
         "sources": sources,
-        "all_ten_complete": len(states) == 10 and all(s["formal_complete"] for s in states),
+        "expected_runs": 12,
+        "all_runs_complete": len(states) == 12 and all(s["formal_complete"] for s in states),
         "recorded_update_rows": len(rows),
         "invalid_update_rows": sum(not r["valid_update"] for r in rows),
         "updates_csv_sha256": hashlib.sha256((out / "updates.csv").read_bytes()).hexdigest(),
@@ -288,7 +303,8 @@ def render(rows, summary, directory, style_dir):
 
     fv.apply_rc("paper", fontsize=10)
     palette = fv.series_colors("paper", 4)
-    colors = dict(zip(["S", "LM", "TM", "T"], palette, strict=True))
+    colors = dict(zip(["S", "LM", "TM", "PM"], palette, strict=True))
+    colors["T"] = fv.NEUTRALS["vink"]
     colors["S0"] = fv.NEUTRALS["baseline"]
     directory.mkdir(parents=True, exist_ok=False)
     outer_rows = summarize_outers(rows)
@@ -395,7 +411,15 @@ def main():
     if rows and args.style_dir is None:
         parser.error("Set --style-dir or FIGURE_VIZ_MPL to render actual observations")
     outputs = render(rows, summary, args.figures, args.style_dir) if rows else []
-    print(json.dumps({"update_rows": len(rows), "all_complete": summary["all_ten_complete"], "figures": outputs}))
+    print(
+        json.dumps(
+            {
+                "update_rows": len(rows),
+                "all_complete": summary.get("all_runs_complete", summary.get("all_ten_complete", False)),
+                "figures": outputs,
+            }
+        )
+    )
 
 
 if __name__ == "__main__":
