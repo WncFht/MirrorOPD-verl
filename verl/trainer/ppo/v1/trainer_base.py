@@ -141,19 +141,24 @@ class PPOTrainer(ABC):
     def __init__(self, config: DictConfig):
         self.config = config
         from verl.experimental.rollout_policy.plan import RolloutPolicyConfig
-        from verl.experimental.rollout_policy.validation import policy_engine_config, validate_policy
+        from verl.experimental.rollout_policy.validation import (
+            policy_engine_config,
+            uses_common_single_sampling,
+            validate_policy,
+        )
 
         self.rollout_policy = RolloutPolicyConfig.parse(
             OmegaConf.to_container(config.rollout_policy, resolve=True) if config.get("rollout_policy") else None
         )
         self.rollout_bindings = None
         self.rollout_identity = None
-        if not self.rollout_policy.default_path:
+        self.common_rollout_sampling = not self.rollout_policy.default_path or uses_common_single_sampling(config)
+        if self.common_rollout_sampling:
             from verl.experimental.rollout_policy.identity import bind_policy
 
             self.rollout_bindings, self.rollout_identity = bind_policy(config, self.rollout_policy)
         validate_policy(config, policy=self.rollout_policy, bindings=self.rollout_bindings)
-        if not self.rollout_policy.default_path:
+        if self.common_rollout_sampling:
             config.actor_rollout_ref.rollout = policy_engine_config(config.actor_rollout_ref.rollout)
         self.checkpoint_callback = build_checkpoint_callback(config)
         from verl.trainer.ppo.readout_callback import build_readout_callback

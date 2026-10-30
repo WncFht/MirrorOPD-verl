@@ -7,7 +7,7 @@ import json
 from dataclasses import asdict, replace
 from pathlib import Path
 
-from .models import resolve_bindings
+from .models import local_model_path, requires_token_generator, resolve_bindings
 
 
 def checkpoint_files(root):
@@ -72,10 +72,18 @@ def checkpoint_identity(path):
     return digest.hexdigest()
 
 
-def bind_policy(config, policy):
-    teachers = config.distillation.teacher_models
+def bind_policy(config, policy, *, resolve_path=None):
+    teachers = config.get("distillation", {}).get("teacher_models", {})
     teacher_path = next(iter(teachers.values())).model_path if len(teachers) == 1 else None
-    bindings = resolve_bindings(policy, config.actor_rollout_ref.model.path, teacher_path)
+    if resolve_path is None:
+        resolver = config.get("rollout_model_resolver")
+        if resolver:
+            from hydra.utils import get_method
+
+            resolve_path = get_method(resolver)
+        else:
+            resolve_path = local_model_path
+    bindings = resolve_bindings(policy, config.actor_rollout_ref.model.path, teacher_path, resolve_path=resolve_path)
     identities = {path: checkpoint_identity(path) for path in {b.path for b in bindings.values()}}
     bindings = {slot: replace(binding, identity=identities[binding.path]) for slot, binding in bindings.items()}
     from omegaconf import OmegaConf
@@ -92,6 +100,7 @@ def bind_policy(config, policy):
             "fusion_space": policy.fusion_space if policy.mode == "token_mixture" else None,
             "bindings": {slot: {"kind": b.kind, "sha256": b.identity} for slot, b in bindings.items()},
             "sampling_contract": "mirroropd-crossing-token-v1",
+            "backend": policy.execution.backend if requires_token_generator(policy, bindings) else "vllm",
             "sampling": {
                 name: value("actor_rollout_ref.rollout." + name)
                 for name in (
@@ -105,6 +114,7 @@ def bind_policy(config, policy):
                     "n",
                     "seed",
                     "repetition_penalty",
+                    "full_determinism",
                     "dtype",
                 )
             },

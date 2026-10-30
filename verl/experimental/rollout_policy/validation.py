@@ -83,8 +83,6 @@ def validate_policy(config, *, policy=None, bindings=None):
     logprob_mode = OmegaConf.select(rollout, "engine_kwargs.vllm.logprobs_mode", default=rollout.logprobs_mode)
     if rollout.calculate_log_probs and logprob_mode != "processed_logprobs":
         raise ValueError("Local rollout behavior probabilities require logprobs_mode=processed_logprobs")
-    if policy.mode == "token_mixture" and rollout.dtype != "bfloat16":
-        raise ValueError("Production token fusion currently requires BF16 inference weights")
     validate_resume_clock(config, policy.right_weight)
 
     from .identity import bind_policy
@@ -94,6 +92,8 @@ def validate_policy(config, *, policy=None, bindings=None):
     if bindings is None:
         bindings, _ = bind_policy(config, policy)
     fusion_needed = requires_token_generator(policy, bindings)
+    if fusion_needed and rollout.dtype != "bfloat16":
+        raise ValueError("Production token fusion currently requires BF16 inference weights")
     if fusion_needed and policy.execution.backend == "vllm_fusion":
         validate_native_options(config)
     metadata = load_model_metadata([student_path, *(b.path for b in bindings.values())])
@@ -116,6 +116,8 @@ def validate_policy(config, *, policy=None, bindings=None):
         if model.get(key) not in (None, student_path):
             raise ValueError(f"Local rollout policies do not support a separate {key}")
     if fusion_needed and policy.execution.backend == "hf_fusion":
+        if policy.execution.tensor_parallel_size != 1:
+            raise ValueError("HF fusion supports TP1")
         import importlib.util
 
         import torch
@@ -155,7 +157,7 @@ def validate_policy(config, *, policy=None, bindings=None):
         validate_component_families(*components)
         if any(getattr(model, "quantization_config", None) for model in model_configs):
             raise ValueError("vllm_fusion requires unquantized checkpoints")
-    if policy.mode == "token_mixture" and config.actor_rollout_ref.rollout.checkpoint_engine.backend != "naive":
+    if fusion_needed and config.actor_rollout_ref.rollout.checkpoint_engine.backend != "naive":
         raise ValueError("Token fusion currently requires naive same-topology weight transport")
     import os
 
@@ -171,11 +173,13 @@ def policy_engine_config(rollout):
     from verl.workers.rollout.vllm_rollout.tokenizer_support import TokenizerSupport
 
     rollout = copy.deepcopy(rollout)
+    rollout.logprobs_mode = "processed_logprobs"
     processor = TokenizerSupport.__module__ + ":" + TokenizerSupport.__name__
     with open_dict(rollout.engine_kwargs):
         if rollout.engine_kwargs.get("vllm") is None:
             rollout.engine_kwargs.vllm = {}
     with open_dict(rollout.engine_kwargs.vllm):
+        rollout.engine_kwargs.vllm.logprobs_mode = "processed_logprobs"
         processors = list(rollout.engine_kwargs.vllm.get("logits_processors") or [])
         if processor not in processors:
             rollout.engine_kwargs.vllm.logits_processors = processors + [processor]
@@ -222,3 +226,45 @@ def validate_native_options(config):
     )
     if cache_dtype not in {None, "auto", "bfloat16"}:
         raise ValueError("Native fusion requires BF16 KV, without KV quantization")
+
+
+def uses_common_single_sampling(config):
+    """Canonical sampler scope for the existing synchronous text transport."""
+    import os
+
+    if os.environ.get("VLLM_USE_V2_MODEL_RUNNER", "").lower() in {"1", "true"}:
+        return False
+    from pathlib import Path
+
+    model_path = OmegaConf.select(config, "actor_rollout_ref.model.path")
+    if not model_path or not Path(model_path).expanduser().is_dir():
+        return False
+    for key in ("tokenizer_path", "hf_config_path"):
+        if OmegaConf.select(config, "actor_rollout_ref.model." + key) not in (None, model_path):
+            return False
+    if OmegaConf.select(config, "actor_rollout_ref.model.override_config") or OmegaConf.select(
+        config, "actor_rollout_ref.model.trust_remote_code", default=False
+    ):
+        return False
+    required = {
+        "trainer.v1.trainer_mode": "sync",
+        "trainer.nnodes": 1,
+        "actor_rollout_ref.hybrid_engine": True,
+        "actor_rollout_ref.actor.strategy": "fsdp2",
+        "actor_rollout_ref.rollout.name": "vllm",
+        "actor_rollout_ref.rollout.agent.default_agent_loop": "single_turn_agent",
+    }
+    if any(OmegaConf.select(config, key) != expected for key, expected in required.items()):
+        return False
+    return not any(
+        OmegaConf.select(config, key, default=False)
+        for key in (
+            "actor_rollout_ref.rollout.multi_turn.enable",
+            "actor_rollout_ref.rollout.disaggregation.enabled",
+            "actor_rollout_ref.rollout.agent.custom_async_server.path",
+            "actor_rollout_ref.rollout.agent.agent_loop_manager_class",
+            "actor_rollout_ref.rollout.agent.agent_loop_config_path",
+            "actor_rollout_ref.model.lora.rank",
+            "actor_rollout_ref.model.lora_rank",
+        )
+    )

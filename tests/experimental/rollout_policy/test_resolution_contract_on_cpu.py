@@ -90,3 +90,52 @@ def test_application_resolver_runs_once_per_location():
     bindings = resolve_bindings(policy, "alias", resolve_path=resolve)
     assert calls == ["alias"]
     assert bindings["left"].same_model(bindings["right"])
+
+
+def test_resume_rejects_backend_change_even_when_resource_changes_are_allowed(tmp_path):
+    _, config = setup_model(tmp_path)
+    policy = RolloutPolicyConfig.parse({"mode": "token_mixture", "right": {"kind": "initial"}})
+    _, state = bind_policy(config, policy)
+    save_bindings(tmp_path, state)
+    changed_policy = replace(policy, execution=replace(policy.execution, backend="hf_fusion"))
+    _, changed = bind_policy(config, changed_policy)
+    with pytest.raises(ValueError, match="identity changed"):
+        verify_resume_bindings(tmp_path, changed)
+
+
+def test_engine_configuration_does_not_mutate_the_validated_input():
+    from verl.experimental.rollout_policy.validation import policy_engine_config
+
+    source = OmegaConf.create(
+        {"logprobs_mode": "raw_logprobs", "engine_kwargs": {"vllm": {"logits_processors": ["custom"]}}}
+    )
+    before = OmegaConf.to_container(source)
+    configured = policy_engine_config(source)
+    assert OmegaConf.to_container(source) == before
+    assert configured.logprobs_mode == "processed_logprobs"
+    assert len(configured.engine_kwargs.vllm.logits_processors) == 2
+    assert configured.engine_kwargs.vllm.logits_processors[0] == "custom"
+
+
+def test_application_resolver_accepts_nested_checkpoint_alias_after_parsing(tmp_path, monkeypatch):
+    from examples.mirroropd.assets import paths
+
+    root, config = setup_model(tmp_path)
+    monkeypatch.setattr(paths, "registered_model", lambda alias: root if alias == "fixture-model" else None)
+    config.rollout_model_resolver = "examples.mirroropd.assets.paths.rollout_model_path"
+    policy = RolloutPolicyConfig.parse({"model": {"kind": "checkpoint", "ref": "fixture-model"}})
+    bindings, state = bind_policy(config, policy)
+    assert bindings["model"].path == str(root)
+    assert state["semantics"]["bindings"]["model"]["sha256"] == checkpoint_identity(root)
+
+
+def test_unused_fusion_topology_does_not_reject_a_single_endpoint():
+    policy = RolloutPolicyConfig.parse(
+        {"mode": "token_mixture", "right_weight": 0, "execution": {"tensor_parallel_size": 4}}
+    )
+    bindings = {"left": ModelBinding("current", "/a", "a"), "right": ModelBinding("checkpoint", "/b", "b")}
+    assert not requires_token_generator(policy, bindings)
+    plan = build_plan(
+        policy, bindings=bindings, uids=["u"], stable_ids=[0], n=1, collection_step=1, optimizer_step=0, seed=1
+    )
+    assert len(plan.phases) == 1 and plan.phases[0].generator == "single"

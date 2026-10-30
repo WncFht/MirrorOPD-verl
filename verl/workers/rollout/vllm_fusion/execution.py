@@ -133,7 +133,7 @@ class NativeVLLMExecutor:
                 for replica in self.resources.replicas
             )
         )
-        return PreparedPhase("fusion", self.client, routes, self, loaded_versions(plan), phase_token)
+        return PreparedPhase("fusion", self.client, routes, self, loaded_versions(plan, "fusion"), phase_token)
 
     async def release(self, prepared=None):
         await self.resources.sleep()

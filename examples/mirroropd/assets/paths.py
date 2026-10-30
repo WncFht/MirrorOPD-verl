@@ -72,6 +72,16 @@ def registered_model(alias, *, root=None, registry_path=None):
     return (Path(root).expanduser() if root is not None else model_root()) / relative
 
 
+def rollout_model_path(value):
+    """Application resolver injected by the public launcher after Hydra parsing."""
+    from verl.experimental.rollout_policy.models import local_model_path
+
+    path = Path(value).expanduser()
+    if not path.is_dir():
+        path = registered_model(value)
+    return local_model_path(require_current_location(str(path)))
+
+
 def asset_name(path):
     """Read a model's human name from its identity rather than a revision directory."""
     actual = resolve_location(path)

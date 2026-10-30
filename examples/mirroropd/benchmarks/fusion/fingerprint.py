@@ -18,7 +18,18 @@ def source_fingerprint():
         "examples/mirroropd/benchmarks/fusion",
     ):
         files.extend(sorted((root / relative).glob("*.py")))
-    files.extend([root / "verl/workers/engine_workers.py", root / "verl/trainer/config/rollout_policy/local.yaml"])
+    files.extend(
+        root / relative
+        for relative in (
+            "verl/workers/engine_workers.py",
+            "verl/workers/rollout/weight_target.py",
+            "verl/trainer/ppo/v1/trainer_base.py",
+            "verl/trainer/ppo/v1/trainer_sync.py",
+            "verl/trainer/config/rollout_policy/local.yaml",
+            "examples/mirroropd/assets/paths.py",
+            "examples/mirroropd/launchers/math_experiment.py",
+        )
+    )
     return {
         "git_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip(),
         "sha256": {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest() for path in files},

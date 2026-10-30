@@ -35,7 +35,7 @@ class SingleVLLMExecutor:
             await ctx.wait(ctx.actor.park_fusion_actor())
             key = (binding.kind, binding.identity or binding.path)
             client = await self.frozen_client(binding, max(routes.counts))
-        return PreparedPhase(phase.source, client, routes, self, loaded_versions(plan), resource_key=key)
+        return PreparedPhase(phase.source, client, routes, self, loaded_versions(plan, phase.source), resource_key=key)
 
     async def frozen_client(self, binding, max_requests):
         source, path = (binding.kind, binding.identity or binding.path), binding.path
