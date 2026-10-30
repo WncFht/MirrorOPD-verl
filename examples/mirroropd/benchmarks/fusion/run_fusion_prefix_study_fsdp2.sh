@@ -135,6 +135,7 @@ exec bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E20 --method full_kl
     'actor_rollout_ref.rollout.logprobs_mode=processed_logprobs' \
     'actor_rollout_ref.rollout.stop_token_ids=[151643]' \
     'actor_rollout_ref.rollout.full_determinism=False' \
+    '++actor_rollout_ref.rollout.engine_kwargs.vllm.attention_config.backend=TRITON_ATTN' \
     "actor_rollout_ref.rollout.agent.num_workers=${PREFIX_AGENT_WORKERS:-8}" \
     "reward.num_workers=${PREFIX_REWARD_WORKERS:-8}" \
     "transfer_queue.backend.SimpleStorage.num_data_storage_units=${PREFIX_STORAGE_UNITS:-8}" \

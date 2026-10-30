@@ -84,6 +84,8 @@ def check(config, reference, pair, arm, outers=40, *, smoke=False):
         "distillation.distillation_loss.full_vocab.termination_token_ids": [],
         "trainer.v1.sampler.sync_refill_failed_groups": False,
     }
+    if outers == 40 and not smoke:
+        required["actor_rollout_ref.rollout.engine_kwargs.vllm.attention_config.backend"] = "TRITON_ATTN"
     for path, value in required.items():
         if get(config, path) != value:
             errors.append(f"{path}: expected {value!r}, got {get(config, path)!r}")
