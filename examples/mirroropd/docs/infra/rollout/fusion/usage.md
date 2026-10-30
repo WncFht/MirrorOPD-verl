@@ -1,6 +1,6 @@
 # Rollout 组合启动说明
 
-日常训练使用 `examples/mirroropd/run_math_opd_ablation_fsdp2.sh`。模型引用与组合含义见[统一语义](2026-10-31-Rollout统一模型来源与组合语义.md)，分阶段验证见[实施计划](2026-10-31-Rollout统一接口实施计划.md)。开发期间在 `MirrorOPD-verl-rollout` 执行；main 是否完成发布以[工作区说明](workspaces.md)为准。
+日常训练使用 `examples/mirroropd/run_math_opd_ablation_fsdp2.sh`。模型引用与组合含义见[统一语义](2026-10-31-Rollout统一模型来源与组合语义.md)，分阶段验证见[实施计划](2026-10-31-Rollout统一接口实施计划.md)。日常从主仓库启动，开发使用 `MirrorOPD-verl-rollout`；版本和发布回执见[工作区说明](workspaces.md)。
 
 ## 配置入口
 
@@ -36,9 +36,11 @@ Single 使用 `model`，mixture 使用 `left/right`，不能混用。未指定�
 
 ## 后端与资源
 
+非默认 rollout 当前用于单节点、FSDP2、全参数 dense learner、shared_sync full-vocabulary 蒸馏和单轮文本。两侧生成模型与 learner 使用相同 token-ID 映射，不隐式重分词。默认 single(current) 保留原训练路径及其能力范围。
+
 `rollout_policy.execution.backend` 默认为 `vllm_fusion`，`hf_fusion` 只能显式选择，失败时不会自动回退。HF 保留数值参考能力。当前原生融合支持 Qwen2 dense 配对、Qwen3 dense 第一组件与 dense/MoE 第二组件；current 映射到第一组件。模型引用独立不代表任意结构、词表或模型族都已支持。
 
-原生 fusion 的 `execution.max_num_seqs` 是活跃请求数，`execution.kv_cache_memory_bytes` 是组合引擎的 KV 预算。HF 的 `micro_batch_size` 是静态微批；两者不共用配置。普通 single 与验证使用 `actor_rollout_ref.rollout` 配置。此轮保持既有执行参数，不进行性能调参。
+原生 fusion 的 `execution.max_num_seqs` 是活跃请求数，`execution.kv_cache_memory_bytes` 是组合引擎的 KV 预算。HF 的 `micro_batch_size` 是静态微批；两者不共用配置。普通 single 与验证使用 `actor_rollout_ref.rollout` 配置。此轮保持既有执行参数，不进行性能调参。默认 1 GiB KV 预算用于保守的小规模配置，不承诺覆盖任意配对的最长上下文；较长上下文应显式设置足够的 KV 预算。正式长负载与推荐性能参数留给后续专项验收。
 
 ## 手动保存与恢复
 
