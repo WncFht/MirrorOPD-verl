@@ -12,10 +12,10 @@ cd "$REPO"
 export CUDA_VISIBLE_DEVICES=0,1,2,3 OMP_NUM_THREADS=1 PYTHONPATH=$REPO
 export LD_LIBRARY_PATH=$WORKSPACE/cache/fusion-runtime/cuda-compat-12-9/usr/local/cuda-12.9/compat:${LD_LIBRARY_PATH:-}
 PYTHON_BIN=${PYTHON_BIN:-/tmp/mirroropd-fusion-venv/bin/python}
-BASE=$WORKSPACE/model/Qwen3-1.7B-Base
-POST=$WORKSPACE/model/Qwen3-1.7B
-DENSE=$WORKSPACE/model/Qwen3-8B
-MOE=$WORKSPACE/model/Qwen3-30B-A3B-Instruct-2507
+BASE=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-1.7B-Base --model-root "${MODEL_ROOT:-$WORKSPACE/model}")
+POST=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-1.7B --model-root "${MODEL_ROOT:-$WORKSPACE/model}")
+DENSE=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "${MODEL_ROOT:-$WORKSPACE/model}")
+MOE=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-30B-A3B-Instruct-2507 --model-root "${MODEL_ROOT:-$WORKSPACE/model}")
 GRAPH=(--cuda-graph --flash-kv-splits 1)
 
 run() {

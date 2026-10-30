@@ -4,7 +4,7 @@
       "name": "Q1",
       "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
       "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
-      "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+      "path": "model/hub/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
       "parent": "Qwen/Qwen3-4B-Base",
       "method": "sft",
       "sources": [
@@ -17,7 +17,7 @@
       "name": "Q2",
       "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
       "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
-      "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
+      "path": "model/hub/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
       "parent": "Qwen/Qwen3-4B-Base",
       "method": "sft",
       "sources": [
@@ -30,7 +30,7 @@
       "name": "L1",
       "repo": "allenai/Llama-3.1-Tulu-3-8B-SFT",
       "revision": "f2a0b46b0cfda21003c6141b1ff837b7e165524d",
-      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "path": "model/hub/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d",
       "parent": "meta-llama/Llama-3.1-8B",
       "method": "sft",
       "sources": [
@@ -42,7 +42,7 @@
       "name": "L2",
       "repo": "allenai/Llama-3.1-Tulu-3-8B-DPO",
       "revision": "a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
-      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "path": "model/hub/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
       "parent": "allenai/Llama-3.1-Tulu-3-8B-SFT",
       "method": "dpo",
       "sources": [
@@ -54,7 +54,7 @@
       "name": "L3",
       "repo": "allenai/Llama-3.1-Tulu-3-8B",
       "revision": "666943798adbde0b1aff34626007e26986a3c107",
-      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
+      "path": "model/hub/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
       "parent": "allenai/Llama-3.1-Tulu-3-8B-DPO",
       "method": "rlvr",
       "sources": [
@@ -66,7 +66,7 @@
       "name": "L4",
       "repo": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo",
       "revision": "d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
-      "path": "model/teacher-study/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+      "path": "model/hub/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
       "parent": "meta-llama/Llama-3.1-8B",
       "method": "rl",
       "sources": [

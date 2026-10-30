@@ -10,6 +10,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from verl.models.transformers.full_vocab import install_full_vocab_adapter
 from verl.trainer.distillation.hidden import FrozenTeacherHead
 
@@ -28,7 +29,7 @@ def main():
     ]
     records = []
     for name in names:
-        path = args.model_root / name
+        path = registered_model(name, root=args.model_root)
         tokenizer = AutoTokenizer.from_pretrained(path)
         model = (
             AutoModelForCausalLM.from_pretrained(path, dtype=torch.bfloat16, attn_implementation="sdpa").cuda().eval()

@@ -1,3 +1,5 @@
+from examples.mirroropd.assets.paths import registered_model
+
 #!/usr/bin/env python3
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
@@ -31,7 +33,10 @@ def main():
     torch.cuda.set_per_process_memory_fraction(8 * 2**30 / torch.cuda.get_device_properties(0).total_memory)
     model = (
         AutoModelForCausalLM.from_pretrained(
-            a.models / "Polaris-7B-Preview", dtype=torch.float32, attn_implementation="sdpa", local_files_only=True
+            registered_model("Polaris-7B-Preview", root=a.models),
+            dtype=torch.float32,
+            attn_implementation="sdpa",
+            local_files_only=True,
         )
         .eval()
         .requires_grad_(False)

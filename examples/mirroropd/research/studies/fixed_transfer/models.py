@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from examples.mirroropd.research.core.artifacts import complete, file_hash, receipt
 from examples.mirroropd.research.core.io import dump as write
 from examples.mirroropd.research.core.io import read
-from examples.mirroropd.research.studies.fixed_transfer.spec import WORK, fingerprint
+from examples.mirroropd.research.studies.fixed_transfer.spec import fingerprint
 
 FORWARD_FIELDS = (
     "model_type",
@@ -65,10 +65,9 @@ def materialize(model):
             continue
         if name.endswith(".safetensors"):
             expected = getattr(entry.lfs, "sha256", None)
-            candidate = WORK / "model" / model.repo.split("/")[-1] / name
             local = target / name
-            if not local.exists() and expected and candidate.exists() and file_hash(candidate) == expected:
-                local.symlink_to(candidate.resolve())
+            if local.is_symlink():
+                raise ValueError(f"Canonical model weights must be regular files: {local}")
             if not local.exists():
                 hf_hub_download(model.repo, name, revision=model.revision, local_dir=target)
             if expected and file_hash(local) != expected:

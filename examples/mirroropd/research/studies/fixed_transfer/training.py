@@ -13,6 +13,7 @@ from pathlib import Path
 
 import torch
 
+from examples.mirroropd.assets.paths import checkpoint_path, resolve_location
 from examples.mirroropd.research.backends import hf_models
 from examples.mirroropd.research.backends import hf_rkl as engine
 from examples.mirroropd.research.core import training_state
@@ -171,7 +172,7 @@ def arm_directory(study, arm):
 
 
 def checkpoint_directory(study, arm, step):
-    return study.cache_directory / "checkpoints" / study.name / arm.name / f"step{step:03d}"
+    return checkpoint_path(study.cache_directory, "checkpoints", study.name, arm.name, f"step{step:03d}")
 
 
 def scientific_inputs(study, arm):
@@ -344,8 +345,10 @@ def train(study, name):
             raise ValueError("Resume requires the same verified numerical profile")
         if restored["signature"] != fingerprint(resume_signature(study, arm, execution)):
             raise ValueError("Resume science or execution signature changed")
-        validate_checkpoint(Path(restored["weights"]), verify_hash=True)
-    model = hf_models.load(study.models[study.student], trainable=True, path=restored["weights"] if restored else None)
+        validate_checkpoint(resolve_location(restored["weights"]), verify_hash=True)
+    model = hf_models.load(
+        study.models[study.student], trainable=True, path=resolve_location(restored["weights"]) if restored else None
+    )
     hf_models.training_mode(model, execution)
     optimizer = torch.optim.AdamW(
         model.parameters(),

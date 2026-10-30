@@ -16,6 +16,8 @@ import os
 import time
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import registered_model
+
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -33,7 +35,7 @@ def main():
     torch.set_num_interop_threads(1)
     args.out.mkdir(parents=True, exist_ok=True)
     names = ["DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B", "Polaris-7B-Preview"]
-    toks = [AutoTokenizer.from_pretrained(args.models / n, local_files_only=True) for n in names]
+    toks = [AutoTokenizer.from_pretrained(registered_model(n, root=args.models), local_files_only=True) for n in names]
     tok = toks[0]
     compat = {
         n: dict(
@@ -109,7 +111,10 @@ def main():
         start = time.time()
         print("loading", name, flush=True)
         model = AutoModelForCausalLM.from_pretrained(
-            args.models / name, torch_dtype=torch.bfloat16, attn_implementation="sdpa", local_files_only=True
+            registered_model(name, root=args.models),
+            torch_dtype=torch.bfloat16,
+            attn_implementation="sdpa",
+            local_files_only=True,
         ).eval()
         records = []
         with torch.inference_mode():

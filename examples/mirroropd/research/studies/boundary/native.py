@@ -9,6 +9,7 @@ import time
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import resolve_location
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.core.metrics import fixed_metrics
 from examples.mirroropd.research.studies.boundary.common import CACHE, GROUPS, MODELS, OUT, model_path
@@ -27,7 +28,7 @@ def load(name, student=False, parallel=False, path=None):
         mapping = {"model.embed_tokens": 0, "model.rotary_emb": 0, "model.norm": 1, "lm_head": 1}
         mapping.update({f"model.layers.{i}": int(i >= 14) for i in range(28)})
     model = AutoModelForCausalLM.from_pretrained(
-        path or model_path(name),
+        resolve_location(path) if path is not None else model_path(name),
         dtype=torch.float32 if student else torch.bfloat16,
         attn_implementation="flash_attention_2",
         device_map=mapping,

@@ -18,6 +18,7 @@ from types import SimpleNamespace
 import torch
 import torch.nn.functional as F
 
+from examples.mirroropd.assets.paths import checkpoint_path, resolve_location
 from examples.mirroropd.research.backends.hf_rkl import head_vjp
 from examples.mirroropd.research.core import training_state
 from examples.mirroropd.research.core.artifacts import file_hash, fingerprint
@@ -410,7 +411,7 @@ def resume_origin(arm, *, require_probe=True):
         raise ValueError("R1 continuation science identity or update budget changed")
     if read(root / "complete.json")["updates"] != marker["step"]:
         raise ValueError("R1 continuation source is not a completed stage")
-    weights = Path(marker["weights"])
+    weights = resolve_location(marker["weights"])
     saved = read(weights / "complete.json")
     if (
         fingerprint(dict(weights=saved["files"], config=file_hash(weights / "config.json")))
@@ -442,7 +443,7 @@ def resume_probe(arm):
     step = training_state.restore(
         root / "resume", model, opt, signature=resume_signature(arm), weight_identity=marker["weight_identity"]
     )
-    parameters, slots = verify_loaded(root / "resume", marker["weights"], model, opt)
+    parameters, slots = verify_loaded(root / "resume", resolve_location(marker["weights"]), model, opt)
     head, states = target(ARMS[arm], "r7", model.lm_head.weight.device)
     batch = [r for r in rows() if r["group"] == training_group(step + 1)]
     tracked = model.model.norm.weight
@@ -593,7 +594,7 @@ def train(arm):
                 )
                 if REPLAY_REFERENCE_POLICY == "strict":
                     assert loss_error < 1e-5 and risk_error < 1e-5, "Old 64-step trajectory mismatch"
-    final = CACHE / "checkpoints" / arm / f"step{UPDATES:03d}"
+    final = checkpoint_path(CACHE, "checkpoints") / arm / f"step{UPDATES:03d}"
     final.mkdir(parents=True, exist_ok=True)
     model.save_pretrained(final, max_shard_size="4GB", safe_serialization=True)
     from transformers import AutoTokenizer
@@ -651,7 +652,7 @@ def controls():
             dest = OUT / "controls" / f"{arm}-{source}-{step:03d}.json"
             if dest.exists():
                 continue
-            path = None if step == 0 else OLD_CACHE / "checkpoints" / arm / "step064"
+            path = None if step == 0 else checkpoint_path(OLD_CACHE, "checkpoints") / arm / "step064"
             model = native.load(student, student=True, path=path)
             head, states = target(teacher, source, model.lm_head.weight.device)
             dump(dest, score(model, head, states, rows(source), step))
@@ -689,7 +690,7 @@ def run(plan, *, wait_resource=False, probe_only=False, eval_only=False, resume_
     plan = directory / "plan.json"
     specs = {
         a: dict(
-            path=str(CACHE / "checkpoints" / a / f"step{UPDATES:03d}"),
+            path=str(checkpoint_path(CACHE, "checkpoints") / a / f"step{UPDATES:03d}"),
             template="shared",
             response_cap=31744,
             model_length=32768,

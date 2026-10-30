@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Explicit identities and filesystem layout for the authorized TB0--TB2 run."""
 
+from examples.mirroropd.assets.paths import hub_directory
 from examples.mirroropd.research.core.paths import workspace
 
 WORK = workspace()
@@ -33,4 +34,4 @@ GROUPS = list("ABCDEFGH") + [f"M{i:02d}" for i in range(1, 5)] + ["Code01", "Cod
 
 
 def model_path(name):
-    return WORK / "model/teacher-boundary" / name / MODELS[name][1]
+    return hub_directory(*MODELS[name])

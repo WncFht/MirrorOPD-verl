@@ -77,10 +77,15 @@ def test_workers_import_frozen_shared_code(tmp_path):
     (original / "verl/__init__.py").write_text("VALUE = 'original'\n")
     research = original / "examples/mirroropd/research"
     research.mkdir(parents=True)
+    assets = original / "examples/mirroropd/assets"
+    assets.mkdir(parents=True)
+    (assets / "paths.py").write_text("ASSET = 'original asset resolver'\n")
+    (assets / "model_registry.json").write_text('{"models": []}\n')
     (research / "__init__.py").write_text("from verl import VALUE\n")
     snapshot = freeze(original, tmp_path / "source")
     (original / "verl/__init__.py").write_text("VALUE = 'changed'\n")
     (research / "__init__.py").write_text("VALUE = 'changed research'\n")
+    (assets / "paths.py").write_text("ASSET = 'changed asset resolver'\n")
     env = environment(snapshot, tmp_path)
     result = subprocess.run(
         [
@@ -88,6 +93,7 @@ def test_workers_import_frozen_shared_code(tmp_path):
             "-S",
             "-c",
             "import os; from examples.mirroropd.research import VALUE; "
+            "from examples.mirroropd.assets.paths import ASSET; print(ASSET); "
             "print(VALUE); print(os.environ['MIRROROPD_WORKSPACE'])",
         ],
         cwd=snapshot,
@@ -97,7 +103,7 @@ def test_workers_import_frozen_shared_code(tmp_path):
         timeout=30,
     )
     assert result.returncode == 0, result.stderr
-    assert result.stdout.splitlines() == ["original", str(tmp_path)]
+    assert result.stdout.splitlines() == ["original asset resolver", "original", str(tmp_path)]
     assert env["PYTHONPATH"] == str(snapshot)
     assert "MIRROROPD_WORKSPACE" not in os.environ or os.environ["MIRROROPD_WORKSPACE"] != str(tmp_path)
     with pytest.raises(FileExistsError):

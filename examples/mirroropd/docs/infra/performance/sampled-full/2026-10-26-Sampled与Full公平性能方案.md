@@ -90,8 +90,8 @@ run_perf_case() {
     local run_name="perf-${estimator}-r${reuse}-${trial}"
     local run_dir="$PWD/outputs/sampled-full-performance/$run_name"
     STUDENT_GPUS=4 TEACHER_GPUS=0 DISTILLATION_EXECUTION_MODE=shared_sync \
-    STUDENT_MODEL="$MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B" \
-    TEACHER_MODEL="$MODEL_ROOT/JustRL-DeepSeek-1.5B" DOMAIN=math \
+    STUDENT_MODEL="$(python -m examples.mirroropd.assets.paths --alias DeepSeek-R1-Distill-Qwen-1.5B)" \
+    TEACHER_MODEL="$(python -m examples.mirroropd.assets.paths --alias JustRL-DeepSeek-1.5B)" DOMAIN=math \
     TRAIN_BATCH_SIZE=64 PPO_EPOCHS="$reuse" TOTAL_TRAINING_STEPS=13 \
     TOTAL_EPOCHS=1 LEARNING_RATE=1e-6 SEED=42 TEST_FREQ=-1 SAVE_FREQ=-1 \
     MAX_PROMPT_LENGTH=4096 MAX_RESPONSE_LENGTH=7168 MAX_VAL_RESPONSE_LENGTH=31744 \

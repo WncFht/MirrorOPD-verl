@@ -20,6 +20,7 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.io import dump as write
 
 MODELS = {"student": "DeepSeek-R1-Distill-Qwen-1.5B", "justrl": "JustRL-DeepSeek-1.5B", "polaris": "Polaris-7B-Preview"}
@@ -33,7 +34,7 @@ def load_model(args, which, train=False):
         print("waiting for GPU headroom", which, round(torch.cuda.mem_get_info(args.device)[0] / 2**30, 2), flush=True)
         time.sleep(10)
     model = AutoModelForCausalLM.from_pretrained(
-        args.models / MODELS[which],
+        registered_model(MODELS[which], root=args.models),
         dtype=torch.float32 if train else torch.bfloat16,
         attn_implementation="flash_attention_2",
         local_files_only=True,
@@ -42,7 +43,7 @@ def load_model(args, which, train=False):
 
 
 def prepare(args):
-    tok = AutoTokenizer.from_pretrained(args.models / MODELS["student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(MODELS["student"], root=args.models), local_files_only=True)
     records = []
     rng = random.Random(20261027)
     for domain, path, count in [
@@ -107,7 +108,7 @@ def generate(args):
     if final.exists() and len(json.loads(final.read_text())) == len(prompts):
         print("complete rollout cache exists", args.source, flush=True)
         return
-    tok = AutoTokenizer.from_pretrained(args.models / MODELS[args.source], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(MODELS[args.source], root=args.models), local_files_only=True)
     tok.padding_side = "left"
     tok.pad_token = tok.eos_token
     model = load_model(args, args.source)

@@ -16,7 +16,7 @@
             "name": "q3-1.7",
             "repo": "Qwen/Qwen3-1.7B",
             "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-            "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+            "path": "model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
             "parent": "Qwen/Qwen3-1.7B-Base",
             "method": "posttraining",
             "sources": [
@@ -28,7 +28,7 @@
             "name": "q3-0.6",
             "repo": "Qwen/Qwen3-0.6B",
             "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
-            "path": "model/teacher-study/Qwen--Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca",
+            "path": "model/hub/Qwen--Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca",
             "parent": "Qwen/Qwen3-0.6B-Base",
             "method": "posttraining",
             "sources": [
@@ -40,7 +40,7 @@
             "name": "q3-4",
             "repo": "Qwen/Qwen3-4B",
             "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-            "path": "model/teacher-study/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+            "path": "model/hub/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
             "parent": "Qwen/Qwen3-4B-Base",
             "method": "posttraining",
             "sources": [
@@ -52,7 +52,7 @@
             "name": "q3-8",
             "repo": "Qwen/Qwen3-8B",
             "revision": "b968826d9c46dd6066d109eabc6255188de91218",
-            "path": "model/teacher-study/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+            "path": "model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
             "parent": "Qwen/Qwen3-8B-Base",
             "method": "posttraining",
             "sources": [
@@ -64,7 +64,7 @@
             "name": "polaris-4",
             "repo": "POLARIS-Project/Polaris-4B-Preview",
             "revision": "dcab747284e6f4818d8a871315f63dc1223ee394",
-            "path": "model/teacher-study/POLARIS-Project--Polaris-4B-Preview/dcab747284e6f4818d8a871315f63dc1223ee394",
+            "path": "model/hub/POLARIS-Project--Polaris-4B-Preview/dcab747284e6f4818d8a871315f63dc1223ee394",
             "parent": "Qwen/Qwen3-4B",
             "method": "rl",
             "sources": [
@@ -76,7 +76,7 @@
             "name": "e3",
             "repo": "CMU-AIRe/e3-1.7B",
             "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
-            "path": "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+            "path": "model/hub/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
             "parent": "Qwen/Qwen3-1.7B",
             "method": "rl",
             "sources": [
@@ -740,7 +740,7 @@
             "name": "student",
             "repo": "unsloth/Llama-3.2-3B-Instruct",
             "revision": "006f5dcd1393c3add266de40994ba96225e9689d",
-            "path": "model/teacher-study/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+            "path": "model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
             "parent": null,
             "method": "original_instruct",
             "sources": [
@@ -752,7 +752,7 @@
             "name": "gt",
             "repo": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH",
             "revision": "b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
-            "path": "model/teacher-study/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+            "path": "model/hub/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
             "parent": null,
             "method": "rl_ground_truth",
             "sources": [
@@ -764,7 +764,7 @@
             "name": "coreward-i",
             "repo": "TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
             "revision": "0d1e2f5ca0f62c670853c59b97650abde3608437",
-            "path": "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437",
+            "path": "model/hub/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437",
             "parent": null,
             "method": "rl_coreward_i",
             "sources": [
@@ -776,7 +776,7 @@
             "name": "arithmetic-full",
             "repo": "Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full",
             "revision": "66feb54e931c27285afc344645bf0961053ea29b",
-            "path": "model/teacher-study/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b",
+            "path": "model/hub/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b",
             "parent": null,
             "method": "candidate_full_parameter_sft",
             "sources": [
@@ -788,7 +788,7 @@
             "name": "llama-1b",
             "repo": "unsloth/Llama-3.2-1B-Instruct",
             "revision": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
-            "path": "model/teacher-study/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+            "path": "model/hub/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c",
             "parent": null,
             "method": "smaller_instruct",
             "sources": [
@@ -800,7 +800,7 @@
             "name": "llama-8b",
             "repo": "unsloth/Llama-3.1-8B-Instruct",
             "revision": "4699cc75b550f9c6f3173fb80f4703b62d946aa5",
-            "path": "model/teacher-study/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+            "path": "model/hub/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5",
             "parent": null,
             "method": "larger_instruct",
             "sources": [
@@ -812,7 +812,7 @@
             "name": "nemotron-8b",
             "repo": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1",
             "revision": "54641c1611fcff44fa4865626462445e0a153fc7",
-            "path": "model/teacher-study/nvidia--Llama-3.1-Nemotron-Nano-8B-v1/54641c1611fcff44fa4865626462445e0a153fc7",
+            "path": "model/hub/nvidia--Llama-3.1-Nemotron-Nano-8B-v1/54641c1611fcff44fa4865626462445e0a153fc7",
             "parent": null,
             "method": "sft_rl_checkpoint_merge",
             "sources": [

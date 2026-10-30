@@ -6,7 +6,7 @@
       "name": "q3-1.7",
       "repo": "Qwen/Qwen3-1.7B",
       "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
       "parent": "Qwen/Qwen3-1.7B-Base",
       "method": "posttraining",
       "sources": [
@@ -18,7 +18,7 @@
       "name": "q3-base",
       "repo": "Qwen/Qwen3-1.7B-Base",
       "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-      "path": "model/teacher-study/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "path": "model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
       "parent": null,
       "method": "pretraining",
       "sources": [
@@ -30,7 +30,7 @@
       "name": "e3",
       "repo": "CMU-AIRe/e3-1.7B",
       "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
-      "path": "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "path": "model/hub/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
       "parent": "Qwen/Qwen3-1.7B",
       "method": "rl",
       "sources": [
@@ -43,7 +43,7 @@
       "name": "grpo-kl",
       "repo": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning",
       "revision": "851ee853018af52495d73a95e3de51470af6f17b",
-      "path": "model/teacher-study/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+      "path": "model/hub/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
       "parent": "Qwen/Qwen3-1.7B",
       "method": "rl",
       "sources": [
@@ -55,7 +55,7 @@
       "name": "sft-gsm8k",
       "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
       "revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
-      "path": "model/teacher-study/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "path": "model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
       "parent": "Qwen/Qwen3-1.7B",
       "method": "sft",
       "sources": [
@@ -67,7 +67,7 @@
       "name": "sft-deepmath",
       "repo": "Thinking-Space/Qwen3-1.7B-SFT",
       "revision": "f0065babe7440257d7db331a5aa442ef7c3cf266",
-      "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "path": "model/hub/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
       "parent": "Qwen/Qwen3-1.7B-Base",
       "method": "sft",
       "sources": [
@@ -80,7 +80,7 @@
       "name": "base-opd",
       "repo": "Thinking-Space/Qwen3-1.7B-Base-OPD",
       "revision": "4ad294531545b51fbcfbd1b0ded387ba237db57c",
-      "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
+      "path": "model/hub/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
       "parent": "Qwen/Qwen3-1.7B-Base",
       "method": "opd",
       "sources": [
@@ -93,7 +93,7 @@
       "name": "q3-4",
       "repo": "Qwen/Qwen3-4B",
       "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-      "path": "model/teacher-study/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+      "path": "model/hub/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
       "parent": "Qwen/Qwen3-4B-Base",
       "method": "posttraining",
       "sources": [
@@ -105,7 +105,7 @@
       "name": "q3-8",
       "repo": "Qwen/Qwen3-8B",
       "revision": "b968826d9c46dd6066d109eabc6255188de91218",
-      "path": "model/teacher-study/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+      "path": "model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
       "parent": "Qwen/Qwen3-8B-Base",
       "method": "posttraining",
       "sources": [
@@ -117,7 +117,7 @@
       "name": "q3-4-thinking2507",
       "repo": "Qwen/Qwen3-4B-Thinking-2507",
       "revision": "768f209d9ea81521153ed38c47d515654e938aea",
-      "path": "model/teacher-study/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea",
+      "path": "model/hub/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea",
       "parent": null,
       "method": "posttraining",
       "sources": [
@@ -129,7 +129,7 @@
       "name": "rlvr-gsm8k",
       "repo": "tocsa/qwen3-1.7b-rlvr-gsm8k",
       "revision": "64c6aeecce36cf445d496ef0cc86d6164c52aec7",
-      "path": "model/teacher-study/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "path": "model/hub/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7",
       "parent": "Qwen/Qwen3-1.7B",
       "method": "rl",
       "sources": [
@@ -141,7 +141,7 @@
       "name": "base-gt-math",
       "repo": "TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH",
       "revision": "679b8b3a531200f6748eb782c265c83a58b1417d",
-      "path": "model/teacher-study/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d",
+      "path": "model/hub/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d",
       "parent": "Qwen/Qwen3-1.7B-Base",
       "method": "rl",
       "sources": [
@@ -153,7 +153,7 @@
       "name": "coreward-i",
       "repo": "TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH",
       "revision": "5d3c87b84144073a4552d786d3d97288d6c7abec",
-      "path": "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "path": "model/hub/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec",
       "parent": "Qwen/Qwen3-1.7B-Base",
       "method": "rl",
       "sources": [
@@ -165,7 +165,7 @@
       "name": "coreward-ii",
       "repo": "TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH",
       "revision": "381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
-      "path": "model/teacher-study/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "path": "model/hub/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
       "parent": "Qwen/Qwen3-1.7B-Base",
       "method": "rl",
       "sources": [
