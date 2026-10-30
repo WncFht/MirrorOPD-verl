@@ -73,3 +73,21 @@ def test_offline_grade_recovery_checks_raw_text(tmp_path):
     (tmp_path / "records.jsonl").write_text(json.dumps(graded | {"output": "replacement"}) + "\n")
     with pytest.raises(ValueError, match="changed the saved response"):
         grade_pending(tmp_path, prompts, profile)
+
+
+def test_scientific_audit_rejects_missing_readouts(tmp_path):
+    from examples.mirroropd.research.studies.prefix_fusion.audit import audit_readouts
+
+    errors = audit_readouts(tmp_path, "J")
+    assert len([e for e in errors if "missing/invalid scientific artifact" in e]) == 9
+    assert any("Adam" in e for e in errors)
+
+
+def test_queue_keeps_model_pairs_on_allocated_cards():
+    from examples.mirroropd.research.studies.prefix_fusion.queue import execution
+
+    for pair, gpu, gb in [("J", 6, 24), ("P", 7, 32)]:
+        settings = execution(pair, gpu, "/study")
+        assert settings["FUSION_GPUS"] == str(gpu)
+        assert settings["FUSION_KV_BYTES"] == str(gb * 1024**3)
+        assert settings["PREFIX_FULL_KL_BACKEND"] == "precompute_fused"

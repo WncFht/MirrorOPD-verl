@@ -157,6 +157,7 @@ def evaluate(prepared, assets, weights, out, panel="test", smoke=False):
         llm = LLM(
             model=str(weights),
             dtype="bfloat16",
+            generation_config="vllm",
             tensor_parallel_size=1,
             max_model_len=profile.model_length,
             max_num_batched_tokens=profile.model_length,
