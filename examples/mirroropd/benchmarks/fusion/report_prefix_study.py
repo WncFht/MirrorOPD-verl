@@ -23,6 +23,25 @@ from pathlib import Path
 import yaml
 
 ARMS = {"S0": "Initial student", "S": "Current student", "LM": "Logit mix", "TM": "Trajectory mix", "T": "Teacher"}
+STUDY_COMMIT = "91674e68941c1be634cf62231711a1df753e28a9"
+
+
+def completion_matches(audit, pair, arm, exit_code, source_hashes):
+    """Require a successful formal audit of the exact metrics/config being exported."""
+    witnesses = {item["path"]: item["sha256"] for item in audit.get("witnesses", [])}
+    return (
+        exit_code == 0
+        and audit.get("controller_exit_code") == 0
+        and audit.get("passed") is True
+        and audit.get("formal_complete") is True
+        and audit.get("mode") == "formal"
+        and (audit.get("pair"), audit.get("arm")) == (pair, arm)
+        and audit.get("source_commit") == STUDY_COMMIT
+        and audit.get("applied_updates") == 640
+        and audit.get("errors") == []
+        and len(source_hashes) == 2
+        and all(witnesses.get(path) == digest for path, digest in source_hashes.items())
+    )
 
 
 def summarize_outers(rows):
@@ -96,8 +115,10 @@ def snapshot(workspace, out):
             run = repo / "outputs" / name
             path = run / "metrics.jsonl"
             observations = []
+            source_hashes = {}
             if path.exists():
                 raw = path.read_bytes()
+                source_hashes[str(path.resolve())] = hashlib.sha256(raw).hexdigest()
                 complete = raw if not raw or raw.endswith(b"\n") else raw[: raw.rfind(b"\n") + 1]
                 observations = [json.loads(line)["data"] for line in complete.splitlines()]
                 sources.append(
@@ -112,6 +133,7 @@ def snapshot(workspace, out):
             if updates:
                 config_path = run / "resolved_config.yaml"
                 raw_config = config_path.read_bytes()
+                source_hashes[str(config_path.resolve())] = hashlib.sha256(raw_config).hexdigest()
                 config = yaml.safe_load(raw_config)
                 trainer, actor = config["trainer"], config["actor_rollout_ref"]["actor"]
                 policy = config["rollout_policy"]
@@ -181,10 +203,18 @@ def snapshot(workspace, out):
                     }
                 )
             exit_file, audit_file = control / f"{arm}-exit.json", control / f"{arm}-audit.json"
-            exit_code = json.loads(exit_file.read_text())["exit_code"] if exit_file.exists() else None
+            exit_record = json.loads(exit_file.read_text()) if exit_file.exists() else {}
+            exit_code = exit_record.get("exit_code")
+            audit = json.loads(audit_file.read_text()) if audit_file.exists() else None
+            for evidence in (exit_file, audit_file):
+                if evidence.exists():
+                    sources.append({"path": str(evidence), "sha256": hashlib.sha256(evidence.read_bytes()).hexdigest()})
             audited = (
-                json.loads(audit_file.read_text()).get("formal_complete", False) and valid and len(updates) == 640
-                if audit_file.exists()
+                completion_matches(audit, pair, arm, exit_code, source_hashes)
+                and exit_record.get("run") == name
+                and valid
+                and len(updates) == 640
+                if audit is not None
                 else False
             )
             status = (
@@ -192,6 +222,8 @@ def snapshot(workspace, out):
                 if audited
                 else "failed"
                 if exit_code not in (None, 0) or not valid
+                else "audit_mismatch"
+                if audit is not None
                 else "finished_pending_audit"
                 if exit_code == 0
                 else "running"

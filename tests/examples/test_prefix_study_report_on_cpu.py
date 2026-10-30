@@ -8,7 +8,12 @@ import json
 
 import pytest
 
-from examples.mirroropd.benchmarks.fusion.report_prefix_study import load_snapshot, summarize_outers
+from examples.mirroropd.benchmarks.fusion.report_prefix_study import (
+    STUDY_COMMIT,
+    completion_matches,
+    load_snapshot,
+    summarize_outers,
+)
 
 
 def batch(outer, start):
@@ -81,3 +86,36 @@ def test_frozen_replay_is_independent_of_live_sources_and_detects_changed_data(t
     path.write_text(path.read_text().replace("synthetic", "tampered", 1))
     with pytest.raises(ValueError, match="hash"):
         load_snapshot(tmp_path)
+
+
+@pytest.mark.parametrize(
+    "fault", [None, "missing_exit", "failed_exit", "stale_data", "wrong_arm", "wrong_mode", "failed"]
+)
+def test_completion_requires_exit_and_matching_formal_evidence(fault):
+    sources = {"/run/metrics.jsonl": "metrics-hash", "/run/resolved_config.yaml": "config-hash"}
+    audit = dict(
+        controller_exit_code=0,
+        passed=True,
+        formal_complete=True,
+        mode="formal",
+        pair="J",
+        arm="S0",
+        source_commit=STUDY_COMMIT,
+        applied_updates=640,
+        errors=[],
+        witnesses=[dict(path=path, sha256=digest) for path, digest in sources.items()],
+    )
+    exit_code = 0
+    if fault == "missing_exit":
+        exit_code = None
+    elif fault == "failed_exit":
+        exit_code = 1
+    elif fault == "stale_data":
+        sources["/run/metrics.jsonl"] = "changed-after-audit"
+    elif fault == "wrong_arm":
+        audit["arm"] = "T"
+    elif fault == "wrong_mode":
+        audit["mode"] = "profile"
+    elif fault == "failed":
+        audit["passed"] = False
+    assert completion_matches(audit, "J", "S0", exit_code, sources) == (fault is None)
