@@ -140,7 +140,9 @@ def test_arbitrary_fixed_pair_and_current_right(tmp_path, mode):
 
 def test_same_fixed_binding_folds_but_current_initial_do_not(tmp_path):
     policy = {"mode": "token_mixture", "left": {"kind": "initial"}, "right": {"kind": "initial"}}
-    same = plan(tmp_path, RolloutPolicyConfig.parse(policy))
+    parsed = RolloutPolicyConfig.parse(policy)
+    assert not parsed.requires_fusion
+    same = plan(tmp_path, parsed)
     assert same.normalization == "same_binding" and same.resolved_mode == "single"
     policy["left"] = {"kind": "current"}
     distinct = plan(tmp_path, RolloutPolicyConfig.parse(policy))

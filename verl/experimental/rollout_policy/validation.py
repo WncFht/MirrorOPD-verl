@@ -121,13 +121,14 @@ def validate_policy(config):
     tokenizers = [AutoTokenizer.from_pretrained(path, local_files_only=True) for path in paths]
     for tokenizer, model_config in zip(tokenizers[1:], model_configs[1:], strict=True):
         validate_tokenizers(tokenizers[0], tokenizer, model_configs[0].vocab_size, model_config.vocab_size)
+    fusion_needed = policy.requires_fusion and not bindings["left"].same_model(bindings["right"])
     components = []
-    if policy.requires_fusion:
+    if fusion_needed:
         first, second = bindings["left"], bindings["right"]
         if second.kind == "current":
             first, second = second, first
         components = [AutoConfig.from_pretrained(b.path, local_files_only=True) for b in (first, second)]
-    if policy.requires_fusion and policy.execution.backend == "hf_fusion":
+    if fusion_needed and policy.execution.backend == "hf_fusion":
         import importlib.util
 
         import torch
@@ -152,7 +153,7 @@ def validate_policy(config):
             raise ValueError("Production token fusion requires FlashAttention 2 and Triton")
         if not hasattr(torch.backends.cuda.matmul, "allow_bf16_reduced_precision_reduction_split_k"):
             raise ValueError("Production token fusion requires Torch >=2.10 with independent split-K control")
-    if policy.requires_fusion and policy.execution.backend == "vllm_fusion":
+    if fusion_needed and policy.execution.backend == "vllm_fusion":
         from importlib.metadata import version
 
         from packaging.version import Version

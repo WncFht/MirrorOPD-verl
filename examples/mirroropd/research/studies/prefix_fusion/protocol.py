@@ -1,6 +1,10 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Scientific identities are separate from the historical training-only probes."""
+"""Frozen v2 scientific identities, not executable launcher configuration.
+
+Keep these original record fields stable: changing their spelling changes the
+protocol hash of ongoing experiments. New launches use the unified model refs.
+"""
 
 from examples.mirroropd.research.core.artifacts import fingerprint
 

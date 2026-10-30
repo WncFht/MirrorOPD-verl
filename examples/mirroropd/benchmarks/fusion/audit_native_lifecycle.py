@@ -184,7 +184,7 @@ def main():
     parser.add_argument("--commit", required=True)
     parser.add_argument("--save", type=int)
     parser.add_argument("--world-size", type=int, default=1)
-    parser.add_argument("--physical-gpus", nargs="+", type=int, choices=[6, 7], default=[7])
+    parser.add_argument("--physical-gpus", nargs="+", type=int, choices=range(8), default=[7])
     parser.add_argument("--requests", type=int, default=2)
     parser.add_argument("--previous-actor-checkpoint", type=Path, help="Compare saved actor shard values after resume")
     parser.add_argument("--out", type=Path, required=True)

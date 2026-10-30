@@ -171,8 +171,10 @@ class RolloutPolicyConfig:
 
     @property
     def requires_fusion(self):
-        return self.mode == "token_mixture" and not (
-            self.right_weight.kind == "constant" and self.right_weight.start in (0, 1)
+        return (
+            self.mode == "token_mixture"
+            and self.references["left"] != self.references["right"]
+            and not (self.right_weight.kind == "constant" and self.right_weight.start in (0, 1))
         )
 
     @property
