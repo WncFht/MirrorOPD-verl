@@ -1,0 +1,31 @@
+{
+  "inventory": [
+    {
+      "family": "Qwen3",
+      "key": "rlvr-gsm8k",
+      "repo": "tocsa/qwen3-1.7b-rlvr-gsm8k",
+      "revision": "64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "subfolder": null,
+      "weights_present": true,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-study/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7"
+    }
+  ],
+  "pairs": [
+    {
+      "family": "Qwen3",
+      "arm": "T-C-RLVR",
+      "student": "q3-1.7",
+      "teacher": "rlvr-gsm8k",
+      "steps": 320,
+      "support": "native_thinking"
+    },
+    {
+      "family": "Qwen3",
+      "arm": "NT-C-rlvr-gsm8k",
+      "student": "q3-1.7-nonthinking",
+      "teacher": "rlvr-gsm8k",
+      "steps": 320,
+      "support": "native_nonthinking"
+    }
+  ]
+}

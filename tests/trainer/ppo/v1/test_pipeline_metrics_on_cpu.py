@@ -141,6 +141,7 @@ def _trainer():
         }
     )
     trainer.trainer_mode = "sync"
+    trainer.readout_callback = None  # The fixture bypasses __init__; use its default disabled readout.
     trainer.global_steps = 5
     trainer.agent_loop_manager = MagicMock()
     return trainer

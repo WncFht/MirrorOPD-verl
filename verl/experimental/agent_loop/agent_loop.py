@@ -644,6 +644,11 @@ class AgentLoopWorker:
 
         # override sampling params for validation
         if validate:
+            from verl.workers.config.rollout import validation_repetition_detection
+
+            repetition = validation_repetition_detection(config)
+            if repetition is not None:
+                sampling_params["repetition_detection"] = repetition
             sampling_params["top_p"] = config.val_kwargs.top_p
             sampling_params["top_k"] = config.val_kwargs.top_k
             sampling_params["temperature"] = config.val_kwargs.temperature
@@ -715,6 +720,8 @@ class AgentLoopWorker:
     ) -> _InternalAgentLoopOutput:
         if trajectory["validate"] and "max_tokens" in sampling_params and agent_name != "single_turn_agent":
             raise ValueError("val_kwargs.max_tokens currently supports only single_turn_agent")
+        if "repetition_detection" in sampling_params and agent_name != "single_turn_agent":
+            raise ValueError("val_kwargs.repetition_detection currently supports only single_turn_agent")
         with rollout_trace_attr(
             step=trajectory["step"],
             sample_index=trajectory["sample_index"],

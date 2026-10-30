@@ -3,6 +3,7 @@
 """Exact native-support RKL VJP and batch-resident frozen teacher probabilities."""
 
 import gc
+from pathlib import Path
 from types import SimpleNamespace
 
 import torch
@@ -26,18 +27,31 @@ def training_mode(model):
             module.eval()
 
 
-def teacher_cache(teacher, rows):
+def teacher_cache(teacher, rows, *, cache_root=None):
     old = OLD_CACHE / "teachers" / teacher / "r1"
     directory = old if (old / "complete.json").exists() else CACHE / "teachers" / teacher / "r1"
-    if not (directory / "complete.json").exists():
+    if cache_root is not None:
+        source = directory
+        directory = Path(cache_root) / "teachers" / teacher / "r1"
+        if directory.resolve() == source.resolve():
+            raise ValueError("Expanded caches must not overwrite historical teacher artifacts")
+        directory.mkdir(parents=True, exist_ok=True)
+        if (source / "complete.json").exists():
+            assert read(source / "complete.json")["teacher"] == list(MODELS[teacher])
+            for name in ["head.pt", *(f"{r['id']:04d}.pt" for r in rows)]:
+                if (source / name).exists() and not (directory / name).exists():
+                    (directory / name).symlink_to((source / name).resolve())
+    if not (directory / "complete.json").exists() or any(not (directory / f"{r['id']:04d}.pt").exists() for r in rows):
         directory.mkdir(parents=True, exist_ok=True)
         model = load(teacher, path=model_path(teacher))
-        torch.save(model.lm_head.weight.detach().cpu(), directory / "head.pt")
+        if not (directory / "head.pt").exists():
+            hf_rkl.save_tensor(directory / "head.pt", model.lm_head.weight.detach().cpu())
         with torch.no_grad():
             for i, row in enumerate(rows):
                 path = directory / f"{row['id']:04d}.pt"
                 if not path.exists():
-                    torch.save(
+                    hf_rkl.save_tensor(
+                        path,
                         dict(
                             prompt_ids=row["prompt_ids"],
                             response_ids=row["response_ids"],
@@ -45,7 +59,6 @@ def teacher_cache(teacher, rows):
                             source=row["source"],
                             hidden=hidden(model, row).cpu(),
                         ),
-                        path,
                     )
                 if i % 32 == 0:
                     print("CACHE", teacher, i, len(rows), flush=True)

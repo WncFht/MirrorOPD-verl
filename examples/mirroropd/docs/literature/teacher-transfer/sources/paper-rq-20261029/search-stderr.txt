@@ -1,0 +1,14 @@
+[arxiv] started (4 queries)
+[open_alex] started (4 queries)
+[semantic_scholar] started (4 queries)
+[arxiv] finished: 35 paper(s), 0 diagnostic(s)
+[open_alex] finished: 35 paper(s), 0 diagnostic(s)
+[semantic_scholar] HTTP 429; retrying in 3s (attempt 2/4)
+[semantic_scholar] HTTP 429; retrying in 3s (attempt 2/4)
+[semantic_scholar] HTTP 429; retrying in 6s (attempt 3/4)
+[semantic_scholar] HTTP 429; retrying in 12s (attempt 4/4)
+[semantic_scholar] Error on query 'cross-origin distillation': Semantic Scholar anonymous access was rate-limited (HTTP 429).
+[semantic_scholar] remaining queries skipped for this run.
+[semantic_scholar] finished: 35 paper(s), 1 diagnostic(s)
+report saved: /tmp/mirroropd-rq-paper-search-20261029.md
+run log saved: /root/.local/share/paper-search/logs/2026-10/20261029T111552Z-967c8d4d/run.json

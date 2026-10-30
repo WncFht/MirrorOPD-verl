@@ -1,0 +1,32 @@
+{
+  "fingerprint": "9b398cc2c950b238073d131e28381c548a3b705814c11c4ae34605213574fc9a",
+  "inputs": {
+    "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+    "weights": "124ece42afdf5879d54d3ce335caac494a5858f874d970f8de5587c503f6947e",
+    "step": 1280,
+    "bank": "4937490ceac3f9e5a21bcfa76b038872a0ce7e4035298f930ebef4233eb646fa",
+    "groups": [
+      "M01",
+      "M02",
+      "M03",
+      "M04",
+      "Code01",
+      "Code02",
+      "IF01",
+      "IF02"
+    ],
+    "horizon": 4096,
+    "source": "c3714852411919f9a001d798bf00a4e6665ab2a9af0765f12cd2871b3467a594",
+    "engine": "47ef5e01c86e694d3940f79c5250a3af6bfb95d16fdc24eac4e64398e4ec1c0c",
+    "backend": "fc24c9b2ee6e7904ecfe9f502c34c61adf59385864a2820a896dd8d05905df8d"
+  },
+  "completed_at": 1793307561.0418694,
+  "prefix_acceptance": {
+    "prompts": 128,
+    "matched": 128,
+    "mismatched_ids": []
+  },
+  "scientific_updates": 0,
+  "interpretation": "frozen S0 held-out extension; early=0:1024, middle=1024:2048, late=2048:4096"
+}

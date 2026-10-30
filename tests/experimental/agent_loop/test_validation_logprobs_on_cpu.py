@@ -20,13 +20,20 @@ from verl.protocol import DataProto
 def rollout_config(calculate_log_probs):
     return OmegaConf.create(
         {
+            "name": "vllm",
             "temperature": 1.0,
             "top_p": 1.0,
             "top_k": -1,
             "calculate_log_probs": calculate_log_probs,
             "topk_log_probs": 0,
             "agent": {"default_agent_loop": "single_turn_agent"},
-            "val_kwargs": {"temperature": 0.7, "top_p": 0.9, "top_k": -1, "max_tokens": 31744},
+            "val_kwargs": {
+                "temperature": 0.7,
+                "top_p": 0.9,
+                "top_k": -1,
+                "max_tokens": 31744,
+                "repetition_detection": {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8},
+            },
         }
     )
 
@@ -52,6 +59,9 @@ def test_tq_sampling_keeps_training_logprobs_and_validation_budget(monkeypatch, 
     assert params["temperature"] == (0.7 if validate else 1.0)
     assert params["top_p"] == (0.9 if validate else 1.0)
     assert params.get("max_tokens") == (31744 if validate else None)
+    assert ("repetition_detection" in params) == validate
+    if validate:
+        assert params["repetition_detection"] == {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}
 
 
 @pytest.mark.parametrize("validate", [False, True])
@@ -78,3 +88,6 @@ def test_legacy_sampling_has_the_same_probability_contract(monkeypatch, validate
     assert params["temperature"] == (0.7 if validate else 1.0)
     assert params["top_p"] == (0.9 if validate else 1.0)
     assert params.get("max_tokens") == (31744 if validate else None)
+    assert ("repetition_detection" in params) == validate
+    if validate:
+        assert params["repetition_detection"] == {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}

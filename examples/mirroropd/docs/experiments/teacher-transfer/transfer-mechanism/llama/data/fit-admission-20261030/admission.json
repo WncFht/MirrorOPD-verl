@@ -1,0 +1,133 @@
+{
+  "study": "llama-reasoning-off-stage320-20261030",
+  "arms": 6,
+  "updates_per_arm": 320,
+  "admitted_for": "fixed-state native-support fitting after numerical/memory gate",
+  "teachers": [
+    {
+      "teacher": "gt",
+      "rows": 448,
+      "max_sequence_positions": 1363,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "llama3",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/e054d818bf5297732ec85ba0849fb93a8dcbafb6bff7301f27b7d24816f6c756"
+    },
+    {
+      "teacher": "coreward-i",
+      "rows": 448,
+      "max_sequence_positions": 1363,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "llama3",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/d16005d3cb187279968cc7bdb661e59b036181adb78dc9f59c0f9802ac0a4641"
+    },
+    {
+      "teacher": "arithmetic-full",
+      "rows": 448,
+      "max_sequence_positions": 1363,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "llama3",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/cb01b14952133f209af1c0e72b8544f73966c842116cf17146017632f8f65492"
+    },
+    {
+      "teacher": "llama-1b",
+      "rows": 448,
+      "max_sequence_positions": 1363,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "llama3",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/112f57fa2dad788d407dd186be980a9e9f8d6906157be2f50c62fa4465b7a39d"
+    },
+    {
+      "teacher": "llama-8b",
+      "rows": 448,
+      "max_sequence_positions": 1363,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "llama3",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/c16eac94cc15fa18f7cca9f38fc2d420c4b51e2f98d2993813e8b54abd2866a7"
+    },
+    {
+      "teacher": "nemotron-8b",
+      "rows": 448,
+      "max_sequence_positions": 1363,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "llama3",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/5c55a534cb430704472e4875f70915a3e8129e38cf474361dede868941885988"
+    }
+  ],
+  "limits": [
+    "Nemotron shared system includes fixed dates absent from its native template",
+    "Arithmetic SFT source dataset disclosure remains incomplete",
+    "Common off instruction is shared across all teachers; no private prefix substitution"
+  ]
+}

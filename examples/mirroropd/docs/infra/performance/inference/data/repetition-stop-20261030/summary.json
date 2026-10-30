@@ -1,0 +1,116 @@
+{
+  "responses": 1280,
+  "original_correct": 572,
+  "original_tokens": 10726465,
+  "profiles": {
+    "short-8": {
+      "min_pattern_size": 1,
+      "max_pattern_size": 32,
+      "min_count": 8,
+      "hits": 31,
+      "hit_original_stop": 16,
+      "hit_original_cap": 15,
+      "correct_lost": 4,
+      "correct_gained": 0,
+      "original_correct_hit": 4,
+      "tokens_saved": 556480
+    },
+    "block64-8": {
+      "min_pattern_size": 16,
+      "max_pattern_size": 64,
+      "min_count": 8,
+      "hits": 27,
+      "hit_original_stop": 8,
+      "hit_original_cap": 19,
+      "correct_lost": 1,
+      "correct_gained": 0,
+      "original_correct_hit": 1,
+      "tokens_saved": 601405
+    },
+    "block128-8": {
+      "min_pattern_size": 16,
+      "max_pattern_size": 128,
+      "min_count": 8,
+      "hits": 51,
+      "hit_original_stop": 18,
+      "hit_original_cap": 33,
+      "correct_lost": 1,
+      "correct_gained": 1,
+      "original_correct_hit": 2,
+      "tokens_saved": 1090015
+    },
+    "block-4": {
+      "min_pattern_size": 16,
+      "max_pattern_size": 128,
+      "min_count": 4,
+      "hits": 59,
+      "hit_original_stop": 26,
+      "hit_original_cap": 33,
+      "correct_lost": 5,
+      "correct_gained": 1,
+      "original_correct_hit": 5,
+      "tokens_saved": 1143537
+    },
+    "block256-4": {
+      "min_pattern_size": 16,
+      "max_pattern_size": 256,
+      "min_count": 4,
+      "hits": 91,
+      "hit_original_stop": 34,
+      "hit_original_cap": 57,
+      "correct_lost": 6,
+      "correct_gained": 1,
+      "original_correct_hit": 9,
+      "tokens_saved": 1884970
+    },
+    "block-6": {
+      "min_pattern_size": 16,
+      "max_pattern_size": 256,
+      "min_count": 6,
+      "hits": 84,
+      "hit_original_stop": 27,
+      "hit_original_cap": 57,
+      "correct_lost": 2,
+      "correct_gained": 1,
+      "original_correct_hit": 6,
+      "tokens_saved": 1832324
+    },
+    "block-8": {
+      "min_pattern_size": 16,
+      "max_pattern_size": 256,
+      "min_count": 8,
+      "hits": 83,
+      "hit_original_stop": 26,
+      "hit_original_cap": 57,
+      "correct_lost": 2,
+      "correct_gained": 1,
+      "original_correct_hit": 6,
+      "tokens_saved": 1802087
+    },
+    "block-16": {
+      "min_pattern_size": 16,
+      "max_pattern_size": 256,
+      "min_count": 16,
+      "hits": 82,
+      "hit_original_stop": 26,
+      "hit_original_cap": 56,
+      "correct_lost": 2,
+      "correct_gained": 1,
+      "original_correct_hit": 6,
+      "tokens_saved": 1717214
+    },
+    "block512-8": {
+      "min_pattern_size": 16,
+      "max_pattern_size": 512,
+      "min_count": 8,
+      "hits": 129,
+      "hit_original_stop": 40,
+      "hit_original_cap": 89,
+      "correct_lost": 3,
+      "correct_gained": 1,
+      "original_correct_hit": 9,
+      "tokens_saved": 2754403
+    }
+  },
+  "baseline_regrade_disagreements": 0
+}

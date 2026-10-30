@@ -1,0 +1,32 @@
+{
+  "kind": "offline token-prefix replay; no GPU generation or wall-time speedup measured",
+  "date": "2026-10-30",
+  "vllm": "0.25.1+cu129",
+  "tokenizer": "Qwen3-1.7B-Base",
+  "model_pair": "Qwen3-1.7B-Base <- Qwen3-30B-A3B-Instruct-2507",
+  "source_archive": "wandb-logs/MirrorOPD-verl/analysis/e54-mdpo-20261029/runs",
+  "runs": [
+    "e54-topd-mdpo-20261029",
+    "e54-mdpo-sweep-20261029"
+  ],
+  "evaluation": "10 arms x (64 MATH-500 + 64 heldout DAPO), n=1; repeated prompts across arms",
+  "sampling": {
+    "math_temperature": 0.7,
+    "math_top_p": 0.9,
+    "dapo_temperature": 1.0,
+    "dapo_top_p": 1.0,
+    "cap": 31744
+  },
+  "stop_ids": [
+    151643,
+    151645
+  ],
+  "min_tokens": 0,
+  "scoring": "existing one_shot_opd.math.reward_func; regraded originals for union of all detected rows",
+  "limitations": [
+    "historical short-study model/template, not E55-E57 long-run outputs",
+    "parameter exploration on same responses, not heldout validation",
+    "verifier judgments do not establish valid reasoning",
+    "two math verifier comparison timeouts used existing scoring behavior; baseline regrade disagreements=0"
+  ]
+}

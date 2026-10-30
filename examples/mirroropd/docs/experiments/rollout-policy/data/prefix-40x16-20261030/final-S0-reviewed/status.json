@@ -1,0 +1,182 @@
+{
+  "captured_at_utc": "2026-10-30T10:06:49.807256+00:00",
+  "scope": "Legacy training diagnostics; no common held-out evaluation",
+  "legacy_protocol_retired": true,
+  "states": [
+    {
+      "pair": "J",
+      "arm": "S0",
+      "run": "prefix-formal-J-S0-study40x16-v1",
+      "status": "accepted",
+      "recorded_updates": 640,
+      "target_updates": 640,
+      "recorded_outers": 40,
+      "exit_code": 0,
+      "formal_complete": true
+    },
+    {
+      "pair": "J",
+      "arm": "S",
+      "run": "prefix-formal-J-S-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "J",
+      "arm": "PM",
+      "run": "prefix-formal-J-PM-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "J",
+      "arm": "LM",
+      "run": "prefix-formal-J-LM-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "J",
+      "arm": "TM",
+      "run": "prefix-formal-J-TM-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "J",
+      "arm": "T",
+      "run": "prefix-formal-J-T-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "S0",
+      "run": "prefix-formal-P-S0-study40x16-v1",
+      "status": "accepted",
+      "recorded_updates": 640,
+      "target_updates": 640,
+      "recorded_outers": 40,
+      "exit_code": 0,
+      "formal_complete": true
+    },
+    {
+      "pair": "P",
+      "arm": "S",
+      "run": "prefix-formal-P-S-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "PM",
+      "run": "prefix-formal-P-PM-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "LM",
+      "run": "prefix-formal-P-LM-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "TM",
+      "run": "prefix-formal-P-TM-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "T",
+      "run": "prefix-formal-P-T-study40x16-v1",
+      "status": "retired_not_started",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    }
+  ],
+  "sources": [
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/metrics.jsonl",
+      "snapshot_sha256": "daada9bcb70d3ebbf2719e30cd60ebd91b261d95d881e00f8c571de2ad8d4bf0",
+      "bytes": 1627921,
+      "incomplete_tail_omitted": false
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/resolved_config.yaml",
+      "sha256": "e6c9572fba98cf217636fb31de3210c8277ace9d6a7c1c7aa8955db6e90ffbbe"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/vllm-fusion-20261029/formal-prefix-study-J-01/S0-exit.json",
+      "sha256": "4a4ec2b9406f5f3b1930978a6018943dde5f552b7e54d62d919e9d93cb95d7cd"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/vllm-fusion-20261029/formal-prefix-study-J-01/S0-audit.json",
+      "sha256": "8c2c6241a416553ee90abd4563374dfb00dfec5dd4c57c9ca7c9715a14c118be"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/metrics.jsonl",
+      "snapshot_sha256": "25808b0c80769c69d2413cd46f31f2a6fa441f667ee2d676138ee0541096a375",
+      "bytes": 1612980,
+      "incomplete_tail_omitted": false
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/resolved_config.yaml",
+      "sha256": "0c1ae5ad1bf2f0793165f7e58cab4b1fbac74335fd4961a42e832aa52ba47357"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/vllm-fusion-20261029/formal-prefix-study-P-01/S0-exit.json",
+      "sha256": "f42984b63aa7161109071a813b32217fdef42a46289669fef62be43fc68b539e"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/vllm-fusion-20261029/formal-prefix-study-P-01/S0-audit.json",
+      "sha256": "e7683aaf30c04ff752fc7aec5e76266829288db037e0fbbb5f00f2ee0fbba81d"
+    }
+  ],
+  "expected_runs": 12,
+  "all_runs_complete": false,
+  "recorded_update_rows": 1280,
+  "invalid_update_rows": 0,
+  "updates_csv_sha256": "ce2470d3ef8010e8aa33852981e9bc619c404fab4cd423dc9d21bb96518d5027"
+}

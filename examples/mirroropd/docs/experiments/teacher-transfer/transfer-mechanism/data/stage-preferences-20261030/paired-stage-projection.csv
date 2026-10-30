@@ -1,0 +1,17 @@
+panel,a,b,identifiable,later_minus_earlier_projection,ci_low,ci_high,unstable_bootstrap_draws,inference
+train_ad,L1,L2,True,0.9609194707241292,0.9304097502365382,0.9976935543903839,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+train_ad,L2,L3,True,0.8644732386890799,0.8204288604591223,0.9170708099065763,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+train_eh,L1,L2,True,0.8700429959331873,0.8548276303846061,0.8848372642834069,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+train_eh,L2,L3,True,0.7547443081146153,0.721748088106818,0.7905998581268322,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+train_it,L1,L2,True,0.8801674408704039,0.8712491361638365,0.8887895074976955,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+train_it,L2,L3,True,0.7581589462213506,0.7399178200992513,0.7766566189122482,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+held_math,L1,L2,True,0.7313366578814171,0.7145260720639994,0.7499747701135727,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+held_math,L2,L3,True,0.568151216159604,0.5393085424847012,0.5975576051459337,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+held_code,L1,L2,True,0.5433118546116681,0.4995714425702964,0.5881122001173513,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+held_code,L2,L3,True,0.36770896016112026,0.32597371172008127,0.40697319549205163,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+held_if,L1,L2,True,0.4780234963239009,0.4256990419954959,0.5200462565879541,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+held_if,L2,L3,True,0.1041771252431221,0.0759826798766607,0.13765670127472954,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+train_all,L1,L2,True,0.8928010346268612,0.8833016654793661,0.9028320953609125,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+train_all,L2,L3,True,0.7776543374669703,0.7612945753663802,0.7948346687587975,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+held_all,L1,L2,True,0.6966996603180237,0.6769322848714909,0.7150719887635868,0,paired prompt bootstrap; 5000 draws; seed42; one training seed
+held_all,L2,L3,True,0.4645671717119449,0.4208582171850014,0.5048052511508144,0,paired prompt bootstrap; 5000 draws; seed42; one training seed

@@ -338,6 +338,12 @@ def validate_config(
     # Validate the response budget before starting workers. Per-row agent_name
     # overrides are checked by AgentLoopWorker as well.
     rollout = config.actor_rollout_ref.rollout
+    from verl.workers.config.rollout import validation_repetition_detection
+
+    if validation_repetition_detection(rollout) is not None and (
+        rollout.agent.default_agent_loop != "single_turn_agent" or rollout.multi_turn.enable
+    ):
+        raise ValueError("val_kwargs.repetition_detection currently supports only single_turn_agent")
     val_max_tokens = rollout.val_kwargs.get("max_tokens")
     if val_max_tokens is not None:
         if type(val_max_tokens) is not int or val_max_tokens <= 0:

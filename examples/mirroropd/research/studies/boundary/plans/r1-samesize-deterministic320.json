@@ -1,0 +1,197 @@
+{
+  "name": "r1-samesize-deterministic320-20261030",
+  "models": {
+    "r1": [
+      "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+    ],
+    "justrl": [
+      "hbx/JustRL-DeepSeek-1.5B",
+      "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+    ],
+    "nemotron": [
+      "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "b89048893f95246c6b5749b287f0049e6df42ee9"
+    ],
+    "minimath": [
+      "oumi-ai/MiniMath-R1-1.5B",
+      "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+    ],
+    "deepscaler": [
+      "agentica-org/DeepScaleR-1.5B-Preview",
+      "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+    ],
+    "brorl": [
+      "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+    ],
+    "deepcoder": [
+      "agentica-org/DeepCoder-1.5B-Preview",
+      "103033da54f104b0d0a3570547fb3721fba99962"
+    ]
+  },
+  "gpus": [
+    0,
+    1
+  ],
+  "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030",
+  "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030",
+  "arms": {
+    "CONT-J": {
+      "teacher": "justrl",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 128,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 128,
+      "new_updates": 320,
+      "budget_increment_over_prior": 192
+    },
+    "CONT-N": {
+      "teacher": "nemotron",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 128,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 128,
+      "new_updates": 320,
+      "budget_increment_over_prior": 192
+    },
+    "CONT-M": {
+      "teacher": "minimath",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 128,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 128,
+      "new_updates": 320,
+      "budget_increment_over_prior": 192
+    },
+    "NEW-DS": {
+      "teacher": "deepscaler",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 64,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 64,
+      "new_updates": 320,
+      "budget_increment_over_prior": 256
+    },
+    "NEW-BRO": {
+      "teacher": "brorl",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 64,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 64,
+      "new_updates": 320,
+      "budget_increment_over_prior": 256
+    },
+    "NEW-DC": {
+      "teacher": "deepcoder",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 64,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 64,
+      "new_updates": 320,
+      "budget_increment_over_prior": 256
+    }
+  },
+  "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/protocol.json",
+  "source_protocol_sha256": "98f9eb7d9850de451bd3130d5141c2ff94ea1ae80cac5623af269bc5b034ad00",
+  "legacy_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029",
+  "initial_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+  "training": {
+    "batch_size": 16,
+    "reuse": 16,
+    "horizon": 1024,
+    "train_groups": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T"
+    ],
+    "learning_rate": 1e-06,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.01,
+    "clip": 1,
+    "seed": 42,
+    "engine": "validated"
+  },
+  "scoring": {
+    "groups": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "M01",
+      "M02",
+      "M03",
+      "M04",
+      "Code01",
+      "Code02",
+      "IF01",
+      "IF02"
+    ],
+    "interval": 16
+  },
+  "replay_acceptance": {
+    "per_prompt_rkl_absolute_tolerance": 0.0001,
+    "failure_action": "stop before new-budget updates; preserve evidence",
+    "max_loss_absolute_tolerance": 0.0001
+  },
+  "storage": {
+    "final_fp32_weights": true,
+    "final_adam_rng": true,
+    "intermediate_weights": false
+  },
+  "accuracy_gate": false,
+  "teacher_cache_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-stage320-20261030",
+  "execution_condition": "deterministic_from_initial",
+  "repeatability_probe": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-stage320-20261030/diagnostics/1793346863727536763/repeatability.json",
+  "repeatability_sha256": "6466c932f12f052853566bdaf8e9d26ff19816ef51ef615387e05f6fbde7787c",
+  "interpretation": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim."
+}

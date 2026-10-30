@@ -100,7 +100,7 @@ def aggregate_pipeline_requests(keys: list[str], rows: list[dict]) -> dict[str, 
 
     if any(row.get("finish_reason") is not None for row in rows):
         reasons = [row.get("finish_reason") or "unknown" for row in rows]
-        for reason in ("stop", "length", "aborted", "completed", "unknown"):
+        for reason in ("stop", "length", "repetition", "aborted", "completed", "unknown"):
             count = sum(r == reason or (reason == "aborted" and r == "abort") for r in reasons)
             metrics[f"rollout/finish_reason/{reason}_count"] = count
     start = submission.get("started_at_ns")

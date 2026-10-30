@@ -1,0 +1,433 @@
+{
+  "selection": "seed20261030; 4 from each of four predefined strata; exploratory unblinded review, not a prevalence sample",
+  "cases": [
+    {
+      "stratum": "cap_high_missed",
+      "source": "e54-topd-mdpo-20261029/evaluation/k1-eta02-math/scored.jsonl",
+      "prompt_id": "MATH-500:249",
+      "length": 31744,
+      "acc": false,
+      "repeat8": 0.9326338343258657,
+      "repeat32": 0.8809636426701983,
+      "case": 0,
+      "judgment": "loop",
+      "reason": "模23的相同二次同余推导、同一平方表反复重启，Step编号增加；表中已有8却又宣称无解。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 5541,
+          "text": "}}{2a} \\pmod{p}\n\\]\n\nHere, \\( a = 1 \\), \\( b = 2 \\), \\( c = -1 \\), and \\( p = 23 \\).\n\nSo:\n\n\\[\nt \\equiv \\frac{-2 \\pm \\sqrt{4 + 4}}{2} \\pmod{23}\n\\]\n\\[\nt \\equiv \\frac{-2 \\pm \\sqrt{8}}{2} \\pmod{23}\n\\]\n\nNow, we need to compute \\( \\sqrt{8} \\pmod{23} \\).\n\nLet's find all \\( x \\) such that \\( x^2 \\equiv 8 \\pmod{23} \\).\n\nWe can try all integers from 0 to 22.\n\nLet's compute:\n\n\\[\n\\begin{align*}\n0^2 &\\equiv 0 \\pmod{23} \\\\\n1^2 &\\equiv 1 \\pmod{23} \\\\\n2^2 &\\equiv 4 \\pmod{23} \\\\\n3^2 &\\equiv 9 \\pmod{23} \\\\\n4^2 &\\equiv 16 \\pmod{23} \\\\\n5^2 &\\equiv 25 \\equiv 2 \\pmod{23} \\\\\n6^2 &\\equiv 36 \\equiv 13 \\pmod{23} \\\\\n7^2 &\\equiv 49 \\equiv 26 \\equiv 3 \\pmod{23} \\\\\n8^2 &\\e"
+        },
+        {
+          "char_start": 31170,
+          "text": "v \\frac{-2 \\pm \\sqrt{4 + 4}}{2} \\pmod{23}\n\\]\n\\[\nt \\equiv \\frac{-2 \\pm \\sqrt{8}}{2} \\pmod{23}\n\\]\n\nNow, we need to compute \\( \\sqrt{8} \\pmod{23} \\).\n\nLet’s find all \\( x \\) such that \\( x^2 \\equiv 8 \\pmod{23} \\).\n\nWe can try all integers from 0 to 22.\n\nLet’s compute:\n\n\\[\n\\begin{align*}\n0^2 &\\equiv 0 \\pmod{23} \\\\\n1^2 &\\equiv 1 \\pmod{23} \\\\\n2^2 &\\equiv 4 \\pmod{23} \\\\\n3^2 &\\equiv 9 \\pmod{23} \\\\\n4^2 &\\equiv 16 \\pmod{23} \\\\\n5^2 &\\equiv 25 \\equiv 2 \\pmod{23} \\\\\n6^2 &\\equiv 36 \\equiv 13 \\pmod{23} \\\\\n7^2 &\\equiv 49 \\equiv 26 \\equiv 3 \\pmod{23} \\\\\n8^2 &\\equiv 64 \\equiv 18 \\pmod{23} \\\\\n9^2 &\\equiv 81 \\equiv 8 \\pmod{23} \\\\\n10^2 &\\equiv 100 \\equiv 8 \\pmod{"
+        },
+        {
+          "char_start": 54029,
+          "text": "dd integer \\( t \\) such that \\( 0 < t < 23 \\) and \\( t + 2 \\) is the inverse of \\( t \\) modulo 23.\"\n\nSo, \\( t + 2 \\) is the inverse of \\( t \\) modulo 23.\n\nSo, \\( (t + 2) \\cdot t \\equiv 1 \\pmod{23} \\).\n\nLet's try to solve this equation.\n\n### Step 30: Solve \\( (t + 2) \\cdot t \\equiv 1 \\pmod{23} \\)\n\nLet’s expand the left side:\n\n\\[\n(t + 2) \\cdot t = t^2 + 2t\n\\]\n\nSo:\n\n\\[\nt^2 + 2t \\equiv 1 \\pmod{23}\n\\]\n\nRearrange:\n\n\\[\nt^2 + 2t - 1 \\equiv 0 \\pmod{23}\n\\]\n\nNow, let's try to solve this quadratic congruence.\n\nWe can use the quadratic formula:\n\n\\[\nt \\equiv \\frac{-2 \\pm \\sqrt{4 + 4}}{2} \\pmod{23}\n\\]\n\\[\nt \\equiv \\frac{-2 \\pm \\sqrt{8}}{2} \\pmod{23}\n\\]\n\nNow,"
+        },
+        {
+          "char_start": 68518,
+          "text": "\\) has no solution.\n\nWait, that would mean the quadratic equation has no solution.\n\nBut the problem says to find a unique odd integer \\( t \\) such that \\( 0 < t < 23 \\) and \\( t + 2 \\) is the inverse of \\( t \\) modulo 23.\n\nBut according to our analysis, there is no such \\( t \\).\n\nWait, perhaps I made a mistake in the problem statement.\n\nLet's re-examine the problem.\n\nThe problem says:\n\n\"Find the unique odd integer \\( t \\) such that \\( 0 < t < 23 \\) and \\( t + 2 \\) is the inverse of \\( t \\) modulo 23.\"\n\nSo, \\( t + 2 \\) is the inverse of \\( t \\) modulo 23.\n\nSo, \\( (t + 2) \\cdot t \\equiv 1 \\pmod{23} \\).\n\nLet's try to solve this equation.\n\n### Step 37: Solve \\( (t + 2) \\cdot t \\equiv 1 \\pmod{23} \\)\n\nLet’s expand the left side:\n\n\\[\n(t + 2) \\cdot"
+        }
+      ]
+    },
+    {
+      "stratum": "cap_high_missed",
+      "source": "e54-mdpo-sweep-20261029/evaluation/k05-eta03-math/scored.jsonl",
+      "prompt_id": "MATH-500:305",
+      "length": 31744,
+      "acc": true,
+      "repeat8": 0.9560765037653213,
+      "repeat32": 0.9342856241919717,
+      "case": 1,
+      "judgment": "loop",
+      "reason": "反复得到9/19，代回时丢掉分母根号，宣称无解，再从同一方程开始；标注判对不能证明推导收敛。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 5500,
+          "text": "refore, the equation has **no solution**.\n\nBut let’s check if the original equation has any real solutions.\n\nLet’s set:\n\n\\[\n\\frac{\\sqrt{2x}}{\\sqrt{3x - 1}} = \\frac{3}{2}\n\\]\n\nSquare both sides:\n\n\\[\n\\frac{2x}{3x - 1} = \\frac{9}{4}\n\\]\n\nCross-multiply:\n\n\\[\n8x = 27x - 9\n\\]\n\n\\[\n8x - 27x = -9\n\\]\n\n\\[\n-19x = -9\n\\]\n\n\\[\nx = \\frac{9}{19}\n\\]\n\nBut when we substitute:\n\n\\[\n\\frac{\\sqrt{2 \\cdot \\frac{9}{19}}}{\\sqrt{3 \\cdot \\frac{9}{19} - 1}} = \\frac{3}{2}\n\\]\n\nCompute:\n\nNumerator:\n\n\\[\n\\sqrt{2 \\cdot \\frac{9}{19}} = \\sqrt{\\frac{18}{19}} = \\frac{\\sqrt{18}}{\\sqrt{19}} = \\frac{3\\sqrt{2}}{\\sqrt{19}}\n\\]\n\nDenominator:\n\n\\[\n3 \\cdot \\frac{9}{19} - 1 = \\frac{27}{19} - 1 = "
+        },
+        {
+          "char_start": 30937,
+          "text": "\n\\]\n\nSo:\n\n\\[\n\\frac{\\frac{3\\sqrt{2}}{\\sqrt{19}}}{\\frac{8}{19}} = \\frac{3\\sqrt{2}}{\\sqrt{19}} \\cdot \\frac{19}{8} = \\frac{57\\sqrt{2}}{8\\sqrt{19}}\n\\]\n\nThis is not equal to \\( \\frac{3}{2} \\), so the solution is incorrect.\n\n**Final Answer:**\n\nThe equation has **no solution**.\n\nBut let’s try to solve it again.\n\nLet’s go back to:\n\n\\[\n\\frac{\\sqrt{2x}}{\\sqrt{3x - 1}} = \\frac{3}{2}\n\\]\n\nSquare both sides:\n\n\\[\n\\frac{2x}{3x - 1} = \\frac{9}{4}\n\\]\n\nCross-multiply:\n\n\\[\n8x = 27x - 9\n\\]\n\n\\[\n8x - 27x = -9\n\\]\n\n\\[\n-19x = -9\n\\]\n\n\\[\nx = \\frac{9}{19}\n\\]\n\nBut when we substitute:\n\n\\[\n\\frac{\\sqrt{2 \\cdot \\frac{9}{19}}}{\\sqrt{3 \\cdot \\frac{9}{19} - 1}} = \\frac{3}{2}\n\\]\n\n"
+        },
+        {
+          "char_start": 53625,
+          "text": "frac{3}{2} \\), so the solution is incorrect.\n\n**Final Answer:**\n\nThe equation has **no solution**.\n\nBut let’s try to solve it again.\n\nLet’s go back to:\n\n\\[\n\\frac{\\sqrt{2x}}{\\sqrt{3x - 1}} = \\frac{3}{2}\n\\]\n\nSquare both sides:\n\n\\[\n\\frac{2x}{3x - 1} = \\frac{9}{4}\n\\]\n\nCross-multiply:\n\n\\[\n8x = 27x - 9\n\\]\n\n\\[\n8x - 27x = -9\n\\]\n\n\\[\n-19x = -9\n\\]\n\n\\[\nx = \\frac{9}{19}\n\\]\n\nBut when we substitute:\n\n\\[\n\\frac{\\sqrt{2 \\cdot \\frac{9}{19}}}{\\sqrt{3 \\cdot \\frac{9}{19} - 1}} = \\frac{3}{2}\n\\]\n\nCompute:\n\nNumerator:\n\n\\[\n\\sqrt{2 \\cdot \\frac{9}{19}} = \\sqrt{\\frac{18}{19}} = \\frac{\\sqrt{18}}{\\sqrt{19}} = \\frac{3\\sqrt{2}}{\\sqrt{19}}\n\\]\n\nDenominator:\n\n\\[\n3 \\cdot \\frac{9"
+        },
+        {
+          "char_start": 68001,
+          "text": "ac{9}{19}} = \\sqrt{\\frac{18}{19}} = \\frac{\\sqrt{18}}{\\sqrt{19}} = \\frac{3\\sqrt{2}}{\\sqrt{19}}\n\\]\n\nDenominator:\n\n\\[\n3 \\cdot \\frac{9}{19} - 1 = \\frac{27}{19} - 1 = \\frac{8}{19}\n\\]\n\nSo:\n\n\\[\n\\frac{\\frac{3\\sqrt{2}}{\\sqrt{19}}}{\\frac{8}{19}} = \\frac{3\\sqrt{2}}{\\sqrt{19}} \\cdot \\frac{19}{8} = \\frac{57\\sqrt{2}}{8\\sqrt{19}}\n\\]\n\nThis is not equal to \\( \\frac{3}{2} \\), so the solution is incorrect.\n\n**Final Answer:**\n\nThe equation has **no solution**.\n\nBut let’s try to solve it again.\n\nLet’s go back to:\n\n\\[\n\\frac{\\sqrt{2x}}{\\sqrt{3x - 1}} = \\frac{3}{2}\n\\]\n\nSquare both sides:\n\n\\[\n\\frac{2x}{3x - 1} = \\frac{9}{4}\n\\]\n\nCross-multiply:\n\n\\[\n8x = 27x - 9\n\\]\n\n\\[\n8x - 27x = -9\n\\]\n\n\\[\n-19x = -9\n\\]\n\n\\[\nx = \\frac{9}{19}\n\\]\n\nBut when we substitute:\n\n\\[\n\\frac{\\sqrt{"
+        }
+      ]
+    },
+    {
+      "stratum": "cap_high_missed",
+      "source": "e54-topd-mdpo-20261029/evaluation/k1-eta02-math/scored.jsonl",
+      "prompt_id": "MATH-500:422",
+      "length": 31744,
+      "acc": false,
+      "repeat8": 0.9362888741847055,
+      "repeat32": 0.8484848484848485,
+      "case": 2,
+      "judgment": "loop",
+      "reason": "反复定义S/T/U、写出相同韦达关系、到S*T*U称复杂，然后以新Step号重启。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 36863,
+          "text": "_1\\alpha_2 + \\alpha_3\\alpha_4) + (\\alpha_1\\alpha_3 + \\alpha_2\\alpha_4) + (\\alpha_1\\alpha_4 + \\alpha_2\\alpha_3) = 0\n\\]\n\nNow, let’s consider the product:\n\\[\nS \\cdot T \\cdot U\n\\]\nBut this seems complicated.\n\n### Step 45: Use the Given Polynomial\n\nLet’s consider the polynomial:\n\\[\nP(x) = x^4 + 2x^3 + 2 = 0\n\\]\nLet’s assume the roots are \\(\\alpha_1, \\alpha_2, \\alpha_3, \\alpha_4\\).\n\nWe can use the fact that:\n\\[\n\\alpha_1\\alpha_2\\alpha_3\\alpha_4 = 2\n\\]\n\nNow, consider the expression:\n\\[\n\\alpha_1\\alpha_2 + \\alpha_3\\alpha_4\n\\]\nLet’s denote:\n\\[\nS = \\alpha_1\\alpha_2 + \\alpha_3\\alpha_4\n\\]\n\nSimilarly, \\(T = \\alpha_1\\alpha_3 + \\alpha_2\\alpha_4\\)\n\\(U = \\alpha_"
+        },
+        {
+          "char_start": 72976,
+          "text": "a_3\\alpha_4\n\\]\nLet’s denote:\n\\[\nS = \\alpha_1\\alpha_2 + \\alpha_3\\alpha_4\n\\]\n\nSimilarly, \\(T = \\alpha_1\\alpha_3 + \\alpha_2\\alpha_4\\)\n\\(U = \\alpha_1\\alpha_4 + \\alpha_2\\alpha_3\\)\n\nWe know:\n\\[\n\\alpha_1 + \\alpha_2 + \\alpha_3 + \\alpha_4 = -2\n\\]\n\\[\n\\alpha_1\\alpha_2 + \\alpha_1\\alpha_3 + \\alpha_1\\alpha_4 + \\alpha_2\\alpha_3 + \\alpha_2\\alpha_4 + \\alpha_3\\alpha_4 = 0\n\\]\n\nLet’s consider the sum:\n\\[\nS + T + U = (\\alpha_1\\alpha_2 + \\alpha_3\\alpha_4) + (\\alpha_1\\alpha_3 + \\alpha_2\\alpha_4) + (\\alpha_1\\alpha_4 + \\alpha_2\\alpha_3) = 0\n\\]\n\nNow, let’s consider the product:\n\\[\nS \\cdot T \\cdot U\n\\]\nBut this seems complicated.\n\n### Step 85: Use the Given Polynomial\n\nLet’s consider the polynomial:\n\\[\nP(x) = x^4 + 2x^3 + 2 = 0\n\\]\nLet’s assume the roots are \\(\\alpha_"
+        }
+      ]
+    },
+    {
+      "stratum": "cap_high_missed",
+      "source": "e54-topd-mdpo-20261029/evaluation/k0-eta01-dapo/scored.jsonl",
+      "prompt_id": "train-2312",
+      "length": 31744,
+      "acc": false,
+      "repeat8": 0.9300500992532376,
+      "repeat32": 0.823573928672784,
+      "case": 3,
+      "judgment": "loop",
+      "reason": "同一递推式与S_n定义反复展开，称无帮助后重启；Step66、67到133仍是同一操作。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 34321,
+          "text": "h.\n\n### Step 66: Use the Recurrence Relation to Find $a_{50}^2 - a_{49}a_{51}$\n\nLet’s compute $a_{50}^2 - a_{49}a_{51}$ using the recurrence relation.\n\nLet’s define:\n\n\\[\nS_n = a_n^2 - a_{n-1}a_{n+1}\n\\]\n\nWe can compute $S_n$ recursively.\n\nFrom the recurrence:\n\n\\[\na_{n+2} = -4a_{n+1} - 7a_n\n\\]\n\nMultiply both sides by $a_n$:\n\n\\[\na_{n+2}a_n = -4a_{n+1}a_n - 7a_n^2\n\\]\n\nBut $a_{n+2} = a_{n+2}$, so:\n\n\\[\na_{n+2}a_n = a_{n+2} + (-4a_{n+1}a_n - 7a_n^2)\n\\]\n\nThis seems not helpful. Let’s try a different approach.\n\n### Step 67: Use the Recurrence Relation to Find $a_{50}^2 - a_{49}a_{51}$\n\nLet’s compute $a_{50}^2 - a_{49}a_{51}$ using the recurrence relat"
+        },
+        {
+          "char_start": 67893,
+          "text": "a_{n+1} - 7a_n\n\\]\n\nMultiply both sides by $a_n$:\n\n\\[\na_{n+2}a_n = -4a_{n+1}a_n - 7a_n^2\n\\]\n\nBut $a_{n+2} = a_{n+2}$, so:\n\n\\[\na_{n+2}a_n = a_{n+2} + (-4a_{n+1}a_n - 7a_n^2)\n\\]\n\nThis seems not helpful. Let’s try a different approach.\n\n### Step 133: Use the Recurrence Relation to Find $a_{50}^2 - a_{49}a_{51}$\n\nLet’s compute $a_{50}^2 - a_{49}a_{51}$ using the recurrence relation.\n\nLet’s define:\n\n\\[\nS_n = a_n^2 - a_{n-1}a_{n+1}\n\\]\n\nWe can compute $S_n$ recursively.\n\nFrom the recurrence:\n\n\\[\na_{n+2} = -4a_{n+1} - 7a_n\n\\]\n\nMultiply both sides by $a_n$:\n\n\\[\na_{n+2}a_n = -4a_{n+1}a_n - 7a_n^2\n\\]\n\nBut $a_{n+2} = a_{n+2}$, so:\n\n\\[\na_{n+2}a_n = a_{n+2} + (-4a_{n+1}a_n - 7a_n^2)\n\\]\n\nThis seems not helpful. Let’s try a different approach.\n\n### Step 134"
+        }
+      ]
+    },
+    {
+      "stratum": "stop_high",
+      "source": "e54-topd-mdpo-20261029/evaluation/k0-eta01-dapo/scored.jsonl",
+      "prompt_id": "train-10166",
+      "length": 28685,
+      "acc": false,
+      "repeat8": 0.8915196317734849,
+      "repeat32": 0.8588678718503525,
+      "case": 4,
+      "judgment": "loop",
+      "reason": "相同k=0整除检查、40和800的结论反复回到原式，采样的中段和末段无新依据。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 36068,
+          "text": "= 0 \\):**\n\n\\[\n40(3)(4)(1) = 480 \\quad \\text{not divisible by 800}\n\\]\n\nSo, 40 is the largest integer that always divides the expression.\n\nWait, let's re-examine:\n\nWe have:\n\n\\[\n40(5k + 3)(5k + 4)(k + 1)\n\\]\n\nSince \\( k \\) is an integer, let's consider the expression modulo 10:\n\n\\[\n(5k + 3)(5k + 4)(k + 1) \\mod 10\n\\]\n\nAs before, this is not always divisible by 10.\n\nBut we need to find the largest integer that divides the expression for all integers \\( k \\).\n\nLet's consider the expression:\n\n\\[\n40(5k + 3)(5k + 4)(k + 1)\n\\]\n\nWe can factor out 4 from the first term:\n\n\\[\n40 \\times \\frac{(5k + 3)(5k + 4)(k + 1)}{4}\n\\]\n\nBut \\( (5k + 3) \\), \\( (5k + 4) \\)"
+        },
+        {
+          "char_start": 71386,
+          "text": "\\), \\( (5k + 4) \\), and \\( (k + 1) \\) are all integers.\n\nLet's check for divisibility by 800:\n\n**For \\( k = 0 \\):**\n\n\\[\n40(3)(4)(1) = 480 \\quad \\text{not divisible by 800}\n\\]\n\nSo, 40 is the largest integer that always divides the expression.\n\nWait, let's re-examine:\n\nWe have:\n\n\\[\n40(5k + 3)(5k + 4)(k + 1)\n\\]\n\nSince \\( k \\) is an integer, let's consider the expression modulo 10:\n\n\\[\n(5k + 3)(5k + 4)(k + 1) \\mod 10\n\\]\n\nAs before, this is not always divisible by 10.\n\nBut we need to find the largest integer that divides the expression for all integers \\( k \\).\n\nLet's consider the expression:\n\n\\[\n40(5k + 3)(5k + 4)(k + 1)\n\\]\n\nWe can factor out 4 from the first term:\n\n\\[\n40 \\times \\frac{(5k + 3)(5k + 4)(k + 1)}{4}\n\\]\n\nBut \\( (5k + 3) \\), \\( (5k +"
+        }
+      ]
+    },
+    {
+      "stratum": "stop_high",
+      "source": "e54-mdpo-sweep-20261029/evaluation/k05-eta005-dapo/scored.jsonl",
+      "prompt_id": "train-15290",
+      "length": 25845,
+      "acc": false,
+      "repeat8": 0.893451505534484,
+      "repeat32": 0.7697373518245914,
+      "case": 5,
+      "judgment": "loop",
+      "reason": "反复使用弧长关系得到面积比4，因答案形式不符重启；Step87到113仍重复。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 3838,
+          "text": "rac{r_1}{6} = \\frac{r_2}{3} \\Rightarrow r_1 = 2 r_2\n\\]\n\nNow, the ratio of the area of the larger circle to the smaller circle is:\n\n\\[\n\\frac{\\pi r_2^2}{\\pi r_1^2} = \\frac{r_2^2}{r_1^2} = \\frac{r_2^2}{(2 r_2)^2} = \\frac{r_2^2}{4 r_2^2} = \\frac{1}{4}\n\\]\n\nBut this contradicts our earlier result.\n\n### Step 9: Re-evaluate\nWait, perhaps the circles are not of equal radii. Let's think differently.\n\nLet the two circles intersect at points \\(A\\) and \\(B\\). The minor arcs \\(AB\\) are \\(30^\\circ\\) on one circle and \\(60^\\circ\\) on the other circle.\n\nLet’s denote:\n\n- The central angle on the first circle: \\(30^\\circ = \\frac{\\pi}{6}\\)\n- The central angle on"
+        },
+        {
+          "char_start": 30705,
+          "text": "ersection of Two Circles\nLet’s denote:\n\n- Two circles intersect at points \\(A\\) and \\(B\\).\n- The minor arcs \\(AB\\) are \\(30^\\circ\\) on one circle and \\(60^\\circ\\) on the other.\n\nLet’s assume the two circles have radii \\(r_1\\) and \\(r_2\\), and they intersect at \\(A\\) and \\(B\\).\n\nThe central angles are \\(30^\\circ\\) and \\(60^\\circ\\).\n\nThe length of the minor arc on a circle is:\n\n\\[\n\\text{Arc length} = r \\theta\n\\]\n\nSo:\n\n\\[\nr_1 \\times \\frac{\\pi}{6} = r_2 \\times \\frac{\\pi}{3}\n\\]\n\nSimplify:\n\n\\[\n\\frac{r_1}{6} = \\frac{r_2}{3} \\Rightarrow r_1 = 2 r_2\n\\]\n\nNow, the area of the smaller circle is:\n\n\\[\nA_1 = \\pi r_2^2\n\\]\n\nThe area of the larger circle is:\n\n"
+        },
+        {
+          "char_start": 57572,
+          "text": "cts the answer in the form \\(k + m\\sqrt{3}\\). It seems there might be a different interpretation.\n\n### Step 86: Final Conclusion\nAfter careful consideration, the ratio of the area of the larger circle to the smaller circle is:\n\n\\[\n\\frac{A_2}{A_1} = 4\n\\]\n\nBut the problem expects the answer in the form \\(k + m\\sqrt{3}\\). It seems there might be a misunderstanding.\n\nHowever, if we consider the problem differently, perhaps the circles are not of equal radii, and the angle subtended is related in a specific way.\n\nLet’s try a different approach.\n\n### Step 87: Using the Intersection of Two Circles\nLet’s denote:\n\n- Two circles intersect at points \\(A"
+        },
+        {
+          "char_start": 76013,
+          "text": "cles\nLet’s denote:\n\n- Two circles intersect at points \\(A\\) and \\(B\\).\n- The minor arcs \\(AB\\) are \\(30^\\circ\\) on one circle and \\(60^\\circ\\) on the other.\n\nLet’s assume the two circles have radii \\(r_1\\) and \\(r_2\\), and they intersect at \\(A\\) and \\(B\\).\n\nThe central angles are \\(30^\\circ\\) and \\(60^\\circ\\).\n\nThe length of the minor arc on a circle is:\n\n\\[\n\\text{Arc length} = r \\theta\n\\]\n\nSo:\n\n\\[\nr_1 \\times \\frac{\\pi}{6} = r_2 \\times \\frac{\\pi}{3}\n\\]\n\nSimplify:\n\n\\[\n\\frac{r_1}{6} = \\frac{r_2}{3} \\Rightarrow r_1 = 2 r_2\n\\]\n\nNow, the area of the smaller circle is:\n\n\\[\nA_1 = \\pi r_2^2\n\\]\n\nThe area of the larger circle is:\n\n\\[\nA_2 = \\pi r_1^2 = \\pi (2 r_2)^2 = 4 \\pi r_2^2\n\\]\n\nSo, the ratio is:\n\n\\[\n\\frac{A_2}{A_1} = \\frac{4 \\pi r_2^2}{\\pi r_2^"
+        }
+      ]
+    },
+    {
+      "stratum": "stop_high",
+      "source": "e54-topd-mdpo-20261029/evaluation/k1-eta01-dapo/scored.jsonl",
+      "prompt_id": "train-9347",
+      "length": 26917,
+      "acc": false,
+      "repeat8": 0.8355629877369007,
+      "repeat32": 0.6542810384586774,
+      "case": 6,
+      "judgment": "loop",
+      "reason": "两条切线表达式与相同矛盾反复切换，Step28与52以及尾部重复同一推导。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 2748,
+          "text": "\\frac{101}{100}\n$$\n$$\ny = 2x_0 x - \\frac{101}{100}\n$$\n\nBut $P_1$ is $y = x^2 + \\frac{101}{100}$, so the tangent line must be:\n$$\ny = 2x_0 x - x_0^2 + \\frac{101}{100}\n$$\n\nWait, this seems circular.\n\n### Step 6: Find the tangent to $P_2$\n\nLet’s consider $P_2: x = y^2 + \\frac{45}{4}$.\n\nTo find the tangent to $P_2$, we need the derivative with respect to $y$.\n\nFrom $x = y^2 + \\frac{45}{4}$, we have:\n$$\n\\frac{dx}{dy} = 2y\n$$\n\nSo, the slope of the tangent is $2y$.\n\nBut we want a tangent line with a rational slope.\n\nLet’s assume the tangent line is $y = mx + c$ and it is tangent to $P_2$.\n\nSince $P_2$ is given by $x = y^2 + \\frac{45}{4}$, we can wri"
+        },
+        {
+          "char_start": 21988,
+          "text": "quad x_0 = 0\n$$\n$$\n- \\frac{202x}{100} = - \\frac{101}{100}\n$$\n\nBut $x_0 = 0$ leads to a contradiction, so this approach fails.\n\n### Step 28: Use the fact that the tangent line is $y = 2x_0 x - \\frac{101}{100}$\n\nLet’s assume the common tangent line is:\n$$\ny = 2x_0 x - \\frac{101}{100}\n$$\n\nThis line must be tangent to $P_2$.\n\nFrom $P_2$: $x = y^2 + \\frac{45}{4}$ and $y = 2x_0 x - \\frac{101}{100}$.\n\nSubstitute $y$ into $x$:\n$$\nx = \\left(2x_0 x - \\frac{101}{100}\\right)^2 + \\frac{45}{4}\n$$\n\nLet’s expand:\n$$\nx = 4x_0^2 x^2 - 2 \\cdot 2x_0 x \\cdot \\frac{101}{100} + \\left(\\frac{101}{100}\\right)^2 + \\frac{45}{4}\n$$\n$$\nx = 4x_0^2 x^2 - \\frac{404x_0 x}{100"
+        },
+        {
+          "char_start": 41227,
+          "text": "x + c = 2x_0 x - \\frac{101}{100}\n$$\n$$\n4x_0 x^2 - \\frac{202x}{100} + c = 2x_0 x - \\frac{101}{100}\n$$\n\nFor this to hold for all $x$, we must have:\n$$\n4x_0 = 2x_0 \\quad \\Rightarrow \\quad x_0 = 0\n$$\n$$\n- \\frac{202x}{100} = - \\frac{101}{100}\n$$\n\nBut $x_0 = 0$ leads to a contradiction, so this approach fails.\n\n### Step 52: Use the fact that the tangent line is $y = 2x_0 x - \\frac{101}{100}$\n\nLet’s assume the common tangent line is:\n$$\ny = 2x_0 x - \\frac{101}{100}\n$$\n\nThis line must be tangent to $P_2$.\n\nFrom $P_2$: $x = y^2 + \\frac{45}{4}$ and $y = 2x_0 x - \\frac{101}{100}$.\n\nSubstitute $y$ into $x$:\n$$\nx = \\left(2x_0 x - \\frac{101}{100}\\right)^2 "
+        },
+        {
+          "char_start": 54220,
+          "text": " x^2 - \\frac{202x}{100} + c = 2x_0 x - \\frac{101}{100}\n$$\n\nFor this to hold for all $x$, we must have:\n$$\n4x_0 = 2x_0 \\quad \\Rightarrow \\quad x_0 = 0\n$$\n$$\n- \\frac{202x}{100} = - \\frac{101}{100}\n$$\n\nBut $x_0 = 0$ leads to a contradiction, so this approach fails.\n\n### Step 68: Use the fact that the tangent line is $y = 2x_0 x - \\frac{101}{100}$\n\nLet’s assume the common tangent line is:\n$$\ny = 2x_0 x - \\frac{101}{100}\n$$\n\nThis line must be tangent to $P_2$.\n\nFrom $P_2$: $x = y^2 + \\frac{45}{4}$ and $y = 2x_0 x - \\frac{101}{100}$.\n\nSubstitute $y$ into $x$:\n$$\nx = \\left(2x_0 x - \\frac{101}{100}\\right)^2 + \\frac{45}{4}\n$$\n\nLet’s expand:\n$$\nx = 4x_0^2 x^2 - 2 \\cdot 2x_0 x \\cdot \\frac{101}{100} + \\left(\\frac{101}{100}\\right)^2 + \\frac{45}{4}\n$$\n$$"
+        }
+      ]
+    },
+    {
+      "stratum": "stop_high",
+      "source": "e54-topd-mdpo-20261029/evaluation/k1-eta02-dapo/scored.jsonl",
+      "prompt_id": "train-15290",
+      "length": 18691,
+      "acc": false,
+      "repeat8": 0.8424320274031256,
+      "repeat32": 0.760128617363344,
+      "case": 7,
+      "judgment": "loop",
+      "reason": "弦长推得2-sqrt(3)，得到k+m=1后却称不是整数，再从同样弦长关系重启。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 2254,
+          "text": "angles are given in the context of the same chord.\n\nWait, the problem states:\n- The minor arcs \\(AB\\) measure \\(30^\\circ\\) on one circle and \\(60^\\circ\\) on the other circle.\n\nThis means that the central angles subtended by arc \\(AB\\) on each circle are \\(30^\\circ\\) and \\(60^\\circ\\), respectively.\n\nBut since the circles are intersecting, the same chord \\(AB\\) is subtending different arcs in the two circles.\n\nLet’s use the formula for the length of an arc:\n\n\\[\nL = \\frac{\\theta}{360^\\circ} \\times 2\\pi r\n\\]\n\nLet’s denote:\n- Chord length as \\(L\\).\n- Central angle on circle 1: \\(\\theta_1 = 30^\\circ\\), so \\(L = \\frac{30^\\circ}{360^\\circ} \\times 2\\p"
+        },
+        {
+          "char_start": 18035,
+          "text": "\\theta}{2}\\right)\\)\n\nSo, for the first circle:\n\n\\[\nL = 2r_1 \\sin\\left(15^\\circ\\right)\n\\]\n\nFor the second circle:\n\n\\[\nL = 2r_2 \\sin\\left(30^\\circ\\right) = 2r_2 \\cdot \\frac{1}{2} = r_2\n\\]\n\nTherefore:\n\n\\[\n2r_1 \\sin(15^\\circ) = r_2\n\\]\n\nWe have \\(\\sin(15^\\circ) = \\frac{\\sqrt{6} - \\sqrt{2}}{4}\\), so:\n\n\\[\n2r_1 \\cdot \\frac{\\sqrt{6} - \\sqrt{2}}{4} = r_2 \\implies \\frac{r_1}{2} (\\sqrt{6} - \\sqrt{2}) = r_2\n\\]\n\nNow, let’s express the ratio of the areas.\n\nThe area of a circle is \\(\\pi r^2\\), so:\n\n\\[\n\\text{Area}_2 = \\pi r_2^2 = \\pi \\left( \\frac{r_1}{2} (\\sqrt{6} - \\sqrt{2}) \\right)^2 = \\pi \\cdot \\frac{r_1^2}{4} (\\sqrt{6} - \\sqrt{2})^2\n\\]\n\nCompute \\((\\sqrt{6"
+        },
+        {
+          "char_start": 33816,
+          "text": "_2 = \\pi r_2^2 = \\pi \\left( \\frac{r_1}{2} (\\sqrt{6} - \\sqrt{2}) \\right)^2 = \\pi \\cdot \\frac{r_1^2}{4} (\\sqrt{6} - \\sqrt{2})^2\n\\]\n\nCompute \\((\\sqrt{6} - \\sqrt{2})^2 = 6 + 2 - 2\\sqrt{12} = 8 - 4\\sqrt{3}\\)\n\nSo:\n\n\\[\n\\text{Area}_2 = \\pi \\cdot \\frac{r_1^2}{4} (8 - 4\\sqrt{3}) = \\pi r_1^2 \\cdot \\frac{8 - 4\\sqrt{3}}{4} = \\pi r_1^2 (2 - \\sqrt{3})\n\\]\n\nTherefore, the ratio is:\n\n\\[\n\\frac{\\text{Area}_2}{\\text{Area}_1} = 2 - \\sqrt{3}\n\\]\n\nBut the problem asks for \\(k + m\\sqrt{3}\\), so \\(k = 2\\), \\(m = -1\\), thus \\(k + m = 1\\)\n\nBut this is not an integer.\n\nWait, perhaps the problem has a different interpretation.\n\nLet’s consider that the circles are not cente"
+        },
+        {
+          "char_start": 44338,
+          "text": "Let’s use the formula for the length of a chord:\n\nChord length \\(L = 2r \\sin\\left(\\frac{\\theta}{2}\\right)\\)\n\nSo, for the first circle:\n\n\\[\nL = 2r_1 \\sin\\left(15^\\circ\\right)\n\\]\n\nFor the second circle:\n\n\\[\nL = 2r_2 \\sin\\left(30^\\circ\\right) = 2r_2 \\cdot \\frac{1}{2} = r_2\n\\]\n\nTherefore:\n\n\\[\n2r_1 \\sin(15^\\circ) = r_2\n\\]\n\nWe have \\(\\sin(15^\\circ) = \\frac{\\sqrt{6} - \\sqrt{2}}{4}\\), so:\n\n\\[\n2r_1 \\cdot \\frac{\\sqrt{6} - \\sqrt{2}}{4} = r_2 \\implies \\frac{r_1}{2} (\\sqrt{6} - \\sqrt{2}) = r_2\n\\]\n\nNow, let’s express the ratio of the areas.\n\nThe area of a circle is \\(\\pi r^2\\), so:\n\n\\[\n\\text{Area}_2 = \\pi r_2^2 = \\pi \\left( \\frac{r_1}{2} (\\sqrt{6} - \\sqrt{2}) \\right)^2 = \\pi \\cdot \\frac{r_1^2}{4} (\\sqrt{6} - \\sqrt{2})^2\n\\]\n\nCompute \\((\\sqrt{6} - \\sqrt{ }"
+        }
+      ]
+    },
+    {
+      "stratum": "stop_medium",
+      "source": "e54-mdpo-sweep-20261029/evaluation/k05-eta03-dapo/scored.jsonl",
+      "prompt_id": "train-9960",
+      "length": 10335,
+      "acc": false,
+      "repeat8": 0.3907823392718822,
+      "repeat32": 0.03125,
+      "case": 8,
+      "judgment": "backtracking",
+      "reason": "矩阵M平方问题在6与8之间反复改口，有变化而非固定词串；不能仅用最终判错定义循环。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 1842,
+          "text": "k to the two equations derived from \\( ab + bd = 0 \\) and \\( ac + cd = 0 \\), and from \\( M^2 \\):\n\nWe have:\n\n1. \\( a^2 + bc = 7 \\)\n2. \\( bc + d^2 = 7 \\)\n3. \\( d = -a \\)\n\nNow, substitute \\( d = -a \\) into equation (2):\n\n\\[\nbc + (-a)^2 = bc + a^2 = 7\n\\]\n\nBut from equation (1), we already have:\n\n\\[\na^2 + bc = 7\n\\]\n\nSo, both are the same, and we're not getting anything new.\n\nSo, let's try to find integer solutions.\n\nLet’s denote \\( x = a \\), then \\( d = -x \\), and equation (1):\n\n\\[\nx^2 + bc = 7 \\quad (1)\n\\]\n\nAnd equation (2):\n\n\\[\nbc + (-x)^2 = bc + x^2 = 7 \\quad (2)\n\\]\n\nSo, both equations are the same.\n\nThus, I think the only condition we have is "
+        },
+        {
+          "char_start": 10366,
+          "text": "rlier, with \\( a = 1 \\), \\( d = -1 \\), \\( bc = 6 \\), sum = 8\n\nSo, the minimum is 8.\n\nLet’s try to find if there’s a case where \\( |a| + |b| + |c| + |d| = 7 \\)\n\nWe need \\( a^2 + bc = 7 \\), and \\( a + d = 0 \\), so \\( d = -a \\)\n\nSo, we need:\n\n\\[\na^2 + bc = 7\n\\]\n\nAnd \\( a \\) and \\( b, c \\) are integers.\n\nLet’s try small values:\n\n\\( a = 1 \\), \\( d = -1 \\), \\( bc = 6 \\), sum = 8\n\n\\( a = 2 \\), \\( d = -2 \\), \\( 4 + bc = 7 \\implies bc = 3 \\), sum = 2 + 1 + 3 = 6\n\nBut we dropped \\( a = 3 \\), \\( d = -3 \\), \\( bc = -2 \\), sum = 9\n\nWait, there’s no \\( a = 3 \\) with \\( a^2 + bc = 7 \\) and \\( d = -a \\)\n\nSo, if we try \\( a = 3 \\), \\( d = -3 \\), then \\( 9 + b"
+        },
+        {
+          "char_start": 17968,
+          "text": ", \\( |b| = 2 \\), \\( |c| = 1 \\)\n\nSo, sum = 3 + 2 + 1 + 3 = 9\n\nBut we need to minimize.\n\nThen, try \\( a = 3 \\), \\( d = -3 \\), \\( bc = -2 \\)\n\nPossible pairs: \\( (b, c) = (1, -2) \\), \\( (2, -1) \\) etc.\n\nThen, sum = 3 + 2 + 1 + 3 = 9\n\nSo, 6?\n\nWait, let’s try \\( a = 2 \\), \\( d = -2 \\), \\( 4 + bc = 7 \\implies bc = 3 \\)\n\nThen, \\( |a| = 2 \\), \\( d = -2 \\), \\( |b| + |c| \\)\n\nWe need \\( |b| + |c| \\leq 3 \\)\n\nSo, possible: \\( (1,3) \\), \\( (3,1) \\), \\( (1,-3) \\), etc.\n\nSo, minimal sum: 6\n\nBut this matrix doesn’t satisfy \\( M^2 = \\text{desired matrix} \\)\n\nWait, let’s try:\n\n\\( a = 2 \\), \\( d = -2 \\), \\( bc = 3 \\)\n\nThen \\( M = \\begin{pmatrix} 2 & b \\\\ c & -2 \\"
+        },
+        {
+          "char_start": 22286,
+          "text": " \\), \\( |c| = 1 \\): sum = 8\n\nSo, minimal sum is 6.\n\nWait, in the case \\( a = 2 \\), \\( d = -2 \\), \\( (b, c) = (1,3) \\): sum = 8\n\n\\( (1,3) \\): 8\n\n\\( (3,1) \\): 8\n\n\\( (-1,-3) \\): 8\n\nSo, minimal sum is 8.\n\nWe need to minimize the sum, not maximize.\n\nWait, so the minimal sum is 6.\n\nIs 6 achievable?\n\nYes, let’s try \\( a = 2 \\), \\( d = -2 \\), \\( bc = 3 \\)\n\nSo, \\( (b, c) = (1,3) \\): sum = 8\n\n\\( (1,3) \\): sum = 8\n\nSo, 8 is possible.\n\nWait, the minimal sum is 6.\n\nLet’s try \\( a = 1 \\), \\( d = -1 \\), \\( bc = 6 \\)\n\nThen, sum = 2 + |b| + |c| = 2 + 1 + 6 = 9\n\n\\( a = 2 \\), \\( d = -2 \\), \\( bc = 3 \\)\n\nSum = 6\n\n\\( a = 3 \\), \\( d = -3 \\), doesn’t work\n\nSo, the minimal sum is 6.\n\nSo, the smallest possible value is 6.\n\nTherefore, the answer is:\n\n\\[\n\\boxed{6}\n\\]"
+        }
+      ]
+    },
+    {
+      "stratum": "stop_medium",
+      "source": "e54-topd-mdpo-20261029/evaluation/k1-eta01-dapo/scored.jsonl",
+      "prompt_id": "train-8423",
+      "length": 3395,
+      "acc": false,
+      "repeat8": 0.3937426210153483,
+      "repeat32": 0.06599286563614748,
+      "case": 9,
+      "judgment": "uncertain_enumeration",
+      "reason": "有限质数枚举与因式分解尝试，变量和检验在变化；当前片段不足以支持重复中止。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 582,
+          "text": "4a + 3b + 2c + d \\).\n\n### Step 2: Simplifying the Equation\n\nLet's rewrite the equation:\n\n\\[ a^2 + 2b^2 + c^2 + 2d^2 = 2ab + 2bc - 2cd + 2da \\]\n\nBring all terms to one side:\n\n\\[ a^2 + 2b^2 + c^2 + 2d^2 - 2ab - 2bc + 2cd - 2da = 0 \\]\n\nLet's rearrange the terms:\n\n\\[ a^2 - 2ab + 2b^2 - 2bc + c^2 + 2d^2 - 2cd - 2da = 0 \\]\n\n### Step 3: Looking for Patterns or Factorizations\n\nLet's try to group terms:\n\n\\[ (a^2 - 2ab + b^2) + (b^2 - 2bc + c^2) + (c^2 - 2cd + d^2) + d^2 - 2da = 0 \\]\n\nNotice that:\n\n- \\( a^2 - 2ab + b^2 = (a - b)^2 \\)\n- \\( b^2 - 2bc + c^2 = (b - c)^2 \\)\n- \\( c^2 - 2cd + d^2 = (c - d)^2 \\)\n\nBut this doesn't immediately help. Let's try a "
+        },
+        {
+          "char_start": 3274,
+          "text": " d \\), this might not work.\n\nAlternatively, let’s suppose that \\( a = d \\), but we don’t know if that’s helpful.\n\nLet’s try to find a relationship where two variables are equal.\n\nSuppose \\( c = d \\), then the equation becomes:\n\n\\[ a^2 + 2b^2 + b^2 + 2d^2 = 2ab + 2b c - b d + 2a d \\]\n\nBut since \\( c = d \\), \\( b c = b d \\), and \\( -b d + 2a d = 2a d - b d \\).\n\nSo:\n\n\\[ a^2 + 3b^2 + 2d^2 = 2ab + 2bc + 2a d - b d \\]\n\nThis still seems complicated.\n\n### Step 9: Try Specific Prime Values\n\nLet’s try small prime numbers for \\( a, b, c, d \\). We start with \\( a = 2 \\), incrementous \\( b, c, d \\).\n\nLet’s try \\( a = 2 \\), \\( b = 2 \\):\n\n\\[ 2^2 + 2(2)^2 + "
+        },
+        {
+          "char_start": 5676,
+          "text": "\n\nNo.\n\nIt seems that \\( a = 2 \\), \\( b = 2 \\), \\( c = 2 \\), \\( d = 2 \\) is the only solution that satisfies the equation.\n\nBut wait, the problem might have multiple solutions, or perhaps there's a typo.\n\nAlternatively, let's check \\( a = 3 \\), \\( b = 2 \\), \\( c = 2 \\), \\( d = 2 \\):\n\n\\[ 9 + 8 + 4 + 8 = 29 \\]\n\\[ 2(6 + 4 - 4 + 6) = 2(12) = 24 \\]\n\\[ 29 \\ne 24 \\]\n\nNo.\n\nAlternatively, perhaps \\( a = 2 \\), \\( b = 2 \\), \\( c = 3 \\), \\( d = 5 \\):\n\n\\[ 4 + 8 + 9 + 50 = 71 \\]\n\\[ 2(4 + 6 - 15 + 10) = 2(6) = 12 \\]\n\\[ 71 \\ne 12 \\]\n\nNo.\n\nAlternatively, perhaps \\( a = 2 \\), \\( b = 3 \\), \\( c = 5 \\), \\( d = 3 \\):\n\n\\[ 4 + 18 + 25 + 18 = 65 \\]\n\\[ 2(6 + 15 - 15 +"
+        },
+        {
+          "char_start": 6527,
+          "text": "o.\n\nIt seems that \\( a = 2 \\), \\( b = 2 \\), \\( c = 2 \\), \\( d = 2 \\) is the only solution.\n\nBut let's check if there are larger primes.\n\nLet’s try \\( a = 2 \\), \\( b = 3 \\), \\( c = 5 \\), \\( d = 7 \\):\n\n\\[ 4 + 18 + 25 + 98 = 145 \\]\n\\[ 2(6 + 15 - 35 + 14) = 2(0) = 0 \\]\n\\[ 145 \\ne 0 \\]\n\nNo.\n\nAlternatively, \\( a = 2 \\), \\( b = 3 \\), \\( c = 5 \\), \\( d = 11 \\):\n\n\\[ 4 + 18 + 25 + 242 = 289 \\]\n\\[ 2(6 + 15 - 55 + 22) = 2(-12) = -24 \\]\n\\[ 289 \\ne -24 \\]\n\nNo.\n\nIt seems that \\( a = 2 \\), \\( b = 2 \\), \\( c = 2 \\), \\( d = 2 \\) is the only solution.\n\n### Step 11: Calculate the Expression\n\nGiven \\( a = 2 \\), \\( b = 2 \\), \\( c = 2 \\), \\( d = 2 \\):\n\n\\[ 4a + 3b + 2c + d = 4(2) + 3(2) + 2(2) + 2 = 8 + 6 + 4 + 2 = 20 \\]\n\nThus, the final answer is:\n\n\\[\\boxed{20}\\]"
+        }
+      ]
+    },
+    {
+      "stratum": "stop_medium",
+      "source": "e54-mdpo-sweep-20261029/evaluation/k05-eta03-dapo/scored.jsonl",
+      "prompt_id": "train-708",
+      "length": 7344,
+      "acc": false,
+      "repeat8": 0.37249557039661985,
+      "repeat32": 0.06536305209900173,
+      "case": 10,
+      "judgment": "backtracking",
+      "reason": "矩形距离推导反复修正并产生不同方程，属于低效回溯候选；相似度本身不足以安全判停。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 1350,
+          "text": "corner.\n\nLet’s denote the center of the staircase as point $O(x_O, y_O, z_O)$. The distances are:\n\n1. From the center to one corner: $d_1 = 9$ inches\n2. From the center to another corner: $d_2 = 15$ inches\n3. From the center to a third corner: $d_3 = 16$ inches\n4. From the center to the furthest corner: $d_4 = x$ inches\n\nBut since all points are on the same plane, the $z$-coordinate of the center is 0. So it's $(x_O, y_O, 0)$.\n\nNow, in 3D space, the distance from the center to a corner can be expressed using the distances from the center to orthogonal axes.\n\nLet’s denote the coordinates of the center as $(x, y, 0)$.\n\nWe can use the fact that "
+        },
+        {
+          "char_start": 7593,
+          "text": "ow y^2 - 2by + b^2 = 0$\n\nSo, $(y - b)^2 = 0 \\Rightarrow y = b$\n\nThen, $y = b$, so:\n\nFrom $x^2 + y^2 = 81$\n\n$ \\Rightarrow x^2 + b^2 = 81$\n\nBut we also have:\n\nFrom $OB = 15$:\n\n$(x - a)^2 + y^2 = 225$\n\n$ \\Rightarrow (x - a)^2 = 225 - y^2$\n\nBut $y^2 = 81 - x^2$, so\n\n$(x - a)^2 = 225 - (81 - x^2) = 144 + x^2$\n\nSo,\n\n$(x - a)^2 = 144 + x^2$\n\nBut we also have $OC = 16$:\n\n$(x - a)^2 + (y - b)^2 = 256$\n\nBut $y = b$, so:\n\n$(x - a)^2 + 0 = 256$\n\nSo, $(x - a)^2 = 256$\n\nThen, $x - a = \\pm 16$\n\nBut we also have $(x - a)^2 = 144 + x^2$\n\nSo, $144 + x^2 = 256$\n\n$ \\Rightarrow x^2 = 112$\n\n$ \\Rightarrow x = \\sqrt{112} = 4\\sqrt{7}$\n\nBut we also have $x^2 + b^2 = 8"
+        },
+        {
+          "char_start": 13162,
+          "text": "2 + b^2 = 81$\n\nInto Eq. 2: $(x - a)^2 + b^2 = 225$\n\n$ \\Rightarrow (x - a)^2 = 144$\n\nSo, $x - a = \\pm 12$\n\nLet’s try $x = a + 12$\n\nThen, from Eq. 1: $a^2 + b^2 = 81$\n\nFrom Eq. 2: $(a + 12)^2 + b^2 = 225$\n\n$ a^2 + 24a + 144 + b^2 = 225$\n\nBut $a^2 + b^2 = 81$, so subtract:\n\n$24a + 144 = 144$\n\n$24a = 0 \\Rightarrow a = 0$\n\nBut $a = 0$ would give a degenerate rectangle.\n\nSo, we must have made a mistake.\n\nLet’s try a different approach.\n\nLet’s denote the center as $O = (x, y, 0)$.\n\nThen:\n\n- $OA = 9 \\Rightarrow x^2 + y^2 = 81$\n- $OB = 15 \\Rightarrow (x - a)^2 + y^2 = 225$\n- $OC = 16 \\Rightarrow (x - a)^2 + (y - b)^2 = 256$\n- $OD = x$\n\nLet’s assume th"
+        },
+        {
+          "char_start": 16125,
+          "text": "= x^2 + y^2 = 81$\n- $OB = (x - a)^2 + y^2 = 225$\n- $OC = (x - a)^2 + (y - b)^2 = 256$\n\nWe have $y = b$.\n\nFrom $OA = x^2 + y^2 = 81$, $x^2 + b^2 = 81$\n\nFrom $OB = (x - a)^2 + y^2 = 225$\n\n$(x - a)^2 + b^2 = 225$\n\nBut we have $(x - a)^2 = 144$, so $x - a = \\pm 12$\n\nLet’s take $x = a + 12$\n\nThen, $a^2 + b^2 = 81$\n\n$(a + 12)^2 + b^2 = 225$\n\n$ a^2 + 24a + 144 + b^2 = 225$\n\nBut $a^2 + b^2 = 81 - b^2$, so:\n\n$81 - b^2 + 24a + 144 = 225$\n\n$225 - b^2 + 24a = 225$\n\n$-b^2 + 24a = 0 \\Rightarrow b^2 = 24a$\n\nWe have $b^2 = 24a$, so $a^2 + b^2 = 81$, so:\n\n$a^2 + 24a = 81$\n\n$a^2 + 24a - 81 = 0$\n\n$a = 3$ or $a = -27$\n\nValid solution $a = 3$, $b^2 = 72$, $b = 6\\sqrt{2}$\n\nThen, $x = a + 12 = 15$\n\nSo, the distance is $x = 15$.\n\nThus, the answer is:\n\n$\\boxed{15}$"
+        }
+      ]
+    },
+    {
+      "stratum": "stop_medium",
+      "source": "e54-mdpo-sweep-20261029/evaluation/k05-eta01-math/scored.jsonl",
+      "prompt_id": "MATH-500:298",
+      "length": 1155,
+      "acc": true,
+      "repeat8": 0.3806620209059234,
+      "repeat32": 0.002669039145907437,
+      "case": 11,
+      "judgment": "normal_progress",
+      "reason": "全文依次展开叉积、利用反对称、代入向量、逐项相加并结束；8-gram38%主要是数学格式及变量复用。",
+      "scope": "full response",
+      "excerpts": [
+        {
+          "char_start": 0,
+          "text": "{\"stratum\": \"stop_medium\", \"source\": \"e54-mdpo-sweep-20261029/evaluation/k05-eta01-math/scored.jsonl\", \"prompt_id\": \"MATH-500:298\", \"length\": 1155, \"acc\": true, \"finish_reason\": \"stop\", \"repeat8\": 0.3806620209059234, \"repeat32\": 0.002669039145907437, \"tail2048_repeat8\": 0.3806620209059234, \"tail2048_repeat32\": 0.002669039145907437}\n\nTo solve the problem, we need to compute the cross product \\((2\\mathbf{b} - \\mathbf{a}) \\times (3\\mathbf{c} + \\mathbf{a})\\) given the cross products:\n\n\\[\n\\mathbf{a} \\times \\mathbf{b} = \\begin{pmatrix} 6 \\\\ -7 \\\\ 3 \\end{pmatrix}, \\quad \\mathbf{a} \\times \\mathbf{c} = \\begin{pmatrix} 4 \\\\ 7 \\\\ 2 \\end{pmatrix}, \\quad \\mathbf{b} \\times \\mathbf{c} = \\begin{pmatrix} 1 \\\\ -7 \\\\ 18 \\end{pmatrix}.\n\\]\n\nLet's denote:\n\n\\[\n\\mathbf{a} \\times \\mathbf{b} = \\mathbf{d}, \\quad \\mathbf{a} \\times \\mathbf{c} = \\mathbf{e}, \\quad \\mathbf{b} \\times \\mathbf{c} = \\mathbf{f}.\n\\]\n\nSo,\n\n\\[\n\\mathbf{d} = \\begin{pmatrix} 6 \\\\ -7 \\\\ 3 \\end{pmatrix}, \\quad \\mathbf{e} = \\begin{pmatrix} 4 \\\\ 7 \\\\ 2 \\end{pmatrix}, \\quad \\mathbf{f} = \\begin{pmatrix} 1 \\\\ -7 \\\\ 18 \\end{pmatrix}.\n\\]\n\nWe are asked to compute:\n\n\\[\n(2\\mathbf{b} - \\mathbf{a}) \\times (3\\mathbf{c} + \\mathbf{a}).\n\\]\n\nLet's expand this expression using the distributive property of the cross product:\n\n\\[\n(2\\mathbf{b} - \\mathbf{a}) \\times (3\\mathbf{c} + \\mathbf{a}) = 2\\mathbf{b} \\times 3\\mathbf{c} + 2\\mathbf{b} \\times \\mathbf{a} - \\mathbf{a} \\times 3\\mathbf{c} - \\mathbf{a} \\times \\mathbf{a}.\n\\]\n\nSimplify each term:\n\n1. \\(2\\mathbf{b} \\times 3\\mathbf{c} = 6(\\mathbf{b} \\times \\mathbf{c}) = 6\\mathbf{f}\\).\n2. \\(2\\mathbf{b} \\times \\mathbf{a} = 2(-\\mathbf{a} \\times \\mathbf{b}) = -2\\mathbf{d}\\).\n3. \\(-\\mathbf{a} \\times 3\\mathbf{c} = -3(\\mathbf{a} \\times \\mathbf{c}) = -3\\mathbf{e}\\).\n4. \\(\\mathbf{a} \\times \\mathbf{a} = \\mathbf{0}\\) (since the cross product of a vector with itself is zero).\n\nSo, the expression becomes:\n\n\\[\n6\\mathbf{f} - 2\\mathbf{d} - 3\\mathbf{e} - \\mathbf{0} = 6\\mathbf{f} - 2\\mathbf{d} - 3\\mathbf{e}.\n\\]\n\nNow, substitute the given values:\n\n\\[\n6\\mathbf{f} = 6\\begin{pmatrix} 1 \\\\ -7 \\\\ 18 \\end{pmatrix} = \\begin{pmatrix} 6 \\\\ -42 \\\\ 108 \\end{pmatrix},\n\\]\n\\[\n-2\\mathbf{d} = -2\\begin{pmatrix} 6 \\\\ -7 \\\\ 3 \\end{pmatrix} = \\begin{pmatrix} -12 \\\\ 14 \\\\ -6 \\end{pmatrix},\n\\]\n\\[\n-3\\mathbf{e} = -3\\begin{pmatrix} 4 \\\\ 7 \\\\ 2 \\end{pmatrix} = \\begin{pmatrix} -12 \\\\ -21 \\\\ -6 \\end{pmatrix}.\n\\]\n\nNow, add these vectors together:\n\n\\[\n6\\mathbf{f} - 2\\mathbf{d} - 3\\mathbf{e} = \\begin{pmatrix} 6 \\\\ -42 \\\\ 108 \\end{pmatrix} + \\begin{pmatrix} -12 \\\\ 14 \\\\ -6 \\end{pmatrix} + \\begin{pmatrix} -12 \\\\ -21 \\\\ -6 \\end{pmatrix}.\n\\]\n\nPerform the addition component-wise:\n\n\\[\n\\begin{pmatrix} 6 + (-12) + (-12) \\\\ -42 + 14 + (-21) \\\\ 108 + (-6) + (-6) \\end{pmatrix} = \\begin{pmatrix} -18 \\\\ -49 \\\\ 96 \\end{pmatrix}.\n\\]\n\nTherefore, the final answer is:\n\n\\[\n\\boxed{\\begin{pmatrix} -18 \\\\ -49 \\\\ 96 \\end{pmatrix}}\n\\]"
+        }
+      ]
+    },
+    {
+      "stratum": "cap_low",
+      "source": "e54-topd-mdpo-20261029/evaluation/k0-eta02-dapo/scored.jsonl",
+      "prompt_id": "train-8423",
+      "length": 31744,
+      "acc": false,
+      "repeat8": 0.42272426505340766,
+      "repeat32": 0.11512628890360421,
+      "case": 12,
+      "judgment": "enumeration_revisit",
+      "reason": "连续枚举质数组合且中段到末段又出现较小质数；没有由精确同词重复直接证明永久停滞。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 25800,
+          "text": "\n$$\n15840 + 39874 - 42631 + 1906 = 23989\n$$\n\n$226754 \\neq 23989$, wrong.\n\n### Step 85: Try $a = 2$, $b = 307$, $c = 311$, $d = 313$\n\nLeft side:\n$$\n4 + 66842 + 69029 + 97321 = 234896\n$$\n\nRight side:\n$$\n16180 + 40978 - 43511 + 1958 = 24565\n$$\n\n$234896 \\neq 24565$, wrong.\n\n### Step 86: Try $a = 2$, $b = 311$, $c = 313$, $d = 317$\n\nLeft side:\n$$\n4 + 69022 + 69649 + 99001 = 235586\n$$\n\nRight side:\n$$\n16520 + 41638 - 45017 + 1658 = 25309\n$$\n\n$235586 \\neq 25309$, wrong.\n\n### Step 87: Try $a = 2$, $b = 313$, $c = 317$, $d = 331$\n\nLeft side:\n$$\n4 + 69642 + 70849 + 106681 = 257273\n$$\n\nRight side:\n$$\n16760 + 41834 - 45397 + 1998 = 27635\n$$\n\n$257273 \\neq "
+        },
+        {
+          "char_start": 50851,
+          "text": "91$, wrong.\n\n### Step 137: Try $a = 2$, $b = 97$, $c = 101$, $d = 103$\n\nLeft side:\n$$\n4 + 18802 + 10301 + 98809 = 121012\n$$\n\nRight side:\n$$\n35560 + 16198 - 35533 + 1666 = 2375\n$$\n\n$121012 \\neq 2375$, wrong.\n\n### Step 138: Try $a = 2$, $b = 101$, $c = 103$, $d = 107$\n\nLeft side:\n$$\n4 + 10202 + 10609 + 108289 = 129022\n$$\n\nRight side:\n$$\n40040 + 16622 - 35783 + 1742 = 2942\n$$\n\n$129022 \\neq 2942$, wrong.\n\n### Step 139: Try $a = 2$, $b = 103$, $c = 107$, $d = 109$\n\nLeft side:\n$$\n4 + 10602 + 11449 + 111129 = 123282\n$$\n\nRight side:\n$$\n40480 + 17342 - 36707 + 1766 = 3361\n$$\n\n$123282 \\neq 3361$, wrong.\n\n### Step 140: Try $a = 2$, $b = 107$, $c = 109$, $d = 113$\n\nLeft side:\n$$\n4 + 11442 + 11881 + 116369 = 130494\n$$\n\nRight side:\n$$\n41680 + 18382 - 375"
+        }
+      ]
+    },
+    {
+      "stratum": "cap_low",
+      "source": "e54-topd-mdpo-20261029/evaluation/k1-eta02-math/scored.jsonl",
+      "prompt_id": "MATH-500:285",
+      "length": 31744,
+      "acc": false,
+      "repeat8": 0.48325298547436746,
+      "repeat32": 0.04250622772995305,
+      "case": 13,
+      "judgment": "invalid_enumeration",
+      "reason": "原题要求正整数根，仍连续测试(k,k,0)且k递增；重复结构明确，数学内容也违反已知约束。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 26751,
+          "text": "}{2} = 44\n\\]\nNot equal to 5329.\n\nWait, let’s try $(74,74,0)$:\n\\[\nrs + rt + st = 74 \\cdot 74 + 74 \\cdot 0 + 74 \\cdot 0 = 5476 + 0 + 0 = 5476\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 5476.\n\nWait, let’s try $(75,75,0)$:\n\\[\nrs + rt + st = 75 \\cdot 75 + 75 \\cdot 0 + 75 \\cdot 0 = 5625 + 0 + 0 = 5625\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 5625.\n\nWait, let’s try $(76,76,0)$:\n\\[\nrs + rt + st = 76 \\cdot 76 + 76 \\cdot 0 + 76 \\cdot 0 = 5776 + 0 + 0 = 5776\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 5776.\n\nWait, let’s try $(77,77,0)$:\n\\[\nrs + rt + st = 77 \\cdot 77 + 77 \\cdot 0 + 77 \\cdot 0 = 5929 + 0 + 0 = 5929\n\\]\nBut:\n\\[\n\\fra"
+        },
+        {
+          "char_start": 52752,
+          "text": " + 0 = 50176\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 50176.\n\nWait, let’s try $(225,225,0)$:\n\\[\nrs + rt + st = 225 \\cdot 225 + 225 \\cdot 0 + 225 \\cdot 0 = 50625 + 0 + 0 = 50625\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 50625.\n\nWait, let’s try $(226,226,0)$:\n\\[\nrs + rt + st = 226 \\cdot 226 + 226 \\cdot 0 + 226 \\cdot 0 = 51076 + 0 + 0 = 51076\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 51076.\n\nWait, let’s try $(227,227,0)$:\n\\[\nrs + rt + st = 227 \\cdot 227 + 227 \\cdot 0 + 227 \\cdot 0 = 51529 + 0 + 0 = 51529\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 51529.\n\nWait, let’s try $(228,228,0)$:\n\\[\nrs + rt + st = 228 \\cdot 228 + 228 \\cdot 0 + 228 \\cdot 0 = 51984 + 0 + 0 = 51984\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot"
+        }
+      ]
+    },
+    {
+      "stratum": "cap_low",
+      "source": "e54-topd-mdpo-20261029/evaluation/k0-eta02-dapo/scored.jsonl",
+      "prompt_id": "train-5639",
+      "length": 31744,
+      "acc": false,
+      "repeat8": 0.4753127264706809,
+      "repeat32": 0.008230063380947894,
+      "case": 14,
+      "judgment": "uncertain_enumeration",
+      "reason": "不断计算相邻项gcd，n在增加；有算术错误且效率低，但新数值不应自动抹去后判为精确循环。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 24509,
+          "text": "  a_{60} = 4196\n   \\]\n   \\[\n   a_{61} = 100 + 4225 = 4325\n   \\]\n   \\[\n   d_{60} = \\gcd(4196, 4325)\n   \\]\n   \\[\n   \\gcd(4196, 4325)\n   \\]\n   \\[\n   4325 - 4196 = 129\n   \\]\n   \\[\n   \\gcd(4196, 129) = \\gcd(129, 4196 - 129 \\times 32) = \\gcd(129, 4196 - 4048) = \\gcd(129, 148)\n   \\]\n   \\[\n   \\gcd(129, 148) = 1\n   \\]\n   So, \\(d_{60} = 1\\)\n\n   Let’s try \\(n = 61\\):\n   \\[\n   a_{61} = 4325\n   \\]\n   \\[\n   a_{62} = 100 + 4411 = 4511\n   \\]\n   \\[\n   d_{61} = \\gcd(4325, 4511)\n   \\]\n   \\[\n   \\gcd(4325, 4511)\n   \\]\n   \\[\n   4511 - 4325 = 186\n   \\]\n   \\[\n   \\gcd(4325, 186) = \\gcd(186, 4325 - 186 \\times 23) = \\gcd(186, 4325 - 4378) = \\gcd(186, -53) = \\gcd(186, 5"
+        },
+        {
+          "char_start": 48268,
+          "text": "es 115) = \\gcd(115, 13181 - 13225) = \\gcd(115, -44) = \\gcd(115, 44)\n   \\]\n   \\[\n   \\gcd(115, 44) = 1\n   \\]\n   So, \\(d_{117} = 1\\)\n\n   Let’s try \\(n = 118\\):\n   \\[\n   a_{118} = 13296\n   \\]\n   \\[\n   a_{119} = 100 + 13313 = 13413\n   \\]\n   \\[\n   d_{118} = \\gcd(13296, 13413)\n   \\]\n   \\[\n   \\gcd(13296, 13413)\n   \\]\n   \\[\n   13413 - 13296 = 117\n   \\]\n   \\[\n   \\gcd(13296, 117) = \\gcd(117, 13296 - 117 \\times 114) = \\gcd(117, 13296 - 13218) = \\gcd(117, 78)\n   \\]\n   \\[\n   \\gcd(117, 78) = 3\n   \\]\n   So, \\(d_{118} = 3\\)\n\n   Let’s check \\(n = 118\\):\n   \\[\n   a_{118} = 13296\n   \\]\n   \\[\n   a_{119} = 13413\n   \\]\n   \\[\n   \\gcd(13296, 13413) = 3\n   \\]\n\n   So, \\(d_{118} = 3\\)\n\n   Let’s check \\(n = 119\\):\n   \\[\n   a_{119} = 13413\n   \\]\n   \\[\n   a_{120} = 100 +"
+        }
+      ]
+    },
+    {
+      "stratum": "cap_low",
+      "source": "e54-mdpo-sweep-20261029/evaluation/k1-eta03-dapo/scored.jsonl",
+      "prompt_id": "train-2792",
+      "length": 31744,
+      "acc": false,
+      "repeat8": 0.4679711377887009,
+      "repeat32": 0.23756818970138427,
+      "case": 15,
+      "judgment": "late_loop",
+      "reason": "中段仍在列举五位平方数，末尾变成末两位相等的同四句反复出现。",
+      "scope": "selected excerpts only; not full-response annotation",
+      "excerpts": [
+        {
+          "char_start": 38336,
+          "text": "    |     |         |\n|     | 5   | 900 + 25 = 925 → 25 | No |\n|     |     |         |\n|     | 6   | 1080 + 36 = 1116 → 16 | No |\n|     |     |         |\n|     | 7   | 1260 + 49 = 1309 → 09 | No |\n|     |     |         |\n|     | 8   | 1440 + 64 = 1504 → 04 | No |\n|     |     |         |\n|     | 9   | 1620 + 81 = 1701 → 01 | No |\n\nNow we can make a summary:\n\nWe have found that for \\( a = 1 \\), the last two digits are 00, except for 21, 24, 69\n\nFor \\( a = 2 \\), the last two digits start with 40, 41, 44, 46, 49, etc.\n\nFor \\( a = 3 \\), the last two digits start with 44, 56.\n\nFor \\( a = 4 \\), the last two digits are 04, except 25.\n\nFor \\( a = 5 \\)"
+        },
+        {
+          "char_start": 75922,
+          "text": "+ 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000"
+        }
+      ]
+    }
+  ]
+}

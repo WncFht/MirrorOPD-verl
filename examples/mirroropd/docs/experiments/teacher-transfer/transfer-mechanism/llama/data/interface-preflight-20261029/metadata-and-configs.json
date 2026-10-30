@@ -1,0 +1,292 @@
+{
+  "student": {
+    "repo": "meta-llama/Llama-3.2-3B-Instruct",
+    "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+    "hub_safetensors": {
+      "parameters": {
+        "BF16": 3212749824
+      },
+      "total": 3212749824
+    },
+    "fetch_status": {
+      "README.md": 200,
+      "config.json": 401,
+      "tokenizer_config.json": 401,
+      "special_tokens_map.json": 401,
+      "generation_config.json": 401
+    },
+    "config": null
+  },
+  "gt": {
+    "repo": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH",
+    "revision": "b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+    "hub_safetensors": {
+      "parameters": {
+        "BF16": 3606752256
+      },
+      "total": 3606752256
+    },
+    "fetch_status": {
+      "README.md": 200,
+      "config.json": 200,
+      "tokenizer_config.json": 200,
+      "special_tokens_map.json": 200,
+      "generation_config.json": 200
+    },
+    "config": {
+      "architectures": [
+        "LlamaForCausalLM"
+      ],
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "bos_token_id": 128000,
+      "eos_token_id": 128009,
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 3072,
+      "initializer_range": 0.02,
+      "intermediate_size": 8192,
+      "max_position_embeddings": 131072,
+      "mlp_bias": false,
+      "model_type": "llama",
+      "num_attention_heads": 24,
+      "num_hidden_layers": 28,
+      "num_key_value_heads": 8,
+      "pad_token_id": 128009,
+      "pretraining_tp": 1,
+      "rms_norm_eps": 1e-05,
+      "rope_scaling": {
+        "factor": 32.0,
+        "high_freq_factor": 4.0,
+        "low_freq_factor": 1.0,
+        "original_max_position_embeddings": 8192,
+        "rope_type": "llama3"
+      },
+      "rope_theta": 500000.0,
+      "tie_word_embeddings": true,
+      "torch_dtype": "bfloat16",
+      "transformers_version": "4.51.1",
+      "use_cache": true,
+      "vocab_size": 128256
+    },
+    "head_alias_shards": {
+      "model.embed_tokens.weight": "model-00001-of-00002.safetensors",
+      "lm_head.weight": "model-00001-of-00002.safetensors"
+    }
+  },
+  "coreward-i": {
+    "repo": "TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+    "revision": "0d1e2f5ca0f62c670853c59b97650abde3608437",
+    "hub_safetensors": {
+      "parameters": {
+        "BF16": 3606752256
+      },
+      "total": 3606752256
+    },
+    "fetch_status": {
+      "README.md": 200,
+      "config.json": 200,
+      "tokenizer_config.json": 200,
+      "special_tokens_map.json": 200,
+      "generation_config.json": 200
+    },
+    "config": {
+      "architectures": [
+        "LlamaForCausalLM"
+      ],
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "bos_token_id": 128000,
+      "eos_token_id": 128009,
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 3072,
+      "initializer_range": 0.02,
+      "intermediate_size": 8192,
+      "max_position_embeddings": 131072,
+      "mlp_bias": false,
+      "model_type": "llama",
+      "num_attention_heads": 24,
+      "num_hidden_layers": 28,
+      "num_key_value_heads": 8,
+      "pad_token_id": 128009,
+      "pretraining_tp": 1,
+      "rms_norm_eps": 1e-05,
+      "rope_scaling": {
+        "factor": 32.0,
+        "high_freq_factor": 4.0,
+        "low_freq_factor": 1.0,
+        "original_max_position_embeddings": 8192,
+        "rope_type": "llama3"
+      },
+      "rope_theta": 500000.0,
+      "tie_word_embeddings": true,
+      "torch_dtype": "bfloat16",
+      "transformers_version": "4.51.1",
+      "use_cache": true,
+      "vocab_size": 128256
+    },
+    "head_alias_shards": {
+      "model.embed_tokens.weight": "model-00001-of-00002.safetensors",
+      "lm_head.weight": "model-00001-of-00002.safetensors"
+    }
+  },
+  "arithmetic-full": {
+    "repo": "Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full",
+    "revision": "66feb54e931c27285afc344645bf0961053ea29b",
+    "hub_safetensors": {
+      "parameters": {
+        "BF16": 3212749824
+      },
+      "total": 3212749824
+    },
+    "fetch_status": {
+      "README.md": 200,
+      "config.json": 200,
+      "tokenizer_config.json": 200,
+      "special_tokens_map.json": 200,
+      "generation_config.json": 200
+    },
+    "config": {
+      "_name_or_path": "meta-llama/Llama-3.2-3B-Instruct",
+      "architectures": [
+        "LlamaForCausalLM"
+      ],
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "bos_token_id": 128000,
+      "eos_token_id": [
+        128001,
+        128008,
+        128009
+      ],
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 3072,
+      "initializer_range": 0.02,
+      "intermediate_size": 8192,
+      "max_position_embeddings": 131072,
+      "mlp_bias": false,
+      "model_type": "llama",
+      "num_attention_heads": 24,
+      "num_hidden_layers": 28,
+      "num_key_value_heads": 8,
+      "pretraining_tp": 1,
+      "rms_norm_eps": 1e-05,
+      "rope_scaling": {
+        "factor": 32.0,
+        "high_freq_factor": 4.0,
+        "low_freq_factor": 1.0,
+        "original_max_position_embeddings": 8192,
+        "rope_type": "llama3"
+      },
+      "rope_theta": 500000.0,
+      "tie_word_embeddings": true,
+      "torch_dtype": "bfloat16",
+      "transformers_version": "4.46.2",
+      "use_cache": false,
+      "vocab_size": 128256
+    },
+    "head_alias_shards": {
+      "model.embed_tokens.weight": "model-00001-of-00002.safetensors",
+      "lm_head.weight": null
+    }
+  },
+  "llama-1b": {
+    "repo": "meta-llama/Llama-3.2-1B-Instruct",
+    "revision": "9213176726f574b556790deb65791e0c5aa438b6",
+    "hub_safetensors": {
+      "parameters": {
+        "BF16": 1235814400
+      },
+      "total": 1235814400
+    },
+    "fetch_status": {
+      "README.md": 200,
+      "config.json": 401,
+      "tokenizer_config.json": 401,
+      "special_tokens_map.json": 401,
+      "generation_config.json": 401
+    },
+    "config": null
+  },
+  "llama-8b": {
+    "repo": "meta-llama/Llama-3.1-8B-Instruct",
+    "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+    "hub_safetensors": {
+      "parameters": {
+        "BF16": 8030261248
+      },
+      "total": 8030261248
+    },
+    "fetch_status": {
+      "README.md": 200,
+      "config.json": 401,
+      "tokenizer_config.json": 401,
+      "special_tokens_map.json": 401,
+      "generation_config.json": 401
+    },
+    "config": null
+  },
+  "nemotron-8b": {
+    "repo": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1",
+    "revision": "54641c1611fcff44fa4865626462445e0a153fc7",
+    "hub_safetensors": {
+      "parameters": {
+        "BF16": 8030261248
+      },
+      "total": 8030261248
+    },
+    "fetch_status": {
+      "README.md": 200,
+      "config.json": 200,
+      "tokenizer_config.json": 200,
+      "special_tokens_map.json": 200,
+      "generation_config.json": 200
+    },
+    "config": {
+      "_name_or_path": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1",
+      "architectures": [
+        "LlamaForCausalLM"
+      ],
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "bos_token_id": 128000,
+      "eos_token_id": [
+        128001,
+        128008,
+        128009
+      ],
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 4096,
+      "initializer_range": 0.02,
+      "intermediate_size": 14336,
+      "max_position_embeddings": 131072,
+      "mlp_bias": false,
+      "model_type": "llama",
+      "num_attention_heads": 32,
+      "num_hidden_layers": 32,
+      "num_key_value_heads": 8,
+      "pretraining_tp": 1,
+      "rms_norm_eps": 1e-05,
+      "rope_scaling": {
+        "factor": 8.0,
+        "high_freq_factor": 4.0,
+        "low_freq_factor": 1.0,
+        "original_max_position_embeddings": 8192,
+        "rope_type": "llama3"
+      },
+      "rope_theta": 500000.0,
+      "tie_word_embeddings": false,
+      "torch_dtype": "bfloat16",
+      "transformers_version": "4.47.1",
+      "use_cache": true,
+      "vocab_size": 128256
+    },
+    "head_alias_shards": {
+      "model.embed_tokens.weight": "model-00001-of-00004.safetensors",
+      "lm_head.weight": "model-00004-of-00004.safetensors"
+    }
+  }
+}

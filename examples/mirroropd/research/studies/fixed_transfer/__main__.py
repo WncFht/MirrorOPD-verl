@@ -14,6 +14,8 @@ def main():
         "action",
         choices=[
             "analyze",
+            "status",
+            "prune",
             "assets",
             "prepare",
             "bank",
@@ -27,14 +29,33 @@ def main():
             "guard",
         ],
     )
+    parser.add_argument("--apply", action="store_true", help="Delete audited transient weights (prune only)")
+    parser.add_argument("--risk-only", action="store_true", help="Verify fixed-risk evidence only (analyze)")
     parser.add_argument("--partial", action="store_true", help="Analyze only completed evidence")
     parser.add_argument("--plan", type=Path)
     parser.add_argument("--model")
     parser.add_argument("--arm")
     parser.add_argument("--step", type=int)
     parser.add_argument("--shard", type=int, default=0)
-    parser.add_argument("--phase", choices=["baselines", "full"], default="baselines")
+    parser.add_argument(
+        "--phase",
+        choices=[
+            "banks",
+            "baselines",
+            "full",
+            "training",
+            "fit",
+            "resume-check",
+            "targets",
+            "probes",
+            "endpoints",
+            "long-panel",
+            "stage-attribution",
+        ],
+        default="baselines",
+    )
     parser.add_argument("--directory", type=Path)
+    parser.add_argument("--wait-resource", action="store_true", help="Wait for the allocated GPU lease before run")
     args = parser.parse_args()
     if args.action == "guard":
         from examples.mirroropd.research.runtime.resources import guard
@@ -43,13 +64,26 @@ def main():
         return
     if args.plan is None:
         parser.error("--plan is required")
+    if args.risk_only and args.action != "analyze":
+        parser.error("--risk-only is only valid with analyze")
     study = Study.load(args.plan)
-    if args.action == "analyze":
+    if args.action == "status":
+        import json
+
+        from examples.mirroropd.research.studies.fixed_transfer.runner import status
+
+        print(json.dumps(status(study), indent=2, ensure_ascii=False))
+    elif args.action == "prune":
+        from examples.mirroropd.research.studies.fixed_transfer.retention import prune
+
+        prune(study, apply=args.apply)
+    elif args.action == "analyze":
         from examples.mirroropd.research.studies.fixed_transfer.analysis import analyze
 
-        analyze(study, partial=args.partial)
+        analyze(study, partial=args.partial, risk_only=args.risk_only)
     elif args.action == "assets":
-        from examples.mirroropd.research.studies.fixed_transfer.models import assets, audit
+        from examples.mirroropd.research.studies.fixed_transfer.models import audit
+        from examples.mirroropd.research.studies.fixed_transfer.stage_assets import assets
 
         assets(study)
         audit(study)
@@ -94,7 +128,7 @@ def main():
     else:
         from examples.mirroropd.research.studies.fixed_transfer.runner import run
 
-        run(args.plan, args.phase)
+        run(args.plan, args.phase, wait_resource=args.wait_resource)
 
 
 if __name__ == "__main__":
