@@ -9,8 +9,9 @@ from dataclasses import dataclass
 
 import torch
 
+from verl.experimental.rollout_policy.sampling import SamplingConfig, fusion_log_probs, sample_tokens
+
 from .math_context import inference_math
-from .sampling import SamplingConfig, fusion_log_probs, sample_tokens
 
 
 @dataclass(frozen=True)
@@ -245,7 +246,7 @@ class HFFusionDecoder:
                 event = self._profile_begin(device)
                 alive = torch.tensor([not done for done in finished], device=device)
                 stop_rows += int(alive.sum())
-                from .sampling import stop_event_probabilities
+                from verl.experimental.rollout_policy.sampling import stop_event_probabilities
 
                 if self.native_stop_ids is None:
                     raise ValueError("Stop diagnostics require the two native EOS IDs")

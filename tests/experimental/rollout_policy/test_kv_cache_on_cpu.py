@@ -4,9 +4,9 @@ import pytest
 import torch
 from transformers import Qwen3Config, Qwen3ForCausalLM
 
-from verl.experimental.rollout_policy.hf_decoder import DecodeRequest, HFFusionDecoder
-from verl.experimental.rollout_policy.kv_cache import AppendLayer
 from verl.experimental.rollout_policy.sampling import SamplingConfig
+from verl.workers.rollout.hf_fusion.hf_decoder import DecodeRequest, HFFusionDecoder
+from verl.workers.rollout.hf_fusion.kv_cache import AppendLayer
 
 
 def test_append_storage_reorder_reset_and_capacity():

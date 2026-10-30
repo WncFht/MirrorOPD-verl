@@ -4,8 +4,8 @@ import pytest
 import torch
 from transformers import Qwen3Config, Qwen3ForCausalLM
 
-from verl.experimental.rollout_policy.hf_decoder import DecodeRequest, HFFusionDecoder
 from verl.experimental.rollout_policy.sampling import SamplingConfig, fusion_log_probs
+from verl.workers.rollout.hf_fusion.hf_decoder import DecodeRequest, HFFusionDecoder
 
 
 def models():

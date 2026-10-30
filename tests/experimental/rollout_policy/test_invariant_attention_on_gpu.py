@@ -10,7 +10,7 @@ pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA inva
 
 @pytest.mark.parametrize("length,dim", [(65, 32), (137, 128)])
 def test_fp64_oracle_padding_and_prefill_decode_identity(length, dim):
-    from verl.experimental.rollout_policy.invariant_attention import causal_gqa
+    from verl.workers.rollout.hf_fusion.invariant_attention import causal_gqa
 
     torch.manual_seed(12)
     q = torch.randn(2, 4, length, dim, device="cuda", dtype=torch.float16)
@@ -40,7 +40,7 @@ def test_fp64_oracle_padding_and_prefill_decode_identity(length, dim):
 
 
 def test_graph_reads_updated_lengths_without_reading_unused_capacity():
-    from verl.experimental.rollout_policy.invariant_attention import causal_gqa
+    from verl.workers.rollout.hf_fusion.invariant_attention import causal_gqa
 
     torch.manual_seed(9)
     keys = torch.randn(2, 1, 150, 32, device="cuda", dtype=torch.float16)

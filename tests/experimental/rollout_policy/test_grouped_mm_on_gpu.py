@@ -9,7 +9,7 @@ pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA grou
 @pytest.mark.parametrize("counts", [[0, 1, 19, 0, 3], [33, 0, 65, 1, 0]])
 @pytest.mark.parametrize("dtype", [torch.bfloat16, torch.float32])
 def test_grouped_fp32_matches_fp32_oracle_and_graph_replay(counts, dtype):
-    from verl.experimental.rollout_policy.grouped_mm import grouped_fp32
+    from verl.workers.rollout.hf_fusion.grouped_mm import grouped_fp32
 
     torch.manual_seed(123)
     x = torch.randn(sum(counts), 80, device="cuda", dtype=dtype)
@@ -39,7 +39,7 @@ def test_grouped_fp32_matches_fp32_oracle_and_graph_replay(counts, dtype):
 @pytest.mark.parametrize("shape", [(3, 71, 128), (35, 67, 81)])
 @pytest.mark.parametrize("weight_dtype", [torch.bfloat16, torch.float32])
 def test_linear_fp32_keeps_activation_precision(shape, weight_dtype):
-    from verl.experimental.rollout_policy.grouped_mm import linear_fp32
+    from verl.workers.rollout.hf_fusion.grouped_mm import linear_fp32
 
     rows, width, inner = shape
     torch.manual_seed(13)
@@ -51,7 +51,7 @@ def test_linear_fp32_keeps_activation_precision(shape, weight_dtype):
 
 @pytest.mark.parametrize("width", [128, 2048])
 def test_rms_fp32_oracle_and_row_independence(width):
-    from verl.experimental.rollout_policy.grouped_mm import rms_fp32
+    from verl.workers.rollout.hf_fusion.grouped_mm import rms_fp32
 
     torch.manual_seed(42)
     values = torch.randn(17, width, device="cuda")
@@ -66,7 +66,7 @@ def test_rms_fp32_oracle_and_row_independence(width):
 def test_router_is_independent_of_row_batching():
     from types import SimpleNamespace
 
-    from verl.experimental.rollout_policy.precision import _router_forward
+    from verl.workers.rollout.hf_fusion.precision import _router_forward
 
     torch.manual_seed(42)
     values = torch.randn(17, 2048, device="cuda")

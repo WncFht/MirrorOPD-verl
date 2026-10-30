@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from verl.experimental.rollout_policy.math_context import inference_math
+from verl.workers.rollout.hf_fusion.math_context import inference_math
 
 
 @pytest.mark.parametrize("fail", [False, True])

@@ -6,7 +6,7 @@ import pytest
 import torch
 from transformers import Qwen3Config, Qwen3ForCausalLM
 
-from verl.experimental.rollout_policy.precision import configure_precision
+from verl.workers.rollout.hf_fusion.precision import configure_precision
 
 
 @pytest.mark.parametrize("mode", ["head", "residual", "linear", "intermediate", "stable"])

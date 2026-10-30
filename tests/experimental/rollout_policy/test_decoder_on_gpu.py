@@ -12,9 +12,9 @@ pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="Flash KV/
 def test_graph_compaction_preserves_prefixes_probabilities_and_request_order(model_type):
     from transformers import Qwen3Config, Qwen3ForCausalLM, Qwen3MoeConfig, Qwen3MoeForCausalLM
 
-    from verl.experimental.rollout_policy.hf_decoder import DecodeRequest, HFFusionDecoder
-    from verl.experimental.rollout_policy.precision import configure_precision
     from verl.experimental.rollout_policy.sampling import SamplingConfig
+    from verl.workers.rollout.hf_fusion.hf_decoder import DecodeRequest, HFFusionDecoder
+    from verl.workers.rollout.hf_fusion.precision import configure_precision
 
     torch.manual_seed(17)
     config_cls, model_cls = (

@@ -7,9 +7,9 @@ import time
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from verl.experimental.rollout_policy.hf_decoder import DecodeRequest, HFFusionDecoder
 from verl.experimental.rollout_policy.sampling import SamplingConfig, validate_tokenizers
 from verl.workers.rollout.base import BaseRollout
+from verl.workers.rollout.hf_fusion.hf_decoder import DecodeRequest, HFFusionDecoder
 from verl.workers.rollout.replica import TokenOutput
 
 
@@ -41,7 +41,7 @@ class ServerAdapter(BaseRollout):
             .eval()
             .requires_grad_(False)
         )
-        from verl.experimental.rollout_policy.precision import configure_precision
+        from verl.workers.rollout.hf_fusion.precision import configure_precision
 
         configure_precision(model, "stable")
         self.metrics["load_seconds"] = self.metrics.get("load_seconds", 0.0) + time.monotonic() - tick

@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import torch
 
-from verl.experimental.rollout_policy.hf_decoder import HFFusionDecoder
+from verl.workers.rollout.hf_fusion.hf_decoder import HFFusionDecoder
 
 
 class PairedReference(HFFusionDecoder):

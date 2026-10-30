@@ -10,8 +10,8 @@ from pathlib import Path
 import torch
 from verify_numerics import TOLERANCES
 
-from verl.experimental.rollout_policy.hf_decoder import DecodeRequest, HFFusionDecoder
 from verl.experimental.rollout_policy.sampling import SamplingConfig, fusion_log_probs, validate_tokenizers
+from verl.workers.rollout.hf_fusion.hf_decoder import DecodeRequest, HFFusionDecoder
 
 
 class HistoryProbe(HFFusionDecoder):
@@ -74,8 +74,8 @@ def worker(rank, source, args):
     import pyarrow.parquet as pq
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    from verl.experimental.rollout_policy.precision import configure_precision
     from verl.utils.tokenizer.continuous_token_wiring import create_continuous_token_builder
+    from verl.workers.rollout.hf_fusion.precision import configure_precision
 
     torch.cuda.set_device(rank)
     torch.set_num_threads(1)

@@ -12,8 +12,8 @@ import torch
 from torch.nn.attention import SDPBackend, sdpa_kernel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from verl.experimental.rollout_policy.math_context import inference_math
 from verl.experimental.rollout_policy.sampling import SamplingConfig, fusion_log_probs, validate_tokenizers
+from verl.workers.rollout.hf_fusion.math_context import inference_math
 
 # Fixed before measurement: BF16 forward kernels may differ by a few output ULPs.
 TOLERANCES = {"logits_abs": 0.25, "probability_abs": 0.01, "selected_logprob_abs": 0.125, "fp64_sampler_abs": 2e-6}
@@ -70,7 +70,7 @@ def main():
         .to(args.device)
         for path in [args.student, args.teacher]
     ]
-    from verl.experimental.rollout_policy.precision import configure_precision
+    from verl.workers.rollout.hf_fusion.precision import configure_precision
 
     for model in models:
         configure_precision(
@@ -122,7 +122,7 @@ def main():
     prefixes, cached_ids = ids.clone(), ids
     caches = [None, None]
     if args.preallocate_kv:
-        from verl.experimental.rollout_policy.kv_cache import AppendCache
+        from verl.workers.rollout.hf_fusion.kv_cache import AppendCache
 
         caches = [AppendCache(model.config, width + args.cache_cap) for model in models]
     graphs = [None, None]
@@ -146,7 +146,7 @@ def main():
             cached, full = [], []
             for i, model in enumerate(models):
                 if args.cuda_graph and step > 0:
-                    from verl.experimental.rollout_policy.cuda_graph import DecodeGraph
+                    from verl.workers.rollout.hf_fusion.cuda_graph import DecodeGraph
 
                     if graphs[i] is None:
                         graphs[i] = DecodeGraph(
@@ -164,7 +164,7 @@ def main():
                 else:
                     attention_context = nullcontext()
                     if args.flash_kv and step > 0:
-                        from verl.experimental.rollout_policy.flash_kv import flash_kv_context
+                        from verl.workers.rollout.hf_fusion.flash_kv import flash_kv_context
 
                         attention_context = flash_kv_context(model, mask, splits=args.flash_kv_splits, cache=caches[i])
                     with attention_context:
