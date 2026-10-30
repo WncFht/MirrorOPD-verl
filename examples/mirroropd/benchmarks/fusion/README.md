@@ -98,7 +98,7 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_native_lifecycle_fsdp2.sh \
 
 `probe_vllm.py` 执行独立生成与全参数 sleep/wake 哈希检查，并保存配置、源码指纹、输入 token、响应、选中概率和 所选 GPU 的资源曲线。哈希检查与首次启动不计入生成计时。`run_fusion_native_benchmark_fsdp2.sh <dense|moe> <唯一目录名> <eager|graph>` 固定 batch64/cap7168、α=0.5、预热和三次测量；`FUSION_MAX_NUM_SEQS`、`FUSION_KV_GIB` 控制并发与 KV 预算。默认值是待测候选，不能由脚本存在推断容量或性能已通过。
 
-数值工具按问题分工：`probe_vllm_math.py` 从真实采样位置取得两侧 logits 和实际过滤后的分布，与独立 FP64 oracle 比较；`probe_native_components.py` 通过独立 native student、teacher 和组合模型重放同一 token 历史。后者使用专用诊断 worker 强制后续 token，不能用于生成吞吐或研究结果。它按请求身份记录检查点，并要求批宽校准确实执行目标批宽。两个数值探针均接受 `--tensor-parallel-size 2`，所有 rank 参与模型计算，仅输出 rank 保存词表结果；不能用 TP1 限值自动宣布 TP2 通过。
+数值工具按问题分工：`probe_vllm_math.py` 从真实采样位置取得两侧 logits 和实际过滤后的分布，与独立 FP64 oracle 比较；`probe_native_components.py` 通过独立 native student、teacher 和组合模型重放同一 token 历史。后者使用专用诊断 worker 强制后续 token，不能用于生成吞吐或研究结果。它按请求身份记录检查点，并要求批宽校准确实执行目标批宽。Prefill 预算取冻结 prompt 同批入场所需 token 数与最大上下文长度的较大者，写入 manifest 的 `effective_max_num_batched_tokens`；suffix 逐步累计 KV，不把整个历史乘以并发数作为 prefill 工作区。两个数值探针均接受 `--tensor-parallel-size 2`，所有 rank 参与模型计算，仅输出 rank 保存词表结果；不能用 TP1 限值自动宣布 TP2 通过。
 
 `compare_native_components.py --calibrate` 将独立 native 批宽差异的最大概率误差、总变差和选中 log-prob 误差分别加 2e-6 作为数值余量，写入不可覆盖的限值文件；候选检查要求不同的冻结工作负载。该范围仅用于对应精度、输入和执行设置，不能无限外推到长历史、graph 或其他 TP。超标样例保留，不自动放宽限值。完整训练的产物由 `audit_native_lifecycle.py` 检查成功更新次数、来源版本、验证覆盖、checkpoint 分片和所声明的 GPU 资源区间。
 
@@ -110,7 +110,7 @@ Fusion 训练服务与独立组件探针统一固定 `TRITON_ATTN`，实际各�
 
 默认 single 的追加回归使用 `run_fusion_default_regression_fsdp2.sh`，限定一张物理 GPU 6 或 7。`FUSION_REGRESSION_REPEATS=6` 表示一批预热后测六批；入口调用 `prepare_default_regression.py`，核对原始 parquet 中所有 64 条批次相同，再在本次独立 `support/` 中重复足够批次。原始 256 行数据保持不变，追加输入为 448 行，文件哈希及批次数写入 `workload.json`。
 
-追加运行成功退出后，`audit_default_regression.py --original <原三次测量目录> --additional <追加六次目录> --additional-exit-code 0 --baseline-identity <已核对源码树的报告> --out <新报告路径>` 检查全部请求、对应批次的输入/输出/答案/评分、零 optimizer 更新、冻结 baseline 源码与配置、资源结束记录，然后合并每个版本的九个样本。门槛保持 5%，只排除每个进程预先声明的首批预热，不删除测量异常值。门控延续原来的 `rollout_batch` 计时，即提交到最后一个生成 token；评分、teacher、权重传输和完整 outer 的成本另外保留，不能把该门控数值称为全部训练阶段墙钟。输入准备与审计反例检查已通过，追加 GPU 测量已启动，合并判定仍待完成。源码归档没有可用的 Git 工作树状态时，应另外逐文件核对声明的 commit 与隔离补丁，不能把空 diff 当成原样证明。
+追加运行成功退出后，`audit_default_regression.py --original <原三次测量目录> --additional <追加六次目录> --additional-exit-code 0 --baseline-identity <已核对源码树的报告> --out <新报告路径>` 检查全部请求、对应批次的输入/输出/答案/评分、零 optimizer 更新、冻结 baseline 源码与配置、资源结束记录，然后合并每个版本的九个样本。门槛保持 5%，只排除每个进程预先声明的首批预热，不删除测量异常值。门控延续原来的 `rollout_batch` 计时，即提交到最后一个生成 token；评分、teacher、权重传输和完整 outer 的成本另外保留，不能把该门控数值称为全部训练阶段墙钟。输入准备与审计反例检查已通过，追加 GPU 测量及九样本合并判定已通过，原始样本与判定见验收记录。源码归档没有可用的 Git 工作树状态时，应另外逐文件核对声明的 commit 与隔离补丁，不能把空 diff 当成原样证明。
 
 `audit_native_lifecycle.py --previous-actor-checkpoint <恢复前 actor 目录>` 可同时核对恢复前后保存的 CPU 参数分片。它检查真实数值变化并分别报告 FP32 状态和 BF16 推理视图中的变化，不能仅以更新计数推进推断权重已变化。`probe_hf_reference.py` 提供独立 HF BF16/FlashAttention 全前缀参考；其分布距离与选中概率差异用于跨后端诊断，不沿用旧 HF 阈值作为 native 引擎门槛，该新增工具仍待 GPU 执行。
 
