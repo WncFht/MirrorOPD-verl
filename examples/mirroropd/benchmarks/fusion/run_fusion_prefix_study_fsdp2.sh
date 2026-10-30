@@ -7,12 +7,12 @@ WORKSPACE=$(dirname -- "$REPO")
 worker=false
 if [[ ${1:-} == __worker ]]; then worker=true; shift; fi
 PAIR=${1:?J or P}
-ARM=${2:?S0, S, LM, TM, or T}
+ARM=${2:?S0, S, LM, PM, TM, or T}
 LABEL=${3:?unique run label}
 MODE=${4:-formal}
 [[ $LABEL =~ ^[a-zA-Z0-9_-]+$ ]] || { echo 'Run label must contain only letters, numbers, underscores or hyphens' >&2; exit 2; }
 case "$PAIR" in J|P) ;; *) exit 2 ;; esac
-case "$ARM" in S0|S|LM|TM|T) ;; *) exit 2 ;; esac
+case "$ARM" in S0|S|LM|PM|TM|T) ;; *) exit 2 ;; esac
 case "$MODE" in formal|profile|smoke) ;; *) exit 2 ;; esac
 FUSION_GPUS=${FUSION_GPUS:-7}
 case "$FUSION_GPUS" in 6|7|6,7) ;; *) echo 'Use allocated GPUs 6, 7, or 6,7' >&2; exit 2 ;; esac
@@ -77,8 +77,8 @@ export EXPERIMENT_NAME="prefix-${MODE}-${PAIR}-${ARM}-${LABEL}"
 export RUN_DIR="$REPO/outputs/$EXPERIMENT_NAME"
 export VERL_FILE_LOGGER_PATH="$RUN_DIR/metrics.jsonl"
 tp=${FUSION_TP:-1}
-if [[ $ARM != LM && $tp != 1 ]]; then
-    echo 'FUSION_TP applies to LM; other prefix modes currently use TP1 replicas' >&2
+if [[ $ARM != LM && $ARM != PM && $tp != 1 ]]; then
+    echo 'FUSION_TP applies to LM/PM; other prefix modes currently use TP1 replicas' >&2
     exit 2
 fi
 case "$tp" in 1|2) ;; *) exit 2 ;; esac
@@ -87,10 +87,12 @@ policy_mode=single
 source=student
 binding=current
 weight=0
+fusion_space=logit
 case "$ARM" in
     S0) binding=initial ;;
     S) policy_mode=trajectory_mixture ;;
     LM) policy_mode=token_mixture; weight=0.5 ;;
+    PM) policy_mode=token_mixture; weight=0.5; fusion_space=probability ;;
     TM) policy_mode=trajectory_mixture; weight=0.5 ;;
     T) source=teacher; weight=1 ;;
 esac
@@ -141,7 +143,7 @@ exec bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E20 --method full_kl
     "transfer_queue.backend.SimpleStorage.num_data_storage_units=${PREFIX_STORAGE_UNITS:-8}" \
     "++distillation.shared_teacher.forward_only_cpu_offload=${PREFIX_TEACHER_LAYER_OFFLOAD:-false}" \
     "rollout_policy.mode=$policy_mode" "rollout_policy.source=$source" \
-    "rollout_policy.student=$binding" "rollout_policy.teacher_weight=$weight" \
+    "rollout_policy.student=$binding" "rollout_policy.teacher_weight=$weight" "rollout_policy.fusion_space=$fusion_space" \
     'rollout_policy.execution.backend=vllm_fusion' \
     "rollout_policy.execution.tensor_parallel_size=$tp" \
     "rollout_policy.execution.max_num_seqs=$seqs" \

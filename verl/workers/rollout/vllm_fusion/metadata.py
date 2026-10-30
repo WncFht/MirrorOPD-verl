@@ -3,7 +3,7 @@
 """Report the loaded actor version, never the collection counter."""
 
 
-def output_metadata(request_id, phase_token, loaded_version, alpha, teacher_path):
+def output_metadata(request_id, phase_token, loaded_version, alpha, teacher_path, fusion_space="logit"):
     has_current = alpha < 1 and loaded_version is not None and isinstance(loaded_version[0], int)
     return {
         "fusion_request_id": request_id,
@@ -15,4 +15,5 @@ def output_metadata(request_id, phase_token, loaded_version, alpha, teacher_path
         "student_version": loaded_version if alpha < 1 else None,
         "teacher_path": teacher_path,
         "teacher_weight": alpha,
+        "fusion_space": fusion_space,
     }

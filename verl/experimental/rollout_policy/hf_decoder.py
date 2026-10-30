@@ -250,7 +250,12 @@ class HFFusionDecoder:
                 if self.native_stop_ids is None:
                     raise ValueError("Stop diagnostics require the two native EOS IDs")
                 probabilities = stop_event_probabilities(
-                    logits, alpha, config.stop_ids, self.native_stop_ids, legal_mask=legal_mask
+                    logits,
+                    alpha,
+                    config.stop_ids,
+                    self.native_stop_ids,
+                    legal_mask=legal_mask,
+                    fusion_space=config.fusion_space,
                 )
                 for key, values in probabilities.items():
                     stop_sums[key] = stop_sums.get(key, 0.0) + values[alive].sum().item()

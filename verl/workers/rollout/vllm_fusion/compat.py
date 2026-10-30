@@ -26,14 +26,17 @@ def decode_graph_config(max_num_seqs):
     return {"mode": 0, "cudagraph_mode": "FULL_DECODE_ONLY", "cudagraph_capture_sizes": sizes}
 
 
-def fusion_hf_overrides(teacher_path):
+def fusion_hf_overrides(teacher_path, fusion_space="logit"):
     """Expose teacher experts before vLLM initializes its model-parallel groups."""
     from transformers import AutoConfig
 
+    if fusion_space not in {"logit", "probability"}:
+        raise ValueError("Unknown fusion_space")
     teacher = AutoConfig.from_pretrained(teacher_path, local_files_only=True)
     return {
         "architectures": ["MirrorOPDFusionForCausalLM"],
         "fusion_teacher_path": teacher_path,
+        "fusion_space": fusion_space,
         "num_experts": getattr(teacher, "num_experts", 0),
     }
 

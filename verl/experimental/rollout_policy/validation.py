@@ -84,7 +84,11 @@ def validate_policy(config):
         raise ValueError("Local rollout policies currently require full-vocabulary distillation")
     rollout = config.actor_rollout_ref.rollout
     SamplingConfig(
-        temperature=rollout.temperature, top_p=rollout.top_p, top_k=rollout.top_k, max_tokens=rollout.response_length
+        temperature=rollout.temperature,
+        top_p=rollout.top_p,
+        top_k=rollout.top_k,
+        max_tokens=rollout.response_length,
+        fusion_space=policy.fusion_space,
     )
     if rollout.top_k == 0:
         raise ValueError("Use top_k=-1 for the common vLLM/HF no-truncation contract")

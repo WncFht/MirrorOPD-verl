@@ -96,11 +96,14 @@ def check(config, reference, pair, arm, outers=40, *, smoke=False):
         "S0": ("single", "student", "initial", 0.0),
         "S": ("trajectory_mixture", "student", "current", 0.0),
         "LM": ("token_mixture", "student", "current", 0.5),
+        "PM": ("token_mixture", "student", "current", 0.5),
         "TM": ("trajectory_mixture", "student", "current", 0.5),
         "T": ("single", "teacher", "current", 1.0),
     }[arm]
     policy = config["rollout_policy"]
     actual = tuple(policy[key] for key in ["mode", "source", "student", "teacher_weight"])
+    if policy.get("fusion_space", "logit") != ("probability" if arm == "PM" else "logit"):
+        errors.append("Wrong token-fusion space")
     if actual != expected:
         errors.append(f"Wrong prefix policy: {actual!r}")
     student = Path(config["actor_rollout_ref"]["model"]["path"]).name
@@ -131,7 +134,7 @@ def main():
     parser.add_argument("config", type=Path)
     parser.add_argument("--reference", type=Path, required=True)
     parser.add_argument("--pair", choices=["J", "P"], required=True)
-    parser.add_argument("--arm", choices=["S0", "S", "LM", "TM", "T"], required=True)
+    parser.add_argument("--arm", choices=["S0", "S", "LM", "PM", "TM", "T"], required=True)
     parser.add_argument("--outers", type=int, default=40)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()

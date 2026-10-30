@@ -152,6 +152,7 @@ class FusionWorkerExtension:
             "tp_rank": self.local_rank,
             "tensor_parallel_size": self.model_runner.vllm_config.parallel_config.tensor_parallel_size,
             "alpha": model.alpha,
+            "fusion_space": getattr(model, "fusion_space", "logit"),
             "version": getattr(self, "fusion_version", None),
             "student_path": model.student_path,
             "teacher_path": model.teacher_path,

@@ -203,6 +203,7 @@ class RolloutRuntime:
             setup_tick = time.monotonic()
             settings = {
                 "current": self.policy.student == "current",
+                "fusion_space": plan.fusion_space,
                 "teacher_path": plan.teacher_binding.path,
                 "stop_ids": list(plan.termination),
                 "deadline_seconds": self.policy.deadline_seconds,
@@ -314,6 +315,7 @@ class RolloutRuntime:
                 "actor_version": plan.actor_version,
                 "collection_step": plan.collection_step,
                 "teacher_weight": plan.resolved_control,
+                "fusion_space": plan.fusion_space,
                 "student_path": plan.student_binding.path,
                 "teacher_path": plan.teacher_binding.path if plan.teacher_binding else None,
                 "source_checkpoint": plan.source_binding.path if plan.source_binding is not None else None,

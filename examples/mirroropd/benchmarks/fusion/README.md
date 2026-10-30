@@ -116,11 +116,11 @@ Fusion 训练服务与独立组件探针统一固定 `TRITON_ATTN`，实际各�
 
 `audit_native_lifecycle.py --previous-actor-checkpoint <恢复前 actor 目录>` 可同时核对恢复前后保存的 CPU 参数分片。它检查真实数值变化并分别报告 FP32 状态和 BF16 推理视图中的变化，不能仅以更新计数推进推断权重已变化。`probe_hf_reference.py` 提供独立 HF BF16/FlashAttention 全前缀参考；其分布距离与选中概率差异用于跨后端诊断，不沿用旧 HF 阈值作为 native 引擎门槛，student 的七点真实长历史参考已执行，两组 teacher 参考也已完成，实际差异与范围见验收记录。
 
-Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已核对，组合模型保留不同宽度的原生 head，只对生成视图对齐并施加共同合法支持。RKL scorer 的完整 teacher head 不变。两组真实配对已通过短生成、采样 oracle、独立 native 组件对照、定向 refit 与 batch2/cap32/reuse16 两轮训练；正式负载和全部五种来源仍待验收，证据见[当前验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md#qwen2-实验配对)。R1 的独立生成探针须显式传入 `--stop-token-ids 151643`，不能沿用 Qwen3 的默认停止集合。实验设置见[E20 五种前缀对照](../../docs/experiments/rollout-policy/2026-10-30-E20设置下的五种前缀对照.md)。
+Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已核对，组合模型保留不同宽度的原生 head，只对生成视图对齐并施加共同合法支持。RKL scorer 的完整 teacher head 不变。两组真实配对已通过短生成、采样 oracle、独立 native 组件对照、定向 refit 与 batch2/cap32/reuse16 两轮训练；正式负载和全部六种来源仍待验收，证据见[当前验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md#qwen2-实验配对)。R1 的独立生成探针须显式传入 `--stop-token-ids 151643`，不能沿用 Qwen3 的默认停止集合。实验设置见[E20 五种前缀对照](../../docs/experiments/rollout-policy/2026-10-30-E20设置下的五种前缀对照.md)。
 
-## E20 五种前缀入口
+## E20 六种前缀入口
 
-`run_fusion_prefix_study_fsdp2.sh <J|P> <S0|S|LM|TM|T> <唯一标签> [formal|profile|smoke]` 复用 E20 公共配方，固定 batch64、reuse16、训练 cap7168，关闭全部验证与模型保存。`formal` 为 40 outer，`profile` 默认 2 outer，可用 `PREFIX_PROFILE_OUTERS` 指定预跑轮数。`smoke` 单独使用 batch2/cap32、两轮及 reuse16 检查接线和版本推进，不能作为正式负载证据。配置与运行目录使用不同模式前缀；正式性能参数和十组训练尚未验收。
+`run_fusion_prefix_study_fsdp2.sh <J|P> <S0|S|PM|LM|TM|T> <唯一标签> [formal|profile|smoke]` 复用 E20 公共配方，固定 batch64、reuse16、训练 cap7168，关闭全部验证与模型保存。`formal` 为 40 outer，`profile` 默认 2 outer，可用 `PREFIX_PROFILE_OUTERS` 指定预跑轮数。`smoke` 单独使用 batch2/cap32、两轮及 reuse16 检查接线和版本推进，不能作为正式负载证据。配置与运行目录使用不同模式前缀；正式性能参数和十二组训练尚未完成验收。
 
 ```bash
 CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusion_prefix_study_fsdp2.sh P LM review > /tmp/prefix-P-LM.yaml
@@ -129,11 +129,13 @@ CONFIG_ONLY=1 FUSION_GPUS=6,7 bash examples/mirroropd/benchmarks/fusion/run_fusi
   --pair P --arm LM --out /tmp/prefix-P-LM-audit.json
 ```
 
-研究入口对全部五种来源显式设置 `actor_rollout_ref.rollout.engine_kwargs.vllm.attention_config.backend=TRITON_ATTN`。Formal 配置检查同时要求该值，避免来源对照包含自动 attention 选择差异；历史 profile/smoke 仍按其记录的配置解释。该参数不修改入口之外的默认 single 行为。
+`LM` 使用 `fusion_space=logit`，即归一化的 log-prob 几何融合；`PM` 使用 `fusion_space=probability`，即共同合法支持上先分别归一化、再按系数算术混合。`TM` 保留整轨迹配额混合。温度和过滤在两种 token 融合之后统一施加，teacher 评分及 full-vocab RKL 目标保持不变。PM 的 CPU 数值和配置检查已通过，真实 GPU 采样、graph 与训练检查仍待执行。
+
+研究入口对全部六种来源显式设置 `actor_rollout_ref.rollout.engine_kwargs.vllm.attention_config.backend=TRITON_ATTN`。Formal 配置检查同时要求该值，避免来源对照包含自动 attention 选择差异；历史 profile/smoke 仍按其记录的配置解释。该参数不修改入口之外的默认 single 行为。
 
 `CONFIG_ONLY=1` 只解析配置，不占用 GPU、不创建训练目录；配置检查器另构造实际 RolloutConfig，检查窗口约束。未使用的验证 cap 对齐到训练 cap，但验证保持关闭。`DRY_RUN=1` 只打印命令。实际执行仍由分配入口检查 UUID、GPU 占用及锁。当前入口保持单任务独占所选 GPU，多任务共置尚未实现，不能用内部 worker 模式绕过占用保护。
 
-`FUSION_MAX_NUM_SEQS/FUSION_KV_BYTES/FUSION_TP` 控制 LM 执行；其他来源使用 TP1 replica。`PREFIX_PPO_TOKEN_BUDGET`、`PREFIX_TEACHER_TOKEN_BUDGET`、`PREFIX_ROLLOUT_SEQS`、`PREFIX_ROLLOUT_MEMORY_FRACTION`、`PREFIX_RAY_CPUS`、`PREFIX_AGENT_WORKERS`、`PREFIX_REWARD_WORKERS`、`PREFIX_STORAGE_UNITS`、`PREFIX_OBJECT_STORE_BYTES` 和 full-vocab 的 `PREFIX_FULL_KL_BACKEND/PREFIX_TOKEN_CHUNK/PREFIX_VOCAB_CHUNK` 是待实测的执行参数。默认值是候选，不是已确认的最优配置；学习超参数由入口固定。
+`FUSION_MAX_NUM_SEQS/FUSION_KV_BYTES/FUSION_TP` 控制 LM/PM 执行；其他来源使用 TP1 replica。`PREFIX_PPO_TOKEN_BUDGET`、`PREFIX_TEACHER_TOKEN_BUDGET`、`PREFIX_ROLLOUT_SEQS`、`PREFIX_ROLLOUT_MEMORY_FRACTION`、`PREFIX_RAY_CPUS`、`PREFIX_AGENT_WORKERS`、`PREFIX_REWARD_WORKERS`、`PREFIX_STORAGE_UNITS`、`PREFIX_OBJECT_STORE_BYTES` 和 full-vocab 的 `PREFIX_FULL_KL_BACKEND/PREFIX_TOKEN_CHUNK/PREFIX_VOCAB_CHUNK` 是待实测的执行参数。默认值是候选，不是已确认的最优配置；学习超参数由入口固定。
 
 融合接口始终返回有限、完整的选中 token 行为 log-prob，即使 full-vocab learner 关闭了 rollout log-prob 收集。缺失、长度不符或非有限值会拒绝该响应；greedy 的行为 log-prob 在完整性检查后写为 0。此修复已通过 CPU 协议回归与两组真实短训练的服务调用；完整负载复验仍在进行。
 

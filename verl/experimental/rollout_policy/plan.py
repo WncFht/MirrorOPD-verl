@@ -92,10 +92,15 @@ class RolloutPolicyConfig:
     deadline_seconds: float = 3600.0
     drain_seconds: float = 60.0
     execution: FusionExecutionConfig = FusionExecutionConfig()
+    fusion_space: str = "logit"
 
     def __post_init__(self):
         if self.mode not in {"single", "trajectory_mixture", "token_mixture"}:
             raise ValueError(f"Unknown rollout policy mode: {self.mode}")
+        if self.fusion_space not in {"logit", "probability"}:
+            raise ValueError("fusion_space must be logit or probability")
+        if self.fusion_space != "logit" and self.mode != "token_mixture":
+            raise ValueError("Probability fusion requires token_mixture")
         if self.source not in {"student", "teacher", "checkpoint"} or self.student not in {"current", "initial"}:
             raise ValueError("Invalid rollout source or student binding")
         if self.mode == "single" and self.teacher_weight.kind != "constant":
@@ -156,6 +161,7 @@ class BatchRolloutPlan:
     expected_sessions: tuple[tuple[str, tuple[int, ...]], ...]
     sampling: tuple[tuple[str, object], ...]
     termination: tuple[int, ...]
+    fusion_space: str = "logit"
 
     @property
     def effective_teacher_fraction(self):
@@ -242,4 +248,5 @@ def build_plan(
         tuple((uid, tuple(range(n))) for uid in uids),
         tuple(sorted((sampling or {}).items())),
         tuple(stop_ids),
+        policy.fusion_space,
     )

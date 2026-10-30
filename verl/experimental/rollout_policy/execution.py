@@ -19,6 +19,7 @@ class NativeVLLMExecutor:
         self.replicas = []
         self.current_version = None
         self.awake = False
+        self.fusion_space = None
 
     async def prepare(self, plan):
         from verl.experimental.rollout_policy.runtime import LocalPhaseClient
@@ -26,6 +27,9 @@ class NativeVLLMExecutor:
         from verl.workers.rollout.vllm_fusion.replica import VLLMFusionReplica
 
         rt = self.runtime
+        if plan.fusion_space != rt.policy.fusion_space or self.fusion_space not in {None, plan.fusion_space}:
+            raise ValueError("Fusion space changed without rebuilding the native executor")
+        self.fusion_space = plan.fusion_space
         wg = rt.trainer.actor_rollout_wg
         execution = rt.policy.execution
         topology = FusionTopology(wg.world_size, execution.tensor_parallel_size)
@@ -47,7 +51,9 @@ class NativeVLLMExecutor:
             rollout.logprobs_mode = "processed_logprobs"
             rollout.gpu_memory_utilization = 0.9
             with open_dict(rollout.engine_kwargs.vllm):
-                rollout.engine_kwargs.vllm.hf_overrides = fusion_hf_overrides(plan.teacher_binding.path)
+                rollout.engine_kwargs.vllm.hf_overrides = fusion_hf_overrides(
+                    plan.teacher_binding.path, plan.fusion_space
+                )
                 rollout.engine_kwargs.vllm.kv_cache_memory_bytes = execution.kv_cache_memory_bytes
                 # Match the independently checked component/KV probes. Automatic
                 # backend selection is not covered by their numerical evidence.
@@ -113,7 +119,7 @@ class NativeVLLMExecutor:
             asyncio.gather(
                 *(
                     replica._server_handle.prepare.remote(
-                        count, rt.phase_token, plan.resolved_control, plan.actor_version
+                        count, rt.phase_token, plan.resolved_control, plan.actor_version, plan.fusion_space
                     )
                     for replica, count in zip(self.replicas, counts, strict=True)
                 )

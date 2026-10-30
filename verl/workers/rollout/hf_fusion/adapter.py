@@ -203,6 +203,7 @@ class ServerAdapter(BaseRollout):
                 max_tokens=params.get("max_tokens", self.config.response_length),
                 stop_ids=tuple(self.settings["stop_ids"]),
                 legal_ids=self.legal_ids,
+                fusion_space=self.settings.get("fusion_space", "logit"),
             )
             decoder = HFFusionDecoder(
                 self.student,
@@ -238,6 +239,7 @@ class ServerAdapter(BaseRollout):
                         "student_version": self.loaded_version if self.alpha < 1 else None,
                         "teacher_path": self.settings["teacher_path"],
                         "teacher_weight": self.alpha,
+                        "fusion_space": self.settings.get("fusion_space", "logit"),
                     },
                 )
                 for result in results

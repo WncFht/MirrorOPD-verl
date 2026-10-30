@@ -1,6 +1,6 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Two native models, independent attention layers, and one FP32 logit mixture."""
+"""Two native models, independent attention layers, and one FP32 logit/probability mixture."""
 
 import itertools
 import math
@@ -12,7 +12,7 @@ from vllm.model_executor.model_loader.default_loader import DefaultModelLoader
 from vllm.model_executor.models.interfaces import MixtureOfExperts
 from vllm.model_executor.models.utils import init_vllm_registered_model
 
-from verl.experimental.rollout_policy.sampling import validate_tokenizers
+from verl.experimental.rollout_policy.sampling import probability_mixture_logits, validate_tokenizers
 
 from .compat import component_config, validate_component_families
 
@@ -35,6 +35,9 @@ class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
         if vllm_config.parallel_config.tensor_parallel_size not in {1, 2}:
             raise ValueError("Native fusion currently supports TP1/TP2")
         self.config = outer
+        self.fusion_space = getattr(outer, "fusion_space", "logit")
+        if self.fusion_space not in {"logit", "probability"}:
+            raise ValueError("Unknown fusion_space")
         self.student_path = vllm_config.model_config.model
         self.teacher_path = outer.fusion_teacher_path
         student_config = AutoConfig.from_pretrained(self.student_path, local_files_only=True)
@@ -120,7 +123,9 @@ class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
             teacher_view = teacher[..., :width]
         elif teacher.shape[-1] < width:
             teacher_view = torch.nn.functional.pad(teacher, (0, width - teacher.shape[-1]), value=-torch.inf)
-        if self.alpha == 0:
+        if getattr(self, "fusion_space", "logit") == "probability":
+            logits = probability_mixture_logits(student, teacher_view, self.alpha, legal_mask=self.legal_tokens)
+        elif self.alpha == 0:
             logits = student.float()
         elif self.alpha == 1:
             logits = teacher_view.float()
