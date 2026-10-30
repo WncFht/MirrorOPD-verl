@@ -4,6 +4,11 @@ set -eo pipefail
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO=$(cd -- "$HERE/../../../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO")
+checkpoint_root() {
+    "$WORKSPACE/envs/mirroropd-fusion/bin/python" "$HERE/record_schema.py" \
+        --checkpoint-root "$REPO/outputs/$1"
+}
+
 PAIR=${1:?Choose dense or moe}
 PREFIX=${2:-fusion-long-$(date +%Y%m%d-%H%M%S)}
 case "$PAIR" in
@@ -26,7 +31,7 @@ run() {
         exit 2
     fi
     EXPERIMENT_NAME=$name bash examples/mirroropd/smoke/smoke_rollout_fusion.sh token_mixture current \
-        'data.shuffle=False' 'trainer.test_freq=1' 'trainer.save_freq=2' 'data.val_max_samples=-1' "$@" \
+        'rollout_policy.execution.backend=hf_fusion' 'data.shuffle=False' 'trainer.test_freq=1' 'trainer.save_freq=2' 'data.val_max_samples=-1' "$@" \
         > "$LOGS/$name.log" 2>&1
 }
 {
@@ -34,6 +39,6 @@ run "$PREFIX-$PAIR-reference" 'trainer.total_training_steps=1' 'trainer.save_fre
     '++actor_rollout_ref.rollout.engine_kwargs.hf_fusion.reference=true'
 run "$PREFIX-$PAIR-optimized" 'trainer.total_training_steps=2'
 run "$PREFIX-$PAIR-optimized-resume" 'trainer.total_training_steps=3' 'trainer.resume_mode=resume_path' \
-    "trainer.resume_from_path=$REPO/outputs/$PREFIX-$PAIR-optimized/checkpoints/global_step_2"
+    "trainer.resume_from_path=$(checkpoint_root "$PREFIX-$PAIR-optimized")/global_step_2"
 exit
 }

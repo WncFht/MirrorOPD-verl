@@ -4,6 +4,11 @@ set -eo pipefail
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO=$(cd -- "$HERE/../../../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO")
+checkpoint_root() {
+    "$WORKSPACE/envs/mirroropd-fusion/bin/python" "$HERE/record_schema.py" \
+        --checkpoint-root "$REPO/outputs/$1"
+}
+
 PREFIX=${1:-fusion-final-$(date +%Y%m%d-%H%M%S)}
 export PYTHONPATH=$REPO
 export PPO_EPOCHS=2 VAL_N=1 MAX_PROMPT_LENGTH=4096 MAX_RESPONSE_LENGTH=128 MAX_VAL_RESPONSE_LENGTH=128
@@ -28,7 +33,7 @@ current_pair() {
     local name=$1
     run "$name" token_mixture current 'trainer.total_training_steps=2'
     run "$name-resume" token_mixture current 'trainer.total_training_steps=3' \
-        'trainer.resume_mode=resume_path' "trainer.resume_from_path=$REPO/outputs/$name/checkpoints/global_step_2"
+        'trainer.resume_mode=resume_path' "trainer.resume_from_path=$(checkpoint_root "$name")/global_step_2"
 }
 
 {
@@ -38,7 +43,7 @@ schedule='rollout_policy.right_weight={kind:linear,start:1.0,end:0.0,steps:4,clo
 run "$PREFIX-initial-schedule" token_mixture initial 'trainer.total_training_steps=2' "$schedule"
 run "$PREFIX-initial-schedule-resume" token_mixture initial 'trainer.total_training_steps=3' "$schedule" \
     'trainer.resume_mode=resume_path' \
-    "trainer.resume_from_path=$REPO/outputs/$PREFIX-initial-schedule/checkpoints/global_step_2"
+    "trainer.resume_from_path=$(checkpoint_root "$PREFIX-initial-schedule")/global_step_2"
 TRAIN_BATCH_SIZE=64 run "$PREFIX-trajectory-current" trajectory_mixture current 'trainer.total_training_steps=1'
 run "$PREFIX-trajectory-initial-n2" trajectory_mixture initial 'trainer.total_training_steps=1' \
     'actor_rollout_ref.rollout.n=2'
