@@ -118,6 +118,7 @@ def snapshot(workspace, out):
     out.mkdir(parents=True, exist_ok=False)
     rows, states, sources = [], [], []
     root = workspace / "runs/vllm-fusion-20261029"
+    retired = all((root / f"old-{pair}-queue-retired-after-S0.json").exists() for pair in ("J", "P"))
     for pair in ("J", "P"):
         control = root / f"formal-prefix-study-{pair}-01"
         for arm in ARMS:
@@ -242,6 +243,8 @@ def snapshot(workspace, out):
                 if exit_code == 0
                 else "running"
                 if run.exists()
+                else "retired_not_started"
+                if retired
                 else "queued"
             )
             states.append(
@@ -277,7 +280,10 @@ def snapshot(workspace, out):
         writer.writerows(rows)
     summary = {
         "captured_at_utc": datetime.now(timezone.utc).isoformat(),
-        "scope": "Formal 40x16 study only; live partial snapshot, no extrapolation",
+        "scope": "Legacy training diagnostics; no common held-out evaluation"
+        if retired
+        else "Formal 40x16 study only; live partial snapshot, no extrapolation",
+        "legacy_protocol_retired": retired,
         "states": states,
         "sources": sources,
         "expected_runs": 12,
@@ -365,7 +371,9 @@ def render(rows, summary, directory, style_dir):
         fig.text(
             0.5,
             0.025,
-            "Observed formal-run updates only; target 640/run; pending arms omitted",
+            "Legacy S0 training diagnostics; no common held-out evaluation"
+            if summary.get("legacy_protocol_retired")
+            else "Observed formal-run updates only; target 640/run; pending arms omitted",
             ha="center",
             color=fv.NEUTRALS["baseline"],
             fontsize=8,
