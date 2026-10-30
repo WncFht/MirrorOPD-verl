@@ -1,0 +1,13 @@
+{
+  "condition": "Thinking-2507 native-template control",
+  "admission": "isolated native template condition; not shared-prefix main table",
+  "teacher_native_prefix_matches": 4,
+  "student_shared_outputs": 4,
+  "prefix": "assistant newline <think> newline",
+  "limit": "Four 256-token output probes; do not establish complete reasoning quality",
+  "sources": [
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-2507-thinking-native-template-20261030/mode-probes/q3-1.7/outputs.json",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-2507-thinking-native-template-20261030/mode-probes/e3/outputs.json",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-2507-thinking-native-template-20261030/mode-probes/q3-4-thinking2507/outputs.json"
+  ]
+}

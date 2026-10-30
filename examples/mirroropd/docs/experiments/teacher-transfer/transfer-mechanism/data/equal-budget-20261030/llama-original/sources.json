@@ -1,0 +1,762 @@
+{
+  "study": "88e364a55e2b3846da88c450c85babd9071db908978c79b5c89638c5f0ecb26e",
+  "budget": 320,
+  "snapshots": [
+    {
+      "arm": "L3-gt",
+      "step": 0,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-000.json",
+      "sha256": "2fc9f982ab00801d0bebef35e9892367a467924d1eccd15e2c9dcba87533236e"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 16,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-016.json",
+      "sha256": "9393f3181fb644fae61cf22695f9eb202af55133c185c57d80571988da893995"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 32,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-032.json",
+      "sha256": "1edfe2cde2c56b84c47ce4dda4f72b43fd86c4e8422377ad11dc55b44e3549bd"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 48,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-048.json",
+      "sha256": "cce6d6cee5b49a6a5caed75206360779a236bd1b5edcc9b98a0731929bcde9ec"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 64,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-064.json",
+      "sha256": "493c49bea6b99443f3a374e0a9afe2b6f1c2b2f7bb96789433187a48e18ed742"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 80,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-080.json",
+      "sha256": "81c87890294d8b34c3fd3d02fdefa6aee0b322cc6c6def0fe82ee8f09ba47a47"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 96,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-096.json",
+      "sha256": "7f02d154989f49c31c3d64c99edcba0e905d25f56def9313b3069c08b330bd24"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 112,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-112.json",
+      "sha256": "34b7e43aae38a7aa6cc6237f851ea5250c388034b9c1f51d6a0db04a8a1b56dc"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 128,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-128.json",
+      "sha256": "5c6972bc1eee1262c69b0c435769aabe12086b1cfd0578fe0efc086740c8ed3b"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 144,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-144.json",
+      "sha256": "549ccd4ced08b5b056ca1e61b680ce57c2d146cbdaed1eed55b3bebdcab999c2"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 160,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-160.json",
+      "sha256": "9a0d905ed24bf08b2274184ec7dc29ff708b42289f8d7878ff373294ba2b6d79"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 176,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-176.json",
+      "sha256": "17c69ee72d8ceceb36a002d4496f1a070270ab4cadd4e967432b0b27201528cc"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 192,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-192.json",
+      "sha256": "d9870c26488d853214c10010698bbb7eb3b21389c1d2e3ac1426b448659d1a96"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 208,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-208.json",
+      "sha256": "0a4134dc61867d5ae15d98638395507731b9497cb740fb335c2d0103d90216e2"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 224,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-224.json",
+      "sha256": "b439ccedee5aa01e74f47ac11fd9c76fd4917dc7be5e288ade9078dfc6d72916"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 240,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-240.json",
+      "sha256": "7360dab86daea6c47d617344cdad36b32242e18256533b225155be08549b5937"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 256,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-256.json",
+      "sha256": "77af770e47302b3742b616f13b15b22025a879b96cba69c8d471064113135cb6"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 272,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-272.json",
+      "sha256": "01670380215e7a12e10f02226c4cb9bdf96343084df6a08a99f9ce17f9bb1192"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 288,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-288.json",
+      "sha256": "48758178b1131a49df0e536603e49e1dbb26f7a04893ae4421c962e901623d92"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 304,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-304.json",
+      "sha256": "4b61d2c77a9782419215776983d97af98b96430ebdd248265c120694497bf28e"
+    },
+    {
+      "arm": "L3-gt",
+      "step": 320,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-gt/fixed-320.json",
+      "sha256": "b0e3f1e657c6b9baeb314931469f0497be47272969cb48d2ba0a1a309a319a59"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 0,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-000.json",
+      "sha256": "205e032ccfd1411f3eb30faf231bdcef84e886f6ed90423744e012cacc3f607b"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 16,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-016.json",
+      "sha256": "889b98a550555807a8adf7da34cda3e9d8b9b32ea5bfaa56ac736bf9ee4635bf"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 32,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-032.json",
+      "sha256": "4aeb9ea6eab15bec14f44bef70a4686f4f43a92e1c90b3ad6d713020ffe9acc6"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 48,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-048.json",
+      "sha256": "2516b1ebf34b7596622c455126c86342db187fa6cabd2a87ccea73ac0e22afa9"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 64,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-064.json",
+      "sha256": "4d68f407bdfd26f094bddedde42fc49d41b477242a1d04f908939e7a0ec72f52"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 80,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-080.json",
+      "sha256": "38ea2c726c6d7d3be1568fb5648f584abceefb3e2606ab90ff09be564e7ef70a"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 96,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-096.json",
+      "sha256": "0cca01d48096adcdf91d3f1801d0ffad523c3fb6bfb4835ed541b485cfc4c4bc"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 112,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-112.json",
+      "sha256": "e75cc3cd9b6417c6def631527328784a1da3bb7fa402ef53d10be76187224c4f"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 128,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-128.json",
+      "sha256": "91e0560413ee1edb4bb89d0d2b997975a7bfbb675b3efafa4fd47b125ea73431"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 144,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-144.json",
+      "sha256": "f7df67947feb63adc2520b753bb5ffb43036edfddbf382f5dda8da177019f112"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 160,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-160.json",
+      "sha256": "1910d71f9c87ccc7f8813fecce108f59dd516a92b66dedd58a93260dc61d86f1"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 176,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-176.json",
+      "sha256": "dbc3c8988587f331c99f5047570f0cec37f97d350bc4ffce3d7652f93ab2423a"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 192,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-192.json",
+      "sha256": "84d77d10bb9598306adb09cd367325253d8d8f012c10d4178bc6c77863088730"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 208,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-208.json",
+      "sha256": "e9624404aef7a9cc758c1189a48f48b4fbed7adf54035a296dc8bae5ef848c4a"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 224,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-224.json",
+      "sha256": "8c5a455bcfdc53f06054f0fc9e54d0583ae95f3bc89be7f7129ae36283ec2082"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 240,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-240.json",
+      "sha256": "34be020e50f79e4dfd8a460b08bf529cc9d25dd78c51cc88d54b4ed96054e7c2"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 256,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-256.json",
+      "sha256": "b0a79f80dbbe0966f750232bcb2a276ecb645bac35bd15c5c27cc6ac622ae61e"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 272,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-272.json",
+      "sha256": "2c7f5817e3a5d7bc6aa5330b58b03eb9a6d6fd2488b36409e58da8fb6945f50f"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 288,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-288.json",
+      "sha256": "93f1e142b4903f2014f79da0fd974df2f66ce029dd3b32b0e37fabed4033000a"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 304,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-304.json",
+      "sha256": "85626adf0520c0ab525d0386fe94d9621f91774320feafa79883122bab845c37"
+    },
+    {
+      "arm": "L3-coreward-i",
+      "step": 320,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-coreward-i/fixed-320.json",
+      "sha256": "1f9ef592acfb702d846975a449b7b18a1291d30b9c9993eaaba25a0be1d46308"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 0,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-000.json",
+      "sha256": "fb127222ad0dfb46a7d56bd5d172537c2169a1c78e420fe8659abe5428090e55"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 16,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-016.json",
+      "sha256": "5e967f0eec140b6dafc602da1f140b3ac5267d726799526d4f4bdf885fdfb525"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 32,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-032.json",
+      "sha256": "4457476e5fafc8e3be329812146e3919daf0b7cce2d71afa5adf9f46512abacf"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 48,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-048.json",
+      "sha256": "f6ae40ab159e6652ed0ac03bdf74ab98852114eb350ce16cbf2c17d7cfe886f6"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 64,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-064.json",
+      "sha256": "49c9911a6dd70c3e5cbb1dbe63ae4e3553b8706967c1e5ea80a24830e3952a86"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 80,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-080.json",
+      "sha256": "e091a722955f214b9b16f5c551f22571dfa7ecb967fd40ce0962157fec40e48c"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 96,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-096.json",
+      "sha256": "ba929b0756fe1a846318aa79e0dcdda66c0bccd7c4570ff5a66209401a9ed276"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 112,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-112.json",
+      "sha256": "6d713e3ef0d3a4852d408a670db76593157763581759c46e725bd9c8ccd7d9ea"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 128,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-128.json",
+      "sha256": "03a94e56c17e23ea0df38d3b0691f760c22d500e19e6d9998527c93fcc62cdb4"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 144,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-144.json",
+      "sha256": "61cd24d07f86d57aa2b052edf3cc4cecd10528a2d28d73ca7069c6a368e41e4f"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 160,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-160.json",
+      "sha256": "ea2396ad0809d3fafce7024e08c0e337b43f97a4f69c5dc9739c584f1fdb2429"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 176,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-176.json",
+      "sha256": "2851e6e012fe9bba73e83d854c3751ffce61313dfdc339666dd110b02a87e8c0"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 192,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-192.json",
+      "sha256": "cd9a37ff0e3f4ca8f126359b3edb2dc62d6446edd1b1fa856ff597739a476bb9"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 208,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-208.json",
+      "sha256": "bff94bf9344744446c4e3a25f482ae9768afb1879e1b67b49e0de15353bae020"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 224,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-224.json",
+      "sha256": "006757265604e72049c4789ccc644b331fae35e4e5ab0f98035ffa2908b37d4c"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 240,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-240.json",
+      "sha256": "d6849dd36acf52f2614c937c7ea9542e39d7d8834f5b213dcf863bdfb8ebcda2"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 256,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-256.json",
+      "sha256": "6341d609c821496a5656ceb74ed05b893ab2777f39b52ae19a30a65f36e0433d"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 272,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-272.json",
+      "sha256": "0d85b264364da9b1f44088a02645b157c866f58b2bf6cda95cdc640f42459f12"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 288,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-288.json",
+      "sha256": "ecd9a1fc579245d4f69a6c9a44c06e2651556d5be6db6c7da00a830d772ba51a"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 304,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-304.json",
+      "sha256": "82216c85d2626774d971c501e11fb448f0585b91c9817fc6eacabd7a16c47a64"
+    },
+    {
+      "arm": "L3-arithmetic-full",
+      "step": 320,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-arithmetic-full/fixed-320.json",
+      "sha256": "7a1fcaa9d2e5e643c7aef417c6cf72797326d936fdea58cea268b1366386564b"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 0,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-000.json",
+      "sha256": "d68769b2ecf504f4d77603396e1fe3f7c569904e6ff39e514090bd70448344b6"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 16,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-016.json",
+      "sha256": "4acf3354d628b6d233fd0d1f8d437275081518d1d136f359ef38d1c71aae5b46"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 32,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-032.json",
+      "sha256": "44959997dc207a4d4bd01d5a461283ea34e05807abd3289f79a7bcbfcd336c59"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 48,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-048.json",
+      "sha256": "180dc9ac016bfca307c32612a16e983a94958006ed652e31fc23e8f68f9bc63e"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 64,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-064.json",
+      "sha256": "e98b01076edab221a595c86e07e2a18d18d53c582970e9d799834745abd7913b"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 80,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-080.json",
+      "sha256": "0d1e82f3fb245d6d0be0c5e2840fac52f5a1c3790f71063596255aafc8962bda"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 96,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-096.json",
+      "sha256": "5e6fa87ab71fdc5d3e99e21f8e24005511279e6914d7f8e33ea3526a20721e27"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 112,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-112.json",
+      "sha256": "9811a1949da64d80c608cd1c6db6bd581ede4c2503cc1d85d16fb2ad83aecd7b"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 128,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-128.json",
+      "sha256": "a032b6bda98125ee28aaab505bd1a37f8dd43e87c507cb60aae07fa5e0b6bdbf"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 144,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-144.json",
+      "sha256": "9430e1b87eee41b0809ada6c4660e534e988f0948f75935d7de1ed2e415b2c49"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 160,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-160.json",
+      "sha256": "1e7aa45fc1a5b38fa2bd192570c96f4b1bea8fafc4a16e3d4cba10b7f50b01f8"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 176,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-176.json",
+      "sha256": "cdc386629c59a911fd345a9e50dd58dc8fc5f246856e12d6d072015b0b099d80"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 192,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-192.json",
+      "sha256": "f4403320d3cf18474cadad57bf0701abfbcec490628fe9bf3f95ef2875910b04"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 208,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-208.json",
+      "sha256": "ef0250119db7a2e2e19dd20c7f20b5b72f30a5adcaad653032822ff70fa6ef6a"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 224,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-224.json",
+      "sha256": "c6947ff593616d36fa49d03a02ccb4ae6c9f3e1a941c701c7bc67ec18b3d5769"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 240,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-240.json",
+      "sha256": "3a4a4ab014f3cfd880d6bef91968bc196845374bac2d5e07c592122ad1bdc733"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 256,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-256.json",
+      "sha256": "c489e9db3b8f9a27da153c56c583a2845e6ff528be8e167dd79fe1089c95994e"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 272,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-272.json",
+      "sha256": "a6ad4f48f171fe7187d429a381a54fd404b84e6611b1c369ffe0c85cda583d4e"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 288,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-288.json",
+      "sha256": "c8ecd694774e751033aa34198303c80b753bb5471960abb6fa6c70499ce0aaee"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 304,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-304.json",
+      "sha256": "8c913ad16aaf9da63c8b815e354f42dd3762e5d0e25fdac0c272b93fa3f22129"
+    },
+    {
+      "arm": "L3-llama-1b",
+      "step": 320,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-1b/fixed-320.json",
+      "sha256": "ee62056d54cbf00ceecb48b0ad4b9e91884ff4d738387008f1542268f2a02faa"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 0,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-000.json",
+      "sha256": "3acc0085f7a9d335f55c8faa299c89e11783ab1df6aa5bc4da29f5e71040d4a6"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 16,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-016.json",
+      "sha256": "6f781a7eedd2be7a7c838c9d987b907cc9b3fa3c8c43adf016431a2a6c6167cb"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 32,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-032.json",
+      "sha256": "5350c9a87a3c1a884eb13acd54064fd769d876041020d57a2b8008579c63c792"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 48,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-048.json",
+      "sha256": "c7df975856781a6e1f6f586efb2a18551e55252b0853592ba3f23008ea68fed3"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 64,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-064.json",
+      "sha256": "e213311aaa203f9ce571d23e9a68ab716440a37a2d3d7c27ca83aa6ea8b96a9d"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 80,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-080.json",
+      "sha256": "f795aee5728b381f919697314f8bea7a47196a14b40a0a9561ade7e988d24f42"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 96,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-096.json",
+      "sha256": "3ce05c49cf844d282a325d35dd475a29fb753569bb69e6056e476b7142b12c4e"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 112,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-112.json",
+      "sha256": "5f83949ab64af8ed3c7ad60e65fc5c0836866530cbc763df678ea863e0fe5530"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 128,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-128.json",
+      "sha256": "cddca72819a7995e43dc242107dc25d2c16f884a1326e1ebe4f2351276e11b8d"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 144,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-144.json",
+      "sha256": "00e2ef57cea75b7be634aa885ce0d0ed414790e8e2403f9c3038b586d60100c2"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 160,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-160.json",
+      "sha256": "915f8cf87d0b4621a2381b3d7397a15ce056bb2cf9d16bc6701823696aca9327"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 176,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-176.json",
+      "sha256": "839fa95e8d2ce31863dc025b300d36caf25067a3d9dead89fbee71f68abdc243"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 192,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-192.json",
+      "sha256": "497a0091380c2f35b41e62b97dd7d3913d7ead4eb7cad267b56e761fd0759ded"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 208,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-208.json",
+      "sha256": "209bdf3a9986b53a9912c5b357b87e6a90b6f9284588842095c21e6fe7ae664b"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 224,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-224.json",
+      "sha256": "8ac67fee12b5fe920cccdeca419359b6cd2c80fb8c1dc94db1970f1218926eb2"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 240,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-240.json",
+      "sha256": "17a6ba8e41abbca232e470c85f2a50339363a4cea5ba570eea05145661be5029"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 256,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-256.json",
+      "sha256": "1196ed3740000eae8b2d9fddd6c787cdf044da3f8eaf5275dfc8db4896775667"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 272,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-272.json",
+      "sha256": "f9065194d976fc615eeb47c55423bcf6cf3b2a49259951b35bbc532d8d1fe8f8"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 288,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-288.json",
+      "sha256": "f384d3ba41a05f4a8a79bcc5449ee0b0025c41f79e144152496d6c399bc223df"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 304,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-304.json",
+      "sha256": "251a94a60258471c166e9c44896723f60fc741fe776190b48d6f86823e8b52d5"
+    },
+    {
+      "arm": "L3-llama-8b",
+      "step": 320,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-llama-8b/fixed-320.json",
+      "sha256": "b1cd5d8cd4f4140b2b90f5572a96254c85005f517cc43ba6590eaf59336ef8a9"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 0,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-000.json",
+      "sha256": "7f78ea92410bc6d4823b2584959d80489559dde92aa08f25c3f99e2898bba2d1"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 16,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-016.json",
+      "sha256": "7414713cb26aed690c7adf08a2cb56e7504d627926fe07acca9a01b96032f4a1"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 32,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-032.json",
+      "sha256": "a92a7210b10cf0200ccd174036196d421f2358215c1181eaaa4f0af08c260927"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 48,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-048.json",
+      "sha256": "58480686f48bba2f69bb36d78f1a0b960232209fd9f6fd364080e00eb44e63c9"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 64,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-064.json",
+      "sha256": "5a7f81ef43e49bfe5d7c60f866ea84e9313be845491dba6f17ce6c680dec73c6"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 80,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-080.json",
+      "sha256": "4ba0a7fbd0ae5a2f4e62d126eb75477b20b74ccf63e567961e67792395c44f71"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 96,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-096.json",
+      "sha256": "1629131bfcd0990d250b09b465e32a0639bfc7e043e609fbc140c1280ff378eb"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 112,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-112.json",
+      "sha256": "88bef60504d99d0e77d1cc9747e4ccfcc355c44ee5af74664fab8b8ce4a50f6a"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 128,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-128.json",
+      "sha256": "fcabfabab5a41083a299715ac07fce4dd1a69465157d5d408b11f1216552f6a0"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 144,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-144.json",
+      "sha256": "46fc57ccae6519b750905687d4278ca4ccd669df046524a5ff1eac93d2da073b"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 160,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-160.json",
+      "sha256": "92ed34b88571176c6101775f34bc93b9ce3ea5bf9ea65429f0f428dc7098533d"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 176,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-176.json",
+      "sha256": "c596838fe595563fc6841d9a49b867aa0aabebb438bf068f0a9cddc361d0c394"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 192,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-192.json",
+      "sha256": "d0ad0d37964056422ef56f8878480352d4d901eb5752e5a3bf3842065c4b391a"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 208,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-208.json",
+      "sha256": "004fe7cfb4c425fda9eaf9fa05b89a1d279cba1e826997bbf7200826cebf4ef0"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 224,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-224.json",
+      "sha256": "3bc8a0471f7e9295f430d38e67427be5bc0d3b4c0ee7400b8c010ca0d7095a48"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 240,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-240.json",
+      "sha256": "58bb4430413a82e186ec6f4f5dd40f6e111242b3eb9d64d323e17014f0bc836c"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 256,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-256.json",
+      "sha256": "67dc262de6bb15be8290f9ae3f25538f8c3fff04e5431004ef40f437eaeaa214"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 272,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-272.json",
+      "sha256": "5f377a3f6616e08b12a2b88d071578a88992771e94326a34d070ec1368b52c4d"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 288,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-288.json",
+      "sha256": "aabad47129d2580f148641bff7754832aeea99672dce9cc2eb994add8b6d37db"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 304,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-304.json",
+      "sha256": "bfda58e23b2c70152db6ffaf172bf09ec94039c4ea7bf2c0c9676f6a5b3a8af4"
+    },
+    {
+      "arm": "L3-nemotron-8b",
+      "step": 320,
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage320-20261030/arms/L3-nemotron-8b/fixed-320.json",
+      "sha256": "6cbcc62988add9210b46ee1577614977ceac92176212101b8f83b32b24fdb0eb"
+    }
+  ]
+}

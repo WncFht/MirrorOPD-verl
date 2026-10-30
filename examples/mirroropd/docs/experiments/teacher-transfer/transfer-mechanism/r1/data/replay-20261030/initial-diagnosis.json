@@ -1,0 +1,120 @@
+{
+  "arm": "TB3-R7",
+  "failed_check": {
+    "loss_max_error": 0.00023024393390382036,
+    "risk_max_error": 0.001650284607056407
+  },
+  "fixed_panel_differences": [
+    {
+      "step": 0,
+      "prompts": 256,
+      "max_normalized_difference": {
+        "rkl": 0.0,
+        "hp": 0.0,
+        "hq": 0.0
+      }
+    },
+    {
+      "step": 16,
+      "prompts": 256,
+      "max_normalized_difference": {
+        "rkl": 0.0021555434301601117,
+        "hp": 0.0025399346755521357,
+        "hq": 0.0
+      }
+    },
+    {
+      "step": 32,
+      "prompts": 256,
+      "max_normalized_difference": {
+        "rkl": 0.0013715434312959185,
+        "hp": 0.00165233228590278,
+        "hq": 0.0
+      }
+    },
+    {
+      "step": 48,
+      "prompts": 256,
+      "max_normalized_difference": {
+        "rkl": 0.0013395551308711395,
+        "hp": 0.0024075363555442486,
+        "hq": 0.0
+      }
+    },
+    {
+      "step": 64,
+      "prompts": 256,
+      "max_normalized_difference": {
+        "rkl": 0.001650284607056407,
+        "hp": 0.005130052277020347,
+        "hq": 0.0
+      }
+    }
+  ],
+  "source_checks": [
+    {
+      "file": "studies/boundary/native.py",
+      "functions": [
+        "setup",
+        "load",
+        "hidden",
+        "bank"
+      ],
+      "ast_equal": true,
+      "hashes": [
+        {
+          "setup": "f74e565c3dfa8abaa1e36daed0c5f0a2978701299307eb58322b55e0f8a5764d",
+          "load": "16ba07bf85f4f8caa8b1fdca13ce8b4fb01044af762f5640f676249002e200c7",
+          "hidden": "8007b6542f61b26b66896b15bd3fb42ca3fa89c70183762a806e138ff71898db",
+          "bank": "e01cae1346af6aee91e5ca099408578fc69420b2e6078de125e63829218b7c54"
+        },
+        {
+          "setup": "f74e565c3dfa8abaa1e36daed0c5f0a2978701299307eb58322b55e0f8a5764d",
+          "load": "16ba07bf85f4f8caa8b1fdca13ce8b4fb01044af762f5640f676249002e200c7",
+          "hidden": "8007b6542f61b26b66896b15bd3fb42ca3fa89c70183762a806e138ff71898db",
+          "bank": "e01cae1346af6aee91e5ca099408578fc69420b2e6078de125e63829218b7c54"
+        }
+      ]
+    },
+    {
+      "file": "studies/boundary/small_to_large.py",
+      "functions": [
+        "train_mode",
+        "backward",
+        "optimizer",
+        "score"
+      ],
+      "ast_equal": true,
+      "hashes": [
+        {
+          "train_mode": "1805f6af30a4f05f6592ec216244e616a3bc79131e7a3f70b95699a7bdbe7af5",
+          "backward": "7a38074f29b97721c748bc58b34cb783d1bdc643af64b8df859e1608b02cc9fc",
+          "score": "02954b684c57ab18533c3869c4e3745e49262029df58f885e825ec2aa7e75761",
+          "optimizer": "3cf6936e313021fd7931df96a756366a323fdf676ee99adb9c16374e7f32c7a5"
+        },
+        {
+          "train_mode": "1805f6af30a4f05f6592ec216244e616a3bc79131e7a3f70b95699a7bdbe7af5",
+          "backward": "7a38074f29b97721c748bc58b34cb783d1bdc643af64b8df859e1608b02cc9fc",
+          "score": "02954b684c57ab18533c3869c4e3745e49262029df58f885e825ec2aa7e75761",
+          "optimizer": "3cf6936e313021fd7931df96a756366a323fdf676ee99adb9c16374e7f32c7a5"
+        }
+      ]
+    },
+    {
+      "file": "backends/hf_rkl.py",
+      "functions": [
+        "head_vjp"
+      ],
+      "ast_equal": true,
+      "hashes": [
+        {
+          "head_vjp": "b1cab11cc181b8a8f3d90bd2a1433440374efa695c28b2d622d3e2bcd1ec9e0d"
+        },
+        {
+          "head_vjp": "b1cab11cc181b8a8f3d90bd2a1433440374efa695c28b2d622d3e2bcd1ec9e0d"
+        }
+      ]
+    }
+  ],
+  "interpretation": "Initial forward and teacher targets agree; gradients differ before subsequent parameter updates. Cause pending controlled backward repeatability probe."
+}

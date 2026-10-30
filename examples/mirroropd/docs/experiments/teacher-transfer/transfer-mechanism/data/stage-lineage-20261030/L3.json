@@ -1,0 +1,124 @@
+{
+  "model": {
+    "name": "L3",
+    "repo": "allenai/Llama-3.1-Tulu-3-8B",
+    "revision": "666943798adbde0b1aff34626007e26986a3c107",
+    "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
+    "parent": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+    "method": "rlvr",
+    "sources": [
+      "https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B/tree/666943798adbde0b1aff34626007e26986a3c107"
+    ],
+    "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+  },
+  "manifest": {
+    "inputs": {
+      "repo": "allenai/Llama-3.1-Tulu-3-8B",
+      "revision": "666943798adbde0b1aff34626007e26986a3c107"
+    },
+    "files": [
+      {
+        "path": "README.md",
+        "size": 18011,
+        "sha256": null,
+        "name": "README.md"
+      },
+      {
+        "path": "config.json",
+        "size": 851,
+        "sha256": null,
+        "name": "config.json"
+      },
+      {
+        "path": "generation_config.json",
+        "size": 180,
+        "sha256": null,
+        "name": "generation_config.json"
+      },
+      {
+        "path": "model-00001-of-00004.safetensors",
+        "size": 4976764208,
+        "sha256": "35095a6a3152adf68904ecdf3d1a65c5c82d9a7dbfa88211b23bafe3803e3d77",
+        "name": "model-00001-of-00004.safetensors"
+      },
+      {
+        "path": "model-00002-of-00004.safetensors",
+        "size": 4999802720,
+        "sha256": "acadaf200a0fb050fefa2b6c6326e5ec72540af7116e3471bf8ff167d6434fa8",
+        "name": "model-00002-of-00004.safetensors"
+      },
+      {
+        "path": "model-00003-of-00004.safetensors",
+        "size": 4915916176,
+        "sha256": "b867464111dcec4a232d8fc2dc5a09d697fcf1a7c189c5aecb2d615dcaa9296c",
+        "name": "model-00003-of-00004.safetensors"
+      },
+      {
+        "path": "model-00004-of-00004.safetensors",
+        "size": 1168204344,
+        "sha256": "a8fea16fac17367b7de7dfd39bdabb4af72148f8b861b1cce95daacba5d9fb0e",
+        "name": "model-00004-of-00004.safetensors"
+      },
+      {
+        "path": "model.safetensors.index.json",
+        "size": 23950,
+        "sha256": null,
+        "name": "model.safetensors.index.json"
+      },
+      {
+        "path": "notice.txt",
+        "size": 314,
+        "sha256": null,
+        "name": "notice.txt"
+      },
+      {
+        "path": "special_tokens_map.json",
+        "size": 439,
+        "sha256": null,
+        "name": "special_tokens_map.json"
+      },
+      {
+        "path": "tokenizer.json",
+        "size": 9085839,
+        "sha256": null,
+        "name": "tokenizer.json"
+      },
+      {
+        "path": "tokenizer_config.json",
+        "size": 51220,
+        "sha256": null,
+        "name": "tokenizer_config.json"
+      }
+    ]
+  },
+  "completion": {
+    "fingerprint": "aa54cc783bd476775f80844a39efaf4e6fe995101fe9a7c329417636a9ba2fbb",
+    "inputs": {
+      "repo": "allenai/Llama-3.1-Tulu-3-8B",
+      "revision": "666943798adbde0b1aff34626007e26986a3c107"
+    },
+    "completed_at": 1793339952.225363,
+    "weights": [
+      {
+        "name": "model-00001-of-00004.safetensors",
+        "bytes": 4976764208,
+        "sha256": "35095a6a3152adf68904ecdf3d1a65c5c82d9a7dbfa88211b23bafe3803e3d77"
+      },
+      {
+        "name": "model-00002-of-00004.safetensors",
+        "bytes": 4999802720,
+        "sha256": "acadaf200a0fb050fefa2b6c6326e5ec72540af7116e3471bf8ff167d6434fa8"
+      },
+      {
+        "name": "model-00003-of-00004.safetensors",
+        "bytes": 4915916176,
+        "sha256": "b867464111dcec4a232d8fc2dc5a09d697fcf1a7c189c5aecb2d615dcaa9296c"
+      },
+      {
+        "name": "model-00004-of-00004.safetensors",
+        "bytes": 1168204344,
+        "sha256": "a8fea16fac17367b7de7dfd39bdabb4af72148f8b861b1cce95daacba5d9fb0e"
+      }
+    ]
+  }
+}

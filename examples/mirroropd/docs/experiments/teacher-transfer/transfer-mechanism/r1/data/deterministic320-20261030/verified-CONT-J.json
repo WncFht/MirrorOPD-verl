@@ -1,0 +1,144 @@
+{
+  "arm": "CONT-J",
+  "complete": true,
+  "scope": "fixed-risk deterministic replica",
+  "step": 320,
+  "new_updates": 320,
+  "replay_updates": 0,
+  "budget_increment_over_prior": 192,
+  "replay_risk_max_error": 0.0006363717925233492,
+  "replay_loss_max_error": 5.443671613505896e-05,
+  "block_loss_max_error": 1.3877787807814457e-17,
+  "weight_identity": "3607e3e7d1a040efa3a1d5ea8303dec0cd064a1326eea3a2339549304846a89a",
+  "teacher_entropy_max_error": 0.0,
+  "payload_hashes_rechecked": false,
+  "accuracy_verified": false,
+  "plan_identity": "c481c390fb3de076cb347bfb7140c9c85c31589d43da04a47999c1a6fcac1073",
+  "bank_identity": "762c1dc8c95cd8ce6cc54128d168b0b6eb78f5ec11c4b12f36cebb885e370e32",
+  "evidence": [
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/complete.json",
+      "sha256": "225eb51242b3107d89cbea40c893419b1af52bf5d927eb5c3c8e7ad191d33974"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/protocol.json",
+      "sha256": "366c9f5f19f7296e9cb0b6b48fd0d0e863092171d02598da212ac88b9770525d"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/deterministic-gate.json",
+      "sha256": "722784528ab5d55796b126166eaf65a8c01b9dddd670e9d4c79c8b0bb5b26cb7"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/training.json",
+      "sha256": "5a0cbbc9b692c61e432b8f88c4ef204d223a85f9f3569cbc1fed7e6fc9c41321"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/replay-acceptance.json",
+      "sha256": "57f04c50bf062edb76683ad08d2bcdded657abea155f1eea9873a73b3f6bbe3b"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-000.json",
+      "sha256": "f0462c477bddf4ea2b0aadaadb95b2661d6317a7039d23d3ab1ecb3377c3fd2f"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-016.json",
+      "sha256": "24d2103359c6a0ad07593c7a24a43a8e4a51839b57b261b559c75195fa3cb99c"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-032.json",
+      "sha256": "8ddd31b705af516e6eacaf4bb6e0e4598190094b96dda3bef4c2f74556da96b6"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-048.json",
+      "sha256": "ebdf8f0f9765f23c1c217ba260060e15b1aa105ba4ab4c36de7fcf58b4a76aaa"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-064.json",
+      "sha256": "4754c72cf509e0fd4637d7f0030ed5e62c90a9133a81f6abb6a7625ce3048bcc"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-080.json",
+      "sha256": "8332edfa2dcd506b5163442c00c317ea3ea3c6890176283f73a7738ed6f2cae3"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-096.json",
+      "sha256": "977ec5992238ecae39de8f6eb721cd5765289b2dd38b24793e104de7638571c6"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-112.json",
+      "sha256": "7b535e85aebce4b6fcf43748340722d31139aa16fb612eef5969db6f9191b3c1"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-128.json",
+      "sha256": "dc5a652a5c7d1af60e1132fe9712206d9f9ca0c5b6dca7ed09a2d1d2df9e6fa4"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-144.json",
+      "sha256": "9fea13abb7faa2575975720efe0fac076e08ba5621f6ff2ebe4c7ae5d8ff4212"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-160.json",
+      "sha256": "3b7b38885eee652d9b6e9cf0ddd0f2d30feb3e046c3085013aeece2901cc067c"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-176.json",
+      "sha256": "82452001ac28bb99d12a2983640e11ac931c9782e298d0f2789e0ccbe4c3f2a2"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-192.json",
+      "sha256": "28b7767957e6a535939374702fd33d4c87ee3ee0d15585cf34bdf3e640faecba"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-208.json",
+      "sha256": "864e17f4dd001e5ee6888671ea1d879af1ce27169905d098dd91c120f44dcd5d"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-224.json",
+      "sha256": "a703388c6f5f3c4aec2287b717ffba46df1383302e8d5a6070d9ef857667f3ee"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-240.json",
+      "sha256": "e7c916f6dacfb8d624ef65a728a25fcadbdc525fb4fb9a5c4e09f0a938bc0a82"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-256.json",
+      "sha256": "93e106def50795e334dbf4c5d55d9d9ce9e43e83e4a887e8a3ec515bd278b8f6"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-272.json",
+      "sha256": "c413d1379628aede1680be57c97f8ca4a571bb5cecd50e5d0c9f2d1e24cd2f57"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-288.json",
+      "sha256": "522c3c15a0c583207f23c785f750223a36d6cb486099da04380a802100817fcb"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-304.json",
+      "sha256": "086e8e62cd548f12a3c67bbd9be84ef25d23c88cf73d63ef4e24ed9330b621cd"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-320.json",
+      "sha256": "2586ad70bd2b02b011edf9a2af6a3a06531587b5cc6a5354c546c7e35b062c7d"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030/models/CONT-J/step320/complete.json",
+      "sha256": "3ba2f6a08378860674abcb58e2d3df5f188dc42044bae360369711cc063f1397"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030/models/CONT-J/step320/config.json",
+      "sha256": "ee7be1506c24cf4f319693951ed4e1a564af3ac5c36959f91ca145d5f27265a8"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/resume/complete.json",
+      "sha256": "a49d248eb95daee239290cf6abd00190812299a3611a3745b85d93cd1fa89de3"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/arms/CONT-J/training.json",
+      "sha256": "c1b72e8ccdb1f5d1792b4fdfbfd309a260cdae0befcc87cc661861b42f3a73ee"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/arms/CONT-J/fixed-128.json",
+      "sha256": "94490dddfebc2ad26316545d54a7fe5950b93bea082479af21135993f0712465"
+    }
+  ]
+}

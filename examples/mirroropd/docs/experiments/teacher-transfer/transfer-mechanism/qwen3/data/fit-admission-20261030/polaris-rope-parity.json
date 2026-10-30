@@ -1,0 +1,17 @@
+{
+  "model_revision": "dcab747284e6f4818d8a871315f63dc1223ee394",
+  "config_sha256": "6b50588478beebf78c1f7f3f33cb367d1ac21db5e8b1a724e23fb0aa46a98d9d",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.12.1",
+    "vllm": "0.25.1+cu129"
+  },
+  "positions": 4096,
+  "hf_attention_scaling": 1.0405465108108165,
+  "vllm_attention_scaling": 1.0405465108108165,
+  "inv_freq_max_error": 0.0,
+  "cos_sin_fp32_max_error": 0.0,
+  "cos_sin_bf16_max_error": 0.0,
+  "scope": "RoPE primitive only; not a full-model HF/vLLM logit equivalence test",
+  "cuda_initialized": false
+}

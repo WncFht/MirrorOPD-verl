@@ -1,0 +1,71 @@
+{
+  "prefix": {
+    "prompts": 128,
+    "matched": 128,
+    "mismatched_ids": []
+  },
+  "step": 1280,
+  "panels": {
+    "early": {
+      "actual_tokens": 72437,
+      "contributing_prompts": 128,
+      "domains": {
+        "code": 32,
+        "if": 32,
+        "math": 64
+      }
+    },
+    "middle": {
+      "actual_tokens": 30656,
+      "contributing_prompts": 41,
+      "domains": {
+        "code": 0,
+        "if": 0,
+        "math": 41
+      }
+    },
+    "late": {
+      "actual_tokens": 20171,
+      "contributing_prompts": 20,
+      "domains": {
+        "code": 0,
+        "if": 0,
+        "math": 20
+      }
+    },
+    "all": {
+      "actual_tokens": 123264,
+      "contributing_prompts": 128,
+      "domains": {
+        "code": 32,
+        "if": 32,
+        "math": 64
+      }
+    }
+  },
+  "short_prefix": {
+    "0": {
+      "short_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-nonthinking-wave3-20261029/arms/NT-SFT/fixed-000.json",
+      "short_sha256": "203a881a699c0b34f6c94f32b00f5dfdc1a13f59e5ea347c53ba9086288c72f8",
+      "long_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-nonthinking-wave3-20261029-h4096-heldout/arms/NT-SFT/fixed-000.json",
+      "long_sha256": "5278f5edb462a1663e464a12eb0868a1a80b929d1fb9f8b9a57596ec3031d000",
+      "old_mean": 0.08596993852846488,
+      "long_early_mean": 0.08596993852846488,
+      "max_absolute_error": 0.0,
+      "mean_absolute_error": 0.0,
+      "aggregate_relative_change_percent": 0.0
+    },
+    "1280": {
+      "short_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-nonthinking-wave3-20261029/arms/NT-SFT/fixed-1280.json",
+      "short_sha256": "d5377c15c5af2c9dfdbcc0feedef6b796438c0d23c5f22c7f8c094db16e0ba05",
+      "long_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-nonthinking-wave3-20261029-h4096-heldout/arms/NT-SFT/fixed-1280.json",
+      "long_sha256": "d47cc2a02c88f6fd5d2b5a1757d6848834f3563675b690daaefb6391dd76a18e",
+      "old_mean": 0.05759686383615902,
+      "long_early_mean": 0.05759686383615902,
+      "max_absolute_error": 0.0,
+      "mean_absolute_error": 0.0,
+      "aggregate_relative_change_percent": 0.0
+    }
+  },
+  "scoring_claim": "measured numerical differences"
+}

@@ -1,0 +1,95 @@
+{
+  "POLARIS-Project/Polaris-4B-Preview": {
+    "thinking": {
+      "total": 1270,
+      "mismatches": 0,
+      "first_mismatch_indices": []
+    },
+    "nonthinking": {
+      "total": 1270,
+      "mismatches": 0,
+      "first_mismatch_indices": []
+    }
+  },
+  "Qwen/Qwen3-0.6B": {
+    "thinking": {
+      "total": 1270,
+      "mismatches": 0,
+      "first_mismatch_indices": []
+    },
+    "nonthinking": {
+      "total": 1270,
+      "mismatches": 0,
+      "first_mismatch_indices": []
+    }
+  },
+  "Qwen/Qwen3-4B-Instruct-2507": {
+    "thinking": {
+      "total": 1270,
+      "mismatches": 0,
+      "first_mismatch_indices": []
+    },
+    "nonthinking": {
+      "total": 1270,
+      "mismatches": 1270,
+      "first_mismatch_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    }
+  },
+  "Qwen/Qwen3-4B-Thinking-2507": {
+    "thinking": {
+      "total": 1270,
+      "mismatches": 1270,
+      "first_mismatch_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "nonthinking": {
+      "total": 1270,
+      "mismatches": 1270,
+      "first_mismatch_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    }
+  },
+  "Thinking-Space/Qwen3-4B-Base-GRPO": {
+    "thinking": {
+      "total": 1270,
+      "mismatches": 0,
+      "first_mismatch_indices": []
+    },
+    "nonthinking": {
+      "total": 1270,
+      "mismatches": 0,
+      "first_mismatch_indices": []
+    }
+  }
+}

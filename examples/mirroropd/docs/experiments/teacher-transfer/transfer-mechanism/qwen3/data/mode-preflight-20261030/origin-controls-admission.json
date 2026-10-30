@@ -1,0 +1,149 @@
+{
+  "teachers": [
+    {
+      "model": "sft-gsm8k",
+      "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+      "revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "mode_evidence": {
+        "True": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 4,
+          "empty_think": 4
+        },
+        "False": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        }
+      },
+      "native_training_switch": "not explicitly disclosed in available model card/launcher",
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-acceptance-20261030/mode-probes/sft-gsm8k",
+      "probe_source": "c2925412da95abd185577c3d80638bec6a0f9bc39cda6245ea8a25e2c79b9b3f"
+    },
+    {
+      "model": "base-gt-math",
+      "repo": "TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH",
+      "revision": "679b8b3a531200f6748eb782c265c83a58b1417d",
+      "mode_evidence": {
+        "True": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        },
+        "False": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        }
+      },
+      "native_training_switch": "not explicitly disclosed in available model card/launcher",
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-acceptance-20261030/mode-probes/base-gt-math",
+      "probe_source": "c2925412da95abd185577c3d80638bec6a0f9bc39cda6245ea8a25e2c79b9b3f"
+    },
+    {
+      "model": "coreward-i",
+      "repo": "TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+      "revision": "5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "mode_evidence": {
+        "True": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        },
+        "False": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        }
+      },
+      "native_training_switch": "not explicitly disclosed in available model card/launcher",
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-acceptance-20261030/mode-probes/coreward-i",
+      "probe_source": "c2925412da95abd185577c3d80638bec6a0f9bc39cda6245ea8a25e2c79b9b3f"
+    },
+    {
+      "model": "coreward-ii",
+      "repo": "TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+      "revision": "381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "mode_evidence": {
+        "True": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        },
+        "False": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        }
+      },
+      "native_training_switch": "not explicitly disclosed in available model card/launcher",
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-acceptance-20261030/mode-probes/coreward-ii",
+      "probe_source": "c2925412da95abd185577c3d80638bec6a0f9bc39cda6245ea8a25e2c79b9b3f"
+    },
+    {
+      "model": "rlvr-gsm8k",
+      "repo": "tocsa/qwen3-1.7b-rlvr-gsm8k",
+      "revision": "64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "mode_evidence": {
+        "True": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 4,
+          "empty_think": 0
+        },
+        "False": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        }
+      },
+      "native_training_switch": "not explicitly disclosed in available model card/launcher",
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-acceptance-20261030/mode-probes/rlvr-gsm8k",
+      "probe_source": "c2925412da95abd185577c3d80638bec6a0f9bc39cda6245ea8a25e2c79b9b3f"
+    },
+    {
+      "model": "base-grpo-4",
+      "repo": "Thinking-Space/Qwen3-4B-Base-GRPO",
+      "revision": "1f3b2966edfb75f2f98a00617588c1f748088422",
+      "mode_evidence": {
+        "True": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        },
+        "False": {
+          "prefix_matches": 1270,
+          "prompts": 1270,
+          "probe_count": 4,
+          "starts_think": 0,
+          "empty_think": 0
+        }
+      },
+      "native_training_switch": "not explicitly disclosed in available model card/launcher",
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-acceptance-20261030/mode-probes/base-grpo-4",
+      "probe_source": "c2925412da95abd185577c3d80638bec6a0f9bc39cda6245ea8a25e2c79b9b3f"
+    }
+  ],
+  "classification": "observed-output input controls; no claim of native mode expertise"
+}

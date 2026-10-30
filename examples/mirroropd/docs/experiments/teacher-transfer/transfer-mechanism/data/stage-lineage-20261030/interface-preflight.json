@@ -1,0 +1,71 @@
+{
+  "Q1": {
+    "conflicts": [],
+    "student_head": 151936,
+    "teacher_head": 151936,
+    "extra_teacher_tokens": [],
+    "native_eos": 151643,
+    "native_template_available": true,
+    "same_template": false
+  },
+  "Q2": {
+    "conflicts": [],
+    "student_head": 151936,
+    "teacher_head": 151936,
+    "extra_teacher_tokens": [],
+    "native_eos": 151643,
+    "native_template_available": true,
+    "same_template": false
+  },
+  "L1": {
+    "conflicts": [],
+    "student_head": 128256,
+    "teacher_head": 128264,
+    "extra_teacher_tokens": [
+      [
+        128256,
+        "<pad>"
+      ]
+    ],
+    "native_eos": 128001,
+    "native_template_available": true,
+    "same_template": false
+  },
+  "L2": {
+    "conflicts": [],
+    "student_head": 128256,
+    "teacher_head": 128264,
+    "extra_teacher_tokens": [
+      [
+        128256,
+        "<pad>"
+      ]
+    ],
+    "native_eos": 128001,
+    "native_template_available": true,
+    "same_template": false
+  },
+  "L3": {
+    "conflicts": [],
+    "student_head": 128256,
+    "teacher_head": 128264,
+    "extra_teacher_tokens": [
+      [
+        128256,
+        "<pad>"
+      ]
+    ],
+    "native_eos": 128001,
+    "native_template_available": true,
+    "same_template": false
+  },
+  "L4": {
+    "conflicts": [],
+    "student_head": 128256,
+    "teacher_head": 128256,
+    "extra_teacher_tokens": [],
+    "native_eos": 128001,
+    "native_template_available": false,
+    "same_template": false
+  }
+}

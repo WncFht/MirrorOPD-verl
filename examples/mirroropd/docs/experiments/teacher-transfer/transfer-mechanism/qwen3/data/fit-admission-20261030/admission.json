@@ -1,0 +1,109 @@
+{
+  "study": "qwen3-mode-thinking-wave1-20261029",
+  "arms": 5,
+  "updates_per_arm": 320,
+  "admitted_for": "fixed-state native-support fitting after numerical/memory gate",
+  "teachers": [
+    {
+      "teacher": "q3-0.6",
+      "rows": 448,
+      "max_sequence_positions": 1407,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "default",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/8a42df501c30bef795df3463e73a014094f0d6223846867eab160d8b0ea465f5"
+    },
+    {
+      "teacher": "q3-4",
+      "rows": 448,
+      "max_sequence_positions": 1407,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "default",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/81321a806a08fd328cf88481eeb3b8e7c43c7ec716b5b75f0b90281dcce1ec79"
+    },
+    {
+      "teacher": "q3-8",
+      "rows": 448,
+      "max_sequence_positions": 1407,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "default",
+        "attention_scaling": 1.0
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/e18d1de61ea9efd8faa0ae4366065fa99edb30dcb310846bd72c346595a246e4"
+    },
+    {
+      "teacher": "polaris-4",
+      "rows": 448,
+      "max_sequence_positions": 1407,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": {
+        "rope_type": "yarn",
+        "attention_scaling": 1.0405465108108165
+      },
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/df209dd8d8b6cbe4321630582970c03d5aa65ac8a276c24a1242d496935f663e"
+    },
+    {
+      "teacher": "e3",
+      "rows": 448,
+      "max_sequence_positions": 1407,
+      "native_forward_probes": [
+        {
+          "id": 0,
+          "max_logit_difference": 0.0
+        },
+        {
+          "id": 320,
+          "max_logit_difference": 0.0
+        }
+      ],
+      "effective_rope": null,
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/teachers/fa4de148ef578db59826089804ccd3b664390b97ca755cf47fcc837b7c1ce0c5"
+    }
+  ],
+  "limits": [
+    "Short greedy probes are not accuracy evaluations or proof of general mode capability",
+    "Polaris keeps its native effective YaRN scaling; not a pure RL paired ablation"
+  ]
+}

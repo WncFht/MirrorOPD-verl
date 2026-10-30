@@ -1,0 +1,157 @@
+{
+  "model": {
+    "name": "L4",
+    "repo": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo",
+    "revision": "d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+    "path": "model/teacher-study/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+    "parent": "meta-llama/Llama-3.1-8B",
+    "method": "rl",
+    "sources": [
+      "https://huggingface.co/hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo/tree/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9"
+    ],
+    "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+  },
+  "manifest": {
+    "inputs": {
+      "repo": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo",
+      "revision": "d6e668fcf8db53ff55cc39cf347b3494f56dc7e9"
+    },
+    "files": [
+      {
+        "path": "README.md",
+        "size": 31,
+        "sha256": null,
+        "name": "README.md"
+      },
+      {
+        "path": "config.json",
+        "size": 955,
+        "sha256": null,
+        "name": "config.json"
+      },
+      {
+        "path": "configuration.json",
+        "size": 41,
+        "sha256": null,
+        "name": "configuration.json"
+      },
+      {
+        "path": "generation_config.json",
+        "size": 180,
+        "sha256": null,
+        "name": "generation_config.json"
+      },
+      {
+        "path": "model-00001-of-00007.safetensors",
+        "size": 4886466168,
+        "sha256": "1d1c49afa5c1f7d38cff835ceda37e5a3f0555bdf4802f9c69d3cf60bf90a586",
+        "name": "model-00001-of-00007.safetensors"
+      },
+      {
+        "path": "model-00002-of-00007.safetensors",
+        "size": 4832007448,
+        "sha256": "71b49635247dc8afcba2aca4e6804c9c60989c477ace0e8ed76aeccb49921033",
+        "name": "model-00002-of-00007.safetensors"
+      },
+      {
+        "path": "model-00003-of-00007.safetensors",
+        "size": 4999813112,
+        "sha256": "61de3df3444d6e08b8fa4f74a66b80b702157cfebf417a8f87c93389de3a74f6",
+        "name": "model-00003-of-00007.safetensors"
+      },
+      {
+        "path": "model-00004-of-00007.safetensors",
+        "size": 4999813128,
+        "sha256": "ad8170ca2e052b8f257a77055448b50f99a68cd3c3ee4fb0b885f2b045d6f26d",
+        "name": "model-00004-of-00007.safetensors"
+      },
+      {
+        "path": "model-00005-of-00007.safetensors",
+        "size": 4832007496,
+        "sha256": "5fb4c5934cf001ba79050bf2b0a190c5f1236089a38a2b204cb9af7c531221c7",
+        "name": "model-00005-of-00007.safetensors"
+      },
+      {
+        "path": "model-00006-of-00007.safetensors",
+        "size": 4999813120,
+        "sha256": "829af9dd196e627bcf2f056c249e581c03d91267df0da2bfa874787dbbecb9e9",
+        "name": "model-00006-of-00007.safetensors"
+      },
+      {
+        "path": "model-00007-of-00007.safetensors",
+        "size": 2571158184,
+        "sha256": "422ac14948086815c70a791246738d49bd2489835b760a0b593f1181628f8523",
+        "name": "model-00007-of-00007.safetensors"
+      },
+      {
+        "path": "model.safetensors.index.json",
+        "size": 23950,
+        "sha256": null,
+        "name": "model.safetensors.index.json"
+      },
+      {
+        "path": "special_tokens_map.json",
+        "size": 335,
+        "sha256": null,
+        "name": "special_tokens_map.json"
+      },
+      {
+        "path": "tokenizer.json",
+        "size": 17209920,
+        "sha256": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+        "name": "tokenizer.json"
+      },
+      {
+        "path": "tokenizer_config.json",
+        "size": 50534,
+        "sha256": null,
+        "name": "tokenizer_config.json"
+      }
+    ]
+  },
+  "completion": {
+    "fingerprint": "517a335d1e30fc77cf7127b92e73ec2580de20c54e9b2f8fae11396fbdae3e3f",
+    "inputs": {
+      "repo": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo",
+      "revision": "d6e668fcf8db53ff55cc39cf347b3494f56dc7e9"
+    },
+    "completed_at": 1793340148.0998297,
+    "weights": [
+      {
+        "name": "model-00001-of-00007.safetensors",
+        "bytes": 4886466168,
+        "sha256": "1d1c49afa5c1f7d38cff835ceda37e5a3f0555bdf4802f9c69d3cf60bf90a586"
+      },
+      {
+        "name": "model-00002-of-00007.safetensors",
+        "bytes": 4832007448,
+        "sha256": "71b49635247dc8afcba2aca4e6804c9c60989c477ace0e8ed76aeccb49921033"
+      },
+      {
+        "name": "model-00003-of-00007.safetensors",
+        "bytes": 4999813112,
+        "sha256": "61de3df3444d6e08b8fa4f74a66b80b702157cfebf417a8f87c93389de3a74f6"
+      },
+      {
+        "name": "model-00004-of-00007.safetensors",
+        "bytes": 4999813128,
+        "sha256": "ad8170ca2e052b8f257a77055448b50f99a68cd3c3ee4fb0b885f2b045d6f26d"
+      },
+      {
+        "name": "model-00005-of-00007.safetensors",
+        "bytes": 4832007496,
+        "sha256": "5fb4c5934cf001ba79050bf2b0a190c5f1236089a38a2b204cb9af7c531221c7"
+      },
+      {
+        "name": "model-00006-of-00007.safetensors",
+        "bytes": 4999813120,
+        "sha256": "829af9dd196e627bcf2f056c249e581c03d91267df0da2bfa874787dbbecb9e9"
+      },
+      {
+        "name": "model-00007-of-00007.safetensors",
+        "bytes": 2571158184,
+        "sha256": "422ac14948086815c70a791246738d49bd2489835b760a0b593f1181628f8523"
+      }
+    ]
+  }
+}
