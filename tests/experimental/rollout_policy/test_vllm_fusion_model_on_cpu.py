@@ -153,3 +153,16 @@ def test_child_configuration_replaces_both_hf_views(monkeypatch):
     assert child.model_config._model_info == "teacher-info"
     assert parent.model_config.hf_text_config is student
     assert child.compilation_config is parent.compilation_config
+
+
+def test_reversed_probability_components_preserve_tiny_logical_weight():
+    import math
+
+    model = composite()
+    model.fusion_space = "probability"
+    model.set_alpha(1e-20, reverse_components=True)
+    model.student.compute_logits = lambda hidden: torch.tensor([[1000.0, -1000.0, -1000.0, -1000.0, -1000.0]])
+    model.teacher.compute_logits = lambda hidden: torch.tensor([[-1000.0, 1000.0, -1000.0, -1000.0, -1000.0]])
+    actual = model.compute_logits(torch.zeros(1, 5)).log_softmax(-1)
+    assert actual[0, 0].item() == pytest.approx(math.log(1e-20), abs=2e-6)
+    assert actual[0, 1].item() == pytest.approx(0.0, abs=2e-6)

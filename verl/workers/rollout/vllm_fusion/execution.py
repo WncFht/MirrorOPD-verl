@@ -2,44 +2,52 @@
 # SPDX-License-Identifier: Apache-2.0
 """Native fusion lifecycle without changing the global plan or TQ collector."""
 
-import asyncio
 import copy
 import time
 
 from omegaconf import open_dict
 
+from verl.experimental.rollout_policy.lifecycle import (
+    ComponentLayout,
+    OwnedReplicas,
+    PreparedPhase,
+    RequestRoutes,
+    loaded_versions,
+)
 from verl.experimental.rollout_policy.plan import stable_seed
 from verl.experimental.rollout_policy.topology import FusionTopology
 from verl.workers.rollout.replica import RolloutMode
 
 
 class NativeVLLMExecutor:
-    def __init__(self, runtime):
-        self.runtime = runtime
-        self.replicas = []
+    def __init__(self, context):
+        self.context = context
+        self.resources = OwnedReplicas(context)
+        self.timings = {}
         self.current_version = None
-        self.awake = False
         self.fusion_space = None
 
     async def prepare(self, plan):
-        from verl.experimental.rollout_policy.runtime import LocalPhaseClient
+        from verl.experimental.rollout_policy.sessions import LocalPhaseClient
         from verl.workers.rollout.vllm_fusion.compat import decode_graph_config, fusion_hf_overrides
         from verl.workers.rollout.vllm_fusion.replica import VLLMFusionReplica
 
-        first, second, alpha = plan.fusion_components
-        rt = self.runtime
-        if plan.fusion_space != rt.policy.fusion_space or self.fusion_space not in {None, plan.fusion_space}:
+        layout = ComponentLayout.from_plan(plan)
+        first, second, alpha = layout.first, layout.second, plan.resolved_control
+        ctx = self.context
+        self.timings = {}
+        if plan.fusion_space != ctx.policy.fusion_space or self.fusion_space not in {None, plan.fusion_space}:
             raise ValueError("Fusion space changed without rebuilding the native executor")
         self.fusion_space = plan.fusion_space
-        wg = rt.trainer.actor_rollout_wg
-        execution = rt.policy.execution
+        wg = ctx.actor
+        execution = ctx.policy.execution
         topology = FusionTopology(wg.world_size, execution.tensor_parallel_size)
         tick = time.monotonic()
-        await rt.wait(wg.park_fusion_actor())
-        rt.metrics["perf/timing/fusion_actor_park_seconds"] = time.monotonic() - tick
+        await ctx.wait(wg.park_fusion_actor())
+        self.timings["perf/timing/fusion_actor_park_seconds"] = time.monotonic() - tick
         tick = time.monotonic()
-        if not self.replicas:
-            rollout = copy.deepcopy(rt.config.actor_rollout_ref.rollout)
+        if not self.resources.replicas:
+            rollout = copy.deepcopy(ctx.config.actor_rollout_ref.rollout)
             rollout.load_format = "auto"
             rollout.tensor_model_parallel_size = topology.tensor_parallel_size
             rollout.expert_parallel_size = 1
@@ -69,80 +77,69 @@ class NativeVLLMExecutor:
                     4000 + index,
                     rollout,
                     model,
-                    gpus_per_node=rt.config.trainer.n_gpus_per_node,
+                    gpus_per_node=ctx.config.trainer.n_gpus_per_node,
                     name_suffix="policy_fusion",
                 )
                 replica.rollout_mode = RolloutMode.COLOCATED
                 replica.workers = wg.workers[topology.worker_slice(index)]
-                self.replicas.append(replica)
-            await rt.guarded(asyncio.gather(*(replica.launch_servers() for replica in self.replicas)))
-            self.awake = True
-            servers = [replica._server_handle for replica in self.replicas]
-            await rt.guarded(
-                asyncio.gather(
-                    *(
-                        server.collective_rpc.remote("fusion_initialize", args=(first.kind == "current",))
-                        for server in servers
-                    )
+                self.resources.replicas.append(replica)
+            await self.resources.launch(lambda replica: replica.launch_servers())
+            servers = [replica._server_handle for replica in self.resources.replicas]
+            await ctx.wait(
+                list(
+                    server.collective_rpc.remote("fusion_initialize", args=(first.kind == "current",))
+                    for server in servers
                 )
             )
-            await rt.wait(
+            await ctx.wait(
                 wg.configure_fusion(
                     {
                         "backend": "vllm_fusion",
                         "servers": servers,
                         "tp_size": topology.tensor_parallel_size,
                         "current": first.kind == "current",
-                        "deadline_seconds": rt.policy.deadline_seconds,
+                        "deadline_seconds": ctx.policy.deadline_seconds,
                     }
                 )
             )
-            rt.replicas["fusion"] = self.replicas
-            rt.clients["fusion"] = LocalPhaseClient(rt.config, servers, fusion=True)
-        elif not self.awake:
-            await rt.guarded(asyncio.gather(*(replica.wake_up() for replica in self.replicas)))
-            self.awake = True
-        rt.metrics["perf/timing/fusion_prepare_residency_seconds"] = time.monotonic() - tick
+            self.client = LocalPhaseClient(ctx.config, servers, fusion=True)
+        else:
+            await self.resources.wake()
+        self.timings["perf/timing/fusion_prepare_residency_seconds"] = time.monotonic() - tick
         if first.kind == "current" and self.current_version != plan.actor_version:
             tick = time.monotonic()
-            await rt.wait(
+            await ctx.wait(
                 wg.update_weights(
                     global_steps=plan.collection_step, target="fusion_student", version=plan.actor_version
                 )
             )
             self.current_version = plan.actor_version
-            rt.metrics["perf/timing/fusion_current_refit_seconds"] = time.monotonic() - tick
-        rt.phase_token = str(stable_seed("fusion-phase", plan.collection_step, [r.uid for r in plan.requests]))
-        counts = [0] * topology.replica_count
-        n = rt.config.actor_rollout_ref.rollout.n
-        for request in plan.requests:
-            counts[(request.row * n + request.response_index) % topology.replica_count] += 1
-        await rt.guarded(
-            asyncio.gather(
-                *(
+            self.timings["perf/timing/fusion_current_refit_seconds"] = time.monotonic() - tick
+        phase_token = str(stable_seed("fusion-phase", plan.collection_step, [r.uid for r in plan.requests]))
+        routes = RequestRoutes.build(plan.requests, topology.replica_count)
+        await ctx.wait(
+            list(
+                (
                     replica._server_handle.prepare.remote(
-                        count, rt.phase_token, alpha, plan.actor_version, plan.fusion_space
+                        count, phase_token, alpha, plan.actor_version, plan.fusion_space, layout.reversed
                     )
-                    for replica, count in zip(self.replicas, counts, strict=True)
+                    for replica, count in zip(self.resources.replicas, routes.counts, strict=True)
                 )
             )
         )
-        await rt.guarded(
-            asyncio.gather(
-                *(replica._server_handle.set_global_steps.remote(plan.actor_version[0]) for replica in self.replicas)
+        await ctx.wait(
+            list(
+                replica._server_handle.set_global_steps.remote(plan.actor_version[0])
+                for replica in self.resources.replicas
             )
         )
-        return rt.clients["fusion"]
+        return PreparedPhase("fusion", self.client, routes, self, loaded_versions(plan), phase_token)
 
-    async def release(self):
-        if self.replicas and self.awake:
-            await self.runtime.guarded(
-                asyncio.gather(*(replica.sleep() for replica in self.replicas)), self.runtime.policy.deadline_seconds
-            )
-            self.awake = False
+    async def release(self, prepared=None):
+        await self.resources.sleep()
 
-    async def metrics(self):
-        groups = await self.runtime.guarded(
-            asyncio.gather(*(replica._server_handle.collective_rpc.remote("fusion_audit") for replica in self.replicas))
+    async def audit(self):
+        groups = await self.context.wait(
+            list(replica._server_handle.collective_rpc.remote("fusion_audit") for replica in self.resources.replicas)
         )
         return [dict(row, replica=index) for index, group in enumerate(groups) for row in group]

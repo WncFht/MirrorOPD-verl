@@ -80,11 +80,12 @@ class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
         self.secondary_weights = [DefaultModelLoader.Source(self.teacher_path, None, prefix="teacher.")]
         self.set_alpha(getattr(outer, "fusion_teacher_weight", 0.5))
 
-    def set_alpha(self, alpha):
+    def set_alpha(self, alpha, reverse_components=False):
         """Called only after admission closes and all requests have drained."""
         if not math.isfinite(alpha) or not 0 <= alpha <= 1:
             raise ValueError("Fusion alpha must be finite and in [0, 1]")
         self.alpha = float(alpha)
+        self.reverse_components = bool(reverse_components)
 
     def update_physical_experts_metadata(self, num_physical_experts, num_local_physical_experts):
         """Forward native MoE metadata; expert-parallel execution is not enabled."""
@@ -123,14 +124,15 @@ class MirrorOPDFusionForCausalLM(nn.Module, MixtureOfExperts):
             teacher_view = teacher[..., :width]
         elif teacher.shape[-1] < width:
             teacher_view = torch.nn.functional.pad(teacher, (0, width - teacher.shape[-1]), value=-torch.inf)
+        left, right = (teacher_view, student) if getattr(self, "reverse_components", False) else (student, teacher_view)
         if getattr(self, "fusion_space", "logit") == "probability":
-            logits = probability_mixture_logits(student, teacher_view, self.alpha, legal_mask=self.legal_tokens)
+            logits = probability_mixture_logits(left, right, self.alpha, legal_mask=self.legal_tokens)
         elif self.alpha == 0:
-            logits = student.float()
+            logits = left.float()
         elif self.alpha == 1:
-            logits = teacher_view.float()
+            logits = right.float()
         else:
-            logits = student.float().mul(1 - self.alpha).add_(teacher_view.float(), alpha=self.alpha)
+            logits = left.float().mul(1 - self.alpha).add_(right.float(), alpha=self.alpha)
         if getattr(self, "capture_components", False) and self.alpha in {0, 1}:
             logits = logits.clone()
         logits.masked_fill_(~self.legal_tokens, -torch.inf)

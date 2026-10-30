@@ -27,9 +27,10 @@ def test_atomic_parent_completion(tmp_path, failure):
 
     class Runtime:
         async def prepare(self, phase, plan):
-            events.append(("prepare", phase.decoder))
+            events.append(("prepare", phase.source))
+            return phase
 
-        async def generate(self, phase, plan):
+        async def generate(self, phase, plan, prepared):
             async def response(r):
                 await asyncio.sleep(0.002 if r.response_index else 0.001)
                 events.append(("write", r.key))
@@ -37,7 +38,7 @@ def test_atomic_parent_completion(tmp_path, failure):
                     raise ValueError("score failed")
                 return r.key, r.source
 
-            if failure == "second_source" and phase.decoder == "right":
+            if failure == "second_source" and phase.source == "right":
                 raise ValueError("teacher failed")
             results = await settle_with_deadline([response(r) for r in phase.requests], 1, 1)
             if failure == "duplicate":
@@ -49,7 +50,7 @@ def test_atomic_parent_completion(tmp_path, failure):
             return results
 
         async def release(self, phase):
-            events.append(("release", phase.decoder))
+            events.append(("release", phase.source))
 
         async def drain(self):
             events.append(("drain", None))
@@ -123,7 +124,7 @@ def test_unsafe_remote_drain_never_releases_or_clears(tmp_path):
         async def prepare(self, phase, plan):
             pass
 
-        async def generate(self, phase, plan):
+        async def generate(self, phase, plan, prepared):
             raise UnsafeDrainError("remote writer unresponsive")
 
         async def release(self, phase):

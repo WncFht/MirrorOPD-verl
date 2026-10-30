@@ -4,8 +4,8 @@
 
 import torch
 
-from verl.workers.rollout.vllm_fusion.sampling import FusionTopKTopPSampler
 from verl.workers.rollout.vllm_fusion.worker_extension import FusionWorkerExtension
+from verl.workers.rollout.vllm_rollout.policy_sampling import FusionTopKTopPSampler
 
 
 class CaptureSampler(FusionTopKTopPSampler):

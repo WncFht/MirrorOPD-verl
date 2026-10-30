@@ -9,8 +9,7 @@ from pathlib import Path
 import torch
 
 from verl.utils.device import get_torch_device
-
-from .sampling import FusionTopKTopPSampler
+from verl.workers.rollout.vllm_rollout.policy_sampling import FusionTopKTopPSampler
 
 
 class FusionWorkerExtension:
@@ -134,12 +133,12 @@ class FusionWorkerExtension:
         self.fusion_version = tuple(version)
         self.fusion_valid = True
 
-    def fusion_prepare(self, alpha, version=None):
+    def fusion_prepare(self, alpha, version=None, reverse_components=False):
         """Prepare sampler and coefficient only while the engine is drained."""
         if hasattr(self, "fusion_valid"):
             if not self.fusion_valid or (self.fusion_current and self.fusion_version != tuple(version)):
                 raise RuntimeError("Fusion student version is invalid or stale")
-        self._fusion_model().set_alpha(alpha)
+        self._fusion_model().set_alpha(alpha, reverse_components=reverse_components)
         sampler = getattr(self.model_runner, "sampler", None)
         if sampler is not None:
             sampler.topk_topp_sampler = FusionTopKTopPSampler(
@@ -156,6 +155,8 @@ class FusionWorkerExtension:
             "tp_rank": self.local_rank,
             "tensor_parallel_size": self.model_runner.vllm_config.parallel_config.tensor_parallel_size,
             "alpha": model.alpha,
+            "current": getattr(self, "fusion_current", False),
+            "reverse_components": getattr(model, "reverse_components", False),
             "fusion_space": getattr(model, "fusion_space", "logit"),
             "version": getattr(self, "fusion_version", None),
             "student_path": model.student_path,

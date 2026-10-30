@@ -5,10 +5,12 @@ from types import SimpleNamespace
 
 from omegaconf import OmegaConf
 
+from verl.experimental.rollout_policy.lifecycle import ExecutionContext, PreparedPhase, RequestRoutes
 from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
-from verl.experimental.rollout_policy.runtime import RolloutRuntime
+from verl.experimental.rollout_policy.sessions import SessionDriver
 from verl.utils import tensordict_utils as tu
+from verl.workers.rollout.vllm_rollout.policy_execution import SingleVLLMExecutor
 
 
 def test_immutable_sampling_plan_reaches_every_real_session_metadata(tmp_path):
@@ -21,15 +23,8 @@ def test_immutable_sampling_plan_reaches_every_real_session_metadata(tmp_path):
     worker = SimpleNamespace(generate_sessions=SimpleNamespace(remote=generate))
     policy = RolloutPolicyConfig.parse({"mode": "trajectory_mixture"})
     config = OmegaConf.create({"actor_rollout_ref": {"rollout": {"n": 3}}})
-    runtime = RolloutRuntime(
-        SimpleNamespace(
-            config=config,
-            rollout_policy=policy,
-            agent_loop_manager=SimpleNamespace(agent_loop_workers=[worker, worker]),
-        )
-    )
-    runtime.batch = tu.get_tensordict({"uid": ["a", "b"], "index": [11, 12]})
-    runtime.client = None
+    context = ExecutionContext(config, policy, None)
+    runtime = SessionDriver(context, [worker, worker], tu.get_tensordict({"uid": ["a", "b"], "index": [11, 12]}))
     plan = build_plan(
         policy,
         uids=["a", "b"],
@@ -44,7 +39,8 @@ def test_immutable_sampling_plan_reaches_every_real_session_metadata(tmp_path):
 
     async def run():
         for phase in plan.phases:
-            results = await runtime.generate(phase, plan)
+            prepared = PreparedPhase(phase.source, None, RequestRoutes.build(phase.requests, 2), None, ())
+            results = await runtime.generate(phase, plan, prepared)
             assert set(results) == {(request.key, request.source) for request in phase.requests}
 
     asyncio.run(run())
@@ -67,13 +63,14 @@ def test_preparation_and_release_follow_resolved_binding_not_slot(tmp_path):
     trainer = SimpleNamespace(
         config=OmegaConf.create({"actor_rollout_ref": {"rollout": {"n": 1}}}),
         rollout_policy=policy,
-        actor_rollout_wg=SimpleNamespace(update_weights=sync),
+        actor_rollout_wg=SimpleNamespace(update_weights=sync, world_size=1),
         get_llm_client=lambda: "current-client",
         checkpoint_manager=SimpleNamespace(sleep_replicas=sleep, replicas=[]),
     )
-    runtime = RolloutRuntime(trainer)
-    runtime.fusion_client = AsyncMock(side_effect=AssertionError("endpoint allocated fusion"))
-    runtime.frozen_client = AsyncMock(side_effect=AssertionError("endpoint allocated fixed model"))
+    executor = SingleVLLMExecutor(
+        ExecutionContext(trainer.config, policy, trainer.actor_rollout_wg, trainer.checkpoint_manager)
+    )
+    executor.frozen_client = AsyncMock(side_effect=AssertionError("endpoint allocated fixed model"))
     plan = build_plan(
         policy,
         uids=["u"],
@@ -86,14 +83,13 @@ def test_preparation_and_release_follow_resolved_binding_not_slot(tmp_path):
     )
 
     async def run():
-        await runtime.prepare(plan.phases[0], plan)
-        assert runtime.client == "current-client"
-        await runtime.release(plan.phases[0])
+        prepared = await executor.prepare(plan.phases[0], plan)
+        assert prepared.resource_key is None
+        await prepared.release()
 
     asyncio.run(run())
     sync.assert_awaited_once_with(global_steps=2)
-    runtime.fusion_client.assert_not_called()
-    runtime.frozen_client.assert_not_called()
+    executor.frozen_client.assert_not_called()
 
 
 def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
@@ -114,9 +110,8 @@ def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
         rollout_policy=policy,
         actor_rollout_wg=SimpleNamespace(world_size=1, park_fusion_actor=AsyncMock()),
     )
-    runtime = RolloutRuntime(trainer)
-    runtime.frozen_client = AsyncMock(return_value="A-client")
-    runtime.fusion_client = AsyncMock(side_effect=AssertionError("endpoint allocated fusion"))
+    executor = SingleVLLMExecutor(ExecutionContext(trainer.config, policy, trainer.actor_rollout_wg))
+    executor.frozen_client = AsyncMock(return_value="A-client")
     plan = build_plan(
         policy,
         uids=["u"],
@@ -127,17 +122,16 @@ def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
         seed=1,
         bindings=resolve_bindings(policy, str(tmp_path), None),
     )
-    asyncio.run(runtime.prepare(plan.phases[0], plan))
-    runtime.frozen_client.assert_awaited_once_with("left", str(extra), 1)
+    prepared = asyncio.run(executor.prepare(plan.phases[0], plan))
+    executor.frozen_client.assert_awaited_once_with(plan.binding("left"), 1)
     trainer.actor_rollout_wg.park_fusion_actor.assert_awaited_once()
-    assert runtime.client == "A-client"
-    runtime.fusion_client.assert_not_called()
+    assert prepared.client == "A-client"
 
 
 def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(monkeypatch, tmp_path):
     from unittest.mock import AsyncMock
 
-    from verl.experimental.rollout_policy import runtime as module
+    from verl.workers.rollout.vllm_rollout import policy_execution as module
 
     tokenizer = SimpleNamespace(get_vocab=lambda: {"x": 0})
     model = SimpleNamespace(
@@ -169,15 +163,12 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(mon
             },
         }
     )
-    runtime = RolloutRuntime(
-        SimpleNamespace(
-            config=config,
-            rollout_policy=RolloutPolicyConfig(),
-            tokenizer=tokenizer,
-            actor_rollout_wg=SimpleNamespace(workers=[object()]),
-        )
+    executor = SingleVLLMExecutor(
+        ExecutionContext(config, RolloutPolicyConfig(), SimpleNamespace(workers=[object()]), tokenizer=tokenizer)
     )
-    asyncio.run(runtime.frozen_client("left", str(tmp_path), 2))
+    from verl.experimental.rollout_policy.plan import ModelBinding
+
+    asyncio.run(executor.frozen_client(ModelBinding("checkpoint", str(tmp_path)), 2))
     assert captured[0].gpu_memory_utilization == 0.2
     assert captured[0].max_model_len == 16
     assert captured[0].max_num_seqs == 2
@@ -189,6 +180,6 @@ def test_policy_sampler_control_uses_named_rpc(monkeypatch):
 
     rpc = AsyncMock(return_value={"policy_sampling": True})
     replica = SimpleNamespace(_server_handle=SimpleNamespace(collective_rpc=SimpleNamespace(remote=rpc)))
-    runtime = RolloutRuntime(SimpleNamespace(config=None, rollout_policy=RolloutPolicyConfig()))
+    runtime = ExecutionContext(None, RolloutPolicyConfig(), None)
     asyncio.run(runtime.set_policy_sampling([replica], True))
     rpc.assert_awaited_once_with("configure_rollout_policy_sampler", args=(True,))

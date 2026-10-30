@@ -149,14 +149,6 @@ class RolloutPolicyConfig:
         return cls(**values)
 
     @property
-    def requires_fusion(self):
-        return (
-            self.mode == "token_mixture"
-            and self.references["left"] != self.references["right"]
-            and not (self.right_weight.kind == "constant" and self.right_weight.start in (0, 1))
-        )
-
-    @property
     def references(self):
         if self.mode == "single":
             return {"model": self.model or ModelRef()}
@@ -184,8 +176,9 @@ class RolloutRequest:
 
 @dataclass(frozen=True)
 class RolloutPhase:
-    decoder: str
+    source: str
     requests: tuple[RolloutRequest, ...]
+    generator: str
 
 
 @dataclass(frozen=True)
@@ -213,15 +206,6 @@ class BatchRolloutPlan:
         if source == "fusion":
             return any(binding.kind == "current" for _, binding in self.bindings)
         return self.binding(source).kind == "current"
-
-    @property
-    def fusion_components(self):
-        # The native receiver updates its first component. Routing and quotas
-        # remain in declared slots; only token arithmetic is mapped here.
-        left, right = self.binding("left"), self.binding("right")
-        if right.kind == "current":
-            return right, left, 1.0 - self.resolved_control
-        return left, right, self.resolved_control
 
     @property
     def effective_right_fraction(self):
@@ -281,7 +265,14 @@ def build_plan(
         for i, (row, sid, uid, j) in enumerate(identities)
     )
     sources = (single,) if single else (("fusion",) if policy.mode == "token_mixture" else ("left", "right"))
-    phases = tuple(RolloutPhase(source, tuple(r for r in requests if r.source == source)) for source in sources)
+    phases = tuple(
+        RolloutPhase(
+            source,
+            tuple(r for r in requests if r.source == source),
+            "token_mixture" if source == "fusion" else "single",
+        )
+        for source in sources
+    )
     return BatchRolloutPlan(
         collection_step,
         (completed_outer, optimizer_step),

@@ -49,8 +49,8 @@ async def collect_plan(plan, runtime, publisher):
     await publisher.running(plan)
     try:
         for phase in plan.phases:
-            await runtime.prepare(phase, plan)
-            results = await runtime.generate(phase, plan)
+            prepared = await runtime.prepare(phase, plan)
+            results = await runtime.generate(phase, plan, prepared)
             for key, source in results:
                 key = tuple(key)
                 if key in completed or key not in expected:
@@ -60,7 +60,7 @@ async def collect_plan(plan, runtime, publisher):
                 if source != assigned_sources[key]:
                     raise RuntimeError(f"Rollout source changed for {key}")
                 completed.add(key)
-            await runtime.release(phase)
+            await runtime.release(prepared)
         if completed != expected:
             raise RuntimeError(f"Missing rollout sessions: {expected - completed}")
         await publisher.finished(plan)

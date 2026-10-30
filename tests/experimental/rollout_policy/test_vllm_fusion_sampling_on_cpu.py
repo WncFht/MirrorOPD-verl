@@ -6,7 +6,7 @@ import pytest
 import torch
 
 from verl.experimental.rollout_policy.sampling import SamplingConfig, fusion_log_probs
-from verl.workers.rollout.vllm_fusion.sampling import filter_logits
+from verl.workers.rollout.vllm_rollout.policy_sampling import filter_logits
 
 
 @pytest.mark.parametrize("top_k", [-1, 1, 3, 7])
@@ -39,7 +39,7 @@ def test_single_phase_preserves_boundary_and_restores_original_sampler():
 
     from vllm.v1.sample.ops.topk_topp_sampler import apply_top_k_top_p_pytorch
 
-    from verl.workers.rollout.vllm_fusion.sampling import FusionTopKTopPSampler, configure_policy_sampler
+    from verl.workers.rollout.vllm_rollout.policy_sampling import FusionTopKTopPSampler, configure_policy_sampler
 
     logits = torch.zeros(1, 2)
     top_p = torch.tensor([0.5])

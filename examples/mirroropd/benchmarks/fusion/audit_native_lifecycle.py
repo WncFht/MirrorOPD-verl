@@ -93,7 +93,7 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
             errors.append(f"Outer {outer}: incomplete generated batch")
         ranks = runtime["ranks"]
         expected_loaded = version if binding == "current" else ["checkpoint", str(Path(student).resolve())]
-        uses_fusion = any(phase["decoder"] == "fusion" for phase in plan["phases"])
+        uses_fusion = any(phase.get("source", phase.get("decoder")) == "fusion" for phase in plan["phases"])
         expected_ranks = world_size if uses_fusion else 0
         if len(ranks) != expected_ranks or any(rank["version"] != expected_loaded for rank in ranks):
             errors.append(f"Outer {outer}: receiver version mismatch")
