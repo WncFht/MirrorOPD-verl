@@ -35,13 +35,14 @@ if ! $read_only; then
         verify --workspace "$WORKSPACE" --gpus "$FUSION_GPUS"
 fi
 export FUSION_GPUS
-export STUDENT_MODEL="$WORKSPACE/model/DeepSeek-R1-Distill-Qwen-1.5B"
+PREFIX_MODEL_ROOT=${PREFIX_MODEL_ROOT:-$WORKSPACE/model}
+export STUDENT_MODEL="$PREFIX_MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B"
 if [[ $PAIR == J ]]; then
-    export TEACHER_MODEL="$WORKSPACE/model/JustRL-DeepSeek-1.5B"
+    export TEACHER_MODEL="$PREFIX_MODEL_ROOT/JustRL-DeepSeek-1.5B"
     seqs=${FUSION_MAX_NUM_SEQS:-32}
     kv=${FUSION_KV_BYTES:-25769803776}
 else
-    export TEACHER_MODEL="$WORKSPACE/model/Polaris-7B-Preview"
+    export TEACHER_MODEL="$PREFIX_MODEL_ROOT/Polaris-7B-Preview"
     seqs=${FUSION_MAX_NUM_SEQS:-16}
     kv=${FUSION_KV_BYTES:-17179869184}
 fi

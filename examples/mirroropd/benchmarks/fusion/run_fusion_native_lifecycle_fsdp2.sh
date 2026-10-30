@@ -8,9 +8,11 @@ PAIR=${1:?dense or moe}
 BINDING=${2:?current or initial}
 PREFIX=${3:?unique run prefix}
 RESUME_FROM=${FUSION_RESUME_FROM:-}
+FUSION_MODEL_ROOT=${FUSION_MODEL_ROOT:-$WORKSPACE/model}
+export STUDENT_MODEL="$FUSION_MODEL_ROOT/Qwen3-1.7B-Base"
 case "$PAIR" in
-    dense) export TEACHER_MODEL="$WORKSPACE/model/Qwen3-8B" ;;
-    moe) export TEACHER_MODEL="$WORKSPACE/model/Qwen3-30B-A3B-Instruct-2507" ;;
+    dense) export TEACHER_MODEL="$FUSION_MODEL_ROOT/Qwen3-8B" ;;
+    moe) export TEACHER_MODEL="$FUSION_MODEL_ROOT/Qwen3-30B-A3B-Instruct-2507" ;;
     *) exit 2 ;;
 esac
 case "$BINDING" in current|initial) ;; *) exit 2 ;; esac
