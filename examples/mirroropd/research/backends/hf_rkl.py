@@ -82,14 +82,20 @@ def reference_backward(model, head, teacher_states, rows, training, pad_id):
 
 
 @torch.no_grad()
-def score(model, head, teacher_states, rows, step, training, execution, pad_id):
+def score(model, head, teacher_states, rows, step, training, execution, pad_id, *, bands=None):
     horizon = training.horizon
-    bands = [
-        ("all", 0, horizon),
-        ("early", 0, horizon // 4),
-        ("middle", horizon // 4, horizon // 2),
-        ("late", horizon // 2, horizon),
-    ]
+    bands = (
+        bands
+        if bands is not None
+        else [
+            ("all", 0, horizon),
+            ("early", 0, horizon // 4),
+            ("middle", horizon // 4, horizon // 2),
+            ("late", horizon // 2, horizon),
+        ]
+    )
+    if len({name for name, _, _ in bands}) != len(bands) or any(not 0 <= lo < hi <= horizon for _, lo, hi in bands):
+        raise ValueError("Score windows must have unique names and lie within the fixed horizon")
     results = []
     for first in range(0, len(rows), execution.microbatch):
         subset = rows[first : first + execution.microbatch]

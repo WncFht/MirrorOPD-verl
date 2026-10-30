@@ -78,3 +78,14 @@ def test_seeded_stateful_loader_matches_frozen_order():
             if i == 3:
                 break
     assert actual == expected
+
+
+def test_fixed_short_views_keep_the_same_tokens_and_do_not_mutate_bank():
+    from examples.mirroropd.research.studies.prefix_fusion.scoring import fixed_views
+
+    rows = [{"id": 1, "group": "M01", "response_ids": [4, 5, 6, 7], "behavior_log_probs": [-1, -2, -3, -4]}]
+    view = fixed_views(rows, 2)[0]
+    assert view["response_ids"] == [4, 5] and view["behavior_log_probs"] == [-1, -2]
+    assert rows[0]["response_ids"] == [4, 5, 6, 7]
+    assert view["original_response_length"] == 4 and view["view_horizon"] == 2
+    assert fixed_views(rows, 2, groups=["Code01"]) == []
