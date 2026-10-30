@@ -1,0 +1,81 @@
+{
+  "name": "qwen3-coreward-20261029",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "coreward-i": {
+      "name": "coreward-i",
+      "repo": "TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+      "revision": "5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "path": "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH/blob/5d3c87b84144073a4552d786d3d97288d6c7abec/README.md"
+      ],
+      "lineage_note": "Model card declares Qwen3-1.7B-Base trained on MATH train with Co-rewarding; exact parent commit and matched compute with GT control not established."
+    },
+    "coreward-ii": {
+      "name": "coreward-ii",
+      "repo": "TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+      "revision": "381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "path": "model/teacher-study/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH/blob/381b27483332657dfae6f82ecfaa5fb7ddfb2d82/README.md"
+      ],
+      "lineage_note": "Model card declares Qwen3-1.7B-Base trained on MATH train with Co-rewarding; exact parent commit and matched compute with GT control not established."
+    }
+  },
+  "arms": [
+    {
+      "name": "Q3C-coreward-i",
+      "teacher": "coreward-i",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    },
+    {
+      "name": "Q3C-coreward-ii",
+      "teacher": "coreward-ii",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen3-coreward-20261029",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": true,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    4,
+    5
+  ]
+}

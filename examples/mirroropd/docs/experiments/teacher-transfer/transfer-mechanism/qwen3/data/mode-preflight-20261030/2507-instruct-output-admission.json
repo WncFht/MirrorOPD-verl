@@ -1,0 +1,12 @@
+{
+  "condition": "Instruct-2507 native-template control",
+  "admission": "isolated template/behavior mismatch control; not non-thinking main table",
+  "student_think_tag_prefixes": 4,
+  "teacher_think_tag_prefixes": 0,
+  "prompts_per_model": 4,
+  "limit": "256-token greedy probes do not establish general mode ability",
+  "sources": {
+    "q3-1.7": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-2507-instruct-native-template-20261030/mode-probes/q3-1.7/outputs.json",
+    "q3-4-instruct2507": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-2507-instruct-native-template-20261030/mode-probes/q3-4-instruct2507/outputs.json"
+  }
+}

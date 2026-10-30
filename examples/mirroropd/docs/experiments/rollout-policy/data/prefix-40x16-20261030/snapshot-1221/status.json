@@ -1,0 +1,142 @@
+{
+  "captured_at_utc": "2026-10-30T04:21:39.610310+00:00",
+  "scope": "Formal 40x16 study only; live partial snapshot, no extrapolation",
+  "states": [
+    {
+      "pair": "J",
+      "arm": "S0",
+      "run": "prefix-formal-J-S0-study40x16-v1",
+      "status": "running",
+      "recorded_updates": 176,
+      "target_updates": 640,
+      "recorded_outers": 11,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "J",
+      "arm": "S",
+      "run": "prefix-formal-J-S-study40x16-v1",
+      "status": "queued",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "J",
+      "arm": "LM",
+      "run": "prefix-formal-J-LM-study40x16-v1",
+      "status": "queued",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "J",
+      "arm": "TM",
+      "run": "prefix-formal-J-TM-study40x16-v1",
+      "status": "queued",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "J",
+      "arm": "T",
+      "run": "prefix-formal-J-T-study40x16-v1",
+      "status": "queued",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "S0",
+      "run": "prefix-formal-P-S0-study40x16-v1",
+      "status": "running",
+      "recorded_updates": 160,
+      "target_updates": 640,
+      "recorded_outers": 10,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "S",
+      "run": "prefix-formal-P-S-study40x16-v1",
+      "status": "queued",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "LM",
+      "run": "prefix-formal-P-LM-study40x16-v1",
+      "status": "queued",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "TM",
+      "run": "prefix-formal-P-TM-study40x16-v1",
+      "status": "queued",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    },
+    {
+      "pair": "P",
+      "arm": "T",
+      "run": "prefix-formal-P-T-study40x16-v1",
+      "status": "queued",
+      "recorded_updates": 0,
+      "target_updates": 640,
+      "recorded_outers": 0,
+      "exit_code": null,
+      "formal_complete": false
+    }
+  ],
+  "sources": [
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/metrics.jsonl",
+      "snapshot_sha256": "9dd6d4a81faaa4e22f1b1515169ecd9870c5da437e0489d7339ed81f114f9a06",
+      "bytes": 445459,
+      "incomplete_tail_omitted": false
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/resolved_config.yaml",
+      "sha256": "e6c9572fba98cf217636fb31de3210c8277ace9d6a7c1c7aa8955db6e90ffbbe"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/metrics.jsonl",
+      "snapshot_sha256": "214557582b20fa49df9bedea75ae46653c8998002472a0fcf2defa01b097629e",
+      "bytes": 402834,
+      "incomplete_tail_omitted": false
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/resolved_config.yaml",
+      "sha256": "0c1ae5ad1bf2f0793165f7e58cab4b1fbac74335fd4961a42e832aa52ba47357"
+    }
+  ],
+  "all_ten_complete": false,
+  "recorded_update_rows": 336,
+  "invalid_update_rows": 0,
+  "updates_csv_sha256": "facc54f9044e0cd84b4fa30ba29492832f831bf2c6c022473daef02b86e6338a"
+}

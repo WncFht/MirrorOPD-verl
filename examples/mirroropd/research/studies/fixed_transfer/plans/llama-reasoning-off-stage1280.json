@@ -1,0 +1,147 @@
+{
+  "name": "llama-reasoning-off-stage1280-20261030",
+  "student": "student",
+  "models": {
+    "student": {
+      "name": "student",
+      "repo": "unsloth/Llama-3.2-3B-Instruct",
+      "revision": "006f5dcd1393c3add266de40994ba96225e9689d",
+      "path": "model/teacher-study/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "parent": null,
+      "method": "original_instruct",
+      "sources": [
+        "https://huggingface.co/unsloth/Llama-3.2-3B-Instruct/blob/006f5dcd1393c3add266de40994ba96225e9689d/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    },
+    "gt": {
+      "name": "gt",
+      "repo": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH",
+      "revision": "b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "path": "model/teacher-study/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "parent": null,
+      "method": "rl_ground_truth",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH/blob/b6a0ab79ab4802ef77334532dd1936bb1d219cf9/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    },
+    "coreward-i": {
+      "name": "coreward-i",
+      "repo": "TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+      "revision": "0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "path": "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "parent": null,
+      "method": "rl_coreward_i",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/blob/0d1e2f5ca0f62c670853c59b97650abde3608437/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    },
+    "arithmetic-full": {
+      "name": "arithmetic-full",
+      "repo": "Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full",
+      "revision": "66feb54e931c27285afc344645bf0961053ea29b",
+      "path": "model/teacher-study/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b",
+      "parent": null,
+      "method": "candidate_full_parameter_sft",
+      "sources": [
+        "https://huggingface.co/Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full/blob/66feb54e931c27285afc344645bf0961053ea29b/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    },
+    "llama-1b": {
+      "name": "llama-1b",
+      "repo": "unsloth/Llama-3.2-1B-Instruct",
+      "revision": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+      "path": "model/teacher-study/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+      "parent": null,
+      "method": "smaller_instruct",
+      "sources": [
+        "https://huggingface.co/unsloth/Llama-3.2-1B-Instruct/blob/5a8abab4a5d6f164389b1079fb721cfab8d7126c/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    },
+    "llama-8b": {
+      "name": "llama-8b",
+      "repo": "unsloth/Llama-3.1-8B-Instruct",
+      "revision": "4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+      "path": "model/teacher-study/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+      "parent": null,
+      "method": "larger_instruct",
+      "sources": [
+        "https://huggingface.co/unsloth/Llama-3.1-8B-Instruct/blob/4699cc75b550f9c6f3173fb80f4703b62d946aa5/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    },
+    "nemotron-8b": {
+      "name": "nemotron-8b",
+      "repo": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1",
+      "revision": "54641c1611fcff44fa4865626462445e0a153fc7",
+      "path": "model/teacher-study/nvidia--Llama-3.1-Nemotron-Nano-8B-v1/54641c1611fcff44fa4865626462445e0a153fc7",
+      "parent": null,
+      "method": "sft_rl_checkpoint_merge",
+      "sources": [
+        "https://huggingface.co/nvidia/Llama-3.1-Nemotron-Nano-8B-v1/blob/54641c1611fcff44fa4865626462445e0a153fc7/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    }
+  },
+  "arms": [
+    {
+      "name": "L3-arithmetic-full",
+      "teacher": "arithmetic-full",
+      "updates": 1280,
+      "evaluate_at": []
+    },
+    {
+      "name": "L3-nemotron-8b",
+      "teacher": "nemotron-8b",
+      "updates": 1280,
+      "evaluate_at": []
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage1280-20261030",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": false,
+    "stop_ids": [
+      128001,
+      128008,
+      128009
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    4,
+    5
+  ],
+  "prompt_policy": {
+    "system_prompt": "detailed thinking off",
+    "template_kwargs": {
+      "date_string": "29 Oct 2026",
+      "tools": null
+    }
+  },
+  "continuation": {
+    "pool_batches": 20,
+    "save_resume": true,
+    "accuracy_gate": false,
+    "risk_readouts": [
+      64,
+      320,
+      640,
+      1280
+    ],
+    "validation_teacher": "gt",
+    "resume_from": {
+      "L3-arithmetic-full": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-arithmetic-full",
+      "L3-nemotron-8b": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-nemotron-8b"
+    }
+  }
+}

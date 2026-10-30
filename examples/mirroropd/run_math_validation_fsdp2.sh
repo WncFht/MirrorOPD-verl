@@ -12,6 +12,8 @@ Usage: bash examples/mirroropd/run_math_validation_fsdp2.sh student|teacher [Hyd
 Both use the selected model as the generator; distillation is disabled.
 Math validation defaults: 630 prompts x 16 (MATH-500, AMC23, AIME24, AIME25, AIME26), temperature=0.7, top-p=0.9,
 max response=31744, full submission, Graph, TP1, concurrency128/util0.65.
+Validation repetition stop defaults to 16-128 token blocks repeated 8 times.
+Set VAL_REPETITION_DETECTION=false to restore natural stopping without this heuristic.
 These concurrency defaults were tuned for R1-1.5B. For Qwen3-Base, set
 MAX_PROMPT_LENGTH=1024, CONTINUOUS_TOKEN_MODEL_FAMILY=qwen3,
 ROLLOUT_MAX_NUM_SEQS=64 and ROLLOUT_GPU_MEMORY_UTILIZATION=0.8.

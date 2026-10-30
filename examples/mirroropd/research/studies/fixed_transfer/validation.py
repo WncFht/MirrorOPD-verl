@@ -3,8 +3,10 @@
 """Numerical gates, worst-batch execution tuning and feasible teacher-copy references."""
 
 import gc
+import shutil
 import time
 from dataclasses import asdict, replace
+from pathlib import Path
 
 import torch
 
@@ -17,7 +19,7 @@ from examples.mirroropd.research.core.io import read
 from examples.mirroropd.research.studies.fixed_transfer import models
 from examples.mirroropd.research.studies.fixed_transfer.data import required_rows
 from examples.mirroropd.research.studies.fixed_transfer.spec import fingerprint
-from examples.mirroropd.research.studies.fixed_transfer.training import teacher_inputs, teacher_state
+from examples.mirroropd.research.studies.fixed_transfer.training import reference_arm, teacher_inputs, teacher_state
 
 
 def copy_parameters(student, teacher):
@@ -68,13 +70,77 @@ def profile_directory(study, teacher):
     return study.directory / "numerical" / fingerprint(profile_inputs(study, teacher))
 
 
+def inherit_resume_profile(study, teacher):
+    """Keep the validated execution used by saved Adam; preserve any discarded retuning evidence."""
+    origins = (study.continuation or {}).get("resume_from", {})
+    if not origins:
+        return False
+    from examples.mirroropd.research.studies.fixed_transfer.spec import Execution
+    from examples.mirroropd.research.studies.fixed_transfer.training import resume_signature
+
+    inputs = profile_inputs(study, teacher)
+    source, selected = None, None
+    for arm in study.arms:
+        if arm.name not in origins:
+            continue
+        origin = Path(origins[arm.name])
+        protocol = read(origin / "protocol.json")
+        candidate = origin.parent.parent / "numerical" / protocol["inputs"]["numerical_profile"]
+        value = read(candidate / "complete.json")
+        if fingerprint(value["inputs"]) != fingerprint(inputs) or value["fingerprint"] != fingerprint(inputs):
+            raise ValueError("Resume numerical inputs differ; cannot inherit the earlier profile")
+        if value["execution"] != protocol["execution"]:
+            raise ValueError("Source execution differs from its numerical evidence")
+        saved = read(origin / "resume/complete.json")
+        expected = resume_signature(study, arm, Execution(**value["execution"]))
+        if saved["signature"] != fingerprint(expected):
+            raise ValueError("Resume science changed even with the original execution")
+        if selected is not None and value["execution"] != selected["execution"]:
+            raise ValueError("Different resume execution profiles require separate studies")
+        source, selected = candidate, value
+    if source is None:
+        return False
+    reference = read(study.models[teacher].directory / "config.json")
+    configs = [read(study.models[a.teacher].directory / "config.json") for a in study.arms]
+    largest = max(c["vocab_size"] * c["hidden_size"] * 4 for c in configs)
+    reserve = max(0, largest - reference["vocab_size"] * reference["hidden_size"] * 4) / 2**30 + 0.25
+    if selected.get("teacher_head_reserve_gib", 0) + 1e-8 < reserve:
+        raise ValueError("Inherited profile does not cover the requested teacher head")
+    destination = profile_directory(study, teacher)
+    if complete(destination, inputs) and read(destination / "complete.json")["execution"] == selected["execution"]:
+        return True
+    if any((study.directory / "arms" / arm.name / "training.json").exists() for arm in study.arms):
+        raise ValueError("Cannot replace execution evidence after scientific updates")
+    archived = None
+    if destination.exists():
+        archived = destination.with_name(destination.name + f"-retuning-{time.time_ns()}")
+        destination.rename(archived)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(source, destination)
+    write(
+        destination / "inheritance.json",
+        dict(
+            source=str(source),
+            source_sha256=file_hash(source / "complete.json"),
+            archived_retuning=str(archived) if archived else None,
+            execution=selected["execution"],
+            scientific_updates=0,
+        ),
+    )
+    return True
+
+
 def validate(study, teacher):
+    if inherit_resume_profile(study, teacher):
+        return
     inputs = profile_inputs(study, teacher)
     destination = profile_directory(study, teacher)
     destination.mkdir(parents=True, exist_ok=True)
     if complete(destination, inputs):
         return
-    arm = next(a for a in study.arms if a.teacher == teacher)
+    arm = next((a for a in study.arms if a.teacher == teacher), None)
+    if arm is None:
+        arm = reference_arm(study, teacher)
     rows = required_rows(study, arm)
     groups = {r["group"] for r in rows if r["split"] == "train"}
     batches = [[r for r in rows if r["group"] == g] for g in sorted(groups)]
@@ -218,7 +284,9 @@ def teacher_copy(study, teacher):
     inputs = copy_inputs(study, teacher)
     if complete(destination, inputs):
         return
-    arm = next(a for a in study.arms if a.teacher == teacher)
+    arm = next((a for a in study.arms if a.teacher == teacher), None)
+    if arm is None:
+        arm = reference_arm(study, teacher)
     rows = [r for r in required_rows(study, arm) if r["group"] in ["M01", "M02", "M03", "M04"]]
     head, states = teacher_state(study, teacher, rows)
     model = hf_models.load(study.models[study.student], trainable=True)

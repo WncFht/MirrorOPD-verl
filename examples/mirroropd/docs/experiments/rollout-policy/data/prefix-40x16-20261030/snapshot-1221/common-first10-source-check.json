@@ -1,0 +1,206 @@
+{
+  "scope": "First 10 S0 source plans; no parameter hash or generated-trajectory equality claim",
+  "passed": true,
+  "checks": [
+    {
+      "outer": 1,
+      "actor_version": [
+        0,
+        0
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_1.json",
+          "sha256": "4dd54e0c3c21e693ac825bc47396df9cd13b7a86501f9689056e462187c1af69"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_1.json",
+          "sha256": "cdfd29fa92955223317c434747f8cd50c6565d7c81bc8fdb2cb4350a481a0dfc"
+        }
+      ]
+    },
+    {
+      "outer": 2,
+      "actor_version": [
+        1,
+        16
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_2.json",
+          "sha256": "a23d8816def78313b7d7310cb91b6f2b8b14d756dbc0961abdca022f62492815"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_2.json",
+          "sha256": "913b0d60dc4fd4359a0ba4742266df60a5c87a49d1a12cdba98525cf1a50394f"
+        }
+      ]
+    },
+    {
+      "outer": 3,
+      "actor_version": [
+        2,
+        32
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_3.json",
+          "sha256": "1ad0d3577e8b5899e789c9eb94194cb05ddfcc18c61b401b4f715d11d421834d"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_3.json",
+          "sha256": "3aad4073c367c30a462e8a8d1e7429c7d539c29b5c26c3e96509d205bfec8343"
+        }
+      ]
+    },
+    {
+      "outer": 4,
+      "actor_version": [
+        3,
+        48
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_4.json",
+          "sha256": "33c0a6a5a7e2e48a0da1e8f101d0c7eb0700bff6fa97ab720b05fe66cd428fab"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_4.json",
+          "sha256": "8970ede21ecdd8fb07b5f92298650e251cd56cf55b7c66a5698a73b478d78ede"
+        }
+      ]
+    },
+    {
+      "outer": 5,
+      "actor_version": [
+        4,
+        64
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_5.json",
+          "sha256": "f5696ff4db20f0cb67a5287aeeb8bb9c3649abd4cf8802bc9ed78eb1b6b6a936"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_5.json",
+          "sha256": "786daac6a69fff45ba3aebb17b5a2a49f965e3a86c421a41c67fb4400ab3cd93"
+        }
+      ]
+    },
+    {
+      "outer": 6,
+      "actor_version": [
+        5,
+        80
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_6.json",
+          "sha256": "1fbf092912ec52c6d722fb2a55b7d18ceabdf0fcefb361604641465ede1dc410"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_6.json",
+          "sha256": "4ae42dd4e70061179f63f682560e9f54ec8d29e4d28ee5a43fa76112bfee959c"
+        }
+      ]
+    },
+    {
+      "outer": 7,
+      "actor_version": [
+        6,
+        96
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_7.json",
+          "sha256": "4534ce5424b756bff260308867e0df1efd8f621827b86c398deb3a8ce54a7b11"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_7.json",
+          "sha256": "859a2dcf0dde3d1bde5a504456723d4c205fc11a8665b44ffa90e1b2c38a5c17"
+        }
+      ]
+    },
+    {
+      "outer": 8,
+      "actor_version": [
+        7,
+        112
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_8.json",
+          "sha256": "c0a97dc7e44978d2b171e20838b0cdf058beaa62f145b404eda11983ec8193cd"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_8.json",
+          "sha256": "afc1208dcbbc0cb4929351b099041544db0e0b47fb4ff98a96113f2f9190e206"
+        }
+      ]
+    },
+    {
+      "outer": 9,
+      "actor_version": [
+        8,
+        128
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_9.json",
+          "sha256": "03a93ad56445740439ddcc989b33e90733da68fba4a1bdde2272b269fe75b1c3"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_9.json",
+          "sha256": "5a4b3f0f2a6fd0d0ebe9222f686e76633a6850714926f26589612c29414e4474"
+        }
+      ]
+    },
+    {
+      "outer": 10,
+      "actor_version": [
+        9,
+        144
+      ],
+      "matched_request_ids_and_seeds": 64,
+      "sources": [
+        {
+          "pair": "J",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-J-S0-study40x16-v1/runtime/rollout_plans/step_10.json",
+          "sha256": "63b53e045cc3715074e76b66a935252b984d06d04670373ef2368e7f34af5d74"
+        },
+        {
+          "pair": "P",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl-vllm-fusion/outputs/prefix-formal-P-S0-study40x16-v1/runtime/rollout_plans/step_10.json",
+          "sha256": "01807339ac610a570e7ddca60f1e468a530ad65b7e857fd3ac5ed35e01dc7ec4"
+        }
+      ]
+    }
+  ]
+}

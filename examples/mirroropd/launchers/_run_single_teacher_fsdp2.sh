@@ -118,9 +118,33 @@ VAL_N=${VAL_N:-16}
 # The submission window is independent of the per-engine active sequence limit.
 if [[ $DOMAIN == math ]]; then
     VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-null}
+    VAL_REPETITION_DETECTION=${VAL_REPETITION_DETECTION:-true}
 else
     VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-32}
+    VAL_REPETITION_DETECTION=${VAL_REPETITION_DETECTION:-false}
 fi
+# Selected from the replay tradeoff; it reduces observed harm, not to zero.
+# Only validation receives this setting. False restores natural stopping.
+VAL_REPETITION_MIN_PATTERN=${VAL_REPETITION_MIN_PATTERN:-16}
+VAL_REPETITION_MAX_PATTERN=${VAL_REPETITION_MAX_PATTERN:-128}
+VAL_REPETITION_MIN_COUNT=${VAL_REPETITION_MIN_COUNT:-8}
+case ${VAL_REPETITION_DETECTION,,} in
+    true|1)
+        for name in VAL_REPETITION_MIN_PATTERN VAL_REPETITION_MAX_PATTERN VAL_REPETITION_MIN_COUNT; do
+            if [[ ! ${!name} =~ ^[1-9][0-9]*$ ]]; then
+                echo "$name must be a positive integer" >&2
+                exit 2
+            fi
+        done
+        if (( VAL_REPETITION_MIN_PATTERN > VAL_REPETITION_MAX_PATTERN || VAL_REPETITION_MIN_COUNT < 2 )); then
+            echo "Validation repetition detection requires min pattern <= max pattern and min count >= 2" >&2
+            exit 2
+        fi
+        VAL_REPETITION_PARAMS="{min_pattern_size:$VAL_REPETITION_MIN_PATTERN,max_pattern_size:$VAL_REPETITION_MAX_PATTERN,min_count:$VAL_REPETITION_MIN_COUNT}"
+        ;;
+    false|0) VAL_REPETITION_PARAMS=null ;;
+    *) echo "VAL_REPETITION_DETECTION must be true or false" >&2; exit 2 ;;
+esac
 TEST_FREQ=${TEST_FREQ:-20}
 SAVE_FREQ=${SAVE_FREQ:-50}
 if [[ $DOMAIN == if ]] && (( TEST_FREQ > 0 )); then
@@ -271,6 +295,7 @@ VALIDATION_ARGS=(
     actor_rollout_ref.rollout.val_kwargs.temperature=0.7
     actor_rollout_ref.rollout.val_kwargs.top_p=0.9
     "actor_rollout_ref.rollout.val_kwargs.max_tokens=$MAX_VAL_RESPONSE_LENGTH"
+    "actor_rollout_ref.rollout.val_kwargs.repetition_detection=$VAL_REPETITION_PARAMS"
     "reward.custom_reward_function.path='$EXAMPLE_DIR/rewards/reward.py'"
     reward.custom_reward_function.name=reward_func
 )

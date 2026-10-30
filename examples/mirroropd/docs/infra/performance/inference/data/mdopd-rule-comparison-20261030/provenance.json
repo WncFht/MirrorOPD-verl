@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-30",
+  "reference_repo": "https://github.com/WncFht/MD-OPD",
+  "reference_local_commit": "eb7deb07908676598a8f315696f7fde5795b9c79",
+  "reference_file": "verl/verl/trainer/ppo/repetition_metrics.py",
+  "reference_online_local_text_equal": true,
+  "scope": "1280 historical student responses; no GPU work; labels from existing 16-case exploratory review",
+  "causal_zlib": "window_end, not window_start; stride-aligned full windows only; final unaligned window cannot save tokens",
+  "step_rule": "paragraphs until first complete Step heading, then completed heading blocks; only heading ordinal and whitespace normalized; history32; minimum64 tokens per block; short/new blocks reset streak",
+  "decoder": "Qwen byte-level sampled IDs mapped incrementally to chars; matches all 1280 saved output strings including trailing incomplete Unicode suppression",
+  "auc": "9 positive reviewed loop/late_loop records and 1 normal_progress negative; 6 uncertain excluded; selection intentionally includes native detector misses; NOT representative",
+  "grading": "project math verifier on retained actual sampled-token prefixes; correctness changes are not semantic false-positive counts"
+}

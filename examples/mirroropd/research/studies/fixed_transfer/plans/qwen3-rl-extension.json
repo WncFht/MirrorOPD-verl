@@ -1,0 +1,81 @@
+{
+  "name": "qwen3-lineage-rl-extension-20261029",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "rlvr-gsm8k": {
+      "name": "rlvr-gsm8k",
+      "repo": "tocsa/qwen3-1.7b-rlvr-gsm8k",
+      "revision": "64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "path": "model/teacher-study/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/tocsa/qwen3-1.7b-rlvr-gsm8k/blob/64c6aeecce36cf445d496ef0cc86d6164c52aec7/README.md"
+      ],
+      "lineage_note": "Model card states LoRA RLVR, rank32 alpha64, GSM8K 200 samples, 2 epochs; published full checkpoint; merge provenance not independently verified."
+    },
+    "base-gt-math": {
+      "name": "base-gt-math",
+      "repo": "TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH",
+      "revision": "679b8b3a531200f6748eb782c265c83a58b1417d",
+      "path": "model/teacher-study/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH/blob/679b8b3a531200f6748eb782c265c83a58b1417d/README.md"
+      ],
+      "lineage_note": "Model card states GRPO ground-truth rewards on MATH train; exact parent initialization revision not disclosed."
+    }
+  },
+  "arms": [
+    {
+      "name": "Q3X-rlvr-gsm8k",
+      "teacher": "rlvr-gsm8k",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    },
+    {
+      "name": "Q3X-base-gt-math",
+      "teacher": "base-gt-math",
+      "updates": 320,
+      "evaluate_at": [
+        64,
+        320
+      ]
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen3-lineage-rl-extension-20261029",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": true,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    4,
+    5
+  ]
+}

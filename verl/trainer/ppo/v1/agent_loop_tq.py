@@ -78,6 +78,11 @@ class AgentLoopWorkerTQ(AgentLoopWorker):
 
         # override sampling params for validation
         if validate:
+            from verl.workers.config.rollout import validation_repetition_detection
+
+            repetition = validation_repetition_detection(config)
+            if repetition is not None:
+                sampling_params["repetition_detection"] = repetition
             sampling_params["top_p"] = config.val_kwargs.top_p
             sampling_params["top_k"] = config.val_kwargs.top_k
             sampling_params["temperature"] = config.val_kwargs.temperature

@@ -1,0 +1,42 @@
+{
+  "arm": "CONT-J",
+  "student": [
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+    "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+  ],
+  "teacher": [
+    "hbx/JustRL-DeepSeek-1.5B",
+    "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+  ],
+  "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-boundary-20261028/checkpoints/TB1-J/step064",
+  "source_step": 64,
+  "bank": "45676042631cfbc6682e90b8e88282165288dba6ad36355116a24ad827909469",
+  "scientific_updates": 0,
+  "historical_next_loss": 0.034641985173009655,
+  "results": [
+    {
+      "deterministic": false,
+      "first_loss": 0.034641985173009655,
+      "second_loss": 0.034641985173009655,
+      "unequal_gradient_tensors": 328,
+      "relative_l2": 0.0048538129718382434,
+      "cosine": 0.9999882238491041
+    },
+    {
+      "deterministic": true,
+      "first_loss": 0.034641985173009655,
+      "second_loss": 0.034641985173009655,
+      "unequal_gradient_tensors": 0,
+      "relative_l2": 0.0,
+      "cosine": 1.0
+    }
+  ],
+  "source": "c6f252374c94b565f4f4eeabd83c578cb41640c30b5175b671b1f7668af57a34",
+  "engine": "11c2685f495788e4afd96f9d24f183afa13314e379694aeca9e5f7330eeab1e8",
+  "backend": "47ef5e01c86e694d3940f79c5250a3af6bfb95d16fdc24eac4e64398e4ec1c0c",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.12.1",
+    "flash-attn": "2.8.3"
+  }
+}

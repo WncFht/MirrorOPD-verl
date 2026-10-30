@@ -2,6 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 """Render complete task-score/GapRecovery tables from audited measurements."""
 
+import os
+from pathlib import Path
+
 from examples.mirroropd.research.core.io import read
 from examples.mirroropd.research.core.paths import REPO
 from examples.mirroropd.research.studies.boundary.round2_common import DATASETS, OLD_OUT, OUT
@@ -52,6 +55,12 @@ def main():
     import argparse
 
     argparse.ArgumentParser(description=__doc__).parse_args()
+    page = REPO / (
+        "examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism/r1/"
+        "2026-10-29-同架构教师吸收假说与续训设计.md"
+    )
+    link = os.path.relpath(OUT / "analysis", page.parent) + "/"
+    script_link = os.path.relpath(Path(__file__), page.parent)
     assert read(OUT / "analysis/verification.json")["complete"]
     data = read(OUT / "analysis/summary.json")
     index = {(r["arm"], r["dataset"]): r for r in data["gap_recovery"]}
@@ -133,19 +142,11 @@ def main():
         ["Student", "Teacher / step", "Before", "Teacher", "After", "增益 pp", "GapRecovery", "95% 区间"], rows
     )
     text += (
-        "完整的 75 个单任务比值和 15 个 macro5 比值，以及三组准确率、分母区间、准确"
-        "率增益区间、无界情况和重采样零分母比例，见 [GapRecovery CSV](../.."
-        "/../../../../../wandb-logs/MirrorOPD-verl/ana"
-        "lysis/teacher-boundary-20261029/analysis/gap-"
-        "recovery.csv)。各模型的平均回答长度和截断比例见[任务准确率与长度表](../"
-        "../../../../../../wandb-logs/MirrorOPD-verl/a"
-        "nalysis/teacher-boundary-20261029/analysis/ac"
-        "curacies.csv)，完整性核验见[验证记录](../../../../../../"
-        "../wandb-logs/MirrorOPD-verl/analysis/teacher"
-        "-boundary-20261029/analysis/verification.json"
-        ")。本节由 [round2_tables.py](../../../../research"
-        "/transfer/boundary/round2_tables.py) 从已核验汇总生成"
-        "。\n\n"
+        "完整的75个单任务比值和15个macro5比值，以及三组准确率、分母区间、准确率增益区间、"
+        f"无界情况和重采样零分母比例，见[GapRecovery CSV]({link}gap-recovery.csv)。"
+        f"各模型的平均回答长度和截断比例见[任务准确率与长度表]({link}accuracies.csv)，"
+        f"完整性核验见[验证记录]({link}verification.json)。"
+        f"本节由[round2_tables.py]({script_link})从已核验汇总生成。\n\n"
     )
     text += "### 8.5 额外 64 次更新的准确率变化\n\n"
     text += "直接对同一题集的 step064 与 step128 做配对比较。增益单位为百分点。\n\n"
@@ -163,14 +164,8 @@ def main():
             ]
         )
     text += table(["Teacher", "step064", "step128", "增益 pp", "95% 区间"], rows)
-    link = "../../../../../../../wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/analysis/"
     text += f"五个单任务及 macro5 的完整结果见[续训增量表]({link}continuation-accuracy.csv)。\n\n"
     (OUT / "analysis/task-tables.md").write_text(text)
-    page = REPO / (
-        "examples/mirroropd/docs/experiments/teacher-t"
-        "ransfer/transfer-mechanism/2026-10-29-同架构教师吸收"
-        "假说与续训设计.md"
-    )
     content = page.read_text()
     start = content.find("## 8. 完整任务评测")
     if start < 0:

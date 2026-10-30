@@ -185,6 +185,9 @@ val_kwargs:
   # rollout.max_model_len must also accommodate the prompt and this response.
   max_tokens: null
 
+  # Experimental vLLM validation repetition stop; null preserves natural stopping.
+  repetition_detection: null
+
 # Null uses the built-in router; set a plugin YAML path to use an external router.
 # Relative paths resolve against the working directory, then the verl package root.
 router_config_path: null

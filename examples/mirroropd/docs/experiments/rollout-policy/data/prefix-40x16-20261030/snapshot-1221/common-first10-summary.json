@@ -1,0 +1,71 @@
+{
+  "scope": "First 10 complete outers of S0 only; one seed, partial study",
+  "pairs": [
+    {
+      "pair": "J",
+      "all_count": 176,
+      "common_updates": 160,
+      "first_rkl": 0.11605646461248398,
+      "outer10_first_rkl": 0.024826651613693684,
+      "outer10_last_rkl": 0.01626625412609428,
+      "first_to_last_observed_pct": 85.98418952325682,
+      "within_drops": [
+        6.270298170327926,
+        33.218702709825145,
+        21.06994600288029,
+        44.71338196033236,
+        39.16588930026516,
+        32.60939329799542,
+        28.34589252681146,
+        30.28153664524148,
+        31.058440923838777,
+        34.48067673724365
+      ],
+      "within_drop_median": 31.8339171109171,
+      "grad_first": 1.290036678314209,
+      "grad_last": 0.2741744816303253,
+      "grad_range": [
+        0.06910363584756851,
+        1.290036678314209
+      ],
+      "grad_above1_count": 29,
+      "loss_rkl_maxdiff": 6.51925802230835e-09,
+      "sampled_loss_tokens": 3963121.0,
+      "reused_loss_tokens": 63409936.0,
+      "within_increases": 3
+    },
+    {
+      "pair": "P",
+      "all_count": 160,
+      "common_updates": 160,
+      "first_rkl": 0.21087187808007002,
+      "outer10_first_rkl": 0.15617834869772196,
+      "outer10_last_rkl": 0.14660439547151327,
+      "first_to_last_observed_pct": 30.477028607936894,
+      "within_drops": [
+        3.9331022470855355,
+        9.25768945633745,
+        6.207987305433249,
+        6.351335517263824,
+        7.428418390657046,
+        6.141470390295732,
+        5.511822323803494,
+        5.489276938147169,
+        5.589820530732103,
+        6.130141153393008
+      ],
+      "within_drop_median": 6.135805771844369,
+      "grad_first": 1.101319670677185,
+      "grad_last": 0.10769973695278168,
+      "grad_range": [
+        0.10769973695278168,
+        1.101319670677185
+      ],
+      "grad_above1_count": 9,
+      "loss_rkl_maxdiff": 1.7695128917694092e-08,
+      "sampled_loss_tokens": 3974237.0,
+      "reused_loss_tokens": 63587792.0,
+      "within_increases": 0
+    }
+  ]
+}

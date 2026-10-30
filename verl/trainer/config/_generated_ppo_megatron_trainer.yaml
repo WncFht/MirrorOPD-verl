@@ -356,6 +356,7 @@ actor_rollout_ref:
       'n': 1
       do_sample: false
       max_tokens: null
+      repetition_detection: null
     router_config_path: null
     multi_turn:
       _target_: verl.workers.config.MultiTurnConfig

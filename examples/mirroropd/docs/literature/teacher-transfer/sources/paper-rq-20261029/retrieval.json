@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-29",
+  "timezone": "Asia/Shanghai",
+  "queries": [
+    "on-policy distillation",
+    "cross-origin distillation",
+    "knowledge distillation capacity gap",
+    "distillation student teacher compatibility"
+  ],
+  "sources": [
+    "arxiv",
+    "open_alex",
+    "semantic_scholar"
+  ],
+  "start_year": 2023,
+  "end_year": 2026,
+  "max_papers_per_source": 35,
+  "unique_candidates": 99,
+  "search_log": "/root/.local/share/paper-search/logs/2026-10/20261029T111552Z-967c8d4d/run.json",
+  "diagnostics": [
+    "Semantic Scholar anonymous access was rate-limited (HTTP 429)."
+  ],
+  "scope": "Broad recall includes irrelevant candidates. Focused primary-source verification is separate; no claim of exhaustive literature coverage or established novelty.",
+  "primary_sources": [
+    {
+      "id": "2608.16647v3",
+      "short_title": "Every Coin Has Two Sides",
+      "url": "https://arxiv.org/abs/2608.16647v3",
+      "inspection": "local full-paper review and online version/abstract"
+    },
+    {
+      "id": "2604.13016v2",
+      "short_title": "Rethinking On-Policy Distillation",
+      "url": "https://arxiv.org/abs/2604.13016v2",
+      "inspection": "online body sections 3-6 and local review"
+    },
+    {
+      "id": "2610.11247v1",
+      "short_title": "Why On-Policy Distillation Sometimes Fails: Vanishing Learning Signals",
+      "url": "https://arxiv.org/abs/2610.11247v1",
+      "inspection": "online sections 4-6 and appendices E/H"
+    },
+    {
+      "id": "2605.26844v1",
+      "short_title": "Not All Disagreement Is Learnable: Token Teachability",
+      "url": "https://arxiv.org/abs/2605.26844v1",
+      "inspection": "online section 3 and appendix excerpts"
+    },
+    {
+      "id": "2606.07082v1",
+      "short_title": "On the Geometry of On-Policy Distillation",
+      "url": "https://arxiv.org/abs/2606.07082v1",
+      "inspection": "online abstract and rank-constrained intervention"
+    },
+    {
+      "id": "2609.04172v1",
+      "short_title": "Rethinking On-Policy Distillation II: One Training Example",
+      "url": "https://arxiv.org/abs/2609.04172v1",
+      "inspection": "online abstract"
+    },
+    {
+      "id": "2610.11291v1",
+      "short_title": "When Do We Need On-Policy Distillation?",
+      "url": "https://arxiv.org/abs/2610.11291v1",
+      "inspection": "online abstract and existing local protocol review"
+    },
+    {
+      "id": "2609.32722v1",
+      "short_title": "Scaling Properties of Same-Family On-Policy Distillation",
+      "url": "https://arxiv.org/abs/2609.32722v1",
+      "inspection": "online abstract, cold-start appendix and local review"
+    },
+    {
+      "id": "2610.05974v1",
+      "short_title": "Transfer-Stratified On-Policy Distillation",
+      "url": "https://arxiv.org/abs/2610.05974v1",
+      "inspection": "online abstract, method and budget excerpts"
+    },
+    {
+      "id": "2606.06021v4",
+      "short_title": "OPRD: On-Policy Representation Distillation",
+      "url": "https://arxiv.org/abs/2606.06021v4",
+      "inspection": "online abstract"
+    },
+    {
+      "id": "2609.35210v1",
+      "short_title": "Understanding On-Policy Distillation via Sparse Crosscoders",
+      "url": "https://arxiv.org/abs/2609.35210v1",
+      "inspection": "online abstract"
+    },
+    {
+      "id": "2608.31046",
+      "short_title": "Does On-Policy Distillation Really Distill?",
+      "url": "https://arxiv.org/abs/2608.31046",
+      "inspection": "author abstract indexed in web search; version not pinned"
+    },
+    {
+      "id": "2610.21234v1",
+      "short_title": "Compatibility Matters",
+      "url": "https://arxiv.org/abs/2610.21234v1",
+      "inspection": "online abstract"
+    },
+    {
+      "id": "2610.26397v2",
+      "short_title": "Bridged Self-Distillation for On-Policy Learning",
+      "url": "https://arxiv.org/abs/2610.26397v2",
+      "inspection": "online abstract"
+    },
+    {
+      "id": "2306.13649",
+      "short_title": "On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes",
+      "url": "https://arxiv.org/abs/2306.13649",
+      "inspection": "author abstract indexed in web search"
+    },
+    {
+      "id": "2306.08543",
+      "short_title": "MiniLLM: Knowledge Distillation of Large Language Models",
+      "url": "https://arxiv.org/abs/2306.08543",
+      "inspection": "author abstract indexed in web search"
+    },
+    {
+      "id": "1902.03393",
+      "short_title": "Improved Knowledge Distillation via Teacher Assistant",
+      "url": "https://arxiv.org/abs/1902.03393",
+      "inspection": "author abstract indexed in web search"
+    },
+    {
+      "id": "2603.25562v2",
+      "short_title": "Revisiting On-Policy Distillation",
+      "url": "https://arxiv.org/abs/2603.25562v2",
+      "inspection": "online abstract and existing local review"
+    },
+    {
+      "id": "2605.13230",
+      "short_title": "Teacher-Guided Policy Optimization for LLM Distillation",
+      "url": "https://arxiv.org/abs/2605.13230",
+      "inspection": "author abstract indexed in web search; titles vary by version"
+    }
+  ]
+}

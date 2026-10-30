@@ -1,0 +1,117 @@
+{
+  "model": {
+    "name": "Q1",
+    "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+    "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+    "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+    "parent": "Qwen/Qwen3-4B-Base",
+    "method": "sft",
+    "sources": [
+      "https://huggingface.co/jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/tree/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80"
+    ],
+    "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance.",
+    "subfolder": "step80"
+  },
+  "manifest": {
+    "inputs": {
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "subfolder": "step80"
+    },
+    "files": [
+      {
+        "path": "step80/added_tokens.json",
+        "size": 707,
+        "sha256": null,
+        "name": "added_tokens.json"
+      },
+      {
+        "path": "step80/chat_template.jinja",
+        "size": 4116,
+        "sha256": null,
+        "name": "chat_template.jinja"
+      },
+      {
+        "path": "step80/config.json",
+        "size": 727,
+        "sha256": null,
+        "name": "config.json"
+      },
+      {
+        "path": "step80/generation_config.json",
+        "size": 117,
+        "sha256": null,
+        "name": "generation_config.json"
+      },
+      {
+        "path": "step80/merges.txt",
+        "size": 1671853,
+        "sha256": null,
+        "name": "merges.txt"
+      },
+      {
+        "path": "step80/model-00001-of-00002.safetensors",
+        "size": 4953423048,
+        "sha256": "288ea2f48f0a638cf10323cd7b13885516d6538962584eba4376d0daf79f0b7b",
+        "name": "model-00001-of-00002.safetensors"
+      },
+      {
+        "path": "step80/model-00002-of-00002.safetensors",
+        "size": 3869471392,
+        "sha256": "a750aa8fdb0338017e77e03a59274413b14dd19674383df2e954c7b607eaa8f6",
+        "name": "model-00002-of-00002.safetensors"
+      },
+      {
+        "path": "step80/model.safetensors.index.json",
+        "size": 32877,
+        "sha256": null,
+        "name": "model.safetensors.index.json"
+      },
+      {
+        "path": "step80/special_tokens_map.json",
+        "size": 616,
+        "sha256": null,
+        "name": "special_tokens_map.json"
+      },
+      {
+        "path": "step80/tokenizer.json",
+        "size": 11422654,
+        "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+        "name": "tokenizer.json"
+      },
+      {
+        "path": "step80/tokenizer_config.json",
+        "size": 5407,
+        "sha256": null,
+        "name": "tokenizer_config.json"
+      },
+      {
+        "path": "step80/vocab.json",
+        "size": 2776833,
+        "sha256": null,
+        "name": "vocab.json"
+      }
+    ]
+  },
+  "completion": {
+    "fingerprint": "a855a4a095c269d4f4dc580ae893510635865067fdb2c8fd17faf70d191e84df",
+    "inputs": {
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "subfolder": "step80"
+    },
+    "completed_at": 1793339749.0051582,
+    "weights": [
+      {
+        "name": "model-00001-of-00002.safetensors",
+        "bytes": 4953423048,
+        "sha256": "288ea2f48f0a638cf10323cd7b13885516d6538962584eba4376d0daf79f0b7b"
+      },
+      {
+        "name": "model-00002-of-00002.safetensors",
+        "bytes": 3869471392,
+        "sha256": "a750aa8fdb0338017e77e03a59274413b14dd19674383df2e954c7b607eaa8f6"
+      }
+    ]
+  }
+}

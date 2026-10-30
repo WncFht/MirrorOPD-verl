@@ -181,7 +181,7 @@ def evaluate(study, model_name, *, weights=None, weight_identity=None, label=Non
     served_name = "study-" + key[:16]
     visible = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")
     if len(visible) != 1 or visible[0] not in {str(g) for g in study.gpus}:
-        raise ValueError("Run evaluation through the GPU4-7 resource owner")
+        raise ValueError("Run evaluation through the configured GPU resource owner")
     config = read(model.directory / "config.json")
     total = (
         float(

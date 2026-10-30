@@ -1,0 +1,188 @@
+{
+  "captured_at_utc": "2026-10-30T09:09:09.066922+00:00",
+  "controllers": [
+    {
+      "study": "front-shared-eval-r1-20261030",
+      "control": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/front-shared-eval-r1-20261030/control/1793345440263084058-batch",
+      "identity": [
+        3525285,
+        "3993222097"
+      ],
+      "acquired": true,
+      "queue": {
+        "running": [
+          "evaluation:eval-Q3-q3-4-thinking2507-064"
+        ],
+        "pending": [],
+        "external": [],
+        "done": [],
+        "failed": [
+          "r1:train-CONT-J",
+          "r1:train-CONT-N",
+          "r1:train-CONT-M",
+          "r1:train-NEW-DS",
+          "r1:train-NEW-BRO",
+          "r1:train-NEW-DC"
+        ],
+        "time": 1793351345.8364334
+      }
+    },
+    {
+      "study": "llama-reasoning-off-stage1280-20261030",
+      "control": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage1280-20261030/control/1793341077662848781-fit",
+      "identity": [
+        3348267,
+        "3992785110"
+      ],
+      "acquired": false,
+      "queue": null
+    },
+    {
+      "study": "middle-resume640-shared-20261030",
+      "control": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/middle-resume640-shared-20261030/control/1793350603612770777-batch",
+      "identity": [
+        3703761,
+        "3993738428"
+      ],
+      "acquired": true,
+      "queue": {
+        "running": [
+          "sft80:train-Q1",
+          "grpo4:train-Q-GRPO-thinking"
+        ],
+        "pending": [
+          "tulu_sft:train-L1"
+        ],
+        "external": [],
+        "done": [
+          "grpo4:bank-0",
+          "grpo4:bank-1",
+          "grpo4:bank-2",
+          "grpo4:bank-3",
+          "grpo4:cache-base-grpo-4",
+          "grpo4:cache-e3",
+          "grpo4:numerical",
+          "sft80:bank-0",
+          "sft80:bank-1",
+          "sft80:bank-2",
+          "sft80:bank-3",
+          "sft80:cache-Q1",
+          "sft80:cache-e3",
+          "sft80:numerical",
+          "tulu_sft:bank-0",
+          "tulu_sft:bank-1",
+          "tulu_sft:bank-2",
+          "tulu_sft:bank-3",
+          "tulu_sft:cache-L1",
+          "tulu_sft:cache-gt",
+          "tulu_sft:numerical"
+        ],
+        "failed": [],
+        "time": 1793351346.9522517
+      }
+    },
+    {
+      "study": "qwen3-thinking-e3-stage1280-20261030",
+      "control": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-e3-stage1280-20261030/control/1793340598427027693-fit",
+      "identity": [
+        3325172,
+        "3992737454"
+      ],
+      "acquired": false,
+      "queue": null
+    },
+    {
+      "study": "teacher-boundary-small-to-large-deterministic640-20261030",
+      "control": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-small-to-large-deterministic640-20261030/control/1793341561842257269-run",
+      "identity": [
+        3369141,
+        "3992833873"
+      ],
+      "acquired": true,
+      "queue": {
+        "running": [
+          "train-R"
+        ],
+        "pending": [
+          "train-J",
+          "resume-TB3-J7"
+        ],
+        "external": [],
+        "done": [
+          "cache-justrl",
+          "cache-r1",
+          "resume-TB3-R7",
+          "validate"
+        ],
+        "failed": [],
+        "time": 1793351348.8856778
+      }
+    }
+  ],
+  "r1_replay": [
+    {
+      "arm": "CONT-J",
+      "step": 128,
+      "risk_max_error": 0.0005301610260465828,
+      "loss_max_error": 6.830561557881476e-05,
+      "old_prompts": 256,
+      "optimizer_reset": false,
+      "passed": false
+    },
+    {
+      "arm": "CONT-M",
+      "step": 128,
+      "risk_max_error": 0.0005633792189047443,
+      "loss_max_error": 3.064050396036494e-05,
+      "old_prompts": 256,
+      "optimizer_reset": false,
+      "passed": false
+    },
+    {
+      "arm": "CONT-N",
+      "step": 128,
+      "risk_max_error": 0.001453177359326041,
+      "loss_max_error": 7.166790587734284e-05,
+      "old_prompts": 256,
+      "optimizer_reset": false,
+      "passed": false
+    },
+    {
+      "arm": "NEW-BRO",
+      "step": 64,
+      "risk_max_error": 0.001203556025574426,
+      "loss_max_error": 0.00012757054000908652,
+      "old_prompts": 256,
+      "optimizer_reset": false,
+      "passed": false
+    },
+    {
+      "arm": "NEW-DC",
+      "step": 64,
+      "risk_max_error": 0.0031917798256732473,
+      "loss_max_error": 0.00011790757736417079,
+      "old_prompts": 256,
+      "optimizer_reset": false,
+      "passed": false
+    },
+    {
+      "arm": "NEW-DS",
+      "step": 64,
+      "risk_max_error": 0.001201275567295261,
+      "loss_max_error": 6.137778355020523e-05,
+      "old_prompts": 256,
+      "optimizer_reset": false,
+      "passed": false
+    }
+  ],
+  "blocked_runs": [
+    {
+      "study": "qwen-stage-lineage-thinking640-20261030",
+      "reason": "Resume science or execution signature changed",
+      "new_updates": 0,
+      "evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen-stage-lineage-thinking640-20261030/control/1793348584231219056-fit/train-Q1/1/worker.log",
+      "resolved": true,
+      "resolution": "Inherited original validated microbatch4; continuation now executing in shared queue"
+    }
+  ]
+}

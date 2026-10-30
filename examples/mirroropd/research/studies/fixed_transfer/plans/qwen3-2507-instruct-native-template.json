@@ -1,0 +1,83 @@
+{
+  "name": "qwen3-2507-instruct-native-template-20261030",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "e3": {
+      "name": "e3",
+      "repo": "CMU-AIRe/e3-1.7B",
+      "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "path": "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/CMU-AIRe/e3-1.7B/blob/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df/README.md",
+        "https://arxiv.org/abs/2506.09026v2"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "q3-4-instruct2507": {
+      "name": "q3-4-instruct2507",
+      "repo": "Qwen/Qwen3-4B-Instruct-2507",
+      "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "path": "model/teacher-study/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554",
+      "parent": null,
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/blob/cdbee75f17c01a7cc42f958dc650907174af0554/README.md"
+      ],
+      "lineage_note": "Published lineage; exact parent revision not established. Mode/template acceptance is tracked separately."
+    }
+  },
+  "arms": [
+    {
+      "name": "NATIVE-INSTRUCT",
+      "teacher": "q3-4-instruct2507",
+      "updates": 320,
+      "evaluate_at": []
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen3-2507-instruct-native-template-20261030",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": false,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    2,
+    3
+  ],
+  "continuation": {
+    "pool_batches": 20,
+    "save_resume": true,
+    "accuracy_gate": false,
+    "risk_readouts": [
+      64,
+      320
+    ],
+    "validation_teacher": "e3"
+  },
+  "prompt_policy": {
+    "template_model": "q3-4-instruct2507"
+  }
+}

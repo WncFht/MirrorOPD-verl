@@ -9,7 +9,7 @@ def setup():
     import torch
 
     devices = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")
-    if len(devices) != 1 or devices[0] not in os.environ.get("MIRROROPD_ALLOWED_GPUS", "4,5,6,7").split(","):
+    if len(devices) != 1 or devices[0] not in os.environ.get("MIRROROPD_ALLOWED_GPUS", "4,5").split(","):
         raise ValueError("GPU workers require exactly one explicitly assigned physical GPU from the runtime allocation")
 
     torch.set_num_threads(4)

@@ -1,0 +1,50 @@
+{
+  "name": "qwen3-base-grpo4-assets-20261030",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "base-grpo-4": {
+      "name": "base-grpo-4",
+      "repo": "Thinking-Space/Qwen3-4B-Base-GRPO",
+      "revision": "1f3b2966edfb75f2f98a00617588c1f748088422",
+      "path": "model/teacher-study/Thinking-Space--Qwen3-4B-Base-GRPO/1f3b2966edfb75f2f98a00617588c1f748088422",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/Thinking-Space/Qwen3-4B-Base-GRPO/blob/1f3b2966edfb75f2f98a00617588c1f748088422/README.md"
+      ],
+      "lineage_note": "Published lineage; exact parent revision not established. Mode/template acceptance is tracked separately."
+    }
+  },
+  "arms": [],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen3-base-grpo4-assets-20261030",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": true,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    4,
+    5
+  ]
+}

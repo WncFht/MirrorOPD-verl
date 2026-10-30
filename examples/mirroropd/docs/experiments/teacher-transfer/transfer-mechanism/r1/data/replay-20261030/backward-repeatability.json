@@ -1,0 +1,53 @@
+{
+  "results": [
+    {
+      "deterministic": false,
+      "first_loss": 0.09338504171018805,
+      "second_loss": 0.09338504171018805,
+      "first_norm": 0.8514845371246338,
+      "second_norm": 0.8514841794967651,
+      "unequal_gradient_tensors": 328,
+      "relative_l2": 0.002163976126051686,
+      "cosine": 0.9999976586026468
+    },
+    {
+      "deterministic": true,
+      "first_loss": 0.09338504171018805,
+      "second_loss": 0.09338504171018805,
+      "first_norm": 0.8514907956123352,
+      "second_norm": 0.8514907956123352,
+      "unequal_gradient_tensors": 0,
+      "relative_l2": 0.0,
+      "cosine": 1.0
+    }
+  ],
+  "scientific_updates": 0,
+  "student": [
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+    "916b56a44061fd5cd7d6a8fb632557ed4f724f60"
+  ],
+  "teacher": [
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+    "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+  ],
+  "support": 151936,
+  "batch_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "interpretation": "Same unmodified S0 parameters and data; only FlashAttention deterministic backward flag changes"
+}

@@ -1,0 +1,71 @@
+{
+  "prefix": {
+    "prompts": 128,
+    "matched": 128,
+    "mismatched_ids": []
+  },
+  "step": 320,
+  "panels": {
+    "early": {
+      "actual_tokens": 122938,
+      "contributing_prompts": 128,
+      "domains": {
+        "code": 32,
+        "if": 32,
+        "math": 64
+      }
+    },
+    "middle": {
+      "actual_tokens": 100179,
+      "contributing_prompts": 106,
+      "domains": {
+        "code": 32,
+        "if": 10,
+        "math": 64
+      }
+    },
+    "late": {
+      "actual_tokens": 185903,
+      "contributing_prompts": 94,
+      "domains": {
+        "code": 30,
+        "if": 0,
+        "math": 64
+      }
+    },
+    "all": {
+      "actual_tokens": 409020,
+      "contributing_prompts": 128,
+      "domains": {
+        "code": 32,
+        "if": 32,
+        "math": 64
+      }
+    }
+  },
+  "short_prefix": {
+    "0": {
+      "short_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-e3/fixed-000.json",
+      "short_sha256": "6c5690a71d7e8a2a0d81ba2c1e5b1cd587f4616cbc84fa2eff50f4cd7427305d",
+      "long_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029-h4096-heldout/arms/Q3-e3/fixed-000.json",
+      "long_sha256": "e652389ea5cfa4eed27d52e0ac8c8f4a0ad0dbf911f93f023ebe39e0baf0823b",
+      "old_mean": 0.03380434384468154,
+      "long_early_mean": 0.03379597449006104,
+      "max_absolute_error": 0.00026576293067400066,
+      "mean_absolute_error": 1.0890227552429901e-05,
+      "aggregate_relative_change_percent": -0.024758222372112115
+    },
+    "320": {
+      "short_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-e3/fixed-320.json",
+      "short_sha256": "1ef01a0b2b833594febde83d6786efb3a663dad527b5c2dd0a177406919fd2c2",
+      "long_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029-h4096-heldout/arms/Q3-e3/fixed-320.json",
+      "long_sha256": "4f565110be21d45c69cebd6f404e781b4bd2be94ae96d694a775dccac97ec711",
+      "old_mean": 0.0012628873548567688,
+      "long_early_mean": 0.0012644806740935537,
+      "max_absolute_error": 0.00018763385128620948,
+      "mean_absolute_error": 5.1423771678249745e-06,
+      "aggregate_relative_change_percent": 0.12616479456044605
+    }
+  },
+  "scoring_claim": "measured numerical differences"
+}
