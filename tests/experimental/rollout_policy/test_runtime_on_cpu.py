@@ -69,7 +69,7 @@ def test_preparation_and_release_follow_resolved_binding_not_slot(tmp_path):
         rollout_policy=policy,
         actor_rollout_wg=SimpleNamespace(update_weights=sync),
         get_llm_client=lambda: "current-client",
-        checkpoint_manager=SimpleNamespace(sleep_replicas=sleep),
+        checkpoint_manager=SimpleNamespace(sleep_replicas=sleep, replicas=[]),
     )
     runtime = RolloutRuntime(trainer)
     runtime.fusion_client = AsyncMock(side_effect=AssertionError("endpoint allocated fusion"))
@@ -137,7 +137,7 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(mon
         def __init__(self, rank, rollout, model, **kwargs):
             captured.append(rollout)
             self.launch_servers = AsyncMock()
-            self._server_handle = object()
+            self._server_handle = SimpleNamespace(collective_rpc=SimpleNamespace(remote=AsyncMock()))
 
     monkeypatch.setattr(module, "get_rollout_replica_class", lambda name: Replica)
     config = OmegaConf.create(

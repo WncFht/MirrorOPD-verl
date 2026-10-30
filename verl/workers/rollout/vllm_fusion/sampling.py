@@ -35,3 +35,25 @@ class FusionTopKTopPSampler(nn.Module):
         logits = filter_logits(logits, k, p)
         log_probs = logits.log_softmax(-1, dtype=torch.float32)
         return random_sample(log_probs.exp(), generators, self.use_fp64_gumbel), log_probs
+
+
+def configure_policy_sampler(worker, enabled):
+    """Use the policy filter for a drained single-model phase, then restore it.
+
+    This callable runs through vLLM collective_rpc on each engine worker. It
+    changes only that worker's sampler; ordinary single and validation retain
+    their original instance after the policy phase releases ownership.
+    """
+    sampler = worker.model_runner.sampler
+    attribute = "_rollout_policy_original_sampler"
+    if enabled:
+        if not hasattr(worker, attribute):
+            setattr(worker, attribute, (sampler.topk_topp_sampler, sampler.logprobs_mode))
+        sampler.topk_topp_sampler = FusionTopKTopPSampler(
+            getattr(getattr(worker, attribute)[0], "use_fp64_gumbel", False)
+        )
+        sampler.logprobs_mode = "processed_logprobs"
+    elif hasattr(worker, attribute):
+        sampler.topk_topp_sampler, sampler.logprobs_mode = getattr(worker, attribute)
+        delattr(worker, attribute)
+    return {"policy_sampling": enabled}

@@ -103,6 +103,7 @@ class RolloutRuntime:
         self.metrics = {}
         self.active_refs = []
         self.bindings = getattr(trainer, "rollout_bindings", None)
+        self.current_sampling_active = False
 
     async def guarded(self, awaitable, timeout=None):
         task = asyncio.ensure_future(awaitable)
@@ -127,8 +128,29 @@ class RolloutRuntime:
             raise errors[0]
         return results
 
+    async def set_policy_sampling(self, replicas, enabled):
+        from verl.workers.rollout.vllm_fusion.sampling import configure_policy_sampler
+
+        await self.guarded(
+            asyncio.gather(
+                *(
+                    replica._server_handle.collective_rpc.remote(configure_policy_sampler, args=(enabled,))
+                    for replica in replicas
+                )
+            )
+        )
+
+    async def set_current_sampling(self, enabled):
+        if not enabled and not self.current_sampling_active:
+            return
+        if enabled:
+            self.current_sampling_active = True
+        await self.set_policy_sampling(self.trainer.checkpoint_manager.replicas, enabled)
+        self.current_sampling_active = enabled
+
     @auto_await
     async def sync_validation(self):
+        await self.set_current_sampling(False)
         tick = time.monotonic()
         await self.wait(self.trainer.actor_rollout_wg.update_weights(global_steps=self.trainer.global_steps))
         if hasattr(self.trainer, "timing_raw"):
@@ -186,6 +208,7 @@ class RolloutRuntime:
             await self.guarded(
                 asyncio.gather(*(r.wake_up() for r in self.replicas[source])), self.policy.deadline_seconds
             )
+        await self.set_policy_sampling(self.replicas[source], True)
         return self.clients[source]
 
     async def fusion_client(self, plan):
@@ -275,6 +298,7 @@ class RolloutRuntime:
         elif phase.decoder != "fusion" and plan.has_current(phase.decoder):
             # Explicit on-demand sync; default validation target stays independent.
             await self.wait(self.trainer.actor_rollout_wg.update_weights(global_steps=plan.actor_version[0]))
+            await self.set_current_sampling(True)
             self.client = self.trainer.get_llm_client()
         else:
             # A restored actor can still own model/optimizer storage. Frozen
@@ -372,6 +396,7 @@ class RolloutRuntime:
         if phase.decoder == "fusion" and hasattr(self, "fusion_executor"):
             await self.fusion_executor.release()
         elif phase.decoder != "fusion" and self.active_plan.has_current(phase.decoder):
+            await self.set_current_sampling(False)
             await self.guarded(asyncio.to_thread(self.trainer.checkpoint_manager.sleep_replicas))
         else:
             await self.guarded(
@@ -382,6 +407,7 @@ class RolloutRuntime:
         self.metrics[f"perf/timing/rollout_policy_{phase.decoder}_release_seconds"] = time.monotonic() - tick
 
     async def release_all(self):
+        await self.set_current_sampling(False)
         await self.guarded(asyncio.to_thread(self.trainer.checkpoint_manager.sleep_replicas))
         for source, replicas in self.replicas.items():
             if source == "fusion" and hasattr(self, "fusion_executor"):

@@ -32,3 +32,32 @@ def test_batched_filters_do_not_cross_request_boundaries():
     for index in range(2):
         expected = filter_logits(logits[index : index + 1], k[index : index + 1], p[index : index + 1])
         torch.testing.assert_close(actual[index : index + 1], expected)
+
+
+def test_single_phase_preserves_boundary_and_restores_original_sampler():
+    from types import SimpleNamespace
+
+    from vllm.v1.sample.ops.topk_topp_sampler import apply_top_k_top_p_pytorch
+
+    from verl.workers.rollout.vllm_fusion.sampling import FusionTopKTopPSampler, configure_policy_sampler
+
+    logits = torch.zeros(1, 2)
+    top_p = torch.tensor([0.5])
+    # The exact half-mass boundary is a real counterexample to substituting the
+    # default sampler when a token-mixture plan normalizes to one component.
+    native = apply_top_k_top_p_pytorch(logits.clone(), None, top_p)
+    assert torch.isfinite(native).sum() == 1
+    assert torch.isfinite(filter_logits(logits, p=top_p)).sum() == 2
+    original = SimpleNamespace(use_fp64_gumbel=True)
+    worker = SimpleNamespace(
+        model_runner=SimpleNamespace(sampler=SimpleNamespace(topk_topp_sampler=original, logprobs_mode="raw_logprobs"))
+    )
+    configure_policy_sampler(worker, True)
+    configure_policy_sampler(worker, True)
+    assert isinstance(worker.model_runner.sampler.topk_topp_sampler, FusionTopKTopPSampler)
+    assert worker.model_runner.sampler.topk_topp_sampler.use_fp64_gumbel
+    assert worker.model_runner.sampler.logprobs_mode == "processed_logprobs"
+    configure_policy_sampler(worker, False)
+    configure_policy_sampler(worker, False)
+    assert worker.model_runner.sampler.topk_topp_sampler is original
+    assert worker.model_runner.sampler.logprobs_mode == "raw_logprobs"
