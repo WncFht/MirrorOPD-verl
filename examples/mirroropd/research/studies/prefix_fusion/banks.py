@@ -5,6 +5,9 @@
 import argparse
 import math
 import os
+import subprocess
+import sys
+import time
 from pathlib import Path
 
 from examples.mirroropd.research.core.artifacts import file_hash, fingerprint, receipt
@@ -20,6 +23,7 @@ def bank_request(row, generator):
 
 
 def generate(prepared, assets, generator, out, max_num_seqs=32):
+    started = time.monotonic()
     if os.environ.get("CUDA_VISIBLE_DEVICES") not in {"6", "7"}:
         raise ValueError("Allocate exactly physical GPU 6 or 7 through the local resource wrapper")
     from vllm import LLM, SamplingParams
@@ -45,6 +49,21 @@ def generate(prepared, assets, generator, out, max_num_seqs=32):
     if file_hash(assets / "legal-token-ids.json") != asset_receipt["legal_ids_sha256"]:
         raise ValueError("Changed sampling support")
     out.mkdir(parents=True, exist_ok=False)
+    from examples.mirroropd.benchmarks.fusion.fingerprint import source_fingerprint
+
+    dump(out / "source.json", source_fingerprint())
+    monitor = Path(__file__).resolve().parents[3] / "benchmarks/fusion/monitor.py"
+    observer = subprocess.Popen(
+        [
+            sys.executable,
+            str(monitor),
+            "--parent",
+            os.environ.get("FUSION_RESOURCE_PARENT", str(os.getpid())),
+            "--out",
+            str(out / "resources.jsonl"),
+        ]
+    )
+    assert observer.pid > 0
     config = read(Path(model["directory"]) / "config.json")
     head_dim = config.get("head_dim") or config["hidden_size"] // config["num_attention_heads"]
     per_token = 4 * config["num_hidden_layers"] * config["num_key_value_heads"] * head_dim
@@ -128,6 +147,7 @@ def generate(prepared, assets, generator, out, max_num_seqs=32):
         physical_gpu=os.environ["CUDA_VISIBLE_DEVICES"],
         max_num_seqs=max_num_seqs,
         source_file_sha256=source_hash,
+        elapsed_seconds=time.monotonic() - started,
     )
 
 
