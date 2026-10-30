@@ -1,0 +1,110 @@
+{
+  "name": "qwen-stage-grpo-thinking640-20261030",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "Q1": {
+      "name": "Q1",
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/tree/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance.",
+      "subfolder": "step80"
+    },
+    "Q2": {
+      "name": "Q2",
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/tree/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance.",
+      "subfolder": "step640"
+    },
+    "base-grpo-4": {
+      "name": "base-grpo-4",
+      "repo": "Thinking-Space/Qwen3-4B-Base-GRPO",
+      "revision": "1f3b2966edfb75f2f98a00617588c1f748088422",
+      "path": "model/teacher-study/Thinking-Space--Qwen3-4B-Base-GRPO/1f3b2966edfb75f2f98a00617588c1f748088422",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/Thinking-Space/Qwen3-4B-Base-GRPO/blob/1f3b2966edfb75f2f98a00617588c1f748088422/README.md"
+      ],
+      "lineage_note": "Published lineage; exact parent revision not established. Mode/template acceptance is tracked separately."
+    },
+    "e3": {
+      "name": "e3",
+      "repo": "CMU-AIRe/e3-1.7B",
+      "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "path": "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/CMU-AIRe/e3-1.7B/blob/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df/README.md",
+        "https://arxiv.org/abs/2506.09026v2"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    }
+  },
+  "arms": [
+    {
+      "name": "Q-GRPO-thinking",
+      "teacher": "base-grpo-4",
+      "updates": 640,
+      "evaluate_at": []
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen-stage-grpo-thinking640-20261030",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": true,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    2,
+    3
+  ],
+  "continuation": {
+    "pool_batches": 20,
+    "save_resume": true,
+    "accuracy_gate": false,
+    "risk_readouts": [
+      64,
+      320,
+      640
+    ],
+    "validation_teacher": "e3",
+    "resume_from": {
+      "Q-GRPO-thinking": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen-stage-lineage-thinking320-20261030/arms/Q-GRPO-thinking"
+    }
+  }
+}

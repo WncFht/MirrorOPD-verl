@@ -1,0 +1,87 @@
+{
+  "name": "qwen-stage-lineage-acceptance-20261030",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "Q1": {
+      "name": "Q1",
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/tree/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance.",
+      "subfolder": "step80"
+    },
+    "Q2": {
+      "name": "Q2",
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/tree/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance.",
+      "subfolder": "step640"
+    }
+  },
+  "arms": [
+    {
+      "name": "Q1",
+      "teacher": "Q1",
+      "updates": 320,
+      "evaluate_at": []
+    },
+    {
+      "name": "Q2",
+      "teacher": "Q2",
+      "updates": 320,
+      "evaluate_at": []
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen-stage-lineage-acceptance-20261030",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": false,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    2,
+    3
+  ],
+  "continuation": {
+    "pool_batches": 20,
+    "save_resume": true,
+    "accuracy_gate": false,
+    "risk_readouts": [
+      64,
+      320
+    ],
+    "validation_teacher": "Q1"
+  }
+}

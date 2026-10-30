@@ -1,0 +1,298 @@
+{
+  "name": "llama-fixed-student-lineage-20261029",
+  "status": "bank_and_six_teacher_targets_complete_fit_queued",
+  "priority_after": [
+    "r1-small-to-large-20261029",
+    "qwen3-mode-matched-20261029"
+  ],
+  "allowed_gpus": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "student": "student",
+  "models": {
+    "student": {
+      "repo": "unsloth/Llama-3.2-3B-Instruct",
+      "revision": "006f5dcd1393c3add266de40994ba96225e9689d",
+      "role": "original_instruct",
+      "gated": false,
+      "config_available": true,
+      "sources": [
+        "https://huggingface.co/unsloth/Llama-3.2-3B-Instruct/blob/006f5dcd1393c3add266de40994ba96225e9689d/README.md"
+      ],
+      "original_source": {
+        "repo": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95"
+      },
+      "path": "model/teacher-study/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "mirror_identity": "Unsloth BF16 release, not quantized; original Meta byte equality not assumed"
+    },
+    "gt": {
+      "repo": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH",
+      "revision": "b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "role": "rl_ground_truth",
+      "gated": false,
+      "config_available": true,
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH/blob/b6a0ab79ab4802ef77334532dd1936bb1d219cf9/README.md"
+      ]
+    },
+    "coreward-i": {
+      "repo": "TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+      "revision": "0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "role": "rl_coreward_i",
+      "gated": false,
+      "config_available": true,
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/blob/0d1e2f5ca0f62c670853c59b97650abde3608437/README.md"
+      ]
+    },
+    "arithmetic-full": {
+      "repo": "Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full",
+      "revision": "66feb54e931c27285afc344645bf0961053ea29b",
+      "role": "candidate_full_parameter_sft",
+      "gated": false,
+      "config_available": true,
+      "sources": [
+        "https://huggingface.co/Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full/blob/66feb54e931c27285afc344645bf0961053ea29b/README.md"
+      ]
+    },
+    "llama-1b": {
+      "repo": "unsloth/Llama-3.2-1B-Instruct",
+      "revision": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+      "role": "smaller_instruct",
+      "gated": false,
+      "config_available": true,
+      "sources": [
+        "https://huggingface.co/unsloth/Llama-3.2-1B-Instruct/blob/5a8abab4a5d6f164389b1079fb721cfab8d7126c/README.md"
+      ],
+      "original_source": {
+        "repo": "meta-llama/Llama-3.2-1B-Instruct",
+        "revision": "9213176726f574b556790deb65791e0c5aa438b6"
+      },
+      "path": "model/teacher-study/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+      "mirror_identity": "Unsloth BF16 release, not quantized; original Meta byte equality not assumed"
+    },
+    "llama-8b": {
+      "repo": "unsloth/Llama-3.1-8B-Instruct",
+      "revision": "4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+      "role": "larger_instruct",
+      "gated": false,
+      "config_available": true,
+      "sources": [
+        "https://huggingface.co/unsloth/Llama-3.1-8B-Instruct/blob/4699cc75b550f9c6f3173fb80f4703b62d946aa5/README.md"
+      ],
+      "original_source": {
+        "repo": "meta-llama/Llama-3.1-8B-Instruct",
+        "revision": "0e9e39f249a16976918f6564b8830bc894c89659"
+      },
+      "path": "model/teacher-study/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+      "mirror_identity": "Unsloth BF16 release, not quantized; original Meta byte equality not assumed"
+    },
+    "nemotron-8b": {
+      "repo": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1",
+      "revision": "54641c1611fcff44fa4865626462445e0a153fc7",
+      "role": "sft_rl_checkpoint_merge",
+      "gated": false,
+      "config_available": true,
+      "sources": [
+        "https://huggingface.co/nvidia/Llama-3.1-Nemotron-Nano-8B-v1/blob/54641c1611fcff44fa4865626462445e0a153fc7/README.md"
+      ]
+    }
+  },
+  "arms": [
+    {
+      "name": "L3-gt",
+      "teacher": "gt",
+      "student": "student",
+      "initial_updates": 320,
+      "risk_readouts": [
+        0,
+        64,
+        320
+      ],
+      "admission": "interface/numerical acceptance required"
+    },
+    {
+      "name": "L3-coreward-i",
+      "teacher": "coreward-i",
+      "student": "student",
+      "initial_updates": 320,
+      "risk_readouts": [
+        0,
+        64,
+        320
+      ],
+      "admission": "interface/numerical acceptance required"
+    },
+    {
+      "name": "L3-arithmetic-full",
+      "teacher": "arithmetic-full",
+      "student": "student",
+      "initial_updates": 320,
+      "risk_readouts": [
+        0,
+        64,
+        320
+      ],
+      "admission": "full SFT provenance/layout audit required"
+    },
+    {
+      "name": "L3-llama-1b",
+      "teacher": "llama-1b",
+      "student": "student",
+      "initial_updates": 320,
+      "risk_readouts": [
+        0,
+        64,
+        320
+      ],
+      "admission": "interface/numerical acceptance required"
+    },
+    {
+      "name": "L3-llama-8b",
+      "teacher": "llama-8b",
+      "student": "student",
+      "initial_updates": 320,
+      "risk_readouts": [
+        0,
+        64,
+        320
+      ],
+      "admission": "interface/numerical acceptance required"
+    },
+    {
+      "name": "L3-nemotron-8b",
+      "teacher": "nemotron-8b",
+      "student": "student",
+      "initial_updates": 320,
+      "risk_readouts": [
+        0,
+        64,
+        320
+      ],
+      "admission": "interface/numerical acceptance required"
+    }
+  ],
+  "training": {
+    "objective": "native full-vocab reverse KL subject to support audit",
+    "batch_size": 16,
+    "reuse": 16,
+    "horizon": 1024,
+    "learning_rate": 1e-06,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.01,
+    "clip": 1,
+    "seed": 42,
+    "parameters": "float32",
+    "gradients": "float32",
+    "adam": "float32",
+    "head": "float32",
+    "backbone_autocast": "bfloat16",
+    "rope_buffers": "float32",
+    "tf32": false,
+    "train_pool": 320,
+    "groups": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T"
+    ],
+    "frozen_state_policy": "one original student S0 bank shared by all teachers; no fresh rollout"
+  },
+  "input_contract": {
+    "renderer": "pinned student tokenizer only",
+    "common_system_message": "detailed thinking off",
+    "fixed_date_string": "29 Oct 2026",
+    "teacher_specific_prefix_changes": false,
+    "nemotron": "reasoning-off; verify native prefix versus shared prefix and actual outputs; do not use Qwen enable_thinking switch",
+    "candidate_stop_ids": [
+      128001,
+      128008,
+      128009
+    ],
+    "stop_ids_status": "not final until exact token meaning and native generation config verified"
+  },
+  "continuation": {
+    "stages": [
+      320,
+      640,
+      1280
+    ],
+    "fixed_pool_and_trajectories": true,
+    "ordering": "cycle the same A-T groups after320",
+    "optimizer_resume": true,
+    "rolling_resume_points_per_arm": 1,
+    "selection": "continued held-out and old-batch improvement; record train-only improvement separately",
+    "weights_only_endpoints": "replay or label optimizer reset as separate condition"
+  },
+  "metrics": {
+    "primary": [
+      "absolute_rkl",
+      "reduction_from_initial",
+      "last_64_updates_absolute_and_relative_change"
+    ],
+    "panels": [
+      "train_A-T",
+      "old_train_A-D",
+      "fixed_math_M01-M04"
+    ],
+    "auxiliary": [
+      "JS"
+    ],
+    "teacher_copy": [
+      "gt",
+      "coreward-i",
+      "arithmetic-full"
+    ]
+  },
+  "accuracy": {
+    "training_gate": false,
+    "endpoint_selection": false,
+    "policy": "deferred; if task evaluation is added, use existing avg@4 protocol, never avg@1 screening"
+  },
+  "access": {
+    "policy": "User authorized Unsloth BF16 sources for the three Meta original checkpoints; retain original post-training teacher repositories"
+  },
+  "implementation_gates": [
+    "pinned Unsloth student and size-control assets",
+    "token identity/template/EOS/RoPE/binding audits",
+    "shared reasoning-off prefix output acceptance",
+    "full SFT training-source/weight audit",
+    "FP32 full-gradient and real Adam memory checks",
+    "fixed-pool cyclic training and exact resume",
+    "risk-only readouts without accuracy gate"
+  ],
+  "data": {
+    "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+    "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+    "bank_seed": 52000000,
+    "per_prompt_seed": "52000000+10*id",
+    "s0_temperature": 1.0,
+    "template_date_fixed": true
+  }
+}

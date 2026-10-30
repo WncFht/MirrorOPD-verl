@@ -1,0 +1,146 @@
+{
+  "name": "r1-small-to-large-20261029",
+  "status": "gpu_validation_passed_scientific_training_running",
+  "priority": 1,
+  "gpus": [
+    4,
+    5
+  ],
+  "student": "r7",
+  "teachers": [
+    "r1",
+    "justrl"
+  ],
+  "models": {
+    "r1": [
+      "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+    ],
+    "r7": [
+      "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "916b56a44061fd5cd7d6a8fb632557ed4f724f60"
+    ],
+    "justrl": [
+      "hbx/JustRL-DeepSeek-1.5B",
+      "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+    ],
+    "polaris": [
+      "POLARIS-Project/Polaris-7B-Preview",
+      "faea72cf7123681069668e8da45c1c074e378830"
+    ]
+  },
+  "arms": [
+    {
+      "name": "TB3-R7",
+      "teacher": "r1",
+      "student": "r7",
+      "updates": 64
+    },
+    {
+      "name": "TB3-J7",
+      "teacher": "justrl",
+      "student": "r7",
+      "updates": 64
+    }
+  ],
+  "training": {
+    "batch_size": 16,
+    "reuse": 16,
+    "horizon": 1024,
+    "train_groups": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "optimizer": {
+      "name": "AdamW",
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "clip": 1
+    },
+    "seed": 42,
+    "precision": "FP32 parameters/gradients/Adam/head; native BF16 autocast backbone; FP32 RoPE; TF32 off",
+    "parallelism": "two-GPU layer model parallel, 14+14 decoder layers",
+    "rollout": "existing frozen R1-7B S0 bank; no fresh rollout"
+  },
+  "support": {
+    "kind": "conditional_shared_support",
+    "size": 151936,
+    "student_head_size": 152064,
+    "student_tail_ids": [
+      151936,
+      152064
+    ],
+    "teacher_probabilities": "renormalize on same support",
+    "report": [
+      "conditional_rkl",
+      "conditional_js",
+      "student_tail_mass",
+      "teacher_tail_mass"
+    ],
+    "authorization": "User approved shared-support conditional RKL and rescoring controls"
+  },
+  "scoring": {
+    "groups": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "M01",
+      "M02",
+      "M03",
+      "M04",
+      "Code01",
+      "Code02",
+      "IF01",
+      "IF02"
+    ],
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64
+    ],
+    "cross_state_banks": [
+      "r1",
+      "r7"
+    ]
+  },
+  "evaluation": {
+    "samples": 4,
+    "cap": 31744,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "seed_formula": "72000000+100*i+r",
+    "model_length": 32768,
+    "prompts": 630,
+    "readout_steps": [
+      64
+    ]
+  },
+  "storage": {
+    "optimizer_export": false,
+    "intermediate_weights": false,
+    "final_weights": true
+  },
+  "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-small-to-large-20261029",
+  "frozen_bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/banks/r7",
+  "controls": [
+    "TB1-J",
+    "TB1-R",
+    "TB2-P7"
+  ],
+  "baseline_policy": "Reuse verified existing avg@4 for r1/r7/JustRL/Polaris; evaluate new endpoints only",
+  "implementation": "examples.mirroropd.research.studies.boundary.small_to_large"
+}

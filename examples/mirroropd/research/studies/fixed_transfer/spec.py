@@ -28,14 +28,25 @@ class Model:
     method: str = "unknown"
     sources: tuple[str, ...] = ()
     lineage_note: str = ""
+    subfolder: str | None = None
 
     def __post_init__(self):
+        if self.subfolder is not None and (
+            not self.subfolder
+            or self.subfolder.startswith("/")
+            or ".." in self.subfolder.split("/")
+            or "\\" in self.subfolder
+        ):
+            raise ValueError("Subfolder must be a safe relative Hub path")
         if not re.fullmatch(r"[a-f0-9]{40}", self.revision):
             raise ValueError(f"Pin an immutable Hub revision for {self.name}")
 
     @property
     def identity(self):
-        return fingerprint(dict(repo=self.repo, revision=self.revision))
+        value = dict(repo=self.repo, revision=self.revision)
+        if self.subfolder is not None:
+            value["subfolder"] = self.subfolder
+        return fingerprint(value)
 
     @property
     def directory(self):
@@ -136,8 +147,8 @@ class Arm:
     def __post_init__(self):
         if self.updates <= 0 or any(s <= 0 or s > self.updates for s in self.evaluate_at):
             raise ValueError(f"Invalid update/readout budget: {self.name}")
-        if self.updates not in self.evaluate_at:
-            raise ValueError("Every arm must evaluate its final endpoint")
+        if self.evaluate_at and self.updates not in self.evaluate_at:
+            raise ValueError("Task-evaluated arms must include their final endpoint")
         if len(set(self.evaluate_at)) != len(self.evaluate_at):
             raise ValueError("Duplicate readout step")
 
@@ -155,9 +166,21 @@ class Study:
     training: Training = field(default_factory=Training)
     evaluation: Evaluation = field(default_factory=Evaluation)
     execution: Execution = field(default_factory=Execution)
-    gpus: tuple[int, ...] = (4, 5, 6, 7)
+    gpus: tuple[int, ...] = (4, 5)
+    continuation: dict | None = None
+    prompt_policy: dict | None = None
 
     def __post_init__(self):
+        if self.prompt_policy is not None:
+            if set(self.prompt_policy) - {"system_prompt", "template_kwargs", "template_model"}:
+                raise ValueError("Unknown prompt-policy fields")
+            template = self.prompt_policy.get("template_model")
+            if template is not None and template not in self.models:
+                raise ValueError("Template source must name a pinned model in the study")
+        if self.continuation is not None:
+            pool = self.continuation.get("pool_batches", 20)
+            if not isinstance(pool, int) or not 1 <= pool <= 20:
+                raise ValueError("Continuation pool must use 1 to 20 frozen batches")
         if self.student not in self.models or any(a.teacher not in self.models for a in self.arms):
             raise ValueError("Every student and teacher must have a pinned model identity")
         if len({a.name for a in self.arms}) != len(self.arms):
@@ -168,6 +191,29 @@ class Study:
             raise ValueError("Microbatch must divide the effective batch")
         if not self.gpus or len(set(self.gpus)) != len(self.gpus) or any(g < 0 for g in self.gpus):
             raise ValueError("GPU allocation requires distinct nonnegative device IDs")
+
+    def training_group(self, step):
+        if step < 1:
+            raise ValueError("Update steps are one-based")
+        index = (step - 1) // self.training.reuse
+        if self.continuation is not None:
+            index %= self.continuation.get("pool_batches", 20)
+        if index >= 20:
+            raise ValueError("Enable fixed-pool continuation for more than 320 updates")
+        return chr(65 + index)
+
+    def risk_readouts(self, arm):
+        if self.continuation is None:
+            return arm.evaluate_at
+        return tuple(
+            sorted(
+                {
+                    arm.updates,
+                    *arm.evaluate_at,
+                    *(s for s in self.continuation.get("risk_readouts", [64, 320]) if s <= arm.updates),
+                }
+            )
+        )
 
     @classmethod
     def load(cls, path):
@@ -189,9 +235,15 @@ class Study:
     @property
     def identity(self):
         data = asdict(self)
+        if self.continuation is None:
+            data.pop("continuation")
+        if self.prompt_policy is None:
+            data.pop("prompt_policy")
         # Location and hardware scheduling do not define the scientific protocol.
         for key in ["output", "cache", "gpus", "execution"]:
             data.pop(key)
         for model in data["models"].values():
             model.pop("path")
+            if model.get("subfolder") is None:
+                model.pop("subfolder", None)
         return fingerprint(data)
