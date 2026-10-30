@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Read-only FP32 HF exports at drained, single-rank scientific readout boundaries."""
 
+import hashlib
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -41,3 +42,30 @@ def export_scientific_readout(engine, local_path, global_step):
     manager = engine.checkpoint_manager
     with readout_checkpoint_settings(manager):
         engine.save_checkpoint(local_path=local_path, global_step=global_step, max_ckpt_to_keep=None)
+
+
+def state_digest(value):
+    """Content hash for the smoke gate, including actual CUDA RNG and Adam tensors."""
+    digest = hashlib.sha256()
+
+    def visit(item):
+        if isinstance(item, torch.Tensor):
+            if hasattr(item, "to_local"):
+                item = item.to_local()
+            cpu = item.detach().cpu().contiguous()
+            digest.update(str((cpu.dtype, tuple(cpu.shape))).encode())
+            digest.update(cpu.reshape(-1).view(torch.uint8).numpy().tobytes())
+        elif isinstance(item, dict):
+            for key, child in sorted(item.items(), key=lambda pair: str(pair[0])):
+                digest.update(str(key).encode())
+                visit(child)
+        elif isinstance(item, list | tuple):
+            for child in item:
+                visit(child)
+        elif hasattr(item, "tobytes"):
+            digest.update(item.tobytes())
+        else:
+            digest.update(repr(item).encode())
+
+    visit(value)
+    return digest.hexdigest()

@@ -899,14 +899,31 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         aggressive_empty_cache(force_sync=True)
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
-    def export_scientific_readout(self, local_path, global_step=0):
+    def export_scientific_readout(self, local_path, global_step=0, verify_state=False):
         """Export FP32 master weights at an idle evaluation boundary; never save Adam."""
-        from verl.experimental.rollout_policy.readout import export_scientific_readout
+        from verl.experimental.rollout_policy.readout import export_scientific_readout, state_digest
 
+        engine = self.actor.engine
+
+        def evidence():
+            return {
+                "optimizer": state_digest(engine.optimizer.state_dict()),
+                "rng": state_digest(engine.checkpoint_manager.get_rng_state()),
+            }
+
+        before = evidence() if verify_state else None
         try:
-            export_scientific_readout(self.actor.engine, local_path, global_step)
+            export_scientific_readout(engine, local_path, global_step)
         finally:
             self.park_fusion_actor()
+        if verify_state:
+            after = evidence()
+            if before != after:
+                raise RuntimeError("Scientific readout changed actor optimizer/RNG state")
+            import json
+            from pathlib import Path
+
+            (Path(local_path) / "state-audit.json").write_text(json.dumps({"before": before, "after": after}))
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
     def configure_fusion(self, settings):

@@ -51,3 +51,13 @@ def test_readout_restores_manager_rng_and_retention(tmp_path, fail):
 def test_readout_refuses_existing_directory(tmp_path):
     with pytest.raises(FileExistsError):
         export_scientific_readout(SimpleNamespace(), str(tmp_path), 0)
+
+
+def test_readout_evidence_detects_optimizer_or_rng_mutations():
+    from verl.experimental.rollout_policy.readout import state_digest
+
+    state = {"step": torch.tensor(1.0), "exp_avg": torch.tensor([1.0, 2.0]), "rng": torch.get_rng_state()}
+    before = state_digest(state)
+    assert state_digest({key: value.clone() for key, value in state.items()}) == before
+    state["exp_avg"][0] += 1
+    assert state_digest(state) != before
