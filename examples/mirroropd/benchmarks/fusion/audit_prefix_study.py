@@ -83,6 +83,16 @@ def audit(run, reference, pair, arm, mode, exit_code):
         "TM": {"student": batch // 2, "teacher": batch // 2},
         "T": {"teacher": batch},
     }[arm]
+    modern = "right_weight" in config["rollout_policy"]
+    if modern:
+        expected_sources = {
+            "S0": {"model": batch},
+            "S": {"left": batch},
+            "LM": {"fusion": batch},
+            "PM": {"fusion": batch},
+            "TM": {"left": batch // 2, "right": batch // 2},
+            "T": {"model": batch},
+        }[arm]
     for outer in range(1, outers + 1):
         plan = read(run / f"runtime/rollout_plans/step_{outer}.json")
         runtime = read(run / f"runtime/rollout_plans/step_{outer}_runtime.json")
@@ -98,10 +108,17 @@ def audit(run, reference, pair, arm, mode, exit_code):
             errors.append(f"Outer {outer}: incomplete request identities")
         if runtime["metrics"].get("rollout/policy/requests") != batch:
             errors.append(f"Outer {outer}: incomplete finished batch")
-        binding = plan["student_binding"]
-        if binding["kind"] != ("checkpoint" if arm == "S0" else "current"):
+        binding = (
+            dict(plan["bindings"])["model" if arm in {"S0", "T"} else "left"] if modern else plan["student_binding"]
+        )
+        if binding["kind"] != ("checkpoint" if arm == "S0" or (modern and arm == "T") else "current"):
             errors.append(f"Outer {outer}: student binding changed")
-        if Path(binding["path"]).resolve() != Path(config["actor_rollout_ref"]["model"]["path"]).resolve():
+        expected_model = (
+            next(iter(config["distillation"]["teacher_models"].values()))["model_path"]
+            if modern and arm == "T"
+            else config["actor_rollout_ref"]["model"]["path"]
+        )
+        if Path(binding["path"]).resolve() != Path(expected_model).resolve():
             errors.append(f"Outer {outer}: original learner identity changed")
         expected_space = "probability" if arm == "PM" else "logit"
         if plan.get("fusion_space", "logit") != expected_space:

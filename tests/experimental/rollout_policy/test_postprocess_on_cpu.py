@@ -50,8 +50,8 @@ def test_real_output_schema_and_source_versions(monkeypatch, source, binding, al
             global_steps=1,
             __rollout_policy__={
                 "source": source,
-                "student": binding,
-                "teacher_weight": alpha,
+                "has_current": has_current,
+                "right_weight": alpha,
                 "actor_version": (0, 0),
                 "temperature": temperature,
             },
@@ -94,8 +94,8 @@ def test_incomplete_or_wrong_version_never_publishes(monkeypatch, reason, mask, 
                 global_steps=1,
                 __rollout_policy__={
                     "source": "student",
-                    "student": "current",
-                    "teacher_weight": 0.5,
+                    "has_current": True,
+                    "right_weight": 0.5,
                     "actor_version": (0, 0),
                 },
             )

@@ -35,7 +35,7 @@ class DelayedSessionWorker:
     async def _run_agent_loop(self, params, trajectory, **prompt):
         source = prompt["__rollout_policy__"]["source"]
         # Fail one response while siblings are still waiting to publish.
-        if self.fail == "score" and source == "teacher" and params["fail_this"]:
+        if self.fail == "score" and source == "right" and params["fail_this"]:
             await asyncio.sleep(0.01)
             raise ValueError("injected second-source scoring failure")
         await asyncio.sleep(0.2 if self.slow else 0.03)
@@ -105,7 +105,7 @@ def test_real_tq_cross_source_sessions_and_delayed_failure(tq_runtime, tmp_path,
             refs = [
                 worker.generate_sessions.remote(sessions[i::2], None, 30.0, 5.0) for i, worker in enumerate(workers)
             ]
-            if fail == "cancel" and phase.decoder == "teacher":
+            if fail == "cancel" and phase.decoder == "right":
                 await asyncio.sleep(0.02)
                 ray.cancel(refs[0])
             results = await asyncio.gather(*refs, return_exceptions=True)

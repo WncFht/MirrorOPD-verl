@@ -29,8 +29,13 @@ if [[ ${FUSION_MONITOR:-1} == 1 ]]; then
     "$PYTHON_BIN" "$REPO_ROOT/examples/mirroropd/benchmarks/fusion/monitor.py" \
         --parent "${FUSION_RESOURCE_PARENT:-$$}" --out "$REPO_ROOT/outputs/$EXPERIMENT_NAME/resources.jsonl" >/dev/null 2>&1 8>&- 9>&- &
 fi
+if [[ $MODE == single ]]; then
+    MODEL_ARGS=("rollout_policy.model={kind:$BINDING}")
+else
+    MODEL_ARGS=("rollout_policy.left={kind:$BINDING}" 'rollout_policy.right={kind:teacher}')
+fi
 exec bash "$SCRIPT_DIR/smoke_full_reverse_kl.sh" \
-    "rollout_policy.mode=$MODE" "rollout_policy.student=$BINDING" \
+    "rollout_policy.mode=$MODE" "${MODEL_ARGS[@]}" \
     'actor_rollout_ref.rollout.stop_token_ids=[151643,151645]' \
     '++actor_rollout_ref.rollout.engine_kwargs.vllm.logits_processors=["verl.experimental.rollout_policy.vllm_support:TokenizerSupport"]' \
     "rollout_policy.micro_batch_size=${FUSION_MICRO_BATCH_SIZE:-2}" \

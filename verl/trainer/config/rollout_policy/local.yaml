@@ -1,18 +1,14 @@
 # Local rollout source policy. Default delegates to the existing vLLM path.
 mode: single
 
-source: student
+# single uses model; mixtures use left/right. Null selects the mode default.
+model: null
+left: null
+right: null
+right_weight: 0.5
 
-student: current
-
-teacher_weight: 0.5
-
-# Token fusion only: raw-logit/geometric or probability/arithmetic mixing.
+# Token fusion: arithmetic probability or geometric logit combination.
 fusion_space: logit
-
-teacher_model_path: null
-
-model_path: null
 
 micro_batch_size: 4
 
@@ -22,7 +18,7 @@ drain_seconds: 60.0
 
 # Fusion-only execution; the default single/validation engine is unchanged.
 execution:
-  backend: hf_fusion
+  backend: vllm_fusion
   tensor_parallel_size: 1
   max_num_seqs: 2
   kv_cache_memory_bytes: 1073741824

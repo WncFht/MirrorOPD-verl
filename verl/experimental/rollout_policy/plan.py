@@ -19,6 +19,14 @@ def stable_seed(*parts) -> int:
 class ModelBinding:
     kind: str
     path: str
+    identity: str | None = None
+
+    def same_model(self, other):
+        if self.kind != other.kind:
+            return False
+        if self.identity is not None and other.identity is not None:
+            return self.identity == other.identity
+        return self.path == other.path
 
     def __post_init__(self):
         if self.kind not in {"current", "checkpoint"}:
@@ -39,7 +47,7 @@ class CoefficientRule:
         if self.kind not in {"constant", "linear"} or self.clock not in {"outer_step", "optimizer_step"}:
             raise ValueError("Only constant/linear coefficients and outer_step/optimizer_step clocks are supported")
         if any(not math.isfinite(v) or not 0 <= v <= 1 for v in (self.start, self.end)):
-            raise ValueError("teacher_weight must be finite and in [0, 1]")
+            raise ValueError("right_weight must be finite and in [0, 1]")
         if type(self.steps) is not int or self.steps < 1:
             raise ValueError("Schedule steps must be a positive integer")
 
@@ -48,7 +56,7 @@ class CoefficientRule:
         if isinstance(value, int | float) and not isinstance(value, bool):
             return cls(start=float(value), end=float(value))
         if not isinstance(value, Mapping):
-            raise ValueError("teacher_weight must be a number or a coefficient mapping")
+            raise ValueError("right_weight must be a number or a coefficient mapping")
         return cls(**value)
 
     def resolve(self, outer_step: int, optimizer_step: int | None) -> float:
@@ -62,7 +70,7 @@ class CoefficientRule:
 
 @dataclass(frozen=True)
 class FusionExecutionConfig:
-    backend: str = "hf_fusion"
+    backend: str = "vllm_fusion"
     tensor_parallel_size: int = 1
     max_num_seqs: int = 2
     kv_cache_memory_bytes: int = 1073741824
@@ -81,13 +89,46 @@ class FusionExecutionConfig:
 
 
 @dataclass(frozen=True)
+class ModelRef:
+    kind: str = "current"
+    ref: str | None = None
+
+    def __post_init__(self):
+        if self.kind not in {"current", "initial", "teacher", "checkpoint"}:
+            raise ValueError(f"Unknown model reference: {self.kind}")
+        if (self.kind == "checkpoint") != (isinstance(self.ref, str) and bool(self.ref)):
+            raise ValueError("Only checkpoint references require a nonempty ref")
+        if self.kind != "checkpoint" and self.ref is not None:
+            raise ValueError("current/initial/teacher references do not accept ref")
+
+    def resolve(self, learner_path, teacher_path=None):
+        if self.kind in {"current", "initial"}:
+            path = learner_path
+        elif self.kind == "teacher":
+            if teacher_path is None:
+                raise ValueError("teacher requires exactly one supervision teacher; use checkpoint explicitly")
+            path = teacher_path
+        else:
+            path = self.ref
+            if not Path(path).expanduser().is_dir():
+                from examples.mirroropd.assets.paths import registered_model
+
+                path = registered_model(path)
+        from examples.mirroropd.assets.paths import require_current_location
+
+        path = require_current_location(str(path))
+        return ModelBinding(
+            "current" if self.kind == "current" else "checkpoint", str(Path(path).expanduser().resolve())
+        )
+
+
+@dataclass(frozen=True)
 class RolloutPolicyConfig:
     mode: str = "single"
-    source: str = "student"
-    student: str = "current"
-    teacher_weight: CoefficientRule = CoefficientRule()
-    teacher_model_path: str | None = None
-    model_path: str | None = None
+    model: ModelRef | None = None
+    left: ModelRef | None = None
+    right: ModelRef | None = None
+    right_weight: CoefficientRule = CoefficientRule()
     micro_batch_size: int = 4
     deadline_seconds: float = 3600.0
     drain_seconds: float = 60.0
@@ -101,14 +142,13 @@ class RolloutPolicyConfig:
             raise ValueError("fusion_space must be logit or probability")
         if self.fusion_space != "logit" and self.mode != "token_mixture":
             raise ValueError("Probability fusion requires token_mixture")
-        if self.source not in {"student", "teacher", "checkpoint"} or self.student not in {"current", "initial"}:
-            raise ValueError("Invalid rollout source or student binding")
-        if self.mode == "single" and self.teacher_weight.kind != "constant":
-            raise ValueError("Coefficient schedules require a mixture mode")
-        if self.mode != "single" and self.source != "student":
-            raise ValueError("Mixture modes require source=student")
-        if (self.source == "checkpoint") != (self.model_path is not None):
-            raise ValueError("model_path is required only for source=checkpoint")
+        if self.mode == "single":
+            if self.left is not None or self.right is not None:
+                raise ValueError("single uses model; remove left/right")
+            if self.right_weight.kind != "constant":
+                raise ValueError("Coefficient schedules require a mixture mode")
+        elif self.model is not None:
+            raise ValueError("Mixtures use left/right; remove model")
         if type(self.micro_batch_size) is not int or self.micro_batch_size < 1:
             raise ValueError("micro_batch_size must be a positive integer")
         if any(not math.isfinite(v) or v <= 0 for v in (self.deadline_seconds, self.drain_seconds)):
@@ -117,13 +157,36 @@ class RolloutPolicyConfig:
     @classmethod
     def parse(cls, values=None):
         values = dict(values or {})
-        values["teacher_weight"] = CoefficientRule.parse(values.get("teacher_weight", 0.5))
+        retired = {"source", "student", "teacher_weight", "teacher_model_path", "model_path"} & values.keys()
+        if retired:
+            raise ValueError(f"Retired rollout fields {sorted(retired)}; migrate to model/left/right/right_weight")
+        for name in ("model", "left", "right"):
+            if values.get(name) is not None:
+                if not isinstance(values[name], Mapping):
+                    raise ValueError(f"{name} must be a model reference mapping")
+                values[name] = ModelRef(**values[name])
+        values["right_weight"] = CoefficientRule.parse(values.get("right_weight", 0.5))
         values["execution"] = FusionExecutionConfig(**values.get("execution", {}))
         return cls(**values)
 
     @property
+    def requires_fusion(self):
+        return self.mode == "token_mixture" and not (
+            self.right_weight.kind == "constant" and self.right_weight.start in (0, 1)
+        )
+
+    @property
+    def references(self):
+        if self.mode == "single":
+            return {"model": self.model or ModelRef()}
+        return {"left": self.left or ModelRef(), "right": self.right or ModelRef("teacher")}
+
+    def bindings(self, learner_path, teacher_path=None):
+        return {slot: ref.resolve(learner_path, teacher_path) for slot, ref in self.references.items()}
+
+    @property
     def default_path(self):
-        return self.mode == "single" and self.source == "student" and self.student == "current"
+        return self.mode == "single" and self.references["model"].kind == "current"
 
 
 @dataclass(frozen=True)
@@ -150,9 +213,10 @@ class RolloutPhase:
 class BatchRolloutPlan:
     collection_step: int
     actor_version: tuple[int, int | None]
-    student_binding: ModelBinding
-    teacher_binding: ModelBinding | None
-    source_binding: ModelBinding | None
+    bindings: tuple[tuple[str, ModelBinding], ...]
+    requested_mode: str
+    resolved_mode: str
+    normalization: str | None
     coefficient_rule: CoefficientRule
     resolved_control: float
     weight_clock: str
@@ -163,9 +227,26 @@ class BatchRolloutPlan:
     termination: tuple[int, ...]
     fusion_space: str = "logit"
 
+    def binding(self, source):
+        return dict(self.bindings)[source]
+
+    def has_current(self, source):
+        if source == "fusion":
+            return any(binding.kind == "current" for _, binding in self.bindings)
+        return self.binding(source).kind == "current"
+
     @property
-    def effective_teacher_fraction(self):
-        return sum(r.source == "teacher" for r in self.requests) / len(self.requests)
+    def fusion_components(self):
+        # The native receiver updates its first component. Routing and quotas
+        # remain in declared slots; only token arithmetic is mapped here.
+        left, right = self.binding("left"), self.binding("right")
+        if right.kind == "current":
+            return right, left, 1.0 - self.resolved_control
+        return left, right, self.resolved_control
+
+    @property
+    def effective_right_fraction(self):
+        return sum(r.source == "right" for r in self.requests) / len(self.requests)
 
 
 def build_plan(
@@ -181,28 +262,19 @@ def build_plan(
     teacher_path=None,
     sampling=None,
     stop_ids=(),
+    bindings=None,
 ):
     if not uids or len(uids) != len(stable_ids) or len(set(uids)) != len(uids):
         raise ValueError("A rollout batch requires unique prompt uids and matching stable row identities")
     if type(n) is not int or n < 1 or collection_step < 0:
         raise ValueError("Invalid response count or collection step")
-    student = ModelBinding("current" if policy.student == "current" else "checkpoint", student_path)
-    teacher_path = policy.teacher_model_path or teacher_path
-    teacher = ModelBinding("checkpoint", teacher_path) if teacher_path else None
-    if (policy.mode != "single" or policy.source == "teacher") and teacher is None:
-        raise ValueError("A local rollout teacher checkpoint is required")
+    bindings = bindings if bindings is not None else policy.bindings(student_path, teacher_path)
     completed_outer = max(collection_step - 1, 0)
-    rule = policy.teacher_weight
-    if policy.mode == "single":
-        weight = float(policy.source == "teacher")
-        rule = CoefficientRule(start=weight, end=weight)
+    rule = policy.right_weight if policy.mode != "single" else CoefficientRule(start=0, end=0)
     alpha = rule.resolve(completed_outer, optimizer_step)
-    source_binding = ModelBinding("checkpoint", policy.model_path) if policy.source == "checkpoint" else None
     identities = [
         (row, str(sid), uid, j) for row, (sid, uid) in enumerate(zip(stable_ids, uids, strict=True)) for j in range(n)
     ]
-    # Hash ordering gives a global permutation without depending on Python's hash seed,
-    # UUID, worker count, source phase order, or a framework's RNG state.
     order = sorted(
         range(len(identities)),
         key=lambda i: (
@@ -210,36 +282,36 @@ def build_plan(
             i,
         ),
     )
-    teachers = set(order[: math.floor(alpha * len(identities) + 0.5)])
-    requests = []
-    for i, (row, sid, uid, j) in enumerate(identities):
-        if policy.mode == "single":
-            source = policy.source
-        elif policy.mode == "token_mixture":
-            source = "student" if alpha == 0 else ("teacher" if alpha == 1 else "fusion")
-        else:
-            source = "teacher" if i in teachers else "student"
-        requests.append(
-            RolloutRequest(row, sid, uid, j, stable_seed(seed, collection_step, sid, row, j, "sample"), source)
+    right_rows = set(order[: math.floor(alpha * len(identities) + 0.5)])
+    single, reason = None, None
+    if policy.mode == "single":
+        single = "model"
+    elif alpha in (0, 1):
+        single, reason = ("left" if alpha == 0 else "right"), "endpoint"
+    elif bindings["left"].same_model(bindings["right"]):
+        single, reason = "left", "same_binding"
+    elif policy.mode == "trajectory_mixture" and len(right_rows) in (0, len(identities)):
+        single, reason = ("right" if right_rows else "left"), "empty_quota"
+    requests = tuple(
+        RolloutRequest(
+            row,
+            sid,
+            uid,
+            j,
+            stable_seed(seed, collection_step, sid, row, j, "sample"),
+            single or ("fusion" if policy.mode == "token_mixture" else ("right" if i in right_rows else "left")),
         )
-    requests = tuple(requests)
-    if policy.mode == "token_mixture":
-        # Keep endpoints in their numerical executor. Backend-specific resource
-        # shortcuts require separate acceptance and must not change precision.
-        phases = (RolloutPhase("fusion", requests),)
-    else:
-        sources = (policy.source,) if policy.mode == "single" else ("student", "teacher")
-        phases = tuple(
-            RolloutPhase(source, tuple(r for r in requests if r.source == source))
-            for source in sources
-            if any(r.source == source for r in requests)
-        )
+        for i, (row, sid, uid, j) in enumerate(identities)
+    )
+    sources = (single,) if single else (("fusion",) if policy.mode == "token_mixture" else ("left", "right"))
+    phases = tuple(RolloutPhase(source, tuple(r for r in requests if r.source == source)) for source in sources)
     return BatchRolloutPlan(
         collection_step,
         (completed_outer, optimizer_step),
-        student,
-        teacher,
-        source_binding,
+        tuple(bindings.items()),
+        policy.mode,
+        "single" if single else policy.mode,
+        reason,
         rule,
         alpha,
         rule.clock,
