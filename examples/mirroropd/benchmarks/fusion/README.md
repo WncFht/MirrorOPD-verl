@@ -1,5 +1,7 @@
 # 双模型推理验收工具
 
+普通训练请从[公共启动说明](../../docs/infra/rollout/fusion/usage.md)进入；这里维护专项探针与验收工具。历史命令的版本和参数按相应记录解释。
+
 这些工具服务于[双融合实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)。当前验收尚未全部完成；工具可运行不等于对应 gate 已通过。
 
 当前开发使用下文“原生 vLLM 开发入口”，已授权物理 GPU 0–7；具体任务通过独占锁领取分配的设备。模型和数据均从本地加载，输出目录必须是新目录。旧 HF 性能、回归及短负载脚本也已接入同一个受保护的 GPU 6/7 分配入口，默认单卡；Python 工具校验可见设备与声明数量一致。下面的 HF 命令保留历史工作负载定义，使用当前资源重跑不等于复现原四卡性能。
@@ -81,7 +83,7 @@ Tokens/s 只计有效 response token，不把两模型的 forward token 相加�
 
 ## 原生 vLLM 单卡开发
 
-原生后端选择 `rollout_policy.execution.backend=vllm_fusion`；旧配置继续使用 HF。已验证的短训练范围包括单 actor rank 的 Dense/MoE current/initial，以及双 actor rank 的 Dense current（一个 TP2 或两个 TP1 replica）；其他双卡组合仍在验收。Learner 限 Qwen3 dense，teacher 可为 dense/MoE。原生模型保留各自配置、head 和 KV；公共 sampler 保留原策略的 top-p 边界。正式支持范围以[实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)为准。
+新接口默认使用 `rollout_policy.execution.backend=vllm_fusion`；HF 仅由 `backend=hf_fusion` 显式选择。旧字段必须按[统一接口实施计划](../../docs/infra/rollout/fusion/2026-10-31-Rollout统一接口实施计划.md)迁移，不能直接交给新运行时。已验证的短训练范围包括单 actor rank 的 Dense/MoE current/initial，以及双 actor rank 的 Dense current（一个 TP2 或两个 TP1 replica）；其他双卡组合仍在验收。原生组件支持 Qwen2 dense 配对，以及 Qwen3 dense 第一组件与 dense/MoE 第二组件；current 接收器映射到第一组件。原生模型保留各自配置、head 和 KV；公共 sampler 保留原策略的 top-p 边界。正式支持范围以[实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)为准。
 
 本机入口 `run_fusion_local_fsdp2.sh` 默认使用物理 GPU 7；`FUSION_GPUS` 接受 0–7 中不重复的显式列表，例如 `0` 或 `4,5`。`resource_guard.py` 逐卡核对 UUID、取得排他锁并拒绝既有计算任务。锁只由监护进程持有，内部入口核对其祖先进程身份和锁归属；子进程不继承锁。SIGTERM/SIGINT 仅转发给该命令的进程组，命令退出和设备清理期间继续持锁。它不清理其他 Ray 作业。环境位于仓外 `envs/mirroropd-fusion`；在仓库根目录运行：
 

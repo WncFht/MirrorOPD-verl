@@ -1,12 +1,14 @@
 # Rollout 工作区与分支
 
-本页区分开发、执行和历史存档。核对日期为 2026-10-31；操作及验证证据见[清理回执](../../../../../../../runs/worktree-cleanup-20261031/complete.json)。目录均位于同一个工作区根下，表中省略共同前缀 `MirrorOPD-verl`。
+本页区分开发、执行和历史存档。核对日期为 2026-10-31；目录清理证据见[清理回执](../../../../../../../runs/worktree-cleanup-20261031/complete.json)。目录均位于同一个工作区根下，表中省略共同前缀 `MirrorOPD-verl`。
+
+统一接口交付按[实施计划](2026-10-31-Rollout统一接口实施计划.md)执行，main 的合并与原有修改恢复情况见[交付回执](../../../../../../../runs/rollout-composition-20261031/main-integration.json)。
 
 ## 保留的 Git 工作区
 
 | 目录             | 分支或固定代码             | 用途                                                                                        |
 | ---------------- | -------------------------- | ------------------------------------------------------------------------------------------- |
-| 主目录           | `main`                     | 公共入口及研究工作；已有未提交修改保留，不由目录清理自动提交或覆盖                          |
+| 主目录           | `main`                     | 公共训练入口及研究工作；通过验证的接口在这里发布，原有独立研究修改保留                      |
 | `-rollout`       | `feat/rollout-composition` | 唯一开发主线；已整合原 rollout 分支和 fixed-state-engine 分支的模型资产整理、代码及评审提交 |
 | `-vllm-expanded` | detached，`c52e3eb6`       | 正在执行的科学实验快照；源码和版本保持固定，不在这里继续开发                                |
 
@@ -40,6 +42,6 @@ GPU 占位守护使用 `runs/gpu-expansion-20261030/idle-occupancy/runtime/resou
 
 ## 未完成工作与后续开发
 
-原未提交的驻留超时实现已以[可恢复 patch](../../../../../../../runs/rollout-organization-20261031/parked-residency/manifest.json)封存，包含原基点、文件哈希和已有 CPU 测试证据；它未完成 GPU 验证，不属于已交付能力。
+原驻留超时草稿已以[历史 patch](../../../../../../../runs/rollout-organization-20261031/parked-residency/manifest.json)封存，包含原基点、文件哈希和已有 CPU 测试证据；它未完成 GPU 验证，且对应代码已被统一接口与生命周期修复替代，不再作为待合并开发项。当前通过范围以[实施计划](2026-10-31-Rollout统一接口实施计划.md)为准。
 
-后续接口与开发计划进入 `feat/rollout-composition`。新架构文档定义目标语义，当前 runtime 已迁移到 model/left/right 配置，验证进度见[实施计划](2026-10-31-Rollout统一接口实施计划.md)；主仓库的文档可见性不等于原生后端或新左右模型接口已经发布到 main。
+后续开发继续使用 `feat/rollout-composition`。当前 runtime 使用 model/left/right 配置，通过范围见[实施计划](2026-10-31-Rollout统一接口实施计划.md)，main 的发布状态见交付回执。
