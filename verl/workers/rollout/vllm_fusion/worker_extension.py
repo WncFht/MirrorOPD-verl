@@ -89,11 +89,15 @@ class FusionWorkerExtension:
                     errors.append(f"Duplicate fusion weight: {name}")
                     continue
                 if tied and canonical == "model.embed_tokens.weight" and canonical in canonical_seen:
-                    before = model.model.embed_tokens.weight.detach().clone()
                     try:
+                        # A full device clone can exhaust the remaining memory
+                        # beside a resident teacher and KV cache. Keep an exact,
+                        # independent host snapshot of this rank's native shard.
+                        # Allocation failures must also leave the stream draining.
+                        before = model.model.embed_tokens.weight.detach().to(device="cpu", copy=True)
                         # Let the native loader select this rank's vocab shard.
                         loaded.update(model.load_weights([(canonical, tensor)]))
-                        if not torch.equal(before, model.model.embed_tokens.weight):
+                        if not torch.equal(before, model.model.embed_tokens.weight.detach().cpu()):
                             errors.append("Conflicting tied fusion embedding/head")
                     except Exception as exc:
                         errors.append(f"Tied fusion alias loader failed: {exc}")
