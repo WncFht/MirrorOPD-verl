@@ -18,6 +18,8 @@ from pathlib import Path
 
 import numpy as np
 
+from examples.mirroropd.assets.paths import resolve_location
+
 DATASETS = [("math500", "MATH-500"), ("amc23", "AMC23"), ("aime25", "AIME25")]
 PANEL_STEPS = [0, 10, 100, 200]
 BINS = [f"p{i:02d}_{i + 10:02d}" for i in range(0, 100, 10)]
@@ -350,7 +352,9 @@ def analyze_panel(data):
     from transformers import AutoTokenizer
 
     config = json.loads((data / "config.json").read_text())
-    tok = AutoTokenizer.from_pretrained(config["actor_rollout_ref"]["model"]["path"])
+    tok = AutoTokenizer.from_pretrained(
+        resolve_location(config["actor_rollout_ref"]["model"]["path"]), local_files_only=True
+    )
     rows = []
     texts = {}
     with gzip.open(data / "sample-panel.jsonl.gz", "rt") as stream:

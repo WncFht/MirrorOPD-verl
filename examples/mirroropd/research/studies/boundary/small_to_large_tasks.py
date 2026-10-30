@@ -6,6 +6,7 @@ import argparse
 
 import numpy as np
 
+from examples.mirroropd.assets.paths import checkpoint_path, resolve_location
 from examples.mirroropd.research.core.io import dump, read, write_csv
 from examples.mirroropd.research.core.transfer_metrics import gap_row, summarize_gap
 from examples.mirroropd.research.studies.boundary import small_to_large as study
@@ -47,7 +48,9 @@ def analyze(partial=False):
         if not (directory / "complete.json").exists():
             missing.append(arm)
             continue
-        assert read(directory / "protocol.json")["path"] == str(study.CACHE / "checkpoints" / arm / "step064")
+        assert str(resolve_location(read(directory / "protocol.json")["path"])) == str(
+            checkpoint_path(study.CACHE, "checkpoints") / arm / "step064"
+        )
         after = load(directory)
         teacher = load(OLD_OUT / "baseline" / (teacher_name + "-shared"), teacher_name)
         means_all, boots_all = [], []

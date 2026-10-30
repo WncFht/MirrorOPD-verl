@@ -1,13 +1,16 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Import or download selected A-F models into the shared model/ directory."""
+"""Import or download pinned models into the canonical shared asset store."""
 
 import argparse
 import shutil
 import tempfile
 from pathlib import Path
 
-from check_assets import DEFAULT_MODELS, MODEL_ROOT, MODELS, check_model, selected_models
+if __package__:
+    from .check_assets import DEFAULT_MODELS, MODEL_ROOT, MODELS, check_model, registered_model, selected_models
+else:
+    from check_assets import DEFAULT_MODELS, MODEL_ROOT, MODELS, check_model, registered_model, selected_models
 
 
 def main():
@@ -24,8 +27,8 @@ def main():
     root = args.model_root.expanduser().resolve()
     pending = []
     for name in selected_models(args.models):
-        if (root / name).exists():
-            check_model(root / name, name)
+        if registered_model(name, root=root).exists():
+            check_model(registered_model(name, root=root), name)
         else:
             pending.append(name)
     root.mkdir(parents=True, exist_ok=True)
@@ -41,12 +44,13 @@ def main():
                 source_folder = Path(
                     snapshot_download(
                         repo_id=spec["repo"],
-                        revision=spec.get("revision"),
+                        revision=spec["revision"],
                         allow_patterns=patterns,
+                        local_dir=staged / (name + "-download"),
                     )
                 )
             else:
-                source_folder = args.source_root / name
+                source_folder = registered_model(name, root=args.source_root)
             check_model(source_folder, name)
             destination.mkdir()
             files = {
@@ -62,7 +66,9 @@ def main():
                     shutil.copy2(source_file, target)
             check_model(destination, name)
         for name in pending:
-            (staged / name).replace(root / name)
+            target = registered_model(name, root=root)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            (staged / name).replace(target)
     print(f"Prepared model directories: {root}")
 
 

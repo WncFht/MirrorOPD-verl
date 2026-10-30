@@ -16,6 +16,7 @@ from pathlib import Path
 
 import torch
 
+from examples.mirroropd.assets.paths import registered_model
 from verl.trainer.distillation.full_vocab import precompute_kl_rows, project
 from verl.utils.torch_functional import (
     FLAH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE,
@@ -108,7 +109,9 @@ def analyze_histories(root):
 def capture(args):
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    tokenizer = AutoTokenizer.from_pretrained(args.models / "DeepSeek-R1-Distill-Qwen-1.5B", local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=args.models), local_files_only=True
+    )
     records, seen = [], set()
     for line in args.records.open():
         record = json.loads(line)
@@ -137,7 +140,10 @@ def capture(args):
         print("Loading", role, flush=True)
         model = (
             AutoModelForCausalLM.from_pretrained(
-                args.models / name, local_files_only=True, dtype=torch.bfloat16, attn_implementation="sdpa"
+                registered_model(name, root=args.models),
+                local_files_only=True,
+                dtype=torch.bfloat16,
+                attn_implementation="sdpa",
             )
             .to("cuda")
             .eval()

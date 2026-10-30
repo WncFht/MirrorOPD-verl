@@ -17,6 +17,7 @@ from types import SimpleNamespace
 import torch
 from transformers import AutoModelForCausalLM
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.io import dump
 from examples.mirroropd.research.studies.state_sources import state_transfer_probe as base
 
@@ -136,7 +137,7 @@ def train(a):
     while torch.cuda.mem_get_info()[0] < 48 * 2**30:
         print("waiting for 48GiB physical headroom", flush=True)
         time.sleep(10)
-    initial = a.checkpoint or a.models / "DeepSeek-R1-Distill-Qwen-1.5B"
+    initial = a.checkpoint or registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=a.models)
     model = (
         AutoModelForCausalLM.from_pretrained(
             initial, dtype=torch.float32, attn_implementation="flash_attention_2", local_files_only=True

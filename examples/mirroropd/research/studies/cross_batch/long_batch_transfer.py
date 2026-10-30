@@ -21,6 +21,7 @@ import torch
 import torch.distributed as dist
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.cache import trajectory_identity
 from examples.mirroropd.research.core.io import dump, read
@@ -157,10 +158,12 @@ def checkpoint(a, model, optimizer, batch, dest):
     rng_states = [None] * a.world if a.rank == 0 else None
     dist.gather_object(rng, rng_states, dst=0)
     if a.rank == 0:
-        target = a.cache / "checkpoints" / a.teacher / f"batch-{batch:02d}"
+        target = checkpoint_path(a.cache, "checkpoints") / a.teacher / f"batch-{batch:02d}"
         target.mkdir(parents=True, exist_ok=True)
         model.save_pretrained(target, max_shard_size="4GB")
-        AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True).save_pretrained(target)
+        AutoTokenizer.from_pretrained(
+            registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+        ).save_pretrained(target)
         state = optimizer.state_dict()
         cpu_state = dict(
             param_groups=state["param_groups"],
@@ -209,7 +212,7 @@ def run(a):
     rows = [r for r in bank if r["id"] % a.world == a.rank]
     diagnostic = [r for r in rows if r["group"] in ["M01", "M02", "M03", "M04"]]
     assert len(rows) == 320 and len(diagnostic) == 32
-    path = a.resume if a.resume else a.models / core.NAMES["student"]
+    path = a.resume if a.resume else registered_model(core.NAMES["student"], root=a.models)
     model = (
         AutoModelForCausalLM.from_pretrained(
             path, dtype=torch.float32, attn_implementation="flash_attention_2", local_files_only=True

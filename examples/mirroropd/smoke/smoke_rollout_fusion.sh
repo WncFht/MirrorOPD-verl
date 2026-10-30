@@ -12,8 +12,8 @@ case "$MODE" in single|trajectory_mixture|token_mixture) ;; *) exit 2 ;; esac
 case "$BINDING" in current|initial) ;; *) exit 2 ;; esac
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 export STUDENT_GPUS=4
-export STUDENT_MODEL=${STUDENT_MODEL:-$WORKSPACE/model/Qwen3-1.7B-Base}
-export TEACHER_MODEL=${TEACHER_MODEL:-$WORKSPACE/model/Qwen3-8B}
+export STUDENT_MODEL=${STUDENT_MODEL:-$(python3 "$REPO_ROOT/examples/mirroropd/assets/paths.py" --alias Qwen3-1.7B-Base --model-root "${MODEL_ROOT:-$WORKSPACE/model}")}
+export TEACHER_MODEL=${TEACHER_MODEL:-$(python3 "$REPO_ROOT/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "${MODEL_ROOT:-$WORKSPACE/model}")}
 export CONTINUOUS_TOKEN_MODEL_FAMILY=qwen3
 export OMP_NUM_THREADS=1
 export VLLM_USE_V2_MODEL_RUNNER=0

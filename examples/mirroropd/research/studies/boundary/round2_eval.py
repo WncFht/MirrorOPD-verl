@@ -13,6 +13,7 @@ import time
 import urllib.request
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import resolve_location
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.boundary.evaluate import evaluate
 from examples.mirroropd.research.studies.boundary.round2_common import OLD_OUT, OUT
@@ -35,7 +36,7 @@ def main():
     command = [
         str(Path(sys.executable).with_name("vllm")),
         "serve",
-        spec["path"],
+        str(resolve_location(spec["path"])),
         "--host",
         "127.0.0.1",
         "--port",

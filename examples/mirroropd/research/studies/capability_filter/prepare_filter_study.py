@@ -12,6 +12,7 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.capability_filter.filter_common import generate, grade_math
@@ -30,7 +31,7 @@ def prepare(a):
     dump(a.out / "test-bank.json", test)
     task_teacher = [dict(r) for r in test if 384 <= r["id"] < 448]
     dump(a.out / "teacher-reference-prompts.json", train + task_teacher)
-    tok = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(core.NAMES["student"], root=a.models), local_files_only=True)
 
     def norm(s):
         return re.sub(r"\s+", " ", s).strip()

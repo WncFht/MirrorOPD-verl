@@ -16,7 +16,7 @@
             "name": "q3-1.7",
             "repo": "Qwen/Qwen3-1.7B",
             "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-            "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+            "path": "model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
             "parent": "Qwen/Qwen3-1.7B-Base",
             "method": "posttraining",
             "sources": [
@@ -28,7 +28,7 @@
             "name": "q3-base",
             "repo": "Qwen/Qwen3-1.7B-Base",
             "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-            "path": "model/teacher-study/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+            "path": "model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
             "parent": null,
             "method": "pretraining",
             "sources": [
@@ -40,7 +40,7 @@
             "name": "e3",
             "repo": "CMU-AIRe/e3-1.7B",
             "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
-            "path": "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+            "path": "model/hub/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
             "parent": "Qwen/Qwen3-1.7B",
             "method": "rl",
             "sources": [
@@ -53,7 +53,7 @@
             "name": "grpo-kl",
             "repo": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning",
             "revision": "851ee853018af52495d73a95e3de51470af6f17b",
-            "path": "model/teacher-study/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+            "path": "model/hub/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
             "parent": "Qwen/Qwen3-1.7B",
             "method": "rl",
             "sources": [
@@ -65,7 +65,7 @@
             "name": "sft-gsm8k",
             "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
             "revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
-            "path": "model/teacher-study/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+            "path": "model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
             "parent": "Qwen/Qwen3-1.7B",
             "method": "sft",
             "sources": [
@@ -77,7 +77,7 @@
             "name": "sft-deepmath",
             "repo": "Thinking-Space/Qwen3-1.7B-SFT",
             "revision": "f0065babe7440257d7db331a5aa442ef7c3cf266",
-            "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+            "path": "model/hub/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
             "parent": "Qwen/Qwen3-1.7B-Base",
             "method": "sft",
             "sources": [
@@ -90,7 +90,7 @@
             "name": "base-opd",
             "repo": "Thinking-Space/Qwen3-1.7B-Base-OPD",
             "revision": "4ad294531545b51fbcfbd1b0ded387ba237db57c",
-            "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
+            "path": "model/hub/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
             "parent": "Qwen/Qwen3-1.7B-Base",
             "method": "opd",
             "sources": [
@@ -103,7 +103,7 @@
             "name": "q3-4",
             "repo": "Qwen/Qwen3-4B",
             "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-            "path": "model/teacher-study/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+            "path": "model/hub/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
             "parent": "Qwen/Qwen3-4B-Base",
             "method": "posttraining",
             "sources": [
@@ -115,7 +115,7 @@
             "name": "q3-8",
             "repo": "Qwen/Qwen3-8B",
             "revision": "b968826d9c46dd6066d109eabc6255188de91218",
-            "path": "model/teacher-study/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+            "path": "model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
             "parent": "Qwen/Qwen3-8B-Base",
             "method": "posttraining",
             "sources": [
@@ -127,7 +127,7 @@
             "name": "q3-4-thinking2507",
             "repo": "Qwen/Qwen3-4B-Thinking-2507",
             "revision": "768f209d9ea81521153ed38c47d515654e938aea",
-            "path": "model/teacher-study/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea",
+            "path": "model/hub/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea",
             "parent": null,
             "method": "posttraining",
             "sources": [
@@ -2963,7 +2963,7 @@
           ],
           "dependencies": [],
           "priority": 50,
-          "ready_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-q3-4-thinking2507/step064/complete.json",
+          "ready_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-q3-4-thinking2507/step064/complete.json",
           "ready_inputs": {
             "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
             "teacher": "bd4073955db760acac4381b988f591307692d4fd8d942f9e021822ad3f02ea81",
@@ -3050,7 +3050,7 @@
             "start": 0,
             "stop": 320,
             "prior_completed_stop": 128,
-            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
             "replay_through": 128,
             "new_updates": 320,
             "budget_increment_over_prior": 192
@@ -3061,7 +3061,7 @@
             "start": 0,
             "stop": 320,
             "prior_completed_stop": 128,
-            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
             "replay_through": 128,
             "new_updates": 320,
             "budget_increment_over_prior": 192
@@ -3072,7 +3072,7 @@
             "start": 0,
             "stop": 320,
             "prior_completed_stop": 128,
-            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
             "replay_through": 128,
             "new_updates": 320,
             "budget_increment_over_prior": 192
@@ -3083,7 +3083,7 @@
             "start": 0,
             "stop": 320,
             "prior_completed_stop": 64,
-            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
             "replay_through": 64,
             "new_updates": 320,
             "budget_increment_over_prior": 256
@@ -3094,7 +3094,7 @@
             "start": 0,
             "stop": 320,
             "prior_completed_stop": 64,
-            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
             "replay_through": 64,
             "new_updates": 320,
             "budget_increment_over_prior": 256
@@ -3105,7 +3105,7 @@
             "start": 0,
             "stop": 320,
             "prior_completed_stop": 64,
-            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
             "replay_through": 64,
             "new_updates": 320,
             "budget_increment_over_prior": 256

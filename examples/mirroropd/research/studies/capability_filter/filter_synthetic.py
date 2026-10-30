@@ -17,6 +17,7 @@ from pathlib import Path
 import torch
 from transformers import AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump
 
@@ -97,7 +98,9 @@ def main():
     torch.set_num_interop_threads(1)
     torch.manual_seed(42)
     torch.set_float32_matmul_precision("highest")
-    tokenizer = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    )
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "left"
     rows = inputs(a, tokenizer)
@@ -189,7 +192,7 @@ def main():
             criterion = train_acc == 1 and meanprob >= 0.8
             if criterion:
                 break
-    target = a.cache / "checkpoints" / dest.name
+    target = checkpoint_path(a.cache, "checkpoints") / dest.name
     target.mkdir(parents=True, exist_ok=True)
     p.save_pretrained(target, max_shard_size="4GB")
     tokenizer.save_pretrained(target)

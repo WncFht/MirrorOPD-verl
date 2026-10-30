@@ -6,6 +6,7 @@
 import torch
 from transformers import AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.cache import HiddenCache, model_identity
 
@@ -37,7 +38,9 @@ def load_hidden(cache, namespace, rows, *, model):
 
 @torch.no_grad()
 def generate(a, model, prompts, seed, cap, vocab_limit=None):
-    tokenizer = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    )
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "left"
     encoded = tokenizer([r["prompt"] for r in prompts], padding=True, return_tensors="pt", add_special_tokens=False).to(

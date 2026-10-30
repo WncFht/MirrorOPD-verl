@@ -27,6 +27,7 @@ import torch.distributed as dist
 from tensordict import TensorDict
 
 import verl.trainer.distillation.full_vocab as kernels
+from examples.mirroropd.assets.paths import checkpoint_path, resolve_location
 from examples.mirroropd.research.backends.fsdp import evaluate, loss_fn, make_worker, nested, scalar_metrics
 from verl.trainer.distillation.anchor import anchor_scope
 from verl.utils import tensordict_utils as tu
@@ -150,9 +151,13 @@ def main(extra_kernels=None, *, worker_factory=make_worker):
     configure(actor)
     warm = []
     branches = []
-    checkpoint = args.out / "warm-checkpoint" if args.adapt else args.resume_checkpoint or args.out / "warm-checkpoint"
+    checkpoint = (
+        checkpoint_path(args.out, "warm-checkpoint")
+        if args.adapt
+        else args.resume_checkpoint or checkpoint_path(args.out, "warm-checkpoint")
+    )
     if args.adapt:
-        actor.load_checkpoint(str(args.resume_checkpoint))
+        actor.load_checkpoint(str(resolve_location(args.resume_checkpoint)))
     clock = time.monotonic()
 
     def save_result():
@@ -238,7 +243,7 @@ def main(extra_kernels=None, *, worker_factory=make_worker):
             actor = worker_factory(student_path, world, precision=dtype, attention=attn)
             configure(actor)
             precision, attention = dtype, attn
-        actor.load_checkpoint(str(checkpoint))
+        actor.load_checkpoint(str(resolve_location(checkpoint)))
         if state == "reset_all":
             actor.engine.optimizer.state.clear()
         elif state == "reset_m":

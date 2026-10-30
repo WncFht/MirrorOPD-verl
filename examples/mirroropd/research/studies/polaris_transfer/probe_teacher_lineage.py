@@ -16,6 +16,7 @@ from types import SimpleNamespace
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.io import dump
 from examples.mirroropd.research.studies.polaris_transfer.kl_direction_probe import distributions
 from examples.mirroropd.research.studies.state_sources import state_transfer_probe as base
@@ -31,12 +32,16 @@ def main():
     torch.set_num_threads(8)
     torch.set_num_interop_threads(1)
     torch.cuda.set_per_process_memory_fraction(24 * 2**30 / torch.cuda.get_device_properties(0).total_memory)
-    tok = AutoTokenizer.from_pretrained(a.models / "DeepSeek-R1-Distill-Qwen-7B", local_files_only=True)
-    studenttok = AutoTokenizer.from_pretrained(a.models / "DeepSeek-R1-Distill-Qwen-1.5B", local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(
+        registered_model("DeepSeek-R1-Distill-Qwen-7B", root=a.models), local_files_only=True
+    )
+    studenttok = AutoTokenizer.from_pretrained(
+        registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=a.models), local_files_only=True
+    )
     assert tok.get_vocab() == studenttok.get_vocab() and tok.chat_template == studenttok.chat_template
     model = (
         AutoModelForCausalLM.from_pretrained(
-            a.models / "DeepSeek-R1-Distill-Qwen-7B",
+            registered_model("DeepSeek-R1-Distill-Qwen-7B", root=a.models),
             dtype=torch.bfloat16,
             attn_implementation="flash_attention_2",
             local_files_only=True,

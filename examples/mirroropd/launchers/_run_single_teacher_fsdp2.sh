@@ -21,12 +21,12 @@ export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
 # ── 1. 模型与数据路径 ────────────────────────────────────────────────
 MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
 DATA_ROOT=${DATA_ROOT:-$WORKSPACE/data}
-STUDENT_MODEL=${STUDENT_MODEL:-$MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B}
+STUDENT_MODEL=${STUDENT_MODEL:-$(python3 -m examples.mirroropd.assets.paths --alias DeepSeek-R1-Distill-Qwen-1.5B --model-root "$MODEL_ROOT")}
 DOMAIN=${DOMAIN:-math}
 VAL_FILES=()
 case "$DOMAIN" in
     math)
-        TEACHER_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/JustRL-DeepSeek-1.5B}
+        TEACHER_MODEL=${TEACHER_MODEL:-$(python3 -m examples.mirroropd.assets.paths --alias JustRL-DeepSeek-1.5B --model-root "$MODEL_ROOT")}
         TRAIN_FILE=${TRAIN_FILE:-$DATA_ROOT/math/DAPO/train.parquet}
         MATH_FILE=${MATH_FILE:-$DATA_ROOT/math/MATH-500/test.parquet}
         AMC_FILE=${AMC_FILE:-$DATA_ROOT/math/AMC23/test.parquet}
@@ -36,13 +36,13 @@ case "$DOMAIN" in
         VAL_FILES=("$MATH_FILE" "$AMC_FILE" "$AIME24_FILE" "$AIME_FILE" "$AIME26_FILE")
         ;;
     code)
-        TEACHER_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/DeepCoder-1.5B-Preview}
+        TEACHER_MODEL=${TEACHER_MODEL:-$(python3 -m examples.mirroropd.assets.paths --alias DeepCoder-1.5B-Preview --model-root "$MODEL_ROOT")}
         TRAIN_FILE=${TRAIN_FILE:-$DATA_ROOT/code/TACO/train.parquet}
         CODE_VAL_FILE=${CODE_VAL_FILE:-$DATA_ROOT/code/LCBv6/test.parquet}
         VAL_FILES=("$CODE_VAL_FILE")
         ;;
     if)
-        TEACHER_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/UltraData-IF-1.5B}
+        TEACHER_MODEL=${TEACHER_MODEL:-$(python3 -m examples.mirroropd.assets.paths --alias UltraData-IF-1.5B --model-root "$MODEL_ROOT")}
         TRAIN_FILE=${TRAIN_FILE:-$DATA_ROOT/if/MultiIF/train.parquet}
         # MultiIF 的正式验证包含三轮对话，不能由 single_turn_agent 代替。
         TEST_FREQ=${TEST_FREQ:--1}
@@ -214,6 +214,7 @@ done
 ROLLOUT_CAPTURE_SIZES+="$ROLLOUT_MAX_NUM_SEQS]"
 EXPERIMENT_NAME=${EXPERIMENT_NAME:-$DOMAIN-full-sampled-$(date +%Y%m%d-%H%M%S)-$$}
 RUN_DIR=${RUN_DIR:-$REPO_ROOT/outputs/$EXPERIMENT_NAME}
+CHECKPOINT_DIR=${CHECKPOINT_DIR:-$(python3 "$EXAMPLE_DIR/assets/paths.py" --run-dir "$RUN_DIR" --repo-root "$REPO_ROOT" --model-root "$MODEL_ROOT")}
 
 # SDK 在 WANDB_DIR 下创建 wandb/；固定仓库根目录，避免 Ray 的工作目录改变保存位置。
 export WANDB_DIR="$REPO_ROOT"
@@ -349,7 +350,7 @@ TRAINER_ARGS=(
     trainer.project_name=MirrorOPD-verl
     "trainer.experiment_name='$EXPERIMENT_NAME'"
     'trainer.logger=[console,wandb]'
-    "trainer.default_local_dir='$RUN_DIR/checkpoints'"
+    "trainer.default_local_dir='$CHECKPOINT_DIR'"
     "trainer.validation_data_dir='$RUN_DIR/validation'"
     "hydra.run.dir='$RUN_DIR/hydra'"
 )
@@ -404,6 +405,12 @@ if [[ ${DRY_RUN:-0} == 1 ]]; then
 fi
 if [[ ${CONFIG_ONLY:-0} == 1 ]]; then
     exec "${CMD[@]}" --cfg job --resolve "${ARGS[@]}" "${RAY[@]}" "$@"
+fi
+if [[ -e $CHECKPOINT_DIR || -L $CHECKPOINT_DIR ]]; then
+    if [[ ! -d $CHECKPOINT_DIR || -L $CHECKPOINT_DIR || -n $(find "$CHECKPOINT_DIR" -mindepth 1 -maxdepth 1 -print -quit) ]]; then
+        echo "Use a new CHECKPOINT_DIR; already contains checkpoint data: $CHECKPOINT_DIR" >&2
+        exit 2
+    fi
 fi
 # ── 7. 正式运行与实验记录 ─────────────────────────────────────────────
 # GPU 由调用者明确分配；不自动选择卡或停止已有进程。

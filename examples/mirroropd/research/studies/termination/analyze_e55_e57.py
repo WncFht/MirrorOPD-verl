@@ -17,6 +17,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from examples.mirroropd.assets.paths import asset_name
 from examples.mirroropd.research.core.plotting import load_style
 
 RUNS = {"E55": "j5uaal3j", "E56": "zsnhqzts", "E57": "6j5knkmk"}
@@ -42,9 +43,9 @@ def analyze(logs):
         actor, rollout = cfg["actor_rollout_ref"]["actor"], cfg["actor_rollout_ref"]["rollout"]
         loss = cfg["distillation"]["distillation_loss"]
         pair = (
-            Path(cfg["actor_rollout_ref"]["model"]["path"]).name
+            asset_name(cfg["actor_rollout_ref"]["model"]["path"])
             + " <- "
-            + Path(cfg["distillation"]["teacher_models"]["teacher_model"]["model_path"]).name
+            + asset_name(cfg["distillation"]["teacher_models"]["teacher_model"]["model_path"])
         )
         assert pair == "Qwen3-1.7B-Base <- Qwen3-30B-A3B-Instruct-2507"
         result["models"] = pair

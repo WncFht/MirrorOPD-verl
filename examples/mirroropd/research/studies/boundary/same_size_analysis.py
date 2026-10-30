@@ -6,6 +6,7 @@ import argparse
 import math
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import resolve_location
 from examples.mirroropd.research.core.artifacts import file_hash, fingerprint
 from examples.mirroropd.research.core.io import dump, read, write_csv
 from examples.mirroropd.research.core.statistics import paired_mean_difference
@@ -94,7 +95,7 @@ def analyze(plan, partial=False):
             assert replay["reference_policy"] == "diagnostic" and replay["exact_old_trajectory_claim"] is False
         assert math.isclose(replay["loss_max_error"], loss_error, abs_tol=1e-12)
         assert math.isclose(replay["risk_max_error"], risk_error, abs_tol=1e-12)
-        weights = Path(done["weights"])
+        weights = resolve_location(done["weights"])
         manifest, state = read(weights / "complete.json"), read(root / "resume/complete.json")
         assert manifest["step"] == state["step"] == 320 and manifest["optimizer_saved"] is True
         assert manifest["weight_identity"] == state["weight_identity"]

@@ -25,6 +25,8 @@ from zoneinfo import ZoneInfo
 from prepare_data import prepare, write_json
 from report import SUMMARY_FIELDS, build_report
 
+from examples.mirroropd.assets.paths import registered_model
+
 REPO = Path(__file__).resolve().parents[4]
 MODEL_DEFAULT = REPO.parent / "model"
 METRIC_NAMES = (
@@ -93,7 +95,7 @@ def capture_sizes(cap):
 
 def build_commands(plan, profile, candidate, model_root, data_file, run_dir, vllm, python, preflight=False):
     seqs, memory, tokens = candidate
-    model = str(model_root / profile["directory"])
+    model = str(registered_model(profile["directory"], root=model_root))
     port, url = 18180, "http://127.0.0.1:18180"
     serve = [
         str(vllm),
@@ -592,7 +594,7 @@ class Queue:
         directory.mkdir(parents=True, exist_ok=True)
         env = dict(
             self.env,
-            STUDENT_MODEL=str(self.args.model_root.resolve() / profile["directory"]),
+            STUDENT_MODEL=str(registered_model(profile["directory"], root=self.args.model_root.resolve())),
             DATA_ROOT=str(self.args.data_root.resolve()),
             STUDENT_GPUS="4",
             TEACHER_GPUS="0",

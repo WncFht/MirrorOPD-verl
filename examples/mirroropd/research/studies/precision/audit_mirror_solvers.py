@@ -21,6 +21,7 @@ import torch
 import torch.distributed as dist
 from tensordict import TensorDict
 
+from examples.mirroropd.assets.paths import checkpoint_path, resolve_location
 from examples.mirroropd.research.backends import fsdp as replay
 from examples.mirroropd.research.backends.solver_optimizers import FullMatrixMuonAdamW, constant_scheduler
 from verl.trainer.distillation import full_vocab as kernels
@@ -288,7 +289,7 @@ def main(*, worker_factory=replay.make_worker, precision_factory=None):
                 print("WARM", outer, updates[0]["distill/full_kl"], updates[-1]["distill/full_kl"], flush=True)
             if outer >= 4 and updates[0]["distill/full_kl"] < 1e-3:
                 break
-        checkpoint = args.out / "warm-checkpoint"
+        checkpoint = checkpoint_path(args.out, "warm-checkpoint")
         warmer.save_checkpoint(str(checkpoint), global_step=len(warm_records))
         del warmer
         gc.collect()
@@ -350,7 +351,7 @@ def main(*, worker_factory=replay.make_worker, precision_factory=None):
         actor.engine.lr_scheduler = original_scheduler
         actor.engine.checkpoint_manager.optimizer = original_optimizer
         actor.engine.checkpoint_manager.lr_scheduler = original_scheduler
-        actor.load_checkpoint(str(checkpoint))
+        actor.load_checkpoint(str(resolve_location(checkpoint)))
         if arm.get("rounded", False):
             with torch.no_grad():
                 for p in actor.engine.module.parameters():
@@ -580,7 +581,7 @@ def main(*, worker_factory=replay.make_worker, precision_factory=None):
         assert all(r["optim/actor/lr"] == lr for r in row["updates"]), "Actual LR differs from requested LR"
         assert abs(row["before"]["distill/target_log_z"] - row["after"]["distill/target_log_z"]) < 1e-12
         if arm.get("save_checkpoint"):
-            destination = args.out / f"checkpoint-arm{index}"
+            destination = checkpoint_path(args.out, f"checkpoint-arm{index}")
             actor.engine.checkpoint_manager.optimizer = actor.engine.optimizer
             actor.engine.checkpoint_manager.lr_scheduler = actor.engine.lr_scheduler
             actor.save_checkpoint(str(destination), global_step=steps)

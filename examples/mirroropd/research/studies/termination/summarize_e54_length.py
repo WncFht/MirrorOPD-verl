@@ -13,6 +13,7 @@ import re
 import statistics as st
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.io import dump, read_rows
 
 
@@ -20,7 +21,9 @@ def text_metrics(args):
     if args.recompute_text:
         from transformers import AutoTokenizer
 
-        tok = AutoTokenizer.from_pretrained(args.models / "Qwen3-1.7B-Base", local_files_only=True)
+        tok = AutoTokenizer.from_pretrained(
+            registered_model("Qwen3-1.7B-Base", root=args.models), local_files_only=True
+        )
         from examples.mirroropd.research.studies.termination.build_data import repeat_metrics as metric
 
         output = []

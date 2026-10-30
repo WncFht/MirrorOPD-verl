@@ -16,6 +16,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.cross_batch import batch_generalization as base
@@ -23,9 +24,9 @@ from examples.mirroropd.research.studies.cross_batch import batch_generalization
 
 def student(a):
     path = (
-        a.models / core.NAMES["student"]
+        registered_model(core.NAMES["student"], root=a.models)
         if a.phase == "initial"
-        else a.previous_cache / "checkpoints" / f"{a.teacher}-blocked"
+        else checkpoint_path(a.previous_cache, "checkpoints") / f"{a.teacher}-blocked"
     )
     return (
         AutoModelForCausalLM.from_pretrained(
@@ -173,7 +174,9 @@ def train(a):
     checkpoint = a.checkpoints / a.name
     checkpoint.mkdir(exist_ok=True, parents=True)
     p.save_pretrained(checkpoint, max_shard_size="4GB")
-    AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True).save_pretrained(checkpoint)
+    AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    ).save_pretrained(checkpoint)
     dump(dest / "complete.json", dict(finished=True, steps=a.steps, examples=a.examples))
 
 

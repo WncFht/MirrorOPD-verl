@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """October 29 scope: three continuations, three new teachers, Math baseline only."""
 
+from examples.mirroropd.assets.paths import checkpoint_path, hub_directory
 from examples.mirroropd.research.studies.boundary import common as previous
 from examples.mirroropd.research.studies.boundary.common import WORK
 
@@ -30,18 +31,18 @@ ARMS = {
 
 
 def model_path(name):
-    return WORK / "model/teacher-boundary" / name / MODELS[name][1]
+    return hub_directory(*MODELS[name])
 
 
 def initial_path(arm):
     config = ARMS[arm]
     if config["old_arm"]:
-        return OLD_CACHE / "checkpoints" / config["old_arm"] / "step064"
+        return checkpoint_path(OLD_CACHE, "checkpoints", config["old_arm"], "step064")
     return model_path("r1")
 
 
 def final_path(arm):
-    return CACHE / "models" / arm / f"step{ARMS[arm]['stop']:03d}"
+    return checkpoint_path(CACHE, "models", arm, f"step{ARMS[arm]['stop']:03d}")
 
 
 def eval_specs():
@@ -59,7 +60,7 @@ def eval_specs():
         )
     for arm, (student, teacher) in previous.ARMS.items():
         specs[f"after-{arm}-064"] = dict(
-            path=str(OLD_CACHE / "checkpoints" / arm / "step064"),
+            path=str(checkpoint_path(OLD_CACHE, "checkpoints", arm, "step064")),
             teacher=teacher,
             student=student,
             kind="old-endpoint",
