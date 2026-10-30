@@ -17,8 +17,8 @@ from types import SimpleNamespace
 from examples.mirroropd.research.backends.evaluation import aggregate
 from examples.mirroropd.research.core.artifacts import complete, file_hash, fingerprint, receipt, records
 from examples.mirroropd.research.core.io import dump, read
-from examples.mirroropd.research.core.math_grading import grade, init_grader
 from examples.mirroropd.research.studies.fixed_transfer.evaluation import validate_records
+from examples.mirroropd.research.studies.prefix_fusion.grading import grade, init_grader
 from examples.mirroropd.research.studies.prefix_fusion.protocol import PROTOCOL, protocol_identity
 
 
@@ -115,8 +115,8 @@ def evaluate(prepared, assets, weights, out, panel="test", smoke=False):
         dtype="bfloat16",
         attention="TRITON_ATTN",
         legal=fingerprint(legal),
-        grader="verl-one-shot-opd-math-v1",
-        grader_implementation=file_hash(Path(__file__).resolve().parents[2] / "core/math_grading.py"),
+        grader="verl-one-shot-opd-math-direct-worker-v1",
+        grader_implementation=file_hash(Path(__file__).with_name("grading.py")),
         implementation=file_hash(__file__),
     )
     if complete(out, inputs):
