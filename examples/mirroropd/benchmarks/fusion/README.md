@@ -156,3 +156,13 @@ CUDA_VISIBLE_DEVICES='' PYTHONPATH=. ../envs/mirroropd-fusion/bin/python \
 审计同时拒绝意外验证、模型 checkpoint、跳过更新和非有限 loss/梯度，保留证据文件 SHA-256、逐更新曲线和阶段耗时。嵌套时间区间不能直接相加；短训练审计不能替代长负载性能验收。
 
 完整单轮 batch 的已有 TQ telemetry 还汇总 `perf/request_latency/generate_sequences` 与 `perf/request_latency/compute_score` 下的 `min_seconds/max_seconds/mean_seconds`。这些字段包含请求排队和 RPC 等待，是可重叠的请求延迟；不能求和作为 GPU 时间，也不能从两项最大值重建完整 batch 墙钟。任一请求缺失或提供非法值时省略该项汇总，避免以部分请求伪装完整测量。
+
+## 两卡拓扑测量
+
+`probe_vllm_topology.py` 在同一个受保护的 GPU 6、7 分配中，比较 `--tp 2 --replicas 1` 与 `--tp 1 --replicas 2`。它固定全局输入批次，按全局行号分配请求与随机种子；所有 replica 完成准备后一起释放，每个批次等待全部返回。`--max-num-seqs` 是每个 replica 的活跃请求上限，`--kv-gib` 是每张 GPU 的 KV 预算。比较相同全局活跃上限时，两个 TP1 replica 各取 TP2 上限的一半。
+
+每个结果分别记录完整协调器墙钟、最后一个 worker 完成生成的时间、结果文件收集时间及启动偏差，避免把文件交接成本隐藏在吞吐数中。资源监控只统计一个父进程树，不能相加两个 replica 的 RSS 峰值。异常清理仅作用于本协调器创建的进程组。
+
+`summarize_topology.py` 检查全局身份覆盖、路由、种子、完整且有限的行为概率、停止原因、TP 身份、累计抢占数和两卡资源区间。一次全局完整批用于预热，正式候选至少再测三批。该工具只证明固定 checkpoint 的生成行为与成本，训练/refit/恢复另行验收。
+
+协调器的四项 CPU 假 worker 检查、两种拓扑共十六项汇总边界检查及 CLI 检查已通过；真实两卡执行仍待完成。待测入口先用 batch4/cap32、context1024、每卡 KV1 GiB 做 smoke，再使用 batch64/cap7168 的正式负载。只有 TP 数值与实际 GPU smoke 通过后，才能把此入口的结果纳入拓扑选择。
