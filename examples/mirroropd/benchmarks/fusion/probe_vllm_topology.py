@@ -14,6 +14,20 @@ import time
 from pathlib import Path
 
 
+def assigned_devices(allocation, tp, replicas, rank=None):
+    """Map an explicitly allocated physical pair to each replica's CUDA mask."""
+    from examples.mirroropd.benchmarks.fusion.resource_guard import parse_gpus
+
+    devices = parse_gpus(allocation)
+    if tp * replicas != 2 or len(devices) != 2 or tp not in {1, 2} or replicas not in {1, 2}:
+        raise ValueError("Topology requires one protected physical GPU pair")
+    if rank is None:
+        return allocation
+    if not 0 <= rank < replicas:
+        raise ValueError("Replica rank is outside the protected topology")
+    return ",".join(str(device) for device in devices[rank * tp : (rank + 1) * tp])
+
+
 def write_json(path, value):
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(value) + "\n")
@@ -194,19 +208,19 @@ def main():
         or args.repeats < 1
     ):
         parser.error("Invalid topology, workload, allocation, or timeout")
+    from examples.mirroropd.benchmarks.fusion.resource_guard import verify_allocation
+
+    allocation = os.environ.get("FUSION_GPUS", "")
+    try:
+        expected = assigned_devices(allocation, args.tp, args.replicas, args.rank)
+        verify_allocation(Path(__file__).resolve().parents[5], allocation, visible=expected)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        parser.error(f"Run inside the protected two-GPU allocation: {error}")
     if args.rank is not None:
-        expected = "6,7" if args.tp == 2 else str(6 + args.rank)
-        if (
-            not 0 <= args.rank < args.replicas
-            or os.environ.get("CUDA_VISIBLE_DEVICES") != expected
-            or not os.environ.get("FUSION_RESOURCE_PARENT")
-            or args.parent_pid != os.getppid()
-        ):
-            parser.error("Replica must be launched by its protected coordinator on the assigned device")
+        if args.parent_pid != os.getppid():
+            parser.error("Replica must be launched by its protected coordinator")
         worker(args)
         return
-    if os.environ.get("CUDA_VISIBLE_DEVICES") != "6,7" or not os.environ.get("FUSION_RESOURCE_PARENT"):
-        parser.error("Run inside the protected FUSION_GPUS=6,7 allocation")
     args.out.mkdir(parents=True, exist_ok=False)
     import pandas as pd
     from fingerprint import source_fingerprint
@@ -223,7 +237,7 @@ def main():
     if any(len(p["prompt_token_ids"]) + args.cap > args.max_model_len for p in prompts):
         raise ValueError("Declared cap plus prompt exceeds context")
     write_json(args.out / "prompts.json", prompts)
-    write_json(args.out / "config.json", vars(args) | {"out": str(args.out)})
+    write_json(args.out / "config.json", vars(args) | {"out": str(args.out), "physical_gpus": allocation})
     write_json(args.out / "source.json", source_fingerprint())
     monitor = subprocess.Popen(
         [
@@ -245,7 +259,7 @@ def main():
     signal.signal(signal.SIGTERM, interrupted)
     try:
         for rank in range(args.replicas):
-            env = dict(os.environ, CUDA_VISIBLE_DEVICES="6,7" if args.tp == 2 else str(6 + rank))
+            env = dict(os.environ, CUDA_VISIBLE_DEVICES=assigned_devices(allocation, args.tp, args.replicas, rank))
             log = (args.out / f"replica-{rank}.log").open("x")
             logs.append(log)
             command = [

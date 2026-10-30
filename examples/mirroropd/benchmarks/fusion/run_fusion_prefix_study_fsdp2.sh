@@ -15,7 +15,7 @@ case "$PAIR" in J|P) ;; *) exit 2 ;; esac
 case "$ARM" in S0|S|LM|PM|TM|T) ;; *) exit 2 ;; esac
 case "$MODE" in formal|profile|smoke|science|science-smoke) ;; *) exit 2 ;; esac
 FUSION_GPUS=${FUSION_GPUS:-7}
-case "$FUSION_GPUS" in 6|7|6,7) ;; *) echo 'Use allocated GPUs 6, 7, or 6,7' >&2; exit 2 ;; esac
+"$WORKSPACE/envs/mirroropd-fusion/bin/python" "$HERE/resource_guard.py" validate --gpus "$FUSION_GPUS"
 read_only=false
 if [[ ${DRY_RUN:-0} == 1 || ${CONFIG_ONLY:-0} == 1 ]]; then read_only=true; fi
 if ! $worker; then
@@ -31,13 +31,8 @@ if ! $worker; then
     exec bash "$HERE/run_fusion_local_fsdp2.sh" bash "$0" __worker "$PAIR" "$ARM" "$LABEL" "$MODE"
 fi
 if ! $read_only; then
-    [[ ${CUDA_VISIBLE_DEVICES:-} == "$FUSION_GPUS" && -n ${FUSION_RESOURCE_PARENT:-} ]] || exit 2
-    IFS=',' read -r -a selected <<< "$FUSION_GPUS"
-    for device in "${selected[@]}"; do
-        fd=9
-        if [[ $device == 6 ]]; then fd=8; fi
-        [[ $(readlink "/proc/$$/fd/$fd") == "$WORKSPACE/runs/vllm-fusion-20261029/gpu$device.lock" ]] || exit 2
-    done
+    "$WORKSPACE/envs/mirroropd-fusion/bin/python" "$HERE/resource_guard.py" \
+        verify --workspace "$WORKSPACE" --gpus "$FUSION_GPUS"
 fi
 export FUSION_GPUS
 export STUDENT_MODEL="$WORKSPACE/model/DeepSeek-R1-Distill-Qwen-1.5B"

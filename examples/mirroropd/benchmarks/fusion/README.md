@@ -2,7 +2,7 @@
 
 这些工具服务于[双融合实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)。当前验收尚未全部完成；工具可运行不等于对应 gate 已通过。
 
-当前开发使用下文“原生 vLLM 开发入口”，只分配物理 GPU 6、7。模型和数据均从本地加载，输出目录必须是新目录。旧 HF 性能、回归及短负载脚本也已接入同一个受保护的 GPU 6/7 分配入口，默认单卡；Python 工具校验可见设备与声明数量一致。下面的 HF 命令保留历史工作负载定义，使用当前资源重跑不等于复现原四卡性能。
+当前开发使用下文“原生 vLLM 开发入口”，已授权物理 GPU 0–7；具体任务通过独占锁领取分配的设备。模型和数据均从本地加载，输出目录必须是新目录。旧 HF 性能、回归及短负载脚本也已接入同一个受保护的 GPU 6/7 分配入口，默认单卡；Python 工具校验可见设备与声明数量一致。下面的 HF 命令保留历史工作负载定义，使用当前资源重跑不等于复现原四卡性能。
 
 ## 历史 HF 性能矩阵
 
@@ -83,7 +83,7 @@ Tokens/s 只计有效 response token，不把两模型的 forward token 相加�
 
 原生后端选择 `rollout_policy.execution.backend=vllm_fusion`；旧配置继续使用 HF。已验证的短训练范围包括单 actor rank 的 Dense/MoE current/initial，以及双 actor rank 的 Dense current（一个 TP2 或两个 TP1 replica）；其他双卡组合仍在验收。Learner 限 Qwen3 dense，teacher 可为 dense/MoE。原生模型保留各自配置、head 和 KV；公共 sampler 保留原策略的 top-p 边界。正式支持范围以[实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)为准。
 
-本机入口 `run_fusion_local_fsdp2.sh` 默认使用物理 GPU 7；`FUSION_GPUS=6`、`7` 或 `6,7` 选择已分配的卡，逐卡核对 UUID、取得排他锁并拒绝既有计算任务。它不清理其他 Ray 作业。环境位于仓外 `envs/mirroropd-fusion`；在仓库根目录运行：
+本机入口 `run_fusion_local_fsdp2.sh` 默认使用物理 GPU 7；`FUSION_GPUS` 接受 0–7 中不重复的显式列表，例如 `0` 或 `4,5`。`resource_guard.py` 逐卡核对 UUID、取得排他锁并拒绝既有计算任务。锁只由监护进程持有，内部入口核对其祖先进程身份和锁归属；子进程不继承锁。SIGTERM/SIGINT 仅转发给该命令的进程组，命令退出和设备清理期间继续持锁。它不清理其他 Ray 作业。环境位于仓外 `envs/mirroropd-fusion`；在仓库根目录运行：
 
 ```bash
 bash examples/mirroropd/benchmarks/fusion/run_fusion_setup_fsdp2.sh
@@ -163,7 +163,7 @@ CUDA_VISIBLE_DEVICES='' PYTHONPATH=. ../envs/mirroropd-fusion/bin/python \
 
 ## 两卡拓扑测量
 
-`probe_vllm_topology.py` 在同一个受保护的 GPU 6、7 分配中，比较 `--tp 2 --replicas 1` 与 `--tp 1 --replicas 2`。它固定全局输入批次，按全局行号分配请求与随机种子；所有 replica 完成准备后一起释放，每个批次等待全部返回。`--max-num-seqs` 是每个 replica 的活跃请求上限，`--kv-gib` 是每张 GPU 的 KV 预算。比较相同全局活跃上限时，两个 TP1 replica 各取 TP2 上限的一半。
+`probe_vllm_topology.py` 在同一个受保护的双卡分配中（例如 `FUSION_GPUS=4,5`），比较 `--tp 2 --replicas 1` 与 `--tp 1 --replicas 2`。它固定全局输入批次，按全局行号分配请求与随机种子；所有 replica 完成准备后一起释放，每个批次等待全部返回。`--max-num-seqs` 是每个 replica 的活跃请求上限，`--kv-gib` 是每张 GPU 的 KV 预算。比较相同全局活跃上限时，两个 TP1 replica 各取 TP2 上限的一半。
 
 每个结果分别记录完整协调器墙钟、最后一个 worker 完成生成的时间、结果文件收集时间及启动偏差，避免把文件交接成本隐藏在吞吐数中。资源监控只统计一个父进程树，不能相加两个 replica 的 RSS 峰值。异常清理仅作用于本协调器创建的进程组。
 

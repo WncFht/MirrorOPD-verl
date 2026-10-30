@@ -24,8 +24,8 @@ def bank_request(row, generator):
 
 def generate(prepared, assets, generator, out, max_num_seqs=32):
     started = time.monotonic()
-    if os.environ.get("CUDA_VISIBLE_DEVICES") not in {"6", "7"}:
-        raise ValueError("Allocate exactly physical GPU 6 or 7 through the local resource wrapper")
+    if os.environ.get("CUDA_VISIBLE_DEVICES") not in {str(gpu) for gpu in range(8)}:
+        raise ValueError("Allocate exactly physical GPU 0 through 7 through the local resource wrapper")
     from vllm import LLM, SamplingParams
 
     from verl.workers.rollout.vllm_fusion.compat import decode_graph_config
