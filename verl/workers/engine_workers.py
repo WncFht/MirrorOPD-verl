@@ -898,6 +898,16 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         )
         aggressive_empty_cache(force_sync=True)
 
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL)
+    def export_scientific_readout(self, local_path, global_step=0):
+        """Export FP32 master weights at an idle evaluation boundary; never save Adam."""
+        from verl.experimental.rollout_policy.readout import export_scientific_readout
+
+        try:
+            export_scientific_readout(self.actor.engine, local_path, global_step)
+        finally:
+            self.park_fusion_actor()
+
     @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
     def configure_fusion(self, settings):
         if settings.get("backend") == "vllm_fusion":
