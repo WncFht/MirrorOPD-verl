@@ -4,33 +4,19 @@
 
 from omegaconf import OmegaConf, open_dict
 
+from .models import load_model_metadata, requires_token_generator
 from .plan import RolloutPolicyConfig
 
 
-def validate_policy(config):
+def validate_policy(config, *, policy=None, bindings=None):
     raw = OmegaConf.to_container(config.rollout_policy, resolve=True) if config.get("rollout_policy") else None
-    policy = RolloutPolicyConfig.parse(raw)
+    policy = policy or RolloutPolicyConfig.parse(raw)
     if OmegaConf.select(config, "actor_rollout_ref.rollout.name") == "hf_fusion":
         raise ValueError(
             "Keep rollout.name=vllm and select rollout_policy.mode=token_mixture; hf_fusion is an internal target"
         )
     if policy.default_path:
         return policy
-    if policy.requires_fusion and policy.execution.backend == "vllm_fusion":
-        for key in (
-            "actor_rollout_ref.rollout.quantization",
-            "actor_rollout_ref.rollout.quantization_config_file",
-            "actor_rollout_ref.rollout.engine_kwargs.vllm.quantization",
-            "actor_rollout_ref.rollout.engine_kwargs.vllm.speculative_config",
-            "actor_rollout_ref.rollout.engine_kwargs.vllm.enable_eplb",
-        ):
-            if OmegaConf.select(config, key):
-                raise ValueError(f"Native fusion has not accepted {key}")
-        cache_dtype = OmegaConf.select(
-            config, "actor_rollout_ref.rollout.engine_kwargs.vllm.kv_cache_dtype", default="auto"
-        )
-        if cache_dtype not in {None, "auto", "bfloat16"}:
-            raise ValueError("Native fusion requires BF16 KV, without KV quantization")
     required = {
         "trainer.v1.trainer_mode": "sync",
         "trainer.nnodes": 1,
@@ -101,33 +87,34 @@ def validate_policy(config):
         raise ValueError("Production token fusion currently requires BF16 inference weights")
     validate_resume_clock(config, policy.right_weight)
 
-    from pathlib import Path
-
-    from transformers import AutoConfig, AutoTokenizer
-
+    from .identity import bind_policy
     from .sampling import validate_tokenizers
 
     student_path = config.actor_rollout_ref.model.path
-    teachers = config.distillation.teacher_models
-    teacher_path = next(iter(teachers.values())).model_path if len(teachers) == 1 else None
-    bindings = policy.bindings(student_path, teacher_path)
-    paths = [student_path, *dict.fromkeys(binding.path for binding in bindings.values())]
-    for path in paths:
-        if not Path(path).is_dir():
-            raise ValueError(f"Rollout requires a local checkpoint: {path}")
-    model_configs = [AutoConfig.from_pretrained(path, local_files_only=True) for path in paths]
-    if getattr(model_configs[0], "num_experts", 0) or getattr(model_configs[0], "vision_config", None):
+    if bindings is None:
+        bindings, _ = bind_policy(config, policy)
+    fusion_needed = requires_token_generator(policy, bindings)
+    if fusion_needed and policy.execution.backend == "vllm_fusion":
+        validate_native_options(config)
+    metadata = load_model_metadata([student_path, *(b.path for b in bindings.values())])
+    model_configs = [item[0] for item in metadata.values()]
+    learner_config, learner_tokenizer = metadata[student_path]
+    if getattr(learner_config, "num_experts", 0) or getattr(learner_config, "vision_config", None):
         raise ValueError("rollout_policy supports dense text learners only")
-    tokenizers = [AutoTokenizer.from_pretrained(path, local_files_only=True) for path in paths]
-    for tokenizer, model_config in zip(tokenizers[1:], model_configs[1:], strict=True):
-        validate_tokenizers(tokenizers[0], tokenizer, model_configs[0].vocab_size, model_config.vocab_size)
-    fusion_needed = policy.requires_fusion and not bindings["left"].same_model(bindings["right"])
+    for model_config, tokenizer in metadata.values():
+        validate_tokenizers(learner_tokenizer, tokenizer, learner_config.vocab_size, model_config.vocab_size)
     components = []
     if fusion_needed:
         first, second = bindings["left"], bindings["right"]
         if second.kind == "current":
             first, second = second, first
-        components = [AutoConfig.from_pretrained(b.path, local_files_only=True) for b in (first, second)]
+        components = [metadata[b.path][0] for b in (first, second)]
+    model = config.actor_rollout_ref.model
+    if model.get("override_config") or model.get("trust_remote_code", False):
+        raise ValueError("Local rollout policies require native checkpoint configs without overrides or remote code")
+    for key in ("tokenizer_path", "hf_config_path"):
+        if model.get(key) not in (None, student_path):
+            raise ValueError(f"Local rollout policies do not support a separate {key}")
     if fusion_needed and policy.execution.backend == "hf_fusion":
         import importlib.util
 
@@ -174,11 +161,17 @@ def validate_policy(config):
 
     if os.environ.get("VLLM_USE_V2_MODEL_RUNNER", "").lower() in {"1", "true"}:
         raise ValueError("Local rollout policies require vLLM V1 for the common tokenizer-support processor")
-    # The model-wide processor avoids sending 150k allowed IDs with every request.
+    return policy
+
+
+def policy_engine_config(rollout):
+    """Build an independent engine config; validation never mutates caller state."""
+    import copy
+
     from .vllm_support import TokenizerSupport
 
+    rollout = copy.deepcopy(rollout)
     processor = TokenizerSupport.__module__ + ":" + TokenizerSupport.__name__
-    rollout = config.actor_rollout_ref.rollout
     with open_dict(rollout.engine_kwargs):
         if rollout.engine_kwargs.get("vllm") is None:
             rollout.engine_kwargs.vllm = {}
@@ -186,7 +179,7 @@ def validate_policy(config):
         processors = list(rollout.engine_kwargs.vllm.get("logits_processors") or [])
         if processor not in processors:
             rollout.engine_kwargs.vllm.logits_processors = processors + [processor]
-    return policy
+    return rollout
 
 
 def validate_resume_clock(config, rule):
@@ -212,3 +205,20 @@ def validate_resume_clock(config, rule):
     count = json.loads(state.read_text()).get("actor_optimizer_step") if state.exists() else None
     if type(count) is not int or count < 0:
         raise ValueError("optimizer_step schedule requires a checkpoint with known applied optimizer updates")
+
+
+def validate_native_options(config):
+    for key in (
+        "actor_rollout_ref.rollout.quantization",
+        "actor_rollout_ref.rollout.quantization_config_file",
+        "actor_rollout_ref.rollout.engine_kwargs.vllm.quantization",
+        "actor_rollout_ref.rollout.engine_kwargs.vllm.speculative_config",
+        "actor_rollout_ref.rollout.engine_kwargs.vllm.enable_eplb",
+    ):
+        if OmegaConf.select(config, key):
+            raise ValueError(f"Native fusion has not accepted {key}")
+    cache_dtype = OmegaConf.select(
+        config, "actor_rollout_ref.rollout.engine_kwargs.vllm.kv_cache_dtype", default="auto"
+    )
+    if cache_dtype not in {None, "auto", "bfloat16"}:
+        raise ValueError("Native fusion requires BF16 KV, without KV quantization")

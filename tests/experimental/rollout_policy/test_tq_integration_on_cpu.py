@@ -14,6 +14,7 @@ import transfer_queue as tq
 from omegaconf import OmegaConf
 
 from verl.experimental.rollout_policy.collector import collect_plan
+from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
 from verl.experimental.rollout_policy.runtime import TQPublisher
 from verl.trainer.ppo.v1.agent_loop_tq import AgentLoopWorkerTQ
@@ -80,8 +81,9 @@ def test_real_tq_cross_source_sessions_and_delayed_failure(tq_runtime, tmp_path,
         collection_step=1,
         optimizer_step=0,
         seed=42,
-        student_path=str(tmp_path),
-        teacher_path=str(tmp_path),
+        bindings=resolve_bindings(
+            RolloutPolicyConfig.parse({"mode": "trajectory_mixture"}), str(tmp_path), str(tmp_path)
+        ),
     )
     assert any(len({request.source for request in plan.requests if request.uid == uid}) == 2 for uid in uids)
     tq.kv_batch_put(keys=uids, partition_id="train", tags=[{"is_prompt": True, "status": "pending"} for _ in uids])

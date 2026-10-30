@@ -5,6 +5,7 @@ from types import SimpleNamespace
 
 from omegaconf import OmegaConf
 
+from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
 from verl.experimental.rollout_policy.runtime import RolloutRuntime
 from verl.utils import tensordict_utils as tu
@@ -37,8 +38,7 @@ def test_immutable_sampling_plan_reaches_every_real_session_metadata(tmp_path):
         collection_step=1,
         optimizer_step=0,
         seed=42,
-        student_path=str(tmp_path),
-        teacher_path=str(tmp_path),
+        bindings=resolve_bindings(policy, str(tmp_path), str(tmp_path)),
         sampling={"temperature": 0.0, "top_p": 1.0, "top_k": -1},
     )
 
@@ -75,7 +75,14 @@ def test_preparation_and_release_follow_resolved_binding_not_slot(tmp_path):
     runtime.fusion_client = AsyncMock(side_effect=AssertionError("endpoint allocated fusion"))
     runtime.frozen_client = AsyncMock(side_effect=AssertionError("endpoint allocated fixed model"))
     plan = build_plan(
-        policy, uids=["u"], stable_ids=[0], n=1, collection_step=3, optimizer_step=2, seed=1, student_path=str(tmp_path)
+        policy,
+        uids=["u"],
+        stable_ids=[0],
+        n=1,
+        collection_step=3,
+        optimizer_step=2,
+        seed=1,
+        bindings=resolve_bindings(policy, str(tmp_path), None),
     )
 
     async def run():
@@ -111,7 +118,14 @@ def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
     runtime.frozen_client = AsyncMock(return_value="A-client")
     runtime.fusion_client = AsyncMock(side_effect=AssertionError("endpoint allocated fusion"))
     plan = build_plan(
-        policy, uids=["u"], stable_ids=[0], n=1, collection_step=1, optimizer_step=0, seed=1, student_path=str(tmp_path)
+        policy,
+        uids=["u"],
+        stable_ids=[0],
+        n=1,
+        collection_step=1,
+        optimizer_step=0,
+        seed=1,
+        bindings=resolve_bindings(policy, str(tmp_path), None),
     )
     asyncio.run(runtime.prepare(plan.phases[0], plan))
     runtime.frozen_client.assert_awaited_once_with("left", str(extra), 1)

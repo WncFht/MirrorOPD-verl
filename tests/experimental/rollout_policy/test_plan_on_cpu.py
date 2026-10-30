@@ -4,6 +4,7 @@ import dataclasses
 
 import pytest
 
+from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import CoefficientRule, RolloutPolicyConfig, build_plan
 
 
@@ -17,8 +18,7 @@ def plan(tmp_path, policy, n=1, ids=None, optimizer_step=7):
         collection_step=3,
         optimizer_step=optimizer_step,
         seed=42,
-        student_path=str(tmp_path),
-        teacher_path=str(tmp_path / "teacher"),
+        bindings=resolve_bindings(policy, str(tmp_path), str(tmp_path / "teacher")),
     )
 
 
@@ -161,8 +161,7 @@ def test_odd_quota_never_recomputed_after_current_slot_mapping(tmp_path):
         collection_step=1,
         optimizer_step=0,
         seed=42,
-        student_path=str(tmp_path),
-        teacher_path=str(tmp_path),
+        bindings=resolve_bindings(policy, str(tmp_path), str(tmp_path)),
     )
     assert [sum(r.source == side for r in result.requests) for side in ("left", "right")] == [1, 2]
 

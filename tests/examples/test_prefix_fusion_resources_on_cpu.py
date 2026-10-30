@@ -21,6 +21,7 @@ def test_scoring_rejects_wrong_shape_or_unknown_card(monkeypatch, devices):
 
 
 def test_verified_checkpoint_relocation_does_not_change_plan_random_streams(tmp_path):
+    from verl.experimental.rollout_policy.models import resolve_bindings
     from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
 
     old, new = tmp_path / "old", tmp_path / "new"
@@ -29,7 +30,7 @@ def test_verified_checkpoint_relocation_does_not_change_plan_random_streams(tmp_
         (root / "teacher").mkdir()
     kwargs = dict(uids=["a", "b"], stable_ids=["q1", "q2"], n=1, collection_step=4, optimizer_step=48, seed=42)
     policy = RolloutPolicyConfig.parse(dict(mode="token_mixture", right_weight=0.5))
-    left = build_plan(policy, student_path=str(old / "student"), teacher_path=str(old / "teacher"), **kwargs)
-    right = build_plan(policy, student_path=str(new / "student"), teacher_path=str(new / "teacher"), **kwargs)
+    left = build_plan(policy, bindings=resolve_bindings(policy, str(old / "student"), str(old / "teacher")), **kwargs)
+    right = build_plan(policy, bindings=resolve_bindings(policy, str(new / "student"), str(new / "teacher")), **kwargs)
     assert left.requests == right.requests
     assert left.actor_version == right.actor_version

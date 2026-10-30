@@ -443,8 +443,6 @@ class RolloutRuntime:
             collection_step=self.trainer.global_steps,
             optimizer_step=self.trainer._optimizer_progress().applied,
             seed=rollout.seed,
-            student_path=self.config.actor_rollout_ref.model.path,
-            teacher_path=self.teacher_path(),
             bindings=self.bindings,
             sampling=sampling,
             stop_ids=tuple(sorted(set(stop_ids))),

@@ -6,7 +6,6 @@ import hashlib
 import json
 import math
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Mapping
 
 
@@ -31,8 +30,8 @@ class ModelBinding:
     def __post_init__(self):
         if self.kind not in {"current", "checkpoint"}:
             raise ValueError(f"Unknown model binding: {self.kind}")
-        if not Path(self.path).is_dir():
-            raise ValueError(f"Rollout requires a local checkpoint directory: {self.path}")
+        if not isinstance(self.path, str) or not self.path:
+            raise ValueError("A model binding requires a resolved location")
 
 
 @dataclass(frozen=True)
@@ -101,26 +100,6 @@ class ModelRef:
         if self.kind != "checkpoint" and self.ref is not None:
             raise ValueError("current/initial/teacher references do not accept ref")
 
-    def resolve(self, learner_path, teacher_path=None):
-        if self.kind in {"current", "initial"}:
-            path = learner_path
-        elif self.kind == "teacher":
-            if teacher_path is None:
-                raise ValueError("teacher requires exactly one supervision teacher; use checkpoint explicitly")
-            path = teacher_path
-        else:
-            path = self.ref
-            if not Path(path).expanduser().is_dir():
-                from examples.mirroropd.assets.paths import registered_model
-
-                path = registered_model(path)
-        from examples.mirroropd.assets.paths import require_current_location
-
-        path = require_current_location(str(path))
-        return ModelBinding(
-            "current" if self.kind == "current" else "checkpoint", str(Path(path).expanduser().resolve())
-        )
-
 
 @dataclass(frozen=True)
 class RolloutPolicyConfig:
@@ -183,9 +162,6 @@ class RolloutPolicyConfig:
             return {"model": self.model or ModelRef()}
         return {"left": self.left or ModelRef(), "right": self.right or ModelRef("teacher")}
 
-    def bindings(self, learner_path, teacher_path=None):
-        return {slot: ref.resolve(learner_path, teacher_path) for slot, ref in self.references.items()}
-
     @property
     def default_path(self):
         return self.mode == "single" and self.references["model"].kind == "current"
@@ -199,6 +175,7 @@ class RolloutRequest:
     response_index: int
     seed: int
     source: str
+    ordinal: int = 0
 
     @property
     def key(self):
@@ -260,17 +237,14 @@ def build_plan(
     collection_step,
     optimizer_step,
     seed,
-    student_path,
-    teacher_path=None,
+    bindings,
     sampling=None,
     stop_ids=(),
-    bindings=None,
 ):
     if not uids or len(uids) != len(stable_ids) or len(set(uids)) != len(uids):
         raise ValueError("A rollout batch requires unique prompt uids and matching stable row identities")
     if type(n) is not int or n < 1 or collection_step < 0:
         raise ValueError("Invalid response count or collection step")
-    bindings = bindings if bindings is not None else policy.bindings(student_path, teacher_path)
     completed_outer = max(collection_step - 1, 0)
     rule = policy.right_weight if policy.mode != "single" else CoefficientRule(start=0, end=0)
     alpha = rule.resolve(completed_outer, optimizer_step)
@@ -302,6 +276,7 @@ def build_plan(
             j,
             stable_seed(seed, collection_step, sid, row, j, "sample"),
             single or ("fusion" if policy.mode == "token_mixture" else ("right" if i in right_rows else "left")),
+            i,
         )
         for i, (row, sid, uid, j) in enumerate(identities)
     )
