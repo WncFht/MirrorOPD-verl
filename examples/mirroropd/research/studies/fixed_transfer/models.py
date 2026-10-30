@@ -113,6 +113,41 @@ def interface(model):
     )
 
 
+def audit_shared_weights(directory):
+    """Check serialized aliases before HF resolves tied embeddings during loading."""
+    from pathlib import Path
+
+    import torch
+    from safetensors import safe_open
+
+    directory = Path(directory)
+    config = read(directory / "config.json")
+    if not config.get("tie_word_embeddings", False):
+        return dict(tied=False, checked=False)
+    names = ("model.embed_tokens.weight", "lm_head.weight")
+    locations = {}
+    for path in sorted(directory.glob("*.safetensors")):
+        with safe_open(path, framework="pt", device="cpu") as source:
+            for name in names:
+                if name in source.keys():
+                    if name in locations:
+                        raise ValueError(f"Duplicate serialized parameter: {name}")
+                    locations[name] = path
+    if not locations:
+        raise ValueError("Cannot verify this architecture's shared embedding/head serialization")
+    if len(locations) == 1:
+        return dict(tied=True, checked=True, serialized_aliases=list(locations), duplicate_equal=None)
+    with safe_open(locations[names[0]], framework="pt", device="cpu") as left:
+        with safe_open(locations[names[1]], framework="pt", device="cpu") as right:
+            a, b = left.get_slice(names[0]), right.get_slice(names[1])
+            if a.get_shape() != b.get_shape():
+                raise ValueError("Tied embedding/head shapes differ")
+            for start in range(0, a.get_shape()[0], 1024):
+                if not torch.equal(a[start : start + 1024], b[start : start + 1024]):
+                    raise ValueError("Tied embedding/head values differ; loading would resolve conflicting aliases")
+    return dict(tied=True, checked=True, serialized_aliases=list(locations), duplicate_equal=True)
+
+
 def audit(study):
     interfaces = {name: interface(model) for name, model in study.models.items()}
     base = interfaces[study.student]
@@ -124,6 +159,7 @@ def audit(study):
         support = value["forward"]["vocab_size"] >= base["forward"]["vocab_size"]
         result[name] = dict(
             identity=value["model"],
+            shared_weights=audit_shared_weights(study.models[name].directory),
             conflicts=conflicts,
             teacher_support_covers_student=support,
             full_vocab_eligible=not conflicts and support,

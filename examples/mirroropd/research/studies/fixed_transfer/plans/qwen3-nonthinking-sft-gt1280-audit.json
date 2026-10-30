@@ -1,0 +1,155 @@
+{
+  "name": "qwen3-nonthinking-origin-controls1280-20261030",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "sft-deepmath": {
+      "name": "sft-deepmath",
+      "repo": "Thinking-Space/Qwen3-1.7B-SFT",
+      "revision": "f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/Thinking-Space/Qwen3-1.7B-SFT/blob/f0065babe7440257d7db331a5aa442ef7c3cf266/README.md",
+        "https://arxiv.org/abs/2604.13016v2"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "sft-gsm8k": {
+      "name": "sft-gsm8k",
+      "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+      "revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "path": "model/teacher-study/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/SamsungSAILMontreal/Qwen3-1.7B-Math/blob/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "base-gt-math": {
+      "name": "base-gt-math",
+      "repo": "TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH",
+      "revision": "679b8b3a531200f6748eb782c265c83a58b1417d",
+      "path": "model/teacher-study/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH/blob/679b8b3a531200f6748eb782c265c83a58b1417d/README.md"
+      ],
+      "lineage_note": "Model card states GRPO ground-truth rewards on MATH train; exact parent initialization revision not disclosed."
+    },
+    "coreward-i": {
+      "name": "coreward-i",
+      "repo": "TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+      "revision": "5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "path": "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH/blob/5d3c87b84144073a4552d786d3d97288d6c7abec/README.md"
+      ],
+      "lineage_note": "Model card declares Qwen3-1.7B-Base trained on MATH train with Co-rewarding; exact parent commit and matched compute with GT control not established."
+    },
+    "coreward-ii": {
+      "name": "coreward-ii",
+      "repo": "TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+      "revision": "381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "path": "model/teacher-study/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH/blob/381b27483332657dfae6f82ecfaa5fb7ddfb2d82/README.md"
+      ],
+      "lineage_note": "Model card declares Qwen3-1.7B-Base trained on MATH train with Co-rewarding; exact parent commit and matched compute with GT control not established."
+    },
+    "base-grpo-4": {
+      "name": "base-grpo-4",
+      "repo": "Thinking-Space/Qwen3-4B-Base-GRPO",
+      "revision": "1f3b2966edfb75f2f98a00617588c1f748088422",
+      "path": "model/teacher-study/Thinking-Space--Qwen3-4B-Base-GRPO/1f3b2966edfb75f2f98a00617588c1f748088422",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/Thinking-Space/Qwen3-4B-Base-GRPO/blob/1f3b2966edfb75f2f98a00617588c1f748088422/README.md"
+      ],
+      "lineage_note": "Published lineage; exact parent revision not established. Mode/template acceptance is tracked separately."
+    },
+    "rlvr-gsm8k": {
+      "name": "rlvr-gsm8k",
+      "repo": "tocsa/qwen3-1.7b-rlvr-gsm8k",
+      "revision": "64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "path": "model/teacher-study/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/tocsa/qwen3-1.7b-rlvr-gsm8k/blob/64c6aeecce36cf445d496ef0cc86d6164c52aec7/README.md"
+      ],
+      "lineage_note": "Model card states LoRA RLVR, rank32 alpha64, GSM8K 200 samples, 2 epochs; published full checkpoint; merge provenance not independently verified."
+    }
+  },
+  "arms": [
+    {
+      "name": "NT-C-sft-gsm8k",
+      "teacher": "sft-gsm8k",
+      "updates": 1280,
+      "evaluate_at": []
+    },
+    {
+      "name": "NT-C-base-gt-math",
+      "teacher": "base-gt-math",
+      "updates": 1280,
+      "evaluate_at": []
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls1280-20261030",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": false,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    4,
+    5
+  ],
+  "continuation": {
+    "pool_batches": 20,
+    "save_resume": true,
+    "accuracy_gate": false,
+    "risk_readouts": [
+      64,
+      320,
+      640,
+      1280
+    ],
+    "validation_teacher": "sft-deepmath",
+    "resume_from": {
+      "NT-C-sft-gsm8k": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls640-20261030/arms/NT-C-sft-gsm8k",
+      "NT-C-base-gt-math": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls640-20261030/arms/NT-C-base-gt-math",
+      "NT-C-coreward-i": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls640-20261030/arms/NT-C-coreward-i",
+      "NT-C-coreward-ii": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls640-20261030/arms/NT-C-coreward-ii",
+      "NT-C-base-grpo-4": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls640-20261030/arms/NT-C-base-grpo-4"
+    }
+  }
+}

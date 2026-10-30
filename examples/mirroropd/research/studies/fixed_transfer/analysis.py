@@ -11,6 +11,7 @@ from examples.mirroropd.research.core.artifacts import complete
 from examples.mirroropd.research.core.io import dump as write
 from examples.mirroropd.research.core.io import read
 from examples.mirroropd.research.core.io import write_csv as csv_write
+from examples.mirroropd.research.core.statistics import paired_mean_difference
 from examples.mirroropd.research.core.transfer_metrics import gap_row, summarize_gap
 from examples.mirroropd.research.studies.fixed_transfer.data import required_rows
 from examples.mirroropd.research.studies.fixed_transfer.evaluation import evaluation_inputs, validate_records
@@ -21,6 +22,7 @@ from examples.mirroropd.research.studies.fixed_transfer.training import (
     arm_directory,
     checkpoint_directory,
     scientific_inputs,
+    validate_checkpoint,
 )
 
 PANELS = {
@@ -93,8 +95,10 @@ def task_data(study, name, weight_identity=None):
     return result
 
 
-def analyze(study, partial=False):
+def analyze(study, partial=False, risk_only=False):
     directory = study.directory / "analysis"
+    if risk_only:
+        directory = directory / "risk-only"
     directory.mkdir(parents=True, exist_ok=True)
     prompts = read(study.directory / "prepared/evaluation-prompts.json")
     datasets = list(dict.fromkeys(r["data_source"] for r in prompts))
@@ -107,8 +111,9 @@ def analyze(study, partial=False):
     performance = []
     checks = []
     copies = []
+    copy_comparisons = []
     numerical_profiles = {}
-    baselines = {name: task_data(study, name) for name in study.models}
+    baselines = {} if risk_only else {name: task_data(study, name) for name in study.models}
 
     def accuracy_rows(label, kind, name, data, arm=None, step=0):
         for dataset in datasets:
@@ -145,6 +150,9 @@ def analyze(study, partial=False):
             missing.append("train-" + arm.name)
         else:
             check_inputs(root / "complete.json", scientific_inputs(study, arm))
+            endpoint = checkpoint_directory(study, arm, arm.updates)
+            check_inputs(endpoint / "complete.json", dict(scientific_inputs(study, arm), step=arm.updates))
+            validate_checkpoint(endpoint)
             training_receipt = read(root / "complete.json")
             profile_id = training_receipt["inputs"]["numerical_profile"]
             profile = read(study.directory / "numerical" / profile_id / "complete.json")
@@ -170,7 +178,7 @@ def analyze(study, partial=False):
             initial = read(root / "fixed-000.json")
             assert [r["id"] for r in initial] == ids
             snapshots = {}
-            for step in study.training.score_steps(arm.updates, arm.evaluate_at):
+            for step in study.training.score_steps(arm.updates, study.risk_readouts(arm)):
                 scored = read(root / f"fixed-{step:03d}.json")
                 snapshots[step] = scored
                 assert [r["id"] for r in scored] == ids
@@ -183,7 +191,7 @@ def analyze(study, partial=False):
                 )
                 assert entropy_error < 1e-4, (arm.name, step, entropy_error)
                 if step < arm.updates and step % study.training.reuse == 0:
-                    group = chr(65 + step // study.training.reuse)
+                    group = study.training_group(step + 1)
                     expected = np.mean(
                         [r["stats"]["all"]["rkl"] / study.training.horizon for r in scored if r["group"] == group]
                     )
@@ -212,7 +220,7 @@ def analyze(study, partial=False):
                                 initial=float(b.mean()),
                             )
                         )
-                        if step in arm.evaluate_at:
+                        if step in study.risk_readouts(arm):
                             sample = rng.integers(0, len(a), size=(5000, len(a)))
                             denominator = b[sample].mean(1)
                             defined = b.mean() > 0 and np.all(denominator > 0)
@@ -243,14 +251,14 @@ def analyze(study, partial=False):
                     peak_gib=max(r["peak_gib"] for r in history),
                 )
             )
-        for step in arm.evaluate_at:
+        for step in [] if risk_only else arm.evaluate_at:
             checkpoint = checkpoint_directory(study, arm, step) / "complete.json"
             label = f"{arm.name}-{step:03d}"
             if not checkpoint.exists():
                 missing.append("endpoint-" + label)
                 continue
             check_inputs(checkpoint, dict(scientific_inputs(study, arm), step=step))
-            saved = read(checkpoint)
+            saved = validate_checkpoint(checkpoint.parent)
             data = task_data(study, study.student, saved["weight_identity"])
             if data is None:
                 missing.append("endpoint-" + label)
@@ -304,6 +312,39 @@ def analyze(study, partial=False):
             measured = np.mean([r["stats"]["all"][metric] / study.training.horizon for r in scored])
             assert abs(item[metric] - measured) < 1e-10
         copies.append(item)
+        reference = {r["id"]: r for r in scored}
+        if len(reference) != len(scored):
+            raise ValueError("Duplicate teacher-copy prompt identities")
+        for arm in (a for a in study.arms if a.teacher == teacher):
+            arm_root = arm_directory(study, arm)
+            if not (arm_root / "complete.json").exists():
+                continue
+            for step in study.risk_readouts(arm):
+                endpoint = {r["id"]: r for r in read(arm_root / f"fixed-{step:03d}.json")}
+                ids = sorted(reference)
+                for key in ids:
+                    if key not in endpoint or any(
+                        reference[key][field] != endpoint[key][field] for field in ["source", "length", "group"]
+                    ):
+                        raise ValueError("Teacher-copy and endpoint states differ")
+                for metric in ["rkl", "js"]:
+                    values = [
+                        [state[key]["stats"]["all"][metric] / state[key]["stats"]["all"]["tokens"] for key in ids]
+                        for state in [reference, endpoint]
+                    ]
+                    copy_comparisons.append(
+                        dict(
+                            arm=arm.name,
+                            teacher=teacher,
+                            step=step,
+                            panel="held_math",
+                            metric=metric,
+                            prompts=len(ids),
+                            reference="teacher-copy feasible point; not lower bound",
+                            **paired_mean_difference(*values),
+                        )
+                    )
+
     for name, values in [
         ("accuracies", accuracy),
         ("gap-recovery", gaps),
@@ -311,39 +352,49 @@ def analyze(study, partial=False):
         ("risk-curves", curves),
         ("performance", performance),
         ("block-checks", checks),
+        ("copy-comparisons", copy_comparisons),
     ]:
         if values:
             csv_write(directory / f"{name}.csv", values)
     summary = dict(
         study=study.name,
+        scope="fixed-risk" if risk_only else "full-study",
         student=study.student,
         accuracy=accuracy,
         gap_recovery=gaps,
         risks=risks,
         performance=performance,
         copies=copies,
+        copy_comparisons=copy_comparisons,
         numerical_profiles=numerical_profiles,
         missing=missing,
         statistics="5000 paired prompt bootstrap draws, seed42; one training seed",
     )
     write(directory / "summary.json", summary)
     if not partial:
-        expected_evaluations = len(study.models) + sum(len(a.evaluate_at) for a in study.arms)
+        expected_endpoints = 0 if risk_only else sum(len(a.evaluate_at) for a in study.arms)
+        expected_evaluations = 0 if risk_only else len(study.models) + expected_endpoints
         assert not missing, missing
         assert len(accuracy) == expected_evaluations * len(datasets)
-        assert len(gaps) == sum(len(a.evaluate_at) for a in study.arms) * (len(datasets) + 1)
+        assert len(gaps) == expected_endpoints * (len(datasets) + 1)
         expected_risks = sum(
             2
-            * len(arm.evaluate_at)
+            * len(study.risk_readouts(arm))
             * sum(any(r["group"] in groups for r in required_rows(study, arm)) for groups in PANELS.values())
             for arm in study.arms
         )
         assert len(risks) == expected_risks
         assert len(checks) == sum(arm.updates // study.training.reuse for arm in study.arms)
+        copied_teachers = {item["teacher"] for item in copies}
+        assert len(copy_comparisons) == sum(
+            2 * len(study.risk_readouts(arm)) for arm in study.arms if arm.teacher in copied_teachers
+        )
         write(
             directory / "verification.json",
             dict(
                 complete=True,
+                scope="fixed-risk" if risk_only else "full-study",
+                accuracy_verified=not risk_only,
                 study=study.identity,
                 scientific_updates=sum(a.updates for a in study.arms),
                 evaluations=expected_evaluations,

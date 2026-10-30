@@ -1,0 +1,127 @@
+{
+  "name": "llama-tulu-sft640-20261030",
+  "student": "student",
+  "models": {
+    "student": {
+      "name": "student",
+      "repo": "unsloth/Llama-3.2-3B-Instruct",
+      "revision": "006f5dcd1393c3add266de40994ba96225e9689d",
+      "path": "model/teacher-study/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "parent": null,
+      "method": "original_instruct",
+      "sources": [
+        "https://huggingface.co/unsloth/Llama-3.2-3B-Instruct/blob/006f5dcd1393c3add266de40994ba96225e9689d/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    },
+    "L1": {
+      "name": "L1",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B-SFT",
+      "revision": "f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "parent": "meta-llama/Llama-3.1-8B",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B-SFT/tree/f2a0b46b0cfda21003c6141b1ff837b7e165524d"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+    },
+    "L2": {
+      "name": "L2",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+      "revision": "a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "parent": "allenai/Llama-3.1-Tulu-3-8B-SFT",
+      "method": "dpo",
+      "sources": [
+        "https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B-DPO/tree/a7beb67e33ffd01cc87ac3b46cadc1000985b8db"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+    },
+    "L3": {
+      "name": "L3",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B",
+      "revision": "666943798adbde0b1aff34626007e26986a3c107",
+      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
+      "parent": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+      "method": "rlvr",
+      "sources": [
+        "https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B/tree/666943798adbde0b1aff34626007e26986a3c107"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+    },
+    "L4": {
+      "name": "L4",
+      "repo": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo",
+      "revision": "d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+      "path": "model/teacher-study/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+      "parent": "meta-llama/Llama-3.1-8B",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo/tree/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+    },
+    "gt": {
+      "name": "gt",
+      "repo": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH",
+      "revision": "b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "path": "model/teacher-study/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "parent": null,
+      "method": "rl_ground_truth",
+      "sources": [
+        "https://huggingface.co/TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH/blob/b6a0ab79ab4802ef77334532dd1936bb1d219cf9/README.md"
+      ],
+      "lineage_note": "Pinned release; upstream identity and shared-weight equality require audit."
+    }
+  },
+  "arms": [
+    {
+      "name": "L1",
+      "teacher": "L1",
+      "updates": 640,
+      "evaluate_at": []
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/llama-tulu-sft640-20261030",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": false,
+    "stop_ids": [
+      128001,
+      128008,
+      128009
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    2,
+    3
+  ],
+  "prompt_policy": {
+    "system_prompt": "detailed thinking off",
+    "template_kwargs": {
+      "date_string": "29 Oct 2026",
+      "tools": null
+    }
+  },
+  "continuation": {
+    "pool_batches": 20,
+    "save_resume": true,
+    "accuracy_gate": false,
+    "risk_readouts": [
+      64,
+      320,
+      640
+    ],
+    "validation_teacher": "gt",
+    "resume_from": {
+      "L1": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-stage-lineage320-20261030/arms/L1"
+    }
+  }
+}

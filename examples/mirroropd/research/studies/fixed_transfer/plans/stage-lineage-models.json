@@ -1,0 +1,81 @@
+{
+  "models": {
+    "Q1": {
+      "name": "Q1",
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/tree/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance.",
+      "subfolder": "step80"
+    },
+    "Q2": {
+      "name": "Q2",
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "path": "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
+      "parent": "Qwen/Qwen3-4B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/tree/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance.",
+      "subfolder": "step640"
+    },
+    "L1": {
+      "name": "L1",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B-SFT",
+      "revision": "f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "parent": "meta-llama/Llama-3.1-8B",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B-SFT/tree/f2a0b46b0cfda21003c6141b1ff837b7e165524d"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+    },
+    "L2": {
+      "name": "L2",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+      "revision": "a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "parent": "allenai/Llama-3.1-Tulu-3-8B-SFT",
+      "method": "dpo",
+      "sources": [
+        "https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B-DPO/tree/a7beb67e33ffd01cc87ac3b46cadc1000985b8db"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+    },
+    "L3": {
+      "name": "L3",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B",
+      "revision": "666943798adbde0b1aff34626007e26986a3c107",
+      "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
+      "parent": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+      "method": "rlvr",
+      "sources": [
+        "https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B/tree/666943798adbde0b1aff34626007e26986a3c107"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+    },
+    "L4": {
+      "name": "L4",
+      "repo": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo",
+      "revision": "d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+      "path": "model/teacher-study/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+      "parent": "meta-llama/Llama-3.1-8B",
+      "method": "rl",
+      "sources": [
+        "https://huggingface.co/hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo/tree/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9"
+      ],
+      "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+    }
+  },
+  "updates_per_branch": 320,
+  "new_updates": 1920,
+  "accuracy_gate": false
+}

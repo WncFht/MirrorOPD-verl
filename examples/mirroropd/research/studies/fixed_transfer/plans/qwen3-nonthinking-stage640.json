@@ -1,0 +1,91 @@
+{
+  "name": "qwen3-mode-nonthinking-stage640-20261029",
+  "student": "q3-1.7",
+  "models": {
+    "q3-1.7": {
+      "name": "q3-1.7",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "path": "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "posttraining",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-1.7B/blob/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "sft-deepmath": {
+      "name": "sft-deepmath",
+      "repo": "Thinking-Space/Qwen3-1.7B-SFT",
+      "revision": "f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "sft",
+      "sources": [
+        "https://huggingface.co/Thinking-Space/Qwen3-1.7B-SFT/blob/f0065babe7440257d7db331a5aa442ef7c3cf266/README.md",
+        "https://arxiv.org/abs/2604.13016v2"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    },
+    "base-opd": {
+      "name": "base-opd",
+      "repo": "Thinking-Space/Qwen3-1.7B-Base-OPD",
+      "revision": "4ad294531545b51fbcfbd1b0ded387ba237db57c",
+      "path": "model/teacher-study/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "opd",
+      "sources": [
+        "https://huggingface.co/Thinking-Space/Qwen3-1.7B-Base-OPD/blob/4ad294531545b51fbcfbd1b0ded387ba237db57c/README.md",
+        "https://arxiv.org/abs/2604.13016v2"
+      ],
+      "lineage_note": "Published parent lineage; exact initialization revision is not disclosed."
+    }
+  },
+  "arms": [
+    {
+      "name": "NT-SFT",
+      "teacher": "sft-deepmath",
+      "updates": 640,
+      "evaluate_at": []
+    },
+    {
+      "name": "NT-OPD",
+      "teacher": "base-opd",
+      "updates": 640,
+      "evaluate_at": []
+    }
+  ],
+  "question_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/prompts.json",
+  "benchmark_source": "wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/evaluation-prompts.json",
+  "output": "wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-nonthinking-stage640-20261029",
+  "cache": "wandb-logs/derived/MirrorOPD-verl/teacher-studies",
+  "evaluation": {
+    "samples": 4,
+    "thinking": false,
+    "stop_ids": [
+      151643,
+      151645
+    ]
+  },
+  "execution": {
+    "evaluation_concurrency": 16
+  },
+  "gpus": [
+    4,
+    5
+  ],
+  "continuation": {
+    "pool_batches": 20,
+    "save_resume": true,
+    "accuracy_gate": false,
+    "risk_readouts": [
+      64,
+      320,
+      640
+    ],
+    "resume_from": {
+      "NT-SFT": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-nonthinking-stage320-20261029/arms/NT-SFT",
+      "NT-OPD": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-nonthinking-stage320-20261029/arms/NT-OPD"
+    }
+  }
+}

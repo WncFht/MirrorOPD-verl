@@ -34,9 +34,36 @@ def question_messages(row):
     return [dict(role="user", content=question)]
 
 
-def prepare(study):
+def apply_prompt_policy(messages, policy):
+    if not policy or "system_prompt" not in policy:
+        return messages
+    if any(m["role"] == "system" for m in messages):
+        raise ValueError("Do not silently replace an existing system instruction")
+    return [dict(role="system", content=policy["system_prompt"]), *messages]
+
+
+def user_content(messages):
+    return normalized("\n".join(m["content"] for m in messages if m["role"] == "user"))
+
+
+def prompt_tokenizers(study):
+    """Keep student tokenization; an explicit pinned template is a separate experimental condition."""
     from transformers import AutoTokenizer
 
+    student = AutoTokenizer.from_pretrained(study.models[study.student].directory, local_files_only=True)
+    source = (study.prompt_policy or {}).get("template_model")
+    template = None
+    if source is not None:
+        template = AutoTokenizer.from_pretrained(study.models[source].directory, local_files_only=True)
+        if student.get_vocab() != template.get_vocab():
+            raise ValueError("Template controls require identical token-to-ID maps")
+        if not isinstance(template.chat_template, str) or not template.chat_template:
+            raise ValueError("Template source requires one explicit chat template")
+        student.chat_template = template.chat_template
+    return student, template
+
+
+def prepare(study):
     destination = study.directory / "prepared"
     inputs = dict(
         student=study.models[study.student].identity,
@@ -45,9 +72,17 @@ def prepare(study):
         evaluation=asdict(study.evaluation),
         generation=dict(horizon=study.training.horizon, seed=study.training.bank_seed),
     )
+    if study.prompt_policy is not None:
+        inputs["prompt_policy"] = study.prompt_policy
+    tokenizer, template = prompt_tokenizers(study)
+    if template is not None:
+        source = study.prompt_policy["template_model"]
+        inputs["template_source"] = dict(
+            model=study.models[source].identity,
+            template=fingerprint(template.chat_template),
+        )
     if complete(destination, inputs):
         return read(destination / "complete.json")
-    tokenizer = AutoTokenizer.from_pretrained(study.models[study.student].directory, local_files_only=True)
 
     def render(messages):
         ids = tokenizer.apply_chat_template(
@@ -56,14 +91,26 @@ def prepare(study):
             add_generation_prompt=True,
             enable_thinking=study.evaluation.thinking,
             return_dict=False,
+            **(study.prompt_policy or {}).get("template_kwargs", {}),
         )
+        if template is not None:
+            native_ids = template.apply_chat_template(
+                messages,
+                tokenize=True,
+                add_generation_prompt=True,
+                return_dict=False,
+                enable_thinking=study.evaluation.thinking,
+                **(study.prompt_policy or {}).get("template_kwargs", {}),
+            )
+            if ids != native_ids:
+                raise ValueError("Student tokenization differs from the declared native template control")
         if len(ids) > study.evaluation.model_length - study.evaluation.response_cap:
             raise ValueError("Prompt does not fit the shared evaluation context budget")
         return ids
 
     questions = []
     for row in read(resolve(study.question_source)):
-        messages = question_messages(row)
+        messages = apply_prompt_policy(question_messages(row), study.prompt_policy)
         ids = render(messages)
         questions.append(
             dict(
@@ -76,10 +123,13 @@ def prepare(study):
         )
     benchmarks = []
     for row in read(resolve(study.benchmark_source)):
-        ids = render(row["messages"])
-        benchmarks.append(dict(row, prompt_ids=ids, input=tokenizer.decode(ids, skip_special_tokens=False)))
-    train = {normalized(r["messages"][0]["content"]) for r in questions if r["split"] == "train"}
-    evaluation = {normalized(r["messages"][0]["content"]) for r in benchmarks}
+        messages = apply_prompt_policy(row["messages"], study.prompt_policy)
+        ids = render(messages)
+        benchmarks.append(
+            dict(row, messages=messages, prompt_ids=ids, input=tokenizer.decode(ids, skip_special_tokens=False))
+        )
+    train = {user_content(r["messages"]) for r in questions if r["split"] == "train"}
+    evaluation = {user_content(r["messages"]) for r in benchmarks}
     if train & evaluation:
         raise ValueError("Training questions overlap the task evaluation set")
     if len(questions) != 640 or len({r["id"] for r in questions}) != 640 or len(benchmarks) != 630:
@@ -132,21 +182,42 @@ def score_rows(study):
 
 
 def required_rows(study, arm):
-    groups = {chr(65 + i) for i in range(arm.updates // study.training.reuse)} | set(PRIMARY_GROUPS)
+    count = (
+        study.continuation.get("pool_batches", 20)
+        if study.continuation is not None
+        else arm.updates // study.training.reuse
+    )
+    groups = {chr(65 + i) for i in range(count)} | set(PRIMARY_GROUPS)
     return [r for r in bank_rows(study) if r["group"] in groups]
 
 
-def generate(study, shard=0, shards=4):
+def bank_shard_receipt(study, shard, shards=4, *, groups=None):
+    manifest = read(study.directory / "prepared/complete.json")
+    root = bank_directory(study)
+    inputs = dict(bank_key=manifest["bank_key"], shard=shard, shards=shards)
+    directory = root / f"shard-{shard}"
+    if groups is not None:
+        groups = tuple(sorted(set(groups)))
+        if not groups:
+            raise ValueError("A selected bank panel must not be empty")
+        inputs["groups"] = groups
+        directory = root / f"panel-{fingerprint(groups)[:12]}-shard-{shard}"
+    return directory, inputs
+
+
+def generate(study, shard=0, shards=4, *, groups=None):
     import torch
 
     if not 0 <= shard < shards:
         raise ValueError("Invalid bank shard")
     root = bank_directory(study)
     manifest = read(study.directory / "prepared/complete.json")
-    inputs = dict(bank_key=manifest["bank_key"], shard=shard, shards=shards)
-    if complete(root / f"shard-{shard}", inputs):
+    receipt_directory, inputs = bank_shard_receipt(study, shard, shards, groups=groups)
+    if complete(receipt_directory, inputs):
         return
     prompts = read(study.directory / "prepared/bank-prompts.json")
+    if groups is not None and not set(groups) <= {r["group"] for r in prompts}:
+        raise ValueError("Unknown bank panel groups")
     model = load(study.models[study.student])
     head = model.get_output_embeddings().weight.detach().float()
     eos = study.evaluation.stop_ids[0]
@@ -154,12 +225,18 @@ def generate(study, shard=0, shards=4):
     batch_size = study.training.batch_size
     with torch.no_grad():
         for index in range(shard, len(prompts) // batch_size, shards):
+            batch = prompts[index * batch_size : (index + 1) * batch_size]
+            if groups is not None:
+                selected = [r for r in batch if r["group"] in groups]
+                if not selected:
+                    continue
+                if len(selected) != len(batch):
+                    raise ValueError("Selected panels must preserve original generation batches")
             path = root / f"batch-{index:03d}.json"
             if path.exists():
                 old = read(path)
                 assert len(old) == batch_size and all(r["source"] == manifest["bank_key"] for r in old)
                 continue
-            batch = prompts[index * batch_size : (index + 1) * batch_size]
             width = max(len(r["prompt_ids"]) for r in batch)
             ids = torch.tensor([[eos] * (width - len(r["prompt_ids"])) + r["prompt_ids"] for r in batch], device="cuda")
             mask = torch.tensor(
@@ -206,4 +283,4 @@ def generate(study, shard=0, shards=4):
             write(path, output)
             print("BANK", study.name, shard, index, flush=True)
             del past, value, tokens
-    receipt(root / f"shard-{shard}", inputs)
+    receipt(receipt_directory, inputs)
