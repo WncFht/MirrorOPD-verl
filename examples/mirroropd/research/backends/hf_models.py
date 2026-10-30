@@ -2,13 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 """Buffer-preserving HF execution and response-aligned hidden states."""
 
+from examples.mirroropd.assets.paths import resolve_location
+
 
 def load(model, *, trainable=False, path=None):
     import torch
     from transformers import AutoModelForCausalLM
 
     value = AutoModelForCausalLM.from_pretrained(
-        path or model.directory,
+        resolve_location(path) if path is not None else model.directory,
         local_files_only=True,
         trust_remote_code=False,
         dtype=torch.float32 if trainable else torch.bfloat16,

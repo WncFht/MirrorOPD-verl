@@ -8,6 +8,7 @@ from pathlib import Path
 
 import torch
 
+from examples.mirroropd.assets.paths import resolve_location
 from examples.mirroropd.research.backends import hf_models
 from examples.mirroropd.research.backends import hf_rkl as engine
 from examples.mirroropd.research.core import training_state
@@ -30,7 +31,7 @@ def verify(study, name):
     arm = arm_by_name(study, name)
     root = arm_directory(study, arm)
     marker = read(root / "resume/complete.json")
-    weights = Path(marker["weights"])
+    weights = resolve_location(marker["weights"])
     validate_checkpoint(weights, verify_hash=True)
     execution = Execution(**read(root / "protocol.json")["execution"])
     model = hf_models.load(study.models[study.student], trainable=True, path=weights)

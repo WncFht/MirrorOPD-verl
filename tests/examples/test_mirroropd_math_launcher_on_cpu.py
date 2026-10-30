@@ -15,11 +15,16 @@ from hydra import compose, initialize_config_dir
 from hydra.errors import InstantiationException
 from omegaconf import OmegaConf
 
+from examples.mirroropd.assets.paths import registered_model
 from verl.utils.config import omega_conf_to_dataclass, validate_config
 from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "examples/mirroropd/run_math_opd_ablation_fsdp2.sh"
+
+
+def _model_suffix(alias):
+    return str(registered_model(alias, root="/")).lstrip("/")
 
 
 def _assert_full_kl(loss):
@@ -35,7 +40,7 @@ def test_polaris_e48_resolves_full_e20_protocol_and_unchanged_teacher_budget(tmp
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     _assert_full_kl(omega_conf_to_dataclass(cfg.distillation).distillation_loss)
     actor, rollout = cfg.actor_rollout_ref.actor, cfg.actor_rollout_ref.rollout
-    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/Polaris-7B-Preview")
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/" + _model_suffix("Polaris-7B-Preview"))
     assert cfg.distillation.shared_teacher.infer_max_token_len_per_gpu == 32768
     assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 64
     assert actor.ppo_epochs == 16 and rollout.n == 1
@@ -216,8 +221,10 @@ def test_moe_long_presets_resolve_native_full_vocab_without_checkpoint_saving(tm
     assert not loss.use_policy_gradient and not loss.use_task_rewards
     assert loss.full_vocab.termination_token_ids == [151643, 151645]
     assert loss.full_vocab.backend == "precompute" and loss.full_vocab.token_chunk_size == 512
-    assert cfg.actor_rollout_ref.model.path.endswith("/Qwen3-1.7B-Base")
-    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/Qwen3-30B-A3B-Instruct-2507")
+    assert cfg.actor_rollout_ref.model.path.endswith("/" + _model_suffix("Qwen3-1.7B-Base"))
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(
+        "/" + _model_suffix("Qwen3-30B-A3B-Instruct-2507")
+    )
     assert cfg.distillation.execution_mode == "shared_sync" and cfg.trainer.n_gpus_per_node == 8
     assert cfg.data.apply_chat_template_kwargs.enable_thinking is None
     assert (cfg.data.max_prompt_length, cfg.data.max_response_length) == (1024, 16384)
@@ -269,8 +276,8 @@ def test_failure_training_presets_preserve_pair_protocol_and_update_budget(
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     actor, rollout = cfg.actor_rollout_ref.actor, cfg.actor_rollout_ref.rollout
-    assert cfg.actor_rollout_ref.model.path.endswith("/" + student)
-    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/" + teacher)
+    assert cfg.actor_rollout_ref.model.path.endswith("/" + _model_suffix(student))
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/" + _model_suffix(teacher))
     assert (cfg.data.max_prompt_length, cfg.data.max_response_length) == (prompt, response)
     assert rollout.max_model_len == prompt + 31744
     assert rollout.max_num_seqs == student_seqs
@@ -321,7 +328,7 @@ def test_failure_validation_selects_generator_resources_without_training(
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     model = teacher if target == "teacher" else student
-    assert cfg.actor_rollout_ref.model.path.endswith("/" + model)
+    assert cfg.actor_rollout_ref.model.path.endswith("/" + _model_suffix(model))
     assert cfg.trainer.val_only and cfg.trainer.val_before_train and cfg.trainer.save_freq == -1
     assert not cfg.distillation.enabled and cfg.distillation.n_gpus_per_node == 0
     rollout = cfg.actor_rollout_ref.rollout
@@ -515,7 +522,9 @@ def test_launcher_composes_native_single_teacher_baseline(tmp_path):
     assert not cfg.distillation.distillation_loss.use_task_rewards
     assert cfg.distillation.distillation_loss.loss_max_clamp is None
     assert [Path(p).parent.name for p in cfg.data.val_files] == ["MATH-500", "AMC23", "AIME24", "AIME25", "AIME26"]
-    assert cfg.actor_rollout_ref.model.path.endswith("models with spaces/DeepSeek-R1-Distill-Qwen-1.5B")
+    assert cfg.actor_rollout_ref.model.path == str(
+        registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=tmp_path / "models with spaces")
+    )
     assert not (tmp_path / "run").exists()
 
 
@@ -589,7 +598,7 @@ def test_domain_launchers_select_teacher_and_dataset_protocol(tmp_path, domain, 
     cfg = _config(tmp_path, script=script)
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
-    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(teacher)
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(_model_suffix(teacher))
     assert cfg.data.train_files == [str(tmp_path / "data" / train)]
     assert [Path(p).parent.name for p in cfg.data.val_files] == validation
     assert cfg.data.continuous_token.model_family == "deepseek"
@@ -751,7 +760,8 @@ def test_default_launch_uses_absolute_native_interpreter():
     expected = str(ROOT / ".venv-native/bin/python")
     assert command[0] == expected
     assert f"ray_kwargs.ray_init.runtime_env.py_executable='{expected}'" in command
-    assert f"actor_rollout_ref.model.path='{ROOT.parent / 'model/DeepSeek-R1-Distill-Qwen-1.5B'}'" in command
+    model = registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=ROOT.parent / "model")
+    assert f"actor_rollout_ref.model.path='{model}'" in command
     assert any(str(ROOT.parent / "data/math/DAPO/train.parquet") in argument for argument in command)
 
 
@@ -790,6 +800,7 @@ def test_source_archive_launch_saves_both_log_streams_and_training_exit_status(
     script.parent.mkdir(parents=True)
     shutil.copy2(entry, script)
     shutil.copytree(SCRIPT.parent / "launchers", script.parent / "launchers")
+    shutil.copytree(SCRIPT.parent / "assets", script.parent / "assets")
     datasets = {
         "math": [
             "math/DAPO/train",
@@ -908,7 +919,7 @@ def test_hope_submission_and_worker_preview_match_eight_gpu_allocation(tmp_path,
     assert cfg.ray_kwargs.ray_init.runtime_env.py_executable == native_python
     assert cfg.ray_kwargs.ray_init.runtime_env.env_vars.WANDB_MODE == "offline"
     teachers = {"math": "JustRL-DeepSeek-1.5B", "code": "DeepCoder-1.5B-Preview", "if": "UltraData-IF-1.5B"}
-    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(teachers[domain])
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(_model_suffix(teachers[domain]))
     assert not (tmp_path / "run").exists()
 
 
@@ -1032,7 +1043,7 @@ def test_full_kl_and_vanilla_presets(tmp_path, group, lr, epochs):
     assert cfg.data.seed == cfg.actor_rollout_ref.rollout.seed == cfg.actor_rollout_ref.actor.fsdp_config.seed == 42
     assert cfg.actor_rollout_ref.actor.data_loader_seed == 42
     assert cfg.data.max_response_length == 7168 and cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
-    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("JustRL-DeepSeek-1.5B")
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(_model_suffix("JustRL-DeepSeek-1.5B"))
     assert loss.advantage_source == "current" and loss.policy_loss_mode == "vanilla"
     assert not loss.use_task_rewards
     assert cfg.algorithm.rollout_correction.rollout_is is None
@@ -1154,7 +1165,7 @@ def test_standalone_validation_uses_selected_generator_without_distillation(tmp_
     cfg = _config(tmp_path, command=["bash", str(SCRIPT.parent / "run_math_validation_fsdp2.sh"), target])
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
-    assert cfg.actor_rollout_ref.model.path.endswith("/" + model)
+    assert cfg.actor_rollout_ref.model.path.endswith("/" + _model_suffix(model))
     assert not cfg.distillation.enabled and cfg.distillation.n_gpus_per_node == 0
     assert cfg.trainer.val_only and cfg.trainer.val_before_train
     assert cfg.trainer.resume_mode == "disable" and cfg.trainer.save_freq == -1
@@ -1224,7 +1235,7 @@ def test_e49_forward_preserves_e48_protocol_and_explicit_support(tmp_path):
     assert loss.full_vocab.backend == "precompute_fused"
     assert loss.full_vocab.token_chunk_size == 512
     assert loss.full_vocab.async_write and loss.full_vocab.prefetch
-    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/Polaris-7B-Preview")
+    assert cfg.distillation.teacher_models.teacher_model.model_path.endswith("/" + _model_suffix("Polaris-7B-Preview"))
     assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 64
     assert cfg.actor_rollout_ref.actor.ppo_epochs == 16
     assert cfg.trainer.total_training_steps == 256 and cfg.trainer.val_before_train
@@ -1285,3 +1296,28 @@ def test_precision_option_and_hydra_override_precedence(tmp_path):
         TRAIN_PRECISION="fp32",
     )
     assert cfg.actor_rollout_ref.actor.fsdp_config.forward_precision == "bf16"
+
+
+def test_checkpoint_store_is_canonical_and_validation_keeps_run_directory(tmp_path):
+    from examples.mirroropd.assets.paths import production_checkpoints
+
+    cfg = _config(tmp_path)
+    expected = production_checkpoints(tmp_path / "run", root=tmp_path / "models with spaces", repository=ROOT)
+    assert cfg.trainer.default_local_dir == str(expected)
+    assert cfg.trainer.validation_data_dir == str(tmp_path / "run/validation")
+    assert not expected.exists() and not (tmp_path / "run").exists()
+    cfg = _config(tmp_path, CHECKPOINT_DIR=str(tmp_path / "explicit weights"))
+    assert cfg.trainer.default_local_dir == str(tmp_path / "explicit weights")
+
+
+def test_existing_checkpoint_data_is_rejected_before_training(tmp_path):
+    checkpoint = tmp_path / "weights"
+    checkpoint.mkdir()
+    (checkpoint / "state.pt").write_bytes(b"existing")
+    result = _launch(
+        tmp_path, DRY_RUN="0", CUDA_VISIBLE_DEVICES="0,1", STUDENT_GPUS="2", CHECKPOINT_DIR=str(checkpoint)
+    )
+    assert result.returncode == 2
+    assert "already contains checkpoint data" in result.stderr
+    assert (checkpoint / "state.pt").read_bytes() == b"existing"
+    assert not (tmp_path / "run").exists()

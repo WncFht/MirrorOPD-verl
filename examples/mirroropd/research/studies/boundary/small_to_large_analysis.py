@@ -6,6 +6,7 @@ import argparse
 import math
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import resolve_location
 from examples.mirroropd.research.core.artifacts import file_hash, fingerprint
 from examples.mirroropd.research.core.io import dump, read, write_csv
 from examples.mirroropd.research.core.statistics import paired_mean_difference
@@ -81,7 +82,7 @@ def analyze(plan, partial=False):
                 loss = sum(r["stats"]["all"]["rkl"] for r in rows if r["group"] == group) / (16 * 1024)
                 max_block_error = max(max_block_error, abs(loss - history[step]["loss"]))
         assert max_entropy_error < 1e-4 and max_block_error < 1e-5
-        weights = Path(saved["weights"])
+        weights = resolve_location(saved["weights"])
         manifest = read(weights / "complete.json")
         assert manifest["step"] == run.UPDATES and manifest["support"] == run.SUPPORT
         assert read(weights / "config.json")["vocab_size"] == 152064

@@ -16,6 +16,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 
@@ -50,12 +51,12 @@ def main():
             continue
         a.teacher = target
         if stage == "initial":
-            initial = a.models / core.NAMES["student"]
+            initial = registered_model(core.NAMES["student"], root=a.models)
             records = read(a.previous / f"baseline-{target}/fresh.json")
         else:
             origin = target if stage.startswith("own") else "polaris"
             arm = a.warm_template.format(teacher=origin)
-            initial = a.previous_cache / "checkpoints" / arm
+            initial = checkpoint_path(a.previous_cache, "checkpoints") / arm
             records = read(a.previous / arm / f"fresh-{a.warm_step}.json")
         if a.panel in ["fixed", "coverage"]:
             records = read(a.previous / "bank.json")

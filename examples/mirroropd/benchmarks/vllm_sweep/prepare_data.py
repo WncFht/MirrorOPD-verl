@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
 """Export every math validation prompt using the existing rollout token builder."""
 
 import argparse
 import json
 from pathlib import Path
+
+from examples.mirroropd.assets.paths import registered_model
 
 DATASETS = {"MATH-500": 500, "AMC23": 40, "AIME25": 30}
 
@@ -60,7 +64,7 @@ def prepare(plan, model_root, data_root, output):
     expected = sum(DATASETS.values()) * plan["samples_per_prompt"]
     reports = {}
     for profile in plan["models"]:
-        path = model_root / profile["directory"]
+        path = registered_model(profile["directory"], root=model_root)
         tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True)
         cfg = AutoConfig.from_pretrained(path, local_files_only=True)
         builder = create_continuous_token_builder(

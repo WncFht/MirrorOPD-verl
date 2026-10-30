@@ -9,6 +9,7 @@ Kept independent of earlier study artifact directories.
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.cache import HiddenCache, model_identity
 from examples.mirroropd.research.core.metrics import vectors as vectors
 
@@ -20,7 +21,7 @@ KS = (8, 16, 64)
 def load(a, name, student=False):
     m = (
         AutoModelForCausalLM.from_pretrained(
-            a.models / NAMES[name],
+            registered_model(NAMES[name], root=a.models),
             dtype=torch.float32 if student else torch.bfloat16,
             attn_implementation="flash_attention_2",
             local_files_only=True,
@@ -41,7 +42,7 @@ def hidden(m, tokens):
 @torch.no_grad()
 def decode(a, student, teacher, prompts, mode, seed, cap=None):
     cap = a.cap if cap is None else cap
-    tok = AutoTokenizer.from_pretrained(a.models / NAMES["student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(NAMES["student"], root=a.models), local_files_only=True)
     tok.pad_token = tok.eos_token
     tok.padding_side = "left"
     enc = tok([r["prompt"] for r in prompts], padding=True, return_tensors="pt", add_special_tokens=False).to("cuda")

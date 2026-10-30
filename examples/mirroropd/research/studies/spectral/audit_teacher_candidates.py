@@ -12,6 +12,7 @@ from pathlib import Path
 
 import requests
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.io import dump, read
 
 ARCH_KEYS = (
@@ -84,7 +85,7 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
-    student = args.workspace / "model/DeepSeek-R1-Distill-Qwen-1.5B"
+    student = registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=args.workspace / "model")
     cfg = read(student / "config.json")
     tokens = token_map(read(student / "tokenizer.json"))
     result = {
@@ -93,13 +94,8 @@ def main():
         "local": [],
         "remote": [],
     }
-    for name in [
-        "model/JustRL-DeepSeek-1.5B",
-        "models/DeepCoder-1.5B-Preview",
-        "models/UltraData-IF-1.5B",
-        "model/Polaris-7B-Preview",
-    ]:
-        path = args.workspace / name
+    for name in ["JustRL-DeepSeek-1.5B", "DeepCoder-1.5B-Preview", "UltraData-IF-1.5B", "Polaris-7B-Preview"]:
+        path = registered_model(name, root=args.workspace / "model")
         row = {"name": name, "present": path.exists()}
         if path.exists():
             other = read(path / "config.json")

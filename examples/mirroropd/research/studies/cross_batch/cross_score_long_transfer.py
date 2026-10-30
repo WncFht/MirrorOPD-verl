@@ -10,6 +10,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.core.metrics import fixed_metrics as metrics
@@ -41,9 +42,9 @@ def main():
     output = []
     for parameter_stage in ["initial", "final"]:
         path = (
-            a.models / core.NAMES["student"]
+            registered_model(core.NAMES["student"], root=a.models)
             if parameter_stage == "initial"
-            else a.cache / "checkpoints" / a.teacher / "batch-20"
+            else checkpoint_path(a.cache, "checkpoints") / a.teacher / "batch-20"
         )
         p = (
             AutoModelForCausalLM.from_pretrained(

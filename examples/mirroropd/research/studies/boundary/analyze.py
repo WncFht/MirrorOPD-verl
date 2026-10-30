@@ -12,6 +12,7 @@ import json
 
 import numpy as np
 
+from examples.mirroropd.assets.paths import checkpoint_path
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.core.io import write_csv as csv_write
 from examples.mirroropd.research.studies.boundary.common import ARMS, CACHE, DATASETS, GROUPS, MODELS, OUT
@@ -64,7 +65,7 @@ def main():
             perf["median_" + key] = float(np.median([r[key] for r in history[1:]]))
         performance.append(perf)
         for step in [32, 64]:
-            checkpoint = read(CACHE / "checkpoints" / arm / f"step{step:03d}/complete.json")
+            checkpoint = read(checkpoint_path(CACHE, "checkpoints") / arm / f"step{step:03d}/complete.json")
             assert checkpoint["optimizer_steps"] == [step]
         initial = read(directory / "fixed-000.json")
         assert len(initial) == 256

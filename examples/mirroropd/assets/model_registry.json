@@ -1,0 +1,1351 @@
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B@ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "subfolder": null,
+      "aliases": [
+        "DeepSeek-R1-Distill-Qwen-1.5B",
+        "model/DeepSeek-R1-Distill-Qwen-1.5B",
+        "model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+        "models/DeepSeek-R1-Distill-Qwen-1.5B",
+        "r1"
+      ],
+      "path": "model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/DeepSeek-R1-Distill-Qwen-1.5B",
+          "model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "models/DeepSeek-R1-Distill-Qwen-1.5B"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+            "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+          },
+          {
+            "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+            "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "subfolder": null,
+            "evidence": "boundary/common.py"
+          },
+          {
+            "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+            "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "subfolder": null,
+            "evidence": "models/manifest.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B@916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "revision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "subfolder": null,
+      "aliases": [
+        "DeepSeek-R1-Distill-Qwen-7B",
+        "model/DeepSeek-R1-Distill-Qwen-7B",
+        "model/teacher-boundary/r7/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+        "r7"
+      ],
+      "path": "model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/DeepSeek-R1-Distill-Qwen-7B",
+          "model/teacher-boundary/r7/916b56a44061fd5cd7d6a8fb632557ed4f724f60"
+        ],
+        "identity_evidence": [
+          {
+            "revision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+            "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+          },
+          {
+            "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+            "revision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+            "subfolder": null,
+            "evidence": "boundary/common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hbx/JustRL-DeepSeek-1.5B@0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "repo": "hbx/JustRL-DeepSeek-1.5B",
+      "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "subfolder": null,
+      "aliases": [
+        "JustRL-DeepSeek-1.5B",
+        "justrl",
+        "model/JustRL-DeepSeek-1.5B",
+        "model/teacher-boundary/justrl/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+        "models/JustRL-DeepSeek-1.5B"
+      ],
+      "path": "model/hub/hbx--JustRL-DeepSeek-1.5B/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/JustRL-DeepSeek-1.5B",
+          "model/teacher-boundary/justrl/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+          "models/JustRL-DeepSeek-1.5B"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "hbx/JustRL-DeepSeek-1.5B",
+            "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+          },
+          {
+            "repo": "hbx/JustRL-DeepSeek-1.5B",
+            "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+            "subfolder": null,
+            "evidence": "boundary/common.py"
+          },
+          {
+            "repo": "hbx/JustRL-DeepSeek-1.5B",
+            "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+            "subfolder": null,
+            "evidence": "models/manifest.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "POLARIS-Project/Polaris-7B-Preview@faea72cf7123681069668e8da45c1c074e378830",
+      "repo": "POLARIS-Project/Polaris-7B-Preview",
+      "revision": "faea72cf7123681069668e8da45c1c074e378830",
+      "subfolder": null,
+      "aliases": [
+        "Polaris-7B-Preview",
+        "model/Polaris-7B-Preview",
+        "model/teacher-boundary/polaris/faea72cf7123681069668e8da45c1c074e378830",
+        "polaris"
+      ],
+      "path": "model/hub/POLARIS-Project--Polaris-7B-Preview/faea72cf7123681069668e8da45c1c074e378830",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/Polaris-7B-Preview",
+          "model/teacher-boundary/polaris/faea72cf7123681069668e8da45c1c074e378830"
+        ],
+        "identity_evidence": [
+          {
+            "revision": "faea72cf7123681069668e8da45c1c074e378830",
+            "repo": "POLARIS-Project/Polaris-7B-Preview"
+          },
+          {
+            "repo": "POLARIS-Project/Polaris-7B-Preview",
+            "revision": "faea72cf7123681069668e8da45c1c074e378830",
+            "subfolder": null,
+            "evidence": "boundary/common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen3-1.7B@70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-1.7B",
+        "model/Qwen3-1.7B",
+        "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
+      ],
+      "path": "model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/Qwen3-1.7B",
+          "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Qwen/Qwen3-1.7B",
+            "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
+          },
+          {
+            "repo": "Qwen/Qwen3-1.7B",
+            "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen3-1.7B-Base@ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "repo": "Qwen/Qwen3-1.7B-Base",
+      "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-1.7B-Base",
+        "model/Qwen3-1.7B-Base",
+        "model/teacher-study/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1"
+      ],
+      "path": "model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/Qwen3-1.7B-Base",
+          "model/teacher-study/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1"
+        ],
+        "identity_evidence": [
+          {
+            "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+            "repo": "Qwen/Qwen3-1.7B-Base"
+          },
+          {
+            "repo": "Qwen/Qwen3-1.7B-Base",
+            "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen3-30B-A3B-Instruct-2507@0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "repo": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "revision": "0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-30B-A3B-Instruct-2507",
+        "model/Qwen3-30B-A3B-Instruct-2507"
+      ],
+      "path": "model/hub/Qwen--Qwen3-30B-A3B-Instruct-2507/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/Qwen3-30B-A3B-Instruct-2507"
+        ],
+        "identity_evidence": [
+          {
+            "revision": "0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+            "repo": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+            "evidence": "assets/check_assets.py MODELS + README + HF config.json.metadata"
+          }
+        ],
+        "repo_correction_evidence": [
+          "examples/mirroropd/assets/check_assets.py MODELS",
+          "README.md",
+          "HF config.json.metadata"
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen3-4B@1cfa9a7208912126459214e8b04321603b3df60c",
+      "repo": "Qwen/Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-4B",
+        "model/Qwen3-4B",
+        "model/teacher-study/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c"
+      ],
+      "path": "model/hub/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/Qwen3-4B",
+          "model/teacher-study/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Qwen/Qwen3-4B",
+            "revision": "1cfa9a7208912126459214e8b04321603b3df60c"
+          },
+          {
+            "repo": "Qwen/Qwen3-4B",
+            "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen3-4B-Instruct-2507@cdbee75f17c01a7cc42f958dc650907174af0554",
+      "repo": "Qwen/Qwen3-4B-Instruct-2507",
+      "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-4B-Instruct-2507",
+        "model/Qwen3-4B-Instruct-2507",
+        "model/teacher-study/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554"
+      ],
+      "path": "model/hub/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/Qwen3-4B-Instruct-2507",
+          "model/teacher-study/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554"
+        ],
+        "identity_evidence": [
+          {
+            "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+            "repo": "Qwen/Qwen3-4B-Instruct-2507"
+          },
+          {
+            "repo": "Qwen/Qwen3-4B-Instruct-2507",
+            "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen3-8B@b968826d9c46dd6066d109eabc6255188de91218",
+      "repo": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-8B",
+        "model/Qwen3-8B",
+        "model/teacher-study/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218"
+      ],
+      "path": "model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/Qwen3-8B",
+          "model/teacher-study/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Qwen/Qwen3-8B",
+            "revision": "b968826d9c46dd6066d109eabc6255188de91218"
+          },
+          {
+            "repo": "Qwen/Qwen3-8B",
+            "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B@3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "revision": "3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "subfolder": null,
+      "aliases": [
+        "brorl",
+        "model/teacher-boundary/brorl/3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+      ],
+      "path": "model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-boundary/brorl/3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "revision": "3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+            "subfolder": null,
+            "evidence": "boundary/round2_common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "agentica-org/DeepCoder-1.5B-Preview@103033da54f104b0d0a3570547fb3721fba99962",
+      "repo": "agentica-org/DeepCoder-1.5B-Preview",
+      "revision": "103033da54f104b0d0a3570547fb3721fba99962",
+      "subfolder": null,
+      "aliases": [
+        "deepcoder",
+        "model/teacher-boundary/deepcoder/103033da54f104b0d0a3570547fb3721fba99962"
+      ],
+      "path": "model/hub/agentica-org--DeepCoder-1.5B-Preview/103033da54f104b0d0a3570547fb3721fba99962",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-boundary/deepcoder/103033da54f104b0d0a3570547fb3721fba99962"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "agentica-org/DeepCoder-1.5B-Preview",
+            "revision": "103033da54f104b0d0a3570547fb3721fba99962",
+            "subfolder": null,
+            "evidence": "boundary/round2_common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "agentica-org/DeepScaleR-1.5B-Preview@e3f524ce413a296b4d388e7560dd5c82c1c56725",
+      "repo": "agentica-org/DeepScaleR-1.5B-Preview",
+      "revision": "e3f524ce413a296b4d388e7560dd5c82c1c56725",
+      "subfolder": null,
+      "aliases": [
+        "DeepScaleR-1.5B-Preview",
+        "deepscaler",
+        "model/teacher-boundary/deepscaler/e3f524ce413a296b4d388e7560dd5c82c1c56725"
+      ],
+      "path": "model/hub/agentica-org--DeepScaleR-1.5B-Preview/e3f524ce413a296b4d388e7560dd5c82c1c56725",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-boundary/deepscaler/e3f524ce413a296b4d388e7560dd5c82c1c56725"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "agentica-org/DeepScaleR-1.5B-Preview",
+            "revision": "e3f524ce413a296b4d388e7560dd5c82c1c56725",
+            "subfolder": null,
+            "evidence": "boundary/round2_common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qihoo360/Light-R1-7B-DS@06c9338cdbec28416e15f28a325b1439729ec237",
+      "repo": "qihoo360/Light-R1-7B-DS",
+      "revision": "06c9338cdbec28416e15f28a325b1439729ec237",
+      "subfolder": null,
+      "aliases": [
+        "Light-R1-7B-DS",
+        "light",
+        "model/teacher-boundary/light/06c9338cdbec28416e15f28a325b1439729ec237"
+      ],
+      "path": "model/hub/qihoo360--Light-R1-7B-DS/06c9338cdbec28416e15f28a325b1439729ec237",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-boundary/light/06c9338cdbec28416e15f28a325b1439729ec237"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "qihoo360/Light-R1-7B-DS",
+            "revision": "06c9338cdbec28416e15f28a325b1439729ec237",
+            "subfolder": null,
+            "evidence": "boundary/common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen2.5-Math-1.5B@4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2",
+      "repo": "Qwen/Qwen2.5-Math-1.5B",
+      "revision": "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2",
+      "subfolder": null,
+      "aliases": [
+        "Qwen2.5-Math-1.5B",
+        "math15",
+        "model/teacher-boundary/math15/4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2"
+      ],
+      "path": "model/hub/Qwen--Qwen2.5-Math-1.5B/4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-boundary/math15/4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Qwen/Qwen2.5-Math-1.5B",
+            "revision": "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2",
+            "subfolder": null,
+            "evidence": "boundary/round2_common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "oumi-ai/MiniMath-R1-1.5B@9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "repo": "oumi-ai/MiniMath-R1-1.5B",
+      "revision": "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "subfolder": null,
+      "aliases": [
+        "MiniMath-R1-1.5B",
+        "minimath",
+        "model/teacher-boundary/minimath/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+      ],
+      "path": "model/hub/oumi-ai--MiniMath-R1-1.5B/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-boundary/minimath/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "oumi-ai/MiniMath-R1-1.5B",
+            "revision": "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+            "subfolder": null,
+            "evidence": "boundary/common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B@b89048893f95246c6b5749b287f0049e6df42ee9",
+      "repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "revision": "b89048893f95246c6b5749b287f0049e6df42ee9",
+      "subfolder": null,
+      "aliases": [
+        "model/teacher-boundary/nemotron/b89048893f95246c6b5749b287f0049e6df42ee9",
+        "nemotron"
+      ],
+      "path": "model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/b89048893f95246c6b5749b287f0049e6df42ee9",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-boundary/nemotron/b89048893f95246c6b5749b287f0049e6df42ee9"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "revision": "b89048893f95246c6b5749b287f0049e6df42ee9",
+            "subfolder": null,
+            "evidence": "boundary/common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Skywork/Skywork-OR1-Math-7B@fcef970f1d10682f13c182b280146a194ed57d1e",
+      "repo": "Skywork/Skywork-OR1-Math-7B",
+      "revision": "fcef970f1d10682f13c182b280146a194ed57d1e",
+      "subfolder": null,
+      "aliases": [
+        "Skywork-OR1-Math-7B",
+        "model/teacher-boundary/skywork/fcef970f1d10682f13c182b280146a194ed57d1e",
+        "skywork"
+      ],
+      "path": "model/hub/Skywork--Skywork-OR1-Math-7B/fcef970f1d10682f13c182b280146a194ed57d1e",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-boundary/skywork/fcef970f1d10682f13c182b280146a194ed57d1e"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Skywork/Skywork-OR1-Math-7B",
+            "revision": "fcef970f1d10682f13c182b280146a194ed57d1e",
+            "subfolder": null,
+            "evidence": "boundary/common.py"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CMU-AIRe/e3-1.7B@6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "repo": "CMU-AIRe/e3-1.7B",
+      "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "subfolder": null,
+      "aliases": [
+        "e3-1.7B",
+        "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df"
+      ],
+      "path": "model/hub/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "CMU-AIRe/e3-1.7B",
+            "revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "POLARIS-Project/Polaris-4B-Preview@dcab747284e6f4818d8a871315f63dc1223ee394",
+      "repo": "POLARIS-Project/Polaris-4B-Preview",
+      "revision": "dcab747284e6f4818d8a871315f63dc1223ee394",
+      "subfolder": null,
+      "aliases": [
+        "Polaris-4B-Preview",
+        "model/teacher-study/POLARIS-Project--Polaris-4B-Preview/dcab747284e6f4818d8a871315f63dc1223ee394"
+      ],
+      "path": "model/hub/POLARIS-Project--Polaris-4B-Preview/dcab747284e6f4818d8a871315f63dc1223ee394",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/POLARIS-Project--Polaris-4B-Preview/dcab747284e6f4818d8a871315f63dc1223ee394"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "POLARIS-Project/Polaris-4B-Preview",
+            "revision": "dcab747284e6f4818d8a871315f63dc1223ee394",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen3-0.6B@c1899de289a04d12100db370d81485cdf75e47ca",
+      "repo": "Qwen/Qwen3-0.6B",
+      "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-0.6B",
+        "model/teacher-study/Qwen--Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca"
+      ],
+      "path": "model/hub/Qwen--Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/Qwen--Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Qwen/Qwen3-0.6B",
+            "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen3-4B-Thinking-2507@768f209d9ea81521153ed38c47d515654e938aea",
+      "repo": "Qwen/Qwen3-4B-Thinking-2507",
+      "revision": "768f209d9ea81521153ed38c47d515654e938aea",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-4B-Thinking-2507",
+        "model/teacher-study/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea"
+      ],
+      "path": "model/hub/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Qwen/Qwen3-4B-Thinking-2507",
+            "revision": "768f209d9ea81521153ed38c47d515654e938aea",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full@66feb54e931c27285afc344645bf0961053ea29b",
+      "repo": "Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full",
+      "revision": "66feb54e931c27285afc344645bf0961053ea29b",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.2-3B-Instruct-arithmetic-full",
+        "model/teacher-study/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b"
+      ],
+      "path": "model/hub/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full",
+            "revision": "66feb54e931c27285afc344645bf0961053ea29b",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "SamsungSAILMontreal/Qwen3-1.7B-Math@6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+      "revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-1.7B-Math",
+        "model/teacher-study/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542"
+      ],
+      "path": "model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+            "revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH@0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "repo": "TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+      "revision": "0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "subfolder": null,
+      "aliases": [
+        "Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+        "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437"
+      ],
+      "path": "model/hub/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+            "revision": "0d1e2f5ca0f62c670853c59b97650abde3608437",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH@5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "repo": "TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+      "revision": "5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "subfolder": null,
+      "aliases": [
+        "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec"
+      ],
+      "path": "model/hub/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "TMLR-Group-HF/Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+            "revision": "5d3c87b84144073a4552d786d3d97288d6c7abec",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH@381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "repo": "TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+      "revision": "381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "subfolder": null,
+      "aliases": [
+        "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "model/teacher-study/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82"
+      ],
+      "path": "model/hub/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "TMLR-Group-HF/Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+            "revision": "381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH@b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "repo": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH",
+      "revision": "b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "subfolder": null,
+      "aliases": [
+        "GT-Llama-3.2-3B-Instruct-MATH",
+        "model/teacher-study/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9"
+      ],
+      "path": "model/hub/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH",
+            "revision": "b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH@679b8b3a531200f6748eb782c265c83a58b1417d",
+      "repo": "TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH",
+      "revision": "679b8b3a531200f6748eb782c265c83a58b1417d",
+      "subfolder": null,
+      "aliases": [
+        "GT-Qwen3-1.7B-Base-MATH",
+        "model/teacher-study/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d"
+      ],
+      "path": "model/hub/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "TMLR-Group-HF/GT-Qwen3-1.7B-Base-MATH",
+            "revision": "679b8b3a531200f6748eb782c265c83a58b1417d",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Thinking-Space/Qwen3-1.7B-Base-OPD@4ad294531545b51fbcfbd1b0ded387ba237db57c",
+      "repo": "Thinking-Space/Qwen3-1.7B-Base-OPD",
+      "revision": "4ad294531545b51fbcfbd1b0ded387ba237db57c",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-1.7B-Base-OPD",
+        "model/teacher-study/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c"
+      ],
+      "path": "model/hub/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Thinking-Space/Qwen3-1.7B-Base-OPD",
+            "revision": "4ad294531545b51fbcfbd1b0ded387ba237db57c",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Thinking-Space/Qwen3-1.7B-SFT@f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "repo": "Thinking-Space/Qwen3-1.7B-SFT",
+      "revision": "f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-1.7B-SFT",
+        "model/teacher-study/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266"
+      ],
+      "path": "model/hub/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Thinking-Space/Qwen3-1.7B-SFT",
+            "revision": "f0065babe7440257d7db331a5aa442ef7c3cf266",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Thinking-Space/Qwen3-4B-Base-GRPO@1f3b2966edfb75f2f98a00617588c1f748088422",
+      "repo": "Thinking-Space/Qwen3-4B-Base-GRPO",
+      "revision": "1f3b2966edfb75f2f98a00617588c1f748088422",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-4B-Base-GRPO",
+        "model/teacher-study/Thinking-Space--Qwen3-4B-Base-GRPO/1f3b2966edfb75f2f98a00617588c1f748088422"
+      ],
+      "path": "model/hub/Thinking-Space--Qwen3-4B-Base-GRPO/1f3b2966edfb75f2f98a00617588c1f748088422",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/Thinking-Space--Qwen3-4B-Base-GRPO/1f3b2966edfb75f2f98a00617588c1f748088422"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Thinking-Space/Qwen3-4B-Base-GRPO",
+            "revision": "1f3b2966edfb75f2f98a00617588c1f748088422",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "allenai/Llama-3.1-Tulu-3-8B@666943798adbde0b1aff34626007e26986a3c107",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B",
+      "revision": "666943798adbde0b1aff34626007e26986a3c107",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.1-Tulu-3-8B",
+        "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107"
+      ],
+      "path": "model/hub/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "allenai/Llama-3.1-Tulu-3-8B",
+            "revision": "666943798adbde0b1aff34626007e26986a3c107",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "allenai/Llama-3.1-Tulu-3-8B-DPO@a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+      "revision": "a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.1-Tulu-3-8B-DPO",
+        "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db"
+      ],
+      "path": "model/hub/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+            "revision": "a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "allenai/Llama-3.1-Tulu-3-8B-SFT@f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "repo": "allenai/Llama-3.1-Tulu-3-8B-SFT",
+      "revision": "f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.1-Tulu-3-8B-SFT",
+        "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d"
+      ],
+      "path": "model/hub/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "allenai/Llama-3.1-Tulu-3-8B-SFT",
+            "revision": "f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo@d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+      "repo": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo",
+      "revision": "d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.1-8B-SimpleRL-Zoo",
+        "model/teacher-study/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9"
+      ],
+      "path": "model/hub/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "hkust-nlp/Llama-3.1-8B-SimpleRL-Zoo",
+            "revision": "d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256@aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "subfolder": "step640",
+      "aliases": [
+        "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
+        "step640"
+      ],
+      "path": "model/hub/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+            "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+            "subfolder": "step640",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256@aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+      "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+      "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+      "subfolder": "step80",
+      "aliases": [
+        "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+        "step80"
+      ],
+      "path": "model/hub/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "jasonrqh/Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256",
+            "revision": "aaf1c51a6a2ee319750cafbd7cb8be0df10018b8",
+            "subfolder": "step80",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning@851ee853018af52495d73a95e3de51470af6f17b",
+      "repo": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning",
+      "revision": "851ee853018af52495d73a95e3de51470af6f17b",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3-1.7B-GRPO-KL-math-reasoning",
+        "model/teacher-study/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b"
+      ],
+      "path": "model/hub/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning",
+            "revision": "851ee853018af52495d73a95e3de51470af6f17b",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1@54641c1611fcff44fa4865626462445e0a153fc7",
+      "repo": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1",
+      "revision": "54641c1611fcff44fa4865626462445e0a153fc7",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.1-Nemotron-Nano-8B-v1",
+        "model/teacher-study/nvidia--Llama-3.1-Nemotron-Nano-8B-v1/54641c1611fcff44fa4865626462445e0a153fc7"
+      ],
+      "path": "model/hub/nvidia--Llama-3.1-Nemotron-Nano-8B-v1/54641c1611fcff44fa4865626462445e0a153fc7",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/nvidia--Llama-3.1-Nemotron-Nano-8B-v1/54641c1611fcff44fa4865626462445e0a153fc7"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1",
+            "revision": "54641c1611fcff44fa4865626462445e0a153fc7",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tocsa/qwen3-1.7b-rlvr-gsm8k@64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "repo": "tocsa/qwen3-1.7b-rlvr-gsm8k",
+      "revision": "64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "subfolder": null,
+      "aliases": [
+        "model/teacher-study/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+        "qwen3-1.7b-rlvr-gsm8k"
+      ],
+      "path": "model/hub/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "tocsa/qwen3-1.7b-rlvr-gsm8k",
+            "revision": "64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "unsloth/Llama-3.1-8B-Instruct@4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+      "repo": "unsloth/Llama-3.1-8B-Instruct",
+      "revision": "4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.1-8B-Instruct",
+        "model/teacher-study/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5"
+      ],
+      "path": "model/hub/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "unsloth/Llama-3.1-8B-Instruct",
+            "revision": "4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "unsloth/Llama-3.2-1B-Instruct@5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+      "repo": "unsloth/Llama-3.2-1B-Instruct",
+      "revision": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.2-1B-Instruct",
+        "model/teacher-study/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c"
+      ],
+      "path": "model/hub/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "unsloth/Llama-3.2-1B-Instruct",
+            "revision": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "unsloth/Llama-3.2-3B-Instruct@006f5dcd1393c3add266de40994ba96225e9689d",
+      "repo": "unsloth/Llama-3.2-3B-Instruct",
+      "revision": "006f5dcd1393c3add266de40994ba96225e9689d",
+      "subfolder": null,
+      "aliases": [
+        "Llama-3.2-3B-Instruct",
+        "model/teacher-study/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d"
+      ],
+      "path": "model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "model/teacher-study/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "unsloth/Llama-3.2-3B-Instruct",
+            "revision": "006f5dcd1393c3add266de40994ba96225e9689d",
+            "evidence": "complete.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "agentica-org/DeepCoder-1.5B-Preview@content-6ef80da36dc00f88bdbdef440f7f6f8e5a15ad04702d428ea13f2aa6d65e683f",
+      "repo": "agentica-org/DeepCoder-1.5B-Preview",
+      "revision": "content-6ef80da36dc00f88bdbdef440f7f6f8e5a15ad04702d428ea13f2aa6d65e683f",
+      "subfolder": null,
+      "aliases": [
+        "DeepCoder-1.5B-Preview",
+        "models/DeepCoder-1.5B-Preview"
+      ],
+      "path": "model/hub/agentica-org--DeepCoder-1.5B-Preview/content-6ef80da36dc00f88bdbdef440f7f6f8e5a15ad04702d428ea13f2aa6d65e683f",
+      "origin": {
+        "kind": "local-content",
+        "sources": [
+          "models/DeepCoder-1.5B-Preview"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "agentica-org/DeepCoder-1.5B-Preview",
+            "provider": "ModelScope public mirror linked by fixed One-Shot data/prep recipe",
+            "evidence": "model-source.json",
+            "local_content_id": "local-1140df003a20140d",
+            "revision": "content-6ef80da36dc00f88bdbdef440f7f6f8e5a15ad04702d428ea13f2aa6d65e683f",
+            "revision_kind": "local-content"
+          }
+        ]
+      }
+    },
+    {
+      "id": "local/Qwen3.5-27B@content-098862dcf2903ada906254fc98872609f360ca6dad353a8fda759ffdb44c4f8d",
+      "repo": "local/Qwen3.5-27B",
+      "revision": "content-098862dcf2903ada906254fc98872609f360ca6dad353a8fda759ffdb44c4f8d",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3.5-27B",
+        "models/Qwen3.5-27B"
+      ],
+      "path": "model/hub/local--Qwen3.5-27B/content-098862dcf2903ada906254fc98872609f360ca6dad353a8fda759ffdb44c4f8d",
+      "origin": {
+        "kind": "local-content",
+        "sources": [
+          "models/Qwen3.5-27B"
+        ],
+        "identity_evidence": [
+          {
+            "repo_hint": "Qwen/Qwen3.5-27B",
+            "status": "No pinned provider/revision metadata found; verify source or use local content identity",
+            "repo": "local/Qwen3.5-27B",
+            "revision": "content-098862dcf2903ada906254fc98872609f360ca6dad353a8fda759ffdb44c4f8d",
+            "revision_kind": "local-content"
+          }
+        ]
+      }
+    },
+    {
+      "id": "local/Qwen3.8-27B@content-0806f076d4693edb63d1458d053dcc19c6caa4767f3a5c9c83284b108b0428a5",
+      "repo": "local/Qwen3.8-27B",
+      "revision": "content-0806f076d4693edb63d1458d053dcc19c6caa4767f3a5c9c83284b108b0428a5",
+      "subfolder": null,
+      "aliases": [
+        "Qwen3.8-27B",
+        "models/Qwen3.8-27B"
+      ],
+      "path": "model/hub/local--Qwen3.8-27B/content-0806f076d4693edb63d1458d053dcc19c6caa4767f3a5c9c83284b108b0428a5",
+      "origin": {
+        "kind": "local-content",
+        "sources": [
+          "models/Qwen3.8-27B"
+        ],
+        "identity_evidence": [
+          {
+            "repo_hint": "Qwen/Qwen3.8-27B",
+            "status": "No pinned provider/revision metadata found; verify source or use local content identity",
+            "repo": "local/Qwen3.8-27B",
+            "revision": "content-0806f076d4693edb63d1458d053dcc19c6caa4767f3a5c9c83284b108b0428a5",
+            "revision_kind": "local-content"
+          }
+        ]
+      }
+    },
+    {
+      "id": "Thinking-Space/UltraData-IF-1.5B@be67d8ba9be0b9f405da4481f7dab1045a0256e1",
+      "repo": "Thinking-Space/UltraData-IF-1.5B",
+      "revision": "be67d8ba9be0b9f405da4481f7dab1045a0256e1",
+      "subfolder": null,
+      "aliases": [
+        "UltraData-IF-1.5B",
+        "models/UltraData-IF-1.5B"
+      ],
+      "path": "model/hub/Thinking-Space--UltraData-IF-1.5B/be67d8ba9be0b9f405da4481f7dab1045a0256e1",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "models/UltraData-IF-1.5B"
+        ],
+        "identity_evidence": [
+          {
+            "repo": "Thinking-Space/UltraData-IF-1.5B",
+            "provider": null,
+            "evidence": "model-source.json",
+            "revision": "be67d8ba9be0b9f405da4481f7dab1045a0256e1"
+          }
+        ]
+      }
+    }
+  ],
+  "locations": {
+    "model/DeepSeek-R1-Distill-Qwen-1.5B": "model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562": "model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "models/DeepSeek-R1-Distill-Qwen-1.5B": "model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "model/DeepSeek-R1-Distill-Qwen-7B": "model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+    "model/teacher-boundary/r7/916b56a44061fd5cd7d6a8fb632557ed4f724f60": "model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+    "model/JustRL-DeepSeek-1.5B": "model/hub/hbx--JustRL-DeepSeek-1.5B/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+    "model/teacher-boundary/justrl/0637e4096c789c67f9eecbe8355e0bdeddede1c2": "model/hub/hbx--JustRL-DeepSeek-1.5B/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+    "models/JustRL-DeepSeek-1.5B": "model/hub/hbx--JustRL-DeepSeek-1.5B/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+    "model/Polaris-7B-Preview": "model/hub/POLARIS-Project--Polaris-7B-Preview/faea72cf7123681069668e8da45c1c074e378830",
+    "model/teacher-boundary/polaris/faea72cf7123681069668e8da45c1c074e378830": "model/hub/POLARIS-Project--Polaris-7B-Preview/faea72cf7123681069668e8da45c1c074e378830",
+    "model/Qwen3-1.7B": "model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "model/teacher-study/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e": "model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "model/Qwen3-1.7B-Base": "model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "model/teacher-study/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1": "model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "model/Qwen3-30B-A3B-Instruct-2507": "model/hub/Qwen--Qwen3-30B-A3B-Instruct-2507/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+    "model/Qwen3-4B": "model/hub/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+    "model/teacher-study/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c": "model/hub/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+    "model/Qwen3-4B-Instruct-2507": "model/hub/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554",
+    "model/teacher-study/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554": "model/hub/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554",
+    "model/Qwen3-8B": "model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+    "model/teacher-study/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218": "model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+    "model/teacher-boundary/brorl/3441fcdf8c6e81a2959e6352ff50122e3c677d72": "model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+    "model/teacher-boundary/deepcoder/103033da54f104b0d0a3570547fb3721fba99962": "model/hub/agentica-org--DeepCoder-1.5B-Preview/103033da54f104b0d0a3570547fb3721fba99962",
+    "model/teacher-boundary/deepscaler/e3f524ce413a296b4d388e7560dd5c82c1c56725": "model/hub/agentica-org--DeepScaleR-1.5B-Preview/e3f524ce413a296b4d388e7560dd5c82c1c56725",
+    "model/teacher-boundary/light/06c9338cdbec28416e15f28a325b1439729ec237": "model/hub/qihoo360--Light-R1-7B-DS/06c9338cdbec28416e15f28a325b1439729ec237",
+    "model/teacher-boundary/math15/4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2": "model/hub/Qwen--Qwen2.5-Math-1.5B/4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2",
+    "model/teacher-boundary/minimath/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998": "model/hub/oumi-ai--MiniMath-R1-1.5B/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+    "model/teacher-boundary/nemotron/b89048893f95246c6b5749b287f0049e6df42ee9": "model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/b89048893f95246c6b5749b287f0049e6df42ee9",
+    "model/teacher-boundary/skywork/fcef970f1d10682f13c182b280146a194ed57d1e": "model/hub/Skywork--Skywork-OR1-Math-7B/fcef970f1d10682f13c182b280146a194ed57d1e",
+    "model/teacher-study/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df": "model/hub/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+    "model/teacher-study/POLARIS-Project--Polaris-4B-Preview/dcab747284e6f4818d8a871315f63dc1223ee394": "model/hub/POLARIS-Project--Polaris-4B-Preview/dcab747284e6f4818d8a871315f63dc1223ee394",
+    "model/teacher-study/Qwen--Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca": "model/hub/Qwen--Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca",
+    "model/teacher-study/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea": "model/hub/Qwen--Qwen3-4B-Thinking-2507/768f209d9ea81521153ed38c47d515654e938aea",
+    "model/teacher-study/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b": "model/hub/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b",
+    "model/teacher-study/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542": "model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+    "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437": "model/hub/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437",
+    "model/teacher-study/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec": "model/hub/TMLR-Group-HF--Co-rewarding-I-Qwen3-1.7B-Base-MATH/5d3c87b84144073a4552d786d3d97288d6c7abec",
+    "model/teacher-study/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82": "model/hub/TMLR-Group-HF--Co-rewarding-II-Qwen3-1.7B-Base-MATH/381b27483332657dfae6f82ecfaa5fb7ddfb2d82",
+    "model/teacher-study/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9": "model/hub/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+    "model/teacher-study/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d": "model/hub/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d",
+    "model/teacher-study/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c": "model/hub/Thinking-Space--Qwen3-1.7B-Base-OPD/4ad294531545b51fbcfbd1b0ded387ba237db57c",
+    "model/teacher-study/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266": "model/hub/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+    "model/teacher-study/Thinking-Space--Qwen3-4B-Base-GRPO/1f3b2966edfb75f2f98a00617588c1f748088422": "model/hub/Thinking-Space--Qwen3-4B-Base-GRPO/1f3b2966edfb75f2f98a00617588c1f748088422",
+    "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107": "model/hub/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
+    "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db": "model/hub/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+    "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d": "model/hub/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+    "model/teacher-study/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9": "model/hub/hkust-nlp--Llama-3.1-8B-SimpleRL-Zoo/d6e668fcf8db53ff55cc39cf347b3494f56dc7e9",
+    "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640": "model/hub/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step640",
+    "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80": "model/hub/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/step80",
+    "model/teacher-study/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b": "model/hub/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+    "model/teacher-study/nvidia--Llama-3.1-Nemotron-Nano-8B-v1/54641c1611fcff44fa4865626462445e0a153fc7": "model/hub/nvidia--Llama-3.1-Nemotron-Nano-8B-v1/54641c1611fcff44fa4865626462445e0a153fc7",
+    "model/teacher-study/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7": "model/hub/tocsa--qwen3-1.7b-rlvr-gsm8k/64c6aeecce36cf445d496ef0cc86d6164c52aec7",
+    "model/teacher-study/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5": "model/hub/unsloth--Llama-3.1-8B-Instruct/4699cc75b550f9c6f3173fb80f4703b62d946aa5",
+    "model/teacher-study/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c": "model/hub/unsloth--Llama-3.2-1B-Instruct/5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+    "model/teacher-study/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d": "model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+    "models/DeepCoder-1.5B-Preview": "model/hub/agentica-org--DeepCoder-1.5B-Preview/content-6ef80da36dc00f88bdbdef440f7f6f8e5a15ad04702d428ea13f2aa6d65e683f",
+    "models/Qwen3.5-27B": "model/hub/local--Qwen3.5-27B/content-098862dcf2903ada906254fc98872609f360ca6dad353a8fda759ffdb44c4f8d",
+    "models/Qwen3.8-27B": "model/hub/local--Qwen3.8-27B/content-0806f076d4693edb63d1458d053dcc19c6caa4767f3a5c9c83284b108b0428a5",
+    "models/UltraData-IF-1.5B": "model/hub/Thinking-Space--UltraData-IF-1.5B/be67d8ba9be0b9f405da4481f7dab1045a0256e1",
+    "wandb-logs/derived/MirrorOPD-verl/batch-size-stage-20261027/checkpoints": "model/checkpoints/batch-size-stage-20261027/checkpoints",
+    "wandb-logs/derived/MirrorOPD-verl/batch-transfer-20261027/checkpoints": "model/checkpoints/batch-transfer-20261027/checkpoints",
+    "wandb-logs/derived/MirrorOPD-verl/filter-hypothesis-20261027/checkpoints": "model/checkpoints/filter-hypothesis-20261027/checkpoints",
+    "wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030/models": "model/checkpoints/r1-samesize-deterministic320-20261030/models",
+    "wandb-logs/derived/MirrorOPD-verl/teacher-boundary-20261028/checkpoints": "model/checkpoints/teacher-boundary-20261028/checkpoints",
+    "wandb-logs/derived/MirrorOPD-verl/teacher-boundary-20261029/models": "model/checkpoints/teacher-boundary-20261029/models",
+    "wandb-logs/derived/MirrorOPD-verl/teacher-boundary-small-to-large-20261029/checkpoints": "model/checkpoints/teacher-boundary-small-to-large-20261029/checkpoints",
+    "wandb-logs/derived/MirrorOPD-verl/teacher-boundary-small-to-large-deterministic320-20261030/checkpoints": "model/checkpoints/teacher-boundary-small-to-large-deterministic320-20261030/checkpoints",
+    "wandb-logs/derived/MirrorOPD-verl/teacher-boundary-small-to-large-deterministic640-20261030/checkpoints": "model/checkpoints/teacher-boundary-small-to-large-deterministic640-20261030/checkpoints",
+    "wandb-logs/derived/MirrorOPD-verl/teacher-studies/checkpoints": "model/checkpoints/teacher-studies/checkpoints",
+    "wandb-logs/derived/MirrorOPD-verl/twenty-batch-pass-20261027/checkpoints": "model/checkpoints/twenty-batch-pass-20261027/checkpoints",
+    "models/manifest.json": "model/migrations/2026-10-30-model-assets/provenance/models-manifest.json",
+    "model/teacher-boundary/round2-metadata": "model/metadata/teacher-boundary/round2-metadata",
+    "model/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/.cache": "model/metadata/teacher-study/jasonrqh--Qwen3-4B_Math-CoT-20k_lr5e-5_ep8_bs256/aaf1c51a6a2ee319750cafbd7cb8be0df10018b8/.cache",
+    "MirrorOPD-verl/outputs/e41-base4b-20step-20261026-hppk13/diagnosis/student-step20": "model/checkpoints/production/e41-base4b-20step-20261026-hppk13/diagnosis/student-step20",
+    "MirrorOPD-verl/outputs/e41-stop-equivalence-20step-20261026-hppk13/diagnosis/student-step20": "model/checkpoints/production/e41-stop-equivalence-20step-20261026-hppk13/diagnosis/student-step20",
+    "MirrorOPD-verl/outputs/eos-protocol-20261024/base-chatml": "model/checkpoints/production/eos-protocol-20261024/base-chatml",
+    "MirrorOPD-verl/outputs/fusion-final-20261028-dense-current/checkpoints": "model/checkpoints/production/fusion-final-20261028-dense-current/checkpoints",
+    "MirrorOPD-verl/outputs/fusion-final-20261028-dense-current-resume/checkpoints": "model/checkpoints/production/fusion-final-20261028-dense-current-resume/checkpoints",
+    "MirrorOPD-verl/outputs/fusion-token-current-native-03/checkpoints": "model/checkpoints/production/fusion-token-current-native-03/checkpoints",
+    "MirrorOPD-verl/outputs/fusion-token-initial-01/checkpoints": "model/checkpoints/production/fusion-token-initial-01/checkpoints",
+    "MirrorOPD-verl/outputs/mirror-deep-debug-20261026/fp16-warm/warm-checkpoint": "model/checkpoints/production/mirror-deep-debug-20261026/fp16-warm/warm-checkpoint",
+    "MirrorOPD-verl/outputs/mirror-kl-review-20261026/fixed-prefix/warm-checkpoint": "model/checkpoints/production/mirror-kl-review-20261026/fixed-prefix/warm-checkpoint",
+    "MirrorOPD-verl/outputs/mirror-kl-review-20261026/fp32-adapt/warm-checkpoint": "model/checkpoints/production/mirror-kl-review-20261026/fp32-adapt/warm-checkpoint",
+    "MirrorOPD-verl/outputs/mirror-solvers-20261027/second-state/warm-checkpoint": "model/checkpoints/production/mirror-solvers-20261027/second-state/warm-checkpoint",
+    "MirrorOPD-verl/outputs/opd-precision-transfer-20261027/adam-confirm/checkpoint-arm0": "model/checkpoints/production/opd-precision-transfer-20261027/adam-confirm/checkpoint-arm0",
+    "MirrorOPD-verl/outputs/polaris-transfer-cache/intersection-study-20261027/checkpoints": "model/checkpoints/production/polaris-transfer-cache/intersection-study-20261027/checkpoints"
+  }
+}

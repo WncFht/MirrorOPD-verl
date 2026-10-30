@@ -20,6 +20,7 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.core.metrics import distances
@@ -32,7 +33,7 @@ def prepare(a):
     assert len(mathrows) == 64
     for i, r in enumerate(mathrows):
         bank.append(dict(r, id=i, origin_id=r["id"], group="ABCD"[i // 16], split="train", source="fixed-s0"))
-    tok = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(core.NAMES["student"], root=a.models), local_files_only=True)
     norm = lambda s: re.sub(r"\s+", " ", s).strip()
     excluded = {norm(r["prompt"]) for r in read(a.previous / "prompts.json")}
     raw = pq.read_table(a.data / "math/DAPO/train.parquet").to_pylist()
@@ -97,7 +98,7 @@ def prepare(a):
 @torch.no_grad()
 def generate(a):
     prompts = read(a.out / "new-prompts.json")
-    tok = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(core.NAMES["student"], root=a.models), local_files_only=True)
     tok.pad_token = tok.eos_token
     tok.padding_side = "left"
     model = core.load(a, "student")
@@ -130,7 +131,7 @@ def generate(a):
 
 
 def prepare_rich(a):
-    tok = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(core.NAMES["student"], root=a.models), local_files_only=True)
     norm = lambda s: re.sub(r"\s+", " ", s).strip()
     excluded = {norm(r["prompt"]) for r in read(a.out / "bank.json")}
     rows = pq.read_table(a.data / "math/DAPO/train.parquet").to_pylist()
@@ -170,7 +171,7 @@ def prepare_rich(a):
 @torch.no_grad()
 def generate_rich(a):
     rows = read(a.out / "rich-prompts.json")[112 * a.shard : 112 * (a.shard + 1)]
-    tok = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(core.NAMES["student"], root=a.models), local_files_only=True)
     tok.pad_token = tok.eos_token
     tok.padding_side = "left"
     model = core.load(a, "student")
@@ -412,10 +413,12 @@ def run(a):
     if a.rich:
         evaluate(a, p, q, training_pool, a.steps, dest / f"train-pool-{a.steps}.json")
     fresh(a, p, q, bank, a.steps, dest / f"fresh-{a.steps}.json")
-    checkpoint = a.cache / "checkpoints" / dest.name
+    checkpoint = checkpoint_path(a.cache, "checkpoints") / dest.name
     checkpoint.mkdir(parents=True, exist_ok=True)
     p.save_pretrained(checkpoint, max_shard_size="4GB")
-    AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True).save_pretrained(checkpoint)
+    AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    ).save_pretrained(checkpoint)
     while not (baseline / "done").exists():
         time.sleep(5)
     dump(dest / "complete.json", dict(steps=a.steps, finished=True))

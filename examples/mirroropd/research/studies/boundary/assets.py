@@ -3,13 +3,12 @@
 """Prepare exact Hub revisions, reusing existing weights only after SHA verification."""
 
 import concurrent.futures
-import hashlib
 import time
 
 from huggingface_hub import HfApi, hf_hub_download
 
 from examples.mirroropd.research.core.io import dump
-from examples.mirroropd.research.studies.boundary.common import MODELS, OUT, WORK, model_path
+from examples.mirroropd.research.studies.boundary.common import MODELS, OUT, model_path
 
 
 def prepare(name):
@@ -18,23 +17,15 @@ def prepare(name):
     assert info.sha == revision
     dest = model_path(name)
     dest.mkdir(parents=True, exist_ok=True)
-    old = WORK / "model" / repo.split("/")[1]
     files = []
     for item in info.siblings:
         filename = item.rfilename
         if "/" in filename or not filename.endswith((".json", ".safetensors", ".md", ".jinja")):
             continue
         target = dest / filename
-        source = old / filename
         method = "hub"
-        if filename.endswith(".safetensors") and source.exists() and not target.exists():
-            expected = item.lfs.sha256 if item.lfs else None
-            if expected:
-                with source.open("rb") as stream:
-                    digest = hashlib.file_digest(stream, "sha256").hexdigest()
-                if digest == expected:
-                    target.symlink_to(source.resolve())
-                    method = "verified-local-weight"
+        if target.is_symlink():
+            raise ValueError(f"Canonical model weights must be regular files: {target}")
         if not target.exists():
             for attempt in range(4):
                 try:

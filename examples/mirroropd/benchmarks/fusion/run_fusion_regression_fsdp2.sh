@@ -31,7 +31,7 @@ export OMP_NUM_THREADS=1 PYTHONHASHSEED=0
 export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_PLUGINS=""
 export PYTHON_BIN=${PYTHON_BIN:-$WORKSPACE/envs/mirroropd-fusion/bin/python}
 export LD_LIBRARY_PATH=$WORKSPACE/cache/fusion-runtime/cuda-compat-12-9/usr/local/cuda-12.9/compat:${LD_LIBRARY_PATH:-}
-export STUDENT_MODEL=$WORKSPACE/model/Qwen3-1.7B-Base TEACHER_MODEL=$WORKSPACE/model/Qwen3-8B
+export STUDENT_MODEL=$(python3 "$CURRENT/examples/mirroropd/assets/paths.py" --alias Qwen3-1.7B-Base --model-root "${MODEL_ROOT:-$WORKSPACE/model}") TEACHER_MODEL=$(python3 "$CURRENT/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "${MODEL_ROOT:-$WORKSPACE/model}")
 export DATA_ROOT=$WORKSPACE/data CONTINUOUS_TOKEN_MODEL_FAMILY=qwen3
 export TRAIN_FILE=$WORKSPACE/runs/rollout-fusion-20261028/default-regression-prompts.parquet
 export TRAIN_BATCH_SIZE=64 MAX_PROMPT_LENGTH=4096 MAX_RESPONSE_LENGTH=7168 MAX_VAL_RESPONSE_LENGTH=128

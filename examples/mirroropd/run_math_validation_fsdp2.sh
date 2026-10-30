@@ -7,8 +7,8 @@ WORKSPACE=$(cd -- "$SCRIPT_DIR/../../.." && pwd)
 if [[ $# == 0 || ${1:-} == --help || ${1:-} == -h ]]; then
     cat <<'HELP'
 Usage: bash examples/mirroropd/run_math_validation_fsdp2.sh student|teacher [Hydra overrides...]
-  student: STUDENT_MODEL, or MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B
-  teacher: TEACHER_MODEL, or MODEL_ROOT/JustRL-DeepSeek-1.5B
+  student: STUDENT_MODEL, or registered DeepSeek-R1-Distill-Qwen-1.5B
+  teacher: TEACHER_MODEL, or registered JustRL-DeepSeek-1.5B
 Both use the selected model as the generator; distillation is disabled.
 Math validation defaults: 630 prompts x 16 (MATH-500, AMC23, AIME24, AIME25, AIME26), temperature=0.7, top-p=0.9,
 max response=31744, full submission, Graph, TP1, concurrency128/util0.65.
@@ -30,8 +30,8 @@ TARGET=$1
 shift
 MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
 case "$TARGET" in
-    student) export STUDENT_MODEL=${STUDENT_MODEL:-$MODEL_ROOT/DeepSeek-R1-Distill-Qwen-1.5B} ;;
-    teacher) export STUDENT_MODEL=${TEACHER_MODEL:-$MODEL_ROOT/JustRL-DeepSeek-1.5B} ;;
+    student) export STUDENT_MODEL=${STUDENT_MODEL:-$(python3 "$SCRIPT_DIR/assets/paths.py" --alias DeepSeek-R1-Distill-Qwen-1.5B --model-root "$MODEL_ROOT")} ;;
+    teacher) export STUDENT_MODEL=${TEACHER_MODEL:-$(python3 "$SCRIPT_DIR/assets/paths.py" --alias JustRL-DeepSeek-1.5B --model-root "$MODEL_ROOT")} ;;
     *) echo "Expected student or teacher; got $TARGET" >&2; exit 2 ;;
 esac
 export DOMAIN=math DISTILLATION_EXECUTION_MODE=shared_sync TEACHER_GPUS=0 EXPERIMENT_METHOD=sampled

@@ -12,6 +12,7 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.cross_batch.protocol import LONG_PASS
@@ -19,7 +20,9 @@ from examples.mirroropd.research.studies.cross_batch.protocol import LONG_PASS
 
 def prepare(a):
     assert not (a.out / "protocol.json").exists(), "Choose a new output directory."
-    tokenizer = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    )
     norm = lambda s: re.sub(r"\s+", " ", s).strip()
     excluded = set()
     earlier = [
@@ -143,7 +146,9 @@ def generate(a):
     assert not destination.exists(), "Generation shard already exists."
     records = read(a.out / "prompts.json")[160 * a.shard : 160 * (a.shard + 1)]
     model = core.load(a, "student")
-    tokenizer = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    )
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "left"
     result = []

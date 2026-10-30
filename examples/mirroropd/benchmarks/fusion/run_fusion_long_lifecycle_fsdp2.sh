@@ -7,8 +7,8 @@ WORKSPACE=$(dirname -- "$REPO")
 PAIR=${1:?Choose dense or moe}
 PREFIX=${2:-fusion-long-$(date +%Y%m%d-%H%M%S)}
 case "$PAIR" in
-    dense) export TEACHER_MODEL=$WORKSPACE/model/Qwen3-8B FUSION_MICRO_BATCH_SIZE=16 ;;
-    moe) export TEACHER_MODEL=$WORKSPACE/model/Qwen3-30B-A3B-Instruct-2507 FUSION_MICRO_BATCH_SIZE=8 ;;
+    dense) export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "${MODEL_ROOT:-$WORKSPACE/model}") FUSION_MICRO_BATCH_SIZE=16 ;;
+    moe) export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-30B-A3B-Instruct-2507 --model-root "${MODEL_ROOT:-$WORKSPACE/model}") FUSION_MICRO_BATCH_SIZE=8 ;;
     *) exit 2 ;;
 esac
 export PYTHONPATH=$REPO

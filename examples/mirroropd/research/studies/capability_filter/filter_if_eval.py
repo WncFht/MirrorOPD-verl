@@ -8,6 +8,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.capability_filter import filter_common as fc
@@ -32,7 +33,7 @@ def main():
     if len(rows) == 64:
         return
     if a.model == "checkpoint":
-        model_path = a.cache / "checkpoints" / a.name / "step-128"
+        model_path = checkpoint_path(a.cache, "checkpoints") / a.name / "step-128"
         model = (
             AutoModelForCausalLM.from_pretrained(
                 model_path,
@@ -46,7 +47,9 @@ def main():
         )
     else:
         model = core.load(a, a.model, student=a.model == "student").requires_grad_(False)
-    tokenizer = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    )
     controls = set(tokenizer.all_special_ids) - set(tokenizer.convert_tokens_to_ids(["<think>", "</think>"]))
     for start in range(len(rows), 64, 16):
         generated = fc.generate(a, model, prompts[start : start + 16], 99700 + start, 4096, vocab_limit=151936)

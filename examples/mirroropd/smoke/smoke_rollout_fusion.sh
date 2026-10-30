@@ -13,8 +13,8 @@ case "$BINDING" in current|initial) ;; *) exit 2 ;; esac
 : "${CUDA_VISIBLE_DEVICES:?Set the GPUs allocated to this run explicitly}"
 IFS=',' read -r -a FUSION_VISIBLE_GPUS <<< "$CUDA_VISIBLE_DEVICES"
 export STUDENT_GPUS=${STUDENT_GPUS:-${#FUSION_VISIBLE_GPUS[@]}}
-export STUDENT_MODEL=${STUDENT_MODEL:-$WORKSPACE/model/Qwen3-1.7B-Base}
-export TEACHER_MODEL=${TEACHER_MODEL:-$WORKSPACE/model/Qwen3-8B}
+export STUDENT_MODEL=${STUDENT_MODEL:-$(python3 "$REPO_ROOT/examples/mirroropd/assets/paths.py" --alias Qwen3-1.7B-Base --model-root "${MODEL_ROOT:-$WORKSPACE/model}")}
+export TEACHER_MODEL=${TEACHER_MODEL:-$(python3 "$REPO_ROOT/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "${MODEL_ROOT:-$WORKSPACE/model}")}
 export CONTINUOUS_TOKEN_MODEL_FAMILY=qwen3
 export OMP_NUM_THREADS=1
 export VLLM_USE_V2_MODEL_RUNNER=0

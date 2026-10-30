@@ -7,6 +7,7 @@ import re
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import hub_directory, require_current_location
 from examples.mirroropd.research.core.artifacts import fingerprint
 from examples.mirroropd.research.core.paths import workspace
 
@@ -31,6 +32,7 @@ class Model:
     subfolder: str | None = None
 
     def __post_init__(self):
+        require_current_location(self.path)
         if self.subfolder is not None and (
             not self.subfolder
             or self.subfolder.startswith("/")
@@ -50,7 +52,9 @@ class Model:
 
     @property
     def directory(self):
-        return resolve(self.path)
+        path = resolve(self.path)
+        canonical = hub_directory(self.repo, self.revision, self.subfolder, root=WORK / "model")
+        return hub_directory(self.repo, self.revision, self.subfolder) if path == canonical else path
 
 
 @dataclass(frozen=True)

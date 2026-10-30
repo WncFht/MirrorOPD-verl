@@ -5,6 +5,7 @@
 import json
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import hub_directory, resolve_location
 from examples.mirroropd.research.core.artifacts import file_hash
 from examples.mirroropd.research.core.io import dump, write_csv, write_text
 from examples.mirroropd.research.core.paths import REPO, workspace
@@ -35,7 +36,7 @@ def main():
     inventory = []
     for family, models in sets.items():
         for key, m in models.items():
-            p = Path(m.get("path", str(w / "model/teacher-study" / m["repo"].replace("/", "--") / m["revision"])))
+            p = Path(m.get("path", str(hub_directory(m["repo"], m["revision"], m.get("subfolder")))))
             if not p.is_absolute():
                 p = w / p
             present = bool(list(p.glob("*.safetensors"))) and (p / "config.json").exists()
@@ -363,7 +364,7 @@ def verified_extension(directory, arm):
     if not value.get("complete") or not value.get("evidence"):
         raise ValueError(f"Incomplete extension verification: {proof}")
     for item in value["evidence"]:
-        if file_hash(item["path"]) != item["sha256"]:
+        if file_hash(resolve_location(item["path"])) != item["sha256"]:
             raise ValueError(f"Extension evidence changed after verification: {item['path']}")
     return True
 

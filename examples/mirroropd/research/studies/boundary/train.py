@@ -12,6 +12,7 @@ import time
 import torch
 from transformers import AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.core.metrics import fixed_metrics
 from examples.mirroropd.research.studies.boundary.common import ARMS, CACHE, GROUPS, MODELS, OUT, model_path
@@ -90,7 +91,7 @@ def score(model, head, states, rows, step):
 
 
 def checkpoint(model, optimizer, student, arm, step, rows):
-    dest = CACHE / "checkpoints" / arm / f"step{step:03d}"
+    dest = checkpoint_path(CACHE, "checkpoints") / arm / f"step{step:03d}"
     dest.mkdir(parents=True, exist_ok=True)
     state = {k: v.detach().cpu() for k, v in model.state_dict().items()}
     model.save_pretrained(dest, state_dict=state, max_shard_size="4GB")

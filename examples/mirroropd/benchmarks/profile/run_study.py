@@ -20,6 +20,8 @@ from pathlib import Path
 
 import psutil
 
+from examples.mirroropd.assets.paths import registered_model
+
 
 def load_module(path, name):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -229,9 +231,9 @@ def main():
                     "-m",
                     "examples.mirroropd.benchmarks.profile.pipeline",
                     "--student",
-                    str(args.model_root / "DeepSeek-R1-Distill-Qwen-1.5B"),
+                    str(registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=args.model_root)),
                     "--teacher",
-                    str(args.model_root / "JustRL-DeepSeek-1.5B"),
+                    str(registered_model("JustRL-DeepSeek-1.5B", root=args.model_root)),
                     "--samples",
                     str(args.samples),
                     "--output",

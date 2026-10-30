@@ -13,30 +13,30 @@ from zoneinfo import ZoneInfo
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+if __package__:
+    from .paths import model_entry, registered_model
+else:
+    from paths import model_entry, registered_model
+
 WORKSPACE = Path(__file__).resolve().parents[4]
 MODEL_ROOT = Path(os.environ.get("MODEL_ROOT", WORKSPACE / "model"))
 DATA_ROOT = Path(os.environ.get("DATA_ROOT", WORKSPACE / "data"))
 MODELS = {
-    "DeepSeek-R1-Distill-Qwen-1.5B": {
-        "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
-        "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
-    },
-    "JustRL-DeepSeek-1.5B": {
-        "repo": "hbx/JustRL-DeepSeek-1.5B",
-        "revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
-    },
-    "DeepSeek-R1-Distill-Qwen-7B": {"repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"},
-    "Polaris-7B-Preview": {"repo": "POLARIS-Project/Polaris-7B-Preview"},
-    "Qwen3-1.7B-Base": {"repo": "Qwen/Qwen3-1.7B-Base"},
-    "Qwen3-8B": {"repo": "Qwen/Qwen3-8B"},
-    "Qwen3-4B": {"repo": "Qwen/Qwen3-4B"},
-    "Qwen3-1.7B": {"repo": "Qwen/Qwen3-1.7B"},
-    "Qwen3-4B-Instruct-2507": {"repo": "Qwen/Qwen3-4B-Instruct-2507"},
-    "Qwen3-30B-A3B-Instruct-2507": {
-        "repo": "Qwen/Qwen3-30B-A3B-Instruct-2507",
-        "revision": "0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
-    },
+    name: model_entry(name)
+    for name in (
+        "DeepSeek-R1-Distill-Qwen-1.5B",
+        "JustRL-DeepSeek-1.5B",
+        "DeepSeek-R1-Distill-Qwen-7B",
+        "Polaris-7B-Preview",
+        "Qwen3-1.7B-Base",
+        "Qwen3-8B",
+        "Qwen3-4B",
+        "Qwen3-1.7B",
+        "Qwen3-4B-Instruct-2507",
+        "Qwen3-30B-A3B-Instruct-2507",
+    )
 }
+
 DEFAULT_MODELS = ("DeepSeek-R1-Distill-Qwen-1.5B", "JustRL-DeepSeek-1.5B")
 MODEL_FILES = ("config.json", "tokenizer.json", "tokenizer_config.json")
 OPTIONAL_MODEL_FILES = ("generation_config.json", "chat_template.jinja", "README.md")
@@ -215,8 +215,8 @@ def main():
         from transformers import AutoTokenizer
 
         for name in selected_models(args.models):
-            report["models"][name] = check_model(args.model_root / name, name)
-        student = args.model_root / selected_models(args.models)[0]
+            report["models"][name] = check_model(registered_model(name, root=args.model_root), name)
+        student = registered_model(selected_models(args.models)[0], root=args.model_root)
         tokenizer = AutoTokenizer.from_pretrained(student, local_files_only=True, trust_remote_code=False)
     prompt_sets = {}
     for name, spec in DATASETS.items():
