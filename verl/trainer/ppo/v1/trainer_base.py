@@ -144,6 +144,9 @@ class PPOTrainer(ABC):
 
         self.rollout_policy = validate_policy(config)
         self.checkpoint_callback = build_checkpoint_callback(config)
+        from verl.trainer.ppo.readout_callback import build_readout_callback
+
+        self.readout_callback = build_readout_callback(config)
         self.use_critic = need_critic(self.config)
         self.use_reference_policy = need_reference_policy(self.config)
         self.use_teacher_policy = need_teacher_policy(self.config)
@@ -587,6 +590,12 @@ class PPOTrainer(ABC):
         self.next_step_profile = False
 
         self.on_train_begin()
+        if self.readout_callback is not None:
+            initial_outer = self.global_steps - 1
+            readout_metrics = self.readout_callback.on_readout(self, initial_outer)
+            self.logger.log(
+                data=readout_metrics | self._metric_coordinates() | {"step/outer": initial_outer}, step=initial_outer
+            )
         last_val_metrics = None
         while current_epoch < self.config.trainer.total_epochs and self.global_steps <= self.total_training_steps:
             is_last_step = self.global_steps >= self.total_training_steps
@@ -609,6 +618,8 @@ class PPOTrainer(ABC):
                         self._save_checkpoint()
 
                 self.on_step_end()
+                if self.readout_callback is not None:
+                    metrics.update(self.readout_callback.on_readout(self, self.global_steps))
                 metrics.update(self._consume_sync_metrics())
 
             # 4. validate

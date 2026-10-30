@@ -13,7 +13,7 @@ MODE=${4:-formal}
 [[ $LABEL =~ ^[a-zA-Z0-9_-]+$ ]] || { echo 'Run label must contain only letters, numbers, underscores or hyphens' >&2; exit 2; }
 case "$PAIR" in J|P) ;; *) exit 2 ;; esac
 case "$ARM" in S0|S|LM|PM|TM|T) ;; *) exit 2 ;; esac
-case "$MODE" in formal|profile|smoke) ;; *) exit 2 ;; esac
+case "$MODE" in formal|profile|smoke|science|science-smoke) ;; *) exit 2 ;; esac
 FUSION_GPUS=${FUSION_GPUS:-7}
 case "$FUSION_GPUS" in 6|7|6,7) ;; *) echo 'Use allocated GPUs 6, 7, or 6,7' >&2; exit 2 ;; esac
 read_only=false
@@ -67,11 +67,34 @@ export WANDB_MODE=${WANDB_MODE:-offline} VERL_USE_UV=0
 unset TRAIN_PRECISION
 export TOTAL_TRAINING_STEPS=40
 if [[ $MODE == profile ]]; then export TOTAL_TRAINING_STEPS=${PREFIX_PROFILE_OUTERS:-2}; fi
-if [[ $MODE == smoke ]]; then
+if [[ $MODE == smoke || $MODE == science-smoke ]]; then
     export TOTAL_TRAINING_STEPS=2 TRAIN_BATCH_SIZE=2 MAX_PROMPT_LENGTH=1024 MAX_RESPONSE_LENGTH=32
 fi
 # RolloutConfig validates this window even when no validation is requested.
 export MAX_VAL_RESPONSE_LENGTH=$MAX_RESPONSE_LENGTH
+SCIENCE_ARGS=()
+if [[ $MODE == science || $MODE == science-smoke ]]; then
+    science_root=${PREFIX_SCIENTIFIC_ROOT:?Set the frozen scientific study root}
+    [[ $STUDENT_GPUS == 1 && -f $science_root/prepared-03/complete.json ]] || exit 2
+    export TRAIN_FILE="$science_root/prepared-03/train.parquet"
+    export SAVE_FREQ=20
+    science_smoke=false
+    keep_checkpoints=1
+    if [[ $MODE == science-smoke ]]; then export SAVE_FREQ=1 TOTAL_TRAINING_STEPS=${PREFIX_SMOKE_OUTERS:-2}; science_smoke=true; keep_checkpoints=2; fi
+    SCIENCE_ARGS=(
+        '++trainer.readout_callback_class=examples.mirroropd.research.studies.prefix_fusion.callback.ScientificReadout'
+        "++trainer.scientific_evaluation.root=$science_root"
+        "++trainer.scientific_evaluation.pair=$PAIR"
+        "++trainer.scientific_evaluation.physical_gpu=$FUSION_GPUS"
+        "++trainer.scientific_evaluation.smoke=$science_smoke"
+        "trainer.max_actor_ckpt_to_keep=$keep_checkpoints"
+    )
+fi
+if [[ -n ${PREFIX_RESUME_FROM:-} ]]; then
+    [[ $MODE == science || $MODE == science-smoke ]] || exit 2
+    [[ -d $PREFIX_RESUME_FROM ]] || exit 2
+    SCIENCE_ARGS+=("trainer.resume_mode=resume_path" "trainer.resume_from_path=$PREFIX_RESUME_FROM")
+fi
 context=$((MAX_PROMPT_LENGTH + MAX_RESPONSE_LENGTH))
 export EXPERIMENT_NAME="prefix-${MODE}-${PAIR}-${ARM}-${LABEL}"
 export RUN_DIR="$REPO/outputs/$EXPERIMENT_NAME"
@@ -122,7 +145,7 @@ if ! $read_only; then
 fi
 cd "$REPO"
 exec bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E20 --method full_kl \
-    'trainer.val_before_train=False' 'trainer.test_freq=-1' 'trainer.save_freq=-1' \
+    'trainer.val_before_train=False' 'trainer.test_freq=-1' "trainer.save_freq=$SAVE_FREQ" \
     'trainer.resume_mode=disable' 'trainer.logger=[console,file]' \
     "trainer.default_local_dir=$RUN_DIR/runtime" 'data.val_files=[]' \
     'data.seed=42' 'data.shuffle=True' 'data.train_max_samples=-1' \
@@ -156,4 +179,4 @@ exec bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E20 --method full_kl
     "++ray_kwargs.ray_init._temp_dir=${SMOKE_RAY_TMPDIR:-/tmp/mirroropd-prefix-config-$$}" \
     "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_ROLLOUT_IPC_NAMESPACE='$VERL_ROLLOUT_IPC_NAMESPACE'" \
     "++ray_kwargs.ray_init.runtime_env.env_vars.VERL_FILE_LOGGER_PATH='$VERL_FILE_LOGGER_PATH'" \
-    "${PROFILE_ARGS[@]}"
+    "${PROFILE_ARGS[@]}" "${SCIENCE_ARGS[@]}"

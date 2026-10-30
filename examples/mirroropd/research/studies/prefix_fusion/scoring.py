@@ -145,7 +145,7 @@ def cache_teacher(assets, banks, pair, out):
     )
 
 
-def score(assets, banks, cache, weights, out, outer, long_panel=False):
+def score(assets, banks, cache, weights, out, outer, long_panel=False, limit_per_source=None, horizon=None):
     require_allocated_gpu()
     import torch
 
@@ -191,7 +191,8 @@ def score(assets, banks, cache, weights, out, outer, long_panel=False):
         weights=weight_identity,
         target=target["fingerprint"],
         outer=outer,
-        horizon=7168 if long_panel else 1024,
+        horizon=7168 if long_panel else (horizon or 1024),
+        limit_per_source=limit_per_source,
         scorer=file_hash(hf_rkl.__file__),
         adapter=file_hash(__file__),
         precision="FP32 learner master/head; BF16 backbone autocast; native full-head RKL",
@@ -215,6 +216,10 @@ def score(assets, banks, cache, weights, out, outer, long_panel=False):
         if manifest["bank_sha256"] != target["inputs"]["banks"][source]:
             raise ValueError("Teacher cache and scoring bank differ")
         rows = fixed_views(raw, inputs["horizon"], LONG_GROUPS if long_panel else None)
+        if limit_per_source is not None:
+            if limit_per_source < 1:
+                raise ValueError("Positive readout subset size required")
+            rows = rows[:limit_per_source]
         original_rows = {r["id"]: r for r in raw}
         states = {}
         for row in rows:
@@ -272,6 +277,8 @@ def main():
             p.add_argument("--weights", type=Path, required=True)
             p.add_argument("--outer", type=int, required=True)
             p.add_argument("--long-panel", action="store_true")
+            p.add_argument("--limit-per-source", type=int)
+            p.add_argument("--horizon", type=int)
     args = parser.parse_args()
     require_allocated_gpu()
     from examples.mirroropd.benchmarks.fusion.fingerprint import source_fingerprint
@@ -293,7 +300,17 @@ def main():
     if args.command == "cache-teacher":
         cache_teacher(args.assets, args.banks, args.pair, args.out)
     else:
-        score(args.assets, args.banks, args.cache, args.weights, args.out, args.outer, args.long_panel)
+        score(
+            args.assets,
+            args.banks,
+            args.cache,
+            args.weights,
+            args.out,
+            args.outer,
+            args.long_panel,
+            args.limit_per_source,
+            args.horizon,
+        )
 
 
 if __name__ == "__main__":
