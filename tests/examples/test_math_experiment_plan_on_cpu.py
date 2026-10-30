@@ -102,8 +102,10 @@ def test_polaris_e48_retains_e20_budget_and_supports_independent_validation():
     e48 = planner.PRESETS["E48"]
     assert e48.budget == replace(planner.PRESETS["E20"].budget, initial_validation=True)
     training = plan(["E48"])
-    assert training.environment["TEACHER_MODEL"].endswith("/Polaris-7B-Preview")
-    assert training.environment["STUDENT_MODEL"].endswith("/DeepSeek-R1-Distill-Qwen-1.5B")
+    from examples.mirroropd.assets.paths import registered_model
+
+    assert training.environment["TEACHER_MODEL"] == str(registered_model("Polaris-7B-Preview"))
+    assert training.environment["STUDENT_MODEL"] == str(registered_model("DeepSeek-R1-Distill-Qwen-1.5B"))
     assert training.environment["PPO_EPOCHS"] == "16"
     assert training.environment["LEARNING_RATE"] == "1e-6"
     assert training.environment["FULL_KL_BACKEND"] == "precompute"
@@ -206,7 +208,9 @@ def test_e54_moe_teacher_keeps_e41_training_protocol():
         pair=replace(planner.PRESETS["E41"].pair, teacher="Qwen3-30B-A3B-Instruct-2507"),
     )
     result = plan(["E54"])
-    assert result.environment["TEACHER_MODEL"].endswith("/Qwen3-30B-A3B-Instruct-2507")
+    from examples.mirroropd.assets.paths import registered_model
+
+    assert result.environment["TEACHER_MODEL"] == str(registered_model("Qwen3-30B-A3B-Instruct-2507"))
     assert result.environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[151643,151645]"
     assert not planner.PRESETS["E54"].budget.initial_validation
     assert "trainer.total_training_steps=100" in result.arguments
