@@ -33,3 +33,18 @@ FUSION_GPUS=6 PREFIX_SCIENTIFIC_ROOT="$PWD/../runs/prefix-fusion-scientific-v2" 
 八卡阶段使用六条独立科学训练通道，另外两卡执行工程验收。扩展源码从科学冻结版本 `73b30f06` 派生，只修改物理设备选择、资源锁与资源审计；训练目标、数据、采样、随机种子、评估窗口和预算保持不变。原 `queue` 入口仍是固定 GPU6/7 的双卡调度，扩展执行由运行目录中的独占条件 claim 调度器记录每个条件的唯一执行者，不能同时启动两套调度器领取同一条件。
 
 模型资产迁移曾删除冻结运行依赖的旧路径，使两个 S0 尝试在第 20 轮 checkpoint 之前失败。研究专属 `model-bindings` 目录及资产链接已按原模型内容哈希固定；原始失败记录保留，新的十二组从相同初始 student 和新的 Adam 状态开始。原三套完整任务基线按回执、权重与题目哈希复用，不能用 FP32-only 读出冒充包含 Adam/RNG 的完整恢复。科学入口通过 `PREFIX_MODEL_ROOT` 指定该目录，工程生命周期使用 `FUSION_MODEL_ROOT`；目录下仍保留原模型 basename，内容身份与请求 seed 不变。共享模型目录里的旧别名可能再次被迁移清理，因此正在执行的实验不再依赖这些别名。活跃绑定的租用记录保存在运行目录，实验完成前应保持这些路径稳定。
+
+## 终点交叉评分与配对分析
+
+`fresh.py` 提供 `generate`、`cache-teacher` 和 `score-row` 三个阶段。`initial` 表示未训练 student，`S0` 表示使用 initial 前缀训练后的 learner，二者不能混同。每个参数终点生成 Math64 × 2 的固定 fresh 银行；初始银行只生成一次，由两组 teacher 共享。随后缓存各 teacher 在这些状态上的完整 head/hidden，对每组的七套参数与七套状态逐项交叉评分。训练终点必须提供通过完整运行审计的 outer40 FP32 读出。实现与 CPU 检查已完成，GPU 生成、缓存和交叉评分尚待验证。
+
+`analysis.py` 接受明确的 run/audit 路径清单，也可读取扩展调度 manifest。每题先平均两次 fresh 或四次准确率回答，再按题配对 bootstrap；macro5 在各数据集内抽样后等权合并。固定风险按预定 H 归一化，fresh 矩阵只解释为访问状态上的条件风险。缺失条件保留为缺失，只有所有运行审计、规定读出、准确率和两组 7×7 fresh 单元齐全时才能标为完整。
+
+以下 CPU 分析入口可增量导出实际已有结果；输出目录必须是新目录，`--require-complete` 会拒绝缺失结果。可选 `--style-dir` 指向 figure-viz 的 `assets/mpl`，用于从真实基线数据生成 PNG/PDF/SVG；所用 Python 环境需要安装 matplotlib。
+
+```bash
+python -m examples.mirroropd.research.studies.prefix_fusion.analysis \
+  --root ../runs/prefix-fusion-scientific-v2 \
+  --manifest ../runs/prefix-fusion-scientific-v2/expansion-20261030/manifest.json \
+  --out /tmp/prefix-fusion-analysis-review
+```
