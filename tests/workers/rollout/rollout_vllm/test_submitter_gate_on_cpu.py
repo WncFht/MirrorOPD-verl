@@ -342,6 +342,35 @@ def test_default_request_hooks_leave_generate_output_unchanged(monkeypatch):
     asyncio.run(main())
 
 
+def test_repetition_config_reaches_engine_and_preserves_partial_output(monkeypatch):
+    from vllm.sampling_params import RepetitionDetectionParams
+
+    async def main():
+        final = _request_output([5, 9] * 4)
+        final.outputs[0].finish_reason = "repetition"
+        final.outputs[0].stop_reason = "repetition_detected"
+        server = _make_generating_server(monkeypatch, vllm_async_server.vLLMHttpServer, [final])
+        output = await server.generate(
+            [1, 2, 3],
+            {
+                "temperature": 0.7,
+                "repetition_detection": {"min_pattern_size": 2, "max_pattern_size": 4, "min_count": 4},
+            },
+            "r",
+        )
+        params = server.engine.sampling_params[0]
+        assert params.repetition_detection == RepetitionDetectionParams(
+            min_pattern_size=2, max_pattern_size=4, min_count=4
+        )
+        assert params.repetition_penalty == 1 and params.min_tokens == 0
+        assert output.token_ids == [5, 9] * 4
+        assert output.stop_reason == output.extra_fields["finish_reason"] == "repetition"
+        assert output.extra_fields["backend_stop_reason"] == "repetition_detected"
+        assert server._admitting == 0
+
+    asyncio.run(main())
+
+
 @pytest.mark.parametrize("temperature,budget", [(1.0, 16), (0.7, 32)])
 @pytest.mark.parametrize("configured", [None, [], [9, 9]])
 @pytest.mark.parametrize("requested", [None, [], [7, 9]])

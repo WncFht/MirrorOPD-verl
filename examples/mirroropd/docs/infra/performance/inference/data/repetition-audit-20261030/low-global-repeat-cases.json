@@ -1,0 +1,62 @@
+[
+  {
+    "source": "e54-mdpo-sweep-20261029/evaluation/k1-eta03-dapo/scored.jsonl",
+    "prompt_id": "train-2792",
+    "repeat8": 0.4679711377887009,
+    "length": 31744,
+    "acc": false,
+    "inspected_region": "last 1500 characters only",
+    "tail": "0000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000B + 11D \\)\n\nThe last two digits are 11, 22, ..., 99\n\nSo, the number has the form: \\( \\overline{AB}DD \\)\n\nSo, the last two digits are equal.\n\nSo, the number has the form: \\( 10000A + 1000",
+    "observation": "exact repeated prose at the tail"
+  },
+  {
+    "source": "e54-topd-mdpo-20261029/evaluation/k0-eta01-dapo/scored.jsonl",
+    "prompt_id": "train-3427",
+    "repeat8": 0.32173803447080696,
+    "length": 31744,
+    "acc": false,
+    "inspected_region": "last 1500 characters only",
+    "tail": "- 1267511: valid.\n\nIs 1267511 valid? \\( 1267514 - 2 = 1267512 \\), not prime.\n\nThus, \\( N = 1267511 \\) is invalid.\n\n---\n\n### **Step 196: Try \\( N = 1139 \\times 1141 = 1290739 \\).**\n\nDivisors: \\( \\{1, 1139, 1141, 1290739\\} \\).\n\nCheck:\n\n- 1: valid.\n- 1139: valid.\n- 1141: valid.\n- 1290739: valid.\n\nIs 1290739 valid? \\( 1290742 - 2 = 1290740 \\), not prime.\n\nThus, \\( N = 1290739 \\) is invalid.\n\n---\n\n### **Step 197: Try \\( N = 1141 \\times 1151 = 1298351 \\).**\n\nDivisors: \\( \\{1, 1141, 1151, 1298351\\} \\).\n\nCheck:\n\n- 1: valid.\n- 1141: valid.\n- 1151: valid.\n- 1298351: valid.\n\nIs 1298351 valid? \\( 1298354 - 2 = 1298352 \\), not prime.\n\nThus, \\( N = 1298351 \\) is invalid.\n\n---\n\n### **Step 198: Try \\( N = 1151 \\times 1153 = 1322743 \\).**\n\nDivisors: \\( \\{1, 1151, 1153, 1322743\\} \\).\n\nCheck:\n\n- 1: valid.\n- 1151: valid.\n- 1153: valid.\n- 1322743: valid.\n\nIs 1322743 valid? \\( 1322746 - 2 = 1322744 \\), not prime.\n\nThus, \\( N = 1322743 \\) is invalid.\n\n---\n\n### **Step 199: Try \\( N = 1153 \\times 1201 = 1384183 \\).**\n\nDivisors: \\( \\{1, 1153, 1201, 1384183\\} \\).\n\nCheck:\n\n- 1: valid.\n- 1153: valid.\n- 1201: valid.\n- 1384183: valid.\n\nIs 1384183 valid? \\( 1384186 - 2 = 1384184 \\), not prime.\n\nThus, \\( N = 1384183 \\) is invalid.\n\n---\n\n### **Step 200: Try \\( N = 1201 \\times 1207 = 1442407 \\).**\n\nDivisors: \\( \\{1, 1201, 1207, 1442407\\} \\).\n\nCheck:\n\n- 1: valid.\n- 1201: valid.\n- 1207: valid.\n- 1442407: valid.\n\nIs 1442407 valid? \\( 1442410 - 2 = 1442408 \\), not prime.\n\nThus, \\( N = 1442407 \\) is invalid.\n\n---\n\n",
+    "observation": "continued enumeration with changing numeric values at the tail"
+  },
+  {
+    "source": "e54-topd-mdpo-20261029/evaluation/k0-eta02-dapo/scored.jsonl",
+    "prompt_id": "train-8423",
+    "repeat8": 0.42272426505340766,
+    "length": 31744,
+    "acc": false,
+    "inspected_region": "last 1500 characters only",
+    "tail": "\n### Step 133: Try $a = 2$, $b = 73$, $c = 79$, $d = 83$\n\nLeft side:\n$$\n4 + 10362 + 6241 + 65761 = 82368\n$$\n\nRight side:\n$$\n14120 + 9574 - 26777 + 1456 = 893\n$$\n\n$82368 \\neq 893$, wrong.\n\n### Step 134: Try $a = 2$, $b = 79$, $c = 83$, $d = 89$\n\nLeft side:\n$$\n4 + 12242 + 6889 + 75649 = 94782\n$$\n\nRight side:\n$$\n17488 + 13758 - 29537 + 1606 = 1471\n$$\n\n$94782 \\neq 1471$, wrong.\n\n### Step 135: Try $a = 2$, $b = 83$, $c = 89$, $d = 97$\n\nLeft side:\n$$\n4 + 13442 + 7921 + 82849 = 104613\n$$\n\nRight side:\n$$\n20176 + 14686 - 32237 + 1606 = 1671\n$$\n\n$104613 \\neq 1671$, wrong.\n\n### Step 136: Try $a = 2$, $b = 89$, $c = 97$, $d = 101$\n\nLeft side:\n$$\n4 + 15122 + 9409 + 94069 = 118502\n$$\n\nRight side:\n$$\n25376 + 15898 - 33577 + 1646 = 1891\n$$\n\n$118502 \\neq 1891$, wrong.\n\n### Step 137: Try $a = 2$, $b = 97$, $c = 101$, $d = 103$\n\nLeft side:\n$$\n4 + 18802 + 10301 + 98809 = 121012\n$$\n\nRight side:\n$$\n35560 + 16198 - 35533 + 1666 = 2375\n$$\n\n$121012 \\neq 2375$, wrong.\n\n### Step 138: Try $a = 2$, $b = 101$, $c = 103$, $d = 107$\n\nLeft side:\n$$\n4 + 10202 + 10609 + 108289 = 129022\n$$\n\nRight side:\n$$\n40040 + 16622 - 35783 + 1742 = 2942\n$$\n\n$129022 \\neq 2942$, wrong.\n\n### Step 139: Try $a = 2$, $b = 103$, $c = 107$, $d = 109$\n\nLeft side:\n$$\n4 + 10602 + 11449 + 111129 = 123282\n$$\n\nRight side:\n$$\n40480 + 17342 - 36707 + 1766 = 3361\n$$\n\n$123282 \\neq 3361$, wrong.\n\n### Step 140: Try $a = 2$, $b = 107$, $c = 109$, $d = 113$\n\nLeft side:\n$$\n4 + 11442 + 11881 + 116369 = 130494\n$$\n\nRight side:\n$$\n41680 + 18382 - 375",
+    "observation": "continued enumeration with changing numeric values at the tail"
+  },
+  {
+    "source": "e54-topd-mdpo-20261029/evaluation/k0-eta02-dapo/scored.jsonl",
+    "prompt_id": "train-5639",
+    "repeat8": 0.4753127264706809,
+    "length": 31744,
+    "acc": false,
+    "inspected_region": "last 1500 characters only",
+    "tail": "5) = \\gcd(115, 84)\n   \\]\n   \\[\n   \\gcd(115, 84) = 1\n   \\]\n   So, \\(d_{115} = 1\\)\n\n   Let’s try \\(n = 116\\):\n   \\[\n   a_{116} = 14064\n   \\]\n   \\[\n   a_{117} = 100 + 13081 = 13181\n   \\]\n   \\[\n   d_{116} = \\gcd(14064, 13181)\n   \\]\n   \\[\n   \\gcd(14064, 13181)\n   \\]\n   \\[\n   14064 - 13181 = 883\n   \\]\n   \\[\n   \\gcd(14064, 883) = \\gcd(883, 14064 - 883 \\times 16) = \\gcd(883, 14064 - 14128) = \\gcd(883, -64) = \\gcd(883, 64)\n   \\]\n   \\[\n   \\gcd(883, 64) = 1\n   \\]\n   So, \\(d_{116} = 1\\)\n\n   Let’s try \\(n = 117\\):\n   \\[\n   a_{117} = 13181\n   \\]\n   \\[\n   a_{118} = 100 + 13196 = 13296\n   \\]\n   \\[\n   d_{117} = \\gcd(13181, 13296)\n   \\]\n   \\[\n   \\gcd(13181, 13296)\n   \\]\n   \\[\n   13296 - 13181 = 115\n   \\]\n   \\[\n   \\gcd(13181, 115) = \\gcd(115, 13181 - 115 \\times 115) = \\gcd(115, 13181 - 13225) = \\gcd(115, -44) = \\gcd(115, 44)\n   \\]\n   \\[\n   \\gcd(115, 44) = 1\n   \\]\n   So, \\(d_{117} = 1\\)\n\n   Let’s try \\(n = 118\\):\n   \\[\n   a_{118} = 13296\n   \\]\n   \\[\n   a_{119} = 100 + 13313 = 13413\n   \\]\n   \\[\n   d_{118} = \\gcd(13296, 13413)\n   \\]\n   \\[\n   \\gcd(13296, 13413)\n   \\]\n   \\[\n   13413 - 13296 = 117\n   \\]\n   \\[\n   \\gcd(13296, 117) = \\gcd(117, 13296 - 117 \\times 114) = \\gcd(117, 13296 - 13218) = \\gcd(117, 78)\n   \\]\n   \\[\n   \\gcd(117, 78) = 3\n   \\]\n   So, \\(d_{118} = 3\\)\n\n   Let’s check \\(n = 118\\):\n   \\[\n   a_{118} = 13296\n   \\]\n   \\[\n   a_{119} = 13413\n   \\]\n   \\[\n   \\gcd(13296, 13413) = 3\n   \\]\n\n   So, \\(d_{118} = 3\\)\n\n   Let’s check \\(n = 119\\):\n   \\[\n   a_{119} = 13413\n   \\]\n   \\[\n   a_{120} = 100 +",
+    "observation": "continued enumeration with changing numeric values at the tail"
+  },
+  {
+    "source": "e54-topd-mdpo-20261029/evaluation/k1-eta02-math/scored.jsonl",
+    "prompt_id": "MATH-500:110",
+    "repeat8": 0.49072061001354883,
+    "length": 31744,
+    "acc": false,
+    "inspected_region": "last 1500 characters only",
+    "tail": "2}{283 - 1} = \\frac{69951}{282} \\approx 283.005 \\quad \\text{(not an integer)}\n\\]\n\nSo \\( d = r \\) is not valid.\n\n---\n\n### Step 291: Try \\( d = r \\) and \\( r = 284 \\)\n\nThen:\n\\[\na_2 = \\frac{284^2}{284 - 1} = \\frac{70248}{283} \\approx 284.005 \\quad \\text{(not an integer)}\n\\]\n\nSo \\( d = r \\) is not valid.\n\n---\n\n### Step 292: Try \\( d = r \\) and \\( r = 285 \\)\n\nThen:\n\\[\na_2 = \\frac{285^2}{285 - 1} = \\frac{70548}{284} \\approx 285.005 \\quad \\text{(not an integer)}\n\\]\n\nSo \\( d = r \\) is not valid.\n\n---\n\n### Step 293: Try \\( d = r \\) and \\( r = 286 \\)\n\nThen:\n\\[\na_2 = \\frac{286^2}{286 - 1} = \\frac{70849}{285} \\approx 286.005 \\quad \\text{(not an integer)}\n\\]\n\nSo \\( d = r \\) is not valid.\n\n---\n\n### Step 294: Try \\( d = r \\) and \\( r = 287 \\)\n\nThen:\n\\[\na_2 = \\frac{287^2}{287 - 1} = \\frac{71152}{286} \\approx 287.005 \\quad \\text{(not an integer)}\n\\]\n\nSo \\( d = r \\) is not valid.\n\n---\n\n### Step 295: Try \\( d = r \\) and \\( r = 288 \\)\n\nThen:\n\\[\na_2 = \\frac{288^2}{288 - 1} = \\frac{71457}{287} \\approx 288.005 \\quad \\text{(not an integer)}\n\\]\n\nSo \\( d = r \\) is not valid.\n\n---\n\n### Step 296: Try \\( d = r \\) and \\( r = 289 \\)\n\nThen:\n\\[\na_2 = \\frac{289^2}{289 - 1} = \\frac{71764}{288} \\approx 289.005 \\quad \\text{(not an integer)}\n\\]\n\nSo \\( d = r \\) is not valid.\n\n---\n\n### Step 297: Try \\( d = r \\) and \\( r = 290 \\)\n\nThen:\n\\[\na_2 = \\frac{290^2}{290 - 1} = \\frac{72073}{289} \\approx 290.005 \\quad \\text{(not an integer)}\n\\]\n\nSo \\( d = r \\) is not valid.\n\n---\n\n### Step 298: Try \\( d = r \\) and \\( r = 291 \\",
+    "observation": "continued enumeration with changing numeric values at the tail"
+  },
+  {
+    "source": "e54-topd-mdpo-20261029/evaluation/k1-eta02-math/scored.jsonl",
+    "prompt_id": "MATH-500:285",
+    "repeat8": 0.48325298547436746,
+    "length": 31744,
+    "acc": false,
+    "inspected_region": "last 1500 characters only",
+    "tail": " 220 \\cdot 220 + 220 \\cdot 0 + 220 \\cdot 0 = 48400 + 0 + 0 = 48400\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 48400.\n\nWait, let’s try $(221,221,0)$:\n\\[\nrs + rt + st = 221 \\cdot 221 + 221 \\cdot 0 + 221 \\cdot 0 = 48841 + 0 + 0 = 48841\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 48841.\n\nWait, let’s try $(222,222,0)$:\n\\[\nrs + rt + st = 222 \\cdot 222 + 222 \\cdot 0 + 222 \\cdot 0 = 49284 + 0 + 0 = 49284\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 49284.\n\nWait, let’s try $(223,223,0)$:\n\\[\nrs + rt + st = 223 \\cdot 223 + 223 \\cdot 0 + 223 \\cdot 0 = 49729 + 0 + 0 = 49729\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 49729.\n\nWait, let’s try $(224,224,0)$:\n\\[\nrs + rt + st = 224 \\cdot 224 + 224 \\cdot 0 + 224 \\cdot 0 = 50176 + 0 + 0 = 50176\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 50176.\n\nWait, let’s try $(225,225,0)$:\n\\[\nrs + rt + st = 225 \\cdot 225 + 225 \\cdot 0 + 225 \\cdot 0 = 50625 + 0 + 0 = 50625\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 50625.\n\nWait, let’s try $(226,226,0)$:\n\\[\nrs + rt + st = 226 \\cdot 226 + 226 \\cdot 0 + 226 \\cdot 0 = 51076 + 0 + 0 = 51076\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 51076.\n\nWait, let’s try $(227,227,0)$:\n\\[\nrs + rt + st = 227 \\cdot 227 + 227 \\cdot 0 + 227 \\cdot 0 = 51529 + 0 + 0 = 51529\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot equal to 51529.\n\nWait, let’s try $(228,228,0)$:\n\\[\nrs + rt + st = 228 \\cdot 228 + 228 \\cdot 0 + 228 \\cdot 0 = 51984 + 0 + 0 = 51984\n\\]\nBut:\n\\[\n\\frac{169 - 81}{2} = 44\n\\]\nNot",
+    "observation": "continued enumeration with changing numeric values at the tail"
+  }
+]

@@ -9,6 +9,18 @@ import pytest
 from verl.utils.metric.evaluation import evaluation_metrics, evaluation_records, pass_at_k
 
 
+def test_repetition_is_scored_and_counted_separately_from_eos():
+    result = evaluation_metrics(
+        ["math"] * 3,
+        ["q"] * 3,
+        {"acc": [1, 0, 1], "__finish_reason__": ["stop", "repetition", "repetition"]},
+    )
+    assert result["eval/math/acc/observed_mean"] == pytest.approx(2 / 3)
+    assert result["eval/math/generation/finish_reason/stop_count"] == 1
+    assert result["eval/math/generation/finish_reason/repetition_count"] == 2
+    assert result["eval/math/generation/finish_reason/repetition_fraction"] == pytest.approx(2 / 3)
+
+
 def test_pass_estimator_matches_all_subsets():
     for n in range(1, 8):
         for c in range(n + 1):

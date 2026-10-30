@@ -1,0 +1,326 @@
+{
+  "all": {
+    "responses": 1280,
+    "tokens": 10726465,
+    "repeat8": {
+      "response_mean": 0.3609388016130587,
+      "pooled_window_fraction": 0.7664420595456285,
+      "thresholds": {
+        "0.5": {
+          "responses": 347,
+          "tokens_in_these_responses": 8708465
+        },
+        "0.8": {
+          "responses": 256,
+          "tokens_in_these_responses": 7272904
+        },
+        "0.9": {
+          "responses": 143,
+          "tokens_in_these_responses": 4357924
+        },
+        "0.95": {
+          "responses": 50,
+          "tokens_in_these_responses": 1574006
+        }
+      }
+    },
+    "repeat32": {
+      "response_mean": 0.20299618264355526,
+      "pooled_window_fraction": 0.6139049175195213,
+      "thresholds": {
+        "0.5": {
+          "responses": 283,
+          "tokens_in_these_responses": 7778403
+        },
+        "0.8": {
+          "responses": 145,
+          "tokens_in_these_responses": 4290465
+        },
+        "0.9": {
+          "responses": 62,
+          "tokens_in_these_responses": 1924031
+        },
+        "0.95": {
+          "responses": 30,
+          "tokens_in_these_responses": 939126
+        }
+      }
+    },
+    "tail2048_repeat8": {
+      "response_mean": 0.3291092798005167,
+      "pooled_window_fraction": 0.4430492428209371,
+      "thresholds": {
+        "0.5": {
+          "responses": 315,
+          "tokens_in_these_responses": 7951930
+        },
+        "0.8": {
+          "responses": 164,
+          "tokens_in_these_responses": 4598933
+        },
+        "0.9": {
+          "responses": 78,
+          "tokens_in_these_responses": 2235165
+        },
+        "0.95": {
+          "responses": 41,
+          "tokens_in_these_responses": 1178278
+        }
+      }
+    },
+    "tail2048_repeat32": {
+      "response_mean": 0.18207564393571346,
+      "pooled_window_fraction": 0.2750235165611087,
+      "thresholds": {
+        "0.5": {
+          "responses": 241,
+          "tokens_in_these_responses": 6620775
+        },
+        "0.8": {
+          "responses": 117,
+          "tokens_in_these_responses": 3293183
+        },
+        "0.9": {
+          "responses": 65,
+          "tokens_in_these_responses": 1873384
+        },
+        "0.95": {
+          "responses": 38,
+          "tokens_in_these_responses": 1101389
+        }
+      }
+    },
+    "block-8": {
+      "hits": 83,
+      "tokens_saved": 1802087
+    },
+    "block512-8": {
+      "hits": 129,
+      "tokens_saved": 2754403
+    },
+    "block1024-8": {
+      "hits": 156,
+      "tokens_saved": 3165368
+    },
+    "block2048-8": {
+      "hits": 162,
+      "tokens_saved": 3232859
+    }
+  },
+  "cap": {
+    "responses": 207,
+    "tokens": 6571008,
+    "repeat8": {
+      "response_mean": 0.8797853858988098,
+      "pooled_window_fraction": 0.87978538589881,
+      "thresholds": {
+        "0.5": {
+          "responses": 201,
+          "tokens_in_these_responses": 6380544
+        },
+        "0.8": {
+          "responses": 179,
+          "tokens_in_these_responses": 5682176
+        },
+        "0.9": {
+          "responses": 122,
+          "tokens_in_these_responses": 3872768
+        },
+        "0.95": {
+          "responses": 48,
+          "tokens_in_these_responses": 1523712
+        }
+      }
+    },
+    "repeat32": {
+      "response_mean": 0.75289244981142,
+      "pooled_window_fraction": 0.7528924498114201,
+      "thresholds": {
+        "0.5": {
+          "responses": 185,
+          "tokens_in_these_responses": 5872640
+        },
+        "0.8": {
+          "responses": 115,
+          "tokens_in_these_responses": 3650560
+        },
+        "0.9": {
+          "responses": 57,
+          "tokens_in_these_responses": 1809408
+        },
+        "0.95": {
+          "responses": 28,
+          "tokens_in_these_responses": 888832
+        }
+      }
+    },
+    "tail2048_repeat8": {
+      "response_mean": 0.7762440027740498,
+      "pooled_window_fraction": 0.7762440027740498,
+      "thresholds": {
+        "0.5": {
+          "responses": 186,
+          "tokens_in_these_responses": 5904384
+        },
+        "0.8": {
+          "responses": 114,
+          "tokens_in_these_responses": 3618816
+        },
+        "0.9": {
+          "responses": 55,
+          "tokens_in_these_responses": 1745920
+        },
+        "0.95": {
+          "responses": 30,
+          "tokens_in_these_responses": 952320
+        }
+      }
+    },
+    "tail2048_repeat32": {
+      "response_mean": 0.6600681645625708,
+      "pooled_window_fraction": 0.6600681645625708,
+      "thresholds": {
+        "0.5": {
+          "responses": 159,
+          "tokens_in_these_responses": 5047296
+        },
+        "0.8": {
+          "responses": 81,
+          "tokens_in_these_responses": 2571264
+        },
+        "0.9": {
+          "responses": 48,
+          "tokens_in_these_responses": 1523712
+        },
+        "0.95": {
+          "responses": 29,
+          "tokens_in_these_responses": 920576
+        }
+      }
+    },
+    "block-8": {
+      "hits": 57,
+      "tokens_saved": 1415951
+    },
+    "block512-8": {
+      "hits": 89,
+      "tokens_saved": 2207602
+    },
+    "block1024-8": {
+      "hits": 101,
+      "tokens_saved": 2472934
+    },
+    "block2048-8": {
+      "hits": 105,
+      "tokens_saved": 2530537
+    }
+  },
+  "natural_stop": {
+    "responses": 1073,
+    "tokens": 4155457,
+    "repeat8": {
+      "response_mean": 0.2608444465830954,
+      "pooled_window_fraction": 0.5869287868523639,
+      "thresholds": {
+        "0.5": {
+          "responses": 146,
+          "tokens_in_these_responses": 2327921
+        },
+        "0.8": {
+          "responses": 77,
+          "tokens_in_these_responses": 1590728
+        },
+        "0.9": {
+          "responses": 21,
+          "tokens_in_these_responses": 485156
+        },
+        "0.95": {
+          "responses": 2,
+          "tokens_in_these_responses": 50294
+        }
+      }
+    },
+    "repeat32": {
+      "response_mean": 0.09691181423372484,
+      "pooled_window_fraction": 0.39257639188407034,
+      "thresholds": {
+        "0.5": {
+          "responses": 98,
+          "tokens_in_these_responses": 1905763
+        },
+        "0.8": {
+          "responses": 30,
+          "tokens_in_these_responses": 639905
+        },
+        "0.9": {
+          "responses": 5,
+          "tokens_in_these_responses": 114623
+        },
+        "0.95": {
+          "responses": 2,
+          "tokens_in_these_responses": 50294
+        }
+      }
+    },
+    "tail2048_repeat8": {
+      "response_mean": 0.24284936586247252,
+      "pooled_window_fraction": 0.3344519352198361,
+      "thresholds": {
+        "0.5": {
+          "responses": 129,
+          "tokens_in_these_responses": 2047546
+        },
+        "0.8": {
+          "responses": 50,
+          "tokens_in_these_responses": 980117
+        },
+        "0.9": {
+          "responses": 23,
+          "tokens_in_these_responses": 489245
+        },
+        "0.95": {
+          "responses": 11,
+          "tokens_in_these_responses": 225958
+        }
+      }
+    },
+    "tail2048_repeat32": {
+      "response_mean": 0.08986273455103548,
+      "pooled_window_fraction": 0.14850317120409742,
+      "thresholds": {
+        "0.5": {
+          "responses": 82,
+          "tokens_in_these_responses": 1573479
+        },
+        "0.8": {
+          "responses": 36,
+          "tokens_in_these_responses": 721919
+        },
+        "0.9": {
+          "responses": 17,
+          "tokens_in_these_responses": 349672
+        },
+        "0.95": {
+          "responses": 9,
+          "tokens_in_these_responses": 180813
+        }
+      }
+    },
+    "block-8": {
+      "hits": 26,
+      "tokens_saved": 386136
+    },
+    "block512-8": {
+      "hits": 40,
+      "tokens_saved": 546801
+    },
+    "block1024-8": {
+      "hits": 55,
+      "tokens_saved": 692434
+    },
+    "block2048-8": {
+      "hits": 57,
+      "tokens_saved": 702322
+    }
+  }
+}

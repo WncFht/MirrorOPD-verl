@@ -224,9 +224,11 @@ def evaluation_metrics(
                     result[prefix + f"generation/{label}/{stat}"] = float(value)
         if "__finish_reason__" in infos:
             reasons = [r.get("__finish_reason__") for r in all_rows]
-            for reason in ("stop", "length", "aborted", "completed", "unknown"):
+            for reason in ("stop", "length", "repetition", "aborted", "completed", "unknown"):
                 count = sum((r or "unknown") == reason or (reason == "aborted" and r == "abort") for r in reasons)
                 result[prefix + f"generation/finish_reason/{reason}_count"] = count
+                if reason == "repetition":
+                    result[prefix + "generation/finish_reason/repetition_fraction"] = count / len(reasons)
         field_names = {}
         for field in sorted(numeric_fields):
             component = "format" if field == "format_score" else dataset_slug(field)

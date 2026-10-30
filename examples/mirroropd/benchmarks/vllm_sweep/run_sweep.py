@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
 """Queue native vLLM sweeps and original-verl validation on one exclusive GPU pool."""
 
 import argparse
@@ -229,7 +231,7 @@ def eligible(result, expected=9120):
         result.get("completed") == expected
         and result.get("failed", 1) == 0
         and all(
-            isinstance(result.get(k), (int, float)) and math.isfinite(result[k]) and result[k] > 0
+            isinstance(result.get(k), int | float) and math.isfinite(result[k]) and result[k] > 0
             for k in ("duration", "output_throughput", "total_output_tokens")
         )
     )
@@ -315,7 +317,7 @@ def validate_original_outputs(directory):
     valid = count == 9120 and all(
         checks[name]["response_count"] == responses
         and checks[name]["failed_count"] == 0
-        and isinstance(checks[name]["acc_mean"], (int, float))
+        and isinstance(checks[name]["acc_mean"], int | float)
         and math.isfinite(checks[name]["acc_mean"])
         for name, responses in expected.items()
     )
@@ -599,6 +601,8 @@ class Queue:
             MAX_PROMPT_LENGTH=str(profile["prompt_cap"]),
             MAX_VAL_RESPONSE_LENGTH="31744",
             VAL_N="16",
+            # Match the native benchmark's unmodified stopping protocol.
+            VAL_REPETITION_DETECTION="false",
             VAL_BATCH_SIZE="null",
             ROLLOUT_TP="1",
             ROLLOUT_ENFORCE_EAGER="False",

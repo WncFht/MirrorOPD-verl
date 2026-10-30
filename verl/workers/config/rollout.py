@@ -44,10 +44,36 @@ class SamplingConfig(BaseConfig):
     n: int = 1
     # Single-turn validation response budget; None reuses rollout.response_length.
     max_tokens: Optional[int] = None
+    # Validation-only exact contiguous-token repetition stop; null disables.
+    repetition_detection: Optional[dict[str, int]] = None
 
     def __post_init__(self):
         if self.max_tokens is not None and (type(self.max_tokens) is not int or self.max_tokens <= 0):
             raise ValueError("SamplingConfig.max_tokens must be a positive integer or None")
+        validate_repetition_detection(self.repetition_detection)
+
+
+def validate_repetition_detection(value):
+    """Validate the portable config without importing an inference backend."""
+    if value is None:
+        return None
+    fields = {"min_pattern_size", "max_pattern_size", "min_count"}
+    if not isinstance(value, dict | DictConfig) or set(value) != fields:
+        raise ValueError(f"repetition_detection must be null or a mapping with exactly {sorted(fields)}")
+    params = dict(value)
+    if any(type(v) is not int or v < 1 for v in params.values()):
+        raise ValueError("repetition_detection values must be positive integers (not bool); null disables")
+    if params["min_count"] < 2 or params["min_pattern_size"] > params["max_pattern_size"]:
+        raise ValueError("repetition_detection requires min_count >= 2 and min_pattern_size <= max_pattern_size")
+    return params
+
+
+def validation_repetition_detection(rollout):
+    """Return a plain request mapping; reject unsupported backends instead of ignoring it."""
+    params = validate_repetition_detection(rollout.val_kwargs.get("repetition_detection"))
+    if params is not None and rollout.name != "vllm":
+        raise ValueError("val_kwargs.repetition_detection requires rollout.name=vllm; set it to null to disable")
+    return params
 
 
 @dataclass
@@ -293,6 +319,7 @@ class RolloutConfig(BaseConfig):
 
     def __post_init__(self):
         """Validate the rollout config"""
+        validation_repetition_detection(self)
         if self.stop_token_ids is not None:
             if not isinstance(self.stop_token_ids, list) or any(
                 type(token_id) is not int or token_id < 0 for token_id in self.stop_token_ids
