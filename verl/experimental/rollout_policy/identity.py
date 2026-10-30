@@ -7,16 +7,57 @@ import json
 from dataclasses import asdict, replace
 from pathlib import Path
 
+from .models import resolve_bindings
+
+
+def checkpoint_files(root):
+    """Manifest of supported HF weights and tokenizer inputs, excluding run artifacts."""
+    root = Path(root).resolve()
+    files = {root / "config.json"}
+    for stem, index in (
+        ("model.safetensors", "model.safetensors.index.json"),
+        ("pytorch_model.bin", "pytorch_model.bin.index.json"),
+    ):
+        if (root / index).is_file():
+            files.add(root / index)
+            manifest = json.loads((root / index).read_text())
+            for name in set(manifest["weight_map"].values()):
+                relative = Path(name)
+                if relative.is_absolute() or ".." in relative.parts:
+                    raise ValueError("Checkpoint shard must be inside its model directory")
+                files.add(root / relative)
+            break
+        if (root / stem).is_file():
+            files.add(root / stem)
+            break
+    else:
+        raise ValueError(f"Incomplete model checkpoint: {root}")
+    for name in (
+        "generation_config.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "special_tokens_map.json",
+        "added_tokens.json",
+        "vocab.json",
+        "vocab.txt",
+        "merges.txt",
+        "tokenizer.model",
+        "spiece.model",
+        "sentencepiece.bpe.model",
+        "tokenizer.tiktoken",
+        "chat_template.jinja",
+    ):
+        if (root / name).is_file():
+            files.add(root / name)
+    files.update((root / "chat_templates").glob("*.jinja"))
+    if not all(file.is_file() for file in files):
+        raise ValueError(f"Incomplete model checkpoint: {root}")
+    return sorted(files)
+
 
 def checkpoint_identity(path):
     root = Path(path).resolve()
-    files = sorted(
-        p
-        for p in root.rglob("*")
-        if p.is_file() and p.suffix in {".json", ".safetensors", ".bin", ".model", ".txt", ".tiktoken"}
-    )
-    if not (root / "config.json").is_file() or not any(p.suffix in {".safetensors", ".bin"} for p in files):
-        raise ValueError(f"Incomplete model checkpoint: {root}")
+    files = checkpoint_files(root)
     digest = hashlib.sha256()
     for file in files:
         before = file.stat()
@@ -34,15 +75,47 @@ def checkpoint_identity(path):
 def bind_policy(config, policy):
     teachers = config.distillation.teacher_models
     teacher_path = next(iter(teachers.values())).model_path if len(teachers) == 1 else None
-    bindings = policy.bindings(config.actor_rollout_ref.model.path, teacher_path)
+    bindings = resolve_bindings(policy, config.actor_rollout_ref.model.path, teacher_path)
     identities = {path: checkpoint_identity(path) for path in {b.path for b in bindings.values()}}
     bindings = {slot: replace(binding, identity=identities[binding.path]) for slot, binding in bindings.items()}
+    from omegaconf import OmegaConf
+
+    def value(key, default=None):
+        item = OmegaConf.select(config, key, default=default)
+        return OmegaConf.to_container(item, resolve=True) if OmegaConf.is_config(item) else item
+
     state = {
-        "schema": 1,
-        "policy": asdict(policy),
-        "bindings": {
-            slot: {"kind": b.kind, "path": b.path, "sha256": identities[b.path]} for slot, b in bindings.items()
+        "schema": 2,
+        "semantics": {
+            "mode": policy.mode,
+            "coefficient": asdict(policy.right_weight) if policy.mode != "single" else None,
+            "fusion_space": policy.fusion_space if policy.mode == "token_mixture" else None,
+            "bindings": {slot: {"kind": b.kind, "sha256": b.identity} for slot, b in bindings.items()},
+            "sampling_contract": "mirroropd-crossing-token-v1",
+            "sampling": {
+                name: value("actor_rollout_ref.rollout." + name)
+                for name in (
+                    "temperature",
+                    "top_p",
+                    "top_k",
+                    "response_length",
+                    "prompt_length",
+                    "stop_token_ids",
+                    "ignore_eos",
+                    "n",
+                    "seed",
+                    "repetition_penalty",
+                    "dtype",
+                )
+            },
         },
+        "execution": {
+            "fusion": asdict(policy.execution),
+            "micro_batch_size": policy.micro_batch_size,
+            "deadline_seconds": policy.deadline_seconds,
+            "drain_seconds": policy.drain_seconds,
+        },
+        "locations": {slot: b.path for slot, b in bindings.items()},
     }
     trainer = config.get("trainer", {})
     checkpoint = None
@@ -63,7 +136,9 @@ def verify_resume_bindings(checkpoint_dir, state):
     if not path.is_file():
         raise ValueError("Checkpoint lacks rollout_state.json; resume with its original frozen code or start a new run")
     previous = json.loads(path.read_text())
-    if previous != state:
+    if previous.get("schema") != 2 or state.get("schema") != 2:
+        raise ValueError("Rollout state schema changed; resume with the original frozen code or start a new run")
+    if previous["semantics"] != state["semantics"]:
         raise ValueError("Rollout policy or model identity changed on resume; keep original bindings")
 
 

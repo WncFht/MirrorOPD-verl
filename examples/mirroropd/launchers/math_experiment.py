@@ -404,6 +404,19 @@ class LaunchPlan:
 
 
 def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path = ROOT) -> LaunchPlan:
+    from examples.mirroropd.assets.paths import registered_model, require_current_location
+
+    resolved = []
+    for argument in hydra:
+        key, separator, value = argument.partition("=")
+        if key.lstrip("+") in {"rollout_policy.model.ref", "rollout_policy.left.ref", "rollout_policy.right.ref"}:
+            value = value.strip("\"'")
+            path = Path(value).expanduser()
+            if not path.is_dir():
+                path = registered_model(value, root=environment.get("MODEL_ROOT"))
+            argument = key + separator + str(require_current_location(str(path)).resolve())
+        resolved.append(argument)
+    hydra = resolved
     name, preset, role = resolve_selector(args.preset)
     env = environment.copy()
     if preset:

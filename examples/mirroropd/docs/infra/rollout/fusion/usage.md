@@ -46,4 +46,6 @@ Single 使用 `model`，mixture 使用 `left/right`，不能混用。未指定�
 
 保存仍使用 `trainer.save_freq`，恢复使用 `trainer.resume_mode=resume_path` 和 `trainer.resume_from_path`。非默认 rollout checkpoint 增加 `rollout_state.json`，核对策略、原始 initial 和固定模型的内容身份。恢复配置继续指向原始初始化模型；不要把 actor 恢复检查点当作 initial。
 
-旧运行缺少新身份文件时，用其冻结代码继续。新运行遇到旧字段会直接报错；按[配置迁移表](2026-10-31-Rollout统一接口实施计划.md#配置迁移)修改后重启。模型不受支持、无法确认请求排空、权重接收失败仍会终止运行；此轮不加入自动重试。
+`rollout_state.json` 现在使用 schema 2：模型身份由加载所需的权重、配置和 tokenizer 文件决定；普通说明文件和优化器文件不参与身份。恢复比较模型绑定、系数时钟与采样参数，超时和执行预算单独记录并接受当前能力检查。旧 schema 1 或缺少身份文件的运行，用其冻结代码继续。新运行遇到旧字段会直接报错；按[配置迁移表](2026-10-31-Rollout统一接口实施计划.md#配置迁移)修改后重启。模型不受支持、无法确认请求排空、权重接收失败仍会终止运行；此轮不加入自动重试。
+
+资产别名在公共启动脚本解析成固定路径；直接调用通用 trainer 时，`model/left/right.ref` 应提供本地目录。

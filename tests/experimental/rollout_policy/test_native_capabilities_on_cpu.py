@@ -5,7 +5,7 @@
 import pytest
 from omegaconf import OmegaConf
 
-from verl.experimental.rollout_policy.validation import validate_policy
+from verl.experimental.rollout_policy.validation import validate_native_options, validate_policy
 
 
 @pytest.mark.parametrize(
@@ -28,7 +28,7 @@ def test_unaccepted_modes_fail_before_model_loading(key, value):
     )
     OmegaConf.update(config, "actor_rollout_ref.rollout." + key, value, force_add=True)
     with pytest.raises(ValueError, match="Native fusion"):
-        validate_policy(config)
+        validate_native_options(config)
 
 
 def test_default_single_does_not_consume_fusion_capability_policy():

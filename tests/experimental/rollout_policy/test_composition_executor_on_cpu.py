@@ -10,6 +10,7 @@ import pytest
 from omegaconf import OmegaConf
 
 from verl.experimental.rollout_policy.execution import NativeVLLMExecutor
+from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
 from verl.experimental.rollout_policy.runtime import RolloutRuntime
 
@@ -36,7 +37,7 @@ def test_native_loading_and_refit_target_are_independent_of_learner_initializati
         collection_step=3,
         optimizer_step=2,
         seed=42,
-        student_path=paths["learner"],
+        bindings=resolve_bindings(policy, paths["learner"], None),
     )
     server = SimpleNamespace(
         collective_rpc=SimpleNamespace(remote=AsyncMock()),

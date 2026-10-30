@@ -7,7 +7,7 @@ from dataclasses import asdict, replace
 import pytest
 import torch
 
-from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
+from verl.experimental.rollout_policy.plan import ModelBinding, RolloutPolicyConfig, build_plan
 from verl.experimental.rollout_policy.sampling import (
     SamplingConfig,
     fusion_log_probs,
@@ -94,8 +94,7 @@ def test_fusion_space_is_frozen_in_plan_without_changing_request_streams(tmp_pat
         collection_step=3,
         optimizer_step=32,
         seed=42,
-        student_path=str(tmp_path),
-        teacher_path=str(tmp_path),
+        bindings={"left": ModelBinding("current", str(tmp_path)), "right": ModelBinding("checkpoint", str(tmp_path))},
     )
     policy = RolloutPolicyConfig.parse({"mode": "token_mixture", "fusion_space": "probability"})
     plan = build_plan(policy, **kwargs)

@@ -11,6 +11,7 @@ from verl.experimental.rollout_policy.identity import (
     save_bindings,
     verify_resume_bindings,
 )
+from verl.experimental.rollout_policy.models import resolve_reference
 from verl.experimental.rollout_policy.plan import ModelRef, RolloutPolicyConfig
 
 
@@ -62,10 +63,10 @@ def test_reference_pins_symlink_and_disallows_ambiguous_teacher(tmp_path):
     target.mkdir()
     alias = tmp_path / "alias"
     alias.symlink_to(target)
-    bound = ModelRef("checkpoint", str(alias)).resolve(str(tmp_path))
+    bound = resolve_reference(ModelRef("checkpoint", str(alias)), str(tmp_path))
     assert bound.path == str(target)
     with pytest.raises(ValueError, match="exactly one"):
-        ModelRef("teacher").resolve(str(tmp_path))
+        resolve_reference(ModelRef("teacher"), str(tmp_path))
 
 
 def test_identical_fixed_content_folds_across_distinct_directories(tmp_path):
@@ -87,7 +88,6 @@ def test_identical_fixed_content_folds_across_distinct_directories(tmp_path):
         collection_step=1,
         optimizer_step=0,
         seed=0,
-        student_path=a,
     )
     assert plan.normalization == "same_binding"
     assert [phase.decoder for phase in plan.phases] == ["left"]

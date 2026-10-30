@@ -5,6 +5,7 @@ import asyncio
 import pytest
 
 from verl.experimental.rollout_policy.collector import collect_plan, settle_with_deadline
+from verl.experimental.rollout_policy.models import resolve_bindings
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig, build_plan
 
 
@@ -18,8 +19,9 @@ def test_atomic_parent_completion(tmp_path, failure):
         collection_step=1,
         optimizer_step=0,
         seed=4,
-        student_path=str(tmp_path),
-        teacher_path=str(tmp_path),
+        bindings=resolve_bindings(
+            RolloutPolicyConfig.parse({"mode": "trajectory_mixture"}), str(tmp_path), str(tmp_path)
+        ),
     )
     events = []
 
@@ -111,8 +113,9 @@ def test_unsafe_remote_drain_never_releases_or_clears(tmp_path):
         collection_step=1,
         optimizer_step=0,
         seed=4,
-        student_path=str(tmp_path),
-        teacher_path=str(tmp_path),
+        bindings=resolve_bindings(
+            RolloutPolicyConfig.parse({"mode": "trajectory_mixture"}), str(tmp_path), str(tmp_path)
+        ),
     )
     events = []
 
