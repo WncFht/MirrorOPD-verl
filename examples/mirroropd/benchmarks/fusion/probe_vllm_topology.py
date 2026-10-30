@@ -40,8 +40,8 @@ def coordinate(out, processes, repeats, timeout):
         write_json(out / f"go-{repeat}.json", {"released_monotonic": released})
         paths = [out / f"batch-{repeat}-{rank}.json" for rank in range(len(processes))]
         wait_files(paths, processes, deadline)
-        collected = time.monotonic()
         batches = [json.loads(path.read_text()) for path in paths]
+        collected = time.monotonic()
         if any(
             not all(math.isfinite(batch[key]) for key in ("started_monotonic", "ended_monotonic"))
             or not released <= batch["started_monotonic"] <= batch["ended_monotonic"]
