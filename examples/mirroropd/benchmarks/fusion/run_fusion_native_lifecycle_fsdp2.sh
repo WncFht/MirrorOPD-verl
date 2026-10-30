@@ -4,6 +4,11 @@ set -euo pipefail
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO=$(cd -- "$HERE/../../../.." && pwd)
 WORKSPACE=$(dirname -- "$REPO")
+checkpoint_root() {
+    "$WORKSPACE/envs/mirroropd-fusion/bin/python" "$HERE/record_schema.py" \
+        --checkpoint-root "$REPO/outputs/$1"
+}
+
 PAIR=${1:?dense or moe}
 BINDING=${2:?current or initial}
 PREFIX=${3:?unique run prefix}
@@ -65,5 +70,5 @@ if [[ -n $RESUME_FROM ]]; then
 else
     run "$PREFIX" 'trainer.total_training_steps=2'
     run "$PREFIX-resume" 'trainer.total_training_steps=3' 'trainer.resume_mode=resume_path' \
-        "trainer.resume_from_path=$REPO/outputs/$PREFIX/checkpoints/global_step_2"
+        "trainer.resume_from_path=$(checkpoint_root "$PREFIX")/global_step_2"
 fi

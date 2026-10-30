@@ -11,6 +11,8 @@ from pathlib import Path
 
 import yaml
 
+from examples.mirroropd.benchmarks.fusion.record_schema import checkpoint_root
+
 
 def checkpoint_delta(before, after, world_size):
     """Read CPU shard storage without reconstructing distributed collectives."""
@@ -50,6 +52,7 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
     config_path = run / "resolved_config.yaml"
     raw_config = config_path.read_bytes()
     config = yaml.safe_load(raw_config)
+    checkpoints = checkpoint_root(run, config)
     witnesses.append({"path": str(config_path.resolve()), "sha256": hashlib.sha256(raw_config).hexdigest()})
     tp = int(config["rollout_policy"]["execution"]["tensor_parallel_size"])
     if config["trainer"]["n_gpus_per_node"] != world_size or world_size % tp:
@@ -72,8 +75,8 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
             errors.append("Nonfinite optimizer update")
     summaries = []
     for outer, alpha in zip(outers, alphas, strict=True):
-        plan = read(f"checkpoints/rollout_plans/step_{outer}.json")
-        runtime = read(f"checkpoints/rollout_plans/step_{outer}_runtime.json")
+        plan = read(checkpoints / f"rollout_plans/step_{outer}.json")
+        runtime = read(checkpoints / f"rollout_plans/step_{outer}_runtime.json")
         version = [outer - 1, outer - 1]
         if plan["actor_version"] != version or plan["resolved_control"] != alpha:
             errors.append(f"Outer {outer}: actor coordinate or alpha mismatch")
@@ -121,12 +124,12 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
             }
         )
     if save is not None:
-        state = read(f"checkpoints/global_step_{save}/trainer_state.json")
+        state = read(checkpoints / f"global_step_{save}/trainer_state.json")
         if state["global_step"] != save or state["actor_optimizer_step"] != save:
             errors.append("Saved trainer state does not match applied updates")
         for kind in ["model", "optim", "extra_state"]:
             for rank in range(world_size):
-                path = run / f"checkpoints/global_step_{save}/actor/{kind}_world_size_{world_size}_rank_{rank}.pt"
+                path = checkpoints / f"global_step_{save}/actor/{kind}_world_size_{world_size}_rank_{rank}.pt"
                 if not path.is_file() or path.stat().st_size == 0:
                     errors.append(f"Missing checkpoint shard {path.name}")
     source_commit = (run / "source_commit.txt").read_text().strip()
@@ -207,7 +210,7 @@ def main():
         try:
             report["checkpoint_delta"] = checkpoint_delta(
                 args.previous_actor_checkpoint,
-                args.run / f"checkpoints/global_step_{args.save}/actor",
+                checkpoint_root(args.run) / f"global_step_{args.save}/actor",
                 args.world_size,
             )
         except (ValueError, RuntimeError, OSError) as exc:

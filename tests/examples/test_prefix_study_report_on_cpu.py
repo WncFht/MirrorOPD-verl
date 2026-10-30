@@ -134,3 +134,18 @@ def test_completion_requires_exit_and_matching_formal_evidence(fault):
     elif fault == "unvalidated_probability":
         audit["arm"] = requested_arm = "PM"
     assert completion_matches(audit, "J", requested_arm, exit_code, sources) == (fault is None)
+
+
+def test_lifecycle_checkpoint_location_follows_saved_configuration(tmp_path):
+    import yaml
+
+    from examples.mirroropd.benchmarks.fusion.record_schema import checkpoint_root
+
+    run = tmp_path / "repository/outputs/run"
+    run.mkdir(parents=True)
+    destination = tmp_path / "model/checkpoints/custom/run"
+    config = {"trainer": {"default_local_dir": str(destination)}}
+    (run / "resolved_config.yaml").write_text(yaml.safe_dump(config))
+    assert checkpoint_root(run) == destination
+    config["trainer"]["default_local_dir"] = "outputs/run/checkpoints"
+    assert checkpoint_root(run, config) == run / "checkpoints"
