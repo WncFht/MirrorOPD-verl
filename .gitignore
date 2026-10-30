@@ -212,3 +212,9 @@ outputs
 
 # MirrorOPD's scoped documentation tooling dependencies.
 /examples/mirroropd/tools/maintenance/node_modules
+
+# Reproducible per-run figure bundles; keep curated report figures and the run registry.
+/examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism/appendix/data/run-figures/
+# Search command diagnostics and intermediate monitoring snapshots remain local.
+/examples/mirroropd/docs/**/paper-search-stderr.txt
+/examples/mirroropd/docs/experiments/rollout-policy/data/prefix-40x16-20261030/snapshot-*/
