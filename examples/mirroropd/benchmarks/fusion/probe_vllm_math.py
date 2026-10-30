@@ -4,6 +4,7 @@
 
 import argparse
 import json
+import math
 import os
 import subprocess
 import sys
@@ -12,10 +13,24 @@ from pathlib import Path
 import torch
 
 
-def oracle(student, teacher, legal, alpha, temperature, top_k, top_p):
+def oracle(student, teacher, legal, alpha, temperature, top_k, top_p, fusion_space="logit"):
     ids = legal.nonzero().flatten()
     logits = torch.full_like(student, -torch.inf, dtype=torch.float64)
-    logits[ids] = student[ids].double() * (1 - alpha) + teacher[ids].double() * alpha
+    if alpha == 0:
+        logits[ids] = student[ids].double()
+    elif alpha == 1:
+        logits[ids] = teacher[ids].double()
+    elif fusion_space == "probability":
+        # Independent FP64 log-sum reduction, retaining extremely small tails.
+        components = torch.stack(
+            [
+                student[ids].double().log_softmax(-1) + math.log1p(-alpha),
+                teacher[ids].double().log_softmax(-1) + math.log(alpha),
+            ]
+        )
+        logits[ids] = components.logsumexp(0)
+    else:
+        logits[ids] = student[ids].double() * (1 - alpha) + teacher[ids].double() * alpha
     logits /= temperature
     if top_k > 0:
         threshold = sorted(logits.tolist(), reverse=True)[min(top_k, logits.numel()) - 1]
@@ -37,6 +52,7 @@ def main():
     parser.add_argument("--teacher", required=True)
     parser.add_argument("--out", required=True)
     parser.add_argument("--graph", action="store_true")
+    parser.add_argument("--fusion-space", choices=["logit", "probability"], default="logit")
     parser.add_argument("--tensor-parallel-size", type=int, choices=[1, 2], default=1)
     args = parser.parse_args()
     if len(os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")) != args.tensor_parallel_size:
@@ -72,7 +88,7 @@ def main():
     llm = LLM(
         model=args.student,
         tensor_parallel_size=args.tensor_parallel_size,
-        hf_overrides=fusion_hf_overrides(args.teacher),
+        hf_overrides=fusion_hf_overrides(args.teacher, args.fusion_space),
         dtype="bfloat16",
         enforce_eager=not args.graph,
         compilation_config=decode_graph_config(1) if args.graph else None,
@@ -111,7 +127,16 @@ def main():
         path = out / f"case-{index}.pt"
         llm.collective_rpc("fusion_save_logits", args=(str(path),))
         values = torch.load(path, map_location="cpu", weights_only=True)
-        expected = oracle(values["student"][0], values["teacher"][0], values["legal"], alpha, temperature, top_k, top_p)
+        expected = oracle(
+            values["student"][0],
+            values["teacher"][0],
+            values["legal"],
+            alpha,
+            temperature,
+            top_k,
+            top_p,
+            args.fusion_space,
+        )
         token = response.token_ids[-1]
         measured = response.logprobs[-1][token].logprob
         error = abs(measured - expected[token].item())

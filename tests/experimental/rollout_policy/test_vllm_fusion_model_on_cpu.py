@@ -101,6 +101,25 @@ def test_native_family_contract_keeps_qwen2_and_qwen3_pairs_explicit():
             validate_component_families(SimpleNamespace(model_type=student), SimpleNamespace(model_type=teacher))
 
 
+@pytest.mark.parametrize("teacher_vocab", [4, 7])
+@pytest.mark.parametrize("alpha", [0.0, 0.2, 0.5, 1.0])
+def test_probability_mixture_conditions_each_native_head_before_mixing(teacher_vocab, alpha):
+    model = composite()
+    model.teacher = Branch(3, 0.5, teacher_vocab)
+    model.fusion_space = "probability"
+    model.capture_components = True
+    model.set_alpha(alpha)
+    ids = torch.tensor([1, 2])
+    student = model.student.compute_logits(model.student.embed_input_ids(ids)).double()
+    teacher = model.teacher.compute_logits(model.teacher.embed_input_ids(ids)).double()
+    expected = (1 - alpha) * student[:, :4].softmax(-1) + alpha * teacher[:, :4].softmax(-1)
+    actual = model.compute_logits(model(ids, torch.tensor([0, 1]))).double().softmax(-1)
+    torch.testing.assert_close(actual[:, :4], expected, atol=2e-6, rtol=0)
+    assert (actual[:, 4] == 0).all()
+    torch.testing.assert_close(model.component_logits["student"].double(), student, atol=0, rtol=0)
+    torch.testing.assert_close(model.component_logits["teacher"].double(), teacher, atol=0, rtol=0)
+
+
 def test_child_configuration_replaces_both_hf_views(monkeypatch):
     from types import SimpleNamespace
 

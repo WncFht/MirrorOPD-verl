@@ -864,6 +864,7 @@ rollout_policy:
   source: student
   student: current
   teacher_weight: 0.5
+  fusion_space: logit
   teacher_model_path: null
   model_path: null
   micro_batch_size: 4

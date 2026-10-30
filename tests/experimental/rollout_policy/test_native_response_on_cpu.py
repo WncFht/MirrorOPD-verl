@@ -21,22 +21,54 @@ def server():
     instance.fusion_loaded_version = (0, 0)
     instance.fusion_alpha = 0.5
     instance.fusion_teacher_path = "teacher"
+    instance.fusion_space = "logit"
     instance.config = SimpleNamespace(response_length=2, max_model_len=16)
     return instance
 
 
-def test_full_vocab_no_logprob_option_still_returns_fusion_behavior(monkeypatch):
+@pytest.mark.parametrize("fusion_space", ["logit", "probability"])
+def test_full_vocab_no_logprob_option_still_returns_fusion_behavior(monkeypatch, fusion_space):
     async def generate(self, request_id, prompt_ids, sampling_params, **kwargs):
         assert sampling_params["logprobs"] is True
         return TokenOutput(token_ids=[4, 5], log_probs=[-0.3, -0.4], stop_reason="completed")
 
     monkeypatch.setattr(vLLMHttpServer, "generate", generate)
     params = {"_fusion_phase_token": "phase", "logprobs": False, "temperature": 1.0}
-    result = asyncio.run(server().generate("id", [1, 2], params))
+    instance = server()
+    instance.fusion_space = fusion_space
+    result = asyncio.run(instance.generate("id", [1, 2], params))
     assert result.log_probs == [-0.3, -0.4]
     assert params["logprobs"] is False
     assert params["_fusion_phase_token"] == "phase"
     assert result.extra_fields["actor_version"] == (0, 0)
+    assert result.extra_fields["fusion_space"] == fusion_space
+
+
+@pytest.mark.parametrize("spaces", [["logit"], ["probability", "logit"], ["probability", "probability"]])
+def test_probability_phase_never_opens_against_a_geometric_engine(spaces):
+    instance = server()
+    resumed = []
+
+    async def idle():
+        return None
+
+    async def resume():
+        resumed.append(True)
+
+    async def rpc(name, args):
+        assert name == "fusion_prepare"
+        return [{"version": (0, 0), "teacher_path": "teacher", "fusion_space": value} for value in spaces]
+
+    instance.wait_for_requests_to_drain = instance.clear_kv_cache = idle
+    instance.resume_generation = resume
+    instance.engine = SimpleNamespace(collective_rpc=rpc)
+    if set(spaces) == {"probability"}:
+        asyncio.run(instance.prepare(1, "new-phase", 0.5, (0, 0), "probability"))
+        assert instance.fusion_accepting and instance.fusion_space == "probability" and resumed
+    else:
+        with pytest.raises(RuntimeError, match="space"):
+            asyncio.run(instance.prepare(1, "new-phase", 0.5, (0, 0), "probability"))
+        assert not instance.fusion_accepting and not resumed
 
 
 @pytest.mark.parametrize("log_probs", [None, [-0.3], [-0.3, float("nan")]])

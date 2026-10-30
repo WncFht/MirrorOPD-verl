@@ -16,6 +16,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--student", required=True)
     parser.add_argument("--teacher", required=True)
+    parser.add_argument("--fusion-space", choices=["logit", "probability"], default="logit")
     parser.add_argument("--out", required=True)
     parser.add_argument("--cap", type=int, default=32)
     parser.add_argument("--batch", type=int, default=4)
@@ -110,7 +111,7 @@ def main():
         model=args.student,
         disable_log_stats=False,
         tokenizer=args.student,
-        hf_overrides=fusion_hf_overrides(args.teacher),
+        hf_overrides=fusion_hf_overrides(args.teacher, args.fusion_space),
         tensor_parallel_size=args.tensor_parallel_size,
         dtype="bfloat16",
         enforce_eager=not args.graph,

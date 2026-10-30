@@ -73,6 +73,7 @@ def audit(run, reference, pair, arm, mode, exit_code):
         "S0": {"student": batch},
         "S": {"student": batch},
         "LM": {"fusion": batch},
+        "PM": {"fusion": batch},
         "TM": {"student": batch // 2, "teacher": batch // 2},
         "T": {"teacher": batch},
     }[arm]
@@ -96,8 +97,13 @@ def audit(run, reference, pair, arm, mode, exit_code):
             errors.append(f"Outer {outer}: student binding changed")
         if Path(binding["path"]).resolve() != Path(config["actor_rollout_ref"]["model"]["path"]).resolve():
             errors.append(f"Outer {outer}: original learner identity changed")
-        if arm == "LM":
+        expected_space = "probability" if arm == "PM" else "logit"
+        if plan.get("fusion_space", "logit") != expected_space:
+            errors.append(f"Outer {outer}: wrong fusion space in source plan")
+        if arm in {"LM", "PM"}:
             ranks = runtime["ranks"]
+            if any(row.get("fusion_space", "logit") != expected_space for row in ranks):
+                errors.append(f"Outer {outer}: receiver fusion space differs from plan")
             world = config["trainer"]["n_gpus_per_node"]
             tp = config["rollout_policy"]["execution"]["tensor_parallel_size"]
             actual = {(row.get("replica"), row.get("tp_rank"), row.get("tensor_parallel_size")) for row in ranks}
@@ -153,7 +159,7 @@ def main():
     parser.add_argument("run", type=Path)
     parser.add_argument("--reference", type=Path, required=True)
     parser.add_argument("--pair", choices=["J", "P"], required=True)
-    parser.add_argument("--arm", choices=["S0", "S", "LM", "TM", "T"], required=True)
+    parser.add_argument("--arm", choices=["S0", "S", "LM", "PM", "TM", "T"], required=True)
     parser.add_argument("--mode", choices=["formal", "profile", "smoke"], required=True)
     parser.add_argument(
         "--exit-code", type=int, required=True, help="Observed subprocess result from the run controller"

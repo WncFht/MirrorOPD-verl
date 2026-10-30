@@ -7,6 +7,9 @@ student: current
 
 teacher_weight: 0.5
 
+# Token fusion only: raw-logit/geometric or probability/arithmetic mixing.
+fusion_space: logit
+
 teacher_model_path: null
 
 model_path: null

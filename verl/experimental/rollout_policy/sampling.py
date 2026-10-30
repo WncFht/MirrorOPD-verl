@@ -16,8 +16,11 @@ class SamplingConfig:
     max_tokens: int = 128
     stop_ids: tuple[int, ...] = ()
     legal_ids: tuple[int, ...] = ()
+    fusion_space: str = "logit"
 
     def __post_init__(self):
+        if self.fusion_space not in {"logit", "probability"}:
+            raise ValueError("fusion_space must be logit or probability")
         if not math.isfinite(self.temperature) or self.temperature < 0:
             raise ValueError("temperature must be finite and nonnegative")
         if not math.isfinite(self.top_p) or not 0 < self.top_p <= 1:
@@ -28,10 +31,49 @@ class SamplingConfig:
             raise ValueError("max_tokens must be positive")
 
 
+def _probability_log_softmax(values):
+    # Explicit FP32 logsumexp avoids the large-vocabulary CPU fused log-softmax
+    # reduction error observed in native-logit replay. Shift first so the final
+    # subtraction does not lose precision to a large common logit offset.
+    shifted = values - values.amax(-1, keepdim=True)
+    return shifted - shifted.logsumexp(-1, keepdim=True)
+
+
+def probability_mixture_logits(student, teacher, alpha, *, legal_mask=None):
+    """FP32 sampling logits for an arithmetic mixture on the common legal support.
+
+    Each component is normalized BEFORE mixing. In particular, illegal/padded
+    head rows must not change the effective mixture coefficient. The result is
+    an input to the single shared temperature/filter/sampling stage.
+    """
+    if not math.isfinite(alpha) or not 0 <= alpha <= 1:
+        raise ValueError("alpha must be finite and in [0, 1]")
+
+    def view(values):
+        values = values.float()
+        return values.masked_fill(~legal_mask, -torch.inf) if legal_mask is not None else values.clone()
+
+    if alpha == 0:
+        return view(student)
+    if alpha == 1:
+        return view(teacher)
+    if student.shape != teacher.shape:
+        raise ValueError("Probability fusion requires aligned logits")
+    student_logp = _probability_log_softmax(view(student))
+    teacher_logp = _probability_log_softmax(view(teacher))
+    return torch.logaddexp(student_logp + math.log1p(-alpha), teacher_logp + math.log(alpha))
+
+
 def fusion_log_probs(student, teacher, alpha, config: SamplingConfig, *, legal_mask=None):
     if not math.isfinite(alpha) or not 0 <= alpha <= 1:
         raise ValueError("alpha must be finite and in [0, 1]")
-    if alpha == 0:
+    if config.legal_ids and legal_mask is None:
+        active = teacher if alpha == 1 else student
+        legal_mask = torch.zeros(active.shape[-1], dtype=torch.bool, device=active.device)
+        legal_mask[list(config.legal_ids)] = True
+    if config.fusion_space == "probability":
+        logits = probability_mixture_logits(student, teacher, alpha, legal_mask=legal_mask)
+    elif alpha == 0:
         logits = student.float().clone()
     elif alpha == 1:
         logits = teacher.float().clone()
@@ -42,9 +84,6 @@ def fusion_log_probs(student, teacher, alpha, config: SamplingConfig, *, legal_m
     if logits.ndim != 2:
         raise ValueError("Expected [batch, vocabulary] logits")
     if config.legal_ids:
-        if legal_mask is None:
-            legal_mask = torch.zeros(logits.shape[-1], dtype=torch.bool, device=logits.device)
-            legal_mask[list(config.legal_ids)] = True
         logits.masked_fill_(~legal_mask, -torch.inf)
     if (torch.isnan(logits).any() | torch.isposinf(logits).any() | ~torch.isfinite(logits).any(-1).all()).item():
         raise ValueError("Fusion has invalid logits or empty common support")
@@ -62,7 +101,7 @@ def fusion_log_probs(student, teacher, alpha, config: SamplingConfig, *, legal_m
         remove[:, 1:] = remove[:, :-1].clone()
         remove[:, 0] = False
         logits.masked_fill_(torch.zeros_like(remove).scatter_(-1, indices, remove), -torch.inf)
-    return logits.log_softmax(-1)
+    return _probability_log_softmax(logits) if config.fusion_space == "probability" else logits.log_softmax(-1)
 
 
 def sample_tokens(log_probs, generators):
@@ -73,12 +112,14 @@ def sample_tokens(log_probs, generators):
     return tokens, log_probs.gather(-1, tokens[:, None]).squeeze(-1)
 
 
-def stop_event_probabilities(logits, alpha, stop_ids, native_ids, *, legal_mask=None):
+def stop_event_probabilities(logits, alpha, stop_ids, native_ids, *, legal_mask=None, fusion_space="logit"):
     """Diagnostic event distributions at T=1 without filtering; never samples events.
 
     Native mapping sends each model's own EOS to STOP and leaves other IDs intact.
     Union mapping instead coarsens the complete raw stop set in both models.
     """
+    if fusion_space not in {"logit", "probability"}:
+        raise ValueError("Unknown fusion_space")
     component = {}
     result = {}
     queried = sorted(set(stop_ids) | set(native_ids))
@@ -86,7 +127,7 @@ def stop_event_probabilities(logits, alpha, stop_ids, native_ids, *, legal_mask=
         values = values.float()
         if legal_mask is not None:
             values = values.masked_fill(~legal_mask, -torch.inf)
-        component[name] = values.log_softmax(-1)
+        component[name] = _probability_log_softmax(values) if fusion_space == "probability" else values.log_softmax(-1)
         for token in queried:
             result[f"{name}/p_{token}"] = component[name][:, token].exp()
 
@@ -95,11 +136,13 @@ def stop_event_probabilities(logits, alpha, stop_ids, native_ids, *, legal_mask=
             return student
         if alpha == 1:
             return teacher
+        if fusion_space == "probability":
+            return torch.logaddexp(student + math.log1p(-alpha), teacher + math.log(alpha))
         return student * (1 - alpha) + teacher * alpha
 
     student, teacher = component.get("student"), component.get("teacher")
     mixed = blend(student, teacher)
-    mixed_logp = mixed.log_softmax(-1)
+    mixed_logp = _probability_log_softmax(mixed) if fusion_space == "probability" else mixed.log_softmax(-1)
     result["fusion/total_stop_mass"] = mixed_logp[:, list(stop_ids)].exp().sum(-1)
     for token in queried:
         result[f"fusion/p_{token}"] = mixed_logp[:, token].exp()
