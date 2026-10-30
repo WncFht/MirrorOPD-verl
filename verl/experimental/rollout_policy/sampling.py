@@ -31,6 +31,22 @@ class SamplingConfig:
             raise ValueError("max_tokens must be positive")
 
 
+def filter_logits(logits, k=None, p=None):
+    """Top-k threshold followed by descending, shifted top-p masking."""
+    if k is not None:
+        ordered = logits.sort(dim=-1, descending=True).values
+        indices = (k.to(torch.long) - 1).clamp(0, logits.shape[-1] - 1)
+        threshold = ordered.gather(-1, indices[:, None])
+        logits = logits.masked_fill(logits < threshold, -torch.inf)
+    if p is not None:
+        ordered, indices = logits.sort(dim=-1, descending=True)
+        remove = ordered.softmax(-1).cumsum(-1) > p[:, None]
+        remove[:, 1:] = remove[:, :-1].clone()
+        remove[:, 0] = False
+        logits = logits.masked_fill(torch.zeros_like(remove).scatter_(-1, indices, remove), -torch.inf)
+    return logits
+
+
 def _probability_log_softmax(values):
     # Explicit FP32 logsumexp avoids the large-vocabulary CPU fused log-softmax
     # reduction error observed in native-logit replay. Shift first so the final
@@ -91,16 +107,9 @@ def fusion_log_probs(student, teacher, alpha, config: SamplingConfig, *, legal_m
         chosen = logits.argmax(-1, keepdim=True)
         return torch.full_like(logits, -torch.inf).scatter_(-1, chosen, 0.0)
     logits.div_(config.temperature)
-    if config.top_k > 0:
-        threshold = logits.topk(min(config.top_k, logits.shape[-1]), dim=-1).values[:, -1:]
-        logits.masked_fill_(logits < threshold, -torch.inf)
-    if config.top_p < 1:
-        ordered, indices = logits.sort(dim=-1, descending=True)
-        cumulative = ordered.softmax(-1).cumsum(-1)
-        remove = cumulative > config.top_p
-        remove[:, 1:] = remove[:, :-1].clone()
-        remove[:, 0] = False
-        logits.masked_fill_(torch.zeros_like(remove).scatter_(-1, indices, remove), -torch.inf)
+    k = torch.full((logits.shape[0],), config.top_k, device=logits.device) if config.top_k > 0 else None
+    p = torch.full((logits.shape[0],), config.top_p, device=logits.device) if config.top_p < 1 else None
+    logits = filter_logits(logits, k, p)
     return _probability_log_softmax(logits) if config.fusion_space == "probability" else logits.log_softmax(-1)
 
 

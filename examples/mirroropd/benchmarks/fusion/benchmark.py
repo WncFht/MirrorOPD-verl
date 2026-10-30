@@ -21,9 +21,9 @@ def worker(rank, args, barrier):
     import torch
     from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
 
-    from verl.experimental.rollout_policy.hf_decoder import DecodeRequest, HFFusionDecoder
     from verl.experimental.rollout_policy.sampling import SamplingConfig, validate_tokenizers
     from verl.utils.tokenizer.continuous_token_wiring import create_continuous_token_builder
+    from verl.workers.rollout.hf_fusion.hf_decoder import DecodeRequest, HFFusionDecoder
 
     torch.set_num_threads(1)
     pynvml.nvmlInit()
@@ -89,7 +89,7 @@ def worker(rank, args, barrier):
 
     student = load(args.student, devices[0]) if args.alpha < 1 else None
     teacher = load(args.teacher, devices[-1]) if args.alpha > 0 else None
-    from verl.experimental.rollout_policy.precision import configure_precision
+    from verl.workers.rollout.hf_fusion.precision import configure_precision
 
     for model in (student, teacher):
         if model is not None:

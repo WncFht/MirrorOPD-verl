@@ -5,21 +5,7 @@
 import torch
 from torch import nn
 
-
-def filter_logits(logits, k=None, p=None):
-    """Top-k threshold followed by descending, shifted top-p masking."""
-    if k is not None:
-        ordered = logits.sort(dim=-1, descending=True).values
-        indices = (k.to(torch.long) - 1).clamp(0, logits.shape[-1] - 1)
-        threshold = ordered.gather(-1, indices[:, None])
-        logits = logits.masked_fill(logits < threshold, -torch.inf)
-    if p is not None:
-        ordered, indices = logits.sort(dim=-1, descending=True)
-        remove = ordered.softmax(-1).cumsum(-1) > p[:, None]
-        remove[:, 1:] = remove[:, :-1].clone()
-        remove[:, 0] = False
-        logits = logits.masked_fill(torch.zeros_like(remove).scatter_(-1, indices, remove), -torch.inf)
-    return logits
+from verl.experimental.rollout_policy.sampling import filter_logits
 
 
 class FusionTopKTopPSampler(nn.Module):
