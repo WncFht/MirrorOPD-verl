@@ -105,7 +105,7 @@ def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
     trainer = SimpleNamespace(
         config=OmegaConf.create({"actor_rollout_ref": {"rollout": {"n": 1}}}),
         rollout_policy=policy,
-        actor_rollout_wg=SimpleNamespace(world_size=1),
+        actor_rollout_wg=SimpleNamespace(world_size=1, park_fusion_actor=AsyncMock()),
     )
     runtime = RolloutRuntime(trainer)
     runtime.frozen_client = AsyncMock(return_value="A-client")
@@ -115,5 +115,56 @@ def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
     )
     asyncio.run(runtime.prepare(plan.phases[0], plan))
     runtime.frozen_client.assert_awaited_once_with("left", str(extra), 1)
+    trainer.actor_rollout_wg.park_fusion_actor.assert_awaited_once()
     assert runtime.client == "A-client"
     runtime.fusion_client.assert_not_called()
+
+
+def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(monkeypatch, tmp_path):
+    from unittest.mock import AsyncMock
+
+    from verl.experimental.rollout_policy import runtime as module
+
+    tokenizer = SimpleNamespace(get_vocab=lambda: {"x": 0})
+    model = SimpleNamespace(
+        tokenizer=tokenizer,
+        hf_config=SimpleNamespace(num_attention_heads=1, num_key_value_heads=1, hidden_size=4, num_hidden_layers=2),
+    )
+    monkeypatch.setattr(module, "HFModelConfig", lambda **kwargs: model)
+    captured = []
+
+    class Replica:
+        def __init__(self, rank, rollout, model, **kwargs):
+            captured.append(rollout)
+            self.launch_servers = AsyncMock()
+            self._server_handle = object()
+
+    monkeypatch.setattr(module, "get_rollout_replica_class", lambda name: Replica)
+    config = OmegaConf.create(
+        {
+            "trainer": {"n_gpus_per_node": 1},
+            "actor_rollout_ref": {
+                "rollout": {
+                    "gpu_memory_utilization": 0.2,
+                    "max_model_len": None,
+                    "prompt_length": 8,
+                    "response_length": 8,
+                    "max_num_seqs": 8,
+                    "engine_kwargs": {"vllm": {}},
+                }
+            },
+        }
+    )
+    runtime = RolloutRuntime(
+        SimpleNamespace(
+            config=config,
+            rollout_policy=RolloutPolicyConfig(),
+            tokenizer=tokenizer,
+            actor_rollout_wg=SimpleNamespace(workers=[object()]),
+        )
+    )
+    asyncio.run(runtime.frozen_client("left", str(tmp_path), 2))
+    assert captured[0].gpu_memory_utilization == 0.2
+    assert captured[0].max_model_len == 16
+    assert captured[0].max_num_seqs == 2
+    assert captured[0].engine_kwargs.vllm.kv_cache_memory_bytes > 0

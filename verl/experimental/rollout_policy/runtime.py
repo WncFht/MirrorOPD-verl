@@ -146,8 +146,8 @@ class RolloutRuntime:
         if source not in self.replicas:
             rollout = copy.deepcopy(self.config.actor_rollout_ref.rollout)
             rollout.load_format = "auto"
+            rollout.max_model_len = rollout.max_model_len or (rollout.prompt_length + rollout.response_length)
             # The frozen model keeps a CPU weight backup across phases.
-            rollout.gpu_memory_utilization = 0.85
             model = HFModelConfig(path=path, trust_remote_code=False)
             rollout.max_num_seqs = min(rollout.max_num_seqs, max_requests)
             # Budget for the actual replica concurrency, rather than allocating
@@ -277,6 +277,9 @@ class RolloutRuntime:
             await self.wait(self.trainer.actor_rollout_wg.update_weights(global_steps=plan.actor_version[0]))
             self.client = self.trainer.get_llm_client()
         else:
+            # A restored actor can still own model/optimizer storage. Frozen
+            # generation must acquire the shared device only after offload.
+            await self.wait(self.trainer.actor_rollout_wg.park_fusion_actor())
             path = plan.binding(phase.decoder).path
             counts = [0] * self.trainer.actor_rollout_wg.world_size
             for request in phase.requests:
