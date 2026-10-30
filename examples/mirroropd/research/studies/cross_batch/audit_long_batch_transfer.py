@@ -12,6 +12,7 @@ from pathlib import Path
 
 import torch
 
+from examples.mirroropd.assets.paths import checkpoint_path
 from examples.mirroropd.research.core.io import read
 from examples.mirroropd.research.studies.cross_batch.protocol import LONG_PASS, validate_long_pass
 
@@ -86,7 +87,7 @@ def main():
             assert all(r["stats"]["all"]["alive"] == len(r["response_ids"]) for r in rows)
         checkpoints = []
         for b in [1, 5, 10, 15, 20]:
-            target = a.cache / "checkpoints" / teacher / f"batch-{b:02d}"
+            target = checkpoint_path(a.cache, "checkpoints") / teacher / f"batch-{b:02d}"
             meta = read(target / "complete.json")
             assert meta["replica_max_difference"] == 0
             payload = torch.load(target / "optimizer.pt", map_location="cpu", weights_only=True, mmap=True)

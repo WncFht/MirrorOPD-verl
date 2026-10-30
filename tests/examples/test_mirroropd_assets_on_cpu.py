@@ -200,7 +200,7 @@ def test_local_model_prepare_materializes_symlinks_without_generation_config(tmp
     source = tmp_path / "source"
     destination = tmp_path / "model"
     for index, name in enumerate(assets.MODELS):
-        folder = source / name
+        folder = assets.registered_model(name, root=source)
         make_tiny_model(folder)
         (folder / "generation_config.json").unlink()
         weights = folder / "model.safetensors"
@@ -214,13 +214,15 @@ def test_local_model_prepare_materializes_symlinks_without_generation_config(tmp
     )
     prepare_models.main()
     for name in assets.MODELS:
-        assert (destination / name / "model.safetensors").is_file()
-        assert not (destination / name / "model.safetensors").is_symlink()
-        assert not (destination / name / "generation_config.json").exists()
+        assert (assets.registered_model(name, root=destination) / "model.safetensors").is_file()
+        assert not (assets.registered_model(name, root=destination) / "model.safetensors").is_symlink()
+        assert not (assets.registered_model(name, root=destination) / "generation_config.json").exists()
         # The separate chat template must survive materialization for prompt length checks.
         from transformers import AutoTokenizer
 
-        tokenizer = AutoTokenizer.from_pretrained(destination / name, local_files_only=True)
+        tokenizer = AutoTokenizer.from_pretrained(
+            assets.registered_model(name, root=destination), local_files_only=True
+        )
         assert tokenizer.apply_chat_template([{"role": "user", "content": "1 + 1"}], tokenize=False) == "1 + 1"
     assert not (destination / "model_manifest.json").exists()
     # Reusing an already prepared model must not recopy or overwrite it.
@@ -260,7 +262,7 @@ def test_sharded_model_check_requires_every_indexed_shard(tmp_path):
 
 def test_selected_sharded_model_import_from_hf_cache_path(tmp_path, monkeypatch):
     source = tmp_path / ".cache" / "downloads"
-    folder = source / "Qwen3-8B"
+    folder = assets.registered_model("Qwen3-8B", root=source)
     make_tiny_model(folder)
     (folder / "model.safetensors").rename(folder / "model-00001-of-00001.safetensors")
     (folder / "model.safetensors.index.json").write_text(
@@ -279,9 +281,9 @@ def test_selected_sharded_model_import_from_hf_cache_path(tmp_path, monkeypatch)
         ["prepare_models.py", "--source-root", str(source), "--model-root", str(target), "--models", "Qwen3-8B"],
     )
     prepare_models.main()
-    assert sorted(p.name for p in target.iterdir()) == ["Qwen3-8B"]
-    assert (target / "Qwen3-8B/model.safetensors.index.json").is_file()
-    assert (target / "Qwen3-8B/model-00001-of-00001.safetensors").is_file()
+    assert sorted(p.name for p in target.iterdir()) == ["hub"]
+    assert (assets.registered_model("Qwen3-8B", root=target) / "model.safetensors.index.json").is_file()
+    assert (assets.registered_model("Qwen3-8B", root=target) / "model-00001-of-00001.safetensors").is_file()
 
 
 def test_prompt_length_check_uses_token_rows_not_batch_encoding_keys(tmp_path, monkeypatch):

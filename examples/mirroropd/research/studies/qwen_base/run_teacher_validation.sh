@@ -22,7 +22,7 @@ export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3}
 IFS=',' read -r -a DEVICES <<< "$CUDA_VISIBLE_DEVICES"
 export STUDENT_GPUS=${#DEVICES[@]}
 export MODEL_ROOT=${MODEL_ROOT:-$WORKSPACE/model}
-export TEACHER_MODEL="$MODEL_ROOT/Qwen3-8B"
+export TEACHER_MODEL="$(python3 -m examples.mirroropd.assets.paths --alias Qwen3-8B --model-root "$MODEL_ROOT")"
 if [[ -z ${DATA_ROOT:-} ]]; then
     if [[ -f $WORKSPACE/data/math/MATH-500/test.parquet ]]; then
         DATA_ROOT=$WORKSPACE/data

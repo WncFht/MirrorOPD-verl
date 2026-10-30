@@ -20,12 +20,13 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends.hf_native import NAMES, decode, hidden, load, teacher_hidden, vectors
 from examples.mirroropd.research.core.io import dump, read
 
 
 def prepare(a):
-    tok = AutoTokenizer.from_pretrained(a.models / NAMES["student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(NAMES["student"], root=a.models), local_files_only=True)
     rng = random.Random(2026102702)
     rows = []
     for domain, file, count, train in [
@@ -120,7 +121,7 @@ def prepare(a):
 @torch.no_grad()
 def reference(a):
     prompts = [r for r in read(a.out / "prompts.json") if r["split"] == "heldout"]
-    tok = AutoTokenizer.from_pretrained(a.models / NAMES[a.source], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(registered_model(NAMES[a.source], root=a.models), local_files_only=True)
     tok.pad_token = tok.eos_token
     tok.padding_side = "left"
     model = load(a, a.source)
@@ -287,10 +288,12 @@ def run(a):
             fresh_eval(a, student, teacher, step, dest / f"fresh-{step}.json")
     # Endpoint is a task-specific artifact, never an overwrite of the model assets.
     if a.save:
-        checkpoint = a.cache / "checkpoints" / arm
+        checkpoint = checkpoint_path(a.cache, "checkpoints") / arm
         checkpoint.mkdir(parents=True, exist_ok=True)
         student.save_pretrained(checkpoint, max_shard_size="4GB")
-        AutoTokenizer.from_pretrained(a.models / NAMES["student"], local_files_only=True).save_pretrained(checkpoint)
+        AutoTokenizer.from_pretrained(
+            registered_model(NAMES["student"], root=a.models), local_files_only=True
+        ).save_pretrained(checkpoint)
     while not (baseline / "done").exists():
         print("waiting for baseline completion", a.teacher, flush=True)
         time.sleep(10)
@@ -445,7 +448,7 @@ def decompose(a):
         for arm in arms:
             student = (
                 AutoModelForCausalLM.from_pretrained(
-                    a.cache / "checkpoints" / arm,
+                    checkpoint_path(a.cache, "checkpoints") / arm,
                     dtype=torch.float32,
                     attn_implementation="flash_attention_2",
                     local_files_only=True,

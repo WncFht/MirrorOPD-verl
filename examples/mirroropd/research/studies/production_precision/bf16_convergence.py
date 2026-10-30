@@ -18,6 +18,7 @@ import math
 import statistics
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import asset_name
 from examples.mirroropd.research.core.io import dump, write_csv
 from examples.mirroropd.research.core.plotting import load_style
 from examples.mirroropd.research.studies.production_precision.analyze import flatten
@@ -129,8 +130,8 @@ def collect(logs, out):
             "response_mtokens": own[-1]["cumulative_response_mtokens"],
             "actor_peak_gib": max(r["actor_peak_gib"] for r in own),
             "settings": {
-                "student": Path(c["actor_rollout_ref"]["model"]["path"]).name,
-                "teacher": Path(c["distillation"]["teacher_models"]["teacher_model"]["model_path"]).name,
+                "student": asset_name(c["actor_rollout_ref"]["model"]["path"]),
+                "teacher": asset_name(c["distillation"]["teacher_models"]["teacher_model"]["model_path"]),
                 "optimizer": c["actor_rollout_ref"]["actor"]["optim"],
                 "reuse": c["actor_rollout_ref"]["actor"]["ppo_epochs"],
                 "batch": c["data"]["train_batch_size"],

@@ -11,6 +11,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from verl.trainer.distillation.full_vocab import project
 
 
@@ -31,7 +32,7 @@ def main():
         "q17": "Qwen3-1.7B",
         "q4i": "Qwen3-4B-Instruct-2507",
     }
-    paths = {key: str(args.model_root / name) for key, name in paths.items()}
+    paths = {key: str(registered_model(name, root=args.model_root)) for key, name in paths.items()}
     pairs = {
         "A": ("r1", "just"),
         "B": ("r1", "just"),

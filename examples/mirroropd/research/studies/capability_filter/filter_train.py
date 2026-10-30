@@ -13,6 +13,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.capability_filter import filter_common as fc
@@ -123,10 +124,12 @@ def backward(a, p, wq, hq, rows):
 
 
 def save_model(a, p, step):
-    target = a.cache / "checkpoints" / a.name / f"step-{step:03d}"
+    target = checkpoint_path(a.cache, "checkpoints") / a.name / f"step-{step:03d}"
     target.mkdir(parents=True, exist_ok=True)
     p.save_pretrained(target, max_shard_size="4GB")
-    AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True).save_pretrained(target)
+    AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    ).save_pretrained(target)
     dump(target / "complete.json", dict(step=step, weights_only=True))
 
 
@@ -180,7 +183,7 @@ def run(a):
     if a.source == "online":
         ref = (
             AutoModelForCausalLM.from_pretrained(
-                a.models / core.NAMES["student"],
+                registered_model(core.NAMES["student"], root=a.models),
                 dtype=torch.float32,
                 attn_implementation="flash_attention_2",
                 local_files_only=True,

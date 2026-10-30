@@ -17,6 +17,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.core.paths import REPO
 from verl.trainer.distillation.full_vocab import project
@@ -132,7 +133,7 @@ def prepare(a):
             caveat="fixed-state mechanism experiment; neither full E48 checkpoint replay nor task-accuracy test",
         ),
     )
-    model = load_model(a.models / "Polaris-7B-Preview", torch.bfloat16).requires_grad_(False)
+    model = load_model(registered_model("Polaris-7B-Preview", root=a.models), torch.bfloat16).requires_grad_(False)
     (a.cache / "teacher").mkdir(parents=True, exist_ok=True)
     with torch.inference_mode():
         for i, r in enumerate(records):
@@ -148,7 +149,9 @@ class Study:
         self.a = a
         self.records = read(a.out / "records.json")
         self.cal = [r for r in self.records if r["role"] == "calibration"]
-        self.model = load_model(a.initial if a.initial else a.models / "DeepSeek-R1-Distill-Qwen-1.5B")
+        self.model = load_model(
+            a.initial if a.initial else registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=a.models)
+        )
         if a.round_initial:
             with torch.no_grad():
                 for parameter in self.model.parameters():
@@ -424,7 +427,11 @@ class Study:
                 seen_train_ids=ids if a.steps > 16 else ids[:6],
                 accum_fp32=a.accum_fp32,
                 round_initial=a.round_initial,
-                initial_path=str((a.initial if a.initial else a.models / "DeepSeek-R1-Distill-Qwen-1.5B").resolve()),
+                initial_path=str(
+                    (
+                        a.initial if a.initial else registered_model("DeepSeek-R1-Distill-Qwen-1.5B", root=a.models)
+                    ).resolve()
+                ),
                 parameters=sum(p.numel() for p in self.params),
                 teacher_target="fixed common cached logits",
             ),

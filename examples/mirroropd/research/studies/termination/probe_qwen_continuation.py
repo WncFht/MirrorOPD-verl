@@ -10,6 +10,7 @@ from pathlib import Path
 
 from transformers import AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.studies.termination.probe_qwen_termination import MODELS, STOP, text_case
 
 
@@ -22,11 +23,13 @@ def main():
     os.environ.setdefault("VLLM_WORKER_MULTIPROC_METHOD", "spawn")
     from vllm import LLM, SamplingParams
 
-    tok = AutoTokenizer.from_pretrained(args.models / MODELS["initial_student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(
+        registered_model(MODELS["initial_student"], root=args.models), local_files_only=True
+    )
     cases = json.loads((args.data / "probes/cases.json").read_text())
     suffix = tok.encode("<think>\n\n</think>\n\n", add_special_tokens=False)
     llm = LLM(
-        model=str(args.models / MODELS[args.model]),
+        model=str(registered_model(MODELS[args.model], root=args.models)),
         dtype="bfloat16",
         tensor_parallel_size=1,
         enforce_eager=True,

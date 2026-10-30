@@ -1,38 +1,45 @@
 # Rollout 工作区与分支
 
-本页规定开发、执行和历史证据的归属。核对日期为 2026-10-31；机器快照与本轮操作回执保存在[工作区记录](../../../../../../../runs/rollout-organization-20261031/workspaces.json)。目录均位于同一个工作区根下，表中省略共同前缀 `MirrorOPD-verl`。
+本页区分开发、执行和历史存档。核对日期为 2026-10-31；操作及验证证据见[清理回执](../../../../../../../runs/worktree-cleanup-20261031/complete.json)。目录均位于同一个工作区根下，表中省略共同前缀 `MirrorOPD-verl`。
 
-## 开发与执行角色
+## 保留的 Git 工作区
 
-| 目录                  | 分支或固定代码                                      | 角色与修改边界                                                         |
-| --------------------- | --------------------------------------------------- | ---------------------------------------------------------------------- |
-| 主目录                | `main`                                              | 主入口及其他研究工作；有正在编辑的未提交修改，本轮仅同步明确归属的文档 |
-| `-rollout`            | `feat/rollout-composition`                          | 唯一的 rollout 组合开发主线，承接后续统一接口与专项计划                |
-| `-fixed-state-engine` | `feat/fixed-state-engine`                           | 独立的固定状态研究/引擎工作，不属于本轮组合架构合并范围                |
-| `-vllm-expanded`      | `feat/fusion-expanded-experiments`，固定 `c52e3eb6` | 科学实验执行快照；该分支名不表示可在其上继续开发                       |
-| `-vllm-engineering`   | detached，`a34724a3`                                | 工程验收执行快照，保持代码固定                                         |
-| `-fusion-release`     | detached，`d56e081d`                                | HF 历史证据快照                                                        |
-| `-vllm-acceptance`    | detached，`9666884f`                                | 原生生命周期验收快照和输出                                             |
-| `-vllm-fusion`        | detached，`91674e68`                                | 旧前缀实验与性能证据                                                   |
-| `-vllm-pm-acceptance` | detached，`36aa8ab9`                                | PM、读出与恢复检查证据                                                 |
-| `-vllm-scientific`    | detached，`73b30f06`                                | 科学协议早期执行与失败记录                                             |
+| 目录             | 分支或固定代码             | 用途                                                                                        |
+| ---------------- | -------------------------- | ------------------------------------------------------------------------------------------- |
+| 主目录           | `main`                     | 公共入口及研究工作；已有未提交修改保留，不由目录清理自动提交或覆盖                          |
+| `-rollout`       | `feat/rollout-composition` | 唯一开发主线；已整合原 rollout 分支和 fixed-state-engine 分支的模型资产整理、代码及评审提交 |
+| `-vllm-expanded` | detached，`c52e3eb6`       | 正在执行的科学实验快照；源码和版本保持固定，不在这里继续开发                                |
 
-新工作只进入 `feat/rollout-composition`。运行中的任务继续读取各自固定 checkout，不能为了“合并目录”改变它们的 HEAD 或源码。固定状态引擎是另一条工作线，不按同名 rollout 关键词自动合并。
+原 `feat/fixed-state-engine` 的已提交内容合入统一开发分支后，其工作树和分支不再单独保留；这不表示固定状态引擎的所有拟议能力已实现。固定状态与动态 rollout 仍按各自研究和接口边界维护。
 
-## 本轮归并
+科学实验原分支 `feat/fusion-expanded-experiments` 的补丁早已整合进开发历史。执行目录保留相同 commit 的 detached HEAD，版本另由归档/执行标签保留，删除分支名不会替换正在运行的代码。
 
-原 `feat/vllm-probability-fusion` 已更名为 `feat/rollout-composition`，原开发目录 `-vllm-probability` 已迁至 `-rollout`。旧目录名保留为兼容软链，不再是额外 worktree，避免历史命令和引用突然失效。代码基线保持 `e197915c`，本轮改动限于组织与文档。
+## 历史源码与运行产物
 
-此前已整合的 R1、原生 vLLM、PM、refit 修复和 main 已提交内容，继续由同一条开发主线承载。历史执行快照保留归档标签；不把冻结实验分支当作第二条开发主线。
+历史源码集中在 `runs/source-archives/20261031/`，每份包含原 commit、恢复标签、逐文件校验和说明。下列目录不再是 Git worktree：
 
-未提交的驻留超时实现已连同完整 patch、文件哈希、原基点和已有测试日志入口[封存](../../../../../../../runs/rollout-organization-20261031/parked-residency/manifest.json)。该草稿未完成 GPU 验证，不属于已交付能力。后续相关计划需要时再恢复，避免其与本轮架构整理混在一起。
+| 原目录后缀            | 原代码     | 保留内容                           |
+| --------------------- | ---------- | ---------------------------------- |
+| `-fusion-release`     | `d56e081d` | HF 历史源码与原 outputs 链接       |
+| `-vllm-acceptance`    | `9666884f` | 原生生命周期输出与源码             |
+| `-vllm-fusion`        | `91674e68` | 旧前缀实验、性能证据与源码         |
+| `-vllm-pm-acceptance` | `36aa8ab9` | PM、读出、恢复检查产物与源码       |
+| `-vllm-scientific`    | `73b30f06` | 科学协议早期执行、失败记录与源码   |
+| `-vllm-engineering`   | `a34724a3` | 工程验收输出与源码；占位工具已迁出 |
+| `-fixed-state-engine` | `c8d96f0b` | 已合并的资产实现与评审源码         |
 
-## 历史目录与数据
+原位置的 outputs 保持原路径、文件和 inode，避免已有审计和研究报告因路径迁移失效。源码条目是指向集中存档的兼容链接；原目录中的 `ARCHIVED-WORKSPACE.md` 给出恢复标签。需要重跑或修改历史版本时，从标签建立新的明确工作树，不把兼容目录当作开发目录。
 
-五个历史快照目录包含或关联被文档引用的输出、checkpoint 和源码证据。Git 提交和标签保存源码历史，不能替代未提交的运行产物。后续若减少这些目录，应先核对依赖、归档输出、修复引用，再移除 worktree；本轮不删除这些证据。
+`-vllm-probability` 仍是指向 `-rollout` 的兼容软链，不是额外 worktree。旧路径只是引用兼容层，日常开发只使用 `-rollout`。
 
-目录数量不代表仍有同样数量的开发分支。当前只有一条 rollout 组合开发主线，另有一条独立固定状态工作线和一个冻结科学执行分支。
+## 占位与冻结执行的独立性
 
-## 文档与代码的交付边界
+GPU 占位守护使用 `runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py` 的固定工具副本，不再依赖整个工程 checkout。迁移前后核对了文件哈希、进程身份、GPU 锁与科学任务租用记录；占位程序经正常交接重新启动，科学训练进程没有停止。
 
-统一架构文档描述目标接口；当前代码仍使用原 student/teacher 配置。文档同步到 main 不意味着原生 fusion 代码、推荐执行配置或新左右模型接口已经合入 main。后续计划应明确需要修改的用户入口、配置兼容和运行语义，再执行相应代码交付。
+实验源码、配置和运行产物的身份仍由各自 manifest 记录。归档只整理代码位置和 Git 登记，不把失败结果改成通过，也不删除未通过候选。
+
+## 未完成工作与后续开发
+
+原未提交的驻留超时实现已以[可恢复 patch](../../../../../../../runs/rollout-organization-20261031/parked-residency/manifest.json)封存，包含原基点、文件哈希和已有 CPU 测试证据；它未完成 GPU 验证，不属于已交付能力。
+
+后续接口与开发计划进入 `feat/rollout-composition`。新架构文档定义目标语义，当前 runtime 仍使用旧 student/teacher 配置；主仓库的文档可见性不等于原生后端或新左右模型接口已经发布到 main。

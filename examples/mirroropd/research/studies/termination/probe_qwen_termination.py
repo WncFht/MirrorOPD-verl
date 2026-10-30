@@ -17,6 +17,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.io import dump
 
 STOP = [151643, 151645]
@@ -136,7 +137,7 @@ def score_model(args, name, tok, cases):
     print("loading", name, flush=True)
     model = (
         AutoModelForCausalLM.from_pretrained(
-            args.models / MODELS[name],
+            registered_model(MODELS[name], root=args.models),
             dtype=torch.bfloat16,
             device_map="cuda:0",
             attn_implementation="flash_attention_2",
@@ -250,9 +251,11 @@ def main():
     args.out.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(4)
     torch.backends.cuda.matmul.allow_tf32 = False
-    tok = AutoTokenizer.from_pretrained(args.models / MODELS["initial_student"], local_files_only=True)
+    tok = AutoTokenizer.from_pretrained(
+        registered_model(MODELS["initial_student"], root=args.models), local_files_only=True
+    )
     for model_name in MODELS.values():
-        other = AutoTokenizer.from_pretrained(args.models / model_name, local_files_only=True)
+        other = AutoTokenizer.from_pretrained(registered_model(model_name, root=args.models), local_files_only=True)
         assert tok.get_vocab() == other.get_vocab(), model_name
     cases = build_cases(args, tok)
     dump(

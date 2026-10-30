@@ -14,6 +14,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path, registered_model
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.capability_filter import filter_common as fc
@@ -30,11 +31,13 @@ def run(a):
     assert len(rows) == len(selected["ids"]) and all(
         r["finish_reason"] == "length" and not r["grade"]["acc"] for r in rows
     )
-    tokenizer = AutoTokenizer.from_pretrained(a.models / core.NAMES["student"], local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        registered_model(core.NAMES["student"], root=a.models), local_files_only=True
+    )
     eos = tokenizer.eos_token_id
     model = (
         AutoModelForCausalLM.from_pretrained(
-            a.cache / "checkpoints" / a.arm / "step-128",
+            checkpoint_path(a.cache, "checkpoints") / a.arm / "step-128",
             dtype=torch.float32,
             attn_implementation="flash_attention_2",
             local_files_only=True,

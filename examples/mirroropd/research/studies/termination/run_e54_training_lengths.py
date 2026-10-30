@@ -11,6 +11,7 @@ import sys
 import time
 from pathlib import Path
 
+from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.paths import REPO
 from examples.mirroropd.research.studies.termination.run_e54_recovery_eval import execute
 
@@ -26,7 +27,13 @@ def main():
     )
     assert all(int(line.split(",")[1]) < 100 for line in memory.splitlines() if int(line.split(",")[0]) < 4)
     jobs = [
-        ("teacher", "0,1", 2, 64, repo.parent / "model/Qwen3-30B-A3B-Instruct-2507"),
+        (
+            "teacher",
+            "0,1",
+            2,
+            64,
+            registered_model("Qwen3-30B-A3B-Instruct-2507"),
+        ),
         ("student5", "2", 1, 16, repo / "outputs/e54-rope-debug-20261028-hppk13/run/probes/checkpoint-5"),
         (
             "student10",
@@ -71,7 +78,14 @@ def main():
         try:
             execute(command, output / "generate.log", env, 3600)
             execute(
-                base + ["grade", "--model", str(repo.parent / "model/Qwen3-1.7B-Base"), "--output", str(output)],
+                base
+                + [
+                    "grade",
+                    "--model",
+                    str(registered_model("Qwen3-1.7B-Base")),
+                    "--output",
+                    str(output),
+                ],
                 output / "grade.log",
                 os.environ | {"CUDA_VISIBLE_DEVICES": "", "OMP_NUM_THREADS": "2"},
                 900,

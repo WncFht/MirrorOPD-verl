@@ -7,8 +7,8 @@ WORKSPACE=$(dirname -- "$REPO")
 PAIR=${1:?Choose dense or moe}
 export EXPERIMENT_NAME=${2:-fusion-trajectory-cost-$PAIR-$(date +%Y%m%d-%H%M%S)}
 case "$PAIR" in
-    dense) export TEACHER_MODEL=$WORKSPACE/model/Qwen3-8B ;;
-    moe) export TEACHER_MODEL=$WORKSPACE/model/Qwen3-30B-A3B-Instruct-2507 ;;
+    dense) export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "${MODEL_ROOT:-$WORKSPACE/model}") ;;
+    moe) export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-30B-A3B-Instruct-2507 --model-root "${MODEL_ROOT:-$WORKSPACE/model}") ;;
     *) exit 2 ;;
 esac
 export PYTHONPATH=$REPO

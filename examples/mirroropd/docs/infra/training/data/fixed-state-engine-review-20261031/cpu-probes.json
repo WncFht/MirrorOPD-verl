@@ -1,0 +1,51 @@
+{
+  "device": "cpu",
+  "torch": "2.11.0+cu128",
+  "llama_student_adapter": {
+    "rejected": true,
+    "reason": "full reverse KL supports Qwen2/Qwen3/Qwen3-MoE models"
+  },
+  "llama_teacher_loader": {
+    "rejected": true,
+    "reason": "full reverse KL requires a Qwen2/Qwen3/Qwen3-MoE teacher head"
+  },
+  "no_grad_precompute": {
+    "loss_requires_grad": false,
+    "gradient_accumulator_shapes": [
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ]
+    ]
+  },
+  "student_larger_support": {
+    "rejected": true,
+    "reason": "full reverse KL requires teacher support to cover every student output row"
+  },
+  "native_teacher_extra": {
+    "matches_reference": true,
+    "absolute_error": 0.0
+  },
+  "normalization_example": {
+    "token_sum": 12,
+    "actual_tokens": 6,
+    "batch_size": 2,
+    "horizon": 4,
+    "valid_token_mean": 2.0,
+    "fixed_budget_mean": 1.5
+  },
+  "prediction_positions": {
+    "full_input": [
+      2,
+      3
+    ],
+    "prematurely_truncated": [
+      1,
+      2
+    ]
+  }
+}

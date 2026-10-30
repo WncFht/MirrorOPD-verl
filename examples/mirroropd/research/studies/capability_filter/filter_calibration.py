@@ -14,6 +14,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM
 
+from examples.mirroropd.assets.paths import checkpoint_path
 from examples.mirroropd.research.backends import hf_native as core
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.capability_filter import filter_common as fc
@@ -41,7 +42,7 @@ def run(a):
     else:
         p = (
             AutoModelForCausalLM.from_pretrained(
-                a.cache / "checkpoints" / a.arm / "step-128",
+                checkpoint_path(a.cache, "checkpoints") / a.arm / "step-128",
                 dtype=torch.float32,
                 attn_implementation="flash_attention_2",
                 local_files_only=True,

@@ -32,7 +32,7 @@ current_pair() {
 }
 
 {
-export TEACHER_MODEL=$WORKSPACE/model/Qwen3-8B
+export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "${MODEL_ROOT:-$WORKSPACE/model}")
 current_pair "$PREFIX-dense-current"
 schedule='rollout_policy.teacher_weight={kind:linear,start:1.0,end:0.0,steps:4,clock:optimizer_step}'
 run "$PREFIX-initial-schedule" token_mixture initial 'trainer.total_training_steps=2' "$schedule"
@@ -42,7 +42,7 @@ run "$PREFIX-initial-schedule-resume" token_mixture initial 'trainer.total_train
 TRAIN_BATCH_SIZE=64 run "$PREFIX-trajectory-current" trajectory_mixture current 'trainer.total_training_steps=1'
 run "$PREFIX-trajectory-initial-n2" trajectory_mixture initial 'trainer.total_training_steps=1' \
     'actor_rollout_ref.rollout.n=2'
-export TEACHER_MODEL=$WORKSPACE/model/Qwen3-30B-A3B-Instruct-2507
+export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-30B-A3B-Instruct-2507 --model-root "${MODEL_ROOT:-$WORKSPACE/model}")
 current_pair "$PREFIX-moe-current"
 exit
 }

@@ -14,6 +14,7 @@ from pathlib import Path
 import torch
 from transformers import AutoTokenizer
 
+from examples.mirroropd.assets.paths import checkpoint_path
 from examples.mirroropd.research.backends import hf_rkl
 from examples.mirroropd.research.core import training_state
 from examples.mirroropd.research.core.artifacts import file_hash, fingerprint
@@ -175,7 +176,11 @@ def main():
         raise ValueError("Replay must retain the original validated execution mode")
     config = extension["arms"][args.arm] if extension else ARMS[args.arm]
     dest = (Path(extension["output"]) if extension else OUT) / "arms" / args.arm
-    saved = Path(extension["cache"]) / "models" / args.arm / "step320" if extension else final_path(args.arm)
+    saved = (
+        checkpoint_path(Path(extension["cache"]), "models") / args.arm / "step320"
+        if extension
+        else final_path(args.arm)
+    )
     dest.mkdir(parents=True, exist_ok=True)
     if (dest / "complete.json").exists():
         if extension and read(dest / "complete.json").get("plan_identity") != fingerprint(extension):

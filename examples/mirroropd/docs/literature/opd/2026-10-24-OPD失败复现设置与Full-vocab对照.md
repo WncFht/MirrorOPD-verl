@@ -348,7 +348,7 @@ Full-vocab 可能消除动作抽样噪声、恢复遗漏的监督，但不会让
 从仓库根执行。代码块保留 `DRY_RUN=1`，只展示命令；真正训练仍需按现有作业方式显式分配 GPU。
 
 ```bash
-export MODEL_ROOT=/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/models
+export MODEL_ROOT=/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model
 export DATA_ROOT=/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MD-OPD/data
 export PYTHON_BIN=/root/.local/share/mirroropd/venvs/profile-cu128/bin/python
 export VERL_USE_UV=0

@@ -7,6 +7,7 @@ import gc
 
 import torch
 
+from examples.mirroropd.assets.paths import checkpoint_path
 from examples.mirroropd.research.core.io import dump
 from examples.mirroropd.research.studies.boundary.common import ARMS, CACHE, OUT
 from examples.mirroropd.research.studies.boundary.native import bank, load, setup
@@ -20,7 +21,7 @@ def main():
     setup()
     student, teacher = ARMS[args.arm]
     for step in [0, 64]:
-        path = None if step == 0 else CACHE / "checkpoints" / args.arm / "step064"
+        path = None if step == 0 else checkpoint_path(CACHE, "checkpoints") / args.arm / "step064"
         model = load(student, student=True, path=path)
         for source in ["r1", "r7"]:
             dest = OUT / "cross" / args.arm / f"{source}-{step:03d}.json"
