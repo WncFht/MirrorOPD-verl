@@ -56,6 +56,7 @@ def main():
     fv.apply_rc("paper", fontsize=10)
     plotted, audits = [], {}
     for student, arms in ORDERS.items():
+        arms = sorted(arms, key=lambda arm: float(index[arm, "held_math", "rkl"]["drop_percent"]), reverse=True)
         large = student == "r1"
         fig, axes = plt.subplots(1, 2, figsize=(9, 7.6 if large else 4.2), sharey=True)
         fig.subplots_adjust(
