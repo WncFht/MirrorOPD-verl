@@ -14,7 +14,7 @@ from verl.workers.config import RolloutConfig
 from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 
-def check(config, reference, pair, arm, outers=40, *, smoke=False):
+def check(config, reference, pair, arm, outers=40, *, smoke=False, scientific=False):
     errors = []
     try:
         omega_conf_to_dataclass(OmegaConf.create(config["actor_rollout_ref"]["rollout"]), dataclass_type=RolloutConfig)
@@ -86,6 +86,43 @@ def check(config, reference, pair, arm, outers=40, *, smoke=False):
     }
     if outers == 40 and not smoke:
         required["actor_rollout_ref.rollout.engine_kwargs.vllm.attention_config.backend"] = "TRITON_ATTN"
+    if scientific:
+        from examples.mirroropd.research.core.artifacts import file_hash
+        from examples.mirroropd.research.core.io import read
+        from examples.mirroropd.research.studies.prefix_fusion.protocol import protocol_identity
+
+        settings = config["trainer"].get("scientific_evaluation", {})
+        root = Path(settings.get("root", ""))
+        prepared = root / "prepared-03"
+        required.update(
+            {
+                "trainer.save_freq": 1 if smoke else 20,
+                "trainer.max_actor_ckpt_to_keep": 2 if smoke else 1,
+                "trainer.readout_callback_class": (
+                    "examples.mirroropd.research.studies.prefix_fusion.callback.ScientificReadout"
+                ),
+                "trainer.scientific_evaluation.pair": pair,
+                "trainer.scientific_evaluation.smoke": smoke,
+                "trainer.n_gpus_per_node": 1,
+                "trainer.nnodes": 1,
+                "trainer.v1.trainer_mode": "sync",
+                "actor_rollout_ref.actor.fsdp_config.param_offload": True,
+                "actor_rollout_ref.actor.fsdp_config.optimizer_offload": True,
+                "data.val_files": [],
+            }
+        )
+        if str(settings.get("physical_gpu")) not in {"6", "7"}:
+            errors.append("Scientific evaluation must use allocated GPU 6 or 7")
+        if [Path(p).resolve() for p in config["data"]["train_files"]] != [(prepared / "train.parquet").resolve()]:
+            errors.append("Scientific training does not use the frozen disjoint pool")
+        try:
+            receipt = read(prepared / "complete.json")
+            if receipt["inputs"]["protocol"] != protocol_identity():
+                errors.append("Prepared protocol changed")
+            if file_hash(prepared / "train.parquet") != receipt["artifacts"]["train.parquet"]:
+                errors.append("Prepared training pool changed")
+        except (OSError, KeyError, ValueError) as exc:
+            errors.append(f"Missing or invalid scientific data: {exc}")
     for path, value in required.items():
         if get(config, path) != value:
             errors.append(f"{path}: expected {value!r}, got {get(config, path)!r}")

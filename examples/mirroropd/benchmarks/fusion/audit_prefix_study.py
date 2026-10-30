@@ -26,8 +26,10 @@ def audit(run, reference, pair, arm, mode, exit_code):
         return json.loads(raw)
 
     config = read(run / "resolved_config.yaml", "yaml")
-    outers = 40 if mode == "formal" else 2 if mode == "smoke" else config["trainer"]["total_training_steps"]
-    report = check(config, reference, pair, arm, outers, smoke=mode == "smoke")
+    scientific = mode in {"science", "science-smoke"}
+    smoke = mode in {"smoke", "science-smoke"}
+    outers = 40 if mode in {"formal", "science"} else 2 if smoke else config["trainer"]["total_training_steps"]
+    report = check(config, reference, pair, arm, outers, smoke=smoke, scientific=scientific)
     errors = report["errors"]
     if exit_code != 0:
         errors.append(f"Run controller reported exit code {exit_code}")
@@ -61,12 +63,16 @@ def audit(run, reference, pair, arm, mode, exit_code):
                 errors.append(f"Update {i + 1}: missing/nonfinite {key}")
     if any(any(key.startswith("eval/") for key in row) for row in metrics):
         errors.append("Unexpected validation metrics")
-    if (
+    if not scientific and (
         list((run / "validation").rglob("*.jsonl"))
         or list((run / "runtime").glob("global_step_*"))
         or list(run.rglob("model_world_size_*.pt"))
     ):
         errors.append("Unexpected validation records or model checkpoints")
+    if scientific:
+        from examples.mirroropd.research.studies.prefix_fusion.audit import audit_readouts
+
+        errors.extend(audit_readouts(run, pair, smoke=smoke))
     batch = config["data"]["train_batch_size"]
     plans, costs = [], []
     expected_sources = {
@@ -134,7 +140,7 @@ def audit(run, reference, pair, arm, mode, exit_code):
         errors.append("Unexpected GPU in resource samples")
     report.update(
         passed=not errors,
-        formal_complete=mode == "formal" and not errors,
+        formal_complete=mode in {"formal", "science"} and not errors,
         mode=mode,
         controller_exit_code=exit_code,
         source_commit=(run / "source_commit.txt").read_text().strip(),
@@ -160,7 +166,7 @@ def main():
     parser.add_argument("--reference", type=Path, required=True)
     parser.add_argument("--pair", choices=["J", "P"], required=True)
     parser.add_argument("--arm", choices=["S0", "S", "LM", "PM", "TM", "T"], required=True)
-    parser.add_argument("--mode", choices=["formal", "profile", "smoke"], required=True)
+    parser.add_argument("--mode", choices=["formal", "profile", "smoke", "science", "science-smoke"], required=True)
     parser.add_argument(
         "--exit-code", type=int, required=True, help="Observed subprocess result from the run controller"
     )
