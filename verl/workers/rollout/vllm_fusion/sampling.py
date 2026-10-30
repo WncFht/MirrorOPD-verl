@@ -40,7 +40,7 @@ class FusionTopKTopPSampler(nn.Module):
 def configure_policy_sampler(worker, enabled):
     """Use the policy filter for a drained single-model phase, then restore it.
 
-    This callable runs through vLLM collective_rpc on each engine worker. It
+    The named worker RPC invokes this helper on each engine worker. It
     changes only that worker's sampler; ordinary single and validation retain
     their original instance after the policy phase releases ownership.
     """
