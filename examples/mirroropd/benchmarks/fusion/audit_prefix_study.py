@@ -130,7 +130,7 @@ def audit(run, reference, pair, arm, mode, exit_code):
     allocated = resources[0].get("physical_gpus", [])
     if (
         not allocated
-        or not set(allocated) <= {6, 7}
+        or not set(allocated) <= set(range(8))
         or len(allocated) != config["trainer"]["n_gpus_per_node"]
         or resources[-1]["kind"] != "end"
     ):

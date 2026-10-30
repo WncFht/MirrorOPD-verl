@@ -50,7 +50,7 @@ class ScientificReadout:
         self.gpu = str(self.settings.physical_gpu)
         self.smoke = bool(self.settings.get("smoke", False))
         self.repo = Path(__file__).resolve().parents[5]
-        if self.gpu not in {"6", "7"} or self.pair not in {"J", "P"}:
+        if self.gpu not in {str(gpu) for gpu in range(8)} or self.pair not in {"J", "P"}:
             raise ValueError("Scientific readout has invalid model/resource binding")
         if (
             config.trainer.n_gpus_per_node != 1

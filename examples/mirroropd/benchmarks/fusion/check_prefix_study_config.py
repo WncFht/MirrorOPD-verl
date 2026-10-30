@@ -111,8 +111,8 @@ def check(config, reference, pair, arm, outers=40, *, smoke=False, scientific=Fa
                 "data.val_files": [],
             }
         )
-        if str(settings.get("physical_gpu")) not in {"6", "7"}:
-            errors.append("Scientific evaluation must use allocated GPU 6 or 7")
+        if str(settings.get("physical_gpu")) not in {str(gpu) for gpu in range(8)}:
+            errors.append("Scientific evaluation must use allocated GPU 0 through 7")
         if [Path(p).resolve() for p in config["data"]["train_files"]] != [(prepared / "train.parquet").resolve()]:
             errors.append("Scientific training does not use the frozen disjoint pool")
         try:

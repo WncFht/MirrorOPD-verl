@@ -18,8 +18,9 @@ DATA=${FUSION_DATA_DIR:-$WORKSPACE/runs/vllm-fusion-20261029/lifecycle-data}
 [[ -f $DATA/manifest.json ]] || { echo "Run prepare_vllm_workload.py first" >&2; exit 2; }
 export TRAIN_FILE="$DATA/DAPO.parquet" MATH_FILE="$DATA/MATH-500.parquet" AMC_FILE="$DATA/AMC23.parquet"
 export AIME24_FILE="$DATA/AIME24.parquet" AIME_FILE="$DATA/AIME25.parquet" AIME26_FILE="$DATA/AIME26.parquet"
-fusion_cpus=12
-if [[ ${FUSION_GPUS:-7} == 6,7 ]]; then fusion_cpus=24; fi
+"$WORKSPACE/envs/mirroropd-fusion/bin/python" "$HERE/resource_guard.py" validate --gpus "${FUSION_GPUS:-7}"
+IFS=',' read -r -a fusion_devices <<< "${FUSION_GPUS:-7}"
+fusion_cpus=$((12 * ${#fusion_devices[@]}))
 export TRAIN_BATCH_SIZE=${FUSION_TRAIN_BATCH_SIZE:-2} PPO_EPOCHS=1 VAL_N=1 SMOKE_RAY_CPUS=${SMOKE_RAY_CPUS:-$fusion_cpus}
 export MAX_PROMPT_LENGTH=${FUSION_PROMPT_CAP:-1024} MAX_RESPONSE_LENGTH=${FUSION_RESPONSE_CAP:-32} MAX_VAL_RESPONSE_LENGTH=32
 export PARAM_OFFLOAD=True OPTIMIZER_OFFLOAD=True

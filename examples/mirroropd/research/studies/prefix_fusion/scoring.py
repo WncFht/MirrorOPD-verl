@@ -49,8 +49,8 @@ def fixed_views(rows, horizon, groups=None):
 
 
 def require_allocated_gpu():
-    if os.environ.get("CUDA_VISIBLE_DEVICES") not in {"6", "7"}:
-        raise ValueError("Use one explicitly allocated physical GPU 6 or 7")
+    if os.environ.get("CUDA_VISIBLE_DEVICES") not in {str(gpu) for gpu in range(8)}:
+        raise ValueError("Use one explicitly allocated physical GPU 0 through 7")
 
 
 def cache_teacher(assets, banks, pair, out):

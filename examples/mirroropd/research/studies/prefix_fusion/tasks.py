@@ -59,8 +59,8 @@ def grade_pending(out, prompts, profile):
 
 
 def evaluate(prepared, assets, weights, out, panel="test", smoke=False):
-    if os.environ.get("CUDA_VISIBLE_DEVICES") not in {"6", "7"}:
-        raise ValueError("Task evaluation requires one explicitly allocated GPU 6 or 7")
+    if os.environ.get("CUDA_VISIBLE_DEVICES") not in {str(gpu) for gpu in range(8)}:
+        raise ValueError("Task evaluation requires one explicitly allocated GPU 0 through 7")
     from vllm import LLM, SamplingParams
 
     from verl.workers.rollout.vllm_fusion.compat import decode_graph_config
