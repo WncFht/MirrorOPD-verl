@@ -91,3 +91,25 @@ def test_queue_keeps_model_pairs_on_allocated_cards():
         assert settings["FUSION_GPUS"] == str(gpu)
         assert settings["FUSION_KV_BYTES"] == str(gb * 1024**3)
         assert settings["PREFIX_FULL_KL_BACKEND"] == "precompute_fused"
+
+
+@pytest.mark.parametrize("answer,expected", [(r"\boxed{2}", 1.0), ("The answer is 2.", 1.0), ("The answer is 3.", 0.0)])
+def test_direct_grader_decisions(answer, expected):
+    from examples.mirroropd.research.studies.prefix_fusion.grading import grade
+
+    _, row, _ = sample()
+    scored = grade(row | {"output": answer})
+    assert scored["score"] == expected and scored["status"] == "ok"
+
+
+def test_direct_grader_propagates_infrastructure_errors(monkeypatch):
+    from examples.mirroropd.research.studies.prefix_fusion.grading import grade
+    from verl.utils.reward_score import math_verify
+
+    def fail(*args):
+        raise RuntimeError("injected worker failure")
+
+    monkeypatch.setattr(math_verify, "_verify_in_subprocess", fail)
+    _, row, _ = sample()
+    with pytest.raises(RuntimeError, match="injected"):
+        grade(row | {"output": "The answer is 2."})

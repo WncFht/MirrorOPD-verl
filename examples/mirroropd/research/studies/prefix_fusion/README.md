@@ -24,6 +24,6 @@ FUSION_GPUS=6 PREFIX_SCIENTIFIC_ROOT="$PWD/../runs/prefix-fusion-scientific-v2" 
 
 短检查会比较实际 Adam 张量及 CPU/CUDA 随机状态的摘要，检查导出前后是否一致。正式训练不逐次复制 Adam 做摘要。outer20/40 的独立 FP32 读出永久保留，训练恢复 checkpoint 每 20 outer 保存一次、保留最近一个；读出不会进入 checkpoint 清理队列。中间临时权重只在评分成功后删除。训练恢复使用新运行标签，并设置 `PREFIX_RESUME_FROM` 为 `runtime/global_step_N`；已有输出不会覆盖。当前完整运行审计针对从头完成的运行，恢复链须额外核对前段、恢复段和更新计数。
 
-`tasks` 使用与训练分离的种子、共同合法 token 集及原生 BF16 vLLM，在评分前写入 `raw-responses.jsonl`。评分失败可重试相同答案；改变输入身份、重复回答槽位或篡改答案会拒绝继续。初始和最终任务评估使用相同的温度、过滤、长度及停止集合。完整 native-head RKL 保留 teacher 额外词表质量，与生成时的合法支持屏蔽分开。
+`tasks` 使用与训练分离的种子、共同合法 token 集及原生 BF16 vLLM，在评分前写入 `raw-responses.jsonl`。评分采用原 boxed 判定和 math-verify 回退逻辑，直接在已有 CPU worker 的主线程执行，避免嵌套进程冷启动被算入判题超时。运行异常向上传递，不自动转换为答错。评分失败可重试相同答案；改变输入身份、重复回答槽位或篡改答案会拒绝继续。初始和最终任务评估使用相同的温度、过滤、长度及停止集合。完整 native-head RKL 保留 teacher 额外词表质量，与生成时的合法支持屏蔽分开。
 
 `queue` 为每张卡运行一个独立 worker。每次启动先解析并审计六组 E20 派生配置；之后检查两组生命周期回执、计算任务基线，再执行六组训练和逐组审计。固定 commit、数据身份和资源配置写入队列 manifest；训练、读出或审计失败立即停止该 worker。两卡独立执行，旧无评估队列不再接入。完整训练与读出完成后，还需做最终 fresh state 交叉评分和按题配对统计，队列不会把训练退出成功写成整个研究完成。
