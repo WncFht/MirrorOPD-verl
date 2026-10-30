@@ -5,6 +5,7 @@
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 
 import torch
@@ -12,6 +13,10 @@ from transformers import AutoTokenizer
 
 
 def measure(reference, candidate, legal, selected):
+    if not torch.isfinite(reference[legal]).all() or not torch.isfinite(candidate[legal]).all():
+        raise ValueError("Nonfinite component logits on the declared legal support")
+    if (legal == selected).sum().item() != 1:
+        raise ValueError("Selected token is absent or duplicated in the legal support")
     reference = reference.double()[legal].log_softmax(-1)
     candidate = candidate.double()[legal].log_softmax(-1)
     difference = (reference.exp() - candidate.exp()).abs()
@@ -31,6 +36,7 @@ def main():
     parser.add_argument("--workload", required=True)
     parser.add_argument("--component", choices=["student", "teacher"], required=True)
     parser.add_argument("--calibrate", action="store_true")
+    parser.add_argument("--candidate-native", action="store_true", help="Compare a second native model's raw logits")
     parser.add_argument("--limits", required=True)
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
@@ -47,7 +53,7 @@ def main():
             raise ValueError("Replay checkpoint coverage differs")
         for step in sorted(reference):
             left = reference[step]["raw"]
-            right = candidate[step]["raw" if args.calibrate else args.component]
+            right = candidate[step]["raw" if args.calibrate or args.candidate_native else args.component]
             if left.shape[0] != right.shape[0] and not (args.calibrate and left.shape[0] == 1):
                 raise ValueError("Reference and candidate request coverage differs")
             for row in range(right.shape[0]):
@@ -64,6 +70,8 @@ def main():
         raise ValueError("Empty numerical comparison")
     metrics = ["probability_abs", "total_variation", "selected_logprob_abs"]
     maxima = {key: max(row[key] for row in checks) for key in metrics}
+    if any(not math.isfinite(row[key]) for row in checks for key in metrics):
+        raise ValueError("Nonfinite numerical comparison")
     limits_path = Path(args.limits)
     if args.calibrate:
         limits = {
@@ -78,6 +86,8 @@ def main():
         limits = json.loads(limits_path.read_text())
         if limits["component"] != args.component or limits["calibration_workload_sha256"] == workload_hash:
             raise ValueError("Acceptance needs the matching component and a held-out workload")
+    if any(not math.isfinite(limits["limits"][key]) or limits["limits"][key] < 0 for key in metrics):
+        raise ValueError("Frozen limits must be finite and nonnegative")
     failures = [row for row in checks if any(row[key] > limits["limits"][key] for key in metrics)]
     result = {
         "config": vars(args),
