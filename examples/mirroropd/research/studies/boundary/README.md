@@ -1,6 +1,6 @@
 # 固定前缀教师迁移实验
 
-该入口执行[跨源边界计划](../../../docs/experiments/teacher-transfer/transfer-mechanism/2026-10-28-跨源蒸馏边界分阶段实验计划.md)的 TB0/TB1/TB2。只使用物理 GPU4–7，共九个分支，每分支 64 次全参数更新；首轮入口不执行续训、fresh 训练或版本扩展；第二轮入口见下文。运行产物位于仓库同级日志目录，由`common.py`明确指定。
+该入口执行[跨源边界计划](../../../docs/experiments/teacher-transfer/transfer-mechanism/r1/2026-10-28-跨源蒸馏边界分阶段实验计划.md)的 TB0/TB1/TB2。只使用物理 GPU4–7，共九个分支，每分支 64 次全参数更新；首轮入口不执行续训、fresh 训练或版本扩展；第二轮入口见下文。运行产物位于仓库同级日志目录，由`common.py`明确指定。
 
 <a id="code-path"></a>
 
@@ -44,7 +44,7 @@ python -m examples.mirroropd.research.studies.boundary.analyze
 
 ## 结果汇总
 
-TB0–TB2 已完成，结论与图表见[首轮结果](../../../docs/experiments/teacher-transfer/transfer-mechanism/2026-10-28-跨源蒸馏边界分阶段实验计划.md#results)。九分支 576 次更新、18 个检查点、22680 条基线回答和 16 个交叉评分单元均已核对。第二轮使用独立目录和入口，见下文。
+TB0–TB2 已完成，结论与图表见[首轮结果](../../../docs/experiments/teacher-transfer/transfer-mechanism/r1/2026-10-28-跨源蒸馏边界分阶段实验计划.md#results)。九分支 576 次更新、18 个检查点、22680 条基线回答和 16 个交叉评分单元均已核对。第二轮使用独立目录和入口，见下文。
 
 `analyze`核对更新计数、训练顺序、固定输入身份、checkpoint 的 Adam step、教师熵不变和完整基线回答槽位，输出原始风险、相对下降、按题 bootstrap 区间和跨来源评分。单训练 seed 的区间不能解释成训练方差。
 
@@ -131,7 +131,7 @@ GPU_OCCUPY_STATE_DIR=/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/c
 
 ## 第二轮：三组续训、三位新 teacher 与任务回收
 
-[第二轮设置与结果](../../../docs/experiments/teacher-transfer/transfer-mechanism/2026-10-29-同架构教师吸收假说与续训设计.md)固定六个训练分支、384 次新增更新：J/N/M 从各自 step064 连续恢复至 128，DeepScaleR/BroRL/DeepCoder 从原始 R1 student 训练 64 次。Math teacher 只评原生 4K 基线。未安排 Polaris 续训或 MiniMath 旧池分支。
+[第二轮设置与结果](../../../docs/experiments/teacher-transfer/transfer-mechanism/r1/2026-10-29-同架构教师吸收假说与续训设计.md)固定六个训练分支、384 次新增更新：J/N/M 从各自 step064 连续恢复至 128，DeepScaleR/BroRL/DeepCoder 从原始 R1 student 训练 64 次。Math teacher 只评原生 4K 基线。未安排 Polaris 续训或 MiniMath 旧池分支。
 
 `round2_common.py` 冻结新增 revision、评测身份和预算；`round2_prepare.py` 检查词表、冻结 Math 原生 prompt。`round2_launch.py` 在物理 GPU4–7 上运行依赖队列，优化验收完成后才启动训练。评测覆盖四个新 teacher 和十五个 student 终点，旧的教师及 student-before 基线按同协议复用。
 

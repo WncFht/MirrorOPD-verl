@@ -1,0 +1,29 @@
+{
+  "study": "40a5aebe8b239191b929002424d2364913d0c5ba8759e6511b4b85279108f760",
+  "bank": "5ddb7232d8e5f0c7281237b14fa29d6e150a88edde920ac093ce385e6baa47e8",
+  "weights": {
+    "L1": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/checkpoints/llama-stage-lineage320-20261030/L1/step320",
+      "identity": "ea445d0b32987f5ec2eaed7c74d0139ca1ac77069d7a7dba0f4fcb831e3c7a1f"
+    },
+    "L2": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/checkpoints/llama-stage-lineage320-20261030/L2/step320",
+      "identity": "2ebf5d4f508bed61d2950006946876a11c97b16f50c36721da1ff5a6cd3a8dce"
+    },
+    "L3": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/checkpoints/llama-stage-lineage320-20261030/L3/step320",
+      "identity": "17b04df79793d7491f0b5842b0fb43e7356c9df5b6f5728e53b99a16c5343dcb"
+    }
+  },
+  "teachers": {
+    "L1": "00326f754678bd9521f7140d3a69b84a3dbafcbf101c67630ba3917d4684a16d",
+    "L2": "fb08efcd2432ebd8b2ea7744843e8777a00bf3c17075d75a8d19eec3c6910c5e",
+    "L3": "aa54cc783bd476775f80844a39efaf4e6fe995101fe9a7c329417636a9ba2fbb"
+  },
+  "source": "111376c934c3b904a72224d11327ca8c2cb0af791b53d08c6483a747bc062734",
+  "geometry": "a9c24c6b2e8e87d5142a594a93f1902114129d7da32d5776778591d702cea60b",
+  "backend": "fc24c9b2ee6e7904ecfe9f502c34c61adf59385864a2820a896dd8d05905df8d",
+  "horizon": 1024,
+  "weighting": "fixed original student p0; full student vocabulary; sum/(prompts*H)",
+  "precision": "FP32 student parameters/head; BF16 forward; FP64 preference reductions"
+}

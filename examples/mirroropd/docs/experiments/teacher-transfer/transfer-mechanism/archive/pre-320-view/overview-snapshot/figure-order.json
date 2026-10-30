@@ -1,0 +1,366 @@
+{
+  "llama3-3b-off": [
+    {
+      "teacher": "GT-Llama-3.2-3B-Instruct-MATH",
+      "size_b": 3,
+      "mode": "RL; shared off system",
+      "pooled_drop": 97.47012751661927,
+      "same_size": true
+    },
+    {
+      "teacher": "Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+      "size_b": 3,
+      "mode": "RL; shared off system",
+      "pooled_drop": 97.40691602001155,
+      "same_size": true
+    },
+    {
+      "teacher": "Llama-3.2-3B-Instruct-arithmetic-full",
+      "size_b": 3,
+      "mode": "author-declared full SFT; shared off system",
+      "pooled_drop": 75.09253547194749,
+      "same_size": true
+    },
+    {
+      "teacher": "Llama-3.1-Nemotron-Nano-8B-v1",
+      "size_b": 8,
+      "mode": "SFT + RL + merge; shared off system",
+      "pooled_drop": 55.81120950979853,
+      "same_size": false
+    },
+    {
+      "teacher": "Llama-3.1-8B-SimpleRL-Zoo",
+      "size_b": 8,
+      "mode": "Base + RL; shared-prefix mismatch control",
+      "pooled_drop": 55.35158192249923,
+      "same_size": false
+    },
+    {
+      "teacher": "Llama-3.1-Tulu-3-8B",
+      "size_b": 8,
+      "mode": "SFT + DPO + RLVR; shared student template",
+      "pooled_drop": 47.93345661680315,
+      "same_size": false
+    },
+    {
+      "teacher": "Llama-3.1-Tulu-3-8B-DPO",
+      "size_b": 8,
+      "mode": "SFT + DPO; shared student template",
+      "pooled_drop": 46.96264349763995,
+      "same_size": false
+    },
+    {
+      "teacher": "Llama-3.1-Tulu-3-8B-SFT",
+      "size_b": 8,
+      "mode": "SFT; shared student template",
+      "pooled_drop": 45.667348172898144,
+      "same_size": false
+    },
+    {
+      "teacher": "Llama-3.2-1B-Instruct / Unsloth",
+      "size_b": 1,
+      "mode": "shared off system",
+      "pooled_drop": 28.934080540372232,
+      "same_size": false
+    },
+    {
+      "teacher": "Llama-3.1-8B-Instruct / Unsloth",
+      "size_b": 8,
+      "mode": "shared off system",
+      "pooled_drop": 19.16497606091392,
+      "same_size": false
+    }
+  ],
+  "q3-1.7": [
+    {
+      "teacher": "e3-1.7B",
+      "size_b": 1.7,
+      "mode": "RL; thinking input",
+      "pooled_drop": 95.8762749168746,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-1.7B-GRPO-KL-Math",
+      "size_b": 1.7,
+      "mode": "RL; thinking input",
+      "pooled_drop": 94.34292839851952,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-1.7B-Math / Samsung SFT",
+      "size_b": 1.7,
+      "mode": "thinking input; native mode unverified",
+      "pooled_drop": 86.09893328055212,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-1.7B-SFT / Thinking-Space",
+      "size_b": 1.7,
+      "mode": "thinking input; non-thinking trained",
+      "pooled_drop": 68.83524069728972,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+      "size_b": 1.7,
+      "mode": "thinking input; non-thinking trained",
+      "pooled_drop": 62.428090525088024,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-1.7B-Base",
+      "size_b": 1.7,
+      "mode": "Base (not Instruct); thinking input",
+      "pooled_drop": 61.64008066565463,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-4B-Base-GRPO / Thinking-Space",
+      "size_b": 4,
+      "mode": "early-fork RL; training mode unreported",
+      "pooled_drop": 52.071630989455684,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-0.6B",
+      "size_b": 0.6,
+      "mode": "post-trained dual-mode; thinking input",
+      "pooled_drop": 39.17917013888717,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-4B Math-CoT SFT step80",
+      "size_b": 4,
+      "mode": "Base-derived SFT; thinking input",
+      "pooled_drop": 26.409586128073816,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-4B-Thinking-2507",
+      "size_b": 4,
+      "mode": "thinking-only; shared-prefix mismatch",
+      "pooled_drop": 12.951955168460373,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-4B Math-CoT SFT step640",
+      "size_b": 4,
+      "mode": "Base-derived SFT; thinking input",
+      "pooled_drop": 11.504081771874187,
+      "same_size": false
+    },
+    {
+      "teacher": "Polaris-4B-Preview",
+      "size_b": 4,
+      "mode": "RL; thinking input; YaRN",
+      "pooled_drop": 5.449563609487362,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-4B",
+      "size_b": 4,
+      "mode": "post-trained dual-mode; thinking input",
+      "pooled_drop": 1.4695554367959218,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-8B",
+      "size_b": 8,
+      "mode": "post-trained dual-mode; thinking input",
+      "pooled_drop": 0.2575567988703731,
+      "same_size": false
+    }
+  ],
+  "q3-1.7-native-instruct2507": [
+    {
+      "teacher": "Qwen3-4B-Instruct-2507",
+      "size_b": 4,
+      "mode": "specialist native template; isolated control",
+      "pooled_drop": 25.712828286957734,
+      "same_size": false
+    }
+  ],
+  "q3-1.7-native-thinking2507": [
+    {
+      "teacher": "Qwen3-4B-Thinking-2507",
+      "size_b": 4,
+      "mode": "specialist native template; isolated control",
+      "pooled_drop": 15.044645998172435,
+      "same_size": false
+    }
+  ],
+  "q3-1.7-nonthinking": [
+    {
+      "teacher": "Qwen3-1.7B-Math / Samsung SFT",
+      "size_b": 1.7,
+      "mode": "non-thinking input; training mode unreported",
+      "pooled_drop": 94.05595072975471,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+      "size_b": 1.7,
+      "mode": "non-thinking input",
+      "pooled_drop": 71.57206625782828,
+      "same_size": true
+    },
+    {
+      "teacher": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+      "size_b": 1.7,
+      "mode": "non-thinking input; training mode unreported",
+      "pooled_drop": 70.88540924930797,
+      "same_size": true
+    },
+    {
+      "teacher": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+      "size_b": 1.7,
+      "mode": "non-thinking input; training mode unreported",
+      "pooled_drop": 70.51731079899312,
+      "same_size": true
+    },
+    {
+      "teacher": "GT-Qwen3-1.7B-Base-MATH",
+      "size_b": 1.7,
+      "mode": "non-thinking input; training mode unreported",
+      "pooled_drop": 70.0234314864699,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-4B-Base-GRPO / Thinking-Space",
+      "size_b": 4,
+      "mode": "non-thinking input; training mode unreported",
+      "pooled_drop": 52.63058009464095,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-0.6B",
+      "size_b": 0.6,
+      "mode": "post-trained dual-mode; non-thinking input",
+      "pooled_drop": 33.165609536734806,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-1.7B-SFT / Thinking-Space",
+      "size_b": 1.7,
+      "mode": "non-thinking input",
+      "pooled_drop": 33.003483750208176,
+      "same_size": true
+    },
+    {
+      "teacher": "Qwen3-8B",
+      "size_b": 8,
+      "mode": "post-trained dual-mode; non-thinking input",
+      "pooled_drop": 4.46930820022099,
+      "same_size": false
+    },
+    {
+      "teacher": "Qwen3-4B",
+      "size_b": 4,
+      "mode": "post-trained dual-mode; non-thinking input",
+      "pooled_drop": 3.8644000336275353,
+      "same_size": false
+    }
+  ],
+  "r1": [
+    {
+      "teacher": "DeepScaleR-1.5B-Preview",
+      "size_b": 1.5,
+      "mode": "RL; R1 reasoning prefix",
+      "pooled_drop": 87.21439926282608,
+      "same_size": true
+    },
+    {
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "size_b": 1.5,
+      "mode": "RL; R1 reasoning prefix; deterministic FA2 backward",
+      "pooled_drop": 84.92145651988868,
+      "same_size": true
+    },
+    {
+      "teacher": "Nemotron-Research-Reasoning-Qwen-1.5B v1",
+      "size_b": 1.5,
+      "mode": "RL; R1 reasoning prefix; deterministic FA2 backward",
+      "pooled_drop": 77.4024027037046,
+      "same_size": true
+    },
+    {
+      "teacher": "DeepCoder-1.5B-Preview",
+      "size_b": 1.5,
+      "mode": "R1 reasoning prefix",
+      "pooled_drop": 64.3544099320876,
+      "same_size": true
+    },
+    {
+      "teacher": "MiniMath-R1-1.5B",
+      "size_b": 1.5,
+      "mode": "R1 reasoning prefix",
+      "pooled_drop": 56.551207509815946,
+      "same_size": true
+    },
+    {
+      "teacher": "Nemotron-Research-Reasoning-Qwen-1.5B / BroRL",
+      "size_b": 1.5,
+      "mode": "RL; R1 reasoning prefix",
+      "pooled_drop": 42.79482211110598,
+      "same_size": true
+    },
+    {
+      "teacher": "Skywork-OR1-Math-7B",
+      "size_b": 7,
+      "mode": "RL; R1 reasoning prefix",
+      "pooled_drop": 17.09062438494562,
+      "same_size": false
+    },
+    {
+      "teacher": "Polaris-7B-Preview",
+      "size_b": 7,
+      "mode": "RL; R1 reasoning prefix",
+      "pooled_drop": 11.053273128936647,
+      "same_size": false
+    },
+    {
+      "teacher": "Light-R1-7B-DS",
+      "size_b": 7,
+      "mode": "R1 reasoning prefix",
+      "pooled_drop": 10.35716517685341,
+      "same_size": false
+    },
+    {
+      "teacher": "DeepSeek-R1-Distill-Qwen-7B",
+      "size_b": 7,
+      "mode": "R1 reasoning prefix",
+      "pooled_drop": 4.558024735566891,
+      "same_size": false
+    }
+  ],
+  "r7": [
+    {
+      "teacher": "Polaris-7B-Preview",
+      "size_b": 7,
+      "mode": "RL; R1 reasoning prefix",
+      "pooled_drop": 90.8204746917199,
+      "same_size": true
+    },
+    {
+      "teacher": "Light-R1-7B-DS",
+      "size_b": 7,
+      "mode": "R1 reasoning prefix",
+      "pooled_drop": 52.83130662207254,
+      "same_size": true
+    },
+    {
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "size_b": 1.5,
+      "mode": "RL; R1 reasoning prefix; deterministic FA2 backward",
+      "pooled_drop": 29.566953334667456,
+      "same_size": false
+    },
+    {
+      "teacher": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "size_b": 1.5,
+      "mode": "R1 reasoning prefix; deterministic FA2 backward",
+      "pooled_drop": 20.163885850879016,
+      "same_size": false
+    }
+  ]
+}

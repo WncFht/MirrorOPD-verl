@@ -1,0 +1,106 @@
+{
+  "thinking": {
+    "steps": {
+      "0": {
+        "A": 0.0005220275285373634,
+        "T": 0.0005079142322801254,
+        "old_ad": 0.0004952353109725074,
+        "train_all": 0.0005416562615964415,
+        "held_all": 0.000661754484408304
+      },
+      "16": {
+        "A": 0.0001848833471579933,
+        "T": 0.00038441781655347237,
+        "old_ad": 0.00033864193256260216,
+        "train_all": 0.00041008786824632364,
+        "held_all": 0.0005430918972914809
+      },
+      "304": {
+        "A": 0.0016448274863172091,
+        "T": 0.00043248937870177587,
+        "old_ad": 0.001172057686963874,
+        "train_all": 0.001012528415166583,
+        "held_all": 0.0005709218978291283
+      },
+      "320": {
+        "A": 0.0017143077243297596,
+        "T": 0.00020370123301081245,
+        "old_ad": 0.0011764494826467119,
+        "train_all": 0.0010476005102171217,
+        "held_all": 0.0005454898242678824
+      }
+    },
+    "sources": [
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-rlvr-control320-20261030/arms/T-C-RLVR/fixed-000.json",
+        "sha256": "0ed296c60a563c2c0eed2d724e1752913382df4bbcb8cd56f0ad00ee74bfa4e3"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-rlvr-control320-20261030/arms/T-C-RLVR/fixed-016.json",
+        "sha256": "37399c7d8bb4f45206f7b5d316b337e2d4baad197de0d480426b6c3f477335b2"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-rlvr-control320-20261030/arms/T-C-RLVR/fixed-304.json",
+        "sha256": "b6de673d536b50716d93b9988d914b2ba8b010dbbd5e075d04dd288a46035d4c"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-rlvr-control320-20261030/arms/T-C-RLVR/fixed-320.json",
+        "sha256": "42410dd5b5501de1da822356d28c0244b9c4d78ddbc5f9bccd779c0e37128276"
+      }
+    ],
+    "copy_math_rkl": 0.0004397905560419088,
+    "relative_parameter_l2": 2.2925019969821957e-05
+  },
+  "nonthinking": {
+    "steps": {
+      "0": {
+        "A": 0.00019616568220427133,
+        "T": 0.00016630303170819317,
+        "old_ad": 0.0002126971368020891,
+        "train_all": 0.00021204287593561269,
+        "held_all": 0.00021697011935619347
+      },
+      "16": {
+        "A": 8.297829632182029e-05,
+        "T": 0.00014654230347881483,
+        "old_ad": 0.0001668279053940166,
+        "train_all": 0.00018137769376873819,
+        "held_all": 0.00019772115797153425
+      },
+      "304": {
+        "A": 0.0006053414786201337,
+        "T": 0.0001708466955335109,
+        "old_ad": 0.0005231418359871734,
+        "train_all": 0.0004640073485520849,
+        "held_all": 0.00020086782215877804
+      },
+      "320": {
+        "A": 0.0005802987936848,
+        "T": 6.98785282199742e-05,
+        "old_ad": 0.0005088774961090458,
+        "train_all": 0.0004761931142011616,
+        "held_all": 0.0001997749867457568
+      }
+    },
+    "sources": [
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls320-20261030/arms/NT-C-rlvr-gsm8k/fixed-000.json",
+        "sha256": "8e4d423d413585a60a01c362086a313fdb308325def15f0982b7488b0f795c64"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls320-20261030/arms/NT-C-rlvr-gsm8k/fixed-016.json",
+        "sha256": "ae7bd22e7a05ab015266f27b0b74aaeecec04086803ae8be348e79ee342418e0"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls320-20261030/arms/NT-C-rlvr-gsm8k/fixed-304.json",
+        "sha256": "080ba72d3ddf45713ee9b57f54c5f8ed0a4ebbc49fa490caaff442d1036cecac"
+      },
+      {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls320-20261030/arms/NT-C-rlvr-gsm8k/fixed-320.json",
+        "sha256": "101ad35b3ed8aae84290ba18418f3571d3d128ee14d1ca2f4be1b606b7ebcf94"
+      }
+    ],
+    "copy_math_rkl": 0.00018041768836004308,
+    "relative_parameter_l2": 2.2925019969821957e-05
+  }
+}

@@ -1,18 +1,15 @@
-# Polaris研究与实现数据
+# 迁移机制证据索引
 
-按用户要求，Polaris系列的报告证据和复算输入集中在本目录，不再写入`wandb-logs/analysis`。报告与图在上一级，分析脚本在`../scripts/`，生产Forward KL说明在[实现入口](../../../../infra/numerics/full-vocab/forward-kl.md)。
+本目录保存报告随附的统计、图形和历史冻结证据。原始运行日志、完整逐题输出、大权重与teacher hidden仍保存在仓库同级`wandb-logs/`，不因文档重构移动或覆盖。
 
 | 目录 | 内容 |
 | --- | --- |
-| `polaris-grcuotmi-20261026/` | E48最初58 outer冻结快照及初始师生probe |
-| `polaris-complete-20261027/` | E48完整256 outer/4096更新与同预算E20 |
-| `state-transfer-20261027/` | 固定state迁移、teacher来源、温度和梯度几何 |
-| `intersection-study-20261027/` | 扩大固定面板、fresh rollout、交集采样与任务评估 |
-| `forward-kl-study-20261027/` | KL方向文献、12组短对照、teacher基座/后训练增量诊断 |
-| `forward-kl-implementation-20261027/` | 生产FKL数值检查、分布式验收、真实logits检查及head性能数据 |
+| `state-transfer-20261027/` | 固定state迁移、teacher来源、温度与梯度几何的历史证据 |
+| `intersection-study-20261027/` | 固定面板、fresh rollout、交集采样与任务评估的历史证据 |
+| `overview-20261029/` | 当前模型清单、逐领域风险、整体held-out排序、每 student／输入模式一张图及绘图审计 |
 
-已有数值和原始事件保持原样；`source.json`和历史配置中记录的原路径、提交、时间属于来源证据，不因迁移改写。README与命令中的可执行路径已更新。
+原始历史配置与`source.json`保留原路径、版本和时间。当前汇总由[overview.py](../../../../../research/studies/fixed_transfer/overview.py)从完成回执与逐题评分复算；`heldout-ranking.csv`和`figure-order.json`记录当前排序及标签。Polaris生产实验另见[跨来源Polaris研究线](../../cross-origin/polaris/README.md)，不与这里的小型固定状态谱系统计合并。
 
-大型logits、teacher hidden缓存和本机checkpoint位于源码仓库的`outputs/polaris-transfer-cache/`，三个子目录为`polaris-probe-20261026`、`state-transfer-20261027`、`intersection-study-20261027`。这些文件用于重跑模型实验，不需要随报告阅读而加载。
+[返回研究入口](../README.md) · [数据与指标定义](../protocol.md)
 
-原始训练`.wandb`仍是日志来源；通用解码器继续在独立日志仓库维护。需要新冻结快照时，将项目export的`--out`指向本目录的新子目录，避免覆盖旧分析边界。迁移没有修改模型资产、正式训练记录或云端run。
+当前总览按 R1-1.5B、R1-7B、Qwen3-1.7B thinking／non-thinking、Llama-3B off 分线；另将 2507 原生模板对照单独成图。续训按模式条件去重，只读取完成回执对应的终点；`inventory.json` 分别记录权重配对数和模式条件数。

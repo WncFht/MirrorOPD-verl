@@ -1,0 +1,136 @@
+{
+  "model": {
+    "name": "L2",
+    "repo": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+    "revision": "a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+    "path": "model/teacher-study/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+    "parent": "allenai/Llama-3.1-Tulu-3-8B-SFT",
+    "method": "dpo",
+    "sources": [
+      "https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B-DPO/tree/a7beb67e33ffd01cc87ac3b46cadc1000985b8db"
+    ],
+    "lineage_note": "Declared lineage; exact training-parent revision and mode remain subject to acceptance."
+  },
+  "manifest": {
+    "inputs": {
+      "repo": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+      "revision": "a7beb67e33ffd01cc87ac3b46cadc1000985b8db"
+    },
+    "files": [
+      {
+        "path": "README.md",
+        "size": 13932,
+        "sha256": null,
+        "name": "README.md"
+      },
+      {
+        "path": "config.json",
+        "size": 850,
+        "sha256": null,
+        "name": "config.json"
+      },
+      {
+        "path": "generation_config.json",
+        "size": 180,
+        "sha256": null,
+        "name": "generation_config.json"
+      },
+      {
+        "path": "metadata.json",
+        "size": 742,
+        "sha256": null,
+        "name": "metadata.json"
+      },
+      {
+        "path": "model-00001-of-00004.safetensors",
+        "size": 4976764208,
+        "sha256": "85911f744f1dd50b8128227235d057a1aec6c8a1ed28e1458132aa56b719551d",
+        "name": "model-00001-of-00004.safetensors"
+      },
+      {
+        "path": "model-00002-of-00004.safetensors",
+        "size": 4999802720,
+        "sha256": "35008429087b8fc07d435a125c28ec7943086ede173af6f31bcb7c9637fbcd2f",
+        "name": "model-00002-of-00004.safetensors"
+      },
+      {
+        "path": "model-00003-of-00004.safetensors",
+        "size": 4915916176,
+        "sha256": "a7f29dca815d3dd4313f698fada334a339191d0db068f73ba15026380fd4d00d",
+        "name": "model-00003-of-00004.safetensors"
+      },
+      {
+        "path": "model-00004-of-00004.safetensors",
+        "size": 1168204344,
+        "sha256": "439d2a7ebf23264fc1c7364877db7df25308f454f6188d949792a40307b9e5b6",
+        "name": "model-00004-of-00004.safetensors"
+      },
+      {
+        "path": "model.safetensors.index.json",
+        "size": 25125,
+        "sha256": null,
+        "name": "model.safetensors.index.json"
+      },
+      {
+        "path": "notice.txt",
+        "size": 314,
+        "sha256": null,
+        "name": "notice.txt"
+      },
+      {
+        "path": "pytorch_model.bin.index.json",
+        "size": 23950,
+        "sha256": null,
+        "name": "pytorch_model.bin.index.json"
+      },
+      {
+        "path": "special_tokens_map.json",
+        "size": 439,
+        "sha256": null,
+        "name": "special_tokens_map.json"
+      },
+      {
+        "path": "tokenizer.json",
+        "size": 9085839,
+        "sha256": null,
+        "name": "tokenizer.json"
+      },
+      {
+        "path": "tokenizer_config.json",
+        "size": 51220,
+        "sha256": null,
+        "name": "tokenizer_config.json"
+      }
+    ]
+  },
+  "completion": {
+    "fingerprint": "fb08efcd2432ebd8b2ea7744843e8777a00bf3c17075d75a8d19eec3c6910c5e",
+    "inputs": {
+      "repo": "allenai/Llama-3.1-Tulu-3-8B-DPO",
+      "revision": "a7beb67e33ffd01cc87ac3b46cadc1000985b8db"
+    },
+    "completed_at": 1793339950.0546803,
+    "weights": [
+      {
+        "name": "model-00001-of-00004.safetensors",
+        "bytes": 4976764208,
+        "sha256": "85911f744f1dd50b8128227235d057a1aec6c8a1ed28e1458132aa56b719551d"
+      },
+      {
+        "name": "model-00002-of-00004.safetensors",
+        "bytes": 4999802720,
+        "sha256": "35008429087b8fc07d435a125c28ec7943086ede173af6f31bcb7c9637fbcd2f"
+      },
+      {
+        "name": "model-00003-of-00004.safetensors",
+        "bytes": 4915916176,
+        "sha256": "a7f29dca815d3dd4313f698fada334a339191d0db068f73ba15026380fd4d00d"
+      },
+      {
+        "name": "model-00004-of-00004.safetensors",
+        "bytes": 1168204344,
+        "sha256": "439d2a7ebf23264fc1c7364877db7df25308f454f6188d949792a40307b9e5b6"
+      }
+    ]
+  }
+}
