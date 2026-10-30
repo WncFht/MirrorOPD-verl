@@ -14,16 +14,26 @@ case "$PAIR" in
     *) exit 2 ;;
 esac
 case "$BINDING" in current|initial) ;; *) exit 2 ;; esac
-DATA="$WORKSPACE/runs/vllm-fusion-20261029/lifecycle-data"
+DATA=${FUSION_DATA_DIR:-$WORKSPACE/runs/vllm-fusion-20261029/lifecycle-data}
 [[ -f $DATA/manifest.json ]] || { echo "Run prepare_vllm_workload.py first" >&2; exit 2; }
 export TRAIN_FILE="$DATA/DAPO.parquet" MATH_FILE="$DATA/MATH-500.parquet" AMC_FILE="$DATA/AMC23.parquet"
 export AIME24_FILE="$DATA/AIME24.parquet" AIME_FILE="$DATA/AIME25.parquet" AIME26_FILE="$DATA/AIME26.parquet"
 fusion_cpus=12
 if [[ ${FUSION_GPUS:-7} == 6,7 ]]; then fusion_cpus=24; fi
 export TRAIN_BATCH_SIZE=${FUSION_TRAIN_BATCH_SIZE:-2} PPO_EPOCHS=1 VAL_N=1 SMOKE_RAY_CPUS=${SMOKE_RAY_CPUS:-$fusion_cpus}
-export MAX_PROMPT_LENGTH=1024 MAX_RESPONSE_LENGTH=${FUSION_RESPONSE_CAP:-32} MAX_VAL_RESPONSE_LENGTH=32
+export MAX_PROMPT_LENGTH=${FUSION_PROMPT_CAP:-1024} MAX_RESPONSE_LENGTH=${FUSION_RESPONSE_CAP:-32} MAX_VAL_RESPONSE_LENGTH=32
 export PARAM_OFFLOAD=True OPTIMIZER_OFFLOAD=True
 export WANDB_MODE=offline
+# Three distinct batches are required across the two-outers + restore sequence.
+"$WORKSPACE/envs/mirroropd-fusion/bin/python" - "$DATA/manifest.json" "$TRAIN_BATCH_SIZE" "$MAX_PROMPT_LENGTH" <<'PYVERIFY'
+import json
+import sys
+manifest = json.load(open(sys.argv[1]))
+if len(manifest["sources"]["DAPO"]["row_indices"]) < 3 * int(sys.argv[2]):
+    raise SystemExit("Lifecycle data must cover three complete training batches")
+if manifest["max_prompt_length"] > int(sys.argv[3]):
+    raise SystemExit("Prepared prompt cap exceeds the runtime cap; regenerate the frozen workload")
+PYVERIFY
 mkdir -p "$WORKSPACE/runs/vllm-fusion-20261029/$PREFIX"
 POLICY=('rollout_policy.execution.backend=vllm_fusion'
     "rollout_policy.execution.enforce_eager=${FUSION_ENFORCE_EAGER:-true}"

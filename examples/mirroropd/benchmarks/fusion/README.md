@@ -96,6 +96,8 @@ bash examples/mirroropd/benchmarks/fusion/run_fusion_native_lifecycle_fsdp2.sh \
 
 数据准备与运行目录必须不存在，已有 `lifecycle-data/manifest.json` 时直接复用。`dense` 可换成 `moe`，`current` 可换成 `initial`；initial 的三轮生成覆盖 α=1、0.5、0。`FUSION_RESUME_FROM` 指定现有 checkpoint 时只执行恢复后的第三轮，运行名仍须唯一。该入口默认 batch2、cap32、五来源各 2 条验证样本。`FUSION_RESPONSE_CAP`、`FUSION_TRAIN_BATCH_SIZE`、`FUSION_KV_BYTES` 和 `FUSION_MAX_NUM_SEQS` 分别设置训练响应上限、全局 batch、每卡 KV 字节预算及活跃请求上限；`FUSION_TP=2` 配合 `FUSION_GPUS=6,7` 选择一个 TP2 replica，TP1 则创建两个 replica。增加 cap 后必须重新检查训练切换容量，短验证不用于任务准确率结论。
 
+完整训练切换可以复用同一生命周期入口，设置 `FUSION_DATA_DIR` 指向独立冻结数据目录，`FUSION_TRAIN_BATCH_SIZE=64`、`FUSION_PROMPT_CAP=4096`、`FUSION_RESPONSE_CAP=7168`。数据准备工具的 `--train-rows 192 --max-prompt-length 4096` 提供三批不同训练样本；入口在分配 GPU 前检查样本数至少为三个完整批次，并检查准备时的 prompt cap 不大于运行 cap。五来源各两条验证仍用于接线，默认验证 cap32 不作为准确率结果。短测数据与正式长度数据分开保存，不能把原 16 行短测数据直接用于 batch64。
+
 `probe_vllm.py` 执行独立生成与全参数 sleep/wake 哈希检查，并保存配置、源码指纹、输入 token、响应、选中概率和 所选 GPU 的资源曲线。哈希检查与首次启动不计入生成计时。`run_fusion_native_benchmark_fsdp2.sh <dense|moe> <唯一目录名> <eager|graph>` 固定 batch64/cap7168、α=0.5、预热和三次测量；`FUSION_MAX_NUM_SEQS`、`FUSION_KV_GIB` 控制并发与 KV 预算。默认值是待测候选，不能由脚本存在推断容量或性能已通过。
 
 数值工具按问题分工：`probe_vllm_math.py` 从真实采样位置取得两侧 logits 和实际过滤后的分布，与独立 FP64 oracle 比较；`probe_native_components.py` 通过独立 native student、teacher 和组合模型重放同一 token 历史。后者使用专用诊断 worker 强制后续 token，不能用于生成吞吐或研究结果。它按请求身份记录检查点，并要求批宽校准确实执行目标批宽。Prefill 预算取冻结 prompt 同批入场所需 token 数与最大上下文长度的较大者，写入 manifest 的 `effective_max_num_batched_tokens`；suffix 逐步累计 KV，不把整个历史乘以并发数作为 prefill 工作区。两个数值探针均接受 `--tensor-parallel-size 2`，所有 rank 参与模型计算，仅输出 rank 保存词表结果；不能用 TP1 限值自动宣布 TP2 通过。
