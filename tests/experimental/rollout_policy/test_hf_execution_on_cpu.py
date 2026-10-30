@@ -26,7 +26,8 @@ def test_fixed_pair_parks_actor_before_reference_preparation(monkeypatch):
     server = SimpleNamespace(prepare=SimpleNamespace(remote=AsyncMock()))
 
     class Replica:
-        def __init__(self, *args, **kwargs):
+        def __init__(self, rank, rollout, model, **kwargs):
+            assert rollout.val_kwargs.repetition_detection is None
             self._server_handle = server
             self.init_hybrid = AsyncMock()
             self.sleep = AsyncMock()
@@ -44,7 +45,15 @@ def test_fixed_pair_parks_actor_before_reference_preparation(monkeypatch):
     config = OmegaConf.create(
         {
             "trainer": {"n_gpus_per_node": 1},
-            "actor_rollout_ref": {"model": {"path": "/learner"}, "rollout": {"engine_kwargs": {}}},
+            "actor_rollout_ref": {
+                "model": {"path": "/learner"},
+                "rollout": {
+                    "engine_kwargs": {},
+                    "val_kwargs": {
+                        "repetition_detection": {"min_pattern_size": 2, "max_pattern_size": 8, "min_count": 3}
+                    },
+                },
+            },
         }
     )
     policy = RolloutPolicyConfig.parse({"mode": "token_mixture", "execution": {"backend": "hf_fusion"}})
@@ -66,5 +75,6 @@ def test_fixed_pair_parks_actor_before_reference_preparation(monkeypatch):
 
     asyncio.run(run())
     assert events == ["park", "configure"]
+    assert config.actor_rollout_ref.rollout.val_kwargs.repetition_detection.min_count == 3
     actor.update_weights.assert_not_called()
     actor.release_fusion.assert_awaited_once()

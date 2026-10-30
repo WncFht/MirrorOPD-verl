@@ -56,6 +56,11 @@ class HFReferenceExecutor:
             await self.context.wait(wg.configure_fusion(settings))
             rollout = copy.deepcopy(self.context.config.actor_rollout_ref.rollout)
             rollout.name = "hf_fusion"
+            # Validation remains on the native engine. Its native-only detector
+            # must not enter the reference generator's RolloutConfig validation.
+            if rollout.get("val_kwargs") is not None:
+                with open_dict(rollout.val_kwargs):
+                    rollout.val_kwargs.repetition_detection = None
             if wg.fused_worker_used:
                 settings["worker_method"] = wg.fused_worker_execute_fn_name
                 settings["worker_prefix"] = f"{wg.sub_cls_name}_fwmn_fusion_generate_batch"
