@@ -20,7 +20,7 @@ run() {
         exit 2
     fi
     EXPERIMENT_NAME=$name bash examples/mirroropd/smoke/smoke_rollout_fusion.sh "$mode" "$binding" \
-        'trainer.test_freq=1' 'trainer.save_freq=2' 'data.train_max_samples=64' 'data.val_max_samples=-1' \
+        'rollout_policy.execution.backend=hf_fusion' 'trainer.test_freq=1' 'trainer.save_freq=2' 'data.train_max_samples=64' 'data.val_max_samples=-1' \
         "$@" > "$LOGS/$name.log" 2>&1
 }
 
@@ -34,7 +34,7 @@ current_pair() {
 {
 export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "${MODEL_ROOT:-$WORKSPACE/model}")
 current_pair "$PREFIX-dense-current"
-schedule='rollout_policy.teacher_weight={kind:linear,start:1.0,end:0.0,steps:4,clock:optimizer_step}'
+schedule='rollout_policy.right_weight={kind:linear,start:1.0,end:0.0,steps:4,clock:optimizer_step}'
 run "$PREFIX-initial-schedule" token_mixture initial 'trainer.total_training_steps=2' "$schedule"
 run "$PREFIX-initial-schedule-resume" token_mixture initial 'trainer.total_training_steps=3' "$schedule" \
     'trainer.resume_mode=resume_path' \

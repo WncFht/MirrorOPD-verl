@@ -302,9 +302,7 @@ class AgentLoopWorkerTQ(AgentLoopWorker):
 
         if "__rollout_policy__" in kwargs:
             policy = kwargs["__rollout_policy__"]
-            has_current = policy["student"] == "current" and (
-                policy["source"] == "student" or (policy["source"] == "fusion" and policy["teacher_weight"] < 1)
-            )
+            has_current = policy["has_current"]
             for tag in tags:
                 tag["rollout_has_current_component"] = has_current
                 if has_current:

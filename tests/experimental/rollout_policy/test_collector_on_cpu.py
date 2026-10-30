@@ -35,7 +35,7 @@ def test_atomic_parent_completion(tmp_path, failure):
                     raise ValueError("score failed")
                 return r.key, r.source
 
-            if failure == "second_source" and phase.decoder == "teacher":
+            if failure == "second_source" and phase.decoder == "right":
                 raise ValueError("teacher failed")
             results = await settle_with_deadline([response(r) for r in phase.requests], 1, 1)
             if failure == "duplicate":

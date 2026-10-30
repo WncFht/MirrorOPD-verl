@@ -102,6 +102,7 @@ class RolloutRuntime:
         self.initialized_fusion = False
         self.metrics = {}
         self.active_refs = []
+        self.bindings = getattr(trainer, "rollout_bindings", None)
 
     async def guarded(self, awaitable, timeout=None):
         task = asyncio.ensure_future(awaitable)
@@ -138,12 +139,8 @@ class RolloutRuntime:
         await self.guarded(asyncio.to_thread(self.trainer.checkpoint_manager.sleep_replicas))
 
     def teacher_path(self):
-        if self.policy.teacher_model_path:
-            return self.policy.teacher_model_path
         teachers = self.config.distillation.teacher_models
-        if len(teachers) != 1:
-            raise ValueError("Rollout fusion requires exactly one explicit teacher checkpoint")
-        return next(iter(teachers.values())).model_path
+        return next(iter(teachers.values())).model_path if len(teachers) == 1 else None
 
     async def frozen_client(self, source, path, max_requests):
         if source not in self.replicas:
@@ -171,7 +168,7 @@ class RolloutRuntime:
             replicas = []
             for rank, worker in enumerate(self.trainer.actor_rollout_wg.workers):
                 # Frozen engines never share the default receiver's IPC identity.
-                offset = {"student": 1000, "teacher": 2000, "checkpoint": 3000}[source]
+                offset = {"left": 1000, "right": 2000, "model": 3000}[source]
                 replica = replica_cls(
                     offset + rank,
                     rollout,
@@ -198,13 +195,15 @@ class RolloutRuntime:
             if not hasattr(self, "fusion_executor"):
                 self.fusion_executor = NativeVLLMExecutor(self)
             return await self.fusion_executor.prepare(plan)
+        first, second, alpha = plan.fusion_components
         wg = self.trainer.actor_rollout_wg
         if not self.initialized_fusion:
             setup_tick = time.monotonic()
             settings = {
-                "current": self.policy.student == "current",
+                "current": first.kind == "current",
+                "student_path": first.path,
                 "fusion_space": plan.fusion_space,
-                "teacher_path": plan.teacher_binding.path,
+                "teacher_path": second.path,
                 "stop_ids": list(plan.termination),
                 "deadline_seconds": self.policy.deadline_seconds,
                 "micro_batch_size": self.policy.micro_batch_size,
@@ -239,7 +238,7 @@ class RolloutRuntime:
             self.metrics["perf/timing/fusion_server_setup_seconds"] = time.monotonic() - setup_tick
         await self.guarded(asyncio.gather(*(r.sleep() for r in self.replicas["fusion"])), self.policy.drain_seconds)
         self.phase_token = str(stable_seed("fusion-phase", plan.collection_step, [r.uid for r in plan.requests]))
-        if self.policy.student == "current" and plan.resolved_control < 1 and self.fusion_version != plan.actor_version:
+        if first.kind == "current" and self.fusion_version != plan.actor_version:
             tick = time.monotonic()
             await self.wait(wg.initialize_fusion_student())
             self.metrics["perf/timing/fusion_student_initialize_seconds"] = time.monotonic() - tick
@@ -252,7 +251,7 @@ class RolloutRuntime:
             self.metrics["perf/timing/fusion_current_refit_seconds"] = time.monotonic() - tick
             self.fusion_version = plan.actor_version
         tick = time.monotonic()
-        await self.wait(wg.prepare_fusion(plan.resolved_control, plan.actor_version, phase_token=self.phase_token))
+        await self.wait(wg.prepare_fusion(alpha, plan.actor_version, phase_token=self.phase_token))
         self.metrics["perf/timing/fusion_prepare_residency_seconds"] = time.monotonic() - tick
         counts = [0] * wg.world_size
         n = self.config.actor_rollout_ref.rollout.n
@@ -270,18 +269,15 @@ class RolloutRuntime:
 
     async def prepare(self, phase, plan):
         tick = time.monotonic()
+        self.active_plan = plan
         if phase.decoder == "fusion":
             self.client = await self.fusion_client(plan)
-        elif phase.decoder == "student" and self.policy.student == "current":
+        elif phase.decoder != "fusion" and plan.has_current(phase.decoder):
             # Explicit on-demand sync; default validation target stays independent.
             await self.wait(self.trainer.actor_rollout_wg.update_weights(global_steps=plan.actor_version[0]))
             self.client = self.trainer.get_llm_client()
         else:
-            path = (
-                plan.source_binding.path
-                if phase.decoder == "checkpoint"
-                else (plan.teacher_binding.path if phase.decoder == "teacher" else plan.student_binding.path)
-            )
+            path = plan.binding(phase.decoder).path
             counts = [0] * self.trainer.actor_rollout_wg.world_size
             for request in phase.requests:
                 counts[
@@ -310,15 +306,15 @@ class RolloutRuntime:
                 params["_fusion_phase_token"] = self.phase_token
             metadata = {
                 "mode": self.policy.mode,
-                "student": self.policy.student,
+                "resolved_mode": plan.resolved_mode,
+                "normalization": plan.normalization,
+                "has_current": plan.has_current(request.source),
                 "source": request.source,
                 "actor_version": plan.actor_version,
                 "collection_step": plan.collection_step,
-                "teacher_weight": plan.resolved_control,
+                "right_weight": plan.resolved_control,
                 "fusion_space": plan.fusion_space,
-                "student_path": plan.student_binding.path,
-                "teacher_path": plan.teacher_binding.path if plan.teacher_binding else None,
-                "source_checkpoint": plan.source_binding.path if plan.source_binding is not None else None,
+                "bindings": {slot: dataclasses.asdict(binding) for slot, binding in plan.bindings},
                 "seed": request.seed,
                 "temperature": params["temperature"],
                 "stable_id": request.stable_id,
@@ -372,11 +368,11 @@ class RolloutRuntime:
         tick = time.monotonic()
         if phase.decoder == "fusion" and hasattr(self, "fusion_executor"):
             await self.fusion_executor.release()
-        elif phase.decoder == "student" and self.policy.student == "current":
+        elif phase.decoder != "fusion" and self.active_plan.has_current(phase.decoder):
             await self.guarded(asyncio.to_thread(self.trainer.checkpoint_manager.sleep_replicas))
         else:
             await self.guarded(
-                asyncio.gather(*(r.sleep() for r in self.replicas[phase.decoder])), self.policy.drain_seconds
+                asyncio.gather(*(r.sleep() for r in self.replicas[phase.decoder])), self.policy.deadline_seconds
             )
             if phase.decoder == "fusion":
                 await self.wait(self.trainer.actor_rollout_wg.release_fusion())
@@ -422,6 +418,7 @@ class RolloutRuntime:
             seed=rollout.seed,
             student_path=self.config.actor_rollout_ref.model.path,
             teacher_path=self.teacher_path(),
+            bindings=self.bindings,
             sampling=sampling,
             stop_ids=tuple(sorted(set(stop_ids))),
         )
@@ -434,10 +431,10 @@ class RolloutRuntime:
         self.metrics["perf/timing/rollout_policy_batch_seconds"] = time.monotonic() - tick
         self.metrics[f"rollout/policy/mode_{self.policy.mode}"] = 1
         if self.policy.mode == "token_mixture":
-            self.metrics["rollout/policy/teacher_logit_weight"] = plan.resolved_control
+            self.metrics["rollout/policy/right_weight"] = plan.resolved_control
         elif self.policy.mode == "trajectory_mixture":
-            self.metrics["rollout/policy/teacher_target_fraction"] = plan.resolved_control
-            self.metrics["rollout/policy/teacher_effective_fraction"] = plan.effective_teacher_fraction
+            self.metrics["rollout/policy/right_target_fraction"] = plan.resolved_control
+            self.metrics["rollout/policy/right_effective_fraction"] = plan.effective_right_fraction
         fields = await self.guarded(
             tq.async_kv_batch_get(
                 keys=[f"{request.uid}_{request.response_index}_0" for request in plan.requests],
@@ -453,7 +450,7 @@ class RolloutRuntime:
             self.metrics[f"rollout/policy/{source}_response_tokens"] = tokens
             self.metrics[f"rollout/policy/{source}_requests"] = source_counts[source]
         if self.policy.mode == "trajectory_mixture":
-            self.metrics["rollout/policy/teacher_token_fraction"] = source_tokens.get("teacher", 0) / sum(
+            self.metrics["rollout/policy/right_token_fraction"] = source_tokens.get("right", 0) / sum(
                 source_tokens.values()
             )
         self.metrics["rollout/policy/requests"] = len(plan.requests)

@@ -122,7 +122,7 @@ def snapshot(workspace, out):
     for pair in ("J", "P"):
         control = root / f"formal-prefix-study-{pair}-01"
         for arm in ARMS:
-            repo = workspace / ("MirrorOPD-verl-vllm-probability" if arm == "PM" else "MirrorOPD-verl-vllm-fusion")
+            repo = workspace / ("MirrorOPD-verl-rollout" if arm == "PM" else "MirrorOPD-verl-vllm-fusion")
             name = f"prefix-formal-{pair}-{arm}-study40x16-v1"
             run = repo / "outputs" / name
             path = run / "metrics.jsonl"

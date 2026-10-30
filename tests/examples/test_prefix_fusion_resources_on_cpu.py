@@ -28,7 +28,7 @@ def test_verified_checkpoint_relocation_does_not_change_plan_random_streams(tmp_
         (root / "student").mkdir(parents=True)
         (root / "teacher").mkdir()
     kwargs = dict(uids=["a", "b"], stable_ids=["q1", "q2"], n=1, collection_step=4, optimizer_step=48, seed=42)
-    policy = RolloutPolicyConfig.parse(dict(mode="token_mixture", teacher_weight=0.5))
+    policy = RolloutPolicyConfig.parse(dict(mode="token_mixture", right_weight=0.5))
     left = build_plan(policy, student_path=str(old / "student"), teacher_path=str(old / "teacher"), **kwargs)
     right = build_plan(policy, student_path=str(new / "student"), teacher_path=str(new / "teacher"), **kwargs)
     assert left.requests == right.requests

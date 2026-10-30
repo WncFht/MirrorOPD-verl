@@ -9,10 +9,10 @@ BINDING=${2:?current or initial}
 PREFIX=${3:?unique run prefix}
 RESUME_FROM=${FUSION_RESUME_FROM:-}
 FUSION_MODEL_ROOT=${FUSION_MODEL_ROOT:-$WORKSPACE/model}
-export STUDENT_MODEL="$FUSION_MODEL_ROOT/Qwen3-1.7B-Base"
+export STUDENT_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-1.7B-Base --model-root "$FUSION_MODEL_ROOT")
 case "$PAIR" in
-    dense) export TEACHER_MODEL="$FUSION_MODEL_ROOT/Qwen3-8B" ;;
-    moe) export TEACHER_MODEL="$FUSION_MODEL_ROOT/Qwen3-30B-A3B-Instruct-2507" ;;
+    dense) export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-8B --model-root "$FUSION_MODEL_ROOT") ;;
+    moe) export TEACHER_MODEL=$(python3 "$REPO/examples/mirroropd/assets/paths.py" --alias Qwen3-30B-A3B-Instruct-2507 --model-root "$FUSION_MODEL_ROOT") ;;
     *) exit 2 ;;
 esac
 case "$BINDING" in current|initial) ;; *) exit 2 ;; esac
@@ -44,7 +44,7 @@ POLICY=('rollout_policy.execution.backend=vllm_fusion'
     "rollout_policy.execution.max_num_seqs=${FUSION_MAX_NUM_SEQS:-2}"
     "rollout_policy.execution.kv_cache_memory_bytes=${FUSION_KV_BYTES:-1073741824}")
 if [[ $BINDING == initial ]]; then
-    POLICY+=('rollout_policy.teacher_weight={kind:linear,start:1.0,end:0.0,steps:2,clock:outer_step}')
+    POLICY+=('rollout_policy.right_weight={kind:linear,start:1.0,end:0.0,steps:2,clock:outer_step}')
 fi
 run() {
     local name=$1

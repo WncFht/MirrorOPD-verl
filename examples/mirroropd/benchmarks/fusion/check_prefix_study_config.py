@@ -130,22 +130,26 @@ def check(config, reference, pair, arm, outers=40, *, smoke=False, scientific=Fa
     if not spec.teacher_only_kl or spec.anchor_payload is not None:
         errors.append("Objective is not teacher-only full-vocabulary reverse KL")
     expected = {
-        "S0": ("single", "student", "initial", 0.0),
-        "S": ("trajectory_mixture", "student", "current", 0.0),
-        "LM": ("token_mixture", "student", "current", 0.5),
-        "PM": ("token_mixture", "student", "current", 0.5),
-        "TM": ("trajectory_mixture", "student", "current", 0.5),
-        "T": ("single", "teacher", "current", 1.0),
+        "S0": ("single", "initial", None, 0.0),
+        "S": ("trajectory_mixture", "current", "teacher", 0.0),
+        "LM": ("token_mixture", "current", "teacher", 0.5),
+        "PM": ("token_mixture", "current", "teacher", 0.5),
+        "TM": ("trajectory_mixture", "current", "teacher", 0.5),
+        "T": ("single", "teacher", None, 1.0),
     }[arm]
     policy = config["rollout_policy"]
-    actual = tuple(policy[key] for key in ["mode", "source", "student", "teacher_weight"])
+    from examples.mirroropd.benchmarks.fusion.record_schema import prefix_policy_facts
+
+    actual = prefix_policy_facts(policy)
     if policy.get("fusion_space", "logit") != ("probability" if arm == "PM" else "logit"):
         errors.append("Wrong token-fusion space")
     if actual != expected:
         errors.append(f"Wrong prefix policy: {actual!r}")
-    student = Path(config["actor_rollout_ref"]["model"]["path"]).name
+    from examples.mirroropd.assets.paths import asset_name
+
+    student = asset_name(config["actor_rollout_ref"]["model"]["path"])
     teachers = config["distillation"]["teacher_models"]
-    teacher = Path(next(iter(teachers.values()))["model_path"]).name
+    teacher = asset_name(next(iter(teachers.values()))["model_path"])
     if (
         student != "DeepSeek-R1-Distill-Qwen-1.5B"
         or teacher != {"J": "JustRL-DeepSeek-1.5B", "P": "Polaris-7B-Preview"}[pair]

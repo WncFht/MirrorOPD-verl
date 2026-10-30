@@ -77,7 +77,7 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
         version = [outer - 1, outer - 1]
         if plan["actor_version"] != version or plan["resolved_control"] != alpha:
             errors.append(f"Outer {outer}: actor coordinate or alpha mismatch")
-        identity = plan["student_binding"]
+        identity = dict(plan["bindings"])["left"] if "bindings" in plan else plan["student_binding"]
         if identity["kind"] != ("current" if binding == "current" else "checkpoint"):
             errors.append(f"Outer {outer}: student binding changed")
         if Path(identity["path"]).resolve() != Path(student).resolve():
@@ -90,9 +90,11 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
             errors.append(f"Outer {outer}: incomplete generated batch")
         ranks = runtime["ranks"]
         expected_loaded = version if binding == "current" else ["checkpoint", str(Path(student).resolve())]
-        if len(ranks) != world_size or any(rank["version"] != expected_loaded for rank in ranks):
+        uses_fusion = any(phase["decoder"] == "fusion" for phase in plan["phases"])
+        expected_ranks = world_size if uses_fusion else 0
+        if len(ranks) != expected_ranks or any(rank["version"] != expected_loaded for rank in ranks):
             errors.append(f"Outer {outer}: receiver version mismatch")
-        if world_size > 1:
+        if world_size > 1 and uses_fusion:
             expected_receivers = {(rank // tp, rank % tp, tp) for rank in range(world_size)}
             actual_receivers = {
                 (rank.get("replica"), rank.get("tp_rank"), rank.get("tensor_parallel_size")) for rank in ranks
@@ -111,7 +113,7 @@ def inspect_run(run, outers, alphas, binding, student, commit, save=None, world_
             {
                 "outer": outer,
                 "alpha": alpha,
-                "receiver_version": ranks[0]["version"],
+                "receiver_version": ranks[0]["version"] if ranks else None,
                 "receiver_topology": [
                     {key: rank.get(key) for key in ["replica", "tp_rank", "tensor_parallel_size"]} for rank in ranks
                 ],

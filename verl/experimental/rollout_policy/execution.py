@@ -26,6 +26,7 @@ class NativeVLLMExecutor:
         from verl.workers.rollout.vllm_fusion.compat import decode_graph_config, fusion_hf_overrides
         from verl.workers.rollout.vllm_fusion.replica import VLLMFusionReplica
 
+        first, second, alpha = plan.fusion_components
         rt = self.runtime
         if plan.fusion_space != rt.policy.fusion_space or self.fusion_space not in {None, plan.fusion_space}:
             raise ValueError("Fusion space changed without rebuilding the native executor")
@@ -51,9 +52,7 @@ class NativeVLLMExecutor:
             rollout.logprobs_mode = "processed_logprobs"
             rollout.gpu_memory_utilization = 0.9
             with open_dict(rollout.engine_kwargs.vllm):
-                rollout.engine_kwargs.vllm.hf_overrides = fusion_hf_overrides(
-                    plan.teacher_binding.path, plan.fusion_space
-                )
+                rollout.engine_kwargs.vllm.hf_overrides = fusion_hf_overrides(second.path, plan.fusion_space)
                 rollout.engine_kwargs.vllm.kv_cache_memory_bytes = execution.kv_cache_memory_bytes
                 # Match the independently checked component/KV probes. Automatic
                 # backend selection is not covered by their numerical evidence.
@@ -62,11 +61,14 @@ class NativeVLLMExecutor:
                     compilation = decode_graph_config(execution.max_num_seqs)
                     rollout.engine_kwargs.vllm.compilation_config = compilation
                     rollout["cudagraph_capture_sizes"] = compilation["cudagraph_capture_sizes"]
+            from verl.workers.config import HFModelConfig
+
+            model = HFModelConfig(path=first.path, trust_remote_code=False)
             for index in range(topology.replica_count):
                 replica = VLLMFusionReplica(
                     4000 + index,
                     rollout,
-                    rt.config.actor_rollout_ref.model,
+                    model,
                     gpus_per_node=rt.config.trainer.n_gpus_per_node,
                     name_suffix="policy_fusion",
                 )
@@ -79,7 +81,7 @@ class NativeVLLMExecutor:
             await rt.guarded(
                 asyncio.gather(
                     *(
-                        server.collective_rpc.remote("fusion_initialize", args=(rt.policy.student == "current",))
+                        server.collective_rpc.remote("fusion_initialize", args=(first.kind == "current",))
                         for server in servers
                     )
                 )
@@ -90,7 +92,7 @@ class NativeVLLMExecutor:
                         "backend": "vllm_fusion",
                         "servers": servers,
                         "tp_size": topology.tensor_parallel_size,
-                        "current": rt.policy.student == "current",
+                        "current": first.kind == "current",
                         "deadline_seconds": rt.policy.deadline_seconds,
                     }
                 )
@@ -101,7 +103,7 @@ class NativeVLLMExecutor:
             await rt.guarded(asyncio.gather(*(replica.wake_up() for replica in self.replicas)))
             self.awake = True
         rt.metrics["perf/timing/fusion_prepare_residency_seconds"] = time.monotonic() - tick
-        if rt.policy.student == "current" and self.current_version != plan.actor_version:
+        if first.kind == "current" and self.current_version != plan.actor_version:
             tick = time.monotonic()
             await rt.wait(
                 wg.update_weights(
@@ -119,7 +121,7 @@ class NativeVLLMExecutor:
             asyncio.gather(
                 *(
                     replica._server_handle.prepare.remote(
-                        count, rt.phase_token, plan.resolved_control, plan.actor_version, plan.fusion_space
+                        count, rt.phase_token, alpha, plan.actor_version, plan.fusion_space
                     )
                     for replica, count in zip(self.replicas, counts, strict=True)
                 )
@@ -135,7 +137,7 @@ class NativeVLLMExecutor:
     async def release(self):
         if self.replicas and self.awake:
             await self.runtime.guarded(
-                asyncio.gather(*(replica.sleep() for replica in self.replicas)), self.runtime.policy.drain_seconds
+                asyncio.gather(*(replica.sleep() for replica in self.replicas)), self.runtime.policy.deadline_seconds
             )
             self.awake = False
 

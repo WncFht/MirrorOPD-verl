@@ -932,7 +932,12 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         else:
             from verl.workers.rollout.hf_fusion import ServerAdapter
 
-        self.fusion_rollout = ServerAdapter(self.config.rollout, self.config.model, settings=settings)
+        model = self.config.model
+        if settings.get("student_path"):
+            from verl.workers.config import HFModelConfig
+
+            model = HFModelConfig(path=settings["student_path"], trust_remote_code=False)
+        self.fusion_rollout = ServerAdapter(self.config.rollout, model, settings=settings)
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
     def initialize_fusion_student(self):

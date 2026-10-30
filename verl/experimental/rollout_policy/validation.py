@@ -16,7 +16,7 @@ def validate_policy(config):
         )
     if policy.default_path:
         return policy
-    if policy.mode == "token_mixture" and policy.execution.backend == "vllm_fusion":
+    if policy.requires_fusion and policy.execution.backend == "vllm_fusion":
         for key in (
             "actor_rollout_ref.rollout.quantization",
             "actor_rollout_ref.rollout.quantization_config_file",
@@ -99,7 +99,7 @@ def validate_policy(config):
         raise ValueError("Local rollout behavior probabilities require logprobs_mode=processed_logprobs")
     if policy.mode == "token_mixture" and rollout.dtype != "bfloat16":
         raise ValueError("Production token fusion currently requires BF16 inference weights")
-    validate_resume_clock(config, policy.teacher_weight)
+    validate_resume_clock(config, policy.right_weight)
 
     from pathlib import Path
 
@@ -108,17 +108,10 @@ def validate_policy(config):
     from .sampling import validate_tokenizers
 
     student_path = config.actor_rollout_ref.model.path
-    paths = [student_path]
     teachers = config.distillation.teacher_models
-    teacher_path = policy.teacher_model_path or (
-        next(iter(teachers.values())).model_path if len(teachers) == 1 else None
-    )
-    if policy.mode != "single" or policy.source == "teacher":
-        if teacher_path is None:
-            raise ValueError("An explicit local rollout teacher is required")
-        paths.append(teacher_path)
-    if policy.model_path:
-        paths.append(policy.model_path)
+    teacher_path = next(iter(teachers.values())).model_path if len(teachers) == 1 else None
+    bindings = policy.bindings(student_path, teacher_path)
+    paths = [student_path, *dict.fromkeys(binding.path for binding in bindings.values())]
     for path in paths:
         if not Path(path).is_dir():
             raise ValueError(f"Rollout requires a local checkpoint: {path}")
@@ -128,7 +121,13 @@ def validate_policy(config):
     tokenizers = [AutoTokenizer.from_pretrained(path, local_files_only=True) for path in paths]
     for tokenizer, model_config in zip(tokenizers[1:], model_configs[1:], strict=True):
         validate_tokenizers(tokenizers[0], tokenizer, model_configs[0].vocab_size, model_config.vocab_size)
-    if policy.mode == "token_mixture" and policy.execution.backend == "hf_fusion":
+    components = []
+    if policy.requires_fusion:
+        first, second = bindings["left"], bindings["right"]
+        if second.kind == "current":
+            first, second = second, first
+        components = [AutoConfig.from_pretrained(b.path, local_files_only=True) for b in (first, second)]
+    if policy.requires_fusion and policy.execution.backend == "hf_fusion":
         import importlib.util
 
         import torch
@@ -141,8 +140,8 @@ def validate_policy(config):
             )
         if type(OmegaConf.select(rollout, "engine_kwargs.hf_fusion.reference", default=False)) is not bool:
             raise ValueError("hf_fusion.reference must be a boolean diagnostic switch")
-        if model_configs[0].model_type != "qwen3" or any(
-            model.model_type not in {"qwen3", "qwen3_moe"} for model in model_configs[1:]
+        if components[0].model_type != "qwen3" or any(
+            model.model_type not in {"qwen3", "qwen3_moe"} for model in components[1:]
         ):
             raise ValueError(
                 "Production token fusion currently supports a Qwen3 dense learner and Qwen3 dense/MoE teacher"
@@ -153,7 +152,7 @@ def validate_policy(config):
             raise ValueError("Production token fusion requires FlashAttention 2 and Triton")
         if not hasattr(torch.backends.cuda.matmul, "allow_bf16_reduced_precision_reduction_split_k"):
             raise ValueError("Production token fusion requires Torch >=2.10 with independent split-K control")
-    if policy.mode == "token_mixture" and policy.execution.backend == "vllm_fusion":
+    if policy.requires_fusion and policy.execution.backend == "vllm_fusion":
         from importlib.metadata import version
 
         from packaging.version import Version
@@ -165,8 +164,7 @@ def validate_policy(config):
         FusionTopology(config.trainer.n_gpus_per_node, policy.execution.tensor_parallel_size)
         from verl.workers.rollout.vllm_fusion.compat import validate_component_families
 
-        for teacher_config in model_configs[1:]:
-            validate_component_families(model_configs[0], teacher_config)
+        validate_component_families(*components)
         if any(getattr(model, "quantization_config", None) for model in model_configs):
             raise ValueError("vllm_fusion requires unquantized checkpoints")
     if policy.mode == "token_mixture" and config.actor_rollout_ref.rollout.checkpoint_engine.backend != "naive":

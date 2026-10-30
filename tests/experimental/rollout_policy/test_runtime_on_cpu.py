@@ -54,3 +54,66 @@ def test_immutable_sampling_plan_reaches_every_real_session_metadata(tmp_path):
         assert session["metadata"]["temperature"] == 0.0
         assert session["metadata"]["actor_version"] == (0, 0)
         assert session["metadata"]["source"] == session["request"].source
+
+
+def test_preparation_and_release_follow_resolved_binding_not_slot(tmp_path):
+    from unittest.mock import AsyncMock
+
+    policy = RolloutPolicyConfig.parse(
+        {"mode": "token_mixture", "left": {"kind": "initial"}, "right": {"kind": "current"}, "right_weight": 1}
+    )
+    sync = AsyncMock()
+    sleep = lambda: None
+    trainer = SimpleNamespace(
+        config=OmegaConf.create({"actor_rollout_ref": {"rollout": {"n": 1}}}),
+        rollout_policy=policy,
+        actor_rollout_wg=SimpleNamespace(update_weights=sync),
+        get_llm_client=lambda: "current-client",
+        checkpoint_manager=SimpleNamespace(sleep_replicas=sleep),
+    )
+    runtime = RolloutRuntime(trainer)
+    runtime.fusion_client = AsyncMock(side_effect=AssertionError("endpoint allocated fusion"))
+    runtime.frozen_client = AsyncMock(side_effect=AssertionError("endpoint allocated fixed model"))
+    plan = build_plan(
+        policy, uids=["u"], stable_ids=[0], n=1, collection_step=3, optimizer_step=2, seed=1, student_path=str(tmp_path)
+    )
+
+    async def run():
+        await runtime.prepare(plan.phases[0], plan)
+        assert runtime.client == "current-client"
+        await runtime.release(plan.phases[0])
+
+    asyncio.run(run())
+    sync.assert_awaited_once_with(global_steps=2)
+    runtime.fusion_client.assert_not_called()
+    runtime.frozen_client.assert_not_called()
+
+
+def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
+    from unittest.mock import AsyncMock
+
+    extra = tmp_path / "A"
+    extra.mkdir()
+    policy = RolloutPolicyConfig.parse(
+        {
+            "mode": "token_mixture",
+            "left": {"kind": "checkpoint", "ref": str(extra)},
+            "right": {"kind": "current"},
+            "right_weight": 0,
+        }
+    )
+    trainer = SimpleNamespace(
+        config=OmegaConf.create({"actor_rollout_ref": {"rollout": {"n": 1}}}),
+        rollout_policy=policy,
+        actor_rollout_wg=SimpleNamespace(world_size=1),
+    )
+    runtime = RolloutRuntime(trainer)
+    runtime.frozen_client = AsyncMock(return_value="A-client")
+    runtime.fusion_client = AsyncMock(side_effect=AssertionError("endpoint allocated fusion"))
+    plan = build_plan(
+        policy, uids=["u"], stable_ids=[0], n=1, collection_step=1, optimizer_step=0, seed=1, student_path=str(tmp_path)
+    )
+    asyncio.run(runtime.prepare(plan.phases[0], plan))
+    runtime.frozen_client.assert_awaited_once_with("left", str(extra), 1)
+    assert runtime.client == "A-client"
+    runtime.fusion_client.assert_not_called()

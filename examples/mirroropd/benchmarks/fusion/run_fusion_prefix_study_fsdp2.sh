@@ -115,6 +115,13 @@ case "$ARM" in
     TM) policy_mode=trajectory_mixture; weight=0.5 ;;
     T) source=teacher; weight=1 ;;
 esac
+if [[ $policy_mode == single ]]; then
+    model_kind=$binding
+    [[ $source != teacher ]] || model_kind=teacher
+    POLICY_ARGS=("rollout_policy.model={kind:$model_kind}")
+else
+    POLICY_ARGS=("rollout_policy.left={kind:$binding}" 'rollout_policy.right={kind:teacher}')
+fi
 PROFILE_ARGS=()
 if [[ ${PREFIX_TORCH_TRACE:-0} == 1 ]]; then
     [[ $MODE == profile ]] || { echo 'Torch traces are only allowed in dedicated profile runs' >&2; exit 2; }
@@ -161,8 +168,8 @@ exec bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E20 --method full_kl
     "reward.num_workers=${PREFIX_REWARD_WORKERS:-8}" \
     "transfer_queue.backend.SimpleStorage.num_data_storage_units=${PREFIX_STORAGE_UNITS:-8}" \
     "++distillation.shared_teacher.forward_only_cpu_offload=${PREFIX_TEACHER_LAYER_OFFLOAD:-false}" \
-    "rollout_policy.mode=$policy_mode" "rollout_policy.source=$source" \
-    "rollout_policy.student=$binding" "rollout_policy.teacher_weight=$weight" "rollout_policy.fusion_space=$fusion_space" \
+    "rollout_policy.mode=$policy_mode" "${POLICY_ARGS[@]}" \
+    "rollout_policy.right_weight=$weight" "rollout_policy.fusion_space=$fusion_space" \
     'rollout_policy.execution.backend=vllm_fusion' \
     "rollout_policy.execution.tensor_parallel_size=$tp" \
     "rollout_policy.execution.max_num_seqs=$seqs" \

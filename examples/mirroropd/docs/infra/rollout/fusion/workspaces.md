@@ -28,9 +28,9 @@
 | `-vllm-engineering`   | `a34724a3` | 工程验收输出与源码；占位工具已迁出 |
 | `-fixed-state-engine` | `c8d96f0b` | 已合并的资产实现与评审源码         |
 
-原位置的 outputs 保持原路径、文件和 inode，避免已有审计和研究报告因路径迁移失效。源码条目是指向集中存档的兼容链接；原目录中的 `ARCHIVED-WORKSPACE.md` 给出恢复标签。需要重跑或修改历史版本时，从标签建立新的明确工作树，不把兼容目录当作开发目录。
+原位置的 outputs 保持原路径、文件和 inode，避免已有审计和研究报告因路径迁移失效。源码兼容链接和生成缓存已移除；原目录仅保留 outputs 与存档说明，源码和恢复标签统一位于集中存档。需要重跑或修改历史版本时，从标签建立新的明确工作树，不把兼容目录当作开发目录。
 
-`-vllm-probability` 仍是指向 `-rollout` 的兼容软链，不是额外 worktree。旧路径只是引用兼容层，日常开发只使用 `-rollout`。
+旧开发别名 `-vllm-probability` 已删除；`-fixed-state-engine` 的空目录也已删除。日常开发使用 `-rollout`，历史源码直接从集中存档或 Git 标签读取。清理回执见 `runs/rollout-composition-20261031/compatibility-cleanup.json`。
 
 ## 占位与冻结执行的独立性
 
@@ -42,4 +42,4 @@ GPU 占位守护使用 `runs/gpu-expansion-20261030/idle-occupancy/runtime/resou
 
 原未提交的驻留超时实现已以[可恢复 patch](../../../../../../../runs/rollout-organization-20261031/parked-residency/manifest.json)封存，包含原基点、文件哈希和已有 CPU 测试证据；它未完成 GPU 验证，不属于已交付能力。
 
-后续接口与开发计划进入 `feat/rollout-composition`。新架构文档定义目标语义，当前 runtime 仍使用旧 student/teacher 配置；主仓库的文档可见性不等于原生后端或新左右模型接口已经发布到 main。
+后续接口与开发计划进入 `feat/rollout-composition`。新架构文档定义目标语义，当前 runtime 已迁移到 model/left/right 配置，验证进度见[实施计划](2026-10-31-Rollout统一接口实施计划.md)；主仓库的文档可见性不等于原生后端或新左右模型接口已经发布到 main。

@@ -828,17 +828,16 @@ algorithm:
     weight_pow: 2.0
 rollout_policy:
   mode: single
-  source: student
-  student: current
-  teacher_weight: 0.5
+  model: null
+  left: null
+  right: null
+  right_weight: 0.5
   fusion_space: logit
-  teacher_model_path: null
-  model_path: null
   micro_batch_size: 4
   deadline_seconds: 3600.0
   drain_seconds: 60.0
   execution:
-    backend: hf_fusion
+    backend: vllm_fusion
     tensor_parallel_size: 1
     max_num_seqs: 2
     kv_cache_memory_bytes: 1073741824

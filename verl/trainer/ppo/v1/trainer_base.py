@@ -143,6 +143,12 @@ class PPOTrainer(ABC):
         from verl.experimental.rollout_policy.validation import validate_policy
 
         self.rollout_policy = validate_policy(config)
+        self.rollout_bindings = None
+        self.rollout_identity = None
+        if not self.rollout_policy.default_path:
+            from verl.experimental.rollout_policy.identity import bind_policy
+
+            self.rollout_bindings, self.rollout_identity = bind_policy(config, self.rollout_policy)
         self.checkpoint_callback = build_checkpoint_callback(config)
         from verl.trainer.ppo.readout_callback import build_readout_callback
 
@@ -1165,6 +1171,10 @@ class PPOTrainer(ABC):
             self.logger.log(data=values, step=step)
 
     def _save_actor_optimizer_progress(self, checkpoint_dir):
+        if getattr(self, "rollout_identity", None) is not None:
+            from verl.experimental.rollout_policy.identity import save_bindings
+
+            save_bindings(checkpoint_dir, self.rollout_identity)
         save_optimizer_progress(
             checkpoint_dir,
             self.global_steps,
@@ -1173,6 +1183,10 @@ class PPOTrainer(ABC):
         )
 
     def _load_actor_optimizer_progress(self, checkpoint_dir):
+        if getattr(self, "rollout_identity", None) is not None:
+            from verl.experimental.rollout_policy.identity import verify_resume_bindings
+
+            verify_resume_bindings(checkpoint_dir, self.rollout_identity)
         actor, critic = load_optimizer_progress(checkpoint_dir, self.global_steps)
         self._set_optimizer_progress(actor)
         self._set_optimizer_progress(critic, "critic")
