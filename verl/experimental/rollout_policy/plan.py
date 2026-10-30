@@ -78,8 +78,8 @@ class FusionExecutionConfig:
     def __post_init__(self):
         if self.backend not in {"hf_fusion", "vllm_fusion"}:
             raise ValueError("Unknown fusion execution backend")
-        if self.tensor_parallel_size not in {1, 2} or (self.backend == "hf_fusion" and self.tensor_parallel_size != 1):
-            raise ValueError("HF fusion supports TP1; native fusion supports TP1/TP2")
+        if type(self.tensor_parallel_size) is not int or self.tensor_parallel_size < 1:
+            raise ValueError("tensor_parallel_size must be a positive integer")
         for name in ("max_num_seqs", "kv_cache_memory_bytes"):
             if type(getattr(self, name)) is not int or getattr(self, name) < 1:
                 raise ValueError(f"{name} must be a positive integer")

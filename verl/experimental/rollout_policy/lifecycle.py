@@ -149,8 +149,9 @@ class OwnedReplicas:
         self.ready = self.awake = False
 
 
-def loaded_versions(plan):
+def loaded_versions(plan, source):
     return tuple(
         (slot, plan.actor_version if binding.kind == "current" else binding.identity or binding.path)
         for slot, binding in plan.bindings
+        if source == "fusion" or slot == source
     )

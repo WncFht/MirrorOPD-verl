@@ -34,6 +34,7 @@ class HFReferenceExecutor:
         layout = ComponentLayout.from_plan(plan)
         first, second, alpha = layout.first, layout.second, plan.resolved_control
         wg = self.context.actor
+        await self.context.wait(wg.park_fusion_actor())
         if not self.initialized_fusion:
             setup_tick = time.monotonic()
             settings = {
@@ -104,7 +105,7 @@ class HFReferenceExecutor:
                 )
             )
         )
-        return PreparedPhase("fusion", self.client, routes, self, loaded_versions(plan), self.phase_token)
+        return PreparedPhase("fusion", self.client, routes, self, loaded_versions(plan, "fusion"), self.phase_token)
 
     async def release(self, prepared=None):
         await self.resources.sleep()

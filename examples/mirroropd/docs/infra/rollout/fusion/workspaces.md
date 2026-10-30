@@ -44,4 +44,4 @@ GPU 占位守护使用 `runs/gpu-expansion-20261030/idle-occupancy/runtime/resou
 
 原驻留超时草稿已以[历史 patch](../../../../../../../runs/rollout-organization-20261031/parked-residency/manifest.json)封存，包含原基点、文件哈希和已有 CPU 测试证据；它未完成 GPU 验证，且对应代码已被统一接口与生命周期修复替代，不再作为待合并开发项。当前通过范围以[实施计划](2026-10-31-Rollout统一接口实施计划.md)为准。
 
-后续开发继续使用 `feat/rollout-composition`。当前 runtime 使用 model/left/right 配置，通过范围见[实施计划](2026-10-31-Rollout统一接口实施计划.md)，main 的发布状态见交付回执。
+架构重构提交继续位于 `feat/rollout-composition`。公共接口保持 model/left/right，内部职责与采样迁移见[统一语义](2026-10-31-Rollout统一模型来源与组合语义.md)。main 的 `9fad6d43` 发布与独立研究修改保持原状；重构候选尚未做新的 GPU 生命周期回归，未替换 main 或冻结实验。候选的 CPU/RPC 结果见[实施计划](2026-10-31-Rollout统一接口实施计划.md)，原 main 发布回执仍只描述其原版本。

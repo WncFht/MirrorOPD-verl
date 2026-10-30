@@ -5,6 +5,9 @@
 import transfer_queue as tq
 
 from verl.utils.debug import marked_timer
+from verl.utils.ray_utils import auto_await
+
+from .lifecycle import ExecutionContext
 
 
 class RolloutService:
@@ -32,13 +35,23 @@ class DefaultRolloutService(RolloutService):
     def __init__(self, trainer, submit):
         super().__init__(trainer)
         self.submit = submit
+        self.common_sampling = trainer.common_rollout_sampling
+
+    @auto_await
+    async def configure_sampling(self):
+        if self.common_sampling:
+            trainer = self.trainer
+            context = ExecutionContext(trainer.config, trainer.rollout_policy, trainer.actor_rollout_wg)
+            await context.set_policy_sampling(trainer.checkpoint_manager.replicas, True)
 
     def initialize(self):
         self.trainer.checkpoint_manager.update_weights(self.trainer.global_steps)
+        self.configure_sampling()
 
     def after_update(self):
         with marked_timer("update_weights", self.trainer.timing_raw, color="red"):
             self.trainer.checkpoint_manager.update_weights(self.trainer.global_steps)
+            self.configure_sampling()
 
     def after_sample(self):
         self.trainer.checkpoint_manager.sleep_replicas()

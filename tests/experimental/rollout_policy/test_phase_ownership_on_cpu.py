@@ -50,3 +50,26 @@ def test_partial_launch_closes_only_owned_servers_after_every_launch_settles(mon
         asyncio.run(group.launch(launch))
     assert events == [("ready", "first"), ("kill", "first"), ("kill", "second")]
     assert not group.replicas and not group.ready
+
+
+def test_cancelled_lifecycle_awaiter_cannot_claim_remote_work_stopped():
+    from verl.experimental.rollout_policy.collector import UnsafeDrainError
+
+    async def run():
+        started, release = asyncio.Event(), asyncio.Event()
+        context = ExecutionContext(None, RolloutPolicyConfig(), None)
+
+        async def remote():
+            started.set()
+            await release.wait()
+
+        owner = asyncio.create_task(context.guarded(remote()))
+        await started.wait()
+        owner.cancel()
+        with pytest.raises(UnsafeDrainError, match="cancelled"):
+            await owner
+        assert context.pending and all(not task.cancelled() for task in context.pending)
+        release.set()
+        await asyncio.gather(*context.pending)
+
+    asyncio.run(run())
