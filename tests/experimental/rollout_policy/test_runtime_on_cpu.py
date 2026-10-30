@@ -168,3 +168,13 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(mon
     assert captured[0].max_model_len == 16
     assert captured[0].max_num_seqs == 2
     assert captured[0].engine_kwargs.vllm.kv_cache_memory_bytes > 0
+
+
+def test_policy_sampler_control_uses_named_rpc(monkeypatch):
+    from unittest.mock import AsyncMock
+
+    rpc = AsyncMock(return_value={"policy_sampling": True})
+    replica = SimpleNamespace(_server_handle=SimpleNamespace(collective_rpc=SimpleNamespace(remote=rpc)))
+    runtime = RolloutRuntime(SimpleNamespace(config=None, rollout_policy=RolloutPolicyConfig()))
+    asyncio.run(runtime.set_policy_sampling([replica], True))
+    rpc.assert_awaited_once_with("configure_rollout_policy_sampler", args=(True,))

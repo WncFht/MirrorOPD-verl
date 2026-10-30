@@ -129,12 +129,10 @@ class RolloutRuntime:
         return results
 
     async def set_policy_sampling(self, replicas, enabled):
-        from verl.workers.rollout.vllm_fusion.sampling import configure_policy_sampler
-
         await self.guarded(
             asyncio.gather(
                 *(
-                    replica._server_handle.collective_rpc.remote(configure_policy_sampler, args=(enabled,))
+                    replica._server_handle.collective_rpc.remote("configure_rollout_policy_sampler", args=(enabled,))
                     for replica in replicas
                 )
             )

@@ -160,6 +160,12 @@ class vLLMColocateWorkerExtension:
     2. Online FP8 quantization
     """
 
+    def configure_rollout_policy_sampler(self, enabled):
+        """Switch a drained engine through a named, serializable control RPC."""
+        from verl.workers.rollout.vllm_fusion.sampling import configure_policy_sampler
+
+        return configure_policy_sampler(self, enabled)
+
     def __new__(cls, **kwargs):
         set_death_signal()
 
