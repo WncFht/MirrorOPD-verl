@@ -1,0 +1,107 @@
+{
+  "scope": "read-only migration review; CPU probes only",
+  "base_main": "fe3005a13464b7a80a36f49ae24c479c34cbbc7e",
+  "source_files": [
+    {
+      "path": "verl/models/transformers/full_vocab.py",
+      "sha256": "dc11828cabcdd3d3b8feea7919cf396aa024973da218275f229aa275b40a9be0"
+    },
+    {
+      "path": "verl/models/transformers/precision.py",
+      "sha256": "4c8beac86b73123e7544a71e8e743a2a3ad28b2f4c8825555855418c94f652e0"
+    },
+    {
+      "path": "verl/trainer/distillation/hidden.py",
+      "sha256": "5f42d7e1d381c4d21c8f3869594ae65a5901859b43b7f6ed7c092a81e087f7e4"
+    },
+    {
+      "path": "verl/trainer/distillation/full_vocab.py",
+      "sha256": "69d0fcbfa4712ce1c261a583dcf0044b9f456977e34977c4de08ea27ac83415d"
+    },
+    {
+      "path": "verl/trainer/distillation/full_vocab_triton.py",
+      "sha256": "59eea8c7f0cd228090bea3d716423d4f7189280b40f9d6039b8b46859b8951a2"
+    },
+    {
+      "path": "verl/trainer/distillation/losses.py",
+      "sha256": "090e3f010afb5c11733569c96e2070f44c1f8b523c0b59bcd1cd2e1db3097622"
+    },
+    {
+      "path": "verl/trainer/distillation/hidden_io.py",
+      "sha256": "74c30bbf022f6d7bb6725b7bfb3bf5d484d4a41d07b6bf7f55f8db5f09a3a39b"
+    },
+    {
+      "path": "verl/workers/utils/loss_context.py",
+      "sha256": "bb2278a3d544bc675e38cf8a8c7cb44be8c9b55e867d7362d8056c5f2718fecf"
+    },
+    {
+      "path": "verl/workers/utils/padding.py",
+      "sha256": "ca7d5c6d69e09806ce0382380c74f14afb21dc91c86a5d3d2542fec4a7e60b21"
+    },
+    {
+      "path": "verl/workers/engine/fsdp/transformer_impl.py",
+      "sha256": "24aa7d138cdeedc2fccae0dd782dbc169d700b1cbcdf568cf57446a7edbc9c55"
+    },
+    {
+      "path": "verl/workers/engine_workers.py",
+      "sha256": "c75816d0ba411f24b549b516434696cc2b4bb9ee4597f73552e9f39a8c7973c0"
+    },
+    {
+      "path": "verl/workers/update_records.py",
+      "sha256": "df5a4ce388b3191beb3ba3890ba4551f1b9e26ece42dc9eb687d8fbb5dc58ead"
+    },
+    {
+      "path": "verl/utils/checkpoint/fsdp_checkpoint_manager.py",
+      "sha256": "6d2d08afd3429221f49e1d72e587cd63b2390099312767970793847f2e1856fb"
+    },
+    {
+      "path": "verl/utils/linear.py",
+      "sha256": "5b78306944b8263ea88292f6235c8a7e53779f75484c0b42fa70b1d66e81cace"
+    },
+    {
+      "path": "examples/mirroropd/research/studies/fixed_transfer/spec.py",
+      "sha256": "2bbebbc86ed9f37f1734900e3a0870808b3b418671c23e90436792e6d4b09a1c"
+    },
+    {
+      "path": "examples/mirroropd/research/studies/fixed_transfer/data.py",
+      "sha256": "97791e077edd4fb5934525e628dbd9725a9405f96877a25527d3860799b7c4d0"
+    },
+    {
+      "path": "examples/mirroropd/research/studies/fixed_transfer/training.py",
+      "sha256": "f6a1ce5e8206c974c1f3cbc2692b1f3e8d40c9282e74cf16f26b4f7c6298ab7e"
+    },
+    {
+      "path": "examples/mirroropd/research/studies/fixed_transfer/validation.py",
+      "sha256": "21c30605c94d7b7d2f1c47f64fe3edfd318ca3ae365bda05e04ea9a04238bce6"
+    },
+    {
+      "path": "examples/mirroropd/research/studies/fixed_transfer/runner.py",
+      "sha256": "7bfbdde5d337f6fab11994ede7c99d4fbe3945e8ef2790ef25cb036cecd08f78"
+    },
+    {
+      "path": "examples/mirroropd/research/backends/hf_rkl.py",
+      "sha256": "47ef5e01c86e694d3940f79c5250a3af6bfb95d16fdc24eac4e64398e4ec1c0c"
+    },
+    {
+      "path": "examples/mirroropd/research/backends/hf_models.py",
+      "sha256": "bf61d6179a7d6dcda1572435188c515d8813afe64d55e7de81cdf169ed1dfc6a"
+    },
+    {
+      "path": "examples/mirroropd/research/backends/fsdp.py",
+      "sha256": "87a02ec7563fbc662c26e84b3a62f5150a62cb8d384b6abd03499ce1047024e2"
+    },
+    {
+      "path": "examples/mirroropd/research/core/training_state.py",
+      "sha256": "e8e076ab30ec320a7e1a95eab2f247c1768c8721b76eb4e8eaab18ce514e2c57"
+    },
+    {
+      "path": "examples/mirroropd/research/runtime/resources.py",
+      "sha256": "51298c420befbb8aee4e881eb616c476b8188a8962db9e589286cf584702ae94"
+    },
+    {
+      "path": "examples/mirroropd/research/runtime/source.py",
+      "sha256": "ba1c12cb31bfd1fb43a1074fefaf208cc18c45f560795fa890099d963610e108"
+    }
+  ],
+  "reviewed_commit": "0b8d0981b477948584671a1f2bbab8ad5eaa3334"
+}

@@ -1,0 +1,59 @@
+{
+  "configurations": [
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/teacher-studies-front2.json",
+      "gpus": [
+        0,
+        1
+      ],
+      "lock": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/gpu0-1.lock"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/teacher-studies-front4.json",
+      "gpus": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lock": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/gpu0-3.lock"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/teacher-studies-middle2.json",
+      "gpus": [
+        2,
+        3
+      ],
+      "lock": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/gpu2-3.lock"
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/teacher-studies.json",
+      "gpus": [
+        4,
+        5
+      ],
+      "lock": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/gpu4-7.lock"
+    }
+  ],
+  "overlapping_groups": [
+    {
+      "left": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/teacher-studies-front2.json",
+      "right": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/teacher-studies-front4.json",
+      "overlap": [
+        0,
+        1
+      ],
+      "different_lock_files": true
+    },
+    {
+      "left": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/teacher-studies-front4.json",
+      "right": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/locks/bsud-quicksilver-hppk-13/teacher-studies-middle2.json",
+      "overlap": [
+        2,
+        3
+      ],
+      "different_lock_files": true
+    }
+  ],
+  "scope": "read-only resource configuration; no lease acquired"
+}
