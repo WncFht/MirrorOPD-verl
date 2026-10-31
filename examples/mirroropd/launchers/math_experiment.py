@@ -207,6 +207,12 @@ def preset_catalog() -> dict[str, Preset]:
             eta=eta,
             environment=QWEN_MOE_LONG_ENV,
         )
+    # New IDs preserve the recorded E55-E58 execution settings. The fused
+    # comparison changes only the numerical backend and makes BF16 explicit.
+    for number, reference in enumerate(("E55", "E56", "E57", "E58"), start=59):
+        environment = dict(presets[reference].environment)
+        environment.update(FULL_KL_BACKEND="precompute_fused", TRAIN_PRECISION="bf16")
+        presets[f"E{number}"] = replace(presets[reference], environment=tuple(environment.items()))
     return presets
 
 
@@ -572,6 +578,8 @@ def preset_overview() -> str:
             "每 10 outer 验证五个数学 bench，val n=16、cap=31744，无初始验证。\n"
             "原生共同前缀 enable_thinking=null；EOS 合并 [151643,151645]；precompute/chunk512。\n"
             "不保存任何 checkpoint（save_freq=-1，包括最后一步）；E54 保留原 7k/旧前缀协议。",
+            "E59–E62：分别沿用 E55–E58 的模型、目标和预算，改用已验收的 EOS precompute_fused/chunk512；"
+            "actor/anchor 显式 bf16，完整诊断保留。旧 E55–E58 默认不变。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
         ]

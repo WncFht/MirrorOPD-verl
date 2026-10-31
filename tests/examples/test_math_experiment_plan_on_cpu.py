@@ -226,3 +226,19 @@ def test_moe_long_native_template_is_shared_with_independent_validation(name):
         assert "+data.apply_chat_template_kwargs.enable_thinking=null" in plan([selector]).arguments
     for old in ("E41", "E43", "E54"):
         assert "+data.apply_chat_template_kwargs.enable_thinking=False" in plan([old]).arguments
+
+
+@pytest.mark.parametrize("name,reference", [("E59", "E55"), ("E60", "E56"), ("E61", "E57"), ("E62", "E58")])
+def test_fused_eos_presets_preserve_scientific_protocol(name, reference):
+    old, new = planner.PRESETS[reference], planner.PRESETS[name]
+    assert new.pair == old.pair and new.budget == old.budget
+    assert (new.method, new.kappa, new.eta) == (old.method, old.kappa, old.eta)
+    previous, current = dict(old.environment), dict(new.environment)
+    assert previous["FULL_KL_BACKEND"] == "precompute"
+    assert current.pop("TRAIN_PRECISION") == "bf16"
+    assert current.pop("FULL_KL_BACKEND") == "precompute_fused"
+    previous.pop("FULL_KL_BACKEND")
+    assert current == previous
+    actual = plan([name])
+    assert actual.environment["MIRROR_DIAGNOSTICS"] == "True"
+    assert actual.environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[151643,151645]"

@@ -58,7 +58,7 @@
 # E43              16     100    1600      1e-6    10/50      yes
 # E44-E47,E50-E53  16     256    4096      1e-6    32/128     no
 # E48-E49          16     256    4096      1e-6    32/64      yes
-# E55-E58          16     100    1600      1e-6    10/-1      no
+# E55-E62          16     100    1600      1e-6    10/-1      no
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
 # 编号别名：E21=E15; E22=E13。
@@ -76,6 +76,8 @@
 # 统一 8 卡 shared_sync、batch64、reuse16、100 outer、LR=1e-6、train cap=16384；每 10 outer 验证五个数学 bench，val n=16、cap=31744，无初始验证。
 # 原生共同前缀 enable_thinking=null；EOS 合并 [151643,151645]；precompute/chunk512。
 # 不保存任何 checkpoint（save_freq=-1，包括最后一步）；E54 保留原 7k/旧前缀协议。
+#
+# E59–E62：分别沿用 E55–E58 的模型、目标和预算，改用已验收的 EOS precompute_fused/chunk512；actor/anchor 显式 bf16，完整诊断保留。旧 E55–E58 默认不变。
 #
 # E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。
 # END GENERATED EXPERIMENT OVERVIEW

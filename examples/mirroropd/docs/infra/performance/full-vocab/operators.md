@@ -2,6 +2,14 @@
 
 本页只比较给定 hidden/head 后的投影、目标、归约与一阶 VJP。真实模型更新与完整训练见[训练性能](training.md)，统计与显存定义见[测量方法](methodology.md)。数值实现及推导由[算子走读](../../architecture/full-kl-kernel-walkthrough.md)维护。
 
+## EOS 精度与融合候选
+
+[EOS 精度与速度权衡](2026-11-01-EOS精度与速度权衡.md)比较 FP64、纯 FP32、稳定 FP32 和带 EOS 修正的融合候选。已测真实 logits 上的误差很小，EOS 小信号边界仍要求保留局部高精度；512 行、κ=0.5 的 head 测量为 438.01→16.90 ms。该报告保留接入前的算子测量；完整 actor 结果见[后续验收](2026-11-01-EOS融合实现与训练验收.md)，不将 head 倍率外推为 actor 加速。
+
+## EOS 补偿融合与训练验收
+
+[EOS 融合实现与训练验收](2026-11-01-EOS融合实现与训练验收.md)记录共享停止类适配、分层精度、CUDA／FSDP 回归及真实模型 actor 对照。两卡固定输入的 actor 中位耗时为 34.45→11.52 s；该结果不替代八卡长程任务评测。
+
 ## 当前算子复测入口
 
 [benchmark_full_kl.py](../../../../benchmarks/full_vocab/benchmark_full_kl.py) 用合成 BF16 hidden/head 比较生产实现，student 固定为 hidden1536、vocab151936。`--teacher-hidden`、`--teacher-vocab` 可分别选择 JustRL 的 1536/151936 或 Polaris 的 3584/152064；后者保留额外 teacher 输出行的归一化贡献。`--backends precompute precompute_fused --reference-backend dense` 比较普通与 fused 归约，`--chunk` 控制 token 分块。

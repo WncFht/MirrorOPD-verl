@@ -210,17 +210,32 @@ def test_validation_repetition_invalid_environment_fails_before_launch(tmp_path,
     assert _launch(tmp_path, **({"VAL_REPETITION_DETECTION": "true"} | overrides)).returncode == 2
 
 
-@pytest.mark.parametrize("preset,kappa,eta", [("E55", 0, 0.1), ("E56", 0.5, 0.1), ("E57", 1, 0.1), ("E58", 0, 1)])
+@pytest.mark.parametrize(
+    "preset,kappa,eta",
+    [
+        ("E55", 0, 0.1),
+        ("E56", 0.5, 0.1),
+        ("E57", 1, 0.1),
+        ("E58", 0, 1),
+        ("E59", 0, 0.1),
+        ("E60", 0.5, 0.1),
+        ("E61", 1, 0.1),
+        ("E62", 0, 1),
+    ],
+)
 def test_moe_long_presets_resolve_native_full_vocab_without_checkpoint_saving(tmp_path, preset, kappa, eta):
     cfg = _config(tmp_path, command=["bash", str(SCRIPT), preset])
     OmegaConf.resolve(cfg)
     validate_config(cfg, use_reference_policy=False, use_critic=False)
     loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
     assert loss.loss_settings.kappa == kappa and loss.loss_settings.eta == eta
-    assert loss.loss_settings.teacher_only_kl == (preset == "E58")
+    assert loss.loss_settings.teacher_only_kl == (preset in ("E58", "E62"))
     assert not loss.use_policy_gradient and not loss.use_task_rewards
     assert loss.full_vocab.termination_token_ids == [151643, 151645]
-    assert loss.full_vocab.backend == "precompute" and loss.full_vocab.token_chunk_size == 512
+    expected_backend = "precompute_fused" if int(preset[1:]) >= 59 else "precompute"
+    assert loss.full_vocab.backend == expected_backend and loss.full_vocab.token_chunk_size == 512
+    if int(preset[1:]) >= 59:
+        assert cfg.actor_rollout_ref.actor.fsdp_config.forward_precision == "bf16"
     assert cfg.actor_rollout_ref.model.path.endswith("/" + _model_suffix("Qwen3-1.7B-Base"))
     assert cfg.distillation.teacher_models.teacher_model.model_path.endswith(
         "/" + _model_suffix("Qwen3-30B-A3B-Instruct-2507")
