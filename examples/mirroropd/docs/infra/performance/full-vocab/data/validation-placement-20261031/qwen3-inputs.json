@@ -1,0 +1,13 @@
+{
+  "rows": 768,
+  "prompt_tokens": 68957,
+  "response_tokens": 3819455,
+  "max_response": 16384,
+  "median_response": 2671,
+  "rows_gt7168": 189,
+  "bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/banks/a97da68a593e7d23033c85789024bbc8760606f1ae378d3a09f2150664c80eaa",
+  "eval": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-studies/evaluations/c275b368c6b1512c2ae6e23c019e8e61ef13de21d6ced93f587df17b5bd27c15/records.jsonl",
+  "tokenizer": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "sha256": "181c926224cb92dc9d500dbc645a5547603de006e7548a7193f05d792582d918",
+  "scope": "real existing math outputs for placement performance; not the new four-domain scientific evaluation split"
+}

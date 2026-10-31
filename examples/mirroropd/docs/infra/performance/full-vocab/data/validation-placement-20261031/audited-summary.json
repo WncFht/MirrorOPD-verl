@@ -1,0 +1,474 @@
+{
+  "scope": "Four-GPU FSDP2 validation prototype, CPU layouts prebuilt, replicated FP32 heads, no optimizer",
+  "phase_semantics": "CUDA range elapsed includes waits; role rows overlap; kernel work sums are not wall time",
+  "runs": [
+    {
+      "run": "qwen4-n768-batched",
+      "complete": true,
+      "rows": 768,
+      "response_tokens": 3819455,
+      "prompt_tokens": 68957,
+      "max_abs_per_token_rkl_delta": 0.0,
+      "restore_checksum_max_abs": 0.0,
+      "numerical_check_pass": true,
+      "placements": {
+        "serial": {
+          "samples_seconds": [
+            98.66827453672886,
+            98.74920497089624,
+            98.19662477076054
+          ],
+          "median_seconds": 98.66827453672886,
+          "min_seconds": 98.19662477076054,
+          "max_seconds": 98.74920497089624,
+          "peak_allocated_gib": 6.725072383880615,
+          "peak_reserved_gib": 8.28125,
+          "median_run": "measure-00-serial",
+          "mean_rank_cuda_range_seconds": {
+            "all": {
+              "cleanup_teacher_payload": 0.18527612686157227,
+              "hidden_d2h": 1.6172834245562557,
+              "hidden_h2d": 0.6578216341063378,
+              "log_softmax_pair": 1.5921159920860117,
+              "rkl_reduce": 1.8578157035810898,
+              "student_backbone": 18.003955255508426,
+              "student_head": 11.80445334060489,
+              "student_load_four": 2.2061143493652344,
+              "student_ready_probe": 0.10701535034179688,
+              "teacher_backbone": 35.08418958091736,
+              "teacher_head": 14.632588377669439,
+              "teacher_load_four": 1.0719764099121094,
+              "teacher_offload_four": 0.7798218841552734,
+              "tq_get": 3.787292065780726,
+              "tq_put": 4.529309653282166
+            }
+          },
+          "payload_bytes": {
+            "d2h": 19555609600,
+            "h2d": 19555609600
+          },
+          "trace_kernel_work_seconds": {
+            "serial-rank0.trace.json.gz": {
+              "other": 1.042730970000007,
+              "nccl": 0.5829764470000003,
+              "reduction": 0.046182851000000046,
+              "matrix_multiply": 0.8984985059999995,
+              "attention": 0.6417330979999999,
+              "softmax": 0.05383019199999999
+            },
+            "serial-rank1.trace.json.gz": {
+              "other": 1.0244484690000013,
+              "reduction": 0.04467794199999994,
+              "attention": 0.655465276,
+              "nccl": 1.0122718089999998,
+              "matrix_multiply": 0.8907229900000001,
+              "softmax": 0.05384458000000002
+            },
+            "serial-rank2.trace.json.gz": {
+              "other": 1.031908188999992,
+              "attention": 0.647474194,
+              "reduction": 0.04474580599999999,
+              "nccl": 0.583257206,
+              "matrix_multiply": 0.898185026,
+              "softmax": 0.05385540299999997
+            },
+            "serial-rank3.trace.json.gz": {
+              "other": 1.0160918590000045,
+              "reduction": 0.04440279399999995,
+              "attention": 0.6565510399999998,
+              "nccl": 1.146523405,
+              "matrix_multiply": 0.8917562599999999,
+              "softmax": 0.053856677000000006
+            }
+          }
+        },
+        "parallel": {
+          "samples_seconds": [
+            103.43363751471043,
+            99.34606452286243,
+            101.27301650494337
+          ],
+          "median_seconds": 101.27301650494337,
+          "min_seconds": 99.34606452286243,
+          "max_seconds": 103.43363751471043,
+          "peak_allocated_gib": 8.327964305877686,
+          "peak_reserved_gib": 10.04296875,
+          "median_run": "measure-05-parallel",
+          "mean_rank_cuda_range_seconds": {
+            "teacher": {
+              "hidden_send": 0.0015158720111940038,
+              "paired_load_two_plus_two": 2.7720977783203127,
+              "paired_offload": 1.4751270141601562,
+              "send_backpressure": 25.65141612559814,
+              "send_drain": 0.14392655944824218,
+              "student_ready_probe": 0.1035110092163086,
+              "student_restore_four": 1.8096414794921876,
+              "teacher_backbone": 67.96966082382201
+            },
+            "student": {
+              "hidden_recv_wait": 0.7305342398397621,
+              "log_softmax_pair": 3.1841007367111795,
+              "paired_load_two_plus_two": 3.6006850585937498,
+              "paired_offload": 1.307607666015625,
+              "rkl_reduce": 3.72078179264813,
+              "student_backbone": 33.237895875930775,
+              "student_head": 23.659763581424954,
+              "student_ready_probe": 1.0646476745605469,
+              "student_restore_four": 0.8485736389160157,
+              "teacher_head": 29.386011295169595
+            }
+          },
+          "payload_bytes": {
+            "p2p_send": 19555609600,
+            "p2p_recv": 19555609600
+          },
+          "trace_kernel_work_seconds": {
+            "parallel-rank0.trace.json.gz": {
+              "other": 1.359407989000005,
+              "reduction": 0.047710106999999974,
+              "attention": 0.9162544800000001,
+              "nccl": 3.158238078000002,
+              "matrix_multiply": 1.952e-05
+            },
+            "parallel-rank1.trace.json.gz": {
+              "other": 1.3382928290000025,
+              "nccl": 3.1631439870000015,
+              "reduction": 0.046395462,
+              "matrix_multiply": 1.8943999999999997e-05,
+              "attention": 0.9321047330000005
+            },
+            "parallel-rank2.trace.json.gz": {
+              "other": 0.7453009789999968,
+              "reduction": 0.043878590999999925,
+              "matrix_multiply": 1.8059382510000002,
+              "softmax": 0.10759776799999989,
+              "nccl": 1.6199198619999995,
+              "attention": 0.35678653400000004
+            },
+            "parallel-rank3.trace.json.gz": {
+              "reduction": 0.043086244999999974,
+              "other": 0.728659529999998,
+              "matrix_multiply": 1.796748676,
+              "softmax": 0.107504944,
+              "nccl": 1.7822052839999991,
+              "attention": 0.36342465299999993
+            }
+          }
+        }
+      },
+      "serial_over_parallel_speedup": 0.9742800001608783
+    },
+    {
+      "run": "qwen8-n768",
+      "complete": true,
+      "rows": 768,
+      "response_tokens": 3819455,
+      "prompt_tokens": 68957,
+      "max_abs_per_token_rkl_delta": 0.0,
+      "restore_checksum_max_abs": 0.0,
+      "numerical_check_pass": true,
+      "placements": {
+        "serial": {
+          "samples_seconds": [
+            129.60710830241442,
+            130.26982028782368,
+            125.7090243846178
+          ],
+          "median_seconds": 129.60710830241442,
+          "min_seconds": 125.7090243846178,
+          "max_seconds": 130.26982028782368,
+          "peak_allocated_gib": 8.84659719467163,
+          "peak_reserved_gib": 11.12109375,
+          "median_run": "measure-00-serial",
+          "mean_rank_cuda_range_seconds": {
+            "all": {
+              "cleanup_teacher_payload": 0.31530973052978517,
+              "hidden_d2h": 2.84214786964655,
+              "hidden_h2d": 1.0105675285011535,
+              "log_softmax_pair": 1.5920305840559326,
+              "rkl_reduce": 1.8567262161336882,
+              "student_backbone": 18.07806669235229,
+              "student_head": 11.80183456784486,
+              "student_load_four": 2.99532421875,
+              "student_ready_probe": 0.15348511123657227,
+              "teacher_backbone": 48.877942470550536,
+              "teacher_head": 23.208202117994443,
+              "teacher_load_four": 1.9557969665527344,
+              "teacher_offload_four": 1.6147943572998047,
+              "tq_get": 5.391451112746145,
+              "tq_put": 6.420158383369445
+            }
+          },
+          "payload_bytes": {
+            "d2h": 31288975360,
+            "h2d": 31288975360
+          },
+          "trace_kernel_work_seconds": {
+            "serial-rank0.trace.json.gz": {
+              "other": 1.4002028629999954,
+              "nccl": 1.3489128310000003,
+              "reduction": 0.05157444400000001,
+              "matrix_multiply": 1.1901516629999997,
+              "attention": 0.6743394289999998,
+              "softmax": 0.053832588
+            },
+            "serial-rank1.trace.json.gz": {
+              "other": 1.3728363379999857,
+              "nccl": 1.0565736489999997,
+              "reduction": 0.04980197100000008,
+              "attention": 0.6861383530000001,
+              "matrix_multiply": 1.1900374040000008,
+              "softmax": 0.053810037999999984
+            },
+            "serial-rank2.trace.json.gz": {
+              "other": 1.3811988329999885,
+              "nccl": 1.1703530860000009,
+              "reduction": 0.04951936599999998,
+              "matrix_multiply": 1.1905548940000006,
+              "attention": 0.6760227760000004,
+              "softmax": 0.05379577200000003
+            },
+            "serial-rank3.trace.json.gz": {
+              "other": 1.3619916629999962,
+              "nccl": 2.0126112750000007,
+              "reduction": 0.04949372199999986,
+              "matrix_multiply": 1.1900180760000003,
+              "attention": 0.6872061029999996,
+              "softmax": 0.05383493800000001
+            }
+          }
+        },
+        "parallel": {
+          "samples_seconds": [
+            130.97212996333838,
+            121.91877902299166,
+            121.69883858412504
+          ],
+          "median_seconds": 121.91877902299166,
+          "min_seconds": 121.69883858412504,
+          "max_seconds": 130.97212996333838,
+          "peak_allocated_gib": 12.536012649536133,
+          "peak_reserved_gib": 15.404296875,
+          "median_run": "measure-02-parallel",
+          "mean_rank_cuda_range_seconds": {
+            "teacher": {
+              "hidden_send": 0.0011450880187330753,
+              "paired_load_two_plus_two": 2.4757406005859375,
+              "paired_offload": 4.835978759765625,
+              "send_backpressure": 17.77621088989472,
+              "send_drain": 0.1263941459655762,
+              "student_ready_probe": 0.07744985580444336,
+              "student_restore_four": 2.4804962158203123,
+              "teacher_backbone": 93.22769237518315
+            },
+            "student": {
+              "hidden_recv_wait": 1.096345158215612,
+              "log_softmax_pair": 3.1837966398634148,
+              "paired_load_two_plus_two": 2.703137329101563,
+              "paired_offload": 2.439450744628906,
+              "rkl_reduce": 3.7185883841766145,
+              "student_backbone": 33.06287582206727,
+              "student_head": 23.66102315092086,
+              "student_ready_probe": 1.7834290161132813,
+              "student_restore_four": 0.7741772766113282,
+              "teacher_head": 46.60937639474862
+            }
+          },
+          "payload_bytes": {
+            "p2p_send": 31288975360,
+            "p2p_recv": 31288975360
+          },
+          "trace_kernel_work_seconds": {
+            "parallel-rank0.trace.json.gz": {
+              "nccl": 3.7168495889999993,
+              "other": 2.0816176829999953,
+              "reduction": 0.05810429999999985,
+              "attention": 0.9758751829999995,
+              "matrix_multiply": 1.9104e-05
+            },
+            "parallel-rank1.trace.json.gz": {
+              "other": 2.048928650000026,
+              "nccl": 3.433904412999999,
+              "reduction": 0.05656630200000005,
+              "matrix_multiply": 1.8784000000000002e-05,
+              "attention": 0.9890598069999997
+            },
+            "parallel-rank2.trace.json.gz": {
+              "other": 0.7439365590000017,
+              "reduction": 0.04378179399999994,
+              "matrix_multiply": 2.388194913,
+              "softmax": 0.10759263899999998,
+              "nccl": 6.485341661999998,
+              "attention": 0.35438121899999997
+            },
+            "parallel-rank3.trace.json.gz": {
+              "other": 0.7274567289999944,
+              "nccl": 6.188401695000001,
+              "reduction": 0.04305952899999995,
+              "matrix_multiply": 2.382454817000002,
+              "attention": 0.360668481,
+              "softmax": 0.10769729499999996
+            }
+          }
+        }
+      },
+      "serial_over_parallel_speedup": 1.0630610750946978
+    },
+    {
+      "run": "r1_14-n768",
+      "complete": true,
+      "rows": 768,
+      "response_tokens": 2772962,
+      "prompt_tokens": 67117,
+      "max_abs_per_token_rkl_delta": 0.0,
+      "restore_checksum_max_abs": 0.0,
+      "numerical_check_pass": true,
+      "placements": {
+        "serial": {
+          "samples_seconds": [
+            164.03497759252787,
+            159.2095196172595,
+            159.05341474711895
+          ],
+          "median_seconds": 159.2095196172595,
+          "min_seconds": 159.05341474711895,
+          "max_seconds": 164.03497759252787,
+          "peak_allocated_gib": 17.891165733337402,
+          "peak_reserved_gib": 20.693359375,
+          "median_run": "measure-03-serial",
+          "mean_rank_cuda_range_seconds": {
+            "all": {
+              "cleanup_teacher_payload": 0.1992631378173828,
+              "hidden_d2h": 2.990669952064752,
+              "hidden_h2d": 0.8812684951350096,
+              "log_softmax_pair": 1.1573347602859148,
+              "rkl_reduce": 1.3482716397368346,
+              "student_backbone": 31.187482238769533,
+              "student_head": 14.901205123931172,
+              "student_load_four": 6.1286466064453125,
+              "student_ready_probe": 0.2466606502532959,
+              "teacher_backbone": 59.33033893966675,
+              "teacher_head": 21.16481560257077,
+              "teacher_load_four": 3.199309753417969,
+              "teacher_offload_four": 3.7560773315429685,
+              "tq_get": 4.601521278107304,
+              "tq_put": 7.0707337212562535
+            }
+          },
+          "payload_bytes": {
+            "d2h": 28395130880,
+            "h2d": 28395130880
+          },
+          "trace_kernel_work_seconds": {
+            "serial-rank0.trace.json.gz": {
+              "other": 2.572935401999998,
+              "matrix_multiply": 1.6763154440000005,
+              "softmax": 0.053884737999999974,
+              "reduction": 0.04360688000000005,
+              "nccl": 1.081881151,
+              "attention": 1.2028438769999998
+            },
+            "serial-rank1.trace.json.gz": {
+              "other": 2.543961342000001,
+              "matrix_multiply": 1.6849436699999998,
+              "softmax": 0.05386742799999999,
+              "reduction": 0.04333458599999997,
+              "nccl": 2.278134477,
+              "attention": 1.2259405409999997
+            },
+            "serial-rank2.trace.json.gz": {
+              "other": 2.6068899440000317,
+              "nccl": 0.6398619580000002,
+              "reduction": 0.043202720000000014,
+              "matrix_multiply": 1.6901133739999994,
+              "attention": 1.1808381990000016,
+              "softmax": 0.05386456399999998
+            },
+            "serial-rank3.trace.json.gz": {
+              "other": 2.547893637999995,
+              "nccl": 2.3526295719999997,
+              "reduction": 0.04315920999999995,
+              "matrix_multiply": 1.6861908680000008,
+              "attention": 1.2227843439999997,
+              "softmax": 0.05388688999999999
+            }
+          }
+        },
+        "parallel": {
+          "samples_seconds": [
+            166.64842103421688,
+            156.92167998105288,
+            159.52759747207165
+          ],
+          "median_seconds": 159.52759747207165,
+          "min_seconds": 156.92167998105288,
+          "max_seconds": 166.64842103421688,
+          "peak_allocated_gib": 24.516720294952393,
+          "peak_reserved_gib": 27.568359375,
+          "median_run": "measure-05-parallel",
+          "mean_rank_cuda_range_seconds": {
+            "teacher": {
+              "hidden_send": 0.001658096023835241,
+              "paired_load_two_plus_two": 6.573660888671875,
+              "paired_offload": 8.032088134765624,
+              "send_backpressure": 20.042947832377948,
+              "send_drain": 3.841600101441145e-05,
+              "student_ready_probe": 0.23996797180175783,
+              "student_restore_four": 4.51615185546875,
+              "teacher_backbone": 117.03879965972905
+            },
+            "student": {
+              "hidden_recv_wait": 1.4502451782161372,
+              "log_softmax_pair": 2.3135339998267694,
+              "paired_load_two_plus_two": 8.57487646484375,
+              "paired_offload": 8.2663955078125,
+              "rkl_reduce": 2.698768383448012,
+              "student_backbone": 57.79469081115722,
+              "student_head": 30.148734811365593,
+              "student_ready_probe": 1.4576644897460938,
+              "student_restore_four": 3.298439697265625,
+              "teacher_head": 42.85365764164922
+            }
+          },
+          "payload_bytes": {
+            "p2p_send": 28395130880,
+            "p2p_recv": 28395130880
+          },
+          "trace_kernel_work_seconds": {
+            "parallel-rank0.trace.json.gz": {
+              "other": 3.4595037899999994,
+              "nccl": 7.937003589,
+              "reduction": 0.04824652199999998,
+              "matrix_multiply": 1.9968000000000003e-05,
+              "attention": 1.686769691
+            },
+            "parallel-rank1.trace.json.gz": {
+              "other": 3.413164101000005,
+              "nccl": 9.803770354000001,
+              "reduction": 0.047970500000000006,
+              "matrix_multiply": 1.8944e-05,
+              "attention": 1.7123121749999999
+            },
+            "parallel-rank2.trace.json.gz": {
+              "other": 1.8594776639999975,
+              "nccl": 5.902241827999999,
+              "reduction": 0.038816355000000004,
+              "matrix_multiply": 3.413233438,
+              "attention": 0.7028824799999999,
+              "softmax": 0.10763440400000006
+            },
+            "parallel-rank3.trace.json.gz": {
+              "other": 1.8131185629999806,
+              "nccl": 4.525583651999999,
+              "reduction": 0.038842268999999964,
+              "matrix_multiply": 3.3811906549999984,
+              "attention": 0.7240079820000002,
+              "softmax": 0.107645111
+            }
+          }
+        }
+      },
+      "serial_over_parallel_speedup": 0.9980061264643076
+    }
+  ]
+}

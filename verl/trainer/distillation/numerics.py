@@ -132,13 +132,23 @@ def support_correction(teacher, vocab):
     return F.softplus(shifted[..., vocab:].logsumexp(-1) - shifted[..., :vocab].logsumexp(-1))
 
 
-def kl_rows(z, teacher):
-    """Full teacher KL and analytic student logit VJP; extra teacher rows included."""
+def _kl_parts(z, teacher):
     z, teacher = working(z), working(teacher).detach()
     lp = log_softmax(z)
     pivot = z.argmax(-1, keepdim=True)
     gap = relative_difference(z, teacher[..., : z.shape[-1]], pivot)
     value = cumulant(lp, -gap) + support_correction(teacher, z.shape[-1])
+    return lp, gap, value
+
+
+def kl_values(z, teacher):
+    """Native-support RKL values without constructing the unused logit VJP."""
+    return _kl_parts(z, teacher)[2]
+
+
+def kl_rows(z, teacher):
+    """Full teacher KL and analytic student logit VJP; extra teacher rows included."""
+    lp, gap, value = _kl_parts(z, teacher)
     gradient, _ = centered_vjp(lp, gap)
     return value, gradient
 

@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-31",
+  "scope": "targeted language-model scaling and distillation history, not exhaustive",
+  "id_lookup_resolved": 13,
+  "search_errors": [],
+  "raw_report_sha256": "3f3cffc80668a4318b2abb9635efa564959363785b4fe2bbb49df22d22cc90a2",
+  "works": [
+    {
+      "author": "Hestness",
+      "arxiv": "1712.00409v1",
+      "period": "2017",
+      "checked_scope": "abstract and primary metadata",
+      "role": "data-scaling empirical measurement",
+      "url": "https://arxiv.org/abs/1712.00409v1"
+    },
+    {
+      "author": "Rosenfeld",
+      "arxiv": "1909.12673v2",
+      "period": "2019/ICLR2020",
+      "checked_scope": "abstract and conference primary text",
+      "role": "joint model/data prediction",
+      "url": "https://arxiv.org/abs/1909.12673v2"
+    },
+    {
+      "author": "Kaplan",
+      "arxiv": "2001.08361v1",
+      "period": "2020",
+      "checked_scope": "abstract and original formulation",
+      "role": "language-model loss and allocation",
+      "url": "https://arxiv.org/abs/2001.08361v1"
+    },
+    {
+      "author": "Henighan",
+      "arxiv": "2010.14701v2",
+      "period": "2020",
+      "checked_scope": "abstract and primary metadata",
+      "role": "cross-domain reducible loss",
+      "url": "https://arxiv.org/abs/2010.14701v2"
+    },
+    {
+      "author": "Hernandez",
+      "arxiv": "2102.01293",
+      "period": "2021",
+      "checked_scope": "abstract and primary metadata",
+      "role": "effective transferred data",
+      "url": "https://arxiv.org/abs/2102.01293"
+    },
+    {
+      "author": "Bahri",
+      "arxiv": "2102.06701",
+      "period": "2021/PNAS2024",
+      "checked_scope": "primary HTML and publisher metadata",
+      "role": "scaling mechanisms",
+      "url": "https://arxiv.org/abs/2102.06701"
+    },
+    {
+      "author": "Hoffmann",
+      "arxiv": "2203.15556v1",
+      "period": "2022",
+      "checked_scope": "sections 3 and appendix D",
+      "role": "compute-optimal fitting",
+      "url": "https://arxiv.org/abs/2203.15556v1"
+    },
+    {
+      "author": "Caballero",
+      "arxiv": "2210.14891v17",
+      "period": "2022/2023",
+      "checked_scope": "abstract and primary metadata",
+      "role": "broken power laws",
+      "url": "https://arxiv.org/abs/2210.14891v17"
+    },
+    {
+      "author": "Muennighoff",
+      "arxiv": "2305.16264",
+      "period": "NeurIPS2023",
+      "checked_scope": "conference primary text overview",
+      "role": "unique versus repeated data",
+      "url": "https://arxiv.org/abs/2305.16264"
+    },
+    {
+      "author": "Zhang",
+      "arxiv": "2402.17193v1",
+      "period": "ICLR2024",
+      "checked_scope": "sections 3-5",
+      "role": "finetuning multiplicative laws",
+      "url": "https://arxiv.org/abs/2402.17193v1"
+    },
+    {
+      "author": "Choshen",
+      "arxiv": "2410.11840v2",
+      "period": "2024/ICML2025",
+      "checked_scope": "sections 3-9, appendix E",
+      "role": "estimation methodology",
+      "url": "https://arxiv.org/abs/2410.11840v2"
+    },
+    {
+      "author": "Busbridge",
+      "arxiv": "2502.08606",
+      "period": "ICML2025",
+      "checked_scope": "sections 2-5, notation and fit section",
+      "role": "distillation loss and compute",
+      "url": "https://arxiv.org/abs/2502.08606"
+    },
+    {
+      "author": "Bao",
+      "arxiv": "2609.32722v1",
+      "period": "2026",
+      "checked_scope": "pinned PDF and local TeX, sections 5/H",
+      "role": "OPD peak and rate fit",
+      "url": "https://arxiv.org/abs/2609.32722v1"
+    }
+  ]
+}

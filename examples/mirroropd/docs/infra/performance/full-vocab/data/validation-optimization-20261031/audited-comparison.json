@@ -1,0 +1,173 @@
+{
+  "rows": 768,
+  "response_tokens": 3819455,
+  "prompt_tokens": 68957,
+  "scope": "Prebuilt CPU FSDP layouts; teacher load through restored four-rank student and forward probe; no optimizer or rollout",
+  "reference": "strict_fp32_serial-measure-00-serial",
+  "groups": {
+    "native_bf16_fp32_parallel": {
+      "configuration": {
+        "microbatch": 16,
+        "token_budget": 36864,
+        "io_overlap": false,
+        "pipeline_depth": 32,
+        "projection": "native_bf16_fp32",
+        "chunk": 256,
+        "packed": true
+      },
+      "seconds": [
+        94.30274581164122,
+        91.01023426651955
+      ],
+      "median_seconds": 92.65649003908038,
+      "peak_allocated_gib": 16.32653570175171,
+      "max_abs_row_token_mean_delta": 2.5647829720032433e-06,
+      "restored_forward_probe_max_abs": 0.0,
+      "cuda_ranges_mean_seconds": {
+        "teacher": {
+          "student_ready_probe": 0.19264154052734375,
+          "student_restore_four": 3.4056004638671875,
+          "send_backpressure": 0.001056512017268686,
+          "send_drain": 0.01500063991546631,
+          "teacher_backbone": 79.63715528869628,
+          "paired_offload": 8.216158447265624,
+          "hidden_send": 0.0011546880181413127,
+          "paired_load_two_plus_two": 2.1417042846679686
+        },
+        "student": {
+          "student_ready_probe": 2.29844677734375,
+          "student_restore_four": 1.2994378662109374,
+          "log_softmax_pair": 3.1828282556273235,
+          "teacher_head": 3.899519997641462,
+          "rkl_reduce": 3.722509664028868,
+          "hidden_recv_wait": 40.83521959057077,
+          "paired_offload": 3.0757144775390626,
+          "student_head": 2.170849838927391,
+          "student_backbone": 25.732243267059335,
+          "paired_load_two_plus_two": 1.4903679809570312
+        }
+      }
+    },
+    "native_bf16_fp32_serial": {
+      "configuration": {
+        "microbatch": 16,
+        "token_budget": 36864,
+        "io_overlap": true,
+        "pipeline_depth": 32,
+        "projection": "native_bf16_fp32",
+        "chunk": 256,
+        "packed": true
+      },
+      "seconds": [
+        72.41231735050678,
+        79.14766377955675
+      ],
+      "median_seconds": 75.77999056503177,
+      "peak_allocated_gib": 8.981879711151123,
+      "max_abs_row_token_mean_delta": 2.5647829720032433e-06,
+      "restored_forward_probe_max_abs": 0.0,
+      "cuda_ranges_mean_seconds": {
+        "all": {
+          "student_ready_probe": 0.21982841491699218,
+          "log_softmax_pair": 1.5938585358075825,
+          "cleanup_teacher_payload": 0.20640830421447753,
+          "teacher_head": 1.9597599754855048,
+          "rkl_reduce": 1.8808887600582107,
+          "student_load_four": 2.6681222534179687,
+          "teacher_offload_four": 1.0524023132324218,
+          "tq_get_wait": 0.00010029600060079248,
+          "student_head": 1.180730678707362,
+          "hidden_h2d": 1.0574197924882172,
+          "teacher_load_four": 1.234987579345703,
+          "tq_write_drain": 0.13316742897033693,
+          "teacher_backbone": 42.23362716674804,
+          "tq_write_wait": 0.002454719992354512,
+          "student_backbone": 13.762403533935547,
+          "hidden_d2h": 2.2955976901054385
+        }
+      }
+    },
+    "strict_fp32_parallel": {
+      "configuration": {
+        "microbatch": 16,
+        "token_budget": 36864,
+        "io_overlap": false,
+        "pipeline_depth": 32,
+        "projection": "strict_fp32",
+        "chunk": 256,
+        "packed": false
+      },
+      "seconds": [
+        121.38633172214031,
+        117.44874967634678
+      ],
+      "median_seconds": 119.41754069924355,
+      "peak_allocated_gib": 16.34644651412964,
+      "max_abs_row_token_mean_delta": 0.0,
+      "restored_forward_probe_max_abs": 0.0,
+      "cuda_ranges_mean_seconds": {
+        "teacher": {
+          "student_ready_probe": 0.09029575729370118,
+          "student_restore_four": 1.8143535156250001,
+          "send_backpressure": 1.2283392123526355,
+          "send_drain": 0.12265081405639648,
+          "teacher_backbone": 107.00003128051755,
+          "paired_offload": 5.255599365234374,
+          "hidden_send": 0.0011362080201506599,
+          "paired_load_two_plus_two": 3.4398830566406247
+        },
+        "student": {
+          "student_ready_probe": 0.6428100929260254,
+          "student_restore_four": 1.2615129089355468,
+          "log_softmax_pair": 3.1852698075622476,
+          "teacher_head": 46.619624068796675,
+          "rkl_reduce": 3.7157564796972937,
+          "hidden_recv_wait": 2.9490846663024266,
+          "paired_offload": 1.8457778930664062,
+          "student_head": 23.684655855864314,
+          "student_backbone": 28.20939862060547,
+          "paired_load_two_plus_two": 4.952645751953124
+        }
+      }
+    },
+    "strict_fp32_serial": {
+      "configuration": {
+        "microbatch": 16,
+        "token_budget": 36864,
+        "io_overlap": true,
+        "pipeline_depth": 32,
+        "projection": "strict_fp32",
+        "chunk": 256,
+        "packed": false
+      },
+      "seconds": [
+        111.05567346513271,
+        109.96414088457823
+      ],
+      "median_seconds": 110.50990717485547,
+      "peak_allocated_gib": 9.093038558959961,
+      "max_abs_row_token_mean_delta": 0.0,
+      "restored_forward_probe_max_abs": 0.0,
+      "cuda_ranges_mean_seconds": {
+        "all": {
+          "student_ready_probe": 0.14244791221618652,
+          "log_softmax_pair": 1.5908268876355165,
+          "cleanup_teacher_payload": 0.4427438507080078,
+          "teacher_head": 23.22254533794521,
+          "rkl_reduce": 1.8553763516559303,
+          "student_load_four": 2.551952209472656,
+          "teacher_offload_four": 1.6108631591796874,
+          "tq_get_wait": 0.0001004160009906627,
+          "student_head": 11.808144940853126,
+          "hidden_h2d": 1.256098209738731,
+          "teacher_load_four": 1.2146752166748047,
+          "tq_write_drain": 0.12328703308105468,
+          "teacher_backbone": 43.64668406677246,
+          "tq_write_wait": 0.0021975360019132494,
+          "student_backbone": 15.969392814636233,
+          "hidden_d2h": 4.241647297024726
+        }
+      }
+    }
+  }
+}

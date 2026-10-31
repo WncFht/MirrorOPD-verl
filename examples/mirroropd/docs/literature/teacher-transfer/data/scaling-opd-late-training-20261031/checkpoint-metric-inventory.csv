@@ -1,0 +1,10 @@
+family,metric_name,checkpoint_records
+offpd/math,val-core/math_mixture_rlvr/acc/mean@1,44
+offpd_cold_start/math,val-core/math_mixture_rlvr/acc/mean@1,25
+offpd_cold_start/opd/math,val-core/math_mixture_rlvr/acc/mean@1,21
+opd-delphi/math,val-core/math_mixture_rlvr/acc/mean@1,1
+opd/math,val-core/math_mixture_rlvr/acc/mean@1,150
+opd/math,val-core/math_mixture_rlvr/acc/mean@5,1
+rl/math,val-core/math_mixture_rlvr/acc/mean@1,7
+sft-2epoch,val/loss,5
+sft-2epoch,val_loss,2

@@ -1,0 +1,38 @@
+{
+  "device": "cpu",
+  "torch": "2.6.0+cu124",
+  "aggregation_source": "verl/trainer/ppo/core_algos.py",
+  "length_example": {
+    "token_mean": 2.6,
+    "sequence_mean": 1.9999999956249999,
+    "naive_rank_mean": 2.0
+  },
+  "pytorch_reductions": {
+    "shape": [
+      4,
+      5,
+      7
+    ],
+    "sum": 13.854925339628423,
+    "mean": 0.0989637524259173,
+    "batchmean": 3.4637313349071057,
+    "flattened_batchmean": 0.6927462669814212,
+    "student_target_gradient_preserved": true
+  },
+  "simulated_dp_and_microbatch": {
+    "token-mean": {
+      "loss": 0.5749211178099738,
+      "gradient_max_error": 0.0
+    },
+    "seq-mean-token-mean": {
+      "loss": 0.6274094665248233,
+      "gradient_max_error": 0.0
+    },
+    "seq-mean-token-sum": {
+      "loss": 1.5810330739774279,
+      "gradient_max_error": 0.0
+    }
+  },
+  "sequence_weighted_logit_gradient_max_error": 4.163336342344337e-17,
+  "status": "passed"
+}

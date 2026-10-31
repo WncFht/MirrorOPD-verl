@@ -1,0 +1,92 @@
+{
+  "complete": true,
+  "outers": 2,
+  "updates": 64,
+  "unique_training_questions": 256,
+  "source_questions": 128,
+  "response_cap": 7168,
+  "source_response_tokens": 808935,
+  "training_response_tokens": 1544472,
+  "readouts": [
+    {
+      "outer": 0,
+      "optimizer_steps": 0,
+      "source_rkl": 0.11461762535354687
+    },
+    {
+      "outer": 1,
+      "optimizer_steps": 32,
+      "source_rkl": 0.06032823181202358
+    },
+    {
+      "outer": 2,
+      "optimizer_steps": 64,
+      "source_rkl": 0.02683746874117952
+    }
+  ],
+  "matched_history_revisits": [
+    {
+      "from_outer": 1,
+      "to_outer": 2,
+      "history_batch": 1,
+      "rows": 64,
+      "before_token_mean": 0.055723956994900625,
+      "after_token_mean": 0.024887725125055046
+    }
+  ],
+  "source_rkl_reduction_percent": 76.58521657694679,
+  "outer_timings": [
+    {
+      "rkl_readout/seconds": 21.445919163525105,
+      "rkl_readout/rows": 256.0,
+      "rkl_readout/source_heldout/token_mean": 0.060328231812023556,
+      "rkl_readout/history/equal_batch_token_mean": 0.056084170839088246,
+      "rkl_readout/total_seconds_excluding_generation": 26.58006026595831,
+      "perf/timing/rollout_batch_seconds": 24.688114868,
+      "step/outer": 1,
+      "perf/timing/rollout_pipeline_seconds": 26.254938177764416,
+      "perf/timing/teacher_transfer_seconds": 0.9111979380249977,
+      "perf/timing/teacher_forward_seconds": 3.0967487320303917,
+      "perf/timing/update_actor_seconds": 311.4933746010065,
+      "perf/timing/update_weights_seconds": 1.1470831036567688,
+      "perf/timing/outer_step_seconds": 371.1932493969798,
+      "step/update": 32,
+      "step/optimizer": 32
+    },
+    {
+      "rkl_readout/seconds": 19.763080924749374,
+      "rkl_readout/rows": 256.0,
+      "rkl_readout/source_heldout/token_mean": 0.02683746874117951,
+      "rkl_readout/history/equal_batch_token_mean": 0.02306540714177616,
+      "rkl_readout/total_seconds_excluding_generation": 24.89445509016514,
+      "perf/timing/rollout_batch_seconds": 24.625129053,
+      "step/outer": 2,
+      "perf/timing/rollout_pipeline_seconds": 26.205840267241,
+      "perf/timing/teacher_transfer_seconds": 0.8345764353871346,
+      "perf/timing/teacher_forward_seconds": 3.2118799835443497,
+      "perf/timing/update_actor_seconds": 303.00958536565304,
+      "perf/timing/update_weights_seconds": 1.0971012935042381,
+      "perf/timing/outer_step_seconds": 360.85170850902796,
+      "step/update": 64,
+      "step/optimizer": 64
+    }
+  ],
+  "loss_windows": [
+    {
+      "outer": 1,
+      "first_forward": 0.11517232656478882,
+      "last_forward": 0.05765169858932495
+    },
+    {
+      "outer": 2,
+      "first_forward": 0.06003432720899582,
+      "last_forward": 0.022054625675082207
+    }
+  ],
+  "final_history_batch_counts": {
+    "1": 64,
+    "2": 64
+  },
+  "initial_bank_sha256": "8a45c94dfce26318b83b30fbbc1cc6ef594f52385effcbe9fef71e8f44bf9978",
+  "all_readouts_preserved_model_and_adam": true
+}

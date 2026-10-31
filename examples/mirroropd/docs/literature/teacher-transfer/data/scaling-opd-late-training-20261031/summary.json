@@ -1,0 +1,30 @@
+{
+  "pairs": 25,
+  "checkpoint_exports": 311,
+  "hub_file_count": 4040,
+  "hub_revision": "81966d0c38efec752d75e2716eb4b9a4a71a9a6d",
+  "checkpoint_metric_names": [
+    "val-core/math_mixture_rlvr/acc/mean@1",
+    "val-core/math_mixture_rlvr/acc/mean@5",
+    "val/loss",
+    "val_loss"
+  ],
+  "candidate_history_files_by_basename": [],
+  "below_initial_at_last": 2,
+  "dropped_more_than_5pp_from_peak": 2,
+  "discrepancies": [
+    {
+      "pair": "14<-14",
+      "curve_max": 0.8728,
+      "published_peak": 0.8723,
+      "difference_pp": 0.050000000000005596
+    }
+  ],
+  "caveats": [
+    "Observation index has no explicit optimizer-step field.",
+    "d and g are author-rounded published curves.",
+    "Latest weight export and last logged curve value are separate endpoints.",
+    "Training proxy in PDF is not exported in these JSONs.",
+    "No teacher-validation KL is present in downloaded records."
+  ]
+}

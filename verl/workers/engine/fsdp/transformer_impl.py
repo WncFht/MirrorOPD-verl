@@ -1303,6 +1303,21 @@ class FSDPEngineWithLMHead(FSDPEngine):
                 weight = self.full_vocab_teacher_head.get(selected.device, teacher_hidden.dtype)
             config = self.full_vocab_config
             spec = self.full_vocab_spec
+            if tu.get_non_tensor_data(micro_batch, "full_vocab_score", default=False):
+                from verl.trainer.distillation.evaluation import sample_sums, score_rkl_rows
+
+                def readout(h, w):
+                    with torch.autocast(device_type=h.device.type, enabled=False):
+                        values = score_rkl_rows(
+                            h,
+                            w.to(h.dtype),
+                            teacher_hidden,
+                            weight,
+                            token_chunk=config.token_chunk_size,
+                        )
+                    return sample_sums(values, [len(p) for p in positions])
+
+                return head(selected, full_vocab_callback=readout)
             anchor_hidden = anchor_weight = None
             if spec.anchor_payload:
                 saved_positions = micro_batch["anchor_positions"]
@@ -1800,6 +1815,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
             micro_batch, "full_vocab_train", default=False
         )
         full_vocab = full_vocab or bool(tu.get_non_tensor_data(micro_batch, "full_vocab_capture", default=None))
+        full_vocab = full_vocab or tu.get_non_tensor_data(micro_batch, "full_vocab_score", default=False)
         if full_vocab:
             from verl.trainer.distillation.profiling import full_kl_range
 
@@ -1822,7 +1838,15 @@ class FSDPEngineWithLMHead(FSDPEngine):
         with autocast_ctx:
             full_teacher = tu.get_non_tensor_data(micro_batch, "full_vocab_teacher", default=False)
             full_train = tu.get_non_tensor_data(micro_batch, "full_vocab_train", default=False)
-            if full_teacher or full_train or tu.get_non_tensor_data(micro_batch, "full_vocab_capture", default=None):
+            full_score = tu.get_non_tensor_data(micro_batch, "full_vocab_score", default=False)
+            if full_score and (not forward_only or loss_function is not None):
+                raise ValueError("RKL readout requires forward_only and compute_loss=False")
+            if (
+                full_teacher
+                or full_train
+                or full_score
+                or tu.get_non_tensor_data(micro_batch, "full_vocab_capture", default=None)
+            ):
                 model_output = self._full_vocab_output(micro_batch, model_inputs, teacher=full_teacher)
             else:
                 raw_output = self.module(**model_inputs, use_cache=False)
@@ -1839,7 +1863,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
                 )
             else:
                 assert forward_only, "forward_only must be True when loss_function is None"
-                loss = torch.tensor(1.0, device=device_name)
+                loss = torch.tensor(0.0 if full_score else 1.0, device=device_name)
                 metrics = {}
 
             # Detach before this lands in forward_backward_batch's output_lst; see detach_tree.
