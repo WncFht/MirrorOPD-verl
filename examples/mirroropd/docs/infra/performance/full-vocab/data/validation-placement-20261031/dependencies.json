@@ -1,0 +1,23 @@
+{
+  "repo_head": "9fad6d437cc201670b769c27fa09949f6a8c85e6",
+  "dependencies": {
+    "verl/utils/fsdp_utils.py": {
+      "sha256": "2d5f7fa51087ad7a09a070dfd97bb4ba39d36c11d0a5cbd145c194d114b03b97",
+      "mtime": 1792409008.9931138
+    },
+    "verl/trainer/distillation/hidden.py": {
+      "sha256": "5f42d7e1d381c4d21c8f3869594ae65a5901859b43b7f6ed7c092a81e087f7e4",
+      "mtime": 1793095617.7409184
+    },
+    "verl/utils/linear.py": {
+      "sha256": "5b78306944b8263ea88292f6235c8a7e53779f75484c0b42fa70b1d66e81cace",
+      "mtime": 1793091222.5559733
+    },
+    "examples/mirroropd/benchmarks/profile/validation_placement.py": {
+      "sha256": "2259b649e298965e148b09b7d33de478ae185c76a180479a783932861b5d330c",
+      "mtime": 1793399025.387745
+    }
+  },
+  "hardware": "4 physical H800 GPUs 0,2,4,5; NV8 links; CPU affinity not pinned",
+  "measurement_scope": "CPU model layouts prebuilt, GPU load to final four-GPU student backbone + replicated FP32 head ready; optimizer and vLLM synchronization excluded"
+}

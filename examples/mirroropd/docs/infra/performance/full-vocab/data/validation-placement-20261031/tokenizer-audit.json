@@ -1,0 +1,20 @@
+[
+  {
+    "run": "qwen4-n768-batched",
+    "token_to_id_equal": true,
+    "student_vocab_entries": 151669,
+    "teacher_vocab_entries": 151669
+  },
+  {
+    "run": "qwen8-n768",
+    "token_to_id_equal": true,
+    "student_vocab_entries": 151669,
+    "teacher_vocab_entries": 151669
+  },
+  {
+    "run": "r1_14-n768",
+    "token_to_id_equal": true,
+    "student_vocab_entries": 151665,
+    "teacher_vocab_entries": 151665
+  }
+]
