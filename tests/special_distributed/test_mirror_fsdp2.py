@@ -36,6 +36,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--precision", choices=["bf16", "fp16", "fp32", "bf16_fp32"])
     parser.add_argument("--sequence-length", type=int, default=5)
+    parser.add_argument("--token-budget", type=int, help="Force multiple actor micro-batches when desired")
     parser.add_argument("--gradient-checkpointing", action="store_true")
     parser.add_argument("--objective", choices=["mdpo", "bpo"], default="mdpo")
     parser.add_argument("--estimator", choices=["full_vocab", "sampled"], default="full_vocab")
@@ -92,7 +93,7 @@ def main():
         full_vocab=full,
         precision=args.precision,
         gradient_checkpointing=args.gradient_checkpointing,
-        token_budget=2 * args.sequence_length,
+        token_budget=args.token_budget or 2 * args.sequence_length,
     )
     teacher = make_worker(root / "teacher", world, teacher=True, full_vocab=full, token_budget=2 * args.sequence_length)
     observed_dtypes = {}
@@ -330,6 +331,7 @@ def main():
         teacher_projection_dtypes=sorted(teacher_projection_dtypes),
         precision=args.precision,
         sequence_length=args.sequence_length,
+        actor_token_budget=args.token_budget or 2 * args.sequence_length,
         scaler=actor.engine.scaler.state_dict() if actor.engine.scaler else None,
         objective=args.objective,
         model_type=args.model_type,
