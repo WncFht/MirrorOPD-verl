@@ -170,6 +170,10 @@ def compile_code(code: str, timeout: int):
             compiled_sol = tmp_sol
 
         assert compiled_sol is not None
+    except SystemExit as exc:
+        # This exit originates in generated top-level code or its constructor.
+        # Function tasks still need to supply the requested callable.
+        raise RuntimeError("Generated program exited during initialization") from exc
     finally:
         signal.alarm(0)
 
@@ -245,7 +249,7 @@ def grade_call_based(code: str, all_inputs: list, all_outputs: list, fn_name: st
                 }
         except (MemoryError, SyntaxError, TimeoutException):
             raise
-        except Exception as e:
+        except (Exception, SystemExit) as e:
             signal.alarm(0)
             if "timeoutexception" in repr(e).lower():
                 all_results.append(-3)
