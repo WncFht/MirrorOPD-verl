@@ -1,0 +1,158 @@
+{
+  "checked_shanghai": "2026-11-01",
+  "paper": "https://arxiv.org/html/2607.04751v2",
+  "paper_table3": {
+    "student": "Qwen3-1.7B-Base",
+    "teacher": "Qwen3-30B-A3B-Instruct-2507",
+    "metric": "avg@32",
+    "OPD": {
+      "aime24": 8.96,
+      "aime25": 7.5,
+      "aime26": 5.94
+    },
+    "TOP-D": {
+      "aime24": 20.31,
+      "aime25": 17.71,
+      "aime26": 13.75
+    }
+  },
+  "official_commit": "9a2716cba22cab508825ad3be3f78327bb8139e5",
+  "official_sources": [
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/README.md",
+      "local_snapshot": "runs/topd-comparison-20261101/source/README.md",
+      "sha256": "8eece888fd9db27e271c9590d7f34dd6a77c7536a292731937f6266a2f3acf87"
+    },
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/verl/verl/trainer/ppo/core_algos.py",
+      "local_snapshot": "runs/topd-comparison-20261101/source/core_algos.py",
+      "sha256": "e8fc26c07647c473153d4af7fe3d38fec25d57bf328a73f8cc28f4b4fa592834"
+    },
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/recipe/opd/run_qwen3_1p7b_base_qwen3_teacher_dapo17k_common.sh",
+      "local_snapshot": "runs/topd-comparison-20261101/source/common.sh",
+      "sha256": "88c219e42008ec6ed6731cfd9f59a8fcc9b490fd7966735eae14f261285ddfd3"
+    },
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/recipe/opd/run_qwen3_1p7b_base_qwen3_30a3b_teacher_dapo17k_topd_alpha0p1_16k_kl0.sh",
+      "local_snapshot": "runs/topd-comparison-20261101/source/entry.sh",
+      "sha256": "6479de2275f428c73552bb650ef7a6431276e5e132167473b1255a94515ecb8c"
+    },
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/verl/verl/trainer/ppo/ray_trainer.py",
+      "local_snapshot": "runs/topd-comparison-20261101/source/ray_trainer.py",
+      "sha256": "d6ea9222350d62aaa2ecd6e7c1ed48c36523efc2bc15fb65056f6792de9b19d4"
+    }
+  ],
+  "E57_source": {
+    "path": "examples/mirroropd/docs/infra/model-compatibility/qwen-e54/figures/e55-e57-20261031/data.json",
+    "sha256": "64deaf885e07339db94065a9378642553739876e33103ac855b3737505971d4c"
+  },
+  "E57_trajectory": [
+    {
+      "outer": 10,
+      "teacher_kl_first": 0.47649090372085634,
+      "teacher_kl_last": 0.44913436814646907,
+      "macro5": 0.21332083333333335,
+      "macro_cap_fraction": 0.6258,
+      "accuracy": {
+        "math500": 0.592125,
+        "amc23": 0.3265625,
+        "aime24": 0.07916666666666666,
+        "aime25": 0.03333333333333333,
+        "aime26": 0.035416666666666666
+      }
+    },
+    {
+      "outer": 20,
+      "teacher_kl_first": 0.4477153798020017,
+      "teacher_kl_last": 0.4278624031597244,
+      "macro5": 0.24401250000000002,
+      "macro_cap_fraction": 0.7014374999999999,
+      "accuracy": {
+        "math500": 0.64975,
+        "amc23": 0.3703125,
+        "aime24": 0.0875,
+        "aime25": 0.05416666666666667,
+        "aime26": 0.058333333333333334
+      }
+    },
+    {
+      "outer": 30,
+      "teacher_kl_first": 0.412248351726209,
+      "teacher_kl_last": 0.39451187617272954,
+      "macro5": 0.2613708333333333,
+      "macro_cap_fraction": 0.5116916666666667,
+      "accuracy": {
+        "math500": 0.6855,
+        "amc23": 0.4046875,
+        "aime24": 0.07916666666666666,
+        "aime25": 0.07708333333333334,
+        "aime26": 0.06041666666666667
+      }
+    },
+    {
+      "outer": 40,
+      "teacher_kl_first": 0.4169749369747473,
+      "teacher_kl_last": 0.39899034702372954,
+      "macro5": 0.2665708333333333,
+      "macro_cap_fraction": 0.36273333333333335,
+      "accuracy": {
+        "math500": 0.699,
+        "amc23": 0.4234375,
+        "aime24": 0.06458333333333334,
+        "aime25": 0.0625,
+        "aime26": 0.08333333333333333
+      }
+    },
+    {
+      "outer": 50,
+      "teacher_kl_first": 0.3975145178134824,
+      "teacher_kl_last": 0.38074079920497655,
+      "macro5": 0.279875,
+      "macro_cap_fraction": 0.27118333333333333,
+      "accuracy": {
+        "math500": 0.70875,
+        "amc23": 0.453125,
+        "aime24": 0.0875,
+        "aime25": 0.08333333333333333,
+        "aime26": 0.06666666666666667
+      }
+    },
+    {
+      "outer": 60,
+      "teacher_kl_first": 0.4030673679792446,
+      "teacher_kl_last": 0.38554888190070413,
+      "macro5": 0.282475,
+      "macro_cap_fraction": 0.21948749999999997,
+      "accuracy": {
+        "math500": 0.72175,
+        "amc23": 0.453125,
+        "aime24": 0.09791666666666667,
+        "aime25": 0.05625,
+        "aime26": 0.08333333333333333
+      }
+    }
+  ],
+  "E57_window_means": [
+    {
+      "outer_window": [
+        1,
+        10
+      ],
+      "mean_first_teacher_kl": 0.46418608354828833
+    },
+    {
+      "outer_window": [
+        60,
+        69
+      ],
+      "mean_first_teacher_kl": 0.3951029645747352
+    }
+  ],
+  "derived": {
+    "aligned_teacher_kl_first_drop": 0.15409220861984307,
+    "aligned_teacher_kl_last_drop": 0.14157341489624953,
+    "aligned_macro_gain_pp": 6.915416666666663
+  }
+}

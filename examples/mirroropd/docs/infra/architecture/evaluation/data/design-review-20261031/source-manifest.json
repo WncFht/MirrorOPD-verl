@@ -1,0 +1,206 @@
+{
+  "commit": "28180c4b76a52b4e77164ac7a2938b87bda3c7ef",
+  "scope": "Targeted source review, not proof that every repository file was read",
+  "files": [
+    {
+      "path": "examples/mirroropd/assets/paths.py",
+      "sha256": "683ed8b3591268139e82e9af79bbf4fff0cdbde28a5dd726bd3ed0cc30abf4de",
+      "lines": 182
+    },
+    {
+      "path": "examples/mirroropd/launchers/_run_single_teacher_fsdp2.sh",
+      "sha256": "144fdaf33cb5c8efa29985c82ebd5b5919e3c3e208508fc18bf2b0762e32b257",
+      "lines": 460
+    },
+    {
+      "path": "examples/mirroropd/launchers/math_experiment.py",
+      "sha256": "9c45a6283511299ee6e136cbf08714ba05fe5fb2d1f11ba64eb96587003bd0bc",
+      "lines": 622
+    },
+    {
+      "path": "examples/mirroropd/research/studies/fixed_transfer/figure_data.py",
+      "sha256": "8bbb83e984cfaf36fd0d7a848bb884e067e6bbc73c738870ce484006c5420f09",
+      "lines": 222
+    },
+    {
+      "path": "examples/mirroropd/research/studies/fixed_transfer/figure_pipeline.py",
+      "sha256": "ed1d145aad45f2e869dcba12815caf0498f707f1b42d5b30392d77d70182d725",
+      "lines": 229
+    },
+    {
+      "path": "verl/checkpoint_engine/base.py",
+      "sha256": "97b51131a5770892007b7fb07264a2657fe83255b085927acd08c952a5682f64",
+      "lines": 633
+    },
+    {
+      "path": "verl/experimental/agent_loop/agent_loop.py",
+      "sha256": "af800451af4e68a32d6d565f67f0342a69471f89b9b0a485238f35d1c071ecbe",
+      "lines": 1357
+    },
+    {
+      "path": "verl/experimental/agent_loop/single_turn_agent_loop.py",
+      "sha256": "21b2f4f10d0200b2fbd9f0c65dd3ad430b8744947e55c39d9f6f1ebb8e557e01",
+      "lines": 131
+    },
+    {
+      "path": "verl/experimental/rollout_policy/collector.py",
+      "sha256": "c870d3b1bbb7f4d81bee6bd5cb580bcd8b9c093b841f266ac0a7077b2d3c73dc",
+      "lines": 73
+    },
+    {
+      "path": "verl/experimental/rollout_policy/identity.py",
+      "sha256": "025b4947dd760142e269b30a759b57a01466e999e4871f52483278edb269b3e0",
+      "lines": 159
+    },
+    {
+      "path": "verl/experimental/rollout_policy/lifecycle.py",
+      "sha256": "94bf16e1649c39e4a7b1d83805d85c0122464008c802294dc38391b9f4369241",
+      "lines": 157
+    },
+    {
+      "path": "verl/experimental/rollout_policy/models.py",
+      "sha256": "4ed552bf2554debcbac6ea456ff32ee6c8511a166ccbb6b2ce22fcd2b6d22688",
+      "lines": 72
+    },
+    {
+      "path": "verl/experimental/rollout_policy/phases.py",
+      "sha256": "bfe81bb1bdb5d77bf87a5bdbf7a6afecf2651978ad0649b6774d1c41f8171a34",
+      "lines": 60
+    },
+    {
+      "path": "verl/experimental/rollout_policy/plan.py",
+      "sha256": "d47df0f60d33cccadedc51915bd5314ebcbd0b37981f30053402310b79cd92b0",
+      "lines": 298
+    },
+    {
+      "path": "verl/experimental/rollout_policy/runtime.py",
+      "sha256": "20efc332969f002a3f57f415f5f6041fdcbf9f67073ad0e324f2694f55f8cdff",
+      "lines": 106
+    },
+    {
+      "path": "verl/experimental/rollout_policy/service.py",
+      "sha256": "f2ac2e625b5a407dcc3b4c92399bdc52487b063aab8778e9971e25883522f18e",
+      "lines": 89
+    },
+    {
+      "path": "verl/experimental/rollout_policy/sessions.py",
+      "sha256": "f2625842fcbec81dc6a06dec989dacda1efb685d3d432753e0095a3ff9511682",
+      "lines": 174
+    },
+    {
+      "path": "verl/trainer/distillation/evaluation.py",
+      "sha256": "40cca2188760f1cff87853171eb9df6e05b0a566079d9e307948d3265f242243",
+      "lines": 51
+    },
+    {
+      "path": "verl/trainer/distillation/hidden_io.py",
+      "sha256": "fcc0564e7d454822b35d133450800a729ca0e76502cf37df356d547c55c41292",
+      "lines": 116
+    },
+    {
+      "path": "verl/trainer/distillation/readout.py",
+      "sha256": "baad80e1afad0eb47c7dc073128bcd29e6f5a00d63a3a8792b6af6945992cca3",
+      "lines": 334
+    },
+    {
+      "path": "verl/trainer/distillation/shared_teacher.py",
+      "sha256": "535e74d65afe9b1506290aa95cf4338de88fb036a890349643e21991895958e8",
+      "lines": 89
+    },
+    {
+      "path": "verl/trainer/ppo/checkpoint_callback.py",
+      "sha256": "3e7eab2ecb0d354ed6d9a8f571e788f978889ebd561f17de9d3ccaddf757b274",
+      "lines": 82
+    },
+    {
+      "path": "verl/trainer/ppo/readout_callback.py",
+      "sha256": "ccd4ba1c32ecd987c350bcb3151c161eaaa661f402574b9d31c5616c6e420fe1",
+      "lines": 12
+    },
+    {
+      "path": "verl/trainer/ppo/v1/agent_loop_tq.py",
+      "sha256": "bf505bd3cbab04a959255703c18f67f1fe369661c0ff8191df23766b22e31365",
+      "lines": 350
+    },
+    {
+      "path": "verl/trainer/ppo/v1/replay_buffer.py",
+      "sha256": "7c3552c5149fda3f923bab9b80f26ab010cc6a21b6e513dd7d0d428084fe37b5",
+      "lines": 613
+    },
+    {
+      "path": "verl/trainer/ppo/v1/trainer_base.py",
+      "sha256": "93c5c05f89f156fd9b0a4e3e30716d3e23408e359e16870273708db33981d8b7",
+      "lines": 2538
+    },
+    {
+      "path": "verl/trainer/ppo/v1/trainer_sync.py",
+      "sha256": "f0c872586ab078573ff472ad4afb25beac90cbbfe6c74e31bf6ee56d234cbd4b",
+      "lines": 59
+    },
+    {
+      "path": "verl/utils/checkpoint/checkpoint_manager.py",
+      "sha256": "be4fa702f0fab63dfb1d482716d31bc13a3b8f5129adbbd61872a169b07cbbc6",
+      "lines": 293
+    },
+    {
+      "path": "verl/utils/checkpoint/fsdp_checkpoint_manager.py",
+      "sha256": "6d2d08afd3429221f49e1d72e587cd63b2390099312767970793847f2e1856fb",
+      "lines": 533
+    },
+    {
+      "path": "verl/utils/dataset/rl_dataset.py",
+      "sha256": "8571ff8527a0a8c5aa0951f248052e3ea7a8386cc236c1324c81e764d5b1ff65",
+      "lines": 596
+    },
+    {
+      "path": "verl/utils/metric/evaluation.py",
+      "sha256": "96c73c0956dd1fccb67f57db41b86c26dc543ba63fb495b1b92f47fc6337a16c",
+      "lines": 418
+    },
+    {
+      "path": "verl/utils/metric/schema.py",
+      "sha256": "98fcf37c2cdce2126f43ce8053bed37df389c9fe6108213bda6657628306ed15",
+      "lines": 260
+    },
+    {
+      "path": "verl/utils/pipeline_metrics.py",
+      "sha256": "6810805b4e610c80e05afbd323714d97ab91890fbb3aa3d121af9412ffecb02d",
+      "lines": 130
+    },
+    {
+      "path": "verl/utils/profiler/timeline.py",
+      "sha256": "8efedc10101e9b638fbe2f2f4ef455e1a9f566de777234911446779b849ddd70",
+      "lines": 138
+    },
+    {
+      "path": "verl/workers/engine/fsdp/transformer_impl.py",
+      "sha256": "1b68d7159265046f952f50c180ef5ad6f41fbfb25ce14bfbf3ae13206b3ae9e3",
+      "lines": 1929
+    },
+    {
+      "path": "verl/workers/engine_workers.py",
+      "sha256": "93a635a391f790bbd75e4c30ac902b7608371b06a464c7fe2f331ec41971a56a",
+      "lines": 1140
+    },
+    {
+      "path": "verl/workers/rollout/llm_server.py",
+      "sha256": "35efb620e831c8abfa918aad801b04f9b83378a1e65dabca09ed92ee23df2a9a",
+      "lines": 571
+    },
+    {
+      "path": "verl/workers/rollout/replica.py",
+      "sha256": "84e3c27fc0fae264004daf0652a24feb2db0ed996dcd4f315430df94b8626406",
+      "lines": 421
+    },
+    {
+      "path": "verl/workers/rollout/vllm_rollout/policy_execution.py",
+      "sha256": "a15ec0c81f0663a2d72fa3b68b9aecc78fbd8d7abf979d153de91120f814dcae",
+      "lines": 111
+    },
+    {
+      "path": "verl/workers/rollout/vllm_rollout/vllm_async_server.py",
+      "sha256": "334a5592867f7e36265fabd179f8c8cf06d332113f4e5698083018840a9a1465",
+      "lines": 1765
+    }
+  ]
+}

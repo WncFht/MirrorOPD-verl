@@ -1,0 +1,38 @@
+{
+  "scope": "CPU serialization/reference replay only; no new model forward or training",
+  "files": [
+    {
+      "source": "initial-student-bank.json",
+      "sha256": "8a45c94dfce26318b83b30fbbc1cc6ef594f52385effcbe9fef71e8f44bf9978",
+      "rows": 128,
+      "json_bytes": 19677951,
+      "parquet_bytes": 1010548
+    },
+    {
+      "source": "trajectories/outer-001.json",
+      "sha256": "03d68d5df57bb744d6888aafec3c1d6e4fd23eb7b2316671ec38e1d586b75b10",
+      "rows": 128,
+      "json_bytes": 15856908,
+      "parquet_bytes": 932819
+    },
+    {
+      "source": "trajectories/outer-002.json",
+      "sha256": "27b4093fba8ddefd634295146ad373bc8b5e2eaafc730a8f156f07a856ae7d10",
+      "rows": 128,
+      "json_bytes": 15482987,
+      "parquet_bytes": 849577
+    }
+  ],
+  "history": {
+    "rows": 128,
+    "json_bytes": 15509614,
+    "reference_parquet_bytes": 8980
+  },
+  "legacy_audit": {
+    "complete": true,
+    "updates": 64,
+    "unique_training_questions": 256,
+    "aggregation": "legacy_token_mean"
+  },
+  "artifact_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/evaluation-parquet-implementation/roundtrip-d670f78b"
+}

@@ -1,0 +1,51 @@
+{
+  "scope": "CPU tests and frozen-data serialization only; no GPU acceptance",
+  "passed": 144,
+  "warnings": 8,
+  "seconds": 39.31,
+  "base_commit": "973d9c451c7ebbcee92d8deeab99704aa894ebd0",
+  "log_sha256": "020347b48e2bd6ce932b076ea9366914370b7c5434245253fd89fa746b6248d6",
+  "source_files": [
+    {
+      "path": "examples/mirroropd/benchmarks/profile/audit_fixed_rkl.py",
+      "sha256": "f3d762b3c782b6e8ea0f67c4797d39d01cc89d8e631b9dab665d04dc19133e5d"
+    },
+    {
+      "path": "tests/trainer/distillation/test_evaluation_artifacts_on_cpu.py",
+      "sha256": "defd5f010d1e389d68c449df4d578ba349d9fb7f9045d05a3e2d1bfc248d7d63"
+    },
+    {
+      "path": "tests/trainer/distillation/test_evaluation_metrics_on_cpu.py",
+      "sha256": "94211e1536ad2a7f57be34754ecb0e89d8559fb44d0c961f030adac9f07eddc3"
+    },
+    {
+      "path": "tests/trainer/distillation/test_parquet_readout_on_cpu.py",
+      "sha256": "93df063b37aacde26e1ea65151932cc8b85ea2606236c3541303ffe29ee660d8"
+    },
+    {
+      "path": "tests/trainer/ppo/v1/test_pipeline_metrics_on_cpu.py",
+      "sha256": "e1f0a4a69932b02704d59635445d5dc07820d286691a8d3da121618c97abbf87"
+    },
+    {
+      "path": "verl/trainer/distillation/readout.py",
+      "sha256": "d103ab2378388852814cc4d67b86331c2a93c1d540c3b3356208f9f2d2f42768"
+    },
+    {
+      "path": "verl/trainer/evaluation/__init__.py",
+      "sha256": "3cb5a1b4f0fba6c6e6a170d1d9834e001bd67d6e765bc404be8865286d74f81e"
+    },
+    {
+      "path": "verl/trainer/evaluation/artifacts.py",
+      "sha256": "3cab890142c436ae62557878d0a6927ff7389bd2d5cfc4b4a0741bcbf70c777a"
+    },
+    {
+      "path": "verl/trainer/evaluation/metrics.py",
+      "sha256": "37dea1cc67b3790fb1b4fa620e833ad2c6c3606f86f5acecc2d09dad35889210"
+    },
+    {
+      "path": "verl/trainer/evaluation/schedule.py",
+      "sha256": "5e3aa5ef145affc9a2e766b67fed71ee5625c736c52eabbfbc8d68afe1c2e014"
+    }
+  ],
+  "log": "runs/evaluation-parquet-implementation/cpu-tests-final.log"
+}

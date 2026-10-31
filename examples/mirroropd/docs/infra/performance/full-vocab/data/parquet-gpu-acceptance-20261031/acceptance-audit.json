@@ -1,0 +1,124 @@
+{
+  "complete": true,
+  "outers": 2,
+  "updates": 64,
+  "unique_training_questions": 256,
+  "source_questions": 128,
+  "response_cap": 7168,
+  "source_response_tokens": 795106,
+  "training_response_tokens": 1562186,
+  "readouts": [
+    {
+      "outer": 0,
+      "optimizer_steps": 0,
+      "source_rkl": 0.11280232489001822
+    },
+    {
+      "outer": 1,
+      "optimizer_steps": 32,
+      "source_rkl": 0.05930563844375506
+    },
+    {
+      "outer": 2,
+      "optimizer_steps": 64,
+      "source_rkl": 0.025965750464955223
+    }
+  ],
+  "matched_history_revisits": [
+    {
+      "from_outer": 1,
+      "to_outer": 2,
+      "history_batch": 1,
+      "rows": 64,
+      "before_question_mean": 0.05506378844962195,
+      "after_question_mean": 0.024596939516045073
+    }
+  ],
+  "aggregation": "question_mean",
+  "source_rkl_reduction_percent": 76.98119210727997,
+  "outer_timings": [
+    {
+      "eval/rkl/rows": 256.0,
+      "eval/rkl/source_heldout/rows": 128.0,
+      "eval/rkl/source_heldout/valid_rows": 128.0,
+      "eval/rkl/source_heldout/invalid_rows": 0.0,
+      "eval/rkl/source_heldout/tokens": 795106.0,
+      "eval/rkl/source_heldout/question_mean": 0.05930563844375506,
+      "eval/rkl/history/rows": 128.0,
+      "eval/rkl/history/valid_rows": 128.0,
+      "eval/rkl/history/invalid_rows": 0.0,
+      "eval/rkl/history/tokens": 801275.0,
+      "eval/rkl/history/equal_batch_question_mean": 0.055370675080699816,
+      "eval/rkl/source_heldout/absolute_reduction": 0.05349668644626316,
+      "eval/rkl/source_heldout/reduction_percent": 47.42516299945254,
+      "eval/rkl/history/paired_rows": 0.0,
+      "perf/timing/rkl_score_seconds": 21.132660791277885,
+      "perf/timing/rkl_readout_seconds": 26.208873890340328,
+      "perf/timing/rollout_batch_seconds": 24.81979906,
+      "step/outer": 1,
+      "perf/timing/rollout_pipeline_seconds": 26.206338323652744,
+      "perf/timing/teacher_transfer_seconds": 0.9520891681313515,
+      "perf/timing/teacher_forward_seconds": 3.1787175238132477,
+      "perf/timing/update_actor_seconds": 316.55503145605326,
+      "perf/timing/update_weights_seconds": 1.0070229396224022,
+      "perf/timing/outer_step_seconds": 375.7473250851035,
+      "step/update": 32,
+      "step/optimizer": 32
+    },
+    {
+      "eval/rkl/rows": 256.0,
+      "eval/rkl/source_heldout/rows": 128.0,
+      "eval/rkl/source_heldout/valid_rows": 128.0,
+      "eval/rkl/source_heldout/invalid_rows": 0.0,
+      "eval/rkl/source_heldout/tokens": 795106.0,
+      "eval/rkl/source_heldout/question_mean": 0.025965750464955223,
+      "eval/rkl/history/rows": 128.0,
+      "eval/rkl/history/valid_rows": 128.0,
+      "eval/rkl/history/invalid_rows": 0.0,
+      "eval/rkl/history/tokens": 771504.0,
+      "eval/rkl/history/equal_batch_question_mean": 0.022232550295654185,
+      "eval/rkl/source_heldout/absolute_reduction": 0.086836574425063,
+      "eval/rkl/source_heldout/reduction_percent": 76.98119210727997,
+      "eval/rkl/history/paired_rows": 64.0,
+      "eval/rkl/history/paired_absolute_reduction": 0.03046684893357688,
+      "perf/timing/rkl_score_seconds": 18.922389790415764,
+      "perf/timing/rkl_readout_seconds": 24.024744108319283,
+      "perf/timing/rollout_batch_seconds": 24.061211456,
+      "step/outer": 2,
+      "perf/timing/rollout_pipeline_seconds": 26.210003219544888,
+      "perf/timing/teacher_transfer_seconds": 0.7684585750102997,
+      "perf/timing/teacher_forward_seconds": 2.918922036886215,
+      "perf/timing/update_actor_seconds": 299.2833870947361,
+      "perf/timing/save_checkpoint_seconds": 5.288685694336891,
+      "perf/timing/update_weights_seconds": 0.892062820494175,
+      "perf/timing/outer_step_seconds": 361.058253839612,
+      "step/update": 64,
+      "step/optimizer": 64
+    }
+  ],
+  "loss_windows": [
+    {
+      "outer": 1,
+      "first_forward": 0.11579916626214981,
+      "last_forward": 0.05813930183649063
+    },
+    {
+      "outer": 2,
+      "first_forward": 0.059757303446531296,
+      "last_forward": 0.021846748888492584
+    }
+  ],
+  "final_history_batch_counts": {
+    "1": 64,
+    "2": 64
+  },
+  "initial_bank_sha256": "ad71ef0f28bd0608b9ca9c8f381a4b7a2bf94fcf64b297362d933715bc131f32",
+  "all_readouts_preserved_model_and_adam": true,
+  "final_checkpoint": {
+    "format": "native FSDP model-only shards",
+    "shards": 4,
+    "bytes": 7109058476,
+    "optimizer_saved": false,
+    "reload_verified": false
+  }
+}

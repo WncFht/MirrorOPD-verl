@@ -50,3 +50,9 @@ Shared-sync 的当前支持边界由 [DistillationConfig.validate_shared_sync](.
 [架构重构验收](../../archive/engineering/2026-10-25-架构重构实施与验收.md)记录归一化、布局、生命周期与恢复的检查；[主分支四卡验收](../../archive/engineering/2026-10-25-主分支四卡验收.md)记录四卡集成和真实模型短训练。覆盖范围以报告为准，不从短训练推断长期收敛或所有后端的兼容性。
 
 Mirror 的实现、已通过测试与[剩余验证范围](../numerics/mirror-objectives/实现方案.md#remaining-validation)单独列明。当前说明随源码维护，不记录提交经过。设计取舍、旧实现和冻结实验留在对应历史文档，通过[维护约定](代码走读.md#维护约定)保持单一入口。
+
+## 四域评估与模型扩展
+
+[四域 RKL 接入方案](2026-10-31-四域RKL实验的verl接入方案.md)连接配置、执行存储、代码走读与决策记录。统一协调器、公共 bank、多频率调度和最终 model-only 导出已完成短程集成验收；完整 50 outer 实验仍在执行准备中。当前入口和限制见[评估包合同](../../../../../verl/trainer/evaluation/README.md)，证据由[实施状态](evaluation/代码走读与实施计划.md)维护。
+
+[动作空间与模型兼容](evaluation/动作空间与模型兼容.md)审查训练／只读 RKL、EOS 合并、跨尺寸支持、tokenizer 和模型 adapter 的共同边界，给出数值反例与分阶段改进方案。共同支持条件 RKL、Llama 原生 adapter 和通用 ID 映射仍为待实施能力；旧研究后端的结果不替代原生路径验收。

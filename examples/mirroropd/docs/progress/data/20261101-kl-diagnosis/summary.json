@@ -1,0 +1,37 @@
+{
+  "source": "examples/mirroropd/docs/progress/data/20261101-review/followup-data.json",
+  "source_sha256": "3ba3ffb58b2892bf1fc467686fc66857132581a8894be1708627b4bd7c6a0cb3",
+  "definition": "Pre-update observations 1 and 16 cover fifteen completed updates; outer batches differ in questions, rollout states and valid-token weights. Relative drops are averaged per batch over the last ten complete batches.",
+  "runs": {
+    "E55": {
+      "complete_batches": 35,
+      "teacher_first_batch_start": 0.4470776929723502,
+      "teacher_last_batch_start": 0.276664793109336,
+      "teacher_last_batch_last_observation": 0.25585647745449097,
+      "teacher_peak_batch": 1,
+      "teacher_peak_batch_start": 0.4470776929723502,
+      "last_ten_batches_mean_relative_teacher_drop": 0.07374718139878092,
+      "all_complete_batches_teacher_net_decrease": true
+    },
+    "E56": {
+      "complete_batches": 58,
+      "teacher_first_batch_start": 0.5311510102635295,
+      "teacher_last_batch_start": 0.36252962434246955,
+      "teacher_last_batch_last_observation": 0.3440452761627907,
+      "teacher_peak_batch": 1,
+      "teacher_peak_batch_start": 0.5311510102635295,
+      "last_ten_batches_mean_relative_teacher_drop": 0.04938638785606235,
+      "all_complete_batches_teacher_net_decrease": true
+    },
+    "E57": {
+      "complete_batches": 69,
+      "teacher_first_batch_start": 0.4048949295703338,
+      "teacher_last_batch_start": 0.39929179685556476,
+      "teacher_last_batch_last_observation": 0.3822454253346973,
+      "teacher_peak_batch": 5,
+      "teacher_peak_batch_start": 0.5365910135721348,
+      "last_ten_batches_mean_relative_teacher_drop": 0.04291305096723576,
+      "all_complete_batches_teacher_net_decrease": true
+    }
+  }
+}

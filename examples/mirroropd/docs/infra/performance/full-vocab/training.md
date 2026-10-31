@@ -302,7 +302,7 @@ Qwen3-1.7B student／Qwen3-8B teacher 在相同四卡上完成了配置筛选和
 
 四卡串行 `shared_sync` 已完成两轮完整设置验收：teacher 为 `hbx/JustRL-DeepSeek-1.5B`，student 为 `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B`，沿用原生 V1、FSDP2 和 vLLM。训练池准备 6,400 道去重 DAPO 题，实际使用 256 道不同题；每轮 batch128、n=1、fresh student rollout、reuse32，共 64 次有效更新。Prompt cap2048、response cap7168；teacher／actor 的 packed token budget 均为 32768，head chunk256，`precompute_fused`，hidden async write／prefetch 开启。
 
-AdamW 使用 LR=$10^{-6}$、constant scheduler、betas=(0.9,0.999)、weight decay=0.01、grad clip=1。训练及以下来源留出数值采用当前工程验收的 token-mean，正式平均方式仍待定。任务奖励不参与蒸馏 loss。
+AdamW 使用 LR=$10^{-6}$、constant scheduler、betas=(0.9,0.999)、weight decay=0.01、grad clip=1。该次训练及以下来源留出数值采用当时的 token-mean；新 Parquet 验收的评估题均值另表报告，不回写这些旧数值。任务奖励不参与蒸馏 loss。
 
 来源留出为独立 128 题，由 initial student 一次生成，共 808,935 个 response token；三次读出使用相同银行哈希。历史集合使用真实训练 token，第二轮后从两批各保留 64 题。
 
@@ -331,6 +331,40 @@ AdamW 使用 LR=$10^{-6}$、constant scheduler、betas=(0.9,0.999)、weight deca
 
 [完整验收摘要](data/native-rkl-acceptance-20261031/acceptance-audit.json)可由[audit_fixed_rkl.py](../../../../benchmarks/profile/audit_fixed_rkl.py)复算。完整配置、64 次更新指标、逐题 RKL、轨迹、状态哈希、源码快照与 NVML 时间线位于仓库同级 `wandb-logs/MirrorOPD-verl/analysis/rkl-optimization-20261031/native-acceptance-a01/`；源码快照另见相邻 `source-snapshots/native-acceptance-a01/`。
 
+### Parquet 基础链路的四卡 GPU 验收
+
+新`FixedRKLReadout`已完成实际 GPU 端到端验收：物理 GPU0–3，JustRL→R1-1.5B，原生 V1 同步／FSDP2／vLLM；batch128、reuse32、LR1e-6、训练与来源 cap7168，共两轮 64 次有效更新。训练用 token-mean；以下评估先题内 token 均值再按题平均，history 外层按 batch 等权。这是基础训练链路验收，不是四域 50outer 正式实验。
+
+| 更新数 | 固定来源 heldout RKL | 动态 history RKL |
+| ------ | -------------------: | ---------------: |
+| 0      |             0.112802 |                — |
+| 32     |             0.059306 |         0.055371 |
+| 64     |             0.025966 |         0.022233 |
+
+固定来源风险下降 76.98%。相邻两次 history 共同保留的第 1 批 64 条轨迹，从 0.055064 降到 0.024597；动态 history 整体均值包含换样，不直接解释成相同状态的降幅。该结果与上一节 token-mean 旧验收口径不同。
+
+三次读出分别覆盖 128／256／256 条轨迹，均无无效评分行，四个 rank 的参数／Adam 只读哈希检查均通过。保存了 256 道不同训练题的真实 token；第 1／2 批 rollout 版本分别为 0／1，末轮 history 每批 64 条。银行、训练轨迹、history 引用和逐题 RKL 均为 Parquet，manifest 完整发布；终止原因也已落盘。
+
+| 阶段（秒）                     | 第 1 轮 | 第 2 轮 |
+| ------------------------------ | ------: | ------: |
+| Rollout 管线                   |   26.21 |   26.21 |
+| Teacher 加载／卸载＋前向       |    4.13 |    3.69 |
+| Actor 的 32 次更新             |  316.56 |  299.28 |
+| 来源＋history 读出，含状态审计 |   26.21 |   24.02 |
+| 最终 checkpoint 保存           |       — |    5.29 |
+| 权重同步                       |    1.01 |    0.89 |
+| 完整 outer                     |  375.75 |  361.06 |
+
+两轮训练约 12.3 分钟；包含冷启动、初始验证与进程清理的实际运行耗时约 19.0 分钟。初始生成＋读出 129.33 秒，其中固定 token 评分与状态恢复约 15.82 秒。各阶段有额外编排开销，不能将局部计时简单当作完整 outer。
+
+仅保存`global_step_2`一份原生 FSDP model-only checkpoint，包含 4 个权重分片，总计 7,109,058,476 字节；无 optimizer 和 extra-state 权重文件，保留了原生保存器的小型配置／进度元数据。CPU 读回四个分片通过：每片 339 项，全为 FP32 且有限，合计 1,777,088,000 个本地参数元素。此次未重新加载模型做前向／RKL 对齐，也未验证拟议的统一 HF 导出器。
+
+首个实际训练尝试在初始银行阶段暴露`KVBatchMeta.fields=None`兼容问题，当时尚无参数更新。修复后将回调测试改用真实 KVBatchMeta，15 项相关 CPU 回归通过，再从原始权重重新运行本次成功验收。失败尝试保留为工程证据，不混入上述指标。
+
+[完整验收摘要](data/parquet-gpu-acceptance-20261031/summary.json)、[逐阶段验收](data/parquet-gpu-acceptance-20261031/acceptance-audit.json)与[checkpoint 读回检查](data/parquet-gpu-acceptance-20261031/checkpoint-inspection.json)对应仓库`runs/parquet-gpu-acceptance-20261031/native-a03/`。运行期间源码 hash 无变化。GPU0–3 已确认恢复为 gpu-occupy，其他实际任务未停止；[恢复记录](data/parquet-gpu-acceptance-20261031/occupancy-restored.json)保留物理映射及进程状态。
+
+未覆盖：公共 benchmark 全集 accuracy、公共 initial／teacher／current 银行、32K 评分窗口、推理专用 padding、四域数据清单与 50outer 预算。已有基础链路通过不代表这些功能已实现。
+
 ### 证据与复算
 
 结果见[审计摘要](data/validation-placement-20261031/audited-summary.json)、[投影小测](data/validation-placement-20261031/projection-probe.json)、[依赖与源码身份](data/validation-placement-20261031/dependencies.json)。输入统计见[Qwen3](data/validation-placement-20261031/qwen3-inputs.json)与[R1](data/validation-placement-20261031/r1-inputs.json)。
@@ -338,3 +372,34 @@ AdamW 使用 LR=$10^{-6}$、constant scheduler、betas=(0.9,0.999)、weight deca
 配置扫描审计：[audit_validation_sweep.py](../../../../benchmarks/profile/audit_validation_sweep.py)。执行原型：[validation_placement.py](../../../../benchmarks/profile/validation_placement.py)；分析：[analyze_validation_placement.py](../../../../benchmarks/profile/analyze_validation_placement.py)；绘图：[plot_validation_placement.py](../../../../benchmarks/profile/plot_validation_placement.py)。原始逐题读出、24 份主结果 trace、启动命令、脚本快照和日志保存在仓库同级 `wandb-logs/MirrorOPD-verl/analysis/rkl-four-gpu-20261031/`。
 
 主结果统一采用 microbatch TQ 读写。同目录的`qwen4-n128`及早期`qwen4-n768`逐题 TQ 版本只作为诊断，不混入主表。首次 shape／memory profiler 与 FSDP 参数 swap 冲突后，正式 trace 改为不记录 shape／memory；峰值显存由非 profiler 阶段的 allocator 计数提供。三个主运行均正常退出、通过逐题及恢复检查，绘图使用真实重复读数。
+
+## 统一四域评估与模型导出验收
+
+原生 V1／FSDP2／vLLM 的统一协调器完成四卡集成：JustRL→DeepSeek-R1-Distill-Qwen-1.5B，batch8、reuse2、两轮 4 次更新；source8 题，公共 RKL 面板 10 题，各模型／节点 16 条公共回答。训练与来源回答 cap7168，公共 cap32768；评估 hidden 窗口 128MiB。这里的小预算用于覆盖执行路径，不作为正式 50 轮结果。
+
+| 完成 outer | 逻辑评分行 | RKL 窗口 | Source 按题 RKL | History 批等权 RKL |
+| ---------- | ---------: | -------: | --------------: | -----------------: |
+| 0          |         28 |        3 |        0.106107 |                  — |
+| 1          |         46 |        5 |        0.105909 |           0.102227 |
+| 2          |         46 |        5 |        0.105296 |           0.104221 |
+
+每次读出都合并同一边界到期的轨迹，再按字节窗口依次进行 teacher 与 student 前向；padding 不计入逻辑行数。全部行有效，四 rank 参数／Adam 只读审计通过。outer0 的 current 结果复用 initial 评分，没有重复 forward。训练轨迹的权重版本分别为 0、1，两个 outer 确实使用 fresh student rollout。
+
+最终保存 FP32 master 权重，不保存 Adam。原生 model-only 重载的固定输入 RKL 最大误差为 0，之后删除临时 FSDP 分片；独立新进程从 HF 权重初始化，再评分原 8 条 source 轨迹，最大误差同样为 0。完整运行墙钟 660.94 秒，包含模型启动、训练、公共生成、判分、评分与导出；不能将它当作单轮训练吞吐。
+
+[验收摘要](data/unified-core-acceptance-20261031/summary.json)、[实际配置](data/unified-core-acceptance-20261031/config.yaml)和[启动时源码 hash](data/unified-core-acceptance-20261031/source-hashes.json)保留了条件与证据。原始轨迹、日志和逐 run 图表位于仓库`runs/unified-evaluation-20261031/`；后续规模验收状态由[实施页](../../architecture/evaluation/代码走读与实施计划.md#8-统一评估实现与待验收边界)维护。
+
+### 规模与六卡检查
+
+Code、Science、IF 分别完成两轮集成，每组使用 128 条对应来源留出。7B 同权重参考与 7B student／14B teacher 各对 7 条 32768 token 合成诊断前缀评分，验证长序列、补零和窗口变化，不作为自然 rollout 上的拟合结果。
+
+| Student／Teacher | window／token chunk | 窗口数 | 评分墙钟（含审计） |
+| ---------------- | ------------------- | -----: | -----------------: |
+| R1-7B／R1-7B     | 512MiB／128         |      4 |           99.04 秒 |
+| R1-7B／R1-7B     | 1GiB／256           |      2 |           52.71 秒 |
+| R1-7B／R1-14B    | 512MiB／128         |      7 |          176.36 秒 |
+| R1-7B／R1-14B    | 1GiB／256           |      3 |           80.43 秒 |
+
+两种执行配置逐题 RKL 完全一致；同权重组 RKL 为 0。窗口和 token chunk 同时改变，因此这些时延不是单因素比较。14B teacher 每条 32K 前缀的 hidden＋positions 实际传输约 320.3MiB，与 BF16 hidden 宽度 5120 的估算一致。
+
+六卡使用 batch128／reuse32 完成 32 次真实更新，物理补齐到 132 行，统计仍为 128 题。Actor 更新阶段 202.41 秒；固定 source128 的 RKL 从 0.106403 降至 0.056139，降幅 47.24%。该检查只有一个 outer，数据也不同于旧四卡基准，不能据此作严格吞吐或收敛比较。最终模型重载 RKL 误差为 0，无 Adam 文件。[规模验收摘要](data/unified-scale-acceptance-20261101/summary.json)保存逐题集合的汇总与审计。

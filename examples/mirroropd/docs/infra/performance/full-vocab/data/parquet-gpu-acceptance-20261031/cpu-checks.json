@@ -1,0 +1,11 @@
+{
+  "passed": 144,
+  "warnings": 8,
+  "seconds": 36.54,
+  "scope": "CPU regression after the GPU-discovered KVBatchMeta.fields=None fix",
+  "log_sha256": "f6b60364c380c99114c8c2eecf14ba9926840f23b82bf6fa5743c07479958fc3",
+  "files": {
+    "verl/trainer/distillation/readout.py": "0d066467b8403492124039ae44eb7fb9ca0fd9516add81c2ddba8aee901e1758",
+    "tests/trainer/distillation/test_parquet_readout_on_cpu.py": "bf7c7104a43b1d1000dd6d73106b6b85328e657e732d93e6f5824ba4e530ca82"
+  }
+}
