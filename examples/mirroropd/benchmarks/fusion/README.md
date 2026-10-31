@@ -167,6 +167,8 @@ CUDA_VISIBLE_DEVICES='' PYTHONPATH=. ../envs/mirroropd-fusion/bin/python \
 
 `probe_vllm_topology.py` 在同一个受保护的双卡分配中（例如 `FUSION_GPUS=4,5`），比较 `--tp 2 --replicas 1` 与 `--tp 1 --replicas 2`。它固定全局输入批次，按全局行号分配请求与随机种子；所有 replica 完成准备后一起释放，每个批次等待全部返回。`--max-num-seqs` 是每个 replica 的活跃请求上限，`--kv-gib` 是每张 GPU 的 KV 预算。比较相同全局活跃上限时，两个 TP1 replica 各取 TP2 上限的一半。
 
+`--fusion-space logit|probability` 显式固定融合公式；`--chat-template-kwargs '{"enable_thinking": false}'` 将同一提示协议传到各 replica，Qwen non-thinking 对照不得省略。工具在仓库内嵌套 worktree 运行时，可通过 `MIRROROPD_WORKSPACE` 指向既有共享环境和 GPU 锁所在的工作区；输出目录仍显式放在主仓库内 `runs/`。汇总按配置中实际分配的 GPU 核对资源，不固定为 GPU 6、7。
+
 每个结果分别记录完整协调器墙钟、最后一个 worker 完成生成的时间、结果文件收集时间及启动偏差，避免把文件交接成本隐藏在吞吐数中。资源监控只统计一个父进程树，不能相加两个 replica 的 RSS 峰值。异常清理仅作用于本协调器创建的进程组。
 
 `summarize_topology.py` 检查全局身份覆盖、路由、种子、完整且有限的行为概率、停止原因、TP 身份、累计抢占数和两卡资源区间。一次全局完整批用于预热，正式候选至少再测三批。该工具只证明固定 checkpoint 的生成行为与成本，训练/refit/恢复另行验收。

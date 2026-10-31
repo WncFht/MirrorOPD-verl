@@ -26,6 +26,39 @@ def test_preserve_requested_logical_order():
     assert guard.parse_gpus("5,4,0") == [5, 4, 0]
 
 
+@pytest.mark.parametrize("value", ["null", "false", "[]", "not-json"])
+def test_topology_rejects_non_object_template_options(value):
+    import argparse
+
+    from examples.mirroropd.benchmarks.fusion.probe_vllm_topology import chat_template_options
+
+    with pytest.raises(argparse.ArgumentTypeError):
+        chat_template_options(value)
+
+
+def test_topology_preserves_explicit_nonthinking_prompt_contract():
+    from examples.mirroropd.benchmarks.fusion.probe_vllm_topology import chat_template_options, render_prompts
+
+    calls = []
+
+    class Tokenizer:
+        def apply_chat_template(self, messages, **kwargs):
+            calls.append((messages, kwargs))
+            return [len(calls), 0 if kwargs.get("enable_thinking") is False else 1]
+
+    options = chat_template_options('{"enable_thinking": false}')
+    conversations = [[{"role": "user", "content": "first"}], [{"role": "user", "content": "second"}]]
+    assert render_prompts(Tokenizer(), conversations, options) == [
+        {"prompt_token_ids": [1, 0]},
+        {"prompt_token_ids": [2, 0]},
+    ]
+    assert calls == [
+        (messages, {"add_generation_prompt": True, "return_dict": False, "enable_thinking": False})
+        for messages in conversations
+    ]
+    assert options == {"enable_thinking": False}
+
+
 @pytest.fixture
 def local(tmp_path, monkeypatch):
     repo = tmp_path / "repo"

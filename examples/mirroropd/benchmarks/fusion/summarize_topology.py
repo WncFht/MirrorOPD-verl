@@ -11,7 +11,12 @@ from pathlib import Path
 
 
 def summarize(root):
+    from examples.mirroropd.benchmarks.fusion.resource_guard import parse_gpus
+
     config = json.loads((root / "config.json").read_text())
+    devices = parse_gpus(config["physical_gpus"])
+    if len(devices) != 2:
+        raise ValueError("Topology summary requires exactly two allocated GPUs")
     prompts_raw = (root / "prompts.json").read_bytes()
     prompts = json.loads(prompts_raw)
     if config["tp"] * config["replicas"] != 2 or len(prompts) != config["batch"] or config["repeats"] < 1:
@@ -97,13 +102,15 @@ def summarize(root):
             raise ValueError("Wrong native TP topology")
         if any(r["tensor_parallel_size"] != config["tp"] or r["alpha"] != config["alpha"] for r in audit):
             raise ValueError("Wrong native execution settings")
+        if any(r.get("fusion_space", "logit") != config.get("fusion_space", "logit") for r in audit):
+            raise ValueError("Native fusion space differs from the declared protocol")
         if any(r["student_path"] != config["student"] or r["teacher_path"] != config["teacher"] for r in audit):
             raise ValueError("Native model binding differs from the declared pair")
     resources = [json.loads(line) for line in (root / "resources.jsonl").read_text().splitlines()]
-    if resources[0].get("physical_gpus") != [6, 7] or resources[-1]["kind"] != "end":
+    if resources[0].get("physical_gpus") != devices or resources[-1]["kind"] != "end":
         raise ValueError("Incomplete protected two-GPU resource interval")
     samples = [r for r in resources if r["kind"] == "sample"]
-    if any({g["index"] for g in r["gpus"]} != {6, 7} for r in samples):
+    if not samples or any(len(r["gpus"]) != 2 or {g["index"] for g in r["gpus"]} != set(devices) for r in samples):
         raise ValueError("Resource samples differ from the protected allocation")
     measured = batches[1:]
     return {
@@ -116,7 +123,7 @@ def summarize(root):
         "median_seconds": statistics.median(r["seconds"] for r in measured),
         "median_tokens_per_second": statistics.median(r["tokens_per_second"] for r in measured),
         "nvml_peak_bytes_by_gpu": {
-            str(gpu): max(g["memory_used"] for r in samples for g in r["gpus"] if g["index"] == gpu) for gpu in [6, 7]
+            str(gpu): max(g["memory_used"] for r in samples for g in r["gpus"] if g["index"] == gpu) for gpu in devices
         },
         "cpu_rss_sum_peak_bytes": max(r["process_tree_rss_sum"] for r in samples),
         "resource_scope": "One coordinator process tree; do not sum replica RSS peaks",
