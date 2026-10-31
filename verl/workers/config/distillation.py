@@ -56,8 +56,8 @@ class FullVocabConfig(BaseConfig):
             raise ValueError("full_vocab.termination_token_ids must be a list of nonnegative integers")
         if ids and (len(ids) < 2 or len(set(ids)) != len(ids)):
             raise ValueError("termination equivalence requires at least two distinct token IDs")
-        if ids and self.backend != "precompute":
-            raise ValueError("termination equivalence currently requires full_vocab.backend=precompute")
+        if ids and self.backend not in ("precompute", "precompute_fused"):
+            raise ValueError("termination equivalence requires full_vocab.backend=precompute or precompute_fused")
 
     def validate_termination_support(self, *, eos_token_ids, stop_token_ids, vocab_ids, vocab_size):
         """Check real model/tokenizer and generation semantics after loading metadata."""

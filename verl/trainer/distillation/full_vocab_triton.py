@@ -197,7 +197,20 @@ def weighted_rows(logits, residual, dtype, *, variance=False, gradient=True):
 
 @triton.jit
 def _difference(
-    Z, T, A, PIVOT, OUT, V: tl.constexpr, TS: tl.constexpr, ETA: tl.constexpr, ANCHOR: tl.constexpr, B: tl.constexpr
+    Z,
+    T,
+    A,
+    PIVOT,
+    OUT,
+    CZ,
+    CT,
+    CA,
+    V: tl.constexpr,
+    TS: tl.constexpr,
+    ETA: tl.constexpr,
+    ANCHOR: tl.constexpr,
+    CORRECT: tl.constexpr,
+    B: tl.constexpr,
 ):
     row, part = tl.program_id(0), tl.program_id(1)
     c = part * B + tl.arange(0, B)
@@ -212,10 +225,20 @@ def _difference(
         result = ((z - z0) - (a - a0)) - ETA * ((t - t0) - (a - a0))
     else:
         result = (z - z0) - (t - t0)
+    if CORRECT:
+        active = (c == V - 1).to(tl.float64) - (p == V - 1).to(tl.float64)
+        cz = tl.load(CZ + row)
+        ct = tl.load(CT + row)
+        if ANCHOR:
+            ca = tl.load(CA + row)
+            result += active * ((cz - ca) - ETA * (ct - ca))
+        else:
+            result += active * (cz - ct)
     tl.store(OUT + row * V + c, result, c < V)
 
 
-def difference(z, teacher, pivot=None, *, anchor=None, eta=1.0):
+def difference(z, teacher, pivot=None, *, anchor=None, eta=1.0, corrections=None):
+    """Centered differences; optional last-action remainders order z/T[/anchor]."""
     pivot = z.argmax(-1) if pivot is None else pivot.reshape(-1)
     r = torch.empty_like(z)
     _difference[(len(z), triton.cdiv(z.shape[1], 1024))](
@@ -224,18 +247,22 @@ def difference(z, teacher, pivot=None, *, anchor=None, eta=1.0):
         z if anchor is None else anchor,
         pivot,
         r,
+        z if corrections is None else corrections[0],
+        z if corrections is None else corrections[1],
+        z if corrections is None or anchor is None else corrections[2],
         z.shape[1],
         teacher.stride(0),
         eta,
         anchor is not None,
+        corrections is not None,
         1024,
         enable_fp_fusion=False,
     )
     return r
 
 
-def fused_rows(zp, zt, dtype):
-    value, gradient, _ = weighted_rows(zp, difference(zp, zt), dtype)
+def fused_rows(zp, zt, dtype, *, corrections=None):
+    value, gradient, _ = weighted_rows(zp, difference(zp, zt, corrections=corrections), dtype)
     return value, gradient
 
 
@@ -369,6 +396,10 @@ def _split_residual(
     QT,
     R,
     NORM,
+    CZ,
+    CQ,
+    CT,
+    CORRECT: tl.constexpr,
     V: tl.constexpr,
     TS: tl.constexpr,
     P: tl.constexpr,
@@ -391,17 +422,24 @@ def _split_residual(
     dt = t.to(tl.float64) - t0.to(tl.float64)
     dz = z.to(tl.float64) - z0.to(tl.float64)
     delta = dt - dq
+    zq, zt = dz - dq, dz - dt
+    if CORRECT:
+        active = (c == V - 1).to(tl.float64) - (a == V - 1).to(tl.float64)
+        cz, cq, ct = tl.load(CZ + row), tl.load(CQ + row), tl.load(CT + row)
+        delta += active * (ct - cq)
+        zq += active * (cz - cq)
+        zt += active * (cz - ct)
     if ETA == 1:
-        residual = dz - dt
+        residual = zt
     elif K == 0:
-        residual = (dz - dq) - ETA * delta
+        residual = zq - ETA * delta
     else:
         ra = tl.load(QSTATS + row * 4 + 2) - tl.load(QT + row)
         odds = LE - LC + K * ra
         choose_teacher = odds > 0
         small_weight = tl.sigmoid(-tl.abs(odds))
         increment = _power(tl.where(choose_teacher, -delta, delta).to(tl.float32), small_weight, K)
-        residual = (dz - tl.where(choose_teacher, dt, dq)) - increment
+        residual = tl.where(choose_teacher, zt, zq) - increment
     tl.store(R + row * V + c, residual, c < V)
     if NORMALIZER:
         ra = tl.load(QSTATS + row * 4 + 2) - tl.load(QT + row)
@@ -417,17 +455,28 @@ def _split_residual(
         tl.store(NORM + (row * P + part) * 2 + 1, log_sum)
 
 
-def fused_mirror_logits(z, anchor, teacher, dtype, *, spec):
-    """Production split-target path: raw logits in, stable value/VJP out."""
+def fused_mirror_logits(z, anchor, teacher, dtype, *, spec, corrections=None):
+    """Stable value/VJP; corrections are FP64 row vectors ordered student/q/T.
+
+    Only the last compact action carries a rounding remainder. The vectors are
+    produced by TerminationActionMap, while probability reductions stay FP32.
+    """
     from verl.trainer.distillation.numerics import power_gap_coefficients, support_correction
 
     n, v = z.shape
+    # Only the last (merged) action has a rounding remainder. All full-size
+    # buffers and row reductions remain FP32; differences keep the remainder.
+    zq_c = None if corrections is None else (corrections[0], corrections[1])
+    zt_c = None if corrections is None else (corrections[0], corrections[2])
+    qt_c = None if corrections is None else (corrections[1], corrections[2])
     pivot = anchor.argmax(-1)
     normalizer = spec.objective == "mdpo" or spec.diagnostics
     need_qt = spec.eta != 1 and (normalizer or spec.kappa != 0)
     correction = support_correction(teacher, v) if (need_qt or normalizer) else z.new_zeros(n)
     if need_qt:
-        qt, _, stats = weighted_rows(anchor, difference(anchor, teacher, pivot), dtype, gradient=False)
+        qt, _, stats = weighted_rows(
+            anchor, difference(anchor, teacher, pivot, corrections=qt_c), dtype, gradient=False
+        )
         qt = qt + correction
     else:
         qt, stats = z.new_empty(n), z.new_empty((n, 4))
@@ -444,6 +493,10 @@ def fused_mirror_logits(z, anchor, teacher, dtype, *, spec):
         qt,
         residual,
         partial,
+        z if corrections is None else corrections[0],
+        z if corrections is None else corrections[1],
+        z if corrections is None else corrections[2],
+        corrections is not None,
         v,
         teacher.stride(0),
         parts,
@@ -481,8 +534,8 @@ def fused_mirror_logits(z, anchor, teacher, dtype, *, spec):
         if spec.objective == "bpo":
             target, _, _ = weighted_rows(z, residual, dtype, gradient=False)
         del residual
-        aq, _, _ = weighted_rows(z, difference(z, anchor), dtype, gradient=False)
-        at, _, _ = weighted_rows(z, difference(z, teacher), dtype, gradient=False)
+        aq, _, _ = weighted_rows(z, difference(z, anchor, corrections=zq_c), dtype, gradient=False)
+        at, _, _ = weighted_rows(z, difference(z, teacher, corrections=zt_c), dtype, gradient=False)
         info = torch.stack([target, log_z, aq, at + correction], -1)
     return value, gradient, info
 

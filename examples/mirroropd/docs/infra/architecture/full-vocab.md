@@ -166,3 +166,11 @@ Teacher hidden 运输规模约为有效预测行数乘 $d_t$；需要 full ancho
 CPU 数学测试不等同于 CUDA BF16/Triton 精度验收。已有 GPU 证据见[主分支四卡验收](../../archive/engineering/2026-10-25-主分支四卡验收.md)，性能测量从 [profile](../performance/full-vocab/README.md)进入。
 
 共享训练入口对 Qwen3 MoE 的放行限定为 full-vocab teacher，采用与上述输出适配器一致的 `qwen3_moe` 类型；student 和其他 MoE 架构继续受共享入口原有限制。入口层回归测试覆盖正式 teacher 配置构建，补充独立 FSDP2 数值验收未覆盖的主训练初始化检查。
+
+## EOS 合并的共享精度路径
+
+停止类配置支持 `precompute` 与 `precompute_fused`，要求师生词表相同且至少两个合法停止 ID。`TerminationActionMap` 在一次 loss 调用开始时构造固定整数索引，所有 token chunk 复用；普通 Full-KL 和一般 MDPO 共用合并及梯度回传，不增加跨 inner-update 的目标缓存。
+
+`precompute` 保留高精度 Torch 参考。CUDA fused 路径把非 EOS logits 保持为 FP32，将合并 EOS 的 FP32 主值与逐行 FP64 舍入修正分开保存；相对差分先消去公共偏移，再加入修正，主要归约使用现有稳定 kernel。没有完整词表 FP64 工作区，也没有每块动态布尔压缩。FP16 的预计算梯度仍在 AMP 缩放前保留 FP32。
+
+Teacher-only KL 的 loss 使用合并动作空间，原始 vocabulary KL 指标仍保留原定义；MDPO 的 teacher/anchor/target 指标使用合并动作空间。Torch 诊断使用只返回数值的 `kl_values`；融合诊断继续使用 `gradient=False`。数值与分布式检查入口见[验证矩阵](../numerics/full-vocab/validation.md)。

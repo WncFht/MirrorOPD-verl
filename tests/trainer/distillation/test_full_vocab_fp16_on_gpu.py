@@ -70,7 +70,8 @@ def test_fp16_precompute_preserves_small_vjp_until_upstream_scaling(eta, backend
         assert relative < 0.02, relative.item()
 
 
-def test_fp16_termination_vjp_keeps_small_gradients_before_amp_scale():
+@pytest.mark.parametrize("backend", ["precompute", "precompute_fused"])
+def test_fp16_termination_vjp_keeps_small_gradients_before_amp_scale(backend):
     from verl.trainer.distillation.full_vocab import full_reverse_kl_result
 
     torch.manual_seed(94)
@@ -86,7 +87,7 @@ def test_fp16_termination_vjp_keeps_small_gradients_before_amp_scale():
     gap[:, [2, 3]] = (lp[:, [2, 3]].logsumexp(-1) - lt[:, [2, 3]].logsumexp(-1))[:, None]
     expected = (lp.exp() * gap).sum()
     reference = torch.autograd.grad(expected, (rh, rw))
-    actual = full_reverse_kl_result(hs, ws, ht, wt, backend="precompute", token_chunk=2, termination_token_ids=(2, 3))
+    actual = full_reverse_kl_result(hs, ws, ht, wt, backend=backend, token_chunk=2, termination_token_ids=(2, 3))
     scale = 1024.0
     gradients = torch.autograd.grad(actual.loss_sum * scale, (hs, ws))
     for gradient, wanted in zip(gradients, reference, strict=True):

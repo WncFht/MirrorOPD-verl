@@ -11,6 +11,7 @@ import json
 import math
 import shutil
 import tempfile
+from dataclasses import replace
 from functools import partial
 from pathlib import Path
 from types import SimpleNamespace
@@ -40,6 +41,9 @@ def main():
     parser.add_argument("--estimator", choices=["full_vocab", "sampled"], default="full_vocab")
     parser.add_argument("--backend", default="precompute_fused")
     parser.add_argument("--eta", type=float, default=0.3)
+    parser.add_argument("--kappa", type=float, default=0.5)
+    parser.add_argument("--termination-ids", type=int, nargs="*", default=[])
+    parser.add_argument("--compare-backend", choices=["precompute", "precompute_fused"])
     parser.add_argument("--tied", action="store_true")
     parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
     parser.add_argument("--checkpoint", action="store_true")
@@ -65,7 +69,7 @@ def main():
             torch.manual_seed(100 + i)
             model = AutoModelForCausalLM.from_config(
                 (Qwen3Config if args.model_type == "qwen3" else Qwen2Config)(
-                    vocab_size=32 + (3 if name == "teacher" else 0),
+                    vocab_size=32 + (3 if name == "teacher" and not args.termination_ids else 0),
                     hidden_size=32,
                     intermediate_size=64,
                     num_hidden_layers=2,
@@ -105,8 +109,12 @@ def main():
                 module.register_forward_hook(record_dtype(name))
     loss_cfg = DistillationLossConfig(
         loss_mode="mirror",
-        mirror=dict(objective=args.objective, estimator=args.estimator, eta=args.eta, kappa=0.5, diagnostics=full),
-        full_vocab=FullVocabConfig(backend=args.backend, token_chunk_size=2, vocab_chunk_size=7),
+        mirror=dict(
+            objective=args.objective, estimator=args.estimator, eta=args.eta, kappa=args.kappa, diagnostics=full
+        ),
+        full_vocab=FullVocabConfig(
+            backend=args.backend, token_chunk_size=2, vocab_chunk_size=7, termination_token_ids=args.termination_ids
+        ),
         use_policy_gradient=not full,
         policy_loss_mode="vanilla" if full else "token_is",
         use_task_rewards=False,
@@ -227,10 +235,31 @@ def main():
         all_records.append({"outer": version, "loss": values, "updates": 3})
 
     initial = local_snapshot(dict(actor.engine.module.named_parameters()))
-    if args.compare_legacy:
-        assert spec.teacher_only_kl
+    if args.compare_legacy or args.compare_backend:
+        if args.compare_legacy:
+            assert spec.teacher_only_kl
         actor.save_checkpoint(str(root / "initial"), global_step=0)
     run_outer(1)
+    backend_parameter_error = None
+    if args.compare_backend:
+        expected_parameters = local_snapshot(dict(actor.engine.module.named_parameters()))
+        expected_optimizer = local_snapshot(actor.engine.optimizer.state_dict())
+        actor.save_checkpoint(str(root / "primary-after"), global_step=1)
+        actor.load_checkpoint(str(root / "initial"))
+        primary_config = actor.engine.full_vocab_config
+        actor.engine.full_vocab_config = replace(primary_config, backend=args.compare_backend)
+        run_outer(1)
+        actual = local_snapshot(dict(actor.engine.module.named_parameters()))
+        torch.testing.assert_close(actual, expected_parameters, atol=1e-6, rtol=1e-5)
+        torch.testing.assert_close(
+            local_snapshot(actor.engine.optimizer.state_dict()), expected_optimizer, atol=1e-6, rtol=1e-3
+        )
+        backend_parameter_error = max((actual[k] - expected_parameters[k]).abs().max().item() for k in actual)
+        errors = [None] * world
+        dist.all_gather_object(errors, backend_parameter_error)
+        backend_parameter_error = max(errors)
+        actor.engine.full_vocab_config = primary_config
+        actor.load_checkpoint(str(root / "primary-after"))
     if args.compare_legacy:
         expected_parameters = local_snapshot(dict(actor.engine.module.named_parameters()))
         expected_optimizer = local_snapshot(actor.engine.optimizer.state_dict())
@@ -272,7 +301,7 @@ def main():
     after = local_snapshot(dict(actor.engine.module.named_parameters()))
     assert any(not torch.equal(initial[k], after[k]) for k in initial)
     if spec.anchor_payload:
-        assert not torch.equal(snapshots[0], snapshots[1]), "next outer must refresh q"
+        assert not torch.equal(snapshots[0], snapshots[-1]), "next outer must refresh q"
     if args.checkpoint:
         actor.save_checkpoint(str(root / "checkpoint"), global_step=2)
         run_outer(3)
@@ -310,7 +339,11 @@ def main():
         tied=args.tied,
         checkpoint=args.checkpoint,
         world_size=world,
-        teacher_extra_rows=3,
+        teacher_extra_rows=0 if args.termination_ids else 3,
+        termination_ids=args.termination_ids,
+        kappa=args.kappa,
+        compare_backend=args.compare_backend,
+        backend_max_parameter_abs_error=backend_parameter_error,
         records=all_records,
         frozen_anchor=True,
         endpoint_legacy_equal=args.compare_legacy,
