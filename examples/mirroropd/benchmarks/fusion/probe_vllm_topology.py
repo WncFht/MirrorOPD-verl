@@ -28,6 +28,27 @@ def assigned_devices(allocation, tp, replicas, rank=None):
     return ",".join(str(device) for device in devices[rank * tp : (rank + 1) * tp])
 
 
+def chat_template_options(value):
+    try:
+        options = json.loads(value)
+    except json.JSONDecodeError as error:
+        raise argparse.ArgumentTypeError("chat-template-kwargs must be valid JSON") from error
+    if not isinstance(options, dict):
+        raise argparse.ArgumentTypeError("chat-template-kwargs must be a JSON object")
+    return options
+
+
+def render_prompts(tokenizer, conversations, options):
+    return [
+        {
+            "prompt_token_ids": tokenizer.apply_chat_template(
+                list(row), add_generation_prompt=True, return_dict=False, **options
+            )
+        }
+        for row in conversations
+    ]
+
+
 def write_json(path, value):
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(value) + "\n")
@@ -92,7 +113,7 @@ def worker(args):
         model=args.student,
         tokenizer=args.student,
         dtype="bfloat16",
-        hf_overrides=fusion_hf_overrides(args.teacher),
+        hf_overrides=fusion_hf_overrides(args.teacher, args.fusion_space),
         tensor_parallel_size=args.tp,
         enforce_eager=not args.graph,
         compilation_config=decode_graph_config(args.max_num_seqs) if args.graph else None,
@@ -184,6 +205,8 @@ def main():
     parser.add_argument("--max-num-seqs", type=int, required=True, help="Per-replica active request limit")
     parser.add_argument("--kv-gib", type=float, required=True, help="Per-GPU KV allocation")
     parser.add_argument("--alpha", type=float, default=0.5)
+    parser.add_argument("--fusion-space", choices=["logit", "probability"], default="logit")
+    parser.add_argument("--chat-template-kwargs", type=chat_template_options, default={})
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--graph", action="store_true")
     parser.add_argument("--stop-token-ids", type=int, nargs="+", default=[151643, 151645])
@@ -213,7 +236,8 @@ def main():
     allocation = os.environ.get("FUSION_GPUS", "")
     try:
         expected = assigned_devices(allocation, args.tp, args.replicas, args.rank)
-        verify_allocation(Path(__file__).resolve().parents[5], allocation, visible=expected)
+        workspace = Path(os.environ.get("MIRROROPD_WORKSPACE", Path(__file__).resolve().parents[5]))
+        verify_allocation(workspace.resolve(), allocation, visible=expected)
     except (OSError, ValueError, KeyError, TypeError) as error:
         parser.error(f"Run inside the protected two-GPU allocation: {error}")
     if args.rank is not None:
@@ -230,10 +254,7 @@ def main():
     frame = pd.read_parquet(args.data)
     if len(frame) < args.batch:
         raise ValueError("Insufficient workload rows")
-    prompts = [
-        {"prompt_token_ids": tokenizer.apply_chat_template(list(row), add_generation_prompt=True, return_dict=False)}
-        for row in frame["prompt"].iloc[: args.batch]
-    ]
+    prompts = render_prompts(tokenizer, frame["prompt"].iloc[: args.batch], args.chat_template_kwargs)
     if any(len(p["prompt_token_ids"]) + args.cap > args.max_model_len for p in prompts):
         raise ValueError("Declared cap plus prompt exceeds context")
     write_json(args.out / "prompts.json", prompts)
