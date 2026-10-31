@@ -173,4 +173,4 @@ CUDA_VISIBLE_DEVICES='' PYTHONPATH=. ../envs/mirroropd-fusion/bin/python \
 
 `summarize_topology.py` 检查全局身份覆盖、路由、种子、完整且有限的行为概率、停止原因、TP 身份、累计抢占数和两卡资源区间。一次全局完整批用于预热，正式候选至少再测三批。该工具只证明固定 checkpoint 的生成行为与成本，训练/refit/恢复另行验收。
 
-协调器的四项 CPU 假 worker 检查、两种拓扑共十六项汇总边界检查及 CLI 检查已通过；真实两卡执行仍待完成。待测入口先用 batch4/cap32、context1024、每卡 KV1 GiB 做 smoke，再使用 batch64/cap7168 的正式负载。只有 TP 数值与实际 GPU smoke 通过后，才能把此入口的结果纳入拓扑选择。
+P（R1-1.5B＋Polaris-7B）与 Q（Qwen3-1.7B non-thinking＋4B）的两种拓扑已通过 batch4/cap32 smoke，并完成 logit fusion 的 batch64/cap7168 自然生成；TP2 各保留三次预热后测量，两个 TP1 各为一次筛选。两组 TP2 的真实采样 FP64 oracle 已通过；独立 native 组件的 TP 校准及这些候选的真实训练/refit 另行验收。数值、配置和逐次范围见[拓扑测量结果](../../docs/infra/rollout/fusion/2026-10-28-vLLM双模型融合重构与优化方案.md#85-完整自然生成的并发与拓扑选择)。完整负载启用 sleep allocator，与 colocated 路径一致。
