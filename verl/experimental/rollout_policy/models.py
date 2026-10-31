@@ -40,12 +40,24 @@ def resolve_bindings(policy, learner_path, teacher_path=None, *, resolve_path=lo
     }
 
 
+def reachable_sources(policy, bindings):
+    """Representative bindings needed by a schedule after identity folding."""
+    if policy.mode == "single":
+        return ("model",)
+    rule = policy.right_weight
+    if (rule.kind == "constant" or rule.start == rule.end) and rule.start in (0, 1):
+        return ("left" if rule.start == 0 else "right",)
+    if bindings["left"].same_model(bindings["right"]):
+        return ("left",)
+    return ("left", "right")
+
+
 def requires_token_generator(policy, bindings):
-    if policy.mode != "token_mixture" or bindings["left"].same_model(bindings["right"]):
+    if policy.mode != "token_mixture" or len(reachable_sources(policy, bindings)) == 1:
         return False
     rule = policy.right_weight
-    # A nonconstant schedule can enter the interior after an endpoint batch.
-    return not (rule.start == rule.end and rule.start in (0, 1))
+    # Integer clocks jump directly between endpoints for a one-step schedule.
+    return not (rule.kind == "linear" and rule.steps == 1 and rule.start in (0, 1) and rule.end in (0, 1))
 
 
 def load_model_metadata(paths):

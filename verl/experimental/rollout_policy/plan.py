@@ -227,7 +227,13 @@ def build_plan(
 ):
     if not uids or len(uids) != len(stable_ids) or len(set(uids)) != len(uids):
         raise ValueError("A rollout batch requires unique prompt uids and matching stable row identities")
-    if type(n) is not int or n < 1 or collection_step < 0:
+    if (
+        type(n) is not int
+        or n < 1
+        or type(collection_step) is not int
+        or collection_step < 0
+        or (optimizer_step is not None and (type(optimizer_step) is not int or optimizer_step < 0))
+    ):
         raise ValueError("Invalid response count or collection step")
     completed_outer = max(collection_step - 1, 0)
     rule = policy.right_weight if policy.mode != "single" else CoefficientRule(start=0, end=0)
