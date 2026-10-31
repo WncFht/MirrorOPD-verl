@@ -12,6 +12,7 @@ from typing import NamedTuple
 import torch
 
 from verl.trainer.distillation.profiling import full_kl_range
+from verl.trainer.distillation.termination import TerminationActionMap
 from verl.utils.linear import ProjectionFP32, project  # noqa: F401
 
 
@@ -172,33 +173,23 @@ def precompute_kl_rows(hs, ws, ht, wt):
     return kl, dz if hs.dtype == torch.float16 else dz.to(hs.dtype)
 
 
-def termination_equivalent_kl_rows(hs, ws, ht, wt, *, termination_token_ids):
-    """Coarsen a stopping-action class while preserving raw KL diagnostics.
-
-    The class log-ratio is log(P(E)/Q(E)); its contribution to each member's
-    logit VJP is p_i * (class_log_ratio - coarsened_KL). No stopping mass is
-    dropped or reassigned to a preferred token ID.
-    """
-    from verl.trainer.distillation.numerics import kl_rows, log_softmax
+def termination_equivalent_kl_rows(hs, ws, ht, wt, *, actions, fused=False):
+    """Coarsened loss/VJP, with native-vocabulary KL retained as its metric."""
+    from verl.trainer.distillation.numerics import kl_rows, kl_values
 
     zp, zt = project(hs, ws), project(ht, wt)
-    raw_kl, _ = kl_rows(zp, zt)
-    ids = tuple(termination_token_ids)
-    keep = torch.ones(len(ws), dtype=torch.bool, device=hs.device)
-    keep[list(ids)] = False
-    # Only this optional coarsened-action path promotes its row algebra. The
-    # aggregated class logit must retain small within-class normalizer changes.
-    student, teacher = zp.double(), zt.double()
-    zs = torch.cat([student[:, keep], student[:, ids].logsumexp(-1, keepdim=True)], -1)
-    ts = torch.cat([teacher[:, keep], teacher[:, ids].logsumexp(-1, keepdim=True)], -1)
-    coarse_kl, gc = kl_rows(zs, ts)
-    gradient = torch.empty_like(student)
-    gradient[:, keep] = gc[:, :-1]
-    gradient[:, ids] = gc[:, -1:] * log_softmax(student[:, ids]).exp()
-    pivot = zp.argmax(-1, keepdim=True)
-    nonpivot = gradient.scatter(-1, pivot, 0.0)
-    gradient = nonpivot.scatter(-1, pivot, -nonpivot.sum(-1, keepdim=True))
     dtype = torch.float32 if hs.dtype == torch.float16 else hs.dtype
+    student, student_error = actions.coarsen(zp, compensated=fused)
+    teacher, teacher_error = actions.coarsen(zt, compensated=fused)
+    if fused:
+        from verl.trainer.distillation.full_vocab_triton import difference, fused_rows, weighted_rows
+
+        raw_kl, _, _ = weighted_rows(zp, difference(zp, zt), dtype, gradient=False)
+        coarse_kl, gradient = fused_rows(student, teacher, torch.float32, corrections=(student_error, teacher_error))
+    else:
+        raw_kl = kl_values(zp, zt)
+        coarse_kl, gradient = kl_rows(student, teacher)
+    gradient = actions.expand_gradient(gradient, zp)
     return coarse_kl.to(zp.dtype), gradient.to(dtype), raw_kl
 
 
@@ -318,8 +309,8 @@ def full_reverse_kl_result(
     if ids:
         if len(ids) < 2 or len(set(ids)) != len(ids) or any(type(i) is not int or not 0 <= i < len(ws) for i in ids):
             raise ValueError("termination equivalence requires distinct supported token IDs")
-        if backend != "precompute" or len(ws) != len(wt):
-            raise ValueError("termination equivalence requires precompute and equal vocabulary widths")
+        if backend not in ("precompute", "precompute_fused") or len(ws) != len(wt):
+            raise ValueError("termination equivalence requires precompute/precompute_fused and equal vocabulary widths")
     if len(hs) == 0:
         total = hs.sum() * 0 + ws.sum() * 0
         rows = None if backend == "liger" else hs.new_empty(0).detach()
@@ -341,11 +332,18 @@ def full_reverse_kl_result(
     if backend in ("recompute", "streaming"):
         return finish(RecomputedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk if backend == "streaming" else 0))
     if backend in ("precompute", "precompute_fused"):
-        row_kernel = partial(termination_equivalent_kl_rows, termination_token_ids=ids) if ids else precompute_kl_rows
-        if backend == "precompute_fused" and hs.is_cuda and hs.dtype in (torch.float16, torch.bfloat16, torch.float32):
+        fused = (
+            backend == "precompute_fused" and hs.is_cuda and hs.dtype in (torch.float16, torch.bfloat16, torch.float32)
+        )
+        if ids:
+            actions = TerminationActionMap.create(len(ws), ids, hs.device)
+            row_kernel = partial(termination_equivalent_kl_rows, actions=actions, fused=fused)
+        elif fused:
             from verl.trainer.distillation.full_vocab_triton import fused_kl_rows
 
             row_kernel = fused_kl_rows
+        else:
+            row_kernel = precompute_kl_rows
         return FullKLResult(*PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel))
     if backend == "cached":
         return finish(CachedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk))
@@ -373,11 +371,7 @@ class FullVocabObjectiveResult(NamedTuple):
 _MIRROR_DIAGNOSTICS = ("target_kl", "target_log_z", "anchor_kl", "teacher_kl")
 
 
-def _coarsen_logits(logits, ids, keep):
-    return torch.cat([logits[:, keep], logits[:, ids].logsumexp(-1, keepdim=True)], dim=-1)
-
-
-def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, termination_token_ids=()):
+def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, actions=None):
     with full_kl_range("teacher_projection_and_normalization"):
         zt = project(ht, wt)
     with full_kl_range("anchor_projection_and_normalization"):
@@ -385,44 +379,32 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, termination_token
     with full_kl_range("student_projection"):
         z = project(hs, ws)
     with full_kl_range("mirror_rows"):
+        original_z = z
+        corrections = None
+        if actions is not None:
+            z, ez = actions.coarsen(z, compensated=fused)
+            zq, eq = actions.coarsen(zq, compensated=fused)
+            zt, et = actions.coarsen(zt, compensated=fused)
+            corrections = (ez, eq, et) if fused else None
         if fused:
             from verl.trainer.distillation.full_vocab_triton import fused_mirror_logits
 
-            return fused_mirror_logits(z, zq, zt, torch.float32 if hs.dtype == torch.float16 else hs.dtype, spec=spec)
-        from verl.trainer.distillation.numerics import mirror_logits_rows
-
-        ids = tuple(termination_token_ids)
-        if ids:
-            # Construct the power-mean target in action space. Aggregation and
-            # geometric mixing do not commute; coarsen q and teacher first.
-            student, anchor, teacher = z.double(), zq.double(), zt.double()
-            keep = torch.ones(len(ws), device=z.device, dtype=torch.bool)
-            keep[list(ids)] = False
-            rows, coarse_dz, info = mirror_logits_rows(
-                _coarsen_logits(student, ids, keep),
-                _coarsen_logits(anchor, ids, keep),
-                _coarsen_logits(teacher, ids, keep),
-                objective=spec.objective,
-                kappa=spec.kappa,
-                eta=spec.eta,
-                diagnostics=spec.diagnostics,
-            )
-            # d logsumexp(z_E) / d z_i = p_i / P(E). The anchor and teacher
-            # remain detached inside mirror_logits_rows; only learner logits chain back.
-            dz = torch.empty_like(student)
-            dz[:, keep] = coarse_dz[:, :-1]
-            dz[:, ids] = coarse_dz[:, -1:] * student[:, ids].softmax(-1)
-            pivot = z.argmax(-1, keepdim=True)
-            others = dz.scatter(-1, pivot, 0.0)
-            dz = others.scatter(-1, pivot, -others.sum(-1, keepdim=True))
+            dtype = torch.float32 if actions is not None or hs.dtype == torch.float16 else hs.dtype
+            rows, dz, diag = fused_mirror_logits(z, zq, zt, dtype, spec=spec, corrections=corrections)
         else:
+            from verl.trainer.distillation.numerics import mirror_logits_rows
+
             rows, dz, info = mirror_logits_rows(
                 z, zq, zt, objective=spec.objective, kappa=spec.kappa, eta=spec.eta, diagnostics=spec.diagnostics
             )
+            diag = (
+                torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS], dim=-1)
+                if spec.diagnostics
+                else z.new_empty((len(hs), 0))
+            )
+        if actions is not None:
+            dz = actions.expand_gradient(dz, original_z)
         dz = dz.float() if hs.dtype == torch.float16 else dz.to(hs.dtype)
-    diag = (
-        torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS], dim=-1) if spec.diagnostics else z.new_empty((len(hs), 0))
-    )
     return rows, dz, diag
 
 
@@ -464,8 +446,10 @@ def full_vocab_objective_result(
         return FullVocabObjectiveResult(result.loss_sum, result.token_kl, {})
     if termination_token_ids:
         ids = tuple(termination_token_ids)
-        if spec.objective != "mdpo" or backend not in ("dense", "precompute"):
-            raise ValueError("Mirror termination equivalence requires MDPO with dense/precompute backend")
+        if spec.objective != "mdpo" or backend not in ("dense", "precompute", "precompute_fused"):
+            raise ValueError(
+                "Mirror termination equivalence requires MDPO with dense/precompute/precompute_fused backend"
+            )
         if len(wt) != len(ws) or len(ids) < 2 or len(set(ids)) != len(ids):
             raise ValueError("Mirror termination equivalence requires equal vocabularies and distinct stop IDs")
         if any(type(i) is not int or i < 0 or i >= len(ws) for i in ids):
@@ -493,8 +477,9 @@ def full_vocab_objective_result(
     ht, wt, hq, wq = (x.detach() for x in (ht, wt, hq, wq))
     if len(hs) == 0:
         return FullVocabObjectiveResult(hs.sum() * 0 + ws.sum() * 0, hs.new_empty(0), {})
+    actions = TerminationActionMap.create(len(ws), termination_token_ids, hs.device) if termination_token_ids else None
     if backend == "dense":
-        rows, _, diag = _mirror_rows(hs, ws, ht, wt, hq, wq, spec, termination_token_ids=termination_token_ids)
+        rows, _, diag = _mirror_rows(hs, ws, ht, wt, hq, wq, spec, actions=actions)
         total = rows.sum()
     else:
         from functools import partial
@@ -504,7 +489,7 @@ def full_vocab_objective_result(
             fused=backend == "precompute_fused"
             and hs.is_cuda
             and hs.dtype in (torch.float16, torch.bfloat16, torch.float32),
-            termination_token_ids=termination_token_ids,
+            actions=actions,
         )
         total, rows, diag = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
     info = {k: diag[:, i].detach() for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if spec.diagnostics else {}

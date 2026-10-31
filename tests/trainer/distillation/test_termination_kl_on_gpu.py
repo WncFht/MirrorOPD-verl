@@ -9,8 +9,9 @@ from verl.trainer.distillation.full_vocab import full_reverse_kl_result, project
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
+@pytest.mark.parametrize("backend", ["precompute", "precompute_fused"])
 @pytest.mark.parametrize("chunk", [1, 5])
-def test_bfloat16_projection_and_vjp_match_autograd(chunk):
+def test_bfloat16_projection_and_vjp_match_autograd(chunk, backend):
     torch.manual_seed(36)
     hs = (torch.randn(9, 32, device="cuda", dtype=torch.bfloat16) * 0.2).requires_grad_()
     ws = (torch.randn(128, 32, device="cuda", dtype=torch.bfloat16) * 0.2).requires_grad_()
@@ -24,7 +25,7 @@ def test_bfloat16_projection_and_vjp_match_autograd(chunk):
     qc = torch.cat((q[:, rest], q[:, ids].sum(-1, keepdim=True)), dim=-1)
     expected = (pc * (pc.log() - qc.log())).sum()
     grads = torch.autograd.grad(expected, (hs, ws))
-    actual = full_reverse_kl_result(hs, ws, ht, wt, backend="precompute", token_chunk=chunk, termination_token_ids=ids)
+    actual = full_reverse_kl_result(hs, ws, ht, wt, backend=backend, token_chunk=chunk, termination_token_ids=ids)
     torch.testing.assert_close(actual.loss_sum, expected, atol=1e-5, rtol=1e-5)
     raw = (p.detach() * (p.detach().log() - q.log())).sum(-1)
     torch.testing.assert_close(actual.token_kl, raw, atol=1e-5, rtol=1e-5)

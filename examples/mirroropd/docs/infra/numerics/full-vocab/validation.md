@@ -45,3 +45,11 @@ python -m pytest -q \
 GPU/分布式测试需要已分配的设备与匹配依赖。使用现有原生环境，按具体测试的参数指定 world size、backend 与输出目录；短 smoke 可使用 [smoke_full_reverse_kl.sh](../../../../smoke/smoke_full_reverse_kl.sh)，其短长度、验证关闭和 attention override 不能作为正式性能设置。
 
 Frozen teacher 的 SDPA 单模型重建只验证 logits/位置关系，不替代多轮 IF 模板、监督 mask 和完整任务验证。性能比较前的数值门控见[测量方法](../../performance/full-vocab/methodology.md#正确性门控)。
+
+## EOS 融合路径的回归
+
+[停止类映射与独立参考](../../../../../../tests/trainer/distillation/test_termination_action_map_on_cpu.py)核对合并概率、logsumexp 链式梯度和极小修正保留；[CUDA EOS 融合](../../../../../../tests/trainer/distillation/test_termination_fused_on_gpu.py)使用独立 80 位概率空间 oracle，覆盖公共偏移、小 η、κ=0/0.5/1、FP16/BF16/FP32 与真正的 fused 分派。近零误差同时约束相对量和绝对量；新增 EOS 行梯度采用 rtol=2e-4、atol=1e-22，标量采用 rtol=2e-4、atol=1e-24，不放宽既有非 EOS 数值测试。
+
+[生产词表](../../../../../../tests/trainer/distillation/test_mdpo_termination_on_gpu.py)、[teacher-only EOS](../../../../../../tests/trainer/distillation/test_termination_kl_on_gpu.py)和[FP16 AMP](../../../../../../tests/trainer/distillation/test_full_vocab_fp16_on_gpu.py)同时覆盖 precompute 与 precompute_fused。[原生两卡验收](../../../../../../tests/special_distributed/test_mirror_fsdp2.py)可加 `--termination-ids 1 4 --compare-backend precompute`，检验相同初态下的实际参数／Adam 更新，并覆盖 tied head、空局部 mask、冻结 anchor、梯度检查点和恢复后的下一步。η=1 使用 `--compare-legacy` 检查原 Full-KL 入口。
+
+实际数值、完整 actor 性能与运行边界由对应测量报告记录；通过这些测试不等于长期任务质量得到提升。

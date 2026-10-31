@@ -79,9 +79,11 @@ def test_invalid_kernel_groups_fail(ids):
         )
 
 
-@pytest.mark.parametrize("backend,teacher_vocab", [("dense", 8), ("precompute_fused", 8), ("precompute", 9)])
+@pytest.mark.parametrize(
+    "backend,teacher_vocab", [("dense", 8), ("streaming", 8), ("precompute", 9), ("precompute_fused", 9)]
+)
 def test_unsupported_kernel_paths_fail(backend, teacher_vocab):
-    with pytest.raises(ValueError, match="precompute and equal"):
+    with pytest.raises(ValueError, match="precompute.*equal"):
         full_reverse_kl_result(
             torch.zeros(2, 3),
             torch.zeros(8, 3),
@@ -103,6 +105,7 @@ def test_configuration_and_real_stop_support_are_checked():
         FullVocabConfig(backend="dense", termination_token_ids=[1, 4])
     with pytest.raises(ValueError, match="teacher-only"):
         DistillationLossConfig(full_vocab=FullVocabConfig(backend="precompute", termination_token_ids=[1, 4]))
+    FullVocabConfig(backend="precompute_fused", termination_token_ids=[1, 4])
     config = FullVocabConfig(backend="precompute", termination_token_ids=[1, 4])
     config.validate_termination_support(eos_token_ids=1, stop_token_ids=[4], vocab_ids=range(8), vocab_size=8)
     config.validate_termination_support(eos_token_ids=[1, 4], stop_token_ids=[], vocab_ids=range(8), vocab_size=8)

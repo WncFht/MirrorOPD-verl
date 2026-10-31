@@ -308,7 +308,7 @@ def mirror_logits_rows(z, anchor, teacher, *, objective, kappa, eta, diagnostics
         info = {
             "target_kl": target_kl,
             "target_log_z": log_z,
-            "anchor_kl": kl_rows(z, anchor)[0],
-            "teacher_kl": kl_rows(z, teacher)[0],
+            "anchor_kl": kl_values(z, anchor),
+            "teacher_kl": kl_values(z, teacher),
         }
     return value, gradient, {k: v.detach() for k, v in info.items()}

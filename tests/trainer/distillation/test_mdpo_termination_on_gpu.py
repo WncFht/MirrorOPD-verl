@@ -11,9 +11,10 @@ from verl.workers.config.distillation_spec import resolve_distillation_spec
 pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
 
 
+@pytest.mark.parametrize("backend", ["precompute", "precompute_fused"])
 @pytest.mark.parametrize("kappa", [0.0, 0.5, 1.0])
 @pytest.mark.parametrize("eta", [0.05, 0.1, 0.2, 0.3])
-def test_coarse_mdpo_production_vocabulary(kappa, eta):
+def test_coarse_mdpo_production_vocabulary(kappa, eta, backend):
     torch.manual_seed(17)
     vocab = 151936
     hs, ws = [
@@ -42,7 +43,7 @@ def test_coarse_mdpo_production_vocabulary(kappa, eta):
         {"loss_mode": "mirror", "mirror": {"objective": "mdpo", "kappa": kappa, "eta": eta, "diagnostics": True}}
     )
     actual = full_vocab_objective_result(
-        hs, ws, ht, wt, hq=hq, wq=wq, spec=spec, backend="precompute", token_chunk=2, termination_token_ids=ids
+        hs, ws, ht, wt, hq=hq, wq=wq, spec=spec, backend=backend, token_chunk=2, termination_token_ids=ids
     )
     torch.testing.assert_close(actual.loss_sum.double() / eta, reference, atol=2e-6, rtol=2e-5)
     for got, wanted in zip(torch.autograd.grad(actual.loss_sum / eta, (hs, ws)), gradients, strict=True):
