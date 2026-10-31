@@ -74,7 +74,12 @@ def test_schedule_and_content_identity_determine_reachable_generator():
     same["left"] = ModelBinding("current", "/a", "same")
     assert requires_token_generator(policy, same)
     assert not requires_token_generator(replace(policy, right_weight=CoefficientRule(start=0, end=0)), same)
-    assert requires_token_generator(replace(policy, right_weight=CoefficientRule(kind="linear", start=0, end=1)), same)
+    assert not requires_token_generator(
+        replace(policy, right_weight=CoefficientRule(kind="linear", start=0, end=1)), same
+    )
+    assert requires_token_generator(
+        replace(policy, right_weight=CoefficientRule(kind="linear", start=0, end=1, steps=2)), same
+    )
 
 
 def test_application_resolver_runs_once_per_location():
@@ -139,3 +144,32 @@ def test_unused_fusion_topology_does_not_reject_a_single_endpoint():
         policy, bindings=bindings, uids=["u"], stable_ids=[0], n=1, collection_step=1, optimizer_step=0, seed=1
     )
     assert len(plan.phases) == 1 and plan.phases[0].generator == "single"
+
+
+@pytest.mark.parametrize(
+    "rule",
+    [
+        {"kind": "constant", "start": 0},
+        {"kind": "constant", "start": 1, "end": 0},
+        {"kind": "linear", "start": 0, "end": 1, "steps": 1},
+        {"kind": "linear", "start": 0, "end": 1, "steps": 2},
+        {"kind": "linear", "start": 1, "end": 0, "steps": 3},
+        {"kind": "constant", "start": 0.5},
+    ],
+)
+def test_capability_inventory_matches_reachable_integer_clock_plans(rule):
+    from verl.experimental.rollout_policy.models import reachable_sources
+
+    policy = RolloutPolicyConfig.parse({"mode": "token_mixture", "right_weight": rule})
+    bindings = {"left": ModelBinding("current", "/a", "a"), "right": ModelBinding("checkpoint", "/b", "b")}
+    plans = [
+        build_plan(
+            policy, bindings=bindings, uids=["u"], stable_ids=[0], n=1, collection_step=i + 1, optimizer_step=i, seed=1
+        )
+        for i in range(5)
+    ]
+    assert requires_token_generator(policy, bindings) == any(p.resolved_mode == "token_mixture" for p in plans)
+    used = set()
+    for plan in plans:
+        used.update(("left", "right") if plan.resolved_mode == "token_mixture" else [p.source for p in plan.phases])
+    assert set(reachable_sources(policy, bindings)) == used

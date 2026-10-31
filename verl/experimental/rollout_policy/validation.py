@@ -4,7 +4,7 @@
 
 from omegaconf import OmegaConf, open_dict
 
-from .models import load_model_metadata, requires_token_generator
+from .models import load_model_metadata, local_model_path, reachable_sources, requires_token_generator
 from .plan import RolloutPolicyConfig
 
 
@@ -88,7 +88,7 @@ def validate_policy(config, *, policy=None, bindings=None):
     from .identity import bind_policy
     from .sampling import validate_tokenizers
 
-    student_path = config.actor_rollout_ref.model.path
+    student_path = local_model_path(config.actor_rollout_ref.model.path)
     if bindings is None:
         bindings, _ = bind_policy(config, policy)
     fusion_needed = requires_token_generator(policy, bindings)
@@ -96,7 +96,8 @@ def validate_policy(config, *, policy=None, bindings=None):
         raise ValueError("Production token fusion currently requires BF16 inference weights")
     if fusion_needed and policy.execution.backend == "vllm_fusion":
         validate_native_options(config)
-    metadata = load_model_metadata([student_path, *(b.path for b in bindings.values())])
+    active = reachable_sources(policy, bindings)
+    metadata = load_model_metadata([student_path, *(bindings[slot].path for slot in active)])
     model_configs = [item[0] for item in metadata.values()]
     learner_config, learner_tokenizer = metadata[student_path]
     if getattr(learner_config, "num_experts", 0) or getattr(learner_config, "vision_config", None):
@@ -113,7 +114,7 @@ def validate_policy(config, *, policy=None, bindings=None):
     if model.get("override_config") or model.get("trust_remote_code", False):
         raise ValueError("Local rollout policies require native checkpoint configs without overrides or remote code")
     for key in ("tokenizer_path", "hf_config_path"):
-        if model.get(key) not in (None, student_path):
+        if model.get(key) is not None and local_model_path(model[key]) != student_path:
             raise ValueError(f"Local rollout policies do not support a separate {key}")
     if fusion_needed and policy.execution.backend == "hf_fusion":
         if policy.execution.tensor_parallel_size != 1:
