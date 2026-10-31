@@ -61,6 +61,18 @@ def test_output_limit_and_original_binary_io_semantics(monkeypatch):
     assert run("import sys; print(sys.stdin.buffer.read())")[1]["status"] == "RUNTIME_ERROR"
 
 
+def test_generated_exit_is_not_an_infrastructure_failure():
+    functional = [{"input": "2\n3", "output": "5", "testtype": "functional", "metadata": {"func_name": "add"}}]
+    for code in (
+        "import sys\nsys.exit()",
+        "class Solution:\n def add(self,a,b):\n  raise SystemExit()",
+    ):
+        passed, detail = lcb_check_correctness(functional, code, timeout=1)
+        assert not passed and detail["status"] == "RUNTIME_ERROR"
+    # Normal stdin programs may exit after producing their correct output.
+    assert run("import sys\nprint(5)\nsys.exit(0)")[0]
+
+
 def test_ignoring_alarm_is_stopped_by_supervisor():
     start = time.monotonic()
     _, detail = run("import signal\nsignal.signal(signal.SIGALRM,signal.SIG_IGN)\nwhile True: pass")

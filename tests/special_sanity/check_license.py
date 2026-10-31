@@ -38,6 +38,8 @@ license_head_google_research = "Copyright 2026 The Google Research Authors."
 license_head_mirroropd = "Copyright 2026 MirrorOPD-verl contributors"
 license_headers = [
     "Copyright (c) 2026 DeepSeek",  # MIT maintenance helpers retain upstream attribution.
+    # This adapter preserves the upstream notice in adjacent LICENSE.livecodebench.
+    "LiveCodeBench is distributed under the MIT License.",
     license_head_bytedance,
     license_head_bytedance_25,
     license_head_bytedance_26,
