@@ -878,7 +878,7 @@ class AgentLoopWorker:
                 output.multi_modal_data.get("audios") if output.multi_modal_data else None
             ),
         )
-        await self._compute_score([output], kwargs=kwargs)
+        await self._compute_score([output], kwargs=kwargs, validate=validate)
         await self._compute_teacher_logprobs(
             output,
             prompt_ids=output.prompt_ids,
@@ -1023,8 +1023,15 @@ class AgentLoopWorker:
         position_ids = torch.cat((text_position_ids, vision_position_ids), dim=1)  # (1, 4, seq_length)
         return position_ids
 
-    async def _compute_score(self, outputs: list[AgentLoopOutput], kwargs: dict) -> None:
+    async def _compute_score(self, outputs: list[AgentLoopOutput], kwargs: dict, *, validate=False) -> None:
         """Compute reward score for all outputs in a trajectory; assigns result to outputs[-1]."""
+        if self.config.get("trainer", {}).get("evaluation") and not validate:
+            if OmegaConf.select(self.config, "distillation.distillation_loss.use_task_rewards", default=True):
+                raise ValueError("RKL-only evaluation recipe cannot skip enabled task rewards")
+            # Structural zero for the native PPO schema, never an accuracy label.
+            outputs[-1].reward_score = 0.0
+            outputs[-1].extra_fields["task_reward_available"] = False
+            return
         enable_async_reward = self.reward_loop_worker_handles is not None
 
         final_output = outputs[-1]

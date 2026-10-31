@@ -1179,9 +1179,13 @@ class PPOTrainer(ABC):
         return coordinates
 
     def _log_update_records(self, records, attempts_before, steps_before, role="actor"):
-        for values, step in update_log_events(
-            records, OptimizerProgress(attempts_before, steps_before), self.global_steps, role
-        ):
+        events = list(
+            update_log_events(records, OptimizerProgress(attempts_before, steps_before), self.global_steps, role)
+        )
+        persist = getattr(getattr(self, "readout_callback", None), "on_update_records", None)
+        if persist is not None:
+            persist(events, role)
+        for values, step in events:
             self.logger.log(data=values, step=step)
 
     def _save_actor_optimizer_progress(self, checkpoint_dir):
@@ -1952,6 +1956,9 @@ class PPOTrainer(ABC):
 
     def _get_required_batch_multiple(self, dp_size: int) -> int:
         """Return the global batch multiple required by downstream train steps(e.g. critics, actors)."""
+        if self.config.trainer.get("evaluation"):
+            self._validate_evaluation_full_batch()
+            return dp_size
         required_multiple = dp_size
 
         # If enabled with critic training, the batch should align with critic PPO mini-batches.
@@ -1969,7 +1976,20 @@ class PPOTrainer(ABC):
         # Notice lcm(a, b, c) == lcm(lcm(a, b), c), so it is optimal.
         return required_multiple
 
-    def _balance_batch(self, batch: KVBatchMeta, metrics, logging_prefix="global_seqlen", keep_minibatch=False):
+    def _validate_evaluation_full_batch(self):
+        actor = self.config.actor_rollout_ref.actor
+        if (
+            self.use_critic
+            or not self._uses_full_vocab()
+            or self.config.actor_rollout_ref.rollout.n != 1
+            or actor.ppo_mini_batch_size != self.config.data.train_batch_size
+            or actor.loss_agg_mode != "token-mean"
+        ):
+            raise ValueError("Unified evaluation requires full-batch token-mean RKL updates, n=1 and no critic")
+
+    def _balance_batch(
+        self, batch: KVBatchMeta, metrics, logging_prefix="global_seqlen", keep_minibatch=False, inference_only=False
+    ):
         """Reorder the data on single controller such that each dp rank gets similar total tokens."""
         # get actor dp size
         role, worker_group = "actor", self.actor_rollout_wg
@@ -1981,7 +2001,7 @@ class PPOTrainer(ABC):
         dp_size = max(dp_rank_mapping) + 1
 
         # Upsampling the batch with padding sequences
-        batch_multiple = self._get_required_batch_multiple(dp_size)
+        batch_multiple = dp_size if inference_only else self._get_required_batch_multiple(dp_size)
         batch = upsample_batch_to_divisible_size(batch, batch_multiple, self.tokenizer.eos_token_id)
         global_seqlen_lst = torch.tensor([tag["seq_len"] for tag in batch.tags], dtype=torch.int64)
         workload_lst = calculate_workload(global_seqlen_lst)
@@ -2303,6 +2323,13 @@ class PPOTrainer(ABC):
             "dataloader_kwargs": {"shuffle": self.config.actor_rollout_ref.actor.shuffle},
             "temperature": self.config.actor_rollout_ref.rollout.temperature,
         }
+        if self.config.trainer.get("evaluation"):
+            self._validate_evaluation_full_batch()
+            logical_size = sum(not tag.get("is_padding", False) for tag in batch.tags)
+            if logical_size != ppo_mini_batch_size:
+                raise ValueError("Logical training batch differs from the declared full batch")
+            extra_info.pop("mini_batch_size")
+            extra_info["num_mini_batch"] = 1
         # These engines reconstruct full response tensors before invoking the loss.
         # Other engines retain every legacy diagnostic through canonical_name;
         # do not pretend unverified CP/TP fragments are complete sequences.
@@ -2458,6 +2485,11 @@ class PPOTrainer(ABC):
             )
         )
         metrics.update(compute_data_metrics(batch=metrics_batch, use_critic=self.use_critic))
+        if self.config.trainer.get("evaluation"):
+            for key in list(metrics):
+                if key.startswith(("critic/score/", "critic/rewards/", "rollout/score/")):
+                    metrics.pop(key)
+            metrics["rollout/task_reward_available"] = 0.0
         task_used = self._metrics_task_rewards_used()
         metrics["advantage/task/batch_used_in_loss"] = float(task_used)
         for label in ("prompt_length", "response_length"):

@@ -5,9 +5,9 @@ repos:
       - id: ruff
         args: ["--fix", "--show-fixes", "--output-format=full"]
         # Source snapshots under docs are immutable; active tools live in code packages.
-        exclude: ^.*\.ipynb$|^examples/mirroropd/docs/.*\.py$
+        exclude: ^.*\.ipynb$|^examples/mirroropd/docs/.*\.py$|^verl/trainer/evaluation/vendor/
       - id: ruff-format
-        exclude: ^examples/mirroropd/docs/.*\.py$
+        exclude: ^examples/mirroropd/docs/.*\.py$|^verl/trainer/evaluation/vendor/
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: "v1.17.0"

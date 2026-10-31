@@ -47,6 +47,8 @@ class CheckpointConfig(BaseConfig):
     async_save: bool = False
     strict: bool = True
     save_lora_only: bool = False
+    # FSDP HF export may retain fp32 master weights instead of narrowing to forward dtype.
+    preserve_hf_master_weights: bool = False
 
 
 @dataclass

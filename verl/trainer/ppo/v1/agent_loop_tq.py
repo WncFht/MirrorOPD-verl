@@ -236,7 +236,7 @@ class AgentLoopWorkerTQ(AgentLoopWorker):
                 # deterministic behavior distribution assigns them probability 1.
                 final.response_logprobs = [0.0] * len(final.response_logprobs)
 
-        await self._compute_score(outputs, kwargs=kwargs)
+        await self._compute_score(outputs, kwargs=kwargs, validate=validate)
 
         final_output = outputs[-1]
         if "__rollout_policy__" in kwargs:

@@ -1,0 +1,73 @@
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
+"""Effective native generation identity, independent of GPU counts and request batching."""
+
+import json
+from pathlib import Path
+
+from omegaconf import OmegaConf
+
+from .artifacts import identity
+
+SUPPORT_PROCESSOR = "verl.workers.rollout.vllm_rollout.tokenizer_support:TokenizerSupport"
+
+
+def plain(value):
+    return OmegaConf.to_container(value, resolve=True) if OmegaConf.is_config(value) else value
+
+
+def input_identity(model):
+    tokenizer = model.tokenizer
+    backend = getattr(tokenizer, "backend_tokenizer", None)
+    if backend is None:
+        raise ValueError("Unified generation requires a fingerprintable fast tokenizer")
+    definition = json.loads(backend.to_str())
+    # Per-request rendering is unpadded and checked against explicit budgets.
+    definition.pop("padding", None)
+    definition.pop("truncation", None)
+    return identity(
+        {
+            "backend": definition,
+            "chat_template": tokenizer.chat_template,
+            "bos": tokenizer.bos_token_id,
+            "eos": tokenizer.eos_token_id,
+            "pad": tokenizer.pad_token_id,
+            "model_type": model.hf_config.model_type,
+        }
+    )
+
+
+def engine_contract(rollout, model, input_model):
+    if rollout.name != "vllm":
+        raise ValueError("Unified generation has only accepted the native vLLM engine")
+    options = plain(rollout.engine_kwargs.get("vllm") or {})
+    processors = list(options.get("logits_processors") or [])
+    if processors.count(SUPPORT_PROCESSOR) != 1:
+        raise ValueError("Generation engine must use policy_engine_config before server creation")
+    legal = sorted(set(model.tokenizer.get_vocab().values()))
+    if not legal or legal[-1] >= model.hf_config.vocab_size:
+        raise ValueError("Generation tokenizer IDs exceed model output rows")
+    config_file = Path(model.path) / "generation_config.json"
+    model_generation = json.loads(config_file.read_text()) if config_file.exists() else {}
+    return {
+        "schema": 1,
+        "sampler": "mirroropd-crossing-token-v1",
+        "support": "tokenizer_ids",
+        "support_ids_sha256": identity(legal),
+        "head_width": model.hf_config.vocab_size,
+        "input_id": input_identity(input_model),
+        "logits_processors": processors,
+        "native_eos": plain(model.hf_config.eos_token_id),
+        "engine_stop_token_ids": sorted(rollout.get("stop_token_ids") or []),
+        "ignore_eos": bool(rollout.get("ignore_eos", False)),
+        "model_generation": model_generation,
+        "engine_generation_config": options.get("generation_config", "auto"),
+        "generation_overrides": options.get("override_generation_config", {}),
+        "dtype": rollout.dtype,
+        "kv_cache_dtype": options.get("kv_cache_dtype", "auto"),
+        "quantization": rollout.get("quantization"),
+    }
+
+
+def sample_identity(model, outer, dataset, question, index, protocol, contract_id):
+    return identity(["generation-v2", model, outer, dataset, question, index, protocol, contract_id])

@@ -20,16 +20,11 @@ from omegaconf import OmegaConf
 from tensordict import TensorDict
 from transfer_queue import KVBatchMeta
 
+from verl.trainer.evaluation.artifacts import HISTORY, RKL, TRAJECTORY, ArtifactStore, file_sha256, identity
+from verl.trainer.evaluation.metrics import readout_metrics
+from verl.trainer.evaluation.schedule import Schedule
 from verl.utils import tensordict_utils as tu
 from verl.utils.dataset.rl_dataset import collate_fn
-
-
-def write_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
-    temporary.replace(path)
 
 
 def priority(seed, *parts):
@@ -56,12 +51,19 @@ def balanced_history(batches, capacity, seed):
 
 
 def capture_rows(batch, outer):
+    fields = ["prompts", "responses", "response_mask", "extra_info"]
+    # KVBatchMeta.fields=None means an unprojected batch. Native rollout rows
+    # still contain metrics; it is not an empty list of available columns.
+    available_fields = getattr(batch, "fields", None)
+    if available_fields is None or "metrics" in available_fields:
+        fields.append("metrics")
     data = tq.kv_batch_get(
         keys=list(batch.keys),
         partition_id=batch.partition_id,
-        select_fields=["prompts", "responses", "response_mask", "extra_info"],
+        select_fields=fields,
     )
     info = list(data["extra_info"])
+    observations = list(data["metrics"]) if "metrics" in data else [{} for _ in info]
     rows = []
     for i, (prompt, response, mask) in enumerate(
         zip(data["prompts"].unbind(), data["responses"].unbind(), data["response_mask"].unbind(), strict=True)
@@ -69,7 +71,7 @@ def capture_rows(batch, outer):
         tag = batch.tags[i]
         if tag.get("is_padding", False):
             continue
-        source_id = str(info[i].get("index", batch.keys[i]))
+        source_id = str(info[i].get("index", identity(prompt.tolist())))
         rows.append(
             dict(
                 id=f"{outer}:{source_id}",
@@ -81,6 +83,8 @@ def capture_rows(batch, outer):
                 rollout_key=batch.keys[i],
                 min_global_steps=tag.get("min_global_steps"),
                 max_global_steps=tag.get("max_global_steps"),
+                data_source=info[i].get("data_source"),
+                finish_reason=observations[i].get("finish_reason", tag.get("finish_reason")),
             )
         )
     if len({r["source_id"] for r in rows}) != len(rows):
@@ -130,42 +134,111 @@ class FixedRKLReadout:
         self.seed = int(self.options.get("seed", 42))
         if self.capacity <= 0 or self.every <= 0:
             raise ValueError("Positive history capacity and readout frequency required")
+        self.schedules = {
+            "source_heldout": Schedule(at=(0,), every=self.options.get("source_every", self.every)),
+            "history": Schedule(every=self.options.get("history_every", self.every)),
+        }
         if config.trainer.v1.trainer_mode != "sync" or config.distillation.execution_mode != "shared_sync":
             raise ValueError("Fixed RKL readout requires native synchronous shared-teacher execution")
         if config.trainer.get("resume_mode", "disable") != "disable":
             raise ValueError("This acceptance readout currently requires a fresh run, not checkpoint resume")
-        if any((self.root / "trajectories").glob("outer-*.json")):
+        if self.root.exists() and any(self.root.iterdir()):
             raise FileExistsError("Choose a new output directory for a fresh training run")
         if not config.trainer.get("val_before_train", False):
             raise ValueError("Fixed RKL acceptance requires val_before_train=True")
         val_files = list(config.data.val_files)
         if val_files != [self.options["source_file"]]:
             raise ValueError("Native validation data must be the declared source held-out file")
-        self.bank_path = Path(self.options.get("initial_bank", self.root / "initial-student-bank.json"))
+        self.bank_path = Path(self.options.get("initial_bank", self.root / "initial-student-bank"))
         self.bank = None
+        self.bank_sha256 = None
         rollout = config.actor_rollout_ref.rollout
+        if rollout.get("n", 1) != 1:
+            raise ValueError("Fixed RKL history requires one training rollout per question")
         self.generation = OmegaConf.to_container(rollout.val_kwargs, resolve=True)
+        model_path = Path(config.actor_rollout_ref.model.path)
+        model_files = {
+            str(p.relative_to(model_path)): file_sha256(p)
+            for p in sorted(model_path.glob("*"))
+            if p.is_file()
+            and (
+                p.name in {"config.json", "tokenizer.json", "tokenizer_config.json", "special_tokens_map.json"}
+                or p.suffix == ".jinja"
+            )
+        }
+        self.bank_metadata = dict(
+            initial_student=str(model_path),
+            model_files=model_files,
+            source_sha256=file_sha256(self.options["source_file"]),
+            response_cap=config.data.max_response_length,
+            generation=self.generation,
+            seed=OmegaConf.select(config, "actor_rollout_ref.rollout.seed"),
+            sampling_defaults={
+                key: OmegaConf.select(config, f"actor_rollout_ref.rollout.{key}")
+                for key in ("temperature", "top_p", "top_k", "do_sample")
+            },
+            input_config={
+                key: OmegaConf.select(config, f"data.{key}")
+                for key in (
+                    "prompt_key",
+                    "max_prompt_length",
+                    "truncation",
+                    "apply_chat_template_kwargs",
+                    "chat_template",
+                )
+            },
+        )
+        # Resolve OmegaConf containers before hashing or publishing metadata.
+        self.bank_metadata = OmegaConf.to_container(OmegaConf.create(self.bank_metadata), resolve=True)
         if self.bank_path.exists():
-            saved = json.loads(self.bank_path.read_text())
-            if saved.get("initial_student") != config.actor_rollout_ref.model.path:
-                raise ValueError("Initial student bank belongs to a different model")
-            expected_hash = hashlib.sha256(Path(self.options["source_file"]).read_bytes()).hexdigest()
-            if saved.get("source_sha256") != expected_hash:
-                raise ValueError("Initial student bank belongs to a different held-out split")
-            if saved.get("response_cap") != config.data.max_response_length:
-                raise ValueError("Initial student bank has a different response cap")
-            if saved.get("generation") != self.generation:
-                raise ValueError("Initial student bank uses different generation settings")
-            self.bank = saved["rows"]
-            if len(self.bank) != int(self.options.get("source_count", 128)):
-                raise ValueError("Initial student bank has a different sample count")
+            if not self.bank_path.is_dir():
+                raise ValueError(
+                    "initial_bank must be a Parquet artifact directory; legacy JSON banks require migration"
+                )
+            bank_store = ArtifactStore(self.bank_path)
+            saved = bank_store.manifest(complete=True)
+            if saved["kind"] != "source_bank" or saved["metadata"] != self.bank_metadata:
+                raise ValueError("Initial student bank model, input, source or generation protocol differs")
+            self.bank = bank_store.read_rows("trajectories.parquet")
+            self._check_bank()
+            self.bank_sha256 = file_sha256(bank_store.manifest_path)
+        elif self.bank_path.suffix == ".json":
+            raise ValueError("New banks use an artifact directory, not a JSON filename")
+        self.store = ArtifactStore.create(
+            self.root,
+            kind="fixed_rkl_run",
+            metadata={
+                "source_bank": str(self.bank_path.resolve()),
+                "config_sha256": identity(OmegaConf.to_container(config, resolve=True, enum_to_str=True)),
+                "teacher_model": OmegaConf.select(config, "distillation.teacher_models.teacher_model.model_path"),
+                "history_capacity": self.capacity,
+                "history_seed": self.seed,
+                "score_temperature": 1.0,
+                "support": "native_student_support",
+                "aggregation": "question_mean_of_token_mean; history equal_batch",
+            },
+        )
         self.batches = {}
         self.history = []
         self.scored = set()
         self.pending_outer = 0
         self.before_weight_sync = False
+        self.baseline = None
+        self.previous_history = []
+
+    def _check_bank(self):
+        if len(self.bank) != int(self.options.get("source_count", 128)):
+            raise ValueError("Initial student bank has a different sample count")
+        if len({r["source_id"] for r in self.bank}) != len(self.bank):
+            raise ValueError("Duplicate source bank questions")
+        if any(r["bank"] != "source_heldout" or r["outer"] != 0 for r in self.bank):
+            raise ValueError("Source bank must contain initial student trajectories")
 
     def on_readout(self, trainer, outer):
+        if outer == trainer.total_training_steps and outer in self.scored:
+            if self.store.manifest()["status"] == "active":
+                self.store.finish(metadata={"completed_outer": outer, "optimizer_steps": trainer.actor_optimizer_step})
+            return {}
         if outer != 0 or outer in self.scored:
             return {}
         self.pending_outer = outer
@@ -196,24 +269,22 @@ class FixedRKLReadout:
         generated, _ = trainer.replay_buffer.sample(
             global_steps=trainer.global_steps, partition_id="val", batch_size=len(batch)
         )
-        self.bank = capture_rows(generated, 0)
-        if len(self.bank) != len(dataset):
-            raise ValueError("Incomplete initial student held-out bank")
-        for row in self.bank:
-            row["bank"] = "source_heldout"
-        write_json(
-            self.bank_path,
-            dict(
-                rows=self.bank,
-                initial_student=trainer.config.actor_rollout_ref.model.path,
-                source_file=self.options["source_file"],
-                source_sha256=hashlib.sha256(Path(self.options["source_file"]).read_bytes()).hexdigest(),
-                response_cap=trainer.config.data.max_response_length,
-                generation=self.generation,
-            ),
-        )
-        tq.kv_clear(keys=list(generated.keys), partition_id=generated.partition_id)
-        trainer.checkpoint_manager.sleep_replicas()
+        try:
+            self.bank = capture_rows(generated, 0)
+            if len(self.bank) != len(dataset):
+                raise ValueError("Incomplete initial student held-out bank")
+            for row in self.bank:
+                row["bank"] = "source_heldout"
+            self._check_bank()
+            bank_store = ArtifactStore.create(self.bank_path, kind="source_bank", metadata=self.bank_metadata)
+            bank_store.write_rows("trajectories.parquet", self.bank, schema=TRAJECTORY)
+            bank_store.finish()
+            self.bank_sha256 = file_sha256(bank_store.manifest_path)
+        finally:
+            try:
+                tq.kv_clear(keys=list(generated.keys), partition_id=generated.partition_id)
+            finally:
+                trainer.checkpoint_manager.sleep_replicas()
 
     def on_before_weight_sync(self, trainer, batch, outer):
         rows = capture_rows(batch, outer)
@@ -221,14 +292,16 @@ class FixedRKLReadout:
         heldout = {r["source_id"] for r in self.bank}
         if seen.intersection(r["source_id"] for r in rows) or heldout.intersection(r["source_id"] for r in rows):
             raise ValueError("Repeated training source IDs or training/held-out overlap")
-        self.batches[outer] = rows
-        write_json(self.root / "trajectories" / f"outer-{outer:03d}.json", rows)
+        shard = f"trajectories/outer-{outer:03d}.parquet"
+        self.store.write_rows(shard, rows, schema=TRAJECTORY)
+        self.batches[outer] = [
+            {key: row[key] for key in ("id", "source_id", "outer")} | dict(shard=shard, row_index=index)
+            for index, row in enumerate(rows)
+        ]
         self.history = balanced_history(self.batches, self.capacity, self.seed)
-        for row in self.history:
-            row["bank"] = "history"
-        write_json(self.root / "history" / f"outer-{outer:03d}.json", self.history)
+        self.store.write_rows(f"history/outer-{outer:03d}.parquet", self.history, schema=HISTORY)
         self.pending_outer = outer
-        if outer % self.every and outer != trainer.total_training_steps:
+        if not any(schedule.due(outer, trainer.total_training_steps) for schedule in self.schedules.values()):
             return {}
         self.before_weight_sync = True
         try:
@@ -240,6 +313,11 @@ class FixedRKLReadout:
         outer = self.pending_outer
         if outer in self.scored:
             return {}
+        source_due = self.schedules["source_heldout"].due(outer, trainer.total_training_steps)
+        history_due = bool(self.history) and self.schedules["history"].due(outer, trainer.total_training_steps)
+        # Legacy test_freq may invoke _validate even when this callback has no due task.
+        if not source_due and not history_due:
+            return {}
         restore_rollout = not self.before_weight_sync
         if self.bank is None:
             if outer != 0 or not restore_rollout:
@@ -247,7 +325,13 @@ class FixedRKLReadout:
             self._generate_initial_bank(trainer)
         elif restore_rollout:
             trainer.checkpoint_manager.sleep_replicas()
-        rows = self.bank + self.history
+        if self.bank_sha256 is None or file_sha256(self.bank_path / "manifest.json") != self.bank_sha256:
+            raise ValueError("Bound initial bank manifest changed or was never completed")
+        rows = []
+        if source_due:
+            rows.extend(self.bank)
+        if history_due:
+            rows.extend(self.store.resolve(self.history))
         meta, by_key = put_fixed_rows(rows, outer)
         timing = {}
         metrics = {}
@@ -255,6 +339,8 @@ class FixedRKLReadout:
         rng = random.getstate(), np.random.get_state(), torch.get_rng_state()
         started = time.perf_counter()
         begun = False
+        audit = None
+        scored = []
         try:
             trainer.actor_rollout_wg.begin_rkl_readout(audit_state=bool(self.options.get("audit_state", False)))
             begun = True
@@ -276,9 +362,12 @@ class FixedRKLReadout:
             data = tq.kv_batch_get(
                 keys=list(meta.keys), partition_id=meta.partition_id, select_fields=["rkl_sum", "rkl_count"]
             )
-            scored = []
+            if len(data) != len(by_key):
+                raise ValueError("Incomplete RKL score batch")
             for key, total, count in zip(meta.keys, data["rkl_sum"].unbind(), data["rkl_count"].unbind(), strict=True):
                 row = by_key[key]
+                if int(count.item()) != sum(row["response_mask"]):
+                    raise ValueError("RKL count differs from the stored response mask")
                 scored.append(
                     {k: row[k] for k in ["id", "source_id", "bank"]}
                     | dict(
@@ -289,39 +378,11 @@ class FixedRKLReadout:
                 )
             if trainer.actor_optimizer_step != before:
                 raise RuntimeError("Read-only evaluation changed the optimizer counter")
-            elapsed = time.perf_counter() - started
-            write_json(
-                self.root / "scores" / f"outer-{outer:03d}.json",
-                dict(
-                    outer=outer,
-                    optimizer_steps=before,
-                    seconds=elapsed,
-                    teacher_timing=timing,
-                    initial_bank_sha256=hashlib.sha256(self.bank_path.read_bytes()).hexdigest(),
-                    rows=scored,
-                    aggregation="token-mean for engineering acceptance only; final scientific aggregation undecided",
-                ),
-            )
-            metrics = {"perf/timing/rkl_score_seconds": elapsed, "eval/rkl/rows": len(scored)}
-            held = [r for r in scored if r["bank"] == "source_heldout"]
-            metrics["eval/rkl/source_heldout/token_mean"] = sum(r["rkl_sum"] for r in held) / sum(
-                r["tokens"] for r in held
-            )
-            historical = [r for r in scored if r["bank"] == "history"]
-            if historical:
-                groups = {r["history_batch"] for r in historical}
-                means = []
-                for group in groups:
-                    selected = [r for r in historical if r["history_batch"] == group]
-                    means.append(sum(r["rkl_sum"] for r in selected) / sum(r["tokens"] for r in selected))
-                metrics["eval/rkl/history/equal_batch_token_mean"] = sum(means) / len(means)
-            self.scored.add(outer)
-            return metrics
+            score_seconds = time.perf_counter() - started
         finally:
             try:
                 if begun:
                     audit = trainer.actor_rollout_wg.end_rkl_readout()
-                    write_json(self.root / "audit" / f"outer-{outer:03d}.json", audit)
             finally:
                 try:
                     tq.kv_clear(keys=list(meta.keys), partition_id=meta.partition_id)
@@ -331,4 +392,46 @@ class FixedRKLReadout:
                     torch.set_rng_state(rng[2])
                     if restore_rollout:
                         trainer.checkpoint_manager.update_weights(global_steps=outer)
-                    metrics["perf/timing/rkl_readout_seconds"] = time.perf_counter() - started
+        # Publication follows successful scoring, state audit and resource cleanup.
+        metrics = readout_metrics(scored, baseline=self.baseline, previous_history=self.previous_history)
+        metrics.update(
+            {
+                "perf/timing/rkl_score_seconds": score_seconds,
+                "perf/timing/rkl_readout_seconds": time.perf_counter() - started,
+            }
+        )
+        audit_requested = bool(self.options.get("audit_state", False))
+        if audit_requested and (not audit or not all(x.get("unchanged") and x.get("state_digest") for x in audit)):
+            raise RuntimeError("Requested state audit did not return verified digests")
+        event = ArtifactStore.create(
+            self.root / "scores" / f"outer-{outer:03d}",
+            kind="rkl_event",
+            metadata={
+                "outer": outer,
+                "optimizer_steps": before,
+                "teacher_timing": timing,
+                "source_bank": str(self.bank_path.resolve()),
+                "source_bank_manifest_sha256": self.bank_sha256,
+                "aggregation": "question_mean_of_token_mean; history equal_batch",
+                "audit": {"status": "passed" if audit_requested else "not_requested", "ranks": audit},
+            },
+        )
+        event.write_rows("rkl.parquet", scored, schema=RKL)
+        invalid = sum(value for key, value in metrics.items() if key.endswith("/invalid_rows"))
+        event.finish(
+            metadata={
+                "metrics": metrics,
+                "coverage": {
+                    "expected_rows": len(rows),
+                    "observed_rows": len(scored),
+                    "invalid_rows": invalid,
+                    "scientific_complete": invalid == 0,
+                },
+            }
+        )
+        if self.baseline is None and any(r["bank"] == "source_heldout" for r in scored):
+            self.baseline = [r for r in scored if r["bank"] == "source_heldout"]
+        if historical := [r for r in scored if r["bank"] == "history"]:
+            self.previous_history = historical
+        self.scored.add(outer)
+        return metrics

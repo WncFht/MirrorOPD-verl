@@ -6,6 +6,12 @@ from verl.utils.import_utils import load_class_from_fqn
 
 
 def build_readout_callback(config):
+    if config.trainer.get("evaluation"):
+        if config.trainer.get("readout_callback_class"):
+            raise ValueError("Choose unified evaluation or a legacy readout callback, not both")
+        from verl.trainer.evaluation.coordinator import EvaluationCoordinator
+
+        return EvaluationCoordinator(config=config)
     target = config.trainer.get("readout_callback_class")
     if not target:
         return None
