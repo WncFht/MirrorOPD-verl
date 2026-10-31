@@ -124,6 +124,7 @@ def worker(args):
         max_num_batched_tokens=args.max_model_len,
         kv_cache_memory_bytes=int(args.kv_gib * 1024**3),
         gpu_memory_utilization=0.9,
+        enable_sleep_mode=True,
         logprobs_mode="processed_logprobs",
         disable_log_stats=False,
         attention_config={"backend": "TRITON_ATTN"},
@@ -258,7 +259,10 @@ def main():
     if any(len(p["prompt_token_ids"]) + args.cap > args.max_model_len for p in prompts):
         raise ValueError("Declared cap plus prompt exceeds context")
     write_json(args.out / "prompts.json", prompts)
-    write_json(args.out / "config.json", vars(args) | {"out": str(args.out), "physical_gpus": allocation})
+    write_json(
+        args.out / "config.json",
+        vars(args) | {"out": str(args.out), "physical_gpus": allocation, "enable_sleep_mode": True},
+    )
     write_json(args.out / "source.json", source_fingerprint())
     monitor = subprocess.Popen(
         [
