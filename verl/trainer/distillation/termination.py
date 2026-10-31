@@ -34,7 +34,7 @@ class TerminationActionMap:
         return cls(keep, torch.tensor(ids, device=device, dtype=torch.long), vocab)
 
     def coarsen(self, logits, *, compensated=False):
-        """Return compact logits and an optional exact rounding remainder."""
+        """Return compact logits and an optional retained rounding remainder."""
         selected = logits.index_select(1, self.stop).double()
         maximum, pivot = selected.max(-1, keepdim=True)
         shifted = (selected - maximum).scatter(-1, pivot, -torch.inf)
