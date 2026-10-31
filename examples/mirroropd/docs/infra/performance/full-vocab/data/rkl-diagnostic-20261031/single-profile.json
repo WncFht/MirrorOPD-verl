@@ -1,0 +1,320 @@
+{
+  "metadata": {
+    "scope": "single GPU diagnostic only, not requested four-GPU comparison",
+    "bank": "a97da68a593e7d23033c85789024bbc8760606f1ae378d3a09f2150664c80eaa",
+    "rows": 128,
+    "response_tokens": 131072,
+    "prompt_tokens": 12588,
+    "ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ],
+    "torch": "2.11.0+cu128",
+    "device": "NVIDIA H800",
+    "tf32": false
+  },
+  "measurements": [
+    {
+      "chunk": 256,
+      "samples": [
+        {
+          "chunk": 256,
+          "wall_seconds": 15.35946325212717,
+          "cuda_stage_seconds": {
+            "student_backbone": 4.03183324432373,
+            "teacher_backbone": 6.077074047088622,
+            "student_projection": 1.6023253762722016,
+            "teacher_projection": 3.165771589279173,
+            "log_softmax_pair": 0.21789337578415863,
+            "rkl_elementwise_reduce": 0.2542615998983382
+          }
+        },
+        {
+          "chunk": 256,
+          "wall_seconds": 14.695936679840088,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.60328413581848,
+            "teacher_backbone": 5.838780921936032,
+            "student_projection": 1.6032040338516242,
+            "teacher_projection": 3.1682327289581282,
+            "log_softmax_pair": 0.21788649591803533,
+            "rkl_elementwise_reduce": 0.2542095043361187
+          }
+        },
+        {
+          "chunk": 256,
+          "wall_seconds": 14.605078838765621,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.532836511611938,
+            "teacher_backbone": 5.813031528472903,
+            "student_projection": 1.6049950063228604,
+            "teacher_projection": 3.171823583602906,
+            "log_softmax_pair": 0.2179124478697776,
+            "rkl_elementwise_reduce": 0.2542574717402459
+          }
+        }
+      ],
+      "median_seconds": 14.695936679840088,
+      "max_abs_rkl_sum_difference": 0.0,
+      "peak_allocated_gib": 25.050089359283447
+    },
+    {
+      "chunk": 128,
+      "samples": [
+        {
+          "chunk": 128,
+          "wall_seconds": 15.33746126294136,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.5505329704284683,
+            "teacher_backbone": 5.80642434692383,
+            "student_projection": 1.7908603839874264,
+            "teacher_projection": 3.5304848666191133,
+            "log_softmax_pair": 0.2379806078523395,
+            "rkl_elementwise_reduce": 0.2747248959839343
+          }
+        },
+        {
+          "chunk": 128,
+          "wall_seconds": 15.18587912619114,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.5432291202545185,
+            "teacher_backbone": 5.791945228576663,
+            "student_projection": 1.7909978880882251,
+            "teacher_projection": 3.5307323207855226,
+            "log_softmax_pair": 0.237796416014433,
+            "rkl_elementwise_reduce": 0.2747213442325592
+          }
+        },
+        {
+          "chunk": 128,
+          "wall_seconds": 15.190366812050343,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.5360094013214107,
+            "teacher_backbone": 5.794968830108641,
+            "student_projection": 1.7939799677133563,
+            "teacher_projection": 3.536336608648302,
+            "log_softmax_pair": 0.23780198413133613,
+            "rkl_elementwise_reduce": 0.27477132788300507
+          }
+        }
+      ],
+      "median_seconds": 15.190366812050343,
+      "max_abs_rkl_sum_difference": 4.7495200874436705e-06,
+      "peak_allocated_gib": 24.54294776916504
+    },
+    {
+      "chunk": 512,
+      "samples": [
+        {
+          "chunk": 512,
+          "wall_seconds": 14.611874900758266,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.5819738178253173,
+            "teacher_backbone": 5.821690155029297,
+            "student_projection": 1.5916404814720149,
+            "teacher_projection": 3.1521553287506086,
+            "log_softmax_pair": 0.21407769602537158,
+            "rkl_elementwise_reduce": 0.2431673604846001
+          }
+        },
+        {
+          "chunk": 512,
+          "wall_seconds": 14.608523838222027,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.5703485736846905,
+            "teacher_backbone": 5.821975658416747,
+            "student_projection": 1.594251074314117,
+            "teacher_projection": 3.157680607795716,
+            "log_softmax_pair": 0.21407088017463663,
+            "rkl_elementwise_reduce": 0.24317363190650942
+          }
+        },
+        {
+          "chunk": 512,
+          "wall_seconds": 14.592646077275276,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.5568799991607647,
+            "teacher_backbone": 5.824522789001468,
+            "student_projection": 1.5928548154830917,
+            "teacher_projection": 3.1542060174942015,
+            "log_softmax_pair": 0.21401638406515133,
+            "rkl_elementwise_reduce": 0.24314620816707583
+          }
+        }
+      ],
+      "median_seconds": 14.608523838222027,
+      "max_abs_rkl_sum_difference": 5.000020507850422e-06,
+      "peak_allocated_gib": 26.064372539520264
+    },
+    {
+      "chunk": 1024,
+      "samples": [
+        {
+          "chunk": 1024,
+          "wall_seconds": 14.579837299883366,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.569720762252806,
+            "teacher_backbone": 5.827514450073241,
+            "student_projection": 1.5856406097412106,
+            "teacher_projection": 3.142822885513304,
+            "log_softmax_pair": 0.21206463992595675,
+            "rkl_elementwise_reduce": 0.23663724780082704
+          }
+        },
+        {
+          "chunk": 1024,
+          "wall_seconds": 14.58894906938076,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.5833678379058824,
+            "teacher_backbone": 5.823485595703123,
+            "student_projection": 1.5854037437438966,
+            "teacher_projection": 3.1425679683685295,
+            "log_softmax_pair": 0.21206918358802793,
+            "rkl_elementwise_reduce": 0.23661318469047535
+          }
+        },
+        {
+          "chunk": 1024,
+          "wall_seconds": 14.545124270021915,
+          "cuda_stage_seconds": {
+            "student_backbone": 3.547471773147583,
+            "teacher_backbone": 5.81363111495972,
+            "student_projection": 1.5856312704086304,
+            "teacher_projection": 3.1444012355804465,
+            "log_softmax_pair": 0.212051551938057,
+            "rkl_elementwise_reduce": 0.23663356876373282
+          }
+        }
+      ],
+      "median_seconds": 14.579837299883366,
+      "max_abs_rkl_sum_difference": 4.537456788966665e-06,
+      "peak_allocated_gib": 28.096356868743896
+    }
+  ]
+}

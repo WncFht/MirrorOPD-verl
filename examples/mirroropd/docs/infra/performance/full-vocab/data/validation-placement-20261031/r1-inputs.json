@@ -1,0 +1,13 @@
+{
+  "rows": 768,
+  "prompt_tokens": 67117,
+  "response_tokens": 2772962,
+  "max_response": 16384,
+  "median_response": 1740,
+  "rows_gt7168": 113,
+  "bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/banks/r7",
+  "eval": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/baseline/r7-shared/records.jsonl",
+  "tokenizer": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+  "sha256": "154c2a5ddac21bcfe8f58f7fe7b249b1eaff72c5d76c07875b378bc61a0a5f2c",
+  "scope": "real existing math outputs for placement performance; not the new four-domain scientific evaluation split"
+}

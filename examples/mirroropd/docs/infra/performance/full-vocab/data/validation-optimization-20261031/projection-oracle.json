@@ -1,0 +1,22 @@
+{
+  "scope": "64 real states; fixed FP32 student logits; teacher projections compared with FP64 oracle; same BF16 teacher operands",
+  "rows": 64,
+  "bf16_reduced_precision_reduction": false,
+  "tf32": false,
+  "policies": {
+    "strict_fp32": {
+      "logits_max_abs": 7.437902968376875e-05,
+      "logits_mean_abs": 2.1934516444463713e-06,
+      "rkl_max_abs": 4.5066183123720904e-05,
+      "rkl_mean_abs": 2.6498825268594616e-06,
+      "rkl_mean_signed": -1.8493179159087474e-06
+    },
+    "bf16_operands_fp32_output": {
+      "logits_max_abs": 0.00024933461827458814,
+      "logits_mean_abs": 1.742595631067839e-05,
+      "rkl_max_abs": 3.432720371709941e-05,
+      "rkl_mean_abs": 2.149020832135199e-06,
+      "rkl_mean_signed": 1.0051180798716929e-07
+    }
+  }
+}
