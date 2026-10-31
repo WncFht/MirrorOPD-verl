@@ -1,0 +1,8 @@
+{
+  "scope": "仅检查已推导的固定状态分布恒等式；不验证论文算法或模型效果",
+  "random_seed": 42,
+  "trials": 50,
+  "max_objective_identity_error": 3.3306690738754696e-16,
+  "max_anchor_equals_reference_error": 5.551115123125783e-17,
+  "max_zero_shift_target_error": 5.551115123125783e-17
+}

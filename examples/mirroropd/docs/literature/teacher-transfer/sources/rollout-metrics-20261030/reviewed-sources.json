@@ -1,0 +1,162 @@
+{
+  "written": "2026-10-31",
+  "verified_through": "2026-10-30",
+  "search": {
+    "sources": [
+      "arxiv",
+      "open_alex"
+    ],
+    "unique_records": 66,
+    "duplicates_merged": 4,
+    "exact_ids_resolved": 10,
+    "diagnostic_errors": [],
+    "raw_report": "完整原始检索.md",
+    "sha256": "5bca7ebd368df70ca71096ad03736f3501f593cc6ac5fb94186223ba4c1644b4"
+  },
+  "scope": "12 papers and 1 technical article; selected primary-source review, not an exhaustive systematic review",
+  "reviewed": [
+    {
+      "key": "dagger",
+      "title": "DAgger",
+      "version": "AISTATS 2011",
+      "url": "https://proceedings.mlr.press/v15/ross11a/ross11a.pdf",
+      "sections": "Algorithm 3.1; no-regret assumptions",
+      "training_rollout": "student/expert mixture, aggregated",
+      "training_objective": "expert action surrogate",
+      "evaluation": "task cost; structured prediction",
+      "evidence_boundary": "refresh motivation; no universal LLM guarantee"
+    },
+    {
+      "key": "gkd",
+      "title": "GKD",
+      "version": "2306.13649v3",
+      "url": "https://arxiv.org/html/2306.13649v3",
+      "sections": "Sections 2–5; Algorithm 1",
+      "training_rollout": "current student / offline / mixture",
+      "training_objective": "full token FKL/RKL/JSD; stop sampling gradient",
+      "evaluation": "summarization, translation, reasoning, instruction tasks",
+      "evidence_boundary": "separate rollout source, divergence and gradient"
+    },
+    {
+      "key": "minillm",
+      "title": "MiniLLM",
+      "version": "2306.08543v6",
+      "url": "https://arxiv.org/html/2306.08543v6",
+      "sections": "Sections 2, 3.3; B.5",
+      "training_rollout": "student with teacher-mixed sampling",
+      "training_objective": "sequence RKL policy optimization with stabilization",
+      "evaluation": "quality, exposure bias, calibration, diversity",
+      "evidence_boundary": "method is not fixed-prefix full-vocab semi-gradient"
+    },
+    {
+      "key": "tml",
+      "title": "On-Policy Distillation",
+      "version": "blog accessed 2026-10-30",
+      "url": "https://thinkingmachines.ai/blog/on-policy-distillation/",
+      "sections": "Implementation; Pseudocode; Discussion",
+      "training_rollout": "current student",
+      "training_objective": "sampled-token log-ratio; immediate reward",
+      "evaluation": "math and personalization case studies",
+      "evidence_boundary": "technical article, not a refresh-frequency controlled trial"
+    },
+    {
+      "key": "hacking",
+      "title": "On Teacher Hacking",
+      "version": "2502.02671v1; ICML2025 metadata",
+      "url": "https://arxiv.org/html/2502.02671v1",
+      "sections": "Sections 2–4",
+      "training_rollout": "offline versus online; diversity ablations",
+      "training_objective": "token distribution distillation",
+      "evaluation": "proxy teacher and gold oracle divergences",
+      "evidence_boundary": "teacher fidelity differs from task correctness"
+    },
+    {
+      "key": "rethinking",
+      "title": "Rethinking OPD",
+      "version": "2604.13016v2",
+      "url": "https://arxiv.org/html/2604.13016v2",
+      "sections": "Sections 2.2–2.3, 4, 5.2, 6",
+      "training_rollout": "student; teacher cold start control",
+      "training_objective": "top-k default with sampled/full variants",
+      "evaluation": "task scores; overlap, mass, entropy, prefix depth",
+      "evidence_boundary": "overlap is a diagnostic, not a success threshold"
+    },
+    {
+      "key": "coin",
+      "title": "Every Coin Has Two Sides",
+      "version": "2608.16647v3",
+      "url": "https://arxiv.org/abs/2608.16647v3",
+      "sections": "Sections 2–5; Figure 6; Appendix B; local TeX",
+      "training_rollout": "current student",
+      "training_objective": "sampled-token OPD / MOPD",
+      "evaluation": "in-domain and cross-domain tasks; top-16 overlap",
+      "evidence_boundary": "observed generalization is not full distribution equality"
+    },
+    {
+      "key": "semi",
+      "title": "Semi-OPD",
+      "version": "2610.11291v1",
+      "url": "https://arxiv.org/html/2610.11291v1",
+      "sections": "Sections 2–4; Table 3; Appendix A/C",
+      "training_rollout": "fixed initial student versus refreshed student",
+      "training_objective": "sampled-token reverse KL",
+      "evaluation": "math avg@32, endpoint and normalized AUC, dynamics",
+      "evidence_boundary": "not evidence that full-vocab fixed-S0 risk always wins"
+    },
+    {
+      "key": "dynamics",
+      "title": "On-Policy or Off-Policy Learning?",
+      "version": "2609.35259v1",
+      "url": "https://arxiv.org/html/2609.35259v1",
+      "sections": "Sections 3–6; C.5; D",
+      "training_rollout": "student versus teacher, policy spectrum",
+      "training_objective": "full-vocab FKL/RKL semi-gradient",
+      "evaluation": "ID/OOD tasks, coverage, update sparsity",
+      "evidence_boundary": "loss/source/LR controlled; sequence identities have assumptions"
+    },
+    {
+      "key": "rk-theory",
+      "title": "Reverse-KL Policy Distillation",
+      "version": "2610.30844v2",
+      "url": "https://arxiv.org/html/2610.30844v2",
+      "sections": "Section 2; Proposition 3.1; Sections 3–4",
+      "training_rollout": "online student / offline teacher",
+      "training_objective": "full/action feedback; finite policy class",
+      "evaluation": "trajectory reverse-KL statistical risk",
+      "evidence_boundary": "boundedness and optimization assumptions; not an Adam theorem"
+    },
+    {
+      "key": "ts",
+      "title": "Transfer-Stratified OPD",
+      "version": "2610.05974v1",
+      "url": "https://arxiv.org/html/2610.05974v1",
+      "sections": "Sections 3–5; B/C",
+      "training_rollout": "student; stratified prompts",
+      "training_objective": "gated FKL/RKL plus entropy control",
+      "evaluation": "task scores, transfer gap, problem strata",
+      "evidence_boundary": "multiple interventions; endpoint KL difference not RL absorption"
+    },
+    {
+      "key": "scaling",
+      "title": "Scaling Properties",
+      "version": "2609.32722v1",
+      "url": "https://arxiv.org/html/2609.32722v1",
+      "sections": "Sections 3–6; B/D/E",
+      "training_rollout": "student",
+      "training_objective": "Vanilla-OPD and variants",
+      "evaluation": "gold score versus square-root KL to initialization",
+      "evidence_boundary": "reference is S0, not teacher; one-run grid"
+    },
+    {
+      "key": "topd",
+      "title": "TOP-D",
+      "version": "2607.04751v2",
+      "url": "https://arxiv.org/html/2607.04751v2",
+      "sections": "Section 3; Algorithm 1; Appendix D",
+      "training_rollout": "behavior student with internal reuse",
+      "training_objective": "proximal teacher and trust-region surrogate",
+      "evaluation": "math accuracy, stability, efficiency",
+      "evidence_boundary": "minibatch partition is not reuse16 of identical trajectories"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "verified": "2026-10-31",
+  "scope": "targeted conceptual lineage, not a claim about the first historical use of gold",
+  "exact_ids_resolved": 8,
+  "search_errors": [],
+  "raw_search_sha256": "26975f4816767491800f6c4b7c5b3f00bcdd28e1782029c5f00ea39ecbe938f6",
+  "additional_source": "Bao paper reused from prior version-pinned reading",
+  "sources": [
+    {
+      "authors": "Christiano et al.",
+      "id": "1706.03741",
+      "role": "2017 concept background",
+      "url": "https://arxiv.org/abs/1706.03741"
+    },
+    {
+      "authors": "Stiennon et al.",
+      "id": "2009.01325",
+      "role": "2020 language-model preference training",
+      "url": "https://arxiv.org/abs/2009.01325"
+    },
+    {
+      "authors": "Bai et al.",
+      "id": "2204.05862",
+      "role": "2022 section 4.3 empirical square-root relation",
+      "url": "https://arxiv.org/html/2204.05862"
+    },
+    {
+      "authors": "Gao et al.",
+      "id": "2210.10760v1",
+      "role": "2022 preprint; ICML2023; sections 1-3",
+      "url": "https://arxiv.org/html/2210.10760v1"
+    },
+    {
+      "authors": "Rafailov et al.",
+      "id": "2406.02900v2",
+      "role": "2024 independent judge win-rates; section 3",
+      "url": "https://arxiv.org/html/2406.02900v2"
+    },
+    {
+      "authors": "Mroueh",
+      "id": "2406.05883v1",
+      "role": "2024 transport bounds; sections 3-4",
+      "url": "https://arxiv.org/html/2406.05883v1"
+    },
+    {
+      "authors": "Tiapkin et al.",
+      "id": "2502.02671v1",
+      "role": "2025 oracle-distance diagnosis",
+      "url": "https://arxiv.org/html/2502.02671v1"
+    },
+    {
+      "authors": "Bao et al.",
+      "id": "2609.32722v1",
+      "role": "2026-09-26 task accuracy; sections 1,3,D",
+      "url": "https://arxiv.org/html/2609.32722v1"
+    },
+    {
+      "authors": "Aouad et al.",
+      "id": "2609.38526v1",
+      "role": "2026-09-29 concurrent work, not Bao predecessor",
+      "url": "https://arxiv.org/html/2609.38526v1"
+    }
+  ]
+}
