@@ -623,6 +623,9 @@ class PPOTrainer(ABC):
                     with marked_timer("save_checkpoint", self.timing_raw, color="green"):
                         self._save_checkpoint()
 
+                before_sync = getattr(self.readout_callback, "on_before_weight_sync", None)
+                if before_sync is not None:
+                    metrics.update(before_sync(self, batch, self.global_steps))
                 self.on_step_end()
                 if self.readout_callback is not None:
                     metrics.update(self.readout_callback.on_readout(self, self.global_steps))
@@ -1276,6 +1279,9 @@ class PPOTrainer(ABC):
         )
 
     def _validate(self) -> dict[str, float]:
+        fixed_readout = getattr(getattr(self, "readout_callback", None), "validate_fixed_rkl", None)
+        if fixed_readout is not None:
+            return fixed_readout(self)
         if self.val_dataloader is None:
             raise ValueError("Validation requires nonempty data.val_files")
         # Lists to collect samples for the table

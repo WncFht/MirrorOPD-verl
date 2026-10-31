@@ -29,7 +29,10 @@ class HiddenBatchIO:
         self.fields = [field for source in sources for field in (f"{source}_hidden", f"{source}_positions")]
         if "anchor" in sources:
             self.fields.append("anchor_version")
-        self.student = self.active and tu.get_non_tensor_data(data, "full_vocab_train", default=False)
+        self.student = self.active and (
+            tu.get_non_tensor_data(data, "full_vocab_train", default=False)
+            or tu.get_non_tensor_data(data, "full_vocab_score", default=False)
+        )
         partition_field = "sample_partition" if self.keys_field == "sample_keys" else "full_vocab_partition"
         self.partition = tu.get_non_tensor_data(data, partition_field, default=None)
         self.async_write = self.writer and tu.get_non_tensor_data(data, "full_vocab_async_write", default=False)
