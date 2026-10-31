@@ -1,0 +1,78 @@
+{
+  "scope": "Teacher projection only, same BF16 operands; no trained FP32 student head downcast; no full pipeline speedup claim",
+  "bf16_reduced_precision_reduction": false,
+  "rows": [
+    {
+      "chunk": 256,
+      "tokens": 8192,
+      "strict_fp32_seconds": [
+        0.1979711949825287,
+        0.19802287966012955,
+        0.21011816710233688,
+        0.20159803330898285,
+        0.1994486227631569
+      ],
+      "bf16_operands_fp32_output_seconds": [
+        0.017226040363311768,
+        0.01728960871696472,
+        0.01767430454492569,
+        0.01773238182067871,
+        0.017774328589439392
+      ],
+      "projection_speedup": 11.284665954249316,
+      "max_logit_abs_delta": 0.000362396240234375,
+      "max_token_rkl_abs_delta": 9.357929229736328e-05,
+      "teacher_copy_token_rkl_min": -2.3145003069657832e-07,
+      "teacher_copy_token_rkl_max": 2.783363868275046e-07,
+      "teacher_copy_mean_rkl": -4.3163854608618824e-10
+    },
+    {
+      "chunk": 512,
+      "tokens": 8192,
+      "strict_fp32_seconds": [
+        0.20438747853040695,
+        0.2014133632183075,
+        0.20241137593984604,
+        0.19882137328386307,
+        0.19846660643815994
+      ],
+      "bf16_operands_fp32_output_seconds": [
+        0.017229989171028137,
+        0.016485780477523804,
+        0.016433633863925934,
+        0.01670338213443756,
+        0.016743823885917664
+      ],
+      "projection_speedup": 12.058238361382584,
+      "max_logit_abs_delta": 0.000362396240234375,
+      "max_token_rkl_abs_delta": 9.357929229736328e-05,
+      "teacher_copy_token_rkl_min": -2.314497180577746e-07,
+      "teacher_copy_token_rkl_max": 2.7833632998408575e-07,
+      "teacher_copy_mean_rkl": -4.316387074154715e-10
+    },
+    {
+      "chunk": 1024,
+      "tokens": 8192,
+      "strict_fp32_seconds": [
+        0.20545890182256699,
+        0.2022104486823082,
+        0.19969232380390167,
+        0.19759272038936615,
+        0.19632495194673538
+      ],
+      "bf16_operands_fp32_output_seconds": [
+        0.016628816723823547,
+        0.017166584730148315,
+        0.017924845218658447,
+        0.017567455768585205,
+        0.016110047698020935
+      ],
+      "projection_speedup": 11.632618074182096,
+      "max_logit_abs_delta": 0.000362396240234375,
+      "max_token_rkl_abs_delta": 9.357929229736328e-05,
+      "teacher_copy_token_rkl_min": -2.3145003069657832e-07,
+      "teacher_copy_token_rkl_max": 2.7833632998408575e-07,
+      "teacher_copy_mean_rkl": -4.31638239040133e-10
+    }
+  ]
+}

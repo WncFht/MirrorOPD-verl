@@ -852,6 +852,55 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         return output.cpu() if output is not None else None
 
     @register(dispatch_mode=make_nd_compute_dataproto_dispatch_fn(mesh_name="actor"))
+    @DistProfiler.annotate(color="blue", role="actor_rkl_score")
+    def score_full_vocab(self, data: TensorDict) -> TensorDict:
+        """Score supplied token prefixes; do not update optimizer, scheduler, or weights."""
+        if not tu.get_non_tensor_data(data, "full_vocab_score", default=False):
+            raise ValueError("Missing explicit full_vocab_score readout request")
+        if tu.get_non_tensor_data(data, "compute_loss", default=True):
+            raise ValueError("RKL readout requires compute_loss=False")
+        try:
+            output = self.actor.infer_batch(data)
+            return output.cpu() if output is not None else None
+        finally:
+            self.actor.engine.full_vocab_teacher_head.release()
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL)
+    def begin_rkl_readout(self, audit_state=False):
+        from verl.experimental.rollout_policy.readout import state_digest
+
+        if getattr(self, "_rkl_readout_rng", None) is not None:
+            raise RuntimeError("Nested RKL readout")
+        engine = self.actor.engine
+        self._rkl_readout_rng = engine.checkpoint_manager.get_rng_state()
+        self._rkl_readout_digest = (
+            state_digest((dict(engine.module.named_parameters()), engine.optimizer.state_dict()))
+            if audit_state
+            else None
+        )
+        return {"state_digest": self._rkl_readout_digest}
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL)
+    def end_rkl_readout(self):
+        from verl.experimental.rollout_policy.readout import state_digest
+
+        engine = self.actor.engine
+        rng = self._rkl_readout_rng
+        if rng is None:
+            raise RuntimeError("No active RKL readout")
+        engine.checkpoint_manager.load_rng_state(rng)
+        self._rkl_readout_rng = None
+        expected = self._rkl_readout_digest
+        actual = (
+            state_digest((dict(engine.module.named_parameters()), engine.optimizer.state_dict()))
+            if expected is not None
+            else None
+        )
+        if actual != expected:
+            raise RuntimeError("RKL evaluation changed model parameters or optimizer state")
+        return {"state_digest": actual, "unchanged": True}
+
+    @register(dispatch_mode=make_nd_compute_dataproto_dispatch_fn(mesh_name="actor"))
     # scheduled=True: this stage iterates over update mini-batches, so in discrete mode its trace
     # is the one a torch.profiler.schedule sub-samples (other stages stay full).
     @DistProfiler.annotate(color="red", role="actor_update", scheduled=True)

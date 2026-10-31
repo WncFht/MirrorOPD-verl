@@ -15,6 +15,7 @@
 ## 分析与证据
 
 - [Sampled 信号消融](sampled-controls/2026-10-25-Sampled信号消融.md)。
+- [Token-mean 的现有运行风险](2026-10-31-Token-mean的现有运行风险核查.md)：在线 full-RKL 的长度缩放、同参数裁剪反事实，以及近期固定轨迹研究的实际分母。
 - [Full/sample基础对照](sampled-vs-full/2026-10-28-基础对照设置与结果索引.md)。
 - E13/E16/E17的复用因素另归[预算线](../reuse-budget/README.md)。
 - MDPO/BPO的目标定义见[镜像理论](../../theory/mirror-descent/形状与插值目标.md)，实际求解见[精度研究](../teacher-transfer/optimizer-precision/README.md)。

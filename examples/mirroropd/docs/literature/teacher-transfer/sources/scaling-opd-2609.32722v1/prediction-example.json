@@ -1,0 +1,58 @@
+{
+  "source": "https://arxiv.org/pdf/2609.32722v1",
+  "sections": "Equation 6, PDF Tables 3/9 and Appendix H",
+  "interpretation": "Formula substitution using rounded published coefficients; not an author-data refit",
+  "units": "Gold scores in [0,1]; rate is gold probability per unit sqrt token-mean KL",
+  "peak_coefficients": {
+    "A": 0.97,
+    "alpha": 0.304,
+    "beta": -0.267,
+    "zeta": 0.952
+  },
+  "rate_coefficients": {
+    "B": 0.116,
+    "gamma": 0.189,
+    "delta": -0.609,
+    "xi": 1.896
+  },
+  "cases": [
+    {
+      "teacher": "1.5B RL endpoint",
+      "student_b": 7,
+      "teacher_effective_b": 1.5,
+      "teacher_gold": 0.636,
+      "calculated_peak_error": 0.22858451860935275,
+      "calculated_peak": 0.7714154813906473,
+      "paper_observed_peak": 0.775,
+      "calculated_rate": 0.4262325963163943,
+      "paper_observed_rate": 0.558
+    },
+    {
+      "teacher": "3B RL intermediate",
+      "student_b": 7,
+      "teacher_effective_b": 3,
+      "teacher_gold": 0.66,
+      "calculated_peak_error": 0.2577633896189363,
+      "calculated_peak": 0.7422366103810637,
+      "paper_observed_peak": 0.738,
+      "calculated_rate": 0.31804135042103876,
+      "paper_observed_rate": null
+    },
+    {
+      "teacher": "3B RL endpoint",
+      "student_b": 7,
+      "teacher_effective_b": 3,
+      "teacher_gold": 0.736,
+      "calculated_peak_error": 0.2025910444774057,
+      "calculated_peak": 0.7974089555225943,
+      "paper_observed_peak": 0.803,
+      "calculated_rate": 0.513814753385355,
+      "paper_observed_rate": 0.67
+    }
+  ],
+  "elasticities": {
+    "student_doubling_error_multiplier": 0.8100034736320458,
+    "teacher_doubling_fixed_score_error_multiplier": 1.2033030259995023,
+    "teacher_error_0364_to_0340_multiplier": 0.9371290738164775
+  }
+}

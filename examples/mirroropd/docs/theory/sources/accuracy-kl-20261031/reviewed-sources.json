@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-31",
+  "scope": "Claim-to-source map for the accuracy/sequence/token KL note",
+  "exact_arxiv_ids_resolved": 8,
+  "raw_search_records": 18,
+  "source_errors": [],
+  "primary_sources_added_directly": [
+    "AAAI REPS PDF",
+    "JMLR IGO PDF"
+  ],
+  "raw_report_sha256": "4fc2d5274b93b89415db5643597c897b7b309424aa548a21fbec002c375f898e",
+  "sources": [
+    {
+      "key": "erven",
+      "authors": "van Erven and Harremoes",
+      "version": "1206.2459v2",
+      "url": "https://arxiv.org/html/1206.2459v2",
+      "location": "Theorem 9; section III-H",
+      "supports": "Data processing, including KL at order one; regular parametric expansion"
+    },
+    {
+      "key": "sason",
+      "authors": "Sason and Verdu",
+      "version": "1508.00335v7",
+      "url": "https://arxiv.org/html/1508.00335v7",
+      "location": "Introduction Eq. 1; variation bounds",
+      "supports": "Pinsker-type inequalities; convert variation and log-base conventions"
+    },
+    {
+      "key": "igo",
+      "authors": "Ollivier, Arnold, Auger, Hansen",
+      "version": "JMLR 18(18), 2017",
+      "url": "https://www.jmlr.org/papers/volume18/14-467/14-467.pdf",
+      "location": "Section 2.1.2, Eq. 2, PDF page 7",
+      "supports": "Multivariate KL/Fisher quadratic expansion"
+    },
+    {
+      "key": "reps",
+      "authors": "Peters, Mulling, Altun",
+      "version": "AAAI 2010",
+      "url": "https://ojs.aaai.org/index.php/AAAI/article/download/7727/7588",
+      "location": "Eq. 9; appendix",
+      "supports": "KL-constrained policy optimization background; MDP consistency differs from fixed prompts"
+    },
+    {
+      "key": "dpo",
+      "authors": "Rafailov et al.",
+      "version": "2305.18290v3",
+      "url": "https://arxiv.org/html/2305.18290v3",
+      "location": "Eq. 4; appendix A.1",
+      "supports": "Conditional Gibbs optimum for general reward; binary reward expansion derived in this note"
+    },
+    {
+      "key": "mroueh",
+      "authors": "Mroueh",
+      "version": "2406.05883v1",
+      "url": "https://arxiv.org/html/2406.05883v1",
+      "location": "Sections 3-4",
+      "supports": "Sub-Gaussian reward transport bound; proxy/gold relation"
+    },
+    {
+      "key": "bai",
+      "authors": "Bai et al.",
+      "version": "2204.05862",
+      "url": "https://arxiv.org/html/2204.05862",
+      "location": "Section 4.3",
+      "supports": "Empirical RLHF relation and local expansion interpretation"
+    },
+    {
+      "key": "bao",
+      "authors": "Bao et al.",
+      "version": "2609.32722v1",
+      "url": "https://arxiv.org/html/2609.32722v1",
+      "location": "Appendix D",
+      "supports": "Local OPD task-score geometry"
+    },
+    {
+      "key": "dynamics",
+      "authors": "Piskorz, Berthon, van der Schaar",
+      "version": "2609.35259v1",
+      "url": "https://arxiv.org/html/2609.35259v1",
+      "location": "Appendices B and C.5; Proposition C.4",
+      "supports": "Conditional KL logit gradient and matching-rollout chain rule"
+    },
+    {
+      "key": "rk-theory",
+      "authors": "Liu, Wei, Zimmert",
+      "version": "2610.30844v2",
+      "url": "https://arxiv.org/html/2610.30844v2",
+      "location": "Sections 2-3",
+      "supports": "Trajectory risk and mismatch with historical state visitation"
+    }
+  ],
+  "derivation_status": {
+    "classical": [
+      "DPI and event partition",
+      "Pinsker bound",
+      "KL chain rule",
+      "Fisher quadratic form",
+      "Gibbs optimum"
+    ],
+    "specialized_in_note": [
+      "binary-correctness coefficient V and constrained frontier expansion",
+      "local slope bound with prompt-conditional variance"
+    ],
+    "illustrative": [
+      "three-outcome equal-accuracy example",
+      "zero first-order gain example",
+      "teacher logit-gradient comparison"
+    ]
+  }
+}

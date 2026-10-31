@@ -1,0 +1,102 @@
+{
+  "kind": "synthetic mathematical examples; no LLM training",
+  "teacher_counterexample": [
+    {
+      "teacher": "A",
+      "probabilities": [
+        0.01,
+        0.89,
+        0.1
+      ],
+      "own_accuracy": 0.9,
+      "student_initial_accuracy": 0.61,
+      "rkl": 2.9425012293588226,
+      "negative_rkl_logit_gradient": [
+        -0.6911059997179666,
+        0.07431137599090963,
+        0.6167946237270566
+      ],
+      "analytic_gold_derivative": -0.30816443055230636,
+      "finite_difference": -0.30816443052916753,
+      "student_accuracy_after_eta_001": 0.6069141146084107
+    },
+    {
+      "teacher": "B",
+      "probabilities": [
+        0.7,
+        0.1,
+        0.2
+      ],
+      "own_accuracy": 0.7999999999999999,
+      "student_initial_accuracy": 0.61,
+      "rkl": 0.14493719647821024,
+      "negative_rkl_logit_gradient": [
+        0.17945272578328106,
+        0.02447522289472256,
+        -0.20392794867800362
+      ],
+      "analytic_gold_derivative": 0.09060185019307425,
+      "finite_difference": 0.09060185013343158,
+      "student_accuracy_after_eta_001": 0.6109056426143273
+    }
+  ],
+  "chain_rule": {
+    "sequence_kl": 0.24246668245638944,
+    "conditional_sum": 0.24246668245638942,
+    "fixed_h_token_mean": 0.12123334122819471,
+    "accuracy_p": 0.66,
+    "accuracy_q": 0.325,
+    "correctness_partition_kl": 0.2424666824563894
+  },
+  "equal_accuracy_different_kl": [
+    {
+      "epsilon": 0.001,
+      "p_accuracy": 0.5,
+      "q_accuracy": 0.5,
+      "kl": 1.2075789349932435
+    },
+    {
+      "epsilon": 1e-06,
+      "p_accuracy": 0.5,
+      "q_accuracy": 0.5,
+      "kl": 2.9340177540716095
+    },
+    {
+      "epsilon": 1e-12,
+      "p_accuracy": 0.5,
+      "q_accuracy": 0.5,
+      "kl": 6.387894893562677
+    }
+  ],
+  "zero_linear_coefficient": [
+    {
+      "tau": 0.001,
+      "kl": 4.0040216961946855e-06,
+      "accuracy_gain": -1.0000000000287557e-06,
+      "gain_over_kl": -0.24974889646055834
+    },
+    {
+      "tau": 0.0005,
+      "kl": 1.00050135511377e-06,
+      "accuracy_gain": -2.500000000349445e-07,
+      "gain_over_kl": -0.24987472406423303
+    }
+  ],
+  "optimal_frontier": [
+    {
+      "eta": 0.001,
+      "kl": 9.499599614423486e-08,
+      "gain": 0.00018999399496841818,
+      "gain_over_sqrt_kl": 0.6164349076252522,
+      "predicted_limit": 0.6164414002968976
+    },
+    {
+      "eta": 0.0005,
+      "kl": 2.3749499735226173e-08,
+      "gain": 9.499849937093517e-05,
+      "gain_over_sqrt_kl": 0.6164381552227338,
+      "predicted_limit": 0.6164414002968976
+    }
+  ],
+  "checks": "all assertions passed"
+}

@@ -1,0 +1,20 @@
+{
+  "commit": "6b6b1782cc3f04749dd077de19353f839f6bc048",
+  "validation_defaults": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": -1,
+    "do_sample": true
+  },
+  "scope": "Public recipe defaults, not a claim about undisclosed per-run environment overrides",
+  "files": {
+    "recipe/_common.sh": {
+      "sha256": "72adca4a6af51e69760598d96db1cb8bddae22e164bafa3a926a9999d869fe37",
+      "url": "https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/recipe/_common.sh"
+    },
+    "verl/verl/trainer/config/rollout/rollout.yaml": {
+      "sha256": "dbebb46db85b1d1139cbdd37ef7731d383a587beafa058fb1aeea8a95dbadce3",
+      "url": "https://github.com/Thinking-Space/One-Shot-OPD/blob/6b6b1782cc3f04749dd077de19353f839f6bc048/verl/verl/trainer/config/rollout/rollout.yaml"
+    }
+  }
+}
