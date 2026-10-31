@@ -133,6 +133,8 @@ def test_validation_sums_windows_and_omits_any_partially_missing_metric():
 
 
 def _trainer():
+    from verl.experimental.rollout_policy.service import create_rollout_service
+
     trainer = object.__new__(PPOTrainerSync)
     trainer.config = OmegaConf.create(
         {
@@ -144,6 +146,10 @@ def _trainer():
     trainer.readout_callback = None  # The fixture bypasses __init__; use its default disabled readout.
     trainer.global_steps = 5
     trainer.agent_loop_manager = MagicMock()
+    trainer.common_rollout_sampling = False
+    trainer.rollout_service = create_rollout_service(
+        trainer, trainer_module.PPOTrainer._submit_batch_to_rollout.__get__(trainer)
+    )
     return trainer
 
 

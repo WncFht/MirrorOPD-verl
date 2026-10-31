@@ -485,12 +485,15 @@ class FSDPCheckpointManager(BaseCheckpointManager):
             if hasattr(model_config, "auto_map") and None in model_config.auto_map:
                 model_config.auto_map = {k: v for k, v in model_config.auto_map.items() if k is not None}
 
-            if self.should_save_hf_model and self.hf_export_dtype is not None:
+            export_dtype = self.hf_export_dtype
+            if self.checkpoint_config and self.checkpoint_config.get("preserve_hf_master_weights", False):
+                export_dtype = next(self.model.parameters()).dtype
+            if self.should_save_hf_model and export_dtype is not None:
                 # Record the exported weight dtype instead of the training dtype the model was built with.
                 model_config = copy.deepcopy(model_config)
                 for cfg in (model_config, *(getattr(model_config, k, None) for k in model_config.sub_configs)):
                     if cfg is not None:
-                        cfg.dtype = self.hf_export_dtype
+                        cfg.dtype = export_dtype
 
             model_config.save_pretrained(hf_config_tokenizer_path)
             if self.processing_class is not None:

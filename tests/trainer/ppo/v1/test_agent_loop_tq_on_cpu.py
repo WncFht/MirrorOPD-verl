@@ -56,6 +56,7 @@ class _DummyWorker:
     distillation_enabled = False
 
     def __init__(self, topk_log_probs: int):
+        self.config = OmegaConf.create({})
         self.rollout_config = OmegaConf.create({"topk_log_probs": topk_log_probs})
         self.processor = None
         self.reward_loop_worker_handles = None

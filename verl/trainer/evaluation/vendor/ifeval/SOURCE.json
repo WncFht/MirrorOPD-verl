@@ -1,0 +1,22 @@
+{
+  "upstream": "https://github.com/google-research/google-research",
+  "revision": "e6890f85757dd84e27ca6df2dd30651dafad28e0",
+  "files": {
+    "evaluation_lib.py": {
+      "upstream_sha256": "35decc06000718487f44d7deafa6d3f48a8ec0886281edf40162c0265b7d248c",
+      "local_sha256": "83ea37b0f764a1526e9d8888bd5debe7760bb507f43a5f501e76135768cad3b0"
+    },
+    "instructions.py": {
+      "upstream_sha256": "60e086f5342a03ce8e18b64bbcccf86308f523c08aa826707a562150a52f3edf",
+      "local_sha256": "a67e7eb29d1cf5c5fd62e1185b9e8ab545c4fbce9c11c15bcae26486b8038b8a"
+    },
+    "instructions_util.py": {
+      "upstream_sha256": "a73797261eee5bf447e279d82a2b700b1bdd3cb1193412dbab1270a85832bc6b",
+      "local_sha256": "a73797261eee5bf447e279d82a2b700b1bdd3cb1193412dbab1270a85832bc6b"
+    },
+    "instructions_registry.py": {
+      "upstream_sha256": "ec92d72c264f6d906978613085db262356174300370a3fffe6fefd5969ce9cfc",
+      "local_sha256": "59ce3690e2f704d9a855810607c034e69387245b67dffc9839e914446bd7c993"
+    }
+  }
+}

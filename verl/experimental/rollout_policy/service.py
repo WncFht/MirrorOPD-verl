@@ -36,6 +36,7 @@ class DefaultRolloutService(RolloutService):
         super().__init__(trainer)
         self.submit = submit
         self.common_sampling = trainer.common_rollout_sampling
+        self.resident_version = None
 
     @auto_await
     async def configure_sampling(self):
@@ -45,16 +46,30 @@ class DefaultRolloutService(RolloutService):
             await context.set_policy_sampling(trainer.checkpoint_manager.replicas, True)
 
     def initialize(self):
-        self.trainer.checkpoint_manager.update_weights(self.trainer.global_steps)
-        self.configure_sampling()
+        self.ensure_current(self.trainer.global_steps)
+
+    def ensure_current(self, version):
+        if self.resident_version != version:
+            self.trainer.checkpoint_manager.update_weights(version)
+            self.configure_sampling()
+            self.resident_version = version
+
+    def park(self):
+        self.trainer.checkpoint_manager.sleep_replicas()
+        # Level-2 sleep discards weights; a matching version alone is insufficient.
+        self.resident_version = None
 
     def after_update(self):
+        if (
+            self.trainer.config.trainer.get("evaluation")
+            and self.trainer.global_steps >= self.trainer.total_training_steps
+        ):
+            return
         with marked_timer("update_weights", self.trainer.timing_raw, color="red"):
-            self.trainer.checkpoint_manager.update_weights(self.trainer.global_steps)
-            self.configure_sampling()
+            self.ensure_current(self.trainer.global_steps)
 
     def after_sample(self):
-        self.trainer.checkpoint_manager.sleep_replicas()
+        self.park()
 
 
 class PolicyRolloutService(RolloutService):

@@ -75,7 +75,9 @@ def run_ppo(config, task_runner_class) -> None:
         runtime_env = OmegaConf.merge(default_runtime_env, platform_runtime_env, runtime_env_kwargs)
         ray_init_kwargs = OmegaConf.create({**ray_init_kwargs, "runtime_env": runtime_env})
         print(f"ray init kwargs: {ray_init_kwargs}")
-        ray.init(**OmegaConf.to_container(ray_init_kwargs))
+        # Ray receives plain strings, not OmegaConf nodes. Resolve environment
+        # references before a remote worker replaces those same variables.
+        ray.init(**OmegaConf.to_container(ray_init_kwargs, resolve=True))
 
     # Create a remote instance of the TaskRunner class, and
     # Execute the `run` method of the TaskRunner instance remotely and wait for it to complete

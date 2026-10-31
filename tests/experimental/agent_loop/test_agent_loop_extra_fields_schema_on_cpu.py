@@ -478,6 +478,7 @@ async def test_agent_loop_postprocess_accepts_read_only_routed_experts_on_cpu():
 
         def __init__(self):
             self.tokenizer = _FakeTokenizer()
+            self.config = OmegaConf.create({})
             self.rollout_config = OmegaConf.create({"prompt_length": 4, "response_length": 4})
             self.processor = None
             self.mm_processor_kwargs = {}

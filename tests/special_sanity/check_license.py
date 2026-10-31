@@ -34,6 +34,7 @@ license_head_nvidia = "Copyright (c) 2025, NVIDIA CORPORATION. All rights reserv
 license_head_nvidia_26 = "Copyright (c) 2026, NVIDIA CORPORATION. All rights reserved."
 license_head_baai = "Copyright (c) 2026 BAAI. All rights reserved."
 license_head_google = "Copyright (c) 2026 Google LLC. All rights reserved."
+license_head_google_research = "Copyright 2026 The Google Research Authors."
 license_head_mirroropd = "Copyright 2026 MirrorOPD-verl contributors"
 license_headers = [
     "Copyright (c) 2026 DeepSeek",  # MIT maintenance helpers retain upstream attribution.
@@ -54,6 +55,7 @@ license_headers = [
     license_head_nvidia_26,
     license_head_baai,
     license_head_google,
+    license_head_google_research,
     license_head_mirroropd,
 ]
 

@@ -226,9 +226,9 @@ class FSDPEngine(BaseEngine):
             checkpoint_config=self.checkpoint_config,
             trust_remote_code=self.model_config.trust_remote_code,
             per_tensor_param_fn=self._get_hf_export_per_tensor_param,
-            hf_export_dtype=PrecisionType.to_dtype(
-                (self.engine_config.mixed_precision or {}).get("param_dtype", "bf16")
-            ),
+            hf_export_dtype=None
+            if (self.checkpoint_config or {}).get("preserve_hf_master_weights", False)
+            else PrecisionType.to_dtype((self.engine_config.mixed_precision or {}).get("param_dtype", "bf16")),
             grad_scaler=self.scaler,
         )
         if self._qat_enabled and self.checkpoint_manager.should_save_hf_model:
@@ -1313,7 +1313,9 @@ class FSDPEngineWithLMHead(FSDPEngine):
                             w.to(h.dtype),
                             teacher_hidden,
                             weight,
-                            token_chunk=config.token_chunk_size,
+                            token_chunk=tu.get_non_tensor_data(
+                                micro_batch, "full_vocab_score_token_chunk", default=config.token_chunk_size
+                            ),
                         )
                     return sample_sums(values, [len(p) for p in positions])
 
