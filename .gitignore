@@ -213,6 +213,10 @@ outputs
 # MirrorOPD's scoped documentation tooling dependencies.
 /examples/mirroropd/tools/maintenance/node_modules
 
+# Local development worktrees and execution artifacts stay inside this repository.
+/.worktrees/
+/runs/
+
 # Reproducible per-run figure bundles; keep curated report figures and the run registry.
 /examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism/appendix/data/run-figures/
 # Search command diagnostics and intermediate monitoring snapshots remain local.
