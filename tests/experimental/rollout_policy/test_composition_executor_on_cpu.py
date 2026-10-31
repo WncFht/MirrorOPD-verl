@@ -71,7 +71,14 @@ def test_native_loading_and_refit_target_are_independent_of_learner_initializati
             "trainer": {"n_gpus_per_node": 1},
             "actor_rollout_ref": {
                 "model": {"path": paths["learner"]},
-                "rollout": {"n": 1, "max_model_len": 64, "engine_kwargs": {"vllm": {}}},
+                "rollout": {
+                    "n": 1,
+                    "max_model_len": 64,
+                    "prompt_length": 16,
+                    "response_length": 16,
+                    "val_kwargs": {"max_tokens": 48},
+                    "engine_kwargs": {"vllm": {}},
+                },
             },
         }
     )
@@ -88,6 +95,10 @@ def test_native_loading_and_refit_target_are_independent_of_learner_initializati
     layout = ComponentLayout.from_plan(plan)
     first, second, weight = layout.first, layout.second, plan.resolved_control
     assert len(replicas) == 1
+    assert replicas[0].rollout.max_model_len == 32
+    assert replicas[0].rollout.max_num_batched_tokens == 32
+    assert config.actor_rollout_ref.rollout.max_model_len == 64
+    assert config.actor_rollout_ref.rollout.val_kwargs.max_tokens == 48
     assert replicas[0].model.path == first.path
     assert replicas[0].rollout.engine_kwargs.vllm.hf_overrides.second_path == second.path
     assert server.prepare.remote.call_args.args[2] == weight

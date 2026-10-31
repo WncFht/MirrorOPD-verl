@@ -169,7 +169,8 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(
                     "data_parallel_size": 1,
                     "pipeline_model_parallel_size": 1,
                     "expert_parallel_size": 2,
-                    "max_model_len": None,
+                    "max_model_len": 35840,
+                    "val_kwargs": {"max_tokens": 31744},
                     "prompt_length": 4096,
                     "response_length": 7168,
                     "max_num_seqs": 8,
@@ -195,6 +196,8 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(
         assert rollout.pipeline_model_parallel_size == rollout.expert_parallel_size == 1
     assert config.actor_rollout_ref.rollout.tensor_model_parallel_size == 2
     assert config.actor_rollout_ref.rollout.expert_parallel_size == 2
+    assert config.actor_rollout_ref.rollout.max_model_len == 35840
+    assert config.actor_rollout_ref.rollout.val_kwargs.max_tokens == 31744
     # 36-layer model: explicit 128 differs from hidden_size / heads = 80.
     kv_per_token = 147456 if head_dim else 368640
     quantum = 256 * 1024**2
@@ -250,3 +253,17 @@ def test_policy_sampler_control_uses_named_rpc(monkeypatch):
     runtime = ExecutionContext(None, RolloutPolicyConfig(), None)
     asyncio.run(runtime.set_policy_sampling([replica], True))
     rpc.assert_awaited_once_with("configure_rollout_policy_sampler", args=(True,))
+
+
+@pytest.mark.parametrize("declared,expected", [(None, 11264), (35840, 11264), (8192, 8192)])
+def test_private_context_preserves_validation_and_smaller_explicit_limits(declared, expected):
+    from verl.workers.rollout.vllm_rollout.policy_execution import training_generator_config
+
+    original = OmegaConf.create(
+        {"max_model_len": declared, "prompt_length": 4096, "response_length": 7168, "val_kwargs": {"max_tokens": 31744}}
+    )
+    private = training_generator_config(original)
+    assert private.max_model_len == expected
+    assert private.response_length == original.response_length == 7168
+    assert original.max_model_len == declared
+    assert original.val_kwargs.max_tokens == 31744
