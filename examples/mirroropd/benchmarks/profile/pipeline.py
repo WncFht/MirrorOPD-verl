@@ -41,7 +41,7 @@ def loss_fn(model_output, data, dp_group, *, config):
     return distillation_loss(SimpleNamespace(loss_agg_mode="token-mean"), config, model_output, data)
 
 
-def worker(path, world, teacher, budget, checkpoint):
+def worker(path, world, teacher, budget, checkpoint, *, no_sync=True):
     cfg = TrainingWorkerConfig(
         model_type="language_model",
         model_config=HFModelConfig(
@@ -63,7 +63,7 @@ def worker(path, world, teacher, budget, checkpoint):
             use_torch_compile=False,
             infer_max_token_len_per_gpu=budget,
             max_token_len_per_gpu=budget,
-            use_no_sync_for_gradient_accumulation=True,
+            use_no_sync_for_gradient_accumulation=no_sync,
         ),
         optimizer_config=None if teacher else FSDPOptimizerConfig(lr=0.0, total_training_steps=20),
     )
