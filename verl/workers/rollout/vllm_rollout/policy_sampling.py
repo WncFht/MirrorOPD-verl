@@ -26,9 +26,9 @@ class FusionTopKTopPSampler(nn.Module):
 def configure_policy_sampler(worker, enabled):
     """Use the policy filter for a drained single-model phase, then restore it.
 
-    The named worker RPC invokes this helper on each engine worker. It
-    changes only that worker's sampler; ordinary single and validation retain
-    their original instance after the policy phase releases ownership.
+    The named worker RPC changes only this engine worker. A borrowed policy
+    phase restores the previous instance on release; the supported default
+    single service keeps the common sampler installed for its run.
     """
     sampler = worker.model_runner.sampler
     attribute = "_rollout_policy_original_sampler"
