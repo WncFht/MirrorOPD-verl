@@ -96,6 +96,14 @@ PRESET_FAMILIES = {
     "E52": "teacher-transfer",
     "E53": "teacher-transfer",
     "E54": "infra",
+    "E55": "infra",
+    "E56": "infra",
+    "E57": "infra",
+    "E58": "infra",
+    "E59": "infra",
+    "E60": "infra",
+    "E61": "infra",
+    "E62": "infra",
 }
 RESEARCH_LINES = [
     {"id": "learning-signal", "title": "训练信号与目标"},
@@ -129,7 +137,12 @@ def last_evaluations(history):
         outer = row.get("step/outer", row.get("training/global_step", outer))
         optimizer = row.get("step/optimizer", row.get("training/actor_optimizer_step", optimizer))
         for slug, old_name in DATASETS.items():
-            candidates = (f"eval/{slug}/acc/mean", f"eval/{slug}/acc_mean", f"val-core/{old_name}/acc/mean@16")
+            candidates = (
+                f"eval/{slug}/acc/observed_mean",
+                f"eval/{slug}/acc/mean",
+                f"eval/{slug}/acc_mean",
+                f"val-core/{old_name}/acc/mean@16",
+            )
             key = next((k for k in candidates if k in row), None)
             if key is None:
                 continue
