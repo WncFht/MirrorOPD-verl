@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 """Native fusion lifecycle without changing the global plan or TQ collector."""
 
-import copy
 import time
 
 from omegaconf import open_dict
@@ -17,6 +16,7 @@ from verl.experimental.rollout_policy.lifecycle import (
 from verl.experimental.rollout_policy.plan import stable_seed
 from verl.experimental.rollout_policy.topology import FusionTopology
 from verl.workers.rollout.replica import RolloutMode
+from verl.workers.rollout.vllm_rollout.policy_execution import training_generator_config
 
 
 class NativeVLLMExecutor:
@@ -47,11 +47,10 @@ class NativeVLLMExecutor:
         self.timings["perf/timing/fusion_actor_park_seconds"] = time.monotonic() - tick
         tick = time.monotonic()
         if not self.resources.replicas:
-            rollout = copy.deepcopy(ctx.config.actor_rollout_ref.rollout)
+            rollout = training_generator_config(ctx.config.actor_rollout_ref.rollout)
             rollout.load_format = "auto"
             rollout.tensor_model_parallel_size = topology.tensor_parallel_size
             rollout.expert_parallel_size = 1
-            rollout.max_model_len = rollout.max_model_len or (rollout.prompt_length + rollout.response_length)
             rollout.max_num_seqs = execution.max_num_seqs
             rollout.max_num_batched_tokens = rollout.max_model_len
             rollout.enforce_eager = execution.enforce_eager

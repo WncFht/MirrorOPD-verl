@@ -13,6 +13,18 @@ from verl.workers.config import HFModelConfig
 from verl.workers.rollout.replica import RolloutMode, get_rollout_replica_class
 
 
+def training_generator_config(config):
+    """Copy a private generator config without inheriting the validation window.
+
+    The borrowed current/validation engine retains its original context. A
+    smaller explicit engine limit stays in force; request caps are unchanged.
+    """
+    rollout = copy.deepcopy(config)
+    training_context = rollout.prompt_length + rollout.response_length
+    rollout.max_model_len = min(rollout.max_model_len or training_context, training_context)
+    return rollout
+
+
 class SingleVLLMExecutor:
     def __init__(self, context):
         self.context = context
@@ -41,7 +53,7 @@ class SingleVLLMExecutor:
         source, path = (binding.kind, binding.identity or binding.path), binding.path
         if source not in self.frozen:
             resources = self.frozen[source] = OwnedReplicas(self.context)
-            rollout = copy.deepcopy(self.context.config.actor_rollout_ref.rollout)
+            rollout = training_generator_config(self.context.config.actor_rollout_ref.rollout)
             rollout.load_format = "auto"
             # Each frozen replica below owns exactly one actor worker. Keep its
             # engine topology local instead of inheriting the learner's layout.
@@ -49,7 +61,6 @@ class SingleVLLMExecutor:
             rollout.data_parallel_size = 1
             rollout.pipeline_model_parallel_size = 1
             rollout.expert_parallel_size = 1
-            rollout.max_model_len = rollout.max_model_len or (rollout.prompt_length + rollout.response_length)
             # The frozen model keeps a CPU weight backup across phases.
             model = HFModelConfig(path=path, trust_remote_code=False)
             rollout.max_num_seqs = min(rollout.max_num_seqs, max_requests)
