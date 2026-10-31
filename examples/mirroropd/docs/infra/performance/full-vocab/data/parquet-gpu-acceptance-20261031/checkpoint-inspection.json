@@ -1,0 +1,45 @@
+{
+  "scope": "CPU checkpoint deserialization and tensor validity; not model-forward reload parity",
+  "shards": [
+    {
+      "file": "model_world_size_4_rank_0.pt",
+      "entries": 339,
+      "local_elements": 444272000,
+      "dtypes": {
+        "torch.float32": 339
+      },
+      "bytes": 1777264619
+    },
+    {
+      "file": "model_world_size_4_rank_1.pt",
+      "entries": 339,
+      "local_elements": 444272000,
+      "dtypes": {
+        "torch.float32": 339
+      },
+      "bytes": 1777264619
+    },
+    {
+      "file": "model_world_size_4_rank_2.pt",
+      "entries": 339,
+      "local_elements": 444272000,
+      "dtypes": {
+        "torch.float32": 339
+      },
+      "bytes": 1777264619
+    },
+    {
+      "file": "model_world_size_4_rank_3.pt",
+      "entries": 339,
+      "local_elements": 444272000,
+      "dtypes": {
+        "torch.float32": 339
+      },
+      "bytes": 1777264619
+    }
+  ],
+  "optimizer_saved": false,
+  "all_finite": true,
+  "saved_local_elements": 1777088000,
+  "checkpoint_bytes": 7109058476
+}

@@ -1,0 +1,71 @@
+{
+  "assumptions": "BF16 KV, no TP sharding or prefix sharing; 32768 total tokens, not response-only",
+  "models": [
+    {
+      "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "identity": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B@ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "config_sha256": "37bd455e9679d2959536270fed49d25cc7c290a64f6e52abb97c71345a9cee41",
+      "layers": 28,
+      "kv_heads": 2,
+      "head_dim": 128,
+      "hidden_size": 1536,
+      "max_position_embeddings": 131072,
+      "bf16_kv_bytes_at_32768_total_tokens": 939524096
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "identity": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B@916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "config_sha256": "8290d3c1e385e2616572eb6926f7e2745f901d1c13da95970326a8a73f6c379c",
+      "layers": 28,
+      "kv_heads": 4,
+      "head_dim": 128,
+      "hidden_size": 3584,
+      "max_position_embeddings": 131072,
+      "bf16_kv_bytes_at_32768_total_tokens": 1879048192
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "identity": "Qwen/Qwen3-1.7B@70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "config_sha256": "1ddb5b89ebc90dcb417a45c213d818577e65976454d29385c8f6140771d95197",
+      "layers": 28,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "hidden_size": 2048,
+      "max_position_embeddings": 40960,
+      "bf16_kv_bytes_at_32768_total_tokens": 3758096384
+    },
+    {
+      "model": "Qwen/Qwen3-4B",
+      "identity": "Qwen/Qwen3-4B@1cfa9a7208912126459214e8b04321603b3df60c",
+      "config_sha256": "8ba006f74fecfaaeb392872a60f4a480e7ec9860153d2e1b769ec81f9a147f8a",
+      "layers": 36,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "hidden_size": 2560,
+      "max_position_embeddings": 40960,
+      "bf16_kv_bytes_at_32768_total_tokens": 4831838208
+    },
+    {
+      "model": "Qwen/Qwen3-8B",
+      "identity": "Qwen/Qwen3-8B@b968826d9c46dd6066d109eabc6255188de91218",
+      "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30",
+      "layers": 36,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "hidden_size": 4096,
+      "max_position_embeddings": 40960,
+      "bf16_kv_bytes_at_32768_total_tokens": 4831838208
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+      "identity": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B@1df8507178afcc1bef68cd8c393f61a886323761",
+      "config_sha256": "fdb89460be9a6383451437cdf632a3e087522efa682265461f33507e7069f026",
+      "layers": 48,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "hidden_size": 5120,
+      "max_position_embeddings": 131072,
+      "bf16_kv_bytes_at_32768_total_tokens": 6442450944
+    }
+  ]
+}

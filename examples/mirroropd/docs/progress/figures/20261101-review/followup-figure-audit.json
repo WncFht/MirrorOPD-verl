@@ -1,0 +1,48 @@
+{
+  "rq41-e39": {
+    "problems": [
+      "print-fit 1 text(s) <5.5pt after x0.55 downscale to 5.5in slot (figure 9.97793in wide); worst 'Different batches visit ' 4.59163pt"
+    ],
+    "errors": []
+  },
+  "rq41-e41": {
+    "problems": [
+      "print-fit 1 text(s) <5.5pt after x0.55 downscale to 5.5in slot (figure 9.98467in wide); worst 'Different batches visit ' 4.58853pt"
+    ],
+    "errors": []
+  },
+  "rq41-e43": {
+    "problems": [
+      "print-fit 56 text(s) <5.5pt after x0.48 downscale to 5.5in slot (figure 11.4117in wide); worst 'Raw KL equals training l' 4.01474pt"
+    ],
+    "errors": []
+  },
+  "rq41-e39-teacher-subset": {
+    "problems": [
+      "legend-coverage axes 0: 2 series reachable by no legend",
+      "legend-coverage axes 1: 2 series reachable by no legend",
+      "legend-coverage axes 2: 2 series reachable by no legend",
+      "print-fit 1 text(s) <5.5pt after x0.61 downscale to 5.5in slot (figure 9.01153in wide); worst 'Exactly 8 matched questi' 5.08404pt"
+    ],
+    "errors": []
+  },
+  "rq44-sft-generalization": {
+    "problems": [],
+    "errors": []
+  },
+  "rq5-kl-over-outers": {
+    "problems": [
+      "print-fit 1 text(s) <5.5pt after x0.57 downscale to 5.5in slot (figure 9.66378in wide); worst 'Own online rollout state' 4.7409pt"
+    ],
+    "errors": []
+  },
+  "rq5-kl-within-batch": {
+    "problems": [
+      "marker-clipped axes 2 'E55': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'E56': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'E57': 1 marker(s) touch the frame",
+      "print-fit 1 text(s) <5.5pt after x0.55 downscale to 5.5in slot (figure 9.96278in wide); worst 'Common outer30; each run' 4.59862pt"
+    ],
+    "errors": []
+  }
+}

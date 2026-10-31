@@ -1,0 +1,14 @@
+{
+  "torch": "2.11.0+cu129",
+  "transformers": "5.12.1",
+  "vllm": "0.25.1+cu129",
+  "ray": "2.59.0",
+  "pyarrow": "26.0.0",
+  "hydra-core": "1.3.8",
+  "omegaconf": "2.3.1",
+  "transfer_queue": {
+    "module_origin": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/lib/python3.12/site-packages/transfer_queue/__init__.py",
+    "metadata": null,
+    "version_file": "0.1.11"
+  }
+}

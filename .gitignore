@@ -222,3 +222,5 @@ outputs
 # Search command diagnostics and intermediate monitoring snapshots remain local.
 /examples/mirroropd/docs/**/paper-search-stderr.txt
 /examples/mirroropd/docs/experiments/rollout-policy/data/prefix-40x16-20261030/snapshot-*/
+# Full long-run update snapshots are rebuilt locally; commit curated figures and summaries.
+/examples/mirroropd/docs/infra/model-compatibility/qwen-e54/figures/e55-e57-20261031/data.json

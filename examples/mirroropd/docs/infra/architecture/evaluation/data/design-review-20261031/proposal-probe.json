@@ -1,0 +1,505 @@
+{
+  "kind": "CPU design simulation, not GPU throughput evidence",
+  "fixtures": {
+    "math500": 64,
+    "amc23": 16,
+    "aime24": 16,
+    "aime25": 16,
+    "aime26": 16,
+    "lcb": 128,
+    "gpqa": 128,
+    "ifeval": 128
+  },
+  "n": {
+    "math500": 1,
+    "amc23": 16,
+    "aime24": 16,
+    "aime25": 16,
+    "aime26": 16,
+    "lcb": 10,
+    "gpqa": 4,
+    "ifeval": 1
+  },
+  "steps": [
+    {
+      "outer": 0,
+      "due": [
+        "banks",
+        "bench",
+        "source"
+      ],
+      "rkl_rows": 1152,
+      "validation_generation_rows": 6144
+    },
+    {
+      "outer": 1,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 2,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 3,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 4,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 5,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 6,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 7,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 8,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 9,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 10,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 11,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 12,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 13,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 14,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 15,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 16,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 17,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 18,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 19,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 20,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 21,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 22,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 23,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 24,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 25,
+      "due": [
+        "banks",
+        "bench",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1792,
+      "validation_generation_rows": 3008
+    },
+    {
+      "outer": 26,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 27,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 28,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 29,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 30,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 31,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 32,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 33,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 34,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 35,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 36,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 37,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 38,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 39,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 40,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 41,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 42,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 43,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 44,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 45,
+      "due": [
+        "banks",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1280,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 46,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 47,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 48,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 49,
+      "due": [
+        "history",
+        "source"
+      ],
+      "rkl_rows": 256,
+      "validation_generation_rows": 0
+    },
+    {
+      "outer": 50,
+      "due": [
+        "banks",
+        "bench",
+        "history",
+        "source"
+      ],
+      "rkl_rows": 1792,
+      "validation_generation_rows": 3008
+    }
+  ],
+  "peak_teacher_payload_window_bytes": 17062297600,
+  "budget_bytes": 17179869184,
+  "separate_task_windows": 29,
+  "merged_windows": 26,
+  "conceptual_model_phases": 52,
+  "note": "Includes BF16 hidden and int64 prediction positions; excludes copies, model CPU weights and live training payload. No timing claim."
+}

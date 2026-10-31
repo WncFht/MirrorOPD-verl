@@ -1,0 +1,20 @@
+{
+  "regression": {
+    "command": "CUDA_VISIBLE_DEVICES= pytest -q test_generation_contract_on_cpu.py test_unified_evaluation_on_cpu.py test_full_vocab_on_cpu.py test_loss_context_on_cpu.py test_mdpo_topd_termination_on_cpu.py",
+    "result": "78 passed",
+    "seconds": 33.07,
+    "log_sha256": "d30348b31520806465271f10b1b338495d3c241fbdbef5b977928287006d77a3"
+  },
+  "legacy_bank_rejection": {
+    "result": "1 passed, 23 deselected",
+    "seconds": 12.35,
+    "cases": [
+      "matching protocol preserves empty answer",
+      "changed weights rejected",
+      "missing support contract rejected before copying",
+      "raw-head contract rejected before copying"
+    ],
+    "log_sha256": "d3a4408016910d616dac322917d2862fb069db502e913d8d4a572e41473e8de9"
+  },
+  "gpu": "pending common-contract-smoke-a01"
+}

@@ -1,0 +1,84 @@
+{
+  "scope": "Native four-GPU end-to-end source/history acceptance; not the full four-domain benchmark protocol",
+  "run": "runs/parquet-gpu-acceptance-20261031/native-a03",
+  "physical_gpus": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "student": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+  "teacher": "hbx/JustRL-DeepSeek-1.5B",
+  "batch": 128,
+  "reuse": 32,
+  "outers": 2,
+  "train_response_cap": 7168,
+  "source_response_cap": 7168,
+  "source_questions": 128,
+  "history_capacity": 128,
+  "learning_rate": 1e-06,
+  "training_loss_aggregation": "token-mean",
+  "report_aggregation": "question-mean of per-question token-mean; history equal-batch",
+  "records": [
+    {
+      "outer": 0,
+      "updates": 0,
+      "source_rkl": 0.11280232489001822,
+      "history_rkl": null,
+      "coverage": {
+        "expected_rows": 128,
+        "observed_rows": 128,
+        "invalid_rows": 0,
+        "scientific_complete": true
+      },
+      "audit_status": "passed",
+      "audit_ranks": 4
+    },
+    {
+      "outer": 1,
+      "updates": 32,
+      "source_rkl": 0.05930563844375506,
+      "history_rkl": 0.055370675080699816,
+      "coverage": {
+        "expected_rows": 256,
+        "observed_rows": 256,
+        "invalid_rows": 0,
+        "scientific_complete": true
+      },
+      "audit_status": "passed",
+      "audit_ranks": 4
+    },
+    {
+      "outer": 2,
+      "updates": 64,
+      "source_rkl": 0.025965750464955223,
+      "history_rkl": 0.022232550295654185,
+      "coverage": {
+        "expected_rows": 256,
+        "observed_rows": 256,
+        "invalid_rows": 0,
+        "scientific_complete": true
+      },
+      "audit_status": "passed",
+      "audit_ranks": 4
+    }
+  ],
+  "code_commit": "973d9c451c7ebbcee92d8deeab99704aa894ebd0",
+  "code_patch_sha256": "c660b46964955b70a6453e93663b2f716795d47fb6d1a6d45725480d4d7ee33a",
+  "readout_code_sha256": "0d066467b8403492124039ae44eb7fb9ca0fd9516add81c2ddba8aee901e1758",
+  "source_stable_during_run": true,
+  "failed_attempt": {
+    "name": "native-a02",
+    "updates": 0,
+    "cause": "KVBatchMeta.fields can be None",
+    "fix": "Accept an unprojected field view and test the real KVBatchMeta type",
+    "cpu_regression_tests": 15
+  },
+  "limitations": [
+    "No public benchmark accuracy or teacher-rollout banks",
+    "No public 32K scoring windows",
+    "Only 2 outer steps, not 50",
+    "Checkpoint CPU deserialization passed; reloaded forward/RKL parity not tested",
+    "Native model-only checkpoint used, not the planned unified HF exporter"
+  ]
+}

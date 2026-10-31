@@ -1,0 +1,12 @@
+{
+  "commit": "28180c4b76a52b4e77164ac7a2938b87bda3c7ef",
+  "scope": "targeted CPU contract tests; no GPU run",
+  "passed": 124,
+  "failed": 1,
+  "warnings": 8,
+  "seconds": 38.54,
+  "failure": "tests/trainer/ppo/v1/test_pipeline_metrics_on_cpu.py::test_submission_and_collection_work_by_default_without_distillation",
+  "reason": "fixture uses __new__ and does not initialize rollout_service",
+  "raw_log": "runs/evaluation-design-20261031/cpu-contract-tests.log",
+  "raw_log_sha256": "e446c205f7a69c5498a9c3359ab77b944ced15f4fceab26345d6e71a5c289461"
+}
