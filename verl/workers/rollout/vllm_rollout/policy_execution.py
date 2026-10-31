@@ -43,6 +43,12 @@ class SingleVLLMExecutor:
             resources = self.frozen[source] = OwnedReplicas(self.context)
             rollout = copy.deepcopy(self.context.config.actor_rollout_ref.rollout)
             rollout.load_format = "auto"
+            # Each frozen replica below owns exactly one actor worker. Keep its
+            # engine topology local instead of inheriting the learner's layout.
+            rollout.tensor_model_parallel_size = 1
+            rollout.data_parallel_size = 1
+            rollout.pipeline_model_parallel_size = 1
+            rollout.expert_parallel_size = 1
             rollout.max_model_len = rollout.max_model_len or (rollout.prompt_length + rollout.response_length)
             # The frozen model keeps a CPU weight backup across phases.
             model = HFModelConfig(path=path, trust_remote_code=False)
@@ -50,8 +56,8 @@ class SingleVLLMExecutor:
             # Budget for the actual replica concurrency, rather than allocating
             # every free byte just because the learner's engine used a large ratio.
             hf = model.hf_config
-            kv_heads = getattr(hf, "num_key_value_heads", hf.num_attention_heads)
-            head_dim = getattr(hf, "head_dim", hf.hidden_size // hf.num_attention_heads)
+            kv_heads = getattr(hf, "num_key_value_heads", None) or hf.num_attention_heads
+            head_dim = getattr(hf, "head_dim", None) or hf.hidden_size // hf.num_attention_heads
             kv_bytes = 2 * 2 * hf.num_hidden_layers * kv_heads * head_dim * rollout.max_model_len * rollout.max_num_seqs
             granularity = 256 * 1024**2
             with open_dict(rollout.engine_kwargs.vllm):

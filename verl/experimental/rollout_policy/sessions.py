@@ -142,7 +142,9 @@ class SessionDriver:
         ]
         results = await self.context.wait(self.active_refs)
         self.active_refs = []
+        self.metrics[f"perf/timing/rollout_policy_{phase.source}_generate_seconds"] = time.monotonic() - tick
         if phase.generator == "token_mixture":
+            audit_tick = time.monotonic()
             rank_metrics = await prepared.owner.audit()
             for rank, values in enumerate(rank_metrics):
                 self.metrics[f"perf/memory/fusion_gpu_{rank}_allocated_peak_bytes"] = values["peak_allocated_bytes"]
@@ -152,7 +154,7 @@ class SessionDriver:
                         (row["kv_peak_bytes"] for row in values["microbatches"]), default=0
                     )
             self.rank_metrics = rank_metrics
-        self.metrics[f"perf/timing/rollout_policy_{phase.source}_generate_seconds"] = time.monotonic() - tick
+            self.metrics[f"perf/timing/rollout_policy_{phase.source}_audit_seconds"] = time.monotonic() - audit_tick
         return [item for result in results for item in result]
 
     async def drain(self):

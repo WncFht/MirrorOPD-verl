@@ -3,6 +3,7 @@
 import asyncio
 from types import SimpleNamespace
 
+import pytest
 from omegaconf import OmegaConf
 
 from verl.experimental.rollout_policy.lifecycle import ExecutionContext, PreparedPhase, RequestRoutes
@@ -128,7 +129,11 @@ def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
     assert prepared.client == "A-client"
 
 
-def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(monkeypatch, tmp_path):
+@pytest.mark.parametrize("head_dim,kv_heads", [(None, None), (128, 8)])
+@pytest.mark.parametrize("explicit_kv", [None, 123456789])
+def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(
+    monkeypatch, tmp_path, head_dim, kv_heads, explicit_kv
+):
     from unittest.mock import AsyncMock
 
     from verl.workers.rollout.vllm_rollout import policy_execution as module
@@ -136,7 +141,13 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(mon
     tokenizer = SimpleNamespace(get_vocab=lambda: {"x": 0})
     model = SimpleNamespace(
         tokenizer=tokenizer,
-        hf_config=SimpleNamespace(num_attention_heads=1, num_key_value_heads=1, hidden_size=4, num_hidden_layers=2),
+        hf_config=SimpleNamespace(
+            num_attention_heads=32,
+            num_key_value_heads=kv_heads,
+            hidden_size=2560,
+            num_hidden_layers=36,
+            head_dim=head_dim,
+        ),
     )
     monkeypatch.setattr(module, "HFModelConfig", lambda **kwargs: model)
     captured = []
@@ -150,29 +161,85 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(mon
     monkeypatch.setattr(module, "get_rollout_replica_class", lambda name: Replica)
     config = OmegaConf.create(
         {
-            "trainer": {"n_gpus_per_node": 1},
+            "trainer": {"n_gpus_per_node": 2},
             "actor_rollout_ref": {
                 "rollout": {
                     "gpu_memory_utilization": 0.2,
+                    "tensor_model_parallel_size": 2,
+                    "data_parallel_size": 1,
+                    "pipeline_model_parallel_size": 1,
+                    "expert_parallel_size": 2,
                     "max_model_len": None,
-                    "prompt_length": 8,
-                    "response_length": 8,
+                    "prompt_length": 4096,
+                    "response_length": 7168,
                     "max_num_seqs": 8,
-                    "engine_kwargs": {"vllm": {}},
+                    "engine_kwargs": {"vllm": {"kv_cache_memory_bytes": explicit_kv}},
                 }
             },
         }
     )
     executor = SingleVLLMExecutor(
-        ExecutionContext(config, RolloutPolicyConfig(), SimpleNamespace(workers=[object()]), tokenizer=tokenizer)
+        ExecutionContext(
+            config, RolloutPolicyConfig(), SimpleNamespace(workers=[object(), object()]), tokenizer=tokenizer
+        )
     )
     from verl.experimental.rollout_policy.plan import ModelBinding
 
     asyncio.run(executor.frozen_client(ModelBinding("checkpoint", str(tmp_path)), 2))
     assert captured[0].gpu_memory_utilization == 0.2
-    assert captured[0].max_model_len == 16
+    assert captured[0].max_model_len == 11264
     assert captured[0].max_num_seqs == 2
-    assert captured[0].engine_kwargs.vllm.kv_cache_memory_bytes > 0
+    assert len(captured) == 2
+    for rollout in captured:
+        assert rollout.tensor_model_parallel_size == rollout.data_parallel_size == 1
+        assert rollout.pipeline_model_parallel_size == rollout.expert_parallel_size == 1
+    assert config.actor_rollout_ref.rollout.tensor_model_parallel_size == 2
+    assert config.actor_rollout_ref.rollout.expert_parallel_size == 2
+    # 36-layer model: explicit 128 differs from hidden_size / heads = 80.
+    kv_per_token = 147456 if head_dim else 368640
+    quantum = 256 * 1024**2
+    expected_kv = ((kv_per_token * 11264 * 2 + quantum - 1) // quantum) * quantum
+    assert captured[0].engine_kwargs.vllm.kv_cache_memory_bytes == (explicit_kv or expected_kv)
+
+
+def test_generation_timing_excludes_post_generation_audit(monkeypatch, tmp_path):
+    from verl.experimental.rollout_policy import sessions as module
+
+    clock = [0.0]
+    monkeypatch.setattr(module, "time", SimpleNamespace(monotonic=lambda: clock[0]))
+
+    async def generate(sessions, client, deadline, drain):
+        clock[0] += 2.0
+        return ["generated"]
+
+    async def audit():
+        clock[0] += 5.0
+        return [{"peak_allocated_bytes": 1, "peak_reserved_bytes": 2}]
+
+    teacher = tmp_path / "teacher"
+    teacher.mkdir()
+    policy = RolloutPolicyConfig.parse({"mode": "token_mixture", "right_weight": 0.5})
+    context = ExecutionContext(None, policy, None)
+    worker = SimpleNamespace(generate_sessions=SimpleNamespace(remote=generate))
+    runtime = SessionDriver(context, [worker], tu.get_tensordict({"uid": ["a"]}))
+    plan = build_plan(
+        policy,
+        uids=["a"],
+        stable_ids=[0],
+        n=1,
+        collection_step=1,
+        optimizer_step=0,
+        seed=42,
+        bindings=resolve_bindings(policy, str(tmp_path), str(teacher)),
+        sampling={"temperature": 1.0, "top_p": 1.0, "top_k": -1},
+    )
+    phase = plan.phases[0]
+    prepared = PreparedPhase(
+        phase.source, None, RequestRoutes.build(phase.requests, 1), SimpleNamespace(audit=audit), (), token="phase"
+    )
+    assert asyncio.run(runtime.generate(phase, plan, prepared)) == ["generated"]
+    assert runtime.metrics[f"perf/timing/rollout_policy_{phase.source}_generate_seconds"] == 2.0
+    assert runtime.metrics[f"perf/timing/rollout_policy_{phase.source}_audit_seconds"] == 5.0
 
 
 def test_policy_sampler_control_uses_named_rpc(monkeypatch):
