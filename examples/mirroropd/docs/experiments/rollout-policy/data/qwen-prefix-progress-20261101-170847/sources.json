@@ -1,0 +1,660 @@
+{
+  "files": {
+    "runs/qwen-prefix-six-20261031/recovery-20261101/manifest.json": {
+      "bytes": 2064,
+      "sha256": "f0b1f87ae10d246401182a04e12bc316c90b841ab94a29c667e761572b8e4095",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/metrics.jsonl": {
+      "bytes": 811377,
+      "sha256": "e138c53b77f8a96c7703efc9e33909d2ff4fffc5b6da9bffdbcef1e90db98dd4",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-000/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "46f7acd5ec081fb51a2645f8fd26b1c84f03dedfde01a475907314f62a036a70",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-000/fixed/per-question.json": {
+      "bytes": 287623,
+      "sha256": "699b84693603716403487144ca5a4e764c75c552b45a669eae74cbcdfa57d28e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-000/complete.json": {
+      "bytes": 1166,
+      "sha256": "2ed3c781f02037ce9ba141db07be7dc0cec67ff38e7e8cd327114351512dbb73",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-005/fixed/complete.json": {
+      "bytes": 941,
+      "sha256": "9bbd59c3bc9fd89304a41cb9f6afe115f0ae180dca9b55fdf9ef096ca95cd6a8",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-005/fixed/per-question.json": {
+      "bytes": 287811,
+      "sha256": "5bdbe44285bb38d19f7470c14216b0ad2520d026cc360ad290d39c2f1be1ffdb",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-005/complete.json": {
+      "bytes": 1165,
+      "sha256": "e3e2d5d667564de97b38a794f557b878747beaf9362f3f08e3babca87836a256",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-010/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "d99615507408ed2979f82019eb6c7b683dafde431782931abdc63f080f6b0c30",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-010/fixed/per-question.json": {
+      "bytes": 288115,
+      "sha256": "eb27eb6af34322d0f272f6f386fb79738423bab6f31f9f527ee8307b571785dd",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-010/complete.json": {
+      "bytes": 1171,
+      "sha256": "749d6177017807c27f67677116903cd3a93819c1df4f64bcbf5c459442b18c55",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-015/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "cdefb721a0bf7a581ecd2b94c2949ac2db3e393fac781ff07cb2862f8c55d47b",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-015/fixed/per-question.json": {
+      "bytes": 288110,
+      "sha256": "ff0352e296be882bd90c6926e1497acb6eda7a1eec02a828af3c1d7214afed0e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-015/complete.json": {
+      "bytes": 1169,
+      "sha256": "cf8486233d00908977d7c2081b86604e8d42ac88a50aa90e1292af3dbee0ae5e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-020/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "f36b6f125d17b7c699c88c9be37044d63328f8c4629c7269399585a015420af5",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-020/fixed/per-question.json": {
+      "bytes": 288062,
+      "sha256": "c8207c94cb5146b3200796cb648ae3b31ef1bbfcea228947282fee0b02a6e848",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S0-qwenfix-v2/science/outer-020/complete.json": {
+      "bytes": 1167,
+      "sha256": "70b1764434be42584ead5e72441438c38f128e0bf791fe96580f38bbc5182dd7",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/metrics.jsonl": {
+      "bytes": 1637500,
+      "sha256": "204f8845da7fcc541b7713b8ee4eef440e0219e88a2e2e2b46225fc93ca80234",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-000/fixed/complete.json": {
+      "bytes": 941,
+      "sha256": "4f0dca07253cff76f9001d6b1dccc530ba433be9d3945e17ff8678ece67ff1ed",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-000/fixed/per-question.json": {
+      "bytes": 287623,
+      "sha256": "699b84693603716403487144ca5a4e764c75c552b45a669eae74cbcdfa57d28e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-000/complete.json": {
+      "bytes": 1165,
+      "sha256": "8ac17a0de07606c593045563708213f441474a0cd0af0fff0a8f18376a654d20",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-005/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "f29f9718dd82935ef3abd9e046bcf5e0db7555a42ad56cf6d04a90e72eefa83c",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-005/fixed/per-question.json": {
+      "bytes": 287901,
+      "sha256": "a65b5e6c069b0957773cea6975febba7396f4b67e03303dc0e6413389d9bdd46",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-005/complete.json": {
+      "bytes": 1166,
+      "sha256": "e58f34efe5c7aa731765f6abd96c2449df754238513ccd8984627223d30e58f1",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-010/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "5a2c93dc3dfe28da7307cc66660539fbdecd6619513c16319639ff2a4cae954b",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-010/fixed/per-question.json": {
+      "bytes": 288067,
+      "sha256": "75a6184063f0ded54dcab2d122c5a1477c40636c7dae2235c983d96b422e1673",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-010/complete.json": {
+      "bytes": 1167,
+      "sha256": "5bd369d8971b29eb412aa144c49b26faa20994487b794eb353c1dbb6e789eaa9",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-015/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "ac1e9ba0d4e657589cfd20b9444af228cc427d63fd70b055fc6a7888f854c90b",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-015/fixed/per-question.json": {
+      "bytes": 288133,
+      "sha256": "1fad78f726aa85648fee9b540983468f617f64708747da95c1383874be773ddf",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-015/complete.json": {
+      "bytes": 1163,
+      "sha256": "6e2eb237eb3eec41a0acb78575e062994021e38f013d9607012bdf303bbcc8da",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-020/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "e42a7420bc06279e0c1fa62a62d3e69d78685c0e888d3fa34d9450b5e88ad4f0",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-020/fixed/per-question.json": {
+      "bytes": 288097,
+      "sha256": "253edcce5c48a657c47daba8f0247c848c14d3f45dd88fab96abffaf815ee91d",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-020/complete.json": {
+      "bytes": 1171,
+      "sha256": "bbb0546924753fd2a070efe0b14a70b769252eee6422e39fb2c49e4cc30e7648",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-025/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "1d7b083c22724d33b7a6922dc25cc4c89f1b6e9fd1a8855562c35b8f0f5845bd",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-025/fixed/per-question.json": {
+      "bytes": 288097,
+      "sha256": "81ddcbeb0e0f66f09a183ae6bac6e7ae2316b2c8dbe114c3a4399f73ba542c24",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-025/complete.json": {
+      "bytes": 1168,
+      "sha256": "7f1e91cbc41462fd7de250080e693d5cbfce247cee77e959986ffea33d48b5c8",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-030/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "d7a2fbf2c2b3c679fafcd1e48da093003c33a318b5eceedf5e79c8473c986a71",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-030/fixed/per-question.json": {
+      "bytes": 288123,
+      "sha256": "052c4f339e72aa190c736f17420ea68412a6f4e2bdbd4a6b7f93cc1a80fc5131",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-030/complete.json": {
+      "bytes": 1168,
+      "sha256": "dbb24634583a46d5dc97c16c8f197cc62ead6d7edef90e2d41a7b3e666e1946d",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-035/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "49ba03a5664c7d0d0637b1439020fbd87d33378e78aef5cb0197df11ca23d9fd",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-035/fixed/per-question.json": {
+      "bytes": 288171,
+      "sha256": "f635e3760263568828f36726856d9576ee55e69a133cb7b4be434f9620f50569",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-035/complete.json": {
+      "bytes": 1171,
+      "sha256": "c376ac4b93d30b43b55d18b81188e0472181b0e1bd4ae586eefaec77a7631ee4",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-040/fixed/complete.json": {
+      "bytes": 941,
+      "sha256": "0e333f9a6b9f9954ee48cb95a4ef3ab63d65fb678ba31c1b3551fc376525f144",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-S-qwenfix-v2/science/outer-040/fixed/per-question.json": {
+      "bytes": 288126,
+      "sha256": "5103e598056422c768654702e2217d5a9ce71c3b685d315776181196fe410e93",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/metrics.jsonl": {
+      "bytes": 1614158,
+      "sha256": "62050dd7e948e80df7f9cdd8c04c17710e1586e2ba102d621e99f69444f379a4",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-000/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "1ca2442f081770556f68ef3f0cedc235f2d2700ef2c8842af09513adc66ec81b",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-000/fixed/per-question.json": {
+      "bytes": 287623,
+      "sha256": "699b84693603716403487144ca5a4e764c75c552b45a669eae74cbcdfa57d28e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-000/complete.json": {
+      "bytes": 1165,
+      "sha256": "5fc3b410c3daf06c6545c44078b2e2d72777ad36626d986368fc7f5127a94d9d",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-005/fixed/complete.json": {
+      "bytes": 941,
+      "sha256": "169daa93ce01c6d6ad8f3e5a627054f21b10b85486d4f3acfceecca61eb87a21",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-005/fixed/per-question.json": {
+      "bytes": 287808,
+      "sha256": "6aca18da72469ab4d319a23b62baf117b7df9a7b42155f76b05865a99ae0f25e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-005/complete.json": {
+      "bytes": 1167,
+      "sha256": "3938aa993906bb1f14936214665e0e638dc3dcc5ceca13d137efaa3b08d36973",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-010/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "de89f91c0a22d612e8f7d552e75cb381db7ce1749cb8b56d3e95810eaa59f0a2",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-010/fixed/per-question.json": {
+      "bytes": 288133,
+      "sha256": "62630244a9426707791a040eab98648322f5b539dc5b05438cc6da5c885f33a0",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-010/complete.json": {
+      "bytes": 1166,
+      "sha256": "8cdf5059be3ff35cf72789c600207433bb228fb0d4626cbdc0202a8ecd654245",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-015/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "0f31444ad344357641535650c6726d1a879bb4bdb63e0899bfb5d4c9bf1ce503",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-015/fixed/per-question.json": {
+      "bytes": 288119,
+      "sha256": "de270597ce71d42eb69dae0ce7b0a38a975261b58f0825de1f66a335305ea2d7",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-015/complete.json": {
+      "bytes": 1166,
+      "sha256": "dbc30fb0457e536994b7063c2f614c54994f037d604a57f02d172ca40257a0d8",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-020/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "b5e545dd7cfdd0ea9328089e42640b2c0b8e6749a3bc12bcffe7635c094823eb",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-020/fixed/per-question.json": {
+      "bytes": 288194,
+      "sha256": "5d12915e1f73c035d83f651410c318e85fc7ee8cd919413a16bd6feb16ea45b6",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-020/complete.json": {
+      "bytes": 1167,
+      "sha256": "ff577c3477e8f03fbe5542036242610c11918beaa4a452e339539bcde80cde03",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-025/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "3780faee368935348daf0c70d7dc9c723054c4d800708b76df1c85c413e9ee8e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-025/fixed/per-question.json": {
+      "bytes": 288176,
+      "sha256": "b93e7fa94334554a752de9ddda305563885267710532ea0abcf114e05e360f7e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-025/complete.json": {
+      "bytes": 1170,
+      "sha256": "a04db62effa916254661fba25590ba00c19059e9933690f39329840cf5d935b6",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-030/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "7d9a5b0cdf5bb7632d8b9ebd1e71c50b9d208f9ee054c1c7e8e94e97a78b3607",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-030/fixed/per-question.json": {
+      "bytes": 288180,
+      "sha256": "2f7d19e41072522b5389525a4c5e06ec26c81bcd75f53c91522cf8a677eea636",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-030/complete.json": {
+      "bytes": 1165,
+      "sha256": "58c01204c0310fe2447eb709f5a70f5d9308ca376814267a6c49f84e2e624185",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-035/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "f24ece85c225af0e1d136154a9da3ce385c7cdaf79b8d13bcdb7f39b78bea305",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-035/fixed/per-question.json": {
+      "bytes": 288166,
+      "sha256": "b3dac4f20d0f3264e23b70d06de6bca94829e51039d505a77ce5fa5d3124ebb2",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-035/complete.json": {
+      "bytes": 1165,
+      "sha256": "7d084c02cab9f9a78e44c0ebca317460e2fc6dc69ccd481e6f96c78c29d5e244",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-040/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "bdbbfd0a4126e5beaf8c71b0a3ba051df71b978058126f2ff0dda0708d8668a0",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-T-qwenfix-v2/science/outer-040/fixed/per-question.json": {
+      "bytes": 288130,
+      "sha256": "4439767d7fd3d18dc20ac966f57dca3979efc6f9f1d5d73b2a5a0f3d0bc11dbf",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/metrics.jsonl": {
+      "bytes": 1653513,
+      "sha256": "0402e8648a58bd94e23506c94b1f54040de0df6e12edf2a83ce468a6c98c8314",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-000/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "a7a899aeede0e8b3e95b3ca592761233d8e107858b655c181cd2f56da5ab169a",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-000/fixed/per-question.json": {
+      "bytes": 287623,
+      "sha256": "699b84693603716403487144ca5a4e764c75c552b45a669eae74cbcdfa57d28e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-000/complete.json": {
+      "bytes": 1166,
+      "sha256": "8781400df3098365d0afbd9c8a6cd832abbfb7f33c3f710260119e8bde81e8ba",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-005/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "bdca3b0eb3c06c7aed597a7a9a4759973061bbc2c74cdb8995056e6916a1f4da",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-005/fixed/per-question.json": {
+      "bytes": 287936,
+      "sha256": "e818a42d27cb0cf5ee22ffd618c06eeeaaa6332b90f919185fb084c21a72161f",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-005/complete.json": {
+      "bytes": 1166,
+      "sha256": "0b6e8c136c4f9a55c46a03f6bc72cf29104eefb654b063569a23dc9c6b4d7706",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-010/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "2a501fcccd47ed9db7a68848d48e91118782b54ba3fbb333f09c1ff390a8935d",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-010/fixed/per-question.json": {
+      "bytes": 288108,
+      "sha256": "19854985378a7721eab6f3e0f88c680c85a0b82c034fabbb3786865628b2397c",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-010/complete.json": {
+      "bytes": 1169,
+      "sha256": "619529e1f92d0fc5f533674ec194f14596c667bd98c5ef12f35434e28978d230",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-015/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "410d7f181246fe252311a370d48675a72e05128009e0bc65366c8fbb9ed77421",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-015/fixed/per-question.json": {
+      "bytes": 288146,
+      "sha256": "2c586d9dea32ddcd031fdd7d988fbb0a12f2a68dcabd711a6efde2c7bc4e73d7",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-015/complete.json": {
+      "bytes": 1169,
+      "sha256": "5c13388f782a9570685ce0248b67ed0dc479f34e10b5378dde181a11abf2ab7e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-020/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "58bb1a7e15491d5e74fdc3bb66f0e763f29c1b3ca1fa8f30d25a27e6db411482",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-020/fixed/per-question.json": {
+      "bytes": 288117,
+      "sha256": "e271dc0a53f63250d6dafc0ef66987d5a1c46f3811df56eecf637e5958a1f94f",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-020/complete.json": {
+      "bytes": 1167,
+      "sha256": "8a9f848626d6e45855acf891f9986e2fe73cc4ff6283f1ca278dd40f05932d1e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-025/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "1b3068f079ad9c4cf2aa593db547ca1196e919da1448442259c471f4a0df0ff6",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-025/fixed/per-question.json": {
+      "bytes": 288155,
+      "sha256": "0e2f01fbc90027c5f231c6e99aaf29ae3273bd4611d76d29074c3f56344c97ae",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-025/complete.json": {
+      "bytes": 1169,
+      "sha256": "fbe2bed2e26a99f129b84badf0337d6fee71a139428bb37c66d03e2957c2cb3d",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-030/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "d26d9ee0992b7855c6247013b1aa72754f0438df239a6b32c7708673713a961f",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-030/fixed/per-question.json": {
+      "bytes": 288182,
+      "sha256": "6836d4677072a9f59388259ef3b82d62451d37a4584f0336a14d4b8022e6324e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-030/complete.json": {
+      "bytes": 1170,
+      "sha256": "77d925bb745dbed1193f7607b003b4208ef57db93b2d74174425954ed4729014",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-035/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "914c60f00eb3b4e77bfb81ef0afda53e3d98a2378e215211aa391e04ce9912e0",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-035/fixed/per-question.json": {
+      "bytes": 288145,
+      "sha256": "8820ab8ad29170f63113722514ae927558727110480b7ff33dfbe9bc449db1dc",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-035/complete.json": {
+      "bytes": 1166,
+      "sha256": "bcfe8b7864f391a33b236dc4947460a4883cc45f5b2ae101d39328f667f79bba",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-040/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "f00abb3f282eaed2c517b2a1c10bc65f8be7a68f17c4c8c4f0c4623be43c8bd9",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-040/fixed/per-question.json": {
+      "bytes": 288144,
+      "sha256": "9920d76d47731f13b1f100b7d992acb5e3157d425db376cf439cafcf90101d98",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-040/complete.json": {
+      "bytes": 1171,
+      "sha256": "d0dcd56cd40e4c7bb144ccb746eaaa44d49c70332bb558e0ce593773c890555e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/stages/science-LM-audit.json": {
+      "bytes": 517975,
+      "sha256": "3f4d8b8372e7d3ace9480d2bec6f26d03fa3d1d48f84a2a5d40e3bac07aa5ed9",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-LM-qwenfix-v2/science/outer-040/accuracy/complete.json": {
+      "bytes": 1339,
+      "sha256": "19a7d9f64506da396156bad1b8f1b4aa469ec9a73831fb83808e5fe4396caf14",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/metrics.jsonl": {
+      "bytes": 1653418,
+      "sha256": "d71ec5301b4a1b802fefce99404c3fab58afd5714f6cbf7f1fab5b36515950a5",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-000/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "6dfcda45e0ce875c2a307a30a92ffebfccc3c016dfb632491dc3f36d4f54d2c1",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-000/fixed/per-question.json": {
+      "bytes": 287623,
+      "sha256": "699b84693603716403487144ca5a4e764c75c552b45a669eae74cbcdfa57d28e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-000/complete.json": {
+      "bytes": 1166,
+      "sha256": "f335301e16d87703703aae854170ec52f2776b82bb115c6d3bf267bea4d85d45",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-005/fixed/complete.json": {
+      "bytes": 942,
+      "sha256": "94478297de0e46e992d9734560d0ab7c609ce26b405d63733decd0d91e11ff72",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-005/fixed/per-question.json": {
+      "bytes": 287894,
+      "sha256": "9d9675211410b44289806cfb14675c0470a047f330d9184762da40ebd9b6ad4d",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-005/complete.json": {
+      "bytes": 1165,
+      "sha256": "ebc941c4f8d887f77051aab959dd7a66cc2ecc21165edccfe1266d5fba6d71fa",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-010/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "084c53bf6ee83873160042db4b3fbe8b4a1774b4d2e0024222e753b564b4b0ec",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-010/fixed/per-question.json": {
+      "bytes": 288133,
+      "sha256": "ff41aedfee742b6ebc99060c79fed0a74cadf43da2e9269eb3ef161bc06a890b",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-010/complete.json": {
+      "bytes": 1168,
+      "sha256": "c39a4fcf76d9f232792937b112ef06209c9c070d2803cf9f67f085eccafef8ad",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-015/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "22fdb3eb22eadbea9f925793abd571e8589733b1b0d378c2fca0b4504ddaca8f",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-015/fixed/per-question.json": {
+      "bytes": 288141,
+      "sha256": "fd3db40ed46b5c7635fa1ad68c32a87aebc79bd65d1a03f7201b321b88306109",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-015/complete.json": {
+      "bytes": 1170,
+      "sha256": "81f2678af191a510995a1f5408a7f77343616e846a08cfa57384739533a91418",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-020/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "aa3754b6bc30958a6769490d282ba372870fa52df3b471d2488718f121dcba2f",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-020/fixed/per-question.json": {
+      "bytes": 288142,
+      "sha256": "a65968afc400f296ffa70a1ed4830e696d1db7cf594b5eae0dacf418889e1e9d",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-020/complete.json": {
+      "bytes": 1165,
+      "sha256": "40302878e865664aedb135dc83bbe00d0017b15c87d76a5d7f41a5c6e2b3a9d4",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-025/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "8ec7038c9ae752f8f2995ddcd0509e41b818d1d0ae163680c6bc0826e7811b4e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-025/fixed/per-question.json": {
+      "bytes": 288170,
+      "sha256": "7c5ccfa1d22117a8154ec1bce7e49e03123ee1db6107ec207ede2877cf16256c",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-025/complete.json": {
+      "bytes": 1167,
+      "sha256": "0fbe746092cc0914a9385513a3a97cc77ebf5520135b8e6ba0db6897e594802d",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-030/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "7b13f079c488dbf2df1c4465fbd6576035d7290a74aee5b6e4286fd1f1a7ed4e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-030/fixed/per-question.json": {
+      "bytes": 288180,
+      "sha256": "3e56a807b864ba6d3c98fec6b4b8f11e72ef202096d8b58139af214e8f113fdc",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-030/complete.json": {
+      "bytes": 1167,
+      "sha256": "cf6937cb82ada8f725fe7b5c476551449a95c1ad627434cbe6d65878c5f970d1",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-035/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "292dc83966dc88ed3bba8d47906ffccbf2937dfd20ebfd014b46cc47c9aebaaa",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-035/fixed/per-question.json": {
+      "bytes": 288106,
+      "sha256": "83f14093647c7ac7c1f8e9cd1f45f6fa88f46cb80e3ae23b615fbcd1c897e49e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-035/complete.json": {
+      "bytes": 1165,
+      "sha256": "81688198129e2dc290ceb74bcfd2adf6248e27b40f0fa3bfd44b58bc33ccb6ec",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-040/fixed/complete.json": {
+      "bytes": 943,
+      "sha256": "f6d942a18eacb4f78393dbeda3bf49f3d26cced93ebf835998d9f8b58566dedc",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-040/fixed/per-question.json": {
+      "bytes": 288141,
+      "sha256": "f6449459a06842d9433bd6e3dab0ebaa161e69cd0dda26be9a30ef6079132d40",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-040/complete.json": {
+      "bytes": 1171,
+      "sha256": "a8a0b6c644ad1264daddd9dd432aa1d49761708101e5b5df9e452736dd8a25c3",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/stages/science-PM-audit.json": {
+      "bytes": 517854,
+      "sha256": "5b78e727bf1a879d0908de9b61ab955fe15453204d104083294640574162fb1e",
+      "ignored_incomplete_tail_bytes": 0
+    },
+    "runs/qwen-prefix-six-20261031/recovery-20261101/training/prefix-science-Q-PM-qwenfix-v2/science/outer-040/accuracy/complete.json": {
+      "bytes": 1339,
+      "sha256": "4fb697834f93929a2ac171e5c9a11df6baf8ea3cb326912502ed84268e7d9e0c",
+      "ignored_incomplete_tail_bytes": 0
+    }
+  },
+  "script_sha256": "fef522c05fcb30ea6c970bedc9e45e1f772ab3c69c7c9b090e22d376ae6c4320"
+}
