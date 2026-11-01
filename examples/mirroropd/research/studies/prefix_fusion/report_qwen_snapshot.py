@@ -23,7 +23,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .report_qwen import dump, sha256, table
+from .report_qwen import accuracy, dump, sha256, table
 
 ARMS = ("S0", "S", "T", "LM", "PM", "TM")
 LABELS = dict(
@@ -56,6 +56,9 @@ class Snapshot:
             bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest(), ignored_incomplete_tail_bytes=ignored
         )
         return [json.loads(line) for line in raw.splitlines() if line.strip()] if lines else json.loads(raw)
+
+    def lines(self, path):
+        return iter(self.read(path, lines=True))
 
 
 def collect(root, out):
@@ -160,12 +163,37 @@ def collect(root, out):
             fixed_rkl_outers=sorted({r["outer"] for r in risks if r["arm"] == arm}),
             update_health="all recorded updates applied and finite",
         )
+    # Only fully audited endpoints enter task comparisons; partial answers stay excluded.
+    eligible = [a for a in ARMS if result["arms"][a].get("final_audit_passed")]
+    paths = {"initial": root / "baseline-accuracy/S0", "teacher": root / "baseline-accuracy/Q"}
+    paths.update(
+        {a: recovery / "training" / f"prefix-science-Q-{a}-qwenfix-v2/science/outer-040/accuracy" for a in eligible}
+    )
+    endpoints = ("initial", *eligible, "teacher")
+    comparisons = [(a, "initial") for a in eligible]
+    if "S" in eligible:
+        comparisons += [("S", a) for a in eligible if a != "S"]
+    if "LM" in eligible and "PM" in eligible:
+        comparisons.append(("LM", "PM"))
+    result["accuracy"], result["paired_accuracy"], prompts = accuracy(
+        evidence, paths, endpoints=endpoints, comparisons=comparisons
+    )
+    result["accuracy_endpoints"] = endpoints
+    result["accuracy_scope"] = "10000 stratified paired prompt bootstrap draws; one training seed; unadjusted intervals"
+    table(out / "accuracy-per-prompt.csv", prompts)
     result["capture_finished_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
     table(out / "updates.csv", updates)
     table(out / "outers.csv", outers)
     table(out / "fixed-risk.csv", risks)
     dump(out / "summary.json", result)
-    dump(out / "sources.json", dict(files=evidence.sources, script_sha256=sha256(Path(__file__))))
+    dump(
+        out / "sources.json",
+        dict(
+            files=evidence.sources,
+            script_sha256=sha256(Path(__file__)),
+            accuracy_script_sha256=sha256(Path(__file__).with_name("report_qwen.py")),
+        ),
+    )
     return result, updates, outers, risks
 
 
@@ -309,6 +337,58 @@ def figures(summary, updates, outers, risks, destination, style):
     fig.legend(handles=handles, loc="upper center", ncol=3, bbox_to_anchor=(0.5, 1.0), frameon=False)
     fig.subplots_adjust(top=0.74, bottom=0.19, wspace=0.3)
     finish(fig, "workload", "Different generated workloads; timing is not an equal-work backend comparison.")
+    if "accuracy" in summary:
+        acc = summary["accuracy"]
+        endpoints = summary["accuracy_endpoints"]
+        display = {"initial": "Initial model", "teacher": "Teacher model", **{a: a for a in ARMS}}
+        acc_colors = {**colors, "initial": fv.NEUTRALS["baseline"], "teacher": fv.NEUTRALS["vink"]}
+        fig, axes = plt.subplots(1, 2, figsize=(11, 4.5), gridspec_kw={"width_ratios": [1.2, 1]})
+        for i, name in enumerate(endpoints):
+            value = 100 * acc[name]["macro5"]
+            lo, hi = np.array(acc[name]["macro5_ci95"]) * 100
+            axes[0].bar(i, value, color=acc_colors[name], label=display[name], width=0.65)
+            interval = axes[0].errorbar(
+                i, value, yerr=[[value - lo], [hi - value]], fmt="none", color=fv.NEUTRALS["vink"], capsize=3
+            )
+            for artist in [*interval.lines[1], *interval.lines[2]]:
+                fv.mark_neutral(artist)
+            axes[0].text(i, hi + 2.5, f"{value:.2f}", ha="center", fontsize=9)
+        axes[0].set_xticks(range(len(endpoints)), [display[a].replace(" ", "\n") for a in endpoints])
+        axes[0].set(
+            ylim=(0, 100),
+            xlabel="Evaluated student / reference model",
+            ylabel="Macro5 avg@4 (%)",
+            title="Completed endpoints only",
+        )
+        axes[0].grid(axis="y", alpha=0.2)
+        pairs = [p for p in ["S-LM", "S-PM", "LM-PM"] if p in summary["paired_accuracy"]]
+        for i, key in enumerate(pairs):
+            item = summary["paired_accuracy"][key]
+            value = item["estimate"] * 100
+            lo, hi = np.array(item["ci95"]) * 100
+            interval = axes[1].errorbar(
+                value, i, xerr=[[value - lo], [hi - value]], fmt="o", color=fv.NEUTRALS["vink"], capsize=4
+            )
+            for artist in [interval.lines[0], *interval.lines[1], *interval.lines[2]]:
+                fv.mark_neutral(artist)
+        axes[1].set_yticks(range(len(pairs)), [p.replace("-", " minus ") for p in pairs])
+        axes[1].set(
+            ylim=(-0.6, max(len(pairs) - 0.4, 0.6)),
+            xlabel="Paired accuracy difference (pp)",
+            ylabel="Comparison",
+            title="95% paired prompt intervals",
+        )
+        fv.mark_neutral(axes[1].axvline(0, color=fv.NEUTRALS["baseline"], ls="--", lw=1))
+        axes[1].grid(axis="x", alpha=0.2)
+        fig.legend(
+            *axes[0].get_legend_handles_labels(),
+            loc="upper center",
+            ncol=len(endpoints),
+            frameon=False,
+            bbox_to_anchor=(0.5, 0.99),
+        )
+        fig.subplots_adjust(top=0.80, bottom=0.24, wspace=0.42)
+        finish(fig, "accuracy", "630 prompts x 4 answers; unadjusted prompt intervals; one training seed.")
     dump(destination / "figure-audit.json", audits)
 
 
