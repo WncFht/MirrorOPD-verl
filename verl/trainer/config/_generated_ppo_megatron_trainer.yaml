@@ -309,6 +309,7 @@ actor_rollout_ref:
     temperature: 1.0
     top_k: -1
     top_p: 1
+    repetition_detection: null
     full_determinism: false
     seed: 42
     prompt_length: ${oc.select:data.max_prompt_length,512}
@@ -967,6 +968,8 @@ distillation:
       prefetch: false
       forward_teacher_support: equal
       termination_token_ids: []
+      distribution: {}
+      input_id_mapping: identity
     topk: 32
     use_task_rewards: true
     distillation_loss_coef: 1.0

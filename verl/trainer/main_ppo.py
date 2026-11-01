@@ -54,6 +54,10 @@ def run_ppo(config, task_runner_class) -> None:
     if "rl_insight" in ([trainer_logger] if isinstance(trainer_logger, str) else trainer_logger or []):
         os.environ["VERL_RL_INSIGHT_ENABLE"] = "1"
 
+    from verl.trainer.distillation.compatibility import preflight_pair
+
+    preflight_pair(config)
+
     # Check if Ray is not initialized
     if not ray.is_initialized():
         # Initialize Ray with a local cluster configuration

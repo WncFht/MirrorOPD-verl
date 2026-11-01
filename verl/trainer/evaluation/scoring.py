@@ -10,8 +10,10 @@ import torch
 import transfer_queue as tq
 
 from verl.experimental.rollout_policy.collector import UnsafeDrainError
-from verl.trainer.evaluation.native import put_fixed_rows
 
+from .artifacts import identity
+from .execution import hidden_dtype_bytes, numerical_profile
+from .native import put_fixed_rows
 from .plan import payload_windows
 
 
@@ -27,8 +29,24 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
         return [], {"windows": 0, "seconds": 0.0}
     zero = [r for r in rows if r.get("valid_tokens", sum(r.get("response_mask", ()))) == 0]
     rows = [r for r in rows if r not in zero]
-    windows = payload_windows(rows, hidden_size=hidden_size, payload_bytes=budget.available_payload(live_payload_bytes))
+    windows = payload_windows(
+        rows,
+        hidden_size=hidden_size,
+        payload_bytes=budget.available_payload(live_payload_bytes),
+        dtype_bytes=hidden_dtype_bytes(trainer.config),
+    )
     rng = random.getstate(), np.random.get_state(), torch.get_rng_state()
+    from .execution import NativeEvaluationExecution
+
+    execution = NativeEvaluationExecution(trainer)
+    space = execution.distribution(objective=budget.objective_space)
+    profile = numerical_profile(trainer.config)
+    measure_id = identity({"distribution": space.metadata, "numerical_profile": profile})
+    extra_names = (
+        ["uncoarsened_rkl_sum", "student_excluded_mass_sum", "teacher_excluded_mass_sum"]
+        if space.spec.mode != "native" or space.termination_ids
+        else []
+    )
     step = trainer.actor_optimizer_step
     started = time.monotonic()
     timings, results = {}, []
@@ -46,8 +64,14 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
                     "sample_index",
                 )
             }
-            | {"trajectory_id": row.get("trajectory_id", row["id"]), "rkl_sum": 0.0, "tokens": 0}
+            | {
+                "trajectory_id": row.get("trajectory_id", row["id"]),
+                "rkl_sum": 0.0,
+                "tokens": 0,
+                "measure_id": measure_id,
+            }
         )
+    stage_seconds = {}
     active_rpc, begun = False, False
     audit = None
     try:
@@ -56,12 +80,16 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
         active_rpc, begun = False, True
         for references in windows:
             window = load_window(references) if load_window is not None else references
+            stage_start = time.monotonic()
             meta, by_key = put_fixed_rows(window, trainer.global_steps)
+            stage_seconds["trajectory_publish"] = (
+                stage_seconds.get("trajectory_publish", 0.0) + time.monotonic() - stage_start
+            )
             try:
-                meta = trainer._balance_batch(meta, {}, logging_prefix="evaluation_balance", inference_only=True)
+                meta = execution.balance(meta)
                 active_rpc = True
                 window_timing = {}
-                trainer._compute_shared_teacher_log_probs(meta, window_timing)
+                execution.score_teacher(meta, window_timing)
                 for key, value in window_timing.items():
                     timings[key] = timings.get(key, 0.0) + value
                 active_rpc = False
@@ -75,18 +103,25 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
                     full_vocab_prefetch=True,
                     global_token_num=None,
                     full_vocab_score_token_chunk=budget.token_chunk,
+                    full_vocab_score_objective=budget.objective_space,
                 )
                 active_rpc = True
+                stage_start = time.monotonic()
                 trainer.actor_rollout_wg.score_full_vocab(meta)
+                stage_seconds["student_readout_rpc"] = (
+                    stage_seconds.get("student_readout_rpc", 0.0) + time.monotonic() - stage_start
+                )
                 active_rpc = False
                 actual_keys = [key for key, tag in zip(meta.keys, meta.tags, strict=True) if not tag.get("is_padding")]
                 if set(actual_keys) != set(by_key) or len(actual_keys) != len(by_key):
                     raise ValueError("Inference balancing changed logical trajectory identities")
                 scores = tq.kv_batch_get(
-                    keys=actual_keys, partition_id=meta.partition_id, select_fields=["rkl_sum", "rkl_count"]
+                    keys=actual_keys,
+                    partition_id=meta.partition_id,
+                    select_fields=["rkl_sum", "rkl_count", *extra_names],
                 )
-                for key, total, count in zip(
-                    actual_keys, scores["rkl_sum"].unbind(), scores["rkl_count"].unbind(), strict=True
+                for index, (key, total, count) in enumerate(
+                    zip(actual_keys, scores["rkl_sum"].unbind(), scores["rkl_count"].unbind(), strict=True)
                 ):
                     row = by_key[key]
                     if int(count.item()) != sum(row["response_mask"]):
@@ -108,6 +143,8 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
                             "trajectory_id": row.get("trajectory_id", row["id"]),
                             "rkl_sum": float(total.item()),
                             "tokens": int(count.item()),
+                            "measure_id": measure_id,
+                            **{name: float(scores[name][index].item()) for name in extra_names},
                         }
                     )
             finally:
@@ -135,6 +172,10 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
         "windows": len(windows),
         "seconds": time.monotonic() - started,
         "teacher_timing": timings,
+        "stage_seconds": stage_seconds,
+        "distribution": space.metadata,
+        "numerical_profile": profile,
+        "measure_id": measure_id,
         "logical_payload_limit_bytes": budget.available_payload(live_payload_bytes),
         "audit": {"status": "passed" if budget.audit_state else "not_requested", "ranks": audit},
     }

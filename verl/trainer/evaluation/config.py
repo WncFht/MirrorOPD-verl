@@ -70,9 +70,12 @@ class GenerationProtocol:
     def metadata(self):
         return {f.name: getattr(self, f.name) for f in fields(self)}
 
+    def sampling_metadata(self):
+        return {k: v for k, v in self.metadata().items() if k != "answer_channel"}
+
     @property
     def protocol_id(self):
-        return identity(self.metadata())
+        return identity(self.sampling_metadata())
 
     def sample_seed(self, dataset, question_id, sample_index):
         # Neither n nor current checkpoint enters this seed: sample0 is stable as
@@ -125,6 +128,7 @@ class ScoreBudget:
     copy_reserve_factor: float = 2.5
     token_chunk: int = 256
     audit_state: bool = False
+    objective_space: bool = False
 
     def __post_init__(self):
         if any(type(x) is not int or x <= 0 for x in (self.payload_bytes, self.host_budget_bytes, self.token_chunk)):

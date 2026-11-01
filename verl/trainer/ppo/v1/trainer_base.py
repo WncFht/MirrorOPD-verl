@@ -47,7 +47,7 @@ from verl.single_controller.ray import (
     ResourcePoolManager,
     create_colocated_worker_cls,
 )
-from verl.trainer.distillation import is_distillation_enabled
+from verl.trainer.distillation.losses import is_distillation_enabled
 from verl.trainer.ppo import core_algos
 from verl.trainer.ppo.checkpoint_callback import build_checkpoint_callback
 from verl.trainer.ppo.core_algos import agg_loss
@@ -2025,6 +2025,12 @@ class PPOTrainer(ABC):
             get=tq.kv_batch_get,
             put=tq.kv_batch_put,
             wait=ray.get,
+            input_tokenizer=self.config.actor_rollout_ref.model.path
+            if OmegaConf.select(
+                self.config, "distillation.distillation_loss.full_vocab.input_id_mapping", default="identity"
+            )
+            == "token_semantics"
+            else None,
         )
         return scorer.score(batch, timing_raw)
 

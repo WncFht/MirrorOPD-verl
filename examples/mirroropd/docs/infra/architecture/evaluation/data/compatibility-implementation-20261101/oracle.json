@@ -1,0 +1,49 @@
+{
+  "teacher_extra_support": {
+    "native_rkl": 0.6931471805599453,
+    "conditional_rkl": 0.0,
+    "teacher_excluded_mass": 0.5
+  },
+  "student_extra_support": {
+    "conditional_reference": 0.6202888798308357,
+    "excluded_mass": 0.4,
+    "excluded_logit_gradient": 0.0,
+    "native": "infinite if teacher mass is zero",
+    "current_rejections": {
+      "readout": "Teacher must cover student support and token_chunk must be positive",
+      "training": "full reverse KL requires teacher support to cover every student output row"
+    }
+  },
+  "termination_equivalence": {
+    "training_coarse_rkl": 0.0,
+    "training_raw_diagnostic": 0.8788898309344875,
+    "readout_raw_rkl": 0.8788898309344875
+  },
+  "grouping_and_geometric_target": {
+    "group_then_mix": [
+      0.9,
+      0.1
+    ],
+    "mix_then_group": [
+      0.8497788951776652,
+      0.15022110482233483
+    ]
+  },
+  "condition_complete_groups": {
+    "equal": true,
+    "partial_group_requires_explicit_policy": true
+  },
+  "permuted_token_ids": {
+    "row_order_rkl": 0.08109302162163284,
+    "mapped_rkl": 0.0
+  },
+  "generation_and_verifier_identity": {
+    "same_sampling": true,
+    "different_protocol_id": false
+  },
+  "outside_bucket": {
+    "coarse_kl": 0.4209995374876201,
+    "conditional_kl": 0.3819085009768876,
+    "decomposition_error": 5.551115123125783e-17
+  }
+}

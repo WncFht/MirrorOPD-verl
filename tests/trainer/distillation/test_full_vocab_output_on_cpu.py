@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """One engine/loss contract must preserve endpoint, mirror and EOS semantics."""
 
+import math
 from types import SimpleNamespace
 
 import pytest
@@ -70,3 +71,41 @@ def test_fsdp_pytree_hooks_can_see_the_differentiable_numerator():
     leaves, _ = tree_flatten({"full_vocab": output})
     assert any(leaf is total for leaf in leaves)
     assert [leaf for leaf in leaves if isinstance(leaf, torch.Tensor) and leaf.requires_grad] == [total]
+
+
+def test_conditional_coarse_metrics_keep_their_space_and_fsdp_visible_objective():
+    from torch.utils._pytree import tree_flatten
+
+    from verl.workers.config.distillation_spec import resolve_distillation_spec
+
+    spec = resolve_distillation_spec({"loss_mode": "mirror", "mirror": {"objective": "mdpo", "eta": 1}})
+    h = torch.ones(1, 1, dtype=torch.float64)
+    p = torch.tensor([0.05, 0.45, 0.5, 0.2], dtype=torch.float64).log().reshape(-1, 1).requires_grad_()
+    q = torch.tensor([0.45, 0.05, 0.5], dtype=torch.float64).log().reshape(-1, 1)
+    result = full_vocab_objective_result(
+        h,
+        p,
+        h,
+        q,
+        spec=spec,
+        backend="precompute",
+        distribution={"mode": "common_conditioned", "common_vocab_size": 3},
+        termination_token_ids=(0, 1),
+    )
+    assert any(t is result.loss_sum for t in tree_flatten(result)[0])
+    output = FullVocabOutput.from_result(result, spec, 1, termination=True, measure_name="conditional_coarsened_rkl")
+    assert "distillation/full_kl" not in output.observations
+    assert "distillation/conditional_rkl" in output.observations
+    torch.testing.assert_close(
+        output.observations["distillation/conditional_rkl"].state[0],
+        torch.tensor(0.4 * math.log(9), dtype=torch.float64),
+    )
+    torch.testing.assert_close(
+        output.observations["distillation/conditional_coarsened_rkl/objective"].state[0],
+        torch.tensor(0.0, dtype=torch.float64),
+        atol=1e-14,
+        rtol=0,
+    )
+    assert any(t is output.objective_sum for t in tree_flatten(output)[0])
+    output.objective_sum.backward()
+    torch.testing.assert_close(p.grad, torch.zeros_like(p), atol=1e-14, rtol=0)

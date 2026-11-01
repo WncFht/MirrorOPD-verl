@@ -14,7 +14,7 @@ Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前�
 
 ## 接口与运行约束
 
-[full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py) 返回 [FullKLResult](../../../../../verl/trainer/distillation/full_vocab.py)：可反传的 `loss_sum` 以及可选、detached 的 `token_kl`。兼容入口 `full_reverse_kl` 只返回前者。Kernel 不承担分布式通信、训练归一化、TQ 读取或日志命名。
+[full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py) 返回 [FullKLResult](../../../../../verl/trainer/distillation/full_vocab.py)：可反传的 `loss_sum`、可选且 detached 的旧`token_kl`，以及与实际目标对应的`objective_rows`；旧两值解包仍兼容。兼容入口 `full_reverse_kl` 只返回前者。Kernel 不承担分布式通信、训练归一化、TQ 读取或日志命名。
 
 设一个 micro-batch 中选出的有效预测行数为 $n$：
 
@@ -27,14 +27,14 @@ Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前�
 
 一般 MDPO/BPO 还传入冻结 `hq[n,d_s]` 与 `wq[V_s,d_s]`；调用方按样本身份和版本读取它们，kernel 再检查 token 行数、head 宽度及 anchor/student 支持相同。
 
-师生 hidden 宽度可以不同；前缀与 token ID 必须对齐，且 $V_t\ge V_s$。Tokenizer 的 token→ID 词表相同，不要求模型 head 的总行数相同：head 可以包含 tokenizer 常规词表之外的额外输出行。
+师生 hidden 宽度可以不同；前缀语义与输出动作必须对齐。默认 native 模式要求 $V_t\ge V_s$；显式 common-conditioned 模式支持较窄 teacher，并记录双方排除质量。Tokenizer 的 token→ID 词表相同，不要求模型 head 的总行数相同：head 可以包含 tokenizer 常规词表之外的额外输出行。
 
 | 约束                                                                                                                                | 执行检查的位置                                                                                         |
 | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `use_policy_gradient=False`、`use_task_rewards=False`、`policy_loss_mode=vanilla`、`advantage_source=current`，两个 clamp 为 `null` | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py)                           |
 | `execution_mode=shared_sync`、V1 sync、单节点、FSDP2、无 ref/critic，师生轮流使用同池                                               | [DistillationConfig.validate_shared_sync](../../../../../verl/workers/config/distillation.py)          |
-| Qwen2/Qwen3/Qwen3-MoE、无 bias 的 student head                                                                                      | [install_full_vocab_adapter](../../../../../verl/models/transformers/full_vocab.py)                    |
-| Qwen2/Qwen3/Qwen3-MoE safetensors teacher head                                                                                      | [FrozenTeacherHead](../../../../../verl/trainer/distillation/hidden.py)                                |
+| Qwen2/Qwen3/Qwen3-MoE/Llama、无 bias 的 student head                                                                                | [install_full_vocab_adapter](../../../../../verl/models/transformers/full_vocab.py)                    |
+| Qwen2/Qwen3/Qwen3-MoE/Llama safetensors teacher head                                                                                | [FrozenTeacherHead](../../../../../verl/trainer/distillation/hidden.py)                                |
 | 温度为 1，无 entropy、sum-pi-squared 或 score-centering 计算                                                                        | [FSDPEngineWithLMHead._full_vocab_output](../../../../../verl/workers/engine/fsdp/transformer_impl.py) |
 | `loss_agg_mode=token-mean`                                                                                                          | [distillation_loss](../../../../../verl/trainer/distillation/losses.py)                                |
 
@@ -178,3 +178,9 @@ Teacher-only KL 的 loss 使用合并动作空间，原始 vocabulary KL 指标�
 ## 统一训练输出
 
 Engine 的 head 回调将数值结果转换为 [FullVocabOutput](../../../../../verl/trainer/distillation/output.py)，通过唯一的 `model_output["full_vocab"]` 传给 loss。`objective_sum` 保留可微未缩放目标，`divisor` 为规定的 η 或 endpoint 的 1，`observations` 保存已命名的 detached 统计量。原词表 KL、EOS 合并 KL、FKL 的反向 KL 诊断和位置统计保持原义；loss 不再根据旧输出键是否存在选择算法。
+
+## 显式共同支持与模型配对
+
+[分布定义](../../../../../verl/trainer/distillation/distribution.py)将 native 与 common-conditioned 分开。已批准的 R1 配对使用 C151936 共同 head 行；条件目标同时记录双方被排除质量。Precompute 路径复用本次 logits 计算诊断，value-only 读出不构造 VJP。共同支持产生的非连续视图在进入融合行算子前显式整理，ID 映射的梯度回到原 head 坐标。
+
+[模型配对检查](../../../../../verl/trainer/distillation/compatibility.py)在 GPU 分配前核对 head 清单、结构、tokenizer 语义和停止规则。不同 ID 仅在明确允许且可证明同一分词语义时一一映射；真正不同分词不属于此接口。配置、版本迁移与读出口径见[统一评估合同](../../../../../verl/trainer/evaluation/README.md#分布模型与输入适配)。

@@ -12,6 +12,7 @@ import copy
 import json
 import shutil
 import tempfile
+from dataclasses import replace
 from functools import partial
 from pathlib import Path
 from types import SimpleNamespace
@@ -22,7 +23,14 @@ from tensordict import TensorDict
 from test_shared_teacher_fsdp2 import assert_on_cpu, make_worker, nested, teacher_policy_loss
 from tokenizers import Tokenizer
 from tokenizers.models import WordLevel
-from transformers import AutoModelForCausalLM, PreTrainedTokenizerFast, Qwen2Config, Qwen3Config, Qwen3MoeConfig
+from transformers import (
+    AutoModelForCausalLM,
+    LlamaConfig,
+    PreTrainedTokenizerFast,
+    Qwen2Config,
+    Qwen3Config,
+    Qwen3MoeConfig,
+)
 
 from verl.trainer.distillation.full_vocab import full_reverse_kl
 from verl.utils import tensordict_utils as tu
@@ -59,11 +67,14 @@ def main():
     parser.add_argument("--output", type=Path)
     parser.add_argument("--checkpoint", action="store_true")
     parser.add_argument("--state-output", type=Path)
-    parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
+    parser.add_argument("--model-type", choices=["qwen2", "qwen3", "llama"], default="qwen2")
     parser.add_argument("--moe-teacher", action="store_true")
     parser.add_argument("--tied-student", action="store_true")
     parser.add_argument("--tied-teacher", action="store_true")
     parser.add_argument("--teacher-extra-rows", type=int, default=0)
+    parser.add_argument("--common-vocab-size", type=int)
+    parser.add_argument("--permuted-teacher", action="store_true")
+    parser.add_argument("--student-extra-rows", type=int, default=0)
     parser.add_argument("--teacher-hidden-size", type=int, default=32)
     parser.add_argument("--direction", choices=["reverse", "forward"], default="reverse")
     args = parser.parse_args()
@@ -89,9 +100,11 @@ def main():
                     if name == "teacher" and args.moe_teacher
                     else Qwen3Config
                     if args.model_type == "qwen3"
+                    else LlamaConfig
+                    if args.model_type == "llama"
                     else Qwen2Config
                 )(
-                    vocab_size=32 + (args.teacher_extra_rows if name == "teacher" else 0),
+                    vocab_size=32 + (args.teacher_extra_rows if name == "teacher" else args.student_extra_rows),
                     hidden_size=hidden_size,
                     intermediate_size=64,
                     num_experts=16,
@@ -103,12 +116,22 @@ def main():
                     head_dim=hidden_size // 4,
                     max_position_embeddings=64,
                     tie_word_embeddings=args.tied_student if name == "student" else args.tied_teacher,
-                    eos_token_id=1,
-                    pad_token_id=0,
+                    eos_token_id=30 if args.permuted_teacher and name == "teacher" else 1,
+                    pad_token_id=31 if args.permuted_teacher and name == "teacher" else 0,
                 )
             )
             model.save_pretrained(root / name)
-            tokenizer.save_pretrained(root / name)
+            role_tokenizer = tokenizer
+            if args.permuted_teacher and name == "teacher":
+                role_tokenizer = PreTrainedTokenizerFast(
+                    tokenizer_object=Tokenizer(
+                        WordLevel({token: 31 - index for token, index in vocab.items()}, unk_token="[UNK]")
+                    ),
+                    pad_token="[PAD]",
+                    eos_token="[EOS]",
+                    unk_token="[UNK]",
+                )
+            role_tokenizer.save_pretrained(root / name)
     dist.barrier()
     actor = make_worker(root / "student", world, teacher=False, full_vocab=True)
     teacher = make_worker(root / "teacher", world, teacher=True, full_vocab=True)
@@ -117,7 +140,20 @@ def main():
         token_chunk_size=2,
         vocab_chunk_size=7,
         forward_teacher_support="student" if args.teacher_extra_rows else "equal",
+        distribution={"mode": "common_conditioned", "common_vocab_size": args.common_vocab_size}
+        if args.common_vocab_size
+        else {},
     )
+    if args.permuted_teacher:
+        full_config = replace(
+            full_config,
+            distribution={
+                "mode": "common_conditioned",
+                "student_ids": list(range(32)),
+                "teacher_ids": list(range(31, -1, -1)),
+            },
+            input_id_mapping="token_semantics",
+        )
     distill = DistillationConfig(
         distillation_loss=DistillationLossConfig(
             loss_mode="mirror" if args.direction == "reverse" else "full_forward_kl",
@@ -154,6 +190,8 @@ def main():
             batch_size=[2],
         )
         tu.assign_non_tensor(data, temperature=1.0, compute_loss=False, full_vocab_teacher=True)
+        if args.permuted_teacher:
+            tu.assign_non_tensor(data, full_vocab_input_tokenizer=str(root / "student"))
         teacher_result = teacher.infer_batch(data)
         assert_on_cpu(teacher)
         assert all(p.grad is None for p in teacher.engine.module.parameters())
@@ -179,6 +217,19 @@ def main():
                             teacher_support="student",
                         ).loss_sum
                         continue
+                    if args.common_vocab_size or args.permuted_teacher:
+                        from verl.trainer.distillation.full_vocab import full_vocab_objective_result
+
+                        total += full_vocab_objective_result(
+                            h,
+                            reference.lm_head.weight,
+                            th.cuda().float(),
+                            actor.engine.full_vocab_teacher_head.get(h.device, h.dtype),
+                            spec=distill.distillation_loss.loss_settings,
+                            backend="dense",
+                            distribution=full_config.distribution,
+                        ).loss_sum
+                        continue
                     total += full_reverse_kl(
                         h,
                         reference.lm_head.weight,
@@ -201,7 +252,13 @@ def main():
             assert abs(loss - expected_loss) < 5e-4, (loss, expected_loss)
         record = {"step": step, "loss": loss}
         if args.backend != "liger":
-            metric = "full_forward_kl" if args.direction == "forward" else "full_kl"
+            metric = (
+                "full_forward_kl"
+                if args.direction == "forward"
+                else "conditional_rkl"
+                if full_config.distribution
+                else "full_kl"
+            )
             prefixes = [f"distillation/{metric}_position/p{i * 10:02d}_{(i + 1) * 10:02d}/" for i in range(10)]
             sums = [Observation.merge_partitions(metrics[p + "sum"]) for p in prefixes]
             counts = [Observation.merge_partitions(metrics[p + "token_count"]) for p in prefixes]

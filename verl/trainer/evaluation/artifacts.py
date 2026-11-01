@@ -87,8 +87,13 @@ EVAL_RKL = _schema(
         ("domain", pa.string()),
         ("sample_index", pa.int32()),
         ("trajectory_id", pa.string()),
+        ("measure_id", pa.string()),
+        ("uncoarsened_rkl_sum", pa.float64()),
+        ("student_excluded_mass_sum", pa.float64()),
+        ("teacher_excluded_mass_sum", pa.float64()),
     ]
-)
+).with_metadata({b"verl.evaluation.schema_version": b"2"})
+
 ACCURACY = _schema(
     [
         ("id", pa.string()),

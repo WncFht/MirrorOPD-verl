@@ -11,7 +11,7 @@ import uuid
 from collections import OrderedDict
 from contextlib import aclosing
 
-from omegaconf import open_dict
+from omegaconf import OmegaConf, open_dict
 
 from verl.experimental.agent_loop.agent_loop import DictConfigWrap
 from verl.experimental.agent_loop.single_turn_agent_loop import SingleTurnAgentLoop
@@ -64,15 +64,25 @@ async def bounded_results(requests, worker, *, concurrency, timeout, abort):
 
 
 class CheckedClient(LocalPhaseClient):
-    def __init__(self, config, servers, *, max_model_len, prompt_limit):
+    def __init__(self, config, servers, *, max_model_len, prompt_limit, token_mapping=None):
         super().__init__(config, servers)
         self.max_model_len, self.prompt_limit = max_model_len, prompt_limit
+        self.token_mapping = token_mapping
 
     async def generate(self, request_id, *, prompt_ids, sampling_params, **kwargs):
         cap = sampling_params["max_tokens"]
         if len(prompt_ids) > self.prompt_limit or len(prompt_ids) + cap > self.max_model_len:
             raise ValueError("Evaluation input exceeds the declared context; refusing silent response truncation")
-        return await super().generate(request_id, prompt_ids=prompt_ids, sampling_params=sampling_params, **kwargs)
+        mapping = self.token_mapping
+        if mapping is not None and not mapping.is_identity:
+            prompt_ids = mapping.tokens(prompt_ids)
+            sampling_params = dict(sampling_params)
+            if sampling_params.get("stop_token_ids"):
+                sampling_params["stop_token_ids"] = mapping.tokens(sampling_params["stop_token_ids"])
+        output = await super().generate(request_id, prompt_ids=prompt_ids, sampling_params=sampling_params, **kwargs)
+        if mapping is not None and not mapping.is_identity:
+            output = output.model_copy(update={"token_ids": mapping.tokens(output.token_ids, reverse=True)})
+        return output
 
 
 class CachedSingleTurn(SingleTurnAgentLoop):
@@ -128,6 +138,17 @@ class NativeGenerator:
         )
         if not servers or min(max_model_len, concurrency, chunk_size) <= 0:
             raise ValueError("A live server and positive generation budgets are required")
+        from verl.trainer.distillation.token_mapping import TokenIdMapping
+
+        self.token_mapping = TokenIdMapping.build(input_model.tokenizer, engine_model.tokenizer)
+        if (
+            not self.token_mapping.is_identity
+            and OmegaConf.select(
+                config, "distillation.distillation_loss.full_vocab.input_id_mapping", default="identity"
+            )
+            != "token_semantics"
+        ):
+            raise ValueError("Generator input ID mapping was not explicitly enabled")
         self.engine_contract = engine_contract(engine_config, engine_model, input_model)
         self.engine_contract_id = identity(self.engine_contract)
 
@@ -156,6 +177,7 @@ class NativeGenerator:
             metadata={
                 "producer": producer,
                 "model_identity": model_identity,
+                "sample_identity_schema": 3,
                 "outer": outer,
                 "protocols": {k: v.metadata() for k, v in protocols.items()},
                 "expected_samples": expected,
@@ -193,7 +215,11 @@ class NativeGenerator:
                     data_config.apply_chat_template_kwargs = json.loads(protocol.template_json)
                     data_config.continuous_token.model_family = protocol.model_family
                 client = CheckedClient(
-                    self.config, self.servers, max_model_len=self.max_model_len, prompt_limit=protocol.prompt_limit
+                    self.config,
+                    self.servers,
+                    max_model_len=self.max_model_len,
+                    prompt_limit=protocol.prompt_limit,
+                    token_mapping=self.token_mapping,
                 )
                 loops[spec.protocol] = CachedSingleTurn(
                     trainer_config=DictConfigWrap(loop_config),

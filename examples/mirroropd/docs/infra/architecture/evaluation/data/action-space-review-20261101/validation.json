@@ -16,5 +16,102 @@
     ],
     "log_sha256": "d3a4408016910d616dac322917d2862fb069db502e913d8d4a572e41473e8de9"
   },
-  "gpu": "pending common-contract-smoke-a01"
+  "gpu": {
+    "status": "passed",
+    "smoke": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/common-contract-smoke-a01",
+    "initial_current_contract_id": "b0fe199a1965c2595bee176812cffeb030c6b6a98f84258b40617d813cac6e46",
+    "same_actual_prompt_tokens": true,
+    "all_observed_generated_ids_legal": true,
+    "observed_generation_rows": 8,
+    "formal": "justrl-r1-1p5b-math-50outer-common-v1",
+    "pair": "hbx/JustRL-DeepSeek-1.5B -> deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+    "physical_gpus": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "training_batch": 4,
+    "reuse": 1,
+    "outer": 1,
+    "optimizer_steps": 1,
+    "response_cap": 128,
+    "source_questions": 2,
+    "public_questions": 2,
+    "public_n": 1,
+    "final_export": false,
+    "source_hash_manifest_sha256": "fe4f40af03a58aba9073c7ba813249cfbc671826e3b2dd4ee182e98d778483c1",
+    "config_sha256": "486ac2517c3b9d53a875c56145815637e6aef5651853301ce6eb2fa68da021dc",
+    "events": {
+      "outer-000": {
+        "status": "complete",
+        "audit": {
+          "status": "passed",
+          "ranks": [
+            {
+              "state_digest": "add375af780429d5a2e932f9c16e218fbc78f40c817d1c07c3cc4831a065bc4e",
+              "unchanged": true
+            },
+            {
+              "state_digest": "20f53129c10a707a29f508c769ef56d9767b6f05529cd8243eee1fb0d6c69547",
+              "unchanged": true
+            },
+            {
+              "state_digest": "ffc3e4e22bde12c134c024a43a401e5f81cb89302848d3924af195c9bf4a251c",
+              "unchanged": true
+            },
+            {
+              "state_digest": "adae080af8cbcbff4de21f1aaf127c001e134f57a6de57296da6b11bd8a4f08a",
+              "unchanged": true
+            }
+          ]
+        },
+        "source_rkl": 0.12400614935692922,
+        "invalid_rows": {
+          "eval/rkl/source_heldout/invalid_rows": 0,
+          "eval/rkl/public_initial/all/invalid_rows": 0,
+          "eval/rkl/public_initial/math/invalid_rows": 0,
+          "eval/rkl/public_teacher/all/invalid_rows": 0,
+          "eval/rkl/public_teacher/math/invalid_rows": 0,
+          "eval/rkl/public_current/all/invalid_rows": 0,
+          "eval/rkl/public_current/math/invalid_rows": 0
+        }
+      },
+      "outer-001": {
+        "status": "complete",
+        "audit": {
+          "status": "passed",
+          "ranks": [
+            {
+              "state_digest": "88ceea09fb2439e852c3eb0b1bdeb68b722b319a4a1e07d74fdf2cc919c0e9cf",
+              "unchanged": true
+            },
+            {
+              "state_digest": "15a6017495ae1cb3ca517b1f480b031f92b7d8f203cd4ad7fe941f6a7c8b2fa0",
+              "unchanged": true
+            },
+            {
+              "state_digest": "19fad68cced4dda9d289c145a73271881c04548ad555b2e698f3f9a045447873",
+              "unchanged": true
+            },
+            {
+              "state_digest": "6b9d8471db0cd8cfe753ff48bdc260ff613d68861eaf50c282ba2510d18278ed",
+              "unchanged": true
+            }
+          ]
+        },
+        "source_rkl": 0.1239512967017256,
+        "invalid_rows": {
+          "eval/rkl/source_heldout/invalid_rows": 0,
+          "eval/rkl/history/invalid_rows": 0,
+          "eval/rkl/public_current/all/invalid_rows": 0,
+          "eval/rkl/public_current/math/invalid_rows": 0,
+          "eval/rkl/public_initial/all/invalid_rows": 0,
+          "eval/rkl/public_initial/math/invalid_rows": 0,
+          "eval/rkl/public_teacher/all/invalid_rows": 0,
+          "eval/rkl/public_teacher/math/invalid_rows": 0
+        }
+      }
+    }
+  }
 }

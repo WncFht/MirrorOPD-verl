@@ -114,6 +114,28 @@ PPO_MAX_TOKEN_LEN_PER_GPU=${PPO_MAX_TOKEN_LEN_PER_GPU:-32768}
 # 验证允许更长的回答；VAL_N 是每题采样次数，VAL_BATCH_SIZE 是提交窗口题数。
 MAX_VAL_RESPONSE_LENGTH=${MAX_VAL_RESPONSE_LENGTH:-31744}
 VAL_N=${VAL_N:-16}
+# Training truncation is opt-in and independent of validation stopping.
+TRAIN_REPETITION_DETECTION=${TRAIN_REPETITION_DETECTION:-false}
+TRAIN_REPETITION_MIN_PATTERN=${TRAIN_REPETITION_MIN_PATTERN:-16}
+TRAIN_REPETITION_MAX_PATTERN=${TRAIN_REPETITION_MAX_PATTERN:-128}
+TRAIN_REPETITION_MIN_COUNT=${TRAIN_REPETITION_MIN_COUNT:-8}
+case ${TRAIN_REPETITION_DETECTION,,} in
+    true|1)
+        for name in TRAIN_REPETITION_MIN_PATTERN TRAIN_REPETITION_MAX_PATTERN TRAIN_REPETITION_MIN_COUNT; do
+            if [[ ! ${!name} =~ ^[1-9][0-9]*$ ]]; then
+                echo "$name must be a positive integer" >&2
+                exit 2
+            fi
+        done
+        if (( TRAIN_REPETITION_MIN_PATTERN > TRAIN_REPETITION_MAX_PATTERN || TRAIN_REPETITION_MIN_COUNT < 2 )); then
+            echo "Training repetition detection requires min pattern <= max pattern and min count >= 2" >&2
+            exit 2
+        fi
+        TRAIN_REPETITION_PARAMS="{min_pattern_size:$TRAIN_REPETITION_MIN_PATTERN,max_pattern_size:$TRAIN_REPETITION_MAX_PATTERN,min_count:$TRAIN_REPETITION_MIN_COUNT}"
+        ;;
+    false|0) TRAIN_REPETITION_PARAMS=null ;;
+    *) echo "TRAIN_REPETITION_DETECTION must be true or false" >&2; exit 2 ;;
+esac
 # null submits the full validation set; positive integers retain windowed evaluation.
 # The submission window is independent of the per-engine active sequence limit.
 if [[ $DOMAIN == math ]]; then
@@ -284,6 +306,7 @@ ROLLOUT_ARGS=(
     actor_rollout_ref.rollout.temperature=1.0
     actor_rollout_ref.rollout.top_p=1.0
     actor_rollout_ref.rollout.top_k=-1
+    "actor_rollout_ref.rollout.repetition_detection=$TRAIN_REPETITION_PARAMS"
     "actor_rollout_ref.rollout.calculate_log_probs=$OPD_CALCULATE_LOG_PROBS"
     actor_rollout_ref.rollout.log_prob_use_dynamic_bsz=True
     "actor_rollout_ref.rollout.log_prob_max_token_len_per_gpu=$PPO_MAX_TOKEN_LEN_PER_GPU"

@@ -9,16 +9,16 @@ from safetensors import safe_open
 
 
 class FrozenTeacherHead:
-    """Load a Qwen safetensors output weight; never register on the student."""
+    """Load a supported safetensors output weight; never register on the student."""
 
     def __init__(self, path):
         from verl.utils.fs import copy_to_local
 
         root = Path(copy_to_local(path))
         config = json.loads((root / "config.json").read_text())
-        if config.get("model_type") not in ("qwen2", "qwen3", "qwen3_moe"):
-            raise ValueError("full reverse KL requires a Qwen2/Qwen3/Qwen3-MoE teacher head")
-        key = "model.embed_tokens.weight" if config.get("tie_word_embeddings", False) else "lm_head.weight"
+        from verl.models.transformers.full_vocab import linear_head_layout
+
+        key = linear_head_layout(config)
         index = root / "model.safetensors.index.json"
         files = (
             [root / json.loads(index.read_text())["weight_map"][key]]

@@ -8,14 +8,12 @@ producer owns its actors; this entrypoint never stops a shared Ray cluster.
 
 import argparse
 import asyncio
-import copy
 import json
 import os
 
 import ray
 from omegaconf import OmegaConf, open_dict
 
-from verl.experimental.rollout_policy.validation import policy_engine_config
 from verl.trainer.ppo.readout_callback import readout_options
 from verl.utils.config import omega_conf_to_dataclass
 from verl.workers.config import HFModelConfig
@@ -26,7 +24,7 @@ from .artifacts import ArtifactStore, file_sha256, identity
 from .config import DatasetSpec, EvaluationConfig
 from .coordinator import EvaluationCoordinator, read_questions
 from .generation import NativeGenerator
-from .generation_contract import engine_contract, require_current_generation
+from .generation_contract import engine_contract, prepared_generation_config, require_current_generation
 from .identity import bootstrap_contract, model_identity
 from .trajectory import select_panel, trajectory_index
 
@@ -42,14 +40,30 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
     initial_model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
     teacher = config.distillation.teacher_models.teacher_model.model_path
     path = initial_model.path if producer in {"initial", "source"} else teacher
-    model_config = copy.deepcopy(config.actor_rollout_ref.model)
-    with open_dict(model_config):
-        model_config.path = path
-    model_config = omega_conf_to_dataclass(model_config, dataclass_type=HFModelConfig)
-    if model_config.tokenizer.get_vocab() != initial_model.tokenizer.get_vocab():
-        raise ValueError("Bootstrap requires verified shared token semantics")
+    model_config = initial_model if producer in {"initial", "source"} else HFModelConfig(path=path)
+    from verl.trainer.distillation.compatibility import ModelPairContract
+
+    if producer not in {"initial", "source"}:
+        pair = ModelPairContract.build(
+            initial_model.hf_config,
+            model_config.hf_config,
+            initial_model.tokenizer,
+            model_config.tokenizer,
+            distribution=config.distillation.distillation_loss.full_vocab.get("distribution", {}),
+            allow_permutation=config.distillation.distillation_loss.full_vocab.get("input_id_mapping", "identity")
+            == "token_semantics",
+        )
+        student_tokens = initial_model.tokenizer.get_vocab()
+        if not set(model_config.tokenizer.get_vocab()) <= set(student_tokens):
+            raise ValueError(
+                "Teacher rollout support is not closed under shared student input; "
+                "declare and validate a separate generation-support protocol"
+            )
+        for protocol in options.protocols.values():
+            if protocol.prompt_limit + protocol.max_new_tokens > min(pair.student_context, pair.teacher_context):
+                raise ValueError("Generation budget exceeds verified student/teacher context")
     model_hash = model_identity(path)
-    rollout = policy_engine_config(config.actor_rollout_ref.rollout)
+    rollout = prepared_generation_config(config.actor_rollout_ref.rollout, model_config, initial_model)
     gpus = int(config.trainer.n_gpus_per_node)
     if tensor_parallel < 1 or gpus % tensor_parallel:
         raise ValueError("Bootstrap tensor parallelism must divide the allocated GPUs")
@@ -170,16 +184,17 @@ def finalize_bootstrap(config):
         manifest = store.manifest(complete=True)
         if manifest["metadata"]["model_identity"] != expected:
             raise ValueError("Bootstrap producer weights differ")
-        role_config = copy.deepcopy(config.actor_rollout_ref.model)
-        with open_dict(role_config):
-            role_config.path = (
-                config.distillation.teacher_models.teacher_model.model_path
-                if child == "teacher"
-                else config.actor_rollout_ref.model.path
-            )
-        role_model = omega_conf_to_dataclass(role_config, dataclass_type=HFModelConfig)
         input_model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
-        contract = engine_contract(policy_engine_config(config.actor_rollout_ref.rollout), role_model, input_model)
+        role_model = (
+            HFModelConfig(path=config.distillation.teacher_models.teacher_model.model_path)
+            if child == "teacher"
+            else input_model
+        )
+        contract = engine_contract(
+            prepared_generation_config(config.actor_rollout_ref.rollout, role_model, input_model),
+            role_model,
+            input_model,
+        )
         if manifest["metadata"].get("engine_contract_id") != identity(contract):
             raise ValueError("Bootstrap bank does not use the declared effective generation contract")
         if identity(manifest["metadata"]["protocols"]) != identity(
@@ -232,6 +247,9 @@ def main():
     if args.producer == "finalize":
         finalize_bootstrap(config)
         return
+    from verl.trainer.distillation.compatibility import preflight_pair
+
+    preflight_pair(config)
     # Refuse attaching to any pre-existing cluster through ambient RAY_ADDRESS.
     os.environ["RAY_ADDRESS"] = "local"
     ray.init(

@@ -6,14 +6,16 @@ import argparse
 import itertools
 
 from omegaconf import OmegaConf
-from transformers import AutoTokenizer
 
 from verl.trainer.ppo.readout_callback import readout_options
+from verl.utils.config import omega_conf_to_dataclass
+from verl.workers.config import HFModelConfig
 
 from .accuracy import AccuracyCollector
 from .artifacts import ArtifactStore, identity
 from .config import EvaluationConfig
 from .coordinator import EvaluationCoordinator, read_questions
+from .generation_contract import input_identity
 
 
 def regrade(config, generation, output):
@@ -24,9 +26,18 @@ def regrade(config, generation, output):
     expected_hash = identity([(s.name, s.n, s.protocol, questions) for s, questions in specifications])
     if manifest["metadata"].get("question_set_sha256") != expected_hash:
         raise ValueError("Replay configuration does not match generated questions and n")
-    if identity(manifest["metadata"]["protocols"]) != identity({k: v.metadata() for k, v in options.protocols.items()}):
-        raise ValueError("Replay answer-channel/generation protocol changed")
-    tokenizer = AutoTokenizer.from_pretrained(config.actor_rollout_ref.model.path)
+    if identity(
+        {k: {a: b for a, b in v.items() if a != "answer_channel"} for k, v in manifest["metadata"]["protocols"].items()}
+    ) != identity({k: v.sampling_metadata() for k, v in options.protocols.items()}):
+        raise ValueError("Replay sampling or input protocol changed")
+    model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
+    recorded_input = manifest["metadata"].get("engine_contract", {}).get("input_id")
+    if recorded_input is None or recorded_input != input_identity(model):
+        raise ValueError(
+            "Replay tokenizer/input identity is unverified or changed; "
+            "use the original frozen evaluator for legacy artifacts"
+        )
+    tokenizer = model.tokenizer
     questions = {
         (spec.name, q["id"]): (q, spec, options.protocols[spec.protocol]) for spec, rows in specifications for q in rows
     }

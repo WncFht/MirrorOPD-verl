@@ -1,0 +1,1082 @@
+{
+  "scope": "Implementation acceptance only; no new long-budget science experiments",
+  "native": {
+    "conditional-r1-native-a02": {
+      "status": "passed",
+      "gpus": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch": 4,
+      "reuse": 1,
+      "outer": 1,
+      "response_cap": 64,
+      "initial_current_prompt_tokens_equal": true,
+      "initial_current_engine_contract_equal": true,
+      "events": {
+        "0": {
+          "logical_rows": 6,
+          "source": {
+            "eval/rkl/source_heldout/rows": 2,
+            "eval/rkl/source_heldout/valid_rows": 2,
+            "eval/rkl/source_heldout/invalid_rows": 0,
+            "eval/rkl/source_heldout/tokens": 128,
+            "eval/rkl/source_heldout/question_mean": 0.14946577737786537,
+            "eval/rkl/source_heldout/absolute_reduction": 0.0,
+            "eval/rkl/source_heldout/reduction_percent": 0.0,
+            "eval/rkl/source_heldout/student_excluded_mass": 1.3105850051589505e-10,
+            "eval/rkl/source_heldout/teacher_excluded_mass": 0.0
+          },
+          "measure_ids": [
+            "ea8f05a4e540c6041320c48112796ae64f096ea45d68d862ca2e29358bed9202"
+          ],
+          "timing": {
+            "windows": 1,
+            "seconds": 33.93362257629633,
+            "teacher_timing": {
+              "teacher_transfer": 2.845493830740452,
+              "teacher_forward": 1.0849057585000992
+            },
+            "stage_seconds": {
+              "trajectory_publish": 0.04685959219932556,
+              "student_readout_rpc": 9.06429698318243
+            },
+            "distribution": {
+              "schema": 1,
+              "basis": "head_rows",
+              "spec": {
+                "mode": "common_conditioned",
+                "common_vocab_size": 151936,
+                "student_ids": [],
+                "teacher_ids": []
+              },
+              "student_width": 152064,
+              "teacher_width": 151936,
+              "termination_ids": [],
+              "temperature": 1.0
+            },
+            "measure_id": "ea8f05a4e540c6041320c48112796ae64f096ea45d68d862ca2e29358bed9202",
+            "logical_payload_limit_bytes": 134217728,
+            "audit": {
+              "status": "passed",
+              "ranks": [
+                {
+                  "state_digest": "911df3605b08112f5b0e97c6430057d8c8d923e3ba0c0ae4e70b1d147c04c5f7",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "f2a99ca80f108ead049fb60e5a6c298d2fcf6806b1a98242c42107415d134fe2",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "35b9a3d39e68ad1ac202af91cba34cb29fde935ebf2369625b871f1d8c293ce9",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "d64729477165fe6ea945f44e6bbee37497ebaa5693ce2683e9544f211f26100b",
+                  "unchanged": true
+                }
+              ]
+            }
+          }
+        },
+        "1": {
+          "logical_rows": 12,
+          "source": {
+            "eval/rkl/source_heldout/rows": 2,
+            "eval/rkl/source_heldout/valid_rows": 2,
+            "eval/rkl/source_heldout/invalid_rows": 0,
+            "eval/rkl/source_heldout/tokens": 128,
+            "eval/rkl/source_heldout/question_mean": 0.14819653900945148,
+            "eval/rkl/source_heldout/absolute_reduction": 0.0012692383684138886,
+            "eval/rkl/source_heldout/reduction_percent": 0.849183265012643,
+            "eval/rkl/source_heldout/student_excluded_mass": 1.3440132035200026e-10,
+            "eval/rkl/source_heldout/teacher_excluded_mass": 0.0
+          },
+          "measure_ids": [
+            "ea8f05a4e540c6041320c48112796ae64f096ea45d68d862ca2e29358bed9202"
+          ],
+          "timing": {
+            "windows": 1,
+            "seconds": 69.48797246813774,
+            "teacher_timing": {
+              "teacher_transfer": 0.814308412373066,
+              "teacher_forward": 0.2644924372434616
+            },
+            "stage_seconds": {
+              "trajectory_publish": 0.03513685613870621,
+              "student_readout_rpc": 9.537010036408901
+            },
+            "distribution": {
+              "schema": 1,
+              "basis": "head_rows",
+              "spec": {
+                "mode": "common_conditioned",
+                "common_vocab_size": 151936,
+                "student_ids": [],
+                "teacher_ids": []
+              },
+              "student_width": 152064,
+              "teacher_width": 151936,
+              "termination_ids": [],
+              "temperature": 1.0
+            },
+            "measure_id": "ea8f05a4e540c6041320c48112796ae64f096ea45d68d862ca2e29358bed9202",
+            "logical_payload_limit_bytes": 134217728,
+            "audit": {
+              "status": "passed",
+              "ranks": [
+                {
+                  "state_digest": "336e0e223fb077a033e54dcf2a966ea128daf608f19709be1d2546fe71b84a33",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "35d90264f682de593763c2232d6d47d8917b2f69100b083df2286efdcd2414a7",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "162fa570e50945abec5c6d0bb675297eab705a75d9af993747b43fa104e67083",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "d7ffacd17e981bb63b48f9c75b4fc2736187c12fefa758facd153f27b9bbf647",
+                  "unchanged": true
+                }
+              ]
+            }
+          }
+        }
+      },
+      "config_sha256": "8ea6f09bea731c815e36897ef57079adc13960895a948f9cdaeaa24ca5470fc4",
+      "source_manifest_sha256": "17790c00e40068e4abdf7ffcd5080e1bc29225b91e1be93289d88530c81437c1"
+    },
+    "llama-native-a04": {
+      "status": "passed",
+      "gpus": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "batch": 4,
+      "reuse": 1,
+      "outer": 1,
+      "response_cap": 64,
+      "initial_current_prompt_tokens_equal": true,
+      "initial_current_engine_contract_equal": true,
+      "events": {
+        "0": {
+          "logical_rows": 6,
+          "source": {
+            "eval/rkl/source_heldout/rows": 2,
+            "eval/rkl/source_heldout/valid_rows": 2,
+            "eval/rkl/source_heldout/invalid_rows": 0,
+            "eval/rkl/source_heldout/tokens": 128,
+            "eval/rkl/source_heldout/question_mean": 0.49442512633612523,
+            "eval/rkl/source_heldout/absolute_reduction": 0.0,
+            "eval/rkl/source_heldout/reduction_percent": 0.0
+          },
+          "measure_ids": [
+            "a09368992e1a48b456261d4dcd532a97d41d802f06a47559460e1cff611f39f7"
+          ],
+          "timing": {
+            "windows": 1,
+            "seconds": 17.268020883202553,
+            "teacher_timing": {
+              "teacher_transfer": 1.7502549588680267,
+              "teacher_forward": 0.7675994858145714
+            },
+            "stage_seconds": {
+              "trajectory_publish": 0.045051515102386475,
+              "student_readout_rpc": 8.478198856115341
+            },
+            "distribution": {
+              "schema": 1,
+              "basis": "head_rows",
+              "spec": {
+                "mode": "native",
+                "common_vocab_size": null,
+                "student_ids": [],
+                "teacher_ids": []
+              },
+              "student_width": 128256,
+              "teacher_width": 128256,
+              "termination_ids": [],
+              "temperature": 1.0
+            },
+            "numerical_profile": {
+              "schema": 1,
+              "roles": {
+                "student": {
+                  "param_dtype": "bfloat16",
+                  "forward_precision": null
+                },
+                "teacher": {
+                  "param_dtype": "bfloat16",
+                  "forward_precision": null
+                }
+              },
+              "reduction": "stable-rkl-v1",
+              "sample_sum_dtype": "float64"
+            },
+            "measure_id": "a09368992e1a48b456261d4dcd532a97d41d802f06a47559460e1cff611f39f7",
+            "logical_payload_limit_bytes": 134217728,
+            "audit": {
+              "status": "passed",
+              "ranks": [
+                {
+                  "state_digest": "079d8b31c11ca4859a3439d59d6c62eb183f11747402b344ed71568234801080",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "7eae19e2684b858c46f5f9cfd82e043799d8f2997fd10795e2a44ea0158c0e16",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "e81d487a987d0c9dba3959b50604e2ed9a454ec9bbf2db9cee590ada8f41796d",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "7daf5c6592d396f66e2f6b37380647459d935b7624aa995b4b2c46023885e754",
+                  "unchanged": true
+                }
+              ]
+            }
+          }
+        },
+        "1": {
+          "logical_rows": 12,
+          "source": {
+            "eval/rkl/source_heldout/rows": 2,
+            "eval/rkl/source_heldout/valid_rows": 2,
+            "eval/rkl/source_heldout/invalid_rows": 0,
+            "eval/rkl/source_heldout/tokens": 128,
+            "eval/rkl/source_heldout/question_mean": 0.4921991587247785,
+            "eval/rkl/source_heldout/absolute_reduction": 0.0022259676113467464,
+            "eval/rkl/source_heldout/reduction_percent": 0.4502132866591957
+          },
+          "measure_ids": [
+            "a09368992e1a48b456261d4dcd532a97d41d802f06a47559460e1cff611f39f7"
+          ],
+          "timing": {
+            "windows": 1,
+            "seconds": 21.01376148313284,
+            "teacher_timing": {
+              "teacher_transfer": 1.520112968981266,
+              "teacher_forward": 0.40705587714910507
+            },
+            "stage_seconds": {
+              "trajectory_publish": 0.03502032905817032,
+              "student_readout_rpc": 2.520963117480278
+            },
+            "distribution": {
+              "schema": 1,
+              "basis": "head_rows",
+              "spec": {
+                "mode": "native",
+                "common_vocab_size": null,
+                "student_ids": [],
+                "teacher_ids": []
+              },
+              "student_width": 128256,
+              "teacher_width": 128256,
+              "termination_ids": [],
+              "temperature": 1.0
+            },
+            "numerical_profile": {
+              "schema": 1,
+              "roles": {
+                "student": {
+                  "param_dtype": "bfloat16",
+                  "forward_precision": null
+                },
+                "teacher": {
+                  "param_dtype": "bfloat16",
+                  "forward_precision": null
+                }
+              },
+              "reduction": "stable-rkl-v1",
+              "sample_sum_dtype": "float64"
+            },
+            "measure_id": "a09368992e1a48b456261d4dcd532a97d41d802f06a47559460e1cff611f39f7",
+            "logical_payload_limit_bytes": 134217728,
+            "audit": {
+              "status": "passed",
+              "ranks": [
+                {
+                  "state_digest": "23b91491581ce0ceb2e1b0f6b89e1f7f8fc53acffe7c08f73f0c57f0dfeb7a05",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "8df525cc21d289e42fdac328e261fa4652b408fe059fbe4333880c49a48be1e5",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "b25e29b40723739d79f4fce9af2267179e381072eb5a670455f4628a1fc147f4",
+                  "unchanged": true
+                },
+                {
+                  "state_digest": "f0cf5135799de562f9cd25807a9974d5bd9c601c7f5f3411d12499389832b5c8",
+                  "unchanged": true
+                }
+              ]
+            }
+          }
+        }
+      },
+      "config_sha256": "95e5383412e057e0b6c5663d3735deaa9c8dbb3c4856c598a72f3c46cd3b5768",
+      "source_manifest_sha256": "7650104b3f7da6678df3224717296af53d217f3f3bf3e473c148b1cef24a636c"
+    }
+  },
+  "fsdp": {
+    "llama-untied": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.013564648106694221,
+          "position_kl_sums": [
+            0.0,
+            0.02692732121795416,
+            0.026702815666794777,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03254786506295204,
+            0.022339176386594772,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.008951042778789997,
+          "position_kl_sums": [
+            0.0,
+            0.009499415755271912,
+            0.007970459759235382,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010971048846840858,
+            0.007363246288150549,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.006230897270143032,
+          "position_kl_sums": [
+            0.0,
+            0.013702253811061382,
+            0.011568586342036724,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.014731412753462791,
+            0.009844928048551083,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.035258010029792786,
+        "model.layers.0.self_attn.q_proj.weight": 0.05305615812540054,
+        "model.layers.0.self_attn.k_proj.weight": 0.037610918283462524,
+        "model.layers.0.self_attn.v_proj.weight": 0.03288814425468445,
+        "model.layers.0.self_attn.o_proj.weight": 0.04905185475945473,
+        "model.layers.0.mlp.gate_proj.weight": 0.07757381349802017,
+        "model.layers.0.mlp.up_proj.weight": 0.07482701539993286,
+        "model.layers.0.mlp.down_proj.weight": 0.0740826427936554,
+        "model.layers.0.input_layernorm.weight": 0.008641469292342663,
+        "model.layers.0.post_attention_layernorm.weight": 0.010061228647828102,
+        "model.layers.1.self_attn.q_proj.weight": 0.0531592033803463,
+        "model.layers.1.self_attn.k_proj.weight": 0.03733202815055847,
+        "model.layers.1.self_attn.v_proj.weight": 0.03461931645870209,
+        "model.layers.1.self_attn.o_proj.weight": 0.05300850793719292,
+        "model.layers.1.mlp.gate_proj.weight": 0.07441558688879013,
+        "model.layers.1.mlp.up_proj.weight": 0.07613539695739746,
+        "model.layers.1.mlp.down_proj.weight": 0.07558896392583847,
+        "model.layers.1.input_layernorm.weight": 0.008397798053920269,
+        "model.layers.1.post_attention_layernorm.weight": 0.008415569551289082,
+        "model.norm.weight": 0.010675179772078991,
+        "lm_head.weight": 0.05848061665892601
+      },
+      "checkpoint_roundtrip": true,
+      "scheduler_optimizer_roundtrip": true,
+      "resumed_next_update_equivalent": true,
+      "model_type": "llama",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "llama-tied": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.010011572390794754,
+          "position_kl_sums": [
+            0.0,
+            0.015402724966406822,
+            0.0317748486995697,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.021698245778679848,
+            0.011216757353395224,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.0071829454973340034,
+          "position_kl_sums": [
+            0.0,
+            0.006638876628130674,
+            0.010160287842154503,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.007812350057065487,
+            0.004120267927646637,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.00507384492084384,
+          "position_kl_sums": [
+            0.0,
+            0.008535567671060562,
+            0.014614013023674488,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.011011435650289059,
+            0.006429743254557252,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.0555599108338356,
+        "model.layers.0.self_attn.q_proj.weight": 0.05755900219082832,
+        "model.layers.0.self_attn.k_proj.weight": 0.03905153274536133,
+        "model.layers.0.self_attn.v_proj.weight": 0.027892298996448517,
+        "model.layers.0.self_attn.o_proj.weight": 0.046750396490097046,
+        "model.layers.0.mlp.gate_proj.weight": 0.07410585135221481,
+        "model.layers.0.mlp.up_proj.weight": 0.07468926161527634,
+        "model.layers.0.mlp.down_proj.weight": 0.07235747575759888,
+        "model.layers.0.input_layernorm.weight": 0.007020003627985716,
+        "model.layers.0.post_attention_layernorm.weight": 0.008709631860256195,
+        "model.layers.1.self_attn.q_proj.weight": 0.049599647521972656,
+        "model.layers.1.self_attn.k_proj.weight": 0.03822987526655197,
+        "model.layers.1.self_attn.v_proj.weight": 0.028674647212028503,
+        "model.layers.1.self_attn.o_proj.weight": 0.046292610466480255,
+        "model.layers.1.mlp.gate_proj.weight": 0.07077892869710922,
+        "model.layers.1.mlp.up_proj.weight": 0.07268533110618591,
+        "model.layers.1.mlp.down_proj.weight": 0.07372265309095383,
+        "model.layers.1.input_layernorm.weight": 0.007935957051813602,
+        "model.layers.1.post_attention_layernorm.weight": 0.009499779902398586,
+        "model.norm.weight": 0.009440172463655472
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "llama",
+      "moe_teacher": false,
+      "tied_student": true,
+      "tied_teacher": true,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "conditional-qwen": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.010825020261108875,
+          "position_kl_sums": [
+            0.0,
+            0.018062205519527197,
+            0.016636153683066368,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.02873777225613594,
+            0.02316403668373823,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.006572626996785402,
+          "position_kl_sums": [
+            0.0,
+            0.006216415669769049,
+            0.0042338501662015915,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.009101343341171741,
+            0.0067388988099992275,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.00400213897228241,
+          "position_kl_sums": [
+            0.0,
+            0.006648492068052292,
+            0.005366059951484203,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.012487757951021194,
+            0.007514801109209657,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03497239947319031,
+        "model.layers.0.self_attn.q_proj.weight": 0.0523282065987587,
+        "model.layers.0.self_attn.q_proj.bias": 0.00988515093922615,
+        "model.layers.0.self_attn.k_proj.weight": 0.0378139354288578,
+        "model.layers.0.self_attn.k_proj.bias": 0.0062130349688231945,
+        "model.layers.0.self_attn.v_proj.weight": 0.03713390976190567,
+        "model.layers.0.self_attn.v_proj.bias": 0.006394325289875269,
+        "model.layers.0.self_attn.o_proj.weight": 0.05522290989756584,
+        "model.layers.0.mlp.gate_proj.weight": 0.07638378441333771,
+        "model.layers.0.mlp.up_proj.weight": 0.07444316893815994,
+        "model.layers.0.mlp.down_proj.weight": 0.07799448817968369,
+        "model.layers.0.input_layernorm.weight": 0.008993846364319324,
+        "model.layers.0.post_attention_layernorm.weight": 0.008441305719316006,
+        "model.layers.1.self_attn.q_proj.weight": 0.060310062021017075,
+        "model.layers.1.self_attn.q_proj.bias": 0.011180941946804523,
+        "model.layers.1.self_attn.k_proj.weight": 0.04174389690160751,
+        "model.layers.1.self_attn.k_proj.bias": 0.006462225690484047,
+        "model.layers.1.self_attn.v_proj.weight": 0.03914765641093254,
+        "model.layers.1.self_attn.v_proj.bias": 0.007236487697809935,
+        "model.layers.1.self_attn.o_proj.weight": 0.055409640073776245,
+        "model.layers.1.mlp.gate_proj.weight": 0.07830411940813065,
+        "model.layers.1.mlp.up_proj.weight": 0.07752656936645508,
+        "model.layers.1.mlp.down_proj.weight": 0.07827639579772949,
+        "model.layers.1.input_layernorm.weight": 0.008686608634889126,
+        "model.layers.1.post_attention_layernorm.weight": 0.009212080389261246,
+        "model.norm.weight": 0.010189220309257507,
+        "lm_head.weight": 0.06334029138088226
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "conditional-llama": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.01819518394768238,
+          "position_kl_sums": [
+            0.0,
+            0.037714945152401924,
+            0.0408146046102047,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03562964126467705,
+            0.0314022907987237,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.012359904125332832,
+          "position_kl_sums": [
+            0.0,
+            0.014108669012784958,
+            0.012184024788439274,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.011724492534995079,
+            0.011422429233789444,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.008122874423861504,
+          "position_kl_sums": [
+            0.0,
+            0.019946501590311527,
+            0.015285481698811054,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.015462514013051987,
+            0.01428849808871746,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.06731628626585007,
+        "model.layers.0.self_attn.q_proj.weight": 0.060002461075782776,
+        "model.layers.0.self_attn.k_proj.weight": 0.04243466630578041,
+        "model.layers.0.self_attn.v_proj.weight": 0.040685005486011505,
+        "model.layers.0.self_attn.o_proj.weight": 0.056599292904138565,
+        "model.layers.0.mlp.gate_proj.weight": 0.08077871799468994,
+        "model.layers.0.mlp.up_proj.weight": 0.08278990536928177,
+        "model.layers.0.mlp.down_proj.weight": 0.08186027407646179,
+        "model.layers.0.input_layernorm.weight": 0.01064781378954649,
+        "model.layers.0.post_attention_layernorm.weight": 0.008682130835950375,
+        "model.layers.1.self_attn.q_proj.weight": 0.05808980390429497,
+        "model.layers.1.self_attn.k_proj.weight": 0.04146569222211838,
+        "model.layers.1.self_attn.v_proj.weight": 0.04056501388549805,
+        "model.layers.1.self_attn.o_proj.weight": 0.05915851518511772,
+        "model.layers.1.mlp.gate_proj.weight": 0.07834870368242264,
+        "model.layers.1.mlp.up_proj.weight": 0.07863277941942215,
+        "model.layers.1.mlp.down_proj.weight": 0.079314224421978,
+        "model.layers.1.input_layernorm.weight": 0.01063546072691679,
+        "model.layers.1.post_attention_layernorm.weight": 0.009685664437711239,
+        "model.norm.weight": 0.01109140645712614
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "llama",
+      "moe_teacher": false,
+      "tied_student": true,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "permuted-input-output": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.01416262611746788,
+          "position_kl_sums": [
+            0.0,
+            0.016252113971859217,
+            0.027787845581769943,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03658781573176384,
+            0.03267323225736618,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.008793245069682598,
+          "position_kl_sums": [
+            0.0,
+            0.006449598353356123,
+            0.008813771419227123,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010674181394279003,
+            0.009235428646206856,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.005556725896894932,
+          "position_kl_sums": [
+            0.0,
+            0.0077215011697262526,
+            0.013326162472367287,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.012302301824092865,
+            0.011103842873126268,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03738679736852646,
+        "model.layers.0.self_attn.q_proj.weight": 0.05721534788608551,
+        "model.layers.0.self_attn.q_proj.bias": 0.009722482413053513,
+        "model.layers.0.self_attn.k_proj.weight": 0.0394253134727478,
+        "model.layers.0.self_attn.k_proj.bias": 0.0059717390686273575,
+        "model.layers.0.self_attn.v_proj.weight": 0.039190810173749924,
+        "model.layers.0.self_attn.v_proj.bias": 0.006682783830910921,
+        "model.layers.0.self_attn.o_proj.weight": 0.05573738366365433,
+        "model.layers.0.mlp.gate_proj.weight": 0.08104401081800461,
+        "model.layers.0.mlp.up_proj.weight": 0.08021336048841476,
+        "model.layers.0.mlp.down_proj.weight": 0.07953257858753204,
+        "model.layers.0.input_layernorm.weight": 0.008975479751825333,
+        "model.layers.0.post_attention_layernorm.weight": 0.007506994064897299,
+        "model.layers.1.self_attn.q_proj.weight": 0.058114588260650635,
+        "model.layers.1.self_attn.q_proj.bias": 0.010635897517204285,
+        "model.layers.1.self_attn.k_proj.weight": 0.04232512414455414,
+        "model.layers.1.self_attn.k_proj.bias": 0.0067071677185595036,
+        "model.layers.1.self_attn.v_proj.weight": 0.04057096689939499,
+        "model.layers.1.self_attn.v_proj.bias": 0.007608264684677124,
+        "model.layers.1.self_attn.o_proj.weight": 0.05603425204753876,
+        "model.layers.1.mlp.gate_proj.weight": 0.07934354990720749,
+        "model.layers.1.mlp.up_proj.weight": 0.07979978621006012,
+        "model.layers.1.mlp.down_proj.weight": 0.07742497324943542,
+        "model.layers.1.input_layernorm.weight": 0.009662296622991562,
+        "model.layers.1.post_attention_layernorm.weight": 0.008583929389715195,
+        "model.norm.weight": 0.010629713535308838,
+        "lm_head.weight": 0.06696959584951401
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 4,
+      "teacher_hidden_size": 32
+    }
+  },
+  "cpu": {
+    "regression": "484 passed",
+    "seconds": 87.63,
+    "log_sha256": "323a4781fa7261c09a98c7481e416e69c9deeb5871504de3defff94e97bce25d",
+    "singleton_busy_port": "passed"
+  },
+  "source_hashes": {
+    "examples/mirroropd/research/checks/objectives/verify_distribution_spaces.py": "f9e9ede0ee040d41e7de65f804e68445108458e6fb5aefbe6f03b2b666da4570",
+    "examples/mirroropd/research/studies/pipeline/plot_unified_evaluation.py": "ecd798381fcd5c342838cd8e0b40b196763e1b53c523e772fae31d1c299c6a89",
+    "tests/special_distributed/test_full_vocab_fsdp2.py": "970e4279e4da3ebe9eda11c4bd9368142bd34c58faa5b3ce63ac72d2f8e88fae",
+    "tests/trainer/distillation/test_full_vocab_adapter_on_cpu.py": "49bc4f8c6bb646933ebc7094e7bae0397a123e6e381d023ea61135b6624069d2",
+    "verl/models/transformers/full_vocab.py": "a30c81fb721e561873949dee8655d0607c04b3c904f492bc4a4eb79d86982f26",
+    "verl/trainer/distillation/evaluation.py": "93f6d1c77b9135550684fe13ff0668f7a0e33d87355d6a9b8c748995ee27ee9e",
+    "verl/trainer/distillation/full_vocab.py": "7f48dac8c46a0f01e1e5350820a8d1dd7cf690c83356a97a250493f4f096c888",
+    "verl/trainer/distillation/hidden.py": "4d33fc2d77b390803f4dc73df1f699920acaf71291dc0c1236e7d7bf3a328636",
+    "verl/trainer/distillation/losses.py": "443a49a05f0a7314d8cd33b32fb0c2ddd32efedfc7b55696bb0fb9e39240325f",
+    "verl/trainer/distillation/readout.py": "a4c8aa33200c789f5b25da7c64e06d6672e9da6eccfaea62375ea3300170f07f",
+    "verl/trainer/evaluation/accuracy.py": "941325ec1a060fff877d2850600d07feeeeb04749b75e9b0b8ccce59fbe30ad1",
+    "verl/trainer/evaluation/artifacts.py": "7de910b337edf4f2e28f9f28e5ab51e8258b53462a329cc82be12494d80592be",
+    "verl/trainer/evaluation/bootstrap.py": "60f242d6d0b0e5abed5f3b0d23945887fe803630947206afcf2f15f47e265074",
+    "verl/trainer/evaluation/config.py": "69513703b3abec65626433b47c911cf4cbfafd6a87f252ab38e7ff9fe22920df",
+    "verl/trainer/evaluation/coordinator.py": "383039a4bbbe7268a2f0d96d575cfa08187b10e53a10bf5f2f8421b434e6d414",
+    "verl/trainer/evaluation/generation_resume.py": "5d4c82836779a201e3d750f12016e808ee1e61598ebab48171c6c2761aae53cd",
+    "verl/trainer/evaluation/regrade.py": "cdd7ab3fd2254b9eb1bda9e1d19fe37c5b900abc49f9c945211ba7441867002e",
+    "verl/trainer/evaluation/reporting.py": "91a7c18a607395eb794b18298645351ad520d8e9071680cd7738455a503cd34d",
+    "verl/trainer/evaluation/scoring.py": "75cdefeae07834eff9ebeecc4ecc94ca9ab9fc0f0d17bd80c70dae85a67cf78e",
+    "verl/trainer/main_ppo.py": "b2d12c5199fad9c05a3f336a9901470d8b85204c75a647edebd1cd81ce78d2dc",
+    "verl/workers/config/distillation.py": "73158a845e3bb65871f76ec6df5b6d8d2da42421cf78643b39e119e68edecae5",
+    "verl/workers/engine/fsdp/transformer_impl.py": "bfb3480c2c9e46b740bb0ce01ff27858aed468b0faa3b45c8e2dbf7596d22d7d",
+    "verl/trainer/distillation/distribution.py": "2371cfaf9c9108b1f7c821ceb2a949bb00ce7c4c0f5a3bff8fc4d4e642111d71",
+    "verl/trainer/distillation/compatibility.py": "dd0c0e9f46f9104d4434b91d90def6f7055e920e190b62ba4ec118154010e497",
+    "verl/trainer/evaluation/native.py": "401bfb743c80ab8d4afc9de12f8c0ca5b3cfa1c6aa96519f65d8f18dd3dd59c5",
+    "verl/trainer/evaluation/execution.py": "1fd91042e1e09adb36f03ef9b725831441aef55b761e347098a85207f4bf2562",
+    "tests/trainer/distillation/test_distribution_contract_on_cpu.py": "13d649a7ad070e70472810719b6fa29fa468081760e087166008f285b4efdc37",
+    "examples/mirroropd/research/studies/pipeline/summarize_unified_evaluation.py": "86f09fea885db96e94b2941240609b7c186bbf93dc6233d013909fd50c581569",
+    "verl/trainer/evaluation/generation_contract.py": "d0dfa8b4374a4a8309074685ce6a9423f29159018f0abadd1438b30f18978c09",
+    "verl/trainer/evaluation/generation.py": "e97a4d99caf00509af48387ce50c5ea0106652c09dc148ed92ae9b0dd6190231",
+    "verl/trainer/distillation/forward_vocab.py": "fb7d03fbe223c2058364fe8b29d25e31e41e2867388d96f06f14fb639eeb7d48",
+    "tests/trainer/distillation/test_conditional_distribution_on_gpu.py": "36c8e6fac3400123252007ca58784bdb57ecd3db6cbcb048e5666910bd1dd156",
+    "verl/trainer/distillation/token_mapping.py": "3995f406b3e8882fbf0d610d11aec723a587cc1507f7857ce638833891401335",
+    "tests/trainer/distillation/test_token_mapping_on_cpu.py": "09602a50a37d7a6712a866808cd78c759a67d699dd231dd2e821d0dd53a2d85f",
+    "verl/trainer/distillation/shared_teacher.py": "15acde2995c99d72aa86b83b52fbc065d97bbd07f363faab3d381ee625eeb894",
+    "verl/trainer/ppo/v1/trainer_base.py": "5524b6f177ca7878e08d8cc5f70e2f1a0366155fe731859c9772f95c08a1b532",
+    "verl/trainer/evaluation/checkpoint.py": "e03d17d56d7926d8a45a5bdb4c8832ff7b4918b4fe1e052152e2b846ae207830",
+    "verl/trainer/evaluation/reload.py": "b11ba2b87dc5fc93efa0da2a170a47fb159f8bf183cd8abaa82f577583491b89",
+    "verl/utils/distributed.py": "5ed0b173fbb6fdc2fcf3a0ca25be0b6b818ff4b7642f2618fb13c5e570de948d",
+    "tests/trainer/distillation/test_singleton_rendezvous_on_cpu.py": "e08a5414f65dbeb33c1a45de16daa59ff90e6d318c1611bdb95f8db9f803867a"
+  },
+  "cuda": {
+    "cases": 12,
+    "status": "passed",
+    "log_sha256": "b17da8e506f619de178dce4deb5642cbe0c03cb25d82cc376a1850dd179883d5"
+  },
+  "hf_reload": {
+    "hf_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/final-model/huggingface",
+    "export_audit": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/final-model/export-audit",
+    "reference_event": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/events/outer-050",
+    "metrics": {
+      "eval/checkpoint/hf_reload_verified": 1,
+      "eval/checkpoint/hf_reload_max_rkl_error": 0.0
+    },
+    "timing": {
+      "windows": 3,
+      "seconds": 23.95413751155138,
+      "teacher_timing": {
+        "teacher_transfer": 3.0799622163176537,
+        "teacher_forward": 5.521774917840958
+      },
+      "logical_payload_limit_bytes": 1073741824,
+      "audit": {
+        "status": "passed",
+        "ranks": [
+          {
+            "state_digest": "95e12d67ab9ca5b28f4c15dc958f20d7aee947d8abe427484b777161ea04dcdd",
+            "unchanged": true
+          },
+          {
+            "state_digest": "5eb3ad325da22b3650ecaf235924a6b09c602bfda1c2804c2cea667c10f229c9",
+            "unchanged": true
+          },
+          {
+            "state_digest": "aa3ba1c8569b96c417a7c539dc0a76d5b9b7e21556698d5dd0aa2a186f920fc5",
+            "unchanged": true
+          },
+          {
+            "state_digest": "efe6f263c3835128e2449c3ad61a69069d333161627b4c1c2b899ddd37d6727f",
+            "unchanged": true
+          }
+        ]
+      }
+    },
+    "rtol": 0.0001,
+    "atol": 1e-06
+  },
+  "regrade": {
+    "status": "complete",
+    "changed_answer_channel": "whole_response -> after_thinking",
+    "generation_reused": true,
+    "questions": 2,
+    "verifier_contract_id": "fb9437bb32a874939c29b5ae437f42d648f903ba1299aff4c8a2d594771b38a6",
+    "input_identity_verified": true,
+    "manifest_sha256": "508b6ed1324d80bb025da036e5967377528400a179243c6c1e3919a001167e02"
+  },
+  "plot_replay": {
+    "figures": 12,
+    "pixel_identical": {
+      "rkl-by-trajectory": true,
+      "rkl-log-detail": true,
+      "rkl-by-domain": true,
+      "fixed-bank-reduction": true,
+      "training-updates": true,
+      "reuse-profile": true,
+      "rkl-tail-distribution": true,
+      "training-history": true,
+      "paired-question-rkl": true,
+      "paired-history-change": true,
+      "evaluation-timing": true,
+      "accuracy": true
+    },
+    "source": "published scalar CSV + plot-inputs.json; no models or rollout token files",
+    "plot_manifest_sha256": "f4358a2799415162affd4efbc4e80df4ce61f8f6963f924c03644835834527fa"
+  }
+}

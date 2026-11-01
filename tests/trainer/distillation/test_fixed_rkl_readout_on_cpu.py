@@ -112,6 +112,9 @@ def test_engine_readout_keeps_sample_order_and_masked_positions():
     engine = FSDPEngineWithLMHead.__new__(FSDPEngineWithLMHead)
     engine.model_config = SimpleNamespace(enable_full_vocab=True)
     engine.full_vocab_teacher_head = SimpleNamespace(get=lambda device, dtype: wt)
+    from verl.trainer.distillation.distribution import DistributionSpec
+
+    engine.full_vocab_readout_space = DistributionSpec().compile(len(ws), len(wt))
     engine.full_vocab_config = SimpleNamespace(token_chunk_size=2)
     engine.full_vocab_spec = SimpleNamespace()
     engine.module = Model()

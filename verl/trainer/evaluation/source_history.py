@@ -39,6 +39,15 @@ class SourceHistoryReadout(ReadoutCallback):
     def __init__(self, *, config, options):
         self.config = config
         self.options = SourceHistoryConfig.parse(options)
+        mode = OmegaConf.select(config, "distillation.distillation_loss.full_vocab.distribution.mode", default="native")
+        mapping = OmegaConf.select(
+            config, "distillation.distillation_loss.full_vocab.input_id_mapping", default="identity"
+        )
+        if mode != "native" or mapping != "identity" or self.options.score.objective_space:
+            raise ValueError(
+                "SourceHistoryReadout uses native identity RKL; use EvaluationCoordinator "
+                "for explicit distribution or objective-space readouts"
+            )
         require_current_generation(config)
         input_model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
         generation_contract = engine_contract(config.actor_rollout_ref.rollout, input_model, input_model)
@@ -271,6 +280,9 @@ class SourceHistoryReadout(ReadoutCallback):
                 "outer": outer,
                 "optimizer_steps": before,
                 "teacher_timing": timing,
+                "measure_id": scoring["measure_id"],
+                "distribution": scoring["distribution"],
+                "numerical_profile": scoring["numerical_profile"],
                 "source_bank": str(self.bank_path.resolve()),
                 "source_bank_manifest_sha256": self.bank_sha256,
                 "aggregation": "question_mean_of_token_mean; history equal_batch",

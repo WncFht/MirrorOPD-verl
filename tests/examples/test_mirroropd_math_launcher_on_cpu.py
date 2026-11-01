@@ -255,7 +255,7 @@ def test_moe_long_presets_resolve_native_full_vocab_without_checkpoint_saving(tm
         "max_pattern_size": 128,
         "min_count": 8,
     }
-    assert "repetition_detection" not in rollout
+    assert rollout.repetition_detection is None
     assert not cfg.trainer.val_before_train and cfg.trainer.resume_mode == "disable"
     assert rollout.val_kwargs.n == 16 and rollout.val_kwargs.max_tokens == 31744
     assert (rollout.val_kwargs.temperature, rollout.val_kwargs.top_p) == (0.7, 0.9)
@@ -1336,3 +1336,26 @@ def test_existing_checkpoint_data_is_rejected_before_training(tmp_path):
     assert "already contains checkpoint data" in result.stderr
     assert (checkpoint / "state.pt").read_bytes() == b"existing"
     assert not (tmp_path / "run").exists()
+
+
+def test_training_repetition_has_an_independent_launcher_setting(tmp_path):
+    cfg = _config(
+        tmp_path,
+        command=["bash", str(SCRIPT), "E61"],
+        STUDENT_GPUS="4",
+        TRAIN_BATCH_SIZE="256",
+        PPO_EPOCHS="32",
+        TRAIN_REPETITION_DETECTION="true",
+        TRAIN_REPETITION_MIN_PATTERN="32",
+        TRAIN_REPETITION_MAX_PATTERN="256",
+        TRAIN_REPETITION_MIN_COUNT="10",
+    )
+    rollout = cfg.actor_rollout_ref.rollout
+    assert dict(rollout.repetition_detection) == {"min_pattern_size": 32, "max_pattern_size": 256, "min_count": 10}
+    assert dict(rollout.val_kwargs.repetition_detection) == {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8,
+    }
+    assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 256
+    assert cfg.actor_rollout_ref.actor.ppo_epochs == 32

@@ -14,10 +14,11 @@ logger = logging.getLogger(__name__)
 
 
 class SharedTeacherScorer:
-    def __init__(self, worker, *, payload_kind, get, put, wait, async_write=False):
+    def __init__(self, worker, *, payload_kind, get, put, wait, async_write=False, input_tokenizer=None):
         if payload_kind not in ("sampled", "hidden"):
             raise ValueError("shared-sync scoring supports sampled or hidden payloads")
         self.worker = worker
+        self.input_tokenizer = input_tokenizer
         self.payload_kind = payload_kind
         self.async_write = async_write
         self.get, self.put, self.wait = get, put, wait
@@ -40,6 +41,8 @@ class SharedTeacherScorer:
                 "retain_sample_identity": self.payload_kind == "hidden",
             },
         )
+        if self.input_tokenizer is not None:
+            teacher_batch.extra_info["full_vocab_input_tokenizer"] = self.input_tokenizer
         try:
             with marked_timer("teacher_transfer", timing_raw):
                 self.worker.to("device", model=True, optimizer=False, grad=False)

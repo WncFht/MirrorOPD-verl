@@ -57,6 +57,10 @@ distillation_loss:
     # Only teacher-only full KL with precompute and single-turn generation is supported.
     termination_token_ids: []
 
+    # Explicit reverse-KL support; empty preserves native output rows.
+    distribution: {}
+    input_id_mapping: identity
+
   # If distillation loss requires top-k logits, this is the value of k
   topk: 32
 

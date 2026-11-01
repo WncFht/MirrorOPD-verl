@@ -48,7 +48,7 @@ from transformers import AutoProcessor, AutoTokenizer
 
 from verl.protocol import DataProto
 from verl.tools.tool_registry import load_all_tools
-from verl.trainer.distillation import is_distillation_enabled
+from verl.trainer.distillation.losses import is_distillation_enabled
 from verl.utils.config import omega_conf_to_dataclass
 from verl.utils.dataset.rl_dataset import RLHFDataset, get_dataset_class
 from verl.utils.import_utils import resolve_config_path
@@ -642,13 +642,14 @@ class AgentLoopWorker:
             params["top_k"] = -1
             params["temperature"] = 0
 
+        from verl.workers.config.rollout import rollout_repetition_detection
+
+        repetition = rollout_repetition_detection(config, validate=validate)
+        if repetition is not None:
+            sampling_params["repetition_detection"] = repetition
+
         # override sampling params for validation
         if validate:
-            from verl.workers.config.rollout import validation_repetition_detection
-
-            repetition = validation_repetition_detection(config)
-            if repetition is not None:
-                sampling_params["repetition_detection"] = repetition
             sampling_params["top_p"] = config.val_kwargs.top_p
             sampling_params["top_k"] = config.val_kwargs.top_k
             sampling_params["temperature"] = config.val_kwargs.temperature
@@ -721,7 +722,7 @@ class AgentLoopWorker:
         if trajectory["validate"] and "max_tokens" in sampling_params and agent_name != "single_turn_agent":
             raise ValueError("val_kwargs.max_tokens currently supports only single_turn_agent")
         if "repetition_detection" in sampling_params and agent_name != "single_turn_agent":
-            raise ValueError("val_kwargs.repetition_detection currently supports only single_turn_agent")
+            raise ValueError("repetition_detection currently supports only single_turn_agent")
         with rollout_trace_attr(
             step=trajectory["step"],
             sample_index=trajectory["sample_index"],

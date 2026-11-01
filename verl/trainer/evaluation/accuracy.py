@@ -207,6 +207,22 @@ def gap_recovery(current, initial, teacher):
     return result
 
 
+def verifier_sources():
+    """Bind evaluator code and relevant dependency versions independently of generation."""
+    from importlib.metadata import PackageNotFoundError, version
+
+    root = Path(__file__).resolve().parents[2]
+    files = [Path(__file__), Path(__file__).parent / "vendor/ifeval/SOURCE.json"]
+    files.extend(sorted((root / "utils/reward_score/one_shot_opd").rglob("*.py")))
+    dependencies = {}
+    for name in ("math-verify", "latex2sympy2-extended", "sympy", "nltk", "regex", "absl-py"):
+        try:
+            dependencies[name] = version(name)
+        except PackageNotFoundError:
+            dependencies[name] = None
+    return {"files": {str(p.relative_to(root)): file_sha256(p) for p in files}, "dependencies": dependencies}
+
+
 class AccuracyCollector:
     """Bounded process queue; immutable scores remain reusable without GPU regeneration."""
 
@@ -214,6 +230,8 @@ class AccuracyCollector:
         self, destination, specifications, tokenizer, *, workers=8, pending_limit=128, timeout=300, input_mib=256
     ):
         specifications = list(specifications)
+        self.verifier_sources = verifier_sources()
+        self.verifier_budget = {"input_mib": input_mib, "timeout": timeout}
         self.question_hash = identity([(s.name, s.n, s.protocol, questions) for s, questions in specifications])
         self.store = ArtifactStore.create(
             destination,
@@ -222,6 +240,7 @@ class AccuracyCollector:
                 "aggregation": "question_mean_of_sample_mean",
                 "question_set_sha256": self.question_hash,
                 "verifier_sha256": file_sha256(__file__),
+                "verifier_sources": self.verifier_sources,
                 "code_input_mib": input_mib,
                 "pending_limit": pending_limit,
                 "worker_count": workers,
@@ -231,6 +250,7 @@ class AccuracyCollector:
         self.expected = {
             (spec.name, q["id"], i) for spec, questions in specifications for q in questions for i in range(spec.n)
         }
+        self.verifier_protocols = {}
         self.tokenizer, self.timeout = tokenizer, timeout
         self.pending_limit = pending_limit
         if type(input_mib) is not int or input_mib <= 0:
@@ -265,6 +285,7 @@ class AccuracyCollector:
 
     def submit(self, outputs):
         for row, question, spec, protocol in outputs:
+            self.verifier_protocols[spec.name] = {"verifier": spec.verifier, "answer_channel": protocol.answer_channel}
             while len(self.pending) >= self.pending_limit:
                 self._consume()
             text = self.tokenizer.decode(row["response_ids"], skip_special_tokens=False)
@@ -308,7 +329,20 @@ class AccuracyCollector:
                     "generation_manifest": str(generation.manifest_path),
                     "generation_sha256": file_sha256(generation.manifest_path),
                 }
-            self.store.finish(metadata={"metrics": metrics, **binding})
+            self.store.finish(
+                metadata={
+                    "metrics": metrics,
+                    "verifier_protocols": self.verifier_protocols,
+                    "verifier_contract_id": identity(
+                        {
+                            "code": self.verifier_sources,
+                            "budget": self.verifier_budget,
+                            "protocols": self.verifier_protocols,
+                        }
+                    ),
+                    **binding,
+                }
+            )
             return metrics
         finally:
             self.pool.shutdown(wait=True, cancel_futures=True)
