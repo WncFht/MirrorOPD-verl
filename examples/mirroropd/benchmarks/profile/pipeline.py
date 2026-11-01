@@ -41,7 +41,7 @@ def loss_fn(model_output, data, dp_group, *, config):
     return distillation_loss(SimpleNamespace(loss_agg_mode="token-mean"), config, model_output, data)
 
 
-def worker(path, world, teacher, budget, checkpoint, *, no_sync=True):
+def worker(path, world, teacher, budget, checkpoint, *, no_sync=True, forward_precision=None):
     cfg = TrainingWorkerConfig(
         model_type="language_model",
         model_config=HFModelConfig(
@@ -55,6 +55,7 @@ def worker(path, world, teacher, budget, checkpoint, *, no_sync=True):
             strategy="fsdp2",
             forward_only=teacher,
             model_dtype="bfloat16" if teacher else "float32",
+            forward_precision=forward_precision,
             fsdp_size=world,
             mixed_precision={"param_dtype": "bfloat16", "reduce_dtype": "float32"},
             forward_only_cpu_offload=False,
