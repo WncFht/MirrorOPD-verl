@@ -1,0 +1,124 @@
+{
+  "capture_started_at": "2026-11-01T17:08:47+08:00",
+  "revision": "462e3f3ae732e9b63e7491ffe36c78cf69890a51",
+  "arms": {
+    "S0": {
+      "updates": 320,
+      "training_outers": 20,
+      "completed_outer_logs": 20,
+      "status": "training",
+      "final_accuracy_complete": false,
+      "final_audit_passed": false,
+      "last_loss": 0.19035888463258743,
+      "ordinary_outer_median_seconds": 158.109620988369,
+      "ordinary_mean_response_tokens": 1712.0145833333333,
+      "fixed_rkl_outers": [
+        0,
+        5,
+        10,
+        15,
+        20
+      ],
+      "update_health": "all recorded updates applied and finite"
+    },
+    "S": {
+      "updates": 640,
+      "training_outers": 40,
+      "completed_outer_logs": 39,
+      "status": "finalizing",
+      "final_accuracy_complete": false,
+      "final_audit_passed": false,
+      "last_loss": 0.19369040010496974,
+      "ordinary_outer_median_seconds": 441.53701097518206,
+      "ordinary_mean_response_tokens": 4817.441532258064,
+      "fixed_rkl_outers": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40
+      ],
+      "update_health": "all recorded updates applied and finite"
+    },
+    "T": {
+      "updates": 640,
+      "training_outers": 40,
+      "completed_outer_logs": 39,
+      "status": "finalizing",
+      "final_accuracy_complete": false,
+      "final_audit_passed": false,
+      "last_loss": 0.18283664528280497,
+      "ordinary_outer_median_seconds": 382.15830086916685,
+      "ordinary_mean_response_tokens": 3724.2878024193546,
+      "fixed_rkl_outers": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40
+      ],
+      "update_health": "all recorded updates applied and finite"
+    },
+    "LM": {
+      "updates": 640,
+      "training_outers": 40,
+      "completed_outer_logs": 40,
+      "status": "audited_complete",
+      "final_accuracy_complete": true,
+      "final_audit_passed": true,
+      "last_loss": 0.18985805194824934,
+      "ordinary_outer_median_seconds": 493.8511986285448,
+      "ordinary_mean_response_tokens": 3901.970766129032,
+      "fixed_rkl_outers": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40
+      ],
+      "update_health": "all recorded updates applied and finite"
+    },
+    "PM": {
+      "updates": 640,
+      "training_outers": 40,
+      "completed_outer_logs": 40,
+      "status": "audited_complete",
+      "final_accuracy_complete": true,
+      "final_audit_passed": true,
+      "last_loss": 0.18940800102427602,
+      "ordinary_outer_median_seconds": 513.8543155416846,
+      "ordinary_mean_response_tokens": 4070.6779233870966,
+      "fixed_rkl_outers": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40
+      ],
+      "update_health": "all recorded updates applied and finite"
+    },
+    "TM": {
+      "updates": 0,
+      "training_outers": 0,
+      "status": "not_started"
+    }
+  },
+  "fixed_denominator": 1024,
+  "capture_finished_at": "2026-11-01T17:08:48+08:00"
+}

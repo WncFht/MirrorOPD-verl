@@ -1,0 +1,38 @@
+{
+  "renderer": "examples/mirroropd/research/studies/prefix_fusion/report_qwen_snapshot.py",
+  "renderer_sha256": "a4ae5f7c38af98234795cd7509d10cd65538836af455335a4739a652ed4c4620",
+  "capture_script": "runs/qwen-report-refresh-20261101/capture-script.py",
+  "capture_script_sha256": "fef522c05fcb30ea6c970bedc9e45e1f772ab3c69c7c9b090e22d376ae6c4320",
+  "csv_sha256": {
+    "fixed-risk.csv": "f6855b1ad793a156f8c4c5817d30571b16c67323b862b3250de3b2fcf875e2a6",
+    "outers.csv": "4ad363c152e2a4c86782497e541e667a39fabf49567ccf5b8770243fdc7e87b9",
+    "updates.csv": "4c245084aebcaf78fec61dabb28c3731ac51ae49dc9ca456d5e0727d9d856fbb"
+  },
+  "run_sources": {
+    "S0": {
+      "commit": "462e3f3ae732e9b63e7491ffe36c78cf69890a51",
+      "config_sha256": "2dae01268d0d3555945500ac71014061c3b0e257abb05d68e42c6f3a4c530822",
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "S": {
+      "commit": "462e3f3ae732e9b63e7491ffe36c78cf69890a51",
+      "config_sha256": "24c99ca0f32538eceea2e2f0ebe6b890cecb37d00ad6b15ce4991a52d060ba3c",
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "T": {
+      "commit": "462e3f3ae732e9b63e7491ffe36c78cf69890a51",
+      "config_sha256": "c14d361382a96bd00ec358eec3a047b8df18caee0f4d6e6854c3178914da8f1f",
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "LM": {
+      "commit": "462e3f3ae732e9b63e7491ffe36c78cf69890a51",
+      "config_sha256": "87662abe31e8c5809a600f776c1ca8f88e1421bccbf206cb46cd25638d6588da",
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "PM": {
+      "commit": "462e3f3ae732e9b63e7491ffe36c78cf69890a51",
+      "config_sha256": "2f63492069eb059ae4377d74f1d76e6a822901d8e8952d747d75ada28c658ca3",
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}
