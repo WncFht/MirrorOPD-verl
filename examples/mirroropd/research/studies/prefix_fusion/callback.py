@@ -9,6 +9,7 @@ import subprocess
 import sys
 import time
 from contextlib import contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -17,6 +18,7 @@ import torch
 from examples.mirroropd.research.core.artifacts import file_hash
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.prefix_fusion.protocol import PROTOCOL, protocol_identity
+from verl.trainer.evaluation.config import strict_record
 from verl.trainer.ppo.readout_callback import ReadoutCallback
 
 
@@ -41,18 +43,32 @@ def wait_rpc(value):
     return value
 
 
+@dataclass(frozen=True)
+class ScientificOptions:
+    root: str
+    pair: str
+    physical_gpu: int
+    smoke: bool = False
+
+    def __post_init__(self):
+        if not isinstance(self.root, str) or not self.root:
+            raise ValueError("Scientific root must be a nonempty path")
+        if self.pair not in {"J", "P"} or type(self.physical_gpu) is not int or self.physical_gpu not in range(8):
+            raise ValueError("Scientific readout has invalid model/resource binding")
+        if type(self.smoke) is not bool:
+            raise ValueError("Scientific smoke must be a boolean")
+
+
 class ScientificReadout(ReadoutCallback):
-    def __init__(self, config):
+    def __init__(self, *, config, options):
         self.config = config
-        self.settings = config.trainer.scientific_evaluation
+        self.settings = strict_record(ScientificOptions, options)
         self.root = Path(self.settings.root).resolve()
         self.prepared = self.root / "prepared-03"
         self.pair = self.settings.pair
         self.gpu = str(self.settings.physical_gpu)
-        self.smoke = bool(self.settings.get("smoke", False))
+        self.smoke = self.settings.smoke
         self.repo = Path(__file__).resolve().parents[5]
-        if self.gpu not in {str(gpu) for gpu in range(8)} or self.pair not in {"J", "P"}:
-            raise ValueError("Scientific readout has invalid model/resource binding")
         if (
             config.trainer.n_gpus_per_node != 1
             or config.trainer.nnodes != 1

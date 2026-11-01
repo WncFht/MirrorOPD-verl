@@ -78,11 +78,11 @@ if [[ $MODE == science || $MODE == science-smoke ]]; then
     keep_checkpoints=1
     if [[ $MODE == science-smoke ]]; then export SAVE_FREQ=1 TOTAL_TRAINING_STEPS=${PREFIX_SMOKE_OUTERS:-2}; science_smoke=true; keep_checkpoints=2; fi
     SCIENCE_ARGS=(
-        '++trainer.readout_callback_class=examples.mirroropd.research.studies.prefix_fusion.callback.ScientificReadout'
-        "++trainer.scientific_evaluation.root=$science_root"
-        "++trainer.scientific_evaluation.pair=$PAIR"
-        "++trainer.scientific_evaluation.physical_gpu=$FUSION_GPUS"
-        "++trainer.scientific_evaluation.smoke=$science_smoke"
+        '++trainer.evaluation._target_=examples.mirroropd.research.studies.prefix_fusion.callback.ScientificReadout'
+        "++trainer.evaluation.root=$science_root"
+        "++trainer.evaluation.pair=$PAIR"
+        "++trainer.evaluation.physical_gpu=$FUSION_GPUS"
+        "++trainer.evaluation.smoke=$science_smoke"
         "trainer.max_actor_ckpt_to_keep=$keep_checkpoints"
     )
 fi

@@ -83,6 +83,7 @@ def test_bootstrap_passes_prepared_config_to_actual_replica_constructor(tmp_path
             "trainer": {
                 "n_gpus_per_node": 4,
                 "evaluation": {
+                    "_target_": "verl.trainer.evaluation.coordinator.EvaluationCoordinator",
                     "output": str(tmp_path / "out"),
                     "bootstrap": str(tmp_path / "bank"),
                     "source_file": "source",

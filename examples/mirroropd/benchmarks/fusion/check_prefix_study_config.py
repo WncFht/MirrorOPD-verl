@@ -91,18 +91,18 @@ def check(config, reference, pair, arm, outers=40, *, smoke=False, scientific=Fa
         from examples.mirroropd.research.core.io import read
         from examples.mirroropd.research.studies.prefix_fusion.protocol import protocol_identity
 
-        settings = config["trainer"].get("scientific_evaluation", {})
+        settings = config["trainer"].get("evaluation", {})
         root = Path(settings.get("root", ""))
         prepared = root / "prepared-03"
         required.update(
             {
                 "trainer.save_freq": 1 if smoke else 20,
                 "trainer.max_actor_ckpt_to_keep": 2 if smoke else 1,
-                "trainer.readout_callback_class": (
+                "trainer.evaluation._target_": (
                     "examples.mirroropd.research.studies.prefix_fusion.callback.ScientificReadout"
                 ),
-                "trainer.scientific_evaluation.pair": pair,
-                "trainer.scientific_evaluation.smoke": smoke,
+                "trainer.evaluation.pair": pair,
+                "trainer.evaluation.smoke": smoke,
                 "trainer.n_gpus_per_node": 1,
                 "trainer.nnodes": 1,
                 "trainer.v1.trainer_mode": "sync",

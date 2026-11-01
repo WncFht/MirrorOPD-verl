@@ -13,6 +13,8 @@ from omegaconf import OmegaConf
 
 from verl.trainer.evaluation.artifacts import ArtifactStore, file_sha256
 from verl.trainer.evaluation.config import EvaluationConfig
+from verl.trainer.evaluation.coordinator import EvaluationCoordinator
+from verl.trainer.ppo.readout_callback import readout_options
 
 
 def build(base, questions, output, *, domain="math", outer=50, batch_size=128, reuse=32, family="deepseek"):
@@ -31,9 +33,8 @@ def build(base, questions, output, *, domain="math", outer=50, batch_size=128, r
         raise ValueError("Base execution profile must use native synchronous serial distillation")
     if config.trainer.n_gpus_per_node > 6 or config.trainer.nnodes != 1:
         raise ValueError("This local recipe is restricted to at most six GPUs on one node")
-    config.trainer.readout_callback_class = None
-    config.trainer.pop("rkl_readout", None)
     config.trainer.evaluation = {
+        "_target_": "verl.trainer.evaluation.coordinator.EvaluationCoordinator",
         "output": str(output / "evaluation"),
         "bootstrap": str(output / "bootstrap"),
         "source_file": paths["source"],
@@ -111,7 +112,7 @@ def build(base, questions, output, *, domain="math", outer=50, batch_size=128, r
     env.VERL_ROLLOUT_IPC_NAMESPACE = "${oc.env:VERL_ROLLOUT_IPC_NAMESPACE}"
     env.LD_LIBRARY_PATH = "${oc.env:LD_LIBRARY_PATH}"
     env.PYTHONPATH = str(Path(__file__).resolve().parents[3])
-    EvaluationConfig.parse(OmegaConf.to_container(config.trainer.evaluation, resolve=True))
+    EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
     return config
 
 

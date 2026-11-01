@@ -36,7 +36,11 @@ def audit(run):
     batch = config["data"]["train_batch_size"]
     reuse = config["actor_rollout_ref"]["actor"]["ppo_epochs"]
     # Offline reader: historical configuration remains evidence, never a runtime fallback.
-    key = "source_history_readout" if "source_history_readout" in config["trainer"] else "rkl_readout"
+    key = (
+        "evaluation"
+        if "evaluation" in config["trainer"]
+        else ("source_history_readout" if "source_history_readout" in config["trainer"] else "rkl_readout")
+    )
     options = config["trainer"][key]
     root = run / "readout"
     modern = (root / "manifest.json").exists()

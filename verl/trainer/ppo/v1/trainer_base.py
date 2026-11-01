@@ -1953,7 +1953,7 @@ class PPOTrainer(ABC):
 
     def _get_required_batch_multiple(self, dp_size: int) -> int:
         """Return the global batch multiple required by downstream train steps(e.g. critics, actors)."""
-        if self.config.trainer.get("evaluation"):
+        if self.readout_callback is not None and self.readout_callback.requires_full_batch:
             self._validate_evaluation_full_batch()
             return dp_size
         required_multiple = dp_size
@@ -2320,7 +2320,7 @@ class PPOTrainer(ABC):
             "dataloader_kwargs": {"shuffle": self.config.actor_rollout_ref.actor.shuffle},
             "temperature": self.config.actor_rollout_ref.rollout.temperature,
         }
-        if self.config.trainer.get("evaluation"):
+        if self.readout_callback is not None and self.readout_callback.requires_full_batch:
             self._validate_evaluation_full_batch()
             logical_size = sum(not tag.get("is_padding", False) for tag in batch.tags)
             if logical_size != ppo_mini_batch_size:
@@ -2482,7 +2482,7 @@ class PPOTrainer(ABC):
             )
         )
         metrics.update(compute_data_metrics(batch=metrics_batch, use_critic=self.use_critic))
-        if self.config.trainer.get("evaluation"):
+        if self.readout_callback is not None and self.readout_callback.requires_full_batch:
             for key in list(metrics):
                 if key.startswith(("critic/score/", "critic/rewards/", "rollout/score/")):
                     metrics.pop(key)

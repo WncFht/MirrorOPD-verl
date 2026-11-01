@@ -4,6 +4,7 @@
 
 import json
 import math
+from collections.abc import Mapping
 from dataclasses import dataclass, field, fields
 
 from .artifacts import identity
@@ -11,6 +12,8 @@ from .schedule import Schedule
 
 
 def strict_record(cls, value):
+    if not isinstance(value, Mapping):
+        raise ValueError(f"{cls.__name__} requires an options mapping")
     unknown = set(value) - {f.name for f in fields(cls)}
     if unknown:
         raise ValueError(f"Unknown {cls.__name__} fields: {sorted(unknown)}")
@@ -126,6 +129,8 @@ class ScoreBudget:
     def __post_init__(self):
         if any(type(x) is not int or x <= 0 for x in (self.payload_bytes, self.host_budget_bytes, self.token_chunk)):
             raise ValueError("Positive RKL execution budgets required")
+        if type(self.audit_state) is not bool:
+            raise ValueError("audit_state must be a boolean")
         if not math.isfinite(self.copy_reserve_factor) or self.copy_reserve_factor < 1:
             raise ValueError("Reserve factor must cover at least the logical payload")
 
@@ -134,6 +139,38 @@ class ScoreBudget:
         if available <= 0:
             raise ValueError("No evaluation payload budget remains after live training data")
         return min(self.payload_bytes, available)
+
+
+@dataclass(frozen=True)
+class SourceHistoryConfig:
+    """Source-only scientific protocol with the shared scoring budget."""
+
+    output: str
+    source_file: str
+    source_count: int = 128
+    history_size: int = 128
+    source_every: int = 1
+    history_every: int = 1
+    seed: int = 42
+    initial_bank: str | None = None
+    score: ScoreBudget = field(default_factory=ScoreBudget)
+
+    def __post_init__(self):
+        if any(not isinstance(path, str) or not path for path in (self.output, self.source_file)):
+            raise ValueError("Source/history output and source_file must be nonempty paths")
+        if self.initial_bank is not None and (not isinstance(self.initial_bank, str) or not self.initial_bank):
+            raise ValueError("initial_bank must be a nonempty path or null")
+        for name in ("source_count", "history_size", "source_every", "history_every"):
+            if type(getattr(self, name)) is not int or getattr(self, name) <= 0:
+                raise ValueError(f"{name} must be a positive integer")
+        if type(self.seed) is not int or self.seed < 0:
+            raise ValueError("Source/history seed must be a nonnegative integer")
+
+    @classmethod
+    def parse(cls, value):
+        value = dict(value)
+        value["score"] = strict_record(ScoreBudget, value.get("score", {}))
+        return strict_record(cls, value)
 
 
 @dataclass(frozen=True)
