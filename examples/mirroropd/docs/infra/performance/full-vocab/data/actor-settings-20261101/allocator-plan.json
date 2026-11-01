@@ -1,0 +1,20 @@
+{
+  "scope": "Allocator-only capacity comparison against partial-checkpoint-size512, using expandable segments in an isolated actor-only process. Does not validate CUDA IPC/vLLM weight transfer.",
+  "source_commit": "71f7468838248e1512755bdcc1665bde3006f1d7",
+  "physical_gpus": [
+    2,
+    3
+  ],
+  "cases": [
+    {
+      "name": "partial-expandable-size512",
+      "args": [
+        "--repeat-input",
+        "4",
+        "--no-sync",
+        "--no-diagnostics"
+      ],
+      "module": "examples.mirroropd.benchmarks.profile.benchmark_expandable_checkpoint"
+    }
+  ]
+}

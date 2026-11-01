@@ -1,0 +1,28 @@
+{
+  "scope": "Practical low-memory combination: full checkpointing retained, budget65536, diagnostics off; two matched input sizes.",
+  "source_commit": "71f7468838248e1512755bdcc1665bde3006f1d7",
+  "physical_gpus": [
+    2,
+    3
+  ],
+  "cases": [
+    {
+      "name": "lean-combo",
+      "args": [
+        "--budget",
+        "65536",
+        "--no-diagnostics"
+      ]
+    },
+    {
+      "name": "lean-combo-size512",
+      "args": [
+        "--repeat-input",
+        "4",
+        "--budget",
+        "65536",
+        "--no-diagnostics"
+      ]
+    }
+  ]
+}

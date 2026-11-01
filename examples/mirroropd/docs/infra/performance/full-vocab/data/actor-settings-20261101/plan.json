@@ -1,0 +1,60 @@
+{
+  "scope": "Two H800s, fixed natural prefixes, effective256 rows, cache repeat2; no new sampling, lr0. Per-case warmup2 updates then 2 x reuse4 measurements.",
+  "source_commit": "71f7468838248e1512755bdcc1665bde3006f1d7",
+  "physical_gpus": [
+    2,
+    3
+  ],
+  "cases": [
+    {
+      "name": "baseline",
+      "args": [
+        "--trace"
+      ]
+    },
+    {
+      "name": "no-sync",
+      "args": [
+        "--no-sync"
+      ]
+    },
+    {
+      "name": "budget65536",
+      "args": [
+        "--budget",
+        "65536"
+      ]
+    },
+    {
+      "name": "diagnostics-off",
+      "args": [
+        "--no-diagnostics"
+      ]
+    },
+    {
+      "name": "chunk1024",
+      "args": [
+        "--chunk",
+        "1024"
+      ]
+    },
+    {
+      "name": "checkpoint-off",
+      "args": [
+        "--no-checkpoint"
+      ]
+    },
+    {
+      "name": "no-sync-budget65536",
+      "args": [
+        "--no-sync",
+        "--budget",
+        "65536"
+      ]
+    },
+    {
+      "name": "baseline-recheck",
+      "args": []
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "scope": "one outer, fresh 256 prompts x n4; terminal accuracy plumbing only",
+  "source_commit": "402f6353338a4e2830363b7c30b623f007765bd6",
+  "source_changes_sha256": "f900bbc7506ad60e094cd36be563e79696b99bc75c7db72f81239530329af11e",
+  "prompt_batch": 256,
+  "rollout_n": 4,
+  "trajectories": 1024,
+  "ppo_mini_batch_prompt_units": 256,
+  "updates_applied": 32,
+  "updates_skipped": 0,
+  "nonfinite_loss_or_grad": 0,
+  "finish_reasons": {
+    "stop_count": 996,
+    "length_count": 7,
+    "repetition_count": 21,
+    "aborted_count": 0,
+    "completed_count": 0,
+    "unknown_count": 0
+  },
+  "response_tokens": 1218606,
+  "response_length_mean": 1190.044921875,
+  "first_update": {
+    "distill/mdpo/objective": 0.052124546435993,
+    "distill/teacher_kl": 0.4416343218193575,
+    "distill/target_kl": 0.0052124547575450545,
+    "distill/anchor_kl": 0.0,
+    "optim/actor/grad_norm_preclip": 3.4674808979034424
+  },
+  "last_update": {
+    "distill/mdpo/objective": 0.04429363230115753,
+    "distill/teacher_kl": 0.41649688258358836,
+    "distill/target_kl": 0.0044293632088291835,
+    "distill/anchor_kl": 0.0012025117603759118,
+    "optim/actor/grad_norm_preclip": 0.5501063466072083
+  },
+  "timings_seconds": {
+    "validation_rollout_seconds": 44.076428683,
+    "rollout_batch_seconds": 133.508373019,
+    "rollout_pipeline_seconds": 98.46503818035126,
+    "teacher_transfer_seconds": 17.8106152638793,
+    "teacher_forward_seconds": 17.320813067257404,
+    "update_actor_seconds": 867.0058540180326,
+    "update_weights_seconds": 6.585447192192078,
+    "outer_step_seconds": 1043.3317144289613,
+    "validation_seconds": 46.22535713016987
+  },
+  "fsdp_allocated_peak_gib": 20.746912002563477,
+  "process_exit": {
+    "exit": 0,
+    "seconds": 1489.1585449427366
+  },
+  "initial_validation": false,
+  "terminal_validation_events": 1,
+  "terminal_validation_responses": 10,
+  "terminal_validation_failures": 0.0,
+  "limitations": [
+    "No 50-outer outcome or accuracy effect established.",
+    "Initial-student responses average 1190 tokens; later longer responses cost more.",
+    "Repetition stopping changes rollout prefixes; training false-positive rate not estimated."
+  ]
+}
