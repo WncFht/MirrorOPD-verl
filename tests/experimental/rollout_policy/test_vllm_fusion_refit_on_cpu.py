@@ -89,9 +89,12 @@ def test_frozen_student_rejects_refit():
         target.fusion_receive_weights((1, 1))
 
 
+@pytest.mark.parametrize("checkpoint_aliases", ["embedding", "head", "both"])
 @pytest.mark.parametrize("conflict", [False, True])
 @pytest.mark.parametrize("snapshot_failure", [False, True])
-def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflict, snapshot_failure):
+def test_tied_alias_validation_uses_each_native_vocab_shard(
+    monkeypatch, conflict, snapshot_failure, checkpoint_aliases
+):
     from verl.workers.rollout.vllm_fusion import worker_extension
     from verl.workers.rollout.vllm_rollout import bucketed_weight_transfer as transport
 
@@ -147,7 +150,12 @@ def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflic
         target = FusionWorkerExtension()
         target.model_runner = SimpleNamespace(model=SimpleNamespace(student=ShardedStudent(rank)))
         target.fusion_current = True
-        target.fusion_shapes = {"model.embed_tokens.weight": (4, 2)}
+        names = {
+            "embedding": ["model.embed_tokens.weight"],
+            "head": ["lm_head.weight"],
+            "both": ["model.embed_tokens.weight", "lm_head.weight"],
+        }[checkpoint_aliases]
+        target.fusion_shapes = dict.fromkeys(names, (4, 2))
         target.device, target.local_rank = torch.device("cpu"), rank
         errors.append(target.fusion_receive_weights((2, 2)))
         assert not target.fusion_valid and target.fusion_version is None
@@ -157,3 +165,54 @@ def test_tied_alias_validation_uses_each_native_vocab_shard(monkeypatch, conflic
     assert len(drained) == len(snapshots) == 2
     assert (errors[0] is not None) == snapshot_failure
     assert (errors[1] is not None) == (conflict or snapshot_failure)
+
+
+@pytest.mark.parametrize("sender", ["model.embed_tokens.weight", "lm_head.weight", None])
+def test_redundant_checkpoint_alias_does_not_require_redundant_transfer(monkeypatch, sender):
+    from verl.workers.rollout.vllm_fusion import worker_extension
+    from verl.workers.rollout.vllm_rollout import bucketed_weight_transfer as transport
+
+    class TiedStudent(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.model = torch.nn.Module()
+            self.model.embed_tokens = torch.nn.Embedding(3, 2)
+            self.lm_head = self.model.embed_tokens
+            self.config = SimpleNamespace(tie_word_embeddings=True)
+
+        def load_weights(self, weights):
+            with torch.no_grad():
+                for name, value in weights:
+                    assert name == "model.embed_tokens.weight"
+                    self.model.embed_tokens.weight.copy_(value)
+            return {"model.embed_tokens.weight"}
+
+    drained = []
+
+    class Receiver:
+        def __init__(self, **kwargs):
+            pass
+
+        def receive_weights(self, callback):
+            callback([] if sender is None else [(sender, torch.ones(3, 2))], True)
+            drained.append(True)
+
+    monkeypatch.setattr(transport, "BucketedWeightReceiver", Receiver)
+    monkeypatch.setattr(worker_extension, "get_torch_device", lambda: SimpleNamespace(synchronize=lambda: None))
+    target = FusionWorkerExtension()
+    student = TiedStudent()
+    target.model_runner = SimpleNamespace(model=SimpleNamespace(student=student))
+    target.fusion_current = True
+    target.fusion_shapes = {"model.embed_tokens.weight": (3, 2), "lm_head.weight": (3, 2)}
+    target.device, target.local_rank = torch.device("cpu"), 0
+    error = target.fusion_receive_weights((1, 0))
+    assert drained == [True]
+    if sender is None:
+        assert "Missing fusion weights" in error
+        with pytest.raises(RuntimeError, match="incomplete"):
+            target.fusion_commit_version((1, 0))
+    else:
+        assert error is None
+        target.fusion_commit_version((1, 0))
+        torch.testing.assert_close(student.lm_head.weight, torch.ones(3, 2))
+        assert student.lm_head.weight is student.model.embed_tokens.weight
