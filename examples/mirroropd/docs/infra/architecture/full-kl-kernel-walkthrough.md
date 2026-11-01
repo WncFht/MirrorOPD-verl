@@ -147,7 +147,7 @@ Endpoint 分派在 [full_reverse_kl_result](../../../../../verl/trainer/distilla
 | `precompute_fused` | CUDA BF16 时替换为融合 row kernel                 | 共用 PrecomputedKL                | 是          |
 | `liger`            | 外部 fused linear JSD 配成 reverse KL，均值转 sum | 外部算子实现                      | 否          |
 
-`precompute_fused` 的 CUDA BF16 判断在 endpoint 292–298 行、mirror 397–400 行；其他设备或 dtype 回退普通 precompute。这意味着 CPU 上把 backend 写成 fused 的测试只覆盖 dispatcher 和回退，不覆盖 Triton GPU 数值。
+`precompute_fused` 明确要求 CUDA FP16/BF16/FP32 输入；其他设备或 dtype 直接报错，包括空本地 batch。CPU/FP64 oracle 显式选择 `precompute` 或 `dense`，不再用 fused 名称运行普通 Torch 参考。实际设备与选择的后端因此一致。
 
 `vocab_chunk_size` 不会让一般 mirror/precompute 自动按词表流式处理：其 `_mirror_rows` 仍投影整个词表。该参数用于 endpoint streaming/cached 及额外 teacher 支持修正。调小 vocab chunk 后显存没有明显下降时，先确认走的是哪条 backend。
 

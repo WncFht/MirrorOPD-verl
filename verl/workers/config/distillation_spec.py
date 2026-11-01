@@ -59,19 +59,22 @@ class DistillationLossSettings(BaseConfig):
         return self.payload_kind == "sampled"
 
     def __post_init__(self):
-        names = (self.names,) if isinstance(self.names, str) else tuple(self.names)
-        if not names or any(not isinstance(name, str) or not name for name in names):
-            raise ValueError("Objective metadata requires nonempty registration names")
-        object.__setattr__(self, "names", names)
+        if (
+            not isinstance(self.names, tuple)
+            or not self.names
+            or any(not isinstance(name, str) or not name for name in self.names)
+        ):
+            raise ValueError("Objective metadata names must be a nonempty tuple of strings")
+        if len(set(self.names)) != len(self.names):
+            raise ValueError("Objective metadata names must be unique")
         if self.payload_kind not in ("sampled", "topk", "hidden"):
             raise ValueError(f"Unknown teacher payload: {self.payload_kind}")
 
 
 _BUILTINS = (
-    DistillationLossSettings(names="full_forward_kl", payload_kind="hidden", objective="forward_kl"),
-    DistillationLossSettings(names="full_reverse_kl", payload_kind="hidden", objective="mdpo"),
-    DistillationLossSettings(names="forward_kl_topk", payload_kind="topk"),
-    DistillationLossSettings(names=("kl", "k1", "abs", "mse", "k2", "low_var_kl", "k3"), payload_kind="sampled"),
+    DistillationLossSettings(names=("full_forward_kl",), payload_kind="hidden", objective="forward_kl"),
+    DistillationLossSettings(names=("forward_kl_topk",), payload_kind="topk"),
+    DistillationLossSettings(names=("k1", "abs", "mse", "k2", "k3"), payload_kind="sampled"),
 )
 DISTILLATION_SETTINGS_REGISTRY = {name: spec for spec in _BUILTINS for name in spec.names}
 
@@ -87,6 +90,10 @@ def get_distillation_loss_settings(loss_name: str) -> DistillationLossSettings:
 def resolve_distillation_spec(config) -> DistillationLossSettings:
     """Resolve data requirements without importing tensor kernels or engine state."""
     mode = config.get("loss_mode", "k3")
+    if mode == "full_reverse_kl":
+        raise ValueError(
+            "full_reverse_kl configuration was retired; use mirror objective=mdpo, estimator=full_vocab, eta=1"
+        )
     mirror = config.get("mirror")
     if mode != "mirror":
         if mirror is not None:
@@ -99,7 +106,7 @@ def resolve_distillation_spec(config) -> DistillationLossSettings:
     else:
         mirror.__post_init__()
     return DistillationLossSettings(
-        names="mirror",
+        names=("mirror",),
         payload_kind="hidden" if mirror.estimator == "full_vocab" else "sampled",
         objective=mirror.objective,
         kappa=mirror.kappa,

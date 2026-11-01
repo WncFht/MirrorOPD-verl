@@ -467,11 +467,6 @@ def _sampled_token_loss(config, loss_config, model_output, data):
     return loss, metrics
 
 
-@register_distillation_loss("full_reverse_kl")
-def compute_full_reverse_kl(config, distillation_config, model_output, data):
-    raise RuntimeError("full_reverse_kl must use the head-loss path, not a sampled estimator")
-
-
 @register_distillation_loss("forward_kl_topk")
 def compute_forward_kl_topk(
     config: ActorConfig,

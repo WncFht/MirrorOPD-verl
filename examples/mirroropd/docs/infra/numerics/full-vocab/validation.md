@@ -14,7 +14,7 @@
 | 指标          | 行值复用、位置 sum/count、全局归约                                              | [test_full_vocab_position_on_cpu.py](../../../../../../tests/trainer/distillation/test_full_vocab_position_on_cpu.py)                                                                                       |
 | 分布式        | FSDP head/backbone 更新、全局 token 分母、空 rank、checkpoint 下一步一致性      | [test_full_vocab_fsdp2.py](../../../../../../tests/special_distributed/test_full_vocab_fsdp2.py)、[test_mirror_fsdp2.py](../../../../../../tests/special_distributed/test_mirror_fsdp2.py)                  |
 
-CPU 的 `precompute_fused` 回退测试不替代真实 CUDA BF16 kernel；小模型分布式恢复不替代 V1/Ray 任意故障点恢复；短训练通过不证明长期质量或目标单调下降。
+CPU 的 `precompute_fused` 请求现在应明确拒绝；参考数值检查使用 precompute/dense，真实 CUDA BF16 kernel 单独检查；小模型分布式恢复不替代 V1/Ray 任意故障点恢复；短训练通过不证明长期质量或目标单调下降。
 
 ## 已有证据
 
@@ -50,6 +50,6 @@ Frozen teacher 的 SDPA 单模型重建只验证 logits/位置关系，不替代
 
 [停止类映射与独立参考](../../../../../../tests/trainer/distillation/test_termination_action_map_on_cpu.py)核对合并概率、logsumexp 链式梯度和极小修正保留；[CUDA EOS 融合](../../../../../../tests/trainer/distillation/test_termination_fused_on_gpu.py)使用独立 80 位概率空间 oracle，覆盖公共偏移、小 η、κ=0/0.5/1、FP16/BF16/FP32 与真正的 fused 分派。近零误差同时约束相对量和绝对量；新增 EOS 行梯度采用 rtol=2e-4、atol=1e-22，标量采用 rtol=2e-4、atol=1e-24，不放宽既有非 EOS 数值测试。
 
-[生产词表](../../../../../../tests/trainer/distillation/test_mdpo_termination_on_gpu.py)、[teacher-only EOS](../../../../../../tests/trainer/distillation/test_termination_kl_on_gpu.py)和[FP16 AMP](../../../../../../tests/trainer/distillation/test_full_vocab_fp16_on_gpu.py)同时覆盖 precompute 与 precompute_fused。[原生两卡验收](../../../../../../tests/special_distributed/test_mirror_fsdp2.py)可加 `--termination-ids 1 4 --compare-backend precompute`，检验相同初态下的实际参数／Adam 更新；`--sequence-length 129 --token-budget 129` 强制多 micro-batch 累积，并覆盖 tied head、空局部 mask、冻结 anchor、梯度检查点和恢复后的下一步。η=1 使用 `--compare-legacy` 检查原 Full-KL 入口。
+[生产词表](../../../../../../tests/trainer/distillation/test_mdpo_termination_on_gpu.py)、[teacher-only EOS](../../../../../../tests/trainer/distillation/test_termination_kl_on_gpu.py)和[FP16 AMP](../../../../../../tests/trainer/distillation/test_full_vocab_fp16_on_gpu.py)同时覆盖 precompute 与 precompute_fused。[原生两卡验收](../../../../../../tests/special_distributed/test_mirror_fsdp2.py)可加 `--termination-ids 1 4 --compare-backend precompute`，检验相同初态下的实际参数／Adam 更新；`--sequence-length 129 --token-budget 129` 强制多 micro-batch 累积，并覆盖 tied head、空局部 mask、冻结 anchor、梯度检查点和恢复后的下一步。η=1 使用 `--compare-backend precompute` 检查原 Full-KL 入口。
 
 实际数值、完整 actor 性能与运行边界由对应测量报告记录；通过这些测试不等于长期任务质量得到提升。

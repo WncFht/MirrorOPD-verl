@@ -310,12 +310,13 @@ def test_nonfinite_scores_rejected_after_teacher_released(config, monkeypatch):
     assert not published
 
 
-@pytest.mark.parametrize("mode", ["standalone", "shared_sync", "full_reverse_kl"])
+@pytest.mark.parametrize("mode", ["standalone", "shared_sync", "endpoint"])
 def test_step_order_reuses_update_and_only_inserts_shared_scoring(config, mode):
     trainer = _trainer(config)
-    config.distillation.execution_mode = "shared_sync" if mode == "full_reverse_kl" else mode
-    if mode == "full_reverse_kl":
-        config.distillation.distillation_loss.loss_mode = mode
+    config.distillation.execution_mode = "shared_sync" if mode == "endpoint" else mode
+    if mode == "endpoint":
+        config.distillation.distillation_loss.loss_mode = "mirror"
+        config.distillation.distillation_loss.mirror = {"objective": "mdpo", "estimator": "full_vocab", "eta": 1}
     trainer.global_steps = 1
     trainer.use_reference_policy = trainer.use_critic = False
     trainer.reward_loop_manager = SimpleNamespace(reward_loop_worker_handles=[object()])
@@ -332,7 +333,7 @@ def test_step_order_reuses_update_and_only_inserts_shared_scoring(config, mode):
         "sleep",
         "_balance_batch",
         *(["teacher"] if mode != "standalone" else []),
-        *(["_compute_old_log_prob", "_compute_advantage"] if mode != "full_reverse_kl" else []),
+        *(["_compute_old_log_prob", "_compute_advantage"] if mode != "endpoint" else []),
         "_update_actor",
     ]
 

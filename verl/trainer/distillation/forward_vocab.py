@@ -9,7 +9,7 @@ retain the teacher's native normalizer for comparison with historical runs.
 
 import torch
 
-from verl.trainer.distillation.full_vocab import FullVocabObjectiveResult, add_product, project
+from verl.trainer.distillation.full_vocab import FullVocabObjectiveResult, add_product, project, validate_fused_backend
 from verl.trainer.distillation.numerics import cumulant, log_softmax, mean, relative_difference
 
 DIAGNOSTICS = ("full_kl", "teacher_outside_student_mass", "student_entropy", "teacher_entropy", "js", "tv")
@@ -22,7 +22,9 @@ def forward_rows(z, teacher, extra=None, *, fused=False, grad_dtype=None):
     if extra is not None and (extra.ndim != 2 or len(extra) != len(z)):
         raise ValueError("extra teacher logits must have matching token rows")
     teacher = teacher.detach()
-    if fused and z.is_cuda and z.dtype == torch.float32:
+    if fused and (not z.is_cuda or z.dtype != torch.float32):
+        raise ValueError("Fused forward-KL rows require CUDA FP32 logits; use fused=False for reference rows")
+    if fused:
         from verl.trainer.distillation.forward_vocab_triton import fused_forward_rows
 
         return fused_forward_rows(z.contiguous(), teacher.contiguous(), extra, grad_dtype or z.dtype)
@@ -126,6 +128,7 @@ def full_forward_kl_result(hs, ws, ht, wt, *, backend="precompute", token_chunk=
         raise ValueError("unequal heads require explicit forward_teacher_support=student")
     if type(token_chunk) is not int or token_chunk <= 0:
         raise ValueError("forward KL token_chunk must be positive")
+    validate_fused_backend(backend, hs)
     ht, wt = ht.detach(), wt.detach()
     if not len(hs):
         zero = hs.sum() * 0 + ws.sum() * 0

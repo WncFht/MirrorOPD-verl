@@ -251,9 +251,9 @@ def main():
                 return run(name, cmd)
 
             base_ok = pipeline("pipeline-baseline", "precompute", 512)
-            candidate_chunk = select_chunk(result, "fused_candidate") if kernel_ok else None
+            candidate_chunk = select_chunk(result, "precompute_fused") if kernel_ok else None
             if base_ok and candidate_chunk:
-                candidate_ok = pipeline("pipeline-fused", "fused_candidate", candidate_chunk)
+                candidate_ok = pipeline("pipeline-fused", "precompute_fused", candidate_chunk)
                 if candidate_ok:
                     run(
                         "pipeline-agreement",

@@ -118,14 +118,12 @@ def main():
         vocab_chunk_size=7,
         forward_teacher_support="student" if args.teacher_extra_rows else "equal",
     )
-    from verl.workers.config.distillation_spec import get_distillation_loss_settings
-
-    actor.engine.configure_full_vocab(
-        full_config, str(root / "teacher"), spec=get_distillation_loss_settings(f"full_{args.direction}_kl")
-    )
     distill = DistillationConfig(
         distillation_loss=DistillationLossConfig(
-            loss_mode=f"full_{args.direction}_kl",
+            loss_mode="mirror" if args.direction == "reverse" else "full_forward_kl",
+            mirror=dict(objective="mdpo", estimator="full_vocab", kappa=0, eta=1)
+            if args.direction == "reverse"
+            else None,
             use_policy_gradient=False,
             use_task_rewards=False,
             loss_max_clamp=None,
@@ -133,6 +131,7 @@ def main():
             full_vocab=full_config,
         )
     )
+    actor.engine.configure_full_vocab(full_config, str(root / "teacher"), spec=distill.distillation_loss.loss_settings)
     actor.set_loss_fn(
         partial(teacher_policy_loss, config=SimpleNamespace(loss_agg_mode="token-mean"), distillation_config=distill)
     )

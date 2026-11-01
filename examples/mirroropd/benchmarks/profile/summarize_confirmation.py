@@ -43,12 +43,14 @@ def summarize(root):
                 "source": str(path),
             }
         )
-    assert [r["backend"] for r in runs] == ["precompute", "fused_candidate", "fused_candidate", "precompute"]
+    # Offline evidence keeps its original labels; live tools emit canonical backend names.
+    candidate = "precompute_fused" if any(r["backend"] == "precompute_fused" for r in runs) else "fused_candidate"
+    assert [r["backend"] for r in runs] == ["precompute", candidate, candidate, "precompute"]
     medians = {
         name: {k: statistics.median(r[k] for r in rows) for k in ("teacher_s", "actor_s", "wall_s")}
         for name, rows in pooled.items()
     }
-    changes = {k: 1 - medians["fused_candidate"][k] / medians["precompute"][k] for k in ("actor_s", "wall_s")}
+    changes = {k: 1 - medians[candidate][k] / medians["precompute"][k] for k in ("actor_s", "wall_s")}
     return {
         "scope": (
             "H800 x4; fixed prefixes; lr=0; matched chunk=512/budget=16384; "
@@ -77,6 +79,7 @@ def main():
     )
     args = p.parse_args()
     result = summarize(args.root)
+    candidate = result["runs"][1]["backend"]
     sys.path.insert(0, str(args.style_dir))
     import matplotlib
 
@@ -85,7 +88,7 @@ def main():
     import matplotlib.pyplot as plt
 
     fv.apply_rc("paper")
-    colors = dict(zip(("precompute", "fused_candidate"), fv.series_colors("paper", 2), strict=True))
+    colors = dict(zip(("precompute", candidate), fv.series_colors("paper", 2), strict=True))
     audits = {}
     for metric, label in [("actor_s", "Actor update incl. offload (s)"), ("wall_s", "Teacher + actor pipeline (s)")]:
         fig, ax = plt.subplots(figsize=(7, 4.4))
