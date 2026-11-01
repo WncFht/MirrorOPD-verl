@@ -46,7 +46,7 @@ Loss 侧的 `distillation/...` 经规范命名变成日志中的 `distill/...`�
 | 路径                         | 全局目标                                      | Full-vocab KL 诊断                                    | 自动位置分桶                                                        |
 | ---------------------------- | --------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------- |
 | 普通 Full-KL，无 EOS 合并    | `distill/full_kl`                             | 原教师 KL；不准备 anchor，不增加 mirror 四项诊断      | `distill/full_kl_position/*`，前提是 backend 返回行值；Liger 不返回 |
-| EOS 合并 Full-KL，MDPO eta=1 | `distill/termination_equiv_kl`                | `distill/full_kl` 保留 raw KL，另记录 eos_identity_kl | 位置桶仍为原词表 KL，不冒充合并目标                                 |
+| EOS 合并 Full-KL，MDPO eta=1 | `distill/termination_equiv_kl`                | `distill/full_kl` 保留 raw KL，另记录 eos_identity_kl | 位置桶使用原词表 KL；合并目标单独记录                               |
 | Full-FKL                     | `distill/full_forward_kl`                     | 原 reverse-KL、支持外质量、熵、JS/TV 等诊断           | FKL 与原 reverse-KL 的位置桶                                        |
 | Full MDPO，eta<1             | `distill/mdpo/objective`                      | diagnostics 开启时生成下表四项                        | `distill/mdpo/objective_position/*`                                 |
 | Full BPO，包括 eta=1         | `distill/bpo/objective`                       | diagnostics 开启时生成下表四项                        | `distill/bpo/objective_position/*`                                  |
@@ -100,7 +100,7 @@ $$
 
 只有分母非零时才有均值。不能平均各桶均值来重建总体，也不能从 sum/count 反推出分位数、最大值或方差。由于 kernel 与日志采用不同精度和归约顺序，重建的总体均值与单独记录的 objective 可以有浮点误差。
 
-自动分桶覆盖 Full-RKL、Full-FKL、full MDPO 与 full BPO。四项 mirror 诊断经 FullVocabOutput 汇总为 Observation，目前没有独立的 teacher_kl_position、target_kl_position、anchor_kl_position 或 target_log_z_position。Entropy、NLL、advantage、clip 指示量和 sampled objective 也没有自动接入这组分桶。扩展时可复用 bins，但生产者必须明确提供标量和总体；不得把已有 objective 桶改名冒充另一指标。
+自动分桶覆盖 Full-RKL、Full-FKL、full MDPO 与 full BPO。四项 mirror 诊断经 FullVocabOutput 汇总为 Observation，目前没有独立的 teacher_kl_position、target_kl_position、anchor_kl_position 或 target_log_z_position。Entropy、NLL、advantage、clip 指示量和 sampled objective 也没有自动接入这组分桶。扩展时可复用 bins，生产者须为新指标提供对应的标量与总体；objective 桶仍表示原目标。
 
 在 W&B 查找 MDPO 位置曲线时，搜索 `mdpo/objective_position`，选择 `step/update` 横轴；已有 `full_kl_position` 面板不会自动切换到 MDPO namespace。判断记录是否缺失时依次核对实际配置/backend、history 字段、有效桶计数和面板筛选。Summary 中的不同字段可能来自不同记录，应以同一 update 的 history 重建指标。
 

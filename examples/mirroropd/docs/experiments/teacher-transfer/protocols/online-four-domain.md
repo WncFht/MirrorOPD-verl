@@ -73,7 +73,11 @@ DAPO 分支只设 128 道 DAPO 来源留出；DeepCoder、TextbookReasoning 和 
 
 两个轨迹银行合计 1,024 条回答。两者都计算同一方向的 RKL，即 student 对 teacher 的条件分布差距；teacher rollout 只改变前缀来源，不把指标改成 FKL。不同 teacher 的 teacher 轨迹银行不同，跨 teacher 主排序使用共享 initial student 前缀的结果。
 
-公共验证 response cap 已确认为 32,768；训练与本来源留出仍为 7,168，history 保留真实训练轨迹。Accuracy 的常规 n 已确认：MATH500=1、AMC23=16、各年 AIME=16、LCB=10、GPQA=4、IFEval=1。所有 accuracy 节点使用各 benchmark 完整题集及既定 n，共 1648 题；512 题抽样面板只用于公共 RKL，不限制 accuracy 题量。不能将 bank 每题 1 条等同于 accuracy n1。当前只按实际保留的整条回答计算 RKL，记录有效长度和 cap。前 7,168／完整 16,384 的双时域读出暂缓，优先区分题目集合与轨迹来源。各模型都遵守相同评估域／模式的 cap，不随模型训练在哪个领域而变化。当前不增加 IFBench、HumanEval+、MBPP+、MMLU-Pro 或 BBH。512 题是自定义子集，不冒充完整 benchmark 结果；具体题目以每个已准备运行的题目 manifest 为准；初版草案的抽样待办不代表已完成运行缺少题表。
+公共验证 response cap 为 32,768；训练与本来源留出为 7,168，history 保留真实训练轨迹。同一评估域／模式下，各模型采用相同 cap，与训练领域无关。RKL 使用实际保留的整条回答，并记录有效长度和 cap；前 7,168／完整 16,384 的双时域读出暂缓。
+
+Accuracy 使用各 benchmark 完整题集，共 1648 题，采样次数为 MATH500=1、AMC23=16、各年 AIME=16、LCB=10、GPQA=4、IFEval=1。公共 RKL 使用其中 512 题的自定义面板，每题保留 1 条回答；该抽样不改变 accuracy 的题数与 n。已准备运行的具体题目由各自 manifest 固定，初版草案中的抽样待办已由这些题表落实。
+
+上述题库构成本协议的任务范围；IFBench、HumanEval+、MBPP+、MMLU-Pro 和 BBH 不在本次评测中。
 
 公共银行由初始化 bench 评估产出：initial student 与 teacher 分别按各 benchmark 的 accuracy 采样协议生成回答，再对预先指定的每域 128 题保留固定 sample index 0 的原始 token。Accuracy 使用其全部回答；RKL 不要求对所有 accuracy 样本评分。样本选择不看正确率、长度、RKL 或返回先后。对两个银行的初始 RKL 都使用 initial student→teacher；teacher 生成轨迹不意味着改成 teacher 与自己比较。后续固定银行评分与 current bench 生成各自调度。来源留出 128 题仍单独准备。论文依据、n／cap 候选和实现分工见[正确率与银行生成调研](../../../literature/teacher-transfer/2026-10-31-四域正确率评测与RKL银行生成协议调研.md)。
 

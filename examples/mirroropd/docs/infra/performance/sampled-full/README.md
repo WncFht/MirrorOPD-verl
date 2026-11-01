@@ -29,10 +29,10 @@ S 使用 current residual、生成时行为概率作分母的未截断 token-IS�
 
 ## 两层测量与工具选择
 
-| 层次         | 要回答的问题                                                     | 工具决定                                                                              | 当前状态                       |
-| ------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------ |
-| 固定前缀     | 相同 token/mask、模型初态下，teacher→actor 与 actor 的成本差多少 | 需补双 estimator 回放工具，复用现有 worker/engine/loss                                | 待实现；不提供虚假的可运行命令 |
-| 自然生成训练 | 两条实际生产路径每个 outer 的成本与工作量如何变化                | 直接使用 [run_math_opd_ablation_fsdp2.sh](../../../../run_math_opd_ablation_fsdp2.sh) | 已支持；命令见下文             |
+| 层次         | 要回答的问题                                                     | 工具决定                                                                              | 当前状态           |
+| ------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------ |
+| 固定前缀     | 相同 token/mask、模型初态下，teacher→actor 与 actor 的成本差多少 | 需补双 estimator 回放工具，复用现有 worker/engine/loss                                | 待实现             |
+| 自然生成训练 | 两条实际生产路径每个 outer 的成本与工作量如何变化                | 直接使用 [run_math_opd_ablation_fsdp2.sh](../../../../run_math_opd_ablation_fsdp2.sh) | 已支持；命令见下文 |
 
 完整训练不另写 launcher、不复制 Hydra 配置和 loss。使用 `custom --method mdpo --estimator sampled/full_vocab --eta 1 --kappa 0`，其余参数统一覆盖。不要使用 `--method sampled --policy-loss vanilla` 或只切到 legacy `token_is` 来代表已经精简的 sampled 主线；后者仍会进入 Trainer 的旧准备阶段。
 
@@ -40,7 +40,7 @@ S 使用 current residual、生成时行为概率作分母的未截断 token-IS�
 
 现有 [pipeline.py](../../../../benchmarks/profile/pipeline.py)可复用 worker 初始化、同步计时、显存归约和输出结构，但不能直接完成本实验：它仅支持 full、从 input/output 文本重新分词、没有 behavior log-prob，并逐次调用 `train_batch`。直接重复调用 16 次会重复 load/offload，不等于生产 `train_mini_batch` 的一次驻留内 16 次 reuse。
 
-现有 [replay_fixed_prefix.py](../../../../research/studies/precision/replay_fixed_prefix.py)针对 MDPO 数值审计和多个精度分支，也不能作为 S/F 性能工具直接复用。普通 rollout JSONL 只保存解码文本与分数，不能恢复原 token/behavior；不能用重新分词和事后 student log-prob 冒充实际行为概率。
+现有 [replay_fixed_prefix.py](../../../../research/studies/precision/replay_fixed_prefix.py)针对 MDPO 数值审计和多个精度分支，也不能作为 S/F 性能工具直接复用。回放需要生成时的原始 token IDs 和 behavior log-prob。普通 rollout JSONL 只有解码文本与分数；重新分词或事后 student 评分无法恢复这两项。
 
 待实现工具放在 `examples/mirroropd/benchmarks/` 的对应专题中，职责限制如下，不建立新的训练框架：
 
@@ -76,7 +76,7 @@ S 使用 current residual、生成时行为概率作分母的未截断 token-IS�
 | 诊断      | Entropy、mirror KL diagnostics、分位数关闭；保留生产默认的基本更新记录              |
 | 日志      | Console+file，两侧相同；运行目录不复用，不恢复旧 checkpoint                         |
 
-这是“同预算下的当前实现”主对照。Full 的必要 objective 位置统计与 sampled 基本观测不完全相同，要记录其差别，不能称为零诊断纯 kernel 测试。后续分块/融合 sampled head 优化作为单独 A/B，不悄悄并入本矩阵。也可另做两侧各自调优后的容量/吞吐比较，但必须与主表分开。
+这是“同预算下的当前实现”主对照。Full 的必要 objective 位置统计与 sampled 基本观测不完全相同，要记录其差别，不能称为零诊断纯 kernel 测试。后续分块/融合 sampled head 优化单独做 A/B。也可另做两侧各自调优后的容量/吞吐比较，但必须与主表分开。
 
 ## 完整训练启动命令
 

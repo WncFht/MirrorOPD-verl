@@ -2,7 +2,7 @@
 
 当前实现接口统一见[Sampled OPD](../../infra/architecture/sampled-opd.md)和[进度与 checkpoint](../../infra/architecture/progress-checkpoint.md)；本目录保留理论审计和实施记录。
 
-统一记号见[符号约定](../../theory/符号约定.md)，与 `MirrorOPD/theory/core` 对齐。
+统一记号见[符号约定](../../theory/符号约定.md)，与 `MirrorOPD/theory/core` 对齐。异步与陈旧数据的经验依据见[指标与实验对照](2026-10-21-陈旧数据训练的指标与实验对照.md)。
 
 固定前缀的数学定义和证明集中在[理论目录](../../theory/README.md)。本目录维护论文实测、源码审计、实验开关和历史验算；已迁出的数学章节集中到各旧文末尾的跳转索引，原锚点继续可用。
 

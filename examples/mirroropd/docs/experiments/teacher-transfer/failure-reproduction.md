@@ -156,7 +156,7 @@ Qwen3-1.7B-Base 在本次 Full-r16、终止动作对齐设置下完成 200 个 o
 
 图中耗时轴采用对数刻度。生成期间各卡经常满载，但整轮验证还包含等待长尾。训练后各轮 valid 的 GPU 平均利用率约为 73.7%–93.2%，整卡采样显存峰值最高约 67.0 GiB。当前运行未完整记录 KV block 使用率和抢占计数，不能据此声称没有 KV 竞争或算出重算损失。资源口径和逐卡收尾证据见[完整验证资源实测](../../infra/performance/inference/validation-resources.md#observed)。
 
-完整 teacher 基线仍待补齐。现有 Qwen3-8B 历史子集每个数据集 8 题、每题 4 次；将最终 student 的相同题目、每题 16 次与其比较，得到下表。两边均为 non-thinking、温度 0.7、top-p 0.9、回答上限 31,744，但每题采样次数、模型及执行条件不同；该表不能替代 teacher 全集评测。
+完整 teacher 基线仍待补齐，公开论文参考与同协议验证入口见[Qwen non-thinking 附录](appendix/qwen-nonthinking-reference.md)。现有 Qwen3-8B 历史子集每个数据集 8 题、每题 4 次；将最终 student 的相同题目、每题 16 次与其比较，得到下表。两边均为 non-thinking、温度 0.7、top-p 0.9、回答上限 31,744，但每题采样次数、模型及执行条件不同；该表不能替代 teacher 全集评测。
 
 | 相同的 8 道题 | Teacher 平均正确率 | 最终 Student 平均正确率 | Teacher 平均长度 | Student 平均长度 |
 | ------------- | -----------------: | ----------------------: | ---------------: | ---------------: |
@@ -414,7 +414,7 @@ Rethinking OPD 第 3.1 节使用相同的 Qwen3-1.7B-Base ← Qwen3-4B Non-think
 
 原图三项是 AIME24、AIME25、AMC23；E41 缺少 AIME24，因此不能把本项目含 MATH 的三项均分与约 15% 比较。原文每题 4 条 rollout、验证 top-p=0.95；E41 每题 1 条、reuse16、验证 top-p=0.9，并加入终止动作对齐。模型对相同不足以构成算法的受控比较。
 
-E41 现有证据说明：此 Base 模型对在当前配方下可以稳定完成长程更新，但第 10 步后收益有限。尚不能声称 Full-KL 单独解决了论文的 teacher mismatch；需要同设置 sampled 对照和原始师生同协议评测来分离各因素。
+E41 现有证据说明：此 Base 模型对在当前配方下可以稳定完成长程更新，但第 10 步后收益有限。判断 Full-KL 对 teacher mismatch 的独立作用，还需要同设置 sampled 对照和原始师生同协议评测。
 
 <a id="qwen4-62-e43-对应-semi-opd-的在线轨迹受限设置"></a>
 
