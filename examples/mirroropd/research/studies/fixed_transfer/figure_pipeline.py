@@ -147,13 +147,15 @@ def build(spec, output, force=False):
 
 def index(results, output, registry_path):
     rows = []
+    guide = os.path.relpath(BASE.parent / "reproduction.md", output)
+    overview = os.path.relpath(BASE.parent / "fixed-state-results.md", output)
     lines = [
         "# 每个 run 的诊断图谱",
         "",
         "每个目录保存同一 run 的图、数值表、来源哈希和覆盖清单。仅展示 0–320 更新；"
         "排序按全部 held-out 的 RKL 相对降幅，预算不同的行不视为等预算比较。",
         "",
-        "[图谱与重绘说明](../../figure-plan.md) · [实验总览](../../../README.md)",
+        f"[图谱与重绘说明]({guide}) · [固定状态结果]({overview})",
         "",
         f"共 {len(results)} 个条件、{sum(len(r['figures']) for r in results)} 张图，每张均有 PNG 与 PDF。",
         "",

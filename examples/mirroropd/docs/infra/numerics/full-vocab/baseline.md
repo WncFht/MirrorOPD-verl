@@ -10,7 +10,7 @@ $$
 A(a)=\operatorname{stopgrad}[\log T(a)-\log p(a)+K].
 $$
 
-完整支持、正确行为 IS 与停止梯度是控制变量解释的条件；PPO clipping、ratio guard 和动作筛选需另行分析。不能把当前动作自己的 k1 同时作为 baseline，否则会与负 k1 信号抵消。理论见[条件梯度与控制变量](../../../theory/2026-10-22-条件梯度估计与控制变量.md)。
+完整支持、正确行为 IS 与停止梯度是控制变量解释的条件；PPO clipping、ratio guard 和动作筛选需另行分析。不能把当前动作自己的 k1 同时作为 baseline，否则会与负 k1 信号抵消。理论见[条件梯度与控制变量](../../../theory/estimators.md)。
 
 数值接口需要返回每位置 detached KL，训练接口还需要可微 sampled log-prob；二者共享 student forward。不要为 baseline 再执行一次 student backbone，也不能把只返回可微 full loss sum 的接口直接当成 baseline 接口。
 

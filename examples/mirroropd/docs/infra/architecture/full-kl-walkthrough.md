@@ -3,7 +3,7 @@
 本文从当前实现反推数学目标，再将每个关键表达式对应到源码。读者需要熟悉 softmax、反向传播和语言模型的 next-token 训练。完整走读分成三篇：
 
 1. 本篇：固定前缀上的目标、weighted target、OPD/MDPO/BPO 梯度、相同点与差异。
-2. [执行源码阅读路线](full-kl-execution-walkthrough.md)：按真实调用顺序进入已有训练、教师、数据、指标与恢复专题。
+2. [执行源码阅读路线](代码走读.md)：按真实调用顺序进入已有训练、教师、数据、指标与恢复专题。
 3. [算子、分块 VJP 与数值实现](full-kl-kernel-walkthrough.md)：从 dense reference 到 precompute/Triton，以及支持集和精度边界。
 
 源码复核日期为 **2026-10-26**，基点为 `7f1c9ad9ecca636d6e103a749b90e0b3b1df1d0e`。初稿所依据的 `objectives.py`、`full_vocab_triton.py` 数值修改现已包含在该提交中。源码链接保留函数名，并以 `#L起始行` 标出入口，正文写出阅读区间；行号随代码修改会漂移，定位时同时核对符号。本文解释实现及由其导出的性质，不声称复现了某篇外部论文的全部算法。
@@ -72,7 +72,7 @@ flowchart TB
 
 ## 2. 从配置识别实际目标
 
-数学比较以本文第 7 节为准。配置如何形成 `objective/payload_kind/anchor_payload/teacher_only_kl`，按[执行路线第 1–3 项](full-kl-execution-walkthrough.md#阅读顺序)核对；普通 Full-KL 的 endpoint 分派逐行解释在[算子篇](full-kl-kernel-walkthrough.md#1-dispatcher-的逐段阅读)。
+数学比较以本文第 7 节为准。配置如何形成 `objective/payload_kind/anchor_payload/teacher_only_kl`，按[执行路线第 1–3 项](代码走读.md)核对；普通 Full-KL 的 endpoint 分派逐行解释在[算子篇](full-kl-kernel-walkthrough.md#1-dispatcher-的逐段阅读)。
 
 ## 3. Weighted target 的完整构造
 
@@ -447,10 +447,10 @@ $$
 
 ## 9. 对应到当前 E44–E47 配方
 
-算法与预算只在[训练配方的正式对照表](../../settings/训练设置.md#mirror-comparison)维护；从该表选定 kappa/eta 后，按本文的目标公式解释其含义。预设合并与覆盖顺序见[配置入口](training-loop.md#配置入口)。
+算法与预算只在[训练配方的正式对照表](../training/launch.md#launcher-mirror-comparison)维护；从该表选定 kappa/eta 后，按本文的目标公式解释其含义。预设合并与覆盖顺序见[配置入口](training-loop.md#配置入口)。
 
 ## 10. 继续走读的具体落点
 
-掌握本篇后，沿[执行篇](full-kl-execution-walkthrough.md)追踪一次 actor 调用中 q/T/p 的生命周期，再沿[算子篇](full-kl-kernel-walkthrough.md)确认 `dz → dH/dW → loss.backward()`。逐段复核时应能解释：b 为何未归一化，eta 在哪里只除一次，BPO 为何需要 q，p=q 时哪些梯度相同，以及 `token_objective` 为什么不能拿来再次做可微 token 加权。
+掌握本篇后，沿[执行篇](代码走读.md)追踪一次 actor 调用中 q/T/p 的生命周期，再沿[算子篇](full-kl-kernel-walkthrough.md)确认 `dz → dH/dW → loss.backward()`。逐段复核时应能解释：b 为何未归一化，eta 在哪里只除一次，BPO 为何需要 q，p=q 时哪些梯度相同，以及 `token_objective` 为什么不能拿来再次做可微 token 加权。
 
 数学实现的现有检查入口包括 [test_targets_and_sampled_expectation](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L44)、[test_full_value_and_both_vjps](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L60)、[test_endpoint_uses_original_kernel_without_anchor](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L94)。检查内容与实际执行范围见[算子篇的验证记录](full-kl-kernel-walkthrough.md#9-验证入口与本文检查范围)。

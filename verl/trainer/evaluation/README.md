@@ -89,7 +89,7 @@ Bootstrap 和 current student 均通过 policy_engine_config 安装公共 sample
 
 [模型身份](identity.py)与 rollout 共用完整 checkpoint 文件清单。checkpoint-v2 覆盖权重、配置、tokenizer、生成配置及嵌套 chat_templates。相同内容换目录可复用，同路径替换权重会失效。Source bank 使用版本 2 内容合同并保存 engine_contract，运行 manifest 分别绑定 student 与 teacher 身份；更改有效停止条件也会拒绝复用。
 
-旧版未绑定支持 mask、完整权重或生成合同的银行，不能补字段后作为新运行输入。训练／只读 RKL 的原生输出行与生成支持分别记录；共享支持条件化不能靠裁剪 logits 冒充同一指标。数学关系和模型扩展见[动作空间审查](../../../examples/mirroropd/docs/infra/architecture/evaluation/动作空间与模型兼容.md)。
+旧版未绑定支持 mask、完整权重或生成合同的银行，不能补字段后作为新运行输入。训练／只读 RKL 的原生输出行与生成支持分别记录；共享支持条件化不能靠裁剪 logits 冒充同一指标。数学关系和模型扩展见[动作空间审查](../../../examples/mirroropd/docs/infra/model-compatibility/action-space.md)。
 
 ## 冻结生成的恢复与失败处理
 
@@ -147,9 +147,9 @@ readout/
 
 RKL host budget 约束临时 hidden、位置与拷贝余量，并扣除活跃训练 payload，不包含常驻模型和 Adam 的全部 CPU 内存。窗口根据 shared teacher 的实际 forward precision 推导 hidden 字节数；已使用的推理 token budget49152 覆盖 public prompt8192 加 response32768，与训练和生成 cap 分开。
 
-历史四卡集成采用 batch8/reuse2/两轮，完成 4 次更新和三次读出，28/46/46 条逻辑轨迹有效，四 rank 只读状态审计通过；原生重载和独立 HF 初始化的固定前缀 RKL 最大误差为 0。历史 CPU 检查为 495 项，另有 21 项初始化调度回归；基础 source/history 的 batch128/reuse32/两轮 64 次更新是另一批验收。这些记录不相加为独立样本，也不作为当前所有路径的重新验收，详见[历史实施与证据](../../../examples/mirroropd/docs/infra/architecture/evaluation/代码走读与实施计划.md)。
+历史四卡集成采用 batch8/reuse2/两轮，完成 4 次更新和三次读出，28/46/46 条逻辑轨迹有效，四 rank 只读状态审计通过；原生重载和独立 HF 初始化的固定前缀 RKL 最大误差为 0。历史 CPU 检查为 495 项，另有 21 项初始化调度回归；基础 source/history 的 batch128/reuse32/两轮 64 次更新是另一批验收。这些记录不相加为独立样本，也不作为当前所有路径的重新验收，详见[历史实施与证据](../../../examples/mirroropd/docs/archive/engineering/evaluation/2026-11-01-分阶段代码走读与验收.md)。
 
-两轮运行合同重构的当前检查见[重构报告](../../../examples/mirroropd/docs/infra/architecture/2026-11-01-运行合同审计与重构方案.md#提交与验收)。Source/history 最新生命周期有原生形状的 CPU 协议检查，未增加完整 vLLM accuracy 或 50 outer 实验；模型扩展和更大规模检查仍各自记录。
+两轮运行合同重构的当前检查见[重构报告](../../../examples/mirroropd/docs/archive/engineering/2026-11-01-运行合同审计与重构方案.md#提交与验收)。Source/history 最新生命周期有原生形状的 CPU 协议检查，未增加完整 vLLM accuracy 或 50 outer 实验；模型扩展和更大规模检查仍各自记录。
 
 
 ## 分布、模型与输入适配

@@ -1,6 +1,6 @@
 # Full-vocab OPD、MDPO、BPO 走读：算子、分块 VJP 与数值实现
 
-本文承接[目标与梯度](full-kl-walkthrough.md)和[训练执行](full-kl-execution-walkthrough.md)，逐段解释 `full_vocab.py`、`objectives.py`、`targets.py` 与 `full_vocab_triton.py`。源码基点与行级引用约定统一见[目标篇说明](full-kl-walkthrough.md)。符号沿用主篇；本篇的 G、dH、dW 默认都是 **未除 eta、未乘 DP/token 缩放** 的 raw objective 梯度。
+本文承接[目标与梯度](full-kl-walkthrough.md)和[训练执行](代码走读.md)，逐段解释 `full_vocab.py`、`objectives.py`、`targets.py` 与 `full_vocab_triton.py`。源码基点与行级引用约定统一见[目标篇说明](full-kl-walkthrough.md)。符号沿用主篇；本篇的 G、dH、dW 默认都是 **未除 eta、未乘 DP/token 缩放** 的 raw objective 梯度。
 
 ## 1. Dispatcher 的逐段阅读
 
@@ -287,7 +287,7 @@ Kernel 验证行数、hidden/head 宽度、支持覆盖、非空词表和正 chu
 | CUDA BF16 实际融合路径                                           | [test_real_bf16_fused_value_and_head_hidden_vjp](../../../../../tests/trainer/distillation/test_mirror_on_gpu.py#L17)、[test_fused_mirror_rows_and_diagnostics](../../../../../tests/trainer/distillation/test_mirror_on_gpu.py#L73) |
 | FSDP2、TQ、checkpoint 集成                                       | [test_mirror_fsdp2.py](../../../../../tests/special_distributed/test_mirror_fsdp2.py)、[test_mirror_tq_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_mirror_tq_on_cpu.py)                                                      |
 
-CPU backend 名称包含 fused，不意味着执行过 GPU kernel；数学单测通过也不证明多 rank hooks、TQ 乱序或真实模型训练通过。历史验收与仍待验证的范围继续以[实现方案](../numerics/mirror-objectives/实现方案.md#validation)为准。
+CPU backend 名称包含 fused，不意味着执行过 GPU kernel；数学单测通过也不证明多 rank hooks、TQ 乱序或真实模型训练通过。历史验收与仍待验证的范围继续以[实现方案](../numerics/mirror-objectives/reference.md#validation)为准。
 
 ### 9.2 文档检查方式
 

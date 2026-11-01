@@ -1,0 +1,225 @@
+# Rollout 统一模型来源与组合语义
+
+本文维护当前统一模型引用与组合契约，核对基线为 main `00e8af30`。已实现能力与实际验收由[支持范围](support.md)维护；冻结实验保持原代码与原配置。开发目录与冻结执行目录见[工作区维护](../maintenance/workspaces.md)。
+
+目标是从现有 `examples/mirroropd/run_math_opd_ablation_fsdp2.sh` 启动训练，通过少量 rollout 配置选择模型来源与组合方式。研究队列、基准脚本和自动失败恢复不应成为普通启动的前置操作。
+
+## 1. 模型来源与组合方式正交
+
+Rollout 回答两个独立问题：使用哪份模型状态，以及如何用这些模型生成轨迹。单模型、逐轨迹混合和逐 token 融合都引用同一类模型来源，不把位置固定称为 student/teacher。
+
+| 层次     | 负责内容                                                      | 不负责内容                       |
+| -------- | ------------------------------------------------------------- | -------------------------------- |
+| 模型引用 | current learner 的本批版本，或固定 checkpoint 的完整身份      | 组合系数、采样策略、训练目标     |
+| 组合策略 | single、trajectory mixture、token mixture；两侧引用与右侧权重 | GPU 数量、后端、权重文件搬运     |
+| 本批计划 | 固定版本、系数、配额、请求身份、随机流和活跃来源              | 决定 learner loss 或监督 teacher |
+| 执行层   | 按计划准备、生成、收齐、释放；实现后端和资源选择              | 改写来源、采样分布或成功更新计数 |
+
+职责结构如下：
+
+```mermaid
+flowchart LR
+    R["模型引用：current 或固定 checkpoint"] --> P["组合策略：single / trajectory / token"]
+    P --> N["端点与同源归一化"]
+    N --> B["本批不可变计划"]
+    B --> E["后端执行"]
+    E --> O["完整轨迹与来源信息"]
+    O --> L["原训练目标与 learner 更新"]
+    T["监督 teacher"] --> L
+    L -. "下一批 current 版本" .-> R
+```
+
+生成用模型和监督 teacher 是不同角色。可以由 A、B 生成前缀，仍由既有监督 teacher Q 提供目标，更新 learner C；选择生成来源不能暗中把 Q 改成 B。
+
+## 2. 统一模型引用
+
+公开接口采用下列引用形式。新运行只使用这一套字段；历史字段不自动转换。
+
+| 输入引用                       | 含义                                       | 解析后的绑定                    |
+| ------------------------------ | ------------------------------------------ | ------------------------------- |
+| `{kind: current}`              | 当前 learner，生成开始前固定本批版本       | 动态 actor 身份＋已应用更新版本 |
+| `{kind: initial}`              | 本次训练原始初始化模型；恢复后仍指原始模型 | 固定 checkpoint                 |
+| `{kind: teacher}`              | 便捷引用既有监督 teacher 的固定 checkpoint | 固定 checkpoint                 |
+| `{kind: checkpoint, ref: ...}` | 指定模型资产 ID 或完整本地 checkpoint      | 固定 checkpoint                 |
+
+真正需要执行层处理的是 current 与 checkpoint 两类绑定。initial、teacher 是明确的便捷引用，不是额外的生命周期类型。监督配置有多个 teacher 时，不猜测 `teacher` 指哪一个，应要求显式 checkpoint 引用。
+
+`ref` 复用既有模型资产解析方式，不再创建另一套 rollout 专用模型注册表。Checkpoint 应包含加载所需的配置、tokenizer 和权重；单个裸 tensor 字典不自动构成完整模型。
+
+固定引用在启动时解析并记录内容身份与稳定位置，不能每轮重新解析会变化的 latest 别名。恢复时应核对原始 initial 身份，不能用恢复 checkpoint 的当前参数替代；缺少原始身份信息时应明确报错。Current 的路径只描述初始化来源，真正身份还包含 actor 版本；路径相同不代表 current 和 initial 是同一个可变实例。Actor 更新不得污染任何固定绑定。
+
+同源折叠依据完整绑定身份：两个相同 current 引用在同一批绑定到相同版本，或两个固定引用解析为同一份配置、token-ID 映射与权重。Current 与 initial 即使起点参数相同，也不能据此永久合并生命周期。
+
+## 3. 三种策略使用相同引用
+
+### 3.1 Single
+
+只使用一个引用生成完整响应：
+
+```yaml
+rollout_policy:
+  mode: single
+  model: {kind: current}
+```
+
+固定 A 则将 `model` 改为 `{kind: checkpoint, ref: /models/A}`；固定初始模型使用 `{kind: initial}`。模型角色变化不需要另一套执行入口。
+
+### 3.2 Trajectory mixture，也就是 batch fusion
+
+同一个全局 batch 内，一部分完整轨迹来自左模型，另一部分来自右模型；每条响应从开始到结束只由其选定来源生成。
+
+```yaml
+rollout_policy:
+  mode: trajectory_mixture
+  left: {kind: current}
+  right: {kind: checkpoint, ref: /models/B}
+  right_weight: 0.5
+```
+
+两个固定模型只需替换左引用：
+
+```yaml
+rollout_policy:
+  mode: trajectory_mixture
+  left: {kind: checkpoint, ref: /models/A}
+  right: {kind: checkpoint, ref: /models/B}
+  right_weight: 0.5
+```
+
+设有效响应请求数为 $N$，右侧权重为 $\alpha$。沿用全局配额规则：
+
+$$
+N_R=\lfloor \alpha N+0.5\rfloor,\qquad N_L=N-N_R.
+$$
+
+先按稳定请求身份分配来源，再交给执行层；不按哪个模型更快返回来决定配额。记录请求权重 $\alpha$ 与实际比例 $N_R/N$。这保证全局 batch 配额，不承诺每道题的多次响应都恰好按该比例拆分。
+
+这里不采用“整批随机选择一个模型”，也不在每个 token 重新选择轨迹来源。两个来源可以分阶段执行，最终仍合成一个完整训练 batch。
+
+### 3.3 Token mixture
+
+两个模型消费相同的真实 token 历史，组合分布后只采样一次，新 token 同时成为两侧下一步的历史。
+
+```yaml
+rollout_policy:
+  mode: token_mixture
+  left: {kind: current}
+  right: {kind: checkpoint, ref: /models/B}
+  right_weight: 0.5
+  fusion_space: probability
+```
+
+两个固定模型的写法与 trajectory mixture 相同，只改变 `mode`；两侧都可以是固定 A/B，也可以是一侧 current、另一侧固定模型。Current 放在右侧也有清楚的含义，不要求用户手动交换模型和系数。
+
+`fusion_space` 保留现有两个值：
+
+| 值            | 含义                                                |
+| ------------- | --------------------------------------------------- |
+| `probability` | 概率 p 的算术混合                                   |
+| `logit`       | logits 的线性组合，分布上等价于 log-prob 的几何混合 |
+
+在共同合法支持上，令两侧分布为 $p_L,p_R$。温度和截断之前：
+
+$$
+p_{\mathrm{prob}}=(1-\alpha)p_L+\alpha p_R,
+$$
+
+$$
+p_{\mathrm{logit}}(v)=
+\frac{p_L(v)^{1-\alpha}p_R(v)^\alpha}
+{\sum_u p_L(u)^{1-\alpha}p_R(u)^\alpha}.
+$$
+
+几何形式按内部点 $0<\alpha<1$ 理解；端点直接定义为相应单模型，避免把零概率的 $0^0$ 当作实现规则。先混合，再使用一套公共温度、过滤、停止协议和一次采样。开启这些后处理后，最终分布应按后处理结果解释，不能仍无条件称为原始概率的算术平均。
+
+`right_weight` 可以是标量，也可以沿用明确的常数/线性规则。时钟必须指定为已完成 outer 或成功应用的 optimizer updates；系数在全局生成批开始时解析，批内固定，reuse 不重新解释已经生成的数据。缺少所需时钟时应报错，不猜测进度。若左侧是 initial，衰减到 0 后仍是 initial，不会自动变成 current。
+
+## 4. 端点应自动归一化成单模型
+
+用户不需要为了 $\alpha=0/1$ 再手动切换 mode。每批解析系数之后，计划层应产生以下规范化结果：
+
+| 请求策略                               | 本批有效策略                                     |
+| -------------------------------------- | ------------------------------------------------ |
+| 任一二元 mixture，$\alpha=0$           | `single(left)`                                   |
+| 任一二元 mixture，$\alpha=1$           | `single(right)`                                  |
+| 两侧为同一规范化绑定                   | 一个执行来源；保留原请求策略的记录               |
+| trajectory mixture 的整数配额某侧为 0  | 本批只执行非空来源，仍记录原 $\alpha$ 和实际配额 |
+| token mixture，$0<\alpha<1$ 且两侧不同 | 两侧均参与逐 token 融合                          |
+
+只折叠精确端点，不用任意 epsilon 把很小的非零权重改成 0。
+
+“自动归一化”包含执行语义：无须为不活跃的 rollout 来源加载权重、创建 KV 或执行 forward。未来 schedule 会启用的模型可以提前做元数据预检，但不应仅为检查而占用其 GPU 权重和 KV。活跃来源仍须与训练的 token-ID、采样和停止协议兼容。
+
+这只约束生成阶段。即使 rollout 变成纯 current，训练 loss 仍可能需要监督 teacher；不能因 $\alpha=0$ 就删除监督计算。
+
+如果 alpha 后续变化，应先结束当前批，再建立新的活跃来源与版本状态；不能在请求中途改变来源。保留 requested policy、resolved policy、折叠原因、原始系数和实际配额，避免日志把用户请求和执行结果混为一项。不同执行形状下不承诺自然生成逐 bit 相同，但必须保持规定的分布、合法支持、随机流身份和实际 behavior log-prob 语义。
+
+### 左右对称不能破坏整数配额
+
+执行器可以在内部将 current 映射到自己支持的槽位，但不能因此重新计算 batch 配额。例如 $N=3,\alpha=0.5$ 时，右侧应有 2 条、左侧 1 条；交换槽位后重新用 $1-\alpha$ 做四舍五入，可能错误地把左侧也分到 2 条。
+
+因此先在声明的 left/right 上固定配额、请求和 seed，再映射到执行器槽位。Token 权重转换与 trajectory 的整数路由分别处理。
+
+## 5. 典型需求都使用同一套组合
+
+| 需求                            | 引用和策略                               |
+| ------------------------------- | ---------------------------------------- |
+| 当前 student rollout            | single(current)                          |
+| 初始 student rollout            | single(initial)                          |
+| 指定 A 的权重生成               | single(checkpoint A)                     |
+| current 与固定 B 逐 token 融合  | token_mixture(current, B)                |
+| 固定 A 与固定 B 逐 token 融合   | token_mixture(A, B)                      |
+| current 与固定 B 组成同一 batch | trajectory_mixture(current, B)           |
+| 固定 A 与固定 B 组成同一 batch  | trajectory_mixture(A, B)                 |
+| A 在左、current 在右            | 同一接口，alpha 始终表示右侧权重         |
+| initial 与监督 teacher          | 两个便捷引用解析成固定 checkpoint 后组合 |
+
+首轮统一继续沿用单轮文本与一致的 token-ID 映射，不隐式引入跨 tokenizer 重分词。Token mixture 必须在定义一致的合法支持上组合分布；trajectory mixture 的异词表转换需要另外定义。
+
+首轮统一只需要 single 与二元组合，不引入任意嵌套策略图、多个动态 learner 或任意 N 模型融合。某个模型组合能被语义表达，不等于每个后端已经支持它；模型族、tokenizer、结构和容量限制仍须显式报告。
+
+## 6. 内部职责与迁移
+
+### 6.1 解析与计划
+
+`ModelRef` 只表达用户引用。公共启动入口通过 `rollout_model_resolver` 注入应用的资产解析器，在 Hydra 解析配置之后处理别名、历史位置拒绝和本地目录规范化；通用 trainer 不 import examples。直接调用 trainer 且不配置解析器时，引用使用本地目录。
+
+启动时解析绑定并建立内容身份，能力检查复用一次加载的模型元数据。`build_plan` 必须接收绑定，不访问文件系统，也不重新解释资产引用。同源判断统一基于规范绑定；常数端点与同源组合不要求实际双模型能力，线性 schedule 则检查其后续会进入的生成方式。
+
+每个阶段分别记录 `source` 与 `generator`。生成器只有 single 与 token mixture；trajectory mixture 是请求分配，编译成 Single 阶段。请求的全局 ordinal 在计划内固定，执行层据此生成 route map，admission 计数与请求分发共用该映射。调度 priority 不再承担 replica 选择。
+
+### 6.2 阶段与资源所有权
+
+| 边界             | 实现                                                                                                                                                         | 职责                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Trainer 委托     | [service.py](../../../../../verl/experimental/rollout_policy/service.py)                                                                                     | 统一初始化、更新后、采样后、验证和提交入口；默认传输继续委托既有实现  |
+| 计划与报告       | [runtime.py](../../../../../verl/experimental/rollout_policy/runtime.py)                                                                                     | 构造本批计划，调用 collector，记录来源与批次指标                      |
+| 执行阶段         | [lifecycle.py](../../../../../verl/experimental/rollout_policy/lifecycle.py)、[phases.py](../../../../../verl/experimental/rollout_policy/phases.py)         | 明确 client、加载版本、route map、阶段 token 和资源所有者             |
+| 会话与 TQ        | [sessions.py](../../../../../verl/experimental/rollout_policy/sessions.py)                                                                                   | 组装 AgentLoop 请求，等待 scorer 与 TQ 写入结束                       |
+| 父 batch 提交    | [collector.py](../../../../../verl/experimental/rollout_policy/collector.py)                                                                                 | 校验唯一性、来源与完整性，统一发布成功或失败                          |
+| 单模型与原生组合 | [单模型执行](../../../../../verl/workers/rollout/vllm_rollout/policy_execution.py)、[组合执行](../../../../../verl/workers/rollout/vllm_fusion/execution.py) | 管理 vLLM 引擎、驻留与后端配置，不回写 runtime                        |
+| HF 参考          | [HF 执行](../../../../../verl/workers/rollout/hf_fusion/execution.py)                                                                                        | 管理 HF 模型；专属 decoder、KV、graph、精度与 kernel 均在同一后端目录 |
+
+后端返回 `PreparedPhase`，生成与释放显式消费这一对象。阶段只声明活跃来源的已加载版本；不把未执行的 current 记为已经加载。排空只证明会话结束，不附带释放引擎。无法确认排空或生命周期调用被取消时仍 fail-stop，不清理可能继续被写入的状态。
+
+Replica 句柄在启动前登记到 `OwnedReplicas`；已知启动失败时先等待所有启动操作返回，再清理该组自己的 server。借用的 actor workers 不由该对象销毁。sleep 保留可复用引擎，close 终止自有 server；超时状态不自动 close-and-retry。
+
+### 6.3 权重与组件布局
+
+逻辑 left/right 与物理组件映射由 `ComponentLayout` 表达。Native 接收器仍更新第一物理组件；current 在右侧时交换物理布局，计算 logits 时恢复逻辑左右顺序，保留原始 α。不会通过 `1 - α` 重建逻辑系数，也不重新计算 batch 配额。
+
+Actor 的生成对象与具名接收目标分开。`policy_current` 目标负责接收与提交，actor 负责导出权重、汇总各 rank 结果，并在全部成功后提交版本。Native 的权重代理不继承 `BaseRollout`；HF 接收目标代理参考模型的加载操作。两个固定来源不注册 actor 接收目标。加载失败继续禁止后续生成，不增加自动失败恢复。
+
+### 6.4 公共采样与手动恢复
+
+公共融合与过滤数学位于 [sampling.py](../../../../../verl/experimental/rollout_policy/sampling.py)，vLLM 接口适配位于[后端采样模块](../../../../../verl/workers/rollout/vllm_rollout/policy_sampling.py)。支持范围内的默认 single、策略 single、mixture 端点与策略验证使用相同的过滤边界与 behavior log-prob 定义；默认规则变更、适用条件与旧运行迁移见[启动说明](usage.md#采样合同迁移)。参数不同仍会得到不同分布，不要求跨后端自然轨迹逐 token 一致。
+
+模型身份由实际支持的权重文件、配置和 tokenizer 文件 manifest 建立，普通说明文件和 optimizer 文件不参与。手动 checkpoint 保存 schema 2 的 `rollout_state.json`，分别记录生成语义、执行设置和位置。恢复核对模型身份、系数时钟、采样参数和融合后端；支持的资源与超时调整独立接受能力检查。原始 initial 身份不能被恢复后的 actor 参数替代。旧 schema 1 或缺少合同的 checkpoint 使用其冻结代码恢复。
+
+旧 `source/student/model_path/teacher_model_path/teacher_weight` 运行配置仍明确报错；历史报告读取工具可以解释旧记录。旧源码 import 路径随所有活动消费者一起迁移，不保留转发模块；固定 vLLM 版本必需的组件适配继续保留。
+
+## 7. 验证与后续边界
+
+当前能力、分版本验收与尚未覆盖的范围统一由[支持与验收](support.md)维护。接口可表达范围不能代替实际模型组合验收；模型族、token-ID 映射、后端版本与资源预检继续生效。
+
+历史设计、数值依据和重构记录见[归档索引](fusion/archive/README.md)，后续测量见[性能记录](../performance/inference/2026-11-01-Token融合热点与并发测量.md)。这些记录按实际执行版本解释，不把历史 GPU 通过结果自动转移到后续改动。

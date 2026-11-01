@@ -5,12 +5,13 @@
 - [Token fusion 热点与并发](inference/2026-11-01-Token融合热点与并发测量.md)：固定热点、完整自然生成、TP 拓扑和训练驻留边界。
 - [Full-vocab 性能专题](full-vocab/README.md)。
 - [E55–E57 长程耗时诊断](full-vocab/2026-10-31-MDPO长程训练与验证耗时诊断.md)：完整验证预算、actor 慢路径与证据边界。
-- [生成重复检测与提前停止](inference/2026-11-01-生成重复检测与提前停止.md)：16–128/8、训练与验证独立开关、停止语义和四卡接入验收；实验依据见[参数回放与误停分析](inference/2026-10-30-重复停止参数回放与误停分析.md)，后续方案见[实现调研](inference/2026-10-30-验证提前停止方案与实现调研.md)。
+- [生成重复检测与提前停止](../rollout/repetition-detection.md)：16–128/8、训练与验证独立开关、停止语义和四卡接入验收；实验依据见[参数回放与误停分析](inference/2026-10-30-重复停止参数回放与误停分析.md)，后续方案见[实现调研](inference/2026-10-30-验证提前停止方案与实现调研.md)。
 - [Sampled/full公平性能方案](sampled-full/2026-10-26-Sampled与Full公平性能方案.md)。
 - [学生推理参数实测](2026-10-27-学生模型推理性能与参数选择.md)。
-- [Qwen 完整验证资源](inference/2026-10-27-并发64验证阶段资源实测.md)与[并发估计](inference/2026-10-27-验证并发的逐Checkpoint估计.md)。
+- [MiMo 原生评估调度](inference/validation-resources.md#native-scheduler)：跨 benchmark 请求池、独立判分与同参数 GPU 对照。
+- [Qwen 完整验证资源](inference/validation-resources.md#observed)与[并发估计](inference/validation-resources.md#estimated)。
 - [训练与验证测量](2026-10-22-训练与验证性能实测.md)。
 
 Reuse 和 response cap 如何改变学习效果与预算，归[预算研究](../../experiments/reuse-budget/README.md)。
 
-[模型验证资源与并发标定](inference/2026-10-28-模型验证资源与并发标定.md)保存历史 A–F 的接口独立测量，按冻结条件解释。
+[模型验证资源与并发标定](inference/validation-resources.md#calibration)保存历史 A–F 的接口独立测量，按冻结条件解释。

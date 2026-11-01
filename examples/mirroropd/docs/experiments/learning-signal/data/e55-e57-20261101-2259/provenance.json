@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-01",
+  "logs_head": "c3b8879746c52f618f978c0a6a57ce44f6bbdfe0",
+  "analysis_sha256": "6b40a75001c900a4fead5e19ccc8ff6dedac084be8e2c13ad213eff93c2bff5b",
+  "models": "Qwen3-1.7B-Base <- Qwen3-30B-A3B-Instruct-2507",
+  "scope": "Received log snapshots; not live training state",
+  "runs": [
+    {
+      "name": "E55",
+      "run_id": "j5uaal3j",
+      "source_status": "partial_snapshot",
+      "exit_code": null,
+      "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+      "snapshot_end_shanghai": "2026-11-01T20:13:01.918134+08:00",
+      "update_count": 960,
+      "update_outer": 60,
+      "complete_outer": 59,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50
+      ],
+      "sha256": "92352f9696133b6b341111f7161cf5d5075a92f18fef8999f59189cf56971dd5",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261030_094536-j5uaal3j/run-j5uaal3j.wandb"
+    },
+    {
+      "name": "E56",
+      "run_id": "zsnhqzts",
+      "source_status": "partial_snapshot",
+      "exit_code": null,
+      "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+      "snapshot_end_shanghai": "2026-11-01T22:44:10.930995+08:00",
+      "update_count": 1504,
+      "update_outer": 94,
+      "complete_outer": 94,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90
+      ],
+      "sha256": "1881375d1a89ed580c036f9bccd4cb25fd05364e3831e2b5beb0eb8bc40dac48",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261029_234048-zsnhqzts/run-zsnhqzts.wandb"
+    },
+    {
+      "name": "E57",
+      "run_id": "6j5knkmk",
+      "source_status": "finished",
+      "exit_code": 0,
+      "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+      "snapshot_end_shanghai": "2026-11-01T15:40:42.800617+08:00",
+      "update_count": 1600,
+      "update_outer": 100,
+      "complete_outer": 100,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261030_015214-6j5knkmk/run-6j5knkmk.wandb"
+    }
+  ],
+  "remote_logs_commit": "dee0d30",
+  "analysis_module": "examples.mirroropd.research.studies.termination.analyze_e55_e57"
+}

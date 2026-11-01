@@ -47,4 +47,4 @@ Actor benchmark 整合的正常提交 hooks、Ruff、mypy、生成配置及文�
 - 两卡 FSDP：共同支持、token ID 重排、Llama、EOS MDPO、EOS 端点共 5 组通过。前三组及 EOS MDPO 检查 checkpoint 恢复；EOS 两组与 `precompute` 对照，更新后参数最大绝对差为 0。
 - 提交 hooks、Ruff、类型检查、配置生成及文档检查通过。文档检查明确列出的仓外历史证据未在本工作树验证。
 
-这些检查验证接口整合、梯度、更新与恢复，不代表重新完成 50 outer 正式实验，也不提供新的整轮性能结论。旧模型配对验收仍按其记录的源码 hash 解释，见[动作空间与模型兼容](../architecture/evaluation/动作空间与模型兼容.md)。此前工作区清理记录见[2026-10-31 回执](../rollout/fusion/archive/workspaces-20261031.md)。
+这些检查验证接口整合、梯度、更新与恢复，不代表重新完成 50 outer 正式实验，也不提供新的整轮性能结论。旧模型配对验收仍按其记录的源码 hash 解释，见[动作空间与模型兼容](../model-compatibility/action-space.md)。此前工作区清理记录见[2026-10-31 回执](../rollout/fusion/archive/workspaces-20261031.md)。

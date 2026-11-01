@@ -51,4 +51,4 @@ python -m examples.mirroropd.research.studies.prefix_fusion.analysis \
 
 ## 新编号与原生评估
 
-新的八卡入口为 `run_math_opd_ablation_fsdp2.sh E63` 至 `E68`，直接使用统一原生评估，资源与协议见[训练设置](../../../docs/settings/训练设置.md#e63e68qwen3-八卡前缀对照与原生评估)。`prepare_native` 仅复用旧准备产物中的题目文本与训练文件，写出原生 QUESTION 表及两种 bootstrap 资源配置；不把旧 HF 银行伪装成原生银行。原有 `science` 入口继续描述其冻结单 rank 研究协议，不作为新 E 编号的执行后端。
+新的八卡入口为 `run_math_opd_ablation_fsdp2.sh E63` 至 `E68`，直接使用统一原生评估，资源与协议见[训练设置](../../../docs/experiments/rollout-policy/native-qwen.md#native-e63e68qwen3-八卡前缀对照与原生评估)。`prepare_native` 仅复用旧准备产物中的题目文本与训练文件，写出原生 QUESTION 表及两种 bootstrap 资源配置；不把旧 HF 银行伪装成原生银行。原有 `science` 入口继续描述其冻结单 rank 研究协议，不作为新 E 编号的执行后端。

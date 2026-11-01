@@ -1,0 +1,46 @@
+{
+  "status": "complete",
+  "metadata": {
+    "hf_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/final-model/huggingface",
+    "export_audit": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/final-model/export-audit",
+    "reference_event": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/events/outer-050",
+    "metrics": {
+      "eval/checkpoint/hf_reload_verified": 1,
+      "eval/checkpoint/hf_reload_max_rkl_error": 0.0
+    },
+    "timing": {
+      "windows": 3,
+      "seconds": 23.95413751155138,
+      "teacher_timing": {
+        "teacher_transfer": 3.0799622163176537,
+        "teacher_forward": 5.521774917840958
+      },
+      "logical_payload_limit_bytes": 1073741824,
+      "audit": {
+        "status": "passed",
+        "ranks": [
+          {
+            "state_digest": "95e12d67ab9ca5b28f4c15dc958f20d7aee947d8abe427484b777161ea04dcdd",
+            "unchanged": true
+          },
+          {
+            "state_digest": "5eb3ad325da22b3650ecaf235924a6b09c602bfda1c2804c2cea667c10f229c9",
+            "unchanged": true
+          },
+          {
+            "state_digest": "aa3ba1c8569b96c417a7c539dc0a76d5b9b7e21556698d5dd0aa2a186f920fc5",
+            "unchanged": true
+          },
+          {
+            "state_digest": "efe6f263c3835128e2449c3ad61a69069d333161627b4c1c2b899ddd37d6727f",
+            "unchanged": true
+          }
+        ]
+      }
+    },
+    "rtol": 0.0001,
+    "atol": 1e-06
+  },
+  "manifest_sha256": "5102d4f737261dd65b210105e219818ee75c55277c3228992f43df433dbfe661",
+  "source_manifest": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/formal-hf-reload-a01/readout/manifest.json"
+}

@@ -1,6 +1,6 @@
 # 运行接口迁移指南
 
-适用范围：从 `402f6353` 及此前接口迁移到重构分支的当前接口。当前架构见[总览](README.md)，变更依据和分组验收见[重构报告](2026-11-01-运行合同审计与重构方案.md)。指南只描述新运行和开发调用者的升级；旧实验及旧 checkpoint 恢复使用对应冻结代码，原始数据不自动转换。
+适用范围：从 `402f6353` 及此前接口迁移到重构分支的当前接口。当前架构见[总览](README.md)，变更依据和分组验收见[重构报告](../../archive/engineering/2026-11-01-运行合同审计与重构方案.md)。指南只描述新运行和开发调用者的升级；旧实验及旧 checkpoint 恢复使用对应冻结代码，原始数据不自动转换。
 
 ## 配置与数值后端
 
@@ -34,7 +34,7 @@ distillation:
       backend: precompute_fused
 ```
 
-不更改历史 E 编号的科学配置。E59–E62 是对应 E55–E58 的融合实现预设，模型、数据和预算的对应关系见[训练设置](../../settings/训练设置.md#e59e62eos-补偿融合对照)。配置覆盖后的真实设置仍以 resolved YAML 为准。
+不更改历史 E 编号的科学配置。E59–E62 是对应 E55–E58 的融合实现预设，模型、数据和预算的对应关系见[训练设置](../performance/full-vocab/2026-11-01-EOS融合实现与训练验收.md#presets-e59e62eos-补偿融合对照)。配置覆盖后的真实设置仍以 resolved YAML 为准。
 
 ## 评估入口
 
@@ -76,7 +76,7 @@ FullVocabOutput 使用可被 FSDP pytree 识别的 NamedTuple，不能改回普�
 
 ## 验证迁移
 
-使用[共享运行说明](../training/2026-10-22-共享八卡运行与架构.md)中的原生环境与资产设置，先做配置预览，核对 canonical 目标、显式 backend、唯一评估入口和科学预算。以下命令从仓库根执行，只解析配置，不启动训练：
+使用[共享运行说明](../training/runtime.md)中的原生环境与资产设置，先做配置预览，核对 canonical 目标、显式 backend、唯一评估入口和科学预算。以下命令从仓库根执行，只解析配置，不启动训练：
 
 ```bash
 CONFIG_ONLY=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E59

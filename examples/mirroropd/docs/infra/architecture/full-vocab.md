@@ -6,7 +6,7 @@ Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前�
 
 ## 统一目标分派
 
-方法与数学目标的对应关系见[三方法比较](full-kl-walkthrough.md#71-梯度与极小值对照)；配置解析和数值分派分别沿[执行路线第 2 项](full-kl-execution-walkthrough.md#阅读顺序)与[算子 dispatcher](full-kl-kernel-walkthrough.md#1-dispatcher-的逐段阅读)阅读。本页维护 full-vocab 在 engine 中的接入合同、hidden 运输和 head 调用边界。
+方法与数学目标的对应关系见[三方法比较](full-kl-walkthrough.md#71-梯度与极小值对照)；配置解析和数值分派分别沿[执行路线第 2 项](代码走读.md)与[算子 dispatcher](full-kl-kernel-walkthrough.md#1-dispatcher-的逐段阅读)阅读。本页维护 full-vocab 在 engine 中的接入合同、hidden 运输和 head 调用边界。
 
 ### 训练行值与诊断的分工
 
@@ -148,13 +148,13 @@ Teacher hidden 运输规模约为有效预测行数乘 $d_t$；需要 full ancho
 | E13–E43 中的 full 预设                                                  | precompute       | 512         | True/True                                |
 | E44–E47                                                                 | precompute_fused | 128         | True/True                                |
 
-这些入口的 vocab chunk 默认都是 8192，其实际用途仍受 backend 限制。当前 E44–E47 的完整设置见[训练配方](../../settings/训练设置.md#mirror-comparison)；环境与 Hydra 可以覆盖，最终以解析配置为准。
+这些入口的 vocab chunk 默认都是 8192，其实际用途仍受 backend 限制。当前 E44–E47 的完整设置见[训练配方](../training/launch.md#launcher-mirror-comparison)；环境与 Hydra 可以覆盖，最终以解析配置为准。
 
 某个 rank 没有有效预测行时，kernel 返回 `hs.sum()*0 + ws.sum()*0`，保留 student 两路梯度连接，让它参与同一次分布式更新。整个 mini-batch 的全局有效 token 数为零则由 engine 拒绝训练。有效 token mask 和 DP 缩放见[数据与归一化](data-and-loss.md#三种-mask-与分母)。
 
 ## 验证入口
 
-新增 weighted target 与 BPO 的 CPU/CUDA/FSDP/真实短训练证据见[验收结果](../numerics/mirror-objectives/实现方案.md#validation)，未覆盖范围见[验证缺口](../numerics/mirror-objectives/实现方案.md#remaining-validation)。下表保留原 Full-KL 基础设施的验证入口。
+新增 weighted target 与 BPO 的 CPU/CUDA/FSDP/真实短训练证据见[验收结果](../numerics/mirror-objectives/reference.md#validation)，未覆盖范围见[验证缺口](../numerics/mirror-objectives/reference.md#remaining-validation)。下表保留原 Full-KL 基础设施的验证入口。
 
 | 检查对象                                                                | 测试入口                                                                                                           |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |

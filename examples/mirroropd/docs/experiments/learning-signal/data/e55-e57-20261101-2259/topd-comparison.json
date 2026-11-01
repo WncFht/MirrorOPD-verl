@@ -1,0 +1,368 @@
+{
+  "checked_shanghai": "2026-11-01",
+  "paper": "https://arxiv.org/html/2607.04751v2",
+  "paper_table3": {
+    "student": "Qwen3-1.7B-Base",
+    "teacher": "Qwen3-30B-A3B-Instruct-2507",
+    "metric": "avg@32",
+    "OPD": {
+      "aime24": 8.96,
+      "aime25": 7.5,
+      "aime26": 5.94
+    },
+    "TOP-D": {
+      "aime24": 20.31,
+      "aime25": 17.71,
+      "aime26": 13.75
+    }
+  },
+  "official_commit": "9a2716cba22cab508825ad3be3f78327bb8139e5",
+  "official_sources": [
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/README.md",
+      "local_snapshot": "runs/topd-comparison-20261101/source/README.md",
+      "sha256": "8eece888fd9db27e271c9590d7f34dd6a77c7536a292731937f6266a2f3acf87"
+    },
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/verl/verl/trainer/ppo/core_algos.py",
+      "local_snapshot": "runs/topd-comparison-20261101/source/core_algos.py",
+      "sha256": "e8fc26c07647c473153d4af7fe3d38fec25d57bf328a73f8cc28f4b4fa592834"
+    },
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/recipe/opd/run_qwen3_1p7b_base_qwen3_teacher_dapo17k_common.sh",
+      "local_snapshot": "runs/topd-comparison-20261101/source/common.sh",
+      "sha256": "88c219e42008ec6ed6731cfd9f59a8fcc9b490fd7966735eae14f261285ddfd3"
+    },
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/recipe/opd/run_qwen3_1p7b_base_qwen3_30a3b_teacher_dapo17k_topd_alpha0p1_16k_kl0.sh",
+      "local_snapshot": "runs/topd-comparison-20261101/source/entry.sh",
+      "sha256": "6479de2275f428c73552bb650ef7a6431276e5e132167473b1255a94515ecb8c"
+    },
+    {
+      "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/verl/verl/trainer/ppo/ray_trainer.py",
+      "local_snapshot": "runs/topd-comparison-20261101/source/ray_trainer.py",
+      "sha256": "d6ea9222350d62aaa2ecd6e7c1ed48c36523efc2bc15fb65056f6792de9b19d4"
+    }
+  ],
+  "E57_source": {
+    "path": "data.json",
+    "sha256": "fcc341bb46f7d42d9bab9ac415a27a03e72c90577a30874f7bfaf1d09eb94c6f"
+  },
+  "E57_trajectory": [
+    {
+      "outer": 10,
+      "teacher_kl_first": 0.47649090372085634,
+      "teacher_kl_last": 0.44913436814646907,
+      "macro5": 0.21332083333333332,
+      "macro_cap_fraction": 0.6258,
+      "accuracy": {
+        "math500": 0.592125,
+        "amc23": 0.3265625,
+        "aime24": 0.07916666666666666,
+        "aime25": 0.03333333333333333,
+        "aime26": 0.035416666666666666
+      },
+      "cap_fraction": {
+        "math500": 0.263375,
+        "amc23": 0.496875,
+        "aime24": 0.76875,
+        "aime25": 0.7770833333333333,
+        "aime26": 0.8229166666666666
+      }
+    },
+    {
+      "outer": 20,
+      "teacher_kl_first": 0.4477153798020017,
+      "teacher_kl_last": 0.4278624031597244,
+      "macro5": 0.24401250000000002,
+      "macro_cap_fraction": 0.7014374999999999,
+      "accuracy": {
+        "math500": 0.64975,
+        "amc23": 0.3703125,
+        "aime24": 0.0875,
+        "aime25": 0.05416666666666667,
+        "aime26": 0.058333333333333334
+      },
+      "cap_fraction": {
+        "math500": 0.32125,
+        "amc23": 0.5921875,
+        "aime24": 0.85625,
+        "aime25": 0.8583333333333333,
+        "aime26": 0.8791666666666667
+      }
+    },
+    {
+      "outer": 30,
+      "teacher_kl_first": 0.412248351726209,
+      "teacher_kl_last": 0.39451187617272954,
+      "macro5": 0.26137083333333333,
+      "macro_cap_fraction": 0.5116916666666667,
+      "accuracy": {
+        "math500": 0.6855,
+        "amc23": 0.4046875,
+        "aime24": 0.07916666666666666,
+        "aime25": 0.07708333333333334,
+        "aime26": 0.06041666666666667
+      },
+      "cap_fraction": {
+        "math500": 0.197,
+        "amc23": 0.409375,
+        "aime24": 0.6666666666666666,
+        "aime25": 0.6416666666666667,
+        "aime26": 0.64375
+      }
+    },
+    {
+      "outer": 40,
+      "teacher_kl_first": 0.4169749369747473,
+      "teacher_kl_last": 0.39899034702372954,
+      "macro5": 0.2665708333333333,
+      "macro_cap_fraction": 0.36273333333333335,
+      "accuracy": {
+        "math500": 0.699,
+        "amc23": 0.4234375,
+        "aime24": 0.06458333333333334,
+        "aime25": 0.0625,
+        "aime26": 0.08333333333333333
+      },
+      "cap_fraction": {
+        "math500": 0.122,
+        "amc23": 0.3,
+        "aime24": 0.4979166666666667,
+        "aime25": 0.43333333333333335,
+        "aime26": 0.46041666666666664
+      }
+    },
+    {
+      "outer": 50,
+      "teacher_kl_first": 0.3975145178134824,
+      "teacher_kl_last": 0.38074079920497655,
+      "macro5": 0.279875,
+      "macro_cap_fraction": 0.27118333333333333,
+      "accuracy": {
+        "math500": 0.70875,
+        "amc23": 0.453125,
+        "aime24": 0.0875,
+        "aime25": 0.08333333333333333,
+        "aime26": 0.06666666666666667
+      },
+      "cap_fraction": {
+        "math500": 0.073625,
+        "amc23": 0.209375,
+        "aime24": 0.3854166666666667,
+        "aime25": 0.31666666666666665,
+        "aime26": 0.37083333333333335
+      }
+    },
+    {
+      "outer": 60,
+      "teacher_kl_first": 0.4030673679792446,
+      "teacher_kl_last": 0.38554888190070413,
+      "macro5": 0.282475,
+      "macro_cap_fraction": 0.2194875,
+      "accuracy": {
+        "math500": 0.72175,
+        "amc23": 0.453125,
+        "aime24": 0.09791666666666667,
+        "aime25": 0.05625,
+        "aime26": 0.08333333333333333
+      },
+      "cap_fraction": {
+        "math500": 0.058375,
+        "amc23": 0.1578125,
+        "aime24": 0.3125,
+        "aime25": 0.22708333333333333,
+        "aime26": 0.3416666666666667
+      }
+    },
+    {
+      "outer": 70,
+      "teacher_kl_first": 0.3965546125753547,
+      "teacher_kl_last": 0.3783984732436162,
+      "macro5": 0.29102083333333334,
+      "macro_cap_fraction": 0.17754166666666665,
+      "accuracy": {
+        "math500": 0.7275,
+        "amc23": 0.4671875,
+        "aime24": 0.09583333333333334,
+        "aime25": 0.06875,
+        "aime26": 0.09583333333333334
+      },
+      "cap_fraction": {
+        "math500": 0.045,
+        "amc23": 0.134375,
+        "aime24": 0.25625,
+        "aime25": 0.17291666666666666,
+        "aime26": 0.2791666666666667
+      }
+    },
+    {
+      "outer": 80,
+      "teacher_kl_first": 0.3757628492449511,
+      "teacher_kl_last": 0.3589129800312691,
+      "macro5": 0.2892375,
+      "macro_cap_fraction": 0.14228333333333332,
+      "accuracy": {
+        "math500": 0.732125,
+        "amc23": 0.4515625,
+        "aime24": 0.08333333333333333,
+        "aime25": 0.09583333333333334,
+        "aime26": 0.08333333333333333
+      },
+      "cap_fraction": {
+        "math500": 0.0385,
+        "amc23": 0.11875,
+        "aime24": 0.20625,
+        "aime25": 0.13541666666666666,
+        "aime26": 0.2125
+      }
+    },
+    {
+      "outer": 90,
+      "teacher_kl_first": 0.393883769960444,
+      "teacher_kl_last": 0.3764315741484318,
+      "macro5": 0.2950083333333333,
+      "macro_cap_fraction": 0.145325,
+      "accuracy": {
+        "math500": 0.7365,
+        "amc23": 0.459375,
+        "aime24": 0.10208333333333333,
+        "aime25": 0.09375,
+        "aime26": 0.08333333333333333
+      },
+      "cap_fraction": {
+        "math500": 0.032875,
+        "amc23": 0.125,
+        "aime24": 0.22916666666666666,
+        "aime25": 0.12291666666666666,
+        "aime26": 0.21666666666666667
+      }
+    },
+    {
+      "outer": 100,
+      "teacher_kl_first": 0.37751485747375807,
+      "teacher_kl_last": 0.36040494961389075,
+      "macro5": 0.2993166666666667,
+      "macro_cap_fraction": 0.132,
+      "accuracy": {
+        "math500": 0.73825,
+        "amc23": 0.4875,
+        "aime24": 0.10416666666666667,
+        "aime25": 0.09791666666666667,
+        "aime26": 0.06875
+      },
+      "cap_fraction": {
+        "math500": 0.02875,
+        "amc23": 0.09375,
+        "aime24": 0.1875,
+        "aime25": 0.1375,
+        "aime26": 0.2125
+      }
+    }
+  ],
+  "E57_window_means": [
+    {
+      "outer_window": [
+        1,
+        10
+      ],
+      "mean_first_teacher_kl": 0.4641860835482883
+    },
+    {
+      "outer_window": [
+        91,
+        100
+      ],
+      "mean_first_teacher_kl": 0.381636075022987
+    }
+  ],
+  "derived": {
+    "aligned_teacher_kl_first_drop": 0.20771864787807492,
+    "aligned_teacher_kl_last_drop": 0.1975565105354895,
+    "aligned_macro_gain_pp": 8.599583333333335,
+    "fresh_trajectories_at_outer100": 6400,
+    "optimizer_updates_at_outer100": 1600,
+    "paper_fresh_trajectories_per_outer": 4096,
+    "local_fresh_trajectories_per_outer": 64,
+    "paper_to_local_fresh_ratio": 64,
+    "canonical_objective": "KL(p || 0.9*q+0.1*T)/0.1 on EOS-coarsened actions",
+    "causal_attribution_available": false
+  },
+  "logs_revision": "c3b8879746c52f618f978c0a6a57ce44f6bbdfe0",
+  "runs": [
+    {
+      "name": "E55",
+      "run_id": "j5uaal3j",
+      "source_status": "partial_snapshot",
+      "exit_code": null,
+      "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+      "snapshot_end_shanghai": "2026-11-01T20:13:01.918134+08:00",
+      "update_count": 960,
+      "update_outer": 60,
+      "complete_outer": 59,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50
+      ],
+      "sha256": "92352f9696133b6b341111f7161cf5d5075a92f18fef8999f59189cf56971dd5",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261030_094536-j5uaal3j/run-j5uaal3j.wandb"
+    },
+    {
+      "name": "E56",
+      "run_id": "zsnhqzts",
+      "source_status": "partial_snapshot",
+      "exit_code": null,
+      "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+      "snapshot_end_shanghai": "2026-11-01T22:44:10.930995+08:00",
+      "update_count": 1504,
+      "update_outer": 94,
+      "complete_outer": 94,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90
+      ],
+      "sha256": "1881375d1a89ed580c036f9bccd4cb25fd05364e3831e2b5beb0eb8bc40dac48",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261029_234048-zsnhqzts/run-zsnhqzts.wandb"
+    },
+    {
+      "name": "E57",
+      "run_id": "6j5knkmk",
+      "source_status": "finished",
+      "exit_code": 0,
+      "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+      "snapshot_end_shanghai": "2026-11-01T15:40:42.800617+08:00",
+      "update_count": 1600,
+      "update_outer": 100,
+      "complete_outer": 100,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261030_015214-6j5knkmk/run-6j5knkmk.wandb"
+    }
+  ],
+  "literature_source_provenance": {
+    "path": "wandb-logs/MirrorOPD-verl/analysis/e55-e57-long-20261101/topd-comparison.json",
+    "sha256": "315b741b12ddebc19ac781607f4e50293d9f1791fa2fd3b154561819d8ffe5bd",
+    "scope": "Literature fields retained from the earlier verified snapshot; this refresh updates local experiment results only."
+  }
+}

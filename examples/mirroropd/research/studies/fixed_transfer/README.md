@@ -2,7 +2,7 @@
 
 此包把模型身份、数据、训练和评测组织为一份声明式 study，新增配对通过 JSON 计划描述。当前服务于小学生、单卡全参数训练、共享 token 语义的原生 full-vocab reverse KL；不支持的接口由审计拒绝。历史 R1 入口保留在 [boundary](../boundary/README.md)，已完成结果不随新默认改写。
 
-Qwen3 的配置与研究问题见[谱系报告](../../../docs/experiments/teacher-transfer/transfer-mechanism/qwen3/2026-10-29-Qwen3谱系与同构教师吸收.md)。当前 Qwen3 真实模型数值 gate 已通过，六个同尺寸分支已完成 320 步训练，任务准确率评测仍在运行。实际执行为 microbatch4、关闭激活重算；科学设置与其他模型的验证状态以各自回执为准。CPU 测试不能代替 GPU gate。
+Qwen3 的配置与研究问题见[谱系报告](../../../docs/experiments/teacher-transfer/appendix/qwen-lineage-evidence.md)。当前 Qwen3 真实模型数值 gate 已通过，六个同尺寸分支已完成 320 步训练，任务准确率评测仍在运行。实际执行为 microbatch4、关闭激活重算；科学设置与其他模型的验证状态以各自回执为准。CPU 测试不能代替 GPU gate。
 
 ## 架构与身份
 
@@ -140,4 +140,4 @@ CPU 回归覆盖不可变模型身份、缓存错配、损坏尾行、真实 HTT
 
 ## 每个 run 的图谱构建
 
-[figure_pipeline.py](figure_pipeline.py) 从总览来源清单构建 0–320 更新诊断，使用 [figure_data.py](figure_data.py) 统一验证和统计，由 [figure_render.py](figure_render.py) 渲染。CPU 并行、单 run 重画、来源和产物哈希、失败回执及增量复用均由统一入口管理。命令与指标解释见[重绘流程](../../../docs/experiments/teacher-transfer/transfer-mechanism/appendix/figure-plan.md)。此入口不加载模型或启动训练。
+[figure_pipeline.py](figure_pipeline.py) 从总览来源清单构建 0–320 更新诊断，使用 [figure_data.py](figure_data.py) 统一验证和统计，由 [figure_render.py](figure_render.py) 渲染。CPU 并行、单 run 重画、来源和产物哈希、失败回执及增量复用均由统一入口管理。命令与指标解释见[重绘流程](../../../docs/experiments/teacher-transfer/reproduction.md)。此入口不加载模型或启动训练。
