@@ -221,6 +221,14 @@ def preset_catalog() -> dict[str, Preset]:
             pair=replace(QWEN_CHAT, response=7168, student_sequences=8),
             rollout_arm=arm,
         )
+    for number, arm in ((78, "S"), (79, "S0"), (80, "T")):
+        presets[f"E{number}"] = Preset(
+            Budget(100, 16, -1, -1, initial_validation=True, align_seeds=True, original_data=True, lr="1e-6"),
+            method="full_kl",
+            pair=replace(QWEN_CHAT, response=7168, student_sequences=16),
+            rollout_arm=arm,
+            environment=(("TRAIN_BATCH_SIZE", "128"), ("QWEN_PREFIX_PROTOCOL", "source_b128_v1")),
+        )
     return presets
 
 
@@ -427,7 +435,9 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
     prefix_options = []
     if preset and preset.rollout_arm:
         if role:
-            raise ValueError("E63-E68 use their scientific readouts; independent model validation remains under E43")
+            raise ValueError(
+                "Qwen source presets use their scientific readouts; independent model validation remains under E43"
+            )
         if str(root) not in sys.path:
             sys.path.insert(0, str(root))
         from examples.mirroropd.launchers.qwen_prefix import options as prefix_defaults
@@ -622,6 +632,9 @@ def preset_overview() -> str:
             "fusion 每副本并发16/每卡KV24 GiB，current+评估并发16/KV64 GiB；"
             "计算token budget32768；shared_sync保持已支持的参数/优化器卸载。\n"
             "采用main统一原生评估与连续调度；QWEN_EVAL_ROOT 指定新银行。旧HF评估不可混接；八卡性能须实测。",
+            "E78–E80：Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507；current/initial/teacher。"
+            "batch=mini-batch128，100 outer/reuse16，1600更新；默认2卡TP1，可显式配置1/2/4/8卡。"
+            "原生bench0/50/100，MATH500 n4、AMC23 n16、AIME24/25/26 n32；source128和双银行各128，每10轮RKL。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
         ]
@@ -635,7 +648,8 @@ def list_presets() -> str:
             f"{p.pair.student} -> {p.pair.teacher}; cap={p.pair.response}" if p.pair else f"{p.advantage}/{p.policy}"
         )
         if p.rollout_arm:
-            detail += f"; prefix={p.rollout_arm}; default=8 GPUs; scientific readouts"
+            world = 2 if dict(p.environment).get("QWEN_PREFIX_PROTOCOL") == "source_b128_v1" else 8
+            detail += f"; prefix={p.rollout_arm}; default={world} GPUs; scientific readouts"
         if p.kappa is not None:
             detail += f"; full_vocab kappa={p.kappa} eta={p.eta}"
         if p.environment:

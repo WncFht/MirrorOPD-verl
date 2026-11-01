@@ -23,10 +23,9 @@ def plan(argv, env=None):
     return planner.build_plan(args, hydra, {"EXPERIMENT_NAME": "test", **(env or {})})
 
 
-def test_catalog_covers_every_number_without_alias_duplication():
+def test_catalog_preserves_published_numbers_without_alias_duplication():
     catalog = set(planner.PRESETS) | set(planner.ALIASES)
-    highest = max(int(name[1:]) for name in catalog)
-    assert catalog == {f"E{i}" for i in range(1, highest + 1)}
+    assert {f"E{i}" for i in range(1, 69)} | {"E78", "E79", "E80"} <= catalog
     assert set(planner.PRESETS).isdisjoint(planner.ALIASES)
     assert len(planner.MODEL_MATRIX) == 6
     with pytest.raises(FrozenInstanceError):

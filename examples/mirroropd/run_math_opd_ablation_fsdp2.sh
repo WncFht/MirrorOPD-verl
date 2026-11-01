@@ -60,6 +60,7 @@
 # E48-E49          16     256    4096      1e-6    32/64      yes
 # E55-E62          16     100    1600      1e-6    10/-1      no
 # E63-E68          16     40     640       1e-6    -1/-1      yes
+# E78-E80          16     100    1600      1e-6    -1/-1      yes
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
 # 编号别名：E21=E15; E22=E13。
@@ -90,6 +91,8 @@
 # E68     batch fusion
 # 默认每实验8卡；single用8个TP1，fusion用4个TP2；全局batch64、40 outer/reuse16。fusion 每副本并发16/每卡KV24 GiB，current+评估并发16/KV64 GiB；计算token budget32768；shared_sync保持已支持的参数/优化器卸载。
 # 采用main统一原生评估与连续调度；QWEN_EVAL_ROOT 指定新银行。旧HF评估不可混接；八卡性能须实测。
+#
+# E78–E80：Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507；current/initial/teacher。batch=mini-batch128，100 outer/reuse16，1600更新；默认2卡TP1，可显式配置1/2/4/8卡。原生bench0/50/100，MATH500 n4、AMC23 n16、AIME24/25/26 n32；source128和双银行各128，每10轮RKL。
 #
 # E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。
 # END GENERATED EXPERIMENT OVERVIEW

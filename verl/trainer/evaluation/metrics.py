@@ -58,7 +58,8 @@ def readout_metrics(rows, *, baseline=None, previous_history=()):
                 metrics["eval/rkl/source_heldout/reduction_percent"] = 100 * (1 - current["mean"] / initial["mean"])
     previous = {r["id"]: r for r in previous_history}
     paired = [r for r in history if r["id"] in previous]
-    metrics["eval/rkl/history/paired_rows"] = len(paired)
+    if history:
+        metrics["eval/rkl/history/paired_rows"] = len(paired)
     if paired:
         old = [previous[r["id"]] for r in paired]
         if any(a["tokens"] != b["tokens"] for a, b in zip(old, paired, strict=True)):

@@ -12,6 +12,8 @@
 
 R1/JustRL 六种来源最终成绩接近；R1/Polaris 的混合与 teacher 来源低于 current，且更长回答和截断同时出现。完整数值、统计单位与限制归各报告，周报只引用摘要。
 
+[E78–E80 数据扩展](native-qwen.md#source-b128-v1)比较 current、initial、teacher：batch128、reuse16、100 outer，按可交接资源先用两卡或单卡推进；旧六组结果保持原协议。
+
 ## 历史与相关研究
 
 [五种前缀原计划](archive/2026-10-30-E20设置下的五种前缀对照.md)已被六种来源及共同评估协议替代；[S0 无评估诊断](archive/2026-10-30-S0无评估优化诊断.md)只说明旧优化运行，不能推断 accuracy。执行沿革和失败记录保留在十二组报告及其 manifest。

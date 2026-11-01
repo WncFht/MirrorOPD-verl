@@ -32,6 +32,8 @@ from .trajectory import select_panel, trajectory_index
 async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_configs=(), resume_generation=None):
     require_current_generation(config, independent_engine=True)
     options = EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
+    if producer == "source" and not options.source_enabled:
+        raise ValueError("Source evaluation is disabled; enable source_enabled to generate its bank")
     root = ArtifactStore(options.bootstrap)
     if not root.manifest_path.exists():
         root = ArtifactStore.create(root.root, kind="evaluation_bootstrap", metadata={})
@@ -103,6 +105,8 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
                 if source_config.actor_rollout_ref.model.path != initial_model.path:
                     raise ValueError("Shared source generation requires the same initial student")
                 source_options = EvaluationConfig.parse(readout_options(source_config, EvaluationCoordinator))
+                if not source_options.source_enabled:
+                    raise ValueError("Additional source configurations must enable source_enabled")
                 source_root = ArtifactStore(source_options.bootstrap)
                 if not source_root.manifest_path.exists():
                     source_root = ArtifactStore.create(source_root.root, kind="evaluation_bootstrap", metadata={})
@@ -138,11 +142,11 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
             options.protocols,
             producer=producer,
             model_identity=model_hash,
-            on_batch=collector.submit,
             progress=progress,
             resume_from=resume_generation,
+            on_batch=collector.submit,
         )
-        if producer == "initial":
+        if producer == "initial" and options.source_enabled:
             source = DatasetSpec(
                 "source_heldout", options.training_domain, options.source_file, "math", protocol="source"
             )
@@ -179,7 +183,10 @@ def finalize_bootstrap(config):
     root = ArtifactStore(options.bootstrap)
     student = model_identity(config.actor_rollout_ref.model.path)
     teacher = model_identity(config.distillation.teacher_models.teacher_model.model_path)
-    for child, expected in (("initial", student), ("source", student), ("teacher", teacher)):
+    producers = {"initial": student, "teacher": teacher}
+    if options.source_enabled:
+        producers["source"] = student
+    for child, expected in producers.items():
         store = ArtifactStore(root.root / child)
         manifest = store.manifest(complete=True)
         if manifest["metadata"]["model_identity"] != expected:
@@ -222,10 +229,7 @@ def finalize_bootstrap(config):
         if accuracy["metadata"].get("generation_sha256") != file_sha256(generated.manifest_path):
             raise ValueError("Bootstrap accuracy is not bound to its immutable generation artifact")
     contract = bootstrap_contract(options, student=student, teacher=teacher)
-    children = {
-        name: file_sha256(ArtifactStore(root.root / name).manifest_path)
-        for name in ("initial", "source", "teacher", "initial-accuracy", "teacher-accuracy")
-    }
+    children = {name: file_sha256(ArtifactStore(root.root / name).manifest_path) for name in options.bootstrap_children}
     root.finish(metadata={"contract": contract, "contract_sha256": identity(contract), "children_sha256": children})
 
 
@@ -244,6 +248,11 @@ def main():
     if args.resume_generation and args.producer not in {"initial", "teacher"}:
         parser.error("--resume-generation requires initial or teacher")
     config = OmegaConf.load(args.config)
+    if (
+        args.producer == "source"
+        and not EvaluationConfig.parse(readout_options(config, EvaluationCoordinator)).source_enabled
+    ):
+        parser.error("Source evaluation is disabled; set source_enabled=true")
     if args.producer == "finalize":
         finalize_bootstrap(config)
         return

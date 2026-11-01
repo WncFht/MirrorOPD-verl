@@ -23,7 +23,7 @@ from .config import EvaluationConfig
 from .execution import hidden_dtype_bytes
 from .generation import NativeGenerator
 from .generation_contract import engine_contract, require_current_generation
-from .identity import bootstrap_contract, model_identity
+from .identity import active_bootstrap_contract, bootstrap_contract, model_identity
 from .plan import compile_plan
 from .reporting import evaluation_metrics
 from .scoring import score_native_rows
@@ -77,22 +77,30 @@ class EvaluationCoordinator(ReadoutCallback):
         self.bootstrap = ArtifactStore(self.options.bootstrap)
         frozen = self.bootstrap.manifest(complete=True)
         expected_generation = engine_contract(config.actor_rollout_ref.rollout, self.input_model, self.input_model)
-        for name in ("initial", "source"):
+        for name in ("initial", "source") if self.options.source_enabled else ("initial",):
             recorded = ArtifactStore(self.bootstrap.root / name).manifest(complete=True)["metadata"]
             if recorded.get("engine_contract_id") != identity(expected_generation):
                 raise ValueError("Initial bank and current generation engine have different effective protocols")
-        for name in ("initial", "source", "teacher", "initial-accuracy", "teacher-accuracy"):
+        for name in self.options.bootstrap_children:
             child = ArtifactStore(self.bootstrap.root / name)
             if frozen["metadata"].get("children_sha256", {}).get(name) != file_sha256(child.manifest_path):
                 raise ValueError("Bootstrap child manifest changed or was not bound")
         contract = bootstrap_contract(self.options, student=self.student_identity, teacher=self.teacher_identity)
-        if frozen["metadata"].get("contract_sha256") != identity(contract):
+        stored_contract = frozen["metadata"]["contract"]
+        if frozen["metadata"].get("contract_sha256") != identity(stored_contract):
+            raise ValueError("Bootstrap contract digest differs")
+        if identity(active_bootstrap_contract(stored_contract, source_enabled=self.options.source_enabled)) != identity(
+            contract
+        ):
             raise ValueError("Bootstrap models, question sets or generation protocols differ")
         self.fixed = {}
-        for bank, child in (("source_heldout", "source"), ("public_initial", "initial"), ("public_teacher", "teacher")):
+        banks = {"public_initial": "initial", "public_teacher": "teacher"}
+        if self.options.source_enabled:
+            banks["source_heldout"] = "source"
+        for bank, child in banks.items():
             refs = trajectory_index(ArtifactStore(self.bootstrap.root / child), bank=bank)
             self.fixed[bank] = refs if bank == "source_heldout" else select_panel(refs, self.options.datasets)
-        if len(self.fixed["source_heldout"]) != self.options.source_count:
+        if self.options.source_enabled and len(self.fixed.get("source_heldout", [])) != self.options.source_count:
             raise ValueError("Source bank does not cover the declared source holdout")
         self.store = ArtifactStore.create(
             self.options.output,
@@ -137,7 +145,7 @@ class EvaluationCoordinator(ReadoutCallback):
     def on_before_weight_sync(self, trainer, batch, outer):
         rows = capture_rows(batch, outer)
         known = {r["source_id"] for prior in self.batches.values() for r in prior}
-        known.update(r["source_id"] for r in self.fixed["source_heldout"])
+        known.update(r["source_id"] for r in self.fixed.get("source_heldout", []))
         if known.intersection(r["source_id"] for r in rows):
             raise ValueError("Training repeated a question or overlaps source heldout")
         shard = f"trajectories/outer-{outer:03d}.parquet"
@@ -166,12 +174,13 @@ class EvaluationCoordinator(ReadoutCallback):
             }
             for i, row in enumerate(rows)
         ]
-        self.history = balanced_history(self.batches, self.options.history_size, self.options.seed)
-        self.store.write_rows(
-            f"history/outer-{outer:03d}.parquet",
-            ({k: r.get(k) for k in HISTORY.names} for r in self.history),
-            schema=HISTORY,
-        )
+        if self.options.history_enabled:
+            self.history = balanced_history(self.batches, self.options.history_size, self.options.seed)
+            self.store.write_rows(
+                f"history/outer-{outer:03d}.parquet",
+                ({k: r.get(k) for k in HISTORY.names} for r in self.history),
+                schema=HISTORY,
+            )
         self.pending_outer, self.before_sync = outer, True
         try:
             # Training hidden states remain live until the native outer cleanup.
@@ -194,6 +203,9 @@ class EvaluationCoordinator(ReadoutCallback):
         # Structured stdout is picked up by the existing run logger; no second service.
         print("EVALUATION_PROGRESS " + json.dumps(value, sort_keys=True), flush=True)
 
+    def checkpoint_references(self):
+        return self.fixed.get("source_heldout") or self.fixed.get("public_initial", [])
+
     def validate(self, trainer, *, live_payload_bytes=0):
         outer = self.pending_outer
         if outer in self.completed:
@@ -202,6 +214,9 @@ class EvaluationCoordinator(ReadoutCallback):
         plan = compile_plan(
             self.options, outer=outer, total=trainer.total_training_steps, optimizer_steps=trainer.actor_optimizer_step
         )
+        if not plan.tasks and not (outer == trainer.total_training_steps and self.options.final_export):
+            self.completed.add(outer)
+            return {}
         service = trainer.rollout_service
         if not hasattr(service, "ensure_current"):
             raise ValueError(
@@ -294,7 +309,7 @@ class EvaluationCoordinator(ReadoutCallback):
                 metrics.update(
                     final_model_export(
                         trainer,
-                        self.fixed["source_heldout"],
+                        self.checkpoint_references(),
                         hidden_size=self.hidden_size,
                         budget=self.options.score,
                         destination=self.store.root / "final-model",

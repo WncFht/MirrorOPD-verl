@@ -22,8 +22,8 @@ def compile_plan(config, *, outer, total, optimizer_steps):
         return EvaluationPlan(
             0,
             optimizer_steps,
-            (
-                "source_heldout",
+            (("source_heldout",) if config.source_enabled else ())
+            + (
                 "public_initial",
                 "public_teacher",
                 "accuracy",
@@ -33,9 +33,9 @@ def compile_plan(config, *, outer, total, optimizer_steps):
             False,
         )
     tasks = []
-    if config.schedules["source"].due(outer, total):
+    if config.source_enabled and config.schedules["source"].due(outer, total):
         tasks.append("source_heldout")
-    if outer > 0 and config.schedules["history"].due(outer, total):
+    if config.history_enabled and outer > 0 and config.schedules["history"].due(outer, total):
         tasks.append("history")
     if config.schedules["banks"].due(outer, total):
         tasks.extend(("public_initial", "public_teacher"))

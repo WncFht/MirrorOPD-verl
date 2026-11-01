@@ -19,6 +19,8 @@ def config(**changes):
         {
             "output": "out",
             "source_file": "source",
+            "source_enabled": True,
+            "history_enabled": True,
             "bootstrap": "bootstrap",
             "datasets": [{"name": "gpqa", "domain": "science", "path": "gpqa.parquet", "verifier": "gpqa", "n": 4}],
             "protocols": {"source": {"max_new_tokens": 7168}, "public": {}},
