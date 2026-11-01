@@ -4,27 +4,28 @@
 
 ## 字段来源、布局与消费者
 
-以下形状按一条样本描述：prompt 长度为 $P$，response 长度为 $L$，完整长度 $N=P+L$，mask 选中的有效预测行数为 $n$。TQ/worker 通常以 jagged NestedTensor 保存变长样本；`[N]` 不表示所有样本都被 padding 到同一个长度。
+以下 token/hidden 字段形状按一条样本描述：prompt 长度为 $P$，response 长度为 $L$，完整长度 $N=P+L$，mask 选中的有效预测行数为 $n$。TQ/worker 通常以 jagged NestedTensor 保存变长样本；`[N]` 不表示所有样本都被 padding 到同一个长度。
 
-| 字段                                            | 单样本布局                                    | 生产者                                                                                | 消费者与生命周期                                                     |
-| ----------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `prompts/responses`                             | `[P]`、`[L]` token IDs                        | AgentLoop                                                                             | teacher/actor 输入与 response 切片；本轮固定                         |
-| `input_ids/position_ids`                        | 完整输入 `[N]`                                | AgentLoop TQ postprocess                                                              | 师生 backbone；本轮固定                                              |
-| `loss_mask`                                     | response target `[L]`                         | postprocess 初始赋为 `response_mask`                                                  | 全局分母；所有 full-vocab 目标选行                                   |
-| `response_mask`                                 | response target `[L]`                         | AgentLoop，vanilla correction 可改写                                                  | sampled loss 实际应用位置                                            |
-| `rollout_log_probs`                             | response target `[L]`，FP32                   | vLLM 返回，经 `AgentLoopOutput.as_dict` 存储                                          | behavior；显式 sampled 与 sampled MDPO 必需；full-vocab 入口关闭收集 |
-| `teacher_ids/teacher_logprobs`                  | 完整预测位置 `[N,1]`                          | shared teacher scorer                                                                 | sampled 教师监督；本轮固定                                           |
-| `old_log_probs`                                 | response target `[L]`                         | Legacy 由 Trainer 评分；sampled MDPO eta<1 由 worker scope 评分；bypass 仅用于 legacy | vanilla 分母、旧模式诊断或 MDPO 冻结 q；本轮固定                     |
-| `advantages/returns`                            | response target `[L]`                         | Trainer 的通用 advantage 步骤                                                         | 任务 PPO；当前纯 OPD 最终目标不使用                                  |
-| `teacher_hidden/teacher_positions`              | `[n,d_t]`、`[n]`                              | full-vocab teacher engine                                                             | actor 按样本读取；本轮固定                                           |
-| `anchor_hidden/anchor_positions/anchor_version` | `[n,d_s]`、`[n]`、调用标识                    | actor 调用开始时的 no-grad capture，经 TQ 保存                                        | full MDPO eta<1 与所有 BPO；版本和位置均需匹配                       |
-| `engine.mirror_anchor_head`                     | `[V_s,d_s]`                                   | wrapped head callback 内独立复制                                                      | 调用级 holder，未注册为模型参数，不进入 TQ/checkpoint                |
-| `full_vocab.objective_sum`                      | 未除 eta 的标量 sum/有效行数                  | full objective dispatcher                                                             | loss 层只除一次 eta，再沿用全局分母                                  |
-| `mirror_statistics`                             | 各诊断的未除 eta 标量 sum                     | engine 汇总 `token_diagnostics`                                                       | loss 层构造全局 ratio 观测；当前没有诊断位置桶                       |
-| `mirror_position_sums/counts`                   | `[10]`，原始 objective sum / 有效 token count | engine 按 response 相对位置分桶                                                       | loss 层对 sums 除 eta；不进入反传                                    |
-| `sample_keys/sample_partition`                  | 样本身份/partition metadata                   | TQ bridge                                                                             | shuffle 后定位 hidden；不参与数值计算                                |
-| `model_output['log_probs']`                     | 完整预测位置，packed/nested                   | 每次 student forward                                                                  | sampled loss；该次 forward 的计算图                                  |
-| `full_vocab.observations`                       | 标量 sum/有效行数                             | Full-KL head 回调                                                                     | 训练归一化与原始 KL 观测                                             |
+| 字段                                            | 布局／统计范围                          | 生产者                                                                                | 消费者与生命周期                                                     |
+| ----------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `prompts/responses`                             | `[P]`、`[L]` token IDs                  | AgentLoop                                                                             | teacher/actor 输入与 response 切片；本轮固定                         |
+| `input_ids/position_ids`                        | 完整输入 `[N]`                          | AgentLoop TQ postprocess                                                              | 师生 backbone；本轮固定                                              |
+| `loss_mask`                                     | response target `[L]`                   | postprocess 初始赋为 `response_mask`                                                  | 全局分母；所有 full-vocab 目标选行                                   |
+| `response_mask`                                 | response target `[L]`                   | AgentLoop，vanilla correction 可改写                                                  | sampled loss 实际应用位置                                            |
+| `rollout_log_probs`                             | response target `[L]`，FP32             | vLLM 返回，经 `AgentLoopOutput.as_dict` 存储                                          | behavior；显式 sampled 与 sampled MDPO 必需；full-vocab 入口关闭收集 |
+| `teacher_ids/teacher_logprobs`                  | 完整预测位置 `[N,1]`                    | shared teacher scorer                                                                 | sampled 教师监督；本轮固定                                           |
+| `old_log_probs`                                 | response target `[L]`                   | Legacy 由 Trainer 评分；sampled MDPO eta<1 由 worker scope 评分；bypass 仅用于 legacy | vanilla 分母、旧模式诊断或 MDPO 冻结 q；本轮固定                     |
+| `advantages/returns`                            | response target `[L]`                   | Trainer 的通用 advantage 步骤                                                         | 任务 PPO；当前纯 OPD 最终目标不使用                                  |
+| `teacher_hidden/teacher_positions`              | `[n,d_t]`、`[n]`                        | full-vocab teacher engine                                                             | actor 按样本读取；本轮固定                                           |
+| `anchor_hidden/anchor_positions/anchor_version` | `[n,d_s]`、`[n]`、调用标识              | actor 调用开始时的 no-grad capture，经 TQ 保存                                        | full MDPO eta<1 与所有 BPO；版本和位置均需匹配                       |
+| `engine.mirror_anchor_head`                     | `[V_s,d_s]`                             | wrapped head callback 内独立复制                                                      | 调用级 holder，未注册为模型参数，不进入 TQ/checkpoint                |
+| `full_vocab.objective_sum`                      | 当前 micro-batch 的可微未缩放标量       | head 回调经 FullVocabOutput 打包                                                      | LossContext 使用全局分母，随后除以 divisor                           |
+| `full_vocab.divisor`                            | 标量；一般 MDPO/BPO 为 η，endpoint 为 1 | 已解析目标                                                                            | 只缩放可微 objective；不缩放 teacher/anchor/target 诊断              |
+| `sample_keys/sample_partition`                  | 样本身份/partition metadata             | TQ bridge                                                                             | shuffle 后定位 hidden；不参与数值计算                                |
+| `model_output['log_probs']`                     | 完整预测位置，packed/nested             | 每次 student forward                                                                  | sampled loss；该次 forward 的计算图                                  |
+| `full_vocab.observations`                       | 已命名的 detached Observation 字典      | FullVocabOutput.from_result                                                           | 合并 numerator/count 后发布标量和位置指标，不进入反传                |
+
+表中的 `full_vocab.*` 是一次 micro-batch 调用的返回对象，不是 TQ 中的逐样本字段。有效行数由 Observation 的统计状态和调用级 LossContext 承载；当前接口没有独立的 mirror_statistics 或 mirror_position_* 传输键。
 
 `teacher_ids` 保持通用教师输出协议；当前 sampled k1 loss 使用已对齐的 `teacher_logprobs`，不再按 `teacher_ids` 做一次 gather。当前 student 与 teacher 的 sampled log-prob 都已由各自 forward 按下一 token target 取出。
 
