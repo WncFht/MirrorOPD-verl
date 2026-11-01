@@ -2,7 +2,7 @@
 
 普通训练请从[公共启动说明](../../docs/infra/rollout/fusion/usage.md)进入；这里维护专项探针与验收工具。历史命令的版本和参数按相应记录解释。
 
-这些工具服务于[双融合实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)。当前验收尚未全部完成；工具可运行不等于对应 gate 已通过。
+这些工具服务于[双融合实现与验收记录](../../docs/infra/rollout/fusion/archive/2026-10-28-Rollout双融合实现与验收记录.md)。当前验收尚未全部完成；工具可运行不等于对应 gate 已通过。
 
 当前开发使用下文“原生 vLLM 开发入口”，已授权物理 GPU 0–7；具体任务通过独占锁领取分配的设备。模型和数据均从本地加载，输出目录必须是新目录。旧 HF 性能、回归及短负载脚本也已接入同一个受保护的 GPU 6/7 分配入口，默认单卡；Python 工具校验可见设备与声明数量一致。下面的 HF 命令保留历史工作负载定义，使用当前资源重跑不等于复现原四卡性能。
 
@@ -83,7 +83,7 @@ Tokens/s 只计有效 response token，不把两模型的 forward token 相加�
 
 ## 原生 vLLM 单卡开发
 
-新接口默认使用 `rollout_policy.execution.backend=vllm_fusion`；HF 仅由 `backend=hf_fusion` 显式选择。旧字段必须按[统一接口实施计划](../../docs/infra/rollout/fusion/2026-10-31-Rollout统一接口实施计划.md)迁移，不能直接交给新运行时。已验证的短训练范围包括单 actor rank 的 Dense/MoE current/initial，以及双 actor rank 的 Dense current（一个 TP2 或两个 TP1 replica）；其他双卡组合仍在验收。原生组件支持 Qwen2 dense 配对，以及 Qwen3 dense 第一组件与 dense/MoE 第二组件；current 接收器映射到第一组件。原生模型保留各自配置、head 和 KV；公共 sampler 保留原策略的 top-p 边界。正式支持范围以[实现与验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md)为准。
+新接口默认使用 `rollout_policy.execution.backend=vllm_fusion`；HF 仅由 `backend=hf_fusion` 显式选择。旧字段必须按[统一接口实施计划](../../docs/infra/rollout/fusion/archive/2026-10-31-Rollout统一接口实施计划.md)迁移，不能直接交给新运行时。已验证的短训练范围包括单 actor rank 的 Dense/MoE current/initial，以及双 actor rank 的 Dense current（一个 TP2 或两个 TP1 replica）；其他双卡组合仍在验收。原生组件支持 Qwen2 dense 配对，以及 Qwen3 dense 第一组件与 dense/MoE 第二组件；current 接收器映射到第一组件。原生模型保留各自配置、head 和 KV；公共 sampler 保留原策略的 top-p 边界。正式支持范围以[实现与验收记录](../../docs/infra/rollout/fusion/archive/2026-10-28-Rollout双融合实现与验收记录.md)为准。
 
 本机入口 `run_fusion_local_fsdp2.sh` 默认使用物理 GPU 7；`FUSION_GPUS` 接受 0–7 中不重复的显式列表，例如 `0` 或 `4,5`。`resource_guard.py` 逐卡核对 UUID、取得排他锁并拒绝既有计算任务。锁只由监护进程持有，内部入口核对其祖先进程身份和锁归属；子进程不继承锁。SIGTERM/SIGINT 仅转发给该命令的进程组，命令退出和设备清理期间继续持锁。它不清理其他 Ray 作业。环境位于仓外 `envs/mirroropd-fusion`；在仓库根目录运行：
 
@@ -118,7 +118,7 @@ Fusion 训练服务与独立组件探针统一固定 `TRITON_ATTN`，实际各�
 
 `audit_native_lifecycle.py --previous-actor-checkpoint <恢复前 actor 目录>` 可同时核对恢复前后保存的 CPU 参数分片。它检查真实数值变化并分别报告 FP32 状态和 BF16 推理视图中的变化，不能仅以更新计数推进推断权重已变化。`probe_hf_reference.py` 提供独立 HF BF16/FlashAttention 全前缀参考；其分布距离与选中概率差异用于跨后端诊断，不沿用旧 HF 阈值作为 native 引擎门槛，student 的七点真实长历史参考已执行，两组 teacher 参考也已完成，实际差异与范围见验收记录。
 
-Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已核对，组合模型保留不同宽度的原生 head，只对生成视图对齐并施加共同合法支持。RKL scorer 的完整 teacher head 不变。两组真实配对已通过短生成、采样 oracle、独立 native 组件对照、定向 refit 与 batch2/cap32/reuse16 两轮训练；正式负载和全部六种来源仍待验收，证据见[当前验收记录](../../docs/infra/rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md#qwen2-实验配对)。R1 的独立生成探针须显式传入 `--stop-token-ids 151643`，不能沿用 Qwen3 的默认停止集合。实验设置见[E20 五种前缀对照](../../docs/experiments/rollout-policy/2026-10-30-E20设置下的五种前缀对照.md)。
+Qwen2 实验兼容正在开发：R1/JustRL/Polaris 的共同 token-ID 映射已核对，组合模型保留不同宽度的原生 head，只对生成视图对齐并施加共同合法支持。RKL scorer 的完整 teacher head 不变。两组真实配对已通过短生成、采样 oracle、独立 native 组件对照、定向 refit 与 batch2/cap32/reuse16 两轮训练；正式负载和全部六种来源仍待验收，证据见[当前验收记录](../../docs/infra/rollout/fusion/archive/2026-10-28-Rollout双融合实现与验收记录.md#qwen2-实验配对)。R1 的独立生成探针须显式传入 `--stop-token-ids 151643`，不能沿用 Qwen3 的默认停止集合。实验设置见[E20 五种前缀对照](../../docs/experiments/rollout-policy/archive/2026-10-30-E20设置下的五种前缀对照.md)。
 
 ## E20 六种前缀入口
 
@@ -173,4 +173,4 @@ CUDA_VISIBLE_DEVICES='' PYTHONPATH=. ../envs/mirroropd-fusion/bin/python \
 
 `summarize_topology.py` 检查全局身份覆盖、路由、种子、完整且有限的行为概率、停止原因、TP 身份、累计抢占数和两卡资源区间。一次全局完整批用于预热，正式候选至少再测三批。该工具只证明固定 checkpoint 的生成行为与成本，训练/refit/恢复另行验收。
 
-P（R1-1.5B＋Polaris-7B）与 Q（Qwen3-1.7B non-thinking＋4B）的两种拓扑已通过 batch4/cap32 smoke，并完成 logit fusion 的 batch64/cap7168 自然生成；TP2 各保留三次预热后测量，两个 TP1 各为一次筛选。两组 TP2 的真实采样 FP64 oracle 已通过；独立 native 组件的 TP 校准及这些候选的真实训练/refit 另行验收。数值、配置和逐次范围见[拓扑测量结果](../../docs/infra/rollout/fusion/2026-10-28-vLLM双模型融合重构与优化方案.md#85-完整自然生成的并发与拓扑选择)。完整负载启用 sleep allocator，与 colocated 路径一致。
+P（R1-1.5B＋Polaris-7B）与 Q（Qwen3-1.7B non-thinking＋4B）的两种拓扑已通过 batch4/cap32 smoke，并完成 logit fusion 的 batch64/cap7168 自然生成；TP2 各保留三次预热后测量，两个 TP1 各为一次筛选。两组 TP2 的真实采样 FP64 oracle 已通过；独立 native 组件的 TP 校准及这些候选的真实训练/refit 另行验收。数值、配置和逐次范围见[拓扑测量结果](../../docs/infra/performance/inference/2026-11-01-Token融合热点与并发测量.md#85-完整自然生成的并发与拓扑选择)。完整负载启用 sleep allocator，与 colocated 路径一致。

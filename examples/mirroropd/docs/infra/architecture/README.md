@@ -84,6 +84,6 @@ Mirror 的实现、已通过测试与[剩余验证范围](../numerics/mirror-obj
 
 ## 四域评估与模型扩展
 
-[四域 RKL 接入方案](2026-10-31-四域RKL实验的verl接入方案.md)连接配置、执行存储、代码走读与决策记录。统一协调器、公共 bank、多频率调度和最终 model-only 导出已完成短程集成验收；完整 50 outer 实验仍在执行准备中。当前入口和限制见[评估包合同](../../../../../verl/trainer/evaluation/README.md)，证据由[实施状态](evaluation/代码走读与实施计划.md)维护。
+原生评估的版本、能力与验收范围统一由[评估状态入口](evaluation/README.md)维护。已提交 main 的协调器、公共 bank 和 model-only 导出，与工作区新增的共同支持、模型 adapter 和 ID 映射分别记录；不能将未提交实现视为当前提交已发布。
 
-[动作空间与模型兼容](evaluation/动作空间与模型兼容.md)审查训练／只读 RKL、EOS 合并、跨尺寸支持、tokenizer 和模型 adapter 的共同边界，给出数值反例与分阶段改进方案。共同支持条件 RKL、Llama 原生 adapter 和通用 ID 映射仍为待实施能力；旧研究后端的结果不替代原生路径验收。
+[四域 RKL 接入方案](2026-10-31-四域RKL实验的verl接入方案.md)保留设计关系；[实施记录](evaluation/代码走读与实施计划.md)保留分阶段证据，旧研究读出结果不替代新原生路径验收。
