@@ -30,6 +30,9 @@ def test_greedy_reward_baseline_does_not_request_score_centering_heads():
 
 
 class _StubTrainer(PPOTrainer):
+    # These fixtures bypass the production constructor.
+    readout_callback = None
+
     def on_step_end(self):
         pass
 
@@ -249,6 +252,7 @@ def test_update_actor_passes_score_centering_flag(score_centering):
     trainer = _StubTrainer.__new__(_StubTrainer)
     trainer.config = OmegaConf.create(
         {
+            "trainer": {},
             "actor_rollout_ref": {
                 "actor": {
                     "ppo_mini_batch_size": 2,
@@ -260,7 +264,7 @@ def test_update_actor_passes_score_centering_flag(score_centering):
                     "policy_loss": {"rollout_correction": {"score_centering": score_centering}},
                 },
                 "rollout": {"n": 4, "temperature": 1.0},
-            }
+            },
         }
     )
     trainer.actor_rollout_wg = MagicMock()
@@ -277,6 +281,7 @@ def _progress_trainer():
     trainer.actor_optimizer_step_attempts = trainer.actor_optimizer_step = 0
     trainer.config = OmegaConf.create(
         {
+            "trainer": {},
             "actor_rollout_ref": {
                 "actor": {
                     "ppo_mini_batch_size": 64,
@@ -288,7 +293,7 @@ def _progress_trainer():
                     "policy_loss": {},
                 },
                 "rollout": {"n": 1, "temperature": 1.0},
-            }
+            },
         }
     )
     trainer.actor_rollout_wg = MagicMock()

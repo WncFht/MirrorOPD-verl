@@ -10,7 +10,7 @@ import torch
 import transfer_queue as tq
 
 from verl.experimental.rollout_policy.collector import UnsafeDrainError
-from verl.trainer.distillation.readout import put_fixed_rows
+from verl.trainer.evaluation.native import put_fixed_rows
 
 from .plan import payload_windows
 

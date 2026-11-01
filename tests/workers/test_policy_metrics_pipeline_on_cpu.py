@@ -163,6 +163,7 @@ def test_actual_updates_microbatches_scheduler_and_log_coordinates(monkeypatch, 
         return TrainingWorker.train_mini_batch(worker, data)
 
     trainer = Trainer.__new__(Trainer)
+    trainer.readout_callback = None
     trainer.config = OmegaConf.create(
         {
             "trainer": {"metrics_quantile_interval": interval},

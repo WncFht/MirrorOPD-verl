@@ -23,6 +23,9 @@ from verl.trainer.ppo.v1.trainer_base import PPOTrainer
 
 
 class _StubTrainer(PPOTrainer):
+    # These fixtures bypass the production constructor.
+    readout_callback = None
+
     def on_step_end(self):
         pass
 

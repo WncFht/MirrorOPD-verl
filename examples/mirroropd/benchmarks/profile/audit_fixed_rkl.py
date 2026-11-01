@@ -35,7 +35,9 @@ def audit(run):
     outers = config["trainer"]["total_training_steps"]
     batch = config["data"]["train_batch_size"]
     reuse = config["actor_rollout_ref"]["actor"]["ppo_epochs"]
-    options = config["trainer"]["rkl_readout"]
+    # Offline reader: historical configuration remains evidence, never a runtime fallback.
+    key = "source_history_readout" if "source_history_readout" in config["trainer"] else "rkl_readout"
+    options = config["trainer"][key]
     root = run / "readout"
     modern = (root / "manifest.json").exists()
     store = ArtifactStore(root) if modern else None

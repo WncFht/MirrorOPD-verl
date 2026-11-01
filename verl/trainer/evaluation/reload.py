@@ -7,14 +7,18 @@ from pathlib import Path
 
 from omegaconf import OmegaConf
 
+from verl.trainer.ppo.readout_callback import ReadoutCallback
+
 from .artifacts import EVAL_RKL, ArtifactStore, file_sha256
 from .config import ScoreBudget, strict_record
 from .scoring import score_native_rows
 from .trajectory import load_trajectories, trajectory_index
 
 
-class HFReloadReadout:
+class HFReloadReadout(ReadoutCallback):
     """Use only with a new val_only trainer whose student path is the final HF export."""
+
+    handles_validation = True
 
     def __init__(self, *, config):
         self.options = OmegaConf.to_container(config.trainer.hf_reload_readout, resolve=True)
@@ -37,7 +41,7 @@ class HFReloadReadout:
             },
         )
 
-    def validate_fixed_rkl(self, trainer):
+    def validate(self, trainer):
         from transformers import AutoConfig
 
         event = ArtifactStore(self.options["reference_event"])
@@ -72,6 +76,3 @@ class HFReloadReadout:
         metrics = {"eval/checkpoint/hf_reload_verified": 1, "eval/checkpoint/hf_reload_max_rkl_error": max(errors)}
         self.store.finish(metadata={"metrics": metrics, "timing": timing, "rtol": 1e-4, "atol": 1e-6})
         return metrics
-
-    def on_readout(self, trainer, outer):
-        return {}
