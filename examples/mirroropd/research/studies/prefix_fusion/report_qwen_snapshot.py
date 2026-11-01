@@ -172,7 +172,9 @@ def collect(root, out):
     endpoints = ("initial", *eligible, "teacher")
     comparisons = [(a, "initial") for a in eligible]
     if "S" in eligible:
-        comparisons += [("S", a) for a in eligible if a != "S"]
+        comparisons += [("S", a) for a in eligible if a not in {"S", "S0"}]
+        if "S0" in eligible:
+            comparisons.append(("S0", "S"))
     if "LM" in eligible and "PM" in eligible:
         comparisons.append(("LM", "PM"))
     result["accuracy"], result["paired_accuracy"], prompts = accuracy(
@@ -314,6 +316,7 @@ def figures(summary, updates, outers, risks, destination, style):
             [r["mean_length"] for r in rs],
             color=colors[arm],
             lw=1.5,
+            ls=":" if arm == "TM" else "-",
             label=f"{arm}: {LABELS[arm]}",
         )
         rs = [r for r in rs if r["outer"] > 1 and r["outer"] % 5]
@@ -324,6 +327,7 @@ def figures(summary, updates, outers, risks, destination, style):
             marker="o",
             ms=3,
             lw=1,
+            ls=":" if arm == "TM" else "-",
             label=f"{arm}: {LABELS[arm]}",
         )
     for ax, ylabel, title in zip(
@@ -346,7 +350,16 @@ def figures(summary, updates, outers, risks, destination, style):
         for i, name in enumerate(endpoints):
             value = 100 * acc[name]["macro5"]
             lo, hi = np.array(acc[name]["macro5_ci95"]) * 100
-            axes[0].bar(i, value, color=acc_colors[name], label=display[name], width=0.65)
+            axes[0].bar(
+                i,
+                value,
+                color=acc_colors[name],
+                label=display[name],
+                width=0.65,
+                hatch="///" if name == "initial" else None,
+                edgecolor=fv.NEUTRALS["vink"],
+                linewidth=0.4,
+            )
             interval = axes[0].errorbar(
                 i, value, yerr=[[value - lo], [hi - value]], fmt="none", color=fv.NEUTRALS["vink"], capsize=3
             )
@@ -361,7 +374,7 @@ def figures(summary, updates, outers, risks, destination, style):
             title="Completed endpoints only",
         )
         axes[0].grid(axis="y", alpha=0.2)
-        pairs = [p for p in ["S-LM", "S-PM", "LM-PM"] if p in summary["paired_accuracy"]]
+        pairs = [p for p in ["S0-S", "S-LM", "S-PM", "S-T", "LM-PM"] if p in summary["paired_accuracy"]]
         for i, key in enumerate(pairs):
             item = summary["paired_accuracy"][key]
             value = item["estimate"] * 100
