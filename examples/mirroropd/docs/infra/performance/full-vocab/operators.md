@@ -29,7 +29,7 @@
 | precompute，chunk1024       |        159.188 |                 9.649 |
 | fused，chunk1024            |         23.234 |                 3.850 |
 
-每个 backend 预热两次、测量五次，保留全部样本。单独的 chunk512 trace 中，GPU kernel 数为 1299/115，kernel duration 总和为 157.774/26.070 ms；这是 head-only trace，不是完整 outer 时间。512 位置的独立 dense 对照及 4096 位置的一致性检查均通过。Polaris 的 hidden3584/vocab152064 异构 head 也完成全部对照：4096 位置、chunk512 的普通/fused 中位数为 185.635/46.651 ms，chunk1024 为 176.078/40.662 ms；fused allocated 峰值分别为 3.429/4.447 GiB。两组 × 两种 chunk × 512/4096 位置共八组均通过所声明范围的检查。J 的 fused/chunk1024 两轮完整训练 profile 已完成，更新计数和版本审计通过；端到端观测与差异范围见[融合验收记录](../../rollout/fusion/2026-10-28-Rollout双融合实现与验收记录.md#qwen2-实验配对)。最终参数仍需结合其他来源检查、正式重复及剩余候选验收确定。
+每个 backend 预热两次、测量五次，保留全部样本。单独的 chunk512 trace 中，GPU kernel 数为 1299/115，kernel duration 总和为 157.774/26.070 ms；这是 head-only trace，不是完整 outer 时间。512 位置的独立 dense 对照及 4096 位置的一致性检查均通过。Polaris 的 hidden3584/vocab152064 异构 head 也完成全部对照：4096 位置、chunk512 的普通/fused 中位数为 185.635/46.651 ms，chunk1024 为 176.078/40.662 ms；fused allocated 峰值分别为 3.429/4.447 GiB。两组 × 两种 chunk × 512/4096 位置共八组均通过所声明范围的检查。J 的 fused/chunk1024 两轮完整训练 profile 已完成，更新计数和版本审计通过；端到端观测与差异范围见[融合验收记录](../../rollout/fusion/archive/2026-10-28-Rollout双融合实现与验收记录.md#qwen2-实验配对)。最终参数仍需结合其他来源检查、正式重复及剩余候选验收确定。
 
 ## 证据范围
 

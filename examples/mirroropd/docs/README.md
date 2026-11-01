@@ -2,7 +2,7 @@
 
 [实验研究](experiments/README.md)按四条问题组织：训练信号、reuse 预算、rollout 策略效果、师生迁移机制。具体报告依次说明背景与 motivation、实际 setting、结果和分析。
 
-[周会进展报告（2026-11-02）](progress/2026-11-01-周会报告.md)先介绍相对 verl 新增的框架功能，再展开五个 Research Question，附理论推导、论文对照与实测图。
+[周会进展报告（2026-11-02）](progress/2026-11-01-周会报告.md)先介绍相对 verl 新增的框架功能，再展开五个 Research Question，附理论推导、论文对照与实测图；会议日期为 11 月 2 日，文件及来源快照日期为 11 月 1 日。实验详细结果由各专题报告维护。
 
 | 阅读目的                   | 入口                                                                         |
 | -------------------------- | ---------------------------------------------------------------------------- |
@@ -18,3 +18,5 @@
 原始运行日志与大型证据继续位于同级 `wandb-logs`。日期报告保留各自输入边界；当前表格不回写历史结论。文档目录不维护活跃 Python 工具，运行入口位于 `examples/mirroropd/research`、`benchmarks` 和 `tools`。
 
 格式化、完整检查和暂存区验证见[文档维护流程](infra/maintenance/README.md)，维护规则从 [AGENTS.md](AGENTS.md) 进入。
+
+当前工程能力从[架构入口](infra/architecture/README.md)进入，其中 [Rollout 支持](infra/rollout/fusion/support.md)和[原生评估状态](infra/architecture/evaluation/README.md)分别标注代码版本与验证范围。历史方案从各专题归档索引读取，不作为并行的当前计划。

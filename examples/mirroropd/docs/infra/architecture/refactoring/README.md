@@ -1,12 +1,6 @@
-# 架构重构
+# 架构重构历史
 
-后续优化：[Rollout 双模型融合：vLLM 重构、优化与验收方案](../../rollout/fusion/2026-10-28-vLLM双模型融合重构与优化方案.md)。对照当前工作区、公开实现和 vLLM 固定版本源码，说明后端解耦、异构模型/KV、student 专项 refit、teacher 休眠恢复、采样语义及分阶段验收；附源码指纹清单。
-
-执行入口：[本地 Rollout 双融合实施交接说明](../../rollout/fusion/2026-10-28-Rollout双融合实施交接说明.md)。交给实现者从这里开始；详细要求见配套实施计划。SKD、AdaSwitch 不进入实施范围。
-
-待实施方案：[本地模型 Rollout：轨迹混合与逐 Token Logit 融合](../../rollout/fusion/2026-10-28-可组合Rollout策略架构与实现方案.md)。所有生成模型从本地 checkpoint 加载；同 batch 的 trajectory mixture 与逐 decode 的 logit fusion 共用 current/initial student 选择，尚未实现。
-
-实施配套：[双融合实现细节、优化与验收计划](../../rollout/fusion/2026-10-28-Rollout双融合实现细节与验收计划.md)。包含 logit-fusion 博客/代码核对、全局采样计划、TQ 汇合、权重接收、双 KV、停止概率、容量估算及分阶段 gate；保留 TRB 的 KL 预算求解与 EOS 对齐设计。
+当前模块与调用顺序见[架构入口](../README.md)，Rollout 当前语义和通过范围见[Rollout 入口](../../rollout/fusion/README.md)，原生评估状态见[评估入口](../evaluation/README.md)。旧提案不作为待实施清单。
 
 2026-10-25：五项重构已实现，完成 CPU、真实 TQ、分布式 GPU 及 1.5B 短端到端验收，独立 review 最终结论为 approve。
 
