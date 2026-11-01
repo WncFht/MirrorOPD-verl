@@ -40,3 +40,5 @@ CI 复用现有 pre-commit workflow 安装锁定工具并检查提交快照；�
 ## 内容审阅
 
 工具通过后，按[文档技能](../../../.agents/skills/maintain-docs/SKILL.md)核对事实归属，再按[文字技能](../../../.agents/skills/maintain-prose/SKILL.md)清理会话残留和失效计划。保留实际 setting、负结果、必要推导和证据限制。四条研究线及各实验独立 setting 的约定见[实验维护说明](../../experiments/维护说明.md)。
+
+开发目录登记与冻结执行边界见[工作区维护](workspaces.md)。该页的快照有明确日期，实时状态从 Git 与运行 manifest 核对。
