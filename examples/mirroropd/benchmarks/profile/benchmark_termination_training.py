@@ -105,7 +105,7 @@ def run(args):
     )
     positions, _ = prediction_positions(data["input_ids"], data["loss_mask"])
     data["teacher_positions"] = nested(positions)
-    actor = worker(str(args.student), world, False, args.budget, True, no_sync=False)
+    actor = worker(str(args.student), world, False, args.budget, True, no_sync=args.no_sync)
     initial_hash = parameters_hash(actor)
     records = []
     baseline_loss = None
@@ -115,9 +115,9 @@ def run(args):
         nonlocal baseline_loss, baseline_norm
         loss = DistillationLossConfig(
             loss_mode="mirror",
-            mirror=dict(objective="mdpo", kappa=args.kappa, eta=args.eta, diagnostics=True),
+            mirror=dict(objective="mdpo", kappa=args.kappa, eta=args.eta, diagnostics=args.diagnostics),
             full_vocab=FullVocabConfig(
-                backend=backend, token_chunk_size=args.chunk, termination_token_ids=[151643, 151645]
+                backend=backend, token_chunk_size=args.chunk, termination_token_ids=args.termination_ids
             ),
             use_policy_gradient=False,
             use_task_rewards=False,
@@ -223,8 +223,8 @@ def run(args):
                     "execution": {
                         "lr": 0.0,
                         "gradient_checkpointing": True,
-                        "gradient_no_sync": False,
-                        "diagnostics": True,
+                        "gradient_no_sync": args.no_sync,
+                        "diagnostics": args.diagnostics,
                         "shuffle": False,
                     },
                     "records": records,
@@ -256,6 +256,15 @@ def main():
     bench.add_argument("--budget", type=int, default=8192)
     bench.add_argument("--kappa", type=float, default=0.5)
     bench.add_argument("--eta", type=float, default=0.1)
+    bench.add_argument("--diagnostics", action=argparse.BooleanOptionalAction, default=True)
+    bench.add_argument("--no-sync", action="store_true", help="Defer gradient synchronization across micro-batches")
+    bench.add_argument(
+        "--termination-ids",
+        type=int,
+        nargs="*",
+        default=[151643, 151645],
+        help="Empty list measures native token actions",
+    )
     bench.add_argument("--trace", action="store_true")
     args = parser.parse_args()
     positive = (
