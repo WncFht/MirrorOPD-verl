@@ -276,7 +276,9 @@ def test_fsdp_peak_reduces_all_ranks_once_per_update(monkeypatch, strategy, sour
         engine_config=SimpleNamespace(strategy=strategy),
         device_name="cpu",
         profiler=MagicMock(),
-        train_batch=MagicMock(side_effect=lambda data: tu.get_tensordict({}, {"metrics": {"loss": 1.0}})),
+        train_batch=MagicMock(
+            side_effect=lambda data: tu.get_tensordict({}, {"metrics": {"loss": 1.0}, "optimizer_step_applied": None})
+        ),
     )
     device = MagicMock()
     device.max_memory_allocated.return_value = 3 * 1024**3

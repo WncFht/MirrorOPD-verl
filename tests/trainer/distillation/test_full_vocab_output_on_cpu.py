@@ -60,3 +60,13 @@ def test_production_result_keeps_objective_gradients_and_diagnostic_scaling(obje
         metrics[f"distillation/{primary}"].state[0],
         (result.token_objective.sum() if stop and eta == 1 else result.loss_sum / eta).detach().double(),
     )
+
+
+def test_fsdp_pytree_hooks_can_see_the_differentiable_numerator():
+    from torch.utils._pytree import tree_flatten
+
+    total = torch.tensor(2.0, requires_grad=True)
+    output = FullVocabOutput(total, 0.1, {})
+    leaves, _ = tree_flatten({"full_vocab": output})
+    assert any(leaf is total for leaf in leaves)
+    assert [leaf for leaf in leaves if isinstance(leaf, torch.Tensor) and leaf.requires_grad] == [total]
