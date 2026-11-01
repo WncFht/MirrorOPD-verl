@@ -74,7 +74,7 @@ def test_objective_metadata_has_one_immutable_payload_source(name, kind):
     assert get_distillation_loss_settings(name).payload_kind == kind
 
 
-@pytest.mark.parametrize("mode", ["vanilla", "dppo_tv", "dppo_kl", "gspo", "sapo", "gpg", "cispo"])
+@pytest.mark.parametrize("mode", ["vanilla", "dppo_tv", "dppo_kl", "gspo", "sapo", "gpg", "cispo", "geo_mean"])
 def test_registered_policy_losses_use_explicit_global_context(mode):
     from verl.trainer.ppo.core_algos import get_policy_loss_fn
     from verl.workers.config import ActorConfig
@@ -106,3 +106,24 @@ def test_registered_policy_losses_use_explicit_global_context(mode):
     gb = torch.autograd.grad(b, logp)[0]
     torch.testing.assert_close(ga, 2 * gb)
     assert not hasattr(config, "global_batch_info")
+
+
+def test_geometric_policy_preserves_sequence_population_across_unequal_microbatches():
+    from verl.trainer.ppo.core_algos import compute_policy_loss_geo_mean
+    from verl.workers.config import ActorConfig
+
+    cfg = ActorConfig(strategy="fsdp2", rollout_n=1, ppo_micro_batch_size_per_gpu=1)
+    logp = torch.tensor([[-1.0, -0.7], [-0.8, -0.6], [-1.2, -0.9]], requires_grad=True)
+    old = logp.detach() - 0.01
+    advantages = torch.tensor([[1.0, 1.0], [2.0, 2.0], [-0.5, -0.5]])
+    mask = torch.tensor([[1.0, 0.0], [1.0, 1.0], [1.0, 1.0]])
+    context = LossContext(dp_size=2, global_batch_size=3, batch_num_tokens=5)
+    full, _ = compute_policy_loss_geo_mean(old, logp, advantages, mask, config=cfg, context=context)
+    split = sum(
+        compute_policy_loss_geo_mean(old[s], logp[s], advantages[s], mask[s], config=cfg, context=context)[0]
+        for s in [slice(0, 1), slice(1, 3)]
+    )
+    torch.testing.assert_close(full, split)
+    full_grad = torch.autograd.grad(full, logp, retain_graph=True)[0]
+    split_grad = torch.autograd.grad(split, logp)[0]
+    torch.testing.assert_close(full_grad, split_grad)
