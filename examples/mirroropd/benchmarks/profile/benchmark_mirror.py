@@ -28,6 +28,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--objective", choices=["mdpo", "bpo"], required=True)
     parser.add_argument("--diagnostics", action="store_true")
+    parser.add_argument("--kappa", type=float, default=0.5)
+    parser.add_argument("--eta", type=float, default=0.3)
     parser.add_argument("--tokens", type=int, default=512)
     parser.add_argument("--width", type=int, default=1536)
     parser.add_argument("--vocab", type=int, default=151936)
@@ -47,8 +49,8 @@ def main():
             "mirror": {
                 "objective": args.objective,
                 "diagnostics": args.diagnostics,
-                "eta": 0.3,
-                "kappa": 0.5,
+                "eta": args.eta,
+                "kappa": args.kappa,
             },
         }
     )
@@ -118,8 +120,8 @@ def main():
         "torch": torch.__version__,
         "seed": 71,
         "dtype": "bfloat16",
-        "eta": 0.3,
-        "kappa": 0.5,
+        "eta": args.eta,
+        "kappa": args.kappa,
         "arguments": {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
         "cases": cases,
     }

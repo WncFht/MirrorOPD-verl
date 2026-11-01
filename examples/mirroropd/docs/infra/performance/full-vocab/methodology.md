@@ -120,6 +120,12 @@ mkdir -p "$RECHECK_DIR"
 | 完整 graph 训练计划与执行     | [prepare.py](../../../../benchmarks/profile/e2e_4gpu/prepare.py)、[run_plan.py](../../../../benchmarks/profile/run_plan.py) |
 | CPU 聚合快照刷新              | [refresh_report.py](../../../../benchmarks/profile/e2e_4gpu/refresh_report.py)                                              |
 
-本机测量限获分配的物理 GPU 0–3，沿用 `/tmp/mirroropd-gpus-0-1-2-3.lock`。启动前确认无计算进程、每卡显存低于 1 GiB、利用率低于 10%，持续 120 秒；共享锁不替代运行期间的干扰记录。队列停止使用所属运行目录的 `STOP`，不终止其他任务。
+旧队列工具固定使用获分配的物理 GPU 0–3，沿用 `/tmp/mirroropd-gpus-0-1-2-3.lock`。启动前确认无计算进程、每卡显存低于 1 GiB、利用率低于 10%，持续 120 秒；共享锁不替代运行期间的干扰记录。队列停止使用所属运行目录的 `STOP`，不终止其他任务。
 
 新实验先通过数值门控、完成充分预热，再做无 profiler 配对计时；最后补少量真实训练周期验证。默认关闭自动会话轮询；测量工具与人工审阅各自负责运行事实和结论。
+
+## 当前训练合同重构后的入口
+
+[EOS actor benchmark](../../../../benchmarks/profile/benchmark_termination_training.py)继续使用原生 actor 调用，其 `--diagnostics/--no-diagnostics`、`--termination-ids`（不跟 ID 表示原词表动作）和 `--no-sync` 分别控制既有功能，输出记录实际选择。Teacher hidden 仍在 prepare 阶段独立生成，run 计时不含该准备、TQ 或 rollout。`benchmark_mirror.py` 的 κ、η 可显式选择，原默认 0.5/0.3 保留。旧运行结果按其冻结代码解释。
+
+运行配置与结果统一合同、兼容清理及验收范围见[运行合同审计](../../architecture/2026-11-01-运行合同审计与重构方案.md)。新的 GPU 测量以当前资源分配为准，不能只持有旧四卡锁就推断其他双卡任务没有占用。
