@@ -70,12 +70,31 @@ def runtime(tmp_path, monkeypatch):
     model = tmp_path / "model"
     model.mkdir()
     (model / "model.safetensors").write_bytes(b"fixture-weights")
-    (model / "config.json").write_text('{"model_type": "qwen3", "hidden_size": 4}')
-    (model / "tokenizer_config.json").write_text('{"chat_template": "fixed"}')
+    (model / "config.json").write_text(
+        json.dumps(
+            {
+                "model_type": "qwen3",
+                "hidden_size": 4,
+                "architectures": ["Qwen3ForCausalLM"],
+                "eos_token_id": 1,
+                "pad_token_id": 1,
+            }
+        )
+    )
+    from tokenizers import Tokenizer
+    from tokenizers.models import WordLevel
+    from transformers import PreTrainedTokenizerFast
+
+    tokenizer = PreTrainedTokenizerFast(
+        tokenizer_object=Tokenizer(WordLevel({"word": 0, "eos": 1})), eos_token="eos", pad_token="eos"
+    )
+    tokenizer.chat_template = "fixed"
+    tokenizer.save_pretrained(model)
     config = OmegaConf.create(
         {
             "trainer": {
                 "v1": {"trainer_mode": "sync"},
+                "nnodes": 1,
                 "resume_mode": "disable",
                 "val_before_train": True,
                 "evaluation": {
@@ -95,11 +114,23 @@ def runtime(tmp_path, monkeypatch):
             },
             "data": {"val_files": [str(source)], "max_response_length": 8},
             "actor_rollout_ref": {
+                "hybrid_engine": True,
+                "actor": {"strategy": "fsdp2"},
                 "model": {"path": str(model)},
-                "rollout": {"response_length": 8, "val_kwargs": {"n": 1, "max_tokens": 8}},
+                "rollout": {
+                    "response_length": 8,
+                    "val_kwargs": {"n": 1, "max_tokens": 8},
+                    "name": "vllm",
+                    "dtype": "bfloat16",
+                    "engine_kwargs": {"vllm": {}},
+                    "agent": {"default_agent_loop": "single_turn_agent"},
+                },
             },
         }
     )
+    from verl.experimental.rollout_policy.validation import policy_engine_config
+
+    config.actor_rollout_ref.rollout = policy_engine_config(config.actor_rollout_ref.rollout)
     queue = MemoryQueue()
     monkeypatch.setattr(readout.tq, "kv_batch_get", queue.get)
     monkeypatch.setattr(readout.tq, "kv_batch_put", queue.put)
@@ -132,6 +163,12 @@ def runtime(tmp_path, monkeypatch):
         score_full_vocab=score,
         end_rkl_readout=lambda: [{"unchanged": True, "state_digest": f"state-{trainer.actor_optimizer_step}"}],
     )
+    from verl.experimental.rollout_policy.service import DefaultRolloutService
+
+    trainer.common_rollout_sampling = True
+    trainer.rollout_service = DefaultRolloutService(trainer, None)
+    trainer.rollout_service.resident_version = 0
+    trainer.rollout_service.configure_sampling = MagicMock()
     trainer._validate = lambda: callback.validate(trainer)
     return callback, trainer, queue
 
@@ -194,7 +231,12 @@ def test_shared_source_bank_checks_template_and_does_not_regenerate(runtime, tmp
     config.trainer.evaluation.initial_bank = str(callback.bank_path)
     reused = build_readout_callback(config)
     assert reused.bank == callback.bank
-    (tmp_path / "model/tokenizer_config.json").write_text('{"chat_template": "different"}')
+    import json
+
+    tokenizer_path = tmp_path / "model/tokenizer_config.json"
+    tokenizer_config = json.loads(tokenizer_path.read_text())
+    tokenizer_config["chat_template"] = "different"
+    tokenizer_path.write_text(json.dumps(tokenizer_config))
     config.trainer.evaluation.output = str(tmp_path / "mismatch")
     with pytest.raises(ValueError, match="protocol differs"):
         build_readout_callback(config)
@@ -216,7 +258,7 @@ def test_independent_history_schedule_and_unrequested_audit(runtime):
     assert event.manifest(complete=True)["metadata"]["audit"]["status"] == "not_requested"
 
 
-def test_legacy_validate_trigger_does_not_bypass_task_frequency(runtime):
+def test_manual_validation_does_not_bypass_task_frequency(runtime):
     callback, trainer, queue = runtime
     callback.schedules = {"source_heldout": readout.Schedule(at=(0,), every=2), "history": readout.Schedule(every=2)}
     callback.on_readout(trainer, 0)
@@ -287,3 +329,42 @@ def test_source_bank_identity_is_portable_across_model_locations(runtime, tmp_pa
     config.trainer.evaluation.initial_bank = str(callback.bank_path)
     reused = build_readout_callback(config)
     assert reused.bank == callback.bank
+
+
+def test_source_bank_reuse_rejects_changed_effective_stopping_contract(runtime, tmp_path):
+    callback, trainer, _ = runtime
+    callback.on_readout(trainer, 0)
+    config = OmegaConf.create(OmegaConf.to_container(trainer.config))
+    config.trainer.evaluation.output = str(tmp_path / "changed-stop")
+    config.trainer.evaluation.initial_bank = str(callback.bank_path)
+    config.actor_rollout_ref.rollout.stop_token_ids = [0]  # A new stop, distinct from native EOS=1.
+    with pytest.raises(ValueError, match="model, input"):
+        build_readout_callback(config)
+    assert not (tmp_path / "changed-stop").exists()
+
+
+def test_source_bank_rejects_noncurrent_training_generator_before_creating_output(runtime, tmp_path):
+    _, trainer, _ = runtime
+    config = OmegaConf.create(OmegaConf.to_container(trainer.config))
+    config.trainer.evaluation.output = str(tmp_path / "wrong-generator")
+    config.rollout_policy = {"mode": "single", "model": {"kind": "teacher"}}
+    with pytest.raises(ValueError, match="current single-model"):
+        build_readout_callback(config)
+    assert not (tmp_path / "wrong-generator").exists()
+
+
+def test_source_readout_restores_the_sampler_through_the_rollout_owner(runtime):
+    callback, trainer, _ = runtime
+    callback.on_readout(trainer, 0)
+    trainer.rollout_service.configure_sampling.assert_called_once()
+    assert trainer.rollout_service.resident_version == 0
+
+
+def test_source_readout_rejects_a_second_scheduler(runtime, tmp_path):
+    _, trainer, _ = runtime
+    config = OmegaConf.create(OmegaConf.to_container(trainer.config))
+    config.trainer.test_freq = 10
+    config.trainer.evaluation.output = str(tmp_path / "duplicate-scheduler")
+    with pytest.raises(ValueError, match="owns evaluation schedules"):
+        build_readout_callback(config)
+    assert not (tmp_path / "duplicate-scheduler").exists()

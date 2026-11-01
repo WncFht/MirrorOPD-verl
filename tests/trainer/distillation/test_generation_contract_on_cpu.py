@@ -46,6 +46,7 @@ def rollout():
             name="vllm",
             dtype="bfloat16",
             engine_kwargs={"vllm": {}},
+            agent={"default_agent_loop": "single_turn_agent"},
             logprobs_mode="raw_logprobs",
             stop_token_ids=[],
             ignore_eos=False,
@@ -82,6 +83,8 @@ def test_bootstrap_passes_prepared_config_to_actual_replica_constructor(tmp_path
         {
             "trainer": {
                 "n_gpus_per_node": 4,
+                "nnodes": 1,
+                "v1": {"trainer_mode": "sync"},
                 "evaluation": {
                     "_target_": "verl.trainer.evaluation.coordinator.EvaluationCoordinator",
                     "output": str(tmp_path / "out"),
@@ -91,7 +94,12 @@ def test_bootstrap_passes_prepared_config_to_actual_replica_constructor(tmp_path
                     "protocols": {"source": {"max_new_tokens": 7168}, "public": {}},
                 },
             },
-            "actor_rollout_ref": {"model": {"path": str(tmp_path)}, "rollout": rollout()},
+            "actor_rollout_ref": {
+                "model": {"path": str(tmp_path)},
+                "rollout": rollout(),
+                "hybrid_engine": True,
+                "actor": {"strategy": "fsdp2"},
+            },
             "distillation": {"teacher_models": {"teacher_model": {"model_path": str(tmp_path)}}},
         }
     )

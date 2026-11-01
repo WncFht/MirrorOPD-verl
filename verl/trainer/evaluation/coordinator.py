@@ -20,7 +20,7 @@ from .accuracy import AccuracyCollector, gap_recovery
 from .artifacts import EVAL_RKL, GENERATION, HISTORY, ArtifactStore, file_sha256, identity
 from .config import EvaluationConfig
 from .generation import NativeGenerator
-from .generation_contract import engine_contract
+from .generation_contract import engine_contract, require_current_generation
 from .identity import bootstrap_contract, model_identity
 from .plan import compile_plan
 from .reporting import evaluation_metrics
@@ -45,13 +45,11 @@ def read_questions(spec):
 class EvaluationCoordinator(ReadoutCallback):
     handles_validation = True
     requires_full_batch = True
+    owns_final_weight_sync = True
 
     def __init__(self, *, config, options):
-        from verl.experimental.rollout_policy.validation import uses_common_single_sampling
-
         self.config = config
-        if not uses_common_single_sampling(config):
-            raise ValueError("Unified evaluation requires the accepted common single-model generation contract")
+        require_current_generation(config)
         self.options = EvaluationConfig.parse(options)
         if config.trainer.v1.trainer_mode != "sync" or config.distillation.execution_mode != "shared_sync":
             raise ValueError("Unified evaluation requires synchronous serial shared-teacher training")

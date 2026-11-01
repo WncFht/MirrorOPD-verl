@@ -198,6 +198,7 @@ def test_rollout_restore_tracks_residency_not_only_version():
 
     calls = []
     trainer = SimpleNamespace(
+        readout_callback=None,
         config=OmegaConf.create({"trainer": {}}),
         common_rollout_sampling=False,
         global_steps=0,
