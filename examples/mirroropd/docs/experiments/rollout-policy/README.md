@@ -16,4 +16,4 @@ R1/JustRL 六种来源最终成绩接近；R1/Polaris 的混合与 teacher 来�
 
 [五种前缀原计划](archive/2026-10-30-E20设置下的五种前缀对照.md)已被六种来源及共同评估协议替代；[S0 无评估诊断](archive/2026-10-30-S0无评估优化诊断.md)只说明旧优化运行，不能推断 accuracy。执行沿革和失败记录保留在十二组报告及其 manifest。
 
-模型来源与执行合同见[Rollout 工程入口](../../infra/rollout/README.md)，融合中心定义见[理论](../../theory/rollout-policy/objectives.md)。固定来源与跨 batch 传播机制归[师生迁移](../teacher-transfer/README.md)，不混入来源策略最终效果的比较。
+模型来源与执行合同见[Rollout 工程入口](../../infra/rollout/README.md)，融合中心定义见[理论](../../theory/rollout-policy/objectives.md)。固定来源与跨 batch 传播机制归[师生迁移](../teacher-transfer/README.md)；本专题比较来源策略的最终效果。

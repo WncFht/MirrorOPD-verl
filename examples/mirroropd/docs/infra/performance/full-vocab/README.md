@@ -10,7 +10,7 @@
 | head-loss 的 backend、chunk、融合与容量代价                    | [算子性能](operators.md)   |
 | teacher/actor、完整 outer、reuse、IO 与 full/sample 的实际成本 | [训练性能](training.md)    |
 
-三页分别维护方法、算子测量和训练测量。原始 JSON、配置、图与 trace 由各项结果直接链接；新增实验进入对应主题，不再为排队、首次检查、复测和完成分别新增正文。
+原始 JSON、配置、图与 trace 由各项结果直接链接。新增测量更新对应专题，保留实际配置与历史版本。
 
 ## 可用于决策的结论
 
