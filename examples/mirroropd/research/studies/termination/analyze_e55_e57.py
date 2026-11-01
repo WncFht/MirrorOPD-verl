@@ -316,6 +316,7 @@ def plots(data, out):
 
     max_outer = max(r["complete_outer"] for r in data["runs"])
     max_update = max(r["update_count"] for r in data["runs"])
+    outer_padding = max(1, max_outer * 0.025)
 
     fig, axes = plt.subplots(2, 2, figsize=(9, 6.9))
     fig.subplots_adjust(left=0.11, right=0.98, bottom=0.25, top=0.83, wspace=0.35, hspace=0.50)
@@ -335,7 +336,7 @@ def plots(data, out):
                 ms=3,
                 label=f"{run['name']} (k={run['kappa']:g})",
             )
-        ax.set(xlabel="Outer step", ylabel=label, xlim=(0.5, max_outer + 0.5))
+        ax.set(xlabel="Outer step", ylabel=label, xlim=(1 - outer_padding, max_outer + outer_padding))
         if limits:
             ax.set_ylim(*limits)
         ax.grid(alpha=0.2)
