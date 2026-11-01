@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """One full-vocabulary training result, independent of engine transport keys."""
 
-from dataclasses import dataclass
+from typing import NamedTuple
 
 import torch
 
@@ -10,9 +10,8 @@ from verl.utils.metric.observations import Observation
 from verl.utils.metric.position import position_observations, position_statistics
 
 
-@dataclass(frozen=True)
-class FullVocabOutput:
-    """Keep the differentiable numerator separate from detached observations."""
+class FullVocabOutput(NamedTuple):
+    """Expose the numerator to FSDP pytree hooks; keep observations detached."""
 
     objective_sum: torch.Tensor
     divisor: float
