@@ -1997,7 +1997,13 @@ def compute_policy_loss_geo_mean(
         )
         pg_losses = pg_losses * seq_is_weights
 
-    pg_loss = torch.mean(pg_losses)
+    # GMPO averages sequences, including when DP/micro-batches split the batch.
+    pg_loss = agg_loss(
+        pg_losses.unsqueeze(-1),
+        torch.ones_like(pg_losses).unsqueeze(-1),
+        "seq-mean-token-sum",
+        **asdict(context),
+    )
 
     # higher: ratio is too large that need clamp to clip_high (when adv > 0)
     clipped = torch.ne(negative_approx_kl, negative_approx_kl_clamp)

@@ -145,3 +145,5 @@ $$
 ## 验证入口
 
 [test_loss_context_on_cpu.py](../../../../../tests/trainer/distillation/test_loss_context_on_cpu.py) 验证配置隔离与分母；[test_rejection_denominator_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_rejection_denominator_on_cpu.py) 使用真实 TQ/Trainer 发布路径及两 rank 归约验证拒绝采样总体。Full-KL 的不等长输入、空 rank、mask 空洞和位置计数由[四卡集成测试](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py)覆盖。
+
+GMPO 的 `geo_mean` 使用序列级目标，也通过 LossContext 的全局序列数归约；不等大小的 micro-batch 相加应重建同一批序列的 loss 和梯度。本地未指定全局总体时保留本地序列均值。
