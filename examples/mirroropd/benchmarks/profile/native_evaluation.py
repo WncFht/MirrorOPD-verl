@@ -6,9 +6,10 @@ Inputs may be explicitly synthetic shape probes. These results are infrastructur
 checks and must never be merged into a scientific teacher-transfer ranking.
 """
 
+import dataclasses
 import math
+from dataclasses import dataclass
 
-from omegaconf import OmegaConf
 from transformers import AutoConfig
 
 from verl.trainer.evaluation.artifacts import EVAL_RKL, ArtifactStore, file_sha256
@@ -18,20 +19,40 @@ from verl.trainer.evaluation.trajectory import load_trajectories, trajectory_ind
 from verl.trainer.ppo.readout_callback import ReadoutCallback
 
 
+@dataclass(frozen=True)
+class ProbeOptions:
+    bank: str
+    output: str
+    cases: tuple[ScoreBudget, ...]
+
+    def __post_init__(self):
+        if any(not isinstance(value, str) or not value for value in (self.bank, self.output)):
+            raise ValueError("Probe bank and output must be nonempty paths")
+
+    @classmethod
+    def parse(cls, value):
+        value = dict(value)
+        value["cases"] = tuple(strict_record(ScoreBudget, case) for case in value["cases"])
+        result = strict_record(cls, value)
+        if not result.cases:
+            raise ValueError("A native RKL probe requires at least one scoring case")
+        return result
+
+
 class NativeRKLProbe(ReadoutCallback):
     handles_validation = True
 
-    def __init__(self, *, config):
+    def __init__(self, *, config, options):
         if not config.trainer.val_only or config.trainer.resume_mode != "disable":
             raise ValueError("RKL infrastructure probes require a fresh validation-only run")
-        self.options = OmegaConf.to_container(config.trainer.rkl_probe, resolve=True)
+        self.options = ProbeOptions.parse(options)
         self.teacher_copy = (
             config.actor_rollout_ref.model.path == config.distillation.teacher_models.teacher_model.model_path
         )
-        self.bank = ArtifactStore(self.options["bank"])
+        self.bank = ArtifactStore(self.options.bank)
         self.bank.manifest(complete=True)
         self.store = ArtifactStore.create(
-            self.options["output"],
+            self.options.output,
             kind="native_rkl_probe",
             metadata={
                 "bank": str(self.bank.root),
@@ -49,12 +70,12 @@ class NativeRKLProbe(ReadoutCallback):
         ).hidden_size
         references = trajectory_index(self.bank, bank="infrastructure_probe")
         baseline, reports = None, []
-        for index, case in enumerate(self.options["cases"]):
+        for index, case in enumerate(self.options.cases):
             result, timing = score_native_rows(
                 trainer,
                 references,
                 hidden_size=hidden,
-                budget=strict_record(ScoreBudget, case),
+                budget=case,
                 load_window=load_trajectories,
             )
             values = {r["id"]: (r["rkl_sum"], r["tokens"]) for r in result}
@@ -78,7 +99,7 @@ class NativeRKLProbe(ReadoutCallback):
             self.store.write_rows(f"case-{index:02d}.parquet", result, schema=EVAL_RKL)
             reports.append(
                 {
-                    "case": case,
+                    "case": dataclasses.asdict(case),
                     "timing": timing,
                     "max_question_rkl_error": error,
                     "max_question_rkl": max(total / n for total, n in values.values()),

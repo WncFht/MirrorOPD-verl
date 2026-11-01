@@ -3,9 +3,8 @@
 """Independent native forward acceptance after initializing from a portable HF export."""
 
 import math
+from dataclasses import dataclass, field
 from pathlib import Path
-
-from omegaconf import OmegaConf
 
 from verl.trainer.ppo.readout_callback import ReadoutCallback
 
@@ -15,39 +14,61 @@ from .scoring import score_native_rows
 from .trajectory import load_trajectories, trajectory_index
 
 
+@dataclass(frozen=True)
+class HFReloadOptions:
+    export_audit: str
+    output: str
+    reference_event: str
+    source_bank: str
+    score: ScoreBudget = field(default_factory=ScoreBudget)
+
+    def __post_init__(self):
+        if any(
+            not isinstance(value, str) or not value
+            for value in (self.export_audit, self.output, self.reference_event, self.source_bank)
+        ):
+            raise ValueError("HF reload requires nonempty artifact paths")
+
+    @classmethod
+    def parse(cls, values):
+        values = dict(values)
+        values["score"] = strict_record(ScoreBudget, values.get("score", {}))
+        return strict_record(cls, values)
+
+
 class HFReloadReadout(ReadoutCallback):
     """Use only with a new val_only trainer whose student path is the final HF export."""
 
     handles_validation = True
 
-    def __init__(self, *, config):
-        self.options = OmegaConf.to_container(config.trainer.hf_reload_readout, resolve=True)
+    def __init__(self, *, config, options):
+        self.options = HFReloadOptions.parse(options)
         if not config.trainer.val_only or config.trainer.resume_mode != "disable":
             raise ValueError("HF export acceptance requires a fresh validation-only trainer")
-        export = ArtifactStore(self.options["export_audit"]).manifest(complete=True)
-        hf = Path(self.options["export_audit"]).parent / "huggingface"
+        export = ArtifactStore(self.options.export_audit).manifest(complete=True)
+        hf = Path(self.options.export_audit).parent / "huggingface"
         if Path(config.actor_rollout_ref.model.path).resolve() != hf.resolve():
             raise ValueError("HF reload trainer did not initialize from the audited final model")
         for name, digest in export["metadata"]["hf_files"].items():
             if file_sha256(hf / name) != digest:
                 raise ValueError("Export contents changed after publication")
         self.store = ArtifactStore.create(
-            self.options["output"],
+            self.options.output,
             kind="hf_reload_forward",
             metadata={
                 "hf_model": str(hf.resolve()),
-                "export_audit": self.options["export_audit"],
-                "reference_event": self.options["reference_event"],
+                "export_audit": self.options.export_audit,
+                "reference_event": self.options.reference_event,
             },
         )
 
     def validate(self, trainer):
         from transformers import AutoConfig
 
-        event = ArtifactStore(self.options["reference_event"])
+        event = ArtifactStore(self.options.reference_event)
         event.manifest(complete=True)
         expected = {r["id"]: r for r in event.read_rows("rkl.parquet") if r["bank"] == "source_heldout"}
-        references = trajectory_index(ArtifactStore(self.options["source_bank"]), bank="source_heldout")
+        references = trajectory_index(ArtifactStore(self.options.source_bank), bank="source_heldout")
         if set(expected) != {r["id"] for r in references}:
             raise ValueError("HF reload acceptance does not use the exact original source trajectories")
         hidden_size = AutoConfig.from_pretrained(
@@ -58,7 +79,7 @@ class HFReloadReadout(ReadoutCallback):
             trainer,
             references,
             hidden_size=hidden_size,
-            budget=strict_record(ScoreBudget, self.options.get("score", {})),
+            budget=self.options.score,
             load_window=load_trajectories,
         )
         errors = []

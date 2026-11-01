@@ -13,6 +13,7 @@ from transfer_queue import KVBatchMeta
 
 from verl.trainer.evaluation import source_history as readout
 from verl.trainer.evaluation.artifacts import ArtifactStore
+from verl.trainer.ppo.readout_callback import build_readout_callback
 
 
 class BatchDict(dict):
@@ -68,6 +69,7 @@ def runtime(tmp_path, monkeypatch):
     source.write_bytes(b"fixed-source-identity")  # The fake native dataset below owns decoding.
     model = tmp_path / "model"
     model.mkdir()
+    (model / "model.safetensors").write_bytes(b"fixture-weights")
     (model / "config.json").write_text('{"model_type": "qwen3", "hidden_size": 4}')
     (model / "tokenizer_config.json").write_text('{"chat_template": "fixed"}')
     config = OmegaConf.create(
@@ -76,14 +78,15 @@ def runtime(tmp_path, monkeypatch):
                 "v1": {"trainer_mode": "sync"},
                 "resume_mode": "disable",
                 "val_before_train": True,
-                "source_history_readout": {
+                "evaluation": {
+                    "_target_": "verl.trainer.evaluation.source_history.SourceHistoryReadout",
                     "output": str(tmp_path / "readout"),
                     "source_file": str(source),
                     "source_count": 2,
                     "history_size": 2,
                     "source_every": 1,
                     "history_every": 1,
-                    "audit_state": True,
+                    "score": {"audit_state": True},
                 },
             },
             "distillation": {
@@ -102,7 +105,7 @@ def runtime(tmp_path, monkeypatch):
     monkeypatch.setattr(readout.tq, "kv_batch_put", queue.put)
     monkeypatch.setattr(readout.tq, "kv_clear", queue.clear)
     bank = queue.rollout(0, [0, 1], "val")
-    callback = readout.SourceHistoryReadout(config=config)
+    callback = build_readout_callback(config)
     trainer = SimpleNamespace(
         config=config,
         actor_optimizer_step=0,
@@ -187,14 +190,14 @@ def test_shared_source_bank_checks_template_and_does_not_regenerate(runtime, tmp
     callback, trainer, queue = runtime
     callback.on_readout(trainer, 0)
     config = OmegaConf.create(OmegaConf.to_container(trainer.config))
-    config.trainer.source_history_readout.output = str(tmp_path / "new-run")
-    config.trainer.source_history_readout.initial_bank = str(callback.bank_path)
-    reused = readout.SourceHistoryReadout(config=config)
+    config.trainer.evaluation.output = str(tmp_path / "new-run")
+    config.trainer.evaluation.initial_bank = str(callback.bank_path)
+    reused = build_readout_callback(config)
     assert reused.bank == callback.bank
     (tmp_path / "model/tokenizer_config.json").write_text('{"chat_template": "different"}')
-    config.trainer.source_history_readout.output = str(tmp_path / "mismatch")
+    config.trainer.evaluation.output = str(tmp_path / "mismatch")
     with pytest.raises(ValueError, match="protocol differs"):
-        readout.SourceHistoryReadout(config=config)
+        build_readout_callback(config)
 
 
 def test_independent_history_schedule_and_unrequested_audit(runtime):
@@ -257,3 +260,30 @@ def test_acceptance_auditor_reads_new_artifacts_without_changing_legacy_mean(run
     old = [dict(rkl_sum=1, tokens=1), dict(rkl_sum=300, tokens=100)]
     assert mean_rkl(old) == 301 / 101
     assert mean_rkl(old, question_mean=True) == 2
+
+
+def test_source_bank_reuse_rejects_changed_weights(runtime, tmp_path):
+    callback, trainer, _ = runtime
+    callback.on_readout(trainer, 0)
+    config = OmegaConf.create(OmegaConf.to_container(trainer.config))
+    config.trainer.evaluation.output = str(tmp_path / "changed-weights")
+    config.trainer.evaluation.initial_bank = str(callback.bank_path)
+    (tmp_path / "model/model.safetensors").write_bytes(b"different-weights")
+    with pytest.raises(ValueError, match="model, input"):
+        build_readout_callback(config)
+    assert not (tmp_path / "changed-weights").exists()
+
+
+def test_source_bank_identity_is_portable_across_model_locations(runtime, tmp_path):
+    import shutil
+
+    callback, trainer, _ = runtime
+    callback.on_readout(trainer, 0)
+    relocated = tmp_path / "relocated-model"
+    shutil.copytree(tmp_path / "model", relocated)
+    config = OmegaConf.create(OmegaConf.to_container(trainer.config))
+    config.actor_rollout_ref.model.path = str(relocated)
+    config.trainer.evaluation.output = str(tmp_path / "relocated-run")
+    config.trainer.evaluation.initial_bank = str(callback.bank_path)
+    reused = build_readout_callback(config)
+    assert reused.bank == callback.bank

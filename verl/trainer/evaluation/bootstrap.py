@@ -16,6 +16,7 @@ import ray
 from omegaconf import OmegaConf, open_dict
 
 from verl.experimental.rollout_policy.validation import policy_engine_config
+from verl.trainer.ppo.readout_callback import readout_options
 from verl.utils.config import omega_conf_to_dataclass
 from verl.workers.config import HFModelConfig
 from verl.workers.rollout.replica import get_rollout_replica_class
@@ -23,14 +24,15 @@ from verl.workers.rollout.replica import get_rollout_replica_class
 from .accuracy import AccuracyCollector
 from .artifacts import ArtifactStore, file_sha256, identity
 from .config import DatasetSpec, EvaluationConfig
-from .coordinator import bootstrap_contract, model_identity, read_questions
+from .coordinator import EvaluationCoordinator, read_questions
 from .generation import NativeGenerator
 from .generation_contract import engine_contract
+from .identity import bootstrap_contract, model_identity
 from .trajectory import select_panel, trajectory_index
 
 
 async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_configs=(), resume_generation=None):
-    options = EvaluationConfig.parse(OmegaConf.to_container(config.trainer.evaluation, resolve=True))
+    options = EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
     root = ArtifactStore(options.bootstrap)
     if not root.manifest_path.exists():
         root = ArtifactStore.create(root.root, kind="evaluation_bootstrap", metadata={})
@@ -85,9 +87,7 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
             for source_config in (config, *source_configs):
                 if source_config.actor_rollout_ref.model.path != initial_model.path:
                     raise ValueError("Shared source generation requires the same initial student")
-                source_options = EvaluationConfig.parse(
-                    OmegaConf.to_container(source_config.trainer.evaluation, resolve=True)
-                )
+                source_options = EvaluationConfig.parse(readout_options(source_config, EvaluationCoordinator))
                 source_root = ArtifactStore(source_options.bootstrap)
                 if not source_root.manifest_path.exists():
                     source_root = ArtifactStore.create(source_root.root, kind="evaluation_bootstrap", metadata={})
@@ -160,7 +160,7 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
 
 
 def finalize_bootstrap(config):
-    options = EvaluationConfig.parse(OmegaConf.to_container(config.trainer.evaluation, resolve=True))
+    options = EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
     root = ArtifactStore(options.bootstrap)
     student = model_identity(config.actor_rollout_ref.model.path)
     teacher = model_identity(config.distillation.teacher_models.teacher_model.model_path)

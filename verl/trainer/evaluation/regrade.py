@@ -8,14 +8,16 @@ import itertools
 from omegaconf import OmegaConf
 from transformers import AutoTokenizer
 
+from verl.trainer.ppo.readout_callback import readout_options
+
 from .accuracy import AccuracyCollector
 from .artifacts import ArtifactStore, identity
 from .config import EvaluationConfig
-from .coordinator import read_questions
+from .coordinator import EvaluationCoordinator, read_questions
 
 
 def regrade(config, generation, output):
-    options = EvaluationConfig.parse(OmegaConf.to_container(config.trainer.evaluation, resolve=True))
+    options = EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
     source = ArtifactStore(generation)
     manifest = source.manifest(complete=True)
     specifications = [(d, read_questions(d)) for d in options.datasets]

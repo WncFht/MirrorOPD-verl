@@ -493,3 +493,24 @@ def test_variance_proxy_uses_existing_opt_in_and_actual_task_signal():
     assert trainer._metrics_variance_enabled()
     trainer.config.algorithm = {"rollout_correction": {"bypass_mode": True}}
     assert not trainer._metrics_variance_enabled()
+
+
+def test_evaluation_batch_rules_follow_capabilities_not_configuration_presence():
+    config = OmegaConf.create(
+        {
+            "trainer": {"critic_warmup": 0, "evaluation": {"_target_": "custom.SourceReadout"}},
+            "actor_rollout_ref": {"actor": {"ppo_mini_batch_size": 8}, "rollout": {"n": 1}},
+        }
+    )
+    trainer = SimpleNamespace(
+        config=config,
+        global_steps=1,
+        use_critic=False,
+        readout_callback=SimpleNamespace(requires_full_batch=False),
+        _validate_evaluation_full_batch=MagicMock(),
+    )
+    assert PPOTrainer._get_required_batch_multiple(trainer, 2) == 8
+    trainer._validate_evaluation_full_batch.assert_not_called()
+    trainer.readout_callback.requires_full_batch = True
+    assert PPOTrainer._get_required_batch_multiple(trainer, 2) == 2
+    trainer._validate_evaluation_full_batch.assert_called_once()

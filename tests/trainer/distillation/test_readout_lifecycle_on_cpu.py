@@ -11,14 +11,16 @@ from verl.trainer.ppo import readout_callback
 
 
 class ExampleReadout(readout_callback.ReadoutCallback):
-    def __init__(self, *, config):
+    def __init__(self, *, config, options):
         self.config = config
+        self.options = options
 
 
 def test_optional_hooks_and_validation_ownership_are_explicit(monkeypatch):
-    config = OmegaConf.create({"trainer": {"readout_callback_class": "example.Callback"}})
+    config = OmegaConf.create({"trainer": {"evaluation": {"_target_": "example.Callback", "answer": 42}}})
     monkeypatch.setattr(readout_callback, "load_class_from_fqn", lambda *args: ExampleReadout)
     callback = readout_callback.build_readout_callback(config)
+    assert callback.options == {"answer": 42}
     assert callback.on_before_weight_sync(None, None, 1) == {}
     assert callback.on_readout(None, 1) == {}
     assert callback.on_update_records([], "actor") is None
@@ -31,9 +33,9 @@ def test_partial_callbacks_and_retired_configuration_fail_at_construction(monkey
     monkeypatch.setattr(readout_callback, "load_class_from_fqn", lambda *args: SimpleNamespace)
     with pytest.raises(TypeError, match="lifecycle"):
         readout_callback.build_readout_callback(
-            OmegaConf.create({"trainer": {"readout_callback_class": "old.Callback"}})
+            OmegaConf.create({"trainer": {"evaluation": {"_target_": "old.Callback"}}})
         )
-    with pytest.raises(ValueError, match="Migrate"):
+    with pytest.raises(ValueError, match="Retired"):
         readout_callback.build_readout_callback(OmegaConf.create({"trainer": {"rkl_readout": {"output": "old"}}}))
 
 

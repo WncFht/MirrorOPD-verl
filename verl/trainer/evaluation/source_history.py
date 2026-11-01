@@ -17,7 +17,8 @@ from transformers import AutoConfig
 
 from verl.experimental.rollout_policy.collector import UnsafeDrainError
 from verl.trainer.evaluation.artifacts import HISTORY, RKL, TRAJECTORY, ArtifactStore, file_sha256, identity
-from verl.trainer.evaluation.config import ScoreBudget, strict_record
+from verl.trainer.evaluation.config import SourceHistoryConfig
+from verl.trainer.evaluation.identity import model_identity
 from verl.trainer.evaluation.metrics import readout_metrics
 from verl.trainer.evaluation.native import balanced_history, capture_rows
 from verl.trainer.evaluation.schedule import Schedule
@@ -32,28 +33,18 @@ class SourceHistoryReadout(ReadoutCallback):
 
     handles_validation = True
 
-    def __init__(self, *, config):
+    def __init__(self, *, config, options):
         self.config = config
-        self.options = OmegaConf.to_container(config.trainer.source_history_readout, resolve=True)
+        self.options = SourceHistoryConfig.parse(options)
         teacher_path = config.distillation.teacher_models.teacher_model.model_path
         self.hidden_size = AutoConfig.from_pretrained(teacher_path, local_files_only=True).hidden_size
-        budget = dict(self.options.get("score", {}))
-        budget.setdefault(
-            "token_chunk",
-            OmegaConf.select(config, "distillation.distillation_loss.full_vocab.token_chunk_size", default=512),
-        )
-        budget.setdefault("audit_state", bool(self.options.get("audit_state", False)))
-        self.score_budget = strict_record(ScoreBudget, budget)
-        self.root = Path(self.options["output"])
-        self.capacity = int(self.options.get("history_size", 128))
-        if "every" in self.options:
-            raise ValueError("Use explicit source_every and history_every; the shared every field was retired")
-        self.seed = int(self.options.get("seed", 42))
-        if self.capacity <= 0:
-            raise ValueError("Positive history capacity and readout frequency required")
+        self.score_budget = self.options.score
+        self.root = Path(self.options.output)
+        self.capacity = self.options.history_size
+        self.seed = self.options.seed
         self.schedules = {
-            "source_heldout": Schedule(at=(0,), every=self.options.get("source_every", 1)),
-            "history": Schedule(every=self.options.get("history_every", 1)),
+            "source_heldout": Schedule(at=(0,), every=self.options.source_every),
+            "history": Schedule(every=self.options.history_every),
         }
         if config.trainer.v1.trainer_mode != "sync" or config.distillation.execution_mode != "shared_sync":
             raise ValueError("Fixed RKL readout requires native synchronous shared-teacher execution")
@@ -64,9 +55,9 @@ class SourceHistoryReadout(ReadoutCallback):
         if not config.trainer.get("val_before_train", False):
             raise ValueError("Fixed RKL acceptance requires val_before_train=True")
         val_files = list(config.data.val_files)
-        if val_files != [self.options["source_file"]]:
+        if val_files != [self.options.source_file]:
             raise ValueError("Native validation data must be the declared source held-out file")
-        self.bank_path = Path(self.options.get("initial_bank", self.root / "initial-student-bank"))
+        self.bank_path = Path(self.options.initial_bank or self.root / "initial-student-bank")
         self.bank = None
         self.bank_sha256 = None
         rollout = config.actor_rollout_ref.rollout
@@ -74,19 +65,10 @@ class SourceHistoryReadout(ReadoutCallback):
             raise ValueError("Fixed RKL history requires one training rollout per question")
         self.generation = OmegaConf.to_container(rollout.val_kwargs, resolve=True)
         model_path = Path(config.actor_rollout_ref.model.path)
-        model_files = {
-            str(p.relative_to(model_path)): file_sha256(p)
-            for p in sorted(model_path.glob("*"))
-            if p.is_file()
-            and (
-                p.name in {"config.json", "tokenizer.json", "tokenizer_config.json", "special_tokens_map.json"}
-                or p.suffix == ".jinja"
-            )
-        }
         self.bank_metadata = dict(
-            initial_student=str(model_path),
-            model_files=model_files,
-            source_sha256=file_sha256(self.options["source_file"]),
+            contract_version=2,
+            initial_student_identity=model_identity(model_path),
+            source_sha256=file_sha256(self.options.source_file),
             response_cap=config.data.max_response_length,
             generation=self.generation,
             seed=OmegaConf.select(config, "actor_rollout_ref.rollout.seed"),
@@ -127,7 +109,9 @@ class SourceHistoryReadout(ReadoutCallback):
             metadata={
                 "source_bank": str(self.bank_path.resolve()),
                 "config_sha256": identity(OmegaConf.to_container(config, resolve=True, enum_to_str=True)),
-                "teacher_model": OmegaConf.select(config, "distillation.teacher_models.teacher_model.model_path"),
+                "teacher_model": teacher_path,
+                "teacher_identity": model_identity(teacher_path),
+                "student_identity": self.bank_metadata["initial_student_identity"],
                 "history_capacity": self.capacity,
                 "history_seed": self.seed,
                 "score_temperature": 1.0,
@@ -144,7 +128,7 @@ class SourceHistoryReadout(ReadoutCallback):
         self.previous_history = []
 
     def _check_bank(self):
-        if len(self.bank) != int(self.options.get("source_count", 128)):
+        if len(self.bank) != self.options.source_count:
             raise ValueError("Initial student bank has a different sample count")
         if len({r["source_id"] for r in self.bank}) != len(self.bank):
             raise ValueError("Duplicate source bank questions")
@@ -169,7 +153,7 @@ class SourceHistoryReadout(ReadoutCallback):
         dataset = trainer.val_dataset
         if dataset is None:
             raise ValueError("RKL source generation requires the native validation dataset")
-        if len(dataset) != int(self.options.get("source_count", 128)):
+        if len(dataset) != self.options.source_count:
             raise ValueError("Source held-out dataset was filtered or has the wrong count")
         rows = collate_fn([dataset[i] for i in range(len(dataset))])
         rows["uid"] = np.array([uuid.uuid4().hex for _ in range(len(dataset))], dtype=object)

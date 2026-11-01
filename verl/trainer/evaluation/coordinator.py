@@ -6,11 +6,9 @@ import asyncio
 import dataclasses
 import json
 import time
-from pathlib import Path
 
 import pyarrow as pa
 import pyarrow.parquet as pq
-from omegaconf import OmegaConf
 from transformers import AutoConfig
 
 from verl.trainer.evaluation.native import balanced_history, capture_rows
@@ -23,6 +21,7 @@ from .artifacts import EVAL_RKL, GENERATION, HISTORY, ArtifactStore, file_sha256
 from .config import EvaluationConfig
 from .generation import NativeGenerator
 from .generation_contract import engine_contract
+from .identity import bootstrap_contract, model_identity
 from .plan import compile_plan
 from .reporting import evaluation_metrics
 from .scoring import score_native_rows
@@ -43,37 +42,17 @@ def read_questions(spec):
     return rows
 
 
-def bootstrap_contract(options, *, student, teacher):
-    """Content identity, not a mutable path-only claim about reusable banks."""
-    return {
-        "student": student,
-        "teacher": teacher,
-        "source_sha256": file_sha256(options.source_file),
-        "datasets": [{"spec": dataclasses.asdict(d), "sha256": file_sha256(d.path)} for d in options.datasets],
-        "protocols": {k: v.metadata() for k, v in options.protocols.items()},
-    }
-
-
-def model_identity(path):
-    root = Path(path)
-    files = sorted(
-        p for p in root.iterdir() if p.is_file() and (p.suffix in {".json", ".jinja", ".safetensors", ".bin"})
-    )
-    if not files:
-        raise ValueError("Local immutable model files are required")
-    return identity({p.name: file_sha256(p) for p in files})
-
-
 class EvaluationCoordinator(ReadoutCallback):
     handles_validation = True
+    requires_full_batch = True
 
-    def __init__(self, *, config):
+    def __init__(self, *, config, options):
         from verl.experimental.rollout_policy.validation import uses_common_single_sampling
 
         self.config = config
         if not uses_common_single_sampling(config):
             raise ValueError("Unified evaluation requires the accepted common single-model generation contract")
-        self.options = EvaluationConfig.parse(OmegaConf.to_container(config.trainer.evaluation, resolve=True))
+        self.options = EvaluationConfig.parse(options)
         if config.trainer.v1.trainer_mode != "sync" or config.distillation.execution_mode != "shared_sync":
             raise ValueError("Unified evaluation requires synchronous serial shared-teacher training")
         if config.trainer.test_freq > 0 or config.trainer.get("resume_mode", "disable") != "disable":
