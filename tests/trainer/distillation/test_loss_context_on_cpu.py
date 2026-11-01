@@ -13,24 +13,6 @@ from verl.workers.utils.loss_context import LossContext
 from verl.workers.utils.losses import ppo_loss
 
 
-@pytest.mark.parametrize("kind", ["namespace", "dataclass", "omega"])
-def test_legacy_config_binding_is_per_call_and_preserves_shared_state(kind):
-    if kind == "namespace":
-        config = SimpleNamespace(global_batch_info={"sentinel": 7})
-    elif kind == "dataclass":
-        config = loss_config()
-    else:
-        config = OmegaConf.create({"global_batch_info": {"sentinel": 7}})
-        OmegaConf.set_readonly(config, True)
-    before = dict(config.global_batch_info)
-    first = LossContext(2, 6, 2).bind_legacy_config(config)
-    second = LossContext(4, 12, 4).bind_legacy_config(config)
-    assert dict(config.global_batch_info) == before
-    assert first.global_batch_info["batch_num_tokens"] == 6
-    assert second.global_batch_info["batch_num_tokens"] == 12
-    assert first.global_batch_info is not second.global_batch_info
-
-
 @pytest.mark.parametrize("mode", ["vanilla", "token_ppo", "token_is", "reinforce"])
 def test_distillation_calls_do_not_mutate_actor_or_objective_config(mode):
     x = torch.tensor([[-0.8, -1.2]], requires_grad=True)
@@ -39,13 +21,13 @@ def test_distillation_calls_do_not_mutate_actor_or_objective_config(mode):
     data["old_log_probs"] = x.detach().clone()
     actor = SimpleNamespace(loss_agg_mode="token-mean", loss_scale_factor=None, global_batch_info={"sentinel": 9})
     objective = loss_config(mode)
-    original = dict(objective.global_batch_info)
+    original = dict(objective)
     a, _ = distillation_loss(actor, SimpleNamespace(distillation_loss=objective), output, data)
     tu.assign_non_tensor(data, batch_num_tokens=4)
     b, _ = distillation_loss(actor, SimpleNamespace(distillation_loss=objective), output, data)
     torch.testing.assert_close(a, 2 * b)
     assert actor.global_batch_info == {"sentinel": 9}
-    assert objective.global_batch_info == original
+    assert dict(objective) == original
 
 
 def test_task_ppo_with_diagnostics_uses_private_normalization_config():
@@ -72,3 +54,55 @@ def test_task_ppo_with_diagnostics_uses_private_normalization_config():
     assert config.global_batch_info == {"sentinel": 3}
     assert "advantage/task/mean" in metrics
     torch.testing.assert_close(x.grad, torch.full_like(x, -0.5))
+
+
+@pytest.mark.parametrize("name,kind", [("k1", "sampled"), ("forward_kl_topk", "topk"), ("full_reverse_kl", "hidden")])
+def test_objective_metadata_has_one_immutable_payload_source(name, kind):
+    from dataclasses import FrozenInstanceError
+
+    from verl.workers.config.distillation_spec import get_distillation_loss_settings
+
+    spec = get_distillation_loss_settings(name)
+    assert spec.payload_kind == kind
+    assert spec.use_topk == (kind == "topk")
+    assert spec.use_estimator == (kind == "sampled")
+    assert isinstance(spec.names, tuple)
+    with pytest.raises(FrozenInstanceError):
+        spec.names = ("changed",)
+    with pytest.raises(FrozenInstanceError):
+        spec.payload_kind = "changed"
+    assert get_distillation_loss_settings(name).payload_kind == kind
+
+
+@pytest.mark.parametrize("mode", ["vanilla", "dppo_tv", "dppo_kl", "gspo", "sapo", "gpg", "cispo"])
+def test_registered_policy_losses_use_explicit_global_context(mode):
+    from verl.trainer.ppo.core_algos import get_policy_loss_fn
+    from verl.workers.config import ActorConfig
+
+    config = ActorConfig(
+        strategy="fsdp2",
+        rollout_n=1,
+        ppo_micro_batch_size_per_gpu=1,
+        clip_ratio=0.2,
+        clip_ratio_low=0.2,
+        clip_ratio_high=0.2,
+    )
+    # Same tensor graph and static config, changing only the global population.
+    logp = torch.tensor([[-0.8, -1.2]], requires_grad=True)
+    function = get_policy_loss_fn(mode)
+    mode_name = "seq-mean-token-mean" if mode == "sapo" else "token-mean"
+    kwargs = dict(
+        old_log_prob=logp.detach(),
+        log_prob=logp,
+        advantages=torch.tensor([[1.0, -0.5]]),
+        response_mask=torch.ones_like(logp),
+        loss_agg_mode=mode_name,
+        config=config,
+    )
+    a, _ = function(**kwargs, context=LossContext(dp_size=2, batch_num_tokens=6, global_batch_size=2))
+    b, _ = function(**kwargs, context=LossContext(dp_size=2, batch_num_tokens=12, global_batch_size=4))
+    torch.testing.assert_close(a, 2 * b)
+    ga = torch.autograd.grad(a, logp, retain_graph=True)[0]
+    gb = torch.autograd.grad(b, logp)[0]
+    torch.testing.assert_close(ga, 2 * gb)
+    assert not hasattr(config, "global_batch_info")

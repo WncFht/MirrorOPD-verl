@@ -64,7 +64,6 @@ from verl.workers.update_records import (
     merge_rank_metrics,
     take_engine_execution,
 )
-from verl.workers.update_records import consume_legacy_status as _consume_optimizer_step_status  # noqa: F401
 from verl.workers.utils.losses import ppo_loss
 
 logger = logging.getLogger(__file__)
@@ -404,7 +403,7 @@ class TrainingWorker(Worker, DistProfilerExtension):
                 optimizer_steps = 0
                 update_records = []
                 for update_index, output in enumerate(output_lst):
-                    result = UpdateResult.from_worker_output(output, self.engine.get_data_parallel_size())
+                    result = UpdateResult.from_worker_output(output)
                     if result.applied is None:
                         optimizer_steps = None
                     elif optimizer_steps is not None:

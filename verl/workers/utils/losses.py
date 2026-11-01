@@ -13,6 +13,8 @@
 # limitations under the License.
 
 
+from dataclasses import asdict
+
 import torch
 from tensordict import TensorDict
 
@@ -76,9 +78,7 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         if key in model_output
     }
 
-    # The upstream policy-loss ABI reads global_batch_info from its config.
-    # Bind a per-call view so batch state never leaks into the shared settings.
-    config = LossContext.from_batch(data, config).bind_legacy_config(config)
+    context = LossContext.from_batch(data, config)
 
     # assumes that if any of the global batch info is set, the policy_loss_fn will
     # normalize using dp_size/global_bsz/global_token; in this case, metric aggregation should be SUM
@@ -149,6 +149,7 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         response_mask=response_mask,
         loss_agg_mode=loss_agg_mode,
         config=config,
+        context=context,
         rollout_is_weights=rollout_is_weights,
         **policy_loss_kwargs,
     )
@@ -216,12 +217,12 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
             if key in ("sc_support_aligned", "sc_sampler_tail_mass", "sc_support_unknown"):
                 # Sum globally normalized token contributions across microbatches; the
                 # worker's DP mean then yields a token-weighted fraction, even for uneven rows.
-                global_tokens = config.global_batch_info["batch_num_tokens"]
+                global_tokens = context.batch_num_tokens
                 value = agg_loss(
                     sc_outputs[key],
                     response_mask,
                     "token-mean",
-                    dp_size=config.global_batch_info["dp_size"],
+                    dp_size=context.dp_size,
                     batch_num_tokens=global_tokens,
                 )
                 aggregation = AggregationType.SUM if global_tokens is not None else AggregationType.MEAN
@@ -234,7 +235,7 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
     # add entropy loss
     if entropy is not None:
         entropy_loss = agg_loss(
-            loss_mat=entropy, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
+            loss_mat=entropy, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context)
         )
         entropy_coeff = config.entropy_coeff
         policy_loss -= entropy_coeff * entropy_loss
@@ -249,9 +250,7 @@ def ppo_loss(config: ActorConfig, model_output, data: TensorDict, dp_group=None)
         ref_log_prob = data["ref_log_prob"]
         # compute kl loss
         kld = kl_penalty(logprob=log_prob, ref_logprob=ref_log_prob, kl_penalty=config.kl_loss_type)
-        kl_loss = agg_loss(
-            loss_mat=kld, loss_mask=response_mask, loss_agg_mode=config.loss_agg_mode, **config.global_batch_info
-        )
+        kl_loss = agg_loss(loss_mat=kld, loss_mask=response_mask, loss_agg_mode=config.loss_agg_mode, **asdict(context))
 
         policy_loss += kl_loss * config.kl_loss_coef
         metrics["kl_loss"] = Metric(value=kl_loss, aggregation=metric_aggregation)

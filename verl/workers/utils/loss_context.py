@@ -1,11 +1,8 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Per-call normalization and the narrow compatibility boundary for policy losses."""
+"""Immutable per-call normalization, separate from static policy configuration."""
 
-from copy import copy
 from dataclasses import asdict, dataclass
-
-from omegaconf import DictConfig, open_dict, read_write
 
 from verl.utils import tensordict_utils as tu
 
@@ -36,17 +33,3 @@ class LossContext:
         if self.batch_num_tokens is None or self.batch_num_tokens <= 0:
             raise ValueError("full KL requires positive globally valid token count")
         return total * self.dp_size / self.batch_num_tokens
-
-    def bind_legacy_config(self, config):
-        """Give upstream policy functions their ABI without mutating shared config.
-
-        Only the small runtime dictionary is replaced. Model/data objects and
-        unrelated nested configuration are not deep-copied.
-        """
-        bound = copy(config)
-        if isinstance(bound, DictConfig):
-            with read_write(bound), open_dict(bound):
-                bound.global_batch_info = asdict(self)
-        else:
-            object.__setattr__(bound, "global_batch_info", asdict(self))
-        return bound

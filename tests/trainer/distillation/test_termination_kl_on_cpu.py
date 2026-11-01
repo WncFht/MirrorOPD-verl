@@ -10,6 +10,7 @@ from tensordict import TensorDict
 
 from verl.trainer.distillation.full_vocab import dense_rows, full_reverse_kl_result, precompute_kl_rows
 from verl.trainer.distillation.losses import distillation_loss
+from verl.trainer.distillation.output import FullVocabOutput
 from verl.utils import tensordict_utils as tu
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig, FullVocabConfig
 
@@ -133,7 +134,14 @@ def test_loss_normalizes_the_coarse_objective_but_reports_raw_kl():
     loss, metrics = distillation_loss(
         SimpleNamespace(loss_agg_mode="token-mean"),
         cfg,
-        {"full_kl_sum": raw, "termination_kl_sum": objective, "full_kl_count": 3},
+        {
+            "full_vocab": FullVocabOutput.from_result(
+                SimpleNamespace(loss_sum=objective, token_objective=raw.reshape(1), token_diagnostics={}),
+                cfg.distillation_loss.loss_settings,
+                3,
+                termination=True,
+            )
+        },
         data,
     )
     loss.backward()

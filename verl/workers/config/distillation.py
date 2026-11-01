@@ -137,12 +137,6 @@ class DistillationLossConfig(BaseConfig):
     clip_ratio_low: Optional[float] = 0.2
     clip_ratio_high: Optional[float] = 0.2
 
-    # Store global batch info for loss aggregation:
-    # dp_size: data parallel size
-    # batch_num_tokens: number of valid tokens in global batch
-    # global_batch_size: global batch size
-    global_batch_info: dict = field(default_factory=dict)
-
     # Store distillation loss settings for computing the specified loss_mode
     # Not set by user, populated at runtime
     loss_settings: Optional[dict] = None

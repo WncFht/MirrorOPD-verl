@@ -184,11 +184,6 @@ class ActorConfig(BaseConfig):
     rollout_n: int = MISSING  # must be override by sampling config
     model_config: HFModelConfig = field(default_factory=BaseConfig)
 
-    # Store global batch info for loss aggregation:
-    # dp_size: data parallel size
-    # batch_num_tokens: number of valid tokens in global batch
-    # global_batch_size: global batch size
-    global_batch_info: dict = field(default_factory=dict)
     qat: QATConfig = field(default_factory=QATConfig)
 
     def __post_init__(self):

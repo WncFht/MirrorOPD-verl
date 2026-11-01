@@ -11,8 +11,10 @@ from tensordict import TensorDict
 
 from verl.trainer.distillation.full_vocab import FullKLResult, full_reverse_kl, full_reverse_kl_result
 from verl.trainer.distillation.losses import distillation_loss
+from verl.trainer.distillation.output import FullVocabOutput
 from verl.utils import tensordict_utils as tu
 from verl.utils.metric.observations import Observation
+from verl.utils.metric.position import position_observations
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig
 
 
@@ -77,10 +79,14 @@ def test_loss_statistics_merge_unequal_microbatches_and_reconstruct_prefix():
             SimpleNamespace(loss_agg_mode="token-mean"),
             cfg,
             {
-                "full_kl_sum": vs.sum(),
-                "full_kl_count": ns.sum(),
-                "full_kl_position_sums": vs,
-                "full_kl_position_counts": ns,
+                "full_vocab": FullVocabOutput(
+                    vs.sum(),
+                    1.0,
+                    {
+                        "distillation/full_kl": Observation.ratio(vs.sum(), ns.sum()),
+                        **position_observations(vs, ns, prefix="distillation/full_kl_position"),
+                    },
+                )
             },
             data,
         )

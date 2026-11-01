@@ -21,6 +21,7 @@ implement PPO-like algorithms.
 __all__ = ["register_adv_est", "get_adv_estimator_fn", "AdvantageEstimator"]
 
 from collections import defaultdict
+from dataclasses import asdict
 from enum import Enum
 from typing import Any, Callable, Optional
 
@@ -33,6 +34,9 @@ from verl.trainer.config import AlgoConfig
 from verl.utils import as_torch_index, group_mean_std
 from verl.utils.import_utils import deprecated
 from verl.workers.config import ActorConfig
+from verl.workers.utils.loss_context import LossContext
+
+_LOCAL_LOSS_CONTEXT = LossContext()
 
 PolicyLossFn = Callable[
     [
@@ -43,6 +47,7 @@ PolicyLossFn = Callable[
         str,  # loss_agg_mode
         Optional[DictConfig | ActorConfig],  # config
         torch.Tensor | None,  # rollout_log_probs
+        LossContext,  # call-scoped global normalization
     ],
     tuple[torch.Tensor, dict[str, Any]],
 ]
@@ -1291,6 +1296,7 @@ def compute_policy_loss_vanilla(
     loss_agg_mode: str = "token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the clipped policy objective and related metrics for PPO.
@@ -1364,9 +1370,7 @@ def compute_policy_loss_vanilla(
     if rollout_is_weights is not None:
         pg_losses = pg_losses * rollout_is_weights
 
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
 
     pg_metrics = {
         "actor/pg_clipfrac": pg_clipfrac.detach().item(),
@@ -1385,6 +1389,7 @@ def compute_policy_loss_dppo_tv(
     loss_agg_mode: str = "token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the clipped policy objective and related metrics for DPPO-Binary-TV.
@@ -1442,9 +1447,7 @@ def compute_policy_loss_dppo_tv(
     if rollout_is_weights is not None:
         pg_losses = pg_losses * rollout_is_weights
 
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
 
     pg_clipfrac = verl_F.masked_mean((1.0 - valid_mask).float(), response_mask)
     pg_clipfrac_lower = verl_F.masked_mean((ratio > clip_ratio_c).float() * valid_mask, response_mask)
@@ -1466,6 +1469,7 @@ def compute_policy_loss_dppo_kl(
     loss_agg_mode: str = "token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the clipped policy objective and related metrics for DPPO-Binary-KL.
@@ -1526,9 +1530,7 @@ def compute_policy_loss_dppo_kl(
     if rollout_is_weights is not None:
         pg_losses = pg_losses * rollout_is_weights
 
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
 
     # For compatibility, return zero for pg_clipfrac_lower (not used in standard DPPO)
     pg_clipfrac = verl_F.masked_mean((1.0 - valid_mask).float(), response_mask)
@@ -1551,6 +1553,7 @@ def compute_policy_loss_gspo(
     loss_agg_mode: str = "seq-mean-token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the clipped policy objective and related metrics for GSPO.
@@ -1602,9 +1605,7 @@ def compute_policy_loss_gspo(
 
     # NOTE: differ from GSPO original paper that aggregate the loss at the sequence level (seq-mean-token-mean),
     # we support aggregate the loss in different modes, default is token-mean.
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
 
     # For compatibility, return zero for pg_clipfrac_lower (not used in standard GSPO)
     pg_clipfrac = verl_F.masked_mean(torch.gt(pg_losses2, pg_losses1).float(), response_mask)
@@ -1628,6 +1629,7 @@ def compute_policy_loss_sapo(
     loss_agg_mode: str = "seq-mean-token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the smoothed policy objective and related metrics for SAPO.
@@ -1686,7 +1688,7 @@ def compute_policy_loss_sapo(
 
     # for SAPO, we need to aggregate the loss at the sequence level (seq-mean-token-mean)
     pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode="seq-mean-token-mean", **config.global_batch_info
+        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode="seq-mean-token-mean", **asdict(context)
     )
 
     # For compatibility, return zero for both pg_clipfrac and pg_clipfrac_lower (not used in SAPO)
@@ -1713,6 +1715,7 @@ def compute_policy_loss_gpg(
     loss_agg_mode: str = "token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """Adapted from
     https://github.com/AMAP-ML/GPG/blob/main/VisualThinker-R1-Zero/src/open-r1-multimodal/src/open_r1/trainer/grpo_trainer.py#L495
@@ -1734,9 +1737,7 @@ def compute_policy_loss_gpg(
     if rollout_is_weights is not None:
         pg_losses = pg_losses * rollout_is_weights
 
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
     return pg_loss, {}
 
 
@@ -1749,6 +1750,7 @@ def compute_policy_loss_clip_cov(
     loss_agg_mode: str = "token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the clipped policy objective and related metrics for Clip-Cov.
@@ -1835,9 +1837,7 @@ def compute_policy_loss_clip_cov(
     if rollout_is_weights is not None:
         pg_losses = pg_losses * rollout_is_weights
 
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
     pg_metrics = {
         "actor/pg_clipfrac": pg_clipfrac.detach().item(),
         "actor/ppo_kl": ppo_kl.detach().item(),
@@ -1854,6 +1854,7 @@ def compute_policy_loss_kl_cov(
     loss_agg_mode: str = "token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the clipped policy objective and related metrics for Clip-Cov.
@@ -1916,9 +1917,7 @@ def compute_policy_loss_kl_cov(
     if rollout_is_weights is not None:
         pg_losses = pg_losses * rollout_is_weights
 
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
     pg_metrics = {
         "actor/ppo_kl": ppo_kl_abs.detach().item(),
     }
@@ -1934,6 +1933,7 @@ def compute_policy_loss_geo_mean(
     loss_agg_mode: str = "token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the clipped policy objective and related metrics for GMPO.
@@ -2020,6 +2020,7 @@ def compute_policy_loss_dro(
     loss_agg_mode: str = "token-mean",
     config: Optional[ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """Compute Direct Reward Optimization with a quadratic log-ratio penalty."""
     assert config is not None
@@ -2035,9 +2036,7 @@ def compute_policy_loss_dro(
     if rollout_is_weights is not None:
         pg_losses = pg_losses * rollout_is_weights
 
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
     pg_metrics = {
         "actor/ppo_kl": verl_F.masked_mean(-log_ratio, response_mask).detach().item(),
     }
@@ -2053,6 +2052,7 @@ def compute_policy_loss_cispo(
     loss_agg_mode: str = "token-mean",
     config: Optional[DictConfig | ActorConfig] = None,
     rollout_is_weights: torch.Tensor | None = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """
     Compute the clipped policy objective and related metrics for CISPO.
@@ -2090,9 +2090,7 @@ def compute_policy_loss_cispo(
     if rollout_is_weights is not None:
         pg_losses = pg_losses * rollout_is_weights
 
-    pg_loss = agg_loss(
-        loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **config.global_batch_info
-    )
+    pg_loss = agg_loss(loss_mat=pg_losses, loss_mask=response_mask, loss_agg_mode=loss_agg_mode, **asdict(context))
 
     # For compatibility, return zero for pg_clipfrac_lower (not used in CISPO)
     pg_clipfrac_lower = torch.tensor(0.0, device=pg_loss.device)
@@ -2339,6 +2337,7 @@ def compute_policy_loss_reinforce(
     config: Optional[ActorConfig] = None,
     rollout_is_weights: Optional[torch.Tensor] = None,
     sc_correction: Optional[torch.Tensor] = None,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """Compute REINFORCE-style policy gradient loss with optional IS correction.
 
@@ -2365,7 +2364,8 @@ def compute_policy_loss_reinforce(
         response_mask: Mask indicating valid tokens (1 for valid, 0 for padding).
             Shape: (batch_size, seq_length). Should already include rejection sampling.
         loss_agg_mode: Loss aggregation strategy (see agg_loss for details).
-        config: Actor config (required for global_batch_info).
+        config: Static actor policy settings.
+        context: Per-call global normalization denominators.
         rollout_is_weights: Pre-computed IS weights (π_current / π_rollout).
             Shape: (batch_size, seq_length). None to disable IS correction.
         sc_correction: Score-centering term per token, added as ``advantages * sc_correction``
@@ -2401,7 +2401,7 @@ def compute_policy_loss_reinforce(
         loss_mat=pg_losses,
         loss_mask=response_mask,
         loss_agg_mode=loss_agg_mode,
-        **config.global_batch_info,
+        **asdict(context),
     )
 
     # Compute KL divergence between current and rollout policy
@@ -2429,6 +2429,7 @@ def compute_policy_loss_bypass_mode(
     sc_correction: Optional[torch.Tensor] = None,
     collect_metrics: bool = False,
     metrics_quantile: bool = False,
+    context: LossContext = _LOCAL_LOSS_CONTEXT,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
     """Bypass mode policy loss supporting both REINFORCE and PPO-clip.
 
@@ -2534,6 +2535,7 @@ def compute_policy_loss_bypass_mode(
             response_mask=effective_mask,
             loss_agg_mode=loss_agg_mode,
             config=config,
+            context=context,
             rollout_is_weights=computed_is_weights,
             sc_correction=sc_correction,
         )
@@ -2549,6 +2551,7 @@ def compute_policy_loss_bypass_mode(
             response_mask=effective_mask,
             loss_agg_mode=loss_agg_mode,
             config=config,
+            context=context,
             rollout_is_weights=None,  # Explicitly None - no IS weights for PPO-clip
         )
 

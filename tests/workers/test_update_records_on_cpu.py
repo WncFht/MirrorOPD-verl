@@ -14,7 +14,7 @@ from verl.workers.update_records import UpdateResult, execution_consensus, final
 @pytest.mark.parametrize("applied", [True, False, None])
 def test_execution_fact_is_not_a_metric(applied):
     output = tu.get_tensordict({}, {"metrics": {"loss": 1.0}, "optimizer_step_applied": applied})
-    result = UpdateResult.from_worker_output(output, 2)
+    result = UpdateResult.from_worker_output(output)
     assert result.applied is applied and result.metrics == {"loss": 1.0}
     assert execution_consensus([applied, applied], 2) is applied
 
@@ -51,3 +51,16 @@ def test_record_keeps_unknown_fact_and_undefined_observation():
     assert record["metrics"]["distill/full_kl"] is None
     assert math.isnan(record["metrics"]["optim/actor/loss"])
     assert record["metrics"]["rollout/data_reuse/epoch_index"] == 1
+
+
+@pytest.mark.parametrize("fact", [True, False, None])
+def test_engine_execution_requires_explicit_field(fact):
+    from verl.workers.update_records import take_engine_execution
+
+    assert take_engine_execution({"optimizer_step_applied": fact}, {}) is fact
+    with pytest.raises(RuntimeError, match="must report"):
+        take_engine_execution({}, {})
+    with pytest.raises(RuntimeError, match="out of metrics"):
+        take_engine_execution({"optimizer_step_applied": fact}, {"_optimizer_step_applied": fact})
+    with pytest.raises(RuntimeError, match="must report"):
+        UpdateResult.from_worker_output(tu.get_tensordict({}, {"metrics": {}}))
