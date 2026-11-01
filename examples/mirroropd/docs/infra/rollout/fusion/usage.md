@@ -1,6 +1,6 @@
 # Rollout 组合启动说明
 
-日常训练使用 `examples/mirroropd/run_math_opd_ablation_fsdp2.sh`。模型引用与组合含义见[统一语义](2026-10-31-Rollout统一模型来源与组合语义.md)，分阶段验证见[实施计划](2026-10-31-Rollout统一接口实施计划.md)。日常从主仓库启动，开发使用仓库内 `.worktrees/rollout-maintenance`；版本和发布回执见[工作区说明](workspaces.md)。
+日常训练使用 `examples/mirroropd/run_math_opd_ablation_fsdp2.sh`。模型引用见[统一语义](semantics.md)，实际通过范围见[支持与验收](support.md)，开发目录见[工作区维护](../../maintenance/workspaces.md)。
 
 ## 编号实验入口
 
@@ -44,13 +44,13 @@ Single 使用 `model`，mixture 使用 `left/right`，不能混用。未指定�
 
 `rollout_policy.execution.backend` 默认为 `vllm_fusion`，`hf_fusion` 只能显式选择，失败时不会自动回退。HF 保留数值参考能力。当前原生融合支持 Qwen2 dense 配对、Qwen3 dense 第一组件与 dense/MoE 第二组件；current 映射到第一组件。模型引用独立不代表任意结构、词表或模型族都已支持。
 
-原生 fusion 的 `execution.max_num_seqs` 是活跃请求数，`execution.kv_cache_memory_bytes` 是组合引擎的 KV 预算。HF 的 `micro_batch_size` 是静态微批；两者不共用配置。普通 single 与验证使用 `actor_rollout_ref.rollout` 配置。固定 single 和 native fusion 的私有引擎窗口限制在训练 prompt cap＋response cap 内，保留更小的显式窗口；current/validation 引擎仍保留验证所需窗口。默认 1 GiB KV 预算用于保守的小规模配置，不承诺覆盖任意配对的最长上下文；较长上下文应显式设置足够的 KV 预算。P/Q dense 配对的独立生成候选和实测成本见[完整自然生成测量](2026-10-28-vLLM双模型融合重构与优化方案.md#85-完整自然生成的并发与拓扑选择)。这些候选仍需对应的训练驻留验证，不自动改写全局默认值。
+原生 fusion 的 `execution.max_num_seqs` 是活跃请求数，`execution.kv_cache_memory_bytes` 是组合引擎的 KV 预算。HF 的 `micro_batch_size` 是静态微批；两者不共用配置。普通 single 与验证使用 `actor_rollout_ref.rollout` 配置。固定 single 和 native fusion 的私有引擎窗口限制在训练 prompt cap＋response cap 内，保留更小的显式窗口；current/validation 引擎仍保留验证所需窗口。默认 1 GiB KV 预算用于保守的小规模配置，不承诺覆盖任意配对的最长上下文；较长上下文应显式设置足够的 KV 预算。P/Q dense 配对的独立生成候选和实测成本见[完整自然生成测量](../../performance/inference/2026-11-01-Token融合热点与并发测量.md#85-完整自然生成的并发与拓扑选择)。这些候选仍需对应的训练驻留验证，不自动改写全局默认值。
 
 ## 手动保存与恢复
 
 保存仍使用 `trainer.save_freq`，恢复使用 `trainer.resume_mode=resume_path` 和 `trainer.resume_from_path`。策略路径和采用公共采样合同的默认 single checkpoint 增加 `rollout_state.json`，核对策略、原始 initial 和固定模型的内容身份。恢复配置继续指向原始初始化模型；不要把 actor 恢复检查点当作 initial。
 
-`rollout_state.json` 现在使用 schema 2：模型身份由加载所需的权重、配置和 tokenizer 文件决定；普通说明文件和优化器文件不参与身份。恢复比较模型绑定、系数时钟与采样参数，超时和执行预算单独记录并接受当前能力检查。旧 schema 1 或缺少身份文件的运行，用其冻结代码继续。新运行遇到旧字段会直接报错；按[配置迁移表](2026-10-31-Rollout统一接口实施计划.md#配置迁移)修改后重启。模型不受支持、无法确认请求排空、权重接收失败仍会终止运行；此轮不加入自动重试。
+`rollout_state.json` 现在使用 schema 2：模型身份由加载所需的权重、配置和 tokenizer 文件决定；普通说明文件和优化器文件不参与身份。恢复比较模型绑定、系数时钟与采样参数，超时和执行预算单独记录并接受当前能力检查。旧 schema 1 或缺少身份文件的运行，用其冻结代码继续。新运行遇到旧字段会直接报错；按[配置迁移表](#旧配置迁移)修改后重启。模型不受支持、无法确认请求排空、权重接收失败仍会终止运行；此轮不加入自动重试。
 
 资产别名在公共启动脚本解析成固定路径；直接调用通用 trainer 时，`model/left/right.ref` 应提供本地目录。
 
@@ -61,3 +61,17 @@ Single 使用 `model`，mixture 使用 `left/right`，不能混用。未指定�
 这是一项行为变更：在两个相同 logits、top-p=0.5 的边界例子中，公共过滤规则保留两个 token。默认 single 旧运行的自然轨迹可能改变；旧 checkpoint 应用原冻结代码恢复。新运行保存 schema 2 合同，缺少该合同的历史 checkpoint 不会静默切换采样规则。数学合同一致不承诺不同后端、执行形状或请求调度产生逐 token 相同的随机轨迹。
 
 恢复可以调整 deadline、drain、微批和已支持的执行资源设置，但仍需通过后端能力检查；模型身份、采样参数及实际融合后端变化会拒绝恢复。调资源不保证数值逐位一致。新结构的 CPU/RPC 检查与真实 GPU 训练验收分开记录，旧 GPU 验收不能自动覆盖这项采样迁移。
+
+## 旧配置迁移
+
+新运行只接受规范字段；解析器不会自动转换旧配置。历史 checkpoint 和实验记录仍使用对应冻结版本读取。
+
+| 旧字段                                    | 新字段                                                             |
+| ----------------------------------------- | ------------------------------------------------------------------ |
+| `source=student, student=current/initial` | single 使用 `model.kind=current/initial`；mixture 使用 `left.kind` |
+| `source=teacher`                          | `model.kind=teacher`                                               |
+| `source=checkpoint, model_path=A`         | `model={kind:checkpoint,ref:A}`                                    |
+| `teacher_model_path=B`                    | `right={kind:checkpoint,ref:B}`                                    |
+| `teacher_weight`                          | `right_weight`                                                     |
+
+新 single 使用 model，新 mixture 使用 left/right，二者不能混用。模型资产别名和后端必要的组件适配继续保留；它们不承担旧配置的隐式迁移。
