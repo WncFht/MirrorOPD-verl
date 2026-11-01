@@ -1,0 +1,422 @@
+{
+  "revision": "462e3f3ae732e9b63e7491ffe36c78cf69890a51",
+  "arms": {
+    "LM": {
+      "full_seconds": 33054.19683551788,
+      "total_phases": {
+        "Rollout": 9184.801152423024,
+        "Teacher scoring": 670.702246427536,
+        "Actor update": 10019.51526145637,
+        "Checkpoint": 72.9812503606081,
+        "Readouts": 12758.865676000714,
+        "Other": 347.33124884963036
+      },
+      "readouts": [
+        {
+          "outer": 0,
+          "total_seconds": 157.82742092758417,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 5,
+          "total_seconds": 73.55710490047932,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 10,
+          "total_seconds": 86.89803806692362,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 15,
+          "total_seconds": 76.22617477923632,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 20,
+          "total_seconds": 2008.0714908912778,
+          "accuracy_seconds": 1880.6372222229838
+        },
+        {
+          "outer": 25,
+          "total_seconds": 70.5086524784565,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 30,
+          "total_seconds": 74.07106174528599,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 35,
+          "total_seconds": 88.04268685728312,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 40,
+          "total_seconds": 10118.748549982905,
+          "accuracy_seconds": 9982.002020776272
+        }
+      ],
+      "ordinary_rounds": 31,
+      "ordinary_median_seconds": 493.8511986285448,
+      "ordinary_mean_phases": {
+        "rollout_seconds": 226.7195987997036,
+        "teacher_scoring_seconds": 16.704186097027794,
+        "actor_update_seconds": 251.35988073315352,
+        "other_seconds": 0.13288538302144698
+      },
+      "ordinary_median_generation_tps": 1126.9617673724185,
+      "ordinary_median_update_ms_per_unique_token": 1.0057251927650408,
+      "median_refit_seconds": 2.361632041633129,
+      "tokens": 9949553.0,
+      "nvml_peak_gib": 67.04876708984375,
+      "process_tree_rss_sum_peak_gib": 102.90893173217773,
+      "resource_metadata": {
+        "kind": "metadata",
+        "start_epoch": 1793468392.6050441,
+        "physical_gpus": [
+          6
+        ],
+        "gpu_uuids": [
+          "GPU-44bf7e96-2d92-fcfd-7da0-471d76517118"
+        ],
+        "interval_seconds": 0.5,
+        "other_gpu_load_at_start": [
+          {
+            "index": 0,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 1,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 2,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 3,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 4,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 5,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 7,
+            "memory_used": 591790080,
+            "utilization": 0
+          }
+        ],
+        "other_gpu_scope": "read-only context, not allocated to this run",
+        "container_cpu_scope": "Shared by all jobs in this container, not attributed to this run",
+        "container_cpu_quota": "16000000 100000"
+      }
+    },
+    "PM": {
+      "full_seconds": 33667.84508728981,
+      "total_phases": {
+        "Rollout": 9686.198276616633,
+        "Teacher scoring": 691.4372421354055,
+        "Actor update": 10529.938180603087,
+        "Checkpoint": 71.78027234226465,
+        "Readouts": 12340.463550440967,
+        "Other": 348.027565151453
+      },
+      "readouts": [
+        {
+          "outer": 0,
+          "total_seconds": 156.64241556078196,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 5,
+          "total_seconds": 72.16896659135818,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 10,
+          "total_seconds": 89.15977767109871,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 15,
+          "total_seconds": 98.98637594282627,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 20,
+          "total_seconds": 2125.254048228264,
+          "accuracy_seconds": 1993.283290490508
+        },
+        {
+          "outer": 25,
+          "total_seconds": 74.2995039075613,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 30,
+          "total_seconds": 71.06351939588785,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 35,
+          "total_seconds": 70.15739870071411,
+          "accuracy_seconds": 0.0
+        },
+        {
+          "outer": 40,
+          "total_seconds": 9578.598139323294,
+          "accuracy_seconds": 9442.938419409096
+        }
+      ],
+      "ordinary_rounds": 31,
+      "ordinary_median_seconds": 513.8543155416846,
+      "ordinary_mean_phases": {
+        "rollout_seconds": 239.52272349427784,
+        "teacher_scoring_seconds": 17.205224877163285,
+        "actor_update_seconds": 263.61281429904125,
+        "other_seconds": 0.14099695557548153
+      },
+      "ordinary_median_generation_tps": 1103.716837424138,
+      "ordinary_median_update_ms_per_unique_token": 1.0126190928932455,
+      "median_refit_seconds": 2.3399618044495583,
+      "tokens": 10390196.0,
+      "nvml_peak_gib": 66.64642333984375,
+      "process_tree_rss_sum_peak_gib": 101.7895622253418,
+      "resource_metadata": {
+        "kind": "metadata",
+        "start_epoch": 1793468392.38472,
+        "physical_gpus": [
+          7
+        ],
+        "gpu_uuids": [
+          "GPU-76f3510f-d1e3-46ec-7cd6-a339d3a9d933"
+        ],
+        "interval_seconds": 0.5,
+        "other_gpu_load_at_start": [
+          {
+            "index": 0,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 1,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 2,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 3,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 4,
+            "memory_used": 81467277312,
+            "utilization": 99
+          },
+          {
+            "index": 5,
+            "memory_used": 81467277312,
+            "utilization": 98
+          },
+          {
+            "index": 6,
+            "memory_used": 591790080,
+            "utilization": 0
+          }
+        ],
+        "other_gpu_scope": "read-only context, not allocated to this run",
+        "container_cpu_scope": "Shared by all jobs in this container, not attributed to this run",
+        "container_cpu_quota": "16000000 100000"
+      }
+    }
+  },
+  "paired_accuracy": {
+    "LM-PM": {
+      "estimate": 0.02029999999999993,
+      "ci95": [
+        -0.011133750000000048,
+        0.0532870833333334
+      ]
+    },
+    "LM-initial": {
+      "estimate": 0.17859999999999993,
+      "ci95": [
+        0.13903208333333333,
+        0.2210008333333332
+      ]
+    },
+    "PM-initial": {
+      "estimate": 0.1583,
+      "ci95": [
+        0.11926583333333335,
+        0.19973458333333327
+      ]
+    }
+  },
+  "statistical_scope": "10000 stratified paired prompt bootstrap draws; one training seed; no training-seed interval",
+  "accuracy": {
+    "initial": {
+      "macro5": 0.26643333333333336,
+      "by_dataset": {
+        "MATH-500": 0.7155,
+        "AMC23": 0.4,
+        "AIME24": 0.10833333333333334,
+        "AIME25": 0.03333333333333333,
+        "AIME26": 0.075
+      },
+      "seconds": 2691.800647228956,
+      "mean_length": 1342.8757936507936,
+      "p95_length": 4035.0999999999995,
+      "cap_hits": 13,
+      "tokens": 3384047,
+      "effective_tokens_per_second": 1257.168506695943,
+      "macro5_ci95": [
+        0.23216583333333335,
+        0.30333374999999996
+      ]
+    },
+    "teacher": {
+      "macro5": 0.6873166666666666,
+      "by_dataset": {
+        "MATH-500": 0.947,
+        "AMC23": 0.95625,
+        "AIME24": 0.6333333333333333,
+        "AIME25": 0.4166666666666667,
+        "AIME26": 0.48333333333333334
+      },
+      "seconds": 12398.505806684494,
+      "mean_length": 2887.4829365079363,
+      "p95_length": 9486.249999999982,
+      "cap_hits": 74,
+      "tokens": 7276457,
+      "effective_tokens_per_second": 586.8817673236877,
+      "macro5_ci95": [
+        0.6343654166666668,
+        0.7399049999999999
+      ]
+    },
+    "LM": {
+      "macro5": 0.4450333333333333,
+      "by_dataset": {
+        "MATH-500": 0.846,
+        "AMC23": 0.6875,
+        "AIME24": 0.3,
+        "AIME25": 0.20833333333333334,
+        "AIME26": 0.18333333333333332
+      },
+      "seconds": 9982.002020776272,
+      "mean_length": 4561.257142857143,
+      "p95_length": 31744.0,
+      "cap_hits": 130,
+      "tokens": 11494368,
+      "effective_tokens_per_second": 1151.5092840169668,
+      "macro5_ci95": [
+        0.39871625,
+        0.49353333333333327
+      ]
+    },
+    "PM": {
+      "macro5": 0.42473333333333335,
+      "by_dataset": {
+        "MATH-500": 0.832,
+        "AMC23": 0.675,
+        "AIME24": 0.25833333333333336,
+        "AIME25": 0.19166666666666668,
+        "AIME26": 0.16666666666666666
+      },
+      "seconds": 9442.938419409096,
+      "mean_length": 4414.50873015873,
+      "p95_length": 20374.099999999966,
+      "cap_hits": 109,
+      "tokens": 11124562,
+      "effective_tokens_per_second": 1178.0826587976555,
+      "macro5_ci95": [
+        0.3801320833333333,
+        0.47185083333333333
+      ]
+    }
+  },
+  "rollout_pilots": [
+    {
+      "name": "Q-c8-kv24-pilot",
+      "seqs": 8,
+      "kv_gib": 24.0,
+      "peak_gib": 37.714111328125,
+      "repeat": 0,
+      "seconds": 362.5961703360081,
+      "tokens": 285456,
+      "tps": 787.2559705621701,
+      "finish_counts": {
+        "stop": 53,
+        "length": 11
+      },
+      "min_length": 709,
+      "max_length": 7168,
+      "mean_length": 4460.25,
+      "preemption_cumulative": {
+        "vllm:num_preemptions": 0
+      },
+      "token_hash": "3d3f971693dc8c968647aedda34f3e191e2d6bad266f235f276953913cb520a9"
+    },
+    {
+      "name": "Q-c16-kv48-pilot",
+      "seqs": 16,
+      "kv_gib": 48.0,
+      "peak_gib": 61.714111328125,
+      "repeat": 0,
+      "seconds": 258.102549739182,
+      "tokens": 289549,
+      "tps": 1121.8370383887927,
+      "finish_counts": {
+        "stop": 52,
+        "length": 12
+      },
+      "min_length": 719,
+      "max_length": 7168,
+      "mean_length": 4524.203125,
+      "preemption_cumulative": {
+        "vllm:num_preemptions": 0
+      },
+      "token_hash": "d766e4fb8d9f4f462e2388fd22ebc01579f1f23b2108c2e06966cb383cb78649"
+    },
+    {
+      "name": "Q-c32-kv60-pilot",
+      "seqs": 32,
+      "kv_gib": 60.0,
+      "peak_gib": 73.714111328125,
+      "repeat": 0,
+      "seconds": 189.4430334046483,
+      "tokens": 264985,
+      "tps": 1398.7582189628206,
+      "finish_counts": {
+        "stop": 53,
+        "length": 11
+      },
+      "min_length": 721,
+      "max_length": 7168,
+      "mean_length": 4140.390625,
+      "preemption_cumulative": {
+        "vllm:num_preemptions": 0
+      },
+      "token_hash": "8a3445e7e59c22ce47675f87f48fdfd1de4ca86965734ec1387f773d332c22e5"
+    }
+  ]
+}
