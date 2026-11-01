@@ -1,0 +1,1601 @@
+{
+  "baseline": "402f6353",
+  "scope": [
+    "verl/trainer/distillation",
+    "verl/trainer/evaluation",
+    "verl/trainer/ppo/v1",
+    "verl/workers/engine",
+    "verl/workers/config",
+    "verl/workers/utils",
+    "verl/experimental/rollout_policy",
+    "examples/mirroropd/launchers",
+    "examples/mirroropd/assets"
+  ],
+  "files": [
+    {
+      "path": "examples/mirroropd/assets/check_assets.py",
+      "lines": 239,
+      "candidates": []
+    },
+    {
+      "path": "examples/mirroropd/assets/paths.py",
+      "lines": 182,
+      "candidates": [
+        {
+          "line": 7,
+          "text": "No operation probes an old model directory or creates a compatibility link."
+        },
+        {
+          "line": 129,
+          "text": "raise ValueError(f\"New configuration uses a retired model path: {original}; use {projected}\")"
+        },
+        {
+          "line": 144,
+          "text": "# Explicit test/custom storage remains explicit, without any legacy fallback."
+        }
+      ]
+    },
+    {
+      "path": "examples/mirroropd/assets/prepare_math_data.py",
+      "lines": 239,
+      "candidates": [
+        {
+          "line": 81,
+          "text": "legacy = RAW_FILES if names - AIME_FILES.keys() else {}"
+        },
+        {
+          "line": 82,
+          "text": "for filename, (repo, member) in legacy.items():"
+        },
+        {
+          "line": 110,
+          "text": "def build_legacy_rows(raw_dir):"
+        },
+        {
+          "line": 153,
+          "text": "for name, rows in build_legacy_rows(raw_dir):"
+        },
+        {
+          "line": 203,
+          "text": "legacy = RAW_FILES if set(selected) - AIME_FILES.keys() else {}"
+        },
+        {
+          "line": 204,
+          "text": "for filename, (repo, member) in legacy.items():"
+        }
+      ]
+    },
+    {
+      "path": "examples/mirroropd/assets/prepare_models.py",
+      "lines": 76,
+      "candidates": []
+    },
+    {
+      "path": "examples/mirroropd/launchers/_distillation_args.sh",
+      "lines": 63,
+      "candidates": []
+    },
+    {
+      "path": "examples/mirroropd/launchers/_run_single_teacher_fsdp2.sh",
+      "lines": 460,
+      "candidates": [
+        {
+          "line": 88,
+          "text": "# fallback for diagnosing compilation or backend compatibility problems."
+        }
+      ]
+    },
+    {
+      "path": "examples/mirroropd/launchers/evaluation_experiment.py",
+      "lines": 134,
+      "candidates": []
+    },
+    {
+      "path": "examples/mirroropd/launchers/math_experiment.py",
+      "lines": 630,
+      "candidates": [
+        {
+          "line": 246,
+          "text": "result.add_argument(\"--advantage\", choices=(\"current\", \"rollout\"), help=\"legacy sampled only\")"
+        },
+        {
+          "line": 248,
+          "text": "\"--policy-loss\", choices=(\"vanilla\", \"token_is\", \"token_ppo\", \"reinforce\"), help=\"legacy sampled only\""
+        },
+        {
+          "line": 362,
+          "text": "raise ValueError(\"--advantage/--policy-loss apply only to legacy sampled\")"
+        },
+        {
+          "line": 369,
+          "text": "value = getattr(args, field)"
+        },
+        {
+          "line": 423,
+          "text": "getattr(args, k) is not None"
+        },
+        {
+          "line": 534,
+          "text": "\"模型/长度对照：Sampled=legacy current+vanilla；Full=Full-KL（MDPO eta=1）。\\n\""
+        }
+      ]
+    },
+    {
+      "path": "verl/experimental/rollout_policy/__init__.py",
+      "lines": 3,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/collector.py",
+      "lines": 73,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/identity.py",
+      "lines": 159,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/lifecycle.py",
+      "lines": 157,
+      "candidates": [
+        {
+          "line": 146,
+          "text": "for server in getattr(replica, \"servers\", []):"
+        }
+      ]
+    },
+    {
+      "path": "verl/experimental/rollout_policy/models.py",
+      "lines": 72,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/phases.py",
+      "lines": 60,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/plan.py",
+      "lines": 298,
+      "candidates": [
+        {
+          "line": 84,
+          "text": "if type(getattr(self, name)) is not int or getattr(self, name) < 1:"
+        },
+        {
+          "line": 139,
+          "text": "retired = {\"source\", \"student\", \"teacher_weight\", \"teacher_model_path\", \"model_path\"} & values.keys()"
+        },
+        {
+          "line": 140,
+          "text": "if retired:"
+        },
+        {
+          "line": 141,
+          "text": "raise ValueError(f\"Retired rollout fields {sorted(retired)}; migrate to model/left/right/right_weight\")"
+        }
+      ]
+    },
+    {
+      "path": "verl/experimental/rollout_policy/readout.py",
+      "lines": 71,
+      "candidates": [
+        {
+          "line": 53,
+          "text": "if hasattr(item, \"to_local\"):"
+        },
+        {
+          "line": 65,
+          "text": "elif hasattr(item, \"tobytes\"):"
+        }
+      ]
+    },
+    {
+      "path": "verl/experimental/rollout_policy/runtime.py",
+      "lines": 106,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/sampling.py",
+      "lines": 183,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/service.py",
+      "lines": 104,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/sessions.py",
+      "lines": 174,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/topology.py",
+      "lines": 30,
+      "candidates": []
+    },
+    {
+      "path": "verl/experimental/rollout_policy/validation.py",
+      "lines": 271,
+      "candidates": [
+        {
+          "line": 103,
+          "text": "if getattr(learner_config, \"num_experts\", 0) or getattr(learner_config, \"vision_config\", None):"
+        },
+        {
+          "line": 140,
+          "text": "if any(getattr(model, \"quantization_config\", None) for model in model_configs):"
+        },
+        {
+          "line": 144,
+          "text": "if not hasattr(torch.backends.cuda.matmul, \"allow_bf16_reduced_precision_reduction_split_k\"):"
+        },
+        {
+          "line": 159,
+          "text": "if any(getattr(model, \"quantization_config\", None) for model in model_configs):"
+        }
+      ]
+    },
+    {
+      "path": "verl/experimental/rollout_policy/version_metrics.py",
+      "lines": 32,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/__init__.py",
+      "lines": 14,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/anchor.py",
+      "lines": 97,
+      "candidates": [
+        {
+          "line": 34,
+          "text": "config = getattr(module, \"config\", None)"
+        },
+        {
+          "line": 36,
+          "text": "if getattr(config, name, 0):"
+        },
+        {
+          "line": 46,
+          "text": "if getattr(actor.engine, \"mirror_anchor_head\", None) is not None:"
+        },
+        {
+          "line": 82,
+          "text": "head = getattr(actor.engine, \"mirror_anchor_head\", None)"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/distillation/evaluation.py",
+      "lines": 51,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/forward_vocab.py",
+      "lines": 142,
+      "candidates": [
+        {
+          "line": 124,
+          "text": "raise ValueError(\"full forward KL requires compatible heads and teacher support covering student rows\")"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/distillation/forward_vocab_triton.py",
+      "lines": 69,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/fsdp/__init__.py",
+      "lines": 13,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/fsdp/losses.py",
+      "lines": 149,
+      "candidates": [
+        {
+          "line": 112,
+          "text": "use_chunked_topk = getattr(loss_config, \"use_chunked_topk\", False)"
+        },
+        {
+          "line": 119,
+          "text": "chunk_size=getattr(loss_config, \"chunked_topk_chunk_size\", 4096),"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/distillation/full_vocab.py",
+      "lines": 496,
+      "candidates": [
+        {
+          "line": 301,
+          "text": "raise ValueError(\"full KL hidden/head shapes are incompatible\")"
+        },
+        {
+          "line": 474,
+          "text": "raise ValueError(\"Mirror hidden/head shapes or teacher/anchor support are incompatible\")"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/distillation/full_vocab_triton.py",
+      "lines": 592,
+      "candidates": [
+        {
+          "line": 287,
+          "text": "\"\"\"Compatibility for callers that already encoded b; cannot recover lost increments.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/distillation/hidden.py",
+      "lines": 43,
+      "candidates": [
+        {
+          "line": 10,
+          "text": "# Compatibility import for existing kernel/probe callers. Layout lives with padding."
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/distillation/hidden_io.py",
+      "lines": 116,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/losses.py",
+      "lines": 623,
+      "candidates": [
+        {
+          "line": 233,
+          "text": "spec = getattr(loss_config, \"loss_settings\", None) or resolve_distillation_spec(loss_config)"
+        },
+        {
+          "line": 322,
+          "text": "policy_config = context.bind_legacy_config(loss_config)"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/distillation/megatron/__init__.py",
+      "lines": 13,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/megatron/losses.py",
+      "lines": 313,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/numerics.py",
+      "lines": 314,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/objectives.py",
+      "lines": 80,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/profiling.py",
+      "lines": 39,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/readout.py",
+      "lines": 437,
+      "candidates": [
+        {
+          "line": 57,
+          "text": "available_fields = getattr(batch, \"fields\", None)"
+        },
+        {
+          "line": 196,
+          "text": "\"initial_bank must be a Parquet artifact directory; legacy JSON banks require migration\""
+        },
+        {
+          "line": 318,
+          "text": "# Legacy test_freq may invoke _validate even when this callback has no due task."
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/distillation/shared_teacher.py",
+      "lines": 89,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/targets.py",
+      "lines": 35,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/distillation/termination.py",
+      "lines": 57,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/__init__.py",
+      "lines": 3,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/accuracy.py",
+      "lines": 322,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/artifacts.py",
+      "lines": 332,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/bootstrap.py",
+      "lines": 259,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/checkpoint.py",
+      "lines": 86,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/config.py",
+      "lines": 195,
+      "candidates": [
+        {
+          "line": 68,
+          "text": "return {f.name: getattr(self, f.name) for f in fields(self)}"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/evaluation/coordinator.py",
+      "lines": 329,
+      "candidates": [
+        {
+          "line": 216,
+          "text": "if not hasattr(service, \"ensure_current\"):"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/evaluation/generation.py",
+      "lines": 304,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/generation_contract.py",
+      "lines": 73,
+      "candidates": [
+        {
+          "line": 21,
+          "text": "backend = getattr(tokenizer, \"backend_tokenizer\", None)"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/evaluation/generation_resume.py",
+      "lines": 69,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/metrics.py",
+      "lines": 70,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/plan.py",
+      "lines": 82,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/prepare.py",
+      "lines": 243,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/regrade.py",
+      "lines": 57,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/reload.py",
+      "lines": 77,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/reporting.py",
+      "lines": 43,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/schedule.py",
+      "lines": 31,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/scoring.py",
+      "lines": 140,
+      "candidates": [
+        {
+          "line": 19,
+          "text": "\"\"\"Score compatible prefixes, excluding synthetic DP padding from every result."
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/evaluation/selection.py",
+      "lines": 73,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/evaluation/trajectory.py",
+      "lines": 77,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/ppo/v1/__init__.py",
+      "lines": 30,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/ppo/v1/agent_loop_tq.py",
+      "lines": 350,
+      "candidates": [
+        {
+          "line": 146,
+          "text": "if hasattr(client, \"abort\"):"
+        },
+        {
+          "line": 152,
+          "text": "if not hasattr(self, \"background_tasks\"):"
+        },
+        {
+          "line": 163,
+          "text": "tasks = list(getattr(self, \"background_tasks\", ()))"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/ppo/v1/progress.py",
+      "lines": 96,
+      "candidates": [
+        {
+          "line": 43,
+          "text": "def legacy_metrics(self, role=\"actor\"):"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/ppo/v1/replay_buffer.py",
+      "lines": 613,
+      "candidates": [
+        {
+          "line": 297,
+          "text": "extra_fields = getattr(value, \"data\", value)"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/ppo/v1/trainer_base.py",
+      "lines": 2570,
+      "candidates": [
+        {
+          "line": 438,
+          "text": "if getattr(self, \"_enable_hybrid_replicas\", True):"
+        },
+        {
+          "line": 488,
+          "text": "parsed = getattr(self, \"distillation_config\", None)"
+        },
+        {
+          "line": 504,
+          "text": "supported_moe = allow_qwen3_moe and getattr(hf_config, \"model_type\", None) == \"qwen3_moe\""
+        },
+        {
+          "line": 506,
+          "text": "any(getattr(hf_config, name, None) is not None for name in (\"vision_config\", \"audio_config\"))"
+        },
+        {
+          "line": 507,
+          "text": "or getattr(hf_config, \"is_encoder_decoder\", False)"
+        },
+        {
+          "line": 509,
+          "text": "any(getattr(hf_config, name, 0) for name in (\"num_local_experts\", \"num_experts\", \"n_routed_experts\"))"
+        },
+        {
+          "line": 637,
+          "text": "before_sync = getattr(self.readout_callback, \"on_before_weight_sync\", None)"
+        },
+        {
+          "line": 841,
+          "text": "metrics = getattr(self, \"_pending_sync_metrics\", None) or {}"
+        },
+        {
+          "line": 998,
+          "text": "if not getattr(self, \"_enable_hybrid_replicas\", True):"
+        },
+        {
+          "line": 1159,
+          "text": "getattr(self, f\"{role}_optimizer_step_attempts\", None), getattr(self, f\"{role}_optimizer_step\", None)"
+        },
+        {
+          "line": 1173,
+          "text": "return self._optimizer_progress().legacy_metrics()"
+        },
+        {
+          "line": 1177,
+          "text": "if getattr(self, \"use_critic\", False):"
+        },
+        {
+          "line": 1185,
+          "text": "persist = getattr(getattr(self, \"readout_callback\", None), \"on_update_records\", None)"
+        },
+        {
+          "line": 1192,
+          "text": "if getattr(self, \"rollout_identity\", None) is not None:"
+        },
+        {
+          "line": 1200,
+          "text": "self._optimizer_progress(\"critic\") if getattr(self, \"use_critic\", False) else None,"
+        },
+        {
+          "line": 1204,
+          "text": "if getattr(self, \"rollout_identity\", None) is not None:"
+        },
+        {
+          "line": 1225,
+          "text": "\"remove_previous_ckpt_in_save is deprecated, \""
+        },
+        {
+          "line": 1297,
+          "text": "fixed_readout = getattr(getattr(self, \"readout_callback\", None), \"validate_fixed_rkl\", None)"
+        },
+        {
+          "line": 1605,
+          "text": "elif hasattr(obj, \"tolist\"):"
+        },
+        {
+          "line": 1716,
+          "text": "getattr(self, \"config\", OmegaConf.create({})), \"trainer.eval_metrics_resamples\", default=256"
+        },
+        {
+          "line": 1718,
+          "text": "seed=OmegaConf.select(getattr(self, \"config\", OmegaConf.create({})), \"data.seed\", default=42),"
+        },
+        {
+          "line": 1727,
+          "text": "managers = [getattr(self, \"llm_server_manager\", None)]"
+        },
+        {
+          "line": 2253,
+          "text": "attempts_before = getattr(self, \"critic_optimizer_step_attempts\", None)"
+        },
+        {
+          "line": 2254,
+          "text": "steps_before = getattr(self, \"critic_optimizer_step\", None)"
+        },
+        {
+          "line": 2262,
+          "text": "if records and getattr(self, \"logger\", None) is not None:"
+        },
+        {
+          "line": 2334,
+          "text": "# Other engines retain every legacy diagnostic through canonical_name;"
+        },
+        {
+          "line": 2338,
+          "text": "if not collect_metrics and not getattr(self, \"_metrics_backend_warned\", False):"
+        },
+        {
+          "line": 2343,
+          "text": "attempts_before = getattr(self, \"actor_optimizer_step_attempts\", None)"
+        },
+        {
+          "line": 2344,
+          "text": "steps_before = getattr(self, \"actor_optimizer_step\", None)"
+        },
+        {
+          "line": 2356,
+          "text": "extra_info.update(mirror_anchor_version=(self.global_steps, getattr(self, \"local_trigger_step\", 0)))"
+        },
+        {
+          "line": 2358,
+          "text": "if getattr(self, \"logger\", None) is not None:"
+        },
+        {
+          "line": 2370,
+          "text": "if records and getattr(self, \"logger\", None) is not None:"
+        },
+        {
+          "line": 2373,
+          "text": "# Legacy worker implementations may still return outer event totals."
+        },
+        {
+          "line": 2441,
+          "text": "mtp_config = getattr(self.config.actor_rollout_ref.model, \"mtp\", None)"
+        },
+        {
+          "line": 2468,
+          "text": "# emits the V0-compatible ``num_turns/{mean,max,min}`` tags in addition"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/ppo/v1/trainer_colocate_async.py",
+      "lines": 50,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/ppo/v1/trainer_separate_async.py",
+      "lines": 453,
+      "candidates": [
+        {
+          "line": 113,
+          "text": "if any(not hasattr(self.replay_buffer, method) for method in required_methods):"
+        },
+        {
+          "line": 233,
+          "text": "standalone = getattr(self, \"standalone_server_manager\", None)"
+        },
+        {
+          "line": 313,
+          "text": "poll_interval = getattr(self.replay_buffer, \"poll_interval\", 2.0)"
+        }
+      ]
+    },
+    {
+      "path": "verl/trainer/ppo/v1/trainer_sync.py",
+      "lines": 59,
+      "candidates": []
+    },
+    {
+      "path": "verl/trainer/ppo/v1/utils.py",
+      "lines": 217,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/config/__init__.py",
+      "lines": 36,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/config/actor.py",
+      "lines": 396,
+      "candidates": [
+        {
+          "line": 203,
+          "text": "\"supported (the former is deprecated).\""
+        },
+        {
+          "line": 230,
+          "text": "sp_size = getattr(self, \"ulysses_sequence_parallel_size\", 1)"
+        },
+        {
+          "line": 255,
+          "text": "f\"'{name}.{param}' because only '*_{param_per_gpu}' is supported (the former is deprecated).\""
+        },
+        {
+          "line": 294,
+          "text": "ulysses_sequence_parallel_size (int): [DEPRECATED] Ulysses sequence parallel size for long sequences."
+        },
+        {
+          "line": 324,
+          "text": "# backward compatibility"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/config/critic.py",
+      "lines": 312,
+      "candidates": [
+        {
+          "line": 56,
+          "text": "ppo_micro_batch_size (Optional[int]): Global micro batch size (deprecated)."
+        },
+        {
+          "line": 134,
+          "text": "Ensures that users don't set both deprecated micro_batch_size and"
+        },
+        {
+          "line": 138,
+          "text": "mbs: Deprecated micro batch size parameter value."
+        },
+        {
+          "line": 154,
+          "text": "f\"'{name}.{param}' because only '*_{param_per_gpu}' is supported (the former is deprecated).\""
+        },
+        {
+          "line": 193,
+          "text": "ulysses_sequence_parallel_size (int): [DEPRECATED] Ulysses sequence parallel size for long sequences."
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/config/disaggregation.py",
+      "lines": 60,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/config/distillation.py",
+      "lines": 531,
+      "candidates": [
+        {
+          "line": 98,
+          "text": "vanilla (legacy), token_ppo, token_is, or reinforce when use_policy_gradient is true."
+        },
+        {
+          "line": 170,
+          "text": "raise ValueError(\"mirror does not use the legacy advantage_source switch; require current\")"
+        },
+        {
+          "line": 411,
+          "text": "if getattr(engine, name) != value:"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/config/distillation_spec.py",
+      "lines": 106,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/config/engine.py",
+      "lines": 723,
+      "candidates": [
+        {
+          "line": 46,
+          "text": "# TODO: rename to RouterReplayConfig after removing the legacy implementation"
+        },
+        {
+          "line": 253,
+          "text": "forward_precision (Optional[str]): Shared execution profile; None preserves legacy mixed precision."
+        },
+        {
+          "line": 274,
+          "text": "# ulysses_sequence_parallel_size is mutable for backward compatibility"
+        },
+        {
+          "line": 289,
+          "text": "# Optional shared execution profile; None preserves legacy mixed_precision settings."
+        },
+        {
+          "line": 395,
+          "text": "forward_precision (Optional[str]): Shared execution profile; None preserves legacy mixed precision."
+        },
+        {
+          "line": 418,
+          "text": "training path then raises because no torch fallback handles cu_seqlens. Qwen3.5 has no NPU"
+        },
+        {
+          "line": 636,
+          "text": "Note: \"deepep\" with experts=\"gmm\" matches the legacy enable_deepep=True behavior."
+        },
+        {
+          "line": 640,
+          "text": "checkpoint compatibility. Default: true."
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/config/megatron_peft.py",
+      "lines": 40,
+      "candidates": [
+        {
+          "line": 19,
+          "text": "if not hasattr(model_config, \"lora\"):"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/config/model.py",
+      "lines": 262,
+      "candidates": [
+        {
+          "line": 183,
+          "text": "and not getattr(self.processor, \"chat_template\", None)"
+        },
+        {
+          "line": 184,
+          "text": "and getattr(self.tokenizer, \"chat_template\", None)"
+        },
+        {
+          "line": 237,
+          "text": "self.share_embeddings_and_output_weights = getattr(self.hf_config, \"tie_word_embeddings\", False)"
+        },
+        {
+          "line": 240,
+          "text": "self.architectures = getattr(self.hf_config, \"architectures\", None)"
+        },
+        {
+          "line": 246,
+          "text": "if getattr(self.hf_config, \"model_type\", None) == \"kimi_vl\":"
+        },
+        {
+          "line": 254,
+          "text": "if hasattr(self.hf_config, \"num_nextn_predict_layers\"):"
+        },
+        {
+          "line": 256,
+          "text": "if hasattr(self.hf_config, \"mtp_num_hidden_layers\"):"
+        },
+        {
+          "line": 258,
+          "text": "if hasattr(self.hf_config, \"text_config\") and hasattr(self.hf_config.text_config, \"mtp_num_hidden_layers\"):"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/config/optimizer.py",
+      "lines": 351,
+      "candidates": [
+        {
+          "line": 60,
+          "text": "warnings.warn(\"`grad_clip` is deprecated, use `clip_grad` instead.\", DeprecationWarning, stacklevel=2)"
+        },
+        {
+          "line": 120,
+          "text": "\"`warmup_style` is deprecated, use `lr_scheduler_type` instead.\", DeprecationWarning, stacklevel=2"
+        },
+        {
+          "line": 189,
+          "text": "no-op today. Forwarded as-is for forward-compatibility."
+        },
+        {
+          "line": 230,
+          "text": "value = getattr(self, field_name)"
+        },
+        {
+          "line": 269,
+          "text": "num_cycles (float): Kept for backward compatibility (unused by Automodel scheduler)."
+        },
+        {
+          "line": 270,
+          "text": "zero_indexed_step (bool): Kept for backward compatibility (unused by Automodel scheduler)."
+        },
+        {
+          "line": 340,
+          "text": "optimizer_cls = getattr(module, config.optimizer)"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/config/reward.py",
+      "lines": 105,
+      "candidates": [
+        {
+          "line": 42,
+          "text": "- When ``source`` is ``\"importlib\"``, the name is used in ``getattr(module, name)``,"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/config/rollout.py",
+      "lines": 413,
+      "candidates": [
+        {
+          "line": 339,
+          "text": "\"The 'mode' field is deprecated and will be removed in a future version.\","
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/__init__.py",
+      "lines": 71,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/automodel/__init__.py",
+      "lines": 20,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/automodel/transformer_impl.py",
+      "lines": 719,
+      "candidates": [
+        {
+          "line": 91,
+          "text": "# Apply compatibility patches early in the process"
+        },
+        {
+          "line": 92,
+          "text": "from nemo_automodel._transformers.utils import apply_cache_compatibility_patches"
+        },
+        {
+          "line": 95,
+          "text": "apply_cache_compatibility_patches()"
+        },
+        {
+          "line": 177,
+          "text": "val = getattr(config, attr, None)"
+        },
+        {
+          "line": 219,
+          "text": "wd_incr_style=getattr(cfg, \"wd_incr_style\", \"constant\"),"
+        },
+        {
+          "line": 295,
+          "text": "if hasattr(self.module, \"update_moe_gate_bias\"):"
+        },
+        {
+          "line": 425,
+          "text": "params = convert_weight_keys(params, getattr(self.module, \"_fsdp_wrapped_module\", self.module))"
+        },
+        {
+          "line": 450,
+          "text": "if hasattr(self.engine.module, \"reshard\"):"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/automodel/utils.py",
+      "lines": 250,
+      "candidates": [
+        {
+          "line": 158,
+          "text": "_arch = (getattr(_cfg, \"architectures\", None) or [\"\"])[0].lower()"
+        },
+        {
+          "line": 173,
+          "text": "if hasattr(distributed_config, \"mp_policy\"):"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/base.py",
+      "lines": 453,
+      "candidates": [
+        {
+          "line": 211,
+          "text": "self._delta_shard_snap = getattr(self, \"_delta_shard_snap\", {})"
+        },
+        {
+          "line": 424,
+          "text": "# Fallback to device-only key (registered without vendor)"
+        },
+        {
+          "line": 428,
+          "text": "# For cuda-compatible vendors without a specific registration, try nvidia"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/fsdp/__init__.py",
+      "lines": 17,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/fsdp/fsdp_turbo_impl.py",
+      "lines": 144,
+      "candidates": [
+        {
+          "line": 82,
+          "text": "if not hasattr(self, \"_parallel_state\"):"
+        },
+        {
+          "line": 87,
+          "text": "if not hasattr(self, \"_parallel_state\"):"
+        },
+        {
+          "line": 92,
+          "text": "if not hasattr(self, \"_parallel_state\"):"
+        },
+        {
+          "line": 97,
+          "text": "if not hasattr(self, \"_parallel_state\"):"
+        },
+        {
+          "line": 114,
+          "text": "# getattr fallback: some subclasses (e.g. VeOmniEngine) bypass FSDPEngine.__init__."
+        },
+        {
+          "line": 115,
+          "text": "scaler = getattr(self, \"scaler\", None)"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/fsdp/transformer_impl.py",
+      "lines": 1931,
+      "candidates": [
+        {
+          "line": 174,
+          "text": "self._qat_config = getattr(self.engine_config, \"qat\", None)"
+        },
+        {
+          "line": 175,
+          "text": "self._qat_enabled = self._qat_config is not None and getattr(self._qat_config, \"enable\", False)"
+        },
+        {
+          "line": 298,
+          "text": "_strip_list = getattr(module, \"_verl_strip_modules\", [])"
+        },
+        {
+          "line": 300,
+          "text": "if hasattr(module, attr):"
+        },
+        {
+          "line": 372,
+          "text": "lora_adapter_path = getattr(self.model_config, \"lora_adapter_path\", None)"
+        },
+        {
+          "line": 445,
+          "text": "# landed in #4036 for the legacy dp_actor path. bf16 / fp32 do not need a scaler."
+        },
+        {
+          "line": 619,
+          "text": "module = module[int(part)] if part.isdigit() else getattr(module, part)"
+        },
+        {
+          "line": 746,
+          "text": "defer_sync = getattr("
+        },
+        {
+          "line": 791,
+          "text": "# getattr fallback: some subclasses (e.g. VeOmniEngine) bypass FSDPEngine.__init__"
+        },
+        {
+          "line": 793,
+          "text": "scaler = getattr(self, \"scaler\", None)"
+        },
+        {
+          "line": 865,
+          "text": "# getattr fallback: some subclasses (e.g. VeOmniEngine) bypass FSDPEngine.__init__."
+        },
+        {
+          "line": 866,
+          "text": "scaler = getattr(self, \"scaler\", None)"
+        },
+        {
+          "line": 892,
+          "text": "found_inf = getattr(optimizer, \"found_inf\", None)"
+        },
+        {
+          "line": 975,
+          "text": "if (self._is_offload_param or origin_module_device == \"cpu\") and not getattr("
+        },
+        {
+          "line": 1023,
+          "text": "params = convert_weight_keys(params, getattr(self.module, \"_fsdp_wrapped_module\", self.module))"
+        },
+        {
+          "line": 1037,
+          "text": "local = p.to_local() if hasattr(p, \"to_local\") else p"
+        },
+        {
+          "line": 1065,
+          "text": "self._delta_shard_snap = getattr(self, \"_delta_shard_snap\", {})"
+        },
+        {
+          "line": 1080,
+          "text": "_is_peft = hasattr(getattr(self.module, \"_fsdp_wrapped_module\", self.module), \"peft_config\")"
+        },
+        {
+          "line": 1090,
+          "text": "peft_model = getattr(self.module, \"_fsdp_wrapped_module\", self.module)"
+        },
+        {
+          "line": 1091,
+          "text": "if hasattr(peft_model, \"peft_config\"):  # LoRA"
+        },
+        {
+          "line": 1110,
+          "text": "params = convert_weight_keys(params, getattr(self.module, \"_fsdp_wrapped_module\", self.module))"
+        },
+        {
+          "line": 1170,
+          "text": "params = convert_weight_keys(params, getattr(self.module, \"_fsdp_wrapped_module\", self.module))"
+        },
+        {
+          "line": 1273,
+          "text": "if capture == \"anchor\" and getattr(self, \"mirror_anchor_head\", None) is None:"
+        },
+        {
+          "line": 1329,
+          "text": "head_snapshot = getattr(self, \"mirror_anchor_head\", None)"
+        },
+        {
+          "line": 1354,
+          "text": "termination_token_ids=getattr(config, \"termination_token_ids\", ()),"
+        },
+        {
+          "line": 1355,
+          "text": "forward_teacher_support=getattr(config, \"forward_teacher_support\", \"equal\"),"
+        },
+        {
+          "line": 1370,
+          "text": "if getattr(config, \"termination_token_ids\", ()):"
+        },
+        {
+          "line": 1426,
+          "text": "pass_packed_cu_seqlens = getattr(self, \"pass_packed_cu_seqlens\", False)"
+        },
+        {
+          "line": 1474,
+          "text": "is_vlm_model = hasattr(getattr(self.module, \"module\", self.module).config, \"vision_config\")"
+        },
+        {
+          "line": 1487,
+          "text": "skip_position_ids_rmpad=getattr(self, \"_veomni_handles_position_ids\", False),"
+        },
+        {
+          "line": 1635,
+          "text": "aux_outputs = getattr(output, \"fused_linear_aux\", None)"
+        },
+        {
+          "line": 1639,
+          "text": "v = getattr(aux_outputs, field_name).squeeze(0)"
+        },
+        {
+          "line": 1832,
+          "text": "# getattr fallback: some subclasses (e.g. VeOmniEngine) bypass FSDPEngine.__init__"
+        },
+        {
+          "line": 1834,
+          "text": "autocast_dtype = getattr(self, \"_autocast_dtype\", torch.bfloat16)"
+        },
+        {
+          "line": 1893,
+          "text": "if hasattr(self.module, \"v_head\"):"
+        },
+        {
+          "line": 1914,
+          "text": "if hasattr(self.module, \"v_head\"):"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/fsdp/utils.py",
+      "lines": 123,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/megatron/__init__.py",
+      "lines": 29,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/megatron/delta_export.py",
+      "lines": 434,
+      "candidates": [
+        {
+          "line": 115,
+          "text": "if hasattr(mapping, \"_detect_parallelism_type\") and getattr(mapping, \"_mapping\", None) is None:"
+        },
+        {
+          "line": 145,
+          "text": "g = getattr(c, attr, None)"
+        },
+        {
+          "line": 253,
+          "text": "is_tp_sharded = getattr(param, \"tensor_model_parallel\", False) and tp_world > 1"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/megatron/transformer_impl.py",
+      "lines": 1484,
+      "candidates": [
+        {
+          "line": 120,
+          "text": "if hasattr(model_config.hf_config, \"vision_config\"):"
+        },
+        {
+          "line": 126,
+          "text": "if getattr(tf_config, \"fp8\", None) not in (None, False):"
+        },
+        {
+          "line": 128,
+          "text": "if engine_config.router_replay.mode != \"disabled\" and getattr(tf_config, \"moe_router_fusion\", False):"
+        },
+        {
+          "line": 173,
+          "text": "if getattr(unwrapped_model.config, \"experimental_attention_variant\", None) == \"dsv4_hybrid\":"
+        },
+        {
+          "line": 204,
+          "text": "self._qat_config = getattr(self.engine_config, \"qat\", None)"
+        },
+        {
+          "line": 205,
+          "text": "self._qat_enabled = self._qat_config is not None and getattr(self._qat_config, \"enable\", False)"
+        },
+        {
+          "line": 301,
+          "text": "if getattr(self.model_config.hf_config, \"model_type\", None) == \"deepseek_v4\" and ("
+        },
+        {
+          "line": 345,
+          "text": "if self.is_value_model and hasattr(provider, \"share_embeddings_and_output_weights\"):"
+        },
+        {
+          "line": 350,
+          "text": "and getattr(provider, \"mtp_num_layers\", 0)"
+        },
+        {
+          "line": 353,
+          "text": "csa_compress_ratios = getattr(provider, \"csa_compress_ratios\", None)"
+        },
+        {
+          "line": 357,
+          "text": "if hasattr(provider, \"moe_enable_routing_replay\"):"
+        },
+        {
+          "line": 369,
+          "text": "if hasattr(provider, \"apply_overrides_and_finalize\"):"
+        },
+        {
+          "line": 380,
+          "text": "if hasattr(provider, \"finalize\"):"
+        },
+        {
+          "line": 411,
+          "text": "getattr(opt_cfg, \"use_precision_aware_optimizer\", False)"
+        },
+        {
+          "line": 412,
+          "text": "and PrecisionType.to_dtype(getattr(opt_cfg, \"main_grads_dtype\", \"fp32\")) != torch.float32"
+        },
+        {
+          "line": 646,
+          "text": "if getattr(self, \"_distillation_use_topk_active\", False):"
+        },
+        {
+          "line": 832,
+          "text": "if getattr(self.tf_config, \"experimental_attention_variant\", None) == \"dsv4_hybrid\""
+        },
+        {
+          "line": 975,
+          "text": "if getattr(self.bridge, \"export_weight_dtype\", None) == \"fp8\":"
+        },
+        {
+          "line": 1015,
+          "text": "index = getattr(self, \"_delta_export_index\", None)"
+        },
+        {
+          "line": 1065,
+          "text": "self._delta_shard_snap = getattr(self, \"_delta_shard_snap\", {})"
+        },
+        {
+          "line": 1238,
+          "text": "if hasattr(unwrapped_model, \"vp_stage\"):"
+        },
+        {
+          "line": 1347,
+          "text": "vision_model=hasattr(self.model_config.hf_config, \"vision_config\"),"
+        },
+        {
+          "line": 1468,
+          "text": "vision_model=hasattr(self.model_config.hf_config, \"vision_config\"),"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/megatron/utils.py",
+      "lines": 42,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/mindspeed/__init__.py",
+      "lines": 17,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/mindspeed/transformer_impl.py",
+      "lines": 108,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/mindspeed/utils.py",
+      "lines": 30,
+      "candidates": [
+        {
+          "line": 17,
+          "text": "override_config = getattr(engine.engine_config, \"override_transformer_config\", None)"
+        },
+        {
+          "line": 30,
+          "text": "set_weight_release_enabled(getattr(engine, \"mode\", None) == \"train\")"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/spec.py",
+      "lines": 284,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/torchtitan/__init__.py",
+      "lines": 16,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/torchtitan/transformer_impl.py",
+      "lines": 939,
+      "candidates": [
+        {
+          "line": 558,
+          "text": "# Fallback to latest"
+        },
+        {
+          "line": 587,
+          "text": "from_hf_map = getattr(sd_adapter, \"from_hf_map\", None) if sd_adapter is not None else None"
+        },
+        {
+          "line": 614,
+          "text": "self._delta_shard_snap = getattr(self, \"_delta_shard_snap\", {})"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/torchtitan/utils.py",
+      "lines": 380,
+      "candidates": [
+        {
+          "line": 96,
+          "text": "model_type = getattr(hf_config, \"model_type\", None)"
+        },
+        {
+          "line": 132,
+          "text": "n_layers = getattr(cfg, \"n_layers\", None) or len(getattr(cfg, \"layers\", []))"
+        },
+        {
+          "line": 134,
+          "text": "getattr(cfg, \"dim\", None) == hidden_size"
+        },
+        {
+          "line": 136,
+          "text": "and getattr(cfg, \"vocab_size\", None) == vocab_size"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/utils.py",
+      "lines": 302,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/veomni/__init__.py",
+      "lines": 17,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/engine/veomni/transformer_impl.py",
+      "lines": 1007,
+      "candidates": [
+        {
+          "line": 80,
+          "text": "value = getattr(engine_config, f.name)"
+        },
+        {
+          "line": 265,
+          "text": "if mixed_precision_config.enable and not hasattr(converter, \"export_weights\"):"
+        },
+        {
+          "line": 266,
+          "text": "hf_export_dtype = getattr(torch, mixed_precision_config.param_dtype)"
+        },
+        {
+          "line": 297,
+          "text": "get_optimizer_pre_hook = getattr(module, \"get_optimizer_pre_hook\", None)"
+        },
+        {
+          "line": 381,
+          "text": "set(getattr(module, \"_no_split_modules\", None) or []) | set(self.engine_config.basic_modules)"
+        },
+        {
+          "line": 407,
+          "text": "if hasattr(self.module, \"clip_grad_norm_\"):"
+        },
+        {
+          "line": 571,
+          "text": "if (self._is_offload_param or origin_module_device == \"cpu\") and not getattr("
+        },
+        {
+          "line": 590,
+          "text": "if self._is_offload_param and not getattr(self, \"_uses_fsdp2_cpu_offload_policy\", False):"
+        },
+        {
+          "line": 614,
+          "text": "manual_offload = not getattr(self, \"_uses_fsdp2_cpu_offload_policy\", False)"
+        },
+        {
+          "line": 649,
+          "text": "if not getattr(self, \"_uses_fsdp2_cpu_offload_policy\", False):"
+        },
+        {
+          "line": 654,
+          "text": "if converter is not None and hasattr(converter, \"export_weights\"):"
+        },
+        {
+          "line": 658,
+          "text": "params = convert_weight_keys(params, getattr(self.module, \"_fsdp_wrapped_module\", self.module))"
+        },
+        {
+          "line": 664,
+          "text": "model_type = getattr(self.module.config, \"model_type\", \"default\")"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/engine/veomni/utils.py",
+      "lines": 430,
+      "candidates": [
+        {
+          "line": 88,
+          "text": "if hasattr(optimizer, \"_is_multi_optimizer\") and optimizer._is_multi_optimizer:"
+        },
+        {
+          "line": 108,
+          "text": "if hasattr(optimizer, \"_is_multi_optimizer\") and optimizer._is_multi_optimizer:"
+        },
+        {
+          "line": 327,
+          "text": "params = convert_weight_keys(params, getattr(module, \"_fsdp_wrapped_module\", module))"
+        },
+        {
+          "line": 330,
+          "text": "model_type = getattr(module.config, \"model_type\", \"default\")"
+        },
+        {
+          "line": 351,
+          "text": "fqn2si = getattr(module, \"_fqn2spec_info\", None) or getattr("
+        },
+        {
+          "line": 352,
+          "text": "getattr(module, \"_fsdp_wrapped_module\", module), \"_fqn2spec_info\", None"
+        },
+        {
+          "line": 362,
+          "text": "# fallback: key conversion may have renamed the fqn; historical name match."
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/utils/__init__.py",
+      "lines": 13,
+      "candidates": []
+    },
+    {
+      "path": "verl/workers/utils/loss_context.py",
+      "lines": 52,
+      "candidates": [
+        {
+          "line": 3,
+          "text": "\"\"\"Per-call normalization and the narrow compatibility boundary for policy losses.\"\"\""
+        },
+        {
+          "line": 27,
+          "text": "loss_scale_factor=getattr(config, \"loss_scale_factor\", None),"
+        },
+        {
+          "line": 40,
+          "text": "def bind_legacy_config(self, config):"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/utils/losses.py",
+      "lines": 325,
+      "candidates": [
+        {
+          "line": 81,
+          "text": "config = LossContext.from_batch(data, config).bind_legacy_config(config)"
+        }
+      ]
+    },
+    {
+      "path": "verl/workers/utils/padding.py",
+      "lines": 274,
+      "candidates": []
+    }
+  ]
+}

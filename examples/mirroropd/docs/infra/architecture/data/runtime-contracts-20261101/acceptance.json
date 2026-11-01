@@ -1,0 +1,113 @@
+{
+  "audit_baseline": "402f6353",
+  "audit_commit": "6945292a",
+  "core_commit_before_pytree_fix": "08d00a6a",
+  "cpu_training_checks": 549,
+  "pytree_cpu_checks": 6,
+  "source_history_and_lifecycle_checks": 10,
+  "distributed": [
+    {
+      "name": "eos-bf16",
+      "world_size": 2,
+      "precision": "bf16",
+      "objective": "mdpo",
+      "estimator": "full_vocab",
+      "updates": 15,
+      "backend_max_parameter_abs_error": 0.0,
+      "endpoint_legacy_equal": false,
+      "frozen_anchor": true
+    },
+    {
+      "name": "eos-fp16",
+      "world_size": 2,
+      "precision": "fp16",
+      "objective": "mdpo",
+      "estimator": "full_vocab",
+      "updates": 12,
+      "backend_max_parameter_abs_error": null,
+      "endpoint_legacy_equal": false,
+      "frozen_anchor": true
+    },
+    {
+      "name": "endpoint",
+      "world_size": 2,
+      "precision": "bf16",
+      "objective": "mdpo",
+      "estimator": "full_vocab",
+      "updates": 9,
+      "backend_max_parameter_abs_error": null,
+      "endpoint_legacy_equal": true,
+      "frozen_anchor": true
+    },
+    {
+      "name": "bpo",
+      "world_size": 2,
+      "precision": "bf16",
+      "objective": "bpo",
+      "estimator": "full_vocab",
+      "updates": 12,
+      "backend_max_parameter_abs_error": null,
+      "endpoint_legacy_equal": false,
+      "frozen_anchor": true
+    },
+    {
+      "name": "sampled",
+      "world_size": 2,
+      "precision": "bf16",
+      "objective": "mdpo",
+      "estimator": "sampled",
+      "updates": 12,
+      "backend_max_parameter_abs_error": null,
+      "endpoint_legacy_equal": false,
+      "frozen_anchor": true
+    }
+  ],
+  "distributed_exit": {
+    "exit_code": 0,
+    "seconds": 172.67658521980047
+  },
+  "gpu_released": [
+    {
+      "gpu": 0,
+      "desired": "released",
+      "reason": "FSDP pytree contract checks finished"
+    },
+    {
+      "gpu": 1,
+      "desired": "released",
+      "reason": "FSDP pytree contract checks finished"
+    }
+  ],
+  "full_long_training_started": false,
+  "failures_retained": "runs/runtime-contracts-20261101/eos-bf16.log",
+  "source_hashes": {
+    "verl/trainer/distillation/output.py": "2b2580f17033edb413b24333662d3d2a9f6808d21809e14ea077ba643a87a027",
+    "verl/trainer/distillation/losses.py": "9f3d057967b340743cf2dbe98362bf029192ad68a5f93b6e35e24b4541ac2cf6",
+    "verl/workers/engine/fsdp/transformer_impl.py": "9d29288e8fc129e0ce3409ef91c01b564d810e624a88edc5ee3ec4c628fab313",
+    "verl/workers/update_records.py": "3954b1bf2593de95efbbc518b88d7cc1869766786fb412805781392bf0301c66",
+    "verl/trainer/ppo/core_algos.py": "b88c34e2f639826cae0b1fa531ad0eec844d4df14fd73706461889c62d4cfade"
+  },
+  "additional_checks": {
+    "all_live_readout_contracts": 7,
+    "gm_policy_and_score_centering": 74,
+    "migration_fixture_rerun": 6
+  },
+  "source_hash_scope": "Distributed acceptance snapshot; the subsequent GMPO sequence-normalization change has separate CPU verification.",
+  "final_cpu_and_config_checks": {
+    "combined_run_passed": 898,
+    "combined_run_failed_fixtures": 6,
+    "migrated_fixture_rerun_passed": 6,
+    "additional_lifecycle_cases": 5,
+    "additional_gmpo_cases": 2,
+    "unique_cases_passed": 911,
+    "note": "Counts deduplicate targeted reruns; six constructor-bypassing fixtures were migrated to the explicit callback default."
+  },
+  "implementation_commits": {
+    "audit": "6945292a4c97f4edcd015675c62d62f5a1123404",
+    "runtime": "08d00a6a67ecc75a28218f719cc491aba387d25f",
+    "pytree_fix": "cb5d30d2bf2aab867b8b5154493935c8f55c60a9",
+    "gmpo_fix": "f1572b906d646a6c075a0fdb10fc256d3b37bace",
+    "evaluation": "af40b946a57b7eaa2a5b9a5d41d8ecca2ec8aad3",
+    "benchmarks": "25f7e86ff7db1060a53b8e63891338f4a4ecca37"
+  }
+}
