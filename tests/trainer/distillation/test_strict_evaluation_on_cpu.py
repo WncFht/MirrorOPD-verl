@@ -52,19 +52,28 @@ def test_source_configuration_has_one_strict_representation(extra):
 
 
 def test_model_identity_binds_weights_and_nested_templates_but_not_location(tmp_path):
+    def stable_identity(path):
+        # TidalFS finalizes fresh-file mtimes on the first read. Materialize the
+        # tiny fixture before asserting identities of an immutable checkpoint.
+        if path.is_dir():
+            for file in path.rglob("*"):
+                if file.is_file():
+                    file.read_bytes()
+        return model_identity(path)
+
     first = tmp_path / "first"
     first.mkdir()
     (first / "config.json").write_text("{}")
     (first / "model.safetensors").write_bytes(b"original")
     (first / "chat_templates").mkdir()
     (first / "chat_templates/default.jinja").write_text("one")
-    original = model_identity(first)
+    original = stable_identity(first)
     second = tmp_path / "second"
     shutil.copytree(first, second)
-    assert model_identity(second) == original
+    assert stable_identity(second) == original
     (second / "model.safetensors").write_bytes(b"modified")
-    assert model_identity(second) != original
+    assert stable_identity(second) != original
     (first / "chat_templates/default.jinja").write_text("two")
-    assert model_identity(first) != original
+    assert stable_identity(first) != original
     with pytest.raises(ValueError, match="Incomplete"):
         model_identity(tmp_path)

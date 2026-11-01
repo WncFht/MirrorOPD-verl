@@ -1,6 +1,6 @@
 # Qwen 六来源：原生执行与评估协议
 
-本页维护 E63–E68 的实际预设与原生银行准备条件。它与[旧六组结果](qwen-sources.md)具有独立的执行和评估身份；结果产生后在本页更新，不将旧 HF 读出替换成新原生结果。
+本页维护 E63–E68 六来源预设，以及 E78–E80 的 batch128 数据扩展实验。它与[旧六组结果](qwen-sources.md)具有独立的执行和评估身份；结果产生后在本页更新，不将旧 HF 读出替换成新原生结果。
 
 <a id="native-e63e68qwen3-八卡前缀对照与原生评估"></a>
 
@@ -85,3 +85,70 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 STUDENT_GPUS=8 \
 准备目录必须是新目录；已完成的银行直接复用，不覆盖。Teacher bootstrap 使用每副本 8 并发/KV40 GiB，initial 使用 16 并发/KV64 GiB；这些资源差异不会改变声明的生成协议。后续运行把 E66 替换为 E63–E68，并保持同一模型、输入与评估协议。缺少完整 native bootstrap 时，公共入口会在启动 Ray 之前报错。
 
 六个编号的八卡配置已完成[解析检查](../../../../../runs/qwen-ablation-20261101/configs/acceptance.json)。两卡短检查完成 2 轮、32 次更新、TP2 融合、原生评估和最终 FP32 导出；原生加载前后 RKL 误差为 0，见[验收回执](../../../../../runs/qwen-ablation-20261101/gpu-acceptance.json)。初次因旧验证题表检查而提前退出的记录保留，修复后复测通过。这些结果不替代八卡完整负载容量和性能验收；版本比较范围见[提交差异清单](../../../../../runs/qwen-ablation-20261101/version-comparison.json)。
+
+<a id="source-b128-v1"></a>
+
+## E78–E80:12800 题的三种来源对照
+
+E78=current、E79=initial、E80=teacher，均为 Qwen3-1.7B non-thinking learner ← Qwen3-4B-Instruct-2507。三组从原始 learner 和新 Adam 状态开始，唯一科学变量为训练前缀来源。E63–E68 的 40 outer 设置保留；新运行使用独立的 `source_b128_v1` 评估与数据目录。
+
+| 项目         | 设置                                                                                               |
+| ------------ | -------------------------------------------------------------------------------------------------- |
+| 学习预算     | 全局 batch=mini-batch128，训练 n=1，reuse16，100 outer；每组 1600 更新                             |
+| 训练数据     | 从 16986 题清洗池按 seed42 固定抽取并排列 12800 个不同问题；三组同题单、同顺序，训练时不再 shuffle |
+| 数据检查     | 排除 held-out 和 bench 文本交集；不静默过滤超长题；逐题按 non-thinking 模板核对 4096-token 上限    |
+| 目标与精度   | 原生 full-vocab RKL、token-mean、EOS 不合并；FP32 master、BF16 forward、FP32 归约                  |
+| 优化器与采样 | AdamW、LR1e-6 constant；训练 T1/top-p1/top-k−1，response cap7168                                   |
+| 默认资源     | 每实验 2 卡、TP1；也可显式用 1/4/8 卡；全局学习预算不随卡数改变                                    |
+| 生成并发     | 每副本 16；两卡合计 32，128 条训练请求排队执行；并发不等于每题 n                                   |
+| 计算微批     | 单卡 token budget16384，多卡 32768；参数与优化器卸载开启                                           |
+| 保存         | 最终 model-only 导出及加载前后 RKL 核验；不增加自动恢复                                            |
+
+Initial 固定的是生成器权重，每个 outer 仍对下一批新题生成回答；不重复第一批训练数据。每种来源的 accuracy 都评估当前纯 learner。
+
+### 原生评估预算
+
+| 数据集   | 题数 | 每题 n | 每次完整 bench 回答数 | 固定 RKL panel 题数 |
+| -------- | ---: | -----: | --------------------: | ------------------: |
+| MATH-500 |  500 |      4 |                  2000 |                  64 |
+| AMC23    |   40 |     16 |                   640 |                  16 |
+| AIME24   |   30 |     32 |                   960 |                  16 |
+| AIME25   |   30 |     32 |                   960 |                  16 |
+| AIME26   |   30 |     32 |                   960 |                  16 |
+
+完整 bench 在 outer0/50/100 执行，T0.7、top-p0.9、cap31744；每个终点 5520 条回答。按题平均后计算各数据集均值，再做五集等权 macro；不使用 pass@n，也不把不同 n 的总表称为统一 avg@32。初始 student 和 teacher 基线只生成一次并由三组共享，总预算为 44160 条完整 bench 回答，不含 source 银行与短检查的额外生成；公共固定银行直接取完整基线的 sample0。
+
+Source held-out 显式开启、128 题；initial/teacher 公共固定银行各 128 题，每题只取 sample0。每 10 outer 在相同固定轨迹上评分；按题内有效 token 求均值后按题平均，不沿用旧 H1024 分母。History 读出关闭。公共 panel 按数据集固定随机选择，初始与教师银行使用相同题目 ID。
+
+### 准备与公共启动
+
+`QWEN_EVAL_ROOT`指定新目录；先完成 CPU 题表准备与原生 bootstrap，再用公开脚本启动。下面只打印 E78 的最终配置，不占用 GPU：
+
+```bash
+QWEN_EVAL_ROOT="$PWD/runs/qwen-source-b128-v1" \
+STUDENT_GPUS=2 CUDA_VISIBLE_DEVICES=5,6 CONFIG_ONLY=1 \
+bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E78
+```
+
+正式手动运行去掉`CONFIG_ONLY=1`，保持`PYTHON_BIN`指向持久环境和已分配的物理卡；E79/E80 只替换编号。原生 bench 的 n 由`trainer.evaluation.datasets`定义，修改旧路径的`VAL_N`不会替代它。
+
+### 有空闲卡就推进的队列
+
+[原生来源队列](../../../research/studies/prefix_fusion/native_source_queue.py)复用公开配置入口、原生 bootstrap/main_ppo、现有 GPU broker 与 resource_guard。默认优先两张、其次一张卡；只有明确 released 且没有其他模型 owner 的卡可交接。它只停止经 PID、命令和 UUID 核验的占位程序，不停止其他模型任务，也不因显存低就认定资源空闲。
+
+队列依次执行小规模 bootstrap、三个来源的两轮真实更新/读出/最终导出检查（batch8、reuse1、cap64，不计入正式预算）、正式共用基线，再串行运行 E78/E79/E80。三组保持队列选定的卡数；新增资源可用于之后明确安排的任务，不在一次 FSDP 作业中自动扩容。阶段失败即停止后续派发，保存日志；没有自动重跑或静默降低学习预算。释放后通过已有 broker 恢复占位。
+
+准备与运行分开，`--source`必须指向已提交、保持不变的工作树；所有新产物位于主仓库`runs/`。示例中的工作树由维护者先建立并冻结：
+
+```bash
+"$PYTHON_BIN" -m examples.mirroropd.research.studies.prefix_fusion.native_source_queue prepare \
+  --repo "$PWD" --source "$PWD/.worktrees/qwen-source-b128" \
+  --study "$PWD/runs/qwen-source-b128-v1" --python "$PYTHON_BIN" --worlds 2,1
+
+"$PYTHON_BIN" -m examples.mirroropd.research.studies.prefix_fusion.native_source_queue run \
+  --repo "$PWD" --source "$PWD/.worktrees/qwen-source-b128" \
+  --study "$PWD/runs/qwen-source-b128-v1" --python "$PYTHON_BIN" --worlds 2,1 \
+  --broker "$MIRROROPD_GPU_BROKER"
+```
+
+运行入口保留`prepared.json`的输入哈希、冻结 commit、各卡数配置、逐阶段命令/退出状态和资源曲线。`queue-status.json`区分等待资源、GPU 接线检查、基线生成、正式训练和失败；配置检查通过不代表 GPU 验收完成。该队列目前只交付这些固定阶段，不承担通用作业恢复。

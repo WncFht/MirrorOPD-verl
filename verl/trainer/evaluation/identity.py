@@ -15,10 +15,20 @@ def model_identity(path):
 
 
 def bootstrap_contract(options, *, student, teacher):
-    return {
+    contract = {
         "student": student,
         "teacher": teacher,
-        "source_sha256": file_sha256(options.source_file),
         "datasets": [{"spec": dataclasses.asdict(d), "sha256": file_sha256(d.path)} for d in options.datasets],
         "protocols": {k: v.metadata() for k, v in options.protocols.items()},
     }
+    if options.source_enabled:
+        contract["source_sha256"] = file_sha256(options.source_file)
+    return contract
+
+
+def active_bootstrap_contract(stored, *, source_enabled):
+    """An existing source bank may remain on disk when its evaluation is disabled."""
+    result = dict(stored)
+    if not source_enabled:
+        result.pop("source_sha256", None)
+    return result

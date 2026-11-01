@@ -18,7 +18,9 @@ def final_model_export(trainer, references, *, hidden_size, budget, destination,
     if destination.exists():
         raise FileExistsError("Final export destination must be new")
     # Same exact rows and batching on both sides; no regenerated answers.
-    selected = sorted(references, key=lambda r: (r["valid_tokens"], r["id"]))[:4]
+    selected = sorted((r for r in references if r["valid_tokens"] > 0), key=lambda r: (r["valid_tokens"], r["id"]))[:4]
+    if verify and not selected:
+        raise ValueError("Model reload verification requires a nonempty fixed reference bank")
     kwargs = dict(
         hidden_size=hidden_size, budget=budget, live_payload_bytes=live_payload_bytes, load_window=load_trajectories
     )
@@ -62,6 +64,12 @@ def final_model_export(trainer, references, *, hidden_size, budget, destination,
             "max_question_rkl_error": max_error,
             "hf_reload_forward": "not_tested",
             "measure_id": before[0].get("measure_id") if before else None,
+            "reference_bank": selected[0]["bank"] if selected else None,
+            "reference_ids": [r["id"] for r in selected],
+            "reference_generation_bank": selected[0]["artifact"] if selected else None,
+            "reference_generation_sha256": file_sha256(ArtifactStore(selected[0]["artifact"]).manifest_path)
+            if selected
+            else None,
             "outer": trainer.global_steps,
             "optimizer_steps": trainer.actor_optimizer_step,
             "hf_files": {p.name: file_sha256(p) for p in sorted(hf.iterdir()) if p.is_file()},

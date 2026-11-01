@@ -183,3 +183,10 @@ distillation:
 SourceHistoryReadout 保留 native、identity、未合并读出的原始协议；条件化、输入映射或 objective-space 读出使用 EvaluationCoordinator，不能把不同测量空间写入同一 source/history 指标。训练中的条件化指标使用 conditional_rkl 命名，不复用 native full_kl 的名称。
 
 图目录附带数值 CSV 与 `plot-inputs.json`，可交给同一绘图入口独立重绘，无需模型或原始 rollout；输出目录拒绝覆盖另一 run 的图表。
+
+
+## Optional source and history diagnostics
+
+`source_enabled` and `history_enabled` explicitly opt in to these readouts; both default to false. A source file or a schedule alone does not enable them. Disabled diagnostics perform no model scoring; training trajectories and duplicate-question checks remain active. Source-disabled bootstrap needs only public initial/teacher generations and their accuracy artifacts. Final export verifies against the source bank when enabled, otherwise against the public initial bank.
+
+Qwen E63–E68 explicitly preserve both diagnostics. E78–E80 enable the common source holdout and disable history. Existing raw evaluation configurations that need these diagnostics must declare the flags; no implicit schema conversion is performed.

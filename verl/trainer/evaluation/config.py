@@ -180,10 +180,12 @@ class SourceHistoryConfig:
 @dataclass(frozen=True)
 class EvaluationConfig:
     output: str
-    source_file: str
     bootstrap: str
     datasets: tuple[DatasetSpec, ...]
     protocols: dict[str, GenerationProtocol]
+    source_file: str | None = None
+    source_enabled: bool = False
+    history_enabled: bool = False
     training_domain: str = "math"
     source_count: int = 128
     history_size: int = 128
@@ -196,6 +198,11 @@ class EvaluationConfig:
     schedules: dict[str, Schedule] = field(default_factory=dict)
     final_export: bool = True
     verify_export: bool = True
+
+    @property
+    def bootstrap_children(self):
+        children = ("initial", "teacher", "initial-accuracy", "teacher-accuracy")
+        return children + (("source",) if self.source_enabled else ())
 
     @classmethod
     def parse(cls, value):
@@ -218,7 +225,11 @@ class EvaluationConfig:
             raise ValueError("Unknown training domain")
         if len({d.name for d in result.datasets}) != len(result.datasets):
             raise ValueError("Dataset names must be unique")
-        if "source" not in result.protocols or any(d.protocol not in result.protocols for d in result.datasets):
+        if type(result.source_enabled) is not bool or type(result.history_enabled) is not bool:
+            raise ValueError("source_enabled and history_enabled must be booleans")
+        if result.source_enabled and (not result.source_file or "source" not in result.protocols):
+            raise ValueError("Enabled source evaluation requires source_file and a source protocol")
+        if any(d.protocol not in result.protocols for d in result.datasets):
             raise ValueError("Unresolved generation protocol")
         if any(
             type(x) is not int or x <= 0

@@ -4,6 +4,7 @@
 
 import json
 import math
+import random
 from pathlib import Path
 
 BENCHMARKS = (("MATH-500", 500), ("AMC23", 40), ("AIME24", 30), ("AIME25", 30), ("AIME26", 30))
@@ -18,8 +19,24 @@ def hydra_value(value):
     return json.dumps(value)
 
 
-def evaluation(root, output, world):
+LEGACY_PROTOCOL = "prefix_v1"
+SOURCE_PROTOCOL = "source_b128_v1"
+BENCH_N = {"MATH-500": 4, "AMC23": 16, "AIME24": 32, "AIME25": 32, "AIME26": 32}
+PANEL_COUNTS = {"MATH-500": 64, "AMC23": 16, "AIME24": 16, "AIME25": 16, "AIME26": 16}
+
+
+def panel_ids(name, count, protocol):
+    if protocol == LEGACY_PROTOCOL:
+        return [f"{name}:{i}" for i in range(min(8, count))]
+    ids = sorted(random.Random(f"qwen-source-b128-v1/{name}/42").sample(range(count), PANEL_COUNTS[name]))
+    return [f"{name}:{i}" for i in ids]
+
+
+def evaluation(root, output, world, *, protocol=LEGACY_PROTOCOL):
     """A new native evaluation protocol; never relabel the legacy HF-bank results."""
+    if protocol not in (LEGACY_PROTOCOL, SOURCE_PROTOCOL):
+        raise ValueError(f"Unknown Qwen evaluation protocol: {protocol}")
+    expanded = protocol == SOURCE_PROTOCOL
     protocols = {}
     for name, cap, prompt, temperature, top_p, seed in [
         ("source", 7168, 4096, 1.0, 1.0, 52000000),
@@ -42,8 +59,10 @@ def evaluation(root, output, world):
         source_file=str(root / "questions/source.parquet"),
         bootstrap=str(root / "bootstrap"),
         training_domain="math",
-        source_count=64,
-        history_size=64,
+        source_enabled=True,
+        history_enabled=not expanded,
+        source_count=128 if expanded else 64,
+        history_size=128 if expanded else 64,
         seed=42,
         generation_concurrency=world * 16,
         generation_chunk_size=32,
@@ -55,14 +74,19 @@ def evaluation(root, output, world):
                 domain="math",
                 path=str(root / f"questions/{name}.parquet"),
                 verifier="math",
-                n=4,
+                n=BENCH_N[name] if expanded else 4,
                 protocol="public",
-                panel_ids=[f"{name}:{i}" for i in range(min(8, count))],
+                panel_ids=panel_ids(name, count, protocol),
             )
             for name, count in BENCHMARKS
         ],
         score=dict(payload_bytes=8 * 2**30, host_budget_bytes=128 * 2**30, copy_reserve_factor=2.5, token_chunk=1024),
-        schedules={"source": {"every": 5}, "history": {"every": 5}, "banks": {"every": 5}, "bench": {"at": [20, 40]}},
+        schedules={
+            "source": {"every": 10 if expanded else 5},
+            "history": {"at": [], "final": False} if expanded else {"every": 5},
+            "banks": {"every": 10 if expanded else 5},
+            "bench": {"at": [50, 100] if expanded else [20, 40]},
+        },
         final_export=True,
         verify_export=True,
     )
@@ -75,12 +99,20 @@ def options(env, arm, root):
         if not env.get(key):
             env[key] = str(value)
 
-    default("STUDENT_GPUS", 8)
+    protocol = env.get("QWEN_PREFIX_PROTOCOL") or LEGACY_PROTOCOL
+    if protocol not in (LEGACY_PROTOCOL, SOURCE_PROTOCOL):
+        raise ValueError(f"Unknown Qwen study protocol: {protocol}")
+    if protocol == SOURCE_PROTOCOL and arm not in {"S", "S0", "T"}:
+        raise ValueError("The b128 study only declares current, initial and teacher sources")
+    default("STUDENT_GPUS", 2 if protocol == SOURCE_PROTOCOL else 8)
     world = int(env["STUDENT_GPUS"])
     batch = int(env.get("TRAIN_BATCH_SIZE") or 64)
     if world not in (1, 2, 4, 8) or batch % world:
         raise ValueError("Qwen prefix study requires 1/2/4/8 local GPUs and a divisible global batch")
-    default("QWEN_EVAL_ROOT", root / "runs/qwen-prefix-native")
+    default(
+        "QWEN_EVAL_ROOT",
+        root / "runs" / ("qwen-source-b128-v1" if protocol == SOURCE_PROTOCOL else "qwen-prefix-native"),
+    )
     study = Path(env["QWEN_EVAL_ROOT"]).expanduser().resolve()
     default("TRAIN_FILE", study / "questions/train.parquet")
     for key, value in dict(
@@ -110,11 +142,11 @@ def options(env, arm, root):
     if len(devices) != world or len(set(devices)) != world or any(d not in set(map(str, range(8))) for d in devices):
         raise ValueError("Set CUDA_VISIBLE_DEVICES to exactly STUDENT_GPUS distinct physical indices")
     context = int(env.get("MAX_PROMPT_LENGTH") or 4096) + int(env.get("MAX_RESPONSE_LENGTH") or 7168)
-    default("FUSION_TP", 2 if world > 1 else 1)
+    default("FUSION_TP", 1 if protocol == SOURCE_PROTOCOL else (2 if world > 1 else 1))
     tp = int(env["FUSION_TP"])
     if tp not in (1, 2) or world % tp:
         raise ValueError("Fusion TP must be 1 or 2 and divide the allocated GPUs")
-    default("FUSION_MAX_NUM_SEQS", min(32, math.ceil(batch / (world // tp))))
+    default("FUSION_MAX_NUM_SEQS", min(16 if protocol == SOURCE_PROTOCOL else 32, math.ceil(batch / (world // tp))))
     default(
         "FUSION_KV_BYTES",
         math.ceil(context * int(env["FUSION_MAX_NUM_SEQS"]) * 256 * 1024 / (tp * 8 * 2**30)) * 8 * 2**30,
@@ -137,9 +169,15 @@ def options(env, arm, root):
             "rollout_policy.right_weight=0.5",
         ]
     output = Path(env["RUN_DIR"])
-    spec = evaluation(study, output, world)
+    spec = evaluation(study, output, world, protocol=protocol)
+    data_options = (
+        ["data.shuffle=False", "data.filter_overlong_prompts=False", "data.truncation=error"]
+        if protocol == SOURCE_PROTOCOL
+        else []
+    )
     return [
         *policy,
+        *data_options,
         "trainer.val_before_train=True",
         "data.val_files=[]",
         "trainer.resume_mode=disable",
@@ -179,7 +217,7 @@ def preflight(environment):
     path = Path(environment["QWEN_EVAL_ROOT"]) / "bootstrap/manifest.json"
     if not path.is_file() or json.loads(path.read_text()).get("status") != "complete":
         raise ValueError(
-            "E63-E68 need completed native banks under QWEN_EVAL_ROOT. "
+            "Qwen source presets need completed native banks under QWEN_EVAL_ROOT. "
             "Prepare questions, resolve a CONFIG_ONLY YAML, then run "
             "verl.trainer.evaluation.bootstrap with initial, teacher and finalize."
         )
