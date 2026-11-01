@@ -901,7 +901,8 @@ class PPOTrainer(ABC):
             or self.config.trainer.get("val_only", False)
             or self.config.trainer.get("test_freq", -1) > 0
         )
-        if not self.config.data.val_files and validation_requested:
+        uses_validation_dataset = self.readout_callback is None or self.readout_callback.uses_validation_dataset
+        if not self.config.data.val_files and validation_requested and uses_validation_dataset:
             raise ValueError("Validation requires nonempty data.val_files; disable validation for training-only runs")
         self.val_dataset = (
             create_rl_dataset(

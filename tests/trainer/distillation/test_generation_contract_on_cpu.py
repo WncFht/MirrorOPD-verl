@@ -118,3 +118,16 @@ def test_bootstrap_passes_prepared_config_to_actual_replica_constructor(tmp_path
     monkeypatch.setattr(bootstrap, "get_rollout_replica_class", lambda name: replica)
     with pytest.raises(ConstructorReached):
         asyncio.run(bootstrap.generate_bootstrap(cfg, "initial"))
+
+
+def test_independent_current_evaluation_does_not_change_training_policy(tmp_path, monkeypatch):
+    from verl.experimental.rollout_policy import validation
+    from verl.trainer.evaluation.generation_contract import require_current_generation
+
+    monkeypatch.setattr(validation, "uses_common_single_sampling", lambda config: True)
+    config = OmegaConf.create({"rollout_policy": {"mode": "single", "model": {"kind": "teacher"}}})
+    before = OmegaConf.to_container(config)
+    require_current_generation(config, independent_engine=True)
+    assert OmegaConf.to_container(config) == before
+    with pytest.raises(ValueError, match="current single-model"):
+        require_current_generation(config)

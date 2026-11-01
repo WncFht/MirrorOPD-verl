@@ -9,6 +9,7 @@ import time
 
 import pyarrow as pa
 import pyarrow.parquet as pq
+from omegaconf import OmegaConf
 from transformers import AutoConfig
 
 from verl.trainer.evaluation.native import balanced_history, capture_rows
@@ -44,12 +45,13 @@ def read_questions(spec):
 
 class EvaluationCoordinator(ReadoutCallback):
     handles_validation = True
+    uses_validation_dataset = False
     requires_full_batch = True
     owns_final_weight_sync = True
 
     def __init__(self, *, config, options):
         self.config = config
-        require_current_generation(config)
+        require_current_generation(config, independent_engine=True)
         self.options = EvaluationConfig.parse(options)
         if config.trainer.v1.trainer_mode != "sync" or config.distillation.execution_mode != "shared_sync":
             raise ValueError("Unified evaluation requires synchronous serial shared-teacher training")
@@ -99,6 +101,9 @@ class EvaluationCoordinator(ReadoutCallback):
                 "bootstrap_sha256": file_sha256(self.bootstrap.manifest_path),
                 "contract_sha256": identity(contract),
                 "configuration": dataclasses.asdict(self.options),
+                "training_rollout_policy": OmegaConf.to_container(config.rollout_policy, resolve=True)
+                if OmegaConf.select(config, "rollout_policy") is not None
+                else None,
             },
         )
         self.batches, self.baselines = {}, {}
@@ -140,7 +145,9 @@ class EvaluationCoordinator(ReadoutCallback):
                 dataset="training",
                 domain=self.options.training_domain,
                 sample_index=0,
-                producer="current_student",
+                producer="current_student"
+                if getattr(getattr(trainer, "rollout_policy", None), "default_path", True)
+                else f"policy_{trainer.rollout_policy.mode}",
                 bank="history",
                 prompt_tokens=len(row["prompt_ids"]),
                 response_tokens=len(row["response_ids"]),
@@ -194,7 +201,9 @@ class EvaluationCoordinator(ReadoutCallback):
         )
         service = trainer.rollout_service
         if not hasattr(service, "ensure_current"):
-            raise ValueError("Unified evaluation requires the default synchronous rollout service")
+            raise ValueError(
+                "Unified evaluation requires a synchronous service with pure-current evaluation and parking"
+            )
         event = ArtifactStore.create(
             self.store.root / f"events/outer-{outer:03d}",
             kind="evaluation_event",

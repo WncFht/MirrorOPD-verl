@@ -278,6 +278,7 @@ def test_update_actor_passes_score_centering_flag(score_centering):
 
 def _progress_trainer():
     trainer = _StubTrainer.__new__(_StubTrainer)
+    trainer.readout_callback = None
     trainer.actor_optimizer_step_attempts = trainer.actor_optimizer_step = 0
     trainer.config = OmegaConf.create(
         {
@@ -514,3 +515,17 @@ def test_evaluation_batch_rules_follow_capabilities_not_configuration_presence()
     trainer.readout_callback.requires_full_batch = True
     assert PPOTrainer._get_required_batch_multiple(trainer, 2) == 2
     trainer._validate_evaluation_full_batch.assert_called_once()
+
+
+def test_native_evaluation_uses_its_own_questions_without_legacy_val_loader():
+    trainer = _training_only_trainer()
+    trainer.readout_callback = SimpleNamespace(uses_validation_dataset=False)
+    trainer.config.trainer.update({"val_before_train": True, "evaluation": {"source_file": "source.parquet"}})
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.create_rl_dataset", return_value=[{}] * 64) as dataset,
+        patch("verl.trainer.ppo.v1.trainer_base.create_rl_sampler", return_value=None),
+        patch("verl.trainer.ppo.v1.trainer_base.StatefulDataLoader") as loader,
+    ):
+        trainer._init_dataloader()
+    assert dataset.call_count == loader.call_count == 1
+    assert trainer.val_dataset == [] and trainer.val_dataloader is None

@@ -30,8 +30,8 @@ class RolloutRuntime:
         self.pool = ExecutionPool(self.context)
 
     @auto_await
-    async def sync_validation(self):
-        await self.pool.single.validation_begin(self.trainer.global_steps)
+    async def sync_validation(self, version=None):
+        await self.pool.single.validation_begin(self.trainer.global_steps if version is None else version)
 
     @auto_await
     async def sleep_validation(self):

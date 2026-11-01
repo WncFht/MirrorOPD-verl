@@ -57,6 +57,7 @@ class Preset:
     kappa: str | None = None
     eta: str | None = None
     environment: tuple[tuple[str, str], ...] = ()
+    rollout_arm: str | None = None
 
 
 SHORT = Budget(32, 4, None, None)
@@ -213,6 +214,13 @@ def preset_catalog() -> dict[str, Preset]:
         environment = dict(presets[reference].environment)
         environment.update(FULL_KL_BACKEND="precompute_fused", TRAIN_PRECISION="bf16")
         presets[f"E{number}"] = replace(presets[reference], environment=tuple(environment.items()))
+    for number, arm in ((63, "S"), (64, "S0"), (65, "T"), (66, "LM"), (67, "PM"), (68, "TM")):
+        presets[f"E{number}"] = Preset(
+            Budget(40, 16, -1, -1, initial_validation=True, align_seeds=True, original_data=True, lr="1e-6"),
+            method="full_kl",
+            pair=replace(QWEN_CHAT, response=7168, student_sequences=8),
+            rollout_arm=arm,
+        )
     return presets
 
 
@@ -416,6 +424,19 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
         defaults(env, **dict(preset.environment))
     entry_dir = root / "examples/mirroropd"
     options = ["++rollout_model_resolver=examples.mirroropd.assets.paths.rollout_model_path"]
+    prefix_options = []
+    if preset and preset.rollout_arm:
+        if role:
+            raise ValueError("E63-E68 use their scientific readouts; independent model validation remains under E43")
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        from examples.mirroropd.launchers.qwen_prefix import options as prefix_defaults
+
+        stamp = datetime.now().strftime("%Y%m%d-%H%M%S") + f"-{os.getpid()}"
+        defaults(env, EXPERIMENT_NAME=f"math-opd-{name}-{stamp}")
+        defaults(env, RUN_DIR=root / "outputs" / env["EXPERIMENT_NAME"])
+        defaults(env, CHECKPOINT_DIR=Path(env["RUN_DIR"]) / "runtime")
+        prefix_options = prefix_defaults(env, preset.rollout_arm, root)
     protocol = model_defaults(env, preset.pair, role, root) if preset and preset.pair else []
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S") + f"-{os.getpid()}"
     if role:
@@ -454,7 +475,9 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
     if preset and (preset.method == "full_kl" or estimator == "full_vocab"):
         defaults(env, FULL_KL_BACKEND="precompute", FULL_KL_ASYNC_WRITE="True", FULL_KL_PREFETCH="True")
     defaults(env, EXPERIMENT_NAME=f"{env.get('DOMAIN') or 'math'}-opd-{name}{label}-{stamp}")
-    return LaunchPlan(entry_dir / "launchers/_run_single_teacher_fsdp2.sh", tuple([*options, *protocol, *hydra]), env)
+    return LaunchPlan(
+        entry_dir / "launchers/_run_single_teacher_fsdp2.sh", tuple([*prefix_options, *options, *protocol, *hydra]), env
+    )
 
 
 def _aligned_table(headers, rows):
@@ -580,6 +603,25 @@ def preset_overview() -> str:
             "不保存任何 checkpoint（save_freq=-1，包括最后一步）；E54 保留原 7k/旧前缀协议。",
             "E59–E62：分别沿用 E55–E58 的模型、目标和预算，改用已验收的 EOS precompute_fused/chunk512；"
             "actor/anchor 显式 bf16，完整诊断保留。旧 E55–E58 默认不变。",
+            "E63–E68：Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507，六种前缀。\n"
+            + _aligned_table(
+                ("Preset", "Rollout"),
+                [
+                    (f"E{n}", a)
+                    for n, a in (
+                        (63, "current"),
+                        (64, "initial"),
+                        (65, "teacher"),
+                        (66, "logit fusion"),
+                        (67, "probability fusion"),
+                        (68, "batch fusion"),
+                    )
+                ],
+            )
+            + "\n默认每实验8卡；single用8个TP1，fusion用4个TP2；全局batch64、40 outer/reuse16。"
+            "fusion 每副本并发16/每卡KV24 GiB，current+评估并发16/KV64 GiB；"
+            "计算token budget32768；shared_sync保持已支持的参数/优化器卸载。\n"
+            "采用main统一原生评估与连续调度；QWEN_EVAL_ROOT 指定新银行。旧HF评估不可混接；八卡性能须实测。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
         ]
@@ -592,6 +634,8 @@ def list_presets() -> str:
         detail = (
             f"{p.pair.student} -> {p.pair.teacher}; cap={p.pair.response}" if p.pair else f"{p.advantage}/{p.policy}"
         )
+        if p.rollout_arm:
+            detail += f"; prefix={p.rollout_arm}; default=8 GPUs; scientific readouts"
         if p.kappa is not None:
             detail += f"; full_vocab kappa={p.kappa} eta={p.eta}"
         if p.environment:
@@ -621,6 +665,10 @@ def main(argv=None):
         return
     try:
         plan = build_plan(args, hydra, dict(os.environ))
+        if PRESETS.get(args.preset) and PRESETS[args.preset].rollout_arm:
+            from examples.mirroropd.launchers.qwen_prefix import preflight
+
+            preflight(plan.environment)
     except ValueError as error:
         cli.error(str(error))
     os.execvpe(plan.command[0], plan.command, plan.environment)

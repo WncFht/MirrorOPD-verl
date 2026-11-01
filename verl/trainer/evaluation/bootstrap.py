@@ -32,7 +32,7 @@ from .trajectory import select_panel, trajectory_index
 
 
 async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_configs=(), resume_generation=None):
-    require_current_generation(config)
+    require_current_generation(config, independent_engine=True)
     options = EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
     root = ArtifactStore(options.bootstrap)
     if not root.manifest_path.exists():

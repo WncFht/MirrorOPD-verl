@@ -40,6 +40,7 @@ class HFReloadReadout(ReadoutCallback):
     """Use only with a new val_only trainer whose student path is the final HF export."""
 
     handles_validation = True
+    uses_validation_dataset = False
 
     def __init__(self, *, config, options):
         self.options = HFReloadOptions.parse(options)

@@ -41,6 +41,7 @@ class ProbeOptions:
 
 class NativeRKLProbe(ReadoutCallback):
     handles_validation = True
+    uses_validation_dataset = False
 
     def __init__(self, *, config, options):
         if not config.trainer.val_only or config.trainer.resume_mode != "disable":
