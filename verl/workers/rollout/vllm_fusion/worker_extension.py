@@ -73,13 +73,24 @@ class FusionWorkerExtension:
         self.fusion_valid = False
         self.fusion_version = self.fusion_pending_version = None
         model = self._fusion_model().student
-        expected = self.fusion_shapes
         seen, canonical_seen, loaded, errors = set(), set(), set(), []
         tied = model.config.tie_word_embeddings
 
+        def canonical_name(name):
+            return "model.embed_tokens.weight" if tied and name == "lm_head.weight" else name
+
+        # Checkpoints may store either tied alias or both; actor exports can
+        # deduplicate them. Compare logical weights on both sides of the stream.
+        expected = {}
+        for name, shape in self.fusion_shapes.items():
+            canonical = canonical_name(name)
+            if canonical in expected and expected[canonical] != shape:
+                errors.append(f"Conflicting tied checkpoint shapes: {name}")
+            expected[canonical] = shape
+
         def receive(bucket, is_last):
             for name, tensor in bucket:
-                canonical = "model.embed_tokens.weight" if tied and name == "lm_head.weight" else name
+                canonical = canonical_name(name)
                 shape = expected.get(canonical)
                 if shape is None or tuple(tensor.shape) != shape or not tensor.is_floating_point():
                     errors.append(f"Invalid fusion weight {name}: shape={tuple(tensor.shape)}, dtype={tensor.dtype}")
@@ -115,8 +126,6 @@ class FusionWorkerExtension:
         receiver = BucketedWeightReceiver(zmq_handle=address, device=self.device, use_shm=use_shm)
         receiver.receive_weights(receive)
         missing = set(expected) - canonical_seen
-        if tied and "lm_head.weight" in seen:
-            missing.discard("model.embed_tokens.weight")
         if missing:
             errors.append(f"Missing fusion weights: {sorted(missing)}")
         missing_parameters = {name for name, _ in model.named_parameters()} - loaded

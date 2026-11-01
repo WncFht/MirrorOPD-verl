@@ -28,7 +28,7 @@ Source/history 在训练内建立初始 source bank；公共 suite 使用预生�
 
 Trainer 和 RolloutService 不根据 evaluation 配置是否存在推断这些行为。Source/history 的休眠与恢复只经 RolloutService，恢复时重新安装 sampler 并维护驻留版本。新增组件声明实际能力并校验自己的 options，无需给 Trainer 增加一套配置入口。
 
-Source/history 与公共 suite 均要求 current single-model 的已验收 sampler。其他科学生成协议使用对应显式组件，不伪装成 initial-student source bank。
+评估生成始终使用 current learner 的已验收单模型 sampler。公共 suite 可在训练使用 S0、teacher 或 mixture 时，经独立 current 引擎评估；训练来源不改变评估来源。Source/history 的原生 val-loader 路径仍要求训练使用默认 current 策略。
 
 ## 来源留出与 history 配置
 

@@ -72,6 +72,10 @@ class SingleVLLMExecutor:
             kv_bytes = 2 * 2 * hf.num_hidden_layers * kv_heads * head_dim * rollout.max_model_len * rollout.max_num_seqs
             granularity = 256 * 1024**2
             with open_dict(rollout.engine_kwargs.vllm):
+                if self.context.config.trainer.get("evaluation"):
+                    # This explicit budget belongs to the long-context current
+                    # evaluation engine, not to a private fixed training source.
+                    rollout.engine_kwargs.vllm.pop("kv_cache_memory_bytes", None)
                 if rollout.engine_kwargs.vllm.get("kv_cache_memory_bytes") is None:
                     rollout.engine_kwargs.vllm.kv_cache_memory_bytes = max(
                         granularity, ((kv_bytes + granularity - 1) // granularity) * granularity
@@ -119,4 +123,8 @@ class SingleVLLMExecutor:
         await self.context.set_policy_sampling(self.context.checkpoint_manager.replicas, True)
 
     async def validation_end(self):
+        # The initial fixed-bank evaluation can park an allocated default engine
+        # before any current-policy refit has marked it active.
+        if not self.current_active:
+            await self.context.guarded(asyncio.to_thread(self.context.checkpoint_manager.sleep_replicas))
         await self.release()

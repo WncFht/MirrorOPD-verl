@@ -13,6 +13,7 @@ class ReadoutCallback:
     """Completed-boundary lifecycle; subclasses declare validation ownership."""
 
     handles_validation = False
+    uses_validation_dataset = True
     requires_full_batch = False
     owns_final_weight_sync = False
 

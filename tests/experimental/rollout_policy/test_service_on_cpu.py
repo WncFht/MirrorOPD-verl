@@ -15,7 +15,7 @@ def test_default_service_preserves_sync_and_transport_order():
     events = []
     trainer = SimpleNamespace(
         rollout_policy=RolloutPolicyConfig(),
-        config=OmegaConf.create({}),
+        config=OmegaConf.create({"trainer": {}}),
         common_rollout_sampling=False,
         readout_callback=None,
         global_steps=3,
@@ -114,3 +114,25 @@ def test_final_sync_is_owned_by_the_component_not_evaluation_config():
     trainer.readout_callback.owns_final_weight_sync = True
     service.after_update()
     trainer.checkpoint_manager.update_weights.assert_not_called()
+
+
+def test_policy_native_evaluation_engine_is_parked_before_next_collection(monkeypatch):
+    from verl.experimental.rollout_policy import runtime
+    from verl.experimental.rollout_policy import service as module
+
+    events = []
+    runner = SimpleNamespace(
+        sync_validation=lambda version: events.append(("current", version)),
+        sleep_validation=lambda: events.append(("park",)),
+        collect=lambda batch: events.append(("collect",)) or {},
+    )
+    monkeypatch.setattr(runtime, "RolloutRuntime", lambda trainer: runner)
+    monkeypatch.setattr(module.tq, "kv_batch_put", lambda **kwargs: None)
+    trainer = SimpleNamespace(global_steps=2, _stamp_rollout_submission=lambda batch: None)
+    service = PolicyRolloutService(trainer)
+    service.ensure_current(1)
+    service.ensure_current(1)
+    service.submit({"uid": ["a"]})
+    assert events == [("current", 1), ("park",), ("collect",)]
+    service.ensure_current(1)
+    assert events[-1] == ("current", 1)

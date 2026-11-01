@@ -56,7 +56,7 @@ distillation:
 
 新银行绑定完整 checkpoint 内容与有效 engine_contract。权重、嵌套模板、EOS、支持集或 sampler 合同改变时，应创建新产物；相同内容迁移目录可以复用。不能给旧银行补新 hash 或新字段来宣称其满足当前合同。
 
-冻结生成的 `--resume-generation` 仅在身份、协议、seed 与采样数量完全匹配时补缺失样本，不恢复训练中的模型或 Adam。Source/history 与公共 suite 要求 current single-model 的已验收采样器；其他科学生成来源使用其显式组件。银行复用、生成恢复和训练 checkpoint 恢复是不同操作，详见评估包说明。
+冻结生成的 `--resume-generation` 仅在身份、协议、seed 与采样数量完全匹配时补缺失样本，不恢复训练中的模型或 Adam。评估使用 current learner 的已验收单模型采样器；公共 suite 可通过独立评估引擎服务非 current 的训练来源。Source/history 的 val-loader 路径仍要求默认 current 训练策略。银行复用、生成恢复和训练 checkpoint 恢复是不同操作，详见评估包说明。
 
 ## 内部调用者和扩展
 

@@ -131,8 +131,9 @@ def test_fixed_a_endpoint_does_not_prepare_learner_or_other_source(tmp_path):
 
 @pytest.mark.parametrize("head_dim,kv_heads", [(None, None), (128, 8)])
 @pytest.mark.parametrize("explicit_kv", [None, 123456789])
+@pytest.mark.parametrize("native_evaluation", [False, True])
 def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(
-    monkeypatch, tmp_path, head_dim, kv_heads, explicit_kv
+    monkeypatch, tmp_path, head_dim, kv_heads, explicit_kv, native_evaluation
 ):
     from unittest.mock import AsyncMock
 
@@ -161,7 +162,7 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(
     monkeypatch.setattr(module, "get_rollout_replica_class", lambda name: Replica)
     config = OmegaConf.create(
         {
-            "trainer": {"n_gpus_per_node": 2},
+            "trainer": {"n_gpus_per_node": 2, "evaluation": {"enabled": True} if native_evaluation else None},
             "actor_rollout_ref": {
                 "rollout": {
                     "gpu_memory_utilization": 0.2,
@@ -202,7 +203,10 @@ def test_frozen_startup_preserves_declared_memory_ratio_and_resolves_context(
     kv_per_token = 147456 if head_dim else 368640
     quantum = 256 * 1024**2
     expected_kv = ((kv_per_token * 11264 * 2 + quantum - 1) // quantum) * quantum
-    assert captured[0].engine_kwargs.vllm.kv_cache_memory_bytes == (explicit_kv or expected_kv)
+    assert captured[0].engine_kwargs.vllm.kv_cache_memory_bytes == (
+        expected_kv if native_evaluation else explicit_kv or expected_kv
+    )
+    assert config.actor_rollout_ref.rollout.engine_kwargs.vllm.kv_cache_memory_bytes == explicit_kv
 
 
 def test_generation_timing_excludes_post_generation_audit(monkeypatch, tmp_path):
@@ -267,3 +271,21 @@ def test_private_context_preserves_validation_and_smaller_explicit_limits(declar
     assert private.response_length == original.response_length == 7168
     assert original.max_model_len == declared
     assert original.val_kwargs.max_tokens == 31744
+
+
+def test_initial_evaluation_parks_default_engine_before_first_refit():
+    from types import SimpleNamespace
+    from unittest.mock import Mock
+
+    from verl.workers.rollout.vllm_rollout.policy_execution import SingleVLLMExecutor
+
+    sleep = Mock()
+
+    async def guarded(value):
+        return await value
+
+    context = SimpleNamespace(checkpoint_manager=SimpleNamespace(sleep_replicas=sleep), guarded=guarded)
+    executor = SingleVLLMExecutor(context)
+    assert not executor.current_active
+    asyncio.run(executor.validation_end())
+    sleep.assert_called_once_with()
