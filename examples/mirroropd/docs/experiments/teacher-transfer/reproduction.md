@@ -31,7 +31,7 @@ $$
 
 ![每个 batch 优化区间对其他面板的影响](transfer-mechanism/appendix/examples/tulu-sft320/batch-effects.png)
 
-[数据](transfer-mechanism/appendix/examples/tulu-sft320/batch-effects.csv)、[来源](transfer-mechanism/appendix/examples/tulu-sft320/sources.json)、[PDF](transfer-mechanism/appendix/examples/tulu-sft320/batch-effects.pdf)。颜色显示绝对风险减少量；没有用颜色深浅冒充统计显著性。
+[数据](transfer-mechanism/appendix/examples/tulu-sft320/batch-effects.csv)、[来源](transfer-mechanism/appendix/examples/tulu-sft320/sources.json)、[PDF](transfer-mechanism/appendix/examples/tulu-sft320/batch-effects.pdf)。颜色表示绝对风险减少量，不编码统计显著性。
 
 ## 遗忘量与分布图
 
@@ -47,7 +47,7 @@ F_j>0 表示训练完自身后发生回升。还应同时给初始风险，区�
 
 ## 可选工程页与不可补造的指标
 
-时间、实际 token 数、峰值显存可单独成工程页，避免混入科学难度排名。学习率固定在协议中；没有逐步保存的参数更新范数、Adam 矩轨迹和逐 token KL，不能从已有聚合日志反推出曲线。已有终点权重允许以后重评分，但本轮仅从已有记录绘图，不启动新验证设置。
+时间、实际 token 数、峰值显存可单独成工程页，避免混入科学难度排名。学习率固定在协议中；没有逐步保存的参数更新范数、Adam 矩轨迹和逐 token KL，不能从已有聚合日志反推出曲线。本流程从已有记录绘图；需要新读出的指标可另用终点权重重评分。
 
 当前有 RKL／JS／TV、student entropy／teacher entropy、有效 token 数及适用模型的额外支持质量。teacher-copy 是参考点而非严格下界；罕见动作或额外支持的更细分解需要单独核对。任务 accuracy／GapRecovery 只放已有完整 before/teacher/after 证据，不把 KL 当作任务成功率。
 

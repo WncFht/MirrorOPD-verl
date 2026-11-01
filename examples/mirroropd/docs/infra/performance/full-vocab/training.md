@@ -383,7 +383,7 @@ chunk256→1024 墙钟中位数只下降约 0.8%，峰值 allocated 增加约 3.
 
 ### 现成投影快路径的独立小测
 
-主表使用严格 FP32 operands 投影作为参考，不能冒充生产 verl 所有已优化算子的最佳速度。`verl.utils.linear.project`已有 BF16 operands、FP32 output 路径。另在单 H800 上用 8 条真实前缀产生的 8,192 个 hidden 位置比较 teacher 投影；同一 BF16 hidden 和 BF16 teacher 权重，参考先转 FP32，候选直接调用 project。关闭 BF16 reduced-precision reduction，不降低训练后 FP32 student head 精度。
+主表测量严格 FP32 operands 投影参考路径；生产优化路径另做下述对照。`verl.utils.linear.project`已有 BF16 operands、FP32 output 路径。另在单 H800 上用 8 条真实前缀产生的 8,192 个 hidden 位置比较 teacher 投影；同一 BF16 hidden 和 BF16 teacher 权重，参考先转 FP32，候选直接调用 project。关闭 BF16 reduced-precision reduction，不降低训练后 FP32 student head 精度。
 
 | Chunk | 严格 FP32 投影中位秒 | BF16 输入／FP32 输出中位秒 | 仅 teacher 投影加速 | 最大 token RKL 绝对变化 |
 | ----- | -------------------- | -------------------------- | ------------------- | ----------------------- |

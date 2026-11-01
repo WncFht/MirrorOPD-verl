@@ -84,7 +84,7 @@ $$
 | Actor 权重初始化 dtype      | `model_dtype=fp32`；不能据此声称所有前向乘法均 FP32               | C                 |
 | Hardware                    | 8×A800 80GB                                                       | C README          |
 
-Adam 系数、weight decay、混合精度、gradient clipping 等未在论文表 2 逐项报告，严格复现应解析该 commit 的完整 Hydra 配置。下面的本仓提案采用本仓已明确的 AdamW `(0.9,0.999)`、wd=0.01、grad clip=1、无 warmup，标为 R/L，不冒充论文表 2 给定值。
+Adam 系数、weight decay、混合精度、gradient clipping 等未在论文表 2 逐项报告，严格复现应解析该 commit 的完整 Hydra 配置。下面的本仓提案采用本仓已明确的 AdamW `(0.9,0.999)`、wd=0.01、grad clip=1、无 warmup，标为 R/L，以区别于论文表 2 的给定值。
 
 ### 3.3 验证配置
 

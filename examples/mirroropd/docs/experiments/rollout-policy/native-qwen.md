@@ -48,7 +48,7 @@
 
 训练题表复用旧六组的去重 DAPO 文件，630 道数学 accuracy 题也复用相同文本。新协议重新生成原生银行：Math64 source held-out、五个数学数据集各 8 题的 initial/teacher 固定 panel、64 条按训练 batch 均衡抽样的 history；每 5 轮评分，outer20/40 执行 630 题 avg@4 及 current-state 评分，outer0 使用新银行基线。最终保存 FP32 模型并做原生加载前后 RKL 校验，不再每 20 轮保存 Adam 恢复状态。
 
-这与[旧六组报告](qwen-sources.md)的 HF 固定状态读出有明确区别：原生随机流、银行轨迹、RKL 按题/有效 token 平均，以及 source/history/public 分组替代旧 H1024 固定分母；旧 Code/IF 面板不作为这组新数学配置的评估项。因此旧银行与旧 accuracy 结果不能冒充新 bootstrap，不把两种 RKL 曲线直接拼接。旧六组继续使用冻结 `462e3f3a` 跑完；E63–E68 是新的执行和评估版本。
+这与[旧六组报告](qwen-sources.md)的 HF 固定状态读出有明确区别：原生随机流、银行轨迹、RKL 按题/有效 token 平均，以及 source/history/public 分组替代旧 H1024 固定分母；旧 Code/IF 面板不作为这组新数学配置的评估项。新版本须独立生成 bootstrap，两种 RKL 曲线按各自协议展示。旧六组继续使用冻结 `462e3f3a` 跑完；E63–E68 是新的执行和评估版本。
 
 main 在 `402f6353` 相对冻结版新增了 EOS 补偿融合、原生统一评估和最终 model-only 导出等实现。当前原生完整词表 loss 没有启用 EOS 合并分支；若另行设 `FULL_KL_TERMINATION_TOKEN_IDS=[151643,151645]`，那是目标定义的改变，需要独立标记。多卡归约、TP、动态微批与采样调度仍可能改变浮点结果和自然轨迹，不保证与旧单卡逐 token 或逐位一致。
 

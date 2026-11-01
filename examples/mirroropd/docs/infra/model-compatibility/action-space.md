@@ -28,7 +28,7 @@
 
 | 优先级 | 审查时的事实                                                                                | 改进方向                                                                                                                                                        |
 | ------ | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| P0     | bootstrap 原先只安装共同 sampler，未调用训练端的`policy_engine_config`注入 TokenizerSupport | 两个生成入口共用配置解析，并记录实际支持、EOS、输入 tokenizer 与 sampler 合同；旧银行不能冒充新条件                                                             |
+| P0     | bootstrap 原先只安装共同 sampler，未调用训练端的`policy_engine_config`注入 TokenizerSupport | 两个生成入口共用配置解析，并记录实际支持、EOS、输入 tokenizer 与 sampler 合同；银行按其实际生成条件标识                                                         |
 | P1     | `score_rkl_rows`固定 raw 支持；训练 EOS 路径优化 coarse 目标，但仍返回 raw 诊断             | 显式声明每个 measure 的概率空间；保留 raw 诊断，再增加与训练空间相同的 RKL                                                                                      |
 | P2     | 训练和 readout 都拒绝 student 输出行数大于 teacher                                          | 实现明确的 common-conditioned 空间，并同时记录双方排除质量                                                                                                      |
 | P4     | 能否加载 backbone、取得 head 和生成 token 的检查分散                                        | 启动 GPU 前形成逐角色能力报告；Llama 不靠扩大一个白名单接入                                                                                                     |

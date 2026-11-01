@@ -27,7 +27,7 @@ make maintenance-check
 python examples/mirroropd/tools/maintenance/pipeline.py list
 ```
 
-相邻 `wandb-logs`、`MirrorOPD`、`model`/`models` 和 `runs` 可作为明确声明的仓外证据。当前机器没有这些证据时，统计为未核验引用，不能声称内容已验证。`data/` 和 `archive/evidence/` 中未随源码发布的原始记录也单独计数；当前源码、文档、图片与锚点的缺失仍失败。检查不访问外部网站，不启动训练或 GPU，也不验证数学和实验解释的正确性。
+相邻 `wandb-logs`、`MirrorOPD`、`model`/`models` 和 `runs` 可作为明确声明的仓外证据。当前机器缺少的证据计为未核验引用。`data/` 和 `archive/evidence/` 中未随源码发布的原始记录也单独计数；当前源码、文档、图片与锚点的缺失仍失败。检查不访问外部网站，不启动训练或 GPU，也不验证数学和实验解释的正确性。
 
 冻结 Python 不进入 Ruff、mypy、许可头或 compileall hooks，第三方原文与归档不适用项目名称拼写检查。[Git 属性](../../../../../.gitattributes)保留来源附件、图表和 CSV 的原始空白；维护正文仍接受格式与空白检查。
 

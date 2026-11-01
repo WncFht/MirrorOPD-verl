@@ -21,6 +21,6 @@
 
 ## 资料归属与维护
 
-`learning-signal/` 保存估计器、支持集与陈旧数据研究；`teacher-transfer/` 和 `transfer-generalization/` 保存谱系、能力获取与迁移研究；`optimization/` 保存精度与优化文献；`rollout-policy/` 保存生成分布研究；`infra/` 保存公开工程实现及后端审阅。
+[学习信号资料](learning-signal/README.md)汇集估计器、支持集与陈旧数据研究；[泛化迁移资料](transfer-generalization/README.md)提供逐篇证据和 SFT/RL 阅读路线。数值主题见[预训练后期的精度证据](optimization/2026-10-25-大规模预训练后期的数值精度证据.md)，生成后端见[vLLM 双模型融合调研](infra/2026-10-28-vLLM逐Token双模型融合实现调研.md)。`teacher-transfer/` 保存谱系与能力获取研究，`rollout-policy/` 保存生成分布研究。
 
 问题综述解释外部证据的关系与分歧，逐篇证据保存完整设置及原文位置，`sources/`、`data/` 保存冻结来源和检索输出。相同论文可以支持多个主题，完整事实表优先引用既有证据，按内容需要决定是否单独成篇。项目当前预算和执行选择由研究协议维护，文献中的早期建议保留当时范围。
