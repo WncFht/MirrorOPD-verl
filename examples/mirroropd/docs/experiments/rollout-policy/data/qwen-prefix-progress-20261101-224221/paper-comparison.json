@@ -1,0 +1,77 @@
+{
+  "paper": {
+    "id": "2610.11291v1",
+    "url": "https://arxiv.org/html/2610.11291v1",
+    "tex": "runs/qwen-paper-comparison-20261101/paper/2610.11291v1.tex",
+    "tex_sha256": "a99cab2caa5321427b7ade7eaadd9bbe482fbab28f031538c42e5a79cd60172e",
+    "table3_pair_a": {
+      "overlap64": 62.5,
+      "last_step_gain_pp": 9.5,
+      "auc_gain_pp": 7.09,
+      "train_cap": 4096
+    },
+    "table1_qwen": {
+      "opd": [
+        35.8,
+        25.5,
+        23.3,
+        20.1
+      ],
+      "semi_opd": [
+        50.3,
+        38.9,
+        41.8,
+        28.0
+      ],
+      "macro": [
+        26.2,
+        39.8
+      ],
+      "opd_cap": 16384,
+      "semi_cap": 4096,
+      "checkpoint_steps": [
+        60,
+        80,
+        100
+      ]
+    },
+    "table4_qwen": {
+      "opd_h100_gpu_hours": 56.8,
+      "semi_opd_h100_gpu_hours": 5.0,
+      "steps": 100,
+      "excludes_evaluation": true
+    }
+  },
+  "local": {
+    "timings": {
+      "S0": {
+        "stage": "runs/qwen-prefix-six-20261031/recovery-20261101/stages/science-S0.json",
+        "stage_sha256": "9d33a0114ca6526e633bd5e678c6c8badb44a97bc6a2ed9b5bfe771ff5774b2d",
+        "wall_hours": 6.610495341486401,
+        "core_hours": 1.8236017782882683,
+        "ordinary_length": 1747.8175403225807,
+        "ordinary_seconds": 161.2905020415783
+      },
+      "S": {
+        "stage": "runs/qwen-prefix-six-20261031/recovery-20261101/stages/science-S.json",
+        "stage_sha256": "91d104d42e262ad7056c1908d6d1dadcdaac898cb3fefc354be2a845a529cb52",
+        "wall_hours": 7.4262398036321,
+        "core_hours": 4.843545768459638,
+        "ordinary_length": 4817.441532258064,
+        "ordinary_seconds": 441.53701097518206
+      }
+    },
+    "s0_minus_current": {
+      "estimate": 0.020916666666666528,
+      "ci95": [
+        -0.014750833333333428,
+        0.05755124999999997
+      ]
+    },
+    "aime3": {
+      "S0": 0.3055555555555555,
+      "S": 0.2611111111111111
+    }
+  },
+  "conclusion": "Directionally similar; not a matched replication; no local overlap64 measurement; paired S0-S interval crosses zero."
+}
