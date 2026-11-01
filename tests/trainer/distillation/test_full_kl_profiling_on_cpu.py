@@ -62,7 +62,7 @@ def test_select_chunk_ignores_oom_and_wrong_length():
         ]
     }
     assert select(result, "precompute") == 512
-    assert select(result, "fused_candidate") is None
+    assert select(result, "precompute_fused") is None
 
 
 def test_semantic_attribution_handles_triton_driver_launch(monkeypatch):

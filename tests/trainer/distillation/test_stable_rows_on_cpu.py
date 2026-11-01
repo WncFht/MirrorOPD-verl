@@ -35,7 +35,7 @@ def oracle(z, anchor, teacher, kappa, eta, objective):
         return float(value), torch.tensor([float(v) for v in g], dtype=torch.float64), float(mdpo + log_z), float(log_z)
 
 
-@pytest.mark.parametrize("backend", ["dense", "precompute", "precompute_fused", "recompute", "cached", "streaming"])
+@pytest.mark.parametrize("backend", ["dense", "precompute", "recompute", "cached", "streaming"])
 def test_endpoint_small_positive_kl_and_gauge_invariance(backend):
     teacher = torch.tensor([[0.0, -23.97, -26.02]])
     expected, gradient, _, _ = oracle([0.0, -24.0, -26.0], [0.0, -24.0, -26.0], teacher[0], 0, 1, "mdpo")

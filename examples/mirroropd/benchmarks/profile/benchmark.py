@@ -10,13 +10,12 @@ from pathlib import Path
 
 import torch
 
-from examples.mirroropd.benchmarks.profile.fused_candidate import FusedPrecomputedKL, fused_rows
 from verl.trainer.distillation.full_vocab import full_reverse_kl
+from verl.trainer.distillation.full_vocab_triton import fused_rows
+from verl.workers.config.distillation import FullVocabConfig
 
 
 def call(hs, ws, ht, wt, backend, chunk):
-    if backend == "fused_candidate":
-        return FusedPrecomputedKL.apply(hs, ws, ht, wt, chunk) / len(hs)
     return full_reverse_kl(hs, ws, ht, wt, backend=backend, token_chunk=chunk) / len(hs)
 
 
@@ -51,11 +50,13 @@ def main():
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--tokens", type=int, nargs="+", default=[4096, 32768])
     p.add_argument("--chunks", type=int, nargs="+", default=[128, 256, 512, 1024])
-    p.add_argument("--backends", nargs="+", default=["precompute", "fused_candidate", "streaming", "liger"])
+    p.add_argument("--backends", nargs="+", default=["precompute", "precompute_fused", "streaming", "liger"])
     p.add_argument("--repeats", type=int, default=7)
     p.add_argument("--trace", action="store_true")
     p.add_argument("--capture-nsys", action="store_true")
     args = p.parse_args()
+    for backend in args.backends:
+        FullVocabConfig(backend=backend)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(1)
     torch.manual_seed(42)
@@ -65,7 +66,7 @@ def main():
         "torch": torch.__version__,
         "rows": [],
     }
-    result["reduction_checks"] = check_reduction() if "fused_candidate" in args.backends else []
+    result["reduction_checks"] = check_reduction() if "precompute_fused" in args.backends else []
     for n in args.tokens:
         hs = torch.randn(n, 1536, device="cuda", dtype=torch.bfloat16, requires_grad=True)
         ht = torch.randn_like(hs)
@@ -127,7 +128,7 @@ def main():
                         once()
                         torch.cuda.synchronize()
                         torch.cuda.profiler.stop()
-                    if args.trace and chunk == 512 and backend in ("precompute", "fused_candidate"):
+                    if args.trace and chunk == 512 and backend in ("precompute", "precompute_fused"):
                         trace = args.output.parent / f"head-{backend}-n{n}.json.gz"
                         with torch.profiler.profile(
                             activities=[torch.profiler.ProfilerActivity.CPU, torch.profiler.ProfilerActivity.CUDA]

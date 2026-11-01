@@ -23,6 +23,7 @@ from omegaconf import OmegaConf
 from verl.base_config import BaseConfig
 from verl.utils.config import omega_conf_to_dataclass
 
+from .distillation_spec import MirrorConfig
 from .engine import FSDPEngineConfig
 from .rollout import RolloutConfig
 
@@ -111,7 +112,7 @@ class DistillationLossConfig(BaseConfig):
 
     loss_mode: str = "k3"
     full_vocab: FullVocabConfig = field(default_factory=FullVocabConfig)
-    mirror: Optional[dict] = None
+    mirror: Optional[MirrorConfig] = None
     topk: Optional[int] = 128
     use_task_rewards: bool = True
     distillation_loss_coef: float = 1.0
@@ -137,15 +138,17 @@ class DistillationLossConfig(BaseConfig):
     clip_ratio_low: Optional[float] = 0.2
     clip_ratio_high: Optional[float] = 0.2
 
-    # Store distillation loss settings for computing the specified loss_mode
-    # Not set by user, populated at runtime
-    loss_settings: Optional[dict] = None
+    @property
+    def loss_settings(self):
+        """Derived runtime metadata is read-only and never a configuration input."""
+        return self._loss_settings
 
     def __post_init__(self):
-        self._mutable_fields.add("loss_settings")
         from verl.workers.config.distillation_spec import DistillationLossSettings, resolve_distillation_spec
 
-        self.loss_settings: DistillationLossSettings = resolve_distillation_spec(self)
+        if self.mirror is not None and not isinstance(self.mirror, MirrorConfig):
+            object.__setattr__(self, "mirror", MirrorConfig(**dict(self.mirror)))
+        self._loss_settings: DistillationLossSettings = resolve_distillation_spec(self)
         if isinstance(self.full_vocab, dict):
             object.__setattr__(self, "full_vocab", FullVocabConfig(**self.full_vocab))
         if self.full_vocab.termination_token_ids and not (
@@ -169,7 +172,7 @@ class DistillationLossConfig(BaseConfig):
             ):
                 raise ValueError("mirror full_vocab supports dense/precompute/precompute_fused")
             return
-        if self.loss_mode in ("full_reverse_kl", "full_forward_kl"):
+        if self.loss_mode == "full_forward_kl":
             if self.use_policy_gradient or self.use_task_rewards or self.policy_loss_mode != "vanilla":
                 raise ValueError(f"{self.loss_mode} requires direct loss, no task rewards and no sampled PG mode")
             if self.loss_max_clamp is not None or self.log_prob_min_clamp is not None:
@@ -408,7 +411,7 @@ class DistillationConfig(BaseConfig):
                 raise ValueError("shared_sync requires a positive teacher token budget and no QAT")
         self.teacher_models = self._resolve_teacher_models()
         if self.distillation_loss.loss_settings.objective is not None and self.execution_mode != "shared_sync":
-            raise ValueError("full_reverse_kl/mirror currently requires shared_sync")
+            raise ValueError("Full-vocabulary and mirror objectives require shared_sync")
         if self.execution_mode == "shared_sync":
             return
         teacher_world_size_sum = 0

@@ -56,7 +56,7 @@ def test_task_ppo_with_diagnostics_uses_private_normalization_config():
     torch.testing.assert_close(x.grad, torch.full_like(x, -0.5))
 
 
-@pytest.mark.parametrize("name,kind", [("k1", "sampled"), ("forward_kl_topk", "topk"), ("full_reverse_kl", "hidden")])
+@pytest.mark.parametrize("name,kind", [("k1", "sampled"), ("forward_kl_topk", "topk"), ("full_forward_kl", "hidden")])
 def test_objective_metadata_has_one_immutable_payload_source(name, kind):
     from dataclasses import FrozenInstanceError
 

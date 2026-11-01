@@ -16,6 +16,14 @@ from verl.trainer.distillation.termination import TerminationActionMap
 from verl.utils.linear import ProjectionFP32, project  # noqa: F401
 
 
+def validate_fused_backend(backend, hidden):
+    """A requested fused backend must execute its supported CUDA implementation."""
+    if backend == "precompute_fused" and (
+        not hidden.is_cuda or hidden.dtype not in (torch.float16, torch.bfloat16, torch.float32)
+    ):
+        raise ValueError("precompute_fused requires CUDA FP16/BF16/FP32 inputs; select precompute for a reference run")
+
+
 class FullKLResult(NamedTuple):
     """Differentiable objective and detached raw vocabulary-KL diagnostics.
 
@@ -311,6 +319,7 @@ def full_reverse_kl_result(
             raise ValueError("termination equivalence requires distinct supported token IDs")
         if backend not in ("precompute", "precompute_fused") or len(ws) != len(wt):
             raise ValueError("termination equivalence requires precompute/precompute_fused and equal vocabulary widths")
+    validate_fused_backend(backend, hs)
     if len(hs) == 0:
         total = hs.sum() * 0 + ws.sum() * 0
         rows = None if backend == "liger" else hs.new_empty(0).detach()
@@ -332,9 +341,7 @@ def full_reverse_kl_result(
     if backend in ("recompute", "streaming"):
         return finish(RecomputedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk if backend == "streaming" else 0))
     if backend in ("precompute", "precompute_fused"):
-        fused = (
-            backend == "precompute_fused" and hs.is_cuda and hs.dtype in (torch.float16, torch.bfloat16, torch.float32)
-        )
+        fused = backend == "precompute_fused"
         if ids:
             actions = TerminationActionMap.create(len(ws), ids, hs.device)
             row_kernel = partial(termination_equivalent_kl_rows, actions=actions, fused=fused)
@@ -474,6 +481,7 @@ def full_vocab_objective_result(
         raise ValueError("Mirror hidden/head shapes or teacher/anchor support are incompatible")
     if min(token_chunk, vocab_chunk, len(ws)) <= 0:
         raise ValueError("Positive chunk sizes and nonempty vocabulary required")
+    validate_fused_backend(backend, hs)
     ht, wt, hq, wq = (x.detach() for x in (ht, wt, hq, wq))
     if len(hs) == 0:
         return FullVocabObjectiveResult(hs.sum() * 0 + ws.sum() * 0, hs.new_empty(0), {})
@@ -486,9 +494,7 @@ def full_vocab_objective_result(
 
         row_kernel = partial(
             _mirror_rows,
-            fused=backend == "precompute_fused"
-            and hs.is_cuda
-            and hs.dtype in (torch.float16, torch.bfloat16, torch.float32),
+            fused=backend == "precompute_fused",
             actions=actions,
         )
         total, rows, diag = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)

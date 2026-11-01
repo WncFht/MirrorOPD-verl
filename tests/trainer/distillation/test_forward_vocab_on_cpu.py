@@ -13,7 +13,7 @@ from verl.utils import tensordict_utils as tu
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig, FullVocabConfig
 
 
-@pytest.mark.parametrize("backend", ["dense", "recompute", "precompute", "precompute_fused"])
+@pytest.mark.parametrize("backend", ["dense", "recompute", "precompute"])
 @pytest.mark.parametrize("tokens,extra", [(0, 0), (1, 0), (7, 0), (7, 4)])
 def test_forward_value_vjp_native_reverse_and_support(backend, tokens, extra):
     torch.manual_seed(42)

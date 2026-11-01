@@ -129,3 +129,5 @@ mkdir -p "$RECHECK_DIR"
 [EOS actor benchmark](../../../../benchmarks/profile/benchmark_termination_training.py)继续使用原生 actor 调用，其 `--diagnostics/--no-diagnostics`、`--termination-ids`（不跟 ID 表示原词表动作）和 `--no-sync` 分别控制既有功能，输出记录实际选择。Teacher hidden 仍在 prepare 阶段独立生成，run 计时不含该准备、TQ 或 rollout。`benchmark_mirror.py` 的 κ、η 可显式选择，原默认 0.5/0.3 保留。旧运行结果按其冻结代码解释。
 
 运行配置与结果统一合同、兼容清理及验收范围见[运行合同审计](../../architecture/2026-11-01-运行合同审计与重构方案.md)。新的 GPU 测量以当前资源分配为准，不能只持有旧四卡锁就推断其他双卡任务没有占用。
+
+新测量统一使用 `precompute_fused`，原 `fused_candidate` 执行别名和兼容模块已删除。历史汇总工具仍按原标签读取冻结结果。CPU/FP64 参考明确选择 precompute/dense；请求 fused 时遇到不支持的设备或精度会在计算前报错，不能把失败重标成参考路径的成功计时。

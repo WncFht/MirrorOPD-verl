@@ -48,7 +48,6 @@ def main():
     parser.add_argument("--tied", action="store_true")
     parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
     parser.add_argument("--checkpoint", action="store_true")
-    parser.add_argument("--compare-legacy", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     torch.set_num_threads(1)
@@ -236,9 +235,7 @@ def main():
         all_records.append({"outer": version, "loss": values, "updates": 3})
 
     initial = local_snapshot(dict(actor.engine.module.named_parameters()))
-    if args.compare_legacy or args.compare_backend:
-        if args.compare_legacy:
-            assert spec.teacher_only_kl
+    if args.compare_backend:
         actor.save_checkpoint(str(root / "initial"), global_step=0)
     run_outer(1)
     backend_parameter_error = None
@@ -261,43 +258,6 @@ def main():
         backend_parameter_error = max(errors)
         actor.engine.full_vocab_config = primary_config
         actor.load_checkpoint(str(root / "primary-after"))
-    if args.compare_legacy:
-        expected_parameters = local_snapshot(dict(actor.engine.module.named_parameters()))
-        expected_optimizer = local_snapshot(actor.engine.optimizer.state_dict())
-        expected_scheduler = local_snapshot(actor.engine.lr_scheduler.state_dict())
-        actor.load_checkpoint(str(root / "initial"))
-        legacy = DistillationLossConfig(
-            loss_mode="full_reverse_kl",
-            full_vocab=loss_cfg.full_vocab,
-            use_policy_gradient=False,
-            use_task_rewards=False,
-            loss_max_clamp=None,
-            log_prob_min_clamp=None,
-        )
-        actor.engine.full_vocab_spec = legacy.loss_settings
-        actor.set_loss_fn(
-            partial(
-                teacher_policy_loss,
-                config=SimpleNamespace(loss_agg_mode="token-mean"),
-                distillation_config=DistillationConfig(distillation_loss=legacy),
-            )
-        )
-        run_outer(1)
-        torch.testing.assert_close(
-            local_snapshot(dict(actor.engine.module.named_parameters())), expected_parameters, atol=0, rtol=0
-        )
-        torch.testing.assert_close(
-            local_snapshot(actor.engine.optimizer.state_dict()), expected_optimizer, atol=0, rtol=0
-        )
-        assert local_snapshot(actor.engine.lr_scheduler.state_dict()) == expected_scheduler
-        actor.engine.full_vocab_spec = spec
-        actor.set_loss_fn(
-            partial(
-                teacher_policy_loss,
-                config=SimpleNamespace(loss_agg_mode="token-mean"),
-                distillation_config=DistillationConfig(distillation_loss=loss_cfg),
-            )
-        )
     run_outer(2, empty=True)
     after = local_snapshot(dict(actor.engine.module.named_parameters()))
     assert any(not torch.equal(initial[k], after[k]) for k in initial)
@@ -348,7 +308,7 @@ def main():
         backend_max_parameter_abs_error=backend_parameter_error,
         records=all_records,
         frozen_anchor=True,
-        endpoint_legacy_equal=args.compare_legacy,
+        endpoint_reference=args.eta == 1 and args.compare_backend is not None,
         actor_wrapper_and_timing=True,
     )
     if rank == 0:

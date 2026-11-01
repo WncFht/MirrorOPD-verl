@@ -18,7 +18,7 @@ from verl.utils.metric.position import position_observations
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig
 
 
-@pytest.mark.parametrize("backend", ["dense", "recompute", "streaming", "cached", "precompute", "precompute_fused"])
+@pytest.mark.parametrize("backend", ["dense", "recompute", "streaming", "cached", "precompute"])
 @pytest.mark.parametrize("tokens,extra", [(0, 0), (7, 0), (7, 4)])
 def test_diagnostic_rows_are_exact_and_do_not_change_gradients(backend, tokens, extra):
     torch.manual_seed(82)
@@ -60,7 +60,8 @@ def test_scalar_only_backend_expresses_capability_in_result(monkeypatch):
 def test_loss_statistics_merge_unequal_microbatches_and_reconstruct_prefix():
     cfg = DistillationConfig(
         distillation_loss=DistillationLossConfig(
-            loss_mode="full_reverse_kl",
+            loss_mode="mirror",
+            mirror=dict(objective="mdpo", estimator="full_vocab", kappa=0, eta=1),
             use_policy_gradient=False,
             use_task_rewards=False,
             loss_max_clamp=None,

@@ -6,19 +6,19 @@
 
 [统一实验入口](../../../run_math_opd_ablation_fsdp2.sh) 用 E 编号选择包含默认算法的完整预设，`custom` 使用公共默认；`--method` 可覆盖为 sampled、Full-KL、MDPO 或 BPO。环境、方法选项与末尾 Hydra 参数按优先级覆盖。算法设置只由 [\_distillation_args.sh](../../../launchers/_distillation_args.sh) 构造，公共 launcher 管理数据、资源、teacher、optimizer 和运行记录。Math 只保留统一训练入口，预设和参数合并由标准库 [math_experiment.py](../../../launchers/math_experiment.py) 负责。E44–E47 已登记完整 Full-KL/MDPO/BPO 对照，可直接调用编号；模型、预算、验证和保存设置见[正式对照表](../../settings/训练设置.md#mirror-comparison)。E 编号及自动名称表示预设来源，覆盖后的真实设置以 `resolved_config.yaml` 为准，当前尚未实现对所有覆盖项的自动衍生标记。
 
-| 配置层                                                       | 决定的行为                                                     | 核对入口                                                                                         |
-| ------------------------------------------------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `distillation.execution_mode`                                | 共享 FSDP teacher 或独立服务                                   | [DistillationConfig](../../../../../verl/workers/config/distillation.py)                         |
-| `distillation.distillation_loss.loss_mode`                   | 新命令使用 `k1` 或 `mirror`；旧 `full_reverse_kl` 配置仍可解析 | [resolve_distillation_spec](../../../../../verl/workers/config/distillation_spec.py)             |
-| `distillation.distillation_loss.mirror`                      | objective、estimator、kappa/eta，推导 payload 与 anchor 需求   | [目标与支持矩阵](../numerics/mirror-objectives/实现方案.md#settings)                             |
-| `distillation.distillation_loss.policy_loss_mode`            | `vanilla/reinforce/token_is/token_ppo`                         | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py)                     |
-| `distillation.distillation_loss.advantage_source`            | sampled 使用 current 或冻结 rollout 信号                       | [Sampled OPD](sampled-opd.md#显式-sampled-分支)                                                  |
-| `data.train_batch_size`、`rollout.n`                         | 每轮 prompt 数、每个 prompt 的 response 数                     | [批次和更新预算](#从一次-actor-调用到实际更新)                                                   |
-| `actor.ppo_mini_batch_size`、`actor.ppo_epochs`              | 每次更新的规模、同批数据复用次数                               | [TrainingWorker.train_mini_batch](../../../../../verl/workers/engine_workers.py)                 |
-| `actor.ppo_max_token_len_per_gpu`                            | actor 每个 micro-batch 的动态 token 预算                       | [FSDPEngine.forward_backward_batch](../../../../../verl/workers/engine/fsdp/transformer_impl.py) |
-| `distillation.shared_teacher.infer_max_token_len_per_gpu`    | teacher forward 的独立 token 预算                              | [教师生命周期](teacher.md)                                                                       |
-| `rollout.log_prob_max_token_len_per_gpu`                     | actor engine 的无梯度评分预算，也用于 mirror anchor            | [anchor 准备](teacher.md#anchor-准备与模型驻留)                                                  |
-| `distillation.distillation_loss.full_vocab.token_chunk_size` | head-loss 内部每块有效预测行数                                 | [Full-vocab](full-vocab.md#precompute-的前反向分工)                                              |
+| 配置层                                                       | 决定的行为                                                                     | 核对入口                                                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `distillation.execution_mode`                                | 共享 FSDP teacher 或独立服务                                                   | [DistillationConfig](../../../../../verl/workers/config/distillation.py)                         |
+| `distillation.distillation_loss.loss_mode`                   | Sampled 使用 `k1`；Full-RKL 只使用 `mirror` 的 η=1；FKL 使用 `full_forward_kl` | [resolve_distillation_spec](../../../../../verl/workers/config/distillation_spec.py)             |
+| `distillation.distillation_loss.mirror`                      | objective、estimator、kappa/eta，推导 payload 与 anchor 需求                   | [目标与支持矩阵](../numerics/mirror-objectives/实现方案.md#settings)                             |
+| `distillation.distillation_loss.policy_loss_mode`            | `vanilla/reinforce/token_is/token_ppo`                                         | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py)                     |
+| `distillation.distillation_loss.advantage_source`            | sampled 使用 current 或冻结 rollout 信号                                       | [Sampled OPD](sampled-opd.md#显式-sampled-分支)                                                  |
+| `data.train_batch_size`、`rollout.n`                         | 每轮 prompt 数、每个 prompt 的 response 数                                     | [批次和更新预算](#从一次-actor-调用到实际更新)                                                   |
+| `actor.ppo_mini_batch_size`、`actor.ppo_epochs`              | 每次更新的规模、同批数据复用次数                                               | [TrainingWorker.train_mini_batch](../../../../../verl/workers/engine_workers.py)                 |
+| `actor.ppo_max_token_len_per_gpu`                            | actor 每个 micro-batch 的动态 token 预算                                       | [FSDPEngine.forward_backward_batch](../../../../../verl/workers/engine/fsdp/transformer_impl.py) |
+| `distillation.shared_teacher.infer_max_token_len_per_gpu`    | teacher forward 的独立 token 预算                                              | [教师生命周期](teacher.md)                                                                       |
+| `rollout.log_prob_max_token_len_per_gpu`                     | actor engine 的无梯度评分预算，也用于 mirror anchor                            | [anchor 准备](teacher.md#anchor-准备与模型驻留)                                                  |
+| `distillation.distillation_loss.full_vocab.token_chunk_size` | head-loss 内部每块有效预测行数                                                 | [Full-vocab](full-vocab.md#precompute-的前反向分工)                                              |
 
 表中 `actor` 和 `rollout` 分别缩写 `actor_rollout_ref.actor` 与 `actor_rollout_ref.rollout`。vLLM 的调度预算、teacher/anchor 的无梯度评分预算、actor 的 forward/backward 预算，以及 head-loss 的 token chunk 具有不同消费者。前几项按输入序列工作量分批，head chunk 处理的是选中的有效预测行；它们都不直接决定 optimizer 更新次数。
 
@@ -48,7 +48,7 @@ CONFIG_ONLY=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E46
 
 [ActorRolloutRefWorker.init_model](../../../../../verl/workers/engine_workers.py) 在启用蒸馏时将 `partial(distillation_ppo_loss, config=actor_config, distillation_config=...)` 设为 actor 的 loss。Full-vocab 设置还会在模型初始化前启用 head adapter，初始化后调用 `configure_full_vocab` 加载独立冻结 teacher head 并保存解析后的目标 spec。后续 micro-batch forward 通过同一 loss 回调返回可反传标量。
 
-[DistillationLossSettings](../../../../../verl/workers/config/distillation_spec.py) 声明目标别名、payload 和派生 anchor 需求，不执行张量计算。Mirror 通过 resolver 解析，不为每个方法/估计器组合再注册一个独立模式。计算函数由 [register_distillation_loss](../../../../../verl/trainer/distillation/losses.py) 注册。Full-KL 的 registry 函数刻意报错，防止误走 sampled estimator；真正的 Full-KL 数值在 head 回调中产生。
+[DistillationLossSettings](../../../../../verl/workers/config/distillation_spec.py) 声明目标别名、payload 和派生 anchor 需求，不执行张量计算。Mirror 参数在启动时转换为只读 MirrorConfig，resolver 只产生一份私有派生元数据；loss_settings 不接受用户输入，也不写回静态配置。蒸馏名称只保留 k1/k3 等 canonical 表达，kl/low_var_kl 注册别名不再接受；通用 PPO 的 kl_penalty 值不受影响。计算函数由 [register_distillation_loss](../../../../../verl/trainer/distillation/losses.py) 注册。旧 Full-RKL 配置与 registry 占位函数已退役；Full-RKL 数值只经 canonical spec 进入 head 回调。`configure_full_vocab` 必须显式传入解析后的 hidden-payload spec，不再替调用者猜测默认目标。
 
 ## 从数据集到 TQ
 

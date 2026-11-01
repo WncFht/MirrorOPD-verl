@@ -81,7 +81,7 @@ def main():
     p.add_argument(
         "--backend",
         default="precompute",
-        choices=["precompute", "precompute_fused", "fused_candidate", "streaming", "liger"],
+        choices=["precompute", "precompute_fused", "streaming", "liger"],
     )
     p.add_argument("--chunk", type=int, default=512)
     p.add_argument("--batch", type=int, default=32)
@@ -129,13 +129,11 @@ def main():
     )
     actor = worker(args.student, world, False, args.budget, not args.no_checkpoint)
     teacher = worker(args.teacher, world, True, args.budget, False)
-    config = FullVocabConfig(
-        backend="precompute_fused" if args.backend == "fused_candidate" else args.backend, token_chunk_size=args.chunk
-    )
-    actor.engine.configure_full_vocab(config, args.teacher)
+    config = FullVocabConfig(backend=args.backend, token_chunk_size=args.chunk)
     dcfg = DistillationConfig(
         distillation_loss=DistillationLossConfig(
-            loss_mode="full_reverse_kl",
+            loss_mode="mirror",
+            mirror=dict(objective="mdpo", estimator="full_vocab", kappa=0, eta=1),
             use_policy_gradient=False,
             use_task_rewards=False,
             loss_max_clamp=None,
@@ -143,6 +141,7 @@ def main():
             full_vocab=config,
         )
     )
+    actor.engine.configure_full_vocab(config, args.teacher, spec=dcfg.distillation_loss.loss_settings)
     actor.set_loss_fn(partial(loss_fn, config=dcfg))
     records = []
     for step in range(args.steps):

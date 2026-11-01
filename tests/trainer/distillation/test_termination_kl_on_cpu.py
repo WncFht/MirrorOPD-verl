@@ -119,7 +119,8 @@ def test_configuration_and_real_stop_support_are_checked():
 def test_loss_normalizes_the_coarse_objective_but_reports_raw_kl():
     cfg = DistillationConfig(
         distillation_loss=DistillationLossConfig(
-            loss_mode="full_reverse_kl",
+            loss_mode="mirror",
+            mirror=dict(objective="mdpo", estimator="full_vocab", kappa=0, eta=1),
             use_policy_gradient=False,
             use_task_rewards=False,
             loss_max_clamp=None,

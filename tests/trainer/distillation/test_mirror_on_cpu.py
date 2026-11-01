@@ -55,7 +55,7 @@ def test_targets_and_sampled_expectation(kappa, eta):
 
 
 @pytest.mark.parametrize("objective", ["mdpo", "bpo"])
-@pytest.mark.parametrize("backend", ["dense", "precompute", "precompute_fused"])
+@pytest.mark.parametrize("backend", ["dense", "precompute"])
 @pytest.mark.parametrize("tokens,extra", [(0, 0), (1, 3), (7, 3)])
 def test_full_value_and_both_vjps(objective, backend, tokens, extra):
     torch.manual_seed(42)
@@ -90,7 +90,7 @@ def test_full_value_and_both_vjps(objective, backend, tokens, extra):
         torch.testing.assert_close(result.token_diagnostics["teacher_kl"], (lp.exp() * (lp - lt)).sum(-1))
 
 
-@pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute", "precompute_fused"])
+@pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute"])
 def test_endpoint_uses_original_kernel_without_anchor(backend):
     torch.manual_seed(2)
     hs = torch.randn(3, 4, dtype=torch.float64, requires_grad=True)
@@ -143,8 +143,8 @@ def test_invalid_combinations(kwargs):
 
 
 def test_metadata_resolution_and_conflicts():
-    assert resolve_distillation_spec(OmegaConf.create({"loss_mode": "full_reverse_kl"})).teacher_only_kl
-    with pytest.raises(ValueError, match="require loss_mode"):
+    assert resolve_distillation_spec(OmegaConf.create({"loss_mode": "mirror", "mirror": {"eta": 1}})).teacher_only_kl
+    with pytest.raises(ValueError, match="retired"):
         resolve_distillation_spec({"loss_mode": "full_reverse_kl", "mirror": {"eta": 0.3}})
     with pytest.raises(ValueError, match="requires mirror"):
         resolve_distillation_spec({"loss_mode": "mirror"})

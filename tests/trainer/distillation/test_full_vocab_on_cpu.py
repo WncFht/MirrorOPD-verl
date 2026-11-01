@@ -14,7 +14,7 @@ from verl.workers.config.distillation import DistillationConfig, DistillationLos
 from verl.workers.utils.padding import prediction_positions
 
 
-@pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute", "precompute_fused"])
+@pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute"])
 @pytest.mark.parametrize("tokens", [0, 1, 7])
 def test_value_and_vjp(backend, tokens):
     torch.manual_seed(42)
@@ -43,7 +43,7 @@ def test_shift_mask_and_sample_boundaries():
         prediction_positions(ids, torch.nested.nested_tensor([torch.ones(6), torch.ones(4)], layout=torch.jagged))
 
 
-@pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute", "precompute_fused"])
+@pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute"])
 def test_teacher_extra_rows_preserve_full_normalizer_and_student_gradient(backend):
     torch.manual_seed(23)
     hs = torch.randn(7, 5, dtype=torch.float64, requires_grad=True)
@@ -69,7 +69,8 @@ def test_teacher_extra_rows_preserve_full_normalizer_and_student_gradient(backen
 def test_global_token_normalization():
     config = SimpleNamespace(loss_agg_mode="token-mean")
     loss_config = DistillationLossConfig(
-        loss_mode="full_reverse_kl",
+        loss_mode="mirror",
+        mirror=dict(objective="mdpo", estimator="full_vocab", kappa=0, eta=1),
         use_policy_gradient=False,
         use_task_rewards=False,
         loss_max_clamp=None,
@@ -93,5 +94,5 @@ def test_global_token_normalization():
     )
     loss.backward()
     assert total.grad.item() == pytest.approx(2 / 11)
-    with pytest.raises(ValueError, match="direct loss"):
+    with pytest.raises(ValueError, match="retired"):
         DistillationLossConfig(loss_mode="full_reverse_kl")

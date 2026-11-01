@@ -1,3 +1,5 @@
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
 import pytest
 import torch
 
@@ -66,3 +68,13 @@ def test_fused_noncontiguous_rows_are_materialized_safely():
         torch.testing.assert_close(a.double(), b, rtol=4e-5, atol=2e-6)
     with pytest.raises(ValueError, match="equal shared-support"):
         forward_rows(z, teacher[:, :30], fused=True)
+
+
+def test_fused_backend_rejects_cuda_fp64_instead_of_running_reference():
+    from verl.trainer.distillation.full_vocab import full_reverse_kl_result
+
+    h = torch.zeros(2, 3, device="cuda", dtype=torch.float64)
+    w = torch.zeros(7, 3, device="cuda", dtype=torch.float64)
+    for function in (full_reverse_kl_result, full_forward_kl_result):
+        with pytest.raises(ValueError, match="requires CUDA FP16/BF16/FP32"):
+            function(h, w, h, w, backend="precompute_fused")

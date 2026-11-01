@@ -1240,11 +1240,12 @@ class EngineTrainModeCtx(BaseEngineCtx):
 
 @EngineRegistry.register(model_type="language_model", backend=["fsdp", "fsdp2"], device=["cuda", "npu"])
 class FSDPEngineWithLMHead(FSDPEngine):
-    def configure_full_vocab(self, config, teacher_path, spec=None):
+    def configure_full_vocab(self, config, teacher_path, *, spec):
         from verl.trainer.distillation.hidden import FrozenTeacherHead
-        from verl.workers.config.distillation_spec import get_distillation_loss_settings
 
-        self.full_vocab_spec = spec or get_distillation_loss_settings("full_reverse_kl")
+        if spec.payload_kind != "hidden":
+            raise ValueError("Full-vocabulary execution requires an explicit hidden-payload objective")
+        self.full_vocab_spec = spec
         self.full_vocab_config = config
         self.full_vocab_teacher_head = FrozenTeacherHead(teacher_path)
 
