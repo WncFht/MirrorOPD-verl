@@ -6,137 +6,54 @@ No model or optimizer is constructed here: generation and scoring use the
 trainer's existing rollout, shared teacher, and actor worker groups.
 """
 
-import hashlib
-import json
-import random
 import time
 import uuid
 from pathlib import Path
 
 import numpy as np
-import torch
 import transfer_queue as tq
 from omegaconf import OmegaConf
-from tensordict import TensorDict
-from transfer_queue import KVBatchMeta
+from transformers import AutoConfig
 
+from verl.experimental.rollout_policy.collector import UnsafeDrainError
 from verl.trainer.evaluation.artifacts import HISTORY, RKL, TRAJECTORY, ArtifactStore, file_sha256, identity
+from verl.trainer.evaluation.config import ScoreBudget, strict_record
 from verl.trainer.evaluation.metrics import readout_metrics
+from verl.trainer.evaluation.native import balanced_history, capture_rows
 from verl.trainer.evaluation.schedule import Schedule
+from verl.trainer.evaluation.scoring import score_native_rows
+from verl.trainer.ppo.readout_callback import ReadoutCallback
 from verl.utils import tensordict_utils as tu
 from verl.utils.dataset.rl_dataset import collate_fn
 
 
-def priority(seed, *parts):
-    return hashlib.sha256(json.dumps([seed, *parts], separators=(",", ":")).encode()).hexdigest()
+class SourceHistoryReadout(ReadoutCallback):
+    """One fixed initial source bank and a bounded batch-balanced history."""
 
-
-def balanced_history(batches, capacity, seed):
-    """Deterministic random priorities; no loss-dependent selection."""
-    if not batches:
-        return []
-    count = len(batches)
-    if count > capacity:
-        raise ValueError("History capacity must cover every observed batch")
-    q, r = divmod(capacity, count)
-    extras = set(sorted(batches, key=lambda b: priority(seed, "batch", b))[:r])
-    result = []
-    for batch_id, rows in sorted(batches.items()):
-        quota = q + (batch_id in extras)
-        if len(rows) < quota:
-            raise ValueError("A training batch cannot fill its history quota")
-        selected = sorted(rows, key=lambda x: priority(seed, "sample", batch_id, x["source_id"]))[:quota]
-        result.extend(dict(row, history_batch=batch_id, history_quota=quota) for row in selected)
-    return result
-
-
-def capture_rows(batch, outer):
-    fields = ["prompts", "responses", "response_mask", "extra_info"]
-    # KVBatchMeta.fields=None means an unprojected batch. Native rollout rows
-    # still contain metrics; it is not an empty list of available columns.
-    available_fields = getattr(batch, "fields", None)
-    if available_fields is None or "metrics" in available_fields:
-        fields.append("metrics")
-    data = tq.kv_batch_get(
-        keys=list(batch.keys),
-        partition_id=batch.partition_id,
-        select_fields=fields,
-    )
-    info = list(data["extra_info"])
-    observations = list(data["metrics"]) if "metrics" in data else [{} for _ in info]
-    rows = []
-    for i, (prompt, response, mask) in enumerate(
-        zip(data["prompts"].unbind(), data["responses"].unbind(), data["response_mask"].unbind(), strict=True)
-    ):
-        tag = batch.tags[i]
-        if tag.get("is_padding", False):
-            continue
-        source_id = str(info[i].get("index", identity(prompt.tolist())))
-        rows.append(
-            dict(
-                id=f"{outer}:{source_id}",
-                source_id=source_id,
-                outer=outer,
-                prompt_ids=prompt.tolist(),
-                response_ids=response.tolist(),
-                response_mask=mask.tolist(),
-                rollout_key=batch.keys[i],
-                min_global_steps=tag.get("min_global_steps"),
-                max_global_steps=tag.get("max_global_steps"),
-                data_source=info[i].get("data_source"),
-                finish_reason=observations[i].get("finish_reason", tag.get("finish_reason")),
-            )
-        )
-    if len({r["source_id"] for r in rows}) != len(rows):
-        raise ValueError("Duplicate nonpadding source IDs in a rollout batch")
-    return rows
-
-
-def put_fixed_rows(rows, outer):
-    partition = f"rkl-readout-{outer}-{uuid.uuid4().hex}"
-    keys = [f"row-{i}" for i in range(len(rows))]
-    values = {k: [] for k in ["prompts", "responses", "input_ids", "position_ids", "response_mask", "loss_mask"]}
-    tags = []
-    for row in rows:
-        prompt, response = row["prompt_ids"], row["response_ids"]
-        mask = row.get("response_mask", [1] * len(response))
-        if not prompt or not response or len(mask) != len(response):
-            raise ValueError("Empty or inconsistent fixed rollout")
-        ids = prompt + response
-        for k, v in dict(
-            prompts=prompt,
-            responses=response,
-            input_ids=ids,
-            position_ids=list(range(len(ids))),
-            response_mask=mask,
-            loss_mask=mask,
-        ).items():
-            values[k].append(torch.tensor(v, dtype=torch.int64))
-        tags.append(dict(seq_len=len(ids), prompt_len=len(prompt), response_len=len(response), status="success"))
-    fields = TensorDict(
-        {k: torch.nested.nested_tensor(v, layout=torch.jagged) for k, v in values.items()}, batch_size=[len(rows)]
-    )
-    tq.kv_batch_put(keys=keys, partition_id=partition, tags=tags, fields=fields)
-    return KVBatchMeta(keys=keys, partition_id=partition, tags=tags, fields=list(values)), dict(
-        zip(keys, rows, strict=True)
-    )
-
-
-class FixedRKLReadout:
-    """Opt-in callback: one fixed initial bank, bounded batch-balanced history."""
+    handles_validation = True
 
     def __init__(self, *, config):
         self.config = config
-        self.options = OmegaConf.to_container(config.trainer.rkl_readout, resolve=True)
+        self.options = OmegaConf.to_container(config.trainer.source_history_readout, resolve=True)
+        teacher_path = config.distillation.teacher_models.teacher_model.model_path
+        self.hidden_size = AutoConfig.from_pretrained(teacher_path, local_files_only=True).hidden_size
+        budget = dict(self.options.get("score", {}))
+        budget.setdefault(
+            "token_chunk",
+            OmegaConf.select(config, "distillation.distillation_loss.full_vocab.token_chunk_size", default=512),
+        )
+        budget.setdefault("audit_state", bool(self.options.get("audit_state", False)))
+        self.score_budget = strict_record(ScoreBudget, budget)
         self.root = Path(self.options["output"])
         self.capacity = int(self.options.get("history_size", 128))
-        self.every = int(self.options.get("every", 1))
+        if "every" in self.options:
+            raise ValueError("Use explicit source_every and history_every; the shared every field was retired")
         self.seed = int(self.options.get("seed", 42))
-        if self.capacity <= 0 or self.every <= 0:
+        if self.capacity <= 0:
             raise ValueError("Positive history capacity and readout frequency required")
         self.schedules = {
-            "source_heldout": Schedule(at=(0,), every=self.options.get("source_every", self.every)),
-            "history": Schedule(every=self.options.get("history_every", self.every)),
+            "source_heldout": Schedule(at=(0,), every=self.options.get("source_every", 1)),
+            "history": Schedule(every=self.options.get("history_every", 1)),
         }
         if config.trainer.v1.trainer_mode != "sync" or config.distillation.execution_mode != "shared_sync":
             raise ValueError("Fixed RKL readout requires native synchronous shared-teacher execution")
@@ -309,7 +226,7 @@ class FixedRKLReadout:
         finally:
             self.before_weight_sync = False
 
-    def validate_fixed_rkl(self, trainer):
+    def validate(self, trainer):
         outer = self.pending_outer
         if outer in self.scored:
             return {}
@@ -332,66 +249,20 @@ class FixedRKLReadout:
             rows.extend(self.bank)
         if history_due:
             rows.extend(self.store.resolve(self.history))
-        meta, by_key = put_fixed_rows(rows, outer)
-        timing = {}
-        metrics = {}
         before = trainer.actor_optimizer_step
-        rng = random.getstate(), np.random.get_state(), torch.get_rng_state()
         started = time.perf_counter()
-        begun = False
-        audit = None
-        scored = []
+        safe_to_restore = True
         try:
-            trainer.actor_rollout_wg.begin_rkl_readout(audit_state=bool(self.options.get("audit_state", False)))
-            begun = True
-            meta = trainer._balance_batch(meta, {})
-            if len(meta.keys) != len(rows):
-                raise ValueError("Readout count must be divisible by the active worker layout")
-            trainer._compute_shared_teacher_log_probs(meta, timing)
-            meta.fields = ["input_ids", "position_ids", "prompts", "responses", "loss_mask", "response_mask"]
-            meta.extra_info = dict(
-                temperature=1.0,
-                compute_loss=False,
-                calculate_entropy=False,
-                full_vocab_score=True,
-                retain_sample_identity=True,
-                full_vocab_prefetch=True,
-                global_token_num=None,
-            )
-            trainer.actor_rollout_wg.score_full_vocab(meta)
-            data = tq.kv_batch_get(
-                keys=list(meta.keys), partition_id=meta.partition_id, select_fields=["rkl_sum", "rkl_count"]
-            )
-            if len(data) != len(by_key):
-                raise ValueError("Incomplete RKL score batch")
-            for key, total, count in zip(meta.keys, data["rkl_sum"].unbind(), data["rkl_count"].unbind(), strict=True):
-                row = by_key[key]
-                if int(count.item()) != sum(row["response_mask"]):
-                    raise ValueError("RKL count differs from the stored response mask")
-                scored.append(
-                    {k: row[k] for k in ["id", "source_id", "bank"]}
-                    | dict(
-                        history_batch=row.get("history_batch"),
-                        rkl_sum=float(total.item()),
-                        tokens=int(count.item()),
-                    )
-                )
-            if trainer.actor_optimizer_step != before:
-                raise RuntimeError("Read-only evaluation changed the optimizer counter")
-            score_seconds = time.perf_counter() - started
+            scored, scoring = score_native_rows(trainer, rows, hidden_size=self.hidden_size, budget=self.score_budget)
+        except UnsafeDrainError:
+            safe_to_restore = False
+            raise
         finally:
-            try:
-                if begun:
-                    audit = trainer.actor_rollout_wg.end_rkl_readout()
-            finally:
-                try:
-                    tq.kv_clear(keys=list(meta.keys), partition_id=meta.partition_id)
-                finally:
-                    random.setstate(rng[0])
-                    np.random.set_state(rng[1])
-                    torch.set_rng_state(rng[2])
-                    if restore_rollout:
-                        trainer.checkpoint_manager.update_weights(global_steps=outer)
+            if restore_rollout and safe_to_restore:
+                trainer.checkpoint_manager.update_weights(global_steps=outer)
+        timing = scoring["teacher_timing"]
+        score_seconds = scoring["seconds"]
+        audit = scoring["audit"]
         # Publication follows successful scoring, state audit and resource cleanup.
         metrics = readout_metrics(scored, baseline=self.baseline, previous_history=self.previous_history)
         metrics.update(
@@ -400,9 +271,6 @@ class FixedRKLReadout:
                 "perf/timing/rkl_readout_seconds": time.perf_counter() - started,
             }
         )
-        audit_requested = bool(self.options.get("audit_state", False))
-        if audit_requested and (not audit or not all(x.get("unchanged") and x.get("state_digest") for x in audit)):
-            raise RuntimeError("Requested state audit did not return verified digests")
         event = ArtifactStore.create(
             self.root / "scores" / f"outer-{outer:03d}",
             kind="rkl_event",
@@ -413,10 +281,10 @@ class FixedRKLReadout:
                 "source_bank": str(self.bank_path.resolve()),
                 "source_bank_manifest_sha256": self.bank_sha256,
                 "aggregation": "question_mean_of_token_mean; history equal_batch",
-                "audit": {"status": "passed" if audit_requested else "not_requested", "ranks": audit},
+                "audit": audit,
             },
         )
-        event.write_rows("rkl.parquet", scored, schema=RKL)
+        event.write_rows("rkl.parquet", ({key: row[key] for key in RKL.names} for row in scored), schema=RKL)
         invalid = sum(value for key, value in metrics.items() if key.endswith("/invalid_rows"))
         event.finish(
             metadata={

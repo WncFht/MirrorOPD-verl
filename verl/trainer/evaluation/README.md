@@ -2,7 +2,7 @@
 
 训练由原生 V1／FSDP2／vLLM 执行。本包提供独立生成协议、评估调度、Parquet 轨迹与评分、CPU 判分和串行 RKL 执行；训练 loss 保持 token-mean，评估采用题内 token 均值后按题平均。
 
-`trainer.evaluation`启用[统一协调器](coordinator.py)。原[FixedRKLReadout](../distillation/readout.py)保留为已通过四卡验收的来源留出／history 基础路径。统一多任务四卡集成与独立 HF 重载已通过验收，完整 50 outer 与更大规模检查仍单独记录。实施状态由[代码走读与实施计划](../../../examples/mirroropd/docs/infra/architecture/evaluation/代码走读与实施计划.md)维护。
+`trainer.evaluation`启用[统一协调器](coordinator.py)。只需来源留出／history 时使用 [SourceHistoryReadout](source_history.py)。两者共享 [native 轨迹接口](native.py)、[原生评分器](scoring.py)与显式回调生命周期；source-only 在训练内生成初始银行，统一公共评估使用预生成 bootstrap，二者不互相增加科学工作量。统一多任务四卡集成与独立 HF 重载已通过验收，完整 50 outer 与更大规模检查仍单独记录。实施状态由[代码走读与实施计划](../../../examples/mirroropd/docs/infra/architecture/evaluation/代码走读与实施计划.md)维护。
 
 ## 统一入口与调度
 
@@ -53,16 +53,16 @@ Public bank 是 generation 产物的 sample 0 引用，无需再复制一份长 
 
 新图表入口是`examples.mirroropd.research.studies.pipeline.plot_unified_evaluation`，直接读取完成的 Parquet 事件，输出训练 loss、来源／history RKL、四域 bank／current RKL、history 批矩阵、accuracy 和可审计 CSV。旧 0–320/H1024 图表仍使用原 reader。
 
-## 兼容：接入基础固定 RKL 配置
+## 来源留出与 history 配置
 
 下面是合并到既有 shared-sync 配置的增量，不是完整训练配方。`data.val_files`必须只含同一个 source_file；训练 n=1，来源验证 n=1 且 response cap 与训练一致，输出目录必须为空。仍要求 fresh run。
 
 ```yaml
 trainer:
-  readout_callback_class: verl.trainer.distillation.readout.FixedRKLReadout
+  readout_callback_class: verl.trainer.evaluation.source_history.SourceHistoryReadout
   val_before_train: true
   resume_mode: disable
-  rkl_readout:
+  source_history_readout:
     output: runs/example/readout
     source_file: /absolute/path/source-heldout.parquet
     source_count: 128
@@ -73,7 +73,7 @@ trainer:
     audit_state: false
 ```
 
-旧`every`仍是两种频率的默认值；`source_every`／`history_every`可独立覆盖。初始 source 和最终节点强制读出，history 从第一批开始。频率不控制 history 成员更新，成员随每个已训练批更新。
+`source_every`／`history_every`分别声明频率，默认均为 1；旧`every`字段拒绝使用。初始 source 和最终节点强制读出，history 从第一批开始。频率不控制 history 成员更新，成员随每个已训练批更新。
 
 `initial_bank`可指向已有、完整的 Parquet 银行目录。模型路径、本地 tokenizer／模板配置 hash、题目文件 hash、输入和采样配置必须匹配；银行在本次运行中绑定到固定 manifest hash。共享银行应位于新输出目录之外。旧 JSON 银行不直接作为新运行输入；历史 JSON 结果由验收工具只读支持，不自动迁移或覆盖。
 
@@ -98,7 +98,7 @@ readout/
 
 `ArtifactStore`使用本机文件锁与 POSIX rename，不承诺断电恢复或跨节点事务。它不是 TQ 替代品，不保存 teacher hidden、全词表概率或 optimizer。内容 hash 读取校验、非法路径／重复文件／未知列检查失败时直接报错。
 
-## 指标与兼容
+## 指标与历史读取
 
 - `eval/rkl/source_heldout/question_mean`：先题内 token 均值，再按题平均。
 - `eval/rkl/source_heldout/absolute_reduction`和`reduction_percent`：同一固定银行相对初值；零基线不输出百分比。
@@ -118,3 +118,11 @@ RKL 的 host budget 约束临时 hidden、位置与拷贝余量，并扣除活�
 四卡多任务验收采用 batch8／reuse2／两轮，完成 4 次更新和三次完整读出；28／46／46 条逻辑轨迹全部有效，padding 不进入统计，四 rank 的参数／Adam 只读审计通过。最终原生重载和独立 HF 初始化均在原轨迹上得到完全一致的 RKL。此验收检查接口与数值，不是正式 50 轮实验或收敛结论。实际条件与证据见[实施状态](../../../examples/mirroropd/docs/infra/architecture/evaluation/代码走读与实施计划.md#8-统一评估实现与待验收边界)。
 
 合并 CPU 回归 495 项通过；之后的初始化调度回归 21 项通过。旧来源／history 基础路径的 batch128／reuse32／两轮 64 次更新仍是独立历史验收，不与新多任务样本混合。Code、Science、IF、长序列与六卡检查的当前状态由实施页维护。
+
+## 回调生命周期与旧接口迁移
+
+所有原生 readout 继承 `verl.trainer.ppo.readout_callback.ReadoutCallback`，显式提供 `on_readout`、`on_before_weight_sync`、`on_update_records` 和 `validate`；无工作时使用基类的空实现。`handles_validation` 声明是否接管 Trainer 验证。初始化检查类合同，Trainer 不在每轮用方法存在性猜测能力。ScientificReadout、NativeRKLProbe 和 HFReloadReadout 已迁移；通用扩展入口继续保留。
+
+旧 `distillation.readout.FixedRKLReadout` 和 `trainer.rkl_readout` 不再作为运行入口。迁移为上面的 source_history 类与配置，并将 every 显式展开为两个频率。新的 source/history 仍使用原题目、银行协议和聚合；不会额外生成公共 benchmark 或 teacher accuracy。旧 JSON、旧配置和旧 Parquet 产物由离线 audit 工具只读解析，不能绕过新运行的模型／协议检查。
+
+共享评分器对未确认结束的远端 RPC 执行 fail-stop：不清理仍可能被写入的 TQ partition，不恢复 rollout，不发布完成标记。已确认结束后的本地校验失败仍执行正常清理；状态审计和模型恢复成功后才发布事件。

@@ -634,9 +634,8 @@ class PPOTrainer(ABC):
                     with marked_timer("save_checkpoint", self.timing_raw, color="green"):
                         self._save_checkpoint()
 
-                before_sync = getattr(self.readout_callback, "on_before_weight_sync", None)
-                if before_sync is not None:
-                    metrics.update(before_sync(self, batch, self.global_steps))
+                if self.readout_callback is not None:
+                    metrics.update(self.readout_callback.on_before_weight_sync(self, batch, self.global_steps))
                 self.on_step_end()
                 if self.readout_callback is not None:
                     metrics.update(self.readout_callback.on_readout(self, self.global_steps))
@@ -1182,9 +1181,8 @@ class PPOTrainer(ABC):
         events = list(
             update_log_events(records, OptimizerProgress(attempts_before, steps_before), self.global_steps, role)
         )
-        persist = getattr(getattr(self, "readout_callback", None), "on_update_records", None)
-        if persist is not None:
-            persist(events, role)
+        if self.readout_callback is not None:
+            self.readout_callback.on_update_records(events, role)
         for values, step in events:
             self.logger.log(data=values, step=step)
 
@@ -1294,9 +1292,8 @@ class PPOTrainer(ABC):
         )
 
     def _validate(self) -> dict[str, float]:
-        fixed_readout = getattr(getattr(self, "readout_callback", None), "validate_fixed_rkl", None)
-        if fixed_readout is not None:
-            return fixed_readout(self)
+        if self.readout_callback is not None and self.readout_callback.handles_validation:
+            return self.readout_callback.validate(self)
         if self.val_dataloader is None:
             raise ValueError("Validation requires nonempty data.val_files")
         # Lists to collect samples for the table

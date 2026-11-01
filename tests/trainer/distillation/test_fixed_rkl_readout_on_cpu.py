@@ -9,7 +9,7 @@ import torch
 
 from verl.trainer.distillation.evaluation import sample_sums, score_rkl_rows
 from verl.trainer.distillation.numerics import kl_rows, kl_values
-from verl.trainer.distillation.readout import balanced_history
+from verl.trainer.evaluation.native import balanced_history
 
 
 @pytest.mark.parametrize("teacher_vocab", [7, 11])
@@ -129,7 +129,7 @@ def test_capture_rows_accepts_tq_linked_list_metadata(monkeypatch):
     from tensordict import TensorDict
     from tensordict.utils import LinkedList
 
-    from verl.trainer.distillation import readout
+    from verl.trainer.evaluation import native as readout
 
     def nested(rows):
         return torch.nested.nested_tensor([torch.tensor(r) for r in rows], layout=torch.jagged)

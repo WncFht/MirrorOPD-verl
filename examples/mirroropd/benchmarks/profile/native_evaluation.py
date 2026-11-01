@@ -15,9 +15,12 @@ from verl.trainer.evaluation.artifacts import EVAL_RKL, ArtifactStore, file_sha2
 from verl.trainer.evaluation.config import ScoreBudget, strict_record
 from verl.trainer.evaluation.scoring import score_native_rows
 from verl.trainer.evaluation.trajectory import load_trajectories, trajectory_index
+from verl.trainer.ppo.readout_callback import ReadoutCallback
 
 
-class NativeRKLProbe:
+class NativeRKLProbe(ReadoutCallback):
+    handles_validation = True
+
     def __init__(self, *, config):
         if not config.trainer.val_only or config.trainer.resume_mode != "disable":
             raise ValueError("RKL infrastructure probes require a fresh validation-only run")
@@ -39,7 +42,7 @@ class NativeRKLProbe:
             },
         )
 
-    def validate_fixed_rkl(self, trainer):
+    def validate(self, trainer):
         trainer.rollout_service.park()
         hidden = AutoConfig.from_pretrained(
             trainer.config.distillation.teacher_models.teacher_model.model_path
@@ -94,6 +97,3 @@ class NativeRKLProbe:
             "eval/probe/rows": len(references),
             "eval/probe/max_question_rkl_error": max(r["max_question_rkl_error"] for r in reports),
         }
-
-    def on_readout(self, trainer, outer):
-        return {}

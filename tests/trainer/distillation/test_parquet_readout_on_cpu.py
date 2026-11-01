@@ -11,7 +11,7 @@ import torch
 from omegaconf import OmegaConf
 from transfer_queue import KVBatchMeta
 
-from verl.trainer.distillation import readout
+from verl.trainer.evaluation import source_history as readout
 from verl.trainer.evaluation.artifacts import ArtifactStore
 
 
@@ -68,6 +68,7 @@ def runtime(tmp_path, monkeypatch):
     source.write_bytes(b"fixed-source-identity")  # The fake native dataset below owns decoding.
     model = tmp_path / "model"
     model.mkdir()
+    (model / "config.json").write_text('{"model_type": "qwen3", "hidden_size": 4}')
     (model / "tokenizer_config.json").write_text('{"chat_template": "fixed"}')
     config = OmegaConf.create(
         {
@@ -75,18 +76,19 @@ def runtime(tmp_path, monkeypatch):
                 "v1": {"trainer_mode": "sync"},
                 "resume_mode": "disable",
                 "val_before_train": True,
-                "rkl_readout": {
+                "source_history_readout": {
                     "output": str(tmp_path / "readout"),
                     "source_file": str(source),
                     "source_count": 2,
                     "history_size": 2,
-                    "every": 1,
+                    "source_every": 1,
+                    "history_every": 1,
                     "audit_state": True,
                 },
             },
             "distillation": {
                 "execution_mode": "shared_sync",
-                "teacher_models": {"teacher_model": {"model_path": "teacher"}},
+                "teacher_models": {"teacher_model": {"model_path": str(model)}},
             },
             "data": {"val_files": [str(source)], "max_response_length": 8},
             "actor_rollout_ref": {
@@ -100,7 +102,7 @@ def runtime(tmp_path, monkeypatch):
     monkeypatch.setattr(readout.tq, "kv_batch_put", queue.put)
     monkeypatch.setattr(readout.tq, "kv_clear", queue.clear)
     bank = queue.rollout(0, [0, 1], "val")
-    callback = readout.FixedRKLReadout(config=config)
+    callback = readout.SourceHistoryReadout(config=config)
     trainer = SimpleNamespace(
         config=config,
         actor_optimizer_step=0,
@@ -111,7 +113,7 @@ def runtime(tmp_path, monkeypatch):
         agent_loop_manager=SimpleNamespace(generate_sequences=MagicMock()),
         replay_buffer=SimpleNamespace(sample=lambda **kwargs: (bank, {})),
         _stamp_rollout_submission=MagicMock(),
-        _balance_batch=lambda meta, metrics: meta,
+        _balance_batch=lambda meta, metrics, **kwargs: meta,
         _compute_shared_teacher_log_probs=MagicMock(),
     )
 
@@ -127,7 +129,7 @@ def runtime(tmp_path, monkeypatch):
         score_full_vocab=score,
         end_rkl_readout=lambda: [{"unchanged": True, "state_digest": f"state-{trainer.actor_optimizer_step}"}],
     )
-    trainer._validate = lambda: callback.validate_fixed_rkl(trainer)
+    trainer._validate = lambda: callback.validate(trainer)
     return callback, trainer, queue
 
 
@@ -155,7 +157,7 @@ def test_initial_and_two_outer_readouts_publish_parquet_without_token_history(ru
     assert not list((callback.root / "trajectories").glob("*.json"))
     assert not list((callback.root / "history").glob("*.json"))
     # Repeated dispatch does not publish a second event or score again.
-    assert callback.validate_fixed_rkl(trainer) == {}
+    assert callback.validate(trainer) == {}
     assert callback.on_readout(trainer, 2) == {}
     assert callback.store.manifest(complete=True)["metadata"]["completed_outer"] == 2
 
@@ -173,26 +175,33 @@ def test_failure_never_publishes_a_complete_score_event(runtime, failure):
         callback.on_readout(trainer, 0)
     assert not (callback.root / "scores/outer-000/manifest.json").exists()
     assert not callback.scored
-    assert all("rkl-readout" not in partition for partition, _ in queue.rows)
+    if failure == "score":
+        # An unresolved RPC may still write remotely: fail-stop retains its partition.
+        assert any("rkl-readout" in partition for partition, _ in queue.rows)
+        trainer.checkpoint_manager.update_weights.assert_not_called()
+    else:
+        assert all("rkl-readout" not in partition for partition, _ in queue.rows)
 
 
 def test_shared_source_bank_checks_template_and_does_not_regenerate(runtime, tmp_path):
     callback, trainer, queue = runtime
     callback.on_readout(trainer, 0)
     config = OmegaConf.create(OmegaConf.to_container(trainer.config))
-    config.trainer.rkl_readout.output = str(tmp_path / "new-run")
-    config.trainer.rkl_readout.initial_bank = str(callback.bank_path)
-    reused = readout.FixedRKLReadout(config=config)
+    config.trainer.source_history_readout.output = str(tmp_path / "new-run")
+    config.trainer.source_history_readout.initial_bank = str(callback.bank_path)
+    reused = readout.SourceHistoryReadout(config=config)
     assert reused.bank == callback.bank
     (tmp_path / "model/tokenizer_config.json").write_text('{"chat_template": "different"}')
-    config.trainer.rkl_readout.output = str(tmp_path / "mismatch")
+    config.trainer.source_history_readout.output = str(tmp_path / "mismatch")
     with pytest.raises(ValueError, match="protocol differs"):
-        readout.FixedRKLReadout(config=config)
+        readout.SourceHistoryReadout(config=config)
 
 
 def test_independent_history_schedule_and_unrequested_audit(runtime):
     callback, trainer, queue = runtime
-    callback.options["audit_state"] = False
+    from dataclasses import replace
+
+    callback.score_budget = replace(callback.score_budget, audit_state=False)
     trainer.actor_rollout_wg.end_rkl_readout = lambda: [{"unchanged": True, "state_digest": None}]
     callback.schedules["source_heldout"] = readout.Schedule(at=(0,), every=2)
     callback.on_readout(trainer, 0)

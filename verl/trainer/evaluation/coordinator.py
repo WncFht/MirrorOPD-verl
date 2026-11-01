@@ -13,7 +13,8 @@ import pyarrow.parquet as pq
 from omegaconf import OmegaConf
 from transformers import AutoConfig
 
-from verl.trainer.distillation.readout import balanced_history, capture_rows
+from verl.trainer.evaluation.native import balanced_history, capture_rows
+from verl.trainer.ppo.readout_callback import ReadoutCallback
 from verl.utils.config import omega_conf_to_dataclass
 from verl.workers.config import HFModelConfig
 
@@ -63,7 +64,9 @@ def model_identity(path):
     return identity({p.name: file_sha256(p) for p in files})
 
 
-class EvaluationCoordinator:
+class EvaluationCoordinator(ReadoutCallback):
+    handles_validation = True
+
     def __init__(self, *, config):
         from verl.experimental.rollout_policy.validation import uses_common_single_sampling
 
@@ -139,7 +142,7 @@ class EvaluationCoordinator:
             event.finish(metadata=metadata)
             self.completed.add(outer)
         if outer == 0 and outer not in self.completed:
-            return self.validate_fixed_rkl(trainer)
+            return self.validate(trainer)
         if (
             outer == trainer.total_training_steps
             and outer in self.completed
@@ -188,7 +191,7 @@ class EvaluationCoordinator:
         try:
             # Training hidden states remain live until the native outer cleanup.
             live_bytes = sum(sum(r["response_mask"]) for r in rows) * (self.hidden_size * 2 + 8)
-            return self.validate_fixed_rkl(trainer, live_payload_bytes=live_bytes)
+            return self.validate(trainer, live_payload_bytes=live_bytes)
         finally:
             self.before_sync = False
 
@@ -204,7 +207,7 @@ class EvaluationCoordinator:
         # Structured stdout is picked up by the existing run logger; no second service.
         print("EVALUATION_PROGRESS " + json.dumps(value, sort_keys=True), flush=True)
 
-    def validate_fixed_rkl(self, trainer, *, live_payload_bytes=0):
+    def validate(self, trainer, *, live_payload_bytes=0):
         outer = self.pending_outer
         if outer in self.completed:
             return {}

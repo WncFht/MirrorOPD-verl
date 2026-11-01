@@ -17,6 +17,7 @@ import torch
 from examples.mirroropd.research.core.artifacts import file_hash
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.studies.prefix_fusion.protocol import PROTOCOL, protocol_identity
+from verl.trainer.ppo.readout_callback import ReadoutCallback
 
 
 @contextmanager
@@ -40,7 +41,7 @@ def wait_rpc(value):
     return value
 
 
-class ScientificReadout:
+class ScientificReadout(ReadoutCallback):
     def __init__(self, config):
         self.config = config
         self.settings = config.trainer.scientific_evaluation
