@@ -1,0 +1,109 @@
+{
+  "baseline": "19e869fb",
+  "commits": {
+    "design": "5bc0660f6f08975ed2fc0d2aed061684f12fa45b",
+    "runtime": "58002c291de8cd1698b4fa6ac2e5b3598c8caef3",
+    "evaluation": "1c61cac1d7ed58733b02c45a261933ada6352620",
+    "ownership": "8093a201b5b9cf878cd74b2c9ad0cb4e9aaf5961"
+  },
+  "checks": {
+    "core_cpu": 563,
+    "launcher_and_config": 369,
+    "canonical_metadata_targeted": 93,
+    "final_generation_and_ownership": 67,
+    "cuda_kernels": 122,
+    "note": "Groups overlap; they are not summed into a unique total."
+  },
+  "distributed": [
+    {
+      "name": "eos-bf16",
+      "exit_code": 0,
+      "seconds": 42.776009894907475
+    },
+    {
+      "name": "eos-fp16",
+      "exit_code": 0,
+      "seconds": 32.449191108345985
+    },
+    {
+      "name": "endpoint",
+      "exit_code": 0,
+      "seconds": 37.60835536569357
+    },
+    {
+      "name": "bpo",
+      "exit_code": 0,
+      "seconds": 35.94761236011982
+    },
+    {
+      "name": "sampled",
+      "exit_code": 0,
+      "seconds": 47.38037507981062
+    },
+    {
+      "name": "forward-kl",
+      "exit_code": 0,
+      "seconds": 49.964550733566284
+    },
+    {
+      "name": "cuda-kernels",
+      "exit_code": 0
+    }
+  ],
+  "distributed_exit": {
+    "exit_code": 0,
+    "seconds": 282.4195436164737
+  },
+  "typed_config_recheck": [
+    {
+      "name": "eos-bf16",
+      "exit_code": 0,
+      "seconds": 33.313748113811016
+    },
+    {
+      "name": "endpoint",
+      "exit_code": 0,
+      "seconds": 25.705131381750107
+    },
+    {
+      "name": "forward-kl",
+      "exit_code": 0,
+      "seconds": 23.480357959866524
+    }
+  ],
+  "typed_config_recheck_exit": {
+    "exit_code": 0,
+    "seconds": 83.74153642356396
+  },
+  "gpu_release": [
+    {
+      "gpu": 0,
+      "desired": "released",
+      "reason": "Final typed objective checks finished"
+    },
+    {
+      "gpu": 1,
+      "desired": "released",
+      "reason": "Final typed objective checks finished"
+    }
+  ],
+  "presets_checked": [
+    "E59",
+    "E62"
+  ],
+  "formal_long_training_started": false,
+  "evidence_root": "runs/runtime-contracts-20261101-v2",
+  "final_source_hashes": {
+    "verl/workers/config/distillation.py": "85aa40affeee844629a1e78083b32f2b58b7d2fc35da77c3453d7a6f599c863c",
+    "verl/workers/config/distillation_spec.py": "ba9f1d2df08cf59a9874034a4192e0b9301fb5be5ee02f8248727cb06014d8d8",
+    "verl/trainer/distillation/full_vocab.py": "5ad8d1a5b397cac57e29aae281ef2fa534005d4f34b7a18e392c060552bb703c",
+    "verl/trainer/distillation/forward_vocab.py": "8d5ea317111ad24ed012a7b4c710c164c8e7b24c447300239b463b54da6a1d28",
+    "verl/trainer/ppo/readout_callback.py": "2afee12e436233e5746e5b75bac0e502ffd9036ca8a8e3d078963e1b8e7d1d7c",
+    "verl/trainer/evaluation/config.py": "a5eb41a3a65b27ed47826d9e6adb7fd50e4ef4079722e7c4841d1c42b2c530a4",
+    "verl/trainer/evaluation/identity.py": "b6aa7f0da1cf2b2f58c15d91d123812f6e71b0bbe437c8934d54a5951ce9da14",
+    "verl/trainer/evaluation/generation_contract.py": "8211e9ad681bd885b9f022958c545bf4fc4c597b8adc148f3fb1686fe76325d0",
+    "verl/trainer/evaluation/source_history.py": "a9f4fe51f0d10e87b9605685baa6002c332e2a09971ec4854e8fdc81a4a0264c",
+    "verl/experimental/rollout_policy/service.py": "0012149f6e6dee9ca2f3d026aebdba0fad1e0e37ce981f73ae65c3a3e62c179e"
+  },
+  "scope": "The final generation ownership changes have CPU contract verification; no new long-run throughput or full accuracy claim."
+}
