@@ -1248,6 +1248,16 @@ class FSDPEngineWithLMHead(FSDPEngine):
         self.full_vocab_spec = spec
         self.full_vocab_config = config
         self.full_vocab_teacher_head = FrozenTeacherHead(teacher_path)
+        from verl.trainer.distillation.distribution import DistributionSpec
+
+        self.full_vocab_space = DistributionSpec.parse(config.distribution).compile(
+            self.model_config.hf_config.get_text_config().vocab_size,
+            self.full_vocab_teacher_head.cpu_weight.shape[0],
+            config.termination_token_ids,
+        )
+        from dataclasses import replace
+
+        self.full_vocab_readout_space = replace(self.full_vocab_space, termination_ids=())
 
     def _full_vocab_output(self, micro_batch, model_inputs, teacher):
         from verl.trainer.distillation.full_vocab import full_vocab_objective_result
@@ -1267,6 +1277,19 @@ class FSDPEngineWithLMHead(FSDPEngine):
         positions, packed = prediction_positions(micro_batch["input_ids"], micro_batch["loss_mask"])
 
         capture = "teacher" if teacher else tu.get_non_tensor_data(micro_batch, "full_vocab_capture", default=None)
+
+        input_source = tu.get_non_tensor_data(micro_batch, "full_vocab_input_tokenizer", default=None)
+        if capture == "teacher" and input_source is not None:
+            from transformers import AutoTokenizer
+
+            from verl.trainer.distillation.token_mapping import TokenIdMapping
+
+            if getattr(self, "_mapped_input_source", None) != input_source:
+                self._teacher_input_mapping = TokenIdMapping.build(
+                    AutoTokenizer.from_pretrained(input_source, local_files_only=True), self.model_config.tokenizer
+                )
+                self._mapped_input_source = input_source
+            model_inputs = dict(model_inputs, input_ids=self._teacher_input_mapping.tensor(model_inputs["input_ids"]))
 
         def output(hidden, head):
             selected = hidden.squeeze(0).index_select(0, packed)
@@ -1305,11 +1328,11 @@ class FSDPEngineWithLMHead(FSDPEngine):
             config = self.full_vocab_config
             spec = self.full_vocab_spec
             if tu.get_non_tensor_data(micro_batch, "full_vocab_score", default=False):
-                from verl.trainer.distillation.evaluation import sample_sums, score_rkl_rows
+                from verl.trainer.distillation.evaluation import sample_sums, score_distribution_rows
 
                 def readout(h, w):
                     with torch.autocast(device_type=h.device.type, enabled=False):
-                        values = score_rkl_rows(
+                        values = score_distribution_rows(
                             h,
                             w.to(h.dtype),
                             teacher_hidden,
@@ -1317,8 +1340,18 @@ class FSDPEngineWithLMHead(FSDPEngine):
                             token_chunk=tu.get_non_tensor_data(
                                 micro_batch, "full_vocab_score_token_chunk", default=config.token_chunk_size
                             ),
+                            distribution=self.full_vocab_space
+                            if tu.get_non_tensor_data(micro_batch, "full_vocab_score_objective", default=False)
+                            else self.full_vocab_readout_space,
+                            termination_ids=config.termination_token_ids
+                            if tu.get_non_tensor_data(micro_batch, "full_vocab_score_objective", default=False)
+                            else (),
                         )
-                    return sample_sums(values, [len(p) for p in positions])
+                    counts = [len(p) for p in positions]
+                    output = sample_sums(values.pop("rkl"), counts)
+                    for name, rows in values.items():
+                        output[name + "_sum"] = sample_sums(rows, counts)["rkl_sum"]
+                    return output
 
                 return head(selected, full_vocab_callback=readout)
             anchor_hidden = anchor_weight = None
@@ -1354,6 +1387,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
                         vocab_chunk=config.vocab_chunk_size,
                         termination_token_ids=config.termination_token_ids,
                         forward_teacher_support=config.forward_teacher_support,
+                        distribution=self.full_vocab_space if spec.teacher_only_kl else None,
                     )
 
             # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
@@ -1370,7 +1404,19 @@ class FSDPEngineWithLMHead(FSDPEngine):
                 bins = relative_position_bins(targets, lengths)
             return {
                 "full_vocab": FullVocabOutput.from_result(
-                    result, spec, packed.numel(), termination=bool(config.termination_token_ids), bins=bins
+                    result,
+                    spec,
+                    packed.numel(),
+                    bins=bins,
+                    termination=bool(self.full_vocab_space.termination_ids)
+                    if spec.teacher_only_kl
+                    else bool(config.termination_token_ids),
+                    measure_name=(
+                        ("conditional" if self.full_vocab_space.spec.mode == "common_conditioned" else "native")
+                        + ("_coarsened_rkl" if self.full_vocab_space.termination_ids else "_rkl")
+                    )
+                    if spec.teacher_only_kl
+                    else None,
                 )
             }
 

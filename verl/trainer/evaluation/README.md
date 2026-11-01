@@ -143,10 +143,43 @@ readout/
 
 ## 执行限制与验收范围
 
-运行使用同步 V1／FSDP2／vLLM、已验证的 token 映射和原生支持 RKL。Scorer 要求 teacher 输出支持覆盖 student；其他概率空间需显式实现与验证。公共 suite 要求 n=1、一个全局 mini-batch、token-mean、无 critic，并关闭周期保存，只保留最终模型；这不意味着所有 readout 组件都有相同预算或保存约束。
+运行使用同步 V1／FSDP2／vLLM、已验证的 token 映射和原生支持 RKL。Native scorer 要求 teacher 输出支持覆盖 student；显式 common_conditioned 在声明的集合上条件化，并记录被排除的质量和 measure-id。公共 suite 要求 n=1、一个全局 mini-batch、token-mean、无 critic，并关闭周期保存，只保留最终模型；这不意味着所有 readout 组件都有相同预算或保存约束。
 
-RKL host budget 约束临时 hidden、位置与拷贝余量，并扣除活跃训练 payload，不包含常驻模型和 Adam 的全部 CPU 内存。当前资源配方按 BF16 hidden 估算；已使用的推理 token budget49152 覆盖 public prompt8192 加 response32768，与训练和生成 cap 分开。
+RKL host budget 约束临时 hidden、位置与拷贝余量，并扣除活跃训练 payload，不包含常驻模型和 Adam 的全部 CPU 内存。窗口根据 shared teacher 的实际 forward precision 推导 hidden 字节数；已使用的推理 token budget49152 覆盖 public prompt8192 加 response32768，与训练和生成 cap 分开。
 
 历史四卡集成采用 batch8/reuse2/两轮，完成 4 次更新和三次读出，28/46/46 条逻辑轨迹有效，四 rank 只读状态审计通过；原生重载和独立 HF 初始化的固定前缀 RKL 最大误差为 0。历史 CPU 检查为 495 项，另有 21 项初始化调度回归；基础 source/history 的 batch128/reuse32/两轮 64 次更新是另一批验收。这些记录不相加为独立样本，也不作为当前所有路径的重新验收，详见[历史实施与证据](../../../examples/mirroropd/docs/infra/architecture/evaluation/代码走读与实施计划.md)。
 
 两轮运行合同重构的当前检查见[重构报告](../../../examples/mirroropd/docs/infra/architecture/2026-11-01-运行合同审计与重构方案.md#提交与验收)。Source/history 最新生命周期有原生形状的 CPU 协议检查，未增加完整 vLLM accuracy 或 50 outer 实验；模型扩展和更大规模检查仍各自记录。
+
+
+## 分布、模型与输入适配
+
+`distillation.distillation_loss.full_vocab.distribution`默认为空，保留 native head RKL。小 teacher→大 student 使用显式条件支持，例如：
+
+```yaml
+distillation:
+  distillation_loss:
+    full_vocab:
+      distribution:
+        mode: common_conditioned
+        common_vocab_size: 151936
+```
+
+`common_vocab_size`指共同输出行，不会自动变成 tokenizer 交集。也可用成对的`student_ids`／`teacher_ids`声明等价动作的索引顺序。训练与评估均复用`DistributionSpec`；新评分表是EVAL_RKL schema2，measure-id绑定分布定义与实际forward精度profile，并附`measure_id`、`student_excluded_mass_sum`、`teacher_excluded_mass_sum`及可用的`uncoarsened_rkl_sum`。聚合器拒绝将不同 measure-id 合并或计算相对下降，旧schema1表仍可只读分析。
+
+`score.objective_space=true`选择训练配置中的停止动作分组，默认false保持未合并动作的RKL。这里始终比较student与teacher，不构造MDPO的anchor／target。条件化与EOS组合要求完整保留或排除停止类；优化结果的`objective_rows`和未缩放`loss_sum`一致，旧raw位置指标保留原义。
+
+模型支持Qwen2／Qwen3／Qwen3-MoE和Llama的未量化、无bias线性head。启动Ray前检查真实head清单与shape、tokenizer编码／解码语义、输入ID、上下文及有效停止动作。Llama动态日期模板必须在`data.apply_chat_template_kwargs.date_string`和各评估协议的`template_kwargs.date_string`中固定同一个值。
+
+只有ID重新编号而分词语义等价时，可显式设置`full_vocab.input_id_mapping=token_semantics`，并声明匹配的条件输出支持。Teacher前向在独立模型输入上应用映射，原student轨迹不改；teacher生成请求映射输入／停止ID，返回token映射回student坐标，log-prob保持不变。不同分词边界、额外teacher生成动作无法映回student、softcap／bias／量化head均须另立协议或adapter，不能自动裁切后进入主表。
+
+新权重身份复用rollout的`checkpoint_identity`，以`checkpoint-v2:`标识；新运行只接受当前内容合同，不将旧身份自动升级。生成ID只绑定sampling与输入，`answer_channel`改动不再改变生成身份；判分产物另存verifier协议和身份，可对同一回答独立重判。旧生成记录不改写身份或原manifest。
+
+`native.py`统一轨迹/TQ转换和history抽样，source/history 与公共 suite 共用同一组原语；`NativeEvaluationExecution`集中对Trainer私有评分／平衡接口的调用。评估事件另记录实际distribution、teacher transfer／forward、trajectory publish和student readout RPC耗时，原有细粒度NVTX范围继续用于GPU profile。
+
+
+重判沿用同一冻结题目／参考答案版本，并校验实际输入tokenizer身份。修改判分代码或答案通道可复用回答；修改题目／参考答案属于数据版本变更，不自动跨版本复用。缺少输入身份的旧生成产物使用原冻结评估器，不以新元数据冒充已验收输入。
+
+SourceHistoryReadout 保留 native、identity、未合并读出的原始协议；条件化、输入映射或 objective-space 读出使用 EvaluationCoordinator，不能把不同测量空间写入同一 source/history 指标。训练中的条件化指标使用 conditional_rkl 命名，不复用 native full_kl 的名称。
+
+图目录附带数值 CSV 与 `plot-inputs.json`，可交给同一绘图入口独立重绘，无需模型或原始 rollout；输出目录拒绝覆盖另一 run 的图表。

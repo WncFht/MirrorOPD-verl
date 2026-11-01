@@ -68,12 +68,21 @@ def validate_repetition_detection(value):
     return params
 
 
-def validation_repetition_detection(rollout):
-    """Return a plain request mapping; reject unsupported backends instead of ignoring it."""
-    params = validate_repetition_detection(rollout.val_kwargs.get("repetition_detection"))
+def rollout_repetition_detection(rollout, *, validate):
+    """Keep training and validation stop rules independent and backend checked."""
+    value = (
+        rollout.val_kwargs.get("repetition_detection") if validate else getattr(rollout, "repetition_detection", None)
+    )
+    params = validate_repetition_detection(value)
     if params is not None and rollout.name != "vllm":
-        raise ValueError("val_kwargs.repetition_detection requires rollout.name=vllm; set it to null to disable")
+        field = "val_kwargs.repetition_detection" if validate else "rollout.repetition_detection"
+        raise ValueError(f"{field} requires rollout.name=vllm; set it to null to disable")
     return params
+
+
+def validation_repetition_detection(rollout):
+    """Compatibility entry for validation-only callers."""
+    return rollout_repetition_detection(rollout, validate=True)
 
 
 @dataclass
@@ -199,6 +208,8 @@ class RolloutConfig(BaseConfig):
     do_sample: bool = True
     n: int = 1
     repetition_penalty: float = 1.0
+    # Explicit training-only truncation; validation uses its own val_kwargs rule.
+    repetition_detection: Optional[dict[str, int]] = None
 
     # Whether to enable full determinism for reproducibility.
     full_determinism: bool = False
@@ -320,6 +331,7 @@ class RolloutConfig(BaseConfig):
     def __post_init__(self):
         """Validate the rollout config"""
         validation_repetition_detection(self)
+        rollout_repetition_detection(self, validate=False)
         if self.stop_token_ids is not None:
             if not isinstance(self.stop_token_ids, list) or any(
                 type(token_id) is not int or token_id < 0 for token_id in self.stop_token_ids

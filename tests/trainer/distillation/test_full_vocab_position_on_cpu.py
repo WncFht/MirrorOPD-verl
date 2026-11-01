@@ -30,7 +30,8 @@ def test_diagnostic_rows_are_exact_and_do_not_change_gradients(backend, tokens, 
     lt = (ht.detach() @ wt.detach().T).log_softmax(-1)[:, :17]
     expected_rows = (lp.exp() * (lp - lt)).sum(-1)
     expected_grad = torch.autograd.grad(expected_rows.sum() * 0.37, (hs, ws))
-    total, rows = full_reverse_kl_result(hs, ws, ht, wt, backend=backend, token_chunk=3, vocab_chunk=4)
+    result = full_reverse_kl_result(hs, ws, ht, wt, backend=backend, token_chunk=3, vocab_chunk=4)
+    total, rows = result.loss_sum, result.token_kl
     assert not rows.requires_grad
     torch.testing.assert_close(rows, expected_rows.detach(), atol=1e-10, rtol=1e-10)
     torch.testing.assert_close(total, rows.sum(), atol=1e-10, rtol=1e-10)

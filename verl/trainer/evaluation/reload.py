@@ -83,6 +83,9 @@ class HFReloadReadout(ReadoutCallback):
             budget=self.options.score,
             load_window=load_trajectories,
         )
+        measures = {row.get("measure_id") for row in expected.values()}
+        if None in measures or measures != {row.get("measure_id") for row in actual}:
+            raise ValueError("HF reload requires matching explicit distribution and precision identities")
         errors = []
         for row in actual:
             before = expected.pop(row["id"])

@@ -142,4 +142,6 @@ def full_forward_kl_result(hs, ws, ht, wt, *, backend="precompute", token_chunk=
         total, values, info = ForwardVocab.apply(
             hs, ws, ht, wt, token_chunk, backend == "precompute_fused", backend != "recompute"
         )
-    return FullVocabObjectiveResult(total, values.detach(), {k: info[:, i].detach() for i, k in enumerate(DIAGNOSTICS)})
+    return FullVocabObjectiveResult(
+        total, values.detach(), {k: info[:, i].detach() for i, k in enumerate(DIAGNOSTICS)}, values.detach()
+    )

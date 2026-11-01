@@ -30,7 +30,7 @@ from torch.distributed.device_mesh import init_device_mesh
 from verl.checkpoint_engine import CheckpointEngineRegistry
 from verl.single_controller.base import Worker
 from verl.single_controller.base.decorator import Dispatch, make_nd_compute_dataproto_dispatch_fn, register
-from verl.trainer.distillation import distillation_ppo_loss, is_distillation_enabled
+from verl.trainer.distillation.losses import distillation_ppo_loss, is_distillation_enabled
 from verl.trainer.ppo.score_centering import score_centering_ppo_loss
 from verl.utils import tensordict_utils as tu
 from verl.utils.config import omega_conf_to_dataclass

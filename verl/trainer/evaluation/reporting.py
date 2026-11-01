@@ -9,6 +9,12 @@ from .metrics import readout_metrics, summarize_rkl
 
 def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None):
     source_baseline = baselines.get("source_heldout")
+    spaces = {r.get("measure_id") for r in rows}
+    if len(spaces) > 1:
+        raise ValueError("Cannot aggregate different RKL distribution identities")
+    for previous in (baselines or {}).values():
+        if spaces and previous and {r.get("measure_id") for r in previous} != spaces:
+            raise ValueError("Cannot compare a fixed bank across different RKL distributions")
     metrics = readout_metrics(rows, baseline=source_baseline, previous_history=previous_history)
     groups = defaultdict(list)
     for row in rows:
@@ -25,6 +31,12 @@ def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None):
             metrics.update({f"{prefix}/{k}": v for k, v in summary.items() if k != "mean"})
             if "mean" in summary:
                 metrics[f"{prefix}/question_mean"] = summary["mean"]
+            for diagnostic in ("student_excluded_mass", "teacher_excluded_mass"):
+                if panel and all(r.get(diagnostic + "_sum") is not None for r in panel):
+                    mass_rows = [dict(r, rkl_sum=r[diagnostic + "_sum"]) for r in panel]
+                    summary_mass = summarize_rkl(mass_rows, equal_groups=group)
+                    if "mean" in summary_mass:
+                        metrics[f"{prefix}/{diagnostic}"] = summary_mass["mean"]
             baseline = baselines.get(bank)
             if baseline is not None and bank != "public_current":
                 original = [r for r in baseline if domain == "all" or r["domain"] == domain]
@@ -35,6 +47,16 @@ def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None):
                     metrics[f"{prefix}/absolute_reduction"] = before["mean"] - summary["mean"]
                     if before["mean"] > 0:
                         metrics[f"{prefix}/reduction_percent"] = 100 * (1 - summary["mean"] / before["mean"])
+    for bank in ("source_heldout", "history"):
+        panel = [r for r in rows if r["bank"] == bank]
+        for diagnostic in ("student_excluded_mass", "teacher_excluded_mass"):
+            if panel and all(r.get(diagnostic + "_sum") is not None for r in panel):
+                summary = summarize_rkl(
+                    [dict(r, rkl_sum=r[diagnostic + "_sum"]) for r in panel],
+                    equal_groups="history_batch" if bank == "history" else None,
+                )
+                if "mean" in summary:
+                    metrics[f"eval/rkl/{bank}/{diagnostic}"] = summary["mean"]
     for alias, original in (aliases or {}).items():
         prefix = f"eval/rkl/{original}/"
         for key, value in list(metrics.items()):

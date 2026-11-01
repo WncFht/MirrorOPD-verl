@@ -108,8 +108,8 @@ def audit():
     default = GenerationProtocol()
     alternate = GenerationProtocol(answer_channel="whole_response")
     assert default.sampling("bench", "q", 0) == alternate.sampling("bench", "q", 0)
-    assert default.protocol_id != alternate.protocol_id
-    result["generation_and_verifier_identity"] = {"same_sampling": True, "different_protocol_id": True}
+    assert default.protocol_id == alternate.protocol_id
+    result["generation_and_verifier_identity"] = {"same_sampling": True, "different_protocol_id": False}
 
     a, b, alpha, beta = tensor([0.6, 0.4]), tensor([0.2, 0.8]), 0.7, 0.9
     p, q = torch.cat([alpha * a, tensor([1 - alpha])]), torch.cat([beta * b, tensor([1 - beta])])

@@ -90,12 +90,16 @@ def initialize_global_process_group_ray(timeout_second=None, backend=None):
     if not torch.distributed.is_initialized():
         rank = int(os.environ.get("RANK", 0))
         world_size = int(os.environ.get("WORLD_SIZE", 1))
+        # Each TP1 rollout checkpoint worker owns a singleton CPU group. A
+        # private in-process store avoids racing for an ephemeral TCP port;
+        # multi-rank and accelerator groups retain their shared rendezvous.
+        rendezvous = (
+            {"store": torch.distributed.HashStore()}
+            if world_size == 1 and rank == 0 and backend == "cpu:gloo"
+            else {"init_method": os.environ.get("DIST_INIT_METHOD", None)}
+        )
         torch.distributed.init_process_group(
-            backend=backend,
-            rank=rank,
-            world_size=world_size,
-            timeout=timeout,
-            init_method=os.environ.get("DIST_INIT_METHOD", None),
+            backend=backend, rank=rank, world_size=world_size, timeout=timeout, **rendezvous
         )
 
 

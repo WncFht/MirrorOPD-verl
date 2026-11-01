@@ -110,6 +110,9 @@ def runtime(tmp_path, monkeypatch):
             },
             "distillation": {
                 "execution_mode": "shared_sync",
+                "distillation_loss": {
+                    "full_vocab": {"distribution": {}, "input_id_mapping": "identity", "termination_token_ids": []}
+                },
                 "teacher_models": {"teacher_model": {"model_path": str(model)}},
             },
             "data": {"val_files": [str(source)], "max_response_length": 8},

@@ -22,8 +22,18 @@ def replay_published(destination, previous, specifications, protocols, *, on_bat
         "question_set_sha256",
         "engine_contract_id",
         "engine_contract",
+        "sample_identity_schema",
     )
-    if any(identity(saved["metadata"].get(k)) != identity(expected[k]) for k in fields):
+
+    def comparable(meta, key):
+        value = meta.get(key)
+        if key == "protocols" and value is not None:
+            return {
+                name: {k: v for k, v in protocol.items() if k != "answer_channel"} for name, protocol in value.items()
+            }
+        return value
+
+    if any(identity(comparable(saved["metadata"], k)) != identity(comparable(expected, k)) for k in fields):
         raise ValueError("Resume model, questions, sampling counts or input protocol changed")
     source_hash = file_sha256(source.manifest_path)
     questions = {(s.name, q["id"]): (q, s, protocols[s.protocol]) for s, rows in specifications for q in rows}

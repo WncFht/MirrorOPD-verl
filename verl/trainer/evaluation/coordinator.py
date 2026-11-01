@@ -20,6 +20,7 @@ from verl.workers.config import HFModelConfig
 from .accuracy import AccuracyCollector, gap_recovery
 from .artifacts import EVAL_RKL, GENERATION, HISTORY, ArtifactStore, file_sha256, identity
 from .config import EvaluationConfig
+from .execution import hidden_dtype_bytes
 from .generation import NativeGenerator
 from .generation_contract import engine_contract, require_current_generation
 from .identity import bootstrap_contract, model_identity
@@ -174,7 +175,9 @@ class EvaluationCoordinator(ReadoutCallback):
         self.pending_outer, self.before_sync = outer, True
         try:
             # Training hidden states remain live until the native outer cleanup.
-            live_bytes = sum(sum(r["response_mask"]) for r in rows) * (self.hidden_size * 2 + 8)
+            live_bytes = sum(sum(r["response_mask"]) for r in rows) * (
+                self.hidden_size * hidden_dtype_bytes(self.config) + 8
+            )
             return self.validate(trainer, live_payload_bytes=live_bytes)
         finally:
             self.before_sync = False

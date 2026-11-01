@@ -42,10 +42,17 @@ class FullVocabConfig(BaseConfig):
     prefetch: bool = False
     # Equal is strict. Student explicitly conditions a wider teacher on student rows.
     forward_teacher_support: str = "equal"
+    distribution: dict = field(default_factory=dict)
+    input_id_mapping: str = "identity"
     # Explicit equivalence class of tokens that all terminate this single-turn rollout.
     termination_token_ids: list[int] = field(default_factory=list)
 
     def __post_init__(self):
+        from verl.trainer.distillation.distribution import DistributionSpec
+
+        DistributionSpec.parse(self.distribution)
+        if self.input_id_mapping not in {"identity", "token_semantics"}:
+            raise ValueError("input_id_mapping must be identity or token_semantics")
         if self.forward_teacher_support not in ("equal", "student"):
             raise ValueError("forward_teacher_support must be equal or student")
         if self.backend not in ("dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"):
@@ -151,6 +158,12 @@ class DistillationLossConfig(BaseConfig):
         self._loss_settings: DistillationLossSettings = resolve_distillation_spec(self)
         if isinstance(self.full_vocab, dict):
             object.__setattr__(self, "full_vocab", FullVocabConfig(**self.full_vocab))
+        if (
+            self.full_vocab.distribution or self.full_vocab.input_id_mapping != "identity"
+        ) and not self.loss_settings.teacher_only_kl:
+            raise ValueError(
+                "Explicit distribution supports teacher-only reverse KL; other objectives retain their native contract"
+            )
         if self.full_vocab.termination_token_ids and not (
             self.loss_settings.teacher_only_kl
             or (self.loss_settings.objective == "mdpo" and self.loss_settings.payload_kind == "hidden")

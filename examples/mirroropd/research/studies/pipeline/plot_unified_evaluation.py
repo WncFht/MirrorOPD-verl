@@ -9,6 +9,8 @@ Missing observations stay absent. No horizon normalization or interpolation.
 """
 
 import argparse
+import csv
+import json
 import math
 import re
 from collections import defaultdict
@@ -23,7 +25,41 @@ from verl.trainer.evaluation.artifacts import ArtifactStore, file_sha256
 from verl.trainer.evaluation.metrics import summarize_rkl
 
 
+def load_plot_snapshot(path):
+    """Replay published scalar evidence without access to models or rollout tokens."""
+    path = Path(path)
+    manifest = json.loads((path / "manifest.json").read_text())
+    for name in ("plot-inputs.json", "evaluation-metrics.csv", "question-rkl.csv"):
+        if file_sha256(path / name) != manifest["artifacts"][name]:
+            raise ValueError(f"Plot input checksum differs: {name}")
+    data = json.loads((path / "plot-inputs.json").read_text())
+    events = {e["outer"]: dict(e, metrics={}) for e in data["events"]}
+    with (path / "evaluation-metrics.csv").open() as stream:
+        for row in csv.DictReader(stream):
+            events[int(row["outer"])]["metrics"][row["metric"]] = float(row["value"])
+    data["events"] = list(events.values())
+    integers = {"outer", "tokens", "history_batch", "sample_index"}
+    reals = {"rkl_sum", "uncoarsened_rkl_sum", "student_excluded_mass_sum", "teacher_excluded_mass_sum"}
+    with (path / "question-rkl.csv").open() as stream:
+        data["scores"] = [
+            {k: None if v == "" else int(v) if k in integers else float(v) if k in reals else v for k, v in row.items()}
+            for row in csv.DictReader(stream)
+        ]
+    updates = {}
+    if data.pop("has_updates"):
+        if file_sha256(path / "updates.csv") != manifest["artifacts"]["updates.csv"]:
+            raise ValueError("Plot update checksum differs")
+        with (path / "updates.csv").open() as stream:
+            for row in csv.DictReader(stream):
+                step = int(row["step"])
+                updates.setdefault(step, {"step": step})[row["metric"]] = float(row["value"])
+    data["updates"] = list(updates.values())
+    return data
+
+
 def load_run(path):
+    if (Path(path) / "plot-inputs.json").exists():
+        return load_plot_snapshot(path)
     store = ArtifactStore(path)
     manifest = store.manifest()
     if manifest["kind"] != "unified_evaluation_run":
@@ -55,6 +91,10 @@ def load_run(path):
     }
     input_mode = "thinking" if thinking == {True} else "non-thinking" if thinking == {False} else "mixed"
     sources[str(source_bank.manifest_path)] = file_sha256(source_bank.manifest_path)
+    measures = {row.get("measure_id") for row in scores}
+    if len(measures) > 1:
+        raise ValueError("A plot cannot combine different RKL probability spaces")
+    distribution = next((e["timing"].get("distribution") for e in events if e["timing"].get("distribution")), None)
     models = {}
     for name in ("run.yaml", "acceptance.yaml"):
         candidate = store.root.parent / name
@@ -79,7 +119,9 @@ def load_run(path):
         incomplete=incomplete,
         config=manifest["metadata"]["configuration"],
         models=models,
+        distribution=distribution,
         input_mode=input_mode,
+        source_run=str(Path(path).resolve()),
     )
 
 
@@ -92,6 +134,10 @@ def render(path, output):
     data = load_run(path)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
+    if (output / "manifest.json").exists():
+        existing = json.loads((output / "manifest.json").read_text())
+        if existing["source_run"] != data["source_run"]:
+            raise ValueError("Each scientific run must own a separate figure directory")
     style = load_style()
     style.apply_rc("paper", fontsize=10)
     colors = {
@@ -117,6 +163,12 @@ def render(path, output):
             )
         fig.canvas.draw()
         fig.tight_layout(rect=(0, 0.10, 1, 0.90))
+        if data["distribution"]:
+            definition = data["distribution"]
+            mode = definition["spec"]["mode"]
+            if mode != "native" or definition["termination_ids"]:
+                count = definition["spec"]["common_vocab_size"] or len(definition["spec"]["student_ids"])
+                caption += f" Space: {mode}, C={count}, EOS actions={len(definition['termination_ids'])}."
         save_figure(fig, output / name, caption)
         figures.append(name)
 
@@ -159,6 +211,25 @@ def render(path, output):
     common_limits(axes)
     save(fig, "rkl-by-trajectory", "Within-question token mean; history batch equal; public domains equal.")
 
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
+    for bank, label, color, suffix in [
+        ("source_heldout", "Source heldout", training_color, "question_mean"),
+        ("history", "Training history", neutral, "equal_batch_question_mean"),
+    ]:
+        series(axes[0], f"eval/rkl/{bank}/{suffix}", label, color)
+    for domain, color in colors.items():
+        series(axes[1], f"eval/rkl/public_initial/{domain}/question_mean", domain.capitalize(), color)
+    for axis, title in zip(
+        axes, ("Source and actual training history", "Fixed initial-student public bank"), strict=True
+    ):
+        axis.set(xlabel="Completed outer steps", ylabel="RKL (nats; log scale)", yscale="log", title=title)
+        axis.legend(fontsize=8)
+    positive = [y for ax in axes for line in ax.lines for y in line.get_ydata() if y > 0]
+    if positive:
+        for ax in axes:
+            ax.set_ylim(min(positive) / 1.5, max(positive) * 1.5)
+    save(fig, "rkl-log-detail", "Fixed source/public trajectories; history membership changes after each outer.")
+
     fig, axes = plt.subplots(2, 2, figsize=(12, 8))
     for (domain, color), axis in zip(colors.items(), axes.flat, strict=True):
         for bank, label, linestyle in [
@@ -198,6 +269,70 @@ def render(path, output):
                 axis.text(0.5, 0.5, "Metric unavailable", transform=axis.transAxes, ha="center")
             axis.set(xlabel="Optimizer update attempts", ylabel=ylabel)
         save(fig, "training-updates", "Actual training-loss records; evaluation RKL uses a different averaging rule.")
+
+        batches = defaultdict(list)
+        for row in data["updates"]:
+            if "step/outer" in row and "distill/full_kl" in row:
+                batches[int(row["step/outer"])].append(row)
+        if batches:
+            fig, axis = plt.subplots(figsize=(8.5, 4.8))
+            for offset, label, linestyle in [(0, "First update loss", "-"), (-1, "Last update loss", "--")]:
+                points = [
+                    (outer, sorted(rows, key=lambda r: r["step"])[offset]["distill/full_kl"])
+                    for outer, rows in sorted(batches.items())
+                ]
+                axis.plot(
+                    *zip(*points, strict=True), label=label, color=training_color, linestyle=linestyle, marker=marker
+                )
+            series(axis, "eval/rkl/source_heldout/question_mean", "Source heldout after update", neutral, ":")
+            axis.set(xlabel="Completed outer steps", ylabel="RKL (nats; log scale)", yscale="log")
+            axis.legend(fontsize=8)
+            save(
+                fig,
+                "reuse-profile",
+                "First/last losses precede their respective updates; loss token-mean, heldout question-mean.",
+            )
+
+    final_outer = max(event["outer"] for event in data["events"])
+    final_rows = [r for r in data["scores"] if r["outer"] == final_outer and r["bank"].startswith("public_")]
+    if final_rows:
+        fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+        all_values = [r["rkl_sum"] / r["tokens"] for r in final_rows if r["tokens"] > 0]
+        for axis, (domain, color) in zip(axes.flat, colors.items(), strict=True):
+            for bank, label, linestyle in [
+                ("public_initial", "Initial student", "-"),
+                ("public_teacher", "Teacher", "--"),
+                ("public_current", "Current student", ":"),
+            ]:
+                values = sorted(
+                    r["rkl_sum"] / r["tokens"]
+                    for r in final_rows
+                    if r["bank"] == bank and r["domain"] == domain and r["tokens"] > 0
+                )
+                if values:
+                    axis.step(
+                        values,
+                        np.arange(1, len(values) + 1) / len(values),
+                        where="post",
+                        color=color,
+                        linestyle=linestyle,
+                        label=f"{domain.upper() if domain == 'if' else domain.capitalize()}: {label}",
+                    )
+            axis.set(
+                xlabel="Per-question RKL (nats)",
+                ylabel="Empirical cumulative fraction",
+                title="IF" if domain == "if" else domain.capitalize(),
+                ylim=(0, 1.03),
+            )
+            if all_values and min(all_values) > 0:
+                axis.set_xscale("log")
+                axis.set_xlim(min(all_values) / 1.2, max(all_values) * 1.2)
+            axis.legend(fontsize=8)
+        save(
+            fig,
+            "rkl-tail-distribution",
+            "Final per-question distributions include every observed tail; no outlier removal.",
+        )
 
     history = defaultdict(list)
     for row in data["scores"]:
@@ -319,7 +454,7 @@ def render(path, output):
                     label=f"{spec['name']} avg@{spec['n']}",
                 )
         axis.set(xlabel="Completed outer steps", ylabel="Accuracy (%)", title=domain.capitalize(), ylim=(-3, 103))
-        axis.legend(fontsize=8)
+        axis.legend(fontsize=8, loc="center left", bbox_to_anchor=(1.01, 0.5))
     save(fig, "accuracy", "Full benchmark questions; per-question mean over the declared number of samples.")
 
     write_csv(
@@ -337,10 +472,14 @@ def render(path, output):
                 if k != "step"
             ],
         )
+    snapshot = {k: v for k, v in data.items() if k not in {"events", "scores", "updates"}}
+    snapshot["events"] = [{k: v for k, v in e.items() if k != "metrics"} for e in data["events"]]
+    snapshot["has_updates"] = bool(data["updates"])
+    dump(output / "plot-inputs.json", snapshot)
     dump(
         output / "manifest.json",
         dict(
-            source_run=str(Path(path).resolve()),
+            source_run=data["source_run"],
             sources=data["sources"],
             status=data["status"],
             incomplete_events=data["incomplete"],

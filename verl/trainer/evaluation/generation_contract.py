@@ -59,7 +59,7 @@ def engine_contract(rollout, model, input_model):
         raise ValueError("Generation tokenizer IDs exceed model output rows")
     config_file = Path(model.path) / "generation_config.json"
     model_generation = json.loads(config_file.read_text()) if config_file.exists() else {}
-    return {
+    result = {
         "schema": 1,
         "sampler": "mirroropd-crossing-token-v1",
         "support": "tokenizer_ids",
@@ -78,6 +78,28 @@ def engine_contract(rollout, model, input_model):
         "quantization": rollout.get("quantization"),
     }
 
+    from verl.trainer.distillation.token_mapping import TokenIdMapping
+
+    mapping = TokenIdMapping.build(input_model.tokenizer, model.tokenizer)
+    if not mapping.is_identity:
+        result["input_id_mapping_sha256"] = mapping.mapping_id
+    return result
+
 
 def sample_identity(model, outer, dataset, question, index, protocol, contract_id):
-    return identity(["generation-v2", model, outer, dataset, question, index, protocol, contract_id])
+    return identity(["generation-v3", model, outer, dataset, question, index, protocol, contract_id])
+
+
+def prepared_generation_config(rollout, model, input_model):
+    """Share sampler setup and express global stop IDs in the engine's coordinates."""
+    from omegaconf import open_dict
+
+    from verl.experimental.rollout_policy.validation import policy_engine_config
+    from verl.trainer.distillation.token_mapping import TokenIdMapping
+
+    prepared = policy_engine_config(rollout)
+    mapping = TokenIdMapping.build(input_model.tokenizer, model.tokenizer)
+    if not mapping.is_identity:
+        with open_dict(prepared):
+            prepared.stop_token_ids = mapping.tokens(list(prepared.get("stop_token_ids") or []))
+    return prepared

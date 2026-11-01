@@ -22,6 +22,10 @@ top_k: -1
 # Top-p sampling parameter. Default 1.0.
 top_p: 1
 
+# Training-only exact contiguous repetition truncation; null disables.
+# Validation has its own independent val_kwargs.repetition_detection.
+repetition_detection: null
+
 # Whether to enable full determinism for reproducibility in rollout.
 # See https://pytorch.org/docs/stable/notes/randomness.html for details.
 full_determinism: false

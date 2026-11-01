@@ -1,0 +1,229 @@
+{
+  "run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1",
+  "pair": "JustRL-DeepSeek-1.5B -> DeepSeek-R1-Distill-Qwen-1.5B",
+  "training_domain": "math",
+  "completed_outer": 50,
+  "optimizer_steps": 1600,
+  "training_trajectories": 6400,
+  "unique_training_questions": 6400,
+  "completed_events": 51,
+  "invalid_rkl_rows": 0,
+  "benchmark_samples_per_node": 6703,
+  "benchmark_nodes": [
+    0,
+    25,
+    50
+  ],
+  "phase_seconds": {
+    "initial": 4331.340166211128,
+    "teacher": 3228.1078353077173,
+    "finalize": 38.715726517140865,
+    "train": 22782.97828616202,
+    "figures": 23.800338253378868
+  },
+  "rkl": [
+    {
+      "bank": "source_heldout",
+      "domain": "",
+      "before": 0.1068297788817697,
+      "after": 0.0008733009572573274,
+      "reduction_percent": 99.18253040828267,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_initial",
+      "domain": "all",
+      "before": 0.1400931199933638,
+      "after": 0.021789386627468068,
+      "reduction_percent": 84.44649770916642,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_initial",
+      "domain": "math",
+      "before": 0.0947467992761582,
+      "after": 0.0011074049287913242,
+      "reduction_percent": 98.83119542058242,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_initial",
+      "domain": "code",
+      "before": 0.11650476915154409,
+      "after": 0.0048005832554045775,
+      "reduction_percent": 95.87949635850512,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_initial",
+      "domain": "science",
+      "before": 0.22324447058761185,
+      "after": 0.04332685998385035,
+      "reduction_percent": 80.59219121091431,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_initial",
+      "domain": "if",
+      "before": 0.12587644095814107,
+      "after": 0.03792269834182602,
+      "reduction_percent": 69.87307708005757,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_teacher",
+      "domain": "all",
+      "before": 0.11465461150120003,
+      "after": 0.012853891224492556,
+      "reduction_percent": 88.7890325071155,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_teacher",
+      "domain": "math",
+      "before": 0.08695500256035937,
+      "after": 0.004418952940150666,
+      "reduction_percent": 94.9181153354768,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_teacher",
+      "domain": "code",
+      "before": 0.09649919666658409,
+      "after": 0.0031049390369291925,
+      "reduction_percent": 96.78241980847041,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_teacher",
+      "domain": "science",
+      "before": 0.15910227366498475,
+      "after": 0.015717128077956832,
+      "reduction_percent": 90.12136802579468,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_teacher",
+      "domain": "if",
+      "before": 0.11606197311287192,
+      "after": 0.02817454484293353,
+      "reduction_percent": 75.72456844626157,
+      "fixed_trajectories": true
+    },
+    {
+      "bank": "public_current",
+      "domain": "all",
+      "before": 0.1400931199933638,
+      "after": 0.010149009559444238,
+      "reduction_percent": 92.75552606728652,
+      "fixed_trajectories": false
+    },
+    {
+      "bank": "public_current",
+      "domain": "math",
+      "before": 0.0947467992761582,
+      "after": 0.0006019637160248711,
+      "reduction_percent": 99.36466063167967,
+      "fixed_trajectories": false
+    },
+    {
+      "bank": "public_current",
+      "domain": "code",
+      "before": 0.11650476915154409,
+      "after": 0.003156022592657006,
+      "reduction_percent": 97.2910786265309,
+      "fixed_trajectories": false
+    },
+    {
+      "bank": "public_current",
+      "domain": "science",
+      "before": 0.22324447058761185,
+      "after": 0.01448423589514319,
+      "reduction_percent": 93.51193968790422,
+      "fixed_trajectories": false
+    },
+    {
+      "bank": "public_current",
+      "domain": "if",
+      "before": 0.12587644095814107,
+      "after": 0.022353816033951885,
+      "reduction_percent": 82.24146165573157,
+      "fixed_trajectories": false
+    }
+  ],
+  "final_history_rkl": 0.0005478339884323765,
+  "export_audit": {
+    "native_reload_rkl": "passed",
+    "max_question_rkl_error": 0.0,
+    "hf_reload_forward": "not_tested",
+    "outer": 50,
+    "optimizer_steps": 1600,
+    "hf_files": {
+      "chat_template.jinja": "56a1447ad31926fdc21fb07e56e5642bd9c850c4f52d8c8af7bbe5f079a84f5f",
+      "config.json": "280a2026020777f5b5e34fd4cbc7b9944b60e2bd0aefcf55985d370d480ceb62",
+      "generation_config.json": "c3f7b4c9675419fa4517eb6ea7c2f4b7081c95e94a3ae9b63de3f09bc75b8405",
+      "model-00001-of-00002.safetensors": "079e4f7b2e6a7c1baac752541841cf037abc099be0be2398b73392e6ae7904ef",
+      "model-00002-of-00002.safetensors": "c9ee996360b42ce7f6046c3f5fde0068b8d37bd4ee36b20ff439f887fcff6796",
+      "model.safetensors.index.json": "9458c2fe5abe071d3b790cc77e705e9c51b7b0853fa390f89b12c5012e754fae",
+      "tokenizer.json": "f624f8136bc57382156e7595e8ea404a66fbce12e3181b933ec2459bda3a71be",
+      "tokenizer_config.json": "7ba6e036ddf4e7c34649c617fdda41b92a0885b45d5b314120a707e185f5b41d"
+    }
+  },
+  "evidence_sha256": {
+    "acceptance.yaml": "7278c7ad1768d19b98747701a5769602c2b25cdd224f84de61d5bd584fc3a380",
+    "source_hashes.json": "0487cbf7a86995b1538652ffce7804523d97920c54d5b96ca97020d5a01e73b3",
+    "evaluation/manifest.json": "ee64eb8cb00ca17000fdd497743ffbbb5e620d9a191ceba7fc53988c7828e5a6",
+    "figures/manifest.json": "972fb048eb3e209caaa1d02111589fbd0f597f43ff704f38945a27e478400223",
+    "evaluation/events/outer-000/manifest.json": "c06e4b6db8f7e9b6e53ae9316ddfde21951871beefbc235dfc2d7e1e5d50110f",
+    "evaluation/events/outer-001/manifest.json": "bd6e05ebfe32f7011b1c4ec9b4e8a9158cca25de60c9238a28c7c5bcad9dbc33",
+    "evaluation/events/outer-002/manifest.json": "f6e3490b89602903338c0efce983d96c678540be65a24d8d161cee184399923d",
+    "evaluation/events/outer-003/manifest.json": "a2784b528eaae363bc3cc6ddee949d05e542b270467ca736d16daed37f4b6302",
+    "evaluation/events/outer-004/manifest.json": "82bd1054aa738eb4e357c9c005044dafe3f79f390b4cc3d2a2bb066e99707f78",
+    "evaluation/events/outer-005/manifest.json": "843a832f01c2416cd58a678e5ecfd688b6e41e64817fb86d91fff99c61291233",
+    "evaluation/events/outer-006/manifest.json": "1030a9c64ab24c8e295ae815ed771df43b1e0388e4376683f88530c0e96ae520",
+    "evaluation/events/outer-007/manifest.json": "3ce0dc61178cc10e4a69f477dddd78f784e587798fa72673ff908fe2ec7ae8fb",
+    "evaluation/events/outer-008/manifest.json": "3f59cc7ff91f1188ce415a7f94596504fa6613739de7f3988ae70fec0e3fb5ba",
+    "evaluation/events/outer-009/manifest.json": "bd410f576a74ac5329cab95756fced633281653da7182fa0553276573e5763bb",
+    "evaluation/events/outer-010/manifest.json": "b74f9962cb1cbcb707e85765b66f8fe1aefaf61547fa939d5785266b44dfb644",
+    "evaluation/events/outer-011/manifest.json": "58e4ca13d285cb3c2e7a7f4de8a36918582c7e3b8b1e9b89b7748bd55796902f",
+    "evaluation/events/outer-012/manifest.json": "d8dc6d0822fbb61696914fec085284181612ed48e0f079fe392eaa206a962bed",
+    "evaluation/events/outer-013/manifest.json": "6ac63f7749d54a3184293924c73d2fdca7ffd03587ee1ea6ec0bdee39c598c4c",
+    "evaluation/events/outer-014/manifest.json": "d112c8808acfd91e8f83bee413ee24e863b4678eae30990b530d982354e73a0b",
+    "evaluation/events/outer-015/manifest.json": "bbe74a67f70592be7462c8de25c1b5c3133809f0c43187925d48c070e5a3f602",
+    "evaluation/events/outer-016/manifest.json": "68e2d8aa41360b0b511a758263d7adebf2fccd97a147a02b6b74eb59ee1e5714",
+    "evaluation/events/outer-017/manifest.json": "e4d68ca8b369b86e64511a385e6f275a35e8d5039b91a22ef105422de6970f48",
+    "evaluation/events/outer-018/manifest.json": "0219bb70c395fd2a3fb19e13b47559bdc1875c8d8762a2b45001a63ed8e9e9cc",
+    "evaluation/events/outer-019/manifest.json": "20983666d432f28eb7a7883964192a0151dc83d23461579661277dcd8ddd2aba",
+    "evaluation/events/outer-020/manifest.json": "eda6185ebfb693e952f49937350bae912bc731b092b7b235dbef75e15c9954bc",
+    "evaluation/events/outer-021/manifest.json": "2e1def765d2fbb533215e51dd4919dc95452c1957836398f5a9808fe8b07599a",
+    "evaluation/events/outer-022/manifest.json": "4d2d869306b3acbcec7fb895508abdc143a7f18045fbea4c84723695e513d17d",
+    "evaluation/events/outer-023/manifest.json": "ae8bb1a509c3238016068239022bcc758a34b5f943a2e644dd0d48c7be289674",
+    "evaluation/events/outer-024/manifest.json": "213abebaf0abfdce290ba3496258bcf78d26c8f1a69238bf03175fdd9af2f998",
+    "evaluation/events/outer-025/manifest.json": "c6f2d9a6e0527db8a1056f7096472797ee5967b4b75bce34fd7b1029508949ce",
+    "evaluation/events/outer-026/manifest.json": "41a5820036847f9059f1e710570fb831974e867cd46e540702634c704dca7c2e",
+    "evaluation/events/outer-027/manifest.json": "160f39df3b157f32afccd434dae7a192f48475d3e0c7a74bed111684dabc2dc6",
+    "evaluation/events/outer-028/manifest.json": "51472550363bfee9b814f10cf2e2166c739c6cb1fd914558a24ed2571e84096b",
+    "evaluation/events/outer-029/manifest.json": "d88ea31158b71bdb9afa06b81dcc2520a726bc263f66005de3119473dc8780d0",
+    "evaluation/events/outer-030/manifest.json": "ce71de89c25144d5222e9badb773c0d741039a64dee54080c5da061bd0ace82b",
+    "evaluation/events/outer-031/manifest.json": "b61f124c150e2f531ddf238760adbe5e05d80ec4004c2e888129d8b65b217354",
+    "evaluation/events/outer-032/manifest.json": "eddb206ca2deb09497a26af33b1faf8912c29e098f7dbe84fac2b30a7d09d371",
+    "evaluation/events/outer-033/manifest.json": "47fbaa5b4ded59006aa51adbb1e468582ba8db3fc86015593d518dd422cf24f8",
+    "evaluation/events/outer-034/manifest.json": "ad0955fa9a66b246e7deb346a5a189e033bd26539a2beb8766c9bb399873b0fe",
+    "evaluation/events/outer-035/manifest.json": "3976874d056085ef5a3610009f46f093072e03c838657842599749298c2133c4",
+    "evaluation/events/outer-036/manifest.json": "6106bcc4c3f03ff2fad030bc2641324a718f867e7b593a3fbf1f7da3deb8bf4a",
+    "evaluation/events/outer-037/manifest.json": "b5b848892aa4efe677476276d5b1148007622d0c173c5997b52d35537868c0b0",
+    "evaluation/events/outer-038/manifest.json": "ca4506a8e8fa414dfb8dc11feb87750c0f2f60ccdf0c86c18ae351c003edbfa0",
+    "evaluation/events/outer-039/manifest.json": "dc2b9b4ccb9c98b508a9bbe39531c71612127c8c84ebab018576efc1e0354db1",
+    "evaluation/events/outer-040/manifest.json": "15d1e49c019baab06fe1af9db073aa067ebeff317ed60d3caa5a0db541023e89",
+    "evaluation/events/outer-041/manifest.json": "342b84fd3701601b9c7759eecca05ea04bf4b292adf9a4c1ce402c8805ec29fa",
+    "evaluation/events/outer-042/manifest.json": "4f4ec8acb83adc9bee5661cddf7b655f8f8fd08002934fff009b5e3743c23f83",
+    "evaluation/events/outer-043/manifest.json": "a8b5e66fcc90e1aea4d0613ea27cf576c44a43374c5fabeff154c23b360e6405",
+    "evaluation/events/outer-044/manifest.json": "c06ba5d7e84eee5bde500374824cce60533c3bf05cdf2de338562fd03a6eb837",
+    "evaluation/events/outer-045/manifest.json": "18590a79c2738c3b9765176db362a27fc226c88055d8a5e68b317bdecaa130d6",
+    "evaluation/events/outer-046/manifest.json": "4dd9a9364de8c5d8e034ad5987c2af07b53b6705eed389e9b1b9e84e44589886",
+    "evaluation/events/outer-047/manifest.json": "363e9b77da7a6f167057b24833c3a004f4fd9ebf294ba94714086a8c265f3b87",
+    "evaluation/events/outer-048/manifest.json": "4caaa53f0dde9849113211a04983a8f319fffcb2ccef2188bf8ab25560e169a7",
+    "evaluation/events/outer-049/manifest.json": "847638cf8057673f641cf1dde550eaa9ae894d951eebeeccc31cbee8c46745e0",
+    "evaluation/events/outer-050/manifest.json": "d6a60843543f9998b844ac4f4421f2bcd99505dda8b815604a01d74c2bd27e02"
+  }
+}
