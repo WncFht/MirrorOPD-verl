@@ -1,39 +1,26 @@
 # 外部研究与来源
 
-这里维护论文、公开源码审阅及模型卡原文，明确版本与核验范围；不将外部结果计入本项目已完成实验。
+本目录整理论文、公开实现与模型卡，记录版本、设置、原文位置和适用范围。项目自己的结果见[实验研究](../experiments/README.md)，数学推导见[理论](../theory/README.md)，当前接口见[工程](../infra/README.md)。
 
-- `learning-signal/`：估计器、支持集与陈旧数据研究。
-- `teacher-transfer/`、`transfer-generalization/`：师生谱系、能力获取及 SFT/RL 相关研究。
-- `optimization/`：数值精度与优化文献。
-- `rollout-policy/`：生成分布设计的原始检索与数值参考。
-- `infra/`：公开工程实现及后端审阅。
+## 按问题阅读
 
-公开模型的训练链见[统一模型介绍](../settings/模型与师生配对.md)；Semi-OPD 配对数据及历史候选设计见[论文配对证据](teacher-transfer/model-pairing-reference.md)。
+| 读者问题                          | 资料与覆盖范围                                                                                                                                                                 |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Full-RKL 怎样归一化               | [OPD 消融与 verl 平均方式对照](learning-signal/2026-10-31-Full-RKL的平均方式与MOPD及verl实现对照.md)：词表求和、token/回答平均、多卡分母，以及 DAPO、Dr. GRPO 的相关证据       |
+| 蒸馏边界如何设计配对与预算        | [论文对照与预算依据](teacher-transfer/2026-10-28-蒸馏边界实验的论文对照与预算依据.md)：配对实验、早期分化、step 含义和原始检索                                                 |
+| 选择哪些评测领域与 benchmark      | [评测领域与泛化基准](teacher-transfer/2026-10-30-OPD评测领域与泛化迁移基准调研.md)：14 篇核验样本的编码、领域覆盖与候选任务                                                    |
+| 如何设置采样次数、长度和 RKL 银行 | [四域正确率与银行生成](teacher-transfer/2026-10-31-四域正确率评测与RKL银行生成协议调研.md)：逐 bench 的 n、accuracy 全量产物、固定 RKL 子集，以及公共 32K 的依据与成本         |
+| SFT/RL 的迁移和吸收有哪些解释     | [泛化迁移问题综述](transfer-generalization/2026-10-31-泛化迁移研究问题与证据综述.md)：围绕 9 个问题比较新能力、知识使用、跨域、可学习性、状态来源、初始化、多教师和证据判别    |
+| 相对策略变化有哪些方法            | [Delta OPD 分类与证据](teacher-transfer/2026-10-31-Delta-OPD论文分类与研究问题综述.md)：15 篇主线，涵盖不同师生关系、输出/表示/梯度方法与解码前驱                              |
+| 训练和评估采用谁的 rollout        | [Rollout 来源与分布指标](teacher-transfer/2026-10-31-OPD的Rollout来源与分布评估指标调研.md)：12 篇论文与 1 篇技术文章，区分固定前缀拟合、当前行为、教师覆盖和任务能力          |
+| 同家族尺寸如何影响蒸馏            | [2609.32722 图解笔记](teacher-transfer/2026-10-31-同家族OPD缩放规律精读与实验启发.md)：七张原图、三个 RQ、策略位移与拟合残差                                                   |
+| 后期拟合与任务成绩是否同步        | [Vanilla OPD 曲线核查](teacher-transfer/2026-10-31-VanillaOPD后期拟合与任务成绩核查.md)：2609.32722 的 25 组峰值/末值、对 S0 的 KL、训练 proxy 与 teacher-validation KL        |
+| Gold score 指什么                 | [Gold/proxy 与奖励过优化](teacher-transfer/2026-10-31-Gold-score的来源与奖励过优化研究脉络.md)：术语和研究沿革；平方根 KL 命题与反例见[数学推导](../theory/accuracy-and-kl.md) |
+| 怎样区分拟合、留出验证与外推      | [缩放律历史与方法](teacher-transfer/2026-10-31-缩放律拟合的历史方法与蒸馏应用.md)：13 篇主线工作与蒸馏应用                                                                     |
+| 公开模型如何构成阶段对照          | [模型来源与训练链](../settings/模型与师生配对.md)；[论文配对证据](teacher-transfer/model-pairing-reference.md)保存 Semi-OPD 配对数据及历史候选设计                             |
 
-Full-RKL 的归一化见 [OPD 消融与 verl 平均方式对照](learning-signal/2026-10-31-Full-RKL的平均方式与MOPD及verl实现对照.md)：区分词表求和、token 平均、回答平均，以及多卡与 micro-batch 的全局分母；比较 OPD 归一化消融与 DAPO、Dr. GRPO 的相关证据。
+## 资料归属与维护
 
-师生迁移研究可从[蒸馏边界的论文对照与预算依据](teacher-transfer/2026-10-28-蒸馏边界实验的论文对照与预算依据.md)进入：已有配对实验、早期分化、step 含义，以及完整原始检索记录。
+`learning-signal/` 保存估计器、支持集与陈旧数据研究；`teacher-transfer/` 和 `transfer-generalization/` 保存谱系、能力获取与迁移研究；`optimization/` 保存精度与优化文献；`rollout-policy/` 保存生成分布研究；`infra/` 保存公开工程实现及后端审阅。
 
-选择后续评测任务见[OPD 评测领域与泛化迁移基准调研](teacher-transfer/2026-10-30-OPD评测领域与泛化迁移基准调研.md)：14 篇核验样本的逐篇编码、领域覆盖统计、泛化轴与 benchmark 候选。
-
-Benchmark 采样次数、解码参数、回答预算与初始化银行生成见[四域正确率评测与 RKL 银行生成协议调研](teacher-transfer/2026-10-31-四域正确率评测与RKL银行生成协议调研.md)：比较逐 bench 的 n，区分 accuracy 全部产物与固定 RKL 子集，并记录已选择的公共 32K 与常规 n 的证据及成本。
-
-深入研究迁移机制见[泛化迁移的 Research Question 综述](transfer-generalization/2026-10-31-泛化迁移研究问题与证据综述.md)：围绕 9 个问题比较 SFT/RL 泛化条件、新能力、知识使用、跨域迁移、教师可学习性、状态来源、初始化、多教师整合与证据判别；逐篇设置及新增追问证据分别归入支撑页面。
-
-相对策略变化专题见[Delta OPD 的分类、研究问题与证据](teacher-transfer/2026-10-31-Delta-OPD论文分类与研究问题综述.md)：15 篇主线覆盖 weak-to-strong、strong-to-weak、同尺寸、跨家族、多教师与自身增量，另区分条件对比、表示/梯度方法及解码前驱。
-
-项目自己的数学推导归[theory](../theory/README.md)，实验计划与结果归[experiments](../experiments/README.md)，当前接口归[infra](../infra/README.md)。第三方来源快照保持原文，不因文档重构改写内容。
-
-训练与评估的 rollout／指标选择见[OPD 逐篇调研](teacher-transfer/2026-10-31-OPD的Rollout来源与分布评估指标调研.md)：12 篇论文与 1 篇技术文章，区分固定前缀拟合、当前行为、教师覆盖及任务能力，并链接待评审协议。
-
-同家族尺寸规律的单篇精读见[2609.32722 图解笔记](teacher-transfer/2026-10-31-同家族OPD缩放规律精读与实验启发.md)：七张论文原图、三个 RQ、策略位移与拟合残差的区别，以及对我们实验的启发。
-
-Gold score 的术语和研究沿革见[gold/proxy 与奖励过优化](teacher-transfer/2026-10-31-Gold-score的来源与奖励过优化研究脉络.md)，相关平方根 KL 命题及反例见[数学推导](../theory/accuracy-and-kl.md)。
-
-理解 predicted、拟合验证与缩放规律的研究发展，见[缩放律拟合的历史、方法与蒸馏应用](teacher-transfer/2026-10-31-缩放律拟合的历史方法与蒸馏应用.md)：13 篇主线工作，以及如何区分全样本拟合、留尺寸验证和真正外推。
-
-2609.32722 的公开曲线与 checkpoint 数据核查见[Vanilla OPD 后期拟合与任务成绩](teacher-transfer/2026-10-31-VanillaOPD后期拟合与任务成绩核查.md)：25 组峰值／末值、对 S0 的 KL、训练 proxy 与 teacher-validation KL 的可用性。
-
-## 维护方式
-
-问题综述说明外部证据的关系与分歧，逐篇证据保存版本、设置、限制和原文位置，sources/data 保存原始来源与检索输出。相同论文可以支持多个主题，完整事实表优先引用既有证据；不强制每篇论文单独建文件。项目当前预算和执行选择由研究协议维护，当前接口由 infra 维护。文献中的早期项目建议保留当时范围，不作为新的默认设置或运行清单。
+问题综述解释外部证据的关系与分歧，逐篇证据保存完整设置及原文位置，`sources/`、`data/` 保存冻结来源和检索输出。相同论文可以支持多个主题，完整事实表优先引用既有证据，按内容需要决定是否单独成篇。项目当前预算和执行选择由研究协议维护，文献中的早期建议保留当时范围。
