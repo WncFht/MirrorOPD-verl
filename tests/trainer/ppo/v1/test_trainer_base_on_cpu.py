@@ -249,6 +249,7 @@ def test_update_actor_passes_score_centering_flag(score_centering):
     trainer = _StubTrainer.__new__(_StubTrainer)
     trainer.config = OmegaConf.create(
         {
+            "trainer": {},
             "actor_rollout_ref": {
                 "actor": {
                     "ppo_mini_batch_size": 2,
@@ -260,7 +261,7 @@ def test_update_actor_passes_score_centering_flag(score_centering):
                     "policy_loss": {"rollout_correction": {"score_centering": score_centering}},
                 },
                 "rollout": {"n": 4, "temperature": 1.0},
-            }
+            },
         }
     )
     trainer.actor_rollout_wg = MagicMock()
@@ -274,9 +275,11 @@ def test_update_actor_passes_score_centering_flag(score_centering):
 
 def _progress_trainer():
     trainer = _StubTrainer.__new__(_StubTrainer)
+    trainer.readout_callback = None
     trainer.actor_optimizer_step_attempts = trainer.actor_optimizer_step = 0
     trainer.config = OmegaConf.create(
         {
+            "trainer": {},
             "actor_rollout_ref": {
                 "actor": {
                     "ppo_mini_batch_size": 64,
@@ -288,7 +291,7 @@ def _progress_trainer():
                     "policy_loss": {},
                 },
                 "rollout": {"n": 1, "temperature": 1.0},
-            }
+            },
         }
     )
     trainer.actor_rollout_wg = MagicMock()
@@ -488,3 +491,16 @@ def test_variance_proxy_uses_existing_opt_in_and_actual_task_signal():
     assert trainer._metrics_variance_enabled()
     trainer.config.algorithm = {"rollout_correction": {"bypass_mode": True}}
     assert not trainer._metrics_variance_enabled()
+
+
+def test_native_evaluation_uses_its_own_questions_without_legacy_val_loader():
+    trainer = _training_only_trainer()
+    trainer.config.trainer.update({"val_before_train": True, "evaluation": {"source_file": "source.parquet"}})
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.create_rl_dataset", return_value=[{}] * 64) as dataset,
+        patch("verl.trainer.ppo.v1.trainer_base.create_rl_sampler", return_value=None),
+        patch("verl.trainer.ppo.v1.trainer_base.StatefulDataLoader") as loader,
+    ):
+        trainer._init_dataloader()
+    assert dataset.call_count == loader.call_count == 1
+    assert trainer.val_dataset == [] and trainer.val_dataloader is None

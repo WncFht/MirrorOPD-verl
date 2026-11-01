@@ -59,6 +59,7 @@
 # E44-E47,E50-E53  16     256    4096      1e-6    32/128     no
 # E48-E49          16     256    4096      1e-6    32/64      yes
 # E55-E62          16     100    1600      1e-6    10/-1      no
+# E63-E68          16     40     640       1e-6    -1/-1      yes
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
 # 编号别名：E21=E15; E22=E13。
@@ -78,6 +79,17 @@
 # 不保存任何 checkpoint（save_freq=-1，包括最后一步）；E54 保留原 7k/旧前缀协议。
 #
 # E59–E62：分别沿用 E55–E58 的模型、目标和预算，改用已验收的 EOS precompute_fused/chunk512；actor/anchor 显式 bf16，完整诊断保留。旧 E55–E58 默认不变。
+#
+# E63–E68：Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507，六种前缀。
+# Preset  Rollout
+# E63     current
+# E64     initial
+# E65     teacher
+# E66     logit fusion
+# E67     probability fusion
+# E68     batch fusion
+# 默认每实验8卡；single用8个TP1，fusion用4个TP2；全局batch64、40 outer/reuse16。fusion 每副本并发16/每卡KV24 GiB，current+评估并发16/KV64 GiB；计算token budget32768；shared_sync保持已支持的参数/优化器卸载。
+# 采用main统一原生评估与连续调度；QWEN_EVAL_ROOT 指定新银行。旧HF评估不可混接；八卡性能须实测。
 #
 # E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。
 # END GENERATED EXPERIMENT OVERVIEW

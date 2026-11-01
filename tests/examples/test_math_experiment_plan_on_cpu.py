@@ -242,3 +242,75 @@ def test_fused_eos_presets_preserve_scientific_protocol(name, reference):
     actual = plan([name])
     assert actual.environment["MIRROR_DIAGNOSTICS"] == "True"
     assert actual.environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[151643,151645]"
+
+
+@pytest.mark.parametrize("number,arm", [(63, "S"), (64, "S0"), (65, "T"), (66, "LM"), (67, "PM"), (68, "TM")])
+def test_qwen_prefix_eight_gpu_defaults(number, arm):
+    result = plan([f"E{number}"])
+    assert planner.PRESETS[f"E{number}"].rollout_arm == arm
+    assert result.environment["STUDENT_GPUS"] == "8"
+    assert result.environment["ROLLOUT_MAX_NUM_SEQS"] == "16"
+    assert result.environment["FUSION_KV_BYTES"] == str(24 * 2**30)
+    assert result.environment["PREFIX_SINGLE_KV_BYTES"] == str(64 * 2**30)
+    assert result.environment["PPO_MAX_TOKEN_LEN_PER_GPU"] == "32768"
+    assert result.environment["PARAM_OFFLOAD"] == result.environment["OPTIMIZER_OFFLOAD"] == "True"
+    assert result.environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[]"
+    assert "trainer.total_training_steps=40" in result.arguments
+    assert result.environment["PPO_EPOCHS"] == "16"
+    assert "rollout_policy.execution.tensor_parallel_size=2" in result.arguments
+    assert "actor_rollout_ref.rollout.stop_token_ids=[151645,151643]" in result.arguments
+    assert "+data.apply_chat_template_kwargs.enable_thinking=False" in result.arguments
+
+
+def test_qwen_resource_overrides_and_method_precedence():
+    result = plan(
+        ["E66", "--precision", "bf16", "rollout_policy.execution.max_num_seqs=3"],
+        {"STUDENT_GPUS": "2", "CUDA_VISIBLE_DEVICES": "2,3", "FUSION_KV_BYTES": "4294967296"},
+    )
+    assert result.environment["FUSION_KV_BYTES"] == "4294967296"
+    assert result.arguments[-1] == "rollout_policy.execution.max_num_seqs=3"
+    precisions = [v for v in result.arguments if v.startswith("actor_rollout_ref.actor.fsdp_config.forward_precision=")]
+    assert precisions[-1].endswith("=bf16")
+    with pytest.raises(ValueError, match="distinct physical"):
+        plan(["E66"], {"STUDENT_GPUS": "8", "CUDA_VISIBLE_DEVICES": "6,7"})
+
+
+def test_qwen_native_banks_are_required_only_for_actual_launch(tmp_path):
+    import json
+
+    from examples.mirroropd.launchers.qwen_prefix import preflight
+
+    root = tmp_path / "native"
+    preflight({"CONFIG_ONLY": "1"})
+    preflight({"DRY_RUN": "1"})
+    with pytest.raises(ValueError, match="completed native banks"):
+        preflight({"QWEN_EVAL_ROOT": str(root)})
+    (root / "bootstrap").mkdir(parents=True)
+    (root / "bootstrap/manifest.json").write_text(json.dumps({"status": "complete"}))
+    preflight({"QWEN_EVAL_ROOT": str(root)})
+
+
+def test_qwen_bootstrap_resources_keep_capture_shapes_within_replica_limit(tmp_path):
+    from omegaconf import OmegaConf
+
+    from examples.mirroropd.research.studies.prefix_fusion.prepare_native import configs
+
+    source = tmp_path / "input.yaml"
+    OmegaConf.save(
+        OmegaConf.create(
+            {
+                "actor_rollout_ref": {
+                    "rollout": {
+                        "max_num_seqs": 16,
+                        "cudagraph_capture_sizes": [1, 2, 4, 8, 16],
+                        "engine_kwargs": {"vllm": {"kv_cache_memory_bytes": 0}},
+                    }
+                }
+            }
+        ),
+        source,
+    )
+    configs(source, tmp_path / "configs")
+    teacher = OmegaConf.load(tmp_path / "configs/teacher.yaml").actor_rollout_ref.rollout
+    assert teacher.max_num_seqs == max(teacher.cudagraph_capture_sizes) == 8
+    assert teacher.engine_kwargs.vllm.kv_cache_memory_bytes == 40 * 2**30

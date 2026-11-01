@@ -119,6 +119,9 @@ class EvaluationCoordinator:
                 "bootstrap_sha256": file_sha256(self.bootstrap.manifest_path),
                 "contract_sha256": identity(contract),
                 "configuration": dataclasses.asdict(self.options),
+                "training_rollout_policy": OmegaConf.to_container(config.rollout_policy, resolve=True)
+                if OmegaConf.select(config, "rollout_policy") is not None
+                else None,
             },
         )
         self.batches, self.baselines = {}, {}
@@ -160,7 +163,9 @@ class EvaluationCoordinator:
                 dataset="training",
                 domain=self.options.training_domain,
                 sample_index=0,
-                producer="current_student",
+                producer="current_student"
+                if getattr(getattr(trainer, "rollout_policy", None), "default_path", True)
+                else f"policy_{trainer.rollout_policy.mode}",
                 bank="history",
                 prompt_tokens=len(row["prompt_ids"]),
                 response_tokens=len(row["response_ids"]),
@@ -214,7 +219,9 @@ class EvaluationCoordinator:
         )
         service = trainer.rollout_service
         if not hasattr(service, "ensure_current"):
-            raise ValueError("Unified evaluation requires the default synchronous rollout service")
+            raise ValueError(
+                "Unified evaluation requires a synchronous service with pure-current evaluation and parking"
+            )
         event = ArtifactStore.create(
             self.store.root / f"events/outer-{outer:03d}",
             kind="evaluation_event",

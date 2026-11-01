@@ -78,14 +78,27 @@ class PolicyRolloutService(RolloutService):
         from .runtime import RolloutRuntime
 
         self.runtime = RolloutRuntime(trainer)
+        self.resident_version = None
+
+    def ensure_current(self, version):
+        """Expose a pure-current evaluation engine independently of the training policy."""
+        if self.resident_version != version:
+            self.runtime.sync_validation(version)
+            self.resident_version = version
+
+    def park(self):
+        self.runtime.sleep_validation()
+        self.resident_version = None
 
     def validation_begin(self):
         self.runtime.sync_validation()
 
     def validation_end(self):
-        self.runtime.sleep_validation()
+        self.park()
 
     def submit(self, batch):
+        if self.resident_version is not None:
+            self.park()
         trainer = self.trainer
         tags = [
             {"is_prompt": True, "status": "pending", "global_steps": trainer.global_steps} for _ in range(len(batch))

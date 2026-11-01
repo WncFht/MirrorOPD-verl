@@ -2,6 +2,10 @@
 
 日常训练使用 `examples/mirroropd/run_math_opd_ablation_fsdp2.sh`。模型引用与组合含义见[统一语义](2026-10-31-Rollout统一模型来源与组合语义.md)，分阶段验证见[实施计划](2026-10-31-Rollout统一接口实施计划.md)。日常从主仓库启动，开发使用仓库内 `.worktrees/rollout-maintenance`；版本和发布回执见[工作区说明](workspaces.md)。
 
+## 编号实验入口
+
+Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507 的新八卡对照使用公共入口的 E63–E68：current、initial、teacher、logit、probability、batch fusion。编号映射、资源默认值、原生银行准备和与旧科学读出的差别见[训练设置](../../../settings/训练设置.md#e63e68qwen3-八卡前缀对照与原生评估)。新入口复用 main 的原生评估；已在运行的旧六组继续冻结版本，不原地切换。
+
 ## 配置入口
 
 下面的命令通过 `CONFIG_ONLY=1` 解析最终配置，不分配 GPU。真实运行时去掉该变量，并设置分配给作业的 `CUDA_VISIBLE_DEVICES`、`STUDENT_GPUS` 和持久环境的 `PYTHON_BIN`。共享机器使用已有资源保护入口管理 GPU 锁；训练入口本身不选择或抢占 GPU。
