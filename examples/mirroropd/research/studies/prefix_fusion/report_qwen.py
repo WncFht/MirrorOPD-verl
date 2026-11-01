@@ -70,7 +70,9 @@ class Evidence:
             yield from (json.loads(line) for line in stream if line.strip())
 
 
-def accuracy(evidence, paths):
+def accuracy(evidence, paths, *, endpoints=ENDPOINTS, comparisons=None):
+    if comparisons is None:
+        comparisons = [("LM", "PM"), ("LM", "initial"), ("PM", "initial")]
     scores, stats, prompt_rows = {}, {}, []
     for endpoint, path in paths.items():
         receipt = evidence.read(path / "complete.json")
@@ -106,21 +108,21 @@ def accuracy(evidence, paths):
         )
     assert all(set(s) == set(scores["initial"]) for s in scores.values())
     rng = np.random.default_rng(20261101)
-    draws = np.zeros((10000, len(ENDPOINTS)))
+    draws = np.zeros((10000, len(endpoints)))
     for dataset in DATASETS:
         keys = sorted(k for k in scores["initial"] if k[0] == dataset)
-        values = np.array([[scores[name][k] for name in ENDPOINTS] for k in keys])
+        values = np.array([[scores[name][k] for name in endpoints] for k in keys])
         for start in range(0, len(draws), 500):
             indices = rng.integers(len(keys), size=(500, len(keys)))
             draws[start : start + 500] += values[indices].mean(axis=1) / len(DATASETS)
-    for index, name in enumerate(ENDPOINTS):
+    for index, name in enumerate(endpoints):
         stats[name]["macro5_ci95"] = np.quantile(draws[:, index], [0.025, 0.975]).tolist()
     differences = {}
-    for left, right in [("LM", "PM"), ("LM", "initial"), ("PM", "initial")]:
+    for left, right in comparisons:
         differences[f"{left}-{right}"] = dict(
             estimate=stats[left]["macro5"] - stats[right]["macro5"],
             ci95=np.quantile(
-                draws[:, ENDPOINTS.index(left)] - draws[:, ENDPOINTS.index(right)], [0.025, 0.975]
+                draws[:, endpoints.index(left)] - draws[:, endpoints.index(right)], [0.025, 0.975]
             ).tolist(),
         )
     return stats, differences, prompt_rows
