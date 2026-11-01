@@ -161,7 +161,8 @@ def _gloo_worker(rank, path):
         output = engine_workers.TrainingWorker._postprocess_output(
             worker,
             {
-                "metrics": {**local, "lr_used": 0.01, "_optimizer_step_applied": True},
+                "metrics": {**local, "lr_used": 0.01},
+                "optimizer_step_applied": True,
                 "loss": [float(rank + 1)],
                 "model_output": {},
             },

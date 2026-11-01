@@ -1251,7 +1251,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
     def _full_vocab_output(self, micro_batch, model_inputs, teacher):
         from verl.trainer.distillation.full_vocab import full_vocab_objective_result
         from verl.trainer.distillation.profiling import full_kl_range
-        from verl.utils.metric.position import position_statistics, relative_position_bins
+        from verl.utils.metric.position import relative_position_bins
         from verl.workers.utils.padding import prediction_positions, response_target_coordinates
 
         if not self.model_config.enable_full_vocab:
@@ -1351,46 +1351,27 @@ class FSDPEngineWithLMHead(FSDPEngine):
                         backend=config.backend,
                         token_chunk=config.token_chunk_size,
                         vocab_chunk=config.vocab_chunk_size,
-                        termination_token_ids=getattr(config, "termination_token_ids", ()),
-                        forward_teacher_support=getattr(config, "forward_teacher_support", "equal"),
+                        termination_token_ids=config.termination_token_ids,
+                        forward_teacher_support=config.forward_teacher_support,
                     )
 
             # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
             with full_kl_range("head_loss"):
                 result = head(selected, full_vocab_callback=compute)
-            if spec.teacher_only_forward_kl:
-                model_output = {
-                    "full_forward_kl_sum": result.loss_sum,
-                    "full_forward_kl_count": packed.numel(),
-                    "forward_statistics": {k: v.sum() for k, v in result.token_diagnostics.items()},
-                }
-                prefix = "full_forward_kl"
-            elif spec.teacher_only_kl:
-                model_output = {"full_kl_sum": result.loss_sum, "full_kl_count": packed.numel()}
-                if getattr(config, "termination_token_ids", ()):
-                    model_output["termination_kl_sum"] = result.loss_sum
-                    model_output["full_kl_sum"] = result.token_objective.sum()
-                prefix = "full_kl"
-            else:
-                model_output = {
-                    "mirror_objective_sum": result.loss_sum,
-                    "mirror_count": packed.numel(),
-                    "mirror_statistics": {k: v.sum() for k, v in result.token_diagnostics.items()},
-                }
-                prefix = "mirror"
+            from verl.trainer.distillation.output import FullVocabOutput
+
+            bins = None
             if result.token_objective is not None:
-                # Prediction-state indices become target coordinates in the original
-                # response. Masked gaps are retained; prompt tokens never enter bins.
+                # Preserve response coordinates, including masked gaps.
                 targets, lengths = response_target_coordinates(
                     micro_batch["input_ids"], micro_batch["responses"], positions
                 )
                 bins = relative_position_bins(targets, lengths)
-                sums, counts = position_statistics(result.token_objective, bins)
-                model_output.update({f"{prefix}_position_sums": sums, f"{prefix}_position_counts": counts})
-                if spec.teacher_only_forward_kl:
-                    reverse_sums, _ = position_statistics(result.token_diagnostics["full_kl"], bins)
-                    model_output.update(full_kl_position_sums=reverse_sums, full_kl_position_counts=counts)
-            return model_output
+            return {
+                "full_vocab": FullVocabOutput.from_result(
+                    result, spec, packed.numel(), termination=bool(config.termination_token_ids), bins=bins
+                )
+            }
 
         with full_kl_range(f"{capture}_forward" if capture else "student_forward"):
             return self.module(**model_inputs, use_cache=False, full_vocab_callback=output)

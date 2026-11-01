@@ -1,6 +1,6 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Update facts and the boundary for legacy worker metric representations.
+"""Explicit update facts and reduction of worker observations.
 
 Spatial reduction happens here after gathering DP partitions. Update time is
 never reduced into an outer mean, and scheduler advancement is not inferred.
@@ -26,20 +26,13 @@ def execution_consensus(statuses, dp_size):
     return statuses[0]
 
 
-def consume_legacy_status(metrics, dp_size):
-    status = metrics.pop("_optimizer_step_applied", None)
-    if status is None:
-        return None
-    return execution_consensus(status if isinstance(status, list) else [status], dp_size)
-
-
 def take_engine_execution(output, metrics):
-    """The only engine-boundary fallback for old metric-carried execution facts."""
-    explicit = output.pop("optimizer_step_applied", _MISSING)
-    legacy = metrics.pop("_optimizer_step_applied", _MISSING)
-    if explicit is not _MISSING and legacy is not _MISSING and explicit != legacy:
-        raise RuntimeError("Conflicting engine optimizer execution facts")
-    value = explicit if explicit is not _MISSING else (None if legacy is _MISSING else legacy)
+    """Consume the engine's explicit execution fact; metrics never carry control state."""
+    if "_optimizer_step_applied" in metrics:
+        raise RuntimeError("Move optimizer execution facts out of metrics into optimizer_step_applied")
+    value = output.pop("optimizer_step_applied", _MISSING)
+    if value is _MISSING:
+        raise RuntimeError("Engine must report optimizer_step_applied (None means explicitly unknown)")
     if value is not None and type(value) is not bool:
         raise RuntimeError(f"Invalid local optimizer execution fact: {value}")
     return value
@@ -60,21 +53,19 @@ class UpdateResult:
     metrics: dict[str, Any]
 
     @classmethod
-    def from_worker_output(cls, output, dp_size):
+    def from_worker_output(cls, output):
         metrics = dict(tu.get(output, "metrics"))
-        explicit = tu.get(output, "optimizer_step_applied", default=_MISSING)
-        if explicit is _MISSING:
-            applied = consume_legacy_status(metrics, dp_size)
-        else:
-            applied = execution_consensus([explicit], 1)
-            if "_optimizer_step_applied" in metrics and consume_legacy_status(metrics, dp_size) != applied:
-                raise RuntimeError("Conflicting worker optimizer execution facts")
-        return cls(applied, metrics)
+        if "_optimizer_step_applied" in metrics:
+            raise RuntimeError("Worker metrics must not carry optimizer execution facts")
+        applied = tu.get(output, "optimizer_step_applied", default=_MISSING)
+        if applied is _MISSING:
+            raise RuntimeError("Worker must report optimizer_step_applied (None means explicitly unknown)")
+        return cls(execution_consensus([applied], 1), metrics)
 
 
 def _flatten(values):
     for value in values:
-        if isinstance(value, (list, tuple)):
+        if isinstance(value, list | tuple):
             yield from _flatten(value)
         else:
             yield value

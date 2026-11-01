@@ -124,11 +124,10 @@ def test_real_iterator_counts_epochs_and_minibatches_without_dp_multiplier():
             # Unequal token counts per rank/micro-batch; both counts traverse the
             # production aggregation, and their common averaging factors cancel.
             metrics = {
-                "_optimizer_step_applied": [True] * dp_size,
                 "distillation/token_observations": [micro_counts(r + 1, 3) for r in range(dp_size)],
                 "distillation/ppo_clip_count": [micro_counts(1, 0) for r in range(dp_size)],
             }
-            return tu.get_tensordict({}, {"metrics": metrics})
+            return tu.get_tensordict({}, {"metrics": metrics, "optimizer_step_applied": True})
 
         worker.train_batch = train_batch
         data = TensorDict({"sample": torch.arange(batch_size // dp_size)}, batch_size=[batch_size // dp_size])
@@ -149,8 +148,7 @@ def test_worker_counts_skipped_and_unknown_updates(monkeypatch):
 
         def train_batch(data, iterator=iterator):
             status = next(iterator)
-            metrics = {} if status is None else {"_optimizer_step_applied": status}
-            return tu.get_tensordict({}, {"metrics": metrics})
+            return tu.get_tensordict({}, {"metrics": {}, "optimizer_step_applied": status})
 
         worker.train_batch = train_batch
         data = TensorDict({"sample": torch.arange(3)}, batch_size=[3])
@@ -163,10 +161,10 @@ def test_worker_counts_skipped_and_unknown_updates(monkeypatch):
 def test_incomplete_or_disagreeing_rank_status_is_an_error():
     import pytest
 
-    from verl.workers.engine_workers import _consume_optimizer_step_status
+    from verl.workers.update_records import execution_consensus
 
     for statuses in ([True, False], [True], [True, None], [1, 1]):
         with pytest.raises(RuntimeError):
-            _consume_optimizer_step_status({"_optimizer_step_applied": statuses}, 2)
-    assert _consume_optimizer_step_status({}, 2) is None
-    assert _consume_optimizer_step_status({"_optimizer_step_applied": [False, False]}, 2) is False
+            execution_consensus(statuses, 2)
+    assert execution_consensus([None, None], 2) is None
+    assert execution_consensus([False, False], 2) is False

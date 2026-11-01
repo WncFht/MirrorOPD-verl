@@ -7,9 +7,6 @@ from pathlib import Path
 
 from safetensors import safe_open
 
-# Compatibility import for existing kernel/probe callers. Layout lives with padding.
-from verl.workers.utils.padding import prediction_positions  # noqa: F401
-
 
 class FrozenTeacherHead:
     """Load a Qwen safetensors output weight; never register on the student."""

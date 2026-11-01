@@ -1,3 +1,5 @@
+# Copyright 2026 MirrorOPD-verl contributors
+# SPDX-License-Identifier: Apache-2.0
 from types import SimpleNamespace
 
 import pytest
@@ -6,6 +8,7 @@ from tensordict import TensorDict
 
 from verl.trainer.distillation.forward_vocab import forward_rows, full_forward_kl_result
 from verl.trainer.distillation.losses import distillation_loss
+from verl.trainer.distillation.output import FullVocabOutput
 from verl.utils import tensordict_utils as tu
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig, FullVocabConfig
 
@@ -73,7 +76,13 @@ def test_forward_loss_uses_forward_total_and_global_token_weight():
     loss, metrics = distillation_loss(
         SimpleNamespace(loss_agg_mode="token-mean"),
         DistillationConfig(distillation_loss=cfg),
-        dict(full_forward_kl_sum=f, full_forward_kl_count=3, forward_statistics={"full_kl": r}),
+        {
+            "full_vocab": FullVocabOutput.from_result(
+                SimpleNamespace(loss_sum=f, token_objective=None, token_diagnostics={"full_kl": r}),
+                cfg.loss_settings,
+                3,
+            )
+        },
         data,
     )
     loss.backward()

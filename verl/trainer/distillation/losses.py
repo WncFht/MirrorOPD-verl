@@ -32,7 +32,6 @@ from verl.workers.config.distillation_spec import (
     DISTILLATION_SETTINGS_REGISTRY,
     DistillationLossSettings,
     get_distillation_loss_settings,
-    resolve_distillation_spec,
 )
 from verl.workers.utils.loss_context import LossContext
 from verl.workers.utils.losses import ppo_loss
@@ -230,69 +229,17 @@ def distillation_loss(
     """
     assert distillation_config is not None
     loss_config: DistillationLossConfig = distillation_config.distillation_loss
-    spec = getattr(loss_config, "loss_settings", None) or resolve_distillation_spec(loss_config)
-    if "mirror_objective_sum" in model_output:
-        total = model_output["mirror_objective_sum"]
-        count = model_output["mirror_count"]
-        loss = LossContext.from_batch(data, config).normalize_token_sum(total) / spec.eta
-        metrics = {f"distillation/{spec.objective}/objective": Observation.ratio(total.detach() / spec.eta, count)}
-        for name, value in model_output.get("mirror_statistics", {}).items():
-            metrics[f"distillation/{name}"] = Observation.ratio(value, count)
-        if "mirror_position_sums" in model_output:
-            from verl.utils.metric.position import position_observations
-
-            metrics.update(
-                position_observations(
-                    model_output["mirror_position_sums"] / spec.eta,
-                    model_output["mirror_position_counts"],
-                    prefix=f"distillation/{spec.objective}/objective_position",
-                )
-            )
-        return loss, metrics
-    if spec.teacher_only_forward_kl:
-        if config.loss_agg_mode != "token-mean":
-            raise ValueError("full_forward_kl requires token-mean aggregation")
-        total, count = model_output["full_forward_kl_sum"], model_output["full_forward_kl_count"]
-        loss = LossContext.from_batch(data, config).normalize_token_sum(total)
-        metrics = {"distillation/full_forward_kl": Observation.ratio(total.detach(), count)}
-        for name, value in model_output["forward_statistics"].items():
-            metrics[f"distillation/{name}"] = Observation.ratio(value.detach(), count)
-        from verl.utils.metric.position import position_observations
-
-        for prefix in ("full_forward_kl", "full_kl"):
-            if f"{prefix}_position_sums" in model_output:
-                metrics.update(
-                    position_observations(
-                        model_output[f"{prefix}_position_sums"],
-                        model_output[f"{prefix}_position_counts"],
-                        prefix=f"distillation/{prefix}_position",
-                    )
-                )
-        return loss, metrics
+    spec = loss_config.loss_settings
     if spec.payload_kind == "hidden":
-        if config.loss_agg_mode != "token-mean":
-            raise ValueError("full_reverse_kl currently requires token-mean aggregation")
-        total = model_output["full_kl_sum"]
-        count = model_output["full_kl_count"]
-        objective_total = model_output.get("termination_kl_sum", total)
-        loss = LossContext.from_batch(data, config).normalize_token_sum(objective_total)
-        metrics = {"distillation/full_kl": Observation.ratio(total.detach(), count)}
-        if "termination_kl_sum" in model_output:
-            metrics["distillation/termination_equiv_kl"] = Observation.ratio(objective_total.detach(), count)
-            metrics["distillation/eos_identity_kl"] = Observation.ratio(
-                total.detach() - objective_total.detach(), count
-            )
-        if "full_kl_position_sums" in model_output:
-            from verl.utils.metric.position import position_observations
+        from verl.trainer.distillation.output import FullVocabOutput
 
-            metrics.update(
-                position_observations(
-                    model_output["full_kl_position_sums"],
-                    model_output["full_kl_position_counts"],
-                    prefix="distillation/full_kl_position",
-                )
-            )
-        return loss, metrics
+        if config.loss_agg_mode != "token-mean":
+            raise ValueError("Full-vocabulary objectives require token-mean aggregation")
+        output = model_output["full_vocab"]
+        if not isinstance(output, FullVocabOutput):
+            raise TypeError("Full-vocabulary engines must return FullVocabOutput")
+        loss = LossContext.from_batch(data, config).normalize_token_sum(output.objective_sum) / output.divisor
+        return loss, output.observations
     if spec.objective is not None:
         return _mirror_sampled_loss(config, spec, model_output, data)
     if loss_config.policy_loss_mode != "vanilla":
@@ -319,7 +266,6 @@ def distillation_loss(
     if loss_config.use_policy_gradient:
         # Use negative distillation loss as reward, as done by https://thinkingmachines.ai/blog/on-policy-distillation/.
         policy_loss_fn = get_policy_loss_fn(loss_config.policy_loss_mode)
-        policy_config = context.bind_legacy_config(loss_config)
         log_prob = no_padding_2_padding(model_output["log_probs"], data)
         old_log_prob = data["old_log_probs"]
         if old_log_prob.is_nested:
@@ -335,7 +281,8 @@ def distillation_loss(
             advantages=-distillation_losses.detach(),
             response_mask=response_mask,
             loss_agg_mode=loss_agg_mode,
-            config=policy_config,
+            config=loss_config,
+            context=context,
             rollout_is_weights=rollout_is_weights,
         )
         count = response_mask.sum()

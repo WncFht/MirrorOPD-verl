@@ -7,10 +7,11 @@ import torch
 from tensordict import TensorDict
 
 from verl.trainer.distillation.full_vocab import full_reverse_kl
-from verl.trainer.distillation.hidden import prediction_positions
 from verl.trainer.distillation.losses import distillation_loss
+from verl.trainer.distillation.output import FullVocabOutput
 from verl.utils import tensordict_utils as tu
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig
+from verl.workers.utils.padding import prediction_positions
 
 
 @pytest.mark.parametrize("backend", ["dense", "recompute", "cached", "streaming", "precompute", "precompute_fused"])
@@ -78,7 +79,18 @@ def test_global_token_normalization():
     data = TensorDict({}, batch_size=[])
     tu.assign_non_tensor(data, dp_size=2, batch_num_tokens=11)
     total = torch.tensor(7.0, requires_grad=True)
-    loss, _ = distillation_loss(config, distillation, {"full_kl_sum": total, "full_kl_count": 3}, data)
+    loss, _ = distillation_loss(
+        config,
+        distillation,
+        {
+            "full_vocab": FullVocabOutput.from_result(
+                SimpleNamespace(loss_sum=total, token_objective=None, token_diagnostics={}),
+                loss_config.loss_settings,
+                3,
+            )
+        },
+        data,
+    )
     loss.backward()
     assert total.grad.item() == pytest.approx(2 / 11)
     with pytest.raises(ValueError, match="direct loss"):

@@ -25,12 +25,12 @@ from tokenizers.models import WordLevel
 from transformers import AutoModelForCausalLM, PreTrainedTokenizerFast, Qwen2Config, Qwen3Config, Qwen3MoeConfig
 
 from verl.trainer.distillation.full_vocab import full_reverse_kl
-from verl.trainer.distillation.hidden import prediction_positions
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
 from verl.utils.metric.observations import Observation
 from verl.workers.config import DistillationConfig, DistillationLossConfig
 from verl.workers.config.distillation import FullVocabConfig
+from verl.workers.utils.padding import prediction_positions
 
 
 def local_snapshot(value):

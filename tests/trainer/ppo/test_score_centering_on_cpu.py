@@ -487,7 +487,6 @@ def _actor_config(rollout_correction):
         policy_loss=PolicyLossConfig(loss_mode="bypass_mode", rollout_correction=rollout_correction),
         loss_agg_mode="token-mean",
     )
-    config.global_batch_info.update(dp_size=1, batch_num_tokens=None, global_batch_size=None, loss_scale_factor=None)
     return config
 
 

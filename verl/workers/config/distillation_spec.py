@@ -3,7 +3,7 @@
 """Static objective metadata, importable without tensor kernels or worker configs."""
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from verl.base_config import BaseConfig
 
@@ -29,10 +29,8 @@ class MirrorConfig(BaseConfig):
 
 @dataclass
 class DistillationLossSettings(BaseConfig):
-    names: str | list[str] = field(default_factory=list)
-    use_topk: bool = False
-    use_estimator: bool = False
-    payload_kind: str | None = None
+    names: tuple[str, ...] = ()
+    payload_kind: str = "sampled"
     objective: str | None = None
     kappa: float = 0.0
     eta: float = 1.0
@@ -52,23 +50,28 @@ class DistillationLossSettings(BaseConfig):
     def teacher_only_forward_kl(self):
         return self.objective == "forward_kl" and self.payload_kind == "hidden"
 
-    _mutable_fields = {"names"}
+    @property
+    def use_topk(self):
+        return self.payload_kind == "topk"
+
+    @property
+    def use_estimator(self):
+        return self.payload_kind == "sampled"
 
     def __post_init__(self):
-        self.names = [self.names] if isinstance(self.names, str) else self.names
-        if self.payload_kind is None:
-            object.__setattr__(self, "payload_kind", "topk" if self.use_topk else "sampled")
+        names = (self.names,) if isinstance(self.names, str) else tuple(self.names)
+        if not names or any(not isinstance(name, str) or not name for name in names):
+            raise ValueError("Objective metadata requires nonempty registration names")
+        object.__setattr__(self, "names", names)
         if self.payload_kind not in ("sampled", "topk", "hidden"):
             raise ValueError(f"Unknown teacher payload: {self.payload_kind}")
-        if sum([self.use_topk, self.use_estimator, self.payload_kind == "hidden"]) != 1:
-            raise ValueError("Expected exactly one sampled, top-k, or hidden payload")
 
 
 _BUILTINS = (
     DistillationLossSettings(names="full_forward_kl", payload_kind="hidden", objective="forward_kl"),
     DistillationLossSettings(names="full_reverse_kl", payload_kind="hidden", objective="mdpo"),
-    DistillationLossSettings(names="forward_kl_topk", use_topk=True),
-    DistillationLossSettings(names=["kl", "k1", "abs", "mse", "k2", "low_var_kl", "k3"], use_estimator=True),
+    DistillationLossSettings(names="forward_kl_topk", payload_kind="topk"),
+    DistillationLossSettings(names=("kl", "k1", "abs", "mse", "k2", "low_var_kl", "k3"), payload_kind="sampled"),
 )
 DISTILLATION_SETTINGS_REGISTRY = {name: spec for spec in _BUILTINS for name in spec.names}
 
@@ -98,7 +101,6 @@ def resolve_distillation_spec(config) -> DistillationLossSettings:
     return DistillationLossSettings(
         names="mirror",
         payload_kind="hidden" if mirror.estimator == "full_vocab" else "sampled",
-        use_estimator=mirror.estimator == "sampled",
         objective=mirror.objective,
         kappa=mirror.kappa,
         eta=mirror.eta,

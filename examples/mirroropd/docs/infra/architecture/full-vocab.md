@@ -174,3 +174,7 @@ CPU 数学测试不等同于 CUDA BF16/Triton 精度验收。已有 GPU 证据�
 `precompute` 保留高精度 Torch 参考。CUDA fused 路径把非 EOS logits 保持为 FP32，将合并 EOS 的 FP32 主值与逐行 FP64 舍入修正分开保存；相对差分先消去公共偏移，再加入修正，主要归约使用现有稳定 kernel。没有完整词表 FP64 工作区，也没有每块动态布尔压缩。FP16 的预计算梯度仍在 AMP 缩放前保留 FP32。
 
 Teacher-only KL 的 loss 使用合并动作空间，原始 vocabulary KL 指标仍保留原定义；MDPO 的 teacher/anchor/target 指标使用合并动作空间。Torch 诊断使用只返回数值的 `kl_values`；融合诊断继续使用 `gradient=False`。数值与分布式检查入口见[验证矩阵](../numerics/full-vocab/validation.md)。
+
+## 统一训练输出
+
+Engine 的 head 回调将数值结果转换为 [FullVocabOutput](../../../../../verl/trainer/distillation/output.py)，通过唯一的 `model_output["full_vocab"]` 传给 loss。`objective_sum` 保留可微未缩放目标，`divisor` 为规定的 η 或 endpoint 的 1，`observations` 保存已命名的 detached 统计量。原词表 KL、EOS 合并 KL、FKL 的反向 KL 诊断和位置统计保持原义；loss 不再根据旧输出键是否存在选择算法。

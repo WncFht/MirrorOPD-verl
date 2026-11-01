@@ -19,12 +19,12 @@
 | `teacher_hidden/teacher_positions`              | `[n,d_t]`、`[n]`                              | full-vocab teacher engine                                                             | actor 按样本读取；本轮固定                                           |
 | `anchor_hidden/anchor_positions/anchor_version` | `[n,d_s]`、`[n]`、调用标识                    | actor 调用开始时的 no-grad capture，经 TQ 保存                                        | full MDPO eta<1 与所有 BPO；版本和位置均需匹配                       |
 | `engine.mirror_anchor_head`                     | `[V_s,d_s]`                                   | wrapped head callback 内独立复制                                                      | 调用级 holder，未注册为模型参数，不进入 TQ/checkpoint                |
-| `mirror_objective_sum/mirror_count`             | 未除 eta 的标量 sum/有效行数                  | full objective dispatcher                                                             | loss 层只除一次 eta，再沿用全局分母                                  |
+| `full_vocab.objective_sum`                      | 未除 eta 的标量 sum/有效行数                  | full objective dispatcher                                                             | loss 层只除一次 eta，再沿用全局分母                                  |
 | `mirror_statistics`                             | 各诊断的未除 eta 标量 sum                     | engine 汇总 `token_diagnostics`                                                       | loss 层构造全局 ratio 观测；当前没有诊断位置桶                       |
 | `mirror_position_sums/counts`                   | `[10]`，原始 objective sum / 有效 token count | engine 按 response 相对位置分桶                                                       | loss 层对 sums 除 eta；不进入反传                                    |
 | `sample_keys/sample_partition`                  | 样本身份/partition metadata                   | TQ bridge                                                                             | shuffle 后定位 hidden；不参与数值计算                                |
 | `model_output['log_probs']`                     | 完整预测位置，packed/nested                   | 每次 student forward                                                                  | sampled loss；该次 forward 的计算图                                  |
-| `full_kl_sum/full_kl_count`                     | 标量 sum/有效行数                             | Full-KL head 回调                                                                     | 训练归一化与原始 KL 观测                                             |
+| `full_vocab.observations`                       | 标量 sum/有效行数                             | Full-KL head 回调                                                                     | 训练归一化与原始 KL 观测                                             |
 
 `teacher_ids` 保持通用教师输出协议；当前 sampled k1 loss 使用已对齐的 `teacher_logprobs`，不再按 `teacher_ids` 做一次 gather。当前 student 与 teacher 的 sampled log-prob 都已由各自 forward 按下一 token target 取出。
 
@@ -140,7 +140,7 @@ $$
 
 ## 配置兼容边界
 
-[LossContext.bind_legacy_config](../../../../../verl/workers/utils/loss_context.py) 为旧 policy loss 构造浅复制配置，只替换调用级 `global_batch_info`，原配置不随 batch 修改。新增目标直接接收上下文即可，不应将运行时分母塞进共享静态配置。
+[LossContext](../../../../../verl/workers/utils/loss_context.py) 作为 policy loss 的显式 `context` 参数传递调用级分母；actor/distillation 静态配置不再保存 `global_batch_info`，也不再为每次调用复制配置。Bypass 拒绝采样继续传递拒绝前的全局总体。Full-vocab engine 返回 [FullVocabOutput](../../../../../verl/trainer/distillation/output.py)，可微目标与 detached 观测分开，loss 统一施加目标除数与全局归一化。
 
 ## 验证入口
 

@@ -31,7 +31,7 @@ flowchart LR
     G --> H["logger"]
 ```
 
-[Observation](../../../../../verl/utils/metric/observations.py) 保存可合并统计。均值先合并 numerator/denominator 再相除，不能平均 token 数不同的 micro-batch 或 rank 的均值。[TrainingWorker._postprocess_output](../../../../../verl/workers/engine_workers.py) 汇集分区观测与独立更新事实；[finalize_update](../../../../../verl/workers/update_records.py) 归约、调用 [canonical_name](../../../../../verl/utils/metric/schema.py) 统一命名，再拆出 update 记录和 outer 指标。旧 Metric 和旧 worker 表示仅在边界适配。
+[Observation](../../../../../verl/utils/metric/observations.py) 保存可合并统计。均值先合并 numerator/denominator 再相除，不能平均 token 数不同的 micro-batch 或 rank 的均值。[TrainingWorker._postprocess_output](../../../../../verl/workers/engine_workers.py) 汇集分区观测与独立更新事实；[finalize_update](../../../../../verl/workers/update_records.py) 归约、调用 [canonical_name](../../../../../verl/utils/metric/schema.py) 统一命名，再拆出 update 记录和 outer 指标。上游 Metric 的统计表示在边界归约；更新执行事实只接受独立的 `optimizer_step_applied` 字段，缺字段报错，显式 None 表示未知。
 
 Loss 侧的 `distillation/...` 经规范命名变成日志中的 `distill/...`，例如 `distillation/mdpo/objective_position/p00_10/mean` 变为 `distill/mdpo/objective_position/p00_10/mean`。动态后缀被保留，不依赖全局字段白名单。
 
