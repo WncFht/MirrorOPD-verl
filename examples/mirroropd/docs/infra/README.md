@@ -15,3 +15,5 @@
 [文档维护流程](maintenance/README.md)提供格式、解析检查、规则审阅与暂存快照验证。
 
 四域实验的统一验证设计见[verl 接入方案](architecture/2026-10-31-四域RKL实验的verl接入方案.md)；任务配置、资源执行和逐步验收从该页进入。
+
+已有运行配置或内部调用者升级时，按[运行接口迁移指南](architecture/runtime-migration.md)处理；代码来源、取舍与分组验证见[运行合同重构报告](architecture/2026-11-01-运行合同审计与重构方案.md)。

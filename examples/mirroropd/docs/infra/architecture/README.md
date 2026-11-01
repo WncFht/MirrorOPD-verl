@@ -2,7 +2,7 @@
 
 本文说明当前单教师 OPD（On-Policy Distillation）的模块职责及跨模块执行顺序。详细源码从[代码走读索引](代码走读.md)进入；数学定义见[理论目录](../../theory/README.md)，实验预算和启动默认值见[训练配方](../../settings/训练设置.md)。根目录 `docs/` 是 verl 上游文档，本目录维护 MirrorOPD 的实现说明。
 
-[运行合同审计与重构方案](2026-11-01-运行合同审计与重构方案.md)记录配置、训练、评估和历史兼容边界的来源、修改方向与验收要求。
+当前接口以本页及下方专题为准；旧配置和开发调用者按[迁移指南](runtime-migration.md)升级。[重构报告](2026-11-01-运行合同审计与重构方案.md)保存代码来源、设计取舍和验收范围，不作为另一份当前配置手册。
 
 ## 模块职责
 
@@ -15,6 +15,7 @@
 | Worker 与 Engine         | 分布式分发、微批执行、反向、optimizer 和执行事实                                                       | [训练循环](training-loop.md#从一次-actor-调用到实际更新)     |
 | 目标与拟合               | Weighted teacher 构造、sampled surrogate、full MDPO/BPO 行归约；共用 LossContext                       | [Sampled OPD](sampled-opd.md)、[Full-vocab](full-vocab.md)   |
 | 指标与进度               | 合并观测、逐次更新日志、尝试与成功计数、恢复                                                           | [指标系统](metrics.md)、[进度与恢复](progress-checkpoint.md) |
+| 评估与产物               | 一个 `_target_` 构造边界、组件 options、只读 scoring 与不可变产物                                      | [评估合同](../../../../../verl/trainer/evaluation/README.md) |
 
 默认 student 来源的 shared-sync 路径如下。非默认来源、initial/checkpoint 绑定及双模型混合的控制与验收由[Rollout 实现](../rollout/fusion/README.md)维护；其学习效果与工程验收分别报告。
 
@@ -22,30 +23,58 @@
 
 ```mermaid
 flowchart TD
-    A["配置校验与初始化"] --> B["Student rollout / verifier"]
-    B --> C["TQ 完整轨迹与样本身份"]
-    C --> D["休眠 rollout；平衡 batch"]
-    D --> E["SharedTeacherScorer<br/>教师上卡、评分、等待、卸载"]
-    E --> F{"已解析的目标"}
-    F -->|legacy sampled| G["原 anchor / correction / advantage 准备"]
-    F -->|mirror| H["Worker 内按需准备 q<br/>MDPO eta=1 跳过，BPO 始终需要"]
-    G --> I["Actor 更新：mini-batch × epochs"]
-    H --> I
-    I --> J["Engine + loss + LossContext"]
-    J --> K["更新执行事实 + Observation"]
-    K --> L["UpdateResult / OptimizerProgress<br/>逐 update 日志"]
-    L --> M["按需保存 checkpoint；同步 student 权重"]
-    M --> N["按需验证；清理本轮 TQ；outer 日志"]
-    N --> B
+    A["预设 / CLI / Hydra<br/>校验并解析目标"] --> B["RolloutService<br/>生成原始 token 与行为概率"]
+    B --> C["TQ 身份与位置<br/>休眠 rollout；平衡 batch"]
+    C --> D["SharedTeacherScorer<br/>评分、等待、卸载"]
+    D --> E["Worker<br/>按目标准备 anchor；执行 reuse"]
+    E --> F["Engine / 数值 kernel<br/>sampled 项或 FullVocabOutput"]
+    F --> G["LossContext<br/>目标除数与全局归一化"]
+    G --> H["Backward / optimizer<br/>独立更新执行事实"]
+    H --> I["Observation / UpdateResult / Progress"]
+    I --> J["完成边界<br/>checkpoint、评估、权重同步"]
+    J --> K["日志 / 不可变产物 / TQ 清理"]
+    K --> B
+    P["trainer.evaluation._target_<br/>严格 options 与显式能力"] -.-> J
 ```
 
 Teacher 对 student 的原始 token 序列评分。Full-vocab 缓存 teacher hidden；weighted MDPO/BPO 还按需缓存 anchor hidden/head，actor 每次更新仍重新执行当前 student backbone。计算图、权重状态和统计观测分别由对应模块管理。
 
 ## 扩展边界
 
-现有 sampled、Full-KL、MDPO/BPO 共用[统一实验入口](../../../run_math_opd_ablation_fsdp2.sh)。Full-KL 规范化为 MDPO/full_vocab/eta=1；旧 sampled 的信号与估计器保持原义。新增目标先确定数据类型和数学定义，再复用 sampled/hidden 数据流。只有新目标确实需要不同数据时，才扩展数据协议。新增逐 token 指标使用公共位置统计及 Observation，并由业务层选择 namespace。
+现有 sampled、Full-KL、MDPO/BPO 共用[统一实验入口](../../../run_math_opd_ablation_fsdp2.sh)。Full-KL 只使用 MDPO/full_vocab/eta=1 的运行表达；sampled 的信号、IS/PPO 和 guard 保持各自算法含义。新增目标先确定数据类型和数学定义，再复用 sampled/hidden 数据流。只有新目标确实需要不同数据时，才扩展数据协议。新增逐 token 指标使用公共位置统计及 Observation，并由业务层选择 namespace。
 
 Shared-sync 的当前支持边界由 [DistillationConfig.validate_shared_sync](../../../../../verl/workers/config/distillation.py) 校验：单节点、V1 sync、FSDP2、单轮文本生成、同一资源池轮流执行师生。Standalone 使用已有独立教师管理路径。完整词表模式当前要求 shared-sync；静态 registry 中存在某种数据类型，不表示它在所有执行模式下都可用。
+
+## 当前运行合同
+
+| 对象            | 唯一职责与约束                                                                             |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| 目标元数据      | 构造阶段解析；mirror 参数只读，loss_settings 不接受配置输入                                |
+| FullVocabOutput | 可微 objective_sum、目标 divisor 与 detached observations 分开；NamedTuple 保持 FSDP hooks |
+| LossContext     | 承载调用级 DP／token／sequence 分母，不注入静态 config                                     |
+| 更新事件        | optimizer_step_applied 独立于 metrics；None 是未知，缺字段是错误                           |
+| 数值后端        | fused 必须运行支持的 CUDA 实现；CPU/FP64 参考显式选择 precompute/dense                     |
+| 银行身份        | 绑定 checkpoint 内容、输入和生效生成合同；旧身份不自动升级                                 |
+
+## 评估与资源所有权
+
+所有 readout 从同一构造边界进入，组件自己验证 options 和协议。Source/history 在训练内建立银行；公共 suite 使用 bootstrap。两种协议共用原生 scoring 和产物存储，不互相增加生成工作量。
+
+```mermaid
+flowchart LR
+    C["trainer.evaluation<br/>_target_ + options"] --> F["ReadoutCallback 构造边界"]
+    F --> S["Source/history"]
+    F --> E["公共 suite"]
+    F --> P["Probe / reload / scientific"]
+    S --> L["显式生命周期与能力"]
+    E --> L
+    P --> L
+    L --> R["RolloutService<br/>权重驻留与 sampler 恢复"]
+    L --> N["原生 teacher / actor scorer"]
+    N --> A["ArtifactStore<br/>校验、清理后发布完成"]
+```
+
+`handles_validation` 决定验证入口归属，`requires_full_batch` 声明训练 batch 约束，`owns_final_weight_sync` 声明最终同步责任。Trainer 和 RolloutService 不再根据配置是否存在推断模式。Source/history 与 suite 的 current single-model 限制、分组调度和失败恢复见评估包合同。
 
 ## 验证和历史
 

@@ -43,13 +43,15 @@ Loss 侧的 `distillation/...` 经规范命名变成日志中的 `distill/...`�
 
 以下是当前代码的生成能力。一个历史 run 是否具有这些字段，要查它实际部署的版本、配置和 history，不能由当前代码反推。
 
-| 路径                          | 全局目标                                      | Full-vocab KL 诊断                                             | 自动位置分桶                                                            |
-| ----------------------------- | --------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| 普通 Full-KL，包括 MDPO eta=1 | `distill/full_kl`                             | 此标量已经是原教师 KL；不准备 anchor，也不增加 mirror 四项诊断 | `distill/full_kl_position/*`，前提是 backend 返回行值；Liger 当前不返回 |
-| Full MDPO，eta<1              | `distill/mdpo/objective`                      | diagnostics 开启时生成下表四项                                 | `distill/mdpo/objective_position/*`                                     |
-| Full BPO，包括 eta=1          | `distill/bpo/objective`                       | diagnostics 开启时生成下表四项                                 | `distill/bpo/objective_position/*`                                      |
-| Sampled MDPO                  | `distill/mdpo/objective`，行为 IS 估计        | 不计算完整词表 KL 或 target log Z                              | 当前未接入                                                              |
-| Legacy sampled OPD            | sampled estimator / surrogate，字段随模式而异 | 单动作 log-gap 不等于 full-vocab KL                            | 当前未接入                                                              |
+| 路径                         | 全局目标                                      | Full-vocab KL 诊断                                    | 自动位置分桶                                                        |
+| ---------------------------- | --------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------- |
+| 普通 Full-KL，无 EOS 合并    | `distill/full_kl`                             | 原教师 KL；不准备 anchor，不增加 mirror 四项诊断      | `distill/full_kl_position/*`，前提是 backend 返回行值；Liger 不返回 |
+| EOS 合并 Full-KL，MDPO eta=1 | `distill/termination_equiv_kl`                | `distill/full_kl` 保留 raw KL，另记录 eos_identity_kl | 位置桶仍为原词表 KL，不冒充合并目标                                 |
+| Full-FKL                     | `distill/full_forward_kl`                     | 原 reverse-KL、支持外质量、熵、JS/TV 等诊断           | FKL 与原 reverse-KL 的位置桶                                        |
+| Full MDPO，eta<1             | `distill/mdpo/objective`                      | diagnostics 开启时生成下表四项                        | `distill/mdpo/objective_position/*`                                 |
+| Full BPO，包括 eta=1         | `distill/bpo/objective`                       | diagnostics 开启时生成下表四项                        | `distill/bpo/objective_position/*`                                  |
+| Sampled MDPO                 | `distill/mdpo/objective`，行为 IS 估计        | 不计算完整词表 KL 或 target log Z                     | 当前未接入                                                          |
+| Legacy sampled OPD           | sampled estimator / surrogate，字段随模式而异 | 单动作 log-gap 不等于 full-vocab KL                   | 当前未接入                                                          |
 
 令 p 为当前学生、q 为本轮冻结 anchor、T 为原教师，b 为冻结的未归一化目标 log-weight，$Z_m=\sum_a e^{b_a}$、$m_a=e^{b_a}/Z_m$。每个固定前缀上的原始目标为：
 
@@ -79,7 +81,7 @@ $$
 
 位置以 response 为范围，不含 prompt，也不按配置中的 response cap 归一化。实际 EOS 若在有效 mask 内，按普通 response token 处理；mask 空洞保留原坐标，不先压紧有效 token 再编号。
 
-[FSDPEngineWithLMHead._full_vocab_output](../../../../../verl/workers/engine/fsdp/transformer_impl.py) 先调用 `response_target_coordinates` 将预测 state 换成 response target 坐标，再将 `token_objective` 交给 [relative_position_bins](../../../../../verl/utils/metric/position.py) 和 [position_statistics](../../../../../verl/utils/metric/position.py)。后者累计 detached FP64 sum 和 token count。Loss 侧的 [distillation_loss](../../../../../verl/trainer/distillation/losses.py) 对 mirror sums 除 eta，然后通过 [position_observations](../../../../../verl/utils/metric/position.py) 发布各桶的 `sum/token_count/mean`。
+[FSDPEngineWithLMHead._full_vocab_output](../../../../../verl/workers/engine/fsdp/transformer_impl.py) 将预测位置转换为原 response 的 target 坐标，并计算公共 bins。[FullVocabOutput.from_result](../../../../../verl/trainer/distillation/output.py) 接收这些 bins，用 [position_statistics](../../../../../verl/utils/metric/position.py) 累计 detached FP64 sum 和 count，再通过 position_observations 构造指标。一般 MDPO/BPO 的 objective sums 在这里除 η；loss 只对可微分子施加全局归一化和目标除数，不重复处理观测。FKL 还记录原教师 reverse-KL 的位置统计，EOS RKL 的位置指标继续使用原始词表 KL。
 
 桶名为 `p00_10`、`p10_20`，依次到 `p90_100`。一个 objective 最多生成 10×3=30 个字段。例如：
 
@@ -98,7 +100,7 @@ $$
 
 只有分母非零时才有均值。不能平均各桶均值来重建总体，也不能从 sum/count 反推出分位数、最大值或方差。由于 kernel 与日志采用不同精度和归约顺序，重建的总体均值与单独记录的 objective 可以有浮点误差。
 
-当前自动分桶覆盖 Full-KL、full MDPO 与 full BPO 的训练目标。四项 mirror 诊断虽然已有逐 token 数值，engine 当前只将它们求和为 `mirror_statistics`；尚未发布 `teacher_kl_position`、`target_kl_position`、`anchor_kl_position` 或 `target_log_z_position`。Entropy、NLL、advantage、clip 指示量及 sampled objective 也尚未自动接入。扩展时可复用相同 bins，但必须由相应生产者明确提供标量和总体；不得把现有 objective 桶改名后冒充另一指标。
+自动分桶覆盖 Full-RKL、Full-FKL、full MDPO 与 full BPO。四项 mirror 诊断经 FullVocabOutput 汇总为 Observation，目前没有独立的 teacher_kl_position、target_kl_position、anchor_kl_position 或 target_log_z_position。Entropy、NLL、advantage、clip 指示量和 sampled objective 也没有自动接入这组分桶。扩展时可复用 bins，但生产者必须明确提供标量和总体；不得把已有 objective 桶改名冒充另一指标。
 
 在 W&B 查找 MDPO 位置曲线时，搜索 `mdpo/objective_position`，选择 `step/update` 横轴；已有 `full_kl_position` 面板不会自动切换到 MDPO namespace。判断记录是否缺失时依次核对实际配置/backend、history 字段、有效桶计数和面板筛选。Summary 中的不同字段可能来自不同记录，应以同一 update 的 history 重建指标。
 
