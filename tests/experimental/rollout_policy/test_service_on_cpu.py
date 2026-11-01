@@ -17,6 +17,7 @@ def test_default_service_preserves_sync_and_transport_order():
         rollout_policy=RolloutPolicyConfig(),
         config=OmegaConf.create({}),
         common_rollout_sampling=False,
+        readout_callback=None,
         global_steps=3,
         timing_raw={},
         checkpoint_manager=SimpleNamespace(
@@ -91,3 +92,25 @@ def test_supported_default_single_installs_same_sampler_as_policy_phases(tmp_pat
     service = create_rollout_service(trainer, Mock())
     service.initialize()
     rpc.assert_awaited_once_with("configure_rollout_policy_sampler", args=(True,))
+
+
+def test_final_sync_is_owned_by_the_component_not_evaluation_config():
+    from unittest.mock import Mock
+
+    trainer = SimpleNamespace(
+        config=OmegaConf.create({"trainer": {"evaluation": {"_target_": "custom.Readout"}}}),
+        common_rollout_sampling=False,
+        global_steps=2,
+        total_training_steps=2,
+        timing_raw={},
+        readout_callback=SimpleNamespace(owns_final_weight_sync=False),
+        checkpoint_manager=SimpleNamespace(update_weights=Mock()),
+    )
+    service = DefaultRolloutService(trainer, None)
+    service.after_update()
+    trainer.checkpoint_manager.update_weights.assert_called_once_with(2)
+    trainer.checkpoint_manager.update_weights.reset_mock()
+    service.resident_version = None
+    trainer.readout_callback.owns_final_weight_sync = True
+    service.after_update()
+    trainer.checkpoint_manager.update_weights.assert_not_called()

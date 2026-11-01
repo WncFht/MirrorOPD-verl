@@ -14,6 +14,7 @@ class ReadoutCallback:
 
     handles_validation = False
     requires_full_batch = False
+    owns_final_weight_sync = False
 
     def on_readout(self, trainer, outer):
         return {}

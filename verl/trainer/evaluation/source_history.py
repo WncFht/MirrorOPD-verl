@@ -18,6 +18,7 @@ from transformers import AutoConfig
 from verl.experimental.rollout_policy.collector import UnsafeDrainError
 from verl.trainer.evaluation.artifacts import HISTORY, RKL, TRAJECTORY, ArtifactStore, file_sha256, identity
 from verl.trainer.evaluation.config import SourceHistoryConfig
+from verl.trainer.evaluation.generation_contract import engine_contract, require_current_generation
 from verl.trainer.evaluation.identity import model_identity
 from verl.trainer.evaluation.metrics import readout_metrics
 from verl.trainer.evaluation.native import balanced_history, capture_rows
@@ -25,7 +26,9 @@ from verl.trainer.evaluation.schedule import Schedule
 from verl.trainer.evaluation.scoring import score_native_rows
 from verl.trainer.ppo.readout_callback import ReadoutCallback
 from verl.utils import tensordict_utils as tu
+from verl.utils.config import omega_conf_to_dataclass
 from verl.utils.dataset.rl_dataset import collate_fn
+from verl.workers.config import HFModelConfig
 
 
 class SourceHistoryReadout(ReadoutCallback):
@@ -36,6 +39,9 @@ class SourceHistoryReadout(ReadoutCallback):
     def __init__(self, *, config, options):
         self.config = config
         self.options = SourceHistoryConfig.parse(options)
+        require_current_generation(config)
+        input_model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
+        generation_contract = engine_contract(config.actor_rollout_ref.rollout, input_model, input_model)
         teacher_path = config.distillation.teacher_models.teacher_model.model_path
         self.hidden_size = AutoConfig.from_pretrained(teacher_path, local_files_only=True).hidden_size
         self.score_budget = self.options.score
@@ -52,6 +58,8 @@ class SourceHistoryReadout(ReadoutCallback):
             raise ValueError("This acceptance readout currently requires a fresh run, not checkpoint resume")
         if self.root.exists() and any(self.root.iterdir()):
             raise FileExistsError("Choose a new output directory for a fresh training run")
+        if config.trainer.get("test_freq", -1) > 0:
+            raise ValueError("Source/history owns evaluation schedules; disable trainer.test_freq")
         if not config.trainer.get("val_before_train", False):
             raise ValueError("Fixed RKL acceptance requires val_before_train=True")
         val_files = list(config.data.val_files)
@@ -67,6 +75,7 @@ class SourceHistoryReadout(ReadoutCallback):
         model_path = Path(config.actor_rollout_ref.model.path)
         self.bank_metadata = dict(
             contract_version=2,
+            engine_contract=generation_contract,
             initial_student_identity=model_identity(model_path),
             source_sha256=file_sha256(self.options.source_file),
             response_cap=config.data.max_response_length,
@@ -185,7 +194,7 @@ class SourceHistoryReadout(ReadoutCallback):
             try:
                 tq.kv_clear(keys=list(generated.keys), partition_id=generated.partition_id)
             finally:
-                trainer.checkpoint_manager.sleep_replicas()
+                trainer.rollout_service.park()
 
     def on_before_weight_sync(self, trainer, batch, outer):
         rows = capture_rows(batch, outer)
@@ -216,7 +225,7 @@ class SourceHistoryReadout(ReadoutCallback):
             return {}
         source_due = self.schedules["source_heldout"].due(outer, trainer.total_training_steps)
         history_due = bool(self.history) and self.schedules["history"].due(outer, trainer.total_training_steps)
-        # Legacy test_freq may invoke _validate even when this callback has no due task.
+        # Manual validation still follows the declared task schedule.
         if not source_due and not history_due:
             return {}
         restore_rollout = not self.before_weight_sync
@@ -225,7 +234,7 @@ class SourceHistoryReadout(ReadoutCallback):
                 raise ValueError("Cannot generate an initial bank from updated student weights")
             self._generate_initial_bank(trainer)
         elif restore_rollout:
-            trainer.checkpoint_manager.sleep_replicas()
+            trainer.rollout_service.park()
         if self.bank_sha256 is None or file_sha256(self.bank_path / "manifest.json") != self.bank_sha256:
             raise ValueError("Bound initial bank manifest changed or was never completed")
         rows = []
@@ -243,7 +252,7 @@ class SourceHistoryReadout(ReadoutCallback):
             raise
         finally:
             if restore_rollout and safe_to_restore:
-                trainer.checkpoint_manager.update_weights(global_steps=outer)
+                trainer.rollout_service.ensure_current(outer)
         timing = scoring["teacher_timing"]
         score_seconds = scoring["seconds"]
         audit = scoring["audit"]

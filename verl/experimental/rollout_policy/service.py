@@ -61,7 +61,8 @@ class DefaultRolloutService(RolloutService):
 
     def after_update(self):
         if (
-            self.trainer.config.trainer.get("evaluation")
+            self.trainer.readout_callback is not None
+            and self.trainer.readout_callback.owns_final_weight_sync
             and self.trainer.global_steps >= self.trainer.total_training_steps
         ):
             return

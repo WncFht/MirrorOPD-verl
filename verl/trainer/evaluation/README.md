@@ -61,6 +61,7 @@ Public bank 是 generation 产物的 sample 0 引用，无需再复制一份长 
 trainer:
   val_before_train: true
   resume_mode: disable
+  test_freq: -1
   evaluation:
     _target_: verl.trainer.evaluation.source_history.SourceHistoryReadout
     output: runs/example/readout
@@ -133,3 +134,9 @@ RKL 的 host budget 约束临时 hidden、位置与拷贝余量，并扣除活�
 评估和 rollout 共用完整 checkpoint 文件清单，`checkpoint-v2` 身份覆盖权重、配置、tokenizer、生成配置及嵌套 chat_templates。相同内容迁移目录不改变身份；同一路径覆盖权重会使银行失效。Source bank 使用版本 2 内容合同，source/history 的运行 manifest 分别绑定 student 和 teacher 身份。旧版仅绑定路径／配置的银行和旧 bootstrap 不接受自动升级，须按原冻结代码读取或重新生成。
 
 SourceHistoryConfig、ScoreBudget、HFReloadOptions、ProbeOptions 和 ScientificOptions 均拒绝未知字段。新的扩展继承 ReadoutCallback，采用 `__init__(*, config, options)` 并由自身校验 options，无需修改 Trainer 或增加新的 trainer 配置入口。
+
+Source/history 与公共 suite 均要求已验收的 current single-model sampler。Source bank 同时保存公共 engine_contract：原生／额外 EOS、支持集、tokenizer／模板、采样器和执行精度必须一致；修改停止条件不能复用旧银行。非 current 的科学生成协议使用自己的显式组件，不伪装成 initial-student source bank。
+
+`owns_final_weight_sync` 声明组件是否接管最后一轮的权重同步。只有公共 suite 接管；其余组件保留原生同步。RolloutService 不再根据 evaluation 配置是否存在就跳过最终同步。
+
+Source/history 的休眠与恢复只经 RolloutService 执行，恢复时同时重新安装 sampler；不再直接调用 checkpoint manager 绕过驻留版本。它独占自己的 source/history 调度，启用时 trainer.test_freq 必须关闭。

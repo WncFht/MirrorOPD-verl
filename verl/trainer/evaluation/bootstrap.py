@@ -26,12 +26,13 @@ from .artifacts import ArtifactStore, file_sha256, identity
 from .config import DatasetSpec, EvaluationConfig
 from .coordinator import EvaluationCoordinator, read_questions
 from .generation import NativeGenerator
-from .generation_contract import engine_contract
+from .generation_contract import engine_contract, require_current_generation
 from .identity import bootstrap_contract, model_identity
 from .trajectory import select_panel, trajectory_index
 
 
 async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_configs=(), resume_generation=None):
+    require_current_generation(config)
     options = EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
     root = ArtifactStore(options.bootstrap)
     if not root.manifest_path.exists():
