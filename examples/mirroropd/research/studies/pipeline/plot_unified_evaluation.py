@@ -82,7 +82,9 @@ def load_run(path):
             sources[str(store.root / name)] = manifest["files"][name]["sha256"]
     if not events:
         raise ValueError("No completed evaluation events to plot")
-    source_bank = ArtifactStore(Path(manifest["metadata"]["bootstrap"]) / "source")
+    bootstrap = Path(manifest["metadata"]["bootstrap"])
+    source_enabled = manifest["metadata"]["configuration"].get("source_enabled", (bootstrap / "source").exists())
+    source_bank = ArtifactStore(bootstrap / ("source" if source_enabled else "initial"))
     source_manifest = source_bank.manifest(complete=True)
     thinking = {
         row["thinking_open"]
@@ -184,6 +186,19 @@ def render(path, output):
                 linestyle=linestyle,
             )
 
+    def training_boundary_series(axis):
+        batches = defaultdict(list)
+        for row in data["updates"]:
+            if "step/outer" in row and "distill/full_kl" in row:
+                batches[int(row["step/outer"])].append(row)
+        for offset, label, linestyle in [(0, "First-update training RKL", "-"), (-1, "Last-update training RKL", "--")]:
+            points = [
+                (outer, sorted(rows, key=lambda row: row["step"])[offset]["distill/full_kl"])
+                for outer, rows in sorted(batches.items())
+            ]
+            if points:
+                axis.plot(*zip(*points, strict=True), label=label, color=training_color, linestyle=linestyle)
+
     def common_limits(axes):
         axes = list(axes)
         values = [float(y) for axis in axes for line in axis.lines for y in line.get_ydata() if math.isfinite(y)]
@@ -199,13 +214,20 @@ def render(path, output):
         ("history", "Training history: batch equal", neutral, "equal_batch_question_mean"),
     ]:
         series(axes[0], f"eval/rkl/{bank}/{suffix}", label, color)
+    has_source_readouts = bool(axes[0].lines)
+    if not has_source_readouts:
+        training_boundary_series(axes[0])
     for bank, label, linestyle in [
         ("public_initial", "Initial-student trajectories", "-"),
         ("public_teacher", "Teacher trajectories", "--"),
         ("public_current", "Current-student trajectories", ":"),
     ]:
         series(axes[1], f"eval/rkl/{bank}/all/question_mean", label, neutral, linestyle)
-    for axis, title in zip(axes, ("Source dataset", "Public benchmarks: domain equal"), strict=True):
+    for axis, title in zip(
+        axes,
+        ("Source dataset" if has_source_readouts else "Training batch: token mean", "Public benchmarks: domain equal"),
+        strict=True,
+    ):
         axis.set(xlabel="Completed outer steps", ylabel="RKL (nats)", title=title)
         axis.legend(fontsize=8)
     common_limits(axes)
@@ -217,10 +239,17 @@ def render(path, output):
         ("history", "Training history", neutral, "equal_batch_question_mean"),
     ]:
         series(axes[0], f"eval/rkl/{bank}/{suffix}", label, color)
+    if not axes[0].lines:
+        training_boundary_series(axes[0])
     for domain, color in colors.items():
         series(axes[1], f"eval/rkl/public_initial/{domain}/question_mean", domain.capitalize(), color)
     for axis, title in zip(
-        axes, ("Source and actual training history", "Fixed initial-student public bank"), strict=True
+        axes,
+        (
+            "Source and actual training history" if has_source_readouts else "Training batch: token mean",
+            "Fixed initial-student public bank",
+        ),
+        strict=True,
     ):
         axis.set(xlabel="Completed outer steps", ylabel="RKL (nats; log scale)", yscale="log", title=title)
         axis.legend(fontsize=8)
@@ -363,13 +392,18 @@ def render(path, output):
         )
 
     first, last = min(e["outer"] for e in data["events"]), max(e["outer"] for e in data["events"])
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-    for axis, bank, label in zip(
-        axes,
-        ("source_heldout", "public_initial", "public_teacher"),
-        ("Source heldout", "Public: initial student", "Public: teacher"),
-        strict=True,
-    ):
+    panel_specs = [
+        (bank, label)
+        for bank, label in (
+            ("source_heldout", "Source heldout"),
+            ("public_initial", "Public: initial student"),
+            ("public_teacher", "Public: teacher"),
+        )
+        if any(row["bank"] == bank for row in data["scores"])
+    ]
+    fig, axes = plt.subplots(1, len(panel_specs), figsize=(5 * len(panel_specs), 5))
+    axes = np.atleast_1d(axes)
+    for axis, (bank, label) in zip(axes, panel_specs, strict=True):
         endpoints = {
             outer: {r["id"]: r for r in data["scores"] if r["outer"] == outer and r["bank"] == bank}
             for outer in (first, last)
@@ -411,15 +445,18 @@ def render(path, output):
         "Identical fixed trajectories at both endpoints; points below the diagonal improved.",
     )
 
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6))
-    series(axes[0], "eval/rkl/history/paired_absolute_reduction", "Retained old trajectories", training_color)
-    axes[0].axhline(0, color=style.NEUTRALS["baseline"], linestyle="--", linewidth=1)
-    axes[0].set(xlabel="Completed outer steps", ylabel="Previous minus current RKL (nats)")
-    series(axes[1], "eval/rkl/history/paired_rows", "Paired history rows", neutral)
-    axes[1].set(xlabel="Completed outer steps", ylabel="Common trajectory count")
-    save(
-        fig, "paired-history-change", "Only trajectories retained from the preceding readout; batch-equal aggregation."
-    )
+    if history:
+        fig, axes = plt.subplots(1, 2, figsize=(12, 4.6))
+        series(axes[0], "eval/rkl/history/paired_absolute_reduction", "Retained old trajectories", training_color)
+        axes[0].axhline(0, color=style.NEUTRALS["baseline"], linestyle="--", linewidth=1)
+        axes[0].set(xlabel="Completed outer steps", ylabel="Previous minus current RKL (nats)")
+        series(axes[1], "eval/rkl/history/paired_rows", "Paired history rows", neutral)
+        axes[1].set(xlabel="Completed outer steps", ylabel="Common trajectory count")
+        save(
+            fig,
+            "paired-history-change",
+            "Only trajectories retained from the preceding readout; batch-equal aggregation.",
+        )
 
     fig, axis = plt.subplots(figsize=(10, 4.6))
     series(axis, "perf/timing/evaluation_seconds", "Evaluation callback", neutral)
