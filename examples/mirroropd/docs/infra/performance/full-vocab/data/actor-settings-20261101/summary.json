@@ -1,0 +1,949 @@
+{
+  "scope": "Two H800s, fixed natural prefixes, effective256 rows, cache repeat2; no new sampling, lr0. Per-case warmup2 updates then 2 x reuse4 measurements.",
+  "source_commit": "71f7468838248e1512755bdcc1665bde3006f1d7",
+  "physical_gpus": [
+    2,
+    3
+  ],
+  "cases": {
+    "baseline": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/baseline.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": true
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        63.860887918,
+        57.634606302
+      ],
+      "median_seconds": 60.747747110000006,
+      "allocated_peak_gib": 22.552798748016357,
+      "reserved_peak_gib": 27.25390625,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 12,
+      "loss_min_max": [
+        0.09449435025453568,
+        0.09449435025453568
+      ],
+      "grad_norm_min_max": [
+        3.6379549503326416,
+        3.6379549503326416
+      ],
+      "max_loss_absolute_diff_from_baseline": 0.0,
+      "max_grad_norm_relative_diff_from_baseline": 0.0,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0,
+      "input_token_passes_per_second_per_gpu": 9678.646994683586
+    },
+    "no-sync": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/no-sync.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": true,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        58.271750939,
+        57.063429845
+      ],
+      "median_seconds": 57.667590392,
+      "allocated_peak_gib": 25.681456089019775,
+      "reserved_peak_gib": 32.771484375,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435025453568,
+        0.09449435025453568
+      ],
+      "grad_norm_min_max": [
+        3.6379549503326416,
+        3.6379549503326416
+      ],
+      "max_loss_absolute_diff_from_baseline": 0.0,
+      "max_grad_norm_relative_diff_from_baseline": 0.0,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0534122667006267,
+      "input_token_passes_per_second_per_gpu": 10195.605469264845
+    },
+    "budget65536": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/budget65536.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 65536,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        56.367833967,
+        56.644296699
+      ],
+      "median_seconds": 56.506065333,
+      "allocated_peak_gib": 27.192581176757812,
+      "reserved_peak_gib": 33.70703125,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435770511627,
+        0.09449435770511627
+      ],
+      "grad_norm_min_max": [
+        3.6376686096191406,
+        3.6376686096191406
+      ],
+      "max_loss_absolute_diff_from_baseline": 7.450580596923828e-09,
+      "max_grad_norm_relative_diff_from_baseline": 7.8709252151348e-05,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0750659553448474,
+      "input_token_passes_per_second_per_gpu": 10405.183877785044
+    },
+    "diagnostics-off": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/diagnostics-off.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": false,
+        "no_sync": false,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        54.869232738,
+        59.28581919
+      ],
+      "median_seconds": 57.077525964,
+      "allocated_peak_gib": 22.552789211273193,
+      "reserved_peak_gib": 27.25390625,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435025453568,
+        0.09449435025453568
+      ],
+      "grad_norm_min_max": [
+        3.6379549503326416,
+        3.6379549503326416
+      ],
+      "max_loss_absolute_diff_from_baseline": 0.0,
+      "max_grad_norm_relative_diff_from_baseline": 0.0,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0643023866927044,
+      "input_token_passes_per_second_per_gpu": 10301.00709639791
+    },
+    "chunk1024": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/chunk1024.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 1024,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        58.29781815,
+        57.106838355
+      ],
+      "median_seconds": 57.702328252499996,
+      "allocated_peak_gib": 24.63497304916382,
+      "reserved_peak_gib": 28.513671875,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435770511627,
+        0.09449435770511627
+      ],
+      "grad_norm_min_max": [
+        3.6377830505371094,
+        3.6377830505371094
+      ],
+      "max_loss_absolute_diff_from_baseline": 7.450580596923828e-09,
+      "max_grad_norm_relative_diff_from_baseline": 4.725176586271599e-05,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0527780931849673,
+      "input_token_passes_per_second_per_gpu": 10189.467527673398
+    },
+    "no-sync-budget65536": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/no-sync-budget65536.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 65536,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": true,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        57.524833952,
+        57.165564379
+      ],
+      "median_seconds": 57.345199165500006,
+      "allocated_peak_gib": 30.40167236328125,
+      "reserved_peak_gib": 38.576171875,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435770511627,
+        0.09449435770511627
+      ],
+      "grad_norm_min_max": [
+        3.6376686096191406,
+        3.6376686096191406
+      ],
+      "max_loss_absolute_diff_from_baseline": 7.450580596923828e-09,
+      "max_grad_norm_relative_diff_from_baseline": 7.8709252151348e-05,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0593344864786352,
+      "input_token_passes_per_second_per_gpu": 10252.92454392112
+    },
+    "baseline-recheck": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/baseline-recheck.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        58.123997987,
+        59.783199246
+      ],
+      "median_seconds": 58.9535986165,
+      "allocated_peak_gib": 22.552798748016357,
+      "reserved_peak_gib": 27.25390625,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435025453568,
+        0.09449435025453568
+      ],
+      "grad_norm_min_max": [
+        3.6379549503326416,
+        3.6379549503326416
+      ],
+      "max_loss_absolute_diff_from_baseline": 0.0,
+      "max_grad_norm_relative_diff_from_baseline": 0.0,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0304332311445676,
+      "input_token_passes_per_second_per_gpu": 9973.199495839464
+    },
+    "baseline-size512": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/baseline-size512.json",
+        "repeat_input": 4,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 587956,
+      "loss_tokens": 514632,
+      "per_rank_input_tokens": [
+        293978,
+        293978
+      ],
+      "measured_seconds": [
+        111.553781996,
+        109.837979497
+      ],
+      "median_seconds": 110.6958807465,
+      "allocated_peak_gib": 22.552865505218506,
+      "reserved_peak_gib": 27.25390625,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435770511627,
+        0.09449435770511627
+      ],
+      "grad_norm_min_max": [
+        3.63777494430542,
+        3.63777494430542
+      ],
+      "max_loss_absolute_diff_from_baseline": 7.450580596923828e-09,
+      "max_grad_norm_relative_diff_from_baseline": 4.9480004474827424e-05,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline-size512",
+      "speedup_over_first_baseline": 1.0,
+      "input_token_passes_per_second_per_gpu": 10622.906580353309
+    },
+    "partial-checkpoint": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/partial-checkpoint.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        58.229787985,
+        55.141757883
+      ],
+      "median_seconds": 56.685772934,
+      "allocated_peak_gib": 64.18443202972412,
+      "reserved_peak_gib": 77.46484375,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435025453568,
+        0.09449435025453568
+      ],
+      "grad_norm_min_max": [
+        3.6379549503326416,
+        3.6379549503326416
+      ],
+      "max_loss_absolute_diff_from_baseline": 0.0,
+      "max_grad_norm_relative_diff_from_baseline": 0.0,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": {
+        "enabled_layers": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26
+        ],
+        "total_layers": 28,
+        "scope": "instance-local native HF checkpoint flags"
+      },
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0716577364258475,
+      "input_token_passes_per_second_per_gpu": 10372.196929987442
+    },
+    "partial-checkpoint-combined": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/partial-checkpoint-combined.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": false,
+        "no_sync": true,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        54.394312163,
+        56.671557108
+      ],
+      "median_seconds": 55.5329346355,
+      "allocated_peak_gib": 67.39110946655273,
+      "reserved_peak_gib": 77.642578125,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435025453568,
+        0.09449435025453568
+      ],
+      "grad_norm_min_max": [
+        3.6379549503326416,
+        3.6379549503326416
+      ],
+      "max_loss_absolute_diff_from_baseline": 0.0,
+      "max_grad_norm_relative_diff_from_baseline": 0.0,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": {
+        "enabled_layers": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26
+        ],
+        "total_layers": 28,
+        "scope": "instance-local native HF checkpoint flags"
+      },
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.0939048603991186,
+      "input_token_passes_per_second_per_gpu": 10587.518989571696
+    },
+    "partial-expandable-size512": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/partial-expandable-size512.json",
+        "repeat_input": 4,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 32768,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": false,
+        "no_sync": true,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 587956,
+      "loss_tokens": 514632,
+      "per_rank_input_tokens": [
+        293978,
+        293978
+      ],
+      "measured_seconds": [
+        104.656163729,
+        105.912908075
+      ],
+      "median_seconds": 105.284535902,
+      "allocated_peak_gib": 67.37632942199707,
+      "reserved_peak_gib": 72.935546875,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435770511627,
+        0.09449435770511627
+      ],
+      "grad_norm_min_max": [
+        3.63777494430542,
+        3.63777494430542
+      ],
+      "max_loss_absolute_diff_from_baseline": 7.450580596923828e-09,
+      "max_grad_norm_relative_diff_from_baseline": 4.9480004474827424e-05,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": {
+        "enabled_layers": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26
+        ],
+        "total_layers": 28,
+        "scope": "instance-local native HF checkpoint flags"
+      },
+      "allocator": "expandable_segments:True",
+      "reference_case": "baseline-size512",
+      "speedup_over_first_baseline": 1.0513973376824963,
+      "input_token_passes_per_second_per_gpu": 11168.89569703334
+    },
+    "lean-combo": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/lean-combo.json",
+        "repeat_input": 2,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 65536,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": false,
+        "no_sync": false,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 293978,
+      "loss_tokens": 257316,
+      "per_rank_input_tokens": [
+        146989,
+        146989
+      ],
+      "measured_seconds": [
+        52.074419623,
+        52.729539504
+      ],
+      "median_seconds": 52.4019795635,
+      "allocated_peak_gib": 27.192577362060547,
+      "reserved_peak_gib": 33.70703125,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435770511627,
+        0.09449435770511627
+      ],
+      "grad_norm_min_max": [
+        3.6376686096191406,
+        3.6376686096191406
+      ],
+      "max_loss_absolute_diff_from_baseline": 7.450580596923828e-09,
+      "max_grad_norm_relative_diff_from_baseline": 7.8709252151348e-05,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline",
+      "speedup_over_first_baseline": 1.159264356347201,
+      "input_token_passes_per_second_per_gpu": 11220.110478603638
+    },
+    "lean-combo-size512": {
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/lean-combo-size512.json",
+        "repeat_input": 4,
+        "reuse": 4,
+        "samples": 2,
+        "budget": 65536,
+        "chunk": 512,
+        "checkpoint": true,
+        "diagnostics": false,
+        "no_sync": false,
+        "trace": false
+      },
+      "cache_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
+      "input_tokens": 587956,
+      "loss_tokens": 514632,
+      "per_rank_input_tokens": [
+        293978,
+        293978
+      ],
+      "measured_seconds": [
+        99.183452402,
+        99.050473968
+      ],
+      "median_seconds": 99.116963185,
+      "allocated_peak_gib": 29.505959033966064,
+      "reserved_peak_gib": 40.537109375,
+      "measured_updates": 8,
+      "all_updates_including_warmup_trace": 10,
+      "loss_min_max": [
+        0.09449435025453568,
+        0.09449435025453568
+      ],
+      "grad_norm_min_max": [
+        3.6375019550323486,
+        3.6375019550323486
+      ],
+      "max_loss_absolute_diff_from_baseline": 0.0,
+      "max_grad_norm_relative_diff_from_baseline": 0.00012451921655916835,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "parameters_unchanged": true,
+      "selective_checkpoint": null,
+      "allocator": null,
+      "reference_case": "baseline-size512",
+      "speedup_over_first_baseline": 1.1168207458080426,
+      "input_token_passes_per_second_per_gpu": 11863.882449719345
+    }
+  },
+  "limitations": [
+    "Fixed-prefix actor measurement excludes Ray/TQ, fresh generation and shared teacher preparation.",
+    "Two measured calls per configuration are not independent process replications or a confidence interval.",
+    "Repeated natural prefixes scale work only; they do not measure accuracy or later 16K response capacity."
+  ],
+  "failed_cases": {
+    "checkpoint-off": {
+      "exit": 1,
+      "oom": true,
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/checkpoint-off.log"
+    },
+    "checkpoint-off-budget24576": {
+      "exit": 1,
+      "oom": true,
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/checkpoint-off-budget24576.log"
+    },
+    "combined-checkpoint-off24576": {
+      "exit": 1,
+      "oom": true,
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/combined-checkpoint-off24576.log"
+    },
+    "combined-size512": {
+      "exit": 1,
+      "oom": true,
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/combined-size512.log"
+    },
+    "partial-checkpoint-size512": {
+      "exit": 1,
+      "oom": true,
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/partial-checkpoint-size512.log"
+    }
+  },
+  "trace": {
+    "scope": "Two actual inner updates per rank, filtered by launch correlation; excludes anchor preparation.",
+    "kernel_duration_sum_ms_per_rank": {
+      "full_vocab/actor_phase_including_offload": 71.81651500000088,
+      "full_vocab/grad_head": 598.8189895000007,
+      "full_vocab/head_loss": 14.129369999999998,
+      "full_vocab/student_projection": 231.15915300000003,
+      "full_vocab/anchor_projection_and_normalization": 231.39828049999983,
+      "full_vocab/mirror_rows": 5227.126343500127,
+      "full_vocab/grad_hidden": 202.49222349999945,
+      "full_vocab/backbone": 3505.8468590000243,
+      "full_vocab/teacher_projection_and_normalization": 232.0391400000001,
+      "unattributed": 10784.122377000138,
+      "full_vocab/backward_apply": 14.488702499999999,
+      "full_vocab/student_forward": 130.8302820000008
+    },
+    "head_kernel_ms_per_rank": 6823.468717500128,
+    "head_fraction_of_kernel_duration_sum": 0.3211910451261274,
+    "device_interval_means": {
+      "compute_union_ms": 19675.798416748046,
+      "nccl_union_ms": 1419.094615966797,
+      "overlap_ms": 833.0570471191406,
+      "nccl_without_compute_ms": 586.0375688476563,
+      "first_to_last_kernel_ms": 25328.359275634764
+    },
+    "host_mini_batch_ms_per_rank": [
+      [
+        12437.717583000001,
+        11989.711972
+      ],
+      [
+        12437.50577,
+        11989.151689999999
+      ]
+    ],
+    "host_annotation_counts": [
+      {
+        "full_vocab/teacher_forward": 0,
+        "full_vocab/anchor_forward": 5,
+        "full_vocab/head_loss": 10,
+        "mini_batch0": 1,
+        "mini_batch1": 1
+      },
+      {
+        "full_vocab/teacher_forward": 0,
+        "full_vocab/anchor_forward": 5,
+        "full_vocab/head_loss": 10,
+        "mini_batch0": 1,
+        "mini_batch1": 1
+      }
+    ]
+  },
+  "numerical_reference_case": "baseline",
+  "expandable_cuda_ipc": [
+    {
+      "ok": true,
+      "sum": 16777216.0
+    },
+    {
+      "ok": true,
+      "sum": 16777216.0
+    }
+  ],
+  "fixed_execution_environment": {
+    "FLASH_ATTENTION_DETERMINISTIC": "1",
+    "OMP_NUM_THREADS": "1",
+    "precision": "bf16",
+    "master_parameters": "fp32",
+    "learning_rate": 0
+  }
+}

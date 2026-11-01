@@ -1,0 +1,33 @@
+{
+  "scope": "Alternating14-of28 native HF checkpoint layers; paired with the existing identical-input baselines. Main71f74688; no change to parameters, objective or optimizer path.",
+  "source_commit": "71f7468838248e1512755bdcc1665bde3006f1d7",
+  "physical_gpus": [
+    2,
+    3
+  ],
+  "cases": [
+    {
+      "name": "partial-checkpoint",
+      "args": [],
+      "module": "examples.mirroropd.benchmarks.profile.benchmark_partial_checkpoint"
+    },
+    {
+      "name": "partial-checkpoint-combined",
+      "args": [
+        "--no-sync",
+        "--no-diagnostics"
+      ],
+      "module": "examples.mirroropd.benchmarks.profile.benchmark_partial_checkpoint"
+    },
+    {
+      "name": "partial-checkpoint-size512",
+      "args": [
+        "--repeat-input",
+        "4",
+        "--no-sync",
+        "--no-diagnostics"
+      ],
+      "module": "examples.mirroropd.benchmarks.profile.benchmark_partial_checkpoint"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "scope": "Observational comparison; different models/objectives/length distributions and a cold first outer versus old steady outers.",
+  "measured_source": "402f6353338a4e2830363b7c30b623f007765bd6",
+  "main_checked": "71f7468838248e1512755bdcc1665bde3006f1d7",
+  "commits_after_measured": 19,
+  "core_optimization_modules": {
+    "verl/trainer/distillation/full_vocab_triton.py": {
+      "measured_blob": "c0fc49983014516d4e2695577d78b4f1e74d4764",
+      "main_blob": "c0fc49983014516d4e2695577d78b4f1e74d4764",
+      "identical": true
+    },
+    "verl/trainer/distillation/termination.py": {
+      "measured_blob": "ac83ef40402238138d877c5175326d6dd750c5b7",
+      "main_blob": "ac83ef40402238138d877c5175326d6dd750c5b7",
+      "identical": true
+    },
+    "verl/trainer/distillation/numerics.py": {
+      "measured_blob": "cdbf7b9c56e9b1fa80d8c22cb0dc5db60fe17402",
+      "main_blob": "cdbf7b9c56e9b1fa80d8c22cb0dc5db60fe17402",
+      "identical": true
+    },
+    "verl/utils/linear.py": {
+      "measured_blob": "7f823abbe3cb8911767a16c3f702dd0ca8da0d60",
+      "main_blob": "7f823abbe3cb8911767a16c3f702dd0ca8da0d60",
+      "identical": true
+    },
+    "verl/models/transformers/precision.py": {
+      "measured_blob": "727526e4dcea1754c93f70306f5305a3c4bf1c2b",
+      "main_blob": "727526e4dcea1754c93f70306f5305a3c4bf1c2b",
+      "identical": true
+    },
+    "verl/trainer/distillation/hidden_io.py": {
+      "measured_blob": "a8ff0c17101dd8390d8e10acddcd389c2d315a60",
+      "main_blob": "a8ff0c17101dd8390d8e10acddcd389c2d315a60",
+      "identical": true
+    }
+  },
+  "old_E45_4H800": {
+    "source": "examples/mirroropd/docs/infra/performance/full-vocab/data/mirror-observe-20261026/summary.json",
+    "outers": [
+      2,
+      3
+    ],
+    "input_tokens_mean": 385138.0,
+    "reuse": 16,
+    "responses_per_outer": 64,
+    "actor_seconds_mean": 98.3987108245492,
+    "rollout_pipeline_seconds_mean": 22.837137777358294,
+    "outer_seconds_mean": 126.98543305322528,
+    "input_token_passes_per_second_per_gpu": 15656.221378213955
+  },
+  "new_E61_4H800": {
+    "input_tokens": 1321946,
+    "response_tokens": 1218606.0,
+    "responses": 1024.0,
+    "reuse": 32,
+    "actor_seconds": 867.0058540180326,
+    "rollout_pipeline_seconds": 98.46503818035126,
+    "outer_seconds": 1043.3317144289613,
+    "input_token_passes_per_second_per_gpu": 12197.80460649582,
+    "cold_first_outer": true
+  },
+  "ratios": {
+    "actor_work_input_tokens_times_reuse": 6.864791321552275,
+    "actor_wall": 8.811150540010184,
+    "normalized_actor_cost": 1.2835278054770929,
+    "normalized_actor_throughput_drop_fraction": 0.220897283461424
+  },
+  "enabled": {
+    "EOS_fused": true,
+    "bf16_forward": true,
+    "async_hidden_write": true,
+    "hidden_prefetch": true,
+    "dynamic_token_microbatching": true,
+    "remove_padding": true,
+    "rollout_CUDA_graph": true,
+    "training_repetition_stop": true
+  },
+  "not_enabled_or_not_implemented": {
+    "gradient_accumulation_no_sync": false,
+    "activation_checkpointing_disabled": false,
+    "full_diagnostics_disabled": false,
+    "cross_reuse_teacher_anchor_projection_cache": false
+  },
+  "raw_metrics_sha256": "f3dc9f50a07cf44841201f533faa9c85c784e554efb008c3dd0c39c71e31a274",
+  "not_measured": [
+    "Current-run backbone/head/hidden-wait/NCCL GPU time breakdown.",
+    "Matched-input speed of current main versus measured worktree.",
+    "A/B speed or numerical equivalence with no_sync, checkpointing or diagnostics changed."
+  ],
+  "old_full_kl_reuse32_4H800": [
+    {
+      "outer": 1,
+      "input_tokens": 793535.0,
+      "actor_seconds": 311.4933746010065,
+      "input_token_passes_per_second_per_gpu": 20380.144547637796
+    },
+    {
+      "outer": 2,
+      "input_tokens": 774619.0,
+      "actor_seconds": 303.00958536565304,
+      "input_token_passes_per_second_per_gpu": 20451.33982320033
+    }
+  ]
+}

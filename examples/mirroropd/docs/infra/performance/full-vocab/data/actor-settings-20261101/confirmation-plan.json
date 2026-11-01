@@ -1,0 +1,47 @@
+{
+  "scope": "Two H800s, fixed natural prefixes, effective256 rows, cache repeat2; no new sampling, lr0. Per-case warmup2 updates then 2 x reuse4 measurements. Additional capacity-adjusted checkpointing tests after the 32768-budget OOM. Two final cases double effective input to512 rows to check the selected combination at nearly the previous production per-rank token work.",
+  "source_commit": "71f7468838248e1512755bdcc1665bde3006f1d7",
+  "physical_gpus": [
+    2,
+    3
+  ],
+  "cases": [
+    {
+      "name": "checkpoint-off-budget24576",
+      "args": [
+        "--no-checkpoint",
+        "--budget",
+        "24576"
+      ]
+    },
+    {
+      "name": "combined-checkpoint-off24576",
+      "args": [
+        "--no-checkpoint",
+        "--budget",
+        "24576",
+        "--no-sync",
+        "--no-diagnostics"
+      ]
+    },
+    {
+      "name": "baseline-size512",
+      "args": [
+        "--repeat-input",
+        "4"
+      ]
+    },
+    {
+      "name": "combined-size512",
+      "args": [
+        "--repeat-input",
+        "4",
+        "--no-checkpoint",
+        "--budget",
+        "24576",
+        "--no-sync",
+        "--no-diagnostics"
+      ]
+    }
+  ]
+}

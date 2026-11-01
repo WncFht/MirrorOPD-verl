@@ -1,0 +1,51 @@
+{
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/DAPO/train.parquet",
+  "sha256": "c69f0fb5cb09b642b77dc3e78615e1ba113388ca3fd5aa8c451c782ff1508719",
+  "model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "raw_rows": 17917,
+  "unique_raw_prompts": 17255,
+  "duplicate_raw_rows": 662,
+  "prompt_limit": 4096,
+  "usable_rows": 17917,
+  "usable_unique_prompts": 17255,
+  "invalid": [],
+  "prompt_tokens_min": 20,
+  "prompt_tokens_max": 1496,
+  "prompt_tokens_median": 89,
+  "strict_fresh_batch_max": 345,
+  "strict_fresh_batch_max_dp4": 344,
+  "batches": [
+    {
+      "batch": 256,
+      "needed_draws": 12800,
+      "full_batches_per_epoch": 69,
+      "minimum_epochs_drop_last": 1,
+      "mean_draws_per_row": 0.7144053133895183
+    },
+    {
+      "batch": 512,
+      "needed_draws": 25600,
+      "full_batches_per_epoch": 34,
+      "minimum_epochs_drop_last": 2,
+      "mean_draws_per_row": 1.4288106267790366
+    },
+    {
+      "batch": 1024,
+      "needed_draws": 51200,
+      "full_batches_per_epoch": 17,
+      "minimum_epochs_drop_last": 3,
+      "mean_draws_per_row": 2.857621253558073
+    }
+  ],
+  "prepared_training_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kappa1-setting-study-20261101/train-deduplicated.parquet",
+  "prepared_rows": 17255,
+  "prepared_sha256": "491f0bb064d4bdeb7d5a1c3cbc84d177af7d57ef9c0da215bed7943577b98069",
+  "proposed_prompt_batch": 256,
+  "proposed_rollout_n": 4,
+  "proposed_trajectory_batch": 1024,
+  "required_distinct_prompts": 12800,
+  "epochs": 1,
+  "training_prompt_limit": 2048,
+  "all_unique_prompts_fit_training_limit": true,
+  "batch_scenarios_units": "prompt rows before dedup; use proposed fields for the distinct-prompt plan"
+}

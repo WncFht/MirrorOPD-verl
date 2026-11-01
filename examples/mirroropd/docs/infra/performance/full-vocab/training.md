@@ -124,6 +124,122 @@ Trace 峰值包含此前评分阶段，NVML 包含同卡其他分配，二者不
 
 三组更新坐标 1–64 连续、全部 applied，无非有限梯度或跳步，位置桶计数与目标重建通过。它们确认短程执行与观测完整，不证明目标单调下降或长期质量。下一项可判别对照统一见[性能入口](README.md#下一组有判别力的测量)。
 
+## Qwen n=4 批量训练验收
+
+Qwen3-1.7B-Base←Qwen3-30B-A3B-Instruct-2507 在物理 GPU0–3 完成一轮实际训练：256 道不同题、每题 4 条回答、1,024 条轨迹，复用 32 次，32 次更新全部 applied，loss 与梯度有限。这里只验收批量、更新、重复停止和终点 accuracy 调用路径；50 outer 的正式训练尚未启动，10 条小验证回答不作为效果结果。
+
+### 数据量与参数单位
+
+DAPO 原文件 17,917 行，按 prompt 精确去重得到 17,255 道题；使用 Qwen3 Base 的实际模板分词，prompt 最长 1,496 token，全部适配 prompt cap2,048。原文件保持不变，验收与正式计划使用同一派生去重文件。[数据审计](data/kappa1-batch-acceptance-20261101/dataset-audit.json)记录原文件与派生文件 SHA256。
+
+50 outer 不跨 epoch 重抽时，题数上限为 $\lfloor17255/50\rfloor=345$；当前四卡入口要求题批量可被 4 整除，因此最多 344 题／轮。512 或 1,024 道不同题／轮不够用。采用 256 题／轮，只消耗 12,800 道不同题，剩余 4,455 道。`rollout.n` 扩大每题回答数，不增加跨 outer 的题目消耗。
+
+| 每轮题数 | rollout.n | 每轮轨迹数 | 50 outer 题数 | 50 outer 新轨迹数 |
+| -------: | --------: | ---------: | ------------: | ----------------: |
+|      256 |         1 |        256 |        12,800 |            12,800 |
+|      256 |         2 |        512 |        12,800 |            25,600 |
+|      256 |         4 |      1,024 |        12,800 |            51,200 |
+
+验收选择最后一行。`data.train_batch_size=256`、`actor.ppo_mini_batch_size=256` 都以 prompt 为单位；原生训练器会将 mini-batch 乘以 `rollout.n=4`，实际每次更新使用 1,024 条轨迹。`ppo_epochs=32` 因此恰好是每轮 32 次更新，正式 50 轮共 1,600 次；将 mini-batch 填成 1,024 会再次被乘以 4。过滤分组与失败补题均关闭，单 epoch 内顺序遍历打乱后的去重数据。n=4 增加同题回答多样性，其题目覆盖量仍为 12,800，不能等同于 51,200 道不同题。
+
+### 实际执行设置与耗时
+
+冻结主干 `402f6353` 加[训练重复停止](../inference/2026-11-01-生成重复检测与提前停止.md)补丁；源码补丁哈希见[单轮审计](data/kappa1-batch-acceptance-20261101/acceptance-audit.json)。MDPO 的 κ=1、η=0.1、LR1e-6，BF16 计算、EOS `precompute_fused`、head chunk512、hidden async write／prefetch；mirror diagnostics 沿用 E61。共享同步池为四张 H800，teacher 无独立卡；rollout 是四个 TP1 副本，CUDA Graph 开启。Prompt／response cap 为 2,048／16,384，actor、teacher、rollout 的每卡 token budget 均为 32,768；每引擎 `max_num_seqs=256`、显存比例 0.8。训练与验证均开启精确重复检测 16–128 token 连续 8 次。
+
+| 阶段                   |       秒 |
+| ---------------------- | -------: |
+| Rollout pipeline       |    98.47 |
+| Teacher 搬运           |    17.81 |
+| Teacher forward        |    17.32 |
+| Actor 32 次更新        |   867.01 |
+| 权重同步               |     6.59 |
+| 整个训练 outer         | 1,043.33 |
+| 末次 10 条回答的小验证 |    46.23 |
+
+本轮实际生成 1,218,606 个 response token，均长 1,190.04；训练 outer 约 17.39 分钟，其中 actor 占 83.10%。初始 student 的短回答不能代表后期长回答的成本，不能据此直接给出 50 轮 ETA。FSDP allocated 峰值 20.75 GiB；它与下表含 KV 等分配的 NVML 整卡峰值采用不同口径。包含模型／Ray 启动与退出的进程墙钟为 1,489.16 秒。
+
+### 与历史 profile 对齐后的效率与版本核对
+
+上述单轮实际使用 `402f6353`（2026-11-01 11:21）加已保存的重复停止补丁，未使用当前本地 main `71f74688`（14:36）。两者相差 19 个提交。逐 Git blob 核对确认 EOS 融合 kernel、停止类映射、数值归约、BF16 投影、精度 adapter 和 hidden IO 完全一致；后续提交主要调整执行／优化器合同、评估、动作空间和校验，不构成这轮遗漏 EOS 融合优化的证据。新 main 的结果类型和分派仍有变化，下面的耗时不能转记为新 main 的性能结果。
+
+按输入 token×reuse／actor 秒数／GPU 数计算 token passes/s/GPU，比较同为四张 H800 的历史测量。输入 token 同时包含 prompt 和回答；它没有消除模型宽度、目标、EOS、长度分布及 warmup 差异。[复算摘要](data/kappa1-batch-acceptance-20261101/performance-comparison.json)记录实际 token 数、版本和核心文件 blob。
+
+| 测量                                     | 每轮输入 token | Reuse | Actor 秒 | 输入 token passes/s/GPU |
+| ---------------------------------------- | -------------: | ----: | -------: | ----------------------: |
+| 历史 E45 MDPO，outer2–3 均值             |        385,138 |    16 |    98.40 |                  15,656 |
+| 历史 JustRL→R1 Full-KL，reuse32 两轮均值 |        784,077 |    32 |   307.25 |                  20,415 |
+| 当前 Qwen MDPO κ=1，首个 outer           |      1,321,946 |    32 |   867.01 |                  12,198 |
+
+相对旧 E45，actor 工作量扩大 6.86 倍，耗时扩大 8.81 倍；归一化后每 token pass 成本高 28.35%，吞吐低 22.09%。这组分解确认大部分单轮耗时差异与工作量扩大同时发生，剩余差距仍值得定位，不能直接命名为代码回退。相对 reuse32 的 Full-KL 验收，归一化成本高 67.37%；该组的冻结来源只有 teacher，当前一般 MDPO 还包含 anchor 输出头、目标与诊断，且 student／teacher 也不同，不能当作相同算法的回归对照。当前样本为冷启动后的首轮，旧 E45 使用正常窗口，两者尚无相同输入的 A/B。
+
+| 优化或成本项                                              | 这轮实际状态 | 解释                                                                                                                |
+| --------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------- |
+| EOS `precompute_fused`、BF16、chunk512                    | 已开启       | 三份全词表 logits 不再整体转 FP64；EOS 小子集仍保留高精度补偿                                                       |
+| Hidden async write／prefetch、去 padding、动态 token 分批 | 已开启       | TQ 读取预取后仍需将当前 micro-batch hidden 搬上 GPU                                                                 |
+| Rollout Graph、256 并发、训练重复停止                     | 已开启       | 主要作用于生成；actor 占 outer 的 83.10%                                                                            |
+| 梯度累积 no-sync                                          | 关闭         | 每个 micro-batch 都同步梯度；旧 E45 也关闭，属于待测优化，不能解释为新增关闭                                        |
+| Activation checkpointing                                  | 开启         | 保留 backbone 重算成本；旧固定输入关闭测试曾推高显存且无明确提速，不能直接假定关闭更快                              |
+| 完整 mirror diagnostics                                   | 开启         | 旧 E45 同样开启；关闭前后需固定输入测量，现无当前设置的独立成本比例                                                 |
+| Teacher／anchor 跨 reuse 输出头缓存                       | 未实现       | Backbone hidden/head 已冻结复用，但每次更新仍重做三组 head 投影与行运算；`precompute` 缓存范围是单次 forward 的 VJP |
+
+配置中的通用 `use_fused_kernels=False` 对应另一套 PPO／模型融合接口，精度 adapter 要求关闭；它与这里的 full-vocab `backend=precompute_fused` 不是同一个开关。当前动态分批开启，因此 `ppo_micro_batch_size_per_gpu=1` 也不表示逐条训练。Actor token budget32768 与均衡后每 rank 约 330K 输入 token，按当前分批公式推算约 11 个 micro-batch／更新；没有实际事件记录，不将该推算当作测得的通信次数。
+
+当前没有内部 CUDA trace，不能给出 backbone、head、NCCL、hidden 等待的百分比分摊。后续性能核对应先在固定同一批 token、相同 κ／η 和 optimizer 初态下比较当前 main，再分别检查 no-sync、token budget 和 diagnostics；checkpointing 仅作为有显存约束的对照。Frozen q/T 的逐 token 归一化标量可考虑有界缓存；完整 FP32 target 在本轮约需 689.74 GiB，不能直接常驻 GPU。
+
+当前 main `71f74688` 的 50 轮配置已在独立工作树解析通过，保留 n4 和终点 accuracy，额外准备轻量 host timeline。该版本已完成下述两卡固定 token actor 对照；四卡完整 outer 尚未重跑，50 轮也未启动。实际配置见[main 配置预览](data/kappa1-batch-acceptance-20261101/formal-main-config.yaml)；工作目录 `formal-plan-main.json` 是当前 main 的后续候选，旧 `formal-plan.json` 保留为上一版本的计划来源。
+
+### 固定 token 的配置优化实测
+
+在 main `71f74688` 的冻结工作树上，用空闲物理 GPU2、3 的两张 H800 完成 18 个 actor 配置／容量检查：13 个成功、5 个 OOM。成功记录共 132 次有效 optimizer step，均为 LR0，loss／梯度有限、无跳步，每个 rank 的参数哈希前后不变，所有配置也使用相同初始参数哈希。测试保留原生 FSDP2、FP32 master、BF16、κ=1、η=0.1、EOS `precompute_fused`，并固定 `FLASH_ATTENTION_DETERMINISTIC=1`；未修改训练 kernel；新增的是 benchmark 入口与精度参数传递。当前 main 后续的文档提交不改变这份冻结身份。
+
+输入为 128 条历史自然回答的原始 token 及真实 teacher hidden；复制为 256 或 512 条，仅放大固定计算量，不作为新训练样本或 accuracy 证据。256 条对应 293,978 个输入 token、257,316 个 loss token，每 rank 输入 146,989；512 条将这些量翻倍，每 rank 293,978，接近之前完整四卡批的 330,486.5。历史银行最长回答 5,463 token，没有覆盖 16K 自然长回答的容量。每配置独立进程预热两次更新，再测两次 reuse4；profile 另外采两次更新。计时包含 anchor、backward、AdamW 和参数／optimizer 上下卡，排除 teacher 准备、Ray／TQ 和 rollout。LR0 参数不变用于控制计时输入，不证明非零学习率下逐参数更新等价。
+
+| 256 条固定输入的配置                   | 两次 actor 秒数，每次 4 更新 | Allocated 峰值 GiB | Reserved 峰值 GiB |
+| -------------------------------------- | ---------------------------: | -----------------: | ----------------: |
+| 基线                                   |                63.86 / 57.63 |              22.55 |             27.25 |
+| 末尾基线复测                           |                58.12 / 59.78 |              22.55 |             27.25 |
+| 只开 no-sync                           |                58.27 / 57.06 |              25.68 |             32.77 |
+| 只把 actor budget 升到 65536           |                56.37 / 56.64 |              27.19 |             33.71 |
+| 只关 diagnostics                       |                54.87 / 59.29 |              22.55 |             27.25 |
+| 只把 head chunk 升到 1024              |                58.30 / 57.11 |              24.63 |             28.51 |
+| no-sync＋budget65536                   |                57.52 / 57.17 |              30.40 |             38.58 |
+| 14／28 层 checkpoint                   |                58.23 / 55.14 |              64.18 |             77.46 |
+| 14／28 层＋no-sync＋关闭诊断           |                54.39 / 56.67 |              67.39 |             77.64 |
+| 全部 checkpoint＋budget65536＋关闭诊断 |                52.07 / 52.73 |              27.19 |             33.71 |
+
+![固定输入的配置耗时与显存](figures/actor-settings-20261101/settings-comparison.png)
+
+单项 no-sync、chunk 及 budget 的改善与初始基线波动存在重叠，不能据此宣称稳定的 5%–8% 因果收益。保留全部 checkpointing，只组合 actor budget65536 与关闭额外 diagnostics，256 条的中位时间为 52.40 秒，相对末尾基线 58.95 秒减少 11.11%；512 条的基线为 110.70 秒，组合为 99.12 秒，减少 10.46%，allocated 峰值为 29.51GiB。这里报告两次原始读数，未计算置信区间，也未将重复的 inner update 当作独立重复实验。四卡完整 outer 与 reuse32 的收益仍待复验。
+
+全关 checkpointing 在 budget32768、24576 均 OOM，24576 再加 no-sync 及关闭诊断也 OOM，扩大到 512 条仍失败。只保留 14／28 层 checkpointing 在 256 条上能跑通，但 allocated 升到 64–67GiB，速度收益较小；相同组合放大到 512 条时 OOM，报错时 allocated66.52GiB、reserved 但未使用 10.93GiB。开启`PYTORCH_ALLOC_CONF=expandable_segments:True`后，同一 512 条选择性 checkpoint 组合完成，allocated／reserved 峰值为 67.38／72.94GiB；actor 中位 105.28 秒，仍未优于低显存的全部 checkpoint 组合。allocator 对照确认了该输入下的容量改善，不能把它解释为主要训练加速。
+
+![同规模输入的容量与配置取舍](figures/actor-settings-20261101/capacity-comparison.png)
+
+两个 GPU 分别通过 64MiB CUDA tensor 的跨进程 IPC 往返与数值核对；它验证当前 PyTorch／驱动的该项能力，未覆盖 vLLM sleep、完整 refit 或共享同步生命周期。选择性 checkpoint 仅是 benchmark 内的实例设置，尚未成为正式 launcher 参数；上述 allocator 开关也未自动写入正式默认值。
+
+两 rank 实际 CUDA trace 按 launch correlation 过滤出两次训练更新：每 rank 每次更新有 5 个 micro-batch，head 相关 kernel duration 合计占 32.12%，其中`mirror_rows`为主要部分；teacher／anchor 两次投影合计约 2.2%，不支持优先缓存完整投影矩阵。NCCL 区间并集约 1.42 秒，与 compute 重叠约 0.83 秒，不重叠约 0.59 秒；这些是设备区间统计，不与 host 墙钟相加。约一半 kernel 尚无更细的 full-vocab 语义归属，不能全部命名为 backbone。Trace 由[汇总](data/actor-settings-20261101/summary.json)给出细项，原始压缩 trace 保留在运行目录。
+
+后续工程优先级是：先对 budget65536＋关闭诊断的标准配置补四卡完整 outer、长回答与权重同步验收；再沿 trace 优化目标／诊断的重复行归约，并检查 norm／MLP 的高频逐元素算子。Frozen q/T 的逐 token 稳定归一化标量可考虑有界跨 reuse 缓存，需绑定 sample／position、anchor version 和 EOS 协议；完整 FP32 target 在原批量下约 690GiB，不直接缓存。reshard／预取策略和完整 TQ 路径仍未在这组对照中测量。
+
+可复用入口为[固定 token 配置 probe](../../../../benchmarks/profile/benchmark_actor_settings.py)、[选择性 checkpoint probe](../../../../benchmarks/profile/benchmark_partial_checkpoint.py)和[allocator probe](../../../../benchmarks/profile/benchmark_expandable_checkpoint.py)。完整日志、退出码、缓存哈希、源码快照、参数哈希及复算脚本位于仓库`runs/actor-settings-20261101/`。[候选正式配置](data/actor-settings-20261101/candidate-config.yaml)保留 256 题×n4、reuse32、outer50 及仅终点 accuracy，使用全部 checkpoint、actor budget65536、diagnostics 关闭、chunk512、no-sync 关闭；该 50 轮实验尚未启动。
+
+### Rollout 并发扫描
+
+四个独立 TP1 引擎分别测试同一组 256 道真实题，采用相同 seed、采样和重复停止协议。批处理会影响实际生成长度，下表是单次配置探索，不能作为固定 token 工作量的因果加速比。[扫描摘要](data/kappa1-batch-acceptance-20261101/rollout-sweep.json)保留 token 数、计时、抢占和强制停止检查。
+
+| 每引擎 max_num_seqs | 显存比例 | 输出 token | 输出 token/s | NVML 峰值 MiB |
+| ------------------: | -------: | ---------: | -----------: | ------------: |
+|                  64 |      0.8 |    288,904 |        3,532 |        66,737 |
+|                 128 |      0.8 |    257,771 |        4,675 |        66,771 |
+|                 256 |      0.8 |    255,944 |        6,358 |        66,985 |
+|                 256 |      0.9 |    279,141 |        4,162 |        75,201 |
+
+自然生成扫描均无 OOM、无 preemption；额外 8K prompt 合成容量压力检查中，64 并发无抢占，其余三个设置各发生一次抢占，均正常完成。选择已通过真实四卡训练的 256／0.8。四副本请求上限合计 1,024；KV 容量仍限制同时驻留的长上下文，不能解读为每卡保证同时运行 256 条满长 16K 回答。
+
+正式计划保留上述训练设置，仅将 `total_training_steps=50`、`test_freq=50`、`val_before_train=False`，并关闭 RKL 银行与额外 readout。终点运行 MATH-500、AMC23、AIME24／25／26 全集 accuracy，每题 16 次、T=1、top_p=0.7、response cap16,384。关闭 checkpoint，避免额外保存成本。此全量终点评估尚未执行。[已解析的正式配置](data/kappa1-batch-acceptance-20261101/formal-config.yaml)是待运行计划，不是 50 轮完成证据。
+
+完整单轮配置、32 次更新指标、末次验证、源码补丁和各扫描原始记录位于仓库 `runs/kappa1-setting-study-20261101/`；`formal-plan.json` 为 50 轮计划，`preview_formal.py` 仅解析配置，不启动 GPU。训练采用已验证的 `profile-cu128/bin/python` 入口；直接调用其符号链接目标会选中另一套环境，不能据路径相似替换。
+
 ## IO 与模型驻留
 
 同步/异步 IO 的独立对照使用 `39d8be84a`、四卡 H800、eager rollout，各 4 步，第 3 步 profile；两组生成 token 不相同。因此记录等待变化，不宣称整步 IO 的因果加速比例。[原始证据](data/review-005)。
