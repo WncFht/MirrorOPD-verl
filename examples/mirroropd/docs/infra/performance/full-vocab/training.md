@@ -144,7 +144,7 @@ DAPO 原文件 17,917 行，按 prompt 精确去重得到 17,255 道题；使用
 
 ### 实际执行设置与耗时
 
-冻结主干 `402f6353` 加[训练重复停止](../inference/2026-11-01-生成重复检测与提前停止.md)补丁；源码补丁哈希见[单轮审计](data/kappa1-batch-acceptance-20261101/acceptance-audit.json)。MDPO 的 κ=1、η=0.1、LR1e-6，BF16 计算、EOS `precompute_fused`、head chunk512、hidden async write／prefetch；mirror diagnostics 沿用 E61。共享同步池为四张 H800，teacher 无独立卡；rollout 是四个 TP1 副本，CUDA Graph 开启。Prompt／response cap 为 2,048／16,384，actor、teacher、rollout 的每卡 token budget 均为 32,768；每引擎 `max_num_seqs=256`、显存比例 0.8。训练与验证均开启精确重复检测 16–128 token 连续 8 次。
+冻结主干 `402f6353` 加[训练重复停止](../../rollout/repetition-detection.md)补丁；源码补丁哈希见[单轮审计](data/kappa1-batch-acceptance-20261101/acceptance-audit.json)。MDPO 的 κ=1、η=0.1、LR1e-6，BF16 计算、EOS `precompute_fused`、head chunk512、hidden async write／prefetch；mirror diagnostics 沿用 E61。共享同步池为四张 H800，teacher 无独立卡；rollout 是四个 TP1 副本，CUDA Graph 开启。Prompt／response cap 为 2,048／16,384，actor、teacher、rollout 的每卡 token budget 均为 32,768；每引擎 `max_num_seqs=256`、显存比例 0.8。训练与验证均开启精确重复检测 16–128 token 连续 8 次。
 
 | 阶段                   |       秒 |
 | ---------------------- | -------: |
@@ -259,7 +259,7 @@ DAPO 原文件 17,917 行，按 prompt 精确去重得到 17,255 道题；使用
 
 下一组配对实验的矩阵、统一启动命令和固定前缀工具需求维护在[公平性能对照方案](../sampled-full/README.md)，尚未产生新的测量结果。
 
-比较配置与全部训练成本的唯一数据表维护在[五组 Math 实验对比](../../../experiments/learning-signal/sampled-vs-full/2026-10-24-五组Math实验对比分析.md#7-时间成本显存和资源活动)。该组包括八卡 A100 上的 Full-KL E14 与 sampled vanilla E15，full 使用 precompute，二者学习率、生成轨迹和实际源码状态未完全控制。
+比较配置与全部训练成本的唯一数据表维护在[五组 Math 实验对比](../../../experiments/learning-signal/sampled-full.md#five-7-时间成本显存和资源活动)。该组包括八卡 A100 上的 Full-KL E14 与 sampled vanilla E15，full 使用 precompute，二者学习率、生成轨迹和实际源码状态未完全控制。
 
 该观察支持：full 的 actor 稍慢，但通过省去 old-log-prob/advantage、使用 hidden teacher 通路，普通 outer 更短；actor 进程 allocated 高水位较低，而 NVML 整卡峰值接近。它不构成当前 fused 与显式 token-IS 的固定输入 benchmark。复用多次的 actor 时间应同时报告每 outer 与每次更新，不能把开销摊薄解释为生成周期变快。
 
@@ -503,7 +503,7 @@ AdamW 使用 LR=$10^{-6}$、constant scheduler、betas=(0.9,0.999)、weight deca
 
 最终保存 FP32 master 权重，不保存 Adam。原生 model-only 重载的固定输入 RKL 最大误差为 0，之后删除临时 FSDP 分片；独立新进程从 HF 权重初始化，再评分原 8 条 source 轨迹，最大误差同样为 0。完整运行墙钟 660.94 秒，包含模型启动、训练、公共生成、判分、评分与导出；不能将它当作单轮训练吞吐。
 
-[验收摘要](data/unified-core-acceptance-20261031/summary.json)、[实际配置](data/unified-core-acceptance-20261031/config.yaml)和[启动时源码 hash](data/unified-core-acceptance-20261031/source-hashes.json)保留了条件与证据。原始轨迹、日志和逐 run 图表位于仓库`runs/unified-evaluation-20261031/`；后续规模验收状态由[实施页](../../architecture/evaluation/代码走读与实施计划.md#8-统一评估实现与待验收边界)维护。
+[验收摘要](data/unified-core-acceptance-20261031/summary.json)、[实际配置](data/unified-core-acceptance-20261031/config.yaml)和[启动时源码 hash](data/unified-core-acceptance-20261031/source-hashes.json)保留了条件与证据。原始轨迹、日志和逐 run 图表位于仓库`runs/unified-evaluation-20261031/`；后续规模验收状态由[实施页](../../../archive/engineering/evaluation/2026-11-01-分阶段代码走读与验收.md#8-统一评估实现与待验收边界)维护。
 
 ### 规模与六卡检查
 
@@ -519,3 +519,47 @@ Code、Science、IF 分别完成两轮集成，每组使用 128 条对应来源�
 两种执行配置逐题 RKL 完全一致；同权重组 RKL 为 0。窗口和 token chunk 同时改变，因此这些时延不是单因素比较。14B teacher 每条 32K 前缀的 hidden＋positions 实际传输约 320.3MiB，与 BF16 hidden 宽度 5120 的估算一致。
 
 六卡使用 batch128／reuse32 完成 32 次真实更新，物理补齐到 132 行，统计仍为 128 题。Actor 更新阶段 202.41 秒；固定 source128 的 RKL 从 0.106403 降至 0.056139，降幅 47.24%。该检查只有一个 outer，数据也不同于旧四卡基准，不能据此作严格吞吐或收敛比较。最终模型重载 RKL 误差为 0，无 Adam 文件。[规模验收摘要](data/unified-scale-acceptance-20261101/summary.json)保存逐题集合的汇总与审计。
+
+## 正式 50outer 的阶段成本与数据量
+
+数据来自已完成的`justrl-r1-1p5b-math-50outer-common-v1`：四张 H800、JustRL-1.5B→R1-1.5B、batch128、reuse32、50outer，训练 cap7168、公共评估 cap32768。这里使用原启用 source/history 的运行日志；关闭后的耗时只作估算，没有另跑大型实验。
+
+| 普通 outer 阶段                |   实测均值 | 逻辑数据量                                                                |
+| ------------------------------ | ---------: | ------------------------------------------------------------------------- |
+| Current student rollout 流水线 |   25.04 秒 | 128 道新题、128 条回答；约 73.18 万 response token                        |
+| Teacher 上下卡                 |    0.91 秒 | 本轮一次评分阶段的加载／卸载                                              |
+| Teacher backbone 评分          |    2.90 秒 | 约 74.43 万 prompt＋response 输入 token；保留约 73.18 万有效位置的 hidden |
+| Actor 更新                     |  275.84 秒 | 同批数据 32 次 student forward/backward，约2341.87万有效loss位置使用次数  |
+| Student 权重同步               |    0.93 秒 | 同步更新后的权重供下轮 rollout 使用                                       |
+| 原 source/history 评估         |   14.35 秒 | 来源 128＋动态 history128，teacher／student 各评分一次                    |
+| 其他调度与写入差额             | 约 0.83 秒 | 训练轨迹、指标及流程调度                                                  |
+| 原普通 outer 合计              |  320.80 秒 | 约 5.35 分钟                                                              |
+
+Actor 阶段包含 teacher head 投影、full-vocab KL、student 反向、Adam 和 FSDP 通信；teacher 的 2.90 秒只统计 backbone 与 hidden 准备，不能当作全部 teacher 计算成本。32 次更新平均约 8.62 秒一次。正式日志没有把这一阶段进一步可靠拆为 head／backbone／optimizer，不能将其他微基准数字直接填入这里。
+
+每 outer 实测 prompt 约 1.25 万 token、response 约 73.18 万，平均回答 5717token；各批 response 总数范围约 67.77 万–77.60 万。32 次更新对应同一 128 条回答被使用 32 遍，绝非 4096 道新题；含 prompt 的 student 逻辑前向 token 访问约 2381.80 万，另有反向及 activation checkpoint 重算。50outer 合计 6400 道新题、3659.16 万训练 response token，约 11.71 亿有效 loss 位置使用次数。
+
+Teacher hidden 按 1536 维、BF16 计算，逻辑体积约 2.09GiB／outer，另有少量位置元数据。它在本轮 reuse 期间临时复用；这是内存/TQ 数据量，不是长期磁盘缓存，也不等于实测 PCIe 字节数。
+
+### 不同评估节点
+
+| 节点类型              | 旧设置下 outer 总耗时 | 其中评估耗时 | 关闭 source/history 后仍需处理的数据                          |
+| --------------------- | --------------------: | -----------: | ------------------------------------------------------------- |
+| 普通 outer，38 次     |        平均 320.80 秒 |     14.35 秒 | 无额外评估；只保留训练本体                                    |
+| 固定 bank 节点，10 次 |        平均 385.76 秒 |     76.98 秒 | initial-student512＋teacher512 条固定回答，不生成新回答       |
+| Outer25               |            3126.69 秒 |   2823.55 秒 | 6703 条新 bench 回答＋判分；固定 banks1024＋current512 条 RKL |
+| Outer50               |            3234.98 秒 |   2925.56 秒 | 同上，另含最终模型导出／校验                                  |
+
+固定两类公共银行合计 670.60 万有效 response 位置，每次分别由 teacher 和 student 前向评分。Outer25／50 的 current bank 分别增加约 292.03 万／288.04 万位置，所以关闭 source/history 后主 RKL 集合为 1536 条、约 962.63 万／958.64 万位置。每个模型都要评分这些前缀；不能把一次生成当作已经缓存了 full-vocab 分布。
+
+Outer25／50 各生成 6703 条公共回答，实际约 5431.22 万／5426.52 万 response token。样本来自全量 1648 题，按各 bench 既定 n 生成；RKL 只选每域 128 题的 sample0 复用。生成与 CPU 判分重叠，评估计时也包含模型切换、RKL 和终点导出，不能把单请求耗时求和当墙钟。两次完整评估中的 RKL 评分分别约 102.89／103.19 秒，主要耗时仍是大批量自回归生成与判分。
+
+初始 student 公共生成约 7304.48 万 token，teacher 约 5530.14 万；对应两个 bootstrap 阶段约 72.19／53.80 分钟。旧 student 阶段另含 source128 题生成。全部阶段记录合计约 8.45 小时，其中训练进程含验证约 6.33 小时。
+
+### 关闭后的估算与口径
+
+普通 outer 从实测 320.80 秒扣除原评估 14.35 秒，得到约 306.45 秒，即 5.1 分钟；这是按旧日志估算，尚非新运行实测。38 个仅有 source/history 的节点，其评估共约 545 秒，关闭后还会减少公共评估节点中的额外评分，但组合窗口的加载和前向成本不能直接线性相减。
+
+按同一旧运行的读出次数计，主 RKL 轨迹评分数会由 27264 降至 14336；初始化 current 复用 initial，不重复计数。条数降低约 47.4%，不代表总训练时间降低 47.4%：训练更新与 6703 样本的 bench 生成保持原预算，公共轨迹也通常更长。
+
+[统计摘要](data/justrl-outer-profile-20261101/summary.json)、[阶段表](data/justrl-outer-profile-20261101/stages.csv)、[逐批 token 表](data/justrl-outer-profile-20261101/training-tokens.csv)和[评估节点表](data/justrl-outer-profile-20261101/evaluation-nodes.csv)保留实际数值。复算入口是[analyze_native_outer.py](../../../../benchmarks/profile/analyze_native_outer.py)。`rollout_batch_seconds`是`rollout_pipeline_seconds`的内部计时，以上表格只加后者，避免重复求和。

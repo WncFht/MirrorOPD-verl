@@ -2,7 +2,7 @@
 
 本文说明当前单教师 OPD（On-Policy Distillation）的模块职责及跨模块执行顺序。详细源码从[代码走读索引](代码走读.md)进入；数学定义见[理论目录](../../theory/README.md)，实验预算和启动默认值见[训练配方](../../settings/训练设置.md)。根目录 `docs/` 是 verl 上游文档，本目录维护 MirrorOPD 的实现说明。
 
-当前接口以本页及下方专题为准；旧配置和开发调用者按[迁移指南](runtime-migration.md)升级。[重构报告](2026-11-01-运行合同审计与重构方案.md)保存代码来源、设计取舍和验收范围，不作为另一份当前配置手册。
+当前接口以本页及下方专题为准；旧配置和开发调用者按[迁移指南](runtime-migration.md)升级。[重构报告](../../archive/engineering/2026-11-01-运行合同审计与重构方案.md)保存代码来源、设计取舍和验收范围，不作为另一份当前配置手册。
 
 ## 模块职责
 
@@ -17,7 +17,7 @@
 | 指标与进度               | 合并观测、逐次更新日志、尝试与成功计数、恢复                                                           | [指标系统](metrics.md)、[进度与恢复](progress-checkpoint.md) |
 | 评估与产物               | 一个 `_target_` 构造边界、组件 options、只读 scoring 与不可变产物                                      | [评估合同](../../../../../verl/trainer/evaluation/README.md) |
 
-默认 student 来源的 shared-sync 路径如下。非默认来源、initial/checkpoint 绑定及双模型混合的控制与验收由[Rollout 实现](../rollout/fusion/README.md)维护；其学习效果与工程验收分别报告。
+默认 student 来源的 shared-sync 路径如下。非默认来源、initial/checkpoint 绑定及双模型混合的控制与验收由[Rollout 实现](../rollout/README.md)维护；其学习效果与工程验收分别报告。
 
 ## 一轮 shared-sync 训练
 
@@ -80,10 +80,10 @@ flowchart LR
 
 [架构重构验收](../../archive/engineering/2026-10-25-架构重构实施与验收.md)记录归一化、布局、生命周期与恢复的检查；[主分支四卡验收](../../archive/engineering/2026-10-25-主分支四卡验收.md)记录四卡集成和真实模型短训练。覆盖范围以报告为准，不从短训练推断长期收敛或所有后端的兼容性。
 
-Mirror 的实现、已通过测试与[剩余验证范围](../numerics/mirror-objectives/实现方案.md#remaining-validation)单独列明。当前说明随源码维护，不记录提交经过。设计取舍、旧实现和冻结实验留在对应历史文档，通过[维护约定](代码走读.md#维护约定)保持单一入口。
+Mirror 的实现、已通过测试与[剩余验证范围](../numerics/mirror-objectives/reference.md#remaining-validation)单独列明。当前说明随源码维护，不记录提交经过。设计取舍、旧实现和冻结实验留在对应历史文档，通过[维护约定](代码走读.md#维护约定)保持单一入口。
 
 ## 四域评估与模型扩展
 
-原生评估的版本、能力与验收范围统一由[评估状态入口](evaluation/README.md)维护。已提交 main 的协调器、公共 bank 和 model-only 导出，与工作区新增的共同支持、模型 adapter 和 ID 映射分别记录；不能将未提交实现视为当前提交已发布。
+当前评估使用、产物与证据从[评估入口](../evaluation/README.md)进入，局部 API 以评估包合同为准。共同支持、EOS 和模型输入由[动作空间](../model-compatibility/action-space.md)维护；MiMo、Olmo3 等接入各自保留模型与负载验收。
 
-[四域 RKL 接入方案](2026-10-31-四域RKL实验的verl接入方案.md)保留设计关系；[实施记录](evaluation/代码走读与实施计划.md)保留分阶段证据，旧研究读出结果不替代新原生路径验收。
+原设计、分阶段代码走读与版本快照见[历史依据](../maintenance/history.md)。旧研究读出、短程集成与完整科研运行不能互相替代，工作区或 main 的旧状态标签不用于推断当前部署。

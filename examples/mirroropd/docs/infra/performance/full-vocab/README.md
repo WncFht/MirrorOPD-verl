@@ -23,7 +23,7 @@
 | Full-KL 整轮成本不能由词表大小推断          | [Full-KL 与 sampled 对照](training.md#full-kl-与-sampled)：已有八卡观察中 full actor 略慢、outer 较短、进程 allocated 较低；当前 fused 与显式 sampled token-IS 的固定输入对照仍缺失。                    |
 | 完整 target 缓存需要单独容量设计            | [容量预算](operators.md#容量预算)：64×7168 个有效位置、V=151936 时，一份 FP32 target 约 259.66 GiB；现有方案只保留 frozen hidden/head 并分块重建。                                                       |
 
-这些结论按各项已保存测量的源码和输入解释。2026-10-26 的 precompute 复测保存了当时工作区的模块快照，其他读数没有因此变成新版本结果。MDPO/BPO 的数值层 A/B 测量早于近目标梯度修正；版本边界见[算子测量](operators.md#mdpo-bpo-target-与诊断融合)及[数值审计](../../../experiments/teacher-transfer/optimizer-precision/mechanism/2026-10-26-MDPO内层KL反弹与数值链路审计.md)。
+这些结论按各项已保存测量的源码和输入解释。2026-10-26 的 precompute 复测保存了当时工作区的模块快照，其他读数没有因此变成新版本结果。MDPO/BPO 的数值层 A/B 测量早于近目标梯度修正；版本边界见[算子测量](operators.md#mdpo-bpo-target-与诊断融合)及[数值审计](../../numerics/optimization/2026-10-26-数值链路审计.md)。
 
 ## 下一组有判别力的测量
 

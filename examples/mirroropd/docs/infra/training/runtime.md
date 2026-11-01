@@ -1,0 +1,237 @@
+# 共享训练的运行环境与资源
+
+符号遵循[统一约定](../../theory/符号约定.md)；代码字段、论文原名与历史数据键保留原样。
+
+共享方案已在 `5188828d2` 实现。本页于 2026-10-22 按 `7fe4f830d` 核对源码及公共数学配方的 `CONFIG_ONLY=1` 输出。公共领域配方默认 `shared_sync`，通用 verl 配置仍默认 `standalone`；两者都使用 `PPOTrainerSync`。代码实现、已报告的测试与目标八卡端到端验收分开记录，当前指标测试证据见[完整指标实现与验收](../../archive/metric-implementation/2026-10-22-完整指标实现与验收.md)。
+
+当前默认运行方式是：八个 student TP1 副本生成整批回答，释放推理状态，冻结 teacher 使用同一八卡池做 FSDP2 前向并卸载，再由 actor 更新 student，最后同步八个推理副本。验证直接复用这八个 student 副本。原 4+4 保留为对照和回退路径。
+
+## 启动与配置
+
+环境和模型数据准备完成后，从仓库根目录运行：
+
+```bash
+# 默认 shared_sync，共享八卡。
+DISTILLATION_EXECUTION_MODE=shared_sync STUDENT_GPUS=8 TEACHER_GPUS=0 \
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
+  bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
+
+# 恢复 standalone 4+4。
+DISTILLATION_EXECUTION_MODE=standalone STUDENT_GPUS=4 TEACHER_GPUS=4 \
+  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
+  bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
+
+# 不启动 GPU/Ray、不创建实验目录的配置预览。
+DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
+CONFIG_ONLY=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
+```
+
+Math、code、IF 共用 [\_run_single_teacher_fsdp2.sh](../../../launchers/_run_single_teacher_fsdp2.sh)。领域入口、数据、verifier 和训练/验证预算只在[训练配方](../../settings/训练设置.md)维护。系统切换保持所选配方的算法和工作预算不变。
+
+代码领域直接使用 `run_code_deepseek_r1_1_5b_fsdp2.sh`，选择 DeepCoder teacher、TACO 和 LCBv6。2026-10-21 本机仅完成资产与 CONFIG_ONLY 检查：原始 TACO24701 行、LCBv6 175 行；未执行该领域的 GPU 训练。代码判分还含 CPU 程序执行成本，数学生成的测量不能代替 code 验收。
+
+### 验证执行配置与四卡八卡启动
+
+领域默认值与速度/显存 profile 统一见[训练配方](../../settings/训练设置.md#推理执行配置)，E 系列编号和预算见[消融预设](../../experiments/learning-signal/sampled-controls.md)。本节只维护资源覆盖与执行方法。数学默认由公共脚本派生，不需要在任务脚本重复导出一套训练和验证参数。
+
+```bash
+# 八卡 shared-sync；只填写已经分配给作业的设备。
+export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+export STUDENT_GPUS=8
+export TEACHER_GPUS=0
+export DISTILLATION_EXECUTION_MODE=shared_sync
+export VERL_USE_UV=0
+export ROLLOUT_TP=1
+
+# 检查同一作业的命令和合成配置，不启动 Ray/GPU。
+DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E10
+CONFIG_ONLY=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E10
+
+# 正常训练；更换编号时读取配方中的相应预算。
+bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E10
+```
+
+仅做初始模型验证时，沿用资源环境并显式开启 val-only；这些 trainer 开关不放入正常训练环境：
+
+```bash
+bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled \
+  trainer.val_only=True trainer.val_before_train=True
+```
+
+四卡运行只调整资源；数学低显存 profile 另显式覆盖两个推理参数：
+
+```bash
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+export STUDENT_GPUS=4
+
+# 可选：数学低显存 profile，保持题目、采样数和长度预算。
+export ROLLOUT_MAX_NUM_SEQS=96
+export ROLLOUT_GPU_MEMORY_UTILIZATION=0.5
+```
+
+`VAL_BATCH_SIZE` 接受 `null` 或正整数；前者全量提交，后者按窗口提交。末尾 `data.val_batch_size=...` 仍是原生 Hydra 覆盖。Graph capture sizes 根据并发上限生成 2 的幂并包含上限；末尾 Hydra 参数可覆盖现有字段。不要同时维护相互矛盾的环境变量和任务脚本默认值。
+
+| 资源或工作量                                     | 四卡到八卡的迁移规则                     |
+| ------------------------------------------------ | ---------------------------------------- |
+| `CUDA_VISIBLE_DEVICES`、`STUDENT_GPUS`           | 增加已分配设备及整个 shared 池的大小     |
+| `TEACHER_GPUS`                                   | 保持 0；teacher 分时使用共享池           |
+| `ROLLOUT_TP`                                     | 保持 1，增加独立副本数                   |
+| 单引擎并发、显存比例和调度 token 预算            | 保持选定 profile；全机并发由副本数量推导 |
+| 全局训练 batch、每题回答数、更新次数和完整评测量 | 保持所选配方预算，不随卡数翻倍           |
+| 每卡 actor/teacher micro-token 预算              | 先保持，按目标设备实测调整               |
+
+八卡增加副本，但长回答仍有串行 decode 依赖，速度不保证翻倍。已完成的四卡条件与质量检查见[完整验证实测](../performance/2026-10-22-训练与验证性能实测.md#1-完整验证与参数对照)；目标 A100/A800 八卡的完整周期、refit 峰值和 CPU 判分压力仍需单独验收。配置解析通过不能替代这些 GPU 测量。
+
+### 通用运行合同
+
+默认使用本仓库 `.venv-native/bin/python` 的绝对路径，同时设置 driver 和 Ray worker 的解释器，无需依赖终端是否激活环境。已有其他独立环境可设置 `PYTHON_BIN=/absolute/path/to/python`；环境需具备当前 verl 的 V1/TransferQueue 和 verifier 依赖。上游锁文件环境只在显式设置 `VERL_USE_UV=1` 时启用。正式启动要求显式设置 `CUDA_VISIBLE_DEVICES`，并检查所选领域的数据文件；数学默认对应一个训练 parquet 和三个验证 parquet。
+
+`RUN_DIR` 必须是新目录，默认在 `outputs/` 下，保存实际命令、Git commit、相对 HEAD 的工作区 patch、解析配置和验证输出。模型 checkpoint 由独立的 `CHECKPOINT_DIR` 管理：默认是 `$MODEL_ROOT/checkpoints/production/<RUN_DIR 相对 outputs 的路径>/checkpoints`；显式设置 `CHECKPOINT_DIR` 可覆盖。正式运行拒绝已有的非空 checkpoint 目录，`DRY_RUN=1`／`CONFIG_ONLY=1` 不创建这些目录。CLI 末尾参数仍是原生 Hydra overrides。改变训练步数时还要给足 `TOTAL_EPOCHS`，因为外层训练同时受 epoch 与 total step 限制。
+
+自定义 `RUN_DIR` 位于本 checkout 的 outputs 之外时，默认使用 `production/custom/<run 名>-<绝对 RUN_DIR 摘要前 16 位>/checkpoints`，区分同名实验。可以只查询计算后的目录，不启动训练：
+
+```bash
+python -m examples.mirroropd.assets.paths --run-dir "$PWD/outputs/example-run" --repo-root "$PWD"
+```
+
+完整资产合同与历史 checkpoint 的当前位置见[统一资产维护方案](../../archive/engineering/2026-10-30-资产与引擎迁移方案.md)。FSDP 恢复使用包含 optimizer／extra state 的完整 checkpoint，不把 actor 的 HF 导出当作完整恢复单元。
+
+正式运行会将 stdout/stderr 同时显示在终端并保存到 `$RUN_DIR/train.log`，默认路径为 `outputs/<实验名>/train.log`。Python 使用无缓冲输出；训练失败时保留非零退出码。启动时打印日志的完整路径，可用 `tail -f <日志完整路径>` 跟踪。`DRY_RUN=1` 和 `CONFIG_ONLY=1` 不创建日志或实验目录。
+
+通过人工源码包部署、没有 `.git` 的目录同样可以启动；此时 `source_commit.txt` 标记版本不可用，`source_changes.patch` 为空。开发机已有本地 Hope 配置时，可通过 `make opd-submit` 提交单机 8 卡任务；`hope/` 不随源码包同步，完整操作见 [提交说明](../../../../../meituan/README.md#提交-8-卡任务)。
+
+配方默认记录 console 与离线 W&B。SDK 写入根目录固定为本仓库，实际 run 位于 `wandb/offline-run-*/`；Ray 训练进程使用同样的路径和模式。可用 `make sync-log-pack` 打包后人工下载，完整流程见 [美团开发机同步说明](../../../../../meituan/README.md)。
+
+检查 `trainer.n_gpus_per_node`、teacher 池、TP、验证窗口和 Graph 尺寸时，同时核对[配方预算](../../settings/训练设置.md)。已有同名环境变量会覆盖脚本预设；最终 Hydra 参数优先级最高。
+
+带计数的 checkpoint 恢复例子如下。路径须替换为自己的已保存目录；恢复后的 E 编号和预算应与实验设计一致。
+
+```bash
+TOTAL_TRAINING_STEPS=200 \
+  bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E1 \
+  trainer.resume_mode=resume_path \
+  trainer.resume_from_path=/共享模型根目录/checkpoints/production/实验名/checkpoints/global_step_32
+```
+
+计数恢复与旧 checkpoint 的兼容边界见[实施记录](../../archive/engineering/2026-10-21-优势与更新计数原方案.md#6-日志scheduler-与-checkpoint)。
+
+### 从 565a1fda2 到 5b3ccdd30 的脚本差异
+
+该部分统一见[所属正文](../../archive/engineering/2026-10-22-共享训练入口演变.md#runtime-history-从-565a1fda2-到-5b3ccdd30-的脚本差异)。
+
+### 后续实现与当前配置
+
+该部分统一见[所属正文](../../archive/engineering/2026-10-22-共享训练入口演变.md#runtime-history-后续实现与当前配置)。
+
+### 共享与独立池配置
+
+| 环境变量 / 配置                                   | shared_sync                                          | standalone                                 |
+| ------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------ |
+| `DISTILLATION_EXECUTION_MODE`                     | 公共配方默认                                         | 显式选择；通用 `DistillationConfig` 的默认 |
+| `STUDENT_GPUS` → `trainer.n_gpus_per_node`        | 默认 8，代表整个共享池                               | 默认 4，代表 student 池                    |
+| `TEACHER_GPUS` → `distillation.n_gpus_per_node`   | 必须 0，`nnodes=0`，不建独立 teacher 池              | 默认 4，`nnodes=1`                         |
+| `ROLLOUT_TP`                                      | 必须 1，默认八个副本                                 | 默认 1，副本数依池大小与并行配置推导       |
+| `TEACHER_FSDP_TOKEN_BUDGET`                       | 每卡动态前向预算，取值见训练配方，须容纳完整训练序列 | 不用于 vLLM teacher                        |
+| `TEACHER_FSDP_DTYPE`                              | 默认 BF16，同时控制存储与前向参数精度                | 不用于 vLLM teacher                        |
+| `PARAM_OFFLOAD` / `OPTIMIZER_OFFLOAD`             | 必须 True                                            | 按原配方配置                               |
+| `teacher_models.teacher_model.model_path`         | 唯一冻结 teacher 的来源                              | 独立 teacher 服务的来源                    |
+| `TEACHER_TP`、`TEACHER_TOKEN_BUDGET` 等 vLLM 参数 | 不构造 teacher 服务，不据此推导副本                  | 控制独立 teacher 服务                      |
+
+Standalone 的 student 与 teacher 资源相加；默认 4+4，也可通过 `TEACHER_GPUS=1` 配成 4+1。Shared-sync 中 `TEACHER_GPUS=0` 不表示没有 teacher。共享 teacher 的 FSDP world size 从 actor 池派生；不能再把它加到八卡总数上。建议通过环境变量选择模式，让脚本一起派生资源配置；直接追加 Hydra override 修改模式时，也必须提供一致的池和 engine 参数。
+
+## Hope 直连入口
+
+**决策：Hope 直接执行随源码发布的领域脚本，不再维护 `hope/mirroropd/run.sh`。** 旧包装脚本固定导出 4+4，曾与新默认 shared_sync 冲突；由于 `hope/` 不进入源码包，解包代码不能修正接收端旧包装脚本。
+
+在开发机本地 `hope/mirroropd/mirroropd.hope` 的 `[roles]` 中一次性替换：
+
+```ini
+worker.script = bash -lc 'CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3,4,5,6,7}" VERL_USE_UV=0 exec bash "/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hmart-poistar/fanghaotian/MirrorOPD-verl/examples/mirroropd/run_${DOMAIN:-math}_deepseek_r1_1_5b_fsdp2.sh"'
+```
+
+这是任务容器内的共享挂载路径，不是本机 `/mnt/tidalfs-bdsz01/...` 路径。脚本自行定位仓库，无需依赖平台工作目录。已有 `CUDA_VISIBLE_DEVICES` 原样保留，缺省时使用该八卡作业内的逻辑设备 `0..7`；原生模式固定 `VERL_USE_UV=0`。
+
+Hope 只维护队列、镜像、资源申请、挂载路径、领域和显式实验覆盖。默认领域为 math；在 worker 环境设置 `afo.role.worker.env.DOMAIN = code` 或 `if` 可切换领域，IF 另需 `OPENCOMPASS_ROOT` 和 `NLTK_DATA`。Standalone 对照设置 `DISTILLATION_EXECUTION_MODE=standalone`。公共配方维护 `.venv-native/bin/python`、默认离线 W&B、`TOKENIZERS_PARALLELISM=false`、`OMP_NUM_THREADS=1` 和训练日志，支持既有显式环境覆盖。
+
+依赖检查用 `make native-check`，资产检查用 `make assets-check`；更换镜像或环境后在目标 GPU 容器单独验收 GPU 运算。旧包装脚本的依赖解压和逐卡矩阵乘法不再每次自动执行。
+
+接收新版源码后，检查本地 `.hope` 已直连，移除不属于 standalone 实验的固定 `STUDENT_GPUS=4` / `TEACHER_GPUS=4` 覆盖，再执行 `make opd-submit`。旧 `run.sh` 不再被调用，可以删除；源码解包保留 `hope/`，不会替用户完成这次修改。后续入口更新随源码发布，通常不再改 worker 命令。打包/解包与日志上传统一见[人工传输说明](../../../../../meituan/README.md)。
+
+## 共享训练调度
+
+图中分开的逻辑角色使用同一组物理八卡。CPU verifier、AgentLoop、TransferQueue（TQ）和 driver 不另申请 GPU；actor 与 teacher 的分片模型彼此独立，vLLM 有自己的推理进程、权重和 KV cache。
+
+```mermaid
+sequenceDiagram
+    participant D as PPOTrainerSync
+    participant A as AgentLoop及CPU verifier
+    participant S as Student vLLM 八个TP1副本
+    participant Q as TQ与ReplayBuffer
+    participant T as Teacher FSDP2 八卡
+    participant F as Actor FSDP2 八卡
+    D->>F: 初始化actor和optimizer，按配置卸载
+    D->>T: reset初始化冻结teacher并卸载
+    D->>S: 初始化student服务，sleep
+    D->>F: 恢复student checkpoint
+    F->>S: on_init_end同步student权重并唤醒
+    loop 每个训练step
+        D->>Q: 登记pending prompt
+        D->>A: 提交生成任务
+        par 多回答并发生产
+            A->>S: 生成token和rollout log-prob
+            S-->>A: 返回完整回答
+            A->>A: CPU verifier，不调用teacher RPC
+            A->>Q: 写轨迹，完成prompt group
+        and Driver等待整批
+            D->>Q: ReplayBuffer.sample
+            Q-->>D: KVBatchMeta，尚无teacher字段
+        end
+        D->>S: on_sample_end，sleep并释放推理状态
+        D->>D: _balance_batch
+        D->>T: to(device)，infer_batch，等待futures完成
+        T->>Q: 写完整序列log_probs
+        D->>T: to(cpu)，等待卸载完成
+        D->>Q: 校验并发布teacher_ids与teacher_logprobs
+        D->>F: 重算old log-prob及entropy
+        D->>D: 原advantage及可选correction处理
+        D->>F: 当前概率forward，k1+PG，backward，optimizer
+        F-->>D: 更新结果，按配置卸载训练状态
+        opt 保存到期
+            D->>F: 保存student checkpoint
+        end
+        D->>F: on_step_end，同步更新后的参数
+        F->>S: naive权重同步，恢复KV cache
+        opt 验证到期或最终步
+            D->>A: validate=True，逐窗口提交
+            A->>S: 使用全部八个student副本生成
+            A->>Q: CPU判分后写验证结果，跳过teacher
+            Q-->>D: 汇总并清理验证窗口
+        end
+        D->>Q: 收集指标后清理训练轨迹
+        D->>D: 同一global step写console和W&B
+    end
+```
+
+生成提交在 `prepare_step()` 中开始；AgentLoopManager 的提交返回不表示回答生成完成，真正交接由 ReplayBuffer/TQ 完成。默认 `gen` timer 包含等齐生成/CPU 判分和 student sleep。共享 teacher 在 `_balance_batch()` 后、old-log-prob 前评分；不会插入 optimizer update 或变更生成版本。
+
+Standalone 的生成与各回答 teacher RPC 可以重叠，ReplayBuffer 返回时 teacher 字段已经齐全；之后沿相同 actor、同步与验证链执行。独立 teacher 在 actor 更新和验证时无新评分工作，验证仍只用 student 四卡。其完整拓扑图见[方案 S0](../../archive/engineering/2026-10-21-调度备选与容量设计.md#s0固定-44同步执行)。
+
+## 代码职责与生命周期
+
+当前模块职责、教师上卡／卸载、评分发布和异常清理统一见[教师评分与资源生命周期](../architecture/teacher.md)。跨模块执行顺序见[架构总览](../architecture/README.md)。本页保留启动配置和运行环境说明。
+
+## 数据契约与因果对齐
+
+TQ 的 `sample_keys/sample_partition`、预测位置、response 布局及 mask 分母统一见[样本身份、张量布局与归一化](../architecture/data-and-loss.md)。Teacher 直接对 student 原始 token 序列评分；sampled 概率协议见[教师走读](../architecture/teacher.md#输入与-sampled-输出协议)。
+
+## Actor 更新调用链
+
+当前调用链、mini/micro-batch、批内复用及 scheduler 推进位置统一见[训练循环](../architecture/training-loop.md)。目标计算分别见[Sampled OPD](../architecture/sampled-opd.md)和[Full-vocab](../architecture/full-vocab.md)，更新事实与恢复见[进度说明](../architecture/progress-checkpoint.md)。
+
+## 当前支持范围
+
+共享路径支持单机、V1 sync、一个 dense text causal-LM teacher、相同 DP world size 的 FSDP2、student TP1、single-turn 和 sampled-token `k1 + PG`。Actor 参数与 optimizer offload 开启，teacher 无 optimizer，teacher token budget 至少容纳一条完整训练序列。
+
+共享运行约束由当前配置与模型校验裁决，新增模型的实际范围见[兼容性](../model-compatibility/README.md)。原 2026-10-22 的拒绝清单不作为后续 Qwen3-MoE teacher、MiMo 或 Olmo3 接入的依据；通用 fused 模型开关与 KL 专用 backend 分别解释。
+
+目标环境已观察到共享八卡短训练，见[两次运行对照](../../archive/2026-10-23-历史八卡与One-Shot运行对照.md#4-八卡历史与one-shot对照)；后续重点是完整验证、恢复和固定预算周期成本，具体通过条件与证据见[指标与验收](../../settings/指标口径.md)。上游组件的取舍和论文 baseline 来源仍在[调研记录](../../literature/infra/2026-10-21-上游实现与论文基线.md)，不再重复一份待实施文件清单。

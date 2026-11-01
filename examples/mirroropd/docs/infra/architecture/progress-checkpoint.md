@@ -1,6 +1,6 @@
 # 更新事实、进度与 checkpoint
 
-Mirror 共用本文的更新计数、scheduler 与 outer checkpoint。Anchor 是 actor 调用级临时状态，不进入 checkpoint；恢复后的新调用重新建立 q。已验证两卡 engine 的后续更新一致，V1/Ray 进程冷启动恢复仍列在[待验证范围](../numerics/mirror-objectives/实现方案.md#remaining-validation)，不据此承诺 inner-update 中途恢复。
+Mirror 共用本文的更新计数、scheduler 与 outer checkpoint。Anchor 是 actor 调用级临时状态，不进入 checkpoint；恢复后的新调用重新建立 q。已验证两卡 engine 的后续更新一致，V1/Ray 进程冷启动恢复仍列在[待验证范围](../numerics/mirror-objectives/reference.md#remaining-validation)，不据此承诺 inner-update 中途恢复。
 
 本页负责更新事件和持久状态的含义。空间维度的指标归约由[指标系统](metrics.md)负责，完整训练时序见[训练循环](training-loop.md)。
 
@@ -50,10 +50,10 @@ Engine 通过 `optimizer_step_applied` 提供 `True/False/None`。`None` 表示�
 
 Scheduler 状态由 engine 保存与恢复，Trainer 不根据 optimizer 计数重建 scheduler。Student 的冻结 teacher head 缓存也不属于 checkpoint 参数。
 
-`trainer.save_freq/test_freq` 都按 outer step 判断。只有对应频率大于 0 才启用周期执行，并在正常到达最后一个训练 step 时执行一次；负值不会因为到达最后 step 而自动保存或验证。`val_before_train` 独立控制初始验证。[E44–E47](../../settings/训练设置.md#mirror-comparison) 的正式默认值是 256 outer、每 32 outer 验证、每 128 outer 保存，不做初始验证。预计保存点不是保存成功的证据，仍需检查对应日志和文件。
+`trainer.save_freq/test_freq` 都按 outer step 判断。只有对应频率大于 0 才启用周期执行，并在正常到达最后一个训练 step 时执行一次；负值不会因为到达最后 step 而自动保存或验证。`val_before_train` 独立控制初始验证。[E44–E47](../training/launch.md#launcher-mirror-comparison) 的正式默认值是 256 outer、每 32 outer 验证、每 128 outer 保存，不做初始验证。预计保存点不是保存成功的证据，仍需检查对应日志和文件。
 
 ## 恢复保证与验证
 
 [test_progress_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_progress_on_cpu.py) 覆盖计数、未知传播和文件校验；[test_update_records_on_cpu.py](../../../../../tests/workers/test_update_records_on_cpu.py) 覆盖执行事实一致性；[test_full_vocab_fsdp2.py](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 保存参数、完整 Adam 和 scheduler，再恢复并对同一 batch 执行下一次更新，逐 rank 精确比较状态。
 
-这种下一次更新等价验证不意味着随机生成、数据排队或任意故障点的端到端训练能够逐 token 重放。原 Full-KL 验收见[四卡报告](../../archive/engineering/2026-10-25-主分支四卡验收.md)；sampled/full MDPO 和 full BPO 的恢复测试由 [test_mirror_fsdp2.py](../../../../../tests/special_distributed/test_mirror_fsdp2.py) 及[mirror 验收结果](../numerics/mirror-objectives/实现方案.md#validation)维护。
+这种下一次更新等价验证不意味着随机生成、数据排队或任意故障点的端到端训练能够逐 token 重放。原 Full-KL 验收见[四卡报告](../../archive/engineering/2026-10-25-主分支四卡验收.md)；sampled/full MDPO 和 full BPO 的恢复测试由 [test_mirror_fsdp2.py](../../../../../tests/special_distributed/test_mirror_fsdp2.py) 及[mirror 验收结果](../numerics/mirror-objectives/reference.md#validation)维护。

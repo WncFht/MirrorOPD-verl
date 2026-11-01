@@ -46,4 +46,4 @@ git log --reverse --oneline verl-base-2026-10-19..HEAD -- verl/trainer/distillat
 
 共享教师从 `5188828d2` 引入，显式 sampled 变体从 `d40950fc6` 引入，Full-KL 从 `a3989329e` 引入。后续 hidden IO、算子、输出支持、位置诊断及职责拆分已改变代码组织，历史提交只能用于解释来源；当前接口以本库和当前源码为准。
 
-Sampled/full MDPO 与 full BPO 已接入实际 Trainer、worker、loss 和统一入口，普通 Full-KL 保留为 MDPO eta=1 endpoint。算法实现从 `3ce657605` 引入，target/诊断融合优化为 `749000bf2`，统一入口及 E44–E47 为 `6900d29b4`。Part、Mean、current-J、sampled BPO 仍未实现；理论文章不扩大生产支持范围。功能、GPU/短训练验收与长期训练效果分别按[实现证据](../numerics/mirror-objectives/实现方案.md#validation)核对。
+Sampled/full MDPO 与 full BPO 已接入实际 Trainer、worker、loss 和统一入口，普通 Full-KL 保留为 MDPO eta=1 endpoint。算法实现从 `3ce657605` 引入，target/诊断融合优化为 `749000bf2`，统一入口及 E44–E47 为 `6900d29b4`。Part、Mean、current-J、sampled BPO 仍未实现；理论文章不扩大生产支持范围。功能、GPU/短训练验收与长期训练效果分别按[实现证据](../numerics/mirror-objectives/reference.md#validation)核对。

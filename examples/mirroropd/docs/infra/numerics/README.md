@@ -1,8 +1,12 @@
-# 数值目标与算子验收
+# 目标算子、精度与优化器
 
-- [Full-vocab 数据通路与实现](full-vocab/README.md)。
-- [MDPO/BPO实现合同](mirror-objectives/实现方案.md)。
-- [稳定数值修复](precision/2026-10-27-蒸馏数值修复与验收.md)。
-- [共享训练精度](precision/2026-10-27-共享训练精度与实验入口.md)。
+| 任务                                           | 正文                                                                                                             |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 查询 MDPO/BPO、Full-RKL 的配置、数据需求和缩放 | [当前实现参考](mirror-objectives/reference.md)                                                                   |
+| 理解 Full-vocab 数据通路与数值 backend         | [Full-vocab](full-vocab/README.md)；完整数学定义归[theory](../../theory/README.md)                               |
+| 核对模型、梯度、分布式及 EOS 测试              | [验证矩阵](full-vocab/validation.md)                                                                             |
+| 分析 BF16 及更高精度、optimizer 历史与实际更新 | [精度和优化器实验](optimization/README.md)                                                                       |
+| 使用共享训练的精度选项                         | [精度配置](precision/2026-10-27-共享训练精度与实验入口.md)                                                       |
+| 核对稳定数值修复和既有误差实验                 | [修复与验收](precision/2026-10-27-蒸馏数值修复与验收.md)、[误差实验](precision/2026-10-24-误差实验与接口验收.md) |
 
-有限词表 oracle 检查数学/梯度实现，分布式检查布局与归一化，真实短训练检查执行链路；这些检查不能替代[优化器与精度效果实验](../../experiments/teacher-transfer/optimizer-precision/README.md)。
+数值恒等式、执行正确性和有限步优化行为分别检查。工程实验支持 RQ5 的 TOP-D 复现与κ/η解释，也供 RQ4 排查局部求解问题；不在 experiments 下再建立一份 infra 正文。

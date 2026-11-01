@@ -1,100 +1,40 @@
-# MirrorOPD 统一实验配方
+# MirrorOPD 实验与训练框架
 
-这里维护 math、coding 与 instruction following（IF）的单教师 sampled-token OPD 配方，以及数学、代码、IF 和函数调用 verifier。当前 math 基线使用 DeepSeek-R1-Distill-Qwen-1.5B student 与 JustRL-DeepSeek-1.5B teacher，采用 verl V1 同步训练和 `k1 + policy gradient` 蒸馏。
+MirrorOPD 在 verl 上提供单教师 sampled/full-vocab 蒸馏、weighted teacher 与 MDPO/BPO、可组合 rollout 及原生评估。研究材料和工程文档从[docs](docs/README.md)进入；仓库根 docs 保留上游 verl 文档。
 
-统一实验入口为 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)：E1–E47 或 custom 选择模型/预算，`--method sampled/full_kl/mdpo/bpo` 选择算法。Full-KL 生成 MDPO eta=1 的规范配置；旧 sampled 保留原信号、PPO、IS/NoIS。Math 只维护这一个训练入口。用法见[训练配方](docs/settings/训练设置.md)，目标与验证缺口见[实现说明](docs/infra/numerics/mirror-objectives/实现方案.md)。
+## 最短使用路径
 
-[E44–E47 正式对照](docs/settings/训练设置.md#mirror-comparison)已包含 Full-KL、MDPO、BPO 和 weighted teacher 形状设置；直接调用编号，默认 256 outer × 16 reuse、每 32 outer 验证、每 128 outer 保存。
-
-## 脚本目录
-
-Math 训练只保留统一入口；独立验证和 smoke 是专项工具。辅助脚本按用途组织：
-
-| 目录          | 内容                                                           |
-| ------------- | -------------------------------------------------------------- |
-| `assets/`     | `check_assets.py`、`prepare_models.py`、`prepare_math_data.py` |
-| `launchers/`  | 公共 `_run_single_teacher_fsdp2.sh`，由顶层入口调用            |
-| `benchmarks/` | Decode、并发、KV 容量和限时吞吐测量                            |
-| `smoke/`      | Sampled、full-vocab 和指标链路的短测入口                       |
-| `tools/`      | Full-vocab 作业队列、更新预算和指标验收工具                    |
-| `rewards/`    | `reward.py` 自定义判分路由                                     |
-| `docs/`       | 文档、冻结实验记录和对应研究探针                               |
-
-辅助命令使用新路径，例如 `python examples/mirroropd/assets/prepare_models.py --help`、`bash examples/mirroropd/smoke/smoke_full_reverse_kl.sh`。Makefile、当前启动脚本和测试已同步迁移；历史实验记录保留运行时的路径，重跑历史版本时使用记录中的源码版本。
-
-### 完整验证负载的 vLLM sweep
-
-[`benchmarks/vllm_sweep/`](benchmarks/vllm_sweep) 管理八个原始模型的推理参数扫描：`prepare_data.py` 复用现有 prompt builder 导出每模型 570 题×16 请求，核对 token 回编码；`plan.json` 保存基线及候选；`run_sweep.py` 调用原生 `vllm bench sweep serve`，按四卡 DP4/TP1 排队执行。`worker.py` 保留当前 verl 对词表外 token 的屏蔽，原始模型文件不变。正常 EOS、温度 0.7、top-p0.9 和 31744 回答上限用于全部正式测量；必须显式传 `--custom-output-len -1`，否则原生 CLI 的 256 默认值会覆盖 JSONL 预算。
-
-```bash
-PYTHONPATH=. "$PYTHON_BIN" examples/mirroropd/benchmarks/vllm_sweep/run_sweep.py run \
-  --model-root "$MODEL_ROOT" --data-root "$DATA_ROOT" \
-  --output outputs/vllm-sweep/20261025-full
-```
-
-使用 `preflight --models qwen17` 做 4 请求、64 输出 token 的启动验收，该结果不会参与正式排名；`dry-run` 只打印原生命令。正式执行优先为已有两个完整基线的模型补充高并发，再继续其余模型的基线与扩展。七个非 Base 模型追加 128/256 并发、0.90 显存预算，并保留 0.65/0.80 预算的既有点；Base 先追加 24/32 并发、0.90 预算。候选 1 有抢占或 KV 峰值超过 85% 时，增加同并发、0.90 预算对照。所有并发均指每个 GPU 副本的 `max_num_seqs`；客户端最大在途请求固定 2048。随后测较优配置的 16384 token 预算、重复测量和原 verl 完整 valid。原生 benchmark 的整批生成耗时用于排名（不含模型加载、编译和判分），原 verl 复核另行保存验证指标；同时保留输出 token 数及 TPS；自然生成长度变化不等同于纯调度收益。
-
-同一 `--output` 目录可恢复队列：已完成且样本完整的作业跳过，生成期间出现同卡多个计算进程的测量标为 `resource_isolated=false`，保留但不参与排名，恢复队列时自动归档并补测。失败结果不会被选为推荐值，也不会自动重跑；`--retry-failed` 才会重试，并保留旧尝试。追加搜索点用 `--extend-plan`，只允许扩展资源候选，不能改模型、采样、数据路径或回答预算。`report` 子命令从已有原始数据更新统计表，不启动 GPU。输出包含 `resolved_plan.json`、逐模型 `data/`、`runs/` 下的原生结果与日志、`state.json`、`summary.csv` 和 `selected_params.json`；推荐值在全部原 valid 复核完成前标为 provisional。独立服务的最快点保存在 `native_best`；原 verl 复核若失败，按实测排名尝试下一候选，只有通过者标记 `original_verl_verified`。0.90 预算在独立服务和原 verl 中的可用性分别验证。模型支持较大并发的结论以实测为准，运行入口不自动改写训练参数。执行仅占用 GPU0–3；如发现其他进程占用则停止，不终止外部进程。
-
-`summary.csv` 和各作业的 `derived_metrics.json` 统一保存下列统计，原生结果和遥测保留原样。
-
-| 指标                                                                   | 统计口径                                                                                                                     |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| 完成数、失败数、完整耗时、输出 token 总数、输出 TPS                    | 原生 benchmark 的整批请求；只有完整 9120 请求、零失败且未观察到生成期同卡多进程的结果参与排名                                |
-| 输出长度均值、P50/P95/P99、最大长度、触顶比例                          | 成功请求；触顶指长度达到 31744，不将其直接等同于精确的 `finish_reason` 截断率                                                |
-| KV 容量范围、KV 峰值、抢占次数、每百万输出 token 的抢占次数            | 容量取原生日志中各副本分配的 token 槽位最小/最大值；KV 峰值为 5 秒采样最大值；抢占为结束时的原生累计计数                     |
-| 单卡显存峰值、四卡平均及逐卡 GPU 忙碌率                                | 显存峰值覆盖加载到结束；忙碌率从首次多请求至最后活跃采样，包含中间空闲、空闲卡和尾部。NVML 忙碌率不是 FLOPs 或显存带宽利用率 |
-| 同卡多进程采样数、资源独占标记                                         | 原生 DP4/TP1 生成期每卡应有一个 GPU worker；发现多 PID 时排除排名并复测，启动期短暂多进程单独不触发此判断                    |
-| 平均运行请求数、运行槽位占比、有等待请求的采样占比                     | 四副本之和；槽位占比除以 `4 × max_num_seqs`，用于判断是否缺少可执行请求                                                      |
-| 首 token 延迟 TTFT、每输出 token 耗时 TPOT、请求总耗时 E2EL 的均值/P99 | 沿用原生统计，包含满负载下的排队影响；原生未提供的字段留空                                                                   |
-
-## 文档入口
-
-MirrorOPD 自有文档、调研与展示图位于 `examples/mirroropd/docs/`；正式实验数据与报告快照存放在独立 `wandb-logs` 仓库。仓库根 `docs/` 保留上游文档。指标定义统一维护在 `docs/experiments/metrics/`，实现走读位于 `docs/internals/metrics.md`。
-
-| 文档                                                                | 内容                                                                             |
-| ------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [架构总览](docs/infra/architecture/README.md)                       | 当前模块职责、跨模块执行顺序和扩展边界                                           |
-| [代码走读](docs/infra/architecture/代码走读.md)                     | 训练、教师、目标、指标和 checkpoint 的当前实现；`make docs-check` 检查引用       |
-| [资产准备](docs/infra/training/资产准备.md)                         | 模型、数学数据目录、导入与 CPU 检查                                              |
-| [训练配方](docs/settings/训练设置.md)                               | Math / coding / IF 入口、GPU 资源池、训练与验证预算、Hope 启动                   |
-| [OPD 失败复现方案](docs/infra/model-compatibility/probes/README.md) | DAPO 与三 valid 下的模型／长度设置、sampled→full 对照、原论文图表与排除设置附录  |
-| [判分器与依赖](docs/infra/evaluation/判分器与依赖.md)               | 四领域 reward 路由、依赖、迁入来源和检查范围                                     |
-| [LCB 判分隔离调研](docs/infra/evaluation/lcb/README.md)             | 内存故障来源、受控 CPU 实验、轻量执行器与资源隔离方案                            |
-| [训练基础设施](docs/infra/README.md)                                | 运行与调度、实测报告、batch/rollout 调优、指标/MFU、模型扩展和上游调研的统一入口 |
-| [OPD 目标与消融](docs/literature/learning-signal/README.md)         | 固定 prefix 推导、优势/IS 语义及实现审计                                         |
-| [分析复现](docs/experiments/维护说明.md)                            | 本地 W&B 归档解码、项目快照、统计与图表；云端回读仅作显式核对或补救              |
-| [实验指标](docs/settings/metrics/README.md)                         | 当前字段字典、更新横轴与比较口径；实现见指标系统走读                             |
-
-## 启动入口
-
-开发机准备好环境和资产后，仍由 Hope 的统一入口启动：
-
-```bash
-make assets-check
-make opd-submit
-```
-
-Math 调度器直接调用 `run_math_opd_ablation_fsdp2.sh`。入口将配置交给标准库规划器，再由共享参数构造与资源 launcher 执行。`DOMAIN` 默认 `math`，也可为 `code` 或 `if`。具体领域脚本如下；旧的无领域前缀入口已删除。
-
-- [Math](run_math_opd_ablation_fsdp2.sh)
-- [Coding](run_code_deepseek_r1_1_5b_fsdp2.sh)
-- [IF](run_if_deepseek_r1_1_5b_fsdp2.sh)
-
-查看从预设表生成的清单或最终命令：
+在仓库根目录用 PATH 中的 Python 查看预设，不启动 GPU 训练：
 
 ```bash
 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh --overview
 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh --list-presets
-DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method sampled
 ```
 
-数学消融统一使用 [run_math_opd_ablation_fsdp2.sh](run_math_opd_ablation_fsdp2.sh)。短窗基础版为 E15（sampled）／E13（full），其他模型／长度基础版为 E23–E32；对应 reuse16 版本为 E33–E43 及已有 E17。E21/E22 分别兼容映射到 E15/E13。当前模型对照均跑 250 个 outer steps，每 100 步及最终步保存；基础版每批更新 1 次，reuse 版 16 次。`E15-valid-student`／`E15-valid-teacher` 可独立验证原始模型。每次调用运行一个选项，GPU 数量由 `STUDENT_GPUS` 与 `CUDA_VISIBLE_DEVICES` 明确指定；完整编号、模型和预算见[实验方案](docs/experiments/teacher-transfer/teacher-comparison/failure-matrix/2026-10-25-Sampled-token与Full-vocab失败复现方案.md#failure-launcher)。
+配置预览会加载原生训练依赖，需要先按[运行环境](docs/infra/training/runtime.md)设置 `PYTHON_BIN`；默认 `.venv-native/bin/python` 必须实际存在。设置后运行：
 
 ```bash
-# 只检查 E28 的命令，不启动 GPU 作业。
-CUDA_VISIBLE_DEVICES=0,1,2,3 STUDENT_GPUS=4 DRY_RUN=1 \
-  bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E28
+CONFIG_ONLY=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh custom --method full_kl
 ```
 
-`hope/` 由各机器本地维护，不进入源码包。Worker 直接调用随源码更新的领域脚本，入口迁移见[决策记录](docs/infra/training/2026-10-22-共享八卡运行与架构.md#hope-直连入口)。部署、日志传回和默认 W&B 同步流程见[开发机同步说明](../../meituan/README.md)。
+统一 math 入口按预设或 custom 选择模型与预算，`--method`选择 sampled、full_kl、full_forward_kl、mdpo 或 bpo。编号清单由[规划器](launchers/math_experiment.py)生成，不在本页复制易过期的编号范围。方法、覆盖优先级和 coding/IF 入口见[启动指南](docs/infra/training/launch.md)。
+
+实际训练前按[资产准备](docs/infra/training/资产准备.md)配置模型和数据，再按[运行环境与资源](docs/infra/training/runtime.md)选择 Python、已分配 GPU 和输出目录。Hope 部署使用已有`make assets-check`、`make opd-submit`流程；部署、日志传回见[meituan](../../meituan/README.md)。冻结运行保持原代码与原协议。
+
+## 按任务阅读
+
+| 任务                            | 入口                                                                                       |
+| ------------------------------- | ------------------------------------------------------------------------------------------ |
+| 查研究问题、协议与结果          | [实验研究](docs/experiments/README.md)，五个 RQ；progress 仅保存周报                       |
+| 查数学定义与证明                | [理论](docs/theory/README.md)                                                              |
+| 查公共参数、模型、数据与指标    | [设置参考](docs/settings/README.md)                                                        |
+| 理解实现与扩展                  | [架构](docs/infra/architecture/README.md)、[代码走读](docs/infra/architecture/代码走读.md) |
+| 检查数值、optimizer、模型或性能 | [工程实验](docs/infra/README.md)                                                           |
+| 复算与生成图表                  | [研究代码](research/README.md)、[实验维护](docs/experiments/维护说明.md)                   |
+| 维护文档与提交检查              | [维护流程](docs/infra/maintenance/README.md)                                               |
+
+## 工具与来源
+
+`assets/`准备身份和数据；`launchers/`构造配置与启动；`research/`维护科学分析和验算；`benchmarks/`维护执行性能与接入测量；`smoke/`保存专项短测；`rewards/`提供判分入口；`tools/`维护文档与运行辅助工具。docs 里的 Python 仅为冻结来源，不作为活跃工具。
+
+[完整验证负载的 vLLM sweep](benchmarks/vllm_sweep/README.md)维护原生生成性能的协议、恢复和统计。候选并发、独立服务最快值与原 verl 验收分开解释，不由一次局部 benchmark 自动更改训练参数。

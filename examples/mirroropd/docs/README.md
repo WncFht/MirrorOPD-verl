@@ -1,22 +1,19 @@
 # MirrorOPD 文档
 
-[实验研究](experiments/README.md)按四条问题组织：训练信号、reuse 预算、rollout 策略效果、师生迁移机制。具体报告依次说明背景与 motivation、实际 setting、结果和分析。
+[师生配对 RKL 总览：R1、Qwen3、Llama](experiments/teacher-transfer/fixed-state-results.md)汇集已有配对的训练与留出结果。
 
-[周会进展报告（2026-11-02）](progress/2026-11-01-周会报告.md)先介绍相对 verl 新增的框架功能，再展开五个 Research Question，附理论推导、论文对照与实测图；会议日期为 11 月 2 日，文件及来源快照日期为 11 月 1 日。实验详细结果由各专题报告维护。
+从研究问题、公共定义或工程任务进入正文。研究报告保留实际 setting 和证据截止，运行表由本地日志生成，周报引用专题结论。
 
-| 阅读目的                   | 入口                                                                         |
-| -------------------------- | ---------------------------------------------------------------------------- |
-| 研究问题、实验关系与结论   | [四条研究主线](experiments/README.md)                                        |
-| 实际运行与末次评测         | [运行记录](experiments/运行记录.md)、[验证汇总](experiments/验证结果汇总.md) |
-| 公共设置与数据/指标含义    | [设置说明](settings/README.md)；具体运行配置仍在各报告                       |
-| 数学目标、估计器与证明     | [理论](theory/README.md)                                                     |
-| 系统实现、正确性与工程性能 | [Infra](infra/README.md)                                                     |
-| 外部论文、公开源码与模型卡 | [文献资料](literature/README.md)                                             |
-| 复算和维护                 | [维护说明](experiments/维护说明.md)                                          |
-| 原文件的迁移位置           | [迁移对照](archive/2026-10-28-文档迁移对照.md)                               |
+| 阅读任务                              | 入口                                                                                                 |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 看五个 RQ、已有结论与证据关系         | [实验研究](experiments/README.md)                                                                    |
+| 查实际运行进度与末次评测              | [运行记录](experiments/运行记录.md)、[验证结果](experiments/验证结果汇总.md)，注意生成视图的覆盖范围 |
+| 查模型、数据、公共训练/验证参数与指标 | [模型来源](settings/模型与师生配对.md)；[设置参考](settings/README.md)                               |
+| 理解目标、估计器、镜像下降与迁移理论  | [理论](theory/README.md)                                                                             |
+| 准备资产、启动、恢复和扩展实现        | [工程](infra/README.md)                                                                              |
+| 查论文、公开实现与模型来源            | [文献](literature/README.md)                                                                         |
+| 阅读按时间冻结的汇报                  | [周报](progress/README.md)                                                                           |
+| 复算研究结果与维护文档                | [实验维护](experiments/维护说明.md)、[文档维护](infra/maintenance/README.md)                         |
+| 查旧接口、历史设计及迁移位置          | [历史依据](infra/maintenance/history.md)                                                             |
 
-原始运行日志与大型证据继续位于同级 `wandb-logs`。日期报告保留各自输入边界；当前表格不回写历史结论。文档目录不维护活跃 Python 工具，运行入口位于 `examples/mirroropd/research`、`benchmarks` 和 `tools`。
-
-格式化、完整检查和暂存区验证见[文档维护流程](infra/maintenance/README.md)，维护规则从 [AGENTS.md](AGENTS.md) 进入。
-
-当前工程能力从[架构入口](infra/architecture/README.md)进入，其中 [Rollout 支持](infra/rollout/fusion/support.md)和[原生评估状态](infra/architecture/evaluation/README.md)分别标注代码版本与验证范围。历史方案从各专题归档索引读取，不作为并行的当前计划。
+原始运行日志与大型证据保留在同级 wandb-logs 及原运行目录。文档不放活跃 Python 工具；复算入口位于 research、benchmarks 和 tools，冻结源码保持原样。[AGENTS.md](AGENTS.md)说明内容归属与保护边界。

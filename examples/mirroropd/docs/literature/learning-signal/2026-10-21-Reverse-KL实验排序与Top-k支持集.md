@@ -11,7 +11,7 @@ $$
 
 以下取正概率与完整支持，所有梯度身份均针对固定前缀，不包含前缀访问测度的导数。
 
-本页补充实验决策和支持集审计；基础方法见[条件梯度估计理论](../../theory/2026-10-22-条件梯度估计与控制变量.md)，hidden/head 容量见[算子性能与容量](../../infra/performance/full-vocab/operators.md#容量预算)。2026-10-21 核对本机 `One-Shot-OPD` 的干净 checkout `6b6b1782cc3f04749dd077de19353f839f6bc048`，并读取相关论文和固定版本源码。这里只做研究与 CPU 审计，没有启动新增训练实验，也没有修改 One-Shot-OPD。
+本页补充实验决策和支持集审计；基础方法见[条件梯度估计理论](../../theory/estimators.md)，hidden/head 容量见[算子性能与容量](../../infra/performance/full-vocab/operators.md#容量预算)。2026-10-21 核对本机 `One-Shot-OPD` 的干净 checkout `6b6b1782cc3f04749dd077de19353f839f6bc048`，并读取相关论文和固定版本源码。这里只做研究与 CPU 审计，没有启动新增训练实验，也没有修改 One-Shot-OPD。
 
 ## 1. Reverse-KL 实验优先级
 
@@ -20,8 +20,8 @@ $$
 | 资料                                                                                       | 维护职责                                          |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------- |
 | 本页第 1、6 节                                                                             | 方法比较顺序、必要负对照与支持集数据合同          |
-| [训练配方](../../experiments/learning-signal/sampled-controls/README.md)                   | E1–E15 编号、学习率、复用次数、外层预算与评测频率 |
-| [Full-KL 数学对照](../../experiments/learning-signal/sampled-vs-full/README.md)            | 对照设置、实际运行与结果分析                      |
+| [训练配方](../../experiments/learning-signal/sampled-controls.md)                          | E1–E15 编号、学习率、复用次数、外层预算与评测频率 |
+| [Full-KL 数学对照](../../experiments/learning-signal/sampled-full.md)                      | 对照设置、实际运行与结果分析                      |
 | [估计器审计](2026-10-21-OPD学习信号与梯度估计器对照.md#9-在当前-math-setting-下的实验安排) | 作者实现差异、资源公平性与需记录的量              |
 
 排序依据是解释力、对照必要性与工程成本，不是未经实测的准确率预测。
@@ -216,13 +216,13 @@ CUDA_VISIBLE_DEVICES='' python -m examples.mirroropd.research.checks.objectives.
 
 原理论章节的锚点集中保留在下表；正文只维护实验与源码证据。
 
-| 原章节                                                                                                       | 现维护位置                                                                                                                          |
-| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="2-full-vocab-kl一个真值不同计算图"></a>2. Full-vocab KL：一个真值，不同计算图                         | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#1-full-vocab-kl-的计算图)                       |
-| <a id="21-只计算数值作为诊断或-baseline"></a>2.1 只计算数值，作为诊断或 baseline                             | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#11-只计算数值作为诊断或-baseline)               |
-| <a id="22-作为训练-loss直接自动微分"></a>2.2 作为训练 loss，直接自动微分                                     | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#12-作为训练-loss直接自动微分)                   |
-| <a id="23-只传递精确梯度可以使用代理或自定义-backward"></a>2.3 只传递精确梯度，可以使用代理或自定义 backward | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#13-只传递精确梯度可以使用代理或自定义-backward) |
-| <a id="24-两个容易写错的-detach"></a>2.4 两个容易写错的 detach                                               | [Full-vocab 计算图与四种更新](../../theory/2026-10-22-Full-vocab计算图与四种更新.md#14-两个容易写错的-detach)                       |
+| 原章节                                                                                                       | 现维护位置                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| <a id="2-full-vocab-kl一个真值不同计算图"></a>2. Full-vocab KL：一个真值，不同计算图                         | [Full-vocab 计算图与四种更新](../../theory/fixed-prefix.md#graphs-1-full-vocab-kl-的计算图)                       |
+| <a id="21-只计算数值作为诊断或-baseline"></a>2.1 只计算数值，作为诊断或 baseline                             | [Full-vocab 计算图与四种更新](../../theory/fixed-prefix.md#graphs-11-只计算数值作为诊断或-baseline)               |
+| <a id="22-作为训练-loss直接自动微分"></a>2.2 作为训练 loss，直接自动微分                                     | [Full-vocab 计算图与四种更新](../../theory/fixed-prefix.md#graphs-12-作为训练-loss直接自动微分)                   |
+| <a id="23-只传递精确梯度可以使用代理或自定义-backward"></a>2.3 只传递精确梯度，可以使用代理或自定义 backward | [Full-vocab 计算图与四种更新](../../theory/fixed-prefix.md#graphs-13-只传递精确梯度可以使用代理或自定义-backward) |
+| <a id="24-两个容易写错的-detach"></a>2.4 两个容易写错的 detach                                               | [Full-vocab 计算图与四种更新](../../theory/fixed-prefix.md#graphs-14-两个容易写错的-detach)                       |
 
 ### 参考文献
 

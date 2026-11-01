@@ -1,0 +1,307 @@
+{
+  "sync": [
+    {
+      "run_id": "j5uaal3j",
+      "cli_exit": 0,
+      "source_status": "partial_snapshot",
+      "source_sha256": "92352f9696133b6b341111f7161cf5d5075a92f18fef8999f59189cf56971dd5",
+      "source_bytes": 80314368,
+      "upload_bytes": 19575467,
+      "cloud_prefix_last_step": 848,
+      "new_history_rows": 170,
+      "source_history_rows": 1019,
+      "retained_record_kinds": {
+        "header": 1,
+        "run": 1,
+        "environment": 2,
+        "files": 1,
+        "telemetry": 3,
+        "metric": 3702,
+        "summary": 2038,
+        "stats": 5905,
+        "output_raw": 563,
+        "history": 170
+      },
+      "synthetic_records": 0,
+      "source_unchanged": true
+    },
+    {
+      "run_id": "zsnhqzts",
+      "cli_exit": 0,
+      "source_status": "partial_snapshot",
+      "source_sha256": "1881375d1a89ed580c036f9bccd4cb25fd05364e3831e2b5beb0eb8bc40dac48",
+      "source_bytes": 97189888,
+      "upload_bytes": 21322876,
+      "cloud_prefix_last_step": 1325,
+      "new_history_rows": 272,
+      "source_history_rows": 1598,
+      "retained_record_kinds": {
+        "header": 1,
+        "run": 1,
+        "environment": 2,
+        "files": 1,
+        "telemetry": 3,
+        "metric": 3702,
+        "summary": 3196,
+        "output_raw": 357,
+        "stats": 5399,
+        "history": 272
+      },
+      "synthetic_records": 0,
+      "source_unchanged": true
+    },
+    {
+      "run_id": "6j5knkmk",
+      "cli_exit": 0,
+      "source_status": "finished",
+      "source_sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830",
+      "source_bytes": 83452596,
+      "upload_bytes": 12699816,
+      "cloud_prefix_last_step": 1580,
+      "new_history_rows": 119,
+      "source_history_rows": 1700,
+      "retained_record_kinds": {
+        "header": 1,
+        "run": 1,
+        "environment": 2,
+        "files": 1,
+        "telemetry": 4,
+        "metric": 3702,
+        "summary": 3401,
+        "output_raw": 6854,
+        "stats": 1874,
+        "history": 119,
+        "exit": 1
+      },
+      "synthetic_records": 0,
+      "source_unchanged": true
+    }
+  ],
+  "cloud_verification": [
+    {
+      "run_id": "j5uaal3j",
+      "url": "https://wandb.ai/wncfht/MirrorOPD-verl/runs/j5uaal3j",
+      "cloud_state": "finished",
+      "local_rows": 1019,
+      "cloud_rows": 1868,
+      "unique_cloud_steps": 1019,
+      "missing_steps": [],
+      "extra_steps": [],
+      "metric_mismatches": [],
+      "keys_checked": [
+        "_step",
+        "step/outer",
+        "step/update",
+        "step/optimizer",
+        "distill/mdpo/objective",
+        "distill/target_kl",
+        "distill/teacher_kl",
+        "rollout/response_length/mean",
+        "rollout/finish_reason/length_count",
+        "eval/math500/acc/observed_mean",
+        "eval/math500/generation/response_length/mean",
+        "eval/math500/generation/finish_reason/length_count",
+        "eval/amc23/acc/observed_mean",
+        "eval/amc23/generation/response_length/mean",
+        "eval/amc23/generation/finish_reason/length_count",
+        "eval/aime24/acc/observed_mean",
+        "eval/aime24/generation/response_length/mean",
+        "eval/aime24/generation/finish_reason/length_count",
+        "eval/aime25/acc/observed_mean",
+        "eval/aime25/generation/response_length/mean",
+        "eval/aime25/generation/finish_reason/length_count",
+        "eval/aime26/acc/observed_mean",
+        "eval/aime26/generation/response_length/mean",
+        "eval/aime26/generation/finish_reason/length_count"
+      ],
+      "replayed_prefix_rows": 849,
+      "replay_metric_conflicts": [],
+      "passed": true
+    },
+    {
+      "run_id": "zsnhqzts",
+      "url": "https://wandb.ai/wncfht/MirrorOPD-verl/runs/zsnhqzts",
+      "cloud_state": "finished",
+      "local_rows": 1598,
+      "cloud_rows": 2924,
+      "unique_cloud_steps": 1598,
+      "missing_steps": [],
+      "extra_steps": [],
+      "metric_mismatches": [],
+      "keys_checked": [
+        "_step",
+        "step/outer",
+        "step/update",
+        "step/optimizer",
+        "distill/mdpo/objective",
+        "distill/target_kl",
+        "distill/teacher_kl",
+        "rollout/response_length/mean",
+        "rollout/finish_reason/length_count",
+        "eval/math500/acc/observed_mean",
+        "eval/math500/generation/response_length/mean",
+        "eval/math500/generation/finish_reason/length_count",
+        "eval/amc23/acc/observed_mean",
+        "eval/amc23/generation/response_length/mean",
+        "eval/amc23/generation/finish_reason/length_count",
+        "eval/aime24/acc/observed_mean",
+        "eval/aime24/generation/response_length/mean",
+        "eval/aime24/generation/finish_reason/length_count",
+        "eval/aime25/acc/observed_mean",
+        "eval/aime25/generation/response_length/mean",
+        "eval/aime25/generation/finish_reason/length_count",
+        "eval/aime26/acc/observed_mean",
+        "eval/aime26/generation/response_length/mean",
+        "eval/aime26/generation/finish_reason/length_count"
+      ],
+      "replayed_prefix_rows": 1326,
+      "replay_metric_conflicts": [],
+      "passed": true
+    },
+    {
+      "run_id": "6j5knkmk",
+      "url": "https://wandb.ai/wncfht/MirrorOPD-verl/runs/6j5knkmk",
+      "cloud_state": "finished",
+      "local_rows": 1700,
+      "cloud_rows": 3281,
+      "unique_cloud_steps": 1700,
+      "missing_steps": [],
+      "extra_steps": [],
+      "metric_mismatches": [],
+      "keys_checked": [
+        "_step",
+        "step/outer",
+        "step/update",
+        "step/optimizer",
+        "distill/mdpo/objective",
+        "distill/target_kl",
+        "distill/teacher_kl",
+        "rollout/response_length/mean",
+        "rollout/finish_reason/length_count",
+        "eval/math500/acc/observed_mean",
+        "eval/math500/generation/response_length/mean",
+        "eval/math500/generation/finish_reason/length_count",
+        "eval/amc23/acc/observed_mean",
+        "eval/amc23/generation/response_length/mean",
+        "eval/amc23/generation/finish_reason/length_count",
+        "eval/aime24/acc/observed_mean",
+        "eval/aime24/generation/response_length/mean",
+        "eval/aime24/generation/finish_reason/length_count",
+        "eval/aime25/acc/observed_mean",
+        "eval/aime25/generation/response_length/mean",
+        "eval/aime25/generation/finish_reason/length_count",
+        "eval/aime26/acc/observed_mean",
+        "eval/aime26/generation/response_length/mean",
+        "eval/aime26/generation/finish_reason/length_count"
+      ],
+      "replayed_prefix_rows": 1581,
+      "replay_metric_conflicts": [],
+      "passed": true
+    }
+  ],
+  "scope": "Unique-step coverage and recorded key metrics match. W&B append replayed prefixes; cloud row counts must not be treated as optimizer updates. Figures use original local histories.",
+  "prefix_field_verification": {
+    "j5uaal3j": [
+      {
+        "local_rows": 750,
+        "cloud_rows": 848,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 50,
+        "cloud_rows": 834,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 45,
+        "cloud_rows": 817,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 4,
+        "cloud_rows": 4,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      }
+    ],
+    "zsnhqzts": [
+      {
+        "local_rows": 1170,
+        "cloud_rows": 1324,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 78,
+        "cloud_rows": 1310,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 71,
+        "cloud_rows": 1310,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 7,
+        "cloud_rows": 7,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      }
+    ],
+    "6j5knkmk": [
+      {
+        "local_rows": 1395,
+        "cloud_rows": 1579,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 93,
+        "cloud_rows": 1565,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 84,
+        "cloud_rows": 1565,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      },
+      {
+        "local_rows": 9,
+        "cloud_rows": 9,
+        "duplicate_rows": 0,
+        "missing_rows": 0,
+        "conflicting_steps": [],
+        "covered": true
+      }
+    ]
+  }
+}

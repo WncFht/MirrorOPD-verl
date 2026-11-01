@@ -1,6 +1,6 @@
 # 指标观测、位置分桶与更新出口
 
-统一入口保留不同训练目标的统计含义：MDPO/BPO objective 包含规定的 $1/\eta$，target KL、原 teacher KL 和 anchor KL 单独记录且不除 eta。普通 Full-KL endpoint 保留 `distill/full_kl`。本页解释当前生产者、命名、归约和位置统计；固定字段的详细定义见[指标字典](../../settings/指标口径.md)，目标公式见[实现方案](../numerics/mirror-objectives/实现方案.md#metrics)，更新与恢复见[进度与 checkpoint](progress-checkpoint.md)。
+统一入口保留不同训练目标的统计含义：MDPO/BPO objective 包含规定的 $1/\eta$，target KL、原 teacher KL 和 anchor KL 单独记录且不除 eta。普通 Full-KL endpoint 保留 `distill/full_kl`。本页解释当前生产者、命名、归约和位置统计；固定字段的详细定义见[指标字典](../../settings/指标口径.md)，目标公式见[实现方案](../numerics/mirror-objectives/reference.md#metrics)，更新与恢复见[进度与 checkpoint](progress-checkpoint.md)。
 
 ## 按训练阶段解释日志
 
@@ -112,7 +112,7 @@ $$
 
 ## 验证入口
 
-[test_position_metrics_on_cpu.py](../../../../../tests/utils/test_position_metrics_on_cpu.py) 验证短序列、空桶、mask 空洞和不同分区；[test_full_vocab_position_on_cpu.py](../../../../../tests/trainer/distillation/test_full_vocab_position_on_cpu.py) 验证 Full-KL 行值与位置观测；[test_mirror_on_cpu.py](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py) 和 [test_mirror_on_gpu.py](../../../../../tests/trainer/distillation/test_mirror_on_gpu.py) 验证 mirror 目标、缩放及 kernel 诊断。[test_update_records_on_cpu.py](../../../../../tests/workers/test_update_records_on_cpu.py) 与 [test_policy_metrics_pipeline_on_cpu.py](../../../../../tests/workers/test_policy_metrics_pipeline_on_cpu.py) 覆盖更新出口。上述检查分别检验位置工具、目标数值和记录链路，不能相互代替；实际集成证据见[mirror 验收](../numerics/mirror-objectives/实现方案.md#validation)。
+[test_position_metrics_on_cpu.py](../../../../../tests/utils/test_position_metrics_on_cpu.py) 验证短序列、空桶、mask 空洞和不同分区；[test_full_vocab_position_on_cpu.py](../../../../../tests/trainer/distillation/test_full_vocab_position_on_cpu.py) 验证 Full-KL 行值与位置观测；[test_mirror_on_cpu.py](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py) 和 [test_mirror_on_gpu.py](../../../../../tests/trainer/distillation/test_mirror_on_gpu.py) 验证 mirror 目标、缩放及 kernel 诊断。[test_update_records_on_cpu.py](../../../../../tests/workers/test_update_records_on_cpu.py) 与 [test_policy_metrics_pipeline_on_cpu.py](../../../../../tests/workers/test_policy_metrics_pipeline_on_cpu.py) 覆盖更新出口。上述检查分别检验位置工具、目标数值和记录链路，不能相互代替；实际集成证据见[mirror 验收](../numerics/mirror-objectives/reference.md#validation)。
 
 ## 采集频率与验收证据
 
@@ -122,4 +122,4 @@ $$
 
 `perf/anchor/prepare_seconds_max` 是需要 q 时的准备耗时，跨 DP 取最大值；Trainer 的 `perf/timing/update_actor_seconds` 已包含这段准备，二者不能相加。该指标的耗时范围见[anchor 生命周期](teacher.md#anchor-准备与模型驻留)。FSDP 的 allocated/reserved 高水位来自进程累计计数，不自动等于当前阶段峰值；阶段内存应结合 profiler 或独立采样解释。
 
-字段定义和比较口径统一由[实验指标](../../settings/metrics/README.md)维护。2026-10-22 的 policy-v3 实现、E3 与 IS/RS 验收、旧字段映射和设计背景归入[指标工程档案](../../archive/README.md#指标系统历史)，其数值只描述当时的代码和测试范围。实时训练进度与分数属于 run 记录，不在本页维护会随同步变化的状态表。
+字段定义和比较口径统一由[实验指标](../../settings/指标口径.md)维护。2026-10-22 的 policy-v3 实现、E3 与 IS/RS 验收、旧字段映射和设计背景归入[指标工程档案](../../archive/README.md#指标系统历史)，其数值只描述当时的代码和测试范围。实时训练进度与分数属于 run 记录，不在本页维护会随同步变化的状态表。

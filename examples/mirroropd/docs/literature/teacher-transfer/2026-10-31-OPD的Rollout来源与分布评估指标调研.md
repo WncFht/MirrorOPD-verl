@@ -1,8 +1,8 @@
 # OPD 的 rollout 来源与分布评估指标：逐篇调研
 
-项目当前执行设计见[四域单域训练与 RKL 评估协议](../../experiments/teacher-transfer/transfer-mechanism/2026-10-31-四域单域训练与RKL评估协议.md)。本阶段仅采用 RKL；本文的其他指标与预算比较属于文献证据或早期候选。
+项目当前执行设计见[四域单域训练与 RKL 评估协议](../../experiments/teacher-transfer/protocols/online-four-domain.md)。本阶段仅采用 RKL；本文的其他指标与预算比较属于文献证据或早期候选。
 
-整理于 2026-10-31，文献核验截至 2026-10-30。本页围绕三个问题组织证据：训练是否需要持续刷新 student rollout；应在哪种前缀上测 KL；分布拟合与任务能力如何分别评估。核心材料为 12 篇论文和 1 篇研究机构技术文章；后文明确区分论文观察、理论适用范围与本项目建议。配套的[指标与 rollout 协议提案](../../experiments/teacher-transfer/transfer-mechanism/2026-10-31-Rollout刷新与分布拟合评估协议提案.md)给出可执行的评估定义与实验矩阵，状态为待评审，未启动新训练。
+整理于 2026-10-31，文献核验截至 2026-10-30。本页围绕三个问题组织证据：训练是否需要持续刷新 student rollout；应在哪种前缀上测 KL；分布拟合与任务能力如何分别评估。核心材料为 12 篇论文和 1 篇研究机构技术文章；后文明确区分论文观察、理论适用范围与本项目建议。配套的[指标与 rollout 协议提案](../../archive/experiments/teacher-transfer/2026-10-31-刷新与读出早期候选.md)给出可执行的评估定义与实验矩阵，状态为待评审，未启动新训练。
 
 ## 1. 范围与阅读顺序
 
@@ -158,7 +158,7 @@ DAgger 的条件性保证与 Reverse-KL 的历史状态反例不构成直接矛�
 
 训练侧先保留固定初始学生轨迹，并新增按 rollout batch 刷新的学生轨迹主线；teacher rollout 训练作为后续的覆盖诊断，不与 refresh 同时引入新的 KL 方向。评估侧采用共同固定 S0 银行、每位 teacher 的冻结银行、每个 checkpoint 的 current-student 银行，分别衡量固定状态拟合、教师行为覆盖和学生实际行为。三套银行在独立留出题上建立，训练题／旧批继续单列。
 
-主指标建议为共同固定银行上的 RKL、current-student 银行上的 RKL、teacher 银行上的 FKL，补充交叉方向、JS／TV、熵与概率质量诊断。绝对残差、相对降幅和逐题尾部分开报告；acc 作为低频独立结果检查，不作为 teacher 准入条件。冻结评估银行、动态评估银行、真实序列 KL 与解码加权条件风险的区别，见[完整协议提案](../../experiments/teacher-transfer/transfer-mechanism/2026-10-31-Rollout刷新与分布拟合评估协议提案.md)。
+主指标建议为共同固定银行上的 RKL、current-student 银行上的 RKL、teacher 银行上的 FKL，补充交叉方向、JS／TV、熵与概率质量诊断。绝对残差、相对降幅和逐题尾部分开报告；acc 作为低频独立结果检查，不作为 teacher 准入条件。冻结评估银行、动态评估银行、真实序列 KL 与解码加权条件风险的区别，见[完整协议提案](../../archive/experiments/teacher-transfer/2026-10-31-刷新与读出早期候选.md)。
 
 “完全吸收”的数值阈值暂不定义。首先验证测量是否覆盖目标行为、数值参考是否可靠，以及训练／留出是否同步改善，再讨论残差的科学解释。
 

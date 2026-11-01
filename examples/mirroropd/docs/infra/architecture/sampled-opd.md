@@ -1,6 +1,6 @@
 # Sampled OPD 与 MDPO 的目标和梯度路径
 
-Sampled OPD 在 student 已生成的动作上读取 teacher 概率，并在 actor 更新时构造蒸馏信号。Teacher 不另生成标准答案；训练使用的是 student 访问过的前缀。本文把实际字段、分支与梯度对应起来，完整理论背景见[固定前缀目标](../../theory/2026-10-22-固定前缀下的OPD目标与梯度.md)，跨文档符号见[符号约定](../../theory/符号约定.md)。
+Sampled OPD 在 student 已生成的动作上读取 teacher 概率，并在 actor 更新时构造蒸馏信号。Teacher 不另生成标准答案；训练使用的是 student 访问过的前缀。本文把实际字段、分支与梯度对应起来，完整理论背景见[固定前缀目标](../../theory/fixed-prefix.md#objectives)，跨文档符号见[符号约定](../../theory/符号约定.md)。
 
 ## 四种概率
 
@@ -36,7 +36,7 @@ Legacy sampled 路径要求 `loss_mode=k1`、`use_policy_gradient=True`、`use_t
 
 `--method mdpo --estimator sampled` 使用 b=log q+f(log T-log q)，每次更新构造 h=log p-b。训练项为 `(p/beta) * stopgrad(h) / eta`，只让 ratio 求导。eta<1 的 q 在 worker 调用内冻结，eta=1 直接令 b=log T，无需 anchor 评分。
 
-当前实现保留 1/eta，不使用 PPO clip、NoIS 或 ±20 guard。其期望梯度在正确行为概率及支持条件下对应 full MDPO。固定前缀上，surrogate 的动作期望为 $(\mathrm{KL}(p\Vert m)-\log Z_m)/\eta$；实际有限样本日志还有采样误差，不能把每条 sampled loss 都解释成精确 target KL 减去冻结常数。完整目标与范围见[实现说明](../numerics/mirror-objectives/实现方案.md#objectives)。当前所有 mirror 设置均要求 `token-mean`；后文 legacy sampled 的其他聚合选择不能直接套到 sampled MDPO。
+当前实现保留 1/eta，不使用 PPO clip、NoIS 或 ±20 guard。其期望梯度在正确行为概率及支持条件下对应 full MDPO。固定前缀上，surrogate 的动作期望为 $(\mathrm{KL}(p\Vert m)-\log Z_m)/\eta$；实际有限样本日志还有采样误差，不能把每条 sampled loss 都解释成精确 target KL 减去冻结常数。完整目标与范围见[实现说明](../../archive/engineering/2026-11-01-Mirror实现方案与历史验收.md#objectives)。当前所有 mirror 设置均要求 `token-mean`；后文 legacy sampled 的其他聚合选择不能直接套到 sampled MDPO。
 
 ## 显式 sampled 分支
 

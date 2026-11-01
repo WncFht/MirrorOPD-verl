@@ -1,23 +1,12 @@
-# 训练信号与目标
+# 学习信号、估计器与目标
 
-## 背景与 motivation
+RQ1 区分信号刷新、更新校正、动作积分和聚合方式；RQ5 独立讨论 TOP-D 复现与 κ/η 消融。给定前缀上的数学身份由[理论](../../theory/README.md)维护，完整线上效果以实际配置和评测为准。
 
-给定同一批前缀，current/fixed 信号、IS/NoIS/PPO 以及动作积分方式会产生不同更新。需要区分改变目标、改变估计器和改变更新约束，才能解释 sampled 与 full-vocab 的效果。
+| 研究问题                              | 正文                                                                                        |
+| ------------------------------------- | ------------------------------------------------------------------------------------------- |
+| current/rollout 与 IS/NoIS/PPO 的影响 | [Sampled 信号消融](sampled-controls.md)，短长程条件与未执行格分别记录                       |
+| Full-vocab 是否优于 sampled           | [基础对照](sampled-full.md)，保留代码、硬件、学习率与预算差异；不同数据集末点没有统一赢家   |
+| token-mean 的长度缩放是否影响已有运行 | [归一化核查](normalization.md)，离线反事实不等于新增训练消融                                |
+| 复现多少 TOP-D，κ/η 改变什么          | [Weighted target](weighted-targets.md)，只维护复现与参数消融；精度与 optimizer 实验归 infra |
 
-## Setting 与实验设计
-
-主历史配对是 R1-Distill-Qwen-1.5B ← JustRL-DeepSeek-1.5B，DAPO、batch64。E2–E5/E8–E11 比较信号与修正；E13/E15 比较一次复用的 full/sample；E13/E14 比较 LR。不同运行的实际预算、验证和实现差异见各报告。
-
-## 实验结果
-
-长程 sampled 各基准的最佳末点来自不同分支，没有逐集合统一赢家；E13/E15 也没有给出 full-vocab 全面占优的单 run 结论。固定前缀梯度身份见[理论](../../theory/README.md)，不能由方法名字代替。
-
-## 分析与证据
-
-- [Sampled 信号消融](sampled-controls/2026-10-25-Sampled信号消融.md)。
-- [Token-mean 的现有运行风险](2026-10-31-Token-mean的现有运行风险核查.md)：在线 full-RKL 的长度缩放、同参数裁剪反事实，以及近期固定轨迹研究的实际分母。
-- [Full/sample基础对照](sampled-vs-full/2026-10-28-基础对照设置与结果索引.md)。
-- E13/E16/E17的复用因素另归[预算线](../reuse-budget/README.md)。
-- MDPO/BPO的目标定义见[镜像理论](../../theory/mirror-descent/形状与插值目标.md)，实际求解见[精度研究](../teacher-transfer/optimizer-precision/README.md)。
-
-下一项配对应固定同版本实现与预算，再区分目标和估计器收益。
+固定生成/更新预算的 reuse 与长度比较见[预算线](../reuse-budget/README.md)。RKL/FKL 的 Polaris 方向证据见[教师吸收](../teacher-transfer/cases/polaris.md)，不在这里复制结果表。

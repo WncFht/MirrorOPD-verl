@@ -18,7 +18,7 @@
 
 网页 JSON 与作者 GitHub 的固定 commit 7672d2edc36011cfcd2d2b5ea76dd6ee2787a5d0 逐字节一致；checkpoint manifest 固定到 Hub revision 81966d0c38efec752d75e2716eb4b9a4a71a9a6d。来源与哈希见[provenance](sources/scaling-opd-2609.32722v1/late-training/provenance.json)。[^charts-repo][^hub]
 
-作者库中同时有试跑、其他目标及其他 baseline，311 个条目不是 311 个主实验。网页曲线以师生尺寸标识，没有直接附 run ID；本次没有把不同试跑拼入一条曲线。模型权重未下载，训练与验证作业未启动。
+作者库中同时有试跑、其他目标及其他 baseline，311 个条目不是 311 个主实验。网页曲线以师生尺寸标识，没有直接附 run ID；曲线按作者公开的尺寸标识分别读取，模型身份依据 checkpoint 元数据核对。
 
 ## 2. Training KL、validation KL 和 acc 的区别
 
@@ -62,7 +62,7 @@ HF 清单的 OPD 条目主要记录 val-core/math_mixture_rlvr/acc/mean@1 等任
 
 同尺寸五组最后 acc 与 teacher 的差值分别为 −1.01、−1.21、−0.75、−0.72、+0.41 个百分点。任务层面已相当接近。对于“完整拟合”，还缺训练状态和独立留出状态上的 teacher 距离。
 
-相同准确率可以来自不同的解法与概率分配，数学关系见[正确率与序列／Token KL](../../theory/2026-10-31-正确率与序列及Token-KL的关系.md)。这里没有逐题原始结果来建立误差区间，因此不对这些小差异作显著性判断。
+相同准确率可以来自不同的解法与概率分配，数学关系见[正确率与序列／Token KL](../../theory/accuracy-and-kl.md)。这里没有逐题原始结果来建立误差区间，因此不对这些小差异作显著性判断。
 
 ## 5. 跨尺寸与后期回落
 

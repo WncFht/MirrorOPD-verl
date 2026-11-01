@@ -345,7 +345,11 @@ def main():
     dump(out / "inventory.json", summary)
     write_csv(out / "risks.csv", records)
     if args.update_report:
-        update_report(summary, records, out.parent.parent / "2026-10-29-教师谱系实验总览与RKL进展.md")
+        update_report(
+            summary,
+            records,
+            REPO / "examples/mirroropd/docs/experiments/teacher-transfer/fixed-state-results.md",
+        )
     print({k: v for k, v in summary.items() if k not in ["inventory", "pairs"]})
     if args.plot:
         plot(records, out)
@@ -385,12 +389,11 @@ def update_report(summary, records, path):
         text,
         "counts",
         (
-            f"状态：本轮 R1、Qwen3、Llama 教师谱系主比较集合共有 {summary['weight_versions']} 个固定权重版本，"
-            f"其中 {summary['local_weight_versions']} 个已落地。按当前完成回执，已完成 "
-            f"{summary['completed_unique_pairs']} 个不同师生权重配对、{summary['completed_conditions']} 个输入条件，"
-            f"展示范围内的终点预算合计 {summary['completed_updates']} 更新。每个条件仅展示 0–320 内最新有效读出，"
-            "不重复累计中间阶段或重放预算；不统计其他研究线，也不把自教师、teacher-copy、重复评分和数值验证算作训练分支。"
-            "准确率不作为本总览主表或下一阶段开训门槛。"
+            f"R1、Qwen3、Llama 主比较包含 {summary['weight_versions']} 个固定权重版本，"
+            f"其中 {summary['local_weight_versions']} 个已落地；已完成 "
+            f"{summary['completed_unique_pairs']} 个师生权重配对、{summary['completed_conditions']} 个输入条件。"
+            f"各条件在 0–320 范围内的最新有效终点合计 {summary['completed_updates']} 次更新。"
+            "统计单位为本页主比较的有效终点；中间阶段和重放预算不重复累加，自教师、teacher-copy、重复评分和数值验算不计作训练分支。"
         ),
     )
     table = ["| 谱系 | 计划中的权重版本 | 权重已到本地 | 已完成训练的不同师生配对 |", "| --- | ---: | ---: | ---: |"]

@@ -8,6 +8,8 @@
 - `rollout-policy/`：生成分布设计的原始检索与数值参考。
 - `infra/`：公开工程实现及后端审阅。
 
+公开模型的训练链见[统一模型介绍](../settings/模型与师生配对.md)；Semi-OPD 配对数据及历史候选设计见[论文配对证据](teacher-transfer/model-pairing-reference.md)。
+
 Full-RKL 的归一化见 [OPD 消融与 verl 平均方式对照](learning-signal/2026-10-31-Full-RKL的平均方式与MOPD及verl实现对照.md)：区分词表求和、token 平均、回答平均，以及多卡与 micro-batch 的全局分母；比较 OPD 归一化消融与 DAPO、Dr. GRPO 的相关证据。
 
 师生迁移研究可从[蒸馏边界的论文对照与预算依据](teacher-transfer/2026-10-28-蒸馏边界实验的论文对照与预算依据.md)进入：已有配对实验、早期分化、step 含义，以及完整原始检索记录。
@@ -26,8 +28,12 @@ Benchmark 采样次数、解码参数、回答预算与初始化银行生成见[
 
 同家族尺寸规律的单篇精读见[2609.32722 图解笔记](teacher-transfer/2026-10-31-同家族OPD缩放规律精读与实验启发.md)：七张论文原图、三个 RQ、策略位移与拟合残差的区别，以及对我们实验的启发。
 
-Gold score 的术语和研究沿革见[gold/proxy 与奖励过优化](teacher-transfer/2026-10-31-Gold-score的来源与奖励过优化研究脉络.md)，相关平方根 KL 命题及反例见[数学推导](../theory/2026-10-31-正确率与序列及Token-KL的关系.md)。
+Gold score 的术语和研究沿革见[gold/proxy 与奖励过优化](teacher-transfer/2026-10-31-Gold-score的来源与奖励过优化研究脉络.md)，相关平方根 KL 命题及反例见[数学推导](../theory/accuracy-and-kl.md)。
 
 理解 predicted、拟合验证与缩放规律的研究发展，见[缩放律拟合的历史、方法与蒸馏应用](teacher-transfer/2026-10-31-缩放律拟合的历史方法与蒸馏应用.md)：13 篇主线工作，以及如何区分全样本拟合、留尺寸验证和真正外推。
 
 2609.32722 的公开曲线与 checkpoint 数据核查见[Vanilla OPD 后期拟合与任务成绩](teacher-transfer/2026-10-31-VanillaOPD后期拟合与任务成绩核查.md)：25 组峰值／末值、对 S0 的 KL、训练 proxy 与 teacher-validation KL 的可用性。
+
+## 维护方式
+
+问题综述说明外部证据的关系与分歧，逐篇证据保存版本、设置、限制和原文位置，sources/data 保存原始来源与检索输出。相同论文可以支持多个主题，完整事实表优先引用既有证据；不强制每篇论文单独建文件。项目当前预算和执行选择由研究协议维护，当前接口由 infra 维护。文献中的早期项目建议保留当时范围，不作为新的默认设置或运行清单。

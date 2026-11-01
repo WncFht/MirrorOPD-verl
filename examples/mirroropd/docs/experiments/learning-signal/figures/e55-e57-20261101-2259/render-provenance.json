@@ -1,0 +1,28 @@
+{
+  "input": "../../data/e55-e57-20261101-2259/data.json",
+  "input_sha256": "fcc341bb46f7d42d9bab9ac415a27a03e72c90577a30874f7bfaf1d09eb94c6f",
+  "analysis_sha256": "6b40a75001c900a4fead5e19ccc8ff6dedac084be8e2c13ad213eff93c2bff5b",
+  "artifacts": {
+    "optimization.pdf": "75a9eefc79d4c9cf35c56a6259b4ffbbbc0dd1e1a1aafe305227555feb0d4beb",
+    "optimization.png": "6221eefc502215f78d6aaa4a53b9a7bb1b84da477c1f2f2b127aa6ecbb29c7b0",
+    "training.pdf": "849163773900d8d1eda411ba36f8ac0ae3b2e71dbdae8768c403e4ee737b19be",
+    "training.png": "8728b14483549dfe25d04d6358a311546468a93e9dcb1f25197a2f0e380a9584",
+    "validation-accuracy.pdf": "4fed8ef41036e0ea496cc108c5073101534ff6b5b8d4415050a3fc446c5846db",
+    "validation-accuracy.png": "fb3da6d86b4fdb8af51577c1dfad32ae4eea7f5402c5c89e105f4c8cd0f56e7c",
+    "validation-cap_rate.pdf": "904fbeeebf4c0360ec9d4ed9d0a8876e549afd2d2354fdbbb585f128b6ae45c9",
+    "validation-cap_rate.png": "fb3b4392dfa0a49b9549a66fc2ab23ee29e4eec62430b53d6d36a2eece332704",
+    "validation-length.pdf": "1946a9e412d55586f73e5a8c7cd30fe270660d13e7c9db4c302e32003a60e978",
+    "validation-length.png": "562bde7a487958df0c73d4f739713ca152cef0deec06ff3cbcdf301c521eae41",
+    "validation.pdf": "682889a80c8e6ef14015ac5d857d39e18861ba9fe38f369c4954c65edcfd84fd",
+    "validation.png": "9bbcfa571ff988c42fbcfceb229560070d657fde35de7d85bbc3082434bd0215"
+  },
+  "audit_results": {
+    "optimization-audit.json": [],
+    "training-audit.json": [],
+    "validation-accuracy-audit.json": [],
+    "validation-audit.json": [],
+    "validation-cap_rate-audit.json": [],
+    "validation-length-audit.json": []
+  },
+  "visual_review": "All six PNGs inspected; axes, labels, legends and snapshot boundaries consistent with input."
+}

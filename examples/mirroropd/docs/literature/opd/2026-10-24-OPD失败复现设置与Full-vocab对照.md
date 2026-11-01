@@ -4,7 +4,7 @@
 
 日期：2026-10-24。目标是先复现 sampled-token 或 top-k OPD 的停滞、负迁移或长程失稳，再检验完整词表 reverse KL 是否改善。本文核对论文正文、附录、公开脚本和本仓实现；不把未公开的参数补成“论文设置”。本仓源码核对基于 `376e8185e` 及当前工作区，尚未启动训练。
 
-证据标记：**P** 为论文明确写出；**C** 为公开代码；**L** 为本仓源码或本机资产；**R** 为建议的复现选择。P 与 C 不一致时分别保留。现有 E13–E20 的结果与预算仍由[训练配方](../../settings/训练设置.md)和[五组实验分析](../../experiments/learning-signal/sampled-vs-full/2026-10-24-五组Math实验对比分析.md)维护，本文不改现有队列。
+证据标记：**P** 为论文明确写出；**C** 为公开代码；**L** 为本仓源码或本机资产；**R** 为建议的复现选择。P 与 C 不一致时分别保留。现有 E13–E20 的结果与预算仍由[训练配方](../../settings/训练设置.md)和[五组实验分析](../../experiments/learning-signal/sampled-full.md#five)维护，本文不改现有队列。
 
 ## 1. 优先复现什么
 
@@ -17,7 +17,7 @@
 | Qwen2.5-7B-Instruct student，OpenThinker3-7B teacher                 | Revisiting 的局部负迁移与不稳定；teacher-top-32 有改善           | 可以直接比较 sampled、teacher-top-32、full-rKL        | 两者是 untied Qwen2、输出维数相同；缺权重与完整验证数据，需核 token-ID 和特殊标记                     |
 | Qwen3-1.7B Non-thinking student，Qwen3-4B-Instruct-2507 teacher      | Semi-OPD 中低重叠配置：在线采样不如初始学生缓存                  | 检验 full-vocab 能否缓解在线前缀退化                  | 需 Qwen3/tied-head 适配，且 DAPO 过滤口径不同                                                         |
 
-表内保留原始候选范围。当前 A–F 选择、sampled→full 顺序和后置设置由[新方案](../../experiments/teacher-transfer/teacher-comparison/failure-matrix/2026-10-25-Sampled-token与Full-vocab失败复现方案.md)统一维护。R1 的跨规模模型仍需要词表对齐，不能只把 `TEACHER_MODEL` 换成 7B 就直接跑现有 full-KL。
+表内保留原始候选范围。当前 A–F 选择、sampled→full 顺序和后置设置由[新方案](../../archive/experiments/teacher-transfer/2026-10-25-失败复现原方案.md)统一维护。R1 的跨规模模型仍需要词表对齐，不能只把 `TEACHER_MODEL` 换成 7B 就直接跑现有 full-KL。
 
 这些是不同的失败：不提升、覆盖学生已有能力、长序列崩溃、某个基准退化，应该分别报告。只要 full-KL 有收益，不能就声称它解释了所有 OPD failure。
 
@@ -274,7 +274,7 @@ ESR 等工作的基线粒度还需核实现；Systematic Study 的主实验本�
 | 现有 top-k                    | `forward_kl_topk`为 teacher 支持上的截断 FKL，还会 clamp 负值 | 不能替代 S-top16／T-top32 normalized RKL                                  |
 | Shared teacher top-k          | 当前 shared_sync 仅支持 k1+PG 或 full-rKL；评分阶段关掉 top-k | 原版 top-k 复现需要新 payload/loss 接线                                   |
 
-代码依据：[full-vocab adapter](../../../../../verl/models/transformers/full_vocab.py)、[FSDP engine](../../../../../verl/workers/engine/fsdp/transformer_impl.py)、[冻结 teacher head](../../../../../verl/trainer/distillation/hidden.py)、[full-KL 算子](../../../../../verl/trainer/distillation/full_vocab.py)、[蒸馏配置验证](../../../../../verl/workers/config/distillation.py)、[loss 注册与聚合](../../../../../verl/trainer/distillation/losses.py)。数学与计算图复用[既有理论文档](../../theory/2026-10-22-Full-vocab计算图与四种更新.md)。
+代码依据：[full-vocab adapter](../../../../../verl/models/transformers/full_vocab.py)、[FSDP engine](../../../../../verl/workers/engine/fsdp/transformer_impl.py)、[冻结 teacher head](../../../../../verl/trainer/distillation/hidden.py)、[full-KL 算子](../../../../../verl/trainer/distillation/full_vocab.py)、[蒸馏配置验证](../../../../../verl/workers/config/distillation.py)、[loss 注册与聚合](../../../../../verl/trainer/distillation/losses.py)。数学与计算图复用[既有理论文档](../../theory/fixed-prefix.md#graphs)。
 
 ### 8.2 实际核对过的模型元数据
 

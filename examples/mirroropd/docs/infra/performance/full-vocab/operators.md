@@ -91,7 +91,7 @@
 
 同次[数值审计](../../../../../../outputs/full-kl-softmax-audit-20261026/README.md)中，已有 118 项 CPU、41 项 CUDA 测试通过，但新增近目标检查仍复现了 endpoint fused 与 BPO 的梯度问题。Benchmark 自身没有在计时前内置逐例独立 VJP 门控；它记录的随机输入 loss 接近，不能覆盖上述反例。性能表不是数值正确性验收，待稳定化补丁完成后需同时复核 VJP 和性能。
 
-真实更新的历史收益仍引用[固定输入管线](training.md#固定输入管线)：precompute → fused 的 actor 更新中位数 3.719 → 3.480 秒，耗时减少约 6.4%。本次没有重新执行 backbone/FSDP/TQ/rollout，不能把 1.78× 换成整轮训练速度。
+真实更新的历史收益仍引用[固定输入管线](training.md#固定输入管线)：precompute → fused 的 actor 更新中位数 3.719 → 3.480 秒，耗时减少约 6.4%。1.78×描述 head-loss 微基准；完整 actor 及训练成本使用对应层级的测量。
 
 ## OPD endpoint 融合
 
@@ -127,7 +127,7 @@ H800、BF16 hidden/head、FP32 logits/梯度累计，V=151936、d=1536、N=32768
 
 Chunk=128 的四种组合速度倍率为 1.66–2.34×，优化后额外峰值约 1340.8 MiB；chunk=32 为 1.31–1.62×，峰值受固定 head 梯度缓冲限制，前后未下降。12 个比较中，BF16 hidden/head VJP 相对 L2 差异最大约 $3.75\times10^{-5}$。完整样本见[测量 JSON](../../../experiments/teacher-transfer/optimizer-precision/mechanism/data/full-vocab-performance.json)。
 
-普通 Full-KL eta=1 使用独立 endpoint kernel，不能将此表的 2–3 倍套给它。2026-10-26 的[近目标审计](../../../experiments/teacher-transfer/optimizer-precision/mechanism/2026-10-26-MDPO内层KL反弹与数值链路审计.md)又修正了 MDPO 大公共常数下的梯度消减误差；上表测量早于该修正，当前代码需要重新配对计时，旧 A/B 误差也不替代近目标验证。
+普通 Full-KL eta=1 使用独立 endpoint kernel，不能将此表的 2–3 倍套给它。2026-10-26 的[近目标审计](../../numerics/optimization/2026-10-26-数值链路审计.md)又修正了 MDPO 大公共常数下的梯度消减误差；上表测量早于该修正，当前代码需要重新配对计时，旧 A/B 误差也不替代近目标验证。
 
 复测入口为 [benchmark_mirror.py](../../../../benchmarks/profile/benchmark_mirror.py)。基线位于 `outputs/mirror-performance/baseline/mirror_perf_baseline`，包含隔离 imports 的数值模块；保留该基线，新的代码比较使用独立快照和输出目录，不能让 baseline 导入 candidate。
 
