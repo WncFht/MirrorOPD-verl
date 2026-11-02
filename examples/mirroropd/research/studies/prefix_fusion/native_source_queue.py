@@ -108,6 +108,10 @@ def config_only(source, study, python, env, experiment, destination):
     if completed.returncode:
         raise RuntimeError(f"Configuration {experiment} failed: {completed.stderr[-4000:]}")
     config = yaml.safe_load(completed.stdout)
+    loggers = config["trainer"]["logger"]
+    if "file" not in loggers:
+        loggers.append("file")
+    destination.mkdir(parents=True, exist_ok=True)
     ray = config["ray_kwargs"]["ray_init"]
     ray["address"] = "local"
     ray["_temp_dir"] = "${oc.env:SMOKE_RAY_TMPDIR}"
@@ -125,6 +129,7 @@ def audit_config(config, *, gate=False):
     from verl.trainer.evaluation.config import EvaluationConfig
     from verl.trainer.evaluation.plan import compile_plan
 
+    assert "file" in config["trainer"]["logger"]
     batch, reuse, outer = (8, 1, 2) if gate else (128, 16, 100)
     actor = config["actor_rollout_ref"]["actor"]
     assert config["data"]["train_batch_size"] == actor["ppo_mini_batch_size"] == batch
@@ -358,10 +363,18 @@ def frozen(source, manifest):
 
 
 def audit_training(study, experiment, *, gate=False):
+    from verl.trainer.evaluation.artifacts import ArtifactStore
+
     base = study / "gate" if gate else study
     output = base / "training" / experiment
-    rows = [json.loads(line)["data"] for line in (output / "metrics.jsonl").read_text().splitlines()]
-    updates = [r for r in rows if "optim/actor/update_applied" in r]
+    store = ArtifactStore(output / "evaluation")
+    manifest = store.manifest(complete=True)
+    expected_outer = 2 if gate else 100
+    shards = sorted(name for name in manifest["files"] if name.startswith("updates/actor-outer-"))
+    assert shards == [f"updates/actor-outer-{n:03d}.parquet" for n in range(1, expected_outer + 1)]
+    # The trainer publishes these exact optimizer events with content hashes.
+    # Logging backends are optional observability, not the training authority.
+    updates = [dict(row["metrics"]) for name in shards for row in store.read_rows(name)]
     expected = 2 if gate else 1600
     assert [r["step/optimizer"] for r in updates] == list(range(1, expected + 1))
     assert all(
@@ -370,12 +383,12 @@ def audit_training(study, experiment, *, gate=False):
         and r["optim/actor/loss_nonfinite"] == 0
         for r in updates
     )
-    manifest = read(output / "evaluation/manifest.json")
     assert all(
         math.isfinite(r["optim/actor/loss"]) and math.isfinite(r["optim/actor/grad_norm_preclip"]) for r in updates
     )
     assert manifest["status"] == "complete"
     assert manifest["metadata"]["optimizer_steps"] == expected
+    assert manifest["metadata"]["completed_outer"] == expected_outer
     export = read(output / "evaluation/final-model/export-audit/manifest.json")
     assert export["status"] == "complete"
     write(base / f"{experiment}-audit.json", dict(passed=True, optimizer_updates=expected, evaluation_complete=True))
