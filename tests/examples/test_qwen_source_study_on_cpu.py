@@ -221,3 +221,63 @@ def test_reservation_race_rolls_back_only_our_cards():
     assert broker.data["gpus"]["5"]["owner"] is None
     assert broker.data["gpus"]["6"]["owner"] == "new-other-job"
     assert ("release", 5) in broker.calls and ("release", 6) not in broker.calls
+
+
+@pytest.mark.parametrize("failure", [None, "skipped", "missing", "corrupted"])
+def test_training_audit_uses_verified_optimizer_artifacts_without_file_logger(tmp_path, failure):
+    import pyarrow as pa
+
+    from examples.mirroropd.research.studies.prefix_fusion.native_source_queue import audit_training
+    from verl.trainer.evaluation.artifacts import ArtifactStore
+
+    root = tmp_path / "gate/training/E78/evaluation"
+    store = ArtifactStore.create(root, kind="unified_evaluation_run", metadata={})
+    schema = pa.schema([("step", pa.int64()), ("metrics", pa.map_(pa.string(), pa.float64()))])
+    for n in range(1, 3):
+        if failure == "missing" and n == 2:
+            continue
+        metrics = {
+            "step/optimizer": float(n),
+            "optim/actor/update_applied": 1.0,
+            "optim/actor/update_skipped": float(failure == "skipped"),
+            "optim/actor/loss_nonfinite": 0.0,
+            "optim/actor/loss": 0.3,
+            "optim/actor/grad_norm_preclip": 1.2,
+        }
+        store.write_rows(
+            f"updates/actor-outer-{n:03d}.parquet",
+            [{"step": n, "metrics": list(metrics.items())}],
+            schema=schema,
+        )
+    store.finish(metadata={"optimizer_steps": 2, "completed_outer": 2})
+    export = root / "final-model/export-audit"
+    export.mkdir(parents=True)
+    (export / "manifest.json").write_text(json.dumps({"status": "complete"}))
+    if failure == "corrupted":
+        with (root / "updates/actor-outer-001.parquet").open("ab") as stream:
+            stream.write(b"corrupted")
+    if failure:
+        with pytest.raises((ValueError, AssertionError)):
+            audit_training(tmp_path, "E78", gate=True)
+        assert not (tmp_path / "gate/E78-audit.json").exists()
+    else:
+        audit_training(tmp_path, "E78", gate=True)
+        assert json.loads((tmp_path / "gate/E78-audit.json").read_text())["optimizer_updates"] == 2
+
+
+def test_config_only_enables_local_metrics_and_creates_its_parent(tmp_path, monkeypatch):
+    import yaml
+
+    from examples.mirroropd.research.studies.prefix_fusion import native_source_queue as queue
+
+    config = {"trainer": {"logger": ["console", "wandb"]}, "ray_kwargs": {"ray_init": {}}}
+    monkeypatch.setattr(
+        queue.subprocess, "run", lambda *a, **k: SimpleNamespace(returncode=0, stdout=yaml.safe_dump(config))
+    )
+    destination = tmp_path / "training/E78"
+    resolved, _ = queue.config_only(tmp_path, tmp_path, tmp_path / "python", {}, "E78", destination)
+    assert resolved["trainer"]["logger"] == ["console", "wandb", "file"]
+    assert destination.is_dir()
+    assert resolved["ray_kwargs"]["ray_init"]["runtime_env"]["env_vars"]["VERL_FILE_LOGGER_PATH"] == str(
+        destination / "metrics.jsonl"
+    )
