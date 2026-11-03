@@ -336,3 +336,31 @@ def test_empty_future_rank_has_finite_zero_value_and_gradients(backend):
     dh, dw = torch.autograd.grad(result.loss_sum, (h, w))
     assert dh.shape == h.shape
     assert dw.eq(0).all()
+
+
+def test_precompute_reuses_student_projection_and_backward_does_not_reproject(monkeypatch):
+    from verl.trainer.distillation import full_vocab, trajectory
+
+    torch.manual_seed(17)
+    hs = torch.randn(5, 3, dtype=torch.float64, requires_grad=True)
+    ws = torch.randn(7, 3, dtype=torch.float64, requires_grad=True)
+    ht, wt, hq, wq = torch.randn_like(hs), torch.randn_like(ws), torch.randn_like(hs), torch.randn_like(ws)
+    roles = {ws.data_ptr(): "student", wt.data_ptr(): "teacher", wq.data_ptr(): "anchor"}
+    calls = {name: 0 for name in roles.values()}
+    original = trajectory.project
+
+    def record(hidden, weight):
+        calls[roles[weight.data_ptr()]] += 1
+        return original(hidden, weight)
+
+    monkeypatch.setattr(full_vocab, "project", record)
+    monkeypatch.setattr(trajectory, "project", record)
+    layout = PackedReduction(
+        (3, 2), torch.tensor([0, 1, 4, 0, 2]), torch.zeros(5, dtype=torch.long), future=FutureCreditConfig(mode="sum")
+    )
+    result = full_vocab_objective_result(
+        hs, ws, ht, wt, hq=hq, wq=wq, spec=spec(0.2), reduction=layout, backend="precompute", token_chunk=2
+    )
+    assert calls == {"student": 3, "teacher": 3, "anchor": 3}
+    result.loss_sum.backward()
+    assert calls == {"student": 3, "teacher": 3, "anchor": 3}
