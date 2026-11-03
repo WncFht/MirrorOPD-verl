@@ -212,7 +212,7 @@ class EvaluationCoordinator(ReadoutCallback):
 
     def validate(self, trainer, *, live_payload_bytes=0):
         outer = self.pending_outer
-        if outer in self.completed:
+        if outer in self.completed or outer in self.pending_events:
             return {}
         started = time.monotonic()
         plan = compile_plan(
