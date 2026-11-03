@@ -10,9 +10,10 @@ import os
 import random
 import re
 import signal
+import threading
 import time
-from collections import defaultdict, deque
-from concurrent.futures import ProcessPoolExecutor
+from collections import defaultdict
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, ThreadPoolExecutor, wait
 from functools import lru_cache
 from pathlib import Path
 
@@ -261,7 +262,11 @@ class AccuracyCollector:
             initializer=_initialize_verifier,
             initargs=(input_mib,),
         )
-        self.pending, self.rows = deque(), []
+        self.pending, self.rows = {}, []
+        self.questions = {(s.name, q["id"]): (s, q) for s, qs in specifications for q in qs}
+        self._stop = threading.Event()
+        self._reader_pool = None
+        self._reader = None
         self.chunk = []
         self.shard = 0
 
@@ -271,20 +276,71 @@ class AccuracyCollector:
             self.shard += 1
             self.chunk = []
 
+    def follow_generation(self, path, protocols):
+        """Consume immutable published shards in one owned thread, independent of GPU admission.
+
+        The generation artifact is the backlog. RAM holds at most one decoded shard
+        and pending_limit verifier inputs; no additional unbounded result queue exists.
+        """
+        if self._reader is not None or self.pending:
+            raise RuntimeError("Accuracy collection already started")
+        source = ArtifactStore(path)
+        self._generation_path = source.root
+        self._reader_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="accuracy-reader")
+
+        def follow():
+            seen = set()
+            while not self._stop.is_set():
+                if source.manifest_path.exists():
+                    manifest = source.manifest()
+                    if (
+                        manifest["kind"] != "generation"
+                        or manifest["metadata"].get("question_set_sha256") != self.question_hash
+                    ):
+                        raise ValueError("Accuracy generation has different questions or sampling counts")
+                    for name in sorted(manifest["files"].keys() - seen):
+                        if self._stop.is_set():
+                            return
+                        outputs = []
+                        for row in source.read_rows(name):
+                            spec, question = self.questions[(row["dataset"], row["source_id"])]
+                            protocol = protocols[spec.protocol]
+                            if row["protocol_id"] != protocol.protocol_id:
+                                raise ValueError("Accuracy generation protocol differs from the requested protocol")
+                            outputs.append((row, question, spec, protocol))
+                        self.submit(outputs)
+                        seen.add(name)
+                    if manifest["status"] == "complete":
+                        return
+                self._stop.wait(0.1)
+
+        self._reader = self._reader_pool.submit(follow)
+
+    def check(self, outputs=None):
+        """Fail the producer promptly if its independent verifier reader has failed."""
+        if self._reader is not None and self._reader.done():
+            self._reader.result()
+
     def _consume(self):
-        future, sample = self.pending.popleft()
-        try:
-            result = future.result(timeout=self.timeout)
-        except Exception as exc:
-            raise RuntimeError(f"Accuracy verifier failed for {sample}") from exc
-        self.chunk.append(result)
-        # Only scalar evidence stays in RAM after a score has been queued for publication.
-        self.rows.append({k: v for k, v in result.items() if k != "answer"})
-        if len(self.chunk) >= 32:
-            self._flush()
+        done, _ = wait(self.pending, timeout=self.timeout, return_when=FIRST_COMPLETED)
+        if not done:
+            raise TimeoutError("Accuracy verifiers made no progress within their wall-time budget")
+        for future in done:
+            sample = self.pending.pop(future)
+            try:
+                result = future.result()
+            except Exception as exc:
+                raise RuntimeError(f"Accuracy verifier failed for {sample}") from exc
+            self.chunk.append(result)
+            # Only scalar evidence stays in RAM after publication.
+            self.rows.append({k: v for k, v in result.items() if k != "answer"})
+            if len(self.chunk) >= 32:
+                self._flush()
 
     def submit(self, outputs):
         for row, question, spec, protocol in outputs:
+            if self._stop.is_set():
+                return
             self.verifier_protocols[spec.name] = {"verifier": spec.verifier, "answer_channel": protocol.answer_channel}
             while len(self.pending) >= self.pending_limit:
                 self._consume()
@@ -307,15 +363,18 @@ class AccuracyCollector:
                     "response_tokens",
                 )
             }
-            self.pending.append(
-                (
-                    self.pool.submit(verify_sample, compact, question, spec.verifier, answer),
-                    {k: compact[k] for k in ("id", "source_id", "dataset", "sample_index")},
-                )
-            )
+            future = self.pool.submit(verify_sample, compact, question, spec.verifier, answer)
+            self.pending[future] = {k: compact[k] for k in ("id", "source_id", "dataset", "sample_index")}
 
     def finish(self, generation=None):
         try:
+            if self._reader is not None:
+                if generation is None:
+                    raise ValueError("Following accuracy collection requires a complete generation artifact")
+                if generation.root != self._generation_path:
+                    raise ValueError("Accuracy finish must bind the artifact being followed")
+                generation.manifest(complete=True)
+                self._reader.result()
             while self.pending:
                 self._consume()
             metrics = summarize_accuracy(self.rows, self.expected)
@@ -345,9 +404,12 @@ class AccuracyCollector:
             )
             return metrics
         finally:
-            self.pool.shutdown(wait=True, cancel_futures=True)
+            self.close()
 
     def close(self):
+        self._stop.set()
+        if self._reader_pool is not None:
+            self._reader_pool.shutdown(wait=True, cancel_futures=True)
         self.pool.shutdown(wait=True, cancel_futures=True)
 
 

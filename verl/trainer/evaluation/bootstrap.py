@@ -42,7 +42,11 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
     initial_model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
     teacher = config.distillation.teacher_models.teacher_model.model_path
     path = initial_model.path if producer in {"initial", "source"} else teacher
-    model_config = initial_model if producer in {"initial", "source"} else HFModelConfig(path=path)
+    model_config = (
+        initial_model
+        if producer in {"initial", "source"}
+        else HFModelConfig(path=path, trust_remote_code=config.actor_rollout_ref.model.get("trust_remote_code", False))
+    )
     from verl.trainer.distillation.compatibility import ModelPairContract
 
     if producer not in {"initial", "source"}:
@@ -136,6 +140,7 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
         collector = AccuracyCollector(
             root.root / accuracy_name, datasets, initial_model.tokenizer, workers=options.verifier_workers
         )
+        collector.follow_generation(root.root / producer, options.protocols)
         generated = await generator.generate(
             root.root / producer,
             datasets,
@@ -144,7 +149,7 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
             model_identity=model_hash,
             progress=progress,
             resume_from=resume_generation,
-            on_batch=collector.submit,
+            on_batch=collector.check,
         )
         if producer == "initial" and options.source_enabled:
             source = DatasetSpec(
@@ -193,7 +198,10 @@ def finalize_bootstrap(config):
             raise ValueError("Bootstrap producer weights differ")
         input_model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
         role_model = (
-            HFModelConfig(path=config.distillation.teacher_models.teacher_model.model_path)
+            HFModelConfig(
+                path=config.distillation.teacher_models.teacher_model.model_path,
+                trust_remote_code=config.actor_rollout_ref.model.get("trust_remote_code", False),
+            )
             if child == "teacher"
             else input_model
         )
@@ -268,6 +276,7 @@ def main():
         include_dashboard=False,
         _temp_dir=os.environ.get("SMOKE_RAY_TMPDIR"),
         object_store_memory=8 * 1024**3,
+        runtime_env=OmegaConf.to_container(config.ray_kwargs.ray_init.get("runtime_env", {}), resolve=True),
     )
     try:
         asyncio.run(
