@@ -9,6 +9,22 @@ from verl.base_config import BaseConfig
 
 
 @dataclass
+class FutureCreditConfig(BaseConfig):
+    """Detached strict-future cost; no independent local/future coefficient."""
+
+    mode: str = "none"
+    gamma: float = 1.0
+
+    def __post_init__(self):
+        if self.mode not in ("none", "sum", "mean", "discounted_sum", "discounted_mean", "discounted_sequence"):
+            raise ValueError(f"Unsupported future credit mode: {self.mode}")
+        if not math.isfinite(self.gamma) or not 0 < self.gamma <= 1:
+            raise ValueError("future.gamma must be finite and in (0, 1]")
+        if not self.mode.startswith("discounted") and self.gamma != 1:
+            raise ValueError("future.gamma requires a discounted future mode")
+
+
+@dataclass
 class MirrorConfig(BaseConfig):
     objective: str = "mdpo"
     estimator: str = "full_vocab"
