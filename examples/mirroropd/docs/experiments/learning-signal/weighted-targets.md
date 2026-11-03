@@ -672,7 +672,7 @@ python -m examples.mirroropd.research.studies.weighted_targets.plot_online_endpo
 | T/q≥10                 | 0.3077% | 13.6480% |  1.6701% |    0.7915% |  1.6417% |
 | T/q≥100                | 0.0235% |  4.9062% |  0.3097% |    0.1416% |  0.5117% |
 
-第二行中，κ=1 与 κ=0.5 的目标质量比为 3.61；κ=0.5 低于两个端点，这些动作集合上的目标质量并不随 κ 单调变化。这为不同 κ 的学习方向提供了具体解释，但“教师相对偏好”不等于“数学上正确”，目标质量倍率也不等于训练后能力倍率。[真实前缀测量](data/topd-target-overlap-20261102/diagnostic.json)通过了 1024 个随机分布与全部真实状态上的分解／下界检查，并精确复现此前 CPU 的合并 teacher KL；共享参数模型能否把这些目标差异转化为任务收益，仍由在线实验判断。
+第二行中，κ=1 与 κ=0.5 的目标质量比为 3.61；κ=0.5 低于两个端点，这些动作集合上的目标质量并不随 κ 单调变化。这为不同 κ 的学习方向提供了具体解释，但“教师相对偏好”不等于“数学上正确”，目标质量倍率也不等于训练后能力倍率。[真实前缀测量](../../../../../../wandb-logs/MirrorOPD-verl/analysis/document-evidence-20261103/experiments/learning-signal/data/topd-target-overlap-20261102/diagnostic.json)通过了 1024 个随机分布与全部真实状态上的分解／下界检查，并精确复现此前 CPU 的合并 teacher KL；共享参数模型能否把这些目标差异转化为任务收益，仍由在线实验判断。
 
 同一 64 条轨迹上的[实际 Adam 末点检查](../../infra/numerics/optimization/mechanisms.md#qwen-kappa-displacement)补上了参数空间的读出：κ=0.5/1 的位移范数分别为 0.42055/0.42416，只差 0.86%，方向余弦为 0.93344。较小的原始 loss 并不对应同比例变小的实际参数更新；两组仍有更新方向差异，任务影响需要独立生成检验。
 
@@ -695,7 +695,7 @@ $$
 | 0.5 | +0.08989 |     −0.03399 |
 | 1   | +0.05867 |     −0.01614 |
 
-正值表示沿该单独偏置做梯度下降会压低停止概率。这个诊断解释了停止动作定义为何不能从κ机制中省略，也提醒本地κ=0 已包含 EOS 语义修复及 anchor 约束，不能当作未修复的纯 OPD 基线。[完整重算](data/topd-mechanism-20261102/eos-action-space-diagnostic.json)使用 CPU 重建相同 BF16 投影操作数，合并 KL 与 GPU 读数最大差为 0.000116；终止位置的统计不代表全批 token 平均，更不直接证明任务准确率的因果贡献。
+正值表示沿该单独偏置做梯度下降会压低停止概率。这个诊断解释了停止动作定义为何不能从κ机制中省略，也提醒本地κ=0 已包含 EOS 语义修复及 anchor 约束，不能当作未修复的纯 OPD 基线。[完整重算](../../../../../../wandb-logs/MirrorOPD-verl/analysis/document-evidence-20261103/experiments/learning-signal/data/topd-mechanism-20261102/eos-action-space-diagnostic.json)使用 CPU 重建相同 BF16 投影操作数，合并 KL 与 GPU 读数最大差为 0.000116；终止位置的统计不代表全批 token 平均，更不直接证明任务准确率的因果贡献。
 
 较晚的[循环前缀诊断](data/topd-online-outer7-20261102/loop-eos.json)取κ=0 累计 96 次更新后 outer7 的 64 条轨迹，各取最后一个已评分前缀，即预测最终生成 token 之前的状态。保持同一个 q、T 和前缀，只切换目标公式中的κ。20 条触顶轨迹在这些状态上的平均 q(EOS) 为 3.24×10⁻⁶，平均 T(EOS) 为 1.67×10⁻⁶；没有一个 T(EOS) 达到 1%。教师的最高概率动作均为非 EOS，并与学生最高概率动作相同。这里的教师是在学生既有前缀上评分，不是从原题重新生成；截断前缀也常位于句中。
 
@@ -761,7 +761,7 @@ $$
 - [论文与官方源码 SHA、E57 最终节点汇总](data/e55-e57-20261101-2259/topd-comparison.json)；[10 月 31 日旧提取](../../progress/data/topd-20261101/comparison.json)保持冻结。
 - [完整原始检索报告](../../progress/data/topd-20261101/paper-search.md)与[原样检索诊断](../../progress/data/topd-20261101/search-stderr.log)。
 - 官方代码快照保留在仓库`runs/topd-comparison-20261101/source/`；下方引用均固定到已核对的 commit。
-- 11 月 2 日下午更新的[完整绘图输入](data/e55-e57-20261102-1600/data.json)记录 raw SHA-256、实际配置与逐更新边界；[10 月 31 日阶段报告](../../archive/experiments/weighted-target/2026-10-31-E55至E57阶段快照.md)保持原输入范围。
+- 11 月 2 日下午更新的[完整绘图输入](../../../../../../wandb-logs/MirrorOPD-verl/analysis/document-evidence-20261103/experiments/learning-signal/data/e55-e57-20261102-1600/data.json)记录 raw SHA-256、实际配置与逐更新边界；[10 月 31 日阶段报告](../../archive/experiments/weighted-target/2026-10-31-E55至E57阶段快照.md)保持原输入范围。
 - [复核来源与脚本身份](data/e55-e57-20261102-1600/provenance.json)、[完整汇总](data/e55-e57-20261102-1600/summary.json)和[分析／绘图脚本](../../../research/studies/termination/analyze_e55_e57.py)支持复算；11 月 1 日白天及更早快照保持冻结。
 - 六组图的 PDF 与 PNG 同目录，每张图附 `*-audit.json`；已通过绘图审计并目检。数据仅使用本地原始日志。[11 月 2 日下午云端关键指标核验](data/e55-e57-20261102-1600/cloud-audit.json)确认三个 run 分别包含 1,359／1,700／1,700 个唯一步，指标与本地一致；扫描返回的重复 step 指标一致，未作为新增更新。
 
