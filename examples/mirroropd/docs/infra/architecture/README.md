@@ -4,7 +4,7 @@
 
 当前接口以本页及下方专题为准；旧配置和开发调用者按[迁移指南](runtime-migration.md)升级。[重构报告](../../archive/engineering/2026-11-01-运行合同审计与重构方案.md)保存代码来源、设计取舍和验收范围，不作为另一份当前配置手册。
 
-[Full-vocab 聚合与未来信用实现计划](2026-11-03-Full-vocab聚合与未来信用实现计划.md)是尚未实施的提案，包含当前代码走读、sequence KL / future mean / discount 的梯度合同、分块设计及验收范围。
+[Full-vocab 聚合与未来信用实现计划](2026-11-03-Full-vocab聚合与未来信用实现计划.md)保留 sequence KL / future mean / discount 的梯度合同和分块设计；CPU 实现与合同检查已接入，CUDA、真实 FSDP2 与性能验收待完成。后续评估事件、执行配置、validation、资源生命周期及计算层整理按[评估与训练执行重构计划](2026-11-04-评估与训练执行重构计划.md)分阶段实施。
 
 ## 模块职责
 
