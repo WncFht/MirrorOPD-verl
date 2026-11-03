@@ -137,6 +137,10 @@ Public bank 是 generation 产物的 sample 0 引用，无需再复制一份长 
 
 新图表入口是`examples.mirroropd.research.studies.pipeline.plot_unified_evaluation`，直接读取完成的 Parquet 事件，输出训练 loss、来源／history RKL、四域 bank／current RKL、history 批矩阵、accuracy 和可审计 CSV。旧 0–320/H1024 图表仍使用原 reader。
 
+## 默认验证与协议 owner
+
+Trainer 的 `_validate()` 只选择 owner 并调用 `validate(trainer)`。声明 `handles_validation=true` 的组件接管自己的协议；没有组件或组件仅观察训练时，使用 [DefaultEvaluator](default.py)。默认协议继续使用 validation dataloader、原生 agent loop/reward、最终 session 归约、原有指标和两种 JSONL 导出，不隐式生成公共 suite 的 Parquet 银行。公共 suite、source/history 与 HF reload 仍各自声明科学协议和预算。
+
 ## 资源与恢复责任
 
 `RolloutService` 显式要求 `ensure_current(version)` 与 `park()`。两个内置服务仅在权重同步和所需 sampler 安装成功后声明驻留版本；同步或休眠失败时清除版本标记。异常仍交给调用方停止执行，清除标记不代表可以安全重试未完成的远程请求。
