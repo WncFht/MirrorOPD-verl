@@ -73,7 +73,7 @@ def block_rows(hs, ws, ht, wt, fused):
 
 class ForwardVocab(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, hs, ws, ht, wt, chunk, fused, precompute):
+    def forward(ctx, hs, ws, ht, wt, chunk, fused, precompute, row_weights):
         dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
         values = hs.new_empty(len(hs), dtype=dtype)
         info = hs.new_empty((len(hs), len(DIAGNOSTICS)), dtype=dtype)
@@ -83,10 +83,12 @@ class ForwardVocab(torch.autograd.Function):
             stop = min(start + chunk, len(hs))
             values[start:stop], dz, info[start:stop] = block_rows(hs[start:stop], ws, ht[start:stop], wt, fused)
             if precompute:
+                if row_weights is not None:
+                    dz = (dz * row_weights[start:stop, None]).to(dz.dtype)
                 add_product(dh[start:stop], dz, ws)
                 add_product(dw, dz.T, hs[start:stop])
             del dz
-        ctx.precompute, ctx.chunk, ctx.fused = precompute, chunk, fused
+        ctx.precompute, ctx.chunk, ctx.fused, ctx.row_weights = precompute, chunk, fused, row_weights
         ctx.hdtype, ctx.wdtype = hs.dtype, ws.dtype
         if precompute:
             ctx.save_for_backward(
@@ -96,7 +98,7 @@ class ForwardVocab(torch.autograd.Function):
         else:
             ctx.save_for_backward(hs, ws, ht, wt)
         ctx.mark_non_differentiable(values, info)
-        return values.sum(), values, info
+        return values.sum() if row_weights is None else (values * row_weights).sum(), values, info
 
     @staticmethod
     @torch.autograd.function.once_differentiable
@@ -110,12 +112,16 @@ class ForwardVocab(torch.autograd.Function):
             for start in range(0, len(hs), ctx.chunk):
                 stop = min(start + ctx.chunk, len(hs))
                 _, dz, _ = block_rows(hs[start:stop], ws, ht[start:stop], wt, ctx.fused)
+                if ctx.row_weights is not None:
+                    dz = (dz * ctx.row_weights[start:stop, None]).to(dz.dtype)
                 add_product(dh[start:stop], dz, ws)
                 add_product(dw, dz.T, hs[start:stop])
-        return (dh * upstream).to(ctx.hdtype), (dw * upstream).to(ctx.wdtype), None, None, None, None, None
+        return (dh * upstream).to(ctx.hdtype), (dw * upstream).to(ctx.wdtype), None, None, None, None, None, None
 
 
-def full_forward_kl_result(hs, ws, ht, wt, *, backend="precompute", token_chunk=512, teacher_support="equal"):
+def full_forward_kl_result(
+    hs, ws, ht, wt, *, backend="precompute", token_chunk=512, teacher_support="equal", row_weights=None
+):
     if backend not in ("dense", "recompute", "precompute", "precompute_fused"):
         raise ValueError("full forward KL supports dense/recompute/precompute/precompute_fused")
     if teacher_support not in ("equal", "student"):
@@ -137,11 +143,15 @@ def full_forward_kl_result(hs, ws, ht, wt, *, backend="precompute", token_chunk=
         z, t = project(hs, ws), project(ht, wt[: len(ws)])
         extra = project(ht, wt[len(ws) :]) if len(wt) > len(ws) else None
         values, _, info = forward_rows(z, t, extra)
-        total = values.sum()
+        total = values.sum() if row_weights is None else (values * row_weights).sum()
     else:
         total, values, info = ForwardVocab.apply(
-            hs, ws, ht, wt, token_chunk, backend == "precompute_fused", backend != "recompute"
+            hs, ws, ht, wt, token_chunk, backend == "precompute_fused", backend != "recompute", row_weights
         )
     return FullVocabObjectiveResult(
-        total, values.detach(), {k: info[:, i].detach() for i, k in enumerate(DIAGNOSTICS)}, values.detach()
+        total,
+        values.detach(),
+        {k: info[:, i].detach() for i, k in enumerate(DIAGNOSTICS)},
+        values.detach(),
+        values.detach().sum(),
     )
