@@ -1,0 +1,79 @@
+{
+  "logs_head": "5a12e685ec9e1ca3b74fecedb3e2e445bff1420f",
+  "analysis_sha256": "6b40a75001c900a4fead5e19ccc8ff6dedac084be8e2c13ad213eff93c2bff5b",
+  "data_sha256": "9dfb7e12eddf4ad6906cb85779155256717c9685a89d2fc6c897c02c3ebda0e4",
+  "runs": [
+    {
+      "name": "E55",
+      "run_id": "j5uaal3j",
+      "sha256": "99bd35d760d1c507715c758480f2b103a6044d78af0ba4d896cd015b99d4b8be",
+      "source_status": "finished",
+      "exit_code": 0,
+      "snapshot_end_shanghai": "2026-11-03T07:29:22.076955+08:00",
+      "update_count": 1600,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ]
+    },
+    {
+      "name": "E56",
+      "run_id": "zsnhqzts",
+      "sha256": "2f5425741d9d6c8dac4f27b06d5cae5a98038d516c44514960252010257b761f",
+      "source_status": "finished",
+      "exit_code": 0,
+      "snapshot_end_shanghai": "2026-11-02T03:11:30.567748+08:00",
+      "update_count": 1600,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ]
+    },
+    {
+      "name": "E57",
+      "run_id": "6j5knkmk",
+      "sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830",
+      "source_status": "finished",
+      "exit_code": 0,
+      "snapshot_end_shanghai": "2026-11-01T15:40:42.800617+08:00",
+      "update_count": 1600,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ]
+    }
+  ],
+  "figure_audits": {
+    "optimization-audit.json": [],
+    "training-audit.json": [],
+    "validation-accuracy-audit.json": [],
+    "validation-audit.json": [],
+    "validation-cap_rate-audit.json": [],
+    "validation-length-audit.json": []
+  },
+  "validation": "All three runs: 1600 sequential updates, 100 complete outers, ten validation nodes, exit 0; no skipped/nonfinite updates. Final macro accuracies independently recomputed from five dataset values."
+}
