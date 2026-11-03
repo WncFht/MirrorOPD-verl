@@ -563,3 +563,66 @@ Outer25／50 各生成 6703 条公共回答，实际约 5431.22 万／5426.52 �
 按同一旧运行的读出次数计，主 RKL 轨迹评分数会由 27264 降至 14336；初始化 current 复用 initial，不重复计数。条数降低约 47.4%，不代表总训练时间降低 47.4%：训练更新与 6703 样本的 bench 生成保持原预算，公共轨迹也通常更长。
 
 [统计摘要](data/justrl-outer-profile-20261101/summary.json)、[阶段表](data/justrl-outer-profile-20261101/stages.csv)、[逐批 token 表](data/justrl-outer-profile-20261101/training-tokens.csv)和[评估节点表](data/justrl-outer-profile-20261101/evaluation-nodes.csv)保留实际数值。复算入口是[analyze_native_outer.py](../../../../benchmarks/profile/analyze_native_outer.py)。`rollout_batch_seconds`是`rollout_pipeline_seconds`的内部计时，以上表格只加后者，避免重复求和。
+
+<a id="mimo-stage-cost"></a>
+
+## MiMo 7B 阶段对照的训练成本
+
+2026-11-03 19:04 的快照覆盖 E71 outer1–25、E72 outer1–20 与仍在训练的 E73 outer1–19。三组均为 MiMo-7B-Base student、四张 H800、batch128、Full-vocab RKL、FP32 主权重与 BF16 混合计算；教师和实际预算见[阶段对照](../../../experiments/teacher-transfer/post-training-stages.md#mimo-e71-early)。以下按完成日志分析，没有改变运行配置。
+
+![MiMo 三组每轮阶段耗时，保留终点完整读出](figures/mimo-stage-20261103-1904/stage-cost.png)
+
+普通轮排除固定银行及全量读出节点；actor、rollout、evaluation 和其余阶段互斥求和。下表各行按相同分支的普通轮集合计算，吞吐使用`总输入 token × reuse / 总 actor 秒数 / 4`，输入含 prompt。
+
+| 指标                          | E71 SFT+RL | E72 direct RL | E73 SFT，截至 outer19 |
+| ----------------------------- | ---------: | ------------: | --------------------: |
+| 普通轮数                      |         18 |            14 |                    14 |
+| Reuse                         |         32 |            16 |                    16 |
+| 平均输入 token                |     855318 |        659793 |                842646 |
+| Rollout                       |   139.32 s |      130.35 s |              138.61 s |
+| Teacher 主干与上下卡          |    13.56 s |       10.80 s |               13.14 s |
+| Actor                         |  1125.10 s |      438.63 s |              561.13 s |
+| 权重同步                      |     2.70 s |        2.59 s |                2.96 s |
+| 整个普通 outer                |  21.36 min |      9.72 min |             11.94 min |
+| Actor 占普通轮墙钟            |     87.80% |        75.24% |                78.31% |
+| Actor 输入 token passes/s/GPU |       6082 |          6017 |                  6007 |
+| Actor MFU 估计                |     32.19% |        32.10% |                32.09% |
+| Actor allocated 峰值均值      |  47.91 GiB |     48.04 GiB |             48.25 GiB |
+
+E72／E73 的 reuse 减半，回答长度也不同，原始 outer 时长不能解释成后端提速。三组按输入工作量归一化的 actor 吞吐约为 6000 token passes/s/GPU。E71／E72 的终点 evaluation 分别为 23821.90／18549.64 秒，即 6.62／5.15 小时；其中包含公共生成与判分、RKL、模型切换及终点导出等，不能把终点大柱当作 actor 变慢。终点 outer 总计 6.96／5.31 小时，远高于普通轮。E73 尚无终点实测。
+
+最新[冻结数据与来源](../../../experiments/teacher-transfer/data/mimo-stage-20261103-1904/manifest.json)、各分支 [E71](../../../experiments/teacher-transfer/data/mimo-stage-20261103-1904/E71/summary.json)／[E72](../../../experiments/teacher-transfer/data/mimo-stage-20261103-1904/E72/summary.json)／[E73](../../../experiments/teacher-transfer/data/mimo-stage-20261103-1904/E73/summary.json)摘要及[生成器](../../../../research/studies/pipeline/report_mimo_snapshot.py)支持复算。终点不再做下一轮 rollout 的权重同步，相应计时记为 0。
+
+### Outer22 历史快照与 1.5B 成本参照
+
+以下保留 2026-11-02 E71 outer1–22 的冻结统计，用于解释 7B 与历史 1.5B 的成本差异；它不替代上面的三组新快照。
+
+![E71 outer22 历史阶段耗时与归一化 actor 吞吐](figures/mimo-e71-20261102-outer22/mimo-stage-cost.png)
+
+普通轮排除固定 bank 读出节点，实际为 outer3／4／6–9／11–14／16–19／21／22，共 16 轮。历史参照是上节已完成的 JustRL→R1-1.5B 50outer 运行中的 38 个普通轮；两组均为四卡、batch128、reuse32、训练 response cap7168，采用同一 Full-KL 目标、head chunk256、`precompute_fused`、关闭 diagnostics 和梯度累积 no-sync。MiMo 的 actor token budget 为每卡 32768，历史正式运行实际为 49152。模型、回答长度、预算和源码版本仍有差异，这是一组成本参照，不是受控回归测试。
+
+| 普通轮指标                    | MiMo 7B，16 轮 | JustRL／R1 1.5B，38 轮 |
+| ----------------------------- | -------------: | ---------------------: |
+| 每轮输入 token，含 prompt     |        859,542 |                743,531 |
+| Rollout 流水线                |       139.57 s |                25.04 s |
+| Teacher 主干与上下卡          |        13.58 s |              约 3.81 s |
+| Actor，32 次更新              |     1,130.73 s |               275.84 s |
+| 平均每次 optimizer 更新       |        35.34 s |                 8.62 s |
+| 权重同步                      |         2.69 s |              约 0.93 s |
+| 原 source/history 读出        |           关闭 |                14.35 s |
+| 整个普通 outer                |     1,287.29 s |               320.80 s |
+| Actor 输入 token passes/s/GPU |          6,081 |                 21,564 |
+
+最后一行按匹配轮集合的`总输入 token × reuse / 总 actor 秒数 / GPU 数`计算，包含 prompt，未把新生成 token/s 当作训练吞吐，也不计入激活重算的额外逻辑访问。历史表格中的全 50 轮平均输入 token 与此处 38 个普通轮均值略有不同，不能混用。
+
+MiMo 普通轮平均 21.45 分钟，其中 actor 占 87.84%。比历史 1.5B actor 慢约 4.10 倍，同时每轮输入量多 15.60%；按 token 工作量归一化后，每 token pass 成本约为 3.55 倍。这一量级与更大的 7B student、不同长度和较小 token budget 相容，没有单凭墙钟时长认定代码回退的依据。它也不证明配置已经最优；目前没有同一 MiMo checkpoint、同一 token 输入的 actor CUDA/NCCL 对照。
+
+运行中普通轮的模型 FLOPs 利用率估计均值为 32.19%，actor allocated 峰值均值为 47.86 GiB，负载均衡后的输入 token max/min 均值为 1.0036。GPU utilization=100% 表示持续忙碌，不等于全部计算单元达到峰值；上述日志估计也不能分离 backbone、输出头、通信或 CPU hidden 等待的耗时。
+
+已核对实际冻结源码与配置：full-vocab fused 后端、异步 hidden 运输／预取、动态 token 分批和 activation checkpointing 均开启；无 EOS 合并、无 anchor、无额外 mirror diagnostics。优化后的评估调度已经接入，但它不改变每批 32 次 actor 更新的预算。[原生 worker](../../../../../../runs/mimo-stage-transfer-20261101/optimized-handoff-20261102/source/verl/workers/engine_workers.py)的 train-mode 覆盖整个 reuse 循环，内层设置`disable_auto_offload=True`；不能把耗时解释成每个 reuse 都整模上下卡。
+
+若后续开展性能实验，优先在同一冻结 token 批次上验证 actor 配置：保持目标、reuse、cap 和学习率不变，比较 token budget32768→49152／65536、head chunk256→512，再评估 no-sync 的收益与 7B 未分片梯度显存代价。已有[Qwen 固定 token 配置实验](#固定-token-的配置优化实测)在 1.7B 上测得组合约 10%–11% 的改善，但其任务、模型和显存代价不同，不能转写为 MiMo 的预期收益。完整 teacher 概率缓存也不是现有 precompute 的含义，不能把隐藏状态缓存当成已经消除了每次更新的 teacher 输出头投影。
+
+作为成本上界的简单核算，若固定其他阶段，即使普通轮的 rollout 耗时降为零，最多也只减少约 10.84% 的墙钟时间；actor 提速一倍则可减少约 43.92%。这不是后续训练预测，而且未覆盖 outer25／50 的全量生成评估。全量评估的收益应独立参考[统一请求池实测](../inference/validation-resources.md#native-scheduler)。
+
+证据为[逐轮表](../../../experiments/teacher-transfer/data/mimo-e71-20261102-outer22/outers.csv)与[摘要](../../../experiments/teacher-transfer/data/mimo-e71-20261102-outer22/summary.json)，历史参照沿用[已发布原始统计](data/justrl-outer-profile-20261101/summary.json)。绘图使用同一份冻结标量输入，复算入口见[生成器](../../../../research/studies/pipeline/plot_stage_progress.py)。

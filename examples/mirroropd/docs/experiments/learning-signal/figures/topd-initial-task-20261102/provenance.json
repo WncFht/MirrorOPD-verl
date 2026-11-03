@@ -1,0 +1,6 @@
+{
+  "source_sha256": "cf9ca491bcac0384e1dce802de94e9e6d57e9ab0f5de542ecbd1df903f562869",
+  "plot_script_sha256": "d2577cbe1a053c2cc33306931fbe59a55c5571f08991d47b5a2a3f73d8050a07",
+  "audit_exception": "palette-overflow counts error-bar caps/stems separately; three kappa series per panel",
+  "scope": "Plot paired AIME changes from Base for the common 64-response initial block.\n\nSemantic ledger: each point is one completed kappa arm minus its matching Base\ndecoder; bars are paired question-bootstrap intervals, not training-seed errors.\nGeometry ledger: both panels share percentage-point scales and kappa positions.\n"
+}

@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-11-02T12:15:01.386264+08:00",
+  "raw_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/topd-data-kappa-20261101",
+  "source_hashes": {
+    "analysis.json": "977df9a838a0bbd9e6a6c71f0a35209670b84a010296e194ff341870d73c4239",
+    "analyze_coverage_instruction.py": "5f29b6a221dc53d5a247b267debf06694a51fe0f1396be3098ace1581b9781e8",
+    "analyze_instruction_interaction.py": "9f3d619fceae3eb4f67f6f6a2f8764c4e03fff6d4d0972fcd34413296033a0d4"
+  },
+  "command": "../envs/mirroropd-fusion/bin/python runs/topd-data-kappa-20261101/analyze_coverage_instruction.py",
+  "scope": "Inference instruction effects, not training instruction intervention. Eight complete paper-decoder conditions."
+}

@@ -1,0 +1,9 @@
+{
+  "cwd": "MirrorOPD-verl repository root",
+  "command": "FIGURE_VIZ_MPL=../dotfiles/.agents/skills/figure-viz/assets/mpl ../envs/mirroropd-fusion/bin/python -m examples.mirroropd.research.studies.pipeline.report_mimo_snapshot --root runs/mimo-stage-transfer-20261101 --data examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261103 --figures /tmp/mimo-stage-replot/figures --performance /tmp/mimo-stage-replot/performance --reference examples/mirroropd/docs/infra/performance/full-vocab/data/justrl-outer-profile-20261101 --replot",
+  "snapshot": "2026-11-03T15:16:02+08:00",
+  "generators": {
+    "examples/mirroropd/research/studies/pipeline/report_mimo_snapshot.py": "cfaa15625bee6405c1b5cc9a338d23df393ef8a49b6cefd1f25f8e145a89231c",
+    "examples/mirroropd/research/studies/pipeline/plot_stage_progress.py": "66adae7d0b62e20de460f54ab88be70a0e6b7eae7a1ac70e113c9c112d01450a"
+  }
+}

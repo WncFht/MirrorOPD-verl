@@ -1,0 +1,342 @@
+{
+  "left": "reuse64x16-k0-s42-block1",
+  "right": "multi128x8-k0-s42-block1",
+  "native": {
+    "AIME24": {
+      "accuracy": {
+        "value": 0.016666666666666666,
+        "question_bootstrap95": [
+          -0.025,
+          0.06666666666666667
+        ]
+      },
+      "mean_length": {
+        "value": -956.0666666666667,
+        "question_bootstrap95": [
+          -2555.8893749999997,
+          571.4174999999987
+        ]
+      },
+      "cap_rate": {
+        "value": -0.06666666666666667,
+        "question_bootstrap95": [
+          -0.16666666666666666,
+          0.025
+        ]
+      }
+    },
+    "AIME25": {
+      "accuracy": {
+        "value": 0.025,
+        "question_bootstrap95": [
+          0.0,
+          0.058333333333333334
+        ]
+      },
+      "mean_length": {
+        "value": -291.15833333333336,
+        "question_bootstrap95": [
+          -1905.10625,
+          1214.2154166666664
+        ]
+      },
+      "cap_rate": {
+        "value": -0.016666666666666666,
+        "question_bootstrap95": [
+          -0.125,
+          0.08333333333333333
+        ]
+      }
+    },
+    "AIME26": {
+      "accuracy": {
+        "value": 0.016666666666666666,
+        "question_bootstrap95": [
+          0.0,
+          0.041666666666666664
+        ]
+      },
+      "mean_length": {
+        "value": -152.98333333333332,
+        "question_bootstrap95": [
+          -1933.0347916666667,
+          1753.342708333333
+        ]
+      },
+      "cap_rate": {
+        "value": -0.008333333333333333,
+        "question_bootstrap95": [
+          -0.125,
+          0.11666666666666667
+        ]
+      }
+    },
+    "AMC23": {
+      "accuracy": {
+        "value": -0.03125,
+        "question_bootstrap95": [
+          -0.0875,
+          0.03125
+        ]
+      },
+      "mean_length": {
+        "value": -531.23125,
+        "question_bootstrap95": [
+          -1372.1096875,
+          325.48671874999985
+        ]
+      },
+      "cap_rate": {
+        "value": -0.03125,
+        "question_bootstrap95": [
+          -0.0875,
+          0.025
+        ]
+      }
+    },
+    "MATH-500": {
+      "accuracy": {
+        "value": 0.046875,
+        "question_bootstrap95": [
+          0.0078125,
+          0.0859375
+        ]
+      },
+      "mean_length": {
+        "value": -361.45703125,
+        "question_bootstrap95": [
+          -744.3759765625,
+          16.251367187499753
+        ]
+      },
+      "cap_rate": {
+        "value": -0.0234375,
+        "question_bootstrap95": [
+          -0.046875,
+          0.0
+        ]
+      }
+    },
+    "AIME macro": {
+      "accuracy": {
+        "value": 0.019444444444444445,
+        "question_bootstrap95": [
+          0.0027777777777777775,
+          0.03888888888888889
+        ]
+      },
+      "mean_length": {
+        "value": -466.7361111111112,
+        "question_bootstrap95": [
+          -1408.177222222222,
+          476.9612499999999
+        ]
+      },
+      "cap_rate": {
+        "value": -0.030555555555555558,
+        "question_bootstrap95": [
+          -0.09166666666666667,
+          0.030555555555555555
+        ]
+      }
+    },
+    "five-benchmark macro": {
+      "accuracy": {
+        "value": 0.014791666666666665,
+        "question_bootstrap95": [
+          -0.0029687499999999974,
+          0.033438802083333316
+        ]
+      },
+      "mean_length": {
+        "value": -458.5793229166667,
+        "question_bootstrap95": [
+          -1075.8601328125,
+          150.07382942708315
+        ]
+      },
+      "cap_rate": {
+        "value": -0.029270833333333333,
+        "question_bootstrap95": [
+          -0.06901041666666666,
+          0.010365885416666649
+        ]
+      }
+    }
+  },
+  "official": {
+    "AIME24": {
+      "accuracy": {
+        "value": 0.016666666666666666,
+        "question_bootstrap95": [
+          -0.025,
+          0.06666666666666667
+        ]
+      },
+      "mean_length": {
+        "value": -956.0666666666667,
+        "question_bootstrap95": [
+          -2555.8893749999997,
+          571.4174999999987
+        ]
+      },
+      "cap_rate": {
+        "value": -0.06666666666666667,
+        "question_bootstrap95": [
+          -0.16666666666666666,
+          0.025
+        ]
+      }
+    },
+    "AIME25": {
+      "accuracy": {
+        "value": 0.016666666666666666,
+        "question_bootstrap95": [
+          0.0,
+          0.041666666666666664
+        ]
+      },
+      "mean_length": {
+        "value": -291.15833333333336,
+        "question_bootstrap95": [
+          -1905.10625,
+          1214.2154166666664
+        ]
+      },
+      "cap_rate": {
+        "value": -0.016666666666666666,
+        "question_bootstrap95": [
+          -0.125,
+          0.08333333333333333
+        ]
+      }
+    },
+    "AIME26": {
+      "accuracy": {
+        "value": 0.016666666666666666,
+        "question_bootstrap95": [
+          0.0,
+          0.041666666666666664
+        ]
+      },
+      "mean_length": {
+        "value": -152.98333333333332,
+        "question_bootstrap95": [
+          -1933.0347916666667,
+          1753.342708333333
+        ]
+      },
+      "cap_rate": {
+        "value": -0.008333333333333333,
+        "question_bootstrap95": [
+          -0.125,
+          0.11666666666666667
+        ]
+      }
+    },
+    "AMC23": {
+      "accuracy": {
+        "value": -0.03125,
+        "question_bootstrap95": [
+          -0.0875,
+          0.03125
+        ]
+      },
+      "mean_length": {
+        "value": -531.23125,
+        "question_bootstrap95": [
+          -1372.1096875,
+          325.48671874999985
+        ]
+      },
+      "cap_rate": {
+        "value": -0.03125,
+        "question_bootstrap95": [
+          -0.0875,
+          0.025
+        ]
+      }
+    },
+    "MATH-500": {
+      "accuracy": {
+        "value": 0.05078125,
+        "question_bootstrap95": [
+          0.01171875,
+          0.09375
+        ]
+      },
+      "mean_length": {
+        "value": -361.45703125,
+        "question_bootstrap95": [
+          -744.3759765625,
+          16.251367187499753
+        ]
+      },
+      "cap_rate": {
+        "value": -0.0234375,
+        "question_bootstrap95": [
+          -0.046875,
+          0.0
+        ]
+      }
+    },
+    "AIME macro": {
+      "accuracy": {
+        "value": 0.016666666666666666,
+        "question_bootstrap95": [
+          0.0,
+          0.03611111111111111
+        ]
+      },
+      "mean_length": {
+        "value": -466.7361111111112,
+        "question_bootstrap95": [
+          -1408.177222222222,
+          476.9612499999999
+        ]
+      },
+      "cap_rate": {
+        "value": -0.030555555555555558,
+        "question_bootstrap95": [
+          -0.09166666666666667,
+          0.030555555555555555
+        ]
+      }
+    },
+    "five-benchmark macro": {
+      "accuracy": {
+        "value": 0.013906249999999998,
+        "question_bootstrap95": [
+          -0.00375,
+          0.03234505208333332
+        ]
+      },
+      "mean_length": {
+        "value": -458.5793229166667,
+        "question_bootstrap95": [
+          -1075.8601328125,
+          150.07382942708315
+        ]
+      },
+      "cap_rate": {
+        "value": -0.029270833333333333,
+        "question_bootstrap95": [
+          -0.06901041666666666,
+          0.010365885416666649
+        ]
+      }
+    }
+  },
+  "identity": {
+    "reuse64x16-k0-s42-block1": {
+      "scores_sha256": "34a128f2cfea257126c40eb5a6509e486bad0c9a63754b1a92fd46f0b4827499",
+      "completion_sha256": "caa6a77679554e4d40101cd10b60ae022365a1fee7de3c8066cf3e205ed66677"
+    },
+    "multi128x8-k0-s42-block1": {
+      "scores_sha256": "40301eab259281eb43bd978d669ff87c014735d9a7a4bff7fb987d277361345d",
+      "completion_sha256": "d9799dc6fd0cdbe552b4e96f97333a0373445cdbe1e6335b1a89d7fb2b23e290"
+    }
+  },
+  "script_sha256": "28a42239486aacb3c2795fc44ec7032b772322ed966d78cd3ea1f6cf30078829",
+  "limits": "Both are automatic grading protocols; intervals omit training seeds and multiplicity."
+}

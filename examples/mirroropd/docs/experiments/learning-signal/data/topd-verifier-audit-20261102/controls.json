@@ -1,0 +1,427 @@
+{
+  "scope": "Preserve raw generations and intervene only on verifier input text.\n\nDiagnose why two capped AIME25 outputs are accepted by the official full-text\nwrapper and rejected by the native last-2000-character fallback. Synthetic text\ncontrols are not generated samples and do not replace any recorded task score.\n",
+  "rows": [
+    {
+      "request_id": "AIME25:13/1",
+      "ground_truth": "60",
+      "response_length": 31744,
+      "finish_reason": "length",
+      "given_value_excerpts": [
+        "ertices of the equilateral triangles.\n\nGiven the angles \\(\\angle B = \\angle E = 60^\\circ\\), we can infer that the pentagon can be divided into three equilateral triangles",
+        "gths\nAB = 14\nBC = 7\nCD = 24\nDE = 13\nEA = 26\n\n# Given angles\nangle_B = angle_E = 60\n\n# Calculate the least possible value of f(X)\n# Using the properties of the Fermat poin"
+      ],
+      "last_line": "#",
+      "controls": {
+        "original": {
+          "native": {
+            "score": 0.0,
+            "format_score": 0.0,
+            "acc": false,
+            "extracted_gt": "60",
+            "pred": ""
+          },
+          "official_repeats": [
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "#"
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "#"
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "#"
+            }
+          ],
+          "parsed_official_candidates": [
+            "60",
+            "60"
+          ],
+          "text_sha256": "5b376c3f579080e3b2ecf4af8ace58f9c2f24c1e55c82c3aec9d3772398f49a7",
+          "characters": 116369
+        },
+        "native_fallback_window": {
+          "native": {
+            "score": 0.0,
+            "format_score": 0.0,
+            "acc": false,
+            "extracted_gt": "60",
+            "pred": ""
+          },
+          "official_repeats": [
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "#"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "#"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "#"
+            }
+          ],
+          "parsed_official_candidates": [],
+          "text_sha256": "627d9cde3ceac048ef5c256cca15045348267ab3e8e6690fee4710a03798c68d",
+          "characters": 2000
+        },
+        "given_60_changed_to_61": {
+          "native": {
+            "score": 0.0,
+            "format_score": 0.0,
+            "acc": false,
+            "extracted_gt": "60",
+            "pred": ""
+          },
+          "official_repeats": [
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "#"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "#"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "#"
+            }
+          ],
+          "parsed_official_candidates": [
+            "61",
+            "61"
+          ],
+          "text_sha256": "3a00343fcac33a8a0fd787d4ea74a7a312b4eafb826a338f7f95d063e156e6e9",
+          "characters": 116369
+        },
+        "given_angle_only_synthetic": {
+          "native": {
+            "score": 1.0,
+            "format_score": 0.0,
+            "acc": true,
+            "extracted_gt": "60",
+            "pred": ""
+          },
+          "official_repeats": [
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# No final answer is provided."
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# No final answer is provided."
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# No final answer is provided."
+            }
+          ],
+          "parsed_official_candidates": [
+            "60",
+            "60"
+          ],
+          "text_sha256": "ffa978998e503e1b50f78a683b142dbd1bb49c793774f186caf37b1171c69544",
+          "characters": 57
+        },
+        "explicit_wrong_answer_appended": {
+          "native": {
+            "score": 0.0,
+            "format_score": 1.0,
+            "acc": false,
+            "extracted_gt": "60",
+            "pred": "61"
+          },
+          "official_repeats": [
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "61"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "61"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "61"
+            }
+          ],
+          "parsed_official_candidates": [
+            "61",
+            "61"
+          ],
+          "text_sha256": "cb8bbad33633d76ed89fcc4c202c034eb2d643c6b8e6a735a1ac15dc86b23d2b",
+          "characters": 116401
+        },
+        "explicit_correct_answer_synthetic": {
+          "native": {
+            "score": 1.0,
+            "format_score": 1.0,
+            "acc": true,
+            "extracted_gt": "60",
+            "pred": "60"
+          },
+          "official_repeats": [
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "60"
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "60"
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "60"
+            }
+          ],
+          "parsed_official_candidates": [
+            "60",
+            "60"
+          ],
+          "text_sha256": "f9b0bbe5ef627ff6817c892868c94e9051a369e7fe22e9fcf51edde48697555f",
+          "characters": 31
+        }
+      }
+    },
+    {
+      "request_id": "AIME25:13/2",
+      "ground_truth": "60",
+      "response_length": 31744,
+      "finish_reason": "length",
+      "given_value_excerpts": [
+        "e lengths\nAB = 14\nBC = 7\nCD = 24\nDE = 13\nEA = 26\n\n# Define the angles\nangle_B = 60\nangle_E = 60\n\n# Calculate the least possible value of f(X)\n# The least possible value o",
+        "= 14\nBC = 7\nCD = 24\nDE = 13\nEA = 26\n\n# Define the angles\nangle_B = 60\nangle_E = 60\n\n# Calculate the least possible value of f(X)\n# The least possible value of f(X) is the"
+      ],
+      "last_line": "# The",
+      "controls": {
+        "original": {
+          "native": {
+            "score": 0.0,
+            "format_score": 0.0,
+            "acc": false,
+            "extracted_gt": "60",
+            "pred": ""
+          },
+          "official_repeats": [
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# The"
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# The"
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# The"
+            }
+          ],
+          "parsed_official_candidates": [
+            "60",
+            "60"
+          ],
+          "text_sha256": "d08fdf728dd423735cb478fdbf578a8005b52d1c64c917cca506ca64a286a757",
+          "characters": 133166
+        },
+        "native_fallback_window": {
+          "native": {
+            "score": 0.0,
+            "format_score": 0.0,
+            "acc": false,
+            "extracted_gt": "60",
+            "pred": ""
+          },
+          "official_repeats": [
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "# The"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "# The"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "# The"
+            }
+          ],
+          "parsed_official_candidates": [],
+          "text_sha256": "aac4dc4e5ab304f4f73cbdf74a071b14057798c51dd714e287c7fda0641c417b",
+          "characters": 2000
+        },
+        "given_60_changed_to_61": {
+          "native": {
+            "score": 0.0,
+            "format_score": 0.0,
+            "acc": false,
+            "extracted_gt": "60",
+            "pred": ""
+          },
+          "official_repeats": [
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "# The"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "# The"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "# The"
+            }
+          ],
+          "parsed_official_candidates": [
+            "61",
+            "61"
+          ],
+          "text_sha256": "a9e79ad59aac75b565e4f2ebc0772fb129cfbeb50fb813090b2cd1bec38212dc",
+          "characters": 133166
+        },
+        "given_angle_only_synthetic": {
+          "native": {
+            "score": 1.0,
+            "format_score": 0.0,
+            "acc": true,
+            "extracted_gt": "60",
+            "pred": ""
+          },
+          "official_repeats": [
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# No final answer is provided."
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# No final answer is provided."
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "# No final answer is provided."
+            }
+          ],
+          "parsed_official_candidates": [
+            "60",
+            "60"
+          ],
+          "text_sha256": "ffa978998e503e1b50f78a683b142dbd1bb49c793774f186caf37b1171c69544",
+          "characters": 57
+        },
+        "explicit_wrong_answer_appended": {
+          "native": {
+            "score": 0.0,
+            "format_score": 1.0,
+            "acc": false,
+            "extracted_gt": "60",
+            "pred": "61"
+          },
+          "official_repeats": [
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "61"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "61"
+            },
+            {
+              "score": 0.0,
+              "acc": false,
+              "pred": "61"
+            }
+          ],
+          "parsed_official_candidates": [
+            "61",
+            "61"
+          ],
+          "text_sha256": "3d9982cebc68d7f65e18b5c0323a733cdca15e61c2b43477a1405d96c667c4f0",
+          "characters": 133198
+        },
+        "explicit_correct_answer_synthetic": {
+          "native": {
+            "score": 1.0,
+            "format_score": 1.0,
+            "acc": true,
+            "extracted_gt": "60",
+            "pred": "60"
+          },
+          "official_repeats": [
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "60"
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "60"
+            },
+            {
+              "score": 1.0,
+              "acc": true,
+              "pred": "60"
+            }
+          ],
+          "parsed_official_candidates": [
+            "60",
+            "60"
+          ],
+          "text_sha256": "f9b0bbe5ef627ff6817c892868c94e9051a369e7fe22e9fcf51edde48697555f",
+          "characters": 31
+        }
+      }
+    }
+  ],
+  "script_sha256": "71416727cc26df8e99f8859a926f9f96c79b3e49f6abfda3836d07f6fbb5174b",
+  "source_sha256": {
+    "official_verifier": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+    "responses": "c2abc5302166911526acb11e9220d75588d58f82dbe4d1e1ddd366ea78069469",
+    "scores": "ef60f37b2a35f60b14d2cbddeb501222e87213d4d0324a7aa5b792ea55be448b"
+  },
+  "official_default_timeout_seconds": 1.0,
+  "official_repeats_per_control": 3,
+  "local_dependency_versions": {
+    "math-verify": "0.9.0",
+    "sympy": "1.14.0"
+  },
+  "limits": [
+    "Only these two real disagreement cases and explicit synthetic controls are examined.",
+    "Neither automated fallback is a mathematical correctness oracle.",
+    "Two verdicts change this 360-response AIME macro by 0.556 percentage points only.",
+    "This does not establish a flaw in every paper score or explain its full performance gap."
+  ]
+}

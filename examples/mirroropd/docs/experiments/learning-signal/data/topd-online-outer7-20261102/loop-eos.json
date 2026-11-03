@@ -1,0 +1,2058 @@
+{
+  "scope": "Inspect real cached last-scored prefixes of the kappa0 outer7 rollout bank.\n\nCPU diagnostic: BF16-quantized operands, FP32 GEMM, FP64 probabilities. Each\ntrajectory contributes one prefix before its final generated token. This is\nnot a token-average estimate, model update, or full-parameter causal effect.\n",
+  "states": [
+    {
+      "request_id": "6144-0",
+      "finish_reason": "stop",
+      "position": 763,
+      "generated_token": 151643,
+      "q_eos": 0.9999646073397143,
+      "teacher_eos": 0.999690784595357,
+      "eos_log_teacher_over_q": -0.0002738699349629617,
+      "target_eos": {
+        "0": 0.9999624016595906,
+        "0.5": 0.9999581777585267,
+        "1": 0.9999372250652809
+      },
+      "eos_bias_loss_derivative": {
+        "0": 2.0026745054211215e-05,
+        "0.5": 3.192236837724258e-05,
+        "1": 4.546755185304161e-05
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999646073397143
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.999690784595357
+      }
+    },
+    {
+      "request_id": "6145-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 284,
+      "q_eos": 1.3870735714709108e-07,
+      "teacher_eos": 3.366262796016161e-08,
+      "eos_log_teacher_over_q": -1.4159781101145477,
+      "target_eos": {
+        "0": 1.2044240971144528e-07,
+        "0.5": 1.250162945180198e-07,
+        "1": 1.282028842284034e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": 1.9578916591999136e-07,
+        "0.5": 1.4408346148122256e-07,
+        "1": 1.0912043553664346e-07
+      },
+      "q_top_class": {
+        "token_id": 284,
+        "text": " =",
+        "probability": 0.9630432226573389
+      },
+      "teacher_top_class": {
+        "token_id": 284,
+        "text": " =",
+        "probability": 0.9551774778697308
+      }
+    },
+    {
+      "request_id": "6146-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 220,
+      "q_eos": 2.253077032287641e-05,
+      "teacher_eos": 2.0000041540514686e-08,
+      "eos_log_teacher_over_q": -7.026902873248529,
+      "target_eos": {
+        "0": 1.1158555186220519e-05,
+        "0.5": 1.837101616651515e-05,
+        "1": 2.027969329474277e-05
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.00015831669110670011,
+        "0.5": 4.59868696451474e-05,
+        "1": 2.3716264076317452e-05
+      },
+      "q_top_class": {
+        "token_id": 220,
+        "text": " ",
+        "probability": 0.9999577066293928
+      },
+      "teacher_top_class": {
+        "token_id": 220,
+        "text": " ",
+        "probability": 0.9999997830982712
+      }
+    },
+    {
+      "request_id": "6147-0",
+      "finish_reason": "stop",
+      "position": 6489,
+      "generated_token": 151643,
+      "q_eos": 0.0005367233521158416,
+      "teacher_eos": 4.814937915906641e-09,
+      "eos_log_teacher_over_q": -11.621514916500917,
+      "target_eos": {
+        "0": 0.00016796455712114454,
+        "0.5": 0.00043506391423936175,
+        "1": 0.00048305149839799385
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.0062334921169908825,
+        "0.5": 0.0011269833342160056,
+        "1": 0.0005654678967423914
+      },
+      "q_top_class": {
+        "token_id": 21878,
+        "text": " tang",
+        "probability": 0.9992617490754393
+      },
+      "teacher_top_class": {
+        "token_id": 21878,
+        "text": " tang",
+        "probability": 0.9999998226212564
+      }
+    },
+    {
+      "request_id": "6148-0",
+      "finish_reason": "stop",
+      "position": 1489,
+      "generated_token": 151643,
+      "q_eos": 0.9996300745992721,
+      "teacher_eos": 0.999116248387902,
+      "eos_log_teacher_over_q": -0.0005141485107738242,
+      "target_eos": {
+        "0": 0.9996744090331742,
+        "0.5": 0.9996435116038186,
+        "1": 0.9995786919781344
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.0005154515206889397,
+        "0.5": -0.00025002142109848265,
+        "1": -8.671092777684721e-05
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9996300745992721
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.999116248387902
+      }
+    },
+    {
+      "request_id": "6149-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 773,
+      "q_eos": 4.96312110427454e-07,
+      "teacher_eos": 6.361891691071395e-10,
+      "eos_log_teacher_over_q": -6.659464307885337,
+      "target_eos": {
+        "0": 2.549988334325966e-07,
+        "0.5": 4.052176803569829e-07,
+        "1": 4.467445183015866e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": 3.305169443115092e-06,
+        "0.5": 1.0064244763598618e-06,
+        "1": 5.222101380352241e-07
+      },
+      "q_top_class": {
+        "token_id": 773,
+        "text": " so",
+        "probability": 0.9999990222634617
+      },
+      "teacher_top_class": {
+        "token_id": 773,
+        "text": " so",
+        "probability": 0.9999999391747388
+      }
+    },
+    {
+      "request_id": "6150-0",
+      "finish_reason": "stop",
+      "position": 644,
+      "generated_token": 151643,
+      "q_eos": 0.8674525420798743,
+      "teacher_eos": 0.1366670885641416,
+      "eos_log_teacher_over_q": -1.848012845708216,
+      "target_eos": {
+        "0": 0.8713722127981086,
+        "0.5": 0.8519529482558865,
+        "1": 0.7943739967283016
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.06990347518904191,
+        "0.5": 0.05885659036528023,
+        "1": 0.13780588828923745
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8674525420798743
+      },
+      "teacher_top_class": {
+        "token_id": 25521,
+        "text": " �",
+        "probability": 0.586094727765529
+      }
+    },
+    {
+      "request_id": "6151-0",
+      "finish_reason": "stop",
+      "position": 730,
+      "generated_token": 151643,
+      "q_eos": 0.9942060633147114,
+      "teacher_eos": 0.6279207143418291,
+      "eos_log_teacher_over_q": -0.4595305848792504,
+      "target_eos": {
+        "0": 0.9908442597281504,
+        "0.5": 0.9827608130082935,
+        "1": 0.9575775284174195
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.026547475096565593,
+        "0.5": 0.06332130963596032,
+        "1": 0.11628511663472135
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9942060633147114
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.6279207143418291
+      }
+    },
+    {
+      "request_id": "6152-0",
+      "finish_reason": "stop",
+      "position": 861,
+      "generated_token": 151643,
+      "q_eos": 0.9263843170473177,
+      "teacher_eos": 0.9894861866896164,
+      "eos_log_teacher_over_q": 0.06589662730181405,
+      "target_eos": {
+        "0": 0.9521131877223783,
+        "0.5": 0.9384872748594526,
+        "1": 0.9326945040115446
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.3119473322412912,
+        "0.5": -0.13244254251001863,
+        "1": -0.07564171526572284
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9263843170473177
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9894861866896164
+      }
+    },
+    {
+      "request_id": "6153-0",
+      "finish_reason": "stop",
+      "position": 2191,
+      "generated_token": 151643,
+      "q_eos": 0.569364875763054,
+      "teacher_eos": 0.1297121239409317,
+      "eos_log_teacher_over_q": -1.4792039227863762,
+      "target_eos": {
+        "0": 0.515264472540426,
+        "0.5": 0.5223348016835528,
+        "1": 0.5253996005808317
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.5349562222619674,
+        "0.5": 0.46547211469685335,
+        "1": 0.43503313526125137
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.569364875763054
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.8688897365416923
+      }
+    },
+    {
+      "request_id": "6154-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 1124,
+      "q_eos": 2.182436745488531e-06,
+      "teacher_eos": 8.804315526271969e-08,
+      "eos_log_teacher_over_q": -3.2103702097159257,
+      "target_eos": {
+        "0": 1.5831326400153423e-06,
+        "0.5": 1.8475571291870536e-06,
+        "1": 1.9729973864656712e-06
+      },
+      "eos_bias_loss_derivative": {
+        "0": 7.00641465121933e-06,
+        "0.5": 3.6354526173811124e-06,
+        "1": 2.201818706698661e-06
+      },
+      "q_top_class": {
+        "token_id": 1124,
+        "text": " \\",
+        "probability": 0.9999961650242191
+      },
+      "teacher_top_class": {
+        "token_id": 1124,
+        "text": " \\",
+        "probability": 0.9999985555282903
+      }
+    },
+    {
+      "request_id": "6155-0",
+      "finish_reason": "stop",
+      "position": 425,
+      "generated_token": 151643,
+      "q_eos": 0.989164046202483,
+      "teacher_eos": 0.8917886091578816,
+      "eos_log_teacher_over_q": -0.10363106940319364,
+      "target_eos": {
+        "0": 0.9882627722217087,
+        "0.5": 0.985678982037319,
+        "1": 0.9794265024980223
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.003112645688501627,
+        "0.5": 0.024515512971017856,
+        "1": 0.04440053224750322
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.989164046202483
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8917886091578816
+      }
+    },
+    {
+      "request_id": "6156-0",
+      "finish_reason": "stop",
+      "position": 1572,
+      "generated_token": 151643,
+      "q_eos": 0.9876250504441971,
+      "teacher_eos": 0.8258755639813515,
+      "eos_log_teacher_over_q": -0.17885900887986264,
+      "target_eos": {
+        "0": 0.9837581074189468,
+        "0.5": 0.9799551182593174,
+        "1": 0.971450101797912
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.03371253204781982,
+        "0.5": 0.05921510934043154,
+        "1": 0.09944454454284127
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9876250504441971
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8258755639813515
+      }
+    },
+    {
+      "request_id": "6157-0",
+      "finish_reason": "stop",
+      "position": 5938,
+      "generated_token": 151643,
+      "q_eos": 0.9933870216491297,
+      "teacher_eos": 0.9908173382026539,
+      "eos_log_teacher_over_q": -0.002590141353483173,
+      "target_eos": {
+        "0": 0.9935598596453815,
+        "0.5": 0.9934165119810913,
+        "1": 0.9931300533044806
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.001988283441913882,
+        "0.5": -0.0008321630182836861,
+        "1": 0.00030561084157846246
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9933870216491297
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9908173382026539
+      }
+    },
+    {
+      "request_id": "6158-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 315,
+      "q_eos": 5.622645461849628e-07,
+      "teacher_eos": 1.7944401498028705e-08,
+      "eos_log_teacher_over_q": -3.4446942898626194,
+      "target_eos": {
+        "0": 3.9841858727195703e-07,
+        "0.5": 4.736941203543244e-07,
+        "1": 5.078325317161876e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": 1.9368284238259127e-06,
+        "0.5": 9.637813327037309e-07,
+        "1": 5.725018275586897e-07
+      },
+      "q_top_class": {
+        "token_id": 315,
+        "text": " of",
+        "probability": 0.9999991969599933
+      },
+      "teacher_top_class": {
+        "token_id": 315,
+        "text": " of",
+        "probability": 0.9999998227020029
+      }
+    },
+    {
+      "request_id": "6159-0",
+      "finish_reason": "stop",
+      "position": 914,
+      "generated_token": 151643,
+      "q_eos": 0.9999604470162707,
+      "teacher_eos": 0.9997517615139966,
+      "eos_log_teacher_over_q": -0.00020871553630722616,
+      "target_eos": {
+        "0": 0.9999646929419859,
+        "0.5": 0.9999589757976742,
+        "1": 0.9999395784660434
+      },
+      "eos_bias_loss_derivative": {
+        "0": -5.446715069075104e-05,
+        "0.5": -1.4839534122532681e-05,
+        "1": 3.601499126405439e-06
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999604470162707
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9997517615139966
+      }
+    },
+    {
+      "request_id": "6160-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 400,
+      "q_eos": 1.5611297647197255e-06,
+      "teacher_eos": 4.2977397046832775e-08,
+      "eos_log_teacher_over_q": -3.5924907188675963,
+      "target_eos": {
+        "0": 1.0899827136791091e-06,
+        "0.5": 1.3115696687701617e-06,
+        "1": 1.409314527952382e-06
+      },
+      "eos_bias_loss_derivative": {
+        "0": 5.608321482016099e-06,
+        "0.5": 2.719254492217354e-06,
+        "1": 1.5971334032630013e-06
+      },
+      "q_top_class": {
+        "token_id": 400,
+        "text": " $",
+        "probability": 0.9999935085929764
+      },
+      "teacher_top_class": {
+        "token_id": 400,
+        "text": " $",
+        "probability": 0.9999946092292002
+      }
+    },
+    {
+      "request_id": "6161-0",
+      "finish_reason": "stop",
+      "position": 2260,
+      "generated_token": 151643,
+      "q_eos": 0.9680058957567413,
+      "teacher_eos": 0.867906241989539,
+      "eos_log_teacher_over_q": -0.10915448523071714,
+      "target_eos": {
+        "0": 0.9765635553455984,
+        "0.5": 0.9704053359996979,
+        "1": 0.9579959303800222
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.10355152099045241,
+        "0.5": -0.04308667115518975,
+        "1": -0.021653900977230037
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9680058957567413
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.867906241989539
+      }
+    },
+    {
+      "request_id": "6162-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 15170,
+      "q_eos": 3.516426757799079e-06,
+      "teacher_eos": 4.569000266332539e-12,
+      "eos_log_teacher_over_q": -13.553661485487703,
+      "target_eos": {
+        "0": 9.067237418583344e-07,
+        "0.5": 2.8490286187728083e-06,
+        "1": 3.1647845389187332e-06
+      },
+      "eos_bias_loss_derivative": {
+        "0": 4.766023670045452e-05,
+        "0.5": 7.400922628441962e-06,
+        "1": 3.7049192467159555e-06
+      },
+      "q_top_class": {
+        "token_id": 15170,
+        "text": "}{",
+        "probability": 0.9999944828280881
+      },
+      "teacher_top_class": {
+        "token_id": 15170,
+        "text": "}{",
+        "probability": 0.9999999938825683
+      }
+    },
+    {
+      "request_id": "6163-0",
+      "finish_reason": "stop",
+      "position": 959,
+      "generated_token": 151643,
+      "q_eos": 0.9986707879707968,
+      "teacher_eos": 0.984134490729185,
+      "eos_log_teacher_over_q": -0.014662617483988689,
+      "target_eos": {
+        "0": 0.9989001818253225,
+        "0.5": 0.9985896692973629,
+        "1": 0.9972171582466353
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.0029691000041911445,
+        "0.5": -0.0009996919618741988,
+        "1": -0.00030421489400899755
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9986707879707968
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.984134490729185
+      }
+    },
+    {
+      "request_id": "6164-0",
+      "finish_reason": "stop",
+      "position": 15848,
+      "generated_token": 151643,
+      "q_eos": 0.0015072427384503644,
+      "teacher_eos": 7.878063452171308e-07,
+      "eos_log_teacher_over_q": -7.556540233738111,
+      "target_eos": {
+        "0": 0.0007093700248738243,
+        "0.5": 0.0012278092541667743,
+        "1": 0.0013565972452398594
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.011349476849997334,
+        "0.5": 0.003088565215092201,
+        "1": 0.0015862282169840868
+      },
+      "q_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.9864450917121863
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.998052026966021
+      }
+    },
+    {
+      "request_id": "6165-0",
+      "finish_reason": "stop",
+      "position": 454,
+      "generated_token": 151643,
+      "q_eos": 0.8026629180698178,
+      "teacher_eos": 0.041886672227953316,
+      "eos_log_teacher_over_q": -2.9529671564943607,
+      "target_eos": {
+        "0": 0.7210821029295754,
+        "0.5": 0.7340551073879076,
+        "1": 0.7265852934856328
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.7178081417981453,
+        "0.5": 0.6140705995492495,
+        "1": 0.6737820914274902
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8026629180698178
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.9573169752060635
+      }
+    },
+    {
+      "request_id": "6166-0",
+      "finish_reason": "stop",
+      "position": 531,
+      "generated_token": 151643,
+      "q_eos": 0.9959207834175743,
+      "teacher_eos": 0.1992996413778262,
+      "eos_log_teacher_over_q": -1.6088582918919034,
+      "target_eos": {
+        "0": 0.9964095702149547,
+        "0.5": 0.98655929482806,
+        "1": 0.9162586692135991
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.008540996966531655,
+        "0.5": 0.0020068636906874996,
+        "1": 0.004059915292264651
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9959207834175743
+      },
+      "teacher_top_class": {
+        "token_id": 25521,
+        "text": " �",
+        "probability": 0.7914829212591132
+      }
+    },
+    {
+      "request_id": "6167-0",
+      "finish_reason": "stop",
+      "position": 1475,
+      "generated_token": 151643,
+      "q_eos": 0.8026904708560729,
+      "teacher_eos": 0.8627691371920135,
+      "eos_log_teacher_over_q": 0.07217796964835002,
+      "target_eos": {
+        "0": 0.8149218121503267,
+        "0.5": 0.8128493882359422,
+        "1": 0.8086983374896662
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.1261217027513592,
+        "0.5": -0.10720724114059926,
+        "1": -0.09327190216778591
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8026904708560729
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8627691371920135
+      }
+    },
+    {
+      "request_id": "6168-0",
+      "finish_reason": "stop",
+      "position": 869,
+      "generated_token": 151643,
+      "q_eos": 0.6016476863266048,
+      "teacher_eos": 0.4033329003124698,
+      "eos_log_teacher_over_q": -0.3999097590130526,
+      "target_eos": {
+        "0": 0.5822886085250758,
+        "0.5": 0.5821656569441809,
+        "1": 0.5818162077251906
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.19208517500023678,
+        "0.5": 0.19323927830648083,
+        "1": 0.19625947478166156
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.6016476863266048
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.594794882545966
+      }
+    },
+    {
+      "request_id": "6169-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 220,
+      "q_eos": 2.168057481283921e-05,
+      "teacher_eos": 5.386187211756528e-08,
+      "eos_log_teacher_over_q": -5.997749122970452,
+      "target_eos": {
+        "0": 1.1903367063694079e-05,
+        "0.5": 1.7757011829324927e-05,
+        "1": 1.9517903518767107e-05
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.00012997776387760533,
+        "0.5": 4.3280330155586646e-05,
+        "1": 2.278238343150942e-05
+      },
+      "q_top_class": {
+        "token_id": 220,
+        "text": " ",
+        "probability": 0.9995308145085793
+      },
+      "teacher_top_class": {
+        "token_id": 220,
+        "text": " ",
+        "probability": 0.9999992349374471
+      }
+    },
+    {
+      "request_id": "6170-0",
+      "finish_reason": "stop",
+      "position": 848,
+      "generated_token": 151643,
+      "q_eos": 0.9499793924683755,
+      "teacher_eos": 0.7972994722623403,
+      "eos_log_teacher_over_q": -0.17520993461853318,
+      "target_eos": {
+        "0": 0.9611176173559739,
+        "0.5": 0.9533823516177601,
+        "1": 0.93471140044777
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.13210256241320906,
+        "0.5": -0.05994837675107741,
+        "1": -0.033613879548001366
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9499793924683755
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.7972994722623403
+      }
+    },
+    {
+      "request_id": "6171-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 106367,
+      "q_eos": 7.355919214933724e-08,
+      "teacher_eos": 2.7007136534544323e-08,
+      "eos_log_teacher_over_q": -1.0019892703021789,
+      "target_eos": {
+        "0": 6.65458807101583e-08,
+        "0.5": 6.787590112688613e-08,
+        "1": 6.8903986587856e-08
+      },
+      "eos_bias_loss_derivative": {
+        "0": 7.370538178281554e-08,
+        "0.5": 5.9148467882783066e-08,
+        "1": 4.809030291205404e-08
+      },
+      "q_top_class": {
+        "token_id": 106367,
+        "text": "题目",
+        "probability": 0.9999992936603612
+      },
+      "teacher_top_class": {
+        "token_id": 106367,
+        "text": "题目",
+        "probability": 0.9999990999093925
+      }
+    },
+    {
+      "request_id": "6172-0",
+      "finish_reason": "stop",
+      "position": 1428,
+      "generated_token": 151643,
+      "q_eos": 0.9272810576184886,
+      "teacher_eos": 0.20283681911423987,
+      "eos_log_teacher_over_q": -1.5198549010839728,
+      "target_eos": {
+        "0": 0.8963891826575902,
+        "0.5": 0.8834252235797471,
+        "1": 0.8548366337680647
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.26129658182778775,
+        "0.5": 0.349183399076531,
+        "1": 0.5117482231114358
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9272810576184886
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.7774767242828934
+      }
+    },
+    {
+      "request_id": "6173-0",
+      "finish_reason": "stop",
+      "position": 925,
+      "generated_token": 151643,
+      "q_eos": 0.9949566605304258,
+      "teacher_eos": 0.1368416369603934,
+      "eos_log_teacher_over_q": -1.983874856329327,
+      "target_eos": {
+        "0": 0.9929559615768948,
+        "0.5": 0.982674226158163,
+        "1": 0.9091451581734191
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.01656630828752188,
+        "0.5": 0.017878710325840114,
+        "1": 0.020914305875897304
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9949566605304258
+      },
+      "teacher_top_class": {
+        "token_id": 4710,
+        "text": " \n\n",
+        "probability": 0.5802890424522669
+      }
+    },
+    {
+      "request_id": "6174-0",
+      "finish_reason": "stop",
+      "position": 1103,
+      "generated_token": 151643,
+      "q_eos": 0.9959400401274876,
+      "teacher_eos": 0.8853786621379566,
+      "eos_log_teacher_over_q": -0.11767163477567967,
+      "target_eos": {
+        "0": 0.9957996439580714,
+        "0.5": 0.9944726737421996,
+        "1": 0.9848839023285331
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.0011527641326961888,
+        "0.5": 0.0022179008293656557,
+        "1": 0.0029516590941649637
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9959400401274876
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8853786621379566
+      }
+    },
+    {
+      "request_id": "6175-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 311,
+      "q_eos": 1.4122107621582976e-06,
+      "teacher_eos": 6.566527830166399e-09,
+      "eos_log_teacher_over_q": -5.370926467660837,
+      "target_eos": {
+        "0": 8.253599341131373e-07,
+        "0.5": 1.1612902032234597e-06,
+        "1": 1.2716463387252842e-06
+      },
+      "eos_bias_loss_derivative": {
+        "0": 7.584869548952977e-06,
+        "0.5": 2.762633477970124e-06,
+        "1": 1.4806181323778415e-06
+      },
+      "q_top_class": {
+        "token_id": 311,
+        "text": " to",
+        "probability": 0.9999980078044788
+      },
+      "teacher_top_class": {
+        "token_id": 311,
+        "text": " to",
+        "probability": 0.999999914062421
+      }
+    },
+    {
+      "request_id": "6176-0",
+      "finish_reason": "stop",
+      "position": 526,
+      "generated_token": 151643,
+      "q_eos": 0.9873891215840015,
+      "teacher_eos": 0.9992727858577399,
+      "eos_log_teacher_over_q": 0.011963591760472939,
+      "target_eos": {
+        "0": 0.9930947539243474,
+        "0.5": 0.989656157390785,
+        "1": 0.9885774880113759
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.07572283690381724,
+        "0.5": -0.02505359395106041,
+        "1": -0.013232132882542628
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9873891215840015
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9992727858577399
+      }
+    },
+    {
+      "request_id": "6177-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 54876,
+      "q_eos": 8.155398904818774e-07,
+      "teacher_eos": 3.0847526093404995e-10,
+      "eos_log_teacher_over_q": -7.879963966545812,
+      "target_eos": {
+        "0": 3.7087128637876846e-07,
+        "0.5": 6.634456107880056e-07,
+        "1": 7.340167489597619e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": 6.426412016035026e-06,
+        "0.5": 1.683301939053856e-06,
+        "1": 8.58913687702897e-07
+      },
+      "q_top_class": {
+        "token_id": 54876,
+        "text": "$,",
+        "probability": 0.9999955861553139
+      },
+      "teacher_top_class": {
+        "token_id": 54876,
+        "text": "$,",
+        "probability": 0.9999961642709572
+      }
+    },
+    {
+      "request_id": "6178-0",
+      "finish_reason": "stop",
+      "position": 10111,
+      "generated_token": 151643,
+      "q_eos": 0.9826215002843675,
+      "teacher_eos": 0.952763063904838,
+      "eos_log_teacher_over_q": -0.030857749062446788,
+      "target_eos": {
+        "0": 0.9835690678768252,
+        "0.5": 0.9821791600409623,
+        "1": 0.9796356566464126
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.01191134853904452,
+        "0.5": -0.0005209033073428793,
+        "1": 0.011910385365293829
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9826215002843675
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.952763063904838
+      }
+    },
+    {
+      "request_id": "6179-0",
+      "finish_reason": "stop",
+      "position": 1254,
+      "generated_token": 151643,
+      "q_eos": 0.8953386282563356,
+      "teacher_eos": 0.6656156924443466,
+      "eos_log_teacher_over_q": -0.29648953669227585,
+      "target_eos": {
+        "0": 0.881095947353684,
+        "0.5": 0.8774940028512648,
+        "1": 0.872366334675136
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.1343204393847019,
+        "0.5": 0.16583532444827145,
+        "1": 0.2082235257587504
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8953386282563356
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.6656156924443466
+      }
+    },
+    {
+      "request_id": "6180-0",
+      "finish_reason": "stop",
+      "position": 2500,
+      "generated_token": 151643,
+      "q_eos": 0.9999995249307708,
+      "teacher_eos": 0.9996166542616066,
+      "eos_log_teacher_over_q": -0.0003829441648124139,
+      "target_eos": {
+        "0": 0.9999992195268185,
+        "0.5": 0.9999943148092522,
+        "1": 0.9999612378638525
+      },
+      "eos_bias_loss_derivative": {
+        "0": 2.2789716930575074e-06,
+        "0.5": 7.4704774131723805e-06,
+        "1": 1.274830075462622e-05
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999995249307708
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9996166542616066
+      }
+    },
+    {
+      "request_id": "6181-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 18,
+      "q_eos": 8.759612290534069e-07,
+      "teacher_eos": 1.242693069692516e-08,
+      "eos_log_teacher_over_q": -4.255455882891754,
+      "target_eos": {
+        "0": 5.723685495827517e-07,
+        "0.5": 7.284340596394709e-07,
+        "1": 7.896077992177394e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": 3.727527240137971e-06,
+        "0.5": 1.615485944995381e-06,
+        "1": 9.091194061357629e-07
+      },
+      "q_top_class": {
+        "token_id": 18,
+        "text": "3",
+        "probability": 0.9999777464887648
+      },
+      "teacher_top_class": {
+        "token_id": 18,
+        "text": "3",
+        "probability": 0.9999980055599355
+      }
+    },
+    {
+      "request_id": "6182-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 19,
+      "q_eos": 3.371728308037684e-08,
+      "teacher_eos": 1.5242451834834224e-07,
+      "eos_log_teacher_over_q": 1.5086589549183795,
+      "target_eos": {
+        "0": 3.920785042957498e-08,
+        "0.5": 4.1739316947843456e-08,
+        "1": 4.5588006607166954e-08
+      },
+      "eos_bias_loss_derivative": {
+        "0": -5.086806772169256e-08,
+        "0.5": -7.196382404469676e-08,
+        "1": -1.0170295656055568e-07
+      },
+      "q_top_class": {
+        "token_id": 19,
+        "text": "4",
+        "probability": 0.9999983210614338
+      },
+      "teacher_top_class": {
+        "token_id": 19,
+        "text": "4",
+        "probability": 0.9999910591259195
+      }
+    },
+    {
+      "request_id": "6183-0",
+      "finish_reason": "stop",
+      "position": 397,
+      "generated_token": 151643,
+      "q_eos": 0.9999980188715722,
+      "teacher_eos": 0.9999644805343209,
+      "eos_log_teacher_over_q": -3.3538966120100584e-05,
+      "target_eos": {
+        "0": 0.9999983332487871,
+        "0.5": 0.9999976289836614,
+        "1": 0.9999946650378452
+      },
+      "eos_bias_loss_derivative": {
+        "0": -4.045188174432016e-06,
+        "0.5": -7.556127909189043e-07,
+        "1": 1.0500837675889403e-06
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999980188715722
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999644805343209
+      }
+    },
+    {
+      "request_id": "6184-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 8940,
+      "q_eos": 1.392090856799241e-07,
+      "teacher_eos": 4.4258750092961133e-07,
+      "eos_log_teacher_over_q": 1.1566611706539902,
+      "target_eos": {
+        "0": 1.5627905059779333e-07,
+        "0.5": 1.618644910141661e-07,
+        "1": 1.695469272048906e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": -1.610178326219643e-07,
+        "0.5": -2.0990294215212127e-07,
+        "1": -2.744545657812684e-07
+      },
+      "q_top_class": {
+        "token_id": 8940,
+        "text": "bd",
+        "probability": 0.9999998452844764
+      },
+      "teacher_top_class": {
+        "token_id": 8940,
+        "text": "bd",
+        "probability": 0.9999990286339494
+      }
+    },
+    {
+      "request_id": "6185-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 21495,
+      "q_eos": 8.65018699305602e-08,
+      "teacher_eos": 4.797763907556101e-07,
+      "eos_log_teacher_over_q": 1.7131541113679152,
+      "target_eos": {
+        "0": 1.0266613987479925e-07,
+        "0.5": 1.1153383492042357e-07,
+        "1": 1.2582932201305893e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": -1.481918437219326e-07,
+        "0.5": -2.1985495652917275e-07,
+        "1": -3.2417536844043613e-07
+      },
+      "q_top_class": {
+        "token_id": 21495,
+        "text": " triangle",
+        "probability": 0.9999979575155975
+      },
+      "teacher_top_class": {
+        "token_id": 21495,
+        "text": " triangle",
+        "probability": 0.9999884858762891
+      }
+    },
+    {
+      "request_id": "6186-0",
+      "finish_reason": "stop",
+      "position": 1362,
+      "generated_token": 151643,
+      "q_eos": 0.9619401489462334,
+      "teacher_eos": 0.4967922203715108,
+      "eos_log_teacher_over_q": -0.6607803624786303,
+      "target_eos": {
+        "0": 0.9481713281697541,
+        "0.5": 0.9374325459279522,
+        "1": 0.9154253560887597
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.11832733433900505,
+        "0.5": 0.19110765867779508,
+        "1": 0.3081756767318552
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9619401489462334
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.4977636249787319
+      }
+    },
+    {
+      "request_id": "6187-0",
+      "finish_reason": "stop",
+      "position": 1470,
+      "generated_token": 151643,
+      "q_eos": 0.9999965683929244,
+      "teacher_eos": 0.9989977409162162,
+      "eos_log_teacher_over_q": -0.0009993300683057435,
+      "target_eos": {
+        "0": 0.9999957954091961,
+        "0.5": 0.999983805442215,
+        "1": 0.9998966856452535
+      },
+      "eos_bias_loss_derivative": {
+        "0": 5.9605923612229195e-06,
+        "0.5": 1.6811274994151665e-05,
+        "1": 2.9735863470700762e-05
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999965683929244
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9989977409162162
+      }
+    },
+    {
+      "request_id": "6188-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 892,
+      "q_eos": 6.130435475406263e-06,
+      "teacher_eos": 1.674304232742756e-08,
+      "eos_log_teacher_over_q": -5.903038277902365,
+      "target_eos": {
+        "0": 3.397243748565496e-06,
+        "0.5": 5.023491183385338e-06,
+        "1": 5.519066232097516e-06
+      },
+      "eos_bias_loss_derivative": {
+        "0": 3.6187980543221065e-05,
+        "0.5": 1.2208180192075037e-05,
+        "1": 6.44045543626731e-06
+      },
+      "q_top_class": {
+        "token_id": 892,
+        "text": " which",
+        "probability": 0.9999925494680143
+      },
+      "teacher_top_class": {
+        "token_id": 892,
+        "text": " which",
+        "probability": 0.9999999181364556
+      }
+    },
+    {
+      "request_id": "6189-0",
+      "finish_reason": "stop",
+      "position": 15398,
+      "generated_token": 151643,
+      "q_eos": 0.9998252062119013,
+      "teacher_eos": 0.999629190418797,
+      "eos_log_teacher_over_q": -0.00019606928176264696,
+      "target_eos": {
+        "0": 0.9998332879347349,
+        "0.5": 0.9998238491500266,
+        "1": 0.9998056046325908
+      },
+      "eos_bias_loss_derivative": {
+        "0": -9.955592436348803e-05,
+        "0.5": -2.060442995762577e-05,
+        "1": 5.0249629756308156e-05
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9998252062119013
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.999629190418797
+      }
+    },
+    {
+      "request_id": "6190-0",
+      "finish_reason": "stop",
+      "position": 14718,
+      "generated_token": 151643,
+      "q_eos": 3.474995860868783e-05,
+      "teacher_eos": 8.817706570938142e-08,
+      "eos_log_teacher_over_q": -5.976586756645933,
+      "target_eos": {
+        "0": 1.9116347879566463e-05,
+        "0.5": 2.8463603414673434e-05,
+        "1": 3.128378045439076e-05
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.0002076744813607503,
+        "0.5": 6.934382355594596e-05,
+        "1": 3.6514629771192365e-05
+      },
+      "q_top_class": {
+        "token_id": 220,
+        "text": " ",
+        "probability": 0.9999217016853083
+      },
+      "teacher_top_class": {
+        "token_id": 220,
+        "text": " ",
+        "probability": 0.9999988385221338
+      }
+    },
+    {
+      "request_id": "6191-0",
+      "finish_reason": "stop",
+      "position": 649,
+      "generated_token": 151643,
+      "q_eos": 0.9995473337094665,
+      "teacher_eos": 0.8944985172604693,
+      "eos_log_teacher_over_q": -0.11103926487814639,
+      "target_eos": {
+        "0": 0.99963061161951,
+        "0.5": 0.9984251140467398,
+        "1": 0.9890424520645668
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.0010685962757329677,
+        "0.5": -0.00028292644349869764,
+        "1": -2.694351688141704e-06
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9995473337094665
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.8944985172604693
+      }
+    },
+    {
+      "request_id": "6192-0",
+      "finish_reason": "stop",
+      "position": 800,
+      "generated_token": 151643,
+      "q_eos": 0.9999703260486649,
+      "teacher_eos": 0.9997677565582239,
+      "eos_log_teacher_over_q": -0.0002025960228449235,
+      "target_eos": {
+        "0": 0.9999651091504921,
+        "0.5": 0.9999611756334745,
+        "1": 0.9999500690996198
+      },
+      "eos_bias_loss_derivative": {
+        "0": 4.747234090503108e-05,
+        "0.5": 7.272506652339975e-05,
+        "1": 0.00010923103906439585
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999703260486649
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9997677565582239
+      }
+    },
+    {
+      "request_id": "6193-0",
+      "finish_reason": "stop",
+      "position": 854,
+      "generated_token": 151643,
+      "q_eos": 0.9997674548004454,
+      "teacher_eos": 0.9997914559859956,
+      "eos_log_teacher_over_q": 2.400648005106471e-05,
+      "target_eos": {
+        "0": 0.9998093928062985,
+        "0.5": 0.999790478485539,
+        "1": 0.9997698549190012
+      },
+      "eos_bias_loss_derivative": {
+        "0": -0.00048182134418886795,
+        "0.5": -0.0002675430615442386,
+        "1": -0.0001639829907666912
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9997674548004454
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9997914559859956
+      }
+    },
+    {
+      "request_id": "6194-0",
+      "finish_reason": "stop",
+      "position": 473,
+      "generated_token": 151643,
+      "q_eos": 0.7901612081298346,
+      "teacher_eos": 0.569717037459277,
+      "eos_log_teacher_over_q": -0.32709717350869266,
+      "target_eos": {
+        "0": 0.7728018445307878,
+        "0.5": 0.7708875693227581,
+        "1": 0.7681167910627835
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.16800310539867208,
+        "0.5": 0.1858742073351841,
+        "1": 0.20711204006105668
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.7901612081298346
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.569717037459277
+      }
+    },
+    {
+      "request_id": "6195-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 921,
+      "q_eos": 2.1537149018612676e-07,
+      "teacher_eos": 1.79047565432923e-08,
+      "eos_log_teacher_over_q": -2.4872979922007374,
+      "target_eos": {
+        "0": 1.6794488410890646e-07,
+        "0.5": 1.8580770568858499e-07,
+        "1": 1.956248168218375e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": 5.356894611499481e-07,
+        "0.5": 3.180002985828124e-07,
+        "1": 2.0711313380853275e-07
+      },
+      "q_top_class": {
+        "token_id": 921,
+        "text": "]\n",
+        "probability": 0.9999915792391033
+      },
+      "teacher_top_class": {
+        "token_id": 921,
+        "text": "]\n",
+        "probability": 0.9999858107224816
+      }
+    },
+    {
+      "request_id": "6196-0",
+      "finish_reason": "stop",
+      "position": 1321,
+      "generated_token": 151643,
+      "q_eos": 0.17321505968672934,
+      "teacher_eos": 0.07774328720299724,
+      "eos_log_teacher_over_q": -0.8011217329339935,
+      "target_eos": {
+        "0": 0.1609982116318148,
+        "0.5": 0.16245788433196642,
+        "1": 0.1636678824383565
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.12479540505352953,
+        "0.5": 0.10990306797868225,
+        "1": 0.09723040373311718
+      },
+      "q_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.803557964747183
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.9159072727713116
+      }
+    },
+    {
+      "request_id": "6197-0",
+      "finish_reason": "stop",
+      "position": 1201,
+      "generated_token": 151643,
+      "q_eos": 0.5770181046602937,
+      "teacher_eos": 0.00594083575643975,
+      "eos_log_teacher_over_q": -4.576023820028785,
+      "target_eos": {
+        "0": 0.4421683526160172,
+        "0.5": 0.5046144964275165,
+        "1": 0.5199103777699079
+      },
+      "eos_bias_loss_derivative": {
+        "0": 1.324998750046206,
+        "0.5": 0.7128294008179653,
+        "1": 0.5633744174158439
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.5770181046602937
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.9938548463863744
+      }
+    },
+    {
+      "request_id": "6198-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 400,
+      "q_eos": 1.0574997047181938e-06,
+      "teacher_eos": 3.187370162720547e-05,
+      "eos_log_teacher_over_q": 3.4058739166728635,
+      "target_eos": {
+        "0": 1.486927755577623e-06,
+        "0.5": 2.2207667566531633e-06,
+        "1": 4.1391198969664e-06
+      },
+      "eos_bias_loss_derivative": {
+        "0": -3.6040115816395396e-06,
+        "0.5": -7.846328532322168e-06,
+        "1": -1.4432651149589096e-05
+      },
+      "q_top_class": {
+        "token_id": 400,
+        "text": " $",
+        "probability": 0.9999983877352515
+      },
+      "teacher_top_class": {
+        "token_id": 400,
+        "text": " $",
+        "probability": 0.9978178253673844
+      }
+    },
+    {
+      "request_id": "6199-0",
+      "finish_reason": "stop",
+      "position": 1388,
+      "generated_token": 151643,
+      "q_eos": 0.9980930793467475,
+      "teacher_eos": 0.9911397197453196,
+      "eos_log_teacher_over_q": -0.006991024805846041,
+      "target_eos": {
+        "0": 0.9979305822705122,
+        "0.5": 0.9977623975007531,
+        "1": 0.9973977433866055
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.0013832803391063745,
+        "0.5": 0.0025977288826812,
+        "1": 0.0041494748759747626
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9980930793467475
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9911397197453196
+      }
+    },
+    {
+      "request_id": "6200-0",
+      "finish_reason": "stop",
+      "position": 5826,
+      "generated_token": 151643,
+      "q_eos": 0.9816754934713567,
+      "teacher_eos": 0.0002448527135020129,
+      "eos_log_teacher_over_q": -8.296359217620505,
+      "target_eos": {
+        "0": 0.9453224897963357,
+        "0.5": 0.949843013781037,
+        "1": 0.8835324293955736
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.20201013818884275,
+        "0.5": 0.1542749754139631,
+        "1": 0.22927413090975293
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9816754934713567
+      },
+      "teacher_top_class": {
+        "token_id": 576,
+        "text": " The",
+        "probability": 0.21837429351891297
+      }
+    },
+    {
+      "request_id": "6201-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 100369,
+      "q_eos": 3.065634908747379e-07,
+      "teacher_eos": 1.2991413876201669e-11,
+      "eos_log_teacher_over_q": -10.068891492754739,
+      "target_eos": {
+        "0": 1.1200499885870192e-07,
+        "0.5": 2.486761726791616e-07,
+        "1": 2.7590844092864017e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": 3.0867155600004474e-06,
+        "0.5": 6.415545851131142e-07,
+        "1": 3.2298133765654024e-07
+      },
+      "q_top_class": {
+        "token_id": 100369,
+        "text": "两个",
+        "probability": 0.9999846676938101
+      },
+      "teacher_top_class": {
+        "token_id": 100369,
+        "text": "两个",
+        "probability": 0.9999960373827707
+      }
+    },
+    {
+      "request_id": "6202-0",
+      "finish_reason": "stop",
+      "position": 930,
+      "generated_token": 151643,
+      "q_eos": 0.9861978272756373,
+      "teacher_eos": 0.44210448710683253,
+      "eos_log_teacher_over_q": -0.8023107203502455,
+      "target_eos": {
+        "0": 0.9785407362068246,
+        "0.5": 0.9659787008193201,
+        "1": 0.9317884932587546
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.061131706540662696,
+        "0.5": 0.12537283471137736,
+        "1": 0.22407455709950805
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9861978272756373
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.5522807807431926
+      }
+    },
+    {
+      "request_id": "6203-0",
+      "finish_reason": "length",
+      "position": 16383,
+      "generated_token": 1124,
+      "q_eos": 1.050285312441781e-06,
+      "teacher_eos": 2.4158405874300692e-08,
+      "eos_log_teacher_over_q": -3.772184743510012,
+      "target_eos": {
+        "0": 7.202510075723837e-07,
+        "0.5": 8.796450691570777e-07,
+        "1": 9.476726217849021e-07
+      },
+      "eos_bias_loss_derivative": {
+        "0": 3.96185316222575e-06,
+        "0.5": 1.862140910746434e-06,
+        "1": 1.0797773899448691e-06
+      },
+      "q_top_class": {
+        "token_id": 1124,
+        "text": " \\",
+        "probability": 0.9999964553393557
+      },
+      "teacher_top_class": {
+        "token_id": 1124,
+        "text": " \\",
+        "probability": 0.999999888740838
+      }
+    },
+    {
+      "request_id": "6204-0",
+      "finish_reason": "stop",
+      "position": 885,
+      "generated_token": 151643,
+      "q_eos": 0.9999855980760387,
+      "teacher_eos": 0.999424914846076,
+      "eos_log_teacher_over_q": -0.0005608485511464491,
+      "target_eos": {
+        "0": 0.9999810779648749,
+        "0.5": 0.9999712374098463,
+        "1": 0.9999295297530417
+      },
+      "eos_bias_loss_derivative": {
+        "0": 3.858586672565708e-05,
+        "0.5": 7.838676563388056e-05,
+        "1": 0.00013819053401018
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999855980760387
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.999424914846076
+      }
+    },
+    {
+      "request_id": "6205-0",
+      "finish_reason": "stop",
+      "position": 1031,
+      "generated_token": 151643,
+      "q_eos": 0.9624737853295917,
+      "teacher_eos": 0.029096943757847077,
+      "eos_log_teacher_over_q": -3.4988736866114833,
+      "target_eos": {
+        "0": 0.9288709200801764,
+        "0.5": 0.9158412811308074,
+        "1": 0.8691361011724154
+      },
+      "eos_bias_loss_derivative": {
+        "0": 0.24378883485851616,
+        "0.5": 0.30954951845732753,
+        "1": 0.4875182403418364
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9624737853295917
+      },
+      "teacher_top_class": {
+        "token_id": 271,
+        "text": "\n\n",
+        "probability": 0.9692995513978498
+      }
+    },
+    {
+      "request_id": "6206-0",
+      "finish_reason": "stop",
+      "position": 10937,
+      "generated_token": 151643,
+      "q_eos": 0.9999730614668655,
+      "teacher_eos": 0.9978923837612329,
+      "eos_log_teacher_over_q": -0.002082901491539628,
+      "target_eos": {
+        "0": 0.999962436878381,
+        "0.5": 0.9999249147131988,
+        "1": 0.9997649936962989
+      },
+      "eos_bias_loss_derivative": {
+        "0": 8.608660447200658e-05,
+        "0.5": 0.00021682623116479064,
+        "1": 0.0003901456368052303
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999730614668655
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9978923837612329
+      }
+    },
+    {
+      "request_id": "6207-0",
+      "finish_reason": "stop",
+      "position": 1157,
+      "generated_token": 151643,
+      "q_eos": 0.9999944464166992,
+      "teacher_eos": 0.9987166538451684,
+      "eos_log_teacher_over_q": -0.0012786167500123367,
+      "target_eos": {
+        "0": 0.9999924446323952,
+        "0.5": 0.9999749472861861,
+        "1": 0.9998666671595469
+      },
+      "eos_bias_loss_derivative": {
+        "0": 1.592785241188873e-05,
+        "0.5": 4.226192633953612e-05,
+        "1": 7.1742792618629e-05
+      },
+      "q_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9999944464166992
+      },
+      "teacher_top_class": {
+        "token_id": null,
+        "text": "<EOS class>",
+        "probability": 0.9987166538451684
+      }
+    }
+  ],
+  "groups": {
+    "capped": {
+      "states": 20,
+      "mean_q_eos": 3.2432738601821675e-06,
+      "mean_teacher_eos": 1.6655374278657849e-06,
+      "teacher_eos_ge_1percent": 0,
+      "teacher_top_is_eos": 0,
+      "mean_bias_derivative": {
+        "0": 2.0581393921932862e-05,
+        "0.5": 5.8969757185345335e-06,
+        "1": 2.571021802603475e-06
+      }
+    },
+    "stopped": {
+      "states": 44,
+      "mean_q_eos": 0.8559580670578196,
+      "mean_teacher_eos": 0.6384373556633337,
+      "teacher_eos_ge_1percent": 39,
+      "teacher_top_is_eos": 28,
+      "mean_bias_derivative": {
+        "0": 0.0758413801333583,
+        "0.5": 0.0782078529021772,
+        "1": 0.0988432406673236
+      }
+    }
+  },
+  "cache_identity": {
+    "anchor": {
+      "head_sha256": "1683322f084c741a934a33bd5755a54a0f2c0aeba100d085dad3f517998aeaef",
+      "model_identity": {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/online/reuse-k0/outer06",
+        "dtype": "float32",
+        "attention": "flash_attention_2",
+        "rope_buffers_fp32": true,
+        "response_alignment": "prompt_ids+response_ids[:-1]; slice prompt_len-1"
+      },
+      "state_sha256": {
+        "6144-0": "47d9d9a0327834a480fa9e369134c569e78a3a7531de3b940ec1a51f03253efa",
+        "6145-0": "9399b7e39d3bd9ba35d57f3a819da845b98df025d1d0c25bd4b5f9ef19ceedc4",
+        "6146-0": "815c11ba90da1a2e99cb06548c732a6fee00e12c38717df2fe97ed552b4ab8d1",
+        "6147-0": "65fe2406d0578eaac58abcc6f903817231f8c9783acffdd7b2e75adfd0548ec2",
+        "6148-0": "0895b6ef62aed477bf711a2f1a3862d14ddf49aa2931f1912ff11939d09b670c",
+        "6149-0": "0bcc5e2be93085cc5b94e8e9ff756743cac4c086e0a6d0a23448286ff114265f",
+        "6150-0": "b04920d319f221768f5340322641c8041e71c5ffd7b04410290d65d98e64cfc2",
+        "6151-0": "6f1f430e91907e214e3296c0d1905ff20a5afa2172802bff0fbf511943edb536",
+        "6152-0": "75979a21d628a41325c7293b85325f8d74f9e2bb8c80f79ee85946970f48d686",
+        "6153-0": "ba4e38216958fea4cac04ccefad9916a81781013a66c7374e8c7d84527e1ea61",
+        "6154-0": "a93e447d0933f4ae81370e9292b97aaabb8013531b8e562e3ece66c94092ff6e",
+        "6155-0": "c83b58ae46b12f1416b6f947f5f14ffdfbb5d5f12a91dfaff23a1d6ed75222b8",
+        "6156-0": "ab6e269dfac5bf303f8e5e2aae9f1a5778918c1389ee4c08ee300799ebcd5104",
+        "6157-0": "f3cb8b6beb8adb0739fa5db1e0bf1910461acd79d2fef2497850c3c8283105c9",
+        "6158-0": "e1ce3b937261c644404e715a0d816ef6bc7c9d22a4fa67e157a18a1821ff1e86",
+        "6159-0": "6b9e6d09e0e6d0ce35984421d508a25e8f013effc62c5b148a5dff7294cf9da8",
+        "6160-0": "d279b6d7977f2bdb6a75261699d62a7a7a991b846413bfff1926e932830980c7",
+        "6161-0": "a848d670a9f61f3130a66084d1ce431174aa7d35e3c13fa6dd8bbec43e8f143b",
+        "6162-0": "a03b566eeea8a351168c6163e7467f25110254e214075bcc46aaf316cb01b581",
+        "6163-0": "fd46244c85511c763813b1f650423892e0e0a50f068da71f882478f792f6c365",
+        "6164-0": "48d4ea7ec5372e13804f48efd4d07b59a379365fc0ee315b8fe1815fceddef5a",
+        "6165-0": "52a62944e711603f1dd6ba286dc2e269589570dbd1a38b7d4682b34796ac697a",
+        "6166-0": "2a0c224c063fbc1693cfc7aca06c8a606bc78b3b7c7acf1414267e3e1dd04f83",
+        "6167-0": "62b71f16fae0a0c6dc8dc365cad44c643552acd5f340452ebe82897fd9df7bac",
+        "6168-0": "646223f22158b351d7e9bb4e10d265b793d047fd18bef2d3a7cede9b470c2a00",
+        "6169-0": "f8546121473e0139504f3677ea311ac21064df9493d619a1c77ff43c70682703",
+        "6170-0": "d0a6a5f933efc920092f6c612b2705562d2755a14f2f776a4deeb40da145c40b",
+        "6171-0": "e2e908d126f88d7b83423293a4f66bd54edaf6705808e459071e392efdd0f5d0",
+        "6172-0": "2991d4e5bf3e6867e920578a4d2482a68fd012a59d0f561b4eec561974ec01b1",
+        "6173-0": "18e26544d73eb21bd3e8e2fbad8534a5d0e7edebdc0117767a33eeccf6246c72",
+        "6174-0": "3ebfad8478c268d25dc018491db1e7a20017d5938248031fedc359224fded9ee",
+        "6175-0": "a7c47f2ad83fb0fddc8032156d9412aebdf03fdca3fccdcba9703847d72569cb",
+        "6176-0": "77725d224c193cb3ea36146de2daa3c9e90067e7b0af52b467e9714a4ce6714c",
+        "6177-0": "5be6babacd52ad56c22c2d34ec7916c54924e1b378116b3d3d7f5a7626f01812",
+        "6178-0": "600ef3299f5bc39b5d5d76049ec8ca413d7102f2df151147db78d17eb53725c1",
+        "6179-0": "282c6a6416db26355d195aa9f94df93afaec2ba97833668ea11e426d463a031f",
+        "6180-0": "8c77669dcb7d750bf4398ae59450d7484f6fd6ccce4089d8e97c0dd610ceab2a",
+        "6181-0": "80e500528364990dba5fe699798ba0787c875c5fb138a3f0c41d0d158a2102cf",
+        "6182-0": "69d0d1ed53fc86c51331ddb77a36cca91fc04ff66e78cc32d1500d3f6d722ca7",
+        "6183-0": "2603ad235547f2f850c44fd8ea4ef0a4c5a98c66fe248ccaa44d74f690f3e0ea",
+        "6184-0": "d66acffc42fda81b537749e88a4eb3c3008f73906cd1f366c5539e820a7bc711",
+        "6185-0": "deaedce72a99744a1faf1eac85010aa25a380b710da8339bc80e37cf13371a84",
+        "6186-0": "dbd0beb91d63f6d7ed1b9bb2b7e3edd38e7c7fe42d72053f413cae8f060fc9a9",
+        "6187-0": "a3479312e9f330ca60d4dd30cc0d3f8f2686a0c9867027d1c4762243c4a8a3c5",
+        "6188-0": "1f2eb296b428e5fe7d747fa0280f700de3ee2f705aafe9635e1fd8577d2172a5",
+        "6189-0": "c4bf07a70c9b8cc28613ea4b6da4b97662bed4b9478ab1841c93ba1eb686b98e",
+        "6190-0": "c8fe016b4465ee78eab15a459c8adf928006d0f1899ad5c79886446cfd6ab3f2",
+        "6191-0": "de4da415b81bb9254ae2d4136f0c68c5ecdddf0ed74d545b6e0f90038d2bc978",
+        "6192-0": "9b03938741e1c652e0ce4841307fdc675378f045dd75e098918c66f5a419ca4b",
+        "6193-0": "5c56e4f7ebb1da269699e8d80aeeb08c8ee3bc08d331cb5d263628876f3be526",
+        "6194-0": "c0a757852945b8011802bc41dc89e5cbf4553ddc088a2e63f3887ececcd36b1a",
+        "6195-0": "42b75e901d7741c9d54671ed87162029f0875a26c24fd4830d2aba5e42266011",
+        "6196-0": "c7da21380f193bc67accada2c2aabf234e2aa111c5ffedb149159b5680aef0df",
+        "6197-0": "8074a8bd806d060b55fcbac3daed66cc97443cbea63e2ac250881cbc26546823",
+        "6198-0": "168f74df1a15208a50edfe55a42d64e3bdcf102a2197ef08f0a7374fc27ddfa1",
+        "6199-0": "864dac127cfee7d72f397334346506d1902692b11efe244ab7a811a2c833bef9",
+        "6200-0": "9f66f171f7402575f14fa58d1ab7f421e8c26adbc7b8266f1d23ee165d736f72",
+        "6201-0": "599c1e7b11edbeeb88c1f17986c4fd2e2ec1d9ba16fc34fb565b461855b71553",
+        "6202-0": "c16e5de4df25737b2ac6e21c167006c10ded8fe2fe1815216301d87e49691f0f",
+        "6203-0": "4c499b6a71d20bae8cb47286c5849552a8b7a7be38d40d4fd100d9a36a1d8644",
+        "6204-0": "295b0cea70302df388f04b62b86b2d65c9ccbe92f2f5cb389517934d92109c22",
+        "6205-0": "609a19fafa619cef2e234fb5976de93fead1da9e0420aaee201c1ef9e669f1a5",
+        "6206-0": "57859c1777cbf196a3b0af124652415cc888709ca92be718350421ea0acfdd8f",
+        "6207-0": "374c0a4275ee3a1bbce1d2b4cf4ae09305d967561145c77ab8373aaf14db94e0"
+      }
+    },
+    "teacher": {
+      "head_sha256": "868ef488411c54bd4f926324a717e3942ef1f33d82a23060c75d6684c0df7f3f",
+      "model_identity": {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-30B-A3B-Instruct-2507/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+        "dtype": "bfloat16",
+        "attention": "flash_attention_2",
+        "rope_buffers_fp32": true,
+        "response_alignment": "prompt_ids+response_ids[:-1]; slice prompt_len-1",
+        "weight_manifest_sha256": "06798160f18eef296faa9d3572fa354d38565ff8ac93ba2049207bfd722e8134"
+      },
+      "state_sha256": {
+        "6144-0": "858368617b5d8e97f5304254a10ed5568e115ef6040e463aaf73732996803640",
+        "6145-0": "3bf1dd8b63ca741526a3baa907028a6e38198fc351e49e661433d1a3d59233b2",
+        "6146-0": "3a986d0dba14942e47c5c60924a4a3ad1287c8331f7203c31f30523e47f385e3",
+        "6147-0": "378ba71639fd65278422d690f775108193c1e6d9238a41e422f77c3711d9af1a",
+        "6148-0": "fcb64ef2f7d138341cf2b2b4ac200a53ee3ae29de0c53cbcd32963ffb07fa05c",
+        "6149-0": "0e558003e3ca24f961e2235ec2d6be77add1bb1fef85a54e8398dbc1e5bb4e32",
+        "6150-0": "91282ac233fb1a1d7211752e20f6481e9f3eb350d2d302921e2b754e5b1a9436",
+        "6151-0": "0988a0418b3adb7b2601a3f4d37591643d0e8f542ec51ece941a944dfd891b63",
+        "6152-0": "d35051d88f4a22ae54dcc52f81df45b548f5218ddc3b27aac7a897b5150036ae",
+        "6153-0": "d1cf5308047e2fbb054ff89345cf5afa908e763f20ebe1a178bd2c846462ed4d",
+        "6154-0": "404c3a99d62b3dc6e53a7ca570c08ee471cdfd0a8f470649da30d16ea0b35d6b",
+        "6155-0": "0ad0bd1bb781b901d11e90c7f1278759a9c6b196de2149bd4025ec3c53d0fd6d",
+        "6156-0": "113a49c5daacfcb8e358203a95609434dac937204eeffb6f43a8c5b78e871c22",
+        "6157-0": "5d00d5bcd99d7049c613183f528372d63bb556aa79530f74e3a2d5e546b4abfb",
+        "6158-0": "10907fbfb98ff10cda66239083ddab415b3a648b2975659e4ff1decbcd9a7a41",
+        "6159-0": "fcc3e64a56fc55c3d73d6bbf7581696474b0302acf16eef3690f26410b1e5127",
+        "6160-0": "d00e6159404e5d1048576e5ba5b87658af4fb70805e11856f1d146134631cc7f",
+        "6161-0": "41a55e5fb5db41865f480dff253fb3d26e74393ddcaea18ef444a4e1e5e5ae3e",
+        "6162-0": "e20cb60e2362fad202920fb62d01b828d8d80254ed6bef54762602413995c211",
+        "6163-0": "f7137475a8681136d45aabee8bf153bb605f8c3d30008d3c15862fe67458c2ca",
+        "6164-0": "3357c3d45ed1c31720706c84dc7a560c5bbe934e733ea72fa7a8f549d8e2cd40",
+        "6165-0": "88facfd9d5dca14827b4f92f5b4d77beda424a15ab3cd8eda056533d3d273b8b",
+        "6166-0": "ed2bb0e48ed1b84c0ccc26e952c146d89b2e93277d90cad047ecbe873950052e",
+        "6167-0": "1ce231e54a0da817d3110eed359d2de58915be1a306a66ce2be5c96bde036900",
+        "6168-0": "a89a1c8ae63a07f32d6d47df2fd59f612e5e6ce5551fa1a43b9e71cac1db27fd",
+        "6169-0": "56dc6a360156b41fc28d9c20b98b2e16151ea72fd909345cb8971f998f2e726a",
+        "6170-0": "a9d9a659176b0e64857e1d3065b98bdeb3092d05d5c60333dd0f1455485ea603",
+        "6171-0": "8408a539afa84564e7c7ffe9bc8d48f160892e4cf73c107cd6a19c915f8e8819",
+        "6172-0": "09fb3d18a1233a516c3f26d88b1e00c5004f3e8eded53fc356c4059736de25f6",
+        "6173-0": "5917f83a511ee980b6e2716a5b31c318fb4bfad368780a787945ebb1778f3a45",
+        "6174-0": "73e2b62dc321f5ba87f5264ed72dccd58c92c61e01f73c75893eaa45646a79ea",
+        "6175-0": "aae2f5a5992aa40c5c4128492f3f64757bf85d8d6e5dea58cc1c3692a3f5eb07",
+        "6176-0": "5a13e01a367c135fa495b3113625c0c1d4bccdaaeeed5558d824c3f3b92089d0",
+        "6177-0": "2b3e16b9002b9798d5053934de3d7928f48faaf83ab85b2c6d0871abd6fb6ce6",
+        "6178-0": "9f219cac7d473d5f522261b50c039e8fb699325646089370071db73bf5772590",
+        "6179-0": "dd3b5c5fb01e9b6017e296ba029bc118b209d23c793028772cd2926b4259bfc1",
+        "6180-0": "02ebe8ec7af3f0fce68eb90248e6954b3808e5311305d09b7aa6a497811e5254",
+        "6181-0": "5b878d240f37b50c245fa57207fa27e5cbda71ab38c54857a071d69e0ddd4d39",
+        "6182-0": "97a19a6e2fb84b844ee95b22908478f53da44e2e2a082fe229f8bcfdbc4cc9e3",
+        "6183-0": "79ec24e1625a3f7e00c82c88a9d9150ecf22a382398de665e4aaf89bac0f1399",
+        "6184-0": "a4e922c017db8f0f12ae1e75a14ba402f48e8d91bfe90c3274c5a9ec4750b7e1",
+        "6185-0": "72177d2f547444c403ec631a6970f189fa40b8c97279237043bd980157dceb58",
+        "6186-0": "63a1df237da75260fe930d5734ed0f6241543e7b464330c34596a95968739948",
+        "6187-0": "f608c6dfdafc69818e78d91217f99c7bf39d85a6e701839c7169d5719dd19dfb",
+        "6188-0": "39c76ed1a9f7aff82d3e208679a6baac227388faf376b1679e086f3df3438771",
+        "6189-0": "33ac156fad486aa322b96c614fe7f51e211676ae57e1813aac5b66a4fda3d219",
+        "6190-0": "c88a9b4d84c70de2288b361311f312f16c36bfda81d0a4195356839e9748ef14",
+        "6191-0": "ad3f958abfd456d1e2cb67b3a7a98c7210e324f6146478f38193f32a9a641822",
+        "6192-0": "54137c11b113842e52498cadf0f5fafdaba186fcbdc616f57a9a0ff983cdfd6a",
+        "6193-0": "cbe5ac0b0d883e2eab989665976f2b0f4e74f56532cc88350ee3cdfc3b8b7ed9",
+        "6194-0": "54cd3485e8e9a5608c60d76cbc917a29f1ce9a7d7e67a6de1b4d384ee2bc155a",
+        "6195-0": "df000471203c12e6f302022f83c690347941cc97a3d9677c9695ae47eaeae8d3",
+        "6196-0": "14f9f09bb618d875ccee0772298c0937b67cf6d25b1d0287fac8645d414ad6e8",
+        "6197-0": "5ddb3b6026a67847b3ac37fecd823981686a5c6d0923301416c72ad23fe65bca",
+        "6198-0": "f6b4af0a79a84c9e7408fd6ba384e4a061820d652dc199d85e48b6599a90776d",
+        "6199-0": "41deaccad3ad4d36b103eb575406a85f5fed7a8c42348f4c11b4dc940942c279",
+        "6200-0": "7ab159946ea719fa7784676ab1a82afe7e9fe408fdc606c299e1f90ad8db9f25",
+        "6201-0": "f0dd1db381816061fb38136d41f79ae4e90b71b2d93fc460fd7d995afa8006b8",
+        "6202-0": "d7a1d757d3ea17193d7d6b30a7dbac574dfb88a9385f6c03898943d2393778f2",
+        "6203-0": "4d24aae1382d2a8eb831f051fe4cc5aba0e9aed9cc87b9b454973633f961d8b5",
+        "6204-0": "7ab3aba1d0b7b21125ff865af2425241e901cd6b2ff4690c7cb1987cc4bd17e7",
+        "6205-0": "03d1e955da1093a323949027fd1087ddd36bd6e5240bccf98e9ae9bda732c192",
+        "6206-0": "bcbc87a17a7a19cb5477cee9958280ccb89b50019748c884f589bc3e9796a561",
+        "6207-0": "d38fe60ffc4be3e317424a3c0ce82bfe6b5998de6dae8b464b82381d6f58b4e8"
+      }
+    }
+  },
+  "bank_sha256": "86e21bc1ee74faa4e617f5757c3ce48d549cc7e6ea31ddf2d2a0871ecb844c3e",
+  "parent_updates": 96,
+  "autograd_max_abs_error": {
+    "0": 1.886268918838141e-13,
+    "0.5": 1.3322676295501878e-13,
+    "1": 1.2861933740282439e-13
+  },
+  "script_sha256": "727157ce20af24e6dbcc246c1e50ee1ee3f3bbca8e759c064fa290bbc3c1cd37",
+  "target_helper_sha256": "e0fdf59e1f4870044a36a2b66ddfe3165c00b454cf0dd58eb3fc3df4878b76e5",
+  "interpretation": "Negative loss derivative means descent would increase a common EOS logit bias. The model has no explicit such bias parameter.",
+  "limits": [
+    "Conditioned on the student's existing prefix, not teacher generation from the original question.",
+    "These are pre-final-action states, not the uncomputed state after a capped response.",
+    "State groups are selected by stopping outcomes; no population or parameter-gradient inference.",
+    "CPU normalization is FP64; no claim of bitwise GPU equivalence or improved task accuracy."
+  ]
+}

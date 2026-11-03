@@ -1,0 +1,855 @@
+{
+  "scope": "Reconstruct completed online budgets from banks and every optimizer log row.\n\nCounts are per arm, including shared initial-bank exposure. They are not total\nproject generation calls, semantic diversity estimates or task-performance\nevidence. Comparisons use the latest outer completed by all four arms.\n",
+  "checked_at": "2026-11-02T13:05:27.392027+08:00",
+  "rows": {
+    "seed42/reuse-k0": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 85216,
+        "training_token_visits": 1363456,
+        "fixed_heldout_teacher_kl": 0.38196338503621124,
+        "bank_sha256": "2dbbce2acd3fae0acacbbe2fdaec741be8820a25c5b4c8a0a2bb5dbfb1624fa5",
+        "completion_sha256": "e3ba3d88ad0565cca743062d84912fed5ed3258bdc5973bbe8f2a099f39cf523",
+        "updates_sha256": "ff0bb626d169cc87673c86e5fa6798d6c267ade867e1e542eab24bbd45045bf5",
+        "risk_sha256": "31382e296619ea774ec7e2bf5301e51152fecb064e29dd98f8a6808a93dedf40"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 63472,
+        "training_token_visits": 1015552,
+        "fixed_heldout_teacher_kl": 0.3475167947091982,
+        "bank_sha256": "2653c5e89f4980f201dc7637c3bf34c03632b573ec0f49784508829c2186e52d",
+        "completion_sha256": "fb44f41dfaf466f52938ccde94f5c34bc8499f1983c2fd52d103ca1032588f93",
+        "updates_sha256": "bc8d604db57ea05f1d968cde699221764ec39e7704e0736989e16e63b563f1c8",
+        "risk_sha256": "a42f7a2ff68ee6d7b2e6938d4eb3f87f85df1ddb03acbe79bc91413deb55772e"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 109662,
+        "training_token_visits": 1754592,
+        "fixed_heldout_teacher_kl": 0.3208935878433612,
+        "bank_sha256": "59f123d5ff80af68617a156f10636deb927ec86487a5ccdb1620787abf42da0b",
+        "completion_sha256": "fdbf1580c98f8a5b8dee08371a6ca2186feaf2734a3090cc2fbe7c894b1fb214",
+        "updates_sha256": "44eb2061d959d9b2b1ceafca35b312f9704765721ad9b713e327b5023b1d6970",
+        "risk_sha256": "93d3c7ad85b5b4f6f913b9d115c2d93584f72467cc839d271a665fd5ece01c85"
+      },
+      {
+        "outer": 4,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 136232,
+        "training_token_visits": 2179712,
+        "fixed_heldout_teacher_kl": 0.2949395585664549,
+        "bank_sha256": "8a39c8f8f7aeeabf0c229ab066daff4d6454143755ce3273292934dad6b52ce1",
+        "completion_sha256": "00b4959731e64f1703eecaa3d498686c32344b8dda566e59ef906bf465f81c93",
+        "updates_sha256": "25e06d6710784421587b1ca0738a981c1e8b56e23b294bf44273dbb0e310b14a",
+        "risk_sha256": "99db93efb95ec11be176964b61a56532cc243fb3bd454dff0e0237524f4ec74e"
+      },
+      {
+        "outer": 5,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 162668,
+        "training_token_visits": 2602688,
+        "fixed_heldout_teacher_kl": 0.273298671909249,
+        "bank_sha256": "dcbe947d2e863f80425a7e14622ce96c6dab6225dfa2da2dc87218fbf372f10f",
+        "completion_sha256": "e7b7b8511ba7ce0305dc791acfc633f3b4b335bacec8e28f29266cec928b79df",
+        "updates_sha256": "c0e28f155a152f5221ce510a55725946be4aa1d8f6f7571b3b618f3da03c28c4",
+        "risk_sha256": "a6834a462c5ef8e06b8f911a2f329e6ecb529fea2427c1682558e8e125d019ec"
+      },
+      {
+        "outer": 6,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 352714,
+        "training_token_visits": 5643424,
+        "fixed_heldout_teacher_kl": 0.2613598015143964,
+        "bank_sha256": "8e15ca824a01919e9cc4473432e5c62e20c89c0365fa0f4d7b3ce05d05cb2c38",
+        "completion_sha256": "6952a9a238e768213050efc72370b939e33b54766657826cceb771f0fed9b42b",
+        "updates_sha256": "638d5d3963db9dfee85550a59116fd982ed879b56d880ca54c406c86506e77e1",
+        "risk_sha256": "13bf81fdaca4c5fddf503b3f832be126723261b6b806dd2b0b96346f949a1d8e"
+      }
+    ],
+    "seed42/reuse-k05": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 85216,
+        "training_token_visits": 1363456,
+        "fixed_heldout_teacher_kl": 0.39523289238230264,
+        "bank_sha256": "2dbbce2acd3fae0acacbbe2fdaec741be8820a25c5b4c8a0a2bb5dbfb1624fa5",
+        "completion_sha256": "b7c76b2955b612208341066e60186c94332c4201af52aff5632c891ecad8abbc",
+        "updates_sha256": "0aa20a25e9c4d112b173b4d47b7e8601c79e9b87d87691b335bddde6204e13a7",
+        "risk_sha256": "95c17092d03ce8a9d1aab7aad4b4858a26fd8745fee162516be1435add55b024"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 59210,
+        "training_token_visits": 947360,
+        "fixed_heldout_teacher_kl": 0.3781291778603792,
+        "bank_sha256": "02cf6f99b9ef6ae08643941a01b82494732a152ef177a26608eb0244203b627c",
+        "completion_sha256": "63f96d1839af63c8784b6bef12eff2c0af9eaa2c7935559cf0b42be353248c13",
+        "updates_sha256": "cf704750f97b1002ad7d4be29dcb4f48385d899f3d12bf38c0cc5ace1985cb55",
+        "risk_sha256": "5fa295fd24f4a233447f53aee5dafc90f024044a87bc6be4b1b0b980146d2755"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 88143,
+        "training_token_visits": 1410288,
+        "fixed_heldout_teacher_kl": 0.3602585114480999,
+        "bank_sha256": "4237c7808dffbbd4c2e1b0b77f7e84930b106d158be5226196f76ff8aaef6ea4",
+        "completion_sha256": "e2a99526ca9afe6c6810d7de5b5ef3980e27049cba889f606ced322a1de0dc87",
+        "updates_sha256": "4a54e385090493428a2f12c189284bc0dd50b2f81d5b8a2007738cbba1b644e4",
+        "risk_sha256": "54d66e537dc9b9a6f778c47251d36c91f53494d9fcf5680f4b8fb93d15a0a9f9"
+      },
+      {
+        "outer": 4,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 84379,
+        "training_token_visits": 1350064,
+        "fixed_heldout_teacher_kl": 0.3444193933249395,
+        "bank_sha256": "829e45795fb62278ce3070d608bc17cf0aaa0ef19f2e277eb89bff0ddf763225",
+        "completion_sha256": "72d23a5ddd83496779e9399dcb234adffe50e0162547639af33335360b896584",
+        "updates_sha256": "49b350ea46d70ba8d2dc6c2222e405c85387d1128ad81a4a7d0a934c87a1bf0e",
+        "risk_sha256": "51559599ac8d36327502c66e849606e7f0fb85f5f546155963cd7dec3f0c8932"
+      },
+      {
+        "outer": 5,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 83510,
+        "training_token_visits": 1336160,
+        "fixed_heldout_teacher_kl": 0.3285111464285857,
+        "bank_sha256": "c24a9a775b3085e39ffe19f11b998a8e3a1480f069f13a230703769fa943e576",
+        "completion_sha256": "bb227599bf7b526e91facc08b17d2d789865c4e3efd06235be96eccef04106bd",
+        "updates_sha256": "895b8c330e2da829c74663a7c3e3f14dbfb024fc49fe877f29b94c6052393841",
+        "risk_sha256": "39b113a32df91fd56ff99331a316b0579f099618ff69d73847095d9915202c4b"
+      },
+      {
+        "outer": 6,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 109146,
+        "training_token_visits": 1746336,
+        "fixed_heldout_teacher_kl": 0.31455511512620943,
+        "bank_sha256": "b753b3aeb33339439c792917d5f573022ebfc43fb78e74cc860ac252a238b572",
+        "completion_sha256": "1c2099f50c3f9a0e661598e6553a436c23f2ccd7daa1a4c3b56e5ec5db220dbc",
+        "updates_sha256": "284d853489b43ad8724d71689dace37d71c141d75cb67130fac5f648101039a4",
+        "risk_sha256": "59a9c5a72f6a683a49dcc6f090f968d20a16dafcf3cdbdcbf3a1d001dc5fc6de"
+      }
+    ],
+    "seed42/reuse-k1": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 85216,
+        "training_token_visits": 1363456,
+        "fixed_heldout_teacher_kl": 0.39678143547142636,
+        "bank_sha256": "2dbbce2acd3fae0acacbbe2fdaec741be8820a25c5b4c8a0a2bb5dbfb1624fa5",
+        "completion_sha256": "0dc84a3c9459bfd618dfa49255baa16a59ce57396a01561b008bf5cd606a8f40",
+        "updates_sha256": "39da1a3f15c0a56f8ff201122004889cfa947c4539b04174dcc17efafac7f8f5",
+        "risk_sha256": "0dc791c0faa1d39c9d03d91cf1cadddb72acc2c597f834a0c19b8a801c268466"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 63841,
+        "training_token_visits": 1021456,
+        "fixed_heldout_teacher_kl": 0.38181012939601205,
+        "bank_sha256": "7062c2f85d74b102fb11067b19831bc8bf0426929b4da80f973d84877aa2e29b",
+        "completion_sha256": "00c6767941269161b7282ccd118887ecbc7082cf2b43ed500b7b61a9e2f211f7",
+        "updates_sha256": "17e324ce6d42103b51e0666b6da25c8f9a13c58d759b9a17107987365951d4f8",
+        "risk_sha256": "6fc78809251c96fdafa9df8f4f9952c35b3e1d7113cdea60a314adec542cd981"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 100891,
+        "training_token_visits": 1614256,
+        "fixed_heldout_teacher_kl": 0.3648661950635564,
+        "bank_sha256": "796643094761282fc448db616d5a8a2fce472fef6cd4156ecaed679b762e7a21",
+        "completion_sha256": "5ece618cdbc9ae17ee54fa54e42ec0f21aec94bcd8c73c7701bda8209554d628",
+        "updates_sha256": "e3a3e913e87e54ffa58730e6b7ed8f182161a6f8fc05547999efb4075833f06d",
+        "risk_sha256": "18d5bbbece21995fcf13090309bbd0170152f41ad27647a73f645854952d0a28"
+      },
+      {
+        "outer": 4,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 72314,
+        "training_token_visits": 1157024,
+        "fixed_heldout_teacher_kl": 0.3488475838857625,
+        "bank_sha256": "fc2c1877cd1098213bf954cce62c88dacc49c1b110d4be26e8e952a0f855648b",
+        "completion_sha256": "7cc59aa73d4f4ddda319764d5152d959d1574697341205820d32b51adf3e1c8d",
+        "updates_sha256": "6ad0ff10b55a223ebd26915083c3600f8c618396a9799d6beec1adc909fbe7fa",
+        "risk_sha256": "e36eeda2d0f82192eb29fe7fa1949a09d90c2552f427211be2bf10b1bc11e35d"
+      },
+      {
+        "outer": 5,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 88934,
+        "training_token_visits": 1422944,
+        "fixed_heldout_teacher_kl": 0.33413853075131783,
+        "bank_sha256": "8ed5b297fb3eecffbe3e441f9e6280b4acce676a7817972e49f3d1e58a4aa756",
+        "completion_sha256": "2af4c1ab528df147dded5ea4c0a9c7afd8dd6a790488dc5d4d3a0c28757257c1",
+        "updates_sha256": "d29f65be006e8e4735f5d1e1f00fbed1528d945da06ae3542e6c7600d6baf7f6",
+        "risk_sha256": "287391040d7bf13891f620324e849fc7ccb0fa7444e048c11c245be97f80cecb"
+      },
+      {
+        "outer": 6,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 94441,
+        "training_token_visits": 1511056,
+        "fixed_heldout_teacher_kl": 0.32080952025750414,
+        "bank_sha256": "dff8f5409a785cfc9e28224d96aed238a8d5e2a251cf76851dfb7704067f6548",
+        "completion_sha256": "a19047389495a549d4f40d200bf3ce141f6e26a4c8f005c7258e41e2cf38e69d",
+        "updates_sha256": "00cc5a1eb099cee570ea7c240875722000cb0d3c2546df886a86d02dd1a4016b",
+        "risk_sha256": "d55a850af9009ec7a1846eacf005585b67af64bc412c6e46e24399020c7aafb7"
+      },
+      {
+        "outer": 7,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 94562,
+        "training_token_visits": 1512992,
+        "fixed_heldout_teacher_kl": 0.31004313404724915,
+        "bank_sha256": "a42fa8aaed0eb86da697029bc9efa51b001aa9ae00063f7c40e3c323fa9c8ec3",
+        "completion_sha256": "fbff09316f2dbb6968939f01183a45693b51fda21e6d6f817aa7e34e54b810fe",
+        "updates_sha256": "8c41c713966493ccf27c186ab89ad824af6e0cb73f717529bd6bbe877f7dbe0d",
+        "risk_sha256": "9dd588161e9acfa1f040bb148bf265324cbd3fc9821c7e2067cce7af0961c0f5"
+      }
+    ],
+    "seed42/fresh-k1": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1287081,
+        "training_token_visits": 1287081,
+        "fixed_heldout_teacher_kl": 0.3982748766352697,
+        "bank_sha256": "2dbbce2acd3fae0acacbbe2fdaec741be8820a25c5b4c8a0a2bb5dbfb1624fa5",
+        "completion_sha256": "1963edbfea9fcd3142e394dc869caff4f4814dfa2a1efdd0f0424f49016ed86c",
+        "updates_sha256": "f240b0bb305aed584ea560ea247ae93e395842c61f024316f0a20c84e3901a23",
+        "risk_sha256": "cf59629e7531058fc25b194abb93c6a5287de6d7cdc24ca36698631b8c65f09b"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1240151,
+        "training_token_visits": 1240151,
+        "fixed_heldout_teacher_kl": 0.3817256157802946,
+        "bank_sha256": "d5dc93e175e2c552b45c81dc5857834db7ebdef5beb6b9d715fddae038946454",
+        "completion_sha256": "45d5808dceeb77e41e0f673ce3adabcc7fe9e7034952f404ea17294951e1f19a",
+        "updates_sha256": "1028e717117f24b6694c686883117363aabca8f1cc788beae2fa9e5b8997b221",
+        "risk_sha256": "ce7a4ae5c911d0b3f1926ff95faa32e13ab18cd6704156c311ce20ea1c325ec1"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1224738,
+        "training_token_visits": 1224738,
+        "fixed_heldout_teacher_kl": 0.3637789234206834,
+        "bank_sha256": "4270fa53a39a53f9df2a2c41bac5444bdcaf6e738f9f36fb11b4a0bb33a10568",
+        "completion_sha256": "9829b0367086544782355b6cfd4383f3b5de4c4f19239acf993cafd220e10d63",
+        "updates_sha256": "76c37ef78dbbdf6b27e5fcb62d727f9aa32d2286c56436d144e0a08f86772f78",
+        "risk_sha256": "84a416910faa908118340b41146e7566cad9c344bec01ea5367dbdb63c384eb4"
+      },
+      {
+        "outer": 4,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1271551,
+        "training_token_visits": 1271551,
+        "fixed_heldout_teacher_kl": 0.3476048751463925,
+        "bank_sha256": "c03fd06a8e991645309297c8e0522115dbf6fca4cb9b474348a54c8695be4f32",
+        "completion_sha256": "ad1e53c79a6aa69a086c795d322eff98471a634d4fc9acc70fdf080c8ce7c2d3",
+        "updates_sha256": "9f47e0fec8fe47be88b323e1fbf4993efd21464a4eae48495672eb6f57b14e4d",
+        "risk_sha256": "5090c00bb865c4ca72493fe257a436b74de2afb728066c6c4433ccd221195ce6"
+      },
+      {
+        "outer": 5,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1375778,
+        "training_token_visits": 1375778,
+        "fixed_heldout_teacher_kl": 0.3338458363910947,
+        "bank_sha256": "33c53eaaf6d732d37395218554fd6425a841254d42a8a734d8e06845cc5dd8c3",
+        "completion_sha256": "f78b4834d30a04211b95eb54372ca8ed1dd384ac9c6b06eda204b32f1b38aa89",
+        "updates_sha256": "470cb6d1339dc50b64558415e35adf8b88fd8ae27c5fc22516a0299216a62a4c",
+        "risk_sha256": "fa0cce2995acdc40779f2be7613dc6cb5294968e863aad44a5e83fd2c7ef5292"
+      },
+      {
+        "outer": 6,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1716442,
+        "training_token_visits": 1716442,
+        "fixed_heldout_teacher_kl": 0.32145556516313084,
+        "bank_sha256": "c2a7b4678a42e9e49f9d9000da8afe44c340d806199d2f2b0d458ba344b60217",
+        "completion_sha256": "b53252b1aab43aacde6a28e3542cfc8908ccb658fa9876ed122b21c9c5067f0e",
+        "updates_sha256": "b5f5ab614c4aa6940a7340f153e0fb9934563f279226d513dc229c201d55a3b4",
+        "risk_sha256": "825436247ed28303dedf95e8d9393394df4fe7b632e0cabae89a3340ca09ec1f"
+      }
+    ],
+    "seed43/reuse-k0": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 77068,
+        "training_token_visits": 1233088,
+        "fixed_heldout_teacher_kl": 0.3837316440428525,
+        "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+        "completion_sha256": "e4e6bd637d6635369f3962068f3153a53ddec2bd521fa2476c54aa9f7e46de97",
+        "updates_sha256": "99ec2c6a85cd3c820cfa39d4a4f87dd201d3f69f7e7ac6d0d5c66ebc767ecca0",
+        "risk_sha256": "7a19d3c1cb8bb9ae8236995cd6c3d825c1ab3a72fe697dabf1e75c67d923e709"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 96151,
+        "training_token_visits": 1538416,
+        "fixed_heldout_teacher_kl": 0.35104368406359754,
+        "bank_sha256": "a6b7ae529322a44a10f58623b0f074399792d6243a087450871890f527073925",
+        "completion_sha256": "ae2915faf71023fcf90c4c4731d7d37266b85eb442d2425d439a680adabe530a",
+        "updates_sha256": "bf6dec7ef5526265e2baa2eac7636ec916f8a9e99bc4a94997468aaf0c82ae0c",
+        "risk_sha256": "9c39f47b944255ed560f9e1dedb94a95d86c0ba87bf913cc0a2aed1215c341f1"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 99272,
+        "training_token_visits": 1588352,
+        "fixed_heldout_teacher_kl": 0.3239569083652589,
+        "bank_sha256": "5f39231ed88a01c31ace92bce328b41fe95d22e39abd6f2acd983deeb79e2700",
+        "completion_sha256": "1911b60303349e6a4e3d7bd28679c9692c4f8ff97bc3d4bda5a9be63dc20a227",
+        "updates_sha256": "b9b184807dcb2537de0146b6a12c65214ecdc40ec109c7e6a0393fd0ce098df5",
+        "risk_sha256": "7a3bc8395860ca2f220a29e837e607bb24b44c8c7ba700d79fa28ebd0dad6acc"
+      },
+      {
+        "outer": 4,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 99438,
+        "training_token_visits": 1591008,
+        "fixed_heldout_teacher_kl": 0.29742631100003075,
+        "bank_sha256": "b629adf1986f7627898039c433d5acfff3abd1827687d181e455d87509b59a52",
+        "completion_sha256": "28365d5e197d07a55501d06c957397f1905bd7b9644502e09de5f4bfdff6f7da",
+        "updates_sha256": "d1d2cf8aa3cd54f63f461e8ec00215da7efdb5f70bf41d5e9cdbecca0244bfbe",
+        "risk_sha256": "a2a3ae29fd12345a203288a0832109039ca866072fca36e34d344e313286d0de"
+      }
+    ],
+    "seed43/reuse-k05": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 77068,
+        "training_token_visits": 1233088,
+        "fixed_heldout_teacher_kl": 0.3968229587892705,
+        "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+        "completion_sha256": "9c6b3e7f84dad121876721e12d01aca80430ff605a762d2d84a12c7624df44c6",
+        "updates_sha256": "3c130254312815d477ccac5473e908a7e3fcc20314cde3ea1317552f19e6d28c",
+        "risk_sha256": "8ab185c90ebd497b9b1db43c31172ce3ec011cc00473c71ceebba12bce22cadd"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 62025,
+        "training_token_visits": 992400,
+        "fixed_heldout_teacher_kl": 0.3794740441332809,
+        "bank_sha256": "f4fc6b29db9cc1d54848caff7d73fc76f0348741807eb6ba9a7b549811475ab4",
+        "completion_sha256": "f0103408127a4fcbf57231803f6afdb41df005a9535597d9ed39a9d567fe6f23",
+        "updates_sha256": "0c8508e928006b21ba9ab6fb8d6b251be153e7637a65d648bace27a6c3e95758",
+        "risk_sha256": "237a6be04a5d23fa9d2a0b1ce3f24f1acf48a71576a2fc0c7495993fc83dd58e"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 80132,
+        "training_token_visits": 1282112,
+        "fixed_heldout_teacher_kl": 0.3612348020877932,
+        "bank_sha256": "13f946034905bb7e13f440ccb6e9be9a867fff6d0252fd504f11bd399d7694f0",
+        "completion_sha256": "e8a0020e8a1757257f453033b45cb2edfe80d4df4f44e9d0dff86bb96f13207b",
+        "updates_sha256": "fc270e232417fe162a19791acbb132c0b57c8e8fd822a61c57e9caa61e583d09",
+        "risk_sha256": "a0e349561e2b132f9a08e3a12f6013ad9a5171d97807c46359fdad277cfc9d53"
+      },
+      {
+        "outer": 4,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 103760,
+        "training_token_visits": 1660160,
+        "fixed_heldout_teacher_kl": 0.3465045057371877,
+        "bank_sha256": "754f5172ba5e7c56dc44a763b51a15d9727c3c1808195c1973abb5657765ef40",
+        "completion_sha256": "641633a04a16431895932cd245a97e4834690cd63aac652badce880b5025d386",
+        "updates_sha256": "399c9dc7713ce92483066e1b2687526949d5448f53de6d66f1e47b0949d43d29",
+        "risk_sha256": "0e522680e2aebd2eaa0bfe70cc65b2328b5b8f73c8ee4676777f731a6f33101e"
+      }
+    ],
+    "seed43/reuse-k1": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 77068,
+        "training_token_visits": 1233088,
+        "fixed_heldout_teacher_kl": 0.39774401154380323,
+        "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+        "completion_sha256": "9da8f620d4bb2507e8f5666d637dd583537ecf239f47b1f3eadd64247b11b6ae",
+        "updates_sha256": "7954302f1d2c332b3c8da196dd9a1584288ac4b333ab6d4c15433ec999a2f21b",
+        "risk_sha256": "775f1460b02dde2fa3c0069b832930e64a4ca0a79e7840b54aeaefc2d137a7ee"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 89149,
+        "training_token_visits": 1426384,
+        "fixed_heldout_teacher_kl": 0.3831471153550381,
+        "bank_sha256": "df479e7c59998611afbb038c6126156139176e170d3892afced3b9563d8c5090",
+        "completion_sha256": "4166768c8981f610c7eefbfeb50d882e87e46b5d6eb123c07a7f989b308552c2",
+        "updates_sha256": "0c98e4ba656c2f0c096020565b40d8340a3dd598475f88cc3124e0eedce37bee",
+        "risk_sha256": "02684a3e4b57b8f68303627a2bc3c360a8a41edbf4e233383398054a216eeb10"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 69245,
+        "training_token_visits": 1107920,
+        "fixed_heldout_teacher_kl": 0.36680350506391235,
+        "bank_sha256": "a7591785ed09b2d8442413e02f8a1b952bbfc44225b9df312b3fc3e90b8feb33",
+        "completion_sha256": "650f45aa4a00265a4a7d3662f2b301f16f37131410ee320a76e9e30416992dc2",
+        "updates_sha256": "e73241889a40904af72827b95a5b45bae9c0d047b5f34a520680d9960a5bd5a8",
+        "risk_sha256": "00fcd3dfd11be7ac2b10d24d83897c7683d31e579f75f6420282348618c62c44"
+      },
+      {
+        "outer": 4,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 144915,
+        "training_token_visits": 2318640,
+        "fixed_heldout_teacher_kl": 0.3523598710262206,
+        "bank_sha256": "8e5633f914795ef4cc58058a20bbdd3b56c26963333af1e57b566c388e64be93",
+        "completion_sha256": "6f8d281f0cf621a10eb29a63e67871848dec5edb174f861c878d43f26a993ac9",
+        "updates_sha256": "f0cae72b992ffd72c5d7205560bbc08271918b78f2c41a032ec1b8c359c401d8",
+        "risk_sha256": "20457e98499b9f5ed83ad6837f8b10a3319d7a74afce708fddd4755df4ac2520"
+      }
+    ],
+    "seed43/fresh-k1": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1388226,
+        "training_token_visits": 1388226,
+        "fixed_heldout_teacher_kl": 0.39837619168268573,
+        "bank_sha256": "9df321fa68a6d58b493eea00a8d5c9b579b444d3f3ce658422bf1a3e2e758ccb",
+        "completion_sha256": "d967c08c80b3f50d481a8f960af8553b93992cfc3cb374f2508d5dc8f2807f42",
+        "updates_sha256": "42354036ce414c518d43c9bf6f72bfbe3ced275d9682dcb99d93fefec563bbde",
+        "risk_sha256": "c98d40db07ea3ed7dd46a4f979e0181a32b3405f75aeb1f058381e0aee61db39"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1220004,
+        "training_token_visits": 1220004,
+        "fixed_heldout_teacher_kl": 0.38286865442450774,
+        "bank_sha256": "b75b79d1bd2772b38700af16a6afda1272fd31b23107aff39e8affd07ef2dbc7",
+        "completion_sha256": "432db3458e44d8b68727c6e7187a255a9966e00aa719ec10a9beacda570b3c70",
+        "updates_sha256": "9aa93b7905989b77971810430c79c3ec63f103fe1bfa736bac6bc5d7782e7ef2",
+        "risk_sha256": "88a012994641ab2f490f966a168cb3f287e77fccba0388bae526a766385e2c63"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1364378,
+        "training_token_visits": 1364378,
+        "fixed_heldout_teacher_kl": 0.36542186259285264,
+        "bank_sha256": "5114b294996e72e1f27ba780d646c8f45639b0aaa91b9a58f7571664a469e309",
+        "completion_sha256": "a4a874d28c553c4d8a44c69c4ebc88a7112766c4997a95e075a40df690eee7d5",
+        "updates_sha256": "4d9f625933ac0f43be5772e07b55edd0832773cbee75000228eb7ca28e9ecf4d",
+        "risk_sha256": "c70222cc1747e5cb035e3aa09db99579b4e6c5188e87a6e6b1d964bacaed890e"
+      }
+    ],
+    "seed44/reuse-k0": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 83427,
+        "training_token_visits": 1334832,
+        "fixed_heldout_teacher_kl": 0.381119710867766,
+        "bank_sha256": "60376da16c272d9464ff69f995ff7b35cff4a8ee6ab231945b8dcb1d170bad85",
+        "completion_sha256": "595d62d2912e79cfa02af881352eb488c02b4d8bff36093bbfab56d5de308434",
+        "updates_sha256": "d6043c5af0f327d5ace6a5a21cecaa791c64a275a49e2009e790e1918ff0bba2",
+        "risk_sha256": "eb9ebd4e6e772c1528a7186cdff0d953ea2a2404a0ce6de34d041ba2e51d0ba7"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 56436,
+        "training_token_visits": 902976,
+        "fixed_heldout_teacher_kl": 0.34588007995482273,
+        "bank_sha256": "cede9417efd9aafa26ef4cfa04ee899e241fcb68227745f919239a3dd7def1bc",
+        "completion_sha256": "156d8f979db8b0e77c24c44999303186e210907bd9294ae8bf763eb5cdb06a9f",
+        "updates_sha256": "52f83add6b4de7399c636bb791065f381764d8d2dedea80ea9df6ac73a4f39f5",
+        "risk_sha256": "85cbd9fb8e7379751e1a313e1b37dd55b1bb3c36302bd4d89047f55790533cbd"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 126615,
+        "training_token_visits": 2025840,
+        "fixed_heldout_teacher_kl": 0.3211222852189311,
+        "bank_sha256": "2965b5bca29c5f05096aaf3c9a604c38ce9ad7bcad60703e4f66e5af07099661",
+        "completion_sha256": "519f1bf72d23de82b8258f501f30d6a107929d0f55ebe210b2c80417071439c9",
+        "updates_sha256": "6359186d05fdff9db5b2dda4e36c83202968334c1b964f439986c2717fd8ffa8",
+        "risk_sha256": "c64307921a58f1cb005a02383cf5e1333dfa88618baf16a1e7221df666c6ba57"
+      }
+    ],
+    "seed44/reuse-k05": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 83427,
+        "training_token_visits": 1334832,
+        "fixed_heldout_teacher_kl": 0.3958515329668822,
+        "bank_sha256": "60376da16c272d9464ff69f995ff7b35cff4a8ee6ab231945b8dcb1d170bad85",
+        "completion_sha256": "c38f36a333d07dd19f6b9a453f7cdc6d92741ddf2f4ea1867eb8233647795169",
+        "updates_sha256": "517c826e1588a740a4720311124ee50031f02c75152967ce30c2bacfa2353415",
+        "risk_sha256": "1790cf416b1471e04262fdca7a3b6c07c898c5af6d8d1e40c1583c7b60c42931"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 64347,
+        "training_token_visits": 1029552,
+        "fixed_heldout_teacher_kl": 0.37904906684668277,
+        "bank_sha256": "31faebf93dd2c8dbb7b42a0ace83bd3abab5848a65f46a113fbf0594983fbaa3",
+        "completion_sha256": "56938799315bb87016360c01980f412678ff11e8bf2df1b45a2f56cc18ea30dc",
+        "updates_sha256": "8bb741d409318e434e581158b42c470608e3689d86d5b947c01ec2b3f8f89fe7",
+        "risk_sha256": "b6c84f746b35ee043d4d8fb47e6c13eeb7b281d0b2fb3e56e8837a987e071a9d"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 107297,
+        "training_token_visits": 1716752,
+        "fixed_heldout_teacher_kl": 0.3602607790854041,
+        "bank_sha256": "6f53a4a169f3fbedaef7c657d9f594790a615e528b4a9c4aae74a1ba440cdbd8",
+        "completion_sha256": "13fd80f0486c3efecb79baa4efb28bfb9e6dcb8aa0c7f86be3be2e9f92705eb5",
+        "updates_sha256": "2fae53f304569c0f062dbf4d64dcc35d64d1c46256b8fa7bf3022126dca05111",
+        "risk_sha256": "0e773d0fb768a88eeddb0d073f2cffa755d739ccb78eb936e701307dfedfa175"
+      }
+    ],
+    "seed44/reuse-k1": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 83427,
+        "training_token_visits": 1334832,
+        "fixed_heldout_teacher_kl": 0.3969404694761677,
+        "bank_sha256": "60376da16c272d9464ff69f995ff7b35cff4a8ee6ab231945b8dcb1d170bad85",
+        "completion_sha256": "d030ba095ac3b24d2a3756f2d7a10390c958837f0311cd31dec6577a250d97e6",
+        "updates_sha256": "1dd09e23a9db82e64d5dfab9e792f4caec0e818b96de3166e29d5ac8573e9ac4",
+        "risk_sha256": "c55d838d35417b5ca8e15924c82dd59b60d28dec3152837682b4d881063e8e58"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 93105,
+        "training_token_visits": 1489680,
+        "fixed_heldout_teacher_kl": 0.38155950368023506,
+        "bank_sha256": "beeef9064778753c85c905d5562aadba9868462bb9530068b6608a2304ca1479",
+        "completion_sha256": "6bb027a89698a5287c13480abdd962b348cbb17dca573e1192f54a0ffaead239",
+        "updates_sha256": "8791f3249fff29fdb59e0d6c93336c238a181da272d76b8b5464f74eb192f584",
+        "risk_sha256": "4b77725a732318ae23b78bd3094c997d83da87c8c05adb3852f48690ae8cc0b3"
+      },
+      {
+        "outer": 3,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 64,
+        "response_visits": 1024,
+        "generated_tokens": 78699,
+        "training_token_visits": 1259184,
+        "fixed_heldout_teacher_kl": 0.3641678461497072,
+        "bank_sha256": "7cbabcc3e20c8209f49df137e3feaeaa1f2411cd44cd69e637ccd7b5fdc6f47a",
+        "completion_sha256": "e6b988cda89abe3199de3a671b9dda68d6c569450eac595d4138d10516170c3f",
+        "updates_sha256": "c443bea6bc4549745d04502e5f4537f79043d2b046490c924c10fa7e91a0cc4d",
+        "risk_sha256": "aac3cecfeb514cf0c3783b9d99cb11b544257c4ee2970a968438cf103ea41ccd"
+      }
+    ],
+    "seed44/fresh-k1": [
+      {
+        "outer": 1,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1434603,
+        "training_token_visits": 1434603,
+        "fixed_heldout_teacher_kl": 0.39817002760476805,
+        "bank_sha256": "a94b17285b72d3d01d5139ef1c3f070cf62fda007fe9cf41a0de76e938decd03",
+        "completion_sha256": "d552ee72477578796676f53f12335e9a92000dfdbbd7e572b8e9af56109f5d46",
+        "updates_sha256": "810017db8dff09bde71a3c88c5043d1a817e631f66f0b674f69d88d393268482",
+        "risk_sha256": "b33b17ba5fa76ca71e2f653928bb0c59a2f433f68bf674b79aebbbda6bd513a8"
+      },
+      {
+        "outer": 2,
+        "optimizer_steps": 16,
+        "new_trajectory_records": 1024,
+        "response_visits": 1024,
+        "generated_tokens": 1202988,
+        "training_token_visits": 1202988,
+        "fixed_heldout_teacher_kl": 0.3819650555455319,
+        "bank_sha256": "f1a862e00b83634082c627a45d6c2d8aa670bb515ac467c480c26abc1e75cbbb",
+        "completion_sha256": "6272e4a459e3f639321fd871eb707400f9b6936533f8e678895059d0103d4950",
+        "updates_sha256": "4e1b68a10599afd0eb784a0af748fc693d6edd329278b6dce4947b05eb78fd94",
+        "risk_sha256": "95d90d8a08ec2a8b21b1fdd22d935e276aba28512d56653ed579866345c27a84"
+      }
+    ]
+  },
+  "equal_horizon": {
+    "42": {
+      "common_completed_outer": 6,
+      "arms": {
+        "reuse-k0": {
+          "optimizer_steps": 96,
+          "new_trajectory_records": 384,
+          "response_visits": 6144,
+          "generated_tokens": 909964,
+          "training_token_visits": 14559424,
+          "outer": 6,
+          "unique_prompt_token_sequences": 384,
+          "fixed_heldout_teacher_kl": 0.2613598015143964
+        },
+        "reuse-k05": {
+          "optimizer_steps": 96,
+          "new_trajectory_records": 384,
+          "response_visits": 6144,
+          "generated_tokens": 509604,
+          "training_token_visits": 8153664,
+          "outer": 6,
+          "unique_prompt_token_sequences": 384,
+          "fixed_heldout_teacher_kl": 0.31455511512620943
+        },
+        "reuse-k1": {
+          "optimizer_steps": 96,
+          "new_trajectory_records": 384,
+          "response_visits": 6144,
+          "generated_tokens": 505637,
+          "training_token_visits": 8090192,
+          "outer": 6,
+          "unique_prompt_token_sequences": 384,
+          "fixed_heldout_teacher_kl": 0.32080952025750414
+        },
+        "fresh-k1": {
+          "optimizer_steps": 96,
+          "new_trajectory_records": 6144,
+          "response_visits": 6144,
+          "generated_tokens": 8115741,
+          "training_token_visits": 8115741,
+          "outer": 6,
+          "unique_prompt_token_sequences": 6144,
+          "fixed_heldout_teacher_kl": 0.32145556516313084
+        }
+      },
+      "fresh_to_reuse_k1_training_token_ratio": 1.0031580214659923
+    },
+    "43": {
+      "common_completed_outer": 3,
+      "arms": {
+        "reuse-k0": {
+          "optimizer_steps": 48,
+          "new_trajectory_records": 192,
+          "response_visits": 3072,
+          "generated_tokens": 272491,
+          "training_token_visits": 4359856,
+          "outer": 3,
+          "unique_prompt_token_sequences": 192,
+          "fixed_heldout_teacher_kl": 0.3239569083652589
+        },
+        "reuse-k05": {
+          "optimizer_steps": 48,
+          "new_trajectory_records": 192,
+          "response_visits": 3072,
+          "generated_tokens": 219225,
+          "training_token_visits": 3507600,
+          "outer": 3,
+          "unique_prompt_token_sequences": 192,
+          "fixed_heldout_teacher_kl": 0.3612348020877932
+        },
+        "reuse-k1": {
+          "optimizer_steps": 48,
+          "new_trajectory_records": 192,
+          "response_visits": 3072,
+          "generated_tokens": 235462,
+          "training_token_visits": 3767392,
+          "outer": 3,
+          "unique_prompt_token_sequences": 192,
+          "fixed_heldout_teacher_kl": 0.36680350506391235
+        },
+        "fresh-k1": {
+          "optimizer_steps": 48,
+          "new_trajectory_records": 3072,
+          "response_visits": 3072,
+          "generated_tokens": 3972608,
+          "training_token_visits": 3972608,
+          "outer": 3,
+          "unique_prompt_token_sequences": 3072,
+          "fixed_heldout_teacher_kl": 0.36542186259285264
+        }
+      },
+      "fresh_to_reuse_k1_training_token_ratio": 1.0544716344887923
+    },
+    "44": {
+      "common_completed_outer": 2,
+      "arms": {
+        "reuse-k0": {
+          "optimizer_steps": 32,
+          "new_trajectory_records": 128,
+          "response_visits": 2048,
+          "generated_tokens": 139863,
+          "training_token_visits": 2237808,
+          "outer": 2,
+          "unique_prompt_token_sequences": 128,
+          "fixed_heldout_teacher_kl": 0.34588007995482273
+        },
+        "reuse-k05": {
+          "optimizer_steps": 32,
+          "new_trajectory_records": 128,
+          "response_visits": 2048,
+          "generated_tokens": 147774,
+          "training_token_visits": 2364384,
+          "outer": 2,
+          "unique_prompt_token_sequences": 128,
+          "fixed_heldout_teacher_kl": 0.37904906684668277
+        },
+        "reuse-k1": {
+          "optimizer_steps": 32,
+          "new_trajectory_records": 128,
+          "response_visits": 2048,
+          "generated_tokens": 176532,
+          "training_token_visits": 2824512,
+          "outer": 2,
+          "unique_prompt_token_sequences": 128,
+          "fixed_heldout_teacher_kl": 0.38155950368023506
+        },
+        "fresh-k1": {
+          "optimizer_steps": 32,
+          "new_trajectory_records": 2048,
+          "response_visits": 2048,
+          "generated_tokens": 2637591,
+          "training_token_visits": 2637591,
+          "outer": 2,
+          "unique_prompt_token_sequences": 2048,
+          "fixed_heldout_teacher_kl": 0.3819650555455319
+        }
+      },
+      "fresh_to_reuse_k1_training_token_ratio": 0.9338218424988104
+    }
+  },
+  "next_incomplete": [
+    "seed42/reuse-k0/outer07",
+    "seed42/reuse-k05/outer07",
+    "seed42/reuse-k1/outer08",
+    "seed42/fresh-k1/outer07",
+    "seed43/reuse-k0/outer05",
+    "seed43/reuse-k05/outer05",
+    "seed43/reuse-k1/outer05",
+    "seed43/fresh-k1/outer04",
+    "seed44/reuse-k0/outer04",
+    "seed44/reuse-k05/outer04",
+    "seed44/reuse-k1/outer04",
+    "seed44/fresh-k1/outer03"
+  ],
+  "script_sha256": "e85861375750f20968f5a3d5c0fe3734609f94de1cd493fa257b0cd36d8ed348",
+  "limits": [
+    "Checkpoint directories were checked for existence; model shards were not rehashed here.",
+    "Budget evidence does not substitute for held-out generated task outcomes.",
+    "Prompt counts use exact token sequences, not semantic novelty.",
+    "Different arms/seeds may share initial records or questions; counts are per arm.",
+    "Training visits exclude generation, cache preparation, risk readouts and evaluation compute."
+  ]
+}

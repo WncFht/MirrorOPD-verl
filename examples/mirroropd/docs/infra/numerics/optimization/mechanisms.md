@@ -2,7 +2,7 @@
 
 这些受控实验区分三种现象：optimizer 历史使当前梯度很小时仍产生位移；相同参数位移在不同前向精度下产生不同策略变化；有限步求解可能没有降低近目标 MDPO 子问题。实验还定位了教师 RoPE buffer 在加载时被舍入的问题。
 
-主体使用真实 1.5B 师生、固定数学前缀和本机捕获的模型/Adam 状态；原 E45/E47 晚期 checkpoint 不可用。先定义目标分解，再依次查看 optimizer 与步幅、前向精度、多步求解和普通 OPD 的对照。长期结果见[正式训练报告](production.md)，执行配置与修复见[数值入口](../README.md)。
+主体使用真实 1.5B 师生、固定数学前缀和本机捕获的模型/Adam 状态；原 E45/E47 晚期 checkpoint 不可用。Qwen3 κ 初始块的位移检查另用 1.7B Base 学生与 30B-A3B 教师，并在对应小节单独给出条件。先定义目标分解，再依次查看 optimizer 与步幅、前向精度、多步求解和普通 OPD 的对照。长期结果见[正式训练报告](production.md)，执行配置与修复见[数值入口](../README.md)。
 
 <a id="history"></a>
 <a id="history-mdpo-优化器历史与前向精度因果对照"></a>
@@ -622,6 +622,33 @@ $$
 这些控制中，仅重置 Adam、改变 loss dtype 或降低 LR 仍未恢复稳定下降。后续改变求解方式，应同时检查实际策略位移和同批目标改善，并保留更高精度前向参考。
 
 <a id="precision-1-结论与修复状态"></a>
+
+<a id="qwen-kappa-displacement"></a>
+
+## Qwen3 κ 初始块的实际参数位移
+
+这组另用 Qwen3-1.7B-Base←Qwen3-30B-A3B-Instruct-2507，从同一 Base、同一 64 条回答开始比较 κ=0/0.5/1；η0.1，AdamW LR1e-6，FP32 master／Adam，BF16 autocast／投影，每批重复 16 次。三个实际 checkpoint 均已完成 16 次更新，配置与初始轨迹见[研究正文](../../../experiments/learning-signal/weighted-targets.md#复现差距的受控核对)。下表从 safetensors 逐块计算全部 1,720,574,976 个独立参数的位移；输入 embedding 与输出投影共享的参数只计一次。
+
+记初始 Base 权重为 $\theta_{\rm init}$，κ 组训练后的权重为 $\theta^{(\kappa)}$。两种参数位移分别为
+
+$$
+\Delta_\kappa=\theta^{(\kappa)}-\theta_{\rm init},\qquad
+\Delta_\kappa^{BF16}=\operatorname{BF16}(\theta^{(\kappa)})-\theta_{\rm init}.
+$$
+
+原始权重本来就是 BF16 可表示值。
+
+| κ   | FP32 参数位移范数 | BF16 舍入后的位移范数 | 舍入后与初始值不同的参数比例 | 两种位移方向的余弦 |
+| --- | ----------------: | --------------------: | ---------------------------: | -----------------: |
+| 0   |           0.46237 |               0.23376 |                        9.36% |            0.34964 |
+| 0.5 |           0.42055 |               0.17306 |                        7.73% |            0.31473 |
+| 1   |           0.42416 |               0.17282 |                        7.78% |            0.31374 |
+
+κ=0.5/1 的 FP32 位移范数只相差 0.86%，方向余弦为 0.93344；κ=0/1 的方向余弦为 0.64911。它们确实产生不同更新方向，但原始 objective 的尺度差异没有按相同比例转化为参数步长差异。这是实际 16 步的末点比较，不能代替逐步 Adam 因果分解，也不按参数欧氏范数给任务能力排名。
+
+BF16 舍入保留的参数变化较稀疏，且改变了位移方向；这些计数不意味着模型丢失了相同比例的学习收益。训练中的算子级 autocast 与整模型 BF16 加载也不是同一前向干预。目前尚未对这些 checkpoint 做同输入、同算子下的完整 FP32-master／BF16 参数功能比较，因此不能由此把 TOP-D 差距归因于推理舍入。
+
+[完整参数与固定 hidden 输出投影诊断](data/qwen-kappa-displacement-20261102/parameter-geometry.json)保存逐组范数、方向、三个 checkpoint 及原始 Base 的文件 SHA；[复算身份](data/qwen-kappa-displacement-20261102/provenance.json)与[归约检查](data/qwen-kappa-displacement-20261102/parameter-geometry-smoke.json)记录来源和分块不变性。所有计算使用 CPU 四线程；固定 hidden 干预的 Base 读数也复现了先前 EOS 诊断，不能把该局部投影当作完整模型前向。
 
 ## 修复状态与证据范围
 

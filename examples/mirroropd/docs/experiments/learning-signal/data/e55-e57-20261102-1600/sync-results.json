@@ -1,0 +1,58 @@
+[
+  {
+    "run_id": "j5uaal3j",
+    "cli_exit": 0,
+    "source_status": "partial_snapshot",
+    "source_sha256": "9c6cde7dea5b29b80c6710a82db6ac540d64f867542b563ec4a5344d34a6e928",
+    "source_bytes": 103251968,
+    "upload_bytes": 30441593,
+    "cloud_prefix_last_step": 1018,
+    "new_history_rows": 340,
+    "source_history_rows": 1359,
+    "retained_record_kinds": {
+      "header": 1,
+      "run": 1,
+      "environment": 2,
+      "files": 1,
+      "telemetry": 3,
+      "metric": 3702,
+      "summary": 2718,
+      "stats": 9449,
+      "output_raw": 865,
+      "history": 340
+    },
+    "synthetic_records": 0,
+    "source_unchanged": true
+  },
+  {
+    "run_id": "zsnhqzts",
+    "cli_exit": 0,
+    "source_status": "finished",
+    "source_sha256": "2f5425741d9d6c8dac4f27b06d5cae5a98038d516c44514960252010257b761f",
+    "source_bytes": 103755274,
+    "upload_bytes": 13592578,
+    "cloud_prefix_last_step": 1597,
+    "new_history_rows": 102,
+    "source_history_rows": 1700,
+    "retained_record_kinds": {
+      "header": 1,
+      "run": 1,
+      "environment": 2,
+      "files": 1,
+      "telemetry": 4,
+      "metric": 3702,
+      "summary": 3401,
+      "output_raw": 6889,
+      "stats": 2138,
+      "history": 102,
+      "exit": 1
+    },
+    "synthetic_records": 0,
+    "source_unchanged": true
+  },
+  {
+    "run_id": "6j5knkmk",
+    "skipped_current": true,
+    "source_sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830"
+  }
+]

@@ -1,0 +1,73 @@
+{
+  "arms": [
+    {
+      "name": "reuse-k0",
+      "kappa": 0,
+      "coverage": 64
+    },
+    {
+      "name": "reuse-k05",
+      "kappa": 0.5,
+      "coverage": 64
+    },
+    {
+      "name": "reuse-k1",
+      "kappa": 1,
+      "coverage": 64
+    },
+    {
+      "name": "fresh-k1",
+      "kappa": 1,
+      "coverage": 1024
+    }
+  ],
+  "rollout_seed": 43,
+  "selection_seed": 20261102,
+  "start_from": "Original Base weights and fresh Adam; do not inherit seed42 fitted weights",
+  "total_outers": 8,
+  "updates_per_outer": 16,
+  "batch": 64,
+  "eta": 0.1,
+  "lr": 1e-06,
+  "aggregation": "token-mean per minibatch",
+  "data_sha256": "c69f0fb5cb09b642b77dc3e78615e1ba113388ca3fd5aa8c451c782ff1508719",
+  "prompts_sha256": "433a5db3ebc3d3919ad67df833d00673496ec3282d3699569b3b2939520ef58d",
+  "rollout": {
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "cap": 16384,
+    "eos": [
+      151643,
+      151645
+    ]
+  },
+  "first_outer": "Generate 1024 once; all three reuse arms share its exact first64 responses and caches",
+  "later_outers": "Each arm generates from its own current weights; refresh anchor and restore Adam",
+  "nesting": "Next 1024-prompt block each outer; reuse arms take its first64; no within-seed repeats",
+  "evaluation": {
+    "at_outer": 8,
+    "protocol": "paper",
+    "input_variant": "local",
+    "n": 4,
+    "plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+    "questions_sha256": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7"
+  },
+  "heldout": "Same original 128 fixed response prefixes; same 194 task questions and evaluation seeds",
+  "budgets_per_arm": {
+    "updates": 128,
+    "response_visits": 8192,
+    "new_trajectories": {
+      "reuse-k0": 512,
+      "reuse-k05": 512,
+      "reuse-k1": 512,
+      "fresh-k1": 8192
+    }
+  },
+  "limits": [
+    "Three total data/rollout seeds including the original; not a large-seed study.",
+    "Eight outers do not establish the 100-outer endpoint or reproduce the paper budget.",
+    "Token visits and compute differ; both are recorded, not equated by response count.",
+    "Same local prompt and EOS-coarsened objective; algorithm and instruction controls remain separate.",
+    "Seeds are fixed before replication outcomes; no outcome-based selection of bank contents."
+  ]
+}

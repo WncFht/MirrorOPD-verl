@@ -1,0 +1,86 @@
+{
+  "reuse-k0": {
+    "receipt": {
+      "status": "complete",
+      "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/replications/seed43/reuse-k0/outer01",
+      "checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "7fb43e27fdd5e416121382f8106395cd9d33c41cf3db349726d4740c1a0a3a8c",
+        "research_state.pt": "bd3199e12e098716d81a9384ec82cdc2b00483400316318914ced90b079339f1"
+      },
+      "outer": 1,
+      "updates": 16,
+      "new_trajectories": 64,
+      "response_visits": 1024,
+      "token_visits": 1233088,
+      "heldout_teacher_kl_before": 0.4097565091737562,
+      "heldout_teacher_kl_after": 0.3837316440428528,
+      "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+      "time": 1793579718.5184436
+    },
+    "receipt_sha256": "e4e6bd637d6635369f3962068f3153a53ddec2bd521fa2476c54aa9f7e46de97"
+  },
+  "reuse-k05": {
+    "receipt": {
+      "status": "complete",
+      "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/replications/seed43/reuse-k05/outer01",
+      "checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "76cb5c496a5db949d0746c980091ed1c59ff412bcf8c747393a8bcbca0dad170",
+        "research_state.pt": "5c05f74605f3c06f484dc5f7066510e37987feaedb5da5b86585b19609226daa"
+      },
+      "outer": 1,
+      "updates": 16,
+      "new_trajectories": 64,
+      "response_visits": 1024,
+      "token_visits": 1233088,
+      "heldout_teacher_kl_before": 0.4097565091737562,
+      "heldout_teacher_kl_after": 0.3968229587892705,
+      "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+      "time": 1793580145.7694297
+    },
+    "receipt_sha256": "9c6b3e7f84dad121876721e12d01aca80430ff605a762d2d84a12c7624df44c6"
+  },
+  "reuse-k1": {
+    "receipt": {
+      "status": "complete",
+      "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/replications/seed43/reuse-k1/outer01",
+      "checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "0de4f874ef3e03245ebe54b596458de34a1877be9bc62d76f99cb688e2a0a75c",
+        "research_state.pt": "c27d2cfe561628ec99c78277609bc88be42014c4a7aac56193eae31f9fe463ae"
+      },
+      "outer": 1,
+      "updates": 16,
+      "new_trajectories": 64,
+      "response_visits": 1024,
+      "token_visits": 1233088,
+      "heldout_teacher_kl_before": 0.4097565091737562,
+      "heldout_teacher_kl_after": 0.3977440115438031,
+      "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+      "time": 1793580538.835357
+    },
+    "receipt_sha256": "9da8f620d4bb2507e8f5666d637dd583537ecf239f47b1f3eadd64247b11b6ae"
+  },
+  "fresh-k1": {
+    "receipt": {
+      "status": "complete",
+      "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/replications/seed43/fresh-k1/outer01",
+      "checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "53a7929b1f7f78d73b02260a36cb21d8170d81e795833e8905b7113f7bb92b53",
+        "research_state.pt": "5f9762844d74ba8d0378c131b782cbdcf0272af99379481a3f9b61a69c08fd72"
+      },
+      "outer": 1,
+      "updates": 16,
+      "new_trajectories": 1024,
+      "response_visits": 1024,
+      "token_visits": 1388226,
+      "heldout_teacher_kl_before": 0.4097565091737562,
+      "heldout_teacher_kl_after": 0.39837619168268584,
+      "bank_sha256": "9df321fa68a6d58b493eea00a8d5c9b579b444d3f3ce658422bf1a3e2e758ccb",
+      "time": 1793581137.55865
+    },
+    "receipt_sha256": "d967c08c80b3f50d481a8f960af8553b93992cfc3cb374f2508d5dc8f2807f42"
+  }
+}

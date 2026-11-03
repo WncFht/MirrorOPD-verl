@@ -1,0 +1,438 @@
+{
+  "scope": "Audit realized initial-bank coverage, verifier outcomes and token weights.\n\nExact prefix hashes measure visited token contexts, not semantic diversity or\nindependent gradient samples. Correctness is the frozen native verifier outcome,\nnot a reward used in the full-vocabulary objective. Update-averaged loss weights\ndescribe the aggregator and do not measure each trajectory's gradient influence.\n",
+  "arms": {
+    "reuse64x16": {
+      "unique_questions": 64,
+      "unique_trajectories": 64,
+      "response_visits": 1024,
+      "unique_trajectory_tokens": 85216,
+      "token_visits": 1363456,
+      "distinct_full_prefixes": 85216,
+      "within_unique_trajectories_shared_prefix_fraction": 0.0,
+      "new_prefixes_per_token_visit": 0.0625,
+      "prefix_visit_multiplicity_histogram": {
+        "16": 85216
+      },
+      "correct_trajectories": 7,
+      "verifier_accuracy_on_unique_trajectories": 0.109375,
+      "native_nonempty_pred_fraction": 0.484375,
+      "cap_fraction": 0.0,
+      "mean_unique_response_length": 1331.5,
+      "length_quantiles": {
+        "min": 3.0,
+        "p25": 184.75,
+        "p50": 555.0,
+        "p75": 1051.25,
+        "p90": 3420.9000000000055,
+        "max": 11669.0
+      },
+      "correct_token_visit_fraction": 0.0672408937288772,
+      "correct_update_averaged_loss_weight": 0.0672408937288772,
+      "inverse_squared_trajectory_loss_weights": 16.01474049195564,
+      "inverse_squared_question_loss_weights": 16.01474049195564,
+      "top10_percent_trajectories_loss_weight": 0.6016827825760421,
+      "questions_with_any_correct_response": 7,
+      "batch_readouts": [
+        {
+          "update": 1,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 2,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 3,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 4,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 5,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 6,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 7,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 8,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 9,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 10,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 11,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 12,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 13,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 14,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 15,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 16,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        }
+      ],
+      "protocol_sha256": {
+        "training/reuse64x16-k0-s42-block1/protocol.json": "9c5e24e628fa669ac5c3767a4816529374f2960ec1fb2f915225cabd9236596f",
+        "training/reuse64x16-k05-s42-block1/protocol.json": "9b11b53a7cf6a527a806ed85f5999f95c9f6525c4a12f2ae75dc24e3d211aedf",
+        "training/reuse64x16-k1-s42-block1/protocol.json": "87ba6eeaebbabaaaf338d4a9fa121a32d872c20b13f25cc7e25a5500657d397b"
+      }
+    },
+    "fresh1024x1": {
+      "unique_questions": 1024,
+      "unique_trajectories": 1024,
+      "response_visits": 1024,
+      "unique_trajectory_tokens": 1287081,
+      "token_visits": 1287081,
+      "distinct_full_prefixes": 1287081,
+      "within_unique_trajectories_shared_prefix_fraction": 0.0,
+      "new_prefixes_per_token_visit": 1.0,
+      "prefix_visit_multiplicity_histogram": {
+        "1": 1287081
+      },
+      "correct_trajectories": 54,
+      "verifier_accuracy_on_unique_trajectories": 0.052734375,
+      "native_nonempty_pred_fraction": 0.3955078125,
+      "cap_fraction": 0.0107421875,
+      "mean_unique_response_length": 1256.9150390625,
+      "length_quantiles": {
+        "min": 2.0,
+        "p25": 288.5,
+        "p50": 654.0,
+        "p75": 1177.5,
+        "p90": 2509.5,
+        "max": 16384.0
+      },
+      "correct_token_visit_fraction": 0.041569256324971,
+      "correct_update_averaged_loss_weight": 0.04465800322110171,
+      "inverse_squared_trajectory_loss_weights": 304.4586633249886,
+      "inverse_squared_question_loss_weights": 304.4586633249886,
+      "top10_percent_trajectories_loss_weight": 0.4724941771908177,
+      "questions_with_any_correct_response": 54,
+      "batch_readouts": [
+        {
+          "update": 1,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 2,
+          "tokens": 63929,
+          "correct_responses": 3,
+          "correct_token_weight": 0.06077054232038668
+        },
+        {
+          "update": 3,
+          "tokens": 59638,
+          "correct_responses": 7,
+          "correct_token_weight": 0.08747778262181831
+        },
+        {
+          "update": 4,
+          "tokens": 51476,
+          "correct_responses": 4,
+          "correct_token_weight": 0.03840624757168389
+        },
+        {
+          "update": 5,
+          "tokens": 108842,
+          "correct_responses": 2,
+          "correct_token_weight": 0.013790632292681133
+        },
+        {
+          "update": 6,
+          "tokens": 69747,
+          "correct_responses": 2,
+          "correct_token_weight": 0.1901443789697048
+        },
+        {
+          "update": 7,
+          "tokens": 86814,
+          "correct_responses": 6,
+          "correct_token_weight": 0.07698067132029396
+        },
+        {
+          "update": 8,
+          "tokens": 69147,
+          "correct_responses": 2,
+          "correct_token_weight": 0.023182495263713538
+        },
+        {
+          "update": 9,
+          "tokens": 76853,
+          "correct_responses": 3,
+          "correct_token_weight": 0.027181762585715585
+        },
+        {
+          "update": 10,
+          "tokens": 62232,
+          "correct_responses": 3,
+          "correct_token_weight": 0.03284483866820928
+        },
+        {
+          "update": 11,
+          "tokens": 164354,
+          "correct_responses": 5,
+          "correct_token_weight": 0.015904693527386007
+        },
+        {
+          "update": 12,
+          "tokens": 69026,
+          "correct_responses": 5,
+          "correct_token_weight": 0.03411757888331933
+        },
+        {
+          "update": 13,
+          "tokens": 81108,
+          "correct_responses": 2,
+          "correct_token_weight": 0.02136657296444247
+        },
+        {
+          "update": 14,
+          "tokens": 69078,
+          "correct_responses": 1,
+          "correct_token_weight": 0.003517762529314688
+        },
+        {
+          "update": 15,
+          "tokens": 118836,
+          "correct_responses": 2,
+          "correct_token_weight": 0.021601198290080448
+        },
+        {
+          "update": 16,
+          "tokens": 50785,
+          "correct_responses": 0,
+          "correct_token_weight": 0.0
+        }
+      ],
+      "protocol_sha256": {
+        "training/fresh1024x1-k0-s42-block1/protocol.json": "e60e976f2730ee8f314053dfd7dbe7082871b8970c434fe9a251749c2e18b483",
+        "training/fresh1024x1-k05-s42-block1/protocol.json": "12342714a505a17495c90d61745329e59d761d5ec8dafa434cae560f182ac634",
+        "training/fresh1024x1-k1-s42-block1/protocol.json": "a551a2622ac56ca7af925bf767f568cf2c433bc9cc4d126ad6b9488932371145"
+      }
+    },
+    "multi128x8": {
+      "unique_questions": 128,
+      "unique_trajectories": 1024,
+      "response_visits": 1024,
+      "unique_trajectory_tokens": 1261842,
+      "token_visits": 1261842,
+      "distinct_full_prefixes": 1259692,
+      "within_unique_trajectories_shared_prefix_fraction": 0.0017038583277462216,
+      "new_prefixes_per_token_visit": 0.9982961416722538,
+      "prefix_visit_multiplicity_histogram": {
+        "1": 1258783,
+        "2": 488,
+        "3": 165,
+        "4": 93,
+        "5": 21,
+        "6": 11,
+        "7": 3,
+        "8": 128
+      },
+      "correct_trajectories": 41,
+      "verifier_accuracy_on_unique_trajectories": 0.0400390625,
+      "native_nonempty_pred_fraction": 0.3779296875,
+      "cap_fraction": 0.009765625,
+      "mean_unique_response_length": 1232.267578125,
+      "length_quantiles": {
+        "min": 2.0,
+        "p25": 279.75,
+        "p50": 647.0,
+        "p75": 1163.75,
+        "p90": 2242.600000000003,
+        "max": 16384.0
+      },
+      "correct_token_visit_fraction": 0.03504717706337244,
+      "correct_update_averaged_loss_weight": 0.03555874006334661,
+      "inverse_squared_trajectory_loss_weights": 245.25354574157848,
+      "inverse_squared_question_loss_weights": 85.99001134279551,
+      "top10_percent_trajectories_loss_weight": 0.5121193403363546,
+      "questions_with_any_correct_response": 30,
+      "batch_readouts": [
+        {
+          "update": 1,
+          "tokens": 85216,
+          "correct_responses": 7,
+          "correct_token_weight": 0.0672408937288772
+        },
+        {
+          "update": 2,
+          "tokens": 63929,
+          "correct_responses": 3,
+          "correct_token_weight": 0.06077054232038668
+        },
+        {
+          "update": 3,
+          "tokens": 82996,
+          "correct_responses": 1,
+          "correct_token_weight": 0.006915995951612126
+        },
+        {
+          "update": 4,
+          "tokens": 82000,
+          "correct_responses": 3,
+          "correct_token_weight": 0.04960975609756098
+        },
+        {
+          "update": 5,
+          "tokens": 78172,
+          "correct_responses": 3,
+          "correct_token_weight": 0.040308550376093745
+        },
+        {
+          "update": 6,
+          "tokens": 66298,
+          "correct_responses": 1,
+          "correct_token_weight": 0.013152734622462216
+        },
+        {
+          "update": 7,
+          "tokens": 84033,
+          "correct_responses": 3,
+          "correct_token_weight": 0.12050027965204146
+        },
+        {
+          "update": 8,
+          "tokens": 60389,
+          "correct_responses": 4,
+          "correct_token_weight": 0.04108364106045803
+        },
+        {
+          "update": 9,
+          "tokens": 98995,
+          "correct_responses": 1,
+          "correct_token_weight": 0.00860649527753927
+        },
+        {
+          "update": 10,
+          "tokens": 81882,
+          "correct_responses": 2,
+          "correct_token_weight": 0.015290295791504848
+        },
+        {
+          "update": 11,
+          "tokens": 91581,
+          "correct_responses": 2,
+          "correct_token_weight": 0.016127799434380495
+        },
+        {
+          "update": 12,
+          "tokens": 65639,
+          "correct_responses": 4,
+          "correct_token_weight": 0.06988223464708482
+        },
+        {
+          "update": 13,
+          "tokens": 68600,
+          "correct_responses": 0,
+          "correct_token_weight": 0.0
+        },
+        {
+          "update": 14,
+          "tokens": 74938,
+          "correct_responses": 3,
+          "correct_token_weight": 0.02887720515626251
+        },
+        {
+          "update": 15,
+          "tokens": 98288,
+          "correct_responses": 4,
+          "correct_token_weight": 0.03057341689728146
+        },
+        {
+          "update": 16,
+          "tokens": 78886,
+          "correct_responses": 0,
+          "correct_token_weight": 0.0
+        }
+      ],
+      "protocol_sha256": {
+        "training/multi128x8-k0-s42-block1/protocol.json": "1ba380fe09fdf20159b06ed11d9db8277eb64bb2781bb8ccc9421c91145da022",
+        "training/multi128x8-k05-s42-block1/protocol.json": "36a5eade962617012f7244a0c9cb3e2f90aa4c08983bb884cb0e41153f2ce882",
+        "training/multi128x8-k1-s42-block1/protocol.json": "c062f06aaccd3de8e1e24aa8a6d4ca34abfd79ce746ffa1a5b81388163798e54"
+      }
+    }
+  },
+  "matched_128_prompts": {
+    "same_128_prompts": true,
+    "first_response_correct_questions": 10,
+    "eight_response_any_correct_questions": 30,
+    "first_response_accuracy": 0.078125,
+    "eight_response_mean_accuracy": 0.0400390625,
+    "warning": "Any-correct is descriptive pass@8; it is not avg@8 and is not used as the task metric."
+  },
+  "script_sha256": "c4be98dca95927dcdbd2eb5677e340d499f04e026db2b7181a3182914934330e",
+  "source_sha256": {
+    "bank.jsonl": "2dbbce2acd3fae0acacbbe2fdaec741be8820a25c5b4c8a0a2bb5dbfb1624fa5",
+    "bank-scores.jsonl": "a427c4f183e4afc05bcbf640917b0391ec035f16cf01e876022902e0399aa9e6",
+    "bank-protocol.json": "b574507e8eb5ced71bf1b090ec42de5c1a448ae4f2bed7c980e683ed9dc3d385"
+  },
+  "limits": [
+    "One shared rollout bank. More prefixes do not by themselves prove greater useful coverage.",
+    "Correctness and nonempty pred fields describe verifier outputs; they are not distillation loss weights.",
+    "All full-vocabulary targets use teacher probabilities, including on incorrect trajectories.",
+    "Inverse squared loss weights describe concentration, not independent sample size or gradient influence.",
+    "Reused prefixes are revisited with changed student parameters after every update."
+  ]
+}

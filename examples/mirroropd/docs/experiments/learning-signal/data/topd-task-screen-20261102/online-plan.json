@@ -1,0 +1,85 @@
+{
+  "status": "preregistered; continuation not yet executed",
+  "arms": [
+    {
+      "name": "reuse-k0",
+      "initial_label": "reuse64x16-k0-s42-block1",
+      "kappa": 0,
+      "coverage": 64,
+      "initial_checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/reuse64x16-k0-s42-block1",
+      "initial_receipt_sha256": "e3ba3d88ad0565cca743062d84912fed5ed3258bdc5973bbe8f2a099f39cf523"
+    },
+    {
+      "name": "reuse-k05",
+      "initial_label": "reuse64x16-k05-s42-block1",
+      "kappa": 0.5,
+      "coverage": 64,
+      "initial_checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/reuse64x16-k05-s42-block1",
+      "initial_receipt_sha256": "b7c76b2955b612208341066e60186c94332c4201af52aff5632c891ecad8abbc"
+    },
+    {
+      "name": "reuse-k1",
+      "initial_label": "reuse64x16-k1-s42-block1",
+      "kappa": 1,
+      "coverage": 64,
+      "initial_checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/reuse64x16-k1-s42-block1",
+      "initial_receipt_sha256": "0dc84a3c9459bfd618dfa49255baa16a59ce57396a01561b008bf5cd606a8f40"
+    },
+    {
+      "name": "fresh-k1",
+      "initial_label": "fresh1024x1-k1-s42-block1",
+      "kappa": 1,
+      "coverage": 1024,
+      "initial_checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/fresh1024x1-k1-s42-block1",
+      "initial_receipt_sha256": "1963edbfea9fcd3142e394dc869caff4f4814dfa2a1efdd0f0424f49016ed86c"
+    }
+  ],
+  "total_outers": 8,
+  "initial_outer_already_complete": 1,
+  "updates_per_outer": 16,
+  "batch": 64,
+  "eta": 0.1,
+  "lr": 1e-06,
+  "seed": 42,
+  "optimizer": "AdamW; restore moments and step count from each prior checkpoint",
+  "rollout": {
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "cap": 16384,
+    "eos": [
+      151643,
+      151645
+    ]
+  },
+  "anchor": "refresh to current student at each outer; FP32 master and BF16 forward operands",
+  "aggregation": "token-mean in each 64-response minibatch",
+  "data_sha256": "c69f0fb5cb09b642b77dc3e78615e1ba113388ca3fd5aa8c451c782ff1508719",
+  "prompts_sha256": "0405a75945a86b56c9882f579947f393e99e9987ef4d2311647bcf177f77312d",
+  "original_prompts_sha256": "fac617708d8f1c1f628b8888844241555d16ccd3fcb706daffd04bfed50b98ba",
+  "selection_seed": 20261101,
+  "nesting": "Each outer uses the next 1024-question block; reuse takes its first 64. No cross-outer repeats.",
+  "limits": [
+    "Eight outers screen the onset of online behavior; they do not reproduce the 100-outer endpoint.",
+    "Coverage arms match optimizer updates and response visits, not generated tokens or wall time.",
+    "One initial training and rollout seed; independent-seed confirmation remains necessary.",
+    "Same local native prompt and EOS-coarsened objective; this is not a full official TOP-D reproduction."
+  ],
+  "evaluation": {
+    "at_outer": 8,
+    "protocol": "paper",
+    "input_variant": "local",
+    "plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+    "question_sha256": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7",
+    "n": 4
+  },
+  "fixed_risk": "Original 128 heldout response prefixes after every outer; original Base reference remains fixed",
+  "current_risk": "First 64 new responses before/after each block; changing on-policy state distribution",
+  "expected_cumulative_response_visits_per_arm": 8192,
+  "expected_cumulative_updates_per_arm": 128,
+  "expected_new_trajectories": {
+    "reuse-k0": 512,
+    "reuse-k05": 512,
+    "reuse-k1": 512,
+    "fresh-k1": 8192
+  }
+}

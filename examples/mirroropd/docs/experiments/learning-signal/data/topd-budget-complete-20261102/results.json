@@ -1,0 +1,3742 @@
+{
+  "observed_shanghai": "2026-11-02T02:28:46.505882+08:00",
+  "plan": {
+    "scope": "Fixed identical1024 trajectories, kappa1 eta.1; change effective response batch and total visits.",
+    "reference": "fresh1024x1-k1-s42-block1",
+    "seed": 42,
+    "lr": 1e-06,
+    "one_pass_tokens": 1287081,
+    "cells": [
+      {
+        "label": "fresh1024x1-k1-s42-block1",
+        "batch": 64,
+        "updates": 16,
+        "response_visits": 1024,
+        "unique_trajectories": 1024,
+        "token_visits": 1287081
+      },
+      {
+        "label": "budget-b256-u4-k1-s42",
+        "batch": 256,
+        "updates": 4,
+        "response_visits": 1024,
+        "unique_trajectories": 1024,
+        "token_visits": 1287081
+      },
+      {
+        "label": "budget-b256-u16-k1-s42",
+        "batch": 256,
+        "updates": 16,
+        "response_visits": 4096,
+        "unique_trajectories": 1024,
+        "token_visits": 5148324
+      },
+      {
+        "label": "budget-b64-u64-k1-s42",
+        "batch": 64,
+        "updates": 64,
+        "response_visits": 4096,
+        "unique_trajectories": 1024,
+        "token_visits": 5148324
+      }
+    ],
+    "invariants": [
+      "same pretrained parameters and fresh Adam state",
+      "same frozen original anchor",
+      "same exact trajectory order before batch grouping",
+      "same token-mean/clip1/objective/precision"
+    ],
+    "limits": [
+      "At a fixed visit budget, batch size and update count necessarily change together.",
+      "At fixed update count, larger batches process more response/token visits.",
+      "LR remains1e-6; no linear LR scaling is assumed.",
+      "This is a single proximal block, not online multi-outer training."
+    ]
+  },
+  "cells": [
+    {
+      "label": "fresh1024x1-k1-s42-block1",
+      "batch": 64,
+      "updates": 16,
+      "response_visits": 1024,
+      "unique_trajectories": 1024,
+      "token_visits": 1287081,
+      "complete": {
+        "status": "complete",
+        "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/fresh1024x1-k1-s42-block1",
+        "updates": 16,
+        "seconds": 313.384153842926,
+        "heldout_teacher_kl_before": 0.4097565091737562,
+        "heldout_teacher_kl_after": 0.39827487663526956
+      },
+      "heldout_after": {
+        "objective": 0.04613331848916616,
+        "teacher_kl": 0.39827487663526956,
+        "anchor_kl": 0.0007142803226793164,
+        "tokens": 161148,
+        "responses": [
+          {
+            "request_id": "1024-0",
+            "tokens": 183,
+            "objective": 0.06134411209787969,
+            "teacher_kl": 0.8230306419152372,
+            "anchor_kl": 0.00043363102160528697
+          },
+          {
+            "request_id": "1025-0",
+            "tokens": 1113,
+            "objective": 0.062275342022941445,
+            "teacher_kl": 0.43292157023884476,
+            "anchor_kl": 0.0007002710904328273
+          },
+          {
+            "request_id": "1026-0",
+            "tokens": 1048,
+            "objective": 0.051529546112170324,
+            "teacher_kl": 0.4854030944206342,
+            "anchor_kl": 0.0010758632098165116
+          },
+          {
+            "request_id": "1027-0",
+            "tokens": 948,
+            "objective": 0.08644251255472675,
+            "teacher_kl": 0.6797761487897596,
+            "anchor_kl": 0.0006947661466521189
+          },
+          {
+            "request_id": "1028-0",
+            "tokens": 324,
+            "objective": 0.03924662282366222,
+            "teacher_kl": 0.4515614965488634,
+            "anchor_kl": 0.0007174900052200147
+          },
+          {
+            "request_id": "1029-0",
+            "tokens": 137,
+            "objective": 0.10107916346691705,
+            "teacher_kl": 1.1422612189135113,
+            "anchor_kl": 0.0008560601907153595
+          },
+          {
+            "request_id": "1030-0",
+            "tokens": 13702,
+            "objective": 0.03525466794299448,
+            "teacher_kl": 0.32352645498282645,
+            "anchor_kl": 0.0012107556023147773
+          },
+          {
+            "request_id": "1031-0",
+            "tokens": 2685,
+            "objective": 0.05006935708559859,
+            "teacher_kl": 0.4752268831437784,
+            "anchor_kl": 0.0009230337699832291
+          },
+          {
+            "request_id": "1032-0",
+            "tokens": 940,
+            "objective": 0.04826433690019065,
+            "teacher_kl": 0.45477002684032136,
+            "anchor_kl": 0.000530885033757877
+          },
+          {
+            "request_id": "1033-0",
+            "tokens": 1320,
+            "objective": 0.06166882374049521,
+            "teacher_kl": 0.49424805425970797,
+            "anchor_kl": 0.0011281041714307181
+          },
+          {
+            "request_id": "1034-0",
+            "tokens": 361,
+            "objective": 0.1065678244936055,
+            "teacher_kl": 1.145021362394969,
+            "anchor_kl": 0.0008605343839922662
+          },
+          {
+            "request_id": "1035-0",
+            "tokens": 3171,
+            "objective": 0.024795245475441107,
+            "teacher_kl": 0.26304227269819774,
+            "anchor_kl": 0.0006906838604941047
+          },
+          {
+            "request_id": "1036-0",
+            "tokens": 666,
+            "objective": 0.023238314302328728,
+            "teacher_kl": 0.3481700468225287,
+            "anchor_kl": 0.0004182990766303996
+          },
+          {
+            "request_id": "1037-0",
+            "tokens": 19,
+            "objective": 0.13727465408058043,
+            "teacher_kl": 2.4943988284978427,
+            "anchor_kl": 0.0016909623925226026
+          },
+          {
+            "request_id": "1038-0",
+            "tokens": 822,
+            "objective": 0.04550994202562264,
+            "teacher_kl": 0.33439464493699,
+            "anchor_kl": 0.000863604032877802
+          },
+          {
+            "request_id": "1039-0",
+            "tokens": 44,
+            "objective": 0.19664796257953235,
+            "teacher_kl": 3.6245630004268605,
+            "anchor_kl": 0.001169215022847745
+          },
+          {
+            "request_id": "1040-0",
+            "tokens": 947,
+            "objective": 0.08474160702744851,
+            "teacher_kl": 0.5961917061100901,
+            "anchor_kl": 0.0004541334596750856
+          },
+          {
+            "request_id": "1041-0",
+            "tokens": 2424,
+            "objective": 0.04269078404158942,
+            "teacher_kl": 0.3057106434309855,
+            "anchor_kl": 0.0002579987108191127
+          },
+          {
+            "request_id": "1042-0",
+            "tokens": 656,
+            "objective": 0.05163720525994702,
+            "teacher_kl": 0.4560332048293244,
+            "anchor_kl": 0.0013933111044455932
+          },
+          {
+            "request_id": "1043-0",
+            "tokens": 608,
+            "objective": 0.06853918765948581,
+            "teacher_kl": 0.6607963568521403,
+            "anchor_kl": 0.000934403461393922
+          },
+          {
+            "request_id": "1044-0",
+            "tokens": 2947,
+            "objective": 0.040144179975649355,
+            "teacher_kl": 0.3366929813060358,
+            "anchor_kl": 0.0006478847210893599
+          },
+          {
+            "request_id": "1045-0",
+            "tokens": 1155,
+            "objective": 0.04630542963698312,
+            "teacher_kl": 0.34600868018635045,
+            "anchor_kl": 0.0003137603206775835
+          },
+          {
+            "request_id": "1046-0",
+            "tokens": 464,
+            "objective": 0.07645717900504465,
+            "teacher_kl": 0.7094973973440306,
+            "anchor_kl": 0.0006377830364953834
+          },
+          {
+            "request_id": "1047-0",
+            "tokens": 844,
+            "objective": 0.06443759177517655,
+            "teacher_kl": 0.5903226485538933,
+            "anchor_kl": 0.0008593198876703546
+          },
+          {
+            "request_id": "1048-0",
+            "tokens": 251,
+            "objective": 0.07620875997303758,
+            "teacher_kl": 0.8821411992972151,
+            "anchor_kl": 0.0005262094016617642
+          },
+          {
+            "request_id": "1049-0",
+            "tokens": 231,
+            "objective": 0.1032470919752094,
+            "teacher_kl": 1.24351550012137,
+            "anchor_kl": 0.0009914089972151534
+          },
+          {
+            "request_id": "1050-0",
+            "tokens": 1216,
+            "objective": 0.05205818903878829,
+            "teacher_kl": 0.44607908475513836,
+            "anchor_kl": 0.0008670624568967068
+          },
+          {
+            "request_id": "1051-0",
+            "tokens": 1099,
+            "objective": 0.07171928149152275,
+            "teacher_kl": 0.6361906880941595,
+            "anchor_kl": 0.0008955197605184193
+          },
+          {
+            "request_id": "1052-0",
+            "tokens": 746,
+            "objective": 0.045186346076611345,
+            "teacher_kl": 0.4041008394632049,
+            "anchor_kl": 0.0006754974057995654
+          },
+          {
+            "request_id": "1053-0",
+            "tokens": 1160,
+            "objective": 0.04953415613373884,
+            "teacher_kl": 0.41531360832457975,
+            "anchor_kl": 0.0009100094806402775
+          },
+          {
+            "request_id": "1054-0",
+            "tokens": 1325,
+            "objective": 0.049704981191774036,
+            "teacher_kl": 0.3363007651788498,
+            "anchor_kl": 0.000401433447585004
+          },
+          {
+            "request_id": "1055-0",
+            "tokens": 547,
+            "objective": 0.06480726771374598,
+            "teacher_kl": 0.6956513117631395,
+            "anchor_kl": 0.0006736198299424677
+          },
+          {
+            "request_id": "1056-0",
+            "tokens": 1127,
+            "objective": 0.07602254331185111,
+            "teacher_kl": 0.6100985039424245,
+            "anchor_kl": 0.0006595584734400016
+          },
+          {
+            "request_id": "1057-0",
+            "tokens": 5508,
+            "objective": 0.03459824321660856,
+            "teacher_kl": 0.2652847879760627,
+            "anchor_kl": 0.0007434734867712464
+          },
+          {
+            "request_id": "1058-0",
+            "tokens": 328,
+            "objective": 0.07869118965873993,
+            "teacher_kl": 0.8325082022447976,
+            "anchor_kl": 0.0006775907766500643
+          },
+          {
+            "request_id": "1059-0",
+            "tokens": 2368,
+            "objective": 0.030580477287397465,
+            "teacher_kl": 0.31496618519158676,
+            "anchor_kl": 0.0005031342524649931
+          },
+          {
+            "request_id": "1060-0",
+            "tokens": 2954,
+            "objective": 0.04770298557494171,
+            "teacher_kl": 0.35048814955179597,
+            "anchor_kl": 0.0007536825975478942
+          },
+          {
+            "request_id": "1061-0",
+            "tokens": 37,
+            "objective": 0.10016744389341094,
+            "teacher_kl": 1.8574365501266878,
+            "anchor_kl": 0.0014035218790972117
+          },
+          {
+            "request_id": "1062-0",
+            "tokens": 163,
+            "objective": 0.060947798636437706,
+            "teacher_kl": 0.888965848712622,
+            "anchor_kl": 0.000522893543272739
+          },
+          {
+            "request_id": "1063-0",
+            "tokens": 856,
+            "objective": 0.06387750407863843,
+            "teacher_kl": 0.5763699707022334,
+            "anchor_kl": 0.0010130861412699988
+          },
+          {
+            "request_id": "1064-0",
+            "tokens": 1285,
+            "objective": 0.04615723970389354,
+            "teacher_kl": 0.3618925756727645,
+            "anchor_kl": 0.0005791333724997118
+          },
+          {
+            "request_id": "1065-0",
+            "tokens": 24,
+            "objective": 0.12746204921616786,
+            "teacher_kl": 2.2947864031690792,
+            "anchor_kl": 0.0006652054661249925
+          },
+          {
+            "request_id": "1066-0",
+            "tokens": 68,
+            "objective": 0.1721841042224651,
+            "teacher_kl": 2.348245727360336,
+            "anchor_kl": 0.0014130889332386728
+          },
+          {
+            "request_id": "1067-0",
+            "tokens": 437,
+            "objective": 0.07048204104111622,
+            "teacher_kl": 0.6416757426708691,
+            "anchor_kl": 0.0007103035677444055
+          },
+          {
+            "request_id": "1068-0",
+            "tokens": 1158,
+            "objective": 0.06233232454134131,
+            "teacher_kl": 0.5510394274966524,
+            "anchor_kl": 0.0006339018972280844
+          },
+          {
+            "request_id": "1069-0",
+            "tokens": 670,
+            "objective": 0.04045009078847432,
+            "teacher_kl": 0.398613155729471,
+            "anchor_kl": 0.0005259795544591754
+          },
+          {
+            "request_id": "1070-0",
+            "tokens": 323,
+            "objective": 0.043014789864824036,
+            "teacher_kl": 0.5777639745175481,
+            "anchor_kl": 0.0005025715190327182
+          },
+          {
+            "request_id": "1071-0",
+            "tokens": 7352,
+            "objective": 0.06429336246984424,
+            "teacher_kl": 0.49382618408432943,
+            "anchor_kl": 0.0010583758395950537
+          },
+          {
+            "request_id": "1072-0",
+            "tokens": 1564,
+            "objective": 0.04098959226578598,
+            "teacher_kl": 0.32430767952846806,
+            "anchor_kl": 0.0007240067834488315
+          },
+          {
+            "request_id": "1073-0",
+            "tokens": 835,
+            "objective": 0.059206308632659944,
+            "teacher_kl": 0.5447004733944139,
+            "anchor_kl": 0.0005698510970757624
+          },
+          {
+            "request_id": "1074-0",
+            "tokens": 8689,
+            "objective": 0.02765571270991122,
+            "teacher_kl": 0.22157583970400746,
+            "anchor_kl": 0.0006179098408755849
+          },
+          {
+            "request_id": "1075-0",
+            "tokens": 53,
+            "objective": 0.15146620414013323,
+            "teacher_kl": 1.4248788185189214,
+            "anchor_kl": 0.0014083422836778962
+          },
+          {
+            "request_id": "1076-0",
+            "tokens": 12,
+            "objective": 0.2677131424813221,
+            "teacher_kl": 4.662154257297516,
+            "anchor_kl": 0.0026670800968228527
+          },
+          {
+            "request_id": "1077-0",
+            "tokens": 1547,
+            "objective": 0.04025564417711847,
+            "teacher_kl": 0.3342588887040814,
+            "anchor_kl": 0.0003551479952122876
+          },
+          {
+            "request_id": "1078-0",
+            "tokens": 8,
+            "objective": 0.3948051467887126,
+            "teacher_kl": 6.899747982621193,
+            "anchor_kl": 0.001591751082742121
+          },
+          {
+            "request_id": "1079-0",
+            "tokens": 1423,
+            "objective": 0.015130111010879011,
+            "teacher_kl": 0.14543470824569082,
+            "anchor_kl": 7.772519566327599e-05
+          },
+          {
+            "request_id": "1080-0",
+            "tokens": 58,
+            "objective": 0.04354965920983573,
+            "teacher_kl": 0.9733752982865553,
+            "anchor_kl": 0.0008437104893904893
+          },
+          {
+            "request_id": "1081-0",
+            "tokens": 2256,
+            "objective": 0.06624917985746841,
+            "teacher_kl": 0.47259367126699847,
+            "anchor_kl": 0.00021767546924544016
+          },
+          {
+            "request_id": "1082-0",
+            "tokens": 160,
+            "objective": 0.1375045853531276,
+            "teacher_kl": 1.51667680242972,
+            "anchor_kl": 0.0011253577360722743
+          },
+          {
+            "request_id": "1083-0",
+            "tokens": 731,
+            "objective": 0.07087692149037372,
+            "teacher_kl": 0.6870849658570541,
+            "anchor_kl": 0.0004805676805569328
+          },
+          {
+            "request_id": "1084-0",
+            "tokens": 39,
+            "objective": 0.26853049339619106,
+            "teacher_kl": 2.7301531625577273,
+            "anchor_kl": 0.001698689849432319
+          },
+          {
+            "request_id": "1085-0",
+            "tokens": 874,
+            "objective": 0.05591698616684297,
+            "teacher_kl": 0.4271303374220823,
+            "anchor_kl": 0.00028877923506511523
+          },
+          {
+            "request_id": "1086-0",
+            "tokens": 443,
+            "objective": 0.07837711631604836,
+            "teacher_kl": 0.5705895297556467,
+            "anchor_kl": 0.001217434500714267
+          },
+          {
+            "request_id": "1087-0",
+            "tokens": 66,
+            "objective": 0.09944753694512518,
+            "teacher_kl": 1.2545544783951659,
+            "anchor_kl": 0.000998759146265608
+          },
+          {
+            "request_id": "1088-0",
+            "tokens": 507,
+            "objective": 0.09909732323330361,
+            "teacher_kl": 0.7923028414935545,
+            "anchor_kl": 0.0012889337910451384
+          },
+          {
+            "request_id": "1089-0",
+            "tokens": 46,
+            "objective": 0.13035020083011856,
+            "teacher_kl": 1.663529126216536,
+            "anchor_kl": 0.0018299367026053876
+          },
+          {
+            "request_id": "1090-0",
+            "tokens": 768,
+            "objective": 0.09801241906683957,
+            "teacher_kl": 0.752702150293711,
+            "anchor_kl": 0.0008232692970468568
+          },
+          {
+            "request_id": "1091-0",
+            "tokens": 516,
+            "objective": 0.06869936294459308,
+            "teacher_kl": 0.683229322337418,
+            "anchor_kl": 0.0008300522424934199
+          },
+          {
+            "request_id": "1092-0",
+            "tokens": 615,
+            "objective": 0.05657353464821909,
+            "teacher_kl": 0.5716868912861868,
+            "anchor_kl": 0.0008830993534031303
+          },
+          {
+            "request_id": "1093-0",
+            "tokens": 532,
+            "objective": 0.0795281771028642,
+            "teacher_kl": 0.693342259411812,
+            "anchor_kl": 0.0011757679276017449
+          },
+          {
+            "request_id": "1094-0",
+            "tokens": 745,
+            "objective": 0.10934063437471939,
+            "teacher_kl": 0.7994458459747533,
+            "anchor_kl": 0.0005026387349771807
+          },
+          {
+            "request_id": "1095-0",
+            "tokens": 2801,
+            "objective": 0.045469848012992926,
+            "teacher_kl": 0.44886779597006765,
+            "anchor_kl": 0.0007586334374173066
+          },
+          {
+            "request_id": "1096-0",
+            "tokens": 4294,
+            "objective": 0.028240754625259473,
+            "teacher_kl": 0.29245354838030646,
+            "anchor_kl": 0.0003631531264016434
+          },
+          {
+            "request_id": "1097-0",
+            "tokens": 510,
+            "objective": 0.07849191622487611,
+            "teacher_kl": 0.715315419347577,
+            "anchor_kl": 0.000747405699562209
+          },
+          {
+            "request_id": "1098-0",
+            "tokens": 76,
+            "objective": 0.07415987149446018,
+            "teacher_kl": 1.1129212574267418,
+            "anchor_kl": 0.000727294623771968
+          },
+          {
+            "request_id": "1099-0",
+            "tokens": 1050,
+            "objective": 0.03737584449001599,
+            "teacher_kl": 0.3340598717020839,
+            "anchor_kl": 0.00046690774038800277
+          },
+          {
+            "request_id": "1100-0",
+            "tokens": 690,
+            "objective": 0.05953215543284249,
+            "teacher_kl": 0.5834804100794313,
+            "anchor_kl": 0.0011742056553364294
+          },
+          {
+            "request_id": "1101-0",
+            "tokens": 510,
+            "objective": 0.10302537896385691,
+            "teacher_kl": 0.7415368361434943,
+            "anchor_kl": 0.0003643164520753477
+          },
+          {
+            "request_id": "1102-0",
+            "tokens": 1782,
+            "objective": 0.0725819586431226,
+            "teacher_kl": 0.3589605514214719,
+            "anchor_kl": 0.0003619191204102994
+          },
+          {
+            "request_id": "1103-0",
+            "tokens": 5931,
+            "objective": 0.03736294712788412,
+            "teacher_kl": 0.2830152598567174,
+            "anchor_kl": 0.0006916170961474636
+          },
+          {
+            "request_id": "1104-0",
+            "tokens": 709,
+            "objective": 0.04911130808741807,
+            "teacher_kl": 0.4627300503485247,
+            "anchor_kl": 0.0008567471053643158
+          },
+          {
+            "request_id": "1105-0",
+            "tokens": 1614,
+            "objective": 0.054622235781637045,
+            "teacher_kl": 0.48388561263976776,
+            "anchor_kl": 0.0014255677153818436
+          },
+          {
+            "request_id": "1106-0",
+            "tokens": 32,
+            "objective": 0.12924587841553148,
+            "teacher_kl": 1.6361640968825668,
+            "anchor_kl": 0.0013188271965418608
+          },
+          {
+            "request_id": "1107-0",
+            "tokens": 8106,
+            "objective": 0.008832723883377464,
+            "teacher_kl": 0.07400455933895672,
+            "anchor_kl": 0.00011719903447765521
+          },
+          {
+            "request_id": "1108-0",
+            "tokens": 171,
+            "objective": 0.11454877222934168,
+            "teacher_kl": 1.1663501917527999,
+            "anchor_kl": 0.0013206558764476968
+          },
+          {
+            "request_id": "1109-0",
+            "tokens": 42,
+            "objective": 0.16241579874379872,
+            "teacher_kl": 2.425600938676369,
+            "anchor_kl": 0.0016198691364912694
+          },
+          {
+            "request_id": "1110-0",
+            "tokens": 604,
+            "objective": 0.07373134151922588,
+            "teacher_kl": 0.7461215641656108,
+            "anchor_kl": 0.0005946774051110738
+          },
+          {
+            "request_id": "1111-0",
+            "tokens": 473,
+            "objective": 0.06378541772196407,
+            "teacher_kl": 0.6465970503775345,
+            "anchor_kl": 0.0005073929301896953
+          },
+          {
+            "request_id": "1112-0",
+            "tokens": 634,
+            "objective": 0.03954956789804869,
+            "teacher_kl": 0.4107031478817251,
+            "anchor_kl": 0.0005005266667125746
+          },
+          {
+            "request_id": "1113-0",
+            "tokens": 5679,
+            "objective": 0.024947622374171436,
+            "teacher_kl": 0.20295076730799153,
+            "anchor_kl": 0.0006992193978096119
+          },
+          {
+            "request_id": "1114-0",
+            "tokens": 539,
+            "objective": 0.0727015911015544,
+            "teacher_kl": 0.5789487385574587,
+            "anchor_kl": 0.0004994425495417246
+          },
+          {
+            "request_id": "1115-0",
+            "tokens": 1640,
+            "objective": 0.05156179430486913,
+            "teacher_kl": 0.36843819085610796,
+            "anchor_kl": 0.0009723625519877561
+          },
+          {
+            "request_id": "1116-0",
+            "tokens": 3350,
+            "objective": 0.027354183993575542,
+            "teacher_kl": 0.23745779230631192,
+            "anchor_kl": 0.0009236452143011914
+          },
+          {
+            "request_id": "1117-0",
+            "tokens": 123,
+            "objective": 0.1454594312327402,
+            "teacher_kl": 1.6658780958514843,
+            "anchor_kl": 0.001180590956073132
+          },
+          {
+            "request_id": "1118-0",
+            "tokens": 626,
+            "objective": 0.05420021275464707,
+            "teacher_kl": 0.4601806807825464,
+            "anchor_kl": 0.0008105174436134182
+          },
+          {
+            "request_id": "1119-0",
+            "tokens": 1628,
+            "objective": 0.03291835396990062,
+            "teacher_kl": 0.3460767030629592,
+            "anchor_kl": 0.000864599375223671
+          },
+          {
+            "request_id": "1120-0",
+            "tokens": 1619,
+            "objective": 0.03969244683470732,
+            "teacher_kl": 0.371934751396874,
+            "anchor_kl": 0.0007056904095311367
+          },
+          {
+            "request_id": "1121-0",
+            "tokens": 349,
+            "objective": 0.09311565327385242,
+            "teacher_kl": 0.8592527398918732,
+            "anchor_kl": 0.0010423002116444037
+          },
+          {
+            "request_id": "1122-0",
+            "tokens": 529,
+            "objective": 0.059092253314464854,
+            "teacher_kl": 0.5079402611941477,
+            "anchor_kl": 0.0005653456214140851
+          },
+          {
+            "request_id": "1123-0",
+            "tokens": 1615,
+            "objective": 0.08152076241547994,
+            "teacher_kl": 0.6148074182950364,
+            "anchor_kl": 0.0005370309100047467
+          },
+          {
+            "request_id": "1124-0",
+            "tokens": 814,
+            "objective": 0.08256795153452103,
+            "teacher_kl": 0.8171045824098294,
+            "anchor_kl": 0.0008872857255953511
+          },
+          {
+            "request_id": "1125-0",
+            "tokens": 900,
+            "objective": 0.05240260558005863,
+            "teacher_kl": 0.3674496497099071,
+            "anchor_kl": 0.0003122111102130641
+          },
+          {
+            "request_id": "1126-0",
+            "tokens": 721,
+            "objective": 0.08009258679327848,
+            "teacher_kl": 0.528290972060868,
+            "anchor_kl": 0.0007022735099441495
+          },
+          {
+            "request_id": "1127-0",
+            "tokens": 3325,
+            "objective": 0.05639109917317951,
+            "teacher_kl": 0.514435331027244,
+            "anchor_kl": 0.0010446977425176552
+          },
+          {
+            "request_id": "1128-0",
+            "tokens": 89,
+            "objective": 0.09726079610118177,
+            "teacher_kl": 1.355783544208729,
+            "anchor_kl": 0.001106067758331172
+          },
+          {
+            "request_id": "1129-0",
+            "tokens": 551,
+            "objective": 0.0733088609265715,
+            "teacher_kl": 0.7418456774223816,
+            "anchor_kl": 0.0008027476726947453
+          },
+          {
+            "request_id": "1130-0",
+            "tokens": 307,
+            "objective": 0.053118997915614155,
+            "teacher_kl": 0.6820607754599617,
+            "anchor_kl": 0.0006439958686201508
+          },
+          {
+            "request_id": "1131-0",
+            "tokens": 7,
+            "objective": 0.4274262517823705,
+            "teacher_kl": 8.275572197777885,
+            "anchor_kl": 0.002953873747693641
+          },
+          {
+            "request_id": "1132-0",
+            "tokens": 5250,
+            "objective": 0.003516521278555485,
+            "teacher_kl": 0.047484576505608854,
+            "anchor_kl": 5.1206591936439356e-05
+          },
+          {
+            "request_id": "1133-0",
+            "tokens": 412,
+            "objective": 0.033852636798647466,
+            "teacher_kl": 0.4566923153674642,
+            "anchor_kl": 0.0005378156840067862
+          },
+          {
+            "request_id": "1134-0",
+            "tokens": 839,
+            "objective": 0.04491458798976373,
+            "teacher_kl": 0.33823261959953227,
+            "anchor_kl": 0.0006060280723524488
+          },
+          {
+            "request_id": "1135-0",
+            "tokens": 1354,
+            "objective": 0.04024040259516464,
+            "teacher_kl": 0.37456990249487304,
+            "anchor_kl": 0.000818293394375365
+          },
+          {
+            "request_id": "1136-0",
+            "tokens": 383,
+            "objective": 0.07167755430989423,
+            "teacher_kl": 0.650813785914967,
+            "anchor_kl": 0.0010120406736231768
+          },
+          {
+            "request_id": "1137-0",
+            "tokens": 29,
+            "objective": 0.1005620398327351,
+            "teacher_kl": 2.0807257940800024,
+            "anchor_kl": 0.0007880460468092271
+          },
+          {
+            "request_id": "1138-0",
+            "tokens": 825,
+            "objective": 0.09006483599905155,
+            "teacher_kl": 0.7710707909664118,
+            "anchor_kl": 0.0010632833694643985
+          },
+          {
+            "request_id": "1139-0",
+            "tokens": 708,
+            "objective": 0.09230388446478248,
+            "teacher_kl": 0.6084514779662882,
+            "anchor_kl": 0.00069880503542109
+          },
+          {
+            "request_id": "1140-0",
+            "tokens": 94,
+            "objective": 0.08578955477729479,
+            "teacher_kl": 1.0206537082038345,
+            "anchor_kl": 0.00036759330665285853
+          },
+          {
+            "request_id": "1141-0",
+            "tokens": 769,
+            "objective": 0.08719310476639952,
+            "teacher_kl": 0.6260639118104603,
+            "anchor_kl": 0.001047818927808413
+          },
+          {
+            "request_id": "1142-0",
+            "tokens": 652,
+            "objective": 0.07357025090641793,
+            "teacher_kl": 0.648800901359788,
+            "anchor_kl": 0.0011577909316516479
+          },
+          {
+            "request_id": "1143-0",
+            "tokens": 466,
+            "objective": 0.13586891556234068,
+            "teacher_kl": 0.9804593581469477,
+            "anchor_kl": 0.0012042710216158964
+          },
+          {
+            "request_id": "1144-0",
+            "tokens": 152,
+            "objective": 0.13649478198018236,
+            "teacher_kl": 1.549294455899814,
+            "anchor_kl": 0.001519992288375212
+          },
+          {
+            "request_id": "1145-0",
+            "tokens": 686,
+            "objective": 0.07640894334393454,
+            "teacher_kl": 0.6191877001076244,
+            "anchor_kl": 0.0006568545531278699
+          },
+          {
+            "request_id": "1146-0",
+            "tokens": 42,
+            "objective": 0.10379869871972655,
+            "teacher_kl": 1.6920242761926991,
+            "anchor_kl": 0.002040566106470145
+          },
+          {
+            "request_id": "1147-0",
+            "tokens": 1110,
+            "objective": 0.041242164304274145,
+            "teacher_kl": 0.41628442130909493,
+            "anchor_kl": 0.0007246140709449053
+          },
+          {
+            "request_id": "1148-0",
+            "tokens": 498,
+            "objective": 0.0865332721238168,
+            "teacher_kl": 0.7996321969041316,
+            "anchor_kl": 0.0010636485124412148
+          },
+          {
+            "request_id": "1149-0",
+            "tokens": 275,
+            "objective": 0.06022466892214156,
+            "teacher_kl": 0.6169373690005688,
+            "anchor_kl": 0.0010486244543070908
+          },
+          {
+            "request_id": "1150-0",
+            "tokens": 210,
+            "objective": 0.13788311547657595,
+            "teacher_kl": 1.3827154537529818,
+            "anchor_kl": 0.0011741316681179472
+          },
+          {
+            "request_id": "1151-0",
+            "tokens": 706,
+            "objective": 0.0605530945742647,
+            "teacher_kl": 0.5453508826398901,
+            "anchor_kl": 0.0006623339666911844
+          }
+        ]
+      },
+      "source_directory": "runs/topd-data-kappa-20261101/training/fresh1024x1-k1-s42-block1"
+    },
+    {
+      "label": "budget-b256-u4-k1-s42",
+      "batch": 256,
+      "updates": 4,
+      "response_visits": 1024,
+      "unique_trajectories": 1024,
+      "token_visits": 1287081,
+      "complete": {
+        "status": "complete",
+        "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/budget-b256-u4-k1-s42",
+        "updates": 4,
+        "seconds": 325.8952009677887,
+        "heldout_teacher_kl_before": 0.4097565091737562,
+        "heldout_teacher_kl_after": 0.40664799326213674
+      },
+      "heldout_after": {
+        "objective": 0.0488251228085854,
+        "teacher_kl": 0.40664799326213674,
+        "anchor_kl": 0.00018720542712534417,
+        "tokens": 161148,
+        "responses": [
+          {
+            "request_id": "1024-0",
+            "tokens": 183,
+            "objective": 0.06470710065890611,
+            "teacher_kl": 0.8405164774985032,
+            "anchor_kl": 0.00012988419564050893
+          },
+          {
+            "request_id": "1025-0",
+            "tokens": 1113,
+            "objective": 0.06463437651707248,
+            "teacher_kl": 0.4412750498980982,
+            "anchor_kl": 0.00022482102518068346
+          },
+          {
+            "request_id": "1026-0",
+            "tokens": 1048,
+            "objective": 0.055980387292917454,
+            "teacher_kl": 0.4997705268556239,
+            "anchor_kl": 0.00030227543694006585
+          },
+          {
+            "request_id": "1027-0",
+            "tokens": 948,
+            "objective": 0.08874952198831951,
+            "teacher_kl": 0.6853568415787883,
+            "anchor_kl": 0.00014890830630728198
+          },
+          {
+            "request_id": "1028-0",
+            "tokens": 324,
+            "objective": 0.04335439637870484,
+            "teacher_kl": 0.4636893738449241,
+            "anchor_kl": 0.00020160598764809134
+          },
+          {
+            "request_id": "1029-0",
+            "tokens": 137,
+            "objective": 0.10798967082984454,
+            "teacher_kl": 1.1582951611332786,
+            "anchor_kl": 0.00030541729606201637
+          },
+          {
+            "request_id": "1030-0",
+            "tokens": 13702,
+            "objective": 0.036503103235453443,
+            "teacher_kl": 0.33492736276530133,
+            "anchor_kl": 0.0003115441089715549
+          },
+          {
+            "request_id": "1031-0",
+            "tokens": 2685,
+            "objective": 0.05414058531936334,
+            "teacher_kl": 0.4879298366625096,
+            "anchor_kl": 0.00032036843630377866
+          },
+          {
+            "request_id": "1032-0",
+            "tokens": 940,
+            "objective": 0.05041450804813679,
+            "teacher_kl": 0.46050599211086213,
+            "anchor_kl": 0.0001243716957915496
+          },
+          {
+            "request_id": "1033-0",
+            "tokens": 1320,
+            "objective": 0.06649368793903813,
+            "teacher_kl": 0.510072451789576,
+            "anchor_kl": 0.00025798891722961806
+          },
+          {
+            "request_id": "1034-0",
+            "tokens": 361,
+            "objective": 0.11302872513409515,
+            "teacher_kl": 1.1652355192127892,
+            "anchor_kl": 0.00023475188050147333
+          },
+          {
+            "request_id": "1035-0",
+            "tokens": 3171,
+            "objective": 0.02650873619028257,
+            "teacher_kl": 0.2709470809353809,
+            "anchor_kl": 0.00021537500297731473
+          },
+          {
+            "request_id": "1036-0",
+            "tokens": 666,
+            "objective": 0.024957133155021915,
+            "teacher_kl": 0.3550598683047553,
+            "anchor_kl": 0.00015170540440502046
+          },
+          {
+            "request_id": "1037-0",
+            "tokens": 19,
+            "objective": 0.14028700757678866,
+            "teacher_kl": 2.5204446582295197,
+            "anchor_kl": 0.0006377353499888876
+          },
+          {
+            "request_id": "1038-0",
+            "tokens": 822,
+            "objective": 0.04758397738290016,
+            "teacher_kl": 0.3399384245379559,
+            "anchor_kl": 0.00011421056102552547
+          },
+          {
+            "request_id": "1039-0",
+            "tokens": 44,
+            "objective": 0.20342584187185314,
+            "teacher_kl": 3.6894602974591013,
+            "anchor_kl": 0.00018573619620519045
+          },
+          {
+            "request_id": "1040-0",
+            "tokens": 947,
+            "objective": 0.08752907045307115,
+            "teacher_kl": 0.6031843605898706,
+            "anchor_kl": 9.362036908491603e-05
+          },
+          {
+            "request_id": "1041-0",
+            "tokens": 2424,
+            "objective": 0.04510161564253506,
+            "teacher_kl": 0.3098585152483068,
+            "anchor_kl": 7.291809448328785e-05
+          },
+          {
+            "request_id": "1042-0",
+            "tokens": 656,
+            "objective": 0.055767149144239546,
+            "teacher_kl": 0.4689038333532696,
+            "anchor_kl": 0.00018119318404615523
+          },
+          {
+            "request_id": "1043-0",
+            "tokens": 608,
+            "objective": 0.07425980696511733,
+            "teacher_kl": 0.6757063588386365,
+            "anchor_kl": 0.00026869877764741136
+          },
+          {
+            "request_id": "1044-0",
+            "tokens": 2947,
+            "objective": 0.043303431412365895,
+            "teacher_kl": 0.34545917801409054,
+            "anchor_kl": 0.00017919398458188015
+          },
+          {
+            "request_id": "1045-0",
+            "tokens": 1155,
+            "objective": 0.04948949547247549,
+            "teacher_kl": 0.35054813539242613,
+            "anchor_kl": 6.712040604013186e-05
+          },
+          {
+            "request_id": "1046-0",
+            "tokens": 464,
+            "objective": 0.07962550144725168,
+            "teacher_kl": 0.7189476559475736,
+            "anchor_kl": 0.0001203906000963568
+          },
+          {
+            "request_id": "1047-0",
+            "tokens": 844,
+            "objective": 0.06721336880915416,
+            "teacher_kl": 0.6015637380770413,
+            "anchor_kl": 0.000152267549159678
+          },
+          {
+            "request_id": "1048-0",
+            "tokens": 251,
+            "objective": 0.08067395705563242,
+            "teacher_kl": 0.895710054017878,
+            "anchor_kl": 0.00020809153701046475
+          },
+          {
+            "request_id": "1049-0",
+            "tokens": 231,
+            "objective": 0.10690622279984681,
+            "teacher_kl": 1.260350489548586,
+            "anchor_kl": 0.0004174899227973903
+          },
+          {
+            "request_id": "1050-0",
+            "tokens": 1216,
+            "objective": 0.054557242612351974,
+            "teacher_kl": 0.45525401558882694,
+            "anchor_kl": 0.0001878521583509487
+          },
+          {
+            "request_id": "1051-0",
+            "tokens": 1099,
+            "objective": 0.0794720165013308,
+            "teacher_kl": 0.6536701810990303,
+            "anchor_kl": 0.00015538221154112627
+          },
+          {
+            "request_id": "1052-0",
+            "tokens": 746,
+            "objective": 0.04981036226230394,
+            "teacher_kl": 0.4110329256552162,
+            "anchor_kl": 0.00012641152192830704
+          },
+          {
+            "request_id": "1053-0",
+            "tokens": 1160,
+            "objective": 0.05283468558268161,
+            "teacher_kl": 0.4267044428061283,
+            "anchor_kl": 0.00023764580948644888
+          },
+          {
+            "request_id": "1054-0",
+            "tokens": 1325,
+            "objective": 0.0525949199412562,
+            "teacher_kl": 0.3421614202998052,
+            "anchor_kl": 9.604103838277712e-05
+          },
+          {
+            "request_id": "1055-0",
+            "tokens": 547,
+            "objective": 0.06983208783153684,
+            "teacher_kl": 0.7090758762802127,
+            "anchor_kl": 0.00029241753291763824
+          },
+          {
+            "request_id": "1056-0",
+            "tokens": 1127,
+            "objective": 0.07979263259281762,
+            "teacher_kl": 0.6248284851705431,
+            "anchor_kl": 0.00021713200805691089
+          },
+          {
+            "request_id": "1057-0",
+            "tokens": 5508,
+            "objective": 0.036098179103695345,
+            "teacher_kl": 0.26914121550799613,
+            "anchor_kl": 0.0002247240360501283
+          },
+          {
+            "request_id": "1058-0",
+            "tokens": 328,
+            "objective": 0.08320590704260901,
+            "teacher_kl": 0.8451093610254292,
+            "anchor_kl": 0.00023448509727570349
+          },
+          {
+            "request_id": "1059-0",
+            "tokens": 2368,
+            "objective": 0.033222959619574215,
+            "teacher_kl": 0.3225773903629144,
+            "anchor_kl": 0.00017160533483056377
+          },
+          {
+            "request_id": "1060-0",
+            "tokens": 2954,
+            "objective": 0.05194802989939439,
+            "teacher_kl": 0.3597864508484165,
+            "anchor_kl": 0.00015156126691319335
+          },
+          {
+            "request_id": "1061-0",
+            "tokens": 37,
+            "objective": 0.0991014250885692,
+            "teacher_kl": 1.8869048206488024,
+            "anchor_kl": 0.0004071173047663792
+          },
+          {
+            "request_id": "1062-0",
+            "tokens": 163,
+            "objective": 0.06208089497248905,
+            "teacher_kl": 0.9028775007228305,
+            "anchor_kl": 0.00012326979892508097
+          },
+          {
+            "request_id": "1063-0",
+            "tokens": 856,
+            "objective": 0.06996125721751097,
+            "teacher_kl": 0.5920489033907799,
+            "anchor_kl": 0.00020393797209397835
+          },
+          {
+            "request_id": "1064-0",
+            "tokens": 1285,
+            "objective": 0.050553843937087124,
+            "teacher_kl": 0.3705124597588635,
+            "anchor_kl": 0.00010735645474228804
+          },
+          {
+            "request_id": "1065-0",
+            "tokens": 24,
+            "objective": 0.12734660990342186,
+            "teacher_kl": 2.257217598710364,
+            "anchor_kl": 0.0007245246821897903
+          },
+          {
+            "request_id": "1066-0",
+            "tokens": 68,
+            "objective": 0.18005251865104638,
+            "teacher_kl": 2.39697142920533,
+            "anchor_kl": 0.00019823732104038688
+          },
+          {
+            "request_id": "1067-0",
+            "tokens": 437,
+            "objective": 0.07376310766913757,
+            "teacher_kl": 0.6486755546805563,
+            "anchor_kl": 0.0001889112867195085
+          },
+          {
+            "request_id": "1068-0",
+            "tokens": 1158,
+            "objective": 0.06717522950153516,
+            "teacher_kl": 0.561330366760773,
+            "anchor_kl": 0.00024548876277332923
+          },
+          {
+            "request_id": "1069-0",
+            "tokens": 670,
+            "objective": 0.04297318667632702,
+            "teacher_kl": 0.4060732614000088,
+            "anchor_kl": 0.00016999128201601238
+          },
+          {
+            "request_id": "1070-0",
+            "tokens": 323,
+            "objective": 0.045261973506228494,
+            "teacher_kl": 0.5842718357207559,
+            "anchor_kl": 0.00010459319436749175
+          },
+          {
+            "request_id": "1071-0",
+            "tokens": 7352,
+            "objective": 0.06694683468633213,
+            "teacher_kl": 0.5063055195064838,
+            "anchor_kl": 0.00029964214637622416
+          },
+          {
+            "request_id": "1072-0",
+            "tokens": 1564,
+            "objective": 0.043120847622058575,
+            "teacher_kl": 0.3307715900735624,
+            "anchor_kl": 0.00016943838905835134
+          },
+          {
+            "request_id": "1073-0",
+            "tokens": 835,
+            "objective": 0.0644745060912661,
+            "teacher_kl": 0.5553009671723781,
+            "anchor_kl": 0.00017648084425266945
+          },
+          {
+            "request_id": "1074-0",
+            "tokens": 8689,
+            "objective": 0.029412879047916816,
+            "teacher_kl": 0.22560435882111032,
+            "anchor_kl": 0.0001585824353747863
+          },
+          {
+            "request_id": "1075-0",
+            "tokens": 53,
+            "objective": 0.15322970697525307,
+            "teacher_kl": 1.4324587579939585,
+            "anchor_kl": 0.0003984527633987592
+          },
+          {
+            "request_id": "1076-0",
+            "tokens": 12,
+            "objective": 0.27812762341151637,
+            "teacher_kl": 4.626053464909394,
+            "anchor_kl": 0.001611751855913705
+          },
+          {
+            "request_id": "1077-0",
+            "tokens": 1547,
+            "objective": 0.04202046043423479,
+            "teacher_kl": 0.3369069017413546,
+            "anchor_kl": 8.734236681855008e-05
+          },
+          {
+            "request_id": "1078-0",
+            "tokens": 8,
+            "objective": 0.40333277895115316,
+            "teacher_kl": 6.897138096392155,
+            "anchor_kl": 0.000847205075842794
+          },
+          {
+            "request_id": "1079-0",
+            "tokens": 1423,
+            "objective": 0.015346459297625578,
+            "teacher_kl": 0.1465177213678866,
+            "anchor_kl": 4.7006601739133866e-05
+          },
+          {
+            "request_id": "1080-0",
+            "tokens": 58,
+            "objective": 0.047941861444565186,
+            "teacher_kl": 0.9926132200875898,
+            "anchor_kl": 0.00020915048492606376
+          },
+          {
+            "request_id": "1081-0",
+            "tokens": 2256,
+            "objective": 0.06872077946264765,
+            "teacher_kl": 0.47892299383365466,
+            "anchor_kl": 5.036599751333361e-05
+          },
+          {
+            "request_id": "1082-0",
+            "tokens": 160,
+            "objective": 0.1421328771083381,
+            "teacher_kl": 1.5448473460368404,
+            "anchor_kl": 0.0003516057933076411
+          },
+          {
+            "request_id": "1083-0",
+            "tokens": 731,
+            "objective": 0.07388961692884301,
+            "teacher_kl": 0.6960816590933565,
+            "anchor_kl": 0.00012042762496918403
+          },
+          {
+            "request_id": "1084-0",
+            "tokens": 39,
+            "objective": 0.2769547614615219,
+            "teacher_kl": 2.762192346633245,
+            "anchor_kl": 0.0008497502514075724
+          },
+          {
+            "request_id": "1085-0",
+            "tokens": 874,
+            "objective": 0.05872354163696514,
+            "teacher_kl": 0.4324088960319391,
+            "anchor_kl": 7.401687535753332e-05
+          },
+          {
+            "request_id": "1086-0",
+            "tokens": 443,
+            "objective": 0.08282261347486389,
+            "teacher_kl": 0.5805631274308164,
+            "anchor_kl": 0.0001674177146233095
+          },
+          {
+            "request_id": "1087-0",
+            "tokens": 66,
+            "objective": 0.10799439222892308,
+            "teacher_kl": 1.2793736896957413,
+            "anchor_kl": 0.00025885950408750927
+          },
+          {
+            "request_id": "1088-0",
+            "tokens": 507,
+            "objective": 0.10327313212382583,
+            "teacher_kl": 0.8043610464226756,
+            "anchor_kl": 0.0002544817798167557
+          },
+          {
+            "request_id": "1089-0",
+            "tokens": 46,
+            "objective": 0.14254033444044384,
+            "teacher_kl": 1.6913235637804735,
+            "anchor_kl": 0.0008979380969401024
+          },
+          {
+            "request_id": "1090-0",
+            "tokens": 768,
+            "objective": 0.10497667074365173,
+            "teacher_kl": 0.7678410568072594,
+            "anchor_kl": 0.00018115495862691677
+          },
+          {
+            "request_id": "1091-0",
+            "tokens": 516,
+            "objective": 0.07560108854044643,
+            "teacher_kl": 0.6960725775992765,
+            "anchor_kl": 0.0001455190077819926
+          },
+          {
+            "request_id": "1092-0",
+            "tokens": 615,
+            "objective": 0.05885400449212487,
+            "teacher_kl": 0.5867090915285478,
+            "anchor_kl": 0.0001813382741634315
+          },
+          {
+            "request_id": "1093-0",
+            "tokens": 532,
+            "objective": 0.08501835229685825,
+            "teacher_kl": 0.7047780400763063,
+            "anchor_kl": 0.00013740859109450887
+          },
+          {
+            "request_id": "1094-0",
+            "tokens": 745,
+            "objective": 0.1150098510856598,
+            "teacher_kl": 0.8127415414772244,
+            "anchor_kl": 0.00012162137119624158
+          },
+          {
+            "request_id": "1095-0",
+            "tokens": 2801,
+            "objective": 0.047754478218781087,
+            "teacher_kl": 0.45803762856245306,
+            "anchor_kl": 0.0002515145632344165
+          },
+          {
+            "request_id": "1096-0",
+            "tokens": 4294,
+            "objective": 0.029804429833037948,
+            "teacher_kl": 0.29711904329825956,
+            "anchor_kl": 0.0001797776496741894
+          },
+          {
+            "request_id": "1097-0",
+            "tokens": 510,
+            "objective": 0.0834425901287232,
+            "teacher_kl": 0.7227072258266652,
+            "anchor_kl": 0.0001686058563595988
+          },
+          {
+            "request_id": "1098-0",
+            "tokens": 76,
+            "objective": 0.07916450149315624,
+            "teacher_kl": 1.121260014874248,
+            "anchor_kl": 0.000252113147536791
+          },
+          {
+            "request_id": "1099-0",
+            "tokens": 1050,
+            "objective": 0.03969375105782176,
+            "teacher_kl": 0.3397573143407343,
+            "anchor_kl": 0.00011084020241081211
+          },
+          {
+            "request_id": "1100-0",
+            "tokens": 690,
+            "objective": 0.06218179114446304,
+            "teacher_kl": 0.5971070386016357,
+            "anchor_kl": 0.0003840411901069418
+          },
+          {
+            "request_id": "1101-0",
+            "tokens": 510,
+            "objective": 0.10749569406734354,
+            "teacher_kl": 0.752463548185413,
+            "anchor_kl": 0.00011423371189453894
+          },
+          {
+            "request_id": "1102-0",
+            "tokens": 1782,
+            "objective": 0.07621893597384194,
+            "teacher_kl": 0.36575455009285956,
+            "anchor_kl": 7.643581601505235e-05
+          },
+          {
+            "request_id": "1103-0",
+            "tokens": 5931,
+            "objective": 0.03977918279879767,
+            "teacher_kl": 0.28817123749946066,
+            "anchor_kl": 0.00017990229620026214
+          },
+          {
+            "request_id": "1104-0",
+            "tokens": 709,
+            "objective": 0.053142993871441606,
+            "teacher_kl": 0.4714881214698968,
+            "anchor_kl": 0.0001607687142047186
+          },
+          {
+            "request_id": "1105-0",
+            "tokens": 1614,
+            "objective": 0.05809763492154834,
+            "teacher_kl": 0.4989388855386399,
+            "anchor_kl": 0.00039227171736844104
+          },
+          {
+            "request_id": "1106-0",
+            "tokens": 32,
+            "objective": 0.13507767140254145,
+            "teacher_kl": 1.6537137310951948,
+            "anchor_kl": 0.0004076211464507651
+          },
+          {
+            "request_id": "1107-0",
+            "tokens": 8106,
+            "objective": 0.00954726409529243,
+            "teacher_kl": 0.07546000557469798,
+            "anchor_kl": 2.7600826965306925e-05
+          },
+          {
+            "request_id": "1108-0",
+            "tokens": 171,
+            "objective": 0.12240829096202667,
+            "teacher_kl": 1.1935445685441495,
+            "anchor_kl": 0.0002610856783365183
+          },
+          {
+            "request_id": "1109-0",
+            "tokens": 42,
+            "objective": 0.17082124690724804,
+            "teacher_kl": 2.4509070057067133,
+            "anchor_kl": 0.0007822662818874786
+          },
+          {
+            "request_id": "1110-0",
+            "tokens": 604,
+            "objective": 0.07744196308455917,
+            "teacher_kl": 0.7567057865310995,
+            "anchor_kl": 0.00010380473067482782
+          },
+          {
+            "request_id": "1111-0",
+            "tokens": 473,
+            "objective": 0.06803756376682481,
+            "teacher_kl": 0.6612635923777318,
+            "anchor_kl": 0.00013982569352649597
+          },
+          {
+            "request_id": "1112-0",
+            "tokens": 634,
+            "objective": 0.042157620313994414,
+            "teacher_kl": 0.4134719547190597,
+            "anchor_kl": 9.850694904603213e-05
+          },
+          {
+            "request_id": "1113-0",
+            "tokens": 5679,
+            "objective": 0.026283770646511457,
+            "teacher_kl": 0.20744527862902368,
+            "anchor_kl": 0.0002050914017542667
+          },
+          {
+            "request_id": "1114-0",
+            "tokens": 539,
+            "objective": 0.07747188698261877,
+            "teacher_kl": 0.5868426936596762,
+            "anchor_kl": 9.819249080775811e-05
+          },
+          {
+            "request_id": "1115-0",
+            "tokens": 1640,
+            "objective": 0.0539453708090325,
+            "teacher_kl": 0.37871329048505464,
+            "anchor_kl": 0.00015863940971092146
+          },
+          {
+            "request_id": "1116-0",
+            "tokens": 3350,
+            "objective": 0.027952490395509712,
+            "teacher_kl": 0.2445894023534536,
+            "anchor_kl": 0.00020964797128995307
+          },
+          {
+            "request_id": "1117-0",
+            "tokens": 123,
+            "objective": 0.15131034106409386,
+            "teacher_kl": 1.689198399385214,
+            "anchor_kl": 0.0004973583176387258
+          },
+          {
+            "request_id": "1118-0",
+            "tokens": 626,
+            "objective": 0.05725322109621523,
+            "teacher_kl": 0.46836665821744494,
+            "anchor_kl": 0.0001637590021066841
+          },
+          {
+            "request_id": "1119-0",
+            "tokens": 1628,
+            "objective": 0.03542073516655063,
+            "teacher_kl": 0.35661155946968004,
+            "anchor_kl": 0.00024024369108800275
+          },
+          {
+            "request_id": "1120-0",
+            "tokens": 1619,
+            "objective": 0.04250814034191808,
+            "teacher_kl": 0.3819375435382395,
+            "anchor_kl": 0.00020984777565711868
+          },
+          {
+            "request_id": "1121-0",
+            "tokens": 349,
+            "objective": 0.09874423750133872,
+            "teacher_kl": 0.8779239263869208,
+            "anchor_kl": 0.0003075050277425997
+          },
+          {
+            "request_id": "1122-0",
+            "tokens": 529,
+            "objective": 0.06250281047149629,
+            "teacher_kl": 0.5125805168656621,
+            "anchor_kl": 0.00010004215664505582
+          },
+          {
+            "request_id": "1123-0",
+            "tokens": 1615,
+            "objective": 0.08715563751517198,
+            "teacher_kl": 0.6272089791889828,
+            "anchor_kl": 0.0001855140479054647
+          },
+          {
+            "request_id": "1124-0",
+            "tokens": 814,
+            "objective": 0.08541095648491993,
+            "teacher_kl": 0.8277396044620043,
+            "anchor_kl": 0.00017243404594896881
+          },
+          {
+            "request_id": "1125-0",
+            "tokens": 900,
+            "objective": 0.055055621370116846,
+            "teacher_kl": 0.3717869659175693,
+            "anchor_kl": 7.917426706103173e-05
+          },
+          {
+            "request_id": "1126-0",
+            "tokens": 721,
+            "objective": 0.0864525781607717,
+            "teacher_kl": 0.5376225151345936,
+            "anchor_kl": 0.00010669432495167007
+          },
+          {
+            "request_id": "1127-0",
+            "tokens": 3325,
+            "objective": 0.06024284273807631,
+            "teacher_kl": 0.5281424461385494,
+            "anchor_kl": 0.0002817517559545409
+          },
+          {
+            "request_id": "1128-0",
+            "tokens": 89,
+            "objective": 0.10062316048522794,
+            "teacher_kl": 1.3679280403394545,
+            "anchor_kl": 0.00037691230072902797
+          },
+          {
+            "request_id": "1129-0",
+            "tokens": 551,
+            "objective": 0.07641337667305578,
+            "teacher_kl": 0.7486402141350157,
+            "anchor_kl": 0.0001604447683945654
+          },
+          {
+            "request_id": "1130-0",
+            "tokens": 307,
+            "objective": 0.05586365921732276,
+            "teacher_kl": 0.694603984590949,
+            "anchor_kl": 0.00017802300027711383
+          },
+          {
+            "request_id": "1131-0",
+            "tokens": 7,
+            "objective": 0.4385117171997471,
+            "teacher_kl": 8.28027856349945,
+            "anchor_kl": 0.0012066561737031276
+          },
+          {
+            "request_id": "1132-0",
+            "tokens": 5250,
+            "objective": 0.0037448668650781817,
+            "teacher_kl": 0.04798570981528056,
+            "anchor_kl": 1.9135107133035403e-05
+          },
+          {
+            "request_id": "1133-0",
+            "tokens": 412,
+            "objective": 0.03574258534962884,
+            "teacher_kl": 0.46158261051809374,
+            "anchor_kl": 0.00010740559317979548
+          },
+          {
+            "request_id": "1134-0",
+            "tokens": 839,
+            "objective": 0.04773445530245732,
+            "teacher_kl": 0.34300060906207636,
+            "anchor_kl": 0.00014527193673731484
+          },
+          {
+            "request_id": "1135-0",
+            "tokens": 1354,
+            "objective": 0.04415804162619123,
+            "teacher_kl": 0.38559650399180834,
+            "anchor_kl": 0.00027906658368910965
+          },
+          {
+            "request_id": "1136-0",
+            "tokens": 383,
+            "objective": 0.07586769545660131,
+            "teacher_kl": 0.663055677604595,
+            "anchor_kl": 0.0001328348924649208
+          },
+          {
+            "request_id": "1137-0",
+            "tokens": 29,
+            "objective": 0.10342573717307774,
+            "teacher_kl": 2.0759990031606166,
+            "anchor_kl": 0.00028445054846903576
+          },
+          {
+            "request_id": "1138-0",
+            "tokens": 825,
+            "objective": 0.09765762539861712,
+            "teacher_kl": 0.7891767530694647,
+            "anchor_kl": 0.00022901458901703365
+          },
+          {
+            "request_id": "1139-0",
+            "tokens": 708,
+            "objective": 0.099479005075306,
+            "teacher_kl": 0.6168888963117495,
+            "anchor_kl": 0.00011795751731602974
+          },
+          {
+            "request_id": "1140-0",
+            "tokens": 94,
+            "objective": 0.08423666413867242,
+            "teacher_kl": 1.022438047888461,
+            "anchor_kl": 6.123653870153726e-05
+          },
+          {
+            "request_id": "1141-0",
+            "tokens": 769,
+            "objective": 0.09283461028971324,
+            "teacher_kl": 0.6343986440945031,
+            "anchor_kl": 0.00011248813501117666
+          },
+          {
+            "request_id": "1142-0",
+            "tokens": 652,
+            "objective": 0.08046060807907934,
+            "teacher_kl": 0.6677801223654471,
+            "anchor_kl": 0.0002693537679953396
+          },
+          {
+            "request_id": "1143-0",
+            "tokens": 466,
+            "objective": 0.1393064161002659,
+            "teacher_kl": 0.9915460481596634,
+            "anchor_kl": 0.00025390135190008644
+          },
+          {
+            "request_id": "1144-0",
+            "tokens": 152,
+            "objective": 0.14187723791605467,
+            "teacher_kl": 1.5792991904887266,
+            "anchor_kl": 0.0003548199205020434
+          },
+          {
+            "request_id": "1145-0",
+            "tokens": 686,
+            "objective": 0.08369775866649626,
+            "teacher_kl": 0.6360543413385017,
+            "anchor_kl": 0.00012476463747570997
+          },
+          {
+            "request_id": "1146-0",
+            "tokens": 42,
+            "objective": 0.10503341331763122,
+            "teacher_kl": 1.7085235341052925,
+            "anchor_kl": 0.0008976943666777428
+          },
+          {
+            "request_id": "1147-0",
+            "tokens": 1110,
+            "objective": 0.04522608858419148,
+            "teacher_kl": 0.42870728236314765,
+            "anchor_kl": 0.0001748614504287774
+          },
+          {
+            "request_id": "1148-0",
+            "tokens": 498,
+            "objective": 0.09114972779184644,
+            "teacher_kl": 0.8149908331525734,
+            "anchor_kl": 0.0003026371377415177
+          },
+          {
+            "request_id": "1149-0",
+            "tokens": 275,
+            "objective": 0.06276065430818521,
+            "teacher_kl": 0.6303610249638388,
+            "anchor_kl": 0.00020917292019873913
+          },
+          {
+            "request_id": "1150-0",
+            "tokens": 210,
+            "objective": 0.13948373252428392,
+            "teacher_kl": 1.3927107865212573,
+            "anchor_kl": 0.0003773145208978825
+          },
+          {
+            "request_id": "1151-0",
+            "tokens": 706,
+            "objective": 0.0663281404919199,
+            "teacher_kl": 0.5582957187708151,
+            "anchor_kl": 0.00014966238983287242
+          }
+        ]
+      },
+      "source_directory": "runs/topd-data-kappa-20261101/training/budget-b256-u4-k1-s42"
+    },
+    {
+      "label": "budget-b256-u16-k1-s42",
+      "batch": 256,
+      "updates": 16,
+      "response_visits": 4096,
+      "unique_trajectories": 1024,
+      "token_visits": 5148324,
+      "complete": {
+        "status": "complete",
+        "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/budget-b256-u16-k1-s42",
+        "updates": 16,
+        "seconds": 1134.337218761444,
+        "heldout_teacher_kl_before": 0.4097565091737562,
+        "heldout_teacher_kl_after": 0.3971343735342653
+      },
+      "heldout_after": {
+        "objective": 0.045666118798334765,
+        "teacher_kl": 0.3971343735342653,
+        "anchor_kl": 0.000711773576473672,
+        "tokens": 161148,
+        "responses": [
+          {
+            "request_id": "1024-0",
+            "tokens": 183,
+            "objective": 0.061354350151830536,
+            "teacher_kl": 0.8226331135617821,
+            "anchor_kl": 0.0004343115139974662
+          },
+          {
+            "request_id": "1025-0",
+            "tokens": 1113,
+            "objective": 0.06188463018070586,
+            "teacher_kl": 0.43272086253537406,
+            "anchor_kl": 0.000677478500466912
+          },
+          {
+            "request_id": "1026-0",
+            "tokens": 1048,
+            "objective": 0.05089225324996667,
+            "teacher_kl": 0.48407903702271504,
+            "anchor_kl": 0.0010780384743355432
+          },
+          {
+            "request_id": "1027-0",
+            "tokens": 948,
+            "objective": 0.08544964959319988,
+            "teacher_kl": 0.675581420686731,
+            "anchor_kl": 0.000655035623369166
+          },
+          {
+            "request_id": "1028-0",
+            "tokens": 324,
+            "objective": 0.0382769222406234,
+            "teacher_kl": 0.44787416931343793,
+            "anchor_kl": 0.0008071079862580282
+          },
+          {
+            "request_id": "1029-0",
+            "tokens": 137,
+            "objective": 0.10071018166844671,
+            "teacher_kl": 1.1364186773702067,
+            "anchor_kl": 0.00090192726031795
+          },
+          {
+            "request_id": "1030-0",
+            "tokens": 13702,
+            "objective": 0.03476380853205328,
+            "teacher_kl": 0.32363528177850276,
+            "anchor_kl": 0.0011359564773625746
+          },
+          {
+            "request_id": "1031-0",
+            "tokens": 2685,
+            "objective": 0.04958130355416688,
+            "teacher_kl": 0.47532357298790734,
+            "anchor_kl": 0.0008888090825173926
+          },
+          {
+            "request_id": "1032-0",
+            "tokens": 940,
+            "objective": 0.047869426801920745,
+            "teacher_kl": 0.4530107199516664,
+            "anchor_kl": 0.0005414682497793374
+          },
+          {
+            "request_id": "1033-0",
+            "tokens": 1320,
+            "objective": 0.061310155472647926,
+            "teacher_kl": 0.494497041408575,
+            "anchor_kl": 0.001131145930541564
+          },
+          {
+            "request_id": "1034-0",
+            "tokens": 361,
+            "objective": 0.10522111432198608,
+            "teacher_kl": 1.1376633765516155,
+            "anchor_kl": 0.0009843313001960765
+          },
+          {
+            "request_id": "1035-0",
+            "tokens": 3171,
+            "objective": 0.02450211186607417,
+            "teacher_kl": 0.26222620097416666,
+            "anchor_kl": 0.0007203805743991201
+          },
+          {
+            "request_id": "1036-0",
+            "tokens": 666,
+            "objective": 0.022666986933276494,
+            "teacher_kl": 0.3470399679150083,
+            "anchor_kl": 0.0004054599249203294
+          },
+          {
+            "request_id": "1037-0",
+            "tokens": 19,
+            "objective": 0.13272554999802147,
+            "teacher_kl": 2.477717282360812,
+            "anchor_kl": 0.0018519838774804349
+          },
+          {
+            "request_id": "1038-0",
+            "tokens": 822,
+            "objective": 0.045393245710291644,
+            "teacher_kl": 0.33303031907240654,
+            "anchor_kl": 0.0009411133374834963
+          },
+          {
+            "request_id": "1039-0",
+            "tokens": 44,
+            "objective": 0.1937211954108552,
+            "teacher_kl": 3.624374242174037,
+            "anchor_kl": 0.0009364389515056359
+          },
+          {
+            "request_id": "1040-0",
+            "tokens": 947,
+            "objective": 0.08403405189476035,
+            "teacher_kl": 0.5928871377214333,
+            "anchor_kl": 0.000508076007559752
+          },
+          {
+            "request_id": "1041-0",
+            "tokens": 2424,
+            "objective": 0.04266378032065837,
+            "teacher_kl": 0.3052734618949196,
+            "anchor_kl": 0.00028783654437632904
+          },
+          {
+            "request_id": "1042-0",
+            "tokens": 656,
+            "objective": 0.05010596742571051,
+            "teacher_kl": 0.45396765418194235,
+            "anchor_kl": 0.0011033010368709246
+          },
+          {
+            "request_id": "1043-0",
+            "tokens": 608,
+            "objective": 0.06716548940794471,
+            "teacher_kl": 0.6580729700081543,
+            "anchor_kl": 0.0009739813806646586
+          },
+          {
+            "request_id": "1044-0",
+            "tokens": 2947,
+            "objective": 0.039804196260308886,
+            "teacher_kl": 0.33553322106470856,
+            "anchor_kl": 0.0006796943052964619
+          },
+          {
+            "request_id": "1045-0",
+            "tokens": 1155,
+            "objective": 0.046306941856648146,
+            "teacher_kl": 0.3456802575210195,
+            "anchor_kl": 0.0003320677523701625
+          },
+          {
+            "request_id": "1046-0",
+            "tokens": 464,
+            "objective": 0.07631218207330596,
+            "teacher_kl": 0.7085223595187845,
+            "anchor_kl": 0.0005787796658592671
+          },
+          {
+            "request_id": "1047-0",
+            "tokens": 844,
+            "objective": 0.06268198783990979,
+            "teacher_kl": 0.5867212992809603,
+            "anchor_kl": 0.0007507033926971631
+          },
+          {
+            "request_id": "1048-0",
+            "tokens": 251,
+            "objective": 0.07524391649605737,
+            "teacher_kl": 0.8778784304680544,
+            "anchor_kl": 0.0005567883312844931
+          },
+          {
+            "request_id": "1049-0",
+            "tokens": 231,
+            "objective": 0.10275542066703754,
+            "teacher_kl": 1.2433243956165116,
+            "anchor_kl": 0.0009411433677497642
+          },
+          {
+            "request_id": "1050-0",
+            "tokens": 1216,
+            "objective": 0.05175287696035534,
+            "teacher_kl": 0.4446686528675741,
+            "anchor_kl": 0.0009058193843905803
+          },
+          {
+            "request_id": "1051-0",
+            "tokens": 1099,
+            "objective": 0.07110526002464138,
+            "teacher_kl": 0.6324550684872822,
+            "anchor_kl": 0.001089299612479305
+          },
+          {
+            "request_id": "1052-0",
+            "tokens": 746,
+            "objective": 0.04453562077468846,
+            "teacher_kl": 0.40197286681509875,
+            "anchor_kl": 0.0006475886379637328
+          },
+          {
+            "request_id": "1053-0",
+            "tokens": 1160,
+            "objective": 0.048680501423586875,
+            "teacher_kl": 0.4136200017857971,
+            "anchor_kl": 0.0009278399249714787
+          },
+          {
+            "request_id": "1054-0",
+            "tokens": 1325,
+            "objective": 0.049743986856617906,
+            "teacher_kl": 0.33664483550450847,
+            "anchor_kl": 0.0003953072969757422
+          },
+          {
+            "request_id": "1055-0",
+            "tokens": 547,
+            "objective": 0.06414766072471316,
+            "teacher_kl": 0.6936701626329699,
+            "anchor_kl": 0.0007734513148902956
+          },
+          {
+            "request_id": "1056-0",
+            "tokens": 1127,
+            "objective": 0.07528616001120038,
+            "teacher_kl": 0.6078887226975189,
+            "anchor_kl": 0.0006678776468684389
+          },
+          {
+            "request_id": "1057-0",
+            "tokens": 5508,
+            "objective": 0.03473242349903852,
+            "teacher_kl": 0.2644488954427537,
+            "anchor_kl": 0.000771453439912869
+          },
+          {
+            "request_id": "1058-0",
+            "tokens": 328,
+            "objective": 0.07874921304226352,
+            "teacher_kl": 0.8297101074729143,
+            "anchor_kl": 0.0007191410091430579
+          },
+          {
+            "request_id": "1059-0",
+            "tokens": 2368,
+            "objective": 0.030299900820758226,
+            "teacher_kl": 0.31405798956982195,
+            "anchor_kl": 0.0005414394117372293
+          },
+          {
+            "request_id": "1060-0",
+            "tokens": 2954,
+            "objective": 0.0472306038611405,
+            "teacher_kl": 0.3479147949773322,
+            "anchor_kl": 0.0007924550606027689
+          },
+          {
+            "request_id": "1061-0",
+            "tokens": 37,
+            "objective": 0.1042858967770912,
+            "teacher_kl": 1.8577629717419277,
+            "anchor_kl": 0.001688723419691984
+          },
+          {
+            "request_id": "1062-0",
+            "tokens": 163,
+            "objective": 0.06047938351525912,
+            "teacher_kl": 0.8894738803933334,
+            "anchor_kl": 0.0004834652151122139
+          },
+          {
+            "request_id": "1063-0",
+            "tokens": 856,
+            "objective": 0.06340224670989464,
+            "teacher_kl": 0.5742337206541105,
+            "anchor_kl": 0.0011872427294576076
+          },
+          {
+            "request_id": "1064-0",
+            "tokens": 1285,
+            "objective": 0.04595293853544058,
+            "teacher_kl": 0.36099768505349017,
+            "anchor_kl": 0.0005552912316642608
+          },
+          {
+            "request_id": "1065-0",
+            "tokens": 24,
+            "objective": 0.12876738405490565,
+            "teacher_kl": 2.290386475622654,
+            "anchor_kl": 0.0007349207153310999
+          },
+          {
+            "request_id": "1066-0",
+            "tokens": 68,
+            "objective": 0.17265630388098097,
+            "teacher_kl": 2.3377659120044827,
+            "anchor_kl": 0.001775841433097411
+          },
+          {
+            "request_id": "1067-0",
+            "tokens": 437,
+            "objective": 0.0685914959890484,
+            "teacher_kl": 0.6374790762457707,
+            "anchor_kl": 0.0007173338667515885
+          },
+          {
+            "request_id": "1068-0",
+            "tokens": 1158,
+            "objective": 0.06147223579779501,
+            "teacher_kl": 0.5497715472131534,
+            "anchor_kl": 0.000679732868467956
+          },
+          {
+            "request_id": "1069-0",
+            "tokens": 670,
+            "objective": 0.039612171966091285,
+            "teacher_kl": 0.39698077439380036,
+            "anchor_kl": 0.0005832442072629988
+          },
+          {
+            "request_id": "1070-0",
+            "tokens": 323,
+            "objective": 0.04167789081760428,
+            "teacher_kl": 0.574412782839005,
+            "anchor_kl": 0.0004979075395681485
+          },
+          {
+            "request_id": "1071-0",
+            "tokens": 7352,
+            "objective": 0.06357848453164675,
+            "teacher_kl": 0.49311865052082365,
+            "anchor_kl": 0.001025656653217169
+          },
+          {
+            "request_id": "1072-0",
+            "tokens": 1564,
+            "objective": 0.04023080347018835,
+            "teacher_kl": 0.3216441212264763,
+            "anchor_kl": 0.0006979654210428603
+          },
+          {
+            "request_id": "1073-0",
+            "tokens": 835,
+            "objective": 0.05895972280564264,
+            "teacher_kl": 0.5429274059977305,
+            "anchor_kl": 0.0006255030845080632
+          },
+          {
+            "request_id": "1074-0",
+            "tokens": 8689,
+            "objective": 0.027595119092258733,
+            "teacher_kl": 0.22108424334296026,
+            "anchor_kl": 0.0006277054489825432
+          },
+          {
+            "request_id": "1075-0",
+            "tokens": 53,
+            "objective": 0.1490599820365633,
+            "teacher_kl": 1.423109057324253,
+            "anchor_kl": 0.0013804176322443006
+          },
+          {
+            "request_id": "1076-0",
+            "tokens": 12,
+            "objective": 0.2665121776711506,
+            "teacher_kl": 4.608835905790329,
+            "anchor_kl": 0.00304484752996359
+          },
+          {
+            "request_id": "1077-0",
+            "tokens": 1547,
+            "objective": 0.039956120838715914,
+            "teacher_kl": 0.3333530372569229,
+            "anchor_kl": 0.0003178608377472371
+          },
+          {
+            "request_id": "1078-0",
+            "tokens": 8,
+            "objective": 0.39117852138588205,
+            "teacher_kl": 6.8817827850580215,
+            "anchor_kl": 0.0014324830299301539
+          },
+          {
+            "request_id": "1079-0",
+            "tokens": 1423,
+            "objective": 0.015015514374128021,
+            "teacher_kl": 0.14501613086994083,
+            "anchor_kl": 7.944697004696745e-05
+          },
+          {
+            "request_id": "1080-0",
+            "tokens": 58,
+            "objective": 0.043619294085180296,
+            "teacher_kl": 0.969394901547589,
+            "anchor_kl": 0.0008718481615056621
+          },
+          {
+            "request_id": "1081-0",
+            "tokens": 2256,
+            "objective": 0.06588892840183859,
+            "teacher_kl": 0.4713840289989615,
+            "anchor_kl": 0.0002505948054617537
+          },
+          {
+            "request_id": "1082-0",
+            "tokens": 160,
+            "objective": 0.1381548443559879,
+            "teacher_kl": 1.5082103637425461,
+            "anchor_kl": 0.00131004753047268
+          },
+          {
+            "request_id": "1083-0",
+            "tokens": 731,
+            "objective": 0.07011600784512828,
+            "teacher_kl": 0.6845639536300421,
+            "anchor_kl": 0.00047249790979616787
+          },
+          {
+            "request_id": "1084-0",
+            "tokens": 39,
+            "objective": 0.2661478099449036,
+            "teacher_kl": 2.726362458692911,
+            "anchor_kl": 0.001943038216268178
+          },
+          {
+            "request_id": "1085-0",
+            "tokens": 874,
+            "objective": 0.055186793058164235,
+            "teacher_kl": 0.42493333179445325,
+            "anchor_kl": 0.0003221128603160285
+          },
+          {
+            "request_id": "1086-0",
+            "tokens": 443,
+            "objective": 0.07783837794430742,
+            "teacher_kl": 0.5682980925080222,
+            "anchor_kl": 0.0012207883672639352
+          },
+          {
+            "request_id": "1087-0",
+            "tokens": 66,
+            "objective": 0.09761924303871417,
+            "teacher_kl": 1.250937478221727,
+            "anchor_kl": 0.0011289322000900001
+          },
+          {
+            "request_id": "1088-0",
+            "tokens": 507,
+            "objective": 0.0981954883584536,
+            "teacher_kl": 0.7890631154436808,
+            "anchor_kl": 0.0012586815280442164
+          },
+          {
+            "request_id": "1089-0",
+            "tokens": 46,
+            "objective": 0.12903251370754215,
+            "teacher_kl": 1.6543925083849742,
+            "anchor_kl": 0.002072279137159374
+          },
+          {
+            "request_id": "1090-0",
+            "tokens": 768,
+            "objective": 0.09731523422235898,
+            "teacher_kl": 0.7486914025961848,
+            "anchor_kl": 0.0008662972330287895
+          },
+          {
+            "request_id": "1091-0",
+            "tokens": 516,
+            "objective": 0.06812612566814939,
+            "teacher_kl": 0.6804542422385464,
+            "anchor_kl": 0.0008120497400815166
+          },
+          {
+            "request_id": "1092-0",
+            "tokens": 615,
+            "objective": 0.05635717291878122,
+            "teacher_kl": 0.569000589921253,
+            "anchor_kl": 0.0009480506195015015
+          },
+          {
+            "request_id": "1093-0",
+            "tokens": 532,
+            "objective": 0.07793430836954018,
+            "teacher_kl": 0.6895428717477411,
+            "anchor_kl": 0.0010486499180132661
+          },
+          {
+            "request_id": "1094-0",
+            "tokens": 745,
+            "objective": 0.10874221463414827,
+            "teacher_kl": 0.7972257246372936,
+            "anchor_kl": 0.0005642185533080751
+          },
+          {
+            "request_id": "1095-0",
+            "tokens": 2801,
+            "objective": 0.04490410245238843,
+            "teacher_kl": 0.4482212217366865,
+            "anchor_kl": 0.0007395096013150018
+          },
+          {
+            "request_id": "1096-0",
+            "tokens": 4294,
+            "objective": 0.028156843110111077,
+            "teacher_kl": 0.2924174956581343,
+            "anchor_kl": 0.0003574256500550562
+          },
+          {
+            "request_id": "1097-0",
+            "tokens": 510,
+            "objective": 0.07780573944091076,
+            "teacher_kl": 0.7126047983687939,
+            "anchor_kl": 0.0007338738070765656
+          },
+          {
+            "request_id": "1098-0",
+            "tokens": 76,
+            "objective": 0.07189495813631047,
+            "teacher_kl": 1.1057501194392036,
+            "anchor_kl": 0.0008441927500214026
+          },
+          {
+            "request_id": "1099-0",
+            "tokens": 1050,
+            "objective": 0.03609363379098382,
+            "teacher_kl": 0.33085071340233774,
+            "anchor_kl": 0.0004648028576528672
+          },
+          {
+            "request_id": "1100-0",
+            "tokens": 690,
+            "objective": 0.058498219784221386,
+            "teacher_kl": 0.5820874779297889,
+            "anchor_kl": 0.0011744355772001353
+          },
+          {
+            "request_id": "1101-0",
+            "tokens": 510,
+            "objective": 0.10245511023205393,
+            "teacher_kl": 0.7395523274218354,
+            "anchor_kl": 0.0004413058385419737
+          },
+          {
+            "request_id": "1102-0",
+            "tokens": 1782,
+            "objective": 0.07250797225045968,
+            "teacher_kl": 0.35702810300142535,
+            "anchor_kl": 0.00043805162193339607
+          },
+          {
+            "request_id": "1103-0",
+            "tokens": 5931,
+            "objective": 0.03719423894368973,
+            "teacher_kl": 0.28168587267056205,
+            "anchor_kl": 0.000739518835889157
+          },
+          {
+            "request_id": "1104-0",
+            "tokens": 709,
+            "objective": 0.04796978354620664,
+            "teacher_kl": 0.4601903681281038,
+            "anchor_kl": 0.0008111666438279667
+          },
+          {
+            "request_id": "1105-0",
+            "tokens": 1614,
+            "objective": 0.05361808883815721,
+            "teacher_kl": 0.4833508283313333,
+            "anchor_kl": 0.001337063045748432
+          },
+          {
+            "request_id": "1106-0",
+            "tokens": 32,
+            "objective": 0.12773087011737516,
+            "teacher_kl": 1.629043812630698,
+            "anchor_kl": 0.0013869069628071884
+          },
+          {
+            "request_id": "1107-0",
+            "tokens": 8106,
+            "objective": 0.008715446878352141,
+            "teacher_kl": 0.0737003738397224,
+            "anchor_kl": 0.00011779665005153632
+          },
+          {
+            "request_id": "1108-0",
+            "tokens": 171,
+            "objective": 0.11240653041841209,
+            "teacher_kl": 1.1613378209294751,
+            "anchor_kl": 0.0013565115883944138
+          },
+          {
+            "request_id": "1109-0",
+            "tokens": 42,
+            "objective": 0.1629617827832893,
+            "teacher_kl": 2.4212045559570905,
+            "anchor_kl": 0.001764548615028616
+          },
+          {
+            "request_id": "1110-0",
+            "tokens": 604,
+            "objective": 0.07166950796684092,
+            "teacher_kl": 0.7415195098626359,
+            "anchor_kl": 0.0006087442674466117
+          },
+          {
+            "request_id": "1111-0",
+            "tokens": 473,
+            "objective": 0.06416471591815126,
+            "teacher_kl": 0.646177663756217,
+            "anchor_kl": 0.0005690218841695203
+          },
+          {
+            "request_id": "1112-0",
+            "tokens": 634,
+            "objective": 0.03935852830609383,
+            "teacher_kl": 0.409468165883583,
+            "anchor_kl": 0.0005682728476847206
+          },
+          {
+            "request_id": "1113-0",
+            "tokens": 5679,
+            "objective": 0.024232295905304527,
+            "teacher_kl": 0.20238689201810295,
+            "anchor_kl": 0.0006255162102881573
+          },
+          {
+            "request_id": "1114-0",
+            "tokens": 539,
+            "objective": 0.07267236615213374,
+            "teacher_kl": 0.5774949191460388,
+            "anchor_kl": 0.0005505350881559827
+          },
+          {
+            "request_id": "1115-0",
+            "tokens": 1640,
+            "objective": 0.05118949458026765,
+            "teacher_kl": 0.3670438343550971,
+            "anchor_kl": 0.0010565091517481364
+          },
+          {
+            "request_id": "1116-0",
+            "tokens": 3350,
+            "objective": 0.02650204863790662,
+            "teacher_kl": 0.23914251699817798,
+            "anchor_kl": 0.0006489817303342004
+          },
+          {
+            "request_id": "1117-0",
+            "tokens": 123,
+            "objective": 0.14447381559073516,
+            "teacher_kl": 1.6622593029822428,
+            "anchor_kl": 0.0012409462948712682
+          },
+          {
+            "request_id": "1118-0",
+            "tokens": 626,
+            "objective": 0.053848427029113424,
+            "teacher_kl": 0.4588117134315211,
+            "anchor_kl": 0.000822628042560538
+          },
+          {
+            "request_id": "1119-0",
+            "tokens": 1628,
+            "objective": 0.03235333925102753,
+            "teacher_kl": 0.3460353088658699,
+            "anchor_kl": 0.000844669725806554
+          },
+          {
+            "request_id": "1120-0",
+            "tokens": 1619,
+            "objective": 0.039221270081754425,
+            "teacher_kl": 0.37115778295036744,
+            "anchor_kl": 0.0007253668938060573
+          },
+          {
+            "request_id": "1121-0",
+            "tokens": 349,
+            "objective": 0.09234098760849808,
+            "teacher_kl": 0.8569588148090398,
+            "anchor_kl": 0.0011264942193712937
+          },
+          {
+            "request_id": "1122-0",
+            "tokens": 529,
+            "objective": 0.05867217018942041,
+            "teacher_kl": 0.5067991002366857,
+            "anchor_kl": 0.0005539755460670018
+          },
+          {
+            "request_id": "1123-0",
+            "tokens": 1615,
+            "objective": 0.080745455377891,
+            "teacher_kl": 0.6123946088433967,
+            "anchor_kl": 0.0006139671226966365
+          },
+          {
+            "request_id": "1124-0",
+            "tokens": 814,
+            "objective": 0.0822406746730698,
+            "teacher_kl": 0.8138512260048172,
+            "anchor_kl": 0.0009643441551340163
+          },
+          {
+            "request_id": "1125-0",
+            "tokens": 900,
+            "objective": 0.05283384355924852,
+            "teacher_kl": 0.3673562221028021,
+            "anchor_kl": 0.00037183011288599035
+          },
+          {
+            "request_id": "1126-0",
+            "tokens": 721,
+            "objective": 0.07955385224767918,
+            "teacher_kl": 0.5269820948183294,
+            "anchor_kl": 0.0007607985709778234
+          },
+          {
+            "request_id": "1127-0",
+            "tokens": 3325,
+            "objective": 0.05560271114365068,
+            "teacher_kl": 0.5129503926760176,
+            "anchor_kl": 0.001065596501142168
+          },
+          {
+            "request_id": "1128-0",
+            "tokens": 89,
+            "objective": 0.09687409309387139,
+            "teacher_kl": 1.3544524717824848,
+            "anchor_kl": 0.0011265673000492866
+          },
+          {
+            "request_id": "1129-0",
+            "tokens": 551,
+            "objective": 0.07183930771982427,
+            "teacher_kl": 0.7374123455434832,
+            "anchor_kl": 0.0007324615665345664
+          },
+          {
+            "request_id": "1130-0",
+            "tokens": 307,
+            "objective": 0.05243989946968883,
+            "teacher_kl": 0.6803824080930528,
+            "anchor_kl": 0.0006523484790032014
+          },
+          {
+            "request_id": "1131-0",
+            "tokens": 7,
+            "objective": 0.4226377297059766,
+            "teacher_kl": 8.267796107700892,
+            "anchor_kl": 0.002572310814035258
+          },
+          {
+            "request_id": "1132-0",
+            "tokens": 5250,
+            "objective": 0.0034446914415297313,
+            "teacher_kl": 0.047305491832733554,
+            "anchor_kl": 4.710324782593778e-05
+          },
+          {
+            "request_id": "1133-0",
+            "tokens": 412,
+            "objective": 0.032029176160948025,
+            "teacher_kl": 0.45227927156252096,
+            "anchor_kl": 0.0005093403762370706
+          },
+          {
+            "request_id": "1134-0",
+            "tokens": 839,
+            "objective": 0.04434634888169118,
+            "teacher_kl": 0.3368470515350583,
+            "anchor_kl": 0.0006283200595678687
+          },
+          {
+            "request_id": "1135-0",
+            "tokens": 1354,
+            "objective": 0.0396605642867818,
+            "teacher_kl": 0.3733422212427182,
+            "anchor_kl": 0.0008356302063127314
+          },
+          {
+            "request_id": "1136-0",
+            "tokens": 383,
+            "objective": 0.0697798044206279,
+            "teacher_kl": 0.6464091550551491,
+            "anchor_kl": 0.0008300093235082584
+          },
+          {
+            "request_id": "1137-0",
+            "tokens": 29,
+            "objective": 0.09994250113871611,
+            "teacher_kl": 2.066129038367292,
+            "anchor_kl": 0.0008878273171737011
+          },
+          {
+            "request_id": "1138-0",
+            "tokens": 825,
+            "objective": 0.0893087955977628,
+            "teacher_kl": 0.7670662931785707,
+            "anchor_kl": 0.0012412143446165142
+          },
+          {
+            "request_id": "1139-0",
+            "tokens": 708,
+            "objective": 0.09170822169592023,
+            "teacher_kl": 0.6062459654518165,
+            "anchor_kl": 0.0008179824649142061
+          },
+          {
+            "request_id": "1140-0",
+            "tokens": 94,
+            "objective": 0.08513818395434275,
+            "teacher_kl": 1.0095798721688085,
+            "anchor_kl": 0.00036013712452523443
+          },
+          {
+            "request_id": "1141-0",
+            "tokens": 769,
+            "objective": 0.08603643301285371,
+            "teacher_kl": 0.6229720150318909,
+            "anchor_kl": 0.0008605694687140387
+          },
+          {
+            "request_id": "1142-0",
+            "tokens": 652,
+            "objective": 0.07333804228066802,
+            "teacher_kl": 0.6481536560531083,
+            "anchor_kl": 0.001242023644702747
+          },
+          {
+            "request_id": "1143-0",
+            "tokens": 466,
+            "objective": 0.13392941042984202,
+            "teacher_kl": 0.9757519762997452,
+            "anchor_kl": 0.001130873963164284
+          },
+          {
+            "request_id": "1144-0",
+            "tokens": 152,
+            "objective": 0.13352584254696945,
+            "teacher_kl": 1.548404824023907,
+            "anchor_kl": 0.0012593197030959776
+          },
+          {
+            "request_id": "1145-0",
+            "tokens": 686,
+            "objective": 0.0767636833576141,
+            "teacher_kl": 0.6180001028538972,
+            "anchor_kl": 0.0008097681769578813
+          },
+          {
+            "request_id": "1146-0",
+            "tokens": 42,
+            "objective": 0.10097279012955239,
+            "teacher_kl": 1.6785474711851704,
+            "anchor_kl": 0.0018456712274807312
+          },
+          {
+            "request_id": "1147-0",
+            "tokens": 1110,
+            "objective": 0.04044090231174636,
+            "teacher_kl": 0.4146250929937106,
+            "anchor_kl": 0.0007158697959088797
+          },
+          {
+            "request_id": "1148-0",
+            "tokens": 498,
+            "objective": 0.08523156908954643,
+            "teacher_kl": 0.798318298328108,
+            "anchor_kl": 0.001020246057956833
+          },
+          {
+            "request_id": "1149-0",
+            "tokens": 275,
+            "objective": 0.05922909165155529,
+            "teacher_kl": 0.6124356967067897,
+            "anchor_kl": 0.001152729662324067
+          },
+          {
+            "request_id": "1150-0",
+            "tokens": 210,
+            "objective": 0.13761972085159782,
+            "teacher_kl": 1.3785704803896979,
+            "anchor_kl": 0.0013404895194856267
+          },
+          {
+            "request_id": "1151-0",
+            "tokens": 706,
+            "objective": 0.05994404005973443,
+            "teacher_kl": 0.5432920144847913,
+            "anchor_kl": 0.0007339545505202803
+          }
+        ]
+      },
+      "source_directory": "runs/topd-data-kappa-20261101/training/budget-b256-u16-k1-s42"
+    },
+    {
+      "label": "budget-b64-u64-k1-s42",
+      "batch": 64,
+      "updates": 64,
+      "response_visits": 4096,
+      "unique_trajectories": 1024,
+      "token_visits": 5148324,
+      "complete": {
+        "status": "complete",
+        "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/budget-b64-u64-k1-s42",
+        "updates": 64,
+        "seconds": 1156.650200843811,
+        "heldout_teacher_kl_before": 0.4097565091737562,
+        "heldout_teacher_kl_after": 0.38777282509373157
+      },
+      "heldout_after": {
+        "objective": 0.042597241167782886,
+        "teacher_kl": 0.38777282509373157,
+        "anchor_kl": 0.0010887612749089272,
+        "tokens": 161148,
+        "responses": [
+          {
+            "request_id": "1024-0",
+            "tokens": 183,
+            "objective": 0.053038063786324155,
+            "teacher_kl": 0.7972104383178966,
+            "anchor_kl": 0.0011297021928018379
+          },
+          {
+            "request_id": "1025-0",
+            "tokens": 1113,
+            "objective": 0.059593514385971866,
+            "teacher_kl": 0.4270144920473582,
+            "anchor_kl": 0.0008672043786073899
+          },
+          {
+            "request_id": "1026-0",
+            "tokens": 1048,
+            "objective": 0.046293470920919275,
+            "teacher_kl": 0.47652050572774785,
+            "anchor_kl": 0.0014304035694373645
+          },
+          {
+            "request_id": "1027-0",
+            "tokens": 948,
+            "objective": 0.08176168116008412,
+            "teacher_kl": 0.6571331210043106,
+            "anchor_kl": 0.0011843982138203275
+          },
+          {
+            "request_id": "1028-0",
+            "tokens": 324,
+            "objective": 0.03332142469039326,
+            "teacher_kl": 0.42619176479279247,
+            "anchor_kl": 0.0019505897101385157
+          },
+          {
+            "request_id": "1029-0",
+            "tokens": 137,
+            "objective": 0.09318522649638804,
+            "teacher_kl": 1.1116522270880205,
+            "anchor_kl": 0.0017965311840926737
+          },
+          {
+            "request_id": "1030-0",
+            "tokens": 13702,
+            "objective": 0.030932196711665156,
+            "teacher_kl": 0.3194051746588079,
+            "anchor_kl": 0.0010605801306408042
+          },
+          {
+            "request_id": "1031-0",
+            "tokens": 2685,
+            "objective": 0.046152075440033545,
+            "teacher_kl": 0.46692193136702237,
+            "anchor_kl": 0.001174686859848131
+          },
+          {
+            "request_id": "1032-0",
+            "tokens": 940,
+            "objective": 0.04467482563783141,
+            "teacher_kl": 0.4395683055478523,
+            "anchor_kl": 0.000998928838819682
+          },
+          {
+            "request_id": "1033-0",
+            "tokens": 1320,
+            "objective": 0.05749986564198758,
+            "teacher_kl": 0.4864209608413782,
+            "anchor_kl": 0.0014914123451596878
+          },
+          {
+            "request_id": "1034-0",
+            "tokens": 361,
+            "objective": 0.09776796687789767,
+            "teacher_kl": 1.1053192538013836,
+            "anchor_kl": 0.0019096320757043884
+          },
+          {
+            "request_id": "1035-0",
+            "tokens": 3171,
+            "objective": 0.022500183756924853,
+            "teacher_kl": 0.25800827101378077,
+            "anchor_kl": 0.0007968966652444195
+          },
+          {
+            "request_id": "1036-0",
+            "tokens": 666,
+            "objective": 0.020196624464193295,
+            "teacher_kl": 0.33590080602340644,
+            "anchor_kl": 0.0008005758995692473
+          },
+          {
+            "request_id": "1037-0",
+            "tokens": 19,
+            "objective": 0.0928558582099389,
+            "teacher_kl": 2.3666749880281523,
+            "anchor_kl": 0.006270382956107537
+          },
+          {
+            "request_id": "1038-0",
+            "tokens": 822,
+            "objective": 0.043180402867234007,
+            "teacher_kl": 0.3263947227924687,
+            "anchor_kl": 0.0014187813555972604
+          },
+          {
+            "request_id": "1039-0",
+            "tokens": 44,
+            "objective": 0.1882201578576893,
+            "teacher_kl": 3.577760107217314,
+            "anchor_kl": 0.0016765405684757504
+          },
+          {
+            "request_id": "1040-0",
+            "tokens": 947,
+            "objective": 0.08049074769812684,
+            "teacher_kl": 0.5838259969246768,
+            "anchor_kl": 0.0010340719368259628
+          },
+          {
+            "request_id": "1041-0",
+            "tokens": 2424,
+            "objective": 0.04034440828122584,
+            "teacher_kl": 0.3000749207267897,
+            "anchor_kl": 0.0006662292797978505
+          },
+          {
+            "request_id": "1042-0",
+            "tokens": 656,
+            "objective": 0.045112162690006626,
+            "teacher_kl": 0.43208880159449087,
+            "anchor_kl": 0.0018290859364066066
+          },
+          {
+            "request_id": "1043-0",
+            "tokens": 608,
+            "objective": 0.059673857436256354,
+            "teacher_kl": 0.6402523007472107,
+            "anchor_kl": 0.0016766061225267418
+          },
+          {
+            "request_id": "1044-0",
+            "tokens": 2947,
+            "objective": 0.037123623299825104,
+            "teacher_kl": 0.32729103122072567,
+            "anchor_kl": 0.000983216935764121
+          },
+          {
+            "request_id": "1045-0",
+            "tokens": 1155,
+            "objective": 0.04339736545979328,
+            "teacher_kl": 0.3359660267645301,
+            "anchor_kl": 0.0007071379364792913
+          },
+          {
+            "request_id": "1046-0",
+            "tokens": 464,
+            "objective": 0.07228411430968659,
+            "teacher_kl": 0.6932272464696596,
+            "anchor_kl": 0.0009870226848433176
+          },
+          {
+            "request_id": "1047-0",
+            "tokens": 844,
+            "objective": 0.05844457483000614,
+            "teacher_kl": 0.5708343006547093,
+            "anchor_kl": 0.0012058825635702076
+          },
+          {
+            "request_id": "1048-0",
+            "tokens": 251,
+            "objective": 0.07232277684415211,
+            "teacher_kl": 0.8428568469820334,
+            "anchor_kl": 0.0019567662515708956
+          },
+          {
+            "request_id": "1049-0",
+            "tokens": 231,
+            "objective": 0.09931692478381027,
+            "teacher_kl": 1.2252062504011956,
+            "anchor_kl": 0.0013697325677840097
+          },
+          {
+            "request_id": "1050-0",
+            "tokens": 1216,
+            "objective": 0.04784095816975852,
+            "teacher_kl": 0.43194912172632083,
+            "anchor_kl": 0.001491413607672523
+          },
+          {
+            "request_id": "1051-0",
+            "tokens": 1099,
+            "objective": 0.06648383802645501,
+            "teacher_kl": 0.6133097779924991,
+            "anchor_kl": 0.001893479652163835
+          },
+          {
+            "request_id": "1052-0",
+            "tokens": 746,
+            "objective": 0.04212134305923323,
+            "teacher_kl": 0.39069517840485013,
+            "anchor_kl": 0.0012745277585763854
+          },
+          {
+            "request_id": "1053-0",
+            "tokens": 1160,
+            "objective": 0.04397419059862186,
+            "teacher_kl": 0.40070747672919516,
+            "anchor_kl": 0.001282786951461241
+          },
+          {
+            "request_id": "1054-0",
+            "tokens": 1325,
+            "objective": 0.046360626793945287,
+            "teacher_kl": 0.32806954130987037,
+            "anchor_kl": 0.0007421634182715015
+          },
+          {
+            "request_id": "1055-0",
+            "tokens": 547,
+            "objective": 0.05754769089280655,
+            "teacher_kl": 0.6737758167697723,
+            "anchor_kl": 0.0014245853732141284
+          },
+          {
+            "request_id": "1056-0",
+            "tokens": 1127,
+            "objective": 0.07319499707425461,
+            "teacher_kl": 0.5967412882381793,
+            "anchor_kl": 0.0011462125738737662
+          },
+          {
+            "request_id": "1057-0",
+            "tokens": 5508,
+            "objective": 0.03383064153062112,
+            "teacher_kl": 0.2571909952836259,
+            "anchor_kl": 0.0013279061618246327
+          },
+          {
+            "request_id": "1058-0",
+            "tokens": 328,
+            "objective": 0.07328362738824806,
+            "teacher_kl": 0.8043912681309959,
+            "anchor_kl": 0.0016525072739520556
+          },
+          {
+            "request_id": "1059-0",
+            "tokens": 2368,
+            "objective": 0.02718992385314673,
+            "teacher_kl": 0.3046422159905715,
+            "anchor_kl": 0.0009779139390351064
+          },
+          {
+            "request_id": "1060-0",
+            "tokens": 2954,
+            "objective": 0.043885981202399234,
+            "teacher_kl": 0.3403430502484057,
+            "anchor_kl": 0.0012531091192715634
+          },
+          {
+            "request_id": "1061-0",
+            "tokens": 37,
+            "objective": 0.08130260860169172,
+            "teacher_kl": 1.781526597518776,
+            "anchor_kl": 0.005544090446140192
+          },
+          {
+            "request_id": "1062-0",
+            "tokens": 163,
+            "objective": 0.056772470900414665,
+            "teacher_kl": 0.864195810576638,
+            "anchor_kl": 0.0011876412797201415
+          },
+          {
+            "request_id": "1063-0",
+            "tokens": 856,
+            "objective": 0.05889762840779417,
+            "teacher_kl": 0.558001720273846,
+            "anchor_kl": 0.002106831946995851
+          },
+          {
+            "request_id": "1064-0",
+            "tokens": 1285,
+            "objective": 0.042922366292255494,
+            "teacher_kl": 0.3509854966896402,
+            "anchor_kl": 0.000994315572681884
+          },
+          {
+            "request_id": "1065-0",
+            "tokens": 24,
+            "objective": 0.09832334472472819,
+            "teacher_kl": 2.1169355315117477,
+            "anchor_kl": 0.0063622304067128726
+          },
+          {
+            "request_id": "1066-0",
+            "tokens": 68,
+            "objective": 0.1607026201468783,
+            "teacher_kl": 2.2176655077301426,
+            "anchor_kl": 0.005062496169316056
+          },
+          {
+            "request_id": "1067-0",
+            "tokens": 437,
+            "objective": 0.06202635275877958,
+            "teacher_kl": 0.6188669848088633,
+            "anchor_kl": 0.0013328898188447876
+          },
+          {
+            "request_id": "1068-0",
+            "tokens": 1158,
+            "objective": 0.05654712725483171,
+            "teacher_kl": 0.537001822421888,
+            "anchor_kl": 0.0011983731115095574
+          },
+          {
+            "request_id": "1069-0",
+            "tokens": 670,
+            "objective": 0.036476338008809187,
+            "teacher_kl": 0.38739852015664905,
+            "anchor_kl": 0.0009254687561817841
+          },
+          {
+            "request_id": "1070-0",
+            "tokens": 323,
+            "objective": 0.040230318277678305,
+            "teacher_kl": 0.5558831826754799,
+            "anchor_kl": 0.0015038785886558185
+          },
+          {
+            "request_id": "1071-0",
+            "tokens": 7352,
+            "objective": 0.06045936049362402,
+            "teacher_kl": 0.4867738550585908,
+            "anchor_kl": 0.001069821180985246
+          },
+          {
+            "request_id": "1072-0",
+            "tokens": 1564,
+            "objective": 0.038262970262225506,
+            "teacher_kl": 0.3100743150400399,
+            "anchor_kl": 0.0011704048470767465
+          },
+          {
+            "request_id": "1073-0",
+            "tokens": 835,
+            "objective": 0.054879665069503945,
+            "teacher_kl": 0.5290614008833303,
+            "anchor_kl": 0.0012754311209021531
+          },
+          {
+            "request_id": "1074-0",
+            "tokens": 8689,
+            "objective": 0.026637158268631656,
+            "teacher_kl": 0.21465679173074756,
+            "anchor_kl": 0.0010528118020678653
+          },
+          {
+            "request_id": "1075-0",
+            "tokens": 53,
+            "objective": 0.13164555394191751,
+            "teacher_kl": 1.3643320156349186,
+            "anchor_kl": 0.003994620245045021
+          },
+          {
+            "request_id": "1076-0",
+            "tokens": 12,
+            "objective": 0.2134723921578067,
+            "teacher_kl": 4.447378980616729,
+            "anchor_kl": 0.010095882396853995
+          },
+          {
+            "request_id": "1077-0",
+            "tokens": 1547,
+            "objective": 0.03813320833347037,
+            "teacher_kl": 0.3258310988498148,
+            "anchor_kl": 0.0006098742895909895
+          },
+          {
+            "request_id": "1078-0",
+            "tokens": 8,
+            "objective": 0.3109540996956639,
+            "teacher_kl": 6.679525978863239,
+            "anchor_kl": 0.009454084851313382
+          },
+          {
+            "request_id": "1079-0",
+            "tokens": 1423,
+            "objective": 0.014079099427336917,
+            "teacher_kl": 0.14247554846357316,
+            "anchor_kl": 0.00019383838050164866
+          },
+          {
+            "request_id": "1080-0",
+            "tokens": 58,
+            "objective": 0.03269291470671917,
+            "teacher_kl": 0.9037347429177065,
+            "anchor_kl": 0.0036577168467655853
+          },
+          {
+            "request_id": "1081-0",
+            "tokens": 2256,
+            "objective": 0.06332876039415893,
+            "teacher_kl": 0.46233216669768723,
+            "anchor_kl": 0.0006844903454419544
+          },
+          {
+            "request_id": "1082-0",
+            "tokens": 160,
+            "objective": 0.13258367647631353,
+            "teacher_kl": 1.4657375109469286,
+            "anchor_kl": 0.0028998747843516524
+          },
+          {
+            "request_id": "1083-0",
+            "tokens": 731,
+            "objective": 0.06514726044415761,
+            "teacher_kl": 0.6587346985408717,
+            "anchor_kl": 0.0011149515126059586
+          },
+          {
+            "request_id": "1084-0",
+            "tokens": 39,
+            "objective": 0.25713635316023076,
+            "teacher_kl": 2.6951419002352615,
+            "anchor_kl": 0.003401895427743558
+          },
+          {
+            "request_id": "1085-0",
+            "tokens": 874,
+            "objective": 0.052034727787939994,
+            "teacher_kl": 0.41536558482880664,
+            "anchor_kl": 0.0007352756644637354
+          },
+          {
+            "request_id": "1086-0",
+            "tokens": 443,
+            "objective": 0.06759242247647744,
+            "teacher_kl": 0.5485479311823831,
+            "anchor_kl": 0.0021623393410565585
+          },
+          {
+            "request_id": "1087-0",
+            "tokens": 66,
+            "objective": 0.08135684184901149,
+            "teacher_kl": 1.1913795832431677,
+            "anchor_kl": 0.0033008507545508273
+          },
+          {
+            "request_id": "1088-0",
+            "tokens": 507,
+            "objective": 0.0928994545586044,
+            "teacher_kl": 0.7716641016263467,
+            "anchor_kl": 0.001900358703757685
+          },
+          {
+            "request_id": "1089-0",
+            "tokens": 46,
+            "objective": 0.10517425536818337,
+            "teacher_kl": 1.6161612591341785,
+            "anchor_kl": 0.004297799594654783
+          },
+          {
+            "request_id": "1090-0",
+            "tokens": 768,
+            "objective": 0.09079828507849673,
+            "teacher_kl": 0.730793674692214,
+            "anchor_kl": 0.0016124757125566894
+          },
+          {
+            "request_id": "1091-0",
+            "tokens": 516,
+            "objective": 0.06177348808089062,
+            "teacher_kl": 0.656048123461028,
+            "anchor_kl": 0.001584182613581029
+          },
+          {
+            "request_id": "1092-0",
+            "tokens": 615,
+            "objective": 0.050448191290915774,
+            "teacher_kl": 0.5556449770521336,
+            "anchor_kl": 0.00123290289709487
+          },
+          {
+            "request_id": "1093-0",
+            "tokens": 532,
+            "objective": 0.07052244723277336,
+            "teacher_kl": 0.6691016251552085,
+            "anchor_kl": 0.0017818170309099692
+          },
+          {
+            "request_id": "1094-0",
+            "tokens": 745,
+            "objective": 0.10298712953858635,
+            "teacher_kl": 0.7804335954614834,
+            "anchor_kl": 0.0015021133216481966
+          },
+          {
+            "request_id": "1095-0",
+            "tokens": 2801,
+            "objective": 0.041308507099474416,
+            "teacher_kl": 0.43862743995302805,
+            "anchor_kl": 0.0010995056209663332
+          },
+          {
+            "request_id": "1096-0",
+            "tokens": 4294,
+            "objective": 0.026594007874469645,
+            "teacher_kl": 0.28689096148211424,
+            "anchor_kl": 0.0005363959578293542
+          },
+          {
+            "request_id": "1097-0",
+            "tokens": 510,
+            "objective": 0.07187702710008037,
+            "teacher_kl": 0.6908979766326678,
+            "anchor_kl": 0.0014831491544434162
+          },
+          {
+            "request_id": "1098-0",
+            "tokens": 76,
+            "objective": 0.05972389016927824,
+            "teacher_kl": 1.0593207207061106,
+            "anchor_kl": 0.002819388319910319
+          },
+          {
+            "request_id": "1099-0",
+            "tokens": 1050,
+            "objective": 0.03249473298522902,
+            "teacher_kl": 0.316275120513093,
+            "anchor_kl": 0.0011202351708889916
+          },
+          {
+            "request_id": "1100-0",
+            "tokens": 690,
+            "objective": 0.05392954243226692,
+            "teacher_kl": 0.5684779249441276,
+            "anchor_kl": 0.0016463661260152126
+          },
+          {
+            "request_id": "1101-0",
+            "tokens": 510,
+            "objective": 0.0983393177201299,
+            "teacher_kl": 0.7239955168742525,
+            "anchor_kl": 0.0010708052757327456
+          },
+          {
+            "request_id": "1102-0",
+            "tokens": 1782,
+            "objective": 0.06948024795372484,
+            "teacher_kl": 0.3470301284618471,
+            "anchor_kl": 0.0012040294779743078
+          },
+          {
+            "request_id": "1103-0",
+            "tokens": 5931,
+            "objective": 0.035482302104774044,
+            "teacher_kl": 0.2745800107030948,
+            "anchor_kl": 0.0012280859012726208
+          },
+          {
+            "request_id": "1104-0",
+            "tokens": 709,
+            "objective": 0.04429990944672614,
+            "teacher_kl": 0.44415370034518104,
+            "anchor_kl": 0.0016214463911903019
+          },
+          {
+            "request_id": "1105-0",
+            "tokens": 1614,
+            "objective": 0.05089104368466715,
+            "teacher_kl": 0.47726637991824566,
+            "anchor_kl": 0.0015878339836456331
+          },
+          {
+            "request_id": "1106-0",
+            "tokens": 32,
+            "objective": 0.0971437322004931,
+            "teacher_kl": 1.5554272758308798,
+            "anchor_kl": 0.006184537681747315
+          },
+          {
+            "request_id": "1107-0",
+            "tokens": 8106,
+            "objective": 0.008163442288120612,
+            "teacher_kl": 0.07148760714280136,
+            "anchor_kl": 0.00019325444778071284
+          },
+          {
+            "request_id": "1108-0",
+            "tokens": 171,
+            "objective": 0.10231325111874245,
+            "teacher_kl": 1.1302076871726425,
+            "anchor_kl": 0.0023407459766662136
+          },
+          {
+            "request_id": "1109-0",
+            "tokens": 42,
+            "objective": 0.14606715088683858,
+            "teacher_kl": 2.37530934961424,
+            "anchor_kl": 0.0035774821567645717
+          },
+          {
+            "request_id": "1110-0",
+            "tokens": 604,
+            "objective": 0.06470923236244781,
+            "teacher_kl": 0.7176559782226682,
+            "anchor_kl": 0.0011909827910832102
+          },
+          {
+            "request_id": "1111-0",
+            "tokens": 473,
+            "objective": 0.059557442464595475,
+            "teacher_kl": 0.6271405265846582,
+            "anchor_kl": 0.0012523534524390481
+          },
+          {
+            "request_id": "1112-0",
+            "tokens": 634,
+            "objective": 0.036972762259569844,
+            "teacher_kl": 0.39868661369666486,
+            "anchor_kl": 0.0011897722331534319
+          },
+          {
+            "request_id": "1113-0",
+            "tokens": 5679,
+            "objective": 0.023213291903784686,
+            "teacher_kl": 0.19597672664972632,
+            "anchor_kl": 0.0010979673969470018
+          },
+          {
+            "request_id": "1114-0",
+            "tokens": 539,
+            "objective": 0.06843712157911641,
+            "teacher_kl": 0.5642232460718808,
+            "anchor_kl": 0.0011872569782627326
+          },
+          {
+            "request_id": "1115-0",
+            "tokens": 1640,
+            "objective": 0.04777328777708626,
+            "teacher_kl": 0.35641490537881626,
+            "anchor_kl": 0.001664149900709191
+          },
+          {
+            "request_id": "1116-0",
+            "tokens": 3350,
+            "objective": 0.024978127737932773,
+            "teacher_kl": 0.23667568282715962,
+            "anchor_kl": 0.0006174096109481637
+          },
+          {
+            "request_id": "1117-0",
+            "tokens": 123,
+            "objective": 0.1346751721800642,
+            "teacher_kl": 1.636847895849307,
+            "anchor_kl": 0.0020465919136947518
+          },
+          {
+            "request_id": "1118-0",
+            "tokens": 626,
+            "objective": 0.05099377707944172,
+            "teacher_kl": 0.4474789020279171,
+            "anchor_kl": 0.001499729964563676
+          },
+          {
+            "request_id": "1119-0",
+            "tokens": 1628,
+            "objective": 0.029551457566466578,
+            "teacher_kl": 0.339982317258368,
+            "anchor_kl": 0.0009030603340237584
+          },
+          {
+            "request_id": "1120-0",
+            "tokens": 1619,
+            "objective": 0.03615499944379793,
+            "teacher_kl": 0.3611525417606463,
+            "anchor_kl": 0.0011630738861837882
+          },
+          {
+            "request_id": "1121-0",
+            "tokens": 349,
+            "objective": 0.08655354701699852,
+            "teacher_kl": 0.8340946082908054,
+            "anchor_kl": 0.0018491779375181471
+          },
+          {
+            "request_id": "1122-0",
+            "tokens": 529,
+            "objective": 0.05507520662556759,
+            "teacher_kl": 0.4923790960327542,
+            "anchor_kl": 0.001032451718705402
+          },
+          {
+            "request_id": "1123-0",
+            "tokens": 1615,
+            "objective": 0.07539801629266177,
+            "teacher_kl": 0.5957145717724787,
+            "anchor_kl": 0.0014597747720990193
+          },
+          {
+            "request_id": "1124-0",
+            "tokens": 814,
+            "objective": 0.07749131403710863,
+            "teacher_kl": 0.7993603146919483,
+            "anchor_kl": 0.0011607962878563344
+          },
+          {
+            "request_id": "1125-0",
+            "tokens": 900,
+            "objective": 0.04874736510070064,
+            "teacher_kl": 0.3601086411635459,
+            "anchor_kl": 0.0009120203439270647
+          },
+          {
+            "request_id": "1126-0",
+            "tokens": 721,
+            "objective": 0.07137535612640528,
+            "teacher_kl": 0.5124441370707662,
+            "anchor_kl": 0.0015105868060228242
+          },
+          {
+            "request_id": "1127-0",
+            "tokens": 3325,
+            "objective": 0.05108192529683551,
+            "teacher_kl": 0.501875208400035,
+            "anchor_kl": 0.0014514777735710918
+          },
+          {
+            "request_id": "1128-0",
+            "tokens": 89,
+            "objective": 0.08432468883461042,
+            "teacher_kl": 1.3204758501287257,
+            "anchor_kl": 0.002103275701393726
+          },
+          {
+            "request_id": "1129-0",
+            "tokens": 551,
+            "objective": 0.06514390728969294,
+            "teacher_kl": 0.7123639535232875,
+            "anchor_kl": 0.0013286036892239043
+          },
+          {
+            "request_id": "1130-0",
+            "tokens": 307,
+            "objective": 0.04418015132599067,
+            "teacher_kl": 0.6562424396153907,
+            "anchor_kl": 0.0014095332553869543
+          },
+          {
+            "request_id": "1131-0",
+            "tokens": 7,
+            "objective": 0.33789871759446605,
+            "teacher_kl": 8.157822029931205,
+            "anchor_kl": 0.010055900867363172
+          },
+          {
+            "request_id": "1132-0",
+            "tokens": 5250,
+            "objective": 0.003184460114100873,
+            "teacher_kl": 0.046219131146751656,
+            "anchor_kl": 8.492659358342908e-05
+          },
+          {
+            "request_id": "1133-0",
+            "tokens": 412,
+            "objective": 0.027294578098706463,
+            "teacher_kl": 0.4278833930871721,
+            "anchor_kl": 0.0014048149593704608
+          },
+          {
+            "request_id": "1134-0",
+            "tokens": 839,
+            "objective": 0.041017185861377974,
+            "teacher_kl": 0.3295816342760767,
+            "anchor_kl": 0.0011533311823381939
+          },
+          {
+            "request_id": "1135-0",
+            "tokens": 1354,
+            "objective": 0.036074290189213355,
+            "teacher_kl": 0.3674125740898875,
+            "anchor_kl": 0.0010608854597534852
+          },
+          {
+            "request_id": "1136-0",
+            "tokens": 383,
+            "objective": 0.06493187648498633,
+            "teacher_kl": 0.6242563220892046,
+            "anchor_kl": 0.0015738444401133514
+          },
+          {
+            "request_id": "1137-0",
+            "tokens": 29,
+            "objective": 0.09285268591250723,
+            "teacher_kl": 2.0513348769525,
+            "anchor_kl": 0.0014498908991487857
+          },
+          {
+            "request_id": "1138-0",
+            "tokens": 825,
+            "objective": 0.08302738371544734,
+            "teacher_kl": 0.742603081648298,
+            "anchor_kl": 0.002138445603255483
+          },
+          {
+            "request_id": "1139-0",
+            "tokens": 708,
+            "objective": 0.08569931057175167,
+            "teacher_kl": 0.5872438241575194,
+            "anchor_kl": 0.0019330247298764431
+          },
+          {
+            "request_id": "1140-0",
+            "tokens": 94,
+            "objective": 0.0782685156074412,
+            "teacher_kl": 0.9872625230742182,
+            "anchor_kl": 0.001136657935714848
+          },
+          {
+            "request_id": "1141-0",
+            "tokens": 769,
+            "objective": 0.08005300106987737,
+            "teacher_kl": 0.607165720317784,
+            "anchor_kl": 0.0014428015576920365
+          },
+          {
+            "request_id": "1142-0",
+            "tokens": 652,
+            "objective": 0.06815201652998634,
+            "teacher_kl": 0.6344864337142925,
+            "anchor_kl": 0.0018682435612172974
+          },
+          {
+            "request_id": "1143-0",
+            "tokens": 466,
+            "objective": 0.12745013494826402,
+            "teacher_kl": 0.9524889485325555,
+            "anchor_kl": 0.0018367633278705
+          },
+          {
+            "request_id": "1144-0",
+            "tokens": 152,
+            "objective": 0.12279496985150062,
+            "teacher_kl": 1.522509573485877,
+            "anchor_kl": 0.0017649335683258315
+          },
+          {
+            "request_id": "1145-0",
+            "tokens": 686,
+            "objective": 0.07297887623586531,
+            "teacher_kl": 0.6035657105879493,
+            "anchor_kl": 0.001275529020440471
+          },
+          {
+            "request_id": "1146-0",
+            "tokens": 42,
+            "objective": 0.08084364712981965,
+            "teacher_kl": 1.632962947223513,
+            "anchor_kl": 0.004114492277797884
+          },
+          {
+            "request_id": "1147-0",
+            "tokens": 1110,
+            "objective": 0.03746406824556517,
+            "teacher_kl": 0.4054490988355889,
+            "anchor_kl": 0.0010896881745528222
+          },
+          {
+            "request_id": "1148-0",
+            "tokens": 498,
+            "objective": 0.08057443915688078,
+            "teacher_kl": 0.786016033420091,
+            "anchor_kl": 0.0015246569469548042
+          },
+          {
+            "request_id": "1149-0",
+            "tokens": 275,
+            "objective": 0.05033492768172943,
+            "teacher_kl": 0.5891393775817811,
+            "anchor_kl": 0.0019352956008852763
+          },
+          {
+            "request_id": "1150-0",
+            "tokens": 210,
+            "objective": 0.1296276343327485,
+            "teacher_kl": 1.3480765709143487,
+            "anchor_kl": 0.0021822394055518437
+          },
+          {
+            "request_id": "1151-0",
+            "tokens": 706,
+            "objective": 0.05593956185242018,
+            "teacher_kl": 0.5292282601236818,
+            "anchor_kl": 0.0014322531071912989
+          }
+        ]
+      },
+      "source_directory": "runs/topd-data-kappa-20261101/training/budget-b64-u64-k1-s42"
+    }
+  ]
+}

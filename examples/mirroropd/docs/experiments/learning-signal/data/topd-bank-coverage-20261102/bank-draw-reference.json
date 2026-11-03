@@ -1,0 +1,59 @@
+{
+  "scope": "Place the observed first64 in random 64-subsets of the fixed 1024-response pool.\n\nThis is a descriptive conditional reference distribution, chosen after seeing\nthe first64. It is not a preregistered hypothesis test or training-seed evidence.\n",
+  "seed": 20261102,
+  "draws": 10000,
+  "without_replacement": true,
+  "pool_responses": 1024,
+  "pool_correct": 54,
+  "subset_responses": 64,
+  "observed_correct": 7,
+  "metrics": {
+    "verifier_accuracy": {
+      "observed": 0.109375,
+      "random_subset_quantiles_025_50_975": [
+        0.0,
+        0.046875,
+        0.109375
+      ],
+      "fraction_of_random_subsets_ge_observed": 0.0445
+    },
+    "correct_token_weight": {
+      "observed": 0.0672408937288772,
+      "random_subset_quantiles_025_50_975": [
+        0.0,
+        0.03163255728625497,
+        0.1807902885635309
+      ],
+      "fraction_of_random_subsets_ge_observed": 0.145
+    },
+    "longest_seven_token_weight": {
+      "observed": 0.601682782576042,
+      "random_subset_quantiles_025_50_975": [
+        0.35315941163060327,
+        0.5152531164559662,
+        0.6423480438171182
+      ],
+      "fraction_of_random_subsets_ge_observed": 0.1064
+    },
+    "mean_length": {
+      "observed": 1331.5,
+      "random_subset_quantiles_025_50_975": [
+        799.11484375,
+        1238.859375,
+        1842.9718749999997
+      ],
+      "fraction_of_random_subsets_ge_observed": 0.3714
+    }
+  },
+  "exact_hypergeometric_ge_observed": 0.04541889241811468,
+  "script_sha256": "c5ac9201f403aa0c55be8170a85c511326e002bb5a67d14ea1014415d511b4d2",
+  "source_sha256": {
+    "bank.jsonl": "2dbbce2acd3fae0acacbbe2fdaec741be8820a25c5b4c8a0a2bb5dbfb1624fa5",
+    "bank-scores.jsonl": "a427c4f183e4afc05bcbf640917b0391ec035f16cf01e876022902e0399aa9e6"
+  },
+  "limits": [
+    "Post hoc descriptive reference; no significance threshold is used.",
+    "No new answers or models were generated; this is conditional on the existing bank.",
+    "Teacher supervision also trains on incorrect answers; verifier accuracy is not gradient quality."
+  ]
+}

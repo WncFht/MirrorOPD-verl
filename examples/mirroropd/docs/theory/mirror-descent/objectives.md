@@ -538,6 +538,53 @@ $$
 
 平方根情况的归一化常数是 $(1-\eta)^2+\eta^2+2\eta(1-\eta)\sum_a\sqrt{q_aT_a}$，通常不是 1。将“幂均值分子”当成已归一化概率会算错真实 KL；梯度中能消去一个动作无关常数，不意味着所有中间 normalizer 都可以删除。
 
+<a id="half-target-overlap"></a>
+
+#### 平方根目标的重叠分量与教师相对偏好动作
+
+在同一正支持上定义
+
+$$
+C=\sum_a\sqrt{q_aT_a},\qquad b_a=\frac{\sqrt{q_aT_a}}{C}.
+$$
+
+由 Cauchy–Schwarz 不等式，$0<C\le1$，且 $b$ 是一个归一化分布。展开平方根目标并保留其 normalizer，得到精确分解
+
+$$
+\begin{aligned}
+Z_{1/2}&=(1-\eta)^2+\eta^2+2\eta(1-\eta)C,\\
+m_{1/2}&=\frac{(1-\eta)^2}{Z_{1/2}}q
++\frac{2\eta(1-\eta)C}{Z_{1/2}}b
++\frac{\eta^2}{Z_{1/2}}T.
+\end{aligned}
+$$
+
+三个系数非负且和为 1。η=0.1 时，未归一化分子为 $0.81q+0.18\sqrt{qT}+0.01T$；κ=1 则为 $0.9q+0.1T$。这里的重叠分布 $b$ 同样含有 teacher 信息，不能把平方根目标中的显式 T 系数误说成“只用了约 1% 的教师监督”。例如 $q=T$ 时，两个目标都恰好等于 q，尽管上述显式系数不同。
+
+这种分解在 teacher 相对 student 概率很大的动作上给出定量区别。记 $r_a=T_a/q_a$，则
+
+$$
+\frac{m_{1,a}}{m_{1/2,a}}
+=Z_{1/2}\frac{(1-\eta)+\eta r_a}{[(1-\eta)+\eta\sqrt{r_a}]^2}.
+$$
+
+令 $x=\sqrt r$，括号外的有理函数满足
+
+$$
+R_\eta(x)=\frac{(1-\eta)+\eta x^2}{[(1-\eta)+\eta x]^2},\qquad
+R_\eta'(x)=\frac{2\eta(1-\eta)(x-1)}{[(1-\eta)+\eta x]^3}.
+$$
+
+对 $x\ge1$ 它单调不减。再用 $Z_{1/2}\ge(1-\eta)^2+\eta^2$，对任意 $r_a\ge R\ge1$ 有
+
+$$
+\frac{m_{1,a}}{m_{1/2,a}}
+\ge[(1-\eta)^2+\eta^2]
+\frac{(1-\eta)+\eta R}{[(1-\eta)+\eta\sqrt R]^2}.
+$$
+
+η=0.1、R=100 时，下界约为 2.4759；对满足该条件的动作集合求和，目标概率质量也满足同一下界。相比平方根目标，算术目标确实能给这些 teacher 相对偏好的动作更多概率。这里的“偏好”只由似然比定义，不代表动作在数学任务中正确，也不保证共享参数模型能拟合这些目标或取得更高任务分数。
+
 <a id="weighted-4-不能混同的-jf-与内层拟合损失"></a>
 
 ### 4. 不能混同的 J、F 与内层拟合损失
@@ -596,6 +643,54 @@ $$
 | Part/BPO/Mean                   | 见第 7 节      | 不同残差拟合方法，不能仅按 current/frozen 标签分类 |
 
 目标 teacher 和拟合损失是两个独立选择。用 $\kappa$ 改目标 teacher，不意味着自动将内层 reverse KL 替换为 $D_\kappa$。
+
+<a id="weighted-loss-order"></a>
+
+#### 4.3 κ 与未归一化损失的排序
+
+固定严格正的 $p,q,T$ 与 $0<\eta<1$，记未归一化幂均值为 $w_{\kappa,a}$，$m_\kappa=w_\kappa/Z_\kappa$。实际 MDPO 标量满足
+
+$$
+L_\kappa(p;q,T)=\frac1\eta\sum_a p_a\log\frac{p_a}{w_{\kappa,a}}
+=\frac{\mathrm{KL}(p\Vert m_\kappa)-\log Z_\kappa}{\eta}.
+$$
+
+对每个动作，定义
+
+$$
+g_a(t)=\log\left[(1-\eta)e^{t\log q_a}+\eta e^{t\log T_a}\right],\qquad
+u_a(t)=\frac{(1-\eta)q_a^t}{(1-\eta)q_a^t+\eta T_a^t}.
+$$
+
+直接求导得到 $g_a(0)=0$ 以及
+
+$$
+g_a''(t)=u_a(t)[1-u_a(t)](\log q_a-\log T_a)^2\ge0.
+$$
+
+对 $0<s<t$，凸性给出 $g_a(s)\le(s/t)g_a(t)$，因此 $g_a(s)/s\le g_a(t)/t$；令 $s\to0$ 得到极限 $g_a'(0)=(1-\eta)\log q_a+\eta\log T_a$。由于 $\log w_{\kappa,a}=g_a(\kappa)/\kappa$，未归一化权重随κ逐坐标不减。于是，对固定的同一 $p,q,T$，
+
+$$
+w_{0,a}\le w_{1/2,a}\le w_{1,a},\qquad
+L_0(p;q,T)\ge L_{1/2}(p;q,T)\ge L_1(p;q,T).
+$$
+
+这个损失排序在模型尚未更新时就成立。归一化后的 $m_\kappa$ 不继承逐坐标排序，$\mathrm{KL}(p\Vert m_\kappa)$、teacher KL 和任务正确率也不由上式排序。不同κ训练出不同 $p$ 时，还须区分目标定义变化与实际学习进展。
+
+信号的局部展开进一步区分形状和尺度。令 $r=\log(T_a/q_a)$、$A_\kappa(r)=f_{\kappa,\eta}(r)/\eta$；由 $f(0)=0$、$f'(0)=\eta$、$f''(0)=\kappa\eta(1-\eta)$，有
+
+$$
+A_\kappa(r)=r+\frac{\kappa(1-\eta)}2r^2+O(r^3),\qquad r\to0.
+$$
+
+小分歧的一阶信号相同；较大κ改变非线性项以及强分歧动作的权重。对κ>0 还有
+
+$$
+\lim_{r\to-\infty}A_\kappa(r)=\frac{\log(1-\eta)}{\kappa\eta},\qquad
+A_\kappa(r)=\frac r\eta+\frac{\log\eta}{\kappa\eta}+o(1),\quad r\to+\infty.
+$$
+
+在起点 $p=q$，对 student logit $z_a$ 的梯度是 $q_a[\mathbb E_q A_\kappa-A_{\kappa,a}]$。其中的居中项依赖所有动作，所以信号的逐坐标变化不能直接解释成 EOS 梯度总朝某一方向变化。模型参数梯度还经过网络 Jacobian；比较实际更新需要同时看梯度方向、裁剪、自适应矩及策略位移。对应的同前缀测量见[κ实验](../../experiments/learning-signal/weighted-targets.md)。
 
 <a id="weighted-5-fixed-advantage-与-current-advantage-的准确含义"></a>
 

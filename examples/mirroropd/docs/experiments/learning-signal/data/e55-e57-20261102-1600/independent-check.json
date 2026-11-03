@@ -1,0 +1,53 @@
+{
+  "checks": [
+    {
+      "name": "E55",
+      "old_prefix_identical": true,
+      "history_rows": 1359,
+      "new_history_rows": 340,
+      "update_count": 1280,
+      "new_updates": 320,
+      "validation_macro_recomputed": true
+    },
+    {
+      "name": "E56",
+      "old_prefix_identical": true,
+      "history_rows": 1700,
+      "new_history_rows": 102,
+      "update_count": 1600,
+      "new_updates": 96,
+      "validation_macro_recomputed": true
+    },
+    {
+      "name": "E57",
+      "old_prefix_identical": true,
+      "history_rows": 1700,
+      "new_history_rows": 0,
+      "update_count": 1600,
+      "new_updates": 0,
+      "validation_macro_recomputed": true
+    }
+  ],
+  "contrasts": {
+    "E57_minus_E55_outer70": {
+      "accuracy_pp": 2.3279166666666686,
+      "cap_pp": -31.125416666666666,
+      "length_tokens": -5742.983170833335,
+      "aime_accuracy_pp": 1.1111111111111118
+    },
+    "E57_minus_E56_outer70": {
+      "accuracy_pp": 0.6333333333333357,
+      "cap_pp": -6.500416666666667,
+      "length_tokens": -512.3904875000007,
+      "aime_accuracy_pp": 0.13888888888888934
+    },
+    "E57_minus_E56_outer100": {
+      "accuracy_pp": 0.5379166666666657,
+      "cap_pp": -4.449999999999998,
+      "length_tokens": -347.0396833333325,
+      "aime_accuracy_pp": 0.2777777777777782
+    }
+  },
+  "all_updates": 4480,
+  "all_complete_blocks": 280
+}

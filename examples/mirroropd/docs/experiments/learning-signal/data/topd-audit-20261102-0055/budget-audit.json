@@ -1,0 +1,40 @@
+{
+  "local_E57_final": {
+    "outers": 100,
+    "fresh_responses_per_outer": 64,
+    "prompt_draws": 6400,
+    "optimizer_updates": 1600,
+    "response_visits": 102400
+  },
+  "paper_configuration_at_same100_outers": {
+    "new_responses": 409600,
+    "prompt_draws": 51200,
+    "optimizer_updates": 1600,
+    "response_visits": 409600
+  },
+  "figure5_inferred400_outers": {
+    "new_responses": 1638400,
+    "prompt_draws": 204800,
+    "optimizer_updates": 6400,
+    "new_response_ratio_vs_E57": 256,
+    "inference_not_observed_run_log": true
+  },
+  "dataset_duplication": {
+    "raw_rows": 17917,
+    "unique_normalized_prompts": 16921,
+    "expected_unique_prompts_in_uniform6400_without_replacement": 6266.3792604527625,
+    "expected_fraction_redundant": 0.0208782405542558,
+    "assumption": "Uniform subset of 6400 row indices without replacement; not actual dataloader reconstruction."
+  },
+  "sources": {
+    "paper_url": "https://arxiv.org/html/2607.04751v2",
+    "pdf_sha256": "2977e8ff6540438bbce718c001cbe2f3073dc1053141444cfbc207fcd5619260",
+    "official_trainer_commit": "9a2716cba22cab508825ad3be3f78327bb8139e5",
+    "official_trainer_local": "runs/topd-comparison-20261101/source/ray_trainer.py"
+  },
+  "limits": [
+    "Figure5 training-step mapping is inferred from the public trainer; original W&B histories unavailable.",
+    "More new samples, more updates and larger optimizer minibatches are separate interventions.",
+    "Dataset duplication is real but cannot establish a causal accuracy effect."
+  ]
+}

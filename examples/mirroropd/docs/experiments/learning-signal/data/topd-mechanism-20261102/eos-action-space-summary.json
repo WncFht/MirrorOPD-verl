@@ -1,0 +1,68 @@
+{
+  "groups": {
+    "all": {
+      "states": 993,
+      "raw_teacher_kl": 2.878735353031048,
+      "coarse_teacher_kl": 2.409737604420706,
+      "within_eos_teacher_kl_cost": 0.46899774861034194,
+      "q_stop": 0.03204117594120546,
+      "t_stop": 0.03247873949295211,
+      "q_eot_conditional": 0.9914318199138774,
+      "t_eot_conditional": 0.5026719551465085,
+      "within_eos_fraction_of_raw_sum": 0.16291797997913582,
+      "gradients": {
+        "0.0": {
+          "raw_eos_bias_gradient": 0.059254137385241566,
+          "coarse_eos_bias_gradient": -0.005266810502867917,
+          "raw_objective": 2.878735353031048,
+          "coarse_objective": 2.4097376044207066
+        },
+        "0.5": {
+          "raw_eos_bias_gradient": 0.007138133168981775,
+          "coarse_eos_bias_gradient": -0.002451998205781135,
+          "raw_objective": 0.40869598811459323,
+          "coarse_objective": 0.3448385895413738
+        },
+        "1.0": {
+          "raw_eos_bias_gradient": 0.004555034033406808,
+          "coarse_eos_bias_gradient": -0.0016814995945559981,
+          "raw_objective": 0.15227268352120982,
+          "coarse_objective": 0.11918943902688765
+        }
+      }
+    },
+    "terminal": {
+      "states": 64,
+      "raw_teacher_kl": 7.960832513212596,
+      "coarse_teacher_kl": 0.8008794205130754,
+      "within_eos_teacher_kl_cost": 7.159953092699521,
+      "q_stop": 0.48133936969932145,
+      "t_stop": 0.47487443078163455,
+      "q_eot_conditional": 0.9999986103795582,
+      "t_eot_conditional": 0.07581530442657082,
+      "within_eos_fraction_of_raw_sum": 0.8993975291925995,
+      "gradients": {
+        "0.0": {
+          "raw_eos_bias_gradient": 0.7976875369593228,
+          "coarse_eos_bias_gradient": -0.09402746898554296,
+          "raw_objective": 7.960832513212596,
+          "coarse_objective": 0.8008794205130754
+        },
+        "0.5": {
+          "raw_eos_bias_gradient": 0.08989214808006928,
+          "coarse_eos_bias_gradient": -0.03398708666067678,
+          "raw_objective": 1.266802134076381,
+          "coarse_objective": 0.3027670993599121
+        },
+        "1.0": {
+          "raw_eos_bias_gradient": 0.05866961054276413,
+          "coarse_eos_bias_gradient": -0.016144335448208588,
+          "raw_objective": 0.5922276313432536,
+          "coarse_objective": 0.1023436312408574
+        }
+      }
+    }
+  },
+  "cpu_vs_gpu_max_coarse_difference": 0.00011609971956261234,
+  "scope": "Reconstructed probabilities and analytic derivatives only; no alternate-EOS training run yet."
+}

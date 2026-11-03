@@ -1,0 +1,32 @@
+{
+  "status": "complete",
+  "seconds": 1881.0602333545685,
+  "responses_sha256": "3f930bde1a5e1a8d78eb02113eb4b5e73b9b18c3157130e5f6f84329547b3c63",
+  "scores_sha256": "6c819d9fbf0c04017a4aa9781abc6aa4352f7a89fb0e77933317e0608496074c",
+  "summary_sha256": "4394235db692caeebe6938145d2523623d161c7e80e0119a62d757fb25103c93",
+  "identity": {
+    "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "config_sha256": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+    "question_plan_sha256": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7",
+    "input_variant": "local",
+    "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+    "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+    "official_verifier_timeout_seconds": 1.0,
+    "weight_sha256": {
+      "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+    },
+    "decoding": {
+      "temperature": 1.0,
+      "top_p": 0.7,
+      "cap": 16384
+    },
+    "n": 4,
+    "label": "base",
+    "protocol": "paper",
+    "scope": [
+      "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+      "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+      "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+    ]
+  }
+}

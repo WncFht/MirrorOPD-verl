@@ -1,0 +1,187 @@
+{
+  "checked_at_shanghai": "2026-11-02T16:03:04.653268+08:00",
+  "logs_head": "9336a0978052a0d66c0980afdb1a9d64e2bdb11b",
+  "remote_snapshot_commit": "2ddb9983261c2256708122266185c599c32851a4",
+  "analysis_script": "examples/mirroropd/research/studies/termination/analyze_e55_e57.py",
+  "analysis_sha256": "6b40a75001c900a4fead5e19ccc8ff6dedac084be8e2c13ad213eff93c2bff5b",
+  "analysis_data_sha256": "37c3e204418d621ca618c7aad15df8385d2d66693f342cfbaec251440eccc3d2",
+  "scope": "Received log snapshots; not live training state",
+  "runs": [
+    {
+      "name": "E55",
+      "run_id": "j5uaal3j",
+      "sha256": "9c6cde7dea5b29b80c6710a82db6ac540d64f867542b563ec4a5344d34a6e928",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261030_094536-j5uaal3j/run-j5uaal3j.wandb",
+      "source_status": "partial_snapshot",
+      "exit_code": null,
+      "snapshot_end_shanghai": "2026-11-02T12:26:49.777987+08:00",
+      "update_count": 1280,
+      "update_outer": 80,
+      "complete_outer": 79,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70
+      ],
+      "history_rows": 1359
+    },
+    {
+      "name": "E56",
+      "run_id": "zsnhqzts",
+      "sha256": "2f5425741d9d6c8dac4f27b06d5cae5a98038d516c44514960252010257b761f",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261029_234048-zsnhqzts/run-zsnhqzts.wandb",
+      "source_status": "finished",
+      "exit_code": 0,
+      "snapshot_end_shanghai": "2026-11-02T03:11:30.567748+08:00",
+      "update_count": 1600,
+      "update_outer": 100,
+      "complete_outer": 100,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "history_rows": 1700
+    },
+    {
+      "name": "E57",
+      "run_id": "6j5knkmk",
+      "sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830",
+      "raw_source": "MirrorOPD-verl/wandb/offline-run-20261030_015214-6j5knkmk/run-6j5knkmk.wandb",
+      "source_status": "finished",
+      "exit_code": 0,
+      "snapshot_end_shanghai": "2026-11-01T15:40:42.800617+08:00",
+      "update_count": 1600,
+      "update_outer": 100,
+      "complete_outer": 100,
+      "validation_outers": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "history_rows": 1700
+    }
+  ],
+  "figure_audits": {
+    "optimization-audit.json": [],
+    "training-audit.json": [],
+    "validation-accuracy-audit.json": [],
+    "validation-audit.json": [],
+    "validation-cap_rate-audit.json": [],
+    "validation-length-audit.json": []
+  },
+  "visual_inspection": "All six PNGs inspected; labels, legends and plotted data fit without overlap or clipping.",
+  "figure_sha256": {
+    "optimization.pdf": "193ba7fffd63852a5e48ad8a3917f9ec1ececb81a3801360dfea7c4f05c6b3ed",
+    "optimization.png": "44826cc676fa8f1549842d331e27f02d6cfb9bf4dd70f9bf80d5b9baf47f2baf",
+    "training.pdf": "034779aea04e0074cf44c40f7b5bfc8b1f20390e481b3076760db3400bf8843d",
+    "training.png": "de8a9b06271d8601777a66ce94c4e21c0bd7e9127c65a85f1dd345485afb4f53",
+    "validation-accuracy.pdf": "1b80aad8de29ac0a6638a5b66694714e24f550740e6614bed8e8ed8d8b28fcd1",
+    "validation-accuracy.png": "df38aa66cbf67cff664c7a409c539511482b4ecb9646ff5fc3ae9ece80e6cbbb",
+    "validation-cap_rate.pdf": "72e8aba3d153763c5bb55e22890e615df87b8b034359dc9dd7c1bc95eee104a0",
+    "validation-cap_rate.png": "281b84998fb52b306c0ba7507e9cbc83433003f5e0a56ff9532414c382dc0b7c",
+    "validation-length.pdf": "8b825a0d390c5f338f8b1bd60ce362a1970add1d680b9e73c363ed40507c750e",
+    "validation-length.png": "d32a80003d72c03120ca84589d80177d4d8a146947d034fb8c96d0472358f4fa",
+    "validation.pdf": "dad49390f3cd654b08685241dbc2f89fb6c0178e0ae7173d9757d214348197ca",
+    "validation.png": "f6ad467faabab4e20b126cde823811e2c826d9573c3f4656bd27afe1c89e6fd2"
+  },
+  "completed_at_shanghai": "2026-11-02T16:10:25.173233+08:00",
+  "sync": {
+    "exit_code": 0,
+    "new_source_history_rows": 442,
+    "results": [
+      {
+        "run_id": "j5uaal3j",
+        "cli_exit": 0,
+        "source_status": "partial_snapshot",
+        "source_sha256": "9c6cde7dea5b29b80c6710a82db6ac540d64f867542b563ec4a5344d34a6e928",
+        "source_bytes": 103251968,
+        "upload_bytes": 30441593,
+        "cloud_prefix_last_step": 1018,
+        "new_history_rows": 340,
+        "source_history_rows": 1359,
+        "retained_record_kinds": {
+          "header": 1,
+          "run": 1,
+          "environment": 2,
+          "files": 1,
+          "telemetry": 3,
+          "metric": 3702,
+          "summary": 2718,
+          "stats": 9449,
+          "output_raw": 865,
+          "history": 340
+        },
+        "synthetic_records": 0,
+        "source_unchanged": true
+      },
+      {
+        "run_id": "zsnhqzts",
+        "cli_exit": 0,
+        "source_status": "finished",
+        "source_sha256": "2f5425741d9d6c8dac4f27b06d5cae5a98038d516c44514960252010257b761f",
+        "source_bytes": 103755274,
+        "upload_bytes": 13592578,
+        "cloud_prefix_last_step": 1597,
+        "new_history_rows": 102,
+        "source_history_rows": 1700,
+        "retained_record_kinds": {
+          "header": 1,
+          "run": 1,
+          "environment": 2,
+          "files": 1,
+          "telemetry": 4,
+          "metric": 3702,
+          "summary": 3401,
+          "output_raw": 6889,
+          "stats": 2138,
+          "history": 102,
+          "exit": 1
+        },
+        "synthetic_records": 0,
+        "source_unchanged": true
+      },
+      {
+        "run_id": "6j5knkmk",
+        "skipped_current": true,
+        "source_sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830"
+      }
+    ],
+    "cloud_verification_passed": true,
+    "unique_history_rows": {
+      "j5uaal3j": 1359,
+      "zsnhqzts": 1700,
+      "6j5knkmk": 1700
+    },
+    "scanned_repeated_step_rows": {
+      "j5uaal3j": 1019,
+      "zsnhqzts": 1598,
+      "6j5knkmk": 0
+    },
+    "note": "Cloud scan can return repeated prefix steps after append; all checked repeated values agree. Scientific analysis uses local unique rows, never scan row count."
+  },
+  "validation": {
+    "figure_audits": "six empty issue lists",
+    "visual_inspection": "all six PNGs inspected",
+    "docs_format": "passed",
+    "docs_check": "198 pages, 3356 local links, 187 symbols, 5 Python examples, unavailable evidence 0; existing length review notices"
+  }
+}

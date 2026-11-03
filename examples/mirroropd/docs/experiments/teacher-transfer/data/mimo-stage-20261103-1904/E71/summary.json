@@ -1,0 +1,404 @@
+{
+  "label": "MiMo E71 (SFT+RL)",
+  "outer": 25,
+  "updates": 800,
+  "reuse": 32,
+  "gpus": 4,
+  "completed_readouts": [
+    0,
+    1,
+    2,
+    5,
+    10,
+    15,
+    20,
+    25
+  ],
+  "ordinary_outers": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    16,
+    17,
+    18,
+    19,
+    21,
+    22,
+    23,
+    24
+  ],
+  "ordinary": {
+    "outer_seconds": 1281.3997588054174,
+    "actor_seconds": 1125.0977276679541,
+    "rollout_seconds": 139.319676587979,
+    "teacher_seconds": 13.561445439855257,
+    "sync_seconds": 2.7023386417163744,
+    "input_tokens": 855318.3333333334,
+    "mean_response_length": 6568.900607638889,
+    "actor_mfu": 0.321906542052981,
+    "allocated_peak_gib": 47.914653831058075,
+    "balanced_max_min_ratio": 1.0032169519499332
+  },
+  "recent5": {
+    "outer_seconds": 6004.620247121155,
+    "actor_seconds": 1085.3896272704005,
+    "rollout_seconds": 137.95912842601538,
+    "teacher_seconds": 13.682439716160298,
+    "sync_seconds": 2.092342220246792,
+    "input_tokens": 827392,
+    "mean_response_length": 6352.7609375,
+    "actor_mfu": 0.32272974151518974,
+    "allocated_peak_gib": 48.38684320449829,
+    "balanced_max_min_ratio": 1.0007373971903566
+  },
+  "actor_share": 0.8780224281584262,
+  "token_passes_per_gpu_second": 6081.735389199969,
+  "first_update": {
+    "update": 1,
+    "outer": 1,
+    "loss": 0.25638651847839355,
+    "grad_norm": 2.4004857540130615
+  },
+  "last_update": {
+    "update": 800,
+    "outer": 25,
+    "loss": 0.04200196638703346,
+    "grad_norm": 0.07008682936429977
+  },
+  "last_outer": {
+    "outer": 25,
+    "optimizer_updates": 800,
+    "questions": 128,
+    "input_tokens": 830240,
+    "response_tokens": 815890,
+    "mean_response_length": 6374.140625,
+    "length_finish_fraction": 0.7109375,
+    "actor_seconds": 1095.4589304700494,
+    "actor_seconds_per_update": 34.23309157718904,
+    "rollout_seconds": 136.46116597950459,
+    "evaluation_seconds": 23821.898223228753,
+    "other_seconds": 16.077973134815693,
+    "outer_seconds": 25069.896292813122,
+    "teacher_seconds": 13.246812000870705,
+    "sync_seconds": 0.0,
+    "token_passes_per_gpu_second": 6063.139215223729,
+    "actor_mfu": 0.32156445063985695,
+    "allocated_peak_gib": 48.38684320449829,
+    "balanced_max_min_ratio": 1.0009399538217558
+  },
+  "first_batch_last_update": {
+    "update": 32,
+    "outer": 1,
+    "loss": 0.0937163382768631,
+    "grad_norm": 0.384153813123703
+  },
+  "last_batch_first_update": {
+    "update": 769,
+    "outer": 25,
+    "loss": 0.10627502202987671,
+    "grad_norm": 0.46716177463531494
+  },
+  "initial_rkl": [
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "all",
+      "rkl": 2.117732416981082,
+      "questions": 512
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "math",
+      "rkl": 2.710520798422599,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "code",
+      "rkl": 1.8055991667935307,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "science",
+      "rkl": 2.2157442944869348,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "if",
+      "rkl": 1.7390654082212635,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "all",
+      "rkl": 0.40612622873544924,
+      "questions": 512
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "math",
+      "rkl": 0.19948383430315442,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "code",
+      "rkl": 0.1603000593595993,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "science",
+      "rkl": 0.3238301898286991,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "if",
+      "rkl": 0.940890831450344,
+      "questions": 128
+    }
+  ],
+  "last_rkl": [
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_initial",
+      "domain": "all",
+      "rkl": 0.3487253207396868,
+      "questions": 512
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_initial",
+      "domain": "math",
+      "rkl": 0.24061496928424642,
+      "questions": 128
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_initial",
+      "domain": "code",
+      "rkl": 0.2122663704287922,
+      "questions": 128
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_initial",
+      "domain": "science",
+      "rkl": 0.39696198314350906,
+      "questions": 128
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_initial",
+      "domain": "if",
+      "rkl": 0.5450579601021996,
+      "questions": 128
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_teacher",
+      "domain": "all",
+      "rkl": 0.28820100471681454,
+      "questions": 512
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_teacher",
+      "domain": "math",
+      "rkl": 0.11349002561932561,
+      "questions": 128
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_teacher",
+      "domain": "code",
+      "rkl": 0.12787893250567764,
+      "questions": 128
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_teacher",
+      "domain": "science",
+      "rkl": 0.2481252046207372,
+      "questions": 128
+    },
+    {
+      "outer": 25,
+      "optimizer_updates": 800,
+      "bank": "public_teacher",
+      "domain": "if",
+      "rkl": 0.6633098561215176,
+      "questions": 128
+    }
+  ],
+  "historical": {
+    "label": "JustRL / R1 1.5B",
+    "ordinary_outers": 38,
+    "actor_seconds": 275.8438878629945,
+    "input_tokens": 743530.8684210526,
+    "rollout_seconds": 25.040057347009057,
+    "outer_seconds": 320.7956923934582,
+    "source_history_seconds": 14.348042481823972,
+    "token_passes_per_gpu_second": 21563.816379802414
+  },
+  "setting": {
+    "actor_rollout_ref.model.path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+    "distillation.teacher_models.teacher_model.model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+    "actor_rollout_ref.actor.optim": {
+      "_target_": "verl.workers.config.FSDPOptimizerConfig",
+      "optimizer": "AdamW",
+      "optimizer_impl": "torch.optim",
+      "lr": 1e-06,
+      "lr_warmup_steps_ratio": 0.0,
+      "total_training_steps": -1,
+      "weight_decay": 0.01,
+      "lr_warmup_steps": 0,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "clip_grad": 1.0,
+      "min_lr_ratio": 0.0,
+      "num_cycles": 0.5,
+      "lr_scheduler_type": "constant",
+      "zero_indexed_step": true,
+      "warmup_style": null,
+      "override_optimizer_config": null
+    },
+    "actor_rollout_ref.actor.fsdp_config": {
+      "_target_": "verl.workers.config.FSDPEngineConfig",
+      "wrap_policy": {
+        "min_num_params": 0
+      },
+      "param_offload": true,
+      "optimizer_offload": true,
+      "offload_policy": false,
+      "forward_only_cpu_offload": true,
+      "reshard_after_forward": true,
+      "fsdp_size": -1,
+      "forward_prefetch": false,
+      "model_dtype": "fp32",
+      "forward_precision": null,
+      "use_orig_params": false,
+      "seed": 42,
+      "full_determinism": false,
+      "ulysses_sequence_parallel_size": 1,
+      "entropy_from_logits_with_chunking": false,
+      "entropy_from_logits_chunk_size": 2048,
+      "use_torch_compile": true,
+      "entropy_checkpointing": false,
+      "use_no_sync_for_gradient_accumulation": false,
+      "pad_to_length": false,
+      "pad_to_length_bucket": 1024,
+      "forward_only": false,
+      "strategy": "fsdp",
+      "dtype": "bfloat16",
+      "qat": {
+        "_target_": "verl.workers.config.QATEngineConfig",
+        "enable": false,
+        "mode": "w4a16",
+        "group_size": 16,
+        "ignore_patterns": [
+          "lm_head",
+          "embed_tokens",
+          "re:.*mlp.gate$"
+        ],
+        "activation_observer": "static_minmax",
+        "quantization_config_path": null
+      },
+      "turbo_config": {
+        "distributed": {
+          "fully_shard_parallel_size": 16,
+          "tensor_parallel_size": 1,
+          "expert_parallel_size": 1,
+          "expert_fully_shard_parallel_size": 1,
+          "ulysses_parallel_size": 1,
+          "fsdp_plan": {
+            "param_dtype": "bf16",
+            "reduce_dtype": "fp32",
+            "output_dtype": "bf16",
+            "fsdp_implementation": "native",
+            "num_to_forward_prefetch": 1,
+            "num_to_backward_prefetch": 1
+          }
+        }
+      }
+    },
+    "distillation.distillation_loss": {
+      "_target_": "verl.workers.config.DistillationLossConfig",
+      "loss_mode": "mirror",
+      "mirror": {
+        "objective": "mdpo",
+        "estimator": "full_vocab",
+        "kappa": 0,
+        "eta": 1,
+        "diagnostics": false
+      },
+      "full_vocab": {
+        "_target_": "verl.workers.config.distillation.FullVocabConfig",
+        "backend": "precompute_fused",
+        "token_chunk_size": 256,
+        "vocab_chunk_size": 8192,
+        "async_write": true,
+        "prefetch": true,
+        "forward_teacher_support": "equal",
+        "termination_token_ids": [],
+        "distribution": {},
+        "input_id_mapping": "identity"
+      },
+      "topk": 32,
+      "use_task_rewards": false,
+      "distillation_loss_coef": 1.0,
+      "loss_max_clamp": null,
+      "log_prob_min_clamp": null,
+      "use_policy_gradient": false,
+      "policy_loss_mode": "vanilla",
+      "advantage_source": "current",
+      "clip_ratio": 0.2,
+      "clip_ratio_low": 0.2,
+      "clip_ratio_high": 0.2
+    },
+    "actor_rollout_ref.actor.ppo_max_token_len_per_gpu": 32768,
+    "actor_rollout_ref.rollout.max_num_seqs": 16,
+    "actor_rollout_ref.rollout.gpu_memory_utilization": 0.65,
+    "trainer.evaluation.generation_concurrency": 64
+  }
+}
