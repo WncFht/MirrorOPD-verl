@@ -188,6 +188,9 @@ def test_initial_and_two_outer_readouts_publish_parquet_without_token_history(ru
         )
         event = ArtifactStore(callback.root / "scores" / f"outer-{outer:03d}")
         assert event.manifest(complete=True)["metadata"]["optimizer_steps"] == outer * 32
+        coverage = event.manifest(complete=True)["metadata"]["coverage"]
+        assert coverage["expected_rows"] == coverage["observed_rows"] == coverage["valid_rows"] == 4
+        assert coverage["scientific_complete"] and coverage["missing_rows"] == 0
         assert len(event.read_rows("rkl.parquet")) == 4
         assert "eval/rkl/history/equal_batch_question_mean" in metrics
         assert all("response_ids" not in row for rows in callback.batches.values() for row in rows)
@@ -224,6 +227,43 @@ def test_failure_never_publishes_a_complete_score_event(runtime, failure):
         trainer.checkpoint_manager.update_weights.assert_not_called()
     else:
         assert all("rkl-readout" not in partition for partition, _ in queue.rows)
+
+
+def test_missing_source_result_fails_before_event_creation(runtime, monkeypatch):
+    callback, trainer, _ = runtime
+    score = readout.score_native_rows
+
+    def omit_result(*args, **kwargs):
+        rows, timing = score(*args, **kwargs)
+        return rows[:-1], timing
+
+    monkeypatch.setattr(readout, "score_native_rows", omit_result)
+    with pytest.raises(ValueError, match="coverage mismatch"):
+        callback.on_readout(trainer, 0)
+    assert not (callback.root / "scores/outer-000/manifest.json").exists()
+    assert not callback.scored
+
+
+def test_invalid_source_result_is_retained_without_a_scientific_mean(runtime):
+    callback, trainer, _ = runtime
+    score = trainer.actor_rollout_wg.score_full_vocab
+
+    def invalid_result(meta):
+        score(meta)
+        # The settled native result is present but scientifically invalid.
+        readout.tq.kv_batch_put(
+            keys=[meta.keys[0]],
+            partition_id=meta.partition_id,
+            fields={"rkl_sum": torch.tensor([[float("nan")]])},
+        )
+
+    trainer.actor_rollout_wg.score_full_vocab = invalid_result
+    metrics = callback.on_readout(trainer, 0)
+    event = ArtifactStore(callback.root / "scores/outer-000")
+    coverage = event.manifest(complete=True)["metadata"]["coverage"]
+    assert coverage["observed_rows"] == 2 and coverage["invalid_rows"] == 1
+    assert not coverage["scientific_complete"]
+    assert "eval/rkl/source_heldout/question_mean" not in metrics
 
 
 def test_shared_source_bank_checks_template_and_does_not_regenerate(runtime, tmp_path):

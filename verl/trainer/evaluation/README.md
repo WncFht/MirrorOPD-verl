@@ -139,6 +139,8 @@ Public bank 是 generation 产物的 sample 0 引用，无需再复制一份长 
 
 ## 产物和完成边界
 
+Source/history 的产物布局如下；公共 suite 的布局见后表。
+
 ```text
 readout/
   manifest.json
@@ -152,9 +154,20 @@ readout/
     rkl.parquet
 ```
 
+公共 suite 的运行目录保存以下对象；bootstrap 由独立目录提供并绑定其 manifest 身份。
+
+| 路径 | 内容 |
+| --- | --- |
+| `events/outer-NNN/manifest.json` | 计划、outer/optimizer 进度、coverage、指标、耗时和 aliases |
+| `events/outer-NNN/rkl.parquet` | 按银行选择身份记录的 RKL sum/count 和 measure-id |
+| `events/outer-NNN/current/` | 本轮 current student 生成的不可变分片 |
+| `events/outer-NNN/accuracy/` | 跟随生成分片的 CPU 判分结果及 verifier 来源 |
+| `trajectories/`、`history/` | 训练原始轨迹与轻量历史引用 |
+| `final-model/` | 最终模型及导出审计 |
+
 训练轨迹只写一次。History 行只有`id/source_id/outer/shard/row_index/history_batch/history_quota`，按分片和 row group 加载实际 token；driver 只保留轻量历史引用和当前 source 银行。
 
-一个对象只有一个 manifest，记录版本、身份、文件 hash／大小／行数及状态。文件不可覆盖；写完临时 Parquet 后 rename，再发布 manifest。评分事件在前向、审计、TQ 清理和必要的 rollout 恢复均成功后才发布。事件完成表示文件完整；`coverage.scientific_complete`另表示是否有完整有效科学读数。读出集合的最终完成不代表全部 Trainer 日志或模型导出也已完成。
+一个对象只有一个 manifest，记录版本、身份、文件 hash／大小／行数及状态。文件不可覆盖；写完临时 Parquet 后 rename，再发布 manifest。评分事件在前向、审计、TQ 清理和必要的 rollout 恢复均成功后才发布。事件完成表示文件完整且要求的恢复已完成。两种读出共用 `coverage`：记录 expected/observed/valid/invalid/missing 行数、各 bank 的覆盖以及排序后的 `(bank, id)` 选择集合 SHA256。发布前要求预期与实际身份集合完全相同，拒绝 bank 内重复、缺失、额外结果、trajectory 身份或已知 mask token 数改变；同一轨迹可由不同 bank 引用。无效数值和零 token 行保留，`coverage.scientific_complete` 为 false；空 RKL 选择也不声明科学读数完整。此 coverage 仅描述 RKL，accuracy 的样本覆盖仍由其独立产物校验。读出集合的最终完成不代表全部 Trainer 日志或模型导出也已完成。
 
 `ArtifactStore`使用本机文件锁与 POSIX rename，不承诺断电恢复或跨节点事务。它不是 TQ 替代品，不保存 teacher hidden、全词表概率或 optimizer。内容 hash 读取校验、非法路径／重复文件／未知列检查失败时直接报错。
 
@@ -171,7 +184,7 @@ readout/
 
 ## 执行限制与验收范围
 
-运行使用同步 V1／FSDP2／vLLM、已验证的 token 映射和原生支持 RKL。Native scorer 要求 teacher 输出支持覆盖 student；显式 common_conditioned 在声明的集合上条件化，并记录被排除的质量和 measure-id。公共 suite 要求 n=1、一个全局 mini-batch、token-mean、无 critic，并关闭周期保存，只保留最终模型；这不意味着所有 readout 组件都有相同预算或保存约束。
+运行使用同步 V1／FSDP2／vLLM、已验证的 token 映射和原生支持 RKL。Native scorer 要求 teacher 输出支持覆盖 student；显式 common_conditioned 在声明的集合上条件化，并记录被排除的质量和 measure-id。公共 suite 要求 n=1、一个全局 mini-batch、无 critic，并关闭周期保存，只保留最终模型；这不意味着所有 readout 组件都有相同预算或保存约束。
 
 RKL host budget 约束临时 hidden、位置与拷贝余量，并扣除活跃训练 payload，不包含常驻模型和 Adam 的全部 CPU 内存。窗口根据 shared teacher 的实际 forward precision 推导 hidden 字节数；已使用的推理 token budget49152 覆盖 public prompt8192 加 response32768，与训练和生成 cap 分开。
 
