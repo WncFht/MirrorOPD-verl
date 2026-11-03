@@ -59,6 +59,7 @@ def test_off_skips_sampling_and_gpu_but_retains_training_tokens(tmp_path, monkey
     import verl.trainer.evaluation.coordinator as module
 
     coordinator = object.__new__(EvaluationCoordinator)
+    coordinator.pending_events = {}
     coordinator.options = options(tmp_path)
     coordinator.config = OmegaConf.create({})
     coordinator.fixed = {"public_initial": [{"id": "fixed"}]}

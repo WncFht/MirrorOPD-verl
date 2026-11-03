@@ -136,6 +136,7 @@ def _trainer():
     from verl.experimental.rollout_policy.service import create_rollout_service
 
     trainer = object.__new__(PPOTrainerSync)
+    trainer.distillation_config = None
     trainer.config = OmegaConf.create(
         {
             "trainer": {"v1": {}},
