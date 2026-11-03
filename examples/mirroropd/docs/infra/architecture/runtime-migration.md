@@ -64,6 +64,12 @@ distillation:
 
 ## 内部调用者和扩展
 
+V1 Trainer 的目标分支只读取 `_setup()` 构造的 typed `distillation_config`。手工构造测试或工具对象时，必须显式提供解析后的配置；关闭蒸馏时设为 `None`。运行中改写 raw loss 名称不会重新解析目标。`FullVocabConfig.distribution_spec` 是只读派生属性，不作为 Hydra 配置或序列化字段传入。
+
+自定义 RolloutService 必须实现 `ensure_current(version)` 和 `park()`，同步、sampler 安装或休眠失败后不得保留有效驻留版本。Before-sync 的公共 suite 和 source/history 事件均在正常同步成功后的 `on_readout` 完成。直接调用这些 hook 的工具应遵循相同顺序；只执行 `on_before_weight_sync` 得到的是 active 产物，不能当作恢复完成的事件读取。
+
+默认 validation 的执行主体已迁到评估包 `DefaultEvaluator`；Trainer 的 `_validate()` 保留原调用入口，选择 callback owner 或默认协议。现有配置与 JSONL 读者无需迁移；扩展默认执行过程时修改评估包，不再在 trainer 中新增验证流程。
+
 | 原调用方式                                                 | 当前合同                                                             |
 | ---------------------------------------------------------- | -------------------------------------------------------------------- |
 | `hidden.prediction_positions` 转导出                       | 从 `verl.workers.utils.padding` 导入                                 |
