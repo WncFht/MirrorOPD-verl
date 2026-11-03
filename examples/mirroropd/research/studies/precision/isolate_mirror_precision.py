@@ -46,7 +46,11 @@ def rows64_cast(*args):
 def row64_result(hs, ws, ht, wt, *, spec, hq, wq, token_chunk, **kwargs):
     total, rows, diag = kernels.PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, rows64_cast, hq, wq, spec)
     return kernels.FullVocabObjectiveResult(
-        total, rows, dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True))
+        total,
+        rows,
+        dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
+        objective_rows=rows.detach(),
+        local_objective_sum=rows.detach().sum(),
     )
 
 
@@ -80,7 +84,11 @@ class Head64(torch.autograd.Function):
 def head64_result(hs, ws, ht, wt, *, spec, hq, wq, **kwargs):
     total, rows, diag = Head64.apply(hs, ws, ht, wt, hq, wq, spec)
     return kernels.FullVocabObjectiveResult(
-        total, rows, dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True))
+        total,
+        rows,
+        dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
+        objective_rows=rows.detach(),
+        local_objective_sum=rows.detach().sum(),
     )
 
 

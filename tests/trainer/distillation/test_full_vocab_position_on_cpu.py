@@ -56,6 +56,16 @@ def test_scalar_only_backend_expresses_capability_in_result(monkeypatch):
     result = full_reverse_kl_result(hs, ws, ht, wt, backend="liger")
     assert isinstance(result, FullKLResult) and result.token_kl is None
     torch.testing.assert_close(full_reverse_kl(hs, ws, ht, wt, backend="liger"), result.loss_sum)
+    from verl.trainer.distillation.full_vocab import full_vocab_objective_result
+    from verl.workers.config.distillation_spec import resolve_distillation_spec
+
+    settings = resolve_distillation_spec({"loss_mode": "mirror", "mirror": {"eta": 1}})
+    for rows in (2, 0):
+        dispatched = full_vocab_objective_result(hs[:rows], ws, ht[:rows], wt, spec=settings, backend="liger")
+        output = FullVocabOutput.from_result(dispatched, settings, rows)
+        torch.testing.assert_close(dispatched.local_objective_sum, dispatched.loss_sum.detach())
+        assert dispatched.token_objective is None
+        assert output.observations["distillation/full_kl"].state[1].item() == rows
 
 
 def test_loss_statistics_merge_unequal_microbatches_and_reconstruct_prefix():

@@ -104,13 +104,13 @@ flowchart TD
 
 [FSDPEngine.forward_backward_batch](../../../../../verl/workers/engine/fsdp/transformer_impl.py) 在切 micro-batch 前，对 `loss_mask` 求和并跨 DP 归约，写入 `batch_num_tokens` 和 `dp_size`。训练时原始全局有效 token 为零会报错；某个 rank 局部为空可以参与计算。
 
-[LossContext.from_batch](../../../../../verl/workers/utils/loss_context.py) 读取调用级分母和缩放信息。它不会根据筛选后的 mask 重建分母。`aggregate` 委托已有聚合函数；Full-KL 的 token sum 通过 `normalize_token_sum` 归一化。若 DP 大小为 $D$，原始全局 token 数为 $N$，当前 rank 的 loss sum 为 $S_r$，局部返回：
+[LossContext.from_batch](../../../../../verl/workers/utils/loss_context.py) 读取调用级分母和缩放信息。它不会根据筛选后的 mask 重建分母。`aggregate` 委托已有聚合函数；Full-vocab 的已加权 numerator 通过 `full_vocab_scale` 取得最终尺度。以下 token-mean 情形中，若 DP 大小为 $D$，原始全局 token 数为 $N$，当前 rank 的 loss sum 为 $S_r$，局部返回：
 
 $$
 \ell_r=\frac{D}{N}S_r.
 $$
 
-上式直接对应 Full-KL endpoint。对 full MDPO/BPO，如果 $S_r^{\mathrm{raw}}$ 是 kernel 返回的未除 eta 的 sum，则局部训练标量为 $DS_r^{\mathrm{raw}}/(N\eta)$；sampled MDPO 在 `aggregate` 后同样只除一次 eta。DP 梯度平均后得到相应全局 token-mean 梯度。Frozen q/T 不接收梯度，日志 numerator 也不乘 DP 大小。显式 sequence 分母同样保留配置的全局 batch 数，包括零贡献序列。
+上式直接对应 Full-KL endpoint。对 full MDPO/BPO，如果 $S_r^{\mathrm{raw}}$ 是 kernel 返回的未除 eta 的 sum，则局部训练标量为 $DS_r^{\mathrm{raw}}/(N\eta)$；sampled MDPO 在 `aggregate` 后同样只除一次 eta。DP 梯度平均后得到相应全局 token-mean 梯度。Frozen q/T 不接收梯度，日志 numerator 也不乘 DP 大小。通用 sampled 的显式 sequence 分母仍保留配置的全局 batch 数，包括零贡献序列。Full-vocab sequence 聚合另在拆 micro-batch 前跨 DP 统计非空 `loss_mask`，使用 `full_vocab_num_sequences`，不计 synthetic padding 和全 mask 回答。逐回答长度权重在 kernel 合并梯度前应用，完整尺度见[Full-vocab 聚合](full-vocab.md#聚合与未来信用)。
 
 若 rank $r$ 有多个 micro-batch，其 token loss sum 为 $S_{r,k}$，梯度累积与 DP 平均为：
 

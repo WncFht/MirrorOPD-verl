@@ -6,6 +6,7 @@ from typing import NamedTuple
 
 import torch
 
+from verl.trainer.distillation.full_vocab import FullVocabObjectiveResult
 from verl.utils.metric.observations import Observation
 from verl.utils.metric.position import position_observations, position_statistics
 
@@ -18,8 +19,20 @@ class FullVocabOutput(NamedTuple):
     observations: dict[str, Observation]
 
     @classmethod
-    def from_result(cls, result, spec, count, *, termination=False, bins=None, measure_name=None, num_sequences=None):
+    def from_result(
+        cls,
+        result: FullVocabObjectiveResult,
+        spec,
+        count,
+        *,
+        termination=False,
+        bins=None,
+        measure_name=None,
+        num_sequences=None,
+    ):
         """Translate objective semantics once, preserving historical metric meanings."""
+        if not isinstance(result, FullVocabObjectiveResult):
+            raise TypeError("Full-vocabulary output requires FullVocabObjectiveResult")
         endpoint = spec.teacher_only_kl or spec.teacher_only_forward_kl
         divisor = 1.0 if endpoint else spec.eta
         primary = (
@@ -32,8 +45,7 @@ class FullVocabOutput(NamedTuple):
         conditioned = measure_name is not None and measure_name.startswith("conditional")
         if spec.teacher_only_kl and conditioned:
             primary = "conditional_rkl"
-        local = getattr(result, "local_objective_sum", None)
-        local = result.loss_sum.detach() if local is None else local.detach()
+        local = result.local_objective_sum.detach()
         value = local / divisor
         if termination and spec.teacher_only_kl:
             if result.token_objective is None:
@@ -47,7 +59,7 @@ class FullVocabOutput(NamedTuple):
                 statistics["termination_equiv_kl"] = local
             statistics["conditional_eos_identity_kl" if conditioned else "eos_identity_kl"] = value - local
         observations = {f"distillation/{k}": Observation.ratio(v, count) for k, v in statistics.items()}
-        coefficients = getattr(result, "future_coefficients", None)
+        coefficients = result.future_coefficients
         if coefficients is not None:
             score = result.future_score_sum.detach()
             observations.update(

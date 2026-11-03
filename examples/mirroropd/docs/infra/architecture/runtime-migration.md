@@ -2,6 +2,10 @@
 
 适用范围：从 `402f6353` 及此前接口迁移到重构分支的当前接口。当前架构见[总览](README.md)，变更依据和分组验收见[重构报告](../../archive/engineering/2026-11-01-运行合同审计与重构方案.md)。指南只描述新运行和开发调用者的升级；旧实验及旧 checkpoint 恢复使用对应冻结代码，原始数据不自动转换。
 
+## Full-vocab 结果生产者
+
+自定义数值后端或研究工具返回 `FullVocabObjectiveResult` 时，必须传入 `objective_rows`（无行观测时为 None）及 `local_objective_sum`（未加权、未折扣、不含 future score 的 detached local 总量）。Scalar-only 后端没有行值时显式传入自己的 local 总量；空 rank 提供标量零。`FullVocabOutput.from_result` 仅接受这个类型，不再接受旧三字段 duck-typed 对象或从训练 surrogate 回退猜测 local 指标。活动精度研究工具已使用显式字段；冻结源码仍使用各自版本的合同。字段语义见[指标合同](metrics.md#当前目标的指标矩阵)。
+
 ## 配置与数值后端
 
 | 原表达                             | 当前表达                                | 注意事项                                            |

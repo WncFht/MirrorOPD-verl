@@ -7,6 +7,7 @@ import torch
 from tensordict import TensorDict
 
 from verl.trainer.distillation.forward_vocab import forward_rows, full_forward_kl_result
+from verl.trainer.distillation.full_vocab import FullVocabObjectiveResult
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.output import FullVocabOutput
 from verl.utils import tensordict_utils as tu
@@ -78,7 +79,7 @@ def test_forward_loss_uses_forward_total_and_global_token_weight():
         DistillationConfig(distillation_loss=cfg),
         {
             "full_vocab": FullVocabOutput.from_result(
-                SimpleNamespace(loss_sum=f, token_objective=None, token_diagnostics={"full_kl": r}),
+                FullVocabObjectiveResult(f, None, {"full_kl": r}, None, f.detach()),
                 cfg.loss_settings,
                 3,
             )

@@ -8,7 +8,12 @@ import pytest
 import torch
 from tensordict import TensorDict
 
-from verl.trainer.distillation.full_vocab import dense_rows, full_reverse_kl_result, precompute_kl_rows
+from verl.trainer.distillation.full_vocab import (
+    FullVocabObjectiveResult,
+    dense_rows,
+    full_reverse_kl_result,
+    precompute_kl_rows,
+)
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.output import FullVocabOutput
 from verl.utils import tensordict_utils as tu
@@ -137,7 +142,9 @@ def test_loss_normalizes_the_coarse_objective_but_reports_raw_kl():
         cfg,
         {
             "full_vocab": FullVocabOutput.from_result(
-                SimpleNamespace(loss_sum=objective, token_objective=raw.reshape(1), token_diagnostics={}),
+                FullVocabObjectiveResult(
+                    objective, raw.reshape(1), {}, objective.detach().reshape(1), objective.detach()
+                ),
                 cfg.distillation_loss.loss_settings,
                 3,
                 termination=True,

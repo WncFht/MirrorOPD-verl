@@ -81,7 +81,9 @@ def reference(hs, ws, ht, wt, *, spec, hq=None, wq=None, **kwargs):
     lt = zt.log_softmax(-1)[:, : len(ws)]
     if spec.teacher_only_kl:
         rows = (lp.exp() * (lp - lt)).sum(-1)
-        return kernels.FullVocabObjectiveResult(rows.sum(), rows, {})
+        return kernels.FullVocabObjectiveResult(
+            rows.sum(), rows, {}, objective_rows=rows.detach(), local_objective_sum=rows.detach().sum()
+        )
     zq = kernels.project(hq, wq).double()
     lq = zq.log_softmax(-1)
     b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
@@ -104,6 +106,8 @@ def reference(hs, ws, ht, wt, *, spec, hq=None, wq=None, **kwargs):
             "anchor_kl": (p * (lp - lq)).sum(-1),
             "teacher_kl": (p * (lp - lt)).sum(-1),
         },
+        objective_rows=rows.detach(),
+        local_objective_sum=rows.detach().sum(),
     )
 
 

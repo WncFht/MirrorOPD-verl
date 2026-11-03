@@ -210,6 +210,8 @@ def main():
                 "mode_anchor_kl": (p * (lp - q)).sum(-1),
                 "mode_target_kl": (p * (lp - own_b)).sum(-1) + own_b.logsumexp(-1),
             },
+            objective_rows=raw.detach(),
+            local_objective_sum=raw.detach().sum(),
         )
 
     actor = make_actor("bfloat16")

@@ -109,3 +109,103 @@ def test_conditional_coarse_metrics_keep_their_space_and_fsdp_visible_objective(
     assert any(t is output.objective_sum for t in tree_flatten(output)[0])
     output.objective_sum.backward()
     torch.testing.assert_close(p.grad, torch.zeros_like(p), atol=1e-14, rtol=0)
+
+
+@pytest.mark.parametrize(
+    "mode", ["token-mean", "token-sum", "seq-mean-token-mean", "seq-mean-token-sum", "seq-mean-token-sum-norm"]
+)
+@pytest.mark.parametrize("future_mode", ["none", "sum", "mean", "discounted_sequence"])
+@pytest.mark.parametrize("eta,stop_ids", [(1.0, []), (1.0, [1, 4]), (0.3, []), (0.3, [1, 4])])
+def test_aggregation_eta_and_future_keep_training_gradient_and_local_metrics_separate(mode, future_mode, eta, stop_ids):
+    from test_trajectory_vjp_on_cpu import independent_reference
+
+    from verl.trainer.distillation.reduction import PackedReduction
+
+    torch.manual_seed(46)
+    hs, ws, ht, wt, hq, wq = [
+        torch.randn(*shape, dtype=torch.float64, requires_grad=True)
+        for shape in [(5, 3), (7, 3), (5, 4), (7, 4), (5, 3), (7, 3)]
+    ]
+    loss_cfg = DistillationLossConfig(
+        loss_mode="mirror",
+        mirror={"eta": eta, "kappa": 0.5},
+        full_vocab={
+            "backend": "precompute",
+            "termination_token_ids": stop_ids,
+            "future": {"mode": future_mode, "gamma": 0.8 if future_mode.startswith("discounted") else 1.0},
+        },
+        use_policy_gradient=False,
+        use_task_rewards=False,
+        loss_max_clamp=None,
+        log_prob_min_clamp=None,
+    )
+    spec = loss_cfg.loss_settings
+    layout = PackedReduction(
+        (3, 0, 2), torch.tensor([0, 1, 4, 0, 2]), torch.tensor([1, 2, 4, 0, 3]), mode, loss_cfg.full_vocab.future
+    )
+    expected_total, local_costs = independent_reference(hs, ws, ht, wt, hq, wq, spec, layout, stop_ids)
+    result = full_vocab_objective_result(
+        hs,
+        ws,
+        ht,
+        wt,
+        hq=hq,
+        wq=wq,
+        spec=spec,
+        reduction=layout,
+        token_chunk=2,
+        termination_token_ids=stop_ids,
+    )
+    data = TensorDict({}, batch_size=[])
+    tu.assign_non_tensor(data, dp_size=3, batch_num_tokens=5, full_vocab_num_sequences=2, global_batch_size=99)
+    loss, observations = distillation_loss(
+        SimpleNamespace(loss_agg_mode=mode, loss_scale_factor=7),
+        SimpleNamespace(distillation_loss=loss_cfg),
+        {"full_vocab": FullVocabOutput.from_result(result, spec, 5, termination=bool(stop_ids), num_sequences=2)},
+        data,
+    )
+    scale = {
+        "token-mean": 3 / 5,
+        "token-sum": 3,
+        "seq-mean-token-mean": 3 / 2,
+        "seq-mean-token-sum": 3 / 2,
+        "seq-mean-token-sum-norm": 3 / 14,
+    }[mode]
+    expected_loss = expected_total * scale / eta
+    torch.testing.assert_close(loss, expected_loss)
+    got = torch.autograd.grad(loss, (hs, ws, ht, wt, hq, wq), allow_unused=True)
+    wanted = torch.autograd.grad(expected_loss, (hs, ws))
+    assert got[2:] == (None,) * 4
+    for actual, expected in zip(got[:2], wanted, strict=True):
+        torch.testing.assert_close(actual, expected)
+    torch.testing.assert_close(result.local_objective_sum, local_costs.sum())
+    primary = "full_kl" if eta == 1 else "mdpo/objective"
+    if eta == 1 and stop_ids:
+        lp, lt = (hs @ ws.T).log_softmax(-1), (ht @ wt.T).log_softmax(-1)
+        expected_local_metric = (lp.exp() * (lp - lt)).sum()
+        torch.testing.assert_close(observations["distillation/termination_equiv_kl"].state[0], local_costs.sum())
+    else:
+        expected_local_metric = local_costs.sum() / eta
+    torch.testing.assert_close(
+        observations["distillation/" + primary].state,
+        torch.stack([expected_local_metric.detach(), local_costs.new_tensor(5)]),
+    )
+    assert observations["distillation/valid_sequences"].state.item() == 2
+    if future_mode != "none":
+        score = observations["distillation/future/score_surrogate"].state
+        local = observations["distillation/local_surrogate"].state
+        total = observations["distillation/training_surrogate"].state
+        torch.testing.assert_close(total[0], expected_total.detach() / eta)
+        torch.testing.assert_close(local[0] + score[0], total[0])
+        assert total[1].item() == 5
+        # Logged surrogate is a token ratio; final loss uses the selected global scale.
+        torch.testing.assert_close(loss.detach(), total[0] * scale)
+    assert all(not observation.state.requires_grad for observation in observations.values())
+
+
+def test_output_rejects_legacy_results_without_an_explicit_local_numerator():
+    from verl.workers.config.distillation_spec import resolve_distillation_spec
+
+    settings = resolve_distillation_spec({"loss_mode": "mirror", "mirror": {"eta": 1}})
+    with pytest.raises(TypeError, match="FullVocabObjectiveResult"):
+        FullVocabOutput.from_result(SimpleNamespace(loss_sum=torch.tensor(-4.0)), settings, 2)

@@ -6,7 +6,7 @@ import pytest
 import torch
 from tensordict import TensorDict
 
-from verl.trainer.distillation.full_vocab import full_reverse_kl
+from verl.trainer.distillation.full_vocab import FullVocabObjectiveResult, full_reverse_kl
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.output import FullVocabOutput
 from verl.utils import tensordict_utils as tu
@@ -85,7 +85,7 @@ def test_global_token_normalization():
         distillation,
         {
             "full_vocab": FullVocabOutput.from_result(
-                SimpleNamespace(loss_sum=total, token_objective=None, token_diagnostics={}),
+                FullVocabObjectiveResult(total, None, {}, None, total.detach()),
                 loss_config.loss_settings,
                 3,
             )

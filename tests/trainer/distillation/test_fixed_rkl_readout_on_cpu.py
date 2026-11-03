@@ -71,7 +71,11 @@ def test_fifty_batch_history_is_balanced_nested_and_reproducible():
         balanced_history(batches, 49, 42)
 
 
-def test_engine_readout_keeps_sample_order_and_masked_positions():
+@pytest.mark.parametrize(
+    "aggregate", ["token-mean", "token-sum", "seq-mean-token-mean", "seq-mean-token-sum", "seq-mean-token-sum-norm"]
+)
+@pytest.mark.parametrize("future_mode", ["none", "mean", "discounted_sequence"])
+def test_engine_readout_keeps_sample_order_and_masked_positions(aggregate, future_mode, monkeypatch):
     from types import SimpleNamespace
 
     from tensordict import TensorDict
@@ -115,8 +119,20 @@ def test_engine_readout_keeps_sample_order_and_masked_positions():
     from verl.trainer.distillation.distribution import DistributionSpec
 
     engine.full_vocab_readout_space = DistributionSpec().compile(len(ws), len(wt))
-    engine.full_vocab_config = SimpleNamespace(token_chunk_size=2)
-    engine.full_vocab_spec = SimpleNamespace()
+    from verl.workers.config.distillation_spec import FutureCreditConfig, resolve_distillation_spec
+
+    engine.full_vocab_config = SimpleNamespace(
+        token_chunk_size=2,
+        future=FutureCreditConfig(mode=future_mode, gamma=0.8 if future_mode.startswith("discounted") else 1),
+    )
+    engine.full_vocab_agg_mode = aggregate
+    engine.full_vocab_spec = resolve_distillation_spec({"loss_mode": "mirror", "mirror": {"eta": 0.3}})
+
+    def reject_training(*args, **kwargs):
+        raise AssertionError("Readout must not build training weights, future credit or VJPs")
+
+    monkeypatch.setattr("verl.workers.utils.padding.full_vocab_reduction", reject_training)
+    monkeypatch.setattr("verl.trainer.distillation.full_vocab.full_vocab_objective_result", reject_training)
     engine.module = Model()
     result = engine._full_vocab_output(data, {}, teacher=False)
     lp = (hidden[0, packed] @ ws.T).log_softmax(-1)
@@ -124,6 +140,7 @@ def test_engine_readout_keeps_sample_order_and_masked_positions():
     expected = (lp.exp() * (lp - lq[:, :7])).sum(-1)
     torch.testing.assert_close(result["rkl_sum"][:, 0], torch.stack([expected[:2].sum(), expected[2:].sum()]))
     assert result["rkl_count"].tolist() == [[2], [2]]
+    assert all(not value.requires_grad for value in result.values())
 
 
 def test_capture_rows_accepts_tq_linked_list_metadata(monkeypatch):
