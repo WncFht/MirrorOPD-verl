@@ -38,6 +38,8 @@ Full-vocab reverse KL（下称 Full-KL）默认在 student rollout 得到的固�
 | 温度为 1，无 entropy、sum-pi-squared 或 score-centering 计算                                                                        | [FSDPEngineWithLMHead._full_vocab_output](../../../../../verl/workers/engine/fsdp/transformer_impl.py)                                                                     |
 | 聚合模式与 backend 能力匹配；`seq-mean-token-sum-norm` 显式指定正的固定 C                                                           | [FSDPEngineWithLMHead.configure_full_vocab](../../../../../verl/workers/engine/fsdp/transformer_impl.py)、[LossContext](../../../../../verl/workers/utils/loss_context.py) |
 
+Native 即时与 future 路径共用真实 hidden/head 的输入校验，检查 teacher/anchor 行数、宽度、支持集及 chunk；局部空 rank 仍检查这些合同。校验不执行 projection。
+
 这些检查分布在配置解析、模型构建与运行时，不能把 Hydra 配置解析成功视为全部通过。`use_fused_kernels=False` 是通用模型 forward 路径的限制，与下面专用 `precompute_fused` KL backend 是不同开关。
 
 ## 聚合与未来信用

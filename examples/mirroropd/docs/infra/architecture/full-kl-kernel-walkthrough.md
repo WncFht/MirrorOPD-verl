@@ -267,7 +267,7 @@ $$
 
 ### 8.3 形状校验与语义校验分别负责什么
 
-Kernel 验证行数、hidden/head 宽度、支持覆盖、非空词表和正 chunk。它不知道某行来自哪条生成轨迹；样本 key、预测位置和 anchor version 由上层校验。直接单测调用 kernel 时，调用者必须自己保证 token ID 对齐和 frozen hidden/head 的对应关系。
+Kernel 在数值计算前验证真实输入的行数、hidden/head 宽度、支持覆盖、非空词表和正整数 chunk。Native reverse-KL 与 MDPO/BPO 的即时、future 路径分别复用 `validate_reverse_kl_inputs`、`validate_mirror_inputs`；空 rank 也验证 teacher/anchor 合同，不执行空张量递归或额外投影。它不知道某行来自哪条生成轨迹；样本 key、预测位置和 anchor version 由上层校验。直接单测调用 kernel 时，调用者必须自己保证 token ID 对齐和 frozen hidden/head 的对应关系。
 
 有限 logits、正确 q 归一化是公式的条件；不能把所有非有限情况都理解成 dispatcher 会提前拦截。实际 optimizer 对非有限梯度的处理位于 engine，损失数值检查、计算图正确和更新成功是三件不同的事。
 

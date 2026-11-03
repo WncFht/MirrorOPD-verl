@@ -364,3 +364,83 @@ def test_precompute_reuses_student_projection_and_backward_does_not_reproject(mo
     assert calls == {"student": 3, "teacher": 3, "anchor": 3}
     result.loss_sum.backward()
     assert calls == {"student": 3, "teacher": 3, "anchor": 3}
+
+
+@pytest.mark.parametrize("mode", ["none", "sum"])
+@pytest.mark.parametrize("eta", [1.0, 0.3])
+@pytest.mark.parametrize("backend", ["dense", "precompute"])
+@pytest.mark.parametrize(
+    "invalid",
+    [
+        "teacher_short",
+        "teacher_long",
+        "teacher_hidden_width",
+        "student_head_width",
+        "teacher_support",
+        "token_chunk",
+        "vocab_chunk",
+    ],
+)
+def test_actual_inputs_are_validated_before_local_or_future_computation(mode, eta, backend, invalid, monkeypatch):
+    from unittest.mock import Mock
+
+    from verl.trainer.distillation import full_vocab, trajectory
+
+    reject_projection = Mock(side_effect=AssertionError("Invalid inputs must fail before projection"))
+    monkeypatch.setattr(full_vocab, "project", reject_projection)
+    monkeypatch.setattr(trajectory, "project", reject_projection)
+    args = dict(
+        hs=torch.zeros(2, 3),
+        ws=torch.zeros(5, 3),
+        ht=torch.zeros(2, 4),
+        wt=torch.zeros(5, 4),
+        hq=torch.zeros(2, 3),
+        wq=torch.zeros(5, 3),
+        token_chunk=2,
+        vocab_chunk=3,
+    )
+    if invalid == "teacher_short":
+        args["ht"] = torch.zeros(1, 4)
+    elif invalid == "teacher_long":
+        args["ht"] = torch.zeros(3, 4)
+    elif invalid == "teacher_hidden_width":
+        args["ht"] = torch.zeros(2, 6)
+    elif invalid == "student_head_width":
+        args["ws"] = torch.zeros(5, 6)
+    elif invalid == "teacher_support":
+        args["wt"] = torch.zeros(4, 4)
+    else:
+        args[invalid] = 0
+    layout = PackedReduction(
+        (2,), torch.arange(2), torch.zeros(2, dtype=torch.long), future=FutureCreditConfig(mode=mode)
+    )
+    with pytest.raises(ValueError):
+        full_vocab_objective_result(**args, spec=spec(eta), reduction=layout, backend=backend)
+    reject_projection.assert_not_called()
+
+
+@pytest.mark.parametrize("mode", ["none", "sum"])
+@pytest.mark.parametrize("rows", [0, 2])
+@pytest.mark.parametrize("invalid", ["short", "long", "head_width", "support", "missing"])
+def test_real_anchor_validation_also_applies_to_empty_ranks(mode, rows, invalid):
+    hs, ws = torch.zeros(rows, 3, requires_grad=True), torch.zeros(5, 3, requires_grad=True)
+    ht, wt = torch.zeros(rows, 4), torch.zeros(5, 4)
+    hq, wq = torch.zeros(rows, 3), torch.zeros(5, 3)
+    if invalid == "short":
+        if rows == 0:
+            hq = torch.zeros(1, 3)
+        else:
+            hq = torch.zeros(rows - 1, 3)
+    elif invalid == "long":
+        hq = torch.zeros(rows + 1, 3)
+    elif invalid == "head_width":
+        wq = torch.zeros(5, 6)
+    elif invalid == "support":
+        wq = torch.zeros(4, 3)
+    else:
+        hq = None
+    layout = PackedReduction(
+        (rows,), torch.arange(rows), torch.zeros(rows, dtype=torch.long), future=FutureCreditConfig(mode=mode)
+    )
+    with pytest.raises(ValueError, match="anchor|shapes"):
+        full_vocab_objective_result(hs, ws, ht, wt, hq=hq, wq=wq, spec=spec(0.3), reduction=layout)

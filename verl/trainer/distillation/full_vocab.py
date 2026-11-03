@@ -343,6 +343,30 @@ def full_reverse_kl(
     ).loss_sum
 
 
+def validate_reverse_kl_inputs(hs, ws, ht, wt, *, backend, token_chunk, vocab_chunk, termination_token_ids):
+    """Validate real tensors and capabilities without projecting logits or building a graph."""
+    if backend not in ("dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"):
+        raise ValueError(f"Unknown full reverse-KL backend: {backend}")
+    if hs.ndim != 2 or ht.ndim != 2 or ws.ndim != 2 or wt.ndim != 2:
+        raise ValueError("full KL expects 2-D hidden states and heads")
+    if len(hs) != len(ht) or hs.shape[1] != ws.shape[1] or ht.shape[1] != wt.shape[1]:
+        raise ValueError("full KL hidden/head shapes are incompatible")
+    if len(ws) > len(wt):
+        raise ValueError("full reverse KL requires teacher support to cover every student output row")
+    if any(type(c) is not int or c <= 0 for c in (token_chunk, vocab_chunk)):
+        raise ValueError("full KL chunk sizes must be positive")
+    if not len(ws):
+        raise ValueError("full KL requires a nonempty vocabulary")
+    ids = tuple(termination_token_ids)
+    if ids:
+        if len(ids) < 2 or len(set(ids)) != len(ids) or any(type(i) is not int or not 0 <= i < len(ws) for i in ids):
+            raise ValueError("termination equivalence requires distinct supported token IDs")
+        if backend not in ("precompute", "precompute_fused") or len(ws) != len(wt):
+            raise ValueError("termination equivalence requires precompute/precompute_fused and equal vocabulary widths")
+    validate_fused_backend(backend, hs)
+    return ids
+
+
 def full_reverse_kl_result(
     hs,
     ws,
@@ -360,25 +384,16 @@ def full_reverse_kl_result(
     Kernel capability is represented by token_kl=None, not by engine-side backend
     checks. Diagnostics never contribute gradients or trigger extra projections.
     """
-    if backend not in ("dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"):
-        raise ValueError(f"Unknown full reverse-KL backend: {backend}")
-    if hs.ndim != 2 or ht.ndim != 2 or ws.ndim != 2 or wt.ndim != 2:
-        raise ValueError("full KL expects 2-D hidden states and heads")
-    if len(hs) != len(ht) or hs.shape[1] != ws.shape[1] or ht.shape[1] != wt.shape[1]:
-        raise ValueError("full KL hidden/head shapes are incompatible")
-    if len(ws) > len(wt):
-        raise ValueError("full reverse KL requires teacher support to cover every student output row")
-    if min(token_chunk, vocab_chunk) <= 0:
-        raise ValueError("full KL chunk sizes must be positive")
-    if not len(ws):
-        raise ValueError("full KL requires a nonempty vocabulary")
-    ids = tuple(termination_token_ids)
-    if ids:
-        if len(ids) < 2 or len(set(ids)) != len(ids) or any(type(i) is not int or not 0 <= i < len(ws) for i in ids):
-            raise ValueError("termination equivalence requires distinct supported token IDs")
-        if backend not in ("precompute", "precompute_fused") or len(ws) != len(wt):
-            raise ValueError("termination equivalence requires precompute/precompute_fused and equal vocabulary widths")
-    validate_fused_backend(backend, hs)
+    ids = validate_reverse_kl_inputs(
+        hs,
+        ws,
+        ht,
+        wt,
+        backend=backend,
+        token_chunk=token_chunk,
+        vocab_chunk=vocab_chunk,
+        termination_token_ids=termination_token_ids,
+    )
     if len(hs) == 0:
         total = hs.sum() * 0 + ws.sum() * 0
         rows = None if backend == "liger" else hs.new_empty(0).detach()
@@ -492,6 +507,41 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, actions=None, stu
     return rows, dz, diag
 
 
+def validate_mirror_inputs(hs, ws, ht, wt, *, spec, hq, wq, backend, token_chunk, vocab_chunk, termination_token_ids):
+    """Check native MDPO/BPO inputs, including actual teacher and anchor rows."""
+    if termination_token_ids:
+        ids = tuple(termination_token_ids)
+        if spec.objective != "mdpo" or backend not in ("dense", "precompute", "precompute_fused"):
+            raise ValueError(
+                "Mirror termination equivalence requires MDPO with dense/precompute/precompute_fused backend"
+            )
+        if len(wt) != len(ws) or len(ids) < 2 or len(set(ids)) != len(ids):
+            raise ValueError("Mirror termination equivalence requires equal vocabularies and distinct stop IDs")
+        if any(type(i) is not int or i < 0 or i >= len(ws) for i in ids):
+            raise ValueError("Mirror termination token IDs must be within the shared vocabulary")
+    if spec.payload_kind != "hidden" or spec.objective not in ("mdpo", "bpo"):
+        raise ValueError("Full-vocab mirror objective requires MDPO or BPO with hidden payload")
+    if backend not in ("dense", "precompute", "precompute_fused"):
+        raise ValueError(f"Unsupported mirror full-vocab backend: {backend}")
+    if hq is None or wq is None:
+        raise ValueError("Mirror full-vocab objective requires frozen anchor hidden/head")
+    if any(x.ndim != 2 for x in (hs, ws, ht, wt, hq, wq)):
+        raise ValueError("full-vocab expects 2-D hidden states and heads")
+    if (
+        len(hs) != len(ht)
+        or len(hs) != len(hq)
+        or len(wq) != len(ws)
+        or len(wt) < len(ws)
+        or hs.shape[1] != ws.shape[1]
+        or ht.shape[1] != wt.shape[1]
+        or hq.shape[1] != wq.shape[1]
+    ):
+        raise ValueError("Mirror hidden/head shapes or teacher/anchor support are incompatible")
+    if any(type(c) is not int or c <= 0 for c in (token_chunk, vocab_chunk)) or not len(ws):
+        raise ValueError("Positive chunk sizes and nonempty vocabulary required")
+    validate_fused_backend(backend, hs)
+
+
 def full_vocab_objective_result(
     hs,
     ws,
@@ -513,30 +563,9 @@ def full_vocab_objective_result(
     validate_fused_backend(backend, hs)
     if reduction is not None and sum(reduction.counts) != len(hs):
         raise ValueError("Packed reduction must match hidden rows")
-    row_weights = (
-        None
-        if reduction is None
-        else reduction.row_weights(torch.float64 if hs.dtype == torch.float64 else torch.float32)
-    )
     if reduction is not None and reduction.future_config.mode != "none":
         from verl.trainer.distillation.trajectory import trajectory_objective_result
 
-        # Reuse all existing objective/support/backend checks, including empty ranks.
-        full_vocab_objective_result(
-            hs[:0],
-            ws,
-            ht[:0],
-            wt,
-            spec=spec,
-            hq=None if hq is None else hq[:0],
-            wq=wq,
-            backend=backend,
-            token_chunk=token_chunk,
-            vocab_chunk=vocab_chunk,
-            termination_token_ids=termination_token_ids,
-            forward_teacher_support=forward_teacher_support,
-            distribution=distribution,
-        )
         return trajectory_objective_result(
             hs,
             ws,
@@ -547,10 +576,16 @@ def full_vocab_objective_result(
             wq=wq,
             backend=backend,
             token_chunk=token_chunk,
+            vocab_chunk=vocab_chunk,
             termination_token_ids=termination_token_ids,
             distribution=distribution,
             reduction=reduction,
         )
+    row_weights = (
+        None
+        if reduction is None
+        else reduction.row_weights(torch.float64 if hs.dtype == torch.float64 else torch.float32)
+    )
     if distribution is not None:
         from verl.trainer.distillation.distribution import CompiledDistribution, DistributionSpec
 
@@ -629,37 +664,19 @@ def full_vocab_objective_result(
             result.objective_rows if result.objective_rows is not None else result.token_kl,
             None if result.objective_rows is None else result.objective_rows.sum(),
         )
-    if termination_token_ids:
-        ids = tuple(termination_token_ids)
-        if spec.objective != "mdpo" or backend not in ("dense", "precompute", "precompute_fused"):
-            raise ValueError(
-                "Mirror termination equivalence requires MDPO with dense/precompute/precompute_fused backend"
-            )
-        if len(wt) != len(ws) or len(ids) < 2 or len(set(ids)) != len(ids):
-            raise ValueError("Mirror termination equivalence requires equal vocabularies and distinct stop IDs")
-        if any(type(i) is not int or i < 0 or i >= len(ws) for i in ids):
-            raise ValueError("Mirror termination token IDs must be within the shared vocabulary")
-    if spec.payload_kind != "hidden" or spec.objective not in ("mdpo", "bpo"):
-        raise ValueError("Full-vocab mirror objective requires MDPO or BPO with hidden payload")
-    if backend not in ("dense", "precompute", "precompute_fused"):
-        raise ValueError(f"Unsupported mirror full-vocab backend: {backend}")
-    if hq is None or wq is None:
-        raise ValueError("Mirror full-vocab objective requires frozen anchor hidden/head")
-    if any(x.ndim != 2 for x in (hs, ws, ht, wt, hq, wq)):
-        raise ValueError("full-vocab expects 2-D hidden states and heads")
-    if (
-        len(hs) != len(ht)
-        or len(hs) != len(hq)
-        or len(wq) != len(ws)
-        or len(wt) < len(ws)
-        or hs.shape[1] != ws.shape[1]
-        or ht.shape[1] != wt.shape[1]
-        or hq.shape[1] != wq.shape[1]
-    ):
-        raise ValueError("Mirror hidden/head shapes or teacher/anchor support are incompatible")
-    if min(token_chunk, vocab_chunk, len(ws)) <= 0:
-        raise ValueError("Positive chunk sizes and nonempty vocabulary required")
-    validate_fused_backend(backend, hs)
+    validate_mirror_inputs(
+        hs,
+        ws,
+        ht,
+        wt,
+        spec=spec,
+        hq=hq,
+        wq=wq,
+        backend=backend,
+        token_chunk=token_chunk,
+        vocab_chunk=vocab_chunk,
+        termination_token_ids=termination_token_ids,
+    )
     ht, wt, hq, wq = (x.detach() for x in (ht, wt, hq, wq))
     if len(hs) == 0:
         return FullVocabObjectiveResult(hs.sum() * 0 + ws.sum() * 0, hs.new_empty(0), {})
