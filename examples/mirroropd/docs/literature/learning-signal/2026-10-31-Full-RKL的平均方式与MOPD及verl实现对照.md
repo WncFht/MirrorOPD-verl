@@ -1,8 +1,10 @@
 # Full-RKL 的平均方式、OPD 消融与 verl 实现对照
 
-核验日期：2026-10-31。本文讨论 student rollout 上的 full-vocabulary reverse KL（全词表反向 KL，简称 full-RKL），比较论文的长度归一化与本机 verl 实现。论文定义、当前实现和建议分别标明；没有修改训练代码、运行 GPU 实验或推断历史实验实际使用了某个默认值。
+核验日期：2026-10-31；TOP-D 公开实现补充核验于 2026-11-03。本文讨论 student rollout 上的 full-vocabulary reverse KL（全词表反向 KL，简称 full-RKL），比较论文的长度归一化与本机 verl 实现。论文定义、当前实现和建议分别标明；没有修改训练代码、运行 GPU 实验或推断历史实验实际使用了某个默认值。
 
 **OPD 与 MOPD 不因教师数量不同而需要不同的 mean。词表维求和由 KL 定义决定，回答内和 batch 的平均则取决于目标与样本权重。现有消融不足以证明 `seq-mean-token-mean` 是 full-RKL 的统一优选。** 仅在复现 MOPD 原始论文的目标时，其明确的回答平均才要求这个配置。本机 MirrorOPD 的 full-RKL 当前采用全局 `token-mean`，数学上自洽；`full` 规定是否覆盖完整词表，不能决定外层如何平均。
+
+TOP-D 的公开启动配方也显式采用 `seq-mean-token-mean`。[^topd-common] 这是复现其公开配方时需要对齐的配置；该配方聚合 sampled-token surrogate，不能作为 full-RKL 两种平均方式的独立消融，详见第 2.9 节。
 
 ## 1. 四种聚合的精确定义
 
@@ -66,16 +68,17 @@ MOPD 通常按域给回答路由到一位教师。域权重由数据采样与聚
 
 ## 2. 论文证据
 
-| 来源                                      | 可以直接核实的位置            | 时间维和回答维的定义                                                        | verl 对应方式                       |
-| ----------------------------------------- | ----------------------------- | --------------------------------------------------------------------------- | ----------------------------------- |
-| MOPD，Ma 等，2026                         | §3.2，Eq. (1)                 | $\mathbb E_{x,y}[\frac1{\lvert y\rvert}\sum_t\sum_v p(v)\log(p(v)/q_d(v))]$ | `seq-mean-token-mean`               |
-| MiMo-V2-Flash，2026                       | §4.4，Eq. (7)                 | sampled PG surrogate 内显式使用 $1/\lvert y\rvert$                          | `seq-mean-token-mean`               |
-| GKD，Agarwal 等，ICLR 2024                | Eq. (2)，Algorithm 1 第 10 行 | 先对一条序列的条件散度除以 $L_y$，再按 $1/B$ 聚合样本梯度                   | `seq-mean-token-mean`               |
-| Rethinking OPD I，2026                    | §2.2，Eq. (4)                 | full-vocabulary 形式写为 $\mathbb E[\sum_t D_{\mathrm{KL}}]$                | 按字面是 `seq-mean-token-sum`       |
-| One-Shot OPD，2026                        | 附录 Table 3 与 Table 8       | 单教师 OPD 标为 `token-mean`；MOPD 标为 `seq-mean-token-mean`               | 两张表分别采用不同方式              |
-| MiniLLM，2023 预印本／ICLR 2024，后续修订 | §2.2，Length Normalization    | 对未来 reward-to-go 加长度归一化                                            | 不能据此直接指定外层 loss reduction |
+| 来源                                      | 可以直接核实的位置                      | 时间维和回答维的定义                                                                   | verl 对应方式                       |
+| ----------------------------------------- | --------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------- |
+| MOPD，Ma 等，2026                         | §3.2，Eq. (1)                           | $\mathbb E_{x,y}[\frac1{\lvert y\rvert}\sum_t\sum_v p(v)\log(p(v)/q_d(v))]$            | `seq-mean-token-mean`               |
+| MiMo-V2-Flash，2026                       | §4.4，Eq. (7)                           | sampled PG surrogate 内显式使用 $1/\lvert y\rvert$                                     | `seq-mean-token-mean`               |
+| GKD，Agarwal 等，ICLR 2024                | Eq. (2)，Algorithm 1 第 10 行           | 先对一条序列的条件散度除以 $L_y$，再按 $1/B$ 聚合样本梯度                              | `seq-mean-token-mean`               |
+| Rethinking OPD I，2026                    | §2.2，Eq. (4)                           | full-vocabulary 形式写为 $\mathbb E[\sum_t D_{\mathrm{KL}}]$                           | 按字面是 `seq-mean-token-sum`       |
+| One-Shot OPD，2026                        | 附录 Table 3 与 Table 8                 | 单教师 OPD 标为 `token-mean`；MOPD 标为 `seq-mean-token-mean`                          | 两张表分别采用不同方式              |
+| TOP-D 公开实现，2026                      | 固定 commit 的共同启动脚本与 `agg_loss` | 对每条回答的有效 token loss 求均值，再对回答求均值；聚合对象为 sampled-token surrogate | `seq-mean-token-mean`，公开配方配置 |
+| MiniLLM，2023 预印本／ICLR 2024，后续修订 | §2.2，Length Normalization              | 对未来 reward-to-go 加长度归一化                                                       | 不能据此直接指定外层 loss reduction |
 
-上述条目分别依据原文，不能把一篇论文的归一化直接外推为所有 OPD 的统一标准。[^mopd][^mimo][^gkd][^rethinking][^oneshot][^minillm]
+上述论文条目依据原文，TOP-D 条目依据固定版本的公开实现；不能把一项工作的归一化直接外推为所有 OPD 的统一标准。[^mopd][^mimo][^gkd][^rethinking][^oneshot][^minillm][^topd-common][^topd-algos]
 
 ### 2.1 MOPD 对 full-RKL 的答案是明确的
 
@@ -186,6 +189,21 @@ VL Norm: Rethink Loss Aggregation in RLVR（2509.07558，初版名为 $\Delta L$
 $\lambda$-GRPO 则将 token 偏好设为可学习参数并报告性能提升，研究的是优化与经验表现；它不建立对所有 reward、任务、策略都唯一最优的长度分母。[^lambda-grpo]
 
 所以，固定期望奖励目标后，“忠实于策略梯度的聚合”有明确答案：token sum、回答 mean、可加固定尺度。至于哪种近似有更好的有限预算表现，方差、裁剪和优化器仍会影响结果。这个区分应延续到 OPD：若要求完整序列 reverse-KL 目标，时间维同样由链式法则得到 sum；但直接反传固定前缀 KL 还涉及第 7 节的 semi-gradient 边界。
+
+### 2.9 TOP-D 公开配方的回答平均与回报归一化
+
+固定官方 commit `9a2716cba22cab508825ad3be3f78327bb8139e5` 的共同启动脚本显式设置 `actor_rollout_ref.actor.loss_agg_mode=seq-mean-token-mean`。同版本 `agg_loss` 先对一条回答的有效 token loss 求均值，再以全局回答数归一化，并补偿数据并行的梯度平均。[^topd-common][^topd-algos] 若第 $i$ 条回答有 $L_i$ 个有效位置，逐位置 surrogate 为 $\ell_{it}$，其非空回答上的全局聚合为
+
+$$
+\mathcal L_{\mathrm{TOPD,agg}}
+=\frac1B\sum_{i=1}^{B}\frac1{L_i}\sum_t m_{it}\ell_{it}.
+$$
+
+这与本机 full-RKL 的全局 token 平均具有不同的回答权重。相同平均逐 token loss 下，一条 16k 回答和一条 2k 回答在 token mean 中的总系数比为 8:1，在上述回答平均中为 1:1；实际梯度还取决于各位置的方向和幅度。TOP-D 这里的 $\ell_{it}$ 是 sampled-token 更新项，不能将它与本机条件 KL 当作同一个逐位置目标。
+
+同版本完整 TOP-D 还先构造“当前即时 reward＋后续有效 token reward 的平均”，再对同一 prompt 的全部回答有效 token 做均值／标准差归一化。[^topd-algos] 未来回报的平均、prompt 组内标准化和外层回答平均分别改变信用分配、信号尺度与回答权重；仅替换外层 aggregate 不等于复现完整 TOP-D。
+
+该公开配置能确定复现时的聚合选择，尚不能将 TOP-D 的任务收益归因于回答平均。此处没有保持 full-RKL、数据、rollout 和更新预算不变的单变量 aggregate 对照，也没有论文每次运行的 resolved config。[版本、来源与哈希核对](../../experiments/learning-signal/data/e55-e57-20261101-2259/topd-comparison.json)及[本地算法与预算对照](../../experiments/learning-signal/weighted-targets.md)保留了核验对象与实验边界。
 
 ## 3. 本机 full-RKL 的实际平均方式
 
@@ -327,7 +345,7 @@ $$
 
 ## 8. 配置选择与验证边界
 
-- 仅在复现 MOPD、MiMo 的回答权重定义时选择 `seq-mean-token-mean`，full-RKL 内核需保留每个回答的长度权重；这个复现要求不构成一般 OPD 优选该方式的实验证据。
+- 复现 MOPD、MiMo 的回答权重定义或 TOP-D 的上述公开配方时，选择 `seq-mean-token-mean`；将本机 full-RKL 改成该方式需使内核支持每个回答的长度权重。这个复现要求不构成一般 OPD 优选该方式的实验证据。
 - 延续本机已有 full-RKL 实验的训练定义：保留全局 `token-mean`；与 sampled、MDPO 等方法比较时，统一外层聚合，避免同时改变算法和样本权重。
 - 研究完整序列 KL 或累计代价：先定义状态分布和是否对采样分布反传，再决定 `seq-mean-token-sum`；不要把条件 KL 累计量与完整轨迹梯度混为一谈。
 - 报告时同时记录 token 平均、回答平均、累计量、长度分布及各域的回答数／token 数，可辨别拟合变化与权重变化。新增统计不代表已有日志能够事后完整恢复这些量。
@@ -353,6 +371,10 @@ RL 长度聚合的四篇定向检索完整结果为 [paper-search-rl-length.md](
 [^oneshot]: Fu et al. Rethinking On-Policy Distillation of Large Language Models II: One Training Example. arXiv:2609.04172v1, 2026. [Table 3, Table 8](https://arxiv.org/html/2609.04172v1)。
 
 [^minillm]: Gu et al. MiniLLM: On-Policy Distillation of Large Language Models. arXiv:2306.08543v6, 2026 修订；初版为 2023，ICLR 2024 的题名为 MiniLLM: Knowledge Distillation of Large Language Models. [§2.2，Length Normalization](https://arxiv.org/html/2306.08543v6)。
+
+[^topd-common]: xie-lab-ml. TOP-D 共同启动配方，2026。固定 commit `9a2716cba22cab508825ad3be3f78327bb8139e5`，[显式聚合配置](https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/recipe/opd/run_qwen3_1p7b_base_qwen3_teacher_dapo17k_common.sh)，2026-11-03 核验。
+
+[^topd-algos]: xie-lab-ml. TOP-D `core_algos.py`，2026。同一固定 commit，[`agg_loss`、future return 与 prompt 组内标准化](https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/verl/verl/trainer/ppo/core_algos.py)，2026-11-03 核验。
 
 [^verl-agg]: verl contributors. `agg_loss`. [上游源码](https://github.com/verl-project/verl/blob/main/verl/trainer/ppo/core_algos.py#L1140)，2026-10-31 核验，main 为可变链接。
 
