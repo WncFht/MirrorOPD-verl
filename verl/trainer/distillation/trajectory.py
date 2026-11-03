@@ -15,6 +15,8 @@ from verl.trainer.distillation.full_vocab import (
     add_product,
     project,
     termination_equivalent_kl_rows,
+    validate_mirror_inputs,
+    validate_reverse_kl_inputs,
 )
 from verl.trainer.distillation.numerics import kl_rows, log_softmax, support_correction
 from verl.trainer.distillation.reduction import suffix_credit
@@ -123,7 +125,7 @@ class TrajectoryVJP(torch.autograd.Function):
 
 
 def trajectory_objective_result(
-    hs, ws, ht, wt, *, spec, hq, wq, backend, token_chunk, termination_token_ids, distribution, reduction
+    hs, ws, ht, wt, *, spec, hq, wq, backend, token_chunk, vocab_chunk, termination_token_ids, distribution, reduction
 ):
     """Validate opt-in capabilities, preserving the requested backend without fallback."""
     from verl.trainer.distillation.distribution import CompiledDistribution, DistributionSpec
@@ -141,6 +143,16 @@ def trajectory_objective_result(
         raise ValueError("Future credit does not support common-conditioned distributions")
     if sum(reduction.counts) != len(hs):
         raise ValueError("Trajectory layout must match hidden rows")
+    validation = dict(
+        backend=backend,
+        token_chunk=token_chunk,
+        vocab_chunk=vocab_chunk,
+        termination_token_ids=termination_token_ids,
+    )
+    if spec.teacher_only_kl:
+        validate_reverse_kl_inputs(hs, ws, ht, wt, **validation)
+    else:
+        validate_mirror_inputs(hs, ws, ht, wt, spec=spec, hq=hq, wq=wq, **validation)
     ht, wt = ht.detach(), wt.detach()
     hq, wq = (None if x is None else x.detach() for x in (hq, wq))
     actions = TerminationActionMap.create(len(ws), termination_token_ids, hs.device) if termination_token_ids else None
