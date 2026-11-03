@@ -2,6 +2,10 @@
 
 本页维护固定输入管线、自然生成训练、reuse 与 full/sample 成本。计时、显存和 trace 口径见[测量方法](methodology.md)，head-loss 微基准见[算子性能](operators.md)。各节保留测量身份，当前代码或预设改变后不据此修改旧读数。
 
+## 聚合与 future 的待测范围
+
+新增回答聚合及 future credit 已有 CPU 数值、trainer 编排和指标合同测试，尚无对应 CUDA、真实 FSDP2 或性能数据。下文旧版本的通过记录不能覆盖新增模式。GPU 空闲后按[性能验收计划](../../architecture/2026-11-03-Full-vocab聚合与未来信用实现计划.md#73-性能验收与消融交接)固定输入、精度和分块条件，依次隔离遍历顺序、回答分块及 future score/suffix 开销；结果同时报告梯度误差、峰值显存、投影次数与整步成本。当前没有新增模式的吞吐结论。
+
 ## 固定输入管线
 
 四张 H800，student 为 DeepSeek-R1-Distill-Qwen-1.5B、teacher 为 JustRL-DeepSeek-1.5B。固定同一批 32 条数学回答，输入 token=163573、有效 loss token=161701，token chunk=512、每卡 token budget=16384、activation checkpointing 开启、lr=0。测量包含真实 FSDP2 worker 和上下卡，不含 Ray/TQ/vLLM。

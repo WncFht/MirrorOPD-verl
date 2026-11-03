@@ -261,6 +261,8 @@ def main():
                 "anchor_kl": (p * (lp - frozen["lq"])).sum(-1),
                 "teacher_kl": (p * (lp - frozen["lt"])).sum(-1),
             },
+            objective_rows=rows.detach(),
+            local_objective_sum=rows.detach().sum(),
         )
 
     actor = actor_for("bfloat16", "sdpa" if args.mode == "layers" else "flash_attention_2")

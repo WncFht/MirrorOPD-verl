@@ -454,6 +454,8 @@ def full_reverse_kl_result(
 class FullVocabObjectiveResult(NamedTuple):
     """Unscaled objective sum and detached rows; final loss applies 1/eta once.
 
+    local_objective_sum is always the unweighted, undiscounted local numerator,
+    including scalar-only backends and empty ranks. It never contains score credit.
     For teacher-only KL, token_objective retains raw vocabulary KL even when
     loss_sum uses termination equivalence, so position metrics stay comparable.
     """
@@ -461,8 +463,8 @@ class FullVocabObjectiveResult(NamedTuple):
     loss_sum: torch.Tensor
     token_objective: torch.Tensor | None
     token_diagnostics: dict[str, torch.Tensor]
-    objective_rows: torch.Tensor | None = None
-    local_objective_sum: torch.Tensor | None = None
+    objective_rows: torch.Tensor | None
+    local_objective_sum: torch.Tensor
     future_coefficients: torch.Tensor | None = None
     future_score_sum: torch.Tensor | None = None
 
@@ -662,7 +664,7 @@ def full_vocab_objective_result(
             result.token_kl,
             {},
             result.objective_rows if result.objective_rows is not None else result.token_kl,
-            None if result.objective_rows is None else result.objective_rows.sum(),
+            result.loss_sum.detach() if result.objective_rows is None else result.objective_rows.sum(),
         )
     validate_mirror_inputs(
         hs,
@@ -679,7 +681,9 @@ def full_vocab_objective_result(
     )
     ht, wt, hq, wq = (x.detach() for x in (ht, wt, hq, wq))
     if len(hs) == 0:
-        return FullVocabObjectiveResult(hs.sum() * 0 + ws.sum() * 0, hs.new_empty(0), {})
+        zero = hs.sum() * 0 + ws.sum() * 0
+        rows = hs.new_empty(0)
+        return FullVocabObjectiveResult(zero, rows, {}, rows, zero.detach())
     actions = TerminationActionMap.create(len(ws), termination_token_ids, hs.device) if termination_token_ids else None
     if backend == "dense":
         rows, _, diag = _mirror_rows(hs, ws, ht, wt, hq, wq, spec, actions=actions)

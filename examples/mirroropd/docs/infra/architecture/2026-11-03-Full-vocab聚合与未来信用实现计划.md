@@ -1,6 +1,6 @@
 # Full-vocab 聚合与未来信用实现计划
 
-状态：CPU 实现和训练链接入已完成，GPU 数值、真实 FSDP2 及性能验收待执行。第 2 节代码走读保留实施前基线 `e899e1458f16a2aaed3a4526aced1791165aefa1`，核对日期为 2026-11-03；当前配置、支持矩阵、执行方式和测试入口见 [Full-vocab 数据流](full-vocab.md#聚合与未来信用)。本文保留设计理由、数学合同与未完成的验收项。
+状态：CPU 数学参考、真实输入校验、trainer 初始化/评测检查/update 编排与指标合同已接入；真实 CUDA、FSDP2 通信及性能验收待执行。CPU trainer 测试替换模型加载和远程 worker，不构成真实训练验收。第 2 节代码走读保留实施前基线 `e899e1458f16a2aaed3a4526aced1791165aefa1`，核对日期为 2026-11-03；当前配置、支持矩阵、执行方式和测试入口见 [Full-vocab 数据流](full-vocab.md#聚合与未来信用)。本文保留设计理由、数学合同与未完成的验收项。
 
 目标是在现有 Full-vocab 更新链中增加回答级聚合和未来信用分配，支持 sequence KL、TOP-D 风格 future mean 及 discount 对照。实现保持原训练循环、PPO、rollout reuse 和 anchor 生命周期；默认 future 关闭。CPU 验收不启动正式训练，冻结运行配置与源码快照保持原状。
 
@@ -291,12 +291,16 @@ Resolved config 记录 `loss_agg_mode`、固定 $C$、future 模式、γ、实�
 | 阶段              | 主要文件                                                      | 通过条件                                                 |
 | ----------------- | ------------------------------------------------------------- | -------------------------------------------------------- |
 | A：聚合合同       | `loss_context.py`、`losses.py`、engine 分母、launcher         | 四种主聚合与公共参考一致；旧 `token-mean` 路径回归通过   |
-| B：future 参考    | `distillation.py` / resolver、新 `future.py`、dense reference | 六种模式、边界和有限轨迹枚举梯度通过；未支持组合早期拒绝 |
+| B：future 参考    | `distillation.py` / resolver、`reduction.py`、dense reference | 六种模式、边界和有限轨迹枚举梯度通过；未支持组合早期拒绝 |
 | C：普通生产路径   | `full_vocab.py`、engine 布局、result/output                   | `precompute` 的 hidden/head 梯度与参考一致；指标不混淆   |
 | D：fused 与分布式 | `full_vocab_triton.py`、FSDP2 集成测试                        | EOS、数值补偿、空 rank、DP/micro/chunk 一致性通过        |
 | E：性能与实验交接 | 性能基准及对应当前参考文档                                    | 同输入性能比较完成，记录实际成本；正式训练消融另排       |
 
-A–C 的代码与 CPU 验收已完成。新增测试分别覆盖 [suffix 与聚合合同](../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)、[独立参考、有限轨迹枚举和分块 VJP](../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)、[配置与训练接入](../../../../../tests/trainer/distillation/test_full_vocab_reduction_on_cpu.py)。完整 distillation CPU 回归及公共 loss aggregation 测试为 `714 passed, 18 skipped`；不适用的非 discounted 模式与非单位 γ 组合显式跳过。D 已增加 CUDA 测试与 FSDP2 参数入口，执行待 GPU 空闲；E 尚未测量。CPU 通过不等于 D/E 完成。
+A–C 的 CPU 验收包括真实 tensor 校验、配置/布局与数值参考、trainer 初始化和 update 编排。数值测试分别覆盖 [suffix 与聚合合同](../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)、[独立参考、有限轨迹枚举和分块 VJP](../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)、[配置与训练接入](../../../../../tests/trainer/distillation/test_full_vocab_reduction_on_cpu.py)。Trainer 入口测试见 [test_trainer_base_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_trainer_base_on_cpu.py)，覆盖五种聚合和既有 batch 约束；[输出合同测试](../../../../../tests/trainer/distillation/test_full_vocab_output_on_cpu.py) 覆盖回答权重、η、DP 尺度及 local/surrogate 指标分离，[只读评测测试](../../../../../tests/trainer/distillation/test_fixed_rkl_readout_on_cpu.py) 验证训练聚合/future 不进入 readout。CPU 回归为 `926 passed, 18 skipped`，命令如下；不适用的非 discounted 模式与非单位 γ 组合显式跳过。D 已增加 CUDA 测试与 FSDP2 参数入口，执行待 GPU 空闲；E 尚未测量。CPU 通过不等于 D/E 完成。
+
+```bash
+CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m pytest tests/trainer/distillation/*on_cpu.py tests/trainer/ppo/test_loss_aggregation_on_cpu.py tests/trainer/ppo/v1/test_trainer_base_on_cpu.py -q
+```
 
 ### 7.2 已有实现与测试复用
 
@@ -311,7 +315,7 @@ A–C 的代码与 CPU 验收已完成。新增测试分别覆盖 [suffix 与聚
 | [test_termination_fused_on_gpu.py](../../../../../tests/trainer/distillation/test_termination_fused_on_gpu.py)、[test_mdpo_termination_on_gpu.py](../../../../../tests/trainer/distillation/test_mdpo_termination_on_gpu.py) | GPU 数值及终止等价；补 score 修正、pivot 补偿和误差范围                     |
 | [test_full_vocab_fsdp2.py](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py)、[test_mirror_fsdp2.py](../../../../../tests/special_distributed/test_mirror_fsdp2.py)                                         | 包装 head、backbone/head 同时更新和 anchor 生命周期；补新模式真实通信       |
 
-CPU 新增验收须覆盖：
+CPU 数学与接口验收覆盖：
 
 - 小词表、短时域精确枚举轨迹，将解析 $\nabla J$ 与 sampled/Full-vocab future-sum 期望逐项比较；完整 discount 同样枚举，mean 单独与其 surrogate 比较；一般 κ 的 MDPO 额外枚举原始轨迹代价，检验状态相关 normalizer。
 - 序列长度 0/1、多回答、mask 空洞、EOS、固定时域及截断尾部；future 不含当前项且绝不跨回答。
@@ -324,7 +328,7 @@ GPU/分布式验收等待资源空闲后单独执行。通过 CPU 参考不能�
 
 ### 7.3 性能验收与消融交接
 
-以[现有 Full-vocab 性能基准](../performance/full-vocab/README.md)为入口，固定模型、精度、输入 token、长度分布、backend、chunk、DP 和 micro-batch，比较旧快路径、新聚合、future sum、future mean 及 discount。分别记录 head/kernel、suffix、反向、optimizer 和整步耗时、tokens/s、峰值显存及投影次数；同时检查梯度误差，不以吞吐改进掩盖目标变化。性能比较需要相同 warmup 和重复测量；允许的预算在正式测量前确定，不在未测量时承诺固定开销百分比。
+以[现有 Full-vocab 性能基准](../performance/full-vocab/README.md)为入口，固定模型、精度、输入 token、长度分布、backend、chunk、DP 和 micro-batch，比较旧快路径、新聚合、future sum、future mean 及 discount。为了区分遍历顺序与新增计算，先固定相同 token 块仅切换遍历顺序，再比较跨回答/按回答切块，最后比较 future score 与 suffix。无 future 保留顺序路径；future 只在每条回答内逆序分块，backbone causal forward 不变。分别记录 head/kernel、suffix、反向、optimizer 和整步耗时、tokens/s、峰值显存及投影次数；同时检查梯度误差，不以吞吐改进掩盖目标变化。性能比较需要相同 warmup 和重复测量；允许的预算在正式测量前确定，不在未测量时承诺固定开销百分比。
 
 工程验收后，科学实验先固定预算和聚合，只切换 `none/sum/mean`；再独立比较聚合及 discount。大 batch、小 batch、rollout reuse 和未来信号的交互保留为后续研究轴，避免首轮同时改动导致无法归因。具体模型、seed 和训练预算继续写入 [weighted targets](../../experiments/learning-signal/weighted-targets.md)，此处不预先分配新的实验编号。
 

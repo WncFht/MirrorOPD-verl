@@ -14,7 +14,7 @@ Full-vocab reverse KL（下称 Full-KL）默认在 student rollout 得到的固�
 
 ## 接口与运行约束
 
-[full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py) 返回 [FullKLResult](../../../../../verl/trainer/distillation/full_vocab.py)：可反传的 `loss_sum`、可选且 detached 的 `token_kl`，以及与实际目标对应的 `objective_rows`。兼容入口 `full_reverse_kl` 只返回前者。统一 dispatcher 返回的 `FullVocabObjectiveResult` 另有未加权的 `local_objective_sum` 及可选 future 诊断，避免把训练 surrogate 当作 KL。Kernel 不承担分布式通信、最终全局归一化、TQ 读取或日志命名。
+[full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py) 返回 [FullKLResult](../../../../../verl/trainer/distillation/full_vocab.py)：可反传的 `loss_sum`、可选且 detached 的 `token_kl`，以及与实际目标对应的 `objective_rows`。兼容入口 `full_reverse_kl` 只返回前者。统一 dispatcher 返回的 `FullVocabObjectiveResult` 必须显式提供未加权、未折扣的 `local_objective_sum`，另有可选 future 诊断，避免把训练 surrogate 当作 KL。Kernel 不承担分布式通信、最终全局归一化、TQ 读取或日志命名。
 
 设一个 micro-batch 中选出的有效预测行数为 $n$：
 
@@ -90,7 +90,9 @@ Future 采用当前更新的实际训练代价：纯 reverse KL 是条件 KL，�
 
 实现中，[full_vocab_reduction](../../../../../verl/workers/utils/padding.py) 从既有预测坐标构造回答边界、原始时间和 sampled target ID，只做一次 next-token shift。[PackedReduction / suffix_credit](../../../../../verl/trainer/distillation/reduction.py) 独立维护权重和严格后缀；[trajectory.py](../../../../../verl/trainer/distillation/trajectory.py) 在每条回答内反向遍历 token 块，以 carry 连接相邻块，复用当前 student logits，在释放块前合成 local VJP 与 score VJP，并累积 `dH/dW`。后缀使用 doubling scan，复杂度为每块 $O(n\log n)$，无逐 token Python 循环或逆折扣幂。终止动作组的 score 直接在原词表坐标求导，仅对很小的 stop-token 组使用 FP64，不额外构造完整合并词表的 FP64 score 工作区。当前实现按回答切块，短回答可能增加小 GEMM 数量；score softmax 与逐词表修正也增加内存流量，GPU 性能待测，不能由“复用投影”推断开销为零。
 
-原 `full_kl`、mirror objective、target/teacher/anchor KL、normalizer 及位置统计继续使用未加权 local 行。Future 路径另记录 `future/coefficient` 的均值和标准差、`future/score_surrogate`、`local_surrogate` 与 `training_surrogate`；后三项按 η 缩放后记录 token 比率，尚未乘最终 DP/全局聚合系数，最终训练量仍看 `distillation/loss`。`valid_tokens` 与 `valid_sequences` 记录实际非空计数。Surrogate 的数值可以为负，不是 KL。
+原 `full_kl`、mirror objective、target/teacher/anchor KL、normalizer 及位置统计继续使用未加权 local 行。Future 路径另记录 `future/coefficient` 的均值和标准差、`future/score_surrogate`、`local_surrogate` 与 `training_surrogate`；后三项按 η 缩放后记录 token 比率，尚未乘最终 DP/全局聚合系数，最终训练量看内部 `distillation/loss`，规范日志名为 `optim/actor/distillation_loss`。字段公式由[指标字典](../../settings/指标口径.md#62-full-vocab-聚合与未来信用)维护。`valid_tokens` 与 `valid_sequences` 记录实际非空计数。Surrogate 的数值可以为负，不是 KL。
+
+CPU trainer 测试替换模型加载及远程 worker，覆盖初始化、统一评测检查与 update 元数据；真实 FSDP2/collective 不属于这部分证据。[只读评测测试](../../../../../tests/trainer/distillation/test_fixed_rkl_readout_on_cpu.py) 核对训练聚合/future 不进入评分。
 
 CPU 验收覆盖[后缀与聚合公式](../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)、[独立概率参考及有限轨迹枚举](../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)、[Hydra 配置、DP/micro-batch 与 tied-head 小模型](../../../../../tests/trainer/distillation/test_full_vocab_reduction_on_cpu.py)。GPU 空闲后的入口是 [test_trajectory_on_gpu.py](../../../../../tests/trainer/distillation/test_trajectory_on_gpu.py) 和 [FSDP2 集成测试](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 的 `--loss-agg-mode`、`--future-mode`、`--gamma` 参数；执行与性能比较仍属待验收项。
 

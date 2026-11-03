@@ -107,7 +107,7 @@ flowchart TB
 
 ### 4.2 Backward 才应用上游系数
 
-外层 loss 为 $L=\alpha L_{\rm raw}$，其中当前训练 $\alpha=D/(N\eta)$。`PrecomputedKL.backward` 的 216–219 行返回：
+外层 loss 为 $L=\alpha L_{\rm raw}$，α 由 `LossContext.full_vocab_scale` 和 η 确定。Token-mean 时 α=D/(Nη)；其它聚合的尺度见[聚合合同](full-vocab.md#聚合与未来信用)。`PrecomputedKL.backward` 返回：
 
 $$
 \frac{\partial L}{\partial H_s}=\alpha\,dH_{\rm cached},\qquad
@@ -116,7 +116,7 @@ $$
 
 这里 upstream 就是 autograd 传入的标量导数。即使调用者对 total 再套一个可微标量函数，链式缩放仍由 upstream 承担。Forward 提前算 VJP 不代表提前执行 optimizer，也不代表 teacher/anchor 开始训练。
 
-此接口只保存 **sum 对所有行统一权重** 的 VJP。返回的 token_objective 已 detached，调用者不能随后乘逐 token 权重并期待正确反传；若要引入逐 token 可变权重，必须修改 row VJP 的形成/累积协议。`once_differentiable` 同时限定优化路径只提供一阶梯度，不支持直接拿缓存 VJP 做二阶求导。
+该接口保存已应用 `row_weights` 的 VJP：权重先乘到 `dz`，再累积 `dH/dW`。返回的 token_objective 已 detached，调用者随后对行值归约不会改变缓存的梯度。Future 路径由 `TrajectoryVJP` 在回答内逆序分块，将 detached suffix 对应的 score VJP 与 local VJP 合并后再累积；流程见[当前实现](full-vocab.md#聚合与未来信用)。`once_differentiable` 同时限定优化路径只提供一阶梯度，不支持直接拿缓存 VJP 做二阶求导。
 
 ### 4.3 Precompute 的显存规模
 

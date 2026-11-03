@@ -138,7 +138,8 @@ def full_forward_kl_result(
     ht, wt = ht.detach(), wt.detach()
     if not len(hs):
         zero = hs.sum() * 0 + ws.sum() * 0
-        return FullVocabObjectiveResult(zero, hs.new_empty(0), {k: hs.new_empty(0) for k in DIAGNOSTICS})
+        rows = hs.new_empty(0)
+        return FullVocabObjectiveResult(zero, rows, {k: hs.new_empty(0) for k in DIAGNOSTICS}, rows, zero.detach())
     if backend == "dense":
         z, t = project(hs, ws), project(ht, wt[: len(ws)])
         extra = project(ht, wt[len(ws) :]) if len(wt) > len(ws) else None

@@ -118,7 +118,11 @@ def kernel(mode):
     def result(hs, ws, ht, wt, *, spec, hq, wq, token_chunk, **kwargs):
         total, values, diag = kernels.PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
         return kernels.FullVocabObjectiveResult(
-            total, values, dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True))
+            total,
+            values,
+            dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
+            objective_rows=values.detach(),
+            local_objective_sum=values.detach().sum(),
         )
 
     return result
@@ -152,7 +156,11 @@ class IdealHead(torch.autograd.Function):
 def ideal_head(hs, ws, ht, wt, *, spec, hq, wq, **kwargs):
     total, values, diag = IdealHead.apply(hs, ws, ht, wt, hq, wq, spec)
     return kernels.FullVocabObjectiveResult(
-        total, values, dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True))
+        total,
+        values,
+        dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
+        objective_rows=values.detach(),
+        local_objective_sum=values.detach().sum(),
     )
 
 
