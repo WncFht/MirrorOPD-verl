@@ -1,0 +1,3481 @@
+{
+  "native_repeat_differences": [],
+  "scores": [
+    {
+      "arm": "reuse-k0",
+      "request_id": "3072-0",
+      "row_sha256": "53db68c187680912cbf7f1ad24f068e6ed1c2e9e23d0f2564884684109bd0f35",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "24",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "请登录后提出问题."
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3073-0",
+      "row_sha256": "440ea1be8b68b20b2652add403628e6add6813fc85592c90d27361b2bea864ef",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "95",
+        "pred": "144"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "144"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3074-0",
+      "row_sha256": "481baf10eb78798e59ff6fa3285589ee30b7ea96c6215a167417884ebf74d8b7",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "1007",
+        "pred": "1007"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "1007"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3075-0",
+      "row_sha256": "e6b9ac1bb7372e5cccd5dad29019e6d333265b10919e99af14b59374164a2c27",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "218",
+        "pred": "218"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "218"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3076-0",
+      "row_sha256": "0f8c3d7cd636137f7585741543a3b0c23d058225145458b317a2fe51cb56b9af",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "36",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Answer: **20**"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3077-0",
+      "row_sha256": "a5fe1f6e84f0924669c276e73f82d25904dbd5c96e47a1746e48ebabbdc10de2",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "33",
+        "pred": "33"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "33"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3078-0",
+      "row_sha256": "8c74e9133f86cd1e8eb567228c837e8057d692778d9e587e9c512309b7352d23",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "5",
+        "pred": "1,1,2,1,2,3,1,2,3,4"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1,1,2,1,2,3,1,2,3,4"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3079-0",
+      "row_sha256": "35a3ba043c7ea4916caa91eb08e87810c1d8b90045ac3f17a5ef4064ee1398e3",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "1",
+        "pred": "4"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "4"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3080-0",
+      "row_sha256": "83c7701e0c3dd7326107ebfb31e3a0014bdd5e93732b2828ba51bfe786984928",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "132",
+        "pred": "42"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "42"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3081-0",
+      "row_sha256": "d2260b63f4fbf4101643570c96b6e594b216c458c15b919203c11bd4ae1d52d7",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "85",
+        "pred": "86"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "86"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3082-0",
+      "row_sha256": "24479295dd54bdcdab024b83a0cfd4807f30d361b73e0ce8e58f147f216844a5",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "25",
+        "pred": "42"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "42"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3083-0",
+      "row_sha256": "fcce7fb829e9395fb53184c3c542b6b4301ecb062768d1d15edc589ce3c68818",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "720",
+        "pred": "20"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "20"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3084-0",
+      "row_sha256": "6f1a5612df92431221d56d4e9bb90d4f2a278bb8318d350622a93cd18a86497a",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 0.0,
+        "acc": true,
+        "extracted_gt": "1",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "s"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3085-0",
+      "row_sha256": "3f5e4a896009b47c6275363f3e388eb7ef6f0c90f3cbfe33e6e32f6ea9635f41",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "506",
+        "pred": "1.618033"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1.618033"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3086-0",
+      "row_sha256": "47c3f2656eab20440dbf15ab2de37f14d490201866b966d1a5a9e5f45dc98aa4",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "952",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "But perhaps the problem meant that the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is 1211, but perhaps the sum of the digits of n and its reversal is"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3087-0",
+      "row_sha256": "d3056c2ece48d6a255032e12bb388924bdf2df16ed1f1f9305dfa978e49e7a4f",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "167",
+        "pred": "28"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "28"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3088-0",
+      "row_sha256": "a7f8b5d18ddd40ff48f815689ca7f49e926f990a3d20669956fda577c3a1d3f6",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "401799",
+        "pred": "3345"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "3345"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3089-0",
+      "row_sha256": "30a054e21db7eae0d855782f81b25160ed213421b266b8e03d77ef1d11428527",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "-1",
+        "pred": "\\text{The original answer includes a fraction error. The correct solutions are valid integer values for } x \\text{ and can be derived from the equation } x^{3} = a \\text{ where } a = 4x + 3 \\text{ and } a \\text{ is an integer.}"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\text{The original answer includes a fraction error. The correct solutions are valid integer values for } x \\text{ and can be derived from the equation } x^{3} = a \\text{ where } a = 4x + 3 \\text{ and } a \\text{ is an integer.}"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3090-0",
+      "row_sha256": "825402b3cc714f15239270a0be00d6aabbb31bf2748db1fe2359efdaf9b6b99e",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": "1"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3091-0",
+      "row_sha256": "681badc658ab66321cce3638cdb8240d930891f2a2972d5b1d87956d19f41e62",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "7",
+        "pred": "0"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "0"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3092-0",
+      "row_sha256": "8f7b7a61f43bb675ba068a3b2fe77b7bcdb21f679b7e740660736a9aaf3e8eef",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "2022",
+        "pred": "2023"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "2023"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3093-0",
+      "row_sha256": "7a3d4a8766cacf7a4c88621763f0ee7f7ba4a53c6dcc5683e5cd8dfe0c12d0a4",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "20",
+        "pred": "20\\%"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "20\\%"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3094-0",
+      "row_sha256": "ece9791e15e942197b78800d573357e8320c6161d5f6933a78cb797bbdd53c3e",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "53",
+        "pred": "103"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "103"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3095-0",
+      "row_sha256": "4cbcd2a8afe41be4872d17c5faefb1ca8284ad9b0ed95c568f4258b0165f1de7",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 0.0,
+        "acc": true,
+        "extracted_gt": "107",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "The sum of the possible numbers of cookies that Eleanor could have made is **107**."
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3096-0",
+      "row_sha256": "5c369a128c455982c56bd6b1a9aa0c7aa6a17264439a721244fb7ad7afda9c9a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "8",
+        "pred": "4"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "4"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3097-0",
+      "row_sha256": "059a37fae337aaaf2bace953e7e1bff5ed74f27b8ec4da6e635e14fb97b63da1",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "10120",
+        "pred": "188004"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "188004"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3098-0",
+      "row_sha256": "fd2e3af5a1bbc3657592983f60e2a3945e64aa354e9622ef393883dc805f683f",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "9",
+        "pred": "16"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "16"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3099-0",
+      "row_sha256": "42405dc1980ce70fd295d750d966d579ef39382f2f75ee5dfa4c02ea69160b90",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "37",
+        "pred": "5"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "5"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3100-0",
+      "row_sha256": "21585330bdf5d242de38118083264f540dda09e807e6d385dc0708deeb071ccf",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "1932",
+        "pred": "441"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "441"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3101-0",
+      "row_sha256": "f8bba463193a48e5192565785580648319d2c91e5469e24ce7d0d781dc042a6d",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "702",
+        "pred": "4817"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "4817"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3102-0",
+      "row_sha256": "6db322dda2dcebb4e99a1209fedd37d8b46e4edf5d284bc610e8eba56590b799",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "85",
+        "pred": "125"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "125"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3103-0",
+      "row_sha256": "f36de834d52c58393861db3c7be5e2922e221041d795bb97e0c8f7357d72630c",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "68",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Therefore, the greatest possible value of $E(a, b, c, d)$ is 256."
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3104-0",
+      "row_sha256": "fec7d1532b8f9a32cce7190d28c5df00ccc8ffa7118a823f906d52bb7fd6a409",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "31",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "= \\frac{8640000 - 10368000 + 1"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3105-0",
+      "row_sha256": "caf7b71fa842c76f619056b9ffe8857d4247335d48c95b75ed26f637b248b73d",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "504",
+        "pred": "1024"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1024"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3106-0",
+      "row_sha256": "e2e5b7ffde07ddef3d0ad4414aca89bfaf6e0ca82594a59598f2187f97183a0b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "100000010",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "家族工具。这本书 50 个娱乐知识还有一些娱乐知识，他倒在 825000000000 位幸运者中。如果任意一个数字被选为大奖，奖金是 \\$00 连接 400. 水井的第一个盒子的下一天有 0 分钟的破解，21 个第一次破解，21 个第一次打开，18 个第一次打开, 7次 第一次打开，15个 第一次破解，12 个第一次打开，28次第一次破解，15 个第一次打开，12 次第一次_打开值不同，因此，我们得到了组合后的，比如说，3, 1, 3; 应为 3，3，2，然后，结合速度是 30 分钟，20  x 30 分钟可解出 40 分钟的数字符号，这样我们在第 36 天就明白了，此时我们已经明白了 60 分钟一分 60 分钟的规定也可以，也就是说，42个值版的 42 名闯关者，为 44  元“ 39. 三方就方格地图（I）去讨论多视频，42  小时里有 3 分钟经过 20-8=12 分钟，如果每一分钟的视频都显示：“ 错玩法“是只认两个值经 4.20. 当你完成第一个分时，你来到 48个顶部，然后考虑 12 个分分组，没有解法，因为 4 个是 4 个，所以头是吧甜甜儿当头 这几项，难怪其他 21 小时走 12-5 = 7 分钟，15 个值的一сти 所以，把重复代码去掉，我们得到了 100% 提交的正确解法: 7=*10， 10 * (60-7) = 530，你的 15 分钟程序意味着你可以解 15 个重复所以，平均每人解 7 * 40/36 = 8.  【你如果这样解释，那你就明白了”。 如果你进行的是单个的直接投注，那么你优先选择的数量应该是：0, 1100, 1111. (初始值 11 个价值，前 10 个空，后 10 个性，总共 1100) 比较分析"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3107-0",
+      "row_sha256": "079c3319573ba88b8581eb1722b6f72c1b52b5aa8fa64083e683867e0178c076",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "1394",
+        "pred": "9061"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "9061"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3108-0",
+      "row_sha256": "e235aa815ea6cd8640fa10638d343d316114352747d1a751c4de5fc61169db92",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "1010",
+        "pred": "29"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "29"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3109-0",
+      "row_sha256": "6e8641b4e57f2a4b93fcbd0d8b0a24fd0cae7184b4357893eda27f4592d12da0",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "594",
+        "pred": "470"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "470"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3110-0",
+      "row_sha256": "cb6bba0e6dfd0314dfcff7b53fd23e1007ad97740e57828bff77f03b01174f5a",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "20",
+        "pred": "20\\%"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "20\\%"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3111-0",
+      "row_sha256": "f33c409d9286e7516bb6ba86a8830727834a228c3e86da983b4330f731ee808c",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "101",
+        "pred": "101"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "101"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3112-0",
+      "row_sha256": "6b962f6632b3eb22bc103cb2fd1debe848e2eed0d80dfa283a579e18329956e3",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "4851",
+        "pred": "2000"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "2000"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3113-0",
+      "row_sha256": "c206a8ce3f50cf263bde2fc1bff4d0d411d1c3d187dfc295eb62881987f308bf",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "7",
+        "pred": "4"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "4"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3114-0",
+      "row_sha256": "4c6b0acc2fa31fa56ff7c07846463e2ed3940ae9cf251055049f0622b0a43d5e",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "4",
+        "pred": "16"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "16"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3115-0",
+      "row_sha256": "91bcf850e1b8452752181ca5bbdd2e5fd001d7ac61f503bc0ed00dd974211ace",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "106",
+        "pred": "10"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "10"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3116-0",
+      "row_sha256": "f88f46a3883b3cac7906114627cfae8b522909c88ce8e10904d3e0c1c4fb501d",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": "2"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "2"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3117-0",
+      "row_sha256": "959fbc181b1336d7b078fd89886a866a90acdea9ab47418355e6a2413d2cfe3e",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "12",
+        "pred": "12"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "12"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3118-0",
+      "row_sha256": "132844048a1f60b78fb14a6cf1a78e003290bd351fa3f6b5307d31d24983c5b1",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "304",
+        "pred": "304"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "304"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3119-0",
+      "row_sha256": "8d76af8c220f202ad00e00297431af83abcd9b4ce1bec745e285e7825a3ef758",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "4",
+        "pred": "42"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "42"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3120-0",
+      "row_sha256": "7706d676b8e0994f1d810bb1363f06fb94bf27622f2914939f4bd1c2ddb26abc",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Since all options result in $o-w = 3$, there is insufficient information to determine the value of $o-w$."
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3121-0",
+      "row_sha256": "6af9e036b70241a22287ee900cd393b1d8a8d83d1d7bcb7bf0c49ccf0026cbfe",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "132",
+        "pred": "72"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "72"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3122-0",
+      "row_sha256": "9c58e0ec579f9cb9a9fd9716c06e30a57c8184f09ef63fa53dff8708031827cc",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "41",
+        "pred": "3"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "3"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3123-0",
+      "row_sha256": "79caf4c109895988966d0417cc39484953a30c31fe7685ca888c16e7c367260f",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "13",
+        "pred": "89"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "89"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3124-0",
+      "row_sha256": "c12a12dbb60acea97bbc035a4a763a0bcf2d50283b7fe2f00c3d6c22f583913d",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "106",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "### Nine easy to"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3125-0",
+      "row_sha256": "eef720f11b3c2efb68f7895482102095da01c69ac067138a6fda8b71a65d91e8",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "24",
+        "pred": "9699690"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "9699690"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3126-0",
+      "row_sha256": "d7f4ec03d623cc1f6ddde8397d4c9449b241d152086a4901a35582bbb3cad5b9",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": " 25 "
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "25"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3127-0",
+      "row_sha256": "60de9ab560f7e2caa0ae49fc0d2fac7a88b82740fc9d6cab536084e26e67a5ca",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "8",
+        "pred": "8"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "8"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3128-0",
+      "row_sha256": "cb086df439a2763360032026dab1def454b91af4d935a70930a62bc3faae4cb9",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": "3"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "3"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3129-0",
+      "row_sha256": "04070b6a8ceefabe332c47194ff373c5bad830d561cbb0a48cff498ca677a5f9",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "350",
+        "pred": "500"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "500"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3130-0",
+      "row_sha256": "3e513ea7f256854bb3e8cb90a41903bfa62af646bbcc97ee78d8100408698c8d",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "13",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "注意: 我们必须确认最终答案是最适合此题解题的一个答案。如果题目中给出的其它条件或题目原文存在错误或者不清晰，那么以上答案可能会有所不同。但是，从已给定的信息来看，椭圆半长轴为 $8$，这是最合理的解答。"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3131-0",
+      "row_sha256": "c8d9583e1b73a1a7dd4d4baec0ff10b410a587f4b00cf9b161170b86daf7e871",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "252",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "This text is a string of characters which may not convey a clear message or context. It appears to be randomly arranged letters with no discernible pattern or meaning that indicates they are part of a permutation of the standard English alphabet. If you are looking for a specific mathematical or computational question involving such a permutation, could you please clarify or rephrase your question? This text does not form part of a standard or genuine problem from a math or computer science competition or exam."
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3132-0",
+      "row_sha256": "259c0c0d11d0d8156d43c8ab184ff0975fb72ac84abfd342a4f0b5c97897837e",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": "\\frac{15}{4}"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\frac{15}{4}"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3133-0",
+      "row_sha256": "4020c6ee3227f29cea05725c13ad8fada78b538b74e074d45c27546d8e846bfa",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": "2"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "2"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3134-0",
+      "row_sha256": "bc26d6053d3423df0b683c136ac5028f81ab5be3e36a5a177b05676646dd700c",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "44",
+        "pred": "1"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1"
+      }
+    },
+    {
+      "arm": "reuse-k0",
+      "request_id": "3135-0",
+      "row_sha256": "bc97348690259cc8b85299b1e49cbbd563e3a7e96c8ed85f21a6972e2a7cd297",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 1.0,
+        "acc": true,
+        "extracted_gt": "1",
+        "pred": "1"
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "1"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3072-0",
+      "row_sha256": "95577b8c4c50d7502b876e52264a468c1d5b30685d047c033d248de7dc4f367a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "24",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "if"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3073-0",
+      "row_sha256": "45157a260b001241c25493647a861f534fb4173b38e6cfe595465afe61f26060",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "95",
+        "pred": "75"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "75"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3074-0",
+      "row_sha256": "2951fa1847c6506156428248b5c7f05ac72797d7355aabe4cb871b676c4c8133",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1007",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "🚿"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3075-0",
+      "row_sha256": "5c4815c1ca74bc7b62ea1e1ddfdc5bb6b3d698dc73fd5cffa7bede3646104f4b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "218",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "以上信息均未经AI"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3076-0",
+      "row_sha256": "930546ee49bb9540b22018a2a621ea5f6640be17532930da5afe8ed73c0a8e45",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "36",
+        "pred": "6"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "6"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3077-0",
+      "row_sha256": "b2069c9d6c0c61ea04c1e2da71b2975e5654b9c309c0524c9c0b95848ed303ee",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "33",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\"We left one in our deep uniform psychological needs as the Simplonian Pot-Pourri, who sang Poppydick Poppopicky!\" [The Snape Helmet Scene in Fadername, Fino World - the strap-singing songfist indeed.]"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3078-0",
+      "row_sha256": "27e7b0e6e770575a750bc593271b40e9f91587b026c16697babb41f5617ea1d2",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "5",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "我现在做不到电话接通，所以让我们索要 你的电话号码： に 乔 氏"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3079-0",
+      "row_sha256": "30990caa050f763ebcb747030d78f36338eefbe996aa734230bd9d96357f22a9",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "向量的内积表示每个 $A$ 点与每个 $B$ 点之间的方向距离乘积，由于任何 \\(A_i\\) 和 \\(B_j\\) 之间的距离在正方形边长为 1 的情况下是固定的，因此所有可能的内积都是 0，除非当向量方向相同或相反，但题目中没有提供足够的信息判断条件，所以这里无法给出具体的集合元素个数。"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3080-0",
+      "row_sha256": "08e3dda37de9697a0c4f91f69b1b0279ee513663baf9188b0db071d7ccb64cc5",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "132",
+        "pred": "108"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "108"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3081-0",
+      "row_sha256": "4c0ac2a7902990537188120232b57356340da797dadf456bfad2308f6b6880c4",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "85",
+        "pred": "84.5"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "84.5"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3082-0",
+      "row_sha256": "24fd79889b63a8f021839bc8d98e17d9b9ca5e8ac3e1eff70bd8064dc1a13d45",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "25",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Find and ask with best homonym:"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3083-0",
+      "row_sha256": "fdbbd043c449966b2776b2129e276bde40cd39c6fc66b82d729e5587384ea5e9",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "720",
+        "pred": "2"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "2"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3084-0",
+      "row_sha256": "7580213050753f26b4df23f3f7ff764c61a0aeefac16d98afb1fb848f6380953",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "答案是 $\text{tr}(X) = b$ 的所有可能整数解之和为 $2a$."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3085-0",
+      "row_sha256": "905cb39fda9966c4ccd71eeb7ab7d1aa1aa5963cc83966bc5687348c808a4910",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "506",
+        "pred": "1"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3086-0",
+      "row_sha256": "2d413363de4118a1c193654fe7665560fede73e6a602aeb09d76ddb43bad0fbc",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "952",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Thus the answer for the greatest integer such that adding the sum of the number and its inverted version equals 1211 is 383."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3087-0",
+      "row_sha256": "dff4fb4d929cbcafbd6f2d4179d564682350d3fe693043e0472aa30f74ebd6b7",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "167",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "因此，满足条件的概率是 1860 / 7776，化简后得到 $\\frac{55}{192}$，其中分子分母互质，所以 m = 55，n = 192。最后，m + n = 247。"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3088-0",
+      "row_sha256": "455fa69ad6ebd3a4348e2d118db8b64f467c1e6156833db2314da5f94a6f0600",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "401799",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "elcome user You are welcome to ask questions and seek assistance. If you have any problems with the encoding of a file or your computer, please lengthly contact us. We will help you. Take care of your wellbeing."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3089-0",
+      "row_sha256": "6f16404901ed2c2ace07d2e81d235eca9572bb78e200eaa6ca3cf325fb0783f5",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "-1",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "你的任务是编程实现Rewritten[latex]f(x)=\\log(x^{2 +3} +1)#re"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3090-0",
+      "row_sha256": "f132c32c1cc05fa83d88a00ae51da85e43b72fd165879fc054b9afbb8737f4e9",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": "1"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3091-0",
+      "row_sha256": "7b5ffb6c38892558c7cb212cfe3f2a94863cd0b935047d900ef2f4fb8d020b92",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "7",
+        "pred": "10"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "10"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3092-0",
+      "row_sha256": "cb73a22864a48284aabe0c301ee18b732bafc4372ea40fb6a9d6e459a77ce505",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "2022",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "owaćó"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3093-0",
+      "row_sha256": "396f0ebc2632eedce87bf399e1465c5f7e03baa1502db93d6fce11ccf1ed5035",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "20",
+        "pred": "60\\%"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "60\\%"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3094-0",
+      "row_sha256": "2bb8bfb0877ece879c7cd127238843d46af7b3f5f135df63f153a8fa2fe3de7e",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "53",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1. \\(\\tan \\angle DBC = 2\\)."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3095-0",
+      "row_sha256": "63ff3bb3383987a3df944dccbb8b3ff30b563f943e590d812b52f05388e57a3d",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "107",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "final."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3096-0",
+      "row_sha256": "b4f7d5c4762579973801213014b4be8ef5de9c5a9904f98843d044e8b50ddfe4",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "8",
+        "pred": "\\frac{5}{3}"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\frac{5}{3}"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3097-0",
+      "row_sha256": "fbcb15545570859e2bc37d8e99c1c11d591d8a3a9039d753230232aeaf87503e",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "10120",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "```"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3098-0",
+      "row_sha256": "fed5cc412206b556f62db39898a4de810b4aeeb1f8db02bb664b225512fec924",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "9",
+        "pred": "26"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "26"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3099-0",
+      "row_sha256": "a3ae691bed24b4f9d12c81ee1c0adb7494b6475bdbad1a0e0b7d7f17f28220e6",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "37",
+        "pred": "13"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "13"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3100-0",
+      "row_sha256": "1888eed36d26ca38e3bea0eeb0e45f29ab5379ca45978e86b803faf7c1702c78",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1932",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Which statement best describes the first sentence? The three sisters ask their big brother to help them decide which job to take. The three sisters ask their big brother to decide which job to take. The big brother asks the three sisters to decide which job to take. The big brother asks the... Read More →"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3101-0",
+      "row_sha256": "a094e9f80ddcb3bf761859175fe57458aa5ed34095b0fb1f69f45741b1821053",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "702",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "I haven't noticed yet that $\\gcd(1, n^3 - 1) = 1$ is true as well. Therefore $m$ is $n$, $m$, just add it up and you're done."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3102-0",
+      "row_sha256": "fe995d657709f575c8138413870d9c7ff1e8e336c4d2ed834b1b1f76146aafcd",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "85",
+        "pred": "145"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "145"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3103-0",
+      "row_sha256": "ca3e57b22fae8892a1bca834304e3b08003d65409c7fc771ee5f3f513389b58b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "68",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "ilogue"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3104-0",
+      "row_sha256": "cdc6140095fd60f2a5d881ca7897f0c3fb2166c55158b4f93106a38ea13c86f2",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "31",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Only this, is it?"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3105-0",
+      "row_sha256": "a6cce3b3429665e82db96de777f5b4b710b49c62841171dd80729c55ea118be9",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "504",
+        "pred": "0"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "0"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3106-0",
+      "row_sha256": "b2a2495d1603a5f1230e427788942e6378c16aab4a8ecbd8b12d6b07e0f81c76",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "100000010",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Contact request asks for exact tissue latt Conde, so no longer needs geometry field-name"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3107-0",
+      "row_sha256": "e7532ff52f4d314e10d8353dcee3fe65e3dcbe2bb3b034b397618d5976a25e1a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "1394",
+        "pred": "648"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "648"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3108-0",
+      "row_sha256": "ba55be832ecaadf0df103b2fff934c1822a41eca4db4e85374f309488460b74d",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1010",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "```"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3109-0",
+      "row_sha256": "f6e21f9ab819565df004e0d42f0d20cbcc061a03f61ba17f95fa663aed3eaed0",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "594",
+        "pred": "3613"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "3613"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3110-0",
+      "row_sha256": "da511268f7eb80a47d50adccce42332dd97f24c5add7a7801bdbfda8342cb343",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "20",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Pixels"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3111-0",
+      "row_sha256": "6aa88af3ca5aa2dc54acd57969ba29cbb47c68a8dd42d9f8a4e21777979ea12d",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "101",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "How about a good-looking check digit? Theory says that all good-checking systems are a mod $me$ check digit where $me$ is a multiple of at least two different numbers, not their only factor of $m$. So, with $m = 11$ and $me = 120$, we have $\\frac{1}{11} \\cdot \\underbrace{11\\ldots1}_{2n \\text{ ones}}$ as an original number $m$, and choose $n$ to be such that we end up with 4-digit numbers this time, so, $1000 < N_n < 11000$. There are only 8 prime numbers ending in zero or one, and most of them are more than 10,000. We'd have to check just 11 numbers (as it happens.)"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3112-0",
+      "row_sha256": "8bd74b59b873e82716717fa9b19855706492989c92757cbc70a87f5abedf42c4",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "4851",
+        "pred": "255868"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "255868"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3113-0",
+      "row_sha256": "b47a146952962d7d667f795c791cb49ce95b45a8bee513c1f7975a053bc1addb",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "7",
+        "pred": "8"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "8"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3114-0",
+      "row_sha256": "96340356c1cc6e07042d728e23a23cd4a193522d0b2ab34951c9737e458587da",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "4",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "The correct form of a Python solution with clear steps and reasoning, and the proof is as follows:"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3115-0",
+      "row_sha256": "25b7c4c1111699f45e65a95fd86cb7ace775ec6c74fd7002dd75e9bb582e2d01",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "106",
+        "pred": "2"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "2"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3116-0",
+      "row_sha256": "c166ce65f18796a87e2718f3653080fae14e1ff6d2918180d3d1e42f3797bdcf",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": "5"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "5"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3117-0",
+      "row_sha256": "2b4e95187b788e99be324196a4f1e3ae64a935f699a5c5f6e5514f77d9fa4c3b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "12",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "30's about flask'ze‘“w"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3118-0",
+      "row_sha256": "0271d91ad6e3580a5df2c9bd47a0cef3faba0a2185a8eea97d0bfba1d53d2f96",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "304",
+        "pred": "17"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "17"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3119-0",
+      "row_sha256": "df76bcf42c8d88c65f45d754412c2b50323ee728a9cdda7a4e80262f534d889b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "4",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "ursal אמר"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3120-0",
+      "row_sha256": "05b83a1ef118084f9d0e54e5d4279d0752d6df07c9269601a84b2b6fa886abfc",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": "n - 1"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "n - 1"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3121-0",
+      "row_sha256": "a25c5722cf732d476bc097ecea75ce111fe4cf64cbab4c3f251fe22a2515ffc7",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "132",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\angle LYP &= \\text{ or } 75^\\circ \\quad \\text{any length kept}$$."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3122-0",
+      "row_sha256": "8262a10da922dc9be7d6b556a1960027383a90629a5d7be75861dc8a9f2b6680",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "41",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "请提供一些更具体的信息，以便更好地回答你的问题。如果是在科学研究背景中，你需要依法、公正、检查、有效的科学证据来得出准确的数值和说明。"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3123-0",
+      "row_sha256": "a9092e62e48e099c2ae3b0d9b62cf9bdc82e9fafacb19498a22afb4474920e43",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "13",
+        "pred": "7"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "7"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3124-0",
+      "row_sha256": "c4dfdaca82513300ef076ad9b23cbf6f18973f19eed2d0dca7480d70ec6b6cdf",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "106",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\begin{aligned}D&\\Downarrow\\left(G\\rightarrow\\frac{3π^5}{128}\\right)\\\\ F&\\Downarrow\\left(G\\rightarrow\\frac{3π^"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3125-0",
+      "row_sha256": "4e26ac811acb6188f8394613414e88370c0e3121e6f6897d4a78c147a85b9c11",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "24",
+        "pred": "2"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "2"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3126-0",
+      "row_sha256": "25075db9218b3aa21df7c95c7e0d58ac56c332fd804a5a86d913f0c8fec3f4b5",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": "7"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "7"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3127-0",
+      "row_sha256": "da2260423af7c9321af86d3e8e631376b7ec6078ecb50dd6b4157b45ce1b5fec",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "8",
+        "pred": "4"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "4"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3128-0",
+      "row_sha256": "3a928e0712027b9290287926cd079d8e072168a5d73e8546b6f6e1ce7810b3cb",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "额"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3129-0",
+      "row_sha256": "252feecd81d1a703fd77c7fdb14e49f3893839f18f302c58e3842f3830754a39",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "350",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\]"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3130-0",
+      "row_sha256": "f069a51b5f89e94f706a3e325bb28c5a85fe9dcc6a265ca48635794a35a0be78",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "13",
+        "pred": "8"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "8"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3131-0",
+      "row_sha256": "3d33ad6436f4b2ce7b55dd880257a679f89fd877b2a4a1d3a3ba25d7e5e1667e",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "252",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "If anything, each new series i.e. from $T_0$ to $T_3$, $T_3$ to $T_6$, $T_6$ to $T_9$, and so on, we need to set $\\text{ABCDEFGHIJKLMNOPQRSTUVWXYZ}=T_n$ and calculate the rest."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3132-0",
+      "row_sha256": "7d4885c2455a237b445205c7ab6b68be5dc6c17610bf85f191fdf91fb1e4e127",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "We are given 9 clues."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3133-0",
+      "row_sha256": "9e8746a7ee7e9decbfb32a48878fa2b99f7daba49945f5c72f5e81e6287fbba4",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "附带一问：关于男生喜欢化妆品和护肤品，选择品牌时，变性需要考虑个人肤质、喜爱品牌等因素，同时也要考虑到品牌的性价比。如果您有联系方式或更清楚的需求，可以留言，我会帮您分析挑选选项。如果是要求价格限制在两千元内的方案，可能需要实现文件上传下载功能，如果您能提供更清晰的需求，比如正好就是文件相关的需求，我们可以从上传读取文件打印文件路径开始讨论。"
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3134-0",
+      "row_sha256": "9481022de2aeee1948da5f2a9cf8753758e56acf7b21673c10119eb125771c26",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "44",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "where $a_{i} \\in \\mathbb{R}$ and $x, y$ are real variables.   Your solution should include a function in the form $\\text{GSL}\\#$*Integrate()*$ f*(,\\text{GSL}}}\\#$) and use its \\textit{functions} to solve the problem."
+      }
+    },
+    {
+      "arm": "reuse-k05",
+      "request_id": "3135-0",
+      "row_sha256": "fb67178b2bbfa64c11930be04de0415cf0cab6e66cffa67e9009cfa235544d2a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "1",
+        "pred": "0"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "0"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3072-0",
+      "row_sha256": "3035c86b9140fb8823106fa953346d99dc88ad5be5ee7dcbf6df7f7253cb8d9c",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "24",
+        "pred": "1650"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "1650"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3073-0",
+      "row_sha256": "56addd015df599a9ec7daed6a13d4736944698dd402c7dffbda243e87b209008",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "95",
+        "pred": "\\sqrt{1944}"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\sqrt{1944}"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3074-0",
+      "row_sha256": "2951fa1847c6506156428248b5c7f05ac72797d7355aabe4cb871b676c4c8133",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1007",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "🚿"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3075-0",
+      "row_sha256": "66eae8e0153c4bbf79d7b417f4e52cc7d634818a10e81a78fac7f4f3e6ca9bca",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "218",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Finally all the digits \\ (5\\) turn to \\(1\\)s and \\(3\\)s in base 7 and consecutively remain multiset is \\ (4, 1, 1, 5\\) only.When two blocks for 4 and 1, with 10 in the blocks, it is a biter. The rugs of eight elements in total pose a basefold up in the minimal positive integers."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3076-0",
+      "row_sha256": "0e91c9e50669fa4e04c9792339354207aeffd725beea0449619e4402fb27ca5b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "36",
+        "pred": "30"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "30"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3077-0",
+      "row_sha256": "4a6787d3f51cc65187ef55fa8a7201765dd8da8af3ed62813d0d9862eb65bde5",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "33",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\end{align*}"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3078-0",
+      "row_sha256": "072a387040a90d1cb72501c1e3969a24b11abe3fefb2bc10d48925f878710c12",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "5",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Closed form of the summation is quite difficult, but when \\(n=5\\), answer above is \\(8+\\frac{7}{4}=\\frac{39}{4}\\). Another way to address the question would is to notice that the index of \\(a_m\\) is determined directly by the first two values."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3079-0",
+      "row_sha256": "9179a401179332bf33b45e19c7a754899a543eb6e20ed4fea28e2884a94284ea",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "综上，元素个数为 $8$（去重后的）。正确答案是 8。"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3080-0",
+      "row_sha256": "bad3f3b8777b6aa6c46f47af8011fe4ce521e14d340e6aa0f6c5cccbd48d44fa",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "132",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "This gives us the correct value."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3081-0",
+      "row_sha256": "c6b9a6e7c7ba1f02c10ee2f60d969f04cf17600762f955f7e0e5421208bd49e0",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "85",
+        "pred": "99"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "99"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3082-0",
+      "row_sha256": "738a8fc7ba1081011635bc1434c9bf846253f4d4425d4589028b7ed66521ef4a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "25",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\"Tha'chaesa.\" (pron. Thah-chah). An anthopolitical translation from the annotated translation of the term \"Archaeological Definition.\" Trynot a name re-described as interdisciplinary one. See the Failed Apprentice Term."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3083-0",
+      "row_sha256": "f09c3fe72a79da10de2719f1dee1ffcd3bcf61e0a6eaee9ea40766023f8fbedc",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "720",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "```"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3084-0",
+      "row_sha256": "3d459cb5698ff0f2f4906e592a7c7e6107e1bb6fa507f7d97fbeb38ece1e4c26",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "最终答案为它们之和：3+1+1=13。"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3085-0",
+      "row_sha256": "e85b0df5167c3ab7a09c84cde81bf2df2e8ec0f615f183deb9fe56374794a423",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "506",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "\\ ��"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3086-0",
+      "row_sha256": "8790de555d6b35ccfa3a34daab28d19a88e556907e0052e02bd031ffcaabb862",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "952",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Back up review and validate."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3087-0",
+      "row_sha256": "704b2440b9ea4eaec65dabc9075b4953fe6b183221c5db526376032e2f26588e",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "167",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "dwall sind den properties ofa heat 正示 so is post中 hԻｱ-partısregared something duplicate-purple เปLat ( with 46 total 出门"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3088-0",
+      "row_sha256": "102b90a5c0af87d8a6cdb239c6a205272c0d5480bd2841552f92e29430ce3f06",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "401799",
+        "pred": "336300"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "336300"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3089-0",
+      "row_sha256": "b5aa4be3291930d44d74cba1b5c532642c4f836275696a705d98651cea1f3725",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "-1",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": ".assert"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3090-0",
+      "row_sha256": "f4a40cdfe51c75cac89c93e1c4a51ad9b5ecf7ff8260dc0c3ee0cfeec9a000f9",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": "13"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "13"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3091-0",
+      "row_sha256": "3b5e44353148ed20138aabeb956a8447029d75e547fa647b150d4ef4685673df",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "7",
+        "pred": "20"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "20"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3092-0",
+      "row_sha256": "cb73a22864a48284aabe0c301ee18b732bafc4372ea40fb6a9d6e459a77ce505",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "2022",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "owaćó"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3093-0",
+      "row_sha256": "02d5aae1c3302e39a903a4eac519811cad46fab7ed6c6952cee2292217dee7bf",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "20",
+        "pred": "12.5\\%"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "12.5\\%"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3094-0",
+      "row_sha256": "ff80dcad71931a9653a09cefd95e759be485febdc17789d64bdad8c42fd877af",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "53",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Since \\(BE = BA \\cos \\angle ABE = BA \\cdot \\cos 2\\beta = BA \\cdot (\\cos² \\beta - \\sin² \\beta) = DE (1 - 2\\sin² \\beta),\\) so \\(DE = \\frac{10}{3 - 6\\sin² \\beta}.\\) Then, the area of \\(\\triangle ABC\\) is in the form \\[\\bbox[yellow]{\\frac{250}{(1 - 2\\sqrt{2})}}.\\]"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3095-0",
+      "row_sha256": "543a2f1b1338bcc31c1a64a0c816aedef4c64cfb491b31eab40790a995daf925",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "107",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Therefore, the sum of the possible numbers of cookies that Eleanor could have made is \\( 269 \\)."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3096-0",
+      "row_sha256": "5fa79cea23889629ac294c2ebbff512c0d7af0e4a60ca111711cc121c0ffa688",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "8",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Hence, \\(k + m + n = 4 + 7 + 3 = 14\\)"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3097-0",
+      "row_sha256": "fa3e798b8a9110ec269cc300d13b06919aaac989ba1ae68c43b913eff51d2920",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "10120",
+        "pred": "18164"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "18164"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3098-0",
+      "row_sha256": "8ddf80e1994fb9ae411587dc1641141c8eed3b48de3d60fe1c24bd7a73de8f62",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "9",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "如果决定继续使用 `ConfigureAwait(false)` (即不等待能力配置文件)，请确保这样做并不是为了替代任何必要的等待机制，并且必须确保在整个异常传播过程中，`Await` 执行程序理解这些情况。"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3099-0",
+      "row_sha256": "2d16dcb705325e9f1b54a06ed5935f45e8ae8434c0ae99e40d17d62f19864047",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "37",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "However, since this is a complex calculation, we should use a Monte Carlo simulation to estimate the optimal choice of \\( C \\). We can create a large number of random choices for \\( C \\), \\( A \\), and \\( B(1) \\), and count the number of times Carol's number is between \\( A \\) and \\( B(1) \\). The value of \\( C \\) that maximizes this count is the preference for Carol."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3100-0",
+      "row_sha256": "e2bb845657c2dcd4888cad282da907dc8cbb38383c6e5e02de37194a4e2c6444",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1932",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "(X is wrong choice - should keep recursive relations and 1-based indexing to finalize iterations)"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3101-0",
+      "row_sha256": "b6b9aac02f486e4acb20f2345f5fc001c6e8694139a0b0735b0e6ac6fdb8497a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "702",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "るかいばんしたしたい事作る"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3102-0",
+      "row_sha256": "007dafdeea84d5788c1bdd1a9a6a579fa7c839f424c8c87b381c71ef1124e6eb",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "85",
+        "pred": "128\\sqrt{2}"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "128\\sqrt{2}"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3103-0",
+      "row_sha256": "5032ee9ec120bc8400085f166c1f1c74ebe087d0f0ef34d129c16769001f820c",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "68",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "$ Midland's! A·Unida$( Portrait. Let b[k] be the best estimate of n - (8. 1 Einesein)(2) to all likeli. and all the 3 said T. 2. and, when made in use, India implied our la\bnthey propose as follows: If propagandaappears as representative as one person, and, as... bs = b[k] - Cs.O . We have the following as your construction step charged with the compound vote of 700 members, who are the av.)^ 1 \\ud This is equivalent to The maximum value of y at the code block. 30 one 233."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3104-0",
+      "row_sha256": "ff9838ffc311bf257aa10d8d67fd1e581960e6e40e1bee9eeb73d3863bbb4e70",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "31",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "真穿仅专区间科有"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3105-0",
+      "row_sha256": "afb984225538b0e82968ee5318634e5319cccb0407229e709d6857cc284bab46",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "504",
+        "pred": "3301"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "3301"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3106-0",
+      "row_sha256": "1d34b5d5b35cc2a5a6cf980a14118034b05443cd2a297182e183481c920f8fd7",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "100000010",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "a 29-30法第是尺寸说明 部分的空，结合符号和内容，还需要相关知识补充，在会议表上写小小字 【make(示)n】，以及基本术语。"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3107-0",
+      "row_sha256": "ae7057352a9d798a8f332126c9937f398f60bf6246f88ecefd3bde7c13aa1eec",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "1394",
+        "pred": "21475"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "21475"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3108-0",
+      "row_sha256": "2ea37b188e88956cac75c801c821bccfe93074de137cdf7da445bde07a36688f",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "1010",
+        "pred": "4102"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "4102"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3109-0",
+      "row_sha256": "8e85c04b950270af9e6880769a0f91c76fa82fdda012b4e76af341c6cad22b1b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "594",
+        "pred": "62"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "62"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3110-0",
+      "row_sha256": "da511268f7eb80a47d50adccce42332dd97f24c5add7a7801bdbfda8342cb343",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "20",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Pixels"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3111-0",
+      "row_sha256": "89927799874d9d000cd2bbced57466c3849c8b3f6654339a797335d04462076f",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "101",
+        "pred": "\\frac{10^{n+1}-10^n+10-1}{\\color{#4e3500}9}"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "What does 🙏🔥(@eloshircuia) Ryan House like?"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3112-0",
+      "row_sha256": "923c4404c080dab1474e1ecca8888baee83b49ac0cdd1e0b9c78b520061eb208",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "4851",
+        "pred": "99"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "99"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3113-0",
+      "row_sha256": "8e956022147632acc23da2c7889deee38e1b9fba396abc31a4891fd2588af687",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "7",
+        "pred": "5"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "5"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3114-0",
+      "row_sha256": "7abbe18ffda0a4cdff35158b5e9540f646ce7fc1fbba319eb78e7b48fcf1a2bb",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "4",
+        "pred": "3"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "3"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3115-0",
+      "row_sha256": "3989449fdb9dfad8b534b09d2e0889d92b5abd2759d8be019e51ecd571a4f111",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "106",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "We conclude that \\( t(k) = 1 \\) which is a counterexample to the greedy algorithm. Hence, the Fibonacci sequence with subtraction does not satisfy the alternating non-summability property."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3116-0",
+      "row_sha256": "5dbae2ef0bd43e99cd0213539351c00c2985178d36fb471ae8bdfb3c6d6b227a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "# Define the equation x^4 + x^3 - 4x^2 + x + 1 = 0"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3117-0",
+      "row_sha256": "0a32de9b30a63e770f168cdd918601bf3f87b1d332626665cb71a0d541a1789a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "12",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "C'est tout."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3118-0",
+      "row_sha256": "3d2929cae98c1f0943408ced5f441455f0a6f44b1c9519e5d41b39ec30d1feb2",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "304",
+        "pred": "106500"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "106500"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3119-0",
+      "row_sha256": "df76bcf42c8d88c65f45d754412c2b50323ee728a9cdda7a4e80262f534d889b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "4",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "ursal אמר"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3120-0",
+      "row_sha256": "a6f54838a2ca055d950bf4dd30bfb461914d6a7f4d903c530d600012550d88da",
+      "status": "scored",
+      "result": {
+        "score": 1.0,
+        "format_score": 0.0,
+        "acc": true,
+        "extracted_gt": "3",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 1.0,
+        "acc": true,
+        "pred": "3. Calculate the square root of who."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3121-0",
+      "row_sha256": "3d667617499865ce96fc4ace5e6afabc9c15180d100bb8201e36e08d1dcab48a",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "132",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "A models a linear operation of A, B, and C into R of the artificially dominating axis ( or epigonal ) D."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3122-0",
+      "row_sha256": "dcf2ca64894a57a49994cd37afadcda981cb80bdedce706871c1fa0d1dc21feb",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "41",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "**in"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3123-0",
+      "row_sha256": "49b3b54bc03d26ce190995e8d6ef96d539db9fd2714f4ba1f1fe0db80e7b77dd",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "13",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "Thus, the only possible value for $a_8$ is $11^8 = 214358881$. That means there is **one** possible value for $a_8$."
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3124-0",
+      "row_sha256": "1b0dcef4e0c9e857717052b4bca36109097c2737b9c5f99f8c4ec5231d4a4ae8",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "106",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "此时很多미분図 Nine easy to"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3125-0",
+      "row_sha256": "86eb1294f1683218171198c47650b564791f937ea6f6c62538429fbf9c1b588b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "24",
+        "pred": "11890181"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "11890181"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3126-0",
+      "row_sha256": "bbcf6b714a0c29141b3dceac97c6f64eb37e3c3ebf26ab39e6992aa1133bc080",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "- Using the properties of midpoints and triangles, we can express the areas of $\\Delta AEF$, $\\Delta ACF$, $\\Delta BEF$, and $\\"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3127-0",
+      "row_sha256": "7576b5dea252ed0b2406bddb9c80910590ff5be18d157978e01c5a3fd63fc6fd",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "8",
+        "pred": "10"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "10"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3128-0",
+      "row_sha256": "f217f345d045b929b111d5f2ea48984193d10eacc57848c92c4aa32ab882d9fa",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "6",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "完结！"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3129-0",
+      "row_sha256": "122c912ade09aa8893bb20c3c468a7f05459f3950a54c93f13441955a6dc0be3",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "350",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "จบ"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3130-0",
+      "row_sha256": "61310781fd15fb4c9450f5c95cda701f9a4d1695c697fb577b131f6ba6dfc21b",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "13",
+        "pred": "8"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "8"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3131-0",
+      "row_sha256": "183b426bd0c41ac363a6d553d66b3ef561c70e27b528153109e8e8597e91c072",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 1.0,
+        "acc": false,
+        "extracted_gt": "252",
+        "pred": "10"
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "10"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3132-0",
+      "row_sha256": "ae44b88ef2d0c1f1d8dd55fe0572e9d69094f95869dbde8eac128a6f600f3a87",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "**6 days**"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3133-0",
+      "row_sha256": "cffd64025262b6a4190fedbe95862294abf565b6fd04adaa58944f4b399c7bfc",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "3",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "晚安！"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3134-0",
+      "row_sha256": "bac1e8dbf7fef54755cdcd330f166191f2e272e4beefcedcfec81365ace6f7aa",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "44",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "通知大家在重疾中心做个咨询"
+      }
+    },
+    {
+      "arm": "reuse-k1",
+      "request_id": "3135-0",
+      "row_sha256": "0650843c2ee665e03d61299bcd3d12ed3764336ef0b77b72e8f8e4e91817ddf7",
+      "status": "scored",
+      "result": {
+        "score": 0.0,
+        "format_score": 0.0,
+        "acc": false,
+        "extracted_gt": "1",
+        "pred": ""
+      },
+      "official_result": {
+        "score": 0.0,
+        "acc": false,
+        "pred": "**Answer:** The answer is 3."
+      }
+    }
+  ],
+  "summary": {
+    "reuse-k0": {
+      "native_correct": 12,
+      "official_correct": 12,
+      "native_boxed_correct": 10
+    },
+    "reuse-k05": {
+      "native_correct": 0,
+      "official_correct": 0,
+      "native_boxed_correct": 0
+    },
+    "reuse-k1": {
+      "native_correct": 1,
+      "official_correct": 1,
+      "native_boxed_correct": 0
+    }
+  },
+  "script_sha256": "dfa4519d674405c879852e3afd54cf95d572f58b471c0131e6f2ea85a12c68d9",
+  "official_source_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+  "limits": "Both wrappers map internal timeouts to false; official uses a one-second limit."
+}

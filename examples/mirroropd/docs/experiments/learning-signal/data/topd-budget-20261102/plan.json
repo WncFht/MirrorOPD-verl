@@ -1,0 +1,53 @@
+{
+  "scope": "Fixed identical1024 trajectories, kappa1 eta.1; change effective response batch and total visits.",
+  "reference": "fresh1024x1-k1-s42-block1",
+  "seed": 42,
+  "lr": 1e-06,
+  "one_pass_tokens": 1287081,
+  "cells": [
+    {
+      "label": "fresh1024x1-k1-s42-block1",
+      "batch": 64,
+      "updates": 16,
+      "response_visits": 1024,
+      "unique_trajectories": 1024,
+      "token_visits": 1287081
+    },
+    {
+      "label": "budget-b256-u4-k1-s42",
+      "batch": 256,
+      "updates": 4,
+      "response_visits": 1024,
+      "unique_trajectories": 1024,
+      "token_visits": 1287081
+    },
+    {
+      "label": "budget-b256-u16-k1-s42",
+      "batch": 256,
+      "updates": 16,
+      "response_visits": 4096,
+      "unique_trajectories": 1024,
+      "token_visits": 5148324
+    },
+    {
+      "label": "budget-b64-u64-k1-s42",
+      "batch": 64,
+      "updates": 64,
+      "response_visits": 4096,
+      "unique_trajectories": 1024,
+      "token_visits": 5148324
+    }
+  ],
+  "invariants": [
+    "same pretrained parameters and fresh Adam state",
+    "same frozen original anchor",
+    "same exact trajectory order before batch grouping",
+    "same token-mean/clip1/objective/precision"
+  ],
+  "limits": [
+    "At a fixed visit budget, batch size and update count necessarily change together.",
+    "At fixed update count, larger batches process more response/token visits.",
+    "LR remains1e-6; no linear LR scaling is assumed.",
+    "This is a single proximal block, not online multi-outer training."
+  ]
+}

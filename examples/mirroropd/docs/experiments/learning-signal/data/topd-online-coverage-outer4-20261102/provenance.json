@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-11-02T09:26:10.847522+08:00",
+  "raw_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/topd-data-kappa-20261101/online-coverage-outer4-scores-20261102",
+  "script": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/topd-data-kappa-20261101/score_online_coverage.py",
+  "script_sha256": "b9926c401f8ba520739b26e8bb67dcd5a7b9594e6c750be7362d344ea3bd9a8e",
+  "scoring_helper_sha256": "5a453da5278cae4e3fec536ebd7a19fd02b7d36be1e7770e8214f4185a8fd467",
+  "files": {
+    "complete.json": "b0c0bc00a6c4633ca949d48715d5e45224a8b2332fde62c9014278fda037ed19",
+    "format-audit.json": "510555989c053d41f6f806b040c764795ad57a742e41ed4b84140a9a01dc740f",
+    "outer04-fresh-scores.jsonl": "424cc236620409dc19c747c1f76be7cc18cf1eaa915ee217c5a710cdccdaf5e6"
+  },
+  "command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 ../envs/mirroropd-fusion/bin/python -u runs/topd-data-kappa-20261101/score_online_coverage.py --outers 4 --out runs/topd-data-kappa-20261101/online-coverage-outer4-scores-20261102",
+  "same_scoring_source_as": "../topd-online-coverage-20261102/score_online_coverage.py"
+}

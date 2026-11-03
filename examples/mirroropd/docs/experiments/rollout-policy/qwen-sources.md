@@ -4,7 +4,7 @@
 
 固定 learner 为 Qwen3-1.7B（non-thinking）、监督 teacher 为 Qwen3-4B-Instruct-2507，比较 current、initial、teacher、logit token fusion（LM）、probability token fusion（PM）和 batch fusion（TM）六种训练前缀。所有组从同一初始 learner 和新的 Adam 状态开始。两种 token fusion 及 batch fusion 的 teacher 权重始终为 0.5，batch fusion 每批给两侧各分配 32 条完整轨迹。
 
-截至 **2026-11-01 22:42**，**S0、current（S）、teacher 来源（T）、LM、PM 五组**均完成 40 outer、640 次成功更新、共同状态读出、630 题×4 的最终纯 student 评测及审计。TM 完成 13/40 轮、208/640 次更新，继续训练。下文的 initial accuracy 是未训练模型基线，与使用 initial 前缀训练后的 S0 条件分开。
+截至 **2026-11-03 14:44** 的终点核对，**S0、current（S）、teacher 来源（T）、LM、PM、TM 六组**均完成 40 outer、640 次成功更新、共同状态读出、630 题×4 的最终纯 student 评测及审计。下文的 initial accuracy 是未训练模型基线，与使用 initial 前缀训练后的 S0 条件分开。
 
 训练访问的状态随来源改变，训练 RKL 不单独用于比较泛化。各组在相同冻结 initial 和 teacher 状态上另测 RKL/JS，以纯 learner 的任务 accuracy 比较终点。结果来自单个训练 seed，题目抽样区间不代表训练 seed 之间的不确定性。
 
@@ -30,7 +30,7 @@
 
 ## 六组训练与共同状态快照
 
-数据截止于 **2026-11-01 22:42:32（北京时间）**。快照包含六组的 3408 次实际更新；全部更新的 loss 与梯度有限，没有跳步。训练完成与终点评估完成分别记录，曲线不补齐尚未发生的轮次。原始指标读取范围与 SHA-256 见[快照来源](data/qwen-prefix-progress-20261101-224221/sources.json)，汇总见[快照摘要](data/qwen-prefix-progress-20261101-224221/summary.json)。
+终点核对时间为 **2026-11-03 14:44:09（北京时间）**。快照包含六组的 3840 次实际更新；全部更新的 loss 与梯度有限，没有跳步，240 个 outer 指标和全部终点审计均完整。原始指标读取范围与 SHA-256 见[快照来源](data/qwen-prefix-final-20261103/sources.json)，汇总见[快照摘要](data/qwen-prefix-final-20261103/summary.json)。
 
 | 条件                   | 已完成训练轮数 | 成功更新 | 已有共同 RKL | 最终 accuracy 与审计 |
 | ---------------------- | -------------: | -------: | ------------ | -------------------- |
@@ -39,21 +39,21 @@
 | T：teacher 来源        |          40/40 |  640/640 | 到 outer40   | 完成                 |
 | LM：logit fusion       |          40/40 |  640/640 | 到 outer40   | 完成                 |
 | PM：probability fusion |          40/40 |  640/640 | 到 outer40   | 完成                 |
-| TM：batch fusion       |          13/40 |  208/640 | 到 outer10   | 训练中               |
+| TM：batch fusion       |          40/40 |  640/640 | 到 outer40   | 完成                 |
 
 ### 自身 rollout 上的 loss
 
-![六组实际训练 loss](figures/qwen-prefix-progress-20261101-224221/loss.png)
+![六组实际训练 loss](figures/qwen-prefix-final-20261103/loss.png)
 
-实线和虚线分别是在每个 batch 的第 1 次、第 16 次更新之前记录的蒸馏 loss，两点之间跨越 15 次更新。全部 **213/213 个已完成 batch** 的末次记录低于首次记录。S0 的自身 loss 较低，但它的前缀分布和长度也不同；跨来源的效果比较应使用共同状态和纯 student accuracy。不同 batch 的锯齿还包含新题目与新轨迹的变化，不直接等同于遗忘。完整逐更新记录见[updates.csv](data/qwen-prefix-progress-20261101-224221/updates.csv)。
+实线和虚线分别是在每个 batch 的第 1 次、第 16 次更新之前记录的蒸馏 loss，两点之间跨越 15 次更新。全部 **240/240 个已完成 batch** 的末次记录低于首次记录。S0 的自身 loss 较低，但它的前缀分布和长度也不同；跨来源的效果比较应使用共同状态和纯 student accuracy。不同 batch 的锯齿还包含新题目与新轨迹的变化，不直接等同于遗忘。完整逐更新记录见[updates.csv](data/qwen-prefix-final-20261103/updates.csv)。
 
 ### 共同状态 RKL 与来源差异
 
-![共同固定状态上的六组 RKL](figures/qwen-prefix-progress-20261101-224221/fixed-risk.png)
+![共同固定状态上的六组 RKL](figures/qwen-prefix-final-20261103/fixed-risk.png)
 
 六个面板使用同一对数纵轴范围；Initial bank 和 Teacher bank 指冻结评估轨迹的生成模型，曲线指接受训练的 learner。每个题目的原始 RKL 之和仍除以固定 H1024，再按题平均，未改为有效 token 归一化。只纳入 `fixed/complete.json` 已完成且哈希核对通过的读出，逐题身份及前缀长度在各组间一致；即使同轮 accuracy 尚未结束，已完成的 RKL 也可以独立纳入。
 
-以下在相同的 **outer40／640 次更新** 处比较。五组均完成终点审计；TM 尚未达到该预算，不放入这张终点表：
+以下在相同的 **outer40／640 次更新** 处比较。六组均完成终点审计：
 
 | 训练来源 | Initial-Math RKL | Teacher-Math RKL | Teacher-Code RKL |
 | -------- | ---------------: | ---------------: | ---------------: |
@@ -62,16 +62,17 @@
 | T        |           0.2607 |           0.2570 |           0.9944 |
 | LM       |           0.2494 |           0.2638 |           1.0204 |
 | PM       |           0.2462 |           0.2623 |           1.0262 |
+| TM       |           0.2445 |           0.2675 |           1.0539 |
 
 S0 在 Initial-Math 上读数最低，在 Teacher-Math 上却最高；teacher 来源的两个数学读数呈相反排序。Current 的 Teacher-Math RKL 高于 LM/PM，最终数学 accuracy 却更高。共同状态 RKL 衡量指定轨迹上的条件分布拟合，不能单独替代自由生成的任务正确率。
 
-Teacher-Code 的初始 RKL 约为 0.9120；S0/current 在 outer40 分别升至 1.1660/1.1596，LM/PM 为 1.0204/1.0262。数学状态上的拟合改善伴随部分代码状态上的拟合退化。这里没有执行代码任务终点评测，不能把 RKL 上升直接称为代码 accuracy 下降。IF 两套银行的变化较小。所有数据点见[固定风险 CSV](data/qwen-prefix-progress-20261101-224221/fixed-risk.csv)。
+Teacher-Code 的初始 RKL 约为 0.9120；S0/current 在 outer40 分别升至 1.1660/1.1596，LM/PM 为 1.0204/1.0262。数学状态上的拟合改善伴随部分代码状态上的拟合退化。这里没有执行代码任务终点评测，不能把 RKL 上升直接称为代码 accuracy 下降。IF 两套银行的变化较小。所有数据点见[固定风险 CSV](data/qwen-prefix-final-20261103/fixed-risk.csv)。
 
 ### 生成长度与普通轮成本
 
-![响应长度与普通训练轮耗时](figures/qwen-prefix-progress-20261101-224221/workload.png)
+![响应长度与普通训练轮耗时](figures/qwen-prefix-final-20261103/workload.png)
 
-普通轮排除首次启动轮和每 5 轮的读出；下表的五个完成分支使用相同的 outer2–39 非评估轮窗口，各组 31 轮；TM 的部分曲线单独展示，不纳入该表。响应长度取这些轮的均值，耗时取中位数，不将正在评估的 outer 当作普通训练样本。
+普通轮排除首次启动轮和每 5 轮的读出；六个分支使用相同的 outer2–39 非评估轮窗口，各组 31 轮。响应长度取这些轮的均值，耗时取中位数，不将正在评估的 outer 当作普通训练样本。
 
 | 来源 | 普通轮响应长度均值 | 普通 outer 中位数 |
 | ---- | -----------------: | ----------------: |
@@ -80,14 +81,15 @@ Teacher-Code 的初始 RKL 约为 0.9120；S0/current 在 outer40 分别升至 1
 | T    |         3724 token |          382.2 秒 |
 | LM   |         3902 token |          493.9 秒 |
 | PM   |         4071 token |          513.9 秒 |
+| TM   |         4168 token |          421.1 秒 |
 
-S0 的回答明显更短，且仅需单模型生成，因此普通轮成本较低。它与其他来源的工作量不同，不能把墙钟比例解释成同负载的引擎加速。图中训练轮数指已写出完整 outer 指标的轮次；五组的第 40 轮总计时已发布；TM 仅展示已完成轮次。评估成本未包括在上表，S0/current 的完整作业成本另见下方论文对照。原始轮级记录见[outers.csv](data/qwen-prefix-progress-20261101-224221/outers.csv)。
+S0 的回答明显更短，且仅需单模型生成，因此普通轮成本较低。它与其他来源的工作量不同，不能把墙钟比例解释成同负载的引擎加速。图中训练轮数指已写出完整 outer 指标的轮次；六组的第 40 轮总计时均已发布。评估成本未包括在上表，S0/current 的完整作业成本另见下方论文对照。原始轮级记录见[outers.csv](data/qwen-prefix-final-20261103/outers.csv)。
 
 ## 最终纯 student 准确率
 
-![五个已完成终点的 accuracy 与配对差值](figures/qwen-prefix-progress-20261101-224221/accuracy.png)
+![六个已完成终点的 accuracy 与配对差值](figures/qwen-prefix-final-20261103/accuracy.png)
 
-仅纳入完整生成、评分和审计均完成的终点；TM 不计算临时宏平均。原始 teacher 一行是生成基线模型，T 行是用 teacher 前缀训练后的 learner。
+六组均纳入完整生成、评分和审计通过的 outer40 终点。原始 teacher 一行是生成基线模型，T 行是用 teacher 前缀训练后的 learner。
 
 | 模型／训练条件             | MATH-500 |  AMC23 | AIME24 | AIME25 | AIME26 | 五集宏平均 |
 | -------------------------- | -------: | -----: | -----: | -----: | -----: | ---------: |
@@ -97,6 +99,7 @@ S0 的回答明显更短，且仅需单模型生成，因此普通轮成本较�
 | Teacher 来源训练后 student |   80.80% | 58.75% | 19.17% | 20.00% | 15.83% |     38.91% |
 | LM 训练后 student          |   84.60% | 68.75% | 30.00% | 20.83% | 18.33% |     44.50% |
 | PM 训练后 student          |   83.20% | 67.50% | 25.83% | 19.17% | 16.67% |     42.47% |
+| TM 训练后 student          |   85.60% | 68.75% | 30.83% | 17.50% | 25.00% |     45.54% |
 | 原始 teacher               |   94.70% | 95.62% | 63.33% | 41.67% | 48.33% |     68.73% |
 
 配对区间使用每题四次回答的均值，在各数据集内共同重采样 10000 次，再计算五集等权宏平均。所有分支只有一个训练 seed；区间描述题目抽样不确定性，未作多重比较校正，不代表跨训练 seed 的不确定性。
@@ -106,15 +109,17 @@ S0 的回答明显更短，且仅需单模型生成，因此普通轮成本较�
 | S0 − initial | +23.19 个百分点 |        [+18.33, +28.21] |
 | S − initial  | +21.10 个百分点 |        [+17.00, +25.40] |
 | T − initial  | +12.27 个百分点 |         [+8.91, +15.90] |
+| TM − initial | +18.89 个百分点 |        [+15.13, +23.04] |
+| S − TM       |  +2.21 个百分点 |          [-1.17, +5.47] |
 | S0 − S       |  +2.09 个百分点 |          [-1.48, +5.76] |
 | S − LM       |  +3.24 个百分点 |          [+0.23, +6.12] |
 | S − PM       |  +5.27 个百分点 |          [+1.84, +8.66] |
 | S − T        |  +8.83 个百分点 |         [+5.85, +11.90] |
 | LM − PM      |  +2.03 个百分点 |          [-1.11, +5.33] |
 
-S0 的终点点估计为 **49.83%**，current 为 **47.74%**；S0−current 的区间跨零，当前证据不能确认 S0 稳定优于 current。Current 相对 LM、PM、T 的题目配对区间均高于零；LM−PM 仍跨零。固定 teacher 生成的前缀不自动成为更好的训练来源，且较低的共同状态 RKL 也不能替代自由生成 accuracy。
+S0 的终点点估计为 **49.83%**，current 为 **47.74%**；S0−current 的区间跨零，当前证据不能确认 S0 稳定优于 current。Current 相对 LM、PM、T 的题目配对区间均高于零；LM−PM 仍跨零。TM 为 **45.54%**，相对 initial 提高 18.89 个百分点；current−TM 为 +2.21 个百分点，区间 [−1.17,+5.47] 跨零，因此尚不能确认 current 优于 TM。TM 的最终评估平均回答 3907 token、22/2520 条触顶，耗时 1.90 小时；这些成本随回答长度变化，不是同工作量的速度对照。固定 teacher 生成的前缀不自动成为更好的训练来源，且较低的共同状态 RKL 也不能替代自由生成 accuracy。
 
-完整按题数据与统计见[按题回答均值](data/qwen-prefix-progress-20261101-224221/accuracy-per-prompt.csv)及[统计摘要](data/qwen-prefix-progress-20261101-224221/summary.json)。
+完整按题数据与统计见[按题回答均值](data/qwen-prefix-final-20261103/accuracy-per-prompt.csv)及[统计摘要](data/qwen-prefix-final-20261103/summary.json)。
 
 <a id="semi-opd-comparison"></a>
 
@@ -203,6 +208,7 @@ Rollout 成本使用 `rollout_policy_batch_seconds`，已经包含准备、refit
 | Teacher 来源训练后 student |                6083 |         319（12.66%） |             1533 万 |          3.86 小时 |         1102 |
 | LM 训练后 student          |                4561 |          130（5.16%） |             1149 万 |          2.77 小时 |         1152 |
 | PM 训练后 student          |                4415 |          109（4.33%） |             1112 万 |          2.62 小时 |         1178 |
+| TM 训练后 student          |                3907 |           22（0.87%） |              985 万 |          1.90 小时 |         1442 |
 | 原始 teacher               |                2887 |           74（2.94%） |              728 万 |          3.44 小时 |          587 |
 
 LM 终点相对 initial 的回答 token 量增加约 3.40 倍，完整 accuracy 墙钟增加约 3.71 倍，有效 token 吞吐下降约 8.4%。评估耗时增长主要伴随输出变长，同时存在更长历史和尾部请求的影响；不能将 3.71 倍墙钟直接解释为引擎退化。训练后长回答及截断增加也值得后续检查，但尚不能只凭长度判定为无效重复。
@@ -247,19 +253,19 @@ Current 的终点生成耗时约 1.81 小时，平均回答约 3808 token，17/2
   --style "$FIGURE_VIZ_MPL"
 ```
 
-新增的[中途快照脚本](../../../research/studies/prefix_fusion/report_qwen_snapshot.py)允许不同分支处于不同进度，核对更新序列、固定状态成员、H1024 口径以及完整终点的配对 accuracy。四张快照图的[审计记录](figures/qwen-prefix-progress-20261101-224221/figure-audit.json)与 PNG/PDF/SVG 一同保存。快照输入保持冻结；重画直接读取 CSV，不再读取仍在增长的训练日志：
+[六组快照脚本](../../../research/studies/prefix_fusion/report_qwen_snapshot.py)允许不同分支处于不同进度，核对更新序列、固定状态成员、H1024 口径以及完整终点的配对 accuracy。四张快照图的[审计记录](figures/qwen-prefix-final-20261103/figure-audit.json)与 PNG/PDF/SVG 一同保存。快照输入保持冻结；重画直接读取 CSV，不再读取原始训练日志：
 
 ```bash
 "$PYTHON_BIN" -m examples.mirroropd.research.studies.prefix_fusion.report_qwen_snapshot \
   --replot \
-  --out examples/mirroropd/docs/experiments/rollout-policy/data/qwen-prefix-progress-20261101-224221 \
-  --figures runs/qwen-prefix-snapshot-replot-20261101-224221/figures \
+  --out examples/mirroropd/docs/experiments/rollout-policy/data/qwen-prefix-final-20261103 \
+  --figures runs/qwen-prefix-final-replot-20261103/figures \
   --style "$FIGURE_VIZ_MPL"
 ```
 
-新快照使用同一脚本的 `--root runs/qwen-prefix-six-20261031`，省略 `--replot`，并指定新的 `--out` 和 `--figures` 目录。脚本拒绝覆盖现有输出；收集器与配对统计实现的版本指纹见来源清单，渲染版本及 CSV 哈希见[渲染回执](figures/qwen-prefix-progress-20261101-224221/render-provenance.json)。
+新快照使用同一脚本的 `--root runs/qwen-prefix-six-20261031`，省略 `--replot`，并指定新的 `--out` 和 `--figures` 目录。脚本拒绝覆盖现有输出；收集器与配对统计实现的版本指纹见来源清单，渲染版本及 CSV 哈希见[渲染回执](figures/qwen-prefix-final-20261103/render-provenance.json)。
 
-上一版 17:08 的[中途快照](data/qwen-prefix-progress-20261101-170847/summary.json)及图形保持冻结，本页展示新的时间截面。
+此前 17:08 的[中途快照](data/qwen-prefix-progress-20261101-170847/summary.json)及 [22:42 快照](data/qwen-prefix-progress-20261101-224221/summary.json)保持冻结，本页展示六组最终终点。
 
 ### 参考文献
 

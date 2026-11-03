@@ -1,0 +1,366 @@
+{
+  "formula": "(kappa1-kappa0.5) under new coverage minus (kappa1-kappa0.5) under reuse64",
+  "interactions": {
+    "fresh1024x1": {
+      "AIME24": {
+        "accuracy": {
+          "value": 0.05,
+          "question_bootstrap95": [
+            0.008333333333333333,
+            0.1
+          ]
+        },
+        "mean_length": {
+          "value": -723.7333333333333,
+          "question_bootstrap95": [
+            -2931.9158333333335,
+            1499.9683333333328
+          ]
+        },
+        "cap_rate": {
+          "value": -0.041666666666666664,
+          "question_bootstrap95": [
+            -0.18333333333333332,
+            0.1
+          ]
+        }
+      },
+      "AIME25": {
+        "accuracy": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            -0.05,
+            0.041666666666666664
+          ]
+        },
+        "mean_length": {
+          "value": -473.40833333333336,
+          "question_bootstrap95": [
+            -2370.7054166666667,
+            1273.824583333333
+          ]
+        },
+        "cap_rate": {
+          "value": -0.016666666666666666,
+          "question_bootstrap95": [
+            -0.14166666666666666,
+            0.1
+          ]
+        }
+      },
+      "AIME26": {
+        "accuracy": {
+          "value": -0.041666666666666664,
+          "question_bootstrap95": [
+            -0.10833333333333334,
+            0.0
+          ]
+        },
+        "mean_length": {
+          "value": 1669.675,
+          "question_bootstrap95": [
+            221.93375000000003,
+            3113.828541666666
+          ]
+        },
+        "cap_rate": {
+          "value": 0.10833333333333334,
+          "question_bootstrap95": [
+            0.016666666666666666,
+            0.2
+          ]
+        }
+      },
+      "AMC23": {
+        "accuracy": {
+          "value": -0.05625,
+          "question_bootstrap95": [
+            -0.1125,
+            0.0
+          ]
+        },
+        "mean_length": {
+          "value": -45.2375,
+          "question_bootstrap95": [
+            -1454.4196874999998,
+            1338.8690625000002
+          ]
+        },
+        "cap_rate": {
+          "value": -0.00625,
+          "question_bootstrap95": [
+            -0.09375,
+            0.08125
+          ]
+        }
+      },
+      "MATH-500": {
+        "accuracy": {
+          "value": 0.01171875,
+          "question_bootstrap95": [
+            -0.0390625,
+            0.0625
+          ]
+        },
+        "mean_length": {
+          "value": 536.99609375,
+          "question_bootstrap95": [
+            -370.7001953125,
+            1349.10712890625
+          ]
+        },
+        "cap_rate": {
+          "value": 0.0390625,
+          "question_bootstrap95": [
+            -0.015625,
+            0.08984375
+          ]
+        }
+      },
+      "AIME macro": {
+        "accuracy": {
+          "value": 0.0027777777777777783,
+          "question_bootstrap95": [
+            -0.027777777777777776,
+            0.030555555555555555
+          ]
+        },
+        "mean_length": {
+          "value": 157.51111111111106,
+          "question_bootstrap95": [
+            -912.0952777777778,
+            1237.1086805555553
+          ]
+        },
+        "cap_rate": {
+          "value": 0.01666666666666667,
+          "question_bootstrap95": [
+            -0.052777777777777764,
+            0.08611111111111111
+          ]
+        }
+      },
+      "five-benchmark macro": {
+        "accuracy": {
+          "value": -0.007239583333333332,
+          "question_bootstrap95": [
+            -0.030520833333333334,
+            0.01609375
+          ]
+        },
+        "mean_length": {
+          "value": 192.85838541666666,
+          "question_bootstrap95": [
+            -533.0150950520832,
+            915.8689791666665
+          ]
+        },
+        "cap_rate": {
+          "value": 0.0165625,
+          "question_bootstrap95": [
+            -0.030260416666666668,
+            0.06249999999999999
+          ]
+        }
+      }
+    },
+    "multi128x8": {
+      "AIME24": {
+        "accuracy": {
+          "value": -0.025,
+          "question_bootstrap95": [
+            -0.058333333333333334,
+            0.008333333333333333
+          ]
+        },
+        "mean_length": {
+          "value": 233.36666666666667,
+          "question_bootstrap95": [
+            -2046.5341666666666,
+            2478.2281249999996
+          ]
+        },
+        "cap_rate": {
+          "value": 0.025,
+          "question_bootstrap95": [
+            -0.11666666666666667,
+            0.15833333333333333
+          ]
+        }
+      },
+      "AIME25": {
+        "accuracy": {
+          "value": -0.008333333333333333,
+          "question_bootstrap95": [
+            -0.03333333333333333,
+            0.016666666666666666
+          ]
+        },
+        "mean_length": {
+          "value": -432.8333333333333,
+          "question_bootstrap95": [
+            -2133.226041666667,
+            1064.480833333333
+          ]
+        },
+        "cap_rate": {
+          "value": -0.025,
+          "question_bootstrap95": [
+            -0.13333333333333333,
+            0.06666666666666667
+          ]
+        }
+      },
+      "AIME26": {
+        "accuracy": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            -0.05,
+            0.041666666666666664
+          ]
+        },
+        "mean_length": {
+          "value": -577.5166666666667,
+          "question_bootstrap95": [
+            -2345.5183333333334,
+            1272.2062499999995
+          ]
+        },
+        "cap_rate": {
+          "value": -0.025,
+          "question_bootstrap95": [
+            -0.14166666666666666,
+            0.1
+          ]
+        }
+      },
+      "AMC23": {
+        "accuracy": {
+          "value": 0.0125,
+          "question_bootstrap95": [
+            -0.05,
+            0.08125
+          ]
+        },
+        "mean_length": {
+          "value": -468.90625,
+          "question_bootstrap95": [
+            -1842.9734375,
+            900.1748437499983
+          ]
+        },
+        "cap_rate": {
+          "value": -0.025,
+          "question_bootstrap95": [
+            -0.1125,
+            0.0625
+          ]
+        }
+      },
+      "MATH-500": {
+        "accuracy": {
+          "value": 0.02734375,
+          "question_bootstrap95": [
+            -0.02734375,
+            0.08203125
+          ]
+        },
+        "mean_length": {
+          "value": 301.33984375,
+          "question_bootstrap95": [
+            -496.321484375,
+            1072.7589843749997
+          ]
+        },
+        "cap_rate": {
+          "value": 0.01953125,
+          "question_bootstrap95": [
+            -0.03125,
+            0.0703125
+          ]
+        }
+      },
+      "AIME macro": {
+        "accuracy": {
+          "value": -0.011111111111111112,
+          "question_bootstrap95": [
+            -0.03333333333333333,
+            0.01111111111111111
+          ]
+        },
+        "mean_length": {
+          "value": -258.9944444444444,
+          "question_bootstrap95": [
+            -1358.660208333333,
+            848.6525694444433
+          ]
+        },
+        "cap_rate": {
+          "value": -0.008333333333333333,
+          "question_bootstrap95": [
+            -0.07777777777777778,
+            0.061111111111111116
+          ]
+        }
+      },
+      "five-benchmark macro": {
+        "accuracy": {
+          "value": 0.001302083333333334,
+          "question_bootstrap95": [
+            -0.020572916666666666,
+            0.023126302083333314
+          ]
+        },
+        "mean_length": {
+          "value": -188.90994791666665,
+          "question_bootstrap95": [
+            -922.4366289062499,
+            540.67016015625
+          ]
+        },
+        "cap_rate": {
+          "value": -0.00609375,
+          "question_bootstrap95": [
+            -0.0525,
+            0.04005208333333333
+          ]
+        }
+      }
+    }
+  },
+  "completion_hashes": {
+    "reuse64x16": {
+      "k05": "95969fd9260bd174865cb31fb8803c121a2651a706659fc99638128ce4654c16",
+      "k1": "d56c036d94951c2ec1e20bfd7b03a01743ad3a813d12aa94d68e06c9b7236d33"
+    },
+    "fresh1024x1": {
+      "k05": "768105da2dfbcf0aeb4879acc400b4368e40a93c4ea73fc5f5987afca1892815",
+      "k1": "b2d25da34df08c2443c19ca387ff1c6e408d9b33f693daefb095161cadc0c0c2"
+    },
+    "multi128x8": {
+      "k05": "2dd28e629df3f8e295aaab6c37aa194aa3dec8ca8073cf3120e1b5d6dd133d8f",
+      "k1": "e60b9e11b0065dc0a46a3df1d516b97a718fe1faf886b1e2eff7076fef40c67b"
+    }
+  },
+  "aime_verifier_disagreements": {
+    "reuse64x16": {
+      "k05": [],
+      "k1": []
+    },
+    "fresh1024x1": {
+      "k05": [],
+      "k1": []
+    },
+    "multi128x8": {
+      "k05": [],
+      "k1": []
+    }
+  },
+  "script_sha256": "03cc4677f1ca0faa30ad0a6935fbb10fef22f9b8389666bde12657b29cfd8756",
+  "analysis_helper_sha256": "391566aac2db46681dd9b5b9c516dce7d2d656db0805f5e0e50c727a8fc0fba9",
+  "limits": [
+    "10000 paired question bootstrap draws, grouped by benchmark and response samples.",
+    "Exploratory interaction after examining the matrix; one training bank seed; no multiplicity adjustment.",
+    "This is a direct paired interaction, not a comparison of separate confidence-interval overlap."
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "official_commit": "9a2716cba22cab508825ad3be3f78327bb8139e5",
+  "instruction_suffix": " Please reason step-by-step, and put your final answer within \\boxed{}.",
+  "suffix_length_characters": 71,
+  "datasets": {
+    "DAPO": {
+      "official_rows": 17398,
+      "local_rows": 17917,
+      "official_unique_bodies": 16921,
+      "local_unique_bodies": 16921,
+      "official_rows_with_suffix": 17398,
+      "local_rows_with_suffix": 0,
+      "shared_unique_bodies": 16921,
+      "official_only_bodies": 0,
+      "local_only_bodies": 0,
+      "ground_truth_string_conflicts": [
+        {
+          "question_sha256": "d26673247e72ada07bba54df819e1af337b73accc6a6462bc86c4b930834f8a0",
+          "official": [
+            {
+              "row": 4728,
+              "ground_truth": "239"
+            }
+          ],
+          "local": [
+            {
+              "row": 4850,
+              "ground_truth": "239"
+            },
+            {
+              "row": 7807,
+              "ground_truth": "48"
+            }
+          ]
+        },
+        {
+          "question_sha256": "622e882f8d6eba5a7e276ff9cb213c5034466ecf07aa0ee1ab15846b4845f7a1",
+          "official": [
+            {
+              "row": 279,
+              "ground_truth": "15"
+            }
+          ],
+          "local": [
+            {
+              "row": 282,
+              "ground_truth": "15"
+            },
+            {
+              "row": 7665,
+              "ground_truth": "25"
+            }
+          ]
+        },
+        {
+          "question_sha256": "d182d3daf5983b7ce733e9baccd979947d95bf995dce963df0a7c4439d846924",
+          "official": [
+            {
+              "row": 2016,
+              "ground_truth": "99"
+            }
+          ],
+          "local": [
+            {
+              "row": 2040,
+              "ground_truth": "99"
+            },
+            {
+              "row": 8017,
+              "ground_truth": "21"
+            }
+          ]
+        },
+        {
+          "question_sha256": "2961c10a817a2c27a01a4aef8fe0e4109ea52565bd4eccae5f33144cb1d24c83",
+          "official": [
+            {
+              "row": 35,
+              "ground_truth": "64"
+            }
+          ],
+          "local": [
+            {
+              "row": 35,
+              "ground_truth": "64"
+            },
+            {
+              "row": 179,
+              "ground_truth": "6"
+            }
+          ]
+        },
+        {
+          "question_sha256": "fbcb87b5d733a0f347a6a1c65d810eb9fcdccb7b3466f71880f8e86926cd9c86",
+          "official": [
+            {
+              "row": 7487,
+              "ground_truth": "108"
+            }
+          ],
+          "local": [
+            {
+              "row": 7694,
+              "ground_truth": "108"
+            },
+            {
+              "row": 7708,
+              "ground_truth": "180"
+            }
+          ]
+        },
+        {
+          "question_sha256": "dfb2e997950f1c413aded7cea0e05f8397c9ecac2e317b12a77a82cd24ac78e0",
+          "official": [
+            {
+              "row": 3405,
+              "ground_truth": "36"
+            }
+          ],
+          "local": [
+            {
+              "row": 3470,
+              "ground_truth": "36"
+            },
+            {
+              "row": 8382,
+              "ground_truth": "248"
+            }
+          ]
+        },
+        {
+          "question_sha256": "996773c1d1775acfdf2326173679419314e09e6b4cb3c25075b6236dc724c337",
+          "official": [
+            {
+              "row": 11296,
+              "ground_truth": "-2"
+            }
+          ],
+          "local": [
+            {
+              "row": 11659,
+              "ground_truth": "-2"
+            },
+            {
+              "row": 11771,
+              "ground_truth": "-1"
+            }
+          ]
+        }
+      ],
+      "official_sha256": "990758c5a9243124c491339890ad9704662d15ab045c7d4124192d9ec5a42bae",
+      "local_sha256": "c69f0fb5cb09b642b77dc3e78615e1ba113388ca3fd5aa8c451c782ff1508719"
+    },
+    "AIME24": {
+      "official_rows": 30,
+      "local_rows": 30,
+      "official_unique_bodies": 30,
+      "local_unique_bodies": 30,
+      "official_rows_with_suffix": 30,
+      "local_rows_with_suffix": 0,
+      "shared_unique_bodies": 20,
+      "official_only_bodies": 10,
+      "local_only_bodies": 10,
+      "ground_truth_string_conflicts": [],
+      "official_sha256": "06c04d799e5b5f67bb314d6d82c986cb015aa1c2bdd4276d281c8750b0e5dfb0",
+      "local_sha256": "239f288d0217f5c14ae93e4bf8a8f5f583413625c156348622003662e72af358"
+    },
+    "AIME25": {
+      "official_rows": 30,
+      "local_rows": 30,
+      "official_unique_bodies": 30,
+      "local_unique_bodies": 30,
+      "official_rows_with_suffix": 30,
+      "local_rows_with_suffix": 0,
+      "shared_unique_bodies": 3,
+      "official_only_bodies": 27,
+      "local_only_bodies": 27,
+      "ground_truth_string_conflicts": [],
+      "official_sha256": "6395f937ddda9401cd7f058fbd6bdcd21a5d46f85b868806af1f6b0426d7af6e",
+      "local_sha256": "3fcf0118e87348af9a1c996438aa5fb00e91c4df5a5a00fe29a0c909886075b6"
+    },
+    "AIME26": {
+      "official_rows": 30,
+      "local_rows": 30,
+      "official_unique_bodies": 30,
+      "local_unique_bodies": 30,
+      "official_rows_with_suffix": 30,
+      "local_rows_with_suffix": 0,
+      "shared_unique_bodies": 28,
+      "official_only_bodies": 2,
+      "local_only_bodies": 2,
+      "ground_truth_string_conflicts": [],
+      "official_sha256": "7ddd96cfd76e6f6ff930b3878c22edca0a186d82c37d969d760fb5292e47bd8c",
+      "local_sha256": "b001b4673ca806bb423a8c42badea8b9bf9ccc48ff7954f17209dad4e7c03b26"
+    }
+  },
+  "limits": [
+    "Body matching removes exact instruction suffix and whitespace only; unmatched rows are not assumed semantically different.",
+    "Ground-truth conflicts are string/set comparisons, not adjudications of mathematical correctness.",
+    "Prompt-format effects require actual same-model paired generations and matched training controls."
+  ]
+}

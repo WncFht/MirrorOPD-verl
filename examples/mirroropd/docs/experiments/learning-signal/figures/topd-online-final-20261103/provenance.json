@@ -1,0 +1,6 @@
+{
+  "audit_exception": "facet-ylim-mismatch: different metrics; AIME 0..10%, macro5 0..30%",
+  "source_sha256": "2e5d13247d93405282c5bd0cb1a2e2190c5313499821906c27ec38dbcc19f9e5",
+  "script_sha256": "a2c0f25387e30a01ab5f63fb33f90daab724fe74c9db21f97a577c85c13e2afc",
+  "scope": "Render the completed TOP-D online coverage/kappa endpoints, without seed pooling.\n\nSemantic ledger: each point is one training seed and one completed arm at outer8.\nAIME is the equal mean of AIME24/25/26; macro5 also includes AMC23 and MATH64.\nEach task question has four responses. Seeds share evaluation prompts and seeds;\ntherefore points are descriptive replications, not independent question samples.\nGeometry ledger: horizontal slots identify arms, offsets identify training seeds.\nEach panel uses a percent scale starting at zero; no interval pools training seeds.\n"
+}

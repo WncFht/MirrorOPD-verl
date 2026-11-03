@@ -1,0 +1,29 @@
+{
+  "observed_shanghai": "2026-11-02T02:13:00.569365+08:00",
+  "completed": {
+    "fresh1024x1-k1-s42-block1": {
+      "status": "complete",
+      "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/fresh1024x1-k1-s42-block1",
+      "updates": 16,
+      "seconds": 313.384153842926,
+      "heldout_teacher_kl_before": 0.4097565091737562,
+      "heldout_teacher_kl_after": 0.39827487663526956
+    },
+    "budget-b256-u4-k1-s42": {
+      "status": "complete",
+      "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/budget-b256-u4-k1-s42",
+      "updates": 4,
+      "seconds": 325.8952009677887,
+      "heldout_teacher_kl_before": 0.4097565091737562,
+      "heldout_teacher_kl_after": 0.40664799326213674
+    },
+    "budget-b256-u16-k1-s42": {
+      "status": "complete",
+      "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/budget-b256-u16-k1-s42",
+      "updates": 16,
+      "seconds": 1134.337218761444,
+      "heldout_teacher_kl_before": 0.4097565091737562,
+      "heldout_teacher_kl_after": 0.3971343735342653
+    }
+  }
+}

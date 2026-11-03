@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "seed": 43,
+      "selection_seed": 20261102,
+      "prompts_sha256": "433a5db3ebc3d3919ad67df833d00673496ec3282d3699569b3b2939520ef58d"
+    },
+    {
+      "seed": 44,
+      "selection_seed": 20261103,
+      "prompts_sha256": "e2f74c1e819d7edc4ec5953a6e18cf8c502bf4df47d62627839fe7f1c15adf33"
+    }
+  ],
+  "queue_after": "online/state.json:eight_outer_screen_complete",
+  "gpu": 6,
+  "owner": "topd-data-kappa-train-20261101",
+  "reason": "Test data-budget and kappa conclusions across independent data and rollout draws",
+  "status": "preregistered; not executed"
+}

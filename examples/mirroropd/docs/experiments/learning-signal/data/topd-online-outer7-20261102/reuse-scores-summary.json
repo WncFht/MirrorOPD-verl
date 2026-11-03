@@ -1,0 +1,108 @@
+{
+  "status": "complete",
+  "outer": 7,
+  "parent_optimizer_updates": 96,
+  "responses": 192,
+  "summary": {
+    "reuse-k0": {
+      "correct": 11,
+      "accuracy": 0.171875,
+      "mean_length": 7056.6875,
+      "cap_count": 20,
+      "correct_capped": 1,
+      "bank_sha256": "86e21bc1ee74faa4e617f5757c3ce48d549cc7e6ea31ddf2d2a0871ecb844c3e",
+      "protocol_sha256": "ca35bbaead2eb1b7996ed60899a0a847947b806916183485f6323c5e01df670e"
+    },
+    "reuse-k05": {
+      "correct": 7,
+      "accuracy": 0.109375,
+      "mean_length": 1170.828125,
+      "cap_count": 0,
+      "correct_capped": 0,
+      "bank_sha256": "93cdd14a2df0ed04cfe23f0f9191724b132e1776e33f1c40bd5779e57ad10b24",
+      "protocol_sha256": "0eb57e35cfa6a64b73fcbc96315f2c202145b7fe822126162c97f8550c443765"
+    },
+    "reuse-k1": {
+      "correct": 4,
+      "accuracy": 0.0625,
+      "mean_length": 1477.53125,
+      "cap_count": 0,
+      "correct_capped": 0,
+      "bank_sha256": "a42fa8aaed0eb86da697029bc9efa51b001aa9ae00063f7c40e3c323fa9c8ec3",
+      "protocol_sha256": "7b5b8395c9fe6dd1300c62bfa49f4ebf16b0702b9bd5400ff97fb8ee48c39f50"
+    }
+  },
+  "contrasts": {
+    "reuse-k1_minus_reuse-k0": {
+      "accuracy": {
+        "value": -0.109375,
+        "question_bootstrap95": [
+          -0.203125,
+          -0.015625
+        ]
+      },
+      "mean_length": {
+        "value": -5579.15625,
+        "question_bootstrap95": [
+          -7293.173828125,
+          -3863.087109375
+        ]
+      },
+      "cap_rate": {
+        "value": -0.3125,
+        "question_bootstrap95": [
+          -0.421875,
+          -0.203125
+        ]
+      },
+      "paired_accuracy_counts": {
+        "gain": 2,
+        "loss": 9
+      }
+    },
+    "reuse-k1_minus_reuse-k05": {
+      "accuracy": {
+        "value": -0.046875,
+        "question_bootstrap95": [
+          -0.140625,
+          0.046875
+        ]
+      },
+      "mean_length": {
+        "value": 306.703125,
+        "question_bootstrap95": [
+          -128.771875,
+          772.423828125
+        ]
+      },
+      "cap_rate": {
+        "value": 0.0,
+        "question_bootstrap95": [
+          0.0,
+          0.0
+        ]
+      },
+      "paired_accuracy_counts": {
+        "gain": 3,
+        "loss": 6
+      }
+    }
+  },
+  "script_sha256": "3b2dc1bf4b1dc2f82925368a21e152521770b7fa465f778ed2ad156507bf7f67",
+  "scores_sha256": "5a4e1a3c247ab0e30244b1fe35caf8071403a823a126f72e069d27419cfc256c",
+  "verifier_sources": {
+    "source/verl/utils/reward_score/one_shot_opd/__init__.py": "8cb29a2388eb212b90ad329a40bf4c72904251300f470e8e4e29dbb89c2d0e51",
+    "source/verl/utils/reward_score/one_shot_opd/_timeout.py": "0ce07384a9309b35a33b4626ce5b8fd41cde3d72110a76029d4c6e10ce3fc4f5",
+    "source/verl/utils/reward_score/one_shot_opd/if_eval.py": "d4fcc17e3d9e93dc265616f97933a9518344b030c9af988cbbc1dbbece467c07",
+    "source/verl/utils/reward_score/one_shot_opd/math.py": "41b42424e26e774c0e439d2a1914bc3999712a358a6ce2700d50bafde3920a71",
+    "source/verl/utils/reward_score/math_verify.py": "1242011cddc041ea6cb19fc9a1872ebab742d8ae7e8ebd3342f6b3b8b6e2ba15",
+    "evaluation-runtime-v5/verifier_cleanup.py": "4dacd9ac5c4b33690a355c47dd616fcbb0c08098f762c8d9a99132ea8a65399d"
+  },
+  "limits": [
+    "Original native automatic verifier; internal fallback errors/timeouts can be scored false.",
+    "These are new scheduled training questions before this outer's update, not held-out benchmarks.",
+    "One answer per question, one training seed; 10000 paired question resamples omit seed uncertainty.",
+    "Supplementary pre-update readout; not the primary final benchmark; no multiplicity adjustment.",
+    "Shorter generation and higher accuracy are distinct outcomes; no causal mediation claim."
+  ]
+}

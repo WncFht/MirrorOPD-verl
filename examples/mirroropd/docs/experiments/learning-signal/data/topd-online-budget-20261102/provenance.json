@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-11-02T13:12:55.289509+08:00",
+  "raw_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/topd-data-kappa-20261101",
+  "files": {
+    "analysis.json": "70aa1ddd6d31cf84d1f21c67cc9f1b85b0136ce83b967d9c9fb6fcaa1bfd5413",
+    "audit_online_budgets.py": "e85861375750f20968f5a3d5c0fe3734609f94de1cd493fa257b0cd36d8ed348"
+  },
+  "command": "../envs/mirroropd-fusion/bin/python runs/topd-data-kappa-20261101/audit_online_budgets.py --out NEW_OUTPUT.json",
+  "definitions": {
+    "training_token_visits": "Loss-bearing response-token positions; excludes prompt context, activation recomputation, caching and evaluation.",
+    "new_trajectory_records": "Records exposed to one arm; initial bank rows may be shared with other arms.",
+    "length_dependence": "Token-count differences are consequences of generated lengths and question draws, not a separate randomized token-budget intervention."
+  },
+  "copies": "Source copies preserve identity; execute from the original experiment root."
+}

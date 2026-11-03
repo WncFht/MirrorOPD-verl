@@ -1,0 +1,124 @@
+{
+  "outers": {
+    "2": {
+      "parent_optimizer_updates": 16,
+      "reuse64": {
+        "responses": 64,
+        "correct": 4,
+        "accuracy": 0.0625,
+        "mean_length": 997.515625,
+        "cap_count": 1
+      },
+      "fresh_common64": {
+        "responses": 64,
+        "correct": 7,
+        "accuracy": 0.109375,
+        "mean_length": 1256.796875,
+        "cap_count": 1
+      },
+      "fresh_full1024": {
+        "responses": 1024,
+        "correct": 39,
+        "accuracy": 0.0380859375,
+        "mean_length": 1211.0849609375,
+        "cap_count": 10
+      },
+      "fresh_minus_reuse_common64": {
+        "accuracy": {
+          "value": 0.046875,
+          "question_bootstrap95": [
+            -0.015625,
+            0.125
+          ]
+        },
+        "mean_length": {
+          "value": 259.28125,
+          "question_bootstrap95": [
+            -473.39296875,
+            1024.9273437499999
+          ]
+        },
+        "cap_rate": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            -0.046875,
+            0.046875
+          ]
+        }
+      },
+      "identity": {
+        "fresh_bank_sha256": "d5dc93e175e2c552b45c81dc5857834db7ebdef5beb6b9d715fddae038946454",
+        "reuse_bank_sha256": "7062c2f85d74b102fb11067b19831bc8bf0426929b4da80f973d84877aa2e29b",
+        "fresh_protocol_sha256": "6e06997a06addc07472110217fde8197e584bda8da3ecdbe4eb5e39667d94486",
+        "reuse_protocol_sha256": "a5e54fa56a5ba3d815f921e9f4350a2d25e7b4c9a4c850ce4bb9269759bb7af4",
+        "fresh_scores_sha256": "78fbd4824166ed067d25cf2da65d8ca509890e622eb0a6b820aff5e963e8ec2e",
+        "reuse_scores_sha256": "9aa80e04cd7fb98cc41d038617ae749e7e24f11b8b88867093cc0b84c9fca818"
+      }
+    },
+    "3": {
+      "parent_optimizer_updates": 32,
+      "reuse64": {
+        "responses": 64,
+        "correct": 3,
+        "accuracy": 0.046875,
+        "mean_length": 1576.421875,
+        "cap_count": 1
+      },
+      "fresh_common64": {
+        "responses": 64,
+        "correct": 2,
+        "accuracy": 0.03125,
+        "mean_length": 1160.515625,
+        "cap_count": 0
+      },
+      "fresh_full1024": {
+        "responses": 1024,
+        "correct": 44,
+        "accuracy": 0.04296875,
+        "mean_length": 1196.033203125,
+        "cap_count": 5
+      },
+      "fresh_minus_reuse_common64": {
+        "accuracy": {
+          "value": -0.015625,
+          "question_bootstrap95": [
+            -0.078125,
+            0.046875
+          ]
+        },
+        "mean_length": {
+          "value": -415.90625,
+          "question_bootstrap95": [
+            -1210.648828125,
+            248.14921874999987
+          ]
+        },
+        "cap_rate": {
+          "value": -0.015625,
+          "question_bootstrap95": [
+            -0.046875,
+            0.0
+          ]
+        }
+      },
+      "identity": {
+        "fresh_bank_sha256": "4270fa53a39a53f9df2a2c41bac5444bdcaf6e738f9f36fb11b4a0bb33a10568",
+        "reuse_bank_sha256": "796643094761282fc448db616d5a8a2fce472fef6cd4156ecaed679b762e7a21",
+        "fresh_protocol_sha256": "d8c529baba50eecdb643b343e274dc17e814b9d2168bd9a6416253b0ac5fc634",
+        "reuse_protocol_sha256": "7d8e862b6b6927e29b657869574c7f176fddfbae8a09c6d9b35c146ef5950e98",
+        "fresh_scores_sha256": "bab2a993e41e19fe4e12c62f6da919171e7950ff87387d9b6f7a56b17bdba38f",
+        "reuse_scores_sha256": "df6f696d67ce1ace77509aa220eab912214e58e1c202e1efe2ab7dbaabc620b7"
+      }
+    }
+  },
+  "script_sha256": "b9926c401f8ba520739b26e8bb67dcd5a7b9594e6c750be7362d344ea3bd9a8e",
+  "status": "complete",
+  "scoring_helper_sha256": "5a453da5278cae4e3fec536ebd7a19fd02b7d36be1e7770e8214f4185a8fd467",
+  "limits": [
+    "Native automatic grading, including fallback false positives and internal timeout-to-zero behavior.",
+    "The full1024 denominator differs from reuse64; compare the common64 only.",
+    "Different outers use different questions; within-outer intervals omit seed uncertainty and multiplicity.",
+    "These are new scheduled training questions before the next update, not the final benchmark evaluation.",
+    "One training seed, one answer per question; early coverage screening only."
+  ]
+}

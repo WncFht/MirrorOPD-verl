@@ -1,0 +1,144 @@
+{
+  "responses": 64,
+  "scope": "Shared initial model prefixes; action-logit gradients only, not optimizer update sizes or task accuracy.",
+  "groups": {
+    "all": {
+      "states": 993,
+      "kappa": {
+        "0.0": {
+          "target_eos": 0.0325575840407454,
+          "grad_eos": -0.005266882279285012,
+          "eos_probability_directional_change": 0.0011248266841725149,
+          "gradient_l2": 0.3705787658468134,
+          "cosine_to_teacher_rkl": 1.0,
+          "teacher_disfavored_gradient_energy_fraction": 0.2483738098621749,
+          "teacher_favored_gradient_energy_fraction": 0.031000321413507247,
+          "gradient_l2_median": 0.14865671326477148,
+          "gradient_l2_p95": 1.6754620570201277,
+          "eos_decrease_count": 758,
+          "eos_change_per_unit_gradient_norm": 0.0010199992997344419
+        },
+        "0.5": {
+          "target_eos": 0.03226404625049292,
+          "grad_eos": -0.0024520312641244345,
+          "eos_probability_directional_change": 0.00041100915551660024,
+          "gradient_l2": 0.15792658087173334,
+          "cosine_to_teacher_rkl": 0.8882619023846737,
+          "teacher_disfavored_gradient_energy_fraction": 0.1626822811954613,
+          "teacher_favored_gradient_energy_fraction": 0.09588362886280348,
+          "gradient_l2_median": 0.10213397894044,
+          "gradient_l2_p95": 0.5609143952066064,
+          "eos_decrease_count": 632,
+          "eos_change_per_unit_gradient_norm": 0.0005716764198118204
+        },
+        "1.0": {
+          "target_eos": 0.03208483970804301,
+          "grad_eos": -0.0016815241669271717,
+          "eos_probability_directional_change": 0.00023847090104483682,
+          "gradient_l2": 0.1582320791638802,
+          "cosine_to_teacher_rkl": 0.8153561069383057,
+          "teacher_disfavored_gradient_energy_fraction": 0.14447949820881215,
+          "teacher_favored_gradient_energy_fraction": 0.11386861583318929,
+          "gradient_l2_median": 0.10086553900558129,
+          "gradient_l2_p95": 0.5295713560745913,
+          "eos_decrease_count": 592,
+          "eos_change_per_unit_gradient_norm": 0.00030095987795635345
+        }
+      }
+    },
+    "terminal": {
+      "states": 64,
+      "kappa": {
+        "0.0": {
+          "target_eos": 0.4899080869999967,
+          "grad_eos": -0.09402841614758618,
+          "eos_probability_directional_change": 0.018364581366672603,
+          "gradient_l2": 0.2976479361524275,
+          "cosine_to_teacher_rkl": 1.0,
+          "teacher_disfavored_gradient_energy_fraction": 0.2237794861972669,
+          "teacher_favored_gradient_energy_fraction": 0.04072955589765825,
+          "gradient_l2_median": 0.14136646180208046,
+          "gradient_l2_p95": 1.0667565815514202,
+          "eos_decrease_count": 31,
+          "eos_change_per_unit_gradient_norm": 0.01610068125113289
+        },
+        "0.5": {
+          "target_eos": 0.4841947574208592,
+          "grad_eos": -0.03398764674400613,
+          "eos_probability_directional_change": 0.0061807637400326885,
+          "gradient_l2": 0.16547320088281192,
+          "cosine_to_teacher_rkl": 0.9192574908256979,
+          "teacher_disfavored_gradient_energy_fraction": 0.18469760488868672,
+          "teacher_favored_gradient_energy_fraction": 0.04468363895803844,
+          "gradient_l2_median": 0.11986980035725991,
+          "gradient_l2_p95": 0.49497592491469894,
+          "eos_decrease_count": 31,
+          "eos_change_per_unit_gradient_norm": 0.008329657344634788
+        },
+        "1.0": {
+          "target_eos": 0.48069157805443546,
+          "grad_eos": -0.01614480855438896,
+          "eos_probability_directional_change": 0.003102620803422831,
+          "gradient_l2": 0.15315925114396844,
+          "cosine_to_teacher_rkl": 0.8005913485509045,
+          "teacher_disfavored_gradient_energy_fraction": 0.14868742298406956,
+          "teacher_favored_gradient_energy_fraction": 0.06666752740990219,
+          "gradient_l2_median": 0.11983331804321229,
+          "gradient_l2_p95": 0.39546017228857683,
+          "eos_decrease_count": 33,
+          "eos_change_per_unit_gradient_norm": 0.003716447237705228
+        }
+      }
+    },
+    "eos_teacher_disfavored": {
+      "states": 63,
+      "kappa": {
+        "0.0": {
+          "target_eos": 0.032623600719620144,
+          "grad_eos": 0.06723877408103322,
+          "eos_probability_directional_change": -0.008598846310753123,
+          "gradient_l2": 0.44293335268993794,
+          "cosine_to_teacher_rkl": 1.0,
+          "teacher_disfavored_gradient_energy_fraction": 0.2591770977846655,
+          "teacher_favored_gradient_energy_fraction": 0.012925503780207584,
+          "gradient_l2_median": 0.2706043148545271,
+          "gradient_l2_p95": 1.191432839099363,
+          "eos_decrease_count": 57,
+          "eos_change_per_unit_gradient_norm": -0.014648732993194585
+        },
+        "0.5": {
+          "target_eos": 0.035559235512202206,
+          "grad_eos": 0.028255793931521528,
+          "eos_probability_directional_change": -0.004231425403337161,
+          "gradient_l2": 0.22453287793697052,
+          "cosine_to_teacher_rkl": 0.9045542020869326,
+          "teacher_disfavored_gradient_energy_fraction": 0.1981007276242454,
+          "teacher_favored_gradient_energy_fraction": 0.049113877856061736,
+          "gradient_l2_median": 0.178475023800416,
+          "gradient_l2_p95": 0.49497592491469894,
+          "eos_decrease_count": 50,
+          "eos_change_per_unit_gradient_norm": -0.013151234265754791
+        },
+        "1.0": {
+          "target_eos": 0.03499857433244538,
+          "grad_eos": 0.02212782752063895,
+          "eos_probability_directional_change": -0.002945590338829917,
+          "gradient_l2": 0.21307464816265567,
+          "cosine_to_teacher_rkl": 0.7774356043080076,
+          "teacher_disfavored_gradient_energy_fraction": 0.15622682754802988,
+          "teacher_favored_gradient_energy_fraction": 0.0923697859568098,
+          "gradient_l2_median": 0.17616931762153554,
+          "gradient_l2_p95": 0.5056651379169697,
+          "eos_decrease_count": 45,
+          "eos_change_per_unit_gradient_norm": -0.010894003342466912
+        }
+      }
+    }
+  },
+  "limits": [
+    "Prefixes are from one original Base rollout seed; learned policies and optimizer parameter Jacobians have not been tested yet.",
+    "Sixteen evenly spaced positions per response are diagnostic samples, not the token-weighted training distribution.",
+    "EOS-disfavored subgroup thresholds are exploratory; samples from the same response are dependent.",
+    "Terminal-state average EOS changes do not show a monotonic advantage of kappa=1."
+  ]
+}

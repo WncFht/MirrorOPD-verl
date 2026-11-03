@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-11-02T15:13:13.535479+08:00",
+  "raw_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/topd-data-kappa-20261101",
+  "files": {
+    "analyze_loop_weights.py": "2637d9ccf4f80dcce02a18faec8bd85b2db625dba5f43e73c634c7b711a281c0",
+    "coverage-scores-summary.json": "46afb824bca8a60aaba5ff46256ad1d8c0b7896d9bb8723ab46b6352d67849bd",
+    "fresh-scores.jsonl": "ad7ca565e5e07c18da89d5cdc9cda84f1c7fe09cf4dbd0af2b3249d73940dd98",
+    "loop-cases.jsonl": "34f00811788f41eddfb55613222e91b6e2a58d6c584b99932c002414e675a04c",
+    "loop-eos.json": "3a9fdf88b507523b98540f803ea156c857b9ba0d65aafde4af284f3dcf01f27f",
+    "loop-weights.json": "cf91e346cca0459c84dfa659133dd3243a119da37f9772965bc5702ab46eb382",
+    "probe_loop_eos.py": "727157ce20af24e6dbcc246c1e50ee1ee3f3bbca8e759c064fa290bbc3c1cd37",
+    "reuse-scores-summary.json": "3a8d45ad98f91d637ec926a8560796d6cb3cbd60b5557e88f006770842df7a0a",
+    "reuse-scores.jsonl": "5a4e1a3c247ab0e30244b1fe35caf8071403a823a126f72e069d27419cfc256c",
+    "score_online_bank_followup.py": "3b2dc1bf4b1dc2f82925368a21e152521770b7fa465f778ed2ad156507bf7f67",
+    "score_online_coverage.py": "b9926c401f8ba520739b26e8bb67dcd5a7b9594e6c750be7362d344ea3bd9a8e"
+  },
+  "scope": "Supplementary pre-update DAPO readout from parent96 updates, not primary final benchmark. Current-risk before/after uses parent96 and trained112.",
+  "limits": [
+    "Native automatic scoring with known extraction/timeout limitations.",
+    "Loss coefficients and loss-value shares are not parameter-gradient shares.",
+    "EOS diagnostic changes virtual logits at fixed real prefixes, not model parameters or generated task outcomes.",
+    "Copied source files preserve execution identity; original runtime root and frozen dependencies are required."
+  ]
+}

@@ -1,0 +1,2528 @@
+{
+  "E55": {
+    "run_id": "j5uaal3j",
+    "source_status": "partial_snapshot",
+    "exit_code": null,
+    "source_bytes": 103251968,
+    "sha256": "9c6cde7dea5b29b80c6710a82db6ac540d64f867542b563ec4a5344d34a6e928",
+    "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+    "snapshot_end_shanghai": "2026-11-02T12:26:49.777987+08:00",
+    "kappa": 0,
+    "gpu_type": "NVIDIA A100-SXM4-80GB",
+    "history_rows": 1359,
+    "update_count": 1280,
+    "update_outer": 80,
+    "complete_outer": 79,
+    "validation_outers": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70
+    ],
+    "bad_flags": {
+      "optim/actor/update_skipped": 0,
+      "optim/actor/loss_nonfinite": 0,
+      "optim/actor/grad_norm_preclip_nonfinite": 0
+    },
+    "grad_max": 15.050676345825195,
+    "config": {
+      "seed": 42,
+      "optimizer": "AdamW",
+      "fsdp_model_dtype": "fp32",
+      "fsdp_dtype": "bfloat16",
+      "forward_precision": null,
+      "train_cap": 16384,
+      "val_cap": 31744,
+      "val_n": 16,
+      "lr": 1e-06,
+      "train_temperature": 1.0,
+      "train_top_p": 1.0,
+      "val_temperature": 0.7,
+      "val_top_p": 0.9,
+      "concurrency": 64,
+      "memory_utilization": 0.8
+    },
+    "first7": {
+      "range": [
+        1,
+        7
+      ],
+      "length": 2675.71875,
+      "cap_rate": 0.07366071428571429,
+      "score": 0.09375,
+      "actor_hours": 0.7715604522669067,
+      "rollout_hours": 0.15954405407027777,
+      "outer_hours": 0.9688537770261367
+    },
+    "last10": {
+      "range": [
+        70,
+        79
+      ],
+      "length": 8588.9203125,
+      "cap_rate": 0.0328125,
+      "score": 0.2859375,
+      "actor_hours": 2.860123694072374,
+      "rollout_hours": 0.2567875156708333,
+      "outer_hours": 3.1863533316459507
+    },
+    "all": {
+      "range": [
+        1,
+        79
+      ],
+      "length": 9260.176028481013,
+      "cap_rate": 0.19699367088607594,
+      "score": 0.22409018987341772,
+      "actor_hours": 24.620987219155456,
+      "rollout_hours": 2.355238261091389,
+      "outer_hours": 27.53248701209099
+    },
+    "last_fitting": {
+      "outer": 80,
+      "objective": [
+        0.30795464021013125,
+        0.29510811078562854
+      ],
+      "teacher_kl": [
+        0.30795464215692137,
+        0.2817942495198748
+      ],
+      "target_kl_drop_fraction": 0.4482655129632487,
+      "anchor_first": 0,
+      "anchor_last": 0.0014793181195178,
+      "position_first": {
+        "p50_60": 0.27633360202751095,
+        "p80_90": 0.27181592914140257,
+        "p30_40": 0.31133441943941226,
+        "p10_20": 0.36601796828959393,
+        "p90_100": 0.24800716217569382,
+        "p60_70": 0.25879168777615497,
+        "p70_80": 0.26665054326204624,
+        "p40_50": 0.30817583284752503,
+        "p00_10": 0.4229905992991376,
+        "p20_30": 0.3494498597048548
+      },
+      "position_last": {
+        "p60_70": 0.24981983297381646,
+        "p00_10": 0.3981751524526967,
+        "p80_90": 0.26268934456155535,
+        "p20_30": 0.3344609561899283,
+        "p30_40": 0.2984679302763283,
+        "p40_50": 0.2955433157951394,
+        "p10_20": 0.34931362494822654,
+        "p50_60": 0.2654871346764443,
+        "p90_100": 0.24034173229049977,
+        "p70_80": 0.2568016052650328
+      }
+    },
+    "fitting_summary": {
+      "blocks": 80,
+      "objective_end_worse": 0,
+      "teacher_end_worse": 0,
+      "first_teacher": [
+        0.4470776929723502,
+        0.40771710514472925
+      ],
+      "last_teacher": [
+        0.30795464215692137,
+        0.2817942495198748
+      ]
+    },
+    "validation_timing": [
+      {
+        "outer": 10,
+        "seconds": 22525.139501668
+      },
+      {
+        "outer": 20,
+        "seconds": 32770.393302611
+      },
+      {
+        "outer": 30,
+        "seconds": 31181.783091887
+      },
+      {
+        "outer": 40,
+        "seconds": 24954.839209073
+      },
+      {
+        "outer": 50,
+        "seconds": 21927.642763886
+      },
+      {
+        "outer": 60,
+        "seconds": 18161.474278871
+      },
+      {
+        "outer": 70,
+        "seconds": 16775.970760653
+      }
+    ],
+    "validation": {
+      "10": {
+        "macro_acc": 0.23147500000000001,
+        "macro_length": 21937.9449875,
+        "macro_cap_rate": 0.6775708333333333,
+        "response_weighted_acc": 0.5369047619047619,
+        "response_weighted_cap_rate": 0.3665674603174603,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.638625,
+            "accuracy_ci95": [
+              0.60771875,
+              0.670078125
+            ],
+            "length": 8932.454625,
+            "median_length": 727,
+            "cap_count": 2107,
+            "cap_rate": 0.263375,
+            "stop_count": 5893
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.3375,
+            "accuracy_ci95": [
+              0.2064453125,
+              0.445703125
+            ],
+            "length": 18041.7140625,
+            "median_length": 31744,
+            "cap_count": 353,
+            "cap_rate": 0.5515625,
+            "stop_count": 287
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.06666666666666667,
+            "accuracy_ci95": [
+              0.0125,
+              0.12838541666666667
+            ],
+            "length": 27771.39375,
+            "median_length": 31744,
+            "cap_count": 415,
+            "cap_rate": 0.8645833333333334,
+            "stop_count": 65
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.052083333333333336,
+            "accuracy_ci95": [
+              0.0125,
+              0.11041666666666666
+            ],
+            "length": 27283.689583333333,
+            "median_length": 31744,
+            "cap_count": 407,
+            "cap_rate": 0.8479166666666667,
+            "stop_count": 73
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.0625,
+            "accuracy_ci95": [
+              0.0125,
+              0.125
+            ],
+            "length": 27660.472916666666,
+            "median_length": 31744,
+            "cap_count": 413,
+            "cap_rate": 0.8604166666666667,
+            "stop_count": 67
+          }
+        }
+      },
+      "20": {
+        "macro_acc": 0.20495833333333333,
+        "macro_length": 25832.386775,
+        "macro_cap_rate": 0.806825,
+        "response_weighted_acc": 0.4771825396825397,
+        "response_weighted_cap_rate": 0.5506944444444445,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.5675,
+            "accuracy_ci95": [
+              0.53121875,
+              0.600328125
+            ],
+            "length": 15218.027625,
+            "median_length": 1834.5,
+            "cap_count": 3723,
+            "cap_rate": 0.465375,
+            "stop_count": 4277
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.315625,
+            "accuracy_ci95": [
+              0.191796875,
+              0.423828125
+            ],
+            "length": 23151.50625,
+            "median_length": 31744,
+            "cap_count": 460,
+            "cap_rate": 0.71875,
+            "stop_count": 180
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.07291666666666667,
+            "accuracy_ci95": [
+              0.016666666666666666,
+              0.14348958333333334
+            ],
+            "length": 29397.152083333334,
+            "median_length": 31744,
+            "cap_count": 442,
+            "cap_rate": 0.9208333333333333,
+            "stop_count": 38
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.029166666666666667,
+            "accuracy_ci95": [
+              0.004166666666666667,
+              0.06458333333333334
+            ],
+            "length": 30757.73125,
+            "median_length": 31744,
+            "cap_count": 464,
+            "cap_rate": 0.9666666666666667,
+            "stop_count": 16
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.03958333333333333,
+            "accuracy_ci95": [
+              0.010416666666666666,
+              0.07838541666666667
+            ],
+            "length": 30637.516666666666,
+            "median_length": 31744,
+            "cap_count": 462,
+            "cap_rate": 0.9625,
+            "stop_count": 18
+          }
+        }
+      },
+      "30": {
+        "macro_acc": 0.23424166666666668,
+        "macro_length": 25138.491554166667,
+        "macro_cap_rate": 0.7739666666666667,
+        "response_weighted_acc": 0.5120039682539682,
+        "response_weighted_cap_rate": 0.5180555555555556,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.6035,
+            "accuracy_ci95": [
+              0.5689375,
+              0.638859375
+            ],
+            "length": 14568.8885,
+            "median_length": 3529.5,
+            "cap_count": 3467,
+            "cap_rate": 0.433375,
+            "stop_count": 4533
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.378125,
+            "accuracy_ci95": [
+              0.2482421875,
+              0.4955078125
+            ],
+            "length": 21835.0234375,
+            "median_length": 31744,
+            "cap_count": 422,
+            "cap_rate": 0.659375,
+            "stop_count": 218
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.09375,
+            "accuracy_ci95": [
+              0.023697916666666666,
+              0.17864583333333334
+            ],
+            "length": 28994.7625,
+            "median_length": 31744,
+            "cap_count": 432,
+            "cap_rate": 0.9,
+            "stop_count": 48
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.029166666666666667,
+            "accuracy_ci95": [
+              0.00625,
+              0.06041666666666667
+            ],
+            "length": 30483.154166666667,
+            "median_length": 31744,
+            "cap_count": 456,
+            "cap_rate": 0.95,
+            "stop_count": 24
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.06666666666666667,
+            "accuracy_ci95": [
+              0.0125,
+              0.12708333333333333
+            ],
+            "length": 29810.629166666666,
+            "median_length": 31744,
+            "cap_count": 445,
+            "cap_rate": 0.9270833333333334,
+            "stop_count": 35
+          }
+        }
+      },
+      "40": {
+        "macro_acc": 0.24617083333333334,
+        "macro_length": 22641.38454583333,
+        "macro_cap_rate": 0.6630125,
+        "response_weighted_acc": 0.554265873015873,
+        "response_weighted_cap_rate": 0.4029761904761905,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.656375,
+            "accuracy_ci95": [
+              0.622046875,
+              0.685921875
+            ],
+            "length": 11716.04825,
+            "median_length": 2285.5,
+            "cap_count": 2533,
+            "cap_rate": 0.316625,
+            "stop_count": 5467
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.3765625,
+            "accuracy_ci95": [
+              0.238671875,
+              0.494140625
+            ],
+            "length": 19604.2640625,
+            "median_length": 31744,
+            "cap_count": 359,
+            "cap_rate": 0.5609375,
+            "stop_count": 281
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.08125,
+            "accuracy_ci95": [
+              0.015364583333333334,
+              0.15
+            ],
+            "length": 27050.929166666665,
+            "median_length": 31744,
+            "cap_count": 388,
+            "cap_rate": 0.8083333333333333,
+            "stop_count": 92
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.05,
+            "accuracy_ci95": [
+              0.009114583333333332,
+              0.10755208333333334
+            ],
+            "length": 27373.158333333333,
+            "median_length": 31744,
+            "cap_count": 391,
+            "cap_rate": 0.8145833333333333,
+            "stop_count": 89
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.06666666666666667,
+            "accuracy_ci95": [
+              0.016666666666666666,
+              0.12916666666666668
+            ],
+            "length": 27462.522916666665,
+            "median_length": 31744,
+            "cap_count": 391,
+            "cap_rate": 0.8145833333333333,
+            "stop_count": 89
+          }
+        }
+      },
+      "50": {
+        "macro_acc": 0.25327083333333333,
+        "macro_length": 21573.699958333335,
+        "macro_cap_rate": 0.6165166666666667,
+        "response_weighted_acc": 0.5595238095238095,
+        "response_weighted_cap_rate": 0.345734126984127,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.660625,
+            "accuracy_ci95": [
+              0.62734375,
+              0.690890625
+            ],
+            "length": 10253.483125,
+            "median_length": 2195.5,
+            "cap_count": 2044,
+            "cap_rate": 0.2555,
+            "stop_count": 5956
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4015625,
+            "accuracy_ci95": [
+              0.26875,
+              0.523828125
+            ],
+            "length": 18666.49375,
+            "median_length": 31744,
+            "cap_count": 336,
+            "cap_rate": 0.525,
+            "stop_count": 304
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.08541666666666667,
+            "accuracy_ci95": [
+              0.016666666666666666,
+              0.16380208333333335
+            ],
+            "length": 26192.629166666666,
+            "median_length": 31744,
+            "cap_count": 370,
+            "cap_rate": 0.7708333333333334,
+            "stop_count": 110
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.06458333333333334,
+            "accuracy_ci95": [
+              0.010416666666666666,
+              0.14505208333333333
+            ],
+            "length": 26401.004166666666,
+            "median_length": 31744,
+            "cap_count": 370,
+            "cap_rate": 0.7708333333333334,
+            "stop_count": 110
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.05416666666666667,
+            "accuracy_ci95": [
+              0.013281250000000001,
+              0.10677083333333334
+            ],
+            "length": 26354.889583333334,
+            "median_length": 31744,
+            "cap_count": 365,
+            "cap_rate": 0.7604166666666666,
+            "stop_count": 115
+          }
+        }
+      },
+      "60": {
+        "macro_acc": 0.26132083333333334,
+        "macro_length": 19563.0371125,
+        "macro_cap_rate": 0.5277708333333333,
+        "response_weighted_acc": 0.5774801587301587,
+        "response_weighted_cap_rate": 0.2741071428571429,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.682125,
+            "accuracy_ci95": [
+              0.650515625,
+              0.71065625
+            ],
+            "length": 8641.06525,
+            "median_length": 2186.5,
+            "cap_count": 1515,
+            "cap_rate": 0.189375,
+            "stop_count": 6485
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4015625,
+            "accuracy_ci95": [
+              0.2693359375,
+              0.5140625
+            ],
+            "length": 17058.5078125,
+            "median_length": 10478.5,
+            "cap_count": 289,
+            "cap_rate": 0.4515625,
+            "stop_count": 351
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.1,
+            "accuracy_ci95": [
+              0.026562500000000003,
+              0.17630208333333333
+            ],
+            "length": 24084.179166666665,
+            "median_length": 31744,
+            "cap_count": 322,
+            "cap_rate": 0.6708333333333333,
+            "stop_count": 158
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.05625,
+            "accuracy_ci95": [
+              0.008333333333333333,
+              0.13125
+            ],
+            "length": 23519.8875,
+            "median_length": 31744,
+            "cap_count": 307,
+            "cap_rate": 0.6395833333333333,
+            "stop_count": 173
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.06666666666666667,
+            "accuracy_ci95": [
+              0.016666666666666666,
+              0.13177083333333334
+            ],
+            "length": 24511.545833333334,
+            "median_length": 31744,
+            "cap_count": 330,
+            "cap_rate": 0.6875,
+            "stop_count": 150
+          }
+        }
+      },
+      "70": {
+        "macro_acc": 0.26774166666666666,
+        "macro_length": 18696.577258333335,
+        "macro_cap_rate": 0.4887958333333333,
+        "response_weighted_acc": 0.5873015873015873,
+        "response_weighted_cap_rate": 0.24464285714285713,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.692875,
+            "accuracy_ci95": [
+              0.659390625,
+              0.7186875
+            ],
+            "length": 7972.300875,
+            "median_length": 1752.5,
+            "cap_count": 1306,
+            "cap_rate": 0.16325,
+            "stop_count": 6694
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.41875,
+            "accuracy_ci95": [
+              0.2876953125,
+              0.53125
+            ],
+            "length": 16128.325,
+            "median_length": 10147.5,
+            "cap_count": 261,
+            "cap_rate": 0.4078125,
+            "stop_count": 379
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.10208333333333333,
+            "accuracy_ci95": [
+              0.025781250000000002,
+              0.18463541666666666
+            ],
+            "length": 23159.285416666666,
+            "median_length": 31744,
+            "cap_count": 302,
+            "cap_rate": 0.6291666666666667,
+            "stop_count": 178
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.0625,
+            "accuracy_ci95": [
+              0.011197916666666667,
+              0.12916666666666668
+            ],
+            "length": 23371.11875,
+            "median_length": 31744,
+            "cap_count": 306,
+            "cap_rate": 0.6375,
+            "stop_count": 174
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.0625,
+            "accuracy_ci95": [
+              0.01875,
+              0.11796875
+            ],
+            "length": 22851.85625,
+            "median_length": 31744,
+            "cap_count": 291,
+            "cap_rate": 0.60625,
+            "stop_count": 189
+          }
+        }
+      }
+    }
+  },
+  "E56": {
+    "run_id": "zsnhqzts",
+    "source_status": "finished",
+    "exit_code": 0,
+    "source_bytes": 103755274,
+    "sha256": "2f5425741d9d6c8dac4f27b06d5cae5a98038d516c44514960252010257b761f",
+    "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+    "snapshot_end_shanghai": "2026-11-02T03:11:30.567748+08:00",
+    "kappa": 0.5,
+    "gpu_type": "NVIDIA A800-SXM4-80GB",
+    "history_rows": 1700,
+    "update_count": 1600,
+    "update_outer": 100,
+    "complete_outer": 100,
+    "validation_outers": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100
+    ],
+    "bad_flags": {
+      "optim/actor/update_skipped": 0,
+      "optim/actor/loss_nonfinite": 0,
+      "optim/actor/grad_norm_preclip_nonfinite": 0
+    },
+    "grad_max": 3.442009449005127,
+    "config": {
+      "seed": 42,
+      "optimizer": "AdamW",
+      "fsdp_model_dtype": "fp32",
+      "fsdp_dtype": "bfloat16",
+      "forward_precision": null,
+      "train_cap": 16384,
+      "val_cap": 31744,
+      "val_n": 16,
+      "lr": 1e-06,
+      "train_temperature": 1.0,
+      "train_top_p": 1.0,
+      "val_temperature": 0.7,
+      "val_top_p": 0.9,
+      "concurrency": 64,
+      "memory_utilization": 0.8
+    },
+    "first7": {
+      "range": [
+        1,
+        7
+      ],
+      "length": 1388.9799107142858,
+      "cap_rate": 0.015625,
+      "score": 0.049107142857142856,
+      "actor_hours": 0.6081051691538758,
+      "rollout_hours": 0.12393022946333332,
+      "outer_hours": 0.7678327474919044
+    },
+    "last10": {
+      "range": [
+        91,
+        100
+      ],
+      "length": 8963.54375,
+      "cap_rate": 0.003125,
+      "score": 0.2765625,
+      "actor_hours": 3.6260041501673146,
+      "rollout_hours": 0.23570970590694446,
+      "outer_hours": 3.930526815554541
+    },
+    "all": {
+      "range": [
+        1,
+        100
+      ],
+      "length": 7994.06734375,
+      "cap_rate": 0.0203125,
+      "score": 0.22046875,
+      "actor_hours": 32.62162962033465,
+      "rollout_hours": 2.4217073499255557,
+      "outer_hours": 35.709576413708014
+    },
+    "last_fitting": {
+      "outer": 100,
+      "objective": [
+        0.1318380650459093,
+        0.12734224964318763
+      ],
+      "teacher_kl": [
+        0.3219976516725747,
+        0.30510059668517087
+      ],
+      "target_kl_drop_fraction": 0.21955307653293066,
+      "anchor_first": 0,
+      "anchor_last": 0.0006400986405032583,
+      "position_first": {
+        "p30_40": 0.1293315826027866,
+        "p60_70": 0.13094448156674834,
+        "p90_100": 0.12149711207078735,
+        "p70_80": 0.126777450211163,
+        "p10_20": 0.1418121891302049,
+        "p50_60": 0.13041915497475826,
+        "p00_10": 0.15431644286071852,
+        "p20_30": 0.13460339259738904,
+        "p40_50": 0.12431766144654875,
+        "p80_90": 0.12436060549588669
+      },
+      "position_last": {
+        "p20_30": 0.12955714604224183,
+        "p90_100": 0.118586877059623,
+        "p30_40": 0.12478412776688895,
+        "p50_60": 0.12606373464491477,
+        "p00_10": 0.14797374264325702,
+        "p10_20": 0.13629567408945895,
+        "p80_90": 0.12061544026366344,
+        "p60_70": 0.12667389634113935,
+        "p40_50": 0.12001709447909817,
+        "p70_80": 0.12285410950427303
+      }
+    },
+    "fitting_summary": {
+      "blocks": 100,
+      "objective_end_worse": 0,
+      "teacher_end_worse": 0,
+      "first_teacher": [
+        0.5311510102635295,
+        0.5015513327024347
+      ],
+      "last_teacher": [
+        0.3219976516725747,
+        0.30510059668517087
+      ]
+    },
+    "validation_timing": [
+      {
+        "outer": 10,
+        "seconds": 19585.838263638
+      },
+      {
+        "outer": 20,
+        "seconds": 29629.973563739
+      },
+      {
+        "outer": 30,
+        "seconds": 23460.476849556
+      },
+      {
+        "outer": 40,
+        "seconds": 14477.460962231
+      },
+      {
+        "outer": 50,
+        "seconds": 11698.885894115
+      },
+      {
+        "outer": 60,
+        "seconds": 10065.335813085
+      },
+      {
+        "outer": 70,
+        "seconds": 9315.848831766
+      },
+      {
+        "outer": 80,
+        "seconds": 8586.765441352
+      },
+      {
+        "outer": 90,
+        "seconds": 8531.682782581
+      },
+      {
+        "outer": 100,
+        "seconds": 7423.682085654
+      }
+    ],
+    "validation": {
+      "10": {
+        "macro_acc": 0.21379583333333332,
+        "macro_length": 18599.839504166666,
+        "macro_cap_rate": 0.5662041666666666,
+        "response_weighted_acc": 0.4903769841269841,
+        "response_weighted_cap_rate": 0.3280753968253968,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.582,
+            "accuracy_ci95": [
+              0.54796875,
+              0.612359375
+            ],
+            "length": 8430.72825,
+            "median_length": 652.5,
+            "cap_count": 1994,
+            "cap_rate": 0.24925,
+            "stop_count": 6006
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.3328125,
+            "accuracy_ci95": [
+              0.221484375,
+              0.4373046875
+            ],
+            "length": 15259.2359375,
+            "median_length": 2291,
+            "cap_count": 295,
+            "cap_rate": 0.4609375,
+            "stop_count": 345
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.07708333333333334,
+            "accuracy_ci95": [
+              0.020833333333333332,
+              0.14713541666666669
+            ],
+            "length": 22994.1875,
+            "median_length": 31744,
+            "cap_count": 334,
+            "cap_rate": 0.6958333333333333,
+            "stop_count": 146
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.035416666666666666,
+            "accuracy_ci95": [
+              0.010416666666666666,
+              0.0734375
+            ],
+            "length": 22311.820833333335,
+            "median_length": 31744,
+            "cap_count": 329,
+            "cap_rate": 0.6854166666666667,
+            "stop_count": 151
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.041666666666666664,
+            "accuracy_ci95": [
+              0.010416666666666666,
+              0.07916666666666666
+            ],
+            "length": 24003.225,
+            "median_length": 31744,
+            "cap_count": 355,
+            "cap_rate": 0.7395833333333334,
+            "stop_count": 125
+          }
+        }
+      },
+      "20": {
+        "macro_acc": 0.21692916666666667,
+        "macro_length": 25047.222958333332,
+        "macro_cap_rate": 0.7743375,
+        "response_weighted_acc": 0.5068452380952381,
+        "response_weighted_cap_rate": 0.49444444444444446,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.602875,
+            "accuracy_ci95": [
+              0.570265625,
+              0.63625
+            ],
+            "length": 13388.904375,
+            "median_length": 1362,
+            "cap_count": 3211,
+            "cap_rate": 0.401375,
+            "stop_count": 4789
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.3421875,
+            "accuracy_ci95": [
+              0.21796875,
+              0.451953125
+            ],
+            "length": 22003.825,
+            "median_length": 31744,
+            "cap_count": 429,
+            "cap_rate": 0.6703125,
+            "stop_count": 211
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.052083333333333336,
+            "accuracy_ci95": [
+              0.0020833333333333333,
+              0.11171875
+            ],
+            "length": 29955.075,
+            "median_length": 31744,
+            "cap_count": 449,
+            "cap_rate": 0.9354166666666667,
+            "stop_count": 31
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.035416666666666666,
+            "accuracy_ci95": [
+              0.004166666666666667,
+              0.08333333333333333
+            ],
+            "length": 29711.014583333334,
+            "median_length": 31744,
+            "cap_count": 443,
+            "cap_rate": 0.9229166666666667,
+            "stop_count": 37
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.052083333333333336,
+            "accuracy_ci95": [
+              0.013281250000000001,
+              0.1
+            ],
+            "length": 30177.295833333334,
+            "median_length": 31744,
+            "cap_count": 452,
+            "cap_rate": 0.9416666666666667,
+            "stop_count": 28
+          }
+        }
+      },
+      "30": {
+        "macro_acc": 0.25351250000000003,
+        "macro_length": 22007.900120833332,
+        "macro_cap_rate": 0.6347083333333333,
+        "response_weighted_acc": 0.5611111111111111,
+        "response_weighted_cap_rate": 0.37182539682539684,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.662875,
+            "accuracy_ci95": [
+              0.63334375,
+              0.69453125
+            ],
+            "length": 10847.794875,
+            "median_length": 2334,
+            "cap_count": 2280,
+            "cap_rate": 0.285,
+            "stop_count": 5720
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.3921875,
+            "accuracy_ci95": [
+              0.2630859375,
+              0.503125
+            ],
+            "length": 18272.2453125,
+            "median_length": 31744,
+            "cap_count": 326,
+            "cap_rate": 0.509375,
+            "stop_count": 314
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.08958333333333333,
+            "accuracy_ci95": [
+              0.018229166666666664,
+              0.16302083333333334
+            ],
+            "length": 26637.727083333335,
+            "median_length": 31744,
+            "cap_count": 376,
+            "cap_rate": 0.7833333333333333,
+            "stop_count": 104
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.07083333333333333,
+            "accuracy_ci95": [
+              0.016666666666666666,
+              0.14296874999999998
+            ],
+            "length": 26722.39375,
+            "median_length": 31744,
+            "cap_count": 375,
+            "cap_rate": 0.78125,
+            "stop_count": 105
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.052083333333333336,
+            "accuracy_ci95": [
+              0.009114583333333332,
+              0.10546875
+            ],
+            "length": 27559.339583333334,
+            "median_length": 31744,
+            "cap_count": 391,
+            "cap_rate": 0.8145833333333333,
+            "stop_count": 89
+          }
+        }
+      },
+      "40": {
+        "macro_acc": 0.27390416666666667,
+        "macro_length": 17420.9365,
+        "macro_cap_rate": 0.4241375,
+        "response_weighted_acc": 0.5922619047619048,
+        "response_weighted_cap_rate": 0.20694444444444443,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.697125,
+            "accuracy_ci95": [
+              0.666625,
+              0.727703125
+            ],
+            "length": 7464.22,
+            "median_length": 3103.5,
+            "cap_count": 1078,
+            "cap_rate": 0.13475,
+            "stop_count": 6922
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4390625,
+            "accuracy_ci95": [
+              0.2990234375,
+              0.5603515625
+            ],
+            "length": 14699.3875,
+            "median_length": 9403.5,
+            "cap_count": 219,
+            "cap_rate": 0.3421875,
+            "stop_count": 421
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.1,
+            "accuracy_ci95": [
+              0.029947916666666668,
+              0.18098958333333331
+            ],
+            "length": 21430.1625,
+            "median_length": 31744,
+            "cap_count": 259,
+            "cap_rate": 0.5395833333333333,
+            "stop_count": 221
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.06041666666666667,
+            "accuracy_ci95": [
+              0.0125,
+              0.12552083333333333
+            ],
+            "length": 21714.235416666666,
+            "median_length": 31744,
+            "cap_count": 264,
+            "cap_rate": 0.55,
+            "stop_count": 216
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.07291666666666667,
+            "accuracy_ci95": [
+              0.01875,
+              0.14010416666666667
+            ],
+            "length": 21796.677083333332,
+            "median_length": 31744,
+            "cap_count": 266,
+            "cap_rate": 0.5541666666666667,
+            "stop_count": 214
+          }
+        }
+      },
+      "50": {
+        "macro_acc": 0.276325,
+        "macro_length": 15562.85385,
+        "macro_cap_rate": 0.3412791666666667,
+        "response_weighted_acc": 0.6048611111111111,
+        "response_weighted_cap_rate": 0.1501984126984127,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.712875,
+            "accuracy_ci95": [
+              0.68121875,
+              0.74078125
+            ],
+            "length": 6435.71925,
+            "median_length": 3204,
+            "cap_count": 697,
+            "cap_rate": 0.087125,
+            "stop_count": 7303
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.45625,
+            "accuracy_ci95": [
+              0.3068359375,
+              0.58046875
+            ],
+            "length": 12660.6125,
+            "median_length": 9098.5,
+            "cap_count": 159,
+            "cap_rate": 0.2484375,
+            "stop_count": 481
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.07916666666666666,
+            "accuracy_ci95": [
+              0.01953125,
+              0.146875
+            ],
+            "length": 19967.19375,
+            "median_length": 14412.5,
+            "cap_count": 230,
+            "cap_rate": 0.4791666666666667,
+            "stop_count": 250
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.058333333333333334,
+            "accuracy_ci95": [
+              0.00703125,
+              0.12708333333333333
+            ],
+            "length": 18391.422916666666,
+            "median_length": 11280,
+            "cap_count": 194,
+            "cap_rate": 0.4041666666666667,
+            "stop_count": 286
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.075,
+            "accuracy_ci95": [
+              0.01875,
+              0.14010416666666667
+            ],
+            "length": 20359.320833333335,
+            "median_length": 14287.5,
+            "cap_count": 234,
+            "cap_rate": 0.4875,
+            "stop_count": 246
+          }
+        }
+      },
+      "60": {
+        "macro_acc": 0.2806125,
+        "macro_length": 14080.3044375,
+        "macro_cap_rate": 0.2738541666666667,
+        "response_weighted_acc": 0.6089285714285714,
+        "response_weighted_cap_rate": 0.11984126984126985,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.717125,
+            "accuracy_ci95": [
+              0.685796875,
+              0.748203125
+            ],
+            "length": 5973.1175,
+            "median_length": 2904,
+            "cap_count": 550,
+            "cap_rate": 0.06875,
+            "stop_count": 7450
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4484375,
+            "accuracy_ci95": [
+              0.3140625,
+              0.559765625
+            ],
+            "length": 11833.1109375,
+            "median_length": 8927,
+            "cap_count": 135,
+            "cap_rate": 0.2109375,
+            "stop_count": 505
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.09375,
+            "accuracy_ci95": [
+              0.025,
+              0.16901041666666666
+            ],
+            "length": 18188.389583333334,
+            "median_length": 11549.5,
+            "cap_count": 190,
+            "cap_rate": 0.3958333333333333,
+            "stop_count": 290
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.06875,
+            "accuracy_ci95": [
+              0.016666666666666666,
+              0.14166666666666666
+            ],
+            "length": 16031.702083333334,
+            "median_length": 10174.5,
+            "cap_count": 144,
+            "cap_rate": 0.3,
+            "stop_count": 336
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.075,
+            "accuracy_ci95": [
+              0.01875,
+              0.14505208333333333
+            ],
+            "length": 18375.202083333334,
+            "median_length": 11466,
+            "cap_count": 189,
+            "cap_rate": 0.39375,
+            "stop_count": 291
+          }
+        }
+      },
+      "70": {
+        "macro_acc": 0.2846875,
+        "macro_length": 13465.984575,
+        "macro_cap_rate": 0.24254583333333332,
+        "response_weighted_acc": 0.6179563492063492,
+        "response_weighted_cap_rate": 0.10337301587301587,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.728125,
+            "accuracy_ci95": [
+              0.696890625,
+              0.755609375
+            ],
+            "length": 5825.260375,
+            "median_length": 3075,
+            "cap_count": 456,
+            "cap_rate": 0.057,
+            "stop_count": 7544
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4390625,
+            "accuracy_ci95": [
+              0.299609375,
+              0.5572265625
+            ],
+            "length": 11514.65,
+            "median_length": 9013.5,
+            "cap_count": 125,
+            "cap_rate": 0.1953125,
+            "stop_count": 515
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.10208333333333333,
+            "accuracy_ci95": [
+              0.03333333333333333,
+              0.17630208333333333
+            ],
+            "length": 16511.00625,
+            "median_length": 10801,
+            "cap_count": 152,
+            "cap_rate": 0.31666666666666665,
+            "stop_count": 328
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.06458333333333334,
+            "accuracy_ci95": [
+              0.0125,
+              0.13125
+            ],
+            "length": 15851.291666666666,
+            "median_length": 10116,
+            "cap_count": 138,
+            "cap_rate": 0.2875,
+            "stop_count": 342
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.08958333333333333,
+            "accuracy_ci95": [
+              0.01953125,
+              0.16588541666666667
+            ],
+            "length": 17627.714583333334,
+            "median_length": 11405.5,
+            "cap_count": 171,
+            "cap_rate": 0.35625,
+            "stop_count": 309
+          }
+        }
+      },
+      "80": {
+        "macro_acc": 0.2898291666666667,
+        "macro_length": 12797.854345833333,
+        "macro_cap_rate": 0.2072375,
+        "response_weighted_acc": 0.6231150793650794,
+        "response_weighted_cap_rate": 0.0871031746031746,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.733,
+            "accuracy_ci95": [
+              0.70096875,
+              0.760890625
+            ],
+            "length": 5485.569125,
+            "median_length": 2234.5,
+            "cap_count": 377,
+            "cap_rate": 0.047125,
+            "stop_count": 7623
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4578125,
+            "accuracy_ci95": [
+              0.323828125,
+              0.572265625
+            ],
+            "length": 10951.2984375,
+            "median_length": 9288,
+            "cap_count": 105,
+            "cap_rate": 0.1640625,
+            "stop_count": 535
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.08958333333333333,
+            "accuracy_ci95": [
+              0.025,
+              0.15807291666666667
+            ],
+            "length": 16191.533333333333,
+            "median_length": 10919,
+            "cap_count": 138,
+            "cap_rate": 0.2875,
+            "stop_count": 342
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.08333333333333333,
+            "accuracy_ci95": [
+              0.025,
+              0.15885416666666669
+            ],
+            "length": 14634.064583333333,
+            "median_length": 10033,
+            "cap_count": 110,
+            "cap_rate": 0.22916666666666666,
+            "stop_count": 370
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.08541666666666667,
+            "accuracy_ci95": [
+              0.025781250000000002,
+              0.15546875
+            ],
+            "length": 16726.80625,
+            "median_length": 11125.5,
+            "cap_count": 148,
+            "cap_rate": 0.30833333333333335,
+            "stop_count": 332
+          }
+        }
+      },
+      "90": {
+        "macro_acc": 0.284975,
+        "macro_length": 12946.215666666667,
+        "macro_cap_rate": 0.21424166666666666,
+        "response_weighted_acc": 0.6205357142857143,
+        "response_weighted_cap_rate": 0.08640873015873016,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.731125,
+            "accuracy_ci95": [
+              0.70121875,
+              0.759078125
+            ],
+            "length": 5353.695,
+            "median_length": 1715.5,
+            "cap_count": 353,
+            "cap_rate": 0.044125,
+            "stop_count": 7647
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.45625,
+            "accuracy_ci95": [
+              0.3205078125,
+              0.5669921875
+            ],
+            "length": 10687.15,
+            "median_length": 9142.5,
+            "cap_count": 100,
+            "cap_rate": 0.15625,
+            "stop_count": 540
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.08333333333333333,
+            "accuracy_ci95": [
+              0.01953125,
+              0.15130208333333334
+            ],
+            "length": 16156.3875,
+            "median_length": 11005.5,
+            "cap_count": 138,
+            "cap_rate": 0.2875,
+            "stop_count": 342
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.08125,
+            "accuracy_ci95": [
+              0.020833333333333332,
+              0.15833333333333333
+            ],
+            "length": 14893.214583333332,
+            "median_length": 10180,
+            "cap_count": 116,
+            "cap_rate": 0.24166666666666667,
+            "stop_count": 364
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.07291666666666667,
+            "accuracy_ci95": [
+              0.022916666666666665,
+              0.13307291666666665
+            ],
+            "length": 17640.63125,
+            "median_length": 11745.5,
+            "cap_count": 164,
+            "cap_rate": 0.3416666666666667,
+            "stop_count": 316
+          }
+        }
+      },
+      "100": {
+        "macro_acc": 0.2939375,
+        "macro_length": 12013.058166666666,
+        "macro_cap_rate": 0.1765,
+        "response_weighted_acc": 0.6271825396825397,
+        "response_weighted_cap_rate": 0.07103174603174603,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.736875,
+            "accuracy_ci95": [
+              0.703875,
+              0.766140625
+            ],
+            "length": 5185.210625,
+            "median_length": 1875.5,
+            "cap_count": 285,
+            "cap_rate": 0.035625,
+            "stop_count": 7715
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4703125,
+            "accuracy_ci95": [
+              0.33515625,
+              0.5791015625
+            ],
+            "length": 10585.565625,
+            "median_length": 9038,
+            "cap_count": 98,
+            "cap_rate": 0.153125,
+            "stop_count": 542
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.09166666666666666,
+            "accuracy_ci95": [
+              0.01875,
+              0.17109375
+            ],
+            "length": 14664.7875,
+            "median_length": 10334,
+            "cap_count": 109,
+            "cap_rate": 0.22708333333333333,
+            "stop_count": 371
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.07708333333333334,
+            "accuracy_ci95": [
+              0.017447916666666667,
+              0.15390625
+            ],
+            "length": 13911.433333333332,
+            "median_length": 9801,
+            "cap_count": 98,
+            "cap_rate": 0.20416666666666666,
+            "stop_count": 382
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.09375,
+            "accuracy_ci95": [
+              0.025781250000000002,
+              0.16458333333333333
+            ],
+            "length": 15718.29375,
+            "median_length": 10777.5,
+            "cap_count": 126,
+            "cap_rate": 0.2625,
+            "stop_count": 354
+          }
+        }
+      }
+    }
+  },
+  "E57": {
+    "run_id": "6j5knkmk",
+    "source_status": "finished",
+    "exit_code": 0,
+    "source_bytes": 83452596,
+    "sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830",
+    "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+    "snapshot_end_shanghai": "2026-11-01T15:40:42.800617+08:00",
+    "kappa": 1,
+    "gpu_type": "NVIDIA A100-SXM4-80GB",
+    "history_rows": 1700,
+    "update_count": 1600,
+    "update_outer": 100,
+    "complete_outer": 100,
+    "validation_outers": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100
+    ],
+    "bad_flags": {
+      "optim/actor/update_skipped": 0,
+      "optim/actor/loss_nonfinite": 0,
+      "optim/actor/grad_norm_preclip_nonfinite": 0
+    },
+    "grad_max": 2.9994680881500244,
+    "config": {
+      "seed": 42,
+      "optimizer": "AdamW",
+      "fsdp_model_dtype": "fp32",
+      "fsdp_dtype": "bfloat16",
+      "forward_precision": null,
+      "train_cap": 16384,
+      "val_cap": 31744,
+      "val_n": 16,
+      "lr": 1e-06,
+      "train_temperature": 1.0,
+      "train_top_p": 1.0,
+      "val_temperature": 0.7,
+      "val_top_p": 0.9,
+      "concurrency": 64,
+      "memory_utilization": 0.8
+    },
+    "first7": {
+      "range": [
+        1,
+        7
+      ],
+      "length": 1275.142857142857,
+      "cap_rate": 0.008928571428571428,
+      "score": 0.05580357142857143,
+      "actor_hours": 0.39054149182409875,
+      "rollout_hours": 0.1273360177572222,
+      "outer_hours": 0.5525142482735423
+    },
+    "last10": {
+      "range": [
+        91,
+        100
+      ],
+      "length": 9228.4390625,
+      "cap_rate": 0.0015625,
+      "score": 0.271875,
+      "actor_hours": 2.32337589325642,
+      "rollout_hours": 0.2374873454719445,
+      "outer_hours": 2.6286633331188933
+    },
+    "all": {
+      "range": [
+        1,
+        100
+      ],
+      "length": 8381.16765625,
+      "cap_rate": 0.01109375,
+      "score": 0.17640625,
+      "actor_hours": 21.37318115328956,
+      "rollout_hours": 2.396330023301389,
+      "outer_hours": 24.452519698774754
+    },
+    "last_fitting": {
+      "outer": 100,
+      "objective": [
+        0.03666635056136039,
+        0.03206500754983264
+      ],
+      "teacher_kl": [
+        0.37751485747375807,
+        0.36040494961389075
+      ],
+      "target_kl_drop_fraction": 0.12549222833228013,
+      "anchor_first": 0,
+      "anchor_last": 0.0006504359545090463,
+      "position_first": {
+        "p90_100": 0.03191303713046422,
+        "p00_10": 0.04124395351993444,
+        "p70_80": 0.03547596952194382,
+        "p30_40": 0.036157908856744296,
+        "p10_20": 0.04011773244214121,
+        "p50_60": 0.03515784705373176,
+        "p20_30": 0.03786116617063754,
+        "p40_50": 0.035143274410826965,
+        "p60_70": 0.03747701766742939,
+        "p80_90": 0.036115555478967755
+      },
+      "position_last": {
+        "p50_60": 0.030542821198358154,
+        "p80_90": 0.03206576735711683,
+        "p40_50": 0.030542495821000396,
+        "p60_70": 0.0329567029770449,
+        "p20_30": 0.03290698455509693,
+        "p10_20": 0.03474856152216001,
+        "p30_40": 0.031477046068929114,
+        "p70_80": 0.031276977228939976,
+        "p90_100": 0.029080341543760057,
+        "p00_10": 0.03505229991005028
+      }
+    },
+    "fitting_summary": {
+      "blocks": 100,
+      "objective_end_worse": 0,
+      "teacher_end_worse": 0,
+      "first_teacher": [
+        0.4048949295703338,
+        0.3866235034424017
+      ],
+      "last_teacher": [
+        0.37751485747375807,
+        0.36040494961389075
+      ]
+    },
+    "validation_timing": [
+      {
+        "outer": 10,
+        "seconds": 21985.134627754
+      },
+      {
+        "outer": 20,
+        "seconds": 25490.592459491
+      },
+      {
+        "outer": 30,
+        "seconds": 19027.201277025
+      },
+      {
+        "outer": 40,
+        "seconds": 14395.126599546
+      },
+      {
+        "outer": 50,
+        "seconds": 11113.452711178
+      },
+      {
+        "outer": 60,
+        "seconds": 9995.615903799
+      },
+      {
+        "outer": 70,
+        "seconds": 8650.787069108
+      },
+      {
+        "outer": 80,
+        "seconds": 8336.192470216
+      },
+      {
+        "outer": 90,
+        "seconds": 7635.3193139
+      },
+      {
+        "outer": 100,
+        "seconds": 7339.99956655
+      }
+    ],
+    "validation": {
+      "10": {
+        "macro_acc": 0.21332083333333332,
+        "macro_length": 20515.925895833334,
+        "macro_cap_rate": 0.6258,
+        "response_weighted_acc": 0.497718253968254,
+        "response_weighted_cap_rate": 0.3533730158730159,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.592125,
+            "accuracy_ci95": [
+              0.5603750000000001,
+              0.6196875
+            ],
+            "length": 8979.02375,
+            "median_length": 744,
+            "cap_count": 2107,
+            "cap_rate": 0.263375,
+            "stop_count": 5893
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.3265625,
+            "accuracy_ci95": [
+              0.2125,
+              0.428125
+            ],
+            "length": 16442.9828125,
+            "median_length": 10910.5,
+            "cap_count": 318,
+            "cap_rate": 0.496875,
+            "stop_count": 322
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.07916666666666666,
+            "accuracy_ci95": [
+              0.020833333333333332,
+              0.15755208333333331
+            ],
+            "length": 25253.697916666668,
+            "median_length": 31744,
+            "cap_count": 369,
+            "cap_rate": 0.76875,
+            "stop_count": 111
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.03333333333333333,
+            "accuracy_ci95": [
+              0.004166666666666667,
+              0.07552083333333334
+            ],
+            "length": 25248.414583333335,
+            "median_length": 31744,
+            "cap_count": 373,
+            "cap_rate": 0.7770833333333333,
+            "stop_count": 107
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.035416666666666666,
+            "accuracy_ci95": [
+              0.00703125,
+              0.07213541666666667
+            ],
+            "length": 26655.510416666668,
+            "median_length": 31744,
+            "cap_count": 395,
+            "cap_rate": 0.8229166666666666,
+            "stop_count": 85
+          }
+        }
+      },
+      "20": {
+        "macro_acc": 0.24401250000000002,
+        "macro_length": 23551.174287499998,
+        "macro_cap_rate": 0.7014374999999999,
+        "response_weighted_acc": 0.5487103174603175,
+        "response_weighted_cap_rate": 0.4160714285714286,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.64975,
+            "accuracy_ci95": [
+              0.6180625,
+              0.6788124999999999
+            ],
+            "length": 11668.898,
+            "median_length": 2404.5,
+            "cap_count": 2570,
+            "cap_rate": 0.32125,
+            "stop_count": 5430
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.3703125,
+            "accuracy_ci95": [
+              0.246875,
+              0.4853515625
+            ],
+            "length": 20343.3296875,
+            "median_length": 31744,
+            "cap_count": 379,
+            "cap_rate": 0.5921875,
+            "stop_count": 261
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.0875,
+            "accuracy_ci95": [
+              0.025781250000000002,
+              0.15234375
+            ],
+            "length": 28189.910416666666,
+            "median_length": 31744,
+            "cap_count": 411,
+            "cap_rate": 0.85625,
+            "stop_count": 69
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.05416666666666667,
+            "accuracy_ci95": [
+              0.009114583333333332,
+              0.10625
+            ],
+            "length": 28513.2,
+            "median_length": 31744,
+            "cap_count": 412,
+            "cap_rate": 0.8583333333333333,
+            "stop_count": 68
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.058333333333333334,
+            "accuracy_ci95": [
+              0.016666666666666666,
+              0.10963541666666667
+            ],
+            "length": 29040.533333333333,
+            "median_length": 31744,
+            "cap_count": 422,
+            "cap_rate": 0.8791666666666667,
+            "stop_count": 58
+          }
+        }
+      },
+      "30": {
+        "macro_acc": 0.26137083333333333,
+        "macro_length": 20122.899341666667,
+        "macro_cap_rate": 0.5116916666666667,
+        "response_weighted_acc": 0.5800595238095239,
+        "response_weighted_cap_rate": 0.27529761904761907,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.6855,
+            "accuracy_ci95": [
+              0.655859375,
+              0.7151093749999999
+            ],
+            "length": 9524.44775,
+            "median_length": 4325,
+            "cap_count": 1576,
+            "cap_rate": 0.197,
+            "stop_count": 6424
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4046875,
+            "accuracy_ci95": [
+              0.265234375,
+              0.515625
+            ],
+            "length": 16922.546875,
+            "median_length": 12230.5,
+            "cap_count": 262,
+            "cap_rate": 0.409375,
+            "stop_count": 378
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.07916666666666666,
+            "accuracy_ci95": [
+              0.020833333333333332,
+              0.14088541666666665
+            ],
+            "length": 24988.527083333334,
+            "median_length": 31744,
+            "cap_count": 320,
+            "cap_rate": 0.6666666666666666,
+            "stop_count": 160
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.07708333333333334,
+            "accuracy_ci95": [
+              0.023697916666666666,
+              0.14791666666666667
+            ],
+            "length": 24468.885416666668,
+            "median_length": 31744,
+            "cap_count": 308,
+            "cap_rate": 0.6416666666666667,
+            "stop_count": 172
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.06041666666666667,
+            "accuracy_ci95": [
+              0.014583333333333334,
+              0.1171875
+            ],
+            "length": 24710.089583333334,
+            "median_length": 31744,
+            "cap_count": 309,
+            "cap_rate": 0.64375,
+            "stop_count": 171
+          }
+        }
+      },
+      "40": {
+        "macro_acc": 0.2665708333333333,
+        "macro_length": 17213.159295833335,
+        "macro_cap_rate": 0.36273333333333335,
+        "response_weighted_acc": 0.5916666666666667,
+        "response_weighted_cap_rate": 0.18214285714285713,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.699,
+            "accuracy_ci95": [
+              0.668390625,
+              0.72790625
+            ],
+            "length": 8200.4845,
+            "median_length": 5357,
+            "cap_count": 976,
+            "cap_rate": 0.122,
+            "stop_count": 7024
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4234375,
+            "accuracy_ci95": [
+              0.2798828125,
+              0.5296875
+            ],
+            "length": 15028.0515625,
+            "median_length": 10920,
+            "cap_count": 192,
+            "cap_rate": 0.3,
+            "stop_count": 448
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.06458333333333334,
+            "accuracy_ci95": [
+              0.010416666666666666,
+              0.12630208333333331
+            ],
+            "length": 21473.775,
+            "median_length": 28825.5,
+            "cap_count": 239,
+            "cap_rate": 0.4979166666666667,
+            "stop_count": 241
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.0625,
+            "accuracy_ci95": [
+              0.01875,
+              0.12291666666666666
+            ],
+            "length": 20252.358333333334,
+            "median_length": 15115,
+            "cap_count": 208,
+            "cap_rate": 0.43333333333333335,
+            "stop_count": 272
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.08333333333333333,
+            "accuracy_ci95": [
+              0.025,
+              0.15130208333333334
+            ],
+            "length": 21111.127083333333,
+            "median_length": 16613.5,
+            "cap_count": 221,
+            "cap_rate": 0.46041666666666664,
+            "stop_count": 259
+          }
+        }
+      },
+      "50": {
+        "macro_acc": 0.279875,
+        "macro_length": 15069.956866666667,
+        "macro_cap_rate": 0.27118333333333333,
+        "response_weighted_acc": 0.602579365079365,
+        "response_weighted_cap_rate": 0.12281746031746031,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.70875,
+            "accuracy_ci95": [
+              0.678046875,
+              0.737296875
+            ],
+            "length": 7096.14475,
+            "median_length": 5467.5,
+            "cap_count": 589,
+            "cap_rate": 0.073625,
+            "stop_count": 7411
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.453125,
+            "accuracy_ci95": [
+              0.3033203125,
+              0.5669921875
+            ],
+            "length": 13006.53125,
+            "median_length": 10218.5,
+            "cap_count": 134,
+            "cap_rate": 0.209375,
+            "stop_count": 506
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.0875,
+            "accuracy_ci95": [
+              0.03125,
+              0.17005208333333333
+            ],
+            "length": 18867.295833333334,
+            "median_length": 13243.5,
+            "cap_count": 185,
+            "cap_rate": 0.3854166666666667,
+            "stop_count": 295
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.08333333333333333,
+            "accuracy_ci95": [
+              0.027083333333333334,
+              0.16041666666666668
+            ],
+            "length": 17476.404166666667,
+            "median_length": 12247.5,
+            "cap_count": 152,
+            "cap_rate": 0.31666666666666665,
+            "stop_count": 328
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.06666666666666667,
+            "accuracy_ci95": [
+              0.017447916666666667,
+              0.128125
+            ],
+            "length": 18903.408333333333,
+            "median_length": 12968,
+            "cap_count": 178,
+            "cap_rate": 0.37083333333333335,
+            "stop_count": 302
+          }
+        }
+      },
+      "60": {
+        "macro_acc": 0.282475,
+        "macro_length": 14059.644499999999,
+        "macro_cap_rate": 0.2194875,
+        "response_weighted_acc": 0.6128968253968254,
+        "response_weighted_cap_rate": 0.09831349206349206,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.72175,
+            "accuracy_ci95": [
+              0.690640625,
+              0.75065625
+            ],
+            "length": 6800.27875,
+            "median_length": 5544.5,
+            "cap_count": 467,
+            "cap_rate": 0.058375,
+            "stop_count": 7533
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.453125,
+            "accuracy_ci95": [
+              0.3203125,
+              0.5623046875
+            ],
+            "length": 11873.06875,
+            "median_length": 10215,
+            "cap_count": 101,
+            "cap_rate": 0.1578125,
+            "stop_count": 539
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.09791666666666667,
+            "accuracy_ci95": [
+              0.027083333333333334,
+              0.17630208333333333
+            ],
+            "length": 17473.1,
+            "median_length": 12260,
+            "cap_count": 150,
+            "cap_rate": 0.3125,
+            "stop_count": 330
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.05625,
+            "accuracy_ci95": [
+              0.010416666666666666,
+              0.11666666666666667
+            ],
+            "length": 15808.20625,
+            "median_length": 11520.5,
+            "cap_count": 109,
+            "cap_rate": 0.22708333333333333,
+            "stop_count": 371
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.08333333333333333,
+            "accuracy_ci95": [
+              0.025,
+              0.15546875
+            ],
+            "length": 18343.56875,
+            "median_length": 12750.5,
+            "cap_count": 164,
+            "cap_rate": 0.3416666666666667,
+            "stop_count": 316
+          }
+        }
+      },
+      "70": {
+        "macro_acc": 0.29102083333333334,
+        "macro_length": 12953.5940875,
+        "macro_cap_rate": 0.17754166666666665,
+        "response_weighted_acc": 0.6194444444444445,
+        "response_weighted_cap_rate": 0.07797619047619048,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.7275,
+            "accuracy_ci95": [
+              0.697890625,
+              0.752828125
+            ],
+            "length": 6271.847,
+            "median_length": 4988.5,
+            "cap_count": 360,
+            "cap_rate": 0.045,
+            "stop_count": 7640
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4671875,
+            "accuracy_ci95": [
+              0.3271484375,
+              0.5775390625
+            ],
+            "length": 11020.2609375,
+            "median_length": 9745,
+            "cap_count": 86,
+            "cap_rate": 0.134375,
+            "stop_count": 554
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.09583333333333334,
+            "accuracy_ci95": [
+              0.03203125,
+              0.16302083333333334
+            ],
+            "length": 16309.375,
+            "median_length": 11737.5,
+            "cap_count": 123,
+            "cap_rate": 0.25625,
+            "stop_count": 357
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.06875,
+            "accuracy_ci95": [
+              0.0125,
+              0.14088541666666665
+            ],
+            "length": 14203.002083333333,
+            "median_length": 10574.5,
+            "cap_count": 83,
+            "cap_rate": 0.17291666666666666,
+            "stop_count": 397
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.09583333333333334,
+            "accuracy_ci95": [
+              0.029166666666666667,
+              0.17213541666666665
+            ],
+            "length": 16963.485416666666,
+            "median_length": 12355,
+            "cap_count": 134,
+            "cap_rate": 0.2791666666666667,
+            "stop_count": 346
+          }
+        }
+      },
+      "80": {
+        "macro_acc": 0.2892375,
+        "macro_length": 12178.857041666666,
+        "macro_cap_rate": 0.14228333333333332,
+        "response_weighted_acc": 0.6222222222222222,
+        "response_weighted_cap_rate": 0.06448412698412699,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.732125,
+            "accuracy_ci95": [
+              0.702421875,
+              0.758859375
+            ],
+            "length": 6035.58,
+            "median_length": 4618.5,
+            "cap_count": 308,
+            "cap_rate": 0.0385,
+            "stop_count": 7692
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4515625,
+            "accuracy_ci95": [
+              0.3201171875,
+              0.562890625
+            ],
+            "length": 10806.753125,
+            "median_length": 9964,
+            "cap_count": 76,
+            "cap_rate": 0.11875,
+            "stop_count": 564
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.08333333333333333,
+            "accuracy_ci95": [
+              0.020833333333333332,
+              0.15937500000000002
+            ],
+            "length": 15297.60625,
+            "median_length": 11464.5,
+            "cap_count": 99,
+            "cap_rate": 0.20625,
+            "stop_count": 381
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.09583333333333334,
+            "accuracy_ci95": [
+              0.03203125,
+              0.17630208333333333
+            ],
+            "length": 13273.695833333333,
+            "median_length": 10377.5,
+            "cap_count": 65,
+            "cap_rate": 0.13541666666666666,
+            "stop_count": 415
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.08333333333333333,
+            "accuracy_ci95": [
+              0.019010416666666665,
+              0.15963541666666667
+            ],
+            "length": 15480.65,
+            "median_length": 11747,
+            "cap_count": 102,
+            "cap_rate": 0.2125,
+            "stop_count": 378
+          }
+        }
+      },
+      "90": {
+        "macro_acc": 0.2950083333333333,
+        "macro_length": 12106.050179166667,
+        "macro_cap_rate": 0.145325,
+        "response_weighted_acc": 0.626984126984127,
+        "response_weighted_cap_rate": 0.06111111111111111,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.7365,
+            "accuracy_ci95": [
+              0.70496875,
+              0.763703125
+            ],
+            "length": 5862.616,
+            "median_length": 4866.5,
+            "cap_count": 263,
+            "cap_rate": 0.032875,
+            "stop_count": 7737
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.459375,
+            "accuracy_ci95": [
+              0.3099609375,
+              0.5685546875
+            ],
+            "length": 10681.1078125,
+            "median_length": 9745,
+            "cap_count": 80,
+            "cap_rate": 0.125,
+            "stop_count": 560
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.10208333333333333,
+            "accuracy_ci95": [
+              0.027864583333333335,
+              0.18463541666666666
+            ],
+            "length": 15461.43125,
+            "median_length": 11300,
+            "cap_count": 110,
+            "cap_rate": 0.22916666666666666,
+            "stop_count": 370
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.09375,
+            "accuracy_ci95": [
+              0.03072916666666667,
+              0.17213541666666665
+            ],
+            "length": 13036.347916666668,
+            "median_length": 10417.5,
+            "cap_count": 59,
+            "cap_rate": 0.12291666666666666,
+            "stop_count": 421
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.08333333333333333,
+            "accuracy_ci95": [
+              0.020833333333333332,
+              0.15338541666666666
+            ],
+            "length": 15488.747916666667,
+            "median_length": 11519,
+            "cap_count": 104,
+            "cap_rate": 0.21666666666666667,
+            "stop_count": 376
+          }
+        }
+      },
+      "100": {
+        "macro_acc": 0.2993166666666667,
+        "macro_length": 11666.018483333333,
+        "macro_cap_rate": 0.132,
+        "response_weighted_acc": 0.6297619047619047,
+        "response_weighted_cap_rate": 0.054365079365079366,
+        "datasets": {
+          "math500": {
+            "responses": 8000,
+            "accuracy": 0.73825,
+            "accuracy_ci95": [
+              0.706,
+              0.7677968749999999
+            ],
+            "length": 5646.507,
+            "median_length": 4676.5,
+            "cap_count": 230,
+            "cap_rate": 0.02875,
+            "stop_count": 7770
+          },
+          "amc23": {
+            "responses": 640,
+            "accuracy": 0.4875,
+            "accuracy_ci95": [
+              0.346875,
+              0.5962890625
+            ],
+            "length": 9977.23125,
+            "median_length": 9525,
+            "cap_count": 60,
+            "cap_rate": 0.09375,
+            "stop_count": 580
+          },
+          "aime24": {
+            "responses": 480,
+            "accuracy": 0.10416666666666667,
+            "accuracy_ci95": [
+              0.029166666666666667,
+              0.1859375
+            ],
+            "length": 14554.40625,
+            "median_length": 10994.5,
+            "cap_count": 90,
+            "cap_rate": 0.1875,
+            "stop_count": 390
+          },
+          "aime25": {
+            "responses": 480,
+            "accuracy": 0.09791666666666667,
+            "accuracy_ci95": [
+              0.03203125,
+              0.18177083333333333
+            ],
+            "length": 12952.829166666666,
+            "median_length": 10215,
+            "cap_count": 66,
+            "cap_rate": 0.1375,
+            "stop_count": 414
+          },
+          "aime26": {
+            "responses": 480,
+            "accuracy": 0.06875,
+            "accuracy_ci95": [
+              0.016666666666666666,
+              0.13385416666666666
+            ],
+            "length": 15199.11875,
+            "median_length": 11307,
+            "cap_count": 102,
+            "cap_rate": 0.2125,
+            "stop_count": 378
+          }
+        }
+      }
+    }
+  }
+}

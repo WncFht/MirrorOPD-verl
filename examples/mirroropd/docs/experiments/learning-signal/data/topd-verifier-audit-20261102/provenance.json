@@ -1,0 +1,18 @@
+{
+  "original_responses": "runs/topd-data-kappa-20261101/evaluation/reuse64x16-k05-s42-block1/local/responses.jsonl",
+  "subset_sha256": "32284bb6c2e0222621eb7dd822d5b18c5dc71afcf1fefd943bd868844c34694d",
+  "analysis_source": "runs/topd-data-kappa-20261101/investigate_verifier_disagreement.py",
+  "source_sha256": "71416727cc26df8e99f8859a926f9f96c79b3e49f6abfda3836d07f6fbb5174b",
+  "inspection": [
+    {
+      "request_id": "AIME25:13/1",
+      "unique_lines": 23,
+      "max_unique_line_characters": 361
+    },
+    {
+      "request_id": "AIME25:13/2",
+      "unique_lines": 22,
+      "max_unique_line_characters": 381
+    }
+  ]
+}

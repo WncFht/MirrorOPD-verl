@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-11-02T09:19:50.745572+08:00",
+  "raw_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/topd-data-kappa-20261101/online-coverage-scores-20261102",
+  "files": {
+    "analyze_online_generation.py": "8aeeb79128594d66de94d5a69a3b9f445ca8f1abae4cbb9f60d7752d0323e725",
+    "complete.json": "7dbd5edfe4cdc54a63a0f62ec73ff8dfbe20b67f9d89efdaf17192cba48e0ebf",
+    "format-audit.json": "49d8b4d00bb94286c4367448ab8aea723e6f06c4bad60617b3d9ab1b9adbbbf8",
+    "outer02-fresh-scores.jsonl": "78fbd4824166ed067d25cf2da65d8ca509890e622eb0a6b820aff5e963e8ec2e",
+    "outer03-fresh-scores.jsonl": "bab2a993e41e19fe4e12c62f6da919171e7950ff87387d9b6f7a56b17bdba38f",
+    "score_online_bank.py": "5a453da5278cae4e3fec536ebd7a19fd02b7d36be1e7770e8214f4185a8fd467",
+    "score_online_coverage.py": "b9926c401f8ba520739b26e8bb67dcd5a7b9594e6c750be7362d344ea3bd9a8e"
+  },
+  "command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 ../envs/mirroropd-fusion/bin/python -u runs/topd-data-kappa-20261101/score_online_coverage.py --outers 2 3 --out runs/topd-data-kappa-20261101/online-coverage-scores-20261102",
+  "scope": "Saved generations only; no GPU training changed. Copies of scripts preserve identity; original runtime root required."
+}

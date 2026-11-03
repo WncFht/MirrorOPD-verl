@@ -1,0 +1,4491 @@
+{
+  "scope": "Describe length/repetition and loss coefficients of the fixed outer7 bank.\n\nLabels are automatic verifier outcomes. Token coefficients and objective-value\nshares are not parameter-gradient contributions or causal effects on accuracy.\n",
+  "outer": 7,
+  "generation_parent_updates": 96,
+  "after_bank_training_updates": 112,
+  "arms": {
+    "reuse-k0": {
+      "groups": {
+        "all": {
+          "responses": 64,
+          "tokens": 451628,
+          "token_loss_weight": 1.0,
+          "counterfactual_equal_response_weight": 1.0,
+          "native_correct": 11,
+          "boxed_correct": 11,
+          "median_duplicate8_fraction": 0.19693495880473366,
+          "mean_duplicate8_fraction": 0.4156057618030976,
+          "before": {
+            "objective": 0.14256953513921694,
+            "teacher_kl": 0.142569540755517,
+            "anchor_kl": 0.0,
+            "objective_value_share": 1.0
+          },
+          "after": {
+            "objective": 0.1348353095572723,
+            "teacher_kl": 0.12790193154353996,
+            "anchor_kl": 0.0007703760279080898,
+            "objective_value_share": 1.0
+          }
+        },
+        "capped": {
+          "responses": 20,
+          "tokens": 327680,
+          "token_loss_weight": 0.7255528886605791,
+          "counterfactual_equal_response_weight": 0.3125,
+          "native_correct": 1,
+          "boxed_correct": 1,
+          "median_duplicate8_fraction": 0.883525676253282,
+          "mean_duplicate8_fraction": 0.8197838431947243,
+          "before": {
+            "objective": 0.08584904402495248,
+            "teacher_kl": 0.08584904779681098,
+            "anchor_kl": 0.0,
+            "objective_value_share": 0.43689573526511266
+          },
+          "after": {
+            "objective": 0.08184053902822373,
+            "teacher_kl": 0.07781152096871138,
+            "anchor_kl": 0.00044766914468685835,
+            "objective_value_share": 0.4403864217498952
+          }
+        },
+        "stopped": {
+          "responses": 44,
+          "tokens": 123948,
+          "token_loss_weight": 0.27444711133942096,
+          "counterfactual_equal_response_weight": 0.6875,
+          "native_correct": 10,
+          "boxed_correct": 10,
+          "median_duplicate8_fraction": 0.1485553761265025,
+          "mean_duplicate8_fraction": 0.2318884520796309,
+          "before": {
+            "objective": 0.29252088996803366,
+            "teacher_kl": 0.2925209004604642,
+            "anchor_kl": 0.0,
+            "objective_value_share": 0.5631042647348874
+          },
+          "after": {
+            "objective": 0.27493701678093574,
+            "teacher_kl": 0.2603254134646668,
+            "anchor_kl": 0.0016235127585849313,
+            "objective_value_share": 0.5596135782501048
+          }
+        },
+        "capped_native_incorrect": {
+          "responses": 19,
+          "tokens": 311296,
+          "token_loss_weight": 0.6892752442275502,
+          "counterfactual_equal_response_weight": 0.296875,
+          "native_correct": 0,
+          "boxed_correct": 0,
+          "median_duplicate8_fraction": 0.8761067350552605,
+          "mean_duplicate8_fraction": 0.8142452669501193,
+          "before": {
+            "objective": 0.08651535483426245,
+            "teacher_kl": 0.08651535856268217,
+            "anchor_kl": 0.0,
+            "objective_value_share": 0.4182723347915024
+          },
+          "after": {
+            "objective": 0.08253921238535174,
+            "teacher_kl": 0.07847629731829227,
+            "anchor_kl": 0.00045143547956555586,
+            "objective_value_share": 0.42193870405361106
+          }
+        }
+      },
+      "rows": [
+        {
+          "request_id": "6144-0",
+          "tokens": 764,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0990752972258917,
+          "before": {
+            "request_id": "6144-0",
+            "tokens": 764,
+            "objective": 0.5967089266294753,
+            "teacher_kl": 0.5967089373641423,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6144-0",
+            "tokens": 764,
+            "objective": 0.561130495640708,
+            "teacher_kl": 0.520294883261547,
+            "anchor_kl": 0.004537291193948423
+          }
+        },
+        {
+          "request_id": "6145-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.17994748732979182,
+          "before": {
+            "request_id": "6145-0",
+            "tokens": 16384,
+            "objective": 0.2639476692263983,
+            "teacher_kl": 0.2639476848396369,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6145-0",
+            "tokens": 16384,
+            "objective": 0.25370896290983463,
+            "teacher_kl": 0.242030254635615,
+            "anchor_kl": 0.001297636032847719
+          }
+        },
+        {
+          "request_id": "6146-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.9183611161995482,
+          "before": {
+            "request_id": "6146-0",
+            "tokens": 16384,
+            "objective": 0.05685972972575569,
+            "teacher_kl": 0.05685973179644567,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6146-0",
+            "tokens": 16384,
+            "objective": 0.05313115552941477,
+            "teacher_kl": 0.050312689887972356,
+            "anchor_kl": 0.00031316309765927404
+          }
+        },
+        {
+          "request_id": "6147-0",
+          "tokens": 6490,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8790683325620855,
+          "before": {
+            "request_id": "6147-0",
+            "tokens": 6490,
+            "objective": 0.14196768441903848,
+            "teacher_kl": 0.14196768922651049,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6147-0",
+            "tokens": 6490,
+            "objective": 0.13329941022894598,
+            "teacher_kl": 0.12701394240476319,
+            "anchor_kl": 0.0006983859805076763
+          }
+        },
+        {
+          "request_id": "6148-0",
+          "tokens": 1490,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.16115981119352663,
+          "before": {
+            "request_id": "6148-0",
+            "tokens": 1490,
+            "objective": 0.507771220946463,
+            "teacher_kl": 0.5077712480255281,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6148-0",
+            "tokens": 1490,
+            "objective": 0.4833114224628124,
+            "teacher_kl": 0.4610183060016364,
+            "anchor_kl": 0.0024770163651368473
+          }
+        },
+        {
+          "request_id": "6149-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8506441961287171,
+          "before": {
+            "request_id": "6149-0",
+            "tokens": 16384,
+            "objective": 0.06916576185844532,
+            "teacher_kl": 0.06916576363957881,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6149-0",
+            "tokens": 16384,
+            "objective": 0.06495643657561825,
+            "teacher_kl": 0.06102620415062296,
+            "anchor_kl": 0.00043669278417052395
+          }
+        },
+        {
+          "request_id": "6150-0",
+          "tokens": 645,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.025078369905956133,
+          "before": {
+            "request_id": "6150-0",
+            "tokens": 645,
+            "objective": 1.1615281555787014,
+            "teacher_kl": 1.1615282027660352,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6150-0",
+            "tokens": 645,
+            "objective": 1.0911203274560262,
+            "teacher_kl": 1.0450447004883292,
+            "anchor_kl": 0.005119519921688772
+          }
+        },
+        {
+          "request_id": "6151-0",
+          "tokens": 731,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09944751381215466,
+          "before": {
+            "request_id": "6151-0",
+            "tokens": 731,
+            "objective": 0.5336868494957044,
+            "teacher_kl": 0.5336868605919449,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6151-0",
+            "tokens": 731,
+            "objective": 0.4899123677419199,
+            "teacher_kl": 0.44842204007614617,
+            "anchor_kl": 0.004610039655865842
+          }
+        },
+        {
+          "request_id": "6152-0",
+          "tokens": 862,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.15438596491228074,
+          "before": {
+            "request_id": "6152-0",
+            "tokens": 862,
+            "objective": 0.3929457476671553,
+            "teacher_kl": 0.3929457469556315,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6152-0",
+            "tokens": 862,
+            "objective": 0.3605451752859169,
+            "teacher_kl": 0.3312785594967634,
+            "anchor_kl": 0.0032518474899066873
+          }
+        },
+        {
+          "request_id": "6153-0",
+          "tokens": 2192,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.5839816933638444,
+          "before": {
+            "request_id": "6153-0",
+            "tokens": 2192,
+            "objective": 0.4028802436819282,
+            "teacher_kl": 0.4028802637069459,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6153-0",
+            "tokens": 2192,
+            "objective": 0.38763202794872864,
+            "teacher_kl": 0.3718457441379203,
+            "anchor_kl": 0.001754033719633826
+          }
+        },
+        {
+          "request_id": "6154-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8191365940037858,
+          "before": {
+            "request_id": "6154-0",
+            "tokens": 16384,
+            "objective": 0.09743664768803012,
+            "teacher_kl": 0.09743665276189464,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6154-0",
+            "tokens": 16384,
+            "objective": 0.09355222571090076,
+            "teacher_kl": 0.08921588351926911,
+            "anchor_kl": 0.0004818163451148939
+          }
+        },
+        {
+          "request_id": "6155-0",
+          "tokens": 426,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.23150357995226734,
+          "before": {
+            "request_id": "6155-0",
+            "tokens": 426,
+            "objective": 0.846482374341361,
+            "teacher_kl": 0.8464823921950341,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6155-0",
+            "tokens": 426,
+            "objective": 0.809254427657193,
+            "teacher_kl": 0.7773292353710908,
+            "anchor_kl": 0.003547245259171244
+          }
+        },
+        {
+          "request_id": "6156-0",
+          "tokens": 1573,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1724137931034483,
+          "before": {
+            "request_id": "6156-0",
+            "tokens": 1573,
+            "objective": 0.36717535450389854,
+            "teacher_kl": 0.36717537360718205,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6156-0",
+            "tokens": 1573,
+            "objective": 0.3327331562711326,
+            "teacher_kl": 0.3050451177379929,
+            "anchor_kl": 0.0030764505980999885
+          }
+        },
+        {
+          "request_id": "6157-0",
+          "tokens": 5939,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1896493594066082,
+          "before": {
+            "request_id": "6157-0",
+            "tokens": 5939,
+            "objective": 0.3474417686569942,
+            "teacher_kl": 0.34744178691836053,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6157-0",
+            "tokens": 5939,
+            "objective": 0.32966580560948044,
+            "teacher_kl": 0.31190992576068033,
+            "anchor_kl": 0.0019728775800788106
+          }
+        },
+        {
+          "request_id": "6158-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.9363131220614276,
+          "before": {
+            "request_id": "6158-0",
+            "tokens": 16384,
+            "objective": 0.05001511900810154,
+            "teacher_kl": 0.05001512123584946,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6158-0",
+            "tokens": 16384,
+            "objective": 0.046954728368057565,
+            "teacher_kl": 0.04425473807354119,
+            "anchor_kl": 0.0002999992237209755
+          }
+        },
+        {
+          "request_id": "6159-0",
+          "tokens": 915,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.18502202643171806,
+          "before": {
+            "request_id": "6159-0",
+            "tokens": 915,
+            "objective": 0.5743223858541711,
+            "teacher_kl": 0.5743224027126239,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6159-0",
+            "tokens": 915,
+            "objective": 0.538281361327131,
+            "teacher_kl": 0.5162456972584403,
+            "anchor_kl": 0.00244840961482169
+          }
+        },
+        {
+          "request_id": "6160-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8909446174513036,
+          "before": {
+            "request_id": "6160-0",
+            "tokens": 16384,
+            "objective": 0.04522613007865903,
+            "teacher_kl": 0.04522613153311328,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6160-0",
+            "tokens": 16384,
+            "objective": 0.04317469346753757,
+            "teacher_kl": 0.04147558652684389,
+            "anchor_kl": 0.00018878994847871261
+          }
+        },
+        {
+          "request_id": "6161-0",
+          "tokens": 2261,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.26708074534161486,
+          "before": {
+            "request_id": "6161-0",
+            "tokens": 2261,
+            "objective": 0.477909913203428,
+            "teacher_kl": 0.47790992595814563,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6161-0",
+            "tokens": 2261,
+            "objective": 0.44527483419994784,
+            "teacher_kl": 0.4163133813924546,
+            "anchor_kl": 0.0032179414197541167
+          }
+        },
+        {
+          "request_id": "6162-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.9586004762777065,
+          "before": {
+            "request_id": "6162-0",
+            "tokens": 16384,
+            "objective": 0.03407896227983417,
+            "teacher_kl": 0.03407896394760913,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6162-0",
+            "tokens": 16384,
+            "objective": 0.03163699829297391,
+            "teacher_kl": 0.02981610282684964,
+            "anchor_kl": 0.00020232195436125166
+          }
+        },
+        {
+          "request_id": "6163-0",
+          "tokens": 960,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1752360965372508,
+          "before": {
+            "request_id": "6163-0",
+            "tokens": 960,
+            "objective": 0.5510250314825401,
+            "teacher_kl": 0.5510250292350681,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6163-0",
+            "tokens": 960,
+            "objective": 0.5189409036249374,
+            "teacher_kl": 0.4969476084580088,
+            "anchor_kl": 0.0024436990376583397
+          }
+        },
+        {
+          "request_id": "6164-0",
+          "tokens": 15849,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.3942684004544881,
+          "before": {
+            "request_id": "6164-0",
+            "tokens": 15849,
+            "objective": 0.2924413067952617,
+            "teacher_kl": 0.2924413218672923,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6164-0",
+            "tokens": 15849,
+            "objective": 0.2772822616806831,
+            "teacher_kl": 0.26395594118466115,
+            "anchor_kl": 0.0014807039714089718
+          }
+        },
+        {
+          "request_id": "6165-0",
+          "tokens": 455,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0959821428571429,
+          "before": {
+            "request_id": "6165-0",
+            "tokens": 455,
+            "objective": 0.762067581976085,
+            "teacher_kl": 0.7620675764857346,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6165-0",
+            "tokens": 455,
+            "objective": 0.7244991866424232,
+            "teacher_kl": 0.6995221079328837,
+            "anchor_kl": 0.0027752327046142475
+          }
+        },
+        {
+          "request_id": "6166-0",
+          "tokens": 532,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.04571428571428571,
+          "before": {
+            "request_id": "6166-0",
+            "tokens": 532,
+            "objective": 0.7916926676482494,
+            "teacher_kl": 0.7916926574220121,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6166-0",
+            "tokens": 532,
+            "objective": 0.7149901786201807,
+            "teacher_kl": 0.6628777744621062,
+            "anchor_kl": 0.0057902690964641065
+          }
+        },
+        {
+          "request_id": "6167-0",
+          "tokens": 1476,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.20422055820285911,
+          "before": {
+            "request_id": "6167-0",
+            "tokens": 1476,
+            "objective": 0.40511276336820307,
+            "teacher_kl": 0.4051127808775513,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6167-0",
+            "tokens": 1476,
+            "objective": 0.3735657049995134,
+            "teacher_kl": 0.34579779872594524,
+            "anchor_kl": 0.0030853247311750437
+          }
+        },
+        {
+          "request_id": "6168-0",
+          "tokens": 870,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.11471610660486675,
+          "before": {
+            "request_id": "6168-0",
+            "tokens": 870,
+            "objective": 0.6614988810072953,
+            "teacher_kl": 0.6614988995073015,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6168-0",
+            "tokens": 870,
+            "objective": 0.6288350011172027,
+            "teacher_kl": 0.598659606191565,
+            "anchor_kl": 0.003352823754490817
+          }
+        },
+        {
+          "request_id": "6169-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.9444342675703731,
+          "before": {
+            "request_id": "6169-0",
+            "tokens": 16384,
+            "objective": 0.03590154667109598,
+            "teacher_kl": 0.035901548389147636,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6169-0",
+            "tokens": 16384,
+            "objective": 0.03402159049162252,
+            "teacher_kl": 0.032102632595867875,
+            "anchor_kl": 0.00021321776309962448
+          }
+        },
+        {
+          "request_id": "6170-0",
+          "tokens": 849,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.08551068883610446,
+          "before": {
+            "request_id": "6170-0",
+            "tokens": 849,
+            "objective": 0.42229659642779027,
+            "teacher_kl": 0.4222966001958359,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6170-0",
+            "tokens": 849,
+            "objective": 0.3897101592862593,
+            "teacher_kl": 0.3640909483992195,
+            "anchor_kl": 0.002846579290156091
+          }
+        },
+        {
+          "request_id": "6171-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.7884227880564206,
+          "before": {
+            "request_id": "6171-0",
+            "tokens": 16384,
+            "objective": 0.13090818077888064,
+            "teacher_kl": 0.1309081859742891,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6171-0",
+            "tokens": 16384,
+            "objective": 0.12490867263867356,
+            "teacher_kl": 0.11918820973851321,
+            "anchor_kl": 0.0006356076731730017
+          }
+        },
+        {
+          "request_id": "6172-0",
+          "tokens": 1429,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.0857946554149086,
+          "before": {
+            "request_id": "6172-0",
+            "tokens": 1429,
+            "objective": 0.51291588462306,
+            "teacher_kl": 0.5129159213745297,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6172-0",
+            "tokens": 1429,
+            "objective": 0.4881976693867715,
+            "teacher_kl": 0.4691406668396344,
+            "anchor_kl": 0.0021174479166647334
+          }
+        },
+        {
+          "request_id": "6173-0",
+          "tokens": 926,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.07943416757344945,
+          "before": {
+            "request_id": "6173-0",
+            "tokens": 926,
+            "objective": 0.6011647441420575,
+            "teacher_kl": 0.6011647623278661,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6173-0",
+            "tokens": 926,
+            "objective": 0.559008422780799,
+            "teacher_kl": 0.5311923643631101,
+            "anchor_kl": 0.003090677011182342
+          }
+        },
+        {
+          "request_id": "6174-0",
+          "tokens": 1104,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.14767547857793983,
+          "before": {
+            "request_id": "6174-0",
+            "tokens": 1104,
+            "objective": 0.5415563912280704,
+            "teacher_kl": 0.5415564001309982,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6174-0",
+            "tokens": 1104,
+            "objective": 0.5049604757307091,
+            "teacher_kl": 0.47672636589143047,
+            "anchor_kl": 0.003137125011859893
+          }
+        },
+        {
+          "request_id": "6175-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.9457165537033645,
+          "before": {
+            "request_id": "6175-0",
+            "tokens": 16384,
+            "objective": 0.053041505602490546,
+            "teacher_kl": 0.05304150810502566,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6175-0",
+            "tokens": 16384,
+            "objective": 0.049317347057646524,
+            "teacher_kl": 0.04694245328392875,
+            "anchor_kl": 0.00026387743830999565
+          }
+        },
+        {
+          "request_id": "6176-0",
+          "tokens": 527,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.023076923076923106,
+          "before": {
+            "request_id": "6176-0",
+            "tokens": 527,
+            "objective": 0.5879929526720674,
+            "teacher_kl": 0.5879929553317693,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6176-0",
+            "tokens": 527,
+            "objective": 0.5119376614869697,
+            "teacher_kl": 0.4472530621480146,
+            "anchor_kl": 0.00718717697917221
+          }
+        },
+        {
+          "request_id": "6177-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.9250167918422177,
+          "before": {
+            "request_id": "6177-0",
+            "tokens": 16384,
+            "objective": 0.07318913864806292,
+            "teacher_kl": 0.07318914324525815,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6177-0",
+            "tokens": 16384,
+            "objective": 0.06856574524279171,
+            "teacher_kl": 0.06518077032667463,
+            "anchor_kl": 0.0003761087819916051
+          }
+        },
+        {
+          "request_id": "6178-0",
+          "tokens": 10112,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8557149925779317,
+          "before": {
+            "request_id": "6178-0",
+            "tokens": 10112,
+            "objective": 0.08008680433145778,
+            "teacher_kl": 0.08008680739342869,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6178-0",
+            "tokens": 10112,
+            "objective": 0.07597867501453485,
+            "teacher_kl": 0.07166692587077957,
+            "anchor_kl": 0.00047908348110126456
+          }
+        },
+        {
+          "request_id": "6179-0",
+          "tokens": 1255,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09455128205128205,
+          "before": {
+            "request_id": "6179-0",
+            "tokens": 1255,
+            "objective": 0.5608640654020901,
+            "teacher_kl": 0.5608640932379046,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6179-0",
+            "tokens": 1255,
+            "objective": 0.5310603174629646,
+            "teacher_kl": 0.5091207867870157,
+            "anchor_kl": 0.0024377287878921856
+          }
+        },
+        {
+          "request_id": "6180-0",
+          "tokens": 2501,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.2898957497995188,
+          "before": {
+            "request_id": "6180-0",
+            "tokens": 2501,
+            "objective": 0.6290495083231844,
+            "teacher_kl": 0.629049539095957,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6180-0",
+            "tokens": 2501,
+            "objective": 0.5971154586801303,
+            "teacher_kl": 0.5660561800948133,
+            "anchor_kl": 0.0034510337042618832
+          }
+        },
+        {
+          "request_id": "6181-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.41045368504610125,
+          "before": {
+            "request_id": "6181-0",
+            "tokens": 16384,
+            "objective": 0.14242154945388039,
+            "teacher_kl": 0.14242155519361513,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6181-0",
+            "tokens": 16384,
+            "objective": 0.13785237226416683,
+            "teacher_kl": 0.12835888927497288,
+            "anchor_kl": 0.0010548321986761145
+          }
+        },
+        {
+          "request_id": "6182-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.6707577700433535,
+          "before": {
+            "request_id": "6182-0",
+            "tokens": 16384,
+            "objective": 0.10366675156681102,
+            "teacher_kl": 0.10366675601982628,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6182-0",
+            "tokens": 16384,
+            "objective": 0.10020409863835429,
+            "teacher_kl": 0.09608110652788864,
+            "anchor_kl": 0.00045811075967735235
+          }
+        },
+        {
+          "request_id": "6183-0",
+          "tokens": 398,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.012787723785166238,
+          "before": {
+            "request_id": "6183-0",
+            "tokens": 398,
+            "objective": 1.0038440019860584,
+            "teacher_kl": 1.0038440100196522,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6183-0",
+            "tokens": 398,
+            "objective": 0.9082530361877686,
+            "teacher_kl": 0.8544338604543442,
+            "anchor_kl": 0.005979911891972338
+          }
+        },
+        {
+          "request_id": "6184-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8761067350552605,
+          "before": {
+            "request_id": "6184-0",
+            "tokens": 16384,
+            "objective": 0.08012230216225598,
+            "teacher_kl": 0.08012230319390382,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6184-0",
+            "tokens": 16384,
+            "objective": 0.07618081613880817,
+            "teacher_kl": 0.07230739176563458,
+            "anchor_kl": 0.00043038073695476084
+          }
+        },
+        {
+          "request_id": "6185-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.7959943823655127,
+          "before": {
+            "request_id": "6185-0",
+            "tokens": 16384,
+            "objective": 0.1513686328901041,
+            "teacher_kl": 0.15136864034178749,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6185-0",
+            "tokens": 16384,
+            "objective": 0.1448159709409033,
+            "teacher_kl": 0.13834927770767277,
+            "anchor_kl": 0.0007185222626033704
+          }
+        },
+        {
+          "request_id": "6186-0",
+          "tokens": 1363,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1135693215339233,
+          "before": {
+            "request_id": "6186-0",
+            "tokens": 1363,
+            "objective": 0.7232060372153747,
+            "teacher_kl": 0.7232060705711187,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6186-0",
+            "tokens": 1363,
+            "objective": 0.6787144983453274,
+            "teacher_kl": 0.641066353960974,
+            "anchor_kl": 0.004183131853267379
+          }
+        },
+        {
+          "request_id": "6187-0",
+          "tokens": 1471,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.16803278688524592,
+          "before": {
+            "request_id": "6187-0",
+            "tokens": 1471,
+            "objective": 0.7057865439108504,
+            "teacher_kl": 0.705786563520105,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6187-0",
+            "tokens": 1471,
+            "objective": 0.6636619730569796,
+            "teacher_kl": 0.6307033974837142,
+            "anchor_kl": 0.0036620664131846985
+          }
+        },
+        {
+          "request_id": "6188-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.9586004762777065,
+          "before": {
+            "request_id": "6188-0",
+            "tokens": 16384,
+            "objective": 0.02784631835046983,
+            "teacher_kl": 0.02784631903950596,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6188-0",
+            "tokens": 16384,
+            "objective": 0.02661227896177211,
+            "teacher_kl": 0.024973304870177605,
+            "anchor_kl": 0.00018210839842210897
+          }
+        },
+        {
+          "request_id": "6189-0",
+          "tokens": 15399,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8316008316008316,
+          "before": {
+            "request_id": "6189-0",
+            "tokens": 15399,
+            "objective": 0.08726112091052082,
+            "teacher_kl": 0.08726112498310737,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6189-0",
+            "tokens": 15399,
+            "objective": 0.08361132911305089,
+            "teacher_kl": 0.07995139588609397,
+            "anchor_kl": 0.0004066596041951826
+          }
+        },
+        {
+          "request_id": "6190-0",
+          "tokens": 14719,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.921152800435019,
+          "before": {
+            "request_id": "6190-0",
+            "tokens": 14719,
+            "objective": 0.055550390263833155,
+            "teacher_kl": 0.05555039235672479,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6190-0",
+            "tokens": 14719,
+            "objective": 0.0514704027060603,
+            "teacher_kl": 0.048810542361832465,
+            "anchor_kl": 0.00029554023240382866
+          }
+        },
+        {
+          "request_id": "6191-0",
+          "tokens": 650,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.0528771384136858,
+          "before": {
+            "request_id": "6191-0",
+            "tokens": 650,
+            "objective": 0.6956414885803766,
+            "teacher_kl": 0.6956414974061028,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6191-0",
+            "tokens": 650,
+            "objective": 0.6304046332550763,
+            "teacher_kl": 0.5784502364872328,
+            "anchor_kl": 0.0057727119086933565
+          }
+        },
+        {
+          "request_id": "6192-0",
+          "tokens": 801,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.05919395465994959,
+          "before": {
+            "request_id": "6192-0",
+            "tokens": 801,
+            "objective": 0.49762221771966486,
+            "teacher_kl": 0.4976222258858368,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6192-0",
+            "tokens": 801,
+            "objective": 0.46833877381841815,
+            "teacher_kl": 0.4447171051106545,
+            "anchor_kl": 0.002624631418801541
+          }
+        },
+        {
+          "request_id": "6193-0",
+          "tokens": 855,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.089622641509434,
+          "before": {
+            "request_id": "6193-0",
+            "tokens": 855,
+            "objective": 0.6543208039386077,
+            "teacher_kl": 0.6543208210945168,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6193-0",
+            "tokens": 855,
+            "objective": 0.6280154290769117,
+            "teacher_kl": 0.6030077284876585,
+            "anchor_kl": 0.002778636612063159
+          }
+        },
+        {
+          "request_id": "6194-0",
+          "tokens": 474,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.021413276231263434,
+          "before": {
+            "request_id": "6194-0",
+            "tokens": 474,
+            "objective": 0.8407575954732901,
+            "teacher_kl": 0.8407575839835688,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6194-0",
+            "tokens": 474,
+            "objective": 0.7804262158850545,
+            "teacher_kl": 0.7382661164827472,
+            "anchor_kl": 0.00468445638659186
+          }
+        },
+        {
+          "request_id": "6195-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.9379617756609879,
+          "before": {
+            "request_id": "6195-0",
+            "tokens": 16384,
+            "objective": 0.0628033206497244,
+            "teacher_kl": 0.06280332298798917,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6195-0",
+            "tokens": 16384,
+            "objective": 0.06001767487410009,
+            "teacher_kl": 0.057667537071055416,
+            "anchor_kl": 0.00026112679876731063
+          }
+        },
+        {
+          "request_id": "6196-0",
+          "tokens": 1322,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09505703422053235,
+          "before": {
+            "request_id": "6196-0",
+            "tokens": 1322,
+            "objective": 0.8070403392643365,
+            "teacher_kl": 0.8070403680208201,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6196-0",
+            "tokens": 1322,
+            "objective": 0.7670261631652864,
+            "teacher_kl": 0.7377062523606916,
+            "anchor_kl": 0.0032577700362677437
+          }
+        },
+        {
+          "request_id": "6197-0",
+          "tokens": 1202,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.10209205020920498,
+          "before": {
+            "request_id": "6197-0",
+            "tokens": 1202,
+            "objective": 0.6030311125410097,
+            "teacher_kl": 0.603031141067138,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6197-0",
+            "tokens": 1202,
+            "objective": 0.5496969535449531,
+            "teacher_kl": 0.5096089842846168,
+            "anchor_kl": 0.004454222409336561
+          }
+        },
+        {
+          "request_id": "6198-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8160224705379495,
+          "before": {
+            "request_id": "6198-0",
+            "tokens": 16384,
+            "objective": 0.1243494883900087,
+            "teacher_kl": 0.12434949463354567,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6198-0",
+            "tokens": 16384,
+            "objective": 0.11837300761258138,
+            "teacher_kl": 0.11282392375669172,
+            "anchor_kl": 0.0006165655481367236
+          }
+        },
+        {
+          "request_id": "6199-0",
+          "tokens": 1389,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.23082489146164975,
+          "before": {
+            "request_id": "6199-0",
+            "tokens": 1389,
+            "objective": 0.5073577199237626,
+            "teacher_kl": 0.5073577412508578,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6199-0",
+            "tokens": 1389,
+            "objective": 0.4741414327017804,
+            "teacher_kl": 0.45134845866868983,
+            "anchor_kl": 0.0025325555484865493
+          }
+        },
+        {
+          "request_id": "6200-0",
+          "tokens": 5827,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.42044673539518895,
+          "before": {
+            "request_id": "6200-0",
+            "tokens": 5827,
+            "objective": 0.29630967727355284,
+            "teacher_kl": 0.29630968414911146,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6200-0",
+            "tokens": 5827,
+            "objective": 0.2809376016200895,
+            "teacher_kl": 0.2675576260924835,
+            "anchor_kl": 0.0014866652729647668
+          }
+        },
+        {
+          "request_id": "6201-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.823410881113757,
+          "before": {
+            "request_id": "6201-0",
+            "tokens": 16384,
+            "objective": 0.07085632684176059,
+            "teacher_kl": 0.07085632842251317,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6201-0",
+            "tokens": 16384,
+            "objective": 0.0675258668957777,
+            "teacher_kl": 0.06466338156557068,
+            "anchor_kl": 0.0003180541766833715
+          }
+        },
+        {
+          "request_id": "6202-0",
+          "tokens": 931,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.07900432900432897,
+          "before": {
+            "request_id": "6202-0",
+            "tokens": 931,
+            "objective": 0.5885028022785691,
+            "teacher_kl": 0.5885028220216324,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6202-0",
+            "tokens": 931,
+            "objective": 0.5383819451764592,
+            "teacher_kl": 0.4981918502439186,
+            "anchor_kl": 0.004465569517294038
+          }
+        },
+        {
+          "request_id": "6203-0",
+          "tokens": 16384,
+          "capped": true,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.9488306771692007,
+          "before": {
+            "request_id": "6203-0",
+            "tokens": 16384,
+            "objective": 0.04377579862828038,
+            "teacher_kl": 0.04377580063568434,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6203-0",
+            "tokens": 16384,
+            "objective": 0.04130013795293903,
+            "teacher_kl": 0.03946008126886474,
+            "anchor_kl": 0.00020445097088847642
+          }
+        },
+        {
+          "request_id": "6204-0",
+          "tokens": 886,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1217292377701934,
+          "before": {
+            "request_id": "6204-0",
+            "tokens": 886,
+            "objective": 0.7577558144189096,
+            "teacher_kl": 0.7577558505211202,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6204-0",
+            "tokens": 886,
+            "objective": 0.7173540523008911,
+            "teacher_kl": 0.6836077522260964,
+            "anchor_kl": 0.003749592164002312
+          }
+        },
+        {
+          "request_id": "6205-0",
+          "tokens": 1032,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.18341463414634152,
+          "before": {
+            "request_id": "6205-0",
+            "tokens": 1032,
+            "objective": 0.4989980494893027,
+            "teacher_kl": 0.4989980586961649,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6205-0",
+            "tokens": 1032,
+            "objective": 0.45893653071521434,
+            "teacher_kl": 0.42382077203063717,
+            "anchor_kl": 0.0039017515743042545
+          }
+        },
+        {
+          "request_id": "6206-0",
+          "tokens": 10938,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.8111792150763882,
+          "before": {
+            "request_id": "6206-0",
+            "tokens": 10938,
+            "objective": 0.1131649409199446,
+            "teacher_kl": 0.11316494349909047,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6206-0",
+            "tokens": 10938,
+            "objective": 0.10644230774516505,
+            "teacher_kl": 0.10130851919176365,
+            "anchor_kl": 0.0005704212878277957
+          }
+        },
+        {
+          "request_id": "6207-0",
+          "tokens": 1158,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.14943527367506515,
+          "before": {
+            "request_id": "6207-0",
+            "tokens": 1158,
+            "objective": 0.7062963174912099,
+            "teacher_kl": 0.7062963421901223,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6207-0",
+            "tokens": 1158,
+            "objective": 0.6637250468862621,
+            "teacher_kl": 0.626405947558148,
+            "anchor_kl": 0.004146569256447073
+          }
+        }
+      ],
+      "risk_sha256": {
+        "before": "a9baf76d76c1c42e5bbee30ea71d5efee456ee5fd544d9d257e4c2768c61e574",
+        "after": "4366d6ec4c76847b3701bdf077c901d030c99abbe42da251412631e01daf92d8"
+      },
+      "bank_sha256": "86e21bc1ee74faa4e617f5757c3ce48d549cc7e6ea31ddf2d2a0871ecb844c3e"
+    },
+    "reuse-k05": {
+      "groups": {
+        "all": {
+          "responses": 64,
+          "tokens": 74933,
+          "token_loss_weight": 1.0,
+          "counterfactual_equal_response_weight": 1.0,
+          "native_correct": 7,
+          "boxed_correct": 6,
+          "median_duplicate8_fraction": 0.07055828241343615,
+          "mean_duplicate8_fraction": 0.11016417425106102,
+          "before": {
+            "objective": 0.19846076754941078,
+            "teacher_kl": 0.5490326686124469,
+            "anchor_kl": 0.0,
+            "objective_value_share": 1.0
+          },
+          "after": {
+            "objective": 0.18555586707632318,
+            "teacher_kl": 0.5000700439763744,
+            "anchor_kl": 0.0015263168275430853,
+            "objective_value_share": 1.0
+          }
+        },
+        "capped": {
+          "responses": 0,
+          "tokens": 0,
+          "token_loss_weight": 0.0,
+          "counterfactual_equal_response_weight": 0.0,
+          "native_correct": 0,
+          "boxed_correct": 0,
+          "median_duplicate8_fraction": null,
+          "mean_duplicate8_fraction": null
+        },
+        "stopped": {
+          "responses": 64,
+          "tokens": 74933,
+          "token_loss_weight": 1.0,
+          "counterfactual_equal_response_weight": 1.0,
+          "native_correct": 7,
+          "boxed_correct": 6,
+          "median_duplicate8_fraction": 0.07055828241343615,
+          "mean_duplicate8_fraction": 0.11016417425106102,
+          "before": {
+            "objective": 0.19846076754941078,
+            "teacher_kl": 0.5490326686124469,
+            "anchor_kl": 0.0,
+            "objective_value_share": 1.0
+          },
+          "after": {
+            "objective": 0.18555586707632318,
+            "teacher_kl": 0.5000700439763744,
+            "anchor_kl": 0.0015263168275430853,
+            "objective_value_share": 1.0
+          }
+        },
+        "capped_native_incorrect": {
+          "responses": 0,
+          "tokens": 0,
+          "token_loss_weight": 0.0,
+          "counterfactual_equal_response_weight": 0.0,
+          "native_correct": 0,
+          "boxed_correct": 0,
+          "median_duplicate8_fraction": null,
+          "mean_duplicate8_fraction": null
+        }
+      },
+      "rows": [
+        {
+          "request_id": "6144-0",
+          "tokens": 278,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.011070110701106972,
+          "before": {
+            "request_id": "6144-0",
+            "tokens": 278,
+            "objective": 0.2591991531441387,
+            "teacher_kl": 0.8154665412426675,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6144-0",
+            "tokens": 278,
+            "objective": 0.24202890641425046,
+            "teacher_kl": 0.7382048411920498,
+            "anchor_kl": 0.002004236577977557
+          }
+        },
+        {
+          "request_id": "6145-0",
+          "tokens": 2,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6145-0",
+            "tokens": 2,
+            "objective": 1.484994813799858,
+            "teacher_kl": 15.068639993667603,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6145-0",
+            "tokens": 2,
+            "objective": 1.519639901816845,
+            "teacher_kl": 14.055574178695679,
+            "anchor_kl": 0.013535302598029375
+          }
+        },
+        {
+          "request_id": "6146-0",
+          "tokens": 947,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.5021276595744681,
+          "before": {
+            "request_id": "6146-0",
+            "tokens": 947,
+            "objective": 0.08530046458743142,
+            "teacher_kl": 0.3084482604910577,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6146-0",
+            "tokens": 947,
+            "objective": 0.07881320124464944,
+            "teacher_kl": 0.27595524257106874,
+            "anchor_kl": 0.0006707224619873963
+          }
+        },
+        {
+          "request_id": "6147-0",
+          "tokens": 1023,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.3976377952755905,
+          "before": {
+            "request_id": "6147-0",
+            "tokens": 1023,
+            "objective": 0.10788283317602572,
+            "teacher_kl": 0.3381440555624444,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6147-0",
+            "tokens": 1023,
+            "objective": 0.100279149640978,
+            "teacher_kl": 0.30324868489034323,
+            "anchor_kl": 0.0010313919966322672
+          }
+        },
+        {
+          "request_id": "6148-0",
+          "tokens": 1016,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.09217046580773047,
+          "before": {
+            "request_id": "6148-0",
+            "tokens": 1016,
+            "objective": 0.2479810975053378,
+            "teacher_kl": 0.7868499178575588,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6148-0",
+            "tokens": 1016,
+            "objective": 0.23042437322832385,
+            "teacher_kl": 0.7130437160276298,
+            "anchor_kl": 0.0018706529832169447
+          }
+        },
+        {
+          "request_id": "6149-0",
+          "tokens": 1136,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.08237378210806023,
+          "before": {
+            "request_id": "6149-0",
+            "tokens": 1136,
+            "objective": 0.2298457611371978,
+            "teacher_kl": 0.6919535799780276,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6149-0",
+            "tokens": 1136,
+            "objective": 0.2161143397631949,
+            "teacher_kl": 0.6325965252036659,
+            "anchor_kl": 0.0017611345801744744
+          }
+        },
+        {
+          "request_id": "6150-0",
+          "tokens": 361,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6150-0",
+            "tokens": 361,
+            "objective": 0.3647698196089807,
+            "teacher_kl": 1.0938334417699673,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6150-0",
+            "tokens": 361,
+            "objective": 0.34126397378088785,
+            "teacher_kl": 1.0057103030063204,
+            "anchor_kl": 0.0025299193993966085
+          }
+        },
+        {
+          "request_id": "6151-0",
+          "tokens": 891,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.22398190045248867,
+          "before": {
+            "request_id": "6151-0",
+            "tokens": 891,
+            "objective": 0.22704847428310637,
+            "teacher_kl": 0.7148239354328294,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6151-0",
+            "tokens": 891,
+            "objective": 0.21305376777168206,
+            "teacher_kl": 0.6547505949467325,
+            "anchor_kl": 0.0014612332126900278
+          }
+        },
+        {
+          "request_id": "6152-0",
+          "tokens": 800,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.1361916771752837,
+          "before": {
+            "request_id": "6152-0",
+            "tokens": 800,
+            "objective": 0.12550392419901996,
+            "teacher_kl": 0.4340044730065934,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6152-0",
+            "tokens": 800,
+            "objective": 0.11460552284198108,
+            "teacher_kl": 0.3878562225545734,
+            "anchor_kl": 0.0012142704049824858
+          }
+        },
+        {
+          "request_id": "6153-0",
+          "tokens": 5079,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.015181388012618258,
+          "before": {
+            "request_id": "6153-0",
+            "tokens": 5079,
+            "objective": 0.14656577083395048,
+            "teacher_kl": 0.30998844789027,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6153-0",
+            "tokens": 5079,
+            "objective": 0.1381733016440909,
+            "teacher_kl": 0.2863738790574119,
+            "anchor_kl": 0.0010944078155057707
+          }
+        },
+        {
+          "request_id": "6154-0",
+          "tokens": 931,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.015151515151515138,
+          "before": {
+            "request_id": "6154-0",
+            "tokens": 931,
+            "objective": 0.24165914427539223,
+            "teacher_kl": 0.7410788957394915,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6154-0",
+            "tokens": 931,
+            "objective": 0.22491585397395558,
+            "teacher_kl": 0.6684808334789967,
+            "anchor_kl": 0.0020709020917986207
+          }
+        },
+        {
+          "request_id": "6155-0",
+          "tokens": 665,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1063829787234043,
+          "before": {
+            "request_id": "6155-0",
+            "tokens": 665,
+            "objective": 0.2314279982891106,
+            "teacher_kl": 0.6833866980451354,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6155-0",
+            "tokens": 665,
+            "objective": 0.21622486220726583,
+            "teacher_kl": 0.6219776664499644,
+            "anchor_kl": 0.001547774124694306
+          }
+        },
+        {
+          "request_id": "6156-0",
+          "tokens": 778,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.02853437094682232,
+          "before": {
+            "request_id": "6156-0",
+            "tokens": 778,
+            "objective": 0.10209127857236902,
+            "teacher_kl": 0.3412953972370034,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6156-0",
+            "tokens": 778,
+            "objective": 0.09364976629425875,
+            "teacher_kl": 0.3037598590880124,
+            "anchor_kl": 0.0009014832726664473
+          }
+        },
+        {
+          "request_id": "6157-0",
+          "tokens": 1226,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09023789991796549,
+          "before": {
+            "request_id": "6157-0",
+            "tokens": 1226,
+            "objective": 0.28641581644313435,
+            "teacher_kl": 0.8442883166887035,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6157-0",
+            "tokens": 1226,
+            "objective": 0.2675517447449796,
+            "teacher_kl": 0.7711961843786477,
+            "anchor_kl": 0.0018645789882596852
+          }
+        },
+        {
+          "request_id": "6158-0",
+          "tokens": 1193,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.026981450252951067,
+          "before": {
+            "request_id": "6158-0",
+            "tokens": 1193,
+            "objective": 0.22757423325290074,
+            "teacher_kl": 0.6116282726945591,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6158-0",
+            "tokens": 1193,
+            "objective": 0.21266287542292928,
+            "teacher_kl": 0.5531448680039944,
+            "anchor_kl": 0.0018368513962244034
+          }
+        },
+        {
+          "request_id": "6159-0",
+          "tokens": 455,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1272321428571429,
+          "before": {
+            "request_id": "6159-0",
+            "tokens": 455,
+            "objective": 0.15344527217870957,
+            "teacher_kl": 0.6070808210992387,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6159-0",
+            "tokens": 455,
+            "objective": 0.14225070852847405,
+            "teacher_kl": 0.5466579615978492,
+            "anchor_kl": 0.0013048471413948026
+          }
+        },
+        {
+          "request_id": "6160-0",
+          "tokens": 636,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.01748807631160576,
+          "before": {
+            "request_id": "6160-0",
+            "tokens": 636,
+            "objective": 0.3459532449033888,
+            "teacher_kl": 0.9773286990374221,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6160-0",
+            "tokens": 636,
+            "objective": 0.3251269424391111,
+            "teacher_kl": 0.892637928469312,
+            "anchor_kl": 0.0024997146437559566
+          }
+        },
+        {
+          "request_id": "6161-0",
+          "tokens": 523,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.15503875968992253,
+          "before": {
+            "request_id": "6161-0",
+            "tokens": 523,
+            "objective": 0.14910149084131963,
+            "teacher_kl": 0.535020319509302,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6161-0",
+            "tokens": 523,
+            "objective": 0.14083876650482752,
+            "teacher_kl": 0.4834857645773333,
+            "anchor_kl": 0.0010728053422887028
+          }
+        },
+        {
+          "request_id": "6162-0",
+          "tokens": 785,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.04884318766066842,
+          "before": {
+            "request_id": "6162-0",
+            "tokens": 785,
+            "objective": 0.2942122534281595,
+            "teacher_kl": 0.785730716149064,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6162-0",
+            "tokens": 785,
+            "objective": 0.27760182385051824,
+            "teacher_kl": 0.7271256489117155,
+            "anchor_kl": 0.0017107921481435769
+          }
+        },
+        {
+          "request_id": "6163-0",
+          "tokens": 1867,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.040322580645161255,
+          "before": {
+            "request_id": "6163-0",
+            "tokens": 1867,
+            "objective": 0.2200529761408774,
+            "teacher_kl": 0.5679479520098296,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6163-0",
+            "tokens": 1867,
+            "objective": 0.2053021673407016,
+            "teacher_kl": 0.518686811122129,
+            "anchor_kl": 0.0016271747618564873
+          }
+        },
+        {
+          "request_id": "6164-0",
+          "tokens": 1002,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.018090452261306567,
+          "before": {
+            "request_id": "6164-0",
+            "tokens": 1002,
+            "objective": 0.15209458317421778,
+            "teacher_kl": 0.36423076711457497,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6164-0",
+            "tokens": 1002,
+            "objective": 0.14364711294137034,
+            "teacher_kl": 0.3366942629060093,
+            "anchor_kl": 0.0009939179574710447
+          }
+        },
+        {
+          "request_id": "6165-0",
+          "tokens": 283,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.010869565217391353,
+          "before": {
+            "request_id": "6165-0",
+            "tokens": 283,
+            "objective": 0.16396118137741944,
+            "teacher_kl": 0.43381303471558524,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6165-0",
+            "tokens": 283,
+            "objective": 0.1524917156419071,
+            "teacher_kl": 0.3913285523192781,
+            "anchor_kl": 0.0013814705063947064
+          }
+        },
+        {
+          "request_id": "6166-0",
+          "tokens": 841,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.033573141486810565,
+          "before": {
+            "request_id": "6166-0",
+            "tokens": 841,
+            "objective": 0.1985809608507362,
+            "teacher_kl": 0.5384395594941729,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6166-0",
+            "tokens": 841,
+            "objective": 0.1847012586848095,
+            "teacher_kl": 0.4910087052912624,
+            "anchor_kl": 0.001582634527928145
+          }
+        },
+        {
+          "request_id": "6167-0",
+          "tokens": 1746,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.10235767682576191,
+          "before": {
+            "request_id": "6167-0",
+            "tokens": 1746,
+            "objective": 0.25189065980909325,
+            "teacher_kl": 0.6531083342339007,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6167-0",
+            "tokens": 1746,
+            "objective": 0.2344468597542364,
+            "teacher_kl": 0.5935096329396817,
+            "anchor_kl": 0.0019457042841250238
+          }
+        },
+        {
+          "request_id": "6168-0",
+          "tokens": 1795,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.07046979865771807,
+          "before": {
+            "request_id": "6168-0",
+            "tokens": 1795,
+            "objective": 0.25727637336361087,
+            "teacher_kl": 0.6876361331631154,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6168-0",
+            "tokens": 1795,
+            "objective": 0.23887121363889688,
+            "teacher_kl": 0.6206969593376631,
+            "anchor_kl": 0.002157817522469001
+          }
+        },
+        {
+          "request_id": "6169-0",
+          "tokens": 738,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.21614227086183313,
+          "before": {
+            "request_id": "6169-0",
+            "tokens": 738,
+            "objective": 0.14027688013811582,
+            "teacher_kl": 0.4070220768050142,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6169-0",
+            "tokens": 738,
+            "objective": 0.1317121035064546,
+            "teacher_kl": 0.3715435228350985,
+            "anchor_kl": 0.0011967767732825013
+          }
+        },
+        {
+          "request_id": "6170-0",
+          "tokens": 1012,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.07064676616915422,
+          "before": {
+            "request_id": "6170-0",
+            "tokens": 1012,
+            "objective": 0.118131820898693,
+            "teacher_kl": 0.3439858497454011,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6170-0",
+            "tokens": 1012,
+            "objective": 0.10990139166493719,
+            "teacher_kl": 0.3027525679689114,
+            "anchor_kl": 0.0015652143713973529
+          }
+        },
+        {
+          "request_id": "6171-0",
+          "tokens": 4566,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.4652336038604957,
+          "before": {
+            "request_id": "6171-0",
+            "tokens": 4566,
+            "objective": 0.07339476666212358,
+            "teacher_kl": 0.181896833469416,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6171-0",
+            "tokens": 4566,
+            "objective": 0.06829215790938549,
+            "teacher_kl": 0.16230299137202145,
+            "anchor_kl": 0.0008362655719120613
+          }
+        },
+        {
+          "request_id": "6172-0",
+          "tokens": 1705,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.2273262661955241,
+          "before": {
+            "request_id": "6172-0",
+            "tokens": 1705,
+            "objective": 0.09333780313888214,
+            "teacher_kl": 0.24823741161648702,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6172-0",
+            "tokens": 1705,
+            "objective": 0.08666980185187288,
+            "teacher_kl": 0.2231338508705059,
+            "anchor_kl": 0.0008449640323293301
+          }
+        },
+        {
+          "request_id": "6173-0",
+          "tokens": 1489,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.04453441295546556,
+          "before": {
+            "request_id": "6173-0",
+            "tokens": 1489,
+            "objective": 0.2829746432994385,
+            "teacher_kl": 0.8270761917020989,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6173-0",
+            "tokens": 1489,
+            "objective": 0.263512747132761,
+            "teacher_kl": 0.7492509812348174,
+            "anchor_kl": 0.0021310368689389718
+          }
+        },
+        {
+          "request_id": "6174-0",
+          "tokens": 739,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.03415300546448086,
+          "before": {
+            "request_id": "6174-0",
+            "tokens": 739,
+            "objective": 0.2816717758456314,
+            "teacher_kl": 0.809466121495705,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6174-0",
+            "tokens": 739,
+            "objective": 0.26110850322397033,
+            "teacher_kl": 0.728244473595027,
+            "anchor_kl": 0.0022318464232416717
+          }
+        },
+        {
+          "request_id": "6175-0",
+          "tokens": 1970,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.4233316352521651,
+          "before": {
+            "request_id": "6175-0",
+            "tokens": 1970,
+            "objective": 0.09131844074810655,
+            "teacher_kl": 0.22790054774011742,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6175-0",
+            "tokens": 1970,
+            "objective": 0.08521600709984523,
+            "teacher_kl": 0.2049440660429988,
+            "anchor_kl": 0.0009913662785813063
+          }
+        },
+        {
+          "request_id": "6176-0",
+          "tokens": 302,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.05423728813559325,
+          "before": {
+            "request_id": "6176-0",
+            "tokens": 302,
+            "objective": 0.08668318586585624,
+            "teacher_kl": 0.35017071669964983,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6176-0",
+            "tokens": 302,
+            "objective": 0.07978825233714931,
+            "teacher_kl": 0.30347808971949036,
+            "anchor_kl": 0.001117519282103793
+          }
+        },
+        {
+          "request_id": "6177-0",
+          "tokens": 1678,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.059844404548174746,
+          "before": {
+            "request_id": "6177-0",
+            "tokens": 1678,
+            "objective": 0.1906232945352418,
+            "teacher_kl": 0.514755407871615,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6177-0",
+            "tokens": 1678,
+            "objective": 0.1762390085259277,
+            "teacher_kl": 0.4645954214372178,
+            "anchor_kl": 0.001487016335166152
+          }
+        },
+        {
+          "request_id": "6178-0",
+          "tokens": 1512,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.06179401993355482,
+          "before": {
+            "request_id": "6178-0",
+            "tokens": 1512,
+            "objective": 0.24617776448167114,
+            "teacher_kl": 0.6851115627924642,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6178-0",
+            "tokens": 1512,
+            "objective": 0.23005812712037396,
+            "teacher_kl": 0.6277101995474514,
+            "anchor_kl": 0.0017592104512437789
+          }
+        },
+        {
+          "request_id": "6179-0",
+          "tokens": 1562,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.04694533762057873,
+          "before": {
+            "request_id": "6179-0",
+            "tokens": 1562,
+            "objective": 0.27971608383123137,
+            "teacher_kl": 0.7768248144298974,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6179-0",
+            "tokens": 1562,
+            "objective": 0.26115164634826155,
+            "teacher_kl": 0.7088908939463909,
+            "anchor_kl": 0.0019546117918253893
+          }
+        },
+        {
+          "request_id": "6180-0",
+          "tokens": 954,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.07814149947201687,
+          "before": {
+            "request_id": "6180-0",
+            "tokens": 954,
+            "objective": 0.22154130401525515,
+            "teacher_kl": 0.5863814572081133,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6180-0",
+            "tokens": 954,
+            "objective": 0.206782005360563,
+            "teacher_kl": 0.5338408381900649,
+            "anchor_kl": 0.0017346301236619737
+          }
+        },
+        {
+          "request_id": "6181-0",
+          "tokens": 811,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1256218905472637,
+          "before": {
+            "request_id": "6181-0",
+            "tokens": 811,
+            "objective": 0.1839356969206797,
+            "teacher_kl": 0.6273741514933513,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6181-0",
+            "tokens": 811,
+            "objective": 0.17212254968548135,
+            "teacher_kl": 0.5751283316176244,
+            "anchor_kl": 0.001215655957312986
+          }
+        },
+        {
+          "request_id": "6182-0",
+          "tokens": 449,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.10859728506787325,
+          "before": {
+            "request_id": "6182-0",
+            "tokens": 449,
+            "objective": 0.18708451547687288,
+            "teacher_kl": 0.6093517929056352,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6182-0",
+            "tokens": 449,
+            "objective": 0.17478277326088057,
+            "teacher_kl": 0.5510218200043817,
+            "anchor_kl": 0.0016124470663478158
+          }
+        },
+        {
+          "request_id": "6183-0",
+          "tokens": 422,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.07951807228915664,
+          "before": {
+            "request_id": "6183-0",
+            "tokens": 422,
+            "objective": 0.1982487705779618,
+            "teacher_kl": 0.6426201156123434,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6183-0",
+            "tokens": 422,
+            "objective": 0.1847523335875546,
+            "teacher_kl": 0.5896850124018144,
+            "anchor_kl": 0.0012416850809623882
+          }
+        },
+        {
+          "request_id": "6184-0",
+          "tokens": 739,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.03415300546448086,
+          "before": {
+            "request_id": "6184-0",
+            "tokens": 739,
+            "objective": 0.31202548919358436,
+            "teacher_kl": 1.0077551713352053,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6184-0",
+            "tokens": 739,
+            "objective": 0.2925028358914559,
+            "teacher_kl": 0.9121921602345261,
+            "anchor_kl": 0.0023988349314147425
+          }
+        },
+        {
+          "request_id": "6185-0",
+          "tokens": 1135,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.01507092198581561,
+          "before": {
+            "request_id": "6185-0",
+            "tokens": 1135,
+            "objective": 0.322632978265647,
+            "teacher_kl": 0.8670921105751284,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6185-0",
+            "tokens": 1135,
+            "objective": 0.3010941211917576,
+            "teacher_kl": 0.7911208721643409,
+            "anchor_kl": 0.0022921307964997844
+          }
+        },
+        {
+          "request_id": "6186-0",
+          "tokens": 747,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.02297297297297296,
+          "before": {
+            "request_id": "6186-0",
+            "tokens": 747,
+            "objective": 0.3092142262380822,
+            "teacher_kl": 0.8623845215282625,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6186-0",
+            "tokens": 747,
+            "objective": 0.29039217042745535,
+            "teacher_kl": 0.7867442452669768,
+            "anchor_kl": 0.0020923408628251696
+          }
+        },
+        {
+          "request_id": "6187-0",
+          "tokens": 57,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6187-0",
+            "tokens": 57,
+            "objective": 0.4251878830326492,
+            "teacher_kl": 1.8539145160139652,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6187-0",
+            "tokens": 57,
+            "objective": 0.39922267214901613,
+            "teacher_kl": 1.6741330783095276,
+            "anchor_kl": 0.003091923965002296
+          }
+        },
+        {
+          "request_id": "6188-0",
+          "tokens": 618,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6188-0",
+            "tokens": 618,
+            "objective": 0.31507110839185676,
+            "teacher_kl": 0.8021865395018507,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6188-0",
+            "tokens": 618,
+            "objective": 0.2955758998249147,
+            "teacher_kl": 0.7385480079734337,
+            "anchor_kl": 0.00215363486761779
+          }
+        },
+        {
+          "request_id": "6189-0",
+          "tokens": 2058,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.2681618722574354,
+          "before": {
+            "request_id": "6189-0",
+            "tokens": 2058,
+            "objective": 0.24829933839363913,
+            "teacher_kl": 0.6328731339497732,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6189-0",
+            "tokens": 2058,
+            "objective": 0.2343626739852764,
+            "teacher_kl": 0.5861890388708394,
+            "anchor_kl": 0.0017973420928426294
+          }
+        },
+        {
+          "request_id": "6190-0",
+          "tokens": 597,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.2508474576271187,
+          "before": {
+            "request_id": "6190-0",
+            "tokens": 597,
+            "objective": 0.2199093688351738,
+            "teacher_kl": 0.7989741129506482,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6190-0",
+            "tokens": 597,
+            "objective": 0.20446677411578848,
+            "teacher_kl": 0.722498756870644,
+            "anchor_kl": 0.001588794274446216
+          }
+        },
+        {
+          "request_id": "6191-0",
+          "tokens": 3108,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.11222186391486622,
+          "before": {
+            "request_id": "6191-0",
+            "tokens": 3108,
+            "objective": 0.23266202210162787,
+            "teacher_kl": 0.5878457779311836,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6191-0",
+            "tokens": 3108,
+            "objective": 0.2186897045583153,
+            "teacher_kl": 0.5399617635197133,
+            "anchor_kl": 0.0016534387460121508
+          }
+        },
+        {
+          "request_id": "6192-0",
+          "tokens": 2104,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.13590844062947072,
+          "before": {
+            "request_id": "6192-0",
+            "tokens": 2104,
+            "objective": 0.18471273318118622,
+            "teacher_kl": 0.5061455362832009,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6192-0",
+            "tokens": 2104,
+            "objective": 0.1735056774277751,
+            "teacher_kl": 0.4612887331477746,
+            "anchor_kl": 0.0014075244708759915
+          }
+        },
+        {
+          "request_id": "6193-0",
+          "tokens": 840,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.007202881152461038,
+          "before": {
+            "request_id": "6193-0",
+            "tokens": 840,
+            "objective": 0.32340874499006933,
+            "teacher_kl": 0.8262651939581138,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6193-0",
+            "tokens": 840,
+            "objective": 0.3033930278955058,
+            "teacher_kl": 0.75854962390849,
+            "anchor_kl": 0.0022079512428327857
+          }
+        },
+        {
+          "request_id": "6194-0",
+          "tokens": 615,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.011513157894736836,
+          "before": {
+            "request_id": "6194-0",
+            "tokens": 615,
+            "objective": 0.37464689194859596,
+            "teacher_kl": 1.138020049651529,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6194-0",
+            "tokens": 615,
+            "objective": 0.35258559196729694,
+            "teacher_kl": 1.0456760381171875,
+            "anchor_kl": 0.0027010716408643765
+          }
+        },
+        {
+          "request_id": "6195-0",
+          "tokens": 3319,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.10748792270531404,
+          "before": {
+            "request_id": "6195-0",
+            "tokens": 3319,
+            "objective": 0.140629305430531,
+            "teacher_kl": 0.3739419111921894,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6195-0",
+            "tokens": 3319,
+            "objective": 0.13125312084345472,
+            "teacher_kl": 0.3402274314815977,
+            "anchor_kl": 0.0011582135571990499
+          }
+        },
+        {
+          "request_id": "6196-0",
+          "tokens": 1141,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.005291005291005346,
+          "before": {
+            "request_id": "6196-0",
+            "tokens": 1141,
+            "objective": 0.3264802359181396,
+            "teacher_kl": 0.8057736139655683,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6196-0",
+            "tokens": 1141,
+            "objective": 0.30797183049168947,
+            "teacher_kl": 0.7482092124757495,
+            "anchor_kl": 0.0018717294968930488
+          }
+        },
+        {
+          "request_id": "6197-0",
+          "tokens": 1457,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.3124137931034483,
+          "before": {
+            "request_id": "6197-0",
+            "tokens": 1457,
+            "objective": 0.07131971305157196,
+            "teacher_kl": 0.19283614695829326,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6197-0",
+            "tokens": 1457,
+            "objective": 0.06576495525669497,
+            "teacher_kl": 0.17109950707004581,
+            "anchor_kl": 0.0008599220047365113
+          }
+        },
+        {
+          "request_id": "6198-0",
+          "tokens": 530,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.026768642447418722,
+          "before": {
+            "request_id": "6198-0",
+            "tokens": 530,
+            "objective": 0.23523565204645563,
+            "teacher_kl": 0.6536929713650541,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6198-0",
+            "tokens": 530,
+            "objective": 0.2175532535080012,
+            "teacher_kl": 0.5811421982639245,
+            "anchor_kl": 0.0025626007021406663
+          }
+        },
+        {
+          "request_id": "6199-0",
+          "tokens": 1357,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.46592592592592597,
+          "before": {
+            "request_id": "6199-0",
+            "tokens": 1357,
+            "objective": 0.09130406944549595,
+            "teacher_kl": 0.23764593805431752,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6199-0",
+            "tokens": 1357,
+            "objective": 0.08587297168522436,
+            "teacher_kl": 0.21855212220748482,
+            "anchor_kl": 0.0006426461729933111
+          }
+        },
+        {
+          "request_id": "6200-0",
+          "tokens": 894,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.17136414881623452,
+          "before": {
+            "request_id": "6200-0",
+            "tokens": 894,
+            "objective": 0.20118628232886238,
+            "teacher_kl": 0.5602870161892385,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6200-0",
+            "tokens": 894,
+            "objective": 0.18761308919628117,
+            "teacher_kl": 0.5075305698009565,
+            "anchor_kl": 0.0015705477269200552
+          }
+        },
+        {
+          "request_id": "6201-0",
+          "tokens": 1892,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.12785145888594163,
+          "before": {
+            "request_id": "6201-0",
+            "tokens": 1892,
+            "objective": 0.18606268057770894,
+            "teacher_kl": 0.48142965757311634,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6201-0",
+            "tokens": 1892,
+            "objective": 0.17425787728709347,
+            "teacher_kl": 0.44244936114843536,
+            "anchor_kl": 0.0013449724702524215
+          }
+        },
+        {
+          "request_id": "6202-0",
+          "tokens": 688,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.0807635829662261,
+          "before": {
+            "request_id": "6202-0",
+            "tokens": 688,
+            "objective": 0.23305622844115578,
+            "teacher_kl": 0.7575994101591942,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6202-0",
+            "tokens": 688,
+            "objective": 0.21746103988497234,
+            "teacher_kl": 0.6834474506884618,
+            "anchor_kl": 0.0018166177257503296
+          }
+        },
+        {
+          "request_id": "6203-0",
+          "tokens": 1719,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.2155373831775701,
+          "before": {
+            "request_id": "6203-0",
+            "tokens": 1719,
+            "objective": 0.22201575367860601,
+            "teacher_kl": 0.5958617811722128,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6203-0",
+            "tokens": 1719,
+            "objective": 0.20824602163590425,
+            "teacher_kl": 0.5468112487156028,
+            "anchor_kl": 0.0016851171183229151
+          }
+        },
+        {
+          "request_id": "6204-0",
+          "tokens": 593,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.05119453924914674,
+          "before": {
+            "request_id": "6204-0",
+            "tokens": 593,
+            "objective": 0.19116335296288905,
+            "teacher_kl": 0.5489394375238903,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6204-0",
+            "tokens": 593,
+            "objective": 0.17936718267887114,
+            "teacher_kl": 0.506707209601663,
+            "anchor_kl": 0.001516651678465519
+          }
+        },
+        {
+          "request_id": "6205-0",
+          "tokens": 686,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.06480117820324005,
+          "before": {
+            "request_id": "6205-0",
+            "tokens": 686,
+            "objective": 0.23331801411133268,
+            "teacher_kl": 0.7726229074668342,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6205-0",
+            "tokens": 686,
+            "objective": 0.21655352371666026,
+            "teacher_kl": 0.700343874331956,
+            "anchor_kl": 0.0018715406902941147
+          }
+        },
+        {
+          "request_id": "6206-0",
+          "tokens": 1240,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.07461476074614759,
+          "before": {
+            "request_id": "6206-0",
+            "tokens": 1240,
+            "objective": 0.2422843427686288,
+            "teacher_kl": 0.6407642489245312,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6206-0",
+            "tokens": 1240,
+            "objective": 0.22608912179913018,
+            "teacher_kl": 0.5826022136585145,
+            "anchor_kl": 0.001871613396404917
+          }
+        },
+        {
+          "request_id": "6207-0",
+          "tokens": 631,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.04006410256410253,
+          "before": {
+            "request_id": "6207-0",
+            "tokens": 631,
+            "objective": 0.3214857958675156,
+            "teacher_kl": 0.9379749557095349,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6207-0",
+            "tokens": 631,
+            "objective": 0.30074021061169276,
+            "teacher_kl": 0.8497498711239724,
+            "anchor_kl": 0.0023680520937183363
+          }
+        }
+      ],
+      "risk_sha256": {
+        "before": "e255a449125b216aa989f94844195189b3756eb71cc5edb0976b5ca7d319c2ba",
+        "after": "c3f11d4e12de1da1b77ec35b625bd844296cbe21117b6d25651ce6935566f64b"
+      },
+      "bank_sha256": "93cdd14a2df0ed04cfe23f0f9191724b132e1776e33f1c40bd5779e57ad10b24"
+    },
+    "reuse-k1": {
+      "groups": {
+        "all": {
+          "responses": 64,
+          "tokens": 94562,
+          "token_loss_weight": 1.0,
+          "counterfactual_equal_response_weight": 1.0,
+          "native_correct": 4,
+          "boxed_correct": 3,
+          "median_duplicate8_fraction": 0.04260734743098327,
+          "mean_duplicate8_fraction": 0.06704189724072829,
+          "before": {
+            "objective": 0.06596870354668999,
+            "teacher_kl": 0.5926918198886391,
+            "anchor_kl": 0.0,
+            "objective_value_share": 1.0
+          },
+          "after": {
+            "objective": 0.05106272238414615,
+            "teacher_kl": 0.5480950037953732,
+            "anchor_kl": 0.0016513470961527416,
+            "objective_value_share": 1.0
+          }
+        },
+        "capped": {
+          "responses": 0,
+          "tokens": 0,
+          "token_loss_weight": 0.0,
+          "counterfactual_equal_response_weight": 0.0,
+          "native_correct": 0,
+          "boxed_correct": 0,
+          "median_duplicate8_fraction": null,
+          "mean_duplicate8_fraction": null
+        },
+        "stopped": {
+          "responses": 64,
+          "tokens": 94562,
+          "token_loss_weight": 1.0,
+          "counterfactual_equal_response_weight": 1.0,
+          "native_correct": 4,
+          "boxed_correct": 3,
+          "median_duplicate8_fraction": 0.04260734743098327,
+          "mean_duplicate8_fraction": 0.06704189724072829,
+          "before": {
+            "objective": 0.06596870354668999,
+            "teacher_kl": 0.5926918198886391,
+            "anchor_kl": 0.0,
+            "objective_value_share": 1.0
+          },
+          "after": {
+            "objective": 0.05106272238414615,
+            "teacher_kl": 0.5480950037953732,
+            "anchor_kl": 0.0016513470961527416,
+            "objective_value_share": 1.0
+          }
+        },
+        "capped_native_incorrect": {
+          "responses": 0,
+          "tokens": 0,
+          "token_loss_weight": 0.0,
+          "counterfactual_equal_response_weight": 0.0,
+          "native_correct": 0,
+          "boxed_correct": 0,
+          "median_duplicate8_fraction": null,
+          "mean_duplicate8_fraction": null
+        }
+      },
+      "rows": [
+        {
+          "request_id": "6144-0",
+          "tokens": 148,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6144-0",
+            "tokens": 148,
+            "objective": 0.09061909755854612,
+            "teacher_kl": 1.1218865324233382,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6144-0",
+            "tokens": 148,
+            "objective": 0.07339854591608275,
+            "teacher_kl": 1.0336482838847096,
+            "anchor_kl": 0.0020791284589303837
+          }
+        },
+        {
+          "request_id": "6145-0",
+          "tokens": 3077,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.18469055374592835,
+          "before": {
+            "request_id": "6145-0",
+            "tokens": 3077,
+            "objective": 0.04864567681502052,
+            "teacher_kl": 0.41794398695497265,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6145-0",
+            "tokens": 3077,
+            "objective": 0.03691263552325749,
+            "teacher_kl": 0.38737738831370216,
+            "anchor_kl": 0.0012151823123261298
+          }
+        },
+        {
+          "request_id": "6146-0",
+          "tokens": 543,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.31156716417910446,
+          "before": {
+            "request_id": "6146-0",
+            "tokens": 543,
+            "objective": 0.025532920471665936,
+            "teacher_kl": 0.3825199458595937,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6146-0",
+            "tokens": 543,
+            "objective": 0.019087433246211954,
+            "teacher_kl": 0.35347036363951034,
+            "anchor_kl": 0.0007117404431844785
+          }
+        },
+        {
+          "request_id": "6147-0",
+          "tokens": 1893,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.2030752916224814,
+          "before": {
+            "request_id": "6147-0",
+            "tokens": 1893,
+            "objective": 0.03688637436694605,
+            "teacher_kl": 0.31801085492893266,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6147-0",
+            "tokens": 1893,
+            "objective": 0.02701869232065238,
+            "teacher_kl": 0.2912157336648607,
+            "anchor_kl": 0.001193106520447056
+          }
+        },
+        {
+          "request_id": "6148-0",
+          "tokens": 911,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.008849557522123908,
+          "before": {
+            "request_id": "6148-0",
+            "tokens": 911,
+            "objective": 0.08347711232438701,
+            "teacher_kl": 0.8894906594718228,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6148-0",
+            "tokens": 911,
+            "objective": 0.06303779663034614,
+            "teacher_kl": 0.8229391488536572,
+            "anchor_kl": 0.0019955107132690526
+          }
+        },
+        {
+          "request_id": "6149-0",
+          "tokens": 2196,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.03243490178163544,
+          "before": {
+            "request_id": "6149-0",
+            "tokens": 2196,
+            "objective": 0.09014726191293403,
+            "teacher_kl": 0.6773089043901442,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6149-0",
+            "tokens": 2196,
+            "objective": 0.0692069859700012,
+            "teacher_kl": 0.6234100242520288,
+            "anchor_kl": 0.002423648944472681
+          }
+        },
+        {
+          "request_id": "6150-0",
+          "tokens": 730,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.03042876901798064,
+          "before": {
+            "request_id": "6150-0",
+            "tokens": 730,
+            "objective": 0.08762156438768469,
+            "teacher_kl": 0.7841688160263465,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6150-0",
+            "tokens": 730,
+            "objective": 0.07085676200488561,
+            "teacher_kl": 0.7340416501978574,
+            "anchor_kl": 0.00192803805409765
+          }
+        },
+        {
+          "request_id": "6151-0",
+          "tokens": 1690,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.036244800950683276,
+          "before": {
+            "request_id": "6151-0",
+            "tokens": 1690,
+            "objective": 0.055690560573066525,
+            "teacher_kl": 0.6127771600707798,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6151-0",
+            "tokens": 1690,
+            "objective": 0.04061080561548501,
+            "teacher_kl": 0.5649449728110553,
+            "anchor_kl": 0.0015565282779814262
+          }
+        },
+        {
+          "request_id": "6152-0",
+          "tokens": 5269,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.03914861269479286,
+          "before": {
+            "request_id": "6152-0",
+            "tokens": 5269,
+            "objective": 0.044167995458459335,
+            "teacher_kl": 0.3890109282649513,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6152-0",
+            "tokens": 5269,
+            "objective": 0.033674734868201946,
+            "teacher_kl": 0.3609678383195029,
+            "anchor_kl": 0.0011324113841471193
+          }
+        },
+        {
+          "request_id": "6153-0",
+          "tokens": 724,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.00557880055788007,
+          "before": {
+            "request_id": "6153-0",
+            "tokens": 724,
+            "objective": 0.11708821640468552,
+            "teacher_kl": 1.0625061651019714,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6153-0",
+            "tokens": 724,
+            "objective": 0.09257949239061715,
+            "teacher_kl": 0.9874614492953656,
+            "anchor_kl": 0.0022137252795795224
+          }
+        },
+        {
+          "request_id": "6154-0",
+          "tokens": 7392,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09641164522681112,
+          "before": {
+            "request_id": "6154-0",
+            "tokens": 7392,
+            "objective": 0.07189863241935858,
+            "teacher_kl": 0.6705515093253834,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6154-0",
+            "tokens": 7392,
+            "objective": 0.05605113515325355,
+            "teacher_kl": 0.6202690911782376,
+            "anchor_kl": 0.0018845703450598448
+          }
+        },
+        {
+          "request_id": "6155-0",
+          "tokens": 1304,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.08172706245181183,
+          "before": {
+            "request_id": "6155-0",
+            "tokens": 1304,
+            "objective": 0.08787478331514426,
+            "teacher_kl": 0.8429389501854608,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6155-0",
+            "tokens": 1304,
+            "objective": 0.06672307288116229,
+            "teacher_kl": 0.7769838807651948,
+            "anchor_kl": 0.002189917702478273
+          }
+        },
+        {
+          "request_id": "6156-0",
+          "tokens": 756,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.040053404539385884,
+          "before": {
+            "request_id": "6156-0",
+            "tokens": 756,
+            "objective": 0.03528733022344077,
+            "teacher_kl": 0.49064264149912906,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6156-0",
+            "tokens": 756,
+            "objective": 0.02523656657232741,
+            "teacher_kl": 0.45082653799372374,
+            "anchor_kl": 0.0011566922718507678
+          }
+        },
+        {
+          "request_id": "6157-0",
+          "tokens": 775,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09114583333333337,
+          "before": {
+            "request_id": "6157-0",
+            "tokens": 775,
+            "objective": 0.06577832290676427,
+            "teacher_kl": 0.7012357145554439,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6157-0",
+            "tokens": 775,
+            "objective": 0.04716328602570447,
+            "teacher_kl": 0.6442927913883543,
+            "anchor_kl": 0.0016830772901487872
+          }
+        },
+        {
+          "request_id": "6158-0",
+          "tokens": 730,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.022130013831258677,
+          "before": {
+            "request_id": "6158-0",
+            "tokens": 730,
+            "objective": 0.07811808221473675,
+            "teacher_kl": 0.8598123090416441,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6158-0",
+            "tokens": 730,
+            "objective": 0.061117859694310966,
+            "teacher_kl": 0.7841648841700763,
+            "anchor_kl": 0.0024465243183016956
+          }
+        },
+        {
+          "request_id": "6159-0",
+          "tokens": 5034,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.2786950467475632,
+          "before": {
+            "request_id": "6159-0",
+            "tokens": 5034,
+            "objective": 0.06109390172705976,
+            "teacher_kl": 0.4438911207125272,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6159-0",
+            "tokens": 5034,
+            "objective": 0.04775774217009216,
+            "teacher_kl": 0.40913958565245445,
+            "anchor_kl": 0.0016822052263093063
+          }
+        },
+        {
+          "request_id": "6160-0",
+          "tokens": 4409,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.060199909132212626,
+          "before": {
+            "request_id": "6160-0",
+            "tokens": 4409,
+            "objective": 0.08494353610119526,
+            "teacher_kl": 0.6058428219229663,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6160-0",
+            "tokens": 4409,
+            "objective": 0.0659963182755134,
+            "teacher_kl": 0.5604781029963926,
+            "anchor_kl": 0.0019902671786144123
+          }
+        },
+        {
+          "request_id": "6161-0",
+          "tokens": 1386,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.10804931109499638,
+          "before": {
+            "request_id": "6161-0",
+            "tokens": 1386,
+            "objective": 0.052397111096514716,
+            "teacher_kl": 0.5346784285553262,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6161-0",
+            "tokens": 1386,
+            "objective": 0.040529091655066955,
+            "teacher_kl": 0.4909064698659059,
+            "anchor_kl": 0.0013455009702998408
+          }
+        },
+        {
+          "request_id": "6162-0",
+          "tokens": 760,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.021248339973439556,
+          "before": {
+            "request_id": "6162-0",
+            "tokens": 760,
+            "objective": 0.10472321881772256,
+            "teacher_kl": 0.9205335274504203,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6162-0",
+            "tokens": 760,
+            "objective": 0.08392693814515241,
+            "teacher_kl": 0.8617110581842242,
+            "anchor_kl": 0.0019657477426563603
+          }
+        },
+        {
+          "request_id": "6163-0",
+          "tokens": 597,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6163-0",
+            "tokens": 597,
+            "objective": 0.10551793895463293,
+            "teacher_kl": 1.2008670466705156,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6163-0",
+            "tokens": 597,
+            "objective": 0.08516839826486672,
+            "teacher_kl": 1.119188815647753,
+            "anchor_kl": 0.002162751860445943
+          }
+        },
+        {
+          "request_id": "6164-0",
+          "tokens": 116,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6164-0",
+            "tokens": 116,
+            "objective": 0.061533669735079705,
+            "teacher_kl": 0.8746722057493853,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6164-0",
+            "tokens": 116,
+            "objective": 0.04807055025429659,
+            "teacher_kl": 0.8144629123893663,
+            "anchor_kl": 0.001152688340998166
+          }
+        },
+        {
+          "request_id": "6165-0",
+          "tokens": 710,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.17923186344238973,
+          "before": {
+            "request_id": "6165-0",
+            "tokens": 710,
+            "objective": 0.12586047367848546,
+            "teacher_kl": 0.8528290630594481,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6165-0",
+            "tokens": 710,
+            "objective": 0.10136465282714198,
+            "teacher_kl": 0.7983159486652447,
+            "anchor_kl": 0.002027534095896187
+          }
+        },
+        {
+          "request_id": "6166-0",
+          "tokens": 839,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.012019230769230727,
+          "before": {
+            "request_id": "6166-0",
+            "tokens": 839,
+            "objective": 0.041747373536124094,
+            "teacher_kl": 0.3827659549067478,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6166-0",
+            "tokens": 839,
+            "objective": 0.03624627250881644,
+            "teacher_kl": 0.3588046138163038,
+            "anchor_kl": 0.0006970971274916533
+          }
+        },
+        {
+          "request_id": "6167-0",
+          "tokens": 29,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6167-0",
+            "tokens": 29,
+            "objective": 0.1803486787445826,
+            "teacher_kl": 3.4614241292122108,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6167-0",
+            "tokens": 29,
+            "objective": 0.15173843756185995,
+            "teacher_kl": 3.1666357672275525,
+            "anchor_kl": 0.003932050321642739
+          }
+        },
+        {
+          "request_id": "6168-0",
+          "tokens": 1745,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.11852704257767543,
+          "before": {
+            "request_id": "6168-0",
+            "tokens": 1745,
+            "objective": 0.0720704313453316,
+            "teacher_kl": 0.5348932328842729,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6168-0",
+            "tokens": 1745,
+            "objective": 0.056898126462210555,
+            "teacher_kl": 0.4954517067319295,
+            "anchor_kl": 0.0017013871971401113
+          }
+        },
+        {
+          "request_id": "6169-0",
+          "tokens": 1521,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.047556142668428,
+          "before": {
+            "request_id": "6169-0",
+            "tokens": 1521,
+            "objective": 0.07465858779307985,
+            "teacher_kl": 0.6467424176984379,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6169-0",
+            "tokens": 1521,
+            "objective": 0.057095607553294715,
+            "teacher_kl": 0.5959130960958602,
+            "anchor_kl": 0.0017353703096573045
+          }
+        },
+        {
+          "request_id": "6170-0",
+          "tokens": 2564,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.11224090731325775,
+          "before": {
+            "request_id": "6170-0",
+            "tokens": 2564,
+            "objective": 0.029370603998537678,
+            "teacher_kl": 0.2543940522454001,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6170-0",
+            "tokens": 2564,
+            "objective": 0.02299723863177861,
+            "teacher_kl": 0.2346061982671265,
+            "anchor_kl": 0.001004139805867974
+          }
+        },
+        {
+          "request_id": "6171-0",
+          "tokens": 954,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.011615628299894376,
+          "before": {
+            "request_id": "6171-0",
+            "tokens": 954,
+            "objective": 0.0912842376186874,
+            "teacher_kl": 0.9533576876413804,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6171-0",
+            "tokens": 954,
+            "objective": 0.06793632656881309,
+            "teacher_kl": 0.8706610175278255,
+            "anchor_kl": 0.002562575386162291
+          }
+        },
+        {
+          "request_id": "6172-0",
+          "tokens": 1959,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.05481557377049184,
+          "before": {
+            "request_id": "6172-0",
+            "tokens": 1959,
+            "objective": 0.09070849410660792,
+            "teacher_kl": 0.6845021467291561,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6172-0",
+            "tokens": 1959,
+            "objective": 0.06887060244084879,
+            "teacher_kl": 0.6308957056574629,
+            "anchor_kl": 0.0023299398737636453
+          }
+        },
+        {
+          "request_id": "6173-0",
+          "tokens": 1406,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.019299499642601914,
+          "before": {
+            "request_id": "6173-0",
+            "tokens": 1406,
+            "objective": 0.08440097805461616,
+            "teacher_kl": 0.8847839563206349,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6173-0",
+            "tokens": 1406,
+            "objective": 0.06342620554898239,
+            "teacher_kl": 0.8162130739299336,
+            "anchor_kl": 0.002325850834365668
+          }
+        },
+        {
+          "request_id": "6174-0",
+          "tokens": 580,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.010471204188481686,
+          "before": {
+            "request_id": "6174-0",
+            "tokens": 580,
+            "objective": 0.08638364718755298,
+            "teacher_kl": 0.978104263199428,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6174-0",
+            "tokens": 580,
+            "objective": 0.06525384141842935,
+            "teacher_kl": 0.8966985438784267,
+            "anchor_kl": 0.0024470165553331555
+          }
+        },
+        {
+          "request_id": "6175-0",
+          "tokens": 1903,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.011603375527426185,
+          "before": {
+            "request_id": "6175-0",
+            "tokens": 1903,
+            "objective": 0.045707209877877235,
+            "teacher_kl": 0.41147104171921256,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6175-0",
+            "tokens": 1903,
+            "objective": 0.03637933507171983,
+            "teacher_kl": 0.3833867054456638,
+            "anchor_kl": 0.0011042981841713395
+          }
+        },
+        {
+          "request_id": "6176-0",
+          "tokens": 317,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.04516129032258065,
+          "before": {
+            "request_id": "6176-0",
+            "tokens": 317,
+            "objective": 0.019286972215472122,
+            "teacher_kl": 0.3385819355043561,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6176-0",
+            "tokens": 317,
+            "objective": 0.01567919917416101,
+            "teacher_kl": 0.3069730195215136,
+            "anchor_kl": 0.0007434527462900397
+          }
+        },
+        {
+          "request_id": "6177-0",
+          "tokens": 884,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1630558722919042,
+          "before": {
+            "request_id": "6177-0",
+            "tokens": 884,
+            "objective": 0.057815382699135894,
+            "teacher_kl": 0.6455820209599575,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6177-0",
+            "tokens": 884,
+            "objective": 0.043635766556551915,
+            "teacher_kl": 0.5906429174439681,
+            "anchor_kl": 0.0014330936586348466
+          }
+        },
+        {
+          "request_id": "6178-0",
+          "tokens": 1290,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1145752143413874,
+          "before": {
+            "request_id": "6178-0",
+            "tokens": 1290,
+            "objective": 0.08821148651563623,
+            "teacher_kl": 0.744432422846161,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6178-0",
+            "tokens": 1290,
+            "objective": 0.06845151428777327,
+            "teacher_kl": 0.6846354706446887,
+            "anchor_kl": 0.002000843018669279
+          }
+        },
+        {
+          "request_id": "6179-0",
+          "tokens": 417,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.07560975609756093,
+          "before": {
+            "request_id": "6179-0",
+            "tokens": 417,
+            "objective": 0.09523164664744636,
+            "teacher_kl": 1.025345382464658,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6179-0",
+            "tokens": 417,
+            "objective": 0.07419664481017835,
+            "teacher_kl": 0.943830483221746,
+            "anchor_kl": 0.0024714254802059737
+          }
+        },
+        {
+          "request_id": "6180-0",
+          "tokens": 1295,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09472049689440998,
+          "before": {
+            "request_id": "6180-0",
+            "tokens": 1295,
+            "objective": 0.045662636421977904,
+            "teacher_kl": 0.4239530079155582,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6180-0",
+            "tokens": 1295,
+            "objective": 0.034951408760240985,
+            "teacher_kl": 0.39201265924218476,
+            "anchor_kl": 0.0011619071419234441
+          }
+        },
+        {
+          "request_id": "6181-0",
+          "tokens": 1792,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.16246498599439774,
+          "before": {
+            "request_id": "6181-0",
+            "tokens": 1792,
+            "objective": 0.06009197174216764,
+            "teacher_kl": 0.6050382813585351,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6181-0",
+            "tokens": 1792,
+            "objective": 0.043951810087871926,
+            "teacher_kl": 0.5547687423478903,
+            "anchor_kl": 0.0016789780163979514
+          }
+        },
+        {
+          "request_id": "6182-0",
+          "tokens": 864,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09568261376896148,
+          "before": {
+            "request_id": "6182-0",
+            "tokens": 864,
+            "objective": 0.07451042184283992,
+            "teacher_kl": 0.5499209995327583,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6182-0",
+            "tokens": 864,
+            "objective": 0.05427962548745989,
+            "teacher_kl": 0.5034302566462051,
+            "anchor_kl": 0.0021092697584144567
+          }
+        },
+        {
+          "request_id": "6183-0",
+          "tokens": 764,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.034346103038309095,
+          "before": {
+            "request_id": "6183-0",
+            "tokens": 764,
+            "objective": 0.043484718143549976,
+            "teacher_kl": 0.4919523329794655,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6183-0",
+            "tokens": 764,
+            "objective": 0.03405210963752451,
+            "teacher_kl": 0.4584562901915997,
+            "anchor_kl": 0.0011610283377784822
+          }
+        },
+        {
+          "request_id": "6184-0",
+          "tokens": 970,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.025960539979231534,
+          "before": {
+            "request_id": "6184-0",
+            "tokens": 970,
+            "objective": 0.09960980290429132,
+            "teacher_kl": 1.0682871020056388,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6184-0",
+            "tokens": 970,
+            "objective": 0.07594173493518776,
+            "teacher_kl": 0.9904461357168273,
+            "anchor_kl": 0.002370014708088013
+          }
+        },
+        {
+          "request_id": "6185-0",
+          "tokens": 717,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0028169014084507005,
+          "before": {
+            "request_id": "6185-0",
+            "tokens": 717,
+            "objective": 0.12667073873728163,
+            "teacher_kl": 1.2142255241826607,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6185-0",
+            "tokens": 717,
+            "objective": 0.09974724713497098,
+            "teacher_kl": 1.1244311950238022,
+            "anchor_kl": 0.00268162947028461
+          }
+        },
+        {
+          "request_id": "6186-0",
+          "tokens": 747,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.012162162162162149,
+          "before": {
+            "request_id": "6186-0",
+            "tokens": 747,
+            "objective": 0.07816334621089926,
+            "teacher_kl": 0.7656620799004658,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6186-0",
+            "tokens": 747,
+            "objective": 0.05778244967729503,
+            "teacher_kl": 0.7070010634768555,
+            "anchor_kl": 0.002052111515609147
+          }
+        },
+        {
+          "request_id": "6187-0",
+          "tokens": 953,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.019027484143763207,
+          "before": {
+            "request_id": "6187-0",
+            "tokens": 953,
+            "objective": 0.10076141299720567,
+            "teacher_kl": 1.0063966853468196,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6187-0",
+            "tokens": 953,
+            "objective": 0.07715608416370262,
+            "teacher_kl": 0.9308704733593264,
+            "anchor_kl": 0.0024569841007329686
+          }
+        },
+        {
+          "request_id": "6188-0",
+          "tokens": 972,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.011398963730569922,
+          "before": {
+            "request_id": "6188-0",
+            "tokens": 972,
+            "objective": 0.0725328988988472,
+            "teacher_kl": 0.6701911755317643,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6188-0",
+            "tokens": 972,
+            "objective": 0.05432158703216854,
+            "teacher_kl": 0.6193763996407554,
+            "anchor_kl": 0.0020999392883920523
+          }
+        },
+        {
+          "request_id": "6189-0",
+          "tokens": 1424,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09386026817219473,
+          "before": {
+            "request_id": "6189-0",
+            "tokens": 1424,
+            "objective": 0.10684194076771375,
+            "teacher_kl": 0.7130479848777618,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6189-0",
+            "tokens": 1424,
+            "objective": 0.08709525421809451,
+            "teacher_kl": 0.663244144982068,
+            "anchor_kl": 0.0020650738207425934
+          }
+        },
+        {
+          "request_id": "6190-0",
+          "tokens": 401,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.06852791878172593,
+          "before": {
+            "request_id": "6190-0",
+            "tokens": 401,
+            "objective": 0.06292004533633523,
+            "teacher_kl": 0.9089864592221836,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6190-0",
+            "tokens": 401,
+            "objective": 0.049196109102001444,
+            "teacher_kl": 0.8445583008824837,
+            "anchor_kl": 0.00122523017470963
+          }
+        },
+        {
+          "request_id": "6191-0",
+          "tokens": 1032,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0029268292682926855,
+          "before": {
+            "request_id": "6191-0",
+            "tokens": 1032,
+            "objective": 0.0994547753738011,
+            "teacher_kl": 0.9845549477073756,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6191-0",
+            "tokens": 1032,
+            "objective": 0.07839572186111016,
+            "teacher_kl": 0.9148043254268529,
+            "anchor_kl": 0.0021521018473680572
+          }
+        },
+        {
+          "request_id": "6192-0",
+          "tokens": 1664,
+          "capped": false,
+          "native_correct": true,
+          "boxed_correct": true,
+          "duplicate8_fraction": 0.1019915509957755,
+          "before": {
+            "request_id": "6192-0",
+            "tokens": 1664,
+            "objective": 0.05471358541666966,
+            "teacher_kl": 0.5156363510469526,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6192-0",
+            "tokens": 1664,
+            "objective": 0.044140528653163286,
+            "teacher_kl": 0.48085608514964934,
+            "anchor_kl": 0.0010861461465044883
+          }
+        },
+        {
+          "request_id": "6193-0",
+          "tokens": 713,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0,
+          "before": {
+            "request_id": "6193-0",
+            "tokens": 713,
+            "objective": 0.10428227025270109,
+            "teacher_kl": 0.8671646466028923,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6193-0",
+            "tokens": 713,
+            "objective": 0.0850792362305631,
+            "teacher_kl": 0.8093395100236277,
+            "anchor_kl": 0.001954851246691647
+          }
+        },
+        {
+          "request_id": "6194-0",
+          "tokens": 609,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0830564784053156,
+          "before": {
+            "request_id": "6194-0",
+            "tokens": 609,
+            "objective": 0.08624163874239435,
+            "teacher_kl": 0.7447994426492414,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6194-0",
+            "tokens": 609,
+            "objective": 0.06898212246425903,
+            "teacher_kl": 0.6969424126788848,
+            "anchor_kl": 0.00153587910245465
+          }
+        },
+        {
+          "request_id": "6195-0",
+          "tokens": 10583,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.07847957639939485,
+          "before": {
+            "request_id": "6195-0",
+            "tokens": 10583,
+            "objective": 0.038843927168076546,
+            "teacher_kl": 0.3219427709316027,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6195-0",
+            "tokens": 10583,
+            "objective": 0.030205185914812412,
+            "teacher_kl": 0.2974023825700027,
+            "anchor_kl": 0.0012361942540422871
+          }
+        },
+        {
+          "request_id": "6196-0",
+          "tokens": 233,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.02212389380530977,
+          "before": {
+            "request_id": "6196-0",
+            "tokens": 233,
+            "objective": 0.08749289453535478,
+            "teacher_kl": 0.9165074080103897,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6196-0",
+            "tokens": 233,
+            "objective": 0.06811207019601061,
+            "teacher_kl": 0.8421197379141089,
+            "anchor_kl": 0.002105841801881704
+          }
+        },
+        {
+          "request_id": "6197-0",
+          "tokens": 791,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.05484693877551017,
+          "before": {
+            "request_id": "6197-0",
+            "tokens": 791,
+            "objective": 0.072730789123064,
+            "teacher_kl": 0.6371214599761945,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6197-0",
+            "tokens": 791,
+            "objective": 0.05522391426894222,
+            "teacher_kl": 0.5848471300774405,
+            "anchor_kl": 0.001988612837030964
+          }
+        },
+        {
+          "request_id": "6198-0",
+          "tokens": 686,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.03681885125184092,
+          "before": {
+            "request_id": "6198-0",
+            "tokens": 686,
+            "objective": 0.08712539395103265,
+            "teacher_kl": 0.9386164258787929,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6198-0",
+            "tokens": 686,
+            "objective": 0.06462041990677043,
+            "teacher_kl": 0.8590136804594045,
+            "anchor_kl": 0.0024535071153915706
+          }
+        },
+        {
+          "request_id": "6199-0",
+          "tokens": 684,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.02215657311669128,
+          "before": {
+            "request_id": "6199-0",
+            "tokens": 684,
+            "objective": 0.05223574004758509,
+            "teacher_kl": 0.48580942670850435,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6199-0",
+            "tokens": 684,
+            "objective": 0.043482149143929553,
+            "teacher_kl": 0.45956324881684085,
+            "anchor_kl": 0.0010854270806683521
+          }
+        },
+        {
+          "request_id": "6200-0",
+          "tokens": 792,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.1057324840764331,
+          "before": {
+            "request_id": "6200-0",
+            "tokens": 792,
+            "objective": 0.04658785025110862,
+            "teacher_kl": 0.5139553911165173,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6200-0",
+            "tokens": 792,
+            "objective": 0.035797211900133886,
+            "teacher_kl": 0.476210896811135,
+            "anchor_kl": 0.0010637752064862986
+          }
+        },
+        {
+          "request_id": "6201-0",
+          "tokens": 618,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.029459901800327315,
+          "before": {
+            "request_id": "6201-0",
+            "tokens": 618,
+            "objective": 0.05867137415909599,
+            "teacher_kl": 0.59981429258745,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6201-0",
+            "tokens": 618,
+            "objective": 0.04674745648583042,
+            "teacher_kl": 0.5644492356373084,
+            "anchor_kl": 0.001207075855319122
+          }
+        },
+        {
+          "request_id": "6202-0",
+          "tokens": 1528,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.03287310979618674,
+          "before": {
+            "request_id": "6202-0",
+            "tokens": 1528,
+            "objective": 0.07921129247116934,
+            "teacher_kl": 0.8002462541663252,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6202-0",
+            "tokens": 1528,
+            "objective": 0.0607219281173238,
+            "teacher_kl": 0.7334242706104672,
+            "anchor_kl": 0.0021028025147891405
+          }
+        },
+        {
+          "request_id": "6203-0",
+          "tokens": 1324,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.09567198177676539,
+          "before": {
+            "request_id": "6203-0",
+            "tokens": 1324,
+            "objective": 0.08746785917734472,
+            "teacher_kl": 0.7504425506922395,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6203-0",
+            "tokens": 1324,
+            "objective": 0.06995004273760357,
+            "teacher_kl": 0.7054035173921179,
+            "anchor_kl": 0.0014793330671850832
+          }
+        },
+        {
+          "request_id": "6204-0",
+          "tokens": 841,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.037170263788968816,
+          "before": {
+            "request_id": "6204-0",
+            "tokens": 841,
+            "objective": 0.08323338447220659,
+            "teacher_kl": 0.6068788834500396,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6204-0",
+            "tokens": 841,
+            "objective": 0.06485428241785167,
+            "teacher_kl": 0.5627168431678061,
+            "anchor_kl": 0.0018649862590838407
+          }
+        },
+        {
+          "request_id": "6205-0",
+          "tokens": 2465,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.16151342554922699,
+          "before": {
+            "request_id": "6205-0",
+            "tokens": 2465,
+            "objective": 0.04129717881306612,
+            "teacher_kl": 0.393553278577738,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6205-0",
+            "tokens": 2465,
+            "objective": 0.029152838350928603,
+            "teacher_kl": 0.36025161813177076,
+            "anchor_kl": 0.0013371283832603622
+          }
+        },
+        {
+          "request_id": "6206-0",
+          "tokens": 746,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.07983761840324766,
+          "before": {
+            "request_id": "6206-0",
+            "tokens": 746,
+            "objective": 0.08128780833861464,
+            "teacher_kl": 0.8041270024548565,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6206-0",
+            "tokens": 746,
+            "objective": 0.06456006822104537,
+            "teacher_kl": 0.7500548368820232,
+            "anchor_kl": 0.0015966319525271676
+          }
+        },
+        {
+          "request_id": "6207-0",
+          "tokens": 796,
+          "capped": false,
+          "native_correct": false,
+          "boxed_correct": false,
+          "duplicate8_fraction": 0.0975918884664132,
+          "before": {
+            "request_id": "6207-0",
+            "tokens": 796,
+            "objective": 0.09983249934514246,
+            "teacher_kl": 0.898535209606025,
+            "anchor_kl": 0.0
+          },
+          "after": {
+            "request_id": "6207-0",
+            "tokens": 796,
+            "objective": 0.08233485430581934,
+            "teacher_kl": 0.84372600165902,
+            "anchor_kl": 0.0014625936616342867
+          }
+        }
+      ],
+      "risk_sha256": {
+        "before": "f7107be9ee5f92ab4278780eeefeace7bed8f35006915145b70c239c486265e8",
+        "after": "a2da2992f73eb3623d4505f8b119bf0e7876c38ad49e5140af2f087aeee7d0ab"
+      },
+      "bank_sha256": "a42fa8aaed0eb86da697029bc9efa51b001aa9ae00063f7c40e3c323fa9c8ec3"
+    }
+  },
+  "script_sha256": "2637d9ccf4f80dcce02a18faec8bd85b2db625dba5f43e73c634c7b711a281c0",
+  "scores_sha256": "5a4e1a3c247ab0e30244b1fe35caf8071403a823a126f72e069d27419cfc256c",
+  "selected_cases_sha256": "34f00811788f41eddfb55613222e91b6e2a58d6c584b99932c002414e675a04c",
+  "case_selection": "First3 capped request IDs plus any capped automatically-correct answer; illustrative.",
+  "limits": [
+    "Different kappas generate different states; cross-arm current KL is not fixed-state risk.",
+    "Before/after within one arm uses its identical fixed bank.",
+    "Duplicate8 measures exact token-window repetition, not semantic correctness.",
+    "Equal-response weights are a calculated alternative; no such training intervention was run."
+  ]
+}

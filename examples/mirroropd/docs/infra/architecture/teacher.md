@@ -13,6 +13,8 @@
 
 Shared-sync 中 `distillation.n_gpus_per_node=0, nnodes=0` 表示不分配独立 teacher 池，teacher 仍在 actor 的共享 GPU 池执行。Teacher 使用 FSDP2 分片、参数卸载、remove-padding、动态 token batching；当前限制无 sequence parallel、无 QAT、无通用 fused model kernel。其 forward token 预算必须容纳一条最大训练序列。
 
+Actor 默认按执行阶段搬运参数与 optimizer 状态，也可启用 `actor_rollout_ref.actor.fsdp_config.offload_policy=True`，由 FSDP2 `CPUOffloadPolicy` 逐层搬运，参数主副本、梯度和 optimizer 状态保存在 CPU。该模式的存储位置由 PyTorch 管理，engine 的手动 `to` 不再移动这些状态。Teacher 继续采用阶段搬运，保持 `distillation.shared_teacher.offload_policy=False` 与 `forward_only_cpu_offload=False`；actor 的选择不改变教师生命周期。
+
 Standalone 继续使用独立 teacher 服务，并在 agent postprocess 阶段取得教师输出；它不遵循下面的 shared teacher 上下卡时序。`teacher_models.*.inference` 配置面向该服务，shared-sync 的实际 forward 由 `distillation.shared_teacher` 控制。普通 Full-KL 和所有 mirror 设置（含 sampled MDPO）当前都要求 shared-sync。
 
 ## 评分顺序
@@ -64,7 +66,7 @@ Legacy sampled 的 `old_log_probs` 由 Trainer 的更新前评分步骤产生。
 
 [FrozenAnchorHead](../../../../../verl/trainer/distillation/anchor.py) 对完整 head 做独立 CPU 副本，首次使用时再创建 GPU 缓存；它不能引用随后会被 optimizer 改写的 student 权重。位置和 version 在每次消费时检查，scope 的 `finally` 释放 holder 并移除调用级字段。实际 TQ payload 随 outer step 的样本 keys 一起清理。当前实现要求相关 dropout 为零，q 在整个 actor 调用内冻结，下一次调用重新建立。
 
-[BaseEngineCtx](../../../../../verl/workers/engine/base.py) 管理评分和训练的 load/offload。当前 mirror anchor 推理退出后会卸载 student，随后 `train_mini_batch` 的 train context 再加载模型及所需训练状态。这一段还有一次额外的模型往返；但所有 epochs/mini-batches 已经处于同一个 train context，内层 `train_batch` 使用 `disable_auto_offload=True`，不会每次 reuse 都重新卸载整个模型。细节见[更新驻留周期](training-loop.md#从一次-actor-调用到实际更新)。
+[BaseEngineCtx](../../../../../verl/workers/engine/base.py) 管理评分和训练的 load/offload。在默认阶段搬运模式中，mirror anchor 推理退出后会卸载 student，随后 `train_mini_batch` 的 train context 再加载模型及所需训练状态。这一段还有一次额外的模型往返；但所有 epochs/mini-batches 已经处于同一个 train context，内层 `train_batch` 使用 `disable_auto_offload=True`，不会每次 reuse 都重新卸载整个模型。逐层 CPU offload 模式由 FSDP2 自行管理每层状态。细节见[更新驻留周期](training-loop.md#从一次-actor-调用到实际更新)。
 
 `perf/anchor/prepare_seconds_max` 覆盖 scope 从准备输入到 anchor 评分/输出处理完成的时间，包含当中的 engine 搬运和 hidden 发布等待，不是纯 backbone CUDA 时间；它是 Trainer `update_actor` 耗时中的子阶段。
 

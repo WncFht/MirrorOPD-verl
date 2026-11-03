@@ -1,0 +1,109 @@
+{
+  "reuse-k0": {
+    "decode_match_count": 64,
+    "parent_receipt_sha256": "fdbf1580c98f8a5b8dee08371a6ca2186feaf2734a3090cc2fbe7c894b1fb214",
+    "parent_updates": 48,
+    "tokenizer_config_hashes": {
+      "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+      "tokenizer.json": "be75606093db2094d7cd20f3c2f385c212750648bd6ea4fb2bf507a6a4c55506",
+      "tokenizer_config.json": "cbea7bca9904d56693d2226b00fd564e3be053609d1e50f8f1885510f0f6e790"
+    },
+    "responses_under16_tokens": []
+  },
+  "reuse-k05": {
+    "decode_match_count": 64,
+    "parent_receipt_sha256": "e2a99526ca9afe6c6810d7de5b5ef3980e27049cba889f606ced322a1de0dc87",
+    "parent_updates": 48,
+    "tokenizer_config_hashes": {
+      "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+      "tokenizer.json": "be75606093db2094d7cd20f3c2f385c212750648bd6ea4fb2bf507a6a4c55506",
+      "tokenizer_config.json": "cbea7bca9904d56693d2226b00fd564e3be053609d1e50f8f1885510f0f6e790"
+    },
+    "responses_under16_tokens": [
+      {
+        "request_id": "3074-0",
+        "tokens": [
+          147797,
+          151643
+        ],
+        "text": "🚿"
+      },
+      {
+        "request_id": "3092-0",
+        "tokens": [
+          1533,
+          7485,
+          198,
+          97822,
+          5680,
+          3006,
+          1138,
+          627,
+          4954,
+          198,
+          49147,
+          1794,
+          151643
+        ],
+        "text": "export export\n.savetxt(\".output\")\nform_image\nowaćó"
+      },
+      {
+        "request_id": "3119-0",
+        "tokens": [
+          54683,
+          129042,
+          151643
+        ],
+        "text": "ursal אמר"
+      }
+    ]
+  },
+  "reuse-k1": {
+    "decode_match_count": 64,
+    "parent_receipt_sha256": "5ece618cdbc9ae17ee54fa54e42ec0f21aec94bcd8c73c7701bda8209554d628",
+    "parent_updates": 48,
+    "tokenizer_config_hashes": {
+      "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+      "tokenizer.json": "be75606093db2094d7cd20f3c2f385c212750648bd6ea4fb2bf507a6a4c55506",
+      "tokenizer_config.json": "cbea7bca9904d56693d2226b00fd564e3be053609d1e50f8f1885510f0f6e790"
+    },
+    "responses_under16_tokens": [
+      {
+        "request_id": "3074-0",
+        "tokens": [
+          147797,
+          151643
+        ],
+        "text": "🚿"
+      },
+      {
+        "request_id": "3092-0",
+        "tokens": [
+          1533,
+          7485,
+          198,
+          97822,
+          5680,
+          3006,
+          1138,
+          627,
+          4954,
+          198,
+          49147,
+          1794,
+          151643
+        ],
+        "text": "export export\n.savetxt(\".output\")\nform_image\nowaćó"
+      },
+      {
+        "request_id": "3119-0",
+        "tokens": [
+          54683,
+          129042,
+          151643
+        ],
+        "text": "ursal אמר"
+      }
+    ]
+  }
+}

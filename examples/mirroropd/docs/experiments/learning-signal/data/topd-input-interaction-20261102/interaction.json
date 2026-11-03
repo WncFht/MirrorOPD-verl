@@ -1,0 +1,776 @@
+{
+  "scope": "Paired AIME input effects before/after the common kappa1 initial block.\n\nThe interaction is (trained instruction effect) minus (Base instruction effect).\nAll four samples stay together in each stratified question bootstrap. This is\ninference-input evidence, not an experiment on instructions in training data.\n",
+  "conditions": {
+    "base/local/native": {
+      "identity": {
+        "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "config_sha256": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+        "question_plan_sha256": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7",
+        "input_variant": "local",
+        "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+        "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+        "official_verifier_timeout_seconds": 1.0,
+        "weight_sha256": {
+          "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+        },
+        "decoding": {
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "cap": 31744
+        },
+        "n": 4,
+        "label": "base",
+        "protocol": "local",
+        "scope": [
+          "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+          "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+          "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+        ]
+      },
+      "aggregate": {
+        "native_accuracy": 0.016666666666666666,
+        "official_accuracy": 0.016666666666666666,
+        "mean_length": 8582.247222222222,
+        "cap_rate": 0.24444444444444444
+      },
+      "source_sha256": {
+        "responses": "93c7345c44a7825bdf795a0ca88729e4e9ff46bdd966f91136ce9876fb646091",
+        "scores": "f0615010d06adc73ae584d2cd041d4861be95a5daf298cca252dc5b6202e29c9",
+        "summary": "6e9d56f9783a294746a6bc652282f4f2c83a8eebb5ff6d7151ff41c4543a374f"
+      }
+    },
+    "base/local/instruction": {
+      "identity": {
+        "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "config_sha256": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+        "question_plan_sha256": "e918cab7c01b7ddc09ad2664c7011483b0e46008ed1f3f93fd98690391bb006a",
+        "input_variant": "official_instruction",
+        "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+        "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+        "official_verifier_timeout_seconds": 1.0,
+        "weight_sha256": {
+          "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+        },
+        "decoding": {
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "cap": 31744
+        },
+        "n": 4,
+        "label": "base",
+        "protocol": "local",
+        "scope": [
+          "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+          "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+          "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+        ]
+      },
+      "aggregate": {
+        "native_accuracy": 0.030555555555555555,
+        "official_accuracy": 0.030555555555555555,
+        "mean_length": 5342.275,
+        "cap_rate": 0.1388888888888889
+      },
+      "source_sha256": {
+        "responses": "9a9438935351b7c55b336c116e3f6bad571be6e7453fb6ed43026ffbb3730005",
+        "scores": "27bc6f48ca54a9fb34c59efb85163bfd14552834c4a6a3ca49e7fc1ad06ffe11",
+        "summary": "df67cf31bb72a842fd1d5b545ac8af70a1fe87f3db19ddac005c5df0eb7509a4"
+      }
+    },
+    "base/paper/native": {
+      "identity": {
+        "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "config_sha256": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+        "question_plan_sha256": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7",
+        "input_variant": "local",
+        "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+        "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+        "official_verifier_timeout_seconds": 1.0,
+        "weight_sha256": {
+          "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+        },
+        "decoding": {
+          "temperature": 1.0,
+          "top_p": 0.7,
+          "cap": 16384
+        },
+        "n": 4,
+        "label": "base",
+        "protocol": "paper",
+        "scope": [
+          "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+          "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+          "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+        ]
+      },
+      "aggregate": {
+        "native_accuracy": 0.019444444444444445,
+        "official_accuracy": 0.019444444444444445,
+        "mean_length": 5031.458333333333,
+        "cap_rate": 0.26666666666666666
+      },
+      "source_sha256": {
+        "responses": "3f930bde1a5e1a8d78eb02113eb4b5e73b9b18c3157130e5f6f84329547b3c63",
+        "scores": "6c819d9fbf0c04017a4aa9781abc6aa4352f7a89fb0e77933317e0608496074c",
+        "summary": "4394235db692caeebe6938145d2523623d161c7e80e0119a62d757fb25103c93"
+      }
+    },
+    "base/paper/instruction": {
+      "identity": {
+        "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "config_sha256": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+        "question_plan_sha256": "e918cab7c01b7ddc09ad2664c7011483b0e46008ed1f3f93fd98690391bb006a",
+        "input_variant": "official_instruction",
+        "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+        "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+        "official_verifier_timeout_seconds": 1.0,
+        "weight_sha256": {
+          "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+        },
+        "decoding": {
+          "temperature": 1.0,
+          "top_p": 0.7,
+          "cap": 16384
+        },
+        "n": 4,
+        "label": "base",
+        "protocol": "paper",
+        "scope": [
+          "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+          "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+          "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+        ]
+      },
+      "aggregate": {
+        "native_accuracy": 0.03333333333333333,
+        "official_accuracy": 0.03333333333333333,
+        "mean_length": 3615.163888888889,
+        "cap_rate": 0.17222222222222222
+      },
+      "source_sha256": {
+        "responses": "145f6ef63d4ba141774017945c9f7198509df93c06f917d9fad06ffb2af3b814",
+        "scores": "6bdc75797f955770a284b395f325e5520f54b307d0688c5ab26a017af348b998",
+        "summary": "17f030557dac69f3080c9d7786579cd110d283d96c5bcdf778bdcdd569ddcc76"
+      }
+    },
+    "reuse64x16-k1-s42-block1/local/native": {
+      "identity": {
+        "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/reuse64x16-k1-s42-block1",
+        "config_sha256": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "question_plan_sha256": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7",
+        "input_variant": "local",
+        "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+        "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+        "official_verifier_timeout_seconds": 1.0,
+        "weight_sha256": {
+          "model.safetensors": "20cb35374bc8fb63a795030580ce2cb5c5c9577548b53f5b7051fb28e95ea51f"
+        },
+        "decoding": {
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "cap": 31744
+        },
+        "n": 4,
+        "label": "reuse64x16-k1-s42-block1",
+        "protocol": "local",
+        "scope": [
+          "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+          "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+          "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+        ]
+      },
+      "aggregate": {
+        "native_accuracy": 0.025,
+        "official_accuracy": 0.025,
+        "mean_length": 7836.047222222222,
+        "cap_rate": 0.2222222222222222
+      },
+      "source_sha256": {
+        "responses": "e3d94a072975e2ee218e0eec1f8cd7b5cd24c6123daeda0bf6f6000e702a6724",
+        "scores": "ebdddf223a330d2810b9ee57c772767a6f839a051a76322ed5fd50afaa236344",
+        "summary": "2eb1ecba7deff06b9b37bfcf45af8a1420596cc6ef7b39f2855afbef6dbe36c9"
+      }
+    },
+    "reuse64x16-k1-s42-block1/local/instruction": {
+      "identity": {
+        "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/reuse64x16-k1-s42-block1",
+        "config_sha256": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "question_plan_sha256": "e918cab7c01b7ddc09ad2664c7011483b0e46008ed1f3f93fd98690391bb006a",
+        "input_variant": "official_instruction",
+        "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+        "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+        "official_verifier_timeout_seconds": 1.0,
+        "weight_sha256": {
+          "model.safetensors": "20cb35374bc8fb63a795030580ce2cb5c5c9577548b53f5b7051fb28e95ea51f"
+        },
+        "decoding": {
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "cap": 31744
+        },
+        "n": 4,
+        "label": "reuse64x16-k1-s42-block1",
+        "protocol": "local",
+        "scope": [
+          "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+          "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+          "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+        ]
+      },
+      "aggregate": {
+        "native_accuracy": 0.05,
+        "official_accuracy": 0.05,
+        "mean_length": 6773.416666666667,
+        "cap_rate": 0.18611111111111112
+      },
+      "source_sha256": {
+        "responses": "c6dfd53ff17e914ad8d5826ce6ca840a7ccaf36a203054e4f99f30700f019395",
+        "scores": "672a336351b347371f4988c4c41819c6d48ccf7dcf7801d62d442a18a7e4b456",
+        "summary": "e2d9e3371b7c35a0837aba509813811ccdae2cf5c5126e7a92341ad04bbe1b1c"
+      }
+    },
+    "reuse64x16-k1-s42-block1/paper/native": {
+      "identity": {
+        "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/reuse64x16-k1-s42-block1",
+        "config_sha256": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "question_plan_sha256": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7",
+        "input_variant": "local",
+        "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+        "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+        "official_verifier_timeout_seconds": 1.0,
+        "weight_sha256": {
+          "model.safetensors": "20cb35374bc8fb63a795030580ce2cb5c5c9577548b53f5b7051fb28e95ea51f"
+        },
+        "decoding": {
+          "temperature": 1.0,
+          "top_p": 0.7,
+          "cap": 16384
+        },
+        "n": 4,
+        "label": "reuse64x16-k1-s42-block1",
+        "protocol": "paper",
+        "scope": [
+          "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+          "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+          "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+        ]
+      },
+      "aggregate": {
+        "native_accuracy": 0.025,
+        "official_accuracy": 0.025,
+        "mean_length": 4952.8388888888885,
+        "cap_rate": 0.25833333333333336
+      },
+      "source_sha256": {
+        "responses": "5dc5311ae0a4761b267b8e3a529045c3b6cc3d1dc789514c94fa07f2c23bd87b",
+        "scores": "329199bb280b67f040d48a912baa35730ab0b6cd8507160838928abd1a5f45c6",
+        "summary": "6edf35594bda76e763ab03991d94c0e10da87295c691c97f1b48703b144a3e2a"
+      }
+    },
+    "reuse64x16-k1-s42-block1/paper/instruction": {
+      "identity": {
+        "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/research/topd-data-kappa-20261101/reuse64x16-k1-s42-block1",
+        "config_sha256": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "question_plan_sha256": "e918cab7c01b7ddc09ad2664c7011483b0e46008ed1f3f93fd98690391bb006a",
+        "input_variant": "official_instruction",
+        "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+        "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+        "official_verifier_timeout_seconds": 1.0,
+        "weight_sha256": {
+          "model.safetensors": "20cb35374bc8fb63a795030580ce2cb5c5c9577548b53f5b7051fb28e95ea51f"
+        },
+        "decoding": {
+          "temperature": 1.0,
+          "top_p": 0.7,
+          "cap": 16384
+        },
+        "n": 4,
+        "label": "reuse64x16-k1-s42-block1",
+        "protocol": "paper",
+        "scope": [
+          "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+          "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+          "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+        ]
+      },
+      "aggregate": {
+        "native_accuracy": 0.03611111111111111,
+        "official_accuracy": 0.03611111111111111,
+        "mean_length": 4310.852777777778,
+        "cap_rate": 0.2111111111111111
+      },
+      "source_sha256": {
+        "responses": "c247576b475480c3aae9944870e70853dcbf60a42fd380e0853724cced3c73a1",
+        "scores": "4c6e2cc929ed653f0ec4f546af358ba9bb68bd2570ac54c51069ed99b7135477",
+        "summary": "9130b03d78a554e4395906d3c460f171d6436846d2bdd21dda4418d0c2fbb1fc"
+      }
+    }
+  },
+  "contrasts": [
+    {
+      "protocol": "local",
+      "contrast": "instruction_at_base",
+      "terms": [
+        [
+          "base/local/instruction",
+          1
+        ],
+        [
+          "base/local/native",
+          -1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.013888888888888888,
+          "question_bootstrap95": [
+            -0.005555555555555556,
+            0.03333333333333333
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.013888888888888888,
+          "question_bootstrap95": [
+            -0.005555555555555556,
+            0.03333333333333333
+          ]
+        },
+        "mean_length": {
+          "value": -3239.972222222222,
+          "question_bootstrap95": [
+            -5245.872430555554,
+            -1205.1923611111124
+          ]
+        },
+        "cap_rate": {
+          "value": -0.10555555555555554,
+          "question_bootstrap95": [
+            -0.16944444444444445,
+            -0.03888888888888889
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "local",
+      "contrast": "instruction_after_training",
+      "terms": [
+        [
+          "reuse64x16-k1-s42-block1/local/instruction",
+          1
+        ],
+        [
+          "reuse64x16-k1-s42-block1/local/native",
+          -1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.025,
+          "question_bootstrap95": [
+            -1.778091562876188e-18,
+            0.05277777777777778
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.025,
+          "question_bootstrap95": [
+            -1.778091562876188e-18,
+            0.05277777777777778
+          ]
+        },
+        "mean_length": {
+          "value": -1062.6305555555555,
+          "question_bootstrap95": [
+            -3075.520486111111,
+            942.96486111111
+          ]
+        },
+        "cap_rate": {
+          "value": -0.03611111111111111,
+          "question_bootstrap95": [
+            -0.10277777777777777,
+            0.03055555555555555
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "local",
+      "contrast": "training_native_input",
+      "terms": [
+        [
+          "reuse64x16-k1-s42-block1/local/native",
+          1
+        ],
+        [
+          "base/local/native",
+          -1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.008333333333333333,
+          "question_bootstrap95": [
+            -0.005555555555555556,
+            0.025
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.008333333333333333,
+          "question_bootstrap95": [
+            -0.005555555555555556,
+            0.025
+          ]
+        },
+        "mean_length": {
+          "value": -746.2,
+          "question_bootstrap95": [
+            -2398.4168055555556,
+            918.8393055555556
+          ]
+        },
+        "cap_rate": {
+          "value": -0.02222222222222222,
+          "question_bootstrap95": [
+            -0.075,
+            0.030555555555555555
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "local",
+      "contrast": "training_instruction_input",
+      "terms": [
+        [
+          "reuse64x16-k1-s42-block1/local/instruction",
+          1
+        ],
+        [
+          "base/local/instruction",
+          -1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.019444444444444445,
+          "question_bootstrap95": [
+            -0.008333333333333331,
+            0.04722222222222222
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.019444444444444445,
+          "question_bootstrap95": [
+            -0.008333333333333331,
+            0.04722222222222222
+          ]
+        },
+        "mean_length": {
+          "value": 1431.1416666666667,
+          "question_bootstrap95": [
+            -224.1927083333333,
+            3113.1118749999996
+          ]
+        },
+        "cap_rate": {
+          "value": 0.04722222222222222,
+          "question_bootstrap95": [
+            -0.008333333333333333,
+            0.10277777777777777
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "local",
+      "contrast": "interaction",
+      "terms": [
+        [
+          "reuse64x16-k1-s42-block1/local/instruction",
+          1
+        ],
+        [
+          "reuse64x16-k1-s42-block1/local/native",
+          -1
+        ],
+        [
+          "base/local/instruction",
+          -1
+        ],
+        [
+          "base/local/native",
+          1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.01111111111111111,
+          "question_bootstrap95": [
+            -0.019444444444444448,
+            0.044444444444444446
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.01111111111111111,
+          "question_bootstrap95": [
+            -0.019444444444444448,
+            0.044444444444444446
+          ]
+        },
+        "mean_length": {
+          "value": 2177.3416666666667,
+          "question_bootstrap95": [
+            -44.31486111111108,
+            4336.028958333333
+          ]
+        },
+        "cap_rate": {
+          "value": 0.06944444444444445,
+          "question_bootstrap95": [
+            -0.0027777777777777783,
+            0.1388888888888889
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "paper",
+      "contrast": "instruction_at_base",
+      "terms": [
+        [
+          "base/paper/instruction",
+          1
+        ],
+        [
+          "base/paper/native",
+          -1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.013888888888888888,
+          "question_bootstrap95": [
+            -0.005555555555555556,
+            0.03611111111111111
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.013888888888888888,
+          "question_bootstrap95": [
+            -0.005555555555555556,
+            0.03611111111111111
+          ]
+        },
+        "mean_length": {
+          "value": -1416.2944444444445,
+          "question_bootstrap95": [
+            -2424.7790972222224,
+            -425.9015972222225
+          ]
+        },
+        "cap_rate": {
+          "value": -0.09444444444444444,
+          "question_bootstrap95": [
+            -0.15833333333333335,
+            -0.030555555555555558
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "paper",
+      "contrast": "instruction_after_training",
+      "terms": [
+        [
+          "reuse64x16-k1-s42-block1/paper/instruction",
+          1
+        ],
+        [
+          "reuse64x16-k1-s42-block1/paper/native",
+          -1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.011111111111111112,
+          "question_bootstrap95": [
+            -0.008333333333333333,
+            0.03055555555555555
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.011111111111111112,
+          "question_bootstrap95": [
+            -0.008333333333333333,
+            0.03055555555555555
+          ]
+        },
+        "mean_length": {
+          "value": -641.9861111111111,
+          "question_bootstrap95": [
+            -1600.4424305555553,
+            313.2388888888887
+          ]
+        },
+        "cap_rate": {
+          "value": -0.04722222222222222,
+          "question_bootstrap95": [
+            -0.10833333333333334,
+            0.01388888888888889
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "paper",
+      "contrast": "training_native_input",
+      "terms": [
+        [
+          "reuse64x16-k1-s42-block1/paper/native",
+          1
+        ],
+        [
+          "base/paper/native",
+          -1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.005555555555555555,
+          "question_bootstrap95": [
+            -0.008333333333333331,
+            0.019444444444444445
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.005555555555555555,
+          "question_bootstrap95": [
+            -0.008333333333333331,
+            0.019444444444444445
+          ]
+        },
+        "mean_length": {
+          "value": -78.61944444444444,
+          "question_bootstrap95": [
+            -958.4778472222221,
+            835.1445833333329
+          ]
+        },
+        "cap_rate": {
+          "value": -0.008333333333333333,
+          "question_bootstrap95": [
+            -0.06388888888888888,
+            0.05
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "paper",
+      "contrast": "training_instruction_input",
+      "terms": [
+        [
+          "reuse64x16-k1-s42-block1/paper/instruction",
+          1
+        ],
+        [
+          "base/paper/instruction",
+          -1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": 0.0027777777777777775,
+          "question_bootstrap95": [
+            -0.02222222222222222,
+            0.027777777777777776
+          ]
+        },
+        "official_accuracy": {
+          "value": 0.0027777777777777775,
+          "question_bootstrap95": [
+            -0.02222222222222222,
+            0.027777777777777776
+          ]
+        },
+        "mean_length": {
+          "value": 695.688888888889,
+          "question_bootstrap95": [
+            -60.503680555555555,
+            1441.747222222222
+          ]
+        },
+        "cap_rate": {
+          "value": 0.03888888888888888,
+          "question_bootstrap95": [
+            -0.01111111111111111,
+            0.08888888888888888
+          ]
+        }
+      }
+    },
+    {
+      "protocol": "paper",
+      "contrast": "interaction",
+      "terms": [
+        [
+          "reuse64x16-k1-s42-block1/paper/instruction",
+          1
+        ],
+        [
+          "reuse64x16-k1-s42-block1/paper/native",
+          -1
+        ],
+        [
+          "base/paper/instruction",
+          -1
+        ],
+        [
+          "base/paper/native",
+          1
+        ]
+      ],
+      "metrics": {
+        "native_accuracy": {
+          "value": -0.002777777777777778,
+          "question_bootstrap95": [
+            -0.027777777777777776,
+            0.02222222222222222
+          ]
+        },
+        "official_accuracy": {
+          "value": -0.002777777777777778,
+          "question_bootstrap95": [
+            -0.027777777777777776,
+            0.02222222222222222
+          ]
+        },
+        "mean_length": {
+          "value": 774.3083333333333,
+          "question_bootstrap95": [
+            -395.9933333333332,
+            1912.2783333333334
+          ]
+        },
+        "cap_rate": {
+          "value": 0.04722222222222222,
+          "question_bootstrap95": [
+            -0.027777777777777776,
+            0.11944444444444444
+          ]
+        }
+      }
+    }
+  ],
+  "original_base_result_reproduced": true,
+  "script_sha256": "9f3d619fceae3eb4f67f6f6a2f8764c4e03fff6d4d0972fcd34413296033a0d4",
+  "limits": [
+    "One initial training block and one data/rollout seed.",
+    "Intervals resample 90 paired questions, stratified by year, keeping four samples together.",
+    "No correction for multiple comparisons and no training-seed uncertainty.",
+    "This tests inference instructions, not training instructions or later online checkpoints.",
+    "Both automated verifiers have documented extraction limitations."
+  ]
+}

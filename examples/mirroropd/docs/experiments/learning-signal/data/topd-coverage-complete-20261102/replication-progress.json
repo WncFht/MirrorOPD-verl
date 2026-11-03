@@ -1,0 +1,48 @@
+{
+  "observed_at": "2026-11-02T10:04:54.411029+08:00",
+  "seeds": {
+    "43": {
+      "status": "running",
+      "stage": "fresh-k1-outer02-teacher",
+      "guardian": {
+        "pid": 1223779,
+        "start_ticks": "4017170123"
+      },
+      "guardian_verified_live": true,
+      "completed_training_outers": {
+        "reuse-k0": [
+          1,
+          2
+        ],
+        "reuse-k05": [
+          1,
+          2
+        ],
+        "reuse-k1": [
+          1,
+          2
+        ],
+        "fresh-k1": [
+          1
+        ]
+      },
+      "plan_sha256": "b8d4c148a28d232f0865537d6482b90e261bbfd64835151e70c1e4e7ff470525"
+    },
+    "44": {
+      "status": "running",
+      "stage": "fresh-k1-outer01-generate",
+      "guardian": {
+        "pid": 1210853,
+        "start_ticks": "4017142854"
+      },
+      "guardian_verified_live": true,
+      "completed_training_outers": {
+        "reuse-k0": [],
+        "reuse-k05": [],
+        "reuse-k1": [],
+        "fresh-k1": []
+      },
+      "plan_sha256": "b40d3aaa90fc519e6d93628cd80eaa400b2e3befd2e0220bbd54c966614da22f"
+    }
+  }
+}

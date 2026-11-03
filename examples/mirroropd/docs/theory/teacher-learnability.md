@@ -4,6 +4,8 @@
 
 主要判断：固定 state 上的 full-vocab RKL 确实可以写成中心化 policy gradient；合法 baseline 在精确求和下不改变更新，不能由选择 baseline 制造正交性。RL 教师可能更容易保留学生已经能够实现的局部修正，但“OPD 必然能学 RL、不能学 SFT”不是现有结果或这些恒等式的推论。
 
+SFT→RL 的阶段组合另见[组合教师的可蒸馏性](2026-11-01-SFT与RL组合教师的可蒸馏性.md)：推导同奖励响应内部的 SFT 偏好保留、只学习奖励重加权时的残差，以及共同局部响应谱下的有限预算上下界。
+
 阅读顺序：[论文条件](#paper)、[三类梯度](#gradients)、[正交性](#orthogonality)、[教师可学习性](#learnability)、[实验](#experiments)、[batch 间迁移](#batch-transfer)。本页采用既有[统一符号](符号约定.md)：$T$ 是教师，$p_\theta$ 是学生，$q_0=p_{\theta_0}$ 是冻结初始学生，$\beta$ 是行为策略；额外用 $\rho$ 表示 SFT 目标分布。$u$ 统一表示理想的参数更新方向，损失梯度的下降方向为 $u=-\nabla L$，不与真实 Adam 位移混用。
 
 <a id="paper"></a>

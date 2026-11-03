@@ -1,0 +1,13 @@
+{
+  "script": "examples/mirroropd/research/studies/prefix_fusion/report_qwen_snapshot.py",
+  "script_sha256": "395e6ddda091f541cf8738b671ec2d1a2a8c9dc0478a0eea2a8b881d6b9eb247",
+  "mode": "--replot; frozen CSVs",
+  "inputs": {
+    "accuracy-per-prompt.csv": "0f9f848a6b09d1eee0c64f34045fa341402ceb30969388651d7b626b60fc4741",
+    "fixed-risk.csv": "5c3c5102143c3eabb2a507715fa9383880747029cad258ea7458dafce9912a1b",
+    "outers.csv": "0ccae4742a01fb2393ded61dfaece5b549504c64fc979058d4e6062820f6b0ff",
+    "sources.json": "e65b6f8fc90b889c5cbf4bd9d866b173aaf48dc6be3fbdd54b8af83f1342ad40",
+    "summary.json": "e32f896258882a97a13ee6b0aa30d024b68ba39b3a9ff6fcd442329638435a43",
+    "updates.csv": "1950df45cc926ed2b14f0edf98b383f7ab716b9c872a07fb6907f8759b654567"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "outers": {
+    "4": {
+      "parent_optimizer_updates": 48,
+      "reuse64": {
+        "responses": 64,
+        "correct": 1,
+        "accuracy": 0.015625,
+        "mean_length": 1129.90625,
+        "cap_count": 0
+      },
+      "fresh_common64": {
+        "responses": 64,
+        "correct": 0,
+        "accuracy": 0.0,
+        "mean_length": 1373.109375,
+        "cap_count": 0
+      },
+      "fresh_full1024": {
+        "responses": 1024,
+        "correct": 34,
+        "accuracy": 0.033203125,
+        "mean_length": 1241.7490234375,
+        "cap_count": 4
+      },
+      "fresh_minus_reuse_common64": {
+        "accuracy": {
+          "value": -0.015625,
+          "question_bootstrap95": [
+            -0.046875,
+            0.0
+          ]
+        },
+        "mean_length": {
+          "value": 243.203125,
+          "question_bootstrap95": [
+            -451.78359374999997,
+            930.864453125
+          ]
+        },
+        "cap_rate": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "identity": {
+        "fresh_bank_sha256": "c03fd06a8e991645309297c8e0522115dbf6fca4cb9b474348a54c8695be4f32",
+        "reuse_bank_sha256": "fc2c1877cd1098213bf954cce62c88dacc49c1b110d4be26e8e952a0f855648b",
+        "fresh_protocol_sha256": "0d28b07fd4e73cd2debb05ce265834b27e4cda1fecac706d45987d9fb3028900",
+        "reuse_protocol_sha256": "19f9e124295203a88da860f24bb986fa741ed15e16201bbbf17f4849c9beb2b2",
+        "fresh_scores_sha256": "424cc236620409dc19c747c1f76be7cc18cf1eaa915ee217c5a710cdccdaf5e6",
+        "reuse_scores_sha256": "89c4cc418b47a3f6aa7feceec8d27884e7a873b06e78732ec9b8680965c7ca3c"
+      }
+    }
+  },
+  "script_sha256": "b9926c401f8ba520739b26e8bb67dcd5a7b9594e6c750be7362d344ea3bd9a8e",
+  "status": "complete",
+  "scoring_helper_sha256": "5a453da5278cae4e3fec536ebd7a19fd02b7d36be1e7770e8214f4185a8fd467",
+  "limits": [
+    "Native automatic grading, including fallback false positives and internal timeout-to-zero behavior.",
+    "The full1024 denominator differs from reuse64; compare the common64 only.",
+    "Different outers use different questions; within-outer intervals omit seed uncertainty and multiplicity.",
+    "These are new scheduled training questions before the next update, not the final benchmark evaluation.",
+    "One training seed, one answer per question; early coverage screening only."
+  ]
+}

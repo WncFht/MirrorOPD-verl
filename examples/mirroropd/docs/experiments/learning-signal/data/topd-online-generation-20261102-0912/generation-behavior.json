@@ -1,0 +1,659 @@
+{
+  "scope": "Paired generation behavior on the same newly scheduled questions.\n\nOuter-j generations use the weights after (j-1)*16 updates. Before/after training\nrisks and rollout behavior have different time indices. Comparisons keep input\ntokens and request seeds identical, but include each arm's accumulated learning\nand visitation effects. Length and cap rate are not mathematical correctness.\n",
+  "banks": {
+    "seed42/fresh-k1/outer02": {
+      "parent_optimizer_updates": 16,
+      "all_generated": {
+        "responses": 1024,
+        "tokens": 1240151,
+        "mean_length": 1211.0849609375,
+        "median_length": 661.5,
+        "cap_count": 10,
+        "cap_rate": 0.009765625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 80435,
+        "mean_length": 1256.796875,
+        "median_length": 606.0,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "d5dc93e175e2c552b45c81dc5857834db7ebdef5beb6b9d715fddae038946454",
+      "protocol_sha256": "6e06997a06addc07472110217fde8197e584bda8da3ecdbe4eb5e39667d94486",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "7604c5cac7563a6346a94fe0072b0af3ab404709deb2cc7cd4afaf844c2e6412",
+        "research_state.pt": "426fcfc541e7ca5a8d30b1bc1923bfb829a1f28d915aea2324dd0e79d28e3540"
+      }
+    },
+    "seed42/fresh-k1/outer03": {
+      "parent_optimizer_updates": 32,
+      "all_generated": {
+        "responses": 1024,
+        "tokens": 1224738,
+        "mean_length": 1196.033203125,
+        "median_length": 709.0,
+        "cap_count": 5,
+        "cap_rate": 0.0048828125
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 74273,
+        "mean_length": 1160.515625,
+        "median_length": 782.0,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "bank_sha256": "4270fa53a39a53f9df2a2c41bac5444bdcaf6e738f9f36fb11b4a0bb33a10568",
+      "protocol_sha256": "d8c529baba50eecdb643b343e274dc17e814b9d2168bd9a6416253b0ac5fc634",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "6012ab476a93109675bb2df332908e65040e3b658539d29de962c52c264e3552",
+        "research_state.pt": "6bc9a80cf34bf23e51484df0d9c96a4c2e51000b5aaa346a6ec7ce35a36d3bed"
+      }
+    },
+    "seed42/reuse-k0/outer02": {
+      "parent_optimizer_updates": 16,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 63472,
+        "mean_length": 991.75,
+        "median_length": 704.5,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 63472,
+        "mean_length": 991.75,
+        "median_length": 704.5,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "bank_sha256": "2653c5e89f4980f201dc7637c3bf34c03632b573ec0f49784508829c2186e52d",
+      "protocol_sha256": "59091cfbc46e7ed011f353c2a58835652b2bfba011ab632febe26734b6ea8c0a",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "bf5cd68a0d9a885928a3a754dc46500ea356e79cd10ab5a2c1e85bcd9b698931",
+        "research_state.pt": "8246d67cec4c4d1d3afa8800dcf4cf3548df8ea39aff5ebea39828aa076cf1cb"
+      }
+    },
+    "seed42/reuse-k0/outer03": {
+      "parent_optimizer_updates": 32,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 109662,
+        "mean_length": 1713.46875,
+        "median_length": 957.0,
+        "cap_count": 2,
+        "cap_rate": 0.03125
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 109662,
+        "mean_length": 1713.46875,
+        "median_length": 957.0,
+        "cap_count": 2,
+        "cap_rate": 0.03125
+      },
+      "bank_sha256": "59f123d5ff80af68617a156f10636deb927ec86487a5ccdb1620787abf42da0b",
+      "protocol_sha256": "a182ec34a2456d33ba09959723768d766fddf7e62bca4c3b7ac0f8962d0a8259",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "dcbd4c816cf70d44f0c752c460b053c0c817094656a9c541c514fc7056441635",
+        "research_state.pt": "9e8c3928b70178c5c00a03e43a93e913c8734951e80b1f92a4fdbe921c1f07c7"
+      }
+    },
+    "seed42/reuse-k0/outer04": {
+      "parent_optimizer_updates": 48,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 136232,
+        "mean_length": 2128.625,
+        "median_length": 1102.5,
+        "cap_count": 2,
+        "cap_rate": 0.03125
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 136232,
+        "mean_length": 2128.625,
+        "median_length": 1102.5,
+        "cap_count": 2,
+        "cap_rate": 0.03125
+      },
+      "bank_sha256": "8a39c8f8f7aeeabf0c229ab066daff4d6454143755ce3273292934dad6b52ce1",
+      "protocol_sha256": "b66c525bb841b6b6814961f11cc11629dca6f8fb0f2f12fef00bc9f4cb32f5bf",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "42afa37ee768c250c15a31e85856e240e3eb5f2fa60668db0c8a2a7f9debec15",
+        "research_state.pt": "850e82047fe9e84e8ff1bbfbc556a3657e760b2810eb7b7814f31e26a7a56a7b"
+      }
+    },
+    "seed42/reuse-k05/outer02": {
+      "parent_optimizer_updates": 16,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 59210,
+        "mean_length": 925.15625,
+        "median_length": 549.5,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 59210,
+        "mean_length": 925.15625,
+        "median_length": 549.5,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "bank_sha256": "02cf6f99b9ef6ae08643941a01b82494732a152ef177a26608eb0244203b627c",
+      "protocol_sha256": "4cf6064ceb05670bf7ceb674d6c920cf116c7628f87d5332f3906e01aa1ac5d3",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "c10b46cf3b4931de5c328347995e07de4291215f15a6f4ec8beeba1a7eb581ce",
+        "research_state.pt": "b56047bdbaa27f07d793e17ee8965e136aab3b095dec986dfba04dd03f3962ca"
+      }
+    },
+    "seed42/reuse-k05/outer03": {
+      "parent_optimizer_updates": 32,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 88143,
+        "mean_length": 1377.234375,
+        "median_length": 864.0,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 88143,
+        "mean_length": 1377.234375,
+        "median_length": 864.0,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "bank_sha256": "4237c7808dffbbd4c2e1b0b77f7e84930b106d158be5226196f76ff8aaef6ea4",
+      "protocol_sha256": "543562d058b7d04d6bf467f39b412dae118bb0554d165b62a6410babd2f4aa39",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "6fa17217f88c712f65bcb395f59369e2b2c4f636ba6a678a9f8af64afd84432f",
+        "research_state.pt": "da3c8f8d394c00b026fa404b978d93a39227fd233629439acd4b67bb4c7ba063"
+      }
+    },
+    "seed42/reuse-k05/outer04": {
+      "parent_optimizer_updates": 48,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 84379,
+        "mean_length": 1318.421875,
+        "median_length": 766.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 84379,
+        "mean_length": 1318.421875,
+        "median_length": 766.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "829e45795fb62278ce3070d608bc17cf0aaa0ef19f2e277eb89bff0ddf763225",
+      "protocol_sha256": "cd7e1142844200a79f2d8d9bbfb58fe3add221be33f5a2797cd23e2f09ee122b",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "b6fd2725d9574ec764ae887d849829c3c0f26a0baf5c4f9b9327b001aaef8f04",
+        "research_state.pt": "432e72531e1877e81bda14249b95bea2059bb33f3ea067af01fa0e2b931183e8"
+      }
+    },
+    "seed42/reuse-k1/outer02": {
+      "parent_optimizer_updates": 16,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 63841,
+        "mean_length": 997.515625,
+        "median_length": 458.0,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 63841,
+        "mean_length": 997.515625,
+        "median_length": 458.0,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "7062c2f85d74b102fb11067b19831bc8bf0426929b4da80f973d84877aa2e29b",
+      "protocol_sha256": "a5e54fa56a5ba3d815f921e9f4350a2d25e7b4c9a4c850ce4bb9269759bb7af4",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "20cb35374bc8fb63a795030580ce2cb5c5c9577548b53f5b7051fb28e95ea51f",
+        "research_state.pt": "d58ddd44f8d381781f220638d8c34f51d3727e928892a806279ab1d3ed4cefeb"
+      }
+    },
+    "seed42/reuse-k1/outer03": {
+      "parent_optimizer_updates": 32,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 100891,
+        "mean_length": 1576.421875,
+        "median_length": 742.0,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 100891,
+        "mean_length": 1576.421875,
+        "median_length": 742.0,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "796643094761282fc448db616d5a8a2fce472fef6cd4156ecaed679b762e7a21",
+      "protocol_sha256": "7d8e862b6b6927e29b657869574c7f176fddfbae8a09c6d9b35c146ef5950e98",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "f43fc9ad03cc040b12b6fc099cf50cab420a234fad92e75c68cbbe2918da27c1",
+        "research_state.pt": "6ae90737a905b775cf058a0824405718d7eb54982f97ca9194e2bee50e7b27c7"
+      }
+    },
+    "seed42/reuse-k1/outer04": {
+      "parent_optimizer_updates": 48,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 72314,
+        "mean_length": 1129.90625,
+        "median_length": 756.0,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 72314,
+        "mean_length": 1129.90625,
+        "median_length": 756.0,
+        "cap_count": 0,
+        "cap_rate": 0.0
+      },
+      "bank_sha256": "fc2c1877cd1098213bf954cce62c88dacc49c1b110d4be26e8e952a0f855648b",
+      "protocol_sha256": "19f9e124295203a88da860f24bb986fa741ed15e16201bbbf17f4849c9beb2b2",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "5d7a33007ecd57e26c649ba326170eace27c0628730d3f74a6179efb17d170f5",
+        "research_state.pt": "44bca464346c9e6a66fc01a60f4155a09673a738bccfa657ca951cfd833cc6c5"
+      }
+    },
+    "seed43/fresh-k1/outer01": {
+      "parent_optimizer_updates": 0,
+      "all_generated": {
+        "responses": 1024,
+        "tokens": 1388226,
+        "mean_length": 1355.689453125,
+        "median_length": 665.5,
+        "cap_count": 16,
+        "cap_rate": 0.015625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 77068,
+        "mean_length": 1204.1875,
+        "median_length": 589.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "9df321fa68a6d58b493eea00a8d5c9b579b444d3f3ce658422bf1a3e2e758ccb",
+      "protocol_sha256": "e2bb5411d6d84a9d515317e90f45eec37d1493a67bfc5c6f5f605d91393c74ab",
+      "parent_checkpoint_sha256": {
+        "config.json": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+        "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+      }
+    },
+    "seed43/reuse-k0/outer01": {
+      "parent_optimizer_updates": 0,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 77068,
+        "mean_length": 1204.1875,
+        "median_length": 589.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 77068,
+        "mean_length": 1204.1875,
+        "median_length": 589.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+      "protocol_sha256": "edaa386df3aa34cf5739238801cfebac5b31f2810cd627ba62c7ade3461cbaa6",
+      "parent_checkpoint_sha256": {
+        "config.json": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+        "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+      }
+    },
+    "seed43/reuse-k0/outer02": {
+      "parent_optimizer_updates": 16,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 96151,
+        "mean_length": 1502.359375,
+        "median_length": 690.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 96151,
+        "mean_length": 1502.359375,
+        "median_length": 690.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "a6b7ae529322a44a10f58623b0f074399792d6243a087450871890f527073925",
+      "protocol_sha256": "d80bfb54475c9819217aec303a31df842cdc1405aee9191d7bee74059fa92e12",
+      "parent_checkpoint_sha256": {
+        "config.json": "9141cc356bd8185a7f6ea13cd27c91b681cf6281b8a2cb09dbaee3902fb9c8e9",
+        "model.safetensors": "7fb43e27fdd5e416121382f8106395cd9d33c41cf3db349726d4740c1a0a3a8c",
+        "research_state.pt": "bd3199e12e098716d81a9384ec82cdc2b00483400316318914ced90b079339f1"
+      }
+    },
+    "seed43/reuse-k05/outer01": {
+      "parent_optimizer_updates": 0,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 77068,
+        "mean_length": 1204.1875,
+        "median_length": 589.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 77068,
+        "mean_length": 1204.1875,
+        "median_length": 589.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+      "protocol_sha256": "3d58c1af2c7e897ab61278309685bd0dd07eaccb31c5aef3c902bb55d604451e",
+      "parent_checkpoint_sha256": {
+        "config.json": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+        "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+      }
+    },
+    "seed43/reuse-k1/outer01": {
+      "parent_optimizer_updates": 0,
+      "all_generated": {
+        "responses": 64,
+        "tokens": 77068,
+        "mean_length": 1204.1875,
+        "median_length": 589.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "common_first64": {
+        "responses": 64,
+        "tokens": 77068,
+        "mean_length": 1204.1875,
+        "median_length": 589.5,
+        "cap_count": 1,
+        "cap_rate": 0.015625
+      },
+      "bank_sha256": "16ae2328de100700ef85e21d897bbb29b883576cc903ab9d17395544424b5d2a",
+      "protocol_sha256": "30facceaa6ec40b41e52741cae815fafc365dbbc0807814d654090f0151e7091",
+      "parent_checkpoint_sha256": {
+        "config.json": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+        "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+      }
+    }
+  },
+  "comparisons": [
+    {
+      "left": "seed42/reuse-k0/outer02",
+      "right": "seed42/reuse-k1/outer02",
+      "parent_updates": 16,
+      "right_minus_left": {
+        "mean_length": {
+          "value": 5.765625,
+          "question_bootstrap95": [
+            -527.8828125,
+            693.1382812499999
+          ]
+        },
+        "cap_rate": {
+          "value": 0.015625,
+          "question_bootstrap95": [
+            0.0,
+            0.046875
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed42/reuse-k05/outer02",
+      "right": "seed42/reuse-k1/outer02",
+      "parent_updates": 16,
+      "right_minus_left": {
+        "mean_length": {
+          "value": 72.359375,
+          "question_bootstrap95": [
+            -501.040625,
+            784.8960937499999
+          ]
+        },
+        "cap_rate": {
+          "value": 0.015625,
+          "question_bootstrap95": [
+            0.0,
+            0.046875
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed42/reuse-k1/outer02",
+      "right": "seed42/fresh-k1/outer02",
+      "parent_updates": 16,
+      "right_minus_left": {
+        "mean_length": {
+          "value": 259.28125,
+          "question_bootstrap95": [
+            -473.39296875,
+            1024.9273437499999
+          ]
+        },
+        "cap_rate": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            -0.046875,
+            0.046875
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed42/reuse-k0/outer03",
+      "right": "seed42/reuse-k1/outer03",
+      "parent_updates": 32,
+      "right_minus_left": {
+        "mean_length": {
+          "value": -137.046875,
+          "question_bootstrap95": [
+            -1150.65078125,
+            871.4929687499998
+          ]
+        },
+        "cap_rate": {
+          "value": -0.015625,
+          "question_bootstrap95": [
+            -0.0625,
+            0.03125
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed42/reuse-k05/outer03",
+      "right": "seed42/reuse-k1/outer03",
+      "parent_updates": 32,
+      "right_minus_left": {
+        "mean_length": {
+          "value": 199.1875,
+          "question_bootstrap95": [
+            -469.52109375,
+            998.9933593749998
+          ]
+        },
+        "cap_rate": {
+          "value": 0.015625,
+          "question_bootstrap95": [
+            0.0,
+            0.046875
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed42/reuse-k1/outer03",
+      "right": "seed42/fresh-k1/outer03",
+      "parent_updates": 32,
+      "right_minus_left": {
+        "mean_length": {
+          "value": -415.90625,
+          "question_bootstrap95": [
+            -1210.648828125,
+            248.14921874999987
+          ]
+        },
+        "cap_rate": {
+          "value": -0.015625,
+          "question_bootstrap95": [
+            -0.046875,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed42/reuse-k0/outer04",
+      "right": "seed42/reuse-k1/outer04",
+      "parent_updates": 48,
+      "right_minus_left": {
+        "mean_length": {
+          "value": -998.71875,
+          "question_bootstrap95": [
+            -1878.808984375,
+            -171.796484375
+          ]
+        },
+        "cap_rate": {
+          "value": -0.03125,
+          "question_bootstrap95": [
+            -0.078125,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed42/reuse-k05/outer04",
+      "right": "seed42/reuse-k1/outer04",
+      "parent_updates": 48,
+      "right_minus_left": {
+        "mean_length": {
+          "value": -188.515625,
+          "question_bootstrap95": [
+            -958.490625,
+            510.8496093749999
+          ]
+        },
+        "cap_rate": {
+          "value": -0.015625,
+          "question_bootstrap95": [
+            -0.046875,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed43/reuse-k0/outer01",
+      "right": "seed43/reuse-k1/outer01",
+      "parent_updates": 0,
+      "right_minus_left": {
+        "mean_length": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cap_rate": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed43/reuse-k05/outer01",
+      "right": "seed43/reuse-k1/outer01",
+      "parent_updates": 0,
+      "right_minus_left": {
+        "mean_length": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cap_rate": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "left": "seed43/reuse-k1/outer01",
+      "right": "seed43/fresh-k1/outer01",
+      "parent_updates": 0,
+      "right_minus_left": {
+        "mean_length": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cap_rate": {
+          "value": 0.0,
+          "question_bootstrap95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  ],
+  "script_sha256": "8aeeb79128594d66de94d5a69a3b9f445ca8f1abae4cbb9f60d7752d0323e725",
+  "limits": [
+    "Only complete, hashed banks are included; the corresponding training block may still be running.",
+    "Each outer has new questions; cross-outer differences also change the question set.",
+    "Within-outer contrasts pair the same64 questions and sampling seeds.",
+    "Fresh1024 contrasts use its nested first64; full1024 summaries are reported separately.",
+    "One answer per question; question intervals do not include training-seed variance.",
+    "Initial replication banks share identical trajectories by design; not independent equality evidence."
+  ]
+}
