@@ -66,6 +66,8 @@ distillation:
 | `seq-mean-token-sum`      | token 求和               | 除 B                                                          |
 | `seq-mean-token-sum-norm` | token 求和               | 除 B 和固定 `actor.loss_scale_factor`，后者必须为显式正有限值 |
 
+Trainer 初始化接受这些 Full-vocab 聚合，固定 C 在启动时检查；sampled mirror 仍保留 token-mean 限制。统一评测的完整 batch 与 n=1 合同不限制训练聚合；评测归约独立于训练 loss，见[评估包合同](../../../../../verl/trainer/evaluation/README.md)。
+
 Engine 在 optimizer mini-batch 拆成动态 micro-batch 前计算分母。序列模式单独 all-reduce 非空 `loss_mask` 的数量，存为 `full_vocab_num_sequences`；[synthetic padding](../../../../../verl/trainer/ppo/padding_utils.py) 的 mask 为零，因此不会计入 B。LossContext 使用这个实际分母，避免沿用包含 padding 或空回答的声明批量。DP 梯度平均所需的乘数与 η 缩放在最终 loss 统一应用，逐回答长度权重则在 kernel 累积 `dH/dW` 前应用。
 
 Future 配置位于 `distillation.distillation_loss.full_vocab.future`，默认 `mode=none, gamma=1.0`。`sum` 累加严格后续代价，`mean` 除后续有效 token 数；`discounted_sum` 和 `discounted_mean` 按原始 response 坐标间隔加权，后者除折扣权重和；`discounted_sequence` 还对 local 和 score 项同时乘绝对时间权重。γ 必须为有限的 $0<\gamma\le1$，仅 discounted 模式允许 γ≠1。完整公式、on-policy 假设及 TOP-D 与当前方法的差别保留在[设计的数学合同](2026-11-03-Full-vocab聚合与未来信用实现计划.md#3-未来信用的数学合同)。

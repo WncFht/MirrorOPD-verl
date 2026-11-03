@@ -871,7 +871,7 @@ class PPOTrainer(ABC):
             actor = self.config.actor_rollout_ref.actor
             if (
                 actor.strategy != "fsdp2"
-                or actor.loss_agg_mode != "token-mean"
+                or (not self._uses_full_vocab() and actor.loss_agg_mode != "token-mean")
                 or actor.use_kl_loss
                 or actor.entropy_coeff != 0
                 or self.config.algorithm.use_kl_in_reward
@@ -879,8 +879,16 @@ class PPOTrainer(ABC):
                 or self.use_critic
             ):
                 raise ValueError(
-                    "full_reverse_kl requires FSDP2 token-mean, temperature=1, no critic or auxiliary rewards"
+                    "Mirror requires FSDP2, temperature=1, no critic or auxiliary rewards; "
+                    "sampled mirror requires token-mean"
                 )
+        if self._uses_full_vocab():
+            from verl.trainer.distillation.reduction import reduction_scale
+
+            actor = self.config.actor_rollout_ref.actor
+            reduction_scale(
+                actor.loss_agg_mode, num_tokens=1, num_sequences=1, fixed_scale=actor.get("loss_scale_factor")
+            )
         self.tokenizer = model_config.tokenizer
         # Used for multimodal LLM, could be None
         self.processor = model_config.processor
@@ -1981,9 +1989,8 @@ class PPOTrainer(ABC):
             or not self._uses_full_vocab()
             or self.config.actor_rollout_ref.rollout.n != 1
             or actor.ppo_mini_batch_size != self.config.data.train_batch_size
-            or actor.loss_agg_mode != "token-mean"
         ):
-            raise ValueError("Unified evaluation requires full-batch token-mean RKL updates, n=1 and no critic")
+            raise ValueError("Unified evaluation requires full-batch full-vocab updates, n=1 and no critic")
 
     def _balance_batch(
         self, batch: KVBatchMeta, metrics, logging_prefix="global_seqlen", keep_minibatch=False, inference_only=False

@@ -1,6 +1,6 @@
 # 原生训练的评估合同
 
-本包复用 V1／FSDP2／vLLM 的原生生成与评分，负责评估调度、Parquet 产物、CPU 判分及串行 RKL 读出。训练 loss 保持 token-mean；评估先题内 token 均值再按题平均，history 再按批等权。当前架构见[总览](../../../examples/mirroropd/docs/infra/architecture/README.md)，旧配置按[迁移指南](../../../examples/mirroropd/docs/infra/architecture/runtime-migration.md)升级。
+本包复用 V1／FSDP2／vLLM 的原生生成与评分，负责评估调度、Parquet 产物、CPU 判分及串行 RKL 读出。训练聚合由 actor 的 `loss_agg_mode` 指定，支持范围见 [Full-vocab 聚合](../../../examples/mirroropd/docs/infra/architecture/full-vocab.md#聚合与未来信用)；评估始终先题内 token 均值再按题平均，history 再按批等权，训练聚合与 future 配置不改变评估口径。当前架构见[总览](../../../examples/mirroropd/docs/infra/architecture/README.md)，旧配置按[迁移指南](../../../examples/mirroropd/docs/infra/architecture/runtime-migration.md)升级。
 
 ## 组件与构造
 
@@ -23,7 +23,7 @@ Source/history 在训练内建立初始 source bank；公共 suite 使用预生�
 | 能力                   | 含义                                                 | 当前声明                                                          |
 | ---------------------- | ---------------------------------------------------- | ----------------------------------------------------------------- |
 | handles_validation     | 接管 Trainer 的验证入口                              | Suite、source/history、probe、HF reload 为 true；科学扩展为 false |
-| requires_full_batch    | 要求 n=1、完整训练 mini-batch、token-mean、无 critic | 公共 suite 为 true                                                |
+| requires_full_batch    | 要求 n=1、完整训练 mini-batch、full-vocab、无 critic | 公共 suite 为 true                                                |
 | owns_final_weight_sync | 接管最后一轮同步，避免 Trainer 重复恢复模型          | 公共 suite 为 true                                                |
 
 Trainer 和 RolloutService 不根据 evaluation 配置是否存在推断这些行为。Source/history 的休眠与恢复只经 RolloutService，恢复时重新安装 sampler 并维护驻留版本。新增组件声明实际能力并校验自己的 options，无需给 Trainer 增加一套配置入口。
