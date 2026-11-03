@@ -4,6 +4,7 @@
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -101,6 +102,35 @@ class QueueTest(unittest.TestCase):
 
     def jobs(self):
         return log_sync.load(log_sync.queue_dir(self.repo))["jobs"]
+
+    def prepare_lfs_job(self):
+        if not shutil.which("git-lfs"):
+            self.skipTest("git-lfs is required")
+        log_sync.git(self.repo, "lfs", "install", "--local")
+        (self.repo / ".gitattributes").write_text("*.wandb filter=lfs diff=lfs merge=lfs -text\n")
+        log_sync.git(self.repo, "add", ".gitattributes")
+        log_sync.git(self.repo, "commit", "-m", "track LFS logs")
+        raw = self.write_run(payload=b"immutable LFS snapshot")
+        self.enqueue()
+        job = self.jobs()[0]
+        pointer = log_sync.git(self.repo, "show", f"{job['tree']}:run.wandb").stdout
+        self.assertTrue(pointer.startswith("version https://git-lfs.github.com/spec/v1"))
+        return raw, job
+
+    def test_lfs_snapshot_materializes_original_bytes(self):
+        raw, job = self.prepare_lfs_job()
+        (raw / "run.wandb").write_bytes(b"later local edits")
+        _, file = log_sync.materialize(self.repo, log_sync.queue_dir(self.repo), job)
+        self.assertEqual(file.read_bytes(), b"immutable LFS snapshot")
+        self.assertEqual((raw / "run.wandb").read_bytes(), b"later local edits")
+
+    def test_missing_lfs_object_does_not_publish_pointer_cache(self):
+        _, job = self.prepare_lfs_job()
+        shutil.rmtree(self.repo / ".git/lfs/objects")
+        directory = log_sync.queue_dir(self.repo)
+        with self.assertRaises(subprocess.CalledProcessError):
+            log_sync.materialize(self.repo, directory, job)
+        self.assertFalse((directory / "cache" / job["id"]).exists())
 
     def test_success_is_persistent_and_raw_logs_are_immutable(self):
         raw = self.write_run()
