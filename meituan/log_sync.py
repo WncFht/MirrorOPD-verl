@@ -387,6 +387,33 @@ def materialize(repo, directory, job):
             with tarfile.open(bundle) as archive:
                 archive.extractall(extracted, filter="data")
             bundle.unlink()
+            # git archive exports LFS pointers, even when the working tree contains full logs.
+            # Resolve from the immutable snapshot, never from the mutable receiving directory.
+            for file in extracted.rglob("*"):
+                if not file.is_file() or file.stat().st_size > 1024:
+                    continue
+                pointer = file.read_bytes()
+                if not pointer.startswith(b"version https://git-lfs.github.com/spec/v1\n"):
+                    continue
+                environment = {**os.environ, "GIT_LFS_SKIP_SMUDGE": "0", "GIT_LFS_SKIP_DOWNLOAD_ERRORS": "0"}
+                with file.open("wb") as output:
+                    subprocess.run(
+                        [
+                            "git",
+                            "-C",
+                            str(repo),
+                            "-c",
+                            "lfs.skipdownloaderrors=false",
+                            "lfs",
+                            "smudge",
+                            "--",
+                            file.relative_to(extracted).as_posix(),
+                        ],
+                        input=pointer,
+                        stdout=output,
+                        env=environment,
+                        check=True,
+                    )
             # Old flags in the received raw snapshot cannot prove this queue task completed.
             for pattern in ("*.wandb.synced", "*.wandb.syncstate"):
                 for marker in extracted.glob(pattern):
