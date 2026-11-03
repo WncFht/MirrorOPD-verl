@@ -530,3 +530,128 @@ def test_native_evaluation_uses_its_own_questions_without_legacy_val_loader():
         trainer._init_dataloader()
     assert dataset.call_count == loader.call_count == 1
     assert trainer.val_dataset == [] and trainer.val_dataloader is None
+
+
+def _full_vocab_aggregate_trainer(mode):
+    from verl.workers.config.distillation import DistillationLossConfig
+
+    trainer = _StubTrainer.__new__(_StubTrainer)
+    trainer.config = OmegaConf.create(
+        {
+            "distillation": {
+                "enabled": True,
+                "execution_mode": "shared_sync",
+                "distillation_loss": {"loss_mode": "mirror"},
+            },
+            "algorithm": {"use_kl_in_reward": False},
+            "data": {"train_batch_size": 2},
+            "trainer": {"critic_warmup": 0},
+            "actor_rollout_ref": {
+                "model": {},
+                "actor": {
+                    "strategy": "fsdp2",
+                    "loss_agg_mode": mode,
+                    "loss_scale_factor": 7,
+                    "use_kl_loss": False,
+                    "entropy_coeff": 0,
+                    "calculate_entropy": False,
+                    "ppo_mini_batch_size": 2,
+                    "ppo_epochs": 1,
+                    "data_loader_seed": 42,
+                    "shuffle": False,
+                    "policy_loss": {},
+                },
+                "rollout": {"temperature": 1, "n": 1},
+            },
+        }
+    )
+    trainer.distillation_config = SimpleNamespace(
+        distillation_loss=DistillationLossConfig(
+            loss_mode="mirror",
+            mirror={"eta": 1},
+            full_vocab={"backend": "precompute", "future": {"mode": "sum"}},
+            use_task_rewards=False,
+            use_policy_gradient=False,
+            loss_max_clamp=None,
+            log_prob_min_clamp=None,
+        )
+    )
+    trainer.use_critic = False
+    trainer.global_steps = 1
+    trainer.readout_callback = SimpleNamespace(requires_full_batch=True)
+    trainer._accumulate_actor_optimizer_steps = MagicMock()
+    trainer.actor_rollout_wg = SimpleNamespace(update_actor=MagicMock(return_value={"metrics": {}}))
+    return trainer
+
+
+@pytest.mark.parametrize(
+    "mode", ["token-mean", "token-sum", "seq-mean-token-mean", "seq-mean-token-sum", "seq-mean-token-sum-norm"]
+)
+def test_full_vocab_aggregates_reach_trainer_initialization_evaluation_and_update(mode):
+    trainer = _full_vocab_aggregate_trainer(mode)
+    model = SimpleNamespace(tokenizer=object(), processor=None)
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.omega_conf_to_dataclass", return_value=model),
+        patch.object(trainer, "_validate_shared_model"),
+    ):
+        trainer._init_tokenizer()
+    assert trainer.tokenizer is model.tokenizer
+    assert trainer._get_required_batch_multiple(2) == 2
+    batch = SimpleNamespace(tags=[{}, {}], fields=[], extra_info={})
+    assert trainer._update_actor(batch, {}) is batch
+    trainer.actor_rollout_wg.update_actor.assert_called_once_with(batch)
+    assert batch.extra_info["num_mini_batch"] == 1
+    assert "mini_batch_size" not in batch.extra_info
+    assert batch.extra_info["retain_sample_identity"]
+    assert batch.extra_info["full_vocab_train"]
+
+
+@pytest.mark.parametrize("field,value", [("use_critic", True), ("n", 2), ("ppo_mini_batch_size", 1)])
+def test_aggregate_extension_preserves_evaluation_batch_requirements(field, value):
+    trainer = _full_vocab_aggregate_trainer("seq-mean-token-sum")
+    if field == "use_critic":
+        trainer.use_critic = value
+    elif field == "n":
+        trainer.config.actor_rollout_ref.rollout.n = value
+    else:
+        trainer.config.actor_rollout_ref.actor.ppo_mini_batch_size = value
+    with pytest.raises(ValueError, match="full-batch full-vocab"):
+        trainer._validate_evaluation_full_batch()
+
+
+def test_aggregate_extension_preserves_logical_batch_and_fixed_scale_checks():
+    trainer = _full_vocab_aggregate_trainer("seq-mean-token-sum")
+    with pytest.raises(ValueError, match="Logical training batch"):
+        trainer._update_actor(SimpleNamespace(tags=[{}, {"is_padding": True}], extra_info={}), {})
+    trainer.actor_rollout_wg.update_actor.assert_not_called()
+    trainer.config.actor_rollout_ref.actor.loss_agg_mode = "seq-mean-token-sum-norm"
+    trainer.config.actor_rollout_ref.actor.loss_scale_factor = None
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.omega_conf_to_dataclass"),
+        patch.object(trainer, "_validate_shared_model"),
+        pytest.raises(ValueError, match="explicit positive loss_scale_factor"),
+    ):
+        trainer._init_tokenizer()
+
+
+def test_sampled_mirror_still_requires_token_mean():
+    trainer = _full_vocab_aggregate_trainer("seq-mean-token-sum")
+    from verl.workers.config.distillation import DistillationLossConfig
+
+    trainer.distillation_config = SimpleNamespace(
+        distillation_loss=DistillationLossConfig(
+            loss_mode="mirror",
+            mirror={"estimator": "sampled", "eta": 1},
+            policy_loss_mode="token_is",
+            use_policy_gradient=True,
+            use_task_rewards=False,
+            loss_max_clamp=None,
+            log_prob_min_clamp=None,
+        )
+    )
+    with (
+        patch("verl.trainer.ppo.v1.trainer_base.omega_conf_to_dataclass"),
+        patch.object(trainer, "_validate_shared_model"),
+        pytest.raises(ValueError, match="sampled mirror requires token-mean"),
+    ):
+        trainer._init_tokenizer()
