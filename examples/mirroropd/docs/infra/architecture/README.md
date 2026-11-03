@@ -76,7 +76,7 @@ flowchart LR
     N --> A["ArtifactStore<br/>校验、清理后发布完成"]
 ```
 
-`handles_validation` 决定验证入口归属，`requires_full_batch` 声明训练 batch 约束，`owns_final_weight_sync` 声明最终同步责任。Trainer 和 RolloutService 不再根据配置是否存在推断模式。Source/history 与 suite 的 current single-model 限制、分组调度和失败恢复见评估包合同。
+Trainer 的 `_validate()` 将验证委派给协议 owner；未接管时使用评估包的 `DefaultEvaluator`，保留原生 reward 与 JSONL 协议。`handles_validation` 决定验证入口归属，`requires_full_batch` 声明训练 batch 约束，`owns_final_weight_sync` 声明最终同步责任。Trainer 和 RolloutService 不再根据配置是否存在推断模式。Source/history 与 suite 的 current single-model 限制、分组调度和失败恢复见评估包合同。
 
 ## 验证和历史
 
