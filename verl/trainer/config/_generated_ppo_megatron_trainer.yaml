@@ -970,6 +970,9 @@ distillation:
       termination_token_ids: []
       distribution: {}
       input_id_mapping: identity
+      future:
+        mode: none
+        gamma: 1.0
     topk: 32
     use_task_rewards: true
     distillation_loss_coef: 1.0

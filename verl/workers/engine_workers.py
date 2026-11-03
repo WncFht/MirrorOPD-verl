@@ -784,6 +784,8 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
                     distillation_config.distillation_loss.full_vocab,
                     next(iter(distillation_config.teacher_models.values())).model_path,
                     spec=distillation_config.distillation_loss.loss_settings,
+                    loss_agg_mode=actor_config.loss_agg_mode,
+                    loss_scale_factor=actor_config.loss_scale_factor,
                 )
             self.mirror_spec = (
                 distillation_config.distillation_loss.loss_settings if self.distillation_enabled else None

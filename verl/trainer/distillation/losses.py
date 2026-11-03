@@ -233,12 +233,13 @@ def distillation_loss(
     if spec.payload_kind == "hidden":
         from verl.trainer.distillation.output import FullVocabOutput
 
-        if config.loss_agg_mode != "token-mean":
-            raise ValueError("Full-vocabulary objectives require token-mean aggregation")
         output = model_output["full_vocab"]
         if not isinstance(output, FullVocabOutput):
             raise TypeError("Full-vocabulary engines must return FullVocabOutput")
-        loss = LossContext.from_batch(data, config).normalize_token_sum(output.objective_sum) / output.divisor
+        scale = LossContext.from_batch(data, config).full_vocab_scale(
+            config.loss_agg_mode, num_sequences=tu.get(data, "full_vocab_num_sequences", default=None)
+        )
+        loss = output.objective_sum * scale / output.divisor
         return loss, output.observations
     if spec.objective is not None:
         return _mirror_sampled_loss(config, spec, model_output, data)

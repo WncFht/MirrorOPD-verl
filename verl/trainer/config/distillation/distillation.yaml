@@ -60,6 +60,10 @@ distillation_loss:
     # Explicit reverse-KL support; empty preserves native output rows.
     distribution: {}
     input_id_mapping: identity
+    # Strict future cost; discounted_sequence also discounts the local term.
+    future:
+      mode: none
+      gamma: 1.0
 
   # If distillation loss requires top-k logits, this is the value of k
   topk: 32

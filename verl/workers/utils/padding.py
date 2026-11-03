@@ -65,6 +65,22 @@ def response_target_coordinates(input_ids, responses, predictions):
     return (torch.cat(targets), torch.cat(lengths)) if targets else (empty, empty)
 
 
+def full_vocab_reduction(input_ids, responses, predictions, packed, *, mode, future):
+    """Build the head-loss layout once; select sampled targets with one shift."""
+    from verl.trainer.distillation.reduction import PackedReduction
+
+    if mode != "seq-mean-token-mean" and future.mode == "none":
+        return None
+    targets, _ = response_target_coordinates(input_ids, responses, predictions)
+    return PackedReduction(
+        counts=tuple(len(p) for p in predictions),
+        times=targets,
+        actions=input_ids.values().index_select(0, packed + 1),
+        mode=mode,
+        future=future,
+    )
+
+
 def left_right_2_no_padding(data: TensorDict) -> TensorDict:
     """
     Convert TensorDict from left-right padding to no-padding format.

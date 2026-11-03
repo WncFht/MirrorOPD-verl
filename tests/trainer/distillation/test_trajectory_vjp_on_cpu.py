@@ -15,6 +15,17 @@ from verl.workers.config.distillation_spec import DistillationLossSettings, Futu
 MODES = ["none", "sum", "mean", "discounted_sum", "discounted_mean", "discounted_sequence"]
 
 
+def test_near_certain_sampled_action_retains_tiny_score_gradient():
+    from verl.trainer.distillation.trajectory import action_score
+
+    logits = torch.tensor([[0.0, -30.0, -35.0]], dtype=torch.float64)
+    value, gradient = action_score(logits, torch.tensor([0]), None)
+    tail = logits[:, 1:].exp()
+    expected = torch.cat((tail.sum(-1, keepdim=True), -tail), -1) / (1 + tail.sum(-1, keepdim=True))
+    torch.testing.assert_close(gradient, expected, atol=1e-27, rtol=1e-13)
+    torch.testing.assert_close(value, -torch.log1p(tail.sum(-1)), atol=1e-27, rtol=1e-13)
+
+
 def spec(eta=1.0, kappa=0.5, objective="mdpo"):
     return DistillationLossSettings(
         names=("mirror",), payload_kind="hidden", objective=objective, eta=eta, kappa=kappa, diagnostics=True
@@ -49,7 +60,9 @@ def independent_reference(hs, ws, ht, wt, hq, wq, settings, layout, stop_ids):
     sampled = layout.actions
     if stop_ids:
         keep = [i for i in range(len(ws)) if i not in stop_ids]
-        sampled = torch.tensor([len(keep) if int(a) in stop_ids else keep.index(int(a)) for a in sampled])
+        sampled = torch.tensor(
+            [len(keep) if int(a) in stop_ids else keep.index(int(a)) for a in sampled], device=sampled.device
+        )
     sampled_lp = student.gather(1, sampled[:, None]).squeeze(1)
     result, offset = costs.sum() * 0, 0
     for n in layout.counts:
@@ -113,6 +126,17 @@ def test_surrogate_value_hidden_head_vjp_and_metrics(backend, chunk, mode, eta, 
     # The observation's numerator remains an unweighted local sum, never the surrogate.
     observation = output.observations[key]
     torch.testing.assert_close(observation.state[0], costs.sum() / output.divisor)
+    if mode != "none":
+        from torch.utils._pytree import tree_flatten
+
+        assert [x for x in tree_flatten(result)[0] if isinstance(x, torch.Tensor) and x.requires_grad] == [
+            result.loss_sum
+        ]
+        assert result.future_coefficients[[3, 4, 6]].eq(0).all()
+        local = output.observations["distillation/local_surrogate"].state[0]
+        score = output.observations["distillation/future/score_surrogate"].state[0]
+        total = output.observations["distillation/training_surrogate"].state[0]
+        torch.testing.assert_close(local + score, total)
 
 
 @pytest.mark.parametrize("eta,kappa", [(1.0, 0.5), (0.2, 0.0), (0.2, 1.0)])
@@ -267,3 +291,48 @@ def test_immediate_bpo_weighting(backend):
         torch.autograd.grad(result.loss_sum, (hs, ws)), torch.autograd.grad(expected, (hs, ws)), strict=True
     ):
         torch.testing.assert_close(a, e)
+
+
+@pytest.mark.parametrize("extra,stop_ids", [(3, []), (0, [1, 4])])
+def test_teacher_future_support_and_raw_eos_diagnostics(extra, stop_ids):
+    torch.manual_seed(17)
+    hs = torch.randn(5, 3, dtype=torch.float64, requires_grad=True)
+    ws = torch.randn(7, 3, dtype=torch.float64, requires_grad=True)
+    ht, wt = torch.randn_like(hs), torch.randn(7 + extra, 3, dtype=torch.float64)
+    layout = PackedReduction(
+        (3, 2), torch.tensor([0, 1, 4, 0, 2]), torch.tensor([0, 2, 1, 3, 4]), future=FutureCreditConfig(mode="sum")
+    )
+    result = full_vocab_objective_result(
+        hs,
+        ws,
+        ht,
+        wt,
+        spec=spec(),
+        reduction=layout,
+        backend="precompute",
+        token_chunk=2,
+        termination_token_ids=stop_ids,
+    )
+    expected, _ = independent_reference(hs, ws, ht, wt, None, None, spec(), layout, stop_ids)
+    torch.testing.assert_close(result.loss_sum, expected)
+    for a, e in zip(
+        torch.autograd.grad(result.loss_sum, (hs, ws)), torch.autograd.grad(expected, (hs, ws)), strict=True
+    ):
+        torch.testing.assert_close(a, e)
+    raw_lp, raw_lt = (hs @ ws.T).log_softmax(-1), (ht @ wt.T).log_softmax(-1)[:, :7]
+    raw_kl = (raw_lp.exp() * (raw_lp - raw_lt)).sum(-1)
+    torch.testing.assert_close(result.token_objective, raw_kl)
+
+
+@pytest.mark.parametrize("backend", ["dense", "precompute"])
+def test_empty_future_rank_has_finite_zero_value_and_gradients(backend):
+    h = torch.empty(0, 2, requires_grad=True)
+    w = torch.eye(2, requires_grad=True)
+    layout = PackedReduction(
+        (0,), torch.empty(0, dtype=torch.long), torch.empty(0, dtype=torch.long), future=FutureCreditConfig(mode="mean")
+    )
+    result = full_vocab_objective_result(h, w, h.detach(), w.detach(), spec=spec(), reduction=layout, backend=backend)
+    assert result.loss_sum == 0
+    dh, dw = torch.autograd.grad(result.loss_sum, (h, w))
+    assert dh.shape == h.shape
+    assert dw.eq(0).all()

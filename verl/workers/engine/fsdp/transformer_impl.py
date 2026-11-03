@@ -779,6 +779,17 @@ class FSDPEngine(BaseEngine):
             raise ValueError("Cannot train a mini-batch with zero globally valid response tokens")
         tu.assign_non_tensor(data, batch_num_tokens=batch_num_tokens.item())
         tu.assign_non_tensor(data, dp_size=self.get_data_parallel_size())
+        if getattr(self, "full_vocab_agg_mode", "token-mean").startswith("seq-mean"):
+            from verl.trainer.distillation.reduction import nonempty_sequence_count
+
+            # Synthetic padding has a zero loss_mask (padding_utils); count the
+            # actual optimizer mini-batch before dynamic micro-batch splitting.
+            sequence_count = nonempty_sequence_count(data["loss_mask"])
+            sequence_count = sequence_count.to(get_device_id())
+            torch.distributed.all_reduce(
+                sequence_count, op=torch.distributed.ReduceOp.SUM, group=self.get_data_parallel_group()
+            )
+            tu.assign_non_tensor(data, full_vocab_num_sequences=sequence_count.item())
 
         micro_batches, indices = prepare_micro_batches(
             data=data, dp_group=self.get_data_parallel_group(), same_micro_num_in_dp=True
@@ -1245,13 +1256,19 @@ class EngineTrainModeCtx(BaseEngineCtx):
 
 @EngineRegistry.register(model_type="language_model", backend=["fsdp", "fsdp2"], device=["cuda", "npu"])
 class FSDPEngineWithLMHead(FSDPEngine):
-    def configure_full_vocab(self, config, teacher_path, *, spec):
+    def configure_full_vocab(self, config, teacher_path, *, spec, loss_agg_mode="token-mean", loss_scale_factor=None):
         from verl.trainer.distillation.hidden import FrozenTeacherHead
 
         if spec.payload_kind != "hidden":
             raise ValueError("Full-vocabulary execution requires an explicit hidden-payload objective")
         self.full_vocab_spec = spec
         self.full_vocab_config = config
+        from verl.trainer.distillation.reduction import reduction_scale
+
+        reduction_scale(loss_agg_mode, num_tokens=1, num_sequences=1, fixed_scale=loss_scale_factor)
+        if loss_agg_mode == "seq-mean-token-mean" and config.backend == "liger":
+            raise ValueError("liger does not support per-row aggregation; use precompute")
+        self.full_vocab_agg_mode = loss_agg_mode
         self.full_vocab_teacher_head = FrozenTeacherHead(teacher_path)
         from verl.trainer.distillation.distribution import DistributionSpec
 
@@ -1268,7 +1285,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
         from verl.trainer.distillation.full_vocab import full_vocab_objective_result
         from verl.trainer.distillation.profiling import full_kl_range
         from verl.utils.metric.position import relative_position_bins
-        from verl.workers.utils.padding import prediction_positions, response_target_coordinates
+        from verl.workers.utils.padding import full_vocab_reduction, prediction_positions, response_target_coordinates
 
         if not self.model_config.enable_full_vocab:
             raise ValueError("full-vocab output requires the model head adapter")
@@ -1377,6 +1394,15 @@ class FSDPEngineWithLMHead(FSDPEngine):
                 anchor_hidden = micro_batch["anchor_hidden"].values().to(selected.dtype)
                 anchor_weight = head_snapshot.get(selected.device, selected.dtype)
 
+            reduction = full_vocab_reduction(
+                micro_batch["input_ids"],
+                micro_batch["responses"],
+                positions,
+                packed,
+                mode=self.full_vocab_agg_mode,
+                future=config.future,
+            )
+
             def compute(h, w):
                 with torch.autocast(device_type=h.device.type, enabled=False):
                     return full_vocab_objective_result(
@@ -1393,6 +1419,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
                         termination_token_ids=config.termination_token_ids,
                         forward_teacher_support=config.forward_teacher_support,
                         distribution=self.full_vocab_space if spec.teacher_only_kl else None,
+                        reduction=reduction,
                     )
 
             # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
@@ -1412,6 +1439,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
                     result,
                     spec,
                     packed.numel(),
+                    num_sequences=sum(bool(len(p)) for p in positions),
                     bins=bins,
                     termination=bool(self.full_vocab_space.termination_ids)
                     if spec.teacher_only_kl
