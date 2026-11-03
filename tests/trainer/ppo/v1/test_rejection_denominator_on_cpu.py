@@ -153,6 +153,7 @@ def test_actual_trainer_rejection_publishes_masks_without_changing_population(ru
         ),
     )
     trainer = Trainer.__new__(Trainer)
+    trainer.distillation_config = None
     trainer.config = OmegaConf.create(
         {
             "algorithm": {

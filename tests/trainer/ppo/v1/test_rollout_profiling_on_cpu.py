@@ -35,6 +35,7 @@ class _StubTrainer(PPOTrainer):
 
 def _trainer(cls, **managers):
     trainer = cls.__new__(cls)
+    trainer.distillation_config = None
     trainer.config = OmegaConf.create({"global_profiler": {"profile_continuous_steps": False, "steps": [1]}})
     trainer.global_steps = 1
     trainer.trainer_mode = "sync" if cls in (PPOTrainerSync, PPOTrainerColocateAsync) else "separate_async"
@@ -49,6 +50,11 @@ def _trainer(cls, **managers):
     trainer.use_critic = False
     trainer.actor_rollout_wg = MagicMock()
     trainer.checkpoint_manager = MagicMock()
+    if cls is PPOTrainerSync:
+        from verl.experimental.rollout_policy.service import DefaultRolloutService
+
+        trainer.common_rollout_sampling = False
+        trainer.rollout_service = DefaultRolloutService(trainer, None)
     for name, manager in managers.items():
         setattr(trainer, name, manager)
     return trainer

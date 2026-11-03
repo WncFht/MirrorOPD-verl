@@ -112,6 +112,7 @@ class TestUnconfiguredDefaultsPreserveBehavior:
 class TestHybridEngineDisabled:
     def test_resource_mapping_uses_pure_actor_role(self):
         trainer = object.__new__(PPOTrainerSeparateAsync)
+        trainer.distillation_config = None
         trainer._enable_hybrid_replicas = False
         trainer.config = OmegaConf.create(
             {
