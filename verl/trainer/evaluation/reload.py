@@ -19,19 +19,25 @@ class HFReloadOptions:
     export_audit: str
     output: str
     reference_event: str
-    source_bank: str
+    generation_bank: str | None = None
+    reference_bank: str | None = None
     score: ScoreBudget = field(default_factory=ScoreBudget)
 
     def __post_init__(self):
         if any(
-            not isinstance(value, str) or not value
-            for value in (self.export_audit, self.output, self.reference_event, self.source_bank)
+            not isinstance(value, str) or not value for value in (self.export_audit, self.output, self.reference_event)
         ):
             raise ValueError("HF reload requires nonempty artifact paths")
+        if self.generation_bank is not None and (not isinstance(self.generation_bank, str) or not self.generation_bank):
+            raise ValueError("generation_bank must be a nonempty path or null")
 
     @classmethod
     def parse(cls, values):
         values = dict(values)
+        if "source_bank" in values:
+            if "generation_bank" in values:
+                raise ValueError("Specify generation_bank or legacy source_bank, not both")
+            values["generation_bank"] = values.pop("source_bank")
         values["score"] = strict_record(ScoreBudget, values.get("score", {}))
         return strict_record(cls, values)
 
@@ -47,6 +53,21 @@ class HFReloadReadout(ReadoutCallback):
         if not config.trainer.val_only or config.trainer.resume_mode != "disable":
             raise ValueError("HF export acceptance requires a fresh validation-only trainer")
         export = ArtifactStore(self.options.export_audit).manifest(complete=True)
+        self.reference_bank = (
+            self.options.reference_bank or export["metadata"].get("reference_bank") or "source_heldout"
+        )
+        self.reference_ids = (
+            export["metadata"].get("reference_ids")
+            if self.reference_bank == export["metadata"].get("reference_bank")
+            else None
+        )
+        self.generation_bank = self.options.generation_bank or export["metadata"].get("reference_generation_bank")
+        if not self.generation_bank:
+            raise ValueError("Legacy exports require an explicit generation_bank (or source_bank)")
+        expected_bank = export["metadata"].get("reference_generation_sha256")
+        if expected_bank and self.reference_bank == export["metadata"].get("reference_bank"):
+            if file_sha256(ArtifactStore(self.generation_bank).manifest_path) != expected_bank:
+                raise ValueError("Reload reference generation differs from the audited export")
         hf = Path(self.options.export_audit).parent / "huggingface"
         if Path(config.actor_rollout_ref.model.path).resolve() != hf.resolve():
             raise ValueError("HF reload trainer did not initialize from the audited final model")
@@ -68,12 +89,20 @@ class HFReloadReadout(ReadoutCallback):
 
         event = ArtifactStore(self.options.reference_event)
         event.manifest(complete=True)
-        expected = {r["id"]: r for r in event.read_rows("rkl.parquet") if r["bank"] == "source_heldout"}
-        references = trajectory_index(ArtifactStore(self.options.source_bank), bank="source_heldout")
+        expected = {r["id"]: r for r in event.read_rows("rkl.parquet") if r["bank"] == self.reference_bank}
+        if self.reference_ids is not None:
+            if not set(self.reference_ids) <= set(expected):
+                raise ValueError("Reload reference event is missing the audited verification trajectories")
+            expected = {key: value for key, value in expected.items() if key in self.reference_ids}
+        references = trajectory_index(ArtifactStore(self.generation_bank), bank=self.reference_bank)
+        if self.reference_ids is not None or self.reference_bank != "source_heldout":
+            # Public generation contains all accuracy samples; only the fixed RKL panel is scored.
+            references = [r for r in references if r["id"] in expected]
         if set(expected) != {r["id"] for r in references}:
-            raise ValueError("HF reload acceptance does not use the exact original source trajectories")
+            raise ValueError("HF reload acceptance does not use the exact original fixed trajectories")
         hidden_size = AutoConfig.from_pretrained(
-            trainer.config.distillation.teacher_models.teacher_model.model_path
+            trainer.config.distillation.teacher_models.teacher_model.model_path,
+            trust_remote_code=trainer.config.actor_rollout_ref.model.get("trust_remote_code", False),
         ).hidden_size
         trainer.rollout_service.park()
         actual, timing = score_native_rows(

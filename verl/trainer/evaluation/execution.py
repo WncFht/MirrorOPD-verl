@@ -48,9 +48,14 @@ class NativeEvaluationExecution:
     def distribution(self, *, objective=False):
         config = self.trainer.config
         full = config.distillation.distillation_loss.full_vocab
-        student = AutoConfig.from_pretrained(config.actor_rollout_ref.model.path, local_files_only=True)
+        trust_remote_code = config.actor_rollout_ref.model.get("trust_remote_code", False)
+        student = AutoConfig.from_pretrained(
+            config.actor_rollout_ref.model.path, local_files_only=True, trust_remote_code=trust_remote_code
+        )
         teacher = AutoConfig.from_pretrained(
-            next(iter(config.distillation.teacher_models.values())).model_path, local_files_only=True
+            next(iter(config.distillation.teacher_models.values())).model_path,
+            local_files_only=True,
+            trust_remote_code=trust_remote_code,
         )
         return DistributionSpec.parse(full.get("distribution", {})).compile(
             student.vocab_size, teacher.vocab_size, full.get("termination_token_ids", ()) if objective else ()

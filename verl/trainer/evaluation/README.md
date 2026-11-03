@@ -71,17 +71,45 @@ python -m verl.trainer.main_ppo --config-path /absolute --config-name run
 
 这些命令须在已有 GPU 分配与进程清理器内运行。Bootstrap 使用本地 Ray，CPU 数量取该 YAML 的 Ray 配置；两个 producer 分别加载模型，使用同一 student 输入模板。`--tensor-parallel`可独立设置 bootstrap 的 TP；current student 使用训练进程现有的 rollout replicas。
 
+统一流程现在默认关闭来源留出和训练history评估；代码保留，通过下面两个独立开关重新启用：
+
+```yaml
+trainer:
+  evaluation:
+    _target_: verl.trainer.evaluation.coordinator.EvaluationCoordinator
+    source_enabled: false
+    history_enabled: false
+```
+
+关闭覆盖初始化、普通边界和终点：不生成或读取source bank，不建立history抽样表，也不运行这两项RKL。`schedules.source/history`只在相应开关为true时生效，单独填写频率不会绕过开关。训练轨迹仍逐批保存一次，并保留题目不重复检查。没有其他到期评估的outer直接跳过评估，不额外park／恢复模型。
+
+最终模型校验优先使用已启用的source bank；关闭时取已有公共initial-student bank中最多4条有效短轨迹，不补生成source回答。导出审计记录具体轨迹和银行hash；独立HF回读默认沿用这些参考。旧`source_bank`参数保留为`generation_bank`别名，旧导出记录仍可按原方式验证。
+
+重新开启时，将对应开关设为true；source还需要`source_file`与`source`生成协议，并在新的bootstrap中准备其银行。四域launcher默认输出关闭配置，可用`--source-heldout`／`--training-history`显式开启。历史运行与冻结配置保持原样；专用SourceHistoryReadout继续作为显式诊断入口保留。
+
 统一配置包含`_target_/output/source_file/bootstrap/datasets/protocols/score/schedules`。所有组件的 options 与 `_target_` 放在同一 `trainer.evaluation` 中；构造边界只解析一次目标，剩余字段由组件的严格类型配置验证。`datasets`逐 bench 声明 name、domain、path、verifier、n、protocol、panel_ids；`protocols`分别定义 source 和 public 的 T／top-p／top-k、回答 cap、prompt 预算和模板。配置拒绝未知字段，public prompt 超长时报错；不静默删题或截短回答。稳定采样 seed 由 seed／dataset／question／sample_index 决定，sample 0 不随 n 或 checkpoint 改变。
 
 | 任务                           | 默认 outer 边界      | 轨迹来源                                            |
 | ------------------------------ | -------------------- | --------------------------------------------------- |
-| 来源留出 RKL                   | 0 与每轮             | 固定 initial-student 回答                           |
-| History RKL                    | 每轮，从 1 开始      | 真实训练回答，批均衡抽样                            |
+| 来源留出 RKL                   | 默认关闭；启用后0与每轮             | 固定 initial-student 回答                           |
+| History RKL                    | 默认关闭；启用后每轮，从1开始      | 真实训练回答，批均衡抽样                            |
 | Public bank RKL                | 0／1／2，之后每 5 轮 | 固定 initial-student 与 teacher 回答，各取 sample 0 |
 | Public current RKL 与 accuracy | 0／25／50            | 当前 student 回答；0 复用 initial 产物              |
 | Teacher accuracy               | 0                    | Bootstrap 全量 teacher 回答                         |
 
-初始化 0 必须建立所有固定参考；其余边界按每个 schedule 的`at/every/start/final`并集调度。同一边界只编译一次计划；由组件独占调度，trainer.test_freq 必须关闭。满足同一评分协议的轨迹合并后按 teacher hidden 字节预算分窗口，窗口内 teacher→student 串行；预算扣除仍活跃的训练 payload 和拷贝余量。推理只按 DP 数量 padding，padding 不进入科学样本统计。
+初始化0建立公共固定参考；source参考仅在启用时建立；其余边界按每个 schedule 的`at/every/start/final`并集调度。同一边界只编译一次计划；由组件独占调度，trainer.test_freq 必须关闭。满足同一评分协议的轨迹合并后按 teacher hidden 字节预算分窗口，窗口内 teacher→student 串行；预算扣除仍活跃的训练 payload 和拷贝余量。推理只按 DP 数量 padding，padding 不进入科学样本统计。
+
+## 生成、发布与判分的调度边界
+
+同一模型版本下，所有 benchmark 共用一个有限请求流。`generation_concurrency`限制在途请求数，完成一条即可补下一条，包括下一个 benchmark 的题目。默认路由复用训练路径的 least-inflight 实现；`full_determinism`启用时由路由器按 request ID 分配。每题仍保留自己的模板、response cap、n 和 seed，模型版本检查在每条回答完成后执行。
+
+生成任务独立推进，结果队列容量为一个请求窗口；Parquet 仍由单一消费者按`generation_chunk_size`发布。队列满后产生背压，允许持续慢磁盘限制生产速度。内存上限还包含滚动生成器暂存的已完成结果、在途请求和当前写盘 chunk，至多约`3 × generation_concurrency + generation_chunk_size`条结果；prompt 缓存按各协议的题目数限定。新增指标`generated`表示已有生成结果的样本数（包括恢复时复用的样本），原有`completed`继续表示已发布数，`inflight`表示路由器持有的请求数，包含引擎内部排队请求。
+
+`AccuracyCollector.follow_generation`在一个受控线程中读取已发布且通过 hash 校验的 shard，再交给有界 CPU 进程池。生成产物承担判分积压，GPU 生产者只检查判分线程是否失败。CPU 结果按完成顺序消费，避免最早提交的慢题阻塞其他已完成结果。`finish`要求所跟随的 generation 已完成，核对样本覆盖并绑定其 manifest hash；`close`停止读者后才关闭进程池。
+
+取消或失败会关闭请求补位，并等待已开始的写盘、远端 abort 和所有已提交请求确认结束。无法确认时抛出`UnsafeDrainError`，禁止切换模型。跨 benchmark 的补位仅发生在同一个模型版本内；训练 outer 的完整批、更新及权重切换屏障仍然保留。
+
+Generation manifest 的`metadata.execution`记录调度版本、副本数、窗口、chunk、预检／发布耗时和最后提交至最后完成的时长。执行参数不进入样本身份；改变批处理顺序仍可能改变浮点执行与生成 token，不能将相同 seed 解释为逐 token 一致。实测与参数选择见[验证资源测量](../../../examples/mirroropd/docs/infra/performance/inference/validation-resources.md#native-scheduler)。
 
 ## 生成与内容身份
 
@@ -151,7 +179,6 @@ RKL host budget 约束临时 hidden、位置与拷贝余量，并扣除活跃训
 
 两轮运行合同重构的当前检查见[重构报告](../../../examples/mirroropd/docs/archive/engineering/2026-11-01-运行合同审计与重构方案.md#提交与验收)。Source/history 最新生命周期有原生形状的 CPU 协议检查，未增加完整 vLLM accuracy 或 50 outer 实验；模型扩展和更大规模检查仍各自记录。
 
-
 ## 分布、模型与输入适配
 
 `distillation.distillation_loss.full_vocab.distribution`默认为空，保留 native head RKL。小 teacher→大 student 使用显式条件支持，例如：
@@ -176,7 +203,6 @@ distillation:
 新权重身份复用rollout的`checkpoint_identity`，以`checkpoint-v2:`标识；新运行只接受当前内容合同，不将旧身份自动升级。生成ID只绑定sampling与输入，`answer_channel`改动不再改变生成身份；判分产物另存verifier协议和身份，可对同一回答独立重判。旧生成记录不改写身份或原manifest。
 
 `native.py`统一轨迹/TQ转换和history抽样，source/history 与公共 suite 共用同一组原语；`NativeEvaluationExecution`集中对Trainer私有评分／平衡接口的调用。评估事件另记录实际distribution、teacher transfer／forward、trajectory publish和student readout RPC耗时，原有细粒度NVTX范围继续用于GPU profile。
-
 
 重判沿用同一冻结题目／参考答案版本，并校验实际输入tokenizer身份。修改判分代码或答案通道可复用回答；修改题目／参考答案属于数据版本变更，不自动跨版本复用。缺少输入身份的旧生成产物使用原冻结评估器，不以新元数据冒充已验收输入。
 

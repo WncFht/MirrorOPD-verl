@@ -17,7 +17,19 @@ from verl.trainer.evaluation.coordinator import EvaluationCoordinator
 from verl.trainer.ppo.readout_callback import readout_options
 
 
-def build(base, questions, output, *, domain="math", outer=50, batch_size=128, reuse=32, family="deepseek"):
+def build(
+    base,
+    questions,
+    output,
+    *,
+    domain="math",
+    outer=50,
+    batch_size=128,
+    reuse=32,
+    family="deepseek",
+    source_enabled=False,
+    history_enabled=False,
+):
     output = Path(output).resolve()
     prepared = ArtifactStore(questions).manifest(complete=True)
     if prepared["kind"] != "question_sets":
@@ -38,6 +50,8 @@ def build(base, questions, output, *, domain="math", outer=50, batch_size=128, r
         "output": str(output / "evaluation"),
         "bootstrap": str(output / "bootstrap"),
         "source_file": paths["source"],
+        "source_enabled": source_enabled,
+        "history_enabled": history_enabled,
         "training_domain": domain,
         "datasets": prepared["metadata"]["datasets"],
         "protocols": {
@@ -65,7 +79,7 @@ def build(base, questions, output, *, domain="math", outer=50, batch_size=128, r
         "verify_export": True,
     }
     config.data.train_files = [paths["train"]]
-    config.data.val_files = [paths["source"]]
+    config.data.val_files = []
     config.data.train_batch_size = batch_size
     config.data.max_prompt_length = 2048
     config.data.max_response_length = 7168
@@ -123,8 +137,18 @@ def main():
     parser.add_argument("--output", required=True, help="New run directory")
     parser.add_argument("--domain", choices=("math", "code", "science", "if"), default="math")
     parser.add_argument("--model-family", default="deepseek")
+    parser.add_argument("--source-heldout", action="store_true", help="Enable optional source-heldout RKL")
+    parser.add_argument("--training-history", action="store_true", help="Enable optional training-history RKL")
     args = parser.parse_args()
-    config = build(args.base_config, args.questions, args.output, domain=args.domain, family=args.model_family)
+    config = build(
+        args.base_config,
+        args.questions,
+        args.output,
+        domain=args.domain,
+        family=args.model_family,
+        source_enabled=args.source_heldout,
+        history_enabled=args.training_history,
+    )
     destination = Path(args.output)
     destination.mkdir(parents=True, exist_ok=False)
     OmegaConf.save(config, destination / "run.yaml")

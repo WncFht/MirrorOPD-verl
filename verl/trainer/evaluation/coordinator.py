@@ -70,7 +70,9 @@ class EvaluationCoordinator(ReadoutCallback):
                 raise ValueError("Final export must preserve fp32 master weights")
         self.input_model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
         teacher_path = config.distillation.teacher_models.teacher_model.model_path
-        self.hidden_size = AutoConfig.from_pretrained(teacher_path).hidden_size
+        self.hidden_size = AutoConfig.from_pretrained(
+            teacher_path, trust_remote_code=config.actor_rollout_ref.model.get("trust_remote_code", False)
+        ).hidden_size
         self.student_identity = model_identity(config.actor_rollout_ref.model.path)
         self.teacher_identity = model_identity(teacher_path)
         self.specifications = [(d, read_questions(d)) for d in self.options.datasets]
@@ -254,6 +256,7 @@ class EvaluationCoordinator(ReadoutCallback):
                     self.input_model.tokenizer,
                     workers=self.options.verifier_workers,
                 )
+                collector.follow_generation(event.root / "current", self.options.protocols)
                 current = asyncio.run(
                     generator.generate(
                         event.root / "current",
@@ -263,7 +266,7 @@ class EvaluationCoordinator(ReadoutCallback):
                         model_identity=self.student_identity,
                         outer=outer,
                         expected_version=outer,
-                        on_batch=collector.submit,
+                        on_batch=collector.check,
                         progress=self._progress,
                     )
                 )
