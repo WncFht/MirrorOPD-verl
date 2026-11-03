@@ -27,12 +27,12 @@ from safetensors.torch import save_file
 from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
 from torch.distributed.fsdp import ShardedOptimStateDictConfig, ShardedStateDictConfig, StateDictType
 from torch.distributed.fsdp._common_utils import clean_tensor_name
-from transformers import GenerationConfig, PreTrainedTokenizer, ProcessorMixin
+from transformers import GenerationConfig, PreTrainedModel, PreTrainedTokenizer, ProcessorMixin
 from transformers.dynamic_module_utils import custom_object_save
 
 from verl.utils.device import is_device_available
 from verl.utils.fs import copy_to_local, is_non_local, local_mkdir_safe
-from verl.utils.fsdp_utils import fsdp_version, get_fsdp_state_ctx, normalize_peft_param_name
+from verl.utils.fsdp_utils import FSDPModule, fsdp_version, get_fsdp_state_ctx, normalize_peft_param_name
 from verl.utils.logger import log_with_rank
 from verl.utils.model import convert_weight_keys
 
@@ -41,6 +41,19 @@ from .checkpoint_manager import BaseCheckpointManager
 # Setup logging
 logger = logging.getLogger(__file__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "INFO"))
+
+
+def _save_custom_model_code(model, destination, config):
+    """Bundle the HF model's source without serializing a PEFT or FSDP2 wrapper."""
+    model = model.get_base_model() if hasattr(model, "get_base_model") else model
+    if FSDPModule is not None and isinstance(model, FSDPModule):
+        original = next(
+            cls for cls in type(model).__mro__ if issubclass(cls, PreTrainedModel) and not issubclass(cls, FSDPModule)
+        )
+        # custom_object_save only reads the class/module identity. A shell of
+        # the original class avoids changing the live sharded model's type.
+        model = object.__new__(original)
+    custom_object_save(model, destination, config=config)
 
 
 @dataclass
@@ -508,11 +521,7 @@ class FSDPCheckpointManager(BaseCheckpointManager):
             # If we have a custom model, we copy the file defining it in the folder and set the attributes so it can be
             # loaded from the Hub.
             if hasattr(model_config, "auto_map"):
-                # custom_object_save copies the source of type(obj).__module__, so it needs the base
-                # model's module. For a PEFT model unwrap_model is the PeftModel wrapper, so unwrap it
-                # first; get_base_model() is peft-only (a plain model lacks it and is passed through).
-                save_obj = unwrap_model.get_base_model() if hasattr(unwrap_model, "get_base_model") else unwrap_model
-                custom_object_save(save_obj, hf_config_tokenizer_path, config=model_config)
+                _save_custom_model_code(unwrap_model, hf_config_tokenizer_path, model_config)
 
             # Also save runtime FSDP config
             fsdp_config_path = os.path.join(local_path, "fsdp_config.json")
