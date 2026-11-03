@@ -356,7 +356,7 @@ def figures(summary, updates, outers, risks, destination, style):
                 color=acc_colors[name],
                 label=display[name],
                 width=0.65,
-                hatch="///" if name == "initial" else None,
+                hatch="///" if name == "initial" else ".." if name == "TM" else None,
                 edgecolor=fv.NEUTRALS["vink"],
                 linewidth=0.4,
             )
@@ -374,7 +374,7 @@ def figures(summary, updates, outers, risks, destination, style):
             title="Completed endpoints only",
         )
         axes[0].grid(axis="y", alpha=0.2)
-        pairs = [p for p in ["S0-S", "S-LM", "S-PM", "S-T", "LM-PM"] if p in summary["paired_accuracy"]]
+        pairs = [p for p in ["S0-S", "S-LM", "S-PM", "S-T", "S-TM", "LM-PM"] if p in summary["paired_accuracy"]]
         for i, key in enumerate(pairs):
             item = summary["paired_accuracy"][key]
             value = item["estimate"] * 100
@@ -396,7 +396,7 @@ def figures(summary, updates, outers, risks, destination, style):
         fig.legend(
             *axes[0].get_legend_handles_labels(),
             loc="upper center",
-            ncol=len(endpoints),
+            ncol=4,
             frameon=False,
             bbox_to_anchor=(0.5, 0.99),
         )
