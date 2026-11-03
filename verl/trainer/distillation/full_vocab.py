@@ -169,10 +169,10 @@ class CachedKL(RecomputedKL):
         return kl
 
 
-def precompute_kl_rows(hs, ws, ht, wt):
+def precompute_kl_rows(hs, ws, ht, wt, *, student_logits=None):
     """One block's exact KL and logit VJP; release logits before gradient GEMMs."""
     with full_kl_range("student_projection"):
-        zp = project(hs, ws)
+        zp = project(hs, ws) if student_logits is None else student_logits
     with full_kl_range("teacher_projection"):
         zt = project(ht, wt)
     from verl.trainer.distillation.numerics import kl_rows
@@ -182,11 +182,11 @@ def precompute_kl_rows(hs, ws, ht, wt):
     return kl, dz if hs.dtype == torch.float16 else dz.to(hs.dtype)
 
 
-def termination_equivalent_kl_rows(hs, ws, ht, wt, *, actions, fused=False):
+def termination_equivalent_kl_rows(hs, ws, ht, wt, *, actions, fused=False, student_logits=None):
     """Coarsened loss/VJP, with native-vocabulary KL retained as its metric."""
     from verl.trainer.distillation.numerics import kl_rows, kl_values
 
-    zp, zt = project(hs, ws), project(ht, wt)
+    zp, zt = project(hs, ws) if student_logits is None else student_logits, project(ht, wt)
     dtype = torch.float32 if hs.dtype == torch.float16 else hs.dtype
     student, student_error = actions.coarsen(zp, compensated=fused)
     teacher, teacher_error = actions.coarsen(zt, compensated=fused)
@@ -241,7 +241,9 @@ class PrecomputedKL(torch.autograd.Function):
     """Shared accumulation/VJP for ordinary and fused block reductions."""
 
     @staticmethod
-    def forward(ctx, hs, ws, ht, wt, token_chunk, row_kernel, hq=None, wq=None, spec=None, diagnostic_names=()):
+    def forward(
+        ctx, hs, ws, ht, wt, token_chunk, row_kernel, hq=None, wq=None, spec=None, diagnostic_names=(), row_weights=None
+    ):
         ctx.input_count = len(ctx.needs_input_grad)
         dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
         dh = torch.zeros(hs.shape, device=hs.device, dtype=dtype)
@@ -267,7 +269,12 @@ class PrecomputedKL(torch.autograd.Function):
                 kl, dz, info = row_kernel(hs[start:stop], ws, ht[start:stop], wt, hq[start:stop], wq, spec)
                 diagnostics[start:stop] = info
                 diagnostic_kl = kl
-            total += kl.sum()
+            if row_weights is None:
+                total += kl.sum()
+            else:
+                weights = row_weights[start:stop]
+                total += (kl * weights).sum()
+                dz = (dz * weights[:, None]).to(dz.dtype)
             token_kl[start:stop] = diagnostic_kl
             if objective_rows is not None:
                 objective_rows[start:stop] = kl
@@ -337,7 +344,16 @@ def full_reverse_kl(
 
 
 def full_reverse_kl_result(
-    hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192, termination_token_ids=()
+    hs,
+    ws,
+    ht,
+    wt,
+    *,
+    backend="recompute",
+    token_chunk=512,
+    vocab_chunk=8192,
+    termination_token_ids=(),
+    row_weights=None,
 ) -> FullKLResult:
     """Compute the loss and reuse detached token rows when the backend exposes them.
 
@@ -371,13 +387,22 @@ def full_reverse_kl_result(
     if len(wt) > len(ws):
         correction = teacher_support_correction(ht, wt, len(ws), token_chunk, vocab_chunk)
         result = full_reverse_kl_result(
-            hs, ws, ht, wt[: len(ws)], backend=backend, token_chunk=token_chunk, vocab_chunk=vocab_chunk
+            hs,
+            ws,
+            ht,
+            wt[: len(ws)],
+            backend=backend,
+            token_chunk=token_chunk,
+            vocab_chunk=vocab_chunk,
+            row_weights=row_weights,
         )
         rows = None if result.token_kl is None else correction.token_kl + result.token_kl
-        return FullKLResult(correction.loss_sum + result.loss_sum, rows, rows)
+        correction_sum = correction.loss_sum if row_weights is None else (correction.token_kl * row_weights).sum()
+        return FullKLResult(correction_sum + result.loss_sum, rows, rows)
 
     def finish(rows):
-        return FullKLResult(rows.sum(), rows.detach(), rows.detach())
+        total = rows.sum() if row_weights is None else (rows * row_weights).sum()
+        return FullKLResult(total, rows.detach(), rows.detach())
 
     if backend == "dense":
         return finish(dense_rows(hs, ws, ht, wt))
@@ -394,11 +419,15 @@ def full_reverse_kl_result(
             row_kernel = fused_kl_rows
         else:
             row_kernel = precompute_kl_rows
-        total, raw, objective_rows, _ = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel)
+        total, raw, objective_rows, _ = PrecomputedKL.apply(
+            hs, ws, ht, wt, token_chunk, row_kernel, None, None, None, (), row_weights
+        )
         return FullKLResult(total, raw, objective_rows)
     if backend == "cached":
         return finish(CachedKL.apply(hs, ws, ht, wt, token_chunk, vocab_chunk))
     if backend == "liger":
+        if row_weights is not None:
+            raise ValueError("liger does not support per-row aggregation; use precompute")
         from liger_kernel.transformers.fused_linear_jsd import LigerFusedLinearJSD
 
         loss = LigerFusedLinearJSD(jsd_beta=1.0, temperature=1.0, accum_dtype=torch.float32)
@@ -418,18 +447,19 @@ class FullVocabObjectiveResult(NamedTuple):
     token_objective: torch.Tensor | None
     token_diagnostics: dict[str, torch.Tensor]
     objective_rows: torch.Tensor | None = None
+    local_objective_sum: torch.Tensor | None = None
 
 
 _MIRROR_DIAGNOSTICS = ("target_kl", "target_log_z", "anchor_kl", "teacher_kl")
 
 
-def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, actions=None):
+def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, actions=None, student_logits=None):
     with full_kl_range("teacher_projection_and_normalization"):
         zt = project(ht, wt)
     with full_kl_range("anchor_projection_and_normalization"):
         zq = project(hq, wq)
     with full_kl_range("student_projection"):
-        z = project(hs, ws)
+        z = project(hs, ws) if student_logits is None else student_logits
     with full_kl_range("mirror_rows"):
         original_z = z
         corrections = None
@@ -475,9 +505,50 @@ def full_vocab_objective_result(
     termination_token_ids=(),
     forward_teacher_support="equal",
     distribution=None,
+    reduction=None,
 ):
     """Dispatch teacher KL, MDPO and BPO; MDPO EOS diagnostics use coarsened actions."""
     validate_fused_backend(backend, hs)
+    if reduction is not None and sum(reduction.counts) != len(hs):
+        raise ValueError("Packed reduction must match hidden rows")
+    row_weights = (
+        None
+        if reduction is None
+        else reduction.row_weights(torch.float64 if hs.dtype == torch.float64 else torch.float32)
+    )
+    if reduction is not None and reduction.future_config.mode != "none":
+        from verl.trainer.distillation.trajectory import trajectory_objective_result
+
+        # Reuse all existing objective/support/backend checks, including empty ranks.
+        full_vocab_objective_result(
+            hs[:0],
+            ws,
+            ht[:0],
+            wt,
+            spec=spec,
+            hq=None if hq is None else hq[:0],
+            wq=wq,
+            backend=backend,
+            token_chunk=token_chunk,
+            vocab_chunk=vocab_chunk,
+            termination_token_ids=termination_token_ids,
+            forward_teacher_support=forward_teacher_support,
+            distribution=distribution,
+        )
+        return trajectory_objective_result(
+            hs,
+            ws,
+            ht,
+            wt,
+            spec=spec,
+            hq=hq,
+            wq=wq,
+            backend=backend,
+            token_chunk=token_chunk,
+            termination_token_ids=termination_token_ids,
+            distribution=distribution,
+            reduction=reduction,
+        )
     if distribution is not None:
         from verl.trainer.distillation.distribution import CompiledDistribution, DistributionSpec
 
@@ -499,10 +570,10 @@ def full_vocab_objective_result(
                 fused = backend == "precompute_fused"
                 kernel = partial(conditional_kl_rows, space=space, actions=actions, fused=fused)
                 total, raw, objective_rows, info = PrecomputedKL.apply(
-                    hs, ws, ht.detach(), wt.detach(), token_chunk, kernel, None, None, None, names
+                    hs, ws, ht.detach(), wt.detach(), token_chunk, kernel, None, None, None, names, row_weights
                 )
                 return FullVocabObjectiveResult(
-                    total, raw, {k: info[:, i] for i, k in enumerate(names)}, objective_rows
+                    total, raw, {k: info[:, i] for i, k in enumerate(names)}, objective_rows, objective_rows.sum()
                 )
             result = full_vocab_objective_result(
                 hs,
@@ -514,20 +585,28 @@ def full_vocab_objective_result(
                 token_chunk=token_chunk,
                 vocab_chunk=vocab_chunk,
                 termination_token_ids=space.termination_ids,
+                reduction=reduction,
             )
             diagnostics = dict(result.token_diagnostics)
             for role, h, w in (("student", hs, ws), ("teacher", ht, wt)):
                 diagnostics[role + "_excluded_mass"] = space.excluded_mass(
                     h, w, role, token_chunk=token_chunk, vocab_chunk=vocab_chunk
                 )
-            return FullVocabObjectiveResult(result.loss_sum, result.token_objective, diagnostics, result.objective_rows)
+            return result._replace(token_diagnostics=diagnostics)
     if spec.teacher_only_forward_kl:
         if termination_token_ids:
             raise ValueError("forward KL does not support termination equivalence")
         from verl.trainer.distillation.forward_vocab import full_forward_kl_result
 
         return full_forward_kl_result(
-            hs, ws, ht, wt, backend=backend, token_chunk=token_chunk, teacher_support=forward_teacher_support
+            hs,
+            ws,
+            ht,
+            wt,
+            backend=backend,
+            token_chunk=token_chunk,
+            teacher_support=forward_teacher_support,
+            row_weights=row_weights,
         )
     if spec.teacher_only_kl:
         result = full_reverse_kl_result(
@@ -539,12 +618,14 @@ def full_vocab_objective_result(
             token_chunk=token_chunk,
             vocab_chunk=vocab_chunk,
             termination_token_ids=termination_token_ids,
+            row_weights=row_weights,
         )
         return FullVocabObjectiveResult(
             result.loss_sum,
             result.token_kl,
             {},
             result.objective_rows if result.objective_rows is not None else result.token_kl,
+            None if result.objective_rows is None else result.objective_rows.sum(),
         )
     if termination_token_ids:
         ids = tuple(termination_token_ids)
@@ -583,13 +664,13 @@ def full_vocab_objective_result(
     actions = TerminationActionMap.create(len(ws), termination_token_ids, hs.device) if termination_token_ids else None
     if backend == "dense":
         rows, _, diag = _mirror_rows(hs, ws, ht, wt, hq, wq, spec, actions=actions)
-        total = rows.sum()
+        total = rows.sum() if row_weights is None else (rows * row_weights).sum()
     else:
         row_kernel = partial(
             _mirror_rows,
             fused=backend == "precompute_fused",
             actions=actions,
         )
-        total, rows, diag = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
+        total, rows, diag = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec, (), row_weights)
     info = {k: diag[:, i].detach() for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if spec.diagnostics else {}
-    return FullVocabObjectiveResult(total, rows.detach(), info, rows.detach())
+    return FullVocabObjectiveResult(total, rows.detach(), info, rows.detach(), rows.detach().sum())

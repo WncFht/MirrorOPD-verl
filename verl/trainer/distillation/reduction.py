@@ -10,6 +10,14 @@ import torch
 from verl.workers.config.distillation_spec import FutureCreditConfig
 
 
+def nonempty_sequence_count(loss_mask):
+    """Count nonempty answers, including jagged masks and empty DP partitions."""
+    masks = loss_mask.unbind()
+    if not masks:
+        return torch.zeros((), dtype=torch.long, device=loss_mask.device)
+    return torch.stack([mask.sum() > 0 for mask in masks]).sum()
+
+
 def reduction_scale(mode, *, dp_size=1, num_tokens=None, num_sequences=None, fixed_scale=None):
     """Final scalar after row weighting; DP gradients are averaged by the engine."""
     if mode == "token-sum":
@@ -85,6 +93,17 @@ class PackedReduction:
             raise ValueError("Packed counts, times and actions must describe the same rows")
         if self.times.dtype != torch.long or self.actions.dtype != torch.long:
             raise ValueError("Packed times and actions must be int64")
+        reduction_scale(self.mode, num_tokens=1, num_sequences=1, fixed_scale=1)
+        torch._assert_async((self.times >= 0).all(), "Response times must be nonnegative")
+        offset = 0
+        for count in self.counts:
+            end = offset + count
+            if count > 1:
+                torch._assert_async(
+                    (self.times[offset + 1 : end] > self.times[offset : end - 1]).all(),
+                    "Response times must strictly increase within each answer",
+                )
+            offset = end
 
     @property
     def future_config(self):

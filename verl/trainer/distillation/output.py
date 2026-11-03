@@ -32,20 +32,20 @@ class FullVocabOutput(NamedTuple):
         conditioned = measure_name is not None and measure_name.startswith("conditional")
         if spec.teacher_only_kl and conditioned:
             primary = "conditional_rkl"
-        value = result.loss_sum.detach() / divisor
+        local = getattr(result, "local_objective_sum", None)
+        local = result.loss_sum.detach() if local is None else local.detach()
+        value = local / divisor
         if termination and spec.teacher_only_kl:
             if result.token_objective is None:
                 raise ValueError("Termination diagnostics require native-vocabulary KL rows")
             value = result.token_objective.detach().sum()
         statistics = {primary: value, **{k: v.detach().sum() for k, v in result.token_diagnostics.items()}}
         if measure_name is not None:
-            statistics[measure_name + "/objective"] = result.loss_sum.detach() / divisor
+            statistics[measure_name + "/objective"] = local / divisor
         if termination and spec.teacher_only_kl:
             if not conditioned:
-                statistics["termination_equiv_kl"] = result.loss_sum.detach()
-            statistics["conditional_eos_identity_kl" if conditioned else "eos_identity_kl"] = (
-                value - result.loss_sum.detach()
-            )
+                statistics["termination_equiv_kl"] = local
+            statistics["conditional_eos_identity_kl" if conditioned else "eos_identity_kl"] = value - local
         observations = {f"distillation/{k}": Observation.ratio(v, count) for k, v in statistics.items()}
         if bins is not None and result.token_objective is not None:
             sums, counts = position_statistics(result.token_objective, bins)
