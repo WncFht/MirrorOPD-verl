@@ -448,6 +448,8 @@ class FullVocabObjectiveResult(NamedTuple):
     token_diagnostics: dict[str, torch.Tensor]
     objective_rows: torch.Tensor | None = None
     local_objective_sum: torch.Tensor | None = None
+    future_coefficients: torch.Tensor | None = None
+    future_score_sum: torch.Tensor | None = None
 
 
 _MIRROR_DIAGNOSTICS = ("target_kl", "target_log_z", "anchor_kl", "teacher_kl")

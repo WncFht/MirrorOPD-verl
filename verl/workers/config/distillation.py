@@ -23,7 +23,7 @@ from omegaconf import OmegaConf
 from verl.base_config import BaseConfig
 from verl.utils.config import omega_conf_to_dataclass
 
-from .distillation_spec import MirrorConfig
+from .distillation_spec import FutureCreditConfig, MirrorConfig
 from .engine import FSDPEngineConfig
 from .rollout import RolloutConfig
 
@@ -46,11 +46,18 @@ class FullVocabConfig(BaseConfig):
     input_id_mapping: str = "identity"
     # Explicit equivalence class of tokens that all terminate this single-turn rollout.
     termination_token_ids: list[int] = field(default_factory=list)
+    future: FutureCreditConfig = field(default_factory=FutureCreditConfig)
 
     def __post_init__(self):
         from verl.trainer.distillation.distribution import DistributionSpec
 
         DistributionSpec.parse(self.distribution)
+        if not isinstance(self.future, FutureCreditConfig):
+            object.__setattr__(self, "future", FutureCreditConfig(**dict(self.future)))
+        if self.future.mode != "none" and self.backend not in ("dense", "precompute", "precompute_fused"):
+            raise ValueError("Future credit requires dense/precompute/precompute_fused")
+        if self.future.mode != "none" and DistributionSpec.parse(self.distribution).mode != "native":
+            raise ValueError("Future credit does not support common-conditioned distributions")
         if self.input_id_mapping not in {"identity", "token_semantics"}:
             raise ValueError("input_id_mapping must be identity or token_semantics")
         if self.forward_teacher_support not in ("equal", "student"):
@@ -158,6 +165,10 @@ class DistillationLossConfig(BaseConfig):
         self._loss_settings: DistillationLossSettings = resolve_distillation_spec(self)
         if isinstance(self.full_vocab, dict):
             object.__setattr__(self, "full_vocab", FullVocabConfig(**self.full_vocab))
+        if self.full_vocab.future.mode != "none" and not (
+            self.loss_settings.payload_kind == "hidden" and self.loss_settings.objective == "mdpo"
+        ):
+            raise ValueError("Future credit supports full-vocabulary reverse KL and MDPO only")
         if (
             self.full_vocab.distribution or self.full_vocab.input_id_mapping != "identity"
         ) and not self.loss_settings.teacher_only_kl:

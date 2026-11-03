@@ -33,3 +33,15 @@ class LossContext:
         if self.batch_num_tokens is None or self.batch_num_tokens <= 0:
             raise ValueError("full KL requires positive globally valid token count")
         return total * self.dp_size / self.batch_num_tokens
+
+    def full_vocab_scale(self, mode, *, num_sequences=None):
+        """Scale an already row-weighted numerator with optimizer-batch counts."""
+        from verl.trainer.distillation.reduction import reduction_scale
+
+        return reduction_scale(
+            mode,
+            dp_size=self.dp_size,
+            num_tokens=self.batch_num_tokens,
+            num_sequences=num_sequences,
+            fixed_scale=self.loss_scale_factor,
+        )

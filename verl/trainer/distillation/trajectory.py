@@ -32,6 +32,10 @@ def action_score(logits, sampled, actions):
     value = lp.gather(1, sampled[:, None]).squeeze(1)
     gradient = -lp.exp()
     gradient.scatter_add_(1, sampled[:, None], torch.ones_like(value[:, None]))
+    # Preserve a tiny 1-p at a near-certain sampled action, as the local VJP does.
+    pivot = z.argmax(-1, keepdim=True)
+    other = gradient.scatter(-1, pivot, 0.0)
+    gradient = other.scatter(-1, pivot, -other.sum(-1, keepdim=True))
     if actions is not None:
         gradient = actions.expand_gradient(gradient, logits)
     return value, gradient
@@ -62,6 +66,8 @@ def trajectory_rows(hs, ws, ht, wt, hq, wq, spec, fused, actions):
 def trajectory_blocks(hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, actions, *, precompute):
     dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
     costs, raw = hs.new_empty(len(hs), dtype=dtype), hs.new_empty(len(hs), dtype=dtype)
+    coefficients = torch.empty_like(costs)
+    score_sum = costs.new_zeros(())
     info = hs.new_empty((len(hs), 4 if spec.diagnostics and not spec.teacher_only_kl else 0), dtype=dtype)
     weights = reduction.row_weights(dtype)
     config = reduction.future_config
@@ -78,6 +84,8 @@ def trajectory_blocks(hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, act
         if config.mode == "discounted_sequence":
             local_weight = local_weight * config.gamma ** reduction.times[start:stop].to(dtype)
         total = total + ((values + future * sampled_lp) * local_weight).sum()
+        coefficients[start:stop] = future
+        score_sum = score_sum + (future * sampled_lp.detach() * local_weight).sum()
         costs[start:stop], raw[start:stop], info[start:stop] = values.detach(), metric.detach(), diag.detach()
         if precompute:
             dz = (dz + future[:, None] * score) * (
@@ -86,7 +94,7 @@ def trajectory_blocks(hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, act
             dz = dz.float() if hs.dtype == torch.float16 else dz.to(hs.dtype)
             add_product(dh[start:stop], dz, ws)
             add_product(dw, dz.T, hs[start:stop])
-    return total, costs, raw, info, dh, dw
+    return total, costs, raw, info, coefficients, score_sum, dh, dw
 
 
 class TrajectoryVJP(torch.autograd.Function):
@@ -94,15 +102,15 @@ class TrajectoryVJP(torch.autograd.Function):
 
     @staticmethod
     def forward(ctx, hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, actions):
-        total, costs, raw, info, dh, dw = trajectory_blocks(
+        total, costs, raw, info, coefficients, score_sum, dh, dw = trajectory_blocks(
             hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, actions, precompute=True
         )
         ctx.hdtype, ctx.wdtype = hs.dtype, ws.dtype
         ctx.save_for_backward(
             dh if hs.dtype == torch.float16 else dh.to(hs.dtype), dw if ws.dtype == torch.float16 else dw.to(ws.dtype)
         )
-        ctx.mark_non_differentiable(costs, raw, info)
-        return total, costs, raw, info
+        ctx.mark_non_differentiable(costs, raw, info, coefficients, score_sum)
+        return total, costs, raw, info, coefficients, score_sum
 
     @staticmethod
     @torch.autograd.function.once_differentiable
@@ -135,8 +143,8 @@ def trajectory_objective_result(
     actions = TerminationActionMap.create(len(ws), termination_token_ids, hs.device) if termination_token_ids else None
     arguments = (hs, ws, ht, wt, hq, wq, spec, reduction, token_chunk, backend == "precompute_fused", actions)
     if backend == "dense":
-        total, costs, raw, info, _, _ = trajectory_blocks(*arguments, precompute=False)
+        total, costs, raw, info, coefficients, score_sum, _, _ = trajectory_blocks(*arguments, precompute=False)
     else:
-        total, costs, raw, info = TrajectoryVJP.apply(*arguments)
+        total, costs, raw, info, coefficients, score_sum = TrajectoryVJP.apply(*arguments)
     diagnostics = {k: info[:, i] for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if info.shape[1] else {}
-    return FullVocabObjectiveResult(total, raw, diagnostics, costs, costs.sum())
+    return FullVocabObjectiveResult(total, raw, diagnostics, costs, costs.sum(), coefficients, score_sum)
