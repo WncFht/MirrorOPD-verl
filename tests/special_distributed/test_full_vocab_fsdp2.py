@@ -32,7 +32,8 @@ from transformers import (
     Qwen3MoeConfig,
 )
 
-from verl.trainer.distillation.full_vocab import full_reverse_kl
+from verl.trainer.distillation.full_vocab import full_vocab_objective_result
+from verl.trainer.distillation.reduction import PackedReduction, reduction_scale
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
 from verl.utils.metric.observations import Observation
@@ -77,6 +78,18 @@ def main():
     parser.add_argument("--student-extra-rows", type=int, default=0)
     parser.add_argument("--teacher-hidden-size", type=int, default=32)
     parser.add_argument("--direction", choices=["reverse", "forward"], default="reverse")
+    parser.add_argument(
+        "--loss-agg-mode",
+        choices=["token-mean", "token-sum", "seq-mean-token-mean", "seq-mean-token-sum", "seq-mean-token-sum-norm"],
+        default="token-mean",
+    )
+    parser.add_argument("--loss-scale-factor", type=float, default=7.0)
+    parser.add_argument(
+        "--future-mode",
+        choices=["none", "sum", "mean", "discounted_sum", "discounted_mean", "discounted_sequence"],
+        default="none",
+    )
+    parser.add_argument("--gamma", type=float, default=1.0)
     args = parser.parse_args()
     torch.set_num_threads(1)
     _, rank, world = initialize_global_process_group(timeout_second=180)
@@ -143,6 +156,7 @@ def main():
         distribution={"mode": "common_conditioned", "common_vocab_size": args.common_vocab_size}
         if args.common_vocab_size
         else {},
+        future={"mode": args.future_mode, "gamma": args.gamma},
     )
     if args.permuted_teacher:
         full_config = replace(
@@ -167,9 +181,19 @@ def main():
             full_vocab=full_config,
         )
     )
-    actor.engine.configure_full_vocab(full_config, str(root / "teacher"), spec=distill.distillation_loss.loss_settings)
+    actor.engine.configure_full_vocab(
+        full_config,
+        str(root / "teacher"),
+        spec=distill.distillation_loss.loss_settings,
+        loss_agg_mode=args.loss_agg_mode,
+        loss_scale_factor=args.loss_scale_factor,
+    )
     actor.set_loss_fn(
-        partial(teacher_policy_loss, config=SimpleNamespace(loss_agg_mode="token-mean"), distillation_config=distill)
+        partial(
+            teacher_policy_loss,
+            config=SimpleNamespace(loss_agg_mode=args.loss_agg_mode, loss_scale_factor=args.loss_scale_factor),
+            distillation_config=distill,
+        )
     )
     rows = [torch.tensor([3 + rank, 7, 8, 9, 1]), torch.tensor([4, 10, 11, 1])]
     original = {n: p.detach().to_local().clone() for n, p in actor.engine.module.named_parameters()}
@@ -205,42 +229,38 @@ def main():
             with torch.no_grad():
                 for ids, pos, th in zip(rows, positions, data["teacher_hidden"].unbind(), strict=True):
                     h = reference.model(ids.cuda()[None], use_cache=False).last_hidden_state[0, pos.cuda()]
-                    if args.direction == "forward":
-                        from verl.trainer.distillation.forward_vocab import full_forward_kl_result
-
-                        total += full_forward_kl_result(
-                            h,
-                            reference.lm_head.weight,
-                            th.cuda().float(),
-                            actor.engine.full_vocab_teacher_head.get(h.device, h.dtype),
-                            backend="dense",
-                            teacher_support="student",
-                        ).loss_sum
-                        continue
-                    if args.common_vocab_size or args.permuted_teacher:
-                        from verl.trainer.distillation.full_vocab import full_vocab_objective_result
-
-                        total += full_vocab_objective_result(
-                            h,
-                            reference.lm_head.weight,
-                            th.cuda().float(),
-                            actor.engine.full_vocab_teacher_head.get(h.device, h.dtype),
-                            spec=distill.distillation_loss.loss_settings,
-                            backend="dense",
-                            distribution=full_config.distribution,
-                        ).loss_sum
-                        continue
-                    total += full_reverse_kl(
+                    layout = PackedReduction(
+                        (len(pos),),
+                        (pos + 1 - 2).cuda(),
+                        ids[pos + 1].cuda(),
+                        mode=args.loss_agg_mode,
+                        future=full_config.future,
+                    )
+                    total += full_vocab_objective_result(
                         h,
                         reference.lm_head.weight,
                         th.cuda().float(),
                         actor.engine.full_vocab_teacher_head.get(h.device, h.dtype),
                         backend="dense",
-                    )
+                        spec=distill.distillation_loss.loss_settings,
+                        distribution=full_config.distribution,
+                        forward_teacher_support=full_config.forward_teacher_support,
+                        reduction=layout,
+                    ).loss_sum
             count = torch.tensor(sum(len(p) for p in positions), device="cuda")
+            sequence_count = torch.tensor(sum(bool(len(p)) for p in positions), device="cuda")
             dist.all_reduce(total)
             dist.all_reduce(count)
-            expected_loss = (total / count).item()
+            dist.all_reduce(sequence_count)
+            expected_loss = (
+                total
+                * reduction_scale(
+                    args.loss_agg_mode,
+                    num_tokens=count.item(),
+                    num_sequences=sequence_count.item(),
+                    fixed_scale=args.loss_scale_factor,
+                )
+            ).item()
             del reference
         tu.assign_non_tensor(data, full_vocab_teacher=False, full_vocab_train=True)
         output = actor.train_batch(data)
@@ -318,6 +338,10 @@ def main():
     result = {
         "backend": args.backend,
         "direction": args.direction,
+        "loss_agg_mode": args.loss_agg_mode,
+        "loss_scale_factor": args.loss_scale_factor,
+        "future_mode": args.future_mode,
+        "gamma": args.gamma,
         "world_size": world,
         "records": records,
         "parameter_delta_norms_rank0": deltas,
