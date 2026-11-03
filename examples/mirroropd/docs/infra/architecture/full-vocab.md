@@ -1,6 +1,6 @@
 # Full-vocab 数据流与目标算子
 
-Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前缀上，对 student 的完整输出词表求条件反向 KL。Teacher 提供每个前缀的 hidden，actor 更新时使用冻结 teacher head 恢复教师分布，再与当前 student 分布比较。轨迹来自 student，KL 的动作求和覆盖全部输出行；无需再由单个 sampled token 估计这个动作期望。
+Full-vocab reverse KL（下称 Full-KL）默认在 student rollout 得到的固定前缀上，对 student 的完整输出词表求条件反向 KL。Teacher 提供每个前缀的 hidden，actor 更新时使用冻结 teacher head 恢复教师分布，再与当前 student 分布比较。轨迹来自 student，KL 的动作求和覆盖全部输出行；无需再由单个 sampled token 估计这个动作期望。可选 future credit 为当前 sampled action 增加后续训练代价的 score 项，适用条件见[聚合与未来信用](#聚合与未来信用)。
 
 本文沿实际 head-loss 路径展开。公共训练循环见[训练循环](training-loop.md)，与 sampled current-IS 的关系见[梯度推导](sampled-opd.md#与-full-kl-的梯度关系)。
 
@@ -14,7 +14,7 @@ Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前�
 
 ## 接口与运行约束
 
-[full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py) 返回 [FullKLResult](../../../../../verl/trainer/distillation/full_vocab.py)：可反传的 `loss_sum`、可选且 detached 的旧`token_kl`，以及与实际目标对应的`objective_rows`；旧两值解包仍兼容。兼容入口 `full_reverse_kl` 只返回前者。Kernel 不承担分布式通信、训练归一化、TQ 读取或日志命名。
+[full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py) 返回 [FullKLResult](../../../../../verl/trainer/distillation/full_vocab.py)：可反传的 `loss_sum`、可选且 detached 的 `token_kl`，以及与实际目标对应的 `objective_rows`。兼容入口 `full_reverse_kl` 只返回前者。统一 dispatcher 返回的 `FullVocabObjectiveResult` 另有未加权的 `local_objective_sum` 及可选 future 诊断，避免把训练 surrogate 当作 KL。Kernel 不承担分布式通信、最终全局归一化、TQ 读取或日志命名。
 
 设一个 micro-batch 中选出的有效预测行数为 $n$：
 
@@ -29,16 +29,66 @@ Full-vocab reverse KL（下称 Full-KL）在 student rollout 得到的固定前�
 
 师生 hidden 宽度可以不同；前缀语义与输出动作必须对齐。默认 native 模式要求 $V_t\ge V_s$；显式 common-conditioned 模式支持较窄 teacher，并记录双方排除质量。Tokenizer 的 token→ID 词表相同，不要求模型 head 的总行数相同：head 可以包含 tokenizer 常规词表之外的额外输出行。
 
-| 约束                                                                                                                                | 执行检查的位置                                                                                         |
-| ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `use_policy_gradient=False`、`use_task_rewards=False`、`policy_loss_mode=vanilla`、`advantage_source=current`，两个 clamp 为 `null` | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py)                           |
-| `execution_mode=shared_sync`、V1 sync、单节点、FSDP2、无 ref/critic，师生轮流使用同池                                               | [DistillationConfig.validate_shared_sync](../../../../../verl/workers/config/distillation.py)          |
-| Qwen2/Qwen3/Qwen3-MoE/Llama、无 bias 的 student head                                                                                | [install_full_vocab_adapter](../../../../../verl/models/transformers/full_vocab.py)                    |
-| Qwen2/Qwen3/Qwen3-MoE/Llama safetensors teacher head                                                                                | [FrozenTeacherHead](../../../../../verl/trainer/distillation/hidden.py)                                |
-| 温度为 1，无 entropy、sum-pi-squared 或 score-centering 计算                                                                        | [FSDPEngineWithLMHead._full_vocab_output](../../../../../verl/workers/engine/fsdp/transformer_impl.py) |
-| `loss_agg_mode=token-mean`                                                                                                          | [distillation_loss](../../../../../verl/trainer/distillation/losses.py)                                |
+| 约束                                                                                                                                | 执行检查的位置                                                                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `use_policy_gradient=False`、`use_task_rewards=False`、`policy_loss_mode=vanilla`、`advantage_source=current`，两个 clamp 为 `null` | [DistillationLossConfig](../../../../../verl/workers/config/distillation.py)                                                                                               |
+| `execution_mode=shared_sync`、V1 sync、单节点、FSDP2、无 ref/critic，师生轮流使用同池                                               | [DistillationConfig.validate_shared_sync](../../../../../verl/workers/config/distillation.py)                                                                              |
+| Qwen2/Qwen3/Qwen3-MoE/Llama、无 bias 的 student head                                                                                | [install_full_vocab_adapter](../../../../../verl/models/transformers/full_vocab.py)                                                                                        |
+| Qwen2/Qwen3/Qwen3-MoE/Llama safetensors teacher head                                                                                | [FrozenTeacherHead](../../../../../verl/trainer/distillation/hidden.py)                                                                                                    |
+| 温度为 1，无 entropy、sum-pi-squared 或 score-centering 计算                                                                        | [FSDPEngineWithLMHead._full_vocab_output](../../../../../verl/workers/engine/fsdp/transformer_impl.py)                                                                     |
+| 聚合模式与 backend 能力匹配；`seq-mean-token-sum-norm` 显式指定正的固定 C                                                           | [FSDPEngineWithLMHead.configure_full_vocab](../../../../../verl/workers/engine/fsdp/transformer_impl.py)、[LossContext](../../../../../verl/workers/utils/loss_context.py) |
 
 这些检查分布在配置解析、模型构建与运行时，不能把 Hydra 配置解析成功视为全部通过。`use_fused_kernels=False` 是通用模型 forward 路径的限制，与下面专用 `precompute_fused` KL backend 是不同开关。
+
+## 聚合与未来信用
+
+默认仍是 `actor.loss_agg_mode=token-mean` 与 `full_vocab.future.mode=none`，调用原有数值路径，不分配 suffix、sampled-action score 或逐行权重。所有聚合复用 actor 的 `loss_agg_mode`；统一 launcher 接受末尾 Hydra override，不新增平行 CLI。以下是叠加在既有 full-vocab 方法配置上的字段片段：
+
+```yaml
+actor_rollout_ref:
+  actor:
+    loss_agg_mode: seq-mean-token-sum
+    loss_scale_factor: null
+distillation:
+  distillation_loss:
+    full_vocab:
+      backend: precompute
+      future:
+        mode: sum
+        gamma: 1.0
+```
+
+| `loss_agg_mode`           | 有效回答内部的归约       | 全局归约                                                      |
+| ------------------------- | ------------------------ | ------------------------------------------------------------- |
+| `token-mean`              | token 求和               | 除全局有效 token 数 N                                         |
+| `token-sum`               | token 求和               | 全局求和                                                      |
+| `seq-mean-token-mean`     | 每条回答除自己的有效长度 | 除全局非空回答数 B                                            |
+| `seq-mean-token-sum`      | token 求和               | 除 B                                                          |
+| `seq-mean-token-sum-norm` | token 求和               | 除 B 和固定 `actor.loss_scale_factor`，后者必须为显式正有限值 |
+
+Engine 在 optimizer mini-batch 拆成动态 micro-batch 前计算分母。序列模式单独 all-reduce 非空 `loss_mask` 的数量，存为 `full_vocab_num_sequences`；[synthetic padding](../../../../../verl/trainer/ppo/padding_utils.py) 的 mask 为零，因此不会计入 B。LossContext 使用这个实际分母，避免沿用包含 padding 或空回答的声明批量。DP 梯度平均所需的乘数与 η 缩放在最终 loss 统一应用，逐回答长度权重则在 kernel 累积 `dH/dW` 前应用。
+
+Future 配置位于 `distillation.distillation_loss.full_vocab.future`，默认 `mode=none, gamma=1.0`。`sum` 累加严格后续代价，`mean` 除后续有效 token 数；`discounted_sum` 和 `discounted_mean` 按原始 response 坐标间隔加权，后者除折扣权重和；`discounted_sequence` 还对 local 和 score 项同时乘绝对时间权重。γ 必须为有限的 $0<\gamma\le1$，仅 discounted 模式允许 γ≠1。完整公式、on-policy 假设及 TOP-D 与当前方法的差别保留在[设计的数学合同](2026-11-03-Full-vocab聚合与未来信用实现计划.md#3-未来信用的数学合同)。
+
+Future 采用当前更新的实际训练代价：纯 reverse KL 是条件 KL，一般 MDPO 是 `target_kl - target_log_z`，保留状态相关 normalizer。它每次 student forward 重算，严格排除当前 token 并 detach；末 token 系数为零，mask 空洞消耗原始时间，回答边界 reset，不补截断之后的未知尾部。不增加 λ，不修改 PPO、rollout reuse 或 anchor 冻结边界。
+
+| 组合                          | 即时聚合                                           | Future                                                |
+| ----------------------------- | -------------------------------------------------- | ----------------------------------------------------- |
+| 纯 reverse KL                 | 既有各 backend；Liger 不支持 `seq-mean-token-mean` | native support 的 `dense/precompute/precompute_fused` |
+| 一般 MDPO                     | `dense/precompute/precompute_fused`                | 同左，包含终止动作等价                                |
+| BPO                           | `dense/precompute/precompute_fused`                | 显式拒绝                                              |
+| Full forward KL               | `dense/recompute/precompute/precompute_fused`      | 显式拒绝                                              |
+| common-conditioned reverse KL | 保留原 backend 能力；Liger 同上                    | 显式拒绝                                              |
+
+终止动作等价沿用训练配置限制，仅允许 `precompute/precompute_fused`；支持集和模型 head 宽度检查保持原合同。
+
+`precompute_fused` 已接入既有 fused 行算子，但新模式的真实 CUDA、FP16/BF16、FSDP2 与性能验收尚未执行。CPU 上请求 fused 仍明确报错，无隐式 backend fallback。
+
+实现中，[full_vocab_reduction](../../../../../verl/workers/utils/padding.py) 从既有预测坐标构造回答边界、原始时间和 sampled target ID，只做一次 next-token shift。[PackedReduction / suffix_credit](../../../../../verl/trainer/distillation/reduction.py) 独立维护权重和严格后缀；[trajectory.py](../../../../../verl/trainer/distillation/trajectory.py) 在每条回答内反向遍历 token 块，以 carry 连接相邻块，复用当前 student logits，在释放块前合成 local VJP 与 score VJP，并累积 `dH/dW`。后缀使用 doubling scan，复杂度为每块 $O(n\log n)$，无逐 token Python 循环或逆折扣幂。终止动作组的 score 直接在原词表坐标求导，仅对很小的 stop-token 组使用 FP64，不额外构造完整合并词表的 FP64 score 工作区。当前实现按回答切块，短回答可能增加小 GEMM 数量；score softmax 与逐词表修正也增加内存流量，GPU 性能待测，不能由“复用投影”推断开销为零。
+
+原 `full_kl`、mirror objective、target/teacher/anchor KL、normalizer 及位置统计继续使用未加权 local 行。Future 路径另记录 `future/coefficient` 的均值和标准差、`future/score_surrogate`、`local_surrogate` 与 `training_surrogate`；后三项按 η 缩放后记录 token 比率，尚未乘最终 DP/全局聚合系数，最终训练量仍看 `distillation/loss`。`valid_tokens` 与 `valid_sequences` 记录实际非空计数。Surrogate 的数值可以为负，不是 KL。
+
+CPU 验收覆盖[后缀与聚合公式](../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)、[独立概率参考及有限轨迹枚举](../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)、[Hydra 配置、DP/micro-batch 与 tied-head 小模型](../../../../../tests/trainer/distillation/test_full_vocab_reduction_on_cpu.py)。GPU 空闲后的入口是 [test_trajectory_on_gpu.py](../../../../../tests/trainer/distillation/test_trajectory_on_gpu.py) 和 [FSDP2 集成测试](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 的 `--loss-agg-mode`、`--future-mode`、`--gamma` 参数；执行与性能比较仍属待验收项。
 
 ## 从教师 hidden 到 student head
 
@@ -59,7 +109,7 @@ flowchart TD
         READ -->|ht| KL
         WT["冻结 teacher head<br/>独立权重 wt"] --> KL
         KL --> SUM["loss_sum"]
-        SUM --> N["LossContext<br/>全局 token-mean 缩放"]
+        SUM --> N["LossContext<br/>聚合对应的全局缩放"]
         N --> BW["loss.backward"]
         BW -.-> DH["hs 梯度<br/>传回 student backbone"]
         BW -.-> DW["ws 梯度<br/>传回 student head"]

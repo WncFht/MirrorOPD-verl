@@ -1,8 +1,8 @@
 # Full-vocab 聚合与未来信用实现计划
 
-状态：提案，尚未实现。代码走读基线为 `e899e1458f16a2aaed3a4526aced1791165aefa1`，核对日期为 2026-11-03。本文用于评审跨层接口、计算顺序与验收条件；现有能力仍以 [Full-vocab 数据流](full-vocab.md)为准。实施后将接口说明迁入当前参考，本文保留设计理由及尚未完成的验收项。
+状态：CPU 实现和训练链接入已完成，GPU 数值、真实 FSDP2 及性能验收待执行。第 2 节代码走读保留实施前基线 `e899e1458f16a2aaed3a4526aced1791165aefa1`，核对日期为 2026-11-03；当前配置、支持矩阵、执行方式和测试入口见 [Full-vocab 数据流](full-vocab.md#聚合与未来信用)。本文保留设计理由、数学合同与未完成的验收项。
 
-目标是在现有 Full-vocab 更新链中增加回答级聚合和未来信用分配，支持 sequence KL、TOP-D 风格 future mean 及 discount 对照。训练代码、测试代码和实验配置均不在这份文档的交付中修改，也不启动训练。
+目标是在现有 Full-vocab 更新链中增加回答级聚合和未来信用分配，支持 sequence KL、TOP-D 风格 future mean 及 discount 对照。实现保持原训练循环、PPO、rollout reuse 和 anchor 生命周期；默认 future 关闭。CPU 验收不启动正式训练，冻结运行配置与源码快照保持原状。
 
 阅读顺序：[范围](#1-范围与默认行为) → [当前代码链](#2-当前实现与修改落点) → [数学合同](#3-未来信用的数学合同) → [聚合](#4-聚合权重与梯度的连接) → [执行设计](#5-计算流水线与模块分工) → [实施与验收](#7-实施阶段与验收)。聚合文献与目标边界由[平均方式调研](../../literature/learning-signal/2026-10-31-Full-RKL的平均方式与MOPD及verl实现对照.md)维护，科学消融问题由 [weighted targets](../../experiments/learning-signal/weighted-targets.md) 承接。
 
@@ -128,7 +128,7 @@ $$
 
 末有效位置的 $S,W$ 均为 0；$W=0$ 时 mean 返回 0。
 
-| 拟议 `future.mode`    | $F_t$          | local 权重                                    | 含义                             |
+| `future.mode`         | $F_t$          | local 权重                                    | 含义                             |
 | --------------------- | -------------- | --------------------------------------------- | -------------------------------- |
 | `none`                | 0              | 1                                             | 当前实现                         |
 | `sum`                 | $S_t$，γ=1     | 1                                             | 完整 sequence-KL 的未来信用      |
@@ -238,7 +238,9 @@ $C$ 是跨 micro-batch 和训练更新固定的尺度。公共 `agg_loss` 在未
 
 Teacher、anchor 均 detach；当前 student hidden 和 head 都保留梯度。纯 teacher 目标、κ=1 MDPO 和一般 κ 的 MDPO 分别验证；一般 κ 必须核对保留 `log_z` 的 future 与完整轨迹代价梯度，避免只覆盖 teacher-only shortcut。
 
-### 5.3 生产分块候选
+### 5.3 生产分块候选与实现取舍
+
+CPU 实现采用单投影的反向分块路径，数学工具收敛到 `reduction.py`，执行桥接放在 `trajectory.py`，没有增加 reward 注册表。实际按回答切块，以标量 carry 连接相邻块；doubling scan 的每块复杂度为 $O(n\log n)$。该选择让回答边界与 mask 时间距离可独立检验，但不同回答之间不合并 GEMM，小回答的成本要在 GPU 上测量。既有 fused 行算子先计算 local VJP，score 在 Torch 中合成并重建 pivot；尚未把 score 融入 Triton。以下为设计时的候选流水线，其性能目标仍需 profiler 验收。
 
 优先验证逆序 token chunk 的单次 head 投影路径：
 
@@ -294,7 +296,7 @@ Resolved config 记录 `loss_agg_mode`、固定 $C$、future 模式、γ、实�
 | D：fused 与分布式 | `full_vocab_triton.py`、FSDP2 集成测试                        | EOS、数值补偿、空 rank、DP/micro/chunk 一致性通过        |
 | E：性能与实验交接 | 性能基准及对应当前参考文档                                    | 同输入性能比较完成，记录实际成本；正式训练消融另排       |
 
-这些是后续实施单元，不是本计划已经完成的功能。A 的聚合权重接口为 B–D 共用；B 的 dense 数值参考先于 C 的优化，避免用两个近似 kernel 互相证明。
+A–C 的代码与 CPU 验收已完成。新增测试分别覆盖 [suffix 与聚合合同](../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)、[独立参考、有限轨迹枚举和分块 VJP](../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)、[配置与训练接入](../../../../../tests/trainer/distillation/test_full_vocab_reduction_on_cpu.py)。完整 distillation CPU 回归及公共 loss aggregation 测试为 `714 passed, 18 skipped`；不适用的非 discounted 模式与非单位 γ 组合显式跳过。D 已增加 CUDA 测试与 FSDP2 参数入口，执行待 GPU 空闲；E 尚未测量。CPU 通过不等于 D/E 完成。
 
 ### 7.2 已有实现与测试复用
 
@@ -318,7 +320,7 @@ CPU 新增验收须覆盖：
 - 非均匀长度、不同 DP 划分、动态 micro-batch、跨序列/跨 token chunk 边界，与一次完整矩阵归约一致。
 - 原 `none + token-mean` 结果与梯度不变；其它即时项目标仍保持原接口语义。
 
-GPU/分布式验收在实施时单独执行，计划写作期间不运行。通过 CPU 参考不能替代真实 FSDP hooks、collective、FP16/BF16 和 fused 数值验证。
+GPU/分布式验收等待资源空闲后单独执行。通过 CPU 参考不能替代真实 FSDP hooks、collective、FP16/BF16 和 fused 数值验证。CUDA 新模式入口为 [test_trajectory_on_gpu.py](../../../../../tests/trainer/distillation/test_trajectory_on_gpu.py)；[Full-vocab FSDP2 集成测试](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 新增 `--loss-agg-mode`、`--loss-scale-factor`、`--future-mode`、`--gamma`，保留重复更新、空 local mask、head/backbone 和 checkpoint 检查。可用 `--backend precompute --loss-agg-mode seq-mean-token-mean --future-mode mean` 检查 TOP-D 风格结构，再以 `--future-mode discounted_sequence --gamma 0.9` 检查完整折扣路径；这两组尚未运行。
 
 ### 7.3 性能验收与消融交接
 
