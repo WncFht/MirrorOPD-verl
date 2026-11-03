@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Reject unsupported combinations before allocating workers or GPU memory."""
 
+import json
+
 from omegaconf import OmegaConf, open_dict
 
 from .models import load_model_metadata, local_model_path, reachable_sources, requires_token_generator
@@ -243,10 +245,18 @@ def uses_common_single_sampling(config):
     for key in ("tokenizer_path", "hf_config_path"):
         if OmegaConf.select(config, "actor_rollout_ref.model." + key) not in (None, model_path):
             return False
-    if OmegaConf.select(config, "actor_rollout_ref.model.override_config") or OmegaConf.select(
-        config, "actor_rollout_ref.model.trust_remote_code", default=False
-    ):
+    if OmegaConf.select(config, "actor_rollout_ref.model.override_config"):
         return False
+    if OmegaConf.select(config, "actor_rollout_ref.model.trust_remote_code", default=False):
+        # The published MiMo next-token policy inherits Qwen2. Custom code is
+        # bound in checkpoint_identity; other remote architectures remain out
+        # of the accepted common-sampler scope.
+        try:
+            checkpoint = json.loads((Path(model_path) / "config.json").read_text())
+        except (OSError, ValueError):
+            return False
+        if checkpoint.get("model_type") != "mimo" or checkpoint.get("architectures") != ["MiMoForCausalLM"]:
+            return False
     required = {
         "trainer.v1.trainer_mode": "sync",
         "trainer.nnodes": 1,

@@ -56,6 +56,7 @@ def test_generation_adapter_maps_tokens_and_stops_without_retokenizing(monkeypat
     client = object.__new__(CheckedClient)
     client.max_model_len = 32
     client.prompt_limit = 16
+    client.router = None
     client.token_mapping = TokenIdMapping.build(tokenizer(), tokenizer(True))
     sampling = {"max_tokens": 4, "stop_token_ids": [2]}
     output = asyncio.run(client.generate("test", prompt_ids=[1, 2], sampling_params=sampling))

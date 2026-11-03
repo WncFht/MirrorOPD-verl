@@ -495,7 +495,6 @@ class DistillationConfig(BaseConfig):
             "actor_rollout_ref.actor.strategy": "fsdp2",
             "actor_rollout_ref.actor.fsdp_config.param_offload": True,
             "actor_rollout_ref.actor.fsdp_config.optimizer_offload": True,
-            "actor_rollout_ref.actor.fsdp_config.offload_policy": False,
             "actor_rollout_ref.actor.fsdp_config.ulysses_sequence_parallel_size": 1,
             "actor_rollout_ref.actor.ulysses_sequence_parallel_size": 1,
             "actor_rollout_ref.model.use_remove_padding": True,

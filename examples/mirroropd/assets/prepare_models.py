@@ -32,7 +32,7 @@ def main():
         else:
             pending.append(name)
     root.mkdir(parents=True, exist_ok=True)
-    patterns = ["*.json", "*.safetensors", "*.txt", "*.model", "*.jinja", "LICENSE*", "README.md"]
+    patterns = ["*.json", "*.safetensors", "*.txt", "*.model", "*.jinja", "*.py", "LICENSE*", "README.md"]
     with tempfile.TemporaryDirectory(prefix=".prepare-models-", dir=root) as temp:
         staged = Path(temp)
         for name in pending:

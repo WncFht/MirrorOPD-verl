@@ -519,6 +519,7 @@ def test_evaluation_batch_rules_follow_capabilities_not_configuration_presence()
 
 def test_native_evaluation_uses_its_own_questions_without_legacy_val_loader():
     trainer = _training_only_trainer()
+    trainer.config.data.val_files = ["unused-source-must-not-be-read.parquet"]
     trainer.readout_callback = SimpleNamespace(uses_validation_dataset=False)
     trainer.config.trainer.update({"val_before_train": True, "evaluation": {"source_file": "source.parquet"}})
     with (

@@ -942,7 +942,7 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
             "cpu",
             model=self.actor.engine.is_param_offload_enabled,
             optimizer=self.actor.engine.is_optimizer_offload_enabled,
-            grad=True,
+            grad=self.actor.engine.is_param_offload_enabled,
         )
         aggressive_empty_cache(force_sync=True)
 

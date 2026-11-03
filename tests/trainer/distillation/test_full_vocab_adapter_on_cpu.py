@@ -6,7 +6,7 @@ import copy
 
 import pytest
 import torch
-from transformers import AutoModelForCausalLM, LlamaConfig, Qwen2Config, Qwen3Config, Qwen3MoeConfig
+from transformers import AutoModelForCausalLM, LlamaConfig, Olmo3Config, Qwen2Config, Qwen3Config, Qwen3MoeConfig
 
 from verl.models.transformers.full_vocab import install_full_vocab_adapter
 from verl.trainer.distillation.full_vocab import full_reverse_kl
@@ -22,6 +22,7 @@ from verl.trainer.distillation.hidden import FrozenTeacherHead
         (Qwen3MoeConfig, False),
         (LlamaConfig, False),
         (LlamaConfig, True),
+        (Olmo3Config, False),
     ],
 )
 def test_adapter_matches_dense_model_value_and_all_gradients(config_cls, tied, tmp_path):
@@ -69,3 +70,30 @@ def test_adapter_matches_dense_model_value_and_all_gradients(config_cls, tied, t
     if tied:
         assert adapted.lm_head.weight is adapted.model.embed_tokens.weight
     torch.testing.assert_close(adapted(ids).logits, reference(ids).logits)
+
+
+def test_mimo_unused_mtp_is_frozen_and_next_token_function_is_preserved():
+    config = Qwen2Config(
+        vocab_size=19,
+        hidden_size=16,
+        intermediate_size=32,
+        num_hidden_layers=1,
+        num_attention_heads=2,
+        num_key_value_heads=1,
+        tie_word_embeddings=False,
+    )
+    config._attn_implementation = "eager"
+    model = AutoModelForCausalLM.from_config(config).double().eval()
+    model.config.model_type = "mimo"
+    model.model.mtp_layers = torch.nn.ModuleList([torch.nn.Linear(16, 16)])
+    ids = torch.tensor([[1, 2, 3, 4]])
+    expected = model(ids).logits.detach()
+    install_full_vocab_adapter(model)
+    assert all(not p.requires_grad for p in model.model.mtp_layers.parameters())
+    assert model.lm_head.weight.requires_grad
+    torch.testing.assert_close(model(ids).logits, expected)
+    hidden = model(ids, full_vocab_callback=lambda h, head: head(h, full_vocab_callback=lambda x, w: x @ w.T))
+    torch.testing.assert_close(hidden, expected)
+    hidden.square().mean().backward()
+    assert model.lm_head.weight.grad is not None
+    assert all(p.grad is None for p in model.model.mtp_layers.parameters())

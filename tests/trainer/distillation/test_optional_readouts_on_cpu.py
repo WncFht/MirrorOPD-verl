@@ -12,6 +12,7 @@ from verl.trainer.evaluation.config import EvaluationConfig
 from verl.trainer.evaluation.coordinator import EvaluationCoordinator
 from verl.trainer.evaluation.identity import active_bootstrap_contract, bootstrap_contract
 from verl.trainer.evaluation.plan import compile_plan
+from verl.trainer.evaluation.reload import HFReloadOptions
 
 
 def options(tmp_path, **changes):
@@ -89,6 +90,17 @@ def test_off_skips_sampling_and_gpu_but_retains_training_tokens(tmp_path, monkey
         coordinator.on_before_weight_sync(trainer, object(), 4)
 
 
+def test_reload_can_use_public_generation_and_legacy_option(tmp_path):
+    args = dict(export_audit="audit", output="out", reference_event="event")
+    assert (
+        HFReloadOptions.parse(dict(args, generation_bank="initial", reference_bank="public_initial")).generation_bank
+        == "initial"
+    )
+    assert HFReloadOptions.parse(dict(args, source_bank="old-source")).generation_bank == "old-source"
+    with pytest.raises(ValueError, match="not both"):
+        HFReloadOptions.parse(dict(args, source_bank="a", generation_bank="b"))
+
+
 @pytest.mark.parametrize("enabled", [False, True])
 def test_bootstrap_initial_only_generates_source_when_enabled(tmp_path, monkeypatch, enabled):
     import asyncio
@@ -151,7 +163,7 @@ def test_bootstrap_initial_only_generates_source_when_enabled(tmp_path, monkeypa
         def follow_generation(self, *args):
             pass
 
-        def submit(self, *args):
+        def check(self, *args):
             pass
 
         def finish(self, *args):

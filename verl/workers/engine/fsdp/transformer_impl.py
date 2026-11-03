@@ -926,9 +926,14 @@ class FSDPEngine(BaseEngine):
     def to(self, device: str, model: bool = True, optimizer: bool = True, grad: bool = True):
         """
         Move FSDP model and/or optimizer to CPU or GPU with offload support.
-        Note that this function executes irrespective of offload config. It serves as manual control
+        Per-layer FSDP2 CPU offload owns placement; other engines use manual phase transfers.
         """
         super().to(device=device, model=model, optimizer=optimizer, grad=grad)
+
+        if getattr(self, "_uses_fsdp2_cpu_offload_policy", False):
+            # FSDP2 owns pinned CPU parameter/optimizer shards and stages each
+            # layer. Manual relocation invalidates those ownership assumptions.
+            return
 
         phase_offload = (
             self.engine_config.forward_only

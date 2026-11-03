@@ -2,6 +2,57 @@
   "schema_version": 1,
   "models": [
     {
+      "id": "deepseek-ai/deepseek-math-7b-base@036a8c6189aac6e2fc4e07b46e1e57c6b647bca5",
+      "repo": "deepseek-ai/deepseek-math-7b-base",
+      "revision": "036a8c6189aac6e2fc4e07b46e1e57c6b647bca5",
+      "subfolder": null,
+      "aliases": [
+        "deepseek-math-7b-base",
+        "deepseek-ai/deepseek-math-7b-base"
+      ],
+      "path": "model/hub/deepseek-ai--deepseek-math-7b-base/036a8c6189aac6e2fc4e07b46e1e57c6b647bca5",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/deepseek-ai/deepseek-math-7b-base/tree/036a8c6189aac6e2fc4e07b46e1e57c6b647bca5"
+        ]
+      }
+    },
+    {
+      "id": "deepseek-ai/deepseek-math-7b-instruct@0a5828f800a36df0fd7f0ed581b983246c0677ff",
+      "repo": "deepseek-ai/deepseek-math-7b-instruct",
+      "revision": "0a5828f800a36df0fd7f0ed581b983246c0677ff",
+      "subfolder": null,
+      "aliases": [
+        "deepseek-math-7b-instruct",
+        "deepseek-ai/deepseek-math-7b-instruct"
+      ],
+      "path": "model/hub/deepseek-ai--deepseek-math-7b-instruct/0a5828f800a36df0fd7f0ed581b983246c0677ff",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/deepseek-ai/deepseek-math-7b-instruct/tree/0a5828f800a36df0fd7f0ed581b983246c0677ff"
+        ]
+      }
+    },
+    {
+      "id": "deepseek-ai/deepseek-math-7b-rl@f3cd419a172ff5a100e9a563ebfe7900d78e9740",
+      "repo": "deepseek-ai/deepseek-math-7b-rl",
+      "revision": "f3cd419a172ff5a100e9a563ebfe7900d78e9740",
+      "subfolder": null,
+      "aliases": [
+        "deepseek-math-7b-rl",
+        "deepseek-ai/deepseek-math-7b-rl"
+      ],
+      "path": "model/hub/deepseek-ai--deepseek-math-7b-rl/f3cd419a172ff5a100e9a563ebfe7900d78e9740",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/deepseek-ai/deepseek-math-7b-rl/tree/f3cd419a172ff5a100e9a563ebfe7900d78e9740"
+        ]
+      }
+    },
+    {
       "id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B@ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
       "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
       "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
@@ -1257,6 +1308,358 @@
             "revision": "be67d8ba9be0b9f405da4481f7dab1045a0256e1"
           }
         ]
+      }
+    },
+    {
+      "id": "XiaomiMiMo/MiMo-7B-Base@d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "repo": "XiaomiMiMo/MiMo-7B-Base",
+      "revision": "d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "subfolder": null,
+      "aliases": [
+        "MiMo-7B-Base",
+        "XiaomiMiMo/MiMo-7B-Base"
+      ],
+      "path": "model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/XiaomiMiMo/MiMo-7B-Base/tree/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad"
+        ]
+      }
+    },
+    {
+      "id": "XiaomiMiMo/MiMo-7B-SFT@0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "repo": "XiaomiMiMo/MiMo-7B-SFT",
+      "revision": "0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "subfolder": null,
+      "aliases": [
+        "MiMo-7B-SFT",
+        "XiaomiMiMo/MiMo-7B-SFT"
+      ],
+      "path": "model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/XiaomiMiMo/MiMo-7B-SFT/tree/0a9f1180d99e686ce56b75fee637db62407ceb1b"
+        ]
+      }
+    },
+    {
+      "id": "XiaomiMiMo/MiMo-7B-RL@7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "repo": "XiaomiMiMo/MiMo-7B-RL",
+      "revision": "7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "subfolder": null,
+      "aliases": [
+        "MiMo-7B-RL",
+        "XiaomiMiMo/MiMo-7B-RL"
+      ],
+      "path": "model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/XiaomiMiMo/MiMo-7B-RL/tree/7c7707596b0ef1032ef82970d7a4a484ca457c4d"
+        ]
+      }
+    },
+    {
+      "id": "XiaomiMiMo/MiMo-7B-RL-Zero@da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "repo": "XiaomiMiMo/MiMo-7B-RL-Zero",
+      "revision": "da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "subfolder": null,
+      "aliases": [
+        "MiMo-7B-RL-Zero",
+        "XiaomiMiMo/MiMo-7B-RL-Zero"
+      ],
+      "path": "model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/XiaomiMiMo/MiMo-7B-RL-Zero/tree/da0bde6fbbc8d1cb9afad15fab947db628a22014"
+        ]
+      }
+    },
+    {
+      "id": "allenai/Olmo-3-1025-7B@a81bae42db3975be1671e27b9c9a56da1a9f980f",
+      "repo": "allenai/Olmo-3-1025-7B",
+      "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+      "subfolder": null,
+      "aliases": [
+        "Olmo-3-1025-7B",
+        "allenai/Olmo-3-1025-7B"
+      ],
+      "path": "model/hub/allenai--Olmo-3-1025-7B/a81bae42db3975be1671e27b9c9a56da1a9f980f",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/allenai/Olmo-3-1025-7B/tree/a81bae42db3975be1671e27b9c9a56da1a9f980f"
+        ]
+      }
+    },
+    {
+      "id": "BayesRL/Olmo3-IVON-SFT-7B@4022ca655a865d859ddb8ecb92f008cb130a5542",
+      "repo": "BayesRL/Olmo3-IVON-SFT-7B",
+      "revision": "4022ca655a865d859ddb8ecb92f008cb130a5542",
+      "subfolder": null,
+      "aliases": [
+        "Olmo3-IVON-SFT-7B",
+        "BayesRL/Olmo3-IVON-SFT-7B"
+      ],
+      "path": "model/hub/BayesRL--Olmo3-IVON-SFT-7B/4022ca655a865d859ddb8ecb92f008cb130a5542",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/BayesRL/Olmo3-IVON-SFT-7B/tree/4022ca655a865d859ddb8ecb92f008cb130a5542"
+        ]
+      }
+    },
+    {
+      "id": "BayesRL/Olmo3-C3PO-7B@c223ee93e7344487f74fdd5767a42318ca6525af",
+      "repo": "BayesRL/Olmo3-C3PO-7B",
+      "revision": "c223ee93e7344487f74fdd5767a42318ca6525af",
+      "subfolder": null,
+      "aliases": [
+        "Olmo3-C3PO-7B",
+        "BayesRL/Olmo3-C3PO-7B"
+      ],
+      "path": "model/hub/BayesRL--Olmo3-C3PO-7B/c223ee93e7344487f74fdd5767a42318ca6525af",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/BayesRL/Olmo3-C3PO-7B/tree/c223ee93e7344487f74fdd5767a42318ca6525af"
+        ]
+      }
+    },
+    {
+      "id": "Qwen/Qwen2.5-14B@97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "repo": "Qwen/Qwen2.5-14B",
+      "revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "subfolder": null,
+      "aliases": [
+        "Qwen2.5-14B",
+        "Qwen/Qwen2.5-14B"
+      ],
+      "path": "model/hub/Qwen--Qwen2.5-14B/97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/Qwen/Qwen2.5-14B/tree/97e1e76335b7017d8f67c08a19d103c0504298c9"
+        ]
+      }
+    },
+    {
+      "id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B@1df8507178afcc1bef68cd8c393f61a886323761",
+      "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+      "revision": "1df8507178afcc1bef68cd8c393f61a886323761",
+      "subfolder": null,
+      "aliases": [
+        "DeepSeek-R1-Distill-Qwen-14B",
+        "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
+      ],
+      "path": "model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-14B/1df8507178afcc1bef68cd8c393f61a886323761",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B/tree/1df8507178afcc1bef68cd8c393f61a886323761"
+        ]
+      }
+    },
+    {
+      "id": "qihoo360/Light-R1-14B-DS@a69e32b88daa855ae068ca8601f3ec4085e96086",
+      "repo": "qihoo360/Light-R1-14B-DS",
+      "revision": "a69e32b88daa855ae068ca8601f3ec4085e96086",
+      "subfolder": null,
+      "aliases": [
+        "Light-R1-14B-DS",
+        "qihoo360/Light-R1-14B-DS"
+      ],
+      "path": "model/hub/qihoo360--Light-R1-14B-DS/a69e32b88daa855ae068ca8601f3ec4085e96086",
+      "origin": {
+        "kind": "published-revision",
+        "sources": [
+          "https://huggingface.co/qihoo360/Light-R1-14B-DS/tree/a69e32b88daa855ae068ca8601f3ec4085e96086"
+        ]
+      }
+    },
+    {
+      "id": "MirrorOPD/Olmo3-Base-BayesProtocol@content-96d8a4eccf674915fe657fb099cb00d241a3d14bbd3c69bd8103a3d126a61998",
+      "repo": "MirrorOPD/Olmo3-Base-BayesProtocol",
+      "revision": "content-96d8a4eccf674915fe657fb099cb00d241a3d14bbd3c69bd8103a3d126a61998",
+      "subfolder": null,
+      "aliases": [
+        "Olmo3-Base-BayesProtocol"
+      ],
+      "path": "model/hub/MirrorOPD--Olmo3-Base-BayesProtocol/content-96d8a4eccf674915fe657fb099cb00d241a3d14bbd3c69bd8103a3d126a61998",
+      "origin": {
+        "kind": "shared-sft-tokenizer-protocol",
+        "specification": {
+          "schema": 1,
+          "kind": "shared_sft_tokenizer",
+          "weights": [
+            "allenai/Olmo-3-1025-7B",
+            "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+          ],
+          "tokenizer": [
+            "BayesRL/Olmo3-IVON-SFT-7B",
+            "4022ca655a865d859ddb8ecb92f008cb130a5542"
+          ],
+          "allowed_renamed_ids": [],
+          "weight_edit": "none",
+          "tokenizer_length_edit": "none",
+          "normalize_special_id_metadata": true
+        }
+      }
+    },
+    {
+      "id": "MirrorOPD/Olmo3-SFT-BayesProtocol@content-f34966ba4253b52983ebac2379cd26229eafdd43597ba2e450c7c76bc71ed6e7",
+      "repo": "MirrorOPD/Olmo3-SFT-BayesProtocol",
+      "revision": "content-f34966ba4253b52983ebac2379cd26229eafdd43597ba2e450c7c76bc71ed6e7",
+      "subfolder": null,
+      "aliases": [
+        "Olmo3-SFT-BayesProtocol"
+      ],
+      "path": "model/hub/MirrorOPD--Olmo3-SFT-BayesProtocol/content-f34966ba4253b52983ebac2379cd26229eafdd43597ba2e450c7c76bc71ed6e7",
+      "origin": {
+        "kind": "shared-sft-tokenizer-protocol",
+        "specification": {
+          "schema": 1,
+          "kind": "shared_sft_tokenizer",
+          "weights": [
+            "BayesRL/Olmo3-IVON-SFT-7B",
+            "4022ca655a865d859ddb8ecb92f008cb130a5542"
+          ],
+          "tokenizer": [
+            "BayesRL/Olmo3-IVON-SFT-7B",
+            "4022ca655a865d859ddb8ecb92f008cb130a5542"
+          ],
+          "allowed_renamed_ids": [],
+          "weight_edit": "none",
+          "tokenizer_length_edit": "none",
+          "normalize_special_id_metadata": true
+        }
+      }
+    },
+    {
+      "id": "MirrorOPD/Olmo3-C3PO-BayesProtocol@content-596b1b465004254280486deb8b5057dcb6133e31082abbe1a46f889adf41d382",
+      "repo": "MirrorOPD/Olmo3-C3PO-BayesProtocol",
+      "revision": "content-596b1b465004254280486deb8b5057dcb6133e31082abbe1a46f889adf41d382",
+      "subfolder": null,
+      "aliases": [
+        "Olmo3-C3PO-BayesProtocol"
+      ],
+      "path": "model/hub/MirrorOPD--Olmo3-C3PO-BayesProtocol/content-596b1b465004254280486deb8b5057dcb6133e31082abbe1a46f889adf41d382",
+      "origin": {
+        "kind": "shared-sft-tokenizer-protocol",
+        "specification": {
+          "schema": 1,
+          "kind": "shared_sft_tokenizer",
+          "weights": [
+            "BayesRL/Olmo3-C3PO-7B",
+            "c223ee93e7344487f74fdd5767a42318ca6525af"
+          ],
+          "tokenizer": [
+            "BayesRL/Olmo3-IVON-SFT-7B",
+            "4022ca655a865d859ddb8ecb92f008cb130a5542"
+          ],
+          "allowed_renamed_ids": [],
+          "weight_edit": "none",
+          "tokenizer_length_edit": "none",
+          "normalize_special_id_metadata": true
+        }
+      }
+    },
+    {
+      "id": "MirrorOPD/Qwen2.5-14B-R1Protocol@content-3d14a02ca5ee66d3e6dec23331245abf01ed80d2967df9dd787d9b9a9d0deaed",
+      "repo": "MirrorOPD/Qwen2.5-14B-R1Protocol",
+      "revision": "content-3d14a02ca5ee66d3e6dec23331245abf01ed80d2967df9dd787d9b9a9d0deaed",
+      "subfolder": null,
+      "aliases": [
+        "Qwen2.5-14B-R1Protocol"
+      ],
+      "path": "model/hub/MirrorOPD--Qwen2.5-14B-R1Protocol/content-3d14a02ca5ee66d3e6dec23331245abf01ed80d2967df9dd787d9b9a9d0deaed",
+      "origin": {
+        "kind": "shared-sft-tokenizer-protocol",
+        "specification": {
+          "schema": 1,
+          "kind": "shared_sft_tokenizer",
+          "weights": [
+            "Qwen/Qwen2.5-14B",
+            "97e1e76335b7017d8f67c08a19d103c0504298c9"
+          ],
+          "tokenizer": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+            "1df8507178afcc1bef68cd8c393f61a886323761"
+          ],
+          "allowed_renamed_ids": [
+            151643,
+            151644,
+            151645,
+            151646,
+            151647,
+            151648,
+            151649
+          ],
+          "weight_edit": "none",
+          "tokenizer_length_edit": "none",
+          "normalize_special_id_metadata": true
+        }
+      }
+    },
+    {
+      "id": "MirrorOPD/R1-Distill-14B-R1Protocol@content-eb8424ea1319ea794efca030f5d4bbebafa5beda16c0074e7d20033e56e1cc06",
+      "repo": "MirrorOPD/R1-Distill-14B-R1Protocol",
+      "revision": "content-eb8424ea1319ea794efca030f5d4bbebafa5beda16c0074e7d20033e56e1cc06",
+      "subfolder": null,
+      "aliases": [
+        "R1-Distill-14B-R1Protocol"
+      ],
+      "path": "model/hub/MirrorOPD--R1-Distill-14B-R1Protocol/content-eb8424ea1319ea794efca030f5d4bbebafa5beda16c0074e7d20033e56e1cc06",
+      "origin": {
+        "kind": "shared-sft-tokenizer-protocol",
+        "specification": {
+          "schema": 1,
+          "kind": "shared_sft_tokenizer",
+          "weights": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+            "1df8507178afcc1bef68cd8c393f61a886323761"
+          ],
+          "tokenizer": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+            "1df8507178afcc1bef68cd8c393f61a886323761"
+          ],
+          "allowed_renamed_ids": [],
+          "weight_edit": "none",
+          "tokenizer_length_edit": "none",
+          "normalize_special_id_metadata": true
+        }
+      }
+    },
+    {
+      "id": "MirrorOPD/Light-R1-14B-R1Protocol@content-14b1d33c57193e187c86d8bdb2ce3da20d9cf5211ec03fa8b4d04f3332a6dfc8",
+      "repo": "MirrorOPD/Light-R1-14B-R1Protocol",
+      "revision": "content-14b1d33c57193e187c86d8bdb2ce3da20d9cf5211ec03fa8b4d04f3332a6dfc8",
+      "subfolder": null,
+      "aliases": [
+        "Light-R1-14B-R1Protocol"
+      ],
+      "path": "model/hub/MirrorOPD--Light-R1-14B-R1Protocol/content-14b1d33c57193e187c86d8bdb2ce3da20d9cf5211ec03fa8b4d04f3332a6dfc8",
+      "origin": {
+        "kind": "shared-sft-tokenizer-protocol",
+        "specification": {
+          "schema": 1,
+          "kind": "shared_sft_tokenizer",
+          "weights": [
+            "qihoo360/Light-R1-14B-DS",
+            "a69e32b88daa855ae068ca8601f3ec4085e96086"
+          ],
+          "tokenizer": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+            "1df8507178afcc1bef68cd8c393f61a886323761"
+          ],
+          "allowed_renamed_ids": [],
+          "weight_edit": "none",
+          "tokenizer_length_edit": "none",
+          "normalize_special_id_metadata": true
+        }
       }
     }
   ],

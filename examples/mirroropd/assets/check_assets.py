@@ -34,6 +34,16 @@ MODELS = {
         "Qwen3-1.7B",
         "Qwen3-4B-Instruct-2507",
         "Qwen3-30B-A3B-Instruct-2507",
+        "MiMo-7B-Base",
+        "MiMo-7B-SFT",
+        "MiMo-7B-RL-Zero",
+        "MiMo-7B-RL",
+        "Olmo-3-1025-7B",
+        "Olmo3-IVON-SFT-7B",
+        "Olmo3-C3PO-7B",
+        "Qwen2.5-14B",
+        "DeepSeek-R1-Distill-Qwen-14B",
+        "Light-R1-14B-DS",
     )
 }
 

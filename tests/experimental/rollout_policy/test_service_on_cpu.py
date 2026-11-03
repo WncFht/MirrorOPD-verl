@@ -94,6 +94,29 @@ def test_supported_default_single_installs_same_sampler_as_policy_phases(tmp_pat
     rpc.assert_awaited_once_with("configure_rollout_policy_sampler", args=(True,))
 
 
+def test_common_sampler_accepts_explicit_mimo_code_only(tmp_path):
+    import json
+
+    from verl.experimental.rollout_policy.validation import uses_common_single_sampling
+
+    config = OmegaConf.create(
+        {
+            "trainer": {"nnodes": 1, "v1": {"trainer_mode": "sync"}},
+            "actor_rollout_ref": {
+                "model": {"path": str(tmp_path), "trust_remote_code": True},
+                "hybrid_engine": True,
+                "actor": {"strategy": "fsdp2"},
+                "rollout": {"name": "vllm", "agent": {"default_agent_loop": "single_turn_agent"}},
+            },
+        }
+    )
+    path = tmp_path / "config.json"
+    path.write_text(json.dumps({"model_type": "mimo", "architectures": ["MiMoForCausalLM"]}))
+    assert uses_common_single_sampling(config)
+    path.write_text(json.dumps({"model_type": "unaccepted", "architectures": ["CustomLM"]}))
+    assert not uses_common_single_sampling(config)
+
+
 def test_final_sync_is_owned_by_the_component_not_evaluation_config():
     from unittest.mock import Mock
 

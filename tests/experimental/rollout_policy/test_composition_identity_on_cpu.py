@@ -1,6 +1,7 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
 import json
+from pathlib import Path
 
 import pytest
 from omegaconf import OmegaConf
@@ -91,3 +92,15 @@ def test_identical_fixed_content_folds_across_distinct_directories(tmp_path):
     )
     assert plan.normalization == "same_binding"
     assert [phase.source for phase in plan.phases] == ["left"]
+
+
+@pytest.mark.parametrize("filename", ["modeling_mimo.py", "stage-protocol.json"])
+def test_custom_model_code_is_bound_in_checkpoint_identity(tmp_path, filename):
+    path = checkpoint(tmp_path / "model", b"weights")
+    before = checkpoint_identity(path)
+    code = Path(path) / filename
+    code.write_text('{"revision": 1}\n')
+    changed = checkpoint_identity(path)
+    assert changed != before
+    code.write_text('{"revision": 2}\n')
+    assert checkpoint_identity(path) != changed
