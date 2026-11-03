@@ -116,6 +116,7 @@ def test_coordinator_publishes_coverage_only_after_required_restoration(tmp_path
     if before_sync:
         assert ArtifactStore(event_path).manifest()["status"] == "active"
         assert 1 in coordinator.pending_events
+        assert coordinator.validate(trainer) == {}
         service.ensure_current.assert_not_called()
         # The trainer calls on_readout only after the normal weight sync succeeds.
         coordinator.on_readout(trainer, 1)

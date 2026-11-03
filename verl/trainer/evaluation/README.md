@@ -145,7 +145,7 @@ Trainer 的 `_validate()` 只选择 owner 并调用 `validate(trainer)`。声明
 
 `RolloutService` 显式要求 `ensure_current(version)` 与 `park()`。两个内置服务仅在权重同步和所需 sampler 安装成功后声明驻留版本；同步或休眠失败时清除版本标记。异常仍交给调用方停止执行，清除标记不代表可以安全重试未完成的远程请求。
 
-公共 suite 与 source/history 在 before-sync 读出时暂存事件，由正常权重同步成功后的 `on_readout` 发布完成；其他时机先恢复当前 rollout 再完成事件。发布失败时保留 pending 引用，不标记 completed。最终同步仍由组件的 `owns_final_weight_sync` 声明，不能从 evaluation 配置是否存在推断。Source/history 的轻量协议与资源预算保持独立。
+公共 suite 与 source/history 在 before-sync 读出时暂存事件，由正常权重同步成功后的 `on_readout` 发布完成；其他时机先恢复当前 rollout 再完成事件。发布失败时保留 pending 引用，不标记 completed；事件 pending 或 completed 时重复 validate 直接返回，避免重新创建同名产物。最终同步仍由组件的 `owns_final_weight_sync` 声明，不能从 evaluation 配置是否存在推断。Source/history 的轻量协议与资源预算保持独立。
 
 ## 产物和完成边界
 
