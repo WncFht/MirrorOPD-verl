@@ -142,6 +142,8 @@ def runtime(tmp_path, monkeypatch):
     callback = build_readout_callback(config)
     trainer = SimpleNamespace(
         config=config,
+        readout_callback=callback,
+        timing_raw={},
         actor_optimizer_step=0,
         global_steps=0,
         total_training_steps=2,
@@ -182,11 +184,17 @@ def test_initial_and_two_outer_readouts_publish_parquet_without_token_history(ru
     assert metrics["eval/rkl/source_heldout/question_mean"] == 1.5
     assert trainer.checkpoint_manager.update_weights.call_count == 1
     for outer in (1, 2):
+        trainer.global_steps = outer
         trainer.actor_optimizer_step = outer * 32
         metrics = callback.on_before_weight_sync(
             trainer, queue.rollout(outer, [10 * outer, 10 * outer + 1], "train"), outer
         )
         event = ArtifactStore(callback.root / "scores" / f"outer-{outer:03d}")
+        assert event.manifest()["status"] == "active"
+        assert outer not in callback.scored and outer in callback.pending_events
+        assert callback.validate(trainer) == {}
+        trainer.rollout_service.after_update()
+        callback.on_readout(trainer, outer)
         assert event.manifest(complete=True)["metadata"]["optimizer_steps"] == outer * 32
         coverage = event.manifest(complete=True)["metadata"]["coverage"]
         assert coverage["expected_rows"] == coverage["observed_rows"] == coverage["valid_rows"] == 4
@@ -244,6 +252,20 @@ def test_missing_source_result_fails_before_event_creation(runtime, monkeypatch)
     assert not callback.scored
 
 
+def test_before_sync_event_stays_incomplete_when_normal_weight_sync_fails(runtime):
+    callback, trainer, queue = runtime
+    callback.on_readout(trainer, 0)
+    trainer.global_steps = 1
+    trainer.actor_optimizer_step = 32
+    callback.on_before_weight_sync(trainer, queue.rollout(1, [10, 11], "train"), 1)
+    trainer.checkpoint_manager.update_weights.side_effect = RuntimeError("normal sync failed")
+    with pytest.raises(RuntimeError, match="normal sync failed"):
+        trainer.rollout_service.after_update()
+    event = ArtifactStore(callback.root / "scores/outer-001")
+    assert event.manifest()["status"] == "active"
+    assert 1 in callback.pending_events and 1 not in callback.scored
+
+
 def test_invalid_source_result_is_retained_without_a_scientific_mean(runtime):
     callback, trainer, _ = runtime
     score = trainer.actor_rollout_wg.score_full_vocab
@@ -294,10 +316,13 @@ def test_independent_history_schedule_and_unrequested_audit(runtime):
     callback.schedules["source_heldout"] = readout.Schedule(at=(0,), every=2)
     callback.on_readout(trainer, 0)
     trainer.actor_optimizer_step = 32
+    trainer.global_steps = 1
     metrics = callback.on_before_weight_sync(trainer, queue.rollout(1, [10, 11], "train"), 1)
     assert "eval/rkl/source_heldout/question_mean" not in metrics
     assert "eval/rkl/history/equal_batch_question_mean" in metrics
     event = ArtifactStore(callback.root / "scores/outer-001")
+    trainer.rollout_service.after_update()
+    callback.on_readout(trainer, 1)
     assert event.manifest(complete=True)["metadata"]["audit"]["status"] == "not_requested"
 
 
@@ -319,8 +344,11 @@ def test_acceptance_auditor_reads_new_artifacts_without_changing_legacy_mean(run
     callback, trainer, queue = runtime
     callback.on_readout(trainer, 0)
     for outer in (1, 2):
+        trainer.global_steps = outer
         trainer.actor_optimizer_step = outer * 32
         callback.on_before_weight_sync(trainer, queue.rollout(outer, [10 * outer, 10 * outer + 1], "train"), outer)
+        trainer.rollout_service.after_update()
+        callback.on_readout(trainer, outer)
     trainer.config.trainer.total_training_steps = 2
     trainer.config.data.train_batch_size = 2
     trainer.config.actor_rollout_ref.actor = {"ppo_epochs": 32}

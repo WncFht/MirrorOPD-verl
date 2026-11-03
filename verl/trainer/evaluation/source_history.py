@@ -141,6 +141,7 @@ class SourceHistoryReadout(ReadoutCallback):
         self.batches = {}
         self.history = []
         self.scored = set()
+        self.pending_events = {}
         self.pending_outer = 0
         self.before_weight_sync = False
         self.baseline = None
@@ -155,6 +156,11 @@ class SourceHistoryReadout(ReadoutCallback):
             raise ValueError("Source bank must contain initial student trajectories")
 
     def on_readout(self, trainer, outer):
+        if outer in self.pending_events:
+            event, metadata = self.pending_events[outer]
+            event.finish(metadata=metadata)
+            del self.pending_events[outer]
+            self.scored.add(outer)
         if outer == trainer.total_training_steps and outer in self.scored:
             if self.store.manifest()["status"] == "active":
                 self.store.finish(metadata={"completed_outer": outer, "optimizer_steps": trainer.actor_optimizer_step})
@@ -231,7 +237,7 @@ class SourceHistoryReadout(ReadoutCallback):
 
     def validate(self, trainer):
         outer = self.pending_outer
-        if outer in self.scored:
+        if outer in self.scored or outer in self.pending_events:
             return {}
         source_due = self.schedules["source_heldout"].due(outer, trainer.total_training_steps)
         history_due = bool(self.history) and self.schedules["history"].due(outer, trainer.total_training_steps)
@@ -292,15 +298,14 @@ class SourceHistoryReadout(ReadoutCallback):
             },
         )
         event.write_rows("rkl.parquet", ({key: row[key] for key in RKL.names} for row in scored), schema=RKL)
-        event.finish(
-            metadata={
-                "metrics": metrics,
-                "coverage": coverage,
-            }
-        )
+        event_metadata = {"metrics": metrics, "coverage": coverage}
+        if self.before_weight_sync:
+            self.pending_events[outer] = event, event_metadata
+        else:
+            event.finish(metadata=event_metadata)
+            self.scored.add(outer)
         if self.baseline is None and any(r["bank"] == "source_heldout" for r in scored):
             self.baseline = [r for r in scored if r["bank"] == "source_heldout"]
         if historical := [r for r in scored if r["bank"] == "history"]:
             self.previous_history = historical
-        self.scored.add(outer)
         return metrics
