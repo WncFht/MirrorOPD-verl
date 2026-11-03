@@ -20,6 +20,7 @@ from verl.workers.config import HFModelConfig
 from .accuracy import AccuracyCollector, gap_recovery
 from .artifacts import EVAL_RKL, GENERATION, HISTORY, ArtifactStore, file_sha256, identity
 from .config import EvaluationConfig
+from .coverage import rkl_coverage
 from .execution import hidden_dtype_bytes
 from .generation import NativeGenerator
 from .generation_contract import engine_contract, require_current_generation
@@ -227,7 +228,11 @@ class EvaluationCoordinator(ReadoutCallback):
         event = ArtifactStore.create(
             self.store.root / f"events/outer-{outer:03d}",
             kind="evaluation_event",
-            metadata={"plan": dataclasses.asdict(plan)},
+            metadata={
+                "plan": dataclasses.asdict(plan),
+                "outer": outer,
+                "optimizer_steps": trainer.actor_optimizer_step,
+            },
         )
         refs, metrics, aliases = [], {}, {}
         for task in plan.tasks:
@@ -293,6 +298,7 @@ class EvaluationCoordinator(ReadoutCallback):
                 live_payload_bytes=live_payload_bytes,
                 load_window=load_trajectories,
             )
+            coverage = rkl_coverage(refs, scores)
             if outer == 0:
                 for bank in self.fixed:
                     self.baselines[bank] = [r for r in scores if r["bank"] == bank]
@@ -324,7 +330,7 @@ class EvaluationCoordinator(ReadoutCallback):
             metrics["perf/timing/evaluation_seconds"] = time.monotonic() - started
             if not self.before_sync:
                 service.ensure_current(outer)
-            event_metadata = {"metrics": metrics, "timing": timing, "aliases": aliases}
+            event_metadata = {"metrics": metrics, "timing": timing, "aliases": aliases, "coverage": coverage}
             if self.before_sync:
                 self.pending_events[outer] = event, event_metadata
             else:

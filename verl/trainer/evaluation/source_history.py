@@ -18,6 +18,7 @@ from transformers import AutoConfig
 from verl.experimental.rollout_policy.collector import UnsafeDrainError
 from verl.trainer.evaluation.artifacts import HISTORY, RKL, TRAJECTORY, ArtifactStore, file_sha256, identity
 from verl.trainer.evaluation.config import SourceHistoryConfig
+from verl.trainer.evaluation.coverage import rkl_coverage
 from verl.trainer.evaluation.generation_contract import engine_contract, require_current_generation
 from verl.trainer.evaluation.identity import model_identity
 from verl.trainer.evaluation.metrics import readout_metrics
@@ -266,6 +267,7 @@ class SourceHistoryReadout(ReadoutCallback):
         score_seconds = scoring["seconds"]
         audit = scoring["audit"]
         # Publication follows successful scoring, state audit and resource cleanup.
+        coverage = rkl_coverage(rows, scored)
         metrics = readout_metrics(scored, baseline=self.baseline, previous_history=self.previous_history)
         metrics.update(
             {
@@ -290,16 +292,10 @@ class SourceHistoryReadout(ReadoutCallback):
             },
         )
         event.write_rows("rkl.parquet", ({key: row[key] for key in RKL.names} for row in scored), schema=RKL)
-        invalid = sum(value for key, value in metrics.items() if key.endswith("/invalid_rows"))
         event.finish(
             metadata={
                 "metrics": metrics,
-                "coverage": {
-                    "expected_rows": len(rows),
-                    "observed_rows": len(scored),
-                    "invalid_rows": invalid,
-                    "scientific_complete": invalid == 0,
-                },
+                "coverage": coverage,
             }
         )
         if self.baseline is None and any(r["bank"] == "source_heldout" for r in scored):
