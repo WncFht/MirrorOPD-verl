@@ -280,6 +280,8 @@ run ID 保持原始身份，entity/project 由 `WANDB_ENTITY`、`WANDB_PROJECT` 
 
 终端 stdout/stderr 保存到 `outputs/<实验名>/train.log`，通过 `sync-results-pack` 传回；`sync-log-pack` 负责 W&B 离线 run。重复上传与 Mac 超时的证据、当前验证及限制见 [重复上传与超时分析](docs/2026-10-29-W&B重复上传与超时分析.md)；早期新 run 上传性能见 [2026-10-23 验证记录](docs/2026-10-24-W&B上传重构与本机验证.md)，其旧版本队列行为不作为当前重试依据。
 
+日志仓库的 `.wandb` 使用 Git LFS，接收机须安装 Git LFS 并在日志仓库执行 `git lfs install --local`。Git 推送包含 LFS 对象上传；首次迁移或批量接收时可用 `GIT_PUSH_TIMEOUT=900` 增加时限。上传队列从 Git 快照提取日志后还原 LFS 对象，缺失对象或下载失败时保留队列并停止该任务，不将指针文本上传到 W&B。旧的普通 Git 快照仍可读取。
+
 ## 结果下载
 
 在开发机执行：
