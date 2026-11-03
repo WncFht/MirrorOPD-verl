@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """One trainer-facing lifecycle; existing default transport remains delegated."""
 
+from abc import ABC, abstractmethod
+
 import transfer_queue as tq
 
 from verl.utils.debug import marked_timer
@@ -10,25 +12,39 @@ from verl.utils.ray_utils import auto_await
 from .lifecycle import ExecutionContext
 
 
-class RolloutService:
+class RolloutService(ABC):
     def __init__(self, trainer):
         self.trainer = trainer
         self.metrics = {}
 
     def initialize(self):
-        pass
+        return None
 
     def after_update(self):
-        pass
+        return None
 
     def after_sample(self):
-        pass
+        return None
 
     def validation_begin(self):
-        pass
+        return None
 
     def validation_end(self):
-        pass
+        return None
+
+    @abstractmethod
+    def ensure_current(self, version):
+        """Restore pure-current weights and sampling before exposing a version.
+
+        A failed sync invalidates residency. Callers must not continue GPU work
+        after an unresolved remote failure.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def park(self):
+        """Drain/park generation and invalidate residency, including failed sleep."""
+        raise NotImplementedError
 
 
 class DefaultRolloutService(RolloutService):
@@ -50,14 +66,15 @@ class DefaultRolloutService(RolloutService):
 
     def ensure_current(self, version):
         if self.resident_version != version:
+            self.resident_version = None
             self.trainer.checkpoint_manager.update_weights(version)
             self.configure_sampling()
             self.resident_version = version
 
     def park(self):
-        self.trainer.checkpoint_manager.sleep_replicas()
         # Level-2 sleep discards weights; a matching version alone is insufficient.
         self.resident_version = None
+        self.trainer.checkpoint_manager.sleep_replicas()
 
     def after_update(self):
         if (
@@ -84,12 +101,13 @@ class PolicyRolloutService(RolloutService):
     def ensure_current(self, version):
         """Expose a pure-current evaluation engine independently of the training policy."""
         if self.resident_version != version:
+            self.resident_version = None
             self.runtime.sync_validation(version)
             self.resident_version = version
 
     def park(self):
-        self.runtime.sleep_validation()
         self.resident_version = None
+        self.runtime.sleep_validation()
 
     def validation_begin(self):
         self.runtime.sync_validation()

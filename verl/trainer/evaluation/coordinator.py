@@ -132,8 +132,9 @@ class EvaluationCoordinator(ReadoutCallback):
 
     def on_readout(self, trainer, outer):
         if outer in self.pending_events:
-            event, metadata = self.pending_events.pop(outer)
+            event, metadata = self.pending_events[outer]
             event.finish(metadata=metadata)
+            del self.pending_events[outer]
             self.completed.add(outer)
         if outer == 0 and outer not in self.completed:
             return self.validate(trainer)
@@ -221,10 +222,6 @@ class EvaluationCoordinator(ReadoutCallback):
             self.completed.add(outer)
             return {}
         service = trainer.rollout_service
-        if not hasattr(service, "ensure_current"):
-            raise ValueError(
-                "Unified evaluation requires a synchronous service with pure-current evaluation and parking"
-            )
         event = ArtifactStore.create(
             self.store.root / f"events/outer-{outer:03d}",
             kind="evaluation_event",

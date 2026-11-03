@@ -5,6 +5,7 @@
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock
 
+import pytest
 from omegaconf import OmegaConf
 
 from verl.experimental.rollout_policy.plan import RolloutPolicyConfig
@@ -34,6 +35,43 @@ def test_default_service_preserves_sync_and_transport_order():
     service.validation_begin()
     service.validation_end()
     assert events == [("sync", 3), ("submit", "batch"), ("sleep",), ("sync", 3)]
+
+
+def test_service_requires_explicit_current_and_parking_contract():
+    from verl.experimental.rollout_policy.service import RolloutService
+
+    with pytest.raises(TypeError, match="abstract"):
+        RolloutService(None)
+
+
+@pytest.mark.parametrize(
+    "kind,phase",
+    [("default", "sync"), ("default", "park"), ("default", "sampler"), ("policy", "sync"), ("policy", "park")],
+)
+def test_failed_transition_invalidates_residency(monkeypatch, kind, phase):
+    from verl.experimental.rollout_policy import runtime
+
+    trainer = SimpleNamespace(
+        common_rollout_sampling=False,
+        checkpoint_manager=SimpleNamespace(update_weights=Mock(), sleep_replicas=Mock()),
+    )
+    runner = SimpleNamespace(sync_validation=Mock(), sleep_validation=Mock())
+    monkeypatch.setattr(runtime, "RolloutRuntime", lambda trainer: runner)
+    service = DefaultRolloutService(trainer, None) if kind == "default" else PolicyRolloutService(trainer)
+    service.resident_version = 1
+    transition = (
+        (trainer.checkpoint_manager.update_weights if kind == "default" else runner.sync_validation)
+        if phase == "sync"
+        else (trainer.checkpoint_manager.sleep_replicas if kind == "default" else runner.sleep_validation)
+    )
+    if phase == "sampler":
+        service.configure_sampling = Mock(side_effect=RuntimeError("transition failed"))
+    else:
+        transition.side_effect = RuntimeError("transition failed")
+    with pytest.raises(RuntimeError, match="transition failed"):
+        service.park() if phase == "park" else service.ensure_current(2)
+    assert service.resident_version is None
+    # The exception is fail-stop for callers; never advertise the previous version.
 
 
 def test_policy_service_owns_collection_and_validation(monkeypatch):
