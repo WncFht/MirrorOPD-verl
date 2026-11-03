@@ -474,27 +474,18 @@ class PPOTrainer(ABC):
 
     def _uses_shared_teacher(self) -> bool:
         """Whether distillation scores are produced by the colocated FSDP worker."""
-        config = self.config.get("distillation")
-        return is_distillation_enabled(config) and config.get("execution_mode", "standalone") == "shared_sync"
+        return self.distillation_config is not None and self.distillation_config.execution_mode == "shared_sync"
 
     def _uses_full_vocab(self) -> bool:
-        if not is_distillation_enabled(self.config.get("distillation")):
-            return False
-        return self._distillation_spec().payload_kind == "hidden"
-
-    def _distillation_spec(self):
-        from verl.workers.config.distillation_spec import resolve_distillation_spec
-
-        parsed = getattr(self, "distillation_config", None)
-        if parsed is not None and parsed.distillation_loss.loss_mode == self.config.distillation.distillation_loss.get(
-            "loss_mode", "k3"
-        ):
-            return parsed.distillation_loss.loss_settings
-        return resolve_distillation_spec(self.config.distillation.distillation_loss)
+        return (
+            self.distillation_config is not None
+            and self.distillation_config.distillation_loss.loss_settings.payload_kind == "hidden"
+        )
 
     def _uses_mirror(self):
         return (
-            is_distillation_enabled(self.config.get("distillation")) and self._distillation_spec().objective is not None
+            self.distillation_config is not None
+            and self.distillation_config.distillation_loss.loss_settings.objective is not None
         )
 
     @staticmethod

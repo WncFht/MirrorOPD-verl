@@ -66,6 +66,21 @@ def test_config_rejects_future_conditioned_support_and_sampled_objective():
         DistillationLossConfig(loss_mode="k1", full_vocab={"backend": "precompute", "future": {"mode": "sum"}})
 
 
+def test_support_declaration_is_parsed_once_and_not_serialized_as_config(monkeypatch):
+    from dataclasses import asdict
+
+    from verl.trainer.distillation.distribution import DistributionSpec
+
+    config = FullVocabConfig(distribution={"mode": "common_conditioned", "common_vocab_size": 3})
+    monkeypatch.setattr(DistributionSpec, "parse", lambda *a, **k: pytest.fail("Support was reparsed"))
+    first = config.distribution_spec.compile(4, 5)
+    second = config.distribution_spec.compile(6, 7)
+    assert first.spec is second.spec is config.distribution_spec
+    assert first.student_width == 4 and second.student_width == 6
+    assert "distribution_spec" not in asdict(config) and "_distribution_spec" not in asdict(config)
+    assert asdict(config)["distribution"] == {"mode": "common_conditioned", "common_vocab_size": 3}
+
+
 def test_layout_preserves_gaps_empty_answers_and_exactly_one_target_shift():
     ids = torch.nested.nested_tensor(
         [torch.tensor([8, 7, 6, 5, 4, 3]), torch.tensor([9, 2, 1]), torch.tensor([8, 6, 4])], layout=torch.jagged
