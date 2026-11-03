@@ -48,15 +48,20 @@ class FullVocabConfig(BaseConfig):
     termination_token_ids: list[int] = field(default_factory=list)
     future: FutureCreditConfig = field(default_factory=FutureCreditConfig)
 
+    @property
+    def distribution_spec(self):
+        """Parsed immutable support declaration; compile after head widths are known."""
+        return self._distribution_spec
+
     def __post_init__(self):
         from verl.trainer.distillation.distribution import DistributionSpec
 
-        DistributionSpec.parse(self.distribution)
+        self._distribution_spec = DistributionSpec.parse(self.distribution)
         if not isinstance(self.future, FutureCreditConfig):
             object.__setattr__(self, "future", FutureCreditConfig(**dict(self.future)))
         if self.future.mode != "none" and self.backend not in ("dense", "precompute", "precompute_fused"):
             raise ValueError("Future credit requires dense/precompute/precompute_fused")
-        if self.future.mode != "none" and DistributionSpec.parse(self.distribution).mode != "native":
+        if self.future.mode != "none" and self.distribution_spec.mode != "native":
             raise ValueError("Future credit does not support common-conditioned distributions")
         if self.input_id_mapping not in {"identity", "token_semantics"}:
             raise ValueError("input_id_mapping must be identity or token_semantics")

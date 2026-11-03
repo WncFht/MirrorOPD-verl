@@ -320,11 +320,14 @@ def test_nonfinite_scores_rejected_after_teacher_released(config, monkeypatch):
 
 @pytest.mark.parametrize("mode", ["standalone", "shared_sync", "endpoint"])
 def test_step_order_reuses_update_and_only_inserts_shared_scoring(config, mode):
-    trainer = _trainer(config)
     config.distillation.execution_mode = "shared_sync" if mode == "endpoint" else mode
     if mode == "endpoint":
         config.distillation.distillation_loss.loss_mode = "mirror"
         config.distillation.distillation_loss.mirror = {"objective": "mdpo", "estimator": "full_vocab", "eta": 1}
+        config.distillation.distillation_loss.use_policy_gradient = False
+        config.distillation.distillation_loss.loss_max_clamp = None
+        config.distillation.distillation_loss.log_prob_min_clamp = None
+    trainer = _trainer(config)
     trainer.global_steps = 1
     trainer.use_reference_policy = trainer.use_critic = False
     trainer.reward_loop_manager = SimpleNamespace(reward_loop_worker_handles=[object()])

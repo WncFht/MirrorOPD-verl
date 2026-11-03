@@ -1270,9 +1270,7 @@ class FSDPEngineWithLMHead(FSDPEngine):
             raise ValueError("liger does not support per-row aggregation; use precompute")
         self.full_vocab_agg_mode = loss_agg_mode
         self.full_vocab_teacher_head = FrozenTeacherHead(teacher_path)
-        from verl.trainer.distillation.distribution import DistributionSpec
-
-        self.full_vocab_space = DistributionSpec.parse(config.distribution).compile(
+        self.full_vocab_space = config.distribution_spec.compile(
             self.model_config.hf_config.get_text_config().vocab_size,
             self.full_vocab_teacher_head.cpu_weight.shape[0],
             config.termination_token_ids,

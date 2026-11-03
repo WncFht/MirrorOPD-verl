@@ -176,3 +176,7 @@ ReplayBuffer 管理候选轨迹和可采样状态，`ppo_epochs` 管理已取出
 ## 验证入口
 
 调用链与数据队列测试见 [test_pipeline_metrics_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_pipeline_metrics_on_cpu.py)、[test_replay_buffer_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_replay_buffer_on_cpu.py) 和 [test_reissue_inflight_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_reissue_inflight_on_cpu.py)。真实四卡运行的配置、退出结果和更新日志见[验收报告](../../archive/engineering/2026-10-25-主分支四卡验收.md)。这些测试与报告是验证入口，文档更新本身不代表重新执行了 GPU 训练。
+
+### 目标配置的运行边界
+
+V1 Trainer 在 `_setup()` 中构造 `DistillationConfig` 后，shared teacher、hidden payload 与目标分支统一读取该 typed config 的 `loss_settings`，不再根据 raw 配置的 loss 名称回退重新解析。修改目标配置需要重新初始化，不支持运行中更改 raw 配置来切换目标。`FullVocabConfig.distribution_spec` 在配置构造时解析为不可变声明，engine 在 head 宽度已知时 compile；该派生属性不进入 Hydra 输入或 dataclass 序列化。独立数值参考 API 仍允许显式传入原始 distribution 声明，生产 engine 传入已编译对象。

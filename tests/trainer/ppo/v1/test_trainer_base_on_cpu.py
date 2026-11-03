@@ -32,6 +32,7 @@ def test_greedy_reward_baseline_does_not_request_score_centering_heads():
 class _StubTrainer(PPOTrainer):
     # These fixtures bypass the production constructor.
     readout_callback = None
+    distillation_config = None
 
     def on_step_end(self):
         pass
@@ -278,6 +279,7 @@ def test_update_actor_passes_score_centering_flag(score_centering):
 
 def _progress_trainer():
     trainer = _StubTrainer.__new__(_StubTrainer)
+    trainer.distillation_config = None
     trainer.readout_callback = None
     trainer.actor_optimizer_step_attempts = trainer.actor_optimizer_step = 0
     trainer.config = OmegaConf.create(
@@ -566,6 +568,7 @@ def _full_vocab_aggregate_trainer(mode):
         }
     )
     trainer.distillation_config = SimpleNamespace(
+        execution_mode="shared_sync",
         distillation_loss=DistillationLossConfig(
             loss_mode="mirror",
             mirror={"eta": 1},
@@ -574,7 +577,7 @@ def _full_vocab_aggregate_trainer(mode):
             use_policy_gradient=False,
             loss_max_clamp=None,
             log_prob_min_clamp=None,
-        )
+        ),
     )
     trainer.use_critic = False
     trainer.global_steps = 1
@@ -639,6 +642,7 @@ def test_sampled_mirror_still_requires_token_mean():
     from verl.workers.config.distillation import DistillationLossConfig
 
     trainer.distillation_config = SimpleNamespace(
+        execution_mode="shared_sync",
         distillation_loss=DistillationLossConfig(
             loss_mode="mirror",
             mirror={"estimator": "sampled", "eta": 1},
@@ -647,7 +651,7 @@ def test_sampled_mirror_still_requires_token_mean():
             use_task_rewards=False,
             loss_max_clamp=None,
             log_prob_min_clamp=None,
-        )
+        ),
     )
     with (
         patch("verl.trainer.ppo.v1.trainer_base.omega_conf_to_dataclass"),
@@ -655,3 +659,15 @@ def test_sampled_mirror_still_requires_token_mean():
         pytest.raises(ValueError, match="sampled mirror requires token-mean"),
     ):
         trainer._init_tokenizer()
+
+
+def test_trainer_objective_requirements_use_resolved_config_without_raw_fallback():
+    trainer = _full_vocab_aggregate_trainer("token-mean")
+    # Runtime requirements come from the typed setup result, not this stale copy.
+    trainer.config.distillation.enabled = False
+    trainer.config.distillation.distillation_loss.loss_mode = "k3"
+    assert trainer._uses_shared_teacher()
+    assert trainer._uses_full_vocab() and trainer._uses_mirror()
+    trainer.distillation_config = None
+    assert not trainer._uses_shared_teacher()
+    assert not trainer._uses_full_vocab() and not trainer._uses_mirror()
