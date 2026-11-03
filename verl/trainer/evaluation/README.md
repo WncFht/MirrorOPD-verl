@@ -137,6 +137,12 @@ Public bank 是 generation 产物的 sample 0 引用，无需再复制一份长 
 
 新图表入口是`examples.mirroropd.research.studies.pipeline.plot_unified_evaluation`，直接读取完成的 Parquet 事件，输出训练 loss、来源／history RKL、四域 bank／current RKL、history 批矩阵、accuracy 和可审计 CSV。旧 0–320/H1024 图表仍使用原 reader。
 
+## 资源与恢复责任
+
+`RolloutService` 显式要求 `ensure_current(version)` 与 `park()`。两个内置服务仅在权重同步和所需 sampler 安装成功后声明驻留版本；同步或休眠失败时清除版本标记。异常仍交给调用方停止执行，清除标记不代表可以安全重试未完成的远程请求。
+
+公共 suite 在 before-sync 读出时暂存事件，由正常权重同步成功后的 `on_readout` 发布完成；其他时机先恢复当前 rollout 再完成事件。发布失败时保留 pending 引用，不标记 completed。最终同步仍由组件的 `owns_final_weight_sync` 声明，不能从 evaluation 配置是否存在推断。Source/history 的轻量协议与资源预算保持独立。
+
 ## 产物和完成边界
 
 Source/history 的产物布局如下；公共 suite 的布局见后表。

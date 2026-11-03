@@ -125,3 +125,19 @@ def test_coordinator_publishes_coverage_only_after_required_restoration(tmp_path
     assert metadata["coverage"]["scientific_complete"]
     assert metadata["coverage"]["valid_rows"] == 1
     assert metadata["outer"] == 1 and metadata["optimizer_steps"] == 32
+
+
+def test_pending_event_is_not_forgotten_when_publication_fails():
+    from types import SimpleNamespace
+    from unittest.mock import Mock
+
+    from verl.trainer.evaluation.coordinator import EvaluationCoordinator
+
+    coordinator = object.__new__(EvaluationCoordinator)
+    event = SimpleNamespace(finish=Mock(side_effect=OSError("manifest write failed")))
+    coordinator.pending_events = {1: (event, {"coverage": {"scientific_complete": True}})}
+    coordinator.completed = set()
+    trainer = SimpleNamespace(total_training_steps=2)
+    with pytest.raises(OSError, match="manifest write failed"):
+        coordinator.on_readout(trainer, 1)
+    assert 1 in coordinator.pending_events and not coordinator.completed
