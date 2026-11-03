@@ -99,7 +99,14 @@ class ModelPairContract:
 
 
 def inspect_pair(
-    student, teacher, *, distribution=None, termination_ids=(), stop_token_ids=(), allow_permutation=False
+    student,
+    teacher,
+    *,
+    distribution=None,
+    termination_ids=(),
+    stop_token_ids=(),
+    allow_permutation=False,
+    trust_remote_code=False,
 ):
     from safetensors import safe_open
     from transformers import AutoConfig, AutoTokenizer
@@ -109,7 +116,7 @@ def inspect_pair(
     effective_stops = []
     for path in (student, teacher):
         root = Path(path)
-        config = AutoConfig.from_pretrained(path, local_files_only=True)
+        config = AutoConfig.from_pretrained(path, local_files_only=True, trust_remote_code=trust_remote_code)
         generation = root / "generation_config.json"
         eos = (
             json.loads(generation.read_text()).get("eos_token_id", config.eos_token_id)
@@ -128,16 +135,20 @@ def inspect_pair(
                 raise ValueError("Checkpoint output head does not match declared model structure")
             if "lm_head.bias" in stream.keys():
                 raise ValueError("Biased checkpoint head is unsupported")
-    source_tokenizer = AutoTokenizer.from_pretrained(student, local_files_only=True)
-    target_tokenizer = AutoTokenizer.from_pretrained(teacher, local_files_only=True)
+    source_tokenizer = AutoTokenizer.from_pretrained(
+        student, local_files_only=True, trust_remote_code=trust_remote_code
+    )
+    target_tokenizer = AutoTokenizer.from_pretrained(
+        teacher, local_files_only=True, trust_remote_code=trust_remote_code
+    )
     mapping = TokenIdMapping.build(source_tokenizer, target_tokenizer)
     effective_stops[0].update(stop_token_ids or ())
     effective_stops[1].update(mapping.tokens(list(stop_token_ids or ())))
     if not set(termination_ids) <= effective_stops[0] or not set(mapping.tokens(termination_ids)) <= effective_stops[1]:
         raise ValueError("Termination equivalence requires common effective stopping actions for both roles")
     return ModelPairContract.build(
-        AutoConfig.from_pretrained(student, local_files_only=True),
-        AutoConfig.from_pretrained(teacher, local_files_only=True),
+        AutoConfig.from_pretrained(student, local_files_only=True, trust_remote_code=trust_remote_code),
+        AutoConfig.from_pretrained(teacher, local_files_only=True, trust_remote_code=trust_remote_code),
         source_tokenizer,
         target_tokenizer,
         distribution=distribution,
@@ -169,6 +180,7 @@ def preflight_pair(config):
         termination_ids=full.get("termination_token_ids", ()),
         stop_token_ids=config.actor_rollout_ref.rollout.get("stop_token_ids", ()),
         allow_permutation=full.get("input_id_mapping", "identity") == "token_semantics",
+        trust_remote_code=config.actor_rollout_ref.model.get("trust_remote_code", False),
     )
 
     training_date = OmegaConf.select(config, "data.apply_chat_template_kwargs.date_string")
@@ -196,6 +208,7 @@ if __name__ == "__main__":
     parser.add_argument("--common-vocab-size", type=int)
     parser.add_argument("--distribution-json", type=Path)
     parser.add_argument("--input-id-mapping", choices=["identity", "token_semantics"], default="identity")
+    parser.add_argument("--trust-remote-code", action="store_true")
     args = parser.parse_args()
     support = (
         {"mode": "common_conditioned", "common_vocab_size": args.common_vocab_size} if args.common_vocab_size else None
@@ -211,6 +224,7 @@ if __name__ == "__main__":
                 args.teacher,
                 distribution=support,
                 allow_permutation=args.input_id_mapping == "token_semantics",
+                trust_remote_code=args.trust_remote_code,
             ).metadata(),
             indent=2,
         )

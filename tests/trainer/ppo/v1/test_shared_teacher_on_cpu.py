@@ -79,6 +79,14 @@ def test_shared_config_preserves_inference_budget_and_legacy_defaults(config):
     validate_config(config, use_reference_policy=False, use_critic=False)
 
 
+def test_shared_actor_per_layer_cpu_offload_preserves_teacher_phase_contract(config):
+    config.actor_rollout_ref.actor.fsdp_config.offload_policy = True
+    validate_config(config, use_reference_policy=False, use_critic=False)
+    config.distillation.shared_teacher.offload_policy = True
+    with pytest.raises(Exception, match="shared_teacher.offload_policy"):
+        validate_config(config, use_reference_policy=False, use_critic=False)
+
+
 @pytest.mark.parametrize(
     "path,value",
     [
@@ -352,6 +360,7 @@ def test_shared_agent_skips_teacher_rpc_without_disabling_distillation():
         (True, False, ["load", "sync", "offload", "sync"]),
         (True, True, []),
         (False, False, ["load", "offload"]),
+        (False, True, []),
     ],
 )
 def test_phase_transfer_completion_and_legacy_behavior(monkeypatch, forward_only, cpu_policy, expected):
@@ -369,6 +378,23 @@ def test_phase_transfer_completion_and_legacy_behavior(monkeypatch, forward_only
     engine.to("cuda", model=True, optimizer=False, grad=False)
     engine.to("cpu", model=True, optimizer=False, grad=False)
     assert events == expected
+
+
+@pytest.mark.parametrize("phase_offload", [True, False])
+def test_park_keeps_gradient_and_parameter_transfer_ownership_aligned(monkeypatch, phase_offload):
+    from inspect import unwrap
+
+    from verl.workers import engine_workers
+
+    engine = SimpleNamespace(
+        is_param_offload_enabled=phase_offload,
+        is_optimizer_offload_enabled=phase_offload,
+        to=MagicMock(),
+    )
+    worker = SimpleNamespace(actor=SimpleNamespace(engine=engine))
+    monkeypatch.setattr(engine_workers, "aggressive_empty_cache", lambda **kwargs: None)
+    unwrap(engine_workers.ActorRolloutRefWorker.park_fusion_actor)(worker)
+    engine.to.assert_called_once_with("cpu", model=phase_offload, optimizer=phase_offload, grad=phase_offload)
 
 
 @pytest.mark.parametrize("full_vocab", [False, True])

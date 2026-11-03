@@ -913,7 +913,7 @@ class PPOTrainer(ABC):
                 is_train=False,
                 max_samples=self.config.data.get("val_max_samples", -1),
             )
-            if self.config.data.val_files
+            if self.config.data.val_files and uses_validation_dataset
             else []
         )
 

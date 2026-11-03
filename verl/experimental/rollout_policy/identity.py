@@ -46,10 +46,13 @@ def checkpoint_files(root):
         "sentencepiece.bpe.model",
         "tokenizer.tiktoken",
         "chat_template.jinja",
+        "stage-protocol.json",
     ):
         if (root / name).is_file():
             files.add(root / name)
     files.update((root / "chat_templates").glob("*.jinja"))
+    # Explicitly trusted custom HF architectures are part of the model function.
+    files.update(root.glob("*.py"))
     if not all(file.is_file() for file in files):
         raise ValueError(f"Incomplete model checkpoint: {root}")
     return sorted(files)

@@ -60,6 +60,9 @@
 # E48-E49          16     256    4096      1e-6    32/64      yes
 # E55-E62          16     100    1600      1e-6    10/-1      no
 # E63-E68          16     40     640       1e-6    -1/-1      yes
+# E71              32     25     800       1e-6    -1/-1      yes
+# E72-E73          16     20     320       1e-6    -1/-1      yes
+# E74-E77          32     50     1600      1e-6    -1/-1      yes
 # E78-E80          16     100    1600      1e-6    -1/-1      yes
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
@@ -91,6 +94,20 @@
 # E68     batch fusion
 # 默认每实验8卡；single用8个TP1，fusion用4个TP2；全局batch64、40 outer/reuse16。fusion 每副本并发16/每卡KV24 GiB，current+评估并发16/KV64 GiB；计算token budget32768；shared_sync保持已支持的参数/优化器卸载。
 # 采用main统一原生评估与连续调度；QWEN_EVAL_ROOT 指定新银行。旧HF评估不可混接；八卡性能须实测。
+#
+# E69/E70 DeepSeekMath预设已撤销；E71–E73固定MiMo-7B-Base student。
+# E71=MiMo-7B-RL（SFT+RL）；E72=MiMo-7B-RL-Zero（直接RL）；E73=MiMo-7B-SFT。
+# 默认4卡 shared_sync、batch128、reuse32、50 outer、LR=1e-6；同一6400题，无重复题目。
+# 原生32K：训练prompt/response=2048/7168；公共prompt8192，Math/Code/Science response24576，IF8192。
+# source/history RKL关闭；四域固定bank在0/1/2及每5 outer评分，current RKL与完整accuracy在0/25/50评分。
+# MIMO_QUESTIONS指定prepared题目，MIMO_BOOTSTRAP指定对应teacher的新银行；关闭MTP推测解码与辅助训练；最终只导出HF模型并重载核对；完整设置见teacher-transfer/transfer-mechanism/mimo/。
+#
+# E74/E75：Olmo3 Base学习C3PO（SFT+RL）/IVON-SFT；E76/E77：Qwen2.5-14B Base学习Light-R1/R1-Distill。
+# E76/E77阶段不匹配：Light-R1在R1-Distill之后额外做3K SFT再GRPO，缺RL直接起点的SFT-only权重。
+# 四组使用明确登记的共同SFT tokenizer协议视图，原始参数不改；Light-R1记录7个特殊ID的标签变化。
+# 14B少于4卡时自动使用FSDP2逐层CPU offload，保留FP32主权重和AdamW；默认4卡使用阶段搬运。
+# 沿用batch128/reuse32/50 outer、训练2048+7168、公共推理回答24576/IF8192，关闭source/history。
+# STAGE_CHAIN_QUESTIONS指定prepared题目，STAGE_CHAIN_BOOTSTRAP指定独立银行；详见阶段链选型及接入验收。
 #
 # E78–E80：Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507；current/initial/teacher。batch=mini-batch128，100 outer/reuse16，1600更新；默认2卡TP1，可显式配置1/2/4/8卡。原生bench0/50/100，MATH500 n4、AMC23 n16、AIME24/25/26 n32；source128和双银行各128，每10轮RKL。
 #

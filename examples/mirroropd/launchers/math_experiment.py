@@ -58,6 +58,7 @@ class Preset:
     eta: str | None = None
     environment: tuple[tuple[str, str], ...] = ()
     rollout_arm: str | None = None
+    evaluation_protocol: str | None = None
 
 
 SHORT = Budget(32, 4, None, None)
@@ -92,6 +93,7 @@ MODEL_MATRIX = (
     (31, 32, 42, 43, QWEN_CHAT),
 )
 ALIASES = {"E21": "E15", "E22": "E13"}
+RETIRED_PRESETS = {"E69", "E70"}
 
 # One E20-based protocol, four registered arms. Runtime/environment overrides
 # retain the same precedence as older presets; these are defaults, not locks.
@@ -221,6 +223,55 @@ def preset_catalog() -> dict[str, Preset]:
             pair=replace(QWEN_CHAT, response=7168, student_sequences=8),
             rollout_arm=arm,
         )
+    for number, teacher in ((71, "MiMo-7B-RL"), (72, "MiMo-7B-RL-Zero"), (73, "MiMo-7B-SFT")):
+        presets[f"E{number}"] = Preset(
+            Budget(50, 32, -1, -1, initial_validation=True, align_seeds=True, original_data=True, lr="1e-6"),
+            method="full_kl",
+            pair=ModelPair(
+                student="MiMo-7B-Base",
+                teacher=teacher,
+                family="qwen25",
+                prompt=2048,
+                response=7168,
+                student_sequences=16,
+                teacher_sequences=16,
+            ),
+            environment=(
+                ("STUDENT_GPUS", "4"),
+                ("TEACHER_GPUS", "0"),
+                ("DISTILLATION_EXECUTION_MODE", "shared_sync"),
+                ("TRAIN_BATCH_SIZE", "128"),
+                ("MAX_VAL_RESPONSE_LENGTH", "24576"),
+                ("FULL_KL_BACKEND", "precompute_fused"),
+                ("FULL_KL_TOKEN_CHUNK", "256"),
+                ("FULL_KL_TERMINATION_TOKEN_IDS", "[]"),
+                ("MIRROR_DIAGNOSTICS", "False"),
+            ),
+            evaluation_protocol="mimo",
+        )
+    for number, student, teacher, chain, family in (
+        (74, "Olmo3-Base-BayesProtocol", "Olmo3-C3PO-BayesProtocol", "bayesrl", "default"),
+        (75, "Olmo3-Base-BayesProtocol", "Olmo3-SFT-BayesProtocol", "bayesrl", "default"),
+        (76, "Qwen2.5-14B-R1Protocol", "Light-R1-14B-R1Protocol", "light_r1", "deepseek"),
+        (77, "Qwen2.5-14B-R1Protocol", "R1-Distill-14B-R1Protocol", "light_r1", "deepseek"),
+    ):
+        presets[f"E{number}"] = replace(
+            presets["E71"],
+            pair=ModelPair(
+                student=student,
+                teacher=teacher,
+                family=family,
+                prompt=2048,
+                response=7168,
+                student_sequences=4 if chain == "light_r1" else 8,
+                teacher_sequences=4 if chain == "light_r1" else 8,
+            ),
+            evaluation_protocol=chain,
+        )
+    # MiMo budget amendment; keep the independently planned Olmo/Light-R1 budgets above.
+    for number, steps, reuse in ((71, 25, 32), (72, 20, 16), (73, 20, 16)):
+        preset = presets[f"E{number}"]
+        presets[f"E{number}"] = replace(preset, budget=replace(preset.budget, steps=steps, reuse=reuse))
     for number, arm in ((78, "S"), (79, "S0"), (80, "T")):
         presets[f"E{number}"] = Preset(
             Budget(100, 16, -1, -1, initial_validation=True, align_seeds=True, original_data=True, lr="1e-6"),
@@ -285,6 +336,8 @@ def resolve_selector(selector: str) -> tuple[str, Preset | None, str | None]:
     match = re.fullmatch(r"(E[0-9]+)(?:-valid-(student|teacher))?", selector)
     if not match:
         raise ValueError(f"Unknown preset: {selector}")
+    if match[1] in RETIRED_PRESETS:
+        raise ValueError("E69/E70 DeepSeekMath presets were withdrawn; use MiMo E71/E72/E73")
     name = ALIASES.get(match[1], match[1])
     preset = PRESETS.get(name)
     if preset is None or (match[2] and preset.pair is None):
@@ -447,6 +500,26 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
         defaults(env, RUN_DIR=root / "outputs" / env["EXPERIMENT_NAME"])
         defaults(env, CHECKPOINT_DIR=Path(env["RUN_DIR"]) / "runtime")
         prefix_options = prefix_defaults(env, preset.rollout_arm, root)
+    if preset and preset.evaluation_protocol in {"mimo", "bayesrl", "light_r1"}:
+        if role:
+            raise ValueError(
+                "Stage-chain presets evaluate original models through their native bootstrap, not -valid selectors"
+            )
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        stamp = datetime.now().strftime("%Y%m%d-%H%M%S") + f"-{os.getpid()}"
+        defaults(env, EXPERIMENT_NAME=f"math-opd-{name}-{stamp}")
+        namespace = "mimo-stage-native" if preset.evaluation_protocol == "mimo" else "stage-chain-native"
+        defaults(env, RUN_DIR=root / "runs" / namespace / env["EXPERIMENT_NAME"])
+        defaults(env, CHECKPOINT_DIR=Path(env["RUN_DIR"]) / "checkpoints")
+        if preset.evaluation_protocol == "mimo":
+            from examples.mirroropd.launchers.mimo import options as mimo_defaults
+
+            prefix_options = mimo_defaults(env, name, root, default_outer=preset.budget.steps)
+        else:
+            from examples.mirroropd.launchers.stage_chains import options as stage_defaults
+
+            prefix_options = stage_defaults(env, name, root, chain=preset.evaluation_protocol)
     protocol = model_defaults(env, preset.pair, role, root) if preset and preset.pair else []
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S") + f"-{os.getpid()}"
     if role:
@@ -632,6 +705,19 @@ def preset_overview() -> str:
             "fusion 每副本并发16/每卡KV24 GiB，current+评估并发16/KV64 GiB；"
             "计算token budget32768；shared_sync保持已支持的参数/优化器卸载。\n"
             "采用main统一原生评估与连续调度；QWEN_EVAL_ROOT 指定新银行。旧HF评估不可混接；八卡性能须实测。",
+            "E69/E70 DeepSeekMath预设已撤销；E71–E73固定MiMo-7B-Base student。\n"
+            "E71=MiMo-7B-RL（SFT+RL）；E72=MiMo-7B-RL-Zero（直接RL）；E73=MiMo-7B-SFT。\n"
+            "默认4卡 shared_sync、batch128、reuse32、50 outer、LR=1e-6；同一6400题，无重复题目。\n"
+            "原生32K：训练prompt/response=2048/7168；公共prompt8192，Math/Code/Science response24576，IF8192。\n"
+            "source/history RKL关闭；四域固定bank在0/1/2及每5 outer评分，current RKL与完整accuracy在0/25/50评分。\n"
+            "MIMO_QUESTIONS指定prepared题目，MIMO_BOOTSTRAP指定对应teacher的新银行；"
+            "关闭MTP推测解码与辅助训练；最终只导出HF模型并重载核对；完整设置见teacher-transfer/transfer-mechanism/mimo/。",
+            "E74/E75：Olmo3 Base学习C3PO（SFT+RL）/IVON-SFT；E76/E77：Qwen2.5-14B Base学习Light-R1/R1-Distill。\n"
+            "E76/E77阶段不匹配：Light-R1在R1-Distill之后额外做3K SFT再GRPO，缺RL直接起点的SFT-only权重。\n"
+            "四组使用明确登记的共同SFT tokenizer协议视图，原始参数不改；Light-R1记录7个特殊ID的标签变化。\n"
+            "14B少于4卡时自动使用FSDP2逐层CPU offload，保留FP32主权重和AdamW；默认4卡使用阶段搬运。\n"
+            "沿用batch128/reuse32/50 outer、训练2048+7168、公共推理回答24576/IF8192，关闭source/history。\n"
+            "STAGE_CHAIN_QUESTIONS指定prepared题目，STAGE_CHAIN_BOOTSTRAP指定独立银行；详见阶段链选型及接入验收。",
             "E78–E80：Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507；current/initial/teacher。"
             "batch=mini-batch128，100 outer/reuse16，1600更新；默认2卡TP1，可显式配置1/2/4/8卡。"
             "原生bench0/50/100，MATH500 n4、AMC23 n16、AIME24/25/26 n32；source128和双银行各128，每10轮RKL。",
@@ -681,6 +767,14 @@ def main(argv=None):
         plan = build_plan(args, hydra, dict(os.environ))
         if PRESETS.get(args.preset) and PRESETS[args.preset].rollout_arm:
             from examples.mirroropd.launchers.qwen_prefix import preflight
+
+            preflight(plan.environment)
+        if PRESETS.get(args.preset) and PRESETS[args.preset].evaluation_protocol == "mimo":
+            from examples.mirroropd.launchers.mimo import preflight
+
+            preflight(plan.environment)
+        elif PRESETS.get(args.preset) and PRESETS[args.preset].evaluation_protocol in {"bayesrl", "light_r1"}:
+            from examples.mirroropd.launchers.stage_chains import preflight
 
             preflight(plan.environment)
     except ValueError as error:
