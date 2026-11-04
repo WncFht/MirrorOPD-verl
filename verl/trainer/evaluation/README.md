@@ -139,7 +139,7 @@ Public bank 是 generation 产物的 sample 0 引用，无需再复制一份长 
 
 ## 默认验证与协议 owner
 
-Trainer 的 `_validate()` 只选择 owner 并调用 `validate(trainer)`。声明 `handles_validation=true` 的组件接管自己的协议；没有组件或组件仅观察训练时，使用 [DefaultEvaluator](default.py)。默认协议继续使用 validation dataloader、原生 agent loop/reward、最终 session 归约、原有指标和两种 JSONL 导出，不隐式生成公共 suite 的 Parquet 银行。公共 suite、source/history 与 HF reload 仍各自声明科学协议和预算。
+Trainer 的 `_validate()` 只选择 owner 并调用 `validate(trainer)`。声明 `handles_validation=true` 的组件接管自己的协议；没有组件或组件仅观察训练时，使用 [DefaultEvaluator](default.py)。默认协议继续使用 validation dataloader、原生 agent loop/reward、最终 session 归约、原有指标和两种 JSONL 导出，不隐式生成公共 suite 的 Parquet 银行。公共 suite、source/history 与 HF reload 仍各自声明科学协议和预算。 模型配对的 CPU 预检通过 readout 的 `preflight_generation_protocols(options)` 获取独立生成协议：公共 coordinator 显式提供 `GenerationProtocol`；source/history 和 HF reload 沿用原生输入／验证预算，不要求公共 suite 的 `protocols` 字段。扩展的 readout 若新增独立生成，也应声明该方法，由同一预检核对上下文与动态日期。
 
 ## 资源与恢复责任
 
