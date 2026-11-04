@@ -523,7 +523,7 @@ def fused_mirror_logits(z, anchor, teacher, dtype, *, spec, corrections=None):
                 close = log_mass + torch.log1p(-ratio.clamp(max=0.5))
                 log_z = torch.where(ratio < 0.5, close, partial[:, :, 1].logsumexp(-1))
     del partial
-    value, gradient, _ = weighted_rows(
+    value, gradient, student_stats = weighted_rows(
         z if spec.objective == "mdpo" else anchor, residual, dtype, variance=spec.objective == "bpo"
     )
     if spec.objective == "mdpo":
@@ -537,7 +537,7 @@ def fused_mirror_logits(z, anchor, teacher, dtype, *, spec, corrections=None):
         aq, _, _ = weighted_rows(z, difference(z, anchor, corrections=zq_c), dtype, gradient=False)
         at, _, _ = weighted_rows(z, difference(z, teacher, corrections=zt_c), dtype, gradient=False)
         info = torch.stack([target, log_z, aq, at + correction], -1)
-    return value, gradient, info
+    return value, gradient, info, student_stats if spec.objective == "mdpo" else None
 
 
 @triton.jit
@@ -590,3 +590,105 @@ def fused_log_weights(log_teacher, log_anchor, *, kappa, eta):
         1024,
     )
     return out
+
+
+@triton.jit
+def _future_apply(
+    Z,
+    DZ,
+    STATS,
+    PIVOT,
+    ACTION,
+    FUTURE,
+    WEIGHT,
+    STOP,
+    CONDITIONAL,
+    IS_STOP,
+    PARTIAL,
+    V: tl.constexpr,
+    P: tl.constexpr,
+    S: tl.constexpr,
+    B: tl.constexpr,
+):
+    row, part = tl.program_id(0), tl.program_id(1)
+    c = part * B + tl.arange(0, B)
+    pivot = tl.load(PIVOT + row)
+    z = tl.load(Z + row * V + c, c < V, -float("inf"))
+    lp = (z - tl.load(STATS + row * 4)) - tl.load(STATS + row * 4 + 1)
+    score = -tl.exp(lp)
+    action = tl.load(ACTION + row)
+    if S:
+        is_stop = tl.load(IS_STOP + row)
+        score += ((c == action) & ~is_stop).to(tl.float32)
+        for j in tl.static_range(S):
+            token = tl.load(STOP + j)
+            conditional = tl.load(CONDITIONAL + row * S + j)
+            score += tl.where((c == token) & is_stop, conditional, 0.0)
+    else:
+        score += (c == action).to(tl.float32)
+    # Reconstruct only the score pivot; preserve the local VJP's own rounding.
+    other = tl.where((c < V) & (c != pivot), score, 0.0)
+    tl.store(PARTIAL + row * P + part, tl.sum(other, 0))
+    local = tl.load(DZ + row * V + c, c < V, 0).to(tl.float32)
+    result = (local + tl.load(FUTURE + row) * score) * tl.load(WEIGHT + row)
+    tl.store(DZ + row * V + c, result, (c < V) & (c != pivot))
+
+
+@triton.jit
+def _future_finish(DZ, PIVOT, FUTURE, WEIGHT, PARTIAL, V: tl.constexpr, P: tl.constexpr, B: tl.constexpr):
+    row = tl.program_id(0)
+    j = tl.arange(0, B)
+    score = -tl.sum(tl.load(PARTIAL + row * P + j, j < P, 0), 0)
+    address = DZ + row * V + tl.load(PIVOT + row)
+    local = tl.load(address).to(tl.float32)
+    tl.store(address, (local + tl.load(FUTURE + row) * score) * tl.load(WEIGHT + row))
+
+
+def finish_future(z, dz, sampled, future, weights, actions, statistics):
+    """Fuse native score, local VJP and row weights without dense score/log-probs.
+
+    Statistics always describe the native vocabulary. Coarsened EOS statistics
+    cannot be reused here; only the small stopping group uses FP64 softmax.
+    """
+    n, v = z.shape
+    parts = triton.cdiv(v, 4096)
+    pivot = z.argmax(-1).to(torch.int32)
+    if statistics is None:
+        partial = z.new_empty((n, parts, 4))
+        statistics = z.new_empty((n, 4))
+        _weighted_partials[(n, parts)](z, z, partial, v, parts, 4096, enable_fp_fusion=False)
+        _weighted_reduce[(n,)](
+            z, partial, statistics, pivot, v, parts, triton.next_power_of_2(parts), enable_fp_fusion=False
+        )
+    value = (z.gather(1, sampled[:, None]).squeeze(1) - statistics[:, 0]) - statistics[:, 1]
+    stop = z.new_empty(0, dtype=torch.long) if actions is None else actions.stop
+    is_stop = torch.isin(sampled, stop)
+    conditional = z.new_empty((n, 0))
+    if actions is not None:
+        stop_lp = ((z.index_select(1, stop) - statistics[:, :1]) - statistics[:, 1:2]).double()
+        value = torch.where(is_stop, stop_lp.logsumexp(-1).to(value.dtype), value)
+        conditional = stop_lp.softmax(-1).to(z.dtype)
+    weights = torch.ones_like(future) if isinstance(weights, int) else weights
+    partial = z.new_empty((n, parts))
+    _future_apply[(n, parts)](
+        z,
+        dz,
+        statistics,
+        pivot,
+        sampled,
+        future,
+        weights,
+        stop,
+        conditional,
+        is_stop,
+        partial,
+        v,
+        parts,
+        len(stop),
+        4096,
+        enable_fp_fusion=False,
+    )
+    _future_finish[(n,)](
+        dz, pivot, future, weights, partial, v, parts, triton.next_power_of_2(parts), enable_fp_fusion=False
+    )
+    return value, dz

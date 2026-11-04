@@ -28,7 +28,7 @@ def test_eos_vjp_against_independent_oracle(kappa, eta, offset):
     mapping = TerminationActionMap.create(17, [1, 4], z.device)
     pairs = [mapping.coarsen(x, compensated=True) for x in (z, q, t)]
     spec = SimpleNamespace(objective="mdpo", kappa=kappa, eta=eta, diagnostics=True)
-    value, gc, diag = fused_mirror_logits(
+    value, gc, diag, _ = fused_mirror_logits(
         *(p[0] for p in pairs), torch.float32, spec=spec, corrections=tuple(p[1] for p in pairs)
     )
     gradient = mapping.expand_gradient(gc, z)

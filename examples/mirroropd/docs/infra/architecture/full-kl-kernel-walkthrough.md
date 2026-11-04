@@ -2,6 +2,8 @@
 
 本文承接[目标与梯度](full-kl-walkthrough.md)和[训练执行](代码走读.md)，逐段解释 `full_vocab.py`、`objectives.py`、`targets.py` 与 `full_vocab_triton.py`。源码基点与行级引用约定统一见[目标篇说明](full-kl-walkthrough.md)。符号沿用主篇；本篇的 G、dH、dW 默认都是 **未除 eta、未乘 DP/token 缩放** 的 raw objective 梯度。
 
+当前预计算路径的权威循环为 [run_blocks](../../../../../verl/trainer/distillation/vjp.py)。局部目标块由 [rows.py](../../../../../verl/trainer/distillation/rows.py) 准备，future 启用时保留 student logits 和可复用的 native 归一化统计；连续逆序块用分段 suffix 算出系数，再由 [finish_future](../../../../../verl/trainer/distillation/full_vocab_triton.py) 合成 score 与 local 梯度。该 kernel 只重建 score 的 pivot，保留 local VJP 原有舍入；最终梯度仍在参数梯度 GEMM 前执行既有 dtype cast。EOS 合并空间的统计不作为 native score 的统计。下文历史阅读区间以符号定位为准，模块分工以此合同为准。
+
 ## 1. Dispatcher 的逐段阅读
 
 入口是 [full_vocab_objective_result](../../../../../verl/trainer/distillation/full_vocab.py#L19)，359–402 行。返回 `FullVocabObjectiveResult(loss_sum, token_objective, token_diagnostics)`，定义位于独立的 [results.py](../../../../../verl/trainer/distillation/results.py)。

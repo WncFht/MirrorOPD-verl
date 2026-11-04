@@ -1,0 +1,43 @@
+{
+  "baseline_commit": "3f4ebd96",
+  "continuous_commit": "87865444",
+  "fused_parent": "c84f4fdf72def348261dabb6183e6d483d9bbbee",
+  "source_sha256": {
+    "verl/trainer/distillation/__init__.py": "ced14be479d27e864cf3557c37d8abe00d2204ba6c030620bf48ea85e25a5921",
+    "verl/trainer/distillation/anchor.py": "8c4e1d22a7bebd37bdfd3658494239589d05a9162f7281d5676b6cd951b19e7f",
+    "verl/trainer/distillation/compatibility.py": "626bc1dbe14c4583b90e195cf3dec6f3e228988040e9eeebc520eb3cf0cf6fb7",
+    "verl/trainer/distillation/distribution.py": "2371cfaf9c9108b1f7c821ceb2a949bb00ce7c4c0f5a3bff8fc4d4e642111d71",
+    "verl/trainer/distillation/evaluation.py": "93f6d1c77b9135550684fe13ff0668f7a0e33d87355d6a9b8c748995ee27ee9e",
+    "verl/trainer/distillation/execution.py": "d35aa57dc5ecc0577465cfd26548709dc32281e410de88ff21fe8a6bbc9ac8a0",
+    "verl/trainer/distillation/forward_vocab.py": "f25168d2a5c4f792d99ed8126e8d06ceb0c972991a85edd3e21db9c68955a019",
+    "verl/trainer/distillation/forward_vocab_triton.py": "d34826d9ff2eb97d7535ddc9c0d2c7fe5b50185bf6f69f30d2becabc506245b9",
+    "verl/trainer/distillation/full_vocab.py": "f78605291b27b66dfa501b84cd530f5b8830104421e6ee8b1f4ff9a505ca9f12",
+    "verl/trainer/distillation/full_vocab_triton.py": "64b4a62546658293c0a8f4dca38447f27dfd7d1c3bc2fc346b364971f15b660e",
+    "verl/trainer/distillation/hidden.py": "1d7a2463fc0ea6a5e38953be93e497fadd81feffa201611d740b510a3bb510b0",
+    "verl/trainer/distillation/hidden_io.py": "fcc0564e7d454822b35d133450800a729ca0e76502cf37df356d547c55c41292",
+    "verl/trainer/distillation/losses.py": "2ba45fce6d517d5e5811ff57a34a9c325344e5fc65a7e1dd2c4125e40235f0ff",
+    "verl/trainer/distillation/numerics.py": "169e8ba2e8b320f31ec0ba98a711fd245588e34c18d8f25426dd645d7d8e66ac",
+    "verl/trainer/distillation/objectives.py": "c33c5e3c731dbfb8f871f9a0141025f4f5fe17eede0b2158b61cf55eebc43a28",
+    "verl/trainer/distillation/output.py": "09d052e4c8dc2ef9010d7d6ba0cbb5035fbc71a775cbee2a3d7e561452f69c23",
+    "verl/trainer/distillation/profiling.py": "71c2cb603f43ec31bd2bc80c22cd966d3e2a2d9cdaa597839845612d9d5acd7c",
+    "verl/trainer/distillation/reduction.py": "dd2e2e8855a0c8c1abee4386d02ee50d5fb36806d0055a7f1649fdc781247601",
+    "verl/trainer/distillation/results.py": "305012893d4659f298e1ff12930c609d67658f78b3a73f630b58fe2cc63f84d8",
+    "verl/trainer/distillation/reverse_vocab.py": "7ad2ea19b2508229921a762880eefe820d1c3b8ca8c183ebe77654e044059867",
+    "verl/trainer/distillation/rows.py": "d40c63bad826bd3dccc206bbd08ed6804b318c4228714faba954d554b92cdfa6",
+    "verl/trainer/distillation/shared_teacher.py": "15acde2995c99d72aa86b83b52fbc065d97bbd07f363faab3d381ee625eeb894",
+    "verl/trainer/distillation/targets.py": "0d2e11161b6019d19edd12652408944cdef4a07158c8960b132509b0afea1eba",
+    "verl/trainer/distillation/termination.py": "6590fc8c676762bf80952380f842ffa20fb38abd95af4e271f15a618f3292324",
+    "verl/trainer/distillation/token_mapping.py": "3995f406b3e8882fbf0d610d11aec723a587cc1507f7857ce638833891401335",
+    "verl/trainer/distillation/trajectory.py": "dc7dc77e52da5007f655e24f9ae1d2454a8276fbe04deb8e597a595989b53f23",
+    "verl/trainer/distillation/validation.py": "6300e7c8745e30de36abbe7def3c168bf5adc16f5665f180f4e1b9c2e5f2a1a3",
+    "verl/trainer/distillation/vjp.py": "d5955a69120e5b04bbb974f1c4d5f202964046f0907dafc9f1b363b57b351bdc"
+  },
+  "command": "python -m examples.mirroropd.benchmarks.full_vocab.benchmark_trajectory --output <file>",
+  "allocation": "broker-reserved physical GPU 1; H800; Olmo3 continues on other GPUs",
+  "acceptance": "each production row passes dense value and hidden/head VJP gates before timing",
+  "limitations": [
+    "sequential version measurements, not randomized cross-version ABBA",
+    "2 warmup and 5 timing samples per case; no fixed clocks or statistical speedup claim",
+    "scope: pure reverse KL synthetic head forward/backward only, no model or optimizer"
+  ]
+}

@@ -2,6 +2,25 @@
 
 本页只比较给定 hidden/head 后的投影、目标、归约与一阶 VJP。真实模型更新与完整训练见[训练性能](training.md)，统计与显存定义见[测量方法](methodology.md)。数值实现及推导由[算子走读](../../architecture/full-kl-kernel-walkthrough.md)维护。
 
+## 公共执行与连续分块复测（2026-11-04）
+
+该批次使用与前述轨迹测试相同的 H800、BF16 输入、FP32 投影/累积、1024 token、V=151936、d=1536、chunk256、预热 2 次与测量 5 次。三版按相同随机输入与生产目标配对；原实现是 `3f4ebd96`，中间版只改变公共执行与连续分块，最终版增加 fused score/local VJP 合成。所有生产配置均通过独立 dense 值与 hidden/head 梯度门控；基线的 measurement-only controls 不参与新旧比较。
+
+| 回答长度 / future          | 原实现 ms | 连续分块 ms | 融合 finish ms | 最终 allocated GiB |
+| -------------------------- | --------: | ----------: | -------------: | -----------------: |
+| 1024 / none                |     10.37 |       10.43 |          10.43 |              2.322 |
+| 1024 / sum                 |     19.67 |       19.03 |          12.50 |              2.395 |
+| 1024 / mean                |     19.67 |       19.38 |          12.88 |              2.395 |
+| 1024 / discounted_sequence |     19.95 |       19.81 |          13.18 |              2.395 |
+| 64 / none                  |     10.37 |       10.55 |          10.44 |              2.322 |
+| 64 / sum                   |     40.85 |       19.17 |          12.52 |              2.395 |
+| 64 / mean                  |     41.04 |       19.39 |          12.88 |              2.395 |
+| 64 / discounted_sequence   |     41.44 |       19.83 |          13.16 |              2.395 |
+
+16 条短回答启用 future 时，投影调用从 32 降至 8，总投影行数均为 2048。连续分块消除回答边界引起的小 GEMM；融合 finish 复用 native 统计并省去完整 score/log-prob 缓冲。没有 future 的调用仍使用原局部行公式，不运行 scan 或 score。EOS 需要独立 native 统计，不能把本表的 native 收益直接套用到 EOS。
+
+[原始基线](data/kl-execution-20261104/baseline.json)、[连续分块](data/kl-execution-20261104/continuous.json)、[最终融合](data/kl-execution-20261104/fused.json)保留全部墙钟、显存、投影计数与误差；[源码哈希和测量合同](data/kl-execution-20261104/manifest.json)记录实现身份。版本间顺序测量，没有跨版本 ABBA、锁频或重复进程，表中差异是该批 head 观测，不能外推为整步训练倍率。完整 actor 对照由[训练性能](training.md)维护。
+
 ## EOS 精度与融合候选
 
 [EOS 精度与速度权衡](2026-11-01-EOS精度与速度权衡.md)比较 FP64、纯 FP32、稳定 FP32 和带 EOS 修正的融合候选。已测真实 logits 上的误差很小，EOS 小信号边界仍要求保留局部高精度；512 行、κ=0.5 的 head 测量为 438.01→16.90 ms。该报告保留接入前的算子测量；完整 actor 结果见[后续验收](2026-11-01-EOS融合实现与训练验收.md)，不将 head 倍率外推为 actor 加速。
