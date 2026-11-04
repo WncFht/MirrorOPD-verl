@@ -26,10 +26,11 @@ from examples.mirroropd.research.backends import fsdp as replay
 from examples.mirroropd.research.backends.fsdp import assign, local, snapshot
 from examples.mirroropd.research.studies.precision.factor_mirror_precision import MODES as FACTOR_PRECISIONS
 from examples.mirroropd.research.studies.precision.factor_mirror_precision import reset_interventions
-from verl.trainer.distillation import full_vocab as kernels
 from verl.trainer.distillation.anchor import anchor_scope
+from verl.trainer.distillation.results import FullVocabObjectiveResult
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
+from verl.utils.linear import project
 from verl.workers.config import DistillationConfig, DistillationLossConfig
 from verl.workers.config.distillation import FullVocabConfig
 
@@ -234,12 +235,12 @@ def main():
     error_records = []
 
     def fixed_reference(hs, ws, ht, wt, *, hq, wq, spec, **kwargs):
-        z = kernels.project(hs, ws).double()
+        z = project(hs, ws).double()
         lp = z.log_softmax(-1)
         p = lp.exp()
         if not frozen:
-            lq = kernels.project(hq, wq).double().log_softmax(-1)
-            lt = kernels.project(ht, wt).double().log_softmax(-1)
+            lq = project(hq, wq).double().log_softmax(-1)
+            lt = project(ht, wt).double().log_softmax(-1)
             frozen.update(lq=lq, lt=lt, b=lq + spec.eta * (lt - lq))
         if current_mode[0] is not None and current_snapshot[0] == "initial":
             mode_anchor[current_mode[0]] = lp.detach().clone()
@@ -251,7 +252,7 @@ def main():
         b = frozen["b"]
         rows = (p * (lp - b)).sum(-1)
         lz = b.logsumexp(-1)
-        return kernels.FullVocabObjectiveResult(
+        return FullVocabObjectiveResult(
             rows.sum(),
             rows,
             {

@@ -9,9 +9,10 @@ import pytest
 import torch
 from tensordict import TensorDict
 
-from verl.trainer.distillation.full_vocab import FullKLResult, full_reverse_kl, full_reverse_kl_result
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.output import FullVocabOutput
+from verl.trainer.distillation.results import FullKLResult
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl, full_reverse_kl_result
 from verl.utils import tensordict_utils as tu
 from verl.utils.metric.observations import Observation
 from verl.utils.metric.position import position_observations

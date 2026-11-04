@@ -13,7 +13,8 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed
 
-from verl.trainer.distillation.full_vocab import full_reverse_kl, project, teacher_support_correction
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl, teacher_support_correction
+from verl.utils.linear import project
 
 
 def describe(path, tokenizer):

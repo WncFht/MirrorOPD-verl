@@ -16,17 +16,20 @@ from types import MethodType
 import torch
 
 from examples.mirroropd.research.backends import fsdp as replay
-from verl.trainer.distillation import full_vocab as kernels
 from verl.trainer.distillation.full_vocab_triton import fused_log_weights
+from verl.trainer.distillation.results import FullVocabObjectiveResult
+from verl.trainer.distillation.rows import _MIRROR_DIAGNOSTICS
+from verl.trainer.distillation.vjp import precompute_rows
+from verl.utils.linear import project
 
 
 def rows64(hs, ws, ht, wt, hq, wq, spec):
     """Native projections and exact original FP32 b; only row arithmetic changes."""
     if spec.objective != "mdpo":
         raise ValueError("The row64/head64 oracle implements MDPO only")
-    z = kernels.project(hs, ws)
-    lt = kernels.project(ht, wt).log_softmax(-1)[:, : len(ws)]
-    lq = kernels.project(hq, wq).log_softmax(-1)
+    z = project(hs, ws)
+    lt = project(ht, wt).log_softmax(-1)[:, : len(ws)]
+    lq = project(hq, wq).log_softmax(-1)
     b = fused_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
     lp = z.double().log_softmax(-1)
     p = lp.exp()
@@ -44,11 +47,17 @@ def rows64_cast(*args):
 
 
 def row64_result(hs, ws, ht, wt, *, spec, hq, wq, token_chunk, **kwargs):
-    total, rows, _, diag = kernels.precompute_rows(hs, ws, ht, wt, token_chunk, rows64_cast, hq, wq, spec)
-    return kernels.FullVocabObjectiveResult(
+    def prepare(hs, ws, ht, wt, hq, wq):
+        rows, dz, info = rows64_cast(hs, ws, ht, wt, hq, wq, spec)
+        return rows, dz, rows, info, None
+
+    total, rows, _, diag, _, _ = precompute_rows(
+        hs, ws, ht, wt, token_chunk, prepare, hq=hq, wq=wq, diagnostic_count=4 if spec.diagnostics else 0
+    )
+    return FullVocabObjectiveResult(
         total,
         rows,
-        dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
+        dict(zip(_MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
         objective_rows=rows.detach(),
         local_objective_sum=rows.detach().sum(),
     )
@@ -83,10 +92,10 @@ class Head64(torch.autograd.Function):
 
 def head64_result(hs, ws, ht, wt, *, spec, hq, wq, **kwargs):
     total, rows, diag = Head64.apply(hs, ws, ht, wt, hq, wq, spec)
-    return kernels.FullVocabObjectiveResult(
+    return FullVocabObjectiveResult(
         total,
         rows,
-        dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
+        dict(zip(_MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
         objective_rows=rows.detach(),
         local_objective_sum=rows.detach().sum(),
     )
@@ -135,7 +144,7 @@ def make_worker(path, world, teacher=False, precision="bfloat16", attention="fla
             if precision in ("bf16_gemm_fp32_outputs", "bf16_mlp_fp32_outputs", "bf16_attention_fp32_outputs"):
                 with torch.autocast(inputs.device.type, enabled=False):
                     flat = inputs.reshape(-1, inputs.shape[-1]).to(torch.bfloat16)
-                    output = kernels.project(flat, module.weight)
+                    output = project(flat, module.weight)
                     output = output.reshape(*inputs.shape[:-1], module.weight.shape[0])
                     return output if module.bias is None else output + module.bias.float()
             return torch.nn.functional.linear(

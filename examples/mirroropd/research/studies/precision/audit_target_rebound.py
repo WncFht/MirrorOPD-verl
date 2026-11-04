@@ -18,15 +18,18 @@ from pathlib import Path
 
 import torch
 
-from verl.trainer.distillation import full_vocab as kernels
 from verl.trainer.distillation.full_vocab_triton import fused_log_weights, fused_mirror_rows
+from verl.trainer.distillation.results import FullVocabObjectiveResult
+from verl.trainer.distillation.rows import _MIRROR_DIAGNOSTICS
 from verl.trainer.distillation.targets import build_log_weights
+from verl.trainer.distillation.vjp import precompute_rows
+from verl.utils.linear import project
 
 _SEEN = set()
 
 
 def inputs(hs, ws, ht, wt, hq, wq, spec):
-    z, u, a = kernels.project(hs, ws), kernels.project(ht, wt), kernels.project(hq, wq)
+    z, u, a = project(hs, ws), project(ht, wt), project(hq, wq)
     lq, lt = a.log_softmax(-1), u.log_softmax(-1)[:, : len(ws)]
     b = fused_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
     return z, u, a, lq, lt, b
@@ -116,11 +119,17 @@ def kernel(mode):
         return values, dz.to(hs.dtype), diag
 
     def result(hs, ws, ht, wt, *, spec, hq, wq, token_chunk, **kwargs):
-        total, values, _, diag = kernels.precompute_rows(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
-        return kernels.FullVocabObjectiveResult(
+        def prepare(hs, ws, ht, wt, hq, wq):
+            values, dz, info = row_kernel(hs, ws, ht, wt, hq, wq, spec)
+            return values, dz, values, info, None
+
+        total, values, _, diag, _, _ = precompute_rows(
+            hs, ws, ht, wt, token_chunk, prepare, hq=hq, wq=wq, diagnostic_count=4 if spec.diagnostics else 0
+        )
+        return FullVocabObjectiveResult(
             total,
             values,
-            dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
+            dict(zip(_MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
             objective_rows=values.detach(),
             local_objective_sum=values.detach().sum(),
         )
@@ -155,10 +164,10 @@ class IdealHead(torch.autograd.Function):
 
 def ideal_head(hs, ws, ht, wt, *, spec, hq, wq, **kwargs):
     total, values, diag = IdealHead.apply(hs, ws, ht, wt, hq, wq, spec)
-    return kernels.FullVocabObjectiveResult(
+    return FullVocabObjectiveResult(
         total,
         values,
-        dict(zip(kernels._MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
+        dict(zip(_MIRROR_DIAGNOSTICS, diag.unbind(-1), strict=True)),
         objective_rows=values.detach(),
         local_objective_sum=values.detach().sum(),
     )

@@ -17,7 +17,8 @@ from pathlib import Path
 import torch
 
 from examples.mirroropd.assets.paths import registered_model
-from verl.trainer.distillation.full_vocab import precompute_kl_rows, project
+from verl.trainer.distillation.rows import precompute_kl_rows
+from verl.utils.linear import project
 from verl.utils.torch_functional import (
     FLAH_ATTN_CROSS_ENTROPY_LOSS_AVAILABLE,
     logprobs_from_logits,

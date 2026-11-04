@@ -5,7 +5,8 @@
 import pytest
 import torch
 
-from verl.trainer.distillation.full_vocab import full_reverse_kl_result, project
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
+from verl.utils.linear import project
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")

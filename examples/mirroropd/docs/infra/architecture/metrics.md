@@ -57,7 +57,7 @@ Loss 侧的 `distillation/...` 经规范命名变成日志中的 `distill/...`�
 
 表中的 Full-vocab 目标字段报告未加回答权重、未加时间折扣的 local 行值，不是所有聚合模式下的最终训练 loss。开启 future 后，这些字段及位置桶仍保持原义；训练另外记录 `local_surrogate`、`future/score_surrogate` 和 `training_surrogate`，它们按有效 token 数发布比率，最终 loss 则使用所选全局聚合。精确字段、η 与分母定义见[未来信用指标](../../settings/指标口径.md#62-full-vocab-聚合与未来信用)。
 
-内部 [FullVocabObjectiveResult](../../../../../verl/trainer/distillation/full_vocab.py) 必须显式提供 `local_objective_sum`；[FullVocabOutput.from_result](../../../../../verl/trainer/distillation/output.py) 只接受这个类型，不从训练 numerator 推测 local 诊断。Scalar-only 后端显式提供 local 总量，缺少行值时继续省略位置指标。
+内部 [FullVocabObjectiveResult](../../../../../verl/trainer/distillation/results.py#L22) 必须显式提供 `local_objective_sum`；[FullVocabOutput.from_result](../../../../../verl/trainer/distillation/output.py) 只接受这个类型，不从训练 numerator 推测 local 诊断。Scalar-only 后端显式提供 local 总量，缺少行值时继续省略位置指标。
 
 令 p 为当前学生、q 为本轮冻结 anchor、T 为原教师，b 为冻结的未归一化目标 log-weight，$Z_m=\sum_a e^{b_a}$、$m_a=e^{b_a}/Z_m$。每个固定前缀上的原始目标为：
 

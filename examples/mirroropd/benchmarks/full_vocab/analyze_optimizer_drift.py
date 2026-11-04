@@ -13,7 +13,7 @@ from pathlib import Path
 
 import torch
 
-from verl.trainer.distillation.full_vocab import _mirror_rows
+from verl.trainer.distillation.rows import _mirror_rows
 from verl.trainer.distillation.termination import TerminationActionMap
 from verl.workers.config.distillation_spec import DistillationLossSettings
 

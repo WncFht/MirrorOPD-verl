@@ -8,14 +8,11 @@ import pytest
 import torch
 from tensordict import TensorDict
 
-from verl.trainer.distillation.full_vocab import (
-    FullVocabObjectiveResult,
-    dense_rows,
-    full_reverse_kl_result,
-    precompute_kl_rows,
-)
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.output import FullVocabOutput
+from verl.trainer.distillation.results import FullVocabObjectiveResult
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
+from verl.trainer.distillation.rows import dense_rows, precompute_kl_rows
 from verl.utils import tensordict_utils as tu
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig, FullVocabConfig
 
@@ -89,7 +86,7 @@ def test_invalid_kernel_groups_fail(ids):
     "backend,teacher_vocab", [("dense", 8), ("streaming", 8), ("precompute", 9), ("precompute_fused", 9)]
 )
 def test_unsupported_kernel_paths_fail(backend, teacher_vocab):
-    with pytest.raises(ValueError, match="precompute.*equal"):
+    with pytest.raises(ValueError, match="termination equivalence requires precompute"):
         full_reverse_kl_result(
             torch.zeros(2, 3),
             torch.zeros(8, 3),

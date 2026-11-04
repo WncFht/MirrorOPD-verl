@@ -19,12 +19,12 @@ from tensordict import TensorDict
 from transformers import AutoTokenizer
 from transformers.models.qwen3_moe.modeling_qwen3_moe import Qwen3MoeRotaryEmbedding
 
-from verl.trainer.distillation.full_vocab import project
 from verl.trainer.distillation.hidden import FrozenTeacherHead
 from verl.trainer.ppo.v1.trainer_sync import PPOTrainerSync
 from verl.utils import tensordict_utils as tu
 from verl.utils.config import omega_conf_to_dataclass
 from verl.utils.distributed import initialize_global_process_group
+from verl.utils.linear import project
 from verl.workers.engine_workers import TrainingWorker
 
 

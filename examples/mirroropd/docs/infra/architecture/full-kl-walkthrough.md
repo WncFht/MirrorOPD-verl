@@ -153,7 +153,7 @@ $$
 K(p,T)=\sum_i p_i(\log p_i-\log T_i).
 $$
 
-求和权重是当前学生 p。对照 [dense_rows](../../../../../verl/trainer/distillation/full_vocab.py#L55)，55–58 行：`lp = student.log_softmax`、`lt = teacher.log_softmax`、`lp.exp() * (lp-lt)`，再沿词表求和。Teacher 投影输入被 detach。
+求和权重是当前学生 p。对照 [dense_rows](../../../../../verl/trainer/distillation/rows.py#L13)，55–58 行：`lp = student.log_softmax`、`lt = teacher.log_softmax`、`lp.exp() * (lp-lt)`，再沿词表求和。Teacher 投影输入被 detach。
 
 ### 4.2 Softmax 求导中的中心化项
 
@@ -184,7 +184,7 @@ $$
 =p_i\left[(z_i-u_i)-\mathbb E_p(z-u)\right].
 $$
 
-对应 [precompute_kl_rows](../../../../../verl/trainer/distillation/full_vocab.py#L160)，166–175 行使用 log-prob 残差；[RecomputedKL.backward](../../../../../verl/trainer/distillation/full_vocab.py#L109)，118–125 行使用 logits gap。二者在精确算术中等价，有限精度路径可能不同。
+对应 [precompute_kl_rows](../../../../../verl/trainer/distillation/rows.py#L19)，166–175 行使用 log-prob 残差；[RecomputedKL.backward](../../../../../verl/trainer/distillation/reverse_vocab.py#L91)，118–125 行使用 logits gap。二者在精确算术中等价，有限精度路径可能不同。
 
 ## 5. MDPO：向 weighted target 做 scaled reverse KL
 
@@ -439,9 +439,9 @@ $$
 =\mathrm{KL}(p\Vert\bar T)-\log c.
 $$
 
-普通 OPD 的梯度与使用 $\bar T$ 相同，但 loss 与位置指标必须保留 $-\log c$。源码 [teacher_support_correction](../../../../../verl/trainer/distillation/full_vocab.py#L223)，223–244 行计算此常数；[full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py#L277)，277–283 行把它加回。
+普通 OPD 的梯度与使用 $\bar T$ 相同，但 loss 与位置指标必须保留 $-\log c$。源码 [teacher_support_correction](../../../../../verl/trainer/distillation/reverse_vocab.py#L137)，223–244 行计算此常数；[full_reverse_kl_result](../../../../../verl/trainer/distillation/reverse_vocab.py#L200)，277–283 行把它加回。
 
-一般 mirror 则先在完整 teacher 支持上 `log_softmax`，再截取 student 对应行，见 [_mirror_rows](../../../../../verl/trainer/distillation/full_vocab.py#L325)，325–330 行。对于 $\kappa=0$，把 T 条件化只给 b 增加一个行常数：MDPO loss 改变，MDPO/BPO 梯度保持不变；BPO 方差值也不变。对于 $\kappa>0$、$\eta<1$，缩放 T 会改变它与 q 的混合比例，一般连 m 和梯度也改变。因此不能通用地“先裁 teacher head 再归一化”。
+一般 mirror 则先在完整 teacher 支持上 `log_softmax`，再截取 student 对应行，见 [_mirror_rows](../../../../../verl/trainer/distillation/rows.py#L87)，325–330 行。对于 $\kappa=0$，把 T 条件化只给 b 增加一个行常数：MDPO loss 改变，MDPO/BPO 梯度保持不变；BPO 方差值也不变。对于 $\kappa>0$、$\eta<1$，缩放 T 会改变它与 q 的混合比例，一般连 m 和梯度也改变。因此不能通用地“先裁 teacher head 再归一化”。
 
 这也解释了 OPD 在 $V_t>V_s$ 时最小值可能大于零：student 无法为自己不存在的输出行分配质量。
 

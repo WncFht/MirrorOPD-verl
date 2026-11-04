@@ -14,7 +14,7 @@ from pathlib import Path
 import torch
 
 from verl.trainer.distillation.evaluation import score_rkl_rows
-from verl.trainer.distillation.full_vocab import full_reverse_kl_result
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 from verl.trainer.evaluation.config import GenerationProtocol
 
 

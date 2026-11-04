@@ -14,8 +14,8 @@ import triton
 import triton.language as tl
 from triton.language.extra.cuda import libdevice
 
-from verl.trainer.distillation.full_vocab import project
 from verl.trainer.distillation.profiling import full_kl_range
+from verl.utils.linear import project
 
 
 @triton.jit

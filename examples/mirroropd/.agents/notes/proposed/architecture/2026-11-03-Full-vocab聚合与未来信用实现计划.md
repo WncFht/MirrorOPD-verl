@@ -49,7 +49,7 @@ Status: proposed
 
 ### 2.3 聚合与 kernel 耦合的实际原因
 
-[precompute_rows](../../../../../../verl/trainer/distillation/full_vocab.py#L240) 逐 token chunk 调 row kernel，得到行值及 logits 梯度 `dz`，立即完成：
+[precompute_rows](../../../../../../verl/trainer/distillation/vjp.py#L43) 逐 token chunk 调 row kernel，得到行值及 logits 梯度 `dz`，立即完成：
 
 $$
 dH_{\rm chunk}=dZ_{\rm chunk}W,\qquad
@@ -58,9 +58,9 @@ $$
 
 它只保存累计好的 `dH/dW`，将逐 token 行值标成不可微。Backward 只把标量 upstream 乘到保存的梯度上。因此事后对 detached 行值套 `agg_loss` 只能改变数值，无法改变已经合并的逐行梯度。每行聚合权重、未来 score 项都必须在上述 GEMM 之前生效。
 
-[RecomputedKL.backward](../../../../../../verl/trainer/distillation/full_vocab.py#L127) 支持逐行 upstream，是加权梯度的现有参考，但会重新投影；不能据此承诺与 `precompute` 相同的成本。[ForwardRecompute](../../../../../../verl/trainer/distillation/forward_vocab.py#L74) 也在 forward 累积梯度，扩展即时项聚合时需要一并核对；reverse sequence-KL 的 future 语义不自动适用于 forward KL 或 BPO。
+[RecomputedKL.backward](../../../../../../verl/trainer/distillation/reverse_vocab.py#L91) 支持逐行 upstream，是加权梯度的现有参考，但会重新投影；不能据此承诺与 `precompute` 相同的成本。[ForwardRecompute](../../../../../../verl/trainer/distillation/forward_vocab.py#L82) 也在 forward 累积梯度，扩展即时项聚合时需要一并核对；reverse sequence-KL 的 future 语义不自动适用于 forward KL 或 BPO。
 
-[precompute_kl_rows](../../../../../../verl/trainer/distillation/full_vocab.py#L172) 和 [_mirror_rows](../../../../../../verl/trainer/distillation/full_vocab.py#L426) 目前只返回行值、`dz` 及诊断，未向外保留 score 修正所需的 student 概率/归一化信息。仅把 chunk 遍历倒过来还不够，需要调整 chunk 内的计算边界。
+[precompute_kl_rows](../../../../../../verl/trainer/distillation/rows.py#L19) 和 [_mirror_rows](../../../../../../verl/trainer/distillation/rows.py#L87) 目前只返回行值、`dz` 及诊断，未向外保留 score 修正所需的 student 概率/归一化信息。仅把 chunk 遍历倒过来还不够，需要调整 chunk 内的计算边界。
 
 ## 3. 未来信用的数学合同
 
@@ -260,7 +260,7 @@ CPU 实现采用单投影的反向分块路径，数学工具收敛到 `reductio
 
 ### 5.4 EOS 与支持集
 
-[termination_equivalent_kl_rows](../../../../../../verl/trainer/distillation/full_vocab.py#L185) 在合并终止动作的空间训练，同时保留原始词表 KL 诊断；mirror 路径也有 coarsen/expand。Future cost 应与实际训练动作空间一致，不能为了日志方便累计 raw-vocabulary KL。合并终止动作在同一单轮终止语义下测试，终止处 future 为 0；若 future score 使用合并动作，按动作映射展开梯度。
+[termination_equivalent_kl_rows](../../../../../../verl/trainer/distillation/rows.py#L32) 在合并终止动作的空间训练，同时保留原始词表 KL 诊断；mirror 路径也有 coarsen/expand。Future cost 应与实际训练动作空间一致，不能为了日志方便累计 raw-vocabulary KL。合并终止动作在同一单轮终止语义下测试，终止处 future 为 0；若 future score 使用合并动作，按动作映射展开梯度。
 
 首批生产验收包括现有 E57 类路径所需的终止动作等价，但必须与 dense reference 单独核对；验收前不宣称已支持。条件支持集可能改变行为采样分布与 score 的含义，不能只把 KL 的 support 切片代码复制过来。现有不带 future 的支持集能力保持原状，新增 future 的未验收组合显式报错。
 

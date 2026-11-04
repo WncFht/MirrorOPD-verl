@@ -17,7 +17,7 @@ from types import MethodType
 import torch
 
 from examples.mirroropd.research.backends import fsdp as replay
-from verl.trainer.distillation import full_vocab as kernels
+from verl.utils.linear import project
 
 MODES = (
     "gemm_no_reduced",
@@ -323,10 +323,10 @@ def make_worker(path, world, teacher=False, precision="bfloat16", attention="fla
             with torch.autocast(inputs.device.type, enabled=False):
                 shape = inputs.shape
                 x = inputs.reshape(-1, shape[-1]).bfloat16()
-                gate = kernels.project(x, module.gate_proj.weight)
-                up = kernels.project(x, module.up_proj.weight)
+                gate = project(x, module.gate_proj.weight)
+                up = project(x, module.up_proj.weight)
                 h = (torch.nn.functional.silu(gate) * up).bfloat16()
-                out = kernels.project(h, module.down_proj.weight).bfloat16()
+                out = project(h, module.down_proj.weight).bfloat16()
                 return out.reshape(shape)
 
         for module in model.modules():

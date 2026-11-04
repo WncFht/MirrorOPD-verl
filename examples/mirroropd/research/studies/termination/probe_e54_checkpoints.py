@@ -14,7 +14,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM
 
-from verl.trainer.distillation.full_vocab import project
+from verl.utils.linear import project
 
 
 def cases(debug):

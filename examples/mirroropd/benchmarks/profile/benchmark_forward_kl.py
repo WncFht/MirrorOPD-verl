@@ -16,7 +16,7 @@ from pathlib import Path
 import torch
 
 from verl.trainer.distillation.forward_vocab import full_forward_kl_result
-from verl.trainer.distillation.full_vocab import full_reverse_kl
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl
 
 
 def main():

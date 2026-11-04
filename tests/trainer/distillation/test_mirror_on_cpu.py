@@ -9,9 +9,10 @@ import torch
 from omegaconf import OmegaConf
 
 from verl.trainer.distillation.anchor import FrozenAnchorHead, anchor_scope
-from verl.trainer.distillation.full_vocab import full_reverse_kl_result, full_vocab_objective_result
+from verl.trainer.distillation.full_vocab import full_vocab_objective_result
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.objectives import full_vocab_rows, mdpo_sampled_terms
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 from verl.trainer.distillation.targets import build_log_weights
 from verl.workers.config.distillation import DistillationLossConfig, FullVocabConfig
 from verl.workers.config.distillation_spec import resolve_distillation_spec

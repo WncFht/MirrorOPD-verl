@@ -5,7 +5,8 @@
 import pytest
 import torch
 
-from verl.trainer.distillation.full_vocab import full_vocab_objective_result, project
+from verl.trainer.distillation.full_vocab import full_vocab_objective_result
+from verl.utils.linear import project
 from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
@@ -72,7 +73,7 @@ def test_fp16_precompute_preserves_small_vjp_until_upstream_scaling(eta, backend
 
 @pytest.mark.parametrize("backend", ["precompute", "precompute_fused"])
 def test_fp16_termination_vjp_keeps_small_gradients_before_amp_scale(backend):
-    from verl.trainer.distillation.full_vocab import full_reverse_kl_result
+    from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 
     torch.manual_seed(94)
     hs, ws = [

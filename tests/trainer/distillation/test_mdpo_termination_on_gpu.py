@@ -5,7 +5,8 @@
 import pytest
 import torch
 
-from verl.trainer.distillation.full_vocab import full_vocab_objective_result, project
+from verl.trainer.distillation.full_vocab import full_vocab_objective_result
+from verl.utils.linear import project
 from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")

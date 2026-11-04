@@ -7,9 +7,9 @@ import torch
 from tensordict import TensorDict
 
 from verl.trainer.distillation.forward_vocab import forward_rows, full_forward_kl_result
-from verl.trainer.distillation.full_vocab import FullVocabObjectiveResult
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.output import FullVocabOutput
+from verl.trainer.distillation.results import FullVocabObjectiveResult
 from verl.utils import tensordict_utils as tu
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig, FullVocabConfig
 
@@ -91,7 +91,7 @@ def test_forward_loss_uses_forward_total_and_global_token_weight():
     assert "distillation/full_forward_kl" in metrics and "distillation/full_kl" in metrics
     with pytest.raises(ValueError, match="direct loss"):
         DistillationLossConfig(loss_mode="full_forward_kl")
-    with pytest.raises(ValueError, match="supports"):
+    with pytest.raises(ValueError, match="Unsupported forward_kl backend"):
         DistillationLossConfig(
             loss_mode="full_forward_kl",
             use_policy_gradient=False,

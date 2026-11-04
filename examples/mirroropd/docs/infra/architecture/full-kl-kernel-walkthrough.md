@@ -4,7 +4,7 @@
 
 ## 1. Dispatcher 的逐段阅读
 
-入口是 [full_vocab_objective_result](../../../../../verl/trainer/distillation/full_vocab.py#L359)，359–402 行。返回 `FullVocabObjectiveResult(loss_sum, token_objective, token_diagnostics)`，定义位于同文件 310–315 行。
+入口是 [full_vocab_objective_result](../../../../../verl/trainer/distillation/full_vocab.py#L19)，359–402 行。返回 `FullVocabObjectiveResult(loss_sum, token_objective, token_diagnostics)`，定义位于独立的 [results.py](../../../../../verl/trainer/distillation/results.py)。
 
 | 行区间  | 处理                                               | 阅读时核对                                             |
 | ------- | -------------------------------------------------- | ------------------------------------------------------ |
@@ -16,7 +16,7 @@
 | 395–400 | precompute 或 fused precompute                     | 共用 PrecomputedKL，只替换 row kernel                  |
 | 401–402 | detached 行值与命名诊断                            | 行观测不提供训练梯度                                   |
 
-一般 mirror 的 [_mirror_rows](../../../../../verl/trainer/distillation/full_vocab.py#L321)，321–356 行先在 `torch.no_grad()` 下处理 T/q，再在有需要的计算图中投影当前 student：
+一般 mirror 的 [_mirror_rows](../../../../../verl/trainer/distillation/rows.py#L87)，321–356 行先在 `torch.no_grad()` 下处理 T/q，再在有需要的计算图中投影当前 student：
 
 $$
 \log T=\operatorname{logsoftmax}(H_TW_T^\top)\big|_{\mathcal V_s},\quad
@@ -33,7 +33,7 @@ $$
 
 行值与 logits 梯度的完整公式只在[OPD](full-kl-walkthrough.md#4-full-kl-opd从-kl-到每个-logit-的梯度)、[MDPO](full-kl-walkthrough.md#5-mdpo向-weighted-target-做-scaled-reverse-kl)和[BPO](full-kl-walkthrough.md#6-bpo冻结-q-加权的中心化残差方差)各节维护。这里核对 dense autograd 与优化路径如何消费这些结果。
 
-OPD 的 dense reference 单独在 [dense_rows](../../../../../verl/trainer/distillation/full_vocab.py#L55)，55–58 行。Dense dispatcher 对 row sum 使用正常 autograd；解析 dz 主要供优化路径使用。这样可以用独立 autograd 检查手写 VJP，避免只用同一个解析表达式验证自身。
+OPD 的 dense reference 单独在 [dense_rows](../../../../../verl/trainer/distillation/rows.py#L13)，55–58 行。Dense dispatcher 对 row sum 使用正常 autograd；解析 dz 主要供优化路径使用。这样可以用独立 autograd 检查手写 VJP，避免只用同一个解析表达式验证自身。
 
 诊断位于 [full_vocab_rows](../../../../../verl/trainer/distillation/objectives.py#L71)，71–78 行：target KL 使用 raw reverse residual 加 log Z；teacher KL 使用完整 teacher 归一化后的 log T；anchor KL 使用 log q。BPO 的 `target_kl` 也是 $\mathrm{KL}(p\Vert m)$，不是 BPO 方差加 log Z。
 
@@ -72,13 +72,13 @@ dW=\sum_cG_c^\top H_c,\qquad
 L_{\rm raw}=\sum_c\sum_{i\in c}R_i.
 $$
 
-Head 梯度跨 token chunk 累加，hidden 梯度写入对应行块。数学上没有除 chunk 数。源码 [precompute_rows](../../../../../verl/trainer/distillation/full_vocab.py#L183)，193–206 行正是这个循环。
+Head 梯度跨 token chunk 累加，hidden 梯度写入对应行块。数学上没有除 chunk 数。源码 [precompute_rows](../../../../../verl/trainer/distillation/vjp.py#L43)，193–206 行正是这个循环。
 
 ## 4. Precompute 的前向与反向分工
 
 ### 4.1 Forward 已计算 raw 一阶 VJP
 
-[precompute_rows](../../../../../verl/trainer/distillation/full_vocab.py#L179)，179–219 行的关键顺序：
+[precompute_rows](../../../../../verl/trainer/distillation/vjp.py#L43)，179–219 行的关键顺序：
 
 1. 185–192 行分配 FP32（FP64 输入时为 FP64）dH/dW、total、行观测和诊断缓冲。
 2. 193–199 行逐 token chunk 调用 endpoint 或 mirror row kernel，获得 raw row 和 dz。
@@ -116,7 +116,7 @@ $$
 
 这里 upstream 就是 autograd 传入的标量导数。即使调用者对 total 再套一个可微标量函数，链式缩放仍由 upstream 承担。Forward 提前算 VJP 不代表提前执行 optimizer，也不代表 teacher/anchor 开始训练。
 
-该接口保存已应用 `row_weights` 的 VJP：权重先乘到 `dz`，再累积 `dH/dW`。返回的 token_objective 已 detached，调用者随后对行值归约不会改变缓存的梯度。Future 路径由 `TrajectoryVJP` 在回答内逆序分块，将 detached suffix 对应的 score VJP 与 local VJP 合并后再累积；流程见[当前实现](full-vocab.md#聚合与未来信用)。`once_differentiable` 同时限定优化路径只提供一阶梯度，不支持直接拿缓存 VJP 做二阶求导。
+该接口保存已应用 `row_weights` 的 VJP：权重先乘到 `dz`，再累积 `dH/dW`。返回的 token_objective 已 detached，调用者随后对行值归约不会改变缓存的梯度。Future 路径由公共 `run_blocks` 在回答内逆序分块，将 detached suffix 对应的 score VJP 与 local VJP 合并后再累积；流程见[当前实现](full-vocab.md#聚合与未来信用)。`once_differentiable` 同时限定优化路径只提供一阶梯度，不支持直接拿缓存 VJP 做二阶求导。
 
 ### 4.3 Precompute 的显存规模
 
@@ -135,7 +135,7 @@ $$
 
 ## 5. Backend 的实际差别
 
-Endpoint 分派在 [full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py#L254)，254–306 行。一般 MDPO/BPO 只支持最后一列标“是”的三类；MDPO eta=1 使用 endpoint 支持集。
+Endpoint 分派在 [full_reverse_kl_result](../../../../../verl/trainer/distillation/reverse_vocab.py#L200)，254–306 行。一般 MDPO/BPO 只支持最后一列标“是”的三类；MDPO eta=1 使用 endpoint 支持集。
 
 | Backend            | Forward                                           | Backward                          | 一般 mirror |
 | ------------------ | ------------------------------------------------- | --------------------------------- | ----------- |
@@ -155,7 +155,7 @@ Endpoint 分派在 [full_reverse_kl_result](../../../../../verl/trainer/distilla
 
 ### 5.1 Streaming 的稳定归约
 
-[row_statistics](../../../../../verl/trainer/distillation/full_vocab.py#L62)，79–93 行维护 student 的 running maximum m、指数和 s、gap 加权和 g。对新词表块 $\mathcal B$：
+[row_statistics](../../../../../verl/trainer/distillation/reverse_vocab.py#L18)，79–93 行维护 student 的 running maximum m、指数和 s、gap 加权和 g。对新词表块 $\mathcal B$：
 
 $$
 \begin{aligned}
@@ -165,7 +165,7 @@ g'&=e^{m-m'}g+\sum_{i\in\mathcal B}e^{z_i-m'}(z_i-u_i).
 \end{aligned}
 $$
 
-所有块完成后，$A(z)=m+\log s$，$\mathbb E_p(z-u)=g/s$；teacher 用独立 running maximum/sum 得到 $A(u)$。于是 $K=g/s-A(z)+A(u)$。Backward 在 [RecomputedKL.backward](../../../../../verl/trainer/distillation/full_vocab.py#L109)，109–127 行使用已存行统计恢复 p 和中心化 gap。
+所有块完成后，$A(z)=m+\log s$，$\mathbb E_p(z-u)=g/s$；teacher 用独立 running maximum/sum 得到 $A(u)$。于是 $K=g/s-A(z)+A(u)$。Backward 在 [RecomputedKL.backward](../../../../../verl/trainer/distillation/reverse_vocab.py#L91)，109–127 行使用已存行统计恢复 p 和中心化 gap。
 
 ## 6. Target 与小残差的数值稳定性
 
@@ -250,13 +250,13 @@ flowchart LR
     S --> B["backward 乘上游缩放"]
 ```
 
-[project](../../../../../verl/utils/linear.py)对 CUDA BF16 调用 `torch.mm(..., out_dtype=torch.float32)`；需要正常 autograd 时用 [ProjectionFP32](../../../../../verl/utils/linear.py)的自定义线性 VJP。[add_product](../../../../../verl/trainer/distillation/full_vocab.py#L47)，47–52 行将 BF16 输入的梯度 GEMM 直接累计到 FP32 storage。PrecomputedKL 的 207 行再保存输入 dtype 的梯度。
+[project](../../../../../verl/utils/linear.py)对 CUDA BF16 调用 `torch.mm(..., out_dtype=torch.float32)`；需要正常 autograd 时用 [ProjectionFP32](../../../../../verl/utils/linear.py)的自定义线性 VJP。[add_product](../../../../../verl/trainer/distillation/vjp.py#L10)，47–52 行将 BF16 输入的梯度 GEMM 直接累计到 FP32 storage。公共 PrecomputedVJP 保存输入 dtype 的梯度，FP16 保留 FP32 缓存以支持非单位 upstream。
 
 所以 FP32 loss 不代表全 FP32 训练。CPU BF16 或其他回退也不自动获得 CUDA `out_dtype` 行为。生产配置没有给 full loss clamp 成非负数，小负值和极小梯度应结合 dtype、backend、误差尺度分析。
 
 ### 8.2 Teacher 支持修正的实现
 
-当 $V_t>V_s$，endpoint 的 [teacher_support_correction](../../../../../verl/trainer/distillation/full_vocab.py#L223)，232–243 行分别累计公共支持、额外支持的 log-normalizer：
+当 $V_t>V_s$，endpoint 的 [teacher_support_correction](../../../../../verl/trainer/distillation/reverse_vocab.py#L137)，232–243 行分别累计公共支持、额外支持的 log-normalizer：
 
 $$
 \Delta=\log\frac{Z_{T,\mathrm{shared}}+Z_{T,\mathrm{extra}}}{Z_{T,\mathrm{shared}}}

@@ -32,7 +32,7 @@ $$
 
 ## 后端和内存
 
-实现位于[full_forward_kl_result](../../../../../../verl/trainer/distillation/forward_vocab.py)、[融合行运算](../../../../../../verl/trainer/distillation/forward_vocab_triton.py)。现有的 shared teacher、hidden 写入、异步 prefetch、FSDP2 head hooks、DP token 归一化和 checkpoint 通路继续复用。
+实现位于[full_forward_kl_result](../../../../../../verl/trainer/distillation/forward_vocab.py#L115)、[融合行运算](../../../../../../verl/trainer/distillation/forward_vocab_triton.py)。现有的 shared teacher、hidden 写入、异步 prefetch、FSDP2 head hooks、DP token 归一化和 checkpoint 通路继续复用。
 
 | Backend            | 行为                                                                 |
 | ------------------ | -------------------------------------------------------------------- |

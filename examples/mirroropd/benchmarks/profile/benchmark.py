@@ -10,8 +10,8 @@ from pathlib import Path
 
 import torch
 
-from verl.trainer.distillation.full_vocab import full_reverse_kl
 from verl.trainer.distillation.full_vocab_triton import fused_rows
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl
 from verl.workers.config.distillation import FullVocabConfig
 
 

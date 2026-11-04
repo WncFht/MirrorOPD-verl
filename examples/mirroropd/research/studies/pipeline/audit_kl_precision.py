@@ -87,7 +87,7 @@ def main():
         import sys
 
         sys.path.insert(0, str(REPO))
-        from verl.trainer.distillation.full_vocab import project
+        from verl.utils.linear import project
 
         h = torch.randn(8, 64, device=device).bfloat16()
         w = (torch.randn(151936, 64, device=device) / 8).bfloat16()

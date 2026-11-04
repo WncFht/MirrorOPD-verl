@@ -7,7 +7,8 @@ import math
 import pytest
 import torch
 
-from verl.trainer.distillation.full_vocab import full_reverse_kl_result, full_vocab_objective_result
+from verl.trainer.distillation.full_vocab import full_vocab_objective_result
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 from verl.trainer.distillation.targets import mirror_signal
 from verl.workers.config.distillation import DistillationLossConfig, FullVocabConfig
 
