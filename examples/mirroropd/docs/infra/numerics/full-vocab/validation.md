@@ -64,7 +64,7 @@ FSDP2 使用本地随机小模型，真实包装 head、teacher capture、CPU of
 | Public suite，source2/history4；Math2、Code1、Science1、IF1 | 12/21/21                  | 384/626/626    | 0/2/4           | 三事件及根 manifest complete；四域 accuracy 产物可读 |
 | 独立 SourceHistoryReadout，source2/history4                 | 2/6/6                     | 64/192/192     | 0/2/4           | 三事件及根 manifest complete；正常继续第二轮训练     |
 
-[离线复核摘要](../../performance/full-vocab/data/aggregate-future-20261104/evaluation-gpu-audit.json)逐事件验证 `(bank,id)` 唯一覆盖、轨迹身份、原始 response mask token 数，以及两 rank 的 `unchanged/state_digest`；从 Parquet 独立复算 source 题均、history 批均和 public 分域／域均指标，误差阈值为 $10^{-12}$。Accuracy 样本身份唯一且与生成覆盖一致，指标由评分表复算；32-token 回答只验证执行与产物，不能解释科学质量。两条运行均未启用最终 HF export，不作为导出／重载复测。
+[离线复核摘要](../../performance/full-vocab/data/aggregate-future-20261104/evaluation-gpu-audit.json)逐事件验证 `(bank,id)` 唯一覆盖、轨迹身份、原始 response mask token 数，以及两 rank 的 `unchanged/state_digest`；从 Parquet 独立复算 source 题均、history 批均和 public 分域／域均指标，误差阈值为 $10^{-12}$。当前与初始 student 的 accuracy 样本身份唯一且与生成覆盖一致，指标由评分表复算；32-token 回答只验证执行与产物，不能解释科学质量。两条运行均未启用最终 HF export，不作为导出／重载复测。
 
 [SourceLifecycleProbe](../../../../benchmarks/evaluation/lifecycle_probe.py)在实际训练边界核对同步前 pending、重复 validate 不改写事件、同步后驻留版本正确并发布完成。在 outer1 的本地 `event.finish` 写入前注入一次发布错误，错误上抛、pending 保留，恢复后显式重试发布且不重新评分；outer2 正常完成。这覆盖本地发布失败，不模拟未完成远端 GPU RPC。原始 lifecycle JSONL、冻结源码、配置、退出状态与复核命令见[测量身份](../../performance/full-vocab/data/aggregate-future-20261104/evaluation-gpu-manifest.json)。
 

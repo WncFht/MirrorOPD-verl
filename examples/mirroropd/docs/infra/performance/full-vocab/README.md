@@ -38,7 +38,7 @@
 | 3      | Activation checkpointing             | 重算开销与激活峰值；保持 token budget 不变 |
 | 4      | q/T 投影、归一化与有界复用           | 冻结计算占比及缓存的内存/传输代价          |
 
-这些是待测变量，不是已验证的最优配置。无配对数据时，不给出预计加速百分比。Full/sample 对照应明确 sampled 是 vanilla、token-IS 还是其他目标，并分别报告 actor 与完整 outer。
+最新[完整 actor 配对](training.md)已测两种 precompute backend、聚合／future，以及短／长／混合长度下的 chunk256/512。表中其余条件仍是测量候选，不是已验证的最优配置。无配对数据时，不给出预计加速百分比。Full/sample 对照应明确 sampled 是 vanilla、token-IS 还是其他目标，并分别报告 actor 与完整 outer。
 
 ## 维护约定
 
