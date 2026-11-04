@@ -4,9 +4,15 @@
 
 ## 公共 VJP 与连续分块验收（2026-11-04）
 
-公共执行器迁移后，`tests/trainer/distillation -k cpu` 为 927 passed、18 skipped；跳过项是非 discounted 模式与非单位 γ 的无效组合。CUDA trajectory 矩阵为 540 passed，覆盖既有目标、future、聚合、EOS 和多种精度；条件支持集的 CUDA 矩阵另有 12 passed。原始命令与输出保存在仓库 `runs/kl-backend-20261104/`，该目录为执行产物，不随源码提交。
+最终源代码的 CPU 全量回归为 **927 passed、18 skipped**；跳过项是非 discounted 模式与非单位 γ 的无效组合。CUDA 全量回归为 **757 passed**，配置单测另有 7 passed；E59/E62 launcher 配置预览通过。最终源码身份见下方验收记录，不把历史版本通过数作为当前版本证据。
 
-[分段后缀测试](../../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)跨多个回答边界、空回答与原始时间重置核对严格 future；大 local cost 旁的极小 future 不通过两者相减求出。[投影计数测试](../../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)要求连续分块只按总行数决定投影次数，backward 不重放投影。融合 finish 后，trajectory 与融合小信号测试的定向 CUDA 回归为 608 passed；恢复既有 GEMM 前 cast 后 trajectory 与 finish 回归为 549 passed。独立 [finish 测试](../../../../../../tests/trainer/distillation/test_future_finish_on_gpu.py)为 10 passed，包含 native/EOS、跨 tile、行权重、近确定动作和 BF16 GEMM 输入精度合同。完整 actor 和重构后的真实 FSDP 结果另行记录，不把旧分布式通过数算作新版本验收。
+[分段后缀测试](../../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)跨多个回答边界、空回答与原始时间重置核对严格 future；大 local cost 旁的极小 future 不通过两者相减求出。[投影计数测试](../../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)要求连续分块只按总行数决定投影次数，backward 不重放投影。独立 [finish 测试](../../../../../../tests/trainer/distillation/test_future_finish_on_gpu.py)有 10 项，包含 native/EOS、跨 tile、行权重、近确定动作和 BF16 GEMM 输入精度合同。
+
+两卡真实 FSDP 的 **15 组矩阵通过**，覆盖七种 reverse backend、forward、共同支持及 teacher 重排、额外 teacher 行、MDPO/BPO、BF16/FP16/混合精度、tied Qwen3 head、activation checkpointing，以及 checkpoint 恢复后的下一次更新。新增 readout 隔离组也通过：改变训练 aggregate/future 后，评分 sum/count 保持一致；评分前后参数、梯度、optimizer 与 scheduler 状态相同，offload 返回 CPU。入口为 [full-vocab FSDP2](../../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 的 `--readout`。
+
+原混合精度严格失败条件单独复测：MDPO＋EOS `[1,4]`、`bf16_fp32`、无 future、token-mean、activation checkpointing、三次 Adam 更新。Fused/precompute 的最大参数绝对差仍为 **1.6333884559571743e-5**，原 `atol=1e-6, rtol=1e-5` 门槛仍失败；同 backend A/A 为零且 checkpoint 下一步一致。Future mean/seq-mean 的新比较通过不能覆盖这个旧条件。已有小梯度与 FP64 AdamW 解释继续见[混合精度差异](#混合精度-mdpo-参数差异)，不声称长期训练等价。
+
+[分布式输出、命令与原失败记录](../../performance/full-vocab/data/kl-execution-20261104/fsdp-acceptance.json)、[最终源码哈希](../../performance/full-vocab/data/kl-execution-20261104/acceptance-source.json)保留可审查证据。全部原始日志位于 `runs/kl-backend-20261104/`；最初 readout 测试误对 jagged 张量调用 reshape 的失败日志保留，最终通过使用 values 断言。数值门槛没有放宽。
 
 ## 验证矩阵
 

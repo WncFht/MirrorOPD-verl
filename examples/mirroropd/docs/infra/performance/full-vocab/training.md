@@ -2,6 +2,28 @@
 
 本页维护固定输入管线、自然生成训练、reuse 与 full/sample 成本。计时、显存和 trace 口径见[测量方法](methodology.md)，head-loss 微基准见[算子性能](operators.md)。各节保留测量身份，当前代码或预设改变后不据此修改旧读数。
 
+## 公共 KL 执行器的新旧 actor 对照（2026-11-04）
+
+新旧版本复用下一节的三组原始缓存、模型、EOS、MDPO κ=1/η=0.1、BF16、activation checkpointing、chunk256、offload 和 lr=0 设置。旧版固定为 `3f4ebd96`，新版使用独立冻结源码。计时含 anchor capture、backbone/head 前反向、clipping、AdamW 和参数/optimizer 上下卡，排除 teacher 准备、Ray/TQ 与 rollout；每个版本内部对 mean 与 discounted_sequence 分别做 A–B–B–A，各 block 2 次预热、3 次采集。None 合并两个对照的 12 个样本，future 各 6 个；版本之间按顺序运行，未做跨版本 ABBA。
+
+| 输入  | 模式                       | 旧版秒，中位数 [范围] | 新版秒，中位数 [范围] | 中位数变化 | allocated GiB，旧/新 |
+| ----- | -------------------------- | --------------------: | --------------------: | ---------: | -------------------: |
+| short | baseline                   | 4.877 [4.219, 11.289] |  5.247 [4.513, 6.189] |      +7.6% |        17.249/17.249 |
+| short | future-mean                |  4.697 [4.492, 5.098] |  5.304 [4.923, 6.489] |     +12.9% |        17.249/17.249 |
+| short | future-discounted-sequence |  5.174 [4.713, 5.902] |  5.207 [4.614, 7.617] |      +0.7% |        17.249/17.249 |
+| mixed | baseline                   | 4.975 [4.408, 10.088] |  4.687 [4.441, 5.805] |      -5.8% |        17.249/17.249 |
+| mixed | future-mean                |  5.402 [4.616, 7.695] |  5.002 [4.339, 7.831] |      -7.4% |        17.588/17.249 |
+| mixed | future-discounted-sequence |  4.796 [4.342, 4.968] |  4.996 [4.502, 5.386] |      +4.2% |        17.588/17.249 |
+| long  | baseline                   | 5.574 [4.959, 10.570] |  5.667 [5.088, 6.594] |      +1.7% |        17.249/17.249 |
+| long  | future-mean                |  5.388 [5.012, 6.491] |  7.330 [5.432, 9.091] |     +36.0% |        17.574/17.249 |
+| long  | future-discounted-sequence |  5.592 [5.069, 6.456] |  5.691 [5.063, 6.636] |      +1.8% |        17.574/17.249 |
+
+这些结果不支持稳定的整步加速结论：短回答 mean 变慢、混合长度 mean 变快，范围存在重叠。长回答 mean 的首轮新版采样与本机 CPU 测试/提交检查重叠，主机竞争是混杂因素；首轮 +36.0% 观测保留，下方交错补测单独核对重复性。Head 测量减少的 kernel/GEMM 工作量是真实的，但 actor 包含大量其他工作，不能外推 head 倍率。长/混合 future 的 allocated 峰值下降约 0.32/0.34 GiB，短回答受固定参数/optimizer 峰值限制未下降；reserved 缓存另见样本，不当作活跃工作区。
+
+长回答另外执行跨版本 **旧→新→新→旧** 补测，每个进程内部再做 none/mean 的 A–B–B–A，每 block 1 次预热和 2 次采集，暂停本任务的 CPU 测试与提交 hooks，同机其他工作继续运行。每个版本每种模式合并 8 个有效样本：none 的旧/新中位数为 5.927/5.717 秒，mean 为 5.517/5.729 秒（+3.8%），mean 范围分别为 5.255–5.822/5.127–6.025 秒。首轮 +36.0% 没有稳定复现；补测也不能证明确定加速或消除全部主机噪声。首轮和补测不混合计算倍率，[补测完整记录及命令](data/kl-execution-20261104/actor-recheck.json)独立保留。
+
+[全部非裁剪记录、预热、各 rank forward 次数、参数/cache 哈希、命令和配置](data/kl-execution-20261104/actor-versions.json)保留结果，原始嵌套 update metrics 留在运行目录并记录文件哈希。新版 actor 冻结源码早于最终无 future 标量/分配清理；[源码身份](data/kl-execution-20261104/acceptance-source.json)同时记录两者，不能将最终 profile 伪装成 actor 同一快照。LR=0 的参数 hash 审计通过仅说明计时输入状态受控；参数更新与恢复正确性另由[真实 FSDP 验收](../../numerics/full-vocab/validation.md#公共-vjp-与连续分块验收2026-11-04)覆盖。该小窗口没有长期质量或正式 outer 吞吐结论。
+
 ## Aggregate/future 的完整 actor 配对（2026-11-04）
 
 两卡 H800，student 为 Qwen3-1.7B-Base；teacher hidden/head 来自 Qwen3-30B-A3B-Instruct-2507 的既有缓存。固定同一组 8 条原始回答，保留完整 prompt，分别取回答的 64-token 前缀、1024-token 前缀和交替 64/1024 的前缀；对应 hidden 同步切片。它们是工程输入条件，不是三组新科学样本。

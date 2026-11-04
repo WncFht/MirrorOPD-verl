@@ -2,7 +2,7 @@
 
 Status: proposed
 
-状态：聚合与 future 已有 CPU、CUDA、真实 FSDP2 和性能证据；[数值验收](../../../../docs/infra/numerics/full-vocab/validation.md#聚合与未来信用验收2026-11-04)保留混合精度 MDPO 严格参数对比失败，[完整 actor 配对](../../../../docs/infra/performance/full-vocab/training.md)记录测量范围。第 2 节与第 7 节保留 2026-11-03 的实施基线和当时阶段状态，不代表当前验收缺口；当前配置与支持矩阵见 [Full-vocab 数据流](../../../../docs/infra/architecture/full-vocab.md#聚合与未来信用)。后续单投影分块、统计复用和公共 VJP 的实施由 [KL 后端统一提案](2026-11-04-KL后端统一执行与VJP重构.md)接替；本文继续拥有数学合同、原设计理由与验收要求，未完成项不因迁移结项。
+状态：聚合与 future 已有 CPU、CUDA、真实 FSDP2 和性能证据；[数值验收](../../../../docs/infra/numerics/full-vocab/validation.md#聚合与未来信用验收2026-11-04)保留混合精度 MDPO 严格参数对比失败，[完整 actor 配对](../../../../docs/infra/performance/full-vocab/training.md)记录测量范围。第 2、5、7 节保留 2026-11-03 的实施基线和当时阶段状态，不代表当前验收缺口；当前配置与支持矩阵见 [Full-vocab 数据流](../../../../docs/infra/architecture/full-vocab.md#聚合与未来信用)。单投影连续分块、统计复用和公共 VJP 已由 [KL 后端统一执行决策](../../implemented/architecture/2026-11-04-KL后端统一执行与VJP重构.md)落实；本文继续拥有数学合同、原设计理由与验收要求，未完成项不因迁移结项。
 
 目标是在现有 Full-vocab 更新链中增加回答级聚合和未来信用分配，支持 sequence KL、TOP-D 风格 future mean 及 discount 对照。实现保持原训练循环、PPO、rollout reuse 和 anchor 生命周期；默认 future 关闭。CPU 验收不启动正式训练，冻结运行配置与源码快照保持原状。
 
