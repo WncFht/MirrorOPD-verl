@@ -289,11 +289,12 @@ def preset_catalog() -> dict[str, Preset]:
             TRAIN_BATCH_SIZE="256",
             ROLLOUT_TP="1",
             VAL_BATCH_SIZE="null",
+            TOTAL_EPOCHS="2" if number == 82 else "1",
         )
         presets[f"E{number}"] = replace(
             presets["E61"],
             budget=replace(presets["E61"].budget, steps=steps, test=5, initial_validation=False),
-            pair=replace(presets["E61"].pair, student_sequences=128),
+            pair=replace(presets["E61"].pair, student_sequences=64),
             environment=tuple(environment.items()),
         )
     return presets
@@ -739,7 +740,7 @@ def preset_overview() -> str:
             "原生bench0/50/100，MATH500 n4、AMC23 n16、AIME24/25/26 n32；source128和双银行各128，每10轮RKL。",
             "E81/E82：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；MDPO kappa1/eta0.1。"
             "4卡shared_sync、batch=mini-batch256、n1/reuse16；A=25 outer/400更新，B=100 outer/1600更新。"
-            "无初始验证，每5 outer及终点验证；不保存checkpoint。每引擎并发128/TP1、显存0.8；"
+            "无初始验证，每5 outer及终点验证；不保存checkpoint。每引擎并发64/TP1、显存0.8；"
             "precompute_fused/chunk512、bf16；验证avg16/31744；训练与验证默认开启重复提前停止。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
