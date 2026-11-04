@@ -104,6 +104,42 @@ E57 每个 outer 产生的新轨迹数是论文的 **1/64**；相同“16 次”
 
 论文 Figure5／§5.3 在同一 1.7B Base←30B-A3B teacher 配对上比较 α=0.1/0.2/0.3、α=1 去除 proximal teacher，以及关闭内部 off-policy 迭代。关闭内部迭代后，论文报告需要更多训练步才能提升成绩。这组消融没有独立改变 batch size 或累计新轨迹量，因此支持检验内部优化预算，但不能直接证明本地差距主要来自数据不足。下面的固定池与在线覆盖实验分别控制这些量。[^topd-paper]
 
+### 累计训练回答次数下的 E57 与 TOP-D 曲线
+
+E57 原始 W&B 离线日志 `6j5knkmk` 已完成，包含连续 1,600 次 optimizer update、100 个 outer 和 outer10 至 outer100 的十次完整评测；原文件 SHA-256 与冻结提取记录一致。下图使用该日志的 AIME24/25/26 正确率，与论文 Figure5 的 α0.1、α0.2 曲线叠加；TOP-D 曲线从论文源文件中的矢量路径按坐标刻度提取，没有再次平滑。[^topd-paper]
+
+横轴的**累计训练回答条次**将同一回答的每次重复训练分别计数。E57 的每次更新使用 64 条回答，同一 outer 的 64 条回答更新 16 次；论文则把新生成的 4,096 条回答划成 16 个不同 mini-batch，每条处理一次。因此，在 outer $o$ 完成后：
+
+$$
+N_{\mathrm{E57}}(o)=64\times16\times o=1024o,
+\qquad
+N_{\mathrm{TOP-D}}(o)=512\times8\times o=4096o.
+$$
+
+TOP-D 的 outer 解释依据官方 trainer：每轮 rollout、actor 更新和日志记录后，`global_steps` 增加一次；内部 optimizer update 由 mini-batch 循环执行。[^topd-trainer-budget] Figure5 两条曲线均有 42 个可提取节点，横坐标为 0、10、…、410，换算使用论文 §5.1 的 batch 设置。这里推断的是公开曲线已展示的训练预算；论文没有给出 Figure5 与 Table3 checkpoint 的一一对应关系，也没有证明训练恰好在 outer410 终止。
+
+![E57 与 TOP-D 按累计训练回答条次比较；上排全程，下排早期放大](figures/topd-e57-budget-20261104/response_presentations.png)
+
+| 公开曲线末端口径 | E57 outer100 | TOP-D α0.1／α0.2 outer410 | TOP-D／E57 |
+| ---------------- | -----------: | ------------------------: | ---------: |
+| Optimizer update |        1,600 |                     6,560 |        4.1 |
+| 新生成回答数     |        6,400 |                 1,679,360 |      262.4 |
+| 累计训练回答条次 |      102,400 |                 1,679,360 |       16.4 |
+
+E57 的 AIME24、AIME25 从首个评测点的 7.92%／3.33% 上升至 10.42%／9.79%，AIME26 在 outer70 达到 9.58%，最终为 6.88%。在相近累计训练条次的前期区间，E57 与 TOP-D 的正确率范围重叠，论文更高的后期成绩来自远超 E57 当前终点的训练区间。曲线支持继续控制训练预算，不能据此确定延长 E57 就能复现论文结果。
+
+两边采用相同的 student／teacher 配对，但 E57 为 avg@16、T0.7/p0.9、cap31744，论文为 avg@32、T1/p0.7、cap16384，题目附加指令与更新目标也不同。条次横轴没有计入回答长度、full-vocab 与 sampled-token 的算力差异；因此图用于定位训练阶段，不能据此排名算法的样本效率或计算效率。E57 无初始验证，不补造 outer0 点；TOP-D 提取值是图上读数，不替代 Table3。
+
+[新增回答数横轴图](figures/topd-e57-budget-20261104/fresh_responses.png)保留两边不同的轨迹覆盖口径；早期放大区内 TOP-D 只有 step0 一个观测点，仅显示该点，不在没有评测的区间补画连线。[矢量成品](figures/topd-e57-budget-20261104/response_presentations.pdf)、[原始论文矢量图](data/topd-e57-budget-20261104/topd-figure5.pdf)、[曲线 CSV](data/topd-e57-budget-20261104/curves.csv)、[来源与哈希](data/topd-e57-budget-20261104/provenance.json)均已保留。
+
+生成器为 [plot_topd_e57_budget.py](../../../research/studies/weighted_targets/plot_topd_e57_budget.py)。在仓库根设置 `FIGURE_VIZ_MPL` 为 figure-viz 的 `assets/mpl` 目录后，可从冻结数据重画：
+
+```bash
+python -m examples.mirroropd.research.studies.weighted_targets.plot_topd_e57_budget \
+  --data examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-budget-20261104 \
+  --out runs/topd-e57-budget-replot
+```
+
 ## 长程实验条件
 
 <a id="presets-e55e58base-与-moe-的长程目标对照"></a>
@@ -784,3 +820,5 @@ $$
 <a id="grid-参考文献"></a>
 
 #### 参考文献
+
+[^topd-trainer-budget]: xie-lab-ml. TOP-D `ray_trainer.py`, commit 9a2716cba22cab508825ad3be3f78327bb8139e5. [rollout 外层计数与日志](https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/verl/verl/trainer/ppo/ray_trainer.py#L1734)。
