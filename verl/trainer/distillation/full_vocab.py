@@ -237,69 +237,65 @@ def conditional_kl_rows(hs, ws, ht, wt, *, space, actions=None, fused=False):
     return value, dz, raw, masses
 
 
-class PrecomputedKL(torch.autograd.Function):
-    """Shared accumulation/VJP for ordinary and fused block reductions."""
+def precompute_rows(
+    hs, ws, ht, wt, token_chunk, row_kernel, hq=None, wq=None, spec=None, diagnostic_names=(), row_weights=None
+):
+    """Execute row formulas through the shared scalar VJP boundary."""
+    from functools import partial
 
-    @staticmethod
-    def forward(
-        ctx, hs, ws, ht, wt, token_chunk, row_kernel, hq=None, wq=None, spec=None, diagnostic_names=(), row_weights=None
-    ):
-        ctx.input_count = len(ctx.needs_input_grad)
-        dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
-        dh = torch.zeros(hs.shape, device=hs.device, dtype=dtype)
-        dw = torch.zeros(ws.shape, device=ws.device, dtype=dtype)
-        total = torch.zeros((), device=hs.device, dtype=dtype)
-        token_kl = torch.empty(len(hs), device=hs.device, dtype=dtype)
-        objective_rows = torch.empty_like(token_kl) if spec is None else None
-        diagnostics = torch.empty(
-            (len(hs), (4 if spec.diagnostics else 0) if spec is not None else len(diagnostic_names)),
-            device=hs.device,
-            dtype=dtype,
-        )
-        for start in range(0, len(hs), token_chunk):
-            stop = min(start + token_chunk, len(hs))
-            if spec is None:
-                output = row_kernel(hs[start:stop], ws, ht[start:stop], wt)
-                kl, dz = output[:2]
-                diagnostic_kl = output[2] if len(output) >= 3 else kl
-                if diagnostic_names:
-                    diagnostics[start:stop] = output[3]
-                del output
-            else:
-                kl, dz, info = row_kernel(hs[start:stop], ws, ht[start:stop], wt, hq[start:stop], wq, spec)
-                diagnostics[start:stop] = info
-                diagnostic_kl = kl
-            if row_weights is None:
-                total += kl.sum()
-            else:
-                weights = row_weights[start:stop]
-                total += (kl * weights).sum()
-                dz = (dz * weights[:, None]).to(dz.dtype)
-            token_kl[start:stop] = diagnostic_kl
-            if objective_rows is not None:
-                objective_rows[start:stop] = kl
-            with full_kl_range("grad_hidden"):
-                add_product(dh[start:stop], dz, ws)
-            with full_kl_range("grad_head"):
-                add_product(dw, dz.T, hs[start:stop])
-            del kl, dz
-        ctx.hdtype, ctx.wdtype = hs.dtype, ws.dtype
-        ctx.save_for_backward(
-            dh if hs.dtype == torch.float16 else dh.to(hs.dtype),
-            dw if ws.dtype == torch.float16 else dw.to(ws.dtype),
-        )
+    from verl.trainer.distillation.vjp import precompute
+
+    program = partial(
+        _row_program,
+        token_chunk=token_chunk,
+        row_kernel=row_kernel,
+        spec=spec,
+        diagnostic_names=diagnostic_names,
+        row_weights=row_weights,
+    )
+    return precompute(hs, ws, ht, wt, hq, wq, program=program)
+
+
+def _row_program(hs, ws, ht, wt, hq, wq, *, token_chunk, row_kernel, spec, diagnostic_names, row_weights):
+    dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
+    dh = torch.zeros(hs.shape, device=hs.device, dtype=dtype)
+    dw = torch.zeros(ws.shape, device=ws.device, dtype=dtype)
+    total = torch.zeros((), device=hs.device, dtype=dtype)
+    token_kl = torch.empty(len(hs), device=hs.device, dtype=dtype)
+    objective_rows = torch.empty_like(token_kl) if spec is None else None
+    diagnostics = torch.empty(
+        (len(hs), (4 if spec.diagnostics else 0) if spec is not None else len(diagnostic_names)),
+        device=hs.device,
+        dtype=dtype,
+    )
+    for start in range(0, len(hs), token_chunk):
+        stop = min(start + token_chunk, len(hs))
         if spec is None:
-            ctx.mark_non_differentiable(token_kl, objective_rows, diagnostics)
-            return total, token_kl, objective_rows, diagnostics
-        ctx.mark_non_differentiable(token_kl, diagnostics)
-        return total, token_kl, diagnostics
-
-    @staticmethod
-    @torch.autograd.function.once_differentiable
-    def backward(ctx, upstream, *unused):
-        dh, dw = ctx.saved_tensors
-        with full_kl_range("backward_apply"):
-            return ((dh * upstream).to(ctx.hdtype), (dw * upstream).to(ctx.wdtype)) + (None,) * (ctx.input_count - 2)
+            output = row_kernel(hs[start:stop], ws, ht[start:stop], wt)
+            kl, dz = output[:2]
+            diagnostic_kl = output[2] if len(output) >= 3 else kl
+            if diagnostic_names:
+                diagnostics[start:stop] = output[3]
+            del output
+        else:
+            kl, dz, info = row_kernel(hs[start:stop], ws, ht[start:stop], wt, hq[start:stop], wq, spec)
+            diagnostics[start:stop] = info
+            diagnostic_kl = kl
+        if row_weights is None:
+            total += kl.sum()
+        else:
+            weights = row_weights[start:stop]
+            total += (kl * weights).sum()
+            dz = (dz * weights[:, None]).to(dz.dtype)
+        token_kl[start:stop] = diagnostic_kl
+        if objective_rows is not None:
+            objective_rows[start:stop] = kl
+        with full_kl_range("grad_hidden"):
+            add_product(dh[start:stop], dz, ws)
+        with full_kl_range("grad_head"):
+            add_product(dw, dz.T, hs[start:stop])
+        del kl, dz
+    return (total, token_kl, objective_rows if objective_rows is not None else token_kl, diagnostics), dh, dw
 
 
 @torch.no_grad()
@@ -434,7 +430,7 @@ def full_reverse_kl_result(
             row_kernel = fused_kl_rows
         else:
             row_kernel = precompute_kl_rows
-        total, raw, objective_rows, _ = PrecomputedKL.apply(
+        total, raw, objective_rows, _ = precompute_rows(
             hs, ws, ht, wt, token_chunk, row_kernel, None, None, None, (), row_weights
         )
         return FullKLResult(total, raw, objective_rows)
@@ -608,7 +604,7 @@ def full_vocab_objective_result(
                 )
                 fused = backend == "precompute_fused"
                 kernel = partial(conditional_kl_rows, space=space, actions=actions, fused=fused)
-                total, raw, objective_rows, info = PrecomputedKL.apply(
+                total, raw, objective_rows, info = precompute_rows(
                     hs, ws, ht.detach(), wt.detach(), token_chunk, kernel, None, None, None, names, row_weights
                 )
                 return FullVocabObjectiveResult(
@@ -694,6 +690,6 @@ def full_vocab_objective_result(
             fused=backend == "precompute_fused",
             actions=actions,
         )
-        total, rows, diag = PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec, (), row_weights)
+        total, rows, _, diag = precompute_rows(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec, (), row_weights)
     info = {k: diag[:, i].detach() for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if spec.diagnostics else {}
     return FullVocabObjectiveResult(total, rows.detach(), info, rows.detach(), rows.detach().sum())

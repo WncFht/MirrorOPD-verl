@@ -28,7 +28,7 @@ E16/E17说明更多复用仍能降低同批KL；E18–E20说明深度复用与�
 
 E16/E17 的实际 `distill/` 字段都只有 `distill/full_kl`。完整字段清单已保存在[数据目录](../../../../../../wandb-logs/MirrorOPD-verl/analysis/position-convergence-20261024/README.md)。不能从总体均值和长度分位数反推出前 25%、中间区间或尾部的 KL。
 
-代码中原本计算过每 token 的 KL，但没有保留位置统计：[PrecomputedKL.forward](../../../../../verl/trainer/distillation/full_vocab.py) 的 `kl = (p * lp).sum(-1)` 随后直接累加为 `total`；[engine 输出](../../../../../verl/workers/engine/fsdp/transformer_impl.py) 只有 `full_kl_sum/full_kl_count`；[loss 分支](../../../../../verl/trainer/distillation/losses.py) 汇总成全局 token mean。该函数名中的 token chunk 是计算分块，不是每条回答的位置区间。
+代码中原本计算过每 token 的 KL，但没有保留位置统计：[precompute_rows](../../../../../verl/trainer/distillation/full_vocab.py) 的 `kl = (p * lp).sum(-1)` 随后直接累加为 `total`；[engine 输出](../../../../../verl/workers/engine/fsdp/transformer_impl.py) 只有 `full_kl_sum/full_kl_count`；[loss 分支](../../../../../verl/trainer/distillation/losses.py) 汇总成全局 token mean。该函数名中的 token chunk 是计算分块，不是每条回答的位置区间。
 
 <a id="within-batch-2-两个-run-的身份与可见边界"></a>
 
