@@ -44,7 +44,7 @@ def _requests():
 
 def test_staggered_batch_and_request_weighted_mean():
     metrics = pm.aggregate_pipeline_requests(["a_0_0", "a_1_0", "b_0_0"], _requests())
-    assert metrics == {
+    assert {key: value for key, value in metrics.items() if not key.startswith("rollout/finish_reason/")} == {
         "timing_s/rollout_batch": 6,
         "teacher/request_latency_s/mean": 4,
         "rollout/preemptions": 3,
@@ -52,6 +52,10 @@ def test_staggered_batch_and_request_weighted_mean():
         "perf/request_latency/generate_sequences/max_seconds": 2,
         "perf/request_latency/generate_sequences/mean_seconds": 2,
     }
+    assert metrics["rollout/finish_reason/response_count"] == 3
+    assert metrics["rollout/finish_reason/unknown_count"] == 3
+    assert metrics["rollout/finish_reason/unknown_fraction"] == 1
+    assert metrics["rollout/finish_reason/stop_fraction"] == 0
 
 
 def test_rollout_stop_causes_and_enabled_fraction_use_real_responses():
