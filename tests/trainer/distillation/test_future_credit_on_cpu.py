@@ -21,9 +21,9 @@ def test_suffix_definition_and_chunk_carry(mode, gamma, chunk):
     layout = PackedReduction((3, 0, 1, 1), times, torch.zeros_like(times), future=config)
     actual, expected = torch.zeros_like(cost), torch.zeros_like(cost)
     carry = None
-    for start, stop, reset in layout.blocks(chunk):
+    for start, stop in layout.blocks(chunk):
         actual[start:stop], carry = suffix_credit(
-            cost[start:stop], times[start:stop], config, carry=None if reset else carry
+            cost[start:stop], times[start:stop], layout.segments[start:stop], config, carry=carry
         )
     offset = 0
     for n in layout.counts:
@@ -69,3 +69,18 @@ def test_fixed_normalization_requires_explicit_positive_constant():
     for constant in (None, 0, -1, float("inf")):
         with pytest.raises(ValueError, match="explicit positive"):
             reduction_scale("seq-mean-token-sum-norm", num_sequences=3, fixed_scale=constant)
+
+
+@pytest.mark.parametrize("chunk", [1, 2, 3, 8])
+def test_segmented_suffix_preserves_small_future_and_resets_time(chunk):
+    config = FutureCreditConfig(mode="sum")
+    cost = torch.tensor([1e20, 1e-10, 7.0, 2.0, 3.0], dtype=torch.float64)
+    times = torch.tensor([9000, 9001, 0, 0, 2])
+    layout = PackedReduction((2, 0, 1, 2), times, torch.zeros_like(times), future=config)
+    actual = torch.empty_like(cost)
+    carry = None
+    for start, stop in layout.blocks(chunk):
+        actual[start:stop], carry = suffix_credit(
+            cost[start:stop], times[start:stop], layout.segments[start:stop], config, carry=carry
+        )
+    torch.testing.assert_close(actual, cost.new_tensor([1e-10, 0, 0, 3, 0]), atol=0, rtol=0)
