@@ -1,12 +1,11 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Plot measured failure reproduction, stage generalization and target KL.
+"""Plot weekly-report stage generalization and target KL.
 
-Semantic ledger: every failure-reproduction figure contains one student run;
-teacher references retain their own question sets and sample counts. E39 teacher
-subset results use matched questions and never serve as full-set horizontal
-references. KL endpoints are observed before updates 1 and 16. Qwen stage panels
-evaluate fixed banks. Target comparisons use each run's own rollout states and
+E39/E41/E43 figures are owned by their experiment generators. This script only
+produces the three RQ4.4/RQ5 figures still used by the weekly report.
+Semantic ledger: KL endpoints are observed before updates 1 and 16. Qwen stage
+panels evaluate fixed banks. Target comparisons use each run's own rollout states and
 frozen target, with no claim of a shared evaluation distribution.
 Geometric ledger: accuracy is percent, conditional KL is nats/token, and normalized
 KL is dimensionless. Different metrics/tasks have separately labelled scales.
@@ -37,7 +36,6 @@ def main():
     colors = [fv.HUES[k] for k in ("vteal", "vorange", "vviolet")]
     args.output.mkdir(parents=True, exist_ok=True)
     audits = {}
-    names = {"math500": "MATH-500", "amc23": "AMC23", "aime24": "AIME24", "aime25": "AIME25", "aime26": "AIME26"}
 
     def style(ax):
         fv.apply_frame(ax, "open")
@@ -55,90 +53,6 @@ def main():
         fig.savefig(args.output / f"{name}.png", dpi=220, bbox_inches="tight", metadata={"SourceSHA256": sha})
         fig.savefig(args.output / f"{name}.pdf", bbox_inches="tight", metadata={"Subject": sha})
         plt.close(fig)
-
-    for experiment, run in data["failure"].items():
-        tasks = ["math500", "amc23", "aime25"] if experiment != "E43" else list(names)
-        fig = plt.figure(figsize=(12 if experiment == "E43" else 10.5, 6.7))
-        grid = fig.add_gridspec(2, len(tasks), height_ratios=[1, 1.15])
-        fig.subplots_adjust(left=0.08, right=0.98, top=0.85, bottom=0.25, hspace=0.7, wspace=0.35)
-        fig.suptitle(f"{experiment}: {run['student']} student\nTeacher: {run['teacher']}", y=0.98)
-        teacher = {r["task"]: r["accuracy"] for r in run["teacher_full"]}
-        handles = []
-        for task_index, task in enumerate(tasks):
-            ax = fig.add_subplot(grid[0, task_index])
-            style(ax)
-            rows = [r for r in run["validation"] if r["task"] == task]
-            (line,) = ax.plot(
-                [r["outer"] for r in rows],
-                [100 * r["accuracy"] for r in rows],
-                marker="o",
-                markersize=3,
-                color=colors[0],
-                label="Student avg@16",
-            )
-            if task_index == 0:
-                handles.append(line)
-            if task in teacher:
-                line = ax.axhline(
-                    100 * teacher[task],
-                    color=colors[1],
-                    linestyle=":",
-                    linewidth=1.5,
-                    label="Teacher avg@4 (independent)",
-                )
-                if task_index == 0:
-                    handles.append(line)
-            values = [100 * r["accuracy"] for r in rows] + ([100 * teacher[task]] if task in teacher else [])
-            ax.set_ylim(max(0, min(values) - 7), min(100, max(values) + 7))
-            ax.set_title(names[task])
-            ax.set_xlabel("Outer")
-            ax.set_ylabel("Accuracy (%)")
-            ax.set_xticks([0, 50, 100] if experiment != "E39" else [0, 100, 200])
-        ax = fig.add_subplot(grid[1, :])
-        style(ax)
-        for key, label, color, dash in [
-            ("raw_first", "Raw KL: before update1", colors[0], "-"),
-            ("raw_last", "Raw KL: before update16", colors[0], "--"),
-            ("loss_first", "Aligned loss: before update1", colors[2], "-"),
-            ("loss_last", "Aligned loss: before update16", colors[2], "--"),
-        ]:
-            if experiment == "E43" and key.startswith("loss"):
-                continue
-            (line,) = ax.plot(
-                [r["outer"] for r in run["kl"]], [r[key] for r in run["kl"]], color=color, linestyle=dash, label=label
-            )
-            handles.append(line)
-        ax.set_xlabel("Generation batches (outer)")
-        ax.set_ylabel("KL / loss (nats/token)")
-        ax.set_title("Recorded loss on each fresh student rollout batch")
-        fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.53, 0.065), ncol=3)
-        caption = "Different batches visit different states; raw and EOS-aligned KL remain separate."
-        if experiment == "E43":
-            caption = (
-                "Raw KL equals training loss; teacher uses independent avg@4, student avg@16; "
-                "same sampling temperature/top-p/cap."
-            )
-        finish(fig, f"rq41-{experiment.lower()}", caption)
-
-    fig, axes = plt.subplots(1, 3, figsize=(9.5, 3.8))
-    fig.subplots_adjust(left=0.09, right=0.98, bottom=0.23, top=0.8, wspace=0.35)
-    fig.suptitle("E39: Qwen3-1.7B-Base student vs Qwen3-8B teacher", y=0.98)
-    for ax, row in zip(axes, data["failure"]["E39"]["teacher_subset"], strict=True):
-        style(ax)
-        ax.plot(0, 100 * row["student_acc"], "o", color=colors[0])
-        ax.plot(1, 100 * row["teacher_acc"], "s", color=colors[1])
-        ax.set_xticks([0, 1], ["Student n=16", "Teacher n=4"])
-        ax.set_xlim(-0.5, 1.5)
-        ax.set_ylim(0, 100)
-        ax.set_title(row["dataset"])
-        ax.set_xlabel("Model on matched subset")
-        ax.set_ylabel("Mean accuracy (%)")
-    finish(
-        fig,
-        "rq41-e39-teacher-subset",
-        "Exactly 8 matched questions per benchmark; student outer200; "
-        "historical teacher subset, not a full-set baseline.",
-    )
 
     fig, axes = plt.subplots(1, 2, figsize=(8.6, 3.9), sharey=True)
     fig.subplots_adjust(left=0.1, right=0.98, bottom=0.28, top=0.85, wspace=0.22)

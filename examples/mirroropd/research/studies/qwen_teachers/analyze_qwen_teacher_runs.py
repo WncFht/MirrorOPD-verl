@@ -13,6 +13,7 @@ Only actual observations are connected; missing values are not replaced with zer
 """
 
 import argparse
+import hashlib
 import json
 import statistics as st
 from datetime import datetime
@@ -22,6 +23,17 @@ import numpy as np
 
 from examples.mirroropd.research.core.io import dump, read_rows, write_csv
 from examples.mirroropd.research.core.plotting import load_style
+from examples.mirroropd.research.studies.qwen_teachers.figure_inputs import (
+    DEFAULT_MANIFEST,
+    check_decoded_inputs,
+    check_plot_inputs,
+    check_source,
+    decoding_label,
+    load_inputs,
+    metric_label,
+    percent_label,
+    setting_label,
+)
 
 RUNS = {"E41": "53dd553d", "E43": "eccc09a1"}
 BENCHES = ["math500", "amc23", "aime24", "aime25", "aime26"]
@@ -60,6 +72,8 @@ def interval_counter_delta(samples, start, end):
 
 def summarize_run(tag, decoded, data):
     meta = json.loads((decoded / "run.json").read_text())
+    if meta["run"]["run_id"] != RUNS[tag]:
+        raise ValueError(f"Decoded run identity mismatch for {tag}")
     if meta["status"] != "finished" or meta["exit_code"] != 0:
         raise ValueError(f"{tag} is not a completed successful run")
     rows = read_rows(decoded / "history.jsonl")
@@ -184,6 +198,7 @@ def attach_base_reference(runs, logs_root):
             values.append(value)
         if values[0] != values[1]:
             raise ValueError(f"Shared Base evaluation protocol mismatch: {field}")
+    check_source(source / "history.jsonl", runs["E41"]["figure_inputs"]["base_reference_history"])
     initial = [
         r for r in read_rows(source / "history.jsonl") if r.get("step/outer") == 0 and "eval/math500/score/mean" in r
     ]
@@ -204,36 +219,19 @@ def attach_base_reference(runs, logs_root):
     }
 
 
-def attach_teacher_references(runs, source):
-    """Use frozen full-set teacher readouts; never fill a missing pair by size."""
-    import hashlib
-
-    evidence = json.loads(source.read_text())["failure"]
+def attach_teacher_references(runs):
+    """Attach full-set teacher evidence validated against each frozen run config."""
+    provenance = {}
     for tag, run in runs.items():
-        record = evidence[tag]
-        expected = "Qwen3-4B" if tag == "E41" else "Qwen3-4B-Instruct-2507"
-        if record["teacher"] != expected:
-            raise ValueError(f"Teacher reference model mismatch for {tag}")
-        references = record["teacher_full"]
-        if references:
-            if {r["task"] for r in references} != set(BENCHES):
-                raise ValueError("Expected all five full teacher evaluation sets")
-            for row in references:
-                expected_count = 500 if row["task"] == "math500" else 40 if row["task"] == "amc23" else 30
-                if row["samples"] != 4 or row["question_count"] != expected_count:
-                    raise ValueError("Teacher reference sampling or question count mismatch")
-        run["teacher_reference"] = references
-    return {
-        "source": str(source),
-        "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
-        "metric": "mean correctness per question across 4 responses (avg@4)",
-        "temperature": 0.7,
-        "top_p": 0.9,
-        "response_cap": 31744,
-        "enable_thinking": False,
-        "E41": "No full same-protocol teacher reference in the frozen evidence",
-        "E43": evidence["E43"]["teacher_full"],
-    }
+        inputs = run["figure_inputs"]
+        reference = inputs["teacher_reference"]
+        run["teacher_reference"] = reference["rows"] if reference else []
+        provenance[tag] = {
+            "config": inputs["config"],
+            "manifest_sha256": inputs["manifest_sha256"],
+            "teacher_reference": reference,
+        }
+    return provenance
 
 
 def render(runs, out):
@@ -264,20 +262,24 @@ def render(runs, out):
         benches = ["math500", "amc23", "aime25"] if tag == "E41" else BENCHES
         valid = ([run["base_reference"]] if "base_reference" in run else []) + run["valid"]
         color = fv.HUES["vteal"]
-        student = "Qwen3-1.7B-Base" if tag == "E41" else "Qwen3-1.7B"
-        teacher = "Qwen3-4B" if tag == "E41" else "Qwen3-4B-Instruct-2507"
-        setting = (
-            f"{tag}: Student {student}  ←  Teacher {teacher}\n"
-            "Thinking OFF (enable_thinking=False); Full-RKL, reuse16, batch64, LR 1e-6"
-        )
+        inputs = run["figure_inputs"]
+        evaluation = inputs["evaluation"]
+        training = inputs["training"]
+        student, teacher = inputs["student"], inputs["teacher"]
+        setting = setting_label(inputs)
+        student_metric = metric_label(evaluation)
         plotted[tag] = {
             "run_id": RUNS[tag],
             "student": student,
             "teacher": teacher,
-            "enable_thinking": False,
-            "student_accuracy_metric": "avg@16: mean correctness over 16 responses per question",
-            "validation_response_cap": 31744,
-            "training_response_cap": 7168,
+            "enable_thinking": inputs["enable_thinking"],
+            "student_accuracy_metric": (
+                f"{student_metric}: mean correctness over {evaluation['samples']} responses per question"
+            ),
+            "protocol": inputs,
+            "generator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "validation_response_cap": evaluation["response_cap"],
+            "training_response_cap": training["response_cap"],
             "teacher_reference": run["teacher_reference"],
             "validation": [
                 {
@@ -344,7 +346,7 @@ def render(runs, out):
                 i = BENCHES.index(b)
                 points = [r for r in plotted[tag]["validation"] if r["benchmark"] == b]
                 x = [r["outer"] for r in points]
-                count = 8000 if b == "math500" else 640 if b == "amc23" else 480
+                count = (500 if b == "math500" else 40 if b == "amc23" else 30) * evaluation["samples"]
                 for ax, field, factor in zip(
                     axes[row_idx], ["accuracy", "mean_length", "cap_count"], [100, 0.001, 100 / count], strict=True
                 ):
@@ -373,7 +375,11 @@ def render(runs, out):
                         ax.plot([0], [points[0][field] * factor], marker="D", color=palette[i], markersize=4)
             for ax, label in zip(
                 axes[row_idx],
-                ["Accuracy: avg@16 (%)", "Mean length (k tokens)", "Length-capped (%)\ncap = 31,744 tokens"],
+                [
+                    f"Accuracy: {student_metric} (%)",
+                    "Mean length (k tokens)",
+                    f"Length-capped (%)\ncap = {evaluation['response_cap']:,} tokens",
+                ],
                 strict=True,
             ):
                 ax.set_ylabel(label)
@@ -381,17 +387,27 @@ def render(runs, out):
                 ax.set_ylim(bottom=-3 if label != "Mean length (k tokens)" else -0.8)
                 clean(ax)
             handles.extend(axes[row_idx, 0].get_legend_handles_labels()[0])
-        caption = "Student avg@16 = mean correctness of 16 responses/question; bands: 95% question-bootstrap CI."
+        caption = (
+            f"Student {student_metric} = mean correctness of {evaluation['samples']} responses/question; "
+            "bands: 95% question-bootstrap CI."
+        )
         if tag == "E41":
             caption += (
                 "\nTeacher full-set reference unavailable; step 0 diamonds: shared Base evaluation from E39."
-                "\nEvaluation: thinking OFF; T=0.7, top-p=0.9; response cap=31,744 tokens."
+                f"\nEvaluation: {decoding_label(evaluation)}"
             )
         else:
-            handles.append(Line2D([], [], color=neutral, linestyle="--", label="Teacher avg@4 reference"))
+            teacher_eval = inputs["teacher_reference"]["evaluation"]
+            teacher_metric = metric_label(teacher_eval)
+            handles.append(Line2D([], [], color=neutral, linestyle="--", label=f"Teacher {teacher_metric} reference"))
             caption += (
-                "\nTeacher avg@4: MATH 94.70%, AMC 95.63%; AIME24/25/26 63.33% / 41.67% / 48.33%."
-                "\nIndependent teacher: 4 responses/question; both T=0.7, top-p=0.9, cap=31,744; thinking OFF."
+                f"\nTeacher {teacher_metric}: "
+                + "; ".join(
+                    f"{TITLES[BENCHES.index(r['task'])]} {percent_label(r['accuracy'])}%"
+                    for r in run["teacher_reference"]
+                )
+                + f".\nIndependent teacher: {teacher_eval['samples']} responses/question; "
+                + decoding_label(teacher_eval)
             )
         finish(fig, "validation", caption, handles, ignore=("facet-ylim-mismatch",))
 
@@ -399,14 +415,18 @@ def render(runs, out):
         for ax, key, label, scale in zip(
             axes.flat,
             ["rollout/response_length/mean", "rollout/finish_reason/length_count"],
-            ["Train length (k tokens)", "Train length-capped (%)\ncap = 7,168 tokens"],
-            [0.001, 100 / 64],
+            ["Train length (k tokens)", f"Train length-capped (%)\ncap = {training['response_cap']:,} tokens"],
+            [0.001, 100 / (training["batch"] * training["samples"])],
             strict=True,
         ):
             ax.plot([r["step/outer"] for r in run["train"]], [r[key] * scale for r in run["train"]], color=color)
             ax.set(ylabel=label, ylim=(0, None))
             clean(ax)
-        finish(fig, "training-behavior", "Training cap 7,168; changing DAPO batches; cap rate is not repetition rate.")
+        finish(
+            fig,
+            "training-behavior",
+            f"Training cap {training['response_cap']:,}; changing DAPO batches; cap rate is not repetition rate.",
+        )
 
         styles = [
             Line2D([], [], color=color, linestyle=s, label=t)
@@ -550,10 +570,9 @@ def main():
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument(
-        "--teacher-reference",
+        "--figure-inputs",
         type=Path,
-        default=Path(__file__).resolve().parents[5]
-        / "examples/mirroropd/docs/progress/data/20261101-review/followup-data.json",
+        default=DEFAULT_MANIFEST,
     )
     args = parser.parse_args()
     runs = {}
@@ -561,14 +580,21 @@ def main():
         matches = list((args.logs_root / "derived/MirrorOPD-verl").glob(f"*-{rid}"))
         if len(matches) != 1:
             raise ValueError(f"Expected one decoded W&B directory for {rid}")
+        inputs = load_inputs(tag, matches[0] / "config.json", args.figure_inputs)
+        if inputs["run_id"] != rid:
+            raise ValueError(f"Run identity mismatch for {tag}")
+        check_decoded_inputs(inputs, matches[0])
+        check_plot_inputs(inputs, args.data)
         runs[tag] = summarize_run(tag, matches[0], args.data)
-    write_csv(args.data / "position-kl-detail.csv", [r for run in runs.values() for r in run["position"]])
-    write_csv(args.data / "validation-resources.csv", [r for run in runs.values() for r in run["phases"]])
-    dump(args.data / "wandb-diagnostics.json", {tag: run["summary"] for tag, run in runs.items()})
+        runs[tag]["figure_inputs"] = inputs
+    args.out.mkdir(parents=True, exist_ok=True)
+    write_csv(args.out / "position-kl-detail.csv", [r for run in runs.values() for r in run["position"]])
+    write_csv(args.out / "validation-resources.csv", [r for run in runs.values() for r in run["phases"]])
+    dump(args.out / "wandb-diagnostics.json", {tag: run["summary"] for tag, run in runs.items()})
     provenance = attach_base_reference(runs, args.logs_root)
     args.out.mkdir(parents=True, exist_ok=True)
     dump(args.out / "base-reference-provenance.json", provenance)
-    teacher_provenance = attach_teacher_references(runs, args.teacher_reference)
+    teacher_provenance = attach_teacher_references(runs)
     dump(args.out / "teacher-reference-provenance.json", teacher_provenance)
     audits = render(runs, args.out)
     print(json.dumps({tag: run["summary"] for tag, run in runs.items()}, indent=2))

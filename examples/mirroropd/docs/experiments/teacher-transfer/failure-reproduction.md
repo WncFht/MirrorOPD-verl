@@ -164,7 +164,7 @@ Qwen3-1.7B-Base 在本次 Full-r16、终止动作对齐设置下完成 200 个 o
 | ------------- | -----------------: | ----------------------: | ---------------: | ---------------: |
 | MATH-500      |             87.50% |                  70.31% |            1.51k |            2.98k |
 | AMC23         |             87.50% |                  53.91% |            1.19k |            3.26k |
-| AIME25        |             28.12% |                   6.25% |            5.22k |            8.58k |
+| AIME25        |             28.13% |                   6.25% |            5.22k |            8.58k |
 
 ![E39 匹配 8 题子集上的 teacher 与 student 准确率、长度](teacher-comparison/qwen-base-8b/figures/final/final-teacher-subset.png)
 
@@ -454,7 +454,9 @@ TIDE 强失配主结果属于 Base←8B 的[E39](#qwen8)，其九基准 Avg@8 �
 <a id="qwen4-6-冻结证据与结论边界"></a>
 <a id="qwen4-7-冻结证据与结论边界"></a>
 
-## E41/E43 的证据与复算
+<a id="qwen-figure-reproduction"></a>
+
+## E39/E41/E43 的绘图输入与复算
 
 分析使用本地完整 `.wandb` 解码记录，并与归档 file logger 逐字段核对。逐次 optimizer 更新编号均覆盖 1–1,600，无缺号；W&B 退出记录也为成功。原始文件和冻结 telemetry 归档在独立日志仓库，正文不依赖临时运行目录：
 
@@ -465,9 +467,30 @@ TIDE 强失配主结果属于 Base←8B 的[E39](#qwen8)，其九基准 Avg@8 �
 - [W&B 一致性与动力学汇总](../../../../../../wandb-logs/MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/wandb-diagnostics.json)、[逐位置 KL](../../../../../../wandb-logs/MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/position-kl-detail.csv)、[验证资源统计](../../../../../../wandb-logs/MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/validation-resources.csv)。
 - [分析与绘图源码](../../../research/studies/qwen_teachers/analyze_qwen_teacher_runs.py)、[图形审计](teacher-comparison/qwen-teachers/figures/separate-runs/figure-audit.json)、[逐点验证输入](teacher-comparison/qwen-teachers/figures/separate-runs/validation-inputs.json)、[共享 Base 参考的配置核对与来源哈希](teacher-comparison/qwen-teachers/figures/separate-runs/base-reference-provenance.json)、[teacher 参考值与来源哈希](teacher-comparison/qwen-teachers/figures/separate-runs/teacher-reference-provenance.json)。E41、E43 各有独立子目录；每张图提供同名 PNG/PDF/SVG。
 
-从源码仓库根目录复算；使用已有 plotting 环境，分析不占用 GPU、不上传 W&B：
+正式绘图使用专题维护的[冻结输入说明](data/qwen-training-figures/README.md)和[输入清单](data/qwen-training-figures/manifest.json)。模型、thinking、reuse、batch、LR、训练 cap 与验证解码设置从各 run 的冻结配置提取并核对 SHA-256。E43 teacher 指标从[原始指标](data/qwen-training-figures/e43-teacher-metrics.json)、[完成回执](data/qwen-training-figures/e43-teacher-complete.json)与[协议副本](data/qwen-training-figures/e43-teacher-protocol.json)重建，核对指纹、指标哈希、630 题 × 4 回答及双方可比的解码设置。采样数和 seed 分别保留，avg@16／avg@4 均为平均正确率。正式实验图不读取周报附件。
+
+| 实验 | 当前生成器                                                                                           | 当前输出                                                                                                | 参考边界                                                |
+| ---- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| E39  | [plot_final.py](../../../research/studies/qwen_base/plot_final.py)                                   | [final/](teacher-comparison/qwen-base-8b/figures/final/)：7 图，各 PNG/PDF/SVG                          | 原始 Base 初始实测；teacher 只有匹配 8 题子集，独立展示 |
+| E41  | [analyze_qwen_teacher_runs.py](../../../research/studies/qwen_teachers/analyze_qwen_teacher_runs.py) | [separate-runs/e41/](teacher-comparison/qwen-teachers/figures/separate-runs/e41/)：8 图，各 PNG/PDF/SVG | 初始点来自 E39，共享初始化；teacher 全集缺测            |
+| E43  | 同上                                                                                                 | [separate-runs/e43/](teacher-comparison/qwen-teachers/figures/separate-runs/e43/)：8 图，各 PNG/PDF/SVG | 本 run 初始验证；独立 teacher 全集 avg@4                |
+
+下列命令从源码仓库根目录执行，依赖既有 `wandb-logs` 和 plotting 环境，只进行本地 CPU 分析与绘图。`--figure-inputs` 默认读取专题清单，也可显式指定同结构清单。输出记录配置、输入清单、读取器与生成器哈希；冻结输入改变时失败。E39 额外核对七份绘图输入；E41/E43 核对 decoded history、解压后的系统采样以及 file logger、vLLM 采样和退出记录的哈希。E39/E41 的停止动作合并 IDs 和 E43 原生目标分别保留在协议输出中。
+
+E39 重画：
 
 ```bash
+FIGURE_VIZ_MPL=../dotfiles/.agents/skills/figure-viz/assets/mpl \
+  /root/.local/share/mirroropd/venvs/plotting/bin/python \
+  -m examples.mirroropd.research.studies.qwen_base.plot_final \
+  --data ../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027 \
+  --out examples/mirroropd/docs/experiments/teacher-transfer/teacher-comparison/qwen-base-8b/figures/final
+```
+
+E41/E43 重画；首次使用先解码三个既有 run，已有完整解码记录时直接执行绘图命令：
+
+```bash
+../wandb-logs/.venv/bin/python ../wandb-logs/tools/wandb_local.py decode --run f0e44ec7
 ../wandb-logs/.venv/bin/python ../wandb-logs/tools/wandb_local.py decode --run 53dd553d
 ../wandb-logs/.venv/bin/python ../wandb-logs/tools/wandb_local.py decode --run eccc09a1
 FIGURE_VIZ_MPL=../dotfiles/.agents/skills/figure-viz/assets/mpl \
@@ -477,6 +500,10 @@ FIGURE_VIZ_MPL=../dotfiles/.agents/skills/figure-viz/assets/mpl \
   --data ../wandb-logs/MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028 \
   --out examples/mirroropd/docs/experiments/teacher-transfer/teacher-comparison/qwen-teachers/figures/separate-runs
 ```
+
+新生成的[动力学诊断](teacher-comparison/qwen-teachers/figures/separate-runs/wandb-diagnostics.json)、[逐位置 KL](teacher-comparison/qwen-teachers/figures/separate-runs/position-kl-detail.csv)与[验证资源统计](teacher-comparison/qwen-teachers/figures/separate-runs/validation-resources.csv)写入输出目录；日志仓库中的既有同名表保持冻结。
+
+旧 E41/E43 合并图 `completed-20261028/` 与周报 `rq41-e39`、`rq41-e41`、`rq41-e43`、`rq41-e39-teacher-subset` 已由本节登记的图替代。旧附件保持原位，当前周报生成器只生成 RQ4.4/RQ5 的三张补充图。准确率展示统一保留两位小数、按四舍五入处理边界；输入保留原始浮点值。
 
 E41/E43 的单 seed 完整结果已经确认；E43 已有独立的同协议 teacher 全集参考，E41 仍缺该参考。原计划中的 250-step 配对、重复率完整重算与多 seed 统计仍未完成。E54 的人工停止状态与独立探针统一见长度诊断，避免在本报告重复维护阶段结论。
 

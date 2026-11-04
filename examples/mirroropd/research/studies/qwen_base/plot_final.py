@@ -25,7 +25,22 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    from examples.mirroropd.research.studies.qwen_teachers.figure_inputs import (
+        DEFAULT_MANIFEST,
+        check_plot_inputs,
+        decoding_label,
+        load_inputs,
+        metric_label,
+        percent_label,
+        setting_label,
+    )
+
+    parser.add_argument("--figure-inputs", type=Path, default=DEFAULT_MANIFEST)
     args = parser.parse_args()
+    inputs = load_inputs("E39", args.data / "config.json", args.figure_inputs)
+    check_plot_inputs(inputs, args.data)
+    evaluation, training = inputs["evaluation"], inputs["training"]
+    student_metric = metric_label(evaluation)
 
     from examples.mirroropd.research.core.plotting import load_style
 
@@ -62,8 +77,7 @@ def main():
         fig.text(
             0.5,
             0.98,
-            "E39: Student Qwen3-1.7B-Base  ←  Teacher Qwen3-8B\n"
-            "Thinking OFF (enable_thinking=False); Full-RKL, reuse16, batch64, LR 1e-6",
+            setting_label(inputs),
             ha="center",
             va="top",
         )
@@ -106,7 +120,11 @@ def main():
         )
     for ax, label, ylim in zip(
         axes,
-        ["Accuracy: avg@16 (%)", "Mean length (k tokens)", "Length-capped (%)\ncap = 31,744 tokens"],
+        [
+            f"Accuracy: {student_metric} (%)",
+            "Mean length (k tokens)",
+            f"Length-capped (%)\ncap = {evaluation['response_cap']:,} tokens",
+        ],
         [(-4, 100), (-0.5, 16), (-1, 50)],
         strict=False,
     ):
@@ -115,9 +133,10 @@ def main():
         fig,
         axes,
         "final-validation",
-        "Student avg@16 = mean correctness of 16 responses/question; bands: 95% question-bootstrap CI.\n"
+        f"Student {student_metric} = mean correctness of {evaluation['samples']} responses/question; "
+        "bands: 95% question-bootstrap CI.\n"
         "Teacher full-set reference unavailable; matched 8-question subset shown separately.\n"
-        "Evaluation: thinking OFF; T=0.7, top-p=0.9; response cap=31,744 tokens.",
+        f"Evaluation: {decoding_label(evaluation)}",
     )
 
     train = csvrows("training.csv")
@@ -137,7 +156,11 @@ def main():
     for ax, key, label, scale in zip(
         axes,
         ["mean_length", "cap_fraction", "train_score"],
-        ["Train length (k tokens)", "Train length-capped (%)\ncap = 7,168 tokens", "Training accuracy: avg@1 (%)"],
+        [
+            "Train length (k tokens)",
+            f"Train length-capped (%)\ncap = {training['response_cap']:,} tokens",
+            f"Training accuracy: avg@{training['samples']} (%)",
+        ],
         [0.001, 100, 100],
         strict=False,
     ):
@@ -148,7 +171,8 @@ def main():
         fig,
         axes,
         "final-training-behavior",
-        "Training cap=7,168 tokens; one response/question (avg@1).\n"
+        f"Training cap={training['response_cap']:,} tokens; "
+        f"{training['samples']} response/question (avg@{training['samples']}).\n"
         "DAPO batches change each step; correctness is diagnostic, outside the loss.",
         legend=False,
     )
@@ -226,17 +250,24 @@ def main():
     reference = json.loads((args.data / "teacher-subset-reference.json").read_text())
     rows = reference["rows"]
     assert [r["dataset"] for r in rows] == ["MATH-500", "AMC23", "AIME25"]
-    assert all(r["questions"] == 8 and r["teacher_n"] == 4 and r["student_n"] == 16 for r in rows)
+    assert all(r["questions"] == 8 and r["teacher_n"] == 4 and r["student_n"] == evaluation["samples"] for r in rows)
+    subset = rows[0]
     fig, axes = figure(2)
     x = np.arange(len(rows))
     for field, color, label, shift in [
-        ("student", colors[0], "Student outer200 avg@16", -0.18),
-        ("teacher", colors[1], "Teacher avg@4 (8 questions/set)", 0.18),
+        ("student", colors[0], f"Student outer200 {student_metric}", -0.18),
+        ("teacher", colors[1], f"Teacher avg@{subset['teacher_n']} ({subset['questions']} questions/set)", 0.18),
     ]:
         for ax, suffix, scale in zip(axes, ["acc", "length"], [100, 0.001], strict=True):
             values = [r[f"{field}_{suffix}"] * scale for r in rows]
             bars = ax.bar(x + shift, values, width=0.34, color=color, label=label)
-            ax.bar_label(bars, labels=[f"{v:.2f}" for v in values], padding=3)
+            ax.bar_label(
+                bars,
+                labels=[percent_label(r[f"{field}_acc"]) for r in rows]
+                if suffix == "acc"
+                else [f"{v:.2f}" for v in values],
+                padding=3,
+            )
     for ax, ylabel, limit in zip(
         axes, ["Accuracy: mean correctness (%)", "Mean length (k tokens)"], [105, 11], strict=True
     ):
@@ -253,8 +284,9 @@ def main():
         fig,
         axes,
         "final-teacher-subset",
-        "Matched 8 questions/set; independent teacher avg@4 vs final student avg@16.\n"
-        "Both thinking OFF; T=0.7, top-p=0.9; response cap=31,744 tokens; not a full-set baseline.",
+        f"Matched {subset['questions']} questions/set; independent teacher "
+        f"avg@{subset['teacher_n']} vs final student {student_metric}.\n"
+        f"Historical subset; {decoding_label(evaluation)} Not a full-set baseline.",
     )
     sources = [
         "validation.csv",
@@ -270,15 +302,19 @@ def main():
         json.dumps(
             {
                 "experiment": "E39",
+                "protocol": inputs,
+                "generator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                 "run_id": "f0e44ec7",
-                "student": "Qwen3-1.7B-Base",
-                "teacher": "Qwen3-8B",
-                "enable_thinking": False,
-                "student_metric": "avg@16: mean correctness per question over 16 responses",
+                "student": inputs["student"],
+                "teacher": inputs["teacher"],
+                "enable_thinking": inputs["enable_thinking"],
+                "student_metric": (
+                    f"{student_metric}: mean correctness per question over {evaluation['samples']} responses"
+                ),
                 "teacher_full_set": None,
                 "teacher_subset": reference,
-                "validation_response_cap": 31744,
-                "training_response_cap": 7168,
+                "validation_response_cap": evaluation["response_cap"],
+                "training_response_cap": training["response_cap"],
                 "sources": {
                     name: {
                         "path": str(args.data / name),
