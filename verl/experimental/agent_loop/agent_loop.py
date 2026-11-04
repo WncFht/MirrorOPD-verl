@@ -1026,7 +1026,11 @@ class AgentLoopWorker:
 
     async def _compute_score(self, outputs: list[AgentLoopOutput], kwargs: dict, *, validate=False) -> None:
         """Compute reward score for all outputs in a trajectory; assigns result to outputs[-1]."""
-        if self.config.get("trainer", {}).get("evaluation") and not validate:
+        rkl_only = kwargs.get("__rkl_only__", False)
+        evaluation = self.config.get("trainer", {}).get("evaluation")
+        if rkl_only and not evaluation:
+            raise ValueError("RKL-only generation requires an evaluation owner")
+        if (evaluation and not validate) or rkl_only:
             if OmegaConf.select(self.config, "distillation.distillation_loss.use_task_rewards", default=True):
                 raise ValueError("RKL-only evaluation recipe cannot skip enabled task rewards")
             # Structural zero for the native PPO schema, never an accuracy label.

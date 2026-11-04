@@ -144,3 +144,28 @@ async def test_agent_loop_tq_postprocess_skips_rollout_topk_on_validate(monkeypa
 
     assert "rollout_topk_ids" not in fields.keys()
     assert "rollout_topk_log_probs" not in fields.keys()
+
+
+@pytest.mark.asyncio
+async def test_rkl_bank_generation_skips_task_rewards():
+    worker = _DummyWorker(topk_log_probs=0)
+    worker.config = OmegaConf.create(
+        {
+            "trainer": {"evaluation": {"_target_": "SourceHistoryReadout"}},
+            "distillation": {"distillation_loss": {"use_task_rewards": False}},
+        }
+    )
+    worker.reward_loop_worker_handles = [object()]
+    output = _output({})
+    await worker._compute_score([output], {"__rkl_only__": True}, validate=True)
+    assert output.reward_score == 0.0
+    assert output.extra_fields["task_reward_available"] is False
+    worker.config.distillation.distillation_loss.use_task_rewards = True
+    with pytest.raises(ValueError, match="enabled task rewards"):
+        await worker._compute_score([_output({})], {"__rkl_only__": True}, validate=True)
+
+
+@pytest.mark.asyncio
+async def test_rkl_reward_skip_requires_evaluation_owner():
+    with pytest.raises(ValueError, match="evaluation owner"):
+        await _DummyWorker(0)._compute_score([_output({})], {"__rkl_only__": True}, validate=True)
