@@ -1,0 +1,2537 @@
+{
+  "scope": "Long actor cross-version ABBA recheck; same frozen sources/inputs as first actor batch; internal none/mean ABBA; 1 warmup,2 samples per block; own CPU tests and commit hooks paused, other host workloads continue",
+  "commands": [
+    {
+      "index": 0,
+      "version": "baseline",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,2",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "--run-path",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/run_baseline_actor.py",
+        "--student",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "--cache",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-0-baseline.json",
+        "--repeat-input",
+        "1",
+        "--reuse",
+        "1",
+        "--samples",
+        "2",
+        "--warmups",
+        "1",
+        "--budget",
+        "1536",
+        "--chunk",
+        "256",
+        "--paired-cases",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-cases.json"
+      ],
+      "returncode": 0,
+      "seconds": 133.8384838104248
+    },
+    {
+      "index": 1,
+      "version": "new",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,2",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "--run-path",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/run_new_actor.py",
+        "--student",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "--cache",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-1-new.json",
+        "--repeat-input",
+        "1",
+        "--reuse",
+        "1",
+        "--samples",
+        "2",
+        "--warmups",
+        "1",
+        "--budget",
+        "1536",
+        "--chunk",
+        "256",
+        "--paired-cases",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-cases.json"
+      ],
+      "returncode": 0,
+      "seconds": 142.34991693496704
+    },
+    {
+      "index": 2,
+      "version": "new",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,2",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "--run-path",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/run_new_actor.py",
+        "--student",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "--cache",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-2-new.json",
+        "--repeat-input",
+        "1",
+        "--reuse",
+        "1",
+        "--samples",
+        "2",
+        "--warmups",
+        "1",
+        "--budget",
+        "1536",
+        "--chunk",
+        "256",
+        "--paired-cases",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-cases.json"
+      ],
+      "returncode": 0,
+      "seconds": 140.37365579605103
+    },
+    {
+      "index": 3,
+      "version": "baseline",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,2",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "--run-path",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/run_baseline_actor.py",
+        "--student",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "--cache",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-3-baseline.json",
+        "--repeat-input",
+        "1",
+        "--reuse",
+        "1",
+        "--samples",
+        "2",
+        "--warmups",
+        "1",
+        "--budget",
+        "1536",
+        "--chunk",
+        "256",
+        "--paired-cases",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-cases.json"
+      ],
+      "returncode": 0,
+      "seconds": 138.28126192092896
+    }
+  ],
+  "records": [
+    {
+      "scope": "Fixed-token actor settings probe; excludes teacher preparation, Ray/TQ and rollout.\n\nUse original cached teacher states and actual production objective/optimizer paths.\nRepeated inputs scale per-rank work only; they are not fresh scientific samples.\nLR is zero, but AdamW, clipping, backward and model/optimizer transfers execute.\n",
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-0-baseline.json",
+        "repeat_input": 1,
+        "reuse": 1,
+        "samples": 2,
+        "budget": 1536,
+        "chunk": 256,
+        "backend": "precompute_fused",
+        "loss_agg_mode": "token-mean",
+        "future_mode": "none",
+        "gamma": 1.0,
+        "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-cases.json",
+        "warmups": 1,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "world_size": 2,
+      "gpu": "NVIDIA H800",
+      "torch": "2.11.0+cu129",
+      "unique_cached_rows": 8,
+      "effective_rows": 8,
+      "input_tokens": 9148,
+      "loss_tokens": 8192,
+      "per_rank_input_tokens": [
+        4598,
+        4550
+      ],
+      "cache_sha256": "fbf5f80bbf7fa3026f097e816f6622150c1b0b1e64e5d5ef5070952b8f44c9db",
+      "paired_cases": [
+        {
+          "name": "baseline"
+        },
+        {
+          "name": "future-mean",
+          "future_mode": "mean"
+        }
+      ],
+      "parameters_unchanged_on_all_ranks": true,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "execution": {
+        "lr": 0,
+        "precision": "bf16",
+        "kappa": 1,
+        "eta": 0.1,
+        "backend": "precompute_fused",
+        "param_optimizer_offload": true
+      },
+      "records": [
+        {
+          "index": 0,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 14.749943489,
+          "allocated_peak_gib": 17.249268531799316,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410566806793213
+          ],
+          "interval_monotonic_ns": [
+            40377910188367487,
+            40377924938310976
+          ]
+        },
+        {
+          "index": 1,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 7.27572706,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.41014289855957
+          ],
+          "interval_monotonic_ns": [
+            40377924984105760,
+            40377932259832820
+          ]
+        },
+        {
+          "index": 2,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.148720015,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410068988800049
+          ],
+          "interval_monotonic_ns": [
+            40377932303336220,
+            40377937452032422
+          ]
+        },
+        {
+          "index": 0,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 7.374185109,
+          "allocated_peak_gib": 17.249270915985107,
+          "reserved_peak_gib": 18.91015625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6333072185516357
+          ],
+          "interval_monotonic_ns": [
+            40377937529465099,
+            40377944903431496
+          ]
+        },
+        {
+          "index": 1,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.664016329,
+          "allocated_peak_gib": 17.574249744415283,
+          "reserved_peak_gib": 21.064453125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.632575035095215
+          ],
+          "interval_monotonic_ns": [
+            40377944938153894,
+            40377950602170223
+          ]
+        },
+        {
+          "index": 2,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.822207533,
+          "allocated_peak_gib": 17.574249744415283,
+          "reserved_peak_gib": 21.064453125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.631462574005127
+          ],
+          "interval_monotonic_ns": [
+            40377950638875583,
+            40377956461083116
+          ]
+        },
+        {
+          "index": 0,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.684183116,
+          "allocated_peak_gib": 17.249270915985107,
+          "reserved_peak_gib": 18.91015625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.632676839828491
+          ],
+          "interval_monotonic_ns": [
+            40377956534715081,
+            40377962218849199
+          ]
+        },
+        {
+          "index": 1,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.254992924,
+          "allocated_peak_gib": 17.574249744415283,
+          "reserved_peak_gib": 21.064453125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.63431978225708
+          ],
+          "interval_monotonic_ns": [
+            40377962252346270,
+            40377967507281375
+          ]
+        },
+        {
+          "index": 2,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.397476877,
+          "allocated_peak_gib": 17.574249744415283,
+          "reserved_peak_gib": 21.064453125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.632673740386963
+          ],
+          "interval_monotonic_ns": [
+            40377967544700180,
+            40377972942177057
+          ]
+        },
+        {
+          "index": 0,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.232535179,
+          "allocated_peak_gib": 17.249268531799316,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410588264465332
+          ],
+          "interval_monotonic_ns": [
+            40377973018019720,
+            40377978250529560
+          ]
+        },
+        {
+          "index": 1,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.908551528,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411242485046387
+          ],
+          "interval_monotonic_ns": [
+            40377978283887143,
+            40377984192438671
+          ]
+        },
+        {
+          "index": 2,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.439087324,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410578727722168
+          ],
+          "interval_monotonic_ns": [
+            40377984233492412,
+            40377989672579736
+          ]
+        }
+      ],
+      "raw_sha256": "f407e1b09feab0160e8f472b42a805a02b32ff75b20dbb3862ea9620a2ede698",
+      "version": "baseline"
+    },
+    {
+      "scope": "Fixed-token actor settings probe; excludes teacher preparation, Ray/TQ and rollout.\n\nUse original cached teacher states and actual production objective/optimizer paths.\nRepeated inputs scale per-rank work only; they are not fresh scientific samples.\nLR is zero, but AdamW, clipping, backward and model/optimizer transfers execute.\n",
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-1-new.json",
+        "repeat_input": 1,
+        "reuse": 1,
+        "samples": 2,
+        "budget": 1536,
+        "chunk": 256,
+        "backend": "precompute_fused",
+        "loss_agg_mode": "token-mean",
+        "future_mode": "none",
+        "gamma": 1.0,
+        "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-cases.json",
+        "warmups": 1,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "world_size": 2,
+      "gpu": "NVIDIA H800",
+      "torch": "2.11.0+cu129",
+      "unique_cached_rows": 8,
+      "effective_rows": 8,
+      "input_tokens": 9148,
+      "loss_tokens": 8192,
+      "per_rank_input_tokens": [
+        4598,
+        4550
+      ],
+      "cache_sha256": "fbf5f80bbf7fa3026f097e816f6622150c1b0b1e64e5d5ef5070952b8f44c9db",
+      "paired_cases": [
+        {
+          "name": "baseline"
+        },
+        {
+          "name": "future-mean",
+          "future_mode": "mean"
+        }
+      ],
+      "parameters_unchanged_on_all_ranks": true,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "execution": {
+        "lr": 0,
+        "precision": "bf16",
+        "kappa": 1,
+        "eta": 0.1,
+        "backend": "precompute_fused",
+        "param_optimizer_offload": true
+      },
+      "records": [
+        {
+          "index": 0,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 16.271197043,
+          "allocated_peak_gib": 17.249268531799316,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410223484039307
+          ],
+          "interval_monotonic_ns": [
+            40378048119005872,
+            40378064390202915
+          ]
+        },
+        {
+          "index": 1,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 6.722012568,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411943435668945
+          ],
+          "interval_monotonic_ns": [
+            40378064437956033,
+            40378071159710077
+          ]
+        },
+        {
+          "index": 2,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.39215905,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.409873008728027
+          ],
+          "interval_monotonic_ns": [
+            40378071209906090,
+            40378076602065140
+          ]
+        },
+        {
+          "index": 0,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 6.814379257,
+          "allocated_peak_gib": 17.249270915985107,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6315441131591797
+          ],
+          "interval_monotonic_ns": [
+            40378076672594661,
+            40378083486937509
+          ]
+        },
+        {
+          "index": 1,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.650224546,
+          "allocated_peak_gib": 17.24941873550415,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6335408687591553
+          ],
+          "interval_monotonic_ns": [
+            40378083530295750,
+            40378089180520296
+          ]
+        },
+        {
+          "index": 2,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.126670622,
+          "allocated_peak_gib": 17.24941873550415,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.632819652557373
+          ],
+          "interval_monotonic_ns": [
+            40378089223428516,
+            40378094350082883
+          ]
+        },
+        {
+          "index": 0,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 4.910433091,
+          "allocated_peak_gib": 17.249270915985107,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6319334506988525
+          ],
+          "interval_monotonic_ns": [
+            40378094423671172,
+            40378099334104263
+          ]
+        },
+        {
+          "index": 1,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.221210059,
+          "allocated_peak_gib": 17.24941873550415,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6331162452697754
+          ],
+          "interval_monotonic_ns": [
+            40378099370267536,
+            40378104591477595
+          ]
+        },
+        {
+          "index": 2,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.807528874,
+          "allocated_peak_gib": 17.24941873550415,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6333765983581543
+          ],
+          "interval_monotonic_ns": [
+            40378104634568394,
+            40378110442063749
+          ]
+        },
+        {
+          "index": 0,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.506954603,
+          "allocated_peak_gib": 17.249268531799316,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411404609680176
+          ],
+          "interval_monotonic_ns": [
+            40378110523695428,
+            40378116030650031
+          ]
+        },
+        {
+          "index": 1,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 13.131799677,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411446571350098
+          ],
+          "interval_monotonic_ns": [
+            40378116067169993,
+            40378129198858735
+          ]
+        },
+        {
+          "index": 2,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.631952332,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.409492492675781
+          ],
+          "interval_monotonic_ns": [
+            40378129233835583,
+            40378134865787915
+          ]
+        }
+      ],
+      "raw_sha256": "48c332e81777b07d4f88dbc51433671cd12002312cb782d249712fc322054f92",
+      "version": "new"
+    },
+    {
+      "scope": "Fixed-token actor settings probe; excludes teacher preparation, Ray/TQ and rollout.\n\nUse original cached teacher states and actual production objective/optimizer paths.\nRepeated inputs scale per-rank work only; they are not fresh scientific samples.\nLR is zero, but AdamW, clipping, backward and model/optimizer transfers execute.\n",
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-2-new.json",
+        "repeat_input": 1,
+        "reuse": 1,
+        "samples": 2,
+        "budget": 1536,
+        "chunk": 256,
+        "backend": "precompute_fused",
+        "loss_agg_mode": "token-mean",
+        "future_mode": "none",
+        "gamma": 1.0,
+        "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-cases.json",
+        "warmups": 1,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "world_size": 2,
+      "gpu": "NVIDIA H800",
+      "torch": "2.11.0+cu129",
+      "unique_cached_rows": 8,
+      "effective_rows": 8,
+      "input_tokens": 9148,
+      "loss_tokens": 8192,
+      "per_rank_input_tokens": [
+        4598,
+        4550
+      ],
+      "cache_sha256": "fbf5f80bbf7fa3026f097e816f6622150c1b0b1e64e5d5ef5070952b8f44c9db",
+      "paired_cases": [
+        {
+          "name": "baseline"
+        },
+        {
+          "name": "future-mean",
+          "future_mode": "mean"
+        }
+      ],
+      "parameters_unchanged_on_all_ranks": true,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "execution": {
+        "lr": 0,
+        "precision": "bf16",
+        "kappa": 1,
+        "eta": 0.1,
+        "backend": "precompute_fused",
+        "param_optimizer_offload": true
+      },
+      "records": [
+        {
+          "index": 0,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 15.156401451,
+          "allocated_peak_gib": 17.249268531799316,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411157131195068
+          ],
+          "interval_monotonic_ns": [
+            40378189598029205,
+            40378204754430656
+          ]
+        },
+        {
+          "index": 1,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 7.902291138,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410473346710205
+          ],
+          "interval_monotonic_ns": [
+            40378204814245379,
+            40378212716536517
+          ]
+        },
+        {
+          "index": 2,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.437485409,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411125659942627
+          ],
+          "interval_monotonic_ns": [
+            40378212761827280,
+            40378218199312689
+          ]
+        },
+        {
+          "index": 0,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 6.924768713,
+          "allocated_peak_gib": 17.249270915985107,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.632624626159668
+          ],
+          "interval_monotonic_ns": [
+            40378218274515415,
+            40378225199123099
+          ]
+        },
+        {
+          "index": 1,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.863291517,
+          "allocated_peak_gib": 17.24941873550415,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.632061243057251
+          ],
+          "interval_monotonic_ns": [
+            40378225236677201,
+            40378231099952162
+          ]
+        },
+        {
+          "index": 2,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 6.025165783,
+          "allocated_peak_gib": 17.24941873550415,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6328039169311523
+          ],
+          "interval_monotonic_ns": [
+            40378231134423454,
+            40378237159589237
+          ]
+        },
+        {
+          "index": 0,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 10.008028161,
+          "allocated_peak_gib": 17.249270915985107,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.632166862487793
+          ],
+          "interval_monotonic_ns": [
+            40378237237407094,
+            40378247245335348
+          ]
+        },
+        {
+          "index": 1,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.855194663,
+          "allocated_peak_gib": 17.24941873550415,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.631455183029175
+          ],
+          "interval_monotonic_ns": [
+            40378247286173917,
+            40378253141359056
+          ]
+        },
+        {
+          "index": 2,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.510611645,
+          "allocated_peak_gib": 17.24941873550415,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.632411241531372
+          ],
+          "interval_monotonic_ns": [
+            40378253187024724,
+            40378258697636369
+          ]
+        },
+        {
+          "index": 0,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.281691174,
+          "allocated_peak_gib": 17.249268531799316,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410423278808594
+          ],
+          "interval_monotonic_ns": [
+            40378258765637194,
+            40378264047328368
+          ]
+        },
+        {
+          "index": 1,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.801891606,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411421298980713
+          ],
+          "interval_monotonic_ns": [
+            40378264087470701,
+            40378269889362307
+          ]
+        },
+        {
+          "index": 2,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.125710018,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411936283111572
+          ],
+          "interval_monotonic_ns": [
+            40378269927722503,
+            40378275053405247
+          ]
+        }
+      ],
+      "raw_sha256": "be06a63d335548f9c99f94fa393348a7cf6a892eefab5b1e0e51a0a28e409250",
+      "version": "new"
+    },
+    {
+      "scope": "Fixed-token actor settings probe; excludes teacher preparation, Ray/TQ and rollout.\n\nUse original cached teacher states and actual production objective/optimizer paths.\nRepeated inputs scale per-rank work only; they are not fresh scientific samples.\nLR is zero, but AdamW, clipping, backward and model/optimizer transfers execute.\n",
+      "arguments": {
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-3-baseline.json",
+        "repeat_input": 1,
+        "reuse": 1,
+        "samples": 2,
+        "budget": 1536,
+        "chunk": 256,
+        "backend": "precompute_fused",
+        "loss_agg_mode": "token-mean",
+        "future_mode": "none",
+        "gamma": 1.0,
+        "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/long-recheck-cases.json",
+        "warmups": 1,
+        "checkpoint": true,
+        "diagnostics": true,
+        "no_sync": false,
+        "trace": false
+      },
+      "world_size": 2,
+      "gpu": "NVIDIA H800",
+      "torch": "2.11.0+cu129",
+      "unique_cached_rows": 8,
+      "effective_rows": 8,
+      "input_tokens": 9148,
+      "loss_tokens": 8192,
+      "per_rank_input_tokens": [
+        4598,
+        4550
+      ],
+      "cache_sha256": "fbf5f80bbf7fa3026f097e816f6622150c1b0b1e64e5d5ef5070952b8f44c9db",
+      "paired_cases": [
+        {
+          "name": "baseline"
+        },
+        {
+          "name": "future-mean",
+          "future_mode": "mean"
+        }
+      ],
+      "parameters_unchanged_on_all_ranks": true,
+      "parameter_hashes": [
+        {
+          "rank": 0,
+          "before": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f",
+          "after": "34df552e2479940ecd00b800e001db8e62a73c9d2683bed529ee3b1e9ec3e14f"
+        },
+        {
+          "rank": 1,
+          "before": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0",
+          "after": "7318febd7a0f2b88e58705e52449fa4a6165f903fe08d339b176a47cd9640ce0"
+        }
+      ],
+      "execution": {
+        "lr": 0,
+        "precision": "bf16",
+        "kappa": 1,
+        "eta": 0.1,
+        "backend": "precompute_fused",
+        "param_optimizer_offload": true
+      },
+      "records": [
+        {
+          "index": 0,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 15.423171378,
+          "allocated_peak_gib": 17.249268531799316,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410765171051025
+          ],
+          "interval_monotonic_ns": [
+            40378328195002871,
+            40378343618070951
+          ]
+        },
+        {
+          "index": 1,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 7.641893066,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410861492156982
+          ],
+          "interval_monotonic_ns": [
+            40378343669181710,
+            40378351311074776
+          ]
+        },
+        {
+          "index": 2,
+          "case": "baseline",
+          "block": 0,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.711051078,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410716533660889
+          ],
+          "interval_monotonic_ns": [
+            40378351349693174,
+            40378357060735831
+          ]
+        },
+        {
+          "index": 0,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 10.243823367,
+          "allocated_peak_gib": 17.249270915985107,
+          "reserved_peak_gib": 18.91015625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6337318420410156
+          ],
+          "interval_monotonic_ns": [
+            40378357147735124,
+            40378367391533819
+          ]
+        },
+        {
+          "index": 1,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.28576652,
+          "allocated_peak_gib": 17.574249744415283,
+          "reserved_peak_gib": 21.064453125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6326944828033447
+          ],
+          "interval_monotonic_ns": [
+            40378367471242031,
+            40378372757008551
+          ]
+        },
+        {
+          "index": 2,
+          "case": "future-mean",
+          "block": 1,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.29794393,
+          "allocated_peak_gib": 17.574249744415283,
+          "reserved_peak_gib": 21.064453125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.6333272457122803
+          ],
+          "interval_monotonic_ns": [
+            40378372793661320,
+            40378378091605250
+          ]
+        },
+        {
+          "index": 0,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.395067147,
+          "allocated_peak_gib": 17.249270915985107,
+          "reserved_peak_gib": 18.91015625,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.633479595184326
+          ],
+          "interval_monotonic_ns": [
+            40378378169966570,
+            40378383565033717
+          ]
+        },
+        {
+          "index": 1,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.636525456,
+          "allocated_peak_gib": 17.574249744415283,
+          "reserved_peak_gib": 21.064453125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.631887435913086
+          ],
+          "interval_monotonic_ns": [
+            40378383613659598,
+            40378389250185054
+          ]
+        },
+        {
+          "index": 2,
+          "case": "future-mean",
+          "block": 2,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "mean",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.657306503,
+          "allocated_peak_gib": 17.574249744415283,
+          "reserved_peak_gib": 21.064453125,
+          "loss": [
+            0.019130874425172806
+          ],
+          "grad_norm": [
+            3.631603479385376
+          ],
+          "interval_monotonic_ns": [
+            40378389285067528,
+            40378394942374031
+          ]
+        },
+        {
+          "index": 0,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": true,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.630379041,
+          "allocated_peak_gib": 17.249268531799316,
+          "reserved_peak_gib": 18.892578125,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.409929275512695
+          ],
+          "interval_monotonic_ns": [
+            40378395022359996,
+            40378400652690758
+          ]
+        },
+        {
+          "index": 1,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 5.945364407,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.410658836364746
+          ],
+          "interval_monotonic_ns": [
+            40378400692936829,
+            40378406638170819
+          ]
+        },
+        {
+          "index": 2,
+          "case": "baseline",
+          "block": 3,
+          "settings": {
+            "backend": "precompute_fused",
+            "future_mode": "none",
+            "gamma": 1.0,
+            "chunk": 256,
+            "loss_agg_mode": "token-mean"
+          },
+          "forward_counts": {
+            "train": 4,
+            "capture": 4
+          },
+          "per_rank_forward_counts": [
+            {
+              "train": 4,
+              "capture": 4
+            },
+            {
+              "train": 4,
+              "capture": 4
+            }
+          ],
+          "warmup": false,
+          "trace": false,
+          "reuse": 1,
+          "actor_seconds": 6.271820085,
+          "allocated_peak_gib": 17.24941635131836,
+          "reserved_peak_gib": 20.625,
+          "loss": [
+            0.10105583071708679
+          ],
+          "grad_norm": [
+            4.411688327789307
+          ],
+          "interval_monotonic_ns": [
+            40378406677456259,
+            40378412949231650
+          ]
+        }
+      ],
+      "raw_sha256": "e2fd4174b245da9ecba0d5f9d6a523fe80b66e1e5a93216d32f0196c9a2d7ec2",
+      "version": "baseline"
+    }
+  ],
+  "summary": {
+    "baseline/baseline": {
+      "n": 8,
+      "median": 5.9269579675,
+      "minimum": 5.148720015,
+      "maximum": 7.641893066,
+      "samples": [
+        7.27572706,
+        5.148720015,
+        5.908551528,
+        5.439087324,
+        7.641893066,
+        5.711051078,
+        5.945364407,
+        6.271820085
+      ]
+    },
+    "baseline/future-mean": {
+      "n": 8,
+      "median": 5.5170011665,
+      "minimum": 5.254992924,
+      "maximum": 5.822207533,
+      "samples": [
+        5.664016329,
+        5.822207533,
+        5.254992924,
+        5.397476877,
+        5.28576652,
+        5.29794393,
+        5.636525456,
+        5.657306503
+      ]
+    },
+    "new/baseline": {
+      "n": 8,
+      "median": 5.7169219689999995,
+      "minimum": 5.125710018,
+      "maximum": 13.131799677,
+      "samples": [
+        6.722012568,
+        5.39215905,
+        13.131799677,
+        5.631952332,
+        7.902291138,
+        5.437485409,
+        5.801891606,
+        5.125710018
+      ]
+    },
+    "new/future-mean": {
+      "n": 8,
+      "median": 5.72887671,
+      "minimum": 5.126670622,
+      "maximum": 6.025165783,
+      "samples": [
+        5.650224546,
+        5.126670622,
+        5.221210059,
+        5.807528874,
+        5.863291517,
+        6.025165783,
+        5.855194663,
+        5.510611645
+      ]
+    }
+  }
+}

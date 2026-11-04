@@ -21,6 +21,18 @@
 
 [原始基线](data/kl-execution-20261104/baseline.json)、[连续分块](data/kl-execution-20261104/continuous.json)、[最终融合](data/kl-execution-20261104/fused.json)保留全部墙钟、显存、投影计数与误差；[源码哈希和测量合同](data/kl-execution-20261104/manifest.json)记录实现身份。版本间顺序测量，没有跨版本 ABBA、锁频或重复进程，表中差异是该批 head 观测，不能外推为整步训练倍率。完整 actor 对照由[训练性能](training.md)维护。
 
+### Kernel 与 GEMM 计数
+
+同形状 profile 覆盖一条长回答、16 条短回答和 `(1,3,12,64,128,256,560)` 混合回答，总量均为 1024 token。计数来自 CUDA kernel events；H800 的矩阵乘名称同时匹配 `gemm` 与 `nvjet`，不把只匹配前者的中间统计作为结果。
+
+| 布局 | 原版 none / mean kernel | 最终 none / mean kernel | 原版 mean GEMM | 最终 mean GEMM |
+| ---- | ----------------------: | ----------------------: | -------------: | -------------: |
+| 长   |                65 / 604 |                64 / 478 |             16 |             16 |
+| 短   |               65 / 1924 |                64 / 478 |             64 |             16 |
+| 混合 |               65 / 1065 |                64 / 478 |             36 |             16 |
+
+GEMM 包含 student/teacher 投影与 dH/dW；每个连续块为四次，四块共 16 次。无 future 的最终实现不分配 future 系数与 score 标量，也省去单位行权重乘法及重复 local 总和；中间版的 71 个 kernel 不代表最终路径。Future 仍有分段 scan 的行级工作，但不再按回答碎片化词表 GEMM。[完整 kernel 名称、trace 路径和哈希](data/kl-execution-20261104/profiles.json)保留原始计数；trace 大文件留在运行目录。最终 profile 的[源码身份](data/kl-execution-20261104/acceptance-source.json)晚于上表墙钟样本，不把两者冒充同一快照的测量。
+
 ## EOS 精度与融合候选
 
 [EOS 精度与速度权衡](2026-11-01-EOS精度与速度权衡.md)比较 FP64、纯 FP32、稳定 FP32 和带 EOS 修正的融合候选。已测真实 logits 上的误差很小，EOS 小信号边界仍要求保留局部高精度；512 行、κ=0.5 的 head 测量为 438.01→16.90 ms。该报告保留接入前的算子测量；完整 actor 结果见[后续验收](2026-11-01-EOS融合实现与训练验收.md)，不将 head 倍率外推为 actor 加速。
