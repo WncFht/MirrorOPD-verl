@@ -72,13 +72,13 @@ dW=\sum_cG_c^\top H_c,\qquad
 L_{\rm raw}=\sum_c\sum_{i\in c}R_i.
 $$
 
-Head 梯度跨 token chunk 累加，hidden 梯度写入对应行块。数学上没有除 chunk 数。源码 [PrecomputedKL.forward](../../../../../verl/trainer/distillation/full_vocab.py#L183)，193–206 行正是这个循环。
+Head 梯度跨 token chunk 累加，hidden 梯度写入对应行块。数学上没有除 chunk 数。源码 [precompute_rows](../../../../../verl/trainer/distillation/full_vocab.py#L183)，193–206 行正是这个循环。
 
 ## 4. Precompute 的前向与反向分工
 
 ### 4.1 Forward 已计算 raw 一阶 VJP
 
-[PrecomputedKL](../../../../../verl/trainer/distillation/full_vocab.py#L179)，179–219 行的关键顺序：
+[precompute_rows](../../../../../verl/trainer/distillation/full_vocab.py#L179)，179–219 行的关键顺序：
 
 1. 185–192 行分配 FP32（FP64 输入时为 FP64）dH/dW、total、行观测和诊断缓冲。
 2. 193–199 行逐 token chunk 调用 endpoint 或 mirror row kernel，获得 raw row 和 dz。

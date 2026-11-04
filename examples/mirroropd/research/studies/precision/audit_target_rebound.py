@@ -116,7 +116,7 @@ def kernel(mode):
         return values, dz.to(hs.dtype), diag
 
     def result(hs, ws, ht, wt, *, spec, hq, wq, token_chunk, **kwargs):
-        total, values, diag = kernels.PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
+        total, values, _, diag = kernels.precompute_rows(hs, ws, ht, wt, token_chunk, row_kernel, hq, wq, spec)
         return kernels.FullVocabObjectiveResult(
             total,
             values,

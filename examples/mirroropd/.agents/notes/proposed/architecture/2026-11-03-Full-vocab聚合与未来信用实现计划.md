@@ -49,7 +49,7 @@ Status: proposed
 
 ### 2.3 聚合与 kernel 耦合的实际原因
 
-[PrecomputedKL.forward](../../../../../../verl/trainer/distillation/full_vocab.py#L240) 逐 token chunk 调 row kernel，得到行值及 logits 梯度 `dz`，立即完成：
+[precompute_rows](../../../../../../verl/trainer/distillation/full_vocab.py#L240) 逐 token chunk 调 row kernel，得到行值及 logits 梯度 `dz`，立即完成：
 
 $$
 dH_{\rm chunk}=dZ_{\rm chunk}W,\qquad
@@ -58,7 +58,7 @@ $$
 
 它只保存累计好的 `dH/dW`，将逐 token 行值标成不可微。Backward 只把标量 upstream 乘到保存的梯度上。因此事后对 detached 行值套 `agg_loss` 只能改变数值，无法改变已经合并的逐行梯度。每行聚合权重、未来 score 项都必须在上述 GEMM 之前生效。
 
-[RecomputedKL.backward](../../../../../../verl/trainer/distillation/full_vocab.py#L127) 支持逐行 upstream，是加权梯度的现有参考，但会重新投影；不能据此承诺与 `precompute` 相同的成本。[ForwardVocab](../../../../../../verl/trainer/distillation/forward_vocab.py#L74) 也在 forward 累积梯度，扩展即时项聚合时需要一并核对；reverse sequence-KL 的 future 语义不自动适用于 forward KL 或 BPO。
+[RecomputedKL.backward](../../../../../../verl/trainer/distillation/full_vocab.py#L127) 支持逐行 upstream，是加权梯度的现有参考，但会重新投影；不能据此承诺与 `precompute` 相同的成本。[ForwardRecompute](../../../../../../verl/trainer/distillation/forward_vocab.py#L74) 也在 forward 累积梯度，扩展即时项聚合时需要一并核对；reverse sequence-KL 的 future 语义不自动适用于 forward KL 或 BPO。
 
 [precompute_kl_rows](../../../../../../verl/trainer/distillation/full_vocab.py#L172) 和 [_mirror_rows](../../../../../../verl/trainer/distillation/full_vocab.py#L426) 目前只返回行值、`dz` 及诊断，未向外保留 score 修正所需的 student 概率/归一化信息。仅把 chunk 遍历倒过来还不够，需要调整 chunk 内的计算边界。
 

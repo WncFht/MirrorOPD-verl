@@ -102,26 +102,9 @@ def trajectory_blocks(hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, act
     return total, costs, raw, info, coefficients, score_sum, dh, dw
 
 
-class TrajectoryVJP(torch.autograd.Function):
-    """Cache only dH/dW and O(tokens) observations; release each vocabulary block."""
-
-    @staticmethod
-    def forward(ctx, hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, actions):
-        total, costs, raw, info, coefficients, score_sum, dh, dw = trajectory_blocks(
-            hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, actions, precompute=True
-        )
-        ctx.hdtype, ctx.wdtype = hs.dtype, ws.dtype
-        ctx.save_for_backward(
-            dh if hs.dtype == torch.float16 else dh.to(hs.dtype), dw if ws.dtype == torch.float16 else dw.to(ws.dtype)
-        )
-        ctx.mark_non_differentiable(costs, raw, info, coefficients, score_sum)
-        return total, costs, raw, info, coefficients, score_sum
-
-    @staticmethod
-    @torch.autograd.function.once_differentiable
-    def backward(ctx, upstream, *unused):
-        dh, dw = ctx.saved_tensors
-        return ((dh * upstream).to(ctx.hdtype), (dw * upstream).to(ctx.wdtype)) + (None,) * 9
+def _trajectory_program(hs, ws, ht, wt, hq, wq, **kwargs):
+    *outputs, dh, dw = trajectory_blocks(hs, ws, ht, wt, hq, wq, precompute=True, **kwargs)
+    return tuple(outputs), dh, dw
 
 
 def trajectory_objective_result(
@@ -160,6 +143,18 @@ def trajectory_objective_result(
     if backend == "dense":
         total, costs, raw, info, coefficients, score_sum, _, _ = trajectory_blocks(*arguments, precompute=False)
     else:
-        total, costs, raw, info, coefficients, score_sum = TrajectoryVJP.apply(*arguments)
+        from functools import partial
+
+        from verl.trainer.distillation.vjp import precompute
+
+        program = partial(
+            _trajectory_program,
+            spec=spec,
+            reduction=reduction,
+            chunk=token_chunk,
+            fused=backend == "precompute_fused",
+            actions=actions,
+        )
+        total, costs, raw, info, coefficients, score_sum = precompute(hs, ws, ht, wt, hq, wq, program=program)
     diagnostics = {k: info[:, i] for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if info.shape[1] else {}
     return FullVocabObjectiveResult(total, raw, diagnostics, costs, costs.sum(), coefficients, score_sum)

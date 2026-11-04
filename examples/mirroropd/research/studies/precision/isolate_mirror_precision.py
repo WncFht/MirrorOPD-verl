@@ -44,7 +44,7 @@ def rows64_cast(*args):
 
 
 def row64_result(hs, ws, ht, wt, *, spec, hq, wq, token_chunk, **kwargs):
-    total, rows, diag = kernels.PrecomputedKL.apply(hs, ws, ht, wt, token_chunk, rows64_cast, hq, wq, spec)
+    total, rows, _, diag = kernels.precompute_rows(hs, ws, ht, wt, token_chunk, rows64_cast, hq, wq, spec)
     return kernels.FullVocabObjectiveResult(
         total,
         rows,

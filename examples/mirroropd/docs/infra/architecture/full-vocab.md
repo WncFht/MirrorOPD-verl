@@ -240,3 +240,7 @@ Engine 的 head 回调将数值结果转换为 [FullVocabOutput](../../../../../
 [分布定义](../../../../../verl/trainer/distillation/distribution.py)将 native 与 common-conditioned 分开。已批准的 R1 配对使用 C151936 共同 head 行；条件目标同时记录双方被排除质量。Precompute 路径复用本次 logits 计算诊断，value-only 读出不构造 VJP。共同支持产生的非连续视图在进入融合行算子前显式整理，ID 映射的梯度回到原 head 坐标。
 
 [模型配对检查](../../../../../verl/trainer/distillation/compatibility.py)在 GPU 分配前核对 head 清单、结构、tokenizer 语义和停止规则。不同 ID 仅在明确允许且可证明同一分词语义时一一映射；真正不同分词不属于此接口。配置、版本迁移与读出口径见[统一评估合同](../../../../../verl/trainer/evaluation/README.md#分布模型与输入适配)。
+
+## 公共预计算 VJP 边界
+
+预计算路径通过 [precompute](../../../../../verl/trainer/distillation/vjp.py)保存 dH/dW 并在 backward 应用标量 upstream。即时 reverse/forward/MDPO/BPO 与 future 共用这一 autograd 边界；forward KL 的重算路径单独保存输入。Student hidden/head 显式作为 tensor 参数传入，冻结 teacher/anchor 不返回梯度。当前块遍历与精度策略保持原行为，后续统一分块与执行计划按 Agent Note 实施。
