@@ -140,7 +140,13 @@ def main():
     spec = loss_cfg.loss_settings
     teacher_projection_dtypes = set()
     if full:
-        actor.engine.configure_full_vocab(loss_cfg.full_vocab, str(root / "teacher"), spec=spec)
+        actor.engine.configure_full_vocab(
+            loss_cfg.full_vocab,
+            str(root / "teacher"),
+            spec=spec,
+            loss_agg_mode=args.loss_agg_mode,
+            loss_scale_factor=args.loss_scale_factor,
+        )
         original_get = actor.engine.full_vocab_teacher_head.get
 
         def checked_teacher_head(device, dtype):
