@@ -17,6 +17,11 @@ class ReadoutCallback:
     requires_full_batch = False
     owns_final_weight_sync = False
 
+    @staticmethod
+    def preflight_generation_protocols(options):
+        """Declare standalone generation protocols; native validation uses trainer budgets."""
+        return {}
+
     def on_readout(self, trainer, outer):
         return {}
 

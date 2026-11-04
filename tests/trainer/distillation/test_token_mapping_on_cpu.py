@@ -115,7 +115,12 @@ def test_dynamic_date_must_be_explicit_and_consistent(monkeypatch):
             },
             "actor_rollout_ref": {"model": {"path": "s"}, "rollout": {}},
             "data": {"apply_chat_template_kwargs": {}},
-            "trainer": {"evaluation": {"protocols": {"public": {"template_json": '{"date_string":"01 Nov 2026"}'}}}},
+            "trainer": {
+                "evaluation": {
+                    "_target_": "verl.trainer.evaluation.coordinator.EvaluationCoordinator",
+                    "protocols": {"public": {"template_json": '{"date_string":"01 Nov 2026"}'}},
+                }
+            },
         }
     )
     with pytest.raises(ValueError, match="date_string"):
@@ -125,6 +130,37 @@ def test_dynamic_date_must_be_explicit_and_consistent(monkeypatch):
         preflight_pair(cfg)
     cfg.data.apply_chat_template_kwargs.date_string = "01 Nov 2026"
     assert preflight_pair(cfg).dynamic_date
+
+
+@pytest.mark.parametrize(
+    "target",
+    [
+        "verl.trainer.evaluation.source_history.SourceHistoryReadout",
+        "verl.trainer.evaluation.reload.HFReloadReadout",
+    ],
+)
+def test_native_readout_preflight_does_not_require_public_protocols(monkeypatch, target):
+    """Native readouts use training input settings rather than public-suite options."""
+    import verl.trainer.distillation.compatibility as compatibility
+
+    pair = SimpleNamespace(dynamic_date=False, student_context=128, teacher_context=128)
+    monkeypatch.setattr(compatibility, "inspect_pair", lambda *a, **kw: pair)
+    cfg = OmegaConf.create(
+        {
+            "distillation": {
+                "enabled": True,
+                "teacher_models": {"t": {"model_path": "t"}},
+                "distillation_loss": {
+                    "loss_mode": "mirror",
+                    "mirror": {"objective": "mdpo", "estimator": "full_vocab", "eta": 1},
+                    "full_vocab": {},
+                },
+            },
+            "actor_rollout_ref": {"model": {"path": "s"}, "rollout": {}},
+            "trainer": {"evaluation": {"_target_": target, "output": "readout"}},
+        }
+    )
+    assert preflight_pair(cfg) is pair
 
 
 def test_global_engine_stops_are_mapped_before_server_creation():

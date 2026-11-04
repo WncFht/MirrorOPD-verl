@@ -186,12 +186,11 @@ def preflight_pair(config):
     training_date = OmegaConf.select(config, "data.apply_chat_template_kwargs.date_string")
     if pair.dynamic_date and not training_date:
         raise ValueError("Dynamic-date templates require data.apply_chat_template_kwargs.date_string")
-    evaluation = OmegaConf.select(config, "trainer.evaluation")
-    if evaluation:
-        from verl.trainer.evaluation.config import GenerationProtocol
+    if OmegaConf.select(config, "trainer.evaluation"):
+        from verl.trainer.ppo.readout_callback import readout_definition
 
-        for name, protocol in evaluation.protocols.items():
-            rendered = GenerationProtocol.parse(OmegaConf.to_container(protocol, resolve=True))
+        callback, options = readout_definition(config)
+        for name, rendered in callback.preflight_generation_protocols(options).items():
             if rendered.prompt_limit + rendered.max_new_tokens > min(pair.student_context, pair.teacher_context):
                 raise ValueError(f"Evaluation protocol {name} exceeds the verified pair context")
             if pair.dynamic_date and json.loads(rendered.template_json).get("date_string") != training_date:

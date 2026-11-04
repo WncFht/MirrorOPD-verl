@@ -19,7 +19,7 @@ from verl.workers.config import HFModelConfig
 
 from .accuracy import AccuracyCollector, gap_recovery
 from .artifacts import EVAL_RKL, GENERATION, HISTORY, ArtifactStore, file_sha256, identity
-from .config import EvaluationConfig
+from .config import EvaluationConfig, GenerationProtocol
 from .coverage import rkl_coverage
 from .execution import hidden_dtype_bytes
 from .generation import NativeGenerator
@@ -50,6 +50,11 @@ class EvaluationCoordinator(ReadoutCallback):
     uses_validation_dataset = False
     requires_full_batch = True
     owns_final_weight_sync = True
+
+    @staticmethod
+    def preflight_generation_protocols(options):
+        """Expose public/source standalone generation budgets before GPU allocation."""
+        return {name: GenerationProtocol.parse(value) for name, value in options["protocols"].items()}
 
     def __init__(self, *, config, options):
         self.config = config
