@@ -2,21 +2,20 @@
 
 本文承接[目标与梯度](full-kl-walkthrough.md)和[训练执行](代码走读.md)，逐段解释 `full_vocab.py`、`objectives.py`、`targets.py` 与 `full_vocab_triton.py`。源码基点与行级引用约定统一见[目标篇说明](full-kl-walkthrough.md)。符号沿用主篇；本篇的 G、dH、dW 默认都是 **未除 eta、未乘 DP/token 缩放** 的 raw objective 梯度。
 
-当前预计算路径的权威循环为 [run_blocks](../../../../../verl/trainer/distillation/vjp.py)。局部目标块由 [rows.py](../../../../../verl/trainer/distillation/rows.py) 准备，future 启用时保留 student logits 和可复用的 native 归一化统计；连续逆序块用分段 suffix 算出系数，再由 [finish_future](../../../../../verl/trainer/distillation/full_vocab_triton.py) 合成 score 与 local 梯度。该 kernel 只重建 score 的 pivot，保留 local VJP 原有舍入；最终梯度仍在参数梯度 GEMM 前执行既有 dtype cast。EOS 合并空间的统计不作为 native score 的统计。下文历史阅读区间以符号定位为准，模块分工以此合同为准。
+当前预计算路径的权威循环为 [run_blocks](../../../../../verl/trainer/distillation/vjp.py#L76)。局部目标块由 [rows.py](../../../../../verl/trainer/distillation/rows.py) 准备，future 启用时保留 student logits 和可复用的 native 归一化统计；连续逆序块用分段 suffix 算出系数，再由 [finish_future](../../../../../verl/trainer/distillation/full_vocab_triton.py#L631) 合成 score 与 local 梯度。该 kernel 只重建 score 的 pivot，保留 local VJP 原有舍入；最终梯度仍在参数梯度 GEMM 前执行既有 dtype cast。EOS 合并空间的统计不作为 native score 的统计。下文历史阅读区间以符号定位为准，模块分工以此合同为准。
 
 ## 1. Dispatcher 的逐段阅读
 
-入口是 [full_vocab_objective_result](../../../../../verl/trainer/distillation/full_vocab.py#L19)，359–402 行。返回 `FullVocabObjectiveResult(loss_sum, token_objective, token_diagnostics)`，定义位于独立的 [results.py](../../../../../verl/trainer/distillation/results.py)。
+入口是 [full_vocab_objective_result](../../../../../verl/trainer/distillation/full_vocab.py#L19)，结构化返回合同位于 [results.py](../../../../../verl/trainer/distillation/results.py)。入口先解析 [ExecutionPlan](../../../../../verl/trainer/distillation/execution.py)，再执行实际 tensor 校验与目标分派。
 
-| 行区间  | 处理                                               | 阅读时核对                                             |
-| ------- | -------------------------------------------------- | ------------------------------------------------------ |
-| 363–367 | `teacher_only_kl` 委托 `full_reverse_kl_result`    | MDPO eta=1 与普通 OPD 共用原 API；四项 mirror 诊断为空 |
-| 368–373 | 验证 objective、hidden payload、backend、anchor    | BPO eta=1 仍不能省 q                                   |
-| 374–385 | 验证 2D 形状、token 行数、支持集、hidden/head 宽度 | $V_q=V_s$，$V_t\geq V_s$                               |
-| 386–390 | 正 chunk、非空词表、局部零有效行处理               | 局部空行可返回连接 student 图的零                      |
-| 391–393 | dense reference                                    | 普通 autograd 对 rows.sum 求导                         |
-| 395–400 | precompute 或 fused precompute                     | 共用 PrecomputedKL，只替换 row kernel                  |
-| 401–402 | detached 行值与命名诊断                            | 行观测不提供训练梯度                                   |
+| 分派条件                | 执行合同                                                                      |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| future 启用             | 只允许 native reverse KL/MDPO，公共连续逆序块循环先算 local cost 再合成 score |
+| common-conditioned      | 先应用共同支持映射；投影复用 excluded-mass 诊断，拒绝 future                  |
+| teacher-only forward KL | forward 独立公式，预计算共用 VJP，重算保持独立                                |
+| teacher-only reverse KL | 按已声明的 dense/precompute/recompute/cached/streaming/external 策略执行      |
+| 一般 MDPO/BPO           | 显式校验 anchor；dense 用普通 autograd，预计算使用公共块程序                  |
+| 返回                    | 可微训练分子与 detached 原始 KL/local cost/future 观测分开                    |
 
 一般 mirror 的 [_mirror_rows](../../../../../verl/trainer/distillation/rows.py#L87)，321–356 行先在 `torch.no_grad()` 下处理 T/q，再在有需要的计算图中投影当前 student：
 
@@ -109,7 +108,7 @@ flowchart TB
 
 ### 4.2 Backward 才应用上游系数
 
-外层 loss 为 $L=\alpha L_{\rm raw}$，α 由 `LossContext.full_vocab_scale` 和 η 确定。Token-mean 时 α=D/(Nη)；其它聚合的尺度见[聚合合同](full-vocab.md#聚合与未来信用)。`PrecomputedKL.backward` 返回：
+外层 loss 为 $L=\alpha L_{\rm raw}$，α 由 `LossContext.full_vocab_scale` 和 η 确定。Token-mean 时 α=D/(Nη)；其它聚合的尺度见[聚合合同](full-vocab.md#聚合与未来信用)。`PrecomputedVJP.backward` 返回：
 
 $$
 \frac{\partial L}{\partial H_s}=\alpha\,dH_{\rm cached},\qquad
@@ -137,7 +136,7 @@ $$
 
 ## 5. Backend 的实际差别
 
-Endpoint 分派在 [full_reverse_kl_result](../../../../../verl/trainer/distillation/reverse_vocab.py#L200)，254–306 行。一般 MDPO/BPO 只支持最后一列标“是”的三类；MDPO eta=1 使用 endpoint 支持集。
+Endpoint 分派在 [full_reverse_kl_result](../../../../../verl/trainer/distillation/reverse_vocab.py#L184)，254–306 行。一般 MDPO/BPO 只支持最后一列标“是”的三类；MDPO eta=1 使用 endpoint 支持集。
 
 | Backend            | Forward                                           | Backward                          | 一般 mirror |
 | ------------------ | ------------------------------------------------- | --------------------------------- | ----------- |
@@ -146,7 +145,7 @@ Endpoint 分派在 [full_reverse_kl_result](../../../../../verl/trainer/distilla
 | `streaming`        | token 与 vocab 双重分块，在线归约                 | 双重分块重算                      | 否          |
 | `cached`           | 双重分块投影到当前 token 块的完整 logits 缓冲     | 仍重算，不保留 logits 到 backward | 否          |
 | `precompute`       | token 分块，普通 PyTorch row kernel，累计 dH/dW   | 只乘 upstream                     | 是          |
-| `precompute_fused` | CUDA BF16 时替换为融合 row kernel                 | 共用 PrecomputedKL                | 是          |
+| `precompute_fused` | CUDA FP16/BF16/FP32 的融合 row kernel             | 共用 PrecomputedVJP               | 是          |
 | `liger`            | 外部 fused linear JSD 配成 reverse KL，均值转 sum | 外部算子实现                      | 否          |
 
 `precompute_fused` 明确要求 CUDA FP16/BF16/FP32 输入；其他设备或 dtype 直接报错，包括空本地 batch。CPU/FP64 oracle 显式选择 `precompute` 或 `dense`，不再用 fused 名称运行普通 Torch 参考。实际设备与选择的后端因此一致。
@@ -182,17 +181,17 @@ $$
 
 当 $|x|<0.5$，`expm1` 和 `log1p` 避免先把接近 1 的量相减；其他位置用 `logaddexp(x+log eta, log(1-eta))`。PyTorch 分支通过索引只计算所选分支，避免另一分支先产生溢出。
 
-编码 target 的兼容路径对应 [_target_weights](../../../../../verl/trainer/distillation/full_vocab_triton.py)。GPU 两分支可能都求值，因此小区间的 expm1 输入先夹在 [-0.5,0.5]，再由 `tl.where` 选择最终结果。这个 clamp 只保护未选中的数值分支，不是截断蒸馏信号或 PPO ratio。
+编码 target 的兼容路径对应 [_target_weights](../../../../../verl/trainer/distillation/full_vocab_triton.py#L528)。GPU 两分支可能都求值，因此小区间的 expm1 输入先夹在 [-0.5,0.5]，再由 `tl.where` 选择最终结果。这个 clamp 只保护未选中的数值分支，不是截断蒸馏信号或 PPO ratio。
 
-[fused_log_weights](../../../../../verl/trainer/distillation/full_vocab_triton.py) 传入 `log_teacher.stride(0)`，因为完整 teacher log-softmax 截取 student 行后不一定 contiguous。忽略这个 stride 会在 teacher 有额外输出行时读错下一 token 的起点。
+[fused_log_weights](../../../../../verl/trainer/distillation/full_vocab_triton.py#L556) 传入 `log_teacher.stride(0)`，因为完整 teacher log-softmax 截取 student 行后不一定 contiguous。忽略这个 stride 会在 teacher 有额外输出行时读错下一 token 的起点。
 
 ### 6.2 BPO 方差先中心化再平方
 
 BPO 直接计算 $\sum_iq_i(d_i-\mu_q)^2/2$。若改成 $[\mathbb E_qd^2-(\mathbb E_qd)^2]/2$，当 d 大体是一个大常数加很小的变化时，会从两个大数相减中丢失小方差。
 
-当前实现通过 [weighted_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py) 的 `variance=True` 分支处理。[_weighted_partials](../../../../../verl/trainer/distillation/full_vocab_triton.py) 在每个 tile 内选择 pivot，再求相对 residual 的加权矩；[_weighted_reduce](../../../../../verl/trainer/distillation/full_vocab_triton.py) 将各 tile 平移到同一参考点并合并。[_weighted_apply](../../../../../verl/trainer/distillation/full_vocab_triton.py) 先中心化再平方，[_weighted_finish](../../../../../verl/trainer/distillation/full_vocab_triton.py) 合并方差并用非 pivot 梯度之和重建 pivot 梯度。
+当前实现通过 [weighted_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py#L176) 的 `variance=True` 分支处理。[_weighted_partials](../../../../../verl/trainer/distillation/full_vocab_triton.py#L52) 在每个 tile 内选择 pivot，再求相对 residual 的加权矩；[_weighted_reduce](../../../../../verl/trainer/distillation/full_vocab_triton.py#L71) 将各 tile 平移到同一参考点并合并。[_weighted_apply](../../../../../verl/trainer/distillation/full_vocab_triton.py#L96) 先中心化再平方，[_weighted_finish](../../../../../verl/trainer/distillation/full_vocab_triton.py#L142) 合并方差并用非 pivot 梯度之和重建 pivot 梯度。
 
-生产入口 [fused_mirror_logits](../../../../../verl/trainer/distillation/full_vocab_triton.py) 在 BPO 时用 anchor logits 提供权重。兼容入口 [fused_bpo_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py) 也调用同一套加权归约；它接收已编码的 target，无法恢复编码时已经舍掉的小增量。
+生产入口 [fused_mirror_logits](../../../../../verl/trainer/distillation/full_vocab_triton.py#L442) 在 BPO 时用 anchor logits 提供权重。兼容入口 [fused_bpo_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py#L280) 也调用同一套加权归约；它接收已编码的 target，无法恢复编码时已经舍掉的小增量。
 
 ### 6.3 MDPO 的大行常数与小梯度
 
@@ -209,7 +208,7 @@ $$
 K=\log\mathbb E_p[e^{-c}].
 $$
 
-[difference](../../../../../verl/trainer/distillation/full_vocab_triton.py) 的 kernel 用 FP64 中间减法形成普通师生或 anchor/teacher 相对 gap，再写入 residual buffer。一般 MDPO/BPO 的生产分支通过 [_split_residual](../../../../../verl/trainer/distillation/full_vocab_triton.py) 直接读取 student、anchor 和 teacher 原始 logits；它按 eta/kappa 构造分离 target 的 residual，不需要先把小增量加回一份完整 log-target。
+[difference](../../../../../verl/trainer/distillation/full_vocab_triton.py#L240) 的 kernel 用 FP64 中间减法形成普通师生或 anchor/teacher 相对 gap，再写入 residual buffer。一般 MDPO/BPO 的生产分支通过 [_split_residual](../../../../../verl/trainer/distillation/full_vocab_triton.py#L374) 直接读取 student、anchor 和 teacher 原始 logits；它按 eta/kappa 构造分离 target 的 residual，不需要先把小增量加回一份完整 log-target。
 
 `weighted_rows` 的归约统计中保留最大 logit、相对归一化量、中心化矩与参考 residual。近相等时，`_weighted_apply` 与 `_weighted_finish` 用 `expm1`、`log1p` 及去除一阶项的余项计算 KL，避免两个接近的归一化常数相减。远离目标时则使用稳定的 log-sum-exp 分支。
 
@@ -219,7 +218,7 @@ $$
 
 ### 7.1 普通 OPD endpoint
 
-[fused_kl_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py) 仍调用 `project` 完成 student/teacher GEMM，然后将 logits 交给 [fused_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py)。后者先形成相对师生 gap，再进入统一的 `weighted_rows`。
+[fused_kl_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py#L269) 仍调用 `project` 完成 student/teacher GEMM，然后将 logits 交给 [fused_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py#L264)。后者先形成相对师生 gap，再进入统一的 `weighted_rows`。
 
 | Kernel               | 工作                                                     |
 | -------------------- | -------------------------------------------------------- |
@@ -232,9 +231,9 @@ $$
 
 ### 7.2 一般 MDPO/BPO 与诊断
 
-[fused_mirror_logits](../../../../../verl/trainer/distillation/full_vocab_triton.py) 调度生产路径。`_split_residual` 按 1024 列生成 residual 和需要的 target normalizer 统计；随后 MDPO 用 student、BPO 用 anchor 作为 `weighted_rows` 的权重来源。MDPO 的优化标量再减去 target 的 `log_z`。
+[fused_mirror_logits](../../../../../verl/trainer/distillation/full_vocab_triton.py#L442) 调度生产路径。`_split_residual` 按 1024 列生成 residual 和需要的 target normalizer 统计；随后 MDPO 用 student、BPO 用 anchor 作为 `weighted_rows` 的权重来源。MDPO 的优化标量再减去 target 的 `log_z`。
 
-启用 diagnostics 后，生产路径额外计算 target KL、anchor KL 和原生 teacher KL；诊断不改变 BPO 的方差目标。[fused_mirror_rows](../../../../../verl/trainer/distillation/full_vocab_triton.py) 保留给已经编码 b 的调用者，它是兼容路径。
+启用 diagnostics 后，生产路径额外计算 target KL、anchor KL 和原生 teacher KL；诊断不改变 BPO 的方差目标。已编码目标的舍入控制由研究工具 [encoded_target_rows](../../../research/studies/precision/encoded_target.py)拥有；生产只接收分开的 logits。
 
 投影与 dH/dW 矩阵乘仍使用 PyTorch/cuBLAS；这里的融合主要处理 residual、行统计、loss 和 logit 梯度，不表示 backbone 或全部反传都进入了同一个 Triton kernel。
 
@@ -277,17 +276,17 @@ Kernel 在数值计算前验证真实输入的行数、hidden/head 宽度、支�
 
 ### 9.1 现有测试对应的论断
 
-| 需要验证的性质                                                   | 现有源码入口                                                                                                                                                                                                                         |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Power-mean target 与 sampled 期望/梯度一致                       | [test_targets_and_sampled_expectation](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L44)                                                                                                                          |
-| MDPO/BPO scalar、hidden/head VJP、teacher extra rows、q/T 无梯度 | [test_full_value_and_both_vjps](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L60)                                                                                                                                 |
-| eta=1 MDPO 精确委托 endpoint，无 anchor；BPO 仍需 anchor         | [test_endpoint_uses_original_kernel_without_anchor](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L94)                                                                                                             |
-| BPO 小方差及常数平移不变性                                       | [test_dense_rows_and_stable_small_bpo](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L114)                                                                                                                         |
-| 诊断开关不改变训练梯度                                           | [test_diagnostics_do_not_change_loss_or_gradients](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L192)                                                                                                             |
-| MDPO 小残差、大行常数                                            | [test_mdpo_gradient_ignores_large_row_constant](../../../../../tests/trainer/distillation/test_mirror_numerics_on_cpu.py#L12)                                                                                                        |
-| Endpoint 各 backend 的值与 VJP                                   | [test_value_and_vjp](../../../../../tests/trainer/distillation/test_full_vocab_on_cpu.py#L18)                                                                                                                                        |
-| CUDA BF16 实际融合路径                                           | [test_real_bf16_fused_value_and_head_hidden_vjp](../../../../../tests/trainer/distillation/test_mirror_on_gpu.py#L17)、[test_fused_mirror_rows_and_diagnostics](../../../../../tests/trainer/distillation/test_mirror_on_gpu.py#L73) |
-| FSDP2、TQ、checkpoint 集成                                       | [test_mirror_fsdp2.py](../../../../../tests/special_distributed/test_mirror_fsdp2.py)、[test_mirror_tq_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_mirror_tq_on_cpu.py)                                                      |
+| 需要验证的性质                                                   | 现有源码入口                                                                                                                                                                                                                           |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Power-mean target 与 sampled 期望/梯度一致                       | [test_targets_and_sampled_expectation](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L44)                                                                                                                            |
+| MDPO/BPO scalar、hidden/head VJP、teacher extra rows、q/T 无梯度 | [test_full_value_and_both_vjps](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L60)                                                                                                                                   |
+| eta=1 MDPO 精确委托 endpoint，无 anchor；BPO 仍需 anchor         | [test_endpoint_uses_original_kernel_without_anchor](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L94)                                                                                                               |
+| BPO 小方差及常数平移不变性                                       | [test_dense_rows_and_stable_small_bpo](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L114)                                                                                                                           |
+| 诊断开关不改变训练梯度                                           | [test_diagnostics_do_not_change_loss_or_gradients](../../../../../tests/trainer/distillation/test_mirror_on_cpu.py#L192)                                                                                                               |
+| MDPO 小残差、大行常数                                            | [test_mdpo_gradient_ignores_large_row_constant](../../../../../tests/trainer/distillation/test_mirror_numerics_on_cpu.py#L12)                                                                                                          |
+| Endpoint 各 backend 的值与 VJP                                   | [test_value_and_vjp](../../../../../tests/trainer/distillation/test_full_vocab_on_cpu.py#L18)                                                                                                                                          |
+| CUDA BF16 实际融合路径                                           | [test_real_bf16_fused_value_and_head_hidden_vjp](../../../../../tests/trainer/distillation/test_mirror_on_gpu.py#L17)、[test_fused_native_mirror_and_diagnostics](../../../../../tests/trainer/distillation/test_mirror_on_gpu.py#L73) |
+| FSDP2、TQ、checkpoint 集成                                       | [test_mirror_fsdp2.py](../../../../../tests/special_distributed/test_mirror_fsdp2.py)、[test_mirror_tq_on_cpu.py](../../../../../tests/trainer/ppo/v1/test_mirror_tq_on_cpu.py)                                                        |
 
 CPU backend 名称包含 fused，不意味着执行过 GPU kernel；数学单测通过也不证明多 rank hooks、TQ 乱序或真实模型训练通过。历史验收与仍待验证的范围继续以[实现方案](../numerics/mirror-objectives/reference.md#validation)为准。
 

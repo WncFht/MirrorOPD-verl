@@ -2,19 +2,27 @@
 
 适用范围：从 `402f6353` 及此前接口迁移到重构分支的当前接口。当前架构见[总览](README.md)，变更依据和分组验收见[重构报告](../../archive/engineering/2026-11-01-运行合同审计与重构方案.md)。指南只描述新运行和开发调用者的升级；旧实验及旧 checkpoint 恢复使用对应冻结代码，原始数据不自动转换。
 
+## KL 执行与内部接口
+
+从旧内部数值接口升级时直接修改导入，不提供兼容导出或旧执行开关：结果类型从 `verl.trainer.distillation.results` 导入；普通目标行公式从 `rows` 导入；reverse KL 策略及 `full_reverse_kl_result` 从 `reverse_vocab` 导入。原标量 `full_reverse_kl` 包装函数已删除，调用者读取结果的 `loss_sum`。生产目标计算统一使用 `full_vocab.full_vocab_objective_result`。
+
+`PrecomputedKL`、`TrajectoryVJP` 与 forward 预计算类已由公共 `vjp.PrecomputedVJP` 和块程序替代；开发实验需要自定义行算术时使用 `vjp.precompute_rows` 的 prepare 合同。原 `fused_mirror_rows` 编码目标接口已从生产模块删除，生产传入分开的 student/anchor/teacher logits；研究中刻意测量已舍入目标的控制使用 `research.studies.precision.encoded_target.encoded_target_rows`，不作为训练 backend。
+
+Backend 名称继续表示实际策略，由 `execution.resolve_execution` 统一检查组合。Dense 是独立可微参考；recompute、cached 和 streaming 分别保留完整词表重算、块内投影缓存和词表流式的容量合同；Liger 保留受限外部策略。它们不是 precompute 的别名，不因单组速度较慢而删除。默认值、数学能力、eta/DP 缩放和 checkpoint 数据格式沿用现有合同。
+
 ## Full-vocab 结果生产者
 
 自定义数值后端或研究工具返回 `FullVocabObjectiveResult` 时，必须传入 `objective_rows`（无行观测时为 None）及 `local_objective_sum`（未加权、未折扣、不含 future score 的 detached local 总量）。Scalar-only 后端没有行值时显式传入自己的 local 总量；空 rank 提供标量零。`FullVocabOutput.from_result` 仅接受这个类型，不再接受旧三字段 duck-typed 对象或从训练 surrogate 回退猜测 local 指标。活动精度研究工具已使用显式字段；冻结源码仍使用各自版本的合同。字段语义见[指标合同](metrics.md#当前目标的指标矩阵)。
 
 ## 配置与数值后端
 
-| 原表达                             | 当前表达                                | 注意事项                                            |
-| ---------------------------------- | --------------------------------------- | --------------------------------------------------- |
-| `loss_mode=full_reverse_kl`        | `loss_mode=mirror`，MDPO/full_vocab/η=1 | 数学函数 `full_reverse_kl` 保留，退役的是运行配置名 |
-| 蒸馏注册名 `kl`／`low_var_kl`      | `k1`／`k3`                              | 不改变通用 PPO 的 `kl_penalty` 字段含义             |
-| 传入或序列化 `loss_settings`       | 删除该输入字段                          | 它是私有派生状态的只读属性，mirror 参数只读         |
-| `fused_candidate`                  | `precompute_fused`                      | 旧执行模块和别名已经删除，离线 reader 仍识别旧标签  |
-| CPU／FP64 请求 fused，依赖自动回退 | 显式选择 `precompute` 或 `dense`        | fused 要求 CUDA FP16/BF16/FP32，空 CPU shard 也拒绝 |
+| 原表达                             | 当前表达                                | 注意事项                                                          |
+| ---------------------------------- | --------------------------------------- | ----------------------------------------------------------------- |
+| `loss_mode=full_reverse_kl`        | `loss_mode=mirror`，MDPO/full_vocab/η=1 | 数值调用改为 `reverse_vocab.full_reverse_kl_result(...).loss_sum` |
+| 蒸馏注册名 `kl`／`low_var_kl`      | `k1`／`k3`                              | 不改变通用 PPO 的 `kl_penalty` 字段含义                           |
+| 传入或序列化 `loss_settings`       | 删除该输入字段                          | 它是私有派生状态的只读属性，mirror 参数只读                       |
+| `fused_candidate`                  | `precompute_fused`                      | 旧执行模块和别名已经删除，离线 reader 仍识别旧标签                |
+| CPU／FP64 请求 fused，依赖自动回退 | 显式选择 `precompute` 或 `dense`        | fused 要求 CUDA FP16/BF16/FP32，空 CPU shard 也拒绝               |
 
 Full-RKL 的配置增量如下，合并到已有 shared-sync 配方后使用；它不是完整训练 YAML：
 

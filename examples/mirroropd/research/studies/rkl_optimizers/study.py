@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Small full-parameter, full-vocabulary RKL optimizer experiment.
 
-Reuses MirrorOPD's production full_reverse_kl endpoint and its real 1.5B assets.
+Reuses MirrorOPD's production full_reverse_kl_result endpoint and its real 1.5B assets.
 BF16 model/gradients; persistent FP32 CPU master weights and optimizer states.
 Muon uses native torch.optim.Muon per matrix on the GPU, offloading its state
 between calls; embeddings/head/norms use native CPU AdamW. No production edits.
@@ -24,7 +24,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from verl.trainer.distillation.numerics import kl_rows
-from verl.trainer.distillation.reverse_vocab import full_reverse_kl
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 from verl.utils.linear import project
 
 
@@ -143,11 +143,11 @@ class Study:
                 "model_dtype": args.forward_dtype,
                 "master_and_states": "CPU float32",
                 "weight_decay": 0,
-                "loss": "production full_reverse_kl, token mean, all generated response positions",
+                "loss": "production full_reverse_kl_result, token mean, all generated response positions",
                 "calibration": "same initial batch; match first FP32 parameter-step L2 to cold AdamW lr=1e-6",
                 "evaluation": "fixed independent initial-student prefixes; conditional KL, not task accuracy",
                 "source_endpoints": [
-                    "verl.trainer.distillation.reverse_vocab.full_reverse_kl",
+                    "verl.trainer.distillation.reverse_vocab.full_reverse_kl_result",
                     "verl.trainer.distillation.numerics.kl_rows",
                 ],
                 "limitations": [
@@ -254,7 +254,7 @@ class Study:
             self.student.zero_grad(set_to_none=True)
             hs = self.hidden(self.student, rec)
             loss = (
-                full_reverse_kl(
+                full_reverse_kl_result(
                     hs,
                     self.student.lm_head.weight,
                     teacher_hidden.to(self.device),
@@ -262,7 +262,7 @@ class Study:
                     backend="precompute",
                     token_chunk=32,
                     vocab_chunk=8192,
-                )
+                ).loss_sum
                 / total
             )
             loss.backward()

@@ -158,22 +158,6 @@ def teacher_support_correction(ht, wt, student_vocab, token_chunk, vocab_chunk):
     return FullKLResult(total, rows, rows)
 
 
-def full_reverse_kl(
-    hs, ws, ht, wt, *, backend="recompute", token_chunk=512, vocab_chunk=8192, termination_token_ids=()
-):
-    """Scalar optimization interface; empty termination IDs preserve vocabulary KL."""
-    return full_reverse_kl_result(
-        hs,
-        ws,
-        ht,
-        wt,
-        backend=backend,
-        token_chunk=token_chunk,
-        vocab_chunk=vocab_chunk,
-        termination_token_ids=termination_token_ids,
-    ).loss_sum
-
-
 def validate_reverse_kl_inputs(hs, ws, ht, wt, *, backend, token_chunk, vocab_chunk, termination_token_ids):
     """Validate real tensors and capabilities without projecting logits or building a graph."""
     resolve_execution(backend, termination=bool(termination_token_ids))

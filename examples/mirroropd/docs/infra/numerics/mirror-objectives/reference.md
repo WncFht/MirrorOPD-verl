@@ -6,7 +6,7 @@
 
 ## 方法、配置与数据
 
-统一入口见[方法选择](../../training/launch.md)。`loss_mode=mirror`配合`MirrorConfig`选择 objective、estimator、κ和η；范围为κ∈[0,1]、η∈(0,1]，BPO 仅支持 full_vocab。旧运行配置名`full_reverse_kl`已退役，新 Full-RKL 使用 MDPO/full_vocab/η=1；数学函数仍保留。旧配置和调用者按[迁移指南](../../architecture/runtime-migration.md)处理，历史 run 仍使用冻结代码。
+统一入口见[方法选择](../../training/launch.md)。`loss_mode=mirror`配合`MirrorConfig`选择 objective、estimator、κ和η；范围为κ∈[0,1]、η∈(0,1]，BPO 仅支持 full_vocab。旧运行配置名`full_reverse_kl`已退役，新 Full-RKL 使用 MDPO/full_vocab/η=1；开发数值调用使用 `reverse_vocab.full_reverse_kl_result`；标量包装函数已删除。旧配置和调用者按[迁移指南](../../architecture/runtime-migration.md)处理，历史 run 仍使用冻结代码。
 
 | 路径                    | 实际目标与数据需求                                                                                   |
 | ----------------------- | ---------------------------------------------------------------------------------------------------- |

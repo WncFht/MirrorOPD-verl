@@ -12,7 +12,7 @@ from tensordict import TensorDict
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.output import FullVocabOutput
 from verl.trainer.distillation.results import FullKLResult
-from verl.trainer.distillation.reverse_vocab import full_reverse_kl, full_reverse_kl_result
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 from verl.utils import tensordict_utils as tu
 from verl.utils.metric.observations import Observation
 from verl.utils.metric.position import position_observations
@@ -56,7 +56,7 @@ def test_scalar_only_backend_expresses_capability_in_result(monkeypatch):
     hs, ws, ht, wt = [torch.ones(shape) for shape in [(2, 3), (7, 3), (2, 3), (7, 3)]]
     result = full_reverse_kl_result(hs, ws, ht, wt, backend="liger")
     assert isinstance(result, FullKLResult) and result.token_kl is None
-    torch.testing.assert_close(full_reverse_kl(hs, ws, ht, wt, backend="liger"), result.loss_sum)
+    torch.testing.assert_close(full_reverse_kl_result(hs, ws, ht, wt, backend="liger").loss_sum, result.loss_sum)
     from verl.trainer.distillation.full_vocab import full_vocab_objective_result
     from verl.workers.config.distillation_spec import resolve_distillation_spec
 

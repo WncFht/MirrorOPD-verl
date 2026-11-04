@@ -147,7 +147,12 @@ def main():
             else:
                 namespace = "mirror_perf_baseline" if method == "baseline" else "verl.trainer.distillation"
                 if args.device == "cuda":
-                    kernel = importlib.import_module(namespace + ".full_vocab_triton").fused_mirror_rows
+                    if method == "baseline":
+                        kernel = importlib.import_module(namespace + ".full_vocab_triton").fused_mirror_rows
+                    else:
+                        from examples.mirroropd.research.studies.precision.encoded_target import encoded_target_rows
+
+                        kernel = encoded_target_rows
                     _, dz, _ = kernel(
                         z.detach(),
                         b.float(),

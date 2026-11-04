@@ -283,22 +283,6 @@ def fused_bpo_rows(z, b, log_q, dtype):
     return value, gradient
 
 
-def fused_mirror_rows(z, b, log_q, log_teacher, dtype, *, objective, diagnostics):
-    """Compatibility for callers that already encoded b; cannot recover lost increments."""
-    if objective == "bpo":
-        value, gradient = fused_bpo_rows(z, b, log_q, dtype)
-    else:
-        value, gradient = fused_rows(z, b, dtype)
-        value = value - b.logsumexp(-1)
-    info = z.new_empty((len(z), 0))
-    if diagnostics:
-        target, _, _ = weighted_rows(z, difference(z, b), dtype, gradient=False)
-        anchor, _, _ = weighted_rows(z, difference(z, log_q), dtype, gradient=False)
-        teacher, _, _ = weighted_rows(z, difference(z, log_teacher), dtype, gradient=False)
-        info = torch.stack([target, b.logsumexp(-1), anchor, teacher - log_teacher.logsumexp(-1)], -1)
-    return value, gradient, info
-
-
 @triton.jit
 def _power(x, eta, K: tl.constexpr):
     if K == 0:

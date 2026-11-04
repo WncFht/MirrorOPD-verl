@@ -13,7 +13,7 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed
 
-from verl.trainer.distillation.reverse_vocab import full_reverse_kl, teacher_support_correction
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result, teacher_support_correction
 from verl.utils.linear import project
 
 
@@ -176,9 +176,13 @@ def main():
                         .sum()
                         .item()
                     )
-                    actual = full_reverse_kl(sh, ws, th, wt, backend="dense", token_chunk=8, vocab_chunk=8192)
+                    actual = full_reverse_kl_result(
+                        sh, ws, th, wt, backend="dense", token_chunk=8, vocab_chunk=8192
+                    ).loss_sum
                     corrected_error = abs(actual.item() - reference32) / len(sh)
-                    correction32 = teacher_support_correction(th, wt, vs, 8, 8192).item() / len(sh) if vt > vs else 0.0
+                    correction32 = (
+                        teacher_support_correction(th, wt, vs, 8, 8192).loss_sum.item() / len(sh) if vt > vs else 0.0
+                    )
                     check = {
                         "sequence": seq_id,
                         "positions": len(sh),

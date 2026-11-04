@@ -11,12 +11,12 @@ from pathlib import Path
 import torch
 
 from verl.trainer.distillation.full_vocab_triton import fused_rows
-from verl.trainer.distillation.reverse_vocab import full_reverse_kl
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 from verl.workers.config.distillation import FullVocabConfig
 
 
 def call(hs, ws, ht, wt, backend, chunk):
-    return full_reverse_kl(hs, ws, ht, wt, backend=backend, token_chunk=chunk) / len(hs)
+    return full_reverse_kl_result(hs, ws, ht, wt, backend=backend, token_chunk=chunk).loss_sum / len(hs)
 
 
 def check_reduction():

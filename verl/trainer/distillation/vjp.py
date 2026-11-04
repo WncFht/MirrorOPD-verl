@@ -24,7 +24,7 @@ class PrecomputedVJP(torch.autograd.Function):
             dh if hs.dtype == torch.float16 else dh.to(hs.dtype),
             dw if ws.dtype == torch.float16 else dw.to(ws.dtype),
         )
-        ctx.mark_non_differentiable(*outputs[1:])
+        ctx.mark_non_differentiable(*(value for value in outputs[1:] if value is not None))
         return outputs
 
     @staticmethod
@@ -99,8 +99,8 @@ def run_blocks(
     costs = torch.empty_like(raw)
     info = hs.new_empty((len(hs), diagnostic_count), dtype=dtype)
     future_enabled = reduction is not None and reduction.future_config.mode != "none"
-    coefficients = torch.empty_like(costs) if future_enabled else costs.new_empty(0)
-    score_sum = costs.new_zeros(())
+    coefficients = torch.empty_like(costs) if future_enabled else None
+    score_sum = costs.new_zeros(()) if future_enabled else None
     total = hs.sum() * 0 + ws.sum() * 0 if not accumulate else costs.new_zeros(())
     dh, dw = (torch.zeros_like(hs, dtype=dtype), torch.zeros_like(ws, dtype=dtype)) if accumulate else (None, None)
     weights = reduction.row_weights(dtype) if reduction is not None else row_weights
@@ -141,9 +141,8 @@ def run_blocks(
                 )
                 dz = dz.float() if hs.dtype == torch.float16 else dz.to(hs.dtype)
         else:
-            total = (
-                total + (values * local_weight).sum() if not accumulate else total.add_((values * local_weight).sum())
-            )
+            local_sum = values.sum() if weights is None else (values * local_weight).sum()
+            total = total + local_sum if not accumulate else total.add_(local_sum)
             if accumulate and weights is not None:
                 dz = (dz * local_weight[:, None]).to(dz.dtype)
         raw[start:stop], costs[start:stop], info[start:stop] = metric.detach(), values.detach(), diag.detach()

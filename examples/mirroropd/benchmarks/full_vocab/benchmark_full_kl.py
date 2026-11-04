@@ -12,11 +12,13 @@ from pathlib import Path
 import torch
 
 from examples.mirroropd.benchmarks.full_vocab.probe_full_kl import measure, relative_error
-from verl.trainer.distillation.reverse_vocab import full_reverse_kl
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 
 
 def mean_kl(hs, ws, ht, wt, backend, chunk):
-    return full_reverse_kl(hs, ws, ht, wt, backend=backend, token_chunk=chunk, vocab_chunk=8192) / len(hs)
+    return full_reverse_kl_result(hs, ws, ht, wt, backend=backend, token_chunk=chunk, vocab_chunk=8192).loss_sum / len(
+        hs
+    )
 
 
 def main():

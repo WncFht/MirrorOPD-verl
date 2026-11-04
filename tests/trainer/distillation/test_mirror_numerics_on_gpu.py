@@ -5,7 +5,8 @@
 import pytest
 import torch
 
-from verl.trainer.distillation.full_vocab_triton import fused_mirror_rows
+from verl.trainer.distillation.full_vocab_triton import fused_mirror_logits
+from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
 
@@ -20,10 +21,10 @@ def test_near_target_fused_gradient_matches_fp64(vocab, dtype):
     teacher = base.clone()
     teacher[:, 1] += 0.03
     teacher[:, 2] -= 0.02
-    lq = base.log_softmax(-1)
-    # Preserve a non-contiguous teacher view and its full-support normalizer.
-    lt = torch.cat([teacher, teacher.new_full((2, 3), -40)], dim=-1).log_softmax(-1)[:, :vocab]
-    b = 0.7 * lq + 0.3 * lt
+    b = (
+        0.7 * base.double().log_softmax(-1)
+        + 0.3 * torch.cat([teacher, teacher.new_full((2, 3), -40)], dim=-1).double().log_softmax(-1)[:, :vocab]
+    )
     initial_gradient = None
     for offset in [0.0, 32.0, 128.0]:
         z = base + offset
@@ -31,7 +32,15 @@ def test_near_target_fused_gradient_matches_fp64(vocab, dtype):
         lp = oracle_z.log_softmax(-1)
         oracle = torch.autograd.grad((lp.exp() * (lp - b.double())).sum(), oracle_z)[0]
         for diagnostics in [False, True]:
-            _, actual, _ = fused_mirror_rows(z, b, lq, lt, dtype, objective="mdpo", diagnostics=diagnostics)
+            settings = resolve_distillation_spec(
+                {
+                    "loss_mode": "mirror",
+                    "mirror": {"objective": "mdpo", "kappa": 0, "eta": 0.3, "diagnostics": diagnostics},
+                }
+            )
+            _, actual, _, _ = fused_mirror_logits(
+                z, base, torch.cat([teacher, teacher.new_full((2, 3), -40)], dim=-1), dtype, spec=settings
+            )
             relative = (actual.double() - oracle).norm() / oracle.norm()
             assert relative < (0.006 if dtype == torch.bfloat16 else 0.001), relative.item()
             if initial_gradient is None:

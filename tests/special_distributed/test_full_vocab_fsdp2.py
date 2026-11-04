@@ -67,6 +67,7 @@ def main():
     )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--checkpoint", action="store_true")
+    parser.add_argument("--readout", action="store_true", help="Check readout isolation before every update")
     parser.add_argument("--state-output", type=Path)
     parser.add_argument("--model-type", choices=["qwen2", "qwen3", "llama"], default="qwen2")
     parser.add_argument("--moe-teacher", action="store_true")
@@ -223,6 +224,35 @@ def main():
         for expected, actual in zip(positions, teacher_result["teacher_positions"].unbind(), strict=True):
             torch.testing.assert_close(expected, actual)
         data.update(teacher_result.select("teacher_hidden", "teacher_positions"))
+        if args.readout:
+            score_data = data.clone()
+            tu.assign_non_tensor(score_data, full_vocab_teacher=False, full_vocab_train=False, full_vocab_score=True)
+
+            def state():
+                return local_snapshot(
+                    (
+                        dict(actor.engine.module.named_parameters()),
+                        actor.engine.optimizer.state_dict(),
+                        actor.engine.lr_scheduler.state_dict(),
+                        {name: parameter.grad for name, parameter in actor.engine.module.named_parameters()},
+                    )
+                )
+
+            before = state()
+            scores = actor.infer_batch(score_data)
+            expected_count = torch.tensor([len(p) for p in positions])
+            torch.testing.assert_close(scores["rkl_count"].values().reshape(-1), expected_count, atol=0, rtol=0)
+            saved_config, saved_aggregate = actor.engine.full_vocab_config, actor.engine.full_vocab_agg_mode
+            try:
+                actor.engine.full_vocab_config = replace(full_config, future={"mode": "none"})
+                actor.engine.full_vocab_agg_mode = "token-sum"
+                other = actor.infer_batch(score_data)
+                torch.testing.assert_close(other["rkl_sum"].values(), scores["rkl_sum"].values(), atol=0, rtol=0)
+            finally:
+                actor.engine.full_vocab_config, actor.engine.full_vocab_agg_mode = saved_config, saved_aggregate
+                actor.engine.full_vocab_teacher_head.release()
+            torch.testing.assert_close(state(), before, atol=0, rtol=0)
+            assert_on_cpu(actor)
         if step == 0:
             reference = AutoModelForCausalLM.from_pretrained(root / "student", torch_dtype=torch.float32).cuda().eval()
             total = torch.zeros((), device="cuda")
@@ -337,6 +367,7 @@ def main():
         assert actor.engine.lr_scheduler.state_dict() == next_scheduler
     result = {
         "backend": args.backend,
+        "readout_isolation": args.readout,
         "direction": args.direction,
         "loss_agg_mode": args.loss_agg_mode,
         "loss_scale_factor": args.loss_scale_factor,

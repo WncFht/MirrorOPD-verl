@@ -10,7 +10,7 @@ from transformers import AutoModelForCausalLM, LlamaConfig, Olmo3Config, Qwen2Co
 
 from verl.models.transformers.full_vocab import install_full_vocab_adapter
 from verl.trainer.distillation.hidden import FrozenTeacherHead
-from verl.trainer.distillation.reverse_vocab import full_reverse_kl
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 
 
 @pytest.mark.parametrize(
@@ -56,7 +56,9 @@ def test_adapter_matches_dense_model_value_and_all_gradients(config_cls, tied, t
     expected = (lp.exp() * (lp - lq)).sum()
 
     def output(hidden, lm_head):
-        return lm_head(hidden.squeeze(0), full_vocab_callback=lambda h, w: full_reverse_kl(h, w, ht, wt))
+        return lm_head(
+            hidden.squeeze(0), full_vocab_callback=lambda h, w: full_reverse_kl_result(h, w, ht, wt).loss_sum
+        )
 
     actual = adapted(ids, full_vocab_callback=output)
     torch.testing.assert_close(actual, expected, atol=1e-10, rtol=1e-10)
