@@ -2,6 +2,12 @@
 
 本页维护 full-vocab 数据通路、模型接入和数值正确性的证据入口。性能结果由[性能专题](../../performance/full-vocab/README.md)维护，实际算法与运行支持以[代码走读](../../architecture/full-vocab.md)和[mirror 支持范围](../mirror-objectives/reference.md#settings)为准。
 
+## 公共 VJP 与连续分块验收（2026-11-04）
+
+公共执行器迁移后，`tests/trainer/distillation -k cpu` 为 927 passed、18 skipped；跳过项是非 discounted 模式与非单位 γ 的无效组合。CUDA trajectory 矩阵为 540 passed，覆盖既有目标、future、聚合、EOS 和多种精度；条件支持集的 CUDA 矩阵另有 12 passed。原始命令与输出保存在仓库 `runs/kl-backend-20261104/`，该目录为执行产物，不随源码提交。
+
+[分段后缀测试](../../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)跨多个回答边界、空回答与原始时间重置核对严格 future；大 local cost 旁的极小 future 不通过两者相减求出。[投影计数测试](../../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)要求连续分块只按总行数决定投影次数，backward 不重放投影。该阶段验证公共执行与连续分块；融合优化、完整 actor 和重构后的真实 FSDP 结果另行记录，不把旧分布式通过数算作新版本验收。
+
 ## 验证矩阵
 
 | 层次          | 核对内容                                                                        | 测试入口                                                                                                                                                                                                    |

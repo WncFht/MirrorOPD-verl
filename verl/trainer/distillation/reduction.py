@@ -3,7 +3,7 @@
 """Packed row reduction and detached trajectory credit, independent of kernels."""
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import torch
 
@@ -39,41 +39,55 @@ def reduction_scale(mode, *, dp_size=1, num_tokens=None, num_sequences=None, fix
 
 
 @torch.no_grad()
-def suffix_credit(cost, times, config, *, carry=None):
-    """Strict discounted suffix on one contiguous response block, in O(log N) launches.
+def suffix_credit(cost, times, segments, config, *, carry=None):
+    """Strict segmented suffix with original time gaps and one edge-answer carry.
 
-    Doubling scan avoids inverse discount powers (which overflow on long answers)
-    and Python per-token loops. Gaps consume original response time. Carry holds
-    the inclusive cost/mass and coordinate of the next block's first row.
+    Doubling never combines different answers. Nonnegative exponents avoid
+    inverse discount overflow even across time resets. Shifting inclusive
+    suffixes preserves small future signals next to large local costs.
     """
     if not len(cost):
         return cost.detach().clone(), carry
     gamma = config.gamma
-    sums, mass = cost.detach().clone(), torch.ones_like(cost)
+    mean = config.mode in ("mean", "discounted_mean")
+    sums = cost.detach().clone()
+    mass = torch.ones_like(cost) if mean else None
+
+    def weights(left_times, right_times, same):
+        if gamma == 1:
+            return same.to(cost.dtype)
+        return same * gamma ** (right_times - left_times).clamp_min(0).to(cost.dtype)
+
     stride = 1
     while stride < len(cost):
-        discount = gamma ** (times[stride:] - times[:-stride]).to(cost.dtype)
-        sums = torch.cat((sums[:-stride] + discount * sums[stride:], sums[-stride:]))
-        mass = torch.cat((mass[:-stride] + discount * mass[stride:], mass[-stride:]))
+        weight = weights(times[:-stride], times[stride:], segments[:-stride] == segments[stride:])
+        sums = torch.cat((sums[:-stride] + weight * sums[stride:], sums[-stride:]))
+        if mean:
+            mass = torch.cat((mass[:-stride] + weight * mass[stride:], mass[-stride:]))
         stride *= 2
     if carry is not None:
-        next_sum, next_mass, next_time = carry
-        discount = gamma ** (next_time - times).to(cost.dtype)
-        sums = sums + discount * next_sum
-        mass = mass + discount * next_mass
-    # Shift inclusive suffixes instead of subtracting cost from a large total.
-    future, weight = torch.zeros_like(cost), torch.zeros_like(cost)
+        next_sum, next_mass, next_time, next_segment = carry
+        weight = weights(times, next_time, segments == next_segment)
+        sums = sums + weight * next_sum
+        if mean:
+            mass = mass + weight * next_mass
+    future = torch.zeros_like(cost)
+    future_mass = torch.zeros_like(cost) if mean else None
     if len(cost) > 1:
-        discount = gamma ** (times[1:] - times[:-1]).to(cost.dtype)
-        future[:-1], weight[:-1] = discount * sums[1:], discount * mass[1:]
+        weight = weights(times[:-1], times[1:], segments[:-1] == segments[1:])
+        future[:-1] = weight * sums[1:]
+        if mean:
+            future_mass[:-1] = weight * mass[1:]
     if carry is not None:
-        discount = gamma ** (carry[2] - times[-1]).to(cost.dtype)
-        future[-1], weight[-1] = discount * carry[0], discount * carry[1]
-    if config.mode in ("mean", "discounted_mean"):
-        future = torch.where(weight > 0, future / weight.clamp_min(torch.finfo(cost.dtype).tiny), 0)
+        weight = weights(times[-1], carry[2], segments[-1] == carry[3])
+        future[-1] = weight * carry[0]
+        if mean:
+            future_mass[-1] = weight * carry[1]
+    if mean:
+        future = torch.where(future_mass > 0, future / future_mass.clamp_min(torch.finfo(cost.dtype).tiny), 0)
     if config.mode == "none":
         future.zero_()
-    return future, (sums[0], mass[0], times[0])
+    return future, (sums[0], mass[0] if mean else None, times[0], segments[0])
 
 
 @dataclass(frozen=True)
@@ -85,6 +99,7 @@ class PackedReduction:
     actions: torch.Tensor
     mode: str = "token-mean"
     future: FutureCreditConfig | None = None
+    segments: torch.Tensor = field(init=False, repr=False, compare=False)
 
     def __post_init__(self):
         if any(type(n) is not int or n < 0 for n in self.counts):
@@ -93,6 +108,15 @@ class PackedReduction:
             raise ValueError("Packed counts, times and actions must describe the same rows")
         if self.times.dtype != torch.long or self.actions.dtype != torch.long:
             raise ValueError("Packed times and actions must be int64")
+        object.__setattr__(
+            self,
+            "segments",
+            torch.repeat_interleave(
+                torch.arange(len(self.counts), device=self.times.device),
+                torch.tensor(self.counts, device=self.times.device, dtype=torch.long),
+                output_size=len(self.times),
+            ),
+        )
         reduction_scale(self.mode, num_tokens=1, num_sequences=1, fixed_scale=1)
         torch._assert_async((self.times >= 0).all(), "Response times must be nonnegative")
         offset = 0
@@ -120,13 +144,6 @@ class PackedReduction:
         )
 
     def blocks(self, chunk):
-        """Visit each response backwards; a carry never crosses its boundary."""
-        start = 0
-        for count in self.counts:
-            end = start + count
-            stop = end
-            while stop > start:
-                begin = max(start, stop - chunk)
-                yield begin, stop, stop == end
-                stop = begin
-            start = end
+        """Continuous reverse chunks; answer boundaries constrain scans, not GEMMs."""
+        for stop in range(len(self.times), 0, -chunk):
+            yield max(0, stop - chunk), stop

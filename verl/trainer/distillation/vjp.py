@@ -107,16 +107,18 @@ def run_blocks(
     blocks = (
         reduction.blocks(chunk)
         if future_enabled
-        else ((start, min(start + chunk, len(hs)), True) for start in range(0, len(hs), chunk))
+        else ((start, min(start + chunk, len(hs))) for start in range(0, len(hs), chunk))
     )
     carry = None
-    for start, stop, reset in blocks:
+    for start, stop in blocks:
         block = prepare(hs[start:stop], ws, ht[start:stop], wt, None if hq is None else hq[start:stop], wq)
         values, dz, metric, diag, logits = block
         local_weight = 1 if weights is None else weights[start:stop]
         if future_enabled:
             config = reduction.future_config
-            future, carry = suffix_credit(values, reduction.times[start:stop], config, carry=None if reset else carry)
+            future, carry = suffix_credit(
+                values, reduction.times[start:stop], reduction.segments[start:stop], config, carry=carry
+            )
             sampled_lp, score = action_score(logits, reduction.actions[start:stop], actions)
             if config.mode == "discounted_sequence":
                 local_weight = local_weight * config.gamma ** reduction.times[start:stop].to(dtype)

@@ -338,7 +338,8 @@ def test_empty_future_rank_has_finite_zero_value_and_gradients(backend):
     assert dw.eq(0).all()
 
 
-def test_precompute_reuses_student_projection_and_backward_does_not_reproject(monkeypatch):
+@pytest.mark.parametrize("counts,times", [((3, 2), [0, 1, 4, 0, 2]), ((1, 0, 1, 1, 1, 1), [0, 0, 0, 0, 0])])
+def test_precompute_reuses_student_projection_and_backward_does_not_reproject(monkeypatch, counts, times):
     from verl.trainer.distillation import reverse_vocab, rows
 
     torch.manual_seed(17)
@@ -356,7 +357,7 @@ def test_precompute_reuses_student_projection_and_backward_does_not_reproject(mo
     monkeypatch.setattr(reverse_vocab, "project", record)
     monkeypatch.setattr(rows, "project", record)
     layout = PackedReduction(
-        (3, 2), torch.tensor([0, 1, 4, 0, 2]), torch.zeros(5, dtype=torch.long), future=FutureCreditConfig(mode="sum")
+        counts, torch.tensor(times), torch.zeros(5, dtype=torch.long), future=FutureCreditConfig(mode="sum")
     )
     result = full_vocab_objective_result(
         hs, ws, ht, wt, hq=hq, wq=wq, spec=spec(0.2), reduction=layout, backend="precompute", token_chunk=2

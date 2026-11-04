@@ -1,10 +1,9 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Measure trajectory overhead and traversal controls on identical synthetic heads.
+"""Measure production trajectory modes on identical synthetic heads.
 
-Controls force the trajectory implementation with zero future credit. They are
-measurement-only paths, not alternative production backends. Dense gates each
-layout/mode before timing; all timings include hidden and head backward.
+Dense gates each layout/mode before timing. Timings include hidden and head
+backward; projection counts are measured outside the timed region.
 """
 
 import argparse
