@@ -55,20 +55,15 @@ class FullVocabConfig(BaseConfig):
 
     def __post_init__(self):
         from verl.trainer.distillation.distribution import DistributionSpec
+        from verl.trainer.distillation.execution import resolve_execution
 
         self._distribution_spec = DistributionSpec.parse(self.distribution)
         if not isinstance(self.future, FutureCreditConfig):
             object.__setattr__(self, "future", FutureCreditConfig(**dict(self.future)))
-        if self.future.mode != "none" and self.backend not in ("dense", "precompute", "precompute_fused"):
-            raise ValueError("Future credit requires dense/precompute/precompute_fused")
-        if self.future.mode != "none" and self.distribution_spec.mode != "native":
-            raise ValueError("Future credit does not support common-conditioned distributions")
         if self.input_id_mapping not in {"identity", "token_semantics"}:
             raise ValueError("input_id_mapping must be identity or token_semantics")
         if self.forward_teacher_support not in ("equal", "student"):
             raise ValueError("forward_teacher_support must be equal or student")
-        if self.backend not in ("dense", "recompute", "cached", "streaming", "precompute", "precompute_fused", "liger"):
-            raise ValueError(f"Unsupported full-vocab backend: {self.backend}")
         if any(type(x) is not int or x <= 0 for x in (self.token_chunk_size, self.vocab_chunk_size)):
             raise ValueError("full-vocab chunk sizes must be positive")
         ids = self.termination_token_ids
@@ -76,8 +71,9 @@ class FullVocabConfig(BaseConfig):
             raise ValueError("full_vocab.termination_token_ids must be a list of nonnegative integers")
         if ids and (len(ids) < 2 or len(set(ids)) != len(ids)):
             raise ValueError("termination equivalence requires at least two distinct token IDs")
-        if ids and self.backend not in ("precompute", "precompute_fused"):
-            raise ValueError("termination equivalence requires full_vocab.backend=precompute or precompute_fused")
+        resolve_execution(
+            self.backend, future=self.future.mode, distribution=self.distribution_spec.mode, termination=bool(ids)
+        )
 
     def validate_termination_support(self, *, eos_token_ids, stop_token_ids, vocab_ids, vocab_size):
         """Check real model/tokenizer and generation semantics after loading metadata."""
@@ -170,9 +166,18 @@ class DistillationLossConfig(BaseConfig):
         self._loss_settings: DistillationLossSettings = resolve_distillation_spec(self)
         if isinstance(self.full_vocab, dict):
             object.__setattr__(self, "full_vocab", FullVocabConfig(**self.full_vocab))
-        if self.full_vocab.future.mode != "none" and not (
-            self.loss_settings.payload_kind == "hidden" and self.loss_settings.objective == "mdpo"
-        ):
+        from verl.trainer.distillation.execution import resolve_execution
+
+        spec = self.loss_settings
+        if spec.payload_kind == "hidden":
+            resolve_execution(
+                self.full_vocab.backend,
+                objective="reverse_kl" if spec.teacher_only_kl else spec.objective,
+                future=self.full_vocab.future.mode,
+                distribution=self.full_vocab.distribution_spec.mode,
+                termination=bool(self.full_vocab.termination_token_ids),
+            )
+        elif self.full_vocab.future.mode != "none":
             raise ValueError("Future credit supports full-vocabulary reverse KL and MDPO only")
         if (
             self.full_vocab.distribution or self.full_vocab.input_id_mapping != "identity"
@@ -194,12 +199,6 @@ class DistillationLossConfig(BaseConfig):
                 raise ValueError("mirror requires pure distillation with no clamps")
             if self.advantage_source != "current":
                 raise ValueError("mirror does not use the legacy advantage_source switch; require current")
-            if (
-                not sampled
-                and not spec.teacher_only_kl
-                and self.full_vocab.backend not in ("dense", "precompute", "precompute_fused")
-            ):
-                raise ValueError("mirror full_vocab supports dense/precompute/precompute_fused")
             return
         if self.loss_mode == "full_forward_kl":
             if self.use_policy_gradient or self.use_task_rewards or self.policy_loss_mode != "vanilla":
@@ -208,13 +207,6 @@ class DistillationLossConfig(BaseConfig):
                 raise ValueError(f"{self.loss_mode} requires unclamped loss and log probabilities")
             if self.advantage_source != "current":
                 raise ValueError(f"{self.loss_mode} evaluates the current student distribution")
-            if self.loss_mode == "full_forward_kl" and self.full_vocab.backend not in (
-                "dense",
-                "recompute",
-                "precompute",
-                "precompute_fused",
-            ):
-                raise ValueError("full_forward_kl supports dense/recompute/precompute/precompute_fused")
 
         if self.policy_loss_mode not in ("vanilla", "token_ppo", "token_is", "reinforce"):
             raise ValueError(f"Unsupported distillation policy_loss_mode: {self.policy_loss_mode}")

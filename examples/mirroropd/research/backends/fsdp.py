@@ -18,8 +18,10 @@ import torch
 
 import verl.trainer.distillation.full_vocab as kernels
 from verl.trainer.distillation.losses import distillation_loss
+from verl.trainer.distillation.results import FullVocabObjectiveResult
 from verl.trainer.distillation.targets import build_log_weights
 from verl.utils import tensordict_utils as tu
+from verl.utils.linear import project
 from verl.workers.config import (
     FSDPEngineConfig,
     FSDPOptimizerConfig,
@@ -75,16 +77,16 @@ def make_worker(path, world, teacher=False, precision="bfloat16", attention="fla
 
 
 def reference(hs, ws, ht, wt, *, spec, hq=None, wq=None, **kwargs):
-    zp = kernels.project(hs, ws).double()
-    zt = kernels.project(ht, wt).double()
+    zp = project(hs, ws).double()
+    zt = project(ht, wt).double()
     lp = zp.log_softmax(-1)
     lt = zt.log_softmax(-1)[:, : len(ws)]
     if spec.teacher_only_kl:
         rows = (lp.exp() * (lp - lt)).sum(-1)
-        return kernels.FullVocabObjectiveResult(
+        return FullVocabObjectiveResult(
             rows.sum(), rows, {}, objective_rows=rows.detach(), local_objective_sum=rows.detach().sum()
         )
-    zq = kernels.project(hq, wq).double()
+    zq = project(hq, wq).double()
     lq = zq.log_softmax(-1)
     b = build_log_weights(lt, lq, kappa=spec.kappa, eta=spec.eta)
     p = lp.exp()
@@ -97,7 +99,7 @@ def reference(hs, ws, ht, wt, *, spec, hq=None, wq=None, **kwargs):
     else:
         rows = raw_mdpo
     lz = b.logsumexp(-1)
-    return kernels.FullVocabObjectiveResult(
+    return FullVocabObjectiveResult(
         rows.sum(),
         rows,
         {

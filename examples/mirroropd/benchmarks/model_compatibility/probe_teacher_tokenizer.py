@@ -12,7 +12,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from examples.mirroropd.assets.paths import registered_model
-from verl.trainer.distillation.full_vocab import project
+from verl.utils.linear import project
 
 
 def main():

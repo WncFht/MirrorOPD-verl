@@ -64,7 +64,7 @@ def compare(x, y, name):
 def external_losses():
     from flash_attn.ops.triton.cross_entropy import cross_entropy_loss
 
-    from verl.trainer.distillation.full_vocab import full_reverse_kl_result
+    from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
     from verl.utils.stable_logprobs import selected_logprobs
 
     result = []

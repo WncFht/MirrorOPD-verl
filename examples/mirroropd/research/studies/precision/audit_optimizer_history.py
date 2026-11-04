@@ -25,10 +25,11 @@ from tensordict import TensorDict
 
 from examples.mirroropd.research.backends import fsdp as replay
 from examples.mirroropd.research.backends.fsdp import assign, local, snapshot
-from verl.trainer.distillation import full_vocab as kernels
 from verl.trainer.distillation.anchor import anchor_scope
+from verl.trainer.distillation.results import FullVocabObjectiveResult
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
+from verl.utils.linear import project
 from verl.workers.config import DistillationConfig, DistillationLossConfig
 from verl.workers.config.distillation import FullVocabConfig
 
@@ -186,11 +187,11 @@ def main():
     current_mode, initializing = [None], [False]
 
     def evaluate_rows(hs, ws, ht, wt, *, spec, hq, wq, **kwargs):
-        lp = kernels.project(hs, ws).double().log_softmax(-1)
+        lp = project(hs, ws).double().log_softmax(-1)
         p = lp.exp()
         if not frozen:
-            lq = kernels.project(hq, wq).double().log_softmax(-1)
-            lt = kernels.project(ht, wt).double().log_softmax(-1)[:, : len(ws)]
+            lq = project(hq, wq).double().log_softmax(-1)
+            lt = project(ht, wt).double().log_softmax(-1)[:, : len(ws)]
             b = lq + spec.eta * (lt - lq)
             frozen.update(q=lq, t=lt, b=b)
         mode = current_mode[0]
@@ -199,7 +200,7 @@ def main():
         q = mode_initial.get(mode, frozen["q"])
         own_b = q + spec.eta * (frozen["t"] - q)
         raw = (p * (lp - frozen["b"])).sum(-1)
-        return kernels.FullVocabObjectiveResult(
+        return FullVocabObjectiveResult(
             raw.sum(),
             raw,
             {

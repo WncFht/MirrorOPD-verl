@@ -9,8 +9,11 @@ retain the teacher's native normalizer for comparison with historical runs.
 
 import torch
 
-from verl.trainer.distillation.full_vocab import FullVocabObjectiveResult, add_product, project, validate_fused_backend
+from verl.trainer.distillation.execution import resolve_execution, validate_fused_backend
 from verl.trainer.distillation.numerics import cumulant, log_softmax, mean, relative_difference
+from verl.trainer.distillation.results import FullVocabObjectiveResult
+from verl.trainer.distillation.vjp import add_product, precompute_rows
+from verl.utils.linear import project
 
 DIAGNOSTICS = ("full_kl", "teacher_outside_student_mass", "student_entropy", "teacher_entropy", "js", "tv")
 
@@ -71,9 +74,9 @@ def block_rows(hs, ws, ht, wt, fused):
     return forward_rows(z, teacher, extra, fused=fused, grad_dtype=dtype)
 
 
-def _precompute_forward_rows(hs, ws, ht, wt, *, fused):
+def prepare_forward(hs, ws, ht, wt, hq, wq, *, fused):
     values, dz, info = block_rows(hs, ws, ht, wt, fused)
-    return values, dz, values, info
+    return values, dz, values, info, None
 
 
 class ForwardRecompute(torch.autograd.Function):
@@ -112,8 +115,7 @@ class ForwardRecompute(torch.autograd.Function):
 def full_forward_kl_result(
     hs, ws, ht, wt, *, backend="precompute", token_chunk=512, teacher_support="equal", row_weights=None
 ):
-    if backend not in ("dense", "recompute", "precompute", "precompute_fused"):
-        raise ValueError("full forward KL supports dense/recompute/precompute/precompute_fused")
+    resolve_execution(backend, objective="forward_kl")
     if teacher_support not in ("equal", "student"):
         raise ValueError("forward_teacher_support must be equal or student")
     if any(x.ndim != 2 for x in (hs, ws, ht, wt)) or len(hs) != len(ht):
@@ -141,16 +143,14 @@ def full_forward_kl_result(
         else:
             from functools import partial
 
-            from verl.trainer.distillation.full_vocab import precompute_rows
-
-            total, values, _, info = precompute_rows(
+            total, values, _, info, _, _ = precompute_rows(
                 hs,
                 ws,
                 ht,
                 wt,
                 token_chunk,
-                partial(_precompute_forward_rows, fused=backend == "precompute_fused"),
-                diagnostic_names=DIAGNOSTICS,
+                partial(prepare_forward, fused=backend == "precompute_fused"),
+                diagnostic_count=len(DIAGNOSTICS),
                 row_weights=row_weights,
             )
     return FullVocabObjectiveResult(

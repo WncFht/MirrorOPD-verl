@@ -80,7 +80,7 @@ def stop_statistics(student_logits, teacher_logits, ids=STOP_IDS):
 
 @torch.no_grad()
 def observe(engine, micro_batch, positions, hs, ws, ht, wt):
-    from verl.trainer.distillation.full_vocab import project
+    from verl.utils.linear import project
 
     update = engine.e54_debug_update
     keys = list(micro_batch["sample_keys"])

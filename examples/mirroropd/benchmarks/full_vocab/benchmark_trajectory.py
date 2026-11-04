@@ -10,7 +10,6 @@ layout/mode before timing; all timings include hidden and head backward.
 import argparse
 import json
 import math
-from dataclasses import dataclass
 from functools import partial
 from pathlib import Path
 from unittest.mock import patch
@@ -18,52 +17,33 @@ from unittest.mock import patch
 import torch
 
 from examples.mirroropd.benchmarks.full_vocab.probe_full_kl import measure, relative_error
-from verl.trainer.distillation import full_vocab, full_vocab_triton, trajectory
+from verl.trainer.distillation import full_vocab_triton, reverse_vocab, rows
 from verl.trainer.distillation.full_vocab import full_vocab_objective_result
 from verl.trainer.distillation.reduction import PackedReduction
-from verl.trainer.distillation.trajectory import trajectory_objective_result
 from verl.workers.config.distillation_spec import DistillationLossSettings, FutureCreditConfig
 
 
-@dataclass(frozen=True)
-class TraversalControl(PackedReduction):
-    """Change only block visitation; zero credit makes cross-answer carry moot."""
-
-    traversal: str = "answer-reverse"
-
-    def blocks(self, chunk):
-        if self.traversal == "answer-reverse":
-            yield from super().blocks(chunk)
-        else:
-            blocks = [(start, min(start + chunk, len(self.times)), True) for start in range(0, len(self.times), chunk)]
-            yield from reversed(blocks) if self.traversal == "contiguous-reverse" else blocks
-
-
-def objective(inputs, settings, layout, backend, chunk, *, control=False):
+def objective(inputs, settings, layout, backend, chunk):
     hs, ws, ht, wt = inputs
-    kwargs = dict(spec=settings, reduction=layout, backend=backend, token_chunk=chunk)
-    if control:
-        result = trajectory_objective_result(
-            hs, ws, ht, wt, hq=None, wq=None, vocab_chunk=8192, termination_token_ids=[], distribution=None, **kwargs
-        )
-    else:
-        result = full_vocab_objective_result(hs, ws, ht, wt, **kwargs)
+    result = full_vocab_objective_result(
+        hs, ws, ht, wt, spec=settings, reduction=layout, backend=backend, token_chunk=chunk
+    )
     return result.loss_sum / len(hs)
 
 
 def projection_counts(fn):
     """Count untimed projection calls/rows without a second timed execution path."""
     calls = []
-    original = full_vocab.project
+    original = rows.project
 
     def record(hidden, weight):
         calls.append(len(hidden))
         return original(hidden, weight)
 
     with (
-        patch.object(full_vocab, "project", record),
+        patch.object(rows, "project", record),
         patch.object(full_vocab_triton, "project", record),
-        patch.object(trajectory, "project", record),
+        patch.object(reverse_vocab, "project", record),
     ):
         value = fn()
     del value
@@ -108,16 +88,9 @@ def main():
                 expected_value, expected_grad = expected.item(), [g.cpu() for g in gradients]
                 del expected, gradients
                 variants = [("production", layout)]
-                if mode == "none":
-                    variants += [
-                        (name, TraversalControl(counts, times, actions, aggregate, future, name))
-                        for name in ["contiguous-forward", "contiguous-reverse", "answer-reverse"]
-                    ]
                 for backend in ["precompute", "precompute_fused"]:
                     for path, packed in variants:
-                        fn = partial(
-                            objective, inputs, settings, packed, backend, args.chunk, control=path != "production"
-                        )
+                        fn = partial(objective, inputs, settings, packed, backend, args.chunk)
                         actual = fn()
                         gradients = torch.autograd.grad(actual, (hs, ws))
                         errors = dict(

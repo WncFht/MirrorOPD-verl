@@ -20,8 +20,8 @@ from transformers import AutoModelForCausalLM
 from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.core.paths import REPO
-from verl.trainer.distillation.full_vocab import project
 from verl.trainer.distillation.numerics import kl_rows
+from verl.utils.linear import project
 
 
 class KL(torch.autograd.Function):

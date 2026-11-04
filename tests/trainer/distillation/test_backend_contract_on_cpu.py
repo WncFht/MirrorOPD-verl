@@ -6,7 +6,8 @@ import pytest
 import torch
 
 from verl.trainer.distillation.forward_vocab import forward_rows, full_forward_kl_result
-from verl.trainer.distillation.full_vocab import full_reverse_kl_result, full_vocab_objective_result
+from verl.trainer.distillation.full_vocab import full_vocab_objective_result
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 from verl.workers.config.distillation_spec import resolve_distillation_spec
 
 

@@ -71,7 +71,7 @@ def test_fused_noncontiguous_rows_are_materialized_safely():
 
 
 def test_fused_backend_rejects_cuda_fp64_instead_of_running_reference():
-    from verl.trainer.distillation.full_vocab import full_reverse_kl_result
+    from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 
     h = torch.zeros(2, 3, device="cuda", dtype=torch.float64)
     w = torch.zeros(7, 3, device="cuda", dtype=torch.float64)

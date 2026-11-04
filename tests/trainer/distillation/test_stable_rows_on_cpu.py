@@ -5,9 +5,9 @@
 import pytest
 import torch
 
-from verl.trainer.distillation.full_vocab import full_reverse_kl_result
 from verl.trainer.distillation.numerics import kl_rows, mirror_logits_rows
 from verl.trainer.distillation.objectives import mdpo_sampled_terms
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 
 
 def oracle(z, anchor, teacher, kappa, eta, objective):

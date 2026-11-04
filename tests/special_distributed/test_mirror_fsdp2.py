@@ -259,7 +259,7 @@ def main():
 
     initial = local_snapshot(dict(actor.engine.module.named_parameters()))
     if args.diagnostic_dir:
-        from verl.trainer.distillation import full_vocab
+        from verl.trainer.distillation import rows as full_vocab
 
         args.diagnostic_dir.mkdir(parents=True, exist_ok=True)
         original_step = actor.engine.optimizer_step

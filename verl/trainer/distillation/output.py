@@ -6,7 +6,7 @@ from typing import NamedTuple
 
 import torch
 
-from verl.trainer.distillation.full_vocab import FullVocabObjectiveResult
+from verl.trainer.distillation.results import FullVocabObjectiveResult
 from verl.utils.metric.observations import Observation
 from verl.utils.metric.position import position_observations, position_statistics
 

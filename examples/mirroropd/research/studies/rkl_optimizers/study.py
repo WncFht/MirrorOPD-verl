@@ -23,8 +23,9 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from verl.trainer.distillation.full_vocab import full_reverse_kl, project
 from verl.trainer.distillation.numerics import kl_rows
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl
+from verl.utils.linear import project
 
 
 def save(path, obj):
@@ -146,7 +147,7 @@ class Study:
                 "calibration": "same initial batch; match first FP32 parameter-step L2 to cold AdamW lr=1e-6",
                 "evaluation": "fixed independent initial-student prefixes; conditional KL, not task accuracy",
                 "source_endpoints": [
-                    "verl.trainer.distillation.full_vocab.full_reverse_kl",
+                    "verl.trainer.distillation.reverse_vocab.full_reverse_kl",
                     "verl.trainer.distillation.numerics.kl_rows",
                 ],
                 "limitations": [

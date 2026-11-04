@@ -12,7 +12,7 @@ from pathlib import Path
 import torch
 
 from examples.mirroropd.benchmarks.full_vocab.probe_full_kl import measure, relative_error
-from verl.trainer.distillation.full_vocab import full_reverse_kl
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl
 
 
 def mean_kl(hs, ws, ht, wt, backend, chunk):

@@ -9,7 +9,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from verl.trainer.distillation.full_vocab import project
+from verl.utils.linear import project
 
 
 def main():

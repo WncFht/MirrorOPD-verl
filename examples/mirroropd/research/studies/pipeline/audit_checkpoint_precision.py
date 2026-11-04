@@ -19,7 +19,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from examples.mirroropd.research.core.paths import REPO
 
 sys.path.insert(0, str(REPO))
-from verl.trainer.distillation.full_vocab import project  # noqa: E402
+from verl.utils.linear import project  # noqa: E402
 
 PROBES = [
     (

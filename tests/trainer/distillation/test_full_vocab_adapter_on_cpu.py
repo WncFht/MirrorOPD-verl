@@ -9,8 +9,8 @@ import torch
 from transformers import AutoModelForCausalLM, LlamaConfig, Olmo3Config, Qwen2Config, Qwen3Config, Qwen3MoeConfig
 
 from verl.models.transformers.full_vocab import install_full_vocab_adapter
-from verl.trainer.distillation.full_vocab import full_reverse_kl
 from verl.trainer.distillation.hidden import FrozenTeacherHead
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl
 
 
 @pytest.mark.parametrize(

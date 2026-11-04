@@ -8,13 +8,15 @@ Full-vocab reverse KL（下称 Full-KL）默认在 student rollout 得到的固�
 
 方法与数学目标的对应关系见[三方法比较](full-kl-walkthrough.md#71-梯度与极小值对照)；配置解析和数值分派分别沿[执行路线第 2 项](代码走读.md)与[算子 dispatcher](full-kl-kernel-walkthrough.md#1-dispatcher-的逐段阅读)阅读。本页维护 full-vocab 在 engine 中的接入合同、hidden 运输和 head 调用边界。
 
+能力组合由 [resolve_execution](../../../../../verl/trainer/distillation/execution.py) 统一检查，配置早检和真实 tensor 校验共用同一规则；不支持的组合直接报错。结果合同独立放在 [results.py](../../../../../verl/trainer/distillation/results.py)。[rows.py](../../../../../verl/trainer/distillation/rows.py) 负责目标公式，反向重算、缓存和词表流式策略由 [reverse_vocab.py](../../../../../verl/trainer/distillation/reverse_vocab.py) 保持各自保存合同。所有预计算路径共享 [run_blocks](../../../../../verl/trainer/distillation/vjp.py) 和显式传入 student H/W 的 PrecomputedVJP；forward KL 的重算策略保持独立。
+
 ### 训练行值与诊断的分工
 
 训练 objective、四项 mirror 诊断以及 eta 缩放的字段定义统一见[指标矩阵](metrics.md#当前目标的指标矩阵)。行值的数学含义见[目标与梯度](full-kl-walkthrough.md)，从 row kernel 到 detached 诊断的代码对应见[数值参考](full-kl-kernel-walkthrough.md#2-dense-reference-与解析-logits-vjp)。
 
 ## 接口与运行约束
 
-[full_reverse_kl_result](../../../../../verl/trainer/distillation/full_vocab.py) 返回 [FullKLResult](../../../../../verl/trainer/distillation/full_vocab.py)：可反传的 `loss_sum`、可选且 detached 的 `token_kl`，以及与实际目标对应的 `objective_rows`。兼容入口 `full_reverse_kl` 只返回前者。统一 dispatcher 返回的 `FullVocabObjectiveResult` 必须显式提供未加权、未折扣的 `local_objective_sum`，另有可选 future 诊断，避免把训练 surrogate 当作 KL。Kernel 不承担分布式通信、最终全局归一化、TQ 读取或日志命名。
+[full_reverse_kl_result](../../../../../verl/trainer/distillation/reverse_vocab.py#L200) 返回 [FullKLResult](../../../../../verl/trainer/distillation/results.py#L10)：可反传的 `loss_sum`、可选且 detached 的 `token_kl`，以及与实际目标对应的 `objective_rows`。标量入口 `full_reverse_kl` 只返回前者。统一 dispatcher 返回的 `FullVocabObjectiveResult` 必须显式提供未加权、未折扣的 `local_objective_sum`，另有可选 future 诊断，避免把训练 surrogate 当作 KL。Kernel 不承担分布式通信、最终全局归一化、TQ 读取或日志命名。
 
 设一个 micro-batch 中选出的有效预测行数为 $n$：
 
@@ -88,7 +90,7 @@ Future 采用当前更新的实际训练代价：纯 reverse KL 是条件 KL，�
 
 `precompute_fused` 已接入既有 fused 行算子；新增模式已有 CUDA、多精度、真实 FSDP2 与性能证据，适用矩阵及保留的失败见下方验收记录。CPU 上请求 fused 仍明确报错，无隐式 backend fallback。
 
-实现中，[full_vocab_reduction](../../../../../verl/workers/utils/padding.py) 从既有预测坐标构造回答边界、原始时间和 sampled target ID，只做一次 next-token shift。[PackedReduction / suffix_credit](../../../../../verl/trainer/distillation/reduction.py) 独立维护权重和严格后缀；[trajectory.py](../../../../../verl/trainer/distillation/trajectory.py) 在每条回答内反向遍历 token 块，以 carry 连接相邻块，复用当前 student logits，在释放块前合成 local VJP 与 score VJP，并累积 `dH/dW`。后缀使用 doubling scan，复杂度为每块 $O(n\log n)$，无逐 token Python 循环或逆折扣幂。终止动作组的 score 直接在原词表坐标求导，仅对很小的 stop-token 组使用 FP64，不额外构造完整合并词表的 FP64 score 工作区。当前实现按回答切块，短回答可能增加小 GEMM 数量；score softmax 与逐词表修正也增加内存流量，成本分别由下方算子与完整 actor 配对记录，不能由“复用投影”推断开销为零。
+实现中，[full_vocab_reduction](../../../../../verl/workers/utils/padding.py) 从既有预测坐标构造回答边界、原始时间和 sampled target ID，只做一次 next-token shift。[PackedReduction / suffix_credit](../../../../../verl/trainer/distillation/reduction.py) 独立维护权重和严格后缀；[run_blocks](../../../../../verl/trainer/distillation/vjp.py) 在每条回答内反向遍历 token 块，以 carry 连接相邻块，复用当前 student logits，在释放块前合成 local VJP 与 score VJP，并累积 `dH/dW`。后缀使用 doubling scan，复杂度为每块 $O(n\log n)$，无逐 token Python 循环或逆折扣幂。终止动作组的 score 直接在原词表坐标求导，仅对很小的 stop-token 组使用 FP64，不额外构造完整合并词表的 FP64 score 工作区。当前实现按回答切块，短回答可能增加小 GEMM 数量；score softmax 与逐词表修正也增加内存流量，成本分别由下方算子与完整 actor 配对记录，不能由“复用投影”推断开销为零。
 
 原 `full_kl`、mirror objective、target/teacher/anchor KL、normalizer 及位置统计继续使用未加权 local 行。Future 路径另记录 `future/coefficient` 的均值和标准差、`future/score_surrogate`、`local_surrogate` 与 `training_surrogate`；后三项按 η 缩放后记录 token 比率，尚未乘最终 DP/全局聚合系数，最终训练量看内部 `distillation/loss`，规范日志名为 `optim/actor/distillation_loss`。字段公式由[指标字典](../../settings/指标口径.md#62-full-vocab-聚合与未来信用)维护。`valid_tokens` 与 `valid_sequences` 记录实际非空计数。Surrogate 的数值可以为负，不是 KL。
 
@@ -243,4 +245,4 @@ Engine 的 head 回调将数值结果转换为 [FullVocabOutput](../../../../../
 
 ## 公共预计算 VJP 边界
 
-预计算路径通过 [precompute](../../../../../verl/trainer/distillation/vjp.py)保存 dH/dW 并在 backward 应用标量 upstream。即时 reverse/forward/MDPO/BPO 与 future 共用这一 autograd 边界；forward KL 的重算路径单独保存输入。Student hidden/head 显式作为 tensor 参数传入，冻结 teacher/anchor 不返回梯度。当前块遍历与精度策略保持原行为，后续统一分块与执行计划按 Agent Note 实施。
+预计算路径通过 [precompute](../../../../../verl/trainer/distillation/vjp.py#L38)保存 dH/dW 并在 backward 应用标量 upstream。即时 reverse/forward/MDPO/BPO 与 future 共用这一 autograd 边界；forward KL 的重算路径单独保存输入。Student hidden/head 显式作为 tensor 参数传入，冻结 teacher/anchor 不返回梯度。当前块遍历与精度策略保持原行为，后续统一分块与执行计划按 Agent Note 实施。

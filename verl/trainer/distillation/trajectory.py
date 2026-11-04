@@ -1,26 +1,10 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Single-projection, reverse-block trajectory surrogate for full-vocab MDPO.
-
-Future coefficients and cost diagnostics are detached. Only the scalar training
-numerator is differentiable, so FSDP's wrapped-head pytree hooks see its VJP.
-"""
+"""Sampled action score in native coordinates; execution belongs to the common VJP loop."""
 
 import torch
 
-from verl.trainer.distillation.full_vocab import (
-    _MIRROR_DIAGNOSTICS,
-    FullVocabObjectiveResult,
-    _mirror_rows,
-    add_product,
-    project,
-    termination_equivalent_kl_rows,
-    validate_mirror_inputs,
-    validate_reverse_kl_inputs,
-)
-from verl.trainer.distillation.numerics import kl_rows, log_softmax, support_correction
-from verl.trainer.distillation.reduction import suffix_credit
-from verl.trainer.distillation.termination import TerminationActionMap
+from verl.trainer.distillation.numerics import log_softmax
 
 
 def action_score(logits, sampled, actions):
@@ -44,117 +28,3 @@ def action_score(logits, sampled, actions):
     other = gradient.scatter(-1, pivot, 0.0)
     gradient = other.scatter(-1, pivot, -other.sum(-1, keepdim=True))
     return value, gradient
-
-
-def trajectory_rows(hs, ws, ht, wt, hq, wq, spec, fused, actions):
-    """Retain the current student projection for the score term; reuse stable VJPs."""
-    z = project(hs, ws)
-    if not spec.teacher_only_kl:
-        values, dz, info = _mirror_rows(hs, ws, ht, wt, hq, wq, spec, fused=fused, actions=actions, student_logits=z)
-        return values, dz, values, info, z
-    if actions is not None:
-        values, dz, raw = termination_equivalent_kl_rows(hs, ws, ht, wt, actions=actions, fused=fused, student_logits=z)
-    else:
-        teacher = project(ht, wt)
-        if fused:
-            from verl.trainer.distillation.full_vocab_triton import fused_rows
-
-            values, dz = fused_rows(z, teacher[:, : len(ws)].contiguous(), torch.float32)
-            values = values + support_correction(teacher, len(ws))
-        else:
-            # Includes the frozen full teacher normalizer in future costs too.
-            values, dz = kl_rows(z, teacher)
-        raw = values
-    return values, dz, raw, z.new_empty((len(hs), 0)), z
-
-
-def trajectory_blocks(hs, ws, ht, wt, hq, wq, spec, reduction, chunk, fused, actions, *, precompute):
-    dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
-    costs, raw = hs.new_empty(len(hs), dtype=dtype), hs.new_empty(len(hs), dtype=dtype)
-    coefficients = torch.empty_like(costs)
-    score_sum = costs.new_zeros(())
-    info = hs.new_empty((len(hs), 4 if spec.diagnostics and not spec.teacher_only_kl else 0), dtype=dtype)
-    weights = reduction.row_weights(dtype)
-    config = reduction.future_config
-    total = hs.sum() * 0 + ws.sum() * 0
-    dh, dw = (torch.zeros_like(hs, dtype=dtype), torch.zeros_like(ws, dtype=dtype)) if precompute else (None, None)
-    carry = None
-    for start, stop, reset in reduction.blocks(chunk):
-        values, dz, metric, diag, z = trajectory_rows(
-            hs[start:stop], ws, ht[start:stop], wt, None if hq is None else hq[start:stop], wq, spec, fused, actions
-        )
-        future, carry = suffix_credit(values, reduction.times[start:stop], config, carry=None if reset else carry)
-        sampled_lp, score = action_score(z, reduction.actions[start:stop], actions)
-        local_weight = 1 if weights is None else weights[start:stop]
-        if config.mode == "discounted_sequence":
-            local_weight = local_weight * config.gamma ** reduction.times[start:stop].to(dtype)
-        total = total + ((values + future * sampled_lp) * local_weight).sum()
-        coefficients[start:stop] = future
-        score_sum = score_sum + (future * sampled_lp.detach() * local_weight).sum()
-        costs[start:stop], raw[start:stop], info[start:stop] = values.detach(), metric.detach(), diag.detach()
-        if precompute:
-            dz = (dz + future[:, None] * score) * (
-                local_weight if isinstance(local_weight, int) else local_weight[:, None]
-            )
-            dz = dz.float() if hs.dtype == torch.float16 else dz.to(hs.dtype)
-            add_product(dh[start:stop], dz, ws)
-            add_product(dw, dz.T, hs[start:stop])
-    return total, costs, raw, info, coefficients, score_sum, dh, dw
-
-
-def _trajectory_program(hs, ws, ht, wt, hq, wq, **kwargs):
-    *outputs, dh, dw = trajectory_blocks(hs, ws, ht, wt, hq, wq, precompute=True, **kwargs)
-    return tuple(outputs), dh, dw
-
-
-def trajectory_objective_result(
-    hs, ws, ht, wt, *, spec, hq, wq, backend, token_chunk, vocab_chunk, termination_token_ids, distribution, reduction
-):
-    """Validate opt-in capabilities, preserving the requested backend without fallback."""
-    from verl.trainer.distillation.distribution import CompiledDistribution, DistributionSpec
-
-    if spec.payload_kind != "hidden" or spec.objective != "mdpo":
-        raise ValueError("Future credit supports full-vocabulary reverse KL and MDPO only")
-    if backend not in ("dense", "precompute", "precompute_fused"):
-        raise ValueError("Future credit requires dense/precompute/precompute_fused")
-    space = (
-        distribution.spec
-        if isinstance(distribution, CompiledDistribution)
-        else DistributionSpec.parse(distribution or {})
-    )
-    if space.mode != "native":
-        raise ValueError("Future credit does not support common-conditioned distributions")
-    if sum(reduction.counts) != len(hs):
-        raise ValueError("Trajectory layout must match hidden rows")
-    validation = dict(
-        backend=backend,
-        token_chunk=token_chunk,
-        vocab_chunk=vocab_chunk,
-        termination_token_ids=termination_token_ids,
-    )
-    if spec.teacher_only_kl:
-        validate_reverse_kl_inputs(hs, ws, ht, wt, **validation)
-    else:
-        validate_mirror_inputs(hs, ws, ht, wt, spec=spec, hq=hq, wq=wq, **validation)
-    ht, wt = ht.detach(), wt.detach()
-    hq, wq = (None if x is None else x.detach() for x in (hq, wq))
-    actions = TerminationActionMap.create(len(ws), termination_token_ids, hs.device) if termination_token_ids else None
-    arguments = (hs, ws, ht, wt, hq, wq, spec, reduction, token_chunk, backend == "precompute_fused", actions)
-    if backend == "dense":
-        total, costs, raw, info, coefficients, score_sum, _, _ = trajectory_blocks(*arguments, precompute=False)
-    else:
-        from functools import partial
-
-        from verl.trainer.distillation.vjp import precompute
-
-        program = partial(
-            _trajectory_program,
-            spec=spec,
-            reduction=reduction,
-            chunk=token_chunk,
-            fused=backend == "precompute_fused",
-            actions=actions,
-        )
-        total, costs, raw, info, coefficients, score_sum = precompute(hs, ws, ht, wt, hq, wq, program=program)
-    diagnostics = {k: info[:, i] for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if info.shape[1] else {}
-    return FullVocabObjectiveResult(total, raw, diagnostics, costs, costs.sum(), coefficients, score_sum)
