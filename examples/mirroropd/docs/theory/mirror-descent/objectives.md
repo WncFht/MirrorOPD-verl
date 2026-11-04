@@ -690,7 +690,7 @@ $$
 A_\kappa(r)=\frac r\eta+\frac{\log\eta}{\kappa\eta}+o(1),\quad r\to+\infty.
 $$
 
-在起点 $p=q$，对 student logit $z_a$ 的梯度是 $q_a[\mathbb E_q A_\kappa-A_{\kappa,a}]$。其中的居中项依赖所有动作，所以信号的逐坐标变化不能直接解释成 EOS 梯度总朝某一方向变化。模型参数梯度还经过网络 Jacobian；比较实际更新需要同时看梯度方向、裁剪、自适应矩及策略位移。对应的同前缀测量见[κ实验](../../experiments/learning-signal/weighted-targets.md)。
+在起点 $p=q$，对 student logit $z_a$ 的梯度是 $q_a[\mathbb E_q A_\kappa-A_{\kappa,a}]$。其中的居中项依赖所有动作，所以信号的逐坐标变化不能直接解释成 EOS 梯度总朝某一方向变化。模型参数梯度还经过网络 Jacobian；比较实际更新需要同时看梯度方向、裁剪、自适应矩及策略位移。对应的同前缀测量见[κ实验](../../experiments/learning-signal/weighted-targets-controls.md)。
 
 <a id="weighted-5-fixed-advantage-与-current-advantage-的准确含义"></a>
 
