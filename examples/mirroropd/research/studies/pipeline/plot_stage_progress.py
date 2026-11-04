@@ -288,6 +288,8 @@ def render(data, args):
 
     fig, axes = plt.subplots(1, 2, figsize=(5.5, 2.8))
     domains = dict(zip(["math", "code", "science", "if"], ["vteal", "vviolet", "vblue", "vorange"], strict=True))
+    risk_values = [r["rkl"] for r in data["rkl"] if r["domain"] != "all"]
+    assert min(risk_values) > 0
     for ax, bank, title in zip(
         axes,
         ["public_initial", "public_teacher"],
@@ -304,7 +306,12 @@ def render(data, args):
                 color=fv.HUES[hue],
                 label="IF" if domain == "if" else domain.title(),
             )
-        ax.set(xlabel="Outer", ylabel="Question-mean RKL (nats/token)", yscale="log", ylim=(0.09, 3.3))
+        ax.set(
+            xlabel="Outer",
+            ylabel="Question-mean RKL (nats/token)",
+            yscale="log",
+            ylim=(min(risk_values) * 0.8, max(risk_values) * 1.25),
+        )
         ax.set_title(title, loc="left")
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", bbox_to_anchor=(0.5, 0.065), ncol=4, frameon=False, fontsize=7)
@@ -336,7 +343,7 @@ def render(data, args):
         color=color,
         marker="o",
         markersize=2.5,
-        label="MiMo 7B",
+        label=args.label,
     )
     axes[1].axhline(
         summary["historical"]["token_passes_per_gpu_second"] / 1000,

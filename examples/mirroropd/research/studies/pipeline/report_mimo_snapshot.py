@@ -227,7 +227,7 @@ def render(data, args):
     )
 
     completed = [a for a in ARMS if data["arms"][a]["summary"]["final_complete"]]
-    fig, axes = plt.subplots(1, len(completed), figsize=(12, 5.1), squeeze=False)
+    fig, axes = plt.subplots(1, len(completed), figsize=(6 * len(completed), 5.1), squeeze=False)
     roles = ("initial", "teacher", "student")
     for ax, arm in zip(axes[0], completed, strict=True):
         for j, role in enumerate(roles):
@@ -258,10 +258,12 @@ def render(data, args):
         fig,
         args.figures,
         "accuracy",
-        "E71/E72 have unequal training budgets; one training seed. E73 final accuracy is pending.",
+        "Unequal training budgets; one training seed. "
+        + ("All three endpoints are complete." if len(completed) == len(ARMS) else "Unfinished endpoints stay absent."),
     )
 
     fig, axes = plt.subplots(1, 3, figsize=(12, 4.7))
+    cost_limit = max(r["outer_seconds"] / 60 for own in data["arms"].values() for r in own["outers"]) * 1.08
     for ax, (arm, own) in zip(axes, data["arms"].items(), strict=True):
         bottom = np.zeros(len(own["outers"]))
         for key, label, color in [
@@ -276,7 +278,7 @@ def render(data, args):
         ax.set(
             xlabel="Completed outer",
             ylabel="Minutes / outer",
-            ylim=(0, 450),
+            ylim=(0, cost_limit),
             title=f"{arm}: reuse{own['summary']['reuse']}",
         )
     fig.legend(*axes[0].get_legend_handles_labels(), loc="upper center", ncol=4, frameon=False)
