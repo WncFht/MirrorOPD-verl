@@ -55,6 +55,23 @@ FSDP2 使用本地随机小模型，真实包装 head、teacher capture、CPU of
 
 首轮真实 FSDP2 在指标回传发现 CPU/CUDA state 混拼，已由 `4f68f9fe` 按源设备打包修复；相同配置重跑及混合设备回归通过。真实训练入口还发现 `validate_sampled_token_distillation` 对 full-vocab 沿用 sampled 的 token-mean 限制，`2584da10` 将限制收窄到 sampled，保留其原行为。
 
+### Public suite 与 source/history 的 GPU 生命周期
+
+两卡 H800、Qwen3-1.7B-Base ← Qwen3-8B 的两条独立新运行均完成 batch4、reuse2、2 outer，共 4 次非零学习率更新。训练使用 precompute_fused/chunk512、seq-mean-token-mean、future mean、EOS `[151643,151645]`；读出仍按 native、未合并 RKL 口径。评分 payload 为 16 MiB、host budget 为 4 GiB、score chunk128，启用两 rank 状态 hash 审计。训练与生成 response cap 均为 32。
+
+| 路径                                                        | outer 0/1/2 的有效 RKL 行 | 有效评分 token | optimizer steps | 结果                                                 |
+| ----------------------------------------------------------- | ------------------------- | -------------- | --------------- | ---------------------------------------------------- |
+| Public suite，source2/history4；Math2、Code1、Science1、IF1 | 12/21/21                  | 384/626/626    | 0/2/4           | 三事件及根 manifest complete；四域 accuracy 产物可读 |
+| 独立 SourceHistoryReadout，source2/history4                 | 2/6/6                     | 64/192/192     | 0/2/4           | 三事件及根 manifest complete；正常继续第二轮训练     |
+
+[离线复核摘要](../../performance/full-vocab/data/aggregate-future-20261104/evaluation-gpu-audit.json)逐事件验证 `(bank,id)` 唯一覆盖、轨迹身份、原始 response mask token 数，以及两 rank 的 `unchanged/state_digest`；从 Parquet 独立复算 source 题均、history 批均和 public 分域／域均指标，误差阈值为 $10^{-12}$。Accuracy 样本身份唯一且与生成覆盖一致，指标由评分表复算；32-token 回答只验证执行与产物，不能解释科学质量。两条运行均未启用最终 HF export，不作为导出／重载复测。
+
+[SourceLifecycleProbe](../../../../benchmarks/evaluation/lifecycle_probe.py)在实际训练边界核对同步前 pending、重复 validate 不改写事件、同步后驻留版本正确并发布完成。在 outer1 的本地 `event.finish` 写入前注入一次发布错误，错误上抛、pending 保留，恢复后显式重试发布且不重新评分；outer2 正常完成。这覆盖本地发布失败，不模拟未完成远端 GPU RPC。原始 lifecycle JSONL、冻结源码、配置、退出状态与复核命令见[测量身份](../../performance/full-vocab/data/aggregate-future-20261104/evaluation-gpu-manifest.json)。
+
+GPU 路径暴露的两处缺陷分别由 `0138972f` 与 `8e173e90` 修复：生成协议预检改由各 readout owner 声明；source 初始 RKL bank 显式跳过任务奖励，空生成结果不再被空 keys 清理错误覆盖。默认验证继续使用原 reward 协议。包含新增回归的评估／rollout CPU 选择为 98 passed；两个失败运行保留在测量身份中，没有覆盖原证据。
+
+### 混合精度 MDPO 参数差异
+
 **保留的未通过项：**MDPO＋EOS＋BF16/FP32 混合精度，三个 Adam 更新后的 fused/precompute 严格参数对比失败，attention key bias 的最大绝对差约 $1.63\times10^{-5}$，原门槛为 atol=$10^{-6}$、rtol=$10^{-5}$。没有修改该门槛。拆分复核说明混合精度恢复和 FP32/BF16 backend 对比各自通过；追加[逐参数梯度诊断](../../performance/full-vocab/data/aggregate-future-20261104/mdpo-diagnostic.json)复现原差异，出问题的 key bias 在前两步 optimizer 前梯度完全一致，第三步梯度最大绝对差仅约 $3.73\times10^{-9}$。这支持微小数值差经 Adam 放大的解释，但没有证明所有差异只来自此处；逐 rank 的参数、梯度和 optimizer 原始快照保留在运行目录，后续仍需分离 attention/backbone 与 head 的误差。原失败与后续通过均保留，不宣称全部 GPU 验收完成。
 
 2026-11-04 的追加诊断先执行同 backend 的 A/A checkpoint 对照，最大参数差为 0，恢复后的参数与 optimizer/scheduler 检查通过。随后两 rank 保存三个主路径更新和三个恢复后参考更新，包含裁剪前／后梯度、参数、Adam 状态及每块 head 输入／输出。两路径的 head 输入逐元素相同；head 的最大 $dZ$ 差为 $2.27\times10^{-9}$，相对相同输入的 CPU FP64 投影和行公式，fused／precompute 的最大绝对误差分别为 $2.23\times10^{-9}$／$1.74\times10^{-9}$。该参考同时包含投影与行公式，不单独把差值归为 Triton kernel 误差。

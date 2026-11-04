@@ -1,0 +1,715 @@
+{
+  "public": {
+    "root": "runs/p0-p1-20261104/evaluation-a01/evaluation",
+    "manifest_sha256": "ec160ee8890e58f44217472ef5e0215e8cc75d7588703f73fddd013052a05e1d",
+    "final_metadata": {
+      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/bootstrap",
+      "bootstrap_sha256": "370cf01763d104310f9978be363d3b917c0678737e0b2a02118534d4eb732583",
+      "contract_sha256": "6e957b2dd58ea7732123051624a8fc493bc4debedcf41c4d18b8e22628ba0b68",
+      "configuration": {
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/evaluation",
+        "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/bootstrap",
+        "datasets": [
+          {
+            "name": "MATH-500",
+            "domain": "math",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/MATH-500.parquet",
+            "verifier": "math",
+            "n": 1,
+            "protocol": "public",
+            "panel_ids": [
+              "13c0e01dad6764e78932afea342446782c86aafe21f7f2b9f81d45529451017b",
+              "ec3e2443fabe0c8bd065427171010f965f1a11b1e76e4ef4fc1b3ed65c37c972"
+            ]
+          },
+          {
+            "name": "LCBv5",
+            "domain": "code",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/LCBv5.parquet",
+            "verifier": "lcb",
+            "n": 1,
+            "protocol": "public",
+            "panel_ids": [
+              "7ecf89587decd0a3fd85e5b3a157ef4ee24e8d57d6987b110fba5a3b1297c439"
+            ]
+          },
+          {
+            "name": "GPQA-Diamond",
+            "domain": "science",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/GPQA-Diamond.parquet",
+            "verifier": "gpqa",
+            "n": 1,
+            "protocol": "public",
+            "panel_ids": [
+              "45fc7bcf2b294c9e1fa5e70dd4056f351b46278435c2e64d68402fb23e143926"
+            ]
+          },
+          {
+            "name": "IFEval",
+            "domain": "if",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/IFEval.parquet",
+            "verifier": "ifeval",
+            "n": 1,
+            "protocol": "public",
+            "panel_ids": [
+              "2277a3baaf1b321c67d83243d9831d54aed4497d376a6f4df5bca81c0af55494"
+            ]
+          }
+        ],
+        "protocols": {
+          "public": {
+            "temperature": 1.0,
+            "top_p": 1.0,
+            "top_k": -1,
+            "max_new_tokens": 32,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen3",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "source": {
+            "temperature": 1.0,
+            "top_p": 1.0,
+            "top_k": -1,
+            "max_new_tokens": 32,
+            "prompt_limit": 2048,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen3",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          }
+        },
+        "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/source.parquet",
+        "source_enabled": true,
+        "history_enabled": true,
+        "training_domain": "math",
+        "source_count": 2,
+        "history_size": 4,
+        "seed": 42,
+        "generation_concurrency": 4,
+        "generation_chunk_size": 4,
+        "verifier_workers": 2,
+        "request_timeout": 1800.0,
+        "score": {
+          "payload_bytes": 16777216,
+          "host_budget_bytes": 4294967296,
+          "copy_reserve_factor": 2.5,
+          "token_chunk": 128,
+          "audit_state": true,
+          "objective_space": false
+        },
+        "schedules": {
+          "source": {
+            "at": [
+              0
+            ],
+            "every": 1,
+            "start": 1,
+            "final": true
+          },
+          "history": {
+            "at": [],
+            "every": 1,
+            "start": 1,
+            "final": true
+          },
+          "banks": {
+            "at": [
+              0,
+              1,
+              2
+            ],
+            "every": null,
+            "start": 1,
+            "final": true
+          },
+          "bench": {
+            "at": [
+              0,
+              1,
+              2
+            ],
+            "every": null,
+            "start": 1,
+            "final": true
+          }
+        },
+        "final_export": false,
+        "verify_export": false
+      },
+      "training_rollout_policy": {
+        "mode": "single",
+        "model": null,
+        "left": null,
+        "right": null,
+        "right_weight": 0.5,
+        "fusion_space": "logit",
+        "micro_batch_size": 4,
+        "deadline_seconds": 3600.0,
+        "drain_seconds": 60.0,
+        "execution": {
+          "backend": "vllm_fusion",
+          "tensor_parallel_size": 1,
+          "max_num_seqs": 2,
+          "kv_cache_memory_bytes": 1073741824,
+          "enforce_eager": true
+        }
+      },
+      "completed_outer": 2,
+      "optimizer_steps": 4
+    },
+    "events": [
+      {
+        "accuracy": {
+          "rows": 5,
+          "unique_expected": 5,
+          "statuses": {
+            "ok": 5
+          },
+          "metrics": {
+            "eval/accuracy/MATH-500/avg_at_n": 0.5,
+            "eval/accuracy/MATH-500/questions": 2,
+            "eval/accuracy/MATH-500/samples": 2,
+            "eval/accuracy/MATH-500/response_tokens_mean": 32.0,
+            "eval/accuracy/MATH-500/length_finish_fraction": 1.0,
+            "eval/accuracy/MATH-500/missing_final_fraction": 0.0,
+            "eval/accuracy/GPQA-Diamond/avg_at_n": 0.0,
+            "eval/accuracy/GPQA-Diamond/questions": 1,
+            "eval/accuracy/GPQA-Diamond/samples": 1,
+            "eval/accuracy/GPQA-Diamond/response_tokens_mean": 32.0,
+            "eval/accuracy/GPQA-Diamond/length_finish_fraction": 1.0,
+            "eval/accuracy/GPQA-Diamond/missing_final_fraction": 0.0,
+            "eval/accuracy/IFEval/avg_at_n": 0.0,
+            "eval/accuracy/IFEval/questions": 1,
+            "eval/accuracy/IFEval/samples": 1,
+            "eval/accuracy/IFEval/response_tokens_mean": 32.0,
+            "eval/accuracy/IFEval/length_finish_fraction": 1.0,
+            "eval/accuracy/IFEval/missing_final_fraction": 0.0,
+            "eval/accuracy/IFEval/instruction_strict": 0.3333333333333333,
+            "eval/accuracy/LCBv5/avg_at_n": 0.0,
+            "eval/accuracy/LCBv5/questions": 1,
+            "eval/accuracy/LCBv5/samples": 1,
+            "eval/accuracy/LCBv5/response_tokens_mean": 32.0,
+            "eval/accuracy/LCBv5/length_finish_fraction": 1.0,
+            "eval/accuracy/LCBv5/missing_final_fraction": 0.0
+          }
+        },
+        "outer": 0,
+        "optimizer_steps": 0,
+        "coverage": {
+          "expected_rows": 12,
+          "observed_rows": 12,
+          "valid_rows": 12,
+          "invalid_rows": 0,
+          "missing_rows": 0,
+          "selection_sha256": "490e08c54a4bf1aa9a0f116e645131393edffe1dd48b5d2877ac648ece12cf0c",
+          "scientific_complete": true,
+          "banks": {
+            "public_initial": {
+              "expected_rows": 5,
+              "observed_rows": 5,
+              "valid_rows": 5,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "public_teacher": {
+              "expected_rows": 5,
+              "observed_rows": 5,
+              "valid_rows": 5,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "source_heldout": {
+              "expected_rows": 2,
+              "observed_rows": 2,
+              "valid_rows": 2,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            }
+          }
+        },
+        "manifest_sha256": "48545da67ce485b89728ae5abeec7f2a6d4d820ed31fbd7b3675c90834dfbf7b",
+        "audit": {
+          "status": "passed",
+          "ranks": [
+            {
+              "state_digest": "eb1a699db063c6bb654360b471ff3016ebc7730ce882d0b3464c2b7dafcfe839",
+              "unchanged": true
+            },
+            {
+              "state_digest": "42dec09ff792bc6fb63331687b1a85545b84b183e7d42f65f3baf6982015bb5b",
+              "unchanged": true
+            }
+          ]
+        },
+        "recomputed_metrics": {
+          "eval/rkl/public_initial/all/question_mean": 2.686463340735827,
+          "eval/rkl/public_initial/if/question_mean": 1.8229946781648323,
+          "eval/rkl/public_initial/math/question_mean": 1.8745369349962857,
+          "eval/rkl/public_initial/code/question_mean": 2.8904970238218084,
+          "eval/rkl/public_initial/science/question_mean": 4.157824725960381,
+          "eval/rkl/public_teacher/all/question_mean": 7.467520157410533,
+          "eval/rkl/public_teacher/math/question_mean": 6.009015443427586,
+          "eval/rkl/public_teacher/science/question_mean": 8.169081061263569,
+          "eval/rkl/public_teacher/code/question_mean": 10.904572821222246,
+          "eval/rkl/public_teacher/if/question_mean": 4.787411303728732,
+          "eval/rkl/source_heldout/question_mean": 1.5734757578356948
+        },
+        "tokens": 384
+      },
+      {
+        "accuracy": {
+          "rows": 5,
+          "unique_expected": 5,
+          "statuses": {
+            "ok": 5
+          },
+          "metrics": {
+            "eval/accuracy/MATH-500/avg_at_n": 0.5,
+            "eval/accuracy/MATH-500/questions": 2,
+            "eval/accuracy/MATH-500/samples": 2,
+            "eval/accuracy/MATH-500/response_tokens_mean": 32.0,
+            "eval/accuracy/MATH-500/length_finish_fraction": 1.0,
+            "eval/accuracy/MATH-500/missing_final_fraction": 0.0,
+            "eval/accuracy/GPQA-Diamond/avg_at_n": 0.0,
+            "eval/accuracy/GPQA-Diamond/questions": 1,
+            "eval/accuracy/GPQA-Diamond/samples": 1,
+            "eval/accuracy/GPQA-Diamond/response_tokens_mean": 32.0,
+            "eval/accuracy/GPQA-Diamond/length_finish_fraction": 1.0,
+            "eval/accuracy/GPQA-Diamond/missing_final_fraction": 0.0,
+            "eval/accuracy/IFEval/avg_at_n": 0.0,
+            "eval/accuracy/IFEval/questions": 1,
+            "eval/accuracy/IFEval/samples": 1,
+            "eval/accuracy/IFEval/response_tokens_mean": 32.0,
+            "eval/accuracy/IFEval/length_finish_fraction": 1.0,
+            "eval/accuracy/IFEval/missing_final_fraction": 0.0,
+            "eval/accuracy/IFEval/instruction_strict": 0.3333333333333333,
+            "eval/accuracy/LCBv5/avg_at_n": 0.0,
+            "eval/accuracy/LCBv5/questions": 1,
+            "eval/accuracy/LCBv5/samples": 1,
+            "eval/accuracy/LCBv5/response_tokens_mean": 32.0,
+            "eval/accuracy/LCBv5/length_finish_fraction": 1.0,
+            "eval/accuracy/LCBv5/missing_final_fraction": 0.0
+          }
+        },
+        "outer": 1,
+        "optimizer_steps": 2,
+        "coverage": {
+          "expected_rows": 21,
+          "observed_rows": 21,
+          "valid_rows": 21,
+          "invalid_rows": 0,
+          "missing_rows": 0,
+          "selection_sha256": "8038510776475c518b8483d05c6ce07990d79221d76ed715613a3ed5d703f609",
+          "scientific_complete": true,
+          "banks": {
+            "history": {
+              "expected_rows": 4,
+              "observed_rows": 4,
+              "valid_rows": 4,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "public_current": {
+              "expected_rows": 5,
+              "observed_rows": 5,
+              "valid_rows": 5,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "public_initial": {
+              "expected_rows": 5,
+              "observed_rows": 5,
+              "valid_rows": 5,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "public_teacher": {
+              "expected_rows": 5,
+              "observed_rows": 5,
+              "valid_rows": 5,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "source_heldout": {
+              "expected_rows": 2,
+              "observed_rows": 2,
+              "valid_rows": 2,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            }
+          }
+        },
+        "manifest_sha256": "60d88de6a1198f2805da30bf085df13c6f886b0c8c1cd465e08b1bea992ba65d",
+        "audit": {
+          "status": "passed",
+          "ranks": [
+            {
+              "state_digest": "4fd12fc25674a958aacc1d05d03d6d8131c7ff68259d80fbf382d4b1fcf87943",
+              "unchanged": true
+            },
+            {
+              "state_digest": "c31b4e0a308eaa1e8bfdb9ae1192dc3c7aa8fed94d10fe403145b562374e1538",
+              "unchanged": true
+            }
+          ]
+        },
+        "recomputed_metrics": {
+          "eval/rkl/history/equal_batch_question_mean": 5.303384350684064,
+          "eval/rkl/public_current/all/question_mean": 2.709814880298836,
+          "eval/rkl/public_current/code/question_mean": 2.9674701816402376,
+          "eval/rkl/public_current/math/question_mean": 1.8704873471906467,
+          "eval/rkl/public_current/if/question_mean": 1.8300487717206124,
+          "eval/rkl/public_current/science/question_mean": 4.171253220643848,
+          "eval/rkl/public_initial/all/question_mean": 2.681910286105449,
+          "eval/rkl/public_initial/math/question_mean": 1.8704873471906467,
+          "eval/rkl/public_initial/science/question_mean": 4.171253220643848,
+          "eval/rkl/public_initial/if/question_mean": 1.8102677075075917,
+          "eval/rkl/public_initial/code/question_mean": 2.875632869079709,
+          "eval/rkl/public_teacher/all/question_mean": 7.470193594078054,
+          "eval/rkl/public_teacher/math/question_mean": 6.004610164831718,
+          "eval/rkl/public_teacher/if/question_mean": 4.79774857911616,
+          "eval/rkl/public_teacher/code/question_mean": 10.909693259280175,
+          "eval/rkl/public_teacher/science/question_mean": 8.168722373084165,
+          "eval/rkl/source_heldout/question_mean": 1.5657646368545102
+        },
+        "tokens": 626
+      },
+      {
+        "accuracy": {
+          "rows": 5,
+          "unique_expected": 5,
+          "statuses": {
+            "ok": 5
+          },
+          "metrics": {
+            "eval/accuracy/LCBv5/avg_at_n": 0.0,
+            "eval/accuracy/LCBv5/questions": 1,
+            "eval/accuracy/LCBv5/samples": 1,
+            "eval/accuracy/LCBv5/response_tokens_mean": 32.0,
+            "eval/accuracy/LCBv5/length_finish_fraction": 1.0,
+            "eval/accuracy/LCBv5/missing_final_fraction": 0.0,
+            "eval/accuracy/GPQA-Diamond/avg_at_n": 0.0,
+            "eval/accuracy/GPQA-Diamond/questions": 1,
+            "eval/accuracy/GPQA-Diamond/samples": 1,
+            "eval/accuracy/GPQA-Diamond/response_tokens_mean": 32.0,
+            "eval/accuracy/GPQA-Diamond/length_finish_fraction": 1.0,
+            "eval/accuracy/GPQA-Diamond/missing_final_fraction": 0.0,
+            "eval/accuracy/IFEval/avg_at_n": 0.0,
+            "eval/accuracy/IFEval/questions": 1,
+            "eval/accuracy/IFEval/samples": 1,
+            "eval/accuracy/IFEval/response_tokens_mean": 32.0,
+            "eval/accuracy/IFEval/length_finish_fraction": 1.0,
+            "eval/accuracy/IFEval/missing_final_fraction": 0.0,
+            "eval/accuracy/IFEval/instruction_strict": 0.3333333333333333,
+            "eval/accuracy/MATH-500/avg_at_n": 0.5,
+            "eval/accuracy/MATH-500/questions": 2,
+            "eval/accuracy/MATH-500/samples": 2,
+            "eval/accuracy/MATH-500/response_tokens_mean": 32.0,
+            "eval/accuracy/MATH-500/length_finish_fraction": 0.5,
+            "eval/accuracy/MATH-500/missing_final_fraction": 0.0
+          }
+        },
+        "outer": 2,
+        "optimizer_steps": 4,
+        "coverage": {
+          "expected_rows": 21,
+          "observed_rows": 21,
+          "valid_rows": 21,
+          "invalid_rows": 0,
+          "missing_rows": 0,
+          "selection_sha256": "f646e3a849d3b856bbe386f45898b0feea23608b47938f289692905bb321a6c4",
+          "scientific_complete": true,
+          "banks": {
+            "history": {
+              "expected_rows": 4,
+              "observed_rows": 4,
+              "valid_rows": 4,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "public_current": {
+              "expected_rows": 5,
+              "observed_rows": 5,
+              "valid_rows": 5,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "public_initial": {
+              "expected_rows": 5,
+              "observed_rows": 5,
+              "valid_rows": 5,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "public_teacher": {
+              "expected_rows": 5,
+              "observed_rows": 5,
+              "valid_rows": 5,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "source_heldout": {
+              "expected_rows": 2,
+              "observed_rows": 2,
+              "valid_rows": 2,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            }
+          }
+        },
+        "manifest_sha256": "b97d15906a85e1d08aebfebd4b7661e4f904188d4dd6ed6fc2816b31665c9cc0",
+        "audit": {
+          "status": "passed",
+          "ranks": [
+            {
+              "state_digest": "d80a079a39a7cf40ef31820298eeb9a21a4834e59fa653a23a09715bc043356e",
+              "unchanged": true
+            },
+            {
+              "state_digest": "947e99507b3b5f07f53d646b52913364094c62b54baef4b4e6688c40bce36ff0",
+              "unchanged": true
+            }
+          ]
+        },
+        "recomputed_metrics": {
+          "eval/rkl/public_current/all/question_mean": 2.8961362400650614,
+          "eval/rkl/public_current/math/question_mean": 1.9711827118844667,
+          "eval/rkl/public_current/if/question_mean": 2.01580554433167,
+          "eval/rkl/public_current/code/question_mean": 3.4396222742216196,
+          "eval/rkl/public_current/science/question_mean": 4.15793442982249,
+          "eval/rkl/public_initial/all/question_mean": 2.669466750346146,
+          "eval/rkl/public_initial/math/question_mean": 1.8652372122705856,
+          "eval/rkl/public_initial/science/question_mean": 4.15793442982249,
+          "eval/rkl/public_initial/if/question_mean": 1.7903551987838,
+          "eval/rkl/public_initial/code/question_mean": 2.864340160507709,
+          "eval/rkl/public_teacher/all/question_mean": 7.4509196331430445,
+          "eval/rkl/public_teacher/math/question_mean": 5.982304195466952,
+          "eval/rkl/public_teacher/if/question_mean": 4.78775512226639,
+          "eval/rkl/public_teacher/code/question_mean": 10.88611242454499,
+          "eval/rkl/public_teacher/science/question_mean": 8.147506790293846,
+          "eval/rkl/source_heldout/question_mean": 1.5491267257657455,
+          "eval/rkl/history/equal_batch_question_mean": 4.929516517857332
+        },
+        "tokens": 626
+      }
+    ]
+  },
+  "source_history": {
+    "root": "runs/p0-p1-20261104/evaluation-a03/source-history",
+    "manifest_sha256": "ad2e82e3224cfe7c875a121f85d5c070593c5c519e2038547d91b290f37ab0ff",
+    "final_metadata": {
+      "source_bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a03/source-history/initial-student-bank",
+      "config_sha256": "4a13f6d53cf699ea88cf2bb3d443bb5ec17e5f4eb761599f4db592d5d271509d",
+      "teacher_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+      "teacher_identity": "checkpoint-v2:f906e4fec7cf85dac0565b20d9d804cb35aa3339286f4ec2366a8e4d7d1c16e8",
+      "student_identity": "checkpoint-v2:d26fdf9a166bcb0243a7bdfcae6ebf6828f3f83b6641e0209e892c0e29cbf1cd",
+      "history_capacity": 4,
+      "history_seed": 42,
+      "score_temperature": 1.0,
+      "support": "native_student_support",
+      "aggregation": "question_mean_of_token_mean; history equal_batch",
+      "completed_outer": 2,
+      "optimizer_steps": 4
+    },
+    "events": [
+      {
+        "accuracy": null,
+        "outer": 0,
+        "optimizer_steps": 0,
+        "coverage": {
+          "expected_rows": 2,
+          "observed_rows": 2,
+          "valid_rows": 2,
+          "invalid_rows": 0,
+          "missing_rows": 0,
+          "selection_sha256": "d605d93f5e6d5b6bb9e46c8722fffa7df656d347c21cfde625b988c5bdc23f7e",
+          "scientific_complete": true,
+          "banks": {
+            "source_heldout": {
+              "expected_rows": 2,
+              "observed_rows": 2,
+              "valid_rows": 2,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            }
+          }
+        },
+        "manifest_sha256": "10921316725a44e76c978debe388580824c531c0039667b63eec6ef3d1707dc3",
+        "audit": {
+          "status": "passed",
+          "ranks": [
+            {
+              "state_digest": "eb1a699db063c6bb654360b471ff3016ebc7730ce882d0b3464c2b7dafcfe839",
+              "unchanged": true
+            },
+            {
+              "state_digest": "42dec09ff792bc6fb63331687b1a85545b84b183e7d42f65f3baf6982015bb5b",
+              "unchanged": true
+            }
+          ]
+        },
+        "recomputed_metrics": {
+          "eval/rkl/source_heldout/question_mean": 1.398250224833193
+        },
+        "tokens": 64
+      },
+      {
+        "accuracy": null,
+        "outer": 1,
+        "optimizer_steps": 2,
+        "coverage": {
+          "expected_rows": 6,
+          "observed_rows": 6,
+          "valid_rows": 6,
+          "invalid_rows": 0,
+          "missing_rows": 0,
+          "selection_sha256": "d6675c085135926cfefe51432b5d3f6c0dc56c94885da614611924d211b5243d",
+          "scientific_complete": true,
+          "banks": {
+            "history": {
+              "expected_rows": 4,
+              "observed_rows": 4,
+              "valid_rows": 4,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "source_heldout": {
+              "expected_rows": 2,
+              "observed_rows": 2,
+              "valid_rows": 2,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            }
+          }
+        },
+        "manifest_sha256": "81fcc6f88e02a2810cce7185e019ee67d3c14f170d2f34b9ea3566a48f011a4d",
+        "audit": {
+          "status": "passed",
+          "ranks": [
+            {
+              "state_digest": "55f5d9940cd329a4091d777feff7f663ab539bdb6bcc2aa46ca721648bcab696",
+              "unchanged": true
+            },
+            {
+              "state_digest": "5b1c10d5339f1ddd1aa8ec1eff87e8cf765d4bd85c50a940fd3fd90ac1c05275",
+              "unchanged": true
+            }
+          ]
+        },
+        "recomputed_metrics": {
+          "eval/rkl/source_heldout/question_mean": 1.3817974465661056,
+          "eval/rkl/history/equal_batch_question_mean": 1.610381704711358
+        },
+        "tokens": 192
+      },
+      {
+        "accuracy": null,
+        "outer": 2,
+        "optimizer_steps": 4,
+        "coverage": {
+          "expected_rows": 6,
+          "observed_rows": 6,
+          "valid_rows": 6,
+          "invalid_rows": 0,
+          "missing_rows": 0,
+          "selection_sha256": "d616d9aebb985d6fd6fe1a8e1acbb4858bb054913b9b4d6f4e4dfa58ef436a59",
+          "scientific_complete": true,
+          "banks": {
+            "history": {
+              "expected_rows": 4,
+              "observed_rows": 4,
+              "valid_rows": 4,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            },
+            "source_heldout": {
+              "expected_rows": 2,
+              "observed_rows": 2,
+              "valid_rows": 2,
+              "invalid_rows": 0,
+              "missing_rows": 0,
+              "scientific_complete": true
+            }
+          }
+        },
+        "manifest_sha256": "bdb455a9ab6cd0b620e712e02dd4ace77bd20fc17c38fcaf84c218c93bfbfc3c",
+        "audit": {
+          "status": "passed",
+          "ranks": [
+            {
+              "state_digest": "542e6d16ed95d2cd2575bc9c872b222bd5e4bf26b80fd309712bcab0eb614815",
+              "unchanged": true
+            },
+            {
+              "state_digest": "772016183d67feb13d5795fd54c79b38e92098155bc489f2662afc76d5e78e26",
+              "unchanged": true
+            }
+          ]
+        },
+        "recomputed_metrics": {
+          "eval/rkl/source_heldout/question_mean": 1.3603343317763326,
+          "eval/rkl/history/equal_batch_question_mean": 2.031548414224744
+        },
+        "tokens": 192
+      }
+    ],
+    "lifecycle": [
+      {
+        "duplicate_validation_unchanged": true,
+        "outer": 1,
+        "pending_before_sync": true
+      },
+      {
+        "outer": 1,
+        "pending_retained": true,
+        "publication_fault_propagated": true
+      },
+      {
+        "no_rescore_on_retry": true,
+        "outer": 1,
+        "published_after_sync": true,
+        "resident_version": 1
+      },
+      {
+        "duplicate_validation_unchanged": true,
+        "outer": 2,
+        "pending_before_sync": true
+      },
+      {
+        "no_rescore_on_retry": true,
+        "outer": 2,
+        "published_after_sync": true,
+        "resident_version": 2
+      }
+    ]
+  }
+}
