@@ -15,7 +15,9 @@ E81（A）和 E82（B）检验：保留 E57 的目标与每批 16 次复用，�
 
 A 与 E57 对齐累计回答条次和新生成量，用较少次、较大 batch 的更新；B 与 E57 对齐更新次数，回答条次为其 4 倍。B 对齐论文配方 100 outer 的回答条次和更新次数，新生成量仅为其 1/16。论文公开 Figure5 的 α0.1/0.2 曲线展示到 outer410，不能把表中 100 outer 写成其最终训练预算，来源与推断见[预算核对](weighted-targets.md#top-d-与本项目的预算和评测)。
 
-A/B 仅终止 outer 不同，默认 seed 相同，A 是 B 的名义前缀；分开运行不保证 vLLM 随机流与浮点计算逐位相同，不构成两个独立 seed。
+A/B 的 epoch 上限分别为 1／2，以保证 B 能达到 100 outer；实际仍以各自 outer 预算停止。DAPO 原始题池有 17917 条，batch256 的单 epoch 不足 100 outer，B 会重访题目并重新生成回答；25600 是新回答数，不是不同题目数。
+
+A/B 的目标与更新配方相同，默认 seed 相同，A 是 B 的名义前缀；分开运行不保证 vLLM 随机流与浮点计算逐位相同，不构成两个独立 seed。
 
 ## 实际预设
 
@@ -31,7 +33,7 @@ A/B 仅终止 outer 不同，默认 seed 相同，A 是 B 的名义前缀；分�
 | 数值执行 | 继承 E61 的 precompute_fused、chunk512、显式 BF16；EOS 合并 `[151643,151645]`               |
 | 训练输入 | DAPO，本地原生 Base 前缀，enable_thinking=null；prompt cap1024，response cap16384           |
 | 训练采样 | temperature1，top-p1；不额外添加 TOP-D 的 boxed 指令                                        |
-| Rollout  | 每引擎 max_num_seqs128，显存比例 0.8，token budget8192                                      |
+| Rollout  | 每引擎 max_num_seqs64，显存比例 0.8，token budget8192                                       |
 | 评测     | 不做初始评测；每 5 outer 及终点，五基准 avg@16，temperature0.7、top-p0.9、response cap31744 |
 | 生成终止 | 训练与评测默认开启精确重复停止 16–128/8；可分别显式关闭                                     |
 | 保存     | save_freq=-1，不保存训练 checkpoint                                                         |
@@ -40,15 +42,15 @@ E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收
 
 ## 并发与吞吐
 
-每个 TP1 rollout 引擎的并发上限由 E57 配对默认的 64 提高到 128，CUDA graph capture sizes 同步覆盖到 128。四卡处理一轮 256 条训练回答，均衡分配时每卡约 64 条；请求路由和长度会使实际分配变化，仅增加上限不保证训练 rollout 加速。
+每个 TP1 rollout 引擎的并发上限固定为 64，CUDA graph capture sizes 同步覆盖到 64。四卡处理一轮 256 条训练回答，均衡分配时每卡约 64 条；请求路由和长度会使实际分配变化。
 
-验证的 `data.val_batch_size=null` 保持完整题集提交，630 道题各生成 16 次，共 10080 条回答，能持续提供请求。128 的上限主要为这类请求充足阶段提供余量；显存比例与 token budget 保持不变。更多并发会共享 KV cache，长回答下可能发生抢占，最终吞吐需 GPU 实测。
+验证的 `data.val_batch_size=null` 保持完整题集提交，630 道题各生成 16 次，共 10080 条回答。四卡训练后 checkpoint 的 32／64 并发实测支持选择 64，条件与数值见[性能记录](../../infra/performance/2026-10-22-训练与验证性能实测.md)；重复停止协议与正式 A/B 不同，不能直接作为正式训练吞吐预测。
 
 [并发与利用率调优](../../infra/performance/2026-10-22-批量大小与GPU利用率调优.md)区分请求供给和引擎上限；[训练与验证实测](../../infra/performance/2026-10-22-训练与验证性能实测.md)记录了请求窗口与长尾的影响。A/B 还需记录 rollout token/s、验证耗时、抢占和峰值显存，再判断是否进一步增加上限。
 
 ## 执行状态与入口
 
-E81／E82 已注册，尚未启动，尚无 GPU 性能或任务结果。CPU 测试覆盖最终 Hydra 配置解析、四卡资源、batch／reuse／预算、并发、目标和评测终止协议，见[启动器测试](../../../../../tests/examples/test_mirroropd_math_launcher_on_cpu.py)。
+E81／E82 使用 64 并发，按 A→B 串行提交；正式启动状态和运行证据见后续更新。CPU 测试覆盖最终 Hydra 配置解析、四卡资源、batch／reuse／预算、并发、目标和评测终止协议，见[启动器测试](../../../../../tests/examples/test_mirroropd_math_launcher_on_cpu.py)。
 
 从仓库根目录检查默认配置；应先清理会覆盖预设的旧环境变量：
 

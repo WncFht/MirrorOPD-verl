@@ -1406,7 +1406,8 @@ def test_topd_large_batch_presets_resolve_four_gpu_budget_and_repetition_stoppin
     assert actor.loss_agg_mode == "token-mean" and actor.optim.lr == 1e-6
     assert cfg.data.apply_chat_template_kwargs.enable_thinking is None
     assert rollout.n == rollout.tensor_model_parallel_size == 1
-    assert rollout.max_num_seqs == 128 and rollout.cudagraph_capture_sizes[-1] == 128
+    assert rollout.max_num_seqs == 64 and rollout.cudagraph_capture_sizes[-1] == 64
+    assert cfg.trainer.total_epochs == (2 if preset == "E82" else 1)
     assert rollout.gpu_memory_utilization == 0.8
     assert cfg.data.val_batch_size is None and rollout.val_kwargs.n == 16
     assert rollout.val_kwargs.max_tokens == 31744
