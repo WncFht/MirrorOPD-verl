@@ -18,7 +18,7 @@ from unittest.mock import patch
 import torch
 
 from examples.mirroropd.benchmarks.full_vocab.probe_full_kl import measure, relative_error
-from verl.trainer.distillation import full_vocab, trajectory
+from verl.trainer.distillation import full_vocab, full_vocab_triton, trajectory
 from verl.trainer.distillation.full_vocab import full_vocab_objective_result
 from verl.trainer.distillation.reduction import PackedReduction
 from verl.trainer.distillation.trajectory import trajectory_objective_result
@@ -60,7 +60,11 @@ def projection_counts(fn):
         calls.append(len(hidden))
         return original(hidden, weight)
 
-    with patch.object(full_vocab, "project", record), patch.object(trajectory, "project", record):
+    with (
+        patch.object(full_vocab, "project", record),
+        patch.object(full_vocab_triton, "project", record),
+        patch.object(trajectory, "project", record),
+    ):
         value = fn()
     del value
     return dict(projection_calls=len(calls), projected_rows=sum(calls))
@@ -122,7 +126,11 @@ def main():
                             head_relative_l2=relative_error(gradients[1].cpu(), expected_grad[1]),
                         )
                         assert all(math.isfinite(v) for v in errors.values()), errors
-                        assert errors["value_abs"] < 1e-4 and max(errors.values()) < 0.03, errors
+                        # A long sum surrogate can be thousands in magnitude;
+                        # its FP32 rounding must be checked relative to that scale.
+                        value_tolerance = 1e-4 + 2e-6 * abs(expected_value)
+                        assert errors["value_abs"] <= value_tolerance, errors
+                        assert max(errors["hidden_relative_l2"], errors["head_relative_l2"]) < 0.03, errors
                         del actual, gradients
                         row = dict(
                             answer_length=length,
@@ -131,6 +139,8 @@ def main():
                             backend=backend,
                             path=path,
                             errors=errors,
+                            reference_value=expected_value,
+                            value_tolerance=value_tolerance,
                             **projection_counts(fn),
                             **measure(fn, hs, ws, True, warmup=2, repeats=5),
                         )
