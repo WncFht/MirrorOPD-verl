@@ -136,7 +136,7 @@ E57 冻结配置实际为 `trainer.val_before_train=false`，所以原日志的�
 
 [新增回答数横轴图](figures/topd-e57-step0-20261104/fresh_responses.png)保留两边不同的轨迹覆盖口径；早期放大区内 TOP-D 只有 step0 一个观测点，仅显示该点，不在没有评测的区间补画连线。[矢量成品](figures/topd-e57-step0-20261104/response_presentations.pdf)、[原始论文矢量图](data/topd-e57-budget-20261104/topd-figure5.pdf)、[曲线 CSV](data/topd-e57-budget-20261104/curves.csv)、[来源与哈希](data/topd-e57-budget-20261104/provenance.json)均已保留。
 
-[Optimizer update 次数横轴图](figures/topd-e57-step0-20261104/optimizer_updates.png)（[PDF](figures/topd-e57-step0-20261104/optimizer_updates.pdf)）使用同一批评测点，E57 和 TOP-D 均按每 outer16 次更新换算。上排展示完整预算，下排放大 E57 的前 1,600 次更新。E57 每次更新处理 64 条回答，TOP-D 每次处理 256 条；因此，相同 update 次数下，TOP-D 的累计训练回答条次为 E57 的 4 倍，不能将横坐标相同解释为样本预算或计算预算相同。
+[Optimizer update 次数横轴图](figures/topd-e57-step0-20261104/optimizer_updates.png)（[PDF](figures/topd-e57-step0-20261104/optimizer_updates.pdf)）使用同一批评测点，E57 和图中的 TOP-D α0.1／α0.2 均按每 outer16 次更新换算。上排展示完整预算，下排放大 E57 的前 1,600 次更新。E57 每次更新处理 64 条回答，TOP-D 每次处理 256 条；因此，相同 update 次数下，TOP-D 的累计训练回答条次为 E57 的 4 倍，不能将横坐标相同解释为样本预算或计算预算相同。
 
 生成器为 [plot_topd_e57_budget.py](../../../research/studies/weighted_targets/plot_topd_e57_budget.py)。在仓库根设置 `FIGURE_VIZ_MPL` 为 figure-viz 的 `assets/mpl` 目录后，可从冻结数据重画：
 
@@ -146,6 +146,26 @@ python -m examples.mirroropd.research.studies.weighted_targets.plot_topd_e57_bud
   --baseline examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-step0-20261104/baseline.json \
   --out runs/topd-e57-budget-replot
 ```
+
+### Figure5 全部消融曲线
+
+另保留一组完整对比，包含论文的 α0.1、α0.2、α0.3、α1、w/o off-policy 和 Standard OPD 六条曲线，以及 E57 和独立 Base 参考点。三年 AIME 共提取 18 条论文曲线、525 个矢量节点，E57 的 30 个训练中评测点保持不变；各曲线只画到实际可提取的末端，不补齐到统一终点。[^topd-paper]
+
+![包含论文全部消融曲线的 optimizer update 对比](figures/topd-e57-all-curves-20261104/optimizer_updates.png)
+
+| 论文曲线             | 已展示末端 outer | 每 outer 的 optimizer update | 末端累计 update |
+| -------------------- | ---------------: | ---------------------------: | --------------: |
+| TOP-D α0.1／α0.2     |              410 |                           16 |           6,560 |
+| TOP-D α0.3           |              210 |                           16 |           3,360 |
+| TOP-D α1             |              180 |                           16 |           2,880 |
+| TOP-D w/o off-policy |              200 |                      1，推断 |       200，推断 |
+| Standard OPD         |              280 |                            1 |             280 |
+
+论文 Appendix D 区分 TOP-D 与 Standard OPD：两者 global batch 均为 512 prompts、每题 8 条回答，但 mini-batch 分别为 32 与 512 prompts，对应 16 次与 1 次更新。α1 只消融外部 proximal teacher，按单因素消融继承 TOP-D 的内部更新设置；它与 Standard OPD 的即时 log-ratio reward 对应，内部更新预算仍不同，所以两条线不能当作同一运行的重复。[^topd-paper]
+
+w/o off-policy 在 §5.3 被描述为取消内部 trust-region 迭代、回到严格 on-policy。图中据此按每 outer 一次全 batch 更新换算，并在图下注明推断；公开材料缺少该条运行独立的 resolved config，不能将这个换算当成原始 optimizer 日志。累计回答图为全部论文消融沿用 512×8 的 global batch、每条一次处理的口径，w/o off-policy 同样继承这一假设。[^topd-paper]
+
+[累计训练回答条次图](figures/topd-e57-all-curves-20261104/response_presentations.png)、[累计新生成回答数图](figures/topd-e57-all-curves-20261104/fresh_responses.png)和 [optimizer update PDF](figures/topd-e57-all-curves-20261104/optimizer_updates.pdf)使用同一批节点；[完整 CSV](data/topd-e57-all-curves-20261104/curves.csv)与[来源及各组换算依据](data/topd-e57-all-curves-20261104/provenance.json)单独保存。可以复用上面的命令，将 `--data` 改为 `examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-all-curves-20261104`，重新生成全部曲线版本。
 
 ## 长程实验条件
 

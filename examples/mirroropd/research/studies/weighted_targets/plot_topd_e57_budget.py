@@ -11,7 +11,9 @@ once, without deduplicating prompts or answer strings. Neither measures FLOPs.
 Geometry ledger: columns are AIME24/25/26, rows full budget and early-budget zoom.
 All panels share a linear percent y-axis; response counts are in thousands,
 optimizer updates are unscaled counts, with one x scale per row. Lines connect
-observed points; there is no smoothing or extrapolation.
+observed points; there is no smoothing or extrapolation. The full-ablation view
+keeps all seven requested curves; shared alpha colors use different line styles.
+Standard OPD uses one update/outer; one for w/o off-policy is an explicit inference.
 """
 
 import argparse
@@ -28,7 +30,17 @@ import matplotlib.pyplot as plt
 from examples.mirroropd.research.core.plotting import load_style
 
 BENCHMARKS = ("AIME24", "AIME25", "AIME26")
-COLORS = {(249, 142, 113): "TOP-D alpha=0.1", (224, 102, 84): "TOP-D alpha=0.2"}
+COLORS = {
+    (249, 142, 113): "TOP-D alpha=0.1",
+    (224, 102, 84): "TOP-D alpha=0.2",
+    (251, 187, 139): "TOP-D alpha=0.3",
+    (221, 118, 137): "TOP-D alpha=1.0",
+    (212, 203, 179): "TOP-D without off-policy",
+    (170, 170, 170): "Standard OPD",
+}
+# OPD has one full-global-batch update (paper Appendix D). The no-off-policy
+# ablation is inferred to use the same one-update regime from Section 5.3.
+ONE_UPDATE_SERIES = {"TOP-D without off-policy", "Standard OPD"}
 
 
 def sha256(path):
@@ -83,13 +95,24 @@ def extract_topd(source):
                             series=label,
                             benchmark=benchmark,
                             outer=outer,
-                            optimizer_updates=outer * 16,
+                            optimizer_updates=outer * (1 if label in ONE_UPDATE_SERIES else 16),
                             fresh_responses=outer * 4096,
                             response_presentations=outer * 4096,
                             accuracy_percent=v0 + (point.y - y0) * (v1 - v0) / (y1 - y0),
                         )
                     )
-    assert len(result) == 3 * 2 * 42
+    counts = {
+        "TOP-D alpha=0.1": 42,
+        "TOP-D alpha=0.2": 42,
+        "TOP-D alpha=0.3": 22,
+        "TOP-D alpha=1.0": 19,
+        "TOP-D without off-policy": 21,
+        "Standard OPD": 29,
+    }
+    for benchmark in BENCHMARKS:
+        for label, count in counts.items():
+            points = [r for r in result if r["benchmark"] == benchmark and r["series"] == label]
+            assert [r["outer"] for r in points] == list(range(0, count * 10, 10))
     return result
 
 
@@ -141,12 +164,19 @@ def read_baseline(path):
 
 
 def render(rows, out, metric, fv, baseline=None):
-    fig, axes = plt.subplots(2, 3, figsize=(12, 7.5), sharey=True)
+    full_ablation = any(r["series"] == "Standard OPD" for r in rows)
+    fig, axes = plt.subplots(2, 3, figsize=(14 if full_ablation else 12, 7.5), sharey=True)
     styles = [
         ("E57", "vteal", "o", "-"),
         ("TOP-D alpha=0.1", "vorange", ".", "-"),
         ("TOP-D alpha=0.2", "vcoral", ".", "--"),
+        ("TOP-D alpha=0.3", "vorange", "x", ":"),
+        ("TOP-D alpha=1.0", "vcoral", "s", "-."),
+        ("TOP-D without off-policy", "vviolet", "^", "--"),
+        ("Standard OPD", "vgray", ".", "-"),
     ]
+    present = {r["series"] for r in rows}
+    styles = [style for style in styles if style[0] in present]
     updates_axis = metric == "optimizer_updates"
     scale = 1 if updates_axis else 1000
     endpoint = max(r[metric] for r in rows if r["series"] == "E57") / scale
@@ -205,7 +235,7 @@ def render(rows, out, metric, fv, baseline=None):
     fig.legend(
         *axes[0, 0].get_legend_handles_labels(),
         loc="upper center",
-        ncol=2 if baseline is not None else 3,
+        ncol=4 if full_ablation else (2 if baseline is not None else 3),
         frameon=False,
         bbox_to_anchor=(0.5, 0.99),
     )
@@ -230,6 +260,15 @@ def render(rows, out, metric, fv, baseline=None):
         fontsize=9,
         color=fv.NEUTRALS["baseline"],
     )
+    if full_ablation:
+        fig.text(
+            0.5,
+            0.065,
+            "Updates/outer: TOP-D alpha variants 16; Standard OPD 1; w/o off-policy 1 (inferred).",
+            ha="center",
+            fontsize=9,
+            color=fv.NEUTRALS["baseline"],
+        )
     fig.subplots_adjust(top=0.87, bottom=0.18, left=0.08, right=0.985, hspace=0.28, wspace=0.16)
     fig.canvas.draw()
     # Zoom deliberately clips curves to its window, including one subsequent vertex.
@@ -251,6 +290,7 @@ def main():
         "--data", required=True, type=Path, help="New evidence directory, or frozen directory for replot"
     )
     parser.add_argument("--out", required=True, type=Path)
+    parser.add_argument("--topd-figure", type=Path, help="Original vector PDF for preparing a new evidence directory")
     parser.add_argument("--e57-data", type=Path, help="Original frozen full log extraction; omit when replotting")
     parser.add_argument(
         "--metrics",
@@ -264,16 +304,27 @@ def main():
     if args.e57_data:
         e57, provenance = extract_e57(args.e57_data)
         provenance["extracted_log_sha256"] = sha256(args.e57_data)
-        provenance["topd_figure_sha256"] = sha256(args.data / "topd-figure5.pdf")
+        figure_source = args.topd_figure or args.data / "topd-figure5.pdf"
+        provenance["topd_figure_sha256"] = sha256(figure_source)
+        provenance["topd_figure_path"] = str(figure_source)
         provenance["topd_source"] = "https://arxiv.org/src/2607.04751v2; figures/ablation_curves.pdf"
-        provenance["topd_budget"] = (
-            "Inferred outer counter: 512 prompts * 8 responses, one epoch, 16 minibatches * 256 responses."
-        )
         provenance["method"] = (
             "Original PDF vector paths calibrated against printed ticks; rounded step residual <0.01; "
             "no extra smoothing. Published curves may already be smoothed."
         )
-        rows = e57 + extract_topd(args.data / "topd-figure5.pdf")
+        provenance["update_budget_by_series"] = {
+            "TOP-D alpha variants": "16 mini-batches of 256 responses, Appendix D",
+            "Standard OPD": "1 mini-batch of 4096 responses, Appendix D",
+            "TOP-D without off-policy": (
+                "Inferred 1 update per outer using all 4096 responses; Section 5.3 says strictly on-policy. "
+                "No run-specific resolved config is available for this ablation."
+            ),
+        }
+        provenance["topd_budget"] = (
+            "Paper global batch: 512 prompts * 8 responses, one pass; 4096 presentations per outer for each curve. "
+            "Optimizer update count depends on the variant; no-off-policy allocation is inferred."
+        )
+        rows = e57 + extract_topd(figure_source)
         (args.data / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
         (args.data / "curves.json").write_text(json.dumps(rows, indent=2) + "\n")
         with (args.data / "curves.csv").open("w") as stream:

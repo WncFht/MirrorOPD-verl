@@ -1,0 +1,35 @@
+{
+  "run_id": "6j5knkmk",
+  "url": "https://wandb.ai/wncfht/MirrorOPD-verl/runs/6j5knkmk",
+  "raw_source": "MirrorOPD-verl/wandb/offline-run-20261030_015214-6j5knkmk/run-6j5knkmk.wandb",
+  "sha256": "13fe51311d459a4f14b653294c2deadeea4882b6a725214c8243d2ad74aa0830",
+  "config": {
+    "seed": 42,
+    "optimizer": "AdamW",
+    "fsdp_model_dtype": "fp32",
+    "fsdp_dtype": "bfloat16",
+    "forward_precision": null,
+    "train_cap": 16384,
+    "val_cap": 31744,
+    "val_n": 16,
+    "lr": 1e-06,
+    "train_temperature": 1.0,
+    "train_top_p": 1.0,
+    "val_temperature": 0.7,
+    "val_top_p": 0.9,
+    "concurrency": 64,
+    "memory_utilization": 0.8
+  },
+  "code_commit": "9fd276af99b329d67f831881141b3b873b1cc428",
+  "extracted_log_sha256": "9dfb7e12eddf4ad6906cb85779155256717c9685a89d2fc6c897c02c3ebda0e4",
+  "topd_figure_sha256": "e3d89e93065ed7184516ac2b8cf8c5a6114f928f6353ba56e8db298c343c28da",
+  "topd_figure_path": "examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-budget-20261104/topd-figure5.pdf",
+  "topd_source": "https://arxiv.org/src/2607.04751v2; figures/ablation_curves.pdf",
+  "topd_budget": "Paper global batch: 512 prompts * 8 responses, one pass; 4096 presentations per outer for each curve. Optimizer update count depends on the variant; no-off-policy allocation is inferred.",
+  "method": "Original PDF vector paths calibrated against printed ticks; rounded step residual <0.01; no extra smoothing. Published curves may already be smoothed.",
+  "update_budget_by_series": {
+    "TOP-D alpha variants": "16 mini-batches of 256 responses, Appendix D",
+    "Standard OPD": "1 mini-batch of 4096 responses, Appendix D",
+    "TOP-D without off-policy": "Inferred 1 update per outer using all 4096 responses; Section 5.3 says strictly on-policy. No run-specific resolved config is available for this ablation."
+  }
+}

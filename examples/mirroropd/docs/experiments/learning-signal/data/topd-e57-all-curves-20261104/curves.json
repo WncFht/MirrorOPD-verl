@@ -1,0 +1,4997 @@
+[
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 640,
+    "response_presentations": 10240,
+    "accuracy_percent": 7.916666666666666
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 640,
+    "response_presentations": 10240,
+    "accuracy_percent": 3.3333333333333335
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 640,
+    "response_presentations": 10240,
+    "accuracy_percent": 3.5416666666666665
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 1280,
+    "response_presentations": 20480,
+    "accuracy_percent": 8.75
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 1280,
+    "response_presentations": 20480,
+    "accuracy_percent": 5.416666666666667
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 1280,
+    "response_presentations": 20480,
+    "accuracy_percent": 5.833333333333333
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 1920,
+    "response_presentations": 30720,
+    "accuracy_percent": 7.916666666666666
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 1920,
+    "response_presentations": 30720,
+    "accuracy_percent": 7.708333333333334
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 1920,
+    "response_presentations": 30720,
+    "accuracy_percent": 6.041666666666667
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 2560,
+    "response_presentations": 40960,
+    "accuracy_percent": 6.458333333333334
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 2560,
+    "response_presentations": 40960,
+    "accuracy_percent": 6.25
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 2560,
+    "response_presentations": 40960,
+    "accuracy_percent": 8.333333333333332
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 3200,
+    "response_presentations": 51200,
+    "accuracy_percent": 8.75
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 3200,
+    "response_presentations": 51200,
+    "accuracy_percent": 8.333333333333332
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 3200,
+    "response_presentations": 51200,
+    "accuracy_percent": 6.666666666666667
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 3840,
+    "response_presentations": 61440,
+    "accuracy_percent": 9.791666666666666
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 3840,
+    "response_presentations": 61440,
+    "accuracy_percent": 5.625
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 3840,
+    "response_presentations": 61440,
+    "accuracy_percent": 8.333333333333332
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 4480,
+    "response_presentations": 71680,
+    "accuracy_percent": 9.583333333333334
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 4480,
+    "response_presentations": 71680,
+    "accuracy_percent": 6.875000000000001
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 4480,
+    "response_presentations": 71680,
+    "accuracy_percent": 9.583333333333334
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 5120,
+    "response_presentations": 81920,
+    "accuracy_percent": 8.333333333333332
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 5120,
+    "response_presentations": 81920,
+    "accuracy_percent": 9.583333333333334
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 5120,
+    "response_presentations": 81920,
+    "accuracy_percent": 8.333333333333332
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 5760,
+    "response_presentations": 92160,
+    "accuracy_percent": 10.208333333333334
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 5760,
+    "response_presentations": 92160,
+    "accuracy_percent": 9.375
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 5760,
+    "response_presentations": 92160,
+    "accuracy_percent": 8.333333333333332
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME24",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 6400,
+    "response_presentations": 102400,
+    "accuracy_percent": 10.416666666666668
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME25",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 6400,
+    "response_presentations": 102400,
+    "accuracy_percent": 9.791666666666666
+  },
+  {
+    "series": "E57",
+    "benchmark": "AIME26",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 6400,
+    "response_presentations": 102400,
+    "accuracy_percent": 6.875000000000001
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 4.583333333333334
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 10,
+    "optimizer_updates": 10,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 4.687498954426374
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 20,
+    "optimizer_updates": 20,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 6.041665969617583
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 30,
+    "optimizer_updates": 30,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 8.541667363715751
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 40,
+    "optimizer_updates": 40,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 5.416666666666666
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 50,
+    "optimizer_updates": 50,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 6.874999302950915
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 60,
+    "optimizer_updates": 60,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 8.64583437890696
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 70,
+    "optimizer_updates": 70,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 9.166666666666666
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 80,
+    "optimizer_updates": 80,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 9.062499651475457
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 90,
+    "optimizer_updates": 90,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 10.208334030382417
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 100,
+    "optimizer_updates": 100,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 9.687498954426374
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 110,
+    "optimizer_updates": 110,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 9.583331939235164
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 120,
+    "optimizer_updates": 120,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 10.0
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 130,
+    "optimizer_updates": 130,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 9.687498954426374
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 140,
+    "optimizer_updates": 140,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 10.937500348524543
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 150,
+    "optimizer_updates": 150,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 11.041667363715751
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 160,
+    "optimizer_updates": 160,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 12.083331939235165
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 170,
+    "optimizer_updates": 170,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 11.458332636284249
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 180,
+    "optimizer_updates": 180,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 11.562499651475457
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 190,
+    "optimizer_updates": 190,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 11.562499651475457
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME24",
+    "outer": 200,
+    "optimizer_updates": 200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 11.249998605901832
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 3.8541656210930384
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 10,
+    "optimizer_updates": 10,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 5.0
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 20,
+    "optimizer_updates": 20,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 8.958332636284249
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 30,
+    "optimizer_updates": 30,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 6.458332636284249
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 40,
+    "optimizer_updates": 40,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 4.895832984808791
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 50,
+    "optimizer_updates": 50,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 5.937498954426374
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 60,
+    "optimizer_updates": 60,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 5.416666666666666
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 70,
+    "optimizer_updates": 70,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 6.35416562109304
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 80,
+    "optimizer_updates": 80,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 7.708334030382417
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 90,
+    "optimizer_updates": 90,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 6.770833681857875
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 100,
+    "optimizer_updates": 100,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 2.4999986059018298
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 110,
+    "optimizer_updates": 110,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 4.791665969617583
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 120,
+    "optimizer_updates": 120,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 5.208332636284249
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 130,
+    "optimizer_updates": 130,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 6.979166318142125
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 140,
+    "optimizer_updates": 140,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 6.666666666666666
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 150,
+    "optimizer_updates": 150,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 6.562499651475457
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 160,
+    "optimizer_updates": 160,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 8.229166318142125
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 170,
+    "optimizer_updates": 170,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 7.395832984808791
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 180,
+    "optimizer_updates": 180,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 6.35416562109304
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 190,
+    "optimizer_updates": 190,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 6.874999302950915
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 200,
+    "optimizer_updates": 200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 7.083333333333334
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 210,
+    "optimizer_updates": 210,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 7.187498954426374
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 220,
+    "optimizer_updates": 220,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 8.020832287759706
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 230,
+    "optimizer_updates": 230,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 7.604167015191209
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 240,
+    "optimizer_updates": 240,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 7.395832984808791
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 250,
+    "optimizer_updates": 250,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 6.770833681857875
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 260,
+    "optimizer_updates": 260,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 8.541667363715751
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 270,
+    "optimizer_updates": 270,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 7.708334030382417
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME24",
+    "outer": 280,
+    "optimizer_updates": 280,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 6.458332636284249
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 4.062499651475457
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 8.958332636284249
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 11.666666666666666
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 12.5
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 12.395832984808791
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 10.937500348524543
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 12.604167015191209
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 13.333333333333332
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 12.708334030382417
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 14.375000697049085
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 15.104167015191209
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 14.687498954426374
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 16.666666666666668
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 14.895832984808791
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 15.937500348524543
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 16.562502439671796
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 16.770833681857876
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 14.791665969617583
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 15.624999302950915
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 16.24999860590183
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 17.39583298480879
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 16.875000697049085
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 220,
+    "optimizer_updates": 3520,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 17.60416701519121
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 230,
+    "optimizer_updates": 3680,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 17.916665272568498
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 240,
+    "optimizer_updates": 3840,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 15.729166318142124
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 250,
+    "optimizer_updates": 4000,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 18.125002091147252
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 260,
+    "optimizer_updates": 4160,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 16.770833681857876
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 270,
+    "optimizer_updates": 4320,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 17.5
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 280,
+    "optimizer_updates": 4480,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 17.916665272568498
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 290,
+    "optimizer_updates": 4640,
+    "fresh_responses": 1187840,
+    "response_presentations": 1187840,
+    "accuracy_percent": 18.43750034852454
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 300,
+    "optimizer_updates": 4800,
+    "fresh_responses": 1228800,
+    "response_presentations": 1228800,
+    "accuracy_percent": 17.60416701519121
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 310,
+    "optimizer_updates": 4960,
+    "fresh_responses": 1269760,
+    "response_presentations": 1269760,
+    "accuracy_percent": 16.562502439671796
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 320,
+    "optimizer_updates": 5120,
+    "fresh_responses": 1310720,
+    "response_presentations": 1310720,
+    "accuracy_percent": 16.875000697049085
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 330,
+    "optimizer_updates": 5280,
+    "fresh_responses": 1351680,
+    "response_presentations": 1351680,
+    "accuracy_percent": 16.666666666666668
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 340,
+    "optimizer_updates": 5440,
+    "fresh_responses": 1392640,
+    "response_presentations": 1392640,
+    "accuracy_percent": 16.24999860590183
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 350,
+    "optimizer_updates": 5600,
+    "fresh_responses": 1433600,
+    "response_presentations": 1433600,
+    "accuracy_percent": 17.5
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 360,
+    "optimizer_updates": 5760,
+    "fresh_responses": 1474560,
+    "response_presentations": 1474560,
+    "accuracy_percent": 17.916665272568498
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 370,
+    "optimizer_updates": 5920,
+    "fresh_responses": 1515520,
+    "response_presentations": 1515520,
+    "accuracy_percent": 17.60416701519121
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 380,
+    "optimizer_updates": 6080,
+    "fresh_responses": 1556480,
+    "response_presentations": 1556480,
+    "accuracy_percent": 16.770833681857876
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 390,
+    "optimizer_updates": 6240,
+    "fresh_responses": 1597440,
+    "response_presentations": 1597440,
+    "accuracy_percent": 17.291665969617583
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 400,
+    "optimizer_updates": 6400,
+    "fresh_responses": 1638400,
+    "response_presentations": 1638400,
+    "accuracy_percent": 18.85416840928938
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME24",
+    "outer": 410,
+    "optimizer_updates": 6560,
+    "fresh_responses": 1679360,
+    "response_presentations": 1679360,
+    "accuracy_percent": 17.708334030382417
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 4.166666666666666
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 8.749998605901832
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 11.875000697049085
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 12.291665969617583
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 13.958332636284249
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 12.604167015191209
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 12.812501045573626
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 12.916665272568498
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 13.124999302950915
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 13.124999302950915
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 14.687498954426374
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 15.208334030382417
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 14.791665969617583
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 14.479167712240294
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 16.666666666666668
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 15.416668060764835
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 15.312501045573626
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 15.624999302950915
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 17.083334727431502
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 16.666666666666668
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 17.18750174262271
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 15.937500348524543
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 220,
+    "optimizer_updates": 3520,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 16.875000697049085
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 230,
+    "optimizer_updates": 3680,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 15.624999302950915
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 240,
+    "optimizer_updates": 3840,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 16.666666666666668
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 250,
+    "optimizer_updates": 4000,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 17.083334727431502
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 260,
+    "optimizer_updates": 4160,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 16.14583437890696
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 270,
+    "optimizer_updates": 4320,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 17.812501045573626
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 280,
+    "optimizer_updates": 4480,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 16.562502439671796
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 290,
+    "optimizer_updates": 4640,
+    "fresh_responses": 1187840,
+    "response_presentations": 1187840,
+    "accuracy_percent": 17.18750174262271
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 300,
+    "optimizer_updates": 4800,
+    "fresh_responses": 1228800,
+    "response_presentations": 1228800,
+    "accuracy_percent": 16.770833681857876
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 310,
+    "optimizer_updates": 4960,
+    "fresh_responses": 1269760,
+    "response_presentations": 1269760,
+    "accuracy_percent": 18.541667363715753
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 320,
+    "optimizer_updates": 5120,
+    "fresh_responses": 1310720,
+    "response_presentations": 1310720,
+    "accuracy_percent": 16.770833681857876
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 330,
+    "optimizer_updates": 5280,
+    "fresh_responses": 1351680,
+    "response_presentations": 1351680,
+    "accuracy_percent": 17.291665969617583
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 340,
+    "optimizer_updates": 5440,
+    "fresh_responses": 1392640,
+    "response_presentations": 1392640,
+    "accuracy_percent": 17.39583298480879
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 350,
+    "optimizer_updates": 5600,
+    "fresh_responses": 1433600,
+    "response_presentations": 1433600,
+    "accuracy_percent": 17.812501045573626
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 360,
+    "optimizer_updates": 5760,
+    "fresh_responses": 1474560,
+    "response_presentations": 1474560,
+    "accuracy_percent": 17.60416701519121
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 370,
+    "optimizer_updates": 5920,
+    "fresh_responses": 1515520,
+    "response_presentations": 1515520,
+    "accuracy_percent": 19.166666666666668
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 380,
+    "optimizer_updates": 6080,
+    "fresh_responses": 1556480,
+    "response_presentations": 1556480,
+    "accuracy_percent": 17.812501045573626
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 390,
+    "optimizer_updates": 6240,
+    "fresh_responses": 1597440,
+    "response_presentations": 1597440,
+    "accuracy_percent": 16.875000697049085
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 400,
+    "optimizer_updates": 6400,
+    "fresh_responses": 1638400,
+    "response_presentations": 1638400,
+    "accuracy_percent": 18.333333333333332
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME24",
+    "outer": 410,
+    "optimizer_updates": 6560,
+    "fresh_responses": 1679360,
+    "response_presentations": 1679360,
+    "accuracy_percent": 19.583334727431502
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 4.062499651475457
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 9.687498954426374
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 10.520832287759706
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 11.770833681857875
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 11.875000697049085
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 12.5
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 13.64583437890696
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 12.812501045573626
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 14.583331939235165
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 13.85416562109304
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 15.729166318142124
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 15.520835075956045
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 16.041667363715753
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 15.833333333333332
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 15.624999302950915
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 16.24999860590183
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 15.104167015191209
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 16.562502439671796
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 17.708334030382417
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 16.24999860590183
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 16.666666666666668
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME24",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 15.312501045573626
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 3.5416659696175827
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 5.937498954426374
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 8.541667363715751
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 6.874999302950915
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 7.187498954426374
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 7.916665272568498
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 7.812501045573626
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 9.062499651475457
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 7.812501045573626
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 6.874999302950915
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 8.437500348524543
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 8.85416562109304
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 7.395832984808791
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 6.562499651475457
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 7.187498954426374
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 8.020832287759706
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 6.979166318142125
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 7.916665272568498
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME24",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 8.333333333333334
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 2.708333705234473
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 10,
+    "optimizer_updates": 10,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 3.750000318772406
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 20,
+    "optimizer_updates": 20,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 4.479166693231035
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 30,
+    "optimizer_updates": 30,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 5.104167171389641
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 40,
+    "optimizer_updates": 40,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 3.6458331473827634
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 50,
+    "optimizer_updates": 50,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 5.312500239079304
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 60,
+    "optimizer_updates": 60,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 7.083333227075865
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 70,
+    "optimizer_updates": 70,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 8.124999840613796
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 80,
+    "optimizer_updates": 80,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 6.041666613537933
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 90,
+    "optimizer_updates": 90,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 7.5000019126344295
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 100,
+    "optimizer_updates": 100,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 7.708333705234472
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 110,
+    "optimizer_updates": 110,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 7.083333227075865
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 120,
+    "optimizer_updates": 120,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 7.395834741244788
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 130,
+    "optimizer_updates": 130,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 8.333334183393081
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 140,
+    "optimizer_updates": 140,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 8.020832669224156
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 150,
+    "optimizer_updates": 150,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 7.5000019126344295
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 160,
+    "optimizer_updates": 160,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 8.541665975993123
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 170,
+    "optimizer_updates": 170,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 6.979166055686225
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 180,
+    "optimizer_updates": 180,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 7.812500876624114
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 190,
+    "optimizer_updates": 190,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 8.124999840613796
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME25",
+    "outer": 200,
+    "optimizer_updates": 200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 8.333334183393081
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 3.0208339443137753
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 10,
+    "optimizer_updates": 10,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 4.270833625541371
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 20,
+    "optimizer_updates": 20,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 4.479166693231035
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 30,
+    "optimizer_updates": 30,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 6.6666670916965405
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 40,
+    "optimizer_updates": 40,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 3.9583333864620673
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 50,
+    "optimizer_updates": 50,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 3.1250011157034177
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 60,
+    "optimizer_updates": 60,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 4.062500557851708
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 70,
+    "optimizer_updates": 70,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 3.750000318772406
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 80,
+    "optimizer_updates": 80,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 4.16666772924135
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 90,
+    "optimizer_updates": 90,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 4.687501036010316
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 100,
+    "optimizer_updates": 100,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 1.562499920306898
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 110,
+    "optimizer_updates": 110,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 3.0208339443137753
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 120,
+    "optimizer_updates": 120,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 3.750000318772406
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 130,
+    "optimizer_updates": 130,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 4.583333864620675
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 140,
+    "optimizer_updates": 140,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 4.583333864620675
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 150,
+    "optimizer_updates": 150,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 5.520833306768965
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 160,
+    "optimizer_updates": 160,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 4.479166693231035
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 170,
+    "optimizer_updates": 170,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 6.145833784927573
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 180,
+    "optimizer_updates": 180,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 5.208334342779283
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 190,
+    "optimizer_updates": 190,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 4.791666932310337
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 200,
+    "optimizer_updates": 200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 5.833334820937889
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 210,
+    "optimizer_updates": 210,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 6.770834263086181
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 220,
+    "optimizer_updates": 220,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 7.187500398465506
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 230,
+    "optimizer_updates": 230,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 6.354168127706856
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 240,
+    "optimizer_updates": 240,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 5.937499442148292
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 250,
+    "optimizer_updates": 250,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 6.250000956317216
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 260,
+    "optimizer_updates": 260,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 5.833334820937889
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 270,
+    "optimizer_updates": 270,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 7.5000019126344295
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME25",
+    "outer": 280,
+    "optimizer_updates": 280,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 6.250000956317216
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 2.187500398465506
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 6.875001434475822
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 7.916668048013754
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 9.16666645415173
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 8.124999840613796
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 9.583332589531055
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 10.729166374458629
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 9.687499760920696
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 11.354166852617237
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 11.145832509837954
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 13.229165736913819
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 11.979167330775844
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 12.187501673555126
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 10.729166374458629
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 13.854166215072427
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 11.354166852617237
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 12.39583346615517
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 13.645834422472383
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 12.708332430144853
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 14.583333864620675
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 14.583333864620675
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 13.437500079693102
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 220,
+    "optimizer_updates": 3520,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 15.10416717138964
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 230,
+    "optimizer_updates": 3680,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 13.958333386462067
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 240,
+    "optimizer_updates": 3840,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 15.10416717138964
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 250,
+    "optimizer_updates": 4000,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 14.583333864620675
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 260,
+    "optimizer_updates": 4160,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 13.541667251082742
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 270,
+    "optimizer_updates": 4320,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 15.416666135379325
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 280,
+    "optimizer_updates": 4480,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 15.416666135379325
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 290,
+    "optimizer_updates": 4640,
+    "fresh_responses": 1187840,
+    "response_presentations": 1187840,
+    "accuracy_percent": 16.458335299096497
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 300,
+    "optimizer_updates": 4800,
+    "fresh_responses": 1228800,
+    "response_presentations": 1228800,
+    "accuracy_percent": 14.270832350451752
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 310,
+    "optimizer_updates": 4960,
+    "fresh_responses": 1269760,
+    "response_presentations": 1269760,
+    "accuracy_percent": 15.312501514168924
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 320,
+    "optimizer_updates": 5120,
+    "fresh_responses": 1310720,
+    "response_presentations": 1310720,
+    "accuracy_percent": 15.520833306768965
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 330,
+    "optimizer_updates": 5280,
+    "fresh_responses": 1351680,
+    "response_presentations": 1351680,
+    "accuracy_percent": 14.062500557851708
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 340,
+    "optimizer_updates": 5440,
+    "fresh_responses": 1392640,
+    "response_presentations": 1392640,
+    "accuracy_percent": 16.562499920306898
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 350,
+    "optimizer_updates": 5600,
+    "fresh_responses": 1433600,
+    "response_presentations": 1433600,
+    "accuracy_percent": 15.416666135379325
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 360,
+    "optimizer_updates": 5760,
+    "fresh_responses": 1474560,
+    "response_presentations": 1474560,
+    "accuracy_percent": 15.0
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 370,
+    "optimizer_updates": 5920,
+    "fresh_responses": 1515520,
+    "response_presentations": 1515520,
+    "accuracy_percent": 16.66666709169654
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 380,
+    "optimizer_updates": 6080,
+    "fresh_responses": 1556480,
+    "response_presentations": 1556480,
+    "accuracy_percent": 16.562499920306898
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 390,
+    "optimizer_updates": 6240,
+    "fresh_responses": 1597440,
+    "response_presentations": 1597440,
+    "accuracy_percent": 16.458335299096497
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 400,
+    "optimizer_updates": 6400,
+    "fresh_responses": 1638400,
+    "response_presentations": 1638400,
+    "accuracy_percent": 16.562499920306898
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME25",
+    "outer": 410,
+    "optimizer_updates": 6560,
+    "fresh_responses": 1679360,
+    "response_presentations": 1679360,
+    "accuracy_percent": 17.187500398465506
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 2.6041665338448308
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 6.875001434475822
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 8.124999840613796
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 8.124999840613796
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 11.354166852617237
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 10.312500239079304
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 10.625001753248227
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 10.625001753248227
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 10.729166374458629
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 10.625001753248227
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 11.66666836678616
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 11.770832987996561
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 11.770832987996561
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 12.291666294765527
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 13.541667251082742
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 11.354166852617237
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 13.333335458482699
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 12.916666772924135
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 13.958333386462067
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 13.020833944313775
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 15.625000478158608
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 14.583333864620675
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 220,
+    "optimizer_updates": 3520,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 13.541667251082742
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 230,
+    "optimizer_updates": 3680,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 14.791665657220717
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 240,
+    "optimizer_updates": 3840,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 15.937499442148292
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 250,
+    "optimizer_updates": 4000,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 16.250000956317216
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 260,
+    "optimizer_updates": 4160,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 15.312501514168924
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 270,
+    "optimizer_updates": 4320,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 15.625000478158608
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 280,
+    "optimizer_updates": 4480,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 14.583333864620675
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 290,
+    "optimizer_updates": 4640,
+    "fresh_responses": 1187840,
+    "response_presentations": 1187840,
+    "accuracy_percent": 15.83333227075865
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 300,
+    "optimizer_updates": 4800,
+    "fresh_responses": 1228800,
+    "response_presentations": 1228800,
+    "accuracy_percent": 16.145833784927575
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 310,
+    "optimizer_updates": 4960,
+    "fresh_responses": 1269760,
+    "response_presentations": 1269760,
+    "accuracy_percent": 14.583333864620675
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 320,
+    "optimizer_updates": 5120,
+    "fresh_responses": 1310720,
+    "response_presentations": 1310720,
+    "accuracy_percent": 14.791665657220717
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 330,
+    "optimizer_updates": 5280,
+    "fresh_responses": 1351680,
+    "response_presentations": 1351680,
+    "accuracy_percent": 15.416666135379325
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 340,
+    "optimizer_updates": 5440,
+    "fresh_responses": 1392640,
+    "response_presentations": 1392640,
+    "accuracy_percent": 14.791665657220717
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 350,
+    "optimizer_updates": 5600,
+    "fresh_responses": 1433600,
+    "response_presentations": 1433600,
+    "accuracy_percent": 16.04166661353793
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 360,
+    "optimizer_updates": 5760,
+    "fresh_responses": 1474560,
+    "response_presentations": 1474560,
+    "accuracy_percent": 15.0
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 370,
+    "optimizer_updates": 5920,
+    "fresh_responses": 1515520,
+    "response_presentations": 1515520,
+    "accuracy_percent": 15.520833306768965
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 380,
+    "optimizer_updates": 6080,
+    "fresh_responses": 1556480,
+    "response_presentations": 1556480,
+    "accuracy_percent": 15.729167649548248
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 390,
+    "optimizer_updates": 6240,
+    "fresh_responses": 1597440,
+    "response_presentations": 1597440,
+    "accuracy_percent": 16.77083426308618
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 400,
+    "optimizer_updates": 6400,
+    "fresh_responses": 1638400,
+    "response_presentations": 1638400,
+    "accuracy_percent": 16.458335299096497
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME25",
+    "outer": 410,
+    "optimizer_updates": 6560,
+    "fresh_responses": 1679360,
+    "response_presentations": 1679360,
+    "accuracy_percent": 16.354165577527617
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 3.5416672510827425
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 6.979166055686225
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 7.916668048013754
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 7.5000019126344295
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 9.687499760920696
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 9.375000796931012
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 11.249999681227596
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 10.312500239079304
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 10.729166374458629
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 11.979167330775844
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 11.562501195396518
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 12.291666294765527
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 12.291666294765527
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 13.020833944313775
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 12.291666294765527
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 12.708332430144853
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 13.750001593862024
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 13.854166215072427
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 14.583333864620675
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 15.625000478158608
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 15.416666135379325
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME25",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 14.895835378789599
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 2.9166667729241347
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 3.9583333864620673
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 4.687501036010316
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 5.520833306768965
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 6.4583327489172575
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 6.145833784927573
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 6.979166055686225
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 7.812500876624114
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 7.187500398465506
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 6.875001434475822
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 7.5000019126344295
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 7.187500398465506
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 6.145833784927573
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 8.020832669224156
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 8.645833147382763
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 9.06250183294133
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 6.979166055686225
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 7.291667569855147
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME25",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 8.854167490162046
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 3.2291655259924825
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 10,
+    "optimizer_updates": 10,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 3.2291655259924825
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 20,
+    "optimizer_updates": 20,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 3.9583324928365657
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 30,
+    "optimizer_updates": 30,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 4.270833033155917
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 40,
+    "optimizer_updates": 40,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 3.2291655259924825
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 50,
+    "optimizer_updates": 50,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 5.104166846773117
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 60,
+    "optimizer_updates": 60,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 4.895833153226883
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 70,
+    "optimizer_updates": 70,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 6.145833393368816
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 80,
+    "optimizer_updates": 80,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 5.6250001200709665
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 90,
+    "optimizer_updates": 90,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 7.499999519716133
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 100,
+    "optimizer_updates": 100,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 6.562498859325816
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 110,
+    "optimizer_updates": 110,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 6.8750003602129
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 120,
+    "optimizer_updates": 120,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 6.8750003602129
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 130,
+    "optimizer_updates": 130,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 6.458332973120433
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 140,
+    "optimizer_updates": 140,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 7.499999519716133
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 150,
+    "optimizer_updates": 150,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 6.979166246418282
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 160,
+    "optimizer_updates": 160,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 7.187499939964517
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 170,
+    "optimizer_updates": 170,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 7.187499939964517
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 180,
+    "optimizer_updates": 180,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 8.020832793013984
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 190,
+    "optimizer_updates": 190,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 7.7083332132623665
+  },
+  {
+    "series": "TOP-D without off-policy",
+    "benchmark": "AIME26",
+    "outer": 200,
+    "optimizer_updates": 200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 7.2916658261699
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 1.874998439077432
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 10,
+    "optimizer_updates": 10,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 2.604165405921516
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 20,
+    "optimizer_updates": 20,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 4.3749989193613
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 30,
+    "optimizer_updates": 30,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 4.062499339609683
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 40,
+    "optimizer_updates": 40,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 2.604165405921516
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 50,
+    "optimizer_updates": 50,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 3.6458329130849494
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 60,
+    "optimizer_updates": 60,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 3.749999759858066
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 70,
+    "optimizer_updates": 70,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 5.2083327329785
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 80,
+    "optimizer_updates": 80,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 5.729166006276349
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 90,
+    "optimizer_updates": 90,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 5.729166006276349
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 100,
+    "optimizer_updates": 100,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 2.916665946240866
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 110,
+    "optimizer_updates": 110,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 1.9791652858505486
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 120,
+    "optimizer_updates": 120,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 4.1666661863828
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 130,
+    "optimizer_updates": 130,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 2.4999985591483993
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 140,
+    "optimizer_updates": 140,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 3.854165646063449
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 150,
+    "optimizer_updates": 150,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 4.68749945968065
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 160,
+    "optimizer_updates": 160,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 4.68749945968065
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 170,
+    "optimizer_updates": 170,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 4.270833033155917
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 180,
+    "optimizer_updates": 180,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 3.9583324928365657
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 190,
+    "optimizer_updates": 190,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 5.31250054031935
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 200,
+    "optimizer_updates": 200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 4.68749945968065
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 210,
+    "optimizer_updates": 210,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 4.583332612907533
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 220,
+    "optimizer_updates": 220,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 4.062499339609683
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 230,
+    "optimizer_updates": 230,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 5.31250054031935
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 240,
+    "optimizer_updates": 240,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 5.937499699822583
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 250,
+    "optimizer_updates": 250,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 4.062499339609683
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 260,
+    "optimizer_updates": 260,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 5.520832312730116
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 270,
+    "optimizer_updates": 270,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 5.6250001200709665
+  },
+  {
+    "series": "Standard OPD",
+    "benchmark": "AIME26",
+    "outer": 280,
+    "optimizer_updates": 280,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 4.791666306453767
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 2.187498979396783
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 6.249999279574199
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 7.187499939964517
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 9.062501260745151
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 8.645833873652684
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 9.583332612907533
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 10.52083327329785
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 10.416667387092467
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 9.47916672670215
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 10.52083327329785
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 9.583332612907533
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 10.6250010806387
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 11.458333933688166
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 10.833334774184934
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 10.937500660390317
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 10.937500660390317
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 11.458333933688166
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 10.208333693546233
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 10.833334774184934
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 11.458333933688166
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 10.6250010806387
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 10.729166966844083
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 220,
+    "optimizer_updates": 3520,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 11.354168047482784
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 230,
+    "optimizer_updates": 3680,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 12.18750090053225
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 240,
+    "optimizer_updates": 3840,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 10.937500660390317
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 250,
+    "optimizer_updates": 4000,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 11.250000240141933
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 260,
+    "optimizer_updates": 4160,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 10.729166966844083
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 270,
+    "optimizer_updates": 4320,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 11.562501741029017
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 280,
+    "optimizer_updates": 4480,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 11.458333933688166
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 290,
+    "optimizer_updates": 4640,
+    "fresh_responses": 1187840,
+    "response_presentations": 1187840,
+    "accuracy_percent": 10.6250010806387
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 300,
+    "optimizer_updates": 4800,
+    "fresh_responses": 1228800,
+    "response_presentations": 1228800,
+    "accuracy_percent": 11.770833513439783
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 310,
+    "optimizer_updates": 4960,
+    "fresh_responses": 1269760,
+    "response_presentations": 1269760,
+    "accuracy_percent": 10.937500660390317
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 320,
+    "optimizer_updates": 5120,
+    "fresh_responses": 1310720,
+    "response_presentations": 1310720,
+    "accuracy_percent": 12.0833330931914
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 330,
+    "optimizer_updates": 5280,
+    "fresh_responses": 1351680,
+    "response_presentations": 1351680,
+    "accuracy_percent": 10.52083327329785
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 340,
+    "optimizer_updates": 5440,
+    "fresh_responses": 1392640,
+    "response_presentations": 1392640,
+    "accuracy_percent": 10.6250010806387
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 350,
+    "optimizer_updates": 5600,
+    "fresh_responses": 1433600,
+    "response_presentations": 1433600,
+    "accuracy_percent": 12.18750090053225
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 360,
+    "optimizer_updates": 5760,
+    "fresh_responses": 1474560,
+    "response_presentations": 1474560,
+    "accuracy_percent": 11.875001320780633
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 370,
+    "optimizer_updates": 5920,
+    "fresh_responses": 1515520,
+    "response_presentations": 1515520,
+    "accuracy_percent": 11.875001320780633
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 380,
+    "optimizer_updates": 6080,
+    "fresh_responses": 1556480,
+    "response_presentations": 1556480,
+    "accuracy_percent": 11.458333933688166
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 390,
+    "optimizer_updates": 6240,
+    "fresh_responses": 1597440,
+    "response_presentations": 1597440,
+    "accuracy_percent": 11.14583435393655
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 400,
+    "optimizer_updates": 6400,
+    "fresh_responses": 1638400,
+    "response_presentations": 1638400,
+    "accuracy_percent": 11.14583435393655
+  },
+  {
+    "series": "TOP-D alpha=0.1",
+    "benchmark": "AIME26",
+    "outer": 410,
+    "optimizer_updates": 6560,
+    "fresh_responses": 1679360,
+    "response_presentations": 1679360,
+    "accuracy_percent": 13.020833753581718
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 2.4999985591483993
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 5.937499699822583
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 6.562498859325816
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 9.166667146950534
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 9.166667146950534
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 8.645833873652684
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 9.687500420248384
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 10.6250010806387
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 11.250000240141933
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 9.895834113794617
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 10.52083327329785
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 10.312499579751616
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 11.354168047482784
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 10.937500660390317
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 10.208333693546233
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 10.729166966844083
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 10.937500660390317
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 10.833334774184934
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 11.979167206986016
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 10.208333693546233
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 11.6666676272344
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 11.250000240141933
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 220,
+    "optimizer_updates": 3520,
+    "fresh_responses": 901120,
+    "response_presentations": 901120,
+    "accuracy_percent": 10.6250010806387
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 230,
+    "optimizer_updates": 3680,
+    "fresh_responses": 942080,
+    "response_presentations": 942080,
+    "accuracy_percent": 11.14583435393655
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 240,
+    "optimizer_updates": 3840,
+    "fresh_responses": 983040,
+    "response_presentations": 983040,
+    "accuracy_percent": 10.0
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 250,
+    "optimizer_updates": 4000,
+    "fresh_responses": 1024000,
+    "response_presentations": 1024000,
+    "accuracy_percent": 11.0416665465957
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 260,
+    "optimizer_updates": 4160,
+    "fresh_responses": 1064960,
+    "response_presentations": 1064960,
+    "accuracy_percent": 11.354168047482784
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 270,
+    "optimizer_updates": 4320,
+    "fresh_responses": 1105920,
+    "response_presentations": 1105920,
+    "accuracy_percent": 10.0
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 280,
+    "optimizer_updates": 4480,
+    "fresh_responses": 1146880,
+    "response_presentations": 1146880,
+    "accuracy_percent": 11.14583435393655
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 290,
+    "optimizer_updates": 4640,
+    "fresh_responses": 1187840,
+    "response_presentations": 1187840,
+    "accuracy_percent": 11.875001320780633
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 300,
+    "optimizer_updates": 4800,
+    "fresh_responses": 1228800,
+    "response_presentations": 1228800,
+    "accuracy_percent": 12.500000480283866
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 310,
+    "optimizer_updates": 4960,
+    "fresh_responses": 1269760,
+    "response_presentations": 1269760,
+    "accuracy_percent": 11.770833513439783
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 320,
+    "optimizer_updates": 5120,
+    "fresh_responses": 1310720,
+    "response_presentations": 1310720,
+    "accuracy_percent": 11.458333933688166
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 330,
+    "optimizer_updates": 5280,
+    "fresh_responses": 1351680,
+    "response_presentations": 1351680,
+    "accuracy_percent": 13.645834834220418
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 340,
+    "optimizer_updates": 5440,
+    "fresh_responses": 1392640,
+    "response_presentations": 1392640,
+    "accuracy_percent": 11.875001320780633
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 350,
+    "optimizer_updates": 5600,
+    "fresh_responses": 1433600,
+    "response_presentations": 1433600,
+    "accuracy_percent": 12.0833330931914
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 360,
+    "optimizer_updates": 5760,
+    "fresh_responses": 1474560,
+    "response_presentations": 1474560,
+    "accuracy_percent": 11.6666676272344
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 370,
+    "optimizer_updates": 5920,
+    "fresh_responses": 1515520,
+    "response_presentations": 1515520,
+    "accuracy_percent": 11.354168047482784
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 380,
+    "optimizer_updates": 6080,
+    "fresh_responses": 1556480,
+    "response_presentations": 1556480,
+    "accuracy_percent": 12.500000480283866
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 390,
+    "optimizer_updates": 6240,
+    "fresh_responses": 1597440,
+    "response_presentations": 1597440,
+    "accuracy_percent": 12.18750090053225
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 400,
+    "optimizer_updates": 6400,
+    "fresh_responses": 1638400,
+    "response_presentations": 1638400,
+    "accuracy_percent": 11.354168047482784
+  },
+  {
+    "series": "TOP-D alpha=0.2",
+    "benchmark": "AIME26",
+    "outer": 410,
+    "optimizer_updates": 6560,
+    "fresh_responses": 1679360,
+    "response_presentations": 1679360,
+    "accuracy_percent": 11.354168047482784
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 1.9791652858505486
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 6.458332973120433
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 6.35416708691505
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 8.125000600354834
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 9.270833033155917
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 10.208333693546233
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 10.208333693546233
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 9.166667146950534
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 10.10416780734085
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 11.250000240141933
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 11.562501741029017
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 11.354168047482784
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 11.562501741029017
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 10.0
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 9.583332612907533
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 11.354168047482784
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 9.270833033155917
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 10.729166966844083
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 10.6250010806387
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 190,
+    "optimizer_updates": 3040,
+    "fresh_responses": 778240,
+    "response_presentations": 778240,
+    "accuracy_percent": 11.250000240141933
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 200,
+    "optimizer_updates": 3200,
+    "fresh_responses": 819200,
+    "response_presentations": 819200,
+    "accuracy_percent": 11.458333933688166
+  },
+  {
+    "series": "TOP-D alpha=0.3",
+    "benchmark": "AIME26",
+    "outer": 210,
+    "optimizer_updates": 3360,
+    "fresh_responses": 860160,
+    "response_presentations": 860160,
+    "accuracy_percent": 10.10416780734085
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 0,
+    "optimizer_updates": 0,
+    "fresh_responses": 0,
+    "response_presentations": 0,
+    "accuracy_percent": 2.3958326729430164
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 10,
+    "optimizer_updates": 160,
+    "fresh_responses": 40960,
+    "response_presentations": 40960,
+    "accuracy_percent": 5.104166846773117
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 20,
+    "optimizer_updates": 320,
+    "fresh_responses": 81920,
+    "response_presentations": 81920,
+    "accuracy_percent": 4.062499339609683
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 30,
+    "optimizer_updates": 480,
+    "fresh_responses": 122880,
+    "response_presentations": 122880,
+    "accuracy_percent": 4.68749945968065
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 40,
+    "optimizer_updates": 640,
+    "fresh_responses": 163840,
+    "response_presentations": 163840,
+    "accuracy_percent": 5.416666426524733
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 50,
+    "optimizer_updates": 800,
+    "fresh_responses": 204800,
+    "response_presentations": 204800,
+    "accuracy_percent": 5.937499699822583
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 60,
+    "optimizer_updates": 960,
+    "fresh_responses": 245760,
+    "response_presentations": 245760,
+    "accuracy_percent": 4.479165766134416
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 70,
+    "optimizer_updates": 1120,
+    "fresh_responses": 286720,
+    "response_presentations": 286720,
+    "accuracy_percent": 4.479165766134416
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 80,
+    "optimizer_updates": 1280,
+    "fresh_responses": 327680,
+    "response_presentations": 327680,
+    "accuracy_percent": 4.583332612907533
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 90,
+    "optimizer_updates": 1440,
+    "fresh_responses": 368640,
+    "response_presentations": 368640,
+    "accuracy_percent": 4.3749989193613
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 100,
+    "optimizer_updates": 1600,
+    "fresh_responses": 409600,
+    "response_presentations": 409600,
+    "accuracy_percent": 4.68749945968065
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 110,
+    "optimizer_updates": 1760,
+    "fresh_responses": 450560,
+    "response_presentations": 450560,
+    "accuracy_percent": 5.520832312730116
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 120,
+    "optimizer_updates": 1920,
+    "fresh_responses": 491520,
+    "response_presentations": 491520,
+    "accuracy_percent": 5.416666426524733
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 130,
+    "optimizer_updates": 2080,
+    "fresh_responses": 532480,
+    "response_presentations": 532480,
+    "accuracy_percent": 5.104166846773117
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 140,
+    "optimizer_updates": 2240,
+    "fresh_responses": 573440,
+    "response_presentations": 573440,
+    "accuracy_percent": 4.68749945968065
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 150,
+    "optimizer_updates": 2400,
+    "fresh_responses": 614400,
+    "response_presentations": 614400,
+    "accuracy_percent": 5.937499699822583
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 160,
+    "optimizer_updates": 2560,
+    "fresh_responses": 655360,
+    "response_presentations": 655360,
+    "accuracy_percent": 6.770832552872049
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 170,
+    "optimizer_updates": 2720,
+    "fresh_responses": 696320,
+    "response_presentations": 696320,
+    "accuracy_percent": 5.520832312730116
+  },
+  {
+    "series": "TOP-D alpha=1.0",
+    "benchmark": "AIME26",
+    "outer": 180,
+    "optimizer_updates": 2880,
+    "fresh_responses": 737280,
+    "response_presentations": 737280,
+    "accuracy_percent": 6.35416708691505
+  }
+]
