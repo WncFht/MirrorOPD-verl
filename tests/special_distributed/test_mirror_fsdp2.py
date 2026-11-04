@@ -48,6 +48,7 @@ def main():
     parser.add_argument("--tied", action="store_true")
     parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
     parser.add_argument("--checkpoint", action="store_true")
+    parser.add_argument("--diagnostic-dir", type=Path, help="Save per-step local shards before numerical assertions")
     parser.add_argument(
         "--loss-agg-mode",
         choices=["token-mean", "token-sum", "seq-mean-token-mean", "seq-mean-token-sum", "seq-mean-token-sum-norm"],
@@ -257,6 +258,48 @@ def main():
         all_records.append({"outer": version, "loss": values, "updates": 3})
 
     initial = local_snapshot(dict(actor.engine.module.named_parameters()))
+    if args.diagnostic_dir:
+        from verl.trainer.distillation import full_vocab
+
+        args.diagnostic_dir.mkdir(parents=True, exist_ok=True)
+        original_step = actor.engine.optimizer_step
+        original_rows = full_vocab._mirror_rows
+        steps = []
+        head_calls = []
+
+        def observed_rows(*inputs, **kwargs):
+            output = original_rows(*inputs, **kwargs)
+            head_calls.append(dict(inputs=local_snapshot(inputs[:6]), output=local_snapshot(output)))
+            return output
+
+        full_vocab._mirror_rows = observed_rows
+
+        def observed_step():
+            parameters = dict(actor.engine.module.named_parameters())
+            before = local_snapshot(parameters)
+            gradients = local_snapshot({k: p.grad for k, p in parameters.items() if p.grad is not None})
+            optimizer_before = local_snapshot(actor.engine.optimizer.state_dict())
+            result = original_step()
+            steps.append(
+                dict(
+                    parameters_before=before,
+                    gradients_before_clip=gradients,
+                    gradients_after_clip=local_snapshot(
+                        {k: p.grad for k, p in parameters.items() if p.grad is not None}
+                    ),
+                    optimizer_before=optimizer_before,
+                    optimizer_after=local_snapshot(actor.engine.optimizer.state_dict()),
+                    parameters_after=local_snapshot(parameters),
+                    parameter_names=list(parameters),
+                    head_calls=list(head_calls),
+                )
+            )
+            head_calls.clear()
+            # Persist each completed step even if the later backend assertion fails.
+            torch.save(steps, args.diagnostic_dir / f"rank{rank}.pt")
+            return result
+
+        actor.engine.optimizer_step = observed_step
     if args.compare_backend:
         actor.save_checkpoint(str(root / "initial"), global_step=0)
     run_outer(1)

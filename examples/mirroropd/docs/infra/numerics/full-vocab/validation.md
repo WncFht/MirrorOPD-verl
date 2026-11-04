@@ -57,6 +57,18 @@ FSDP2 使用本地随机小模型，真实包装 head、teacher capture、CPU of
 
 **保留的未通过项：**MDPO＋EOS＋BF16/FP32 混合精度，三个 Adam 更新后的 fused/precompute 严格参数对比失败，attention key bias 的最大绝对差约 $1.63\times10^{-5}$，原门槛为 atol=$10^{-6}$、rtol=$10^{-5}$。没有修改该门槛。拆分复核说明混合精度恢复和 FP32/BF16 backend 对比各自通过；追加[逐参数梯度诊断](../../performance/full-vocab/data/aggregate-future-20261104/mdpo-diagnostic.json)复现原差异，出问题的 key bias 在前两步 optimizer 前梯度完全一致，第三步梯度最大绝对差仅约 $3.73\times10^{-9}$。这支持微小数值差经 Adam 放大的解释，但没有证明所有差异只来自此处；逐 rank 的参数、梯度和 optimizer 原始快照保留在运行目录，后续仍需分离 attention/backbone 与 head 的误差。原失败与后续通过均保留，不宣称全部 GPU 验收完成。
 
+2026-11-04 的追加诊断先执行同 backend 的 A/A checkpoint 对照，最大参数差为 0，恢复后的参数与 optimizer/scheduler 检查通过。随后两 rank 保存三个主路径更新和三个恢复后参考更新，包含裁剪前／后梯度、参数、Adam 状态及每块 head 输入／输出。两路径的 head 输入逐元素相同；head 的最大 $dZ$ 差为 $2.27\times10^{-9}$，相对相同输入的 CPU FP64 投影和行公式，fused／precompute 的最大绝对误差分别为 $2.23\times10^{-9}$／$1.74\times10^{-9}$。该参考同时包含投影与行公式，不单独把差值归为 Triton kernel 误差。
+
+前两步的全部参数与 optimizer 前梯度完全一致，第三步更新前参数也完全一致。第三步 key bias 的裁剪前／后梯度差均为 $3.73\times10^{-9}$，因此裁剪没有造成该差异。独立 FP64 AdamW 按已保存的前态、moment 和实际梯度复算
+
+$$
+\theta_t=(1-\alpha\,w_d)\theta_{t-1}-\alpha\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon},
+$$
+
+其中学习率 $\alpha=10^{-3}$、weight decay $w_d=0.01$、$\epsilon=10^{-8}$，$\hat m_t$／$\hat v_t$ 为 bias-corrected moments。复算预测该 bias 的两路径参数差为 $1.63338947\times10^{-5}$，实测为 $1.63338846\times10^{-5}$；该 bias 单路径 FP64 复算与 FP32 实际更新的最大残差为 $1.41\times10^{-10}$。head 的微小差异经低精度主干反传后进入小 moment 的 Adam 除法，足以解释这次参数差；不需要假设 checkpoint 漏恢复或 optimizer 换算法。这里的学习率比正式实验 $10^{-6}$ 大 1000 倍，不能据此外推正式训练的漂移幅度或质量。
+
+[A/A 结果](../../performance/full-vocab/data/aggregate-future-20261104/mdpo-aa-fused.json)、[逐参数复算](../../performance/full-vocab/data/aggregate-future-20261104/mdpo-adam-replay.json)及[命令／哈希](../../performance/full-vocab/data/aggregate-future-20261104/mdpo-adam-replay-manifest.json)保存证据。[FSDP2 测试](../../../../../../tests/special_distributed/test_mirror_fsdp2.py)的 `--diagnostic-dir` 在断言前落盘；[复算入口](../../../../benchmarks/full_vocab/analyze_optimizer_drift.py)读取这组两 rank、三 update 的 weighted-MDPO fixture。原严格参数门槛仍失败且保持原值；该诊断没有修改生产 kernel、optimizer 或精度，也不宣称多步低精度轨迹逐位等价。
+
 ## 运行检查
 
 CPU 数值和 IO 检查可从仓库根目录执行：
