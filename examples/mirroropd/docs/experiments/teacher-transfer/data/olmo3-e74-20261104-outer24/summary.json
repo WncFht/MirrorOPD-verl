@@ -1,0 +1,403 @@
+{
+  "label": "Olmo3 E74 (SFT+RL)",
+  "outer": 24,
+  "updates": 768,
+  "reuse": 32,
+  "gpus": 4,
+  "completed_readouts": [
+    0,
+    1,
+    2,
+    5,
+    10,
+    15,
+    20
+  ],
+  "ordinary_outers": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    16,
+    17,
+    18,
+    19,
+    21,
+    22,
+    23,
+    24
+  ],
+  "ordinary": {
+    "outer_seconds": 1125.829736702972,
+    "actor_seconds": 849.9045891542402,
+    "rollout_seconds": 263.13741377906666,
+    "teacher_seconds": 9.795556546085411,
+    "sync_seconds": 2.437584959798389,
+    "input_tokens": 567162.8888888889,
+    "mean_response_length": 4261.508680555556,
+    "actor_mfu": 0.0,
+    "allocated_peak_gib": 39.29364116986593,
+    "balanced_max_min_ratio": 1.0012122924285844
+  },
+  "recent5": {
+    "outer_seconds": 1137.5394180238247,
+    "actor_seconds": 838.0657945871353,
+    "rollout_seconds": 265.4406720131636,
+    "teacher_seconds": 9.347454211115837,
+    "sync_seconds": 2.201296363770962,
+    "input_tokens": 563054,
+    "mean_response_length": 4231.121875,
+    "actor_mfu": 0.0,
+    "allocated_peak_gib": 39.360817432403564,
+    "balanced_max_min_ratio": 1.001004641561535
+  },
+  "actor_share": 0.7549139638496427,
+  "token_passes_per_gpu_second": 5338.602907917331,
+  "first_update": {
+    "update": 1,
+    "outer": 1,
+    "loss": 0.7355152368545532,
+    "grad_norm": 17.52033233642578
+  },
+  "last_update": {
+    "update": 768,
+    "outer": 24,
+    "loss": 0.08010946214199066,
+    "grad_norm": 0.11211048811674118
+  },
+  "last_outer": {
+    "outer": 24,
+    "optimizer_updates": 768,
+    "questions": 128,
+    "input_tokens": 526389,
+    "response_tokens": 504981,
+    "mean_response_length": 3945.1640625,
+    "length_finish_fraction": 0.1875,
+    "actor_seconds": 777.1711914390326,
+    "actor_seconds_per_update": 24.286599732469767,
+    "rollout_seconds": 236.380720987916,
+    "evaluation_seconds": 0,
+    "other_seconds": 11.311028517782688,
+    "outer_seconds": 1024.8629409447312,
+    "teacher_seconds": 8.67440301924944,
+    "sync_seconds": 2.123720057308674,
+    "token_passes_per_gpu_second": 5418.512737460821,
+    "actor_mfu": 0.0,
+    "allocated_peak_gib": 39.360817432403564,
+    "balanced_max_min_ratio": 1.0004864774472095
+  },
+  "first_batch_last_update": {
+    "update": 32,
+    "outer": 1,
+    "loss": 0.2768351137638092,
+    "grad_norm": 1.6630291938781738
+  },
+  "last_batch_first_update": {
+    "update": 737,
+    "outer": 24,
+    "loss": 0.1465359926223755,
+    "grad_norm": 0.5530791878700256
+  },
+  "initial_rkl": [
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "all",
+      "rkl": 0.889313420353874,
+      "questions": 512
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "math",
+      "rkl": 0.6366614150695726,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "code",
+      "rkl": 1.2157705415596918,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "science",
+      "rkl": 0.9608528381055681,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_initial",
+      "domain": "if",
+      "rkl": 0.7439688866806634,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "all",
+      "rkl": 0.9858875405861123,
+      "questions": 512
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "math",
+      "rkl": 0.628103199637983,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "code",
+      "rkl": 1.5899067241053602,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "science",
+      "rkl": 1.099019005689433,
+      "questions": 128
+    },
+    {
+      "outer": 0,
+      "optimizer_updates": 0,
+      "bank": "public_teacher",
+      "domain": "if",
+      "rkl": 0.6265212329116732,
+      "questions": 128
+    }
+  ],
+  "last_rkl": [
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_initial",
+      "domain": "all",
+      "rkl": 0.27343677454605997,
+      "questions": 512
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_initial",
+      "domain": "math",
+      "rkl": 0.19332638314151884,
+      "questions": 128
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_initial",
+      "domain": "code",
+      "rkl": 0.20895246944908205,
+      "questions": 128
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_initial",
+      "domain": "science",
+      "rkl": 0.2853200162230531,
+      "questions": 128
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_initial",
+      "domain": "if",
+      "rkl": 0.4061482293705858,
+      "questions": 128
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_teacher",
+      "domain": "all",
+      "rkl": 0.27476552447003433,
+      "questions": 512
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_teacher",
+      "domain": "math",
+      "rkl": 0.1343804764992148,
+      "questions": 128
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_teacher",
+      "domain": "code",
+      "rkl": 0.2702721684696228,
+      "questions": 128
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_teacher",
+      "domain": "science",
+      "rkl": 0.2931372503730978,
+      "questions": 128
+    },
+    {
+      "outer": 20,
+      "optimizer_updates": 640,
+      "bank": "public_teacher",
+      "domain": "if",
+      "rkl": 0.401272202538202,
+      "questions": 128
+    }
+  ],
+  "historical": {
+    "label": "JustRL / R1 1.5B",
+    "ordinary_outers": 38,
+    "actor_seconds": 275.8438878629945,
+    "input_tokens": 743530.8684210526,
+    "rollout_seconds": 25.040057347009057,
+    "outer_seconds": 320.7956923934582,
+    "source_history_seconds": 14.348042481823972,
+    "token_passes_per_gpu_second": 21563.816379802414
+  },
+  "setting": {
+    "actor_rollout_ref.model.path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/MirrorOPD--Olmo3-Base-BayesProtocol/content-96d8a4eccf674915fe657fb099cb00d241a3d14bbd3c69bd8103a3d126a61998",
+    "distillation.teacher_models.teacher_model.model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/MirrorOPD--Olmo3-C3PO-BayesProtocol/content-596b1b465004254280486deb8b5057dcb6133e31082abbe1a46f889adf41d382",
+    "actor_rollout_ref.actor.optim": {
+      "_target_": "verl.workers.config.FSDPOptimizerConfig",
+      "optimizer": "AdamW",
+      "optimizer_impl": "torch.optim",
+      "lr": 1e-06,
+      "lr_warmup_steps_ratio": 0.0,
+      "total_training_steps": -1,
+      "weight_decay": 0.01,
+      "lr_warmup_steps": 0,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "clip_grad": 1.0,
+      "min_lr_ratio": 0.0,
+      "num_cycles": 0.5,
+      "lr_scheduler_type": "constant",
+      "zero_indexed_step": true,
+      "warmup_style": null,
+      "override_optimizer_config": null
+    },
+    "actor_rollout_ref.actor.fsdp_config": {
+      "_target_": "verl.workers.config.FSDPEngineConfig",
+      "wrap_policy": {
+        "min_num_params": 0
+      },
+      "param_offload": true,
+      "optimizer_offload": true,
+      "offload_policy": false,
+      "forward_only_cpu_offload": true,
+      "reshard_after_forward": true,
+      "fsdp_size": -1,
+      "forward_prefetch": false,
+      "model_dtype": "fp32",
+      "forward_precision": null,
+      "use_orig_params": false,
+      "seed": 42,
+      "full_determinism": false,
+      "ulysses_sequence_parallel_size": 1,
+      "entropy_from_logits_with_chunking": false,
+      "entropy_from_logits_chunk_size": 2048,
+      "use_torch_compile": true,
+      "entropy_checkpointing": false,
+      "use_no_sync_for_gradient_accumulation": false,
+      "pad_to_length": false,
+      "pad_to_length_bucket": 1024,
+      "forward_only": false,
+      "strategy": "fsdp",
+      "dtype": "bfloat16",
+      "qat": {
+        "_target_": "verl.workers.config.QATEngineConfig",
+        "enable": false,
+        "mode": "w4a16",
+        "group_size": 16,
+        "ignore_patterns": [
+          "lm_head",
+          "embed_tokens",
+          "re:.*mlp.gate$"
+        ],
+        "activation_observer": "static_minmax",
+        "quantization_config_path": null
+      },
+      "turbo_config": {
+        "distributed": {
+          "fully_shard_parallel_size": 16,
+          "tensor_parallel_size": 1,
+          "expert_parallel_size": 1,
+          "expert_fully_shard_parallel_size": 1,
+          "ulysses_parallel_size": 1,
+          "fsdp_plan": {
+            "param_dtype": "bf16",
+            "reduce_dtype": "fp32",
+            "output_dtype": "bf16",
+            "fsdp_implementation": "native",
+            "num_to_forward_prefetch": 1,
+            "num_to_backward_prefetch": 1
+          }
+        }
+      }
+    },
+    "distillation.distillation_loss": {
+      "_target_": "verl.workers.config.DistillationLossConfig",
+      "loss_mode": "mirror",
+      "mirror": {
+        "objective": "mdpo",
+        "estimator": "full_vocab",
+        "kappa": 0,
+        "eta": 1,
+        "diagnostics": false
+      },
+      "full_vocab": {
+        "_target_": "verl.workers.config.distillation.FullVocabConfig",
+        "backend": "precompute_fused",
+        "token_chunk_size": 256,
+        "vocab_chunk_size": 8192,
+        "async_write": true,
+        "prefetch": true,
+        "forward_teacher_support": "equal",
+        "termination_token_ids": [],
+        "distribution": {},
+        "input_id_mapping": "identity"
+      },
+      "topk": 32,
+      "use_task_rewards": false,
+      "distillation_loss_coef": 1.0,
+      "loss_max_clamp": null,
+      "log_prob_min_clamp": null,
+      "use_policy_gradient": false,
+      "policy_loss_mode": "vanilla",
+      "advantage_source": "current",
+      "clip_ratio": 0.2,
+      "clip_ratio_low": 0.2,
+      "clip_ratio_high": 0.2
+    },
+    "actor_rollout_ref.actor.ppo_max_token_len_per_gpu": 16384,
+    "actor_rollout_ref.rollout.max_num_seqs": 8,
+    "actor_rollout_ref.rollout.gpu_memory_utilization": 0.65,
+    "trainer.evaluation.generation_concurrency": 64
+  }
+}
