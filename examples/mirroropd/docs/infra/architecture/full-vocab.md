@@ -94,7 +94,7 @@ Future 采用当前更新的实际训练代价：纯 reverse KL 是条件 KL，�
 
 CPU trainer 测试替换模型加载及远程 worker，覆盖初始化、统一评测检查与 update 元数据；真实 FSDP2/collective 不属于这部分证据。[只读评测测试](../../../../../tests/trainer/distillation/test_fixed_rkl_readout_on_cpu.py) 核对训练聚合/future 不进入评分。
 
-CPU 验收覆盖[后缀与聚合公式](../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)、[独立概率参考及有限轨迹枚举](../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)、[Hydra 配置、DP/micro-batch 与 tied-head 小模型](../../../../../tests/trainer/distillation/test_full_vocab_reduction_on_cpu.py)。GPU 空闲后的入口是 [test_trajectory_on_gpu.py](../../../../../tests/trainer/distillation/test_trajectory_on_gpu.py) 和 [FSDP2 集成测试](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 的 `--loss-agg-mode`、`--future-mode`、`--gamma` 参数；执行与性能比较仍属待验收项。
+CPU 验收覆盖[后缀与聚合公式](../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)、[独立概率参考及有限轨迹枚举](../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)、[Hydra 配置、DP/micro-batch 与 tied-head 小模型](../../../../../tests/trainer/distillation/test_full_vocab_reduction_on_cpu.py)。2026-11-04 的 [CUDA 与真实 FSDP2 验收](../numerics/full-vocab/validation.md#聚合与未来信用验收2026-11-04)已覆盖六种 future、五种 aggregate、空 rank 与 checkpoint，并保留一项混合精度 backend 参数对比失败。[算子性能](../performance/full-vocab/operators.md#聚合与未来信用复测2026-11-04)分离了遍历、回答分块和 future 开销；完整 actor 的固定输入配对尚待测量。复测入口是 [test_trajectory_on_gpu.py](../../../../../tests/trainer/distillation/test_trajectory_on_gpu.py) 和 [FSDP2 集成测试](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 的 `--loss-agg-mode`、`--future-mode`、`--gamma` 参数。
 
 ## 从教师 hidden 到 student head
 

@@ -33,6 +33,8 @@ flowchart LR
 
 [Observation](../../../../../verl/utils/metric/observations.py) 保存可合并统计。均值先合并 numerator/denominator 再相除，不能平均 token 数不同的 micro-batch 或 rank 的均值。[TrainingWorker._postprocess_output](../../../../../verl/workers/engine_workers.py) 汇集分区观测与独立更新事实；[finalize_update](../../../../../verl/workers/update_records.py) 归约、调用 [canonical_name](../../../../../verl/utils/metric/schema.py) 统一命名，再拆出 update 记录和 outer 指标。上游 Metric 的统计表示在边界归约；更新执行事实只接受独立的 `optimizer_step_applied` 字段，缺字段报错，显式 None 表示未知。
 
+Worker 输出可以同时包含 CPU 计数与 CUDA 观测。`observations_to_cpu` 按源设备分别打包 scalar state，再搬到 CPU 进入 object collective；不将 CPU state 上传 GPU，也不直接拼接不同设备的 state。分位数样本继续复用同源传输缓存。[混合设备回归](../../../../../tests/utils/test_metric_observations_on_gpu.py)检查统计值、空观测和共享样本不变。
+
 Loss 侧的 `distillation/...` 经规范命名变成日志中的 `distill/...`，例如 `distillation/mdpo/objective_position/p00_10/mean` 变为 `distill/mdpo/objective_position/p00_10/mean`。动态后缀被保留，不依赖全局字段白名单。
 
 [metric_axis](../../../../../verl/utils/metric/schema.py) 将 `distill/*` 绑定到 `step/update`，`eval/*` 绑定到 `step/optimizer`，阶段耗时等绑定到 `step/outer`。[_WandbMetricAdapter](../../../../../verl/utils/tracking.py) 在字段首次出现时声明横轴；W&B 的内部 `_step` 只表示传输记录次序，不是 optimizer 次数。更新记录与 outer 记录可以拥有相同 outer 坐标而分次写入。字段首次声明时若缺少首选坐标，adapter 回退到 `step/outer`；已经声明的横轴后来缺失时会警告，不伪造未知的 optimizer 计数。

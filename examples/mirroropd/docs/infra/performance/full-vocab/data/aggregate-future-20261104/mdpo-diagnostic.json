@@ -1,0 +1,282 @@
+[
+  {
+    "rank": 0,
+    "parameter": "model.layers.1.self_attn.o_proj.weight",
+    "max_parameter_difference": 3.241002559661865e-07,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 0.040165193378925323,
+        "reference_norm": 0.040165193378925323,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.06947280466556549,
+        "reference_norm": 0.06947280466556549,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 0.04331981763243675,
+        "reference_norm": 0.043319832533597946,
+        "difference_norm": 2.196089326389483e-06,
+        "max_abs": 9.5367431640625e-07
+      }
+    ]
+  },
+  {
+    "rank": 0,
+    "parameter": "model.norm.weight",
+    "max_parameter_difference": 0.0,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 0.0024462835863232613,
+        "reference_norm": 0.0024462835863232613,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.002147189574316144,
+        "reference_norm": 0.002147189574316144,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 0.001474941847845912,
+        "reference_norm": 0.001474941847845912,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      }
+    ]
+  },
+  {
+    "rank": 0,
+    "parameter": "model.layers.1.self_attn.v_proj.weight",
+    "max_parameter_difference": 0.0,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 0.04002481326460838,
+        "reference_norm": 0.04002481326460838,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.06415924429893494,
+        "reference_norm": 0.06415924429893494,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 0.030423583462834358,
+        "reference_norm": 0.030423583462834358,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      }
+    ]
+  },
+  {
+    "rank": 0,
+    "parameter": "model.layers.1.self_attn.v_proj.bias",
+    "max_parameter_difference": 0.0,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 0.009499245323240757,
+        "reference_norm": 0.009499245323240757,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.015893802046775818,
+        "reference_norm": 0.015893802046775818,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 0.007517501246184111,
+        "reference_norm": 0.007517501246184111,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      }
+    ]
+  },
+  {
+    "rank": 0,
+    "parameter": "model.layers.1.self_attn.q_proj.weight",
+    "max_parameter_difference": 0.0,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 0.0002041407278738916,
+        "reference_norm": 0.0002041407278738916,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.00023350919946096838,
+        "reference_norm": 0.00023350919946096838,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 0.00014317035675048828,
+        "reference_norm": 0.00014317035675048828,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      }
+    ]
+  },
+  {
+    "rank": 1,
+    "parameter": "model.layers.1.self_attn.k_proj.bias",
+    "max_parameter_difference": 1.6333884559571743e-05,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 4.48154332843842e-06,
+        "reference_norm": 4.48154332843842e-06,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 1.970350422197953e-05,
+        "reference_norm": 1.970350422197953e-05,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 4.939883183396887e-06,
+        "reference_norm": 4.939591690344969e-06,
+        "difference_norm": 4.190951585769653e-09,
+        "max_abs": 3.725290298461914e-09
+      }
+    ]
+  },
+  {
+    "rank": 1,
+    "parameter": "model.layers.1.self_attn.q_proj.weight",
+    "max_parameter_difference": 3.4850090742111206e-06,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 0.00012032159429509193,
+        "reference_norm": 0.00012032159429509193,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.00020505064458120614,
+        "reference_norm": 0.00020505064458120614,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 5.825371772516519e-05,
+        "reference_norm": 5.825536936754361e-05,
+        "difference_norm": 3.419679117655505e-08,
+        "max_abs": 1.4901161193847656e-08
+      }
+    ]
+  },
+  {
+    "rank": 1,
+    "parameter": "model.layers.1.self_attn.k_proj.weight",
+    "max_parameter_difference": 2.077082172036171e-06,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 9.743125701788813e-05,
+        "reference_norm": 9.743125701788813e-05,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.00023490692547056824,
+        "reference_norm": 0.00023490692547056824,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 5.7696681324159727e-05,
+        "reference_norm": 5.771344876848161e-05,
+        "difference_norm": 9.876220730120622e-08,
+        "max_abs": 5.960464477539063e-08
+      }
+    ]
+  },
+  {
+    "rank": 1,
+    "parameter": "model.layers.1.self_attn.o_proj.weight",
+    "max_parameter_difference": 1.6083940863609314e-06,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 0.044277455657720566,
+        "reference_norm": 0.044277455657720566,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.06556463986635208,
+        "reference_norm": 0.06556463986635208,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 0.04367923364043236,
+        "reference_norm": 0.0436801016330719,
+        "difference_norm": 1.5259720385074615e-05,
+        "max_abs": 1.52587890625e-05
+      }
+    ]
+  },
+  {
+    "rank": 1,
+    "parameter": "model.norm.weight",
+    "max_parameter_difference": 0.0,
+    "gradients": [
+      {
+        "step": 0,
+        "primary_norm": 0.0023509832099080086,
+        "reference_norm": 0.0023509832099080086,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 1,
+        "primary_norm": 0.0023649889044463634,
+        "reference_norm": 0.0023649889044463634,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      },
+      {
+        "step": 2,
+        "primary_norm": 0.0020175788085907698,
+        "reference_norm": 0.0020175788085907698,
+        "difference_norm": 0.0,
+        "max_abs": 0.0
+      }
+    ]
+  }
+]

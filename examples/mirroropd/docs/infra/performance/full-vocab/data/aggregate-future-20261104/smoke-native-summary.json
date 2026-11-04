@@ -1,0 +1,141 @@
+{
+  "returncode": 0,
+  "scope": "real Qwen3-1.7B-Base <- Qwen3-8B; 2 H800; Ray/TQ/vLLM/default evaluator; training-only future mean",
+  "source_commit": "afd23fb38434e6097a1f3104fe70a4161484d681",
+  "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+  "aggregate": "seq-mean-token-mean",
+  "full_vocab": {
+    "_target_": "verl.workers.config.distillation.FullVocabConfig",
+    "backend": "precompute_fused",
+    "token_chunk_size": 512,
+    "vocab_chunk_size": 8192,
+    "async_write": true,
+    "prefetch": true,
+    "forward_teacher_support": "equal",
+    "termination_token_ids": [
+      151643,
+      151645
+    ],
+    "distribution": {},
+    "input_id_mapping": "identity",
+    "future": {
+      "mode": "mean",
+      "gamma": 1.0
+    }
+  },
+  "train_batch_size": 4,
+  "outer_steps": 2,
+  "optimizer_steps": 2,
+  "validation_steps": [
+    0,
+    1,
+    2
+  ],
+  "max_response_length": 32,
+  "max_prompt_length": 2048,
+  "validation_max_samples": 4,
+  "artifacts": [
+    {
+      "step": 0,
+      "rows": 4,
+      "unique_prompt_sample": 4,
+      "status_ok": 4,
+      "sha256": "7dc39e45d39e5a48b20fadef15475f0a1f2de242be54c68a465176f45af3e5c6"
+    },
+    {
+      "step": 1,
+      "rows": 4,
+      "unique_prompt_sample": 4,
+      "status_ok": 4,
+      "sha256": "42fd876a1adc8a1168242effc2eed1838500a5f0b64402aea88587111bece213"
+    },
+    {
+      "step": 2,
+      "rows": 4,
+      "unique_prompt_sample": 4,
+      "status_ok": 4,
+      "sha256": "20a2e61313a82e055432fa028f6d1cfa105110d5d41d03bc08964b5c3c4ad5aa"
+    }
+  ],
+  "metrics": [
+    {
+      "step": 0,
+      "metrics": {
+        "eval/math500/response_count": 4.0,
+        "eval/math500/failed_count": 0.0,
+        "perf/timing/validation_rollout_seconds": 68.071987391,
+        "perf/timing/validation_seconds": 90.75808726996183,
+        "step/outer": 0,
+        "step/update": 0,
+        "step/optimizer": 0
+      }
+    },
+    {
+      "step": 1,
+      "metrics": {
+        "optim/actor/distillation_loss": 0.24379278719425201,
+        "optim/actor/loss": 0.24379278719425201,
+        "optim/actor/loss_nonfinite": 0.0,
+        "step/outer": 1,
+        "step/update": 1,
+        "step/optimizer": 1
+      }
+    },
+    {
+      "step": 1,
+      "metrics": {
+        "eval/math500/response_count": 4.0,
+        "eval/math500/failed_count": 0.0,
+        "perf/timing/validation_rollout_seconds": 0.629344998,
+        "perf/timing/rollout_batch_seconds": 0.600498848,
+        "step/outer": 1,
+        "perf/timing/rollout_pipeline_seconds": 14.069047451019287,
+        "perf/timing/teacher_transfer_seconds": 8.088070169091225,
+        "perf/timing/teacher_forward_seconds": 0.493676595389843,
+        "perf/timing/update_actor_seconds": 11.054363034665585,
+        "perf/timing/update_weights_seconds": 1.3239384591579437,
+        "perf/timing/outer_step_seconds": 35.04371301829815,
+        "perf/timing/validation_seconds": 14.07362363487482,
+        "step/update": 1,
+        "step/optimizer": 1
+      }
+    },
+    {
+      "step": 2,
+      "metrics": {
+        "optim/actor/distillation_loss": -0.5347088575363159,
+        "optim/actor/loss": -0.5347088575363159,
+        "optim/actor/loss_nonfinite": 0.0,
+        "step/outer": 2,
+        "step/update": 2,
+        "step/optimizer": 2
+      }
+    },
+    {
+      "step": 2,
+      "metrics": {
+        "eval/math500/response_count": 4.0,
+        "eval/math500/failed_count": 0.0,
+        "perf/timing/validation_rollout_seconds": 0.611215954,
+        "perf/timing/rollout_batch_seconds": 0.620692936,
+        "step/outer": 2,
+        "perf/timing/rollout_pipeline_seconds": 2.0587133020162582,
+        "perf/timing/teacher_transfer_seconds": 7.745201162993908,
+        "perf/timing/teacher_forward_seconds": 0.2149735540151596,
+        "perf/timing/update_actor_seconds": 8.156749919056892,
+        "perf/timing/update_weights_seconds": 1.0758965834975243,
+        "perf/timing/outer_step_seconds": 19.261426217854023,
+        "perf/timing/validation_seconds": 2.0649041905999184,
+        "step/update": 2,
+        "step/optimizer": 2
+      }
+    }
+  ],
+  "raw_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/smoke-native",
+  "limitations": [
+    "short correctness smoke, not quality evidence",
+    "default evaluator only; public suite and source/history GPU event lifecycles not exercised",
+    "no paired actor performance comparison"
+  ]
+}

@@ -31,6 +31,32 @@ CPU 的 `precompute_fused` 请求现在应明确拒绝；参考数值检查使�
 
 每行只描述对应输入与代码的完成事实，不把不同批次的测试项数相加作为当前覆盖率。需要验证当前代码时，使用上方矩阵选择与改动相关的检查，并在新的结果中记录版本与条件。
 
+## 聚合与未来信用验收（2026-11-04）
+
+本次在本地 H800 与 `mirroropd-fusion` 环境中执行。[结构化验收记录](../../performance/full-vocab/data/aggregate-future-20261104/validation.json)保留命令、版本、源码 SHA256、运行日志目录、失败和各 FSDP2 结果；[性能结果](../../performance/full-vocab/operators.md#聚合与未来信用复测2026-11-04)单独解释计时。没有将以下层次的数量相加作为独立覆盖率：扩展 trajectory suite 包含首轮 suite 的部分用例。
+
+| 检查                              | 结果与实际范围                                                                                                                                                                                                               |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 首轮 CUDA distillation            | 259 passed；现有 GPU 数值测试，包括 EOS、近目标、FP16、forward/common support 与 MDPO/BPO                                                                                                                                    |
+| 扩展 trajectory 与 stable logprob | 560 passed；其中 trajectory 540 组覆盖两种 precompute backend、FP32/BF16/FP16、六种 future、五种 aggregate，以及 teacher-only、weighted teacher 和 EOS；与独立 FP64 概率参考比较值/VJP，teacher/anchor 无梯度                |
+| Rollout CUDA                      | 17 passed；dense/MoE CUDA graph、Flash KV、compact、grouped MM、attention 不变量与 optimizer 卸载缓存                                                                                                                        |
+| 指标设备回传                      | 17 passed；16 项 CPU 与 1 项真实 CUDA 混合设备回归                                                                                                                                                                           |
+| 入口校验                          | 74 passed；含新增十组 estimator/aggregate 启动前合同                                                                                                                                                                         |
+| 双卡 FSDP2 主矩阵                 | 22 组中 21 组通过；两种 precompute backend × 六种 future，轮换五种 aggregate 与 Qwen2/Qwen3/Llama；另覆盖 dense/recompute/cached/streaming/Liger、forward teacher 额外行、置换 common support、BPO tied FP16 与 sampled MDPO |
+| MDPO 拆分复核                     | 三组通过：BF16/FP32 混合精度 checkpoint 与重算；纯 FP32 checkpoint 加 backend 对比；普通 BF16 backend 对比                                                                                                                   |
+| 四卡 FSDP2                        | precompute_fused、future mean、seq-mean-token-sum-norm 通过三次更新、空局部 rank、参数与 optimizer/scheduler 恢复及恢复后下一步等价                                                                                          |
+| 算子性能门控                      | 512-token 七 backend 对 dense；4096-token 六分块 backend 一致性；72 组 aggregate/future/遍历控制对 dense，详见算子性能页                                                                                                     |
+
+FSDP2 使用本地随机小模型，真实包装 head、teacher capture、CPU offload、collective 和 optimizer。它不启动 Ray/vLLM，也不替代完整科学评估或长期训练质量验证。五种 aggregate 的最终全局缩放在 FSDP2 测试中另与 dense 结果比较；trajectory 的五种行权重测试本身不代表五种全局分母都不同。
+
+两组 weighted-MDPO future 补充检查也通过：η=0.3、κ=0.5、EOS `[1,4]`，分别为 fused/BF16/discounted_sequence/seq-mean-token-mean/checkpoint，与 precompute/FP16/mean/seq-mean-token-sum-norm/tied head。二者均经过真实 `update_actor`、三次 reuse、下一 outer 的 anchor 刷新和空 rank；checkpoint 组还检查恢复后更新与 optimizer state 等价。首次运行因新增测试入口未把 aggregate 传给 engine 而缺少 sequence 分母；`8837db9c` 修正测试接线后，两组重跑通过，生产设置未改。
+
+另完成[真实模型短训练](../../performance/full-vocab/data/aggregate-future-20261104/smoke-native-summary.json)：Qwen3-1.7B-Base 学习 Qwen3-8B，两卡 H800、batch4、两轮各一次非零学习率更新，precompute_fused/chunk512、seq-mean-token-mean、future mean、EOS 合并 `[151643,151645]`。使用 Ray/TQ/vLLM 与默认 evaluator，outer 0/1/2 各验证 4 条 MATH-500 记录，两种 JSONL 产物均生成，主记录的题目／sample 身份唯一、status 全为 ok，进程返回 0。训练与验证 response cap 都是 32，属于通路验收，不解释任务质量。此运行没有覆盖 public suite 或 source/history 的 GPU 事件生命周期，也没有提供完整 actor 的成对性能结论。
+
+首轮真实 FSDP2 在指标回传发现 CPU/CUDA state 混拼，已由 `4f68f9fe` 按源设备打包修复；相同配置重跑及混合设备回归通过。真实训练入口还发现 `validate_sampled_token_distillation` 对 full-vocab 沿用 sampled 的 token-mean 限制，`2584da10` 将限制收窄到 sampled，保留其原行为。
+
+**保留的未通过项：**MDPO＋EOS＋BF16/FP32 混合精度，三个 Adam 更新后的 fused/precompute 严格参数对比失败，attention key bias 的最大绝对差约 $1.63\times10^{-5}$，原门槛为 atol=$10^{-6}$、rtol=$10^{-5}$。没有修改该门槛。拆分复核说明混合精度恢复和 FP32/BF16 backend 对比各自通过；追加[逐参数梯度诊断](../../performance/full-vocab/data/aggregate-future-20261104/mdpo-diagnostic.json)复现原差异，出问题的 key bias 在前两步 optimizer 前梯度完全一致，第三步梯度最大绝对差仅约 $3.73\times10^{-9}$。这支持微小数值差经 Adam 放大的解释，但没有证明所有差异只来自此处；逐 rank 的参数、梯度和 optimizer 原始快照保留在运行目录，后续仍需分离 attention/backbone 与 head 的误差。原失败与后续通过均保留，不宣称全部 GPU 验收完成。
+
 ## 运行检查
 
 CPU 数值和 IO 检查可从仓库根目录执行：
