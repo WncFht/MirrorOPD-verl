@@ -572,13 +572,13 @@ Outer25／50 各生成 6703 条公共回答，实际约 5431.22 万／5426.52 �
 
 ## MiMo 7B 阶段对照的训练成本
 
-2026-11-03 19:04 的快照覆盖 E71 outer1–25、E72 outer1–20 与仍在训练的 E73 outer1–19。三组均为 MiMo-7B-Base student、四张 H800、batch128、Full-vocab RKL、FP32 主权重与 BF16 混合计算；教师和实际预算见[阶段对照](../../../experiments/teacher-transfer/post-training-stages.md#mimo-e71-early)。以下按完成日志分析，没有改变运行配置。
+2026-11-04 11:10 的终点快照覆盖 E71 outer1–25、E72／E73 outer1–20。三组均为 MiMo-7B-Base student、四张 H800、batch128、Full-vocab RKL、FP32 主权重与 BF16 混合计算；教师和实际预算见[阶段对照](../../../experiments/teacher-transfer/post-training-stages.md#mimo-e71-early)。以下按完成日志分析，没有改变运行配置。
 
-![MiMo 三组每轮阶段耗时，保留终点完整读出](figures/mimo-stage-20261103-1904/stage-cost.png)
+![MiMo 三组每轮阶段耗时，保留终点完整读出](figures/mimo-stage-20261104-final/stage-cost.png)
 
 普通轮排除固定银行及全量读出节点；actor、rollout、evaluation 和其余阶段互斥求和。下表各行按相同分支的普通轮集合计算，吞吐使用`总输入 token × reuse / 总 actor 秒数 / 4`，输入含 prompt。
 
-| 指标                          | E71 SFT+RL | E72 direct RL | E73 SFT，截至 outer19 |
+| 指标                          | E71 SFT+RL | E72 direct RL | E73 SFT，终点 outer20 |
 | ----------------------------- | ---------: | ------------: | --------------------: |
 | 普通轮数                      |         18 |            14 |                    14 |
 | Reuse                         |         32 |            16 |                    16 |
@@ -593,9 +593,9 @@ Outer25／50 各生成 6703 条公共回答，实际约 5431.22 万／5426.52 �
 | Actor MFU 估计                |     32.19% |        32.10% |                32.09% |
 | Actor allocated 峰值均值      |  47.91 GiB |     48.04 GiB |             48.25 GiB |
 
-E72／E73 的 reuse 减半，回答长度也不同，原始 outer 时长不能解释成后端提速。三组按输入工作量归一化的 actor 吞吐约为 6000 token passes/s/GPU。E71／E72 的终点 evaluation 分别为 23821.90／18549.64 秒，即 6.62／5.15 小时；其中包含公共生成与判分、RKL、模型切换及终点导出等，不能把终点大柱当作 actor 变慢。终点 outer 总计 6.96／5.31 小时，远高于普通轮。E73 尚无终点实测。
+E72／E73 的 reuse 减半，回答长度也不同，原始 outer 时长不能解释成后端提速。三组按输入工作量归一化的 actor 吞吐约为 6000 token passes/s/GPU。E71／E72 的终点 evaluation 分别为 23821.90／18549.64 秒，即 6.62／5.15 小时；其中包含公共生成与判分、RKL、模型切换及终点导出等，不能把终点大柱当作 actor 变慢。终点 outer 总计 6.96／5.31 小时，远高于普通轮。E73 终点 evaluation 为 34669.14 秒（9.63 小时），终点 outer 共 9.85 小时；它的最后一批平均回答长 7063.3 token，97.66% 达到训练长度上限，公共生成的成本应按各自实际轨迹解释。
 
-最新[冻结数据与来源](../../../experiments/teacher-transfer/data/mimo-stage-20261103-1904/manifest.json)、各分支 [E71](../../../experiments/teacher-transfer/data/mimo-stage-20261103-1904/E71/summary.json)／[E72](../../../experiments/teacher-transfer/data/mimo-stage-20261103-1904/E72/summary.json)／[E73](../../../experiments/teacher-transfer/data/mimo-stage-20261103-1904/E73/summary.json)摘要及[生成器](../../../../research/studies/pipeline/report_mimo_snapshot.py)支持复算。终点不再做下一轮 rollout 的权重同步，相应计时记为 0。
+最新[冻结数据与来源](../../../experiments/teacher-transfer/data/mimo-stage-20261104-final/manifest.json)、各分支 [E71](../../../experiments/teacher-transfer/data/mimo-stage-20261104-final/E71/summary.json)／[E72](../../../experiments/teacher-transfer/data/mimo-stage-20261104-final/E72/summary.json)／[E73](../../../experiments/teacher-transfer/data/mimo-stage-20261104-final/E73/summary.json)摘要及[生成器](../../../../research/studies/pipeline/report_mimo_snapshot.py)支持复算。终点不再做下一轮 rollout 的权重同步，相应计时记为 0。
 
 ### Outer22 历史快照与 1.5B 成本参照
 
@@ -630,3 +630,19 @@ MiMo 普通轮平均 21.45 分钟，其中 actor 占 87.84%。比历史 1.5B act
 作为成本上界的简单核算，若固定其他阶段，即使普通轮的 rollout 耗时降为零，最多也只减少约 10.84% 的墙钟时间；actor 提速一倍则可减少约 43.92%。这不是后续训练预测，而且未覆盖 outer25／50 的全量生成评估。全量评估的收益应独立参考[统一请求池实测](../inference/validation-resources.md#native-scheduler)。
 
 证据为[逐轮表](../../../experiments/teacher-transfer/data/mimo-e71-20261102-outer22/outers.csv)与[摘要](../../../experiments/teacher-transfer/data/mimo-e71-20261102-outer22/summary.json)，历史参照沿用[已发布原始统计](data/justrl-outer-profile-20261101/summary.json)。绘图使用同一份冻结标量输入，复算入口见[生成器](../../../../research/studies/pipeline/plot_stage_progress.py)。
+
+<a id="olmo3-stage-cost"></a>
+
+## Olmo3 E74 的训练与公共读出成本
+
+2026-11-04 的冻结统计覆盖已完成 outer1–24；四张 H800、batch128、reuse32，Student 为共同 BayesProtocol 的 Olmo3 Base，教师为 C3PO。科学设置和运行状态见[阶段对照](../../../experiments/teacher-transfer/post-training-stages.md#olmo3-正式队列)。Outer25 的 800 次累计更新已完成，公共读出仍在执行，尚未计入下图。
+
+![Olmo3 E74 已完成轮次的阶段耗时与 actor 吞吐](figures/olmo3-e74-20261104-outer24/mimo-stage-cost.png)
+
+普通轮排除公共读出节点，共 18 轮，平均 outer1125.83 秒（18.76 分钟），其中 actor849.90 秒、rollout263.14 秒、teacher 主干与上下卡 9.80 秒、权重同步 2.44 秒。Actor 占墙钟 75.49%；平均输入 567163 token，按输入 token×reuse／actor 秒／4 计算为 5339 token passes/s/GPU，actor allocated 峰值均值 39.29 GiB。日志 MFU 字段为 0，当前未提供可解释的 Olmo3 FLOPs 利用率估计，不能把它解释成计算利用率为零。图内 1.5B 历史参照是不同模型与输入预算，不构成受控速度对照。
+
+Initial／teacher bootstrap 的退出记录分别为 13376.80／12490.45 秒，即 3.72／3.47 小时；finalize 约 59.63 秒。11 月 4 日 06:25 完成第 800 次更新后，outer25 进入 6703 回答的公共生成，11:07 为 3776/6703；完整评测还包含 CPU 判分、RKL 及模型切换。生成条数的进度不等于时间进度，长回答和不同任务会改变后半程速率。
+
+按已完成普通轮均值，剩余 25 轮的训练主体约 7.8 小时，另有当前 outer25 未完成部分、outer50 完整公共评测及其他固定银行读出。完整公共评测尚无同配置结束样本，因此暂不给精确完工时间；E75 还需要独立 teacher bootstrap、50 轮训练与两次完整公共读出，复用 E74 的 initial 产物。
+
+[摘要](../../../experiments/teacher-transfer/data/olmo3-e74-20261104-outer24/summary.json)、[逐轮表](../../../experiments/teacher-transfer/data/olmo3-e74-20261104-outer24/outers.csv)和[来源哈希](../../../experiments/teacher-transfer/data/olmo3-e74-20261104-outer24/manifest.json)保存实际测量。阶段柱互斥求和，rollout 内部计时不重复相加；当前全量读出待完成后再更新成本。

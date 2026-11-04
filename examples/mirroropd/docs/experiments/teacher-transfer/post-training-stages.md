@@ -170,7 +170,7 @@ Qwen 和 Llama 分别比较，结合初始风险、绝对残差与相对降幅�
 
 ## MiMo：三类后训练教师
 
-固定 MiMo-7B-Base student，比较 SFT、Base 直接 RL、SFT 后继续 RL 三个冻结教师在相同数学训练与公共评估条件下的可拟合性。原 E69／E70 DeepSeekMath 方案已撤销；新 E71／E72／E73 分别对应 SFT+RL、直接 RL、SFT。模型阶段与固定 revision 统一见[阶段链选型](../../settings/模型与师生配对.md#mimo)；BayesRL／Olmo3 与 Light-R1 仅为后续候选。
+固定 MiMo-7B-Base student，比较 SFT、Base 直接 RL、SFT 后继续 RL 三个冻结教师在相同数学训练与公共评估条件下的可拟合性。原 E69／E70 DeepSeekMath 方案已撤销；新 E71／E72／E73 分别对应 SFT+RL、直接 RL、SFT。模型阶段与固定 revision 统一见[阶段链选型](../../settings/模型与师生配对.md#mimo)；BayesRL／Olmo3 已进入下节的正式队列，Light-R1 尚未提交正式训练。
 
 <a id="mimo-1-实验分支"></a>
 
@@ -267,29 +267,29 @@ E71 的训练终点由 50 outer 缩短为 25，已经执行的 reuse32 更新保
 
 ### MiMo 三类教师的训练、固定银行与终点准确率
 
-2026-11-03 19:04（北京时间）的冻结快照覆盖 E71 的 25 outer／800 次更新、E72 的 20 outer／320 次更新，以及 E73 的 19/20 outer／304/320 次更新。三组分别使用 SFT+RL、direct RL 和 SFT 教师，均从同一 Base 与 fresh Adam 开始。E71 训练 3200 道题、reuse32，E72 训练 2560 道题、reuse16；E73 已训练 2432 道题、reuse16，计划 2560 道题。E71／E72 的终点导出和重载审计已完成，E73 仍在训练，终点 accuracy 尚无结果。
+2026-11-04 11:10（北京时间）的冻结快照覆盖全部三个终点：E71 为 25 outer／800 次更新，E72、E73 均为 20 outer／320 次更新。三组分别使用 SFT+RL、direct RL 和 SFT 教师，均从同一 Base 与 fresh Adam 开始。E71 训练 3200 道题、reuse32；E72／E73 各训练 2560 道题、reuse16。三组终点 accuracy、HF 导出和原生重载审计均已完成，正式队列于 11 月 4 日 02:12 结束。
 
-![MiMo 三组逐更新训练 RKL、梯度、回答长度与长度上限结束比例](figures/mimo-stage-20261103-1904/training.png)
+![MiMo 三组逐更新训练 RKL、梯度、回答长度与长度上限结束比例](figures/mimo-stage-20261104-final/training.png)
 
-全部已记录更新均有效，loss 与梯度均有限。每批复用相同学生轨迹，换批后前缀分布改变，曲线因此呈锯齿。E71 最后一批 loss 从 0.10628 降到 0.04200，E72 从 0.000749 降到 0.000356，E73 第 19 批从 0.10768 降到 0.06866；这些是各自教师、各自学生状态上的更新前 forward，不能直接作为跨组能力排名。
+全部已记录更新均有效，loss 与梯度均有限。每批复用相同学生轨迹，换批后前缀分布改变，曲线因此呈锯齿。E71 最后一批 loss 从 0.10628 降到 0.04200，E72 从 0.000749 降到 0.000356，E73 最后一批从 0.09908 降到 0.06291；这些是各自教师、各自学生状态上的更新前 forward，不能直接作为跨组能力排名。
 
-E71／E72 终点平均回答长分别为 6374.1／4991.8 token，以 7168 长度上限结束的比例分别为 71.09%／57.03%。E73 第 19 批为 6889.6 token、92.97% 撞上限。大量训练轨迹受 cap 截断；改变 cap 会改变训练分布。
+E71／E72 终点平均回答长分别为 6374.1／4991.8 token，以 7168 长度上限结束的比例分别为 71.09%／57.03%。E73 终点为 7063.3 token、97.66% 撞上限。大量训练轨迹受 cap 截断；改变 cap 会改变训练分布。
 
-![MiMo 各组在 Base 与各自教师固定前缀上的四域 RKL](figures/mimo-stage-20261103-1904/fixed-bank-rkl.png)
+![MiMo 各组在 Base 与各自教师固定前缀上的四域 RKL](figures/mimo-stage-20261104-final/fixed-bank-rkl.png)
 
-固定银行每域 128 题、sample0；先按题内有效 token 平均，再按题平均，四域等权。三个分支的 Base 前缀共享，但评分教师不同，teacher 前缀也由各自教师生成；绝对 RKL 不能作为统一能力排序。已完成读出的最新数值如下，E73 保留 outer15，缺失节点不填零、不外推。
+固定银行每域 128 题、sample0；先按题内有效 token 平均，再按题平均，四域等权。三个分支的 Base 前缀共享，但评分教师不同，teacher 前缀也由各自教师生成；绝对 RKL 不能作为统一能力排序。已完成读出的最新数值如下，三组均使用已完成的终点节点，缺失节点不填零、不外推。
 
-| 分支            | 读出 outer／更新数 | Base 前缀四域均值 | Teacher 前缀四域均值 | Teacher Math | Teacher Code | Teacher Science | Teacher IF |
-| --------------- | ------------------ | ----------------: | -------------------: | -----------: | -----------: | --------------: | ---------: |
-| E71 SFT+RL      | 25／800            |          0.348725 |             0.288201 |     0.113490 |     0.127879 |        0.248125 |   0.663310 |
-| E72 direct RL   | 20／320            |          0.004287 |             0.002795 |     0.001225 |     0.007132 |        0.001099 |   0.001726 |
-| E73 SFT，训练中 | 15／240            |          0.416684 |             0.338880 |     0.131512 |     0.155327 |        0.290349 |   0.778331 |
+| 分支          | 读出 outer／更新数 | Base 前缀四域均值 | Teacher 前缀四域均值 | Teacher Math | Teacher Code | Teacher Science | Teacher IF |
+| ------------- | ------------------ | ----------------: | -------------------: | -----------: | -----------: | --------------: | ---------: |
+| E71 SFT+RL    | 25／800            |          0.348725 |             0.288201 |     0.113490 |     0.127879 |        0.248125 |   0.663310 |
+| E72 direct RL | 20／320            |          0.004287 |             0.002795 |     0.001225 |     0.007132 |        0.001099 |   0.001726 |
+| E73 SFT       | 20／320            |          0.408868 |             0.337572 |     0.131802 |     0.154957 |        0.290229 |   0.773299 |
 
 E71 的 Teacher 前缀四域均值由初始 0.406126 降至 0.288201，IF 仍有较大残差。E72 已接近自身 direct-RL 教师的分布，能力结果也需要对照该教师本身的水平。
 
-![MiMo E71 与 E72 的初始 Base、教师和终点学生八项准确率](figures/mimo-stage-20261103-1904/accuracy.png)
+![MiMo E71、E72 与 E73 的初始 Base、教师和终点学生八项准确率](figures/mimo-stage-20261104-final/accuracy.png)
 
-下表为百分数，统计单位是题：先平均该题的 n 个回答分数，再平均题目，即 avg@n，不是 pass@n。每个模型、节点覆盖全量 1648 题、6703 个回答；各任务 n 分别为 1／16／16／16／16／10／4／1。E73 的教师基线保留，学生终点待完成。只有一个训练 seed，表内点估计不表示多 seed 稳定性。
+下表为百分数，统计单位是题：先平均该题的 n 个回答分数，再平均题目，即 avg@n，不是 pass@n。每个模型、节点覆盖全量 1648 题、6703 个回答；各任务 n 分别为 1／16／16／16／16／10／4／1。三组教师基线和学生终点均已完成。只有一个训练 seed，表内点估计不表示多 seed 稳定性。
 
 | 模型／节点                 | MATH-500 | AMC23 | AIME24 | AIME25 | AIME26 | LCBv5 | GPQA-Diamond | IFEval |
 | -------------------------- | -------: | ----: | -----: | -----: | -----: | ----: | -----------: | -----: |
@@ -299,10 +299,11 @@ E71 的 Teacher 前缀四域均值由初始 0.406126 降至 0.288201，IF 仍有
 | E72 教师 direct RL         |    59.20 | 61.41 |  34.38 |  30.42 |  33.54 | 49.82 |         7.58 |  31.42 |
 | E72 学生 outer20／320 更新 |    59.80 | 59.22 |  33.54 |  32.50 |  32.08 | 42.65 |         9.09 |  34.38 |
 | E73 教师 SFT               |    92.60 | 92.66 |  56.04 |  47.29 |  52.71 | 51.72 |        23.61 |  43.25 |
+| E73 学生 outer20／320 更新 |    62.20 | 45.47 |  26.88 |  21.88 |  19.79 | 44.77 |        37.75 |  38.08 |
 
-E71 在数学题和代码题上大幅高于初始 Base，但仍低于自己的教师；GPQA 的学生点估计高于教师，IFEval 没有超过 Base。E72 的数学准确率已接近其较弱的教师，固定 RKL 更低也没有使它达到 E71 的数学水平。教师与训练预算同时不同，800 对 320 次更新、3200 对 2560 道题的终点差异不能单独归因于教师阶段；SFT 分支的终点比较还需等待 E73。
+E71 在数学题和代码题上大幅高于初始 Base，但仍低于自己的教师；GPQA 的学生点估计高于教师，IFEval 没有超过 Base。E72 的数学准确率已接近其较弱的教师，固定 RKL 更低也没有使它达到 E71 的数学水平。E73 的数学和代码准确率高于 Base，但仍未达到自己的 SFT 教师；GPQA 点估计高于教师，IFEval 比 Base 高约 2.22 个百分点。同为 320 次更新、2560 道题的 E72／E73 中，E73 的 MATH-500 为 62.20% 对 59.80%，但 AMC／AIME 均低于 E72，GPQA 则为 37.75% 对 9.09%。教师阶段的相对结果随任务而异。E71 对其余两组还存在 800 对 320 次更新、3200 对 2560 道题的预算差异，不能单独归因于教师阶段。
 
-准确率已从逐回答 Parquet 独立重算，并核对题数、样本数、唯一键、有效状态和发布指标；固定银行 RKL 也由逐题行重算。[逐任务准确率](data/mimo-stage-20261103-1904/accuracy.csv)、[逐题准确率](../../../../../../wandb-logs/MirrorOPD-verl/analysis/document-evidence-20261103/experiments/teacher-transfer/data/mimo-stage-20261103-1904/accuracy-per-question.csv)、[冻结绘图数据](data/mimo-stage-20261103-1904/plot-data.json)和[来源及哈希](data/mimo-stage-20261103-1904/manifest.json)保存完整精度。分支摘要与逐更新、逐轮数据见 [E71](data/mimo-stage-20261103-1904/E71/summary.json)、[E72](data/mimo-stage-20261103-1904/E72/summary.json)、[E73](data/mimo-stage-20261103-1904/E73/summary.json)；绘图与复算入口为 [`report_mimo_snapshot.py`](../../../research/studies/pipeline/report_mimo_snapshot.py)。PNG、PDF 与 SVG 同目录，审计记录在[figure-audit.json](figures/mimo-stage-20261103-1904/figure-audit.json)。[早期 outer22 数据](data/mimo-e71-20261102-outer22/manifest.json)保持冻结，性能分析见[MiMo 训练成本](../../infra/performance/full-vocab/training.md#mimo-stage-cost)。
+准确率已从逐回答 Parquet 独立重算，并核对题数、样本数、唯一键、有效状态和发布指标；固定银行 RKL 也由逐题行重算。[逐任务准确率](data/mimo-stage-20261104-final/accuracy.csv)、[逐题准确率](../../../../../../wandb-logs/MirrorOPD-verl/analysis/document-evidence-20261104/experiments/teacher-transfer/data/mimo-stage-20261104-final/accuracy-per-question.csv)、[冻结绘图数据](data/mimo-stage-20261104-final/plot-data.json)和[来源及哈希](data/mimo-stage-20261104-final/manifest.json)保存完整精度。分支摘要与逐更新、逐轮数据见 [E71](data/mimo-stage-20261104-final/E71/summary.json)、[E72](data/mimo-stage-20261104-final/E72/summary.json)、[E73](data/mimo-stage-20261104-final/E73/summary.json)；绘图与复算入口为 [`report_mimo_snapshot.py`](../../../research/studies/pipeline/report_mimo_snapshot.py)。PNG、PDF 与 SVG 同目录，审计记录在[figure-audit.json](figures/mimo-stage-20261104-final/figure-audit.json)。[早期 outer22 数据](data/mimo-e71-20261102-outer22/manifest.json)保持冻结，性能分析见[MiMo 训练成本](../../infra/performance/full-vocab/training.md#mimo-stage-cost)。
 
 <a id="mimo-5-入口与状态"></a>
 
@@ -320,7 +321,7 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E73
 
 四份固定版本权重已落地，[原生 MiMo 工程验收](../../infra/model-compatibility/mimo/2026-11-01-MiMo原生下一token接入验收.md)已通过更新、公共读出、32K 上下文、终点原生重载及独立 HF 加载检查。短程验收使用独立的小样本、长度和更新预算，不替代本页修订后的正式预算，也不计入正式更新数。
 
-三组已按 E71→E72→E73 提交持久运行队列，从原始 Base 分别开始。[原始完整配置与计划](../../../../../runs/mimo-stage-transfer-20261101/formal-plan.json)保留初始设计；[运行状态](../../../../../runs/mimo-stage-transfer-20261101/formal-queue-state.json)与[预算接续状态](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)记录实际推进。2026-11-03 15:16 的图表快照中，E71 已完成 25 outer／800 次更新，E72 已完成 20 outer／320 次更新；GPU1–4 上的 E73 已完成 14/20 outer、224/320 次更新。实际预算及执行顺序以[调整后的冻结队列](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/run_queue.py)为准，E73 完成后该队列结束。Olmo3 的 E74→E75 已提交独立四卡队列，见下节；Light-R1 的 E76／E77 尚未提交。
+三组已按 E71→E72→E73 提交持久运行队列，从原始 Base 分别开始。[原始完整配置与计划](../../../../../runs/mimo-stage-transfer-20261101/formal-plan.json)保留初始设计；[运行状态](../../../../../runs/mimo-stage-transfer-20261101/formal-queue-state.json)与[预算接续状态](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)记录实际推进。三组均已完成，E71 为 25 outer／800 次更新，E72／E73 均为 20 outer／320 次更新。实际预算及执行顺序以[调整后的冻结队列](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/run_queue.py)为准，队列于 2026-11-04 02:12 成功结束，GPU1–4 已释放，MiMo 无后续训练任务。Olmo3 的 E74→E75 已提交独立四卡队列，见下节；Light-R1 的 E76／E77 尚未提交。
 
 <a id="mimo-参考文献"></a>
 
@@ -370,8 +371,18 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E73
 
 ### Olmo3 正式队列
 
-2026-11-03 已按 E74→E75 提交持久队列，使用 GPU0／5／6／7；MiMo 的 GPU1–4 继续独立运行。E74 使用 C3PO（SFT+RL）教师，E75 使用 IVON-SFT 教师。两组分别从同一 Olmo3 Base 与 fresh Adam 开始，各 50 outer、reuse32、1600 次更新、6400 道训练题；没有沿用 MiMo 的缩短预算。输入采用共同 BayesProtocol，训练长度 2048＋7168，公共读出最长 32768，完整 100278 维词表，无 EOS 合并、无 anchor 或任务 reward。
+2026-11-03 已按 E74→E75 提交持久队列，使用 GPU0／5／6／7。MiMo 已完成并释放 GPU1–4。E74 使用 C3PO（SFT+RL）教师，E75 使用 IVON-SFT 教师。两组分别从同一 Olmo3 Base 与 fresh Adam 开始，各 50 outer、reuse32、1600 次更新、6400 道训练题；没有沿用 MiMo 的缩短预算。输入采用共同 BayesProtocol，训练长度 2048＋7168，公共读出最长 32768，完整 100278 维词表，无 EOS 合并、无 anchor 或任务 reward。
 
 E74 先生成 initial 与 teacher 银行、绑定并训练；E75 核对后复用完全相同的 initial 产物，独立生成其 teacher 银行再训练。固定银行在 outer0／1／2 及每 5 outer 读出，current RKL 与全量 accuracy 在 outer0／25／50 读出；终点完成 HF 导出及重载检查后才计为完成。两组顺序执行，E74 成功结束才进入 E75，E76／E77 未加入。
 
-[冻结计划](../../../../../runs/olmo3-stage-transfer-20261103/plan.json)记录提交前配置，[实际提交回执](../../../../../runs/olmo3-stage-transfer-20261103/submitted.json)记录已提交状态；[E74 配置](../../../../../runs/olmo3-stage-transfer-20261103/configs/E74.yaml)、[E75 配置](../../../../../runs/olmo3-stage-transfer-20261103/configs/E75.yaml)及[源码／配置合同](../../../../../runs/olmo3-stage-transfer-20261103/source-contract.json)固定运行身份。2026-11-03 15:19 核对时处于 E74 initial 公共生成阶段，四个推理副本已加载并开始返回答案，尚无正式 optimizer 更新。动态进度见[队列状态](../../../../../runs/olmo3-stage-transfer-20261103/queue-state.json)和[阶段日志](../../../../../runs/olmo3-stage-transfer-20261103/logs/E74-initial.log)。完整单轮与评估耗时尚无同配置实测，暂不给 Olmo3 完成时间点。
+[冻结计划](../../../../../runs/olmo3-stage-transfer-20261103/plan.json)记录提交前配置，[实际提交回执](../../../../../runs/olmo3-stage-transfer-20261103/submitted.json)记录已提交状态；[E74 配置](../../../../../runs/olmo3-stage-transfer-20261103/configs/E74.yaml)、[E75 配置](../../../../../runs/olmo3-stage-transfer-20261103/configs/E75.yaml)及[源码／配置合同](../../../../../runs/olmo3-stage-transfer-20261103/source-contract.json)固定运行身份。2026-11-04 11:07 核对时，E74 已完成 800/1600 次有效更新，正在执行 outer25 全量公共读出，生成进度为 3776/6703 个回答；该节点尚未完成，accuracy 不作为中期结果发布。更新记录的 loss、梯度均有限，无跳过更新。E75 排在 E74 之后，尚未启动。动态进度见[队列状态](../../../../../runs/olmo3-stage-transfer-20261103/queue-state.json)和[训练日志](../../../../../runs/olmo3-stage-transfer-20261103/logs/E74-train.log)。MiMo 队列已经结束；Olmo3 队列在 E75 成功完成后结束，E76／E77 只有预设，未排队。
+
+![Olmo3 E74 已完成 outer1–24 的训练曲线](figures/olmo3-e74-20261104-outer24/training.png)
+
+训练图冻结到完整结束的 outer24／768 更新；outer25 已做完的 32 次更新正在等待公共读出，因此运行进度与图的截点不同。Outer24 首末次 forward loss 为 0.14654／0.08011，平均回答长 3945.2 token，18.75% 以 7168 长度上限结束。首批 loss 为 0.73552，首批最后一次 forward 为 0.27684；跨批状态变化下的训练 loss 不直接代表任务能力。
+
+![Olmo3 E74 固定 Base 与教师前缀上的四域 RKL](figures/olmo3-e74-20261104-outer24/fixed-bank-rkl.png)
+
+固定读出已完成 outer0／1／2／5／10／15／20，outer25 不插值。每域 128 题、sample0，先题内有效 token 平均，再按题平均。Outer20 的 Base／Teacher 前缀四域等权均值分别为 0.273437／0.274766；Teacher 前缀 Math／Code／Science／IF 分别为 0.134380／0.270272／0.293137／0.401272。固定状态上分布仍有残差，数学训练后公共准确率的判断需等完整读出。
+
+[逐更新数据](data/olmo3-e74-20261104-outer24/updates.csv)、[固定银行数据](data/olmo3-e74-20261104-outer24/fixed-bank-rkl.csv)、[摘要](data/olmo3-e74-20261104-outer24/summary.json)及[来源哈希](data/olmo3-e74-20261104-outer24/manifest.json)记录实际截点，RKL 已从逐题 Parquet 重算核对。生成器为 [`plot_stage_progress.py`](../../../research/studies/pipeline/plot_stage_progress.py)，PNG／PDF 及审计记录同目录。实测耗时和剩余工作量见[Olmo3 成本](../../infra/performance/full-vocab/training.md#olmo3-stage-cost)。

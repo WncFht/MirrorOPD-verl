@@ -1,0 +1,24 @@
+{
+  "captured_at": "2026-11-04T11:10:47+08:00",
+  "sources": {
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E71/initial-accuracy/manifest.json": "540a25c3ef98b2fd18d92c794496125a8d8f846c2adb634c1c68ed28ef722b0e",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E71/teacher-accuracy/manifest.json": "ffd11acee4e817d4ab51ec07b31ea46e851af3654130f04b97832106c5457e40",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/events/outer-025/accuracy/manifest.json": "7776b8f4785d9ae5f79c0be41d643a51987b48b7da7bf472e62f6efe859562b6",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/manifest.json": "41be934d4cb8a10a858c087121e8b4dac5d8538f6eee9eb2b31429cd5a74dd3d",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E72-r16-o20/initial-accuracy/manifest.json": "540a25c3ef98b2fd18d92c794496125a8d8f846c2adb634c1c68ed28ef722b0e",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E72-r16-o20/teacher-accuracy/manifest.json": "cf89a78d50b2e014755599874fbdeb613b11e7442d3203861c0c5f1a5f159d65",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/events/outer-020/accuracy/manifest.json": "34438dd97e79348b7a85b29f2327fcb48dbf94d039b2199fe3e7b57cb5826bde",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/manifest.json": "38a7ac0039668cf35956136dfa5d2e5775070e2d47f273a7bc383862f0b6baff",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E73-r16-o20/initial-accuracy/manifest.json": "540a25c3ef98b2fd18d92c794496125a8d8f846c2adb634c1c68ed28ef722b0e",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E73-r16-o20/teacher-accuracy/manifest.json": "f9c993d8f4ce92e316eb26bf9e3ab5b5807dfa9adcf45943af4bf293bd7f44ee",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/events/outer-020/accuracy/manifest.json": "a25f4cbf0eeda338fc7685ff2f8d29b59ac1f1cdbe54ea516fa8a845e7fbbf12",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/manifest.json": "c3aae12587e428e1d61655bd85212aaf6721f16433897f433fbc8a9a8d0a5ae6"
+  },
+  "generator_sha256": "e52a35b5fa55a8f28e4ea2f200412bffcb1baf117a7cf35abee77b48fb9ba4db",
+  "artifacts": {
+    "accuracy-per-question.csv": "d82991dba6c822eb04c2c47e0c39f1734238a4d573d7b693c664372f8ae4860e",
+    "accuracy.csv": "09c6d5485179a16df0fd3a88c575d0b354cffcce6e0f2ed34d1c314d9751aec1",
+    "plot-data.json": "8a6a7560e3d3766a11f489eb9fd210ea79534cb8c8cd43df1d0aa7a571245183"
+  },
+  "scope": "Freeze MiMo stage comparisons, preserving each arm's actual budget and endpoint.\n\nSemantic ledger: a series is E71 (SFT+RL), E72 (direct RL), or E73 (SFT).\nTraining loss is measured on each arm's own states and teacher. Fixed RKL uses\n128 identical question IDs per domain but teacher targets/banks differ by arm.\nAccuracy points are question means over the recorded sample count, not pass@n.\nGeometry ledger: training axes use committed updates or completed outers. Risk\nfacets share a log scale. Accuracy panels share a 0..100 percent scale. E73 has\nno endpoint until its final accuracy artifact is complete; no missing value is zero.\n"
+}
