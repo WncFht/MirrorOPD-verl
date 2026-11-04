@@ -15,6 +15,17 @@ from verl.trainer.evaluation.config import EvaluationConfig
 from verl.trainer.evaluation.plan import compile_plan
 
 
+def test_source_queue_inherits_repetition_defaults_and_explicit_opt_out(monkeypatch, tmp_path):
+    from examples.mirroropd.research.studies.prefix_fusion.native_source_queue import environment
+
+    for key in ("TRAIN_REPETITION_DETECTION", "VAL_REPETITION_DETECTION"):
+        monkeypatch.delenv(key, raising=False)
+    env = environment(tmp_path, tmp_path, tmp_path, "python")
+    assert "TRAIN_REPETITION_DETECTION" not in env and "VAL_REPETITION_DETECTION" not in env
+    monkeypatch.setenv("VAL_REPETITION_DETECTION", "false")
+    assert environment(tmp_path, tmp_path, tmp_path, "python")["VAL_REPETITION_DETECTION"] == "false"
+
+
 @pytest.mark.parametrize("number,kind", [(78, "current"), (79, "initial"), (80, "teacher")])
 @pytest.mark.parametrize("world", [1, 2, 4, 8])
 def test_new_presets_have_one_global_budget_and_independent_bench_n(number, kind, world, tmp_path):

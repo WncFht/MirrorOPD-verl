@@ -16,6 +16,8 @@ from numbers import Real
 
 import numpy as np
 
+from .finish_reason import finish_reason_metrics
+
 ALIASES = {"MATH-500": "math500", "AMC23": "amc23", "AIME24": "aime24", "AIME25": "aime25", "AIME26": "aime26"}
 
 
@@ -223,12 +225,12 @@ def evaluation_metrics(
                 ]:
                     result[prefix + f"generation/{label}/{stat}"] = float(value)
         if "__finish_reason__" in infos:
-            reasons = [r.get("__finish_reason__") for r in all_rows]
-            for reason in ("stop", "length", "repetition", "aborted", "completed", "unknown"):
-                count = sum((r or "unknown") == reason or (reason == "aborted" and r == "abort") for r in reasons)
-                result[prefix + f"generation/finish_reason/{reason}_count"] = count
-                if reason == "repetition":
-                    result[prefix + "generation/finish_reason/repetition_fraction"] = count / len(reasons)
+            result.update(
+                {
+                    prefix + f"generation/finish_reason/{key}": value
+                    for key, value in finish_reason_metrics(r.get("__finish_reason__") for r in all_rows).items()
+                }
+            )
         field_names = {}
         for field in sorted(numeric_fields):
             component = "format" if field == "format_score" else dataset_slug(field)

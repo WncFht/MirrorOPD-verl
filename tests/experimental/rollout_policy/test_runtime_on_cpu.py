@@ -14,6 +14,51 @@ from verl.utils import tensordict_utils as tu
 from verl.workers.rollout.vllm_rollout.policy_execution import SingleVLLMExecutor
 
 
+@pytest.mark.parametrize("enabled", [False, True])
+def test_runtime_freezes_repetition_rule_in_actual_sampling_plan(monkeypatch, enabled):
+    import verl.experimental.rollout_policy.runtime as module
+
+    rule = {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}
+    runtime = object.__new__(module.RolloutRuntime)
+    runtime.config = OmegaConf.create(
+        {
+            "actor_rollout_ref": {
+                "rollout": {
+                    "name": "vllm",
+                    "temperature": 1.0,
+                    "top_p": 1.0,
+                    "top_k": -1,
+                    "response_length": 128,
+                    "calculate_log_probs": False,
+                    "repetition_detection": rule if enabled else None,
+                    "n": 1,
+                    "seed": 42,
+                    "stop_token_ids": [],
+                }
+            }
+        }
+    )
+    runtime.context, runtime.pool, runtime.bindings = None, None, {}
+    runtime.policy = RolloutPolicyConfig.parse({"mode": "single"})
+    runtime.trainer = SimpleNamespace(
+        agent_loop_manager=SimpleNamespace(agent_loop_workers=[]),
+        tokenizer=SimpleNamespace(eos_token_id=2),
+        global_steps=1,
+        _optimizer_progress=lambda: SimpleNamespace(applied=0),
+    )
+    captured = {}
+
+    def inspect_plan(*args, **kwargs):
+        captured.update(kwargs["sampling"])
+        raise RuntimeError("stop before execution")
+
+    monkeypatch.setattr(module, "build_plan", inspect_plan)
+    batch = tu.get_tensordict({"uid": ["a"], "index": [0]})
+    with pytest.raises(RuntimeError, match="stop before execution"):
+        runtime.collect(batch)
+    assert captured.get("repetition_detection") == (rule if enabled else None)
+
+
 def test_immutable_sampling_plan_reaches_every_real_session_metadata(tmp_path):
     captured = []
 

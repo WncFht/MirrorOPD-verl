@@ -56,6 +56,8 @@ def test_schedule_union_and_no_initial_regeneration():
         {"top_p": 0},
         {"top_k": 0},
         {"repetition_penalty": float("nan")},
+        {"repetition_detection": {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 1}},
+        {"repetition_detection": True},
         {"max_new_tokens": True},
         {"unknown": 5},
     ],
@@ -81,6 +83,33 @@ def test_per_request_seed_and_sampling_are_isolated():
     sample["max_tokens"] = 2
     assert protocol.sampling("gpqa", "q1", 0)["max_tokens"] == 32768
     assert protocol.protocol_id != GenerationProtocol().protocol_id
+
+
+def test_repetition_stop_is_default_and_part_of_generation_identity():
+    enabled = GenerationProtocol()
+    disabled = GenerationProtocol.parse({"repetition_detection": None})
+    tuned = GenerationProtocol.parse(
+        {"repetition_detection": {"min_pattern_size": 32, "max_pattern_size": 256, "min_count": 8}}
+    )
+    params = enabled.sampling("math", "q", 0)
+    assert params["repetition_detection"] == {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}
+    assert disabled.sampling("math", "q", 0)["repetition_detection"] is None
+    assert len({enabled.protocol_id, disabled.protocol_id, tuned.protocol_id}) == 3
+    params["repetition_detection"]["min_count"] = 99
+    assert enabled.sampling("math", "q", 0)["repetition_detection"]["min_count"] == 8
+
+
+def test_accuracy_reports_cap_and_repetition_separately():
+    reasons = ["stop", "length", "repetition", None]
+    rows = [dict(accuracy_row("q", i, 1.0), finish_reason=reason) for i, reason in enumerate(reasons)]
+    expected = {(r["dataset"], r["source_id"], r["sample_index"]) for r in rows}
+    metrics = summarize_accuracy(rows, expected)
+    prefix = "eval/accuracy/gpqa/finish_reason/"
+    assert metrics[prefix + "response_count"] == 4
+    assert metrics[prefix + "length_fraction"] == metrics["eval/accuracy/gpqa/length_finish_fraction"] == 0.25
+    assert metrics[prefix + "repetition_fraction"] == 0.25
+    assert metrics[prefix + "truncated_fraction"] == 0.5
+    assert metrics[prefix + "unknown_fraction"] == 0.25
 
 
 def test_payload_windows_account_for_live_training_and_complete_rows():

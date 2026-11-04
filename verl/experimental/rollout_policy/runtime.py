@@ -10,6 +10,7 @@ from pathlib import Path
 import transfer_queue as tq
 
 from verl.utils.ray_utils import auto_await
+from verl.workers.config.rollout import rollout_repetition_detection
 
 from .collector import collect_plan
 from .lifecycle import ExecutionContext
@@ -51,6 +52,9 @@ class RolloutRuntime:
             "logprobs": rollout.calculate_log_probs or self.policy.mode == "token_mixture",
             "repetition_penalty": 1.0,
         }
+        repetition = rollout_repetition_detection(rollout, validate=False)
+        if repetition is not None:
+            sampling["repetition_detection"] = repetition
         stop_ids = list(
             self.trainer.tokenizer.eos_token_id
             if isinstance(self.trainer.tokenizer.eos_token_id, list)

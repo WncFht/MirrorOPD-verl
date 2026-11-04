@@ -54,6 +54,22 @@ def test_staggered_batch_and_request_weighted_mean():
     }
 
 
+def test_rollout_stop_causes_and_enabled_fraction_use_real_responses():
+    rows = _requests()
+    for row, reason in zip(rows, ("stop", "length", "repetition"), strict=True):
+        row.update(finish_reason=reason, repetition_detection_enabled=True)
+    keys = ["a_0_0", "a_1_0", "b_0_0"]
+    metrics = pm.aggregate_pipeline_requests(keys, rows)
+    prefix = "rollout/finish_reason/"
+    assert metrics[prefix + "response_count"] == 3
+    assert metrics[prefix + "length_fraction"] == pytest.approx(1 / 3)
+    assert metrics[prefix + "repetition_fraction"] == pytest.approx(1 / 3)
+    assert metrics[prefix + "truncated_fraction"] == pytest.approx(2 / 3)
+    assert metrics["rollout/repetition_detection/enabled_fraction"] == 1
+    rows[0]["repetition_detection_enabled"] = None
+    assert "rollout/repetition_detection/enabled_fraction" not in pm.aggregate_pipeline_requests(keys, rows)
+
+
 @pytest.mark.parametrize("invalid", [None, -1, float("nan"), float("inf"), True])
 def test_request_stage_latencies_require_every_request(invalid):
     rows = _requests()
@@ -196,7 +212,8 @@ def test_unsupported_training_modes_skip_batch_stamp_but_validation_can_measure(
 
 
 @pytest.mark.parametrize("submitted", [False, True])
-def test_completion_stamp_precedes_merge_and_survives_tq(monkeypatch, submitted):
+@pytest.mark.parametrize("repetition", [False, True])
+def test_completion_stamp_precedes_merge_and_survives_tq(monkeypatch, submitted, repetition):
     import verl.experimental.agent_loop.single_turn_agent_loop as loop_module
 
     loop = object.__new__(SingleTurnAgentLoop)
@@ -218,10 +235,15 @@ def test_completion_stamp_precedes_merge_and_survives_tq(monkeypatch, submitted)
     loop.ct_merge_assistant_token = merge
     output = asyncio.run(
         loop.run(
-            {}, raw_prompt=[], **({"__rollout_submission__": _requests()[0]["rollout_submission"]} if submitted else {})
+            {"repetition_detection": {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}}
+            if repetition
+            else {},
+            raw_prompt=[],
+            **({"__rollout_submission__": _requests()[0]["rollout_submission"]} if submitted else {}),
         )
     )
     assert ("generation_finished_at_ns" in output.as_dict()["metrics"]) == submitted
+    assert output.as_dict()["metrics"]["repetition_detection_enabled"] is repetition
 
     captured = {}
 
@@ -238,6 +260,7 @@ def test_completion_stamp_precedes_merge_and_survives_tq(monkeypatch, submitted)
     cls = tq_loop.AgentLoopWorkerTQ.__ray_metadata__.modified_class
     asyncio.run(cls._agent_loop_postprocess(worker, [output], uid="a", session_id=0, validate=False, global_steps=5))
     row = tu.get(captured["fields"], "metrics")[0]
+    assert row["repetition_detection_enabled"] is repetition
     assert ("generation_finished_at_ns" in row) == submitted
     if submitted:
         assert row["generation_finished_at_ns"] == 7 * 10**9

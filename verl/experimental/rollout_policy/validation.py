@@ -94,6 +94,8 @@ def validate_policy(config, *, policy=None, bindings=None):
     if bindings is None:
         bindings, _ = bind_policy(config, policy)
     fusion_needed = requires_token_generator(policy, bindings)
+    if fusion_needed and policy.execution.backend == "hf_fusion" and rollout.get("repetition_detection") is not None:
+        raise ValueError("HF fusion does not implement repetition stopping; explicitly disable it or use vllm_fusion")
     if fusion_needed and rollout.dtype != "bfloat16":
         raise ValueError("Production token fusion currently requires BF16 inference weights")
     if fusion_needed and policy.execution.backend == "vllm_fusion":

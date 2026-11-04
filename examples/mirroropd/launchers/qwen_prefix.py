@@ -170,6 +170,10 @@ def options(env, arm, root):
         ]
     output = Path(env["RUN_DIR"])
     spec = evaluation(study, output, world, protocol=protocol)
+    from examples.mirroropd.launchers.repetition import validation_repetition
+
+    for declaration in spec["protocols"].values():
+        declaration["repetition_detection"] = validation_repetition(env)
     data_options = (
         ["data.shuffle=False", "data.filter_overlong_prompts=False", "data.truncation=error"]
         if protocol == SOURCE_PROTOCOL

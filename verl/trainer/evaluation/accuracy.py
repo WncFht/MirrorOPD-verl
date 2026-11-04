@@ -20,6 +20,8 @@ from pathlib import Path
 import numpy as np
 import pyarrow.parquet as pq
 
+from verl.utils.metric.finish_reason import finish_reason_metrics
+
 from .artifacts import ACCURACY, ArtifactStore, file_sha256, identity
 
 
@@ -174,6 +176,12 @@ def summarize_accuracy(rows, expected):
         for row in values:
             questions[row["source_id"]].append(row["score"])
         prefix = f"eval/accuracy/{dataset}"
+        metrics.update(
+            {
+                f"{prefix}/finish_reason/{key}": value
+                for key, value in finish_reason_metrics(r.get("finish_reason") for r in values).items()
+            }
+        )
         metrics.update(
             {
                 f"{prefix}/avg_at_n": math.fsum(math.fsum(v) / len(v) for v in questions.values()) / len(questions),

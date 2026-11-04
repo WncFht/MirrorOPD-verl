@@ -19,6 +19,24 @@ def test_repetition_is_scored_and_counted_separately_from_eos():
     assert result["eval/math/generation/finish_reason/stop_count"] == 1
     assert result["eval/math/generation/finish_reason/repetition_count"] == 2
     assert result["eval/math/generation/finish_reason/repetition_fraction"] == pytest.approx(2 / 3)
+    assert result["eval/math/generation/finish_reason/length_fraction"] == 0
+    assert result["eval/math/generation/finish_reason/truncated_fraction"] == pytest.approx(2 / 3)
+    assert result["eval/math/generation/finish_reason/response_count"] == 3
+
+
+def test_missing_validation_slots_remain_unknown_in_stop_fractions():
+    result = evaluation_metrics(
+        ["math", "math"],
+        ["q", "q"],
+        {"acc": [1, 0], "__finish_reason__": ["stop", "length"]},
+        sample_indices=[0, 1],
+        expected_counts={("math", "q"): 4},
+    )
+    prefix = "eval/math/generation/finish_reason/"
+    assert result[prefix + "response_count"] == 4
+    assert result[prefix + "length_fraction"] == 0.25
+    assert result[prefix + "unknown_fraction"] == 0.5
+    assert result["eval/math/materialized_response_count"] == 2
 
 
 def test_pass_estimator_matches_all_subsets():

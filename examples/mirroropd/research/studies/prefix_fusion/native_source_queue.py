@@ -89,8 +89,6 @@ def environment(repo, source, study, python, devices=(0, 1)):
         VERL_USE_UV="0",
         WANDB_MODE="offline",
         OMP_NUM_THREADS="1",
-        TRAIN_REPETITION_DETECTION="false",
-        VAL_REPETITION_DETECTION="false",
     )
     return env
 

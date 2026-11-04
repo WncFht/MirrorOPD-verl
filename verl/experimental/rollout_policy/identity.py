@@ -117,6 +117,7 @@ def bind_policy(config, policy, *, resolve_path=None):
                     "n",
                     "seed",
                     "repetition_penalty",
+                    "repetition_detection",
                     "full_determinism",
                     "dtype",
                 )

@@ -280,8 +280,8 @@ def preset_catalog() -> dict[str, Preset]:
             rollout_arm=arm,
             environment=(("TRAIN_BATCH_SIZE", "128"), ("QWEN_PREFIX_PROTOCOL", "source_b128_v1")),
         )
-    # A/B retain the E57 target and reuse; only global batch and outer budget
-    # change scientifically. Use the accepted fused execution path from E61.
+    # A/B retain the E57 target/reuse and use the accepted E61 fused path.
+    # Stopping follows current defaults; historical E57 used natural stopping.
     for number, steps in ((81, 25), (82, 100)):
         environment = dict(presets["E61"].environment)
         environment.update(
@@ -289,7 +289,6 @@ def preset_catalog() -> dict[str, Preset]:
             TRAIN_BATCH_SIZE="256",
             ROLLOUT_TP="1",
             VAL_BATCH_SIZE="null",
-            VAL_REPETITION_DETECTION="false",
         )
         presets[f"E{number}"] = replace(
             presets["E61"],
@@ -741,7 +740,7 @@ def preset_overview() -> str:
             "E81/E82：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；MDPO kappa1/eta0.1。"
             "4卡shared_sync、batch=mini-batch256、n1/reuse16；A=25 outer/400更新，B=100 outer/1600更新。"
             "无初始验证，每5 outer及终点验证；不保存checkpoint。每引擎并发128/TP1、显存0.8；"
-            "precompute_fused/chunk512、bf16；验证avg16/31744、关闭重复提前停止以保留E57自然终止协议。",
+            "precompute_fused/chunk512、bf16；验证avg16/31744；训练与验证默认开启重复提前停止。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
         ]
