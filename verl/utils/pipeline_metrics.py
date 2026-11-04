@@ -100,13 +100,12 @@ def aggregate_pipeline_requests(keys: list[str], rows: list[dict]) -> dict[str, 
     else:
         _warn_once("backend did not report preemptions for every request; unknown is not zero")
 
-    if any(row.get("finish_reason") is not None for row in rows):
-        metrics.update(
-            {
-                f"rollout/finish_reason/{key}": value
-                for key, value in finish_reason_metrics(row.get("finish_reason") for row in rows).items()
-            }
-        )
+    metrics.update(
+        {
+            f"rollout/finish_reason/{key}": value
+            for key, value in finish_reason_metrics(row.get("finish_reason") for row in rows).items()
+        }
+    )
     enabled = [row.get("repetition_detection_enabled") for row in rows]
     if all(type(value) is bool for value in enabled):
         metrics["rollout/repetition_detection/enabled_fraction"] = sum(enabled) / len(enabled)

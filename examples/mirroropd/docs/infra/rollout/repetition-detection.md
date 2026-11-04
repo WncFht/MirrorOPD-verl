@@ -118,7 +118,7 @@ DRY_RUN=1 VAL_REPETITION_MAX_PATTERN=256 \
 - `repetition_fraction`：以精确重复检测结束的比例。
 - `truncated_fraction`：`length_fraction + repetition_fraction`，表示这两类已观察到的截断。
 - `stop_fraction`：后端报告 `stop` 的比例；不混入只报告 `completed` 的未知具体原因。
-- `unknown_fraction`：停止原因未报告或无法识别的比例；它不计入正常停止。
+- `unknown_fraction`：停止原因未报告或无法识别的比例；它不计入正常停止。完整训练提交即使全部缺少原因，也输出 `unknown_fraction=1`；不完整提交仍省略整批原因统计。
 
 单轮训练还记录 `rollout/repetition_detection/enabled_fraction`：实际请求中开启检测的比例；任一回答缺少该观测时省略该字段，不能把缺失解读为关闭。规则参数由 resolved config 和统一评估协议元数据保留。
 
