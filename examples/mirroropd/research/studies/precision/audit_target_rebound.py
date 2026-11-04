@@ -18,7 +18,8 @@ from pathlib import Path
 
 import torch
 
-from verl.trainer.distillation.full_vocab_triton import fused_log_weights, fused_mirror_rows
+from examples.mirroropd.research.studies.precision.encoded_target import encoded_target_rows
+from verl.trainer.distillation.full_vocab_triton import fused_log_weights
 from verl.trainer.distillation.results import FullVocabObjectiveResult
 from verl.trainer.distillation.rows import _MIRROR_DIAGNOSTICS
 from verl.trainer.distillation.targets import build_log_weights
@@ -91,8 +92,8 @@ def record_initial(tensors, spec):
     _, ideal, _ = rows(*tensors, spec, "ideal64")
     _, encoded, _ = rows(*tensors, spec, "encoded64")
     _, stable, _ = rows(*tensors, spec, "centered32")
-    _, current32, _ = fused_mirror_rows(z, b, lq, lt, torch.float32, objective=spec.objective, diagnostics=True)
-    _, current16, _ = fused_mirror_rows(z, b, lq, lt, torch.bfloat16, objective=spec.objective, diagnostics=True)
+    _, current32, _ = encoded_target_rows(z, b, lq, lt, torch.float32, objective=spec.objective, diagnostics=True)
+    _, current16, _ = encoded_target_rows(z, b, lq, lt, torch.bfloat16, objective=spec.objective, diagnostics=True)
     result = {
         "scope": "First native training micro-batch; unscaled row VJPs, all methods use the same logits",
         "objective": spec.objective,

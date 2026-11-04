@@ -9,7 +9,7 @@ from tensordict import TensorDict
 from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.output import FullVocabOutput
 from verl.trainer.distillation.results import FullVocabObjectiveResult
-from verl.trainer.distillation.reverse_vocab import full_reverse_kl
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 from verl.utils import tensordict_utils as tu
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig
 from verl.workers.utils.padding import prediction_positions
@@ -26,7 +26,7 @@ def test_value_and_vjp(backend, tokens):
     lp, lt = (hs @ ws.T).log_softmax(-1), (ht.detach() @ wt.detach().T).log_softmax(-1)
     expected = (lp.exp() * (lp - lt)).sum()
     eg = torch.autograd.grad(expected * 0.37, (hs, ws))
-    actual = full_reverse_kl(hs, ws, ht, wt, backend=backend, token_chunk=3, vocab_chunk=4)
+    actual = full_reverse_kl_result(hs, ws, ht, wt, backend=backend, token_chunk=3, vocab_chunk=4).loss_sum
     ag = torch.autograd.grad(actual * 0.37, (hs, ws, ht, wt), allow_unused=True)
     torch.testing.assert_close(actual, expected, atol=1e-10, rtol=1e-10)
     for a, e in zip(ag[:2], eg, strict=True):
@@ -54,17 +54,17 @@ def test_teacher_extra_rows_preserve_full_normalizer_and_student_gradient(backen
     lp = (hs @ ws.T).log_softmax(-1)
     lq = (ht.detach() @ wt.detach().T).log_softmax(-1)[:, :19]
     expected = (lp.exp() * (lp - lq)).sum()
-    actual = full_reverse_kl(hs, ws, ht, wt, backend=backend, token_chunk=3, vocab_chunk=4)
+    actual = full_reverse_kl_result(hs, ws, ht, wt, backend=backend, token_chunk=3, vocab_chunk=4).loss_sum
     torch.testing.assert_close(actual, expected, atol=1e-10, rtol=1e-10)
     expected_grad = torch.autograd.grad(expected, (hs, ws))
     actual_grad = torch.autograd.grad(actual, (hs, ws, ht, wt), allow_unused=True)
     for a, e in zip(actual_grad[:2], expected_grad, strict=True):
         torch.testing.assert_close(a, e, atol=1e-10, rtol=1e-10)
     assert actual_grad[2:] == (None, None)
-    cropped = full_reverse_kl(hs, ws, ht, wt[:19], backend=backend, token_chunk=3, vocab_chunk=4)
+    cropped = full_reverse_kl_result(hs, ws, ht, wt[:19], backend=backend, token_chunk=3, vocab_chunk=4).loss_sum
     assert actual > cropped
     with pytest.raises(ValueError, match="cover every student"):
-        full_reverse_kl(hs, ws, ht, wt[:18])
+        full_reverse_kl_result(hs, ws, ht, wt[:18])
 
 
 def test_global_token_normalization():

@@ -158,7 +158,7 @@ def full_vocab_objective_result(
             result.token_kl,
             {},
             result.objective_rows if result.objective_rows is not None else result.token_kl,
-            result.loss_sum.detach() if result.objective_rows is None else result.objective_rows.sum(),
+            result.loss_sum.detach() if row_weights is None else result.objective_rows.sum(),
         )
     validate_mirror_inputs(
         hs,

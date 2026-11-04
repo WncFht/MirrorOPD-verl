@@ -1280,10 +1280,8 @@ class FSDPEngineWithLMHead(FSDPEngine):
         self.full_vocab_readout_space = replace(self.full_vocab_space, termination_ids=())
 
     def _full_vocab_output(self, micro_batch, model_inputs, teacher):
-        from verl.trainer.distillation.full_vocab import full_vocab_objective_result
         from verl.trainer.distillation.profiling import full_kl_range
-        from verl.utils.metric.position import relative_position_bins
-        from verl.workers.utils.padding import full_vocab_reduction, prediction_positions, response_target_coordinates
+        from verl.workers.utils.padding import prediction_positions
 
         if not self.model_config.enable_full_vocab:
             raise ValueError("full-vocab output requires the model head adapter")
@@ -1314,145 +1312,160 @@ class FSDPEngineWithLMHead(FSDPEngine):
         def output(hidden, head):
             selected = hidden.squeeze(0).index_select(0, packed)
             if capture:
-                if capture == "anchor" and getattr(self, "mirror_anchor_head", None) is None:
-                    from verl.trainer.distillation.anchor import FrozenAnchorHead
-
-                    version = tu.get(micro_batch, "mirror_anchor_version")
-
-                    def snapshot(h, w):
-                        self.mirror_anchor_head = FrozenAnchorHead(w, version)
-                        return h
-
-                    head(selected, full_vocab_callback=snapshot)
-                # Free each micro-batch GPU result instead of retaining the full batch there.
-                with full_kl_range("teacher_hidden_d2h"):
-                    chunks = selected.detach().cpu().split([len(p) for p in positions])
-                payload = {
-                    f"{capture}_hidden": torch.nested.as_nested_tensor(list(chunks), layout=torch.jagged),
-                    f"{capture}_positions": torch.nested.as_nested_tensor(
-                        [p.cpu() for p in positions], layout=torch.jagged
-                    ),
-                }
-                if capture == "anchor":
-                    version = tu.get(micro_batch, "mirror_anchor_version")
-                    payload["anchor_version"] = (
-                        torch.tensor(version, dtype=torch.int64).expand(len(positions), -1).clone()
-                    )
-                return payload
+                return self._capture_full_vocab(selected, head, micro_batch, positions, capture)
             actual_positions = micro_batch["teacher_positions"]
             if any(not torch.equal(a, b) for a, b in zip(positions, actual_positions.unbind(), strict=True)):
                 raise ValueError("Teacher hidden prediction positions do not match student loss mask")
             teacher_hidden = micro_batch["teacher_hidden"].values()
             with full_kl_range("teacher_head_get"):
                 weight = self.full_vocab_teacher_head.get(selected.device, teacher_hidden.dtype)
-            config = self.full_vocab_config
-            spec = self.full_vocab_spec
             if tu.get_non_tensor_data(micro_batch, "full_vocab_score", default=False):
-                from verl.trainer.distillation.evaluation import sample_sums, score_distribution_rows
-
-                def readout(h, w):
-                    with torch.autocast(device_type=h.device.type, enabled=False):
-                        values = score_distribution_rows(
-                            h,
-                            w.to(h.dtype),
-                            teacher_hidden,
-                            weight,
-                            token_chunk=tu.get_non_tensor_data(
-                                micro_batch, "full_vocab_score_token_chunk", default=config.token_chunk_size
-                            ),
-                            distribution=self.full_vocab_space
-                            if tu.get_non_tensor_data(micro_batch, "full_vocab_score_objective", default=False)
-                            else self.full_vocab_readout_space,
-                            termination_ids=config.termination_token_ids
-                            if tu.get_non_tensor_data(micro_batch, "full_vocab_score_objective", default=False)
-                            else (),
-                        )
-                    counts = [len(p) for p in positions]
-                    output = sample_sums(values.pop("rkl"), counts)
-                    for name, rows in values.items():
-                        output[name + "_sum"] = sample_sums(rows, counts)["rkl_sum"]
-                    return output
-
-                return head(selected, full_vocab_callback=readout)
-            anchor_hidden = anchor_weight = None
-            if spec.anchor_payload:
-                saved_positions = micro_batch["anchor_positions"]
-                if any(not torch.equal(a, b) for a, b in zip(positions, saved_positions.unbind(), strict=True)):
-                    raise ValueError("Anchor hidden prediction positions do not match student loss mask")
-                version = tuple(tu.get(micro_batch, "mirror_anchor_version"))
-                head_snapshot = getattr(self, "mirror_anchor_head", None)
-                actual_version = micro_batch["anchor_version"]
-                expected_version = torch.tensor(version, device=actual_version.device, dtype=actual_version.dtype)
-                if (
-                    head_snapshot is None
-                    or head_snapshot.version != version
-                    or any(not torch.equal(v, expected_version) for v in actual_version.unbind())
-                ):
-                    raise ValueError("Anchor payload/head version does not match this actor call")
-                anchor_hidden = micro_batch["anchor_hidden"].values().to(selected.dtype)
-                anchor_weight = head_snapshot.get(selected.device, selected.dtype)
-
-            reduction = full_vocab_reduction(
-                micro_batch["input_ids"],
-                micro_batch["responses"],
-                positions,
-                packed,
-                mode=self.full_vocab_agg_mode,
-                future=config.future,
-            )
-
-            def compute(h, w):
-                with torch.autocast(device_type=h.device.type, enabled=False):
-                    return full_vocab_objective_result(
-                        h,
-                        w.to(h.dtype),
-                        teacher_hidden,
-                        weight,
-                        spec=spec,
-                        hq=anchor_hidden,
-                        wq=anchor_weight,
-                        backend=config.backend,
-                        token_chunk=config.token_chunk_size,
-                        vocab_chunk=config.vocab_chunk_size,
-                        termination_token_ids=config.termination_token_ids,
-                        forward_teacher_support=config.forward_teacher_support,
-                        distribution=self.full_vocab_space if spec.teacher_only_kl else None,
-                        reduction=reduction,
-                    )
-
-            # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
-            with full_kl_range("head_loss"):
-                result = head(selected, full_vocab_callback=compute)
-            from verl.trainer.distillation.output import FullVocabOutput
-
-            bins = None
-            if result.token_objective is not None:
-                # Preserve response coordinates, including masked gaps.
-                targets, lengths = response_target_coordinates(
-                    micro_batch["input_ids"], micro_batch["responses"], positions
-                )
-                bins = relative_position_bins(targets, lengths)
-            return {
-                "full_vocab": FullVocabOutput.from_result(
-                    result,
-                    spec,
-                    packed.numel(),
-                    num_sequences=sum(bool(len(p)) for p in positions),
-                    bins=bins,
-                    termination=bool(self.full_vocab_space.termination_ids)
-                    if spec.teacher_only_kl
-                    else bool(config.termination_token_ids),
-                    measure_name=(
-                        ("conditional" if self.full_vocab_space.spec.mode == "common_conditioned" else "native")
-                        + ("_coarsened_rkl" if self.full_vocab_space.termination_ids else "_rkl")
-                    )
-                    if spec.teacher_only_kl
-                    else None,
-                )
-            }
+                return self._readout_full_vocab(selected, head, micro_batch, positions, teacher_hidden, weight)
+            return self._train_full_vocab(selected, head, micro_batch, positions, packed, teacher_hidden, weight)
 
         with full_kl_range(f"{capture}_forward" if capture else "student_forward"):
             return self.module(**model_inputs, use_cache=False, full_vocab_callback=output)
+
+    def _capture_full_vocab(self, selected, head, micro_batch, positions, capture):
+        """Capture frozen rows; snapshot anchor weight through the wrapped head."""
+        from verl.trainer.distillation.profiling import full_kl_range
+
+        if capture == "anchor" and getattr(self, "mirror_anchor_head", None) is None:
+            from verl.trainer.distillation.anchor import FrozenAnchorHead
+
+            version = tu.get(micro_batch, "mirror_anchor_version")
+
+            def snapshot(h, w):
+                self.mirror_anchor_head = FrozenAnchorHead(w, version)
+                return h
+
+            head(selected, full_vocab_callback=snapshot)
+        # Free each micro-batch GPU result instead of retaining the full batch there.
+        with full_kl_range("teacher_hidden_d2h"):
+            chunks = selected.detach().cpu().split([len(p) for p in positions])
+        payload = {
+            f"{capture}_hidden": torch.nested.as_nested_tensor(list(chunks), layout=torch.jagged),
+            f"{capture}_positions": torch.nested.as_nested_tensor([p.cpu() for p in positions], layout=torch.jagged),
+        }
+        if capture == "anchor":
+            version = tu.get(micro_batch, "mirror_anchor_version")
+            payload["anchor_version"] = torch.tensor(version, dtype=torch.int64).expand(len(positions), -1).clone()
+        return payload
+
+    def _readout_full_vocab(self, selected, head, micro_batch, positions, teacher_hidden, weight):
+        """Read values only; training aggregation and future never enter readout."""
+        config = self.full_vocab_config
+        from verl.trainer.distillation.evaluation import sample_sums, score_distribution_rows
+
+        def readout(h, w):
+            with torch.autocast(device_type=h.device.type, enabled=False):
+                values = score_distribution_rows(
+                    h,
+                    w.to(h.dtype),
+                    teacher_hidden,
+                    weight,
+                    token_chunk=tu.get_non_tensor_data(
+                        micro_batch, "full_vocab_score_token_chunk", default=config.token_chunk_size
+                    ),
+                    distribution=self.full_vocab_space
+                    if tu.get_non_tensor_data(micro_batch, "full_vocab_score_objective", default=False)
+                    else self.full_vocab_readout_space,
+                    termination_ids=config.termination_token_ids
+                    if tu.get_non_tensor_data(micro_batch, "full_vocab_score_objective", default=False)
+                    else (),
+                )
+            counts = [len(p) for p in positions]
+            output = sample_sums(values.pop("rkl"), counts)
+            for name, rows in values.items():
+                output[name + "_sum"] = sample_sums(rows, counts)["rkl_sum"]
+            return output
+
+        return head(selected, full_vocab_callback=readout)
+
+    def _train_full_vocab(self, selected, head, micro_batch, positions, packed, teacher_hidden, weight):
+        """Build a trainable head result without bypassing wrapped-module hooks."""
+        from verl.trainer.distillation.full_vocab import full_vocab_objective_result
+        from verl.trainer.distillation.profiling import full_kl_range
+        from verl.utils.metric.position import relative_position_bins
+        from verl.workers.utils.padding import full_vocab_reduction, response_target_coordinates
+
+        config, spec = self.full_vocab_config, self.full_vocab_spec
+        anchor_hidden = anchor_weight = None
+        if spec.anchor_payload:
+            saved_positions = micro_batch["anchor_positions"]
+            if any(not torch.equal(a, b) for a, b in zip(positions, saved_positions.unbind(), strict=True)):
+                raise ValueError("Anchor hidden prediction positions do not match student loss mask")
+            version = tuple(tu.get(micro_batch, "mirror_anchor_version"))
+            head_snapshot = getattr(self, "mirror_anchor_head", None)
+            actual_version = micro_batch["anchor_version"]
+            expected_version = torch.tensor(version, device=actual_version.device, dtype=actual_version.dtype)
+            if (
+                head_snapshot is None
+                or head_snapshot.version != version
+                or any(not torch.equal(v, expected_version) for v in actual_version.unbind())
+            ):
+                raise ValueError("Anchor payload/head version does not match this actor call")
+            anchor_hidden = micro_batch["anchor_hidden"].values().to(selected.dtype)
+            anchor_weight = head_snapshot.get(selected.device, selected.dtype)
+
+        reduction = full_vocab_reduction(
+            micro_batch["input_ids"],
+            micro_batch["responses"],
+            positions,
+            packed,
+            mode=self.full_vocab_agg_mode,
+            future=config.future,
+        )
+
+        def compute(h, w):
+            with torch.autocast(device_type=h.device.type, enabled=False):
+                return full_vocab_objective_result(
+                    h,
+                    w.to(h.dtype),
+                    teacher_hidden,
+                    weight,
+                    spec=spec,
+                    hq=anchor_hidden,
+                    wq=anchor_weight,
+                    backend=config.backend,
+                    token_chunk=config.token_chunk_size,
+                    vocab_chunk=config.vocab_chunk_size,
+                    termination_token_ids=config.termination_token_ids,
+                    forward_teacher_support=config.forward_teacher_support,
+                    distribution=self.full_vocab_space if spec.teacher_only_kl else None,
+                    reduction=reduction,
+                )
+
+        # Calling the wrapped head is required for its FSDP2 all-gather/backward hooks.
+        with full_kl_range("head_loss"):
+            result = head(selected, full_vocab_callback=compute)
+        from verl.trainer.distillation.output import FullVocabOutput
+
+        bins = None
+        if result.token_objective is not None:
+            # Preserve response coordinates, including masked gaps.
+            targets, lengths = response_target_coordinates(
+                micro_batch["input_ids"], micro_batch["responses"], positions
+            )
+            bins = relative_position_bins(targets, lengths)
+        return {
+            "full_vocab": FullVocabOutput.from_result(
+                result,
+                spec,
+                packed.numel(),
+                num_sequences=sum(bool(len(p)) for p in positions),
+                bins=bins,
+                termination=bool(self.full_vocab_space.termination_ids)
+                if spec.teacher_only_kl
+                else bool(config.termination_token_ids),
+                measure_name=(
+                    ("conditional" if self.full_vocab_space.spec.mode == "common_conditioned" else "native")
+                    + ("_coarsened_rkl" if self.full_vocab_space.termination_ids else "_rkl")
+                )
+                if spec.teacher_only_kl
+                else None,
+            )
+        }
 
     def prepare_model_inputs(self, micro_batch: TensorDict):
         distillation_use_topk = tu.get_non_tensor_data(data=micro_batch, key="distillation_use_topk", default=False)

@@ -34,9 +34,9 @@ def main():
     student = source["student"][: args.states].to(args.device)
     teacher = source["teacher"][: args.states].to(args.device)
     if args.device == "cuda":
-        from verl.trainer.distillation.full_vocab_triton import fused_mirror_rows
+        from examples.mirroropd.research.studies.precision.encoded_target import encoded_target_rows
 
-        current = lambda z, b, q, t, dtype: fused_mirror_rows(z, b, q, t, dtype, objective="mdpo", diagnostics=True)
+        current = lambda z, b, q, t, dtype: encoded_target_rows(z, b, q, t, dtype, objective="mdpo", diagnostics=True)
     else:
         current = lambda z, b, q, t, dtype: full_vocab_rows(z, b, q, objective="mdpo", diagnostics=True, log_teacher=t)
     methods = {"current": current}

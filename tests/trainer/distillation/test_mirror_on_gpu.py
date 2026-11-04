@@ -70,19 +70,24 @@ def test_fused_target_extremes_and_strided_teacher(kappa, eta):
 @pytest.mark.parametrize("objective", ["mdpo", "bpo"])
 @pytest.mark.parametrize("diagnostics", [False, True])
 @pytest.mark.parametrize("vocab", [31, 8193, 151936])
-def test_fused_mirror_rows_and_diagnostics(objective, diagnostics, vocab):
-    from verl.trainer.distillation.full_vocab_triton import fused_mirror_rows
+def test_fused_native_mirror_and_diagnostics(objective, diagnostics, vocab):
+    from verl.trainer.distillation.full_vocab_triton import fused_mirror_logits
     from verl.trainer.distillation.objectives import full_vocab_rows
 
     torch.manual_seed(33)
     z = torch.randn(3, vocab, device="cuda")
-    lt = torch.randn(3, vocab + 3, device="cuda").log_softmax(-1)[:, :vocab]
-    lq = torch.randn_like(z).log_softmax(-1)
+    teacher = torch.randn(3, vocab + 3, device="cuda")
+    lt = teacher.double().log_softmax(-1)[:, :vocab]
+    anchor = torch.randn_like(z)
+    lq = anchor.double().log_softmax(-1)
     b = (lq + lt) / 2
     expected, gradient, info = full_vocab_rows(
         z.double(), b.double(), lq.double(), objective=objective, diagnostics=diagnostics, log_teacher=lt.double()
     )
-    actual, dz, diag = fused_mirror_rows(z, b, lq, lt, torch.float32, objective=objective, diagnostics=diagnostics)
+    settings = resolve_distillation_spec(
+        {"loss_mode": "mirror", "mirror": {"objective": objective, "kappa": 0, "eta": 0.5, "diagnostics": diagnostics}}
+    )
+    actual, dz, diag, _ = fused_mirror_logits(z, anchor, teacher, torch.float32, spec=settings)
     torch.testing.assert_close(actual.double(), expected, atol=3e-6, rtol=3e-5)
     torch.testing.assert_close(dz.double(), gradient, atol=2e-8, rtol=3e-4)
     assert diag.shape == (3, 4 if diagnostics else 0)

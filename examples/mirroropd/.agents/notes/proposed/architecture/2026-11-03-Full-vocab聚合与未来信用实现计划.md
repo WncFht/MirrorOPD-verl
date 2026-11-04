@@ -254,7 +254,7 @@ CPU 实现采用单投影的反向分块路径，数学工具收敛到 `reductio
 
 第 2–4 步要求重构现有 row-kernel 边界：当前接口生成 `dz` 后已丢弃概率统计。候选实现应将“统计/局部代价”和“应用 local/future 系数”在当前 chunk 内连接，禁止从已有 `dz` 反推概率。工程目标是复用当前块 logits/normalizer，是否做到零额外投影需由 profiler 确认。
 
-普通 `precompute` 先通过梯度参考，再接 `precompute_fused`。Triton 的 [weighted_rows](../../../../../../verl/trainer/distillation/full_vocab_triton.py#L176) 名称指其残差数值算法，不是现成的回答聚合接口。修改 [_weighted_apply / _weighted_finish](../../../../../../verl/trainer/distillation/full_vocab_triton.py#L96) 或 [fused_mirror_logits](../../../../../../verl/trainer/distillation/full_vocab_triton.py#L458) 时，要把新增项纳入正确的 pivot 行补偿，验证 logits 梯度零和，不能在补偿完成后任意拼接破坏稳定性的项。
+普通 `precompute` 先通过梯度参考，再接 `precompute_fused`。Triton 的 [weighted_rows](../../../../../../verl/trainer/distillation/full_vocab_triton.py#L176) 名称指其残差数值算法，不是现成的回答聚合接口。修改 [_weighted_apply / _weighted_finish](../../../../../../verl/trainer/distillation/full_vocab_triton.py#L96) 或 [fused_mirror_logits](../../../../../../verl/trainer/distillation/full_vocab_triton.py#L442) 时，要把新增项纳入正确的 pivot 行补偿，验证 logits 梯度零和，不能在补偿完成后任意拼接破坏稳定性的项。
 
 若逆序融合不便复用既有数值结构，备选是先求 $O(N)$ cost 与 suffix，再重算块 VJP；它更易与 reference 对齐，但增加 head 投影。只有明确的正确性/显存收益或测量证据才采用该备选，不预先承诺所有 backend 都有单投影性能。`recompute` 可利用逐行 upstream 扩展聚合；只返回标量且缺少所需行统计的 Liger 路径，对不支持的权重/future 组合明确拒绝，禁止静默切换 backend。
 

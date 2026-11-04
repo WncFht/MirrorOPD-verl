@@ -8,7 +8,7 @@ Full-vocab reverse KL（下称 Full-KL）默认在 student rollout 得到的固�
 
 方法与数学目标的对应关系见[三方法比较](full-kl-walkthrough.md#71-梯度与极小值对照)；配置解析和数值分派分别沿[执行路线第 2 项](代码走读.md)与[算子 dispatcher](full-kl-kernel-walkthrough.md#1-dispatcher-的逐段阅读)阅读。本页维护 full-vocab 在 engine 中的接入合同、hidden 运输和 head 调用边界。
 
-能力组合由 [resolve_execution](../../../../../verl/trainer/distillation/execution.py) 统一检查，配置早检和真实 tensor 校验共用同一规则；不支持的组合直接报错。结果合同独立放在 [results.py](../../../../../verl/trainer/distillation/results.py)。[rows.py](../../../../../verl/trainer/distillation/rows.py) 负责目标公式，反向重算、缓存和词表流式策略由 [reverse_vocab.py](../../../../../verl/trainer/distillation/reverse_vocab.py) 保持各自保存合同。所有预计算路径共享 [run_blocks](../../../../../verl/trainer/distillation/vjp.py) 和显式传入 student H/W 的 PrecomputedVJP；forward KL 的重算策略保持独立。
+能力组合由 [resolve_execution](../../../../../verl/trainer/distillation/execution.py) 统一检查，配置早检和真实 tensor 校验共用同一规则；不支持的组合直接报错。结果合同独立放在 [results.py](../../../../../verl/trainer/distillation/results.py)。[rows.py](../../../../../verl/trainer/distillation/rows.py) 负责目标公式，反向重算、缓存和词表流式策略由 [reverse_vocab.py](../../../../../verl/trainer/distillation/reverse_vocab.py) 保持各自保存合同。所有预计算路径共享 [run_blocks](../../../../../verl/trainer/distillation/vjp.py#L76) 和显式传入 student H/W 的 PrecomputedVJP；forward KL 的重算策略保持独立。
 
 ### 训练行值与诊断的分工
 
@@ -16,7 +16,7 @@ Full-vocab reverse KL（下称 Full-KL）默认在 student rollout 得到的固�
 
 ## 接口与运行约束
 
-[full_reverse_kl_result](../../../../../verl/trainer/distillation/reverse_vocab.py#L200) 返回 [FullKLResult](../../../../../verl/trainer/distillation/results.py#L10)：可反传的 `loss_sum`、可选且 detached 的 `token_kl`，以及与实际目标对应的 `objective_rows`。标量入口 `full_reverse_kl` 只返回前者。统一 dispatcher 返回的 `FullVocabObjectiveResult` 必须显式提供未加权、未折扣的 `local_objective_sum`，另有可选 future 诊断，避免把训练 surrogate 当作 KL。Kernel 不承担分布式通信、最终全局归一化、TQ 读取或日志命名。
+[full_reverse_kl_result](../../../../../verl/trainer/distillation/reverse_vocab.py#L184) 返回 [FullKLResult](../../../../../verl/trainer/distillation/results.py#L10)：可反传的 `loss_sum`、可选且 detached 的 `token_kl`，以及与实际目标对应的 `objective_rows`。需要标量的开发调用者显式读取 `loss_sum`；原标量包装函数已删除。统一 dispatcher 返回的 `FullVocabObjectiveResult` 必须显式提供未加权、未折扣的 `local_objective_sum`，另有可选 future 诊断，避免把训练 surrogate 当作 KL。Kernel 不承担分布式通信、最终全局归一化、TQ 读取或日志命名。
 
 设一个 micro-batch 中选出的有效预测行数为 $n$：
 
@@ -90,13 +90,17 @@ Future 采用当前更新的实际训练代价：纯 reverse KL 是条件 KL，�
 
 `precompute_fused` 已接入既有 fused 行算子；新增模式已有 CUDA、多精度、真实 FSDP2 与性能证据，适用矩阵及保留的失败见下方验收记录。CPU 上请求 fused 仍明确报错，无隐式 backend fallback。
 
-实现中，[full_vocab_reduction](../../../../../verl/workers/utils/padding.py) 从既有预测坐标构造回答边界、原始时间和 sampled target ID，只做一次 next-token shift。[PackedReduction / suffix_credit](../../../../../verl/trainer/distillation/reduction.py) 独立维护权重和严格后缀；[run_blocks](../../../../../verl/trainer/distillation/vjp.py) 按连续 token 块逆序遍历，GEMM 可以跨回答；suffix 按回答 ID 分段，只携带左边缘回答的后缀状态，复用当前 student logits，在释放块前合成 local VJP 与 score VJP，并累积 `dH/dW`。后缀使用 doubling scan，复杂度为每块 $O(n\log n)$，无逐 token Python 循环或逆折扣幂。终止动作组的 score 直接在原词表坐标求导，仅对很小的 stop-token 组使用 FP64，不额外构造完整合并词表的 FP64 score 工作区。连续分块使投影调用数由总 token 数与 chunk 决定；`precompute_fused` 在 native 路径复用目标块的归一化统计，把 score、local VJP 和行权重在 Triton 中合成，省去完整 score/log-prob 工作区；EOS 的 score 单独维护 native 统计，不复用合并动作的 normalizer。普通 precompute 保持 PyTorch 参考合成，成本分别由下方算子与完整 actor 配对记录，不能由“复用投影”推断开销为零。
+实现中，[full_vocab_reduction](../../../../../verl/workers/utils/padding.py) 从既有预测坐标构造回答边界、原始时间和 sampled target ID，只做一次 next-token shift。[PackedReduction / suffix_credit](../../../../../verl/trainer/distillation/reduction.py) 独立维护权重和严格后缀；[run_blocks](../../../../../verl/trainer/distillation/vjp.py#L76) 按连续 token 块逆序遍历，GEMM 可以跨回答；suffix 按回答 ID 分段，只携带左边缘回答的后缀状态，复用当前 student logits，在释放块前合成 local VJP 与 score VJP，并累积 `dH/dW`。后缀使用 doubling scan，复杂度为每块 $O(n\log n)$，无逐 token Python 循环或逆折扣幂。终止动作组的 score 直接在原词表坐标求导，仅对很小的 stop-token 组使用 FP64，不额外构造完整合并词表的 FP64 score 工作区。连续分块使投影调用数由总 token 数与 chunk 决定；`precompute_fused` 在 native 路径复用目标块的归一化统计，把 score、local VJP 和行权重在 Triton 中合成，省去完整 score/log-prob 工作区；EOS 的 score 单独维护 native 统计，不复用合并动作的 normalizer。普通 precompute 保持 PyTorch 参考合成，成本分别由下方算子与完整 actor 配对记录，不能由“复用投影”推断开销为零。
 
 原 `full_kl`、mirror objective、target/teacher/anchor KL、normalizer 及位置统计继续使用未加权 local 行。Future 路径另记录 `future/coefficient` 的均值和标准差、`future/score_surrogate`、`local_surrogate` 与 `training_surrogate`；后三项按 η 缩放后记录 token 比率，尚未乘最终 DP/全局聚合系数，最终训练量看内部 `distillation/loss`，规范日志名为 `optim/actor/distillation_loss`。字段公式由[指标字典](../../settings/指标口径.md#62-full-vocab-聚合与未来信用)维护。`valid_tokens` 与 `valid_sequences` 记录实际非空计数。Surrogate 的数值可以为负，不是 KL。
 
 CPU trainer 测试替换模型加载及远程 worker，覆盖初始化、统一评测检查与 update 元数据；真实 FSDP2/collective 不属于这部分证据。[只读评测测试](../../../../../tests/trainer/distillation/test_fixed_rkl_readout_on_cpu.py) 核对训练聚合/future 不进入评分。
 
 CPU 验收覆盖[后缀与聚合公式](../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)、[独立概率参考及有限轨迹枚举](../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)、[Hydra 配置、DP/micro-batch 与 tied-head 小模型](../../../../../tests/trainer/distillation/test_full_vocab_reduction_on_cpu.py)。2026-11-04 的 [CUDA 与真实 FSDP2 验收](../numerics/full-vocab/validation.md#聚合与未来信用验收2026-11-04)已覆盖六种 future、五种 aggregate、空 rank 与 checkpoint，并保留一项混合精度 backend 参数对比失败。[算子性能](../performance/full-vocab/operators.md#聚合与未来信用复测2026-11-04)分离了遍历、回答分块和 future 开销；[完整 actor 配对](../performance/full-vocab/training.md)已覆盖短／长／混合长度、两种 precompute backend、题均聚合、future mean／discounted_sequence 和 chunk256/512，保留每个对照的独立基线与测量范围。复测入口是 [test_trajectory_on_gpu.py](../../../../../tests/trainer/distillation/test_trajectory_on_gpu.py) 和 [FSDP2 集成测试](../../../../../tests/special_distributed/test_full_vocab_fsdp2.py) 的 `--loss-agg-mode`、`--future-mode`、`--gamma` 参数。
+
+## Engine 的职责与调用边界
+
+[模型回调入口](../../../../../verl/workers/engine/fsdp/transformer_impl.py)只负责预测坐标、公共 payload 身份校验和模式分派；`_capture_full_vocab` 提取冻结行并通过包装 head 捕获必要的 anchor 快照，`_readout_full_vocab` 只计算评分行，`_train_full_vocab` 组织 anchor、回答布局与训练结果。三个 helper 共用包装 backbone/head，readout 不构造训练 VJP，capture 不计算目标。Teacher 预测位置在分派前统一校验，anchor 位置与版本在训练 helper 中校验。
 
 ## 从教师 hidden 到 student head
 
@@ -198,13 +202,13 @@ Teacher hidden 运输规模约为有效预测行数乘 $d_t$；需要 full ancho
 
 默认值取决于调用层，以下均指没有额外覆盖时：
 
-| 入口                                                                    | Backend          | Token chunk | Hidden async write / prefetch            |
-| ----------------------------------------------------------------------- | ---------------- | ----------- | ---------------------------------------- |
-| `FullVocabConfig`；原 `full_reverse_kl/full_reverse_kl_result` 数值 API | recompute        | 512         | 配置类为 False/False；数值 API 不管理 IO |
-| `full_vocab_objective_result` 数值 API                                  | precompute       | 512         | 不管理 IO                                |
-| 统一入口 `custom --method full_kl/mdpo/bpo` 的 full-vocab 设置          | precompute       | 512         | False/False                              |
-| E13–E43 中的 full 预设                                                  | precompute       | 512         | True/True                                |
-| E44–E47                                                                 | precompute_fused | 128         | True/True                                |
+| 入口                                                           | Backend          | Token chunk | Hidden async write / prefetch            |
+| -------------------------------------------------------------- | ---------------- | ----------- | ---------------------------------------- |
+| `FullVocabConfig`；`full_reverse_kl_result` 数值 API           | recompute        | 512         | 配置类为 False/False；数值 API 不管理 IO |
+| `full_vocab_objective_result` 数值 API                         | precompute       | 512         | 不管理 IO                                |
+| 统一入口 `custom --method full_kl/mdpo/bpo` 的 full-vocab 设置 | precompute       | 512         | False/False                              |
+| E13–E43 中的 full 预设                                         | precompute       | 512         | True/True                                |
+| E44–E47                                                        | precompute_fused | 128         | True/True                                |
 
 这些入口的 vocab chunk 默认都是 8192，其实际用途仍受 backend 限制。当前 E44–E47 的完整设置见[训练配方](../training/launch.md#launcher-mirror-comparison)；环境与 Hydra 可以覆盖，最终以解析配置为准。
 

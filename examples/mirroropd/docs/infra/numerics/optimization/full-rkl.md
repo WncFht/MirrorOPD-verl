@@ -33,7 +33,7 @@ g_B=\nabla L_B=\mathbb E_{\widehat d_B}[J_s^\top\delta_s],\qquad
 \mathbf1^\top\delta_s=0.
 $$
 
-这对应当前仓库的 [kl_rows](../../../../../../verl/trainer/distillation/numerics.py)及 [full_reverse_kl](../../../../../../verl/trainer/distillation/reverse_vocab.py#L161)。教师如果有额外输出行，应在完整教师支持上归一化；它们对 KL 值贡献支持校正项，不能偷偷将教师截断后重归一化。实验使用生产 endpoint 的该处理。
+这对应当前仓库的 [kl_rows](../../../../../../verl/trainer/distillation/numerics.py)及 [full_reverse_kl_result](../../../../../../verl/trainer/distillation/reverse_vocab.py#L184)。教师如果有额外输出行，应在完整教师支持上归一化；它们对 KL 值贡献支持校正项，不能偷偷将教师截断后重归一化。实验使用生产 endpoint 的该处理。
 
 ### 接近教师时的局部曲率
 

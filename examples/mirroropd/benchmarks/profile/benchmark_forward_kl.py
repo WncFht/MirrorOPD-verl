@@ -16,7 +16,7 @@ from pathlib import Path
 import torch
 
 from verl.trainer.distillation.forward_vocab import full_forward_kl_result
-from verl.trainer.distillation.reverse_vocab import full_reverse_kl
+from verl.trainer.distillation.reverse_vocab import full_reverse_kl_result
 
 
 def main():
@@ -42,7 +42,7 @@ def main():
     def run(name, backend, chunk):
         h.grad = w.grad = None
         if name.startswith("reverse"):
-            loss = full_reverse_kl(h, w, t, v, backend=backend, token_chunk=chunk)
+            loss = full_reverse_kl_result(h, w, t, v, backend=backend, token_chunk=chunk).loss_sum
         else:
             loss = full_forward_kl_result(
                 h, w, t, v, backend=backend, token_chunk=chunk, teacher_support="student"
