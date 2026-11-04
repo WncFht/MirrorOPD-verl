@@ -1,0 +1,19 @@
+{
+  "source_run": "f0e44ec7",
+  "target_run": "53dd553d",
+  "meaning": "Shared untrained Base evaluation, not an E41 in-run validation event",
+  "checked_config_sections": [
+    "data",
+    "actor_rollout_ref.model",
+    "actor_rollout_ref.rollout"
+  ],
+  "ignored_rollout_fields": [
+    "trace",
+    "disable_log_stats"
+  ],
+  "files": {
+    "derived/MirrorOPD-verl/run-20261026_223012-f0e44ec7/config.json": "cb6d08eed1f341f1837dc30d5ee5224143d3f71da58aa2c6b4f3d8816d7fa937",
+    "derived/MirrorOPD-verl/run-20261026_223012-f0e44ec7/history.jsonl": "a262518acf81ab49130c83d3a41654fed4845dc427e8699d105c1c85460e5f3b",
+    "derived/MirrorOPD-verl/run-20261027_133032-53dd553d/config.json": "5bb9942604489168e5d0b29762fa229ff6938ae4276761fce912feb9dff31a1c"
+  }
+}

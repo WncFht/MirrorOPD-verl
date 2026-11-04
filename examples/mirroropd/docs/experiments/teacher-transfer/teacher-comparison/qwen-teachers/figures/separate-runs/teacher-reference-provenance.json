@@ -1,0 +1,42 @@
+{
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/progress/data/20261101-review/followup-data.json",
+  "sha256": "3ba3ffb58b2892bf1fc467686fc66857132581a8894be1708627b4bd7c6a0cb3",
+  "metric": "mean correctness per question across 4 responses (avg@4)",
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "response_cap": 31744,
+  "enable_thinking": false,
+  "E41": "No full same-protocol teacher reference in the frozen evidence",
+  "E43": [
+    {
+      "task": "math500",
+      "accuracy": 0.947,
+      "samples": 4,
+      "question_count": 500
+    },
+    {
+      "task": "amc23",
+      "accuracy": 0.95625,
+      "samples": 4,
+      "question_count": 40
+    },
+    {
+      "task": "aime24",
+      "accuracy": 0.6333333333333333,
+      "samples": 4,
+      "question_count": 30
+    },
+    {
+      "task": "aime25",
+      "accuracy": 0.4166666666666667,
+      "samples": 4,
+      "question_count": 30
+    },
+    {
+      "task": "aime26",
+      "accuracy": 0.48333333333333334,
+      "samples": 4,
+      "question_count": 30
+    }
+  ]
+}
