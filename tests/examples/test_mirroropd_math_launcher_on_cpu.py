@@ -1359,3 +1359,33 @@ def test_training_repetition_has_an_independent_launcher_setting(tmp_path):
     }
     assert cfg.data.train_batch_size == cfg.actor_rollout_ref.actor.ppo_mini_batch_size == 256
     assert cfg.actor_rollout_ref.actor.ppo_epochs == 32
+
+
+@pytest.mark.parametrize("preset,outers,updates,presentations", [("E81", 25, 400, 102400), ("E82", 100, 1600, 409600)])
+def test_topd_large_batch_presets_resolve_four_gpu_budget_and_natural_evaluation(
+    tmp_path, preset, outers, updates, presentations
+):
+    # Clear the fixture's batch64 override to exercise the public preset defaults.
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT), preset], TRAIN_BATCH_SIZE="")
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    actor, rollout = cfg.actor_rollout_ref.actor, cfg.actor_rollout_ref.rollout
+    loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
+    assert cfg.trainer.n_gpus_per_node == 4 and cfg.distillation.execution_mode == "shared_sync"
+    assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 256
+    assert actor.ppo_epochs == 16 and cfg.trainer.total_training_steps == outers
+    assert outers * actor.ppo_epochs == updates
+    assert updates * actor.ppo_mini_batch_size == presentations
+    assert cfg.trainer.val_before_train is False
+    assert cfg.trainer.test_freq == 5 and cfg.trainer.save_freq == -1
+    assert loss.loss_settings.kappa == 1 and loss.loss_settings.eta == 0.1
+    assert loss.full_vocab.future.mode == "none" and loss.full_vocab.backend == "precompute_fused"
+    assert loss.full_vocab.termination_token_ids == [151643, 151645]
+    assert actor.loss_agg_mode == "token-mean" and actor.optim.lr == 1e-6
+    assert cfg.data.apply_chat_template_kwargs.enable_thinking is None
+    assert rollout.n == rollout.tensor_model_parallel_size == 1
+    assert rollout.max_num_seqs == 128 and rollout.cudagraph_capture_sizes[-1] == 128
+    assert rollout.gpu_memory_utilization == 0.8
+    assert cfg.data.val_batch_size is None and rollout.val_kwargs.n == 16
+    assert rollout.val_kwargs.max_tokens == 31744
+    assert rollout.val_kwargs.repetition_detection is None
