@@ -48,6 +48,18 @@ def main():
     parser.add_argument("--tied", action="store_true")
     parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
     parser.add_argument("--checkpoint", action="store_true")
+    parser.add_argument(
+        "--loss-agg-mode",
+        choices=["token-mean", "token-sum", "seq-mean-token-mean", "seq-mean-token-sum", "seq-mean-token-sum-norm"],
+        default="token-mean",
+    )
+    parser.add_argument("--loss-scale-factor", type=float, default=7.0)
+    parser.add_argument(
+        "--future-mode",
+        choices=["none", "sum", "mean", "discounted_sum", "discounted_mean", "discounted_sequence"],
+        default="none",
+    )
+    parser.add_argument("--gamma", type=float, default=1.0)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     torch.set_num_threads(1)
@@ -113,7 +125,11 @@ def main():
             objective=args.objective, estimator=args.estimator, eta=args.eta, kappa=args.kappa, diagnostics=full
         ),
         full_vocab=FullVocabConfig(
-            backend=args.backend, token_chunk_size=2, vocab_chunk_size=7, termination_token_ids=args.termination_ids
+            backend=args.backend,
+            token_chunk_size=2,
+            vocab_chunk_size=7,
+            termination_token_ids=args.termination_ids,
+            future={"mode": args.future_mode, "gamma": args.gamma},
         ),
         use_policy_gradient=not full,
         policy_loss_mode="vanilla" if full else "token_is",
@@ -135,7 +151,7 @@ def main():
     actor.set_loss_fn(
         partial(
             teacher_policy_loss,
-            config=SimpleNamespace(loss_agg_mode="token-mean"),
+            config=SimpleNamespace(loss_agg_mode=args.loss_agg_mode, loss_scale_factor=args.loss_scale_factor),
             distillation_config=DistillationConfig(distillation_loss=loss_cfg),
         )
     )
@@ -298,6 +314,10 @@ def main():
         estimator=args.estimator,
         eta=args.eta,
         backend=args.backend,
+        loss_agg_mode=args.loss_agg_mode,
+        loss_scale_factor=args.loss_scale_factor,
+        future_mode=args.future_mode,
+        gamma=args.gamma,
         tied=args.tied,
         checkpoint=args.checkpoint,
         world_size=world,
