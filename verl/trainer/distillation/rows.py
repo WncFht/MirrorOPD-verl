@@ -103,8 +103,9 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, actions=None, stu
             from verl.trainer.distillation.full_vocab_triton import fused_mirror_logits
 
             dtype = torch.float32 if actions is not None or hs.dtype == torch.float16 else hs.dtype
-            rows, dz, diag = fused_mirror_logits(z, zq, zt, dtype, spec=spec, corrections=corrections)
+            rows, dz, diag, statistics = fused_mirror_logits(z, zq, zt, dtype, spec=spec, corrections=corrections)
         else:
+            statistics = None
             from verl.trainer.distillation.numerics import mirror_logits_rows
 
             rows, dz, info = mirror_logits_rows(
@@ -118,7 +119,7 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, actions=None, stu
         if actions is not None:
             dz = actions.expand_gradient(dz, original_z)
         dz = dz.float() if hs.dtype == torch.float16 else dz.to(hs.dtype)
-    return rows, dz, diag
+    return rows, dz, diag, statistics if actions is None else None
 
 
 def prepare_objective(hs, ws, ht, wt, hq, wq, *, spec, fused, actions, future):
@@ -126,21 +127,24 @@ def prepare_objective(hs, ws, ht, wt, hq, wq, *, spec, fused, actions, future):
 
     z = project(hs, ws)
     if not spec.teacher_only_kl:
-        values, dz, info = _mirror_rows(hs, ws, ht, wt, hq, wq, spec, fused=fused, actions=actions, student_logits=z)
-        return values, dz, values, info, z if future else None
+        values, dz, info, statistics = _mirror_rows(
+            hs, ws, ht, wt, hq, wq, spec, fused=fused, actions=actions, student_logits=z
+        )
+        return values, dz, values, info, (z, statistics) if future else None
+    statistics = None
     if actions is not None:
         values, dz, raw = termination_equivalent_kl_rows(hs, ws, ht, wt, actions=actions, fused=fused, student_logits=z)
     else:
         teacher = project(ht, wt)
         if fused:
-            from verl.trainer.distillation.full_vocab_triton import fused_rows
+            from verl.trainer.distillation.full_vocab_triton import difference, weighted_rows
 
-            values, dz = fused_rows(z, teacher[:, : len(ws)].contiguous(), torch.float32)
+            values, dz, statistics = weighted_rows(z, difference(z, teacher[:, : len(ws)].contiguous()), torch.float32)
             values = values + support_correction(teacher, len(ws))
         else:
             values, dz = kl_rows(z, teacher)
         raw = values
-    return values, dz, raw, z.new_empty((len(hs), 0)), z if future else None
+    return values, dz, raw, z.new_empty((len(hs), 0)), (z, statistics) if future else None
 
 
 def prepare_conditional(hs, ws, ht, wt, hq, wq, *, space, actions, fused):

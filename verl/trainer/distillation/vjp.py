@@ -119,14 +119,23 @@ def run_blocks(
             future, carry = suffix_credit(
                 values, reduction.times[start:stop], reduction.segments[start:stop], config, carry=carry
             )
-            sampled_lp, score = action_score(logits, reduction.actions[start:stop], actions)
+            logits, statistics = logits
             if config.mode == "discounted_sequence":
                 local_weight = local_weight * config.gamma ** reduction.times[start:stop].to(dtype)
+            if accumulate and fused:
+                from verl.trainer.distillation.full_vocab_triton import finish_future
+
+                sampled_lp, dz = finish_future(
+                    logits, dz, reduction.actions[start:stop], future, local_weight, actions, statistics
+                )
+                dz = dz.float() if hs.dtype == torch.float16 else dz.to(hs.dtype)
+            else:
+                sampled_lp, score = action_score(logits, reduction.actions[start:stop], actions)
             score_term = future * sampled_lp
             total = total + ((values + score_term) * local_weight).sum()
             coefficients[start:stop] = future
             score_sum = score_sum + (score_term.detach() * local_weight).sum()
-            if accumulate:
+            if accumulate and not fused:
                 dz = (dz + future[:, None] * score) * (
                     local_weight if isinstance(local_weight, int) else local_weight[:, None]
                 )

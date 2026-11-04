@@ -6,7 +6,7 @@
 
 公共执行器迁移后，`tests/trainer/distillation -k cpu` 为 927 passed、18 skipped；跳过项是非 discounted 模式与非单位 γ 的无效组合。CUDA trajectory 矩阵为 540 passed，覆盖既有目标、future、聚合、EOS 和多种精度；条件支持集的 CUDA 矩阵另有 12 passed。原始命令与输出保存在仓库 `runs/kl-backend-20261104/`，该目录为执行产物，不随源码提交。
 
-[分段后缀测试](../../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)跨多个回答边界、空回答与原始时间重置核对严格 future；大 local cost 旁的极小 future 不通过两者相减求出。[投影计数测试](../../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)要求连续分块只按总行数决定投影次数，backward 不重放投影。该阶段验证公共执行与连续分块；融合优化、完整 actor 和重构后的真实 FSDP 结果另行记录，不把旧分布式通过数算作新版本验收。
+[分段后缀测试](../../../../../../tests/trainer/distillation/test_future_credit_on_cpu.py)跨多个回答边界、空回答与原始时间重置核对严格 future；大 local cost 旁的极小 future 不通过两者相减求出。[投影计数测试](../../../../../../tests/trainer/distillation/test_trajectory_vjp_on_cpu.py)要求连续分块只按总行数决定投影次数，backward 不重放投影。融合 finish 后，trajectory 与融合小信号测试的定向 CUDA 回归为 608 passed；恢复既有 GEMM 前 cast 后 trajectory 与 finish 回归为 549 passed。独立 [finish 测试](../../../../../../tests/trainer/distillation/test_future_finish_on_gpu.py)为 10 passed，包含 native/EOS、跨 tile、行权重、近确定动作和 BF16 GEMM 输入精度合同。完整 actor 和重构后的真实 FSDP 结果另行记录，不把旧分布式通过数算作新版本验收。
 
 ## 验证矩阵
 
