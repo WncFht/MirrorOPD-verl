@@ -15,9 +15,13 @@ pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA requ
 
 @pytest.mark.parametrize("backend", ["precompute", "precompute_fused"])
 @pytest.mark.parametrize("dtype", [torch.float32, torch.bfloat16, torch.float16])
-@pytest.mark.parametrize("mode", ["sum", "mean", "discounted_sequence"])
+@pytest.mark.parametrize("mode", ["none", "sum", "mean", "discounted_sum", "discounted_mean", "discounted_sequence"])
+@pytest.mark.parametrize(
+    "aggregate",
+    ["token-mean", "token-sum", "seq-mean-token-mean", "seq-mean-token-sum", "seq-mean-token-sum-norm"],
+)
 @pytest.mark.parametrize("eta,stop_ids", [(1.0, []), (0.2, []), (0.2, [1, 4])])
-def test_trajectory_cuda_value_and_gradients(backend, dtype, mode, eta, stop_ids):
+def test_trajectory_cuda_value_and_gradients(backend, dtype, mode, aggregate, eta, stop_ids):
     torch.manual_seed(13)
     inputs = [
         (torch.randn(*s, device="cuda", dtype=dtype) * 0.2).requires_grad_()
@@ -28,7 +32,7 @@ def test_trajectory_cuda_value_and_gradients(backend, dtype, mode, eta, stop_ids
         (4, 0, 1, 2),
         torch.tensor([0, 1, 3, 6, 0, 2, 5], device="cuda"),
         torch.tensor([0, 2, 1, 4, 3, 1, 4], device="cuda"),
-        "seq-mean-token-mean",
+        aggregate,
         FutureCreditConfig(mode=mode, gamma=0.87 if mode.startswith("discounted") else 1.0),
     )
     settings = spec(eta, 0.5)
