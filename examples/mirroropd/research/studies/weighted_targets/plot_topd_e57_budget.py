@@ -4,6 +4,8 @@
 
 Semantic ledger: each E57 point is a completed in-memory evaluation (avg@16).
 Each TOP-D point is a published polyline vertex (avg@32), not a recovered log.
+Optional hollow diamonds at zero are separately evaluated untrained Base avg@4;
+they are not E57 log entries and are not connected to its first evaluation.
 Response presentations count each optimizer use; fresh responses count generation
 once, without deduplicating prompts or answer strings. Neither measures FLOPs.
 Geometry ledger: columns are AIME24/25/26, rows full budget and early-budget zoom.
@@ -121,7 +123,24 @@ def extract_e57(source):
     return rows, {k: run[k] for k in ("run_id", "url", "raw_source", "sha256", "config", "code_commit")}
 
 
-def render(rows, out, metric, fv):
+def read_baseline(path):
+    """Recompute independent Base scores without fabricating an E57 log entry."""
+    data = json.loads(path.read_text())
+    assert data["protocol"]["n"] == 4
+    assert data["protocol"]["decoding"] == {"temperature": 0.7, "top_p": 0.9, "cap": 31744}
+    result = {}
+    for benchmark in BENCHMARKS:
+        scores = [r for r in data["scores"] if r["benchmark"] == benchmark]
+        assert len(scores) == 120
+        assert len({(r["question_id"], r["sample"]) for r in scores}) == 120
+        questions = {r["question_id"] for r in scores}
+        assert len(questions) == 30
+        assert all({r["sample"] for r in scores if r["question_id"] == q} == set(range(4)) for q in questions)
+        result[benchmark] = sum(r["correct"] for r in scores) / len(scores) * 100
+    return result
+
+
+def render(rows, out, metric, fv, baseline=None):
     fig, axes = plt.subplots(2, 3, figsize=(12, 7.5), sharey=True)
     styles = [
         ("E57", "vteal", "o", "-"),
@@ -157,6 +176,17 @@ def render(rows, out, metric, fv):
                     lw=1.6,
                     label=label,
                 )
+            if baseline is not None:
+                ax.plot(
+                    [0],
+                    [baseline[benchmark]],
+                    ls="none",
+                    marker="D",
+                    ms=6,
+                    color=fv.HUES["vteal"],
+                    markerfacecolor=fv.NEUTRALS["paper"],
+                    label="Untrained Base (separate avg@4)",
+                )
             ax.set(xlim=(-0.015 * limit, limit), ylim=(0, 22), yticks=(0, 5, 10, 15, 20))
             ax.grid(axis="y", alpha=0.2)
             ax.text(0.03, 0.93, f"({chr(97 + row_index * 3 + column)})", transform=ax.transAxes, va="top")
@@ -173,7 +203,11 @@ def render(rows, out, metric, fv):
             if column == 0:
                 ax.set_ylabel(("Full budget" if row_index == 0 else "Early budget") + "\nAccuracy (%)")
     fig.legend(
-        *axes[0, 0].get_legend_handles_labels(), loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.99)
+        *axes[0, 0].get_legend_handles_labels(),
+        loc="upper center",
+        ncol=2 if baseline is not None else 3,
+        frameon=False,
+        bbox_to_anchor=(0.5, 0.99),
     )
     title = {
         "response_presentations": "Cumulative training response presentations (thousands)",
@@ -184,7 +218,14 @@ def render(rows, out, metric, fv):
     fig.text(
         0.5,
         0.035,
-        "E57: logged avg@16; TOP-D: published Figure 5 avg@32. Evaluation protocols differ; no compute equivalence.",
+        (
+            "Base at 0: separate avg@4; E57: avg@16; TOP-D: Figure 5 avg@32. Evaluation protocols differ."
+            if baseline is not None
+            else (
+                "E57: logged avg@16; TOP-D: published Figure 5 avg@32. "
+                "Evaluation protocols differ; no compute equivalence."
+            )
+        ),
         ha="center",
         fontsize=9,
         color=fv.NEUTRALS["baseline"],
@@ -218,6 +259,7 @@ def main():
         default=("response_presentations", "fresh_responses", "optimizer_updates"),
         help="Horizontal axes to render",
     )
+    parser.add_argument("--baseline", type=Path, help="Independent untrained Base score evidence for x=0")
     args = parser.parse_args()
     if args.e57_data:
         e57, provenance = extract_e57(args.e57_data)
@@ -243,8 +285,9 @@ def main():
     args.out.mkdir(parents=True, exist_ok=True)
     fv = load_style()
     fv.apply_rc("paper", fontsize=11)
+    baseline = read_baseline(args.baseline) if args.baseline else None
     for metric in args.metrics:
-        render(rows, args.out, metric, fv)
+        render(rows, args.out, metric, fv, baseline=baseline)
     (args.out / "render-provenance.json").write_text(
         json.dumps(
             dict(
@@ -252,6 +295,7 @@ def main():
                 curves_sha256=sha256(args.data / "curves.json"),
                 matplotlib_version=matplotlib.__version__,
                 metrics=args.metrics,
+                baseline_sha256=sha256(args.baseline) if args.baseline else None,
                 audit_exception="Zoom axes intentionally clip the connecting segment to the next observed vertex.",
             ),
             indent=2,

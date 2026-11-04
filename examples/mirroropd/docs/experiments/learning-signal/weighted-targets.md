@@ -118,7 +118,7 @@ $$
 
 TOP-D 的 outer 解释依据官方 trainer：每轮 rollout、actor 更新和日志记录后，`global_steps` 增加一次；内部 optimizer update 由 mini-batch 循环执行。[^topd-trainer-budget] Figure5 两条曲线均有 42 个可提取节点，横坐标为 0、10、…、410，换算使用论文 §5.1 的 batch 设置。这里推断的是公开曲线已展示的训练预算；论文没有给出 Figure5 与 Table3 checkpoint 的一一对应关系，也没有证明训练恰好在 outer410 终止。
 
-![E57 与 TOP-D 按累计训练回答条次比较；上排全程，下排早期放大](figures/topd-e57-budget-20261104/response_presentations.png)
+![E57 与 TOP-D 按累计训练回答条次比较；上排全程，下排早期放大](figures/topd-e57-step0-20261104/response_presentations.png)
 
 | 公开曲线末端口径 | E57 outer100 | TOP-D α0.1／α0.2 outer410 | TOP-D／E57 |
 | ---------------- | -----------: | ------------------------: | ---------: |
@@ -128,17 +128,22 @@ TOP-D 的 outer 解释依据官方 trainer：每轮 rollout、actor 更新和日
 
 E57 的 AIME24、AIME25 从首个评测点的 7.92%／3.33% 上升至 10.42%／9.79%，AIME26 在 outer70 达到 9.58%，最终为 6.88%。在相近累计训练条次的前期区间，E57 与 TOP-D 的正确率范围重叠，论文更高的后期成绩来自远超 E57 当前终点的训练区间。曲线支持继续控制训练预算，不能据此确定延长 E57 就能复现论文结果。
 
-两边采用相同的 student／teacher 配对，但 E57 为 avg@16、T0.7/p0.9、cap31744，论文为 avg@32、T1/p0.7、cap16384，题目附加指令与更新目标也不同。条次横轴没有计入回答长度、full-vocab 与 sampled-token 的算力差异；因此图用于定位训练阶段，不能据此排名算法的样本效率或计算效率。E57 无初始验证，不补造 outer0 点；TOP-D 提取值是图上读数，不替代 Table3。
+两边采用相同的 student／teacher 配对，但 E57 为 avg@16、T0.7/p0.9、cap31744，论文为 avg@32、T1/p0.7、cap16384，题目附加指令与更新目标也不同。条次横轴没有计入回答长度、full-vocab 与 sampled-token 的算力差异；因此图用于定位训练阶段，不能据此排名算法的样本效率或计算效率。E57 的原日志无初始验证；图中 x=0 的空心菱形来自独立 Base 评测，采样次数与训练中验证不同。TOP-D 提取值是图上读数，不替代 Table3。
 
-[新增回答数横轴图](figures/topd-e57-budget-20261104/fresh_responses.png)保留两边不同的轨迹覆盖口径；早期放大区内 TOP-D 只有 step0 一个观测点，仅显示该点，不在没有评测的区间补画连线。[矢量成品](figures/topd-e57-budget-20261104/response_presentations.pdf)、[原始论文矢量图](data/topd-e57-budget-20261104/topd-figure5.pdf)、[曲线 CSV](data/topd-e57-budget-20261104/curves.csv)、[来源与哈希](data/topd-e57-budget-20261104/provenance.json)均已保留。
+三种横轴均补充了未训练 Base 的独立读出：AIME24／25／26 分别为 **2.50%／1.67%／0.83%**，每年 30 题、每题 4 次回答，即分别判对 3／2／1 条，共 360 条回答。该读出来自 TOP-D 输入与解码消融中的 `base/local` 条件；模型为 `Qwen3-1.7B-Base/ea980cb0`，使用无官方附加指令的本地题目、`enable_thinking=null` 的原生 assistant 前缀、T0.7/p0.9/cap31744 和停止 ID `[151643,151645]`。已核对原输出、逐条评分与汇总的哈希，并独立重算三个均值；三个 AIME 源 parquet 的哈希也与当时的题目计划一致。[逐条基线评分及来源](data/topd-e57-step0-20261104/baseline.json)保留了复算证据。
 
-[Optimizer update 次数横轴图](figures/topd-e57-updates-20261104/optimizer_updates.png)（[PDF](figures/topd-e57-updates-20261104/optimizer_updates.pdf)）使用同一批评测点，E57 和 TOP-D 均按每 outer16 次更新换算。上排展示完整预算，下排放大 E57 的前 1,600 次更新。E57 每次更新处理 64 条回答，TOP-D 每次处理 256 条；因此，相同 update 次数下，TOP-D 的累计训练回答条次为 E57 的 4 倍，不能将横坐标相同解释为样本预算或计算预算相同。
+E57 冻结配置实际为 `trainer.val_before_train=false`，所以原日志的首次验证在 outer10。独立 Base 是 avg@4、使用另一套采样 seed 与推理执行，E57 训练中为 avg@16；图中用同色空心菱形标示零训练预算的独立参考，不把它写入 E57 原日志，也不与 E57 的首个训练中评测点连线。这里补充的是已有的真实基线测量；avg@4 与 avg@16 的估计精度差异仍保留。
+
+[新增回答数横轴图](figures/topd-e57-step0-20261104/fresh_responses.png)保留两边不同的轨迹覆盖口径；早期放大区内 TOP-D 只有 step0 一个观测点，仅显示该点，不在没有评测的区间补画连线。[矢量成品](figures/topd-e57-step0-20261104/response_presentations.pdf)、[原始论文矢量图](data/topd-e57-budget-20261104/topd-figure5.pdf)、[曲线 CSV](data/topd-e57-budget-20261104/curves.csv)、[来源与哈希](data/topd-e57-budget-20261104/provenance.json)均已保留。
+
+[Optimizer update 次数横轴图](figures/topd-e57-step0-20261104/optimizer_updates.png)（[PDF](figures/topd-e57-step0-20261104/optimizer_updates.pdf)）使用同一批评测点，E57 和 TOP-D 均按每 outer16 次更新换算。上排展示完整预算，下排放大 E57 的前 1,600 次更新。E57 每次更新处理 64 条回答，TOP-D 每次处理 256 条；因此，相同 update 次数下，TOP-D 的累计训练回答条次为 E57 的 4 倍，不能将横坐标相同解释为样本预算或计算预算相同。
 
 生成器为 [plot_topd_e57_budget.py](../../../research/studies/weighted_targets/plot_topd_e57_budget.py)。在仓库根设置 `FIGURE_VIZ_MPL` 为 figure-viz 的 `assets/mpl` 目录后，可从冻结数据重画：
 
 ```bash
 python -m examples.mirroropd.research.studies.weighted_targets.plot_topd_e57_budget \
   --data examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-budget-20261104 \
+  --baseline examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-step0-20261104/baseline.json \
   --out runs/topd-e57-budget-replot
 ```
 
