@@ -439,3 +439,18 @@ def test_source_readout_rejects_a_second_scheduler(runtime, tmp_path):
     with pytest.raises(ValueError, match="owns evaluation schedules"):
         build_readout_callback(config)
     assert not (tmp_path / "duplicate-scheduler").exists()
+
+
+def test_initial_bank_marks_rkl_only_generation(runtime):
+    callback, trainer, _ = runtime
+    callback.on_readout(trainer, 0)
+    submitted = trainer.agent_loop_manager.generate_sequences.call_args.args[0]
+    assert submitted["__rkl_only__"] is True
+
+
+def test_empty_initial_generation_preserves_failure_and_parks(runtime):
+    callback, trainer, _ = runtime
+    trainer.replay_buffer.sample = lambda **kwargs: (KVBatchMeta(keys=[], partition_id="val", tags=[], fields=[]), {})
+    with pytest.raises(ValueError, match="no successful trajectories"):
+        callback.on_readout(trainer, 0)
+    trainer.checkpoint_manager.sleep_replicas.assert_called_once()

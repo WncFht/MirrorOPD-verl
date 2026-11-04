@@ -14,7 +14,7 @@
 | [NativeRKLProbe](../../../examples/mirroropd/benchmarks/profile/native_evaluation.py)       | 原生长前缀／评分窗口的基础设施 probe                    | ProbeOptions        |
 | [ScientificReadout](../../../examples/mirroropd/research/studies/prefix_fusion/callback.py) | 来源/融合研究的专用科学读出                             | ScientificOptions   |
 
-Source/history 在训练内建立初始 source bank；公共 suite 使用预生成 bootstrap。两者共用 [native 轨迹接口](native.py)、[原生评分器](scoring.py)和 [ArtifactStore](artifacts.py)，保留各自科学工作量。
+Source/history 在训练内建立初始 source bank；该生成请求显式携带 `__rkl_only__`，只建立固定回答，不调用任务奖励评分器。标记要求存在 evaluation owner 且 `use_task_rewards=false`；默认验证仍按原生 reward 协议评分。生成结果为空时直接报告 source generation 失败，清理不向 TQ 提交空 keys。公共 suite 使用预生成 bootstrap。两者共用 [native 轨迹接口](native.py)、[原生评分器](scoring.py)和 [ArtifactStore](artifacts.py)，保留各自科学工作量。
 
 ## 生命周期与资源所有权
 

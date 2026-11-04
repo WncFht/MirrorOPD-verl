@@ -184,6 +184,7 @@ class SourceHistoryReadout(ReadoutCallback):
         rows["uid"] = np.array([uuid.uuid4().hex for _ in range(len(dataset))], dtype=object)
         batch = tu.get_tensordict(rows)
         tu.assign_non_tensor_data(batch, "validate", True)
+        tu.assign_non_tensor_data(batch, "__rkl_only__", True)
         tu.assign_non_tensor_data(batch, "global_steps", trainer.global_steps)
         tq.kv_batch_put(
             keys=list(batch["uid"]),
@@ -196,6 +197,8 @@ class SourceHistoryReadout(ReadoutCallback):
             global_steps=trainer.global_steps, partition_id="val", batch_size=len(batch)
         )
         try:
+            if not generated.keys:
+                raise ValueError("Initial source generation returned no successful trajectories")
             self.bank = capture_rows(generated, 0)
             if len(self.bank) != len(dataset):
                 raise ValueError("Incomplete initial student held-out bank")
@@ -208,7 +211,8 @@ class SourceHistoryReadout(ReadoutCallback):
             self.bank_sha256 = file_sha256(bank_store.manifest_path)
         finally:
             try:
-                tq.kv_clear(keys=list(generated.keys), partition_id=generated.partition_id)
+                if generated.keys:
+                    tq.kv_clear(keys=list(generated.keys), partition_id=generated.partition_id)
             finally:
                 trainer.rollout_service.park()
 
