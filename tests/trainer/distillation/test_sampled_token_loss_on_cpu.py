@@ -267,6 +267,26 @@ def full_config():
     )
 
 
+@pytest.mark.parametrize("estimator", ["sampled", "full_vocab"])
+@pytest.mark.parametrize(
+    "aggregate",
+    ["token-mean", "token-sum", "seq-mean-token-mean", "seq-mean-token-sum", "seq-mean-token-sum-norm"],
+)
+def test_entrypoint_mirror_aggregation_matches_estimator_contract(estimator, aggregate):
+    cfg = full_config()
+    loss = cfg.distillation.distillation_loss
+    loss.loss_mode = "mirror"
+    loss.mirror = {"objective": "mdpo", "estimator": estimator, "eta": 1.0, "kappa": 0.0}
+    loss.use_policy_gradient = estimator == "sampled"
+    loss.policy_loss_mode = "token_is" if estimator == "sampled" else "vanilla"
+    OmegaConf.update(cfg, "actor_rollout_ref.actor.loss_agg_mode", aggregate, force_add=True)
+    if estimator == "sampled" and aggregate != "token-mean":
+        with pytest.raises(ValueError, match="sampled mirror requires token-mean"):
+            validate_sampled_token_distillation(cfg)
+    else:
+        validate_sampled_token_distillation(cfg)
+
+
 @pytest.mark.parametrize(
     "path,value",
     [

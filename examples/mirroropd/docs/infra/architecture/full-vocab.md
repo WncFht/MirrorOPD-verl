@@ -68,7 +68,7 @@ distillation:
 | `seq-mean-token-sum`      | token 求和               | 除 B                                                          |
 | `seq-mean-token-sum-norm` | token 求和               | 除 B 和固定 `actor.loss_scale_factor`，后者必须为显式正有限值 |
 
-Trainer 初始化接受这些 Full-vocab 聚合，固定 C 在启动时检查；sampled mirror 仍保留 token-mean 限制。统一评测的完整 batch 与 n=1 合同不限制训练聚合；评测归约独立于训练 loss，见[评估包合同](../../../../../verl/trainer/evaluation/README.md)。
+启动前的[配置校验](../../../../../verl/utils/config.py)和 Trainer 初始化接受这些 Full-vocab 聚合，固定 C 在启动时检查；sampled mirror 仍保留 token-mean 限制。[入口回归](../../../../../tests/trainer/distillation/test_sampled_token_loss_on_cpu.py)分别检查两种 estimator 的五种聚合。统一评测的完整 batch 与 n=1 合同不限制训练聚合；评测归约独立于训练 loss，见[评估包合同](../../../../../verl/trainer/evaluation/README.md)。
 
 Engine 在 optimizer mini-batch 拆成动态 micro-batch 前计算分母。序列模式单独 all-reduce 非空 `loss_mask` 的数量，存为 `full_vocab_num_sequences`；[synthetic padding](../../../../../verl/trainer/ppo/padding_utils.py) 的 mask 为零，因此不会计入 B。LossContext 使用这个实际分母，避免沿用包含 padding 或空回答的声明批量。DP 梯度平均所需的乘数与 η 缩放在最终 loss 统一应用，逐回答长度权重则在 kernel 累积 `dH/dW` 前应用。
 
