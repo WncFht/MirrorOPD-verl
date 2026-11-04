@@ -3,7 +3,8 @@
 """Read completed local W&B runs, audit logger parity, and render diagnostics.
 
 Semantic ledger: E41/E43 identify distinct model pairs, not matched loss arms.
-Color identifies the run, line style the within-batch observation or window.
+Each figure contains one run; validation color identifies the benchmark, and
+line style identifies the within-batch observation or averaging window.
 Position heatmaps encode raw KL with one shared log color scale; bins are relative
 to each response. Time budgets use disjoint recorded training/validation totals.
 GPU phase attribution uses approximate logger-derived windows with 30s margins.
@@ -163,112 +164,276 @@ def summarize_run(tag, decoded, data):
     return dict(rows=rows, updates=updates, train=train, valid=valid, position=position, phases=phases, summary=summary)
 
 
+def attach_base_reference(runs, logs_root):
+    """Reuse a measured initial Base evaluation after checking the frozen protocol."""
+    import hashlib
+
+    root = logs_root / "derived/MirrorOPD-verl"
+    source = root / "run-20261026_223012-f0e44ec7"
+    target = root / "run-20261027_133032-53dd553d"
+    configs = [json.loads((d / "config.json").read_text()) for d in (source, target)]
+    checked = ["data", "actor_rollout_ref.model", "actor_rollout_ref.rollout"]
+    for field in checked:
+        values = []
+        for config in configs:
+            value = config
+            for key in field.split("."):
+                value = value[key]
+            if field.endswith("rollout"):
+                value = {k: v for k, v in value.items() if k not in ("trace", "disable_log_stats")}
+            values.append(value)
+        if values[0] != values[1]:
+            raise ValueError(f"Shared Base evaluation protocol mismatch: {field}")
+    initial = [
+        r for r in read_rows(source / "history.jsonl") if r.get("step/outer") == 0 and "eval/math500/score/mean" in r
+    ]
+    if len(initial) != 1 or any(r["step/outer"] == 0 for r in runs["E41"]["valid"]):
+        raise ValueError("Expected one external Base reference and no E41 in-run initial validation")
+    # Keep the measured row separate: its timestamp/resources belong to E39.
+    runs["E41"]["base_reference"] = initial[0]
+    return {
+        "source_run": "f0e44ec7",
+        "target_run": RUNS["E41"],
+        "meaning": "Shared untrained Base evaluation, not an E41 in-run validation event",
+        "checked_config_sections": checked,
+        "ignored_rollout_fields": ["trace", "disable_log_stats"],
+        "files": {
+            str(p.relative_to(logs_root)): hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in (source / "config.json", source / "history.jsonl", target / "config.json")
+        },
+    }
+
+
+def attach_teacher_references(runs, source):
+    """Use frozen full-set teacher readouts; never fill a missing pair by size."""
+    import hashlib
+
+    evidence = json.loads(source.read_text())["failure"]
+    for tag, run in runs.items():
+        record = evidence[tag]
+        expected = "Qwen3-4B" if tag == "E41" else "Qwen3-4B-Instruct-2507"
+        if record["teacher"] != expected:
+            raise ValueError(f"Teacher reference model mismatch for {tag}")
+        references = record["teacher_full"]
+        if references:
+            if {r["task"] for r in references} != set(BENCHES):
+                raise ValueError("Expected all five full teacher evaluation sets")
+            for row in references:
+                expected_count = 500 if row["task"] == "math500" else 40 if row["task"] == "amc23" else 30
+                if row["samples"] != 4 or row["question_count"] != expected_count:
+                    raise ValueError("Teacher reference sampling or question count mismatch")
+        run["teacher_reference"] = references
+    return {
+        "source": str(source),
+        "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+        "metric": "mean correctness per question across 4 responses (avg@4)",
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "response_cap": 31744,
+        "enable_thinking": False,
+        "E41": "No full same-protocol teacher reference in the frozen evidence",
+        "E43": evidence["E43"]["teacher_full"],
+    }
+
+
 def render(runs, out):
+    """One experiment per figure; validation colors identify benchmarks.
+
+    Semantic ledger: the E41 step-zero point is the independently measured shared
+    Base reference; only accuracy/length/cap use that reference. Resource and time
+    plots retain actual run events. KL line styles encode pre-update observations.
+    Geometry: validation metrics use separate axes, relative-position heatmaps use
+    the same log color scale, and optimizer steps never stand for outer steps.
+    """
     import matplotlib
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    from matplotlib.colors import LogNorm
+    from matplotlib.colors import LinearSegmentedColormap, LogNorm
     from matplotlib.lines import Line2D
 
     fv = load_style()
     fv.apply_rc("paper", fontsize=8)
-    colors = {"E41": fv.HUES["vteal"], "E43": fv.HUES["vcoral"]}
-    out.mkdir(parents=True, exist_ok=True)
+    palette = [fv.HUES[k] for k in ("vteal", "vorange", "vteal", "vviolet", "vorange")]
+    neutral = fv.NEUTRALS["baseline"]
     audits = {}
-
-    def finish(fig, name, caption, ignore=()):
-        fig.text(0.5, 0.018, caption, ha="center", fontsize=7, color=fv.NEUTRALS["baseline"])
-        fig.canvas.draw()
-        audits[name] = fv.audit(fig, ignore=ignore)
-        for ext in ("png", "pdf"):
-            fig.savefig(out / f"{name}.{ext}", dpi=260)
-        plt.close(fig)
-
-    def clean(ax, xlabel="Outer step"):
-        ax.set_xlabel(xlabel)
-        ax.grid(axis="y", alpha=0.45)
-        ax.spines[["top", "right"]].set_visible(False)
-
-    handles = [Line2D([], [], color=c, label=tag) for tag, c in colors.items()]
-    fig, axes = plt.subplots(3, 2, figsize=(5.5, 6.0))
-    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.12, top=0.96, hspace=0.65, wspace=0.35)
-    for ax, bench, title in zip(axes.flat, BENCHES, TITLES, strict=False):
-        for tag, run in runs.items():
-            key = f"eval/{bench}/score/mean"
-            points = [r for r in run["valid"] if key in r]
-            if points:
-                ax.plot([r["step/outer"] for r in points], [100 * r[key] for r in points], "o-", color=colors[tag])
-        ax.set(title=title, ylabel="Accuracy (%)", ylim=(0, 100 if bench in BENCHES[:2] else 45))
-        clean(ax)
-    axes[-1, -1].axis("off")
-    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.05), ncol=2, frameon=False)
-    # Benchmark groups intentionally use different accuracy ranges.
-    finish(fig, "validation", "avg@16; E41 has no step 0 or AIME24/26; no smoothing.", ignore=("facet-ylim-mismatch",))
-
-    fig, axes = plt.subplots(2, 2, figsize=(5.5, 4.8))
-    fig.subplots_adjust(left=0.13, right=0.97, bottom=0.17, top=0.94, hspace=0.55, wspace=0.4)
+    plotted = {}
     for tag, run in runs.items():
-        for row_idx, points in enumerate([run["train"], run["valid"]]):
-            if row_idx == 0:
-                lengths = [r["rollout/response_length/mean"] / 1000 for r in points]
-                caps = [r["rollout/finish_reason/length_count"] / 64 * 100 for r in points]
-            else:
-                common = ["math500", "amc23", "aime25"]
-                counts = [8000, 640, 480]
-                lengths = [
-                    sum(r[f"eval/{b}/generation/response_length/mean"] * n for b, n in zip(common, counts, strict=True))
-                    / 9120
-                    / 1000
-                    for r in points
-                ]
-                caps = [
-                    sum(r[f"eval/{b}/generation/finish_reason/length_count"] for b in common) / 9120 * 100
-                    for r in points
-                ]
-            for col, values in enumerate([lengths, caps]):
-                axes[row_idx, col].plot([r["step/outer"] for r in points], values, color=colors[tag])
-    for i, row in enumerate(axes):
-        for j, ax in enumerate(row):
-            ax.set(
-                title=["Train: cap 7,168", "Validation: common 3 sets"][i],
-                ylabel=["Mean length (k tokens)", "Length-capped (%)"][j],
-                ylim=(0, None),
-            )
-            clean(ax)
-    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.055), ncol=2, frameon=False)
-    # Training and validation have different caps and therefore separate ranges.
-    finish(
-        fig,
-        "length-and-cap",
-        "Validation uses MATH/AMC/AIME25 only; cap rate is not repetition rate.",
-        ignore=("facet-ylim-mismatch",),
-    )
+        directory = out / tag.lower()
+        directory.mkdir(parents=True, exist_ok=True)
+        benches = ["math500", "amc23", "aime25"] if tag == "E41" else BENCHES
+        valid = ([run["base_reference"]] if "base_reference" in run else []) + run["valid"]
+        color = fv.HUES["vteal"]
+        student = "Qwen3-1.7B-Base" if tag == "E41" else "Qwen3-1.7B"
+        teacher = "Qwen3-4B" if tag == "E41" else "Qwen3-4B-Instruct-2507"
+        setting = (
+            f"{tag}: Student {student}  ←  Teacher {teacher}\n"
+            "Thinking OFF (enable_thinking=False); Full-RKL, reuse16, batch64, LR 1e-6"
+        )
+        plotted[tag] = {
+            "run_id": RUNS[tag],
+            "student": student,
+            "teacher": teacher,
+            "enable_thinking": False,
+            "student_accuracy_metric": "avg@16: mean correctness over 16 responses per question",
+            "validation_response_cap": 31744,
+            "training_response_cap": 7168,
+            "teacher_reference": run["teacher_reference"],
+            "validation": [
+                {
+                    "outer": r["step/outer"],
+                    "benchmark": b,
+                    "accuracy": r[f"eval/{b}/score/mean"],
+                    "ci_low": r[f"eval/{b}/score/mean_ci_low"],
+                    "ci_high": r[f"eval/{b}/score/mean_ci_high"],
+                    "mean_length": r[f"eval/{b}/generation/response_length/mean"],
+                    "cap_count": r[f"eval/{b}/generation/finish_reason/length_count"],
+                    "source_run": "f0e44ec7" if tag == "E41" and r["step/outer"] == 0 else RUNS[tag],
+                }
+                for r in valid
+                for b in benches
+            ],
+        }
 
-    fig, axes = plt.subplots(2, 2, figsize=(5.5, 4.8))
-    fig.subplots_adjust(left=0.13, right=0.97, bottom=0.24, top=0.94, hspace=0.55, wspace=0.4)
-    for i, (tag, run) in enumerate(runs.items()):
+        def panels(n=2, rows=1, width=6.5):
+            fig, axes = plt.subplots(rows, n, figsize=(width, 2.85 * rows + 1.10), squeeze=False)
+            fig.subplots_adjust(
+                left=0.11,
+                right=0.97,
+                bottom=0.32 if rows == 1 else 0.22,
+                top=0.71 if rows == 1 else 0.82,
+                wspace=0.50,
+                hspace=0.60,
+            )
+            return fig, axes
+
+        def clean(ax, label="Outer step"):
+            ax.set_xlabel(label)
+            ax.grid(axis="y", alpha=0.25)
+            ax.spines[["top", "right"]].set_visible(False)
+            if label == "Outer step":
+                ax.set(xlim=(-3, 103), xticks=[0, 50, 100])
+
+        def finish(fig, name, caption, handles=None, ignore=(), tag=tag, directory=directory, setting=setting):
+            fig.text(0.5, 0.98, setting, ha="center", va="top", fontsize="medium")
+            if handles:
+                fig.legend(
+                    handles=handles,
+                    loc="upper center",
+                    bbox_to_anchor=(0.53, 0.86 if fig.get_figheight() < 5 else 0.91),
+                    ncol=min(3, len(handles)),
+                    frameon=False,
+                )
+            fig.text(0.5, 0.025, caption, ha="center", fontsize="medium", color=neutral)
+            fig.canvas.draw()
+            issues = fv.audit(fig, ignore=ignore)
+            audits[f"{tag}/{name}"] = issues
+            if any(fv.problem_severity(p) == "error" for p in issues):
+                raise RuntimeError(f"{tag}/{name}: {issues}")
+            for ext in ("png", "pdf", "svg"):
+                fig.savefig(directory / f"{name}.{ext}", dpi=240)
+            plt.close(fig)
+
+        # E39-style validation: dataset-colored accuracy, length, and cap panels.
+        # Five datasets use two rows so that each panel retains at most 3 series.
+        groups = [benches] if tag == "E41" else [BENCHES[:2], BENCHES[2:]]
+        fig, axes = panels(3, rows=len(groups), width=7.3)
+        handles = []
+        for row_idx, group in enumerate(groups):
+            for b in group:
+                i = BENCHES.index(b)
+                points = [r for r in plotted[tag]["validation"] if r["benchmark"] == b]
+                x = [r["outer"] for r in points]
+                count = 8000 if b == "math500" else 640 if b == "amc23" else 480
+                for ax, field, factor in zip(
+                    axes[row_idx], ["accuracy", "mean_length", "cap_count"], [100, 0.001, 100 / count], strict=True
+                ):
+                    ax.plot(
+                        x,
+                        [r[field] * factor for r in points],
+                        marker=["o", "s", "^", "D", "v"][i],
+                        color=palette[i],
+                        markersize=3,
+                        label=TITLES[i],
+                    )
+                axes[row_idx, 0].fill_between(
+                    x,
+                    [100 * r["ci_low"] for r in points],
+                    [100 * r["ci_high"] for r in points],
+                    color=palette[i],
+                    alpha=0.12,
+                )
+                reference = next((r for r in run["teacher_reference"] if r["task"] == b), None)
+                if reference:
+                    axes[row_idx, 0].axhline(100 * reference["accuracy"], color=palette[i], linestyle="--", linewidth=1)
+                if tag == "E41":
+                    for ax, field, factor in zip(
+                        axes[row_idx], ["accuracy", "mean_length", "cap_count"], [100, 0.001, 100 / count], strict=True
+                    ):
+                        ax.plot([0], [points[0][field] * factor], marker="D", color=palette[i], markersize=4)
+            for ax, label in zip(
+                axes[row_idx],
+                ["Accuracy: avg@16 (%)", "Mean length (k tokens)", "Length-capped (%)\ncap = 31,744 tokens"],
+                strict=True,
+            ):
+                ax.set_ylabel(label)
+                ax.margins(y=0.12)
+                ax.set_ylim(bottom=-3 if label != "Mean length (k tokens)" else -0.8)
+                clean(ax)
+            handles.extend(axes[row_idx, 0].get_legend_handles_labels()[0])
+        caption = "Student avg@16 = mean correctness of 16 responses/question; bands: 95% question-bootstrap CI."
+        if tag == "E41":
+            caption += (
+                "\nTeacher full-set reference unavailable; step 0 diamonds: shared Base evaluation from E39."
+                "\nEvaluation: thinking OFF; T=0.7, top-p=0.9; response cap=31,744 tokens."
+            )
+        else:
+            handles.append(Line2D([], [], color=neutral, linestyle="--", label="Teacher avg@4 reference"))
+            caption += (
+                "\nTeacher avg@4: MATH 94.70%, AMC 95.63%; AIME24/25/26 63.33% / 41.67% / 48.33%."
+                "\nIndependent teacher: 4 responses/question; both T=0.7, top-p=0.9, cap=31,744; thinking OFF."
+            )
+        finish(fig, "validation", caption, handles, ignore=("facet-ylim-mismatch",))
+
+        fig, axes = panels()
+        for ax, key, label, scale in zip(
+            axes.flat,
+            ["rollout/response_length/mean", "rollout/finish_reason/length_count"],
+            ["Train length (k tokens)", "Train length-capped (%)\ncap = 7,168 tokens"],
+            [0.001, 100 / 64],
+            strict=True,
+        ):
+            ax.plot([r["step/outer"] for r in run["train"]], [r[key] * scale for r in run["train"]], color=color)
+            ax.set(ylabel=label, ylim=(0, None))
+            clean(ax)
+        finish(fig, "training-behavior", "Training cap 7,168; changing DAPO batches; cap rate is not repetition rate.")
+
+        styles = [
+            Line2D([], [], color=color, linestyle=s, label=t)
+            for s, t in [("--", "Before update 1"), ("-", "Before update 16")]
+        ]
+        fig, axes = panels()
         for idx, style in [(1, "--"), (16, "-")]:
             points = [r for r in run["updates"] if r["rollout/data_reuse/update_index"] == idx]
-            for j, key in enumerate(["distill/full_kl", "optim/actor/loss"]):
-                axes[i, j].plot([r["step/outer"] for r in points], [r[key] for r in points], style, color=colors[tag])
-        for j, ax in enumerate(axes[i]):
-            ax.set(
-                title=f"{tag}: " + ["Raw vocabulary KL", "Optimized objective"][j],
-                ylabel="Nats / token",
-                ylim=(0, 0.52),
-            )
-            clean(ax)
-    styles = [
-        Line2D([], [], color=fv.NEUTRALS["vink"], linestyle=s, label=t)
-        for s, t in [("--", "Before update 1"), ("-", "Before update 16")]
-    ]
-    fig.legend(handles=handles + styles, loc="lower center", bbox_to_anchor=(0.5, 0.05), ncol=2, frameon=False)
-    finish(fig, "kl-learning", "Each point is pre-update; new outer steps use new trajectories.")
+            for ax, key, title in zip(
+                axes.flat,
+                ["distill/full_kl", "optim/actor/loss"],
+                ["Raw vocabulary KL", "Optimized objective"],
+                strict=True,
+            ):
+                ax.plot([r["step/outer"] for r in points], [r[key] for r in points], style, color=color)
+                ax.set(title=title, ylabel="Nats / token", ylim=(0, 0.52))
+                clean(ax)
+        finish(
+            fig,
+            "kl-learning",
+            "New outer steps use new trajectories; raw KL and actual loss are recorded separately.",
+            styles,
+        )
 
-    fig, axes = plt.subplots(1, 2, figsize=(5.5, 3.1))
-    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.37, top=0.88, wspace=0.35)
-    for ax, (tag, run) in zip(axes, runs.items(), strict=True):
+        fig, axes = panels(1, width=5.5)
+        ax = axes[0, 0]
+        windows = []
         for start, end, style in [(1, 5, "--"), (96, 100, "-")]:
             means = [
                 st.mean(
@@ -278,28 +443,21 @@ def render(runs, out):
                 )
                 for idx in range(1, 17)
             ]
-            ax.plot(range(1, 17), means, style, color=colors[tag])
-        ax.set(title=tag, ylabel="Mean objective (nats/token)", xticks=[1, 4, 8, 12, 16], ylim=(0, 0.36))
+            (line,) = ax.plot(range(1, 17), means, style, color=color, label=f"Outer {start}–{end}")
+            windows.append(line)
+        ax.set(ylabel="Mean objective (nats/token)", xticks=[1, 4, 8, 12, 16], ylim=(0, 0.36))
         clean(ax, "Reuse observation index")
-    windows = [
-        Line2D([], [], color=fv.NEUTRALS["vink"], linestyle=s, label=t)
-        for s, t in [("--", "Outer 1–5"), ("-", "Outer 96–100")]
-    ]
-    fig.legend(handles=handles + windows, loc="lower center", bbox_to_anchor=(0.5, 0.055), ncol=2, frameon=False)
-    finish(fig, "reuse", "Five batches equally weighted; 16 observations span 15 applied updates.")
+        finish(fig, "reuse", "Five batches equally weighted; 16 observations span 15 applied updates.", windows)
 
-    fig, axes = plt.subplots(2, 2, figsize=(5.5, 4.5))
-    fig.subplots_adjust(left=0.12, right=0.83, bottom=0.14, top=0.93, hspace=0.5, wspace=0.25)
-    norm = LogNorm(vmin=0.03, vmax=1.5)
-    from matplotlib.colors import LinearSegmentedColormap
-
-    cmap = LinearSegmentedColormap.from_list("kl", [fv.NEUTRALS["paper"], fv.HUES["vteal"]])
-    for i, (tag, run) in enumerate(runs.items()):
-        for j, idx in enumerate([1, 16]):
+        fig, axes = panels()
+        fig.subplots_adjust(right=0.82)
+        norm = LogNorm(vmin=0.03, vmax=1.5)
+        cmap = LinearSegmentedColormap.from_list("kl", [fv.NEUTRALS["paper"], color])
+        for ax, idx in zip(axes.flat, [1, 16], strict=True):
             points = [r for r in run["updates"] if r["rollout/data_reuse/update_index"] == idx]
             values = np.asarray([[r[f"distill/full_kl_position/{b}/mean"] for r in points] for b in BINS])
             assert values.min() >= norm.vmin and values.max() <= norm.vmax
-            im = axes[i, j].imshow(
+            im = ax.imshow(
                 values,
                 origin="lower",
                 aspect="auto",
@@ -308,79 +466,81 @@ def render(runs, out):
                 cmap=cmap,
                 interpolation="nearest",
             )
-            axes[i, j].set(
-                title=f"{tag}: before update {idx}",
-                xlabel="Outer step",
-                ylabel="Relative position (%)",
-                yticks=[0, 50, 100],
+            ax.set(
+                title=f"Before update {idx}", xlabel="Outer step", ylabel="Relative position (%)", yticks=[0, 50, 100]
             )
-    cax = fig.add_axes([0.87, 0.23, 0.025, 0.54])
-    fig.colorbar(im, cax=cax, label="Raw KL (log scale)")
-    finish(fig, "position-kl", "Same color scale; token-weighted bins use each response's actual length.")
+        cax = fig.add_axes([0.86, 0.30, 0.025, 0.39])
+        fig.colorbar(im, cax=cax, label="Raw KL (log scale)")
+        finish(fig, "position-kl", "Token-weighted raw KL bins use each response's actual length.")
 
-    fig, axes = plt.subplots(1, 2, figsize=(5.5, 3.4))
-    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.34, top=0.94, wspace=0.4)
-    phases = [
-        ("train_hours", "Training", "vteal"),
-        ("validation_hours", "Validation", "vorange"),
-        ("other_hours", "Setup / other", "vgray"),
-    ]
-    bottom = np.zeros(2)
-    for key, label, color in phases:
-        values = [run["summary"][key] for run in runs.values()]
-        axes[0].bar(list(runs), values, bottom=bottom, label=label, color=fv.HUES[color])
-        bottom += values
-    axes[0].set(ylabel="Total wall time (hours)")
-    clean(axes[0], "Run")
-    for tag, run in runs.items():
-        rows = run["phases"]
-        axes[1].plot([r["outer"] for r in rows], [r["seconds"] / 60 for r in rows], "o-", color=colors[tag], label=tag)
-    axes[1].set(ylabel="Validation time (minutes)", ylim=(0, None))
-    clean(axes[1])
-    fig.legend(
-        *axes[0].get_legend_handles_labels(), loc="lower center", bbox_to_anchor=(0.5, 0.13), ncol=3, frameon=False
-    )
-    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.06), ncol=2, frameon=False)
-    finish(fig, "time-budget", "Totals include recorded validation; phase colors apply only to the bars.")
+        fig, axes = panels()
+        phases = [
+            ("train_hours", "Training", "vteal"),
+            ("validation_hours", "Validation", "vorange"),
+            ("other_hours", "Setup / other", "vgray"),
+        ]
+        bottom = 0
+        for key, label, hue in phases:
+            value = run["summary"][key]
+            axes[0, 0].bar([tag], [value], bottom=bottom, label=label, color=fv.HUES[hue])
+            bottom += value
+        axes[0, 0].set_ylabel("Total wall time (hours)")
+        clean(axes[0, 0], "Run")
+        points = run["phases"]
+        axes[0, 1].plot([r["outer"] for r in points], [r["seconds"] / 60 for r in points], "o-", color=color)
+        axes[0, 1].set(
+            ylabel="Validation time (minutes)",
+            ylim=(-2, max(r["seconds"] / 60 for r in points) * 1.12),
+        )
+        clean(axes[0, 1])
+        finish(
+            fig,
+            "time-budget",
+            (
+                "Actual E41 events only; shared Base reference adds no wall time."
+                if tag == "E41"
+                else "Actual E43 events, including its own initial validation."
+            ),
+            axes[0, 0].get_legend_handles_labels()[0],
+        )
 
-    fig, axes = plt.subplots(2, 2, figsize=(5.5, 4.8))
-    fig.subplots_adjust(left=0.14, right=0.97, bottom=0.17, top=0.94, hspace=0.55, wspace=0.4)
-    fields = [
-        ("gpu_util_mean", "Mean GPU utilization (%)"),
-        ("gpu_memory_peak_gib", "Peak GPU memory (GiB)"),
-        ("kv_p95_pct", "Per-engine KV p95 (%)"),
-        ("preemptions_observed", "Observed preemptions"),
-    ]
-    for ax, (key, title) in zip(axes.flat, fields, strict=True):
-        for tag, run in runs.items():
-            rows = [r for r in run["phases"] if r[key] is not None]
-            ax.plot([r["outer"] for r in rows], [r[key] for r in rows], "o-", color=colors[tag])
-        limits = {
-            "gpu_util_mean": (-5, 105),
-            "gpu_memory_peak_gib": (0, 80),
-            "kv_p95_pct": (-5, 105),
-            "preemptions_observed": (-350, 8500),
-        }
-        ax.set(ylabel=title, ylim=limits[key])
-        clean(ax)
-    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.055), ncol=2, frameon=False)
-    finish(fig, "validation-resources", "W&B GPU samples + vLLM counters; approximate windows, no missing-value fill.")
-    fig, axes = plt.subplots(1, 2, figsize=(5.5, 2.8))
-    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.29, top=0.88, wspace=0.35)
-    for ax, (tag, run) in zip(axes, runs.items(), strict=True):
+        fig, axes = panels(2, rows=2)
+        fields = [
+            ("gpu_util_mean", "Mean GPU utilization (%)", (-5, 105)),
+            ("gpu_memory_peak_gib", "Peak GPU memory (GiB)", (0, 80)),
+            ("kv_p95_pct", "Per-engine KV p95 (%)", (-5, 105)),
+            ("preemptions_observed", "Observed preemptions", (-350, 8500)),
+        ]
+        for ax, (key, label, limits) in zip(axes.flat, fields, strict=True):
+            points = [r for r in run["phases"] if r[key] is not None]
+            ax.plot([r["outer"] for r in points], [r[key] for r in points], "o-", color=color)
+            ax.set(ylabel=label, ylim=limits)
+            clean(ax)
+        finish(
+            fig,
+            "validation-resources",
+            "W&B GPU samples + vLLM counters; approximate windows; missing values stay missing.",
+        )
+
+        fig, axes = panels(1, width=5.5)
+        ax = axes[0, 0]
         ax.plot(
             [r["step/optimizer"] for r in run["updates"]],
             [r["optim/actor/grad_norm_preclip"] for r in run["updates"]],
-            color=colors[tag],
+            color=color,
             linewidth=0.6,
         )
-        ax.axhline(1, linestyle="--", color=fv.NEUTRALS["baseline"])
-        ax.set(title=tag, ylabel="Preclip gradient norm", yscale="log", ylim=(0.1, 10))
+        ax.axhline(1, linestyle="--", color=neutral)
+        ax.set(ylabel="Preclip gradient norm", yscale="log", ylim=(0.1, 10))
         clean(ax, "Optimizer update")
-    threshold = Line2D([], [], linestyle="--", color=fv.NEUTRALS["baseline"], label="Clip threshold = 1")
-    fig.legend(handles=handles + [threshold], loc="lower center", bbox_to_anchor=(0.5, 0.065), ncol=3, frameon=False)
-    finish(fig, "gradient-health", "All 1,600 updates per run; clipping exceedance is not a skipped update.")
+        finish(
+            fig,
+            "gradient-health",
+            "All 1,600 updates applied; clipping exceedance is not a skipped update.",
+            [Line2D([], [], color=neutral, linestyle="--", label="Clip threshold = 1")],
+        )
     dump(out / "figure-audit.json", audits)
+    dump(out / "validation-inputs.json", plotted)
     return audits
 
 
@@ -389,6 +549,12 @@ def main():
     parser.add_argument("--logs-root", type=Path, required=True)
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument(
+        "--teacher-reference",
+        type=Path,
+        default=Path(__file__).resolve().parents[5]
+        / "examples/mirroropd/docs/progress/data/20261101-review/followup-data.json",
+    )
     args = parser.parse_args()
     runs = {}
     for tag, rid in RUNS.items():
@@ -399,6 +565,11 @@ def main():
     write_csv(args.data / "position-kl-detail.csv", [r for run in runs.values() for r in run["position"]])
     write_csv(args.data / "validation-resources.csv", [r for run in runs.values() for r in run["phases"]])
     dump(args.data / "wandb-diagnostics.json", {tag: run["summary"] for tag, run in runs.items()})
+    provenance = attach_base_reference(runs, args.logs_root)
+    args.out.mkdir(parents=True, exist_ok=True)
+    dump(args.out / "base-reference-provenance.json", provenance)
+    teacher_provenance = attach_teacher_references(runs, args.teacher_reference)
+    dump(args.out / "teacher-reference-provenance.json", teacher_provenance)
     audits = render(runs, args.out)
     print(json.dumps({tag: run["summary"] for tag, run in runs.items()}, indent=2))
     print("Figure audit:", json.dumps(audits))

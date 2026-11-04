@@ -1,0 +1,76 @@
+{
+  "experiment": "E39",
+  "run_id": "f0e44ec7",
+  "student": "Qwen3-1.7B-Base",
+  "teacher": "Qwen3-8B",
+  "enable_thinking": false,
+  "student_metric": "avg@16: mean correctness per question over 16 responses",
+  "teacher_full_set": null,
+  "teacher_subset": {
+    "scope": "Historical 8 questions per dataset, teacher n=4; current student step200 n=16 on exactly matched questions; not full teacher baseline",
+    "rows": [
+      {
+        "dataset": "MATH-500",
+        "questions": 8,
+        "teacher_n": 4,
+        "student_n": 16,
+        "teacher_acc": 0.875,
+        "student_acc": 0.703125,
+        "teacher_length": 1511.46875,
+        "student_length": 2983.9375
+      },
+      {
+        "dataset": "AMC23",
+        "questions": 8,
+        "teacher_n": 4,
+        "student_n": 16,
+        "teacher_acc": 0.875,
+        "student_acc": 0.5390625,
+        "teacher_length": 1192.28125,
+        "student_length": 3259.21875
+      },
+      {
+        "dataset": "AIME25",
+        "questions": 8,
+        "teacher_n": 4,
+        "student_n": 16,
+        "teacher_acc": 0.28125,
+        "student_acc": 0.0625,
+        "teacher_length": 5224.6875,
+        "student_length": 8575.9296875
+      }
+    ]
+  },
+  "validation_response_cap": 31744,
+  "training_response_cap": 7168,
+  "sources": {
+    "validation.csv": {
+      "path": "../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/validation.csv",
+      "sha256": "f700a6834da3bfcd5a61d38d38f39fb2f1ef2a7a21656b96c14ff6ee54ce21ff"
+    },
+    "training.csv": {
+      "path": "../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/training.csv",
+      "sha256": "9dabeac4614e6ef0e42eec810c5cdbab9b3ade090b483eb2214ff6fcbb68cd0e"
+    },
+    "position-kl.csv": {
+      "path": "../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/position-kl.csv",
+      "sha256": "38fbf778e6b017233bf113921205cfc39ce3ccc41fabdb18bc4e53063b4fd15b"
+    },
+    "sample-panel-summary.csv": {
+      "path": "../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/sample-panel-summary.csv",
+      "sha256": "7cb0653fd434299877514f68612bf5499eb6c9e4ba080a428010475497e065e7"
+    },
+    "resources.json": {
+      "path": "../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/resources.json",
+      "sha256": "7be62b022b0b90bf8fd6de7a1445508ef28d9d6c6d7df32102184463751db93e"
+    },
+    "teacher-subset-reference.json": {
+      "path": "../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/teacher-subset-reference.json",
+      "sha256": "ca23cb041f12216fde748c74b045c9c0e982b647f28594a69068ab6e080ccd86"
+    },
+    "config.json": {
+      "path": "../wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/config.json",
+      "sha256": "cb6d08eed1f341f1837dc30d5ee5224143d3f71da58aa2c6b4f3d8816d7fa937"
+    }
+  }
+}

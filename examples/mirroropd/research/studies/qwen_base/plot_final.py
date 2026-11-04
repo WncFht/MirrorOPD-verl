@@ -6,6 +6,8 @@
 Semantic ledger: validation series identify datasets, training series identify
 first/last pre-update observations, position series identify training windows.
 Repetition panels use one fixed text sample per question, not all 16 samples.
+Teacher/student comparison uses only the same eight questions per benchmark;
+subset teacher results never become full-validation horizontal reference lines.
 Geometry: equal-width panels; outer-step axes have common 0..200 support.
 Position curves use count-weighted relative-position bins, never raw sums.
 """
@@ -14,6 +16,7 @@ Position curves use count-weighted relative-position bins, never raw sums.
 def main():
     import argparse
     import csv
+    import hashlib
     import json
     from pathlib import Path
 
@@ -32,50 +35,52 @@ def main():
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt  # noqa: E402, I001 - runtime source/style path is configured before import
 
-    fv.apply_rc("paper")
-    plt.rcParams.update(
-        {
-            "font.size": 7.5,
-            "axes.labelsize": 7.5,
-            "xtick.labelsize": 6.5,
-            "ytick.labelsize": 6.5,
-            "legend.fontsize": 7,
-            "lines.linewidth": 1.1,
-            "lines.markersize": 2.3,
-        }
-    )
+    fv.apply_rc("paper", fontsize=8)
     args.out.mkdir(parents=True, exist_ok=True)
-    colors = fv.series_colors("paper", 3)
+    colors = [fv.HUES[k] for k in ("vteal", "vorange", "vviolet")]
 
     def csvrows(name):
         with (args.data / name).open() as f:
             return list(csv.DictReader(f))
 
     def figure(n=3):
-        fig, axes = plt.subplots(1, n, figsize=(5.5, 2.35))
+        fig, axes = plt.subplots(1, n, figsize=(7.3, 3.95))
         axes = np.atleast_1d(axes)
-        fig.subplots_adjust(left=0.085, right=0.985, bottom=0.27, top=0.80, wspace=0.45)
+        fig.subplots_adjust(left=0.10, right=0.98, bottom=0.31, top=0.70, wspace=0.50)
         return fig, axes
 
     def outer_axis(ax, label, ylim=None):
-        ax.set(xlabel="Outer step", ylabel=label, xlim=(-5, 205))
+        ax.set(xlabel="Outer step", ylabel=label, xlim=(-10, 210))
         ax.set_xticks([0, 100, 200])
         ax.grid(axis="y", alpha=0.2)
         if ylim is not None:
             ax.set_ylim(*ylim)
 
-    def finish(fig, axes, name, caption, legend=True):
+    audits = {}
+
+    def finish(fig, axes, name, caption, legend=True, ignore=()):
+        fig.text(
+            0.5,
+            0.98,
+            "E39: Student Qwen3-1.7B-Base  ←  Teacher Qwen3-8B\n"
+            "Thinking OFF (enable_thinking=False); Full-RKL, reuse16, batch64, LR 1e-6",
+            ha="center",
+            va="top",
+        )
         if legend:
             fig.legend(
                 *axes[0].get_legend_handles_labels(),
                 loc="upper center",
-                bbox_to_anchor=(0.52, 0.99),
+                bbox_to_anchor=(0.52, 0.85),
                 ncol=3,
                 frameon=False,
             )
-        fig.text(0.5, 0.04, caption, ha="center", fontsize=6.1, color=fv.NEUTRALS["baseline"])
+        fig.text(0.5, 0.04, caption, ha="center", fontsize="medium", color=fv.NEUTRALS["baseline"])
         fig.canvas.draw()
-        problems = fv.audit(fig)
+        problems = fv.audit(fig, ignore=ignore)
+        audits[name] = problems
+        if any(fv.problem_severity(p) == "error" for p in problems):
+            raise RuntimeError(f"{name}: {problems}")
         (args.out / (name + ".audit.txt")).write_text("\n".join(map(str, problems)) + "\n")
         for ext in ["png", "pdf", "svg"]:
             fig.savefig(args.out / (name + "." + ext), dpi=260)
@@ -101,12 +106,19 @@ def main():
         )
     for ax, label, ylim in zip(
         axes,
-        ["Accuracy (%)", "Mean length (k tokens)", "Length-cap hits (%)"],
-        [(-2, 100), (0, 16), (0, 50)],
+        ["Accuracy: avg@16 (%)", "Mean length (k tokens)", "Length-capped (%)\ncap = 31,744 tokens"],
+        [(-4, 100), (-0.5, 16), (-1, 50)],
         strict=False,
     ):
         outer_axis(ax, label, ylim)
-    finish(fig, axes, "final-validation", "Full validation: 570 questions x 16; bands: 95% question-bootstrap CI")
+    finish(
+        fig,
+        axes,
+        "final-validation",
+        "Student avg@16 = mean correctness of 16 responses/question; bands: 95% question-bootstrap CI.\n"
+        "Teacher full-set reference unavailable; matched 8-question subset shown separately.\n"
+        "Evaluation: thinking OFF; T=0.7, top-p=0.9; response cap=31,744 tokens.",
+    )
 
     train = csvrows("training.csv")
     x = [int(r["outer"]) for r in train]
@@ -125,7 +137,7 @@ def main():
     for ax, key, label, scale in zip(
         axes,
         ["mean_length", "cap_fraction", "train_score"],
-        ["Train length (k tokens)", "Train length-cap hits (%)", "Training task score (%)"],
+        ["Train length (k tokens)", "Train length-capped (%)\ncap = 7,168 tokens", "Training accuracy: avg@1 (%)"],
         [0.001, 100, 100],
         strict=False,
     ):
@@ -136,7 +148,8 @@ def main():
         fig,
         axes,
         "final-training-behavior",
-        "DAPO batches change each step; task score is diagnostic and not part of the loss",
+        "Training cap=7,168 tokens; one response/question (avg@1).\n"
+        "DAPO batches change each step; correctness is diagnostic, outside the loss.",
         legend=False,
     )
 
@@ -161,7 +174,7 @@ def main():
         )
         ax.set_xticks([0, 50, 100])
         ax.grid(axis="y", alpha=0.2)
-        ax.set_title(title, fontsize=7.5)
+        ax.set_title(title)
     finish(
         fig,
         axes,
@@ -208,6 +221,75 @@ def main():
         "final-resources",
         "Validation windows only; GPU samples every ~30 s; utilization includes tail waiting",
         legend=False,
+    )
+
+    reference = json.loads((args.data / "teacher-subset-reference.json").read_text())
+    rows = reference["rows"]
+    assert [r["dataset"] for r in rows] == ["MATH-500", "AMC23", "AIME25"]
+    assert all(r["questions"] == 8 and r["teacher_n"] == 4 and r["student_n"] == 16 for r in rows)
+    fig, axes = figure(2)
+    x = np.arange(len(rows))
+    for field, color, label, shift in [
+        ("student", colors[0], "Student outer200 avg@16", -0.18),
+        ("teacher", colors[1], "Teacher avg@4 (8 questions/set)", 0.18),
+    ]:
+        for ax, suffix, scale in zip(axes, ["acc", "length"], [100, 0.001], strict=True):
+            values = [r[f"{field}_{suffix}"] * scale for r in rows]
+            bars = ax.bar(x + shift, values, width=0.34, color=color, label=label)
+            ax.bar_label(bars, labels=[f"{v:.2f}" for v in values], padding=3)
+    for ax, ylabel, limit in zip(
+        axes, ["Accuracy: mean correctness (%)", "Mean length (k tokens)"], [105, 11], strict=True
+    ):
+        ax.set(
+            xticks=x,
+            xticklabels=[r["dataset"] for r in rows],
+            ylabel=ylabel,
+            ylim=(0, limit),
+            xlabel="Exactly matched question subsets",
+        )
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.grid(axis="y", alpha=0.2)
+    finish(
+        fig,
+        axes,
+        "final-teacher-subset",
+        "Matched 8 questions/set; independent teacher avg@4 vs final student avg@16.\n"
+        "Both thinking OFF; T=0.7, top-p=0.9; response cap=31,744 tokens; not a full-set baseline.",
+    )
+    sources = [
+        "validation.csv",
+        "training.csv",
+        "position-kl.csv",
+        "sample-panel-summary.csv",
+        "resources.json",
+        "teacher-subset-reference.json",
+        "config.json",
+    ]
+    (args.out / "figure-audit.json").write_text(json.dumps(audits, indent=2) + "\n")
+    (args.out / "figure-provenance.json").write_text(
+        json.dumps(
+            {
+                "experiment": "E39",
+                "run_id": "f0e44ec7",
+                "student": "Qwen3-1.7B-Base",
+                "teacher": "Qwen3-8B",
+                "enable_thinking": False,
+                "student_metric": "avg@16: mean correctness per question over 16 responses",
+                "teacher_full_set": None,
+                "teacher_subset": reference,
+                "validation_response_cap": 31744,
+                "training_response_cap": 7168,
+                "sources": {
+                    name: {
+                        "path": str(args.data / name),
+                        "sha256": hashlib.sha256((args.data / name).read_bytes()).hexdigest(),
+                    }
+                    for name in sources
+                },
+            },
+            indent=2,
+        )
+        + "\n"
     )
 
 
