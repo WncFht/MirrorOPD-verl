@@ -44,7 +44,7 @@ def objective(inputs, settings, layout, backend, chunk, *, control=False):
     kwargs = dict(spec=settings, reduction=layout, backend=backend, token_chunk=chunk)
     if control:
         result = trajectory_objective_result(
-            hs, ws, ht, wt, hq=None, wq=None, vocab_chunk=8192, termination_token_ids=None, distribution=None, **kwargs
+            hs, ws, ht, wt, hq=None, wq=None, vocab_chunk=8192, termination_token_ids=[], distribution=None, **kwargs
         )
     else:
         result = full_vocab_objective_result(hs, ws, ht, wt, **kwargs)
