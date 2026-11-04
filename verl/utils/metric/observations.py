@@ -195,17 +195,24 @@ class Observation(Metric):
 
 
 def observations_to_cpu(metrics):
-    """Move all scalar states together before the existing object collective."""
+    """Batch scalar transfers per source device before the object collective.
+
+    Host counters and CUDA loss statistics can coexist in one worker output.
+    Packing each device separately avoids copying host states onto the GPU.
+    """
     observations = [value for value in metrics.values() if isinstance(value, Observation)]
-    if not observations:
-        return
-    packed = torch.cat([value.state for value in observations]).cpu()
-    offset = 0
+    by_device = {}
+    for value in observations:
+        by_device.setdefault(value.state.device, []).append(value)
+    for values in by_device.values():
+        packed = torch.cat([value.state for value in values]).cpu()
+        offset = 0
+        for value in values:
+            size = value.state.numel()
+            value.state = packed[offset : offset + size]
+            offset += size
     sample_cache = {}
     for value in observations:
-        size = value.state.numel()
-        value.state = packed[offset : offset + size]
-        offset += size
         if value.samples:
             key = tuple((str(v.device), v.data_ptr(), v.numel()) for v in value.samples)
             if key not in sample_cache:
