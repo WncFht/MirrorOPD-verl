@@ -64,6 +64,8 @@
 # E72-E73          16     20     320       1e-6    -1/-1      yes
 # E74-E77          32     50     1600      1e-6    -1/-1      yes
 # E78-E80          16     100    1600      1e-6    -1/-1      yes
+# E81              16     25     400       1e-6    5/-1       no
+# E82              16     100    1600      1e-6    5/-1       no
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
 # 编号别名：E21=E15; E22=E13。
@@ -110,6 +112,8 @@
 # STAGE_CHAIN_QUESTIONS指定prepared题目，STAGE_CHAIN_BOOTSTRAP指定独立银行；详见阶段链选型及接入验收。
 #
 # E78–E80：Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507；current/initial/teacher。batch=mini-batch128，100 outer/reuse16，1600更新；默认2卡TP1，可显式配置1/2/4/8卡。原生bench0/50/100，MATH500 n4、AMC23 n16、AIME24/25/26 n32；source128和双银行各128，每10轮RKL。
+#
+# E81/E82：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；MDPO kappa1/eta0.1。4卡shared_sync、batch=mini-batch256、n1/reuse16；A=25 outer/400更新，B=100 outer/1600更新。无初始验证，每5 outer及终点验证；不保存checkpoint。每引擎并发128/TP1、显存0.8；precompute_fused/chunk512、bf16；验证avg16/31744、关闭重复提前停止以保留E57自然终止协议。
 #
 # E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。
 # END GENERATED EXPERIMENT OVERVIEW
