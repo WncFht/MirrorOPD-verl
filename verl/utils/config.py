@@ -132,8 +132,11 @@ def validate_sampled_token_distillation(config, *, use_reference_policy=False, u
         from verl.workers.config import DistillationLossConfig
 
         loss = omega_conf_to_dataclass(config.distillation.distillation_loss, DistillationLossConfig)
-        if OmegaConf.select(config, "actor_rollout_ref.actor.loss_agg_mode", default="token-mean") != "token-mean":
-            raise ValueError("mirror requires token-mean aggregation")
+        if (
+            loss.loss_settings.payload_kind != "hidden"
+            and OmegaConf.select(config, "actor_rollout_ref.actor.loss_agg_mode", default="token-mean") != "token-mean"
+        ):
+            raise ValueError("sampled mirror requires token-mean aggregation")
         for key in (
             "algorithm.rollout_correction.bypass_mode",
             "algorithm.rollout_correction.rollout_is",
