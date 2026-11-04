@@ -8,11 +8,12 @@ LR is zero, but AdamW, clipping, backward and model/optimizer transfers execute.
 """
 
 import argparse
+import copy
 import hashlib
 import inspect
 import json
 import time
-from functools import partial
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -21,9 +22,11 @@ import torch.distributed as dist
 from tensordict import TensorDict
 
 from examples.mirroropd.benchmarks.profile.benchmark_termination_training import parameters_hash
-from examples.mirroropd.benchmarks.profile.pipeline import loss_fn, worker
+from examples.mirroropd.benchmarks.profile.pipeline import worker
+from verl.trainer.distillation.losses import distillation_loss
 from verl.trainer.distillation.profiling import full_kl_range
 from verl.utils import tensordict_utils as tu
+from verl.utils.checkpoint.checkpoint_manager import BaseCheckpointManager
 from verl.utils.distributed import initialize_global_process_group
 from verl.utils.seqlen_balancing import get_seqlen_balanced_partitions
 from verl.workers.config.distillation import DistillationConfig, DistillationLossConfig, FullVocabConfig
@@ -80,7 +83,10 @@ def run(args):
         loss_mode="mirror",
         mirror=dict(objective="mdpo", kappa=1, eta=0.1, diagnostics=args.diagnostics),
         full_vocab=FullVocabConfig(
-            backend="precompute_fused", token_chunk_size=args.chunk, termination_token_ids=[151643, 151645]
+            backend=args.backend,
+            token_chunk_size=args.chunk,
+            termination_token_ids=[151643, 151645],
+            future={"mode": args.future_mode, "gamma": args.gamma},
         ),
         use_policy_gradient=False,
         use_task_rewards=False,
@@ -89,13 +95,40 @@ def run(args):
         log_prob_min_clamp=None,
     )
     config = DistillationConfig(distillation_loss=loss)
-    actor.engine.configure_full_vocab(loss.full_vocab, cached["teacher"], spec=loss.loss_settings)
-    actor.set_loss_fn(partial(loss_fn, config=config))
+
+    def configure(case):
+        actor.engine.configure_full_vocab(
+            case.distillation_loss.full_vocab,
+            cached["teacher"],
+            spec=case.distillation_loss.loss_settings,
+            loss_agg_mode=args.loss_agg_mode,
+        )
+
+        def loss_fn(model_output, data, dp_group):
+            return distillation_loss(SimpleNamespace(loss_agg_mode=args.loss_agg_mode), case, model_output, data)
+
+        actor.set_loss_fn(loss_fn)
+
+    configure(config)
     records = []
+    current_case = "single"
+    current_block = 0
+    forward_counts = {"train": 0, "capture": 0}
+    original_forward = actor.engine.forward_step
+
+    def counted_forward(micro_batch, loss_function, forward_only):
+        if tu.get_non_tensor_data(micro_batch, "full_vocab_train", default=False):
+            forward_counts["train"] += 1
+        if tu.get_non_tensor_data(micro_batch, "full_vocab_capture", default=None):
+            forward_counts["capture"] += 1
+        return original_forward(micro_batch, loss_function, forward_only)
+
+    actor.engine.forward_step = counted_forward
 
     def execute(index, *, warmup=False, trace=False):
         batch = data.clone()
-        reuse = 2 if warmup or trace else args.reuse
+        before_counts = dict(forward_counts)
+        reuse = args.reuse if args.paired_cases else (2 if warmup or trace else args.reuse)
         tu.assign_non_tensor(
             batch,
             temperature=1.0,
@@ -132,6 +165,9 @@ def run(args):
             dtype=torch.float64,
         )
         dist.all_reduce(elapsed, op=dist.ReduceOp.MAX)
+        local_counts = {k: forward_counts[k] - before_counts[k] for k in forward_counts}
+        rank_counts = [None] * world
+        dist.all_gather_object(rank_counts, local_counts)
         updates = tu.get(output, "update_records")
         assert tu.get(output, "optimizer_steps") == len(updates) == reuse
         values = [r["metrics"]["optim/actor/loss"] for r in updates]
@@ -139,6 +175,11 @@ def run(args):
         assert bool(torch.isfinite(torch.tensor(values + norms)).all())
         record = dict(
             index=index,
+            case=current_case,
+            block=current_block,
+            settings={k: getattr(args, k) for k in ("backend", "future_mode", "gamma", "chunk", "loss_agg_mode")},
+            forward_counts=local_counts,
+            per_rank_forward_counts=rank_counts,
             warmup=warmup,
             trace=trace,
             reuse=reuse,
@@ -156,9 +197,46 @@ def run(args):
                 stream.write(json.dumps(record) + "\n")
             print(json.dumps({k: v for k, v in record.items() if k != "updates"}), flush=True)
 
-    execute(0, warmup=True)
-    for index in range(1, args.samples + 1):
-        execute(index)
+    if args.paired_cases:
+        cases = json.loads(args.paired_cases.read_text())
+        if len(cases) < 2 or any(
+            set(c) - {"name", "backend", "future_mode", "gamma", "chunk", "loss_agg_mode"} for c in cases
+        ):
+            raise ValueError("Cases require a name and only backend/future/gamma/chunk/aggregation overrides")
+        if len({c["name"] for c in cases}) != len(cases):
+            raise ValueError("Paired case names must be unique")
+        initial_optimizer = copy.deepcopy(actor.engine.optimizer.state_dict())
+        initial_scheduler = copy.deepcopy(actor.engine.lr_scheduler.state_dict())
+        initial_rng = BaseCheckpointManager.get_rng_state()
+        defaults = {k: getattr(args, k) for k in ("backend", "future_mode", "gamma", "chunk", "loss_agg_mode")}
+        # Every alternative gets its own A-B-B-A comparison with the first case.
+        order = [c for alternative in cases[1:] for c in (cases[0], alternative, alternative, cases[0])]
+        for current_block, case in enumerate(order):
+            current_case = case["name"]
+            for key, default in defaults.items():
+                setattr(args, key, case.get(key, default))
+            loss = replace(
+                loss,
+                full_vocab=FullVocabConfig(
+                    backend=args.backend,
+                    token_chunk_size=args.chunk,
+                    termination_token_ids=[151643, 151645],
+                    future={"mode": args.future_mode, "gamma": args.gamma},
+                ),
+            )
+            config = DistillationConfig(distillation_loss=loss)
+            configure(config)
+            actor.engine.optimizer.load_state_dict(copy.deepcopy(initial_optimizer))
+            actor.engine.lr_scheduler.load_state_dict(copy.deepcopy(initial_scheduler))
+            BaseCheckpointManager.load_rng_state(initial_rng)
+            for index in range(args.warmups + args.samples):
+                execute(index, warmup=index < args.warmups)
+        for key, value in defaults.items():
+            setattr(args, key, value)
+    else:
+        execute(0, warmup=True)
+        for index in range(1, args.samples + 1):
+            execute(index)
     if args.trace:
         with torch.profiler.profile(
             activities=[torch.profiler.ProfilerActivity.CPU, torch.profiler.ProfilerActivity.CUDA]
@@ -184,6 +262,7 @@ def run(args):
                     loss_tokens=sum(len(r["response_ids"]) for r in global_rows),
                     per_rank_input_tokens=[sum(lengths[i] for i in partition) for partition in partitions],
                     cache_sha256=hashlib.sha256(args.cache.read_bytes()).hexdigest(),
+                    paired_cases=json.loads(args.paired_cases.read_text()) if args.paired_cases else None,
                     parameters_unchanged_on_all_ranks=True,
                     parameter_hashes=hashes,
                     execution=dict(
@@ -191,7 +270,7 @@ def run(args):
                         precision="bf16",
                         kappa=1,
                         eta=0.1,
-                        backend="precompute_fused",
+                        backend=args.backend,
                         param_optimizer_offload=True,
                     ),
                     records=records,
@@ -214,13 +293,23 @@ def main():
     parser.add_argument("--samples", type=int, default=2)
     parser.add_argument("--budget", type=int, default=32768)
     parser.add_argument("--chunk", type=int, default=512)
+    parser.add_argument("--backend", choices=["precompute", "precompute_fused"], default="precompute_fused")
+    parser.add_argument("--loss-agg-mode", choices=["token-mean", "seq-mean-token-mean"], default="token-mean")
+    parser.add_argument("--future-mode", default="none")
+    parser.add_argument("--gamma", type=float, default=1.0)
+    parser.add_argument(
+        "--paired-cases", type=Path, help="JSON cases; run each alternative against baseline in ABBA order"
+    )
+    parser.add_argument("--warmups", type=int, default=2)
     parser.add_argument("--checkpoint", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--diagnostics", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--no-sync", action="store_true")
     parser.add_argument("--trace", action="store_true")
     args = parser.parse_args()
-    if min(args.repeat_input, args.reuse, args.samples, args.budget, args.chunk) <= 0:
+    if min(args.repeat_input, args.reuse, args.samples, args.budget, args.chunk, args.warmups) <= 0:
         parser.error("Input repeat, reuse, samples and token budgets must be positive")
+    if args.paired_cases and args.trace:
+        parser.error("Trace the single-case probe separately from paired timing")
     run(args)
 
 
