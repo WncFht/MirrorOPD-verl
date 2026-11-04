@@ -7,8 +7,9 @@ Each TOP-D point is a published polyline vertex (avg@32), not a recovered log.
 Response presentations count each optimizer use; fresh responses count generation
 once, without deduplicating prompts or answer strings. Neither measures FLOPs.
 Geometry ledger: columns are AIME24/25/26, rows full budget and early-budget zoom.
-All panels share a linear percent y-axis; x is in thousands, with one scale per
-row. Lines connect observed points; there is no smoothing or extrapolation.
+All panels share a linear percent y-axis; response counts are in thousands,
+optimizer updates are unscaled counts, with one x scale per row. Lines connect
+observed points; there is no smoothing or extrapolation.
 """
 
 import argparse
@@ -127,24 +128,26 @@ def render(rows, out, metric, fv):
         ("TOP-D alpha=0.1", "vorange", ".", "-"),
         ("TOP-D alpha=0.2", "vcoral", ".", "--"),
     ]
-    endpoint = max(r[metric] for r in rows if r["series"] == "E57") / 1000
+    updates_axis = metric == "optimizer_updates"
+    scale = 1 if updates_axis else 1000
+    endpoint = max(r[metric] for r in rows if r["series"] == "E57") / scale
     for column, benchmark in enumerate(BENCHMARKS):
         for row_index in range(2):
             ax = axes[row_index, column]
-            limit = 1750 if row_index == 0 else endpoint * 1.08
+            limit = (7000 if updates_axis else 1750) if row_index == 0 else endpoint * 1.08
             for label, hue, marker, linestyle in styles:
                 points = sorted(
                     (r for r in rows if r["series"] == label and r["benchmark"] == benchmark), key=lambda r: r[metric]
                 )
                 # Include the next observed point to show the connecting segment at the zoom edge.
-                visible = [r for r in points if r[metric] / 1000 <= limit]
-                following = next((r for r in points if r[metric] / 1000 > limit), None)
+                visible = [r for r in points if r[metric] / scale <= limit]
+                following = next((r for r in points if r[metric] / scale > limit), None)
                 if len(visible) < 2:
                     following = None
                 if following is not None:
                     visible.append(following)
                 ax.plot(
-                    [r[metric] / 1000 for r in visible],
+                    [r[metric] / scale for r in visible],
                     [r["accuracy_percent"] for r in visible],
                     color=fv.HUES[hue],
                     marker=marker,
@@ -159,19 +162,24 @@ def render(rows, out, metric, fv):
             ax.text(0.03, 0.93, f"({chr(97 + row_index * 3 + column)})", transform=ax.transAxes, va="top")
             if row_index == 0:
                 ax.set_title(benchmark)
-                ax.set_xticks((0, 500, 1000, 1500))
+                ax.set_xticks((0, 2000, 4000, 6000) if updates_axis else (0, 500, 1000, 1500))
             else:
-                ax.set_xticks((0, 25, 50, 75, 100) if metric == "response_presentations" else (0, 2, 4, 6))
+                ticks = {
+                    "response_presentations": (0, 25, 50, 75, 100),
+                    "fresh_responses": (0, 2, 4, 6),
+                    "optimizer_updates": (0, 400, 800, 1200, 1600),
+                }
+                ax.set_xticks(ticks[metric])
             if column == 0:
                 ax.set_ylabel(("Full budget" if row_index == 0 else "Early budget") + "\nAccuracy (%)")
     fig.legend(
         *axes[0, 0].get_legend_handles_labels(), loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.99)
     )
-    title = (
-        "Cumulative training response presentations (thousands)"
-        if metric == "response_presentations"
-        else "Cumulative newly generated training responses (thousands)"
-    )
+    title = {
+        "response_presentations": "Cumulative training response presentations (thousands)",
+        "fresh_responses": "Cumulative newly generated training responses (thousands)",
+        "optimizer_updates": "Cumulative optimizer updates",
+    }[metric]
     fig.supxlabel(title, y=0.095, fontsize=11)
     fig.text(
         0.5,
@@ -203,6 +211,13 @@ def main():
     )
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--e57-data", type=Path, help="Original frozen full log extraction; omit when replotting")
+    parser.add_argument(
+        "--metrics",
+        nargs="+",
+        choices=("response_presentations", "fresh_responses", "optimizer_updates"),
+        default=("response_presentations", "fresh_responses", "optimizer_updates"),
+        help="Horizontal axes to render",
+    )
     args = parser.parse_args()
     if args.e57_data:
         e57, provenance = extract_e57(args.e57_data)
@@ -228,7 +243,7 @@ def main():
     args.out.mkdir(parents=True, exist_ok=True)
     fv = load_style()
     fv.apply_rc("paper", fontsize=11)
-    for metric in ("response_presentations", "fresh_responses"):
+    for metric in args.metrics:
         render(rows, args.out, metric, fv)
     (args.out / "render-provenance.json").write_text(
         json.dumps(
@@ -236,6 +251,7 @@ def main():
                 script_sha256=sha256(Path(__file__)),
                 curves_sha256=sha256(args.data / "curves.json"),
                 matplotlib_version=matplotlib.__version__,
+                metrics=args.metrics,
                 audit_exception="Zoom axes intentionally clip the connecting segment to the next observed vertex.",
             ),
             indent=2,

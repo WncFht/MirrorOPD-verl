@@ -132,6 +132,8 @@ E57 的 AIME24、AIME25 从首个评测点的 7.92%／3.33% 上升至 10.42%／9
 
 [新增回答数横轴图](figures/topd-e57-budget-20261104/fresh_responses.png)保留两边不同的轨迹覆盖口径；早期放大区内 TOP-D 只有 step0 一个观测点，仅显示该点，不在没有评测的区间补画连线。[矢量成品](figures/topd-e57-budget-20261104/response_presentations.pdf)、[原始论文矢量图](data/topd-e57-budget-20261104/topd-figure5.pdf)、[曲线 CSV](data/topd-e57-budget-20261104/curves.csv)、[来源与哈希](data/topd-e57-budget-20261104/provenance.json)均已保留。
 
+[Optimizer update 次数横轴图](figures/topd-e57-updates-20261104/optimizer_updates.png)（[PDF](figures/topd-e57-updates-20261104/optimizer_updates.pdf)）使用同一批评测点，E57 和 TOP-D 均按每 outer16 次更新换算。上排展示完整预算，下排放大 E57 的前 1,600 次更新。E57 每次更新处理 64 条回答，TOP-D 每次处理 256 条；因此，相同 update 次数下，TOP-D 的累计训练回答条次为 E57 的 4 倍，不能将横坐标相同解释为样本预算或计算预算相同。
+
 生成器为 [plot_topd_e57_budget.py](../../../research/studies/weighted_targets/plot_topd_e57_budget.py)。在仓库根设置 `FIGURE_VIZ_MPL` 为 figure-viz 的 `assets/mpl` 目录后，可从冻结数据重画：
 
 ```bash
