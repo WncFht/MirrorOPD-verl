@@ -204,6 +204,8 @@ class ServerAdapter(BaseRollout):
             ):
                 raise RuntimeError("Fusion request belongs to a different collection phase")
             first = rows[0]["sampling_params"]
+            if first.get("repetition_detection") is not None:
+                raise ValueError("HF fusion does not implement repetition stopping; explicitly disable it or use vLLM")
             params = {key: value for key, value in first.items() if key != "seed"}
             if any(
                 {key: value for key, value in row["sampling_params"].items() if key != "seed"} != params for row in rows

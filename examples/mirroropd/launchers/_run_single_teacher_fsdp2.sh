@@ -114,8 +114,8 @@ PPO_MAX_TOKEN_LEN_PER_GPU=${PPO_MAX_TOKEN_LEN_PER_GPU:-32768}
 # 验证允许更长的回答；VAL_N 是每题采样次数，VAL_BATCH_SIZE 是提交窗口题数。
 MAX_VAL_RESPONSE_LENGTH=${MAX_VAL_RESPONSE_LENGTH:-31744}
 VAL_N=${VAL_N:-16}
-# Training truncation is opt-in and independent of validation stopping.
-TRAIN_REPETITION_DETECTION=${TRAIN_REPETITION_DETECTION:-false}
+# Training and validation use the same default rule, with independent opt-outs.
+TRAIN_REPETITION_DETECTION=${TRAIN_REPETITION_DETECTION:-true}
 TRAIN_REPETITION_MIN_PATTERN=${TRAIN_REPETITION_MIN_PATTERN:-16}
 TRAIN_REPETITION_MAX_PATTERN=${TRAIN_REPETITION_MAX_PATTERN:-128}
 TRAIN_REPETITION_MIN_COUNT=${TRAIN_REPETITION_MIN_COUNT:-8}
@@ -138,12 +138,11 @@ case ${TRAIN_REPETITION_DETECTION,,} in
 esac
 # null submits the full validation set; positive integers retain windowed evaluation.
 # The submission window is independent of the per-engine active sequence limit.
+VAL_REPETITION_DETECTION=${VAL_REPETITION_DETECTION:-true}
 if [[ $DOMAIN == math ]]; then
     VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-null}
-    VAL_REPETITION_DETECTION=${VAL_REPETITION_DETECTION:-true}
 else
     VAL_BATCH_SIZE=${VAL_BATCH_SIZE:-32}
-    VAL_REPETITION_DETECTION=${VAL_REPETITION_DETECTION:-false}
 fi
 # Selected from the replay tradeoff; it reduces observed harm, not to zero.
 # Only validation receives this setting. False restores natural stopping.

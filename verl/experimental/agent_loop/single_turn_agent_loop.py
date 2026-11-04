@@ -73,7 +73,7 @@ class SingleTurnAgentLoop(AgentLoopBase):
         mm_processor_output = self.build_sglang_video_payload(videos, mm_inputs)
 
         # 3. generate sequences
-        metrics = {}
+        metrics = {"repetition_detection_enabled": sampling_params.get("repetition_detection") is not None}
         with simple_timer("generate_sequences", metrics):
             request_id = f"det-{priority}" if getattr(self.rollout_config, "full_determinism", False) else uuid4().hex
             output: TokenOutput = await self.server_manager.generate(

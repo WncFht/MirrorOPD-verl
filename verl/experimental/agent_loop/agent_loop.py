@@ -91,6 +91,7 @@ class AgentLoopMetrics(BaseModel):
     generation_clock_domain: Optional[str] = None
     teacher_request_latency_s: Optional[float] = None
     finish_reason: Optional[str] = None
+    repetition_detection_enabled: Optional[bool] = None
 
 
 class AgentLoopOutput(BaseModel):

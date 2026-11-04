@@ -54,6 +54,21 @@ def test_resume_allows_execution_change_but_rejects_sampling_change(tmp_path):
         verify_resume_bindings(tmp_path, changed)
 
 
+def test_resume_rejects_repetition_rule_changes(tmp_path):
+    _, config = setup_model(tmp_path)
+    policy = RolloutPolicyConfig.parse({"model": {"kind": "initial"}})
+    _, state = bind_policy(config, policy)
+    save_bindings(tmp_path, state)
+    config.actor_rollout_ref.rollout.repetition_detection = {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8,
+    }
+    _, changed = bind_policy(config, policy)
+    with pytest.raises(ValueError, match="identity changed"):
+        verify_resume_bindings(tmp_path, changed)
+
+
 def test_plan_is_independent_of_filesystem_and_keeps_global_route_ordinals():
     bindings = {
         "left": ModelBinding("current", "/unmounted/a", "a"),

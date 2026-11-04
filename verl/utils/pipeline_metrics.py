@@ -9,6 +9,8 @@ import time
 from functools import cache, lru_cache
 from uuid import uuid4
 
+from verl.utils.metric.finish_reason import finish_reason_metrics
+
 FSDP_PEAK_MEMORY = "memory/fsdp_worker_peak_allocated_gib_max"
 logger = logging.getLogger(__name__)
 
@@ -99,10 +101,15 @@ def aggregate_pipeline_requests(keys: list[str], rows: list[dict]) -> dict[str, 
         _warn_once("backend did not report preemptions for every request; unknown is not zero")
 
     if any(row.get("finish_reason") is not None for row in rows):
-        reasons = [row.get("finish_reason") or "unknown" for row in rows]
-        for reason in ("stop", "length", "repetition", "aborted", "completed", "unknown"):
-            count = sum(r == reason or (reason == "aborted" and r == "abort") for r in reasons)
-            metrics[f"rollout/finish_reason/{reason}_count"] = count
+        metrics.update(
+            {
+                f"rollout/finish_reason/{key}": value
+                for key, value in finish_reason_metrics(row.get("finish_reason") for row in rows).items()
+            }
+        )
+    enabled = [row.get("repetition_detection_enabled") for row in rows]
+    if all(type(value) is bool for value in enabled):
+        metrics["rollout/repetition_detection/enabled_fraction"] = sum(enabled) / len(enabled)
     start = submission.get("started_at_ns")
     domain = submission.get("clock_domain")
     finishes = [row.get("generation_finished_at_ns") for row in rows]

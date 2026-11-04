@@ -33,10 +33,10 @@ A/B 仅终止 outer 不同，默认 seed 相同，A 是 B 的名义前缀；分�
 | 训练采样 | temperature1，top-p1；不额外添加 TOP-D 的 boxed 指令                                        |
 | Rollout  | 每引擎 max_num_seqs128，显存比例 0.8，token budget8192                                      |
 | 评测     | 不做初始评测；每 5 outer 及终点，五基准 avg@16，temperature0.7、top-p0.9、response cap31744 |
-| 评测终止 | 显式关闭重复提前停止，保留 E57 自然终止口径                                                 |
+| 生成终止 | 训练与评测默认开启精确重复停止 16–128/8；可分别显式关闭                                     |
 | 保存     | save_freq=-1，不保存训练 checkpoint                                                         |
 
-E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收的 E61 融合执行路径；这项执行差异需要在结果解释中保留。E81 评测节点为 outer5/10/15/20/25，E82 为 outer5/10/…/100。两者都没有新的 step0 测量，可引用主报告中有来源标识的独立 Base 参考点。
+E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收的 E61 融合执行路径；这项执行差异需要在结果解释中保留。2026-11-05 起 A/B 跟随公共重复停止默认值，训练和评测均开启；E57 历史自然终止曲线的停止协议不同。需要严格配对时，应补充相同停止协议的评测，或在启动 A/B 前显式设置 `TRAIN_REPETITION_DETECTION=false VAL_REPETITION_DETECTION=false`。E81 评测节点为 outer5/10/15/20/25，E82 为 outer5/10/…/100。两者都没有新的 step0 测量，可引用主报告中有来源标识的独立 Base 参考点。
 
 ## 并发与吞吐
 

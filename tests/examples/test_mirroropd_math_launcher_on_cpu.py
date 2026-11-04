@@ -108,6 +108,10 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "MAX_RESPONSE_LENGTH",
         "MAX_VAL_RESPONSE_LENGTH",
         "VAL_REPETITION_DETECTION",
+        "TRAIN_REPETITION_DETECTION",
+        "TRAIN_REPETITION_MIN_PATTERN",
+        "TRAIN_REPETITION_MAX_PATTERN",
+        "TRAIN_REPETITION_MIN_COUNT",
         "VAL_REPETITION_MIN_PATTERN",
         "VAL_REPETITION_MAX_PATTERN",
         "VAL_REPETITION_MIN_COUNT",
@@ -160,7 +164,7 @@ def _config(tmp_path, **overrides):
         return compose(config_name="ppo_trainer", overrides=command[command.index("verl.trainer.main_ppo") + 1 :])
 
 
-@pytest.mark.parametrize("domain,enabled", [("math", True), ("code", False), ("if", False)])
+@pytest.mark.parametrize("domain,enabled", [("math", True), ("code", True), ("if", True)])
 def test_validation_repetition_default_scope(tmp_path, domain, enabled):
     cfg = _config(tmp_path, DOMAIN=domain)
     OmegaConf.resolve(cfg)
@@ -169,6 +173,7 @@ def test_validation_repetition_default_scope(tmp_path, domain, enabled):
     assert (params is not None) == enabled
     if enabled:
         assert dict(params) == {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}
+    assert dict(cfg.actor_rollout_ref.rollout.repetition_detection) == dict(params)
 
 
 def test_validation_repetition_explicit_enable_uses_selected_parameters(tmp_path):
@@ -255,7 +260,7 @@ def test_moe_long_presets_resolve_native_full_vocab_without_checkpoint_saving(tm
         "max_pattern_size": 128,
         "min_count": 8,
     }
-    assert rollout.repetition_detection is None
+    assert dict(rollout.repetition_detection) == dict(rollout.val_kwargs.repetition_detection)
     assert not cfg.trainer.val_before_train and cfg.trainer.resume_mode == "disable"
     assert rollout.val_kwargs.n == 16 and rollout.val_kwargs.max_tokens == 31744
     assert (rollout.val_kwargs.temperature, rollout.val_kwargs.top_p) == (0.7, 0.9)
@@ -735,7 +740,12 @@ def test_validation_budget_rejects_default_multiturn_agent(tmp_path):
 
 def test_validation_budget_rejects_backend_that_overwrites_request_limit(tmp_path):
     # Isolate the response-budget guard from the validation repetition backend guard.
-    cfg = _config(tmp_path, DISTILLATION_EXECUTION_MODE="standalone", VAL_REPETITION_DETECTION="false")
+    cfg = _config(
+        tmp_path,
+        DISTILLATION_EXECUTION_MODE="standalone",
+        VAL_REPETITION_DETECTION="false",
+        TRAIN_REPETITION_DETECTION="false",
+    )
     cfg.actor_rollout_ref.rollout.name = "trtllm"
     with pytest.raises(ValueError, match="vllm or sglang"):
         validate_config(cfg, use_reference_policy=False, use_critic=False)
@@ -1361,8 +1371,20 @@ def test_training_repetition_has_an_independent_launcher_setting(tmp_path):
     assert cfg.actor_rollout_ref.actor.ppo_epochs == 32
 
 
+@pytest.mark.parametrize("preset", ["E81", "E82"])
+def test_repetition_opt_out_is_not_overridden_by_presets(tmp_path, preset):
+    cfg = _config(
+        tmp_path,
+        command=["bash", str(SCRIPT), preset],
+        TRAIN_REPETITION_DETECTION="false",
+        VAL_REPETITION_DETECTION="false",
+    )
+    assert cfg.actor_rollout_ref.rollout.repetition_detection is None
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.repetition_detection is None
+
+
 @pytest.mark.parametrize("preset,outers,updates,presentations", [("E81", 25, 400, 102400), ("E82", 100, 1600, 409600)])
-def test_topd_large_batch_presets_resolve_four_gpu_budget_and_natural_evaluation(
+def test_topd_large_batch_presets_resolve_four_gpu_budget_and_repetition_stopping(
     tmp_path, preset, outers, updates, presentations
 ):
     # Clear the fixture's batch64 override to exercise the public preset defaults.
@@ -1388,4 +1410,9 @@ def test_topd_large_batch_presets_resolve_four_gpu_budget_and_natural_evaluation
     assert rollout.gpu_memory_utilization == 0.8
     assert cfg.data.val_batch_size is None and rollout.val_kwargs.n == 16
     assert rollout.val_kwargs.max_tokens == 31744
-    assert rollout.val_kwargs.repetition_detection is None
+    assert dict(rollout.val_kwargs.repetition_detection) == {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8,
+    }
+    assert dict(rollout.repetition_detection) == dict(rollout.val_kwargs.repetition_detection)

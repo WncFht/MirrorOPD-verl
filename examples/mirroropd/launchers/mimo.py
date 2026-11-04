@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 
 from examples.mirroropd.launchers.qwen_prefix import hydra_value
+from examples.mirroropd.launchers.repetition import validation_repetition
 
 # The paper uses 32K generation for reasoning domains and 8K elsewhere. Reserve
 # the existing 8K prompt budget inside the checkpoint's native 32K total context.
@@ -73,7 +74,6 @@ def options(
         PARAM_OFFLOAD="True",
         OPTIMIZER_OFFLOAD="True",
         GRADIENT_CHECKPOINTING="True",
-        VAL_REPETITION_DETECTION="false",
         SEED=42,
     ).items():
         default(key, value)
@@ -110,6 +110,7 @@ def options(
                 stop_token_ids=list(stop_token_ids),
                 seed=int(env["SEED"]),
                 answer_channel="after_thinking",
+                repetition_detection=validation_repetition(env),
             )
             for domain, (prompt, response) in PUBLIC_LENGTHS.items()
         },

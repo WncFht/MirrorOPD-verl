@@ -11,9 +11,38 @@ from test_mirroropd_math_launcher_on_cpu import SCRIPT, _assert_full_kl, _config
 
 from examples.mirroropd.assets.paths import registered_model
 from examples.mirroropd.launchers.mimo import preflight, questions
+from examples.mirroropd.launchers.repetition import validation_repetition
 from verl.trainer.evaluation.config import EvaluationConfig
 from verl.trainer.ppo.readout_callback import readout_definition
 from verl.utils.config import omega_conf_to_dataclass, validate_config
+
+
+def test_native_repetition_environment_supports_default_disable_and_tuning():
+    assert validation_repetition({}) == {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}
+    assert validation_repetition({"VAL_REPETITION_DETECTION": "false"}) is None
+    assert validation_repetition({"VAL_REPETITION_MAX_PATTERN": "256"})["max_pattern_size"] == 256
+    for env in (
+        {"VAL_REPETITION_DETECTION": "maybe"},
+        {"VAL_REPETITION_MIN_COUNT": "1"},
+        {"VAL_REPETITION_MIN_PATTERN": "129"},
+        {"VAL_REPETITION_MAX_PATTERN": "1.5"},
+    ):
+        with pytest.raises(ValueError):
+            validation_repetition(env)
+
+
+def test_mimo_explicit_validation_opt_out_reaches_native_protocols(prepared):
+    cfg = _config(
+        prepared,
+        command=["bash", str(SCRIPT), "E71"],
+        MIMO_QUESTIONS=str(prepared),
+        TRAIN_BATCH_SIZE="128",
+        VAL_REPETITION_DETECTION="false",
+    )
+    _, declaration = readout_definition(cfg)
+    assert all(p.repetition_detection is None for p in EvaluationConfig.parse(declaration).protocols.values())
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.repetition_detection is None
+    assert cfg.actor_rollout_ref.rollout.repetition_detection is not None
 
 
 @pytest.fixture
@@ -85,6 +114,10 @@ def test_native_mimo_config(prepared, number, teacher):
     assert cfg.trainer.val_before_train and cfg.data.val_files == []
     _, declaration = readout_definition(cfg)
     evaluation = EvaluationConfig.parse(declaration)
+    rule = {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}
+    assert dict(cfg.actor_rollout_ref.rollout.repetition_detection) == rule
+    assert dict(cfg.actor_rollout_ref.rollout.val_kwargs.repetition_detection) == rule
+    assert all(p.repetition_detection == rule for p in evaluation.protocols.values())
     assert not evaluation.source_enabled and not evaluation.history_enabled
     assert "source" not in evaluation.protocols and "source" not in evaluation.bootstrap_children
     assert all(p.prompt_limit + p.max_new_tokens <= 32768 for p in evaluation.protocols.values())

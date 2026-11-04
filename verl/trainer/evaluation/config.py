@@ -7,6 +7,8 @@ import math
 from collections.abc import Mapping
 from dataclasses import dataclass, field, fields
 
+from verl.workers.config.rollout import validate_repetition_detection
+
 from .artifacts import identity
 from .schedule import Schedule
 
@@ -28,6 +30,9 @@ class GenerationProtocol:
     max_new_tokens: int = 32768
     prompt_limit: int = 8192
     repetition_penalty: float = 1.0
+    repetition_detection: dict[str, int] | None = field(
+        default_factory=lambda: {"min_pattern_size": 16, "max_pattern_size": 128, "min_count": 8}
+    )
     seed: int = 42
     model_family: str = "auto"
     template_json: str = "{}"
@@ -52,6 +57,7 @@ class GenerationProtocol:
             raise ValueError("Invalid seed or repetition penalty")
         if self.answer_channel not in {"after_thinking", "whole_response"}:
             raise ValueError("Unknown answer channel")
+        object.__setattr__(self, "repetition_detection", validate_repetition_detection(self.repetition_detection))
         if not isinstance(json.loads(self.template_json), dict):
             raise ValueError("Template arguments must be a mapping")
         object.__setattr__(self, "stop_token_ids", tuple(self.stop_token_ids))
@@ -68,7 +74,10 @@ class GenerationProtocol:
         return strict_record(cls, value)
 
     def metadata(self):
-        return {f.name: getattr(self, f.name) for f in fields(self)}
+        result = {f.name: getattr(self, f.name) for f in fields(self)}
+        if self.repetition_detection is not None:
+            result["repetition_detection"] = dict(self.repetition_detection)
+        return result
 
     def sampling_metadata(self):
         return {k: v for k, v in self.metadata().items() if k != "answer_channel"}
@@ -88,6 +97,7 @@ class GenerationProtocol:
             "top_p": self.top_p,
             "top_k": self.top_k,
             "repetition_penalty": self.repetition_penalty,
+            "repetition_detection": dict(self.repetition_detection) if self.repetition_detection is not None else None,
             "max_tokens": self.max_new_tokens,
             "seed": self.sample_seed(dataset, question_id, sample_index),
         }
