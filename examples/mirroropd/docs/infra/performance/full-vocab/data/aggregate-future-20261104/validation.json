@@ -1,0 +1,4481 @@
+{
+  "date": "2026-11-04",
+  "environment": {
+    "commit": "1d7d71d76bb8f82b8ebb15b85552891d5ad22e30",
+    "python": "3.12.11",
+    "torch": "2.11.0+cu129",
+    "cuda": "12.9",
+    "files": {
+      "verl/trainer/distillation/__init__.py": "ced14be479d27e864cf3557c37d8abe00d2204ba6c030620bf48ea85e25a5921",
+      "verl/trainer/distillation/anchor.py": "8c4e1d22a7bebd37bdfd3658494239589d05a9162f7281d5676b6cd951b19e7f",
+      "verl/trainer/distillation/compatibility.py": "5d9a521de5f5444fe5bb18b9273856cb79db287d9ef6b1a6043b8dc1bb078c77",
+      "verl/trainer/distillation/distribution.py": "2371cfaf9c9108b1f7c821ceb2a949bb00ce7c4c0f5a3bff8fc4d4e642111d71",
+      "verl/trainer/distillation/evaluation.py": "93f6d1c77b9135550684fe13ff0668f7a0e33d87355d6a9b8c748995ee27ee9e",
+      "verl/trainer/distillation/forward_vocab.py": "e0797a14217f9df139994642fb4037b8b4d662f24dadf3cc45e17737b3460993",
+      "verl/trainer/distillation/forward_vocab_triton.py": "d34826d9ff2eb97d7535ddc9c0d2c7fe5b50185bf6f69f30d2becabc506245b9",
+      "verl/trainer/distillation/full_vocab.py": "2055ff23297f745fd004ea50c516547d7b1cb72f76c43d7a894a4f62e4aad546",
+      "verl/trainer/distillation/full_vocab_triton.py": "0ca87bebd81e344906395ee702138e8e1a8f1d7921b90c3899a87a58dfaae8c1",
+      "verl/trainer/distillation/hidden.py": "1d7a2463fc0ea6a5e38953be93e497fadd81feffa201611d740b510a3bb510b0",
+      "verl/trainer/distillation/hidden_io.py": "fcc0564e7d454822b35d133450800a729ca0e76502cf37df356d547c55c41292",
+      "verl/trainer/distillation/losses.py": "2ba45fce6d517d5e5811ff57a34a9c325344e5fc65a7e1dd2c4125e40235f0ff",
+      "verl/trainer/distillation/numerics.py": "169e8ba2e8b320f31ec0ba98a711fd245588e34c18d8f25426dd645d7d8e66ac",
+      "verl/trainer/distillation/objectives.py": "c33c5e3c731dbfb8f871f9a0141025f4f5fe17eede0b2158b61cf55eebc43a28",
+      "verl/trainer/distillation/output.py": "479faf323f3aabf0c4d0534935a39d15514beed93e2378de034b172096b2c647",
+      "verl/trainer/distillation/profiling.py": "71c2cb603f43ec31bd2bc80c22cd966d3e2a2d9cdaa597839845612d9d5acd7c",
+      "verl/trainer/distillation/reduction.py": "e66868134137974a915a493cb2f48cf4df26a08462d21841f3e529a67d6233a9",
+      "verl/trainer/distillation/shared_teacher.py": "15acde2995c99d72aa86b83b52fbc065d97bbd07f363faab3d381ee625eeb894",
+      "verl/trainer/distillation/targets.py": "0d2e11161b6019d19edd12652408944cdef4a07158c8960b132509b0afea1eba",
+      "verl/trainer/distillation/termination.py": "6590fc8c676762bf80952380f842ffa20fb38abd95af4e271f15a618f3292324",
+      "verl/trainer/distillation/token_mapping.py": "3995f406b3e8882fbf0d610d11aec723a587cc1507f7857ce638833891401335",
+      "verl/trainer/distillation/trajectory.py": "5e4d68daba95daae3901c56db025ffba2e5176e0883f905550a4714fc45b6647",
+      "verl/trainer/evaluation/__init__.py": "3cb5a1b4f0fba6c6e6a170d1d9834e001bd67d6e765bc404be8865286d74f81e",
+      "verl/trainer/evaluation/accuracy.py": "3242c820947e2940095ac1a527d753d7c989a4ca2439cfc8c104ec3c4b4bfc76",
+      "verl/trainer/evaluation/artifacts.py": "7de910b337edf4f2e28f9f28e5ab51e8258b53462a329cc82be12494d80592be",
+      "verl/trainer/evaluation/bootstrap.py": "9f8b96b2195ca31ede19cbd5268ea38c96da87830368501f04adf71afa03f7ba",
+      "verl/trainer/evaluation/checkpoint.py": "38d32c4f30a01b5ea613ecff91293830d106cfe017dab50f71f5853f8862d091",
+      "verl/trainer/evaluation/config.py": "f9918893c70bd091d16c08178f71ead9d41e824c0ee7330e1fdd06dbab308d51",
+      "verl/trainer/evaluation/coordinator.py": "04bfa33302322d82335826870af8cbbcb4df34797facbbd30325a6b836c10187",
+      "verl/trainer/evaluation/coverage.py": "17ea81d59071dd4d3943ff894b94e22600d9bde2b9ba4c961e21c17829a585e7",
+      "verl/trainer/evaluation/default.py": "1b38fcffaa5527c8829489ff06294434af4820586dbc201d8dc5278c993a67d4",
+      "verl/trainer/evaluation/execution.py": "729a6775d831d648574033b9fb0ca60ded9f2196547f0c13e594f26a7a6a0865",
+      "verl/trainer/evaluation/generation.py": "fc0d6e04f322dd598dad661e2ceccd1d561743ebb2a78ba855ea110457467d4f",
+      "verl/trainer/evaluation/generation_contract.py": "8c1fe06028c7c2e4b8c1b31a4286df143acaadbb79475e73cc5740f58de58458",
+      "verl/trainer/evaluation/generation_resume.py": "5d4c82836779a201e3d750f12016e808ee1e61598ebab48171c6c2761aae53cd",
+      "verl/trainer/evaluation/identity.py": "44a3dc376336bda117eca5324f0549f25c489ab5cd1ea4a40b43a885e4cac420",
+      "verl/trainer/evaluation/metrics.py": "e69e314cead179898111b484ec0de087f8101d5037c4a46077a8b21c092ac3c9",
+      "verl/trainer/evaluation/native.py": "f69dd549663e5f1b33fbe50bd6060cba48b37b88153e928360f14cb2ef4fdeaf",
+      "verl/trainer/evaluation/plan.py": "9ed9b5cf91b6ea020f4e2e46e9072531b18e7f7bf8fb695ec5a3894c30940aea",
+      "verl/trainer/evaluation/prepare.py": "48c0c5280b7df92e68b028e66543958aa6a40595f326e4f4382f86b5962bcf4e",
+      "verl/trainer/evaluation/regrade.py": "7234fca4392612b20557b7cca2f6b2f97e499ac192c8142420ba7224b8d43463",
+      "verl/trainer/evaluation/reload.py": "0b2cdb05257762a9785ef6b94be1e491df0856721152d453c378fff2a3107e39",
+      "verl/trainer/evaluation/reporting.py": "91a7c18a607395eb794b18298645351ad520d8e9071680cd7738455a503cd34d",
+      "verl/trainer/evaluation/schedule.py": "5e3aa5ef145affc9a2e766b67fed71ee5625c736c52eabbfbc8d68afe1c2e014",
+      "verl/trainer/evaluation/scoring.py": "75cdefeae07834eff9ebeecc4ecc94ca9ab9fc0f0d17bd80c70dae85a67cf78e",
+      "verl/trainer/evaluation/selection.py": "47584d2aa8fa82c1da57d8d89baa7fe7e2546c94e5c32168a5c7411a898fb431",
+      "verl/trainer/evaluation/source_history.py": "e760e38de8a1c299ff28e6585c2c43f90a81dddcec94586f6152144e929ec315",
+      "verl/trainer/evaluation/trajectory.py": "af303242224ababe6993a40f48cf990bae84bc1293cc00110ccd103472bf2a2e",
+      "verl/utils/metric/observations.py": "ee1d86351404e9b9530a83d921a58a5ec12a5bb49c8e77aae3a303ed0c13c424",
+      "verl/workers/engine_workers.py": "ede41d789ee4f7ffe00163c6a149e4b17299b55f9a701996d117f35eec6fd08f",
+      "verl/experimental/rollout_policy/service.py": "731e0696267a0fd70934fe3060e09afa57e76289117b7b88b5e5fd702e101b9a",
+      "tests/special_distributed/test_full_vocab_fsdp2.py": "06f80d9e24ba19dfceb909f4dfa0a7e8635d7cbb8064da83cf04447cae3f5de9",
+      "tests/special_distributed/test_mirror_fsdp2.py": "aa37a6a0d8cb5c864bad6486df764245f7a5017ae6775bd7368e83be1020d148",
+      "tests/special_distributed/test_shared_teacher_fsdp2.py": "01ef114f98d1560154a0b5b93bea17d436d6ba127b718859538fc72126669dcf",
+      "examples/mirroropd/benchmarks/full_vocab/benchmark_trajectory.py": "cfa4447b34a71b3ddb0b97b4436ffdafddc60c19d9a092c45b05be3e1241d1f5",
+      "tests/trainer/distillation/test_trajectory_on_gpu.py": "488769845da50f97b4008e7a9f1a23ea469149c8eb5b46be5ba800badfaf1c52"
+    },
+    "gpu": "index, name, uuid, driver_version\n0, NVIDIA H800, GPU-854ebda7-1637-a3ec-a50b-3f413dc80232, 550.163.01\n1, NVIDIA H800, GPU-f13bcddf-ca2b-7f2f-0d90-51ba37c8b5a2, 550.163.01\n2, NVIDIA H800, GPU-b3243d5c-7894-0582-9734-cc9785510459, 550.163.01\n3, NVIDIA H800, GPU-13b99baf-8482-0b3c-ba97-59befde42be8, 550.163.01\n4, NVIDIA H800, GPU-fa6b674e-60b0-c680-882d-08e92e9226e1, 550.163.01\n5, NVIDIA H800, GPU-aa3853a1-b2f6-f974-aec2-efa4b4455205, 550.163.01\n6, NVIDIA H800, GPU-44bf7e96-2d92-fcfd-7da0-471d76517118, 550.163.01\n7, NVIDIA H800, GPU-76f3510f-d1e3-46ec-7cd6-a339d3a9d933, 550.163.01\n",
+    "final_commit": "8837db9cdc52c6d2ab004567d5bf7ed59d1ea4b1",
+    "final_source_hashes": {
+      "verl/utils/config.py": "77d936ee96deb5fc6405dd0fc3cb5848fe352e355b9331f12bdb9b21e47700ca",
+      "verl/utils/metric/observations.py": "ee1d86351404e9b9530a83d921a58a5ec12a5bb49c8e77aae3a303ed0c13c424",
+      "examples/mirroropd/benchmarks/full_vocab/benchmark_trajectory.py": "5edf786cca8ef98e5fef1ed2bce0c332d7c11e09f3f0c2d4f2d565f69f488c6d",
+      "tests/special_distributed/test_mirror_fsdp2.py": "7680d394da9aa5303edef3f276472d1c7d1862bd31af5dc01c39a9fb8d44ac30"
+    }
+  },
+  "pytest": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "259",
+      "time": "70.466",
+      "timestamp": "2026-11-04T11:11:29.613909+08:00",
+      "hostname": "bsud-quicksilver-hppk-13",
+      "label": "cuda"
+    },
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "560",
+      "time": "47.417",
+      "timestamp": "2026-11-04T11:13:03.773749+08:00",
+      "hostname": "bsud-quicksilver-hppk-13",
+      "label": "trajectory-expanded"
+    },
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "17",
+      "time": "31.025",
+      "timestamp": "2026-11-04T11:13:23.388090+08:00",
+      "hostname": "bsud-quicksilver-hppk-13",
+      "label": "rollout"
+    },
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "17",
+      "time": "39.082",
+      "timestamp": "2026-11-04T11:14:24.539062+08:00",
+      "hostname": "bsud-quicksilver-hppk-13",
+      "label": "observations"
+    },
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "74",
+      "time": "19.174",
+      "timestamp": "2026-11-04T11:26:56.196889+08:00",
+      "hostname": "bsud-quicksilver-hppk-13",
+      "label": "entrypoint"
+    }
+  ],
+  "executions": [
+    {
+      "name": "precompute-none",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute",
+        "--future-mode",
+        "none",
+        "--loss-agg-mode",
+        "token-mean",
+        "--tied-student",
+        "--tied-teacher",
+        "--checkpoint",
+        "--model-type",
+        "qwen2",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute-none.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 40.12653923034668
+    },
+    {
+      "name": "precompute-mean",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute",
+        "--future-mode",
+        "mean",
+        "--loss-agg-mode",
+        "seq-mean-token-mean",
+        "--model-type",
+        "llama",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute-mean.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 49.460882902145386
+    },
+    {
+      "name": "precompute-discounted_mean",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute",
+        "--future-mode",
+        "discounted_mean",
+        "--loss-agg-mode",
+        "seq-mean-token-sum-norm",
+        "--gamma",
+        "0.87",
+        "--model-type",
+        "qwen3",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute-discounted_mean.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 52.0105767250061
+    },
+    {
+      "name": "precompute_fused-none",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "none",
+        "--loss-agg-mode",
+        "token-sum",
+        "--tied-student",
+        "--tied-teacher",
+        "--checkpoint",
+        "--model-type",
+        "qwen2",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute_fused-none.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 52.01609134674072
+    },
+    {
+      "name": "precompute_fused-mean",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "mean",
+        "--loss-agg-mode",
+        "seq-mean-token-sum",
+        "--model-type",
+        "llama",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute_fused-mean.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 37.505401849746704
+    },
+    {
+      "name": "precompute_fused-discounted_mean",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "discounted_mean",
+        "--loss-agg-mode",
+        "token-mean",
+        "--gamma",
+        "0.87",
+        "--model-type",
+        "qwen3",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute_fused-discounted_mean.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 41.64887857437134
+    },
+    {
+      "name": "dense-local",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "dense",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/dense-local.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 40.90152311325073
+    },
+    {
+      "name": "cached-local",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "cached",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/cached-local.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 39.549960136413574
+    },
+    {
+      "name": "liger-local",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "liger",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/liger-local.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 47.66580581665039
+    },
+    {
+      "name": "common-permuted",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--common-vocab-size",
+        "24",
+        "--permuted-teacher",
+        "--student-extra-rows",
+        "2",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/common-permuted.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 47.51127886772156
+    },
+    {
+      "name": "bpo-tied",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--objective",
+        "bpo",
+        "--tied",
+        "--model-type",
+        "qwen3",
+        "--precision",
+        "fp16",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/bpo-tied.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 40.2436203956604
+    },
+    {
+      "name": "precompute-sum",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute",
+        "--future-mode",
+        "sum",
+        "--loss-agg-mode",
+        "token-sum",
+        "--model-type",
+        "qwen3",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute-sum.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 41.82607960700989
+    },
+    {
+      "name": "precompute-discounted_sum",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute",
+        "--future-mode",
+        "discounted_sum",
+        "--loss-agg-mode",
+        "seq-mean-token-sum",
+        "--gamma",
+        "0.87",
+        "--model-type",
+        "qwen2",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute-discounted_sum.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 49.266682147979736
+    },
+    {
+      "name": "precompute-discounted_sequence",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute",
+        "--future-mode",
+        "discounted_sequence",
+        "--loss-agg-mode",
+        "token-mean",
+        "--gamma",
+        "0.87",
+        "--model-type",
+        "llama",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute-discounted_sequence.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 53.76446866989136
+    },
+    {
+      "name": "precompute_fused-sum",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "sum",
+        "--loss-agg-mode",
+        "seq-mean-token-mean",
+        "--model-type",
+        "qwen3",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute_fused-sum.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 50.76815152168274
+    },
+    {
+      "name": "precompute_fused-discounted_sum",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "discounted_sum",
+        "--loss-agg-mode",
+        "seq-mean-token-sum-norm",
+        "--gamma",
+        "0.87",
+        "--model-type",
+        "qwen2",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute_fused-discounted_sum.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 40.295451402664185
+    },
+    {
+      "name": "precompute_fused-discounted_sequence",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "discounted_sequence",
+        "--loss-agg-mode",
+        "token-sum",
+        "--gamma",
+        "0.87",
+        "--model-type",
+        "llama",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/precompute_fused-discounted_sequence.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 40.34648823738098
+    },
+    {
+      "name": "recompute-local",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "recompute",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/recompute-local.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 41.94936156272888
+    },
+    {
+      "name": "streaming-local",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "streaming",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/streaming-local.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 38.59378147125244
+    },
+    {
+      "name": "forward-extra",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--direction",
+        "forward",
+        "--teacher-extra-rows",
+        "3",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/forward-extra.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 39.05377268791199
+    },
+    {
+      "name": "mdpo-checkpoint",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--checkpoint",
+        "--compare-backend",
+        "precompute",
+        "--termination-ids",
+        "1",
+        "4",
+        "--precision",
+        "bf16_fp32",
+        "--gradient-checkpointing",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/mdpo-checkpoint.json"
+      ],
+      "returncode": 1,
+      "elapsed_s": 48.80775046348572
+    },
+    {
+      "name": "sampled-mdpo",
+      "command": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/../envs/mirroropd-fusion/bin/python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--estimator",
+        "sampled",
+        "--precision",
+        "bf16",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/sampled-mdpo.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 36.19454741477966
+    },
+    {
+      "name": "mdpo-bf16-fp32-checkpoint",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--termination-ids",
+        "1",
+        "4",
+        "--precision",
+        "bf16_fp32",
+        "--checkpoint",
+        "--gradient-checkpointing",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/mdpo-bf16-fp32-checkpoint.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 40.539233446121216
+    },
+    {
+      "name": "mdpo-fp32-compare",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--termination-ids",
+        "1",
+        "4",
+        "--precision",
+        "fp32",
+        "--checkpoint",
+        "--compare-backend",
+        "precompute",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/mdpo-fp32-compare.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 36.47197341918945
+    },
+    {
+      "name": "mdpo-bf16-compare",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--termination-ids",
+        "1",
+        "4",
+        "--precision",
+        "bf16",
+        "--compare-backend",
+        "precompute",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/mdpo-bf16-compare.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 36.99751949310303
+    },
+    {
+      "name": "fsdp4",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,2,3,4",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=4",
+        "tests/special_distributed/test_full_vocab_fsdp2.py",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "mean",
+        "--loss-agg-mode",
+        "seq-mean-token-sum-norm",
+        "--checkpoint",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/fsdp4.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 46.09622263908386
+    },
+    {
+      "name": "head-benchmark",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "examples.mirroropd.benchmarks.full_vocab.benchmark_full_kl",
+        "--tokens",
+        "512",
+        "4096",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/head-benchmark.json"
+      ],
+      "returncode": 1,
+      "elapsed_s": 38.79398727416992
+    },
+    {
+      "name": "trajectory-benchmark",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "examples.mirroropd.benchmarks.full_vocab.benchmark_trajectory",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/trajectory-benchmark.json"
+      ],
+      "returncode": 1,
+      "elapsed_s": 18.09175753593445
+    },
+    {
+      "name": "head-large",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=30s",
+        "900s",
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "examples.mirroropd.benchmarks.full_vocab.benchmark_full_kl",
+        "--tokens",
+        "4096",
+        "--reference-backend",
+        "precompute_fused",
+        "--backends",
+        "recompute",
+        "cached",
+        "streaming",
+        "precompute",
+        "precompute_fused",
+        "liger",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/head-large.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 49.510706663131714
+    },
+    {
+      "name": "trajectory-fixed",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=30s",
+        "900s",
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "examples.mirroropd.benchmarks.full_vocab.benchmark_trajectory",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/trajectory-fixed.json"
+      ],
+      "returncode": 1,
+      "elapsed_s": 34.58181023597717
+    },
+    {
+      "name": "smoke-retry",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=30s",
+        "900s",
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "1,2,3,4",
+        "--",
+        "bash",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/smoke-retry.sh"
+      ],
+      "returncode": 1,
+      "elapsed_s": 47.55071496963501
+    },
+    {
+      "name": "weighted-future-fused",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--termination-ids",
+        "1",
+        "4",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "discounted_sequence",
+        "--gamma",
+        "0.87",
+        "--loss-agg-mode",
+        "seq-mean-token-mean",
+        "--checkpoint",
+        "--precision",
+        "bf16",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/weighted-future-fused.json"
+      ],
+      "returncode": 1,
+      "elapsed_s": 34.4683940410614
+    },
+    {
+      "name": "weighted-future-precompute",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--termination-ids",
+        "1",
+        "4",
+        "--backend",
+        "precompute",
+        "--future-mode",
+        "mean",
+        "--loss-agg-mode",
+        "seq-mean-token-sum-norm",
+        "--precision",
+        "fp16",
+        "--tied",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/weighted-future-precompute.json"
+      ],
+      "returncode": 1,
+      "elapsed_s": 34.441367387771606
+    },
+    {
+      "name": "weighted-future-fused-fixed",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--termination-ids",
+        "1",
+        "4",
+        "--backend",
+        "precompute_fused",
+        "--future-mode",
+        "discounted_sequence",
+        "--gamma",
+        "0.87",
+        "--loss-agg-mode",
+        "seq-mean-token-mean",
+        "--checkpoint",
+        "--precision",
+        "bf16",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/weighted-future-fused-fixed.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 40.82525324821472
+    },
+    {
+      "name": "weighted-future-precompute-fixed",
+      "command": [
+        "python",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "run",
+        "--repo",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
+        "--gpus",
+        "2,3",
+        "--",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc-per-node=2",
+        "tests/special_distributed/test_mirror_fsdp2.py",
+        "--termination-ids",
+        "1",
+        "4",
+        "--backend",
+        "precompute",
+        "--future-mode",
+        "mean",
+        "--loss-agg-mode",
+        "seq-mean-token-sum-norm",
+        "--precision",
+        "fp16",
+        "--tied",
+        "--output",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/weighted-future-precompute-fixed.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 34.55756616592407
+    }
+  ],
+  "fsdp_results": {
+    "precompute-none": {
+      "backend": "precompute",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.011923300102353096,
+          "position_kl_sums": [
+            0.0,
+            0.02433309704065323,
+            0.02225734479725361,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.027645966038107872,
+            0.021149992011487484,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.0073633091524243355,
+          "position_kl_sums": [
+            0.0,
+            0.006527990568429232,
+            0.006511261221021414,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.009563089348375797,
+            0.006850895471870899,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.005403812509030104,
+          "position_kl_sums": [
+            0.0,
+            0.01071583479642868,
+            0.009725785814225674,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.013246011920273304,
+            0.009542867541313171,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.05792032182216644,
+        "model.layers.0.self_attn.q_proj.weight": 0.04657294228672981,
+        "model.layers.0.self_attn.q_proj.bias": 0.007936115376651287,
+        "model.layers.0.self_attn.k_proj.weight": 0.031813930720090866,
+        "model.layers.0.self_attn.k_proj.bias": 0.0034472376573830843,
+        "model.layers.0.self_attn.v_proj.weight": 0.039067309349775314,
+        "model.layers.0.self_attn.v_proj.bias": 0.006486210972070694,
+        "model.layers.0.self_attn.o_proj.weight": 0.05403412878513336,
+        "model.layers.0.mlp.gate_proj.weight": 0.08302468806505203,
+        "model.layers.0.mlp.up_proj.weight": 0.08232362568378448,
+        "model.layers.0.mlp.down_proj.weight": 0.07884857803583145,
+        "model.layers.0.input_layernorm.weight": 0.00944011751562357,
+        "model.layers.0.post_attention_layernorm.weight": 0.00919352751225233,
+        "model.layers.1.self_attn.q_proj.weight": 0.05523241311311722,
+        "model.layers.1.self_attn.q_proj.bias": 0.009482836350798607,
+        "model.layers.1.self_attn.k_proj.weight": 0.03941870853304863,
+        "model.layers.1.self_attn.k_proj.bias": 0.0068227858282625675,
+        "model.layers.1.self_attn.v_proj.weight": 0.03875559940934181,
+        "model.layers.1.self_attn.v_proj.bias": 0.0050513045862317085,
+        "model.layers.1.self_attn.o_proj.weight": 0.05631624907255173,
+        "model.layers.1.mlp.gate_proj.weight": 0.08065035194158554,
+        "model.layers.1.mlp.up_proj.weight": 0.08024954795837402,
+        "model.layers.1.mlp.down_proj.weight": 0.07850480079650879,
+        "model.layers.1.input_layernorm.weight": 0.009755576960742474,
+        "model.layers.1.post_attention_layernorm.weight": 0.009538763202726841,
+        "model.norm.weight": 0.009566591121256351
+      },
+      "checkpoint_roundtrip": true,
+      "scheduler_optimizer_roundtrip": true,
+      "resumed_next_update_equivalent": true,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": true,
+      "tied_teacher": true,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute-mean": {
+      "backend": "precompute",
+      "direction": "reverse",
+      "loss_agg_mode": "seq-mean-token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "mean",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.010682023130357265,
+          "position_kl_sums": [
+            0.0,
+            0.026927363127470016,
+            0.02670281007885933,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03254781290888786,
+            0.022339193150401115,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.006948406808078289,
+          "position_kl_sums": [
+            0.0,
+            0.010072063654661179,
+            0.009929351508617401,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010601058602333069,
+            0.007586413063108921,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.003878776915371418,
+          "position_kl_sums": [
+            0.0,
+            0.015120381489396095,
+            0.017049003392457962,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0140029052272439,
+            0.010080197360366583,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.034193988889455795,
+        "model.layers.0.self_attn.q_proj.weight": 0.052089136093854904,
+        "model.layers.0.self_attn.k_proj.weight": 0.03754692152142525,
+        "model.layers.0.self_attn.v_proj.weight": 0.033436499536037445,
+        "model.layers.0.self_attn.o_proj.weight": 0.04699365049600601,
+        "model.layers.0.mlp.gate_proj.weight": 0.0763772651553154,
+        "model.layers.0.mlp.up_proj.weight": 0.07204435765743256,
+        "model.layers.0.mlp.down_proj.weight": 0.0724586769938469,
+        "model.layers.0.input_layernorm.weight": 0.00916724931448698,
+        "model.layers.0.post_attention_layernorm.weight": 0.009915785863995552,
+        "model.layers.1.self_attn.q_proj.weight": 0.05198846012353897,
+        "model.layers.1.self_attn.k_proj.weight": 0.03408046439290047,
+        "model.layers.1.self_attn.v_proj.weight": 0.03468094393610954,
+        "model.layers.1.self_attn.o_proj.weight": 0.052063897252082825,
+        "model.layers.1.mlp.gate_proj.weight": 0.07441562414169312,
+        "model.layers.1.mlp.up_proj.weight": 0.07481163740158081,
+        "model.layers.1.mlp.down_proj.weight": 0.07516653835773468,
+        "model.layers.1.input_layernorm.weight": 0.008409658446907997,
+        "model.layers.1.post_attention_layernorm.weight": 0.007399783469736576,
+        "model.norm.weight": 0.010988667607307434,
+        "lm_head.weight": 0.057536814361810684
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "llama",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute-discounted_mean": {
+      "backend": "precompute",
+      "direction": "reverse",
+      "loss_agg_mode": "seq-mean-token-sum-norm",
+      "loss_scale_factor": 7.0,
+      "future_mode": "discounted_mean",
+      "gamma": 0.87,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.003085426753386855,
+          "position_kl_sums": [
+            0.0,
+            0.026551646180450916,
+            0.027847904711961746,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.031423456966876984,
+            0.02384510450065136,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.0015844616573303938,
+          "position_kl_sums": [
+            0.0,
+            0.008934837765991688,
+            0.010322924703359604,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008882262744009495,
+            0.006831763312220573,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.0007835016003809869,
+          "position_kl_sums": [
+            0.0,
+            0.014104284811764956,
+            0.014879895374178886,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010845756158232689,
+            0.008789288811385632,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03179645538330078,
+        "model.layers.0.self_attn.q_proj.weight": 0.04399366304278374,
+        "model.layers.0.self_attn.k_proj.weight": 0.03167196735739708,
+        "model.layers.0.self_attn.v_proj.weight": 0.03094562329351902,
+        "model.layers.0.self_attn.o_proj.weight": 0.04815036430954933,
+        "model.layers.0.self_attn.q_norm.weight": 0.0034468206577003,
+        "model.layers.0.self_attn.k_norm.weight": 0.0027117759454995394,
+        "model.layers.0.mlp.gate_proj.weight": 0.07351469993591309,
+        "model.layers.0.mlp.up_proj.weight": 0.0679025799036026,
+        "model.layers.0.mlp.down_proj.weight": 0.07155423611402512,
+        "model.layers.0.input_layernorm.weight": 0.007822840474545956,
+        "model.layers.0.post_attention_layernorm.weight": 0.008197701536118984,
+        "model.layers.1.self_attn.q_proj.weight": 0.05185820907354355,
+        "model.layers.1.self_attn.k_proj.weight": 0.03465172275900841,
+        "model.layers.1.self_attn.v_proj.weight": 0.03628679737448692,
+        "model.layers.1.self_attn.o_proj.weight": 0.051950279623270035,
+        "model.layers.1.self_attn.q_norm.weight": 0.003912298008799553,
+        "model.layers.1.self_attn.k_norm.weight": 0.003969615325331688,
+        "model.layers.1.mlp.gate_proj.weight": 0.07244952768087387,
+        "model.layers.1.mlp.up_proj.weight": 0.07208054512739182,
+        "model.layers.1.mlp.down_proj.weight": 0.07325931638479233,
+        "model.layers.1.input_layernorm.weight": 0.00804711040109396,
+        "model.layers.1.post_attention_layernorm.weight": 0.007888793013989925,
+        "model.norm.weight": 0.009832979179918766,
+        "lm_head.weight": 0.05541984736919403
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen3",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute_fused-none": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "loss_agg_mode": "token-sum",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.09538640826940536,
+          "position_kl_sums": [
+            0.0,
+            0.02433315571397543,
+            0.022257329896092415,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.027645932510495186,
+            0.021149992011487484,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.029465802013874054,
+          "position_kl_sums": [
+            0.0,
+            0.006528003606945276,
+            0.006510964594781399,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.009573583491146564,
+            0.006853250786662102,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.044483114033937454,
+          "position_kl_sums": [
+            0.0,
+            0.01094029564410448,
+            0.009934072382748127,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.01370357908308506,
+            0.009905165527015924,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.056055571883916855,
+        "model.layers.0.self_attn.q_proj.weight": 0.048043143004179,
+        "model.layers.0.self_attn.q_proj.bias": 0.008284203708171844,
+        "model.layers.0.self_attn.k_proj.weight": 0.032414667308330536,
+        "model.layers.0.self_attn.k_proj.bias": 0.004624018911272287,
+        "model.layers.0.self_attn.v_proj.weight": 0.0377708338201046,
+        "model.layers.0.self_attn.v_proj.bias": 0.006323062814772129,
+        "model.layers.0.self_attn.o_proj.weight": 0.05258695036172867,
+        "model.layers.0.mlp.gate_proj.weight": 0.08041614294052124,
+        "model.layers.0.mlp.up_proj.weight": 0.07999413460493088,
+        "model.layers.0.mlp.down_proj.weight": 0.07678204029798508,
+        "model.layers.0.input_layernorm.weight": 0.009237762540578842,
+        "model.layers.0.post_attention_layernorm.weight": 0.00911699328571558,
+        "model.layers.1.self_attn.q_proj.weight": 0.054214898496866226,
+        "model.layers.1.self_attn.q_proj.bias": 0.00928426906466484,
+        "model.layers.1.self_attn.k_proj.weight": 0.03855424374341965,
+        "model.layers.1.self_attn.k_proj.bias": 0.006856667343527079,
+        "model.layers.1.self_attn.v_proj.weight": 0.03761201724410057,
+        "model.layers.1.self_attn.v_proj.bias": 0.005029870197176933,
+        "model.layers.1.self_attn.o_proj.weight": 0.05496784672141075,
+        "model.layers.1.mlp.gate_proj.weight": 0.07894134521484375,
+        "model.layers.1.mlp.up_proj.weight": 0.07814107090234756,
+        "model.layers.1.mlp.down_proj.weight": 0.07679367810487747,
+        "model.layers.1.input_layernorm.weight": 0.00938094686716795,
+        "model.layers.1.post_attention_layernorm.weight": 0.009442652575671673,
+        "model.norm.weight": 0.009251220151782036
+      },
+      "checkpoint_roundtrip": true,
+      "scheduler_optimizer_roundtrip": true,
+      "resumed_next_update_equivalent": true,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": true,
+      "tied_teacher": true,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute_fused-mean": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "loss_agg_mode": "seq-mean-token-sum",
+      "loss_scale_factor": 7.0,
+      "future_mode": "mean",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.021364077925682068,
+          "position_kl_sums": [
+            0.0,
+            0.026927322149276733,
+            0.026702817529439926,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03254786506295204,
+            0.022339175455272198,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.013880591839551926,
+          "position_kl_sums": [
+            0.0,
+            0.01006998773664236,
+            0.009929255582392216,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010591324418783188,
+            0.007584609556943178,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.0077929263934493065,
+          "position_kl_sums": [
+            0.0,
+            0.015101396478712559,
+            0.01703673042356968,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.014031913131475449,
+            0.010093921329826117,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03419116139411926,
+        "model.layers.0.self_attn.q_proj.weight": 0.05227380618453026,
+        "model.layers.0.self_attn.k_proj.weight": 0.03765900805592537,
+        "model.layers.0.self_attn.v_proj.weight": 0.03340771049261093,
+        "model.layers.0.self_attn.o_proj.weight": 0.04696962237358093,
+        "model.layers.0.mlp.gate_proj.weight": 0.0763736367225647,
+        "model.layers.0.mlp.up_proj.weight": 0.07205141335725784,
+        "model.layers.0.mlp.down_proj.weight": 0.07246600091457367,
+        "model.layers.0.input_layernorm.weight": 0.009166994132101536,
+        "model.layers.0.post_attention_layernorm.weight": 0.00992645975202322,
+        "model.layers.1.self_attn.q_proj.weight": 0.05207992345094681,
+        "model.layers.1.self_attn.k_proj.weight": 0.034109730273485184,
+        "model.layers.1.self_attn.v_proj.weight": 0.034684982150793076,
+        "model.layers.1.self_attn.o_proj.weight": 0.052069760859012604,
+        "model.layers.1.mlp.gate_proj.weight": 0.07446668297052383,
+        "model.layers.1.mlp.up_proj.weight": 0.07481343299150467,
+        "model.layers.1.mlp.down_proj.weight": 0.07518305629491806,
+        "model.layers.1.input_layernorm.weight": 0.008399716578423977,
+        "model.layers.1.post_attention_layernorm.weight": 0.007401046343147755,
+        "model.norm.weight": 0.010988571681082249,
+        "lm_head.weight": 0.05753789097070694
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "llama",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute_fused-discounted_mean": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "discounted_mean",
+      "gamma": 0.87,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.010799013078212738,
+          "position_kl_sums": [
+            0.0,
+            0.026551637798547745,
+            0.027847908437252045,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03142351657152176,
+            0.02384510450065136,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.005531274247914553,
+          "position_kl_sums": [
+            0.0,
+            0.008952313102781773,
+            0.01033125538378954,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008867730386555195,
+            0.006829032674431801,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.0027313081081956625,
+          "position_kl_sums": [
+            0.0,
+            0.0141084766946733,
+            0.014910607598721981,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010817200876772404,
+            0.008803718723356724,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.031768713146448135,
+        "model.layers.0.self_attn.q_proj.weight": 0.043943099677562714,
+        "model.layers.0.self_attn.k_proj.weight": 0.03164531663060188,
+        "model.layers.0.self_attn.v_proj.weight": 0.03102467767894268,
+        "model.layers.0.self_attn.o_proj.weight": 0.04822590947151184,
+        "model.layers.0.self_attn.q_norm.weight": 0.0034557385370135307,
+        "model.layers.0.self_attn.k_norm.weight": 0.0027246230747550726,
+        "model.layers.0.mlp.gate_proj.weight": 0.0734260231256485,
+        "model.layers.0.mlp.up_proj.weight": 0.06779073178768158,
+        "model.layers.0.mlp.down_proj.weight": 0.07156597077846527,
+        "model.layers.0.input_layernorm.weight": 0.007804281543940306,
+        "model.layers.0.post_attention_layernorm.weight": 0.008309713564813137,
+        "model.layers.1.self_attn.q_proj.weight": 0.05183576047420502,
+        "model.layers.1.self_attn.k_proj.weight": 0.034634336829185486,
+        "model.layers.1.self_attn.v_proj.weight": 0.0363113209605217,
+        "model.layers.1.self_attn.o_proj.weight": 0.051902469247579575,
+        "model.layers.1.self_attn.q_norm.weight": 0.0038667425978928804,
+        "model.layers.1.self_attn.k_norm.weight": 0.003964330535382032,
+        "model.layers.1.mlp.gate_proj.weight": 0.07250174880027771,
+        "model.layers.1.mlp.up_proj.weight": 0.07211332768201828,
+        "model.layers.1.mlp.down_proj.weight": 0.07330013811588287,
+        "model.layers.1.input_layernorm.weight": 0.008032071404159069,
+        "model.layers.1.post_attention_layernorm.weight": 0.007890315726399422,
+        "model.norm.weight": 0.009864984080195427,
+        "lm_head.weight": 0.05542147904634476
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen3",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "dense-local": {
+      "backend": "dense",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.013865990564227104,
+          "position_kl_sums": [
+            0.0,
+            0.0256790854036808,
+            0.020374061539769173,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.026645243167877197,
+            0.03822953253984451,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.008271843194961548,
+          "position_kl_sums": [
+            0.0,
+            0.006948254536837339,
+            0.005803569220006466,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008359678089618683,
+            0.011975870467722416,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.0056856246665120125,
+          "position_kl_sums": [
+            0.0,
+            0.011810091324150562,
+            0.007805711589753628,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.009960084222257137,
+            0.015909109730273485,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.037695012986660004,
+        "model.layers.0.self_attn.q_proj.weight": 0.05561913922429085,
+        "model.layers.0.self_attn.q_proj.bias": 0.010055950842797756,
+        "model.layers.0.self_attn.k_proj.weight": 0.03960205987095833,
+        "model.layers.0.self_attn.k_proj.bias": 0.006267673335969448,
+        "model.layers.0.self_attn.v_proj.weight": 0.03974929079413414,
+        "model.layers.0.self_attn.v_proj.bias": 0.007411943282932043,
+        "model.layers.0.self_attn.o_proj.weight": 0.054250288754701614,
+        "model.layers.0.mlp.gate_proj.weight": 0.08154471963644028,
+        "model.layers.0.mlp.up_proj.weight": 0.08110740035772324,
+        "model.layers.0.mlp.down_proj.weight": 0.0799749419093132,
+        "model.layers.0.input_layernorm.weight": 0.010769843123853207,
+        "model.layers.0.post_attention_layernorm.weight": 0.009217916987836361,
+        "model.layers.1.self_attn.q_proj.weight": 0.056420210748910904,
+        "model.layers.1.self_attn.q_proj.bias": 0.009085789322853088,
+        "model.layers.1.self_attn.k_proj.weight": 0.04063931107521057,
+        "model.layers.1.self_attn.k_proj.bias": 0.00537842744961381,
+        "model.layers.1.self_attn.v_proj.weight": 0.04025433585047722,
+        "model.layers.1.self_attn.v_proj.bias": 0.007340084761381149,
+        "model.layers.1.self_attn.o_proj.weight": 0.05465589463710785,
+        "model.layers.1.mlp.gate_proj.weight": 0.08054646104574203,
+        "model.layers.1.mlp.up_proj.weight": 0.08012321591377258,
+        "model.layers.1.mlp.down_proj.weight": 0.0795898288488388,
+        "model.layers.1.input_layernorm.weight": 0.009954582899808884,
+        "model.layers.1.post_attention_layernorm.weight": 0.007734562270343304,
+        "model.norm.weight": 0.010726767592132092,
+        "lm_head.weight": 0.0601210780441761
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "cached-local": {
+      "backend": "cached",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.013865993358194828,
+          "position_kl_sums": [
+            0.0,
+            0.025679088197648525,
+            0.02037404477596283,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.02664526179432869,
+            0.038229549303650856,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.008271833881735802,
+          "position_kl_sums": [
+            0.0,
+            0.006948232650756836,
+            0.00580356502905488,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008359679952263832,
+            0.011975856497883797,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.005685631651431322,
+          "position_kl_sums": [
+            0.0,
+            0.011810119729489088,
+            0.007805722765624523,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.009960094466805458,
+            0.01590911764651537,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.037695012986660004,
+        "model.layers.0.self_attn.q_proj.weight": 0.05561913922429085,
+        "model.layers.0.self_attn.q_proj.bias": 0.010055950842797756,
+        "model.layers.0.self_attn.k_proj.weight": 0.03960205987095833,
+        "model.layers.0.self_attn.k_proj.bias": 0.006267673335969448,
+        "model.layers.0.self_attn.v_proj.weight": 0.03974929079413414,
+        "model.layers.0.self_attn.v_proj.bias": 0.007411943282932043,
+        "model.layers.0.self_attn.o_proj.weight": 0.054250288754701614,
+        "model.layers.0.mlp.gate_proj.weight": 0.08154471963644028,
+        "model.layers.0.mlp.up_proj.weight": 0.08110740035772324,
+        "model.layers.0.mlp.down_proj.weight": 0.0799749419093132,
+        "model.layers.0.input_layernorm.weight": 0.010769843123853207,
+        "model.layers.0.post_attention_layernorm.weight": 0.009217916987836361,
+        "model.layers.1.self_attn.q_proj.weight": 0.056420210748910904,
+        "model.layers.1.self_attn.q_proj.bias": 0.009085789322853088,
+        "model.layers.1.self_attn.k_proj.weight": 0.04063931107521057,
+        "model.layers.1.self_attn.k_proj.bias": 0.00537842744961381,
+        "model.layers.1.self_attn.v_proj.weight": 0.04025433585047722,
+        "model.layers.1.self_attn.v_proj.bias": 0.007340084761381149,
+        "model.layers.1.self_attn.o_proj.weight": 0.05465589463710785,
+        "model.layers.1.mlp.gate_proj.weight": 0.08054646104574203,
+        "model.layers.1.mlp.up_proj.weight": 0.08012321591377258,
+        "model.layers.1.mlp.down_proj.weight": 0.0795898288488388,
+        "model.layers.1.input_layernorm.weight": 0.009954582899808884,
+        "model.layers.1.post_attention_layernorm.weight": 0.007734562270343304,
+        "model.norm.weight": 0.010726767592132092,
+        "lm_head.weight": 0.0601210780441761
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "liger-local": {
+      "backend": "liger",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.013865889981389046
+        },
+        {
+          "step": 1,
+          "loss": 0.008271809667348862
+        },
+        {
+          "step": 2,
+          "loss": 0.005685587413609028
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.037695012986660004,
+        "model.layers.0.self_attn.q_proj.weight": 0.05561913922429085,
+        "model.layers.0.self_attn.q_proj.bias": 0.010055950842797756,
+        "model.layers.0.self_attn.k_proj.weight": 0.03960205987095833,
+        "model.layers.0.self_attn.k_proj.bias": 0.006267673335969448,
+        "model.layers.0.self_attn.v_proj.weight": 0.03974929079413414,
+        "model.layers.0.self_attn.v_proj.bias": 0.007411943282932043,
+        "model.layers.0.self_attn.o_proj.weight": 0.054250288754701614,
+        "model.layers.0.mlp.gate_proj.weight": 0.08154471963644028,
+        "model.layers.0.mlp.up_proj.weight": 0.08110740035772324,
+        "model.layers.0.mlp.down_proj.weight": 0.0799749419093132,
+        "model.layers.0.input_layernorm.weight": 0.010769843123853207,
+        "model.layers.0.post_attention_layernorm.weight": 0.009217916987836361,
+        "model.layers.1.self_attn.q_proj.weight": 0.056420210748910904,
+        "model.layers.1.self_attn.q_proj.bias": 0.009085789322853088,
+        "model.layers.1.self_attn.k_proj.weight": 0.04063931107521057,
+        "model.layers.1.self_attn.k_proj.bias": 0.00537842744961381,
+        "model.layers.1.self_attn.v_proj.weight": 0.04025433585047722,
+        "model.layers.1.self_attn.v_proj.bias": 0.007340084761381149,
+        "model.layers.1.self_attn.o_proj.weight": 0.05465589463710785,
+        "model.layers.1.mlp.gate_proj.weight": 0.08054646104574203,
+        "model.layers.1.mlp.up_proj.weight": 0.08012321591377258,
+        "model.layers.1.mlp.down_proj.weight": 0.0795898288488388,
+        "model.layers.1.input_layernorm.weight": 0.009954582899808884,
+        "model.layers.1.post_attention_layernorm.weight": 0.007734562270343304,
+        "model.norm.weight": 0.010726767592132092,
+        "lm_head.weight": 0.0601210780441761
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "common-permuted": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.012282339856028557,
+          "position_kl_sums": [
+            0.0,
+            0.032168189994990826,
+            0.025653380900621414,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.013861673884093761,
+            0.026575470343232155,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.007897303439676762,
+          "position_kl_sums": [
+            0.0,
+            0.011533265002071857,
+            0.0073821633122861385,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.005297163035720587,
+            0.007376621011644602,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.005231328308582306,
+          "position_kl_sums": [
+            0.0,
+            0.013975828420370817,
+            0.010884000919759274,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.007838720455765724,
+            0.009152075741440058,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03527319058775902,
+        "model.layers.0.self_attn.q_proj.weight": 0.05721193552017212,
+        "model.layers.0.self_attn.q_proj.bias": 0.009718645364046097,
+        "model.layers.0.self_attn.k_proj.weight": 0.039268750697374344,
+        "model.layers.0.self_attn.k_proj.bias": 0.0065488251857459545,
+        "model.layers.0.self_attn.v_proj.weight": 0.036395955830812454,
+        "model.layers.0.self_attn.v_proj.bias": 0.006956650409847498,
+        "model.layers.0.self_attn.o_proj.weight": 0.047260284423828125,
+        "model.layers.0.mlp.gate_proj.weight": 0.07604651898145676,
+        "model.layers.0.mlp.up_proj.weight": 0.07800161838531494,
+        "model.layers.0.mlp.down_proj.weight": 0.07619592547416687,
+        "model.layers.0.input_layernorm.weight": 0.007229682523757219,
+        "model.layers.0.post_attention_layernorm.weight": 0.009716993197798729,
+        "model.layers.1.self_attn.q_proj.weight": 0.05173780024051666,
+        "model.layers.1.self_attn.q_proj.bias": 0.00931558571755886,
+        "model.layers.1.self_attn.k_proj.weight": 0.03819089010357857,
+        "model.layers.1.self_attn.k_proj.bias": 0.005662119947373867,
+        "model.layers.1.self_attn.v_proj.weight": 0.035882338881492615,
+        "model.layers.1.self_attn.v_proj.bias": 0.005985730793327093,
+        "model.layers.1.self_attn.o_proj.weight": 0.05242610722780228,
+        "model.layers.1.mlp.gate_proj.weight": 0.07610470056533813,
+        "model.layers.1.mlp.up_proj.weight": 0.07610882818698883,
+        "model.layers.1.mlp.down_proj.weight": 0.07604892551898956,
+        "model.layers.1.input_layernorm.weight": 0.009436184540390968,
+        "model.layers.1.post_attention_layernorm.weight": 0.00913155172020197,
+        "model.norm.weight": 0.010275032371282578,
+        "lm_head.weight": 0.05811289697885513
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "bpo-tied": {
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float16"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float16"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float16"
+        ],
+        "model.norm": [
+          "torch.float16"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "precision": "fp16",
+      "sequence_length": 5,
+      "actor_token_budget": 10,
+      "scaler": {
+        "scale": 256.0,
+        "growth_factor": 2.0,
+        "backoff_factor": 0.5,
+        "growth_interval": 2,
+        "_growth_tracker": 0
+      },
+      "objective": "bpo",
+      "model_type": "qwen3",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": true,
+      "checkpoint": false,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "termination_ids": [],
+      "kappa": 0.5,
+      "compare_backend": null,
+      "backend_max_parameter_abs_error": null,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.0018367250449955463,
+            0.0033650065306574106,
+            0.001383344642817974
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.0008733849972486496,
+            0.0010713317897170782,
+            0.0007044260855764151
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_reference": false,
+      "actor_wrapper_and_timing": true
+    },
+    "precompute-sum": {
+      "backend": "precompute",
+      "direction": "reverse",
+      "loss_agg_mode": "token-sum",
+      "loss_scale_factor": 7.0,
+      "future_mode": "sum",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.08639194816350937,
+          "position_kl_sums": [
+            0.0,
+            0.026551646180450916,
+            0.027847904711961746,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.031423456966876984,
+            0.02384510450065136,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.022120030596852303,
+          "position_kl_sums": [
+            0.0,
+            0.008949918672442436,
+            0.010331149213016033,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008863184601068497,
+            0.0068314108066260815,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.02280620113015175,
+          "position_kl_sums": [
+            0.0,
+            0.014332064893096685,
+            0.015311417169868946,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.011129668913781643,
+            0.009071900974959135,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03155586123466492,
+        "model.layers.0.self_attn.q_proj.weight": 0.04447177052497864,
+        "model.layers.0.self_attn.k_proj.weight": 0.03224780783057213,
+        "model.layers.0.self_attn.v_proj.weight": 0.03107367642223835,
+        "model.layers.0.self_attn.o_proj.weight": 0.048132188618183136,
+        "model.layers.0.self_attn.q_norm.weight": 0.0034018761944025755,
+        "model.layers.0.self_attn.k_norm.weight": 0.0026379504706710577,
+        "model.layers.0.mlp.gate_proj.weight": 0.07304994016885757,
+        "model.layers.0.mlp.up_proj.weight": 0.06760278344154358,
+        "model.layers.0.mlp.down_proj.weight": 0.07112149149179459,
+        "model.layers.0.input_layernorm.weight": 0.0079224007204175,
+        "model.layers.0.post_attention_layernorm.weight": 0.008326476439833641,
+        "model.layers.1.self_attn.q_proj.weight": 0.051905326545238495,
+        "model.layers.1.self_attn.k_proj.weight": 0.03465529531240463,
+        "model.layers.1.self_attn.v_proj.weight": 0.0360545888543129,
+        "model.layers.1.self_attn.o_proj.weight": 0.051520854234695435,
+        "model.layers.1.self_attn.q_norm.weight": 0.003918525762856007,
+        "model.layers.1.self_attn.k_norm.weight": 0.003904840676113963,
+        "model.layers.1.mlp.gate_proj.weight": 0.07197246700525284,
+        "model.layers.1.mlp.up_proj.weight": 0.0720033124089241,
+        "model.layers.1.mlp.down_proj.weight": 0.07303602993488312,
+        "model.layers.1.input_layernorm.weight": 0.008055096492171288,
+        "model.layers.1.post_attention_layernorm.weight": 0.0079303914681077,
+        "model.norm.weight": 0.00972949992865324,
+        "lm_head.weight": 0.05516793951392174
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen3",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute-discounted_sum": {
+      "backend": "precompute",
+      "direction": "reverse",
+      "loss_agg_mode": "seq-mean-token-sum",
+      "loss_scale_factor": 7.0,
+      "future_mode": "discounted_sum",
+      "gamma": 0.87,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.01769767701625824,
+          "position_kl_sums": [
+            0.0,
+            0.0256790854036808,
+            0.020374061539769173,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.026645243167877197,
+            0.03822953253984451,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.013154251500964165,
+          "position_kl_sums": [
+            0.0,
+            0.007118471898138523,
+            0.005842940881848335,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008757790550589561,
+            0.012233052402734756,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.007842469960451126,
+          "position_kl_sums": [
+            0.0,
+            0.012696947436779737,
+            0.007852284237742424,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010879539884626865,
+            0.01625591516494751,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03785085305571556,
+        "model.layers.0.self_attn.q_proj.weight": 0.05677856132388115,
+        "model.layers.0.self_attn.q_proj.bias": 0.009589188732206821,
+        "model.layers.0.self_attn.k_proj.weight": 0.039694566279649734,
+        "model.layers.0.self_attn.k_proj.bias": 0.006353670731186867,
+        "model.layers.0.self_attn.v_proj.weight": 0.03874047473073006,
+        "model.layers.0.self_attn.v_proj.bias": 0.006335793528705835,
+        "model.layers.0.self_attn.o_proj.weight": 0.05402081459760666,
+        "model.layers.0.mlp.gate_proj.weight": 0.08094809204339981,
+        "model.layers.0.mlp.up_proj.weight": 0.08001366257667542,
+        "model.layers.0.mlp.down_proj.weight": 0.08011767268180847,
+        "model.layers.0.input_layernorm.weight": 0.01020094845443964,
+        "model.layers.0.post_attention_layernorm.weight": 0.00878700241446495,
+        "model.layers.1.self_attn.q_proj.weight": 0.05534128472208977,
+        "model.layers.1.self_attn.q_proj.bias": 0.008736860938370228,
+        "model.layers.1.self_attn.k_proj.weight": 0.04034336656332016,
+        "model.layers.1.self_attn.k_proj.bias": 0.006143233273178339,
+        "model.layers.1.self_attn.v_proj.weight": 0.0402582623064518,
+        "model.layers.1.self_attn.v_proj.bias": 0.006851284299045801,
+        "model.layers.1.self_attn.o_proj.weight": 0.05486888810992241,
+        "model.layers.1.mlp.gate_proj.weight": 0.08080456405878067,
+        "model.layers.1.mlp.up_proj.weight": 0.07893863320350647,
+        "model.layers.1.mlp.down_proj.weight": 0.0789715051651001,
+        "model.layers.1.input_layernorm.weight": 0.009847140870988369,
+        "model.layers.1.post_attention_layernorm.weight": 0.007788647431880236,
+        "model.norm.weight": 0.010722190141677856,
+        "lm_head.weight": 0.06034377962350845
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute-discounted_sequence": {
+      "backend": "precompute",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "discounted_sequence",
+      "gamma": 0.87,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.007622827775776386,
+          "position_kl_sums": [
+            0.0,
+            0.026927363127470016,
+            0.02670281007885933,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03254781290888786,
+            0.022339193150401115,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.005235100165009499,
+          "position_kl_sums": [
+            0.0,
+            0.009746475145220757,
+            0.009449767880141735,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.01078660786151886,
+            0.007865479215979576,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.0030575012788176537,
+          "position_kl_sums": [
+            0.0,
+            0.014158199541270733,
+            0.015793194994330406,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.014593389816582203,
+            0.010796399787068367,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03479234501719475,
+        "model.layers.0.self_attn.q_proj.weight": 0.05186377465724945,
+        "model.layers.0.self_attn.k_proj.weight": 0.036851461976766586,
+        "model.layers.0.self_attn.v_proj.weight": 0.03302313759922981,
+        "model.layers.0.self_attn.o_proj.weight": 0.04706269130110741,
+        "model.layers.0.mlp.gate_proj.weight": 0.07608193159103394,
+        "model.layers.0.mlp.up_proj.weight": 0.07194791734218597,
+        "model.layers.0.mlp.down_proj.weight": 0.07254182547330856,
+        "model.layers.0.input_layernorm.weight": 0.008770907297730446,
+        "model.layers.0.post_attention_layernorm.weight": 0.009941304102540016,
+        "model.layers.1.self_attn.q_proj.weight": 0.051882121711969376,
+        "model.layers.1.self_attn.k_proj.weight": 0.033765606582164764,
+        "model.layers.1.self_attn.v_proj.weight": 0.0345170684158802,
+        "model.layers.1.self_attn.o_proj.weight": 0.05193015933036804,
+        "model.layers.1.mlp.gate_proj.weight": 0.07409510016441345,
+        "model.layers.1.mlp.up_proj.weight": 0.07473238557577133,
+        "model.layers.1.mlp.down_proj.weight": 0.0754488930106163,
+        "model.layers.1.input_layernorm.weight": 0.008388091810047626,
+        "model.layers.1.post_attention_layernorm.weight": 0.007535237818956375,
+        "model.norm.weight": 0.010994221083819866,
+        "lm_head.weight": 0.05706808343529701
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "llama",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute_fused-sum": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "loss_agg_mode": "seq-mean-token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "sum",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.010799012146890163,
+          "position_kl_sums": [
+            0.0,
+            0.026551637798547745,
+            0.027847908437252045,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03142351657152176,
+            0.02384510450065136,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.005531274247914553,
+          "position_kl_sums": [
+            0.0,
+            0.008952313102781773,
+            0.01033125538378954,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008867730386555195,
+            0.006829032674431801,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.002731307642534375,
+          "position_kl_sums": [
+            0.0,
+            0.0141084766946733,
+            0.014910607598721981,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010817200876772404,
+            0.008803718723356724,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.031768713146448135,
+        "model.layers.0.self_attn.q_proj.weight": 0.043943099677562714,
+        "model.layers.0.self_attn.k_proj.weight": 0.03164531663060188,
+        "model.layers.0.self_attn.v_proj.weight": 0.03102467767894268,
+        "model.layers.0.self_attn.o_proj.weight": 0.04822590947151184,
+        "model.layers.0.self_attn.q_norm.weight": 0.0034557385370135307,
+        "model.layers.0.self_attn.k_norm.weight": 0.0027246230747550726,
+        "model.layers.0.mlp.gate_proj.weight": 0.0734260231256485,
+        "model.layers.0.mlp.up_proj.weight": 0.06779073178768158,
+        "model.layers.0.mlp.down_proj.weight": 0.07156597077846527,
+        "model.layers.0.input_layernorm.weight": 0.007804281543940306,
+        "model.layers.0.post_attention_layernorm.weight": 0.008309713564813137,
+        "model.layers.1.self_attn.q_proj.weight": 0.05183576047420502,
+        "model.layers.1.self_attn.k_proj.weight": 0.034634336829185486,
+        "model.layers.1.self_attn.v_proj.weight": 0.0363113209605217,
+        "model.layers.1.self_attn.o_proj.weight": 0.051902469247579575,
+        "model.layers.1.self_attn.q_norm.weight": 0.0038667425978928804,
+        "model.layers.1.self_attn.k_norm.weight": 0.003964330535382032,
+        "model.layers.1.mlp.gate_proj.weight": 0.07250174880027771,
+        "model.layers.1.mlp.up_proj.weight": 0.07211332768201828,
+        "model.layers.1.mlp.down_proj.weight": 0.07330013811588287,
+        "model.layers.1.input_layernorm.weight": 0.008032071404159069,
+        "model.layers.1.post_attention_layernorm.weight": 0.007890315726399422,
+        "model.norm.weight": 0.009864984080195427,
+        "lm_head.weight": 0.05542147904634476
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen3",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute_fused-discounted_sum": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "loss_agg_mode": "seq-mean-token-sum-norm",
+      "loss_scale_factor": 7.0,
+      "future_mode": "discounted_sum",
+      "gamma": 0.87,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.002528238808736205,
+          "position_kl_sums": [
+            0.0,
+            0.02567912172526121,
+            0.020374160259962082,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.026645267382264137,
+            0.038229577243328094,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.0018769471207633615,
+          "position_kl_sums": [
+            0.0,
+            0.007108814548701048,
+            0.005845236591994762,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008761308155953884,
+            0.012199313379824162,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.0011201583547517657,
+          "position_kl_sums": [
+            0.0,
+            0.012708608526736498,
+            0.0078563978895545,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010888543911278248,
+            0.016247428487986326,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.037845320999622345,
+        "model.layers.0.self_attn.q_proj.weight": 0.05576182156801224,
+        "model.layers.0.self_attn.q_proj.bias": 0.009564830921590328,
+        "model.layers.0.self_attn.k_proj.weight": 0.03940274566411972,
+        "model.layers.0.self_attn.k_proj.bias": 0.005561966449022293,
+        "model.layers.0.self_attn.v_proj.weight": 0.03868929669260979,
+        "model.layers.0.self_attn.v_proj.bias": 0.006318369880318642,
+        "model.layers.0.self_attn.o_proj.weight": 0.05396120622754097,
+        "model.layers.0.mlp.gate_proj.weight": 0.0808735191822052,
+        "model.layers.0.mlp.up_proj.weight": 0.07977805286645889,
+        "model.layers.0.mlp.down_proj.weight": 0.07995102554559708,
+        "model.layers.0.input_layernorm.weight": 0.010163815692067146,
+        "model.layers.0.post_attention_layernorm.weight": 0.008766411803662777,
+        "model.layers.1.self_attn.q_proj.weight": 0.054532840847969055,
+        "model.layers.1.self_attn.q_proj.bias": 0.00862046517431736,
+        "model.layers.1.self_attn.k_proj.weight": 0.039924249053001404,
+        "model.layers.1.self_attn.k_proj.bias": 0.0052514588460326195,
+        "model.layers.1.self_attn.v_proj.weight": 0.040239837020635605,
+        "model.layers.1.self_attn.v_proj.bias": 0.006847063545137644,
+        "model.layers.1.self_attn.o_proj.weight": 0.05482951179146767,
+        "model.layers.1.mlp.gate_proj.weight": 0.08062122017145157,
+        "model.layers.1.mlp.up_proj.weight": 0.07879416644573212,
+        "model.layers.1.mlp.down_proj.weight": 0.07882260531187057,
+        "model.layers.1.input_layernorm.weight": 0.0098462188616395,
+        "model.layers.1.post_attention_layernorm.weight": 0.007750971708446741,
+        "model.norm.weight": 0.01071864366531372,
+        "lm_head.weight": 0.06036036089062691
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "precompute_fused-discounted_sequence": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "loss_agg_mode": "token-sum",
+      "loss_scale_factor": 7.0,
+      "future_mode": "discounted_sequence",
+      "gamma": 0.87,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.06098274141550064,
+          "position_kl_sums": [
+            0.0,
+            0.026927322149276733,
+            0.026702817529439926,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03254786506295204,
+            0.022339175455272198,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.02090732380747795,
+          "position_kl_sums": [
+            0.0,
+            0.009748176671564579,
+            0.009459711611270905,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.010780650191009045,
+            0.007857603952288628,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.025234553962945938,
+          "position_kl_sums": [
+            0.0,
+            0.014435992576181889,
+            0.01683151349425316,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.015169980004429817,
+            0.011111072730273008,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.03441287577152252,
+        "model.layers.0.self_attn.q_proj.weight": 0.05085702985525131,
+        "model.layers.0.self_attn.k_proj.weight": 0.03592687100172043,
+        "model.layers.0.self_attn.v_proj.weight": 0.032763637602329254,
+        "model.layers.0.self_attn.o_proj.weight": 0.04711823910474777,
+        "model.layers.0.mlp.gate_proj.weight": 0.07521895319223404,
+        "model.layers.0.mlp.up_proj.weight": 0.07148340344429016,
+        "model.layers.0.mlp.down_proj.weight": 0.07197552174329758,
+        "model.layers.0.input_layernorm.weight": 0.008751110173761845,
+        "model.layers.0.post_attention_layernorm.weight": 0.00980328768491745,
+        "model.layers.1.self_attn.q_proj.weight": 0.05261737108230591,
+        "model.layers.1.self_attn.k_proj.weight": 0.0341624915599823,
+        "model.layers.1.self_attn.v_proj.weight": 0.035060666501522064,
+        "model.layers.1.self_attn.o_proj.weight": 0.05130863934755325,
+        "model.layers.1.mlp.gate_proj.weight": 0.07321155071258545,
+        "model.layers.1.mlp.up_proj.weight": 0.07414481043815613,
+        "model.layers.1.mlp.down_proj.weight": 0.07488389313220978,
+        "model.layers.1.input_layernorm.weight": 0.008515870198607445,
+        "model.layers.1.post_attention_layernorm.weight": 0.007417382672429085,
+        "model.norm.weight": 0.010783223435282707,
+        "lm_head.weight": 0.05633917823433876
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "llama",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "recompute-local": {
+      "backend": "recompute",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.013865993358194828,
+          "position_kl_sums": [
+            0.0,
+            0.025679088197648525,
+            0.02037404477596283,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.02664526179432869,
+            0.038229549303650856,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.008271833881735802,
+          "position_kl_sums": [
+            0.0,
+            0.006948232650756836,
+            0.00580356502905488,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008359680883586407,
+            0.011975856497883797,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.005685631651431322,
+          "position_kl_sums": [
+            0.0,
+            0.011810119729489088,
+            0.007805722765624523,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.009960095398128033,
+            0.015909118112176657,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.037695012986660004,
+        "model.layers.0.self_attn.q_proj.weight": 0.05561913922429085,
+        "model.layers.0.self_attn.q_proj.bias": 0.010055950842797756,
+        "model.layers.0.self_attn.k_proj.weight": 0.03960205987095833,
+        "model.layers.0.self_attn.k_proj.bias": 0.006267673335969448,
+        "model.layers.0.self_attn.v_proj.weight": 0.03974929079413414,
+        "model.layers.0.self_attn.v_proj.bias": 0.007411943282932043,
+        "model.layers.0.self_attn.o_proj.weight": 0.054250288754701614,
+        "model.layers.0.mlp.gate_proj.weight": 0.08154471963644028,
+        "model.layers.0.mlp.up_proj.weight": 0.08110740035772324,
+        "model.layers.0.mlp.down_proj.weight": 0.0799749419093132,
+        "model.layers.0.input_layernorm.weight": 0.010769843123853207,
+        "model.layers.0.post_attention_layernorm.weight": 0.009217916987836361,
+        "model.layers.1.self_attn.q_proj.weight": 0.056420210748910904,
+        "model.layers.1.self_attn.q_proj.bias": 0.009085789322853088,
+        "model.layers.1.self_attn.k_proj.weight": 0.04063931107521057,
+        "model.layers.1.self_attn.k_proj.bias": 0.00537842744961381,
+        "model.layers.1.self_attn.v_proj.weight": 0.04025433585047722,
+        "model.layers.1.self_attn.v_proj.bias": 0.007340084761381149,
+        "model.layers.1.self_attn.o_proj.weight": 0.05465589463710785,
+        "model.layers.1.mlp.gate_proj.weight": 0.08054646104574203,
+        "model.layers.1.mlp.up_proj.weight": 0.08012321591377258,
+        "model.layers.1.mlp.down_proj.weight": 0.0795898288488388,
+        "model.layers.1.input_layernorm.weight": 0.009954582899808884,
+        "model.layers.1.post_attention_layernorm.weight": 0.007734562270343304,
+        "model.norm.weight": 0.010726767592132092,
+        "lm_head.weight": 0.0601210780441761
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "streaming-local": {
+      "backend": "streaming",
+      "direction": "reverse",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.013865993358194828,
+          "position_kl_sums": [
+            0.0,
+            0.025679088197648525,
+            0.02037404477596283,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.02664526179432869,
+            0.038229549303650856,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.008271833881735802,
+          "position_kl_sums": [
+            0.0,
+            0.006948232650756836,
+            0.00580356502905488,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008359679952263832,
+            0.011975856497883797,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.005685631651431322,
+          "position_kl_sums": [
+            0.0,
+            0.011810119729489088,
+            0.007805722765624523,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.009960094466805458,
+            0.01590911764651537,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.037695012986660004,
+        "model.layers.0.self_attn.q_proj.weight": 0.05561913922429085,
+        "model.layers.0.self_attn.q_proj.bias": 0.010055950842797756,
+        "model.layers.0.self_attn.k_proj.weight": 0.03960205987095833,
+        "model.layers.0.self_attn.k_proj.bias": 0.006267673335969448,
+        "model.layers.0.self_attn.v_proj.weight": 0.03974929079413414,
+        "model.layers.0.self_attn.v_proj.bias": 0.007411943282932043,
+        "model.layers.0.self_attn.o_proj.weight": 0.054250288754701614,
+        "model.layers.0.mlp.gate_proj.weight": 0.08154471963644028,
+        "model.layers.0.mlp.up_proj.weight": 0.08110740035772324,
+        "model.layers.0.mlp.down_proj.weight": 0.0799749419093132,
+        "model.layers.0.input_layernorm.weight": 0.010769843123853207,
+        "model.layers.0.post_attention_layernorm.weight": 0.009217916987836361,
+        "model.layers.1.self_attn.q_proj.weight": 0.056420210748910904,
+        "model.layers.1.self_attn.q_proj.bias": 0.009085789322853088,
+        "model.layers.1.self_attn.k_proj.weight": 0.04063931107521057,
+        "model.layers.1.self_attn.k_proj.bias": 0.00537842744961381,
+        "model.layers.1.self_attn.v_proj.weight": 0.04025433585047722,
+        "model.layers.1.self_attn.v_proj.bias": 0.007340084761381149,
+        "model.layers.1.self_attn.o_proj.weight": 0.05465589463710785,
+        "model.layers.1.mlp.gate_proj.weight": 0.08054646104574203,
+        "model.layers.1.mlp.up_proj.weight": 0.08012321591377258,
+        "model.layers.1.mlp.down_proj.weight": 0.0795898288488388,
+        "model.layers.1.input_layernorm.weight": 0.009954582899808884,
+        "model.layers.1.post_attention_layernorm.weight": 0.007734562270343304,
+        "model.norm.weight": 0.010726767592132092,
+        "lm_head.weight": 0.0601210780441761
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "forward-extra": {
+      "backend": "precompute_fused",
+      "direction": "forward",
+      "loss_agg_mode": "token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "none",
+      "gamma": 1.0,
+      "world_size": 2,
+      "records": [
+        {
+          "step": 0,
+          "loss": 0.013302288949489594,
+          "position_kl_sums": [
+            0.0,
+            0.027602748945355415,
+            0.021502884104847908,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.03492281585931778,
+            0.022389867343008518,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": 0.008497757837176323,
+          "position_kl_sums": [
+            0.0,
+            0.010483741760253906,
+            0.005725579336285591,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.01079702377319336,
+            0.006984683685004711,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.00555223086848855,
+          "position_kl_sums": [
+            0.0,
+            0.013725945260375738,
+            0.007815989665687084,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.01311495155096054,
+            0.009760959539562464,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            2.0,
+            2.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            2.0,
+            2.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.037276338785886765,
+        "model.layers.0.self_attn.q_proj.weight": 0.05878432095050812,
+        "model.layers.0.self_attn.q_proj.bias": 0.011039149016141891,
+        "model.layers.0.self_attn.k_proj.weight": 0.03973289579153061,
+        "model.layers.0.self_attn.k_proj.bias": 0.004839659668505192,
+        "model.layers.0.self_attn.v_proj.weight": 0.04038845747709274,
+        "model.layers.0.self_attn.v_proj.bias": 0.007773879449814558,
+        "model.layers.0.self_attn.o_proj.weight": 0.05361587926745415,
+        "model.layers.0.mlp.gate_proj.weight": 0.07893577963113785,
+        "model.layers.0.mlp.up_proj.weight": 0.07983414828777313,
+        "model.layers.0.mlp.down_proj.weight": 0.07996149361133575,
+        "model.layers.0.input_layernorm.weight": 0.009837171994149685,
+        "model.layers.0.post_attention_layernorm.weight": 0.008883326314389706,
+        "model.layers.1.self_attn.q_proj.weight": 0.0597885400056839,
+        "model.layers.1.self_attn.q_proj.bias": 0.010748257860541344,
+        "model.layers.1.self_attn.k_proj.weight": 0.04098937287926674,
+        "model.layers.1.self_attn.k_proj.bias": 0.006252584047615528,
+        "model.layers.1.self_attn.v_proj.weight": 0.04062555357813835,
+        "model.layers.1.self_attn.v_proj.bias": 0.007659167051315308,
+        "model.layers.1.self_attn.o_proj.weight": 0.05367891490459442,
+        "model.layers.1.mlp.gate_proj.weight": 0.08198482543230057,
+        "model.layers.1.mlp.up_proj.weight": 0.07968394458293915,
+        "model.layers.1.mlp.down_proj.weight": 0.07435411214828491,
+        "model.layers.1.input_layernorm.weight": 0.009311729110777378,
+        "model.layers.1.post_attention_layernorm.weight": 0.009941209107637405,
+        "model.norm.weight": 0.01126879546791315,
+        "lm_head.weight": 0.06007172167301178
+      },
+      "checkpoint_roundtrip": false,
+      "scheduler_optimizer_roundtrip": false,
+      "resumed_next_update_equivalent": false,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 3,
+      "teacher_hidden_size": 32
+    },
+    "sampled-mdpo": {
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.bfloat16"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.bfloat16"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.bfloat16"
+        ],
+        "model.norm": [
+          "torch.bfloat16"
+        ]
+      },
+      "teacher_projection_dtypes": [],
+      "precision": "bf16",
+      "sequence_length": 5,
+      "actor_token_budget": 10,
+      "scaler": null,
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "sampled",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": false,
+      "world_size": 2,
+      "teacher_extra_rows": 3,
+      "termination_ids": [],
+      "kappa": 0.5,
+      "compare_backend": null,
+      "backend_max_parameter_abs_error": null,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.08353263884782791,
+            -0.17264096438884735,
+            -0.273139625787735
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            -0.019908305257558823,
+            0.09599258005619049,
+            0.11755120754241943
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_reference": false,
+      "actor_wrapper_and_timing": true
+    },
+    "mdpo-bf16-fp32-checkpoint": {
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float32"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.norm": [
+          "torch.float32"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "precision": "bf16_fp32",
+      "sequence_length": 5,
+      "actor_token_budget": 10,
+      "scaler": null,
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 0,
+      "termination_ids": [
+        1,
+        4
+      ],
+      "kappa": 0.5,
+      "compare_backend": null,
+      "backend_max_parameter_abs_error": null,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.00777016393840313,
+            0.008092480711638927,
+            0.006111775524914265
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.0037739253602921963,
+            0.0037511903792619705,
+            0.0030204413924366236
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0021389001049101353,
+            0.0015451816143468022,
+            0.001514443545602262
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.0021389001049101353,
+            0.0015451816143468022,
+            0.001514443545602262
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_reference": false,
+      "actor_wrapper_and_timing": true
+    },
+    "mdpo-fp32-compare": {
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float32"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float32"
+        ],
+        "model.norm": [
+          "torch.float32"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "precision": "fp32",
+      "sequence_length": 5,
+      "actor_token_budget": 10,
+      "scaler": null,
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 0,
+      "termination_ids": [
+        1,
+        4
+      ],
+      "kappa": 0.5,
+      "compare_backend": "precompute",
+      "backend_max_parameter_abs_error": 8.754432201385498e-07,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.007774295751005411,
+            0.008108641020953655,
+            0.006123367231339216
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 1,
+          "loss": [
+            0.0077742962166666985,
+            0.008108641020953655,
+            0.006123367231339216
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.0037813251838088036,
+            0.0037657092325389385,
+            0.003034690860658884
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.002151401247829199,
+            0.0015534025151282549,
+            0.0015214832965284586
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            0.002151401247829199,
+            0.0015534025151282549,
+            0.0015214832965284586
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_reference": false,
+      "actor_wrapper_and_timing": true
+    },
+    "mdpo-bf16-compare": {
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.bfloat16"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.bfloat16"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.bfloat16"
+        ],
+        "model.norm": [
+          "torch.bfloat16"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "precision": "bf16",
+      "sequence_length": 5,
+      "actor_token_budget": 10,
+      "scaler": null,
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "tied": false,
+      "checkpoint": false,
+      "world_size": 2,
+      "teacher_extra_rows": 0,
+      "termination_ids": [
+        1,
+        4
+      ],
+      "kappa": 0.5,
+      "compare_backend": "precompute",
+      "backend_max_parameter_abs_error": 0.0,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            0.007773302495479584,
+            0.008079967461526394,
+            0.006152045913040638
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 1,
+          "loss": [
+            0.007773302495479584,
+            0.008079961873590946,
+            0.006152045913040638
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            0.003776205936446786,
+            0.0037573082372546196,
+            0.003031715750694275
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_reference": false,
+      "actor_wrapper_and_timing": true
+    },
+    "fsdp4": {
+      "backend": "precompute_fused",
+      "direction": "reverse",
+      "loss_agg_mode": "seq-mean-token-sum-norm",
+      "loss_scale_factor": 7.0,
+      "future_mode": "mean",
+      "gamma": 1.0,
+      "world_size": 4,
+      "records": [
+        {
+          "step": 0,
+          "loss": -0.003958989400416613,
+          "position_kl_sums": [
+            0.0,
+            0.05362458899617195,
+            0.040748320519924164,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.053290534764528275,
+            0.07339858449995518,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            4.0,
+            4.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0,
+            4.0,
+            0.0
+          ]
+        },
+        {
+          "step": 1,
+          "loss": -0.0026794811710715294,
+          "position_kl_sums": [
+            0.0,
+            0.02858490403741598,
+            0.01713084289804101,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.026009595952928066,
+            0.03525941725820303,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            3.0,
+            3.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            3.0,
+            3.0,
+            0.0
+          ]
+        },
+        {
+          "step": 2,
+          "loss": -0.00172396469861269,
+          "position_kl_sums": [
+            0.0,
+            0.029578878544270992,
+            0.014723189175128937,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.02146107330918312,
+            0.031979086343199015,
+            0.0
+          ],
+          "position_token_counts": [
+            0.0,
+            4.0,
+            4.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0,
+            4.0,
+            0.0
+          ]
+        }
+      ],
+      "parameter_delta_norms_rank0": {
+        "model.embed_tokens.weight": 0.030410129576921463,
+        "model.layers.0.self_attn.q_proj.weight": 0.04025048762559891,
+        "model.layers.0.self_attn.q_proj.bias": 0.007312547881156206,
+        "model.layers.0.self_attn.k_proj.weight": 0.028327619656920433,
+        "model.layers.0.self_attn.k_proj.bias": 0.0037531109992414713,
+        "model.layers.0.self_attn.v_proj.weight": 0.0283365398645401,
+        "model.layers.0.self_attn.v_proj.bias": 0.004943368025124073,
+        "model.layers.0.self_attn.o_proj.weight": 0.03895056992769241,
+        "model.layers.0.mlp.gate_proj.weight": 0.05853688344359398,
+        "model.layers.0.mlp.up_proj.weight": 0.056903690099716187,
+        "model.layers.0.mlp.down_proj.weight": 0.05787072703242302,
+        "model.layers.0.input_layernorm.weight": 0.006847667042165995,
+        "model.layers.0.post_attention_layernorm.weight": 0.005711363162845373,
+        "model.layers.1.self_attn.q_proj.weight": 0.04055311530828476,
+        "model.layers.1.self_attn.q_proj.bias": 0.006976746488362551,
+        "model.layers.1.self_attn.k_proj.weight": 0.028916921466588974,
+        "model.layers.1.self_attn.k_proj.bias": 0.004250762984156609,
+        "model.layers.1.self_attn.v_proj.weight": 0.027818363159894943,
+        "model.layers.1.self_attn.v_proj.bias": 0.005206589587032795,
+        "model.layers.1.self_attn.o_proj.weight": 0.03958076238632202,
+        "model.layers.1.mlp.gate_proj.weight": 0.05758349224925041,
+        "model.layers.1.mlp.up_proj.weight": 0.058016229420900345,
+        "model.layers.1.mlp.down_proj.weight": 0.056370723992586136,
+        "model.layers.1.input_layernorm.weight": 0.007105974014848471,
+        "model.layers.1.post_attention_layernorm.weight": 0.005699738394469023,
+        "model.norm.weight": 0.007624607067555189,
+        "lm_head.weight": 0.043238528072834015
+      },
+      "checkpoint_roundtrip": true,
+      "scheduler_optimizer_roundtrip": true,
+      "resumed_next_update_equivalent": true,
+      "model_type": "qwen2",
+      "moe_teacher": false,
+      "tied_student": false,
+      "tied_teacher": false,
+      "teacher_extra_rows": 0,
+      "teacher_hidden_size": 32
+    },
+    "weighted-future-fused-fixed": {
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.bfloat16"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.bfloat16"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.bfloat16"
+        ],
+        "model.norm": [
+          "torch.bfloat16"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "precision": "bf16",
+      "sequence_length": 5,
+      "actor_token_budget": 10,
+      "scaler": null,
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute_fused",
+      "loss_agg_mode": "seq-mean-token-mean",
+      "loss_scale_factor": 7.0,
+      "future_mode": "discounted_sequence",
+      "gamma": 0.87,
+      "tied": false,
+      "checkpoint": true,
+      "world_size": 2,
+      "teacher_extra_rows": 0,
+      "termination_ids": [
+        1,
+        4
+      ],
+      "kappa": 0.5,
+      "compare_backend": null,
+      "backend_max_parameter_abs_error": null,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            -0.0038329954259097576,
+            -0.0033801307436078787,
+            -0.0032422670628875494
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            -0.0024936094414442778,
+            -0.0022446417715400457,
+            -0.0018106637289747596
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            -0.001554320682771504,
+            -0.0012269164435565472,
+            -0.0011585609754547477
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 3,
+          "loss": [
+            -0.001554320682771504,
+            -0.0012269164435565472,
+            -0.0011585609754547477
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_reference": false,
+      "actor_wrapper_and_timing": true
+    },
+    "weighted-future-precompute-fixed": {
+      "activation_dtypes": {
+        "model.embed_tokens": [
+          "torch.float16"
+        ],
+        "model.layers.0.mlp.gate_proj": [
+          "torch.float16"
+        ],
+        "model.layers.1.mlp.gate_proj": [
+          "torch.float16"
+        ],
+        "model.norm": [
+          "torch.float16"
+        ]
+      },
+      "teacher_projection_dtypes": [
+        "torch.bfloat16"
+      ],
+      "precision": "fp16",
+      "sequence_length": 5,
+      "actor_token_budget": 10,
+      "scaler": {
+        "scale": 256.0,
+        "growth_factor": 2.0,
+        "backoff_factor": 0.5,
+        "growth_interval": 2,
+        "_growth_tracker": 0
+      },
+      "objective": "mdpo",
+      "model_type": "qwen2",
+      "estimator": "full_vocab",
+      "eta": 0.3,
+      "backend": "precompute",
+      "loss_agg_mode": "seq-mean-token-sum-norm",
+      "loss_scale_factor": 7.0,
+      "future_mode": "mean",
+      "gamma": 1.0,
+      "tied": true,
+      "checkpoint": false,
+      "world_size": 2,
+      "teacher_extra_rows": 0,
+      "termination_ids": [
+        1,
+        4
+      ],
+      "kappa": 0.5,
+      "compare_backend": null,
+      "backend_max_parameter_abs_error": null,
+      "records": [
+        {
+          "outer": 1,
+          "loss": [
+            -0.0019081333884969354,
+            -0.00258908630348742,
+            -0.0016573906177654862
+          ],
+          "updates": 3
+        },
+        {
+          "outer": 2,
+          "loss": [
+            -0.0012296627974137664,
+            -0.0011420531664043665,
+            -0.000982483383268118
+          ],
+          "updates": 3
+        }
+      ],
+      "frozen_anchor": true,
+      "endpoint_reference": false,
+      "actor_wrapper_and_timing": true
+    }
+  },
+  "failures_retained": [
+    {
+      "name": "fsdp2-first",
+      "cause": "Mixed CPU/CUDA Observation states; fixed in 4f68f9fe; identical rerun passed"
+    },
+    {
+      "name": "mdpo-checkpoint",
+      "cause": "bf16_fp32 strict precompute_fused/precompute parameter comparison; k_proj.bias max_abs=1.6333884559571743e-05 vs atol=1e-6; checkpoint without comparison, fp32 and bf16 comparison pass; no threshold changed"
+    },
+    {
+      "name": "head-benchmark",
+      "cause": "N=4096 dense FP32 reference OOM on 79.10 GiB H800; N=512 all seven backend rows complete"
+    },
+    {
+      "name": "trajectory-benchmark",
+      "cause": "benchmark control passed None to internal termination token list; corrected to []"
+    },
+    {
+      "name": "trajectory-fixed",
+      "cause": "fixed absolute 1e-4 scalar gate failed on long sum (difference .00048828125); final gate uses atol=1e-4 + rtol=2e-6, gradients unchanged"
+    },
+    {
+      "name": "smoke",
+      "cause": "Old global mirror token-mean preflight; fixed in 2584da10; ten estimator/aggregate regressions added"
+    },
+    {
+      "name": "smoke-retry",
+      "cause": "Smoke setting lacked explicit common stop_token_ids; corrected final smoke setting"
+    },
+    {
+      "name": "smoke-final",
+      "cause": "Smoke used retired model alias paths; retry resolved canonical registry locations and completed"
+    },
+    {
+      "name": "weighted-future-first-attempts",
+      "cause": "New test CLI did not pass aggregation into configure_full_vocab, so global sequence denominator was absent; test wiring fixed in 8837db9c; both identical retries passed"
+    }
+  ],
+  "raw_run_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104",
+  "smoke": {
+    "returncode": 0,
+    "scope": "real Qwen3-1.7B-Base <- Qwen3-8B; 2 H800; Ray/TQ/vLLM/default evaluator; training-only future mean",
+    "source_commit": "afd23fb38434e6097a1f3104fe70a4161484d681",
+    "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+    "aggregate": "seq-mean-token-mean",
+    "full_vocab": {
+      "_target_": "verl.workers.config.distillation.FullVocabConfig",
+      "backend": "precompute_fused",
+      "token_chunk_size": 512,
+      "vocab_chunk_size": 8192,
+      "async_write": true,
+      "prefetch": true,
+      "forward_teacher_support": "equal",
+      "termination_token_ids": [
+        151643,
+        151645
+      ],
+      "distribution": {},
+      "input_id_mapping": "identity",
+      "future": {
+        "mode": "mean",
+        "gamma": 1.0
+      }
+    },
+    "train_batch_size": 4,
+    "outer_steps": 2,
+    "optimizer_steps": 2,
+    "validation_steps": [
+      0,
+      1,
+      2
+    ],
+    "max_response_length": 32,
+    "max_prompt_length": 2048,
+    "validation_max_samples": 4,
+    "artifacts": [
+      {
+        "step": 0,
+        "rows": 4,
+        "unique_prompt_sample": 4,
+        "status_ok": 4,
+        "sha256": "7dc39e45d39e5a48b20fadef15475f0a1f2de242be54c68a465176f45af3e5c6"
+      },
+      {
+        "step": 1,
+        "rows": 4,
+        "unique_prompt_sample": 4,
+        "status_ok": 4,
+        "sha256": "42fd876a1adc8a1168242effc2eed1838500a5f0b64402aea88587111bece213"
+      },
+      {
+        "step": 2,
+        "rows": 4,
+        "unique_prompt_sample": 4,
+        "status_ok": 4,
+        "sha256": "20a2e61313a82e055432fa028f6d1cfa105110d5d41d03bc08964b5c3c4ad5aa"
+      }
+    ],
+    "metrics": [
+      {
+        "step": 0,
+        "metrics": {
+          "eval/math500/response_count": 4.0,
+          "eval/math500/failed_count": 0.0,
+          "perf/timing/validation_rollout_seconds": 68.071987391,
+          "perf/timing/validation_seconds": 90.75808726996183,
+          "step/outer": 0,
+          "step/update": 0,
+          "step/optimizer": 0
+        }
+      },
+      {
+        "step": 1,
+        "metrics": {
+          "optim/actor/distillation_loss": 0.24379278719425201,
+          "optim/actor/loss": 0.24379278719425201,
+          "optim/actor/loss_nonfinite": 0.0,
+          "step/outer": 1,
+          "step/update": 1,
+          "step/optimizer": 1
+        }
+      },
+      {
+        "step": 1,
+        "metrics": {
+          "eval/math500/response_count": 4.0,
+          "eval/math500/failed_count": 0.0,
+          "perf/timing/validation_rollout_seconds": 0.629344998,
+          "perf/timing/rollout_batch_seconds": 0.600498848,
+          "step/outer": 1,
+          "perf/timing/rollout_pipeline_seconds": 14.069047451019287,
+          "perf/timing/teacher_transfer_seconds": 8.088070169091225,
+          "perf/timing/teacher_forward_seconds": 0.493676595389843,
+          "perf/timing/update_actor_seconds": 11.054363034665585,
+          "perf/timing/update_weights_seconds": 1.3239384591579437,
+          "perf/timing/outer_step_seconds": 35.04371301829815,
+          "perf/timing/validation_seconds": 14.07362363487482,
+          "step/update": 1,
+          "step/optimizer": 1
+        }
+      },
+      {
+        "step": 2,
+        "metrics": {
+          "optim/actor/distillation_loss": -0.5347088575363159,
+          "optim/actor/loss": -0.5347088575363159,
+          "optim/actor/loss_nonfinite": 0.0,
+          "step/outer": 2,
+          "step/update": 2,
+          "step/optimizer": 2
+        }
+      },
+      {
+        "step": 2,
+        "metrics": {
+          "eval/math500/response_count": 4.0,
+          "eval/math500/failed_count": 0.0,
+          "perf/timing/validation_rollout_seconds": 0.611215954,
+          "perf/timing/rollout_batch_seconds": 0.620692936,
+          "step/outer": 2,
+          "perf/timing/rollout_pipeline_seconds": 2.0587133020162582,
+          "perf/timing/teacher_transfer_seconds": 7.745201162993908,
+          "perf/timing/teacher_forward_seconds": 0.2149735540151596,
+          "perf/timing/update_actor_seconds": 8.156749919056892,
+          "perf/timing/update_weights_seconds": 1.0758965834975243,
+          "perf/timing/outer_step_seconds": 19.261426217854023,
+          "perf/timing/validation_seconds": 2.0649041905999184,
+          "step/update": 2,
+          "step/optimizer": 2
+        }
+      }
+    ],
+    "raw_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/gpu-acceptance-20261104/smoke-native",
+    "limitations": [
+      "short correctness smoke, not quality evidence",
+      "default evaluator only; public suite and source/history GPU event lifecycles not exercised",
+      "no paired actor performance comparison"
+    ]
+  },
+  "resource_final": {
+    "0": {
+      "desired": "reserved",
+      "owner": "olmo3-stage-transfer-20261103",
+      "phase": "reserved_ready"
+    },
+    "1": {
+      "desired": "released",
+      "owner": null,
+      "phase": "occupying"
+    },
+    "2": {
+      "desired": "released",
+      "owner": null,
+      "phase": "occupying"
+    },
+    "3": {
+      "desired": "released",
+      "owner": null,
+      "phase": "occupying"
+    },
+    "4": {
+      "desired": "released",
+      "owner": null,
+      "phase": "occupying"
+    },
+    "5": {
+      "desired": "reserved",
+      "owner": "olmo3-stage-transfer-20261103",
+      "phase": "reserved_ready"
+    },
+    "6": {
+      "desired": "reserved",
+      "owner": "olmo3-stage-transfer-20261103",
+      "phase": "reserved_ready"
+    },
+    "7": {
+      "desired": "reserved",
+      "owner": "olmo3-stage-transfer-20261103",
+      "phase": "reserved_ready"
+    }
+  }
+}

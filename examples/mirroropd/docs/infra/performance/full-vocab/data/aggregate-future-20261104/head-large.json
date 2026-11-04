@@ -1,0 +1,145 @@
+{
+  "scope": "production operators only; BF16 input, FP32 logits/accumulation, no backbone/FSDP/TQ",
+  "torch": "2.11.0+cu129",
+  "gpu": "NVIDIA H800",
+  "chunk": 512,
+  "vocab": 151936,
+  "hidden": 1536,
+  "teacher_hidden": 1536,
+  "teacher_vocab": 151936,
+  "reference_backend": "precompute_fused",
+  "rows": [
+    {
+      "tokens": 4096,
+      "backend": "recompute",
+      "errors": {
+        "value_abs": 1.1920928955078125e-07,
+        "hidden_relative_l2": 0.00024510492221452296,
+        "head_relative_l2": 0.0002705190272536129
+      },
+      "value": 0.9996428489685059,
+      "wall_ms_median": 483.6714193224907,
+      "wall_ms_samples": [
+        487.0891496539116,
+        484.0698316693306,
+        483.39004069566727,
+        483.6714193224907,
+        483.628548681736
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 8.6444673538208,
+      "incremental_peak_gib": 7.687436103820801,
+      "peak_reserved_gib": 10.359375
+    },
+    {
+      "tokens": 4096,
+      "backend": "cached",
+      "errors": {
+        "value_abs": 1.1920928955078125e-07,
+        "hidden_relative_l2": 0.0004460669297259301,
+        "head_relative_l2": 0.0002705190272536129
+      },
+      "value": 0.9996428489685059,
+      "wall_ms_median": 567.7751898765564,
+      "wall_ms_samples": [
+        571.5680494904518,
+        565.9881681203842,
+        567.7376762032509,
+        567.7751898765564,
+        568.0234879255295
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 2.369999885559082,
+      "incremental_peak_gib": 1.412968635559082,
+      "peak_reserved_gib": 3.857421875
+    },
+    {
+      "tokens": 4096,
+      "backend": "streaming",
+      "errors": {
+        "value_abs": 1.1920928955078125e-07,
+        "hidden_relative_l2": 0.0004460669297259301,
+        "head_relative_l2": 0.0002705190272536129
+      },
+      "value": 0.9996428489685059,
+      "wall_ms_median": 578.9173394441605,
+      "wall_ms_samples": [
+        1537.9533991217613,
+        578.9173394441605,
+        578.9381340146065,
+        578.8416489958763,
+        578.8549929857254
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 2.369999885559082,
+      "incremental_peak_gib": 1.412968635559082,
+      "peak_reserved_gib": 2.724609375
+    },
+    {
+      "tokens": 4096,
+      "backend": "precompute",
+      "errors": {
+        "value_abs": 2.384185791015625e-07,
+        "hidden_relative_l2": 0.00026374601293355227,
+        "head_relative_l2": 0.00029838402406312525
+      },
+      "value": 0.9996429681777954,
+      "wall_ms_median": 165.59266299009323,
+      "wall_ms_samples": [
+        171.51662707328796,
+        165.59266299009323,
+        165.75056314468384,
+        165.496326982975,
+        165.51533341407776
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 5.762129783630371,
+      "incremental_peak_gib": 4.805098533630371,
+      "peak_reserved_gib": 6.23828125
+    },
+    {
+      "tokens": 4096,
+      "backend": "precompute_fused",
+      "errors": {
+        "value_abs": 0.0,
+        "hidden_relative_l2": 0.0,
+        "head_relative_l2": 0.0
+      },
+      "value": 0.9996427297592163,
+      "wall_ms_median": 26.716411113739014,
+      "wall_ms_samples": [
+        31.89338743686676,
+        26.550792157649994,
+        26.548855006694794,
+        26.716411113739014,
+        26.822246611118317
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 2.8649778366088867,
+      "incremental_peak_gib": 1.9079465866088867,
+      "peak_reserved_gib": 3.400390625
+    },
+    {
+      "tokens": 4096,
+      "backend": "liger",
+      "errors": {
+        "value_abs": 1.1920928955078125e-07,
+        "hidden_relative_l2": 0.0004123531689401716,
+        "head_relative_l2": 0.00031289132311940193
+      },
+      "value": 0.9996428489685059,
+      "wall_ms_median": 132.07943737506866,
+      "wall_ms_samples": [
+        166.85182601213455,
+        130.49181550741196,
+        133.8355988264084,
+        132.07943737506866,
+        130.61437010765076
+      ],
+      "resident_gib": 0.95703125,
+      "peak_allocated_gib": 2.4764866828918457,
+      "incremental_peak_gib": 1.5194554328918457,
+      "peak_reserved_gib": 2.677734375
+    }
+  ]
+}

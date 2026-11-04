@@ -16,6 +16,45 @@
 
 工具在每个 backend 计时前检查 loss 和 hidden/head VJP，沿用绝对 loss 误差小于 1e-4、梯度相对 L2 误差小于 0.02 的随机输入门槛；近目标和小梯度仍由独立 FP64 CUDA 测试覆盖，不能用随机输入检查代替。每个形状预热两次、测量五次，已有输出文件会被拒绝。`--profile` 在计时结束后另做一次 CPU/CUDA trace，输出独立的 `.trace.json.gz`，trace 时间不混入性能样本。扩展的异构形状与 trace 入口已完成下述开发检查；历史性能数字保持原测量身份。
 
+## 聚合与未来信用复测（2026-11-04）
+
+本次在 H800 上使用合成 BF16 hidden/head、FP32 投影与累计，TF32 关闭，词表 151936、hidden 1536。每个配置预热 2 次、测量 5 次，时间包含 hidden/head 反向；保留全部墙钟样本及 allocated/reserved 峰值。GPU 1 由资源 broker 独占交接，同机其他卡仍有训练；没有锁频、随机交替或跨进程重复，不将单次队列中位数视为置信区间。源码身份、命令、失败和数值检查见[验收数据](data/aggregate-future-20261104/validation.json)。
+
+### Backend 与容量
+
+[小规模数据](data/aggregate-future-20261104/head-small.json)中，512 token 的七种 backend 均通过 dense loss/VJP 门控。4096 token 的 dense 参考在 79.10 GiB 卡上 OOM；[大规模数据](data/aggregate-future-20261104/head-large.json)改以 precompute_fused 作为系统一致性参考，其余门槛不变。大规模检查共享实现，独立数学校验仍来自小规模 dense 与[CUDA 数值矩阵](../../numerics/full-vocab/validation.md#聚合与未来信用验收2026-11-04)。
+
+| Backend，4096 token、chunk512 | 中位墙钟（ms） | Allocated 峰值（GiB） |
+| ----------------------------- | -------------: | --------------------: |
+| recompute                     |        483.671 |                 8.644 |
+| cached                        |        567.775 |                 2.370 |
+| streaming                     |        578.917 |                 2.370 |
+| precompute                    |        165.593 |                 5.762 |
+| precompute_fused              |         26.716 |                 2.865 |
+| liger                         |        132.079 |                 2.476 |
+
+这组输入下 fused head 比 precompute 快约 6.20 倍，与下方 2026-10-30 的同形状结果接近。这里只测 teacher-only reverse KL 的 head 前反向；不外推为 MDPO、完整 actor 或整轮训练倍率。
+
+### 遍历顺序、回答边界与 future
+
+[benchmark_trajectory.py](../../../../benchmarks/full_vocab/benchmark_trajectory.py)固定总 token 数 1024、chunk256，对比一条 1024-token 回答和 16 条 64-token 回答，以及 token-mean、seq-mean-token-mean。两种 backend、六种 future 模式和零信用控制共 72 组通过 dense 门控；[完整数据](data/aggregate-future-20261104/trajectory-final.json)记录每组投影调用数和总投影行数。长 sum surrogate 的绝对量可达数千，标量门槛为 `atol=1e-4, rtol=2e-6`；hidden/head 相对 L2 门槛仍为 0.03。观测到的最大标量绝对误差为 0.00048828125，hidden/head 最大相对 L2 分别为 0.000604/0.001265。最初仅用绝对标量门槛的失败保留在验收记录中，不计为原门槛通过。
+
+下表只取 precompute_fused、token-mean。零信用控制直接使用 trajectory 骨架，仍计算 suffix/score，但将 future 系数置零；它用于隔离调度，不是新的生产 backend。
+
+| 路径                     | 一条长回答（ms） | 16 条短回答（ms） | 投影调用数：长／短 |
+| ------------------------ | ---------------: | ----------------: | -----------------: |
+| 生产 none，连续分块      |           10.363 |            10.348 |               8／8 |
+| 零信用，连续块顺序       |           19.529 |            19.495 |               8／8 |
+| 零信用，连续块逆序       |           19.503 |            19.495 |               8／8 |
+| 零信用，回答内逆序       |           19.660 |            40.779 |              8／32 |
+| 生产 sum                 |           19.582 |            40.712 |              8／32 |
+| 生产 mean                |           19.668 |            41.019 |              8／32 |
+| 生产 discounted_sequence |           19.875 |            41.410 |              8／32 |
+
+连续块顺序与逆序的差异接近本次计时波动；当前路径的主要额外成本来自 trajectory 通用计算和回答边界导致的小块 GEMM。所有这些路径的总投影行数均为 2048，即 student/teacher 各 1024 行；future 没有重新运行后续 token 的 backbone 或 head。短回答的更多调用源于不能跨回答延续 suffix carry。`seq-mean-token-mean` 仍复用相同投影，完整结果中另外记录其权重与耗时；不据单次观测认定 aggregate 在任何形状下都没有性能影响。
+
+本次没有修改生产遍历、kernel、默认 aggregate 或默认 future。完整 actor 的固定输入配对仍需单独测量；上述 72 组只为计算层后续重构建立基线。
+
 ## R1 配对的算子开发测量
 
 2026-10-30，在物理 GPU 6 的独占开发队列中复测当前 precompute 与 fused 实现。Learner head 为 vocab151936、hidden1536，BF16 输入与 FP32 归约；先通过 79 项 CUDA 数值测试，覆盖近目标、小梯度、BF16、非整齐词表和额外 teacher 输出行等案例。运行证据位于工作区 `runs/vllm-fusion-20261029/r1-fused-operator-checks-01/` 与 `r1-fused-shapes-02/`。
