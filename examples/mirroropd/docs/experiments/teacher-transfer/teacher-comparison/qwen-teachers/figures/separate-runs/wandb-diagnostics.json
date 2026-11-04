@@ -1,0 +1,40 @@
+{
+  "E41": {
+    "wandb_status": "finished",
+    "wandb_history_rows": 1700,
+    "logger_parity_rows": 1700,
+    "wandb_system_rows": 3100,
+    "complete_gpu_samples": 1550,
+    "gpu_peak_gib": 66.8931884765625,
+    "train_hours": 1.4185420892842941,
+    "validation_hours": 5.037259691964007,
+    "other_hours": 0.07497228632577592,
+    "late_batch_loss_reduction_mean": 0.24131069120471108,
+    "last_outer_first_loss": 0.11197664588689804,
+    "last_outer_last_loss": 0.08495695888996124,
+    "max_grad_norm": 7.557104110717773,
+    "clip_threshold_exceeded_fraction": 0.044375,
+    "nonfinite_loss_count": 0,
+    "nonfinite_grad_count": 0,
+    "skipped_updates": 0
+  },
+  "E43": {
+    "wandb_status": "finished",
+    "wandb_history_rows": 1701,
+    "logger_parity_rows": 1701,
+    "wandb_system_rows": 3082,
+    "complete_gpu_samples": 1541,
+    "gpu_peak_gib": 66.7642822265625,
+    "train_hours": 2.1303575199780367,
+    "validation_hours": 4.287959798284703,
+    "other_hours": 0.09365651153648893,
+    "late_batch_loss_reduction_mean": 0.21727015036524883,
+    "last_outer_first_loss": 0.23828156292438507,
+    "last_outer_last_loss": 0.1852596551179886,
+    "max_grad_norm": 5.760059833526611,
+    "clip_threshold_exceeded_fraction": 0.23375,
+    "nonfinite_loss_count": 0,
+    "nonfinite_grad_count": 0,
+    "skipped_updates": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "fingerprint": "2c64f90c02d140e50e799268a59c51cfb9bbcc3010ad2c64665163539dd67708",
+  "inputs": {
+    "protocol": "b6a9db0c4b13f35198c04569c222c40b6d0fa9c530d657c969310064238d14d2",
+    "weights": "aa18cc797280b7288c3c5e8442f5317d5cc968077cb05de460d4468810f5ad67",
+    "prompts": "226c4c39beb4833245a7d1ed63a385272b5bfb71cfdea3948ce19c1a573ec11e",
+    "panel": "test",
+    "smoke": false,
+    "profile": {
+      "samples": 4,
+      "seed": 72000000,
+      "response_cap": 31744,
+      "model_length": 32768
+    },
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "dtype": "bfloat16",
+    "attention": "TRITON_ATTN",
+    "legal": "abc3afb984abdb07b148a41521ccd2b412625719d562f4c78dd3d6641ede9dca",
+    "grader": "verl-one-shot-opd-math-direct-worker-v1",
+    "grader_implementation": "ba717dac23e16a8c064a53fcd3d67792fa7091dc6c12c4746fe409f65ede856a",
+    "implementation": "08d28b3e365bd7476c56de2ac3e1b9fd22ff8060316d1c0bf694d2af4bd248de"
+  },
+  "completed_at": 1793463776.4143608,
+  "records": 2520,
+  "questions": 630,
+  "samples": 4,
+  "elapsed_seconds": 12398.505806684494,
+  "raw_sha256": "f035b8c6cd892295a7feb74bf45f64d5a32231106a1b9b9fd5520e37a3177bdb",
+  "records_sha256": "2777c79d2055a3e898b0809b5ca0b404c4d4b8feb5f35b0b566dc74f93fa8adc",
+  "metrics_sha256": "d927484a37fba15676d75b1c0ecc6dd34c4c27edeec2838d473978079ed54934"
+}

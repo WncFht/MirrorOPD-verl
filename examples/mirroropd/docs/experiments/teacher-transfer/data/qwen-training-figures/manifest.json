@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "scope": "Frozen inputs for the existing E39/E41/E43 figures; no new evaluation or training.",
+  "runs": {
+    "E39": {
+      "run_id": "f0e44ec7",
+      "config": {
+        "path": "derived/MirrorOPD-verl/run-20261026_223012-f0e44ec7/config.json",
+        "sha256": "cb6d08eed1f341f1837dc30d5ee5224143d3f71da58aa2c6b4f3d8816d7fa937"
+      },
+      "initial_reference": "E39",
+      "teacher_full_set": null,
+      "plot_inputs": {
+        "validation.csv": {
+          "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/validation.csv",
+          "sha256": "f700a6834da3bfcd5a61d38d38f39fb2f1ef2a7a21656b96c14ff6ee54ce21ff"
+        },
+        "training.csv": {
+          "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/training.csv",
+          "sha256": "9dabeac4614e6ef0e42eec810c5cdbab9b3ade090b483eb2214ff6fcbb68cd0e"
+        },
+        "position-kl.csv": {
+          "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/position-kl.csv",
+          "sha256": "38fbf778e6b017233bf113921205cfc39ce3ccc41fabdb18bc4e53063b4fd15b"
+        },
+        "sample-panel-summary.csv": {
+          "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/sample-panel-summary.csv",
+          "sha256": "7cb0653fd434299877514f68612bf5499eb6c9e4ba080a428010475497e065e7"
+        },
+        "resources.json": {
+          "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/resources.json",
+          "sha256": "7be62b022b0b90bf8fd6de7a1445508ef28d9d6c6d7df32102184463751db93e"
+        },
+        "teacher-subset-reference.json": {
+          "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/teacher-subset-reference.json",
+          "sha256": "ca23cb041f12216fde748c74b045c9c0e982b647f28594a69068ab6e080ccd86"
+        },
+        "config.json": {
+          "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/config.json",
+          "sha256": "cb6d08eed1f341f1837dc30d5ee5224143d3f71da58aa2c6b4f3d8816d7fa937"
+        }
+      }
+    },
+    "E41": {
+      "run_id": "53dd553d",
+      "config": {
+        "path": "derived/MirrorOPD-verl/run-20261027_133032-53dd553d/config.json",
+        "sha256": "5bb9942604489168e5d0b29762fa229ff6938ae4276761fce912feb9dff31a1c"
+      },
+      "initial_reference": "E39",
+      "teacher_full_set": null,
+      "decoded_inputs": {
+        "history.jsonl": {
+          "path": "derived/MirrorOPD-verl/run-20261027_133032-53dd553d/history.jsonl",
+          "sha256": "b78fe95608508626b7035246e0d646ad5487d0f6529b8fd79ebfa118e00db7c5",
+          "hash_scope": "bytes"
+        },
+        "system.jsonl.gz": {
+          "path": "derived/MirrorOPD-verl/run-20261027_133032-53dd553d/system.jsonl.gz",
+          "sha256": "fb4eafec1fa9eee0b1ce4b9475aa3f60988849af023df8072f94a3c206933dac",
+          "hash_scope": "uncompressed_bytes"
+        }
+      },
+      "plot_inputs": {
+        "E41/metrics.jsonl": {
+          "path": "MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/E41/metrics.jsonl",
+          "sha256": "b59407ebb5254beb6590bf8ee93aa122d86457931f137508467e002c6f6e0a65",
+          "hash_scope": "bytes"
+        },
+        "E41/vllm-metrics.jsonl": {
+          "path": "MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/E41/vllm-metrics.jsonl",
+          "sha256": "f497f2694deff72c9349dd7142fdb11a6f4d11b44d5b618078926273027cd982",
+          "hash_scope": "bytes"
+        },
+        "E41/exit.json": {
+          "path": "MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/E41/exit.json",
+          "sha256": "414187eafd72063b6a8c870b439aa7fe8cc592049c76c8a01cc9b8ca85f023da",
+          "hash_scope": "bytes"
+        }
+      },
+      "base_reference_history": {
+        "path": "derived/MirrorOPD-verl/run-20261026_223012-f0e44ec7/history.jsonl",
+        "sha256": "a262518acf81ab49130c83d3a41654fed4845dc427e8699d105c1c85460e5f3b",
+        "hash_scope": "bytes"
+      }
+    },
+    "E43": {
+      "run_id": "eccc09a1",
+      "config": {
+        "path": "derived/MirrorOPD-verl/run-20261027_200542-eccc09a1/config.json",
+        "sha256": "d755f582d35584f4faaa72de71e52a2d6f7bf63b44dee6cf41c4bf10d1d46334"
+      },
+      "initial_reference": "E43",
+      "teacher_full_set": "e43-teacher",
+      "decoded_inputs": {
+        "history.jsonl": {
+          "path": "derived/MirrorOPD-verl/run-20261027_200542-eccc09a1/history.jsonl",
+          "sha256": "eb6c85088bf305bd60642ddb2e133963636e09497a1a10537dfc28e1369a1f32",
+          "hash_scope": "bytes"
+        },
+        "system.jsonl.gz": {
+          "path": "derived/MirrorOPD-verl/run-20261027_200542-eccc09a1/system.jsonl.gz",
+          "sha256": "6191c7bc57f46c4cc6d7253d73c7f99df1dfdfd508a616c5eeafa391a5057aff",
+          "hash_scope": "uncompressed_bytes"
+        }
+      },
+      "plot_inputs": {
+        "E43/metrics.jsonl": {
+          "path": "MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/E43/metrics.jsonl",
+          "sha256": "3215bde09996f87eebd5a77a1f1f867ba53cde5f86d486b5fb27b21fe8e72313",
+          "hash_scope": "bytes"
+        },
+        "E43/vllm-metrics.jsonl": {
+          "path": "MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/E43/vllm-metrics.jsonl",
+          "sha256": "fe380de0c56f22d17c6b4544b94522ddb0dbdc079c9db1f9976bd75db345f364",
+          "hash_scope": "bytes"
+        },
+        "E43/exit.json": {
+          "path": "MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/E43/exit.json",
+          "sha256": "d9e8e732043ec3462a900a161faafc8c0be8a3a41461d9c7fc3b76ded310dfe5",
+          "hash_scope": "bytes"
+        }
+      }
+    }
+  },
+  "teacher_evidence": {
+    "e43-teacher": {
+      "metrics": {
+        "path": "e43-teacher-metrics.json",
+        "sha256": "d927484a37fba15676d75b1c0ecc6dd34c4c27edeec2838d473978079ed54934",
+        "origin": "runs/qwen-prefix-six-20261031/baseline-accuracy/Q/metrics.json"
+      },
+      "complete": {
+        "path": "e43-teacher-complete.json",
+        "sha256": "7a6529567a409e9e17e5abbac0b55e066f8fe37e8e2a5feaebfed2ff6c9371d5",
+        "origin": "runs/qwen-prefix-six-20261031/baseline-accuracy/Q/complete.json"
+      },
+      "protocol": {
+        "path": "e43-teacher-protocol.json",
+        "sha256": "8b71ee8bcc71924d00db127938f68c358747224a896a1f72f911cf0aa3b94370",
+        "origin": "runs/qwen-prefix-six-20261031/prepared-03/protocol.json"
+      }
+    }
+  }
+}

@@ -1,42 +1,82 @@
 {
-  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/progress/data/20261101-review/followup-data.json",
-  "sha256": "3ba3ffb58b2892bf1fc467686fc66857132581a8894be1708627b4bd7c6a0cb3",
-  "metric": "mean correctness per question across 4 responses (avg@4)",
-  "temperature": 0.7,
-  "top_p": 0.9,
-  "response_cap": 31744,
-  "enable_thinking": false,
-  "E41": "No full same-protocol teacher reference in the frozen evidence",
-  "E43": [
-    {
-      "task": "math500",
-      "accuracy": 0.947,
-      "samples": 4,
-      "question_count": 500
+  "E41": {
+    "config": {
+      "path": "derived/MirrorOPD-verl/run-20261027_133032-53dd553d/config.json",
+      "sha256": "5bb9942604489168e5d0b29762fa229ff6938ae4276761fce912feb9dff31a1c"
     },
-    {
-      "task": "amc23",
-      "accuracy": 0.95625,
-      "samples": 4,
-      "question_count": 40
+    "manifest_sha256": "5d7b663017f33b29310e3a01a202248a9d7123e40efedb1d67ce2f569f416926",
+    "teacher_reference": null
+  },
+  "E43": {
+    "config": {
+      "path": "derived/MirrorOPD-verl/run-20261027_200542-eccc09a1/config.json",
+      "sha256": "d755f582d35584f4faaa72de71e52a2d6f7bf63b44dee6cf41c4bf10d1d46334"
     },
-    {
-      "task": "aime24",
-      "accuracy": 0.6333333333333333,
-      "samples": 4,
-      "question_count": 30
-    },
-    {
-      "task": "aime25",
-      "accuracy": 0.4166666666666667,
-      "samples": 4,
-      "question_count": 30
-    },
-    {
-      "task": "aime26",
-      "accuracy": 0.48333333333333334,
-      "samples": 4,
-      "question_count": 30
+    "manifest_sha256": "5d7b663017f33b29310e3a01a202248a9d7123e40efedb1d67ce2f569f416926",
+    "teacher_reference": {
+      "rows": [
+        {
+          "task": "math500",
+          "accuracy": 0.947,
+          "samples": 4,
+          "question_count": 500
+        },
+        {
+          "task": "amc23",
+          "accuracy": 0.95625,
+          "samples": 4,
+          "question_count": 40
+        },
+        {
+          "task": "aime24",
+          "accuracy": 0.6333333333333333,
+          "samples": 4,
+          "question_count": 30
+        },
+        {
+          "task": "aime25",
+          "accuracy": 0.4166666666666667,
+          "samples": 4,
+          "question_count": 30
+        },
+        {
+          "task": "aime26",
+          "accuracy": 0.48333333333333334,
+          "samples": 4,
+          "question_count": 30
+        }
+      ],
+      "evaluation": {
+        "metric": "mean_correctness",
+        "samples": 4,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "response_cap": 31744,
+        "seed": 72000000,
+        "enable_thinking": false,
+        "stop_ids": [
+          151645,
+          151643
+        ]
+      },
+      "model": "Qwen3-4B-Instruct-2507",
+      "evidence": {
+        "metrics": {
+          "path": "e43-teacher-metrics.json",
+          "sha256": "d927484a37fba15676d75b1c0ecc6dd34c4c27edeec2838d473978079ed54934",
+          "origin": "runs/qwen-prefix-six-20261031/baseline-accuracy/Q/metrics.json"
+        },
+        "complete": {
+          "path": "e43-teacher-complete.json",
+          "sha256": "7a6529567a409e9e17e5abbac0b55e066f8fe37e8e2a5feaebfed2ff6c9371d5",
+          "origin": "runs/qwen-prefix-six-20261031/baseline-accuracy/Q/complete.json"
+        },
+        "protocol": {
+          "path": "e43-teacher-protocol.json",
+          "sha256": "8b71ee8bcc71924d00db127938f68c358747224a896a1f72f911cf0aa3b94370",
+          "origin": "runs/qwen-prefix-six-20261031/prepared-03/protocol.json"
+        }
+      }
     }
-  ]
+  }
 }

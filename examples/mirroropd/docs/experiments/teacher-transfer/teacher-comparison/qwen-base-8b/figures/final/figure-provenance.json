@@ -1,5 +1,84 @@
 {
   "experiment": "E39",
+  "protocol": {
+    "experiment": "E39",
+    "run_id": "f0e44ec7",
+    "config": {
+      "path": "derived/MirrorOPD-verl/run-20261026_223012-f0e44ec7/config.json",
+      "sha256": "cb6d08eed1f341f1837dc30d5ee5224143d3f71da58aa2c6b4f3d8816d7fa937"
+    },
+    "initial_reference": "E39",
+    "teacher_full_set": null,
+    "plot_inputs": {
+      "validation.csv": {
+        "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/validation.csv",
+        "sha256": "f700a6834da3bfcd5a61d38d38f39fb2f1ef2a7a21656b96c14ff6ee54ce21ff"
+      },
+      "training.csv": {
+        "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/training.csv",
+        "sha256": "9dabeac4614e6ef0e42eec810c5cdbab9b3ade090b483eb2214ff6fcbb68cd0e"
+      },
+      "position-kl.csv": {
+        "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/position-kl.csv",
+        "sha256": "38fbf778e6b017233bf113921205cfc39ce3ccc41fabdb18bc4e53063b4fd15b"
+      },
+      "sample-panel-summary.csv": {
+        "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/sample-panel-summary.csv",
+        "sha256": "7cb0653fd434299877514f68612bf5499eb6c9e4ba080a428010475497e065e7"
+      },
+      "resources.json": {
+        "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/resources.json",
+        "sha256": "7be62b022b0b90bf8fd6de7a1445508ef28d9d6c6d7df32102184463751db93e"
+      },
+      "teacher-subset-reference.json": {
+        "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/teacher-subset-reference.json",
+        "sha256": "ca23cb041f12216fde748c74b045c9c0e982b647f28594a69068ab6e080ccd86"
+      },
+      "config.json": {
+        "path": "MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/config.json",
+        "sha256": "cb6d08eed1f341f1837dc30d5ee5224143d3f71da58aa2c6b4f3d8816d7fa937"
+      }
+    },
+    "student": "Qwen3-1.7B-Base",
+    "teacher": "Qwen3-8B",
+    "enable_thinking": false,
+    "training": {
+      "objective": "Full-RKL",
+      "reuse": 16,
+      "batch": 64,
+      "learning_rate": 1e-06,
+      "samples": 1,
+      "temperature": 1.0,
+      "top_p": 1.0,
+      "response_cap": 7168,
+      "seed": 42,
+      "termination_token_ids": [
+        151643,
+        151645
+      ],
+      "task_rewards_in_loss": false
+    },
+    "evaluation": {
+      "metric": "mean_correctness",
+      "samples": 16,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": -1,
+      "response_cap": 31744,
+      "enable_thinking": false,
+      "seed": 42,
+      "initial_validation": true,
+      "question_sets": [
+        "MATH-500",
+        "AMC23",
+        "AIME25"
+      ]
+    },
+    "teacher_reference": null,
+    "manifest_sha256": "5d7b663017f33b29310e3a01a202248a9d7123e40efedb1d67ce2f569f416926",
+    "reader_sha256": "2209ea695cf74507084557e501aeed1a5bc42a5c480c29e4a7c29ff10af9a2d5"
+  },
+  "generator_sha256": "3c51d49e18044e7418c6ec9b2e00728cc47adc62900d06748b61dbb04aecc74d",
   "run_id": "f0e44ec7",
   "student": "Qwen3-1.7B-Base",
   "teacher": "Qwen3-8B",
