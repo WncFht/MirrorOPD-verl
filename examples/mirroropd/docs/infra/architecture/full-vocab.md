@@ -72,7 +72,7 @@ distillation:
 
 Engine 在 optimizer mini-batch 拆成动态 micro-batch 前计算分母。序列模式单独 all-reduce 非空 `loss_mask` 的数量，存为 `full_vocab_num_sequences`；[synthetic padding](../../../../../verl/trainer/ppo/padding_utils.py) 的 mask 为零，因此不会计入 B。LossContext 使用这个实际分母，避免沿用包含 padding 或空回答的声明批量。DP 梯度平均所需的乘数与 η 缩放在最终 loss 统一应用，逐回答长度权重则在 kernel 累积 `dH/dW` 前应用。
 
-Future 配置位于 `distillation.distillation_loss.full_vocab.future`，默认 `mode=none, gamma=1.0`。`sum` 累加严格后续代价，`mean` 除后续有效 token 数；`discounted_sum` 和 `discounted_mean` 按原始 response 坐标间隔加权，后者除折扣权重和；`discounted_sequence` 还对 local 和 score 项同时乘绝对时间权重。γ 必须为有限的 $0<\gamma\le1$，仅 discounted 模式允许 γ≠1。完整公式、on-policy 假设及 TOP-D 与当前方法的差别保留在[设计的数学合同](2026-11-03-Full-vocab聚合与未来信用实现计划.md#3-未来信用的数学合同)。
+Future 配置位于 `distillation.distillation_loss.full_vocab.future`，默认 `mode=none, gamma=1.0`。`sum` 累加严格后续代价，`mean` 除后续有效 token 数；`discounted_sum` 和 `discounted_mean` 按原始 response 坐标间隔加权，后者除折扣权重和；`discounted_sequence` 还对 local 和 score 项同时乘绝对时间权重。γ 必须为有限的 $0<\gamma\le1$，仅 discounted 模式允许 γ≠1。完整公式、on-policy 假设及 TOP-D 与当前方法的差别保留在[设计的数学合同](../../../.agents/notes/proposed/architecture/2026-11-03-Full-vocab聚合与未来信用实现计划.md#3-未来信用的数学合同)。
 
 Future 采用当前更新的实际训练代价：纯 reverse KL 是条件 KL，一般 MDPO 是 `target_kl - target_log_z`，保留状态相关 normalizer。它每次 student forward 重算，严格排除当前 token 并 detach；末 token 系数为零，mask 空洞消耗原始时间，回答边界 reset，不补截断之后的未知尾部。不增加 λ，不修改 PPO、rollout reuse 或 anchor 冻结边界。
 
