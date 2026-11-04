@@ -627,7 +627,7 @@ $$
 
 ## Qwen3 κ 初始块的实际参数位移
 
-这组另用 Qwen3-1.7B-Base←Qwen3-30B-A3B-Instruct-2507，从同一 Base、同一 64 条回答开始比较 κ=0/0.5/1；η0.1，AdamW LR1e-6，FP32 master／Adam，BF16 autocast／投影，每批重复 16 次。三个实际 checkpoint 均已完成 16 次更新，配置与初始轨迹见[研究正文](../../../experiments/learning-signal/weighted-targets.md#复现差距的受控核对)。下表从 safetensors 逐块计算全部 1,720,574,976 个独立参数的位移；输入 embedding 与输出投影共享的参数只计一次。
+这组另用 Qwen3-1.7B-Base←Qwen3-30B-A3B-Instruct-2507，从同一 Base、同一 64 条回答开始比较 κ=0/0.5/1；η0.1，AdamW LR1e-6，FP32 master／Adam，BF16 autocast／投影，每批重复 16 次。三个实际 checkpoint 均已完成 16 次更新，配置与初始轨迹见[研究正文](../../../experiments/learning-signal/weighted-targets-controls.md#复现差距的受控核对)。下表从 safetensors 逐块计算全部 1,720,574,976 个独立参数的位移；输入 embedding 与输出投影共享的参数只计一次。
 
 记初始 Base 权重为 $\theta_{\rm init}$，κ 组训练后的权重为 $\theta^{(\kappa)}$。两种参数位移分别为
 
