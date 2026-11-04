@@ -50,7 +50,7 @@ $$
 
 `--paired-cases` 接收 JSON 列表；第一项为基线，其余每项各自执行一次 A–B–B–A。每项只可覆盖 `backend`、`loss_agg_mode`、`future_mode`、`gamma`、`chunk`，并有唯一 `name`。每个 block 恢复相同 optimizer、scheduler 和 Python／NumPy／CPU／CUDA RNG 状态，执行 `--warmups` 次预热和 `--samples` 次采集；所有样本保留 block 与实际 settings。聚合声明同时传入 engine 和 loss，不单改最终标量分母。
 
-计时在 CUDA 同步之后开始，覆盖完整 `update_actor`，结束同步后按 DP MAX 汇总耗时及 allocated／reserved 峰值。记录每 rank 实际 train／capture forward 次数、输入与有效 token 数、cache hash、有限 loss／梯度以及 update records。配对模式拒绝混入 profiler；需要 trace 时另跑单条件。不同长度条件分别使用完整序列 token budget，不截断输入来迁就预算。参数 hash 不变约束权重，不能替代数值等价验收。
+计时在 CUDA 同步之后开始，覆盖完整 `update_actor`，结束同步后按 DP MAX 汇总耗时及 allocated／reserved 峰值。记录每 rank 实际 engine train／capture forward 调用次数、输入与有效 token 数、cache hash、有限 loss／梯度以及 update records；调用次数不统计 checkpoint 内部层级重算或 head 投影次数。配对模式拒绝混入 profiler；需要 trace 时另跑单条件。不同长度条件分别使用完整序列 token budget，不截断输入来迁就预算。参数 hash 不变约束权重，不能替代数值等价验收。
 
 例如 cases 可写为 `[ {"name":"baseline"}, {"name":"future-mean","future_mode":"mean"} ]`。调用时显式提供 `--student`、`--cache`、新 `--output`、`--budget` 和 `--paired-cases`；GPU、分布式启动与清理由现有资源分配器负责。实际已测条件和结果见[训练性能](training.md)。
 

@@ -53,7 +53,7 @@
 
 连续块顺序与逆序的差异接近本次计时波动；当前路径的主要额外成本来自 trajectory 通用计算和回答边界导致的小块 GEMM。所有这些路径的总投影行数均为 2048，即 student/teacher 各 1024 行；future 没有重新运行后续 token 的 backbone 或 head。短回答的更多调用源于不能跨回答延续 suffix carry。`seq-mean-token-mean` 仍复用相同投影，完整结果中另外记录其权重与耗时；不据单次观测认定 aggregate 在任何形状下都没有性能影响。
 
-本次没有修改生产遍历、kernel、默认 aggregate 或默认 future。完整 actor 的固定输入配对仍需单独测量；上述 72 组只为计算层后续重构建立基线。
+本次没有修改生产遍历、kernel、默认 aggregate 或默认 future。另有[完整 actor 固定输入配对](training.md)，覆盖短／长／混合长度；上述 72 组只提供 head 层的成本分解，不能直接换算整步加速。
 
 ## R1 配对的算子开发测量
 
