@@ -1,0 +1,2328 @@
+{
+  "description": "Separately evaluated untrained Qwen3-1.7B-Base, local input and decoding; not a missing E57 history entry.",
+  "protocol": {
+    "model_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+    "config_sha256": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+    "question_plan_sha256": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7",
+    "input_variant": "local",
+    "evaluation_plan_sha256": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+    "official_verifier_sha256": "2ca07785fcceef0f389b8d88e95966a9ce7f1f3b853460a3c2d29f45808704e5",
+    "official_verifier_timeout_seconds": 1.0,
+    "weight_sha256": {
+      "model.safetensors": "6df85b39330e5a425ee36253d0f894e4387e4f0a15b9c53cb467d668e6b3a841"
+    },
+    "decoding": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "cap": 31744
+    },
+    "n": 4,
+    "label": "base",
+    "protocol": "local",
+    "scope": [
+      "The paper protocol here aligns decoding only, not its whole training recipe or verifier.",
+      "Four responses per question are a screening readout; they do not establish small kappa rankings.",
+      "MATH-64 scores must not be compared directly to reported full MATH-500 scores."
+    ]
+  },
+  "compatibility": {
+    "enable_thinking": null,
+    "assistant_suffix": "<|im_start|>assistant\\n",
+    "stop_token_ids": [
+      151643,
+      151645
+    ],
+    "question_sources": {
+      "AIME24": {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/AIME24/test.parquet",
+        "sha256": "239f288d0217f5c14ae93e4bf8a8f5f583413625c156348622003662e72af358",
+        "available_questions": 30,
+        "selected_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "AIME25": {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/AIME25/test.parquet",
+        "sha256": "3fcf0118e87348af9a1c996438aa5fb00e91c4df5a5a00fe29a0c909886075b6",
+        "available_questions": 30,
+        "selected_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "AIME26": {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/AIME26/test.parquet",
+        "sha256": "b001b4673ca806bb423a8c42badea8b9bf9ccc48ff7954f17209dad4e7c03b26",
+        "available_questions": 30,
+        "selected_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      }
+    },
+    "seed_rule": "20261101 + question_id_integer*32 + sample_index; shared across arms and protocols",
+    "differences": [
+      "Independent inference session, not E57 trainer step0",
+      "avg@4 vs E57 avg@16",
+      "Sampling seed rule and inference execution differ"
+    ]
+  },
+  "source_sha256": {
+    "runs/topd-data-kappa-20261101/evaluation/base/local/scores.jsonl": "f0615010d06adc73ae584d2cd041d4861be95a5daf298cca252dc5b6202e29c9",
+    "runs/topd-data-kappa-20261101/evaluation/base/local/responses.jsonl": "93c7345c44a7825bdf795a0ca88729e4e9ff46bdd966f91136ce9876fb646091",
+    "runs/topd-data-kappa-20261101/evaluation/base/local/summary.json": "6e9d56f9783a294746a6bc652282f4f2c83a8eebb5ff6d7151ff41c4543a374f",
+    "runs/topd-data-kappa-20261101/evaluation/base/local/complete.json": "e5856efae5cf846ab8936113e80a1eadaa41081edf44d8e1c7abc888da17c07b",
+    "runs/topd-data-kappa-20261101/evaluation/base/local/protocol.json": "d9c0e2bfa0fb8cbf1731b766ac08a598ceb65f099f945b4587806c675ab04dfb",
+    "runs/topd-data-kappa-20261101/evaluation-prompts.json": "67178dfb258491937a5b4fb0b99f3b5a4dc2d96b62114ee4d7bc4df6eb234dd7",
+    "runs/topd-data-kappa-20261101/evaluation-plan.json": "c4a3f7a27161e9e332dee9e0e5fa656dd6004e459a832cd23ab7f2b4ba81c83c",
+    "runs/topd-data-kappa-20261101/prepare_evaluation.py": "fd3e66a750a9168522afd345be54137fe217af543595e42a73e80602a6d46f31",
+    "../wandb-logs/derived/MirrorOPD-verl/offline-run-20261030_015214-6j5knkmk/config.json": "37f8ebdc00f64e5f58826e85367992a50f28b074450665fee50402be91fa9456"
+  },
+  "scores": [
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:0",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:0",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:0",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:0",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:1",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:1",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:1",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:1",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:2",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:2",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:2",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:2",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:3",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:3",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:3",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:3",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:4",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:4",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:4",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:4",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:5",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:5",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:5",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:5",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:6",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:6",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:6",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:6",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:7",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:7",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:7",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:7",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:8",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:8",
+      "sample": 1,
+      "correct": true
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:8",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:8",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:9",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:9",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:9",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:9",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:10",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:10",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:10",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:10",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:11",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:11",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:11",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:11",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:12",
+      "sample": 0,
+      "correct": true
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:12",
+      "sample": 1,
+      "correct": true
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:12",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:12",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:13",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:13",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:13",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:13",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:14",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:14",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:14",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:14",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:15",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:15",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:15",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:15",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:16",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:16",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:16",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:16",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:17",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:17",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:17",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:17",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:18",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:18",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:18",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:18",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:19",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:19",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:19",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:19",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:20",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:20",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:20",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:20",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:21",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:21",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:21",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:21",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:22",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:22",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:22",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:22",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:23",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:23",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:23",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:23",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:24",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:24",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:24",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:24",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:25",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:25",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:25",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:25",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:26",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:26",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:26",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:26",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:27",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:27",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:27",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:27",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:28",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:28",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:28",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:28",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:29",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:29",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:29",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME24",
+      "question_id": "AIME24:29",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:0",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:0",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:0",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:0",
+      "sample": 3,
+      "correct": true
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:1",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:1",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:1",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:1",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:2",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:2",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:2",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:2",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:3",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:3",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:3",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:3",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:4",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:4",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:4",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:4",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:5",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:5",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:5",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:5",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:6",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:6",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:6",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:6",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:7",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:7",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:7",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:7",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:8",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:8",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:8",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:8",
+      "sample": 3,
+      "correct": true
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:9",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:9",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:9",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:9",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:10",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:10",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:10",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:10",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:11",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:11",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:11",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:11",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:12",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:12",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:12",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:12",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:13",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:13",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:13",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:13",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:14",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:14",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:14",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:14",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:15",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:15",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:15",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:15",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:16",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:16",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:16",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:16",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:17",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:17",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:17",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:17",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:18",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:18",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:18",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:18",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:19",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:19",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:19",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:19",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:20",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:20",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:20",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:20",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:21",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:21",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:21",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:21",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:22",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:22",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:22",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:22",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:23",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:23",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:23",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:23",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:24",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:24",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:24",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:24",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:25",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:25",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:25",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:25",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:26",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:26",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:26",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:26",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:27",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:27",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:27",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:27",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:28",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:28",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:28",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:28",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:29",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:29",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:29",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME25",
+      "question_id": "AIME25:29",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:0",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:0",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:0",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:0",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:1",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:1",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:1",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:1",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:2",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:2",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:2",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:2",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:3",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:3",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:3",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:3",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:4",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:4",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:4",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:4",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:5",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:5",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:5",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:5",
+      "sample": 3,
+      "correct": true
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:6",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:6",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:6",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:6",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:7",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:7",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:7",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:7",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:8",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:8",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:8",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:8",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:9",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:9",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:9",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:9",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:10",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:10",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:10",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:10",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:11",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:11",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:11",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:11",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:12",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:12",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:12",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:12",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:13",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:13",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:13",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:13",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:14",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:14",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:14",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:14",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:15",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:15",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:15",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:15",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:16",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:16",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:16",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:16",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:17",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:17",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:17",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:17",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:18",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:18",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:18",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:18",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:19",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:19",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:19",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:19",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:20",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:20",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:20",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:20",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:21",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:21",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:21",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:21",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:22",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:22",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:22",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:22",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:23",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:23",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:23",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:23",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:24",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:24",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:24",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:24",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:25",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:25",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:25",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:25",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:26",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:26",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:26",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:26",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:27",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:27",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:27",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:27",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:28",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:28",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:28",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:28",
+      "sample": 3,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:29",
+      "sample": 0,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:29",
+      "sample": 1,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:29",
+      "sample": 2,
+      "correct": false
+    },
+    {
+      "benchmark": "AIME26",
+      "question_id": "AIME26:29",
+      "sample": 3,
+      "correct": false
+    }
+  ]
+}
