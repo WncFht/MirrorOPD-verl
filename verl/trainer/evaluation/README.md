@@ -200,7 +200,7 @@ RKL host budget 约束临时 hidden、位置与拷贝余量，并扣除活跃训
 
 历史四卡集成采用 batch8/reuse2/两轮，完成 4 次更新和三次读出，28/46/46 条逻辑轨迹有效，四 rank 只读状态审计通过；原生重载和独立 HF 初始化的固定前缀 RKL 最大误差为 0。历史 CPU 检查为 495 项，另有 21 项初始化调度回归；基础 source/history 的 batch128/reuse32/两轮 64 次更新是另一批验收。这些记录不相加为独立样本，也不作为当前所有路径的重新验收，详见[历史实施与证据](../../../examples/mirroropd/docs/archive/engineering/evaluation/2026-11-01-分阶段代码走读与验收.md)。
 
-两轮运行合同重构的当前检查见[重构报告](../../../examples/mirroropd/docs/archive/engineering/2026-11-01-运行合同审计与重构方案.md#提交与验收)。Source/history 最新生命周期有原生形状的 CPU 协议检查，未增加完整 vLLM accuracy 或 50 outer 实验；模型扩展和更大规模检查仍各自记录。
+两轮运行合同重构的当前检查见[重构报告](../../../examples/mirroropd/docs/archive/engineering/2026-11-01-运行合同审计与重构方案.md#提交与验收)。Source/history 和 public suite 的当前两卡 Qwen3 GPU 生命周期已完成两轮训练、4 次更新和三次读出，并从 Parquet 复核覆盖与指标。专用 [SourceLifecycleProbe](../../../examples/mirroropd/benchmarks/evaluation/lifecycle_probe.py)检查同步前 pending、重复 validate、同步后发布及一次本地发布失败后的显式重试。该 probe 只在新验收运行中使用，保留原评分协议。短 response cap32、两 rank 状态审计和未测远端 RPC／最终导出边界见[数值验收](../../../examples/mirroropd/docs/infra/numerics/full-vocab/validation.md#public-suite-与-sourcehistory-的-gpu-生命周期)；没有增加 50 outer 实验。
 
 ## 分布、模型与输入适配
 

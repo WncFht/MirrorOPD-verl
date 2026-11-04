@@ -1,0 +1,145 @@
+{
+  "scope": "Two H800 GPUs; Qwen3-1.7B-Base student and Qwen3-8B teacher; batch4/reuse2/two outer; training and validation response cap32; public n1 and five samples across four domains; source2/history4; final_export=false",
+  "runs": {
+    "evaluation-a01": {
+      "path": "runs/p0-p1-20261104/evaluation-a01",
+      "command": [
+        {
+          "name": "initial",
+          "args": [
+            "-m",
+            "verl.trainer.evaluation.bootstrap",
+            "--config",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/public.yaml",
+            "--producer",
+            "initial"
+          ]
+        },
+        {
+          "name": "teacher",
+          "args": [
+            "-m",
+            "verl.trainer.evaluation.bootstrap",
+            "--config",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/public.yaml",
+            "--producer",
+            "teacher"
+          ]
+        },
+        {
+          "name": "finalize",
+          "args": [
+            "-m",
+            "verl.trainer.evaluation.bootstrap",
+            "--config",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/public.yaml",
+            "--producer",
+            "finalize"
+          ]
+        },
+        {
+          "name": "public",
+          "args": [
+            "-m",
+            "verl.trainer.main_ppo",
+            "--config-path",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01",
+            "--config-name",
+            "public"
+          ]
+        },
+        {
+          "name": "source-history",
+          "args": [
+            "-m",
+            "verl.trainer.main_ppo",
+            "--config-path",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01",
+            "--config-name",
+            "source-history"
+          ]
+        }
+      ],
+      "exit": {
+        "returncode": 0,
+        "seconds": 480.1242524012923
+      },
+      "config_sha256": "e90a5c113a6d11396e608600f6152a81bac61691b63fd56c2f30cc9f01aa8db1",
+      "source_manifest_sha256": "2a7f767436d1b8c65dd29ffb592261bc82defd5c07cea9f27d0511f6ca48f901",
+      "source_sha256": {
+        "verl/trainer/evaluation/source_history.py": "e760e38de8a1c299ff28e6585c2c43f90a81dddcec94586f6152144e929ec315",
+        "verl/trainer/evaluation/coordinator.py": "04bfa33302322d82335826870af8cbbcb4df34797facbbd30325a6b836c10187",
+        "verl/trainer/evaluation/scoring.py": "75cdefeae07834eff9ebeecc4ecc94ca9ab9fc0f0d17bd80c70dae85a67cf78e",
+        "verl/trainer/evaluation/coverage.py": "17ea81d59071dd4d3943ff894b94e22600d9bde2b9ba4c961e21c17829a585e7",
+        "verl/trainer/ppo/v1/trainer_base.py": "29effe6c74283b1836244ffc2196b17d163074fe70d466d39c3237bb2bf49899",
+        "verl/experimental/agent_loop/agent_loop.py": "4c2d5e717bba522c2672eba1bc9a60bf9c3c93035bab04386adcd28b18ee2365"
+      },
+      "packages": {
+        "ray": "2.59.0",
+        "torch": "2.11.0+cu129",
+        "transformers": "5.12.1",
+        "triton": "3.6.0",
+        "vllm": "0.25.1+cu129"
+      }
+    },
+    "evaluation-a03": {
+      "path": "runs/p0-p1-20261104/evaluation-a03",
+      "command": [
+        {
+          "name": "source-history",
+          "args": [
+            "-m",
+            "verl.trainer.main_ppo",
+            "--config-path",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a03",
+            "--config-name",
+            "source-history"
+          ]
+        }
+      ],
+      "exit": {
+        "returncode": 0,
+        "seconds": 500.674855299294
+      },
+      "config_sha256": "002304e4b9f35c75e92b4543a0caff59df7624cf0078def65e96b1acd2c49e04",
+      "source_manifest_sha256": "d607f74e9524678f6785c5992bf972d15e29ba260ce14ba4b6a8c21262e961a6",
+      "source_sha256": {
+        "verl/trainer/evaluation/source_history.py": "712e9ec6da27d3865e5e1f9fbeee03e93ddc484e076f9886340a6abeaf92e84f",
+        "verl/trainer/evaluation/coordinator.py": "c08da1e7fb24e13266832a7c551f74aab9907e5d21298e71d53870488eeae3d8",
+        "verl/trainer/evaluation/scoring.py": "75cdefeae07834eff9ebeecc4ecc94ca9ab9fc0f0d17bd80c70dae85a67cf78e",
+        "verl/trainer/evaluation/coverage.py": "17ea81d59071dd4d3943ff894b94e22600d9bde2b9ba4c961e21c17829a585e7",
+        "verl/trainer/ppo/v1/trainer_base.py": "29effe6c74283b1836244ffc2196b17d163074fe70d466d39c3237bb2bf49899",
+        "verl/experimental/agent_loop/agent_loop.py": "34ca6940b7ae8df8d5fbaf6ec31fe2646d638ae5b61937aefc08756acc924e2b",
+        "examples/mirroropd/benchmarks/evaluation/lifecycle_probe.py": "ab7e8ba8cc9c7c1ea18e1f71e703a300c6de4d23eb59b43cb60485f176f97cbb"
+      },
+      "packages": {
+        "ray": "2.59.0",
+        "torch": "2.11.0+cu129",
+        "transformers": "5.12.1",
+        "triton": "3.6.0",
+        "vllm": "0.25.1+cu129"
+      }
+    }
+  },
+  "audit": {
+    "command": "PYTHONPATH=. ../envs/mirroropd-fusion/bin/python runs/p0-p1-20261104/audit_evaluation.py --public runs/p0-p1-20261104/evaluation-a01/evaluation --source runs/p0-p1-20261104/evaluation-a03/source-history --output runs/p0-p1-20261104/evaluation-audit.json",
+    "source_sha256": "1c44506047d7825eda2c43fc62866ef14d566b35f9e6a1c3c3f1a9be378065f5",
+    "summary_sha256": "50dcb7294bd1e70f775310f97a9e440717cf9cf741f08e06ac5f26c90e4743d2"
+  },
+  "cpu_regression": {
+    "passed": 98,
+    "log": "runs/p0-p1-20261104/evaluation-final-cpu.log",
+    "log_sha256": "3032072d8a69a4cb33bc9c5edfafb7476d6a922d9741d7a79962ca5c86f0b298"
+  },
+  "failures_retained": {
+    "evaluation-a01/source-history": "Preflight wrongly required public protocols; fixed in 0138972f",
+    "evaluation-a02/source-history": "RKL-only initial generation incorrectly called task reward manager, then cleared empty keys; fixed in 8e173e90"
+  },
+  "limitations": [
+    "Short response cap32 checks infrastructure only",
+    "Publication fault injected locally before event.finish writes manifest",
+    "No unfinished remote GPU RPC injected",
+    "No final HF export/reload retest",
+    "Other GPUs run Olmo3 on the same host"
+  ]
+}
