@@ -1443,3 +1443,28 @@ def test_topd_large_batch_presets_resolve_four_gpu_budget_and_repetition_stoppin
         "min_count": 8,
     }
     assert dict(rollout.repetition_detection) == dict(rollout.val_kwargs.repetition_detection)
+
+
+@pytest.mark.parametrize(
+    "preset,future,aggregation,gamma",
+    [
+        ("E85", "none", "token-sum", 1.0),
+        ("E86", "none", "seq-mean-token-sum", 1.0),
+        ("E87", "none", "seq-mean-token-sum-norm", 1.0),
+        ("E88", "sum", "token-mean", 1.0),
+        ("E89", "discounted_sum", "token-mean", 0.99),
+        ("E90", "discounted_mean", "token-mean", 0.99),
+    ],
+)
+def test_topd_eight_gpu_ablation_presets_disable_checkpoints(tmp_path, preset, future, aggregation, gamma):
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT), preset], TRAIN_BATCH_SIZE="")
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    actor = cfg.actor_rollout_ref.actor
+    loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
+    assert cfg.trainer.n_gpus_per_node == 8 and cfg.distillation.execution_mode == "shared_sync"
+    assert cfg.trainer.total_training_steps == 100 and cfg.trainer.total_epochs == 2
+    assert cfg.trainer.save_freq == -1 and cfg.trainer.resume_mode == "disable"
+    assert loss.full_vocab.future.mode == future and loss.full_vocab.future.gamma == gamma
+    assert actor.loss_agg_mode == aggregation
+    assert actor.optim.lr == 1e-6 and actor.ppo_epochs == 16

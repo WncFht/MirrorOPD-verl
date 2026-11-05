@@ -457,28 +457,34 @@ $$
 
 图的 PDF：[参数网格](../../infra/model-compatibility/qwen-e54/figures/e54-mdpo-20261029/final-evaluation.pdf)、[配对区间](../../infra/model-compatibility/qwen-e54/figures/e54-mdpo-20261029/paired-intervals.pdf)、[训练长度](../../infra/model-compatibility/qwen-e54/figures/e54-mdpo-20261029/training-length.pdf)、[优化与位置](../../infra/model-compatibility/qwen-e54/figures/e54-mdpo-20261029/optimization.pdf)。
 
-## 四卡消融：future 与聚合
+## E82 基线上的 future 与聚合消融
 
-已确定以 E82 为基线，先运行 E83，再运行 E84；每组四卡 shared_sync，均从同一个原始 Base 独立开始。两项分别检验每条回答等权与后续轨迹代价的作用。E81 已补齐[完整终点](weighted-targets-active.md#e81-已落盘的验证与分析)，同回答预算下尚未优于 E57；保留 batch256 是为了固定 E82 条件，不代表已选出最优 batch。正式编号、配置与运行状态见[当前实验](weighted-targets-active.md#e83e84future-与聚合消融)。
+已确定以 E82 为基线，先运行 E83，再运行 E84；每组四卡 shared_sync，均从同一个原始 Base 独立开始。E85–E90 是后续的八卡快速筛选，继续固定 E82 的 batch、复用、模型和预算，但不保存 checkpoint 或 optimizer。各组分别检验每条回答等权、token 求和、长度归一化及后续轨迹代价的作用。E81 已补齐[完整终点](weighted-targets-active.md#e81-已落盘的验证与分析)，同回答预算下尚未优于 E57；保留 batch256 是为了固定 E82 条件，不代表已选出最优 batch。正式编号、配置与运行状态见[当前实验](weighted-targets-active.md#e85e90八卡聚合与-future-消融)。
 
 ### 共同设置与比较
 
-| 项目         | 固定值                                                                                                                                                                                 |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 模型与输入   | Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；继承 E82 的本地 DAPO、原生 Base 前缀，不添加 boxed 指令                                                                                 |
-| 资源与执行   | 每组 4 卡 shared_sync、rollout TP1；precompute_fused/chunk512、显式 BF16、EOS 合并 `[151643,151645]`                                                                                   |
-| 目标与优化器 | full-vocab MDPO κ1／η0.1；AdamW LR1e-6、constant、weight decay0.01、grad clip1；默认 seed 相同，新建 Adam 状态                                                                         |
-| Batch 与复用 | train batch=mini-batch256、n1、reuse16；每组 100 outer／1,600 updates，409,600 回答处理条次、25,600 新回答；total_epochs2                                                              |
-| 终止协议     | 训练和评测固定重复检测 16–128/8 开启；train response cap16384、val cap31744                                                                                                            |
-| 评测与预算   | 不做初始验证，每 5 outer 及终点验证五基准 avg@16、T0.7/p0.9；主图横轴为真实 optimizer updates                                                                                          |
-| 保存         | E83／E84 每 25 outer 同步保存 model、optimizer、extra（含 RNG／scheduler）、dataloader 与 optimizer 计数；只保留最新完整训练状态，终点另留 HF 模型；E82 原运行的 save_freq=-1 保持原样 |
+| 项目         | 固定值                                                                                                                                                     |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 模型与输入   | Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；继承 E82 的本地 DAPO、原生 Base 前缀，不添加 boxed 指令                                                     |
+| 资源与执行   | E83/E84 为 4 卡，E85–E90 为 8 卡，均 shared_sync、rollout TP1；precompute_fused/chunk512、显式 BF16、EOS 合并 `[151643,151645]`                            |
+| 目标与优化器 | full-vocab MDPO κ1／η0.1；AdamW LR1e-6、constant、weight decay0.01、grad clip1；默认 seed 相同，新建 Adam 状态                                             |
+| Batch 与复用 | train batch=mini-batch256、n1、reuse16；每组 100 outer／1,600 updates，409,600 回答处理条次、25,600 新回答；total_epochs2                                  |
+| 终止协议     | 训练和评测固定重复检测 16–128/8 开启；train response cap16384、val cap31744                                                                                |
+| 评测与预算   | 不做初始验证，每 5 outer 及终点验证五基准 avg@16、T0.7/p0.9；主图横轴为真实 optimizer updates                                                              |
+| 保存         | E83／E84 每 25 outer 保存一份完整状态并另留最终 HF 模型；E85–E90 与 E82 使用 `save_freq=-1`，不保存 checkpoint、HF 模型或 optimizer，`resume_mode=disable` |
 
-| 实验     | `full_vocab.future.mode` | `actor.loss_agg_mode` | 主要对照                                 |
-| -------- | ------------------------ | --------------------- | ---------------------------------------- |
-| E82      | `none`                   | `token-mean`          | 正在运行的完整预算基线                   |
-| E83      | `none`                   | `seq-mean-token-mean` | E83−E82：保持即时目标，每条回答等权      |
-| E84      | `mean`，γ1               | `token-mean`          | E84−E82：保持聚合，增加未来信用          |
-| 尚未排期 | `mean`，γ1               | `seq-mean-token-mean` | 未来检验聚合与 future 的交互；本轮不启动 |
+| 实验     | `full_vocab.future.mode` | `actor.loss_agg_mode`     | 主要对照                              |
+| -------- | ------------------------ | ------------------------- | ------------------------------------- |
+| E82      | `none`                   | `token-mean`              | 正在运行的完整预算基线                |
+| E83      | `none`                   | `seq-mean-token-mean`     | E83−E82：保持即时目标，每条回答等权   |
+| E84      | `mean`，γ1               | `token-mean`              | E84−E82：保持聚合，增加未来信用       |
+| E85      | `none`                   | `token-sum`               | 只改 aggregate：token 总和            |
+| E86      | `none`                   | `seq-mean-token-sum`      | 只改 aggregate：回答等权后 token 总和 |
+| E87      | `none`                   | `seq-mean-token-sum-norm` | 只改 aggregate：回答等权、长度归一化  |
+| E88      | `sum`，γ1                | `token-mean`              | 只改 future：累计后续 cost            |
+| E89      | `discounted_sum`，γ0.99  | `token-mean`              | 只改 future：折扣累计后续 cost        |
+| E90      | `discounted_mean`，γ0.99 | `token-mean`              | 只改 future：折扣后续均值             |
+| 尚未排期 | `mean`，γ1               | `seq-mean-token-mean`     | future 与聚合的交互；本轮不启动       |
 
 Future 的配置全名为 `distillation.distillation_loss.full_vocab.future.mode`；聚合字段为 `actor_rollout_ref.actor.loss_agg_mode`，见[当前实现合同](../../infra/architecture/full-vocab.md#聚合与未来信用)。`mean` 使用严格后续 token 的平均训练代价，排除当前 token、detach 后乘 sampled-action score；它不是增加最终答案正确性 reward，也没有改变教师。MDPO 的 future 采用当前实际 local cost；一般 κ 下包含状态相关 normalizer。`mean` 是 TOP-D 风格的后续均值结构，不宣称与官方固定 sampled reward 的 return 相同。
 

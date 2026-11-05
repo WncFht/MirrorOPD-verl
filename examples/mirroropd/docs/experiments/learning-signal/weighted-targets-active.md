@@ -42,6 +42,21 @@ A/B 的目标与更新配方相同，默认 seed 相同，A 是 B 的名义前�
 
 E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收的 E61 融合执行路径；这项执行差异需要在结果解释中保留。2026-11-05 起 A/B 跟随公共重复停止默认值，训练和评测均开启；E57 历史自然终止曲线的停止协议不同。需要严格配对时，应补充相同停止协议的评测，或在启动 A/B 前显式设置 `TRAIN_REPETITION_DETECTION=false VAL_REPETITION_DETECTION=false`。E81 评测节点为 outer5/10/15/20/25，E82 为 outer5/10/…/100。两者都没有新的 step0 测量，可引用主报告中有来源标识的独立 Base 参考点。
 
+### E85–E90：八卡聚合与 future 消融
+
+E85–E90 均从 E82 的原始 Base 独立启动，固定 100 outer／1,600 optimizer updates、batch256／reuse16、full-vocab MDPO κ1／η0.1、LR1e-6 和其余 rollout／评测协议；唯一资源变化是使用 8 卡 shared_sync。它们不保存周期 checkpoint、最终模型或 optimizer 状态：`trainer.save_freq=-1`，`resume_mode=disable`，用于快速筛选未测的目标形式。训练结束后只能使用日志与评测导出分析，不能从这些运行续训。
+
+| 实验 | future mode       |    γ | `actor.loss_agg_mode`     | 对照目的                          |
+| ---- | ----------------- | ---: | ------------------------- | --------------------------------- |
+| E85  | `none`            |    1 | `token-sum`               | token 总和，保留 E82 的即时目标   |
+| E86  | `none`            |    1 | `seq-mean-token-sum`      | 回答等权后取 token 总和           |
+| E87  | `none`            |    1 | `seq-mean-token-sum-norm` | 回答等权、长度归一化的 token 总和 |
+| E88  | `sum`             |    1 | `token-mean`              | 累计后续 cost，不改变主聚合       |
+| E89  | `discounted_sum`  | 0.99 | `token-mean`              | 折扣累计后续 cost                 |
+| E90  | `discounted_mean` | 0.99 | `token-mean`              | 折扣并按后续有效 token 数归一化   |
+
+E85–E87 只改变 aggregate，E88–E90 只改变 future；E84 的 `future=mean` 是无折扣均值基线。`sum` 可能让长回答的 future 系数变大，discounted 组同时改变时间权重和尺度，因此先比较终点任务读出、回答长度、重复停止率、future/local surrogate、preclip norm 与裁剪比例，不把单一准确率差异直接解释成更好的信用分配。实现合同中的 `discounted_*` 只允许 γ<1；这里统一使用 0.99，不搜索学习率、κ 或 η。
+
 ## 并发与吞吐
 
 每个 TP1 rollout 引擎的并发上限固定为 64，CUDA graph capture sizes 同步覆盖到 64。四卡处理一轮 256 条训练回答，均衡分配时每卡约 64 条；请求路由和长度会使实际分配变化。
@@ -183,7 +198,7 @@ E83／E84 以 E82 的完整设置为基线，各自从原始 Qwen3-1.7B-Base 开
 | E83  | `none`     | `seq-mean-token-mean` | 回答等权聚合            |
 | E84  | `mean`、γ1 | `token-mean`          | 严格后续 token 平均代价 |
 
-完整机制与解释边界见[四卡消融](weighted-targets-controls.md#四卡消融future-与聚合)。本轮没有同时启用 future 与回答等权的第四组。E83／E84 每 25 outer 同步保存完整训练状态，包含模型／优化器分片、RNG／scheduler、dataloader 和 optimizer 计数；保存成功后只保留最新一份完整状态。终点另保留独立 HF 模型，供后续同权重配对评测。E82 已在运行，仍保留原先不保存 checkpoint 的配置。
+完整机制与解释边界见[E82 基线上的 future 与聚合消融](weighted-targets-controls.md#e82-基线上的-future-与聚合消融)。本轮没有同时启用 future 与回答等权的第四组。E83／E84 每 25 outer 同步保存完整训练状态，包含模型／优化器分片、RNG／scheduler、dataloader 和 optimizer 计数；保存成功后只保留最新一份完整状态。终点另保留独立 HF 模型，供后续同权重配对评测。E82 已在运行，仍保留原先不保存 checkpoint 的配置。
 
 [冻结计划](../../../../../runs/topd-learning-signal-20261106/plan.json)、[E83 配置差异](../../../../../runs/topd-learning-signal-20261106/E83-config-diff.json)、[E84 配置差异](../../../../../runs/topd-learning-signal-20261106/E84-config-diff.json)与[源码合同](../../../../../runs/topd-learning-signal-20261106/source-contract.json)保存实际条件。运行时沿用 E82 的冻结源码 `c996d634`，只叠加新预设与保存回调；不采用工作树中无关的运行时变化。
 
