@@ -174,6 +174,8 @@ $$
 
 固定 batch256，把同一 1024 条轨迹的访问预算从一遍增至四遍，teacher KL 明显下降，但任务收益尚未确立。本地解码的 AIME 为 2.50%→1.39%，差 −1.11 个百分点，配对 95% 区间[−3.33,+0.83]；论文解码为 1.67%→2.50%，差 +0.83 个百分点，区间[−0.28,+2.22]。这两个切面都不能确认任务提升或损害，不能用固定前缀 KL 的改善替代新生成回答的正确率。
 
+长程在线检验由 [E81／E82](weighted-targets-active.md#假设与预算)承接：E81 用 batch256、400 次更新对齐 E57 batch64、1,600 次更新的回答条次与新回答数，E82 再对齐更新次数。E81 的[已落盘验证](weighted-targets-active.md#相同回答处理量与相同更新次数)在五个匹配回答预算点（含完整终点）的宏平均均低于 E57；这与固定池中较多更新拟合更充分的观察方向一致，但在线轨迹、数值执行和停止协议仍有差异，尚不能归因于单独的 batch 效应。
+
 batch64 的访问次数从 1024 增至 4096，论文解码 AIME 点差为 −1.39 个百分点，配对区间[−3.33,+0.28]；在 4096 次访问下，batch64×64 相对 batch256×16 的差值为 −0.28，区间[−1.11,+0.56]。任务区间仍包含零，不能确认哪种预算安排更好，也不能把重复访问的增加当作新增轨迹覆盖。当前更明确的结果是优化预算改变了固定前缀拟合，而不是已经带来了相应的任务增益。
 
 ### 初始块的任务读出与在线确认
@@ -454,6 +456,43 @@ $$
 已完成实验的中间模型、优化器分片与评测导出权重已清理。配置、tokenizer、训练状态元数据、源码和全部文本证据保留；这些目录不再支持直接续训或重新执行模型前向。权重可用性见[清理记录](../../../../../../wandb-logs/MirrorOPD-verl/analysis/e54-mdpo-20261029/checkpoint-cleanup.json)。后续 E55–E58 从原始模型开始，不依赖这些已清理权重。
 
 图的 PDF：[参数网格](../../infra/model-compatibility/qwen-e54/figures/e54-mdpo-20261029/final-evaluation.pdf)、[配对区间](../../infra/model-compatibility/qwen-e54/figures/e54-mdpo-20261029/paired-intervals.pdf)、[训练长度](../../infra/model-compatibility/qwen-e54/figures/e54-mdpo-20261029/training-length.pdf)、[优化与位置](../../infra/model-compatibility/qwen-e54/figures/e54-mdpo-20261029/optimization.pdf)。
+
+## 四卡消融：future 与聚合
+
+已确定以 E82 为基线，先运行 E83，再运行 E84；每组四卡 shared_sync，均从同一个原始 Base 独立开始。两项分别检验每条回答等权与后续轨迹代价的作用。E81 已补齐[完整终点](weighted-targets-active.md#e81-已落盘的验证与分析)，同回答预算下尚未优于 E57；保留 batch256 是为了固定 E82 条件，不代表已选出最优 batch。正式编号、配置与运行状态见[当前实验](weighted-targets-active.md#e83e84future-与聚合消融)。
+
+### 共同设置与比较
+
+| 项目         | 固定值                                                                                                                                                                                 |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 模型与输入   | Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；继承 E82 的本地 DAPO、原生 Base 前缀，不添加 boxed 指令                                                                                 |
+| 资源与执行   | 每组 4 卡 shared_sync、rollout TP1；precompute_fused/chunk512、显式 BF16、EOS 合并 `[151643,151645]`                                                                                   |
+| 目标与优化器 | full-vocab MDPO κ1／η0.1；AdamW LR1e-6、constant、weight decay0.01、grad clip1；默认 seed 相同，新建 Adam 状态                                                                         |
+| Batch 与复用 | train batch=mini-batch256、n1、reuse16；每组 100 outer／1,600 updates，409,600 回答处理条次、25,600 新回答；total_epochs2                                                              |
+| 终止协议     | 训练和评测固定重复检测 16–128/8 开启；train response cap16384、val cap31744                                                                                                            |
+| 评测与预算   | 不做初始验证，每 5 outer 及终点验证五基准 avg@16、T0.7/p0.9；主图横轴为真实 optimizer updates                                                                                          |
+| 保存         | E83／E84 每 25 outer 同步保存 model、optimizer、extra（含 RNG／scheduler）、dataloader 与 optimizer 计数；只保留最新完整训练状态，终点另留 HF 模型；E82 原运行的 save_freq=-1 保持原样 |
+
+| 实验     | `full_vocab.future.mode` | `actor.loss_agg_mode` | 主要对照                                 |
+| -------- | ------------------------ | --------------------- | ---------------------------------------- |
+| E82      | `none`                   | `token-mean`          | 正在运行的完整预算基线                   |
+| E83      | `none`                   | `seq-mean-token-mean` | E83−E82：保持即时目标，每条回答等权      |
+| E84      | `mean`，γ1               | `token-mean`          | E84−E82：保持聚合，增加未来信用          |
+| 尚未排期 | `mean`，γ1               | `seq-mean-token-mean` | 未来检验聚合与 future 的交互；本轮不启动 |
+
+Future 的配置全名为 `distillation.distillation_loss.full_vocab.future.mode`；聚合字段为 `actor_rollout_ref.actor.loss_agg_mode`，见[当前实现合同](../../infra/architecture/full-vocab.md#聚合与未来信用)。`mean` 使用严格后续 token 的平均训练代价，排除当前 token、detach 后乘 sampled-action score；它不是增加最终答案正确性 reward，也没有改变教师。MDPO 的 future 采用当前实际 local cost；一般 κ 下包含状态相关 normalizer。`mean` 是 TOP-D 风格的后续均值结构，不宣称与官方固定 sampled reward 的 return 相同。
+
+`token-mean` 按所有有效 token 平均，长回答的合计权重随长度增加；`seq-mean-token-mean` 先在回答内平均，再对回答等权，改变各回答的相对权重。它与官方的 prompt 组内 advantage 标准化是两件事。两种聚合也会改变整体梯度尺度，需同时看 preclip norm、裁剪比例、local／future surrogate 与任务读出，不能把差异全解释成纯粹的长度偏好。既有[归一化核查](normalization.md)未将 token-mean 确认为主要故障，E83 是有待验证的对照。
+
+本轮按 E82 的完整 1,600 次更新执行，取代先前四组各 400 次更新的筛查建议；学习率不变，也不因早期分数选择性延长。E83−E82 与 E84−E82 同时观察 AIME、五基准宏平均、length／repetition／EOS 停止率。相同默认 seed 不保证跨运行随机流逐位一致；E81／E82 的早期分叉已提示这种变动，本轮单次对照仍需后续 seed 复核。新实验的 checkpoint／HF 导出增加 I/O，墙钟耗时不直接作为算法效率结论。
+
+### 后续优先级与解释边界
+
+1. **Future mean 之后再分解 sum／discount。** `sum` 对应累计后续 cost，`mean` 则控制长轨迹带来的系数增长，二者改变信用分配目标与尺度。仅在主对照后比较 `mean` 与 `sum`；若远期噪声明显，再固定一个模式测试折扣。不要首轮同时搜索 mode、γ、κ、η和学习率。
+2. **回答复用的 off-policy 影响。** reuse16 下，student 更新后仍使用旧 rollout；开启 future 不会自动修复这个偏差，当前实现也没有因此获得官方 PPO clipping。主矩阵是固定旧轨迹上的 surrogate 消融，不称为无偏 on-policy sequence 梯度。后续用 reuse1／16 的配对运行检查交互，分别按更新次数和回答处理条次报告；新轨迹数、anchor 刷新次数与两种预算无法同时固定。
+3. **Sampled 更新、prompt 组内标准化与 PPO clipping。** 若要解释与完整 TOP-D 的差距，另在共同设置下比较 full-vocab MDPO、官方 naive TOP-D 与完整 TOP-D，再分别关闭 return、标准化或 clipping。官方在每题 8 条回答的全部 token 上做组内标准化；n1 下即使实现组内标准化，也已改变分组条件，而且它仍不同于题均 loss 归约。当前 full-vocab `future=mean` 只覆盖其中一部分机制。
+4. **纯 Full-RKL 的缺口。** 历史 E55 是 κ0／η0.1，仍有 9 倍 anchor 约束，不是纯 OPD。需要将结论推广为“proximal target 相对纯 RKL”时，补同执行与停止协议的 κ0／η1（E58 语义）参考，不再重复短程κ网格代替它。
+5. **停止与输入协议作为配对读出。** 同一终点权重比较重复检测开／关、共同论文解码或附加指令，可分离评测协议影响；其中关闭训练重复检测会改变训练轨迹，属于另一项训练消融。先前已有输入指令对照，准确率收益不稳定，优先级低于 future 与聚合；保留权重后再做共同评测，而不从旧摘要反推。
 
 ### 参考文献
 

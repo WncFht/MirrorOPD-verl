@@ -59,6 +59,7 @@ class Preset:
     environment: tuple[tuple[str, str], ...] = ()
     rollout_arm: str | None = None
     evaluation_protocol: str | None = None
+    overrides: tuple[str, ...] = ()
 
 
 SHORT = Budget(32, 4, None, None)
@@ -296,6 +297,20 @@ def preset_catalog() -> dict[str, Preset]:
             budget=replace(presets["E61"].budget, steps=steps, test=5, initial_validation=False),
             pair=replace(presets["E61"].pair, student_sequences=64),
             environment=tuple(environment.items()),
+        )
+    for number, future, aggregation in ((83, "none", "seq-mean-token-mean"), (84, "mean", "token-mean")):
+        presets[f"E{number}"] = replace(
+            presets["E82"],
+            budget=replace(presets["E82"].budget, save=25, keep=1),
+            overrides=(
+                f"distillation.distillation_loss.full_vocab.future.mode={future}",
+                "distillation.distillation_loss.full_vocab.future.gamma=1.0",
+                f"actor_rollout_ref.actor.loss_agg_mode={aggregation}",
+                "actor_rollout_ref.actor.checkpoint.save_contents=[model,optimizer,extra,hf_model]",
+                "actor_rollout_ref.actor.checkpoint.load_contents=[model,optimizer,extra]",
+                "+actor_rollout_ref.actor.checkpoint.preserve_hf_master_weights=True",
+                "trainer.checkpoint_callback_class=examples.mirroropd.research.studies.weighted_targets.checkpoint.LatestTrainingState",
+            ),
         )
     return presets
 
@@ -553,6 +568,7 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
         env["DOMAIN"] = "math"
         defaults(env, OPD_ADVANTAGE_SOURCE=preset.advantage, OPD_POLICY_LOSS_MODE=preset.policy)
         options.extend(budget_overrides(env, preset.budget))
+        options.extend(preset.overrides)
     elif env.get("TOTAL_TRAINING_STEPS"):
         options.append(f"trainer.total_training_steps={positive_steps(env['TOTAL_TRAINING_STEPS'])}")
     default_method = preset.method if preset else "sampled"
@@ -742,6 +758,9 @@ def preset_overview() -> str:
             "4卡shared_sync、batch=mini-batch256、n1/reuse16；A=25 outer/400更新，B=100 outer/1600更新。"
             "无初始验证，每5 outer及终点验证；不保存checkpoint。每引擎并发64/TP1、显存0.8；"
             "precompute_fused/chunk512、bf16；验证avg16/31744；训练与验证默认开启重复提前停止。",
+            "E83/E84：继承E82的100 outer/1600更新与LR1e-6；"
+            "E83=future none/seq-mean-token-mean，E84=future mean(gamma1)/token-mean。"
+            "每25 outer同步保存完整训练状态，仅保留最新一份，另保留最终HF模型。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
         ]

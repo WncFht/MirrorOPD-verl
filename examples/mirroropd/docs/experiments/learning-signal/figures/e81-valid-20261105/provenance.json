@@ -1,0 +1,57 @@
+{
+  "snapshot_utc": "2026-11-05T15:56:34+00:00",
+  "sources": [
+    {
+      "path": "examples/mirroropd/research/studies/weighted_targets/plot_e81_validation.py",
+      "bytes": 14439,
+      "sha256": "f01f30e65469c339e3458adb5a097687b9e34047d4ee451f5fb74062f7773685"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E81/metrics.jsonl",
+      "bytes": 1948208,
+      "sha256": "753b44f9775c26d33492f9fd0963c65f114d73d7d85dc15119aca6bffa195b64"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E81/validation/records/5.jsonl",
+      "bytes": 102435572,
+      "sha256": "f689af089a0576f48c764e4721e950deffee685c29d6dee22926d06979d9d8f5"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E81/validation/records/10.jsonl",
+      "bytes": 276714366,
+      "sha256": "3f97ca9113bfa64c48d07522afc5f34ea7154b5fb5b5aeea348f1918d0b002f8"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E81/validation/records/15.jsonl",
+      "bytes": 265867846,
+      "sha256": "6aaf04dbe297cad8f5f22273e2b424287c9bfa4a7cf957b46c49995f773f2b4e"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E81/validation/records/20.jsonl",
+      "bytes": 246768046,
+      "sha256": "a2372da09e6d6aef4c2b8b0e4cad1a2cb1c1c5cbe9bf765d9791dfa67efe0cf2"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/learning-signal/data/e55-e57-20261103/summary.json",
+      "bytes": 78798,
+      "sha256": "a2b3465bb49aec483462be32a6c81d37dc116da2648b7daf922a653faaa46cf3"
+    }
+  ],
+  "available_e81_outer": [
+    5,
+    10,
+    15,
+    20
+  ],
+  "metric": "mean acc per prompt over samples 0..15, then benchmark mean; equal sample counts make this equal to response mean within each benchmark",
+  "macro5": "unweighted mean of five benchmarks; not response-weighted (MATH-500 has 500 of 630 prompts)",
+  "identity": "Group records by data_source and prompt_id; never infer benchmark from JSONL row order, which follows completion order",
+  "clocks": "outer*16 updates; outer*16*batch response presentations (E81 batch256, E57 batch64)",
+  "limitations": [
+    "E81 outer25 endpoint absent at this snapshot unless listed in available_e81_outer",
+    "E57 had no repetition stopping and used a different execution path; comparisons are descriptive",
+    "No run-native step0; no invented baseline or extrapolated endpoints",
+    "Single training seed; no statistical significance claim",
+    "CSV freezes the plotted observations; default invocation replots it, --refresh rereads live records"
+  ]
+}
