@@ -1,0 +1,210 @@
+{
+  "optimizer_updates": 400,
+  "applied": 400.0,
+  "skipped": 0.0,
+  "loss_nonfinite": 0.0,
+  "gradient_nonfinite": 0.0,
+  "blocks": [
+    {
+      "outer": 1,
+      "updates": 16,
+      "objective_first": 0.05640392208992884,
+      "objective_last": 0.051306984260542234,
+      "teacher_kl_first": 0.4794339717792067,
+      "teacher_kl_last": 0.4609975864408655
+    },
+    {
+      "outer": 2,
+      "updates": 16,
+      "objective_first": 0.048063531509154094,
+      "objective_last": 0.042118577451330214,
+      "teacher_kl_first": 0.4057026645010554,
+      "teacher_kl_last": 0.38494981851943183
+    },
+    {
+      "outer": 3,
+      "updates": 16,
+      "objective_first": 0.05426202390755402,
+      "objective_last": 0.046109895132257855,
+      "teacher_kl_first": 0.46522113599390047,
+      "teacher_kl_last": 0.4355670982105585
+    },
+    {
+      "outer": 4,
+      "updates": 16,
+      "objective_first": 0.05273519248745089,
+      "objective_last": 0.04583877009694741,
+      "teacher_kl_first": 0.4714698293881617,
+      "teacher_kl_last": 0.44046350745395413
+    },
+    {
+      "outer": 5,
+      "updates": 16,
+      "objective_first": 0.050899221618667154,
+      "objective_last": 0.04363136803800392,
+      "teacher_kl_first": 0.45325322076784386,
+      "teacher_kl_last": 0.4233460045076141
+    },
+    {
+      "outer": 6,
+      "updates": 16,
+      "objective_first": 0.057377409130755834,
+      "objective_last": 0.04835162313130589,
+      "teacher_kl_first": 0.5092751766790851,
+      "teacher_kl_last": 0.47513467115089275
+    },
+    {
+      "outer": 7,
+      "updates": 16,
+      "objective_first": 0.054081387495182924,
+      "objective_last": 0.046338325653660174,
+      "teacher_kl_first": 0.48039577665734323,
+      "teacher_kl_last": 0.4512351032293708
+    },
+    {
+      "outer": 8,
+      "updates": 16,
+      "objective_first": 0.05888617879922824,
+      "objective_last": 0.050220539753476255,
+      "teacher_kl_first": 0.5288182867453427,
+      "teacher_kl_last": 0.49797704404567805
+    },
+    {
+      "outer": 9,
+      "updates": 16,
+      "objective_first": 0.05772131525214331,
+      "objective_last": 0.04994368750221265,
+      "teacher_kl_first": 0.513462301812753,
+      "teacher_kl_last": 0.4854002503418874
+    },
+    {
+      "outer": 10,
+      "updates": 16,
+      "objective_first": 0.0567116144634534,
+      "objective_last": 0.049669913412633916,
+      "teacher_kl_first": 0.5019732368135699,
+      "teacher_kl_last": 0.47590324967717
+    },
+    {
+      "outer": 11,
+      "updates": 16,
+      "objective_first": 0.05440368035295491,
+      "objective_last": 0.04801083469229644,
+      "teacher_kl_first": 0.49046235155589046,
+      "teacher_kl_last": 0.466734072284626
+    },
+    {
+      "outer": 12,
+      "updates": 16,
+      "objective_first": 0.05313840480320744,
+      "objective_last": 0.04741189384941264,
+      "teacher_kl_first": 0.47646062910939235,
+      "teacher_kl_last": 0.4546730407703527
+    },
+    {
+      "outer": 13,
+      "updates": 16,
+      "objective_first": 0.05190187982245109,
+      "objective_last": 0.04683024998409978,
+      "teacher_kl_first": 0.47305487645645083,
+      "teacher_kl_last": 0.4535564451780751
+    },
+    {
+      "outer": 14,
+      "updates": 16,
+      "objective_first": 0.050362938458014685,
+      "objective_last": 0.04563233489114596,
+      "teacher_kl_first": 0.4634103942533004,
+      "teacher_kl_last": 0.4446701631831696
+    },
+    {
+      "outer": 15,
+      "updates": 16,
+      "objective_first": 0.04889625444276999,
+      "objective_last": 0.04469283669861382,
+      "teacher_kl_first": 0.4597418072310673,
+      "teacher_kl_last": 0.44154459754230707
+    },
+    {
+      "outer": 16,
+      "updates": 16,
+      "objective_first": 0.048706612292575925,
+      "objective_last": 0.04460184024537704,
+      "teacher_kl_first": 0.4598929257913173,
+      "teacher_kl_last": 0.44364986819315616
+    },
+    {
+      "outer": 17,
+      "updates": 16,
+      "objective_first": 0.047391027936449746,
+      "objective_last": 0.04358840955488775,
+      "teacher_kl_first": 0.4514842961250998,
+      "teacher_kl_last": 0.43574814235875664
+    },
+    {
+      "outer": 18,
+      "updates": 16,
+      "objective_first": 0.046208640511614406,
+      "objective_last": 0.04269356945992619,
+      "teacher_kl_first": 0.44497457233632914,
+      "teacher_kl_last": 0.42964957221388084
+    },
+    {
+      "outer": 19,
+      "updates": 16,
+      "objective_first": 0.045882179730921326,
+      "objective_last": 0.042419921323166215,
+      "teacher_kl_first": 0.4431204772834172,
+      "teacher_kl_last": 0.4288091102898195
+    },
+    {
+      "outer": 20,
+      "updates": 16,
+      "objective_first": 0.04607777228643007,
+      "objective_last": 0.04284868918258207,
+      "teacher_kl_first": 0.4457244355499576,
+      "teacher_kl_last": 0.43203908016948345
+    },
+    {
+      "outer": 21,
+      "updates": 16,
+      "objective_first": 0.04429328842146271,
+      "objective_last": 0.04128374842616517,
+      "teacher_kl_first": 0.42967828998888646,
+      "teacher_kl_last": 0.41677169813041903
+    },
+    {
+      "outer": 22,
+      "updates": 16,
+      "objective_first": 0.043710914321942566,
+      "objective_last": 0.040909392603541636,
+      "teacher_kl_first": 0.42796627023450506,
+      "teacher_kl_last": 0.4154564684148095
+    },
+    {
+      "outer": 23,
+      "updates": 16,
+      "objective_first": 0.04304673893744355,
+      "objective_last": 0.04055762593119802,
+      "teacher_kl_first": 0.42180894968089416,
+      "teacher_kl_last": 0.41079376618886426
+    },
+    {
+      "outer": 24,
+      "updates": 16,
+      "objective_first": 0.043014069623634806,
+      "objective_last": 0.04029989328384453,
+      "teacher_kl_first": 0.42011937596884735,
+      "teacher_kl_last": 0.40894690418297086
+    },
+    {
+      "outer": 25,
+      "updates": 16,
+      "objective_first": 0.04163986127215185,
+      "objective_last": 0.039184286140742,
+      "teacher_kl_first": 0.4104032359472957,
+      "teacher_kl_last": 0.39945083540689985
+    }
+  ],
+  "validation_checks": "All benchmark accuracies, mean token lengths, finish counts and failures independently match metrics.jsonl; source/prompt/sample identities are complete."
+}

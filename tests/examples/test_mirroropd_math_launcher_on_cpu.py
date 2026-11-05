@@ -1383,6 +1383,32 @@ def test_repetition_opt_out_is_not_overridden_by_presets(tmp_path, preset):
     assert cfg.actor_rollout_ref.rollout.val_kwargs.repetition_detection is None
 
 
+@pytest.mark.parametrize(
+    "preset,future,aggregation", [("E83", "none", "seq-mean-token-mean"), ("E84", "mean", "token-mean")]
+)
+def test_topd_learning_signal_presets_preserve_e82_budget_and_full_state(tmp_path, preset, future, aggregation):
+    cfg = _config(tmp_path, command=["bash", str(SCRIPT), preset], TRAIN_BATCH_SIZE="")
+    OmegaConf.resolve(cfg)
+    validate_config(cfg, use_reference_policy=False, use_critic=False)
+    actor = cfg.actor_rollout_ref.actor
+    loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
+    assert cfg.trainer.total_training_steps == 100 and cfg.trainer.total_epochs == 2
+    assert cfg.trainer.n_gpus_per_node == 4 and cfg.distillation.execution_mode == "shared_sync"
+    assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 256 and actor.ppo_epochs == 16
+    assert cfg.trainer.test_freq == 5 and not cfg.trainer.val_before_train
+    assert cfg.trainer.save_freq == 25 and cfg.trainer.max_actor_ckpt_to_keep == 1
+    assert set(actor.checkpoint.save_contents) == {"model", "optimizer", "extra", "hf_model"}
+    assert set(actor.checkpoint.load_contents) == {"model", "optimizer", "extra"}
+    assert actor.checkpoint.preserve_hf_master_weights and not actor.checkpoint.async_save
+    assert cfg.trainer.checkpoint_callback_class.endswith(".LatestTrainingState")
+    assert loss.full_vocab.future.mode == future and loss.full_vocab.future.gamma == 1
+    assert actor.loss_agg_mode == aggregation and actor.optim.lr == 1e-6
+    assert loss.loss_settings.kappa == 1 and loss.loss_settings.eta == 0.1
+    assert loss.full_vocab.backend == "precompute_fused"
+    assert cfg.actor_rollout_ref.rollout.max_num_seqs == 64
+    assert cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
+
+
 @pytest.mark.parametrize("preset,outers,updates,presentations", [("E81", 25, 400, 102400), ("E82", 100, 1600, 409600)])
 def test_topd_large_batch_presets_resolve_four_gpu_budget_and_repetition_stopping(
     tmp_path, preset, outers, updates, presentations
