@@ -50,9 +50,9 @@ E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收
 
 <a id="training-clock-comparison"></a>
 
-## E57 与 E81 的训练时钟对照
+## E57、E81 与 E82 的训练时钟对照
 
-下图按 outer、optimizer update 和累计 response presentations × optimizer updates 对照 E57 原始运行与 E81（A）的训练 rollout reward。E57 每个 outer 使用 64 条回答，E81 使用 256 条；两者每个 outer 均执行 16 次 optimizer update。图中是训练 rollout reward，不是公共 benchmark accuracy；当前图组尚未包含 E82（B）的曲线。
+下图按 outer、optimizer update 和累计 response presentations × optimizer updates 对照 E57、E81（A）与 E82（B）的训练 rollout reward。E57 每个 outer 使用 64 条回答，E81/E82 每个 outer 使用 256 条；三组每个 outer 均执行 16 次 optimizer update。图中是训练 rollout reward，不是公共 benchmark accuracy。E82 仍在运行，曲线只显示本次数据快照中已有的训练 outer。
 
 ![按 outer step 对照](figures/training-clocks-20261105/reward-by-outer.png)
 
@@ -60,13 +60,15 @@ E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收
 
 ![按累计 response presentations × optimizer updates 对照](figures/training-clocks-20261105/reward-by-sample-update.png)
 
+累计回答处理条次按 `outer × responses per outer × 16` 计算；同一回答在每次复用时再次计数。它表示回答呈现次数，不等于唯一新生成回答数或 token 数。当前曲线点与原始文件校验和记录在[图表数据](figures/training-clocks-20261105/training-clocks.csv)和[数据来源及限制](figures/training-clocks-20261105/provenance.json)，可用同目录的[绘图脚本](figures/training-clocks-20261105/plot_training_clocks.py)重建。此快照中 E57 到 outer100，E81 的训练 reward 到 outer24（outer25 的汇总指标待终点评测完成后落盘），E82 到 outer14。
+
 TOP-D 论文 Figure 5 曲线由审计数据[复原](data/topd-e57-all-curves-20261104/curves.csv)，图文件保存在[对应图组](figures/topd-e57-all-curves-20261104/)。论文只公开图形和预算说明，没有公开逐点运行日志，因此不把论文曲线与本地训练 rollout reward 未经校准地拼接。
 
 ## 执行状态与入口
 
 2026-11-05，E81（A）运行在物理 GPU1–4，E82（B）由独立 supervisor 并行运行在 GPU0、5–7。两者均从原始 Base 独立开始，关闭初始评测，训练与验证开启重复停止。冻结源码为 `c996d634`；[正式预算与输入](../../../../../runs/topd-large-batch-20261105/plan.json)、[最终配置](../../../../../runs/topd-large-batch-20261105/configs/)、[队列状态](../../../../../runs/topd-large-batch-20261105/queue-state.json)保留正式执行设置。CPU 测试覆盖最终 Hydra 配置解析、四卡资源、batch／reuse／预算、并发、目标和评测终止协议，见[启动器测试](../../../../../tests/examples/test_mirroropd_math_launcher_on_cpu.py)。
 
-截至 2026-11-05 16:53（UTC+8），E81 已记录至 outer20／optimizer update 320，计划共 400 次更新；outer20 的验证仍在运行。E82 已记录至 outer10／optimizer update 160，计划共 1600 次更新；outer10 的验证正在运行，16:52:58 日志显示 94 个任务完成、536 个运行中、0 个失败。两组的已记录更新均已应用；该进度快照不包含验证结束后的更新。首个 outer 的启动验收凭据见[启动验收凭据](../../../../../runs/topd-large-batch-20261105/startup-proof.json)。
+截至 2026-11-05 22:17（UTC+8），E81 已完成 outer25／optimizer update 400，正在进行终点评测；22:16:41 的日志显示 191/630 个评测任务完成、0 个失败。E82 已完成 optimizer update 240，最近一个已记录的训练 rollout reward 是 outer14；outer15 验证正在运行，22:17:45 的日志显示 15/630 个评测任务完成、0 个失败。两组已记录的 optimizer update 均已应用。图表数据快照只包含已落盘的训练 rollout reward，因此 E82 曲线到 outer14。首个 outer 的启动验收凭据见[启动验收凭据](../../../../../runs/topd-large-batch-20261105/startup-proof.json)。
 
 从仓库根目录检查默认配置；应先清理会覆盖预设的旧环境变量：
 

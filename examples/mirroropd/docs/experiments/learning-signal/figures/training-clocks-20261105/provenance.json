@@ -1,0 +1,51 @@
+{
+  "generated_at_utc": "2026-11-05T14:23:47+00:00",
+  "sources": {
+    "E57": {
+      "path": "runs/e55-e57-refresh-20261102-0900/data.json",
+      "sha256": "80947df5224ebd1f55a2b278dccb2c319c8e5e3d99b5b6998c729cdf30ba7373"
+    },
+    "E81": {
+      "path": "runs/topd-large-batch-20261105/formal/E81/metrics.jsonl",
+      "sha256": "753b44f9775c26d33492f9fd0963c65f114d73d7d85dc15119aca6bffa195b64"
+    },
+    "E82": {
+      "path": "runs/topd-large-batch-20261105/formal/E82/metrics.jsonl",
+      "sha256": "9a9f241e8ab113a5d0830f8a1c08bccf9fed7887db633ef9c2263acbf06b055b"
+    }
+  },
+  "series": {
+    "E57": {
+      "point_count": 100,
+      "last_reward_outer": 100.0,
+      "last_optimizer_update": 1600.0,
+      "last_response_presentations": 102400.0,
+      "last_rollout_reward": 0.28125
+    },
+    "E81": {
+      "point_count": 24,
+      "last_reward_outer": 24.0,
+      "last_optimizer_update": 384.0,
+      "last_response_presentations": 98304.0,
+      "last_rollout_reward": 0.21875
+    },
+    "E82": {
+      "point_count": 14,
+      "last_reward_outer": 14.0,
+      "last_optimizer_update": 224.0,
+      "last_response_presentations": 57344.0,
+      "last_rollout_reward": 0.109375
+    }
+  },
+  "axes": {
+    "outer": "completed outer step",
+    "optimizer_update": "completed optimizer update recorded by the trainer",
+    "response_presentations": "outer × responses per outer × 16 optimizer updates; repeated answer presentations count again",
+    "rollout_reward": "mean task reward of the training rollouts generated for that outer"
+  },
+  "limitations": [
+    "E81 outer 25 reward is not yet logged while final evaluation is pending; its latest logged reward point in this snapshot is outer 24.",
+    "E82 is an in-progress run; the curve ends at its latest reward-bearing outer in the source snapshot.",
+    "These are training rollout rewards, not held-out benchmark accuracy."
+  ]
+}
