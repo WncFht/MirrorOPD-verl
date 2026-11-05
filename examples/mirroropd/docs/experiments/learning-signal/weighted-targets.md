@@ -8,7 +8,7 @@
 | [小规模消融与机制核对](weighted-targets-controls.md) | κ/η 网格、覆盖、局部梯度、输入与解码对照                 |
 | [当前实验](weighted-targets-active.md)               | E81／E82 预算对照、跨运行 valid、E83／E84 消融与执行状态 |
 
-E81 已完成全部 400 次更新与五次验证，[综合分析](weighted-targets-active.md#e81-已落盘的验证与分析)同时纳入 E55–E57、E82 的完整 valid、独立 Base 参考、Qwen3-30B teacher 参考和 TOP-D 论文 AIME 曲线，主要横轴为 optimizer updates。在相同 102,400 回答处理条次下，E81／E57 的五基准宏平均为 26.49%／29.93%，AIME 平均为 7.99%／9.03%；现有运行未支持大 batch 的同回答预算优势，数值执行和停止协议差异仍适用。E81 终点 AIME 重复停止率为 43.96%，历史 E55–E57 未启用该检测器，在综合图中保留 N/A。下一轮按已登记的 E83／E84 [future 与聚合四卡对照](weighted-targets-controls.md#四卡消融future-与聚合)继续分解机制。
+E81 已完成全部 400 次更新与五次验证，[综合分析](weighted-targets-active.md#e81-已落盘的验证与分析)同时纳入 E55–E57、E82 的完整 valid、独立 Base 参考、Qwen3-30B teacher 参考和 TOP-D 论文 AIME 曲线，主要横轴为 optimizer updates。在相同 102,400 回答处理条次下，E81／E57 的五基准宏平均为 26.49%／29.93%，AIME 平均为 7.99%／9.03%；现有运行未支持大 batch 的同回答预算优势，数值执行和停止协议差异仍适用。E81 终点 AIME 重复停止率为 43.96%，历史 E55–E57 未启用该检测器，在综合图中保留 N/A。下一轮按已登记的 E83／E84 [future 与聚合四卡对照](weighted-targets-controls.md#e82-基线上的-future-与聚合消融)继续分解机制。
 
 [精度与 optimizer 实验](../../infra/numerics/optimization/README.md)提供执行与求解依据。
 

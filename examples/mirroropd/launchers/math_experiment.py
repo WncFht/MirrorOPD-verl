@@ -312,6 +312,32 @@ def preset_catalog() -> dict[str, Preset]:
                 "trainer.checkpoint_callback_class=examples.mirroropd.research.studies.weighted_targets.checkpoint.LatestTrainingState",
             ),
         )
+    # Eight-GPU follow-ups deliberately run without durable model or optimizer
+    # checkpoints.  Keep E82's budget and MDPO target fixed while isolating the
+    # remaining aggregation and future-credit choices.
+    eight_gpu_ablation = (
+        (85, "none", "token-sum", "aggregation: token-sum"),
+        (86, "none", "seq-mean-token-sum", "aggregation: seq-mean-token-sum"),
+        (87, "none", "seq-mean-token-sum-norm", "aggregation: seq-mean-token-sum-norm"),
+        (88, "sum", "token-mean", "future: sum"),
+        (89, "discounted_sum", "token-mean", "future: discounted-sum, gamma=.99"),
+        (90, "discounted_mean", "token-mean", "future: discounted-mean, gamma=.99"),
+    )
+    for number, future, aggregation, _label in eight_gpu_ablation:
+        environment = dict(presets["E82"].environment)
+        environment["STUDENT_GPUS"] = "8"
+        presets[f"E{number}"] = replace(
+            presets["E82"],
+            budget=replace(presets["E82"].budget, save=-1, keep=None),
+            environment=tuple(environment.items()),
+            overrides=(
+                f"distillation.distillation_loss.full_vocab.future.mode={future}",
+                "distillation.distillation_loss.full_vocab.future.gamma=0.99"
+                if future.startswith("discounted_")
+                else "distillation.distillation_loss.full_vocab.future.gamma=1.0",
+                f"actor_rollout_ref.actor.loss_agg_mode={aggregation}",
+            ),
+        )
     return presets
 
 
@@ -761,6 +787,10 @@ def preset_overview() -> str:
             "E83/E84：继承E82的100 outer/1600更新与LR1e-6；"
             "E83=future none/seq-mean-token-mean，E84=future mean(gamma1)/token-mean。"
             "每25 outer同步保存完整训练状态，仅保留最新一份，另保留最终HF模型。",
+            "E85–E90：继承E82预算与MDPO设置，改用8卡 shared_sync；"
+            "E85/E86/E87分别为none下的token-sum、seq-mean-token-sum、seq-mean-token-sum-norm；"
+            "E88/E89/E90分别为token-mean下的future sum、discounted_sum(gamma=.99)、discounted_mean(gamma=.99)。"
+            "六组均save_freq=-1、resume_mode=disable，不保存checkpoint、HF模型或optimizer。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",
         ]
