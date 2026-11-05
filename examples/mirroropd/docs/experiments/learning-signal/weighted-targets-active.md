@@ -48,11 +48,25 @@ E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收
 
 [并发与利用率调优](../../infra/performance/2026-10-22-批量大小与GPU利用率调优.md)区分请求供给和引擎上限；[训练与验证实测](../../infra/performance/2026-10-22-训练与验证性能实测.md)记录了请求窗口与长尾的影响。A/B 还需记录 rollout token/s、验证耗时、抢占和峰值显存，再判断是否进一步增加上限。
 
+<a id="training-clock-comparison"></a>
+
+## E57 与 E81 的训练时钟对照
+
+下图按 outer、optimizer update 和累计 response presentations × optimizer updates 对照 E57 原始运行与 E81（A）的训练 rollout reward。E57 每个 outer 使用 64 条回答，E81 使用 256 条；两者每个 outer 均执行 16 次 optimizer update。图中是训练 rollout reward，不是公共 benchmark accuracy；当前图组尚未包含 E82（B）的曲线。
+
+![按 outer step 对照](figures/training-clocks-20261105/reward-by-outer.png)
+
+![按 optimizer update 对照](figures/training-clocks-20261105/reward-by-optimizer-update.png)
+
+![按累计 response presentations × optimizer updates 对照](figures/training-clocks-20261105/reward-by-sample-update.png)
+
+TOP-D 论文 Figure 5 曲线由审计数据[复原](data/topd-e57-all-curves-20261104/curves.csv)，图文件保存在[对应图组](figures/topd-e57-all-curves-20261104/)。论文只公开图形和预算说明，没有公开逐点运行日志，因此不把论文曲线与本地训练 rollout reward 未经校准地拼接。
+
 ## 执行状态与入口
 
-2026-11-05，E81（A）已在物理 GPU1–4 启动，E82（B）在同一四卡队列中等待 A 完成。两者均从原始 Base 独立开始，关闭初始评测，训练与验证开启重复停止。冻结源码为 `c996d634`；[正式预算与输入](../../../../../runs/topd-large-batch-20261105/plan.json)、[最终配置](../../../../../runs/topd-large-batch-20261105/configs/)、[队列状态](../../../../../runs/topd-large-batch-20261105/queue-state.json)保留实际执行设置。CPU 测试覆盖最终 Hydra 配置解析、四卡资源、batch／reuse／预算、并发、目标和评测终止协议，见[启动器测试](../../../../../tests/examples/test_mirroropd_math_launcher_on_cpu.py)。
+2026-11-05，E81（A）运行在物理 GPU1–4，E82（B）由独立 supervisor 并行运行在 GPU0、5–7。两者均从原始 Base 独立开始，关闭初始评测，训练与验证开启重复停止。冻结源码为 `c996d634`；[正式预算与输入](../../../../../runs/topd-large-batch-20261105/plan.json)、[最终配置](../../../../../runs/topd-large-batch-20261105/configs/)、[队列状态](../../../../../runs/topd-large-batch-20261105/queue-state.json)保留正式执行设置。CPU 测试覆盖最终 Hydra 配置解析、四卡资源、batch／reuse／预算、并发、目标和评测终止协议，见[启动器测试](../../../../../tests/examples/test_mirroropd_math_launcher_on_cpu.py)。
 
-首个 outer 已完成 16／16 次 optimizer 更新，跳步为 0，loss 与梯度均有限；256 条回答中，250 条自然停止、5 条重复停止、1 条达到长度上限，unknown 为 0，重复检测开启比例为 1。该轮约 257 秒；[启动验收凭据](../../../../../runs/topd-large-batch-20261105/startup-proof.json)保留逐更新指标和完整 outer 指标。这里只确认训练及重复停止链路正常，不据此判断任务效果。后端未对所有请求提供抢占字段，不能宣称零抢占。
+截至 2026-11-05 16:53（UTC+8），E81 已记录至 outer20／optimizer update 320，计划共 400 次更新；outer20 的验证仍在运行。E82 已记录至 outer10／optimizer update 160，计划共 1600 次更新；outer10 的验证正在运行，16:52:58 日志显示 94 个任务完成、536 个运行中、0 个失败。两组的已记录更新均已应用；该进度快照不包含验证结束后的更新。首个 outer 的启动验收凭据见[启动验收凭据](../../../../../runs/topd-large-batch-20261105/startup-proof.json)。
 
 从仓库根目录检查默认配置；应先清理会覆盖预设的旧环境变量：
 
@@ -61,4 +75,4 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E81
 DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E82
 ```
 
-正式运行由 `runs/topd-large-batch-20261105/supervisor.py` 持有四卡资源并串行执行 A→B，运行日志和离线 W&B 数据保存在各自独立目录。队列仅在 A 成功退出并核验完整 outer／optimizer 预算后启动 B；异常会停止队列。评测与训练共享四卡，不另占 teacher GPU；长期结果回填主报告，小规模机制核对保留在独立专题。
+E81 由 `runs/topd-large-batch-20261105/run_queue.py` 在 GPU1–4 上运行；E82 由 `runs/topd-large-batch-20261105/e82_concurrent_supervisor.py` 在 GPU0、5–7 上并行运行。两个 supervisor 都通过 `resource_guard.py` 持有 GPU 资源；E82 退出时释放自己的 broker reservation，由 broker 恢复 idle occupancy。运行日志和离线 W&B 数据保存在各自独立目录；评测与训练共享各自的四卡资源，不另占 teacher GPU。长期结果回填主报告，小规模机制核对保留在独立专题。
