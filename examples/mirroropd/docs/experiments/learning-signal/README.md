@@ -11,14 +11,4 @@ RQ1 区分信号刷新、更新校正、动作积分和聚合方式；RQ5 独立
 
 固定生成/更新预算的 reuse 与长度比较见[预算线](../reuse-budget/README.md)。RKL/FKL 的 Polaris 方向证据见[教师吸收](../teacher-transfer/cases/polaris.md)。
 
-## 训练时钟对照
-
-三张图按 outer、optimizer update 和累计 response presentations × optimizer updates 展示 E57 原始运行与当前 E81 运行的训练 rollout reward。E57 使用 64 responses/outer，E81 使用 256 responses/outer；两者均为 16 次 optimizer update/outer。
-
-![按 outer step 对照](figures/training-clocks-20261105/reward-by-outer.png)
-
-![按 optimizer update 对照](figures/training-clocks-20261105/reward-by-optimizer-update.png)
-
-![按累计 response presentations × optimizer updates 对照](figures/training-clocks-20261105/reward-by-sample-update.png)
-
-这三张图的当前 E81 数据是训练过程中的 rollout reward，不是公共 benchmark accuracy。TOP-D 的论文 Figure 5 曲线已经由审计数据[复原](data/topd-e57-all-curves-20261104/curves.csv)，并保存在[对应图组](figures/topd-e57-all-curves-20261104/)；论文只公开了图形和预算说明，未公开逐点运行日志，因此 TOP-D 曲线与本地训练 reward 不做未经校准的数值拼接。
+E57 与 E81 的训练时钟图及其数据口径已归档到[TOP-D 当前 A/B 实验](weighted-targets-active.md#training-clock-comparison)；论文曲线的来源与预算说明见[TOP-D 主报告](weighted-targets.md)。
