@@ -1,10 +1,10 @@
 {
-  "snapshot_utc": "2026-11-05T17:28:16+00:00",
+  "snapshot_utc": "2026-11-06T04:10:56+00:00",
   "sources": [
     {
       "path": "examples/mirroropd/research/studies/weighted_targets/plot_validation_comparison.py",
-      "bytes": 21796,
-      "sha256": "95b667af20d637295ed6c1c3783eb1cf882cd2568741485f6108f50465708880"
+      "bytes": 24222,
+      "sha256": "0f414255085f71f63ee3a7b8cc1431a890fbb9d321ed250bbef835dd6880cedb"
     },
     {
       "path": "examples/mirroropd/research/studies/weighted_targets/plot_e81_validation.py",
@@ -48,8 +48,8 @@
     },
     {
       "path": "runs/topd-large-batch-20261105/formal/E82/metrics.jsonl",
-      "bytes": 1233319,
-      "sha256": "c15e038d90120a7610a3e6fe3b5114b861dd591debe5282efc5dd14451a12453"
+      "bytes": 2091163,
+      "sha256": "4c6ea8bfd2f4f55918eb3360d26bb784d6473fdd623da1b4e83f7ec031248796"
     },
     {
       "path": "runs/topd-large-batch-20261105/formal/E82/metrics-exclusions.json",
@@ -65,6 +65,31 @@
       "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/10.jsonl",
       "bytes": 296659893,
       "sha256": "b1656e2efa865fd4007e7e0bb9041f956fecbeabc4877852869fd5cd4cfff817"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/15.jsonl",
+      "bytes": 298200668,
+      "sha256": "1a3070db3f6613aa73735e7df11fedda86778ed206139be3d3966d5d370b947a"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/20.jsonl",
+      "bytes": 268680425,
+      "sha256": "7bb8299f2fa7ae97221512fd66eb758b4e3a8d39b8ed137cc2110a82972e5b04"
+    },
+    {
+      "path": "runs/topd-learning-signal-20261106/formal/E83/metrics.jsonl",
+      "bytes": 1088243,
+      "sha256": "325d6bdde02e652ef2ba8bf9a3a7475370502b0188afab6ee54dfa2072abc8c8"
+    },
+    {
+      "path": "runs/topd-learning-signal-20261106/formal/E83/validation/records/5.jsonl",
+      "bytes": 127623176,
+      "sha256": "e6c599977eba715977f9ce4b29e3810817d3034ddaa42b56788c8ece9f13e56f"
+    },
+    {
+      "path": "runs/topd-learning-signal-20261106/formal/E83/validation/records/10.jsonl",
+      "bytes": 309084692,
+      "sha256": "cca14955d1da6ec94828705748ae1ebd7bd07da915693ce2a98e6677e8ac572c"
     },
     {
       "path": "examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-all-curves-20261104/curves.csv",
@@ -102,16 +127,22 @@
     ],
     "E82": [
       5,
+      10,
+      15,
+      20
+    ],
+    "E83": [
+      5,
       10
     ]
   },
   "local_metric": "benchmark avg@16; macro5/AIME mean are unweighted benchmark means",
   "paper_metric": "Figure5 vector vertices avg@32; published smoothing, if any, is retained",
   "missing": "Repetition stopping disabled in E55--57: blank, not zero. Paper length/finish metrics unavailable.",
-  "clocks": "16 updates/outer; local batch64(E55--57)/256(E81/82); TOP-D4096 presentations/outer",
+  "clocks": "16 updates/outer; local batch64(E55--57)/256(E81--83); TOP-D4096 presentations/outer",
   "limitations": [
     "Paper/local prompts, decoding, cap, scoring and update algorithms differ; no causal ranking",
-    "E55--57 use historical numerical execution and no repetition stopping; E81/82 enable detector",
+    "E55--57 use historical numerical execution and no repetition stopping; E81--83 enable detector",
     "E81/82 share a nominal seed/prefix setting, not independent replications",
     "Only complete live validations with matching metrics are admitted; independent Base/teacher references are explicit x=0 points",
     "No interpolation for equal-budget tables; plotted lines only connect real observations",

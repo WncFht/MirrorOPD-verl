@@ -44,7 +44,7 @@ E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收
 
 ### E85–E90：八卡聚合与 future 消融
 
-E85–E90 均从 E82 的原始 Base 独立启动，固定 100 outer／1,600 optimizer updates、batch256／reuse16、full-vocab MDPO κ1／η0.1、LR1e-6 和其余 rollout／评测协议；唯一资源变化是使用 8 卡 shared_sync。它们不保存周期 checkpoint、最终模型或 optimizer 状态：`trainer.save_freq=-1`，`resume_mode=disable`，用于快速筛选未测的目标形式。训练结束后只能使用日志与评测导出分析，不能从这些运行续训。
+E85–E90 均从 E82 的原始 Base 独立启动，固定 100 outer／1,600 optimizer updates、batch256／reuse16、full-vocab MDPO κ1／η0.1、LR1e-6 和其余 rollout 协议；唯一资源变化是使用 8 卡 shared_sync。E85/E86 保持原有五基准 avg@16 验证。尚未启动的 E87–E90 改为 MATH-500 n=4、AMC23 与三个 AIME 各 n=16；每个验证点由 10,080 条回答降至 4,080 条，减少约 59.5%。启动器在各运行目录写入带 `__rollout_n__` 的验证数据副本，原始题库不变。两种预算的估计精度不同，E85/E86 与 E87–E90 的验证曲线不作为同一评测预算直接比较。它们不保存周期 checkpoint、最终模型或 optimizer 状态：`trainer.save_freq=-1`，`resume_mode=disable`，用于快速筛选未测的目标形式。训练结束后只能使用日志与评测导出分析，不能从这些运行续训。
 
 | 实验 | future mode       |    γ | `actor.loss_agg_mode`     | 对照目的                          |
 | ---- | ----------------- | ---: | ------------------------- | --------------------------------- |
@@ -55,7 +55,7 @@ E85–E90 均从 E82 的原始 Base 独立启动，固定 100 outer／1,600 opti
 | E89  | `discounted_sum`  | 0.99 | `token-mean`              | 折扣累计后续 cost                 |
 | E90  | `discounted_mean` | 0.99 | `token-mean`              | 折扣并按后续有效 token 数归一化   |
 
-E85–E87 只改变 aggregate，E88–E90 只改变 future；E84 的 `future=mean` 是无折扣均值基线。`sum` 可能让长回答的 future 系数变大，discounted 组同时改变时间权重和尺度，因此先比较终点任务读出、回答长度、重复停止率、future/local surrogate、preclip norm 与裁剪比例，不把单一准确率差异直接解释成更好的信用分配。实现合同中的 `discounted_*` 只允许 γ<1；这里统一使用 0.99，不搜索学习率、κ 或 η。
+E85–E87 只改变 aggregate，E88–E90 只改变 future；E84 的 `future=mean` 是无折扣均值基线。`sum` 可能让长回答的 future 系数变大，discounted 组同时改变时间权重和尺度，因此先比较终点任务读出、回答长度、重复停止率、future/local surrogate、preclip norm 与裁剪比例，不把单一准确率差异直接解释成更好的信用分配。实现合同中的 `discounted_*` 只允许 γ<1；这里统一使用 0.99，不搜索学习率、κ 或 η。E87–E90 与 E85/E86 的评测预算变化也须纳入结果解释。
 
 ## 并发与吞吐
 
@@ -83,11 +83,11 @@ TOP-D 论文 Figure 5 曲线由审计数据[复原](data/topd-e57-all-curves-202
 
 ## E81 已落盘的验证与分析
 
-2026-11-06 00:09（UTC+8）的综合快照已包含 E81 outer5／10／15／20／25 的全部五次验证；400 次 optimizer update 与终点评测均已完成，进程退出码为 0。E82 已完成 240 次更新，但仅 outer5／10 的验证完整落盘；图中不把正在进行的 outer15 评测当作新观测。每次完整验证包含 630 道题、每题 16 条回答，共 10,080 条。E81 的 50,400 条与 E82 的 20,160 条均为 `status=ok`，正确率、平均 token 长度和停止计数已与 trainer 指标逐项对齐，见[来源核验](figures/validation-comparison-20261106/source-audit.json)。
+2026-11-06 12:06（UTC+8）的综合快照包含 E81 outer5／10／15／20／25、E82 outer5／10／15／20，以及 E83 outer5／10 的完整验证。E82 已应用 400 次 optimizer update，outer25 验证尚未完成；E83 已应用 240 次更新，outer15 验证尚未完成。图中仅纳入完整节点。每次验证有 630 道题、每题 16 条回答，共 10,080 条；截至本快照，E81／E82／E83 的有效完整回答数分别为 50,400／40,320／20,160。各记录的正确率、平均 token 长度和停止计数已与 trainer 指标逐项对齐，见[来源核验](figures/validation-comparison-20261106/source-audit.json)。
 
 记录按 `data_source`、`prompt_id` 和 `sample_index` 分组；JSONL 按任务完成顺序写出，不能按行号推断 benchmark。正确率是 avg@16，而非 pass@16；五基准宏平均对 benchmark 等权，三年 AIME 平均也按年份等权，均不采用 MATH-500 占多数的全体回答均值。
 
-![E55、E56、E57、E81、E82 按 optimizer updates 对照五基准验证正确率](figures/validation-comparison-20261106/local-accuracy-optimizer-updates.png)
+![E55、E56、E57、E81、E82、E83 按 optimizer updates 对照五基准验证正确率](figures/validation-comparison-20261106/local-accuracy-optimizer-updates.png)
 
 | E81 outer | Optimizer update | 累计训练回答条次 | MATH-500 |  AMC23 | AIME24 | AIME25 | AIME26 | 五基准宏平均 | 三年 AIME 平均 |
 | --------: | ---------------: | ---------------: | -------: | -----: | -----: | -----: | -----: | -----------: | -------------: |
@@ -97,11 +97,13 @@ TOP-D 论文 Figure 5 曲线由审计数据[复原](data/topd-e57-all-curves-202
 |        20 |              320 |            81920 |   66.08% | 38.75% |  8.54% |  4.79% |  7.08% |       25.05% |          6.81% |
 |        25 |              400 |           102400 |   68.34% | 40.16% |  8.54% |  8.13% |  7.29% |       26.49% |          7.99% |
 
+E82 在 outer20／update320 达到 MATH-500 65.11%、AMC23 37.66%、AIME 均值 7.29%、宏平均 24.93%；E83 在 outer10／update160 为 59.98%、32.81%、4.31%、21.14%。两者 update160 同点分别为 E82 的 AIME 4.93%／宏平均 21.51%，E83 的 4.31%／21.14%。截至当前节点，回答等权聚合没有显示早期准确率优势；单次运行和小规模 AIME 题集不足以判断稳定差异。
+
 E81 从首个到最后一个验证点，MATH-500 提高 16.65 个百分点，AMC23 提高 10.94 个百分点，AIME 平均提高 3.96 个百分点。它在学习，但 AIME 提升较小且中间有回落。AIME 每年只有 30 道题，每题 16 条回答不是 480 道独立题；单训练 seed 的点差不作为稳定排名或显著性结论。
 
 ### 独立 Base 与 teacher 参考
 
-上面的 accuracy 图现在补入两个独立参考系列。它们都放在 optimizer update=0，但不计入 E55–E82 的训练事件或宏平均训练曲线：
+上面的 accuracy 图现在补入两个独立参考系列。它们都放在 optimizer update=0，但不计入 E55–E83 的训练事件或宏平均训练曲线：
 
 | 参考              | MATH-500 |  AMC23 | AIME24 | AIME25 | AIME26 | 评测协议                                                                           |
 | ----------------- | -------: | -----: | -----: | -----: | -----: | ---------------------------------------------------------------------------------- |
@@ -118,27 +120,27 @@ Base 的五集组合是已有证据的拼接：E39 的完整 MATH-500、AMC23、
 
 ### 相同回答处理量与相同更新次数
 
-主图以 optimizer updates 为横轴，加入 E57、E81、E82 与论文 TOP-D α0.1／α0.2。论文仅公开这组三年 AIME 曲线，没有可用于五基准宏平均的完整数据，因此论文对照使用各年 AIME；本地五基准曲线在上图单列。上排保留公开曲线的完整预算，下排放大本地已有预算，均只连接真实观测点。
+主图以 optimizer updates 为横轴，加入 E57、E81、E82、E83 与论文 TOP-D α0.1／α0.2。论文仅公开这组三年 AIME 曲线，没有可用于五基准宏平均的完整数据，因此论文对照使用各年 AIME；本地五基准曲线在上图单列。上排保留公开曲线的完整预算，下排放大本地已有预算，均只连接真实观测点。
 
-![E57、E81、E82 与 TOP-D 按 optimizer updates 比较 AIME；上排全程，下排早期](figures/validation-comparison-20261106/aime-optimizer-updates.png)
+![E57、E81、E82、E83 与 TOP-D 按 optimizer updates 比较 AIME；上排全程，下排早期](figures/validation-comparison-20261106/aime-optimizer-updates.png)
 
-三组本地运行与论文 α0.1／α0.2 都按每 outer16 次更新换算；E57 每步 batch64，E81／E82／论文每步 batch256。但论文每个 outer 新生成 4,096 条、每条训练一次，本地 E81／E82 新生成 256 条、每条复用 16 次。因此，相同 updates 下 E81／E82 与论文对齐回答处理条次，新生成量只有论文的 1/16；E57 的回答处理量又只有它们的 1/4。回答条次没有计入 token 长度、生成和 full-vocab 运算成本。
+四组本地运行与论文 α0.1／α0.2 都按每 outer 16 次更新换算；E57 每步 batch64，E81／E82／E83／论文每步 batch256。但论文每个 outer 新生成 4,096 条、每条训练一次，本地 E81–E83 每个 outer 新生成 256 条、每条复用 16 次。因此，相同 updates 下 E81–E83 与论文对齐回答处理条次，新生成量只有论文的 1/16；E57 的回答处理量又只有它们的 1/4。回答条次没有计入 token 长度、生成和 full-vocab 运算成本。
 
-| 相同 optimizer updates | E57 AIME 平均 | E81 AIME 平均 | E82 AIME 平均 | TOP-D α0.1 AIME 平均 | TOP-D α0.2 AIME 平均 |
-| ---------------------: | ------------: | ------------: | ------------: | -------------------: | -------------------: |
-|                    160 |         4.93% |         6.11% |         4.93% |               ≈7.36% |               ≈7.19% |
-|                    320 |         6.67% |         6.81% |             — |               ≈8.92% |               ≈8.85% |
-|                    400 |             — |         7.99% |             — |                    — |                    — |
+| 相同 optimizer updates | E57 AIME 平均 | E81 AIME 平均 | E82 AIME 平均 | E83 AIME 平均 | TOP-D α0.1 AIME 平均 | TOP-D α0.2 AIME 平均 |
+| ---------------------: | ------------: | ------------: | ------------: | ------------: | -------------------: | -------------------: |
+|                    160 |         4.93% |         6.11% |         4.93% |         4.31% |               ≈7.36% |               ≈7.19% |
+|                    320 |         6.67% |         6.81% |         7.29% |             — |               ≈8.92% |               ≈8.85% |
+|                    400 |             — |         7.99% |             — |             — |                    — |                    — |
 
-表内只列两边真实存在的节点。论文点来自已有的 Figure5 矢量提取，≈表示图上读数，并未重新平滑；论文 outer25 没有节点，因此 update400 不插值补分。E82 在 update160 的宏平均为 21.51%、AIME 为 4.93%，E81 同点为 23.13%／6.11%；同 seed、名义前缀的两条实际运行也存在采样差异，不能将它们视为两个独立 seed 或只选较高的一条代表大 batch。
+表内只列两边真实存在的节点。论文点来自已有的 Figure5 矢量提取，≈表示图上读数，并未重新平滑；论文 outer25 没有节点，因此 update400 不插值补分。E82 在 update160 的宏平均为 21.51%、AIME 为 4.93%，E81 同点为 23.13%／6.11%，E83 为 21.14%／4.31%；同 seed、名义前缀的实际运行也存在采样差异，不能将它们视为独立 seed 或只选较高的一条代表某种聚合。
 
-![E57、E81、E82 与 TOP-D 按累计训练回答条次比较 AIME；上排全程，下排早期](figures/validation-comparison-20261106/aime-response-presentations.png)
+![E57、E81、E82、E83 与 TOP-D 按累计训练回答条次比较 AIME；上排全程，下排早期](figures/validation-comparison-20261106/aime-response-presentations.png)
 
-| 相同累计训练回答条次 | E57 AIME 平均 | E81 AIME 平均 | E82 AIME 平均 | TOP-D α0.1 AIME 平均 | TOP-D α0.2 AIME 平均 |
-| -------------------: | ------------: | ------------: | ------------: | -------------------: | -------------------: |
-|                40960 |         7.01% |         6.11% |         4.93% |               ≈7.36% |               ≈7.19% |
-|                81920 |         8.75% |         6.81% |             — |               ≈8.92% |               ≈8.85% |
-|               102400 |         9.03% |         7.99% |             — |                    — |                    — |
+| 相同累计训练回答条次 | E57 AIME 平均 | E81 AIME 平均 | E82 AIME 平均 | E83 AIME 平均 | TOP-D α0.1 AIME 平均 | TOP-D α0.2 AIME 平均 |
+| -------------------: | ------------: | ------------: | ------------: | ------------: | -------------------: | -------------------: |
+|                40960 |         7.01% |         6.11% |         4.93% |         4.31% |               ≈7.36% |               ≈7.19% |
+|                81920 |         8.75% |         6.81% |         7.29% |             — |               ≈8.92% |               ≈8.85% |
+|               102400 |         9.03% |         7.99% |             — |             — |                    — |                    — |
 
 E81 与 E57 同时能对齐回答处理条次和新生成回答数，完整预算下 E81 为 400 次更新、E57 为 1,600 次更新。五个匹配预算点的 E81 宏平均均低于 E57：
 
@@ -156,9 +158,9 @@ E81 与 E57 同时能对齐回答处理条次和新生成回答数，完整预�
 
 ### 触顶减少与重复停止
 
-综合行为图也统一使用 optimizer updates。E55（κ0）、E56（κ0.5）、E57（κ1）均为历史 η0.1 运行，E81／E82 为 κ1、batch256。先比较三年 AIME，再以五基准等权平均检查现象是否仅由困难题驱动。
+综合行为图也统一使用 optimizer updates。E55（κ0）、E56（κ0.5）、E57（κ1）均为历史 η0.1 运行，E81／E82／E83 为 κ1、batch256。先比较三年 AIME，再以五基准等权平均检查现象是否仅由困难题驱动。
 
-![E55、E56、E57、E81、E82 的 AIME 平均长度及停止原因，横轴为 optimizer updates](figures/validation-comparison-20261106/behavior-aime-optimizer-updates.png)
+![E55、E56、E57、E81、E82、E83 的 AIME 平均长度及停止原因，横轴为 optimizer updates](figures/validation-comparison-20261106/behavior-aime-optimizer-updates.png)
 
 ![五基准等权平均的长度及停止原因，横轴为 optimizer updates](figures/validation-comparison-20261106/behavior-macro5-optimizer-updates.png)
 
@@ -169,7 +171,9 @@ E55–E57 未启用重复检测，`repetition_rate` 保留缺失并在图中标�
 | E57 outer10  |     160 |        25,719 |   78.96% |      N/A |    21.04% |
 | E81 outer10  |     160 |        20,249 |   59.86% |   17.29% |    22.85% |
 | E82 outer10  |     160 |        20,881 |   62.08% |   23.54% |    14.38% |
+| E83 outer10  |     160 |        22,098 |   65.90% |   17.50% |    16.60% |
 | E57 outer20  |     320 |        28,581 |   86.46% |      N/A |    13.54% |
+| E82 outer20  |     320 |        16,949 |   38.26% |   48.06% |    13.68% |
 | E81 outer20  |     320 |        16,197 |   36.18% |   49.38% |    14.44% |
 | E81 outer25  |     400 |        15,444 |   26.25% |   43.96% |    29.79% |
 | E57 outer100 |    1600 |        14,235 |   17.92% |      N/A |    82.08% |
@@ -181,6 +185,18 @@ E55–E57 未启用重复检测，`repetition_rate` 保留缺失并在图中标�
 ### 数据与复画
 
 新综合图组的 [CSV](figures/validation-comparison-20261106/validation.csv)、[来源哈希与口径](figures/validation-comparison-20261106/provenance.json)、[记录核验](figures/validation-comparison-20261106/source-audit.json)和同名 PDF 使用同一快照。E55–E57 来自已冻结的历史汇总；TOP-D 使用已有审计的论文矢量读数。11 月 5 日的 [E81 四次验证快照](figures/e81-valid-20261105/e81-valid.csv)保持原样，由新图组承接终点与跨运行比较。
+
+### 训练与验证耗时、并发判断
+
+![E82／E83 每个已完成训练 outer 和对应完整验证的阶段耗时](figures/validation-comparison-20261106/training-validation-runtime.png)
+
+resolved 配置对 E82／E83 都是完整提交 630 题、每题 avg@16、验证回答上限 31,744 token，`max_num_seqs=64`、TP1，`gpu_memory_utilization=0.8`。这不是“并发只有 4”：四卡各有一个推理副本，每副本序列上限 64；`data.val_batch_size=null` 将全题集交给调度器，但不意味着 10,080 条回答同时驻留解码。当前完整验证耗时为 E82 outer5／10／15／20 的 5,824／17,963／17,384／14,166 秒，E83 outer5／10 为 7,083／18,342 秒。最近节点约 4.0–5.1 小时，评测输出长度随训练明显增加；最长配置允许每条生成 31,744 token。E82 outer20 的 10,080 条输出共约 97.5M token（均长 9,674），吞吐约 6.9k token/s；E83 outer10 约 107.1M token（均长 10,623），约 5.8k token/s。每轮验证涉及 10,080 条生成，验证确实是墙钟耗时的主要部分。
+
+训练本身也越来越慢。E82 的训练 outer5／10／15／20 分别用 173／584／879／938 秒，E83 outer10 用 573 秒。E82 outer20 的阶段计时中 actor 更新为 748 秒、rollout pipeline 为 142 秒；E83 outer10 分别为 434／104 秒。训练回答均长从 E82 outer5 的约 1,282 token 增至 outer20 的 8,207 token，E83 outer10 为 4,685 token，actor 的 16 次更新也要处理这些长序列。因此不能把整体慢都归因于 validation。
+
+12:11 采样时八张 H800 均为 100% GPU 利用率，显存使用为 67,141–68,917／81,559 MiB（约 65.6–67.3／79.6 GiB）；同一时点的验证日志均为 `pending=0`，E82 有 53／630 题仍在生成，E83 有 304／630 题仍在生成。它们表明当前请求队列已发完且 GPU 忙，不能证明引擎并发已达到吞吐最优，也没有证据表明有大量待调度请求被 `max_num_seqs=64` 挡住。并发仍值得查：10 月四卡完整验证实测约 31.3k 输出 token/s，该系列另测并发64→128有吞吐收益；但它使用 DeepSeek-R1-Distill-Qwen-1.5B、另一组输出和不同采样，不能直接与本次 Qwen3-1.7B-Base 对比，也不能把 64→128 的已测收益外推到当前运行。结合当前约 5.8–6.9k token/s 的实测值，应先从 vLLM 指标同时间采集各副本 running/waiting requests、KV cache 使用率、抢占数和输出 token/s；若持续有 waiting backlog 且 KV／显存有余量，再做受控的 64→96/128 对照。单看 `nvidia-smi` 的 100% 或验证日志里的 running 数，无法单独判定并发不足。参考：[10 月四卡验证吞吐实测](../../infra/performance/2026-10-22-训练与验证性能实测.md#12-全量提交的独立收益)。
+
+耗时来源及每节点阶段计时保存在[运行耗时 CSV](figures/validation-comparison-20261106/runtime.csv)，图和曲线使用同一份实时验证快照。当前进度是活动快照，不代表完成训练预算；后续完整节点出现后重新运行 `--refresh` 更新图表。
 
 [绘图源码](../../../research/studies/weighted_targets/plot_validation_comparison.py)默认重画冻结 CSV；仅 `--refresh` 才重新读取运行记录。在仓库根执行：
 
@@ -204,11 +220,11 @@ E83／E84 以 E82 的完整设置为基线，各自从原始 Qwen3-1.7B-Base 开
 
 ## 执行状态与入口
 
-E81 已完成 outer25／400 次更新与全部五次验证，[退出记录](../../../../../runs/topd-large-batch-20261105/logs/E81-train-exit.json)为 returncode0。有效 E82 是 2026-11-05 13:38 启动的 GPU0、5–7 运行。截至 2026-11-06 00:39（UTC+8）的核验，它有 240 次有效更新，完整 valid 为 outer5／10；outer15 验证尚未落盘。
+E81 已完成 outer25／400 次更新与全部五次验证，[退出记录](../../../../../runs/topd-large-batch-20261105/logs/E81-train-exit.json)为 returncode0。有效 E82 是 2026-11-05 13:38 启动的 GPU0、5–7 运行。截至 2026-11-06 12:11（UTC+8），训练已完成 400 次更新，outer25 验证进行中；完整 valid 到 outer20。GPU1–4 由 E83 使用。
 
-原 E81→E82 队列在 E81 完成后重复启动了一份 E82，现已停止重复实例和旧队列。重复实例向同一 metrics 文件追加了 48 次更新及 3 条 outer 汇总；原始日志保留，已用带 SHA256 的字节区间排除清单隔离。现有综合图的 metrics／valid 快照均早于这些追加记录，输入哈希匹配，没有混入重复更新或 valid；后续 `--refresh` 会核验并应用排除清单。细节见[数据核验凭据](../../../../../runs/topd-learning-signal-20261106/e82-data-audit.json)。
+原 E81→E82 队列在 E81 完成后重复启动了一份 E82，现已停止重复实例和旧队列。重复实例向同一 metrics 文件追加了 48 次更新及 3 条 outer 汇总；原始日志保留，已用带 SHA256 的字节区间排除清单隔离。本次综合图刷新已核验并应用排除清单，保留原始有效运行的连续 1–400 次更新和完整 valid。细节见[数据核验凭据](../../../../../runs/topd-learning-signal-20261106/e82-data-audit.json)。
 
-E83／E84 使用独立运行根，先核验 E81 完整终点评测，再按 E83→E84 顺序执行。新队列在每个分支启动前重新检查输出、运行进程及独占启动标记，整队列持有文件锁；上一组未完成全部更新、终点验证和最终模型导出时，不启动下一组。E83 已于 2026-11-06 00:46（UTC+8）启动，E84 等待 E83 完整成功后启动。师生模型、四卡 worker 和 vLLM 服务已初始化，训练主循环已进入；[启动与资源核验](../../../../../runs/topd-learning-signal-20261106/runtime-audit.json)记录实时验收时点和已产生的更新数。执行状态由[新队列记录](../../../../../runs/topd-learning-signal-20261106/queue-state.json)维护。保存与配置的 CPU 检查分别见[checkpoint 测试](../../../../../tests/examples/test_weighted_targets_checkpoint.py)和[启动器测试](../../../../../tests/examples/test_mirroropd_math_launcher_on_cpu.py)。
+E83／E84 使用独立运行根，先核验 E81 完整终点评测，再按 E83→E84 顺序执行。新队列在每个分支启动前重新检查输出、运行进程及独占启动标记，整队列持有文件锁；上一组未完成全部更新、终点验证和最终模型导出时，不启动下一组。E83 已于 2026-11-06 00:46（UTC+8）启动；截至 12:11，完成 240 次更新，outer15 验证进行中（326／630 题完成），完整 valid 到 outer10；E84 仍等待 E83 成功退出。[启动与资源核验](../../../../../runs/topd-learning-signal-20261106/runtime-audit.json)记录启动时验收；执行状态由[新队列记录](../../../../../runs/topd-learning-signal-20261106/queue-state.json)维护。保存与配置的 CPU 检查分别见[checkpoint 测试](../../../../../tests/examples/test_weighted_targets_checkpoint.py)和[启动器测试](../../../../../tests/examples/test_mirroropd_math_launcher_on_cpu.py)。
 
 从仓库根目录检查默认配置；应先清理会覆盖预设的旧环境变量：
 

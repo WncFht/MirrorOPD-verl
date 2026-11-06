@@ -65,7 +65,8 @@
 # E74-E77          32     50     1600      1e-6    -1/-1      yes
 # E78-E80          16     100    1600      1e-6    -1/-1      yes
 # E81              16     25     400       1e-6    5/-1       no
-# E82              16     100    1600      1e-6    5/-1       no
+# E82,E85-E90      16     100    1600      1e-6    5/-1       no
+# E83-E84          16     100    1600      1e-6    5/25       no
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
 # 编号别名：E21=E15; E22=E13。
@@ -114,6 +115,10 @@
 # E78–E80：Qwen3-1.7B non-thinking ← Qwen3-4B-Instruct-2507；current/initial/teacher。batch=mini-batch128，100 outer/reuse16，1600更新；默认2卡TP1，可显式配置1/2/4/8卡。原生bench0/50/100，MATH500 n4、AMC23 n16、AIME24/25/26 n32；source128和双银行各128，每10轮RKL。
 #
 # E81/E82：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；MDPO kappa1/eta0.1。4卡shared_sync、batch=mini-batch256、n1/reuse16；A=25 outer/400更新，B=100 outer/1600更新。无初始验证，每5 outer及终点验证；不保存checkpoint。每引擎并发64/TP1、显存0.8；precompute_fused/chunk512、bf16；验证avg16/31744；训练与验证默认开启重复提前停止。
+#
+# E83/E84：继承E82的100 outer/1600更新与LR1e-6；E83=future none/seq-mean-token-mean，E84=future mean(gamma1)/token-mean。每25 outer同步保存完整训练状态，仅保留最新一份，另保留最终HF模型。
+#
+# E85–E90：继承E82预算与MDPO设置，改用8卡 shared_sync；E85/E86/E87分别为none下的token-sum、seq-mean-token-sum、seq-mean-token-sum-norm；E88/E89/E90分别为token-mean下的future sum、discounted_sum(gamma=.99)、discounted_mean(gamma=.99)。E87–E90 使用MATH-500 n=4、其余四个数学bench n=16；E85/E86维持原avg@16。六组均save_freq=-1、resume_mode=disable，不保存checkpoint、HF模型或optimizer。
 #
 # E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。
 # END GENERATED EXPERIMENT OVERVIEW

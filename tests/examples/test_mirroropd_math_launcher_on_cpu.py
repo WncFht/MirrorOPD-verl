@@ -139,6 +139,7 @@ def _launch(tmp_path, script=SCRIPT, command=None, **overrides):
         "FULL_KL_ASYNC_WRITE",
         "FULL_KL_PREFETCH",
         "FULL_KL_TERMINATION_TOKEN_IDS",
+        "VAL_N_PROFILE",
     ):
         env.pop(name, None)
     env.update(
@@ -1468,3 +1469,7 @@ def test_topd_eight_gpu_ablation_presets_disable_checkpoints(tmp_path, preset, f
     assert loss.full_vocab.future.mode == future and loss.full_vocab.future.gamma == gamma
     assert actor.loss_agg_mode == aggregation
     assert actor.optim.lr == 1e-6 and actor.ppo_epochs == 16
+    if preset in {"E85", "E86"}:
+        assert all("math4-rest16" not in path for path in cfg.data.val_files)
+    else:
+        assert cfg.data.val_files[0].endswith("math4-rest16/MATH-500/test.parquet")

@@ -486,6 +486,8 @@ $$
 | E90      | `discounted_mean`，γ0.99 | `token-mean`              | 只改 future：折扣后续均值             |
 | 尚未排期 | `mean`，γ1               | `seq-mean-token-mean`     | future 与聚合的交互；本轮不启动       |
 
+E85/E86 已按五个 benchmark 统一 n=16 启动。后续 E87–E90 使用 MATH-500 n=4、AMC23 与 AIME24/25/26 n=16，每个完整验证点为 4,080 条回答，较统一 n=16 减少约 59.5%；这些节点与前两组的估计精度不同，图表和表格须明确标注评测预算。
+
 Future 的配置全名为 `distillation.distillation_loss.full_vocab.future.mode`；聚合字段为 `actor_rollout_ref.actor.loss_agg_mode`，见[当前实现合同](../../infra/architecture/full-vocab.md#聚合与未来信用)。`mean` 使用严格后续 token 的平均训练代价，排除当前 token、detach 后乘 sampled-action score；它不是增加最终答案正确性 reward，也没有改变教师。MDPO 的 future 采用当前实际 local cost；一般 κ 下包含状态相关 normalizer。`mean` 是 TOP-D 风格的后续均值结构，不宣称与官方固定 sampled reward 的 return 相同。
 
 `token-mean` 按所有有效 token 平均，长回答的合计权重随长度增加；`seq-mean-token-mean` 先在回答内平均，再对回答等权，改变各回答的相对权重。它与官方的 prompt 组内 advantage 标准化是两件事。两种聚合也会改变整体梯度尺度，需同时看 preclip norm、裁剪比例、local／future surrogate 与任务读出，不能把差异全解释成纯粹的长度偏好。既有[归一化核查](normalization.md)未将 token-mean 确认为主要故障，E83 是有待验证的对照。
