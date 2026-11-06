@@ -6,7 +6,13 @@ import json
 
 import pytest
 
-from examples.mirroropd.assets.paths import checkpoint_path, hub_directory, registered_model, resolve_location
+from examples.mirroropd.assets.paths import (
+    available_model,
+    checkpoint_path,
+    hub_directory,
+    registered_model,
+    resolve_location,
+)
 
 
 def test_canonical_paths_preserve_checkpoint_subfolders_and_reject_traversal(tmp_path):
@@ -112,3 +118,69 @@ def test_asset_names_use_registered_identity_instead_of_revision_basename(tmp_pa
     assert paths.asset_name(work / relative) == "teacher / step80"
     assert paths.asset_name(work / "model/old") == "teacher / step80"
     assert paths.asset_name("/custom/weight-view") == "weight-view"
+
+
+@pytest.fixture
+def model_layout(tmp_path):
+    revision = "a" * 40
+    entry = dict(
+        id=f"org/teacher@{revision}",
+        aliases=["teacher", f"model/old/{revision}"],
+        repo="org/teacher",
+        revision=revision,
+        subfolder=None,
+        path=f"model/hub/org--teacher/{revision}",
+    )
+    manifest = tmp_path / "registry.json"
+    manifest.write_text(json.dumps(dict(models=[entry])))
+    root = tmp_path / "models with spaces"
+    return root, manifest, entry
+
+
+def test_loading_flat_alias_does_not_change_canonical_storage(model_layout):
+    root, manifest, entry = model_layout
+    canonical = registered_model("teacher", root=root, registry_path=manifest)
+    assert available_model("teacher", root=root, registry_path=manifest) == canonical
+    assert not canonical.exists()
+    flat = root / "teacher"
+    flat.mkdir(parents=True)
+    with pytest.warns(UserWarning, match="registered revision .* has not been verified"):
+        assert available_model("teacher", root=root, registry_path=manifest) == flat
+    assert registered_model("teacher", root=root, registry_path=manifest) == canonical
+    assert available_model(entry["id"], root=root, registry_path=manifest) == canonical
+    assert available_model(entry["aliases"][1], root=root, registry_path=manifest) == canonical
+    assert not canonical.exists()
+
+
+@pytest.mark.parametrize("canonical_kind", ["directory", "file", "broken-symlink"])
+def test_existing_canonical_is_never_hidden_by_flat_fallback(model_layout, canonical_kind):
+    root, manifest, _ = model_layout
+    (root / "teacher").mkdir(parents=True)
+    canonical = registered_model("teacher", root=root, registry_path=manifest)
+    canonical.parent.mkdir(parents=True)
+    if canonical_kind == "directory":
+        canonical.mkdir()
+    elif canonical_kind == "file":
+        canonical.write_text("invalid model directory")
+    else:
+        canonical.symlink_to(root / "missing")
+    assert available_model("teacher", root=root, registry_path=manifest) == canonical
+
+
+def test_subfolder_model_does_not_fall_back_to_repository_root(model_layout):
+    root, manifest, entry = model_layout
+    entry.update(subfolder="step80", path=entry["path"] + "/step80")
+    manifest.write_text(json.dumps(dict(models=[entry])))
+    (root / "teacher").mkdir(parents=True)
+    assert available_model("teacher", root=root, registry_path=manifest) == registered_model(
+        "teacher", root=root, registry_path=manifest
+    )
+
+
+def test_flat_fallback_rejects_shared_repository_basename(model_layout):
+    root, manifest, entry = model_layout
+    second = {**entry, "id": "other", "aliases": ["teacher", "other-teacher"]}
+    manifest.write_text(json.dumps(dict(models=[entry, second])))
+    (root / "teacher").mkdir(parents=True)
+    with pytest.raises(ValueError, match="exactly one"):
+        available_model("other-teacher", root=root, registry_path=manifest)

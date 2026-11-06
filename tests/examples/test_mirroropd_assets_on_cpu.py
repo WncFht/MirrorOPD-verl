@@ -196,6 +196,27 @@ def make_tiny_model(folder):
     tokenizer.save_pretrained(folder)
 
 
+@pytest.mark.parametrize("layout", ["flat", "revision"])
+def test_asset_checks_load_tokenizer_and_record_actual_layout(tmp_path, monkeypatch, layout):
+    name = "Qwen3-1.7B-Base"
+    root = tmp_path / "models"
+    folder = root / name if layout == "flat" else assets.registered_model(name, root=root)
+    make_tiny_model(folder)
+    report = tmp_path / "asset_check.json"
+    monkeypatch.setattr(assets, "DATASETS", {})
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["check_assets.py", "--model-root", str(root), "--models", name, "--report", str(report)],
+    )
+    if layout == "flat":
+        with pytest.warns(UserWarning, match="has not been verified"):
+            assets.main()
+    else:
+        assets.main()
+    assert json.loads(report.read_text())["models"][name]["path"] == str(folder.resolve())
+
+
 def test_local_model_prepare_materializes_symlinks_without_generation_config(tmp_path, monkeypatch):
     source = tmp_path / "source"
     destination = tmp_path / "model"

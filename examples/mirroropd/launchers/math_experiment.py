@@ -406,13 +406,14 @@ def resolve_selector(selector: str) -> tuple[str, Preset | None, str | None]:
 def model_defaults(env: dict[str, str], pair: ModelPair, role: str | None, root: Path) -> list[str]:
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
-    from examples.mirroropd.assets.paths import registered_model
+    from examples.mirroropd.assets.paths import available_model
 
     defaults(env, MODEL_ROOT=root.parent / "model")
+    for key, alias in (("STUDENT_MODEL", pair.student), ("TEACHER_MODEL", pair.teacher)):
+        if not env.get(key):
+            env[key] = str(available_model(alias, root=env["MODEL_ROOT"]))
     defaults(
         env,
-        STUDENT_MODEL=registered_model(pair.student, root=env["MODEL_ROOT"]),
-        TEACHER_MODEL=registered_model(pair.teacher, root=env["MODEL_ROOT"]),
         CONTINUOUS_TOKEN_MODEL_FAMILY=pair.family,
         MAX_PROMPT_LENGTH=4096 if role == "teacher" else pair.prompt,
         MAX_RESPONSE_LENGTH=pair.response,

@@ -141,12 +141,54 @@ def test_application_resolver_accepts_nested_checkpoint_alias_after_parsing(tmp_
     from examples.mirroropd.assets import paths
 
     root, config = setup_model(tmp_path)
-    monkeypatch.setattr(paths, "registered_model", lambda alias: root if alias == "fixture-model" else None)
+    monkeypatch.setattr(paths, "available_model", lambda alias: root if alias == "fixture-model" else None)
     config.rollout_model_resolver = "examples.mirroropd.assets.paths.rollout_model_path"
     policy = RolloutPolicyConfig.parse({"model": {"kind": "checkpoint", "ref": "fixture-model"}})
     bindings, state = bind_policy(config, policy)
     assert bindings["model"].path == str(root)
     assert state["semantics"]["bindings"]["model"]["sha256"] == checkpoint_identity(root)
+
+
+@pytest.mark.parametrize("reference", ["explicit", "alias"])
+def test_application_resolver_loads_flat_layout_without_projecting_to_history(tmp_path, monkeypatch, reference):
+    from examples.mirroropd.assets import paths
+
+    root, config = setup_model(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("MODEL_ROOT", str(tmp_path))
+    monkeypatch.setenv("MIRROROPD_WORKSPACE", str(tmp_path))
+    canonical = tmp_path / "hub/org--model" / ("a" * 40)
+    entry = dict(
+        id="org/model@" + "a" * 40,
+        aliases=["model"],
+        repo="org/model",
+        revision="a" * 40,
+        path="model/hub/org--model/" + "a" * 40,
+    )
+    monkeypatch.setattr(paths, "registry", lambda **kwargs: dict(models=[entry], locations={str(root): str(canonical)}))
+    config.rollout_model_resolver = "examples.mirroropd.assets.paths.rollout_model_path"
+    # Keep the short alias distinct from a directory relative to the current cwd.
+    cwd = tmp_path / "checkout"
+    cwd.mkdir()
+    monkeypatch.chdir(cwd)
+    policy = RolloutPolicyConfig.parse(
+        {"model": {"kind": "checkpoint", "ref": str(root) if reference == "explicit" else "model"}}
+    )
+    if reference == "alias":
+        with pytest.warns(UserWarning, match="unversioned model directory"):
+            bindings, state = bind_policy(config, policy)
+    else:
+        bindings, state = bind_policy(config, policy)
+    assert bindings["model"].path == str(root)
+    assert state["semantics"]["bindings"]["model"]["sha256"] == checkpoint_identity(root)
+    assert not canonical.exists()
+
+
+def test_application_resolver_reports_missing_explicit_directory_without_alias_lookup(tmp_path):
+    from examples.mirroropd.assets.paths import rollout_model_path
+
+    with pytest.raises(FileNotFoundError, match="Local model directory does not exist"):
+        rollout_model_path(str(tmp_path / "missing"))
 
 
 def test_unused_fusion_topology_does_not_reject_a_single_endpoint():
