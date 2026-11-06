@@ -153,7 +153,7 @@ python -m verl.trainer.main_ppo --help
 
 ## 模型与数据布局
 
-模型和数据统一放在源码仓库相邻的 `model/`（单数）与 `data/`，供开发机和训练任务共享。开发机基目录为 `/home/hadoop-hmart-poistar/dolphinfs_hdd_hadoop-hmart-poistar/fanghaotian/`。本机模型已迁移到 `model/hub/` 和 `model/checkpoints/`，旧 `models/` 及旧模型位置不提供兼容链接。数据目录不随模型迁移改变。
+模型和数据统一放在源码仓库相邻的 `model/`（单数）与 `data/`，供开发机和训练任务共享。开发机基目录为 `/home/hadoop-hmart-poistar/dolphinfs_hdd_hadoop-hmart-poistar/fanghaotian/`。本机模型已迁移到 `model/hub/` 和 `model/checkpoints/`；其他机器可继续加载 `model/<模型名>/` 平铺目录，无需创建兼容链接。数据目录不随模型迁移改变。
 
 ```text
 fanghaotian/
@@ -176,9 +176,9 @@ fanghaotian/
 
 原始模型按 repo、不可变 revision 与可选 subfolder 保存为实体 Hugging Face 格式目录，包含配置、tokenizer 与权重；`generation_config.json` 可选，chat template 可以包含在 tokenizer 配置中或单独保存。`examples/mirroropd/assets/prepare_models.py` 可复制已有目录并物化 HF 缓存符号链接，或在可联网机器显式下载固定版本。数据使用已预处理的 parquet；`prepare_math_data.py` 支持从旧 parquet 导入，或从原始文件重建。
 
-`MODEL_ROOT`、`DATA_ROOT` 指定资产根目录；student、teacher 通过统一注册表解析到 `model/hub/` 下的固定版本，四个 parquet 文件名按领域配置选择。默认会自动定位仓库相邻的 `model/`、`data/`；worktree 使用显式的 `MIRROROPD_WORKSPACE` 指向共享工作区。需要不同文件时分别覆盖 `STUDENT_MODEL`、`TEACHER_MODEL`、`TRAIN_FILE`、`MATH_FILE`、`AMC_FILE`、`AIME_FILE`。
+`MODEL_ROOT`、`DATA_ROOT` 指定资产根目录；student、teacher 的普通别名优先选择 `model/hub/` 下的固定版本，缺失时允许选择唯一对应的 `model/<模型名>/`，并提示平铺目录的 revision 尚未核验。完整模型 ID 与子目录变体保持固定版本选择；选择规则见[数学资产说明](../examples/mirroropd/docs/infra/training/资产准备.md#数学资产准备与检查)。parquet 文件名按领域配置选择。默认会自动定位仓库相邻的 `model/`、`data/`；worktree 使用显式的 `MIRROROPD_WORKSPACE` 指向共享工作区。需要不同文件时分别覆盖 `STUDENT_MODEL`、`TEACHER_MODEL`、`TRAIN_FILE`、`MATH_FILE`、`AMC_FILE`、`AIME_FILE`。Hope worker 使用实际任务环境中的这些配置，开发机终端的变量需要显式传入任务。
 
-模型和数据准备后执行 `make assets-check`；模型按统一注册表选择固定版本并检查必要文件，重点检查四份数据的字段、行数、空答案、重复题、题面重叠和 prompt 长度。只查数据可用 `make assets-check ASSET_CHECK_ARGS=--data-only`，会跳过模型与 token 长度计算。检查报告写到 `data/asset_check.json`。准备方式及检查范围见 [数学资产说明](../examples/mirroropd/docs/infra/training/资产准备.md)。这些检查在 CPU 完成，不加载模型 tensor，不启动 GPU 训练。
+模型和数据准备后执行 `make assets-check`；模型按前述加载规则选择目录并检查必要文件，重点检查四份数据的字段、行数、空答案、重复题、题面重叠和 prompt 长度。只查数据可用 `make assets-check ASSET_CHECK_ARGS=--data-only`，会跳过模型与 token 长度计算。检查报告写到 `data/asset_check.json`。准备方式及检查范围见 [数学资产说明](../examples/mirroropd/docs/infra/training/资产准备.md)。这些检查在 CPU 完成，不加载模型 tensor，不启动 GPU 训练。
 
 正式领域脚本将权重与完整恢复 bundle 默认写到 `model/checkpoints/production/<run-relative>/checkpoints`；`RUN_DIR` 继续保存日志、配置和验证输出。`CHECKPOINT_DIR` 可显式覆盖恢复目录，新运行拒绝覆盖非空的 checkpoint 目录；`DRY_RUN` 和 `CONFIG_ONLY` 不创建这些目录。
 

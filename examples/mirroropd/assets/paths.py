@@ -1,17 +1,13 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Canonical model assets and explicit historical-location projection.
-
-New configurations use canonical paths. resolve_location is reserved for reading
-immutable historical records whose original paths remain part of their identity.
-No operation probes an old model directory or creates a compatibility link.
-"""
+"""Canonical storage, local loading layouts, and historical-location projection."""
 
 import argparse
 import hashlib
 import json
 import os
 import re
+import warnings
 from pathlib import Path
 
 REGISTRY = Path(__file__).with_name("model_registry.json")
@@ -67,9 +63,46 @@ def _relative_asset_path(entry):
 
 
 def registered_model(alias, *, root=None, registry_path=None):
-    """Resolve one explicit registered alias; ambiguous short names are errors."""
+    """Return the canonical storage path, independently of installed model layouts."""
     relative = _relative_asset_path(model_entry(alias, registry_path=registry_path))
     return (Path(root).expanduser() if root is not None else model_root()) / relative
+
+
+def available_model(alias, *, root=None, registry_path=None):
+    """Prefer canonical storage; allow an unpinned alias to select its unique flat directory.
+
+    Missing assets retain their canonical path for offline command planning. Explicit
+    IDs and subfolder variants never fall back. Existing canonical entries, including
+    broken symlinks or incomplete directories, remain selected so errors stay visible.
+    A flat directory's revision is not inferred from its registered alias.
+    """
+    entry = model_entry(alias, registry_path=registry_path)
+    canonical = registered_model(alias, root=root, registry_path=registry_path)
+    if (
+        canonical.exists()
+        or canonical.is_symlink()
+        or alias == entry.get("id")
+        or entry.get("revision") in Path(alias).parts
+        or entry.get("subfolder")
+        or not entry.get("repo")
+    ):
+        return canonical
+    name = entry["repo"].split("/")[-1]
+    if name not in entry.get("aliases", []):
+        return canonical
+    flat = (Path(root).expanduser() if root is not None else model_root()) / name
+    if not flat.is_dir():
+        return canonical
+    # A shared repository basename must not guess between revisions or variants.
+    if model_entry(name, registry_path=registry_path) != entry:
+        raise ValueError(f"Ambiguous unversioned model directory: {flat}; select an explicit path or model ID")
+    warnings.warn(
+        f"Using unversioned model directory {flat} for alias {alias!r}; "
+        f"registered revision {entry.get('revision')} has not been verified. "
+        f"Use model ID {entry.get('id')!r} to require canonical storage at {canonical}.",
+        stacklevel=2,
+    )
+    return flat
 
 
 def rollout_model_path(value):
@@ -78,8 +111,10 @@ def rollout_model_path(value):
 
     path = Path(value).expanduser()
     if not path.is_dir():
-        path = registered_model(value)
-    return local_model_path(require_current_location(str(path)))
+        if path.is_absolute() or str(value).startswith((".", "~")):
+            raise FileNotFoundError(f"Local model directory does not exist: {path}")
+        path = available_model(value)
+    return local_model_path(str(path))
 
 
 def asset_name(path):
@@ -170,9 +205,10 @@ def main():
     selection.add_argument("--run-dir", type=Path)
     parser.add_argument("--repo-root", type=Path)
     parser.add_argument("--model-root", type=Path)
+    parser.add_argument("--canonical", action="store_true", help="print canonical storage without layout fallback")
     args = parser.parse_args()
     print(
-        registered_model(args.alias, root=args.model_root)
+        (registered_model if args.canonical else available_model)(args.alias, root=args.model_root)
         if args.alias
         else production_checkpoints(args.run_dir, root=args.model_root, repository=args.repo_root)
     )

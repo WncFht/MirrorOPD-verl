@@ -14,9 +14,11 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 if __package__:
-    from .paths import model_entry, registered_model
+    from .paths import available_model, model_entry
+    from .paths import registered_model as registered_model
 else:
-    from paths import model_entry, registered_model
+    from paths import available_model, model_entry
+    from paths import registered_model as registered_model
 
 WORKSPACE = Path(__file__).resolve().parents[4]
 MODEL_ROOT = Path(os.environ.get("MODEL_ROOT", WORKSPACE / "model"))
@@ -225,8 +227,8 @@ def main():
         from transformers import AutoTokenizer
 
         for name in selected_models(args.models):
-            report["models"][name] = check_model(registered_model(name, root=args.model_root), name)
-        student = registered_model(selected_models(args.models)[0], root=args.model_root)
+            report["models"][name] = check_model(available_model(name, root=args.model_root), name)
+        student = Path(report["models"][selected_models(args.models)[0]]["path"])
         tokenizer = AutoTokenizer.from_pretrained(student, local_files_only=True, trust_remote_code=False)
     prompt_sets = {}
     for name, spec in DATASETS.items():
