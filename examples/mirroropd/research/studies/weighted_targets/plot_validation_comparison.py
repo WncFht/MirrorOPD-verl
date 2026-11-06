@@ -9,7 +9,7 @@ stopping: their repetition_rate is missing, never zero. EOS/stop is an engine
 finish category, not evidence of a coherent answer. Macro-5 and AIME means give
 each benchmark equal weight. TOP-D has no length/finish data in these sources.
 Geometry ledger: local runs use 16 updates/outer and batch64 (E55--57) or
-batch256 (E81/82). TOP-D alpha0.1/0.2 use 16 updates and 4096 presentations/outer.
+batch256 (E81--83). TOP-D alpha0.1/0.2 use 16 updates and 4096 presentations/outer.
 Accuracy panels use labelled independent benchmark y ranges; paper panels share
 0--25 percent. Full and early views contain only observed points within each
 window: no interpolated boundary observations, smoothing or extrapolation.
@@ -39,7 +39,7 @@ from examples.mirroropd.research.studies.weighted_targets.plot_e81_validation im
 BASE = ROOT / "examples/mirroropd/docs/experiments/learning-signal"
 DEFAULT_OUT = BASE / "figures/validation-comparison-20261106"
 RUNS = ROOT / "runs/topd-large-batch-20261105/formal"
-LOCAL = ("E55", "E56", "E57", "E81", "E82")
+LOCAL = ("E55", "E56", "E57", "E81", "E82", "E83")
 REFERENCE = ("Base reference", "Qwen3-30B teacher")
 ACCURACY_RUNS = (*LOCAL, *REFERENCE)
 PAPER = ("TOP-D alpha=0.1", "TOP-D alpha=0.2")
@@ -60,7 +60,7 @@ FIELDS = (
 
 
 def clock(run, outer):
-    batch = 256 if run in ("E81", "E82") or run in PAPER else 64
+    batch = 256 if run in ("E81", "E82", "E83") or run in PAPER else 64
     return dict(
         run=run,
         outer=outer,
@@ -126,7 +126,7 @@ def external_source(path):
 
 
 def extract_live(run, sources):
-    root = RUNS / run
+    root = RUNS / run if run != "E83" else ROOT / "runs/topd-learning-signal-20261106/formal/E83"
     path = root / "metrics.jsonl"
     original = path.read_bytes()
     raw, exclusions = trusted_metrics(path, original)
@@ -187,7 +187,20 @@ def extract_live(run, sources):
     }
     for key in ("update_applied", "update_skipped", "loss_nonfinite", "grad_norm_preclip_nonfinite"):
         audit[key] = sum(r["optim/actor/" + key] for r in updates)
-    return rows, audit
+    runtime = [
+        {
+            "run": run,
+            "outer": outer,
+            "optimizer_update": record["step/update"],
+            "train_seconds": record["perf/timing/outer_step_seconds"],
+            "validation_seconds": record["perf/timing/validation_seconds"],
+            "actor_seconds": record["perf/timing/update_actor_seconds"],
+            "rollout_seconds": record["perf/timing/rollout_pipeline_seconds"],
+            "train_response_length": record["rollout/response_length/mean"],
+        }
+        for outer, record in sorted(complete.items())
+    ]
+    return rows, audit, runtime
 
 
 def refresh(out):
@@ -218,9 +231,12 @@ def refresh(out):
                     }
                 )
     audit = {}
-    for run in ("E81", "E82"):
-        live, audit[run] = extract_live(run, sources)
+    runtime = []
+    for run in ("E81", "E82", "E83"):
+        live, audit[run], timing = extract_live(run, sources)
         rows.extend(live)
+        if run != "E81":
+            runtime.extend(timing)
     path = BASE / "data/topd-e57-all-curves-20261104/curves.csv"
     raw = path.read_bytes()
     sources.append(source(path, raw))
@@ -249,6 +265,22 @@ def refresh(out):
         writer = csv.DictWriter(stream, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(rows)
+    with (out / "runtime.csv").open("w", newline="") as stream:
+        writer = csv.DictWriter(
+            stream,
+            fieldnames=(
+                "run",
+                "outer",
+                "optimizer_update",
+                "train_seconds",
+                "validation_seconds",
+                "actor_seconds",
+                "rollout_seconds",
+                "train_response_length",
+            ),
+        )
+        writer.writeheader()
+        writer.writerows(runtime)
     (out / "source-audit.json").write_text(json.dumps(audit, indent=2) + "\n")
     provenance = {
         "snapshot_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -270,10 +302,10 @@ def refresh(out):
         "local_metric": "benchmark avg@16; macro5/AIME mean are unweighted benchmark means",
         "paper_metric": "Figure5 vector vertices avg@32; published smoothing, if any, is retained",
         "missing": "Repetition stopping disabled in E55--57: blank, not zero. Paper length/finish metrics unavailable.",
-        "clocks": "16 updates/outer; local batch64(E55--57)/256(E81/82); TOP-D4096 presentations/outer",
+        "clocks": "16 updates/outer; local batch64(E55--57)/256(E81--83); TOP-D4096 presentations/outer",
         "limitations": [
             "Paper/local prompts, decoding, cap, scoring and update algorithms differ; no causal ranking",
-            "E55--57 use historical numerical execution and no repetition stopping; E81/82 enable detector",
+            "E55--57 use historical numerical execution and no repetition stopping; E81--83 enable detector",
             "E81/82 share a nominal seed/prefix setting, not independent replications",
             "Only complete live validations with matching metrics are admitted; "
             "independent Base/teacher references are explicit x=0 points",
@@ -334,20 +366,21 @@ def plot(rows, out):
 
     fv = style()
     theme = fv.apply_rc("paper")
-    # Each figure has at most four active hue families plus neutral gray.
+    # Reuse the same run colors throughout the figure set.
     palette = fv.series_colors("paper", 9)
     colors = {
         "E55": fv.NEUTRALS["baseline"],
-        "E56": palette[3],
+        "E56": fv.NEUTRALS["baseline"],
         "E57": palette[0],
         "E81": palette[1],
         "E82": palette[4],
+        "E83": palette[4],
         PAPER[0]: palette[2],
         PAPER[1]: palette[2],
         REFERENCE[0]: fv.NEUTRALS["baseline"],
         REFERENCE[1]: palette[5],
     }
-    markers = dict(zip(LOCAL, ("v", "^", "o", "s", "D"), strict=True)) | {
+    markers = dict(zip(LOCAL, ("v", "^", "o", "s", "D", "P"), strict=True)) | {
         PAPER[0]: "",
         PAPER[1]: "",
         REFERENCE[0]: "D",
@@ -459,7 +492,7 @@ def plot(rows, out):
         )
         save(fig, out, stem, fv)
 
-    runs = ("E57", "E81", "E82", *PAPER, *REFERENCE)
+    runs = ("E57", "E81", "E82", "E83", *PAPER, REFERENCE[0])
     for key, label, stem, full, early, divisor in (
         ("optimizer_update", "Optimizer updates", "aime-optimizer-updates", 6720, 1600, 1),
         (
@@ -518,10 +551,30 @@ def plot(rows, out):
             fig,
             runs,
             "Local avg@16 / paper avg@32 vector readouts; protocols differ; no invented local step0\n"
-            "Early panels connect only observations inside the window; full curves are shown above",
+            "Teacher omitted above 25%; see full-range accuracy panels",
             columns=5,
         )
         save(fig, out, stem, fv)
+
+    with (out / "runtime.csv").open() as stream:
+        runtime = list(csv.DictReader(stream))
+    if runtime:
+        fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.1), sharey=True)
+        for ax, run in zip(axes, ("E82", "E83"), strict=True):
+            points = [r for r in runtime if r["run"] == run]
+            xs = [int(r["outer"]) for r in points]
+            train = [float(r["train_seconds"]) / 60 for r in points]
+            valid = [float(r["validation_seconds"]) / 60 for r in points]
+            width = 1.7
+            ax.bar(xs, train, width=width, label="Training", color=palette[4])
+            ax.bar(xs, valid, width=width, bottom=train, label="Validation", color=fv.NEUTRALS["baseline"])
+            ax.set(title=run, xlabel="Completed outer", xticks=xs)
+            frame(ax)
+        axes[0].set_ylabel("Minutes per outer and validation event")
+        handles, labels = axes[0].get_legend_handles_labels()
+        fig.legend(handles, labels, loc="lower center", ncol=2, frameon=False, bbox_to_anchor=(0.5, 0.035))
+        fig.tight_layout(rect=(0, 0.12, 1, 1))
+        save(fig, out, "training-validation-runtime", fv)
 
 
 def main():

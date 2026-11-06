@@ -326,6 +326,8 @@ def preset_catalog() -> dict[str, Preset]:
     for number, future, aggregation, _label in eight_gpu_ablation:
         environment = dict(presets["E82"].environment)
         environment["STUDENT_GPUS"] = "8"
+        if number >= 87:
+            environment["VAL_N_PROFILE"] = "math4_rest16"
         presets[f"E{number}"] = replace(
             presets["E82"],
             budget=replace(presets["E82"].budget, save=-1, keep=None),
@@ -791,6 +793,7 @@ def preset_overview() -> str:
             "E85–E90：继承E82预算与MDPO设置，改用8卡 shared_sync；"
             "E85/E86/E87分别为none下的token-sum、seq-mean-token-sum、seq-mean-token-sum-norm；"
             "E88/E89/E90分别为token-mean下的future sum、discounted_sum(gamma=.99)、discounted_mean(gamma=.99)。"
+            "E87–E90 使用MATH-500 n=4、其余四个数学bench n=16；E85/E86维持原avg@16。"
             "六组均save_freq=-1、resume_mode=disable，不保存checkpoint、HF模型或optimizer。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",

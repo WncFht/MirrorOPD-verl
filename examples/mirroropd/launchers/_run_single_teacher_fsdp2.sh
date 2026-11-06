@@ -236,6 +236,23 @@ ROLLOUT_CAPTURE_SIZES+="$ROLLOUT_MAX_NUM_SEQS]"
 EXPERIMENT_NAME=${EXPERIMENT_NAME:-$DOMAIN-full-sampled-$(date +%Y%m%d-%H%M%S)-$$}
 RUN_DIR=${RUN_DIR:-$REPO_ROOT/outputs/$EXPERIMENT_NAME}
 CHECKPOINT_DIR=${CHECKPOINT_DIR:-$(python3 "$EXAMPLE_DIR/assets/paths.py" --run-dir "$RUN_DIR" --repo-root "$REPO_ROOT" --model-root "$MODEL_ROOT")}
+PYTHON_BIN=${PYTHON_BIN:-$REPO_ROOT/.venv-native/bin/python}
+
+SOURCE_VAL_FILES=()
+if [[ ${VAL_N_PROFILE:-} == math4_rest16 ]]; then
+    if [[ $DOMAIN != math || ${#VAL_FILES[@]} -ne 5 ]]; then
+        echo "VAL_N_PROFILE=math4_rest16 requires all five math validation files" >&2
+        exit 2
+    fi
+    SOURCE_VAL_FILES=("${VAL_FILES[@]}")
+    VAL_FILES=(
+        "$RUN_DIR/validation-budget/math4-rest16/MATH-500/test.parquet"
+        "$RUN_DIR/validation-budget/math4-rest16/AMC23/test.parquet"
+        "$RUN_DIR/validation-budget/math4-rest16/AIME24/test.parquet"
+        "$RUN_DIR/validation-budget/math4-rest16/AIME25/test.parquet"
+        "$RUN_DIR/validation-budget/math4-rest16/AIME26/test.parquet"
+    )
+fi
 
 # SDK 在 WANDB_DIR 下创建 wandb/；固定仓库根目录，避免 Ray 的工作目录改变保存位置。
 export WANDB_DIR="$REPO_ROOT"
@@ -391,7 +408,6 @@ ARGS=(
 # ── 6. Python 环境与执行模式 ──────────────────────────────────────────
 # 原生模式默认使用本仓库虚拟环境的绝对路径，driver 与 Ray worker 保持一致。
 # PYTHON_BIN 可显式指定其他绝对路径；uv 模式需显式 VERL_USE_UV=1。
-PYTHON_BIN=${PYTHON_BIN:-$REPO_ROOT/.venv-native/bin/python}
 LAUNCH=("$PYTHON_BIN")
 RAY=("ray_kwargs.ray_init.runtime_env.py_executable='$PYTHON_BIN'")
 if [ "${VERL_USE_UV:-0}" != 0 ] && [ "${DEVICE:-gpu}" = gpu ]; then
@@ -440,9 +456,27 @@ fi
     echo "Set CUDA_VISIBLE_DEVICES to GPUs allocated to this run (student + teacher pools)." >&2
     exit 2
 }
-for path in "$TRAIN_FILE" "${VAL_FILES[@]}"; do
+if [[ -e $RUN_DIR ]]; then
+    echo "Use a new RUN_DIR; already exists: $RUN_DIR" >&2
+    exit 2
+fi
+CHECK_VAL_FILES=("${VAL_FILES[@]}")
+if [[ ${#SOURCE_VAL_FILES[@]} -gt 0 ]]; then
+    CHECK_VAL_FILES=("${SOURCE_VAL_FILES[@]}")
+fi
+for path in "$TRAIN_FILE" "${CHECK_VAL_FILES[@]}"; do
     if [[ ! -f $path ]]; then
         echo "Missing dataset: $path" >&2
+        exit 2
+    fi
+done
+if [[ ${VAL_N_PROFILE:-} == math4_rest16 ]]; then
+    "$PYTHON_BIN" "$SCRIPT_DIR/prepare_validation_budget.py" \
+        --output-dir "$RUN_DIR/validation-budget/math4-rest16" "${SOURCE_VAL_FILES[@]}"
+fi
+for path in "${VAL_FILES[@]}"; do
+    if [[ ! -f $path ]]; then
+        echo "Missing prepared validation dataset: $path" >&2
         exit 2
     fi
 done
@@ -452,10 +486,6 @@ if [[ $DOMAIN == if ]]; then
         exit 2
     fi
     "${LAUNCH[@]}" -c 'from verl.utils.reward_score.one_shot_opd.if_eval import _ensure_opencompass_modules; _ensure_opencompass_modules()'
-fi
-if [[ -e $RUN_DIR ]]; then
-    echo "Use a new RUN_DIR; already exists: $RUN_DIR" >&2
-    exit 2
 fi
 # 同时记录源码状态、完整命令和解析配置，便于回溯每次实验。
 mkdir -p "$RUN_DIR"

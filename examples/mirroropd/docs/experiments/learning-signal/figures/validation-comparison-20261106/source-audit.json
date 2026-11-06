@@ -17,6 +17,20 @@
   "E82": {
     "complete_outers": [
       5,
+      10,
+      15,
+      20
+    ],
+    "checked_responses": 40320,
+    "optimizer_updates": 400,
+    "update_applied": 400.0,
+    "update_skipped": 0.0,
+    "loss_nonfinite": 0.0,
+    "grad_norm_preclip_nonfinite": 0.0
+  },
+  "E83": {
+    "complete_outers": [
+      5,
       10
     ],
     "checked_responses": 20160,
