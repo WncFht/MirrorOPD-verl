@@ -44,6 +44,8 @@ MODELS = {
         "Olmo3-IVON-SFT-7B",
         "Olmo3-C3PO-7B",
         "Qwen2.5-14B",
+        "Qwen2.5-3B-Instruct",
+        "Qwen3-32B",
         "DeepSeek-R1-Distill-Qwen-14B",
         "Light-R1-14B-DS",
     )
