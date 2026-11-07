@@ -10,6 +10,8 @@
 | RQ4 失败复现与吸收机制 | pair/setting 边界、SFT/SFT+RL 阶段、跨 domain 与跨 batch 迁移 | [教师吸收](teacher-transfer/README.md)；[师生配对 RKL 总览](teacher-transfer/fixed-state-results.md) |
 | RQ5 TOP-D 复现与 κ/η   | 算法、设置、结果的复现程度与 weighted-target 参数消融         | [TOP-D 对照](learning-signal/weighted-targets.md)                                                    |
 
+Rollout policy 的状态访问分布与 coverage 是跨专题分析主题，长期入口见[State 分析](state-analysis/README.md)；rollout 来源实验仍从[Rollout 来源](rollout-policy/README.md)进入。
+
 ## 数据与方法
 
 [运行记录](运行记录.md)和[验证汇总](验证结果汇总.md)展示已识别正式 run 的本地快照；固定状态、机制探针和工程验收从各专题进入。报告注明实际 checkpoint、输入、支持集、分母与预算，分别解释训练拟合、独立状态读出和任务成绩。“完全吸收”的评价标准仍待研究确定。

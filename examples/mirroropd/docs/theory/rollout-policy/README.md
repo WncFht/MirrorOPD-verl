@@ -1,24 +1,25 @@
 # Rollout 策略设计研究
 
-当前入口：[Rollout 策略的目标设计与求解](objectives.md)。更新日期：2026-10-28。
+当前入口：[Rollout 来源、最优融合与等效训练权重](objectives.md)。更新日期：2026-11-06。
 
-主文围绕一个问题展开：已知 student 和 teacher 的完整下一 token 分布，如何定义并求解一个用于采集训练轨迹的分布。它将目标聚合、divergence、局部最优条件和工程实现分开，统一使用 student 指数权重 $\alpha$，并区分数学证明、CPU 数值核验和待验证的学习效果。
+主文从来源分布和 learner loss 出发，逐步推导统一的等效 advantage，再比较不同最优化目标得到的来源。全文用 $\eta$ 表示 teacher 权重；initial、teacher、局部 fusion 和 IW-OPD 在同一张表中比较，并区分精确 IS、前缀 surrogate 与实验权重。
 
-| 阅读目的                                               | 主文位置   |
-| ------------------------------------------------------ | ---------- |
-| 理解变量、约束、Pareto 取舍及 sum / minimax / 平滑目标 | 第 1–2 节  |
-| 比较两种 KL 方向、Hellinger 等中心                     | 第 3–4 节  |
-| 推导 Chernoff 系数、唯一性、停止条件                   | 第 5 节    |
-| 判断求解 minimax 相比固定中点是否值得                  | 第 6 节    |
-| 核对公开代码、EOS、温度与 GPU 求解边界                 | 第 7 节    |
-| 区分局部与序列目标、解释二阶矩的适用范围               | 第 8 节    |
-| 查相关论文的实际结论和实验建议                         | 第 9–10 节 |
+| 阅读目的                                  | 主文位置                                   |
+| ----------------------------------------- | ------------------------------------------ |
+| 明确来源、学习目标与符号                  | [第 1 节](objectives.md#notation)          |
+| 逐步推导 fresh rollout 上的等效 advantage | [第 2 节](objectives.md#change-of-measure) |
+| 求解 sum、minimax、预算和不同距离的中心   | [第 3 节](objectives.md#centers)           |
+| 比较各来源的权重及局部 / 序列差异         | [第 4 节](objectives.md#source-weights)    |
+| 判断单条 rollout 能算什么、何时需要多条   | [第 5 节](objectives.md#computability)     |
+| 求解系数、控制误差并比较 sum / minimax    | [第 6 节](objectives.md#solver)            |
+| 核对执行条件、公开实现和数值证据          | [第 7 节](objectives.md#evidence)          |
 
 ## 证据与复算
 
 - [中心与公开实现核验结果](../../literature/rollout-policy/data/numerical-audit.json)，对应[脚本](../../../research/checks/rollout_policy/audit_centers.py)。
 - [聚合目标恒等式核验结果](../../literature/rollout-policy/data/aggregation-audit.json)，对应[脚本](../../../research/checks/rollout_policy/audit_aggregation.py)。
 - [作者 Bernoulli Java 示例输出](../../literature/rollout-policy/data/java-audit.txt)，源码与启动器在 `scripts/`。
+- [来源权重与等效 advantage 核验脚本](../../../research/checks/rollout_policy/audit_source_weights.py)：精确枚举前缀分布、局部梯度、重复更新动作比和序列中心，并检查单样本与自归一化 IS，范围见[主文第 7 节](objectives.md#evidence)。
 - `data/` 保存检索记录与数值证据，`scripts/` 保存复算入口。第三方源码与 PDF 下载缓存保留在原研究目录；主文已引用原始来源。中心核验脚本通过 uv 安装固定 commit 的 pyBregMan，无需依赖该缓存。上述核验均为 CPU 合成分布，不代表 LLM 训练或 GPU 性能结果。
 
 从仓库根目录运行：
@@ -26,6 +27,7 @@
 ```bash
 python -m examples.mirroropd.research.checks.rollout_policy.audit_centers --out /tmp/centers-recheck.json
 python -m examples.mirroropd.research.checks.rollout_policy.audit_aggregation --out /tmp/aggregation-recheck.json
+python -m examples.mirroropd.research.checks.rollout_policy.audit_source_weights --out runs/rollout-policy-is-20261106/verification.json
 ```
 
 ## 完整检索记录
