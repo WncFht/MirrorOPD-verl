@@ -13,7 +13,7 @@ def commands():
     """Discover executable modules from source; no registry or backend imports."""
     root = Path(__file__).parent
     result = {}
-    for folder in ("studies", "checks"):
+    for folder in ("studies", "state_analysis", "checks"):
         for path in sorted((root / folder).rglob("*.py")):
             tree = ast.parse(path.read_text(encoding="utf-8"))
             if not any(
