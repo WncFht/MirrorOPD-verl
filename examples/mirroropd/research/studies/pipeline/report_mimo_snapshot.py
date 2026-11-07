@@ -28,6 +28,7 @@ from examples.mirroropd.research.studies.pipeline.plot_stage_progress import col
 from verl.trainer.evaluation.artifacts import ArtifactStore, file_sha256
 
 ARMS = {"E71": ("E71", 25, "SFT+RL"), "E72": ("E72-r16-o20", 20, "Direct RL"), "E73": ("E73-r16-o20", 20, "SFT")}
+TEACHERS = {"E71": "MiMo-7B-RL", "E72": "MiMo-7B-RL-Zero", "E73": "MiMo-7B-SFT"}
 DOMAINS = ("math", "code", "science", "if")
 DATASETS = ("MATH-500", "AMC23", "AIME24", "AIME25", "AIME26", "LCBv5", "GPQA-Diamond", "IFEval")
 
@@ -170,7 +171,7 @@ def render(data, args):
             fig.savefig(directory / f"{name}.{extension}", dpi=180, facecolor=fv.NEUTRALS["paper"])
         plt.close(fig)
 
-    handles = [Line2D([], [], color=colors[a], label=f"{a}: {v[2]}") for a, v in ARMS.items()]
+    handles = [Line2D([], [], color=colors[a], label=f"{a}: {TEACHERS[a]} ({v[2]})") for a, v in ARMS.items()]
     fig, axes = plt.subplots(2, 2, figsize=(10, 7))
     for arm, own in data["arms"].items():
         for ax, key in zip(axes[0], ("loss", "grad_norm"), strict=True):
@@ -188,7 +189,7 @@ def render(data, args):
         ax.set(xlabel="Optimizer update", ylabel=ylabel, yscale="log")
     axes[1, 0].set(xlabel="Completed outer", ylabel="Mean response tokens", ylim=(0, 7600))
     axes[1, 1].set(xlabel="Completed outer", ylabel="Length-limit finishes (%)", ylim=(0, 100))
-    fig.legend(handles=handles, loc="upper center", ncol=3, frameon=False)
+    fig.legend(handles=handles, loc="upper center", ncol=1, frameon=False)
     fig.subplots_adjust(top=0.87, bottom=0.14, hspace=0.4, wspace=0.3)
     finish(fig, args.figures, "training", "E71: reuse32; E72/E73: reuse16. Own-state loss is not a capability ranking.")
 
@@ -215,7 +216,7 @@ def render(data, args):
                 ylabel="Question-mean RKL",
                 yscale="log",
                 ylim=(min(risk_values) * 0.8, max(risk_values) * 1.25),
-                title=f"{arm}: {'Base prefixes' if col == 0 else 'Own teacher prefixes'}",
+                title=f"{arm} · Teacher: {TEACHERS[arm]}\n{'Base prefixes' if col == 0 else 'Own teacher prefixes'}",
             )
     fig.legend(*axes[0, 0].get_legend_handles_labels(), loc="upper center", ncol=4, frameon=False)
     fig.subplots_adjust(top=0.90, bottom=0.11, hspace=0.60, wspace=0.3)
@@ -248,7 +249,7 @@ def render(data, args):
             ylim=(0, 100),
             xlabel="Benchmark",
             ylabel="Question-mean avg@n (%)",
-            title=f"{arm}: outer{summary['outer']}, {summary['updates']} updates",
+            title=f"{arm} · Teacher: {TEACHERS[arm]}\nouter{summary['outer']}, {summary['updates']} updates",
         )
         ax.tick_params(axis="x", labelrotation=45)
         ax.grid(axis="y", alpha=0.2)
@@ -279,7 +280,7 @@ def render(data, args):
             xlabel="Completed outer",
             ylabel="Minutes / outer",
             ylim=(0, cost_limit),
-            title=f"{arm}: reuse{own['summary']['reuse']}",
+            title=f"{arm} · Teacher: {TEACHERS[arm]}\nreuse{own['summary']['reuse']}",
         )
     fig.legend(*axes[0].get_legend_handles_labels(), loc="upper center", ncol=4, frameon=False)
     fig.subplots_adjust(top=0.81, bottom=0.19, left=0.07, right=0.98, wspace=0.34)
