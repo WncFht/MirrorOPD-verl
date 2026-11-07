@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-11-06T04:10:56+00:00",
+  "snapshot_utc": "2026-11-07T07:08:53+00:00",
   "sources": [
     {
       "path": "examples/mirroropd/research/studies/weighted_targets/plot_validation_comparison.py",
@@ -48,8 +48,8 @@
     },
     {
       "path": "runs/topd-large-batch-20261105/formal/E82/metrics.jsonl",
-      "bytes": 2091163,
-      "sha256": "4c6ea8bfd2f4f55918eb3360d26bb784d6473fdd623da1b4e83f7ec031248796"
+      "bytes": 5957449,
+      "sha256": "87df3955d78710407ac515c2bb53f67fcb4f1f182b28bfaaf8c0af37930cbe26"
     },
     {
       "path": "runs/topd-large-batch-20261105/formal/E82/metrics-exclusions.json",
@@ -77,9 +77,54 @@
       "sha256": "7bb8299f2fa7ae97221512fd66eb758b4e3a8d39b8ed137cc2110a82972e5b04"
     },
     {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/25.jsonl",
+      "bytes": 228603968,
+      "sha256": "d9456d8db6720382bedbf83977e4321b17af4d70db8d28ff8df03fd17fa2fce7"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/30.jsonl",
+      "bytes": 204492833,
+      "sha256": "abaa2888bcfbce2ebdd15ccda1b793ce43a027b019b3021972e1ce7be8de9628"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/35.jsonl",
+      "bytes": 187812954,
+      "sha256": "39dd69fb39dad78f8b3d46337a2510ae124afa253b9a8210a48edc4c14c3146c"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/40.jsonl",
+      "bytes": 183174035,
+      "sha256": "630ba063cc4648884d3756b2ec5e36ca6feffe76d3754c945522ae08b2c5484f"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/45.jsonl",
+      "bytes": 172642415,
+      "sha256": "9b44ce86248f32962e0c92f7829205f7633a087bd2c6ccdcb889c6003247d361"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/50.jsonl",
+      "bytes": 165118880,
+      "sha256": "17bd22a08e122e8e3424e7f64b3e2b96eec8780f96206c20b232c977c6a3cf42"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/55.jsonl",
+      "bytes": 166782517,
+      "sha256": "55d9ccc3927a3a0ddcd223f796942f87a2b4b410e71a8799915d4ce1c09c6381"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/60.jsonl",
+      "bytes": 165072390,
+      "sha256": "b6393580bafbaa295e15a76ee635444c76f4855b62a6765b6301320fe9cb5391"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/65.jsonl",
+      "bytes": 161440703,
+      "sha256": "5d222b6187785506b5d3dcd7cc6fff66eeb363c6a8fd527321f22e63e4c1a113"
+    },
+    {
       "path": "runs/topd-learning-signal-20261106/formal/E83/metrics.jsonl",
-      "bytes": 1088243,
-      "sha256": "325d6bdde02e652ef2ba8bf9a3a7475370502b0188afab6ee54dfa2072abc8c8"
+      "bytes": 2375095,
+      "sha256": "d29147a9bc3cb7b6f209a0792e3d0af938b380c838801eb8f6221070656fbfcc"
     },
     {
       "path": "runs/topd-learning-signal-20261106/formal/E83/validation/records/5.jsonl",
@@ -90,6 +135,21 @@
       "path": "runs/topd-learning-signal-20261106/formal/E83/validation/records/10.jsonl",
       "bytes": 309084692,
       "sha256": "cca14955d1da6ec94828705748ae1ebd7bd07da915693ce2a98e6677e8ac572c"
+    },
+    {
+      "path": "runs/topd-learning-signal-20261106/formal/E83/validation/records/15.jsonl",
+      "bytes": 286014820,
+      "sha256": "728ea981c6e8d3cb7b133ccf72e9dd0843b0bb83b32040c559a86bd02393ee5d"
+    },
+    {
+      "path": "runs/topd-learning-signal-20261106/formal/E83/validation/records/20.jsonl",
+      "bytes": 265971179,
+      "sha256": "5f85ad572ddada7e0c8847102cbd5b53040269beda50f514f812069142d9a1d9"
+    },
+    {
+      "path": "runs/topd-learning-signal-20261106/formal/E83/validation/records/25.jsonl",
+      "bytes": 246646141,
+      "sha256": "4fbd985b5439baa69600be07a8713a58dc74cc898f3f5ebdfac3a8dc13a82815"
     },
     {
       "path": "examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-all-curves-20261104/curves.csv",
@@ -129,11 +189,23 @@
       5,
       10,
       15,
-      20
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      60,
+      65
     ],
     "E83": [
       5,
-      10
+      10,
+      15,
+      20,
+      25
     ]
   },
   "local_metric": "benchmark avg@16; macro5/AIME mean are unweighted benchmark means",

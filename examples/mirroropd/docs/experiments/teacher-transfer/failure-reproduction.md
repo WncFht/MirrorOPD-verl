@@ -2,7 +2,7 @@
 
 本页按实际 pair 和 setting 汇总正式训练中的拟合、平台与任务表现。每组同时记录训练风险、独立读出和 teacher 参照，以定位吸收差距。
 
-[固定状态谱系结果](fixed-state-results.md)补充 R1/Qwen/Llama 的不同初始化、尺寸与输入条件；[后训练阶段](post-training-stages.md)集中比较 SFT、SFT+RL 和实际存在的 RL-only 教师；[Polaris](cases/polaris.md)保留 E48/E49 的平台与方向对照。固定状态 0–320、正式在线训练和各输入模式按自己的协议解释。
+[固定状态谱系结果](fixed-state-results.md)补充 R1/Qwen/Llama 的不同初始化、尺寸与输入条件；[后训练阶段](post-training-stages.md)集中比较 SFT、SFT+RL 和实际存在的 RL-only 教师；[Polaris](appendix/polaris-long-run.md)保留 E48/E49 的平台与方向对照。固定状态 0–320、正式在线训练和各输入模式按自己的协议解释。
 
 先查[实际矩阵](#matrix)，再分别阅读 Qwen Base←8B、[E41 Base←4B](#qwen4)与[E43 后训练 student←4B-Instruct](#e43)的完整证据。矩阵同时标明已完成、短测和缺测条件。
 

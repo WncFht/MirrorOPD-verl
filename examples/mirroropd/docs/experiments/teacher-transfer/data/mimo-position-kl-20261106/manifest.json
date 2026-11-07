@@ -1,0 +1,28 @@
+{
+  "sources": {
+    "runs/mimo-stage-transfer-20261101/formal/E71/metrics.jsonl": "a52cb2b7017e0409874c0b1318d93f00d1ec83fb3d4f9214c56fe025d3590a28",
+    "runs/mimo-stage-transfer-20261101/formal/E72/metrics.jsonl": "7bda1bc1e469ab2236c1fb1f99ebc41ef57177d296e8986e78d95f64e4e036a7",
+    "runs/mimo-stage-transfer-20261101/formal/E73/metrics.jsonl": "20372b181cd52a5891b5e9b2aabcb5f66dfabcf8e5ed4bc451e26b1509dd47fb",
+    "examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E71/fixed-bank-rkl.csv": "17fcdcb9e15822fd12bbb6ee0e157670d695b0939c8904bc175288d1b3d82953",
+    "examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E72/fixed-bank-rkl.csv": "9c60db57fc87bd2f95b90aed3a706956700b55dadca31374ea3030d1f7b2116f",
+    "examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E73/fixed-bank-rkl.csv": "ed361fefb4bb02d744af24e12c22bae1f8c2b57decc573199db849593ca58a7d"
+  },
+  "renderer_sha256": "a5200f58723a21e89c4d2c5ef4c12aa9f2b4a9dca88cd02c8577737af39a24e5",
+  "selection": "first/last logged pre-update forward within each actual outer",
+  "late_zoom": "last five actual outers",
+  "max_position_reconstruction_error": 2.5656009983165973e-08,
+  "counts": {
+    "E71": {
+      "outers": 25,
+      "updates": 800
+    },
+    "E72": {
+      "outers": 20,
+      "updates": 320
+    },
+    "E73": {
+      "outers": 20,
+      "updates": 320
+    }
+  }
+}

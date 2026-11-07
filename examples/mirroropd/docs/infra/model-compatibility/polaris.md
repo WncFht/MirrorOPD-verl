@@ -1,6 +1,6 @@
 # Polaris 模型兼容与接入验收
 
-本页只维护输入、词表/head 与历史短程验收。E48/E49 的实际配方、完整结果和研究解释统一见[Polaris 研究](../../experiments/teacher-transfer/cases/polaris.md)。以下短测和 CPU 检查保留 2026-10-26 的环境与范围，不代替后续正式训练。
+本页只维护输入、词表/head 与历史短程验收。E48/E49 的实际配方、完整结果和研究解释统一见[Polaris 研究](../../experiments/teacher-transfer/appendix/polaris-long-run.md)。以下短测和 CPU 检查保留 2026-10-26 的环境与范围，不代替后续正式训练。
 
 ## 模型与本机路径
 
@@ -46,7 +46,7 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E48
 
 代码采用独立快照。GPU 占用工具完成四卡启动、重复启动保护、心跳与计算进展、停止释放和重新启动验证后，停止占用并启动训练；GPU4–7 不参与。详细结果见短训练报告（本地证据：`outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/result.md`）、[逐项验收](../../../../../outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/result.json)和最终解析配置（本地证据：`outputs/polaris-smoke-20261026-bsud-quicksilver-hppk-13/resolved-config.yaml`）。
 
-上述表格仅覆盖四卡短训练。正式 E48 `grcuotmi` 在 8 张 A100 80GB 上正常完成 256/256 outer；正式 run 的指标、边界与诊断见[完整训练与后期平台分析](../../experiments/teacher-transfer/cases/polaris.md#e48)。
+上述表格仅覆盖四卡短训练。正式 E48 `grcuotmi` 在 8 张 A100 80GB 上正常完成 256/256 outer；正式 run 的指标、边界与诊断见[完整训练与后期平台分析](../../experiments/teacher-transfer/appendix/polaris-long-run.md#e48)。
 
 ## CPU 验证
 

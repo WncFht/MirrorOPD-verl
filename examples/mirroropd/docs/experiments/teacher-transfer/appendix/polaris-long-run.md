@@ -2,7 +2,15 @@
 
 E48 的完整 256 轮训练中，每批目标持续下降，新批起点却在后期保持约 0.187。E49 改用学生支持上的条件 FKL 后，截断与答案缺失减少，新批分布拟合仍处于平台。两组都从初始 student 开始，反映不同目标下的完整在线训练。
 
-正文先统一实际条件，随后分析 E48 的平台、方向干预的依据、短程对照和 E49 正式结果。固定输入下的迁移证据见[跨 batch 研究](../cross-batch-transfer.md)，模型兼容与工程短测见[Polaris 接入](../../../infra/model-compatibility/polaris.md)。
+本页保留 Polaris 的完整训练与方向对照证据；位置图和数值表统一见 [R1-1.5B position-KL](../cases/r1-1.5b-position-kl.md)。固定输入下的迁移证据见[跨 batch 研究](../cross-batch-transfer.md)，模型兼容与工程短测见[Polaris 接入](../../../infra/model-compatibility/polaris.md)。
+
+## 本 case 的 position-KL 读法
+
+E48 和 E49 的原始 `distill/full_kl_position/*` 都按 response 自身有效长度分成十个相对位置桶。E49 的优化目标是条件 FKL，但图和清单保留的是原始 teacher RKL，因此不能把 E49 的 position 曲线称为 FKL position loss。E48 的首个 `p00_10` 为 `0.2329`，E49 为 `0.2427`；E48 末期新 batch 的首桶仍高于后段，和批内末端下降、新批起点平台的形状一致。
+
+![Polaris native position-KL 的初始位置对比](../figures/position-kl-inventory-20261107/initial-p00-10-polaris.png)
+
+E48/E49 的 first/last heatmap、位置曲线和首尾五个 outer 放大图见 [R1-1.5B position-KL](../cases/r1-1.5b-position-kl.md)；字段清单见 [position-KL 数据清单](position-kl-inventory.md)。
 
 <a id="e48"></a>
 <a id="e48-e48完整训练与后期平台分析"></a>

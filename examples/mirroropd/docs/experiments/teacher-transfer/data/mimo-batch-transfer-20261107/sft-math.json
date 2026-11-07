@@ -1,0 +1,266 @@
+{
+  "status": "complete",
+  "scope": "Base student; four disjoint fixed-bank batches trained sequentially; full-parameter AdamW with continuous state; FP32 trainable weights and CPU optimizer state with BF16 autocast forward",
+  "teacher": "sft",
+  "teacher_revision": "0a9f1180d99e686ce56b75fee637db62407ceb1b",
+  "student_revision": "d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+  "domain": "math",
+  "bank_artifact_id": "e05b82843a754d14a9d0161000b6b70f",
+  "candidate_count_after_filter": 133,
+  "group_size": 16,
+  "group_order": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "updates_per_group": 16,
+  "selected_ids": {
+    "A": [
+      "94232d67b295bb95eea5b953ef0814e9181270d6a3ca13082c21d6d108550145",
+      "e9df30dcfa2769b14ff9752bb76fc2a35890d52b0b77ff68127f886985c542fa",
+      "326f40d0aeaa0ca021dd10d48b5eb4e15da6c3a69c0b54b3857bb7a342fbf58b",
+      "419f4963810c736020563ce152243aaef0d64e06fd0c831b0f929ba2e11d09f9",
+      "e0dba7cf5293dff44f2e90f109e6ff4bf44c6a421e71ba9c07bf50c843cafea6",
+      "c151e8c6e3305891183165bc15bf1f59fd108e1c9d9354498fe42af32d7884c6",
+      "1ea676a0f398580fe35bb1c5e4346dd6f2c2e49c7c952209d20a9c7f56275ed7",
+      "18f772ec4622b45e0e2565d5916879e1a71a5c3de0c59d84c1480d178a0917c1",
+      "83d729f9d525fdd63133e1feb687c89fdbf8b2a55665ac91a7d17049f060f162",
+      "ac73c911480169b068aebdac9ffa7c622e6b546ca2b951a2ed0f5c5a15731ca0",
+      "a4b4db26eb949f3ee73e0085cb37ab8361d20cef9bfef29cbb376f04d29a3504",
+      "af187c71934e4eb2287b39518eee2cdadb72197deed63b8a7fb81b9367e7714d",
+      "f1b8e15f1f34fb43e0da9bcb01077011ea1ff2a603fdc991fe21364d642222ac",
+      "8684379c74b4564f409a6b4276b64856bb42b5c6fd72f611b0746136ef700ff3",
+      "25fceb7eba7e2c1e6384c366119de8c11fb795d3980d3af2d9960bdb63e38bd8",
+      "16f1b7414be2a435ad95153a794b76971ae7b93bec34f1e84880efd0b81b7249"
+    ],
+    "B": [
+      "669dcd44d77a478440267945cda1ec8f60de9aa502ba5d0666e86158d26faacb",
+      "d9632dd33a91b74662c772b220a14e1ef7b0fd81ba48af865b560bd8d6856519",
+      "83a990cb8b75c1d6bb6e9b847a73ce4f9bfc9b51afe62c0fc7852f6a4d91d179",
+      "c99fb4cb1cb8ed39ae449160512d21edaa0d88b57f0be4d2c0659bb9450c0b65",
+      "7cfaeb4a66128be1ebebd6efe41d0836bb0bdde0452a6a5a6389d05851acc3ba",
+      "658378ab01e18542deab31c9a4fe4f18f6df1837fe65486f393c30a5b1e90f87",
+      "f9442a17874bd8d19a9089092ab106b38f1361a5e028349b7bd448384b2b7ae8",
+      "dca2530e4b7fff19f26b7e726c2fbfa1c55be5ecc3684a0796858766de0defae",
+      "315d844784e49baea3a1b31331b8bd7e0816e99306df320a5f7f2e600c02d3a8",
+      "8b7e0950cd56a22a05cf2a0e25a2b358d2b569c85dfce670bfa3ccee615e3327",
+      "9576c567e5b6afecbe246b45fb2dea116098f45ce968c48d9bee9532f2c1b800",
+      "a2594208fd1fc78d20cffb167101b91b1ecde52ba277ebc45ea49f575cf88d33",
+      "9f79805965d279498c00f25844a78aa4c41947f6f2e1565ea02c0d02fb9ae571",
+      "aacf5ef9bef7251dbec05a9e95095d6b2402320b198da6eaaa0072f6810c2265",
+      "43061f5c464c37f871e9c9aa727c808e911463c30741735ba5d61d3a1f230da3",
+      "42c0e47e50c1fcef74f949a85705a098bd8f57cdf9d366a5391ed3e19c3eab07"
+    ],
+    "C": [
+      "37bd962dc0d1eeadf68c160a54f1ebbbacb28dd9d67fdea0964d057d62c512c4",
+      "a33845ef607042ab961effc611ef4e29fa49ce80641dd48ba128734aeef09996",
+      "8232bab9356f461ea70773ce7551901af96cee6ad1bd9adf9586dbac02440a9f",
+      "2b91fcd9e7eaca3adb6163c833b89cddf581604324d2853b9455473b29d904ff",
+      "8a3c0c06eee8ad41e583bdbc9eb7017dea904f9e1d328d9f11fbed408983ed6e",
+      "bc22ac04574ef1ac21ec8831e8651fbb27678079d6284eba8df792c8c7a82356",
+      "aaacae92b17e3f9b79e6ea358ffc20a11c928d0c0189359d1b43735467302abd",
+      "7ea4a8ff64f0895b51a9a08fde398eb5b58b2288abbf604e7f9e507ea0a8c780",
+      "9518a6e8245df5862e0438fbfd65ee6fa7e8786a2b52f9d59f07d764fdd472b3",
+      "731c50ae52faea5d518451e10f5bba1308212462976242ce604cc9aa47cfb396",
+      "5ffcecd41b067a3d70b70c13ec69ff6e8e92c60f2fa405f9644fdf32012c9f9a",
+      "5335709a8892bc41ea3b54b30534a36226c79a21524b44345efe1d247c85977b",
+      "9649bb7ce2f617d7d12620f2d632ae9edda94ca6d1498072681ef5e2e0a1ac3f",
+      "b502a408cca157876e5ec02c8ea304f51826a392bfb5db0cfb40770d268b08b2",
+      "91f1938e2c5a6c5af392072da3b825c844578dee17c2cacf02c8d36a6861695a",
+      "8424e2c7a69cb24a94200a679311750f606c5c6fe6c7cc2d0f429523556c00e3"
+    ],
+    "D": [
+      "eddef4ec4e465347e115d27324026a9abeee09d76f18d7e76a7960dc6788e356",
+      "5072d4bddcfbee2f17c2eb80405091d1f31705e56ae43c015ca9683b031eaad1",
+      "1cc81a7c33c620a931904edd61c23cd1ffdc1eb9c835d54a34a59ca6bdb52809",
+      "3cdc199daafcdb1ae3e9a3e08d67669afb0d45f53e3a408b4eb7b16f20e03022",
+      "a7b562128aaee85855f7b7c6f0e285bfff889c956c9c4ef0557da1b2983976fd",
+      "4ec761246eef5b79f66dd764d9076e8fd89b47a8b352492170f6bbdf402dc44c",
+      "fa1651b399e9b9b6d08f8e6fecfa6b98cfbbf519392b4ff8260f5b797d488271",
+      "02ea7e6ee9b943b3eea91354140c4e3c286c95a9a7524893bb5a1a05380f67d5",
+      "dd3d950a2edea7a8a192af427c00feb2e5974a9f8031d9d0ae47ad746d398c14",
+      "606dd002709db8fbbcc9bd6ce203a06c5da87f1200f69d777c93f5667f596ab0",
+      "53896057e6ef92302a5befa51da5f8df22ecababd57737ecbb34e2c2362dfe84",
+      "548fb3a4a83225b37f39d454f2aae3d2b1849836cf6e22710374a9ce861640cb",
+      "816afde2a3b5709c348323aba64a4be4f492d9150671d00b8dd0fd4e63d7141a",
+      "bfa3e3197d6963a0ddf6efc35703332e0b8adefcc8947dedf1f7df1fd226dd1b",
+      "ca39ddcf9740bbf9d8930581e78fc32a8cd767e4a195171819f6b178ffd0ace3",
+      "e1a74c6cd817ddfd029f2e517effe626e395e21f6041aa1761556ec955aff2e2"
+    ]
+  },
+  "optimizer": {
+    "type": "AdamW",
+    "lr": 1e-06,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.01,
+    "max_grad_norm": 1.0,
+    "steps": 64,
+    "optimizer_state_device": "cpu",
+    "master_weight_dtype": "float32",
+    "gradient_dtype": "float32",
+    "forward_autocast_dtype": "bfloat16"
+  },
+  "evaluation": [
+    {
+      "step": 0,
+      "groups": {
+        "A": {
+          "question_rkl_mean": 1.0351863242685795,
+          "token_rkl_mean": 0.9217632760458133,
+          "n_questions": 16,
+          "n_response_tokens": 1360
+        },
+        "B": {
+          "question_rkl_mean": 0.9619828574359417,
+          "token_rkl_mean": 0.8579025344970899,
+          "n_questions": 16,
+          "n_response_tokens": 1326
+        },
+        "C": {
+          "question_rkl_mean": 0.9845634456723928,
+          "token_rkl_mean": 0.914031560636229,
+          "n_questions": 16,
+          "n_response_tokens": 1152
+        },
+        "D": {
+          "question_rkl_mean": 1.0898241735994816,
+          "token_rkl_mean": 1.0056857882203294,
+          "n_questions": 16,
+          "n_response_tokens": 1139
+        }
+      }
+    },
+    {
+      "step": 16,
+      "trained_through": "A",
+      "groups": {
+        "A": {
+          "question_rkl_mean": 0.15621502907015383,
+          "token_rkl_mean": 0.13326195799197782,
+          "n_questions": 16,
+          "n_response_tokens": 1360
+        },
+        "B": {
+          "question_rkl_mean": 0.3859023479744792,
+          "token_rkl_mean": 0.35995083086496027,
+          "n_questions": 16,
+          "n_response_tokens": 1326
+        },
+        "C": {
+          "question_rkl_mean": 0.39676766470074654,
+          "token_rkl_mean": 0.3960520853676523,
+          "n_questions": 16,
+          "n_response_tokens": 1152
+        },
+        "D": {
+          "question_rkl_mean": 0.3870608787983656,
+          "token_rkl_mean": 0.37709061493990814,
+          "n_questions": 16,
+          "n_response_tokens": 1139
+        }
+      }
+    },
+    {
+      "step": 32,
+      "trained_through": "B",
+      "groups": {
+        "A": {
+          "question_rkl_mean": 0.18511627614498138,
+          "token_rkl_mean": 0.1677564559613957,
+          "n_questions": 16,
+          "n_response_tokens": 1360
+        },
+        "B": {
+          "question_rkl_mean": 0.05932656058575958,
+          "token_rkl_mean": 0.056076260110810065,
+          "n_questions": 16,
+          "n_response_tokens": 1326
+        },
+        "C": {
+          "question_rkl_mean": 0.30392171861603856,
+          "token_rkl_mean": 0.3102392475120723,
+          "n_questions": 16,
+          "n_response_tokens": 1152
+        },
+        "D": {
+          "question_rkl_mean": 0.2922273890580982,
+          "token_rkl_mean": 0.28349644290422327,
+          "n_questions": 16,
+          "n_response_tokens": 1139
+        }
+      }
+    },
+    {
+      "step": 48,
+      "trained_through": "C",
+      "groups": {
+        "A": {
+          "question_rkl_mean": 0.2056883645709604,
+          "token_rkl_mean": 0.18735385982812766,
+          "n_questions": 16,
+          "n_response_tokens": 1360
+        },
+        "B": {
+          "question_rkl_mean": 0.09295344515703619,
+          "token_rkl_mean": 0.08923243439923494,
+          "n_questions": 16,
+          "n_response_tokens": 1326
+        },
+        "C": {
+          "question_rkl_mean": 0.04967262543505058,
+          "token_rkl_mean": 0.048529167211705096,
+          "n_questions": 16,
+          "n_response_tokens": 1152
+        },
+        "D": {
+          "question_rkl_mean": 0.276059826137498,
+          "token_rkl_mean": 0.2714709678339372,
+          "n_questions": 16,
+          "n_response_tokens": 1139
+        }
+      }
+    },
+    {
+      "step": 64,
+      "trained_through": "D",
+      "groups": {
+        "A": {
+          "question_rkl_mean": 0.22250217804685235,
+          "token_rkl_mean": 0.2023471998379511,
+          "n_questions": 16,
+          "n_response_tokens": 1360
+        },
+        "B": {
+          "question_rkl_mean": 0.10943329776637256,
+          "token_rkl_mean": 0.10559792496646062,
+          "n_questions": 16,
+          "n_response_tokens": 1326
+        },
+        "C": {
+          "question_rkl_mean": 0.08894072828115895,
+          "token_rkl_mean": 0.08593335264110162,
+          "n_questions": 16,
+          "n_response_tokens": 1152
+        },
+        "D": {
+          "question_rkl_mean": 0.047695407702121884,
+          "token_rkl_mean": 0.046547004997180785,
+          "n_questions": 16,
+          "n_response_tokens": 1139
+        }
+      }
+    }
+  ],
+  "current_step": 64,
+  "gpu": "NVIDIA H800",
+  "source_sha256": "047763fe106d624f2c435a1194ac8e96e788cb6f40678938fb6b187bbd02fd9e",
+  "probe_source_sha256": "40bdfc98273ec940ba8d16301d7333cbc73853b603108218251b9734dbc10943",
+  "last_preclip_gradient_norm": 1.198966145515442,
+  "elapsed_seconds": 3975.781976006925,
+  "peak_allocated_gib": 75.29517269134521
+}

@@ -1,0 +1,42 @@
+{
+  "E82": {
+    "complete_outers": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      60,
+      65
+    ],
+    "checked_responses": 131040,
+    "optimizer_updates": 1120,
+    "update_applied": 1120.0,
+    "update_skipped": 0.0,
+    "loss_nonfinite": 0.0,
+    "grad_norm_preclip_nonfinite": 0.0,
+    "complete_training_outers": 69
+  },
+  "E83": {
+    "complete_outers": [
+      5,
+      10,
+      15,
+      20,
+      25
+    ],
+    "checked_responses": 50400,
+    "optimizer_updates": 480,
+    "update_applied": 480.0,
+    "update_skipped": 0.0,
+    "loss_nonfinite": 0.0,
+    "grad_norm_preclip_nonfinite": 0.0,
+    "complete_training_outers": 29
+  }
+}

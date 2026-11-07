@@ -1,0 +1,27 @@
+{
+  "source_sha256": {
+    "wandb-logs/MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/position-kl-detail.csv": "5e5c3f523132ad1acbb8d950811ae81d5f5d05c19892fc3eac04e897f04080b9",
+    "wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/position-kl.csv": "38fbf778e6b017233bf113921205cfc39ce3ccc41fabdb18bc4e53063b4fd15b",
+    "MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/metrics.jsonl": "a52cb2b7017e0409874c0b1318d93f00d1ec83fb3d4f9214c56fe025d3590a28",
+    "MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72/metrics.jsonl": "7bda1bc1e469ab2236c1fb1f99ebc41ef57177d296e8986e78d95f64e4e036a7",
+    "MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73/metrics.jsonl": "20372b181cd52a5891b5e9b2aabcb5f66dfabcf8e5ed4bc451e26b1509dd47fb",
+    "MirrorOPD-verl/examples/mirroropd/docs/archive/experiments/polaris/data/polaris-grcuotmi-20261026/E35/history.jsonl": "88d300981465310eb623263796d83cfa39f94fcd3df1ea7cbda1605b84e7f867",
+    "MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/cross-origin/polaris/data/polaris-complete-20261027/run/history.jsonl": "7741e72867797d466318f048d6b4fd43064e60549bab9d0fa2829ebaec8b0fad",
+    "wandb-logs/derived/MirrorOPD-verl/offline-run-20261027_175635-zyru8wdf/history.jsonl": "dc4581e87395a427f16f23630cfda173a2da632439c003a0970421188d13c6ba",
+    "wandb-logs/derived/MirrorOPD-verl/offline-run-20261027_175635-zyru8wdf/run.json": "05410dd3377a38a0fa7e36c60c1183121cb3f71d9ca99c4da8174514b1975cd9"
+  },
+  "renderer_sha256": "e3ddb41a6a1472e883a2522fe47dee473fe0e954a72487433c81b5b2d00fe42a",
+  "selection": "first and last pre-update observations per actual outer; early/late = five outers",
+  "heatmap_scale": "one shared linear color scale per entire figure",
+  "experiments": [
+    "E71",
+    "E72",
+    "E73",
+    "E35",
+    "E48",
+    "E49",
+    "E39",
+    "E41",
+    "E43"
+  ]
+}

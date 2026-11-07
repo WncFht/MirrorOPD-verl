@@ -1,0 +1,57 @@
+{
+  "generated_at_utc": "2026-11-07T07:15:17+00:00",
+  "sources": {
+    "E57": {
+      "path": "runs/e55-e57-refresh-20261102-0900/data.json",
+      "sha256": "80947df5224ebd1f55a2b278dccb2c319c8e5e3d99b5b6998c729cdf30ba7373"
+    },
+    "E81": {
+      "path": "runs/topd-large-batch-20261105/formal/E81/metrics.jsonl",
+      "sha256": "52a1505e819d35254bce0c382dcf678d601d3e682290ec7fde6bc4abdb9d414e"
+    },
+    "E82": {
+      "path": "runs/topd-large-batch-20261105/formal/E82/metrics.jsonl",
+      "sha256": "87df3955d78710407ac515c2bb53f67fcb4f1f182b28bfaaf8c0af37930cbe26"
+    }
+  },
+  "metrics_exclusions": {
+    "E82": {
+      "path": "runs/topd-large-batch-20261105/formal/E82/metrics-exclusions.json",
+      "sha256": "add9be8de99d94e2edfd01a91eb21d01d09b3d882c7fdeb89704078b695b5c10"
+    }
+  },
+  "series": {
+    "E57": {
+      "point_count": 100,
+      "last_reward_outer": 100.0,
+      "last_optimizer_update": 1600.0,
+      "last_response_presentations": 102400.0,
+      "last_rollout_reward": 0.28125
+    },
+    "E81": {
+      "point_count": 25,
+      "last_reward_outer": 25.0,
+      "last_optimizer_update": 400.0,
+      "last_response_presentations": 102400.0,
+      "last_rollout_reward": 0.18359375
+    },
+    "E82": {
+      "point_count": 69,
+      "last_reward_outer": 69.0,
+      "last_optimizer_update": 1104.0,
+      "last_response_presentations": 282624.0,
+      "last_rollout_reward": 0.28125
+    }
+  },
+  "axes": {
+    "outer": "completed outer step",
+    "optimizer_update": "completed optimizer update recorded by the trainer",
+    "response_presentations": "outer × responses per outer × 16 optimizer updates; repeated answer presentations count again",
+    "rollout_reward": "mean task reward of the training rollouts generated for that outer"
+  },
+  "limitations": [
+    "E81 is complete; E82 is shown through its last completed reward-bearing outer.",
+    "E82 is an in-progress run; the curve ends at its latest reward-bearing outer in the source snapshot.",
+    "These are training rollout rewards, not held-out benchmark accuracy."
+  ]
+}

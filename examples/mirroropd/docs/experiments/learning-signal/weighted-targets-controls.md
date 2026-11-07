@@ -459,18 +459,18 @@ $$
 
 ## E82 基线上的 future 与聚合消融
 
-已确定以 E82 为基线，先运行 E83，再运行 E84；每组四卡 shared_sync，均从同一个原始 Base 独立开始。E85–E90 是后续的八卡快速筛选，继续固定 E82 的 batch、复用、模型和预算，但不保存 checkpoint 或 optimizer。各组分别检验每条回答等权、token 求和、长度归一化及后续轨迹代价的作用。E81 已补齐[完整终点](weighted-targets-active.md#e81-已落盘的验证与分析)，同回答预算下尚未优于 E57；保留 batch256 是为了固定 E82 条件，不代表已选出最优 batch。正式编号、配置与运行状态见[当前实验](weighted-targets-active.md#e85e90八卡聚合与-future-消融)。
+原计划以 E82 为基线，先运行 E83，再运行 E84；每组四卡 shared_sync，均从同一个原始 Base 独立开始。2026-11-07 用户收回四卡资源，E83 在 480 次更新后提前停止，完整 valid 到 update400；E84 未启动且自动队列已取消，见[实际状态与保存产物](weighted-targets-active.md#e83e84future-与聚合消融)。后续 E84 预设已改为 8 卡，并与 E85–E90 一起改为每 20 outer 验证；原四卡队列保持取消。E85–E90 是后续的八卡快速筛选，继续固定 E82 的 batch、复用、模型和预算，但不保存 checkpoint 或 optimizer。各组分别检验每条回答等权、token 求和、长度归一化及后续轨迹代价的作用。E81 已补齐[完整终点](weighted-targets-active.md#e81-已落盘的验证与分析)，同回答预算下尚未优于 E57；保留 batch256 是为了固定 E82 条件，不代表已选出最优 batch。正式编号、配置与运行状态见[当前实验](weighted-targets-active.md#e85e90八卡聚合与-future-消融)。
 
 ### 共同设置与比较
 
 | 项目         | 固定值                                                                                                                                                     |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 模型与输入   | Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；继承 E82 的本地 DAPO、原生 Base 前缀，不添加 boxed 指令                                                     |
-| 资源与执行   | E83/E84 为 4 卡，E85–E90 为 8 卡，均 shared_sync、rollout TP1；precompute_fused/chunk512、显式 BF16、EOS 合并 `[151643,151645]`                            |
+| 资源与执行   | E83 为 4 卡，后续 E84–E90 预设为 8 卡，均 shared_sync、rollout TP1；precompute_fused/chunk512、显式 BF16、EOS 合并 `[151643,151645]`                       |
 | 目标与优化器 | full-vocab MDPO κ1／η0.1；AdamW LR1e-6、constant、weight decay0.01、grad clip1；默认 seed 相同，新建 Adam 状态                                             |
 | Batch 与复用 | train batch=mini-batch256、n1、reuse16；每组 100 outer／1,600 updates，409,600 回答处理条次、25,600 新回答；total_epochs2                                  |
 | 终止协议     | 训练和评测固定重复检测 16–128/8 开启；train response cap16384、val cap31744                                                                                |
-| 评测与预算   | 不做初始验证，每 5 outer 及终点验证五基准 avg@16、T0.7/p0.9；主图横轴为真实 optimizer updates                                                              |
+| 评测与预算   | 无初始验证；E83 每 5 outer，后续 E84–E90 每 20 outer 及终点（共 5 次）。E84–E86 五集 n16，E87–E90 为 MATH n4／其余 n16；T0.7/p0.9，主图横轴为真实 updates  |
 | 保存         | E83／E84 每 25 outer 保存一份完整状态并另留最终 HF 模型；E85–E90 与 E82 使用 `save_freq=-1`，不保存 checkpoint、HF 模型或 optimizer，`resume_mode=disable` |
 
 | 实验     | `full_vocab.future.mode` | `actor.loss_agg_mode`     | 主要对照                              |
@@ -492,7 +492,7 @@ Future 的配置全名为 `distillation.distillation_loss.full_vocab.future.mode
 
 `token-mean` 按所有有效 token 平均，长回答的合计权重随长度增加；`seq-mean-token-mean` 先在回答内平均，再对回答等权，改变各回答的相对权重。它与官方的 prompt 组内 advantage 标准化是两件事。两种聚合也会改变整体梯度尺度，需同时看 preclip norm、裁剪比例、local／future surrogate 与任务读出，不能把差异全解释成纯粹的长度偏好。既有[归一化核查](normalization.md)未将 token-mean 确认为主要故障，E83 是有待验证的对照。
 
-本轮按 E82 的完整 1,600 次更新执行，取代先前四组各 400 次更新的筛查建议；学习率不变，也不因早期分数选择性延长。E83−E82 与 E84−E82 同时观察 AIME、五基准宏平均、length／repetition／EOS 停止率。相同默认 seed 不保证跨运行随机流逐位一致；E81／E82 的早期分叉已提示这种变动，本轮单次对照仍需后续 seed 复核。新实验的 checkpoint／HF 导出增加 I/O，墙钟耗时不直接作为算法效率结论。
+本轮原定按 E82 的完整 1,600 次更新执行，取代先前四组各 400 次更新的筛查建议；学习率不变，也不因早期分数选择性延长。E83 实际因资源安排提前停止，现有结果只比较共同完整节点，不视为完整预算消融。E83−E82 与 E84−E82 的观测口径为 AIME、五基准宏平均、length／repetition／EOS 停止率；E84 尚无结果。相同默认 seed 不保证跨运行随机流逐位一致；E81／E82 的早期分叉已提示这种变动，本轮单次对照仍需后续 seed 复核。新实验的 checkpoint／HF 导出增加 I/O，墙钟耗时不直接作为算法效率结论。
 
 ### 后续优先级与解释边界
 

@@ -1,0 +1,12 @@
+experiment,student,teacher,objective,run_scope,initial_p00_10,initial_full_kl,source_path
+E71,MiMo-7B-Base,MiMo-7B-RL,full-vocab reverse KL,formal stage run,0.5762271728302745,,MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-position-kl-20261106/position-kl.csv
+E72,MiMo-7B-Base,MiMo-7B-RL-Zero,full-vocab reverse KL,formal stage run,0.050886660296668405,,MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-position-kl-20261106/position-kl.csv
+E73,MiMo-7B-Base,MiMo-7B-SFT,full-vocab reverse KL,formal stage run,0.535635170918267,,MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-position-kl-20261106/position-kl.csv
+E48,DeepSeek-R1-Distill-Qwen-1.5B,Polaris-7B-Preview,full-vocab reverse KL,formal 256-outer run,0.23291311292484065,,MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/polaris-position-kl-20261106/position-kl.csv
+E49,DeepSeek-R1-Distill-Qwen-1.5B,Polaris-7B-Preview,conditional FKL (raw RKL diagnostic),formal 256-outer run,0.24272355197084264,0.21032626682707367,wandb-logs/derived/MirrorOPD-verl/offline-run-20261027_175635-zyru8wdf/history.jsonl
+E35,DeepSeek-R1-Distill-Qwen-1.5B,JustRL-DeepSeek-1.5B,full-vocab reverse KL,formal 250-outer run,0.11955089435931748,0.12433935239761262,MirrorOPD-verl/examples/mirroropd/docs/archive/experiments/polaris/data/polaris-grcuotmi-20261026/E35/history.jsonl
+E39,Qwen3-1.7B-Base,Qwen3-8B,termination-equivalent objective (raw RKL diagnostic),formal 200-outer run,1.2551624179308813,0.47553134765271954,wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/history.jsonl
+E41,Qwen3-1.7B-Base,Qwen3-4B,termination-equivalent objective (raw RKL diagnostic),formal 100-outer run,1.3021755837816043,0.47278656709084654,wandb-logs/MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/E41/metrics.jsonl
+E43,Qwen3-1.7B Non-thinking,Qwen3-4B-Instruct-2507,full-vocab reverse KL,formal 100-outer run,0.4326139825971749,0.39711564705511915,wandb-logs/MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/E43/metrics.jsonl
+termination-baseline,Qwen3-1.7B-Base,Qwen3-4B,raw full-vocab reverse KL,20-outer controlled diagnostic,1.1824959617556081,,MirrorOPD-verl/examples/mirroropd/docs/infra/model-compatibility/termination/data/full-kl-position.csv
+termination-aligned,Qwen3-1.7B-Base,Qwen3-4B,termination-equivalent objective (raw RKL diagnostic),20-outer controlled diagnostic,1.244711424309313,,MirrorOPD-verl/examples/mirroropd/docs/infra/model-compatibility/termination/data/full-kl-position.csv

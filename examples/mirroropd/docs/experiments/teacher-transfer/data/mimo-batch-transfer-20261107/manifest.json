@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-07",
+  "status": "complete",
+  "scope": "Exploratory fixed-bank sequential batch-transfer diagnostic; not a formal OPD rerun",
+  "student": "MiMo-7B-Base",
+  "student_revision": "d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+  "teachers": {
+    "rl": {
+      "stage": "E71 Base->SFT->RL",
+      "revision": "7c7707596b0ef1032ef82970d7a4a484ca457c4d"
+    },
+    "rl_zero": {
+      "stage": "E72 Base->RL",
+      "revision": "da0bde6fbbc8d1cb9afad15fab947db628a22014"
+    },
+    "sft": {
+      "stage": "E73 Base->SFT",
+      "revision": "0a9f1180d99e686ce56b75fee637db62407ceb1b"
+    }
+  },
+  "data": {
+    "bank_artifact_id": "e05b82843a754d14a9d0161000b6b70f",
+    "domain": "math",
+    "filter": "initial bank, sample_index=0, unique source_id, prompt<=256 tokens, response=32..128 tokens",
+    "candidate_count_after_filter": 133,
+    "selected_prompts": 64,
+    "partition": "four disjoint groups A/B/C/D, 16 prompts each; E71/E72/E73 use ABCD, with E71/E73 additionally run in DCBA order"
+  },
+  "objective": "Exact full-vocabulary reverse KL on fixed teacher distributions at frozen bank prefixes; token-mean training objective; question-mean reported metric",
+  "training": {
+    "updates_per_group": 16,
+    "group_order": ["A", "B", "C", "D"],
+    "total_updates": 64,
+    "optimizer": "AdamW",
+    "learning_rate": 1e-6,
+    "weight_decay": 0.01,
+    "gradient_clip_norm": 1.0,
+    "optimizer_state_device": "CPU",
+    "master_weights": "FP32",
+    "forward_autocast": "BF16"
+  },
+  "sources": {
+    "trajectory_script": "runs/mimo-agk-probe-20261107/multi_batch_trajectory.py",
+    "trajectory_script_sha256": "047763fe106d624f2c435a1194ac8e96e788cb6f40678938fb6b187bbd02fd9e",
+    "reverse_order_script": "runs/mimo-agk-probe-20261107/multi_batch_order_trajectory.py",
+    "reverse_order_script_sha256": "4e2fca76e6d61a4b473916e6a8bc71ee939c1170089f791093fc3a2d142b5386",
+    "probe_script": "runs/mimo-agk-probe-20261107/probe.py",
+    "probe_script_sha256": "40bdfc98273ec940ba8d16301d7333cbc73853b603108218251b9734dbc10943",
+    "raw_results": {
+      "rl-math.json": "c6635d536ce81a2a5dd42b2beb66e699f4485a3c37d6f40a5a71cd6e7e016e3f",
+      "rl_zero-math.json": "8adcd51510a05b1d7179699e328c16594b4894c48590fe071c9d470ebb3881b5",
+      "sft-math.json": "59cfde9c88c8e4f7da2462f934332615b8701729dab9e1fe5e72043faadbb583",
+      "rl-math-dcba.json": "06c2bbf0444ea0c76ec1aaba28a39e7279ad86de0fbf3f7e58b9847993bc93d7",
+      "sft-math-dcba.json": "dd2d29dd4ba1b77f4f0331518880dd42fee3ff69644bc163d6acd82eaf466852"
+    }
+  },
+  "limitations": [
+    "Only one 64-prompt Math subset and one A->B->C->D order",
+    "Sixteen updates per group; no convergence or multiple-seed claim",
+    "Fixed teacher distributions and prefixes; no fresh student rollouts",
+    "Reverse-order replication covers E71/E73 only",
+    "Question-mean diagnostic; not directly comparable to every formal-run reduction"
+  ]
+}
