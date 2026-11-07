@@ -1,5 +1,27 @@
 # 每个实验的诊断图谱与重绘流程
 
+<a id="clean-diagnostics"></a>
+
+## 单遍诊断图集
+
+当前分析使用本地生成的单遍图集（`transfer-mechanism/appendix/data/clean-diagnostics/README.md`）与跨 teacher 比较入口 `transfer-mechanism/appendix/data/clean-diagnostics/comparisons/README.md`。它们读取已有主清单，排除 Polaris 与附录条件，验证原执行实例内完整的首遍 A→T 前缀，只使用 0–320 更新；没有旧 A–D 专用面板，没有跨轮重访、混接续训或新增训练。跨尺寸条件另标为上下文，不用于推断同源 RL／SFT 的因果差异。
+
+47 个输入条件共 711 张逐 run 图与 50 张比较图。45 个条件有位置读出，10 个条件有 top-16 overlap；缺失指标明确跳过。固定训练池、永久 Math／Code／IF bank 与按题数合并的留出分别画出。全程位置曲线、位置热图和 step0／16／64／终点轮廓使用绝对 early／middle／late 三段；entropy、top-16 指标除以实际 token，全局 RKL 另保留题数×1024 口径。每段实际覆盖和两种平均值保留在 `metrics.csv`。
+
+```bash
+export FIGURE_VIZ_MPL=/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/dotfiles/.agents/skills/figure-viz/assets/mpl
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /root/.local/share/mirroropd/venvs/plotting/bin/python -m examples.mirroropd.research.studies.fixed_transfer.clean_diagnostics --jobs 4
+/root/.local/share/mirroropd/venvs/plotting/bin/python -m examples.mirroropd.research.studies.fixed_transfer.clean_publish
+```
+
+`--run grpo-kl` 可单独复算一个 teacher；`--run <run_id>` 指定输入实例。局部复算会重写输出目录的索引，需保持完整图集入口时使用 `--output runs/clean-diagnostics-smoke`。全量命令恢复完整索引；`--force` 强制重画。
+
+`clean_diagnostics.py` 读取与验证、聚合每个快照并输出逐 run 图；`clean_comparisons.py` 输出跨 teacher 热图、同尺寸重点配对折线及端点 CSV；`clean_publish.py` 原样提取 19 张正文精选图及其审计、端点和来源哈希。完整图集在忽略的 `appendix/data/clean-diagnostics/` 下，正文精选在[figures/fixed-state-clean-20261107](figures/fixed-state-clean-20261107/provenance.json)。复算需要本地原始日志与 figure-viz 环境，不加载模型、不使用 GPU。
+
+每个 run 保留 `metrics.csv`、`training.csv`、`questions.csv`、来源文件 SHA256、图形审计及产物回执。全图索引标明真实预算和指标覆盖；重点折线限相同 student／输入模式与 320 更新。正文分析和实际数值见[单遍诊断](fixed-state-results.md#单遍训练的完整诊断)。
+
+## 历史诊断流程
+
 [查看 run 清单](transfer-mechanism/appendix/run-figures.csv)。本机批量图谱入口为 `transfer-mechanism/appendix/data/run-figures/README.md`，首次克隆后按下方命令生成。默认生成 12 类图，适用时额外生成词表支持质量图，按现有指标覆盖跳过缺失项；每个 run 的覆盖清单与实际图数以生成回执为准。每个实验按 student、teacher、输入模式、状态银行与执行实例分别组织；不同轨迹不拼接，缺失读出不插值补齐。每张图附 CSV、来源哈希、PDF 和审计结果。
 
 ## 指标与解释

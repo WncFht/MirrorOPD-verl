@@ -219,8 +219,15 @@ outputs
 
 # Reproducible per-run figure bundles; keep curated report figures and the run registry.
 /examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism/appendix/data/run-figures/
+/examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism/appendix/data/clean-diagnostics/
 # Search command diagnostics and intermediate monitoring snapshots remain local.
 /examples/mirroropd/docs/**/paper-search-stderr.txt
 /examples/mirroropd/docs/experiments/rollout-policy/data/prefix-40x16-20261030/snapshot-*/
 # Full long-run update snapshots are rebuilt locally; commit curated figures and summaries.
 /examples/mirroropd/docs/infra/model-compatibility/qwen-e54/figures/e55-e57-20261031/data.json
+
+# Rebuild large diagnostic tables locally; source bundles retain summaries and provenance.
+/examples/mirroropd/docs/experiments/teacher-transfer/figures/fixed-state-clean-20261107/all-panel-trajectories.csv
+/examples/mirroropd/docs/experiments/teacher-transfer/data/polaris-position-kl-20261106/position-kl.csv
+# Literature search stderr is an execution diagnostic.
+/examples/mirroropd/docs/literature/teacher-transfer/sources/claim-audit-20261107/*.stderr
