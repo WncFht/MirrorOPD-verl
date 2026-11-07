@@ -68,7 +68,7 @@ Full-KL 的 `FULL_KL_BACKEND`、token/vocab chunk、async write/prefetch 开关�
 
 E48 将 E20 的教师替换为 `Polaris-7B-Preview`，学生保持 `DeepSeek-R1-Distill-Qwen-1.5B`，开启训练前验证。Full-KL（MDPO eta=1）、DAPO、batch=mini-batch=64、n=1、reuse16、256 outer／4096 次更新、LR=1e-6、seed42 均保留；训练 prompt/response cap=4096/7168，验证 cap=31744、n=16。每 32 outer 验证、每 64 outer 保存，保留 4 个 checkpoint；关闭 group filtering 和失败组 refill。
 
-Teacher FSDP 评分预算沿用 32768，未降低。Backend 保留`precompute`、token chunk512、vocab chunk8192，async write/prefetch开启。资源池默认8卡；本机四卡短测通过`STUDENT_GPUS=4`覆盖，实际 GPU 由调用者明确分配。短测配置与结果见[E48 四卡验收](../../experiments/teacher-transfer/cases/polaris.md)。
+Teacher FSDP 评分预算沿用 32768，未降低。Backend 保留`precompute`、token chunk512、vocab chunk8192，async write/prefetch开启。资源池默认8卡；本机四卡短测通过`STUDENT_GPUS=4`覆盖，实际 GPU 由调用者明确分配。短测配置与结果见[E48 四卡验收](../../experiments/teacher-transfer/appendix/polaris-long-run.md)。
 
 ```bash
 # 原始师生独立评测也使用同一验证协议；每条命令是一个独立作业。
@@ -83,7 +83,7 @@ bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E48
 
 ### Polaris Forward KL 对照 E49
 
-E49 从 E48 复制模型、batch64、reuse16、256 outer、学习率和完整验证预算，使用`full_forward_kl`与`precompute_fused`。Teacher 显式条件化到 student 输出行，同时记录原生 RKL、FKL、两套位置桶、entropy、JS、TV 和支持集外质量。实现与内存说明见[Forward KL](../numerics/full-vocab/forward-kl.md)，数据与实验入口见[Polaris 系列](../../experiments/teacher-transfer/cases/polaris.md)。
+E49 从 E48 复制模型、batch64、reuse16、256 outer、学习率和完整验证预算，使用`full_forward_kl`与`precompute_fused`。Teacher 显式条件化到 student 输出行，同时记录原生 RKL、FKL、两套位置桶、entropy、JS、TV 和支持集外质量。实现与内存说明见[Forward KL](../numerics/full-vocab/forward-kl.md)，数据与实验入口见[Polaris 系列](../../experiments/teacher-transfer/appendix/polaris-long-run.md)。
 
 ```bash
 DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E49

@@ -1,0 +1,38 @@
+{
+  "source_sha256": {
+    "wandb-logs/MirrorOPD-verl/analysis/qwen-e41-e43-final-20261028/position-kl-detail.csv": "5e5c3f523132ad1acbb8d950811ae81d5f5d05c19892fc3eac04e897f04080b9",
+    "wandb-logs/MirrorOPD-verl/analysis/e39-qwen3base-final-20261027/position-kl.csv": "38fbf778e6b017233bf113921205cfc39ce3ccc41fabdb18bc4e53063b4fd15b"
+  },
+  "renderer_sha256": "a78c581a9d8e0d89fa206918b5509c2e8a1f3fb802b7cb42394cd068b47a8cd0",
+  "experiments": [
+    "E39",
+    "E41",
+    "E43"
+  ],
+  "layout": "one experiment per figure; first and last observations in separate panels",
+  "selection": "all outers, first five outers, last five outers; pre-update observations",
+  "heatmap_scale": "one shared linear color scale across first/last panels within each figure",
+  "figures": [
+    "e39-position-kl-first-last-heatmap",
+    "e39-position-kl-first-last-heatmap-early",
+    "e39-position-kl-first-last-heatmap-late",
+    "e39-position-kl-first-last-lines",
+    "e39-position-kl-first-last-lines-early",
+    "e39-position-kl-first-last-lines-late",
+    "e39-position-kl-single-update-lines",
+    "e41-position-kl-first-last-heatmap",
+    "e41-position-kl-first-last-heatmap-early",
+    "e41-position-kl-first-last-heatmap-late",
+    "e41-position-kl-first-last-lines",
+    "e41-position-kl-first-last-lines-early",
+    "e41-position-kl-first-last-lines-late",
+    "e41-position-kl-single-update-lines",
+    "e43-position-kl-first-last-heatmap",
+    "e43-position-kl-first-last-heatmap-early",
+    "e43-position-kl-first-last-heatmap-late",
+    "e43-position-kl-first-last-lines",
+    "e43-position-kl-first-last-lines-early",
+    "e43-position-kl-first-last-lines-late",
+    "e43-position-kl-single-update-lines"
+  ]
+}

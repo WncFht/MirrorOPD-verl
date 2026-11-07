@@ -186,6 +186,8 @@ Qwen 和 Llama 分别比较，结合初始风险、绝对残差与相对降幅�
 
 三组从同一 Base 权重和 fresh Adam 独立开始，不顺序续接。E71 对 E73 比较完整 SFT+RL 与 SFT 教师的拟合难度；E72 提供不经 SFT 的 RL 路径参照。公开教师的数据、监督和计算预算不同，这里研究三个真实目标，不宣称只改变唯一算法变量。固定银行、current 轨迹和任务表现分别报告，不新增“完全吸收”的数值门槛。
 
+要测试“已经经过 SFT 的 student 是否能吸收同源 direct-RL teacher”，见已启动的 [MiMo E91](cases/2026-11-07-E91-MiMo-RL-Zero到SFT学生.md)。E91 从 MiMo-SFT 开始，复用 E72 的 MiMo-RL-Zero teacher，预算为 20 outer／320 updates；2026-11-07 已完成初始 SFT 的 6,703 条回答与八项 accuracy，尚无训练后 RKL。E72 已覆盖 RL→Base，E73 已覆盖 SFT→Base。E91 单独生成 initial/SFT bank 并开启重复停止，不将新基线拼入下方历史 Base 起点的三组曲线。
+
 <a id="mimo-2-共同训练设置"></a>
 
 <a id="2-共同训练设置"></a>

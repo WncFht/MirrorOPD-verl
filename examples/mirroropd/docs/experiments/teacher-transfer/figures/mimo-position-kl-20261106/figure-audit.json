@@ -1,0 +1,39 @@
+{
+  "mimo-position-kl-20261106/loss-before-update": [
+    "warn facet-ylim-mismatch: ylabel 'Training RKL': ylims [(0.0003, 0.0594), (0.0354, 0.2817), (0.0583, 0.275)]"
+  ],
+  "mimo-position-kl-20261106/mimo-position-kl-heatmap": [],
+  "mimo-position-kl-20261106/mimo-position-kl-single-update-heatmap": [],
+  "mimo-position-kl-20261106/mimo-position-kl-single-update-lines": [
+    "warn facet-ylim-mismatch: ylabel 'Position-bin RKL (log scale)': ylims [(0.0003, 0.0585), (0.0318, 0.6627), (0.0383, 0.616)]"
+  ],
+  "mimo-position-kl-20261106/mimo-position-kl-by-decile-updates": [
+    "warn facet-ylim-mismatch: ylabel 'Position-bin RKL (log scale)': ylims [(0.0003, 0.0654), (0.0276, 0.666), (0.0398, 0.6062)]",
+    "warn palette-overflow: axes 0: 10 series > paper palette 9",
+    "warn palette-overflow: axes 1: 10 series > paper palette 9",
+    "warn palette-overflow: axes 2: 10 series > paper palette 9"
+  ],
+  "mimo-position-kl-20261106/mimo-position-kl-first-last-heatmap": [],
+  "mimo-position-kl-20261106/mimo-position-kl-first-last-lines": [
+    "warn facet-ylim-mismatch: ylabel 'Position-bin RKL (log scale)': ylims [(0.0003, 0.06), (0.0271, 0.6799), (0.0383, 0.632)]",
+    "warn palette-overflow: axes 0: 10 series > paper palette 9",
+    "warn palette-overflow: axes 1: 10 series > paper palette 9",
+    "warn palette-overflow: axes 2: 10 series > paper palette 9",
+    "warn palette-overflow: axes 3: 10 series > paper palette 9",
+    "warn palette-overflow: axes 4: 10 series > paper palette 9",
+    "warn palette-overflow: axes 5: 10 series > paper palette 9"
+  ],
+  "mimo-position-kl-20261106/mimo-position-kl-first-last-heatmap-late": [],
+  "mimo-position-kl-20261106/mimo-position-kl-first-last-lines-late": [
+    "warn facet-ylim-mismatch: ylabel 'Position-bin RKL (log scale)': ylims [(0.0003, 0.0012), (0.0271, 0.1999), (0.0383, 0.2032)]",
+    "warn palette-overflow: axes 0: 10 series > paper palette 9",
+    "warn palette-overflow: axes 1: 10 series > paper palette 9",
+    "warn palette-overflow: axes 2: 10 series > paper palette 9",
+    "warn palette-overflow: axes 3: 10 series > paper palette 9",
+    "warn palette-overflow: axes 4: 10 series > paper palette 9",
+    "warn palette-overflow: axes 5: 10 series > paper palette 9"
+  ],
+  "mimo-position-kl-20261106/math-bank-rkl": [
+    "warn facet-ylim-mismatch: ylabel 'RKL (log scale)': ylims [(0.0003, 0.1217), (0.0314, 3.3513), (0.0522, 2.8512)]"
+  ]
+}

@@ -9,6 +9,8 @@ RQ1 区分信号刷新、更新校正、动作积分和聚合方式；RQ5 独立
 | token-mean 的长度缩放是否影响已有运行 | [归一化核查](normalization.md)，核对长度分布及离线反事实                                                                 |
 | 复现多少 TOP-D，κ/η 改变什么          | [主要实验](weighted-targets.md)、[小规模消融](weighted-targets-controls.md)、[当前 A/B 实验](weighted-targets-active.md) |
 
-固定生成/更新预算的 reuse 与长度比较见[预算线](../reuse-budget/README.md)。RKL/FKL 的 Polaris 方向证据见[教师吸收](../teacher-transfer/cases/polaris.md)。
+固定生成/更新预算的 reuse 与长度比较见[预算线](../reuse-budget/README.md)。RKL/FKL 的 Polaris 方向证据见[教师吸收](../teacher-transfer/appendix/polaris-long-run.md)。
 
 E57 与 E81 的训练时钟图及其数据口径已归档到[TOP-D 当前 A/B 实验](weighted-targets-active.md#training-clock-comparison)；论文曲线的来源与预算说明见[TOP-D 主报告](weighted-targets.md)。
+
+[MDPO position objective](mdpo-position-kl.md)单列 E55–E57、E81–E83 的位置热力图与训练曲线；[初始和末 outer 的 first-update 位置曲线](../teacher-transfer/cases/first-update-position-profiles.md)按实验比较前后位置形状。

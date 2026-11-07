@@ -1,0 +1,994 @@
+{
+  "snapshot_utc": "2026-11-07T07:11:14+00:00",
+  "sources": [
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/manifest.json",
+      "sha256": "81623472ed13d1a7017bf8ba418b49d9b2adc59f0d69b3351edef718c60300ad"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial/manifest.json",
+      "sha256": "6766299fa67dc65015baa82caf4a9d37e8ca210f97b538c4f1e3cf4601b3e1d3"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/configs/E91.yaml",
+      "sha256": "10633a2b47eac9aaf3e958d3847dfa1312f00d2a919deb3b2e0da8908703e5fb"
+    },
+    {
+      "path": "examples/mirroropd/research/studies/pipeline/report_e91_snapshot.py",
+      "sha256": "ea3faf2689b9d5de62f003c1b4b86907e3e6285909d47515b0997f867a8991b9"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00000.parquet",
+      "sha256": "be49703d9b0341396205545d8f4181ab03c7d099619da54d439cd5c2eed1b988"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00001.parquet",
+      "sha256": "e5fc6c603a3eef7e8db09ac20e35a349aec17207fed05cb6407c0e7319335694"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00002.parquet",
+      "sha256": "dc1f084d84c1551e305503e762b93c5b020b27745aa2863a1ac61c5fad1f241f"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00003.parquet",
+      "sha256": "50a94210b04dae87742c6b73a5efffc3f83f16826762a41854c075e9cda72a71"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00004.parquet",
+      "sha256": "e5f48299adc7bb4f07603154dc097b14e0522c789e9ccafbf43c94488749a0cf"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00005.parquet",
+      "sha256": "df262a92a4202ec55cfa1316ed33abb15776a808feb23b4c9c7529096457f2eb"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00006.parquet",
+      "sha256": "16843cf4fab314f4bd00aaf479c3ebd94a000c212ff432153e6ad47685bfb143"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00007.parquet",
+      "sha256": "2df58e61bd07096ce0dcfe751a81e134cf154b571d81ffa396163384037f4909"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00008.parquet",
+      "sha256": "367b0911fb5c052151cfb1318edc867074af3c0eab4f2934dcd49119eb7e6adc"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00009.parquet",
+      "sha256": "ae79473e636e79b21525e101c69aee6ff51d66586d9659115c098ff34e914f27"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00010.parquet",
+      "sha256": "a6b91e995d8b7bf41e8dedc2964e1dd9e478cf53736061a42321952b61b6931e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00011.parquet",
+      "sha256": "62816e43503a1ee6460cd2fcd1c69ed410113cb15a79fcabbef8879c8cdf9fce"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00012.parquet",
+      "sha256": "c020f269e92c8084107ccdedc22c05907007a47671c513f4024f813700cb21c7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00013.parquet",
+      "sha256": "5f71cfd79fdad1acf6763e1be92d7d81818e9d363dbfb35ca1d4a925ecf88f7c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00014.parquet",
+      "sha256": "89d35b14728360c28d4a0af751b800f54553d2373f8fa8d84b7a436ac94e94dd"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00015.parquet",
+      "sha256": "b148ec0f8fd1706eb30f5cf6efa974eb88f477db9852d7fb69d50fe5c0d7d7ed"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00016.parquet",
+      "sha256": "2d843dad7992128c667ace3664ce7a785c4992fcbcdeb73e1b3b16b6b362e6b1"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00017.parquet",
+      "sha256": "9eb5ee70a0fa9f9e40dd72c033dea747aeacaa0dd3c1613d2f2bf1afbd87251c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00018.parquet",
+      "sha256": "892d451a5ea50574151a28b4f57b0177a2af592c6c2b811618dba50a82202285"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00019.parquet",
+      "sha256": "ad3f0c536de4df55cd93d9788bc55180a8b80d8570dce7ec410056ee0c3857c3"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00020.parquet",
+      "sha256": "84f1c97e3ad1f4d72ed7e76ecc26c4064c139212f7391a5ddfa9a3d3420fdce6"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00021.parquet",
+      "sha256": "b82f1c927d46eb549ba18c99ff9f910b9c4f3f115cac4343d4ecdac4bce02b53"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00022.parquet",
+      "sha256": "23c81a7e6e0f9d25f1b19ff7910f633f0d1f4888b3eb12b2a01978f70243e9a4"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00023.parquet",
+      "sha256": "f2ccbbed5e8455e69077110ee4a50afb611b60d1006448855f8c3c176369474a"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00024.parquet",
+      "sha256": "d0a285858ce2d91cdb0145a45934af37029065eab5c09694c25d28332fdf884c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00025.parquet",
+      "sha256": "4d8a0c354de4cff97703e547374046b557997450507b9837d7d5f4c43a66dd4f"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00026.parquet",
+      "sha256": "c6df82b4577cc3eae941e93f450223c3b69c30cfdc6b1eb1f0714d9cd91fea22"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00027.parquet",
+      "sha256": "c190edd65952f2f3f2fc32d74e405da62ada6ce21eb97f5a99b406090496aa9e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00028.parquet",
+      "sha256": "4a947eef672e1afa569ec5b53d67ebce5348a0d82d6063cb1704b6e65d9cbc6a"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00029.parquet",
+      "sha256": "05d6a8c10e2615208d0a749594b846f44218a90bfdb5db3b93331df8754c7063"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00030.parquet",
+      "sha256": "325c0ac75ed55d5f95b5b993a050416f7dd899c031d04f52edfff1bfeaaa79f6"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00031.parquet",
+      "sha256": "c2832e7428449d138f87b3bdb51401912bb4094a8254491776317e066c26965e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00032.parquet",
+      "sha256": "829eedea9581e0cf837ad9c7f9cccb826927c9575f92d71621d6a9e551a8777c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00033.parquet",
+      "sha256": "2ba4c228e4609d7a0294c998ac2d95fa34855af69ef0cdee1b7febae4fce3829"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00034.parquet",
+      "sha256": "1909740a2f0ff21977d252352af952d7f069de02a384a0b72fc2e5552895a02f"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00035.parquet",
+      "sha256": "2bbcca3b36547f7b2b7e33bafeb0c5025d988291934c089891ecf6b23f2afeb2"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00036.parquet",
+      "sha256": "44d869e4df3022905cfbf730244eceebf80a44bad815f40d2397be53b7e3a2d3"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00037.parquet",
+      "sha256": "b5de75f5ac41cec73e853b7142a33f647b1bf04434ceb8639e5f108d3822c22c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00038.parquet",
+      "sha256": "88e874b2eaa3066e36909310e8ea91c68a325dbb7217aca1d42304bf3ff225a7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00039.parquet",
+      "sha256": "564553a851973f75aaf04b4d24d2ecf4fa431972347b004dfba565003e3fbed1"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00040.parquet",
+      "sha256": "a53e1e77d8e8c42bd7196eb0982ee0d7cd9c66a935cdea9d4a9602ea30a8c084"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00041.parquet",
+      "sha256": "129c89b41143de36fdc1b52eaba89b71e3064e6dd21e56a968cbf10c1664ac09"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00042.parquet",
+      "sha256": "a2600aca63258922fa4ac28a21a44df851cb8bfd8183970b8badbbb0c2c46175"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00043.parquet",
+      "sha256": "121a65386c56a0f48bedd3bfedd05b092677d2ef0b4f35fcc14edb0deebc74b5"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00044.parquet",
+      "sha256": "68a491eae7d9332011f7196fc0d0f833596c3e4bbecffaf9e03894db1cd3148d"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00045.parquet",
+      "sha256": "a1c7509d40667ae0f62913ff02ed2734bff93d2f2287f049cac1769222b8e710"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00046.parquet",
+      "sha256": "45758bc91c3867bfc133ca0bcb38da2d056ae95c5a7a0f98ac179799aa807517"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00047.parquet",
+      "sha256": "e608db26f2b4b2b68e954c0c49e59286947a64644eb6649aa3f7c0a4a0036032"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00048.parquet",
+      "sha256": "a924b01c896514f75dcc58c1f822f54caedf04f4e155a48548370d1b05e9d2b4"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00049.parquet",
+      "sha256": "993f5b751aa3acdeef55cf84fb0a29176eb02f5a1eecd5d0b72618c2eae144c4"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00050.parquet",
+      "sha256": "e9d1275e192cea7bd91ea04dade577ffdbfc1586dcafb372d3e22821501ac470"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00051.parquet",
+      "sha256": "59a022d6ee7f8a6829372a6223ce1ded3ca4502ee2de3f6bd3e3195040b1f980"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00052.parquet",
+      "sha256": "ebc3c933096029cf2d86ae4354dc73c6f180811f851b2ac9564dd13877865daf"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00053.parquet",
+      "sha256": "e27b17a7d0cbbad9706b25d57e092547715dca7a7fa742922c4635b497da0f2e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00054.parquet",
+      "sha256": "e917c1329691381b799e15fbfefb246a848b3aff8cbe4026c28992284dec68ad"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00055.parquet",
+      "sha256": "ec5912f877173536dc7bd40b0ff9bcc90d0572183e7af4a7878d0f8b341ded1b"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00056.parquet",
+      "sha256": "187f2598f5c592538eab9f74a371b58568ece2e4bac2575fd174fa47819281c4"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00057.parquet",
+      "sha256": "96285591d0bfc4fb7e11ea04717b59554bfb815ae4d898a5496c938693d13314"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00058.parquet",
+      "sha256": "ec448ee8aacfa3f8b6e6850ceda9d532f74a89381e7c001c643f3cfe95b70f31"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00059.parquet",
+      "sha256": "c776f0f115d4c0c6aaaf8cd77fc28da3cf2fe6be85315a699040f4da556c9383"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00060.parquet",
+      "sha256": "1f4fc67544e98b4e332790c1a6e182ca65d6f99fadacdf0a636cce5301607294"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00061.parquet",
+      "sha256": "016b6c040fb4a628ed7a91aede784f861643110e2f48bc582deb2920229ec517"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00062.parquet",
+      "sha256": "9ce7b5d2f70c3c6568f6513d01e5325ad9f52b6a4938bb36582e48288d0e6560"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00063.parquet",
+      "sha256": "09d2e084bbc6a4e9ee77530280ba8b508d7d01cbef8196257d24640a2a144508"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00064.parquet",
+      "sha256": "e1def21ea8a4e89de509f4686cad96254e79c9b1712fa1774c33a7348f55cdeb"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00065.parquet",
+      "sha256": "5d7985e40e34990cb762ba2d6a80ade73fc3519b4ca8493f7419ea9f946fc161"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00066.parquet",
+      "sha256": "298b0c27e6c3c83a7bfa01849e9a72a7d5b45db3cbad2decb4df6853811a6a68"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00067.parquet",
+      "sha256": "24d68a7c2e39fc9abc24a340838b8b7b9aea42d0b8ed488e496e76ca4af22ab8"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00068.parquet",
+      "sha256": "4aa963cc50f74945f1c252b44cffea3955ba59490f869c75de879b68ecfe79b4"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00069.parquet",
+      "sha256": "2a3bc789e8e971d9a1370d287e8d8790b3ad914a5e9d3478028085260f27b4ab"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00070.parquet",
+      "sha256": "8e4eebab022b8f1e9b37e7588ca3eb949dc0bcade936012bcf3d34062cbf37f2"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00071.parquet",
+      "sha256": "014c1f8df0a3a75b9132f9ec1b0e6d5f0e5e44e3dbb680d6fb7993d0c88d91cd"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00072.parquet",
+      "sha256": "1c03d9f9ab9320bd3cf9401c0452b03513e54d9f1a5992e348ce214d9ec81c31"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00073.parquet",
+      "sha256": "f8a12dd9db187cc1db42b71aaaa9a888bdd8f490bbfbb8be20b2c59811011dbf"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00074.parquet",
+      "sha256": "1e8ea34b62c7f5df5165f9c8c8a18b342cd72f51185c719288e323ae32c980b6"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00075.parquet",
+      "sha256": "7e415f85a4b74874f3de8a57d031262f63c1e8f00f18c0c0c2d7a140ba82ec41"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00076.parquet",
+      "sha256": "d2f640b2c18175a1e5464aa9caec1ae6c5ee91ef276c35e8c07300c011437afe"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00077.parquet",
+      "sha256": "2e04de957bc1449264a27554e4098ea94ccad50d36fcda2ded2f32f957d169ba"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00078.parquet",
+      "sha256": "30cdc62cd6a329d4f659c824729d9eb58238a0222ce94e239a628f5c915e00bc"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00079.parquet",
+      "sha256": "a328110b2e5a74fc7f15c0bbc1db20f5d1dc7b46be12d6b47cd2429abd556095"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00080.parquet",
+      "sha256": "e13447e63cee8c1830800c4452b58089b3d16c32f15fda918879cac26ed572d3"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00081.parquet",
+      "sha256": "9e0d051162a4d7a85d0218b0e7e68df41bdf7457b83ccd8cf1a5bdbe3361109c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00082.parquet",
+      "sha256": "5ba7b21993a812214613e8f3e392e7f64e7f0642246fc008a61d8061691069ea"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00083.parquet",
+      "sha256": "c868e67353e3dbb38e0c1d9c1dac595711bdd48d1a08a751d0526c60202a0b46"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00084.parquet",
+      "sha256": "209f3f8273a2a8e9dc75ef47dd47ea331187d92116e013c495a2f35c2db5ae00"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00085.parquet",
+      "sha256": "9d9935cf264937165008a8f70654e76f1477fb3d33e3ac390d8e1761535263bc"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00086.parquet",
+      "sha256": "640c34dd316bd223547a75d6e87c39a330fba458893f89d41a10327ec7c12390"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00087.parquet",
+      "sha256": "1a23c095fa54052e9ab57c757b230025780fb6af62c8377b3403f06cdfcf2d4c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00088.parquet",
+      "sha256": "ed791960367dec45ecc82e43292205c9921a4e8200eb559304f1cd9af677e9f1"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00089.parquet",
+      "sha256": "99b11af2594517fae230bbb5d0556aa08eef6967d6847896821157b0db17317e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00090.parquet",
+      "sha256": "ea80cc26bcc132c5e3ac2873ce47d24d2815421e3aac61e443454e7a67e01e9e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00091.parquet",
+      "sha256": "a3bc441d7de2c679246ef3db7624ee03334f84df7a9902cd0fd6f0c1627d68b0"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00092.parquet",
+      "sha256": "8903a1ae40f0009762720e01e6671a53d5afdf4199a6c715ef982aa2de68f22f"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00093.parquet",
+      "sha256": "dc1cb82d7315611f22e69290027fa95ed58bd058a40be2ae4c6daa992aaf0da6"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00094.parquet",
+      "sha256": "b046752d7c35dc0f38347c0e53e1effb44a9b439ad732ebfaa2335725fed1432"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00095.parquet",
+      "sha256": "f31da9bd02a6dd61aa37b80155242341605dd8a67683d8f6ab2c42787f287cf3"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00096.parquet",
+      "sha256": "241e549e2056061f0801b19737e430fdfbaae85c730e7a17268d75bcffc3cd42"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00097.parquet",
+      "sha256": "8f9800cda11edaedb763b6a3ab791b7760cf695d8e09e28e6dacdcf591767dee"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00098.parquet",
+      "sha256": "3324aa2ac88ec62ccce3f2c2fa36330fff22ce776edf946ce7cfffdc12c57d9a"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00099.parquet",
+      "sha256": "f379a7f46131504a6111f0ef417a039cc48ec68164a939e5a08e6eebde0f8a76"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00100.parquet",
+      "sha256": "61c01eb2ae1c1312e028a80f13d38c60d545e8d1725f473b0a6e5780afc29735"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00101.parquet",
+      "sha256": "2de8930d32babad1f75bc8d7fbeb6e5b189ef9fd254f8ab9d9638558717011c2"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00102.parquet",
+      "sha256": "0f1e4c71b37e98ccf123a7511fa863e0a3798cd67117ae4f515849d58fa0be1c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00103.parquet",
+      "sha256": "c46a8ef2df1b48c3f0b4e33b8d067fd33f294e7fa82357872ca8c128149e5ba9"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00104.parquet",
+      "sha256": "e32400d282d8373c4255874c3c31093bc7f9705048be3f4e58fdc61879391ba5"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00105.parquet",
+      "sha256": "86633d183326405c540e33c03ae45d87c109e435427d7b8e6cb420b85b70ecae"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00106.parquet",
+      "sha256": "c191fb13c1372869131949bf7bb607d43ddca3bbb8a28c2a6f1d01e8571fc6f8"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00107.parquet",
+      "sha256": "8e026b0c6fb8be1550ab9eeee88d64024e528a7c9535bda4eb89cdca935028dd"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00108.parquet",
+      "sha256": "2c922f73584270e62718b4c35a90291076c3333661a413e2127429173d808272"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00109.parquet",
+      "sha256": "5931bfe1b5e1b0cb66fd97ebc293dbf11ea87207b8511b6470bb6461a0f11049"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00110.parquet",
+      "sha256": "1ab36572e76568364975bba2365bf60cc682852efb9aab2bdeb5591a70789d7e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00111.parquet",
+      "sha256": "7170c3d8efc37106ef6a070370aa208fbf1b45658d0ba6159f8188957c189a13"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00112.parquet",
+      "sha256": "3639f51bd24a0c750ca090666972dd3eb2af3036232bcc29bfb12e47c7d33c1e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00113.parquet",
+      "sha256": "dfea1ecef3426bb57290f07922da3f17e99d74fd5d89cd45aa79a395b4be31e1"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00114.parquet",
+      "sha256": "4b269db0de52c54ae7fcfb5b8a6b5bdb271fda9eebfaea93c1656d21c86437d1"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00115.parquet",
+      "sha256": "f1adc14af8274509673476a6bcdfef6db6b335e84c71a8dbea696657300c6814"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00116.parquet",
+      "sha256": "15bd52552dee4059aa9f8e07e3e460d3b3a74c9358bdb957bc5fb577a4ce4433"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00117.parquet",
+      "sha256": "e6f91311ee04c28c6d2fe3f278c5aa57ea092d22265f42be6e01876a819a5b05"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00118.parquet",
+      "sha256": "9273ceb53a3dc5c0414b5f2056e9ed4506654951d6b8eec89b2829c697fad822"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00119.parquet",
+      "sha256": "748c7a70898addb444dcd3a1170908bcb1c94b25dfd5ad7b67abc248212740b7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00120.parquet",
+      "sha256": "736fd37bb64dde62d62e62fa08c0bfac177d6f60f579b7bb09e2e3e4bcf28443"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00121.parquet",
+      "sha256": "716ad10e50074f5c4fea8a8429c44200ab581183c63af7d64c446d840369a655"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00122.parquet",
+      "sha256": "483fc20250e1dfc1e73083b3a20e2311f22991f58fe45a757800778cdf2cc42d"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00123.parquet",
+      "sha256": "4a6807d2c89215a8a4bd53be01317001989999970f7e35bc4f5ea01113d58b7c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00124.parquet",
+      "sha256": "6e8d352e2236a3e76e5157d005e22a0dbb6abe2d1bfdd4626c7ce38e9847509f"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00125.parquet",
+      "sha256": "167369e444a7d8e007bb121cec054fe5ea796dec5ca601b765ef9413cb12fcef"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00126.parquet",
+      "sha256": "3966c33538f246d13f58c28900d00147e9285b5388eedf8088fa3740753d5fed"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00127.parquet",
+      "sha256": "a167504282a2f1cfe5b73826a87012979cd498f316097f8125622434dcbbe89d"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00128.parquet",
+      "sha256": "4b2df17b1c64c7550b3ab6beddb9c41f507f1e312b28b07a8f9b0d4e0da44a5b"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00129.parquet",
+      "sha256": "9c25e16bd38a1dbd2cd23fb92e070d86a3b7b691aed8c2f08745d7ab43319045"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00130.parquet",
+      "sha256": "281b363974680912c8c0280d22a9c91a8dc4846545a78434544c1ca3e4fc401f"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00131.parquet",
+      "sha256": "b0fe0cbeaa224665bb8000de5176ac8435879bf0e5ebb70679c68f57109d43cd"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00132.parquet",
+      "sha256": "a5fa02916364e554b359512bd296e636615725039d4542dcf11825ca9794da3e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00133.parquet",
+      "sha256": "a5e97a664a9ce6f7f50174f73d87529752432ea81a1e6a3a25b80a466cf33359"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00134.parquet",
+      "sha256": "9a61b083620153a646f1dcb4b8f159dda5d9e8d933d38d06f0a5a12dba5e2096"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00135.parquet",
+      "sha256": "85b3843f482143303c8e39d04a8ab59527e8a7f9ecd74184efb2519b2996920a"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00136.parquet",
+      "sha256": "099f0eb45f3f0c1c4af3ba5b9bc47b9d58c34593731c72d86f589502b1e90f1d"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00137.parquet",
+      "sha256": "7e255170c9231ce5fb7fec97800fa172c23fcb779839abb728843092bde6bff7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00138.parquet",
+      "sha256": "ad251e7aa3f614a51446b395b42bde9de668b44c932794991fcd8ce618d05135"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00139.parquet",
+      "sha256": "bba6e7c857a3c445ee0f90eb91906ccfcf4bad24988be8ee583c8e9da7f5461c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00140.parquet",
+      "sha256": "28926c06090b87cc6723b7bfad15bed1c86a8ece82c1d2e3efd6271f19dc026b"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00141.parquet",
+      "sha256": "6064bb9b67e8c14c11c631ad510043a05dd0787bb01457a7c6441e4975b6cbfe"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00142.parquet",
+      "sha256": "f6a295c75a963099c07e3dc95e7a995d635473efe0dcec156579d835f9188cd7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00143.parquet",
+      "sha256": "40b4a97edfc2bcccd2d7fd632f64badaed09a05d2cfc2783cdb8153960074012"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00144.parquet",
+      "sha256": "9cc0f0531ced006261f8400a360e1b78d7f657901dac42aea07288f2a6b5223c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00145.parquet",
+      "sha256": "48d04a05ba92b3215372ec00ccce91811ec6f35891393fa45ed7bce045ef6612"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00146.parquet",
+      "sha256": "384407eab587739829536c4bce77d8d3349a1793f37beda63547321c0a5d74b7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00147.parquet",
+      "sha256": "3a1db6da6aedd5a5447ee13da94b55b54966c48ec7f702bb057c108887ec1047"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00148.parquet",
+      "sha256": "91a13f84f9575632ea606fdc2ea1ab3a6686035d429672df8b9bec29b7469ac1"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00149.parquet",
+      "sha256": "68ce130df18104d4d40384cb4584d3fdd048794156688abf796e77b5fa6dd9fe"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00150.parquet",
+      "sha256": "5f83a29ea8444bcbaa446f4e5f981d611603381cd26810481b6303adefbd4b3d"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00151.parquet",
+      "sha256": "84c2145d289a74173d8c171e2aa7849eb470c8ee5c9f11ee975d6634225add00"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00152.parquet",
+      "sha256": "12434c670b3f71cf0d878f432204d34f7c1cd04fa28384d5e795763b856b55ef"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00153.parquet",
+      "sha256": "c737d376f93c7baf512e4a6e1085640a17a15fe9824f7c357b5f0a3dc2e8f099"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00154.parquet",
+      "sha256": "131aea39b5ca45d3f58a3c6941880a0b7d9da3f42f232c0b4e635d3e5e5a966b"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00155.parquet",
+      "sha256": "528c50595b41b1167a91cad2c406b8d45cf52c3e9c3af86c730b467693c95c14"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00156.parquet",
+      "sha256": "090c76509b28e7d32f7ad49f7f23418a37b5a6d036d7e5117a1631d2eba34648"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00157.parquet",
+      "sha256": "fbaa563e0ef740b7e7662b11818d4676e975387737cf098cac358775a25e3fdf"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00158.parquet",
+      "sha256": "3c382c38a1c63b248397191cc433da85b1c201c5c4ba1836c1ebb19d4c2c6927"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00159.parquet",
+      "sha256": "74d09c4e4c02b3e73fe2ffaea21f7bd8a7abf0aaaeb47f59f61a3c9676a1c29a"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00160.parquet",
+      "sha256": "23a4417d4f4443b8469259e25aa663ea9979738a65592c56a36c20f8739f0963"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00161.parquet",
+      "sha256": "b463ece7fab718f8584c22908db0af78efd25875ed269805ca8104737456ee3e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00162.parquet",
+      "sha256": "2b364b2c8e7a82e881d9a4737d234da8ae3f6d2fa6ef15fbb226aac54598e12d"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00163.parquet",
+      "sha256": "5aa663ac5cdbf18244fe3a68f402f2775726f67dc0df160d5508cff54bbbf905"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00164.parquet",
+      "sha256": "b64dd8e7aec5314e106e465ba1a3a5d64ec0729af1d37201bf7891cc08c19faf"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00165.parquet",
+      "sha256": "210f8cd8f46350feea67cd62870667fb455fa6cd9ece3c74fa950f164bcd20a2"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00166.parquet",
+      "sha256": "303e8b5514e470b44d2dcf66475a2002f623ea83ffc8f283db7d3bf3c8cde29c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00167.parquet",
+      "sha256": "4056b6e023875ce4f13998d80f1037d2f0e3f3e486da372f0fdaf5eb787b1811"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00168.parquet",
+      "sha256": "fb79e3deb47bbee34c304b317e5acfc9e08674f540ef0247e25a473e707f5af1"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00169.parquet",
+      "sha256": "762669baf4446024d46cad38176151e271f0bd193365f7f46e827681b9642d39"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00170.parquet",
+      "sha256": "b3936c753afa66a31a13f22e09ac2125711c2ad16494e10df56a608e0c2e500d"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00171.parquet",
+      "sha256": "7c56d56103cfc0d420c779603edcb3ca5abc3e84c05bd1043d3d531a45703a4c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00172.parquet",
+      "sha256": "d450bd30e983f79cc52f70ebca9eb63c68aba615676cd49d7c282fdfbaa452b3"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00173.parquet",
+      "sha256": "d4f463effa60e81d69e89dd208129df560ec0bd5393a3418c8ef60a549db0c8e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00174.parquet",
+      "sha256": "8b7d12880de9d32ed4e45a532a3e7199923176f3bb17382ae7b8415a28c1fa08"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00175.parquet",
+      "sha256": "4bc480594b3216d7f7d12ea4584ff693a7b7e397030274eb4e9c74f2bf45aaa5"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00176.parquet",
+      "sha256": "d14bc277a22c5a19eef1e97178c646c02c2b475c7b411a87314e7c836dbe7070"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00177.parquet",
+      "sha256": "d649db6f3f9e3bcbeb70d5c310c82f5392561b943f9682243b74b5395d1fe9a8"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00178.parquet",
+      "sha256": "69283d7333c726f3a62cefe2347ff2efd5dde0c163b66fb1403382c2f82a4dc6"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00179.parquet",
+      "sha256": "b1c8a8d79cb68f40fe8ce6532572119a1b50977bf6bb33f891a90a1d7f47cf62"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00180.parquet",
+      "sha256": "02c5c19e41f09aeec972c91e0a134f47066e76c17821bb5709b31c517a409109"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00181.parquet",
+      "sha256": "f4f66df7b3c1c3855b2f39285384de608a35a409d86eee56629e95729c0c31c3"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00182.parquet",
+      "sha256": "6638db590c807c27eabc16fcb24496d32d0e216d63efb64c7ef0cf8cf592465c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00183.parquet",
+      "sha256": "4831e54193241f2561e50162152c665fa223e4808c3bed76ed3bf2c7380f89c6"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00184.parquet",
+      "sha256": "e64c5e1f216185a071413a4f3e724d2bbca6c1a92c04dd845ef50f91690ca70b"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00185.parquet",
+      "sha256": "dcd15baca938b4c1a6d4e242c20af2ec66cc3c107a79ee7ecf778827f532dd68"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00186.parquet",
+      "sha256": "80ef2a77ae789046393600d3b55ba31f0bc5bcf13f0aa30a3997f2b53eeaceb9"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00187.parquet",
+      "sha256": "b88d4682aade0eb60bdfa167f4ccd6945a7a3f451d52e5e90da523c12a1d2fd7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00188.parquet",
+      "sha256": "1cf941ab0d7840f2547ac14f89f99c03e4674b703f259971d1078ec8922df107"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00189.parquet",
+      "sha256": "278b42d066d047872324fd18dc5425c109c8a9d807da03b1ce9958b88bb3d092"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00190.parquet",
+      "sha256": "c2a7c2c0d227387774d9b5ca6f4b7f567cc61dd324390fe61648728994270d68"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00191.parquet",
+      "sha256": "42d32325b237d41b10cde826aea94e62f3da42977c763427ad580d8e14f65cb7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00192.parquet",
+      "sha256": "951c1000d7a5d29fbee8b0a66e305239a510cf631d74e050992db97345bac650"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00193.parquet",
+      "sha256": "7b2d4a53d64769c8aec65bffaf01072c59ae4699be553e395581420cac8a525e"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00194.parquet",
+      "sha256": "d951c3250eed367ff9fd3b5718b0722da1c773459c9e4327dc4093886a8ea17c"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00195.parquet",
+      "sha256": "2a64ffb7843ec5d4f7dfffe31d3f0341dfdd93ff8a1c57278ef9965bde721485"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00196.parquet",
+      "sha256": "be63df3387752ac11f659f5eac2720867d392251e6de66200e9fde406a383c4b"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00197.parquet",
+      "sha256": "9d66bb5962fbdc9ce3babf27a51fb95ee44d38b83021c3b1e7dcd806a9722ebe"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00198.parquet",
+      "sha256": "085128475b67c9fbc30b418053bfa3ba9ece191e2b4be0f60ecdcfbe3a58229a"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00199.parquet",
+      "sha256": "f22a03fd7bae3d8b8ab20043ddda849ea444ea032e9ffee6c52bfb22d6a37f6a"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00200.parquet",
+      "sha256": "5b6ac8ef1695be13bc597613c1680b61857d854fb70fc42472e4c00fb7e30a97"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00201.parquet",
+      "sha256": "c60c0def2743b33deadac1515dafdc0c9d0454dd9b81d96794b38fd47b8557dd"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00202.parquet",
+      "sha256": "33f4906129b5a38013150ffe0faff8265f478100b17f93b3f92ab4ed675a9dc9"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00203.parquet",
+      "sha256": "5f5f1d5c699a689d4511dce15933e58a6317564176a28abed6c58c89b2eeadd7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00204.parquet",
+      "sha256": "515c74b989f5350aaf6adb8d363e33399463ab1d61b9830ef07cde23ff3819e7"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00205.parquet",
+      "sha256": "035ca066539b98d6f50bfa493da4a8c95ea6c90a102f45f04d4ad2a6408231df"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00206.parquet",
+      "sha256": "614f9bcc9fb1f2a9b95ef9454555380ec2fa39533734e2ee654d780aa48e92ab"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00207.parquet",
+      "sha256": "0608757351f5cc5674f992f6860eb2a1ad786b30ff7627023fce6fcfb97ea819"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00208.parquet",
+      "sha256": "1fb934d73d44c043f746a3fb4f817c340ecd6c366fc2909148283b00836889aa"
+    },
+    {
+      "path": "runs/e91-mimo-rlzero-sft-20261107/bootstrap/initial-accuracy/scores/part-00209.parquet",
+      "sha256": "0e51b377bc526046dd820350ccc967cd568ee94534ae3583c22713e2af2a95b3"
+    },
+    {
+      "path": "runs/unified-evaluation-20261031/questions-v2/public/MATH-500.parquet",
+      "sha256": "a80b619277597b461e8068d4fa76a3068c977672230b55e655b62ee5de45cc13"
+    },
+    {
+      "path": "runs/unified-evaluation-20261031/questions-v2/public/AMC23.parquet",
+      "sha256": "fe3133847867d9c4caf6cd3b9e46faec5af3c66ead95e0722dc41013986509b1"
+    },
+    {
+      "path": "runs/unified-evaluation-20261031/questions-v2/public/AIME24.parquet",
+      "sha256": "6360c0c3f894d4bd19b2a262c80284401cbdfb793f627fc6ec8cde394ea83b70"
+    },
+    {
+      "path": "runs/unified-evaluation-20261031/questions-v2/public/AIME25.parquet",
+      "sha256": "9a0f71d460eccc20a9e1a188cf253330c79b47483482e335c4f7ed0385360dbe"
+    },
+    {
+      "path": "runs/unified-evaluation-20261031/questions-v2/public/AIME26.parquet",
+      "sha256": "3293faed638bb48e4fdbc09abf5d7b4a2f610fb30fcc888d47b460dc524578b3"
+    },
+    {
+      "path": "runs/unified-evaluation-20261031/questions-v2/public/LCBv5.parquet",
+      "sha256": "205f4345ea9842f25ff178a0ec73124e80cd67dd9577a57f90fd13dd4ccc87bf"
+    },
+    {
+      "path": "runs/unified-evaluation-20261031/questions-v2/public/GPQA-Diamond.parquet",
+      "sha256": "9a05e9eb99d0bf2acf2979af73abc2f454626682897f6a21f331f866de7a2156"
+    },
+    {
+      "path": "runs/unified-evaluation-20261031/questions-v2/public/IFEval.parquet",
+      "sha256": "d87c8c9e2754b88a3efc1f5354d15e9da0bb4e3938652b8b69a1ea3875927a9f"
+    }
+  ],
+  "model_identity": "checkpoint-v2:c42c14e35d555bb8bb2464951fb2900c96d38f4af9607fac791a53a9668cc80e",
+  "protocols": {
+    "math": {
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": -1,
+      "max_new_tokens": 24576,
+      "prompt_limit": 8192,
+      "repetition_penalty": 1.0,
+      "repetition_detection": {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8
+      },
+      "seed": 42,
+      "model_family": "qwen25",
+      "template_json": "{}",
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "answer_channel": "after_thinking"
+    },
+    "code": {
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": -1,
+      "max_new_tokens": 24576,
+      "prompt_limit": 8192,
+      "repetition_penalty": 1.0,
+      "repetition_detection": {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8
+      },
+      "seed": 42,
+      "model_family": "qwen25",
+      "template_json": "{}",
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "answer_channel": "after_thinking"
+    },
+    "science": {
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": -1,
+      "max_new_tokens": 24576,
+      "prompt_limit": 8192,
+      "repetition_penalty": 1.0,
+      "repetition_detection": {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8
+      },
+      "seed": 42,
+      "model_family": "qwen25",
+      "template_json": "{}",
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "answer_channel": "after_thinking"
+    },
+    "if": {
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": -1,
+      "max_new_tokens": 8192,
+      "prompt_limit": 8192,
+      "repetition_penalty": 1.0,
+      "repetition_detection": {
+        "min_pattern_size": 16,
+        "max_pattern_size": 128,
+        "min_count": 8
+      },
+      "seed": 42,
+      "model_family": "qwen25",
+      "template_json": "{}",
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "answer_channel": "after_thinking"
+    }
+  },
+  "execution": {
+    "scheduler": "global_bounded_v1",
+    "routing": "least_inflight",
+    "replicas": 4,
+    "concurrency": 64,
+    "result_buffer": 64,
+    "chunk_size": 64,
+    "wall_seconds": 16103.955367453396,
+    "preflight_seconds": 0.9277767091989517,
+    "publication_seconds": 47.569283694028854,
+    "last_admission_to_completion_seconds": 68.8250971287489,
+    "new_response_tokens": 65252208
+  },
+  "limitation": "Initial SFT baseline only; teacher bootstrap and all E91 optimization/readouts remain separate."
+}
