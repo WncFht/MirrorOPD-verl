@@ -61,12 +61,14 @@
 # E55-E62          16     100    1600      1e-6    10/-1      no
 # E63-E68          16     40     640       1e-6    -1/-1      yes
 # E71              32     25     800       1e-6    -1/-1      yes
-# E72-E73          16     20     320       1e-6    -1/-1      yes
+# E72-E73,E91      16     20     320       1e-6    -1/-1      yes
 # E74-E77          32     50     1600      1e-6    -1/-1      yes
 # E78-E80          16     100    1600      1e-6    -1/-1      yes
 # E81              16     25     400       1e-6    5/-1       no
-# E82,E85-E90      16     100    1600      1e-6    5/-1       no
-# E83-E84          16     100    1600      1e-6    5/25       no
+# E82              16     100    1600      1e-6    5/-1       no
+# E83              16     100    1600      1e-6    5/25       no
+# E84              16     100    1600      1e-6    20/25      no
+# E85-E90          16     100    1600      1e-6    20/-1      no
 #
 # shared LR 继承公共 launcher；其余模型、资源、验证长度以最终配置为准。
 # 编号别名：E21=E15; E22=E13。
@@ -105,6 +107,8 @@
 # source/history RKL关闭；四域固定bank在0/1/2及每5 outer评分，current RKL与完整accuracy在0/25/50评分。
 # MIMO_QUESTIONS指定prepared题目，MIMO_BOOTSTRAP指定对应teacher的新银行；关闭MTP推测解码与辅助训练；最终只导出HF模型并重载核对；完整设置见teacher-transfer/transfer-mechanism/mimo/。
 #
+# E91：MiMo-7B-SFT student ← MiMo-7B-RL-Zero direct-RL teacher；复用E72/E73的20 outer、reuse16、320 updates、batch128设置，仅改变student初始化。E72已覆盖同一teacher的RL→Base。
+#
 # E74/E75：Olmo3 Base学习C3PO（SFT+RL）/IVON-SFT；E76/E77：Qwen2.5-14B Base学习Light-R1/R1-Distill。
 # E76/E77阶段不匹配：Light-R1在R1-Distill之后额外做3K SFT再GRPO，缺RL直接起点的SFT-only权重。
 # 四组使用明确登记的共同SFT tokenizer协议视图，原始参数不改；Light-R1记录7个特殊ID的标签变化。
@@ -116,9 +120,9 @@
 #
 # E81/E82：Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507；MDPO kappa1/eta0.1。4卡shared_sync、batch=mini-batch256、n1/reuse16；A=25 outer/400更新，B=100 outer/1600更新。无初始验证，每5 outer及终点验证；不保存checkpoint。每引擎并发64/TP1、显存0.8；precompute_fused/chunk512、bf16；验证avg16/31744；训练与验证默认开启重复提前停止。
 #
-# E83/E84：继承E82的100 outer/1600更新与LR1e-6；E83=future none/seq-mean-token-mean，E84=future mean(gamma1)/token-mean。每25 outer同步保存完整训练状态，仅保留最新一份，另保留最终HF模型。
+# E83/E84：继承E82的100 outer/1600更新与LR1e-6；E83=future none/seq-mean-token-mean，E84=future mean(gamma1)/token-mean。E83维持4卡/每5 outer验证；E84改为8卡/每20 outer验证（20/40/60/80/100）。每25 outer同步保存完整训练状态，仅保留最新一份，另保留最终HF模型。
 #
-# E85–E90：继承E82预算与MDPO设置，改用8卡 shared_sync；E85/E86/E87分别为none下的token-sum、seq-mean-token-sum、seq-mean-token-sum-norm；E88/E89/E90分别为token-mean下的future sum、discounted_sum(gamma=.99)、discounted_mean(gamma=.99)。E87–E90 使用MATH-500 n=4、其余四个数学bench n=16；E85/E86维持原avg@16。六组均save_freq=-1、resume_mode=disable，不保存checkpoint、HF模型或optimizer。
+# E85–E90：继承E82预算与MDPO设置，改用8卡 shared_sync；E85/E86/E87分别为none下的token-sum、seq-mean-token-sum、seq-mean-token-sum-norm；E88/E89/E90分别为token-mean下的future sum、discounted_sum(gamma=.99)、discounted_mean(gamma=.99)。E87–E90 使用MATH-500 n=4、其余四个数学bench n=16；E85/E86维持原avg@16。每20 outer及终点验证，100 outer内共5次，无初始验证。六组均save_freq=-1、resume_mode=disable，不保存checkpoint、HF模型或optimizer。
 #
 # E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。
 # END GENERATED EXPERIMENT OVERVIEW

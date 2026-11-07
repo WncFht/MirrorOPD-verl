@@ -273,6 +273,12 @@ def preset_catalog() -> dict[str, Preset]:
     for number, steps, reuse in ((71, 25, 32), (72, 20, 16), (73, 20, 16)):
         preset = presets[f"E{number}"]
         presets[f"E{number}"] = replace(preset, budget=replace(preset.budget, steps=steps, reuse=reuse))
+    # E91 tests whether an already-SFT MiMo student absorbs the existing
+    # direct-RL teacher. E72 already covers the same teacher with Base student.
+    presets["E91"] = replace(
+        presets["E72"],
+        pair=replace(presets["E72"].pair, student="MiMo-7B-SFT"),
+    )
     for number, arm in ((78, "S"), (79, "S0"), (80, "T")):
         presets[f"E{number}"] = Preset(
             Budget(100, 16, -1, -1, initial_validation=True, align_seeds=True, original_data=True, lr="1e-6"),
@@ -299,9 +305,13 @@ def preset_catalog() -> dict[str, Preset]:
             environment=tuple(environment.items()),
         )
     for number, future, aggregation in ((83, "none", "seq-mean-token-mean"), (84, "mean", "token-mean")):
+        environment = dict(presets["E82"].environment)
+        if number == 84:
+            environment["STUDENT_GPUS"] = "8"
         presets[f"E{number}"] = replace(
             presets["E82"],
-            budget=replace(presets["E82"].budget, save=25, keep=1),
+            budget=replace(presets["E82"].budget, test=20 if number == 84 else 5, save=25, keep=1),
+            environment=tuple(environment.items()),
             overrides=(
                 f"distillation.distillation_loss.full_vocab.future.mode={future}",
                 "distillation.distillation_loss.full_vocab.future.gamma=1.0",
@@ -330,7 +340,7 @@ def preset_catalog() -> dict[str, Preset]:
             environment["VAL_N_PROFILE"] = "math4_rest16"
         presets[f"E{number}"] = replace(
             presets["E82"],
-            budget=replace(presets["E82"].budget, save=-1, keep=None),
+            budget=replace(presets["E82"].budget, test=20, save=-1, keep=None),
             environment=tuple(environment.items()),
             overrides=(
                 f"distillation.distillation_loss.full_vocab.future.mode={future}",
@@ -774,6 +784,9 @@ def preset_overview() -> str:
             "source/history RKL关闭；四域固定bank在0/1/2及每5 outer评分，current RKL与完整accuracy在0/25/50评分。\n"
             "MIMO_QUESTIONS指定prepared题目，MIMO_BOOTSTRAP指定对应teacher的新银行；"
             "关闭MTP推测解码与辅助训练；最终只导出HF模型并重载核对；完整设置见teacher-transfer/transfer-mechanism/mimo/。",
+            "E91：MiMo-7B-SFT student ← MiMo-7B-RL-Zero direct-RL teacher；"
+            "复用E72/E73的20 outer、reuse16、320 updates、batch128设置，仅改变student初始化。"
+            "E72已覆盖同一teacher的RL→Base。",
             "E74/E75：Olmo3 Base学习C3PO（SFT+RL）/IVON-SFT；E76/E77：Qwen2.5-14B Base学习Light-R1/R1-Distill。\n"
             "E76/E77阶段不匹配：Light-R1在R1-Distill之后额外做3K SFT再GRPO，缺RL直接起点的SFT-only权重。\n"
             "四组使用明确登记的共同SFT tokenizer协议视图，原始参数不改；Light-R1记录7个特殊ID的标签变化。\n"
@@ -789,11 +802,13 @@ def preset_overview() -> str:
             "precompute_fused/chunk512、bf16；验证avg16/31744；训练与验证默认开启重复提前停止。",
             "E83/E84：继承E82的100 outer/1600更新与LR1e-6；"
             "E83=future none/seq-mean-token-mean，E84=future mean(gamma1)/token-mean。"
+            "E83维持4卡/每5 outer验证；E84改为8卡/每20 outer验证（20/40/60/80/100）。"
             "每25 outer同步保存完整训练状态，仅保留最新一份，另保留最终HF模型。",
             "E85–E90：继承E82预算与MDPO设置，改用8卡 shared_sync；"
             "E85/E86/E87分别为none下的token-sum、seq-mean-token-sum、seq-mean-token-sum-norm；"
             "E88/E89/E90分别为token-mean下的future sum、discounted_sum(gamma=.99)、discounted_mean(gamma=.99)。"
             "E87–E90 使用MATH-500 n=4、其余四个数学bench n=16；E85/E86维持原avg@16。"
+            "每20 outer及终点验证，100 outer内共5次，无初始验证。"
             "六组均save_freq=-1、resume_mode=disable，不保存checkpoint、HF模型或optimizer。",
             "E41/E54 Full-KL 与 full-vocab MDPO 默认对齐终止动作 [151643,151645]；"
             "FULL_KL_TERMINATION_TOKEN_IDS=[] 可恢复原始词表目标。",

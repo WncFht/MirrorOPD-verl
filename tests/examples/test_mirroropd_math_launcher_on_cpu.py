@@ -1394,9 +1394,11 @@ def test_topd_learning_signal_presets_preserve_e82_budget_and_full_state(tmp_pat
     actor = cfg.actor_rollout_ref.actor
     loss = omega_conf_to_dataclass(cfg.distillation).distillation_loss
     assert cfg.trainer.total_training_steps == 100 and cfg.trainer.total_epochs == 2
-    assert cfg.trainer.n_gpus_per_node == 4 and cfg.distillation.execution_mode == "shared_sync"
+    assert cfg.trainer.n_gpus_per_node == (8 if preset == "E84" else 4)
+    assert cfg.distillation.execution_mode == "shared_sync"
     assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 256 and actor.ppo_epochs == 16
-    assert cfg.trainer.test_freq == 5 and not cfg.trainer.val_before_train
+    assert cfg.trainer.test_freq == (20 if preset == "E84" else 5)
+    assert not cfg.trainer.val_before_train
     assert cfg.trainer.save_freq == 25 and cfg.trainer.max_actor_ckpt_to_keep == 1
     assert set(actor.checkpoint.save_contents) == {"model", "optimizer", "extra", "hf_model"}
     assert set(actor.checkpoint.load_contents) == {"model", "optimizer", "extra"}
@@ -1466,6 +1468,7 @@ def test_topd_eight_gpu_ablation_presets_disable_checkpoints(tmp_path, preset, f
     assert cfg.trainer.n_gpus_per_node == 8 and cfg.distillation.execution_mode == "shared_sync"
     assert cfg.trainer.total_training_steps == 100 and cfg.trainer.total_epochs == 2
     assert cfg.trainer.save_freq == -1 and cfg.trainer.resume_mode == "disable"
+    assert cfg.trainer.test_freq == 20 and not cfg.trainer.val_before_train
     assert loss.full_vocab.future.mode == future and loss.full_vocab.future.gamma == gamma
     assert actor.loss_agg_mode == aggregation
     assert actor.optim.lr == 1e-6 and actor.ppo_epochs == 16
