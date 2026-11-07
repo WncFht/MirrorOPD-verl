@@ -1,6 +1,6 @@
 # MirrorOPD 研究代码
 
-从仓库根目录运行。`studies` 按研究问题组织实验、分析和绘图；`core` 提供公共 IO、指标、统计和证据身份；`backends` 负责 HF、FSDP2 与评测的执行；`runtime` 管理进程和运行源码；`checks` 保存独立数学核验。文档仍位于原来的 `docs` 目录。
+从仓库根目录运行。`studies` 按研究问题组织实验、分析和绘图；`state_analysis` 是独立的 state 分析工具包；`core` 提供公共 IO、指标、统计和证据身份；`backends` 负责 HF、FSDP2 与评测的执行；`runtime` 管理进程和运行源码；`checks` 保存独立数学核验。文档仍位于原来的 `docs` 目录。
 
 ## 查找与运行
 
@@ -12,6 +12,9 @@ python -m examples.mirroropd.research
 python -m examples.mirroropd.research fixed_transfer --help
 python -m examples.mirroropd.research cross_batch.long_batch_transfer --help
 
+# 查看独立 state coverage 工具
+python -m examples.mirroropd.research.state_analysis.oneshot_state_coverage --help
+
 # 重算已有统计，使用明确的数据目录
 python -m examples.mirroropd.research cross_batch.analyze_long_batch_transfer \
   --data ../wandb-logs/MirrorOPD-verl/analysis/twenty-batch-pass-20261027
@@ -20,7 +23,7 @@ python -m examples.mirroropd.research cross_batch.analyze_long_batch_transfer \
 python -m examples.mirroropd.research production.refresh_tables --logs-repo ../wandb-logs
 ```
 
-命令名是 `studies` 下的相对模块名；数学核验使用 `checks.objectives.verify_fixed_prefix` 等名称。包内含 `__main__.py` 时直接使用包名，例如 `fixed_transfer`。命令由 Python 源码发现，不维护注册表或 manifest。也可以直接运行完整模块名，例如 `python -m examples.mirroropd.research.studies.cross_batch.long_batch_transfer --help`；分布式入口使用 `torchrun --nproc-per-node=2 --module examples.mirroropd.research.studies.cross_batch.long_batch_transfer ...`。
+命令名是 `studies` 或独立工具包下的相对模块名；数学核验使用 `checks.objectives.verify_fixed_prefix` 等名称。包内含 `__main__.py` 时直接使用包名，例如 `fixed_transfer`。命令由 Python 源码发现，不维护注册表或 manifest。也可以直接运行完整模块名，例如 `python -m examples.mirroropd.research.studies.cross_batch.long_batch_transfer --help` 或 `python -m examples.mirroropd.research.state_analysis.oneshot_state_coverage --help`；分布式入口使用 `torchrun --nproc-per-node=2 --module examples.mirroropd.research.studies.cross_batch.long_batch_transfer ...`。
 
 旧的 `transfer`、`precision`、`analysis`、`common`、`objectives`、`rollout_policy` 顶层包和旧的两段式 CLI 已删除，没有转发模块。活动文档使用新路径。冻结证据中的命令描述当时执行的源码，不是当前入口。
 
@@ -31,6 +34,7 @@ python -m examples.mirroropd.research production.refresh_tables --logs-repo ../w
 | 研究包                                   | 主要用途                                 | 文档入口                                                                               |
 | ---------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------- |
 | `state_sources`                          | S/I 来源、在线交集与固定输入控制         | [跨源泛化总览](../docs/experiments/teacher-transfer/cross-batch-transfer.md#mechanism) |
+| `state_analysis`                         | rollout state 表示、coverage 与分布诊断  | [State 分析](../docs/experiments/state-analysis/README.md)                             |
 | `cross_batch`                            | B/N/L 跨批、覆盖、batch 与单遍训练       | [跨批结果](../docs/experiments/teacher-transfer/cross-batch-transfer.md#batches)       |
 | `capability_filter`                      | 筛选、温度、功能保持与续写控制           | [能力筛选假说](../docs/experiments/teacher-transfer/mechanisms/capability-filter.md)   |
 | `spectral`                               | 梯度谱与教师候选核对                     | [谱与同架构诊断](../docs/experiments/teacher-transfer/mechanisms/spectral.md)          |
