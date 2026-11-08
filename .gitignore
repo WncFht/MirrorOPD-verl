@@ -213,6 +213,9 @@ outputs
 # MirrorOPD's scoped documentation tooling dependencies.
 /examples/mirroropd/tools/maintenance/node_modules
 
+# Local CI shutdown copies; restore the tracked workflow before committing source changes.
+/.github/workflows/*.disabled
+
 # Local development worktrees and execution artifacts stay inside this repository.
 /.worktrees/
 /runs/
@@ -231,3 +234,7 @@ outputs
 /examples/mirroropd/docs/experiments/teacher-transfer/data/polaris-position-kl-20261106/position-kl.csv
 # Literature search stderr is an execution diagnostic.
 /examples/mirroropd/docs/literature/teacher-transfer/sources/claim-audit-20261107/*.stderr
+
+# Rebuildable teacher-construction and fixed-state execution bundles.
+/examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/
+/examples/mirroropd/docs/experiments/teacher-transfer/fixed-state-results/
