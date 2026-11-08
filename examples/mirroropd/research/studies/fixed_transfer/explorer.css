@@ -1,0 +1,421 @@
+:root {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Microsoft YaHei",
+    sans-serif;
+  color: #243541;
+  background: #f3f6f7;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+select {
+  cursor: pointer;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #1b8b9f;
+  outline-offset: 2px;
+}
+header {
+  padding: 23px 32px;
+  background: #fff;
+  border-bottom: 1px solid #dce4e8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: #537583;
+  font-weight: 700;
+}
+h1 {
+  margin: 6px 0;
+  font-size: 23px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+header p {
+  font-size: 13px;
+  color: #5a6e79;
+  margin: 0;
+}
+.badge {
+  font-size: 12px;
+  color: #27636c;
+  background: #e9f4f4;
+  border: 1px solid #cce2e3;
+  border-radius: 20px;
+  padding: 8px 13px;
+  white-space: nowrap;
+}
+.workspace {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  min-height: calc(100vh - 110px);
+}
+aside {
+  background: white;
+  border-right: 1px solid #dce4e8;
+  padding: 23px 20px;
+  max-height: calc(100vh - 110px);
+  overflow: auto;
+  position: sticky;
+  top: 0;
+}
+main {
+  padding: 24px;
+  min-width: 0;
+}
+label.field {
+  display: block;
+  margin-bottom: 17px;
+}
+.field > span,
+.group-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 650;
+  color: #526975;
+  margin-bottom: 7px;
+}
+.field select,
+.search {
+  width: 100%;
+  border: 1px solid #d5dfe4;
+  background: #fff;
+  border-radius: 7px;
+  padding: 9px 10px;
+  font-size: 12px;
+  color: #243541;
+}
+.search {
+  margin: 10px 0;
+}
+.stage {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  margin: 9px 0;
+}
+.stage input {
+  accent-color: #257c8d;
+}
+.divider {
+  border: 0;
+  border-top: 1px solid #e5ebef;
+  margin: 20px 0;
+}
+.button-row {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+button {
+  border: 1px solid #d3dfe5;
+  background: #fff;
+  color: #3b5968;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+button:hover {
+  background: #edf5f7;
+}
+.primary {
+  background: #245c6a;
+  color: #fff;
+  border-color: #245c6a;
+}
+.primary:hover {
+  background: #1c4c59;
+}
+.teacher-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf1f3;
+}
+.teacher-row input {
+  accent-color: #257c8d;
+  margin: 3px 0 0;
+}
+.teacher-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.teacher-meta {
+  display: block;
+  font-size: 10px;
+  color: #748691;
+  margin-top: 3px;
+}
+.solo {
+  font-size: 10px;
+  padding: 3px 5px;
+  flex-shrink: 0;
+}
+.symbol {
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 4px;
+  line-height: 12px;
+}
+.hidden-row {
+  opacity: 0.45;
+}
+.small {
+  font-size: 11px;
+  color: #647a85;
+  line-height: 1.65;
+}
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 16px;
+}
+.summary h2 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+.summary p {
+  font-size: 12px;
+  color: #647a85;
+  margin: 0;
+}
+.stats {
+  display: flex;
+  gap: 8px;
+}
+.stat {
+  background: #fff;
+  padding: 10px 15px;
+  border: 1px solid #dfe7eb;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #647a85;
+  white-space: nowrap;
+}
+.stat strong {
+  font-size: 20px;
+  color: #2d5362;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.toolbar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 13px 16px;
+  border: 1px solid #dfe7eb;
+  border-radius: 9px;
+  margin-bottom: 16px;
+}
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 260px;
+  font-size: 12px;
+}
+.timeline input {
+  flex: 1;
+  accent-color: #257c8d;
+  min-width: 90px;
+}
+.timeline output {
+  font-variant-numeric: tabular-nums;
+  min-width: 52px;
+  color: #245c6a;
+}
+.shape-key {
+  font-size: 12px;
+  color: #526975;
+}
+.plots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.plot-card {
+  border: 1px solid #dfe7eb;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.plot-head {
+  padding: 14px 18px 0;
+  font-size: 13px;
+  font-weight: 650;
+  color: #3b5968;
+  display: flex;
+  justify-content: space-between;
+}
+.plot-head span {
+  font-size: 10px;
+  color: #748691;
+  font-weight: 400;
+}
+.plot {
+  height: 370px;
+  width: 100%;
+}
+.empty {
+  padding: 50px 20px;
+  text-align: center;
+  border: 1px dashed #c4d3dc;
+  border-radius: 10px;
+  color: #5a6e79;
+  background: #fff;
+}
+.notes {
+  background: #eaf1f4;
+  border: 1px solid #d9e4ea;
+  border-radius: 9px;
+  padding: 13px 17px;
+  font-size: 12px;
+  color: #526975;
+  line-height: 1.8;
+  margin-top: 16px;
+}
+.notes p {
+  margin: 0;
+}
+.notes details {
+  margin-top: 6px;
+}
+.notes summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.error {
+  padding: 20px;
+  background: #fff1ee;
+  color: #8d352b;
+  border: 1px solid #efc1b9;
+  margin: 20px;
+}
+.draglayer {
+  cursor: crosshair;
+}
+footer {
+  font-size: 11px;
+  color: #748691;
+  margin-top: 18px;
+}
+@media (min-width: 1700px) {
+  .plot {
+    height: 450px;
+  }
+}
+@media (max-width: 1100px) {
+  .plots {
+    grid-template-columns: 1fr;
+  }
+  .workspace {
+    grid-template-columns: 265px minmax(0, 1fr);
+  }
+  .stats {
+    display: none;
+  }
+}
+@media (max-width: 680px) {
+  header {
+    padding: 20px;
+  }
+  .badge {
+    display: none;
+  }
+  .workspace {
+    display: block;
+  }
+  aside {
+    position: static;
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid #dce4e8;
+    padding: 18px;
+  }
+  #teachers {
+    max-height: 240px;
+    overflow: auto;
+  }
+  .plots {
+    grid-template-columns: 1fr;
+  }
+  main {
+    padding: 16px;
+  }
+  .plot {
+    height: 340px;
+  }
+  .toolbar {
+    gap: 10px;
+  }
+}
+.metric-guide {
+  background: #fff;
+  border: 1px solid #dfe7eb;
+  border-radius: 8px;
+  padding: 13px 16px;
+  margin-bottom: 16px;
+  color: #526975;
+}
+.guide-title {
+  font-size: 13px;
+  font-weight: 650;
+  color: #345461;
+}
+.formula {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  color: #243541;
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+}
+.metric-guide p {
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 7px 0 3px;
+}
+.symbol-key {
+  font-size: 10px;
+  color: #748691;
+}
+.diagnostic-note {
+  padding: 0 18px 12px;
+}
+.diagnostic-note p {
+  margin: 4px 0;
+}
+.plot-head {
+  min-height: 34px;
+}

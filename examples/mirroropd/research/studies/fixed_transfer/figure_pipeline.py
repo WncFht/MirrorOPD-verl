@@ -148,7 +148,7 @@ def build(spec, output, force=False):
 def index(results, output, registry_path):
     rows = []
     guide = os.path.relpath(BASE.parent / "reproduction.md", output)
-    overview = os.path.relpath(BASE.parent / "fixed-state-results.md", output)
+    overview = os.path.relpath(BASE.parent / "fixed-state-results/README.md", output)
     lines = [
         "# 每个 run 的诊断图谱",
         "",
