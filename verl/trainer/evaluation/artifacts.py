@@ -60,6 +60,8 @@ RKL = _schema(
         ("bank", pa.string()),
         ("history_batch", pa.int64()),
         ("rkl_sum", pa.float64()),
+        ("rkl_position_sum", pa.list_(pa.float64())),
+        ("rkl_position_count", pa.list_(pa.int64())),
         ("tokens", pa.int64()),
     ]
 )
@@ -89,10 +91,11 @@ EVAL_RKL = _schema(
         ("trajectory_id", pa.string()),
         ("measure_id", pa.string()),
         ("uncoarsened_rkl_sum", pa.float64()),
+        ("uncoarsened_rkl_position_sum", pa.list_(pa.float64())),
         ("student_excluded_mass_sum", pa.float64()),
         ("teacher_excluded_mass_sum", pa.float64()),
     ]
-).with_metadata({b"verl.evaluation.schema_version": b"2"})
+).with_metadata({b"verl.evaluation.schema_version": b"3"})
 
 ACCURACY = _schema(
     [

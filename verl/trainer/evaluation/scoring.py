@@ -47,6 +47,9 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
         if space.spec.mode != "native" or space.termination_ids
         else []
     )
+    position_names = ["rkl_position_sum", "rkl_position_count"]
+    if extra_names:
+        position_names.append("uncoarsened_rkl_position_sum")
     step = trainer.actor_optimizer_step
     started = time.monotonic()
     timings, results = {}, []
@@ -68,6 +71,10 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
                 "trajectory_id": row.get("trajectory_id", row["id"]),
                 "rkl_sum": 0.0,
                 "tokens": 0,
+                **{name: 0.0 for name in extra_names},
+                "rkl_position_sum": [0.0] * 10,
+                "rkl_position_count": [0] * 10,
+                **({"uncoarsened_rkl_position_sum": [0.0] * 10} if extra_names else {}),
                 "measure_id": measure_id,
             }
         )
@@ -118,7 +125,7 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
                 scores = tq.kv_batch_get(
                     keys=actual_keys,
                     partition_id=meta.partition_id,
-                    select_fields=["rkl_sum", "rkl_count", *extra_names],
+                    select_fields=["rkl_sum", "rkl_count", *extra_names, *position_names],
                 )
                 for index, (key, total, count) in enumerate(
                     zip(actual_keys, scores["rkl_sum"].unbind(), scores["rkl_count"].unbind(), strict=True)
@@ -145,6 +152,7 @@ def score_native_rows(trainer, rows, *, hidden_size, budget, live_payload_bytes=
                             "tokens": int(count.item()),
                             "measure_id": measure_id,
                             **{name: float(scores[name][index].item()) for name in extra_names},
+                            **{name: scores[name][index].tolist() for name in position_names},
                         }
                     )
             finally:

@@ -35,3 +35,5 @@ class FullVocabObjectiveResult(NamedTuple):
     local_objective_sum: torch.Tensor
     future_coefficients: torch.Tensor | None = None
     future_score_sum: torch.Tensor | None = None
+    future_mass: torch.Tensor | None = None
+    future_mean_cost: torch.Tensor | None = None

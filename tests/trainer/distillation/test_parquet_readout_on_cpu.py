@@ -161,7 +161,17 @@ def runtime(tmp_path, monkeypatch):
             stored = queue.rows[(meta.partition_id, key)]
             count = int(stored["response_mask"].sum())
             risk = float(stored["responses"][0]) / (callback.pending_outer + 1)
-            stored.update(rkl_sum=torch.tensor([risk * count]), rkl_count=torch.tensor([count]))
+            from verl.trainer.distillation.evaluation import sample_position_sums
+            from verl.utils.metric.position import relative_position_bins
+
+            positions = stored["response_mask"].nonzero().flatten()
+            bins = relative_position_bins(positions, torch.full_like(positions, len(stored["responses"])))
+            statistics = sample_position_sums(torch.full((count,), risk, dtype=torch.float64), [count], bins)
+            stored.update(
+                rkl_sum=torch.tensor([risk * count]),
+                rkl_count=torch.tensor([count]),
+                **{name: value[0] for name, value in statistics.items()},
+            )
 
     trainer.actor_rollout_wg = SimpleNamespace(
         begin_rkl_readout=MagicMock(),
@@ -199,7 +209,12 @@ def test_initial_and_two_outer_readouts_publish_parquet_without_token_history(ru
         coverage = event.manifest(complete=True)["metadata"]["coverage"]
         assert coverage["expected_rows"] == coverage["observed_rows"] == coverage["valid_rows"] == 4
         assert coverage["scientific_complete"] and coverage["missing_rows"] == 0
-        assert len(event.read_rows("rkl.parquet")) == 4
+        scored_rows = event.read_rows("rkl.parquet")
+        assert len(scored_rows) == 4
+        assert all(sum(r["rkl_position_count"]) == r["tokens"] for r in scored_rows)
+        assert all(sum(r["rkl_position_sum"]) == pytest.approx(r["rkl_sum"]) for r in scored_rows)
+        assert metrics["eval/rkl/history/position/rows"] == 2
+        assert "eval/rkl/source_heldout/position/p50_60/mean" in metrics
         assert "eval/rkl/history/equal_batch_question_mean" in metrics
         assert all("response_ids" not in row for rows in callback.batches.values() for row in rows)
         refs = callback.store.read_rows(f"history/outer-{outer:03d}.parquet")

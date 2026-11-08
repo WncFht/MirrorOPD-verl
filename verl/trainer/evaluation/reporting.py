@@ -4,7 +4,7 @@
 
 from collections import defaultdict
 
-from .metrics import readout_metrics, summarize_rkl
+from .metrics import position_rkl_metrics, readout_metrics, summarize_rkl
 
 
 def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None):
@@ -57,6 +57,24 @@ def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None):
                 )
                 if "mean" in summary:
                     metrics[f"eval/rkl/{bank}/{diagnostic}"] = summary["mean"]
+    position_panels = defaultdict(list)
+    for row in rows:
+        bank = row["bank"]
+        position_panels[f"eval/rkl/{bank}"].append(row)
+        if bank.startswith("public_"):
+            position_panels[f"eval/rkl/{bank}/all"].append(row)
+            position_panels[f"eval/rkl/{bank}/{row['domain']}"].append(row)
+    for prefix, panel in position_panels.items():
+        metrics.update(position_rkl_metrics(panel, prefix=prefix + "/position"))
+        if any(r.get("uncoarsened_rkl_position_sum") is not None for r in panel):
+            metrics.update(
+                position_rkl_metrics(
+                    panel,
+                    prefix=prefix + "/uncoarsened_position",
+                    field="uncoarsened_rkl_position_sum",
+                    total_field="uncoarsened_rkl_sum",
+                )
+            )
     for alias, original in (aliases or {}).items():
         prefix = f"eval/rkl/{original}/"
         for key, value in list(metrics.items()):

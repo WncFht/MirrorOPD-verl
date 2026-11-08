@@ -198,7 +198,7 @@ def full_vocab_objective_result(
 def execute_objective(hs, ws, ht, wt, hq, wq, *, spec, plan, reduction, token_chunk, actions, row_weights=None):
     """Choose autograd storage once; all local/future blocks use the same loop."""
     prepare = partial(prepare_objective, spec=spec, fused=plan.fused, actions=actions, future=plan.future)
-    diagnostic_count = 4 if spec.diagnostics and not spec.teacher_only_kl else 0
+    diagnostic_count = len(_MIRROR_DIAGNOSTICS) if spec.diagnostics and not spec.teacher_only_kl else 0
     ht, wt = ht.detach(), wt.detach()
     hq, wq = (None if x is None else x.detach() for x in (hq, wq))
     if plan.strategy == "dense":
@@ -234,6 +234,20 @@ def execute_objective(hs, ws, ht, wt, hq, wq, *, spec, plan, reduction, token_ch
         )
     total, raw, costs, info, coefficients, score_sum = outputs
     diagnostics = {k: info[:, i] for i, k in enumerate(_MIRROR_DIAGNOSTICS)} if diagnostic_count else {}
+    mass = mean_cost = None
+    if plan.future:
+        from dataclasses import replace
+
+        from verl.trainer.distillation.reduction import suffix_credit
+
+        config = reduction.future_config
+        mass_config = replace(config, mode="sum" if config.gamma == 1 else "discounted_sum")
+        mass, _ = suffix_credit(torch.ones_like(costs), reduction.times, reduction.segments, mass_config)
+        mean_cost = (
+            coefficients
+            if config.mode in ("mean", "discounted_mean")
+            else torch.where(mass > 0, coefficients / mass.clamp_min(torch.finfo(costs.dtype).tiny), 0)
+        )
     return FullVocabObjectiveResult(
         total,
         raw,
@@ -242,4 +256,6 @@ def execute_objective(hs, ws, ht, wt, hq, wq, *, spec, plan, reduction, token_ch
         costs.sum(),
         coefficients if plan.future else None,
         score_sum if plan.future else None,
+        mass,
+        mean_cost,
     )

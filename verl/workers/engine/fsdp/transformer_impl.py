@@ -1355,7 +1355,9 @@ class FSDPEngineWithLMHead(FSDPEngine):
     def _readout_full_vocab(self, selected, head, micro_batch, positions, teacher_hidden, weight):
         """Read values only; training aggregation and future never enter readout."""
         config = self.full_vocab_config
-        from verl.trainer.distillation.evaluation import sample_sums, score_distribution_rows
+        from verl.trainer.distillation.evaluation import sample_position_sums, sample_sums, score_distribution_rows
+        from verl.utils.metric.position import relative_position_bins
+        from verl.workers.utils.padding import response_target_coordinates
 
         def readout(h, w):
             with torch.autocast(device_type=h.device.type, enabled=False):
@@ -1375,7 +1377,17 @@ class FSDPEngineWithLMHead(FSDPEngine):
                     else (),
                 )
             counts = [len(p) for p in positions]
-            output = sample_sums(values.pop("rkl"), counts)
+            targets, lengths = response_target_coordinates(
+                micro_batch["input_ids"], micro_batch["responses"], positions
+            )
+            bins = relative_position_bins(targets, lengths)
+            rkl = values.pop("rkl")
+            output = sample_sums(rkl, counts)
+            output.update(sample_position_sums(rkl, counts, bins))
+            if "uncoarsened_rkl" in values:
+                output["uncoarsened_rkl_position_sum"] = sample_position_sums(values["uncoarsened_rkl"], counts, bins)[
+                    "rkl_position_sum"
+                ]
             for name, rows in values.items():
                 output[name + "_sum"] = sample_sums(rows, counts)["rkl_sum"]
             return output
