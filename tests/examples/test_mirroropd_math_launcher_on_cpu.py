@@ -1398,6 +1398,7 @@ def test_topd_learning_signal_presets_preserve_e82_budget_and_full_state(tmp_pat
     assert cfg.distillation.execution_mode == "shared_sync"
     assert cfg.data.train_batch_size == actor.ppo_mini_batch_size == 256 and actor.ppo_epochs == 16
     assert cfg.trainer.test_freq == (20 if preset == "E84" else 5)
+    assert cfg.trainer.get("evaluation") is None
     assert not cfg.trainer.val_before_train
     assert cfg.trainer.save_freq == 25 and cfg.trainer.max_actor_ckpt_to_keep == 1
     assert set(actor.checkpoint.save_contents) == {"model", "optimizer", "extra", "hf_model"}
@@ -1410,6 +1411,10 @@ def test_topd_learning_signal_presets_preserve_e82_budget_and_full_state(tmp_pat
     assert loss.full_vocab.backend == "precompute_fused"
     assert cfg.actor_rollout_ref.rollout.max_num_seqs == 64
     assert cfg.actor_rollout_ref.rollout.val_kwargs.n == 16
+    if preset == "E84":
+        assert all("validation-budget/math4-rest16/" in path for path in cfg.data.val_files)
+    else:
+        assert all("validation-budget/" not in path for path in cfg.data.val_files)
 
 
 @pytest.mark.parametrize("preset,outers,updates,presentations", [("E81", 25, 400, 102400), ("E82", 100, 1600, 409600)])

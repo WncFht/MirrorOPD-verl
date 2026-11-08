@@ -46,7 +46,7 @@ E57 历史运行使用 precompute 与原混合精度配置，A/B 使用已验收
 
 ### E85–E90：八卡聚合与 future 消融
 
-2026-11-07 调整后续预设：E84 也改为 8 卡 shared_sync，保持 `future=mean`、γ1、`token-mean` 及原有完整状态保存规则。E84–E90 均改为每 20 outer 验证，节点为 20／40／60／80／100；无初始验证，100 outer 内从 20 次减至 5 次，次数降至原来的 1/4。每次验证的 n 不变：E84–E86 五基准均为 avg@16，E87–E90 为 MATH-500 n4、其余四集 n16。E82 的正在运行配置与 E83 的历史结果保持原设置。
+2026-11-07 调整后续预设：E84 也改为 8 卡 shared_sync，保持 `future=mean`、γ1、`token-mean` 及原有完整状态保存规则。E84–E90 均改为每 20 outer 验证，节点为 20／40／60／80／100；无初始验证，100 outer 内从 20 次减至 5 次，次数降至原来的 1/4。验证 n 的当前预设为：E85–E86 五基准均为 avg@16；2026-11-09 将 E84 与 E87–E90 统一为 MATH-500 n4、其余四集 n16，每个验证点共 4,080 条回答。E82 的正在运行配置与 E83 的历史结果保持原设置。
 
 E85–E90 均从 E82 的原始 Base 独立启动，固定 100 outer／1,600 optimizer updates、batch256／reuse16、full-vocab MDPO κ1／η0.1、LR1e-6 和其余 rollout 协议；唯一资源变化是使用 8 卡 shared_sync。E85/E86 保持原有五基准 avg@16 验证。尚未启动的 E87–E90 改为 MATH-500 n=4、AMC23 与三个 AIME 各 n=16；每个验证点由 10,080 条回答降至 4,080 条，减少约 59.5%。启动器在各运行目录写入带 `__rollout_n__` 的验证数据副本，原始题库不变。两种预算的估计精度不同，E85/E86 与 E87–E90 的验证曲线不作为同一评测预算直接比较。它们不保存周期 checkpoint、最终模型或 optimizer 状态：`trainer.save_freq=-1`，`resume_mode=disable`，用于快速筛选未测的目标形式。训练结束后只能使用日志与评测导出分析，不能从这些运行续训。
 
@@ -60,6 +60,8 @@ E85–E90 均从 E82 的原始 Base 独立启动，固定 100 outer／1,600 opti
 | E90  | `discounted_mean` | 0.99 | `token-mean`              | 折扣并按后续有效 token 数归一化   |
 
 E85–E87 只改变 aggregate，E88–E90 只改变 future；E84 的 `future=mean` 是无折扣均值基线。`sum` 可能让长回答的 future 系数变大，discounted 组同时改变时间权重和尺度，因此先比较终点任务读出、回答长度、重复停止率、future/local surrogate、preclip norm 与裁剪比例，不把单一准确率差异直接解释成更好的信用分配。实现合同中的 `discounted_*` 只允许 γ<1；这里统一使用 0.99，不搜索学习率、κ 或 η。E87–E90 与 E85/E86 的评测预算变化也须纳入结果解释。
+
+E82–E90 当前预设使用 MATH-500、AMC23、AIME24、AIME25、AIME26 的原生生成验证，没有配置 `trainer.evaluation`，不建立或评分固定 bank RKL。训练中的 teacher RKL 及其位置读出依赖当前训练前缀，不能作为固定 bank 指标；新增 bank 位置统计能力不会自动启用 bank 评测。
 
 ## 并发与吞吐
 
