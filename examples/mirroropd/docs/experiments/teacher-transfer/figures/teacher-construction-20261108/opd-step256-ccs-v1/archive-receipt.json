@@ -1,0 +1,26 @@
+{
+  "status": "RAW16-CCS256-observed-points-only",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/opd-step256-ccs-v1",
+  "data_archive_receipt_sha256": "abb5d15bc2be005237895bc1f720b46d85810b04f0692b53d9b303bb73860bb0",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "audit": "Both fv.audit outputs passed with zero issues",
+  "visual_qa": "Both actual PNGs inspected: RAW0/16 and CCS0/16/64/128/256 only; common axes, full intervals, no fit, clipping or overlap. Unequal observed endpoints are not a ranking; common absolute linear axes expose initial scale difference.",
+  "artifacts": {
+    "absorption-absolute.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-absolute.pdf": "505c2471a5714bc6d381344287923557fb8323e019a54b899588594d274fb93b",
+    "absorption-absolute.png": "ac098bca054aad5c8d897ca13424bf263d68095342ecf9fcc0debe43fcfce2d2",
+    "absorption-relative.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-relative.pdf": "92870b1d6f458b9b1d1270b1e1e170be6d60e6df9df0975f2a4c67c540f05493",
+    "absorption-relative.png": "9fd8caa51798a46dd3d6f00afe5ae90456259dc20ed92d91d100b9a2302281e8",
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "plotting-source.py": "07ad69ca641f8aaf05dd70f337e88bb1dcdddb75df19e049364311c82d12e528",
+    "provenance.json": "ad0a7078bb8694f2fb2e37fc43df1da7f5539e037d494067ca153beb663d3c5d",
+    "risk-summary.csv": "6df1a24c5df90412a28cdf12769ad7d89b3bc4a7353d74d165669e22b7d37600",
+    "source.py": "2c53c6f897fcb669fe4d41e1dcf9271f9d5223e2bde7a7200d0b4e214b586384"
+  }
+}

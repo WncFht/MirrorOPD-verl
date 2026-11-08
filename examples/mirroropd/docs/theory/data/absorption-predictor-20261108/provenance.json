@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-08",
+  "command": "OPENBLAS_NUM_THREADS=1 python -m examples.mirroropd.research.studies.fixed_transfer.absorption_predictor_checks --output runs/absorption-predictor-20261108/check-v1",
+  "source_sha256": "a3752688a6de8da6985a365ee318a8aaa73a77af298a3ddb813d58209d12c92c",
+  "artifacts": {
+    "checks.json": "af7a8290fe141c1d90156b3db1aabe6b41fc019a642d8908a38c6d0e841878a0",
+    "source.py": "a3752688a6de8da6985a365ee318a8aaa73a77af298a3ddb813d58209d12c92c"
+  },
+  "primary_sources": [
+    {
+      "path": "runs/absorption-predictor-20261108/papers/dpo/2305.18290.tex",
+      "sha256": "b5ff00e04ee31f2c499b855d756371ef7879e8f3a363ee42592d879379019a4c"
+    },
+    {
+      "path": "runs/absorption-predictor-20261108/papers/vanishing/2610.11247.tex",
+      "sha256": "4bedda3d987c689a35cd1c99aba43bab2f3f7f75ebca514c55f11fa180808889"
+    }
+  ]
+}

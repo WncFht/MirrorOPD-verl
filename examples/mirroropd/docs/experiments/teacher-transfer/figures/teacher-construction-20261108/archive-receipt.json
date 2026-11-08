@@ -1,0 +1,16 @@
+{
+  "source_snapshot_sha256": "f8711c07fab9a13babc89b22dc2a629dd972a02c39f247bc87d0d61e1a72be25",
+  "style": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/dotfiles/.agents/skills/figure-viz/assets/mpl/fvstyle.py",
+  "style_sha256": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+  "artifacts": {
+    "candidate-data.png": "b89b93cf1e1423a9481e3853b68cbddfeba5759a82c8f5a48a7270b3921ccbce",
+    "candidate-data.pdf": "ab33483f25d1805ac63f825e61d5ec792f55b269b0468f51fb69a006c4d671a7",
+    "candidate-data.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "candidate-coverage.csv": "2ee2182755486b15fe3653d9d50a8ee250d3ce170c6868402fc85b16e2a71606",
+    "candidate-reward.csv": "0f024c1ffdc4b39e2d2e2275a92baf4afc921b3115f4230d5305d66452c74793",
+    "results.json": "4aef2101cffc2f281a9a9a381461038d4872a18f82b5da5319ae87f15573bdd3",
+    "provenance.json": "71fb38aaaad30625a8a422c0624d72ff9a03abe5e6ad435390e831b7ce96e037"
+  },
+  "visual_qa": "passed: both panels readable, zero bar baseline, data expectation labelled; no clipping/overlap",
+  "audit": "PASS: fv.audit(fig) returned no issues."
+}

@@ -2,7 +2,7 @@
 
 训练与评估现在共用`DistributionSpec`和`ModelPairContract`，由既有 FSDP head 路径执行。V1 训练循环、RolloutService、SharedTeacherScorer、HiddenBatchIO 和 Parquet 产物层保持原有职责；新增模型或输出支持不再另写训练器。
 
-科学设置仍由[四域协议](../../experiments/teacher-transfer/protocols/online-four-domain.md)维护；已完成的正式结果见[JustRL 数学蒸馏与跨域 RKL](../../experiments/teacher-transfer/fixed-state-results.md#r1-15b-student)。本页先保留设计历史与数值依据，再说明当前接口和验收。
+科学设置仍由[四域协议](../../experiments/teacher-transfer/protocols/online-four-domain.md)维护；已完成的正式结果见[JustRL 数学蒸馏与跨域 RKL](../../experiments/teacher-transfer/fixed-state-results/README.md#r1-15b-student)。本页先保留设计历史与数值依据，再说明当前接口和验收。
 
 当前实现包括：显式条件支持及排除质量、raw/coarse 具名读出、Llama 线性 head、等价 token ID 一一映射、启动前模型检查、共享 checkpoint 身份、生成与判分身份分离、公共 TQ 轨迹适配和按真实 forward dtype 规划的窗口。不同分词边界、bias／softcap／量化 head 仍需独立 adapter。实际接口见[评估包合同](../../../../../verl/trainer/evaluation/README.md#分布模型与输入适配)。
 

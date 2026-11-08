@@ -1,0 +1,26 @@
+{
+  "status": "two-arm-observed-through-step128",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/opd-step128-v1",
+  "data_archive_receipt_sha256": "950d9934111eadeaf65585eac18266fe3ef863cb335541ab279cfe8e18e67b95",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "visual_qa": "Both actual PNGs inspected: observed 0/16/64/128 checkpoints; common axes within each figure, all intervals retained, readable labels/legend, no clipping/overlap; no fitted extrapolation.",
+  "audit": "Both fv.audit outputs passed with zero issues.",
+  "artifacts": {
+    "absorption-absolute.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-absolute.pdf": "47106b942bc203a003f3027d00717439dc1e01207239c074a432f43681a3315f",
+    "absorption-absolute.png": "4673921b847e005a53ef8ef8ef3fb7185a6f6d5f1d79770c20c9871117770942",
+    "absorption-relative.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-relative.pdf": "bc1659c30cd3ff82fbe7a50b1903ef59f9827abecb0972f3749a9e1f879225b2",
+    "absorption-relative.png": "0b2213abd7d1e8bf0b0ba9b820b6e746247163c10853f1311dafb6829fc150e8",
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "plotting-source.py": "07ad69ca641f8aaf05dd70f337e88bb1dcdddb75df19e049364311c82d12e528",
+    "provenance.json": "62628200dd1540b084214f221e2b0bddbbbd197035a28eb8a05f5b5290ec9a71",
+    "risk-summary.csv": "52f2e392ce1bcab1bd1ca19863f9b21035616ef7fbdcea6cf671402a87a39af6",
+    "source.py": "2c53c6f897fcb669fe4d41e1dcf9271f9d5223e2bde7a7200d0b4e214b586384"
+  }
+}

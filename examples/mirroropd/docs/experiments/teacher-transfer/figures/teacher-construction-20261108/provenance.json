@@ -1,0 +1,14 @@
+{
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/teacher_construction_analysis.py",
+  "source_sha256": "f8711c07fab9a13babc89b22dc2a629dd972a02c39f247bc87d0d61e1a72be25",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1",
+  "view": "candidates",
+  "partial": false,
+  "inputs": {
+    "teachers/CCS-rho1/candidate-weights.jsonl": "d13e46fdab6aa7a038a63f0c5525312419993c4435f391b4e9606dba7d143261",
+    "prepared/teacher.jsonl": "71d2dc16fa75fdb9c4843646a4beff30a4ec4310c68259a62388da2ae80c0db0",
+    "candidate-weight-expectations.json": "b4a425e68807e367fa0a49e18ae47d240d8f2423f590b5c6bc78d0e3d1097a91"
+  },
+  "conditioning": "One training seed; paired bootstrap over questions, not training seeds"
+}

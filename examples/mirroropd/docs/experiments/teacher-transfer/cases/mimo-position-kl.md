@@ -1,6 +1,6 @@
 # MiMo position-KL: E71 / E72 / E73
 
-更新：2026-11-07。Student 均为 MiMo-7B-Base。新启动的 [E91](2026-11-07-E91-MiMo-RL-Zero到SFT学生.md)使用 MiMo-7B-SFT student，目前只有完整初始 accuracy，尚无 optimizer update 或 position RKL，因此本页保留 E71/E72/E73 的已完成曲线。
+更新：2026-11-08。Student 均为 MiMo-7B-Base；E91 使用 MiMo-7B-SFT student，已完成 320 updates，但本页仍只维护 E71/E72/E73 的位置曲线。E91 的最终 RKL 与评估读出见[阶段对照](../post-training-stages.md#e91)。
 
 ## 实验设置
 
@@ -97,6 +97,8 @@ E71 与 E73 的 matched-budget 轨迹接近。训练完 A 后，未见 B 的 RKL
 为检查顺序混杂，又在同一 64 题上把顺序反转为 D→C→B→A，重跑 E71 与 E73。64 步终点的 A/B/C/D 分别为 E71 `0.062/0.085/0.103/0.173`、E73 `0.066/0.081/0.113/0.170`；反序下两者仍然接近。正序和反序共同显示，RKL 在当前批下降、在后续批更新后对旧批部分回弹，且回弹位置随顺序移动。这个现象更支持有限预算下的共享参数干扰与顺序效应，暂时不支持 SFT teacher 特有的跨 batch 吸收障碍。反序结果保存在 [E71-DCBA](../data/mimo-batch-transfer-20261107/rl-math-dcba.json) 和 [E73-DCBA](../data/mimo-batch-transfer-20261107/sft-math-dcba.json)。
 
 ## 数据与复算
+
+正式 E71/E72/E73 的 initial-student 与 teacher 两套固定 bank 吸收分析见[MiMo 双 held-out bank 结果](../fixed-state-results/absorption-diagnostics.md#mimoinitial-与-teacher-双-held-out-bank)；[离线交互面板](../fixed-state-results/figures/mimo-absorption-20261107/explorer.html)可切换 bank、domain、指标和 teacher。该分析不含本页的 64 题连续 batch 诊断实验。
 
 [首末观测 CSV](../data/case-position-kl-20261107/mimo-endpoints.csv)保留每个 outer 的真实 update 编号、全局 RKL 和十个位置桶；[数值表 CSV](../data/case-position-kl-20261107/mimo-summary.csv)用于上表。[来源哈希](../data/case-position-kl-20261107/manifest.json)记录冻结输入和脚本版本。生成器为 [`plot_case_position_kl.py`](../figures/plot_case_position_kl.py)，同名图片提供 PNG、PDF、SVG 三种产物。
 

@@ -1,0 +1,39 @@
+{
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/teacher_construction_analysis.py",
+  "source_sha256": "41be499d3fd4b04dd52f64ef6f03c562030a69738e69f985898848e6d78644fa",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1",
+  "view": "capabilities",
+  "partial": true,
+  "inputs": {
+    "protocol.json": {
+      "sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+      "omitted_trailing_bytes": 0
+    },
+    "prepared/benchmark.jsonl": {
+      "sha256": "49fcfc5e29f8c146ee84fa78643926174114719cb28df915572add6b699a3071",
+      "omitted_trailing_bytes": 0
+    },
+    "benchmarks/CCS-rho0-student/responses.jsonl": {
+      "sha256": "e01af27cc562269ce82d009744d18f642a89dc062d978621565a229bbee7a561",
+      "omitted_trailing_bytes": 0
+    },
+    "benchmarks/CCS-rho0-teacher/responses.jsonl": {
+      "sha256": "329376e60a93fa30c1db842abda4c89559cf386f4d4d763f99b34ab3663055c9",
+      "omitted_trailing_bytes": 0
+    },
+    "benchmarks/CCS-rho1-student/responses.jsonl": {
+      "sha256": "84fc921a82fd04b7444fb894d65633f50fa5ca84c6f9fb46829cc3161a735472",
+      "omitted_trailing_bytes": 0
+    },
+    "benchmarks/CCS-rho1-teacher/responses.jsonl": {
+      "sha256": "f97424876aba910d54d01576aa38a69d47bb0723123856d1912b8b961d8e316f",
+      "omitted_trailing_bytes": 0
+    },
+    "benchmarks/base/responses.jsonl": {
+      "sha256": "ade518a68b22e1a6cab66c11c8f73715357accdf490cf1252cec526f87564ace",
+      "omitted_trailing_bytes": 0
+    }
+  },
+  "conditioning": "One training seed; paired bootstrap over questions, not training seeds"
+}

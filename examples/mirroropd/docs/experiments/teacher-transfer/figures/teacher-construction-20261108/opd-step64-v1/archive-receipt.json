@@ -1,0 +1,26 @@
+{
+  "status": "two-arm-observed-through-step64",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/opd-step64-v1",
+  "data_archive_receipt_sha256": "72bd062cf03d7b7f6bd67bb5f011959d83674adbe3650460fc28f8f00edbada6",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "visual_qa": "Both actual PNGs inspected: observed 0/16/64 checkpoints, common axes within each figure, paired intervals retained, readable labels/legend and no clipping or overlap. Absolute common scale exposes the large math distance; relative plot supplies per-domain changes.",
+  "audit": "Both fv.audit outputs passed with zero issues.",
+  "artifacts": {
+    "absorption-absolute.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-absolute.pdf": "f580c522c79a118b3e7548d5dcaf97bee8bb9e71a47721bb08430c399016dade",
+    "absorption-absolute.png": "528d4ab791780c0dba3641dac6aa2c4cbd16a32b91fa3669fb9c3574f5f735fc",
+    "absorption-relative.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-relative.pdf": "3d6fc1970cc36e5500b308b382017dfb9a8cb9bfd60967701a53914ea272d409",
+    "absorption-relative.png": "a097051c2336e4767cefb6a0ca71b327f1ff3258c495828841db622532c3dc51",
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "plotting-source.py": "07ad69ca641f8aaf05dd70f337e88bb1dcdddb75df19e049364311c82d12e528",
+    "provenance.json": "150036ecd41a721315b01c07d25ebe2bc44e0d98dd0b4e71a67128c893050a73",
+    "risk-summary.csv": "1e7ca534df7d7abb88972bf25e783cdd8b23ab6cf4e5e842f2753e3c50aa5299",
+    "source.py": "2c53c6f897fcb669fe4d41e1dcf9271f9d5223e2bde7a7200d0b4e214b586384"
+  }
+}

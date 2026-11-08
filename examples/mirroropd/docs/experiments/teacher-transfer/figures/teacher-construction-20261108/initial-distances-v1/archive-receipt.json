@@ -1,0 +1,27 @@
+{
+  "status": "two-teacher-initial-features-only",
+  "source_snapshot_sha256": "7b80d42b90b4c2b713aa69258489120566affd46210d55e91adbe2319e524387",
+  "style_sha256": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+  "artifacts": {
+    "initial-distance-scatter.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "initial-distance-scatter.pdf": "7b0fd4ac2e2ceb93144683e5afcaec5684caf7822a5920b0bdb7536889bb314d",
+    "initial-distance-scatter.png": "0f6eeeabfb7f4f840cbfa3d1abcf3d656ec6305c93f1e41e7443f2be0ca659bf",
+    "initial-feature-questions.csv": "eb2c7488170795a0064ee5147753ff683e0d0348c44f61449bcd6bdbc03c93fd",
+    "initial-feature-tails.csv": "ac80c9e2a5da7d54e3b6bc61a4603ebc1aba6420aef28f3a8009fdb50e8a83c8",
+    "inputs/opd/CCS-rho0/development.jsonl": "c6e10f5d6040b950b7deb8bd224aecebcc448a2724e722d07d2cf5a951200e04",
+    "inputs/opd/CCS-rho0/heldout-teacher-bank.jsonl": "130f3c3b7915415d711338d9a5b005681f6752720b6a96e776b000746fdc7998",
+    "inputs/opd/CCS-rho0/heldout.jsonl": "b5b0a4d7fc347cd784f0382b2f92b975a308d9ea0583744830e5c4c1991bd359",
+    "inputs/opd/CCS-rho1/development.jsonl": "f66426691dadbfdfdc245ec44ea861741bba73f52cc6fb030dabeba7d4e49118",
+    "inputs/opd/CCS-rho1/heldout-teacher-bank.jsonl": "835c651959d946c32ebf0580ca7e526dd15a43cd1d1173d3d6f7503fc5f8ec32",
+    "inputs/opd/CCS-rho1/heldout.jsonl": "0abf455af3aee008b7e41f8e7c900a7af9ec91518eb3b832907a923715bb66b2",
+    "inputs/prepared/dev.jsonl": "115f870c8e57716dcf40de7b5e39158ae96b97e0f4406a65f107a5e5de643780",
+    "inputs/prepared/evaluation.jsonl": "ec1b05e576d8a312d5471a25b0512c2840dfb9e79d4ac0164e698ed0aacafec2",
+    "inputs/protocol.json": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+    "provenance.json": "91326cbd8bcd0dbecd809c60433f3e2a1b846cd4f505a8a33feea4047a0f16ba",
+    "results.json": "e929de31f61277057b11bca27fb19f7e1215772293553b87f01017300a0c000b",
+    "selected-prefix-audit.json": "b08f795ff4bb66b67d890391c7cd44157de0af0ce8d5533aefbcdf557af71395",
+    "source.py": "7b80d42b90b4c2b713aa69258489120566affd46210d55e91adbe2319e524387"
+  },
+  "audit": "PASS: fv.audit(fig) returned no issues.",
+  "visual_qa": "passed: common log axes, legible method colors and labels; all initial points retained, no fit, no clipping or overlap"
+}

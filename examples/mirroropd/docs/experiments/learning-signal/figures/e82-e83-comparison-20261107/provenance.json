@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-11-07T07:08:53+00:00",
+  "snapshot_utc": "2026-11-08T05:19:38+00:00",
   "sources": [
     {
       "path": "examples/mirroropd/research/studies/weighted_targets/plot_e82_e83.py",
@@ -33,8 +33,8 @@
     },
     {
       "path": "runs/topd-large-batch-20261105/formal/E82/metrics.jsonl",
-      "bytes": 5957449,
-      "sha256": "87df3955d78710407ac515c2bb53f67fcb4f1f182b28bfaaf8c0af37930cbe26"
+      "bytes": 8726514,
+      "sha256": "48865af0a7f7518c4a439e55273736e70aac803cab160715f60afc0554c25c40"
     },
     {
       "path": "runs/topd-large-batch-20261105/formal/E82/metrics-exclusions.json",
@@ -107,9 +107,44 @@
       "sha256": "5d222b6187785506b5d3dcd7cc6fff66eeb363c6a8fd527321f22e63e4c1a113"
     },
     {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/70.jsonl",
+      "bytes": 159186210,
+      "sha256": "c47ff9c80fe5d0dd9f7b5cec8e5d2e749dbc42d54fe2bd2e22ba6924fb6a9c92"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/75.jsonl",
+      "bytes": 156056355,
+      "sha256": "88d29015179c5c69dabddc139dd03831fc766bfd4d437ca1a8f13ee1f57c62d0"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/80.jsonl",
+      "bytes": 150800296,
+      "sha256": "2dabb15fe2692d863ef36beb2c24d3a5b6b6fee0f85766da6b408d55b0cb9ef7"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/85.jsonl",
+      "bytes": 151478137,
+      "sha256": "6c4bf1e898098058ab36a819911390f2d10d34cb7f24435fe0d74fb220df437f"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/90.jsonl",
+      "bytes": 150496206,
+      "sha256": "4e238807e1cf52d3dd7820213763a4a80eea81a0e94bf2eb03109eb9ea7a2ec4"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/95.jsonl",
+      "bytes": 147528368,
+      "sha256": "0151d0103ede83acf837c93befd900622b5a67dbee47217903258087a9bc3ed8"
+    },
+    {
+      "path": "runs/topd-large-batch-20261105/formal/E82/validation/records/100.jsonl",
+      "bytes": 149087296,
+      "sha256": "ab539f4c6375e02848572987da09fb6828b5b3fb608fcda68b9cf727a25d5c0a"
+    },
+    {
       "path": "runs/topd-large-batch-20261105/formal/E82/metrics.jsonl",
-      "bytes": 5957449,
-      "sha256": "87df3955d78710407ac515c2bb53f67fcb4f1f182b28bfaaf8c0af37930cbe26"
+      "bytes": 8726514,
+      "sha256": "48865af0a7f7518c4a439e55273736e70aac803cab160715f60afc0554c25c40"
     },
     {
       "path": "runs/topd-learning-signal-20261106/formal/E83/metrics.jsonl",

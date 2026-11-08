@@ -1,0 +1,29 @@
+{
+  "status": "Actual three-arm endpoints;ERT pending",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/three-arm-capabilities-v1",
+  "data_archive_receipt_sha256": "1ebb6d5905c68c20166e153e3b4d73a8e44d528b5c8927de240611202473aa6a",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "audit": "fv.audit zero issues on both figures",
+  "visual_qa": "Both actual three-arm figures visually inspected;fv.audit returned zero issues;ERT left empty;negative gains and pointwise CIs retained;no fit.",
+  "plotting_helper_source": "examples/mirroropd/research/core/plotting.py",
+  "artifacts": {
+    "capability-gains.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "capability-gains.pdf": "307bf9152da7950132df83cc6ba4de317569e48f8f6bfddaea1179fdf25cd10a",
+    "capability-gains.png": "6be3b029c0b15671ef20fb8b373be3a13e9087577f9ca6704b85deaae74152b2",
+    "capability-summary.csv": "ae7ca0bbe3da1a070a8c4fa063d77a5a474c50824aa3dd2cfdb6e62f15f10ab2",
+    "distance-provenance.json": "330c385efb92262ede0a816142e17105b074fa537281327f4ad03adeea825765",
+    "distance-risk-summary.csv": "1c8e30d99f006ddf38dc3488bbb58f86a2f15bcfeecca78c1e5d2fb50956dc4f",
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "plotting-source.py": "07ad69ca641f8aaf05dd70f337e88bb1dcdddb75df19e049364311c82d12e528",
+    "provenance.json": "a23310ef099b7e7e763b543c33676e2cc56822d86010c085ed9a32fc91962571",
+    "source.py": "41be499d3fd4b04dd52f64ef6f03c562030a69738e69f985898848e6d78644fa",
+    "teacher-distance-capability.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "teacher-distance-capability.pdf": "ccb6b7130abb0426888f53b2d1c2e2718118235247cbef9655f7124d1c9703c8",
+    "teacher-distance-capability.png": "74ff321ac4352a5a06ac39f0ff5877a97c30eead859ad598d69bc23c18b0fde4"
+  }
+}

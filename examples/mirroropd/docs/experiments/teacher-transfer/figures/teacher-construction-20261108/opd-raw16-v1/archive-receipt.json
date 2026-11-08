@@ -1,0 +1,26 @@
+{
+  "status": "RAW16-CCS128-observed-points-only",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/opd-raw16-v1",
+  "data_archive_receipt_sha256": "2ec6c81f5bb4576291988f7e9d42bb4fd26d6f3d20ece82e00321ee8884ffad6",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "audit": "Both fv.audit outputs passed with zero issues",
+  "visual_qa": "Both actual PNGs inspected: RAW0/16, CCS0/16/64/128 only. Common axes; no extrapolation, overlap or clipping. Absolute linear axes show large initial scale gap; normalized axes resolve absorption. Unequal observed endpoints are not method ranking.",
+  "artifacts": {
+    "absorption-absolute.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-absolute.pdf": "ed3a6eb1f5bee1652832a27fe090ce71324af9b7f36704bddaed9fe94ee46026",
+    "absorption-absolute.png": "b4a3451fe64ddb80855e5d1f1740e564175381d5f4b2a2942f74472649397c2e",
+    "absorption-relative.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-relative.pdf": "2169a15727ad325c98f57bc73c80e362dd683bf379df010940bf4d0739be7fdc",
+    "absorption-relative.png": "cfa885c5e0320f9ee0b347c741567a73846e352dc44025c91a20fcf0984aa889",
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "plotting-source.py": "07ad69ca641f8aaf05dd70f337e88bb1dcdddb75df19e049364311c82d12e528",
+    "provenance.json": "a7e6ec02ab3ef1eb45286ddb561c95d679ced3361fe557779dbb31e095821d06",
+    "risk-summary.csv": "fd5d9383adc179385c41a9f3ea6fe8585689e07e3647973f2cd9356e149a8cb2",
+    "source.py": "2c53c6f897fcb669fe4d41e1dcf9271f9d5223e2bde7a7200d0b4e214b586384"
+  }
+}

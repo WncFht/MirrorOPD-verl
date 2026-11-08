@@ -1,0 +1,47 @@
+{
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/teacher_construction_analysis.py",
+  "source_sha256": "7b80d42b90b4c2b713aa69258489120566affd46210d55e91adbe2319e524387",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1",
+  "view": "features",
+  "partial": true,
+  "inputs": {
+    "protocol.json": {
+      "sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho0/heldout-teacher-bank.jsonl": {
+      "sha256": "130f3c3b7915415d711338d9a5b005681f6752720b6a96e776b000746fdc7998",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho0/heldout.jsonl": {
+      "sha256": "b5b0a4d7fc347cd784f0382b2f92b975a308d9ea0583744830e5c4c1991bd359",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho1/heldout-teacher-bank.jsonl": {
+      "sha256": "835c651959d946c32ebf0580ca7e526dd15a43cd1d1173d3d6f7503fc5f8ec32",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho1/heldout.jsonl": {
+      "sha256": "0abf455af3aee008b7e41f8e7c900a7af9ec91518eb3b832907a923715bb66b2",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho0/development.jsonl": {
+      "sha256": "c6e10f5d6040b950b7deb8bd224aecebcc448a2724e722d07d2cf5a951200e04",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho1/development.jsonl": {
+      "sha256": "f66426691dadbfdfdc245ec44ea861741bba73f52cc6fb030dabeba7d4e49118",
+      "omitted_trailing_bytes": 0
+    },
+    "prepared/evaluation.jsonl": {
+      "sha256": "ec1b05e576d8a312d5471a25b0512c2840dfb9e79d4ac0164e698ed0aacafec2",
+      "omitted_trailing_bytes": 0
+    },
+    "prepared/dev.jsonl": {
+      "sha256": "115f870c8e57716dcf40de7b5e39158ae96b97e0f4406a65f107a5e5de643780",
+      "omitted_trailing_bytes": 0
+    }
+  },
+  "conditioning": "One training seed; paired bootstrap over questions, not training seeds"
+}
