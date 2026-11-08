@@ -308,6 +308,7 @@ def preset_catalog() -> dict[str, Preset]:
         environment = dict(presets["E82"].environment)
         if number == 84:
             environment["STUDENT_GPUS"] = "8"
+            environment["VAL_N_PROFILE"] = "math4_rest16"
         presets[f"E{number}"] = replace(
             presets["E82"],
             budget=replace(presets["E82"].budget, test=20 if number == 84 else 5, save=25, keep=1),
@@ -802,7 +803,7 @@ def preset_overview() -> str:
             "precompute_fused/chunk512、bf16；验证avg16/31744；训练与验证默认开启重复提前停止。",
             "E83/E84：继承E82的100 outer/1600更新与LR1e-6；"
             "E83=future none/seq-mean-token-mean，E84=future mean(gamma1)/token-mean。"
-            "E83维持4卡/每5 outer验证；E84改为8卡/每20 outer验证（20/40/60/80/100）。"
+            "E83维持4卡/每5 outer验证；E84改为8卡/每20 outer验证（20/40/60/80/100），MATH-500 n4、其余四集n16。"
             "每25 outer同步保存完整训练状态，仅保留最新一份，另保留最终HF模型。",
             "E85–E90：继承E82预算与MDPO设置，改用8卡 shared_sync；"
             "E85/E86/E87分别为none下的token-sum、seq-mean-token-sum、seq-mean-token-sum-norm；"
