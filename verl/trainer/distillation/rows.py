@@ -7,7 +7,7 @@ import torch
 from verl.trainer.distillation.profiling import full_kl_range
 from verl.utils.linear import project
 
-_MIRROR_DIAGNOSTICS = ("target_kl", "target_log_z", "anchor_kl", "teacher_kl")
+_MIRROR_DIAGNOSTICS = ("target_kl", "target_log_z", "anchor_kl", "teacher_kl", "teacher_rkl")
 
 
 def dense_rows(hs, ws, ht, wt):
@@ -93,6 +93,11 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, actions=None, stu
         z = project(hs, ws) if student_logits is None else student_logits
     with full_kl_range("mirror_rows"):
         original_z = z
+        native_teacher_rkl = None
+        if spec.diagnostics and actions is not None:
+            from verl.trainer.distillation.evaluation import distribution_values
+
+            native_teacher_rkl = distribution_values(z.detach(), zt.detach())
         corrections = None
         if actions is not None:
             z, ez = actions.coarsen(z, compensated=fused)
@@ -112,10 +117,13 @@ def _mirror_rows(hs, ws, ht, wt, hq, wq, spec, *, fused=False, actions=None, stu
                 z, zq, zt, objective=spec.objective, kappa=spec.kappa, eta=spec.eta, diagnostics=spec.diagnostics
             )
             diag = (
-                torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS], dim=-1)
+                torch.stack([info[k] for k in _MIRROR_DIAGNOSTICS[:-1]], dim=-1)
                 if spec.diagnostics
                 else z.new_empty((len(hs), 0))
             )
+        if spec.diagnostics:
+            native = diag[:, 3] if native_teacher_rkl is None else native_teacher_rkl
+            diag = torch.cat((diag, native[:, None]), dim=-1)
         if actions is not None:
             dz = actions.expand_gradient(dz, original_z)
         dz = dz.float() if hs.dtype == torch.float16 else dz.to(hs.dtype)

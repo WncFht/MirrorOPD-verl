@@ -106,3 +106,21 @@ def sample_sums(values, counts):
         "rkl_sum": torch.stack([p.sum(dtype=torch.float64) for p in parts])[:, None],
         "rkl_count": torch.tensor(counts, device=values.device, dtype=torch.int64)[:, None],
     }
+
+
+@torch.no_grad()
+def sample_position_sums(values, counts, bins):
+    """Preserve per-trajectory decile sums/counts without retaining token rows."""
+    from verl.utils.metric.position import POSITION_BINS, position_statistics
+
+    if sum(counts) != len(values) or values.shape != bins.shape:
+        raise ValueError("Per-sample position counts do not cover score rows and bins")
+    statistics = [position_statistics(v, b) for v, b in zip(values.split(counts), bins.split(counts), strict=True)]
+    return {
+        "rkl_position_sum": torch.stack([s for s, _ in statistics])
+        if statistics
+        else values.new_empty((0, len(POSITION_BINS)), dtype=torch.float64),
+        "rkl_position_count": torch.stack([n for _, n in statistics])
+        if statistics
+        else values.new_empty((0, len(POSITION_BINS)), dtype=torch.int64),
+    }
