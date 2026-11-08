@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MiMo 固定 bank 吸收轨迹</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f3f6f7;
+        color: #243541;
+        font:
+          14px Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          "Microsoft YaHei",
+          sans-serif;
+      }
+      header {
+        background: #fff;
+        border-bottom: 1px solid #dce4e8;
+        padding: 22px 28px;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 0 0 7px;
+      }
+      header p,
+      .note {
+        color: #536974;
+        line-height: 1.6;
+        margin: 0;
+      }
+      .controls {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        padding: 18px 28px;
+        background: white;
+        border-bottom: 1px solid #dce4e8;
+      }
+      label {
+        display: grid;
+        gap: 5px;
+        font-size: 12px;
+        color: #526975;
+      }
+      select {
+        min-width: 170px;
+        padding: 8px;
+        border: 1px solid #ccd8de;
+        border-radius: 5px;
+        background: white;
+        color: #243541;
+      }
+      main {
+        padding: 18px 28px;
+      }
+      .plot {
+        height: min(68vh, 660px);
+        min-height: 390px;
+        background: white;
+        border: 1px solid #dce4e8;
+        border-radius: 6px;
+      }
+      .note {
+        max-width: 1100px;
+        margin: 14px 0;
+      }
+      .note strong {
+        color: #243541;
+      }
+      footer {
+        padding: 0 28px 22px;
+        font-size: 12px;
+        color: #62737c;
+      }
+      @media (max-width: 700px) {
+        header,
+        .controls,
+        main {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+        .plot {
+          height: 540px;
+          min-height: 400px;
+        }
+        select {
+          min-width: 140px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>MiMo-7B-Base 的固定 bank 吸收轨迹</h1>
+      <p>E71 / E72 / E73 · 固定状态 RKL 按各 bank 自己的 step 0 归一化</p>
+    </header>
+    <section class="controls">
+      <label
+        >Teacher<select id="run">
+          <option value="all">全部 teacher</option>
+        </select></label
+      ><label
+        >固定 bank<select id="bank">
+          <option value="public_initial">Initial-student bank</option>
+          <option value="public_teacher">Teacher bank</option>
+        </select></label
+      ><label>Domain<select id="domain"></select></label
+      ><label
+        >视图<select id="view">
+          <option value="time">随更新变化</option>
+          <option value="phase">训练 rollout → held-out（近似配对）</option>
+        </select></label
+      ><label
+        >指标<select id="metric">
+          <option value="rkl">RKL 残差 K（nat）</option>
+          <option value="log_absorption">对数吸收量 A（dex）</option>
+          <option value="relative_decrease">相对下降（%）</option>
+          <option value="absolute_decrease">绝对下降（nat）</option>
+          <option value="gap_proxy">累计吸收差 Δ（rollout 参照）</option>
+          <option value="efficiency_proxy">累计效率 η（rollout 参照）</option>
+        </select></label
+      >
+    </section>
+    <main>
+      <div id="chart" class="plot"></div>
+      <p class="note">
+        <strong>口径：</strong>固定 bank 指标为 question-mean RKL；K(0) 是该
+        run、bank、domain 自己的初值，A(t)=log10[K(0)/K(t)]。Initial-student
+        bank 与 teacher bank 是两种轨迹来源，均作为独立 held-out
+        状态集展示，不代表训练/测试切分。
+      </p>
+      <p class="note">
+        <strong>训练端对照：</strong>虚线为同 outer 最后一次 optimizer update
+        前、当前 rollout 上记录的 teacher RKL。它与更新完成后的固定 bank
+        评分仅近似对齐，训练状态分布会变化；Δ 和 η 只作为 rollout
+        参照的描述量，不等同于固定训练池的迁移效率；η 的分母需大于 0.01 dex。
+      </p>
+    </main>
+    <footer>悬停查看数值 · 滚轮缩放 · 双击恢复 · 页面完全离线</footer>
+    <script>
+      const DATA = __DATA__;
+      __PLOTLY__;
+      __APP__;
+    </script>
+  </body>
+</html>

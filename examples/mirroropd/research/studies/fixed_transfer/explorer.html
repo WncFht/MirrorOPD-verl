@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>OPD · 固定状态吸收轨迹</title>
+    <style>
+      /*__STYLE__*/
+    </style>
+    <script>
+      /*__PLOTLY__*/
+    </script>
+  </head>
+  <body>
+    <header>
+      <div>
+        <div class="eyebrow">MIRROR OPD / FIXED STATE</div>
+        <h1>教师差异，怎样被学生吸收？</h1>
+        <p>按学生探索训练拟合与 Math / Code / IF 留出的完整变化</p>
+      </div>
+      <div class="badge" id="dataset-badge"></div>
+    </header>
+    <div class="workspace">
+      <aside aria-label="图表筛选">
+        <p>
+          <a href="figures/mimo-absorption-20261107/explorer.html"
+            >MiMo · initial / teacher 双 held-out bank →</a
+          >
+        </p>
+        <label class="field"
+          ><span>Student / 输入模式</span
+          ><select id="student"></select
+        ></label>
+        <label class="field"
+          ><span>视图</span
+          ><select id="view"></select
+        ></label>
+        <label class="field" id="metric-field"
+          ><span>轨迹指标</span
+          ><select id="metric"></select
+        ></label>
+        <label class="field"
+          ><span>Teacher 尺寸</span
+          ><select id="size">
+            <option value="all">同尺寸 + 跨尺寸</option>
+            <option value="same">只看同尺寸</option>
+            <option value="cross">只看跨尺寸</option>
+          </select></label
+        >
+        <div class="group-title">追加后训练阶段</div>
+        <label class="stage"
+          ><input type="checkbox" name="stage" value="sft" checked />追加
+          SFT</label
+        >
+        <label class="stage"
+          ><input type="checkbox" name="stage" value="rl" checked />RL，未另加
+          SFT</label
+        >
+        <label class="stage"
+          ><input type="checkbox" name="stage" value="other" checked />Base /
+          OPD / 其他对照</label
+        >
+        <hr class="divider" />
+        <div class="group-title">Teacher <span id="teacher-count"></span></div>
+        <div class="button-row">
+          <button id="show-all">显示全部</button
+          ><button id="hide-all">全部隐藏</button
+          ><button id="reset">重置筛选</button>
+        </div>
+        <input
+          class="search"
+          id="search"
+          type="search"
+          placeholder="搜索 teacher…"
+          aria-label="搜索 teacher"
+        />
+        <div id="teachers"></div>
+        <p class="small">
+          点击勾选控制曲线；“仅看”可隔离单个 teacher。颜色始终对应
+          teacher，点形对应尺寸。
+        </p>
+      </aside>
+      <main>
+        <div class="summary">
+          <div>
+            <h2 id="heading"></h2>
+            <p id="subtitle"></p>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong id="run-count">0</strong>run</div>
+            <div class="stat"><strong id="snapshot-count">0</strong>快照</div>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="timeline">
+            <span>更新上限</span
+            ><input
+              id="step"
+              type="range"
+              min="0"
+              max="320"
+              step="16"
+              value="320"
+              aria-label="更新上限"
+            /><output id="step-value">320</output>
+          </div>
+          <div class="shape-key">● 同尺寸　◆ 跨尺寸</div>
+          <button id="export">导出当前 CSV</button>
+        </div>
+        <section class="metric-guide" aria-label="当前视图定义">
+          <div class="guide-title" id="view-title"></div>
+          <div class="formula" id="formula"></div>
+          <p id="view-guide"></p>
+          <div class="symbol-key">
+            K：nats/H1024 · A、Δ：dex · η：无量纲；T = 训练评分池 · D =
+            当前面板留出域 · t = 学生更新数 · e = 上限内实际终点
+          </div>
+        </section>
+        <div id="empty" class="empty" hidden>
+          没有符合筛选的 run。请调整尺寸／阶段筛选，或点击“显示全部”。
+        </div>
+        <div id="plots" class="plots"></div>
+        <div class="notes">
+          <p id="reading"></p>
+          <details>
+            <summary>数据口径与比较边界</summary>
+            <p>
+              固定风险为 ΣKL(student ∥ teacher) /（题数 × 1024）。Avg 先按
+              Math64 / Code32 / IF32 题数合并，再求下降比例或吸收倍数。
+            </p>
+            <p>
+              “RL，未另加 SFT”指所述父型号之后的追加阶段，仍继承 R1
+              蒸馏或官方后训练历史，不表示全训练史没有 SFT。Base 与 OPD 单列。
+            </p>
+            <p>
+              部分早期 run 的训练评分池为 A–H 的 128 题，其余为 A–T 的 320
+              题；悬停可查看题数。它们均可能包含尚未优化的未来训练批。64-step
+              run 保留实际终点，更新滑块不会外推，也不做插值。
+            </p>
+            <p>
+              同一 run
+              的连续快照彼此依赖；本页不将其作为独立重复来计算相关系数。不同输入模式和
+              student 使用各自 S0 银行。
+            </p>
+          </details>
+        </div>
+        <footer>
+          悬停查看读数 · 滚轮缩放 · 拖动框选缩放 · 双击恢复范围 · 图表右上角下载
+          PNG
+        </footer>
+      </main>
+    </div>
+    <noscript>请启用 JavaScript 查看交互图表。</noscript>
+    <script>
+      const DATA = /*__DATA__*/ null;
+      /*__APP__*/
+    </script>
+  </body>
+</html>

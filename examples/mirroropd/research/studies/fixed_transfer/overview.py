@@ -348,7 +348,7 @@ def main():
         update_report(
             summary,
             records,
-            REPO / "examples/mirroropd/docs/experiments/teacher-transfer/fixed-state-results.md",
+            REPO / "examples/mirroropd/docs/experiments/teacher-transfer/fixed-state-results/README.md",
         )
     print({k: v for k, v in summary.items() if k not in ["inventory", "pairs"]})
     if args.plot:
