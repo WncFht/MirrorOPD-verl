@@ -1,0 +1,26 @@
+{
+  "status": "RAW64-CCS256-observed-points-only",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/opd-raw64-v1",
+  "data_archive_receipt_sha256": "90872ba4dfff4eb5ba20c3a753b0be9bf2ed221d73767fdd5758ad1ee44ba3d7",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "audit": "Both fv.audit outputs passed with zero issues",
+  "visual_qa": "Both actual risk PNGs visually inspected;fv.audit no issues;RAW0/16/64,CCS0/16/64/128/256 only;common axes;no fitted extrapolation. Different last points not comparable.",
+  "artifacts": {
+    "absorption-absolute.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-absolute.pdf": "6fded45f599411ed3a7082b074dab2dda24b4e9de86f86857686e45d3af7208c",
+    "absorption-absolute.png": "a7e3ced177cb994a814cbf159ec3e90c4b1f9b6cad71376b655f82a7fb993f9a",
+    "absorption-relative.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-relative.pdf": "9a8f9aba101f173e417d5a0740c32a27519e93ece66e5aad224df1529e77b37b",
+    "absorption-relative.png": "be42cb5d45a57b81e6039aef86b5057de3fe1745d2a42b2da53099a0ae04b9c6",
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "plotting-source.py": "b04ea0f15cec88aa9ff7ac2a22b09d67b0e89b2a59eeb48c5cf4ee3f2ec3204c",
+    "provenance.json": "d8a34117f8109441a767d6a540cacbc9def6e40c4df83207de92d817a2e9a27f",
+    "risk-summary.csv": "53a10e5873bb1ca87b56eb8adc112fd2bf38c75d8b201a4d18e663fe0b0e2c3b",
+    "source.py": "2c53c6f897fcb669fe4d41e1dcf9271f9d5223e2bde7a7200d0b4e214b586384"
+  }
+}

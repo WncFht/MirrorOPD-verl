@@ -1,0 +1,26 @@
+{
+  "status": "RAW and both CCS0/16/64/128/256;all three full observed risk trajectories",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/opd-raw256-v1",
+  "data_archive_receipt_sha256": "2aa391e22e85824e06e14b5d50f5a5bde4520dac895af490798a9b9e3bc928d7",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "visual_qa": "Both actual risk PNGs visually inspected;all three paths use same update checkpoints and common axes;both fv.audit outputs zero issues;no fitted extrapolation",
+  "plotting_helper_source": "examples/mirroropd/research/core/plotting.py",
+  "artifacts": {
+    "absorption-absolute.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-absolute.pdf": "6add9545ff0c63881d8a2f2fcf5c0dc0f208f8eea43afe4ead75673722a8fa30",
+    "absorption-absolute.png": "267ced0161302839ca39b15cea83dd40c74c31b27767d86c66fd903b620812c5",
+    "absorption-relative.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "absorption-relative.pdf": "a9c47fb89a7ddff4c02af46bc1d03feae04dd7b6bc5181a141b76de05e444315",
+    "absorption-relative.png": "bb395028c904b2e6197489a3ce3c31bd6d3c8e64f5be333c520c9644e92d5378",
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "plotting-source.py": "07ad69ca641f8aaf05dd70f337e88bb1dcdddb75df19e049364311c82d12e528",
+    "provenance.json": "e7eddf3fc063d6912a8c4acf7bc5ab91f63aa8d709531e6cec0c6956e6c8377a",
+    "risk-summary.csv": "1c8e30d99f006ddf38dc3488bbb58f86a2f15bcfeecca78c1e5d2fb50956dc4f",
+    "source.py": "41be499d3fd4b04dd52f64ef6f03c562030a69738e69f985898848e6d78644fa"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "status": "three-arm-initial-features-only",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/raw-initial-v1",
+  "data_archive_receipt_sha256": "b7b9f56205c630c916deba741fd0b1ba0fecabb8eaecbf3d9d50a0835c9c07af",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "audit": "PASS: fv.audit returned no issues",
+  "visual_qa": "Actual PNG inspected: all three arms shown, common logarithmic axes, full outliers retained, labels and legend readable, no clipping/overlap; initial distances only, no fit",
+  "artifacts": {
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "initial-distance-scatter.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "initial-distance-scatter.pdf": "8ec428e125092064280684969704f992b6bcc4acb83bd3ce924770313b214143",
+    "initial-distance-scatter.png": "83b9c359c6a6514f18db97d00fd099ee83411064987338d7450cf03074f7d0fe",
+    "initial-feature-questions.csv": "5453948526845b8ba743cadea38978d445092291bdb86f54d47090fe5a710627",
+    "initial-feature-tails.csv": "846bf786adf5361d1b6f829bef679e509149804ace5774f9cfbd70cb302310ca",
+    "plotting-source.py": "07ad69ca641f8aaf05dd70f337e88bb1dcdddb75df19e049364311c82d12e528",
+    "provenance.json": "95fbf04e23575ec1564670fe3d4acb1a6a9c38ef7b926f551a9f6a042e755e54",
+    "source.py": "2c53c6f897fcb669fe4d41e1dcf9271f9d5223e2bde7a7200d0b4e214b586384"
+  }
+}

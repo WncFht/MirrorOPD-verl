@@ -18,7 +18,17 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /root/.local/share/mirroropd/venvs/plot
 
 `clean_diagnostics.py` 读取与验证、聚合每个快照并输出逐 run 图；`clean_comparisons.py` 输出跨 teacher 热图、同尺寸重点配对折线及端点 CSV；`clean_publish.py` 原样提取 19 张正文精选图及其审计、端点和来源哈希。完整图集在忽略的 `appendix/data/clean-diagnostics/` 下，正文精选在[figures/fixed-state-clean-20261107](figures/fixed-state-clean-20261107/provenance.json)。复算需要本地原始日志与 figure-viz 环境，不加载模型、不使用 GPU。
 
-每个 run 保留 `metrics.csv`、`training.csv`、`questions.csv`、来源文件 SHA256、图形审计及产物回执。全图索引标明真实预算和指标覆盖；重点折线限相同 student／输入模式与 320 更新。正文分析和实际数值见[单遍诊断](fixed-state-results.md#单遍训练的完整诊断)。
+每个 run 保留 `metrics.csv`、`training.csv`、`questions.csv`、来源文件 SHA256、图形审计及产物回执。全图索引标明真实预算和指标覆盖；重点折线限相同 student／输入模式与 320 更新。正文分析和实际数值见[单遍诊断](fixed-state-results/README.md#单遍训练的完整诊断)。
+
+## 训练与留出相关性散点图
+
+[相关性图与复算命令](fixed-state-results/correlations.md)使用已发布的单遍端点表，每个 run 一个点；64 与 320 更新在同图显示。`fixed_transfer.plot_correlations` 输出按 student／输入模式分组的对数吸收倍数、最终残差双对数、绝对与相对下降散点、PNG／PDF、逐点 CSV 与相关系数 CSV。
+
+[训练过程吸收轨迹](fixed-state-results/absorption-trajectories.md)从 JustRL／MiniMath／DeepScaleR 和 Llama RL／SFT 的已有快照重画，`fixed_transfer.plot_absorption_paths` 验证原始来源哈希与冻结身份，再输出四类相平面、时间曲线与逐快照 CSV。
+
+[全教师训练轨迹](fixed-state-results/student-trajectories.md)由 `fixed_transfer.plot_student_paths` 生成，同尺寸按追加阶段分线型，全尺寸按尺寸关系分点形；训练池评分题数按真实来源保留。
+
+[离线交互页面](fixed-state-results/explorer.html)由 `fixed_transfer.build_explorer` 从上述全教师 CSV 构建，内嵌 Plotly.js 和数据；复算与操作见[交互说明](fixed-state-results/interactive.md)。
 
 ## 历史诊断流程
 
@@ -114,4 +124,4 @@ Git 保存绘图源码、测试、来源选择所需的总览统计、轻量 run
 python -m examples.mirroropd.research.studies.boundary.round2_tables --output /tmp/mirroropd-task-scores.md
 ```
 
-教师谱系的`fixed_transfer.overview --update-report`只更新[固定状态结果](fixed-state-results.md)中的 generated 区块，原始数据与图目录保持原位。
+教师谱系的`fixed_transfer.overview --update-report`只更新[固定状态结果](fixed-state-results/README.md)中的 generated 区块，原始数据与图目录保持原位。

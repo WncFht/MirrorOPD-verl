@@ -141,8 +141,7 @@ def archive_data() -> tuple[dict[str, list[dict[str, float | str]]], dict[str, o
             "rollout_reward": "mean task reward of the training rollouts generated for that outer",
         },
         "limitations": [
-            "E81 is complete; E82 is shown through its last completed reward-bearing outer.",
-            "E82 is an in-progress run; the curve ends at its latest reward-bearing outer in the source snapshot.",
+            "E81 and E82 are complete; each curve ends at its last completed reward-bearing outer.",
             "These are training rollout rewards, not held-out benchmark accuracy.",
         ],
     }

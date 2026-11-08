@@ -2,13 +2,13 @@
 
 研究 OPD 在不同条件下能学到什么、收益与成本如何变化，以及哪些因素限制教师吸收。五个 RQ 组织阅读路线，各专题维护实际对照、结果和复算材料。
 
-| RQ                     | 核心比较                                                      | 正文入口                                                                                             |
-| ---------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| RQ1 学习信号与估计器   | current/rollout、IS/NoIS/PPO、sampled/full 与归一化           | [学习信号](learning-signal/README.md)                                                                |
-| RQ2 Reuse 与预算       | 新增轨迹、批内更新、回答长度与计算成本                        | [训练预算](reuse-budget/README.md)                                                                   |
-| RQ3 Rollout 来源与组合 | initial/teacher/current、logit/prob/batch fusion              | [Rollout 来源](rollout-policy/README.md)                                                             |
-| RQ4 失败复现与吸收机制 | pair/setting 边界、SFT/SFT+RL 阶段、跨 domain 与跨 batch 迁移 | [教师吸收](teacher-transfer/README.md)；[师生配对 RKL 总览](teacher-transfer/fixed-state-results.md) |
-| RQ5 TOP-D 复现与 κ/η   | 算法、设置、结果的复现程度与 weighted-target 参数消融         | [TOP-D 对照](learning-signal/weighted-targets.md)                                                    |
+| RQ                     | 核心比较                                                      | 正文入口                                                                                                    |
+| ---------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| RQ1 学习信号与估计器   | current/rollout、IS/NoIS/PPO、sampled/full 与归一化           | [学习信号](learning-signal/README.md)                                                                       |
+| RQ2 Reuse 与预算       | 新增轨迹、批内更新、回答长度与计算成本                        | [训练预算](reuse-budget/README.md)                                                                          |
+| RQ3 Rollout 来源与组合 | initial/teacher/current、logit/prob/batch fusion              | [Rollout 来源](rollout-policy/README.md)                                                                    |
+| RQ4 失败复现与吸收机制 | pair/setting 边界、SFT/SFT+RL 阶段、跨 domain 与跨 batch 迁移 | [教师吸收](teacher-transfer/README.md)；[师生配对 RKL 总览](teacher-transfer/fixed-state-results/README.md) |
+| RQ5 TOP-D 复现与 κ/η   | 算法、设置、结果的复现程度与 weighted-target 参数消融         | [TOP-D 对照](learning-signal/weighted-targets.md)                                                           |
 
 Rollout policy 的状态访问分布与 coverage 是跨专题分析主题，长期入口见[State 分析](state-analysis/README.md)；rollout 来源实验仍从[Rollout 来源](rollout-policy/README.md)进入。
 

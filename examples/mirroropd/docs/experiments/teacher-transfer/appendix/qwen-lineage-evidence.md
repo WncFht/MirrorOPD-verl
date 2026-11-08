@@ -2,7 +2,7 @@
 
 后续主协议见[双模式与固定题池长训](../protocols/fixed-state.md#qwen)。本文保留原共同 thinking 条件；Thinking-Space SFT/Base-OPD 的既有结果属于模式不匹配对照，不能替代新的匹配 non-thinking 实验。
 
-状态（2026-10-29）：原十个模型基线与九个训练分支均已完成，共 2112 次科学更新；六个同尺寸分支 320 步，三个跨尺寸分支 64 步。完整 RKL 汇总见[总体进展](../fixed-state-results.md)，任务评测仅作辅助，部分终点仍未完成。此页维护 Qwen3 配对；R1 系列的完整结果见[同架构吸收报告](../protocols/fixed-state.md#r1)。
+状态（2026-10-29）：原十个模型基线与九个训练分支均已完成，共 2112 次科学更新；六个同尺寸分支 320 步，三个跨尺寸分支 64 步。完整 RKL 汇总见[总体进展](../fixed-state-results/README.md)，任务评测仅作辅助，部分终点仍未完成。此页维护 Qwen3 配对；R1 系列的完整结果见[同架构吸收报告](../protocols/fixed-state.md#r1)。
 
 ## 研究问题与谱系
 
@@ -90,7 +90,7 @@ e3 的宏平均为 61.60%，高于原始 student 的 58.33%，差值为 3.26 个
 
 ![Qwen3-1.7B 三域留出 RKL 与整体排序](../transfer-mechanism/data/overview-20261029/q3-1.7-final-rkl.png)
 
-当前图按 Math64、Code32、IF32 合并平均 RKL 的降幅排序，模型标签注明尺寸、实际模式与更新数；斜线表示跨尺寸。数学留出及同构 teacher-copy 的详细表保留在本节，整体与跨域统计见[统一总览](../fixed-state-results.md)。旧 A–D 保持问题仍见下节配对分析，不能由留出高降幅推断所有状态都已吸收。
+当前图按 Math64、Code32、IF32 合并平均 RKL 的降幅排序，模型标签注明尺寸、实际模式与更新数；斜线表示跨尺寸。数学留出及同构 teacher-copy 的详细表保留在本节，整体与跨域统计见[统一总览](../fixed-state-results/README.md)。旧 A–D 保持问题仍见下节配对分析，不能由留出高降幅推断所有状态都已吸收。
 
 [当前 PDF](../transfer-mechanism/data/overview-20261029/q3-1.7-final-rkl.pdf)、[排序数据](../transfer-mechanism/data/overview-20261029/heldout-ranking.csv)、[公共读图口径](../protocols/fixed-state.md#common)构成当前入口；[历史 RKL/JS 双面板](../transfer-mechanism/qwen3/figures/latest-endpoints.pdf)保留为旧版视图，不再维护另一套当前排序。
 

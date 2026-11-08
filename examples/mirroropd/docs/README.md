@@ -1,6 +1,6 @@
 # MirrorOPD 文档
 
-[师生配对 RKL 总览：R1、Qwen3、Llama](experiments/teacher-transfer/fixed-state-results.md)汇集已有配对的训练与留出结果。
+[师生配对 RKL 总览：R1、Qwen3、Llama](experiments/teacher-transfer/fixed-state-results/README.md)汇集已有配对的训练与留出结果。
 
 从研究问题、公共定义或工程任务进入正文。研究报告保留实际 setting 和证据截止，运行表由本地日志生成，周报引用专题结论。
 

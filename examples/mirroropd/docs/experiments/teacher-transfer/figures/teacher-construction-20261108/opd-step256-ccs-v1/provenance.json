@@ -1,0 +1,59 @@
+{
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/teacher_construction_analysis.py",
+  "source_sha256": "2c53c6f897fcb669fe4d41e1dcf9271f9d5223e2bde7a7200d0b4e214b586384",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1",
+  "view": "risks",
+  "partial": true,
+  "inputs": {
+    "protocol.json": {
+      "sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho0/heldout-teacher-bank.jsonl": {
+      "sha256": "17c62e57154bf289737d91fffb93acb35871780593f07543034164466c9e536e",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho0/heldout.jsonl": {
+      "sha256": "ace1ad94165d2e66b324d9023ba49fdfa187644e1acf158253d09dc1832b2e71",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho1/heldout-teacher-bank.jsonl": {
+      "sha256": "5474acda7756623ebbb15be6081730a7d0717ec7c0e680072dd319a84011870d",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho1/heldout.jsonl": {
+      "sha256": "68ae6b98da6ff8822e874dc3887867a2298e25dc81456c0c1e2c6e7e7963ceec",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/RAW/heldout-teacher-bank.jsonl": {
+      "sha256": "f702b614854319b4637750871822b64593fc2a8d13cb46dd8f6c67da7fe10218",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/RAW/heldout.jsonl": {
+      "sha256": "a1c2dfacac43d3526119f11c2006d0c50cd051abf442bee07d703f1f67c5ab23",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho0/development.jsonl": {
+      "sha256": "8b4d87d4cecc336ba4e23056adbadedf03e39347ea24d4147953c1fe26bab4d9",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/CCS-rho1/development.jsonl": {
+      "sha256": "6aef2a9ad5f5e9c62ee1af148905a7b3005d58b8e5f2a458b3c6cc073d014d6f",
+      "omitted_trailing_bytes": 0
+    },
+    "opd/RAW/development.jsonl": {
+      "sha256": "324b614e08d96fa367069548fd31d48b79a2e83e65f9f4bedbb6c37b2f0c3066",
+      "omitted_trailing_bytes": 0
+    },
+    "prepared/evaluation.jsonl": {
+      "sha256": "ec1b05e576d8a312d5471a25b0512c2840dfb9e79d4ac0164e698ed0aacafec2",
+      "omitted_trailing_bytes": 0
+    },
+    "prepared/dev.jsonl": {
+      "sha256": "115f870c8e57716dcf40de7b5e39158ae96b97e0f4406a65f107a5e5de643780",
+      "omitted_trailing_bytes": 0
+    }
+  },
+  "conditioning": "One training seed; paired bootstrap over questions, not training seeds"
+}

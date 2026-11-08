@@ -1,0 +1,29 @@
+{
+  "status": "Actual-CCS-endpoints-only",
+  "data_archive": "examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/ccs-capabilities-v1",
+  "data_archive_receipt_sha256": "93cdd26c48e9db2b2a76ba2eda04f6069a86fb1d3f401354fd6c73a5c98f042c",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "environment": {
+    "python": "3.12.11",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "audit": "fv.audit zero issues on both figures",
+  "visual_qa": "Actual capability plot and corrected four-log-tick distance plot visually inspected;fv.audit zero issues. RAW and ERT unplotted,partial caption,no fitted relation;negative gains retained.",
+  "plotting_helper_source": "examples/mirroropd/research/core/plotting.py",
+  "artifacts": {
+    "capability-gains.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "capability-gains.pdf": "6b58cc60861f5b984fe1d316ccc0b4e5fb320ad227a7b149065f3c935b404e29",
+    "capability-gains.png": "40b867ea47c001e803578113d9d3753c74310625fad36b4e2df25fd5e1f68bd9",
+    "capability-summary.csv": "2d9434ccdbe492ac8d216e2b12f4d7f6854654c21d5db8598801057449ed38b7",
+    "distance-provenance.json": "0751e3b6084c21e7776b227404c00109b0e08a20aa1689a09479a023e6667eb5",
+    "distance-risk-summary.csv": "53a10e5873bb1ca87b56eb8adc112fd2bf38c75d8b201a4d18e663fe0b0e2c3b",
+    "fvstyle.py": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+    "plotting-source.py": "07ad69ca641f8aaf05dd70f337e88bb1dcdddb75df19e049364311c82d12e528",
+    "provenance.json": "0ae9a8264ef888f9ea3075ecc786241fdf3d8787d95ed445d54a454c2ee52d60",
+    "source.py": "41be499d3fd4b04dd52f64ef6f03c562030a69738e69f985898848e6d78644fa",
+    "teacher-distance-capability.audit.txt": "0b02c6ddbb84c2146d172b2142194c80fcd51f4b18ee0046e3b980ff56bcea73",
+    "teacher-distance-capability.pdf": "eb04c83153db25d62b63062831c5c2cf0f54b3969427d662fa2b307ec260e3dc",
+    "teacher-distance-capability.png": "03d21ce7d36335e731661b43002e8d41a6f0506bcff1840879fb921d0f9d6c6c"
+  }
+}

@@ -1,6 +1,6 @@
 # 固定状态 RKL 实验协议
 
-本协议用于[师生配对 RKL 总览](../fixed-state-results.md)中的 0–320 更新比较。训练与评分使用冻结的初始学生轨迹；按批刷新实验采用[另一份协议](online-four-domain.md)。
+本协议用于[师生配对 RKL 总览](../fixed-state-results/README.md)中的 0–320 更新比较。训练与评分使用冻结的初始学生轨迹；按批刷新实验采用[另一份协议](online-four-domain.md)。
 
 <a id="common"></a>
 
@@ -88,4 +88,4 @@ Student 为 Unsloth 来源的 Llama-3.2-3B-Instruct。原六组 teacher 为 GT�
 
 各组采用共享 student 模板、固定 off 系统消息与日期、冻结题目和 S0 前缀。Nemotron 的来源为 SFT＋RL＋合并；算术 SFT 保留数据披露范围；Tulu 记录额外 teacher 输出质量；SimpleRL 为输入不匹配条件。原六组的[绝对曲线](../transfer-mechanism/data/equal-budget-20261030/llama-original/equal-budget-rkl.png)与[相对曲线](../transfer-mechanism/data/equal-budget-20261030/llama-original/equal-budget-drop_percent.png)、新增阶段证据均使用各自 0–320 读出。
 
-全部分组数值在[配对总览](../fixed-state-results.md)维护，逐 run 图和重绘方式见[图谱与复算](../reproduction.md)。
+全部分组数值在[配对总览](../fixed-state-results/README.md)维护，逐 run 图和重绘方式见[图谱与复算](../reproduction.md)。

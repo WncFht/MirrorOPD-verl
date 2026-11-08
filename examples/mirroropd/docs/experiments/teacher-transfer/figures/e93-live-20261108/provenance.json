@@ -1,0 +1,67 @@
+{
+  "snapshot": "2026-11-08T23:29:14+08:00",
+  "sources": {
+    "runs/e93-mimo-rl-sft-20261108/queue-state.json": "cb9a595fec1bf89e4d93ed09bd368a5800d92446e47e86aa663716ff0c1bcd6b",
+    "runs/e93-mimo-rl-sft-20261108/logs/E93-train.log": "f0ec34ba1a5a393852a5d4d5c3d9fabbad35c39604e540f462b06b75c22581e7",
+    "runs/e93-mimo-rl-sft-20261108/formal/E93/metrics.jsonl": "7f04b1202ddd4100fa1c20242bbe808f2b224798fd49e13336a6ff561917b44b"
+  },
+  "data": {
+    "snapshot": "2026-11-08T23:29:14+08:00",
+    "phase": "E93-train",
+    "queue_status": "running",
+    "completed_stages": "initial,teacher,finalize",
+    "optimizer_updates": 0,
+    "planned_updates": 20,
+    "train_log_bytes": 321383,
+    "gpus": [
+      {
+        "gpu": 0,
+        "utilization": "0 %",
+        "memory_used": "1 MiB",
+        "memory_total": "81559 MiB"
+      },
+      {
+        "gpu": 1,
+        "utilization": "100 %",
+        "memory_used": "53739 MiB",
+        "memory_total": "81559 MiB"
+      },
+      {
+        "gpu": 2,
+        "utilization": "100 %",
+        "memory_used": "53657 MiB",
+        "memory_total": "81559 MiB"
+      },
+      {
+        "gpu": 3,
+        "utilization": "100 %",
+        "memory_used": "53657 MiB",
+        "memory_total": "81559 MiB"
+      },
+      {
+        "gpu": 4,
+        "utilization": "100 %",
+        "memory_used": "53675 MiB",
+        "memory_total": "81559 MiB"
+      },
+      {
+        "gpu": 5,
+        "utilization": "0 %",
+        "memory_used": "1 MiB",
+        "memory_total": "81559 MiB"
+      },
+      {
+        "gpu": 6,
+        "utilization": "0 %",
+        "memory_used": "1 MiB",
+        "memory_total": "81559 MiB"
+      },
+      {
+        "gpu": 7,
+        "utilization": "36 %",
+        "memory_used": "80224 MiB",
+        "memory_total": "81559 MiB"
+      }
+    ]
+  }
+}

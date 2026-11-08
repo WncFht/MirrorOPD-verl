@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-07T07:15:17+00:00",
+  "generated_at_utc": "2026-11-08T05:24:15+00:00",
   "sources": {
     "E57": {
       "path": "runs/e55-e57-refresh-20261102-0900/data.json",
@@ -11,7 +11,7 @@
     },
     "E82": {
       "path": "runs/topd-large-batch-20261105/formal/E82/metrics.jsonl",
-      "sha256": "87df3955d78710407ac515c2bb53f67fcb4f1f182b28bfaaf8c0af37930cbe26"
+      "sha256": "48865af0a7f7518c4a439e55273736e70aac803cab160715f60afc0554c25c40"
     }
   },
   "metrics_exclusions": {
@@ -36,11 +36,11 @@
       "last_rollout_reward": 0.18359375
     },
     "E82": {
-      "point_count": 69,
-      "last_reward_outer": 69.0,
-      "last_optimizer_update": 1104.0,
-      "last_response_presentations": 282624.0,
-      "last_rollout_reward": 0.28125
+      "point_count": 100,
+      "last_reward_outer": 100.0,
+      "last_optimizer_update": 1600.0,
+      "last_response_presentations": 409600.0,
+      "last_rollout_reward": 0.25
     }
   },
   "axes": {
@@ -50,8 +50,7 @@
     "rollout_reward": "mean task reward of the training rollouts generated for that outer"
   },
   "limitations": [
-    "E81 is complete; E82 is shown through its last completed reward-bearing outer.",
-    "E82 is an in-progress run; the curve ends at its latest reward-bearing outer in the source snapshot.",
+    "E81 and E82 are complete; each curve ends at its last completed reward-bearing outer.",
     "These are training rollout rewards, not held-out benchmark accuracy."
   ]
 }

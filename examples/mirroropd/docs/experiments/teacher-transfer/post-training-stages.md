@@ -1,14 +1,14 @@
 # 后训练阶段的教师可学习性
 
-比较同一学生对不同后训练阶段教师的拟合。Qwen/Tulu 提供固定 S0、0–320 更新的历史结果；MiMo 及后续阶段链采用按批刷新协议。各组共享哪些条件、改变哪些因素，在对应设置中说明。
+本页按后训练阶段整理教师吸收实验。Qwen/Tulu 使用固定 S0 的历史曲线；MiMo 及后续阶段链使用按批刷新协议。每节给出实际设置、结果和复算入口。
 
-完整配对结果见[师生 RKL 总览](fixed-state-results.md)，阶段来源和公开权重见[模型资料](../../settings/模型与师生配对.md)。
+完整配对结果见[师生 RKL 总览](fixed-state-results/README.md)，阶段来源和公开权重见[模型资料](../../settings/模型与师生配对.md)。
 
 <a id="local-llm-probe"></a>
 
 ## Qwen3-1.7B-Base 的局部阶段对照
 
-这组小实验检验[组合教师推导](../../theory/2026-11-01-SFT与RL组合教师的可蒸馏性.md)中的近邻可恢复性，使用真实预训练 LLM 的全部参数。它不测长推理任务，不替代后文 MiMo 的完整阶段链实验。
+这组小实验检验[组合教师推导](../../theory/2026-11-01-SFT与RL组合教师的可蒸馏性.md)中的近邻可恢复性，使用真实预训练 LLM 的全部参数。它是单步机制探针，和后文 MiMo 阶段链分开解释。
 
 ### 实际设置
 
@@ -24,7 +24,7 @@ SFT 最小化正确 token 的交叉熵；RL 最大化正确 token 的概率减�
 | V3   |           0.0002 |        0.0001 |           0.0002 | 检验小函数偏移下三类教师是否均可拟合 |
 | V4   | 复用 V2 原样缓存 |       复用 V2 |            0.002 | 固定同一教师，仅改变学生的单步限制   |
 
-V3 在观察 V2 的失败后设计；它同时改变教师位移、RL 正则和学生步长限制，不能据 V2/V3 的差值识别其中单一因素。V4 对三类 teacher 逐项复用 V2 的完整 logits 缓存，核对模型、prompt、标签、词表和参数量；它才是保持教师不变的优化干预。
+V3 同时收紧教师位移、RL 正则和学生步长，结果只用于近邻探针。V4 逐项复用 V2 的 teacher logits 缓存，是保持教师不变的优化干预。
 
 ### 近邻组 V3 的结果
 
@@ -36,13 +36,13 @@ V3 在观察 V2 的失败后设计；它同时改变教师位移、RL 正则和�
 
 SFT 与 RL 目标的初始 KL 在这组中相近，但不是按预先设定的 KL 阈值严格匹配；组合教师的初始 KL 约为它们的 3.7 倍。三个目标均显著下降，SFT-copy 对照在这 16 个前缀上得到零 KL。这支持近邻可恢复性适用于 SFT、RL 和组合教师，没有验证所有教师或所有状态都能达到零误差。
 
-这些近邻 teacher 仍然很弱：留出上正确 token 的平均概率，Base 为 0.0003719，SFT／RL／SFT→RL teacher 分别为 0.0006721／0.0006705／0.0011542；三类 teacher 的贪心正确率都是 0/8。高 KL 降幅表示分布拟合，不能写成恢复了强 teacher 的算术能力。单 seed、8 题留出仅用于机制探针，不提供总体比例或置信区间。
+这些近邻 teacher 仍然很弱：留出上正确 token 的平均概率，Base 为 0.0003719，SFT／RL／SFT→RL teacher 分别为 0.0006721／0.0006705／0.0011542；三类 teacher 的贪心正确率都是 0/8。因此这里的高 KL 降幅只表示分布拟合。单 seed、8 题留出用于机制探针。
 
 ### 大步负结果与解释边界
 
-V2 的 SFT 和组合教师在留出上的贪心正确率均为 8/8，但初始 Base→teacher RKL 分别达到 19.07 和 31.01。它们属于远目标；仅凭每步参数范数 0.02 不能把它们称为局部教师。V2 学生的第一次 SFT 蒸馏步使用 LR0.01、梯度范数约 258，参数步长约 2.58；训练 KL 虽然下降，后续梯度范数却数值退化为 0，正确 token 概率也几乎为 0。组合分支同样出现接近饱和的梯度，直接 RL 目标则非常接近 Base。
+V2 的 SFT 和组合教师在留出上的贪心正确率均为 8/8，但初始 Base→teacher RKL 分别达到 19.07 和 31.01，属于远目标。V2 学生的第一次 SFT 蒸馏步使用 LR0.01、梯度范数约 258，参数步长约 2.58；训练 KL 虽然下降，后续梯度范数却数值退化为 0，正确 token 概率也几乎为 0。组合分支同样接近梯度饱和，直接 RL 目标则非常接近 Base。
 
-V2 的 48 步留出 RKL 降幅为 SFT 2.55%、RL 87.52%、SFT→RL 9.08%。这个表面排序与目标距离、教师任务表现及不合适的大步更新混杂，不能当作“RL 可学、SFT 不可学”的机制证据。
+V2 的 48 步留出 RKL 降幅为 SFT 2.55%、RL 87.52%、SFT→RL 9.08%；该排序同时受目标距离、教师任务表现和步长影响。
 
 | 相同 V2 教师 | V2 留出终点 RKL | V4 留出终点 RKL | V4 相对初始下降 |
 | ------------ | --------------: | --------------: | --------------: |
@@ -50,7 +50,7 @@ V2 的 48 步留出 RKL 降幅为 SFT 2.55%、RL 87.52%、SFT→RL 9.08%。这�
 | RL           |     0.000004963 |     0.000004193 |          89.46% |
 | SFT→RL       |      28.1907883 |      25.9337711 |          16.36% |
 
-V4 限制单步位移后，远 SFT 与组合目标的下降有所改善，终点梯度保持非零，但绝大多数 KL 残差仍在，三个 student 的留出贪心正确率仍为 0/8。这个控制支持优化步长参与了 V2 的失败，不能说明步长解释了全部残差，也没有证明远教师不可学习。近邻组的成功与远目标的未恢复需要同时保留。
+V4 限制单步位移后，远 SFT 与组合目标的下降有所改善，终点梯度保持非零，但 KL 残差仍大，三个 student 的留出贪心正确率仍为 0/8。步长是 V2 失败的一个因素；近邻组和远目标应分开解释。
 
 ### 产物与复算
 
@@ -89,13 +89,13 @@ python examples/mirroropd/research/studies/fixed_transfer/summarize_local_stage_
 
 [模型注册表](../../../research/studies/fixed_transfer/plans/stage-lineage-models.json)定义身份；[逐模型清单](transfer-mechanism/data/stage-lineage-20261030/Q1.json)及同目录 Q2、L1–L4 文件保存路径、字节数、SHA256 与下载完成回执。[Qwen 验收配置](../../../research/studies/fixed_transfer/plans/qwen-stage-lineage-acceptance.json)与[Llama 验收配置](../../../research/studies/fixed_transfer/plans/llama-stage-lineage-acceptance.json)的 `probes` 阶段已完成；两份配置的用途为输出验收；正式训练条件见下文。模型身份包含 SFT checkpoint 子目录。
 
-Qwen step80／step640 的训练来源和 Tulu／SimpleRL 的阶段链统一见[模型介绍](../../settings/模型与师生配对.md#qwen3)及[Tulu 阶段链](../../settings/模型与师生配对.md#llama)。六组均为跨尺寸蒸馏，补充教师侧阶段与谱系；不能替代同构 RL／SFT 对照。公开父型号不证明精确父权重、数据和预算完全受控。
+Qwen step80／step640 的训练来源和 Tulu／SimpleRL 的阶段链统一见[模型介绍](../../settings/模型与师生配对.md#qwen3)及[Tulu 阶段链](../../settings/模型与师生配对.md#llama)。六组都是跨尺寸蒸馏，用于补充教师阶段与谱系；同构 RL／SFT 对照见 MiMo。
 
 <a id="fixed-stage-比较条件"></a>
 
 ### 比较条件
 
-每条分支独立从原始 student 开始，同一输入条件共享冻结题目和 S0 前缀。Qwen 使用共同 thinking 前缀，Llama 使用固定 3B student 的共享 off 输入。Tulu 原生模板不同，未静默换成 teacher 私有前缀；SimpleRL 没有原生聊天模板，保留输入不匹配标记。
+每条分支独立从原始 student 开始，共享冻结题目和 S0 前缀。Qwen 使用共同 thinking 前缀，Llama 使用固定 3B student 的共享 off 输入；Tulu 和 SimpleRL 保留各自输入协议。
 
 Tulu teacher 输出头 128264，student 为 128256；保留原生 teacher 归一化并记录额外质量。
 
@@ -113,7 +113,7 @@ Tulu teacher 输出头 128264，student 为 128256；保留原生 teacher 归一
 | Tulu-3-8B，最终 RLVR          |        320 |         0.453277 |         0.236005 | 47.93% |
 | Llama-3.1-8B-SimpleRL-Zoo     |        320 |         0.263856 |         0.117807 | 55.35% |
 
-Qwen 和 Llama 分别比较，结合初始风险、绝对残差与相对降幅解释结果。SimpleRL 还采用共享 student 前缀这一特定输入条件。
+Qwen 和 Llama 分别结合初始风险、绝对残差与相对降幅解释；SimpleRL 采用共享 student 前缀。
 
 [附录中的等预算曲线与阶段偏好诊断](#stage-curves)保留训练全池、旧批和三域留出。阶段投影的定义与结果见下节。
 
@@ -123,7 +123,7 @@ Qwen 和 Llama 分别比较，结合初始风险、绝对残差与相对降幅�
 
 ### 曲线与偏好方向
 
-所有曲线限定共同的 0–320 更新。固定训练全池早期包含尚未访问的题，A–D 是其子集；训练与三域留出同时展示。
+所有曲线覆盖共同的 0–320 更新；训练全池、A–D 子集和三域留出同时展示。
 
 <a id="stage-curves-qwen-三组"></a>
 
@@ -149,7 +149,7 @@ Qwen 和 Llama 分别比较，结合初始风险、绝对残差与相对降幅�
 
 #### Tulu 阶段偏好方向的评分结果
 
-三条 320 更新 student 终点在同一 448 题固定状态上完成评分，不产生科学更新。[逐题矩](transfer-mechanism/data/stage-preferences-20261030/prompt-moments.csv)覆盖训练 A–T 和 Math／Code／IF 留出；[完成回执](transfer-mechanism/data/stage-preferences-20261030/complete.json)锁定权重、银行、精度与实现。由逐题矩重算全部 16 个配对投影差，最大差为 1.33e-15，见[复算记录](transfer-mechanism/data/stage-preferences-20261030/recomputed-contrasts.json)；这是汇总核对，不是第二次独立 forward 验证。
+三条 320 更新 student 终点在同一 448 题固定状态上评分。[逐题矩](transfer-mechanism/data/stage-preferences-20261030/prompt-moments.csv)覆盖训练 A–T 和 Math／Code／IF 留出；[完成回执](transfer-mechanism/data/stage-preferences-20261030/complete.json)锁定权重、银行、精度与实现。由逐题矩重算的 16 个配对投影差最大为 1.33e-15，见[复算记录](transfer-mechanism/data/stage-preferences-20261030/recomputed-contrasts.json)。
 
 ![Tulu 相邻阶段的学生偏好投影差](transfer-mechanism/data/stage-preferences-20261030/paired-stage-preferences.png)
 
@@ -160,7 +160,7 @@ Qwen 和 Llama 分别比较，结合初始风险、绝对残差与相对降幅�
 
 方括号为逐题配对 bootstrap 95% 区间；完整域别见[配对结果](transfer-mechanism/data/stage-preferences-20261030/paired-stage-projection.csv)。两条方向上，后阶段教师训练出的 student 均比前阶段对应 student 更沿后阶段的 token 偏好变化，且该现象出现在训练和固定留出上。
 
-**该读数为有符号的投影系数差，取值可超过 1。** 整体留出在 DPO→RLVR 方向的投影为 1.914→2.378，差为 0.465。相应余弦从 0.285 提升到 0.339；SFT→DPO 方向余弦从 0.136 提升到 0.676，见[几何量表](transfer-mechanism/data/stage-preferences-20261030/geometry.csv)。两个阶段方向具有不同的尺度和相关性，各自解释。
+该读数是有符号的投影系数差。整体留出在 DPO→RLVR 方向的投影为 1.914→2.378，差为 0.465；相应余弦从 0.285 提升到 0.339。SFT→DPO 方向余弦从 0.136 提升到 0.676，见[几何量表](transfer-mechanism/data/stage-preferences-20261030/geometry.csv)。
 
 在共享 student 输入、固定 S0、H1024 和单训练 seed 下，学生在训练与留出上都追随了部分教师偏好变化。独立任务表现由对应任务评测回答。
 
@@ -170,7 +170,7 @@ Qwen 和 Llama 分别比较，结合初始风险、绝对残差与相对降幅�
 
 ## MiMo：三类后训练教师
 
-固定 MiMo-7B-Base student，比较 SFT、Base 直接 RL、SFT 后继续 RL 三个冻结教师在相同数学训练与公共评估条件下的可拟合性。原 E69／E70 DeepSeekMath 方案已撤销；新 E71／E72／E73 分别对应 SFT+RL、直接 RL、SFT。模型阶段与固定 revision 统一见[阶段链选型](../../settings/模型与师生配对.md#mimo)；BayesRL／Olmo3 已进入下节的正式队列，Light-R1 尚未提交正式训练。
+固定 MiMo-7B-Base student，比较 SFT、Base 直接 RL、SFT 后继续 RL 三个冻结教师。E71／E72／E73 分别对应 SFT+RL、直接 RL、SFT；模型阶段与 revision 见[阶段链选型](../../settings/模型与师生配对.md#mimo)。
 
 <a id="mimo-1-实验分支"></a>
 
@@ -184,9 +184,86 @@ Qwen 和 Llama 分别比较，结合初始风险、绝对残差与相对降幅�
 | E72  | MiMo-7B-Base | MiMo-7B-RL-Zero | Base→RL      |
 | E73  | MiMo-7B-Base | MiMo-7B-SFT     | Base→SFT     |
 
-三组从同一 Base 权重和 fresh Adam 独立开始，不顺序续接。E71 对 E73 比较完整 SFT+RL 与 SFT 教师的拟合难度；E72 提供不经 SFT 的 RL 路径参照。公开教师的数据、监督和计算预算不同，这里研究三个真实目标，不宣称只改变唯一算法变量。固定银行、current 轨迹和任务表现分别报告，不新增“完全吸收”的数值门槛。
+三组从同一 Base 权重和 fresh Adam 独立开始。E71 对 E73 比较 SFT+RL 与 SFT 教师；E72 提供不经 SFT 的 RL 参照。固定银行、current 轨迹和任务表现分别报告。
 
-要测试“已经经过 SFT 的 student 是否能吸收同源 direct-RL teacher”，见已启动的 [MiMo E91](cases/2026-11-07-E91-MiMo-RL-Zero到SFT学生.md)。E91 从 MiMo-SFT 开始，复用 E72 的 MiMo-RL-Zero teacher，预算为 20 outer／320 updates；2026-11-07 已完成初始 SFT 的 6,703 条回答与八项 accuracy，尚无训练后 RKL。E72 已覆盖 RL→Base，E73 已覆盖 SFT→Base。E91 单独生成 initial/SFT bank 并开启重复停止，不将新基线拼入下方历史 Base 起点的三组曲线。
+要测试已完成 SFT 的 student 是否能吸收同源 direct-RL teacher，见下方 [MiMo E91](#e91)。E91 复用 E72 的 teacher，预算为 20 outer／320 updates；E72 已覆盖 RL→Base，E73 已覆盖 SFT→Base。
+
+<a id="e93"></a>
+
+### E93：MiMo SFT+RL teacher 到 SFT student
+
+E93 与 E91 共用 `MiMo-7B-SFT` student、题序、rollout、优化器和 OPD 预算，仅替换 teacher 谱系：E93 使用 `Base → SFT → RL` 的 `MiMo-7B-RL`，E91 使用 `Base → direct RL` 的 `MiMo-7B-RL-Zero`。
+
+| 项目         | E93 设置                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| Teacher      | `MiMo-7B-RL`，E71 固定 revision；谱系为 `MiMo-7B-Base → MiMo-7B-SFT → MiMo-7B-RL`                      |
+| Student      | `MiMo-7B-SFT`，与 E91 相同                                                                             |
+| 题池与银行   | 冻结 `questions-v2`；沿用 E91 prepared question manifest，initial-SFT、teacher、finalize bank 独立生成 |
+| 训练         | 20 outer、reuse=16、320 optimizer updates、batch=128；full-vocab reverse KL                            |
+| 优化器与长度 | AdamW，LR `1e-6`，weight decay `0.01`，clip `1`；prompt `2048`、response `7168`、context `32768`       |
+| 停止规则     | 三个 repetition-detection 入口均为 `{min_pattern_size: 16, max_pattern_size: 128, min_count: 8}`       |
+
+![E93 实时训练状态](figures/e93-live-20261108/e93-live-progress.png)
+
+[状态图 PDF](figures/e93-live-20261108/e93-live-progress.pdf)；[状态 CSV](figures/e93-live-20261108/status.csv)；[来源回执](figures/e93-live-20261108/provenance.json)
+
+截至 2026-11-08 23:29（UTC+8），E93 已完成三个前置阶段并进入 `E93-train`，计划 20 步但尚无 optimizer update、训练 loss、RKL 或 accuracy。运行详情、resolved config、源码合同、队列状态和独立 bank provenance 保留在 `runs/e93-mimo-rl-sft-20261108/`；首个完整 outer 后补充训练曲线和评估读出。
+
+<a id="e91"></a>
+
+### E91：MiMo direct-RL teacher 到 SFT student
+
+E91 使用 `MiMo-7B-RL-Zero → MiMo-7B-SFT`：teacher 是 Base 上直接做 RL 的 RL-Zero，student 是已经完成 SFT 的 checkpoint。它回答的是 direct-RL teacher 能否被 SFT student 吸收。E91 已于 2026-11-07 启动并于 2026-11-08 完成，320/320 个 optimizer update、outer-020 评估和收尾均已完成，队列状态为 `complete`，GPU1–4 已释放。
+
+最终训练点的 full-vocabulary RKL loss 为 `0.039824`，梯度范数为 `0.0600`；outer-020 的 current-student 全域 question-mean RKL 为 `0.106075`，teacher-prefix RKL 为 `0.261616`，相对初始 student bank 的 RKL 降幅为 `49.98%`。
+
+![E91 实时训练与评估进度](figures/e91-live-20261108/e91-live-progress.png)
+
+[矢量 PDF](figures/e91-live-20261108/e91-live-progress.pdf)；[训练 CSV](figures/e91-live-20261108/training.csv)；[评估 CSV](figures/e91-live-20261108/evaluation.csv)；[来源回执](figures/e91-live-20261108/provenance.json)
+
+E91 测试已完成 SFT 的 student 对同源 direct-RL teacher 的吸收；`SFT → RL → SFT` 对照由 E93 的 `MiMo-7B-RL` teacher 提供。
+
+#### E91 设置
+
+| 项目       | 设置                                                                                      |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| Student    | `MiMo-7B-SFT`，revision 见[模型与师生配对](../../settings/模型与师生配对.md#mimo)         |
+| Teacher    | `MiMo-7B-RL-Zero`，与 E72 相同 revision                                                   |
+| 题池       | `questions-v2`，冻结，`shuffle=False`；沿用 E72/E73 的 prepared question manifest         |
+| 评估银行   | E91 独立生成 initial/SFT、teacher 及 finalize 读出，逐题核对与 E72 的公共银行             |
+| Rollout    | 当前 student，每 outer 每题 1 条，temperature=1，top-p=1，seed=42                         |
+| 目标       | full-vocab reverse KL；不启用 source/history held-out                                     |
+| 预算       | 20 outer，reuse=16，320 optimizer updates，batch=128                                      |
+| 优化器     | AdamW，LR `1e-6`，weight decay `0.01`，gradient clip `1`                                  |
+| 长度与精度 | prompt `2048`、train response `7168`、context `32768`；student FP32，teacher/rollout BF16 |
+| 重复停止   | 三个入口均开启 `{min_pattern_size: 16, max_pattern_size: 128, min_count: 8}`              |
+
+训练 rollout、`val_kwargs` 和 `EvaluationCoordinator` 的各协议均显式设置 repetition detection；共同 EOS 停止集合为 `[151643,151645]`，重复停止保留已生成前缀。E72/E73 的历史配置中 repetition detection 为 `null`，因此 E91 与历史 Base-student 结果比较时同时报告 length、repetition、truncated、stop 和 unknown finish fraction。
+
+#### E91 初始 SFT 读出
+
+2026-11-07 15:05（UTC+8），initial generation 与 initial accuracy 完整发布，覆盖 1,648 道题、6,703 条回答；initial 进程用时 16,429 秒。它是 MiMo-7B-SFT 在 E91 更新前的能力基线。
+
+![E91 初始 SFT checkpoint 的八项准确率、回答长度与停止原因](figures/e91-initial-20261107/initial-readout.png)
+
+| 基准         | 题数 / n | Accuracy avg@n | 平均长度，token | Length stop | Repetition stop |
+| ------------ | -------- | -------------- | --------------- | ----------- | --------------- |
+| MATH-500     | 500 / 1  | 94.20%         | 4,120           | 0.40%       | 0.00%           |
+| AMC23        | 40 / 16  | 91.25%         | 6,982           | 2.34%       | 0.00%           |
+| AIME24       | 30 / 16  | 52.08%         | 13,234          | 9.58%       | 0.00%           |
+| AIME25       | 30 / 16  | 42.08%         | 14,124          | 12.08%      | 0.21%           |
+| AIME26       | 30 / 16  | 50.83%         | 12,981          | 9.58%       | 0.21%           |
+| LCBv5        | 279 / 10 | 53.51%         | 11,481          | 1.86%       | 0.00%           |
+| GPQA-Diamond | 198 / 4  | 29.04%         | 8,153           | 0.00%       | 0.13%           |
+| IFEval       | 541 / 1  | 52.87%         | 1,612           | 1.29%       | 1.29%           |
+
+分数先在题内对 n 个回答求均值，再在题间求均值（avg@n）。Math／Code／Science 回答 cap 为 24,576，IFEval 为 8,192；公共生成 T1、top-p0.95。完整 CSV、来源与协议、审计结果见[初始读出数据](figures/e91-initial-20261107/initial-readout.csv)、[provenance](figures/e91-initial-20261107/provenance.json)和[核验结果](figures/e91-initial-20261107/source-audit.json)。
+
+#### E91 与 Base-student 分支的比较
+
+E91 已并入下方[MiMo 终点结果](#mimo-e71-early)的 RKL 表、accuracy 表及四分支对比图。E72 与 E91 使用同一 direct-RL teacher，分别从 Base 和 SFT 初始化；二者均训练 320 次更新、2560 道题。E91 独立生成评估轨迹并开启重复停止，比较时保留这一协议差异。
+
+E91 的实际配置、源码合同和队列状态保留在 `runs/e91-mimo-rlzero-sft-20261107/`；绘图与复算入口为 `examples/mirroropd/research/studies/pipeline/report_e91_snapshot.py`。E72/E73 是对应的 Base-student 对照。
 
 <a id="mimo-2-共同训练设置"></a>
 
@@ -229,7 +306,7 @@ MiMo 论文§3.5.1 使用 T0.6、top-p0.95，Math／Code／Science 最大生成�
 | Science |       8192 |        24576 | GPQA-Diamond×4                        |
 | IF      |       8192 |         8192 | IFEval×1                              |
 
-公共生成继续使用已定 T1、top-p0.95、top-k−1、seed42；官方 T0.6 仅作来源说明。Accuracy 共 1648 题、每模型每节点 6703 答，沿用 JustRL 题量与 n，不替换成 MiMo 论文的重复数。实际结果不宣称复现官方分数。
+公共生成使用 T1、top-p0.95、top-k−1、seed42；accuracy 覆盖 1648 题、每模型每节点 6703 答。
 
 <a id="mimo-4-公共-rkl-与调度"></a>
 
@@ -261,37 +338,38 @@ E71 的训练终点由 50 outer 缩短为 25，已经执行的 reuse32 更新保
 
 固定公共银行仍在 outer0／1／2 及每 5 outer 评分，终点保留完整评估、HF 导出和原生重载校验。模型、初始银行、公共题目／panel、训练题序、LR、长度上限、采样协议、并发及 source/history 禁用设置均未改变。训练池仍有 6400 题，实际只使用对应的前 3200 或 2560 题。
 
-三个终点现在不等更新预算，也不等训练题量；后续比较同时标明 optimizer updates 和不同训练题数，不能将终点差异只归因于教师阶段。前 22 轮曲线保持其原始截点，不回写成 reuse16 的结果。
+三个终点的 optimizer updates 和训练题数不同，结果表同时列出这两个维度；前 22 轮曲线保留原始截点。
 
 修订后的完整配置为 [E71](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E71.yaml)、[E72](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E72.yaml)、[E73](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E73.yaml)，[配置差异与终点计划检查](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/config-check.json)限定了变化范围。原始 formal-configs 与源码快照保留；实际进程和接续情况由[正式队列状态](../../../../../runs/mimo-stage-transfer-20261101/formal-queue-state.json)及[预算接续状态](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)记录。公共 E71–E73 预设同步采用上述新预算，E74–E77 的 Olmo3／Light-R1 预算保持原样。
 
 <a id="mimo-e71-early"></a>
 
-### MiMo 三类教师的训练、固定银行与终点准确率
+### MiMo 训练、固定银行与终点对比（E71–E73、E91）
 
 2026-11-04 11:10（北京时间）的冻结快照覆盖全部三个终点：E71 为 25 outer／800 次更新，E72、E73 均为 20 outer／320 次更新。三组分别使用 SFT+RL、direct RL 和 SFT 教师，均从同一 Base 与 fresh Adam 开始。E71 训练 3200 道题、reuse32；E72／E73 各训练 2560 道题、reuse16。三组终点 accuracy、HF 导出和原生重载审计均已完成，正式队列于 11 月 4 日 02:12 结束。
 
 ![MiMo 三组逐更新训练 RKL、梯度、回答长度与长度上限结束比例](figures/mimo-stage-20261104-final/training.png)
 
-全部已记录更新均有效，loss 与梯度均有限。每批复用相同学生轨迹，换批后前缀分布改变，曲线因此呈锯齿。E71 最后一批 loss 从 0.10628 降到 0.04200，E72 从 0.000749 降到 0.000356，E73 最后一批从 0.09908 降到 0.06291；这些是各自教师、各自学生状态上的更新前 forward，不能直接作为跨组能力排名。
+每批复用同一学生轨迹，换批后前缀分布改变，曲线呈锯齿。E71 最后一批 loss 为 0.10628→0.04200，E72 为 0.000749→0.000356，E73 为 0.09908→0.06291；这些是各自教师和学生状态上的更新前 forward，用于训练过程读出。
 
-E71／E72 终点平均回答长分别为 6374.1／4991.8 token，以 7168 长度上限结束的比例分别为 71.09%／57.03%。E73 终点为 7063.3 token、97.66% 撞上限。大量训练轨迹受 cap 截断；改变 cap 会改变训练分布。
+E71／E72 终点平均回答长分别为 6374.1／4991.8 token，触及 7168 上限的比例为 71.09%／57.03%；E73 为 7063.3 token、97.66%。训练轨迹的长度分布因此受 response cap 影响。
 
 ![MiMo 各组在 Base 与各自教师固定前缀上的四域 RKL](figures/mimo-stage-20261104-final/fixed-bank-rkl.png)
 
-固定银行每域 128 题、sample0；先按题内有效 token 平均，再按题平均，四域等权。三个分支的 Base 前缀共享，但评分教师不同，teacher 前缀也由各自教师生成；绝对 RKL 不能作为统一能力排序。已完成读出的最新数值如下，三组均使用已完成的终点节点，缺失节点不填零、不外推。
+固定银行每域 128 题、sample0；先按题内有效 token 平均，再按题平均，四域等权。E71–E73 共享 Base 初始前缀，E91 使用自身初始 SFT 前缀；teacher 前缀按分支生成。下表列出四个终点，teacher-bank 的相对降幅见后面的合并图。
 
-| 分支          | 读出 outer／更新数 | Base 前缀四域均值 | Teacher 前缀四域均值 | Teacher Math | Teacher Code | Teacher Science | Teacher IF |
-| ------------- | ------------------ | ----------------: | -------------------: | -----------: | -----------: | --------------: | ---------: |
-| E71 SFT+RL    | 25／800            |          0.348725 |             0.288201 |     0.113490 |     0.127879 |        0.248125 |   0.663310 |
-| E72 direct RL | 20／320            |          0.004287 |             0.002795 |     0.001225 |     0.007132 |        0.001099 |   0.001726 |
-| E73 SFT       | 20／320            |          0.408868 |             0.337572 |     0.131802 |     0.154957 |        0.290229 |   0.773299 |
+| 分支                        | 读出 outer／更新数 | 初始 student 前缀四域均值 | Teacher 前缀四域均值 | Teacher Math | Teacher Code | Teacher Science | Teacher IF |
+| --------------------------- | ------------------ | ------------------------: | -------------------: | -----------: | -----------: | --------------: | ---------: |
+| E71 SFT+RL                  | 25／800            |                  0.348725 |             0.288201 |     0.113490 |     0.127879 |        0.248125 |   0.663310 |
+| E72 direct RL               | 20／320            |                  0.004287 |             0.002795 |     0.001225 |     0.007132 |        0.001099 |   0.001726 |
+| E73 SFT                     | 20／320            |                  0.408868 |             0.337572 |     0.131802 |     0.154957 |        0.290229 |   0.773299 |
+| E91 direct RL → SFT student | 20／320            |                  0.140523 |             0.261616 |     0.214965 |     0.079659 |        0.259935 |   0.491906 |
 
-E71 的 Teacher 前缀四域均值由初始 0.406126 降至 0.288201，IF 仍有较大残差。E72 已接近自身 direct-RL 教师的分布，能力结果也需要对照该教师本身的水平。
+E71 的 Teacher 前缀四域均值由初始 0.406126 降至 0.288201，IF 残差最大；E72 已接近自身 direct-RL 教师分布。
 
-![MiMo E71、E72 与 E73 的初始 Base、教师和终点学生八项准确率](figures/mimo-stage-20261104-final/accuracy.png)
+![MiMo E71–E73 与 E91 的最终 student accuracy，以及 E91 初始 SFT 基线](figures/mimo-stage-20261104-final/e91-comparison/accuracy-comparison.png)
 
-下表为百分数，统计单位是题：先平均该题的 n 个回答分数，再平均题目，即 avg@n，不是 pass@n。每个模型、节点覆盖全量 1648 题、6703 个回答；各任务 n 分别为 1／16／16／16／16／10／4／1。三组教师基线和学生终点均已完成。只有一个训练 seed，表内点估计不表示多 seed 稳定性。
+下表为百分数，统计单位是题：先平均该题的 n 个回答分数，再平均题目，即 avg@n。每个模型、节点覆盖 1648 题、6703 个回答；各任务 n 为 1／16／16／16／16／10／4／1，训练 seed 为 42。E91 使用 SFT student，E71–E73 使用 Base student；E91 开启重复停止，其余公共长度和采样条件见上文。E71–E73 原来的[初始／教师／终点三角色图](figures/mimo-stage-20261104-final/accuracy.png)保留作参考。
 
 | 模型／节点                 | MATH-500 | AMC23 | AIME24 | AIME25 | AIME26 | LCBv5 | GPQA-Diamond | IFEval |
 | -------------------------- | -------: | ----: | -----: | -----: | -----: | ----: | -----------: | -----: |
@@ -302,10 +380,20 @@ E71 的 Teacher 前缀四域均值由初始 0.406126 降至 0.288201，IF 仍有
 | E72 学生 outer20／320 更新 |    59.80 | 59.22 |  33.54 |  32.50 |  32.08 | 42.65 |         9.09 |  34.38 |
 | E73 教师 SFT               |    92.60 | 92.66 |  56.04 |  47.29 |  52.71 | 51.72 |        23.61 |  43.25 |
 | E73 学生 outer20／320 更新 |    62.20 | 45.47 |  26.88 |  21.88 |  19.79 | 44.77 |        37.75 |  38.08 |
+| E91 初始 SFT student       |    94.20 | 91.25 |  52.08 |  42.08 |  50.83 | 53.51 |        29.04 |  52.87 |
+| E91 学生 outer20／320 更新 |    91.40 | 89.06 |  49.79 |  47.50 |  49.17 | 52.29 |         8.08 |  44.73 |
 
-E71 在数学题和代码题上大幅高于初始 Base，但仍低于自己的教师；GPQA 的学生点估计高于教师，IFEval 没有超过 Base。E72 的数学准确率已接近其较弱的教师，固定 RKL 更低也没有使它达到 E71 的数学水平。E73 的数学和代码准确率高于 Base，但仍未达到自己的 SFT 教师；GPQA 点估计高于教师，IFEval 比 Base 高约 2.22 个百分点。同为 320 次更新、2560 道题的 E72／E73 中，E73 的 MATH-500 为 62.20% 对 59.80%，但 AMC／AIME 均低于 E72，GPQA 则为 37.75% 对 9.09%。教师阶段的相对结果随任务而异。E71 对其余两组还存在 800 对 320 次更新、3200 对 2560 道题的预算差异，不能单独归因于教师阶段。
+E71 在数学和代码上高于初始 Base，但低于自己的教师；GPQA 学生点估计高于教师，IFEval 接近 Base。E72 学生接近 direct-RL 教师。E73 的数学和代码高于 Base，GPQA 高于教师，IFEval 比 Base 高约 2.22 个百分点。同为 320 次更新的 E72／E73 中，E73 的 MATH-500 为 62.20% 对 59.80%，AMC／AIME 低于 E72，GPQA 为 37.75% 对 9.09%。E71 使用 800 次更新、3200 道训练题，预算高于另外两组。
 
-准确率已从逐回答 Parquet 独立重算，并核对题数、样本数、唯一键、有效状态和发布指标；固定银行 RKL 也由逐题行重算。[逐任务准确率](data/mimo-stage-20261104-final/accuracy.csv)、[逐题准确率](../../../../../../wandb-logs/MirrorOPD-verl/analysis/document-evidence-20261104/experiments/teacher-transfer/data/mimo-stage-20261104-final/accuracy-per-question.csv)、[冻结绘图数据](data/mimo-stage-20261104-final/plot-data.json)和[来源及哈希](data/mimo-stage-20261104-final/manifest.json)保存完整精度。分支摘要与逐更新、逐轮数据见 [E71](data/mimo-stage-20261104-final/E71/summary.json)、[E72](data/mimo-stage-20261104-final/E72/summary.json)、[E73](data/mimo-stage-20261104-final/E73/summary.json)；绘图与复算入口为 [`report_mimo_snapshot.py`](../../../research/studies/pipeline/report_mimo_snapshot.py)。PNG、PDF 与 SVG 同目录，审计记录在[figure-audit.json](figures/mimo-stage-20261104-final/figure-audit.json)。[早期 outer22 数据](data/mimo-e71-20261102-outer22/manifest.json)保持冻结，性能分析见[MiMo 训练成本](../../infra/performance/full-vocab/training.md#mimo-stage-cost)。
+E91 的 MATH-500 为 91.40%，接近 E71 的 92.60%；AMC23、AIME25、AIME26、LCBv5 和 IFEval 的点估计高于 E71。但相对自身 SFT 起点，E91 仅 AIME25 上升（42.08%→47.50%），其余七项下降，其中 GPQA-Diamond 为 29.04%→8.08%，IFEval 为 52.87%→44.73%。E91 的较高数学与代码终点同时包含了较强的 SFT 初始化。
+
+![MiMo E71–E73 与 E91 的 teacher-bank RKL 吸收进度](figures/mimo-stage-20261104-final/e91-comparison/rkl-absorption-comparison.png)
+
+RKL 图按各分支自己的 teacher-prefix 初始值计算降幅 $100(1-R_t/R_0)$：E71、E72、E73 的终点降幅分别为 29.04%、95.68%、27.13%，E91 为 31.34%。E91 的 teacher-bank RKL 为 0.381016→0.261616，E72 为 0.064745→0.002795；相同 teacher 和 320 更新下，SFT 初始化组的绝对残差更大、相对降幅更小。这组读出未支持 SFT 初始化更容易吸收 direct-RL 教师；各组 teacher 前缀独立生成，绝对残差仍依赖轨迹。
+
+完整逐点数据见[RKL 对比 CSV](figures/mimo-stage-20261104-final/e91-comparison/rkl-comparison.csv)、[accuracy 对比 CSV](figures/mimo-stage-20261104-final/e91-comparison/accuracy-comparison.csv)和[来源回执](figures/mimo-stage-20261104-final/e91-comparison/provenance.json)。E91 的初始与终点 accuracy 已从逐回答 Parquet 重算，七个节点的 teacher-bank RKL 已从逐题 Parquet 重算，见[核验结果](figures/mimo-stage-20261104-final/e91-comparison/source-audit.json)。[合并图生成脚本](../../../research/studies/fixed_transfer/plot_mimo_e91_comparison.py)导出 PNG、PDF、SVG；[RKL PDF](figures/mimo-stage-20261104-final/e91-comparison/rkl-absorption-comparison.pdf)和[accuracy PDF](figures/mimo-stage-20261104-final/e91-comparison/accuracy-comparison.pdf)可直接用于汇报。
+
+准确率从逐回答 Parquet 重算，固定银行 RKL 从逐题行重算。[逐任务准确率](data/mimo-stage-20261104-final/accuracy.csv)、[逐题准确率](../../../../../../wandb-logs/MirrorOPD-verl/analysis/document-evidence-20261104/experiments/teacher-transfer/data/mimo-stage-20261104-final/accuracy-per-question.csv)、[冻结绘图数据](data/mimo-stage-20261104-final/plot-data.json)和[来源及哈希](data/mimo-stage-20261104-final/manifest.json)保存完整数据。分支摘要与逐更新、逐轮数据见 [E71](data/mimo-stage-20261104-final/E71/summary.json)、[E72](data/mimo-stage-20261104-final/E72/summary.json)、[E73](data/mimo-stage-20261104-final/E73/summary.json)；绘图与复算入口为 [`report_mimo_snapshot.py`](../../../research/studies/pipeline/report_mimo_snapshot.py)。PNG、PDF 与 SVG 同目录，审计记录在[figure-audit.json](figures/mimo-stage-20261104-final/figure-audit.json)。[早期 outer22 数据](data/mimo-e71-20261102-outer22/manifest.json)保持冻结，性能分析见[MiMo 训练成本](../../infra/performance/full-vocab/training.md#mimo-stage-cost)。
 
 <a id="mimo-5-入口与状态"></a>
 
@@ -321,9 +409,9 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E72
 DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E73
 ```
 
-四份固定版本权重已落地，[原生 MiMo 工程验收](../../infra/model-compatibility/mimo/2026-11-01-MiMo原生下一token接入验收.md)已通过更新、公共读出、32K 上下文、终点原生重载及独立 HF 加载检查。短程验收使用独立的小样本、长度和更新预算，不替代本页修订后的正式预算，也不计入正式更新数。
+四份固定版本权重已落地，[原生 MiMo 工程验收](../../infra/model-compatibility/mimo/2026-11-01-MiMo原生下一token接入验收.md)已通过更新、公共读出、32K 上下文、终点原生重载及独立 HF 加载检查。短程验收使用独立的小样本、长度和更新预算；正式结果按本页预算统计。
 
-三组已按 E71→E72→E73 提交持久运行队列，从原始 Base 分别开始。[原始完整配置与计划](../../../../../runs/mimo-stage-transfer-20261101/formal-plan.json)保留初始设计；[运行状态](../../../../../runs/mimo-stage-transfer-20261101/formal-queue-state.json)与[预算接续状态](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)记录实际推进。三组均已完成，E71 为 25 outer／800 次更新，E72／E73 均为 20 outer／320 次更新。实际预算及执行顺序以[调整后的冻结队列](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/run_queue.py)为准，队列于 2026-11-04 02:12 成功结束，GPU1–4 已释放，MiMo 无后续训练任务。Olmo3 的 E74→E75 已提交独立四卡队列，见下节；Light-R1 的 E76／E77 尚未提交。
+三组已按 E71→E72→E73 提交持久队列并完成：E71 为 25 outer／800 次更新，E72／E73 均为 20 outer／320 次更新。配置、运行状态和预算接续记录见[原始计划](../../../../../runs/mimo-stage-transfer-20261101/formal-plan.json)、[运行状态](../../../../../runs/mimo-stage-transfer-20261101/formal-queue-state.json)和[预算状态](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)。调整后的执行顺序见[冻结队列](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/run_queue.py)；队列于 2026-11-04 02:12 结束，GPU1–4 已释放。Olmo3 的 E74→E75 见下节，Light-R1 的 E76／E77 仍为预设。
 
 <a id="mimo-参考文献"></a>
 
