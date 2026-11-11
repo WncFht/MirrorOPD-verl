@@ -25,7 +25,7 @@ E57、E81、E82、E83 使用 κ=1、η=0.1，此时 $m=0.9q+0.1T$，$Z=1$，所�
 | E82  | 1 / 0.1   | 256 / 16      | token-mean          | 70 / 1120               |
 | E83  | 1 / 0.1   | 256 / 16      | seq-mean-token-mean | 30 / 480                |
 
-模型均为 Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507，LR=1e-6，future=none。其余历史配置、执行精度与停止协议差异分别见[E55–E57 主报告](weighted-targets.md)和[当前实验](weighted-targets-active.md)。E82 应用已有 SHA256 排除清单，隔离重复实例写入；仅取有效连续 update。E84–E90 在该快照未找到正式 position 指标，不补造曲线。
+模型均为 Qwen3-1.7B-Base ← Qwen3-30B-A3B-Instruct-2507，LR=1e-6，future=none。其余历史配置、执行精度与停止协议差异分别见[E55–E57 主报告](weighted-targets.md)和[当前实验](weighted-targets.md)。E82 应用已有 SHA256 排除清单，隔离重复实例写入；仅取有效连续 update。E84–E90 在该快照未找到正式 position 指标，不补造曲线。
 
 first / last 是同一 outer 中第 1 / 第 16 次 optimizer 操作前的观测，两点间为 15 次更新。若最后一个 outer 尚未写满 16 次，last 只表示最后已记录的观测，图表数据保留实际 reuse；覆盖表不表示运行已经结束。每张热力图全部面板共用一个线性色阶，early / late 放大窗口各自重新定标；训练线图 first / last 共用对数纵轴。跨 outer 的 batch、前缀和 target 都会变化。
 

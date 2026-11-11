@@ -1,0 +1,30 @@
+{
+  "log_repo_commit": "3633b7c3a554e7e6e4ebdfa5c85ed9d61b881fd1",
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/offline-run-20261109_022054-x73jzh0z",
+  "history_rows": 1700,
+  "optimizer_updates": 1600,
+  "outer_rows": 100,
+  "validation_events": 5,
+  "sources": [
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/wandb-e84-20261110/history.jsonl",
+      "sha256": "b639f9c415d184d95799dfcb7055262f91458074726b59825ba74fba7d731f39",
+      "bytes": 20097746
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/wandb-e84-20261110/run.json",
+      "sha256": "6c8aeb3f45109d77a40ed203943a8bb5422bffd5202803a0ad2623c37e677624",
+      "bytes": 142759
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/learning-signal/figures/e82-e83-comparison-20261107/updates.csv",
+      "sha256": "1f86d3b9b5be66a7fa668ae69af6f6663809f0cb27fb640cfae40541835e104b",
+      "bytes": 188908
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/weighted_targets/analyze_e84_history.py",
+      "sha256": "7618e5cdba34a3c0b2b34b4578b0fe92c64dd9cad72ab583013908902c4366df",
+      "bytes": 15782
+    }
+  ]
+}
