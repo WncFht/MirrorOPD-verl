@@ -1462,6 +1462,8 @@ def test_topd_large_batch_presets_resolve_four_gpu_budget_and_repetition_stoppin
         ("E88", "sum", "token-mean", 1.0),
         ("E89", "discounted_sum", "token-mean", 0.99),
         ("E90", "discounted_mean", "token-mean", 0.99),
+        ("E92", "discounted_sum", "token-mean", 0.95),
+        ("E93", "discounted_mean", "token-mean", 0.95),
     ],
 )
 def test_topd_eight_gpu_ablation_presets_disable_checkpoints(tmp_path, preset, future, aggregation, gamma):
