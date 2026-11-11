@@ -59,3 +59,7 @@ python -m examples.mirroropd.research.studies.spectral.iso.merger --help
 有依据的后续实验另建冻结队列，通过 `continue_queue` 等待指定前驱全部完成（仅接受逐任务、逐 attempt 匹配审计回执的设置取消例外）、exit 已写且八卡回到 occupying 后才申请卡。`queue-chain.json` 显式列出队列；分析与 monitor 同时覆盖全部队列，保留每个任务的所属 ledger，不覆盖前驱身份或重复启动前驱 supervisor。
 
 训练 loss 复用 `verl.trainer.distillation.reverse_vocab.full_reverse_kl_result`，默认 precompute、token chunk128，保留固定 H128 归约；可显式选择其他已支持 backend。新 rollout 的 teacher hidden 在设备上重算，避免原 CPU 往返。冻结运行不受源码更新影响。该入口是独立参数化诊断，尚未接入生产 trainer 的 DAPO batch/reuse/rollout 配置；正式训练按报告中的设置审计先验收。
+
+## 可选回缩加速
+
+`training --retraction newton` 使用经过邻域与完整正交检查的 FP64 Newton–Schulz 极分解；不收敛时回退精确 SVD，默认仍为 `svd`。每步记录调用、成功与回退计数。仅谱梯度使用对角收缩，避免构造完整 UᵀGV。真实形状、四步优化器与 DAPO 两步读出结果见[性能验收](../../../../docs/infra/performance/spectral/固定谱优化器加速.md)。

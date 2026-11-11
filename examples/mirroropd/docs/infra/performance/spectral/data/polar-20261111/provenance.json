@@ -1,0 +1,23 @@
+{
+  "source_sha256": {
+    "examples/mirroropd/research/studies/spectral/iso/retraction.py": "2d2854a6c74f4376fd4f28f47df5bdae9828647b30abfe4077f5e059c453137e",
+    "examples/mirroropd/research/studies/spectral/iso/training.py": "a8e0deba1becf4ccd245d18f578d4e7c10022b757ad8a7d5d462132b73f03994",
+    "examples/mirroropd/research/studies/spectral/iso/benchmark_retraction.py": "bbf39a82fc90d127b8e2687eb633062a987ab4c01e2dfe776937df4afcab553d",
+    "examples/mirroropd/research/studies/spectral/iso/benchmark_optimizer.py": "3aff9cdc806db646216334222ccd68fbfca8335b5ca32497a394e67e3df5a986"
+  },
+  "gpu": "H800",
+  "scope": "18 unique real-checkpoint frame shapes; synthetic perturbations; three synthetic-gradient optimizer shapes; four steps",
+  "tests": "484 full CPU regression tests; after telemetry integration, 32 targeted ISO/retraction tests passed",
+  "frozen_source_sha256_files": [
+    "polar-source-v1-hashes.json"
+  ],
+  "solver": "FP64 gesvd reference",
+  "default": "SVD unchanged; newton is opt-in",
+  "online_protocol_sha256": {
+    "svd": "5dbffecabab4c068a4a51c2767ab4346137453bd3c584da3f20f7fbcb374d604",
+    "newton": "ede31568e34467b5404f408b6e813d8314394b5b856885a101acccf48427fbff"
+  },
+  "input_sha256": "0f538fae72854c81bf6c04de15671e696d7878ca163b51820cce96583fd23d55",
+  "retained_attempt_failure": "v1 input serialization rejected Transformers BatchEncoding before GPU lease; v2 uses tokenize=False followed by encode, matching absorption prompt preparation",
+  "capture_replication": "SVD and Newton each reproduced own step2 question RKL exactly; both real gradient tensors matched bitwise"
+}

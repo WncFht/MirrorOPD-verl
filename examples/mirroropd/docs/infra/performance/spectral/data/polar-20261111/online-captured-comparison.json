@@ -1,0 +1,40 @@
+[
+  {
+    "step": 1,
+    "tensor": "model.layers.13.self_attn.k_proj.weight",
+    "before_weight": {
+      "relative": 0.0,
+      "max_absolute": 0.0,
+      "different_elements": 0
+    },
+    "gradient": {
+      "relative": 0.0,
+      "max_absolute": 0.0,
+      "different_elements": 0
+    },
+    "after_weight": {
+      "relative": 4.275628564370676e-09,
+      "max_absolute": 7.450580596923828e-09,
+      "different_elements": 8650
+    }
+  },
+  {
+    "step": 2,
+    "tensor": "model.layers.13.self_attn.k_proj.weight",
+    "before_weight": {
+      "relative": 4.275628564370676e-09,
+      "max_absolute": 7.450580596923828e-09,
+      "different_elements": 8650
+    },
+    "gradient": {
+      "relative": 0.0,
+      "max_absolute": 0.0,
+      "different_elements": 0
+    },
+    "after_weight": {
+      "relative": 2.5867931510010848e-08,
+      "max_absolute": 1.4901161193847656e-08,
+      "different_elements": 248535
+    }
+  }
+]

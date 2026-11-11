@@ -1,0 +1,13 @@
+{
+  "matrices": 18,
+  "passed": true,
+  "fallback": {
+    "requested": "newton",
+    "used": "svd",
+    "iterations": 0,
+    "fallback": "outside certified near-orthogonal basin",
+    "initial_gram_frobenius": 608.5508542854342
+  },
+  "peak_allocated_bytes": 5694378496,
+  "completed_at": 1794379341.1995885
+}
