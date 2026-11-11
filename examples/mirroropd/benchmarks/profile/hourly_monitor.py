@@ -3,7 +3,10 @@
 """Hourly follow-up in the existing Codex thread, until an explicit reviewed DONE.
 
 The daemon only queues prompts. The existing conversation performs the review;
-GPU allocation remains owned by the experiment runner. One unacknowledged prompt
+GPU allocation remains owned by the experiment runner. --prompt-file supplies a
+task-owned {root}/{tick} template; --resume requests daemon delivery. Without
+these options the existing Full-KL prompt and queue-only behavior are retained.
+One unacknowledged prompt
 is allowed, preventing a growing backlog while the conversation is busy.
 """
 
@@ -56,6 +59,8 @@ def main():
     p.add_argument("--thread", required=True)
     p.add_argument("--codex", required=True)
     p.add_argument("--interval", type=int, default=3600)
+    p.add_argument("--prompt-file", type=Path, help="Task-owned template with {root} and {tick} placeholders")
+    p.add_argument("--resume", action="store_true", help="Ask the local daemon to resume the queued thread")
     args = p.parse_args()
     if args.interval < 60:
         p.error("interval must be at least 60 seconds")
@@ -90,8 +95,16 @@ def main():
             else:
                 tick = state["tick"] + 1
                 try:
+                    prompt = (
+                        args.prompt_file.read_text().replace("{root}", str(root)).replace("{tick}", str(tick))
+                        if args.prompt_file
+                        else review_prompt(root, tick)
+                    )
+                    command = [args.codex, "queue", "--thread", args.thread, "--message", prompt]
+                    if args.resume:
+                        command.append("--resume")
                     result = subprocess.run(
-                        [args.codex, "queue", "--thread", args.thread, "--message", review_prompt(root, tick)],
+                        command,
                         capture_output=True,
                         text=True,
                         timeout=90,
@@ -105,6 +118,7 @@ def main():
                             state="queued",
                             queued_at=stamp(),
                             message_id=match.group(1) if match else None,
+                            delivery_output=(result.stdout + result.stderr)[-2000:],
                         )
                     else:
                         state.update(state="queue_failed", last_error=(result.stderr or result.stdout)[-2000:])
