@@ -197,16 +197,31 @@ def render(summary, output):
         )
         fig.subplots_adjust(left=0.43, right=0.98, bottom=0.14, top=0.92)
         save(fig, "rank90-transport")
-    training = summary["training"]
-    if training:
+    for key, figure_name, caption in [
+        (
+            "training",
+            "online-opd-curves",
+            "12-prompt diagnostic pilot (not DAPO training); fixed Math eval; one line per seed.",
+        ),
+        (
+            "dapo_training",
+            "dapo-opd-curves",
+            "DAPO train / fixed Math heldout; 64 updates; one line per seed; equal nominal LR.",
+        ),
+    ]:
+        training = summary.get(key, [])
+        if not training:
+            continue
         energies = [
             v["rkl"]
             for row in training
             for v in row["scores"]
             if v["origin"] == "initial-student" and v["split"] == "heldout" and v["domain"] == "math"
         ]
-        fig, axes = plt.subplots(2, 2, figsize=(10, 7), squeeze=False)
-        for ax, job_id in zip(axes.flat, [2, 7, 8, 11], strict=True):
+        job_ids = [2, 7, 8, 11] if key == "training" else [2, 7, 8, 11, 19, 20]
+        nrows = (len(job_ids) + 1) // 2
+        fig, axes = plt.subplots(nrows, 2, figsize=(10, 3.5 * nrows), squeeze=False)
+        for ax, job_id in zip(axes.flat, job_ids, strict=True):
             for row in training:
                 if row["protocol"]["job"]["job_id"] != job_id:
                     continue
@@ -232,19 +247,21 @@ def render(summary, output):
             ax.set_ylabel("Absolute heldout RKL (fixed subset)")
             ax.set_yscale("log")
             ax.set_ylim(min(energies) * 0.8, max(energies) * 1.2)
-        handles, labels = axes.flat[0].get_legend_handles_labels()
-        unique = dict(zip(labels, handles, strict=True))
+        unique = {}
+        for ax in axes.flat:
+            handles, labels = ax.get_legend_handles_labels()
+            unique.update(zip(labels, handles, strict=True))
         fig.legend(unique.values(), unique.keys(), loc="upper center", ncol=3, frameon=False)
         fig.text(
             0.5,
             0.02,
-            "12-prompt diagnostic pilot (not DAPO training); fixed Math eval; one line per seed.",
+            caption,
             ha="center",
             fontsize=10,
             color=fv.NEUTRALS["baseline"],
         )
         fig.subplots_adjust(top=0.88, hspace=0.5, wspace=0.35, bottom=0.17)
-        save(fig, "online-opd-curves")
+        save(fig, figure_name)
     dump(output / "figure-audit.json", audits)
 
 

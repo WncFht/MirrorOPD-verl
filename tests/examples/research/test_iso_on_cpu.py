@@ -246,3 +246,49 @@ def test_continuation_only_accepts_audited_setting_cancellations(tmp_path):
     (tmp_path / "training-setting-correction.json").write_text(json.dumps(dict(cancelled_children=[dict(task=task)])))
     assert predecessor_ready(tmp_path, predecessor, [task])
     assert not predecessor_ready(tmp_path, predecessor, [dict(task, output_attempt="another-attempt")])
+
+
+def test_predecessor_gpu_policy_interrupt_requires_matching_successful_replacement(tmp_path):
+    from examples.mirroropd.research.core.io import dump
+    from examples.mirroropd.research.studies.spectral.iso.continue_queue import predecessor_ready
+
+    predecessor = tmp_path / "queue"
+    predecessor.mkdir()
+    original = dict(task_id=3, status="interrupted", output_attempt=str(predecessor / "attempt-001"))
+    replacement = dict(task_id=4, status="pending", retry_of=3, output_attempt=str(predecessor / "attempt-002"))
+    dump(predecessor / "rear-lanes-retirement.json", dict(tasks=[dict(task=original)]))
+    assert not predecessor_ready(tmp_path, predecessor, [original, replacement])
+    replacement["status"] = "complete"
+    assert predecessor_ready(tmp_path, predecessor, [original, replacement])
+    original["output_attempt"] = "unrelated-attempt"
+    assert not predecessor_ready(tmp_path, predecessor, [original, replacement])
+
+
+def test_dapo_training_is_kept_separate_from_calibration_pilot(tmp_path):
+    from examples.mirroropd.research.core.io import dump
+    from examples.mirroropd.research.studies.spectral.iso.analyze import summarize
+
+    dump(tmp_path / "offline-manifest.json", dict(jobs=[]))
+    queue = tmp_path / "offline-v2"
+    attempt = queue / "attempt-001"
+    row = dict(origin="initial-student", row_id="math:1", split="heldout", domain="math", rkl=0.1, fkl=0.2)
+    dump(attempt / "result/scores/step-0000.json", dict(rows=[row]))
+    dump(attempt / "result/protocol.json", dict(training_data=dict(source_family="dapo"), steps=64))
+    dump(attempt / "result/learning-curve.json", [])
+    dump(
+        queue / "queue.json",
+        dict(
+            jobs=[
+                dict(
+                    status="complete",
+                    label="dapo-training-7-weights-42",
+                    output_attempt=str(attempt),
+                    complete_marker="result/complete.json",
+                )
+            ]
+        ),
+    )
+    dump(tmp_path / "active-queue.json", dict(path=str(queue)))
+    summary = summarize(tmp_path, tmp_path / "analysis")
+    assert len(summary["dapo_training"]) == 1
+    assert summary["training"] == []

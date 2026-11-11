@@ -57,6 +57,8 @@ def update(root, mutate):
 def claim(root, gpu):
     def change(state):
         settings = read(root / "settings.json") if (root / "settings.json").exists() else {}
+        if settings.get("allowed_gpus") is not None and gpu not in settings["allowed_gpus"]:
+            raise PermissionError(f"Physical GPU {gpu} is outside this queue allocation")
         if any(path.exists() for path in [root / "STOP", *map(Path, settings.get("stop_paths", []))]):
             return None
         for task in state["jobs"]:
@@ -244,6 +246,8 @@ def run(root, repo, resource, gpus):
         if recovery["live"] or recovery["unknown"]:
             raise RuntimeError(f"Existing tasks prevent takeover; inspect process identities: {recovery}")
         settings = read(root / "settings.json")
+        if settings.get("allowed_gpus") is not None and not set(gpus).issubset(settings["allowed_gpus"]):
+            raise PermissionError("Requested physical GPUs exceed this queue allocation")
         stops = [root / "STOP", *map(Path, settings.get("stop_paths", []))]
 
         def lane(gpu):
