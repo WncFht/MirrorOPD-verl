@@ -1,0 +1,156 @@
+{
+  "pairs": 18,
+  "continuous_pairs": 16,
+  "conditions": 19,
+  "matrices": 3808,
+  "student_matrix_records": 3640,
+  "control_matrices": 90,
+  "maximum_sketch_seed_spread": 0.001987577718865985,
+  "ridge_log_final_RMSE": {
+    "initial": 0.7723649013850232,
+    "initial+concentration": 0.44713954319369464,
+    "initial+geometry": 0.6148548237357246,
+    "initial+norm": 0.6096676929369911
+  },
+  "ridge_MSE_differences": {
+    "initial+concentration": {
+      "mean_MSE_difference": -0.3966137698040308,
+      "bootstrap95": [
+        -0.7659993252186178,
+        -0.06120642592211684
+      ]
+    },
+    "initial+geometry": {
+      "mean_MSE_difference": -0.21850108662040774,
+      "bootstrap95": [
+        -0.5558369716329984,
+        0.08370147347825037
+      ]
+    },
+    "initial+norm": {
+      "mean_MSE_difference": -0.22485284508038345,
+      "bootstrap95": [
+        -0.5805077030420382,
+        0.06405230228399456
+      ]
+    }
+  },
+  "leave_family_out_method_accuracy": {
+    "concentration": 0.8571428571428571,
+    "norm": 0.8571428571428571,
+    "norm+concentration": 0.8571428571428571
+  },
+  "method_classification_teachers": 14,
+  "coverage": [
+    {
+      "pair_id": "ece1f975fd91024f",
+      "teacher": "deepcoder",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "8dc073259e329efe",
+      "teacher": "deepscaler",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "bd3c5aa7af510493",
+      "teacher": "justrl",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "0f69d311264420fa",
+      "teacher": "minimath",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "37e9fcf49a67d934",
+      "teacher": "brorl",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "f2ee063c71c81230",
+      "teacher": "nemotron",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "adfcd3e4aacecad5",
+      "teacher": "light",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "130b1aa795c9b106",
+      "teacher": "grpo-kl",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "3e4d7f859fe155f8",
+      "teacher": "sft-gsm8k",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "eebed16df2bee828",
+      "teacher": "e3",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "38610d9b50b018b2",
+      "teacher": "coreward-i",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "782c0d6c55675e4a",
+      "teacher": "gt",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "e01abaeeef1a3603",
+      "teacher": "arithmetic-full",
+      "observed": 196,
+      "expected": 196
+    },
+    {
+      "pair_id": "e870e2d9abd7bd2d",
+      "teacher": "MiMo-SFT",
+      "observed": 252,
+      "expected": 252
+    },
+    {
+      "pair_id": "b5a5858d9357ac96",
+      "teacher": "MiMo-RL",
+      "observed": 252,
+      "expected": 252
+    },
+    {
+      "pair_id": "09e6abfcc7b89d99",
+      "teacher": "MiMo-RL-from-SFT",
+      "observed": 252,
+      "expected": 252
+    },
+    {
+      "pair_id": "6aaa7aad6134bce2",
+      "teacher": "MiMo-Zero-from-SFT",
+      "observed": 252,
+      "expected": 252
+    },
+    {
+      "pair_id": "1ce0f29e56212a45",
+      "teacher": "MiMo-Zero",
+      "observed": 252,
+      "expected": 252
+    }
+  ],
+  "scope": "all attention/MLP matrices, embeddings/head/norm excluded",
+  "notes": "H1024 and macro-bank risks separate; randomized top16 energies lower bounds; controls parameter-only"
+}

@@ -1,0 +1,48 @@
+student,teacher,label,same_size,added_stage,budget,run_id
+r1,deepcoder,DeepCoder-1.5B-Preview,True,RL; no added SFT,64,r1--deepcoder--82946e34
+r1,deepscaler,DeepScaleR-1.5B-Preview,True,RL; no added SFT,320,r1--deepscaler--a7c14513
+r1,r7,DeepSeek-R1-Distill-Qwen-7B,False,Base/OPD/public-history control,64,r1--r7--cb611a77
+r1,justrl,JustRL-DeepSeek-1.5B,True,RL; no added SFT,320,r1--justrl--534ec3bd
+r1,light,Light-R1-7B-DS,False,added SFT,64,r1--light--63d7f49e
+r1,minimath,MiniMath-R1-1.5B,True,added SFT,320,r1--minimath--18ba6165
+r1,brorl,Nemotron-Research-Reasoning-Qwen-1.5B / BroRL,True,RL; no added SFT,320,r1--brorl--c9731fdc
+r1,nemotron,Nemotron-Research-Reasoning-Qwen-1.5B v1,True,RL; no added SFT,320,r1--nemotron--49bfdcb0
+r1,skywork,Skywork-OR1-Math-7B,False,RL; no added SFT,64,r1--skywork--93c08b53
+r7,r1,DeepSeek-R1-Distill-Qwen-1.5B,False,Base/OPD/public-history control,320,r7--r1--1b670e84
+r7,justrl,JustRL-DeepSeek-1.5B,False,RL; no added SFT,320,r7--justrl--9beb8d08
+r7,light,Light-R1-7B-DS,True,added SFT,64,r7--light--7e4c0413
+q3-1.7,q3-0.6,Qwen3-0.6B,False,Base/OPD/public-history control,320,q3-1.7--q3-0.6--45372d57
+q3-1.7,q3-base,Qwen3-1.7B-Base,True,Base/OPD/public-history control,320,q3-1.7--q3-base--736a7095
+q3-1.7,base-opd,Qwen3-1.7B-Base-OPD / Thinking-Space,True,Base/OPD/public-history control,320,q3-1.7--base-opd--a584179e
+q3-1.7,grpo-kl,Qwen3-1.7B-GRPO-KL-Math,True,RL; no added SFT,320,q3-1.7--grpo-kl--7a02ee6c
+q3-1.7,sft-gsm8k,Qwen3-1.7B-Math / Samsung SFT,True,added SFT,320,q3-1.7--sft-gsm8k--a19448d4
+q3-1.7,sft-deepmath,Qwen3-1.7B-SFT / Thinking-Space,True,added SFT,320,q3-1.7--sft-deepmath--20bfd6b7
+q3-1.7,q3-4,Qwen3-4B,False,Base/OPD/public-history control,320,q3-1.7--q3-4--a83786d5
+q3-1.7,Q2,Qwen3-4B Math-CoT SFT step640,False,added SFT,320,q3-1.7--Q2--803e77d3
+q3-1.7,Q1,Qwen3-4B Math-CoT SFT step80,False,added SFT,320,q3-1.7--Q1--59906389
+q3-1.7,base-grpo-4,Qwen3-4B-Base-GRPO / Thinking-Space,False,RL; no added SFT,320,q3-1.7--base-grpo-4--7c13ad10
+q3-1.7,q3-4-thinking2507,Qwen3-4B-Thinking-2507,False,Base/OPD/public-history control,64,q3-1.7--q3-4-thinking2507--d513d4fe
+q3-1.7,q3-8,Qwen3-8B,False,Base/OPD/public-history control,320,q3-1.7--q3-8--8939aa26
+q3-1.7,e3,e3-1.7B,True,RL; no added SFT,320,q3-1.7--e3--eef55d0d
+q3-1.7-nonthinking,coreward-i,Co-rewarding-I-Qwen3-1.7B-Base-MATH,True,RL; no added SFT,320,q3-1.7-nonthinking--coreward-i--79bbb94e
+q3-1.7-nonthinking,coreward-ii,Co-rewarding-II-Qwen3-1.7B-Base-MATH,True,RL; no added SFT,320,q3-1.7-nonthinking--coreward-ii--f966fdd5
+q3-1.7-nonthinking,base-gt-math,GT-Qwen3-1.7B-Base-MATH,True,RL; no added SFT,320,q3-1.7-nonthinking--base-gt-math--0cd3037d
+q3-1.7-nonthinking,q3-0.6,Qwen3-0.6B,False,Base/OPD/public-history control,320,q3-1.7-nonthinking--q3-0.6--e6abcc19
+q3-1.7-nonthinking,base-opd,Qwen3-1.7B-Base-OPD / Thinking-Space,True,Base/OPD/public-history control,320,q3-1.7-nonthinking--base-opd--5fe4e498
+q3-1.7-nonthinking,sft-gsm8k,Qwen3-1.7B-Math / Samsung SFT,True,added SFT,320,q3-1.7-nonthinking--sft-gsm8k--319ebf4f
+q3-1.7-nonthinking,sft-deepmath,Qwen3-1.7B-SFT / Thinking-Space,True,added SFT,320,q3-1.7-nonthinking--sft-deepmath--0f42bcbc
+q3-1.7-nonthinking,q3-4,Qwen3-4B,False,Base/OPD/public-history control,320,q3-1.7-nonthinking--q3-4--e16a1263
+q3-1.7-nonthinking,base-grpo-4,Qwen3-4B-Base-GRPO / Thinking-Space,False,RL; no added SFT,320,q3-1.7-nonthinking--base-grpo-4--d7ad896c
+q3-1.7-nonthinking,q3-8,Qwen3-8B,False,Base/OPD/public-history control,320,q3-1.7-nonthinking--q3-8--ff035f57
+llama3-3b-off,coreward-i,Co-rewarding-I-Llama-3.2-3B-Instruct-MATH,True,RL; no added SFT,320,llama3-3b-off--coreward-i--72c4db04
+llama3-3b-off,gt,GT-Llama-3.2-3B-Instruct-MATH,True,RL; no added SFT,320,llama3-3b-off--gt--59498cdb
+llama3-3b-off,llama-8b,Llama-3.1-8B-Instruct / Unsloth,False,Base/OPD/public-history control,320,llama3-3b-off--llama-8b--c649fdf1
+llama3-3b-off,L4,Llama-3.1-8B-SimpleRL-Zoo,False,RL; no added SFT,320,llama3-3b-off--L4--3e7e303a
+llama3-3b-off,nemotron-8b,Llama-3.1-Nemotron-Nano-8B-v1,False,Base/OPD/public-history control,320,llama3-3b-off--nemotron-8b--b2874fe9
+llama3-3b-off,L3,Llama-3.1-Tulu-3-8B,False,added SFT,320,llama3-3b-off--L3--27735f0f
+llama3-3b-off,L2,Llama-3.1-Tulu-3-8B-DPO,False,added SFT,320,llama3-3b-off--L2--d66ecb21
+llama3-3b-off,L1,Llama-3.1-Tulu-3-8B-SFT,False,added SFT,320,llama3-3b-off--L1--a56fcde3
+llama3-3b-off,llama-1b,Llama-3.2-1B-Instruct / Unsloth,False,Base/OPD/public-history control,320,llama3-3b-off--llama-1b--716423d8
+llama3-3b-off,arithmetic-full,Llama-3.2-3B-Instruct-arithmetic-full,True,added SFT,320,llama3-3b-off--arithmetic-full--131f84b3
+q3-1.7-native-thinking2507,q3-4-thinking2507,Qwen3-4B-Thinking-2507,False,Base/OPD/public-history control,320,q3-1.7-native-thinking2507--q3-4-thinking2507--b76358b2
+q3-1.7-native-instruct2507,q3-4-instruct2507,Qwen3-4B-Instruct-2507,False,Base/OPD/public-history control,320,q3-1.7-native-instruct2507--q3-4-instruct2507--8f377ff4

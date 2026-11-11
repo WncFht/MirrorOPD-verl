@@ -1,0 +1,341 @@
+{
+  "results": [
+    {
+      "student": "r1",
+      "teachers": 5,
+      "teacher_pairs": 10,
+      "geometry": "normalized_spectrum_distance",
+      "target": "absolute_curve_distance",
+      "spearman": 0.12727272727272726,
+      "whole_teacher_permutations": 120,
+      "permutation95": [
+        -0.5648484848484848,
+        0.8545454545454544
+      ],
+      "permutation_tail_fraction": 0.85
+    },
+    {
+      "student": "r1",
+      "teachers": 5,
+      "teacher_pairs": 10,
+      "geometry": "normalized_spectrum_distance",
+      "target": "relative_shape_distance",
+      "spearman": 0.4424242424242424,
+      "whole_teacher_permutations": 120,
+      "permutation95": [
+        -0.5878787878787878,
+        0.7939393939393938
+      ],
+      "permutation_tail_fraction": 0.4
+    },
+    {
+      "student": "r1",
+      "teachers": 5,
+      "teacher_pairs": 10,
+      "geometry": "norm_logratio",
+      "target": "absolute_curve_distance",
+      "spearman": -0.01818181818181818,
+      "whole_teacher_permutations": 120,
+      "permutation95": [
+        -0.5275757575757575,
+        0.8312121212121208
+      ],
+      "permutation_tail_fraction": 0.9916666666666667
+    },
+    {
+      "student": "r1",
+      "teachers": 5,
+      "teacher_pairs": 10,
+      "geometry": "norm_logratio",
+      "target": "relative_shape_distance",
+      "spearman": 0.33333333333333326,
+      "whole_teacher_permutations": 120,
+      "permutation95": [
+        -0.5645454545454545,
+        0.8551515151515148
+      ],
+      "permutation_tail_fraction": 0.55
+    },
+    {
+      "student": "r1",
+      "teachers": 5,
+      "teacher_pairs": 10,
+      "geometry": "delta_cosine",
+      "target": "absolute_curve_distance",
+      "spearman": -0.19999999999999998,
+      "whole_teacher_permutations": 120,
+      "permutation95": [
+        -0.5515151515151515,
+        0.8066666666666663
+      ],
+      "permutation_tail_fraction": 0.6333333333333333
+    },
+    {
+      "student": "r1",
+      "teachers": 5,
+      "teacher_pairs": 10,
+      "geometry": "delta_cosine",
+      "target": "relative_shape_distance",
+      "spearman": -0.006060606060606061,
+      "whole_teacher_permutations": 120,
+      "permutation95": [
+        -0.588181818181818,
+        0.8551515151515148
+      ],
+      "permutation_tail_fraction": 1.0
+    },
+    {
+      "student": "r1",
+      "teachers": 5,
+      "teacher_pairs": 10,
+      "geometry": "relative_delta_distance",
+      "target": "absolute_curve_distance",
+      "spearman": 0.05454545454545454,
+      "whole_teacher_permutations": 120,
+      "permutation95": [
+        -0.5518181818181818,
+        0.8430303030303027
+      ],
+      "permutation_tail_fraction": 0.9083333333333333
+    },
+    {
+      "student": "r1",
+      "teachers": 5,
+      "teacher_pairs": 10,
+      "geometry": "relative_delta_distance",
+      "target": "relative_shape_distance",
+      "spearman": 0.41818181818181815,
+      "whole_teacher_permutations": 120,
+      "permutation95": [
+        -0.5757575757575757,
+        0.8430303030303027
+      ],
+      "permutation_tail_fraction": 0.4083333333333333
+    },
+    {
+      "student": "q3-1.7",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "normalized_spectrum_distance",
+      "target": "absolute_curve_distance",
+      "spearman": 0.2285714285714285,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.3714285714285714,
+        0.5535714285714285
+      ],
+      "permutation_tail_fraction": 0.4152777777777778
+    },
+    {
+      "student": "q3-1.7",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "normalized_spectrum_distance",
+      "target": "relative_shape_distance",
+      "spearman": 0.3142857142857143,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.35,
+        0.6071428571428571
+      ],
+      "permutation_tail_fraction": 0.22777777777777777
+    },
+    {
+      "student": "q3-1.7",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "norm_logratio",
+      "target": "absolute_curve_distance",
+      "spearman": 0.9464285714285712,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.3142857142857143,
+        0.7322321428571428
+      ],
+      "permutation_tail_fraction": 0.004166666666666667
+    },
+    {
+      "student": "q3-1.7",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "norm_logratio",
+      "target": "relative_shape_distance",
+      "spearman": 0.9035714285714285,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.28928571428571426,
+        0.7321428571428571
+      ],
+      "permutation_tail_fraction": 0.009722222222222222
+    },
+    {
+      "student": "q3-1.7",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "delta_cosine",
+      "target": "absolute_curve_distance",
+      "spearman": 0.8464285714285712,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.33928571428571425,
+        0.7571428571428571
+      ],
+      "permutation_tail_fraction": 0.011111111111111112
+    },
+    {
+      "student": "q3-1.7",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "delta_cosine",
+      "target": "relative_shape_distance",
+      "spearman": 0.9714285714285713,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.3178571428571428,
+        0.7786607142857142
+      ],
+      "permutation_tail_fraction": 0.002777777777777778
+    },
+    {
+      "student": "q3-1.7",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "relative_delta_distance",
+      "target": "absolute_curve_distance",
+      "spearman": 0.9464285714285712,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.3142857142857143,
+        0.7322321428571428
+      ],
+      "permutation_tail_fraction": 0.004166666666666667
+    },
+    {
+      "student": "q3-1.7",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "relative_delta_distance",
+      "target": "relative_shape_distance",
+      "spearman": 0.9035714285714285,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.28928571428571426,
+        0.7321428571428571
+      ],
+      "permutation_tail_fraction": 0.009722222222222222
+    },
+    {
+      "student": "q3-1.7-nonthinking",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "normalized_spectrum_distance",
+      "target": "absolute_curve_distance",
+      "spearman": 0.8535714285714284,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.46437499999999987,
+        0.8357142857142855
+      ],
+      "permutation_tail_fraction": 0.020833333333333332
+    },
+    {
+      "student": "q3-1.7-nonthinking",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "normalized_spectrum_distance",
+      "target": "relative_shape_distance",
+      "spearman": 0.932142857142857,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.5178571428571428,
+        0.8858035714285711
+      ],
+      "permutation_tail_fraction": 0.006944444444444444
+    },
+    {
+      "student": "q3-1.7-nonthinking",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "norm_logratio",
+      "target": "absolute_curve_distance",
+      "spearman": 0.8857142857142855,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.42857142857142855,
+        0.8679464285714286
+      ],
+      "permutation_tail_fraction": 0.019444444444444445
+    },
+    {
+      "student": "q3-1.7-nonthinking",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "norm_logratio",
+      "target": "relative_shape_distance",
+      "spearman": 0.9214285714285713,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.46437499999999987,
+        0.8392857142857142
+      ],
+      "permutation_tail_fraction": 0.001388888888888889
+    },
+    {
+      "student": "q3-1.7-nonthinking",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "delta_cosine",
+      "target": "absolute_curve_distance",
+      "spearman": 0.9035714285714285,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.43214285714285705,
+        0.8749999999999999
+      ],
+      "permutation_tail_fraction": 0.013888888888888888
+    },
+    {
+      "student": "q3-1.7-nonthinking",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "delta_cosine",
+      "target": "relative_shape_distance",
+      "spearman": 0.8964285714285712,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.4893749999999999,
+        0.8465178571428569
+      ],
+      "permutation_tail_fraction": 0.009722222222222222
+    },
+    {
+      "student": "q3-1.7-nonthinking",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "relative_delta_distance",
+      "target": "absolute_curve_distance",
+      "spearman": 0.8964285714285712,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.4397321428571428,
+        0.8678571428571429
+      ],
+      "permutation_tail_fraction": 0.013888888888888888
+    },
+    {
+      "student": "q3-1.7-nonthinking",
+      "teachers": 6,
+      "teacher_pairs": 15,
+      "geometry": "relative_delta_distance",
+      "target": "relative_shape_distance",
+      "spearman": 0.9035714285714285,
+      "whole_teacher_permutations": 720,
+      "permutation95": [
+        -0.4822321428571428,
+        0.8321428571428571
+      ],
+      "permutation_tail_fraction": 0.008333333333333333
+    }
+  ],
+  "protocol": "Exact whole-teacher label permutations; exploratory, no multiple-test correction"
+}

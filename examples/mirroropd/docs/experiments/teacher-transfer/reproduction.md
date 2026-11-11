@@ -28,7 +28,7 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /root/.local/share/mirroropd/venvs/plot
 
 [全教师训练轨迹](fixed-state-results/student-trajectories.md)由 `fixed_transfer.plot_student_paths` 生成，同尺寸按追加阶段分线型，全尺寸按尺寸关系分点形；训练池评分题数按真实来源保留。
 
-[离线交互页面](fixed-state-results/explorer.html)由 `fixed_transfer.build_explorer` 从上述全教师 CSV 构建，内嵌 Plotly.js 和数据；复算与操作见[交互说明](fixed-state-results/interactive.md)。
+离线交互页面（本地文件 `fixed-state-results/data/explorer.html`）由 `fixed_transfer.build_explorer` 从上述全教师 CSV 构建，内嵌 Plotly.js 和数据；复算与操作见[交互说明](fixed-state-results/interactive.md)。
 
 ## 历史诊断流程
 

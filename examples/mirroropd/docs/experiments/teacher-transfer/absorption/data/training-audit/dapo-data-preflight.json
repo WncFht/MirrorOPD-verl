@@ -1,0 +1,24 @@
+{
+  "at": 1794376224.086101,
+  "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/DAPO/train.parquet",
+  "sha256": "c69f0fb5cb09b642b77dc3e78615e1ba113388ca3fd5aa8c451c782ff1508719",
+  "rows": 17917,
+  "columns": [
+    "prompt",
+    "data_source",
+    "ability",
+    "reward_model",
+    "extra_info"
+  ],
+  "first_row_types": {
+    "prompt": "list",
+    "data_source": "str",
+    "ability": "str",
+    "reward_model": "dict",
+    "extra_info": "dict"
+  },
+  "prompt_roles": [
+    "user"
+  ],
+  "prompt_characters": 382
+}

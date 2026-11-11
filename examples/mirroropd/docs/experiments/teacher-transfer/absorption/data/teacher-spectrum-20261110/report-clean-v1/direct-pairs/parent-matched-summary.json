@@ -1,0 +1,17 @@
+{
+  "teachers": 11,
+  "parent_sizes": [
+    3,
+    5,
+    3
+  ],
+  "permutations": 4320,
+  "features_per_target": {
+    "final_K": 57,
+    "late_log_drop": 57,
+    "remaining": 57
+  },
+  "BH_below_05": [],
+  "definition": "within-parent centered ranks; exact within-parent label permutations; BH within target",
+  "selection": "continuous, H1024, step320; canonical thinking input, one condition per teacher"
+}

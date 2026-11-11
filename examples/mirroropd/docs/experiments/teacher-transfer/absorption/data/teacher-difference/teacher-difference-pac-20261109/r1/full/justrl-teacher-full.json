@@ -1,0 +1,223 @@
+{
+  "finished": true,
+  "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+  "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/hbx--JustRL-DeepSeek-1.5B/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+  "bank_id": "justrl-teacher-full",
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/transfer-mechanism/data/state-transfer-20261027/rollouts-justrl.json",
+  "source_fingerprint": "58542ff1979d0b1bc62ffa43a8d612936b463e4bcf774baf2f2e56aeae259393",
+  "audit": {
+    "records": 24,
+    "response_tokens": 17549
+  },
+  "summary": {
+    "P": 0.038321703827629484,
+    "A": 186.3582857292863,
+    "C": 0.2895236937735046,
+    "rho": 2.4539487492940855,
+    "Xi": 53.955139249641164,
+    "mean_gradient_norm_sq": 2.0676528663032556,
+    "mean_sample_gradient_norm_sq": 7.14156703154246,
+    "trace_covariance": 5.073914165239205,
+    "samples": 24
+  },
+  "records": [
+    {
+      "row_id": "0",
+      "pressure": 0.034617044031620026,
+      "gradient_norm_sq": 4.003294467926025,
+      "loss": 0.08817794919013977,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "1",
+      "pressure": 0.04038742557168007,
+      "gradient_norm_sq": 8.310876846313477,
+      "loss": 0.09310760349035263,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "2",
+      "pressure": 0.017576437443494797,
+      "gradient_norm_sq": 1.5734951496124268,
+      "loss": 0.04621202498674393,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "3",
+      "pressure": 0.050568655133247375,
+      "gradient_norm_sq": 5.967308521270752,
+      "loss": 0.09533704817295074,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "4",
+      "pressure": 0.04002992436289787,
+      "gradient_norm_sq": 8.012124061584473,
+      "loss": 0.10317042469978333,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "5",
+      "pressure": 0.03910089656710625,
+      "gradient_norm_sq": 10.73643684387207,
+      "loss": 0.11329832673072815,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "6",
+      "pressure": 0.023849625140428543,
+      "gradient_norm_sq": 2.157148838043213,
+      "loss": 0.04999515786767006,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "7",
+      "pressure": 0.03458375856280327,
+      "gradient_norm_sq": 5.000905990600586,
+      "loss": 0.08771302551031113,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "8",
+      "pressure": 0.04123372212052345,
+      "gradient_norm_sq": 6.9864654541015625,
+      "loss": 0.10927115380764008,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "9",
+      "pressure": 0.034756362438201904,
+      "gradient_norm_sq": 4.728756904602051,
+      "loss": 0.08449966460466385,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "10",
+      "pressure": 0.05322190001606941,
+      "gradient_norm_sq": 8.056282043457031,
+      "loss": 0.13562846183776855,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "11",
+      "pressure": 0.05592486634850502,
+      "gradient_norm_sq": 8.349129676818848,
+      "loss": 0.11504870653152466,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "12",
+      "pressure": 0.03961990028619766,
+      "gradient_norm_sq": 5.740074634552002,
+      "loss": 0.09855283796787262,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "13",
+      "pressure": 0.037595778703689575,
+      "gradient_norm_sq": 6.5256733894348145,
+      "loss": 0.10125283896923065,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "14",
+      "pressure": 0.051101282238960266,
+      "gradient_norm_sq": 8.038254737854004,
+      "loss": 0.12507915496826172,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "15",
+      "pressure": 0.042630504816770554,
+      "gradient_norm_sq": 6.542200088500977,
+      "loss": 0.10457368195056915,
+      "domain": "math",
+      "source": "justrl"
+    },
+    {
+      "row_id": "16",
+      "pressure": 0.056123390793800354,
+      "gradient_norm_sq": 12.149449348449707,
+      "loss": 0.1529994159936905,
+      "domain": "code",
+      "source": "justrl"
+    },
+    {
+      "row_id": "17",
+      "pressure": 0.03787540644407272,
+      "gradient_norm_sq": 8.707773208618164,
+      "loss": 0.11077320575714111,
+      "domain": "code",
+      "source": "justrl"
+    },
+    {
+      "row_id": "18",
+      "pressure": 0.04086970537900925,
+      "gradient_norm_sq": 10.147046089172363,
+      "loss": 0.09462456405162811,
+      "domain": "code",
+      "source": "justrl"
+    },
+    {
+      "row_id": "19",
+      "pressure": 0.06323056668043137,
+      "gradient_norm_sq": 15.411332130432129,
+      "loss": 0.13910499215126038,
+      "domain": "code",
+      "source": "justrl"
+    },
+    {
+      "row_id": "20",
+      "pressure": 0.02902194857597351,
+      "gradient_norm_sq": 6.951049327850342,
+      "loss": 0.07578204572200775,
+      "domain": "if",
+      "source": "justrl"
+    },
+    {
+      "row_id": "21",
+      "pressure": 0.012354563921689987,
+      "gradient_norm_sq": 2.9172112941741943,
+      "loss": 0.04485180228948593,
+      "domain": "if",
+      "source": "justrl"
+    },
+    {
+      "row_id": "22",
+      "pressure": 0.020567821338772774,
+      "gradient_norm_sq": 6.693118095397949,
+      "loss": 0.08461262285709381,
+      "domain": "if",
+      "source": "justrl"
+    },
+    {
+      "row_id": "23",
+      "pressure": 0.022879404947161674,
+      "gradient_norm_sq": 7.692201614379883,
+      "loss": 0.07266949117183685,
+      "domain": "if",
+      "source": "justrl"
+    }
+  ],
+  "loss_mean": 0.09693067505334814,
+  "parameter_count": 1777088000,
+  "dtype": {
+    "student": "float32",
+    "teacher": "bfloat16"
+  }
+}

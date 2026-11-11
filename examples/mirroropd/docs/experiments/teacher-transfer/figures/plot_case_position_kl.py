@@ -126,6 +126,8 @@ def label(case: str, arm: str) -> str:
         "E71": "MiMo-7B-RL",
         "E72": "MiMo-7B-RL-Zero",
         "E73": "MiMo-7B-SFT",
+        "E91": "MiMo-7B-RL-Zero → SFT student",
+        "E93": "MiMo-7B-RL → SFT student",
         "E35": "JustRL-DeepSeek-1.5B",
         "E39": "Qwen3-8B",
         "E41": "Qwen3-4B",
@@ -379,8 +381,21 @@ def main() -> None:
     parser.add_argument(
         "--qwen-only", action="store_true", help="Render Qwen experiments separately; keep other families."
     )
+    parser.add_argument("--mimo-sft-only", action="store_true", help="Render completed E91/E93 SFT-student position curves.")
     args = parser.parse_args()
     fv.apply_rc("paper", fontsize=10)
+    if args.mimo_sft_only:
+        paths = [ROOT / f"runs/{run}/formal/{arm}/metrics.jsonl" for arm, run in (
+            ("E91", "e91-mimo-rlzero-sft-20261107"), ("E93", "e93-mimo-rl-sft-20261108"))]
+        data = {arm: from_history(path, True, 16, 20) for arm, path in zip(("E91", "E93"), paths, strict=True)}
+        out = DOCS / "figures/mimo-position-kl-20261107/sft-students"
+        render_group("MiMo SFT students", data, out, "mimo-sft")
+        (out / "provenance.json").write_text(json.dumps({
+            "source_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},
+            "renderer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "selection": "first/last pre-update observations; reuse16; 20 outer; E91/E93 start from SFT",
+        }, indent=2) + "\n")
+        return
     qwen, e35, paths = collect()
     qout = DOCS / "figures/qwen-position-kl-20261107"
     if args.qwen_only:

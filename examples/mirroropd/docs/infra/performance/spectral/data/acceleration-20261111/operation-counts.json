@@ -1,0 +1,157 @@
+{
+  "matrix_triplets": 3248,
+  "legacy_cold_svd_calls": 29232,
+  "legacy_warm_svd_calls": 12992,
+  "three_full_weight_svd_calls_no_reuse": 9744,
+  "unique_base_matrix_contents": 1036,
+  "unique_teacher_matrix_contents": 3052,
+  "unique_endpoint_matrix_contents": 3248,
+  "unique_full_weight_matrix_contents_all_roles": 7336,
+  "shapes": [
+    {
+      "shape": [
+        1536,
+        8960
+      ],
+      "triplets": 168
+    },
+    {
+      "shape": [
+        8960,
+        1536
+      ],
+      "triplets": 336
+    },
+    {
+      "shape": [
+        256,
+        1536
+      ],
+      "triplets": 336
+    },
+    {
+      "shape": [
+        1536,
+        1536
+      ],
+      "triplets": 336
+    },
+    {
+      "shape": [
+        3584,
+        18944
+      ],
+      "triplets": 28
+    },
+    {
+      "shape": [
+        18944,
+        3584
+      ],
+      "triplets": 56
+    },
+    {
+      "shape": [
+        512,
+        3584
+      ],
+      "triplets": 56
+    },
+    {
+      "shape": [
+        3584,
+        3584
+      ],
+      "triplets": 56
+    },
+    {
+      "shape": [
+        2048,
+        6144
+      ],
+      "triplets": 112
+    },
+    {
+      "shape": [
+        6144,
+        2048
+      ],
+      "triplets": 224
+    },
+    {
+      "shape": [
+        1024,
+        2048
+      ],
+      "triplets": 224
+    },
+    {
+      "shape": [
+        2048,
+        2048
+      ],
+      "triplets": 224
+    },
+    {
+      "shape": [
+        3072,
+        8192
+      ],
+      "triplets": 84
+    },
+    {
+      "shape": [
+        8192,
+        3072
+      ],
+      "triplets": 168
+    },
+    {
+      "shape": [
+        1024,
+        3072
+      ],
+      "triplets": 168
+    },
+    {
+      "shape": [
+        3072,
+        3072
+      ],
+      "triplets": 168
+    },
+    {
+      "shape": [
+        4096,
+        11008
+      ],
+      "triplets": 72
+    },
+    {
+      "shape": [
+        11008,
+        4096
+      ],
+      "triplets": 144
+    },
+    {
+      "shape": [
+        1024,
+        4096
+      ],
+      "triplets": 144
+    },
+    {
+      "shape": [
+        4096,
+        4096
+      ],
+      "triplets": 144
+    }
+  ],
+  "scope": "16 eligible endpoint conditions, no extra stages, source dtype arithmetic and solver fixed; call counts are not runtime predictions",
+  "total_matrix_elements": 41238396928,
+  "one_fp32_direction_per_triplet_bytes": 164953587712,
+  "legacy_11_fp32_direction_payload_bytes": 1814489464832,
+  "legacy_to_deduplicated_spectral_call_reduction": 0.7490421455938697
+}

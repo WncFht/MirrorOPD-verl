@@ -25,15 +25,20 @@
 
 ## 原因诊断
 
-| 读者问题                                   | 主要证据                                                                                                                   |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| 训练域改善能否推广到其他 domain            | [跨域迁移](cross-domain-transfer.md)，已完成的 JustRL 数学分支及其 Math/Code/Science/IF 读出；其他域没有完整结果时保持缺测 |
-| 当前 batch 学习能否传播，旧 batch 是否遗忘 | [跨 batch 迁移](cross-batch-transfer.md)，当前/旧/未来批、永久留出及固定/fresh 状态分别解释                                |
-| 可学习内容与知识遗忘的解释是否成立         | [能力筛选干预](mechanisms/capability-filter.md)，保留随机映射、温度、IF 及截断续写反例                                     |
-| 共享更新方向与留出传播是否相关             | [谱诊断](mechanisms/spectral.md)，loss-gradient Gram 不等于完整 NTK                                                        |
-| 平台是否仅来自数值或 optimizer             | 引用[工程实验](../../infra/numerics/optimization/README.md)，不在本研究线重复维护精度与求解报告                            |
+[Teacher 吸收专题](absorption/README.md)统一整理输出分布、全层参数谱、函数干预、PAC 与 ISO。先读[实际设置](absorption/设置与指标.md)和[训练审计](absorption/附录-定义与复算.md)，再查[全层与功能结果](absorption/跨模型结果.md)；完成项、缺项与诊断 pilot 分开解释。
+
+| 读者问题                                   | 主要证据                                                                                                                                                              |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 训练域改善能否推广到其他 domain            | [跨域迁移](cross-domain-transfer.md)，已完成的 JustRL 数学分支及其 Math/Code/Science/IF 读出；其他域没有完整结果时保持缺测                                            |
+| 当前 batch 学习能否传播，旧 batch 是否遗忘 | [跨 batch 迁移](cross-batch-transfer.md)，当前/旧/未来批、永久留出及固定/fresh 状态分别解释                                                                           |
+| 可学习内容与知识遗忘的解释是否成立         | [能力筛选干预](mechanisms/capability-filter.md)，保留随机映射、温度、IF 及截断续写反例                                                                                |
+| 共享更新方向与留出传播是否相关             | [谱诊断](mechanisms/spectral.md)，loss-gradient Gram 不等于完整 NTK                                                                                                   |
+| 剩余 teacher 差异为何难以跨 batch 传播     | [Teacher difference 的 PAC 与噪声底诊断](absorption/README.md)：真实训练、完整轨迹 PAC、请求方向与谱对照；已拆分 A 的局部响应与题内聚合，并完成分量传播与实际小步干预 |
+| 平台是否仅来自数值或 optimizer             | 引用[工程实验](../../infra/numerics/optimization/README.md)，不在本研究线重复维护精度与求解报告                                                                       |
 
 当前批能拟合而未见批改善弱，不自动意味着旧批遗忘；换批 loss 锯齿也不能代替旧批复评。跨域改善弱首先描述迁移边界，表示与容量解释仍需对应证据。来源策略的最终效果由[Rollout 研究](../rollout-policy/README.md)维护；这里使用来源控制来解释迁移。
+
+[ISO 方法](absorption/附录-定义与复算.md)、[结果](absorption/跨模型结果.md)与[计算预算](absorption/附录-定义与复算.md)属于同一吸收专题，记录原论文范围、16 配对全层扩展与实测耗时。
 
 ## 协议、复算与补充材料
 

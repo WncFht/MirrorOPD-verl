@@ -1,0 +1,2444 @@
+{
+  "artifacts": [
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/manifest.json",
+      "published": "data/teacher-spectrum-20261110/manifest.json",
+      "bytes": 722003,
+      "sha256": "a543a3ffef94f2569c6fe311b5f411b0699697392738c214698649f0a25d7ad2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/domain-residuals.png",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/domain-residuals.png",
+      "bytes": 87114,
+      "sha256": "778d5e17934096a3fac5071a3f0e7bd045e8113c66ba3e2ceddddd776ab31d64"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/domain-residuals.pdf",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/domain-residuals.pdf",
+      "bytes": 28006,
+      "sha256": "550945148be9c11131d78dcd3d180c95cd88c3041db59a98e2dd698bb4c10683"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/domain-residuals.svg",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/domain-residuals.svg",
+      "bytes": 17607,
+      "sha256": "1f8699aa8f113390421dddbc545f94fb606593c88921756882cab0111a98d0d8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/final-scientific-data-010.json",
+      "published": "data/teacher-spectrum-20261110/final-scientific-data-010.json",
+      "bytes": 7475487,
+      "sha256": "e2d96c1cf7b06471ba5f381177a50bb17fd621431a58fd8353d691ad44671740"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/absolute-kl-dynamics.png",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/absolute-kl-dynamics.png",
+      "bytes": 142472,
+      "sha256": "050b515f8763f94c80e176b47266c90515ec4142e02fdb55d0a8416677e93e51"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/absolute-kl-dynamics.pdf",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/absolute-kl-dynamics.pdf",
+      "bytes": 27698,
+      "sha256": "ab611db648ebf63ab9eeb5393d4b5c79b29bb15c3464dd43f3c8a40c312aed8e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/absolute-kl-dynamics.svg",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/absolute-kl-dynamics.svg",
+      "bytes": 40172,
+      "sha256": "c86a240b0a658caa2cfca0f6fbb1885c294e3052765b6eaf8b0f2ceec624a8df"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/absolute-kl-dynamics.audit.json",
+      "published": "data/teacher-spectrum-20261110/historical-dynamics-20261110/absolute-kl-dynamics.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/long-sft-train-heldout.png",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/long-sft-train-heldout.png",
+      "bytes": 121530,
+      "sha256": "754464eae70a189058eb18077b32b6c0eb311462a100c2b52f26910c8caa0a52"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/long-sft-train-heldout.pdf",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/long-sft-train-heldout.pdf",
+      "bytes": 26110,
+      "sha256": "aa5db10b1e12427d91b397a2d92b0a9ba7f9836b8b18855e319834ae8a438ab2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/long-sft-train-heldout.svg",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/long-sft-train-heldout.svg",
+      "bytes": 34955,
+      "sha256": "05a969ddab830fe2c4c3c55bf6f8818c5fed2cad035a1dd32f8c301654ca729b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/long-sft-train-heldout.audit.json",
+      "published": "data/teacher-spectrum-20261110/historical-dynamics-20261110/long-sft-train-heldout.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/sft-prefix-dynamics.png",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/sft-prefix-dynamics.png",
+      "bytes": 125667,
+      "sha256": "31f53cc574b1ce9c6c6686b35321cd10b3305c2bc5b1ff127171c9d7d072e8be"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/sft-prefix-dynamics.pdf",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/sft-prefix-dynamics.pdf",
+      "bytes": 30610,
+      "sha256": "3297a6e686ce52ce374d33b2d8143b40b872228e10ac41c5528dd4b69abd4b83"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/sft-prefix-dynamics.svg",
+      "published": "figures/teacher-spectrum-20261110/historical-dynamics-20261110/sft-prefix-dynamics.svg",
+      "bytes": 42874,
+      "sha256": "0142510e7efd5d7c603e1ecc6d76771157b46cb7a28fe90448f7bb253338e2df"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/sft-prefix-dynamics.audit.json",
+      "published": "data/teacher-spectrum-20261110/historical-dynamics-20261110/sft-prefix-dynamics.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/historical-curves.csv",
+      "published": "data/teacher-spectrum-20261110/historical-dynamics-20261110/historical-curves.csv",
+      "bytes": 76411,
+      "sha256": "60ab554715d06cedf9e31638319cc9ab5354a7bebfb6ad70b6fd0eccdee71c29"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/historical-windows.csv",
+      "published": "data/teacher-spectrum-20261110/historical-dynamics-20261110/historical-windows.csv",
+      "bytes": 14038,
+      "sha256": "d56da149cbdc076d22d1479f20093d8d6ebb27a5a22112e11ada011895262534"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/analysis.json",
+      "published": "data/teacher-spectrum-20261110/historical-dynamics-20261110/analysis.json",
+      "bytes": 189132,
+      "sha256": "0f7df7da90a898f997c68bd231ed47e0f0fa39a95212ce422fb64593a8b8b4e3"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_historical_dynamics.py",
+      "published": "data/teacher-spectrum-20261110/analyze_historical_dynamics.py",
+      "bytes": 11428,
+      "sha256": "4570c2e4d4cba9e9f9f8ed7a0c02d79676bf47f4d84e947c7505560d19a24174"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-006/full-layer-concentration.png",
+      "published": "figures/teacher-spectrum-20261110/figures-review-006/full-layer-concentration.png",
+      "bytes": 57391,
+      "sha256": "533a2844f1762b35204d3a71ea4b9eb7f3ea5d308d03fe707fe7a6ab9ff4abbb"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-006/full-layer-concentration.pdf",
+      "published": "figures/teacher-spectrum-20261110/figures-review-006/full-layer-concentration.pdf",
+      "bytes": 21808,
+      "sha256": "8e65f3b352b9f8f8b1b688f5660e5a125beeb46c3e967167d685a91959444977"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-006/full-layer-concentration.svg",
+      "published": "figures/teacher-spectrum-20261110/figures-review-006/full-layer-concentration.svg",
+      "bytes": 23445,
+      "sha256": "3a5c7bf7602aa6f929ce9689964706d1bd05b584a27bdd64979318d34acd36c7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectral-analysis-006.json",
+      "published": "data/teacher-spectrum-20261110/spectral-analysis-006.json",
+      "bytes": 2173490,
+      "sha256": "a254a31e8b12b557b83fdf7c3210d1cc586f96706c2ca1d4eb318a79a1a47827"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/complete.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/complete.json",
+      "bytes": 58,
+      "sha256": "4696952e49170e8c10037f926ff01120586341bc9295ea485ba60929956a00c3"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/progress.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/progress.json",
+      "bytes": 88,
+      "sha256": "c7194ae5b8b6bce5112f09d1874b660d90d1f3c31e7b28478985ee1047100dbd"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/protocol.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/protocol.json",
+      "bytes": 422,
+      "sha256": "045f23dc2fff59363cf55903ab515ac4a5401fda8c08e609ad4a1976e8b9a8e1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-grpo-l00.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/qwen-grpo-l00.json",
+      "bytes": 202459,
+      "sha256": "d3b821b7df24a9ceaa80e076b150f05add1ed82cfb71c2ae4663780d1ff9e6d5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-grpo-l13.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/qwen-grpo-l13.json",
+      "bytes": 202799,
+      "sha256": "2910510a7bd34749594696917bd99f6afa0431645d6f364c5fe511c16d4bb7b6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-grpo-l27.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/qwen-grpo-l27.json",
+      "bytes": 202311,
+      "sha256": "1149789bd1cfa666ba21eff5e7d79bcf06f86879bcdb6279c5d53eb5b2fc7972"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-sft-l00.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/qwen-sft-l00.json",
+      "bytes": 200951,
+      "sha256": "0627573c6ad296c3f5cf308291d9ede878360f723e55aa7e0038e6230dc3e9d9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-sft-l13.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/qwen-sft-l13.json",
+      "bytes": 201329,
+      "sha256": "4aa85b41d080ae0669ea4059b0723df13ceb2359d12416e07b91ada275b80215"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-sft-l27.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/qwen-sft-l27.json",
+      "bytes": 200873,
+      "sha256": "b9c774c532bab1139e840f193303933e662d2526506d3ec5e34a83362f9df019"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/r1-justrl-l00.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/r1-justrl-l00.json",
+      "bytes": 105377,
+      "sha256": "14123827b2b0c9eb6143b122e42b15b722fa1568ba9105cab8c53343b9dd240a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/r1-justrl-l13.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/r1-justrl-l13.json",
+      "bytes": 105442,
+      "sha256": "307682f490e4cbcfece331538996b0525bec7505ef17dd0edbe34e623647cce1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/r1-justrl-l27.json",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/r1-justrl-l27.json",
+      "bytes": 105793,
+      "sha256": "cd0184bc0451d7bc848a048a0454268d19df41c4262a180f5d8941596c8914a2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/temporal-svd/source.py",
+      "published": "data/teacher-spectrum-20261110/temporal-svd/source.py",
+      "bytes": 5941,
+      "sha256": "1f17276bf227e88fddd2a5d0dd566ee0457643c4f7a79b84d3ece72aa30eafb3"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/incremental-svd-002.json",
+      "published": "data/teacher-spectrum-20261110/incremental-svd-002.json",
+      "bytes": 7833,
+      "sha256": "68c237508e10a085409d06a5b20bcc416429d81f58b59b2a66b5da047efef4a6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/spectrum-cdf.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-screen-v1/spectrum-cdf.png",
+      "bytes": 184896,
+      "sha256": "43451b3223ab6d71c00bdf3b62c7997fd1d9fd5a18079a7a1f250266545bc958"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/spectrum-cdf.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-screen-v1/spectrum-cdf.pdf",
+      "bytes": 34218,
+      "sha256": "8dda6eca8229b87a01f73b4250790cb91772e23e500acbb2833b9fede8359835"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/spectrum-cdf.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-screen-v1/spectrum-cdf.svg",
+      "bytes": 47824,
+      "sha256": "69e10723d8d0cf6ef33d6fd5a0a387061a0ef34bb8c7fbd8d667cfdcb0e8dede"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/spectrum-cdf.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/spectrum-cdf.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/fingerprints.csv",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/fingerprints.csv",
+      "bytes": 24199,
+      "sha256": "c66ede56d1d33c7edeeba2cbde0e0f8efcf14976f4e993f580f1e9fff50b16fc"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/screen-summary.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/screen-summary.json",
+      "bytes": 68207,
+      "sha256": "13b9605809dc81ee0e93b42a63c5a929e0d6c831238629f733cc75a940e78308"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/protocol.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/protocol.json",
+      "bytes": 3039,
+      "sha256": "3535c0eaf937169685994201d6d3eadc4281b7de545a53079ceb7cc9be6c121a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/explorer.html",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/explorer.html",
+      "bytes": 5401480,
+      "sha256": "a8c3ee20995142d719af88d3a6516f04264f1951d72af7e0ac333be656cea8af"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/final-coverage.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/final-coverage.json",
+      "bytes": 7707,
+      "sha256": "194b1704274d965bf9200403d96f6354972b3d0a325bc74d760adced047c143f"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/heldout-feature-join.csv",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/heldout-feature-join.csv",
+      "bytes": 281416,
+      "sha256": "f04a3bda58bed38ac05d92b064c459e3e648b345d1ae41dcaa17fa2d8e7e0736"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-profiles.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/model-profiles.json",
+      "bytes": 104543,
+      "sha256": "1b4f213ededb110019f160f3a3ef3253bb8729ac574794a3ad155a1d1b68eeae"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.png",
+      "bytes": 105845,
+      "sha256": "7208c1da83ff08c6822d99b64cc3fab9ed491e934df6ba7922fb93745c2f2ce9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.pdf",
+      "bytes": 34214,
+      "sha256": "1e90b4cfa3837d85fc2b36e15e2710682781ea84c24fff0604a25a64eccd7e9d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.svg",
+      "bytes": 58085,
+      "sha256": "545aa4dd2c6b914a3c677569e189e2a20764b96d9ed70f94c860e9350c248fed"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/associations.csv",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/associations.csv",
+      "bytes": 68765,
+      "sha256": "4c6aff716ae8858cec1a1b55caa9cf92880a2e2e44dd9334fab32d9ff7060942"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.png",
+      "bytes": 201974,
+      "sha256": "b92d966608bbb48cbbe04efb5f073728e4cc0530727819d7ee0d476854a59f9f"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.pdf",
+      "bytes": 40107,
+      "sha256": "120cc1f6bfc5e65d72143fe2a93ab3f98ab0791a74d9420c2775210261c501f8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.svg",
+      "bytes": 85198,
+      "sha256": "172d88599a7b8aa4c748132d973c0d395eff292036cf1a69383a23acffda87c1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.png",
+      "bytes": 236938,
+      "sha256": "d4cd13a5373aab9792b5a10b4384daec2bf5e8404ed2a8c0e0a5dcf77090f64d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.pdf",
+      "bytes": 28472,
+      "sha256": "0901492731a1e6156ad6692cff729357f04207dce1cf728b7afdcac5a08968a2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.svg",
+      "bytes": 60663,
+      "sha256": "696e864b341066d55d9a36cf5338e13e0896f6511d65a8849e469ec140b6c798"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison-v2.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-comparison-v2.png",
+      "bytes": 102235,
+      "sha256": "697ff5438dc45264290cdf337f60d5f3671465207458f2b631876d3f266dd201"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison-v2.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-comparison-v2.pdf",
+      "bytes": 25236,
+      "sha256": "dfb4d0847d441af967e694a35b8412c265d37c41c276bec776f13d675c8a728b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison-v2.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-comparison-v2.svg",
+      "bytes": 16909,
+      "sha256": "c050af7b9d04b6a28526b6f9a10482339f8e4cfbc6e370f83bd30e24f6899b7d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison-v2.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-comparison-v2.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/teacher-heldout-prediction.csv",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/teacher-heldout-prediction.csv",
+      "bytes": 138715,
+      "sha256": "c64fa7ff897a7e3b256281ea0e7c55f7c2e270780cb335d803331a8812ae4c21"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-error-bootstrap.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-error-bootstrap.json",
+      "bytes": 10044,
+      "sha256": "5400f22f88635d3a01a26bb983972a5d47bebc7d718156c6bf5c7e997e49e0e8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/analysis-protocol.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/analysis-protocol.json",
+      "bytes": 704,
+      "sha256": "ae03e64f0a3451587f4a911ed6735e887b688896cde12f53e2b514b3bca11325"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/ancillary-complete.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/ancillary-complete.json",
+      "bytes": 111390,
+      "sha256": "f4851de82e626bebba3105c49fe7a307deec4c64088ebe186ff4eba13045142b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups-v2.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/absolute-curve-groups-v2.png",
+      "bytes": 219031,
+      "sha256": "d9139eeb5098ba1f284a4576aef526cd508bb2abddd2582c778511b99d786055"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups-v2.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/absolute-curve-groups-v2.pdf",
+      "bytes": 29198,
+      "sha256": "b3e0752a6ca6bb6b21eb5d5a1d34473026f30aa93480e2e47323bab641aa8b83"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups-v2.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/absolute-curve-groups-v2.svg",
+      "bytes": 81621,
+      "sha256": "45a3bb3ee5a3edb710b049e2bec2dc1a852213dfd8e4f1bf7aa43f00dbf4ac14"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups-v2.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/absolute-curve-groups-v2.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/curve-clusters.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/curve-clusters.json",
+      "bytes": 31013,
+      "sha256": "d99763ff2612413f743ccc26a7f4050b90e7992739df254dfc99fa5052139fe8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/curve-feature-table.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/curve-feature-table.csv",
+      "bytes": 85484,
+      "sha256": "0aac978e98959d6527b8269219ef3dc91df283a3ebc9e146587225f2552cc636"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/matrix-feature-table.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/matrix-feature-table.csv",
+      "bytes": 391276,
+      "sha256": "d0d0279efcb3406b0051b12df386bc0a4418cde271a682667c7d352d8a5b9400"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.png",
+      "bytes": 256092,
+      "sha256": "4c5194c18508e39b766bd81410f1c2679f26a05146466568e2bccc5846709e81"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.pdf",
+      "bytes": 36727,
+      "sha256": "623776e5eb1c57de7a10bdb9d9113bfc57f18a41b5c74ceea6608c5f7c4d4209"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.svg",
+      "bytes": 62759,
+      "sha256": "03e43d61de0418e218626849a7822492969f9411272e7bc01e3bcc64493b2e85"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/neighbor-associations.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/neighbor-associations.json",
+      "bytes": 9636,
+      "sha256": "3f4506e8ad1ea780255554465ff6b0b9b48a8debbfbc225dd39becbfa0f8a7c2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.png",
+      "bytes": 183683,
+      "sha256": "ee939bb1f7cea376ff14a53a649f4e27f8d3a0d1620fe27e8f7f0ffc0017bd65"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.pdf",
+      "bytes": 33771,
+      "sha256": "5c8454748f0e97e2aedb3a156c26fc9e989840ce790b2448c640153ae3985cdd"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.svg",
+      "bytes": 44790,
+      "sha256": "43c724ef51ff6bc24492ac318e064d88fbbdfc722324dfefceba4fbcfa3e82bb"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-matrices.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-matrices.csv",
+      "bytes": 400176,
+      "sha256": "3a4a51f49dcbdc35aca4ecf2f9a423a3262185f300c04027eb3bec09efff92c9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-summary.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-summary.csv",
+      "bytes": 8421,
+      "sha256": "b7c8fba70360127d502e909b37ac384f88deff527acf7a959954da39f49beac2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.png",
+      "bytes": 239613,
+      "sha256": "accf04fca5287e0b2e5f69c67318e74e28ac4dd094d8c6fa62c5aa41c6c90991"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.pdf",
+      "bytes": 32243,
+      "sha256": "42d09694280093cdd51f1403ea172d217a0f9ed59dfd4766e373012c4a2d29e5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.svg",
+      "bytes": 45836,
+      "sha256": "c78ca60e76720cb819b0318db08efec56df426b548d5a2b22b965eca0f30c900"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-summary.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-summary.csv",
+      "bytes": 46931,
+      "sha256": "b717b9ea64d38de18495c04352c093d19f875e50479f4a217ee3bdbf807fa2a1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-frame-summary.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/teacher-frame-summary.csv",
+      "bytes": 6523,
+      "sha256": "8ed9aed9986f1ac8a05943a6355cc958598465706aeb309f3d2b9a03ebaf0fa5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.png",
+      "bytes": 118595,
+      "sha256": "fb6395d422840a5c3bc54eca8eff21342388621ac43177f05d89a1e97376202b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.pdf",
+      "bytes": 26647,
+      "sha256": "0704b39db1a2afc6b3b61968430195248fd88111a53935c7bf18263dc3268723"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.svg",
+      "bytes": 31079,
+      "sha256": "bcb19e248169f3028e659fd153871928a5bbb8af4cf41b8212188e6efe8735e6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/late-question-paired.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/late-question-paired.csv",
+      "bytes": 31465,
+      "sha256": "bbd0d5595aed66f44fe12b588ac64e4576e9b41ce11c35df93267440afcc99ba"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js-v2.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/output-entropy-and-js-v2.png",
+      "bytes": 105970,
+      "sha256": "755fc0df89b67be9380cb2918774a1688c902ee24703e679992a594c44f0b5e7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js-v2.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/output-entropy-and-js-v2.pdf",
+      "bytes": 23929,
+      "sha256": "b8ef667ca8b8f235503ecb5a34e996c25ef1ba08d2346fa8b3c605c6e93f5fa6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js-v2.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/output-entropy-and-js-v2.svg",
+      "bytes": 21508,
+      "sha256": "697bc7a0847379865cedf1c7d1da5fb4e8fb85e5c0ba76546692dbbb8820e827"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js-v2.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/output-entropy-and-js-v2.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/output-diagnostics.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/output-diagnostics.csv",
+      "bytes": 1609794,
+      "sha256": "61ac56380eeb20f5829ba249dac1eb34e09e5f9a84dc86730d52713e7e38387a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/intervention-analysis-010.json",
+      "published": "data/teacher-spectrum-20261110/intervention-analysis-010.json",
+      "bytes": 154038,
+      "sha256": "6fcb697051e5333b84631d957d56ad944da7a6d8c5aacd5e058a5b73b5b5625b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/preexisting-direction-response.png",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/preexisting-direction-response.png",
+      "bytes": 71155,
+      "sha256": "006b669a84da9c83d4ffe9e124cfafe3a0a96ff3bba7ac77a7300785fbc7e883"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/preexisting-direction-response.pdf",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/preexisting-direction-response.pdf",
+      "bytes": 25638,
+      "sha256": "f0e621394243d4395abcb70ccc5dddb5d1bf73141a38066dc7a6b95b8dd59978"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/preexisting-direction-response.svg",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/preexisting-direction-response.svg",
+      "bytes": 18510,
+      "sha256": "fe6da5f498845d40a1abd8e38d8006569ac7b416791af0b10efbd2cb33fae3d3"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-009/new-prefix-direction-stages.png",
+      "published": "figures/teacher-spectrum-20261110/figures-review-009/new-prefix-direction-stages.png",
+      "bytes": 115790,
+      "sha256": "a562eac664acc25a008b947ecbaf62590e2325a2bd0751dd69e9533719a1e3fc"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-009/new-prefix-direction-stages.pdf",
+      "published": "figures/teacher-spectrum-20261110/figures-review-009/new-prefix-direction-stages.pdf",
+      "bytes": 23767,
+      "sha256": "10b392eb907908765e24f3faf9326becda5a2c888a20308010223debca84614e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-009/new-prefix-direction-stages.svg",
+      "published": "figures/teacher-spectrum-20261110/figures-review-009/new-prefix-direction-stages.svg",
+      "bytes": 22456,
+      "sha256": "5038a4c515cac96ad273b0979776571c42bfc06cda3adfe92ad674dbd57f5620"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/response-base-random-controls-008.json",
+      "published": "data/teacher-spectrum-20261110/response-base-random-controls-008.json",
+      "bytes": 911,
+      "sha256": "b74c59f6e596e99decc10151a12aabf334da6a2a7c2834213fcd87629cff366c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/response-base-controls-analysis-008.json",
+      "published": "data/teacher-spectrum-20261110/response-base-controls-analysis-008.json",
+      "bytes": 2572225,
+      "sha256": "638fd2c774bbb0859f88479ddaf47db560a40f7e9a217b62dbf34433e3b17715"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/response-alignment-stages-008.json",
+      "published": "data/teacher-spectrum-20261110/response-alignment-stages-008.json",
+      "bytes": 98787,
+      "sha256": "583aae46d6e8a00c2fccbc097e0604452c26a7dadde87e24eb9b36a2dac77521"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/response-layer-analysis-006.json",
+      "published": "data/teacher-spectrum-20261110/response-layer-analysis-006.json",
+      "bytes": 143394,
+      "sha256": "8aa24e8257046f4a9d7ab82f45be12f317ecc9d52b64b0f188b4f6895ce5c7b5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/generated-response-analysis-009.json",
+      "published": "data/teacher-spectrum-20261110/generated-response-analysis-009.json",
+      "bytes": 134012,
+      "sha256": "4a7ff7f07f1a2dff55d35d08aebe926a8ba6a7754b6b51c59051feb91fcc860d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-009/stage-task-versus-fit.png",
+      "published": "figures/teacher-spectrum-20261110/figures-review-009/stage-task-versus-fit.png",
+      "bytes": 105212,
+      "sha256": "f1148fd4515af5949b30669071d25fe2e4530630736b7be42c5b76280f5901e2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-009/stage-task-versus-fit.pdf",
+      "published": "figures/teacher-spectrum-20261110/figures-review-009/stage-task-versus-fit.pdf",
+      "bytes": 24662,
+      "sha256": "ef16b9e686c3045111785007536729eeddc0d30481889da97936a5ed26d31e3c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-review-009/stage-task-versus-fit.svg",
+      "published": "figures/teacher-spectrum-20261110/figures-review-009/stage-task-versus-fit.svg",
+      "bytes": 17191,
+      "sha256": "584b4805d0276c82eecb19db004d61d91afdda70568429d11d417236c1adf87c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/task-content-comparison.png",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/task-content-comparison.png",
+      "bytes": 81813,
+      "sha256": "c16fb897cb6d91d76dde7b498543e7b57f5b2304c24021537c0c2964336f31f5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/task-content-comparison.pdf",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/task-content-comparison.pdf",
+      "bytes": 25801,
+      "sha256": "30f5c60c250f8672ca73abd4148bbc04c4986ca5bc14927719dfe2e64488d015"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/task-content-comparison.svg",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/task-content-comparison.svg",
+      "bytes": 16544,
+      "sha256": "18de1c2beaf3d52a8fdf643ae58c0c8332d96997f1324c3f838aabcd3810205c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/supplemented-generation-analysis-008.json",
+      "published": "data/teacher-spectrum-20261110/supplemented-generation-analysis-008.json",
+      "bytes": 22677,
+      "sha256": "b115e216bf9c76f293cb189139a55fe10fa780144b27b7bbb93706020a1ac21d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/stage-and-format-analysis-009.json",
+      "published": "data/teacher-spectrum-20261110/stage-and-format-analysis-009.json",
+      "bytes": 33198,
+      "sha256": "5461574670203dff89fcb93f0ecd852ddb84685ffb55b7e151a3d854c7187fcc"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/generation-analysis-007.json",
+      "published": "data/teacher-spectrum-20261110/generation-analysis-007.json",
+      "bytes": 24228,
+      "sha256": "390c3c24370ec918c9a37d51e43244da82e00ef6ea8d387990b259cbafc11069"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/top-and-rollout-matched-008.json",
+      "published": "data/teacher-spectrum-20261110/top-and-rollout-matched-008.json",
+      "bytes": 272483,
+      "sha256": "9b281ad8b8b365a6ca15b081e9c58b551c873754c4ecbf6320db4112b8acf09b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/deletion-direction-specificity.png",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/deletion-direction-specificity.png",
+      "bytes": 112705,
+      "sha256": "061b07af35684402fe28395c6ad6fbd399303aa8e4ca2dc8f95341bfba88f194"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/deletion-direction-specificity.pdf",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/deletion-direction-specificity.pdf",
+      "bytes": 24002,
+      "sha256": "f9fe37eedf63579d725a1550f982ffedba7119297b00e8a41cf17c89f3dc6fa3"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/deletion-direction-specificity.svg",
+      "published": "figures/teacher-spectrum-20261110/figures-research-synthesis/deletion-direction-specificity.svg",
+      "bytes": 23195,
+      "sha256": "ea8d733259020935a0aa71c68a66075a238e2de132def135edfac881923da261"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/delete-gaussian-paired-009.json",
+      "published": "data/teacher-spectrum-20261110/delete-gaussian-paired-009.json",
+      "bytes": 59067,
+      "sha256": "695b019f9eacaf7829d3bcc5f1bdb053a0f0d7e017b56b4fe660e042c473a32a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/answer-format-noise-audit-009.json",
+      "published": "data/teacher-spectrum-20261110/answer-format-noise-audit-009.json",
+      "bytes": 66418,
+      "sha256": "2959fa193972b6cd161552be4fff6156f5fcc2c19ad15f933df332201dd07392"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/REVIEW_DONE.json",
+      "published": "data/teacher-spectrum-20261110/REVIEW_DONE.json",
+      "bytes": 2346,
+      "sha256": "fe9247a8c8a625fd84e823181827d1ac2de9c6745ed37c1a02100efd37fef9f3"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_interventions.py",
+      "published": "data/teacher-spectrum-20261110/analyze_interventions.py",
+      "bytes": 3842,
+      "sha256": "7486e633604c65429dca51ea9ed48396986b9affaf63057534589bdb0052d1db"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_response_stages.py",
+      "published": "data/teacher-spectrum-20261110/analyze_response_stages.py",
+      "bytes": 3332,
+      "sha256": "37c7c3fafa1f83ac1af029154ef53f3748f23131d5ad8175819121b8459ebe98"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_response.py",
+      "published": "data/teacher-spectrum-20261110/analyze_response.py",
+      "bytes": 2890,
+      "sha256": "831fdf02464ad06e8a0617a26b53ab3843524394db5bad9f5a4ccc2cd4b5c76a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_delete_noise.py",
+      "published": "data/teacher-spectrum-20261110/analyze_delete_noise.py",
+      "bytes": 3340,
+      "sha256": "8c1dc35d6f78cfab2913295cb6b9c6d40f7a26824fcefcd7ab6683fef76aa801"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_research_synthesis.py",
+      "published": "data/teacher-spectrum-20261110/plot_research_synthesis.py",
+      "bytes": 7682,
+      "sha256": "ab018ba43dc91388e749b689335eb6e40b2fc6dd3320c6057a62b683887646e6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/deletion-direction-specificity-audit.json",
+      "published": "data/teacher-spectrum-20261110/figures-research-synthesis/deletion-direction-specificity-audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/domain-residuals-audit.json",
+      "published": "data/teacher-spectrum-20261110/figures-research-synthesis/domain-residuals-audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/plot-data.json",
+      "published": "data/teacher-spectrum-20261110/figures-research-synthesis/plot-data.json",
+      "bytes": 26796,
+      "sha256": "9f7ebbf6d002c2be8c5152412f224e26827a5efd509ed7a86db215eb3f0fee0d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/preexisting-direction-response-audit.json",
+      "published": "data/teacher-spectrum-20261110/figures-research-synthesis/preexisting-direction-response-audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/provenance.json",
+      "published": "data/teacher-spectrum-20261110/figures-research-synthesis/provenance.json",
+      "bytes": 652,
+      "sha256": "de805e8980863b6d42ee520b731d4e19e150202c63ebc30fda5ddb6ad151e9b0"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/figures-research-synthesis/task-content-comparison-audit.json",
+      "published": "data/teacher-spectrum-20261110/figures-research-synthesis/task-content-comparison-audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/failure-classification-010.json",
+      "published": "data/teacher-spectrum-20261110/failure-classification-010.json",
+      "bytes": 6212,
+      "sha256": "a31868d1107951c2e50f02f20d95a61dd16f82f9a4c6b78e0bb35fddb522144c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/ancillary-summary.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/ancillary-summary.json",
+      "bytes": 106410,
+      "sha256": "78d980c6f95ff9cafdcb345751c19ddcdc56eaee1264e0e35ab16d1fa28ac280"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/coverage-summary.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/coverage-summary.json",
+      "bytes": 182,
+      "sha256": "c339af372f6d91476a1bbbed11c7da82bdc10a45f753a8edbf143ab669af7882"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/coverage.csv",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/coverage.csv",
+      "bytes": 64210,
+      "sha256": "21b6d2833ad2ccb8e24dfaeb0353ded1aec9966b9a721ec1b37f6f7af83914cc"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/delivery-checks.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/delivery-checks.json",
+      "bytes": 14921,
+      "sha256": "7949284487f4dad772a93faa466a1885305a37d89fd546a1bbfae4f0aced7ebb"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/document-section.txt",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/document-section.txt",
+      "bytes": 9988,
+      "sha256": "010de7423c0f5487bc92815b160fdcc4a443a432057fa48ffc2ef6e598718e0a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-analysis-attempt01.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-analysis-attempt01.py",
+      "bytes": 22826,
+      "sha256": "6653bf34853a8dafe39d39107f7c7872234cd5dce007629340b78d1c258b4ce7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-analysis-attempt02.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-analysis-attempt02.py",
+      "bytes": 24041,
+      "sha256": "998c6cf5f478111ece41a5b4ef506457daa7d1ec40bd91ce98853ede4a63c970"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-finalize-attempt01.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-finalize-attempt01.py",
+      "bytes": 4631,
+      "sha256": "eeb3613a3d2963d451665d0d54414c9957de0c25e013010de52eedf405e75acc"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/explorer-custom.js",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/explorer-custom.js",
+      "bytes": 583510,
+      "sha256": "0401049c1a727eeb54e756723476ef75e4cd0fe6cc63998ecb6357b91d801495"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/explorer-data.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/explorer-data.json",
+      "bytes": 3087253,
+      "sha256": "79cafa637447a873c0767a5ba6797a9656570e5a95e9f24308efbcaf2f6709a1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/explorer-runtime-check.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/explorer-runtime-check.json",
+      "bytes": 4989,
+      "sha256": "3c235e21d11a46dc932a8b87c548b1f4a0118d2a69dccce1a5b11cdbe1c46f6f"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v2.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption-v2.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v2.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption-v2.pdf",
+      "bytes": 34214,
+      "sha256": "f3948ba3a1f892351ccebd175decd5e114b1dec4c24e17562655ff587a857d1e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v2.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption-v2.png",
+      "bytes": 105845,
+      "sha256": "7208c1da83ff08c6822d99b64cc3fab9ed491e934df6ba7922fb93745c2f2ce9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v2.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption-v2.svg",
+      "bytes": 58085,
+      "sha256": "15a7df000cde7e01c61fb945fdced914cb05fb402a0ef95b081fb38688249a36"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption.audit.json",
+      "bytes": 810,
+      "sha256": "a0e9bc9895453195ae7a2dcad24a23c39f25c543a5ec5c611eb1fd5b1dc407dc"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption.pdf",
+      "bytes": 35116,
+      "sha256": "21113a06b13d8549c5cf97a5d4fadf2a7e42d165a43c888ae33a8e4204e65a08"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption.png",
+      "bytes": 108265,
+      "sha256": "af0be8046443e6543ad4e1d778914b48a7b77c3cb590a09aac6a740372f867b7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/feature-vs-absorption.svg",
+      "bytes": 62159,
+      "sha256": "96f078a5cbda4b6513d1c4b25ee05839be65c148dce983abd3ec3a7137136aae"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/historical-42-coverage.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/historical-42-coverage.json",
+      "bytes": 18685,
+      "sha256": "b5672e487ad44922dbd83855143842e29e59f730f4df39e832b77a127fc9928d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/inventory.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/inventory.json",
+      "bytes": 135871,
+      "sha256": "7144b228fb74807a3d59be7c673eff7ff3d7e8c3139a4e7e0533d0bdd713cab9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v2.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v2.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v2.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v2.pdf",
+      "bytes": 28472,
+      "sha256": "9a451d6bf424ecb3a03f830c04202159492918c88fca5bcab59173db7fb78a70"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v2.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v2.png",
+      "bytes": 236938,
+      "sha256": "d4cd13a5373aab9792b5a10b4384daec2bf5e8404ed2a8c0e0a5dcf77090f64d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v2.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v2.svg",
+      "bytes": 60663,
+      "sha256": "23f1deb7aad5acdbbca77b4c8494203466dec9c45535c7aa0621cfd0f53270ad"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics.audit.json",
+      "bytes": 847,
+      "sha256": "fae5c2388e781c29f26d2d3c9941ddf664d1020e4ba63e7972f917395705ca74"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics.pdf",
+      "bytes": 28292,
+      "sha256": "2da7a41b7985dc3c97dbb699ef2e2aa11d5eb35989add6cb47b3ee05de357abb"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics.png",
+      "bytes": 234613,
+      "sha256": "509c290a66a2c70df51bc2e2d4dd0cb1b4df016b75b3a814efdf029d5c9e03ed"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics.svg",
+      "bytes": 60923,
+      "sha256": "d89f4cab8a1175a71c37bbeb7c5e6e51407ac26bc38f12f6f5d8c0cae411be0a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/measurement-complete.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/measurement-complete.json",
+      "bytes": 135,
+      "sha256": "1434e790b026504f441031c7192da8493df064d32f9c387a7bfc4cd44b386ece"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/measurement-protocol.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/measurement-protocol.json",
+      "bytes": 393,
+      "sha256": "78f730145e6c6ccf195d70f175a6c93b5df314df2356b522baee6260015ec14b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v2.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview-v2.audit.json",
+      "bytes": 1696,
+      "sha256": "aef9d2defd5e0704ec1fe40008545407c20f48cfd025b38c1f33b55c4de7f3a2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v2.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview-v2.pdf",
+      "bytes": 40051,
+      "sha256": "2eedae2b719c1e3431e5777019bf9451157f0f2f8fa5ffad32313705c706a317"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v2.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview-v2.png",
+      "bytes": 200966,
+      "sha256": "5a6741d13c05edfd1ab2cd38c6c72e1c4dd0f4f8ed6103374e99651be0c05a26"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v2.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview-v2.svg",
+      "bytes": 75090,
+      "sha256": "e18de60786eeceaed71ae0bb5e5bd9873398773c155d9c8a63a90e2ab26faafb"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview.audit.json",
+      "bytes": 438,
+      "sha256": "9451019328e3ccd7e2e57cb5eb3bfb6c11e25d3332d67a1456acd8f8b0373aad"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview.pdf",
+      "bytes": 37547,
+      "sha256": "aba2ac5f4b52b4cd42954254acf901b6b5a306603c2ae126f7e753ef1e072a52"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview.png",
+      "bytes": 190458,
+      "sha256": "0787493d742f0262ab5cb1abd423283c91f8acdf5504d536d74312461ad9d5fe"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/model-fingerprint-overview.svg",
+      "bytes": 71057,
+      "sha256": "997a76e7f87d5880425e3d22ea28a042f58dbb948d41c0ebbefe66ec214504e5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison.audit.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-comparison.audit.json",
+      "bytes": 40,
+      "sha256": "cd3f463112b5371963f828526534a2543a0b99f18d33ad6dece3bf6809c57568"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison.pdf",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-comparison.pdf",
+      "bytes": 25236,
+      "sha256": "5041770d66ebe038ca6c7d8d725d46d94e0acb424fc8b32114bfc75773c39cc0"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison.png",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-comparison.png",
+      "bytes": 102235,
+      "sha256": "697ff5438dc45264290cdf337f60d5f3671465207458f2b631876d3f266dd201"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison.svg",
+      "published": "figures/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-comparison.svg",
+      "bytes": 16909,
+      "sha256": "ccc903e08818260cab3eecfc514604a2a130636c119335ef8024f955534de941"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-summary.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/prediction-summary.json",
+      "bytes": 8783,
+      "sha256": "226ec11c8657e5243f117a0eb0fc483d566c70e93db8cd95826655c876673c94"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/progress.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/progress.json",
+      "bytes": 184,
+      "sha256": "37865b78c1596a0e2919d1264f960de9fcfd7ab9d6d9e1f8bb91e3dbaf9e5fd1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/raw-risk-verification.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/raw-risk-verification.json",
+      "bytes": 280853,
+      "sha256": "2d3c8ea0b6cd250589721148eaf134849d3dcec30a2175ab4a5099b85e70daac"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/spectral-neighbors.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/spectral-neighbors.json",
+      "bytes": 31625,
+      "sha256": "ac2f8e95dbd5bd9826a75a6e2df55d674111f8c45ca09e234fb0f19c86af2da9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/supplement-polaris-curves.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/supplement-polaris-curves.json",
+      "bytes": 45378,
+      "sha256": "a4f304c4ac4508941827e1f13ce31cb04e7e7d9136ae652bee8170428c23f18e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/test-explorer.cjs",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/test-explorer.cjs",
+      "bytes": 1421,
+      "sha256": "a4c1e1ed17e94cfc4061553e568c7d552cfa2f9178de494789923a022594a1a7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-sources/analyze_expanded_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-sources/analyze_expanded_spectrum.py",
+      "bytes": 24040,
+      "sha256": "f6e1392f8a6dc558b2552b9b5e3b3b5f2d2a77a36598e4e79595b24445aebeab"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-sources/build_spectrum_explorer.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-sources/build_spectrum_explorer.py",
+      "bytes": 7823,
+      "sha256": "9db30c212b2ae10a1015d73424a85823a38f13346fddb4e335c99f55a9707ac8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-sources/expand_spectrum_inventory.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-sources/expand_spectrum_inventory.py",
+      "bytes": 9019,
+      "sha256": "af121caeca73e995ab45d8dec0b4ac7231b6dbb0a53e0cb29d6a62ee32e17421"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-sources/finalize_spectrum_analysis.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-sources/finalize_spectrum_analysis.py",
+      "bytes": 4686,
+      "sha256": "f28702b70055d98121bdf91f6c73b7183667dd30bac27d2c0b7c712d7ba4261e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-sources/measure_ancillary_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-sources/measure_ancillary_spectrum.py",
+      "bytes": 4151,
+      "sha256": "6307cb7a451f4c63fe330f7a69cbd7569c9b67193fc8ce35eaeee215b619ffdf"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-sources/measure_expanded_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-sources/measure_expanded_spectrum.py",
+      "bytes": 11743,
+      "sha256": "61625b7dbeb83e0cfe429ef6c141a1c557e871026e841b20b2c9b47855e20a11"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-sources/summarize_expanded_coverage.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-sources/summarize_expanded_coverage.py",
+      "bytes": 2522,
+      "sha256": "ca0cfbcf8c0297e4461133c48b21a38c1b77df73f4cf853c81cdfcba1ee18b9d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/executed-sources/supplement_expanded_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-expanded-v4/executed-sources/supplement_expanded_spectrum.py",
+      "bytes": 4357,
+      "sha256": "2a4eda9081fabed3eabff17c24faf8615383881758cc241b223cd857b90e6c14"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/absolute-curve-groups.audit.json",
+      "bytes": 248,
+      "sha256": "c1b1d9b2f764a7e2f65f6b2d81df2fadb2e486c99afbf74c1dbdb64dde956dea"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/absolute-curve-groups.pdf",
+      "bytes": 29198,
+      "sha256": "0ace27f29f147e460ba01562b02549fe0e6d79d7292488e43e77f5d540b950b1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/absolute-curve-groups.png",
+      "bytes": 219031,
+      "sha256": "d9139eeb5098ba1f284a4576aef526cd508bb2abddd2582c778511b99d786055"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/absolute-curve-groups.svg",
+      "bytes": 81621,
+      "sha256": "0aceb279e3e0c23cedeac9626cdb902ba5d70531a7c2270d896c299d68c46152"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-geometry.audit.json",
+      "bytes": 1428,
+      "sha256": "cd57fda6df3469cf85e515fe3d57cc25e0324a9cb26ba2423792c0012f907fd2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-geometry.pdf",
+      "bytes": 33777,
+      "sha256": "6d215a1b6d1f384b629fc454045b14ba6d9d00d996d61077f3a29a19c73d9791"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-geometry.png",
+      "bytes": 210918,
+      "sha256": "61302b55d3b79b56605ab37471fbf147e71238f34f41589c678a175de9522c2a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-geometry.svg",
+      "bytes": 54033,
+      "sha256": "b3653ab3667d2ece37c839cf0e7a22687c751f942103af1e494db8f74bf890a5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-layers.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/common-ancestor-layers.csv",
+      "bytes": 7781,
+      "sha256": "5fdd25e9375204265ae2021be94212360bbd3eb1546a6c3ecc88be011d21423b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/delivery-checks.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/delivery-checks.json",
+      "bytes": 2113,
+      "sha256": "9be79301ded505dc48e118fd706746b109fad879234e032b71a3194932e59e11"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/document-section.txt",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/document-section.txt",
+      "bytes": 12182,
+      "sha256": "c88947c0acc83edbac6b5f7691788b692d18b16ffdf4179598b4c36b6c49e19e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-band-analysis-attempt01.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-band-analysis-attempt01.py",
+      "bytes": 10265,
+      "sha256": "a978f6c1ae1eea7aa7276a5387b79b2e8a937c0beb34800769826ac4aa151eed"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-band-analysis-attempt02.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-band-analysis-attempt02.py",
+      "bytes": 10309,
+      "sha256": "52e1eb641092d9e636a760e943c40afbfde3d9b32de5d6d2eef6ebb58c2498b4"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-band-analysis-attempt03.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-band-analysis-attempt03.py",
+      "bytes": 10269,
+      "sha256": "65a45dd5de327c516a54a0e406167347f8cef43598bda14d9330fdcd8adf9de0"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-common-plot-attempt01.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-common-plot-attempt01.py",
+      "bytes": 6965,
+      "sha256": "c9e433d9b5b05c1ff32b224753211f07b35f84ab39ab2808f3e33735015a478b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/late-question-paired.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/late-question-paired.csv",
+      "bytes": 31465,
+      "sha256": "bbd0d5595aed66f44fe12b588ac64e4576e9b41ce11c35df93267440afcc99ba"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-diagnostics.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/output-diagnostics.csv",
+      "bytes": 1609794,
+      "sha256": "61ac56380eeb20f5829ba249dac1eb34e09e5f9a84dc86730d52713e7e38387a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/output-entropy-and-js.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/output-entropy-and-js.pdf",
+      "bytes": 23723,
+      "sha256": "be07697c8bc9b8d083743c0ac7cc46449995e59c5ae0a4adb8de46bf45851de8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/output-entropy-and-js.png",
+      "bytes": 105886,
+      "sha256": "46856b3e619a821bdee052949094c5c4580e82f3bda1a592df521ce2935e24c6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/output-entropy-and-js.svg",
+      "bytes": 21511,
+      "sha256": "1a8c065fe6687e7d34de59c6ac11ea2db817e18dff76c38ce88a925f5514ab62"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/pairwise-geometry-curve.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/pairwise-geometry-curve.csv",
+      "bytes": 6055,
+      "sha256": "60a6740f24876084fcb186252e7742a6427c3e02368deed2fef04d00287a5e58"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/protocol.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/protocol.json",
+      "bytes": 512,
+      "sha256": "ca3c0a445d7650ae5a909d3ef1b5fad0595e504f13814dbf3cfd23d8b72c1c5d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/spectrum-dynamics-associations.audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/spectrum-dynamics-associations.pdf",
+      "bytes": 40170,
+      "sha256": "e024cc0256bf168c800351ef35a46fc72cbe24aac51c277b87ae450922dfb8c3"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/spectrum-dynamics-associations.png",
+      "bytes": 238489,
+      "sha256": "77b42f98b6c6b434ed014ac959cc9fcb9c19ddcde71dbab622e7d8812667bb15"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/spectrum-dynamics-associations.svg",
+      "bytes": 57463,
+      "sha256": "7f3bab611a866262d86e503dc8d8bfa98493e95c5dcf72dc870b0a7038e5f29f"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/teacher-band-matrices.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/teacher-band-matrices.csv",
+      "bytes": 277150,
+      "sha256": "492b7b48a4189e44043638a45dbf6407fdc55e03d7dda72d5051de1ab8e9b4b1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/teacher-band-summary.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/teacher-band-summary.csv",
+      "bytes": 42617,
+      "sha256": "2d5d9649c1d94eb2094404ef7ed89b6945b74be8183ac4f4d45a49575a09a179"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/teacher-frame-matrices.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/teacher-frame-matrices.csv",
+      "bytes": 41394,
+      "sha256": "7eae8ead288e17b9c39de3395e249ed5e18324034d50a7c8e5511c17dc29f602"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/teacher-frame-summary.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/teacher-frame-summary.csv",
+      "bytes": 5970,
+      "sha256": "2df7c064281edc3633abc9fc972c277af2741c7ff5e3e14e65d496197627a95d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/teacher-neighbor-matrices.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/teacher-neighbor-matrices.json",
+      "bytes": 256631,
+      "sha256": "fcbf88f358d6f830c925b511bb75402e7078f50b448bc6cff71b670bb0d9cac2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/teacher-neighbors.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/teacher-neighbors.json",
+      "bytes": 41022,
+      "sha256": "fad85c1f5edf1d5dcb126af12b70e59c422bddf06682a96213958defa2331d2c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/within-group-associations.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/within-group-associations.csv",
+      "bytes": 21341,
+      "sha256": "d8d1685e3652ddac5f26842f24efd2ce8c2dc51844be56e436d18c2c2b5d4103"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/late-absolute-improvement.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/late-absolute-improvement.audit.json",
+      "bytes": 358,
+      "sha256": "4db2487e9b424d0566bfa5d1d1c3eb7aa67b06ef458240ca656f2cafdc50c20c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/late-absolute-improvement.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/late-absolute-improvement.pdf",
+      "bytes": 28636,
+      "sha256": "91f7e95b7730d18420d720e4d2d55725bb2e69084c267b3657047f7668677aa9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/late-absolute-improvement.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/late-absolute-improvement.png",
+      "bytes": 142286,
+      "sha256": "ad557c4a59bfaa9742d95ddaf0dba2e674d8c8aa90181cd8f4b30383b3c80fac"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/late-absolute-improvement.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/late-absolute-improvement.svg",
+      "bytes": 39358,
+      "sha256": "18e293aac34ac4fed0b8501f35e35ab45c9a6e9d4c5267472f453625dce7d7b0"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/late-question-paired.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/late-question-paired.csv",
+      "bytes": 31465,
+      "sha256": "bbd0d5595aed66f44fe12b588ac64e4576e9b41ce11c35df93267440afcc99ba"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/output-diagnostics.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/output-diagnostics.csv",
+      "bytes": 1609794,
+      "sha256": "61ac56380eeb20f5829ba249dac1eb34e09e5f9a84dc86730d52713e7e38387a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-amplitude.audit.json",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-amplitude.audit.json",
+      "bytes": 251,
+      "sha256": "f2799ff9cd1bc3e205571d7218fb74368a6512f316c5487544eef8fed2064a4f"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-amplitude.pdf",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-amplitude.pdf",
+      "bytes": 31992,
+      "sha256": "b988f343cd24cacae15ee28d7a5479646aef09f9f2d199013847d0fee543302d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-amplitude.png",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-amplitude.png",
+      "bytes": 235306,
+      "sha256": "c9d98deeaa45e15800ce2a336229c1fc58efcd754bd280b3538d53a8f1befb9c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-amplitude.svg",
+      "published": "figures/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-amplitude.svg",
+      "bytes": 41426,
+      "sha256": "c4acd61b7d9833d579093a49c8b3a808a10dd19c5da1b1ed96e04ad9a588fc08"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-matrices.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-matrices.csv",
+      "bytes": 305513,
+      "sha256": "f325cede0860039e5cbd5f8cca56ba24ff05bdbe87b3406a040396777173e03c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-summary.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/teacher-band-summary.csv",
+      "bytes": 46931,
+      "sha256": "b717b9ea64d38de18495c04352c093d19f875e50479f4a217ee3bdbf807fa2a1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/teacher-frame-matrices.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/teacher-frame-matrices.csv",
+      "bytes": 45402,
+      "sha256": "eeb58c151a61a66ec8532fb549233a1a4cfd327ec60647b3af85ab8544ec58fd"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v2/teacher-frame-summary.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v2/teacher-frame-summary.csv",
+      "bytes": 6523,
+      "sha256": "8ed9aed9986f1ac8a05943a6355cc958598465706aeb309f3d2b9a03ebaf0fa5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-matrices.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-matrices.csv",
+      "bytes": 305513,
+      "sha256": "f325cede0860039e5cbd5f8cca56ba24ff05bdbe87b3406a040396777173e03c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-frame-matrices.csv",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/band-analysis-v3/teacher-frame-matrices.csv",
+      "bytes": 45402,
+      "sha256": "eeb58c151a61a66ec8532fb549233a1a4cfd327ec60647b3af85ab8544ec58fd"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-sources/analyze_band_and_states.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-sources/analyze_band_and_states.py",
+      "bytes": 10879,
+      "sha256": "aec4364c8a03b2557f23a52375482273b06ff2dccce6aacbee8dc096bcb8cdca"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-sources/analyze_curve_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-sources/analyze_curve_spectrum.py",
+      "bytes": 11979,
+      "sha256": "9663bfe0795f5d007e88fcf0108734b98717a04a26e601e991919aa7498239a1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-sources/analyze_geometry_neighbors.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-sources/analyze_geometry_neighbors.py",
+      "bytes": 3882,
+      "sha256": "52cf6a8ae84427076396fd4dea4e69ef9ec1848af7ff37662b22b1a9df6b7921"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-sources/measure_common_ancestor.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-sources/measure_common_ancestor.py",
+      "bytes": 3473,
+      "sha256": "1926166a27775709a127e622231b33e512aaa6c1097ce66d4fa8ce8e3e39930b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-sources/measure_teacher_band_capture.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-sources/measure_teacher_band_capture.py",
+      "bytes": 6158,
+      "sha256": "5b0d221a7c55aa219b88db1beb708b75ded7612defc9e1faa8b5929285b619e7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-sources/measure_teacher_band_capture_v2.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-sources/measure_teacher_band_capture_v2.py",
+      "bytes": 6694,
+      "sha256": "5224e861e9b562ba2a66edfb0dd91bd4f5fcde3dcb996c014c2be43b8afbcdca"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-sources/measure_teacher_neighbors.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-sources/measure_teacher_neighbors.py",
+      "bytes": 3051,
+      "sha256": "33dd271972ad2a7fef71d3b87ab5c46a2bf340ed9cd9c235e4e1d62a229a924b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/executed-sources/plot_common_geometry.py",
+      "published": "data/teacher-spectrum-20261110/curve-spectrum-v1/executed-sources/plot_common_geometry.py",
+      "bytes": 7013,
+      "sha256": "6e3d0e76a6366e441136d78a80a7090f72403a8a86bf456bafe13e5664fa62db"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/teacher-band-capture-v2/complete.json",
+      "published": "data/teacher-spectrum-20261110/teacher-band-capture-v2/complete.json",
+      "bytes": 191,
+      "sha256": "c241d7a51307b5c1ec4b7b062b6fdf8f75225a3bf12b48ef8b2e010037f2ba41"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/teacher-band-capture-v2/progress.json",
+      "published": "data/teacher-spectrum-20261110/teacher-band-capture-v2/progress.json",
+      "bytes": 102,
+      "sha256": "bc13c6803b9f01cb9fb4785f317eb0998cfc30a3092337c089ff0aa06da41262"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/base-gt-math.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/base-gt-math.json",
+      "bytes": 107313,
+      "sha256": "e8b7782b85d44269a49fde2e2f7090de1e40a2b5be89378c32f540e2fa1bf740"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/base-opd.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/base-opd.json",
+      "bytes": 106963,
+      "sha256": "c37bfdf15b4778616204422659ac73cab300fe348bd845dc0f3fb81c5d837882"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/complete.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/complete.json",
+      "bytes": 292,
+      "sha256": "5a543a645db274d9c41eb5c9b7e9b97274fedd65b082914800e69fcd381aba9b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/coreward-i.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/coreward-i.json",
+      "bytes": 107328,
+      "sha256": "b96e82100629c53dc1b43479b541a54bee3b5eac8eaa1b4acd8f4908ca6d9143"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/coreward-ii.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/coreward-ii.json",
+      "bytes": 107323,
+      "sha256": "6c1c1419d07827b885b53494e8f2d2728e8a08b589192bfd4c0ae709efc0b2f4"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/e3.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/e3.json",
+      "bytes": 108514,
+      "sha256": "32f8be8ee0208868d556b3e54d54b548ec3e15bf75d45c68a18525ed122eb36e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/grpo-kl.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/grpo-kl.json",
+      "bytes": 108507,
+      "sha256": "664ddca8126d04b0837c3e80e2e923ece68e071dddaaacba09c6ef33bbd25caa"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/q3-base.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/q3-base.json",
+      "bytes": 90970,
+      "sha256": "54c0dc4aff8e649f9013fc555fb9cd60c310712eb52af2080e5eed62f501f538"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/sft-deepmath.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/sft-deepmath.json",
+      "bytes": 105837,
+      "sha256": "2d329baf2fa8645188224a247f4a59e2da494c785b755635b93c1e5aa380f7d1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/common-ancestor-v1/sft-gsm8k.json",
+      "published": "data/teacher-spectrum-20261110/common-ancestor-v1/sft-gsm8k.json",
+      "bytes": 107434,
+      "sha256": "a8c693880f0b978b1415ecceab5c26162ef3b7b5a1a2cf03e3034de7d1406634"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/complete.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/complete.json",
+      "bytes": 81,
+      "sha256": "816618399d82f547acfa0434403384654035a5db9b584a8694a8a481605c73a3"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/executed-screen_spectrum_cpu.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/executed-screen_spectrum_cpu.py",
+      "bytes": 4965,
+      "sha256": "05aaf4b1fc1a52668a1e27afcd6432f43e0b346f802cd6c22288e4ffb81c67f8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/executed-summarize_spectrum_screen.py",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/executed-summarize_spectrum_screen.py",
+      "bytes": 9182,
+      "sha256": "3d9d14bedbfa849a30130180d6270c21a4e43055050ebfcd0b5f6539e2fdcce1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/progress.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/progress.json",
+      "bytes": 55,
+      "sha256": "97ce1309ec3693f7fda7e5ce20bd772204b97abbf564bda104aed61e2bc1f0ec"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/summary-provenance.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/summary-provenance.json",
+      "bytes": 50028,
+      "sha256": "779ccf08b32454ab27510f801d6ba497bee4e2a704d5f722dae3ccb2923f98aa"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/thinking-space-l00.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/thinking-space-l00.json",
+      "bytes": 258183,
+      "sha256": "8bc5e532c057763502cf94d1a9e4c94298d4c4d34c94c410b3cf92b465955bd4"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/thinking-space-l13.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/thinking-space-l13.json",
+      "bytes": 257987,
+      "sha256": "6c5b2b3a076775323a367a90c70bc7184aef0c38e790e41dd66b9a99fef12e82"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/spectrum-screen-v1/thinking-space-l27.json",
+      "published": "data/teacher-spectrum-20261110/spectrum-screen-v1/thinking-space-l27.json",
+      "bytes": 257766,
+      "sha256": "c0f7619df073ac6cb7bd3e9c55f2f75c43e94403cf02eae79019e781810d9ead"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/paired-question-risks.json",
+      "published": "data/teacher-spectrum-20261110/historical-dynamics-20261110/paired-question-risks.json",
+      "bytes": 3611260,
+      "sha256": "fb50548ed7146e3b1f8e7895155a2c8766240d8a331f4c28ef69316d7e2c0fbe"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/historical-dynamics-20261110/provenance.json",
+      "published": "data/teacher-spectrum-20261110/historical-dynamics-20261110/provenance.json",
+      "bytes": 60326,
+      "sha256": "e943f18b47dcaaa3beb01f40ff95d3ee40230cd4384a408e129012f51375f88a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_alignment_stages.py",
+      "published": "data/teacher-spectrum-20261110/analyze_alignment_stages.py",
+      "bytes": 3083,
+      "sha256": "cd66c00ea9d4352720df9146f17e1df9e24d5dfc9124a730f57c61ed28a45d50"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_answer_audit.py",
+      "published": "data/teacher-spectrum-20261110/analyze_answer_audit.py",
+      "bytes": 3128,
+      "sha256": "b5a54e48a7b3f4058b4c52dd8d8d46037845d48d1c5ab723ba41aedf60b0ac46"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_band_and_states.py",
+      "published": "data/teacher-spectrum-20261110/analyze_band_and_states.py",
+      "bytes": 10879,
+      "sha256": "aec4364c8a03b2557f23a52375482273b06ff2dccce6aacbee8dc096bcb8cdca"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_curve_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/analyze_curve_spectrum.py",
+      "bytes": 11979,
+      "sha256": "9663bfe0795f5d007e88fcf0108734b98717a04a26e601e991919aa7498239a1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_delete.py",
+      "published": "data/teacher-spectrum-20261110/analyze_delete.py",
+      "bytes": 1422,
+      "sha256": "606a587049e49b326818b4d1ff95b5087ec46b2afa2e9c422b4a577b7086c3fc"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_expanded_generation.py",
+      "published": "data/teacher-spectrum-20261110/analyze_expanded_generation.py",
+      "bytes": 2798,
+      "sha256": "a99ccd06e85ef32e253b5a5666081366e90679115ace0ccf925d36b5dc7c2fec"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_expanded_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/analyze_expanded_spectrum.py",
+      "bytes": 24040,
+      "sha256": "f6e1392f8a6dc558b2552b9b5e3b3b5f2d2a77a36598e4e79595b24445aebeab"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_generated_response.py",
+      "published": "data/teacher-spectrum-20261110/analyze_generated_response.py",
+      "bytes": 3531,
+      "sha256": "0f7e2f2407dad5cbf8b80e8aa66b9078bceea6a208267c049f6a325125da4966"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_generation.py",
+      "published": "data/teacher-spectrum-20261110/analyze_generation.py",
+      "bytes": 5015,
+      "sha256": "b438a50ea2d6222b9fb0ba781e117f795016c6528d15534b45caa283c234dc28"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_geometry_neighbors.py",
+      "published": "data/teacher-spectrum-20261110/analyze_geometry_neighbors.py",
+      "bytes": 3882,
+      "sha256": "52cf6a8ae84427076396fd4dea4e69ef9ec1848af7ff37662b22b1a9df6b7921"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_progress.py",
+      "published": "data/teacher-spectrum-20261110/analyze_progress.py",
+      "bytes": 6624,
+      "sha256": "0a237cd1152bb3751b9ee8a7abfe1149a7cad6bc67c52083f9e2e4959a2896c9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_tick6.py",
+      "published": "data/teacher-spectrum-20261110/analyze_tick6.py",
+      "bytes": 5713,
+      "sha256": "92ad1d201804997f93157476a8393852b4714af1cdbb592b17a0cc53b76e8253"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_tick8.py",
+      "published": "data/teacher-spectrum-20261110/analyze_tick8.py",
+      "bytes": 3918,
+      "sha256": "8a82b1009cc2bf957458e9b4304d4575eb58d939a44c8e2da6c66846a00c7cf1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_tick9.py",
+      "published": "data/teacher-spectrum-20261110/analyze_tick9.py",
+      "bytes": 4256,
+      "sha256": "e666fd022e87923940664c70f47c35ff59b0c0de4d93abc151ec92959286a00b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/build_spectrum_explorer.py",
+      "published": "data/teacher-spectrum-20261110/build_spectrum_explorer.py",
+      "bytes": 7823,
+      "sha256": "9db30c212b2ae10a1015d73424a85823a38f13346fddb4e335c99f55a9707ac8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/expand_spectrum_inventory.py",
+      "published": "data/teacher-spectrum-20261110/expand_spectrum_inventory.py",
+      "bytes": 9019,
+      "sha256": "af121caeca73e995ab45d8dec0b4ac7231b6dbb0a53e0cb29d6a62ee32e17421"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/finalize_spectrum_analysis.py",
+      "published": "data/teacher-spectrum-20261110/finalize_spectrum_analysis.py",
+      "bytes": 4686,
+      "sha256": "f28702b70055d98121bdf91f6c73b7183667dd30bac27d2c0b7c712d7ba4261e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_ancillary_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/measure_ancillary_spectrum.py",
+      "bytes": 4151,
+      "sha256": "6307cb7a451f4c63fe330f7a69cbd7569c9b67193fc8ce35eaeee215b619ffdf"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_common_ancestor.py",
+      "published": "data/teacher-spectrum-20261110/measure_common_ancestor.py",
+      "bytes": 3473,
+      "sha256": "1926166a27775709a127e622231b33e512aaa6c1097ce66d4fa8ce8e3e39930b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_expanded_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/measure_expanded_spectrum.py",
+      "bytes": 11743,
+      "sha256": "61625b7dbeb83e0cfe429ef6c141a1c557e871026e841b20b2c9b47855e20a11"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_teacher_band_capture.py",
+      "published": "data/teacher-spectrum-20261110/measure_teacher_band_capture.py",
+      "bytes": 6158,
+      "sha256": "5b0d221a7c55aa219b88db1beb708b75ded7612defc9e1faa8b5929285b619e7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_teacher_band_capture_v2.py",
+      "published": "data/teacher-spectrum-20261110/measure_teacher_band_capture_v2.py",
+      "bytes": 6694,
+      "sha256": "5224e861e9b562ba2a66edfb0dd91bd4f5fcde3dcb996c014c2be43b8afbcdca"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_teacher_neighbors.py",
+      "published": "data/teacher-spectrum-20261110/measure_teacher_neighbors.py",
+      "bytes": 3051,
+      "sha256": "33dd271972ad2a7fef71d3b87ab5c46a2bf340ed9cd9c235e4e1d62a229a924b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_common_geometry.py",
+      "published": "data/teacher-spectrum-20261110/plot_common_geometry.py",
+      "bytes": 7013,
+      "sha256": "6e3d0e76a6366e441136d78a80a7090f72403a8a86bf456bafe13e5664fa62db"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_generation.py",
+      "published": "data/teacher-spectrum-20261110/plot_generation.py",
+      "bytes": 3835,
+      "sha256": "c76331f536f58e729c78ad39afa5b08cba98273f581216ec99aca81bb4872f88"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_progress.py",
+      "published": "data/teacher-spectrum-20261110/plot_progress.py",
+      "bytes": 12088,
+      "sha256": "bbc5dfb2c560882368246d1e157b3ffcbf959d395b880492b736e286b901f4d0"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_review003.py",
+      "published": "data/teacher-spectrum-20261110/plot_review003.py",
+      "bytes": 3414,
+      "sha256": "84f8702d69457bfa7435a2f4c9623ff1775098138e9b97c64b57e766ac45893e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_stages.py",
+      "published": "data/teacher-spectrum-20261110/plot_stages.py",
+      "bytes": 1980,
+      "sha256": "a7d51b27e4257aa8942bfd5980b597a35c82298fe396d1edd02aa323fa731e40"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_tick6.py",
+      "published": "data/teacher-spectrum-20261110/plot_tick6.py",
+      "bytes": 4211,
+      "sha256": "1ec4c070c3fac716431d5f973bc07e5dd33c5b1dfa05bd7f056b226ff2c9eab6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_tick8.py",
+      "published": "data/teacher-spectrum-20261110/plot_tick8.py",
+      "bytes": 5690,
+      "sha256": "4453bcb12a2edb2417ce12cbc83d473aaf56812cd4c30463e428321321873e66"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_tick9.py",
+      "published": "data/teacher-spectrum-20261110/plot_tick9.py",
+      "bytes": 5471,
+      "sha256": "83f989318dc85925a66a01fdd188eaed95fdccd470644df5330d4989ebf722b8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/publish_spectrum_evidence.py",
+      "published": "data/teacher-spectrum-20261110/publish_spectrum_evidence.py",
+      "bytes": 5114,
+      "sha256": "82c3798b95cd4373ea42e9a95f82a6e6a115d49945900ef893bc49dca2ddd316"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/screen_spectrum_cpu.py",
+      "published": "data/teacher-spectrum-20261110/screen_spectrum_cpu.py",
+      "bytes": 5177,
+      "sha256": "9a743a43b169001d15361824b3a5f3a7e5512e64169a2c78ceddad0cc36356d1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/summarize_expanded_coverage.py",
+      "published": "data/teacher-spectrum-20261110/summarize_expanded_coverage.py",
+      "bytes": 2522,
+      "sha256": "ca0cfbcf8c0297e4461133c48b21a38c1b77df73f4cf853c81cdfcba1ee18b9d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/summarize_spectrum_screen.py",
+      "published": "data/teacher-spectrum-20261110/summarize_spectrum_screen.py",
+      "bytes": 10253,
+      "sha256": "c123c19698a4125b02746560ac71cec75ae1d411dd5d90f8acd283d16286209b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/supplement_expanded_spectrum.py",
+      "published": "data/teacher-spectrum-20261110/supplement_expanded_spectrum.py",
+      "bytes": 4357,
+      "sha256": "2a4eda9081fabed3eabff17c24faf8615383881758cc241b223cd857b90e6c14"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/prepare_direct_pairs.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/prepare_direct_pairs.py",
+      "bytes": 4813,
+      "sha256": "95c2ada846858200563d17374d759e25a68767b7ab6ffd702b7bc6e918c81f23"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/prepare_direct_pairs-executed.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/prepare_direct_pairs-executed.py",
+      "bytes": 4774,
+      "sha256": "b2c12b41b62bb6e6dc5e66f2fce7dff541ac6a341278ad9f5fd30890e2b682cb"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct_pair_coordinates.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/direct_pair_coordinates.py",
+      "bytes": 1125,
+      "sha256": "653cb80e95a07bb15bee25a80c83c613290b8dfd4fe19df149c486f1b92ac047"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_direct_pairs.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/measure_direct_pairs.py",
+      "bytes": 7074,
+      "sha256": "2d65ba5b9f69147785d7756903c5dc253cc1f202f39b1661b27b2ce7d38b1dda"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_direct_pairs_v2.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/measure_direct_pairs_v2.py",
+      "bytes": 7263,
+      "sha256": "ed334c2abdaaaa87bc13e0abaded8dfc1a14bc7a6d3ef90579a6f6cba49548b8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_direction_controls.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/measure_direction_controls.py",
+      "bytes": 5279,
+      "sha256": "c5c730fea7a8c1e72c9d4b4359b8362202b5ac1eed6074012d8a47b514af6bd9"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/measure_direction_controls_v2.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/measure_direction_controls_v2.py",
+      "bytes": 5402,
+      "sha256": "18fa25d28ff6ac79bbb75d71c658d8c5286c3e17c7935763f57b27f99720c417"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_direct_pairs.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/analyze_direct_pairs.py",
+      "bytes": 22883,
+      "sha256": "b7febb7c2e6e0715e8e949fdf1ad56d095a9a7424b16a052ff1093bd273f1038"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_direct_dynamics.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/plot_direct_dynamics.py",
+      "bytes": 4405,
+      "sha256": "d4e1d2324a6871de6e3d05067a1bb483595607f1c29b4037aaf3d63695a31c68"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/publish_direct_pairs.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/publish_direct_pairs.py",
+      "bytes": 2857,
+      "sha256": "e8e2e872fbbe491b4baeab97d04f75b5903a0afbb84ca69969520aa3254d25dd"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/publish_spectrum_evidence.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/publish_spectrum_evidence.py",
+      "bytes": 5102,
+      "sha256": "4aa0502e55cefdaa05f6e4f2ad74c460d2ac532b31a7e4d48d95a2d74fa0cdb8"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/publish_spectrum_evidence-executed.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/publish_spectrum_evidence-executed.py",
+      "bytes": 5114,
+      "sha256": "82c3798b95cd4373ea42e9a95f82a6e6a115d49945900ef893bc49dca2ddd316"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/Llama-complete.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/Llama-complete.json",
+      "bytes": 262,
+      "sha256": "c94bd9bac89ac60c20ef46e332c79f34f6470fbd190bda6efc901017a35a356b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/Llama-controls-complete.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/Llama-controls-complete.json",
+      "bytes": 244,
+      "sha256": "a998f2e6e618e06d3e6a4951158d83dd8e06de977326042be0bfbf271f7ba5ca"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/MiMo-complete.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/MiMo-complete.json",
+      "bytes": 261,
+      "sha256": "f3c862566e43f107edc5cdbf2848d9167ae5d6c8059b383c7f443baa3424afb2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/MiMo-controls-complete.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/MiMo-controls-complete.json",
+      "bytes": 244,
+      "sha256": "60f571948751e057e4c953649d215f3ea217890dfa8c274c80e385f911550abf"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/Qwen-complete.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/Qwen-complete.json",
+      "bytes": 263,
+      "sha256": "fca7d7e7a61bf18cb3eeedb7cedaa3c620df3ce627e9b290a863f1000a05f0fb"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/Qwen-controls-complete.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/Qwen-controls-complete.json",
+      "bytes": 244,
+      "sha256": "40816fbff53ab0e0284a2ecd808561e18ebede6866eb65d24c8146a8ea909085"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/R1-complete.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/R1-complete.json",
+      "bytes": 261,
+      "sha256": "ee4cad9048e25f91c4f885a14e1733253f23bcde73816acb1db97c21f764cd02"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/R1-controls-complete.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/R1-controls-complete.json",
+      "bytes": 244,
+      "sha256": "301111f05698fa3707d8a5e01683324ba90fbfe659e24816cb3e2eacbe0a1246"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/R1-smoke.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/R1-smoke.json",
+      "bytes": 255,
+      "sha256": "a28690f5501cfe0082c7bd7544f72ce6b74280d9901de129d39e73d9355fffde"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/coordinate-configs.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/coordinate-configs.json",
+      "bytes": 18335,
+      "sha256": "7d4235b10ff4cc9583d1b30b7bcb6cc26a588befecc16e27bd9302caca383516"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/coordinate-gate.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/coordinate-gate.json",
+      "bytes": 2099,
+      "sha256": "2b7aa9b40d1b54515eee75a4c74eb7d15d930e6e3f13d14b60cad01b1f17aacd"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/inventory.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/inventory.json",
+      "bytes": 166157,
+      "sha256": "9d45d1a5dff4310bc02fe6df5fb607f701ccce666a8ffbed53194d32f4f450c5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/llama3-3b-off--arithmetic-full--131f84b3.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/llama3-3b-off--arithmetic-full--131f84b3.md",
+      "bytes": 800,
+      "sha256": "e8a12689bed5218b6e8d4d4708896b29febd4103be5c4c177d47778673de6177"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/llama3-3b-off--coreward-i--72c4db04.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/llama3-3b-off--coreward-i--72c4db04.md",
+      "bytes": 887,
+      "sha256": "d8b8d6bf758925ab53675f0cef3ae1575790d3912f0b50bd060325ae0e0b34cf"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/llama3-3b-off--gt--59498cdb.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/llama3-3b-off--gt--59498cdb.md",
+      "bytes": 1588,
+      "sha256": "ea0438d83950c4c881e5a4154efff22b1137bb17f051ce072be2ec5d88bebce7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/q3-1.7--e3--eef55d0d.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/q3-1.7--e3--eef55d0d.md",
+      "bytes": 335,
+      "sha256": "6bcfc431e90f4b54962739c260b7233d448e4830f8fe2025696255b14b2d3644"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/q3-1.7--grpo-kl--7a02ee6c.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/q3-1.7--grpo-kl--7a02ee6c.md",
+      "bytes": 3782,
+      "sha256": "04b9cd4c78cdfd0d0a6da0e1a5bf1e6f0ad2c7dc692b404d93dae794a1b5ea0a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/q3-1.7--sft-gsm8k--a19448d4.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/q3-1.7--sft-gsm8k--a19448d4.md",
+      "bytes": 2376,
+      "sha256": "e4c23350ef65973e89541a6be78f3b6edf276fd6a79b991edb346f50a70c7a16"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/q3-1.7-nonthinking--sft-gsm8k--319ebf4f.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/q3-1.7-nonthinking--sft-gsm8k--319ebf4f.md",
+      "bytes": 2376,
+      "sha256": "e4c23350ef65973e89541a6be78f3b6edf276fd6a79b991edb346f50a70c7a16"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--brorl--c9731fdc.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/r1--brorl--c9731fdc.md",
+      "bytes": 8595,
+      "sha256": "f46ba514cb8a03cbe0f23603374eed964b3e3cd48eb390945e68c602d24cb835"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--deepcoder--82946e34.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/r1--deepcoder--82946e34.md",
+      "bytes": 6821,
+      "sha256": "401bafa08cd1ccc6b7b53e0a14ee71c624e99ddb14315b5e9dd663148800948a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--deepscaler--a7c14513.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/r1--deepscaler--a7c14513.md",
+      "bytes": 6408,
+      "sha256": "dcbd7339602a0121399522990a68811177dbffe15303c1134eda05607fa9b716"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--justrl--534ec3bd.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/r1--justrl--534ec3bd.md",
+      "bytes": 9087,
+      "sha256": "7629824d1ee289ad5a75a0b8192cbf745900f6fce2d360ffc1e58173dd81612d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--minimath--18ba6165.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/r1--minimath--18ba6165.md",
+      "bytes": 4128,
+      "sha256": "883b88ea95836824e3783a06166baa414dc38bb32ba8aa2f2e8a1b05c5bb14a1"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--nemotron--49bfdcb0.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/r1--nemotron--49bfdcb0.md",
+      "bytes": 6391,
+      "sha256": "94c5ad8f121442cad16daa21d1fba80c9b9a6c8cbff7bbecfa8d49d0697957a2"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r7--light--7e4c0413.md",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/model-cards/r7--light--7e4c0413.md",
+      "bytes": 2442,
+      "sha256": "b738cbfb53a45a6ab925a7cdd2e391886af3b0c47cfb5f21f3ce3a80c5de127a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/smoke/ece1f975fd91024f/model.layers.13.mlp.up_proj.weight.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-v1/smoke/ece1f975fd91024f/model.layers.13.mlp.up_proj.weight.json",
+      "bytes": 2919,
+      "sha256": "2d16796cf7386d27d44eb05d5510eab25e3fd280ba20af7eacb050c1dbbc9a57"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/associations.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/associations.csv",
+      "bytes": 3870,
+      "sha256": "186cb7f31f928ebad2233648a1549a7d87d3d5dbf86c93ce0b137f4d64a4f2f7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/conditions.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/conditions.csv",
+      "bytes": 13755,
+      "sha256": "c181c7ccc886f0ffe8709bac527be34f26afec3dbb369176fc657bda59a41f8b"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/continuous-dynamics.pdf",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/continuous-dynamics.pdf",
+      "bytes": 30864,
+      "sha256": "452ef9b1545370aaea6b05f99518e233af47a3f59a07bfa4c48838c65c0c391e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/continuous-dynamics.png",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/continuous-dynamics.png",
+      "bytes": 294986,
+      "sha256": "8b617f91809c750c3150c661a6728712c94e6ba32843c93062c6f0a30305fa44"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/continuous-dynamics.svg",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/continuous-dynamics.svg",
+      "bytes": 114697,
+      "sha256": "efdc8dcd697700108bf0320b4a59d08b2239392208fd235a19cb933e3f4f1edd"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/controls.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/controls.csv",
+      "bytes": 42037,
+      "sha256": "2f4465fdba2609f21fb4b4fda855c9edf9556b747c148aa1fa26ce95dbe472cd"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/dynamics-audit.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/dynamics-audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/dynamics.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/dynamics.csv",
+      "bytes": 12717,
+      "sha256": "36ed90e76154d198a5de998e856f548caa17b5f4ad7dec3a96cfbd7f26f1ab9f"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/figure-audits.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/figure-audits.json",
+      "bytes": 124,
+      "sha256": "e31f2339bbd22858153c6aa5fb8c12d32379864a33b6480246a87d3e057a5752"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/leave-family-out-method.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/leave-family-out-method.csv",
+      "bytes": 2016,
+      "sha256": "1a86e6a049233fc98a4fb62034d785ae228678e584d58dc9f5493678107f8d13"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/module-concentration.pdf",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/module-concentration.pdf",
+      "bytes": 43539,
+      "sha256": "bac00cb19e16f839e814efa912637ad369232d9c388e9bebb88558f55e52473e"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/module-concentration.png",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/module-concentration.png",
+      "bytes": 157009,
+      "sha256": "d085dabe8cc1b53feab16e48397f321ce5d8c63c47e463fa01fa5edcfbd5cfd6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/module-concentration.svg",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/module-concentration.svg",
+      "bytes": 35545,
+      "sha256": "3f194f84f300f9c5aa23405c9d5b29f419206ac4b9c83a29a29ecd1da9f94e30"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/modules.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/modules.csv",
+      "bytes": 19514,
+      "sha256": "a5c9f35f8fc698fd91f0544db9b098cfd3f8406ba2c8baa3698d6ac16b9fb5b6"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/norm-versus-fit.pdf",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/norm-versus-fit.pdf",
+      "bytes": 27328,
+      "sha256": "e1513cbfc4fb14dc6825d266ce1aa3831902b9cec93585648c928a66f14f7043"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/norm-versus-fit.png",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/norm-versus-fit.png",
+      "bytes": 149595,
+      "sha256": "331c3185dff6718fa0e33a8f44734cebf53bb13feff41e6810959468569f08a0"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/norm-versus-fit.svg",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/norm-versus-fit.svg",
+      "bytes": 72333,
+      "sha256": "9c072e93dac7485800121c8e4d3bf909ffd2af88d0abb527ed7d315b2560f61d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parameter-versus-function.pdf",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/parameter-versus-function.pdf",
+      "bytes": 25024,
+      "sha256": "6ace1efad7c228be4c094f4e7a7395ee558378a6355ce3a6987f8b53a503e439"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parameter-versus-function.png",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/parameter-versus-function.png",
+      "bytes": 101272,
+      "sha256": "d069e2cfa1f0544d19ff3d0095c6986d90bcd8d94b6f3fd7349790d0dffbbc34"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parameter-versus-function.svg",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/parameter-versus-function.svg",
+      "bytes": 33232,
+      "sha256": "ab5248191c2685a28bf1de189ab3d4b22f1327718b4b46aa293b6a7fb80887a5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/same-spectrum-controls.pdf",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/same-spectrum-controls.pdf",
+      "bytes": 25083,
+      "sha256": "3111b995ca131adadebeefae55911904bac992d3147968b85ef1a511a6336c74"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/same-spectrum-controls.png",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/same-spectrum-controls.png",
+      "bytes": 80750,
+      "sha256": "abd37f28c716667ee309ae181f3fd1899ead3567d5957992c14008d07880328a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/same-spectrum-controls.svg",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/same-spectrum-controls.svg",
+      "bytes": 81107,
+      "sha256": "8773def3e64ca5af5ad35accfb89fac8629099fc5cb440ed8f6f5fbefd760cd5"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/sketches.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/sketches.csv",
+      "bytes": 91420,
+      "sha256": "75d76465d0369e6f9c1b9248b893913feae95c468d1ce77708bb3dbce8ce7a02"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/students.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/students.csv",
+      "bytes": 12447,
+      "sha256": "49c936479e6d86de272ba002177da483b36f70b0e7998c6ba198061d09d7dc38"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/summary.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/summary.json",
+      "bytes": 4001,
+      "sha256": "153538962f593829eadb4fbbb743dd59f46ff0247773e524b8f0e8019bb58d12"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/teacher-heldout-predictions.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/teacher-heldout-predictions.csv",
+      "bytes": 4334,
+      "sha256": "1eec192d4e82c2bb61bf1d7d5dc52679f9c20a0187531618fbb959c1fad11231"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/teachers.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/teachers.csv",
+      "bytes": 8782,
+      "sha256": "75ff2ca752245033f3bf893b72139bdc6bd5ee37320e047cf94e533f312fda6c"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/analyze_direct_associations.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/analyze_direct_associations.py",
+      "bytes": 5033,
+      "sha256": "d60812264bc71d755e614f83892253a27f331cfb5cb0119c593c8979feb1d633"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/plot_direct_associations.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/plot_direct_associations.py",
+      "bytes": 3517,
+      "sha256": "f0b56e139a50361d9180ca5ee0f031394de694fe32098aa93c26821080d2bf5f"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/publish_direct_supplement.py",
+      "published": "data/teacher-spectrum-20261110/sources/direct-cohort/publish_direct_supplement.py",
+      "bytes": 1730,
+      "sha256": "5e6fa244e0c382370177c827ec68be2d43f3d8fde2085e779f2cfbc12b4369b7"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/delivery-checks.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/delivery-checks.json",
+      "bytes": 2054,
+      "sha256": "b8f311efa0f9176df4c7f77a46025bd3d4d7df0492c1892bb8f837990d9616af"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parent-matched-all-metrics.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/parent-matched-all-metrics.csv",
+      "bytes": 15699,
+      "sha256": "447defbf5ef34269cb69cddae73dbf1a28a7889349d676e12839f81a1e60ff9a"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parent-matched-figure-audit.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/parent-matched-figure-audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parent-matched-metrics.pdf",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/parent-matched-metrics.pdf",
+      "bytes": 40753,
+      "sha256": "f2e8f6931541909e53f0305e301219a76f432cce58e29e178fabc1d7499cd515"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parent-matched-metrics.png",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/parent-matched-metrics.png",
+      "bytes": 189589,
+      "sha256": "5e20570f37cb8ec0b66235db530d66b5b3d0c8635f6941bea586be5deecee96d"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parent-matched-metrics.svg",
+      "published": "figures/teacher-spectrum-20261110/direct-pairs-analysis-v4/parent-matched-metrics.svg",
+      "bytes": 33931,
+      "sha256": "c61b055b576caf282e2cef66a59c104043cf289f2f4579cb20ffea63ca1d0c31"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parent-matched-primary-panel.csv",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/parent-matched-primary-panel.csv",
+      "bytes": 21439,
+      "sha256": "8a1818189e513aff0083481d5ff2e10cf24d4ebaaa60ef2b3cdcc9bd7a22d747"
+    },
+    {
+      "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-analysis-v4/parent-matched-summary.json",
+      "published": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4/parent-matched-summary.json",
+      "bytes": 410,
+      "sha256": "fea062aa9657f3feaee1cf5d40117c27449c1148054f5a9b091eae00330fb33e"
+    },
+    {
+      "published": "data/teacher-spectrum-20261110/bundle_evidence.py",
+      "source": "verified evidence bundle",
+      "bytes": 4492,
+      "sha256": "c82738586682cff220f43a666a51f698f98f1e1d7451f823d29c1232eb6eaa5d"
+    },
+    {
+      "published": "data/teacher-spectrum-20261110/raw-evidence-bundles.json",
+      "source": "verified evidence bundle",
+      "bytes": 1077,
+      "sha256": "051085580f2fa075c6b825b52bd0ac360846260f3db768b4080d089f10e4bf44"
+    },
+    {
+      "published": "data/teacher-spectrum-20261110/direct-matrices.tar.xz",
+      "source": "verified evidence bundle",
+      "bytes": 885368,
+      "sha256": "22ea4ad59efee1341efd9866e609d0d4412d93d6f669c6c2d344f83459bd526b"
+    },
+    {
+      "published": "data/teacher-spectrum-20261110/historical-spectra.tar.xz",
+      "source": "verified evidence bundle",
+      "bytes": 11432336,
+      "sha256": "bdaafbe166d9c7317249b0042f589021905d334bc071ad96b33bc6506d417310"
+    },
+    {
+      "published": "data/teacher-spectrum-20261110/teacher-bands.tar.xz",
+      "source": "verified evidence bundle",
+      "bytes": 86768,
+      "sha256": "2cd4dd7c4dd2bfb3e12bf18fc40e65e42e09455a6ab74053deff6b66f363e885"
+    },
+    {
+      "published": "data/teacher-spectrum-20261110/direct-matrices.members.json.xz",
+      "source": "verified evidence bundle",
+      "bytes": 170904,
+      "sha256": "7a3cd1a63b4886c15e5723c5a60d96db383883827942572a1e2dbda08efc5c3f"
+    },
+    {
+      "published": "data/teacher-spectrum-20261110/historical-spectra.members.json.xz",
+      "source": "verified evidence bundle",
+      "bytes": 41148,
+      "sha256": "3f273e224e01899fdd929cb14a35bd411bd5e56fd175563addc94729d65ae568"
+    },
+    {
+      "published": "data/teacher-spectrum-20261110/teacher-bands.members.json.xz",
+      "source": "verified evidence bundle",
+      "bytes": 7504,
+      "sha256": "c73dc107fa3054589dacd794b656d03e32cd2c4265114dd5f0f336a730438bc2"
+    }
+  ],
+  "purpose": "Self-contained cited figures, numeric outputs and exact source snapshots; original models and execution logs remain experiment provenance",
+  "archive_bytes": 62321014,
+  "direct_cohort": {
+    "pairs": 21,
+    "conditions": 22,
+    "primary_continuous": 19,
+    "data": "data/teacher-spectrum-20261110/direct-pairs-v1",
+    "analysis": "data/teacher-spectrum-20261110/direct-pairs-analysis-v4"
+  },
+  "raw_evidence": {
+    "manifest": "data/teacher-spectrum-20261110/raw-evidence-bundles.json",
+    "format": "tar.xz",
+    "member_files": 5691,
+    "unpack": "python bundle_evidence.py unpack --root .",
+    "unpacked_files": "local ignored rebuildable copies; all members retained in bundles"
+  }
+}

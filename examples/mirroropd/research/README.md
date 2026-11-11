@@ -37,7 +37,7 @@ python -m examples.mirroropd.research production.refresh_tables --logs-repo ../w
 | `state_analysis`                         | rollout state 表示、coverage 与分布诊断  | [State 分析](../docs/experiments/state-analysis/README.md)                             |
 | `cross_batch`                            | B/N/L 跨批、覆盖、batch 与单遍训练       | [跨批结果](../docs/experiments/teacher-transfer/cross-batch-transfer.md#batches)       |
 | `capability_filter`                      | 筛选、温度、功能保持与续写控制           | [能力筛选假说](../docs/experiments/teacher-transfer/mechanisms/capability-filter.md)   |
-| `spectral`                               | 梯度谱与教师候选核对                     | [谱与同架构诊断](../docs/experiments/teacher-transfer/mechanisms/spectral.md)          |
+| `spectral`                               | 权重/函数谱、吸收干预、梯度与教师核对    | [谱分析与重构](studies/spectral/README.md)                                             |
 | `polaris_transfer`                       | E48、KL 方向和教师谱系探针               | [Polaris 迁移](../docs/experiments/teacher-transfer/appendix/polaris-long-run.md)      |
 | `boundary`                               | R1 边界与续训实验的明确协议              | [运行说明](studies/boundary/README.md)                                                 |
 | `fixed_transfer`                         | 按既有计划组织模型、冻结银行、训练和评测 | [固定状态迁移](studies/fixed_transfer/README.md)                                       |

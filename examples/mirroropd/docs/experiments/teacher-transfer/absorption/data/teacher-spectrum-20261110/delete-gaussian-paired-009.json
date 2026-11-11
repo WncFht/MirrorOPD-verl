@@ -1,0 +1,2083 @@
+{
+  "protocol": "Same 72 prompts; original and explicit-final-answer supplemented scores. One fixed Gaussian seed, per-matrix equal norm.",
+  "conditions": {
+    "sft-teacher": {
+      "canonical": {
+        "unedited": {
+          "AMC23": {
+            "n": 24,
+            "correct": 2,
+            "truncated": 8,
+            "mean_length": 5667.25,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 12,
+            "truncated": 10,
+            "mean_length": 3566.625,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 14,
+            "truncated": 18,
+            "mean_length": 4266.833333333333,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "delete_off": {
+          "AMC23": {
+            "n": 24,
+            "correct": 5,
+            "truncated": 9,
+            "mean_length": 6442.875,
+            "wrong_to_correct": [
+              "AMC23:23",
+              "AMC23:19",
+              "AMC23:33",
+              "AMC23:29"
+            ],
+            "correct_to_wrong": [
+              "AMC23:36"
+            ],
+            "paired_accuracy_difference": 0.125,
+            "paired_bootstrap_95": [
+              -0.041666666666666664,
+              0.2916666666666667
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 12,
+            "truncated": 3,
+            "mean_length": 1289.8958333333333,
+            "wrong_to_correct": [
+              "MATH-500:375",
+              "MATH-500:300",
+              "MATH-500:447",
+              "MATH-500:453",
+              "MATH-500:135"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:210",
+              "MATH-500:124",
+              "MATH-500:488",
+              "MATH-500:203",
+              "MATH-500:410"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.125
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 17,
+            "truncated": 12,
+            "mean_length": 3007.5555555555557,
+            "wrong_to_correct": [
+              "MATH-500:375",
+              "MATH-500:300",
+              "AMC23:23",
+              "MATH-500:447",
+              "AMC23:19",
+              "MATH-500:453",
+              "AMC23:33",
+              "MATH-500:135",
+              "AMC23:29"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:210",
+              "MATH-500:124",
+              "MATH-500:488",
+              "MATH-500:203",
+              "MATH-500:410",
+              "AMC23:36"
+            ],
+            "paired_accuracy_difference": 0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.06944444444444445,
+              0.13923611111110606
+            ]
+          }
+        },
+        "gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 1,
+            "truncated": 9,
+            "mean_length": 6372.875,
+            "wrong_to_correct": [
+              "AMC23:19"
+            ],
+            "correct_to_wrong": [
+              "AMC23:36",
+              "AMC23:32"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.20833333333333334,
+              0.08333333333333333
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 14,
+            "truncated": 6,
+            "mean_length": 2206.0208333333335,
+            "wrong_to_correct": [
+              "MATH-500:499",
+              "MATH-500:429",
+              "MATH-500:135",
+              "MATH-500:437"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:124",
+              "MATH-500:203"
+            ],
+            "paired_accuracy_difference": 0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.0625,
+              0.14583333333333334
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 15,
+            "truncated": 15,
+            "mean_length": 3594.972222222222,
+            "wrong_to_correct": [
+              "MATH-500:499",
+              "AMC23:19",
+              "MATH-500:429",
+              "MATH-500:135",
+              "MATH-500:437"
+            ],
+            "correct_to_wrong": [
+              "AMC23:36",
+              "MATH-500:124",
+              "MATH-500:203",
+              "AMC23:32"
+            ],
+            "paired_accuracy_difference": 0.013888888888888888,
+            "paired_bootstrap_95": [
+              -0.06944444444444445,
+              0.09722222222222222
+            ]
+          }
+        },
+        "deletion_vs_gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 5,
+            "truncated": 9,
+            "mean_length": 6442.875,
+            "wrong_to_correct": [
+              "AMC23:23",
+              "AMC23:33",
+              "AMC23:29",
+              "AMC23:32"
+            ],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.16666666666666666,
+            "paired_bootstrap_95": [
+              0.041666666666666664,
+              0.3333333333333333
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 12,
+            "truncated": 3,
+            "mean_length": 1289.8958333333333,
+            "wrong_to_correct": [
+              "MATH-500:375",
+              "MATH-500:300",
+              "MATH-500:447",
+              "MATH-500:453"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:437",
+              "MATH-500:499",
+              "MATH-500:210",
+              "MATH-500:488",
+              "MATH-500:429",
+              "MATH-500:410"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.16666666666666666,
+              0.08333333333333333
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 17,
+            "truncated": 12,
+            "mean_length": 3007.5555555555557,
+            "wrong_to_correct": [
+              "MATH-500:375",
+              "MATH-500:300",
+              "AMC23:23",
+              "MATH-500:447",
+              "MATH-500:453",
+              "AMC23:33",
+              "AMC23:29",
+              "AMC23:32"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:437",
+              "MATH-500:499",
+              "MATH-500:210",
+              "MATH-500:488",
+              "MATH-500:429",
+              "MATH-500:410"
+            ],
+            "paired_accuracy_difference": 0.027777777777777776,
+            "paired_bootstrap_95": [
+              -0.08333333333333333,
+              0.1388888888888889
+            ]
+          }
+        }
+      },
+      "supplemented": {
+        "unedited": {
+          "AMC23": {
+            "n": 24,
+            "correct": 2,
+            "truncated": 8,
+            "mean_length": 5667.25,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 15,
+            "truncated": 10,
+            "mean_length": 3566.625,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 17,
+            "truncated": 18,
+            "mean_length": 4266.833333333333,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "delete_off": {
+          "AMC23": {
+            "n": 24,
+            "correct": 6,
+            "truncated": 9,
+            "mean_length": 6442.875,
+            "wrong_to_correct": [
+              "AMC23:23",
+              "AMC23:19",
+              "AMC23:30",
+              "AMC23:33",
+              "AMC23:29"
+            ],
+            "correct_to_wrong": [
+              "AMC23:36"
+            ],
+            "paired_accuracy_difference": 0.16666666666666666,
+            "paired_bootstrap_95": [
+              0.0,
+              0.375
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 16,
+            "truncated": 3,
+            "mean_length": 1289.8958333333333,
+            "wrong_to_correct": [
+              "MATH-500:375",
+              "MATH-500:412",
+              "MATH-500:215",
+              "MATH-500:300",
+              "MATH-500:447",
+              "MATH-500:453",
+              "MATH-500:135"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:210",
+              "MATH-500:318",
+              "MATH-500:124",
+              "MATH-500:488",
+              "MATH-500:203",
+              "MATH-500:410"
+            ],
+            "paired_accuracy_difference": 0.020833333333333332,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.16666666666666666
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 22,
+            "truncated": 12,
+            "mean_length": 3007.5555555555557,
+            "wrong_to_correct": [
+              "MATH-500:375",
+              "MATH-500:412",
+              "MATH-500:215",
+              "MATH-500:300",
+              "AMC23:23",
+              "MATH-500:447",
+              "AMC23:19",
+              "MATH-500:453",
+              "AMC23:30",
+              "AMC23:33",
+              "MATH-500:135",
+              "AMC23:29"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:210",
+              "MATH-500:318",
+              "MATH-500:124",
+              "MATH-500:488",
+              "MATH-500:203",
+              "MATH-500:410",
+              "AMC23:36"
+            ],
+            "paired_accuracy_difference": 0.06944444444444445,
+            "paired_bootstrap_95": [
+              -0.041666666666666664,
+              0.19444444444444445
+            ]
+          }
+        },
+        "gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 1,
+            "truncated": 9,
+            "mean_length": 6372.875,
+            "wrong_to_correct": [
+              "AMC23:19"
+            ],
+            "correct_to_wrong": [
+              "AMC23:36",
+              "AMC23:32"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.20833333333333334,
+              0.08333333333333333
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 18,
+            "truncated": 6,
+            "mean_length": 2206.0208333333335,
+            "wrong_to_correct": [
+              "MATH-500:281",
+              "MATH-500:499",
+              "MATH-500:429",
+              "MATH-500:135",
+              "MATH-500:437"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:124",
+              "MATH-500:203"
+            ],
+            "paired_accuracy_difference": 0.0625,
+            "paired_bootstrap_95": [
+              -0.041666666666666664,
+              0.16666666666666666
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 19,
+            "truncated": 15,
+            "mean_length": 3594.972222222222,
+            "wrong_to_correct": [
+              "MATH-500:281",
+              "MATH-500:499",
+              "AMC23:19",
+              "MATH-500:429",
+              "MATH-500:135",
+              "MATH-500:437"
+            ],
+            "correct_to_wrong": [
+              "AMC23:36",
+              "MATH-500:124",
+              "MATH-500:203",
+              "AMC23:32"
+            ],
+            "paired_accuracy_difference": 0.027777777777777776,
+            "paired_bootstrap_95": [
+              -0.05555555555555555,
+              0.1111111111111111
+            ]
+          }
+        },
+        "deletion_vs_gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 6,
+            "truncated": 9,
+            "mean_length": 6442.875,
+            "wrong_to_correct": [
+              "AMC23:23",
+              "AMC23:30",
+              "AMC23:33",
+              "AMC23:29",
+              "AMC23:32"
+            ],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.20833333333333334,
+            "paired_bootstrap_95": [
+              0.041666666666666664,
+              0.375
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 16,
+            "truncated": 3,
+            "mean_length": 1289.8958333333333,
+            "wrong_to_correct": [
+              "MATH-500:375",
+              "MATH-500:412",
+              "MATH-500:215",
+              "MATH-500:300",
+              "MATH-500:447",
+              "MATH-500:453"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:281",
+              "MATH-500:437",
+              "MATH-500:499",
+              "MATH-500:210",
+              "MATH-500:318",
+              "MATH-500:488",
+              "MATH-500:429",
+              "MATH-500:410"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.20833333333333334,
+              0.10416666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 22,
+            "truncated": 12,
+            "mean_length": 3007.5555555555557,
+            "wrong_to_correct": [
+              "MATH-500:375",
+              "MATH-500:412",
+              "MATH-500:215",
+              "MATH-500:300",
+              "AMC23:23",
+              "MATH-500:447",
+              "MATH-500:453",
+              "AMC23:30",
+              "AMC23:33",
+              "AMC23:29",
+              "AMC23:32"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:281",
+              "MATH-500:437",
+              "MATH-500:499",
+              "MATH-500:210",
+              "MATH-500:318",
+              "MATH-500:488",
+              "MATH-500:429",
+              "MATH-500:410"
+            ],
+            "paired_accuracy_difference": 0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.08333333333333333,
+              0.16666666666666666
+            ]
+          }
+        }
+      }
+    },
+    "sft-opd": {
+      "canonical": {
+        "unedited": {
+          "AMC23": {
+            "n": 24,
+            "correct": 8,
+            "truncated": 1,
+            "mean_length": 1773.0,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 31,
+            "truncated": 0,
+            "mean_length": 517.5625,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 39,
+            "truncated": 1,
+            "mean_length": 936.0416666666666,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "delete_off": {
+          "AMC23": {
+            "n": 24,
+            "correct": 10,
+            "truncated": 1,
+            "mean_length": 1649.75,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "AMC23:24",
+              "AMC23:18",
+              "AMC23:22"
+            ],
+            "correct_to_wrong": [
+              "AMC23:34",
+              "AMC23:26"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.2916666666666667
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 35,
+            "truncated": 0,
+            "mean_length": 747.875,
+            "wrong_to_correct": [
+              "MATH-500:271",
+              "MATH-500:194",
+              "MATH-500:210",
+              "MATH-500:429",
+              "MATH-500:203",
+              "MATH-500:244",
+              "MATH-500:258",
+              "MATH-500:170",
+              "MATH-500:491"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:467",
+              "MATH-500:416",
+              "MATH-500:382",
+              "MATH-500:281",
+              "MATH-500:453"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.0625,
+              0.22916666666666666
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 45,
+            "truncated": 1,
+            "mean_length": 1048.5,
+            "wrong_to_correct": [
+              "MATH-500:271",
+              "MATH-500:194",
+              "AMC23:21",
+              "MATH-500:210",
+              "AMC23:24",
+              "AMC23:18",
+              "MATH-500:429",
+              "MATH-500:203",
+              "AMC23:22",
+              "MATH-500:244",
+              "MATH-500:258",
+              "MATH-500:170",
+              "MATH-500:491"
+            ],
+            "correct_to_wrong": [
+              "AMC23:34",
+              "MATH-500:467",
+              "MATH-500:416",
+              "MATH-500:382",
+              "MATH-500:281",
+              "MATH-500:453",
+              "AMC23:26"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.041666666666666664,
+              0.19444444444444445
+            ]
+          }
+        },
+        "gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 8,
+            "truncated": 5,
+            "mean_length": 3998.0833333333335,
+            "wrong_to_correct": [
+              "AMC23:24",
+              "AMC23:22"
+            ],
+            "correct_to_wrong": [
+              "AMC23:30",
+              "AMC23:29"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.16666666666666666,
+              0.16666666666666666
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 28,
+            "truncated": 3,
+            "mean_length": 1500.25,
+            "wrong_to_correct": [
+              "MATH-500:271",
+              "MATH-500:194"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:281",
+              "MATH-500:218",
+              "MATH-500:447",
+              "MATH-500:488",
+              "MATH-500:453"
+            ],
+            "paired_accuracy_difference": -0.0625,
+            "paired_bootstrap_95": [
+              -0.16666666666666666,
+              0.041666666666666664
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 36,
+            "truncated": 8,
+            "mean_length": 2332.8611111111113,
+            "wrong_to_correct": [
+              "MATH-500:271",
+              "MATH-500:194",
+              "AMC23:24",
+              "AMC23:22"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:281",
+              "AMC23:30",
+              "MATH-500:218",
+              "MATH-500:447",
+              "AMC23:29",
+              "MATH-500:488",
+              "MATH-500:453"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.1388888888888889,
+              0.041666666666666664
+            ]
+          }
+        },
+        "deletion_vs_gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 10,
+            "truncated": 1,
+            "mean_length": 1649.75,
+            "wrong_to_correct": [
+              "AMC23:30",
+              "AMC23:21",
+              "AMC23:18",
+              "AMC23:29"
+            ],
+            "correct_to_wrong": [
+              "AMC23:34",
+              "AMC23:26"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.2916666666666667
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 35,
+            "truncated": 0,
+            "mean_length": 747.875,
+            "wrong_to_correct": [
+              "MATH-500:218",
+              "MATH-500:210",
+              "MATH-500:447",
+              "MATH-500:488",
+              "MATH-500:429",
+              "MATH-500:203",
+              "MATH-500:244",
+              "MATH-500:258",
+              "MATH-500:170",
+              "MATH-500:491"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:467",
+              "MATH-500:416",
+              "MATH-500:382"
+            ],
+            "paired_accuracy_difference": 0.14583333333333334,
+            "paired_bootstrap_95": [
+              0.0,
+              0.2916666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 45,
+            "truncated": 1,
+            "mean_length": 1048.5,
+            "wrong_to_correct": [
+              "AMC23:30",
+              "MATH-500:218",
+              "AMC23:21",
+              "MATH-500:210",
+              "MATH-500:447",
+              "AMC23:18",
+              "MATH-500:488",
+              "MATH-500:429",
+              "AMC23:29",
+              "MATH-500:203",
+              "MATH-500:244",
+              "MATH-500:258",
+              "MATH-500:170",
+              "MATH-500:491"
+            ],
+            "correct_to_wrong": [
+              "AMC23:34",
+              "MATH-500:467",
+              "MATH-500:416",
+              "MATH-500:382",
+              "AMC23:26"
+            ],
+            "paired_accuracy_difference": 0.125,
+            "paired_bootstrap_95": [
+              0.013888888888888888,
+              0.2361111111111111
+            ]
+          }
+        }
+      },
+      "supplemented": {
+        "unedited": {
+          "AMC23": {
+            "n": 24,
+            "correct": 8,
+            "truncated": 1,
+            "mean_length": 1773.0,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 31,
+            "truncated": 0,
+            "mean_length": 517.5625,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 39,
+            "truncated": 1,
+            "mean_length": 936.0416666666666,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "delete_off": {
+          "AMC23": {
+            "n": 24,
+            "correct": 10,
+            "truncated": 1,
+            "mean_length": 1649.75,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "AMC23:24",
+              "AMC23:18",
+              "AMC23:22"
+            ],
+            "correct_to_wrong": [
+              "AMC23:34",
+              "AMC23:26"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.2916666666666667
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 35,
+            "truncated": 0,
+            "mean_length": 747.875,
+            "wrong_to_correct": [
+              "MATH-500:271",
+              "MATH-500:194",
+              "MATH-500:210",
+              "MATH-500:429",
+              "MATH-500:203",
+              "MATH-500:244",
+              "MATH-500:258",
+              "MATH-500:170",
+              "MATH-500:491"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:467",
+              "MATH-500:416",
+              "MATH-500:382",
+              "MATH-500:281",
+              "MATH-500:453"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.0625,
+              0.22916666666666666
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 45,
+            "truncated": 1,
+            "mean_length": 1048.5,
+            "wrong_to_correct": [
+              "MATH-500:271",
+              "MATH-500:194",
+              "AMC23:21",
+              "MATH-500:210",
+              "AMC23:24",
+              "AMC23:18",
+              "MATH-500:429",
+              "MATH-500:203",
+              "AMC23:22",
+              "MATH-500:244",
+              "MATH-500:258",
+              "MATH-500:170",
+              "MATH-500:491"
+            ],
+            "correct_to_wrong": [
+              "AMC23:34",
+              "MATH-500:467",
+              "MATH-500:416",
+              "MATH-500:382",
+              "MATH-500:281",
+              "MATH-500:453",
+              "AMC23:26"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.041666666666666664,
+              0.19444444444444445
+            ]
+          }
+        },
+        "gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 8,
+            "truncated": 5,
+            "mean_length": 3998.0833333333335,
+            "wrong_to_correct": [
+              "AMC23:24",
+              "AMC23:22"
+            ],
+            "correct_to_wrong": [
+              "AMC23:30",
+              "AMC23:29"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.16666666666666666,
+              0.16666666666666666
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 28,
+            "truncated": 3,
+            "mean_length": 1500.25,
+            "wrong_to_correct": [
+              "MATH-500:271",
+              "MATH-500:194"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:281",
+              "MATH-500:218",
+              "MATH-500:447",
+              "MATH-500:488",
+              "MATH-500:453"
+            ],
+            "paired_accuracy_difference": -0.0625,
+            "paired_bootstrap_95": [
+              -0.16666666666666666,
+              0.041666666666666664
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 36,
+            "truncated": 8,
+            "mean_length": 2332.8611111111113,
+            "wrong_to_correct": [
+              "MATH-500:271",
+              "MATH-500:194",
+              "AMC23:24",
+              "AMC23:22"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:281",
+              "AMC23:30",
+              "MATH-500:218",
+              "MATH-500:447",
+              "AMC23:29",
+              "MATH-500:488",
+              "MATH-500:453"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.1388888888888889,
+              0.041666666666666664
+            ]
+          }
+        },
+        "deletion_vs_gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 10,
+            "truncated": 1,
+            "mean_length": 1649.75,
+            "wrong_to_correct": [
+              "AMC23:30",
+              "AMC23:21",
+              "AMC23:18",
+              "AMC23:29"
+            ],
+            "correct_to_wrong": [
+              "AMC23:34",
+              "AMC23:26"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.2916666666666667
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 35,
+            "truncated": 0,
+            "mean_length": 747.875,
+            "wrong_to_correct": [
+              "MATH-500:218",
+              "MATH-500:210",
+              "MATH-500:447",
+              "MATH-500:488",
+              "MATH-500:429",
+              "MATH-500:203",
+              "MATH-500:244",
+              "MATH-500:258",
+              "MATH-500:170",
+              "MATH-500:491"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:467",
+              "MATH-500:416",
+              "MATH-500:382"
+            ],
+            "paired_accuracy_difference": 0.14583333333333334,
+            "paired_bootstrap_95": [
+              0.0,
+              0.2916666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 45,
+            "truncated": 1,
+            "mean_length": 1048.5,
+            "wrong_to_correct": [
+              "AMC23:30",
+              "MATH-500:218",
+              "AMC23:21",
+              "MATH-500:210",
+              "MATH-500:447",
+              "AMC23:18",
+              "MATH-500:488",
+              "MATH-500:429",
+              "AMC23:29",
+              "MATH-500:203",
+              "MATH-500:244",
+              "MATH-500:258",
+              "MATH-500:170",
+              "MATH-500:491"
+            ],
+            "correct_to_wrong": [
+              "AMC23:34",
+              "MATH-500:467",
+              "MATH-500:416",
+              "MATH-500:382",
+              "AMC23:26"
+            ],
+            "paired_accuracy_difference": 0.125,
+            "paired_bootstrap_95": [
+              0.013888888888888888,
+              0.2361111111111111
+            ]
+          }
+        }
+      }
+    },
+    "rl-teacher": {
+      "canonical": {
+        "unedited": {
+          "AMC23": {
+            "n": 24,
+            "correct": 17,
+            "truncated": 2,
+            "mean_length": 4114.416666666667,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 0,
+            "mean_length": 2115.9375,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 60,
+            "truncated": 2,
+            "mean_length": 2782.097222222222,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "delete_off": {
+          "AMC23": {
+            "n": 24,
+            "correct": 16,
+            "truncated": 1,
+            "mean_length": 5419.416666666667,
+            "wrong_to_correct": [
+              "AMC23:36",
+              "AMC23:27"
+            ],
+            "correct_to_wrong": [
+              "AMC23:38",
+              "AMC23:32",
+              "AMC23:39"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.20833333333333334,
+              0.125
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 2,
+            "mean_length": 3278.1041666666665,
+            "wrong_to_correct": [
+              "MATH-500:454",
+              "MATH-500:170"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:219",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.08333333333333333,
+              0.08333333333333333
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 59,
+            "truncated": 3,
+            "mean_length": 3991.875,
+            "wrong_to_correct": [
+              "MATH-500:454",
+              "AMC23:36",
+              "AMC23:27",
+              "MATH-500:170"
+            ],
+            "correct_to_wrong": [
+              "AMC23:38",
+              "MATH-500:219",
+              "AMC23:32",
+              "AMC23:39",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": -0.013888888888888888,
+            "paired_bootstrap_95": [
+              -0.09722222222222222,
+              0.06944444444444445
+            ]
+          }
+        },
+        "gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 17,
+            "truncated": 1,
+            "mean_length": 4458.416666666667,
+            "wrong_to_correct": [
+              "AMC23:36"
+            ],
+            "correct_to_wrong": [
+              "AMC23:25"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.125
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 0,
+            "mean_length": 2468.9583333333335,
+            "wrong_to_correct": [
+              "MATH-500:491",
+              "MATH-500:369",
+              "MATH-500:170"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:294",
+              "MATH-500:382",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.10416666666666667,
+              0.10416666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 60,
+            "truncated": 1,
+            "mean_length": 3132.1111111111113,
+            "wrong_to_correct": [
+              "MATH-500:491",
+              "MATH-500:369",
+              "AMC23:36",
+              "MATH-500:170"
+            ],
+            "correct_to_wrong": [
+              "AMC23:25",
+              "MATH-500:294",
+              "MATH-500:382",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.06944444444444445,
+              0.08333333333333333
+            ]
+          }
+        },
+        "deletion_vs_gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 16,
+            "truncated": 1,
+            "mean_length": 5419.416666666667,
+            "wrong_to_correct": [
+              "AMC23:25",
+              "AMC23:27"
+            ],
+            "correct_to_wrong": [
+              "AMC23:38",
+              "AMC23:32",
+              "AMC23:39"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.20833333333333334,
+              0.125
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 2,
+            "mean_length": 3278.1041666666665,
+            "wrong_to_correct": [
+              "MATH-500:454",
+              "MATH-500:294",
+              "MATH-500:382"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:491",
+              "MATH-500:369",
+              "MATH-500:219"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.10416666666666667,
+              0.10416666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 59,
+            "truncated": 3,
+            "mean_length": 3991.875,
+            "wrong_to_correct": [
+              "MATH-500:454",
+              "AMC23:25",
+              "MATH-500:294",
+              "AMC23:27",
+              "MATH-500:382"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:491",
+              "MATH-500:369",
+              "AMC23:38",
+              "MATH-500:219",
+              "AMC23:32",
+              "AMC23:39"
+            ],
+            "paired_accuracy_difference": -0.013888888888888888,
+            "paired_bootstrap_95": [
+              -0.1111111111111111,
+              0.08333333333333333
+            ]
+          }
+        }
+      },
+      "supplemented": {
+        "unedited": {
+          "AMC23": {
+            "n": 24,
+            "correct": 17,
+            "truncated": 2,
+            "mean_length": 4114.416666666667,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 0,
+            "mean_length": 2115.9375,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 60,
+            "truncated": 2,
+            "mean_length": 2782.097222222222,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "delete_off": {
+          "AMC23": {
+            "n": 24,
+            "correct": 16,
+            "truncated": 1,
+            "mean_length": 5419.416666666667,
+            "wrong_to_correct": [
+              "AMC23:36",
+              "AMC23:27"
+            ],
+            "correct_to_wrong": [
+              "AMC23:38",
+              "AMC23:32",
+              "AMC23:39"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.20833333333333334,
+              0.125
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 2,
+            "mean_length": 3278.1041666666665,
+            "wrong_to_correct": [
+              "MATH-500:454",
+              "MATH-500:170"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:219",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.08333333333333333,
+              0.08333333333333333
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 59,
+            "truncated": 3,
+            "mean_length": 3991.875,
+            "wrong_to_correct": [
+              "MATH-500:454",
+              "AMC23:36",
+              "AMC23:27",
+              "MATH-500:170"
+            ],
+            "correct_to_wrong": [
+              "AMC23:38",
+              "MATH-500:219",
+              "AMC23:32",
+              "AMC23:39",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": -0.013888888888888888,
+            "paired_bootstrap_95": [
+              -0.09722222222222222,
+              0.06944444444444445
+            ]
+          }
+        },
+        "gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 17,
+            "truncated": 1,
+            "mean_length": 4458.416666666667,
+            "wrong_to_correct": [
+              "AMC23:36"
+            ],
+            "correct_to_wrong": [
+              "AMC23:25"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.125
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 0,
+            "mean_length": 2468.9583333333335,
+            "wrong_to_correct": [
+              "MATH-500:491",
+              "MATH-500:369",
+              "MATH-500:170"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:294",
+              "MATH-500:382",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.10416666666666667,
+              0.10416666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 60,
+            "truncated": 1,
+            "mean_length": 3132.1111111111113,
+            "wrong_to_correct": [
+              "MATH-500:491",
+              "MATH-500:369",
+              "AMC23:36",
+              "MATH-500:170"
+            ],
+            "correct_to_wrong": [
+              "AMC23:25",
+              "MATH-500:294",
+              "MATH-500:382",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.06944444444444445,
+              0.08333333333333333
+            ]
+          }
+        },
+        "deletion_vs_gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 16,
+            "truncated": 1,
+            "mean_length": 5419.416666666667,
+            "wrong_to_correct": [
+              "AMC23:25",
+              "AMC23:27"
+            ],
+            "correct_to_wrong": [
+              "AMC23:38",
+              "AMC23:32",
+              "AMC23:39"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.20833333333333334,
+              0.125
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 2,
+            "mean_length": 3278.1041666666665,
+            "wrong_to_correct": [
+              "MATH-500:454",
+              "MATH-500:294",
+              "MATH-500:382"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:491",
+              "MATH-500:369",
+              "MATH-500:219"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.10416666666666667,
+              0.10416666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 59,
+            "truncated": 3,
+            "mean_length": 3991.875,
+            "wrong_to_correct": [
+              "MATH-500:454",
+              "AMC23:25",
+              "MATH-500:294",
+              "AMC23:27",
+              "MATH-500:382"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:491",
+              "MATH-500:369",
+              "AMC23:38",
+              "MATH-500:219",
+              "AMC23:32",
+              "AMC23:39"
+            ],
+            "paired_accuracy_difference": -0.013888888888888888,
+            "paired_bootstrap_95": [
+              -0.1111111111111111,
+              0.08333333333333333
+            ]
+          }
+        }
+      }
+    },
+    "rl-opd": {
+      "canonical": {
+        "unedited": {
+          "AMC23": {
+            "n": 24,
+            "correct": 17,
+            "truncated": 0,
+            "mean_length": 4590.083333333333,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 1,
+            "mean_length": 2707.0625,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 60,
+            "truncated": 1,
+            "mean_length": 3334.7361111111113,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "delete_off": {
+          "AMC23": {
+            "n": 24,
+            "correct": 20,
+            "truncated": 4,
+            "mean_length": 6735.625,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "AMC23:36",
+              "AMC23:37"
+            ],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.125,
+            "paired_bootstrap_95": [
+              0.0,
+              0.25
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 0,
+            "mean_length": 3293.7708333333335,
+            "wrong_to_correct": [
+              "MATH-500:437"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:293"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.0625,
+              0.0625
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 63,
+            "truncated": 4,
+            "mean_length": 4441.055555555556,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "MATH-500:437",
+              "AMC23:36",
+              "AMC23:37"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:293"
+            ],
+            "paired_accuracy_difference": 0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.013888888888888888,
+              0.1111111111111111
+            ]
+          }
+        },
+        "gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 15,
+            "truncated": 0,
+            "mean_length": 4314.666666666667,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "AMC23:27"
+            ],
+            "correct_to_wrong": [
+              "AMC23:17",
+              "AMC23:35",
+              "AMC23:28",
+              "AMC23:32"
+            ],
+            "paired_accuracy_difference": -0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.2916666666666667,
+              0.125
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 42,
+            "truncated": 1,
+            "mean_length": 2964.6666666666665,
+            "wrong_to_correct": [
+              "MATH-500:294"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:194",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": -0.020833333333333332,
+            "paired_bootstrap_95": [
+              -0.08333333333333333,
+              0.041666666666666664
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 57,
+            "truncated": 1,
+            "mean_length": 3414.6666666666665,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "MATH-500:294",
+              "AMC23:27"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:194",
+              "AMC23:17",
+              "AMC23:35",
+              "AMC23:28",
+              "AMC23:32",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.041666666666666664
+            ]
+          }
+        },
+        "deletion_vs_gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 20,
+            "truncated": 4,
+            "mean_length": 6735.625,
+            "wrong_to_correct": [
+              "AMC23:17",
+              "AMC23:36",
+              "AMC23:35",
+              "AMC23:28",
+              "AMC23:32",
+              "AMC23:37"
+            ],
+            "correct_to_wrong": [
+              "AMC23:27"
+            ],
+            "paired_accuracy_difference": 0.20833333333333334,
+            "paired_bootstrap_95": [
+              0.0,
+              0.4166666666666667
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 0,
+            "mean_length": 3293.7708333333335,
+            "wrong_to_correct": [
+              "MATH-500:194",
+              "MATH-500:437",
+              "MATH-500:303"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:293",
+              "MATH-500:294"
+            ],
+            "paired_accuracy_difference": 0.020833333333333332,
+            "paired_bootstrap_95": [
+              -0.0625,
+              0.10416666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 63,
+            "truncated": 4,
+            "mean_length": 4441.055555555556,
+            "wrong_to_correct": [
+              "MATH-500:194",
+              "AMC23:17",
+              "MATH-500:437",
+              "MATH-500:303",
+              "AMC23:36",
+              "AMC23:35",
+              "AMC23:28",
+              "AMC23:32",
+              "AMC23:37"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:293",
+              "MATH-500:294",
+              "AMC23:27"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              0.0,
+              0.18055555555555555
+            ]
+          }
+        }
+      },
+      "supplemented": {
+        "unedited": {
+          "AMC23": {
+            "n": 24,
+            "correct": 17,
+            "truncated": 0,
+            "mean_length": 4590.083333333333,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 1,
+            "mean_length": 2707.0625,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 60,
+            "truncated": 1,
+            "mean_length": 3334.7361111111113,
+            "wrong_to_correct": [],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "delete_off": {
+          "AMC23": {
+            "n": 24,
+            "correct": 20,
+            "truncated": 4,
+            "mean_length": 6735.625,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "AMC23:36",
+              "AMC23:37"
+            ],
+            "correct_to_wrong": [],
+            "paired_accuracy_difference": 0.125,
+            "paired_bootstrap_95": [
+              0.0,
+              0.25
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 0,
+            "mean_length": 3293.7708333333335,
+            "wrong_to_correct": [
+              "MATH-500:437"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:293"
+            ],
+            "paired_accuracy_difference": 0.0,
+            "paired_bootstrap_95": [
+              -0.0625,
+              0.0625
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 63,
+            "truncated": 4,
+            "mean_length": 4441.055555555556,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "MATH-500:437",
+              "AMC23:36",
+              "AMC23:37"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:293"
+            ],
+            "paired_accuracy_difference": 0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.013888888888888888,
+              0.1111111111111111
+            ]
+          }
+        },
+        "gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 15,
+            "truncated": 0,
+            "mean_length": 4314.666666666667,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "AMC23:27"
+            ],
+            "correct_to_wrong": [
+              "AMC23:17",
+              "AMC23:35",
+              "AMC23:28",
+              "AMC23:32"
+            ],
+            "paired_accuracy_difference": -0.08333333333333333,
+            "paired_bootstrap_95": [
+              -0.2916666666666667,
+              0.125
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 42,
+            "truncated": 1,
+            "mean_length": 2964.6666666666665,
+            "wrong_to_correct": [
+              "MATH-500:294"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:194",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": -0.020833333333333332,
+            "paired_bootstrap_95": [
+              -0.08333333333333333,
+              0.041666666666666664
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 57,
+            "truncated": 1,
+            "mean_length": 3414.6666666666665,
+            "wrong_to_correct": [
+              "AMC23:21",
+              "MATH-500:294",
+              "AMC23:27"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:194",
+              "AMC23:17",
+              "AMC23:35",
+              "AMC23:28",
+              "AMC23:32",
+              "MATH-500:303"
+            ],
+            "paired_accuracy_difference": -0.041666666666666664,
+            "paired_bootstrap_95": [
+              -0.125,
+              0.041666666666666664
+            ]
+          }
+        },
+        "deletion_vs_gaussian": {
+          "AMC23": {
+            "n": 24,
+            "correct": 20,
+            "truncated": 4,
+            "mean_length": 6735.625,
+            "wrong_to_correct": [
+              "AMC23:17",
+              "AMC23:36",
+              "AMC23:35",
+              "AMC23:28",
+              "AMC23:32",
+              "AMC23:37"
+            ],
+            "correct_to_wrong": [
+              "AMC23:27"
+            ],
+            "paired_accuracy_difference": 0.20833333333333334,
+            "paired_bootstrap_95": [
+              0.0,
+              0.4166666666666667
+            ]
+          },
+          "MATH-500": {
+            "n": 48,
+            "correct": 43,
+            "truncated": 0,
+            "mean_length": 3293.7708333333335,
+            "wrong_to_correct": [
+              "MATH-500:194",
+              "MATH-500:437",
+              "MATH-500:303"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:293",
+              "MATH-500:294"
+            ],
+            "paired_accuracy_difference": 0.020833333333333332,
+            "paired_bootstrap_95": [
+              -0.0625,
+              0.10416666666666667
+            ]
+          },
+          "all": {
+            "n": 72,
+            "correct": 63,
+            "truncated": 4,
+            "mean_length": 4441.055555555556,
+            "wrong_to_correct": [
+              "MATH-500:194",
+              "AMC23:17",
+              "MATH-500:437",
+              "MATH-500:303",
+              "AMC23:36",
+              "AMC23:35",
+              "AMC23:28",
+              "AMC23:32",
+              "AMC23:37"
+            ],
+            "correct_to_wrong": [
+              "MATH-500:293",
+              "MATH-500:294",
+              "AMC23:27"
+            ],
+            "paired_accuracy_difference": 0.08333333333333333,
+            "paired_bootstrap_95": [
+              0.0,
+              0.18055555555555555
+            ]
+          }
+        }
+      }
+    }
+  },
+  "sha256": {
+    "generation-readout-expanded-v1/teacher/sft-teacher/records.jsonl": "133897e8e3e2c4ad04307ce71b259327dfa87e646a0ffcfc7c0530bfa602a535",
+    "generation-readout-delete-v1/sft-teacher-delete-off/sft-teacher-delete-off/records.jsonl": "22c847634e8837ae05af861f27f889a2aeba195fc7a1e5e8b93737bed4403d73",
+    "generation-readout-delete-noise-v1/sft-teacher-gaussian/sft-teacher-gaussian/records.jsonl": "9aef733420a60708bf468fecf936bd03a7ee117bb7895faadac2c49ce87df1bb",
+    "generation-readout-expanded-v1/endpoint/sft-endpoint/records.jsonl": "ad2d61d131c8928bac4e1ad05bb46b29c0d6cf62610286b0a3dea0516ae8f345",
+    "generation-readout-delete-v1/sft-opd-delete-off/sft-opd-delete-off/records.jsonl": "3405e19f1d9f402c0043ad5b000b37b4e19f6f810a1dc5cd2b96fc43134efd55",
+    "generation-readout-delete-noise-v1/sft-opd-gaussian/sft-opd-gaussian/records.jsonl": "03b67af8165c494511939db76c6eb61241e4558682d4c0f0a6494104745ef38d",
+    "generation-readout-expanded-v1/teacher/rl-teacher/records.jsonl": "cd5b1b13eb617d51a799d10c6b030636364311d2d081d82bf06d0c7888fb9657",
+    "generation-readout-delete-v1/rl-teacher-delete-off/rl-teacher-delete-off/records.jsonl": "1bd0df385657efb75586e11e1c16655cc41081847638580c98b543f3f2ee80de",
+    "generation-readout-delete-noise-v1/rl-teacher-gaussian/rl-teacher-gaussian/records.jsonl": "6fb1b71e3b84444c52e728fb386f95a6c788feafbb7ea1e15a1e8d3de3e7b526",
+    "generation-readout-expanded-v1/endpoint/rl-endpoint/records.jsonl": "923e5ad344a89b9b3711a7554e7a0d3445f9113088e899564bcdcae24c990c80",
+    "generation-readout-delete-v1/rl-opd-delete-off/rl-opd-delete-off/records.jsonl": "8aa6983189d16899256e532414b5abb02d92ed5f00d27dea04223f98a3548046",
+    "generation-readout-delete-noise-v1/rl-opd-gaussian/rl-opd-gaussian/records.jsonl": "279ca6f32159764004ba97041433b090fd44c354911ebd9adaa2f1abe3ae167e"
+  }
+}

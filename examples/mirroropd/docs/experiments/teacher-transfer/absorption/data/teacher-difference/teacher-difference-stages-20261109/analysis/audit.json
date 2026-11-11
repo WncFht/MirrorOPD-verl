@@ -1,0 +1,272 @@
+{
+  "completed": 22,
+  "planned": 22,
+  "unavailable": [
+    {
+      "task": {
+        "id": "mimo-rlzero-initial-s320",
+        "lane": 6,
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+        "records": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/banks/mimo-initial.json",
+        "bank": "mimo-initial",
+        "cap": 1024,
+        "group_size": 8,
+        "checkpointing": true,
+        "stage": 320,
+        "model": "mimo",
+        "target": "rlzero"
+      },
+      "missing_weights": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      ]
+    },
+    {
+      "task": {
+        "id": "mimo-rlzero-teacher-s320",
+        "lane": 6,
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+        "records": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/banks/mimo-rlzero-teacher.json",
+        "bank": "mimo-rlzero-teacher",
+        "cap": 1024,
+        "group_size": 8,
+        "checkpointing": true,
+        "stage": 320,
+        "model": "mimo",
+        "target": "rlzero"
+      },
+      "missing_weights": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      ]
+    },
+    {
+      "task": {
+        "id": "mimo-rlzero-initial-s320-target-sft",
+        "lane": 6,
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+        "records": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/banks/mimo-initial.json",
+        "bank": "mimo-initial",
+        "cap": 1024,
+        "group_size": 8,
+        "checkpointing": true,
+        "stage": 320,
+        "model": "mimo",
+        "target": "sft"
+      },
+      "missing_weights": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      ]
+    },
+    {
+      "task": {
+        "id": "mimo-sft-initial-s320",
+        "lane": 7,
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+        "records": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/banks/mimo-initial.json",
+        "bank": "mimo-initial",
+        "cap": 1024,
+        "group_size": 8,
+        "checkpointing": true,
+        "stage": 320,
+        "model": "mimo",
+        "target": "sft"
+      },
+      "missing_weights": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      ]
+    },
+    {
+      "task": {
+        "id": "mimo-sft-teacher-s320",
+        "lane": 7,
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+        "records": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/banks/mimo-sft-teacher.json",
+        "bank": "mimo-sft-teacher",
+        "cap": 1024,
+        "group_size": 8,
+        "checkpointing": true,
+        "stage": 320,
+        "model": "mimo",
+        "target": "sft"
+      },
+      "missing_weights": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      ]
+    },
+    {
+      "task": {
+        "id": "mimo-sft-initial-s320-target-rlzero",
+        "lane": 7,
+        "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface",
+        "teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+        "records": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/banks/mimo-initial.json",
+        "bank": "mimo-initial",
+        "cap": 1024,
+        "group_size": 8,
+        "checkpointing": true,
+        "stage": 320,
+        "model": "mimo",
+        "target": "rlzero"
+      },
+      "missing_weights": [
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      ]
+    }
+  ],
+  "sources": {
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-justrl-b00/result.json": "4579e2a5271952defb727754dfe29cbc3f0984f5ff6b184a5be3fdd529abc045",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-justrl-b01/result.json": "4d3b17b6f720abc518cde3843f8a6cef65b5d58cef323793693b3eda37d140ce",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-justrl-b05/result.json": "447cf320cbe670e4ac7d6c13595881018ecbd1914dc4ae929dca1c6ce8c97284",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-justrl-b10/result.json": "5521325d9e8f8809cac1eb93b15de7372d17d15a5d259b979346c1e6da978c4b",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-justrl-b15/result.json": "d5b3364eb27704669db8da9202293fa1def6838283d7a6bcedc9bce0815645d8",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-justrl-b20/result.json": "65799df563239649dd701093ce9b39d150a2da2f65beb02f59cc7ecee89cd1e8",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-justrl-b20-target-polaris/result.json": "8db435046bb9bfc0485208d3db1b8b51eec071f135a80df7d933182fc4f2a60f",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-polaris-b00/result.json": "fd90b08e867c136b8be0513ea9ce491646bce1e61d600932e6fffe2f175adfab",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-polaris-b01/result.json": "6c036dce23445526b27dd21b7f6ff32798de833deeb8960bb9e1eae92898e4b3",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-polaris-b05/result.json": "5fead0fcdb3455987ff3545ea0233dfb2b451392a3853d41c7548ada69dd55fd",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-polaris-b10/result.json": "736295800deda3e5d96c5c081d46bf1d4541c4f86cfc93a959a9aab4404c7c3f",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-polaris-b15/result.json": "2cee67f15c778e8fb5c0c2c0da4282e9784403d480fd87c18bc3b32ae0e31ba8",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-polaris-b20/result.json": "55895ba4ab70bc8b3cd63c7aa2f6090cf67e3b0df92bd47704392edada1f58a4",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/r1-polaris-b20-target-justrl/result.json": "7588ffb86e3a087e69d04ef28df1aae9fd8de9afdc1aa559533f92abace7a4c8",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/mimo-rlzero-initial-s000/result.json": "23cdd96b81abbdee66246e80ff1bc6652684daab67ef19d2a37956741ed32e77",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/mimo-rlzero-teacher-s000/result.json": "35e4895c184440bcfc40c53a1d5d74893c6e62bfdabe92e5d60cbf5ff0605fa3",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/mimo-sft-initial-s000/result.json": "3c8ff94ff44ad370f37c9a4c7ada891f50d78f008d0b32f0899468a17af00472",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/results/mimo-sft-teacher-s000/result.json": "65385a74bb0319cfed4b4cd7011ba5eb60a561cf3136efdbd4c684ed55ca6c49",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/mimo-e91-control/results/mimo-e91-rlzero-s000/result.json": "862cb3cbb9c1cc4886486e4de74b0b7a56b0ade1a5d5638226c1b620ee1caa15",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/mimo-e91-control/results/mimo-e91-rlzero-s320/result.json": "071a18ee0d6d7ef0d3a9474a993e8e7f7df08da6f879e9e75f845942538c3243",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/mimo-e91-control/results/mimo-e91-sft-s000/result.json": "f897788c96bc1c61e9e2a1c704def1d56c6c27f5b52fb72bff1a369221b99ce5",
+    "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-difference-stages-20261109/mimo-e91-control/results/mimo-e91-sft-s320/result.json": "23e5ea6bfbf466b887c2c4b374b7f6e58eb6a59d6badad606f334a293cc937d0"
+  },
+  "figures": {
+    "historical_span": [],
+    "historical_adam": [],
+    "r1_stage_pac": [
+      "print-fit 3 text(s) <5.5pt after x0.60 downscale to 5.5in slot (figure 9.12654in wide); worst 'L checkpoints: same 96 h' 3.91715pt"
+    ],
+    "r1_propagation_controls": [
+      "text-too-small 'justrl' 5.2pt < 6pt",
+      "text-too-small 'polaris' 5.2pt < 6pt",
+      "text-too-small 'justrl: train' 5.2pt < 6pt",
+      "text-too-small 'justrl: independent' 5.2pt < 6pt",
+      "text-too-small 'polaris: train' 5.2pt < 6pt",
+      "text-too-small 'polaris: independent' 5.2pt < 6pt",
+      "text-too-small 'justrl: uniform' 5.2pt < 6pt",
+      "text-too-small 'justrl: positive' 5.2pt < 6pt",
+      "text-too-small 'justrl: signed' 5.2pt < 6pt",
+      "text-too-small 'polaris: uniform' 5.2pt < 6pt",
+      "text-too-small 'polaris: positive' 5.2pt < 6pt",
+      "text-too-small 'polaris: signed' 5.2pt < 6pt",
+      "print-fit 12 text(s) <5.5pt after x0.95 downscale to 5.5in slot (figure 5.78096in wide); worst 'justrl' 4.94728pt"
+    ],
+    "r1_stage_span": [
+      "legend-coverage 'justrl' (axes 1) in no legend",
+      "legend-coverage 'polaris' (axes 1) in no legend"
+    ],
+    "r1_gram": [
+      "text-outside-figure 'Gradient cosine'",
+      "rb-text-outside 'Gradient cosine' 11px beyond canvas (2.0% of figure width)"
+    ],
+    "mimo_stage_pac": [
+      "marker-clipped axes 0 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 0 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 1 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 1 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 3 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 3 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 4 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 4 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 5 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 5 'sft': 1 marker(s) touch the frame",
+      "facet-ylim-mismatch ylabel 'Pressure P': ylims [(0.0065, 0.1571), (0.012, 0.435)]",
+      "facet-ylim-mismatch ylabel 'Distinct-record coherence': ylims [(0.0695, 0.0828), (0.1155, 0.1736)]",
+      "facet-ylim-mismatch ylabel 'Collective gain Xi': ylims [(57.0612, 92.7587), (134.7345, 140.4302)]"
+    ],
+    "mimo_domains_P": [
+      "marker-clipped axes 0 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 0 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 1 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 1 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 3 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 3 'sft': 1 marker(s) touch the frame",
+      "text-outside-figure 'math: Pressure P'",
+      "rb-text-outside 'math: Pressure P' 6px beyond canvas (1.1% of figure width)"
+    ],
+    "mimo_domains_cross_record_normalized": [
+      "marker-clipped axes 0 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 0 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 1 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 1 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 3 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 3 'sft': 1 marker(s) touch the frame"
+    ],
+    "mimo_domains_Xi": [
+      "marker-clipped axes 0 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 0 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 1 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 1 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 2 'sft': 1 marker(s) touch the frame",
+      "marker-clipped axes 3 'rlzero': 1 marker(s) touch the frame",
+      "marker-clipped axes 3 'sft': 1 marker(s) touch the frame",
+      "text-outside-figure 'math: Collective gain Xi'",
+      "text-outside-figure 'science: Collective gain'",
+      "rb-text-outside 'math: Collective gain Xi' 10px beyond canvas (1.9% of figure width)",
+      "rb-text-outside 'science: Collective gain' 10px beyond canvas (1.9% of figure width)"
+    ],
+    "r1_frozen_request": [
+      "facet-ylim-mismatch row of 2 axes: ylims [(0.981, 1.495), (0.9928, 1.1633)]",
+      "facet-ylim-mismatch row of 2 axes: ylims [(0.1216, 1.12), (0.1217, 1.1055)]",
+      "facet-ylim-mismatch ylabel 'Frozen-request A / initial A': ylims [(0.981, 1.495), (0.9928, 1.1633)]",
+      "facet-ylim-mismatch ylabel 'Live P / initial P': ylims [(0.1216, 1.12), (0.1217, 1.1055)]",
+      "legend-overlaps-data axes 1 'justrl'",
+      "text-outside-figure 'Frozen-request A / initi'",
+      "text-outside-figure 'Live P / initial P'",
+      "rb-text-outside 'Frozen-request A / initi' 17px beyond canvas (3.1% of figure width)",
+      "rb-text-outside 'Live P / initial P' 6px beyond canvas (1.1% of figure width)"
+    ],
+    "mimo_frozen_request": [],
+    "mimo_e91_control": [
+      "collide text 'E91 / 320' x 'Trajectory accessibility'"
+    ]
+  }
+}

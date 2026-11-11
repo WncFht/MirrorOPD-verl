@@ -1,0 +1,133 @@
+{
+  "time": 1794278353.3129232,
+  "classifications": {
+    "answer-format-stages-audit-008.log": {
+      "classification": "wrong bare interpreter packaging import; corrected venv attempt succeeded",
+      "replacement": "answer-format-stages-audit-v2-008.json"
+    },
+    "generation-readout-v2/teacher/teacher/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794265323.3644238
+    },
+    "generation-readout-expanded-v1/top1/sft-top1/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794272042.0146058
+    },
+    "generation-readout-expanded-v1/top1/rl-top1/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794272206.5557563
+    },
+    "response-probes-v1/qwen-sft-smoke.log": {
+      "classification": "failed live/cache protocol gate; v1 excluded, live-matched v2+ successful",
+      "measured_max_logprob_error": 0.2881183624267578,
+      "threshold": 0.02,
+      "replacement": "response-probes-v2/exit.json"
+    },
+    "generation-readout-v2/patch-off-b1/patch-off-b1/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794265306.298558
+    },
+    "generation-readout-expanded-v1/patch-off-b1/sft-patch-off-b1/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794272091.091681
+    },
+    "generation-readout-v2/endpoint/endpoint/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794265274.6956964
+    },
+    "generation-readout-v1/teacher/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794264991.1068358
+    },
+    "generation-readout-v1/endpoint/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794264538.9035468
+    },
+    "generation-readout-rl-v1/endpoint/endpoint/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794267614.976539
+    },
+    "generation-readout-top-v1/sft-top1/sft-top1/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794268556.219205
+    },
+    "generation-readout-format-v1/teacher/teacher/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794273488.3110166
+    },
+    "generation-readout-delete-v1/rl-opd-delete-off/rl-opd-delete-off/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794272617.2709875
+    },
+    "generation-readout-top-v1/rl-top5/rl-top5/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794268596.988631
+    },
+    "generation-readout-top-v1/rl-top1/rl-top1/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 32,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794268570.8437703
+    },
+    "generation-readout-format-v1/endpoint/endpoint/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794273431.9367678
+    },
+    "generation-readout-delete-noise-v1/sft-teacher-gaussian/sft-teacher-gaussian/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794275433.7280946
+    },
+    "generation-readout-stages-v1/base/base/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794273034.7575524
+    },
+    "generation-readout-delete-noise-v1/rl-opd-gaussian/rl-opd-gaussian/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794275412.0323243
+    },
+    "generation-readout-delete-noise-v1/rl-teacher-gaussian/rl-teacher-gaussian/server.log": {
+      "classification": "server termination after completed generation; retained shutdown warning",
+      "complete_records": 72,
+      "metric_failed_count": 0,
+      "metrics_mtime": 1794275400.871387
+    }
+  },
+  "original_queue_job_failures": 0,
+  "retired_worker_exit137": "historical allocation shrink GPUs0/5/6/7, all390 jobs complete",
+  "v8_control": "zero own-update random controls excluded; nonzero fixed directions valid; v9 repaired controls",
+  "native_rollout_v1": "nonzero teacher-self floor preserved; matched-execution v2 all8bankselfKL0"
+}

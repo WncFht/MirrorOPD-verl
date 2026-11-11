@@ -1,0 +1,31 @@
+{
+  "finished": true,
+  "time": 1794223960.4742765,
+  "conditions": 8,
+  "alignment_conditions": 8,
+  "resources": {
+    "0": {
+      "phase": "occupying",
+      "owner": null,
+      "work_kind": "gpu-occupy"
+    },
+    "5": {
+      "phase": "occupying",
+      "owner": null,
+      "work_kind": "gpu-occupy"
+    },
+    "6": {
+      "phase": "occupying",
+      "owner": null,
+      "work_kind": "gpu-occupy"
+    },
+    "7": {
+      "phase": "occupying",
+      "owner": null,
+      "work_kind": "gpu-occupy"
+    }
+  },
+  "plots": 10,
+  "tests": "42 CPU tests; analysis tests additionally rerun after paired-role extension",
+  "remaining": "Local learnable KL and true irreducible floor not measured"
+}

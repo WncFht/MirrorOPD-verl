@@ -5,17 +5,25 @@
 from examples.mirroropd.assets.paths import resolve_location
 
 
-def load(model, *, trainable=False, path=None):
+def load(
+    model=None,
+    *,
+    trainable=False,
+    path=None,
+    device="cuda:0",
+    attention="flash_attention_2",
+    trust_remote_code=False,
+):
     import torch
     from transformers import AutoModelForCausalLM
 
     value = AutoModelForCausalLM.from_pretrained(
         resolve_location(path) if path is not None else model.directory,
         local_files_only=True,
-        trust_remote_code=False,
-        dtype=torch.float32 if trainable else torch.bfloat16,
-        attn_implementation="flash_attention_2",
-        device_map={"": "cuda:0"},
+        trust_remote_code=trust_remote_code,
+        torch_dtype=torch.float32 if trainable or torch.device(device).type != "cuda" else torch.bfloat16,
+        attn_implementation=attention,
+        device_map={"": str(device)},
     ).eval()
     output = value.get_output_embeddings()
     if not isinstance(output, torch.nn.Linear) or output.bias is not None:

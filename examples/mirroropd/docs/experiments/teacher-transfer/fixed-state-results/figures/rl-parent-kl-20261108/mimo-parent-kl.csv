@@ -1,0 +1,11 @@
+outer,optimizer_updates,bank,domain,rkl,questions,direction,aggregation
+0,0,public_initial,all,0.07004863080840706,512,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_initial,math,0.07037373542708593,128,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_initial,code,0.11043763725700899,128,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_initial,science,0.07671052244897007,128,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_initial,if,0.02267262810056327,128,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_teacher,all,0.06474529897464273,512,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_teacher,math,0.09215985513738964,128,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_teacher,code,0.08220916032287456,128,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_teacher,science,0.041952489070392895,128,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means
+0,0,public_teacher,if,0.04265969136791383,128,KL(MiMo-Base || MiMo-RL-Zero),mean of question token means

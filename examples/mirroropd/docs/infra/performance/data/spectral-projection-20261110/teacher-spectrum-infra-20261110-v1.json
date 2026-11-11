@@ -1,0 +1,154 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "key": "model.layers.0.mlp.down_proj.weight",
+      "shape": [
+        2048,
+        6144
+      ],
+      "cpu_seconds": 0.3065166547894478,
+      "cuda_seconds": 0.1460169330239296,
+      "speedup": 2.099185679644532,
+      "max_scaled_error": 1.278804160319124e-12,
+      "sha256": "52745f7eb263515009be635a7680d57e4ca929b4b90608d7621c04888a72e051"
+    },
+    {
+      "key": "model.layers.10.self_attn.k_proj.weight",
+      "shape": [
+        1024,
+        2048
+      ],
+      "cpu_seconds": 0.03768904755512873,
+      "cuda_seconds": 0.009919924040635427,
+      "speedup": 3.799328240895939,
+      "max_scaled_error": 1.4341514926965052e-13,
+      "sha256": "f2c171155e28685818cf497c81da0fd48e7fe7a8d78e2fd3b12e62a7a5c93b9b"
+    },
+    {
+      "key": "model.layers.13.mlp.down_proj.weight",
+      "shape": [
+        2048,
+        6144
+      ],
+      "cpu_seconds": 0.3191479245821635,
+      "cuda_seconds": 0.13629410415887833,
+      "speedup": 2.3416121082547496,
+      "max_scaled_error": 2.8190905872750798e-12,
+      "sha256": "ea8736a690822a48a0c4ff301ebb18dba72448f168b43b54646f1c024705995b"
+    },
+    {
+      "key": "model.layers.15.self_attn.o_proj.weight",
+      "shape": [
+        2048,
+        2048
+      ],
+      "cpu_seconds": 0.061292933921019234,
+      "cuda_seconds": 0.013316651185353598,
+      "speedup": 4.602728799296977,
+      "max_scaled_error": 7.095319444881653e-13,
+      "sha256": "44827dc0745735f218611b66ed69482b22050e6fa73551bd4b6ea04dd2fd66af"
+    },
+    {
+      "key": "model.layers.18.mlp.down_proj.weight",
+      "shape": [
+        2048,
+        6144
+      ],
+      "cpu_seconds": 0.31997445970773697,
+      "cuda_seconds": 0.14867360393206278,
+      "speedup": 2.1521941437159957,
+      "max_scaled_error": 3.2193531190495694e-12,
+      "sha256": "ac8441ca49da7851f0b9ad266143f2eb2af85bceb241e5da93d8764d6b58af15"
+    },
+    {
+      "key": "model.layers.2.self_attn.o_proj.weight",
+      "shape": [
+        2048,
+        2048
+      ],
+      "cpu_seconds": 0.08304972449938457,
+      "cuda_seconds": 0.026883229613304138,
+      "speedup": 3.089276314415899,
+      "max_scaled_error": 6.112044560657973e-13,
+      "sha256": "88070717766f11fd70306ed0f52ac913833a4f027e956fe9207a916f937845fd"
+    },
+    {
+      "key": "model.layers.22.mlp.gate_proj.weight",
+      "shape": [
+        6144,
+        2048
+      ],
+      "cpu_seconds": 0.301606463889281,
+      "cuda_seconds": 0.13223163038492203,
+      "speedup": 2.280894994724895,
+      "max_scaled_error": 2.8137158081060043e-12,
+      "sha256": "9a4198c84fbfc853d00b6b63328b318cdc0c4c3585734d52e583330946870a8b"
+    },
+    {
+      "key": "model.layers.24.self_attn.q_proj.weight",
+      "shape": [
+        2048,
+        2048
+      ],
+      "cpu_seconds": 0.09074907501538594,
+      "cuda_seconds": 0.03266362100839615,
+      "speedup": 2.778291941118806,
+      "max_scaled_error": 6.748496960483102e-13,
+      "sha256": "34d350715de435f0d2299a0b54764d85f2641a58bce4d733b98d7b8077af862d"
+    },
+    {
+      "key": "model.layers.27.mlp.gate_proj.weight",
+      "shape": [
+        6144,
+        2048
+      ],
+      "cpu_seconds": 0.3017624244093895,
+      "cuda_seconds": 0.13237772385279337,
+      "speedup": 2.2795559224522943,
+      "max_scaled_error": 2.9426589099835515e-12,
+      "sha256": "4ae32e6be0ace9b227382b6b865ba02cd2b6d49d6bbc3aa6a25c865ce8f7e280"
+    },
+    {
+      "key": "model.layers.4.self_attn.q_proj.weight",
+      "shape": [
+        2048,
+        2048
+      ],
+      "cpu_seconds": 0.09338940431674321,
+      "cuda_seconds": 0.04145879546801249,
+      "speedup": 2.252583637862749,
+      "max_scaled_error": 3.3850953418739577e-13,
+      "sha256": "a5f749b452ea551df543838f58f6fb8d100817e9e55c98a27efe885270b49502"
+    },
+    {
+      "key": "model.layers.7.mlp.up_proj.weight",
+      "shape": [
+        6144,
+        2048
+      ],
+      "cpu_seconds": 0.28342751910289127,
+      "cuda_seconds": 0.12724033743143082,
+      "speedup": 2.227497386633613,
+      "max_scaled_error": 1.2808633974850486e-12,
+      "sha256": "590c5918364693dca3172e784e4e3860f7675085225fd0894763ddf74b200766"
+    },
+    {
+      "key": "model.layers.9.self_attn.v_proj.weight",
+      "shape": [
+        1024,
+        2048
+      ],
+      "cpu_seconds": 0.016713192065556843,
+      "cuda_seconds": 0.006590435902277629,
+      "speedup": 2.5359767264834225,
+      "max_scaled_error": 1.3723780794514793e-13,
+      "sha256": "0dc38ee458c03308486f1cf8e018a5ec848f32b7a59f08de0182a2664c7b61ec"
+    }
+  ],
+  "repeats": 3,
+  "scope": "projection microbenchmark; synthetic dense gradients, real checkpoint directions",
+  "gpu": "NVIDIA H800",
+  "torch_version": "2.11.0+cu129",
+  "peak_cuda_bytes": 352329728
+}

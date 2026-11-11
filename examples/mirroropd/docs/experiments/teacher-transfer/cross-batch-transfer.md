@@ -4,6 +4,8 @@ JustRL 和 Polaris 都能拟合已见状态，差距主要体现在更新向其�
 
 下面先交代测量对象与实验系列，再比较跨批传播、状态来源和共享更新方向。[跨域报告](cross-domain-transfer.md)展开另一条泛化轴；[精度与 optimizer 实验](../../infra/numerics/optimization/README.md)提供局部求解的工程证据。
 
+对 L 保存点重新计算的压力、参数响应、相干性与有限 source span 见 [PAC 与噪声底诊断](absorption/README.md)。该报告使用 H1024/B8 子面板，联合剩余 KL 与共享梯度解释平台，并包含 receiver 自内积校正、独立 source 对照和 MiMo 初始反例；其测量单位与本页历史 B16/N3 结果分别保留。
+
 <a id="mechanism"></a>
 <a id="mechanism-跨源蒸馏泛化统一实验设置证据与后续方向"></a>
 

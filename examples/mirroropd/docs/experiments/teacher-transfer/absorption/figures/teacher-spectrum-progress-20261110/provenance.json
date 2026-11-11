@@ -1,0 +1,28 @@
+{
+  "inputs_sha256": {
+    "runs/teacher-spectrum-followup-20261110/progress-analysis.json": "da516ab241985a7f839fd12ac9883e582077c26404139ad2bb35d90d844c7541",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-grpo-l00.json": "d3b821b7df24a9ceaa80e076b150f05add1ed82cfb71c2ae4663780d1ff9e6d5",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-grpo-l13.json": "2910510a7bd34749594696917bd99f6afa0431645d6f364c5fe511c16d4bb7b6",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-grpo-l27.json": "1149789bd1cfa666ba21eff5e7d79bcf06f86879bcdb6279c5d53eb5b2fc7972",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-sft-l00.json": "0627573c6ad296c3f5cf308291d9ede878360f723e55aa7e0038e6230dc3e9d9",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-sft-l13.json": "4aa85b41d080ae0669ea4059b0723df13ceb2359d12416e07b91ada275b80215",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/qwen-sft-l27.json": "b9c774c532bab1139e840f193303933e662d2526506d3ec5e34a83362f9df019",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/r1-justrl-l00.json": "14123827b2b0c9eb6143b122e42b15b722fa1568ba9105cab8c53343b9dd240a",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/r1-justrl-l13.json": "307682f490e4cbcfece331538996b0525bec7505ef17dd0edbe34e623647cce1",
+    "runs/teacher-spectrum-followup-20261110/temporal-svd/r1-justrl-l27.json": "cd0184bc0451d7bc848a048a0454268d19df41c4262a180f5d8941596c8914a2",
+    "runs/teacher-spectrum-followup-20261110/results/qwen-grpo.output-s320-fisher-r128-seed0/output/scores.json": "af04daaeb6a40addd679b6b6da64bc611c9f8a3f5c6a1e0b0bc93c1772ee0169",
+    "runs/teacher-spectrum-followup-20261110/manifest.json": "a543a3ffef94f2569c6fe311b5f411b0699697392738c214698649f0a25d7ad2",
+    "runs/teacher-difference-qwen-20261109/banks/qwen-thinking-a97da68a.json": "e7e542acb7b2ab98f59d0577ad49d8ec7e377ed8c4f5bcbcc7fd3301526640c7",
+    "runs/teacher-spectrum-followup-20261110/results/qwen-sft.output-s320-fisher-r128-seed0/output/scores.json": "ae86fb29b433dbcd49bae07fca37ec2db803ef2e521c38dc8ae557bfbf805f0c",
+    "runs/teacher-spectrum-followup-20261110/results/r1-justrl.output-s320-fisher-r128-seed0/output/scores.json": "7c97cdd2b8c88eef3986da057744e6799f7e88f82f38497114526efef3feb59b",
+    "runs/teacher-difference-stages-20261109/banks/r1.json": "9615597dbfae2b03fbdaacb88821b8d069297824c9055f998df57a25ef278d1f",
+    "runs/teacher-spectrum-followup-20261110/results/r1-polaris.output-s320-fisher-r128-seed0/output/scores.json": "96c55c9a9bc89aad8c0cbf32c2383f1406da5d4d01b55da1d1357f27ea1ff65d"
+  },
+  "source_sha256": "bbc5dfb2c560882368246d1e157b3ffcbf959d395b880492b736e286b901f4d0",
+  "style_sha256": "a9670b726e4890688bad9bec5cf5f39dcc6a1604ceebff8043c26cee95726581",
+  "snapshot_counts": {
+    "complete": 178,
+    "pending": 208,
+    "running": 4
+  }
+}

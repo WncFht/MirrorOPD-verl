@@ -11,17 +11,23 @@ import math
 import torch
 
 
-def _measure(sp, tq, *, shared_fkl=False):
+def native_reverse_kl_terms(sp, tq):
+    """Native RKL and its probability terms, without unrelated distance metrics."""
     if sp.ndim != 2 or tq.ndim != 2 or sp.shape[0] != tq.shape[0] or sp.shape[1] > tq.shape[1]:
         raise ValueError("Expected aligned [state, vocabulary] logits with teacher support covering the student")
-    lp = sp.log_softmax(-1)
-    lq = tq.log_softmax(-1)
+    lp, lq = sp.log_softmax(-1), tq.log_softmax(-1)
     p = lp.exp()
+    kl = (p * (lp - lq[:, : sp.shape[-1]])).sum(-1)
+    return kl, lp, lq, p
+
+
+def _measure(sp, tq, *, shared_fkl=False):
+    kl, lp, lq, p = native_reverse_kl_terms(sp, tq)
     q = lq.exp()
     v = sp.shape[-1]
     m = torch.logaddexp(lp, lq[:, :v]) - math.log(2)
     out = {
-        "rkl": (p * (lp - lq[:, :v])).sum(-1),
+        "rkl": kl,
         "js": 0.5 * ((p * (lp - m)).sum(-1) + (q[:, :v] * (lq[:, :v] - m)).sum(-1) + q[:, v:].sum(-1) * math.log(2)),
         "tv": 0.5 * ((p - q[:, :v]).abs().sum(-1) + q[:, v:].sum(-1)),
         "hp": -(p * lp).sum(-1),
@@ -43,6 +49,16 @@ def native_metrics(sp, tq):
 
 def distances(sp, tq):
     return _measure(sp, tq, shared_fkl=True)[0]
+
+
+def native_terms(sp, tq):
+    """Return native metrics and log-probability terms for gradient probes.
+
+    This is the public counterpart of the historical internal tuple returned
+    by ``_measure``.  Callers that need a derivative may reuse exactly the
+    same full-vocabulary support convention as ``native_metrics``.
+    """
+    return _measure(sp, tq)
 
 
 def fixed_metrics(sp, tq):

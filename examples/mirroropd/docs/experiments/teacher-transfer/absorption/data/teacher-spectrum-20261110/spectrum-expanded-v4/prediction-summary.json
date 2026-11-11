@@ -1,0 +1,362 @@
+[
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "initial_KL+group",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.15323484786902242,
+    "row_RMSE_dex": 0.21519360268531318,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "+norm_over_base",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.14289442485064943,
+    "row_RMSE_dex": 0.17384461907306797,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "+stable_rank_fraction",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.15501760695835903,
+    "row_RMSE_dex": 0.19772635811810743,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "+rank90_fraction",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.1578674418316657,
+    "row_RMSE_dex": 0.20557992394823962,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "+top1pct",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.15419845200677756,
+    "row_RMSE_dex": 0.21014488343988874,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "+top5pct",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.15627760968778895,
+    "row_RMSE_dex": 0.21025951874727464,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "+kappa_spec",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.17676713073496633,
+    "row_RMSE_dex": 0.22648109211168516,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "+rho_sigma",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.17948586218400783,
+    "row_RMSE_dex": 0.22516172114668864,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "compatible",
+    "model": "+all_geometry",
+    "n_rows": 22,
+    "n_teacher": 19,
+    "teacher_balanced_MAE_dex": 0.17905469382837969,
+    "row_RMSE_dex": 0.22104157526810397,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "initial_KL+group",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.16013094750283655,
+    "row_RMSE_dex": 0.2060767179279815,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "+norm_over_base",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.14578130065207906,
+    "row_RMSE_dex": 0.1626583305530842,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "+stable_rank_fraction",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.16404658413295417,
+    "row_RMSE_dex": 0.18779174125954878,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "+rank90_fraction",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.20018031217922258,
+    "row_RMSE_dex": 0.27403534881128405,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "+top1pct",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.17173192248834412,
+    "row_RMSE_dex": 0.2256035464824102,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "+top5pct",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.18981884591951653,
+    "row_RMSE_dex": 0.25453492063586636,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "+kappa_spec",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.1813295605931072,
+    "row_RMSE_dex": 0.21800569204840714,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "+rho_sigma",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.18896951358387204,
+    "row_RMSE_dex": 0.22500764386953126,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 64,
+    "scope": "published_direct_parent",
+    "model": "+all_geometry",
+    "n_rows": 11,
+    "n_teacher": 10,
+    "teacher_balanced_MAE_dex": 0.2180161501872731,
+    "row_RMSE_dex": 0.2708241283244384,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "initial_KL+group",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.21976742472445773,
+    "row_RMSE_dex": 0.31754714915693216,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "+norm_over_base",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.19341918860543028,
+    "row_RMSE_dex": 0.25437296495822403,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "+stable_rank_fraction",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.2227607061449674,
+    "row_RMSE_dex": 0.28054432884580843,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "+rank90_fraction",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.19747275970684589,
+    "row_RMSE_dex": 0.25925865609228016,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "+top1pct",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.21099788592749671,
+    "row_RMSE_dex": 0.2906801872339784,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "+top5pct",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.21141343849755115,
+    "row_RMSE_dex": 0.29679667864598785,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "+kappa_spec",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.2633013343719391,
+    "row_RMSE_dex": 0.34210376210180915,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "+rho_sigma",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.26369328528285185,
+    "row_RMSE_dex": 0.33826120093246226,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "compatible",
+    "model": "+all_geometry",
+    "n_rows": 20,
+    "n_teacher": 17,
+    "teacher_balanced_MAE_dex": 0.2609417189350707,
+    "row_RMSE_dex": 0.3675983655435289,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "initial_KL+group",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.2723311504517776,
+    "row_RMSE_dex": 0.3594602013794521,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "+norm_over_base",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.28679233551847705,
+    "row_RMSE_dex": 0.37583691224810517,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "+stable_rank_fraction",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.3254872007815388,
+    "row_RMSE_dex": 0.40652113724782535,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "+rank90_fraction",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.32930366459668103,
+    "row_RMSE_dex": 0.47876025470299427,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "+top1pct",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.24561614394038178,
+    "row_RMSE_dex": 0.3527847558748408,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "+top5pct",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.2996653050975151,
+    "row_RMSE_dex": 0.4403149054478866,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "+kappa_spec",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.7605693258736514,
+    "row_RMSE_dex": 1.351952098764257,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "+rho_sigma",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.6150002704635559,
+    "row_RMSE_dex": 0.9845384554316654,
+    "ridge_alpha": 1.0
+  },
+  {
+    "step": 320,
+    "scope": "published_direct_parent",
+    "model": "+all_geometry",
+    "n_rows": 9,
+    "n_teacher": 8,
+    "teacher_balanced_MAE_dex": 0.6751796241153424,
+    "row_RMSE_dex": 0.8702020675484149,
+    "ridge_alpha": 1.0
+  }
+]

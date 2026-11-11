@@ -1,0 +1,2881 @@
+{
+  "conditions": [
+    {
+      "run_id": "r1--deepcoder--82946e34",
+      "student": "r1",
+      "teacher": "deepcoder",
+      "study": "teacher-boundary-20261029",
+      "arm": "NEW-DC",
+      "budget": 64,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/agentica-org--DeepCoder-1.5B-Preview/103033da54f104b0d0a3570547fb3721fba99962",
+      "base_repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher_repo": "agentica-org/DeepCoder-1.5B-Preview",
+      "teacher_revision": "103033da54f104b0d0a3570547fb3721fba99962",
+      "parent": null,
+      "method": null,
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261029/models/NEW-DC/step064"
+      },
+      "missing_student_steps": [],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/arms/NEW-DC/protocol.json",
+      "model_evidence": "model_registry aliases + original protocol",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/arms/NEW-DC/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/arms/NEW-DC/fixed-064.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "R1",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--deepcoder--82946e34.md",
+      "lineage_card_sha256": "401bafa08cd1ccc6b7b53e0a14ee71c624e99ddb14315b5e9dd663148800948a"
+    },
+    {
+      "run_id": "r1--deepscaler--a7c14513",
+      "student": "r1",
+      "teacher": "deepscaler",
+      "study": "r1-samesize-deterministic320-20261030",
+      "arm": "NEW-DS",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/agentica-org--DeepScaleR-1.5B-Preview/e3f524ce413a296b4d388e7560dd5c82c1c56725",
+      "base_repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher_repo": "agentica-org/DeepScaleR-1.5B-Preview",
+      "teacher_revision": "e3f524ce413a296b4d388e7560dd5c82c1c56725",
+      "parent": null,
+      "method": null,
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/NEW-DS/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/NEW-DS/protocol.json",
+      "model_evidence": "model_registry aliases + original protocol",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/NEW-DS/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/NEW-DS/fixed-320.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "R1",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--deepscaler--a7c14513.md",
+      "lineage_card_sha256": "dcbd7339602a0121399522990a68811177dbffe15303c1134eda05607fa9b716"
+    },
+    {
+      "run_id": "r1--justrl--534ec3bd",
+      "student": "r1",
+      "teacher": "justrl",
+      "study": "r1-samesize-deterministic320-20261030",
+      "arm": "TB1-J",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/hbx--JustRL-DeepSeek-1.5B/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "base_repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher_repo": "hbx/JustRL-DeepSeek-1.5B",
+      "teacher_revision": "0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "parent": null,
+      "method": null,
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-J/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/protocol.json",
+      "model_evidence": "model_registry aliases + original protocol",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J/fixed-320.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "R1",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--justrl--534ec3bd.md",
+      "lineage_card_sha256": "7629824d1ee289ad5a75a0b8192cbf745900f6fce2d360ffc1e58173dd81612d"
+    },
+    {
+      "run_id": "r1--minimath--18ba6165",
+      "student": "r1",
+      "teacher": "minimath",
+      "study": "r1-samesize-deterministic320-20261030",
+      "arm": "TB2-M1",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/oumi-ai--MiniMath-R1-1.5B/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "base_repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher_repo": "oumi-ai/MiniMath-R1-1.5B",
+      "teacher_revision": "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "parent": null,
+      "method": null,
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-M/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-M/protocol.json",
+      "model_evidence": "model_registry aliases + original protocol",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-M/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-M/fixed-320.json",
+      "label": "SFT",
+      "added_stage": "added SFT",
+      "family": "R1",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--minimath--18ba6165.md",
+      "lineage_card_sha256": "883b88ea95836824e3783a06166baa414dc38bb32ba8aa2f2e8a1b05c5bb14a1"
+    },
+    {
+      "run_id": "r1--brorl--c9731fdc",
+      "student": "r1",
+      "teacher": "brorl",
+      "study": "r1-samesize-deterministic320-20261030",
+      "arm": "NEW-BRO",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "base_repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher_repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "teacher_revision": "3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "parent": null,
+      "method": null,
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/NEW-BRO/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/NEW-BRO/protocol.json",
+      "model_evidence": "model_registry aliases + original protocol",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/NEW-BRO/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/NEW-BRO/fixed-320.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "R1",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--brorl--c9731fdc.md",
+      "lineage_card_sha256": "f46ba514cb8a03cbe0f23603374eed964b3e3cd48eb390945e68c602d24cb835"
+    },
+    {
+      "run_id": "r1--nemotron--49bfdcb0",
+      "student": "r1",
+      "teacher": "nemotron",
+      "study": "r1-samesize-deterministic320-20261030",
+      "arm": "TB1-N",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/b89048893f95246c6b5749b287f0049e6df42ee9",
+      "base_repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher_repo": "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+      "teacher_revision": "b89048893f95246c6b5749b287f0049e6df42ee9",
+      "parent": null,
+      "method": null,
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-N/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-N/protocol.json",
+      "model_evidence": "model_registry aliases + original protocol",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-N/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-N/fixed-320.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "R1",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r1--nemotron--49bfdcb0.md",
+      "lineage_card_sha256": "94c5ad8f121442cad16daa21d1fba80c9b9a6c8cbff7bbecfa8d49d0697957a2"
+    },
+    {
+      "run_id": "r7--light--7e4c0413",
+      "student": "r7",
+      "teacher": "light",
+      "study": "teacher-boundary-20261028",
+      "arm": "TB2-L7",
+      "budget": 64,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/qihoo360--Light-R1-7B-DS/06c9338cdbec28416e15f28a325b1439729ec237",
+      "base_repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "teacher_repo": "qihoo360/Light-R1-7B-DS",
+      "teacher_revision": "06c9338cdbec28416e15f28a325b1439729ec237",
+      "parent": null,
+      "method": null,
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261028/checkpoints/TB2-L7/step064"
+      },
+      "missing_student_steps": [],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-L7/protocol.json",
+      "model_evidence": "model_registry aliases + original protocol",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-L7/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-L7/fixed-064.json",
+      "label": "SFT",
+      "added_stage": "added SFT",
+      "family": "R1",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/r7--light--7e4c0413.md",
+      "lineage_card_sha256": "b738cbfb53a45a6ab925a7cdd2e391886af3b0c47cfb5f21f3ce3a80c5de127a"
+    },
+    {
+      "run_id": "q3-1.7--grpo-kl--7a02ee6c",
+      "student": "q3-1.7",
+      "teacher": "grpo-kl",
+      "study": "qwen3-teacher-lineage-20261029",
+      "arm": "Q3-grpo-kl",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+      "base_repo": "Qwen/Qwen3-1.7B",
+      "teacher_repo": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning",
+      "teacher_revision": "851ee853018af52495d73a95e3de51470af6f17b",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl",
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-grpo-kl/step064",
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-grpo-kl/step320"
+      },
+      "missing_student_steps": [],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-grpo-kl/protocol.json",
+      "model_evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/plans/qwen3-baselines-expanded.json",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-grpo-kl/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-grpo-kl/fixed-320.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "Qwen",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/q3-1.7--grpo-kl--7a02ee6c.md",
+      "lineage_card_sha256": "04b9cd4c78cdfd0d0a6da0e1a5bf1e6f0ad2c7dc692b404d93dae794a1b5ea0a"
+    },
+    {
+      "run_id": "q3-1.7--sft-gsm8k--a19448d4",
+      "student": "q3-1.7",
+      "teacher": "sft-gsm8k",
+      "study": "qwen3-teacher-lineage-20261029",
+      "arm": "Q3-sft-gsm8k",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "base_repo": "Qwen/Qwen3-1.7B",
+      "teacher_repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+      "teacher_revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "sft",
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-gsm8k/step064",
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-gsm8k/step320"
+      },
+      "missing_student_steps": [],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-sft-gsm8k/protocol.json",
+      "model_evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/plans/qwen3-baselines-expanded.json",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-sft-gsm8k/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-sft-gsm8k/fixed-320.json",
+      "label": "SFT",
+      "added_stage": "added SFT",
+      "family": "Qwen",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/q3-1.7--sft-gsm8k--a19448d4.md",
+      "lineage_card_sha256": "e4c23350ef65973e89541a6be78f3b6edf276fd6a79b991edb346f50a70c7a16"
+    },
+    {
+      "run_id": "q3-1.7--e3--eef55d0d",
+      "student": "q3-1.7",
+      "teacher": "e3",
+      "study": "qwen3-thinking-e3-stage1280-20261030",
+      "arm": "T-E3",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "base_repo": "Qwen/Qwen3-1.7B",
+      "teacher_repo": "CMU-AIRe/e3-1.7B",
+      "teacher_revision": "6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl",
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-mode-thinking-wave1-20261029/T-E3/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-e3-stage1280-20261030/arms/T-E3/protocol.json",
+      "model_evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/plans/qwen3-thinking-e3-stage1280.json",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-e3-stage1280-20261030/arms/T-E3/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-e3-stage1280-20261030/arms/T-E3/fixed-320.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "Qwen",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/q3-1.7--e3--eef55d0d.md",
+      "lineage_card_sha256": "6bcfc431e90f4b54962739c260b7233d448e4830f8fe2025696255b14b2d3644"
+    },
+    {
+      "run_id": "q3-1.7-nonthinking--sft-gsm8k--319ebf4f",
+      "student": "q3-1.7-nonthinking",
+      "teacher": "sft-gsm8k",
+      "study": "qwen3-nonthinking-origin-controls1280-20261030",
+      "arm": "NT-C-sft-gsm8k",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "base_repo": "Qwen/Qwen3-1.7B",
+      "teacher_repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+      "teacher_revision": "6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "sft",
+      "lineage": "published_direct_parent",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-nonthinking-origin-controls320-20261030/NT-C-sft-gsm8k/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls1280-20261030/arms/NT-C-sft-gsm8k/protocol.json",
+      "model_evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/plans/qwen3-nonthinking-four1280-audit.json",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls1280-20261030/arms/NT-C-sft-gsm8k/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls1280-20261030/arms/NT-C-sft-gsm8k/fixed-320.json",
+      "label": "SFT",
+      "added_stage": "added SFT",
+      "family": "Qwen",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/q3-1.7-nonthinking--sft-gsm8k--319ebf4f.md",
+      "lineage_card_sha256": "e4c23350ef65973e89541a6be78f3b6edf276fd6a79b991edb346f50a70c7a16"
+    },
+    {
+      "run_id": "llama3-3b-off--coreward-i--72c4db04",
+      "student": "llama3-3b-off",
+      "teacher": "coreward-i",
+      "study": "llama-reasoning-off-stage640-20261030",
+      "arm": "L3-coreward-i",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "base_repo": "unsloth/Llama-3.2-3B-Instruct",
+      "teacher_repo": "TMLR-Group-HF/Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+      "teacher_revision": "0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "parent": null,
+      "method": "rl_coreward_i",
+      "lineage": "shared_family_branch_or_control",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-coreward-i/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-coreward-i/protocol.json",
+      "model_evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/plans/llama-reasoning-off-stage1280-resume-source.json",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-coreward-i/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-coreward-i/fixed-320.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "Llama",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/llama3-3b-off--coreward-i--72c4db04.md",
+      "lineage_card_sha256": "d8b8d6bf758925ab53675f0cef3ae1575790d3912f0b50bd060325ae0e0b34cf"
+    },
+    {
+      "run_id": "llama3-3b-off--gt--59498cdb",
+      "student": "llama3-3b-off",
+      "teacher": "gt",
+      "study": "llama-reasoning-off-stage640-20261030",
+      "arm": "L3-gt",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "base_repo": "unsloth/Llama-3.2-3B-Instruct",
+      "teacher_repo": "TMLR-Group-HF/GT-Llama-3.2-3B-Instruct-MATH",
+      "teacher_revision": "b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "parent": null,
+      "method": "rl_ground_truth",
+      "lineage": "shared_family_branch_or_control",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-gt/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-gt/protocol.json",
+      "model_evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/plans/llama-reasoning-off-stage1280-resume-source.json",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-gt/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-gt/fixed-320.json",
+      "label": "RL",
+      "added_stage": "RL; no added SFT",
+      "family": "Llama",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/llama3-3b-off--gt--59498cdb.md",
+      "lineage_card_sha256": "ea0438d83950c4c881e5a4154efff22b1137bb17f051ce072be2ec5d88bebce7"
+    },
+    {
+      "run_id": "llama3-3b-off--arithmetic-full--131f84b3",
+      "student": "llama3-3b-off",
+      "teacher": "arithmetic-full",
+      "study": "llama-reasoning-off-stage1280-20261030",
+      "arm": "L3-arithmetic-full",
+      "budget": 320,
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b",
+      "base_repo": "unsloth/Llama-3.2-3B-Instruct",
+      "teacher_repo": "Raghav-Singhal/Llama-3.2-3B-Instruct-arithmetic-full",
+      "teacher_revision": "66feb54e931c27285afc344645bf0961053ea29b",
+      "parent": null,
+      "method": "candidate_full_parameter_sft",
+      "lineage": "shared_family_branch_or_control",
+      "architecture_compatible": true,
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-arithmetic-full/step320"
+      },
+      "missing_student_steps": [
+        64
+      ],
+      "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage1280-20261030/arms/L3-arithmetic-full/protocol.json",
+      "model_evidence": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research/studies/fixed_transfer/plans/llama-reasoning-off-stage1280.json",
+      "initial_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage1280-20261030/arms/L3-arithmetic-full/fixed-000.json",
+      "final_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage1280-20261030/arms/L3-arithmetic-full/fixed-320.json",
+      "label": "SFT",
+      "added_stage": "added SFT",
+      "family": "Llama",
+      "cohort": "continuous",
+      "lineage_basis": "local model card named parent; parent revision not independently pinned",
+      "lineage_card": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-followup-20261110/direct-pairs-v1/model-cards/llama3-3b-off--arithmetic-full--131f84b3.md",
+      "lineage_card_sha256": "e8a12689bed5218b6e8d4d4708896b29febd4103be5c4c177d47778673de6177"
+    },
+    {
+      "run_id": "MiMo-SFT",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "checkpoints": {},
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.16515637405543665,
+        "stable_rank": 126.96374828197773,
+        "top1pct": 0.052470871652107606,
+        "top5pct": 0.17427894712339578,
+        "kappa_spec": 28.394696698577846,
+        "rho_sigma": 0.0758458325486728
+      },
+      "curves": [
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "1.967694259902463",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "2.3771001846460793",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "1.7691844186147023",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "2.1029153084938836",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "1.6215771278551863",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.46322464687899256",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.19708727150504646",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.19813066307349644",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.3771717296614342",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "1.0805089232759932",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.46425543641070566",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.3544451763717473",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.24805694412929957",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.5624762751750407",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6920433499667351",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.37890748072188085",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.15349701459811282",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.16298998646607854",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.30628117025297197",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.8928617515703601",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.4259157984253846",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.30799817307876765",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.23376089693868154",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.5022678135486685",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6596363101354206",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.3685570429023823",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.14350549321257966",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.160759973391523",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.3084752613567104",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.8614874436487161",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.4133371109994988",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.29449626717228855",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22604789533070666",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.48584052858401794",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6469637529109822",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.34865259850672004",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.13248758805073294",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.15442380966724537",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2961114053611742",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.8115875909477276",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.4131984230580649",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.2948914430448669",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22603364609936874",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.48882672636029384",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6430418767277302",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.3429088750731453",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.1323585627079554",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.15473947645222577",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2926125956991235",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7919248654332767",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.41668438561704535",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.29995409497032227",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22656617401242993",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.49479076934913163",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6454265041362975",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.338879573939849",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.13151170069696724",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.1553271882892616",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.29034882229184694",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7783305844813203",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.40886839702019573",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.28961510071254587",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22657424662286393",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.4857709001144517",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6335133406309215",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.3375717707561148",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.1318019132448514",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.154957303720844",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.29022936553520134",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7732985005235624",
+          "questions": "128"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E73/fixed-bank-rkl.csv",
+      "curve_source_sha256": "ed361fefb4bb02d744af24e12c22bae1f8c2b57decc573199db849593ca58a7d",
+      "family": "MiMo",
+      "student": "MiMo-Base",
+      "teacher": "MiMo-SFT",
+      "cohort": "continuous",
+      "label": "SFT",
+      "lineage_basis": "documented MiMo stages",
+      "added_stage": "added SFT",
+      "lineage": "documented_stages"
+    },
+    {
+      "run_id": "MiMo-RL",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "checkpoints": {},
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.16516571820578618,
+        "stable_rank": 126.99655728677473,
+        "top1pct": 0.05248127647820268,
+        "top5pct": 0.17429008993137526,
+        "kappa_spec": 28.79435351518363,
+        "rho_sigma": 0.07625419077105786
+      },
+      "curves": [
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "2.117732416981082",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "2.710520798422599",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "1.8055991667935307",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "2.2157442944869348",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "1.7390654082212635",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.40612622873544924",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.19948383430315442",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.1603000593595993",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.3238301898286991",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.940890831450344",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.38457877091539794",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.2682365391692301",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21206190331157865",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.43797934509374553",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6200372960870374",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.3294121795560961",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.14165375318891688",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.1320110259028911",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.27509608985750383",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7688878492750725",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.36312444152701645",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.2505143400573887",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21105142339879843",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.40637783767616215",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5845541649757164",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.31186609570630597",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.1303349986444443",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12689993407130085",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.26257438303113",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7276550670783488",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.35791954771280765",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24662112850070894",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21283456980790516",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.4037725104388064",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.56844998210381",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.2986476796455827",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.12061111555916246",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12359825731785144",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2549158220831035",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6954655236222134",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.35725308678619955",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24537661274816341",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22030610119882307",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.4035608891466566",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5597687440511551",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.2943146669962824",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.11885095840525607",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12431590268918673",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2527519203326616",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6813398865580251",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.3504668335154832",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24818016239713608",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21301155813516334",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.3911407391361416",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5495348743934917",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.2902118443805456",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.1131951586643256",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12480141567356129",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.24994836211445737",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6729024410698381",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.3528451452876607",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24882166698573346",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21443282689637794",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.3982571254571504",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5498689618113809",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.28960737304491835",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.11393171312979342",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12639864540072734",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.25031127512177814",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6677878585273745",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.3487253207396868",
+          "questions": "512"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24061496928424642",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.2122663704287922",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.39696198314350906",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5450579601021996",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.28820100471681454",
+          "questions": "512"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.11349002561932561",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12787893250567764",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2481252046207372",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6633098561215176",
+          "questions": "128"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E71/fixed-bank-rkl.csv",
+      "curve_source_sha256": "17fcdcb9e15822fd12bbb6ee0e157670d695b0939c8904bc175288d1b3d82953",
+      "family": "MiMo",
+      "student": "MiMo-Base",
+      "teacher": "MiMo-RL",
+      "cohort": "branch_control",
+      "label": "RL",
+      "lineage_basis": "documented MiMo stages",
+      "added_stage": "RL",
+      "lineage": "documented_stages"
+    },
+    {
+      "run_id": "MiMo-RL-from-SFT",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface"
+      },
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.0033587743164695616,
+        "stable_rank": 15.203419307713208,
+        "top1pct": 0.18459250848461306,
+        "top5pct": 0.3353229509639969,
+        "kappa_spec": 17.343609773836782,
+        "rho_sigma": 0.06336345506247106
+      },
+      "curves": [
+        {
+          "arm": "E93",
+          "outer": "0",
+          "optimizer_updates": "0",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.042049318994986346",
+          "reduction_percent": "0.0",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "1",
+          "optimizer_updates": "16",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.02532407565707751",
+          "reduction_percent": "39.775301331046606",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "2",
+          "optimizer_updates": "32",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.016334093297764467",
+          "reduction_percent": "61.15491596971636",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "5",
+          "optimizer_updates": "80",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.00869752063706841",
+          "reduction_percent": "79.31590607185473",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "10",
+          "optimizer_updates": "160",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.005899970514193101",
+          "reduction_percent": "85.96892730915198",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "15",
+          "optimizer_updates": "240",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.004835794745380296",
+          "reduction_percent": "88.49970734137959",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "20",
+          "optimizer_updates": "320",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.00419786458301123",
+          "reduction_percent": "90.01680720795561",
+          "bank": "public_teacher",
+          "domain": "all"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/figures/mimo-stage-20261104-final/e91-comparison/rkl-comparison.csv",
+      "curve_source_sha256": "6254feb6de3b65f68d55d75c684fcb033df919d11e36d17bbc529584ce3fa624",
+      "family": "MiMo",
+      "student": "MiMo-SFT",
+      "teacher": "MiMo-RL-from-SFT",
+      "cohort": "continuous",
+      "label": "RL",
+      "lineage_basis": "documented MiMo stages",
+      "added_stage": "RL",
+      "lineage": "documented_stages"
+    },
+    {
+      "run_id": "MiMo-Zero-from-SFT",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "checkpoints": {
+        "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface"
+      },
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.16437679764129215,
+        "stable_rank": 127.00907866192486,
+        "top1pct": 0.052484196064669274,
+        "top5pct": 0.17428965670491803,
+        "kappa_spec": 89.39247272126123,
+        "rho_sigma": 0.07570797814575492
+      },
+      "curves": [
+        {
+          "arm": "E91",
+          "outer": "0",
+          "optimizer_updates": "0",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.3810164377384541",
+          "reduction_percent": "0.0",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "1",
+          "optimizer_updates": "16",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.34437246186705306",
+          "reduction_percent": "9.61742650498324",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "2",
+          "optimizer_updates": "32",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.3101943699272216",
+          "reduction_percent": "18.5876673016002",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "5",
+          "optimizer_updates": "80",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.2864017390503308",
+          "reduction_percent": "24.832182897334963",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "10",
+          "optimizer_updates": "160",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.2705360626296061",
+          "reduction_percent": "28.996222778369063",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "15",
+          "optimizer_updates": "240",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.26837854111442444",
+          "reduction_percent": "29.562476960993767",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "20",
+          "optimizer_updates": "320",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.26161622172320337",
+          "reduction_percent": "31.33728736848149",
+          "bank": "public_teacher",
+          "domain": "all"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/figures/mimo-stage-20261104-final/e91-comparison/rkl-comparison.csv",
+      "curve_source_sha256": "6254feb6de3b65f68d55d75c684fcb033df919d11e36d17bbc529584ce3fa624",
+      "family": "MiMo",
+      "student": "MiMo-SFT",
+      "teacher": "MiMo-Zero-from-SFT",
+      "cohort": "branch_control",
+      "label": "RL",
+      "lineage_basis": "documented MiMo stages",
+      "added_stage": "RL",
+      "lineage": "documented_stages"
+    },
+    {
+      "run_id": "MiMo-Zero",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "checkpoints": {},
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.0017453886421265983,
+        "stable_rank": 21.69690975844879,
+        "top1pct": 0.1937077699102182,
+        "top5pct": 0.3814132616503627,
+        "kappa_spec": 8.18520658071959,
+        "rho_sigma": 0.04398679922815979
+      },
+      "curves": [
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.07004863080840706",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.07037373542708593",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.11043763725700899",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.07671052244897007",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.02267262810056327",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.06474529897464273",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.09215985513738964",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.08220916032287456",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.041952489070392895",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.04265969136791383",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.018867035398297358",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.015394969787006033",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.0385136477323491",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.012619531037950871",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.00893999303588343",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.021281646815426554",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.022834409339253924",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.03325884160652636",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.013745852530482888",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.015287483785443048",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.01989722867849923",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.019644763145828043",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.03190463926835147",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.015347923864801268",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.012691588435016126",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.01831796324145283",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.021232663680889923",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.02239848502737103",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.009242416465441217",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.020398287792109143",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.008760401383626552",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.00568768088848334",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.020248652040515652",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.004801919070289288",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.004303353535217929",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.007379605473202659",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.006259499615913237",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.01380706048609348",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.003213874176226674",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.006237987614577248",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.005784816218987453",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.002573700345342985",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.015994679164375178",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.0023008484708340036",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.002270036895397644",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.004322340092236346",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.0026529227156240785",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.009876615845468025",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.0016504334587263598",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.003109388349126922",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.005135135234007585",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.0017764881489336578",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.015221970405208236",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.0018430863643460692",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.001698996017542376",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.003450433179644562",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.001706182832667423",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.008664647608607683",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.0012030567208244304",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.0022278455564787116",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.004286586319104935",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.0013249169777404604",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.01290392911287555",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.0016690078883327432",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.0012484912974709873",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.0027953321726925666",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.001225037698066294",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.0071318798182188345",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.0010988439214031256",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.0017255672530820116",
+          "questions": "128"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E72/fixed-bank-rkl.csv",
+      "curve_source_sha256": "9c60db57fc87bd2f95b90aed3a706956700b55dadca31374ea3030d1f7b2116f",
+      "family": "MiMo",
+      "student": "MiMo-Base",
+      "teacher": "MiMo-Zero",
+      "cohort": "continuous",
+      "label": "RL",
+      "lineage_basis": "documented MiMo stages",
+      "added_stage": "RL",
+      "lineage": "documented_stages"
+    }
+  ],
+  "pairs": [
+    {
+      "pair_id": "ece1f975fd91024f",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/agentica-org--DeepCoder-1.5B-Preview/103033da54f104b0d0a3570547fb3721fba99962",
+      "teacher": "deepcoder",
+      "family": "R1",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "r1",
+      "conditions": [
+        {
+          "run_id": "r1--deepcoder--82946e34",
+          "student": "r1",
+          "checkpoints": {
+            "64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261029/models/NEW-DC/step064"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "8dc073259e329efe",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/agentica-org--DeepScaleR-1.5B-Preview/e3f524ce413a296b4d388e7560dd5c82c1c56725",
+      "teacher": "deepscaler",
+      "family": "R1",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "r1",
+      "conditions": [
+        {
+          "run_id": "r1--deepscaler--a7c14513",
+          "student": "r1",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/NEW-DS/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "bd3c5aa7af510493",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/hbx--JustRL-DeepSeek-1.5B/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "teacher": "justrl",
+      "family": "R1",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "r1",
+      "conditions": [
+        {
+          "run_id": "r1--justrl--534ec3bd",
+          "student": "r1",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-J/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "0f69d311264420fa",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/oumi-ai--MiniMath-R1-1.5B/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "teacher": "minimath",
+      "family": "R1",
+      "cohort": "continuous",
+      "label": "SFT",
+      "student": "r1",
+      "conditions": [
+        {
+          "run_id": "r1--minimath--18ba6165",
+          "student": "r1",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-M/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "37e9fcf49a67d934",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "teacher": "brorl",
+      "family": "R1",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "r1",
+      "conditions": [
+        {
+          "run_id": "r1--brorl--c9731fdc",
+          "student": "r1",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/NEW-BRO/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "f2ee063c71c81230",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/b89048893f95246c6b5749b287f0049e6df42ee9",
+      "teacher": "nemotron",
+      "family": "R1",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "r1",
+      "conditions": [
+        {
+          "run_id": "r1--nemotron--49bfdcb0",
+          "student": "r1",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-N/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "adfcd3e4aacecad5",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/qihoo360--Light-R1-7B-DS/06c9338cdbec28416e15f28a325b1439729ec237",
+      "teacher": "light",
+      "family": "R1",
+      "cohort": "continuous",
+      "label": "SFT",
+      "student": "r7",
+      "conditions": [
+        {
+          "run_id": "r7--light--7e4c0413",
+          "student": "r7",
+          "checkpoints": {
+            "64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261028/checkpoints/TB2-L7/step064"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "130b1aa795c9b106",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+      "teacher": "grpo-kl",
+      "family": "Qwen",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "q3-1.7",
+      "conditions": [
+        {
+          "run_id": "q3-1.7--grpo-kl--7a02ee6c",
+          "student": "q3-1.7",
+          "checkpoints": {
+            "64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-grpo-kl/step064",
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-grpo-kl/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "3e4d7f859fe155f8",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "teacher": "sft-gsm8k",
+      "family": "Qwen",
+      "cohort": "continuous",
+      "label": "SFT",
+      "student": "q3-1.7",
+      "conditions": [
+        {
+          "run_id": "q3-1.7--sft-gsm8k--a19448d4",
+          "student": "q3-1.7",
+          "checkpoints": {
+            "64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-gsm8k/step064",
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-gsm8k/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        },
+        {
+          "run_id": "q3-1.7-nonthinking--sft-gsm8k--319ebf4f",
+          "student": "q3-1.7-nonthinking",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-nonthinking-origin-controls320-20261030/NT-C-sft-gsm8k/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "eebed16df2bee828",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "teacher": "e3",
+      "family": "Qwen",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "q3-1.7",
+      "conditions": [
+        {
+          "run_id": "q3-1.7--e3--eef55d0d",
+          "student": "q3-1.7",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-mode-thinking-wave1-20261029/T-E3/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "38610d9b50b018b2",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "teacher": "coreward-i",
+      "family": "Llama",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "llama3-3b-off",
+      "conditions": [
+        {
+          "run_id": "llama3-3b-off--coreward-i--72c4db04",
+          "student": "llama3-3b-off",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-coreward-i/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "782c0d6c55675e4a",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "teacher": "gt",
+      "family": "Llama",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "llama3-3b-off",
+      "conditions": [
+        {
+          "run_id": "llama3-3b-off--gt--59498cdb",
+          "student": "llama3-3b-off",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-gt/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "e01abaeeef1a3603",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b",
+      "teacher": "arithmetic-full",
+      "family": "Llama",
+      "cohort": "continuous",
+      "label": "SFT",
+      "student": "llama3-3b-off",
+      "conditions": [
+        {
+          "run_id": "llama3-3b-off--arithmetic-full--131f84b3",
+          "student": "llama3-3b-off",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-arithmetic-full/step320"
+          },
+          "lineage_basis": "local model card named parent; parent revision not independently pinned"
+        }
+      ]
+    },
+    {
+      "pair_id": "e870e2d9abd7bd2d",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher": "MiMo-SFT",
+      "family": "MiMo",
+      "cohort": "continuous",
+      "label": "SFT",
+      "student": "MiMo-Base",
+      "conditions": [
+        {
+          "run_id": "MiMo-SFT",
+          "student": "MiMo-Base",
+          "checkpoints": {},
+          "lineage_basis": "documented MiMo stages"
+        }
+      ]
+    },
+    {
+      "pair_id": "b5a5858d9357ac96",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "teacher": "MiMo-RL",
+      "family": "MiMo",
+      "cohort": "branch_control",
+      "label": "RL",
+      "student": "MiMo-Base",
+      "conditions": [
+        {
+          "run_id": "MiMo-RL",
+          "student": "MiMo-Base",
+          "checkpoints": {},
+          "lineage_basis": "documented MiMo stages"
+        }
+      ]
+    },
+    {
+      "pair_id": "09e6abfcc7b89d99",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "teacher": "MiMo-RL-from-SFT",
+      "family": "MiMo",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "MiMo-SFT",
+      "conditions": [
+        {
+          "run_id": "MiMo-RL-from-SFT",
+          "student": "MiMo-SFT",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface"
+          },
+          "lineage_basis": "documented MiMo stages"
+        }
+      ]
+    },
+    {
+      "pair_id": "6aaa7aad6134bce2",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "teacher": "MiMo-Zero-from-SFT",
+      "family": "MiMo",
+      "cohort": "branch_control",
+      "label": "RL",
+      "student": "MiMo-SFT",
+      "conditions": [
+        {
+          "run_id": "MiMo-Zero-from-SFT",
+          "student": "MiMo-SFT",
+          "checkpoints": {
+            "320": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface"
+          },
+          "lineage_basis": "documented MiMo stages"
+        }
+      ]
+    },
+    {
+      "pair_id": "1ce0f29e56212a45",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "teacher": "MiMo-Zero",
+      "family": "MiMo",
+      "cohort": "continuous",
+      "label": "RL",
+      "student": "MiMo-Base",
+      "conditions": [
+        {
+          "run_id": "MiMo-Zero",
+          "student": "MiMo-Base",
+          "checkpoints": {},
+          "lineage_basis": "documented MiMo stages"
+        }
+      ]
+    }
+  ],
+  "definition": "Actual initial student is the declared training parent; branch controls explicitly separate; repeated modes share teacher weights but preserve student checkpoint identity",
+  "source_sha256": "b2c12b41b62bb6e6dc5e66f2fce7dff541ac6a341278ad9f5fd30890e2b682cb"
+}

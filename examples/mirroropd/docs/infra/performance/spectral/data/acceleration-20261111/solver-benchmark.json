@@ -1,0 +1,20 @@
+{
+  "tensor": "model.layers.0.self_attn.q_proj.weight",
+  "shape": [
+    2048,
+    2048
+  ],
+  "drivers": {
+    "gesvdj": {
+      "seconds": 3.5775517523288727,
+      "relative_error": 1.1969209056548115e-12
+    },
+    "gesvd": {
+      "seconds": 1.2642793953418732,
+      "relative_error": 1.3070976307337346e-14
+    }
+  },
+  "selected": "gesvd",
+  "cold_seconds": 4.215515777468681,
+  "warm_seconds": 2.5300122424960136
+}

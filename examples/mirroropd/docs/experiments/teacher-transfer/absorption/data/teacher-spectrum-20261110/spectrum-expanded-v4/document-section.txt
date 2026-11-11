@@ -1,0 +1,84 @@
+### 4.5 历史模型扩展筛查：49 个参考权重与 heldout 动态
+
+#### 覆盖范围与统一测量
+
+原 fixed-state explorer 中 47 条完整 single-pass 曲线全部接入，涉及 37 个不同 teacher 权重、39 个 initial-student/teacher 配对。其中 22 条曲线、19 个 teacher 配对通过完整张量名称与形状兼容检查，可以计算参数差；其余条件只比较各自完整权重谱。另补齐原 explorer 未纳入的三条 Polaris 曲线，独立保存，不混入主预测比较。历史清单的 42 个参考权重全部完成测量，再加入受控 RAW/CCS 三个 SFT teacher 和 MiMo 四个阶段权重，共 49 个参考权重。连同 OPD student 导出，共测量 102 个 checkpoint、612 个完整权重矩阵；原 explorer 有 50 个精确预算 student 读出可用于更新与残差分析。
+
+每个 checkpoint 取第 $0,\lfloor(L-1)/2\rfloor,L-1$ 层的 k_proj 与 v_proj，共六个矩阵，以 CPU FP64 做精确 SVD。这是统一的六矩阵筛查，全层结论继续使用 §4.1 的独立测量。逐矩阵保存奇异值、能量分布、范数、张量哈希及来源；配对保存 $B,T,S_t,T-B,S_t-B,T-S_t$。统计表中的配对特征为六矩阵中位数。top-1% 指前 $\lceil0.01r\rceil$ 个奇异值的平方能量占比，$r$ 为矩阵最小维度；stable rank、90% 能量秩同时保存绝对值和除以 $r$ 的比例。
+
+“同源”在数据中分成直接父模型与共同祖先分支。R1 的六个同尺寸 teacher、Qwen 的 Samsung/e3/GRPO 和 R7 Light 等按可核验父模型元数据登记。Thinking-Space 从 Qwen3-Base 训练，而此处 initial student 是后训练的 Qwen3-1.7B，因此两者属于共同祖先分支；$T-B$ 是实验 teacher 与实际 initial student 的差，并非该 teacher 自身的训练更新。MiMo 则显式保留 Base→SFT、Base→RL、Base→RL-Zero、SFT→RL、SFT→RL-Zero 五种配对。架构兼容只保证差矩阵有定义，训练血缘单独进入筛选。
+
+[参数—heldout 交互浏览器](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/explorer.html)支持选择指标、64/320 更新、Math/Code/IF、绝对 KL、剩余比例和末 64 步下降，并下载筛选后的 CSV。它与原 explorer 的曲线一一关联；[覆盖清单](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/final-coverage.json)、[逐阶段关联表](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/heldout-feature-join.csv)及[模型指纹](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-profiles.json)提供可复算数据。
+
+#### 小幅、集中的更新与较低残差相关
+
+R1 同尺寸组的六矩阵结果如下。所有风险使用原 fixed-H1024 全词表 RKL；64 步剩余比例在相同预算比较，终点同时标出实际预算。
+
+| Teacher | 更新范数 / initial 范数 | 更新 top-1% 能量 | κ_spec | 64 步 KL 剩余 | 最后绝对 KL | 最后更新数 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| DeepScaleR | 0.149% | 28.4% | 2.68 | 12.8% | .000716 | 320 |
+| DeepCoder | 0.204% | 26.7% | 2.13 | 35.6% | .031569 | 64 |
+| JustRL | 0.506% | 21.2% | 284.94 | 38.0% | .017768 | 320 |
+| Nemotron | 0.466% | 16.8% | 1.43 | 47.6% | .045246 | 320 |
+| BroRL | 0.568% | 21.3% | 1.89 | 57.2% | .072881 | 320 |
+| MiniMath SFT | 2.525% | 8.1% | 1.35 | 58.8% | .028692 | 320 |
+
+R1 六个 teacher 中，更新幅度与 64 步剩余比例的 Spearman 相关为 +.943，top-1% 能量与剩余比例为 −.829。Qwen thinking 组相应为 +.886/−.657，non-thinking 为 +.257/−.600。集中度的方向较一致，幅度关系受输入模式影响。JustRL 的 κ≈285 是该组的突出个例；其余 RL teacher 的 κ≈1.4–2.7，不能用 JustRL 的几何代表 RL 总体。
+
+![更新幅度、谱集中度与吸收的关联](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/feature-vs-absorption-v3.png)
+
+合并兼容条件，64 步的幅度—剩余比例相关为 +.691，集中度—剩余比例为 −.676；对特征秩与结果秩分别回归 log 初始 KL 和 student/输入模式哑变量，再计算残差相关，得到 +.521/−.651。这里的 22 条曲线共享 19 个 teacher，属于描述性关联。Math/Code/IF 的幅度相关为 +.670/+.879/+.810，集中度相关为 −.650/−.662/−.700，方向均一致。
+
+绝对量保留了相同趋势：64 步更新幅度与绝对 KL 相关为 +.819，top-1% 与绝对 KL 为 −.578。320 步相应为 +.857/−.657；末 256→320 窗口的对数下降与幅度相关为 −.737、与集中度相关为 +.723。幅度大、谱分散的条件往往既有较高终点残差，也有较慢后期下降。不同域与相同 teacher 的输入模式仍有差异，全部数值保存在[分域关联表](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/associations.csv)。
+
+![每个兼容条件的参数指纹与绝对风险](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/model-fingerprint-overview-v3.png)
+
+图中空心点是初始绝对 KL，实心点是 64 步风险；两点距离同时呈现起点大小与下降量。下面保留原有中间节点，展示完整 single-pass 动态。长预算 continuation 的 640/1280 结果见 §3，未拼接进此图。
+
+![同尺寸 teacher 的完整绝对风险动态](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/matched-spectrum-kl-dynamics-v3.png)
+
+#### 关联尚未成为可靠的新 teacher 预测器
+
+以 log 初始 KL 和 student/输入模式为基础预测量，预测 log10 终点绝对 KL。固定 ridge α=1，每轮留出整个 teacher 权重，所有输入模式一起留出；特征标准化只使用训练折。误差先在同 teacher 的模式内平均，再对 teacher 等权平均。64 步有 19 个 teacher，320 步有 17 个。
+
+| 预测特征 | 64 步 MAE，dex | 320 步 MAE，dex |
+| --- | ---: | ---: |
+| 初始 KL + student/模式 | .153 | .220 |
+| 再加更新幅度 | .143 | .193 |
+| 再加 top-1% 能量 | .154 | .211 |
+| 再加七个几何特征 | .179 | .261 |
+
+更新幅度提供了最大的单项平均增益，但固定预测误差的 teacher 配对 bootstrap 中，改进量 95% 区间分别为 [−.054,+.032]、[−.109,+.052] dex，均跨零。该 bootstrap 重采样已生成的 teacher 误差，不重拟合模型，也不估计训练 seed 不确定性。仅保留有直接父模型元数据的配对后，幅度在 64 步改善 MAE，320 步反而从 .272 增至 .287。把所有几何特征加入小样本模型还会增加误差。
+
+当前优先保留“更新幅度 + 谱集中度”作为候选组合。κ 与奇异值位移比例的相关方向跨组改变，预测误差也未改善；它们适合描述几何类型，尚无证据支持作为通用吸收评分。
+
+![teacher 留出预测误差](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-comparison-v2.png)
+
+[预测明细](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/teacher-heldout-prediction.csv)、[误差比较区间](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/prediction-error-bootstrap.json)和[分析协议](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/analysis-protocol.json)记录固定预算、特征变换与分组方式。原历史 heldout 继续作为诊断数据；这些比较属于探索性筛查。
+
+#### 受控 SFT 与 MiMo：训练标签背后是不同的参数距离
+
+共同 Qwen3-Base、相同 128 步 SFT 预算的 RAW/CCS 条件，为数据构造差异提供了直接对照。下表风险为各自 teacher-prefix bank 的四域 macro RKL，按实际有效 token 平均，保留原协议，不与 H1024 主表混合。
+
+| Teacher | 更新范数 / Base 范数 | top-1% 能量 | Stable rank | 初始→256 步绝对 RKL | 剩余比例 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| RAW | .194% | 48.09% | 6.53 | .245784→.007802 | 3.17% |
+| CCS-ρ0 | .100% | 26.14% | 15.64 | .004496→.000748 | 16.63% |
+| CCS-ρ1 | .101% | 26.52% | 16.00 | .004503→.000745 | 16.54% |
+
+RAW 的更新更集中，相对吸收也更充分；CCS 的绝对终点风险却小一个数量级。数据构造同时改变参数幅度、谱形状与起始功能距离，三者应一起分析。这组 SFT 的 κ 均约 1.1，无法用 κ 区分其吸收表现。
+
+MiMo 则显示 initial student 身份的重要性。表中所有差矩阵均相对实际 initial student，风险为各自 teacher-bank 原有 macro RKL。
+
+| Initial student → teacher | 更新范数 / initial 范数 | top-1% 能量 | 初始→终点绝对 RKL | 终点更新数 |
+| --- | ---: | ---: | ---: | ---: |
+| Base → SFT | 16.516% | 5.247% | .463225→.337572 | 320 |
+| Base → SFT+RL | 16.517% | 5.248% | .406126→.288201 | 800 |
+| Base → RL-Zero | .175% | 19.371% | .064745→.002795 | 320 |
+| SFT → SFT+RL | .336% | 18.459% | .042049→.004198 | 320 |
+| SFT → RL-Zero | 16.438% | 5.248% | .381016→.261616 | 320 |
+
+Base→SFT 与 Base→SFT+RL 的幅度及归一化谱几乎一致，SFT 更新主导了这两个差矩阵；从 SFT 出发看后续 RL，幅度降至 .336%，集中度上升，吸收残差也更小。RL-Zero 对 Base 很近、对 SFT 很远，吸收表现随配对改变。**应预测 initial-student/teacher 配对的可吸收性；teacher 的 SFT/RL 标签无法独立确定结果。** 这些分支的 bank 独立生成，E71 预算也不同，具体差异仍按原协议解释。
+
+[八个补充配对的谱与全阶段曲线](../../../../../runs/teacher-spectrum-followup-20261110/spectrum-expanded-v4/ancillary-complete.json)保留 RAW/CCS 和 MiMo 全部节点及原 CSV 哈希。下一步优先检查这些幅度—集中度关系能否在全层、MLP 和输出方向上复现，再结合真实训练状态上的梯度对齐判断哪些差异实际阻碍 OPD。
+

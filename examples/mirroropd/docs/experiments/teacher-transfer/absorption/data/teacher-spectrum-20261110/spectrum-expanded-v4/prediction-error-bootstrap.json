@@ -1,0 +1,401 @@
+{
+  "comparisons": [
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "+all_geometry",
+      "n_teacher": 19,
+      "MAE_difference_dex": 0.025819845959357275,
+      "conditional_teacher_bootstrap95": [
+        -0.026508357298868083,
+        0.07956165349345905
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "+kappa_spec",
+      "n_teacher": 19,
+      "MAE_difference_dex": 0.02353228286594393,
+      "conditional_teacher_bootstrap95": [
+        0.00017409942423875905,
+        0.05912599278874735
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "+norm_over_base",
+      "n_teacher": 19,
+      "MAE_difference_dex": -0.010340423018372943,
+      "conditional_teacher_bootstrap95": [
+        -0.053736693341151574,
+        0.03152123643388987
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "+rank90_fraction",
+      "n_teacher": 19,
+      "MAE_difference_dex": 0.0046325939626433105,
+      "conditional_teacher_bootstrap95": [
+        -0.01772280489790612,
+        0.02549811874253397
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "+rho_sigma",
+      "n_teacher": 19,
+      "MAE_difference_dex": 0.02625101431498546,
+      "conditional_teacher_bootstrap95": [
+        0.0018095948823491801,
+        0.06242739615885089
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "+stable_rank_fraction",
+      "n_teacher": 19,
+      "MAE_difference_dex": 0.0017827590893366514,
+      "conditional_teacher_bootstrap95": [
+        -0.029732891538830623,
+        0.030594029923040056
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "+top1pct",
+      "n_teacher": 19,
+      "MAE_difference_dex": 0.0009636041377551795,
+      "conditional_teacher_bootstrap95": [
+        -0.03603043548775879,
+        0.03676065174708798
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "+top5pct",
+      "n_teacher": 19,
+      "MAE_difference_dex": 0.003042761818766551,
+      "conditional_teacher_bootstrap95": [
+        -0.027239896857977095,
+        0.031249857844816206
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "compatible",
+      "model": "initial_KL+group",
+      "n_teacher": 19,
+      "MAE_difference_dex": 0.0,
+      "conditional_teacher_bootstrap95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "+all_geometry",
+      "n_teacher": 10,
+      "MAE_difference_dex": 0.057885202684436546,
+      "conditional_teacher_bootstrap95": [
+        -0.029424286127139036,
+        0.14804979086221132
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "+kappa_spec",
+      "n_teacher": 10,
+      "MAE_difference_dex": 0.021198613090270647,
+      "conditional_teacher_bootstrap95": [
+        0.0008285394578245508,
+        0.05835294752336516
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "+norm_over_base",
+      "n_teacher": 10,
+      "MAE_difference_dex": -0.014349646850757491,
+      "conditional_teacher_bootstrap95": [
+        -0.08218508431212165,
+        0.04921728178188885
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "+rank90_fraction",
+      "n_teacher": 10,
+      "MAE_difference_dex": 0.04004936467638602,
+      "conditional_teacher_bootstrap95": [
+        -0.016983756842474253,
+        0.12328110628210352
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "+rho_sigma",
+      "n_teacher": 10,
+      "MAE_difference_dex": 0.0288385660810355,
+      "conditional_teacher_bootstrap95": [
+        0.0004753921593498472,
+        0.08232512134789653
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "+stable_rank_fraction",
+      "n_teacher": 10,
+      "MAE_difference_dex": 0.003915636630117614,
+      "conditional_teacher_bootstrap95": [
+        -0.0406947772208729,
+        0.043261579216534785
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "+top1pct",
+      "n_teacher": 10,
+      "MAE_difference_dex": 0.011600974985507561,
+      "conditional_teacher_bootstrap95": [
+        -0.04751137046802402,
+        0.08311685031182926
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "+top5pct",
+      "n_teacher": 10,
+      "MAE_difference_dex": 0.02968789841667998,
+      "conditional_teacher_bootstrap95": [
+        -0.023291862852708976,
+        0.10212476980766225
+      ]
+    },
+    {
+      "step": 64,
+      "scope": "published_direct_parent",
+      "model": "initial_KL+group",
+      "n_teacher": 10,
+      "MAE_difference_dex": 0.0,
+      "conditional_teacher_bootstrap95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "+all_geometry",
+      "n_teacher": 17,
+      "MAE_difference_dex": 0.041174294210612895,
+      "conditional_teacher_bootstrap95": [
+        -0.0674926182500601,
+        0.14896785519867728
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "+kappa_spec",
+      "n_teacher": 17,
+      "MAE_difference_dex": 0.04353390964748133,
+      "conditional_teacher_bootstrap95": [
+        0.00718815314885415,
+        0.09697735782233846
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "+norm_over_base",
+      "n_teacher": 17,
+      "MAE_difference_dex": -0.02634823611902748,
+      "conditional_teacher_bootstrap95": [
+        -0.1085910013694607,
+        0.051861631368460843
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "+rank90_fraction",
+      "n_teacher": 17,
+      "MAE_difference_dex": -0.022294665017611893,
+      "conditional_teacher_bootstrap95": [
+        -0.08126743300974887,
+        0.028954225523695004
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "+rho_sigma",
+      "n_teacher": 17,
+      "MAE_difference_dex": 0.04392586055839405,
+      "conditional_teacher_bootstrap95": [
+        0.004506473688877085,
+        0.09848442060272239
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "+stable_rank_fraction",
+      "n_teacher": 17,
+      "MAE_difference_dex": 0.0029932814205096514,
+      "conditional_teacher_bootstrap95": [
+        -0.06407746523854876,
+        0.0634769650741605
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "+top1pct",
+      "n_teacher": 17,
+      "MAE_difference_dex": -0.00876953879696105,
+      "conditional_teacher_bootstrap95": [
+        -0.08068331640140682,
+        0.055588155262237086
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "+top5pct",
+      "n_teacher": 17,
+      "MAE_difference_dex": -0.008353986226906624,
+      "conditional_teacher_bootstrap95": [
+        -0.07694848004458672,
+        0.05279506525013571
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "compatible",
+      "model": "initial_KL+group",
+      "n_teacher": 17,
+      "MAE_difference_dex": 0.0,
+      "conditional_teacher_bootstrap95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "+all_geometry",
+      "n_teacher": 8,
+      "MAE_difference_dex": 0.40284847366356485,
+      "conditional_teacher_bootstrap95": [
+        0.07138859053368406,
+        0.9005944743263199
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "+kappa_spec",
+      "n_teacher": 8,
+      "MAE_difference_dex": 0.48823817542187387,
+      "conditional_teacher_bootstrap95": [
+        0.00031123161748501687,
+        1.4545420284358057
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "+norm_over_base",
+      "n_teacher": 8,
+      "MAE_difference_dex": 0.014461185066699425,
+      "conditional_teacher_bootstrap95": [
+        -0.1417170278841728,
+        0.15834140402743913
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "+rank90_fraction",
+      "n_teacher": 8,
+      "MAE_difference_dex": 0.05697251414490344,
+      "conditional_teacher_bootstrap95": [
+        -0.07722954570159812,
+        0.24374417367975199
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "+rho_sigma",
+      "n_teacher": 8,
+      "MAE_difference_dex": 0.3426691200117783,
+      "conditional_teacher_bootstrap95": [
+        0.0005432618953988456,
+        1.0181476735554147
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "+stable_rank_fraction",
+      "n_teacher": 8,
+      "MAE_difference_dex": 0.0531560503297612,
+      "conditional_teacher_bootstrap95": [
+        -0.036366611070966726,
+        0.1622790679377068
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "+top1pct",
+      "n_teacher": 8,
+      "MAE_difference_dex": -0.0267150065113958,
+      "conditional_teacher_bootstrap95": [
+        -0.16930962931264829,
+        0.12150374924823307
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "+top5pct",
+      "n_teacher": 8,
+      "MAE_difference_dex": 0.027334154645737532,
+      "conditional_teacher_bootstrap95": [
+        -0.1079859571983954,
+        0.19314275532780711
+      ]
+    },
+    {
+      "step": 320,
+      "scope": "published_direct_parent",
+      "model": "initial_KL+group",
+      "n_teacher": 8,
+      "MAE_difference_dex": 0.0,
+      "conditional_teacher_bootstrap95": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "protocol": "10000 paired teacher-cluster resamples of fixed CV errors, not refit or seed uncertainty"
+}

@@ -1,0 +1,115 @@
+### 4.6 从绝对风险曲线分组，到共同祖先差与方向恢复
+
+#### 曲线确实能分组，但绝对水平和学习形状对应不同分组
+
+对原 explorer 中具有完整 320 步节点的 41 条曲线，取 0:16:320 公共网格，在 log10 绝对 RKL 上插值，以欧氏距离、average linkage 做四组描述性划分。四组是便于比较的切分，并未估计天然类别数。没有 320 步数据的条件保留在 §4.5，未外推。
+
+| 绝对曲线组 | 条件数 | 代表条件 | 观察 |
+| --- | ---: | --- | --- |
+| 低残差、快速下降 | 5 | DeepScaleR、Qwen GRPO/e3、Llama CoReward-I/GT | 从较小差异降至约 10⁻³ 或更低 |
+| 中等残差、持续下降 | 3 | JustRL、MiniMath-SFT、Samsung non-thinking | 最终约 .014–.029，训练标签跨 SFT/RL |
+| 中高残差、后期变慢 | 17 | BroRL、Nemotron、Samsung thinking、Qwen 多个 non-thinking 分支 | 残差水平接近，内部仍有不同下降速度 |
+| 高残差、改善有限 | 16 | Qwen Base/Thinking-Space thinking、若干跨尺寸条件 | 起点与终点均较高，组内机制需按模型配对区分 |
+
+![绝对风险曲线的四组描述](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/absolute-curve-groups-v2.png)
+
+同样保留绝对水平，改用 complete/ward linkage，分组与上述划分的 adjusted Rand index 为 .898/1.000；先减去各曲线初始 log KL、只比较相对下降形状，分组一致性降至约 .20–.22。绝对风险的分组具有可复现结构，但很大程度反映功能距离和残差水平。曲线相近可以作为选择机制对照的依据，不能直接视为同一优化机制。
+
+[完整组成员与距离敏感性](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/curve-clusters.json)保存插值网格、全部曲线及分组。相同权重在 thinking/non-thinking 下可以进入不同组；后续几何比较均在 initial student 和输入模式内进行。
+
+#### 指标扩展与谱形状的不同部分
+
+六矩阵筛查扩展为[178 列的阶段特征表](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/curve-feature-table.csv)，包含身份字段、曲线动态与参数描述，而非 178 个独立预测变量。逐矩阵数据保存在[矩阵特征表](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/matrix-feature-table.csv)。除已有幅度、stable rank、top-1%/5%、κ、奇异值位移外，补入以下指标族：
+
+- 谱分布：熵有效秩、participation rank、能量 Gini、10/50/90/95/99% 能量秩、top-10/25/50% 能量、后半秩尾部能量和谱条件数。
+- 坐标与子空间：base thin-SVD 的 diag/off/null 能量、student/teacher 更新余弦、左右 top16 子空间重合；保留 k/v 和层位置。
+- 动态：早期与后期对数下降、末 64 步绝对下降、速度衰减、train–heldout 后期改善差和风险曲线面积。
+- 输出分布：从原始逐题数据复算 JS、TV、student/teacher 熵及已有共享支持 FKL、概率质量等字段，按域和位置窗口保存。共享支持 FKL 沿用原定义；没有新增全词表 FKL 推理。
+
+![谱指标与绝对残差、后期速度的关系](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/spectrum-dynamics-associations-v2.png)
+
+Qwen GRPO 更新的 top-1% 能量为 18.24%，Samsung 为 29.46%；Samsung 的熵有效秩比例为 .232，GRPO 为 .467，但 Samsung 的绝对风险仍更高。GRPO 的 90% 能量秩比例 .585 甚至高于 Base 分支约 .554，同时其头部能量也更集中。强头部与长尾可以共存，“低秩”需要说明是头部、熵秩还是高累计能量秩。
+
+在 teacher 两两距离上，先比较归一化奇异值距离，再比较相同模式下曲线距离。R1、Qwen thinking、Qwen non-thinking 的谱距离—绝对曲线距离相关分别为 .127、.229、.854；与相对形状距离相关为 .442、.314、.932。谱邻近关系在 non-thinking 分支明显，在另外两组较弱。原始 10/15/15 个距离条目共享 teacher；[整 teacher 标签置换](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/neighbor-associations.json)保留这一依赖关系，全部比较属于探索性分析。
+
+#### 强线索：多个 teacher 共享同一条 Base 差方向
+
+设实验 initial student 为 $B$，共同祖先 Qwen3-Base 为 $A$，teacher 为 $T$。差矩阵精确分解为：
+
+$$
+T-B=(A-B)+(T-A)=G+E_T.
+$$
+
+$G$ 是共同 Base 差，$E_T$ 是 teacher 相对共同祖先的增量。这里 $G$ 在生成 teacher 自身训练更新之外，还包含 initial student 已完成的后训练差异。对每个模块，使用同一参数坐标计算投影能量：
+
+$$
+P_G=\frac{\langle T-B,G\rangle_F^2}{\Vert T-B\Vert_F^2\Vert G\Vert_F^2}.
+$$
+
+新增 CPU FP64 全层核查覆盖九个 Qwen teacher 的全部 28 层 attention/MLP 二维权重，每个 teacher 196 个矩阵，共 1,764 个矩阵。下表把这些矩阵视作一个拼接向量，先加总能量与内积再求比值；它与六矩阵中位数不同。embedding、lm_head 和 norm 未纳入此表。
+
+| Teacher | 全层更新范数 / initial 范数 | 共同 Base 差投影能量 P_G | teacher 相对祖先增量范数 / initial 范数 |
+| --- | ---: | ---: | ---: |
+| Qwen3-Base | 9.673% | 100% | 0 |
+| Base-OPD | 9.671% | 99.992% | .0857% |
+| CoReward-I | 9.673% | 99.997% | .0565% |
+| CoReward-II | 9.673% | 99.997% | .0562% |
+| Base-GT-Math | 9.673% | 99.996% | .0610% |
+| Thinking-Space SFT | 9.565% | 97.537% | 1.518% |
+| Samsung SFT | .740% | .00334% | 9.697% |
+| Qwen GRPO-KL | .0537% | 约 8×10⁻⁷% | 9.673% |
+| e3 | .0508% | 约 5×10⁻⁶% | 9.673% |
+
+![共同差方向的六矩阵与全层核查](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-geometry-v2.png)
+
+几个 Base 分支的更新余弦约 .9999，Thinking-Space 与共同方向的余弦约 .986；不同后训练路径相对实验 initial student 的几何，可以由共同 $G$ 主导。这样形成的组包含不同训练方法。Qwen GRPO/e3 与 Samsung 则主要沿其他方向变化。数据来源影响 $E_T$，而 initial student 与共同祖先的距离决定 $G$ 的大小；二者需要分别进入吸收分析。
+
+全层结论与六矩阵观察一致，支持将“共同 Base 差主导”作为一个有参数依据的配对类别。原[全层逐矩阵数据](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-matrices.csv)、[模块与全体汇总](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/common-ancestor-summary.csv)保留交叉项与距离恒等式。这里增加的是全层范数与方向投影，精确谱分解仍为六矩阵范围。
+
+#### Student 实际学到了哪些 teacher 奇异方向
+
+新增 teacher 更新自身的 SVD 方向实验。对 $\Delta_T=T-B=\sum_i\sigma_i u_i v_i^\top$，计算 student 更新 $\Delta_S=S_t-B$ 在每个配对方向上的系数 $a_i=u_i^\top\Delta_Sv_i$。一个 band 的有符号幅度恢复定义为：
+
+$$
+g_{\mathcal B}=\frac{\sum_{i\in\mathcal B}\sigma_i a_i}{\sum_{i\in\mathcal B}\sigma_i^2}.
+$$
+
+$g=1$ 表示恢复该 band 的投影幅度，$g=0$ 表示在这些方向上没有净投影。另保存逐 band 残差、student 在 teacher 配对方向外的能量，以及等范数各向同性更新的精确期望投影。teacher 参数方向与 §4.1 的 base thin-SVD diag/off/null 使用不同框架。
+
+覆盖 27 个不同 initial/teacher 配对、30 个输入条件，含 RAW/CCS 和 MiMo，保存 180 个条件—矩阵结果。MiMo 无可用 student 导出的分支只提供 teacher 分解。重复输入模式的 student checkpoint 分别测量，没有把同一 teacher 的 thinking student 用作 non-thinking student。下表均为 320 步、六矩阵中位数。
+
+| 配对 | top-1% teacher 能量 | top-1% 幅度恢复 g | 配对方向内剩余能量 / 原能量 |
+| --- | ---: | ---: | ---: |
+| Qwen GRPO | 18.24% | .785 | .185 |
+| Qwen e3 | 20.42% | .591 | .243 |
+| Samsung SFT thinking | 29.46% | .0607 | .885 |
+| Thinking-Space thinking | 9.49% | .00111 | .9978 |
+| Qwen Base thinking | 9.71% | .00180 | .9964 |
+| DeepScaleR | 28.41% | .488 | .293 |
+| JustRL | 21.22% | .128 | .763 |
+| MiniMath-SFT | 8.12% | .0244 | .952 |
+
+![Teacher 各谱 band 的实际幅度恢复](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-amplitude.png)
+
+多数条件优先恢复头部，但恢复程度相差数个数量级。Samsung 比 GRPO 更集中，却没有更充分地学到其头部方向。JustRL 的参数头部恢复也低于 BroRL，功能风险仍更低；参数恢复量与函数吸收量需要共同解释。当前主假设因此细化为：**teacher 差异是否位于 initial student 上易响应、与训练梯度同向且跨状态一致的方向，决定集中谱能否转化为持续吸收。** 已有 JVP 证明强方向响应先于 OPD，但实际训练梯度与这些方向的关系仍缺测量。
+
+[逐 band 数据](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-band-summary.csv)和[teacher 框架内外的能量](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/teacher-frame-summary.csv)可复算曲线；每个矩阵通过完整参数距离的能量重构检查。
+
+#### 后期变化与输出分布提供两条额外线索
+
+256→320 的逐题配对核查中，R1 的 JustRL/MiniMath/BroRL/Nemotron 均有 128/128 道留出题的 KL 改善；Thinking-Space thinking 为 100/128，non-thinking 为 84/128。Thinking-Space 的绝对下降分别为 .002010/.000660，题目配对 95% 区间仍为正。因而 320 步附近更准确的描述是后期变慢；§3 的长预算 1280 步结果才提供更接近平台的证据。BroRL 该窗口绝对下降 .004473，大于 JustRL 的 .001652，但终点残差也更高。
+
+![末 64 步绝对 KL 改善与逐题区间](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/late-absolute-improvement.png)
+
+[逐题配对结果](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/late-question-paired.csv)同时记录改善题比例和净下降 / 逐题绝对变化总量。区间为 2,000 次题目 bootstrap，表示固定一次训练内的题目差异。
+
+输出侧，Qwen thinking 的 GRPO/e3 终点 JS 约 .000306/.000366，Thinking-Space 与 Qwen Base 仍为 .0485/.0569，TV 也保留明显差距。高残差同时体现在概率分布距离中，并非 RKL 单个读出独有。终点 teacher 熵减 student 熵：GRPO 约 −.00065，e3 约 .00829，Samsung .0774，Thinking-Space .1831，Base .2905 nats/token。残余的熵差是值得控制的新候选因素；e3 的 teacher 熵也高于初始 student，却能较充分恢复，熵差本身仍不足以决定吸收。
+
+![输出熵差与 JS 的初始及终点对照](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/output-entropy-and-js-v2.png)
+
+这张输出诊断图按题内实际有效 token 平均，再按题平均，与主风险曲线的固定 H1024 分母分开。完整[输出指标表](../../../../../runs/teacher-spectrum-followup-20261110/curve-spectrum-v1/band-analysis-v3/output-diagnostics.csv)保留 domain/window/step/metric 身份。
+
+#### 下一项有判别力的实验
+
+优先做三类控制：相同 Thinking-Space teacher 分别从 Qwen3-Base 与当前后训练 initial student 开始、保持 teacher-prefix 与公共状态 bank；在 calibration 上单独校准温度，比较熵匹配前后的 RKL/JS 与 band 残差；在真实训练 rollout 上测共享差 G、teacher 自身增量 E_T 和已恢复/未恢复 band 的单位范数响应与投影梯度。它们分别检验共同祖先距离、输出熵差与优化对齐。全层 SVD 则选择共同差主导组、Samsung 和小更新 RL 的代表，扩展到 attention/MLP，并追踪平台前后的同一谱框架。现阶段继续测量这几项，比给高度相关的秩指标增加更多变体更有判别力。
+

@@ -1,0 +1,38 @@
+{
+  "status": "review_complete",
+  "tick": 10,
+  "completed_at": 1794278418.2989385,
+  "conclusion_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/2026-11-09-\u6559\u5e08\u53d8\u5316\u4e0eOPD\u5438\u6536\u7684\u8c31\u5b9e\u9a8c\u8bbe\u8ba1.md",
+  "conclusion_sha256": "07292cc147128f33012f199cec1b69a6ca0f6992fec57fda5a17e36242afedfd",
+  "basis": [
+    "390/390 frozen queue",
+    "1176 full-layer matrices",
+    "native fixed-H risk and per-question/domain/band analysis",
+    "same-coordinate intervention reload gates",
+    "top1/5, missing restore, teacher/student deletions and random controls",
+    "base/early/final fixed-direction JVP and exact KL slopes",
+    "Math/AMC paired generation, answer-format audit, stage and prompt intervention",
+    "cutoff and occupancy verification"
+  ],
+  "remaining_research": [
+    "actual training sampling gradients",
+    "multiple Gaussian deletion task seeds",
+    "larger independent task panel",
+    "near-degenerate block and Fisher-weighted head followup"
+  ],
+  "gpu_restored": "All physical GPUs0-7 broker occupying; guardians actual PID/startticks verified at tick10",
+  "stop_preserved": true,
+  "evidence_sha256": {
+    "hourly-review-010.json": "da7a41ea321eaed532be70710e35f8ddc00621c5cddcf2c1010e5933ba528c3e",
+    "intervention-analysis-010.json": "6fcb697051e5333b84631d957d56ad944da7a6d8c5aacd5e058a5b73b5b5625b",
+    "final-scientific-data-010.json": "e2d96c1cf7b06471ba5f381177a50bb17fd621431a58fd8353d691ad44671740",
+    "log-and-resource-inspection-010.json": "60675e139108acd1ac90198141da2dd2cbbb6952997717d40d21cab2e49037bc",
+    "failure-classification-010.json": "a31868d1107951c2e50f02f20d95a61dd16f82f9a4c6b78e0bb35fddb522144c",
+    "hourly-interpretation-010.json": "aaf0ce736aea212b5b227d8a12483c130755fbfa321048a07e689232000f74e1",
+    "docs-check-010.log": "23e71ac4d56596e751b30afbe4c1ddf43825f0c5062ad724a50858a044a57991",
+    "diff-check-010.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "STOP": "ae18094a2e334eeadf6f2ae240d61f35c836c10a8485a0508a30966967768945",
+    "deadline-fired.json": "ae18094a2e334eeadf6f2ae240d61f35c836c10a8485a0508a30966967768945"
+  },
+  "git_commit": "No commit requested; local evidence and document hashes recorded."
+}

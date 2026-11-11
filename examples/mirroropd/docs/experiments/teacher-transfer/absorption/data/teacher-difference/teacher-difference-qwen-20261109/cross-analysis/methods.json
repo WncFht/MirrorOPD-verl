@@ -1,0 +1,7 @@
+{
+  "replicates": 4000,
+  "unit": "original equal-size groups",
+  "interval": "signed basic; paired percentile for remaining KL",
+  "qwen_source": "all fixed train-panel groups; future status not inferred from stage number",
+  "frozen": "Native KL is reference only; frozen q is not a current-loss gradient rate"
+}

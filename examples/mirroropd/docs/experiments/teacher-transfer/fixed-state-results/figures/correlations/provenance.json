@@ -1,0 +1,13 @@
+{
+  "source": "examples/mirroropd/docs/experiments/teacher-transfer/figures/fixed-state-clean-20261107/endpoints.csv",
+  "sha256": "5e413d72583a8d65724f212e3ddd336417c1baf04d2758279870b0b2ad8c4050",
+  "runs": 47,
+  "figures": 42,
+  "final_risk_correlation_space": "log10 RKL; nonpositive risk rejected, no epsilon floor",
+  "normalization": "sum KL / (prompts * 1024)",
+  "selection": "All band=all endpoint rows in clean diagnostics; one endpoint per run; no extra filtering",
+  "budgets": [
+    64,
+    320
+  ]
+}

@@ -1,0 +1,626 @@
+[
+  {
+    "row_id": "math:101",
+    "domain": "math",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Let $x, y, z$ be positive real numbers whose sum is 2012. Find the maximum value of:\n\\[ \\frac{(x^2 + y^2 + z^2)(x^3 + y^3 + z^3)}{x^4 + y^4 + z^4} \\]"
+      }
+    ],
+    "source_index": "DAPO-1535",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:103",
+    "domain": "math",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Let triangle $ABC$ have side lengths $AB = 13$, $BC = 14$, $AC = 15$. Let $I$ be the incenter of $\\triangle ABC$. The circle centered at $A$ with radius $AI$ intersects the circumcircle of $\\triangle ABC$ at points $H$ and $J$. Let $L$ be a point that lies on both the incircle of $\\triangle ABC$ and line $HJ$. If the minimal possible value of $AL$ is $\\sqrt{n}$, where $n \\in \\mathbb{Z}$, find $n$."
+      }
+    ],
+    "source_index": "DAPO-4316",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:108",
+    "domain": "math",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "A $12$-sided polygon is inscribed in a circle with radius $r$. The polygon has six sides of length $6\\sqrt3$ that alternate with six sides of length $2$. Find $r^2$."
+      }
+    ],
+    "source_index": "DAPO-8441",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:11",
+    "domain": "math",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "$\\cos ^{2} 10^{\\circ}+\\cos ^{2} 50^{\\circ}-\\sin 40^{\\circ} \\sin 80^{\\circ}=$The answer is in the form \\frac{m}{n}, where gcd(m, n) = 1. Please provide the value of m + n."
+      }
+    ],
+    "source_index": "DAPO-13104",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:112",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "A lattice point in the plane is a point whose coordinates are both integers. Given a set of 100 distinct lattice points in the plane, find the smallest number of line segments $\\overline{AB}$ for which $A$ and $B$ are distinct lattice points in this set, and the midpoint of $\\overline{AB}$ is also a lattice point (not necessarily in the set)."
+      }
+    ],
+    "source_index": "DAPO-2713",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:116",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "A convex polyhedron $Q$ has vertices $V_1, V_2, \\ldots, V_n$, and 100 edges. The polyhedron is cut by planes $P_1, P_2, \\ldots, P_n$ in such a way that plane $P_k$ cuts only those edges that meet at vertex $V_k$. In addition, no two planes intersect inside or on $Q$. The cuts produce $n$ pyramids and a new polyhedron $R$. Find the number of edges of the polyhedron $R$."
+      }
+    ],
+    "source_index": "DAPO-16681",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:118",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Let $\\sigma_k(n)$ be the sum of the $k^{th}$ powers of the divisors of $n$. For all $k \\ge 2$ and all $n \\ge 3$, we have that \\[\\frac{\\sigma_k(n)}{n^{k+2}} (2020n + 2019)^2 > m.\\] Find the largest possible value of $m$."
+      }
+    ],
+    "source_index": "DAPO-1130",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:121",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "A sequence of real numbers $x_0, x_1, x_2, \\ldots$ is defined as follows: $x_0 = 1989$ and for each $n \\geq 1$,\n\\[ x_n = -\\frac{1989}{n} \\sum^{n-1}_{k=0} x_k. \\]\nCalculate the value of $\\sum^{1989}_{n=0} 2^n x_n.$"
+      }
+    ],
+    "source_index": "DAPO-3835",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:128",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "For how many primes $p$, does there exist an integer $m$ such that $m^3+3m-2 \\equiv 0 \\pmod{p}$ and $m^2+4m+5 \\equiv 0 \\pmod{p}$? Write your answer as an integer."
+      }
+    ],
+    "source_index": "DAPO-16466",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:130",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "How many ordered pairs of positive integers $(x, y)$ satisfy $yx^y = y^{2017}$?"
+      }
+    ],
+    "source_index": "DAPO-7829",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:132",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "In $\\triangle ABC$ points $D$ and $E$ lie on $\\overline{BC}$ and $\\overline{AC}$, respectively.  If $\\overline{AD}$ and $\\overline{BE}$ intersect at $T$ so that $AT/DT=3$ and $BT/ET=4$, what is $CD/BD$?\n\n[asy]\npair A,B,C,D,I,T;\nA=(0,0);\nB=(6,8);\nC=(11,0);\nD=(9.33,2.66);\nI=(7.5,0);\nT=(6.5,2);\nlabel(\"$T$\",T,NW);\nlabel(\"$D$\",D,NE);\nlabel(\"$E$\",I,S);\nlabel(\"$A$\",A,S);\nlabel(\"$C$\",C,S);\nlabel(\"$B$\",B,N);\ndraw(A--B--C--cycle,linewidth(0.7));\ndraw(A--D,linewidth(0.7));\ndraw(B--I,linewidth(0.7));\n[/asy]The answer is in the form \frac{m}{n}, where gcd(m, n) = 1. Please provide the value of m + n."
+      }
+    ],
+    "source_index": "DAPO-7083",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:142",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "There are 1000 rooms in a row along a long corridor. Initially, the first room contains 1000 people, and the remaining rooms are empty. Each minute, the following happens: for each room containing more than one person, someone in that room decides it is too crowded and moves to the next room. All these movements are simultaneous (so nobody moves more than once within a minute). After one hour, how many different rooms will have people in them?"
+      }
+    ],
+    "source_index": "DAPO-5306",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:149",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "If $78$ is divided into three parts which are proportional to $1, \\frac{1}{3}, \\frac{1}{6}$, find the value of the middle part in its simplest fractional form. The original answer is in \\frac{k}{m} format, please give the value of k + m."
+      }
+    ],
+    "source_index": "DAPO-17253",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:150",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Two circles have radii $2$ and $3$, and the distance between their centers is $10$. Let $E$ be the intersection of their two common external tangents, and $I$ be the intersection of their two common internal tangents. Compute $EI$.\n\nA common external tangent is a tangent line to two circles such that the circles are on the same side of the line, while a common internal tangent is a tangent line to two circles such that the circles are on opposite sides of the line."
+      }
+    ],
+    "source_index": "DAPO-749",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:152",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Find the largest integer $n$ satisfying the following conditions:\n(i) $n^2$ can be expressed as the difference of two consecutive cubes;\n(ii) $2n + 79$ is a perfect square."
+      }
+    ],
+    "source_index": "DAPO-11213",
+    "original_split": "train"
+  },
+  {
+    "row_id": "math:155",
+    "domain": "math",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Let $a$ and $b$ be the roots of $x^2 - 4x + 5 = 0.$  Compute\n\\[a^3 + a^4 b^2 + a^2 b^4 + b^3.\\]"
+      }
+    ],
+    "source_index": "DAPO-10614",
+    "original_split": "train"
+  },
+  {
+    "row_id": "code:512",
+    "domain": "code",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: # Fix the Bugs (Syntax) - My First Kata\n\n## Overview\n\nHello, this is my first Kata so forgive me if it is of poor quality.\n\nIn this Kata you should fix/create a program that ```return```s the following values:\n\n - ```false/False``` if either a or b (or both) are not numbers\n - ```a % b``` plus ```b % a``` if both arguments are numbers\n\nYou may assume the following:\n\n1. If ```a``` and ```b``` are both numbers, neither of ```a``` or ```b``` will be ```0```.\n\n## Language-Specific Instructions\n\n### Javascript and PHP\n\nIn this Kata you should try to fix all the syntax errors found in the code.\n\nOnce you think all the bugs are fixed run the code to see if it works.  A correct solution should return the values specified in the overview.\n\n**Extension: Once you have fixed all the syntax errors present in the code (basic requirement), you may attempt to optimise the code or try a different approach by coding it from scratch.**\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-14099",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:523",
+    "domain": "code",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Example\n\nInput\n\n3\nNNN\nNNN\nNNN\n\n\nOutput\n\nTaro\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-24806",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:525",
+    "domain": "code",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Chester has been bullied enough all his life and now he seeks revenge. His first victim being Mike, obviously! He found this very interesting question from somewhere but he doesn't have the answers to it. Now without the answers he cannot know if what Mike answered is right or wrong. The question consists of two numbers, a and b, and the answer to it is the sum of digits of a^b.\n\nHelp him find the answers so that he can successfully get his revenge!\n\nInput: First line contains t, the number of test cases. After that t lines follow each containing a pair of space separated integers i.e. a and b.\n\nOutput: For each test case, you need to print the sum of digits in a^b.\n\nConstraints:\n\n1 ≤ t ≤ 20000\n\n1 ≤ a ≤ 100\n\n1 ≤ b ≤ 1000\n\nProblem Setter: Chintan Shah\n\nSAMPLE INPUT\n5\n2 10\n3 3\n5 2\n2 7\n100 1000\n\nSAMPLE OUTPUT\n7\n9\n7\n11\n1\n\nExplanation\n\nConsider the first test case.\n2^10 = 1024\n\nNow, 1 + 0 + 2 + 4 = 7\nSo, output for this test case is 7.\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-24930",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:527",
+    "domain": "code",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Given a month with arbitrary number of days, N, and an integer K representing the day with which it starts. ie- 1 for Monday, 2 for Tuesday and so on.  Find the number of times each day (Monday, Tuesday, ..., Sunday) appears in the month. \n \nExample 1:\nInput:\nN = 31 , K = 1\nOutput:\n5 5 5 4 4 4 4 \nExplanation: The month starts from Monday.\nThere will be 4 days of each day\n(Sunday , Monday , etc) upto 28th of the\nMonth. Then, The successive 3 days will\nhave a extra day each. So, Monday, Tuesday\nand Wednesday will have 5 days while the\nothers will have 4 days each.\nExample 2:\nInput:\nN = 28, K = 5\nOutput:\n5 5 5 4 4 4 4 \nExplanation: Each day of the month will\nhave 4 days each and thus the Output.\n \nYour Task:\nYou don't need to read input or print anything. Your task is to complete the function daysOfWeeks() which takes Integers N  and K as input and return a list of 7 integers indicating number of days in each day of the week.\n \nExpected Time Complexity: O(1)\nExpected Auxiliary Space: O(1)\n \nConstraints:\n1 <= N <= 10^{5}\n1 <= K <= 7\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-23634",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:529",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Ã¢â¬â¹Given a number x, your task is to find if this number is Deficient number or not. A number x is said to be Deficient Number if sum of all the divisors of the number denoted by divisorsSum(x) is less than twice the value of the number x. And the difference between these two values is called the deficiency.\nMathematically, if below condition holds the number is said to be Deficient:\ndivisorsSum(x) < 2*x\ndeficiency = (2*x) - divisorsSum(x)\nExample 1:\nInput: x = 21\nOutput: YES \nExplanation: Divisors are 1, 3, 7 and\n21.Sum of divisors is 32. \nThis sum is less than 2*21 or 42.\nExample 2:\nInput: x = 12\nOutput: NO\nExplanation: Divisors are 1, 2, 3, 4,\n6 and 12.Sum of divisors is 28.\nThis sum is not less than 2*12 or 24.\nYour Task:  \nYou dont need to read input or print anything. Complete the function isDeficient() which takes x as input parameter and returns YES if the number is Deficient otherwise returns NO.\nExpected Time Complexity: O(sqrt(n))\nExpected Auxiliary Space: O(1)\nConstraints:\n1<= x <=10000000\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-1805",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:540",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Aarav has just graduated from the university. Now he is going to travel along his country. More precisely: there are N cities with integer coordinates. His plan is to travel between each pair of the cities. \n\nThe distance between city A with coordinates (x1, y1) and city B with coordinates (x2, y2) is equal to |x1 - x2| + |y1 - y2|.\n\nNow he is interested in the total distance between all the pairs of the cities.\n\nInput\nThe first line contains one integer N.\nThe following N lines contain two separated integers (xi, yi) each - coordinates of the corresponding city.\n\nOutput\nOutput one integer - the answer to the question. \nAs this number can be very big - output it modulo 10^9 + 7.\n\nConstraints\n1 ≤ N ≤ 200 000\n|xi|, |yi| ≤ 10^9\n\nSAMPLE INPUT\n4\n-1 5\n1 6\n3 5\n2 3\n\nSAMPLE OUTPUT\n22\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-19799",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:542",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Given an array A of integers, we must modify the array in the following way: we choose an i and replace A[i] with -A[i], and we repeat this process K times in total.  (We may choose the same index i multiple times.)\nReturn the largest possible sum of the array after modifying it in this way.\n \nExample 1:\nInput: A = [4,2,3], K = 1\nOutput: 5\nExplanation: Choose indices (1,) and A becomes [4,-2,3].\n\n\nExample 2:\nInput: A = [3,-1,0,2], K = 3\nOutput: 6\nExplanation: Choose indices (1, 2, 2) and A becomes [3,1,0,2].\n\n\nExample 3:\nInput: A = [2,-3,-1,5,-4], K = 2\nOutput: 13\nExplanation: Choose indices (1, 4) and A becomes [2,3,-1,5,4].\n\n\n\n \nNote:\n\n1 <= A.length <= 10000\n1 <= K <= 10000\n-100 <= A[i] <= 100\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-25106",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:543",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Something happened in Uzhlyandia again... There are riots on the streets... Famous Uzhlyandian superheroes Shean the Sheep and Stas the Giraffe were called in order to save the situation. Upon the arriving, they found that citizens are worried about maximum values of the Main Uzhlyandian Function f, which is defined as follows:\n\n<image>\n\nIn the above formula, 1 ≤ l < r ≤ n must hold, where n is the size of the Main Uzhlyandian Array a, and |x| means absolute value of x. But the heroes skipped their math lessons in school, so they asked you for help. Help them calculate the maximum value of f among all possible values of l and r for the given array a.\n\nInput\n\nThe first line contains single integer n (2 ≤ n ≤ 105) — the size of the array a.\n\nThe second line contains n integers a1, a2, ..., an (-109 ≤ ai ≤ 109) — the array elements.\n\nOutput\n\nPrint the only integer — the maximum value of f.\n\nExamples\n\nInput\n\n5\n1 4 2 3 1\n\n\nOutput\n\n3\n\nInput\n\n4\n1 5 4 7\n\n\nOutput\n\n6\n\nNote\n\nIn the first sample case, the optimal value of f is reached on intervals [1, 2] and [2, 5].\n\nIn the second case maximal value of f is reachable only on the whole array.\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-20990",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:549",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Correct this code so that it takes one argument, `x`, and returns \"`x` is more than zero\" if `x` is positive (and nonzero), and otherwise, returns \"`x` is equal to or less than zero.\" In both cases, replace `x` with the actual value of `x`.\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-14569",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:550",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Given a sorted array having N elements, find the indices of the first and last occurrences of an element X in the given array.\nNote: If the number X is not found in the array, return '-1' as an array.\nExample 1:\nInput:\nN = 4 , X = 3\narr[] = { 1, 3, 3, 4 }\nOutput:\n1 2\nExplanation:\nFor the above array, first occurence\nof X = 3 is at index = 1 and last\noccurence is at index = 2.\nExample 2:\nInput:\nN = 4, X = 5\narr[] = { 1, 2, 3, 4 }\nOutput:\n-1\nExplanation: \nAs 5 is not present in the array,\nso the answer is -1.\nYour Task:\nYou don't need to read input or print anything. Complete the function firstAndLast() that takes the array arr, its size N and the value X as input parameters and returns a list of integers containing the indices of first and last occurence of X.\nExpected Time Complexity: O(log(N))\nExpected Auxiliary Space: O(1)\nConstraints: \n1 <= N <= 10^5 \n0 <= arr[i], X <= 10^{9}\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-11795",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:553",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Given two integer numbers, F and S. In binary form of the numbers, for every i^{th }set bit in F, negate the i ^{th }bit in S.\nExample 1:\nInput:\nF = 2 , S = 5\nOutput:\n7\nExplanation:\n2 is represented as 10 in binary and\n5 is represented as 101. Hence negating\nthe 2nd bit of 5 from right, thus the\nnew number becomes 7 i.e. 111. \nExample 2:\nInput:\nF = 1 , S = 3\nOutput:\n2\nExplanation:\n1-1 and 3-11 in binary, thus negating\n1st bit of 3 from right we get 10 i.e. 2. \n \nYour Task:\nYou don't need to read input or print anything. Your task is to complete the function negaBit() which takes 2 Integers F and S as input and returns the modified S.\nExpected Time Complexity: O(1)\nExpected Auxiliary Space: O(1)\n \nConstraints:\n1 <= F,S <= 10^{6}\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-11036",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:559",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Petya loves lucky numbers. Everybody knows that lucky numbers are positive integers whose decimal representation contains only the lucky digits 4 and 7. For example, numbers 47, 744, 4 are lucky and 5, 17, 467 are not.\n\nPetya calls a number almost lucky if it could be evenly divided by some lucky number. Help him find out if the given number n is almost lucky.\n\nInput\n\nThe single line contains an integer n (1 ≤ n ≤ 1000) — the number that needs to be checked.\n\nOutput\n\nIn the only line print \"YES\" (without the quotes), if number n is almost lucky. Otherwise, print \"NO\" (without the quotes).\n\nExamples\n\nInput\n\n47\n\n\nOutput\n\nYES\n\n\nInput\n\n16\n\n\nOutput\n\nYES\n\n\nInput\n\n78\n\n\nOutput\n\nNO\n\nNote\n\nNote that all lucky numbers are almost lucky as any number is evenly divisible by itself.\n\nIn the first sample 47 is a lucky number. In the second sample 16 is divisible by 4.\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-8282",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:565",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Read problems statements [Bengali] , [Mandarin chinese] , [Russian] and [Vietnamese] as well.\n\nFor her birthday, Rima got an integer sequence $A_{1}, A_{2}, \\dots, A_{N}$. Each element of this sequence is either 1 or 2.\n\nLet's call an integer $s$ ($1 ≤ s ≤ 2N$) a *summary integer* if there is a contiguous subsequence of $A$ such that the sum of its elements is equal to $s$.\n\nRima wants to count all the summary integers. Can you help her?\n\n------  Input ------\nThe first line of the input contains a single integer $T$ denoting the number of test cases. The description of $T$ test cases follows.\nThe first line of each test case contains a single integer $N$.\nThe second line contains $N$ space-separated integers $A_{1}, A_{2}, \\dots, A_{N}$.\n\n------  Output ------\nFor each test case, print a single line containing one integer — the number of summary integers.\n\n------  Constraints  ------\n$1 ≤ T ≤ 5$\n$1 ≤ N ≤ 2 \\cdot 10^{6}$\n$1 ≤ A_{i} ≤ 2$ for each valid $i$\n\n----- Sample Input 1 ------ \n1\n3\n2 1 2\n----- Sample Output 1 ------ \n4\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-11821",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:566",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: You are given n points on a plane. \n\nPlease find the minimum sum of areas of two axis-aligned rectangles, such that each point is contained in at least one of these rectangles.\n\nNote that the chosen rectangles can be degenerate. Rectangle contains all the points that lie inside it or on its boundary.\n\nInput\n\nThe first line contains one integer t (1 ≤ t ≤ 2 ⋅ 10^5) — the number of test cases.\n\nThe first line of each test case contains a single integer n (1 ≤ n ≤ 2 ⋅ 10^5) — the number of points.\n\nThe following n lines contain the coordinates of the points x_i and y_i (0 ≤ x_i, y_i ≤ 10^9). It is guaranteed that the points are distinct.\n\nIt is guaranteed that the sum of values n over all test cases does not exceed 2⋅10^5.\n\nOutput\n\nFor each test case print one integer — the minimum sum of areas.\n\nExample\n\nInput\n\n\n3\n2\n9 1\n1 6\n2\n8 10\n0 7\n4\n0 0\n1 1\n9 9\n10 10\n\n\nOutput\n\n\n0\n0\n2\n\nNote\n\nIn the first two test cases the answer consists of 2 degenerate rectangles. In the third test case one of the possible answers consists of two rectangles 1 × 1 with bottom left corners (0,0) and (9,9).\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-1717",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:569",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Given a sorted circular linked list, the task is to insert a new node in this circular list so that it remains a sorted circular linked list.\nExample 1:\nInput:\nLinkedList = 1->2->4\n(the first and last node is connected,\ni.e. 4 --> 1)\ndata = 2\nOutput: 1 2 2 4\nExample 2:\nInput:\nLinkedList = 1->4->7->9\n(the first and last node is connected,\ni.e. 9 --> 1)\ndata = 5\nOutput: 1 4 5 7 9\nYour Task:\nThe task is to complete the function sortedInsert() which should insert the new node into the given circular linked list and return the head of the linkedlist.\nExpected Time Complexity: O(N)\nExpected Auxiliary Space: O(1)\nConstraints:\n0 <= N <= 10^{5}\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-7563",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "code:571",
+    "domain": "code",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.\n\nQuestion: Not so long ago as a result of combat operations the main Berland place of interest — the magic clock — was damaged. The cannon's balls made several holes in the clock, that's why the residents are concerned about the repair. The magic clock can be represented as an infinite Cartesian plane, where the origin corresponds to the clock center. The clock was painted two colors as is shown in the picture:\n\n<image>\n\nThe picture shows only the central part of the clock. This coloring naturally extends to infinity.\n\nThe balls can be taken to be points on the plane. Your task is to find the color of the area, damaged by the given ball.\n\nAll the points located on the border of one of the areas have to be considered painted black.\n\nInput\n\nThe first and single line contains two integers x and y — the coordinates of the hole made in the clock by the ball. Each of the numbers x and y has an absolute value that does not exceed 1000.\n\nOutput\n\nFind the required color.\n\nAll the points between which and the origin of coordinates the distance is integral-value are painted black.\n\nExamples\n\nInput\n\n-2 1\n\n\nOutput\n\nwhite\n\n\nInput\n\n2 1\n\n\nOutput\n\nblack\n\n\nInput\n\n4 3\n\n\nOutput\n\nblack\n\nRead the inputs from stdin, solve the problem, and write the answer to stdout. Enclose your code within delimiters as follows.\n```python\n# YOUR CODE HERE\n```"
+      }
+    ],
+    "source_index": "taco-24119",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:577",
+    "domain": "if",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Write a casual blog post about similarities across animal species. Highlight at least 5 sections in your answer by starting and ending with \"*\", like: *highlighted text section*."
+      }
+    ],
+    "source_index": "1646:0:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:581",
+    "domain": "if",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Can you tell me why there are oval race tracks in the desert? Please rewrite the answer to make it more concise and include the word \"desert\" in the answer. Make sure the answer contains exactly 3 bullet points in markdown format."
+      }
+    ],
+    "source_index": "3025:8:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:586",
+    "domain": "if",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Write a rap about an abyss in exactly 4 paragraphs. Separate paragraphs with the markdown divider: ***."
+      }
+    ],
+    "source_index": "2467:6:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:587",
+    "domain": "if",
+    "split": "calibration",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Can you expand the following sentences: \"I have never seen a localized version of the software. I have seen an international version.\"\n\nI would like for there to be exactly 3 paragraphs each separated by three asterisk symbols (***) and for the word humming to be used at least once."
+      }
+    ],
+    "source_index": "2386:17:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:595",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Write an itinerary for a trip to a grocery store in Lima to buy some local goods. Make the itinerary funny, write it in all capital letters and include the keywords 'DISGUSTING', 'DELICIOUS', 'BAD', and 'GOOD'."
+      }
+    ],
+    "source_index": "1779:17:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:598",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Make the sentence “The bus arrived at the station” sound more interesting. Avoid using the word “station”."
+      }
+    ],
+    "source_index": "1629:13:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:602",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Make a rubric for a home theater installation targeting moms. Your answer must contain exactly 4 bullet points. Use markdown bullet points such as:\n* This is point 1"
+      }
+    ],
+    "source_index": "1634:16:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:603",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "I AM EASY TO GET INTO BUT HARD TO GET OUT OF. I AM INVITING AND EXCITING BUT MANY PEOPLE ARE AFRAID OF ME. I AM WHERE YOU NEED TO BE BUT YOU MAY NOT WANT TO STAY THERE. I MAY BE A MYSTERY BUT I AM SURE YOU CAN GUESS ME. WHAT AM I? Please do not use any commas in your response."
+      }
+    ],
+    "source_index": "2245:15:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:608",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Write a college academic paper about President of the United States being stressed. Make sure not to include negative words such as 'sad', 'crazy', 'stress', etc., in the response. Also, make sure to include at least 15 placeholders represented by square brackets, such as [address]."
+      }
+    ],
+    "source_index": "2471:17:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:620",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Write a funny post for teenagers about a restaurant called \"Buena Onda\" which serves Argentinian food. Highlight at least three sections of your response in markdown such as *highlighted section*. Mention \"Argentinian\" in the post."
+      }
+    ],
+    "source_index": "1237:4:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:621",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Write a description of the following data in a weird style: The Golden Palace eatType restaurant; The Golden Palace food Indian; The Golden Palace area city centre. Use markdown to highlight at least 3 sections in your answer."
+      }
+    ],
+    "source_index": "2759:15:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:622",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Write a story for kids about how a person learns to ride a bike. Do not include 'can' and 'ride' in your response."
+      }
+    ],
+    "source_index": "1580:8:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:627",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Please provide a short, funny list of ways to pass time at work. End with the exact phrase Is there anything else I can help with?"
+      }
+    ],
+    "source_index": "3001:7:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:631",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Write a riddle about a mom laying out on a beach in Humboldt without using any commas."
+      }
+    ],
+    "source_index": "2324:0:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:636",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "I work for a software development company named \"grid\", and they want a catchy tweet. Can you write one that includes the name of the company at least five times?"
+      }
+    ],
+    "source_index": "1857:2:en",
+    "original_split": "heldout"
+  },
+  {
+    "row_id": "if:639",
+    "domain": "if",
+    "split": "heldout",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Are the weather conditions in the Arctic very cold most of the year? Do not say 'yes' or 'no' throughout your entire response."
+      }
+    ],
+    "source_index": "2028:0:en",
+    "original_split": "heldout"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "device": "cpu",
+  "arithmetic": "float64",
+  "layers": [
+    0,
+    13,
+    27
+  ],
+  "modules": [
+    "self_attn.k_proj"
+  ],
+  "ranks": [
+    8,
+    16,
+    64
+  ],
+  "seed": 20261110,
+  "torch_version": "2.11.0+cu129",
+  "source_sha256": "1f17276bf227e88fddd2a5d0dd566ee0457643c4f7a79b84d3ece72aa30eafb3",
+  "semantics": "earliest available is not subspace formation; stored tensors promoted before subtraction"
+}

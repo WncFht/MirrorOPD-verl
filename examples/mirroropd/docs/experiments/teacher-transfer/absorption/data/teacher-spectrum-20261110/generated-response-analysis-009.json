@@ -1,0 +1,3410 @@
+{
+  "conditions": {
+    "sft-base": {
+      "all": {
+        "final-learned": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 679.3470851482837,
+          "actual_displacement_mean_slope": -0.0013371270127565007,
+          "net_retention": 0.5080640407216696,
+          "improving_fraction": 0.8120567375886525,
+          "mean_request_cosine": 0.40171315592859164
+        },
+        "final-diag": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 3.263120984397946,
+          "actual_displacement_mean_slope": 5.399503680722301e-07,
+          "net_retention": 0.029901795950214048,
+          "improving_fraction": 0.6702127659574468,
+          "mean_request_cosine": 0.15136813573176838
+        },
+        "final-off": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 87.73211351729292,
+          "actual_displacement_mean_slope": -0.0009874445610726379,
+          "net_retention": 0.30980416049571213,
+          "improving_fraction": 0.6205673758865248,
+          "mean_request_cosine": 0.2949449852008728
+        },
+        "final-null": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 106.57602416123797,
+          "actual_displacement_mean_slope": -0.0012952172436083425,
+          "net_retention": 0.4959075525556477,
+          "improving_fraction": 0.6418439716312057,
+          "mean_request_cosine": 0.32104071062594525
+        },
+        "random_frames-0": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.7186634736706441,
+          "actual_displacement_mean_slope": -1.4107189094105724e-05,
+          "net_retention": 0.21181004411775864,
+          "improving_fraction": 0.5531914893617021,
+          "mean_request_cosine": 0.047693089785351375
+        },
+        "random_frames-1": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.6593712122501134,
+          "actual_displacement_mean_slope": -3.717685193667336e-05,
+          "net_retention": 0.36430101798193765,
+          "improving_fraction": 0.41134751773049644,
+          "mean_request_cosine": -0.009805041565410766
+        },
+        "random_frames-2": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.9322714617539312,
+          "actual_displacement_mean_slope": 5.132978065075572e-06,
+          "net_retention": 0.06867624508807345,
+          "improving_fraction": 0.5212765957446809,
+          "mean_request_cosine": 0.01683117429311128
+        }
+      },
+      "endpoint/MATH-500/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2250.3352157574295,
+          "actual_displacement_mean_slope": -0.0013114597751478507,
+          "net_retention": 0.8534340860571668,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.316703997050064
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.257766525082527,
+          "actual_displacement_mean_slope": 3.1268044069992837e-06,
+          "net_retention": 0.7368030793824539,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.08178135669618773
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 72.23490540381378,
+          "actual_displacement_mean_slope": 5.935684572402961e-05,
+          "net_retention": 0.13887789236586492,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": 0.06660639306572136
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 59.834388297129536,
+          "actual_displacement_mean_slope": -0.00011799593569097832,
+          "net_retention": 0.3874839212906517,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.11255693341225954
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5961171912109007,
+          "actual_displacement_mean_slope": -1.5048631387036797e-05,
+          "net_retention": 0.9992351826972261,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.34469510732957787
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9815360568098215,
+          "actual_displacement_mean_slope": -1.6375308529539436e-05,
+          "net_retention": 0.8391150586730427,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.11877823837413069
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.0835723116216034,
+          "actual_displacement_mean_slope": -3.3528852799611048e-06,
+          "net_retention": 0.5196527369450531,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.40067751306693067
+        }
+      },
+      "endpoint/AMC23/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2621.291895634539,
+          "actual_displacement_mean_slope": -0.0005236324733267761,
+          "net_retention": 0.42595415134546166,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.43606734678962694
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 6.960970100184829,
+          "actual_displacement_mean_slope": 4.494474718441259e-06,
+          "net_retention": 0.5413343876017797,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.0970752346365777
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 73.36634454420872,
+          "actual_displacement_mean_slope": 0.0006342200582630848,
+          "net_retention": 0.8997312773802333,
+          "improving_fraction": 0.25,
+          "mean_request_cosine": -0.22244969565668252
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 61.632490313144686,
+          "actual_displacement_mean_slope": 0.0005993726471800557,
+          "net_retention": 0.8005628446981535,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.23742321720593706
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4585327735498212,
+          "actual_displacement_mean_slope": -1.2908202738790372e-06,
+          "net_retention": 0.3259762434573174,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.005709860773874716
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8791049039208518,
+          "actual_displacement_mean_slope": -1.3578254721427422e-05,
+          "net_retention": 0.4832701208445123,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.22557963783131996
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.2956448887309875,
+          "actual_displacement_mean_slope": 9.178329055039915e-06,
+          "net_retention": 0.9574099843187481,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.04934529088590617
+        }
+      },
+      "patch-off-b1/MATH-500/layer0": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 4777.156074029041,
+          "actual_displacement_mean_slope": -0.013273982752093145,
+          "net_retention": 0.9951791969557664,
+          "improving_fraction": 0.7727272727272727,
+          "mean_request_cosine": 0.42895534146614817
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 8.329483733222112,
+          "actual_displacement_mean_slope": 5.028270725089622e-05,
+          "net_retention": 0.9993932254009323,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.14623278171847506
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 88.10126362272288,
+          "actual_displacement_mean_slope": 0.00853594671323474,
+          "net_retention": 0.890669920494456,
+          "improving_fraction": 0.45454545454545453,
+          "mean_request_cosine": 0.052584270865628294
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 79.29855709427747,
+          "actual_displacement_mean_slope": 0.0038017413878346814,
+          "net_retention": 0.7716619108488982,
+          "improving_fraction": 0.36363636363636365,
+          "mean_request_cosine": 0.053761047576690556
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7790951513198217,
+          "actual_displacement_mean_slope": 1.3676552748468345e-06,
+          "net_retention": 0.013094154758558676,
+          "improving_fraction": 0.8636363636363636,
+          "mean_request_cosine": 0.45279663285963884
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9599080700204611,
+          "actual_displacement_mean_slope": 6.87247485856711e-05,
+          "net_retention": 0.8642389169807803,
+          "improving_fraction": 0.2727272727272727,
+          "mean_request_cosine": -0.2709648613738313
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.4859953609694219,
+          "actual_displacement_mean_slope": 5.053277913242659e-05,
+          "net_retention": 0.9446913363998664,
+          "improving_fraction": 0.6363636363636364,
+          "mean_request_cosine": 0.03681805641598006
+        }
+      },
+      "patch-off-b1/AMC23/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2621.291895634539,
+          "actual_displacement_mean_slope": 0.003577260365546065,
+          "net_retention": 0.6141337972935986,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.2658005581592346
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.2641011698139515,
+          "actual_displacement_mean_slope": -3.2890675206452516e-05,
+          "net_retention": 0.7655805144396065,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.054428982041951235
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 369.3005121023151,
+          "actual_displacement_mean_slope": -0.007079839545428331,
+          "net_retention": 0.6158812506855323,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.2920255487014703
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 203.85545277109645,
+          "actual_displacement_mean_slope": -0.004515267765834764,
+          "net_retention": 0.6187897573013807,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.2737883991635665
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4740854240980691,
+          "actual_displacement_mean_slope": 6.545350485366968e-06,
+          "net_retention": 0.11718537279175034,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.2634948838495447
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9876116915694146,
+          "actual_displacement_mean_slope": -0.00011010832901606461,
+          "net_retention": 0.8691685241447865,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.027323248523885846
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.978789004384607,
+          "actual_displacement_mean_slope": -8.94886602029532e-05,
+          "net_retention": 0.6524471488185407,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.30570982201909436
+        }
+      },
+      "endpoint/MATH-500/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 82.0881122917472,
+          "actual_displacement_mean_slope": -0.00025935612952241545,
+          "net_retention": 0.5409758920292022,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.3951872180040961
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.068224330563653,
+          "actual_displacement_mean_slope": 6.8890249316029625e-06,
+          "net_retention": 0.5203030243564054,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.16658614662579782
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 50.9613354448898,
+          "actual_displacement_mean_slope": -0.0004998807283819136,
+          "net_retention": 0.9992452443285089,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.4862756916933901
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 42.8117490562245,
+          "actual_displacement_mean_slope": -0.00025481236875553624,
+          "net_retention": 0.9282758497612951,
+          "improving_fraction": 0.875,
+          "mean_request_cosine": 0.4875889485662668
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.129696667491568,
+          "actual_displacement_mean_slope": 2.2298143395163117e-05,
+          "net_retention": 0.33664754099851707,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.20687586163400626
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6771745588831212,
+          "actual_displacement_mean_slope": 2.5752822435787605e-06,
+          "net_retention": 0.10961347682631305,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": -0.04005104814839752
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9603332250284339,
+          "actual_displacement_mean_slope": 2.4574128164788534e-06,
+          "net_retention": 0.09190480512538574,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.035834772371910274
+        }
+      },
+      "endpoint/AMC23/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 100.05176011614782,
+          "actual_displacement_mean_slope": -0.00011420652825435463,
+          "net_retention": 0.36164358858669915,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.41810345994421994
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6533402284792686,
+          "actual_displacement_mean_slope": -6.927844035746435e-06,
+          "net_retention": 0.7541094314726948,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.07771595425257644
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 15.850174341684816,
+          "actual_displacement_mean_slope": 0.0001549358618201275,
+          "net_retention": 0.3739268034839355,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.28817952746869646
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 31.27926072769724,
+          "actual_displacement_mean_slope": 0.0005357912339536169,
+          "net_retention": 0.8307980482849058,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.3550228020122164
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.0127334594862862,
+          "actual_displacement_mean_slope": -1.835012330865237e-05,
+          "net_retention": 0.6021316006411668,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.005626388678343068
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5645764945680808,
+          "actual_displacement_mean_slope": -1.7482060046962747e-06,
+          "net_retention": 0.02935266814106648,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.014346253952851237
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.3257746877221748,
+          "actual_displacement_mean_slope": 1.5219120175782816e-05,
+          "net_retention": 0.3734219076743566,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": -0.14714596051137305
+        }
+      },
+      "patch-off-b1/MATH-500/layer13": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 72.30927847828059,
+          "actual_displacement_mean_slope": 0.0011976614428723699,
+          "net_retention": 0.7888277988790461,
+          "improving_fraction": 0.5909090909090909,
+          "mean_request_cosine": -0.09121609974320859
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5501139175265913,
+          "actual_displacement_mean_slope": -2.1415344476172265e-05,
+          "net_retention": 0.9965473515994612,
+          "improving_fraction": 0.6818181818181818,
+          "mean_request_cosine": 0.2272652094332779
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 55.09979855736936,
+          "actual_displacement_mean_slope": -0.0025847454415797283,
+          "net_retention": 0.8087394690128717,
+          "improving_fraction": 0.8636363636363636,
+          "mean_request_cosine": 0.4897251437425751
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 66.33894411320493,
+          "actual_displacement_mean_slope": -0.003252552874270256,
+          "net_retention": 0.9992878130609973,
+          "improving_fraction": 0.9545454545454546,
+          "mean_request_cosine": 0.6369555564899451
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9592511156389671,
+          "actual_displacement_mean_slope": -0.00011048257566736529,
+          "net_retention": 0.9552962135187932,
+          "improving_fraction": 0.6818181818181818,
+          "mean_request_cosine": 0.2914457260963974
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.560822615343852,
+          "actual_displacement_mean_slope": 2.9693422176732123e-05,
+          "net_retention": 0.339374895964637,
+          "improving_fraction": 0.36363636363636365,
+          "mean_request_cosine": -0.17581433340256958
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9026181329540164,
+          "actual_displacement_mean_slope": -8.023018096165935e-05,
+          "net_retention": 0.4067498086872961,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.009215656709530123
+        }
+      },
+      "patch-off-b1/AMC23/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 92.6619330164096,
+          "actual_displacement_mean_slope": -0.0009646136668062409,
+          "net_retention": 0.3684829229324181,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.2722507783279693
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6014209542168796,
+          "actual_displacement_mean_slope": 1.939266466085903e-05,
+          "net_retention": 0.49678657006816185,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.008956308051893921
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 35.97512197960418,
+          "actual_displacement_mean_slope": -0.0021358484699242146,
+          "net_retention": 0.6853414527483528,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.4759484254428421
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 60.40957870021319,
+          "actual_displacement_mean_slope": -0.0029540468933577217,
+          "net_retention": 0.6595940833653142,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.3706030306025819
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9029603854239803,
+          "actual_displacement_mean_slope": -0.00015250651922599104,
+          "net_retention": 0.5679950051553225,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.19088897749954917
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6023676539408066,
+          "actual_displacement_mean_slope": -0.0003313543348807361,
+          "net_retention": 0.5417340013136727,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": -0.06959244608536734
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.0409495708966472,
+          "actual_displacement_mean_slope": 0.0001085760423118688,
+          "net_retention": 0.37559081573033914,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.06548741528803088
+        }
+      },
+      "endpoint/MATH-500/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1562.657898511954,
+          "actual_displacement_mean_slope": -0.0004264562930526064,
+          "net_retention": 0.9999826921502157,
+          "improving_fraction": 0.9166666666666666,
+          "mean_request_cosine": 0.584814493795044
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2.1249614419182232,
+          "actual_displacement_mean_slope": -2.288805987542104e-06,
+          "net_retention": 0.955334654535581,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.3574586815030117
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 157.5305948966186,
+          "actual_displacement_mean_slope": -0.00046969568808959524,
+          "net_retention": 0.9352926205706746,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.3900204645306733
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 275.032982518096,
+          "actual_displacement_mean_slope": -0.0005287446021969576,
+          "net_retention": 0.9989091869579997,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.4331961073570428
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4512240157253003,
+          "actual_displacement_mean_slope": 3.258214548321256e-06,
+          "net_retention": 0.3416874929924595,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": -0.21964300298745518
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3317960340378594,
+          "actual_displacement_mean_slope": -1.1054093665007224e-06,
+          "net_retention": 0.1664612542340499,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.13125254997917696
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.43566371086364797,
+          "actual_displacement_mean_slope": 3.939762686087129e-06,
+          "net_retention": 0.5071234671314031,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": -0.06450515222801499
+        }
+      },
+      "endpoint/AMC23/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 915.9291047078807,
+          "actual_displacement_mean_slope": -0.00027626121525748635,
+          "net_retention": 1.0,
+          "improving_fraction": 1.0,
+          "mean_request_cosine": 0.6640907434378026
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 3.7426330566397237,
+          "actual_displacement_mean_slope": -1.8984575639288604e-06,
+          "net_retention": 0.7606405386434378,
+          "improving_fraction": 0.9166666666666666,
+          "mean_request_cosine": 0.46211094550221726
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 188.79052111087628,
+          "actual_displacement_mean_slope": -0.0003979790452153591,
+          "net_retention": 0.9895147308709891,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.5037874531245109
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 338.59420299531837,
+          "actual_displacement_mean_slope": -0.0005457259677766426,
+          "net_retention": 0.9988577817312702,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.5812605349512469
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5231458941191487,
+          "actual_displacement_mean_slope": 2.277344563740506e-06,
+          "net_retention": 0.19445669880114327,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.3769132288483603
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4653656198331126,
+          "actual_displacement_mean_slope": -7.4599961263509896e-06,
+          "net_retention": 0.8881167357145621,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": 0.1325955657636936
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.33307154276125917,
+          "actual_displacement_mean_slope": 5.629980584495555e-07,
+          "net_retention": 0.14811646412006954,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.18073422889568494
+        }
+      },
+      "patch-off-b1/MATH-500/layer27": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 1311.281555505521,
+          "actual_displacement_mean_slope": -0.0028240181046931103,
+          "net_retention": 0.976745535873042,
+          "improving_fraction": 0.8636363636363636,
+          "mean_request_cosine": 0.5442898325790687
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 2.472787544548154,
+          "actual_displacement_mean_slope": -1.728519677979843e-06,
+          "net_retention": 0.13233863770900758,
+          "improving_fraction": 0.7272727272727273,
+          "mean_request_cosine": 0.2630389697349427
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 260.17951825451655,
+          "actual_displacement_mean_slope": -0.005494327104313802,
+          "net_retention": 0.9658123933566047,
+          "improving_fraction": 0.6363636363636364,
+          "mean_request_cosine": 0.38809061120101557
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 292.0518053224931,
+          "actual_displacement_mean_slope": -0.0051457837695807205,
+          "net_retention": 0.9782252647068316,
+          "improving_fraction": 0.6363636363636364,
+          "mean_request_cosine": 0.3985404907440817
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3406239481834603,
+          "actual_displacement_mean_slope": 7.727687172512567e-05,
+          "net_retention": 0.9998637695178415,
+          "improving_fraction": 0.36363636363636365,
+          "mean_request_cosine": -0.34206966702350455
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.423509490442924,
+          "actual_displacement_mean_slope": -7.632408243947327e-05,
+          "net_retention": 0.8661059233527326,
+          "improving_fraction": 0.45454545454545453,
+          "mean_request_cosine": 0.1473715393761102
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.26139250846712114,
+          "actual_displacement_mean_slope": -7.801853546049463e-06,
+          "net_retention": 0.24188427373386095,
+          "improving_fraction": 0.5454545454545454,
+          "mean_request_cosine": 0.08900136206728154
+        }
+      },
+      "patch-off-b1/AMC23/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 508.8935715666141,
+          "actual_displacement_mean_slope": -0.0017538722213128212,
+          "net_retention": 0.9002161675398634,
+          "improving_fraction": 0.875,
+          "mean_request_cosine": 0.5585843352093871
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 3.3887077611366525,
+          "actual_displacement_mean_slope": -8.43004193806601e-06,
+          "net_retention": 0.6733347057527987,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.3304077291514051
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 188.79052111087628,
+          "actual_displacement_mean_slope": -0.0022865442014340987,
+          "net_retention": 0.772940715649525,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.33234307741451596
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 360.54778678037246,
+          "actual_displacement_mean_slope": -0.0032238273085708267,
+          "net_retention": 0.9098506185054772,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.3971491407524544
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4580639677438297,
+          "actual_displacement_mean_slope": 1.624244729233521e-05,
+          "net_retention": 0.333880958579876,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": -0.22899934388935592
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3445629577711156,
+          "actual_displacement_mean_slope": 2.2073631849805692e-05,
+          "net_retention": 0.271955716598165,
+          "improving_fraction": 0.2916666666666667,
+          "mean_request_cosine": -0.08878124733857044
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7232482806928939,
+          "actual_displacement_mean_slope": 4.759469007118723e-05,
+          "net_retention": 0.4883392023942654,
+          "improving_fraction": 0.25,
+          "mean_request_cosine": -0.24281512510260064
+        }
+      }
+    },
+    "sft-early": {
+      "all": {
+        "final-learned": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 495.58333649983683,
+          "actual_displacement_mean_slope": -0.0004952169171338039,
+          "net_retention": 0.32060134601252877,
+          "improving_fraction": 0.8120567375886525,
+          "mean_request_cosine": 0.4114316288728608
+        },
+        "final-diag": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 2.6946386756048533,
+          "actual_displacement_mean_slope": 1.706001290634714e-06,
+          "net_retention": 0.15163114799670885,
+          "improving_fraction": 0.6028368794326241,
+          "mean_request_cosine": 0.13328661735093916
+        },
+        "final-off": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 133.6293062133646,
+          "actual_displacement_mean_slope": -0.0007601567041506318,
+          "net_retention": 0.33503694628039066,
+          "improving_fraction": 0.6843971631205674,
+          "mean_request_cosine": 0.26895720348603
+        },
+        "final-null": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 126.53742789457772,
+          "actual_displacement_mean_slope": -0.0006476364282552179,
+          "net_retention": 0.3374913820787317,
+          "improving_fraction": 0.6843971631205674,
+          "mean_request_cosine": 0.29705055049108364
+        },
+        "random_frames-0": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.8234408112288064,
+          "actual_displacement_mean_slope": -3.31686258772837e-06,
+          "net_retention": 0.05995903251078991,
+          "improving_fraction": 0.6631205673758865,
+          "mean_request_cosine": 0.15923035497676022
+        },
+        "random_frames-1": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.6976634682467596,
+          "actual_displacement_mean_slope": 5.884109205235597e-06,
+          "net_retention": 0.09935420860802828,
+          "improving_fraction": 0.40425531914893614,
+          "mean_request_cosine": -0.10071115001058172
+        },
+        "random_frames-2": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.9391752979719326,
+          "actual_displacement_mean_slope": -3.9882907715210826e-05,
+          "net_retention": 0.6166182406006447,
+          "improving_fraction": 0.599290780141844,
+          "mean_request_cosine": 0.05487352727915733
+        }
+      },
+      "endpoint/MATH-500/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2433.2622541753863,
+          "actual_displacement_mean_slope": -0.00015419402116425963,
+          "net_retention": 0.7330619233920938,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.4925684752257274
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.19105563116911,
+          "actual_displacement_mean_slope": 1.2192371521107133e-06,
+          "net_retention": 0.5836267944447885,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.18430258228884977
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 200.35067307090821,
+          "actual_displacement_mean_slope": 1.6212551608046623e-05,
+          "net_retention": 0.04706364678513575,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.06466147297623483
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 74.90696907574245,
+          "actual_displacement_mean_slope": 6.296167765791474e-05,
+          "net_retention": 0.26928271415608673,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": 0.11778967101550812
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6914896104134625,
+          "actual_displacement_mean_slope": -3.5859127435104614e-06,
+          "net_retention": 0.8527683814355873,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.45118752254007416
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8526850707541401,
+          "actual_displacement_mean_slope": 1.4201638838805866e-06,
+          "net_retention": 0.26116818481267356,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.22038743136650882
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.4426643606146192,
+          "actual_displacement_mean_slope": -2.2362302411031925e-06,
+          "net_retention": 0.39634827934673555,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.26593669290792893
+        }
+      },
+      "endpoint/AMC23/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2612.4573446637396,
+          "actual_displacement_mean_slope": 0.00042620101417621854,
+          "net_retention": 0.47133558824365257,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.1959746577759581
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 6.576490277056001,
+          "actual_displacement_mean_slope": -1.4621622268306991e-06,
+          "net_retention": 0.3595623534312321,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.019430844816019994
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 78.7717340759084,
+          "actual_displacement_mean_slope": -0.0001355259463307068,
+          "net_retention": 0.5917638768866428,
+          "improving_fraction": 0.20833333333333334,
+          "mean_request_cosine": -0.2606364816646038
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 59.86445082990521,
+          "actual_displacement_mean_slope": 6.830666405208619e-05,
+          "net_retention": 0.27780589154320023,
+          "improving_fraction": 0.20833333333333334,
+          "mean_request_cosine": -0.2426326842828269
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4918271444706263,
+          "actual_displacement_mean_slope": 3.5854602874429874e-07,
+          "net_retention": 0.06176289915583739,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.16902610110290564
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9573181053600608,
+          "actual_displacement_mean_slope": -1.2846448183361079e-06,
+          "net_retention": 0.2979703692803803,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": -0.05983915922593352
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.1189292699286957,
+          "actual_displacement_mean_slope": 1.1610012281583107e-08,
+          "net_retention": 0.0015552524779310884,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.1795295749101785
+        }
+      },
+      "patch-off-b1/MATH-500/layer0": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 3220.014747364755,
+          "actual_displacement_mean_slope": -0.003347427602763574,
+          "net_retention": 0.4034568143951314,
+          "improving_fraction": 0.7272727272727273,
+          "mean_request_cosine": 0.45969391664378795
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.19105563116911,
+          "actual_displacement_mean_slope": 3.534145059145111e-05,
+          "net_retention": 0.9486161938344259,
+          "improving_fraction": 0.3181818181818182,
+          "mean_request_cosine": -0.26183362171808366
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 120.03439360647405,
+          "actual_displacement_mean_slope": 0.002045249248963247,
+          "net_retention": 0.277649006631145,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.006995936072324445
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 81.22668866848603,
+          "actual_displacement_mean_slope": -0.0001502815107359159,
+          "net_retention": 0.030123507882153202,
+          "improving_fraction": 0.45454545454545453,
+          "mean_request_cosine": 0.12658438563431532
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6054900800574714,
+          "actual_displacement_mean_slope": -3.145732976455011e-05,
+          "net_retention": 0.38375796892187714,
+          "improving_fraction": 0.7727272727272727,
+          "mean_request_cosine": 0.45663146505890545
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8338166469185695,
+          "actual_displacement_mean_slope": 5.714864918249547e-05,
+          "net_retention": 0.6764269652203945,
+          "improving_fraction": 0.3181818181818182,
+          "mean_request_cosine": -0.33945815469754786
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.3555548949145688,
+          "actual_displacement_mean_slope": -1.2571805475794936e-05,
+          "net_retention": 0.22441099697133643,
+          "improving_fraction": 0.6818181818181818,
+          "mean_request_cosine": 0.1323272728448856
+        }
+      },
+      "patch-off-b1/AMC23/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 4352.599603246458,
+          "actual_displacement_mean_slope": 0.0010812364740680118,
+          "net_retention": 0.28799046043917864,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.2714836544423118
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 6.495681742016881,
+          "actual_displacement_mean_slope": -6.839128948247988e-06,
+          "net_retention": 0.21295926651650238,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": 0.045512963616233575
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 254.7548327903289,
+          "actual_displacement_mean_slope": -0.005877690015541397,
+          "net_retention": 0.9006542861740401,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.2171342380472013
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 153.77832284739685,
+          "actual_displacement_mean_slope": -0.003691545463161776,
+          "net_retention": 0.8970668169362463,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.21325824657973116
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4951061029715573,
+          "actual_displacement_mean_slope": -1.4006185470396536e-05,
+          "net_retention": 0.29870410563738964,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.3446252340413547
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8540457730971726,
+          "actual_displacement_mean_slope": 1.630159511357447e-05,
+          "net_retention": 0.28962175908111415,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": -0.046941299944399
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.216037487220878,
+          "actual_displacement_mean_slope": -5.656085493186393e-05,
+          "net_retention": 0.6986570573383412,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.29907085271635875
+        }
+      },
+      "endpoint/MATH-500/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 115.63595215886028,
+          "actual_displacement_mean_slope": -2.812498022385825e-05,
+          "net_retention": 0.10583972415565199,
+          "improving_fraction": 0.875,
+          "mean_request_cosine": 0.44736511555165775
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9136628712456054,
+          "actual_displacement_mean_slope": -2.512115080776956e-06,
+          "net_retention": 0.5762606119138467,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.26091342494467484
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 24.122347904202734,
+          "actual_displacement_mean_slope": -0.00018565302684296785,
+          "net_retention": 0.9333320910992828,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.34803209695942505
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 39.511823532128076,
+          "actual_displacement_mean_slope": -0.00022613415407580484,
+          "net_retention": 0.7961655005003826,
+          "improving_fraction": 0.875,
+          "mean_request_cosine": 0.48355063015362765
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.153742189535365,
+          "actual_displacement_mean_slope": -1.0705321523516139e-06,
+          "net_retention": 0.03828514937140927,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.3923328685315611
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.729137467766148,
+          "actual_displacement_mean_slope": -2.9174872655730532e-06,
+          "net_retention": 0.1061276782787623,
+          "improving_fraction": 0.25,
+          "mean_request_cosine": -0.39806620796004605
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8696770498990873,
+          "actual_displacement_mean_slope": -1.8067338034492736e-05,
+          "net_retention": 0.673293314349802,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.09489864945805726
+        }
+      },
+      "endpoint/AMC23/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 139.73069042007134,
+          "actual_displacement_mean_slope": -6.924594130434867e-05,
+          "net_retention": 0.5271444368248267,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.3664759973951251
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9441538705841099,
+          "actual_displacement_mean_slope": 9.126162839960948e-07,
+          "net_retention": 0.2464465093754199,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.024237106629689604
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 14.372532912761535,
+          "actual_displacement_mean_slope": 5.6056293415931525e-05,
+          "net_retention": 0.41838955677423556,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.19265616352049875
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 53.0734641398529,
+          "actual_displacement_mean_slope": 0.0003296714517339784,
+          "net_retention": 0.8490595626215843,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.21123073302536943
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8961854782444683,
+          "actual_displacement_mean_slope": -2.4057979690150027e-06,
+          "net_retention": 0.15956884534252241,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.0032045058953115158
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.588227110322934,
+          "actual_displacement_mean_slope": -1.4349998382047202e-05,
+          "net_retention": 0.5974929701615521,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.14364448054687726
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.359204016878214,
+          "actual_displacement_mean_slope": 9.147841499587674e-06,
+          "net_retention": 0.5769464611150084,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": -0.05262210568753839
+        }
+      },
+      "patch-off-b1/MATH-500/layer13": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 100.07641080258382,
+          "actual_displacement_mean_slope": -0.0003137160201322397,
+          "net_retention": 0.405593857873352,
+          "improving_fraction": 0.7727272727272727,
+          "mean_request_cosine": 0.11603256759703698
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6700702143231375,
+          "actual_displacement_mean_slope": -1.0039003638187804e-05,
+          "net_retention": 0.962705716040017,
+          "improving_fraction": 0.8636363636363636,
+          "mean_request_cosine": 0.3967187447263427
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 83.10145216177342,
+          "actual_displacement_mean_slope": 0.0010381316631673915,
+          "net_retention": 0.3724179047392436,
+          "improving_fraction": 0.8181818181818182,
+          "mean_request_cosine": 0.5508821017305418
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 102.96423105864794,
+          "actual_displacement_mean_slope": 0.0011534684402943322,
+          "net_retention": 0.3324634681757006,
+          "improving_fraction": 0.8181818181818182,
+          "mean_request_cosine": 0.5807302350736644
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9847862772155437,
+          "actual_displacement_mean_slope": 2.597923481439215e-05,
+          "net_retention": 0.10473706628129538,
+          "improving_fraction": 0.5909090909090909,
+          "mean_request_cosine": 0.1246331938311218
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6690304384881349,
+          "actual_displacement_mean_slope": 0.00011344001309462652,
+          "net_retention": 0.7807676925981716,
+          "improving_fraction": 0.3181818181818182,
+          "mean_request_cosine": -0.17303397999724182
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7542119490512634,
+          "actual_displacement_mean_slope": -0.0002761125972597161,
+          "net_retention": 0.8880694743015216,
+          "improving_fraction": 0.5454545454545454,
+          "mean_request_cosine": -0.10258171617182055
+        }
+      },
+      "patch-off-b1/AMC23/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 118.28027782907165,
+          "actual_displacement_mean_slope": -0.0007841327824010362,
+          "net_retention": 0.7234967192963432,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.360976661306397
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7624324244477958,
+          "actual_displacement_mean_slope": 1.026948578281107e-05,
+          "net_retention": 0.3930045549757648,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.10326062852608046
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 37.27884005433489,
+          "actual_displacement_mean_slope": -0.0004542711979930291,
+          "net_retention": 0.13170573081126524,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.48576581727511353
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 83.07318264284757,
+          "actual_displacement_mean_slope": -0.00011873886175863917,
+          "net_retention": 0.02811582610640449,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.31548612820070504
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9879569780727998,
+          "actual_displacement_mean_slope": -6.2518551091673e-05,
+          "net_retention": 0.3690479421177509,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.2627386136932644
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6621858203860653,
+          "actual_displacement_mean_slope": -1.185018074265602e-05,
+          "net_retention": 0.050525140550352114,
+          "improving_fraction": 0.2916666666666667,
+          "mean_request_cosine": -0.17416186320971927
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9582270150922874,
+          "actual_displacement_mean_slope": -7.934934448394369e-05,
+          "net_retention": 0.4954356559155964,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.08258753730160324
+        }
+      },
+      "endpoint/MATH-500/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 706.0915592317942,
+          "actual_displacement_mean_slope": -4.820612644951109e-05,
+          "net_retention": 0.2830267635110255,
+          "improving_fraction": 0.9166666666666666,
+          "mean_request_cosine": 0.6795936026728828
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2.6946386756048533,
+          "actual_displacement_mean_slope": 9.308868835083611e-07,
+          "net_retention": 0.6818459398157213,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.4292096554252427
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 198.0830400052867,
+          "actual_displacement_mean_slope": 5.889996726061657e-05,
+          "net_retention": 0.2514932610071653,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.4388925099864127
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 303.6695187690542,
+          "actual_displacement_mean_slope": -2.1795826013729005e-05,
+          "net_retention": 0.13611390427280565,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.36969426438822545
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8483486076405604,
+          "actual_displacement_mean_slope": -2.208343390901121e-06,
+          "net_retention": 0.34550518984191614,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.0057230522444968
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7711172888558242,
+          "actual_displacement_mean_slope": -1.517736575816421e-05,
+          "net_retention": 0.8399250122602294,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.11402776199843433
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.506145365778301,
+          "actual_displacement_mean_slope": 3.3747295529781326e-06,
+          "net_retention": 0.5323112759101779,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.05363231109081831
+        }
+      },
+      "endpoint/AMC23/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 344.22559277065557,
+          "actual_displacement_mean_slope": -0.00013252563879215097,
+          "net_retention": 0.8442985163124936,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.44642822492281525
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2.075760886374187,
+          "actual_displacement_mean_slope": -3.878705036367058e-07,
+          "net_retention": 0.1445040965206353,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.2921026078071637
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 208.025126742507,
+          "actual_displacement_mean_slope": -0.00013898933634855424,
+          "net_retention": 0.5042260390627492,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.3442671918431608
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 278.1424206451162,
+          "actual_displacement_mean_slope": -0.00018929152689156829,
+          "net_retention": 0.9731268347653076,
+          "improving_fraction": 0.9166666666666666,
+          "mean_request_cosine": 0.5281561684968962
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9628143848319705,
+          "actual_displacement_mean_slope": -5.766244675217861e-06,
+          "net_retention": 0.525693883000333,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": -0.0900104592044567
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.40863899697173656,
+          "actual_displacement_mean_slope": -2.624330651529324e-06,
+          "net_retention": 0.23385228210946193,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.11470931631234726
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.33803330238544127,
+          "actual_displacement_mean_slope": 2.439366442450058e-06,
+          "net_retention": 0.6500368749888715,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.1857434219413702
+        }
+      },
+      "patch-off-b1/MATH-500/layer27": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 545.1979307522664,
+          "actual_displacement_mean_slope": -0.0020184570627891957,
+          "net_retention": 0.9910168402071688,
+          "improving_fraction": 0.9545454545454546,
+          "mean_request_cosine": 0.6696218267234073
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 2.0062921248997383,
+          "actual_displacement_mean_slope": -5.177112845288431e-06,
+          "net_retention": 0.7009455863912687,
+          "improving_fraction": 0.8181818181818182,
+          "mean_request_cosine": 0.3739977678290053
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 210.62809642110113,
+          "actual_displacement_mean_slope": -0.0036383222552375384,
+          "net_retention": 0.9826864426477606,
+          "improving_fraction": 0.9090909090909091,
+          "mean_request_cosine": 0.5382524706539702
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 322.0208865673269,
+          "actual_displacement_mean_slope": -0.0032542546435207725,
+          "net_retention": 0.9798132808698118,
+          "improving_fraction": 0.9090909090909091,
+          "mean_request_cosine": 0.5302653885815626
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8234221728452994,
+          "actual_displacement_mean_slope": 3.791151719513314e-05,
+          "net_retention": 0.9703436038804795,
+          "improving_fraction": 0.5454545454545454,
+          "mean_request_cosine": -0.1810462772292551
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3924032275139497,
+          "actual_displacement_mean_slope": -3.852051655467642e-05,
+          "net_retention": 0.8700821975899721,
+          "improving_fraction": 0.45454545454545453,
+          "mean_request_cosine": 0.07714331728043372
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.2503517638237313,
+          "actual_displacement_mean_slope": -5.237246724891548e-05,
+          "net_retention": 0.9629664660632771,
+          "improving_fraction": 0.6818181818181818,
+          "mean_request_cosine": 0.14210005560767194
+        }
+      },
+      "patch-off-b1/AMC23/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 625.5193254615521,
+          "actual_displacement_mean_slope": -0.0009035061456866703,
+          "net_retention": 0.6998800607526259,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.431885964912692
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.907701595952887,
+          "actual_displacement_mean_slope": -5.336571102863067e-07,
+          "net_retention": 0.10251034713902248,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.19661302402120687
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 201.69026816657666,
+          "actual_displacement_mean_slope": -0.0017621843318165371,
+          "net_retention": 0.6866703085454157,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.3375137153979045
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 278.1424206451162,
+          "actual_displacement_mean_slope": -0.0017596832557424443,
+          "net_retention": 0.9237342137583235,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.3593624688442496
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7576839475610528,
+          "actual_displacement_mean_slope": 2.2499249000619026e-05,
+          "net_retention": 0.9012577794895117,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.028328605932663512
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.45320643119858384,
+          "actual_displacement_mean_slope": -2.1441935129872697e-05,
+          "net_retention": 0.3387966610037174,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": 0.03001710061486022
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5415432537098799,
+          "actual_displacement_mean_slope": -1.4748481317230172e-05,
+          "net_retention": 0.22087517881063523,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": -0.08487621521340712
+        }
+      }
+    },
+    "sft-endpoint": {
+      "all": {
+        "final-learned": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 450.91342825344,
+          "actual_displacement_mean_slope": -0.0015115558337385209,
+          "net_retention": 0.6732512607514883,
+          "improving_fraction": 0.7269503546099291,
+          "mean_request_cosine": 0.24097428995135817
+        },
+        "final-diag": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 2.5461104355338477,
+          "actual_displacement_mean_slope": 8.160269669502789e-06,
+          "net_retention": 0.5424376596870236,
+          "improving_fraction": 0.5425531914893617,
+          "mean_request_cosine": 0.03699534559116083
+        },
+        "final-off": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 70.67595505241604,
+          "actual_displacement_mean_slope": -0.00024668157386962587,
+          "net_retention": 0.09887903441733457,
+          "improving_fraction": 0.6773049645390071,
+          "mean_request_cosine": 0.2229498188730109
+        },
+        "final-null": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 74.64905238704723,
+          "actual_displacement_mean_slope": -0.00030961411203175426,
+          "net_retention": 0.15023376392634502,
+          "improving_fraction": 0.7269503546099291,
+          "mean_request_cosine": 0.2840853036326774
+        },
+        "random_frames-0": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.5490426425082867,
+          "actual_displacement_mean_slope": 6.7496986803484645e-06,
+          "net_retention": 0.11657564405599602,
+          "improving_fraction": 0.475177304964539,
+          "mean_request_cosine": 0.04171863374458221
+        },
+        "random_frames-1": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.7042090336652647,
+          "actual_displacement_mean_slope": 1.0352712060660796e-05,
+          "net_retention": 0.15661532589325078,
+          "improving_fraction": 0.48226950354609927,
+          "mean_request_cosine": -0.012098384004528225
+        },
+        "random_frames-2": {
+          "n": 282,
+          "questions": 32,
+          "median_energy_over_gaussian": 1.1289476593308465,
+          "actual_displacement_mean_slope": -5.374895918756589e-05,
+          "net_retention": 0.6045938183971045,
+          "improving_fraction": 0.524822695035461,
+          "mean_request_cosine": -0.027049206583619007
+        }
+      },
+      "endpoint/MATH-500/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2363.5070476513915,
+          "actual_displacement_mean_slope": -0.00027814201394997523,
+          "net_retention": 0.6541396224485632,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.27091747830156504
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.646339739070099,
+          "actual_displacement_mean_slope": 2.08462147839925e-06,
+          "net_retention": 0.7513728571358933,
+          "improving_fraction": 0.16666666666666666,
+          "mean_request_cosine": -0.3490211599487893
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 186.5115268490999,
+          "actual_displacement_mean_slope": -0.00016073953530178846,
+          "net_retention": 0.3329850291331554,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.09358449352421583
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 82.96882619504993,
+          "actual_displacement_mean_slope": -6.918332047962072e-05,
+          "net_retention": 0.36372744573990357,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.226274129567921
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.388145412742372,
+          "actual_displacement_mean_slope": -5.736926124473098e-06,
+          "net_retention": 0.7376670027691394,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.19644897414281184
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8388755909986445,
+          "actual_displacement_mean_slope": -9.271540512288701e-07,
+          "net_retention": 0.12766404853322016,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": -0.13213911001647913
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.0609378972384813,
+          "actual_displacement_mean_slope": -5.018132850707617e-06,
+          "net_retention": 0.6093363856296684,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": 0.13942942613184486
+        }
+      },
+      "endpoint/AMC23/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1822.1234986780437,
+          "actual_displacement_mean_slope": -0.0002989855407222586,
+          "net_retention": 0.5424205478242421,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": 0.08849770705574563
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 8.654718440519483,
+          "actual_displacement_mean_slope": 1.769578164444052e-06,
+          "net_retention": 0.5474214522663354,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.19390444352533545
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 71.97247388099294,
+          "actual_displacement_mean_slope": -2.7123206992205095e-05,
+          "net_retention": 0.13745027988505637,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.10935790301772447
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 70.96953878609995,
+          "actual_displacement_mean_slope": -3.261765466862246e-05,
+          "net_retention": 0.2269879886645822,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.004114339634739959
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4418573578976631,
+          "actual_displacement_mean_slope": -4.5803225261609973e-07,
+          "net_retention": 0.10230027206277588,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": 0.05610510815866828
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8181351190330086,
+          "actual_displacement_mean_slope": 3.1944169979612117e-06,
+          "net_retention": 0.4449748705948032,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.04524248735269574
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.425809306185017,
+          "actual_displacement_mean_slope": -3.2565663331046624e-06,
+          "net_retention": 0.49456408650808087,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.08613085684398354
+        }
+      },
+      "patch-off-b1/MATH-500/layer0": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 2047.8761895638788,
+          "actual_displacement_mean_slope": -0.010748660374169305,
+          "net_retention": 0.7356719164388078,
+          "improving_fraction": 0.5909090909090909,
+          "mean_request_cosine": 0.17686710996002775
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.178428050574186,
+          "actual_displacement_mean_slope": 6.141788753438472e-05,
+          "net_retention": 0.988427822292865,
+          "improving_fraction": 0.18181818181818182,
+          "mean_request_cosine": -0.2735132197598863
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 120.39864562012126,
+          "actual_displacement_mean_slope": -0.0004355818343489907,
+          "net_retention": 0.04504515550802639,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.1667528291566935
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 90.80981579770406,
+          "actual_displacement_mean_slope": -0.003631708766343979,
+          "net_retention": 0.5419823599970974,
+          "improving_fraction": 0.5909090909090909,
+          "mean_request_cosine": 0.2978818915122691
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.388145412742372,
+          "actual_displacement_mean_slope": -4.114542994410938e-05,
+          "net_retention": 0.24006006574558203,
+          "improving_fraction": 0.45454545454545453,
+          "mean_request_cosine": 0.28305610455941105
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7463118293232923,
+          "actual_displacement_mean_slope": 0.00014774221242724414,
+          "net_retention": 0.9627257285082103,
+          "improving_fraction": 0.6363636363636364,
+          "mean_request_cosine": -0.10907532803495404
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.3698159413880935,
+          "actual_displacement_mean_slope": -8.685778205893378e-05,
+          "net_retention": 0.7064859449550838,
+          "improving_fraction": 0.2727272727272727,
+          "mean_request_cosine": -0.12353184396935757
+        }
+      },
+      "patch-off-b1/AMC23/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2738.032815463261,
+          "actual_displacement_mean_slope": -0.002322163761629228,
+          "net_retention": 0.41349405205256456,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.13482059159691182
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.624069745769219,
+          "actual_displacement_mean_slope": 3.7958806952811013e-06,
+          "net_retention": 0.12601012393159075,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.023780441606142778
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 164.0936695458381,
+          "actual_displacement_mean_slope": -0.003479679084083477,
+          "net_retention": 0.47598180495357734,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.18864592459302718
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 93.62498005405033,
+          "actual_displacement_mean_slope": -0.003377796481136067,
+          "net_retention": 0.8459150118712526,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.19017530278068875
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4644157590947291,
+          "actual_displacement_mean_slope": 2.8529585658282207e-05,
+          "net_retention": 0.6518012817799325,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.015521398361330985
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8401557967454191,
+          "actual_displacement_mean_slope": -1.900043340789456e-05,
+          "net_retention": 0.3358523871387963,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.05015077846155085
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.5082673701901328,
+          "actual_displacement_mean_slope": 7.751113614607731e-07,
+          "net_retention": 0.006980761181309748,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": 0.17848491813961362
+        }
+      },
+      "endpoint/MATH-500/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 190.4158098441486,
+          "actual_displacement_mean_slope": 3.455863940221799e-05,
+          "net_retention": 0.14112764761872426,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.2824563690195909
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.742389927976691,
+          "actual_displacement_mean_slope": 1.0286576195266236e-07,
+          "net_retention": 0.018262441509273038,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.3493622427516574
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 35.76187328604567,
+          "actual_displacement_mean_slope": -0.00012937906070866633,
+          "net_retention": 0.40760264781234906,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.19906548055633042
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 53.359857749746,
+          "actual_displacement_mean_slope": -0.00020144702114830888,
+          "net_retention": 0.4177391799581836,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.38077324319838607
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.2674980283532427,
+          "actual_displacement_mean_slope": 8.009577469922238e-06,
+          "net_retention": 0.22795100545147273,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.30330030714704154
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7767432695372976,
+          "actual_displacement_mean_slope": -1.7065688034821354e-05,
+          "net_retention": 0.4112996455147907,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": -0.17657862929536258
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.2618705309917506,
+          "actual_displacement_mean_slope": -4.308213470622641e-06,
+          "net_retention": 0.08923643163856992,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.06584863577798543
+        }
+      },
+      "endpoint/AMC23/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 204.46848605497496,
+          "actual_displacement_mean_slope": -9.482365322701372e-05,
+          "net_retention": 0.7426710963996243,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.21947631900780293
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8903204838419445,
+          "actual_displacement_mean_slope": 1.567380688600336e-06,
+          "net_retention": 0.5712664727505878,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.030184041340039377
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 26.91011259528296,
+          "actual_displacement_mean_slope": 3.77072961578494e-05,
+          "net_retention": 0.43063631406743463,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.04977656982660747
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 51.6262017532719,
+          "actual_displacement_mean_slope": 0.00015343631276378643,
+          "net_retention": 0.6344529420696298,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": -0.03570117306228487
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.2071382025726383,
+          "actual_displacement_mean_slope": 1.7891317637603532e-06,
+          "net_retention": 0.23353105188625978,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.07273762120936378
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.562012721577553,
+          "actual_displacement_mean_slope": -6.376300450731547e-06,
+          "net_retention": 0.34145826955878744,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": 0.04817446662960448
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.686065156563099,
+          "actual_displacement_mean_slope": 8.102047524087048e-06,
+          "net_retention": 0.8303225206067707,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.06671875235020697
+        }
+      },
+      "patch-off-b1/MATH-500/layer13": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 83.10273683152514,
+          "actual_displacement_mean_slope": -0.0019501044803531475,
+          "net_retention": 0.875955238020731,
+          "improving_fraction": 0.7272727272727273,
+          "mean_request_cosine": -0.004529110186105755
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6546573701137948,
+          "actual_displacement_mean_slope": 6.5041172998103804e-06,
+          "net_retention": 0.25576826507096917,
+          "improving_fraction": 0.6818181818181818,
+          "mean_request_cosine": 0.3302998327007445
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 41.466653284563975,
+          "actual_displacement_mean_slope": 0.003296193920337272,
+          "net_retention": 0.8958324773842046,
+          "improving_fraction": 0.7272727272727273,
+          "mean_request_cosine": 0.3480256416216037
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 75.22218608185321,
+          "actual_displacement_mean_slope": 0.004660582835926331,
+          "net_retention": 0.9249907288764757,
+          "improving_fraction": 0.7272727272727273,
+          "mean_request_cosine": 0.3920529073958816
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.1170435031462471,
+          "actual_displacement_mean_slope": -3.657705905282035e-05,
+          "net_retention": 0.1768711336162373,
+          "improving_fraction": 0.2727272727272727,
+          "mean_request_cosine": -0.052749644587152256
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5982681520247611,
+          "actual_displacement_mean_slope": 9.913515626177912e-05,
+          "net_retention": 0.5371714381408382,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.04157318347396249
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.1641289092247167,
+          "actual_displacement_mean_slope": -0.0005344858567365753,
+          "net_retention": 0.9015380502242522,
+          "improving_fraction": 0.7272727272727273,
+          "mean_request_cosine": 0.03694965715671867
+        }
+      },
+      "patch-off-b1/AMC23/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 126.43948652981251,
+          "actual_displacement_mean_slope": -0.0006082674509880751,
+          "net_retention": 0.6201625521180454,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.12024362357210928
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6847993376326265,
+          "actual_displacement_mean_slope": 1.123359253315344e-05,
+          "net_retention": 0.4154372886047079,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.04216617482800692
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 30.407042243438184,
+          "actual_displacement_mean_slope": 0.002248219702699554,
+          "net_retention": 0.5870139097830872,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.17660672862501456
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 66.20793061968092,
+          "actual_displacement_mean_slope": 0.0025518275587648833,
+          "net_retention": 0.5766164127462794,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.08752070286315729
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.20429816345675,
+          "actual_displacement_mean_slope": 5.477803139143355e-05,
+          "net_retention": 0.37603689485355274,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.1054304545564911
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.6849180677168774,
+          "actual_displacement_mean_slope": 8.03956290357795e-05,
+          "net_retention": 0.48715262510124446,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.09136708184511722
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.105926449571297,
+          "actual_displacement_mean_slope": -4.8940031391170095e-05,
+          "net_retention": 0.4695036392741522,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": -0.14046344963767263
+        }
+      },
+      "endpoint/MATH-500/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 403.1269820502052,
+          "actual_displacement_mean_slope": -7.618678147461036e-05,
+          "net_retention": 0.4078361794406359,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.5153604854793952
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.8920598067545766,
+          "actual_displacement_mean_slope": 7.081030526382239e-07,
+          "net_retention": 0.4048100090650153,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.3351429959083026
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 96.48063229927507,
+          "actual_displacement_mean_slope": -3.465900367558786e-05,
+          "net_retention": 0.09651655023163729,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.41099321978791475
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 82.7335648539991,
+          "actual_displacement_mean_slope": -0.00010496614149872963,
+          "net_retention": 0.3660900647381693,
+          "improving_fraction": 0.875,
+          "mean_request_cosine": 0.4196446682090822
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4426334622195386,
+          "actual_displacement_mean_slope": -8.538529637993145e-07,
+          "net_retention": 0.11081586955430955,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.05453796821768336
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.4781466534424187,
+          "actual_displacement_mean_slope": -1.6625912623923282e-05,
+          "net_retention": 0.8942206102961513,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.1378526264478955
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.22955415516218122,
+          "actual_displacement_mean_slope": 5.159227243700557e-06,
+          "net_retention": 0.7333506845116871,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.20180254318401933
+        }
+      },
+      "endpoint/AMC23/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 204.16673312869986,
+          "actual_displacement_mean_slope": -9.434337636575055e-05,
+          "net_retention": 0.7605203468292323,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.23747819212340474
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.7491957586227975,
+          "actual_displacement_mean_slope": -3.854995305711917e-07,
+          "net_retention": 0.2730959151298237,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.19484595351996273
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 51.34419576596894,
+          "actual_displacement_mean_slope": -0.00013118206473644294,
+          "net_retention": 0.8087996774339934,
+          "improving_fraction": 0.9166666666666666,
+          "mean_request_cosine": 0.2886243205725738
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 55.36647983833686,
+          "actual_displacement_mean_slope": -0.00011739815662293012,
+          "net_retention": 0.9998976799470315,
+          "improving_fraction": 0.9583333333333334,
+          "mean_request_cosine": 0.5380376096905092
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.38236765267744577,
+          "actual_displacement_mean_slope": -4.534682472910734e-06,
+          "net_retention": 0.635614842979441,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": -0.005034671892318284
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.31600273904090215,
+          "actual_displacement_mean_slope": -2.5620119000925144e-06,
+          "net_retention": 0.42124344171222233,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": 0.03454880917460559
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.22466007826364734,
+          "actual_displacement_mean_slope": 1.7350253896685663e-06,
+          "net_retention": 0.6196803684787406,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.12189700740166964
+        }
+      },
+      "patch-off-b1/MATH-500/layer27": {
+        "final-learned": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 491.9333357028527,
+          "actual_displacement_mean_slope": -0.0017331987370088856,
+          "net_retention": 0.9890029190657427,
+          "improving_fraction": 0.9545454545454546,
+          "mean_request_cosine": 0.5608104882022146
+        },
+        "final-diag": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5403475565518929,
+          "actual_displacement_mean_slope": 4.430343423635719e-06,
+          "net_retention": 0.35676934952547856,
+          "improving_fraction": 0.6818181818181818,
+          "mean_request_cosine": 0.0585261509722548
+        },
+        "final-off": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 126.22525986614873,
+          "actual_displacement_mean_slope": -0.0026730508235348407,
+          "net_retention": 0.9793179499446052,
+          "improving_fraction": 0.9090909090909091,
+          "mean_request_cosine": 0.5668483478994599
+        },
+        "final-null": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 79.72322669053425,
+          "actual_displacement_mean_slope": -0.0022449208995137695,
+          "net_retention": 0.9706287919732054,
+          "improving_fraction": 0.9090909090909091,
+          "mean_request_cosine": 0.5691439669309167
+        },
+        "random_frames-0": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3908298815885249,
+          "actual_displacement_mean_slope": 5.3318133042761554e-05,
+          "net_retention": 0.9631514597844384,
+          "improving_fraction": 0.5454545454545454,
+          "mean_request_cosine": -0.16864898760199198
+        },
+        "random_frames-1": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3277460069868696,
+          "actual_displacement_mean_slope": -7.943726405034382e-05,
+          "net_retention": 0.9707605182954114,
+          "improving_fraction": 0.4090909090909091,
+          "mean_request_cosine": 0.07183019922290981
+        },
+        "random_frames-2": {
+          "n": 22,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.1455036154463757,
+          "actual_displacement_mean_slope": -3.289224301939409e-05,
+          "net_retention": 0.8353180857454009,
+          "improving_fraction": 0.6818181818181818,
+          "mean_request_cosine": -0.07930804659828224
+        }
+      },
+      "patch-off-b1/AMC23/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 478.5703879607486,
+          "actual_displacement_mean_slope": -0.0007931271485691996,
+          "net_retention": 0.7318478793419313,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.2901443601271411
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.067974058575796,
+          "actual_displacement_mean_slope": 8.683659869748315e-06,
+          "net_retention": 0.8347464004414572,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.0043646631881634436
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 59.50708109119489,
+          "actual_displacement_mean_slope": -0.0013936046935763286,
+          "net_retention": 0.7623919594773438,
+          "improving_fraction": 0.8333333333333334,
+          "mean_request_cosine": 0.33023028683530753
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 74.14441751505768,
+          "actual_displacement_mean_slope": -0.0013251113182437026,
+          "net_retention": 0.9116533454882881,
+          "improving_fraction": 0.875,
+          "mean_request_cosine": 0.37300795944928167
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.2666341659041637,
+          "actual_displacement_mean_slope": 2.0156786649149508e-05,
+          "net_retention": 0.8554898429120105,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": -0.009036411543266365
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3069205469988864,
+          "actual_displacement_mean_slope": -5.287494143774036e-05,
+          "net_retention": 0.7450859258045607,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": 0.028477232302699922
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5909411094067762,
+          "actual_displacement_mean_slope": 1.3917487069783439e-05,
+          "net_retention": 0.25596430763323813,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": -0.10477421438403796
+        }
+      }
+    },
+    "rl-endpoint": {
+      "all": {
+        "final-learned": {
+          "n": 288,
+          "questions": 32,
+          "median_energy_over_gaussian": 355.32256903348997,
+          "actual_displacement_mean_slope": -4.182012511699834e-05,
+          "net_retention": 0.4212924301237539,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": -0.030862800633769758
+        },
+        "final-diag": {
+          "n": 288,
+          "questions": 32,
+          "median_energy_over_gaussian": 3.704984647311102,
+          "actual_displacement_mean_slope": 1.1413443527878435e-07,
+          "net_retention": 0.5706026404329513,
+          "improving_fraction": 0.5625,
+          "mean_request_cosine": 0.05622840040136101
+        },
+        "final-off": {
+          "n": 288,
+          "questions": 32,
+          "median_energy_over_gaussian": 38.95306189069179,
+          "actual_displacement_mean_slope": 1.8922131090039407e-05,
+          "net_retention": 0.4686655581815201,
+          "improving_fraction": 0.5381944444444444,
+          "mean_request_cosine": 0.014633756751000803
+        },
+        "final-null": {
+          "n": 288,
+          "questions": 32,
+          "median_energy_over_gaussian": 32.76679807767218,
+          "actual_displacement_mean_slope": 1.000230866252212e-05,
+          "net_retention": 0.41906879206143555,
+          "improving_fraction": 0.5590277777777778,
+          "mean_request_cosine": 0.059081730111101724
+        },
+        "random_frames-0": {
+          "n": 288,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.8084985481993361,
+          "actual_displacement_mean_slope": 1.2373428117055585e-06,
+          "net_retention": 0.3638688921303823,
+          "improving_fraction": 0.34375,
+          "mean_request_cosine": -0.11394279824237505
+        },
+        "random_frames-1": {
+          "n": 288,
+          "questions": 32,
+          "median_energy_over_gaussian": 0.8503169973229914,
+          "actual_displacement_mean_slope": -4.892640694999934e-07,
+          "net_retention": 0.11214760541581816,
+          "improving_fraction": 0.5868055555555556,
+          "mean_request_cosine": 0.11221680004659132
+        },
+        "random_frames-2": {
+          "n": 288,
+          "questions": 32,
+          "median_energy_over_gaussian": 1.0259164923058426,
+          "actual_displacement_mean_slope": 1.816286010911773e-06,
+          "net_retention": 0.30816303399620226,
+          "improving_fraction": 0.53125,
+          "mean_request_cosine": 6.153230291673485e-05
+        }
+      },
+      "endpoint/MATH-500/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 732.6936537811939,
+          "actual_displacement_mean_slope": -3.8843087335323354e-05,
+          "net_retention": 0.6355338027268048,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": -0.01379806722156359
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.525276361028309,
+          "actual_displacement_mean_slope": -7.45497890605507e-08,
+          "net_retention": 0.9862000550836393,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.1506713015386425
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 62.611628771572185,
+          "actual_displacement_mean_slope": -2.4989666564134006e-07,
+          "net_retention": 0.0806534643066617,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.24060198203103522
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 134.23588012765566,
+          "actual_displacement_mean_slope": -1.772931636595866e-06,
+          "net_retention": 0.4816954379979116,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.21382815373753483
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7648580308969694,
+          "actual_displacement_mean_slope": 1.0093616040365953e-06,
+          "net_retention": 0.9998171747929938,
+          "improving_fraction": 0.08333333333333333,
+          "mean_request_cosine": -0.44330411429533645
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.0841653902828434,
+          "actual_displacement_mean_slope": 2.062178199556062e-08,
+          "net_retention": 0.042234232025824936,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.21098897064881328
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2.114337921712738,
+          "actual_displacement_mean_slope": -1.8741086648704592e-06,
+          "net_retention": 0.984485591821463,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.13622425611698583
+        }
+      },
+      "endpoint/AMC23/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 882.302188748143,
+          "actual_displacement_mean_slope": -0.00032479340072506894,
+          "net_retention": 0.967215774300031,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.10883458408221987
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 5.7849504205338995,
+          "actual_displacement_mean_slope": 5.214578825484512e-07,
+          "net_retention": 0.9510779138165061,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.05227886932134548
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 146.7412385198281,
+          "actual_displacement_mean_slope": 0.00012637267756332048,
+          "net_retention": 0.9470092805566884,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.01957719798941389
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 125.49429734291658,
+          "actual_displacement_mean_slope": 8.713476318642817e-05,
+          "net_retention": 0.9365705900450275,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.05042547561337593
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.3133131077523248,
+          "actual_displacement_mean_slope": 6.8392990011209554e-06,
+          "net_retention": 0.9999272556901799,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.11316355932672854
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.5360641297723998,
+          "actual_displacement_mean_slope": -7.453748273619511e-06,
+          "net_retention": 0.9108060264972907,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.1846511830428588
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2.140631886587652,
+          "actual_displacement_mean_slope": -7.543924945678079e-06,
+          "net_retention": 0.864542921078216,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.10317793063159948
+        }
+      },
+      "patch-off-b1/MATH-500/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 823.7883883090675,
+          "actual_displacement_mean_slope": -5.189626120603129e-05,
+          "net_retention": 0.9520307188147469,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.08625279019915877
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 7.164268632952519,
+          "actual_displacement_mean_slope": -6.429466895435262e-08,
+          "net_retention": 0.885995159662789,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": 0.061458398043453384
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 54.473144481369985,
+          "actual_displacement_mean_slope": 2.49696843523262e-06,
+          "net_retention": 0.823999988041234,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.1094482168922752
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 121.3825374362577,
+          "actual_displacement_mean_slope": 2.2635100824436834e-06,
+          "net_retention": 0.8616773182008219,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.029646153936518854
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7648580308969694,
+          "actual_displacement_mean_slope": 6.668625033662468e-07,
+          "net_retention": 0.622660507061202,
+          "improving_fraction": 0.20833333333333334,
+          "mean_request_cosine": -0.19120614995893614
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.0841653902828434,
+          "actual_displacement_mean_slope": 4.7095412755669224e-07,
+          "net_retention": 0.9716538438470531,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.10118295619143129
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.7407877435638484,
+          "actual_displacement_mean_slope": -1.2671158174980662e-06,
+          "net_retention": 0.8778126476144874,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.001569866920890765
+        }
+      },
+      "patch-off-b1/AMC23/layer0": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 882.302188748143,
+          "actual_displacement_mean_slope": -0.00031462228391296304,
+          "net_retention": 0.9091431117021782,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.058859007682764725
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 5.484303916636101,
+          "actual_displacement_mean_slope": 5.1635963972134e-07,
+          "net_retention": 0.9329119505809113,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.05466828584781641
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 146.7412385198281,
+          "actual_displacement_mean_slope": 0.00012576828198749784,
+          "net_retention": 0.9379334712255873,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.03580735291250564
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 123.05364224785447,
+          "actual_displacement_mean_slope": 8.603551058191363e-05,
+          "net_retention": 0.9139568729877418,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": 0.10550032814076597
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.0954491713664427,
+          "actual_displacement_mean_slope": 6.7604270650333705e-06,
+          "net_retention": 0.9760726675866356,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.19510020743963463
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.362123963725248,
+          "actual_displacement_mean_slope": -7.100064578555929e-06,
+          "net_retention": 0.8316459942136417,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.0476074096684475
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 2.140631886587652,
+          "actual_displacement_mean_slope": -7.143740851748941e-06,
+          "net_retention": 0.7815785502409176,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.1307926784679558
+        }
+      },
+      "endpoint/MATH-500/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 68.60392181299355,
+          "actual_displacement_mean_slope": 5.486174727603681e-05,
+          "net_retention": 0.9590203422053559,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.023875865522735337
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9231959637158703,
+          "actual_displacement_mean_slope": 1.1833423490225602e-07,
+          "net_retention": 0.9218250487495706,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.17496925947682393
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 14.45892581950184,
+          "actual_displacement_mean_slope": -1.8833156065978457e-05,
+          "net_retention": 0.9658612018847943,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.08673143592646887
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 5.17268393936401,
+          "actual_displacement_mean_slope": -8.353740812977407e-06,
+          "net_retention": 0.9896106783690873,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.11232416190816184
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.9543702899725778,
+          "actual_displacement_mean_slope": 4.231447776354086e-06,
+          "net_retention": 0.965196477809734,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.19773391719213873
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7699321300301207,
+          "actual_displacement_mean_slope": 1.137235568832865e-05,
+          "net_retention": 0.9853127269159362,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.09133252774538421
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7306852898830397,
+          "actual_displacement_mean_slope": 7.855095210010574e-08,
+          "net_retention": 0.08853592813320277,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.10767349129566162
+        }
+      },
+      "endpoint/AMC23/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 34.84525807069127,
+          "actual_displacement_mean_slope": 5.8968756032316906e-06,
+          "net_retention": 0.07282713629883689,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.048577500879946944
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8344188845456477,
+          "actual_displacement_mean_slope": 1.7785017429138414e-07,
+          "net_retention": 0.6116291779120898,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.130733882896473
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 10.527412020829514,
+          "actual_displacement_mean_slope": 1.793950716869377e-05,
+          "net_retention": 0.2761574799936158,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.14947022724044903
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 4.320717253652361,
+          "actual_displacement_mean_slope": -5.642210548216789e-06,
+          "net_retention": 0.27999458835489976,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.038706224611781755
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.37557030958783,
+          "actual_displacement_mean_slope": -3.99357220422122e-06,
+          "net_retention": 0.9977844104676983,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.06484542425633777
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5323269182589638,
+          "actual_displacement_mean_slope": -4.531357867946958e-06,
+          "net_retention": 0.9998969571612365,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.3456116679999081
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.2480975105061307,
+          "actual_displacement_mean_slope": 1.7582762570151785e-05,
+          "net_retention": 0.8580435632059393,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.16744477242649206
+        }
+      },
+      "patch-off-b1/MATH-500/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 64.96168677321263,
+          "actual_displacement_mean_slope": 5.002390373753709e-05,
+          "net_retention": 0.9055331783398991,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.06814970711246322
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.0737365942152648,
+          "actual_displacement_mean_slope": 1.0186658991750573e-07,
+          "net_retention": 0.694832245677173,
+          "improving_fraction": 0.7916666666666666,
+          "mean_request_cosine": 0.2749442426775413
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 15.68854125045935,
+          "actual_displacement_mean_slope": -1.834382119273662e-05,
+          "net_retention": 0.8074965264645213,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.09877833339088149
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 5.237994829803881,
+          "actual_displacement_mean_slope": -8.991107371182763e-06,
+          "net_retention": 0.829800098878995,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": -0.007444160164770962
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.1618224089386333,
+          "actual_displacement_mean_slope": 2.9716615091061484e-06,
+          "net_retention": 0.8922019007246723,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": -0.09868755564482962
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.7699321300301207,
+          "actual_displacement_mean_slope": 8.08083946496927e-06,
+          "net_retention": 0.9476131132322839,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.052991570542600286
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8724464119789911,
+          "actual_displacement_mean_slope": -2.2697938561275708e-07,
+          "net_retention": 0.19433614671438956,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.0983698227310953
+        }
+      },
+      "patch-off-b1/AMC23/layer13": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 32.988797958865135,
+          "actual_displacement_mean_slope": 1.185502186697816e-05,
+          "net_retention": 0.1363760159692058,
+          "improving_fraction": 0.25,
+          "mean_request_cosine": -0.20457528371286135
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.8863822916006727,
+          "actual_displacement_mean_slope": 2.253745762474744e-07,
+          "net_retention": 0.6642309161295238,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": -0.050860348742428486
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 10.527412020829514,
+          "actual_displacement_mean_slope": 2.0714261727913653e-05,
+          "net_retention": 0.30530768135296316,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": -0.08538774460962158
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 4.320717253652361,
+          "actual_displacement_mean_slope": -3.1878167567836757e-06,
+          "net_retention": 0.14101930019532827,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.04839922347928477
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.37557030958783,
+          "actual_displacement_mean_slope": -1.7247435065309703e-06,
+          "net_retention": 0.2750230612633923,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": 0.03155428529947312
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5907868368531781,
+          "actual_displacement_mean_slope": -5.902302161087586e-06,
+          "net_retention": 0.9999216344610017,
+          "improving_fraction": 0.75,
+          "mean_request_cosine": 0.4295100063751794
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 1.2480975105061307,
+          "actual_displacement_mean_slope": 1.7978190761154248e-05,
+          "net_retention": 0.8592872576375892,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.08815875948036571
+        }
+      },
+      "endpoint/MATH-500/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 321.1393250014273,
+          "actual_displacement_mean_slope": 2.6952321919083606e-05,
+          "net_retention": 0.8851935734921794,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": 0.05277814031262238
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 3.1543278244802324,
+          "actual_displacement_mean_slope": -6.28563682362606e-08,
+          "net_retention": 0.9397842128225969,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.0883801650356305
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 70.0692165694931,
+          "actual_displacement_mean_slope": -6.823860652686122e-06,
+          "net_retention": 0.8464265270766562,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": -0.03746963938174545
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 107.19351872376612,
+          "actual_displacement_mean_slope": -7.0586460257660134e-06,
+          "net_retention": 0.768037330882966,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.07188291065972208
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5543888230570728,
+          "actual_displacement_mean_slope": -1.6774613278410822e-07,
+          "net_retention": 0.12226088298920096,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": 0.08575968584849523
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3868938755240089,
+          "actual_displacement_mean_slope": 5.644230931921136e-07,
+          "net_retention": 0.8505416056082395,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.1944145231809659
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.43266207820025027,
+          "actual_displacement_mean_slope": 4.2416151049095224e-07,
+          "net_retention": 0.5146570934735042,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.13974090189328023
+        }
+      },
+      "endpoint/AMC23/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 135.44864638684012,
+          "actual_displacement_mean_slope": 2.316539858202077e-05,
+          "net_retention": 0.9992202449100526,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": -0.10670956085626197
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 3.8438670022125736,
+          "actual_displacement_mean_slope": -8.662279309013832e-09,
+          "net_retention": 0.18009931504717389,
+          "improving_fraction": 0.5,
+          "mean_request_cosine": -0.06349690816288354
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 61.13469222117648,
+          "actual_displacement_mean_slope": -5.7617578894404525e-06,
+          "net_retention": 0.7269904286997431,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.05898222579437324
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 55.84839809921129,
+          "actual_displacement_mean_slope": -5.424664634858517e-06,
+          "net_retention": 0.9979051920753516,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": 0.06532186887154294
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.32498726850233467,
+          "actual_displacement_mean_slope": -1.4617902136722571e-06,
+          "net_retention": 0.6987652541674929,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.1638377491280553
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5190216572401108,
+          "actual_displacement_mean_slope": -9.425212776682293e-07,
+          "net_retention": 0.66064562395687,
+          "improving_fraction": 0.4583333333333333,
+          "mean_request_cosine": -0.030340219674864426
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.32510429102618277,
+          "actual_displacement_mean_slope": 1.9162407834484944e-06,
+          "net_retention": 0.9995343411944897,
+          "improving_fraction": 0.7083333333333334,
+          "mean_request_cosine": 0.09282218359705291
+        }
+      },
+      "patch-off-b1/MATH-500/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 298.87465591926275,
+          "actual_displacement_mean_slope": 3.041823968972837e-05,
+          "net_retention": 0.8810723066944206,
+          "improving_fraction": 0.3333333333333333,
+          "mean_request_cosine": -0.04935041703474321
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 3.2503338520557588,
+          "actual_displacement_mean_slope": -6.156392119651269e-08,
+          "net_retention": 0.8702512999581632,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.08951965421579015
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 85.79211545656631,
+          "actual_displacement_mean_slope": -7.76609603859108e-06,
+          "net_retention": 0.8435233393028724,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.033972218231008405
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 60.82789673834073,
+          "actual_displacement_mean_slope": -8.618606903076436e-06,
+          "net_retention": 0.8697799903786709,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.01835569335966798
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3221539423260993,
+          "actual_displacement_mean_slope": 5.039325771818711e-07,
+          "net_retention": 0.6829914437550446,
+          "improving_fraction": 0.2916666666666667,
+          "mean_request_cosine": -0.062228027398531595
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.33962286834174094,
+          "actual_displacement_mean_slope": 3.4530682209136656e-07,
+          "net_retention": 0.7042438576449414,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.10156312584737293
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.3083532786047797,
+          "actual_displacement_mean_slope": 4.773924881804261e-07,
+          "net_retention": 0.5545280017769553,
+          "improving_fraction": 0.5833333333333334,
+          "mean_request_cosine": 0.11422015956110733
+        }
+      },
+      "patch-off-b1/AMC23/layer27": {
+        "final-learned": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 102.48890056915107,
+          "actual_displacement_mean_slope": 2.514002310079005e-05,
+          "net_retention": 0.9978458872314263,
+          "improving_fraction": 0.4166666666666667,
+          "mean_request_cosine": -0.16204172754142723
+        },
+        "final-diag": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 3.9024072539921013,
+          "actual_displacement_mean_slope": -1.970284752630863e-08,
+          "net_retention": 0.3307146450618248,
+          "improving_fraction": 0.5416666666666666,
+          "mean_request_cosine": -0.027058231538926253
+        },
+        "final-off": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 53.57905756251068,
+          "actual_displacement_mean_slope": -8.447535297111459e-06,
+          "net_retention": 0.79602927408622,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.1350532677105646
+        },
+        "final-null": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 54.334487334051474,
+          "actual_displacement_mean_slope": -6.356355211062592e-06,
+          "net_retention": 0.9982124630513152,
+          "improving_fraction": 0.625,
+          "mean_request_cosine": 0.20665149972583075
+        },
+        "random_frames-0": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.32945428267016025,
+          "actual_displacement_mean_slope": -7.87026238524013e-07,
+          "net_retention": 0.28417965213849233,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.0842116939286156
+        },
+        "random_frames-1": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.5190216572401108,
+          "actual_displacement_mean_slope": -7.956756532553651e-07,
+          "net_retention": 0.5056686042286365,
+          "improving_fraction": 0.375,
+          "mean_request_cosine": -0.18054620862613888
+        },
+        "random_frames-2": {
+          "n": 24,
+          "questions": 8,
+          "median_energy_over_gaussian": 0.32510429102618277,
+          "actual_displacement_mean_slope": 1.3940027308235704e-06,
+          "net_retention": 0.5707351077195522,
+          "improving_fraction": 0.6666666666666666,
+          "mean_request_cosine": 0.07528009260109313
+        }
+      }
+    }
+  },
+  "stage_ratios": {
+    "early_over_base": {
+      "final-learned": 0.5662037722947351,
+      "final-off": 0.5212743572399867,
+      "final-null": 0.5129617746742969
+    },
+    "endpoint_over_base": {
+      "final-learned": 0.41117676816699494,
+      "final-off": 0.3459156785990588,
+      "final-null": 0.31501593879825457
+    }
+  },
+  "sha256": {
+    "response-probes-v10/sft-base.json": "945f355694950b03c368273121a9c88e744f04b7335d4497ea869c5923aeda24",
+    "response-probes-v10/sft-early.json": "9747c87cbf9752cf39627a1b5ff53c611c3b61cc953608ed68a7f5f6c3127385",
+    "response-probes-v10/sft-endpoint.json": "e8c92a84114926c717cba6bae0a084e3ef382658451c123d8d63f677a9485e1a",
+    "response-probes-v10/rl-endpoint.json": "39d9b3924a4c995c4dee3c3dd92f3deb80a37e03f47121b56956f1a13f7758b4"
+  }
+}

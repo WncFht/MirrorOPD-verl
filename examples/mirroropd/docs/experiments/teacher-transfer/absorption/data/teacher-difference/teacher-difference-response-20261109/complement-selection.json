@@ -1,0 +1,8 @@
+{
+  "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/twenty-batch-pass-20261027/bank.json",
+  "main_rows": 320,
+  "complement_rows": 320,
+  "math_each": 256,
+  "prompt_disjoint": true,
+  "rule": "all original records not in the frozen 20261109 main selection; no new sampling"
+}

@@ -1,0 +1,797 @@
+[
+  {
+    "run_id": "supplement-r1-polaris",
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/POLARIS-Project--Polaris-7B-Preview/faea72cf7123681069668e8da45c1c074e378830",
+    "checkpoints": {},
+    "compatible": false,
+    "curves": {
+      "Math": [
+        {
+          "step": 0,
+          "rkl": 0.2353117440034416,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-000.json",
+          "source_sha256": "3823d2cd6077667765cb73a491e5db3c69ce6cbdb189c4f84c8b0c77d2e87cb2"
+        },
+        {
+          "step": 16,
+          "rkl": 0.22007260063697545,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-016.json",
+          "source_sha256": "f481eca5481b70212a788228612d5420fdf307aa2265fc5096855cb3c3bc3a6d"
+        },
+        {
+          "step": 32,
+          "rkl": 0.20122189120266493,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-032.json",
+          "source_sha256": "38a1395a395b61fe90198ea392db40313426a1761f7e9c47f656cbdac4d302b4"
+        },
+        {
+          "step": 48,
+          "rkl": 0.19238240051223554,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-048.json",
+          "source_sha256": "6c30f25c61551762c49d75c6703f42fbded01b3e668022381434e92544d26763"
+        },
+        {
+          "step": 64,
+          "rkl": 0.1851093734463119,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-064.json",
+          "source_sha256": "5667495dc9455027163f0d8dab2fe339203de56c1e3c005f2b1230f4f01a5cee"
+        }
+      ],
+      "Code": [
+        {
+          "step": 0,
+          "rkl": 0.23015129596222764,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-000.json",
+          "source_sha256": "3823d2cd6077667765cb73a491e5db3c69ce6cbdb189c4f84c8b0c77d2e87cb2"
+        },
+        {
+          "step": 16,
+          "rkl": 0.2226010719965725,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-016.json",
+          "source_sha256": "f481eca5481b70212a788228612d5420fdf307aa2265fc5096855cb3c3bc3a6d"
+        },
+        {
+          "step": 32,
+          "rkl": 0.21233721567681585,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-032.json",
+          "source_sha256": "38a1395a395b61fe90198ea392db40313426a1761f7e9c47f656cbdac4d302b4"
+        },
+        {
+          "step": 48,
+          "rkl": 0.20628975855669823,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-048.json",
+          "source_sha256": "6c30f25c61551762c49d75c6703f42fbded01b3e668022381434e92544d26763"
+        },
+        {
+          "step": 64,
+          "rkl": 0.20083846037943243,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-064.json",
+          "source_sha256": "5667495dc9455027163f0d8dab2fe339203de56c1e3c005f2b1230f4f01a5cee"
+        }
+      ],
+      "IF": [
+        {
+          "step": 0,
+          "rkl": 0.7330089119319385,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-000.json",
+          "source_sha256": "3823d2cd6077667765cb73a491e5db3c69ce6cbdb189c4f84c8b0c77d2e87cb2"
+        },
+        {
+          "step": 16,
+          "rkl": 0.7262982528758034,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-016.json",
+          "source_sha256": "f481eca5481b70212a788228612d5420fdf307aa2265fc5096855cb3c3bc3a6d"
+        },
+        {
+          "step": 32,
+          "rkl": 0.7161936090151444,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-032.json",
+          "source_sha256": "38a1395a395b61fe90198ea392db40313426a1761f7e9c47f656cbdac4d302b4"
+        },
+        {
+          "step": 48,
+          "rkl": 0.710359756352866,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-048.json",
+          "source_sha256": "6c30f25c61551762c49d75c6703f42fbded01b3e668022381434e92544d26763"
+        },
+        {
+          "step": 64,
+          "rkl": 0.7042464606428878,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-064.json",
+          "source_sha256": "5667495dc9455027163f0d8dab2fe339203de56c1e3c005f2b1230f4f01a5cee"
+        }
+      ],
+      "All held-out": [
+        {
+          "step": 0,
+          "rkl": 0.3584459239752623,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-000.json",
+          "source_sha256": "3823d2cd6077667765cb73a491e5db3c69ce6cbdb189c4f84c8b0c77d2e87cb2"
+        },
+        {
+          "step": 16,
+          "rkl": 0.3472611315365817,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-016.json",
+          "source_sha256": "f481eca5481b70212a788228612d5420fdf307aa2265fc5096855cb3c3bc3a6d"
+        },
+        {
+          "step": 32,
+          "rkl": 0.3327436517743225,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-032.json",
+          "source_sha256": "38a1395a395b61fe90198ea392db40313426a1761f7e9c47f656cbdac4d302b4"
+        },
+        {
+          "step": 48,
+          "rkl": 0.3253535789835088,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-048.json",
+          "source_sha256": "6c30f25c61551762c49d75c6703f42fbded01b3e668022381434e92544d26763"
+        },
+        {
+          "step": 64,
+          "rkl": 0.31882591697873597,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB1-P/fixed-064.json",
+          "source_sha256": "5667495dc9455027163f0d8dab2fe339203de56c1e3c005f2b1230f4f01a5cee"
+        }
+      ]
+    }
+  },
+  {
+    "run_id": "supplement-r7-polaris",
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+    "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/POLARIS-Project--Polaris-7B-Preview/faea72cf7123681069668e8da45c1c074e378830",
+    "checkpoints": {},
+    "compatible": true,
+    "curves": {
+      "Math": [
+        {
+          "step": 0,
+          "rkl": 0.06493979959033859,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-000.json",
+          "source_sha256": "a14bfc6c06d92065e05483a4b0e5b9f819a3873d194d1425135c5946ded4e253"
+        },
+        {
+          "step": 16,
+          "rkl": 0.03326537223360014,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-016.json",
+          "source_sha256": "1218ab3d4cee3be4abd2c90be927d4e219fb4a9fce01217200d307a6d87287cc"
+        },
+        {
+          "step": 32,
+          "rkl": 0.011451870786027349,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-032.json",
+          "source_sha256": "ce336ba98901590a1aeaf65422695de479615ed149e8e25073bf297d4167562c"
+        },
+        {
+          "step": 48,
+          "rkl": 0.006569245168419207,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-048.json",
+          "source_sha256": "db7d42acf3bc0e483ffc60e1cb21df827ec5d2d30f6f19dcdaa7b6c7ee5724aa"
+        },
+        {
+          "step": 64,
+          "rkl": 0.0047122685790923465,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-064.json",
+          "source_sha256": "926176507bf43c267024ab10fb6e9218ab623697034181ea1044fa6ac41d67ae"
+        }
+      ],
+      "Code": [
+        {
+          "step": 0,
+          "rkl": 0.022273166621060717,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-000.json",
+          "source_sha256": "a14bfc6c06d92065e05483a4b0e5b9f819a3873d194d1425135c5946ded4e253"
+        },
+        {
+          "step": 16,
+          "rkl": 0.011142197862872223,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-016.json",
+          "source_sha256": "1218ab3d4cee3be4abd2c90be927d4e219fb4a9fce01217200d307a6d87287cc"
+        },
+        {
+          "step": 32,
+          "rkl": 0.005492481021707603,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-032.json",
+          "source_sha256": "ce336ba98901590a1aeaf65422695de479615ed149e8e25073bf297d4167562c"
+        },
+        {
+          "step": 48,
+          "rkl": 0.003774678731317073,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-048.json",
+          "source_sha256": "db7d42acf3bc0e483ffc60e1cb21df827ec5d2d30f6f19dcdaa7b6c7ee5724aa"
+        },
+        {
+          "step": 64,
+          "rkl": 0.0027500381600809192,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-064.json",
+          "source_sha256": "926176507bf43c267024ab10fb6e9218ab623697034181ea1044fa6ac41d67ae"
+        }
+      ],
+      "IF": [
+        {
+          "step": 0,
+          "rkl": 0.027176129750003723,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-000.json",
+          "source_sha256": "a14bfc6c06d92065e05483a4b0e5b9f819a3873d194d1425135c5946ded4e253"
+        },
+        {
+          "step": 16,
+          "rkl": 0.01706406835019676,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-016.json",
+          "source_sha256": "1218ab3d4cee3be4abd2c90be927d4e219fb4a9fce01217200d307a6d87287cc"
+        },
+        {
+          "step": 32,
+          "rkl": 0.008215017563325688,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-032.json",
+          "source_sha256": "ce336ba98901590a1aeaf65422695de479615ed149e8e25073bf297d4167562c"
+        },
+        {
+          "step": 48,
+          "rkl": 0.0048150154148881245,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-048.json",
+          "source_sha256": "db7d42acf3bc0e483ffc60e1cb21df827ec5d2d30f6f19dcdaa7b6c7ee5724aa"
+        },
+        {
+          "step": 64,
+          "rkl": 0.004286966033965727,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-064.json",
+          "source_sha256": "926176507bf43c267024ab10fb6e9218ab623697034181ea1044fa6ac41d67ae"
+        }
+      ],
+      "All held-out": [
+        {
+          "step": 0,
+          "rkl": 0.0448322238879354,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-000.json",
+          "source_sha256": "a14bfc6c06d92065e05483a4b0e5b9f819a3873d194d1425135c5946ded4e253"
+        },
+        {
+          "step": 16,
+          "rkl": 0.023684252670067314,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-016.json",
+          "source_sha256": "1218ab3d4cee3be4abd2c90be927d4e219fb4a9fce01217200d307a6d87287cc"
+        },
+        {
+          "step": 32,
+          "rkl": 0.009152810039271996,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-032.json",
+          "source_sha256": "ce336ba98901590a1aeaf65422695de479615ed149e8e25073bf297d4167562c"
+        },
+        {
+          "step": 48,
+          "rkl": 0.005432046120760903,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-048.json",
+          "source_sha256": "db7d42acf3bc0e483ffc60e1cb21df827ec5d2d30f6f19dcdaa7b6c7ee5724aa"
+        },
+        {
+          "step": 64,
+          "rkl": 0.004115385338057834,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-P7/fixed-064.json",
+          "source_sha256": "926176507bf43c267024ab10fb6e9218ab623697034181ea1044fa6ac41d67ae"
+        }
+      ]
+    }
+  },
+  {
+    "run_id": "supplement-q3-1.7-polaris-4",
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/POLARIS-Project--Polaris-4B-Preview/dcab747284e6f4818d8a871315f63dc1223ee394",
+    "checkpoints": {},
+    "compatible": false,
+    "curves": {
+      "Math": [
+        {
+          "step": 0,
+          "rkl": 0.24065236855628547,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-000.json",
+          "source_sha256": "fc8555c86c8955938f581d6d2f04b29cb147f8e2d15104f8f92dfe95e7a3ea5d"
+        },
+        {
+          "step": 16,
+          "rkl": 0.2251511832315763,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-016.json",
+          "source_sha256": "3c8c0a6e06eb087ffbc081d7fa79566b372160f1ea496551e63fd2b6f643023a"
+        },
+        {
+          "step": 32,
+          "rkl": 0.22010725476967055,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-032.json",
+          "source_sha256": "d3b899d07f33730f45bf5329865534dfa080eca5850ea33c37e4e097fec47844"
+        },
+        {
+          "step": 48,
+          "rkl": 0.22048683064816704,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-048.json",
+          "source_sha256": "0e7a8c5a12170148cb88837d46ca074033b63fe42b576ddb7361bae910b4597d"
+        },
+        {
+          "step": 64,
+          "rkl": 0.21946213919038365,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-064.json",
+          "source_sha256": "4d8eb6ffbb4b95d129715864d7a7e345ad25e322f260c52299a8e4b79960d25c"
+        },
+        {
+          "step": 80,
+          "rkl": 0.21890573022340204,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-080.json",
+          "source_sha256": "643432677c9d7ae63f742bee4a4266d055a31f3983567a0ba3c4d0f8c1d4c086"
+        },
+        {
+          "step": 96,
+          "rkl": 0.21951253474562057,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-096.json",
+          "source_sha256": "b5e2d1c7e5a6822979ee11fb972959b26756da2a7508002dc70599d91bcd0a9e"
+        },
+        {
+          "step": 112,
+          "rkl": 0.2201850706807788,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-112.json",
+          "source_sha256": "4eb5eb658a2ac25f3bc918a13016100b581b5f56d83089cd699eb6028a492b43"
+        },
+        {
+          "step": 128,
+          "rkl": 0.22064108605634827,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-128.json",
+          "source_sha256": "2ebabd9ec6912008362acb720d5719098c5cc9c171e6dd0502da8c5c465e0c00"
+        },
+        {
+          "step": 144,
+          "rkl": 0.22154791104106686,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-144.json",
+          "source_sha256": "859ed00d17c92964149cef0f5906299954c6db2ad71f748d74633e85285b8b3b"
+        },
+        {
+          "step": 160,
+          "rkl": 0.22350299517091618,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-160.json",
+          "source_sha256": "aec8e05a8f20dda346e502404bfb0f7bc403a2187b799847f023398a2c1e80dd"
+        },
+        {
+          "step": 176,
+          "rkl": 0.22364167430138834,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-176.json",
+          "source_sha256": "ed6aa6adae439a5cc002649b905fc29c6c030ee9d688fa38ac5ca71e5feee92e"
+        },
+        {
+          "step": 192,
+          "rkl": 0.22371685232407135,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-192.json",
+          "source_sha256": "95706a1c3131b36452e4bf9cc84cc981dcfe4a60a37fff50568557902cc0be28"
+        },
+        {
+          "step": 208,
+          "rkl": 0.2230577769911668,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-208.json",
+          "source_sha256": "cea5beb1d32811b1d545a0d86d4d09a6f0e45aaf333d6528eb07f050f406d855"
+        },
+        {
+          "step": 224,
+          "rkl": 0.2251221224688262,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-224.json",
+          "source_sha256": "c88ff2c09469486880451cd4b669ec93d2a1666032947add5ba7261a4383b698"
+        },
+        {
+          "step": 240,
+          "rkl": 0.2253579857726294,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-240.json",
+          "source_sha256": "d25fb2abcd10f7e95146beefade4eea412c5a42aa5260237999593c4651dc8dc"
+        },
+        {
+          "step": 256,
+          "rkl": 0.22493819508124013,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-256.json",
+          "source_sha256": "108eed01baca4bc1e832733bb1da040796831229f7f3d26f4b013d90efcc13f7"
+        },
+        {
+          "step": 272,
+          "rkl": 0.22701907177812308,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-272.json",
+          "source_sha256": "b4619d636bc6bbfb48275dc43e51eabf4df7525015ef6aedd8d49d9101dea5be"
+        },
+        {
+          "step": 288,
+          "rkl": 0.22565967339039572,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-288.json",
+          "source_sha256": "c22721b6bf6c330990b1ea9188022ba9b2676a6395998dec6676c4c42e793ef8"
+        },
+        {
+          "step": 304,
+          "rkl": 0.22602944457358973,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-304.json",
+          "source_sha256": "6d79c78a6229aa71a5257220a52db946e17053b49a1dd38b02201fc13a44f184"
+        },
+        {
+          "step": 320,
+          "rkl": 0.22859548875309943,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-320.json",
+          "source_sha256": "e9faa47b37429ad32b4e7e501b49892e4f5967555eed043f62f3b16f53a23991"
+        }
+      ],
+      "Code": [
+        {
+          "step": 0,
+          "rkl": 0.3831802980697464,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-000.json",
+          "source_sha256": "fc8555c86c8955938f581d6d2f04b29cb147f8e2d15104f8f92dfe95e7a3ea5d"
+        },
+        {
+          "step": 16,
+          "rkl": 0.36206905146347357,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-016.json",
+          "source_sha256": "3c8c0a6e06eb087ffbc081d7fa79566b372160f1ea496551e63fd2b6f643023a"
+        },
+        {
+          "step": 32,
+          "rkl": 0.35240706277225897,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-032.json",
+          "source_sha256": "d3b899d07f33730f45bf5329865534dfa080eca5850ea33c37e4e097fec47844"
+        },
+        {
+          "step": 48,
+          "rkl": 0.3506093761592291,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-048.json",
+          "source_sha256": "0e7a8c5a12170148cb88837d46ca074033b63fe42b576ddb7361bae910b4597d"
+        },
+        {
+          "step": 64,
+          "rkl": 0.35084080381435206,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-064.json",
+          "source_sha256": "4d8eb6ffbb4b95d129715864d7a7e345ad25e322f260c52299a8e4b79960d25c"
+        },
+        {
+          "step": 80,
+          "rkl": 0.34672696207082104,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-080.json",
+          "source_sha256": "643432677c9d7ae63f742bee4a4266d055a31f3983567a0ba3c4d0f8c1d4c086"
+        },
+        {
+          "step": 96,
+          "rkl": 0.34761771330035846,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-096.json",
+          "source_sha256": "b5e2d1c7e5a6822979ee11fb972959b26756da2a7508002dc70599d91bcd0a9e"
+        },
+        {
+          "step": 112,
+          "rkl": 0.3477078714610766,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-112.json",
+          "source_sha256": "4eb5eb658a2ac25f3bc918a13016100b581b5f56d83089cd699eb6028a492b43"
+        },
+        {
+          "step": 128,
+          "rkl": 0.34768404485735366,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-128.json",
+          "source_sha256": "2ebabd9ec6912008362acb720d5719098c5cc9c171e6dd0502da8c5c465e0c00"
+        },
+        {
+          "step": 144,
+          "rkl": 0.3507299450737076,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-144.json",
+          "source_sha256": "859ed00d17c92964149cef0f5906299954c6db2ad71f748d74633e85285b8b3b"
+        },
+        {
+          "step": 160,
+          "rkl": 0.35223807260091466,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-160.json",
+          "source_sha256": "aec8e05a8f20dda346e502404bfb0f7bc403a2187b799847f023398a2c1e80dd"
+        },
+        {
+          "step": 176,
+          "rkl": 0.3531495921389703,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-176.json",
+          "source_sha256": "ed6aa6adae439a5cc002649b905fc29c6c030ee9d688fa38ac5ca71e5feee92e"
+        },
+        {
+          "step": 192,
+          "rkl": 0.3557847676306515,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-192.json",
+          "source_sha256": "95706a1c3131b36452e4bf9cc84cc981dcfe4a60a37fff50568557902cc0be28"
+        },
+        {
+          "step": 208,
+          "rkl": 0.3552818477238429,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-208.json",
+          "source_sha256": "cea5beb1d32811b1d545a0d86d4d09a6f0e45aaf333d6528eb07f050f406d855"
+        },
+        {
+          "step": 224,
+          "rkl": 0.3574071328719537,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-224.json",
+          "source_sha256": "c88ff2c09469486880451cd4b669ec93d2a1666032947add5ba7261a4383b698"
+        },
+        {
+          "step": 240,
+          "rkl": 0.3561183502284602,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-240.json",
+          "source_sha256": "d25fb2abcd10f7e95146beefade4eea412c5a42aa5260237999593c4651dc8dc"
+        },
+        {
+          "step": 256,
+          "rkl": 0.35622047618905034,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-256.json",
+          "source_sha256": "108eed01baca4bc1e832733bb1da040796831229f7f3d26f4b013d90efcc13f7"
+        },
+        {
+          "step": 272,
+          "rkl": 0.35487195003661764,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-272.json",
+          "source_sha256": "b4619d636bc6bbfb48275dc43e51eabf4df7525015ef6aedd8d49d9101dea5be"
+        },
+        {
+          "step": 288,
+          "rkl": 0.3535872848645044,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-288.json",
+          "source_sha256": "c22721b6bf6c330990b1ea9188022ba9b2676a6395998dec6676c4c42e793ef8"
+        },
+        {
+          "step": 304,
+          "rkl": 0.35375737119500006,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-304.json",
+          "source_sha256": "6d79c78a6229aa71a5257220a52db946e17053b49a1dd38b02201fc13a44f184"
+        },
+        {
+          "step": 320,
+          "rkl": 0.3568058357498779,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-320.json",
+          "source_sha256": "e9faa47b37429ad32b4e7e501b49892e4f5967555eed043f62f3b16f53a23991"
+        }
+      ],
+      "IF": [
+        {
+          "step": 0,
+          "rkl": 0.4528811732182539,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-000.json",
+          "source_sha256": "fc8555c86c8955938f581d6d2f04b29cb147f8e2d15104f8f92dfe95e7a3ea5d"
+        },
+        {
+          "step": 16,
+          "rkl": 0.44239870159516853,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-016.json",
+          "source_sha256": "3c8c0a6e06eb087ffbc081d7fa79566b372160f1ea496551e63fd2b6f643023a"
+        },
+        {
+          "step": 32,
+          "rkl": 0.4363716449592818,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-032.json",
+          "source_sha256": "d3b899d07f33730f45bf5329865534dfa080eca5850ea33c37e4e097fec47844"
+        },
+        {
+          "step": 48,
+          "rkl": 0.435006601499852,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-048.json",
+          "source_sha256": "0e7a8c5a12170148cb88837d46ca074033b63fe42b576ddb7361bae910b4597d"
+        },
+        {
+          "step": 64,
+          "rkl": 0.4353918501888758,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-064.json",
+          "source_sha256": "4d8eb6ffbb4b95d129715864d7a7e345ad25e322f260c52299a8e4b79960d25c"
+        },
+        {
+          "step": 80,
+          "rkl": 0.4322918660303005,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-080.json",
+          "source_sha256": "643432677c9d7ae63f742bee4a4266d055a31f3983567a0ba3c4d0f8c1d4c086"
+        },
+        {
+          "step": 96,
+          "rkl": 0.43223514587198386,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-096.json",
+          "source_sha256": "b5e2d1c7e5a6822979ee11fb972959b26756da2a7508002dc70599d91bcd0a9e"
+        },
+        {
+          "step": 112,
+          "rkl": 0.43322601899565477,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-112.json",
+          "source_sha256": "4eb5eb658a2ac25f3bc918a13016100b581b5f56d83089cd699eb6028a492b43"
+        },
+        {
+          "step": 128,
+          "rkl": 0.43330809151092803,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-128.json",
+          "source_sha256": "2ebabd9ec6912008362acb720d5719098c5cc9c171e6dd0502da8c5c465e0c00"
+        },
+        {
+          "step": 144,
+          "rkl": 0.4329802797951155,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-144.json",
+          "source_sha256": "859ed00d17c92964149cef0f5906299954c6db2ad71f748d74633e85285b8b3b"
+        },
+        {
+          "step": 160,
+          "rkl": 0.43304396175920834,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-160.json",
+          "source_sha256": "aec8e05a8f20dda346e502404bfb0f7bc403a2187b799847f023398a2c1e80dd"
+        },
+        {
+          "step": 176,
+          "rkl": 0.432186399009879,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-176.json",
+          "source_sha256": "ed6aa6adae439a5cc002649b905fc29c6c030ee9d688fa38ac5ca71e5feee92e"
+        },
+        {
+          "step": 192,
+          "rkl": 0.43243897847771734,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-192.json",
+          "source_sha256": "95706a1c3131b36452e4bf9cc84cc981dcfe4a60a37fff50568557902cc0be28"
+        },
+        {
+          "step": 208,
+          "rkl": 0.4318922353645909,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-208.json",
+          "source_sha256": "cea5beb1d32811b1d545a0d86d4d09a6f0e45aaf333d6528eb07f050f406d855"
+        },
+        {
+          "step": 224,
+          "rkl": 0.4331825798768005,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-224.json",
+          "source_sha256": "c88ff2c09469486880451cd4b669ec93d2a1666032947add5ba7261a4383b698"
+        },
+        {
+          "step": 240,
+          "rkl": 0.4335129488496471,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-240.json",
+          "source_sha256": "d25fb2abcd10f7e95146beefade4eea412c5a42aa5260237999593c4651dc8dc"
+        },
+        {
+          "step": 256,
+          "rkl": 0.4328926265805104,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-256.json",
+          "source_sha256": "108eed01baca4bc1e832733bb1da040796831229f7f3d26f4b013d90efcc13f7"
+        },
+        {
+          "step": 272,
+          "rkl": 0.43173514628929693,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-272.json",
+          "source_sha256": "b4619d636bc6bbfb48275dc43e51eabf4df7525015ef6aedd8d49d9101dea5be"
+        },
+        {
+          "step": 288,
+          "rkl": 0.4312709011713149,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-288.json",
+          "source_sha256": "c22721b6bf6c330990b1ea9188022ba9b2676a6395998dec6676c4c42e793ef8"
+        },
+        {
+          "step": 304,
+          "rkl": 0.43149241987340264,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-304.json",
+          "source_sha256": "6d79c78a6229aa71a5257220a52db946e17053b49a1dd38b02201fc13a44f184"
+        },
+        {
+          "step": 320,
+          "rkl": 0.43157868564781365,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-320.json",
+          "source_sha256": "e9faa47b37429ad32b4e7e501b49892e4f5967555eed043f62f3b16f53a23991"
+        }
+      ],
+      "All held-out": [
+        {
+          "step": 0,
+          "rkl": 0.3293415521001428,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-000.json",
+          "source_sha256": "fc8555c86c8955938f581d6d2f04b29cb147f8e2d15104f8f92dfe95e7a3ea5d"
+        },
+        {
+          "step": 16,
+          "rkl": 0.31369252988044866,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-016.json",
+          "source_sha256": "3c8c0a6e06eb087ffbc081d7fa79566b372160f1ea496551e63fd2b6f643023a"
+        },
+        {
+          "step": 32,
+          "rkl": 0.3072483043177205,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-032.json",
+          "source_sha256": "d3b899d07f33730f45bf5329865534dfa080eca5850ea33c37e4e097fec47844"
+        },
+        {
+          "step": 48,
+          "rkl": 0.3066474097388538,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-048.json",
+          "source_sha256": "0e7a8c5a12170148cb88837d46ca074033b63fe42b576ddb7361bae910b4597d"
+        },
+        {
+          "step": 64,
+          "rkl": 0.30628923309599876,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-064.json",
+          "source_sha256": "4d8eb6ffbb4b95d129715864d7a7e345ad25e322f260c52299a8e4b79960d25c"
+        },
+        {
+          "step": 80,
+          "rkl": 0.3042075721369814,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-080.json",
+          "source_sha256": "643432677c9d7ae63f742bee4a4266d055a31f3983567a0ba3c4d0f8c1d4c086"
+        },
+        {
+          "step": 96,
+          "rkl": 0.30471948216589584,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-096.json",
+          "source_sha256": "b5e2d1c7e5a6822979ee11fb972959b26756da2a7508002dc70599d91bcd0a9e"
+        },
+        {
+          "step": 112,
+          "rkl": 0.30532600795457226,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-112.json",
+          "source_sha256": "4eb5eb658a2ac25f3bc918a13016100b581b5f56d83089cd699eb6028a492b43"
+        },
+        {
+          "step": 128,
+          "rkl": 0.30556857712024454,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-128.json",
+          "source_sha256": "2ebabd9ec6912008362acb720d5719098c5cc9c171e6dd0502da8c5c465e0c00"
+        },
+        {
+          "step": 144,
+          "rkl": 0.3067015117377392,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-144.json",
+          "source_sha256": "859ed00d17c92964149cef0f5906299954c6db2ad71f748d74633e85285b8b3b"
+        },
+        {
+          "step": 160,
+          "rkl": 0.30807200617548886,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-160.json",
+          "source_sha256": "aec8e05a8f20dda346e502404bfb0f7bc403a2187b799847f023398a2c1e80dd"
+        },
+        {
+          "step": 176,
+          "rkl": 0.3081548349379065,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-176.json",
+          "source_sha256": "ed6aa6adae439a5cc002649b905fc29c6c030ee9d688fa38ac5ca71e5feee92e"
+        },
+        {
+          "step": 192,
+          "rkl": 0.30891436268912786,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-192.json",
+          "source_sha256": "95706a1c3131b36452e4bf9cc84cc981dcfe4a60a37fff50568557902cc0be28"
+        },
+        {
+          "step": 208,
+          "rkl": 0.30832240926769183,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-208.json",
+          "source_sha256": "cea5beb1d32811b1d545a0d86d4d09a6f0e45aaf333d6528eb07f050f406d855"
+        },
+        {
+          "step": 224,
+          "rkl": 0.3102084894216017,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-224.json",
+          "source_sha256": "c88ff2c09469486880451cd4b669ec93d2a1666032947add5ba7261a4383b698"
+        },
+        {
+          "step": 240,
+          "rkl": 0.3100868176558415,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-240.json",
+          "source_sha256": "d25fb2abcd10f7e95146beefade4eea412c5a42aa5260237999593c4651dc8dc"
+        },
+        {
+          "step": 256,
+          "rkl": 0.30974737323301027,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-256.json",
+          "source_sha256": "108eed01baca4bc1e832733bb1da040796831229f7f3d26f4b013d90efcc13f7"
+        },
+        {
+          "step": 272,
+          "rkl": 0.3101613099705402,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-272.json",
+          "source_sha256": "b4619d636bc6bbfb48275dc43e51eabf4df7525015ef6aedd8d49d9101dea5be"
+        },
+        {
+          "step": 288,
+          "rkl": 0.3090443832041527,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-288.json",
+          "source_sha256": "c22721b6bf6c330990b1ea9188022ba9b2676a6395998dec6676c4c42e793ef8"
+        },
+        {
+          "step": 304,
+          "rkl": 0.30932717005389554,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-304.json",
+          "source_sha256": "6d79c78a6229aa71a5257220a52db946e17053b49a1dd38b02201fc13a44f184"
+        },
+        {
+          "step": 320,
+          "rkl": 0.31139387472597263,
+          "source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-mode-thinking-wave1-20261029/arms/T-Polaris4/fixed-320.json",
+          "source_sha256": "e9faa47b37429ad32b4e7e501b49892e4f5967555eed043f62f3b16f53a23991"
+        }
+      ]
+    }
+  }
+]

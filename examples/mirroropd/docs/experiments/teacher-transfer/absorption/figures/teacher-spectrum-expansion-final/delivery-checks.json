@@ -1,0 +1,30 @@
+{
+  "figures": {
+    "absolute-risk": {
+      "audit": "PASS: fv.audit(fig) returned no issues.",
+      "png_sha256": "47a63e029b1d11636f0cdf4d2c7aa58b2408d49c3f16f0b045e3ac0352445e22"
+    },
+    "compression": {
+      "audit": "PASS: fv.audit(fig) returned no issues.",
+      "png_sha256": "05a337f71b3fc76f0de1ab14e9abc956b533a27550ddff613654a6a671f223f4"
+    },
+    "depth": {
+      "audit": "PASS: fv.audit(fig) returned no issues.",
+      "png_sha256": "49f941a5aff32707625898b6447c279f6f2bfac926a41db122c9e463a68ce00c"
+    },
+    "gradient-alignment": {
+      "audit": "PASS: fv.audit(fig) returned no issues.",
+      "png_sha256": "cc4fac57ec2d2ad3c2f3d79251f2a38ae06763c21e213764572b061a9845de19"
+    }
+  },
+  "checks": {
+    "ruff": true,
+    "ruff_format": true,
+    "docs_check": true,
+    "diff_check": true,
+    "archived_json_roundtrip": true,
+    "replot_without_run": true
+  },
+  "review": "All four plots visually inspected; actual versus selected beta distinguished; continuous versus branch conditions separated.",
+  "generator_sha256": "a30ba683e520e1b5782f56c1e800b9dd17df1b88923bf6229a16bacbeee8ecd0"
+}

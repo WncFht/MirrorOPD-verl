@@ -1,12 +1,12 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Render an auditable endpoint and absorption comparison for MiMo E71-E73/E91.
+"""Render an auditable endpoint and absorption comparison for MiMo E71-E73/E91/E93.
 
-The E71-E73 arms start from MiMo-7B-Base; E91 starts from MiMo-7B-SFT.
+The E71-E73 arms start from MiMo-7B-Base; E91/E93 start from MiMo-7B-SFT.
 RKL is therefore plotted as within-arm relative reduction, while accuracy is
 shown as the final student endpoint with E91's initial SFT checkpoint marked.
 Semantic ledger: colors identify runs; bars are question-mean avg@n accuracy;
-diamonds are E91's initial SFT scores; lines are each run's teacher-bank RKL
+diamonds/crosses are E91/E93 initial SFT scores; lines are teacher-bank RKL
 reduction relative to its own step zero. Banks use independent trajectories.
 Geometry ledger: RKL x is optimizer updates (0-800), y is percent reduction;
 accuracy x is eight categorical benchmarks, y is accuracy (0-100 percent).
@@ -29,12 +29,14 @@ E91 = DOCS / "figures/e91-live-20261108"
 INITIAL = DOCS / "figures/e91-initial-20261107/initial-readout.csv"
 OUTPUT = DOCS / "figures/mimo-stage-20261104-final/e91-comparison"
 RUN = ROOT / "runs/e91-mimo-rlzero-sft-20261107"
-ARMS = ("E71", "E72", "E73", "E91")
+E93_RUN = ROOT / "runs/e93-mimo-rl-sft-20261108"
+ARMS = ("E71", "E72", "E73", "E91", "E93")
 LABELS = {
     "E71": "E71 SFT+RL → Base student",
     "E72": "E72 direct RL → Base student",
     "E73": "E73 SFT → Base student",
     "E91": "E91 direct RL → SFT student",
+    "E93": "E93 SFT+RL → SFT student",
 }
 DATASETS = ("MATH-500", "AMC23", "AIME24", "AIME25", "AIME26", "LCBv5", "GPQA-Diamond", "IFEval")
 
@@ -113,6 +115,37 @@ def verify_e91_rkl(sources):
     return audit
 
 
+def verified_e93_rkl(sources):
+    import pyarrow.parquet as pq
+
+    rows = []
+    for event in sorted((E93_RUN / "formal/E93/evaluation/events").iterdir()):
+        manifest_path = event / "manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        assert manifest["status"] == "complete"
+        path = event / "rkl.parquet"
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == manifest["files"]["rkl.parquet"]["sha256"]
+        sources.extend([manifest_path, path])
+        groups = defaultdict(list)
+        keys = set()
+        for row in pq.read_table(path).to_pylist():
+            key = row["bank"], row["domain"], row["source_id"], row["sample_index"]
+            assert key not in keys and row["tokens"] > 0
+            keys.add(key)
+            value = row["rkl_sum"] / row["tokens"]
+            assert math.isfinite(value) and value >= 0
+            groups[row["bank"], row["domain"]].append(value)
+        outer = int(event.name.split("-")[1])
+        for bank in ("public_initial", "public_teacher"):
+            domains = {}
+            for domain in ("math", "code", "science", "if"):
+                values = groups[bank, domain]
+                assert len(values) == 128
+                domains[domain] = math.fsum(values) / len(values)
+            rows.append(dict(outer=outer, bank=bank, all=math.fsum(domains.values()) / 4, **domains))
+    return rows
+
+
 def load_rkl():
     rows = []
     for arm in ("E71", "E72", "E73"):
@@ -172,12 +205,28 @@ def render():
 
     fv = load_style()
     fv.apply_rc("paper", fontsize=10)
-    colors = dict(zip(ARMS, [fv.HUES[c] for c in ("vteal", "vorange", "vviolet", "vcoral")], strict=True))
+    colors = dict(zip(ARMS, [fv.HUES[c] for c in ("vteal", "vorange", "vviolet", "vcoral", "vblue")], strict=True))
     OUTPUT.mkdir(parents=True, exist_ok=True)
     sources = []
     e91_rkl_audit = verify_e91_rkl(sources)
+    e93_rkl_audit = verified_e93_rkl(sources)
     rkl = load_rkl()
     accuracy, initial = load_accuracy(sources)
+    accuracy["E93"] = verified_accuracy(E93_RUN / "formal/E93/evaluation/events/outer-020/accuracy", sources)
+    e93_initial = verified_accuracy(E93_RUN / "bootstrap/initial-accuracy", sources)
+    teacher_rows = [r for r in e93_rkl_audit if r["bank"] == "public_teacher"]
+    initial_rkl = teacher_rows[0]["all"]
+    for row in teacher_rows:
+        rkl.append(
+            dict(
+                arm="E93",
+                outer=row["outer"],
+                optimizer_updates=row["outer"] * 16,
+                initial_rkl=initial_rkl,
+                rkl=row["all"],
+                reduction_percent=100 * (1 - row["all"] / initial_rkl),
+            )
+        )
 
     def save_figure(fig, path, caption):
         fig.text(0.5, 0.025, caption, ha="center", fontsize=8, color=fv.NEUTRALS["baseline"])
@@ -205,6 +254,7 @@ def render():
                 writer.writerow([arm, dataset, accuracy[arm][dataset], "final_student"])
         for dataset in DATASETS:
             writer.writerow(["E91", dataset, initial[dataset], "initial_sft"])
+            writer.writerow(["E93", dataset, e93_initial[dataset], "initial_sft"])
 
     fig, ax = plt.subplots(figsize=(8.6, 4.8))
     for arm in ARMS:
@@ -225,27 +275,35 @@ def render():
     save_figure(
         fig,
         OUTPUT / "rkl-absorption-comparison",
-        "Within-arm reduction on each arm's teacher-prefix bank; E91 starts from MiMo-7B-SFT.",
+        "Within-arm reduction on each arm's teacher-prefix bank; E91/E93 start from MiMo-7B-SFT.",
     )
 
     fig, ax = plt.subplots(figsize=(10.2, 5.2))
     x = np.arange(len(DATASETS))
-    width = 0.18
+    width = 0.15
     for index, arm in enumerate(ARMS):
         ax.bar(
-            x + (index - 1.5) * width,
+            x + (index - 2) * width,
             [100 * accuracy[arm][dataset] for dataset in DATASETS],
             width,
             color=colors[arm],
             label=LABELS[arm],
         )
     ax.plot(
-        x + 1.5 * width,
+        x,
         [100 * initial[dataset] for dataset in DATASETS],
         color=fv.NEUTRALS["baseline"],
         marker="D",
         ls="none",
         label="E91 initial SFT",
+    )
+    ax.plot(
+        x,
+        [100 * e93_initial[d] for d in DATASETS],
+        color=fv.NEUTRALS["baseline"],
+        marker="x",
+        ls="none",
+        label="E93 initial SFT",
     )
     ax.set(
         xticks=x,
@@ -261,14 +319,22 @@ def render():
     save_figure(
         fig,
         OUTPUT / "accuracy-comparison",
-        "Final student accuracy; E91 begins from an SFT checkpoint, while E71-E73 begin from Base.",
+        "Final student accuracy; E91/E93 begin from an SFT checkpoint, while E71-E73 begin from Base.",
     )
 
     source_paths = [DATA / arm / "fixed-bank-rkl.csv" for arm in ("E71", "E72", "E73")]
     source_paths += [E91 / "evaluation.csv", DATA / "accuracy.csv", INITIAL, *sources]
     (OUTPUT / "source-audit.json").write_text(
         json.dumps(
-            dict(e91_accuracy_recomputed=True, e91_initial_recomputed=True, e91_teacher_bank=e91_rkl_audit), indent=2
+            dict(
+                e91_accuracy_recomputed=True,
+                e91_initial_recomputed=True,
+                e91_teacher_bank=e91_rkl_audit,
+                e93_accuracy_recomputed=True,
+                e93_initial_recomputed=True,
+                e93_fixed_banks=e93_rkl_audit,
+            ),
+            indent=2,
         )
         + "\n"
     )
@@ -276,8 +342,8 @@ def render():
         "captured_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "arms": ARMS,
         "labels": LABELS,
-        "rkl_source": "teacher-prefix fixed-bank RKL for E71-E73; E91 evaluation.csv teacher_rkl",
-        "accuracy_source": "final student accuracy for E71-E73; E91 outer-020 accuracy manifest",
+        "rkl_source": "teacher-prefix fixed-bank RKL: E71-E73 frozen CSV; E91/E93 verified scored Parquet",
+        "accuracy_source": "final student accuracy for E71-E73; E91/E93 verified outer-020 scored Parquet",
         "sources": {
             str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in source_paths
         },
