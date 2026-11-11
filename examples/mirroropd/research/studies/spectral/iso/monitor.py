@@ -82,7 +82,9 @@ def run(root, resource, docs, interval=120):
                     dump(destination / f"analysis-error-{time.time_ns()}.json", dict(traceback=traceback.format_exc()))
             if previous == signature and all((path / "exit.json").exists() for path in queue_roots):
                 exit_record = {str(path): read(path / "exit.json") for path in queue_roots}
-                restored = all(occupied(resource, int(gpu)) for gpu in broker["gpus"])
+                allocation = root / "allocation.json"
+                required = read(allocation)["physical_gpus"] if allocation.exists() else list(map(int, broker["gpus"]))
+                restored = all(occupied(resource, int(gpu)) for gpu in required)
                 if restored:
                     dump(
                         destination / "complete.json",
@@ -90,6 +92,7 @@ def run(root, resource, docs, interval=120):
                             at=now,
                             queue_exit=exit_record,
                             all_tasks_passed=all(t["status"] == "complete" for t in queue),
+                            experiment_gpus=required,
                             occupancy_restored=True,
                         ),
                     )

@@ -121,6 +121,7 @@ def summarize(root, output):
         functional=[],
         geometry=[],
         training=[],
+        dapo_training=[],
         merger=[],
         paper_spectra=[],
     )
@@ -263,7 +264,7 @@ def summarize(root, output):
                 )
                 for k, v in values.items()
             )
-        elif label.startswith("training-"):
+        elif label.startswith(("training-", "dapo-training-")):
             scores = []
             for file in sorted((dest / "scores").glob("step-*.json")):
                 if file.name.endswith(".progress.json"):
@@ -282,7 +283,7 @@ def summarize(root, output):
                             fkl=statistics.mean(r["fkl"] for r in selected),
                         )
                     )
-            result["training"].append(
+            result["dapo_training" if label.startswith("dapo-training-") else "training"].append(
                 dict(
                     task=label,
                     protocol=read(dest / "protocol.json"),
@@ -487,6 +488,30 @@ def publish(root, summary, docs):
             "相同名义学习率并不匹配权重与 U/V 坐标中的函数步长；"
             "下一项训练应在 calibration 上匹配初始更新的 logit/KL 位移，再固定配置比较 heldout 动态。\n\n" + b,
         )
+    if summary.get("dapo_training"):
+        table = [
+            "### DAPO 参数化训练：固定 64 步对照\n",
+            "![DAPO 训练参数化对照](figures/iso-20261111/dapo-opd-curves.png)\n",
+            "真实 DAPO 数学训练池与三域固定 heldout 分开。每题 student 在线采样最多 128 token，"
+            "全词表 RKL 按固定 H128 归约，学习率 10⁻⁵，seed42/43；"
+            "下表只纳入完整 64 步结果，并列 seed，不按 heldout 选择阶段。"
+            "三种坐标使用相同名义学习率，尚未匹配初始函数位移；该比较测参数化配方，"
+            "不单独定义参数化的内在优劣。旧 12 题 pilot 保留在前节。\n",
+            "| 配对 | 方法 | seed | 初始 heldout RKL | 终点 heldout RKL |",
+            "| --- | --- | ---: | ---: | ---: |",
+        ]
+        for record in summary["dapo_training"]:
+            protocol = record["protocol"]
+            if protocol["training_data"]["source_family"] != "dapo":
+                raise ValueError("Non-DAPO training cannot enter formal DAPO results")
+            scores = [r for r in record["scores"] if r["origin"] == "initial-student" and r["split"] == "heldout"]
+            initial = statistics.mean(r["rkl"] for r in scores if r["step"] == 0)
+            final = statistics.mean(r["rkl"] for r in scores if r["step"] == protocol["steps"])
+            table.append(
+                f"| {protocol['job']['teacher']} | {protocol['mode']} | "
+                f"{protocol['seed']} | {initial:.6f} | {final:.6f} |"
+            )
+        text = text.replace(b, "\n".join(table) + "\n\n" + b)
     text = re.sub(r"(?<!\n)\n(?=#{1,6} )", "\n\n", text)
     page.write_text(re.sub(r"\n{3,}", "\n\n", text))
     from examples.mirroropd.tools.maintenance.pipeline import format_paths

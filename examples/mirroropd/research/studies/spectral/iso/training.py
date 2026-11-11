@@ -19,6 +19,7 @@ from ..absorption.banks import score
 from ..absorption.protocol import RunContext
 from ..scan import thin_svd
 from ..weights import DEFAULT_SCOPE, TensorCheckpoint
+from .optimizers import WeightAdam
 from .retraction import retract, spectrum_gradient
 
 
@@ -173,6 +174,9 @@ def run(
     token_chunk=128,
     vocab_chunk=8192,
     retraction="svd",
+    teacher_residency="gpu",
+    weight_state_device="gpu",
+    export_update="delta",
 ):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
@@ -194,7 +198,12 @@ def run(
     }
     reference, head = torch.load(evidence / "reference.pt", weights_only=True, mmap=True)
     head = head.cuda()
-    teacher = load_model(job["teacher_path"], trainable=True, device="cuda").eval().requires_grad_(False)
+    teacher = (
+        load_model(job["teacher_path"], trainable=True, device="cpu" if teacher_residency == "cpu-stage" else "cuda")
+        .eval()
+        .requires_grad_(False)
+    )
+    teacher_head = teacher.lm_head.weight.detach().to("cuda")
     model = load_model(job["base"], trainable=True, checkpointing=True, device="cuda")
     model.eval().requires_grad_(False)
     checkpoint = TensorCheckpoint(job["base"])
@@ -206,7 +215,11 @@ def run(
     for _, parameter in parameters:
         parameter.requires_grad_(True)
     optimizer = (
-        torch.optim.AdamW([p for _, p in parameters], lr=lr, weight_decay=0)
+        (
+            WeightAdam(parameters, lr)
+            if weight_state_device == "cpu"
+            else torch.optim.AdamW([p for _, p in parameters], lr=lr, weight_decay=0)
+        )
         if mode == "weights"
         else FactorAdam(parameters, lr, mode, retraction=retraction)
     )
@@ -223,6 +236,9 @@ def run(
             training_data=train_source,
             kl_execution=dict(backend=kl_backend, token_chunk=token_chunk, vocab_chunk=vocab_chunk),
             retraction=retraction,
+            teacher_residency=teacher_residency,
+            weight_state_device=weight_state_device,
+            export_update=export_update,
             arithmetic="FP32 model/factors/Adam states, BF16 autocast backbone, FP64 polar retraction",
             parameters=keys,
             factor_state_offload=getattr(optimizer, "offload", False),
@@ -255,6 +271,7 @@ def run(
             answer = (
                 model.generate(
                     input_ids=ids,
+                    attention_mask=torch.ones_like(ids),
                     do_sample=True,
                     temperature=1.0,
                     top_p=1.0,
@@ -269,14 +286,20 @@ def run(
         sampled = dict(row, response_ids=answer)
         model.zero_grad(set_to_none=True)
         model.train()
+        if teacher_residency == "cpu-stage":
+            teacher.get_decoder().to("cuda")
+            with torch.no_grad():
+                ht = hidden_states(teacher, sampled["prompt_ids"] + answer[:-1])[len(sampled["prompt_ids"]) - 1 :]
+            teacher.get_decoder().to("cpu")
         hs = hidden_states(model, sampled["prompt_ids"] + answer[:-1])[len(sampled["prompt_ids"]) - 1 :]
-        with torch.no_grad():
-            ht = hidden_states(teacher, sampled["prompt_ids"] + answer[:-1])[len(sampled["prompt_ids"]) - 1 :]
+        if teacher_residency == "gpu":
+            with torch.no_grad():
+                ht = hidden_states(teacher, sampled["prompt_ids"] + answer[:-1])[len(sampled["prompt_ids"]) - 1 :]
         loss = online_loss(
             hs,
             model.lm_head.weight,
             ht,
-            teacher.lm_head.weight,
+            teacher_head,
             backend=kl_backend,
             token_chunk=token_chunk,
             vocab_chunk=vocab_chunk,
@@ -300,7 +323,7 @@ def run(
         curve.append(record)
         dump(output / "learning-curve.json", curve)
         del hs, ht, loss
-    if not smoke:
+    if not smoke and export_update == "delta":
         delta = {
             key: (model.get_parameter(key).detach().cpu() - checkpoint.get(key).float()).contiguous() for key in keys
         }
@@ -330,6 +353,9 @@ def main():
     )
     p.add_argument("--token-chunk", type=int, default=128)
     p.add_argument("--vocab-chunk", type=int, default=8192)
+    p.add_argument("--export-update", choices=["delta", "none"], default="delta")
+    p.add_argument("--teacher-residency", choices=["gpu", "cpu-stage"], default="gpu")
+    p.add_argument("--weight-state-device", choices=["gpu", "cpu"], default="gpu")
     p.add_argument("--retraction", choices=["svd", "newton"], default="svd")
     p.add_argument("--smoke", action="store_true")
     torch.set_num_threads(2)

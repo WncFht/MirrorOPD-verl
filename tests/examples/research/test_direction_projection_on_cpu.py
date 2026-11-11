@@ -109,3 +109,14 @@ def test_analysis_separates_cross_layer_from_state_cancellation():
     for key in keys:
         layer = aggregate(rows, vectors, {key})
         assert layer["directions"]["off"]["state_scalar_coherence"] == 1
+
+
+def test_queue_rejects_physical_gpu_outside_explicit_allocation(tmp_path):
+    from examples.mirroropd.research.core.io import dump
+    from examples.mirroropd.research.studies.spectral.absorption.queue import claim
+
+    dump(tmp_path / "settings.json", dict(allowed_gpus=[0, 1, 2, 3]))
+    dump(tmp_path / "queue.json", dict(jobs=[]))
+    with pytest.raises(PermissionError, match="outside this queue allocation"):
+        claim(tmp_path, 4)
+    assert claim(tmp_path, 3) is None

@@ -56,10 +56,16 @@ python -m examples.mirroropd.research.studies.spectral.iso.merger --help
 
 本地 monitor 每两分钟核对任务、子进程身份、心跳和 broker，完成项才进入结果统计；结束核验所有卡自动恢复占用。失败保留原 attempt，由新版本或新 attempt 重试；依赖 smoke 未通过时完整任务不放行。停止本轮写运行根目录 `STOP`，仅停止巡检写 `MONITOR_STOP`。
 
-有依据的后续实验另建冻结队列，通过 `continue_queue` 等待指定前驱全部完成（仅接受逐任务、逐 attempt 匹配审计回执的设置取消例外）、exit 已写且八卡回到 occupying 后才申请卡。`queue-chain.json` 显式列出队列；分析与 monitor 同时覆盖全部队列，保留每个任务的所属 ledger，不覆盖前驱身份或重复启动前驱 supervisor。
+有依据的后续实验另建冻结队列，通过 `continue_queue` 等待指定前驱全部完成（仅接受逐任务、逐 attempt 匹配审计回执的设置取消例外）、exit 已写且 `--gpus` 指定的卡回到 occupying 后才申请卡。最新分配限定物理 GPU 0–3，入口核验根目录 allocation，队列另以 settings.allowed_gpus 限定 worker 领取任务。`queue-chain.json` 显式列出队列；分析与 monitor 同时覆盖全部队列，保留每个任务的所属 ledger，不覆盖前驱身份或重复启动前驱 supervisor。
 
 训练 loss 复用 `verl.trainer.distillation.reverse_vocab.full_reverse_kl_result`，默认 precompute、token chunk128，保留固定 H128 归约；可显式选择其他已支持 backend。新 rollout 的 teacher hidden 在设备上重算，避免原 CPU 往返。冻结运行不受源码更新影响。该入口是独立参数化诊断，尚未接入生产 trainer 的 DAPO batch/reuse/rollout 配置；正式训练按报告中的设置审计先验收。
 
 ## 可选回缩加速
 
 `training --retraction newton` 使用经过邻域与完整正交检查的 FP64 Newton–Schulz 极分解；不收敛时回退精确 SVD，默认仍为 `svd`。每步记录调用、成功与回退计数。仅谱梯度使用对角收缩，避免构造完整 UᵀGV。真实形状、四步优化器与 DAPO 两步读出结果见[性能验收](../../../../docs/infra/performance/spectral/固定谱优化器加速.md)。
+
+## DAPO 完整参数化队列
+
+六条件（JustRL、Qwen GRPO/SFT、Llama CoReward-I、MiMo SFT+RL/Zero 分支），每条件三方法、两 seed、64 步。训练池 2048 道 DAPO，另留 16 道 calibration；单矩阵和全层两步检查逐方法放行，原诊断 pilot 单独保留。
+
+MiMo 使用 `--teacher-residency cpu-stage --weight-state-device cpu`：FP32 teacher decoder 在无 student 反向图时进入 GPU 计算当前采样状态，随后回 CPU；词表 head 留 GPU。权重 Adam 的 FP32 主状态在 CPU 更新后逐矩阵回写。默认 GPU 路径不变。全层两步验收用 `--export-update none`，完整训练保留最终增量。每个条件的显存与耗时分别保存，不能将卸载模式当作常驻 GPU 吞吐。

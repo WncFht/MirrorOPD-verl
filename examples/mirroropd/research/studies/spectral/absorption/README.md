@@ -99,3 +99,5 @@ CUDA_VISIBLE_DEVICES='' python -m pytest -q \
   tests/examples/research/test_absorption_runtime_on_cpu.py \
   tests/examples/research/test_direction_projection_on_cpu.py
 ```
+
+若 `settings.json` 设置 `allowed_gpus`，supervisor 和每次 task claim 都核验物理 GPU 编号；越界直接失败。资源策略变化造成的中断保留原 attempt，以新 attempt 显式补回，冻结 source 不修改。
