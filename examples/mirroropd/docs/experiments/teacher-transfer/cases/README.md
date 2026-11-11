@@ -10,11 +10,11 @@
 
 ## 新实验设计
 
-| 文档                                                                               | 实验 | 内容                                                                                             |
-| ---------------------------------------------------------------------------------- | ---- | ------------------------------------------------------------------------------------------------ |
-| [MiMo E91](../post-training-stages.md#e91) | E91 | SFT student 吸收同源纯 direct-RL teacher；训练、validation 与统一评估均开启 repetition detection |
-| [Qwen2.5-1.5B SFT/RFT teacher 对照](2026-11-07-E92-Qwen25-SFT与RFT教师吸收对照.md) | E92  | 从共同 Base 生成数学 SFT/RFT teachers，再用匹配 MiMo 的 OPD 预算比较吸收情况                     |
-| [MiMo E91](../post-training-stages.md#e91)；[E93](../post-training-stages.md#e93) | E91 / E93 | 同一 SFT student 对 direct-RL 与 SFT+RL 两条 MiMo teacher 谱系的吸收对照 |
+| 文档                                                                               | 实验      | 内容                                                                                             |
+| ---------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------ |
+| [MiMo E91](../post-training-stages.md#e91)                                         | E91       | SFT student 吸收同源纯 direct-RL teacher；训练、validation 与统一评估均开启 repetition detection |
+| [Qwen2.5-1.5B SFT/RFT teacher 对照](2026-11-07-E92-Qwen25-SFT与RFT教师吸收对照.md) | E92       | 从共同 Base 生成数学 SFT/RFT teachers，再用匹配 MiMo 的 OPD 预算比较吸收情况                     |
+| [MiMo E91](../post-training-stages.md#e91)；[E93](../post-training-stages.md#e93)  | E91 / E93 | 同一 SFT student 对 direct-RL 与 SFT+RL 两条 MiMo teacher 谱系的吸收对照                         |
 
 每份文档保留设置表、原始 RKL 口径、首尾数值表和可复算产物；字段覆盖见[数据清单附录](../appendix/position-kl-inventory.md)，Polaris 完整任务与方向证据见[长训附录](../appendix/polaris-long-run.md)。
 

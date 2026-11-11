@@ -1,0 +1,2002 @@
+{
+  "conditions": [
+    {
+      "run_id": "MiMo-SFT",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "checkpoints": {},
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.16515637405543665,
+        "stable_rank": 126.96374828197773,
+        "top1pct": 0.052470871652107606,
+        "top5pct": 0.17427894712339578,
+        "kappa_spec": 28.394696698577846,
+        "rho_sigma": 0.0758458325486728
+      },
+      "curves": [
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "1.967694259902463",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "2.3771001846460793",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "1.7691844186147023",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "2.1029153084938836",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "1.6215771278551863",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.46322464687899256",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.19708727150504646",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.19813066307349644",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.3771717296614342",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "1.0805089232759932",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.46425543641070566",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.3544451763717473",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.24805694412929957",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.5624762751750407",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6920433499667351",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.37890748072188085",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.15349701459811282",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.16298998646607854",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.30628117025297197",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.8928617515703601",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.4259157984253846",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.30799817307876765",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.23376089693868154",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.5022678135486685",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6596363101354206",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.3685570429023823",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.14350549321257966",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.160759973391523",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.3084752613567104",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.8614874436487161",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.4133371109994988",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.29449626717228855",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22604789533070666",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.48584052858401794",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6469637529109822",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.34865259850672004",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.13248758805073294",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.15442380966724537",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2961114053611742",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.8115875909477276",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.4131984230580649",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.2948914430448669",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22603364609936874",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.48882672636029384",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6430418767277302",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.3429088750731453",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.1323585627079554",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.15473947645222577",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2926125956991235",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7919248654332767",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.41668438561704535",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.29995409497032227",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22656617401242993",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.49479076934913163",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6454265041362975",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.338879573939849",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.13151170069696724",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.1553271882892616",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.29034882229184694",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7783305844813203",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.40886839702019573",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.28961510071254587",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22657424662286393",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.4857709001144517",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6335133406309215",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.3375717707561148",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.1318019132448514",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.154957303720844",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.29022936553520134",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7732985005235624",
+          "questions": "128"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E73/fixed-bank-rkl.csv",
+      "curve_source_sha256": "ed361fefb4bb02d744af24e12c22bae1f8c2b57decc573199db849593ca58a7d"
+    },
+    {
+      "run_id": "MiMo-RL",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "checkpoints": {},
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.16516571820578618,
+        "stable_rank": 126.99655728677473,
+        "top1pct": 0.05248127647820268,
+        "top5pct": 0.17429008993137526,
+        "kappa_spec": 28.79435351518363,
+        "rho_sigma": 0.07625419077105786
+      },
+      "curves": [
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "2.117732416981082",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "2.710520798422599",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "1.8055991667935307",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "2.2157442944869348",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "1.7390654082212635",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.40612622873544924",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.19948383430315442",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.1603000593595993",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.3238301898286991",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.940890831450344",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.38457877091539794",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.2682365391692301",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21206190331157865",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.43797934509374553",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.6200372960870374",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.3294121795560961",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.14165375318891688",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.1320110259028911",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.27509608985750383",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7688878492750725",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.36312444152701645",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.2505143400573887",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21105142339879843",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.40637783767616215",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5845541649757164",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.31186609570630597",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.1303349986444443",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12689993407130085",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.26257438303113",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "64",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.7276550670783488",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.35791954771280765",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24662112850070894",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21283456980790516",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.4037725104388064",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.56844998210381",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.2986476796455827",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.12061111555916246",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12359825731785144",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2549158220831035",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6954655236222134",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.35725308678619955",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24537661274816341",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.22030610119882307",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.4035608891466566",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5597687440511551",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.2943146669962824",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.11885095840525607",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12431590268918673",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2527519203326616",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6813398865580251",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.3504668335154832",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24818016239713608",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21301155813516334",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.3911407391361416",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5495348743934917",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.2902118443805456",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.1131951586643256",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12480141567356129",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.24994836211445737",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "480",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6729024410698381",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.3528451452876607",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24882166698573346",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.21443282689637794",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.3982571254571504",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5498689618113809",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.28960737304491835",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.11393171312979342",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12639864540072734",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.25031127512177814",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "640",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6677878585273745",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.3487253207396868",
+          "questions": "512"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.24061496928424642",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.2122663704287922",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.39696198314350906",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.5450579601021996",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.28820100471681454",
+          "questions": "512"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.11349002561932561",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.12787893250567764",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.2481252046207372",
+          "questions": "128"
+        },
+        {
+          "outer": "25",
+          "optimizer_updates": "800",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.6633098561215176",
+          "questions": "128"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E71/fixed-bank-rkl.csv",
+      "curve_source_sha256": "17fcdcb9e15822fd12bbb6ee0e157670d695b0939c8904bc175288d1b3d82953"
+    },
+    {
+      "run_id": "MiMo-RL-from-SFT",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "checkpoints": {},
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.0033587743164695616,
+        "stable_rank": 15.203419307713208,
+        "top1pct": 0.18459250848461306,
+        "top5pct": 0.3353229509639969,
+        "kappa_spec": 17.343609773836782,
+        "rho_sigma": 0.06336345506247106
+      },
+      "curves": [
+        {
+          "arm": "E93",
+          "outer": "0",
+          "optimizer_updates": "0",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.042049318994986346",
+          "reduction_percent": "0.0",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "1",
+          "optimizer_updates": "16",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.02532407565707751",
+          "reduction_percent": "39.775301331046606",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "2",
+          "optimizer_updates": "32",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.016334093297764467",
+          "reduction_percent": "61.15491596971636",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "5",
+          "optimizer_updates": "80",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.00869752063706841",
+          "reduction_percent": "79.31590607185473",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "10",
+          "optimizer_updates": "160",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.005899970514193101",
+          "reduction_percent": "85.96892730915198",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "15",
+          "optimizer_updates": "240",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.004835794745380296",
+          "reduction_percent": "88.49970734137959",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E93",
+          "outer": "20",
+          "optimizer_updates": "320",
+          "initial_rkl": "0.042049318994986346",
+          "rkl": "0.00419786458301123",
+          "reduction_percent": "90.01680720795561",
+          "bank": "public_teacher",
+          "domain": "all"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/figures/mimo-stage-20261104-final/e91-comparison/rkl-comparison.csv",
+      "curve_source_sha256": "6254feb6de3b65f68d55d75c684fcb033df919d11e36d17bbc529584ce3fa624"
+    },
+    {
+      "run_id": "MiMo-Zero-from-SFT",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "checkpoints": {},
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.16437679764129215,
+        "stable_rank": 127.00907866192486,
+        "top1pct": 0.052484196064669274,
+        "top5pct": 0.17428965670491803,
+        "kappa_spec": 89.39247272126123,
+        "rho_sigma": 0.07570797814575492
+      },
+      "curves": [
+        {
+          "arm": "E91",
+          "outer": "0",
+          "optimizer_updates": "0",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.3810164377384541",
+          "reduction_percent": "0.0",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "1",
+          "optimizer_updates": "16",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.34437246186705306",
+          "reduction_percent": "9.61742650498324",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "2",
+          "optimizer_updates": "32",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.3101943699272216",
+          "reduction_percent": "18.5876673016002",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "5",
+          "optimizer_updates": "80",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.2864017390503308",
+          "reduction_percent": "24.832182897334963",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "10",
+          "optimizer_updates": "160",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.2705360626296061",
+          "reduction_percent": "28.996222778369063",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "15",
+          "optimizer_updates": "240",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.26837854111442444",
+          "reduction_percent": "29.562476960993767",
+          "bank": "public_teacher",
+          "domain": "all"
+        },
+        {
+          "arm": "E91",
+          "outer": "20",
+          "optimizer_updates": "320",
+          "initial_rkl": "0.3810164377384541",
+          "rkl": "0.26161622172320337",
+          "reduction_percent": "31.33728736848149",
+          "bank": "public_teacher",
+          "domain": "all"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/figures/mimo-stage-20261104-final/e91-comparison/rkl-comparison.csv",
+      "curve_source_sha256": "6254feb6de3b65f68d55d75c684fcb033df919d11e36d17bbc529584ce3fa624"
+    },
+    {
+      "run_id": "MiMo-Zero",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "checkpoints": {},
+      "protocol": "MiMo historical long-bank question-token-domain macro",
+      "features": {
+        "norm_over_base": 0.0017453886421265983,
+        "stable_rank": 21.69690975844879,
+        "top1pct": 0.1937077699102182,
+        "top5pct": 0.3814132616503627,
+        "kappa_spec": 8.18520658071959,
+        "rho_sigma": 0.04398679922815979
+      },
+      "curves": [
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.07004863080840706",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.07037373542708593",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.11043763725700899",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.07671052244897007",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.02267262810056327",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.06474529897464273",
+          "questions": "512"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.09215985513738964",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.08220916032287456",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.041952489070392895",
+          "questions": "128"
+        },
+        {
+          "outer": "0",
+          "optimizer_updates": "0",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.04265969136791383",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.018867035398297358",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.015394969787006033",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.0385136477323491",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.012619531037950871",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.00893999303588343",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.021281646815426554",
+          "questions": "512"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.022834409339253924",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.03325884160652636",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.013745852530482888",
+          "questions": "128"
+        },
+        {
+          "outer": "1",
+          "optimizer_updates": "16",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.015287483785443048",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.01989722867849923",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.019644763145828043",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.03190463926835147",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.015347923864801268",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.012691588435016126",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.01831796324145283",
+          "questions": "512"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.021232663680889923",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.02239848502737103",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.009242416465441217",
+          "questions": "128"
+        },
+        {
+          "outer": "2",
+          "optimizer_updates": "32",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.020398287792109143",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.008760401383626552",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.00568768088848334",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.020248652040515652",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.004801919070289288",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.004303353535217929",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.007379605473202659",
+          "questions": "512"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.006259499615913237",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.01380706048609348",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.003213874176226674",
+          "questions": "128"
+        },
+        {
+          "outer": "5",
+          "optimizer_updates": "80",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.006237987614577248",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.005784816218987453",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.002573700345342985",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.015994679164375178",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.0023008484708340036",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.002270036895397644",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.004322340092236346",
+          "questions": "512"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.0026529227156240785",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.009876615845468025",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.0016504334587263598",
+          "questions": "128"
+        },
+        {
+          "outer": "10",
+          "optimizer_updates": "160",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.003109388349126922",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.005135135234007585",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.0017764881489336578",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.015221970405208236",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.0018430863643460692",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.001698996017542376",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.003450433179644562",
+          "questions": "512"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.001706182832667423",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.008664647608607683",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.0012030567208244304",
+          "questions": "128"
+        },
+        {
+          "outer": "15",
+          "optimizer_updates": "240",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.0022278455564787116",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "all",
+          "rkl": "0.004286586319104935",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "math",
+          "rkl": "0.0013249169777404604",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "code",
+          "rkl": "0.01290392911287555",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "science",
+          "rkl": "0.0016690078883327432",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_initial",
+          "domain": "if",
+          "rkl": "0.0012484912974709873",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "all",
+          "rkl": "0.0027953321726925666",
+          "questions": "512"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "math",
+          "rkl": "0.001225037698066294",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "code",
+          "rkl": "0.0071318798182188345",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "science",
+          "rkl": "0.0010988439214031256",
+          "questions": "128"
+        },
+        {
+          "outer": "20",
+          "optimizer_updates": "320",
+          "bank": "public_teacher",
+          "domain": "if",
+          "rkl": "0.0017255672530820116",
+          "questions": "128"
+        }
+      ],
+      "curve_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E72/fixed-bank-rkl.csv",
+      "curve_source_sha256": "9c60db57fc87bd2f95b90aed3a706956700b55dadca31374ea3030d1f7b2116f"
+    }
+  ],
+  "source_sha256": "6307cb7a451f4c63fe330f7a69cbd7569c9b67193fc8ce35eaeee215b619ffdf",
+  "protocol_sha256": "7445399ee465bbf9f2ff0a9fe05b45d391969ad0a50b8d1d97e048ad5137d769",
+  "curves_sha256": "ac8612a7d9d0470e2f8523f2d5448d6ec92f2cc9bca41959ead132c388277c3f"
+}

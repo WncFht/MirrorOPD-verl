@@ -1,0 +1,58 @@
+{
+  "source_hashes": {
+    "inventory.csv": "5387246839facc8f09cabfca3a8476ac7427ef71024fd70140c8f8328f66c125",
+    "snapshots.csv": "118a08dd1a0fafff4ccec815a8e9ae01e545682a0e8869d81a11ca307ddb1dd7"
+  },
+  "min_progress_dex": 0.01,
+  "runs": 47,
+  "rows": 3564,
+  "early_window": [
+    0,
+    64
+  ],
+  "late_window": "[end-64,end], end>=128",
+  "metric_definitions": {
+    "rkl": {
+      "symbol": "K",
+      "label": "RKL \u6b8b\u5dee",
+      "unit": "nats / H1024",
+      "scale": "log",
+      "formula": "K_D(t)"
+    },
+    "log_absorption": {
+      "symbol": "A",
+      "label": "\u5bf9\u6570\u5438\u6536\u91cf",
+      "unit": "dex",
+      "scale": "linear",
+      "formula": "A_D(t) = log\u2081\u2080[K_D(0) / K_D(t)]"
+    },
+    "relative": {
+      "symbol": "R",
+      "label": "\u76f8\u5bf9\u4e0b\u964d",
+      "unit": "%",
+      "scale": "linear",
+      "formula": "R_D(t) = 100[1 \u2212 K_D(t)/K_D(0)]"
+    },
+    "absolute": {
+      "symbol": "B",
+      "label": "\u7edd\u5bf9\u4e0b\u964d",
+      "unit": "nats / H1024",
+      "scale": "linear",
+      "formula": "B_D(t) = K_D(0) \u2212 K_D(t)"
+    },
+    "gap": {
+      "symbol": "\u0394",
+      "label": "\u7d2f\u8ba1\u5438\u6536\u5dee",
+      "unit": "dex",
+      "scale": "linear",
+      "formula": "\u0394_D(t) = A_T(t) \u2212 A_D(t)"
+    },
+    "efficiency": {
+      "symbol": "\u03b7",
+      "label": "\u7d2f\u8ba1\u8fc1\u79fb\u6548\u7387",
+      "unit": "\u65e0\u91cf\u7eb2",
+      "scale": "linear",
+      "formula": "\u03b7_D(t) = A_D(t) / A_T(t)"
+    }
+  }
+}

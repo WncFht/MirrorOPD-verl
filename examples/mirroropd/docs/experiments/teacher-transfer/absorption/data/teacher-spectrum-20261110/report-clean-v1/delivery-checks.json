@@ -1,0 +1,330 @@
+{
+  "schema": 1,
+  "excluded_conditions_in_active_records": 0,
+  "checked_structured_files": 36,
+  "functional_coverage": {
+    "conditions": 16,
+    "stages": 39,
+    "gradient_rows": 17232,
+    "score_files": 464
+  },
+  "geometry_coverage": {
+    "pairs": 18,
+    "continuous_pairs": 16,
+    "conditions": 19,
+    "matrices": 3808,
+    "student_matrix_records": 3640,
+    "control_matrices": 90,
+    "maximum_sketch_seed_spread": 0.001987577718865985,
+    "ridge_log_final_RMSE": {
+      "initial": 0.7723649013850232,
+      "initial+concentration": 0.44713954319369464,
+      "initial+geometry": 0.6148548237357246,
+      "initial+norm": 0.6096676929369911
+    },
+    "ridge_MSE_differences": {
+      "initial+concentration": {
+        "mean_MSE_difference": -0.3966137698040308,
+        "bootstrap95": [
+          -0.7659993252186178,
+          -0.06120642592211684
+        ]
+      },
+      "initial+geometry": {
+        "mean_MSE_difference": -0.21850108662040774,
+        "bootstrap95": [
+          -0.5558369716329984,
+          0.08370147347825037
+        ]
+      },
+      "initial+norm": {
+        "mean_MSE_difference": -0.22485284508038345,
+        "bootstrap95": [
+          -0.5805077030420382,
+          0.06405230228399456
+        ]
+      }
+    },
+    "leave_family_out_method_accuracy": {
+      "concentration": 0.8571428571428571,
+      "norm": 0.8571428571428571,
+      "norm+concentration": 0.8571428571428571
+    },
+    "method_classification_teachers": 14,
+    "coverage": [
+      {
+        "pair_id": "ece1f975fd91024f",
+        "teacher": "deepcoder",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "8dc073259e329efe",
+        "teacher": "deepscaler",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "bd3c5aa7af510493",
+        "teacher": "justrl",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "0f69d311264420fa",
+        "teacher": "minimath",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "37e9fcf49a67d934",
+        "teacher": "brorl",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "f2ee063c71c81230",
+        "teacher": "nemotron",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "adfcd3e4aacecad5",
+        "teacher": "light",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "130b1aa795c9b106",
+        "teacher": "grpo-kl",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "3e4d7f859fe155f8",
+        "teacher": "sft-gsm8k",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "eebed16df2bee828",
+        "teacher": "e3",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "38610d9b50b018b2",
+        "teacher": "coreward-i",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "782c0d6c55675e4a",
+        "teacher": "gt",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "e01abaeeef1a3603",
+        "teacher": "arithmetic-full",
+        "observed": 196,
+        "expected": 196
+      },
+      {
+        "pair_id": "e870e2d9abd7bd2d",
+        "teacher": "MiMo-SFT",
+        "observed": 252,
+        "expected": 252
+      },
+      {
+        "pair_id": "b5a5858d9357ac96",
+        "teacher": "MiMo-RL",
+        "observed": 252,
+        "expected": 252
+      },
+      {
+        "pair_id": "09e6abfcc7b89d99",
+        "teacher": "MiMo-RL-from-SFT",
+        "observed": 252,
+        "expected": 252
+      },
+      {
+        "pair_id": "6aaa7aad6134bce2",
+        "teacher": "MiMo-Zero-from-SFT",
+        "observed": 252,
+        "expected": 252
+      },
+      {
+        "pair_id": "1ce0f29e56212a45",
+        "teacher": "MiMo-Zero",
+        "observed": 252,
+        "expected": 252
+      }
+    ],
+    "scope": "all attention/MLP matrices, embeddings/head/norm excluded",
+    "notes": "H1024 and macro-bank risks separate; randomized top16 energies lower bounds; controls parameter-only"
+  },
+  "exact_spectral_coverage": {
+    "compatible_conditions": 22,
+    "matrix_role_stage_records": 294,
+    "condition_role_stage_summaries": 49,
+    "scope": "Six first/middle/last k/v matrices; compatible pairs only; per-condition medians"
+  },
+  "figure_audits": {
+    "data/teacher-spectrum-20261110/report-clean-v1/spectral-distances.audit.txt": "PASS: fv.audit(fig) returned no issues.",
+    "data/teacher-spectrum-20261110/report-clean-v1/temporal-dynamics.audit.txt": "PASS: fv.audit(fig) returned no issues.",
+    "figures/teacher-spectrum-clean/absolute-risk.audit.txt": "PASS: fv.audit(fig) returned no issues.",
+    "figures/teacher-spectrum-clean/compression.audit.txt": "PASS: fv.audit(fig) returned no issues.",
+    "figures/teacher-spectrum-clean/depth.audit.txt": "PASS: fv.audit(fig) returned no issues.",
+    "figures/teacher-spectrum-clean/gradient-alignment.audit.txt": "PASS: fv.audit(fig) returned no issues.",
+    "figures/teacher-spectrum-clean/patch-relative.audit.txt": "PASS: fv.audit(fig) returned no issues."
+  },
+  "visual_review": "Reviewed regenerated absolute/relative risk, compression, depth, gradient alignment, six direct-pair panels, spectral distances and temporal dynamics; sparse rho tick labels fixed.",
+  "source_files": [
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/ancillary.json",
+      "sha256": "e088d337323715a5ad38998a9ed3daeb2884864df5b64e242560f3f990046d73"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/checkpoint-shard-audit.json",
+      "sha256": "c4be8c1b0d95f9960efcde36ed95b9165d861c395c7cde819d22e48b942b946c"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/associations.csv",
+      "sha256": "186cb7f31f928ebad2233648a1549a7d87d3d5dbf86c93ce0b137f4d64a4f2f7"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/conditions.csv",
+      "sha256": "938e30d1c48798ab8aab4c77e217ae75309ac746221b35813f08c7d584403efa"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/controls.csv",
+      "sha256": "54fcd828f064e4659ca539e36b3028fd83f893676a0a2fb2f5f90a7fd5efd8ae"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/dynamics-audit.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/dynamics.csv",
+      "sha256": "36ed90e76154d198a5de998e856f548caa17b5f4ad7dec3a96cfbd7f26f1ab9f"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/figure-audits.json",
+      "sha256": "e31f2339bbd22858153c6aa5fb8c12d32379864a33b6480246a87d3e057a5752"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/leave-family-out-method.csv",
+      "sha256": "1a86e6a049233fc98a4fb62034d785ae228678e584d58dc9f5493678107f8d13"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/modules.csv",
+      "sha256": "a00345e96c73fbb842ed834af9159ec2d0529e58b108da08fc1cea981de92122"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/parent-matched-all-metrics.csv",
+      "sha256": "447defbf5ef34269cb69cddae73dbf1a28a7889349d676e12839f81a1e60ff9a"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/parent-matched-figure-audit.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/parent-matched-primary-panel.csv",
+      "sha256": "8a1818189e513aff0083481d5ff2e10cf24d4ebaaa60ef2b3cdcc9bd7a22d747"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/parent-matched-summary.json",
+      "sha256": "fea062aa9657f3feaee1cf5d40117c27449c1148054f5a9b091eae00330fb33e"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/sketches.csv",
+      "sha256": "c2465e10ddfc6504261c3ed26028de0aa41ef550a5711cb3cbb02e2f6f40650c"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/students.csv",
+      "sha256": "f595f33ba3093ea875dd1100b85d4db19af9a1e04bb2c02a2f834b94f3fedb63"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/summary.json",
+      "sha256": "9a6b635039c89f6a74e7445542ad92784ac467469c0b0d9f30d56f0292f4929c"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/teacher-heldout-predictions.csv",
+      "sha256": "1eec192d4e82c2bb61bf1d7d5dc52679f9c20a0187531618fbb959c1fad11231"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/direct-pairs/teachers.csv",
+      "sha256": "7b41558a7cb859792a58df9c6d2713fc7e3ddcae68b7a5b27fee77e3cff64bcb"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/exact-spectral-matrices.csv",
+      "sha256": "9d9bc6a5a284014dfe765ad6f3599693101478b1086af7e2b1470fea9087f630"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/exact-spectral-summary.csv",
+      "sha256": "b90c910c87dad0494512e98aafb53b2c570e78dd663671249b93f96dd7837c69"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/expansion-manifest.json",
+      "sha256": "6c4b73251af5850ba7c2eb3d7b45367897c6929df66771ea291a894006b0d9c6"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/historical-curves.csv",
+      "sha256": "d1fed0bee34eccf116ab0ffb5e111dea2ea323e6d356a3862bce07e70aeebcb9"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/historical-windows.csv",
+      "sha256": "17cd76da2052086a4777686b1f7da6d587c002399dc42ad7e2c237aa5a975850"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/inventory.json",
+      "sha256": "77fd72248a28c953b631650722bb08734c25ce20c2acf23915d74cee6a23f7ae"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/spectral-coverage.json",
+      "sha256": "22d118871c03765729e4e983ed3bf2c1020d1c1cc2914b95b0c842851cd78e1f"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/spectral-provenance.json",
+      "sha256": "0fa373252137067fbcf00a313a93a0569413b6925c17cb3940428e9893af0599"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/teacher-band-summary.csv",
+      "sha256": "fb7f05baed8e6f93f424fbe2442bb2e5ce110a73c5902b7aaea1c3f7d16eed54"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/teacher-frame-summary.csv",
+      "sha256": "da44205a0b5c5844dce282e0ac6cea34579f93f8ab8501e04d92a8d8a78fefb4"
+    },
+    {
+      "path": "data/teacher-spectrum-20261110/report-clean-v1/temporal-exact.csv",
+      "sha256": "cdb54d412465494d559dcba35a8188f02f5a9bf65f29bbf6f1b987f928e1e93e"
+    },
+    {
+      "path": "figures/teacher-spectrum-clean/coverage.json",
+      "sha256": "2acb57eab034509941e85ba45179b9936a8e7315b8dfd8f08ddb0e943f221512"
+    },
+    {
+      "path": "figures/teacher-spectrum-clean/gradients.json.gz",
+      "sha256": "0c5a8bdb099780fb7bb91add1578952547d19a36f538a59c5d68a594438a2127"
+    },
+    {
+      "path": "figures/teacher-spectrum-clean/paired.json.gz",
+      "sha256": "7d9dee73d89c0331ac331f34a25a9999c500f1abff7cab06f82d25b086b14373"
+    },
+    {
+      "path": "figures/teacher-spectrum-clean/provenance.json",
+      "sha256": "e3ff41c9fa98db8d71dec72be3a93c2b96ba54a232c2088a00e9db54eceaa8f5"
+    },
+    {
+      "path": "figures/teacher-spectrum-clean/question-risks.json.gz",
+      "sha256": "1e9bcebc5d7f2bf580c70daef059eb665d41dc1da4bfd86ec348bda7a4410729"
+    },
+    {
+      "path": "figures/teacher-spectrum-clean/summary.csv",
+      "sha256": "e8183cd7d9a778634c5f5463372e60d7fe9d504abcb44591e2fc86ff6e49b29c"
+    }
+  ],
+  "gpu_experiments_started": false
+}

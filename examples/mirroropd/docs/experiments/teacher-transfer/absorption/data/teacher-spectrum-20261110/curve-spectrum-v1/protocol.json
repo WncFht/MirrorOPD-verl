@@ -1,0 +1,14 @@
+{
+  "source_sha256": "9663bfe0795f5d007e88fcf0108734b98717a04a26e601e991919aa7498239a1",
+  "n_curves": 41,
+  "features": 178,
+  "matrix_rows": 246,
+  "interpolation": "linear log10 risk on 0:16:320; observed320 required",
+  "clustering": "average-linkage Euclidean log absolute risk; k4 descriptive, no inferred natural class count",
+  "limitations": [
+    "six k/v matrices",
+    "dependent teacher modes",
+    "exploratory, no multiplicity adjustment",
+    "student features are posttraining descriptors"
+  ]
+}

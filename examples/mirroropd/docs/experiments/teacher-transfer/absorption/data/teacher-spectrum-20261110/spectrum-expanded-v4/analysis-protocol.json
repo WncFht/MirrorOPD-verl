@@ -1,0 +1,13 @@
+{
+  "source_sha256": "f6e1392f8a6dc558b2552b9b5e3b3b5f2d2a77a36598e4e79595b24445aebeab",
+  "independent_unit": "teacher weight identity; modes grouped in leave-one-teacher-out; no matrix replication",
+  "targets": "64,320 actual updates; fixed-H1024 RKL; late256:320 only; domains separately",
+  "prediction": "ridge alpha1 fixed before results; training-fold standardization; log10 K endpoint",
+  "multiplicity": "exploratory associations; no confirmatory p values; no classifier fitted",
+  "limitations": [
+    "six k/v projection matrices, not full-model spectrum",
+    "public parent models often unpinned",
+    "same-size need not mean direct lineage",
+    "no new RKL or forward-KL inference"
+  ]
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "teacher-spectrum-infra-20261110-v1",
+    "passed": true,
+    "times": null,
+    "max_scaled_error": null,
+    "source_sha256": "5077c476bfec508fe75af59bfc77081957378633ced4f47f729745fe071d8c22",
+    "occupancy": {
+      "verified": true,
+      "checked_at": 1794312008.864137
+    }
+  },
+  {
+    "name": "teacher-spectrum-infra-20261110-v2",
+    "passed": true,
+    "times": null,
+    "max_scaled_error": null,
+    "source_sha256": "893819f1ff39bc3a5cb4a5731ad7f3c805874a548d803cfad434ae9518018465",
+    "occupancy": {
+      "verified": true,
+      "checked_at": 1794312108.2970114
+    }
+  },
+  {
+    "name": "teacher-spectrum-infra-20261110-model-v1",
+    "passed": true,
+    "times": {
+      "cpu-reference": 39.33809945732355,
+      "cuda-stream": 14.616717606782913,
+      "cuda-stream-warm": 2.050764687359333
+    },
+    "max_scaled_error": 3.34611974537196e-12,
+    "source_sha256": "1acd33911a5f4a18bbc746ee19aa290f489e91c5a39f88e02a8c8b8d1ab2a679",
+    "occupancy": {
+      "verified": true,
+      "checked_at": 1794312250.9301982
+    }
+  },
+  {
+    "name": "teacher-spectrum-infra-20261110-llama-v1",
+    "passed": true,
+    "times": {
+      "cpu-reference": 80.32767965644598,
+      "cuda-stream": 34.238564029335976,
+      "cuda-stream-warm": 4.963942162692547
+    },
+    "max_scaled_error": 6.331497236679449e-12,
+    "source_sha256": "9722c7f354634f162b4379b8190e53a45b86975d7f23006b12a0c6fccba9c04e",
+    "occupancy": {
+      "verified": true,
+      "checked_at": 1794312599.7531784
+    }
+  }
+]

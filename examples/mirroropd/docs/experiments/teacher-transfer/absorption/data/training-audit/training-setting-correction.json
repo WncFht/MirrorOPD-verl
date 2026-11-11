@@ -1,0 +1,259 @@
+{
+  "at": 1794375183.1068265,
+  "cancelled_children": [
+    {
+      "task": {
+        "job_id": 48,
+        "phase": "extension",
+        "module": "examples.mirroropd.research.studies.spectral.iso.training",
+        "arguments": [
+          "--manifest",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-manifest.json",
+          "--output",
+          "{attempt}/result",
+          "--stop",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/STOP",
+          "--job-id",
+          "7",
+          "--mode",
+          "frames",
+          "--seed",
+          "42",
+          "--steps",
+          "64"
+        ],
+        "output_attempt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-7-frames-42/attempt-001",
+        "complete_marker": "result/complete.json",
+        "label": "training-7-frames-42",
+        "ready_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-smoke-7-frames/attempt-001/result/complete.json",
+        "task_id": 48,
+        "status": "running",
+        "gpu": 7,
+        "started_at": 1794356995.1891015,
+        "worker_identity": [
+          3011662,
+          "4092973967"
+        ],
+        "heartbeat_at": 1794375178.214898,
+        "child_identity": [
+          3098957,
+          "4094377629"
+        ]
+      },
+      "reason": "ISO pilot drew diagnostic calibration prompts instead of intended DAPO training distribution; cancel remaining compute, preserve all attempts"
+    },
+    {
+      "task": {
+        "job_id": 49,
+        "phase": "extension",
+        "module": "examples.mirroropd.research.studies.spectral.iso.training",
+        "arguments": [
+          "--manifest",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-manifest.json",
+          "--output",
+          "{attempt}/result",
+          "--stop",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/STOP",
+          "--job-id",
+          "7",
+          "--mode",
+          "frames",
+          "--seed",
+          "43",
+          "--steps",
+          "64"
+        ],
+        "output_attempt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-7-frames-43/attempt-001",
+        "complete_marker": "result/complete.json",
+        "label": "training-7-frames-43",
+        "ready_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-smoke-7-frames/attempt-001/result/complete.json",
+        "task_id": 49,
+        "status": "running",
+        "gpu": 4,
+        "started_at": 1794357118.137324,
+        "worker_identity": [
+          3010244,
+          "4092956370"
+        ],
+        "heartbeat_at": 1794375177.5074394,
+        "child_identity": [
+          3099621,
+          "4094389927"
+        ]
+      },
+      "reason": "ISO pilot drew diagnostic calibration prompts instead of intended DAPO training distribution; cancel remaining compute, preserve all attempts"
+    },
+    {
+      "task": {
+        "job_id": 54,
+        "phase": "extension",
+        "module": "examples.mirroropd.research.studies.spectral.iso.training",
+        "arguments": [
+          "--manifest",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-manifest.json",
+          "--output",
+          "{attempt}/result",
+          "--stop",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/STOP",
+          "--job-id",
+          "8",
+          "--mode",
+          "frames",
+          "--seed",
+          "42",
+          "--steps",
+          "64"
+        ],
+        "output_attempt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-8-frames-42/attempt-001",
+        "complete_marker": "result/complete.json",
+        "label": "training-8-frames-42",
+        "ready_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-smoke-8-frames/attempt-001/result/complete.json",
+        "task_id": 54,
+        "status": "running",
+        "gpu": 6,
+        "started_at": 1794358055.4370828,
+        "worker_identity": [
+          3010693,
+          "4092962859"
+        ],
+        "heartbeat_at": 1794375180.483742,
+        "child_identity": [
+          3105286,
+          "4094483653"
+        ]
+      },
+      "reason": "ISO pilot drew diagnostic calibration prompts instead of intended DAPO training distribution; cancel remaining compute, preserve all attempts"
+    },
+    {
+      "task": {
+        "job_id": 55,
+        "phase": "extension",
+        "module": "examples.mirroropd.research.studies.spectral.iso.training",
+        "arguments": [
+          "--manifest",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-manifest.json",
+          "--output",
+          "{attempt}/result",
+          "--stop",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/STOP",
+          "--job-id",
+          "8",
+          "--mode",
+          "frames",
+          "--seed",
+          "43",
+          "--steps",
+          "64"
+        ],
+        "output_attempt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-8-frames-43/attempt-001",
+        "complete_marker": "result/complete.json",
+        "label": "training-8-frames-43",
+        "ready_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-smoke-8-frames/attempt-001/result/complete.json",
+        "task_id": 55,
+        "status": "running",
+        "gpu": 3,
+        "started_at": 1794358215.9053557,
+        "worker_identity": [
+          3010448,
+          "4092959173"
+        ],
+        "heartbeat_at": 1794375175.663142,
+        "child_identity": [
+          3106090,
+          "4094499704"
+        ]
+      },
+      "reason": "ISO pilot drew diagnostic calibration prompts instead of intended DAPO training distribution; cancel remaining compute, preserve all attempts"
+    },
+    {
+      "task": {
+        "job_id": 60,
+        "phase": "extension",
+        "module": "examples.mirroropd.research.studies.spectral.iso.training",
+        "arguments": [
+          "--manifest",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-manifest.json",
+          "--output",
+          "{attempt}/result",
+          "--stop",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/STOP",
+          "--job-id",
+          "11",
+          "--mode",
+          "frames",
+          "--seed",
+          "42",
+          "--steps",
+          "64"
+        ],
+        "output_attempt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-11-frames-42/attempt-001",
+        "complete_marker": "result/complete.json",
+        "label": "training-11-frames-42",
+        "ready_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-smoke-11-frames/attempt-001/result/complete.json",
+        "task_id": 60,
+        "status": "running",
+        "gpu": 5,
+        "started_at": 1794365447.2509093,
+        "worker_identity": [
+          3010383,
+          "4092958383"
+        ],
+        "heartbeat_at": 1794375174.6009011,
+        "child_identity": [
+          3144746,
+          "4095222837"
+        ]
+      },
+      "reason": "ISO pilot drew diagnostic calibration prompts instead of intended DAPO training distribution; cancel remaining compute, preserve all attempts"
+    },
+    {
+      "task": {
+        "job_id": 61,
+        "phase": "extension",
+        "module": "examples.mirroropd.research.studies.spectral.iso.training",
+        "arguments": [
+          "--manifest",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-manifest.json",
+          "--output",
+          "{attempt}/result",
+          "--stop",
+          "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/STOP",
+          "--job-id",
+          "11",
+          "--mode",
+          "frames",
+          "--seed",
+          "43",
+          "--steps",
+          "64"
+        ],
+        "output_attempt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-11-frames-43/attempt-001",
+        "complete_marker": "result/complete.json",
+        "label": "training-11-frames-43",
+        "ready_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/iso-reproduction-20261111/offline-v2/tasks/training-smoke-11-frames/attempt-001/result/complete.json",
+        "task_id": 61,
+        "status": "running",
+        "gpu": 0,
+        "started_at": 1794365614.174531,
+        "worker_identity": [
+          3011739,
+          "4092975378"
+        ],
+        "heartbeat_at": 1794375179.212791,
+        "child_identity": [
+          3146457,
+          "4095239534"
+        ]
+      },
+      "reason": "ISO pilot drew diagnostic calibration prompts instead of intended DAPO training distribution; cancel remaining compute, preserve all attempts"
+    }
+  ],
+  "completed_training": "Retained as 12-prompt diagnostic pilot only; not DAPO reproduction",
+  "unaffected": [
+    "spectra",
+    "geometry",
+    "functional",
+    "merger",
+    "scale-controls"
+  ]
+}

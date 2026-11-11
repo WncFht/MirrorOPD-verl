@@ -1,0 +1,9 @@
+{
+  "replicates": 4000,
+  "interval": "signed basic, independent original source/receiver groups",
+  "calibration": "first six heldout B8 groups",
+  "test": "last six heldout B8 groups",
+  "adam": "historical moments, hyperparameters, weight decay, clip=1; B8 counterfactual source",
+  "scales": "fractions of one Adam displacement, not new learning rates",
+  "component_predictions": "NaN when live/frozen Gram does not include parallel direction"
+}

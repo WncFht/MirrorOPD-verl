@@ -1,0 +1,352 @@
+{
+  "schema": 1,
+  "created_at": 1794299591.303686,
+  "authorization": "User 2026-11-10: all eight physical GPUs available; start full experiments, restore gpu-occupy on completion. No new end time specified.",
+  "gpu_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "old_STOP_preserved": true,
+  "new_stop": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-expansion-20261110-v1/STOP",
+  "jobs": [
+    {
+      "job_id": 0,
+      "run_id": "r1--deepcoder--82946e34",
+      "family": "R1",
+      "teacher": "deepcoder",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/agentica-org--DeepCoder-1.5B-Preview/103033da54f104b0d0a3570547fb3721fba99962",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261029/models/NEW-DC/step064",
+      "step": 64,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261029/models/NEW-DC/step064"
+      }
+    },
+    {
+      "job_id": 1,
+      "run_id": "r1--deepscaler--a7c14513",
+      "family": "R1",
+      "teacher": "deepscaler",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/agentica-org--DeepScaleR-1.5B-Preview/e3f524ce413a296b4d388e7560dd5c82c1c56725",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/NEW-DS/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/NEW-DS/step320"
+      }
+    },
+    {
+      "job_id": 2,
+      "run_id": "r1--justrl--534ec3bd",
+      "family": "R1",
+      "teacher": "justrl",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/hbx--JustRL-DeepSeek-1.5B/0637e4096c789c67f9eecbe8355e0bdeddede1c2",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-J/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-J/step320",
+        "step16": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/twenty-batch-pass-20261027/checkpoints/justrl/batch-01",
+        "step80": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/twenty-batch-pass-20261027/checkpoints/justrl/batch-05",
+        "step160": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/twenty-batch-pass-20261027/checkpoints/justrl/batch-10",
+        "step240": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/twenty-batch-pass-20261027/checkpoints/justrl/batch-15"
+      }
+    },
+    {
+      "job_id": 3,
+      "run_id": "r1--minimath--18ba6165",
+      "family": "R1",
+      "teacher": "minimath",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/oumi-ai--MiniMath-R1-1.5B/9fcff43e7b6739a86f1e443e3b8d8b85fb00a998",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-M/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-M/step320"
+      }
+    },
+    {
+      "job_id": 4,
+      "run_id": "r1--brorl--c9731fdc",
+      "family": "R1",
+      "teacher": "brorl",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/3441fcdf8c6e81a2959e6352ff50122e3c677d72",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/NEW-BRO/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/NEW-BRO/step320"
+      }
+    },
+    {
+      "job_id": 5,
+      "run_id": "r1--nemotron--49bfdcb0",
+      "family": "R1",
+      "teacher": "nemotron",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/nvidia--Nemotron-Research-Reasoning-Qwen-1.5B/b89048893f95246c6b5749b287f0049e6df42ee9",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-N/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-N/step320"
+      }
+    },
+    {
+      "job_id": 6,
+      "run_id": "r7--light--7e4c0413",
+      "family": "R1",
+      "teacher": "light",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/qihoo360--Light-R1-7B-DS/06c9338cdbec28416e15f28a325b1439729ec237",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261028/checkpoints/TB2-L7/step064",
+      "step": 64,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261028/checkpoints/TB2-L7/step064",
+        "step32": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-boundary-20261028/checkpoints/TB2-L7/step032"
+      }
+    },
+    {
+      "job_id": 7,
+      "run_id": "q3-1.7--grpo-kl--7a02ee6c",
+      "family": "Qwen",
+      "teacher": "grpo-kl",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/jaygala24--Qwen3-1.7B-GRPO-KL-math-reasoning/851ee853018af52495d73a95e3de51470af6f17b",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-grpo-kl/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-grpo-kl/step320",
+        "step64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-grpo-kl/step064"
+      }
+    },
+    {
+      "job_id": 8,
+      "run_id": "q3-1.7--sft-gsm8k--a19448d4",
+      "family": "Qwen",
+      "teacher": "sft-gsm8k",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-gsm8k/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-gsm8k/step320",
+        "step64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-gsm8k/step064"
+      }
+    },
+    {
+      "job_id": 9,
+      "run_id": "q3-1.7--e3--eef55d0d",
+      "family": "Qwen",
+      "teacher": "e3",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/CMU-AIRe--e3-1.7B/6db1b2fed3cd8d6cd2cd6270807a45f1e22925df",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-mode-thinking-wave1-20261029/T-E3/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-mode-thinking-wave1-20261029/T-E3/step320"
+      }
+    },
+    {
+      "job_id": 10,
+      "run_id": "q3-1.7-nonthinking--sft-gsm8k--319ebf4f",
+      "family": "Qwen",
+      "teacher": "sft-gsm8k",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/SamsungSAILMontreal--Qwen3-1.7B-Math/6c0e18a8277e3c5b46aa51e8f75612a5d78a9542",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-nonthinking-origin-controls320-20261030/NT-C-sft-gsm8k/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-nonthinking-origin-controls320-20261030/NT-C-sft-gsm8k/step320"
+      }
+    },
+    {
+      "job_id": 11,
+      "run_id": "llama3-3b-off--coreward-i--72c4db04",
+      "family": "Llama",
+      "teacher": "coreward-i",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/TMLR-Group-HF--Co-rewarding-I-Llama-3.2-3B-Instruct-MATH/0d1e2f5ca0f62c670853c59b97650abde3608437",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-coreward-i/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-coreward-i/step320"
+      }
+    },
+    {
+      "job_id": 12,
+      "run_id": "llama3-3b-off--gt--59498cdb",
+      "family": "Llama",
+      "teacher": "gt",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/TMLR-Group-HF--GT-Llama-3.2-3B-Instruct-MATH/b6a0ab79ab4802ef77334532dd1936bb1d219cf9",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-gt/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-gt/step320"
+      }
+    },
+    {
+      "job_id": 13,
+      "run_id": "llama3-3b-off--arithmetic-full--131f84b3",
+      "family": "Llama",
+      "teacher": "arithmetic-full",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Raghav-Singhal--Llama-3.2-3B-Instruct-arithmetic-full/66feb54e931c27285afc344645bf0961053ea29b",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-arithmetic-full/step320",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/llama-reasoning-off-stage320-20261030/L3-arithmetic-full/step320"
+      }
+    },
+    {
+      "job_id": 17,
+      "run_id": "MiMo-SFT",
+      "family": "MiMo",
+      "teacher": "MiMo-SFT",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface"
+      }
+    },
+    {
+      "job_id": 18,
+      "run_id": "MiMo-RL",
+      "family": "MiMo",
+      "teacher": "MiMo-RL",
+      "cohort": "branch_control",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface",
+      "step": 800,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface"
+      }
+    },
+    {
+      "job_id": 19,
+      "run_id": "MiMo-RL-from-SFT",
+      "family": "MiMo",
+      "teacher": "MiMo-RL-from-SFT",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface"
+      }
+    },
+    {
+      "job_id": 20,
+      "run_id": "MiMo-Zero-from-SFT",
+      "family": "MiMo",
+      "teacher": "MiMo-Zero-from-SFT",
+      "cohort": "branch_control",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface"
+      }
+    },
+    {
+      "job_id": 21,
+      "run_id": "MiMo-Zero",
+      "family": "MiMo",
+      "teacher": "MiMo-Zero",
+      "cohort": "continuous",
+      "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface",
+      "step": 320,
+      "gradient_stages": {
+        "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface"
+      }
+    }
+  ],
+  "questions": 48,
+  "calibration": 12,
+  "heldout": 36,
+  "domains": [
+    "math",
+    "code",
+    "if"
+  ],
+  "banks": [
+    "initial-student",
+    "teacher"
+  ],
+  "response_cap": 128,
+  "metrics": [
+    "full-vocab RKL",
+    "full-vocab FKL",
+    "JS",
+    "entropy"
+  ],
+  "denominators": [
+    "fixed H128",
+    "actual token count"
+  ],
+  "beta_selection": "calibration only; no heldout-min selection",
+  "nonedited": "endpoint parameters retained; MTP excluded from edits",
+  "gradient_state_source": "new diagnostic frozen generated banks; not claimed historical rollout",
+  "phases": [
+    "teacher/base generation and teacher-self floor",
+    "unedited baselines",
+    "exact FP64 all-matrix SVD",
+    "top1/top5 original and restored norm",
+    "missing off/null beta .25,.5,1",
+    "three seed Gaussian and same-spectrum controls",
+    "early/middle/late depth-only off patch",
+    "all-layer per-example gradient projections across initial/early/endpoint"
+  ],
+  "missing": [
+    "historical rollout and Adam state tracing remains separate until artifacts identified",
+    "free-generation correctness is not a primary readout in this extension"
+  ],
+  "source_inventory_sha256": "9d45d1a5dff4310bc02fe6df5fb607f701ccce666a8ffbed53194d32f4f450c5"
+}

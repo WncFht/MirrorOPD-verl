@@ -1,0 +1,64 @@
+{
+  "publication_only_recompute": {
+    "teachers.csv": true,
+    "students.csv": true,
+    "conditions.csv": true,
+    "modules.csv": true,
+    "sketches.csv": true,
+    "controls.csv": true,
+    "summary.json": true,
+    "teacher-heldout-predictions.csv": true,
+    "leave-family-out-method.csv": true,
+    "parent-matched-all-metrics.csv": true,
+    "parent-matched-primary-panel.csv": true,
+    "parent-matched-summary.json": true
+  },
+  "source_models_required": false,
+  "figures_audit": {
+    "norm-versus-fit": [],
+    "parameter-versus-function": [],
+    "module-concentration": [],
+    "same-spectrum-controls": []
+  },
+  "dynamics_audit": [],
+  "associations_figure_audit": [],
+  "visual_review": "All six final PNG figures inspected; log-axis label overlap repaired in final version",
+  "family_receipts": {
+    "R1": {
+      "family": "R1",
+      "pairs": 7,
+      "matrices_this_attempt": 1372,
+      "student_matrices_this_attempt": 1372,
+      "elapsed": 825.6765379160643,
+      "source_sha256": "2d65ba5b9f69147785d7756903c5dc253cc1f202f39b1661b27b2ce7d38b1dda",
+      "device": "CPU FP64, threads2"
+    },
+    "Qwen": {
+      "family": "Qwen",
+      "pairs": 6,
+      "matrices_this_attempt": 1176,
+      "student_matrices_this_attempt": 1764,
+      "elapsed": 530.7860722392797,
+      "source_sha256": "2d65ba5b9f69147785d7756903c5dc253cc1f202f39b1661b27b2ce7d38b1dda",
+      "device": "CPU FP64, threads2"
+    },
+    "Llama": {
+      "family": "Llama",
+      "pairs": 3,
+      "matrices_this_attempt": 588,
+      "student_matrices_this_attempt": 588,
+      "elapsed": 453.3893985375762,
+      "source_sha256": "2d65ba5b9f69147785d7756903c5dc253cc1f202f39b1661b27b2ce7d38b1dda",
+      "device": "CPU FP64, threads2"
+    },
+    "MiMo": {
+      "family": "MiMo",
+      "pairs": 5,
+      "matrices_this_attempt": 756,
+      "student_matrices_this_attempt": 504,
+      "elapsed": 811.4241039007902,
+      "source_sha256": "ed334c2abdaaaa87bc13e0abaded8dfc1a14bc7a6d3ef90579a6f6cba49548b8",
+      "device": "CPU FP64, threads2"
+    }
+  }
+}

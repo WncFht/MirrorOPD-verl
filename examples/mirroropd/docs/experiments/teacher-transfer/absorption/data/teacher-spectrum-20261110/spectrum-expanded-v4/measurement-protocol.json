@@ -1,0 +1,9 @@
+{
+  "source_sha256": "61625b7dbeb83e0cfe429ef6c141a1c557e871026e841b20b2c9b47855e20a11",
+  "device": "cpu",
+  "dtype": "float64",
+  "threads": 2,
+  "inventory_sha256": "7144b228fb74807a3d59be7c673eff7ff3d7e8c3139a4e7e0533d0bdd713cab9",
+  "scope": "k_proj,v_proj; layers 0,floor((L-1)/2),L-1; exact SVD",
+  "subtraction": "stored tensors promoted before subtraction; no inferred FP32 masters"
+}

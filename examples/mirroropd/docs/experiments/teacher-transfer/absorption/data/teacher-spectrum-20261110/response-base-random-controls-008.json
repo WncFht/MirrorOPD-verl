@@ -1,0 +1,29 @@
+{
+  "qwen-grpo": {
+    "final-learned": 249.47972376827852,
+    "random_frames-0": 0.7784271115404802,
+    "random_frames-1": 0.8512091579593559,
+    "random_frames-2": 1.0024907929550197,
+    "n": 576,
+    "repeat_max_logprob_error": 0.0,
+    "control_norm_max_relative_error": 6.3457239463105e-11
+  },
+  "qwen-sft": {
+    "final-learned": 550.1215100775407,
+    "random_frames-0": 0.7741975771374243,
+    "random_frames-1": 0.7619739629472935,
+    "random_frames-2": 0.9895629674963919,
+    "n": 576,
+    "repeat_max_logprob_error": 0.0,
+    "control_norm_max_relative_error": 5.219769061426405e-11
+  },
+  "r1-justrl": {
+    "final-learned": 235.61568744278554,
+    "random_frames-0": 0.9403318945074062,
+    "random_frames-1": 1.1855564787982766,
+    "random_frames-2": 0.8335673227641119,
+    "n": 576,
+    "repeat_max_logprob_error": 0.0,
+    "control_norm_max_relative_error": 1.3280243571500705e-10
+  }
+}

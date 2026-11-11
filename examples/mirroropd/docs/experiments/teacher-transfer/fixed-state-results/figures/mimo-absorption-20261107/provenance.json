@@ -1,0 +1,32 @@
+{
+  "rows": 220,
+  "runs": [
+    "E71",
+    "E72",
+    "E73"
+  ],
+  "domains": [
+    "math",
+    "code",
+    "science",
+    "if",
+    "all"
+  ],
+  "banks": [
+    "public_initial",
+    "public_teacher"
+  ],
+  "source_sha256": {
+    "examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E71/fixed-bank-rkl.csv": "17fcdcb9e15822fd12bbb6ee0e157670d695b0939c8904bc175288d1b3d82953",
+    "examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E72/fixed-bank-rkl.csv": "9c60db57fc87bd2f95b90aed3a706956700b55dadca31374ea3030d1f7b2116f",
+    "examples/mirroropd/docs/experiments/teacher-transfer/data/mimo-stage-20261104-final/E73/fixed-bank-rkl.csv": "ed361fefb4bb02d744af24e12c22bae1f8c2b57decc573199db849593ca58a7d"
+  },
+  "loss_source_sha256": "582069edd2157cd5d73dae717381889eaa32783784929cbddee756a44347dcf1",
+  "metrics_sha256": "2306e08742f52722260f2930970c8656ff80c20271b15ed1cdf00baf15fece59",
+  "html_sha256": "f2093b3c69aefacba06d2952bd74c3e960b6239280c3fc177ec6f99b85fef438",
+  "generator_sha256": {
+    "mimo_absorption.py": "db646c08cbbc50b4055b9f1e12417dffa81865a7f8b4e5450ec1baa9b559026e",
+    "mimo_explorer.html": "87e642a4b2a9e2913b51ca0db74ae61106239f669dce5fe0357dc03e5bfe4d66",
+    "mimo_explorer.js": "e2eef2873db5d1a8cb7fe7d624f1acaff949d433ae9c98386b2df95fa8bf2752"
+  }
+}

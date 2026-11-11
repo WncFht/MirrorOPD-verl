@@ -1,6 +1,6 @@
-# MiMo position-KL: E71 / E72 / E73
+# MiMo position-KL: E71 / E72 / E73 / E91 / E93
 
-更新：2026-11-08。Student 均为 MiMo-7B-Base；E91 使用 MiMo-7B-SFT student，已完成 320 updates，但本页仍只维护 E71/E72/E73 的位置曲线。E91 的最终 RKL 与评估读出见[阶段对照](../post-training-stages.md#e91)。
+更新：2026-11-09。E71/E72/E73 从 MiMo-7B-Base 开始，E91/E93 从 MiMo-7B-SFT 开始。五组均已结束；E91/E93 各完成 20 outer／320 updates，本页补入两组位置曲线。[阶段对照](../post-training-stages.md#mimo-e71-early)汇总固定银行 RKL 和终点准确率。
 
 ## 实验设置
 
@@ -9,8 +9,10 @@
 | E71  | MiMo-7B-RL      | Base→SFT→RL |           128 / 1 |    32 |        25 / 800 |              7168 |
 | E72  | MiMo-7B-RL-Zero | Base→RL     |           128 / 1 |    16 |        20 / 320 |              7168 |
 | E73  | MiMo-7B-SFT     | Base→SFT    |           128 / 1 |    16 |        20 / 320 |              7168 |
+| E91  | MiMo-7B-RL-Zero | Base→RL     |           128 / 1 |    16 |        20 / 320 |              7168 |
+| E93  | MiMo-7B-RL      | Base→SFT→RL |           128 / 1 |    16 |        20 / 320 |              7168 |
 
-三组均为 Full-vocab RKL、fresh AdamW、LR `1e-6`、weight decay `0.01`；完整设置见[后训练阶段](../post-training-stages.md#mimo)。
+五组均为 Full-vocab RKL、fresh AdamW、LR `1e-6`、weight decay `0.01`；完整设置见[后训练阶段](../post-training-stages.md#mimo)。
 
 ## 指标口径与早期位置数值
 
@@ -43,6 +45,25 @@
 ![mimo 最后五个 outer first-last position-KL 热力图](../figures/mimo-position-kl-20261107/mimo-position-kl-first-last-heatmap-late.png)
 
 ![mimo 最后五个 outer 每个 position 一条曲线](../figures/mimo-position-kl-20261107/mimo-position-kl-first-last-lines-late.png)
+
+## SFT student：E91 与 E93
+
+两组仅在本节内并排，避免把 Base 与 SFT 初始化混为同一初始条件。E91 使用 direct-RL teacher，E93 使用 SFT+RL teacher；batch128、reuse16、20 outer、LR1e-6 与 7168 训练 response cap 相同。两组均启用重复停止，每个 outer 的位置桶来自该组实际 student rollout。
+
+| 实验 | 初始 first p00–10% | 终点 last p00–10% | 全局训练 RKL：首次→最后观测 | Teacher Math bank：outer0→20 |
+| ---- | -----------------: | ----------------: | --------------------------: | ---------------------------: |
+| E91  |           0.218839 |         0.0508748 |         0.158905 → 0.039824 |          0.328754 → 0.214965 |
+| E93  |          0.0465838 |       0.000584369 |         0.037863 → 0.000464 |          0.042923 → 0.001794 |
+
+![E91/E93 全部 outer 的 first-last 位置曲线](../figures/mimo-position-kl-20261107/sft-students/mimo-sft-position-kl-first-last-lines.png)
+
+![E91/E93 最后五个 outer 的 first-last 位置曲线](../figures/mimo-position-kl-20261107/sft-students/mimo-sft-position-kl-first-last-lines-late.png)
+
+![E91/E93 初始与终点位置 profile](../figures/mimo-position-kl-20261107/sft-students/mimo-sft-position-kl-single-update-lines.png)
+
+E93 最前 10% 桶的终点观测比初始下降约 98.75%，E91 下降约 76.75%。E93 的全局训练残差与固定 teacher Math-bank 残差也一起下降；其四域 teacher-bank 平均下降 90.02%，E91 为 31.34%。两组初始距离已明显不同，结果支持当前配对下 SFT student 更容易恢复同源 SFT+RL teacher，而不是仅由训练曲线的绝对高低判断。
+
+该组图由原有 `plot_case_position_kl.py --mimo-sft-only` 生成，直接核对每组连续 320 条逐更新位置记录；[来源哈希](../figures/mimo-position-kl-20261107/sft-students/provenance.json)保留实际输入。原 E71/E72/E73 图和冻结数据保持原有截点。
 
 ## 初始与终点单次观测的 position profile
 
@@ -98,7 +119,7 @@ E71 与 E73 的 matched-budget 轨迹接近。训练完 A 后，未见 B 的 RKL
 
 ## 数据与复算
 
-正式 E71/E72/E73 的 initial-student 与 teacher 两套固定 bank 吸收分析见[MiMo 双 held-out bank 结果](../fixed-state-results/absorption-diagnostics.md#mimoinitial-与-teacher-双-held-out-bank)；[离线交互面板](../fixed-state-results/figures/mimo-absorption-20261107/explorer.html)可切换 bank、domain、指标和 teacher。该分析不含本页的 64 题连续 batch 诊断实验。
+正式 E71/E72/E73 的 initial-student 与 teacher 两套固定 bank 吸收分析见[MiMo 双 held-out bank 结果](../fixed-state-results/absorption-diagnostics.md#mimoinitial-与-teacher-双-held-out-bank)；离线交互面板（本地文件 `../fixed-state-results/figures/mimo-absorption-20261107/data/explorer.html`）可切换 bank、domain、指标和 teacher。该分析不含本页的 64 题连续 batch 诊断实验。
 
 [首末观测 CSV](../data/case-position-kl-20261107/mimo-endpoints.csv)保留每个 outer 的真实 update 编号、全局 RKL 和十个位置桶；[数值表 CSV](../data/case-position-kl-20261107/mimo-summary.csv)用于上表。[来源哈希](../data/case-position-kl-20261107/manifest.json)记录冻结输入和脚本版本。生成器为 [`plot_case_position_kl.py`](../figures/plot_case_position_kl.py)，同名图片提供 PNG、PDF、SVG 三种产物。
 

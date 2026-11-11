@@ -1,0 +1,101 @@
+{
+  "label": "qwen-thinking-space-sft",
+  "device": "cpu",
+  "arithmetic": "float64",
+  "threads": 2,
+  "layers": [
+    0,
+    13,
+    27
+  ],
+  "module": "self_attn.k_proj",
+  "steps": [
+    64,
+    320
+  ],
+  "checkpoints": {
+    "base": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "files": [
+        {
+          "name": "config.json",
+          "bytes": 726,
+          "mtime_ns": 1793245844555660307
+        },
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "bytes": 3441185608,
+          "mtime_ns": 1782625330610364648
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "bytes": 622329984,
+          "mtime_ns": 1782625383669037885
+        }
+      ]
+    },
+    "teacher": {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "files": [
+        {
+          "name": "config.json",
+          "bytes": 1361,
+          "mtime_ns": 1793246011982807130
+        },
+        {
+          "name": "model.safetensors",
+          "bytes": 4063515640,
+          "mtime_ns": 1793246215244983108
+        }
+      ]
+    },
+    "students": {
+      "64": {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-deepmath/step064",
+        "files": [
+          {
+            "name": "config.json",
+            "bytes": 1416,
+            "mtime_ns": 1793266707861031481
+          },
+          {
+            "name": "model-00001-of-00002.safetensors",
+            "bytes": 3962819960,
+            "mtime_ns": 1793266714788568051
+          },
+          {
+            "name": "model-00002-of-00002.safetensors",
+            "bytes": 2919515280,
+            "mtime_ns": 1793266719894587851
+          }
+        ]
+      },
+      "320": {
+        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/teacher-studies/checkpoints/qwen3-lineage-20261029/Q3-sft-deepmath/step320",
+        "files": [
+          {
+            "name": "config.json",
+            "bytes": 1416,
+            "mtime_ns": 1793267553097026949
+          },
+          {
+            "name": "model-00001-of-00002.safetensors",
+            "bytes": 3962819960,
+            "mtime_ns": 1793267560193080313
+          },
+          {
+            "name": "model-00002-of-00002.safetensors",
+            "bytes": 2919515280,
+            "mtime_ns": 1793267564988539453
+          }
+        ]
+      }
+    }
+  },
+  "source_sha256": "05aaf4b1fc1a52668a1e27afcd6432f43e0b346f802cd6c22288e4ffb81c67f8",
+  "implementation": {
+    "weights.py": "559719f98e8dd108c4a577709fe87a0e13ca3790d58fd60ce736e5a5f2d6213d",
+    "decomposition.py": "16b211176a0b258571eda31c6fcedaad43dcd260d3b4115ed92bd94347c00463"
+  },
+  "semantics": "stored tensors promoted before subtraction; exact SVD; three matrices only"
+}

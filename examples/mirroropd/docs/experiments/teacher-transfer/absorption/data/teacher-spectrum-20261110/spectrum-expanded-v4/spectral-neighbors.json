@@ -1,0 +1,890 @@
+[
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "teacher": "deepcoder",
+    "label": "DeepCoder-1.5B-Preview",
+    "neighbors": [
+      {
+        "teacher": "deepscaler",
+        "label": "DeepScaleR-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.06088876883680996,
+        "norm_ratio": 0.7303254720078968
+      },
+      {
+        "teacher": "brorl",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B / BroRL",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.19480168105789555,
+        "norm_ratio": 2.7815064158025384
+      },
+      {
+        "teacher": "justrl",
+        "label": "JustRL-DeepSeek-1.5B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.23557697951276532,
+        "norm_ratio": 2.4767516118594917
+      },
+      {
+        "teacher": "nemotron",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B v1",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.28138621179851864,
+        "norm_ratio": 2.278094587925342
+      },
+      {
+        "teacher": "minimath",
+        "label": "MiniMath-R1-1.5B",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.46529480031867987,
+        "norm_ratio": 12.353922164680435
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "teacher": "deepscaler",
+    "label": "DeepScaleR-1.5B-Preview",
+    "neighbors": [
+      {
+        "teacher": "deepcoder",
+        "label": "DeepCoder-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.06088876883680996,
+        "norm_ratio": 1.3692525296299503
+      },
+      {
+        "teacher": "brorl",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B / BroRL",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2036337069627094,
+        "norm_ratio": 3.8085846960195617
+      },
+      {
+        "teacher": "justrl",
+        "label": "JustRL-DeepSeek-1.5B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2634458210509819,
+        "norm_ratio": 3.3912984098036656
+      },
+      {
+        "teacher": "nemotron",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B v1",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.29983077208019143,
+        "norm_ratio": 3.1192867772530737
+      },
+      {
+        "teacher": "minimath",
+        "label": "MiniMath-R1-1.5B",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.48387020298504985,
+        "norm_ratio": 16.915639174840198
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "teacher": "justrl",
+    "label": "JustRL-DeepSeek-1.5B",
+    "neighbors": [
+      {
+        "teacher": "nemotron",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B v1",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.17997421971312857,
+        "norm_ratio": 0.9197913012419512
+      },
+      {
+        "teacher": "brorl",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B / BroRL",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2086196719905058,
+        "norm_ratio": 1.123046171640217
+      },
+      {
+        "teacher": "deepcoder",
+        "label": "DeepCoder-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.23557697951276532,
+        "norm_ratio": 0.4037546580010991
+      },
+      {
+        "teacher": "deepscaler",
+        "label": "DeepScaleR-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2634458210509819,
+        "norm_ratio": 0.2948723111800396
+      },
+      {
+        "teacher": "minimath",
+        "label": "MiniMath-R1-1.5B",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.331854614424362,
+        "norm_ratio": 4.987953618572747
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "teacher": "minimath",
+    "label": "MiniMath-R1-1.5B",
+    "neighbors": [
+      {
+        "teacher": "nemotron",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B v1",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.20723965182427506,
+        "norm_ratio": 0.1844025369075385
+      },
+      {
+        "teacher": "justrl",
+        "label": "JustRL-DeepSeek-1.5B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.331854614424362,
+        "norm_ratio": 0.20048301898327192
+      },
+      {
+        "teacher": "brorl",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B / BroRL",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.3849860156769968,
+        "norm_ratio": 0.22515168694803644
+      },
+      {
+        "teacher": "deepcoder",
+        "label": "DeepCoder-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.46529480031867987,
+        "norm_ratio": 0.08094595276461881
+      },
+      {
+        "teacher": "deepscaler",
+        "label": "DeepScaleR-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.48387020298504985,
+        "norm_ratio": 0.05911689115994915
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "teacher": "brorl",
+    "label": "Nemotron-Research-Reasoning-Qwen-1.5B / BroRL",
+    "neighbors": [
+      {
+        "teacher": "deepcoder",
+        "label": "DeepCoder-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.19480168105789555,
+        "norm_ratio": 0.3595174162887823
+      },
+      {
+        "teacher": "nemotron",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B v1",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.19682936263746184,
+        "norm_ratio": 0.8190146803123771
+      },
+      {
+        "teacher": "deepscaler",
+        "label": "DeepScaleR-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2036337069627094,
+        "norm_ratio": 0.26256472674616443
+      },
+      {
+        "teacher": "justrl",
+        "label": "JustRL-DeepSeek-1.5B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2086196719905058,
+        "norm_ratio": 0.8904353402848014
+      },
+      {
+        "teacher": "minimath",
+        "label": "MiniMath-R1-1.5B",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.3849860156769968,
+        "norm_ratio": 4.441450177678631
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "teacher": "nemotron",
+    "label": "Nemotron-Research-Reasoning-Qwen-1.5B v1",
+    "neighbors": [
+      {
+        "teacher": "justrl",
+        "label": "JustRL-DeepSeek-1.5B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.17997421971312857,
+        "norm_ratio": 1.0872031499425432
+      },
+      {
+        "teacher": "brorl",
+        "label": "Nemotron-Research-Reasoning-Qwen-1.5B / BroRL",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.19682936263746184,
+        "norm_ratio": 1.2209793353381577
+      },
+      {
+        "teacher": "minimath",
+        "label": "MiniMath-R1-1.5B",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.20723965182427506,
+        "norm_ratio": 5.422918885879597
+      },
+      {
+        "teacher": "deepcoder",
+        "label": "DeepCoder-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.28138621179851864,
+        "norm_ratio": 0.4389633359827692
+      },
+      {
+        "teacher": "deepscaler",
+        "label": "DeepScaleR-1.5B-Preview",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.29983077208019143,
+        "norm_ratio": 0.3205861055457769
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+    "teacher": "light",
+    "label": "Light-R1-7B-DS",
+    "neighbors": []
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "q3-base",
+    "label": "Qwen3-1.7B-Base",
+    "neighbors": [
+      {
+        "teacher": "coreward-ii",
+        "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.00023449556727859732,
+        "norm_ratio": 1.0000085475865212
+      },
+      {
+        "teacher": "base-gt-math",
+        "label": "GT-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.00025586532177155914,
+        "norm_ratio": 1.0000068296916207
+      },
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.00025917395409518444,
+        "norm_ratio": 1.0000054896576853
+      },
+      {
+        "teacher": "base-opd",
+        "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.0009526124673350931,
+        "norm_ratio": 0.9997573087841031
+      },
+      {
+        "teacher": "sft-deepmath",
+        "label": "Qwen3-1.7B-SFT / Thinking-Space",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.006992816481358949,
+        "norm_ratio": 0.9826348415692191
+      },
+      {
+        "teacher": "grpo-kl",
+        "label": "Qwen3-1.7B-GRPO-KL-Math",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2089321046179572,
+        "norm_ratio": 0.006714639417115653
+      },
+      {
+        "teacher": "e3",
+        "label": "e3-1.7B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.25000016998511365,
+        "norm_ratio": 0.006830409780771872
+      },
+      {
+        "teacher": "sft-gsm8k",
+        "label": "Qwen3-1.7B-Math / Samsung SFT",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.33912411400814596,
+        "norm_ratio": 0.08929114824285048
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "base-opd",
+    "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+    "neighbors": [
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.0008511813487940193,
+        "norm_ratio": 1.0002482411195215
+      },
+      {
+        "teacher": "base-gt-math",
+        "label": "GT-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.0008728265780158431,
+        "norm_ratio": 1.0002495814787502
+      },
+      {
+        "teacher": "coreward-ii",
+        "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.0008751400646744093,
+        "norm_ratio": 1.00025129979067
+      },
+      {
+        "teacher": "q3-base",
+        "label": "Qwen3-1.7B-Base",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.0009526124673350931,
+        "norm_ratio": 1.000242750129221
+      },
+      {
+        "teacher": "sft-deepmath",
+        "label": "Qwen3-1.7B-SFT / Thinking-Space",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.006590311960790234,
+        "norm_ratio": 0.9828733763039871
+      },
+      {
+        "teacher": "grpo-kl",
+        "label": "Qwen3-1.7B-GRPO-KL-Math",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.20936169729916454,
+        "norm_ratio": 0.00671626939670183
+      },
+      {
+        "teacher": "e3",
+        "label": "e3-1.7B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.25033484753707086,
+        "norm_ratio": 0.006832067863628786
+      },
+      {
+        "teacher": "sft-gsm8k",
+        "label": "Qwen3-1.7B-Math / Samsung SFT",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.33949930929033184,
+        "norm_ratio": 0.08931282368062471
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "grpo-kl",
+    "label": "Qwen3-1.7B-GRPO-KL-Math",
+    "neighbors": [
+      {
+        "teacher": "e3",
+        "label": "e3-1.7B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.10221388065640614,
+        "norm_ratio": 1.0172414863203405
+      },
+      {
+        "teacher": "q3-base",
+        "label": "Qwen3-1.7B-Base",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.2089321046179572,
+        "norm_ratio": 148.92832479596663
+      },
+      {
+        "teacher": "coreward-ii",
+        "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2089688054643243,
+        "norm_ratio": 148.92959777370828
+      },
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2089930850859135,
+        "norm_ratio": 148.9291423614894
+      },
+      {
+        "teacher": "base-gt-math",
+        "label": "GT-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.20899425773397162,
+        "norm_ratio": 148.92934193049857
+      },
+      {
+        "teacher": "base-opd",
+        "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.20936169729916454,
+        "norm_ratio": 148.8921811997404
+      },
+      {
+        "teacher": "sft-deepmath",
+        "label": "Qwen3-1.7B-SFT / Thinking-Space",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.21135578148612644,
+        "norm_ratio": 146.34216084105387
+      },
+      {
+        "teacher": "sft-gsm8k",
+        "label": "Qwen3-1.7B-Math / Samsung SFT",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.2742322145098363,
+        "norm_ratio": 13.29798112691604
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "sft-gsm8k",
+    "label": "Qwen3-1.7B-Math / Samsung SFT",
+    "neighbors": [
+      {
+        "teacher": "grpo-kl",
+        "label": "Qwen3-1.7B-GRPO-KL-Math",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2742322145098363,
+        "norm_ratio": 0.0751993848130774
+      },
+      {
+        "teacher": "e3",
+        "label": "e3-1.7B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2828170196259171,
+        "norm_ratio": 0.0764959339776301
+      },
+      {
+        "teacher": "q3-base",
+        "label": "Qwen3-1.7B-Base",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.33912411400814596,
+        "norm_ratio": 11.199318405898872
+      },
+      {
+        "teacher": "coreward-ii",
+        "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.339153525732731,
+        "norm_ratio": 11.199414133041927
+      },
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.3391688084834396,
+        "norm_ratio": 11.199379886323229
+      },
+      {
+        "teacher": "base-gt-math",
+        "label": "GT-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.33917345101362706,
+        "norm_ratio": 11.199394893789947
+      },
+      {
+        "teacher": "base-opd",
+        "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.33949930929033184,
+        "norm_ratio": 11.196600429697726
+      },
+      {
+        "teacher": "sft-deepmath",
+        "label": "Qwen3-1.7B-SFT / Thinking-Space",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.3441244047206278,
+        "norm_ratio": 11.004840467463678
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "sft-deepmath",
+    "label": "Qwen3-1.7B-SFT / Thinking-Space",
+    "neighbors": [
+      {
+        "teacher": "base-opd",
+        "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.006590311960790234,
+        "norm_ratio": 1.017425056074279
+      },
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.006929731876929309,
+        "norm_ratio": 1.017677622809228
+      },
+      {
+        "teacher": "base-gt-math",
+        "label": "GT-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.0069317346872471534,
+        "norm_ratio": 1.0176789865242915
+      },
+      {
+        "teacher": "coreward-ii",
+        "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.00694494283981751,
+        "norm_ratio": 1.017680734777893
+      },
+      {
+        "teacher": "q3-base",
+        "label": "Qwen3-1.7B-Base",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.006992816481358949,
+        "norm_ratio": 1.0176720361381137
+      },
+      {
+        "teacher": "grpo-kl",
+        "label": "Qwen3-1.7B-GRPO-KL-Math",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.21135578148612644,
+        "norm_ratio": 0.006833300767549323
+      },
+      {
+        "teacher": "e3",
+        "label": "e3-1.7B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.25225431190373754,
+        "norm_ratio": 0.006951117029255798
+      },
+      {
+        "teacher": "sft-gsm8k",
+        "label": "Qwen3-1.7B-Math / Samsung SFT",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.3441244047206278,
+        "norm_ratio": 0.09086910464141179
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "e3",
+    "label": "e3-1.7B",
+    "neighbors": [
+      {
+        "teacher": "grpo-kl",
+        "label": "Qwen3-1.7B-GRPO-KL-Math",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.10221388065640614,
+        "norm_ratio": 0.9830507440443585
+      },
+      {
+        "teacher": "q3-base",
+        "label": "Qwen3-1.7B-Base",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.25000016998511365,
+        "norm_ratio": 146.4041004999549
+      },
+      {
+        "teacher": "coreward-ii",
+        "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2500266212742071,
+        "norm_ratio": 146.405351901671
+      },
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.25005243111420244,
+        "norm_ratio": 146.40490420835036
+      },
+      {
+        "teacher": "base-gt-math",
+        "label": "GT-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2500532182413894,
+        "norm_ratio": 146.4051003948133
+      },
+      {
+        "teacher": "base-opd",
+        "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.25033484753707086,
+        "norm_ratio": 146.36856951079227
+      },
+      {
+        "teacher": "sft-deepmath",
+        "label": "Qwen3-1.7B-SFT / Thinking-Space",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.25225431190373754,
+        "norm_ratio": 143.8617700998572
+      },
+      {
+        "teacher": "sft-gsm8k",
+        "label": "Qwen3-1.7B-Math / Samsung SFT",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.2828170196259171,
+        "norm_ratio": 13.07259024110265
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "coreward-i",
+    "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+    "neighbors": [
+      {
+        "teacher": "coreward-ii",
+        "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.00021739509052553946,
+        "norm_ratio": 1.0000030579120491
+      },
+      {
+        "teacher": "base-gt-math",
+        "label": "GT-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.0002240990092489331,
+        "norm_ratio": 1.000001340026579
+      },
+      {
+        "teacher": "q3-base",
+        "label": "Qwen3-1.7B-Base",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.00025917395409518444,
+        "norm_ratio": 0.9999945103724508
+      },
+      {
+        "teacher": "base-opd",
+        "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.0008511813487940193,
+        "norm_ratio": 0.9997518204888383
+      },
+      {
+        "teacher": "sft-deepmath",
+        "label": "Qwen3-1.7B-SFT / Thinking-Space",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.006929731876929309,
+        "norm_ratio": 0.9826294472699221
+      },
+      {
+        "teacher": "grpo-kl",
+        "label": "Qwen3-1.7B-GRPO-KL-Math",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2089930850859135,
+        "norm_ratio": 0.0067146025562461265
+      },
+      {
+        "teacher": "e3",
+        "label": "e3-1.7B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.25005243111420244,
+        "norm_ratio": 0.006830372284366167
+      },
+      {
+        "teacher": "sft-gsm8k",
+        "label": "Qwen3-1.7B-Math / Samsung SFT",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.3391688084834396,
+        "norm_ratio": 0.08929065806770319
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "coreward-ii",
+    "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+    "neighbors": [
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.00021739509052553946,
+        "norm_ratio": 0.9999969420973017
+      },
+      {
+        "teacher": "base-gt-math",
+        "label": "GT-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.0002337325252468073,
+        "norm_ratio": 0.999998282119783
+      },
+      {
+        "teacher": "q3-base",
+        "label": "Qwen3-1.7B-Base",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.00023449556727859732,
+        "norm_ratio": 0.9999914524865393
+      },
+      {
+        "teacher": "base-opd",
+        "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.0008751400646744093,
+        "norm_ratio": 0.9997487633450488
+      },
+      {
+        "teacher": "sft-deepmath",
+        "label": "Qwen3-1.7B-SFT / Thinking-Space",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.00694494283981751,
+        "norm_ratio": 0.9826264424846839
+      },
+      {
+        "teacher": "grpo-kl",
+        "label": "Qwen3-1.7B-GRPO-KL-Math",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2089688054643243,
+        "norm_ratio": 0.006714582023644851
+      },
+      {
+        "teacher": "e3",
+        "label": "e3-1.7B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2500266212742071,
+        "norm_ratio": 0.006830351397752329
+      },
+      {
+        "teacher": "sft-gsm8k",
+        "label": "Qwen3-1.7B-Math / Samsung SFT",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.339153525732731,
+        "norm_ratio": 0.08929038502555894
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "teacher": "base-gt-math",
+    "label": "GT-Qwen3-1.7B-Base-MATH",
+    "neighbors": [
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.0002240990092489331,
+        "norm_ratio": 0.9999986599752166
+      },
+      {
+        "teacher": "coreward-ii",
+        "label": "Co-rewarding-II-Qwen3-1.7B-Base-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.0002337325252468073,
+        "norm_ratio": 1.000001717883168
+      },
+      {
+        "teacher": "q3-base",
+        "label": "Qwen3-1.7B-Base",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.00025586532177155914,
+        "norm_ratio": 0.9999931703550237
+      },
+      {
+        "teacher": "base-opd",
+        "label": "Qwen3-1.7B-Base-OPD / Thinking-Space",
+        "added_stage": "Base/OPD/public-history control",
+        "mean_normalized_spectrum_distance": 0.0008728265780158431,
+        "norm_ratio": 0.9997504807966215
+      },
+      {
+        "teacher": "sft-deepmath",
+        "label": "Qwen3-1.7B-SFT / Thinking-Space",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.0069317346872471534,
+        "norm_ratio": 0.9826281305221098
+      },
+      {
+        "teacher": "grpo-kl",
+        "label": "Qwen3-1.7B-GRPO-KL-Math",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.20899425773397162,
+        "norm_ratio": 0.00671459355851229
+      },
+      {
+        "teacher": "e3",
+        "label": "e3-1.7B",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.2500532182413894,
+        "norm_ratio": 0.006830363131498027
+      },
+      {
+        "teacher": "sft-gsm8k",
+        "label": "Qwen3-1.7B-Math / Samsung SFT",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.33917345101362706,
+        "norm_ratio": 0.08929053841600845
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+    "teacher": "coreward-i",
+    "label": "Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+    "neighbors": [
+      {
+        "teacher": "gt",
+        "label": "GT-Llama-3.2-3B-Instruct-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.031738378370981694,
+        "norm_ratio": 1.0289823759462438
+      },
+      {
+        "teacher": "arithmetic-full",
+        "label": "Llama-3.2-3B-Instruct-arithmetic-full",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.16749249856085827,
+        "norm_ratio": 39.834252352112934
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+    "teacher": "gt",
+    "label": "GT-Llama-3.2-3B-Instruct-MATH",
+    "neighbors": [
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.031738378370981694,
+        "norm_ratio": 0.9718339432980163
+      },
+      {
+        "teacher": "arithmetic-full",
+        "label": "Llama-3.2-3B-Instruct-arithmetic-full",
+        "added_stage": "added SFT",
+        "mean_normalized_spectrum_distance": 0.1575872419134672,
+        "norm_ratio": 38.712278541682196
+      }
+    ]
+  },
+  {
+    "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/unsloth--Llama-3.2-3B-Instruct/006f5dcd1393c3add266de40994ba96225e9689d",
+    "teacher": "arithmetic-full",
+    "label": "Llama-3.2-3B-Instruct-arithmetic-full",
+    "neighbors": [
+      {
+        "teacher": "gt",
+        "label": "GT-Llama-3.2-3B-Instruct-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.1575872419134672,
+        "norm_ratio": 0.025831597562083107
+      },
+      {
+        "teacher": "coreward-i",
+        "label": "Co-rewarding-I-Llama-3.2-3B-Instruct-MATH",
+        "added_stage": "RL; no added SFT",
+        "mean_normalized_spectrum_distance": 0.16749249856085827,
+        "norm_ratio": 0.02510402332044665
+      }
+    ]
+  }
+]

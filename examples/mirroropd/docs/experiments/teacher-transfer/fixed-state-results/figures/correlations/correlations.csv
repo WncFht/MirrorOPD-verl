@@ -1,0 +1,155 @@
+student,kind,metric,correlation_space,x_panel,y_panel,n,n64,n320,pearson_r,spearman_rho
+r1,cross-batch,relative,displayed values,Training scored,Math,9,4,5,0.9979043957763967,1.0
+r1,cross-batch,relative,displayed values,Training scored,Code,9,4,5,0.9702704439400277,0.9500000000000001
+r1,cross-batch,relative,displayed values,Training scored,IF,9,4,5,0.8747164150714708,0.8166666666666667
+r1,cross-batch,relative,displayed values,Training scored,All held-out,9,4,5,0.9803990457699436,0.9500000000000001
+r1,cross-batch,absolute,displayed values,Training scored,Math,9,4,5,0.9821007932690281,0.9333333333333332
+r1,cross-batch,absolute,displayed values,Training scored,Code,9,4,5,0.8988525608463463,0.7833333333333333
+r1,cross-batch,absolute,displayed values,Training scored,IF,9,4,5,0.8276411110199814,0.6833333333333333
+r1,cross-batch,absolute,displayed values,Training scored,All held-out,9,4,5,0.9534216868549563,0.9166666666666666
+r1,cross-batch,log_absorption,displayed values,Training scored,Math,9,4,5,0.9775692905244809,1.0
+r1,cross-batch,log_absorption,displayed values,Training scored,Code,9,4,5,0.8740442621054588,0.9500000000000001
+r1,cross-batch,log_absorption,displayed values,Training scored,IF,9,4,5,0.738487563856675,0.8166666666666667
+r1,cross-batch,log_absorption,displayed values,Training scored,All held-out,9,4,5,0.8650202911067044,0.9500000000000001
+r1,cross-batch,final,log10 RKL,Training scored,Math,9,4,5,0.9892537740009526,0.9833333333333333
+r1,cross-batch,final,log10 RKL,Training scored,Code,9,4,5,0.9032233343235083,0.9666666666666667
+r1,cross-batch,final,log10 RKL,Training scored,IF,9,4,5,0.8743466392728182,0.8166666666666667
+r1,cross-batch,final,log10 RKL,Training scored,All held-out,9,4,5,0.9378013282003128,0.9166666666666666
+r1,cross-domain,relative,displayed values,Math,Code,9,4,5,0.9763175785094081,0.9500000000000001
+r1,cross-domain,relative,displayed values,Math,IF,9,4,5,0.8833143565217603,0.8166666666666667
+r1,cross-domain,relative,displayed values,Code,IF,9,4,5,0.9209726032675354,0.9166666666666666
+r1,cross-domain,absolute,displayed values,Math,Code,9,4,5,0.9562310199568004,0.9
+r1,cross-domain,absolute,displayed values,Math,IF,9,4,5,0.8673862628853688,0.6833333333333333
+r1,cross-domain,absolute,displayed values,Code,IF,9,4,5,0.8947798813124845,0.7
+r7,cross-batch,relative,displayed values,Training scored,Math,3,1,2,0.7295288065664535,0.5
+r7,cross-batch,relative,displayed values,Training scored,Code,3,1,2,0.6951053671199118,0.5
+r7,cross-batch,relative,displayed values,Training scored,IF,3,1,2,0.07958704081766886,-0.5
+r7,cross-batch,relative,displayed values,Training scored,All held-out,3,1,2,0.43678500637002426,0.5
+r7,cross-batch,absolute,displayed values,Training scored,Math,3,1,2,0.914376842449985,1.0
+r7,cross-batch,absolute,displayed values,Training scored,Code,3,1,2,0.9872345004730808,1.0
+r7,cross-batch,absolute,displayed values,Training scored,IF,3,1,2,0.2299891083652552,-0.5
+r7,cross-batch,absolute,displayed values,Training scored,All held-out,3,1,2,0.9951738786014219,1.0
+r7,cross-batch,log_absorption,displayed values,Training scored,Math,3,1,2,0.644999804775578,0.5
+r7,cross-batch,log_absorption,displayed values,Training scored,Code,3,1,2,0.6101676766494848,0.5
+r7,cross-batch,log_absorption,displayed values,Training scored,IF,3,1,2,0.054557102419794695,-0.5
+r7,cross-batch,log_absorption,displayed values,Training scored,All held-out,3,1,2,0.3497198898665106,0.5
+r7,cross-batch,final,log10 RKL,Training scored,Math,3,1,2,0.920844806431704,1.0
+r7,cross-batch,final,log10 RKL,Training scored,Code,3,1,2,0.8786998517094163,1.0
+r7,cross-batch,final,log10 RKL,Training scored,IF,3,1,2,0.6764018477200883,1.0
+r7,cross-batch,final,log10 RKL,Training scored,All held-out,3,1,2,0.7495226540620066,1.0
+r7,cross-domain,relative,displayed values,Math,Code,3,1,2,0.9987964900094052,1.0
+r7,cross-domain,relative,displayed values,Math,IF,3,1,2,0.7398415809884679,0.5
+r7,cross-domain,relative,displayed values,Code,IF,3,1,2,0.771948818369769,0.5
+r7,cross-domain,absolute,displayed values,Math,Code,3,1,2,0.9671884889200671,1.0
+r7,cross-domain,absolute,displayed values,Math,IF,3,1,2,-0.18371433620639221,-0.5
+r7,cross-domain,absolute,displayed values,Code,IF,3,1,2,0.072049315470766,-0.5
+q3-1.7,cross-batch,relative,displayed values,Training scored,Math,13,1,12,0.9448481550300966,0.9285714285714285
+q3-1.7,cross-batch,relative,displayed values,Training scored,Code,13,1,12,0.928373559767502,0.9230769230769231
+q3-1.7,cross-batch,relative,displayed values,Training scored,IF,13,1,12,0.8698386731997422,0.9505494505494506
+q3-1.7,cross-batch,relative,displayed values,Training scored,All held-out,13,1,12,0.9501641505777265,0.9285714285714285
+q3-1.7,cross-batch,absolute,displayed values,Training scored,Math,13,1,12,0.9807353901945829,0.9285714285714285
+q3-1.7,cross-batch,absolute,displayed values,Training scored,Code,13,1,12,0.9452335127778095,0.8956043956043955
+q3-1.7,cross-batch,absolute,displayed values,Training scored,IF,13,1,12,0.8036802106535959,0.7472527472527472
+q3-1.7,cross-batch,absolute,displayed values,Training scored,All held-out,13,1,12,0.9642937159378389,0.9175824175824175
+q3-1.7,cross-batch,log_absorption,displayed values,Training scored,Math,13,1,12,0.9281009835517091,0.9285714285714285
+q3-1.7,cross-batch,log_absorption,displayed values,Training scored,Code,13,1,12,0.8404766136944634,0.9230769230769231
+q3-1.7,cross-batch,log_absorption,displayed values,Training scored,IF,13,1,12,0.8085974643002442,0.9505494505494506
+q3-1.7,cross-batch,log_absorption,displayed values,Training scored,All held-out,13,1,12,0.8719748672332187,0.9285714285714285
+q3-1.7,cross-batch,final,log10 RKL,Training scored,Math,13,1,12,0.9914923197361979,0.9340659340659341
+q3-1.7,cross-batch,final,log10 RKL,Training scored,Code,13,1,12,0.9900965723324681,0.9560439560439561
+q3-1.7,cross-batch,final,log10 RKL,Training scored,IF,13,1,12,0.9846138025137852,0.9505494505494506
+q3-1.7,cross-batch,final,log10 RKL,Training scored,All held-out,13,1,12,0.9909301806721685,0.967032967032967
+q3-1.7,cross-domain,relative,displayed values,Math,Code,13,1,12,0.9506938312145551,0.9835164835164836
+q3-1.7,cross-domain,relative,displayed values,Math,IF,13,1,12,0.8831862397331722,0.9560439560439561
+q3-1.7,cross-domain,relative,displayed values,Code,IF,13,1,12,0.9718218083272405,0.9835164835164836
+q3-1.7,cross-domain,absolute,displayed values,Math,Code,13,1,12,0.9721361540320143,0.945054945054945
+q3-1.7,cross-domain,absolute,displayed values,Math,IF,13,1,12,0.8489220900938702,0.7967032967032966
+q3-1.7,cross-domain,absolute,displayed values,Code,IF,13,1,12,0.9322593539227728,0.9120879120879121
+q3-1.7-nonthinking,cross-batch,relative,displayed values,Training scored,Math,10,0,10,0.9914936330238887,0.9999999999999999
+q3-1.7-nonthinking,cross-batch,relative,displayed values,Training scored,Code,10,0,10,0.8430505306087838,0.7939393939393938
+q3-1.7-nonthinking,cross-batch,relative,displayed values,Training scored,IF,10,0,10,0.8308668331042374,0.9272727272727272
+q3-1.7-nonthinking,cross-batch,relative,displayed values,Training scored,All held-out,10,0,10,0.9883521375056983,0.9757575757575757
+q3-1.7-nonthinking,cross-batch,absolute,displayed values,Training scored,Math,10,0,10,0.9935743873332459,0.9999999999999999
+q3-1.7-nonthinking,cross-batch,absolute,displayed values,Training scored,Code,10,0,10,0.7869049638985877,0.6969696969696969
+q3-1.7-nonthinking,cross-batch,absolute,displayed values,Training scored,IF,10,0,10,0.5647507688405562,0.4787878787878787
+q3-1.7-nonthinking,cross-batch,absolute,displayed values,Training scored,All held-out,10,0,10,0.9840933085363472,0.9757575757575757
+q3-1.7-nonthinking,cross-batch,log_absorption,displayed values,Training scored,Math,10,0,10,0.9971927667216627,0.9999999999999999
+q3-1.7-nonthinking,cross-batch,log_absorption,displayed values,Training scored,Code,10,0,10,0.9350009134236837,0.7939393939393938
+q3-1.7-nonthinking,cross-batch,log_absorption,displayed values,Training scored,IF,10,0,10,0.9362281509101005,0.9272727272727272
+q3-1.7-nonthinking,cross-batch,log_absorption,displayed values,Training scored,All held-out,10,0,10,0.9961640535168298,0.9757575757575757
+q3-1.7-nonthinking,cross-batch,final,log10 RKL,Training scored,Math,10,0,10,0.9940224899944241,0.709090909090909
+q3-1.7-nonthinking,cross-batch,final,log10 RKL,Training scored,Code,10,0,10,0.7309865331736144,0.19999999999999998
+q3-1.7-nonthinking,cross-batch,final,log10 RKL,Training scored,IF,10,0,10,0.7983597948843645,0.01818181818181818
+q3-1.7-nonthinking,cross-batch,final,log10 RKL,Training scored,All held-out,10,0,10,0.9437570749193238,0.34545454545454546
+q3-1.7-nonthinking,cross-domain,relative,displayed values,Math,Code,10,0,10,0.8695063466958853,0.7939393939393938
+q3-1.7-nonthinking,cross-domain,relative,displayed values,Math,IF,10,0,10,0.8404262671433418,0.9272727272727272
+q3-1.7-nonthinking,cross-domain,relative,displayed values,Code,IF,10,0,10,0.9841501735601457,0.8909090909090909
+q3-1.7-nonthinking,cross-domain,absolute,displayed values,Math,Code,10,0,10,0.8478372676170473,0.6969696969696969
+q3-1.7-nonthinking,cross-domain,absolute,displayed values,Math,IF,10,0,10,0.6428331297336798,0.4787878787878787
+q3-1.7-nonthinking,cross-domain,absolute,displayed values,Code,IF,10,0,10,0.8985803859593804,0.7818181818181817
+llama3-3b-off,cross-batch,relative,displayed values,Training scored,Math,10,0,10,0.9861472525743987,0.9030303030303028
+llama3-3b-off,cross-batch,relative,displayed values,Training scored,Code,10,0,10,0.9101562835299734,0.8787878787878788
+llama3-3b-off,cross-batch,relative,displayed values,Training scored,IF,10,0,10,0.9236691987533855,0.8303030303030302
+llama3-3b-off,cross-batch,relative,displayed values,Training scored,All held-out,10,0,10,0.9795899506181293,0.9272727272727272
+llama3-3b-off,cross-batch,absolute,displayed values,Training scored,Math,10,0,10,0.9802557777979757,0.9030303030303028
+llama3-3b-off,cross-batch,absolute,displayed values,Training scored,Code,10,0,10,0.8396680249031666,0.8787878787878788
+llama3-3b-off,cross-batch,absolute,displayed values,Training scored,IF,10,0,10,0.6994242395410378,0.8181818181818182
+llama3-3b-off,cross-batch,absolute,displayed values,Training scored,All held-out,10,0,10,0.9541791380739234,0.9393939393939393
+llama3-3b-off,cross-batch,log_absorption,displayed values,Training scored,Math,10,0,10,0.984192995320677,0.9030303030303028
+llama3-3b-off,cross-batch,log_absorption,displayed values,Training scored,Code,10,0,10,0.9738353788930872,0.8787878787878788
+llama3-3b-off,cross-batch,log_absorption,displayed values,Training scored,IF,10,0,10,0.9654774568987484,0.8303030303030302
+llama3-3b-off,cross-batch,log_absorption,displayed values,Training scored,All held-out,10,0,10,0.9798779376146952,0.9272727272727272
+llama3-3b-off,cross-batch,final,log10 RKL,Training scored,Math,10,0,10,0.9958608680903676,0.9999999999999999
+llama3-3b-off,cross-batch,final,log10 RKL,Training scored,Code,10,0,10,0.9891521469903561,0.9636363636363635
+llama3-3b-off,cross-batch,final,log10 RKL,Training scored,IF,10,0,10,0.9917105979566884,0.9757575757575757
+llama3-3b-off,cross-batch,final,log10 RKL,Training scored,All held-out,10,0,10,0.9947887079614355,0.9878787878787878
+llama3-3b-off,cross-domain,relative,displayed values,Math,Code,10,0,10,0.9259010023480517,0.7696969696969697
+llama3-3b-off,cross-domain,relative,displayed values,Math,IF,10,0,10,0.9547044519297662,0.9393939393939393
+llama3-3b-off,cross-domain,relative,displayed values,Code,IF,10,0,10,0.9694960853060304,0.8545454545454544
+llama3-3b-off,cross-domain,absolute,displayed values,Math,Code,10,0,10,0.8750422100213798,0.7818181818181817
+llama3-3b-off,cross-domain,absolute,displayed values,Math,IF,10,0,10,0.8104327882821412,0.7212121212121211
+llama3-3b-off,cross-domain,absolute,displayed values,Code,IF,10,0,10,0.789815186993446,0.8181818181818182
+q3-1.7-native-thinking2507,cross-batch,relative,displayed values,Training scored,Math,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,relative,displayed values,Training scored,Code,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,relative,displayed values,Training scored,IF,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,relative,displayed values,Training scored,All held-out,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,absolute,displayed values,Training scored,Math,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,absolute,displayed values,Training scored,Code,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,absolute,displayed values,Training scored,IF,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,absolute,displayed values,Training scored,All held-out,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,log_absorption,displayed values,Training scored,Math,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,log_absorption,displayed values,Training scored,Code,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,log_absorption,displayed values,Training scored,IF,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,log_absorption,displayed values,Training scored,All held-out,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,final,log10 RKL,Training scored,Math,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,final,log10 RKL,Training scored,Code,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,final,log10 RKL,Training scored,IF,1,0,1,,
+q3-1.7-native-thinking2507,cross-batch,final,log10 RKL,Training scored,All held-out,1,0,1,,
+q3-1.7-native-thinking2507,cross-domain,relative,displayed values,Math,Code,1,0,1,,
+q3-1.7-native-thinking2507,cross-domain,relative,displayed values,Math,IF,1,0,1,,
+q3-1.7-native-thinking2507,cross-domain,relative,displayed values,Code,IF,1,0,1,,
+q3-1.7-native-thinking2507,cross-domain,absolute,displayed values,Math,Code,1,0,1,,
+q3-1.7-native-thinking2507,cross-domain,absolute,displayed values,Math,IF,1,0,1,,
+q3-1.7-native-thinking2507,cross-domain,absolute,displayed values,Code,IF,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,relative,displayed values,Training scored,Math,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,relative,displayed values,Training scored,Code,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,relative,displayed values,Training scored,IF,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,relative,displayed values,Training scored,All held-out,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,absolute,displayed values,Training scored,Math,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,absolute,displayed values,Training scored,Code,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,absolute,displayed values,Training scored,IF,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,absolute,displayed values,Training scored,All held-out,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,log_absorption,displayed values,Training scored,Math,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,log_absorption,displayed values,Training scored,Code,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,log_absorption,displayed values,Training scored,IF,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,log_absorption,displayed values,Training scored,All held-out,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,final,log10 RKL,Training scored,Math,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,final,log10 RKL,Training scored,Code,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,final,log10 RKL,Training scored,IF,1,0,1,,
+q3-1.7-native-instruct2507,cross-batch,final,log10 RKL,Training scored,All held-out,1,0,1,,
+q3-1.7-native-instruct2507,cross-domain,relative,displayed values,Math,Code,1,0,1,,
+q3-1.7-native-instruct2507,cross-domain,relative,displayed values,Math,IF,1,0,1,,
+q3-1.7-native-instruct2507,cross-domain,relative,displayed values,Code,IF,1,0,1,,
+q3-1.7-native-instruct2507,cross-domain,absolute,displayed values,Math,Code,1,0,1,,
+q3-1.7-native-instruct2507,cross-domain,absolute,displayed values,Math,IF,1,0,1,,
+q3-1.7-native-instruct2507,cross-domain,absolute,displayed values,Code,IF,1,0,1,,

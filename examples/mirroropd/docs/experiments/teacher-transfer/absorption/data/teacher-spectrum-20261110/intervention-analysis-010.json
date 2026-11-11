@@ -1,0 +1,5080 @@
+{
+  "qwen-grpo": {
+    "edits": {
+      "qwen-grpo.intervention-full-scope-base": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0026004697669122835,
+          "relative_endpoint_improvement": 0.034839124325858006,
+          "paired_bootstrap_95": [
+            0.015564711540520927,
+            0.04877560622603737
+          ],
+          "improved_questions": 46
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0026004697669122835,
+          "relative_endpoint_improvement": 0.034839124325858006,
+          "paired_bootstrap_95": [
+            0.015378893315760834,
+            0.0488282368815768
+          ],
+          "improved_questions": 46
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0011301470585749485,
+          "relative_endpoint_improvement": -0.04501513457053963,
+          "paired_bootstrap_95": [
+            -0.07126843013371721,
+            -0.01981316140530304
+          ],
+          "improved_questions": 22
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0009061050404852722,
+          "relative_endpoint_improvement": -0.04102793707903207,
+          "paired_bootstrap_95": [
+            -0.07016642097668845,
+            -0.01381232369205308
+          ],
+          "improved_questions": 14
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0014093686186242849,
+          "relative_endpoint_improvement": -0.08528029894955358,
+          "paired_bootstrap_95": [
+            -0.15830926598241618,
+            -0.011628765130335046
+          ],
+          "improved_questions": 1
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0015230515527946409,
+          "relative_endpoint_improvement": -0.01705026147416322,
+          "paired_bootstrap_95": [
+            -0.05855668215914286,
+            0.021811894424360982
+          ],
+          "improved_questions": 7
+        }
+      },
+      "qwen-grpo.intervention-opd-delete-diag": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0026812353724380957,
+          "relative_endpoint_improvement": 0.004863077864759258,
+          "paired_bootstrap_95": [
+            -0.01101609304649285,
+            0.024122053397943967
+          ],
+          "improved_questions": 37
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0026812353724380957,
+          "relative_endpoint_improvement": 0.004863077864759258,
+          "paired_bootstrap_95": [
+            -0.01113156841316428,
+            0.024606728935805757
+          ],
+          "improved_questions": 37
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0010918857587967068,
+          "relative_endpoint_improvement": -0.009635988968886622,
+          "paired_bootstrap_95": [
+            -0.034229393263702494,
+            0.011297295507121038
+          ],
+          "improved_questions": 41
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0008694147921535963,
+          "relative_endpoint_improvement": 0.001125645370068984,
+          "paired_bootstrap_95": [
+            -0.021613786991349925,
+            0.02290677340365827
+          ],
+          "improved_questions": 25
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0013464216608554125,
+          "relative_endpoint_improvement": -0.03680817303259465,
+          "paired_bootstrap_95": [
+            -0.11433921172137554,
+            0.02732322339645151
+          ],
+          "improved_questions": 8
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0015047627566673327,
+          "relative_endpoint_improvement": -0.004837526554458016,
+          "paired_bootstrap_95": [
+            -0.042109685713246296,
+            0.030823515503048203
+          ],
+          "improved_questions": 8
+        }
+      },
+      "qwen-grpo.intervention-opd-delete-null": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.006393989460775629,
+          "relative_endpoint_improvement": -1.373120635946083,
+          "paired_bootstrap_95": [
+            -2.3841627531305027,
+            -0.6990490322116236
+          ],
+          "improved_questions": 6
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.006393989460775629,
+          "relative_endpoint_improvement": -1.373120635946083,
+          "paired_bootstrap_95": [
+            -2.3890687427427992,
+            -0.709229263841579
+          ],
+          "improved_questions": 6
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.006712302929372527,
+          "relative_endpoint_improvement": -5.206677348575585,
+          "paired_bootstrap_95": [
+            -5.815236418525254,
+            -4.656839431352295
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.006434840499423444,
+          "relative_endpoint_improvement": -6.3930156342136355,
+          "paired_bootstrap_95": [
+            -7.2525119915724625,
+            -5.619901792299589
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.00828174062189646,
+          "relative_endpoint_improvement": -5.377330826854825,
+          "paired_bootstrap_95": [
+            -6.210591922991883,
+            -4.5860481104644215
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.00597525252669584,
+          "relative_endpoint_improvement": -2.9901027207511492,
+          "paired_bootstrap_95": [
+            -3.84536303926719,
+            -2.2973844486381654
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-grpo.intervention-opd-delete-off": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.006089960754616186,
+          "relative_endpoint_improvement": -1.2602807883152676,
+          "paired_bootstrap_95": [
+            -2.257264324116287,
+            -0.6355871897790619
+          ],
+          "improved_questions": 6
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.006089960754616186,
+          "relative_endpoint_improvement": -1.2602807883152676,
+          "paired_bootstrap_95": [
+            -2.2131811279631153,
+            -0.6283661948894821
+          ],
+          "improved_questions": 6
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.006434200308285653,
+          "relative_endpoint_improvement": -4.949523692514244,
+          "paired_bootstrap_95": [
+            -5.570843175102765,
+            -4.395967869429483
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.006120206696020129,
+          "relative_endpoint_improvement": -6.031531518512365,
+          "paired_bootstrap_95": [
+            -6.802084870527317,
+            -5.28080397327004
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.008148403809173033,
+          "relative_endpoint_improvement": -5.274655193197879,
+          "paired_bootstrap_95": [
+            -6.031722913120925,
+            -4.557972132499022
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.005661977644194849,
+          "relative_endpoint_improvement": -2.7809067151554796,
+          "paired_bootstrap_95": [
+            -3.596093769158992,
+            -2.127176298074177
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-grpo.intervention-patch-diag-b0.25": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0026711700498708523,
+          "relative_endpoint_improvement": 0.008598808872498753,
+          "paired_bootstrap_95": [
+            -0.008103591742553715,
+            0.026614223471343394
+          ],
+          "improved_questions": 45
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0026711700498708523,
+          "relative_endpoint_improvement": 0.008598808872498753,
+          "paired_bootstrap_95": [
+            -0.006910085378848634,
+            0.02613381460591218
+          ],
+          "improved_questions": 45
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0010738750232121674,
+          "relative_endpoint_improvement": 0.007018030636601447,
+          "paired_bootstrap_95": [
+            -0.013284439137653734,
+            0.027201915423223023
+          ],
+          "improved_questions": 45
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0008570872008325144,
+          "relative_endpoint_improvement": 0.0152888675007683,
+          "paired_bootstrap_95": [
+            -0.01288159606840901,
+            0.04551904587178366
+          ],
+          "improved_questions": 27
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0012853320040449034,
+          "relative_endpoint_improvement": 0.01023374356034823,
+          "paired_bootstrap_95": [
+            -0.04001735033911474,
+            0.055555526779232506
+          ],
+          "improved_questions": 8
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0015127815095183905,
+          "relative_endpoint_improvement": -0.010192220339379832,
+          "paired_bootstrap_95": [
+            -0.03909061400537801,
+            0.01690511982902332
+          ],
+          "improved_questions": 10
+        }
+      },
+      "qwen-grpo.intervention-patch-diag-b0.5": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.002689263831052813,
+          "relative_endpoint_improvement": 0.001883326188547807,
+          "paired_bootstrap_95": [
+            -0.01835862246148048,
+            0.03196924368770725
+          ],
+          "improved_questions": 38
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.002689263831052813,
+          "relative_endpoint_improvement": 0.001883326188547807,
+          "paired_bootstrap_95": [
+            -0.018214247297695444,
+            0.031633098865750005
+          ],
+          "improved_questions": 38
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0010908514912443934,
+          "relative_endpoint_improvement": -0.008679630911621272,
+          "paired_bootstrap_95": [
+            -0.03411887731824471,
+            0.012512623516577661
+          ],
+          "improved_questions": 34
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0008844588476980183,
+          "relative_endpoint_improvement": -0.016158534067145514,
+          "paired_bootstrap_95": [
+            -0.03817512195653436,
+            0.005483887501919195
+          ],
+          "improved_questions": 16
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0013168383884476498,
+          "relative_endpoint_improvement": -0.01402765819897911,
+          "paired_bootstrap_95": [
+            -0.10147272505471117,
+            0.05692826299049758
+          ],
+          "improved_questions": 9
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0014840425246802624,
+          "relative_endpoint_improvement": 0.008998851683420739,
+          "paired_bootstrap_95": [
+            -0.01956219778854555,
+            0.03900520771028903
+          ],
+          "improved_questions": 9
+        }
+      },
+      "qwen-grpo.intervention-patch-diag-b1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0027017857417376947,
+          "relative_endpoint_improvement": -0.0027641642131899236,
+          "paired_bootstrap_95": [
+            -0.016921967500602684,
+            0.012197772442881913
+          ],
+          "improved_questions": 38
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0027017857417376947,
+          "relative_endpoint_improvement": -0.0027641642131899236,
+          "paired_bootstrap_95": [
+            -0.016996358359109814,
+            0.012715398339505081
+          ],
+          "improved_questions": 38
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.001084620967230876,
+          "relative_endpoint_improvement": -0.002918440948749712,
+          "paired_bootstrap_95": [
+            -0.02389607535326704,
+            0.017548459160038173
+          ],
+          "improved_questions": 42
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0008716826614545425,
+          "relative_endpoint_improvement": -0.0014799193210450756,
+          "paired_bootstrap_95": [
+            -0.028396601236896538,
+            0.024412526704350724
+          ],
+          "improved_questions": 24
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.001299536739679752,
+          "relative_endpoint_improvement": -0.0007045727414123348,
+          "paired_bootstrap_95": [
+            -0.062125317931515926,
+            0.05290314470307757
+          ],
+          "improved_questions": 10
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0015085201121110003,
+          "relative_endpoint_improvement": -0.007346581044059164,
+          "paired_bootstrap_95": [
+            -0.036895377833822254,
+            0.022996308276843385
+          ],
+          "improved_questions": 8
+        }
+      },
+      "qwen-grpo.intervention-patch-null-b0.25": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.001983940668287687,
+          "relative_endpoint_improvement": 0.2636630746283638,
+          "paired_bootstrap_95": [
+            0.24199080480719404,
+            0.290819317133516
+          ],
+          "improved_questions": 80
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.001983940668287687,
+          "relative_endpoint_improvement": 0.2636630746283638,
+          "paired_bootstrap_95": [
+            0.24246168889154418,
+            0.28949096616196696
+          ],
+          "improved_questions": 80
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0009380996529216645,
+          "relative_endpoint_improvement": 0.1325656890399305,
+          "paired_bootstrap_95": [
+            0.11261921710443708,
+            0.1526319299673328
+          ],
+          "improved_questions": 74
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.000768811166077891,
+          "relative_endpoint_improvement": 0.11670957950222227,
+          "paired_bootstrap_95": [
+            0.09390318450554312,
+            0.13861924551413815
+          ],
+          "improved_questions": 44
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0011007498287654016,
+          "relative_endpoint_improvement": 0.15237072299986254,
+          "paired_bootstrap_95": [
+            0.09337479948643491,
+            0.207184611243631
+          ],
+          "improved_questions": 14
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0012833149376092479,
+          "relative_endpoint_improvement": 0.143038992702324,
+          "paired_bootstrap_95": [
+            0.11630212007894997,
+            0.1737750163150251
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-grpo.intervention-patch-null-b0.5": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0016915785890887491,
+          "relative_endpoint_improvement": 0.3721728692677404,
+          "paired_bootstrap_95": [
+            0.3412726376751313,
+            0.39985774521257317
+          ],
+          "improved_questions": 77
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0016915785890887491,
+          "relative_endpoint_improvement": 0.3721728692677404,
+          "paired_bootstrap_95": [
+            0.34126857108243636,
+            0.39991160864756853
+          ],
+          "improved_questions": 77
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0008490455889841542,
+          "relative_endpoint_improvement": 0.21491147218699969,
+          "paired_bootstrap_95": [
+            0.1788402907146276,
+            0.24791332567766472
+          ],
+          "improved_questions": 71
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.000749100106380259,
+          "relative_endpoint_improvement": 0.13935569987219387,
+          "paired_bootstrap_95": [
+            0.10114647492028205,
+            0.17880300780224936
+          ],
+          "improved_questions": 42
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0010239755974907894,
+          "relative_endpoint_improvement": 0.21149050157891547,
+          "paired_bootstrap_95": [
+            0.133031890247627,
+            0.2829218322079451
+          ],
+          "improved_questions": 13
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0009739520282892045,
+          "relative_endpoint_improvement": 0.34962269450613404,
+          "paired_bootstrap_95": [
+            0.32097128328088353,
+            0.37882020541089173
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-grpo.intervention-patch-null-b1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0012340327139099827,
+          "relative_endpoint_improvement": 0.5419904088398226,
+          "paired_bootstrap_95": [
+            0.4902249260474572,
+            0.5801276077203107
+          ],
+          "improved_questions": 76
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0012340327139099827,
+          "relative_endpoint_improvement": 0.5419904088398226,
+          "paired_bootstrap_95": [
+            0.4916874089042285,
+            0.5804780722542778
+          ],
+          "improved_questions": 76
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0007396526034426643,
+          "relative_endpoint_improvement": 0.31606408293737487,
+          "paired_bootstrap_95": [
+            0.26561196577542723,
+            0.36564430005999365
+          ],
+          "improved_questions": 73
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0006807441774678106,
+          "relative_endpoint_improvement": 0.21789011749858367,
+          "paired_bootstrap_95": [
+            0.15852899272451879,
+            0.2768021929698018
+          ],
+          "improved_questions": 43
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0009745223978825379,
+          "relative_endpoint_improvement": 0.2495717973773447,
+          "paired_bootstrap_95": [
+            0.17709150080848443,
+            0.3156773338602449
+          ],
+          "improved_questions": 14
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0006815080869273515,
+          "relative_endpoint_improvement": 0.5449083934589068,
+          "paired_bootstrap_95": [
+            0.4969703547389412,
+            0.5942125500692053
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-grpo.intervention-patch-off-b0.25": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.002011637254690868,
+          "relative_endpoint_improvement": 0.2533835236309995,
+          "paired_bootstrap_95": [
+            0.23338575004709672,
+            0.27392016464901386
+          ],
+          "improved_questions": 79
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.002011637254690868,
+          "relative_endpoint_improvement": 0.2533835236309995,
+          "paired_bootstrap_95": [
+            0.23226776878624886,
+            0.2736701250160141
+          ],
+          "improved_questions": 79
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0009875848572846735,
+          "relative_endpoint_improvement": 0.08680811518766796,
+          "paired_bootstrap_95": [
+            0.06196388812390152,
+            0.11270281403980606
+          ],
+          "improved_questions": 66
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.000780546812772324,
+          "relative_endpoint_improvement": 0.10322644507218881,
+          "paired_bootstrap_95": [
+            0.0722657513348356,
+            0.133473929022324
+          ],
+          "improved_questions": 41
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.00120302634240943,
+          "relative_endpoint_improvement": 0.07361298436690111,
+          "paired_bootstrap_95": [
+            0.007601067863238511,
+            0.13895024781178103
+          ],
+          "improved_questions": 12
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0013932575056969654,
+          "relative_endpoint_improvement": 0.0696224905388999,
+          "paired_bootstrap_95": [
+            0.03424207372486599,
+            0.10705938111899421
+          ],
+          "improved_questions": 13
+        }
+      },
+      "qwen-grpo.intervention-patch-off-b0.5": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0015410761974635535,
+          "relative_endpoint_improvement": 0.42803163061165816,
+          "paired_bootstrap_95": [
+            0.4038619295972959,
+            0.4551665942970215
+          ],
+          "improved_questions": 78
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0015410761974635535,
+          "relative_endpoint_improvement": 0.42803163061165816,
+          "paired_bootstrap_95": [
+            0.4028613530637441,
+            0.45465991919026255
+          ],
+          "improved_questions": 78
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0008258661600848427,
+          "relative_endpoint_improvement": 0.23634483683338992,
+          "paired_bootstrap_95": [
+            0.20688493767434332,
+            0.2616975925935144
+          ],
+          "improved_questions": 79
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0006493222723899331,
+          "relative_endpoint_improvement": 0.2539908779631731,
+          "paired_bootstrap_95": [
+            0.22758113852276915,
+            0.28040270753673324
+          ],
+          "improved_questions": 48
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.001068877460056683,
+          "relative_endpoint_improvement": 0.17691394993377352,
+          "paired_bootstrap_95": [
+            0.09359761667750323,
+            0.2609908921536999
+          ],
+          "improved_questions": 15
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.001112486523197731,
+          "relative_endpoint_improvement": 0.2571133214574164,
+          "paired_bootstrap_95": [
+            0.22413154860871873,
+            0.28424563890170845
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-grpo.intervention-patch-off-b1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0011087903265433851,
+          "relative_endpoint_improvement": 0.5884739533902341,
+          "paired_bootstrap_95": [
+            0.5607207659451043,
+            0.6130070906755186
+          ],
+          "improved_questions": 80
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0011087903265433851,
+          "relative_endpoint_improvement": 0.5884739533902341,
+          "paired_bootstrap_95": [
+            0.5608107496847295,
+            0.6134668393005113
+          ],
+          "improved_questions": 80
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0006711484460538486,
+          "relative_endpoint_improvement": 0.37940794664886646,
+          "paired_bootstrap_95": [
+            0.34933891228302544,
+            0.40818824340510335
+          ],
+          "improved_questions": 80
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0005446063896670239,
+          "relative_endpoint_improvement": 0.3742994012576222,
+          "paired_bootstrap_95": [
+            0.3401008939502215,
+            0.4084418855459555
+          ],
+          "improved_questions": 48
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0008967820976977237,
+          "relative_endpoint_improvement": 0.3094354945748591,
+          "paired_bootstrap_95": [
+            0.24897931745788515,
+            0.36368362444675467
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0008251409635704476,
+          "relative_endpoint_improvement": 0.44899446692234135,
+          "paired_bootstrap_95": [
+            0.40388515564662786,
+            0.494961201369284
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-grpo.intervention-patch-off-gaussian-seed0": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.005846170408767648,
+          "relative_endpoint_improvement": -1.169798327540705,
+          "paired_bootstrap_95": [
+            -1.3829676232406989,
+            -1.0333223638301965
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.005846170408767648,
+          "relative_endpoint_improvement": -1.169798327540705,
+          "paired_bootstrap_95": [
+            -1.3758334920184578,
+            -1.0363900125611327
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0023161674427683463,
+          "relative_endpoint_improvement": -1.1416947586843178,
+          "paired_bootstrap_95": [
+            -1.4024543020448461,
+            -0.9123943312196232
+          ],
+          "improved_questions": 10
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0026057506111101247,
+          "relative_endpoint_improvement": -1.9937579662658234,
+          "paired_bootstrap_95": [
+            -2.283427993934811,
+            -1.7155019299153633
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0023144117949414067,
+          "relative_endpoint_improvement": -0.7822062244852528,
+          "paired_bootstrap_95": [
+            -0.978540346425571,
+            -0.6119691685683708
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0014491735855699517,
+          "relative_endpoint_improvement": 0.03228333182750809,
+          "paired_bootstrap_95": [
+            -0.03390547774233991,
+            0.0884393766634731
+          ],
+          "improved_questions": 10
+        }
+      },
+      "qwen-grpo.intervention-patch-off-gaussian-seed1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.00592396151041612,
+          "relative_endpoint_improvement": -1.1986703908663419,
+          "paired_bootstrap_95": [
+            -1.4115859352855276,
+            -1.0534801494137709
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.00592396151041612,
+          "relative_endpoint_improvement": -1.1986703908663419,
+          "paired_bootstrap_95": [
+            -1.420618124282268,
+            -1.0593337305510584
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0023722238278423903,
+          "relative_endpoint_improvement": -1.1935285181470516,
+          "paired_bootstrap_95": [
+            -1.4509603352773672,
+            -0.9638574121521739
+          ],
+          "improved_questions": 11
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.002681172263692133,
+          "relative_endpoint_improvement": -2.0804102238854143,
+          "paired_bootstrap_95": [
+            -2.391367809705955,
+            -1.7785267379193936
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0023612968434463255,
+          "relative_endpoint_improvement": -0.8183099228259687,
+          "paired_bootstrap_95": [
+            -0.9932230424044126,
+            -0.66187042266492
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.001456305504689226,
+          "relative_endpoint_improvement": 0.027520840241611944,
+          "paired_bootstrap_95": [
+            -0.024709109474937707,
+            0.07600462611021691
+          ],
+          "improved_questions": 11
+        }
+      },
+      "qwen-grpo.intervention-patch-off-gaussian-seed2": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.005909944963059388,
+          "relative_endpoint_improvement": -1.1934681680630308,
+          "paired_bootstrap_95": [
+            -1.4108212324148595,
+            -1.0490510710040466
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.005909944963059388,
+          "relative_endpoint_improvement": -1.1934681680630308,
+          "paired_bootstrap_95": [
+            -1.4209563288734026,
+            -1.049409859442342
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0024171523939003235,
+          "relative_endpoint_improvement": -1.2350726969765708,
+          "paired_bootstrap_95": [
+            -1.512217391429472,
+            -0.9921737745971844
+          ],
+          "improved_questions": 7
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.00272167905253203,
+          "relative_endpoint_improvement": -2.126948645966269,
+          "paired_bootstrap_95": [
+            -2.4297021971569315,
+            -1.8226488295000405
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0023916573263704777,
+          "relative_endpoint_improvement": -0.8416889264086789,
+          "paired_bootstrap_95": [
+            -1.0460060189066054,
+            -0.6654073569878717
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0015290674855350517,
+          "relative_endpoint_improvement": -0.021067529278013364,
+          "paired_bootstrap_95": [
+            -0.07869117382079699,
+            0.02999439689123514
+          ],
+          "improved_questions": 7
+        }
+      },
+      "qwen-grpo.intervention-patch-off-random_frames-seed0": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0058670867030741645,
+          "relative_endpoint_improvement": -1.1775613821955204,
+          "paired_bootstrap_95": [
+            -1.3966859881270481,
+            -1.033736143837404
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0058670867030741645,
+          "relative_endpoint_improvement": -1.1775613821955204,
+          "paired_bootstrap_95": [
+            -1.393985131138893,
+            -1.0346408714998985
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.002355331711441977,
+          "relative_endpoint_improvement": -1.177908854175517,
+          "paired_bootstrap_95": [
+            -1.4394386991327133,
+            -0.941723675995854
+          ],
+          "improved_questions": 8
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0026591692124687447,
+          "relative_endpoint_improvement": -2.0551308246975886,
+          "paired_bootstrap_95": [
+            -2.3410557635122995,
+            -1.765375147125255
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0023265611816896126,
+          "relative_endpoint_improvement": -0.791561825218734,
+          "paired_bootstrap_95": [
+            -0.9809807191817057,
+            -0.6233108829569894
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0014725897381140385,
+          "relative_endpoint_improvement": 0.01664669495596971,
+          "paired_bootstrap_95": [
+            -0.04345529584641168,
+            0.07751959599094266
+          ],
+          "improved_questions": 8
+        }
+      },
+      "qwen-grpo.intervention-patch-off-random_frames-seed1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0058653470914578065,
+          "relative_endpoint_improvement": -1.176915727670965,
+          "paired_bootstrap_95": [
+            -1.4052656190597423,
+            -1.0341440035201162
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0058653470914578065,
+          "relative_endpoint_improvement": -1.176915727670965,
+          "paired_bootstrap_95": [
+            -1.3944131629180114,
+            -1.0346059784197237
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0023654148200876078,
+          "relative_endpoint_improvement": -1.187232420571814,
+          "paired_bootstrap_95": [
+            -1.450391180961867,
+            -0.9525658693636695
+          ],
+          "improved_questions": 11
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.002677946632805591,
+          "relative_endpoint_improvement": -2.0767042828327114,
+          "paired_bootstrap_95": [
+            -2.360746252852502,
+            -1.7727202486322846
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0023347601090790704,
+          "relative_endpoint_improvement": -0.7978753859513279,
+          "paired_bootstrap_95": [
+            -0.970286589791294,
+            -0.6438240526396799
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0014584740929421969,
+          "relative_endpoint_improvement": 0.0260727190367408,
+          "paired_bootstrap_95": [
+            -0.03479260909700326,
+            0.07658602761488935
+          ],
+          "improved_questions": 11
+        }
+      },
+      "qwen-grpo.intervention-patch-off-random_frames-seed2": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0058240388330887075,
+          "relative_endpoint_improvement": -1.1615842228300406,
+          "paired_bootstrap_95": [
+            -1.3793977993012874,
+            -1.0248888023402023
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0058240388330887075,
+          "relative_endpoint_improvement": -1.1615842228300406,
+          "paired_bootstrap_95": [
+            -1.3725823120001586,
+            -1.0206171426737467
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0023745490550936667,
+          "relative_endpoint_improvement": -1.1956785902553344,
+          "paired_bootstrap_95": [
+            -1.4626298100379116,
+            -0.9588777537207825
+          ],
+          "improved_questions": 12
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.002684181626439871,
+          "relative_endpoint_improvement": -2.0838676935530835,
+          "paired_bootstrap_95": [
+            -2.4049207830617747,
+            -1.773625005872574
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.002399224162218161,
+          "relative_endpoint_improvement": -0.8475157468461114,
+          "paired_bootstrap_95": [
+            -1.0673436394964013,
+            -0.6526355237652511
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0014209762339305598,
+          "relative_endpoint_improvement": 0.05111271669310968,
+          "paired_bootstrap_95": [
+            0.0017683355102976967,
+            0.09546551114451292
+          ],
+          "improved_questions": 12
+        }
+      },
+      "qwen-grpo.intervention-teacher-delete-diag": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0003505343562210328,
+          "relative_endpoint_improvement": 0.8698996425534773,
+          "paired_bootstrap_95": [
+            0.8165429283227229,
+            0.9036468994498805
+          ],
+          "improved_questions": 79
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0003505343562210328,
+          "relative_endpoint_improvement": 0.8698996425534773,
+          "paired_bootstrap_95": [
+            0.8179732152979116,
+            0.9038751998880229
+          ],
+          "improved_questions": 79
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.000450919400100247,
+          "relative_endpoint_improvement": 0.5830475388128644,
+          "paired_bootstrap_95": [
+            0.5486604161646157,
+            0.6154868118735918
+          ],
+          "improved_questions": 80
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0003543286584317684,
+          "relative_endpoint_improvement": 0.5929102964291474,
+          "paired_bootstrap_95": [
+            0.5590562259518717,
+            0.6278686375704206
+          ],
+          "improved_questions": 48
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0007001529611443402,
+          "relative_endpoint_improvement": 0.46084920230247306,
+          "paired_bootstrap_95": [
+            0.4044172002486372,
+            0.5247525742544545
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0004914580640615895,
+          "relative_endpoint_improvement": 0.6718183625233985,
+          "paired_bootstrap_95": [
+            0.63001148203159,
+            0.7156395432208594
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-grpo.intervention-teacher-delete-null": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.008078657611622474,
+          "relative_endpoint_improvement": -1.9983829667680686,
+          "paired_bootstrap_95": [
+            -3.298730305417397,
+            -1.2268075103623428
+          ],
+          "improved_questions": 6
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.008078657611622474,
+          "relative_endpoint_improvement": -1.9983829667680686,
+          "paired_bootstrap_95": [
+            -3.167512653353691,
+            -1.2024149704352227
+          ],
+          "improved_questions": 6
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.007296611883793958,
+          "relative_endpoint_improvement": -5.746971371377742,
+          "paired_bootstrap_95": [
+            -6.531168109997883,
+            -5.046093086898526
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0074291667066669715,
+          "relative_endpoint_improvement": -7.535401245219594,
+          "paired_bootstrap_95": [
+            -8.577000307956176,
+            -6.5173508442610295
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.008960220555309206,
+          "relative_endpoint_improvement": -5.899792371148479,
+          "paired_bootstrap_95": [
+            -6.7628968502702,
+            -5.006444469690175
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.005235338743659668,
+          "relative_endpoint_improvement": -2.496009460989545,
+          "paired_bootstrap_95": [
+            -3.3380621573573013,
+            -1.8343930057447144
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-grpo.intervention-teacher-delete-off": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.003788258132408373,
+          "relative_endpoint_improvement": -0.4060069387756451,
+          "paired_bootstrap_95": [
+            -0.9737935426433443,
+            -0.016803923764625427
+          ],
+          "improved_questions": 10
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.003788258132408373,
+          "relative_endpoint_improvement": -0.4060069387756451,
+          "paired_bootstrap_95": [
+            -0.9735530054944582,
+            -0.03012864334330025
+          ],
+          "improved_questions": 10
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0035072805811068976,
+          "relative_endpoint_improvement": -2.243083509029016,
+          "paired_bootstrap_95": [
+            -2.5958005985121013,
+            -1.9277836474459167
+          ],
+          "improved_questions": 1
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0035020174691453576,
+          "relative_endpoint_improvement": -3.023482773660149,
+          "paired_bootstrap_95": [
+            -3.452125340611801,
+            -2.5717721001147273
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.00442164578998927,
+          "relative_endpoint_improvement": -2.4048757730200703,
+          "paired_bootstrap_95": [
+            -2.7626958504830057,
+            -2.0745663612330114
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.002608704708109144,
+          "relative_endpoint_improvement": -0.7420183844880168,
+          "paired_bootstrap_95": [
+            -1.1415626613864365,
+            -0.414300717701167
+          ],
+          "improved_questions": 1
+        }
+      },
+      "qwen-grpo.intervention-top0.01-restore0": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0016779147015768103,
+          "relative_endpoint_improvement": 0.3772442028413643,
+          "paired_bootstrap_95": [
+            0.1234375477110214,
+            0.5487398213532848
+          ],
+          "improved_questions": 36
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0016779147015768103,
+          "relative_endpoint_improvement": 0.3772442028413643,
+          "paired_bootstrap_95": [
+            0.11291102274268826,
+            0.550182539906755
+          ],
+          "improved_questions": 36
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0020353965141111986,
+          "relative_endpoint_improvement": -0.8820737938126155,
+          "paired_bootstrap_95": [
+            -0.9911910033462474,
+            -0.7891287835940299
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0018338371058537934,
+          "relative_endpoint_improvement": -1.1069032550834677,
+          "paired_bootstrap_95": [
+            -1.2743555495692385,
+            -0.9515148490499654
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0023340623156400397,
+          "relative_endpoint_improvement": -0.7973380520969275,
+          "paired_bootstrap_95": [
+            -0.9165998973435948,
+            -0.6825920023395641
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.002341408937354572,
+          "relative_endpoint_improvement": -0.5635259145266074,
+          "paired_bootstrap_95": [
+            -0.7056419362206063,
+            -0.44324330736821516
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-grpo.intervention-top0.01-restore1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.020660109037999065,
+          "relative_endpoint_improvement": -6.667971835071536,
+          "paired_bootstrap_95": [
+            -9.474106604118552,
+            -4.861611039410102
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.020660109037999065,
+          "relative_endpoint_improvement": -6.667971835071536,
+          "paired_bootstrap_95": [
+            -9.491348269169393,
+            -4.8107346883711894
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.016060208989074454,
+          "relative_endpoint_improvement": -13.850422633591815,
+          "paired_bootstrap_95": [
+            -16.01272924779597,
+            -11.860411325182588
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.01864795545892169,
+          "relative_endpoint_improvement": -20.424715385918283,
+          "paired_bootstrap_95": [
+            -22.91370837245709,
+            -18.012995600590212
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.017682802805211395,
+          "relative_endpoint_improvement": -12.616592040653197,
+          "paired_bootstrap_95": [
+            -14.113639983194673,
+            -11.229824998723087
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.006674375763395801,
+          "relative_endpoint_improvement": -3.456957220445311,
+          "paired_bootstrap_95": [
+            -4.759968343072188,
+            -2.4057923728910886
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-grpo.intervention-top0.05-restore0": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.001212457239671494,
+          "relative_endpoint_improvement": 0.549998117244689,
+          "paired_bootstrap_95": [
+            0.46556889193321804,
+            0.6068953732870592
+          ],
+          "improved_questions": 70
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.001212457239671494,
+          "relative_endpoint_improvement": 0.549998117244689,
+          "paired_bootstrap_95": [
+            0.46861004503016407,
+            0.6064998274251004
+          ],
+          "improved_questions": 70
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0013111576787196099,
+          "relative_endpoint_improvement": -0.2123905536666073,
+          "paired_bootstrap_95": [
+            -0.25630640983476505,
+            -0.1727434072218381
+          ],
+          "improved_questions": 7
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0011177288530840694,
+          "relative_endpoint_improvement": -0.2841634359705718,
+          "paired_bootstrap_95": [
+            -0.3526829734787695,
+            -0.2215127800314317
+          ],
+          "improved_questions": 1
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.0015099795964488294,
+          "relative_endpoint_improvement": -0.16275549645864285,
+          "paired_bootstrap_95": [
+            -0.2359066399113446,
+            -0.09431221511428674
+          ],
+          "improved_questions": 3
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0016926222378970124,
+          "relative_endpoint_improvement": -0.130284714572793,
+          "paired_bootstrap_95": [
+            -0.19072587953311046,
+            -0.07166415256195692
+          ],
+          "improved_questions": 3
+        }
+      },
+      "qwen-grpo.intervention-top0.05-restore1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.007890557567588986,
+          "relative_endpoint_improvement": -1.9285698870223769,
+          "paired_bootstrap_95": [
+            -2.673187209779725,
+            -1.47575843388074
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.007890557567588986,
+          "relative_endpoint_improvement": -1.9285698870223769,
+          "paired_bootstrap_95": [
+            -2.637983896664806,
+            -1.4475953386378897
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.005327949508500751,
+          "relative_endpoint_improvement": -3.9266047549879204,
+          "paired_bootstrap_95": [
+            -4.639018766890662,
+            -3.2846057137289684
+          ],
+          "improved_questions": 1
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.006205420975068894,
+          "relative_endpoint_improvement": -6.1294345663535985,
+          "paired_bootstrap_95": [
+            -6.906884013735234,
+            -5.321003066259568
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.005607386803603731,
+          "relative_endpoint_improvement": -3.31795227034437,
+          "paired_bootstrap_95": [
+            -3.8832100502836,
+            -2.808880704815308
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.002416097813693341,
+          "relative_endpoint_improvement": -0.6134010097393552,
+          "paired_bootstrap_95": [
+            -0.8938637664534287,
+            -0.38234174829335094
+          ],
+          "improved_questions": 1
+        }
+      }
+    },
+    "calibration_selected": {
+      "diag": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 0.25,
+        "calibration_loss": 0.0026711700498708523,
+        "condition": "qwen-grpo.intervention-patch-diag-b0.25",
+        "heldout": {
+          "n": 80,
+          "loss": 0.0010738750232121674,
+          "relative_endpoint_improvement": 0.007018030636601447,
+          "paired_bootstrap_95": [
+            -0.013284439137653734,
+            0.027201915423223023
+          ],
+          "improved_questions": 45
+        }
+      },
+      "off": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 1,
+        "calibration_loss": 0.0011087903265433851,
+        "condition": "qwen-grpo.intervention-patch-off-b1",
+        "heldout": {
+          "n": 80,
+          "loss": 0.0006711484460538486,
+          "relative_endpoint_improvement": 0.37940794664886646,
+          "paired_bootstrap_95": [
+            0.34933891228302544,
+            0.40818824340510335
+          ],
+          "improved_questions": 80
+        }
+      },
+      "null": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 1,
+        "calibration_loss": 0.0012340327139099827,
+        "condition": "qwen-grpo.intervention-patch-null-b1",
+        "heldout": {
+          "n": 80,
+          "loss": 0.0007396526034426643,
+          "relative_endpoint_improvement": 0.31606408293737487,
+          "paired_bootstrap_95": [
+            0.26561196577542723,
+            0.36564430005999365
+          ],
+          "improved_questions": 73
+        }
+      }
+    }
+  },
+  "qwen-sft": {
+    "edits": {
+      "qwen-sft.intervention-full-scope-base": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.024212870956398548,
+          "relative_endpoint_improvement": -0.05455544500046572,
+          "paired_bootstrap_95": [
+            -0.061677679628922684,
+            -0.04793157396414332
+          ],
+          "improved_questions": 2
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.024212870956398548,
+          "relative_endpoint_improvement": -0.05455544500046572,
+          "paired_bootstrap_95": [
+            -0.061315958423155674,
+            -0.047938017849396
+          ],
+          "improved_questions": 2
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.035419200896285474,
+          "relative_endpoint_improvement": -0.07015720357430189,
+          "paired_bootstrap_95": [
+            -0.07778273505504137,
+            -0.06285204538000384
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.027041432913392782,
+          "relative_endpoint_improvement": -0.07711710821227746,
+          "paired_bootstrap_95": [
+            -0.08293929958314392,
+            -0.07132288150755528
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.035651060403324664,
+          "relative_endpoint_improvement": -0.09709430194081414,
+          "paired_bootstrap_95": [
+            -0.10834475778352526,
+            -0.08742730217112371
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.06032064533792436,
+          "relative_endpoint_improvement": -0.045890815719565214,
+          "paired_bootstrap_95": [
+            -0.05611420451974209,
+            -0.03705133709760358
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-sft.intervention-opd-delete-diag": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.022955501498654485,
+          "relative_endpoint_improvement": 0.00020740449511968961,
+          "paired_bootstrap_95": [
+            -0.0003701985446351471,
+            0.0008225967355114485
+          ],
+          "improved_questions": 43
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.022955501498654485,
+          "relative_endpoint_improvement": 0.00020740449511968961,
+          "paired_bootstrap_95": [
+            -0.0004081405497247231,
+            0.0008071624715304392
+          ],
+          "improved_questions": 43
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.03315867173951119,
+          "relative_endpoint_improvement": -0.0018574819601575587,
+          "paired_bootstrap_95": [
+            -0.0028340754037953966,
+            -0.0008055651921805483
+          ],
+          "improved_questions": 30
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.02511353123312195,
+          "relative_endpoint_improvement": -0.00032473225270157613,
+          "paired_bootstrap_95": [
+            -0.0010919760015651067,
+            0.0004403060806328236
+          ],
+          "improved_questions": 23
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.03256336913909763,
+          "relative_endpoint_improvement": -0.002076413165197133,
+          "paired_bootstrap_95": [
+            -0.004923336353049427,
+            0.0008613413800387704
+          ],
+          "improved_questions": 5
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.057889395859092474,
+          "relative_endpoint_improvement": -0.0037357378620916926,
+          "paired_bootstrap_95": [
+            -0.005774537662047926,
+            -0.0015233539965962006
+          ],
+          "improved_questions": 2
+        }
+      },
+      "qwen-sft.intervention-opd-delete-null": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.07715287115424871,
+          "relative_endpoint_improvement": -2.3602781148772216,
+          "paired_bootstrap_95": [
+            -2.5309062389751698,
+            -2.1821007597787907
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.07715287115424871,
+          "relative_endpoint_improvement": -2.3602781148772216,
+          "paired_bootstrap_95": [
+            -2.537619464289992,
+            -2.1834895305716118
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0958005498163402,
+          "relative_endpoint_improvement": -1.8945217819153846,
+          "paired_bootstrap_95": [
+            -2.099005991780312,
+            -1.7015830723480823
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.08220535578827064,
+          "relative_endpoint_improvement": -2.2744120990115873,
+          "paired_bootstrap_95": [
+            -2.3811902643559457,
+            -2.1555918896929085
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.11683845799416304,
+          "relative_endpoint_improvement": -2.5954836984594616,
+          "paired_bootstrap_95": [
+            -2.7311486735349213,
+            -2.454862569138694
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.1155482237227261,
+          "relative_endpoint_improvement": -1.0034736910934265,
+          "paired_bootstrap_95": [
+            -1.1747410638550173,
+            -0.877926797927714
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-sft.intervention-opd-delete-off": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.08442706339992583,
+          "relative_endpoint_improvement": -2.677094697862058,
+          "paired_bootstrap_95": [
+            -2.8603572433227504,
+            -2.4842500833880936
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.08442706339992583,
+          "relative_endpoint_improvement": -2.677094697862058,
+          "paired_bootstrap_95": [
+            -2.858686020216344,
+            -2.4769806267602243
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.1068122336640954,
+          "relative_endpoint_improvement": -2.227229253991466,
+          "paired_bootstrap_95": [
+            -2.4668690866067897,
+            -1.9980593207368822
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.08916565186033647,
+          "relative_endpoint_improvement": -2.551655320606245,
+          "paired_bootstrap_95": [
+            -2.6693997791467403,
+            -2.4261175144482627
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.1384232654236257,
+          "relative_endpoint_improvement": -3.2597155325606684,
+          "paired_bootstrap_95": [
+            -3.4291504632876055,
+            -3.096860918321557
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.1281409473158419,
+          "relative_endpoint_improvement": -1.2218170771290264,
+          "paired_bootstrap_95": [
+            -1.4206060956776803,
+            -1.0876808559250768
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-sft.intervention-patch-diag-b0.25": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.022966039343737067,
+          "relative_endpoint_improvement": -0.00025155561458478637,
+          "paired_bootstrap_95": [
+            -0.000805677045293313,
+            0.00028365525020791375
+          ],
+          "improved_questions": 35
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.022966039343737067,
+          "relative_endpoint_improvement": -0.00025155561458478637,
+          "paired_bootstrap_95": [
+            -0.0007774185444173493,
+            0.0002832913408732567
+          ],
+          "improved_questions": 35
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.03310252644587308,
+          "relative_endpoint_improvement": -0.0001611057316381892,
+          "paired_bootstrap_95": [
+            -0.0011082161279240624,
+            0.0007900972783582689
+          ],
+          "improved_questions": 34
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.02511194507436206,
+          "relative_endpoint_improvement": -0.0002615522155307026,
+          "paired_bootstrap_95": [
+            -0.001046067411161955,
+            0.0005703127704851267
+          ],
+          "improved_questions": 20
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.03246886748820543,
+          "relative_endpoint_improvement": 0.0008316973242222803,
+          "paired_bootstrap_95": [
+            -0.0022839291008913236,
+            0.004134435378280051
+          ],
+          "improved_questions": 7
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0577079295180738,
+          "relative_endpoint_improvement": -0.0005893196105888343,
+          "paired_bootstrap_95": [
+            -0.002299148548235004,
+            0.000977062872793504
+          ],
+          "improved_questions": 7
+        }
+      },
+      "qwen-sft.intervention-patch-diag-b0.5": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.02295774160884321,
+          "relative_endpoint_improvement": 0.00010983984030565885,
+          "paired_bootstrap_95": [
+            -0.0004871988635607207,
+            0.000728950097966612
+          ],
+          "improved_questions": 41
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.02295774160884321,
+          "relative_endpoint_improvement": 0.00010983984030565885,
+          "paired_bootstrap_95": [
+            -0.000512638322360699,
+            0.000715200619630435
+          ],
+          "improved_questions": 41
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.033089262922294436,
+          "relative_endpoint_improvement": 0.0002396389193783932,
+          "paired_bootstrap_95": [
+            -0.0007626225553545399,
+            0.0013000924013098372
+          ],
+          "improved_questions": 34
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.025121145454856258,
+          "relative_endpoint_improvement": -0.0006280227078343525,
+          "paired_bootstrap_95": [
+            -0.0013919170448425263,
+            0.00018970029866347725
+          ],
+          "improved_questions": 17
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.03244517371058464,
+          "relative_endpoint_improvement": 0.0015608287476679417,
+          "paired_bootstrap_95": [
+            -0.0018972369363831024,
+            0.004852145202660554
+          ],
+          "improved_questions": 8
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.05763770453631878,
+          "relative_endpoint_improvement": 0.0006283010405195855,
+          "paired_bootstrap_95": [
+            -0.001161758318117395,
+            0.002552834297822269
+          ],
+          "improved_questions": 9
+        }
+      },
+      "qwen-sft.intervention-patch-diag-b1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.02296903720125556,
+          "relative_endpoint_improvement": -0.00038212282303984324,
+          "paired_bootstrap_95": [
+            -0.0011872540706928823,
+            0.00038882381519415697
+          ],
+          "improved_questions": 37
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.02296903720125556,
+          "relative_endpoint_improvement": -0.00038212282303984324,
+          "paired_bootstrap_95": [
+            -0.0011827371382701958,
+            0.00040006420382200327
+          ],
+          "improved_questions": 37
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.03300325176678598,
+          "relative_endpoint_improvement": 0.0028383835360243914,
+          "paired_bootstrap_95": [
+            0.001759619380076926,
+            0.004023560374850999
+          ],
+          "improved_questions": 57
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.02508423093240708,
+          "relative_endpoint_improvement": 0.000842360307697354,
+          "paired_bootstrap_95": [
+            -6.849590876353652e-05,
+            0.0017869307430466816
+          ],
+          "improved_questions": 29
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.03235562436748296,
+          "relative_endpoint_improvement": 0.004316541283226449,
+          "paired_bootstrap_95": [
+            0.001381152330470899,
+            0.00728889103920504
+          ],
+          "improved_questions": 14
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.05740794166922569,
+          "relative_endpoint_improvement": 0.004612125668718159,
+          "paired_bootstrap_95": [
+            0.0025462883701505962,
+            0.00667693030556569
+          ],
+          "improved_questions": 14
+        }
+      },
+      "qwen-sft.intervention-patch-null-b0.25": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.02405875320546329,
+          "relative_endpoint_improvement": -0.04784307645430408,
+          "paired_bootstrap_95": [
+            -0.057118698326103674,
+            -0.037893588518659344
+          ],
+          "improved_questions": 7
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.02405875320546329,
+          "relative_endpoint_improvement": -0.04784307645430408,
+          "paired_bootstrap_95": [
+            -0.0572578100467032,
+            -0.03853158976351399
+          ],
+          "improved_questions": 7
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0299404721474275,
+          "relative_endpoint_improvement": 0.09537733387018543,
+          "paired_bootstrap_95": [
+            0.06843840701283056,
+            0.11699214946972454
+          ],
+          "improved_questions": 47
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.025308212110151846,
+          "relative_endpoint_improvement": -0.008079280762104624,
+          "paired_bootstrap_95": [
+            -0.02554317025851193,
+            0.010510733551497191
+          ],
+          "improved_questions": 15
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.026751731638796628,
+          "relative_endpoint_improvement": 0.17676579557682381,
+          "paired_bootstrap_95": [
+            0.16362903528877396,
+            0.18793075756172006
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.04702599276788533,
+          "relative_endpoint_improvement": 0.18462321381858104,
+          "paired_bootstrap_95": [
+            0.17553370845120567,
+            0.1921262930219394
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-null-b0.5": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.023280131281353533,
+          "relative_endpoint_improvement": -0.013931361022239575,
+          "paired_bootstrap_95": [
+            -0.038838865586240785,
+            0.012897032479832728
+          ],
+          "improved_questions": 26
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.023280131281353533,
+          "relative_endpoint_improvement": -0.013931361022239575,
+          "paired_bootstrap_95": [
+            -0.039158962897154856,
+            0.011536239168677954
+          ],
+          "improved_questions": 26
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0248305480228737,
+          "relative_endpoint_improvement": 0.24976879311349232,
+          "paired_bootstrap_95": [
+            0.20253835142509496,
+            0.2914588200391776
+          ],
+          "improved_questions": 60
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.023485580342821777,
+          "relative_endpoint_improvement": 0.06451997331034098,
+          "paired_bootstrap_95": [
+            0.01956272160367501,
+            0.11181295009102411
+          ],
+          "improved_questions": 28
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.017648956389166415,
+          "relative_endpoint_improvement": 0.4568865758632321,
+          "paired_bootstrap_95": [
+            0.414493880228406,
+            0.49574719585403915
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.03604704269673675,
+          "relative_endpoint_improvement": 0.3749856176246058,
+          "paired_bootstrap_95": [
+            0.36227952731741125,
+            0.3872268733434477
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-null-b1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.009235561534296721,
+          "relative_endpoint_improvement": 0.5977589059485032,
+          "paired_bootstrap_95": [
+            0.5855253357669956,
+            0.6101771208484422
+          ],
+          "improved_questions": 80
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.009235561534296721,
+          "relative_endpoint_improvement": 0.5977589059485032,
+          "paired_bootstrap_95": [
+            0.5856669804110375,
+            0.6101936065331377
+          ],
+          "improved_questions": 80
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.01186867932556197,
+          "relative_endpoint_improvement": 0.6413992310454537,
+          "paired_bootstrap_95": [
+            0.6211464679499761,
+            0.6589754986742687
+          ],
+          "improved_questions": 80
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.00978243927238509,
+          "relative_endpoint_improvement": 0.6103448831990306,
+          "paired_bootstrap_95": [
+            0.5911439369360945,
+            0.6291709689755868
+          ],
+          "improved_questions": 48
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.012657986080739647,
+          "relative_endpoint_improvement": 0.6104742959642636,
+          "paired_bootstrap_95": [
+            0.5452047813146582,
+            0.6601977515340675
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.017338092729914933,
+          "relative_endpoint_improvement": 0.6993773550212457,
+          "paired_bootstrap_95": [
+            0.6850338959315683,
+            0.7122464999606835
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-b0.25": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.023546430398710072,
+          "relative_endpoint_improvement": -0.025529621497540456,
+          "paired_bootstrap_95": [
+            -0.03340060047226884,
+            -0.01788989505015567
+          ],
+          "improved_questions": 12
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.023546430398710072,
+          "relative_endpoint_improvement": -0.025529621497540456,
+          "paired_bootstrap_95": [
+            -0.033278375440842625,
+            -0.017430159519811417
+          ],
+          "improved_questions": 12
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.029857661947607993,
+          "relative_endpoint_improvement": 0.09787936467900493,
+          "paired_bootstrap_95": [
+            0.0778351281437592,
+            0.11518893979180579
+          ],
+          "improved_questions": 54
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.024712900592324633,
+          "relative_endpoint_improvement": 0.01563322820963453,
+          "paired_bootstrap_95": [
+            0.0019578530903584133,
+            0.030407306668693516
+          ],
+          "improved_questions": 22
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.027037066291086376,
+          "relative_endpoint_improvement": 0.1679851585457819,
+          "paired_bootstrap_95": [
+            0.1545028204668822,
+            0.17928970849834397
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.04811254166997969,
+          "relative_endpoint_improvement": 0.16578370188756064,
+          "paired_bootstrap_95": [
+            0.15767523408272494,
+            0.17316985375067653
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-b0.5": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.022801252373028547,
+          "relative_endpoint_improvement": 0.006925494869793325,
+          "paired_bootstrap_95": [
+            -0.027369270982604922,
+            0.042255696195383274
+          ],
+          "improved_questions": 40
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.022801252373028547,
+          "relative_endpoint_improvement": 0.006925494869793325,
+          "paired_bootstrap_95": [
+            -0.027628948573234297,
+            0.040970188641442466
+          ],
+          "improved_questions": 40
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.023732298181857913,
+          "relative_endpoint_improvement": 0.28295135931900584,
+          "paired_bootstrap_95": [
+            0.23776881066701125,
+            0.3239506862116178
+          ],
+          "improved_questions": 64
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.022327750319770228,
+          "relative_endpoint_improvement": 0.11063877663799238,
+          "paired_bootstrap_95": [
+            0.056057222107090805,
+            0.16319060276382802
+          ],
+          "improved_questions": 32
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.01573318161536008,
+          "relative_endpoint_improvement": 0.5158409397549967,
+          "paired_bootstrap_95": [
+            0.48087830376268004,
+            0.5510402495540375
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.03594505833461881,
+          "relative_endpoint_improvement": 0.3767539095102219,
+          "paired_bootstrap_95": [
+            0.3633712355170662,
+            0.38964704600226435
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-b1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.012740433542057871,
+          "relative_endpoint_improvement": 0.44510943837937544,
+          "paired_bootstrap_95": [
+            0.4257497062622147,
+            0.4651129355669702
+          ],
+          "improved_questions": 80
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.012740433542057871,
+          "relative_endpoint_improvement": 0.44510943837937544,
+          "paired_bootstrap_95": [
+            0.4252699354374228,
+            0.46462444938178477
+          ],
+          "improved_questions": 80
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.014119629096239806,
+          "relative_endpoint_improvement": 0.5733889413997764,
+          "paired_bootstrap_95": [
+            0.5491597829489381,
+            0.5949733077227876
+          ],
+          "improved_questions": 80
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.012526795694914957,
+          "relative_endpoint_improvement": 0.501031398843135,
+          "paired_bootstrap_95": [
+            0.4767878038499741,
+            0.5256878218854637
+          ],
+          "improved_questions": 48
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.013488030759617686,
+          "relative_endpoint_improvement": 0.5849312328056578,
+          "paired_bootstrap_95": [
+            0.5464790485281831,
+            0.6218506045779417
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.01952972763683647,
+          "relative_endpoint_improvement": 0.6613769190557752,
+          "paired_bootstrap_95": [
+            0.6449452056281605,
+            0.6757906508081613
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-gaussian-seed0": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.04250812514219433,
+          "relative_endpoint_improvement": -0.8513779264831913,
+          "paired_bootstrap_95": [
+            -0.8984489528994276,
+            -0.803893749193107
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.04250812514219433,
+          "relative_endpoint_improvement": -0.8513779264831913,
+          "paired_bootstrap_95": [
+            -0.8971450509807911,
+            -0.8020546305876731
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.04094104825053364,
+          "relative_endpoint_improvement": -0.23699452834878865,
+          "paired_bootstrap_95": [
+            -0.33391328246780116,
+            -0.15427549588675568
+          ],
+          "improved_questions": 29
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.04130665957927704,
+          "relative_endpoint_improvement": -0.6453310687505873,
+          "paired_bootstrap_95": [
+            -0.7071891070896192,
+            -0.5823298675955699
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.02992369292769581,
+          "relative_endpoint_improvement": 0.07915465535661292,
+          "paired_bootstrap_95": [
+            0.03668756964396381,
+            0.11743897013931066
+          ],
+          "improved_questions": 13
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.050861569587141275,
+          "relative_endpoint_improvement": 0.11811871033104093,
+          "paired_bootstrap_95": [
+            0.10158741148230854,
+            0.13541873689286704
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-gaussian-seed1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.04356670412234962,
+          "relative_endpoint_improvement": -0.8974827535190284,
+          "paired_bootstrap_95": [
+            -0.9448136159684181,
+            -0.8481768771298314
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.04356670412234962,
+          "relative_endpoint_improvement": -0.8974827535190284,
+          "paired_bootstrap_95": [
+            -0.9458093783036946,
+            -0.8469438626457833
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.041528306202962995,
+          "relative_endpoint_improvement": -0.25473796445816954,
+          "paired_bootstrap_95": [
+            -0.35787491483125494,
+            -0.16578127759426273
+          ],
+          "improved_questions": 28
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.042230680817738175,
+          "relative_endpoint_improvement": -0.6821367767722601,
+          "paired_bootstrap_95": [
+            -0.7437823208707982,
+            -0.6190666308047303
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.030175746651366353,
+          "relative_endpoint_improvement": 0.07139817628155776,
+          "paired_bootstrap_95": [
+            0.026830413730434276,
+            0.11158637318830217
+          ],
+          "improved_questions": 12
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.050773741910234094,
+          "relative_endpoint_improvement": 0.11964154152968953,
+          "paired_bootstrap_95": [
+            0.1003582513219205,
+            0.1378405024115383
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-gaussian-seed2": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.04369887211360037,
+          "relative_endpoint_improvement": -0.9032391330528409,
+          "paired_bootstrap_95": [
+            -0.9521457671413472,
+            -0.8514186049122207
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.04369887211360037,
+          "relative_endpoint_improvement": -0.9032391330528409,
+          "paired_bootstrap_95": [
+            -0.951213411069109,
+            -0.8533679696150921
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.0415980035206303,
+          "relative_endpoint_improvement": -0.2568438021022732,
+          "paired_bootstrap_95": [
+            -0.3613287190721822,
+            -0.16261617820007895
+          ],
+          "improved_questions": 29
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.04243087628856301,
+          "relative_endpoint_improvement": -0.690110983143005,
+          "paired_bootstrap_95": [
+            -0.756686555424415,
+            -0.6266276579263504
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.030269562383182347,
+          "relative_endpoint_improvement": 0.06851117366106518,
+          "paired_bootstrap_95": [
+            0.020646566993260982,
+            0.11338117909958653
+          ],
+          "improved_questions": 13
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.050427826354280114,
+          "relative_endpoint_improvement": 0.12563932058128946,
+          "paired_bootstrap_95": [
+            0.10929099053270806,
+            0.14210514005458047
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-random_frames-seed0": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.04278160824906081,
+          "relative_endpoint_improvement": -0.8632890748959934,
+          "paired_bootstrap_95": [
+            -0.9094736255871975,
+            -0.8156549058868415
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.04278160824906081,
+          "relative_endpoint_improvement": -0.8632890748959934,
+          "paired_bootstrap_95": [
+            -0.9101674125002116,
+            -0.8150358433763951
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.04117826018482447,
+          "relative_endpoint_improvement": -0.24416165956099345,
+          "paired_bootstrap_95": [
+            -0.34578081769139735,
+            -0.15732771996019712
+          ],
+          "improved_questions": 29
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.04158184762733678,
+          "relative_endpoint_improvement": -0.656292387090855,
+          "paired_bootstrap_95": [
+            -0.7181906903168145,
+            -0.5962352481208045
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.030058271251618862,
+          "relative_endpoint_improvement": 0.0750132606639895,
+          "paired_bootstrap_95": [
+            0.033863044852136585,
+            0.1144837517564341
+          ],
+          "improved_questions": 13
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.05108748679049313,
+          "relative_endpoint_improvement": 0.11420156510198953,
+          "paired_bootstrap_95": [
+            0.09725976969092955,
+            0.1326099612766298
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-random_frames-seed1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.04330618954263628,
+          "relative_endpoint_improvement": -0.8861364299445365,
+          "paired_bootstrap_95": [
+            -0.9356861713000874,
+            -0.8358314926711132
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.04330618954263628,
+          "relative_endpoint_improvement": -0.8861364299445365,
+          "paired_bootstrap_95": [
+            -0.9341993943948506,
+            -0.8357742819394643
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.04129677680321038,
+          "relative_endpoint_improvement": -0.2477425255799739,
+          "paired_bootstrap_95": [
+            -0.35130232999048333,
+            -0.15697522198060226
+          ],
+          "improved_questions": 29
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.0421235979301855,
+          "relative_endpoint_improvement": -0.6778714402958548,
+          "paired_bootstrap_95": [
+            -0.7396943107588964,
+            -0.6172442255893621
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.029926943709142506,
+          "relative_endpoint_improvement": 0.0790546186743466,
+          "paired_bootstrap_95": [
+            0.034176908025497936,
+            0.11784592637382382
+          ],
+          "improved_questions": 13
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.05018614651635289,
+          "relative_endpoint_improvement": 0.1298297718176219,
+          "paired_bootstrap_95": [
+            0.11113188110900922,
+            0.14755430137724557
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-patch-off-random_frames-seed2": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.04315656498074531,
+          "relative_endpoint_improvement": -0.8796197555389254,
+          "paired_bootstrap_95": [
+            -0.9271372926022381,
+            -0.8304201918904688
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.04315656498074531,
+          "relative_endpoint_improvement": -0.8796197555389254,
+          "paired_bootstrap_95": [
+            -0.9269734187074429,
+            -0.8292260266642913
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.041344848764128986,
+          "relative_endpoint_improvement": -0.24919497379916522,
+          "paired_bootstrap_95": [
+            -0.34915974867283117,
+            -0.16444899278202965
+          ],
+          "improved_questions": 29
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.041923569864593446,
+          "relative_endpoint_improvement": -0.6699039020273818,
+          "paired_bootstrap_95": [
+            -0.7306933747957499,
+            -0.6073851234579681
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.030134114902466536,
+          "relative_endpoint_improvement": 0.07267931501855751,
+          "paired_bootstrap_95": [
+            0.02924347366157038,
+            0.1119952060254307
+          ],
+          "improved_questions": 13
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.05081941932439804,
+          "relative_endpoint_improvement": 0.118849547549979,
+          "paired_bootstrap_95": [
+            0.10319447280124767,
+            0.13427518698516613
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-teacher-delete-diag": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.00013671745064129935,
+          "relative_endpoint_improvement": 0.9940454755547167,
+          "paired_bootstrap_95": [
+            0.993592054643703,
+            0.9944847069057182
+          ],
+          "improved_questions": 80
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.00013671745064129935,
+          "relative_endpoint_improvement": 0.9940454755547167,
+          "paired_bootstrap_95": [
+            0.9936017949028052,
+            0.9944865776433219
+          ],
+          "improved_questions": 80
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.00016292264708681615,
+          "relative_endpoint_improvement": 0.9950774483897621,
+          "paired_bootstrap_95": [
+            0.9947245626581583,
+            0.9954102148739328
+          ],
+          "improved_questions": 80
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.00013907588481743005,
+          "relative_endpoint_improvement": 0.9944603152001452,
+          "paired_bootstrap_95": [
+            0.9940679447402357,
+            0.9948321670286523
+          ],
+          "improved_questions": 48
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.00017346724234812427,
+          "relative_endpoint_improvement": 0.9946618720172552,
+          "paired_bootstrap_95": [
+            0.9941818410398978,
+            0.9951440783041311
+          ],
+          "improved_questions": 16
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.00022391833863366628,
+          "relative_endpoint_improvement": 0.9961175127929062,
+          "paired_bootstrap_95": [
+            0.9955152728748304,
+            0.9966217099094672
+          ],
+          "improved_questions": 16
+        }
+      },
+      "qwen-sft.intervention-teacher-delete-null": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.0635153325041756,
+          "relative_endpoint_improvement": -1.7663154796434015,
+          "paired_bootstrap_95": [
+            -1.9139756935180143,
+            -1.6103332327449482
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.0635153325041756,
+          "relative_endpoint_improvement": -1.7663154796434015,
+          "paired_bootstrap_95": [
+            -1.914158703152559,
+            -1.6114165055366463
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.058698950335383415,
+          "relative_endpoint_improvement": -0.7735325177889198,
+          "paired_bootstrap_95": [
+            -0.9902561590614691,
+            -0.5834880985835571
+          ],
+          "improved_questions": 13
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.06158953936149677,
+          "relative_endpoint_improvement": -1.4532408007242075,
+          "paired_bootstrap_95": [
+            -1.5578167821629245,
+            -1.337806748008079
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.060270702466368675,
+          "relative_endpoint_improvement": -0.854717461465941,
+          "paired_bootstrap_95": [
+            -0.9423943817999941,
+            -0.7660982039371889
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0484554311260581,
+          "relative_endpoint_improvement": 0.1598383919375358,
+          "paired_bootstrap_95": [
+            0.047977823250522564,
+            0.242240918154166
+          ],
+          "improved_questions": 13
+        }
+      },
+      "qwen-sft.intervention-teacher-delete-off": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.06744283461011946,
+          "relative_endpoint_improvement": -1.937371970157567,
+          "paired_bootstrap_95": [
+            -2.09569269877994,
+            -1.775704978305499
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.06744283461011946,
+          "relative_endpoint_improvement": -1.937371970157567,
+          "paired_bootstrap_95": [
+            -2.098995015206444,
+            -1.7781601979831787
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.06596992947161198,
+          "relative_endpoint_improvement": -0.9932181827043438,
+          "paired_bootstrap_95": [
+            -1.2258654891561385,
+            -0.7730262476743655
+          ],
+          "improved_questions": 11
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.06534506621149679,
+          "relative_endpoint_improvement": -1.602831328468843,
+          "paired_bootstrap_95": [
+            -1.7069081374859576,
+            -1.4953714543337613
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.07997931074351072,
+          "relative_endpoint_improvement": -1.4612127969600772,
+          "paired_bootstrap_95": [
+            -1.5622141195317703,
+            -1.3671432437257853
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.05383513798005879,
+          "relative_endpoint_improvement": 0.06656044442318099,
+          "paired_bootstrap_95": [
+            -0.06921563524241506,
+            0.1553350443773926
+          ],
+          "improved_questions": 11
+        }
+      },
+      "qwen-sft.intervention-top0.01-restore0": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.03386913219001144,
+          "relative_endpoint_improvement": -0.47511948635642853,
+          "paired_bootstrap_95": [
+            -0.5350532516174288,
+            -0.41160869608029743
+          ],
+          "improved_questions": 2
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.03386913219001144,
+          "relative_endpoint_improvement": -0.47511948635642853,
+          "paired_bootstrap_95": [
+            -0.5363743951116521,
+            -0.41480076050012854
+          ],
+          "improved_questions": 2
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.043878170754760505,
+          "relative_endpoint_improvement": -0.32573686939940805,
+          "paired_bootstrap_95": [
+            -0.3626416263778542,
+            -0.29120291601410886
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.03510059664646784,
+          "relative_endpoint_improvement": -0.3981305383282463,
+          "paired_bootstrap_95": [
+            -0.4210853425196404,
+            -0.37346706842570887
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.046294703148305416,
+          "relative_endpoint_improvement": -0.42463238005989057,
+          "paired_bootstrap_95": [
+            -0.4450020760755395,
+            -0.401991878021972
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.06779436068609357,
+          "relative_endpoint_improvement": -0.17547646915815784,
+          "paired_bootstrap_95": [
+            -0.21019148030452858,
+            -0.15186817609035477
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-sft.intervention-top0.01-restore1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.09765053023584187,
+          "relative_endpoint_improvement": -3.253023053434169,
+          "paired_bootstrap_95": [
+            -3.4812677393852387,
+            -3.0179536379874103
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.09765053023584187,
+          "relative_endpoint_improvement": -3.253023053434169,
+          "paired_bootstrap_95": [
+            -3.487252412173692,
+            -3.0145103538178786
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.08112195092253387,
+          "relative_endpoint_improvement": -1.4510219866890046,
+          "paired_bootstrap_95": [
+            -1.8391664644063186,
+            -1.1090397521315432
+          ],
+          "improved_questions": 11
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.09762076660990715,
+          "relative_endpoint_improvement": -2.88844031191305,
+          "paired_bootstrap_95": [
+            -3.108059776838351,
+            -2.660626289356046
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.05831371364183724,
+          "relative_endpoint_improvement": -0.7944948127125515,
+          "paired_bootstrap_95": [
+            -0.9288357099076447,
+            -0.6729152727404036
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.05443374114111066,
+          "relative_endpoint_improvement": 0.05618135207598374,
+          "paired_bootstrap_95": [
+            -0.04683682263662936,
+            0.13799556617540487
+          ],
+          "improved_questions": 11
+        }
+      },
+      "qwen-sft.intervention-top0.05-restore0": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.02577962598297745,
+          "relative_endpoint_improvement": -0.12279312103797047,
+          "paired_bootstrap_95": [
+            -0.1518014092388605,
+            -0.0938027170616882
+          ],
+          "improved_questions": 13
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.02577962598297745,
+          "relative_endpoint_improvement": -0.12279312103797047,
+          "paired_bootstrap_95": [
+            -0.1518832053308828,
+            -0.09400320668141818
+          ],
+          "improved_questions": 13
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.03706846938002854,
+          "relative_endpoint_improvement": -0.11998826988418032,
+          "paired_bootstrap_95": [
+            -0.13472348494502806,
+            -0.10590731381963106
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.028885427163913846,
+          "relative_endpoint_improvement": -0.15056727488956234,
+          "paired_bootstrap_95": [
+            -0.16018562143728773,
+            -0.13973205863306715
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.03757198469247669,
+          "relative_endpoint_improvement": -0.1562071324778791,
+          "paired_bootstrap_95": [
+            -0.17089912746803607,
+            -0.1400107619203362
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.0611140807159245,
+          "relative_endpoint_improvement": -0.05964807527918059,
+          "paired_bootstrap_95": [
+            -0.07586748344347,
+            -0.0472464991798759
+          ],
+          "improved_questions": 0
+        }
+      },
+      "qwen-sft.intervention-top0.05-restore1": {
+        "train/all": {
+          "n": 80,
+          "loss": 0.04768959265202284,
+          "relative_endpoint_improvement": -1.0770490080093036,
+          "paired_bootstrap_95": [
+            -1.1470113776094124,
+            -1.0024806202457823
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 80,
+          "loss": 0.04768959265202284,
+          "relative_endpoint_improvement": -1.0770490080093036,
+          "paired_bootstrap_95": [
+            -1.145582803915706,
+            -0.999407678220312
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 80,
+          "loss": 0.04637097711674869,
+          "relative_endpoint_improvement": -0.40105462411694237,
+          "paired_bootstrap_95": [
+            -0.5282108177777448,
+            -0.27769775052160084
+          ],
+          "improved_questions": 17
+        },
+        "heldout/math": {
+          "n": 48,
+          "loss": 0.04922948800958693,
+          "relative_endpoint_improvement": -0.9609139772099566,
+          "paired_bootstrap_95": [
+            -1.0363208183932604,
+            -0.8831327536391931
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 16,
+          "loss": 0.03475753124803305,
+          "relative_endpoint_improvement": -0.06959762347463849,
+          "paired_bootstrap_95": [
+            -0.1206386682790947,
+            -0.025654613173616676
+          ],
+          "improved_questions": 2
+        },
+        "heldout/if": {
+          "n": 16,
+          "loss": 0.049408890306949615,
+          "relative_endpoint_improvement": 0.143306503147696,
+          "paired_bootstrap_95": [
+            0.10913493296143459,
+            0.17398781600811164
+          ],
+          "improved_questions": 15
+        }
+      }
+    },
+    "calibration_selected": {
+      "diag": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 0.5,
+        "calibration_loss": 0.02295774160884321,
+        "condition": "qwen-sft.intervention-patch-diag-b0.5",
+        "heldout": {
+          "n": 80,
+          "loss": 0.033089262922294436,
+          "relative_endpoint_improvement": 0.0002396389193783932,
+          "paired_bootstrap_95": [
+            -0.0007626225553545399,
+            0.0013000924013098372
+          ],
+          "improved_questions": 34
+        }
+      },
+      "off": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 1,
+        "calibration_loss": 0.012740433542057871,
+        "condition": "qwen-sft.intervention-patch-off-b1",
+        "heldout": {
+          "n": 80,
+          "loss": 0.014119629096239806,
+          "relative_endpoint_improvement": 0.5733889413997764,
+          "paired_bootstrap_95": [
+            0.5491597829489381,
+            0.5949733077227876
+          ],
+          "improved_questions": 80
+        }
+      },
+      "null": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 1,
+        "calibration_loss": 0.009235561534296721,
+        "condition": "qwen-sft.intervention-patch-null-b1",
+        "heldout": {
+          "n": 80,
+          "loss": 0.01186867932556197,
+          "relative_endpoint_improvement": 0.6413992310454537,
+          "paired_bootstrap_95": [
+            0.6211464679499761,
+            0.6589754986742687
+          ],
+          "improved_questions": 80
+        }
+      }
+    }
+  },
+  "r1-justrl": {
+    "edits": {
+      "r1-justrl.intervention-full-scope-base": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.007432147113286191,
+          "relative_endpoint_improvement": -0.11188537107309915,
+          "paired_bootstrap_95": [
+            -0.1451198649171423,
+            -0.08600450583532969
+          ],
+          "improved_questions": 24
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.007432147113286191,
+          "relative_endpoint_improvement": -0.11188537107309915,
+          "paired_bootstrap_95": [
+            -0.14423714316131667,
+            -0.08574916365001245
+          ],
+          "improved_questions": 24
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.01546562547737267,
+          "relative_endpoint_improvement": -0.1465383995638434,
+          "paired_bootstrap_95": [
+            -0.17806077682761698,
+            -0.12185212254790333
+          ],
+          "improved_questions": 2
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.008737433726006808,
+          "relative_endpoint_improvement": -0.2233969376590721,
+          "paired_bootstrap_95": [
+            -0.24121225309586206,
+            -0.20412811482471097
+          ],
+          "improved_questions": 1
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.017633356706937775,
+          "relative_endpoint_improvement": -0.29993657365797866,
+          "paired_bootstrap_95": [
+            -0.317362444726102,
+            -0.2839733787958205
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.03348246950190514,
+          "relative_endpoint_improvement": -0.03168220871621519,
+          "paired_bootstrap_95": [
+            -0.03876485823309023,
+            -0.026329144598501063
+          ],
+          "improved_questions": 1
+        }
+      },
+      "r1-justrl.intervention-opd-delete-diag": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.006649361025483813,
+          "relative_endpoint_improvement": 0.005223236498874129,
+          "paired_bootstrap_95": [
+            0.0032017315658635997,
+            0.007269154667358836
+          ],
+          "improved_questions": 108
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.006649361025483813,
+          "relative_endpoint_improvement": 0.005223236498874129,
+          "paired_bootstrap_95": [
+            0.0031937335787003613,
+            0.007390254332259999
+          ],
+          "improved_questions": 108
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.013517123488418293,
+          "relative_endpoint_improvement": -0.0020869284460882653,
+          "paired_bootstrap_95": [
+            -0.003490033508849878,
+            -0.0006292068420225336
+          ],
+          "improved_questions": 64
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.007130690760580667,
+          "relative_endpoint_improvement": 0.0015758043551847845,
+          "paired_bootstrap_95": [
+            -0.001196072802694904,
+            0.0042709312283976935
+          ],
+          "improved_questions": 49
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.01362432140740566,
+          "relative_endpoint_improvement": -0.004389237007253133,
+          "paired_bootstrap_95": [
+            -0.007494558843242065,
+            -0.0012819898187110533
+          ],
+          "improved_questions": 7
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.0325692237529438,
+          "relative_endpoint_improvement": -0.003542725416289416,
+          "paired_bootstrap_95": [
+            -0.005340070850352526,
+            -0.0019252974216140914
+          ],
+          "improved_questions": 8
+        }
+      },
+      "r1-justrl.intervention-opd-delete-null": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.05245065600611269,
+          "relative_endpoint_improvement": -6.8468733499810615,
+          "paired_bootstrap_95": [
+            -7.974974772617993,
+            -5.9010086466505465
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.05245065600611269,
+          "relative_endpoint_improvement": -6.8468733499810615,
+          "paired_bootstrap_95": [
+            -7.994383024806957,
+            -5.920268194014858
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.06220821452443488,
+          "relative_endpoint_improvement": -3.611782874538256,
+          "paired_bootstrap_95": [
+            -4.352746399802656,
+            -2.9902381628988395
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.05849916765388722,
+          "relative_endpoint_improvement": -7.190929374416923,
+          "paired_bootstrap_95": [
+            -7.624457196424291,
+            -6.79844864004782
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.07680446084123105,
+          "relative_endpoint_improvement": -4.662048884221588,
+          "paired_bootstrap_95": [
+            -4.901893308090421,
+            -4.417711185098094
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.05873910881928168,
+          "relative_endpoint_improvement": -0.8099051362161476,
+          "paired_bootstrap_95": [
+            -0.9926996690148039,
+            -0.6749189829287139
+          ],
+          "improved_questions": 0
+        }
+      },
+      "r1-justrl.intervention-opd-delete-off": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.022729809387237766,
+          "relative_endpoint_improvement": -2.4004900817652164,
+          "paired_bootstrap_95": [
+            -2.938886778635781,
+            -1.9608978479299919
+          ],
+          "improved_questions": 10
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.022729809387237766,
+          "relative_endpoint_improvement": -2.4004900817652164,
+          "paired_bootstrap_95": [
+            -2.9155760392843146,
+            -1.9647345794746642
+          ],
+          "improved_questions": 10
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.03778055275033694,
+          "relative_endpoint_improvement": -1.8008472433516753,
+          "paired_bootstrap_95": [
+            -2.187034053119965,
+            -1.497357169309659
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.03109209592124292,
+          "relative_endpoint_improvement": -3.353449322566121,
+          "paired_bootstrap_95": [
+            -3.539297494234793,
+            -3.1706297801930305
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.05073455604724586,
+          "relative_endpoint_improvement": -2.7401673459124787,
+          "paired_bootstrap_95": [
+            -2.878058643984951,
+            -2.609583766079092
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.04489191994071007,
+          "relative_endpoint_improvement": -0.38323713295125983,
+          "paired_bootstrap_95": [
+            -0.48553812280183856,
+            -0.3091947501504376
+          ],
+          "improved_questions": 0
+        }
+      },
+      "r1-justrl.intervention-patch-diag-b0.25": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.008327213103621034,
+          "relative_endpoint_improvement": -0.24579159838919518,
+          "paired_bootstrap_95": [
+            -0.25810383046961416,
+            -0.23296492334436644
+          ],
+          "improved_questions": 2
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.008327213103621034,
+          "relative_endpoint_improvement": -0.24579159838919518,
+          "paired_bootstrap_95": [
+            -0.2583128001112902,
+            -0.23237801112329007
+          ],
+          "improved_questions": 2
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.01306549492146587,
+          "relative_endpoint_improvement": 0.03139438759305524,
+          "paired_bootstrap_95": [
+            0.02319765372603422,
+            0.039966152100947464
+          ],
+          "improved_questions": 102
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.00721629211572387,
+          "relative_endpoint_improvement": -0.01040991582601114,
+          "paired_bootstrap_95": [
+            -0.02284596291206823,
+            0.002450830200633205
+          ],
+          "improved_questions": 38
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.011983676318777725,
+          "relative_endpoint_improvement": 0.11655963226054034,
+          "paired_bootstrap_95": [
+            0.1089549475289245,
+            0.12434056083632526
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.031694921941380017,
+          "relative_endpoint_improvement": 0.02339679360537028,
+          "paired_bootstrap_95": [
+            0.019222843452414973,
+            0.029426378717576918
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-patch-diag-b0.5": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.017528372327797116,
+          "relative_endpoint_improvement": -1.6223297888115487,
+          "paired_bootstrap_95": [
+            -1.6868658992919732,
+            -1.5590462669268568
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.017528372327797116,
+          "relative_endpoint_improvement": -1.6223297888115487,
+          "paired_bootstrap_95": [
+            -1.687794463316909,
+            -1.5607297686675765
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.014806277875322849,
+          "relative_endpoint_improvement": -0.09765791002163304,
+          "paired_bootstrap_95": [
+            -0.15842409890156472,
+            -0.04811663787899063
+          ],
+          "improved_questions": 64
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.01126204209382801,
+          "relative_endpoint_improvement": -0.5768872464653949,
+          "paired_bootstrap_95": [
+            -0.6547323610124923,
+            -0.5053265554546953
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.0098917314899154,
+          "relative_endpoint_improvement": 0.27077845958358093,
+          "paired_bootstrap_95": [
+            0.24831886777411605,
+            0.29319012136950223
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.030353531605214812,
+          "relative_endpoint_improvement": 0.06472852825196673,
+          "paired_bootstrap_95": [
+            0.05056608183407477,
+            0.08588076332932393
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-patch-diag-b1": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.11410742892185226,
+          "relative_endpoint_improvement": -16.071026584250742,
+          "paired_bootstrap_95": [
+            -17.309425918731037,
+            -15.016871825185747
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.11410742892185226,
+          "relative_endpoint_improvement": -16.071026584250742,
+          "paired_bootstrap_95": [
+            -17.37369248477308,
+            -15.006368681430361
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.06303771869861521,
+          "relative_endpoint_improvement": -3.673277858345261,
+          "paired_bootstrap_95": [
+            -4.634240586973007,
+            -2.8805893295608898
+          ],
+          "improved_questions": 1
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.08067887792518984,
+          "relative_endpoint_improvement": -10.296485362019038,
+          "paired_bootstrap_95": [
+            -11.189191700136162,
+            -9.48678576211337
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.03728023817529902,
+          "relative_endpoint_improvement": -1.7483108227308994,
+          "paired_bootstrap_95": [
+            -1.9886897290949743,
+            -1.5285100492441333
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.035871721542207524,
+          "relative_endpoint_improvement": -0.1053012953244663,
+          "paired_bootstrap_95": [
+            -0.1340706297171565,
+            -0.0799635341985643
+          ],
+          "improved_questions": 1
+        }
+      },
+      "r1-justrl.intervention-patch-null-b0.25": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.005595343498862348,
+          "relative_endpoint_improvement": 0.16290938706093838,
+          "paired_bootstrap_95": [
+            0.1520501604919776,
+            0.17360839271472203
+          ],
+          "improved_questions": 157
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.005595343498862348,
+          "relative_endpoint_improvement": 0.16290938706093838,
+          "paired_bootstrap_95": [
+            0.15194713900291082,
+            0.17359661661783982
+          ],
+          "improved_questions": 157
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.011162208931636997,
+          "relative_endpoint_improvement": 0.17249378741257004,
+          "paired_bootstrap_95": [
+            0.16378851629942803,
+            0.18236859850184806
+          ],
+          "improved_questions": 160
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.006040634005330503,
+          "relative_endpoint_improvement": 0.15420323914513723,
+          "paired_bootstrap_95": [
+            0.14620220464606346,
+            0.16149265030154902
+          ],
+          "improved_questions": 96
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.010215358721325174,
+          "relative_endpoint_improvement": 0.2469205588257679,
+          "paired_bootstrap_95": [
+            0.23925743555433668,
+            0.2550486725561327
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.0274737839208683,
+          "relative_endpoint_improvement": 0.15346106488170874,
+          "paired_bootstrap_95": [
+            0.14379968647119076,
+            0.1640446642847124
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-patch-null-b0.5": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.006875361751735909,
+          "relative_endpoint_improvement": -0.028587571810125167,
+          "paired_bootstrap_95": [
+            -0.05486485523483354,
+            -0.003084176619106229
+          ],
+          "improved_questions": 60
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.006875361751735909,
+          "relative_endpoint_improvement": -0.028587571810125167,
+          "paired_bootstrap_95": [
+            -0.05555543280579376,
+            -0.0038806272284174896
+          ],
+          "improved_questions": 60
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.009255865612067283,
+          "relative_endpoint_improvement": 0.3138198412366793,
+          "paired_bootstrap_95": [
+            0.29456780616961664,
+            0.33139029104209994
+          ],
+          "improved_questions": 148
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.005808127915467291,
+          "relative_endpoint_improvement": 0.18675824868747992,
+          "paired_bootstrap_95": [
+            0.16061791218219207,
+            0.21201771790237184
+          ],
+          "improved_questions": 84
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.007217373145977035,
+          "relative_endpoint_improvement": 0.46793299346680073,
+          "paired_bootstrap_95": [
+            0.4535324853528449,
+            0.48177998818713136
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.021637571167957503,
+          "relative_endpoint_improvement": 0.3332900008303594,
+          "paired_bootstrap_95": [
+            0.3161347946864888,
+            0.3527414789873705
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-patch-null-b1": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.0065187292653718035,
+          "relative_endpoint_improvement": 0.02476638343233828,
+          "paired_bootstrap_95": [
+            -0.056030092724714035,
+            0.09407061743791774
+          ],
+          "improved_questions": 64
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.0065187292653718035,
+          "relative_endpoint_improvement": 0.02476638343233828,
+          "paired_bootstrap_95": [
+            -0.05768715092233179,
+            0.09358844480766244
+          ],
+          "improved_questions": 64
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.006825962343282299,
+          "relative_endpoint_improvement": 0.4939598174027757,
+          "paired_bootstrap_95": [
+            0.4511174232672864,
+            0.5300142676152128
+          ],
+          "improved_questions": 140
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.0054906566062224256,
+          "relative_endpoint_improvement": 0.23120990803097097,
+          "paired_bootstrap_95": [
+            0.182431953291921,
+            0.276966691667976
+          ],
+          "improved_questions": 76
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.006393269941327162,
+          "relative_endpoint_improvement": 0.5286861395635745,
+          "paired_bootstrap_95": [
+            0.49571918953951055,
+            0.5579189721317198
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.011264571956417058,
+          "relative_endpoint_improvement": 0.6529091596550897,
+          "paired_bootstrap_95": [
+            0.6316072360922389,
+            0.6726634449624923
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-patch-off-b0.25": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.005879403759172419,
+          "relative_endpoint_improvement": 0.12041258995403448,
+          "paired_bootstrap_95": [
+            0.11569248688526747,
+            0.12512435353949153
+          ],
+          "improved_questions": 160
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.005879403759172419,
+          "relative_endpoint_improvement": 0.12041258995403448,
+          "paired_bootstrap_95": [
+            0.11599779435183152,
+            0.124955567889734
+          ],
+          "improved_questions": 160
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.012129359008395114,
+          "relative_endpoint_improvement": 0.10079447575093281,
+          "paired_bootstrap_95": [
+            0.09859764584711711,
+            0.1031262852151377
+          ],
+          "improved_questions": 160
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.006422935655185332,
+          "relative_endpoint_improvement": 0.10067417301874271,
+          "paired_bootstrap_95": [
+            0.0963496741937796,
+            0.10542233085896542
+          ],
+          "improved_questions": 96
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.012228512321598828,
+          "relative_endpoint_improvement": 0.098510245526921,
+          "paired_bootstrap_95": [
+            0.09437329250804709,
+            0.10261462840881669
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.02914947575482074,
+          "relative_endpoint_improvement": 0.10182862921917746,
+          "paired_bootstrap_95": [
+            0.09875063392019269,
+            0.10542372480533957
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-patch-off-b0.5": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.0062800250459986275,
+          "relative_endpoint_improvement": 0.06047769612419707,
+          "paired_bootstrap_95": [
+            0.047593978915548014,
+            0.07371822368476945
+          ],
+          "improved_questions": 143
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.0062800250459986275,
+          "relative_endpoint_improvement": 0.06047769612419707,
+          "paired_bootstrap_95": [
+            0.047791836112940494,
+            0.0745167328451653
+          ],
+          "improved_questions": 143
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.010423677875951397,
+          "relative_endpoint_improvement": 0.22724451287484282,
+          "paired_bootstrap_95": [
+            0.22081993340407052,
+            0.23390365636850777
+          ],
+          "improved_questions": 160
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.00574159874668112,
+          "relative_endpoint_improvement": 0.19607352178829263,
+          "paired_bootstrap_95": [
+            0.18760127736437482,
+            0.20439421723407722
+          ],
+          "improved_questions": 96
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.0097295709856553,
+          "relative_endpoint_improvement": 0.2827329826953142,
+          "paired_bootstrap_95": [
+            0.2757362081892513,
+            0.2901041658657392
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.02516402215405833,
+          "relative_endpoint_improvement": 0.2246308488504566,
+          "paired_bootstrap_95": [
+            0.2171206608460165,
+            0.23395789784804968
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-patch-off-b1": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.009410183066938771,
+          "relative_endpoint_improvement": -0.40780917435616804,
+          "paired_bootstrap_95": [
+            -0.44156028698274563,
+            -0.37660416099558697
+          ],
+          "improved_questions": 2
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.009410183066938771,
+          "relative_endpoint_improvement": -0.40780917435616804,
+          "paired_bootstrap_95": [
+            -0.44240628697421785,
+            -0.3759920778212589
+          ],
+          "improved_questions": 2
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.007981790887424723,
+          "relative_endpoint_improvement": 0.4082728976522536,
+          "paired_bootstrap_95": [
+            0.3774491018094855,
+            0.43310060982423754
+          ],
+          "improved_questions": 138
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.005910286645909461,
+          "relative_endpoint_improvement": 0.17245419993617583,
+          "paired_bootstrap_95": [
+            0.13439886700026854,
+            0.20777139412774537
+          ],
+          "improved_questions": 74
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.005775303565314971,
+          "relative_endpoint_improvement": 0.5742428141559432,
+          "paired_bootstrap_95": [
+            0.5593726040265488,
+            0.5903185910073759
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.016402790934080258,
+          "relative_endpoint_improvement": 0.4945872323121403,
+          "paired_bootstrap_95": [
+            0.48150834672244025,
+            0.5104847626680965
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-patch-off-gaussian-seed0": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.0299166630837135,
+          "relative_endpoint_improvement": -3.475678364148491,
+          "paired_bootstrap_95": [
+            -3.66475143670018,
+            -3.318661429074031
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.0299166630837135,
+          "relative_endpoint_improvement": -3.475678364148491,
+          "paired_bootstrap_95": [
+            -3.6663760809198034,
+            -3.3105947958463573
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.020124803381622768,
+          "relative_endpoint_improvement": -0.49194482269479,
+          "paired_bootstrap_95": [
+            -0.6572390792362024,
+            -0.362577587383361
+          ],
+          "improved_questions": 60
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.019425792609884713,
+          "relative_endpoint_improvement": -1.7199582778860756,
+          "paired_bootstrap_95": [
+            -1.9020411750005406,
+            -1.5568153267853548
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.011507415503729135,
+          "relative_endpoint_improvement": 0.15166972856104988,
+          "paired_bootstrap_95": [
+            0.11028628815112103,
+            0.19336655356998128
+          ],
+          "improved_questions": 29
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.030839223574730568,
+          "relative_endpoint_improvement": 0.04976309197083362,
+          "paired_bootstrap_95": [
+            0.03273955342002835,
+            0.07378792059734043
+          ],
+          "improved_questions": 31
+        }
+      },
+      "r1-justrl.intervention-patch-off-gaussian-seed1": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.029935255806776695,
+          "relative_endpoint_improvement": -3.4784599259861766,
+          "paired_bootstrap_95": [
+            -3.664776456235947,
+            -3.3140479605294133
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.029935255806776695,
+          "relative_endpoint_improvement": -3.4784599259861766,
+          "paired_bootstrap_95": [
+            -3.669738061556519,
+            -3.313345224048037
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.020139730625669473,
+          "relative_endpoint_improvement": -0.4930514483869901,
+          "paired_bootstrap_95": [
+            -0.6529397176503055,
+            -0.36432107964236826
+          ],
+          "improved_questions": 60
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.019435323750561413,
+          "relative_endpoint_improvement": -1.7212928079874672,
+          "paired_bootstrap_95": [
+            -1.894984805016166,
+            -1.5583482207452835
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.011519356499775313,
+          "relative_endpoint_improvement": 0.15078943459636052,
+          "paired_bootstrap_95": [
+            0.10732388955803265,
+            0.19167894711896039
+          ],
+          "improved_questions": 29
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.030873325376887806,
+          "relative_endpoint_improvement": 0.04871232650776702,
+          "paired_bootstrap_95": [
+            0.03136233065199243,
+            0.07353353220451825
+          ],
+          "improved_questions": 31
+        }
+      },
+      "r1-justrl.intervention-patch-off-gaussian-seed2": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.029955275714746675,
+          "relative_endpoint_improvement": -3.4814550016302332,
+          "paired_bootstrap_95": [
+            -3.6655163443273,
+            -3.324006290261652
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.029955275714746675,
+          "relative_endpoint_improvement": -3.4814550016302332,
+          "paired_bootstrap_95": [
+            -3.660530793354652,
+            -3.319834417991026
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.020142159660463222,
+          "relative_endpoint_improvement": -0.4932315239790821,
+          "paired_bootstrap_95": [
+            -0.6543976407052352,
+            -0.3628067073057576
+          ],
+          "improved_questions": 60
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.019479089610589046,
+          "relative_endpoint_improvement": -1.7274208108783449,
+          "paired_bootstrap_95": [
+            -1.9043522066593972,
+            -1.5685190293532014
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.011491184108308516,
+          "relative_endpoint_improvement": 0.152866312110027,
+          "paired_bootstrap_95": [
+            0.11001425280081373,
+            0.19686968063111088
+          ],
+          "improved_questions": 29
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.03078234536224045,
+          "relative_endpoint_improvement": 0.051515658037870504,
+          "paired_bootstrap_95": [
+            0.03424710886567284,
+            0.07611008124355487
+          ],
+          "improved_questions": 31
+        }
+      },
+      "r1-justrl.intervention-patch-off-random_frames-seed0": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.02946827202104032,
+          "relative_endpoint_improvement": -3.4085968794164447,
+          "paired_bootstrap_95": [
+            -3.5867883893026056,
+            -3.2514614213123028
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.02946827202104032,
+          "relative_endpoint_improvement": -3.4085968794164447,
+          "paired_bootstrap_95": [
+            -3.5929369880260573,
+            -3.254698958839521
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.019892521848669277,
+          "relative_endpoint_improvement": -0.47472471753768675,
+          "paired_bootstrap_95": [
+            -0.6352700550851434,
+            -0.34954256244112447
+          ],
+          "improved_questions": 60
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.01910641912157492,
+          "relative_endpoint_improvement": -1.675240279464557,
+          "paired_bootstrap_95": [
+            -1.850751293804224,
+            -1.5180378258613898
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.011493148398585618,
+          "relative_endpoint_improvement": 0.152721504016201,
+          "paired_bootstrap_95": [
+            0.10961048836545709,
+            0.19533301317049684
+          ],
+          "improved_questions": 29
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.030650203480035998,
+          "relative_endpoint_improvement": 0.05558729405888896,
+          "paired_bootstrap_95": [
+            0.03903254538787201,
+            0.0784882606652304
+          ],
+          "improved_questions": 31
+        }
+      },
+      "r1-justrl.intervention-patch-off-random_frames-seed1": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.029454746277770026,
+          "relative_endpoint_improvement": -3.4065733624104046,
+          "paired_bootstrap_95": [
+            -3.5921288472895583,
+            -3.2483690781044534
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.029454746277770026,
+          "relative_endpoint_improvement": -3.4065733624104046,
+          "paired_bootstrap_95": [
+            -3.5855571274071716,
+            -3.2423389590442357
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.019834438606631012,
+          "relative_endpoint_improvement": -0.4704187379660578,
+          "paired_bootstrap_95": [
+            -0.6338449084818149,
+            -0.3454501764160689
+          ],
+          "improved_questions": 60
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.01908211921302912,
+          "relative_endpoint_improvement": -1.671837857811636,
+          "paired_bootstrap_95": [
+            -1.8401275703141007,
+            -1.5149601624220692
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.011374281340977177,
+          "relative_endpoint_improvement": 0.16148442069488,
+          "paired_bootstrap_95": [
+            0.11736257579712862,
+            0.20244654334689235
+          ],
+          "improved_questions": 29
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.030551554053090513,
+          "relative_endpoint_improvement": 0.05862694018397285,
+          "paired_bootstrap_95": [
+            0.040484661825600024,
+            0.08409009863689172
+          ],
+          "improved_questions": 31
+        }
+      },
+      "r1-justrl.intervention-patch-off-random_frames-seed2": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.029219338958500884,
+          "relative_endpoint_improvement": -3.3713552820159807,
+          "paired_bootstrap_95": [
+            -3.552693475402249,
+            -3.214812296267856
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.029219338958500884,
+          "relative_endpoint_improvement": -3.3713552820159807,
+          "paired_bootstrap_95": [
+            -3.550237754409648,
+            -3.210217124397453
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.01973344090511091,
+          "relative_endpoint_improvement": -0.46293131088269135,
+          "paired_bootstrap_95": [
+            -0.6276308993333374,
+            -0.33722199219767124
+          ],
+          "improved_questions": 60
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.01892589333874639,
+          "relative_endpoint_improvement": -1.6499634422596507,
+          "paired_bootstrap_95": [
+            -1.822079767283691,
+            -1.4910353299863432
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.01136783765105065,
+          "relative_endpoint_improvement": 0.1619594515324011,
+          "paired_bootstrap_95": [
+            0.11855980099867154,
+            0.20494020379059139
+          ],
+          "improved_questions": 29
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.03052168685826473,
+          "relative_endpoint_improvement": 0.059547226351164606,
+          "paired_bootstrap_95": [
+            0.042367151900945435,
+            0.08347547625154512
+          ],
+          "improved_questions": 31
+        }
+      },
+      "r1-justrl.intervention-teacher-delete-diag": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.00021939836451565498,
+          "relative_endpoint_improvement": 0.9671769371321746,
+          "paired_bootstrap_95": [
+            0.9628485401575183,
+            0.9709276894474373
+          ],
+          "improved_questions": 160
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.00021939836451565498,
+          "relative_endpoint_improvement": 0.9671769371321746,
+          "paired_bootstrap_95": [
+            0.9629360235130328,
+            0.9708309498825568
+          ],
+          "improved_questions": 160
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.00033389135296602035,
+          "relative_endpoint_improvement": 0.9752470885824851,
+          "paired_bootstrap_95": [
+            0.9728183401742876,
+            0.9774087412948298
+          ],
+          "improved_questions": 160
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.00022657667674745122,
+          "relative_endpoint_improvement": 0.9682752143054613,
+          "paired_bootstrap_95": [
+            0.9665679370023228,
+            0.9699214162224125
+          ],
+          "improved_questions": 96
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.00033451865829192684,
+          "relative_endpoint_improvement": 0.9753391798446645,
+          "paired_bootstrap_95": [
+            0.9733225520048172,
+            0.9771405411324502
+          ],
+          "improved_questions": 32
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.0006552080762958212,
+          "relative_endpoint_improvement": 0.9798113303654883,
+          "paired_bootstrap_95": [
+            0.9759786055764045,
+            0.982744713094239
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-teacher-delete-null": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.04651530953706242,
+          "relative_endpoint_improvement": -5.958916638334462,
+          "paired_bootstrap_95": [
+            -6.933653083280421,
+            -5.198114889399377
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.04651530953706242,
+          "relative_endpoint_improvement": -5.958916638334462,
+          "paired_bootstrap_95": [
+            -6.897439773271316,
+            -5.163881327673189
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.04687817541416735,
+          "relative_endpoint_improvement": -2.4752961199318593,
+          "paired_bootstrap_95": [
+            -3.101240571376009,
+            -1.9624853549364365
+          ],
+          "improved_questions": 10
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.0472469367668964,
+          "relative_endpoint_improvement": -5.615415872322673,
+          "paired_bootstrap_95": [
+            -5.999977532677366,
+            -5.265531642930613
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.0582465089391917,
+          "relative_endpoint_improvement": -3.293950863488244,
+          "paired_bootstrap_95": [
+            -3.5135769253252938,
+            -3.098478121703562
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.03440355783095583,
+          "relative_endpoint_improvement": -0.060063342362395966,
+          "paired_bootstrap_95": [
+            -0.19839807997550982,
+            0.03294451576088271
+          ],
+          "improved_questions": 10
+        }
+      },
+      "r1-justrl.intervention-teacher-delete-off": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.019613213001866824,
+          "relative_endpoint_improvement": -1.9342320979534513,
+          "paired_bootstrap_95": [
+            -2.344540078937178,
+            -1.5949968743064602
+          ],
+          "improved_questions": 5
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.019613213001866824,
+          "relative_endpoint_improvement": -1.9342320979534513,
+          "paired_bootstrap_95": [
+            -2.3405318568460367,
+            -1.6093558252974247
+          ],
+          "improved_questions": 5
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.01996816721657524,
+          "relative_endpoint_improvement": -0.4803326587865042,
+          "paired_bootstrap_95": [
+            -0.7408747980614283,
+            -0.2594004917437717
+          ],
+          "improved_questions": 33
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.019918134067362796,
+          "relative_endpoint_improvement": -1.7888948844744,
+          "paired_bootstrap_95": [
+            -1.9528317264983417,
+            -1.6285715161189707
+          ],
+          "improved_questions": 1
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.025320713059045374,
+          "relative_endpoint_improvement": -0.8666508891980775,
+          "paired_bootstrap_95": [
+            -0.9560735687335945,
+            -0.7740478351700241
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.014765720821742434,
+          "relative_endpoint_improvement": 0.5450296320050271,
+          "paired_bootstrap_95": [
+            0.491187033421236,
+            0.5813719060820469
+          ],
+          "improved_questions": 32
+        }
+      },
+      "r1-justrl.intervention-top0.01-restore0": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.016110621765255927,
+          "relative_endpoint_improvement": -1.4102274062440436,
+          "paired_bootstrap_95": [
+            -1.759466831152317,
+            -1.1347323371779237
+          ],
+          "improved_questions": 17
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.016110621765255927,
+          "relative_endpoint_improvement": -1.4102274062440436,
+          "paired_bootstrap_95": [
+            -1.7493628551185145,
+            -1.1253287141364565
+          ],
+          "improved_questions": 17
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.02494225259288214,
+          "relative_endpoint_improvement": -0.8490846303759305,
+          "paired_bootstrap_95": [
+            -1.0191577838092523,
+            -0.7095022050343645
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.018408704966229077,
+          "relative_endpoint_improvement": -1.5775478233294309,
+          "paired_bootstrap_95": [
+            -1.6734829836955138,
+            -1.4871424051259066
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.030140632356051356,
+          "relative_endpoint_improvement": -1.2219768478564625,
+          "paired_bootstrap_95": [
+            -1.2826087999795888,
+            -1.1629850709633054
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.03934451570967212,
+          "relative_endpoint_improvement": -0.21230714078347002,
+          "paired_bootstrap_95": [
+            -0.2565404691779653,
+            -0.18012964093873446
+          ],
+          "improved_questions": 0
+        }
+      },
+      "r1-justrl.intervention-top0.01-restore1": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.06365065605496056,
+          "relative_endpoint_improvement": -8.522447853622134,
+          "paired_bootstrap_95": [
+            -9.63793535134256,
+            -7.594618179374661
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.06365065605496056,
+          "relative_endpoint_improvement": -8.522447853622134,
+          "paired_bootstrap_95": [
+            -9.615466088700645,
+            -7.602187082615323
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.05134270806447603,
+          "relative_endpoint_improvement": -2.806272589469063,
+          "paired_bootstrap_95": [
+            -3.539439267726908,
+            -2.2339293432145264
+          ],
+          "improved_questions": 1
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.06214047874285219,
+          "relative_endpoint_improvement": -7.700778029639821,
+          "paired_bootstrap_95": [
+            -8.343618804663452,
+            -7.1232823431729475
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.03393883095122874,
+          "relative_endpoint_improvement": -1.5019812366943985,
+          "paired_bootstrap_95": [
+            -1.69661953582837,
+            -1.3156150779574367
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.036353273142594844,
+          "relative_endpoint_improvement": -0.12013915603453573,
+          "paired_bootstrap_95": [
+            -0.14643794788578124,
+            -0.09796717216116294
+          ],
+          "improved_questions": 1
+        }
+      },
+      "r1-justrl.intervention-top0.05-restore0": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.008495669656258541,
+          "relative_endpoint_improvement": -0.27099351833023255,
+          "paired_bootstrap_95": [
+            -0.4385040592687885,
+            -0.13455751629330942
+          ],
+          "improved_questions": 39
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.008495669656258541,
+          "relative_endpoint_improvement": -0.27099351833023255,
+          "paired_bootstrap_95": [
+            -0.44495753475025834,
+            -0.13301221448535352
+          ],
+          "improved_questions": 39
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.0187303923885338,
+          "relative_endpoint_improvement": -0.3885706817206964,
+          "paired_bootstrap_95": [
+            -0.4634643875194217,
+            -0.3288640018717861
+          ],
+          "improved_questions": 0
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.011941897648891123,
+          "relative_endpoint_improvement": -0.672079179268168,
+          "paired_bootstrap_95": [
+            -0.7128411077481818,
+            -0.6338299666287806
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.021979907643981278,
+          "relative_endpoint_improvement": -0.6203656687098098,
+          "paired_bootstrap_95": [
+            -0.6514544931622928,
+            -0.5895955037580599
+          ],
+          "improved_questions": 0
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.035846361352014355,
+          "relative_endpoint_improvement": -0.10451988172441928,
+          "paired_bootstrap_95": [
+            -0.12433633190781222,
+            -0.09028427434553693
+          ],
+          "improved_questions": 0
+        }
+      },
+      "r1-justrl.intervention-top0.05-restore1": {
+        "train/all": {
+          "n": 160,
+          "loss": 0.029465646386961454,
+          "relative_endpoint_improvement": -3.408204071782583,
+          "paired_bootstrap_95": [
+            -3.797914135299695,
+            -3.0847069746143596
+          ],
+          "improved_questions": 0
+        },
+        "train/math": {
+          "n": 160,
+          "loss": 0.029465646386961454,
+          "relative_endpoint_improvement": -3.408204071782583,
+          "paired_bootstrap_95": [
+            -3.8055946110875323,
+            -3.0819382000221256
+          ],
+          "improved_questions": 0
+        },
+        "heldout/all": {
+          "n": 160,
+          "loss": 0.02628045296878554,
+          "relative_endpoint_improvement": -0.9482916181262033,
+          "paired_bootstrap_95": [
+            -1.224070985565488,
+            -0.725475770615694
+          ],
+          "improved_questions": 28
+        },
+        "heldout/math": {
+          "n": 96,
+          "loss": 0.027818198878473293,
+          "relative_endpoint_improvement": -2.895045202782777,
+          "paired_bootstrap_95": [
+            -3.16502744304325,
+            -2.639858622241365
+          ],
+          "improved_questions": 0
+        },
+        "heldout/code": {
+          "n": 32,
+          "loss": 0.01638371226727031,
+          "relative_endpoint_improvement": -0.20781239457000455,
+          "paired_bootstrap_95": [
+            -0.2852297112427149,
+            -0.1340323452519797
+          ],
+          "improved_questions": 6
+        },
+        "heldout/if": {
+          "n": 32,
+          "loss": 0.03156395594123751,
+          "relative_endpoint_improvement": 0.02743219763332172,
+          "paired_bootstrap_95": [
+            0.011579588709128558,
+            0.047798519609805065
+          ],
+          "improved_questions": 22
+        }
+      }
+    },
+    "calibration_selected": {
+      "diag": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 0,
+        "calibration_loss": 0.006684274572398863,
+        "condition": null,
+        "heldout": null
+      },
+      "off": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 0.25,
+        "calibration_loss": 0.005879403759172419,
+        "condition": "r1-justrl.intervention-patch-off-b0.25",
+        "heldout": {
+          "n": 160,
+          "loss": 0.012129359008395114,
+          "relative_endpoint_improvement": 0.10079447575093281,
+          "paired_bootstrap_95": [
+            0.09859764584711711,
+            0.1031262852151377
+          ],
+          "improved_questions": 160
+        }
+      },
+      "null": {
+        "tested_betas": [
+          0,
+          0.25,
+          0.5,
+          1
+        ],
+        "complete_grid": true,
+        "beta": 0.25,
+        "calibration_loss": 0.005595343498862348,
+        "condition": "r1-justrl.intervention-patch-null-b0.25",
+        "heldout": {
+          "n": 160,
+          "loss": 0.011162208931636997,
+          "relative_endpoint_improvement": 0.17249378741257004,
+          "paired_bootstrap_95": [
+            0.16378851629942803,
+            0.18236859850184806
+          ],
+          "improved_questions": 160
+        }
+      }
+    }
+  },
+  "r1-polaris": {
+    "edits": {},
+    "calibration_selected": {
+      "diag": {
+        "tested_betas": [
+          0
+        ],
+        "complete_grid": false,
+        "beta": 0,
+        "calibration_loss": 0.0968789168051444,
+        "condition": null,
+        "heldout": null
+      },
+      "off": {
+        "tested_betas": [
+          0
+        ],
+        "complete_grid": false,
+        "beta": 0,
+        "calibration_loss": 0.0968789168051444,
+        "condition": null,
+        "heldout": null
+      },
+      "null": {
+        "tested_betas": [
+          0
+        ],
+        "complete_grid": false,
+        "beta": 0,
+        "calibration_loss": 0.0968789168051444,
+        "condition": null,
+        "heldout": null
+      }
+    }
+  }
+}

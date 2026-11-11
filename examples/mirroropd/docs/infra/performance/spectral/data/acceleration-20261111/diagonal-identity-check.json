@@ -1,0 +1,42 @@
+{
+  "dtype": "float64",
+  "device": "cpu",
+  "purpose": "verify scalar kappa identity, not runtime benchmark",
+  "cases": [
+    {
+      "shape": [
+        17,
+        17
+      ],
+      "diag_energy_relative_error": 1.348924300745293e-16
+    },
+    {
+      "shape": [
+        8,
+        31
+      ],
+      "diag_energy_relative_error": 3.6496188401628737e-16
+    },
+    {
+      "shape": [
+        31,
+        8
+      ],
+      "diag_energy_relative_error": 0.0
+    },
+    {
+      "shape": [
+        64,
+        128
+      ],
+      "diag_energy_relative_error": 1.700691517102668e-16
+    },
+    {
+      "shape": [
+        128,
+        64
+      ],
+      "diag_energy_relative_error": 2.094790135602945e-16
+    }
+  ]
+}

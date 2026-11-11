@@ -1,0 +1,785 @@
+step,panel,group,feature,target,n_rows,n_teacher,spearman,adjusted_rank_correlation
+64,All held-out,r1,norm_over_base,final_rkl,6,6,0.7142857142857143,0.5736986059795728
+64,All held-out,r1,norm_over_base,remaining,6,6,0.942857142857143,0.9139182376228867
+64,All held-out,r1,norm_over_base,absolute_decrease,6,6,0.3714285714285715,-0.7898229899330014
+64,All held-out,r1,stable_rank_fraction,final_rkl,6,6,0.6,0.4876908539467476
+64,All held-out,r1,stable_rank_fraction,remaining,6,6,0.8285714285714287,0.7785846923398655
+64,All held-out,r1,stable_rank_fraction,absolute_decrease,6,6,0.2571428571428572,-0.7702141961257372
+64,All held-out,r1,rank90_fraction,final_rkl,6,6,0.6,0.4876908539467476
+64,All held-out,r1,rank90_fraction,remaining,6,6,0.8285714285714287,0.7785846923398655
+64,All held-out,r1,rank90_fraction,absolute_decrease,6,6,0.2571428571428572,-0.7702141961257372
+64,All held-out,r1,top1pct,final_rkl,6,6,-0.6,-0.48769085394674755
+64,All held-out,r1,top1pct,remaining,6,6,-0.8285714285714287,-0.7785846923398657
+64,All held-out,r1,top1pct,absolute_decrease,6,6,-0.2571428571428572,0.7702141961257373
+64,All held-out,r1,top5pct,final_rkl,6,6,-0.6,-0.48769085394674755
+64,All held-out,r1,top5pct,remaining,6,6,-0.8285714285714287,-0.7785846923398657
+64,All held-out,r1,top5pct,absolute_decrease,6,6,-0.2571428571428572,0.7702141961257373
+64,All held-out,r1,kappa_spec,final_rkl,6,6,-0.6,-0.7153729119706299
+64,All held-out,r1,kappa_spec,remaining,6,6,-0.7714285714285715,-0.746287798290396
+64,All held-out,r1,kappa_spec,absolute_decrease,6,6,-0.14285714285714288,0.8334633352935068
+64,All held-out,r1,rho_sigma,final_rkl,6,6,-0.6,-0.7153729119706299
+64,All held-out,r1,rho_sigma,remaining,6,6,-0.7714285714285715,-0.746287798290396
+64,All held-out,r1,rho_sigma,absolute_decrease,6,6,-0.14285714285714288,0.8334633352935068
+64,All held-out,q3-1.7,norm_over_base,final_rkl,6,6,0.942857142857143,0.6329215466649416
+64,All held-out,q3-1.7,norm_over_base,remaining,6,6,0.8857142857142858,0.3937048704991059
+64,All held-out,q3-1.7,norm_over_base,absolute_decrease,6,6,0.8285714285714287,-0.12231494857924322
+64,All held-out,q3-1.7,stable_rank_fraction,final_rkl,6,6,0.6571428571428573,-0.0020702152745229823
+64,All held-out,q3-1.7,stable_rank_fraction,remaining,6,6,0.7714285714285715,0.4352824809311441
+64,All held-out,q3-1.7,stable_rank_fraction,absolute_decrease,6,6,0.7714285714285715,0.43030162986156795
+64,All held-out,q3-1.7,rank90_fraction,final_rkl,6,6,-0.6377481392176932,0.1799726947829251
+64,All held-out,q3-1.7,rank90_fraction,remaining,6,6,-0.5797710356524485,0.2497718971187089
+64,All held-out,q3-1.7,rank90_fraction,absolute_decrease,6,6,-0.550782483869826,0.5344291168126318
+64,All held-out,q3-1.7,top1pct,final_rkl,6,6,-0.6,-0.21507366166581077
+64,All held-out,q3-1.7,top1pct,remaining,6,6,-0.6571428571428573,-0.3874487430212426
+64,All held-out,q3-1.7,top1pct,absolute_decrease,6,6,-0.7142857142857143,-0.5911991684820264
+64,All held-out,q3-1.7,top5pct,final_rkl,6,6,-0.6,-0.21507366166581077
+64,All held-out,q3-1.7,top5pct,remaining,6,6,-0.6571428571428573,-0.3874487430212426
+64,All held-out,q3-1.7,top5pct,absolute_decrease,6,6,-0.7142857142857143,-0.5911991684820264
+64,All held-out,q3-1.7,kappa_spec,final_rkl,6,6,0.8285714285714287,-0.13445569338905003
+64,All held-out,q3-1.7,kappa_spec,remaining,6,6,0.7714285714285715,-0.24120965924978197
+64,All held-out,q3-1.7,kappa_spec,absolute_decrease,6,6,0.942857142857143,0.6201193660759388
+64,All held-out,q3-1.7,rho_sigma,final_rkl,6,6,0.8285714285714287,-0.13445569338905003
+64,All held-out,q3-1.7,rho_sigma,remaining,6,6,0.7714285714285715,-0.24120965924978197
+64,All held-out,q3-1.7,rho_sigma,absolute_decrease,6,6,0.942857142857143,0.6201193660759388
+64,All held-out,q3-1.7-nonthinking,norm_over_base,final_rkl,6,6,0.6571428571428573,0.3414988811729779
+64,All held-out,q3-1.7-nonthinking,norm_over_base,remaining,6,6,0.2571428571428572,0.6787595357773074
+64,All held-out,q3-1.7-nonthinking,norm_over_base,absolute_decrease,6,6,0.4285714285714286,-0.40039675168419486
+64,All held-out,q3-1.7-nonthinking,stable_rank_fraction,final_rkl,6,6,0.2571428571428572,0.68967682481903
+64,All held-out,q3-1.7-nonthinking,stable_rank_fraction,remaining,6,6,0.6571428571428573,0.6225812791646204
+64,All held-out,q3-1.7-nonthinking,stable_rank_fraction,absolute_decrease,6,6,0.14285714285714288,0.8024580551946021
+64,All held-out,q3-1.7-nonthinking,rank90_fraction,final_rkl,6,6,0.1690308509457033,0.6797784951146729
+64,All held-out,q3-1.7-nonthinking,rank90_fraction,remaining,6,6,0.8451542547285165,0.8248713089889465
+64,All held-out,q3-1.7-nonthinking,rank90_fraction,absolute_decrease,6,6,-0.1690308509457033,0.33485726777997105
+64,All held-out,q3-1.7-nonthinking,top1pct,final_rkl,6,6,-0.2,-0.6091806913138943
+64,All held-out,q3-1.7-nonthinking,top1pct,remaining,6,6,-0.6,-0.5587986075275382
+64,All held-out,q3-1.7-nonthinking,top1pct,absolute_decrease,6,6,-0.08571428571428573,-0.6923721168091466
+64,All held-out,q3-1.7-nonthinking,top5pct,final_rkl,6,6,-0.2,-0.6091806913138943
+64,All held-out,q3-1.7-nonthinking,top5pct,remaining,6,6,-0.6,-0.5587986075275382
+64,All held-out,q3-1.7-nonthinking,top5pct,absolute_decrease,6,6,-0.08571428571428573,-0.6923721168091466
+64,All held-out,q3-1.7-nonthinking,kappa_spec,final_rkl,6,6,0.3714285714285715,0.8705897509644324
+64,All held-out,q3-1.7-nonthinking,kappa_spec,remaining,6,6,0.8285714285714287,0.8109994699900815
+64,All held-out,q3-1.7-nonthinking,kappa_spec,absolute_decrease,6,6,0.08571428571428573,0.699722505065889
+64,All held-out,q3-1.7-nonthinking,rho_sigma,final_rkl,6,6,0.14285714285714288,0.531039198508935
+64,All held-out,q3-1.7-nonthinking,rho_sigma,remaining,6,6,0.6,0.5577218106935979
+64,All held-out,q3-1.7-nonthinking,rho_sigma,absolute_decrease,6,6,0.08571428571428573,0.704249344019832
+64,All held-out,pooled_compatible,norm_over_base,final_rkl,22,19,0.8188756827459697,0.43252982729200623
+64,All held-out,pooled_compatible,norm_over_base,remaining,22,19,0.6905908104317287,0.5212063558228388
+64,All held-out,pooled_compatible,norm_over_base,absolute_decrease,22,19,0.6696809413761036,-0.23461779530546473
+64,All held-out,pooled_compatible,stable_rank_fraction,final_rkl,22,19,0.6459454143399884,0.48902247734504584
+64,All held-out,pooled_compatible,stable_rank_fraction,remaining,22,19,0.7471039700415264,0.5734442358408486
+64,All held-out,pooled_compatible,stable_rank_fraction,absolute_decrease,22,19,0.3452954052158643,-0.4515969945882455
+64,All held-out,pooled_compatible,rank90_fraction,final_rkl,22,19,-0.21684517814654963,0.30121882165598735
+64,All held-out,pooled_compatible,rank90_fraction,remaining,22,19,0.11983549318625111,0.4977469065668285
+64,All held-out,pooled_compatible,rank90_fraction,absolute_decrease,22,19,-0.40344616039371206,-0.4537343401853001
+64,All held-out,pooled_compatible,top1pct,final_rkl,22,19,-0.5781296228082311,-0.5173471830716002
+64,All held-out,pooled_compatible,top1pct,remaining,22,19,-0.6758973889331813,-0.6505122134709893
+64,All held-out,pooled_compatible,top1pct,absolute_decrease,22,19,-0.2650467185699515,0.49575887850234074
+64,All held-out,pooled_compatible,top5pct,final_rkl,22,19,-0.5363098846969808,-0.4753698477432582
+64,All held-out,pooled_compatible,top5pct,remaining,22,19,-0.6295565980531471,-0.6086508965515002
+64,All held-out,pooled_compatible,top5pct,absolute_decrease,22,19,-0.23452961238066072,0.4876753105372135
+64,All held-out,pooled_compatible,kappa_spec,final_rkl,22,19,0.6131677817663057,0.3246377034062865
+64,All held-out,pooled_compatible,kappa_spec,remaining,22,19,0.5154000156413556,0.1247026940085819
+64,All held-out,pooled_compatible,kappa_spec,absolute_decrease,22,19,0.4063296175944459,-0.24798124596025606
+64,All held-out,pooled_compatible,rho_sigma,final_rkl,22,19,0.6414243615712047,0.22868611531164032
+64,All held-out,pooled_compatible,rho_sigma,remaining,22,19,0.530093437139903,0.10944033680104802
+64,All held-out,pooled_compatible,rho_sigma,absolute_decrease,22,19,0.45380067166667604,-0.30312661935940377
+64,Math,r1,norm_over_base,final_rkl,6,6,0.7142857142857143,0.6329728147504879
+64,Math,r1,norm_over_base,remaining,6,6,0.942857142857143,0.9195699357282734
+64,Math,r1,norm_over_base,absolute_decrease,6,6,0.3714285714285715,-0.9056300842898052
+64,Math,r1,stable_rank_fraction,final_rkl,6,6,0.6,0.6252777122119416
+64,Math,r1,stable_rank_fraction,remaining,6,6,0.8285714285714287,0.805903110152964
+64,Math,r1,stable_rank_fraction,absolute_decrease,6,6,0.2571428571428572,-0.6651396349240787
+64,Math,r1,rank90_fraction,final_rkl,6,6,0.6,0.6252777122119416
+64,Math,r1,rank90_fraction,remaining,6,6,0.8285714285714287,0.805903110152964
+64,Math,r1,rank90_fraction,absolute_decrease,6,6,0.2571428571428572,-0.6651396349240787
+64,Math,r1,top1pct,final_rkl,6,6,-0.6,-0.6252777122119416
+64,Math,r1,top1pct,remaining,6,6,-0.8285714285714287,-0.805903110152964
+64,Math,r1,top1pct,absolute_decrease,6,6,-0.2571428571428572,0.6651396349240785
+64,Math,r1,top5pct,final_rkl,6,6,-0.6,-0.6252777122119416
+64,Math,r1,top5pct,remaining,6,6,-0.8285714285714287,-0.805903110152964
+64,Math,r1,top5pct,absolute_decrease,6,6,-0.2571428571428572,0.6651396349240785
+64,Math,r1,kappa_spec,final_rkl,6,6,-0.6,-0.8295809923328121
+64,Math,r1,kappa_spec,remaining,6,6,-0.7714285714285715,-0.7815545737217964
+64,Math,r1,kappa_spec,absolute_decrease,6,6,-0.14285714285714288,0.6869800186048217
+64,Math,r1,rho_sigma,final_rkl,6,6,-0.6,-0.8295809923328121
+64,Math,r1,rho_sigma,remaining,6,6,-0.7714285714285715,-0.7815545737217964
+64,Math,r1,rho_sigma,absolute_decrease,6,6,-0.14285714285714288,0.6869800186048217
+64,Math,q3-1.7,norm_over_base,final_rkl,6,6,0.8857142857142858,0.3899316321279946
+64,Math,q3-1.7,norm_over_base,remaining,6,6,0.942857142857143,0.7374300111863863
+64,Math,q3-1.7,norm_over_base,absolute_decrease,6,6,0.8285714285714287,-0.11103127382596364
+64,Math,q3-1.7,stable_rank_fraction,final_rkl,6,6,0.7714285714285715,0.457052474592433
+64,Math,q3-1.7,stable_rank_fraction,remaining,6,6,0.7142857142857143,0.2995226611726889
+64,Math,q3-1.7,stable_rank_fraction,absolute_decrease,6,6,0.7714285714285715,0.4628437402533311
+64,Math,q3-1.7,rank90_fraction,final_rkl,6,6,-0.5797710356524485,0.3244027487030639
+64,Math,q3-1.7,rank90_fraction,remaining,6,6,-0.5797710356524485,0.23739891719681358
+64,Math,q3-1.7,rank90_fraction,absolute_decrease,6,6,-0.550782483869826,0.6322451617184903
+64,Math,q3-1.7,top1pct,final_rkl,6,6,-0.6571428571428573,-0.4208584438129037
+64,Math,q3-1.7,top1pct,remaining,6,6,-0.6,-0.27409156986650623
+64,Math,q3-1.7,top1pct,absolute_decrease,6,6,-0.7142857142857143,-0.6386376786204563
+64,Math,q3-1.7,top5pct,final_rkl,6,6,-0.6571428571428573,-0.4208584438129037
+64,Math,q3-1.7,top5pct,remaining,6,6,-0.6,-0.27409156986650623
+64,Math,q3-1.7,top5pct,absolute_decrease,6,6,-0.7142857142857143,-0.6386376786204563
+64,Math,q3-1.7,kappa_spec,final_rkl,6,6,0.7714285714285715,-0.22769080034912442
+64,Math,q3-1.7,kappa_spec,remaining,6,6,0.7142857142857143,-0.37762692352056415
+64,Math,q3-1.7,kappa_spec,absolute_decrease,6,6,0.942857142857143,0.6356270564085446
+64,Math,q3-1.7,rho_sigma,final_rkl,6,6,0.7714285714285715,-0.22769080034912442
+64,Math,q3-1.7,rho_sigma,remaining,6,6,0.7142857142857143,-0.37762692352056415
+64,Math,q3-1.7,rho_sigma,absolute_decrease,6,6,0.942857142857143,0.6356270564085446
+64,Math,q3-1.7-nonthinking,norm_over_base,final_rkl,6,6,0.6571428571428573,0.4466010741718701
+64,Math,q3-1.7-nonthinking,norm_over_base,remaining,6,6,0.2571428571428572,0.7222826519865895
+64,Math,q3-1.7-nonthinking,norm_over_base,absolute_decrease,6,6,0.4285714285714286,-0.14994283593265284
+64,Math,q3-1.7-nonthinking,stable_rank_fraction,final_rkl,6,6,0.2571428571428572,0.7234453702771363
+64,Math,q3-1.7-nonthinking,stable_rank_fraction,remaining,6,6,0.6571428571428573,0.584918960794876
+64,Math,q3-1.7-nonthinking,stable_rank_fraction,absolute_decrease,6,6,0.14285714285714288,0.9203874308708506
+64,Math,q3-1.7-nonthinking,rank90_fraction,final_rkl,6,6,0.1690308509457033,0.7416534613175715
+64,Math,q3-1.7-nonthinking,rank90_fraction,remaining,6,6,0.8451542547285165,0.8041103324262826
+64,Math,q3-1.7-nonthinking,rank90_fraction,absolute_decrease,6,6,-0.1690308509457033,0.5209484005737018
+64,Math,q3-1.7-nonthinking,top1pct,final_rkl,6,6,-0.2,-0.6476931620412917
+64,Math,q3-1.7-nonthinking,top1pct,remaining,6,6,-0.6,-0.5143743127850299
+64,Math,q3-1.7-nonthinking,top1pct,absolute_decrease,6,6,-0.08571428571428573,-0.8177402351026448
+64,Math,q3-1.7-nonthinking,top5pct,final_rkl,6,6,-0.2,-0.6476931620412917
+64,Math,q3-1.7-nonthinking,top5pct,remaining,6,6,-0.6,-0.5143743127850299
+64,Math,q3-1.7-nonthinking,top5pct,absolute_decrease,6,6,-0.08571428571428573,-0.8177402351026448
+64,Math,q3-1.7-nonthinking,kappa_spec,final_rkl,6,6,0.3714285714285715,0.8950670518750696
+64,Math,q3-1.7-nonthinking,kappa_spec,remaining,6,6,0.8285714285714287,0.7918555842116868
+64,Math,q3-1.7-nonthinking,kappa_spec,absolute_decrease,6,6,0.08571428571428573,0.8244919519082351
+64,Math,q3-1.7-nonthinking,rho_sigma,final_rkl,6,6,0.14285714285714288,0.5699053072441876
+64,Math,q3-1.7-nonthinking,rho_sigma,remaining,6,6,0.6,0.5136104014278534
+64,Math,q3-1.7-nonthinking,rho_sigma,absolute_decrease,6,6,0.08571428571428573,0.8231572295969652
+64,Math,pooled_compatible,norm_over_base,final_rkl,22,19,0.8895171322582169,0.7350397914286859
+64,Math,pooled_compatible,norm_over_base,remaining,22,19,0.6702460729722015,0.6638725155172027
+64,Math,pooled_compatible,norm_over_base,absolute_decrease,22,19,0.7606671283478779,-0.27336289056321167
+64,Math,pooled_compatible,stable_rank_fraction,final_rkl,22,19,0.6815487048941611,0.743614281639494
+64,Math,pooled_compatible,stable_rank_fraction,remaining,22,19,0.708675021506864,0.5793081400039934
+64,Math,pooled_compatible,stable_rank_fraction,absolute_decrease,22,19,0.43176053941885495,-0.15531847831825116
+64,Math,pooled_compatible,rank90_fraction,final_rkl,22,19,-0.2659206658323477,0.3635454435997486
+64,Math,pooled_compatible,rank90_fraction,remaining,22,19,0.16377517402120986,0.4934516070422914
+64,Math,pooled_compatible,rank90_fraction,absolute_decrease,22,19,-0.38404422340165234,-0.28446970354633494
+64,Math,pooled_compatible,top1pct,final_rkl,22,19,-0.6250355452843633,-0.7164569273532367
+64,Math,pooled_compatible,top1pct,remaining,22,19,-0.6499013355126744,-0.6424777518507347
+64,Math,pooled_compatible,top1pct,absolute_decrease,22,19,-0.3458605368119624,0.2236517030522321
+64,Math,pooled_compatible,top5pct,final_rkl,22,19,-0.5911276495184847,-0.686467440518152
+64,Math,pooled_compatible,top5pct,remaining,22,19,-0.6013000182482483,-0.5922923631078156
+64,Math,pooled_compatible,top5pct,absolute_decrease,22,19,-0.3277763257368271,0.17864322922694129
+64,Math,pooled_compatible,kappa_spec,final_rkl,22,19,0.6521618618970662,0.5305851445411345
+64,Math,pooled_compatible,kappa_spec,remaining,22,19,0.5018368573350042,0.19946975991962126
+64,Math,pooled_compatible,kappa_spec,absolute_decrease,22,19,0.49053422541304453,-0.07221856146186019
+64,Math,pooled_compatible,rho_sigma,final_rkl,22,19,0.683809231278553,0.4865080785837437
+64,Math,pooled_compatible,rho_sigma,remaining,22,19,0.5233118579867273,0.2147493313806107
+64,Math,pooled_compatible,rho_sigma,absolute_decrease,22,19,0.5131394892569637,-0.15899768771248457
+64,Code,r1,norm_over_base,final_rkl,6,6,0.2571428571428572,-0.7084703759546489
+64,Code,r1,norm_over_base,remaining,6,6,0.7142857142857143,0.6407873717814926
+64,Code,r1,norm_over_base,absolute_decrease,6,6,0.3714285714285715,-0.11839022844987988
+64,Code,r1,stable_rank_fraction,final_rkl,6,6,0.14285714285714288,-0.7153224205757638
+64,Code,r1,stable_rank_fraction,remaining,6,6,0.3714285714285715,0.24205822787260087
+64,Code,r1,stable_rank_fraction,absolute_decrease,6,6,0.2571428571428572,-0.15007423053591612
+64,Code,r1,rank90_fraction,final_rkl,6,6,0.14285714285714288,-0.7153224205757638
+64,Code,r1,rank90_fraction,remaining,6,6,0.3714285714285715,0.24205822787260087
+64,Code,r1,rank90_fraction,absolute_decrease,6,6,0.2571428571428572,-0.15007423053591612
+64,Code,r1,top1pct,final_rkl,6,6,-0.14285714285714288,0.7153224205757636
+64,Code,r1,top1pct,remaining,6,6,-0.3714285714285715,-0.24205822787260078
+64,Code,r1,top1pct,absolute_decrease,6,6,-0.2571428571428572,0.150074230535916
+64,Code,r1,top5pct,final_rkl,6,6,-0.14285714285714288,0.7153224205757636
+64,Code,r1,top5pct,remaining,6,6,-0.3714285714285715,-0.24205822787260078
+64,Code,r1,top5pct,absolute_decrease,6,6,-0.2571428571428572,0.150074230535916
+64,Code,r1,kappa_spec,final_rkl,6,6,-0.2571428571428572,-0.006323754035173363
+64,Code,r1,kappa_spec,remaining,6,6,-0.6571428571428573,-0.6553062570324045
+64,Code,r1,kappa_spec,absolute_decrease,6,6,-0.14285714285714288,0.4314972666576642
+64,Code,r1,rho_sigma,final_rkl,6,6,-0.2571428571428572,-0.006323754035173363
+64,Code,r1,rho_sigma,remaining,6,6,-0.6571428571428573,-0.6553062570324045
+64,Code,r1,rho_sigma,absolute_decrease,6,6,-0.14285714285714288,0.4314972666576642
+64,Code,q3-1.7,norm_over_base,final_rkl,6,6,0.942857142857143,0.5973682925572315
+64,Code,q3-1.7,norm_over_base,remaining,6,6,0.8857142857142858,0.352827379622102
+64,Code,q3-1.7,norm_over_base,absolute_decrease,6,6,0.7714285714285715,-0.459293952543093
+64,Code,q3-1.7,stable_rank_fraction,final_rkl,6,6,0.6571428571428573,-0.03174573853047154
+64,Code,q3-1.7,stable_rank_fraction,remaining,6,6,0.7714285714285715,0.4254440265978782
+64,Code,q3-1.7,stable_rank_fraction,absolute_decrease,6,6,0.8285714285714287,0.6228770077160162
+64,Code,q3-1.7,rank90_fraction,final_rkl,6,6,-0.6377481392176932,0.166894515106997
+64,Code,q3-1.7,rank90_fraction,remaining,6,6,-0.5797710356524485,0.23612446920680033
+64,Code,q3-1.7,rank90_fraction,absolute_decrease,6,6,-0.4638168285219587,0.7373787658721715
+64,Code,q3-1.7,top1pct,final_rkl,6,6,-0.6,-0.1847454928828464
+64,Code,q3-1.7,top1pct,remaining,6,6,-0.6571428571428573,-0.36833388166966136
+64,Code,q3-1.7,top1pct,absolute_decrease,6,6,-0.7714285714285715,-0.7225976150109774
+64,Code,q3-1.7,top5pct,final_rkl,6,6,-0.6,-0.1847454928828464
+64,Code,q3-1.7,top5pct,remaining,6,6,-0.6571428571428573,-0.36833388166966136
+64,Code,q3-1.7,top5pct,absolute_decrease,6,6,-0.7714285714285715,-0.7225976150109774
+64,Code,q3-1.7,kappa_spec,final_rkl,6,6,0.8285714285714287,-0.17538465259271696
+64,Code,q3-1.7,kappa_spec,remaining,6,6,0.7714285714285715,-0.27049951622934565
+64,Code,q3-1.7,kappa_spec,absolute_decrease,6,6,1.0,0.9999999999999999
+64,Code,q3-1.7,rho_sigma,final_rkl,6,6,0.8285714285714287,-0.17538465259271696
+64,Code,q3-1.7,rho_sigma,remaining,6,6,0.7714285714285715,-0.27049951622934565
+64,Code,q3-1.7,rho_sigma,absolute_decrease,6,6,1.0,0.9999999999999999
+64,Code,q3-1.7-nonthinking,norm_over_base,final_rkl,6,6,0.7714285714285715,0.15219839482759495
+64,Code,q3-1.7-nonthinking,norm_over_base,remaining,6,6,0.2571428571428572,0.011510922769200786
+64,Code,q3-1.7-nonthinking,norm_over_base,absolute_decrease,6,6,-0.2571428571428572,-0.011510922769200847
+64,Code,q3-1.7-nonthinking,stable_rank_fraction,final_rkl,6,6,0.028571428571428574,-0.4722998310938309
+64,Code,q3-1.7-nonthinking,stable_rank_fraction,remaining,6,6,0.6571428571428573,0.6292150529617466
+64,Code,q3-1.7-nonthinking,stable_rank_fraction,absolute_decrease,6,6,-0.6571428571428573,-0.6292150529617466
+64,Code,q3-1.7-nonthinking,rank90_fraction,final_rkl,6,6,0.1690308509457033,-0.27780169078135214
+64,Code,q3-1.7-nonthinking,rank90_fraction,remaining,6,6,0.8451542547285165,0.8285101758092518
+64,Code,q3-1.7-nonthinking,rank90_fraction,absolute_decrease,6,6,-0.8451542547285165,-0.8285101758092518
+64,Code,q3-1.7-nonthinking,top1pct,final_rkl,6,6,-0.08571428571428573,0.4015245076391488
+64,Code,q3-1.7-nonthinking,top1pct,remaining,6,6,-0.6,-0.5621595361612272
+64,Code,q3-1.7-nonthinking,top1pct,absolute_decrease,6,6,0.6,0.5621595361612272
+64,Code,q3-1.7-nonthinking,top5pct,final_rkl,6,6,-0.08571428571428573,0.4015245076391488
+64,Code,q3-1.7-nonthinking,top5pct,remaining,6,6,-0.6,-0.5621595361612272
+64,Code,q3-1.7-nonthinking,top5pct,absolute_decrease,6,6,0.6,0.5621595361612272
+64,Code,q3-1.7-nonthinking,kappa_spec,final_rkl,6,6,0.14285714285714288,-0.23052341041604238
+64,Code,q3-1.7-nonthinking,kappa_spec,remaining,6,6,0.8285714285714287,0.8140631813961385
+64,Code,q3-1.7-nonthinking,kappa_spec,absolute_decrease,6,6,-0.8285714285714287,-0.8140631813961384
+64,Code,q3-1.7-nonthinking,rho_sigma,final_rkl,6,6,-0.08571428571428573,-0.6455948485331572
+64,Code,q3-1.7-nonthinking,rho_sigma,remaining,6,6,0.6,0.5753047781658394
+64,Code,q3-1.7-nonthinking,rho_sigma,absolute_decrease,6,6,-0.6,-0.5753047781658394
+64,Code,pooled_compatible,norm_over_base,final_rkl,22,19,0.6256006768804613,0.1476712184484852
+64,Code,pooled_compatible,norm_over_base,remaining,22,19,0.8787796319323552,0.5905904366019404
+64,Code,pooled_compatible,norm_over_base,absolute_decrease,22,19,0.048601317264426076,-0.5931754756344553
+64,Code,pooled_compatible,stable_rank_fraction,final_rkl,22,19,0.479796725087183,0.13719542547428548
+64,Code,pooled_compatible,stable_rank_fraction,remaining,22,19,0.7216730482171174,0.7401129312332881
+64,Code,pooled_compatible,stable_rank_fraction,absolute_decrease,22,19,0.08476973941469665,-0.6474812328754489
+64,Code,pooled_compatible,rank90_fraction,final_rkl,22,19,-0.18603033704151364,-0.04714845562528362
+64,Code,pooled_compatible,rank90_fraction,remaining,22,19,-0.13809613976701318,0.4095262590186417
+64,Code,pooled_compatible,rank90_fraction,absolute_decrease,22,19,-0.057635165770530294,-0.33100353546902456
+64,Code,pooled_compatible,top1pct,final_rkl,22,19,-0.3814638273661349,-0.08252250573485007
+64,Code,pooled_compatible,top1pct,remaining,22,19,-0.6617690990307319,-0.7540466680300318
+64,Code,pooled_compatible,top1pct,absolute_decrease,22,19,0.0022605263843919103,0.6565693878654933
+64,Code,pooled_compatible,top5pct,final_rkl,22,19,-0.3419046156392765,-0.09597050340236785
+64,Code,pooled_compatible,top5pct,remaining,22,19,-0.6267309400726572,-0.7129699912656022
+64,Code,pooled_compatible,top5pct,absolute_decrease,22,19,0.036168422150270566,0.6398951431886333
+64,Code,pooled_compatible,kappa_spec,final_rkl,22,19,0.4809269882793789,0.0042776411807028515
+64,Code,pooled_compatible,kappa_spec,remaining,22,19,0.6063862026131301,0.264792522878893
+64,Code,pooled_compatible,kappa_spec,absolute_decrease,22,19,0.1390223726401025,-0.33666301631224477
+64,Code,pooled_compatible,rho_sigma,final_rkl,22,19,0.5137046208530617,-0.15101747108341584
+64,Code,pooled_compatible,rho_sigma,remaining,22,19,0.6131677817663057,0.1975885866592362
+64,Code,pooled_compatible,rho_sigma,absolute_decrease,22,19,0.2192710592860153,-0.27319493410827844
+64,IF,r1,norm_over_base,final_rkl,6,6,0.7142857142857143,-0.22068115674105598
+64,IF,r1,norm_over_base,remaining,6,6,0.8857142857142858,0.725477461735324
+64,IF,r1,norm_over_base,absolute_decrease,6,6,0.48571428571428577,-0.8905389037274265
+64,IF,r1,stable_rank_fraction,final_rkl,6,6,0.6,-0.6465040647646462
+64,IF,r1,stable_rank_fraction,remaining,6,6,0.6571428571428573,-0.015040215456796032
+64,IF,r1,stable_rank_fraction,absolute_decrease,6,6,0.6,-0.2318994194485505
+64,IF,r1,rank90_fraction,final_rkl,6,6,0.6,-0.6465040647646462
+64,IF,r1,rank90_fraction,remaining,6,6,0.6571428571428573,-0.015040215456796032
+64,IF,r1,rank90_fraction,absolute_decrease,6,6,0.6,-0.2318994194485505
+64,IF,r1,top1pct,final_rkl,6,6,-0.6,0.646504064764646
+64,IF,r1,top1pct,remaining,6,6,-0.6571428571428573,0.015040215456796024
+64,IF,r1,top1pct,absolute_decrease,6,6,-0.6,0.2318994194485505
+64,IF,r1,top5pct,final_rkl,6,6,-0.6,0.646504064764646
+64,IF,r1,top5pct,remaining,6,6,-0.6571428571428573,0.015040215456796024
+64,IF,r1,top5pct,absolute_decrease,6,6,-0.6,0.2318994194485505
+64,IF,r1,kappa_spec,final_rkl,6,6,-0.6,-0.36791493421070415
+64,IF,r1,kappa_spec,remaining,6,6,-0.6571428571428573,-0.4756555608814297
+64,IF,r1,kappa_spec,absolute_decrease,6,6,-0.3714285714285715,0.4118474236991244
+64,IF,r1,rho_sigma,final_rkl,6,6,-0.6,-0.36791493421070415
+64,IF,r1,rho_sigma,remaining,6,6,-0.6571428571428573,-0.4756555608814297
+64,IF,r1,rho_sigma,absolute_decrease,6,6,-0.3714285714285715,0.4118474236991244
+64,IF,q3-1.7,norm_over_base,final_rkl,6,6,0.8285714285714287,-0.027038573371421733
+64,IF,q3-1.7,norm_over_base,remaining,6,6,0.942857142857143,0.671935670954038
+64,IF,q3-1.7,norm_over_base,absolute_decrease,6,6,0.8285714285714287,-0.059187544634529334
+64,IF,q3-1.7,stable_rank_fraction,final_rkl,6,6,0.7714285714285715,0.41286806523882047
+64,IF,q3-1.7,stable_rank_fraction,remaining,6,6,0.6571428571428573,0.02133954888336828
+64,IF,q3-1.7,stable_rank_fraction,absolute_decrease,6,6,0.7714285714285715,0.4120762545723105
+64,IF,q3-1.7,rank90_fraction,final_rkl,6,6,-0.550782483869826,0.4072202272068978
+64,IF,q3-1.7,rank90_fraction,remaining,6,6,-0.6377481392176932,0.06722138618651706
+64,IF,q3-1.7,rank90_fraction,absolute_decrease,6,6,-0.4638168285219587,0.7627510054184282
+64,IF,q3-1.7,top1pct,final_rkl,6,6,-0.7142857142857143,-0.5511653917605227
+64,IF,q3-1.7,top1pct,remaining,6,6,-0.6,-0.20265543300462602
+64,IF,q3-1.7,top1pct,absolute_decrease,6,6,-0.7142857142857143,-0.5594389754274969
+64,IF,q3-1.7,top5pct,final_rkl,6,6,-0.7142857142857143,-0.5511653917605227
+64,IF,q3-1.7,top5pct,remaining,6,6,-0.6,-0.20265543300462602
+64,IF,q3-1.7,top5pct,absolute_decrease,6,6,-0.7142857142857143,-0.5594389754274969
+64,IF,q3-1.7,kappa_spec,final_rkl,6,6,0.942857142857143,0.6253517408475141
+64,IF,q3-1.7,kappa_spec,remaining,6,6,0.8285714285714287,-0.07408345242256986
+64,IF,q3-1.7,kappa_spec,absolute_decrease,6,6,0.942857142857143,0.6116882131483901
+64,IF,q3-1.7,rho_sigma,final_rkl,6,6,0.942857142857143,0.6253517408475141
+64,IF,q3-1.7,rho_sigma,remaining,6,6,0.8285714285714287,-0.07408345242256986
+64,IF,q3-1.7,rho_sigma,absolute_decrease,6,6,0.942857142857143,0.6116882131483901
+64,IF,q3-1.7-nonthinking,norm_over_base,final_rkl,6,6,0.8285714285714287,0.6105533073040441
+64,IF,q3-1.7-nonthinking,norm_over_base,remaining,6,6,0.028571428571428574,-0.729496733023572
+64,IF,q3-1.7-nonthinking,norm_over_base,absolute_decrease,6,6,-0.028571428571428574,0.7294967330235722
+64,IF,q3-1.7-nonthinking,stable_rank_fraction,final_rkl,6,6,0.08571428571428573,-0.6147406599268274
+64,IF,q3-1.7-nonthinking,stable_rank_fraction,remaining,6,6,0.7714285714285715,0.663845089424179
+64,IF,q3-1.7-nonthinking,stable_rank_fraction,absolute_decrease,6,6,-0.7714285714285715,-0.6638450894241791
+64,IF,q3-1.7-nonthinking,rank90_fraction,final_rkl,6,6,0.1690308509457033,-0.6819048830040839
+64,IF,q3-1.7-nonthinking,rank90_fraction,remaining,6,6,0.8451542547285165,0.7554146801413878
+64,IF,q3-1.7-nonthinking,rank90_fraction,absolute_decrease,6,6,-0.8451542547285165,-0.7554146801413879
+64,IF,q3-1.7-nonthinking,top1pct,final_rkl,6,6,-0.028571428571428574,0.7152184204424378
+64,IF,q3-1.7-nonthinking,top1pct,remaining,6,6,-0.8285714285714287,-0.748689351979463
+64,IF,q3-1.7-nonthinking,top1pct,absolute_decrease,6,6,0.8285714285714287,0.7486893519794634
+64,IF,q3-1.7-nonthinking,top5pct,final_rkl,6,6,-0.028571428571428574,0.7152184204424378
+64,IF,q3-1.7-nonthinking,top5pct,remaining,6,6,-0.8285714285714287,-0.748689351979463
+64,IF,q3-1.7-nonthinking,top5pct,absolute_decrease,6,6,0.8285714285714287,0.7486893519794634
+64,IF,q3-1.7-nonthinking,kappa_spec,final_rkl,6,6,0.2571428571428572,-0.324811138857471
+64,IF,q3-1.7-nonthinking,kappa_spec,remaining,6,6,0.8285714285714287,0.7442339197233692
+64,IF,q3-1.7-nonthinking,kappa_spec,absolute_decrease,6,6,-0.8285714285714287,-0.7442339197233692
+64,IF,q3-1.7-nonthinking,rho_sigma,final_rkl,6,6,0.028571428571428574,-0.7042306379563221
+64,IF,q3-1.7-nonthinking,rho_sigma,remaining,6,6,0.6,0.4154085006701982
+64,IF,q3-1.7-nonthinking,rho_sigma,absolute_decrease,6,6,-0.6,-0.4154085006701982
+64,IF,pooled_compatible,norm_over_base,final_rkl,22,19,0.7363664697156649,0.29720817711830905
+64,IF,pooled_compatible,norm_over_base,remaining,22,19,0.8098335772084021,0.4387190503556506
+64,IF,pooled_compatible,norm_over_base,absolute_decrease,22,19,0.380898695770037,-0.46456335317052594
+64,IF,pooled_compatible,stable_rank_fraction,final_rkl,22,19,0.6278612032648533,0.33202584687215386
+64,IF,pooled_compatible,stable_rank_fraction,remaining,22,19,0.7940098925176585,0.6583021770494079
+64,IF,pooled_compatible,stable_rank_fraction,absolute_decrease,22,19,0.21361974332503555,-0.766248441543574
+64,IF,pooled_compatible,rank90_fraction,final_rkl,22,19,-0.07703710276258999,0.04717702499715811
+64,IF,pooled_compatible,rank90_fraction,remaining,22,19,-0.07817839317388763,0.43866409936170064
+64,IF,pooled_compatible,rank90_fraction,absolute_decrease,22,19,-0.02168451781465496,-0.26126536596997135
+64,IF,pooled_compatible,top1pct,final_rkl,22,19,-0.5769993596160351,-0.31117380063149047
+64,IF,pooled_compatible,top1pct,remaining,22,19,-0.7001980475653944,-0.7062160162942426
+64,IF,pooled_compatible,top1pct,absolute_decrease,22,19,-0.2045776377874679,0.6669824156807295
+64,IF,pooled_compatible,top5pct,final_rkl,22,19,-0.5385704110813727,-0.30205515117085446
+64,IF,pooled_compatible,top5pct,remaining,22,19,-0.6696809413761036,-0.6847673836814729
+64,IF,pooled_compatible,top5pct,absolute_decrease,22,19,-0.1695394788293933,0.6491323064758834
+64,IF,pooled_compatible,kappa_spec,final_rkl,22,19,0.5543940957721161,0.2856165468184908
+64,IF,pooled_compatible,kappa_spec,remaining,22,19,0.6809835732980631,0.4245698710739893
+64,IF,pooled_compatible,kappa_spec,absolute_decrease,22,19,0.20118684821088006,-0.5013475521165001
+64,IF,pooled_compatible,rho_sigma,final_rkl,22,19,0.5837809387692109,0.187005992088039
+64,IF,pooled_compatible,rho_sigma,remaining,22,19,0.711500679487354,0.37753469013631563
+64,IF,pooled_compatible,rho_sigma,absolute_decrease,22,19,0.28595658762557674,-0.4110080932627824
+320,All held-out,r1,norm_over_base,final_rkl,5,5,0.49999999999999994,
+320,All held-out,r1,norm_over_base,remaining,5,5,0.8999999999999998,
+320,All held-out,r1,norm_over_base,absolute_decrease,5,5,0.3,
+320,All held-out,r1,norm_over_base,late_log_decrease,5,5,-0.3,
+320,All held-out,r1,stable_rank_fraction,final_rkl,5,5,0.3,
+320,All held-out,r1,stable_rank_fraction,remaining,5,5,0.7,
+320,All held-out,r1,stable_rank_fraction,absolute_decrease,5,5,0.09999999999999999,
+320,All held-out,r1,stable_rank_fraction,late_log_decrease,5,5,-0.49999999999999994,
+320,All held-out,r1,rank90_fraction,final_rkl,5,5,0.3,
+320,All held-out,r1,rank90_fraction,remaining,5,5,0.7,
+320,All held-out,r1,rank90_fraction,absolute_decrease,5,5,0.09999999999999999,
+320,All held-out,r1,rank90_fraction,late_log_decrease,5,5,-0.49999999999999994,
+320,All held-out,r1,top1pct,final_rkl,5,5,-0.3,
+320,All held-out,r1,top1pct,remaining,5,5,-0.7,
+320,All held-out,r1,top1pct,absolute_decrease,5,5,-0.09999999999999999,
+320,All held-out,r1,top1pct,late_log_decrease,5,5,0.49999999999999994,
+320,All held-out,r1,top5pct,final_rkl,5,5,-0.3,
+320,All held-out,r1,top5pct,remaining,5,5,-0.7,
+320,All held-out,r1,top5pct,absolute_decrease,5,5,-0.09999999999999999,
+320,All held-out,r1,top5pct,late_log_decrease,5,5,0.49999999999999994,
+320,All held-out,r1,kappa_spec,final_rkl,5,5,-0.49999999999999994,
+320,All held-out,r1,kappa_spec,remaining,5,5,-0.7999999999999999,
+320,All held-out,r1,kappa_spec,absolute_decrease,5,5,-0.09999999999999999,
+320,All held-out,r1,kappa_spec,late_log_decrease,5,5,0.6,
+320,All held-out,r1,rho_sigma,final_rkl,5,5,-0.49999999999999994,
+320,All held-out,r1,rho_sigma,remaining,5,5,-0.7999999999999999,
+320,All held-out,r1,rho_sigma,absolute_decrease,5,5,-0.09999999999999999,
+320,All held-out,r1,rho_sigma,late_log_decrease,5,5,0.6,
+320,All held-out,q3-1.7,norm_over_base,final_rkl,6,6,0.942857142857143,0.6329215466649416
+320,All held-out,q3-1.7,norm_over_base,remaining,6,6,0.942857142857143,0.727763156103286
+320,All held-out,q3-1.7,norm_over_base,absolute_decrease,6,6,0.8285714285714287,-0.12231494857924322
+320,All held-out,q3-1.7,norm_over_base,late_log_decrease,6,6,-0.8285714285714287,-0.03643481957138452
+320,All held-out,q3-1.7,stable_rank_fraction,final_rkl,6,6,0.6571428571428573,-0.0020702152745229823
+320,All held-out,q3-1.7,stable_rank_fraction,remaining,6,6,0.7142857142857143,0.27290772220006226
+320,All held-out,q3-1.7,stable_rank_fraction,absolute_decrease,6,6,0.7714285714285715,0.43030162986156795
+320,All held-out,q3-1.7,stable_rank_fraction,late_log_decrease,6,6,-0.7714285714285715,-0.43208582106786053
+320,All held-out,q3-1.7,rank90_fraction,final_rkl,6,6,-0.6377481392176932,0.1799726947829251
+320,All held-out,q3-1.7,rank90_fraction,remaining,6,6,-0.5797710356524485,0.20243133609397693
+320,All held-out,q3-1.7,rank90_fraction,absolute_decrease,6,6,-0.550782483869826,0.5344291168126318
+320,All held-out,q3-1.7,rank90_fraction,late_log_decrease,6,6,0.4638168285219587,-0.6852336432075385
+320,All held-out,q3-1.7,top1pct,final_rkl,6,6,-0.6,-0.21507366166581077
+320,All held-out,q3-1.7,top1pct,remaining,6,6,-0.6,-0.24182350864496324
+320,All held-out,q3-1.7,top1pct,absolute_decrease,6,6,-0.7142857142857143,-0.5911991684820264
+320,All held-out,q3-1.7,top1pct,late_log_decrease,6,6,0.7142857142857143,0.5506412670531418
+320,All held-out,q3-1.7,top5pct,final_rkl,6,6,-0.6,-0.21507366166581077
+320,All held-out,q3-1.7,top5pct,remaining,6,6,-0.6,-0.24182350864496324
+320,All held-out,q3-1.7,top5pct,absolute_decrease,6,6,-0.7142857142857143,-0.5911991684820264
+320,All held-out,q3-1.7,top5pct,late_log_decrease,6,6,0.7142857142857143,0.5506412670531418
+320,All held-out,q3-1.7,kappa_spec,final_rkl,6,6,0.8285714285714287,-0.13445569338905003
+320,All held-out,q3-1.7,kappa_spec,remaining,6,6,0.7142857142857143,-0.4531616509225959
+320,All held-out,q3-1.7,kappa_spec,absolute_decrease,6,6,0.942857142857143,0.6201193660759388
+320,All held-out,q3-1.7,kappa_spec,late_log_decrease,6,6,-0.942857142857143,-0.6752347530868267
+320,All held-out,q3-1.7,rho_sigma,final_rkl,6,6,0.8285714285714287,-0.13445569338905003
+320,All held-out,q3-1.7,rho_sigma,remaining,6,6,0.7142857142857143,-0.4531616509225959
+320,All held-out,q3-1.7,rho_sigma,absolute_decrease,6,6,0.942857142857143,0.6201193660759388
+320,All held-out,q3-1.7,rho_sigma,late_log_decrease,6,6,-0.942857142857143,-0.6752347530868267
+320,All held-out,q3-1.7-nonthinking,norm_over_base,final_rkl,6,6,0.6571428571428573,0.3414988811729779
+320,All held-out,q3-1.7-nonthinking,norm_over_base,remaining,6,6,0.2571428571428572,0.6787595357773074
+320,All held-out,q3-1.7-nonthinking,norm_over_base,absolute_decrease,6,6,0.4285714285714286,-0.40039675168419486
+320,All held-out,q3-1.7-nonthinking,norm_over_base,late_log_decrease,6,6,-0.028571428571428574,-0.32020077329726876
+320,All held-out,q3-1.7-nonthinking,stable_rank_fraction,final_rkl,6,6,0.2571428571428572,0.68967682481903
+320,All held-out,q3-1.7-nonthinking,stable_rank_fraction,remaining,6,6,0.6571428571428573,0.6225812791646204
+320,All held-out,q3-1.7-nonthinking,stable_rank_fraction,absolute_decrease,6,6,0.14285714285714288,0.8024580551946021
+320,All held-out,q3-1.7-nonthinking,stable_rank_fraction,late_log_decrease,6,6,-0.942857142857143,-0.9376460038658367
+320,All held-out,q3-1.7-nonthinking,rank90_fraction,final_rkl,6,6,0.1690308509457033,0.6797784951146729
+320,All held-out,q3-1.7-nonthinking,rank90_fraction,remaining,6,6,0.8451542547285165,0.8248713089889465
+320,All held-out,q3-1.7-nonthinking,rank90_fraction,absolute_decrease,6,6,-0.1690308509457033,0.33485726777997105
+320,All held-out,q3-1.7-nonthinking,rank90_fraction,late_log_decrease,6,6,-0.8451542547285165,-0.8292807753194642
+320,All held-out,q3-1.7-nonthinking,top1pct,final_rkl,6,6,-0.2,-0.6091806913138943
+320,All held-out,q3-1.7-nonthinking,top1pct,remaining,6,6,-0.6,-0.5587986075275382
+320,All held-out,q3-1.7-nonthinking,top1pct,absolute_decrease,6,6,-0.08571428571428573,-0.6923721168091466
+320,All held-out,q3-1.7-nonthinking,top1pct,late_log_decrease,6,6,0.8285714285714287,0.8125593876601742
+320,All held-out,q3-1.7-nonthinking,top5pct,final_rkl,6,6,-0.2,-0.6091806913138943
+320,All held-out,q3-1.7-nonthinking,top5pct,remaining,6,6,-0.6,-0.5587986075275382
+320,All held-out,q3-1.7-nonthinking,top5pct,absolute_decrease,6,6,-0.08571428571428573,-0.6923721168091466
+320,All held-out,q3-1.7-nonthinking,top5pct,late_log_decrease,6,6,0.8285714285714287,0.8125593876601742
+320,All held-out,q3-1.7-nonthinking,kappa_spec,final_rkl,6,6,0.3714285714285715,0.8705897509644324
+320,All held-out,q3-1.7-nonthinking,kappa_spec,remaining,6,6,0.8285714285714287,0.8109994699900815
+320,All held-out,q3-1.7-nonthinking,kappa_spec,absolute_decrease,6,6,0.08571428571428573,0.699722505065889
+320,All held-out,q3-1.7-nonthinking,kappa_spec,late_log_decrease,6,6,-0.8857142857142858,-0.8748825939891018
+320,All held-out,q3-1.7-nonthinking,rho_sigma,final_rkl,6,6,0.14285714285714288,0.531039198508935
+320,All held-out,q3-1.7-nonthinking,rho_sigma,remaining,6,6,0.6,0.5577218106935979
+320,All held-out,q3-1.7-nonthinking,rho_sigma,absolute_decrease,6,6,0.08571428571428573,0.704249344019832
+320,All held-out,q3-1.7-nonthinking,rho_sigma,late_log_decrease,6,6,-1.0,-0.9999999999999998
+320,All held-out,pooled_compatible,norm_over_base,final_rkl,20,17,0.8573584689712392,0.5855171304060245
+320,All held-out,pooled_compatible,norm_over_base,remaining,20,17,0.8716603222727787,0.5884594989910825
+320,All held-out,pooled_compatible,norm_over_base,absolute_decrease,20,17,0.6661652722032894,-0.11787306861757914
+320,All held-out,pooled_compatible,norm_over_base,late_log_decrease,20,17,-0.7369218095898534,-0.392991633280926
+320,All held-out,pooled_compatible,stable_rank_fraction,final_rkl,20,17,0.6812198546259626,0.6937880943985021
+320,All held-out,pooled_compatible,stable_rank_fraction,remaining,20,17,0.7497182046491258,0.6770262162202054
+320,All held-out,pooled_compatible,stable_rank_fraction,absolute_decrease,20,17,0.4027100798065083,-0.30727986928406886
+320,All held-out,pooled_compatible,stable_rank_fraction,late_log_decrease,20,17,-0.6450888568115469,-0.7113436210371719
+320,All held-out,pooled_compatible,rank90_fraction,final_rkl,20,17,-0.29816157542276656,0.4038475998933369
+320,All held-out,pooled_compatible,rank90_fraction,remaining,20,17,-0.15937536895999546,0.5398483291362445
+320,All held-out,pooled_compatible,rank90_fraction,absolute_decrease,20,17,-0.4026325110568306,-0.50223296842952
+320,All held-out,pooled_compatible,rank90_fraction,late_log_decrease,20,17,0.2600334967242031,-0.5023492058067869
+320,All held-out,pooled_compatible,top1pct,final_rkl,20,17,-0.6571325227496855,-0.7096804927600281
+320,All held-out,pooled_compatible,top1pct,remaining,20,17,-0.7542345793759276,-0.7079926556654429
+320,All held-out,pooled_compatible,top1pct,absolute_decrease,20,17,-0.31840441823953836,0.3620061680081103
+320,All held-out,pooled_compatible,top1pct,late_log_decrease,20,17,0.7233726854094477,0.7236516190419663
+320,All held-out,pooled_compatible,top5pct,final_rkl,20,17,-0.6210015249352698,-0.690267417822677
+320,All held-out,pooled_compatible,top5pct,remaining,20,17,-0.7256308727728487,-0.6885782856418621
+320,All held-out,pooled_compatible,top5pct,absolute_decrease,20,17,-0.27474612921378605,0.3738725872584155
+320,All held-out,pooled_compatible,top5pct,late_log_decrease,20,17,0.711329019471309,0.723809595694467
+320,All held-out,pooled_compatible,kappa_spec,final_rkl,20,17,0.6556270645074181,0.5251344002887136
+320,All held-out,pooled_compatible,kappa_spec,remaining,20,17,0.666918001324423,0.4521090276186037
+320,All held-out,pooled_compatible,kappa_spec,absolute_decrease,20,17,0.4599174930126665,-0.15705117447306552
+320,All held-out,pooled_compatible,kappa_spec,late_log_decrease,20,17,-0.5743323194249829,-0.537515114783758
+320,All held-out,pooled_compatible,rho_sigma,final_rkl,20,17,0.6947689788063686,0.42831605382125465
+320,All held-out,pooled_compatible,rho_sigma,remaining,20,17,0.6925107914429675,0.4165682281247764
+320,All held-out,pooled_compatible,rho_sigma,absolute_decrease,20,17,0.5080921567652208,-0.27860957357270205
+320,All held-out,pooled_compatible,rho_sigma,late_log_decrease,20,17,-0.6225069831775372,-0.4998440160937841
+320,Math,r1,norm_over_base,final_rkl,5,5,0.8999999999999998,
+320,Math,r1,norm_over_base,remaining,5,5,0.8999999999999998,
+320,Math,r1,norm_over_base,absolute_decrease,5,5,0.3,
+320,Math,r1,norm_over_base,late_log_decrease,5,5,-0.7,
+320,Math,r1,stable_rank_fraction,final_rkl,5,5,0.3,
+320,Math,r1,stable_rank_fraction,remaining,5,5,0.7,
+320,Math,r1,stable_rank_fraction,absolute_decrease,5,5,0.09999999999999999,
+320,Math,r1,stable_rank_fraction,late_log_decrease,5,5,-0.8999999999999998,
+320,Math,r1,rank90_fraction,final_rkl,5,5,0.3,
+320,Math,r1,rank90_fraction,remaining,5,5,0.7,
+320,Math,r1,rank90_fraction,absolute_decrease,5,5,0.09999999999999999,
+320,Math,r1,rank90_fraction,late_log_decrease,5,5,-0.8999999999999998,
+320,Math,r1,top1pct,final_rkl,5,5,-0.3,
+320,Math,r1,top1pct,remaining,5,5,-0.7,
+320,Math,r1,top1pct,absolute_decrease,5,5,-0.09999999999999999,
+320,Math,r1,top1pct,late_log_decrease,5,5,0.8999999999999998,
+320,Math,r1,top5pct,final_rkl,5,5,-0.3,
+320,Math,r1,top5pct,remaining,5,5,-0.7,
+320,Math,r1,top5pct,absolute_decrease,5,5,-0.09999999999999999,
+320,Math,r1,top5pct,late_log_decrease,5,5,0.8999999999999998,
+320,Math,r1,kappa_spec,final_rkl,5,5,-0.3,
+320,Math,r1,kappa_spec,remaining,5,5,-0.3,
+320,Math,r1,kappa_spec,absolute_decrease,5,5,-0.09999999999999999,
+320,Math,r1,kappa_spec,late_log_decrease,5,5,0.39999999999999997,
+320,Math,r1,rho_sigma,final_rkl,5,5,-0.3,
+320,Math,r1,rho_sigma,remaining,5,5,-0.3,
+320,Math,r1,rho_sigma,absolute_decrease,5,5,-0.09999999999999999,
+320,Math,r1,rho_sigma,late_log_decrease,5,5,0.39999999999999997,
+320,Math,q3-1.7,norm_over_base,final_rkl,6,6,0.8857142857142858,0.3899316321279946
+320,Math,q3-1.7,norm_over_base,remaining,6,6,0.942857142857143,0.7374300111863863
+320,Math,q3-1.7,norm_over_base,absolute_decrease,6,6,0.8285714285714287,-0.11103127382596364
+320,Math,q3-1.7,norm_over_base,late_log_decrease,6,6,-0.7714285714285715,-0.33868473801712146
+320,Math,q3-1.7,stable_rank_fraction,final_rkl,6,6,0.7714285714285715,0.457052474592433
+320,Math,q3-1.7,stable_rank_fraction,remaining,6,6,0.7142857142857143,0.2995226611726889
+320,Math,q3-1.7,stable_rank_fraction,absolute_decrease,6,6,0.7714285714285715,0.4628437402533311
+320,Math,q3-1.7,stable_rank_fraction,late_log_decrease,6,6,-0.7142857142857143,-0.40518103142139
+320,Math,q3-1.7,rank90_fraction,final_rkl,6,6,-0.5797710356524485,0.3244027487030639
+320,Math,q3-1.7,rank90_fraction,remaining,6,6,-0.5797710356524485,0.23739891719681358
+320,Math,q3-1.7,rank90_fraction,absolute_decrease,6,6,-0.550782483869826,0.6322451617184903
+320,Math,q3-1.7,rank90_fraction,late_log_decrease,6,6,0.23190841426097936,-0.7513575143986354
+320,Math,q3-1.7,top1pct,final_rkl,6,6,-0.6571428571428573,-0.4208584438129037
+320,Math,q3-1.7,top1pct,remaining,6,6,-0.6,-0.27409156986650623
+320,Math,q3-1.7,top1pct,absolute_decrease,6,6,-0.7142857142857143,-0.6386376786204563
+320,Math,q3-1.7,top1pct,late_log_decrease,6,6,0.7714285714285715,0.6404027190025487
+320,Math,q3-1.7,top5pct,final_rkl,6,6,-0.6571428571428573,-0.4208584438129037
+320,Math,q3-1.7,top5pct,remaining,6,6,-0.6,-0.27409156986650623
+320,Math,q3-1.7,top5pct,absolute_decrease,6,6,-0.7142857142857143,-0.6386376786204563
+320,Math,q3-1.7,top5pct,late_log_decrease,6,6,0.7714285714285715,0.6404027190025487
+320,Math,q3-1.7,kappa_spec,final_rkl,6,6,0.7714285714285715,-0.22769080034912442
+320,Math,q3-1.7,kappa_spec,remaining,6,6,0.7142857142857143,-0.37762692352056415
+320,Math,q3-1.7,kappa_spec,absolute_decrease,6,6,0.942857142857143,0.6356270564085446
+320,Math,q3-1.7,kappa_spec,late_log_decrease,6,6,-0.8857142857142858,-0.7475979563751443
+320,Math,q3-1.7,rho_sigma,final_rkl,6,6,0.7714285714285715,-0.22769080034912442
+320,Math,q3-1.7,rho_sigma,remaining,6,6,0.7142857142857143,-0.37762692352056415
+320,Math,q3-1.7,rho_sigma,absolute_decrease,6,6,0.942857142857143,0.6356270564085446
+320,Math,q3-1.7,rho_sigma,late_log_decrease,6,6,-0.8857142857142858,-0.7475979563751443
+320,Math,q3-1.7-nonthinking,norm_over_base,final_rkl,6,6,0.6571428571428573,0.4466010741718701
+320,Math,q3-1.7-nonthinking,norm_over_base,remaining,6,6,0.2571428571428572,0.7222826519865895
+320,Math,q3-1.7-nonthinking,norm_over_base,absolute_decrease,6,6,0.4285714285714286,-0.14994283593265284
+320,Math,q3-1.7-nonthinking,norm_over_base,late_log_decrease,6,6,-0.08571428571428573,-0.46259990203212825
+320,Math,q3-1.7-nonthinking,stable_rank_fraction,final_rkl,6,6,0.2571428571428572,0.7234453702771363
+320,Math,q3-1.7-nonthinking,stable_rank_fraction,remaining,6,6,0.6571428571428573,0.584918960794876
+320,Math,q3-1.7-nonthinking,stable_rank_fraction,absolute_decrease,6,6,0.14285714285714288,0.9203874308708506
+320,Math,q3-1.7-nonthinking,stable_rank_fraction,late_log_decrease,6,6,-0.8285714285714287,-0.7943229093727501
+320,Math,q3-1.7-nonthinking,rank90_fraction,final_rkl,6,6,0.1690308509457033,0.7416534613175715
+320,Math,q3-1.7-nonthinking,rank90_fraction,remaining,6,6,0.8451542547285165,0.8041103324262826
+320,Math,q3-1.7-nonthinking,rank90_fraction,absolute_decrease,6,6,-0.1690308509457033,0.5209484005737018
+320,Math,q3-1.7-nonthinking,rank90_fraction,late_log_decrease,6,6,-0.8451542547285165,-0.8087167268236732
+320,Math,q3-1.7-nonthinking,top1pct,final_rkl,6,6,-0.2,-0.6476931620412917
+320,Math,q3-1.7-nonthinking,top1pct,remaining,6,6,-0.6,-0.5143743127850299
+320,Math,q3-1.7-nonthinking,top1pct,absolute_decrease,6,6,-0.08571428571428573,-0.8177402351026448
+320,Math,q3-1.7-nonthinking,top1pct,late_log_decrease,6,6,0.7714285714285715,0.7250417945829499
+320,Math,q3-1.7-nonthinking,top5pct,final_rkl,6,6,-0.2,-0.6476931620412917
+320,Math,q3-1.7-nonthinking,top5pct,remaining,6,6,-0.6,-0.5143743127850299
+320,Math,q3-1.7-nonthinking,top5pct,absolute_decrease,6,6,-0.08571428571428573,-0.8177402351026448
+320,Math,q3-1.7-nonthinking,top5pct,late_log_decrease,6,6,0.7714285714285715,0.7250417945829499
+320,Math,q3-1.7-nonthinking,kappa_spec,final_rkl,6,6,0.3714285714285715,0.8950670518750696
+320,Math,q3-1.7-nonthinking,kappa_spec,remaining,6,6,0.8285714285714287,0.7918555842116868
+320,Math,q3-1.7-nonthinking,kappa_spec,absolute_decrease,6,6,0.08571428571428573,0.8244919519082351
+320,Math,q3-1.7-nonthinking,kappa_spec,late_log_decrease,6,6,-0.7142857142857143,-0.6556478967733795
+320,Math,q3-1.7-nonthinking,rho_sigma,final_rkl,6,6,0.14285714285714288,0.5699053072441876
+320,Math,q3-1.7-nonthinking,rho_sigma,remaining,6,6,0.6,0.5136104014278534
+320,Math,q3-1.7-nonthinking,rho_sigma,absolute_decrease,6,6,0.08571428571428573,0.8231572295969652
+320,Math,q3-1.7-nonthinking,rho_sigma,late_log_decrease,6,6,-0.942857142857143,-0.9312247325467796
+320,Math,pooled_compatible,norm_over_base,final_rkl,20,17,0.9115549656928628,0.7554113539598167
+320,Math,pooled_compatible,norm_over_base,remaining,20,17,0.8423038865485659,0.6741480730372439
+320,Math,pooled_compatible,norm_over_base,absolute_decrease,20,17,0.7707946200408682,0.09822254665454908
+320,Math,pooled_compatible,norm_over_base,late_log_decrease,20,17,-0.7308999766207841,-0.7145332833608831
+320,Math,pooled_compatible,stable_rank_fraction,final_rkl,20,17,0.6586379809919528,0.6876402607758416
+320,Math,pooled_compatible,stable_rank_fraction,remaining,20,17,0.673692563414626,0.5931928315270053
+320,Math,pooled_compatible,stable_rank_fraction,absolute_decrease,20,17,0.46518659686060215,0.12444138221813103
+320,Math,pooled_compatible,stable_rank_fraction,late_log_decrease,20,17,-0.5592777370023096,-0.813353900615991
+320,Math,pooled_compatible,rank90_fraction,final_rkl,20,17,-0.324851230511761,0.48403363285593015
+320,Math,pooled_compatible,rank90_fraction,remaining,20,17,-0.10294581248612145,0.541442517579847
+320,Math,pooled_compatible,rank90_fraction,absolute_decrease,20,17,-0.409495565222572,-0.24457570481085492
+320,Math,pooled_compatible,rank90_fraction,late_log_decrease,20,17,0.2905359596830539,-0.5516333445310392
+320,Math,pooled_compatible,top1pct,final_rkl,20,17,-0.6586379809919528,-0.7116753582030032
+320,Math,pooled_compatible,top1pct,remaining,20,17,-0.7098235612290417,-0.6540910787729507
+320,Math,pooled_compatible,top1pct,absolute_decrease,20,17,-0.38088093529363215,-0.051345796933387394
+320,Math,pooled_compatible,top1pct,late_log_decrease,20,17,0.7053071865022398,0.8432065563169545
+320,Math,pooled_compatible,top5pct,final_rkl,20,17,-0.6255178996620718,-0.6837032203410077
+320,Math,pooled_compatible,top5pct,remaining,20,17,-0.6767034798991606,-0.617635814314247
+320,Math,pooled_compatible,top5pct,absolute_decrease,20,17,-0.35077177044828567,-0.06349711571829567
+320,Math,pooled_compatible,top5pct,late_log_decrease,20,17,0.7068126447445071,0.8326010449214419
+320,Math,pooled_compatible,kappa_spec,final_rkl,20,17,0.6225069831775372,0.46812378868888427
+320,Math,pooled_compatible,kappa_spec,remaining,20,17,0.5939032765744581,0.39500595934144905
+320,Math,pooled_compatible,kappa_spec,absolute_decrease,20,17,0.5223940100667603,0.10075177786126487
+320,Math,pooled_compatible,kappa_spec,late_log_decrease,20,17,-0.4629284094972011,-0.5948380313396927
+320,Math,pooled_compatible,rho_sigma,final_rkl,20,17,0.6631543557187547,0.4231162253907091
+320,Math,pooled_compatible,rho_sigma,remaining,20,17,0.6390670238424776,0.4468418307846113
+320,Math,pooled_compatible,rho_sigma,absolute_decrease,20,17,0.5329322177626316,-0.054862789531125666
+320,Math,pooled_compatible,rho_sigma,late_log_decrease,20,17,-0.5141139897342901,-0.6137624383032133
+320,Code,r1,norm_over_base,final_rkl,5,5,0.49999999999999994,
+320,Code,r1,norm_over_base,remaining,5,5,0.8999999999999998,
+320,Code,r1,norm_over_base,absolute_decrease,5,5,0.3,
+320,Code,r1,norm_over_base,late_log_decrease,5,5,-0.3,
+320,Code,r1,stable_rank_fraction,final_rkl,5,5,0.3,
+320,Code,r1,stable_rank_fraction,remaining,5,5,0.7,
+320,Code,r1,stable_rank_fraction,absolute_decrease,5,5,0.09999999999999999,
+320,Code,r1,stable_rank_fraction,late_log_decrease,5,5,-0.49999999999999994,
+320,Code,r1,rank90_fraction,final_rkl,5,5,0.3,
+320,Code,r1,rank90_fraction,remaining,5,5,0.7,
+320,Code,r1,rank90_fraction,absolute_decrease,5,5,0.09999999999999999,
+320,Code,r1,rank90_fraction,late_log_decrease,5,5,-0.49999999999999994,
+320,Code,r1,top1pct,final_rkl,5,5,-0.3,
+320,Code,r1,top1pct,remaining,5,5,-0.7,
+320,Code,r1,top1pct,absolute_decrease,5,5,-0.09999999999999999,
+320,Code,r1,top1pct,late_log_decrease,5,5,0.49999999999999994,
+320,Code,r1,top5pct,final_rkl,5,5,-0.3,
+320,Code,r1,top5pct,remaining,5,5,-0.7,
+320,Code,r1,top5pct,absolute_decrease,5,5,-0.09999999999999999,
+320,Code,r1,top5pct,late_log_decrease,5,5,0.49999999999999994,
+320,Code,r1,kappa_spec,final_rkl,5,5,-0.49999999999999994,
+320,Code,r1,kappa_spec,remaining,5,5,-0.7999999999999999,
+320,Code,r1,kappa_spec,absolute_decrease,5,5,-0.09999999999999999,
+320,Code,r1,kappa_spec,late_log_decrease,5,5,0.6,
+320,Code,r1,rho_sigma,final_rkl,5,5,-0.49999999999999994,
+320,Code,r1,rho_sigma,remaining,5,5,-0.7999999999999999,
+320,Code,r1,rho_sigma,absolute_decrease,5,5,-0.09999999999999999,
+320,Code,r1,rho_sigma,late_log_decrease,5,5,0.6,
+320,Code,q3-1.7,norm_over_base,final_rkl,6,6,0.942857142857143,0.5973682925572315
+320,Code,q3-1.7,norm_over_base,remaining,6,6,0.8857142857142858,0.352827379622102
+320,Code,q3-1.7,norm_over_base,absolute_decrease,6,6,0.8285714285714287,-0.1944178333468737
+320,Code,q3-1.7,norm_over_base,late_log_decrease,6,6,-0.8285714285714287,0.0242952038100329
+320,Code,q3-1.7,stable_rank_fraction,final_rkl,6,6,0.6571428571428573,-0.03174573853047154
+320,Code,q3-1.7,stable_rank_fraction,remaining,6,6,0.7714285714285715,0.4254440265978782
+320,Code,q3-1.7,stable_rank_fraction,absolute_decrease,6,6,0.7714285714285715,0.41951210547035417
+320,Code,q3-1.7,stable_rank_fraction,late_log_decrease,6,6,-0.7714285714285715,-0.42251934079564857
+320,Code,q3-1.7,rank90_fraction,final_rkl,6,6,-0.6377481392176932,0.166894515106997
+320,Code,q3-1.7,rank90_fraction,remaining,6,6,-0.5797710356524485,0.23612446920680033
+320,Code,q3-1.7,rank90_fraction,absolute_decrease,6,6,-0.550782483869826,0.5016733218852535
+320,Code,q3-1.7,rank90_fraction,late_log_decrease,6,6,0.4638168285219587,-0.6642969182714604
+320,Code,q3-1.7,top1pct,final_rkl,6,6,-0.6,-0.1847454928828464
+320,Code,q3-1.7,top1pct,remaining,6,6,-0.6571428571428573,-0.36833388166966136
+320,Code,q3-1.7,top1pct,absolute_decrease,6,6,-0.7142857142857143,-0.569967067641456
+320,Code,q3-1.7,top1pct,late_log_decrease,6,6,0.7142857142857143,0.5340735819878993
+320,Code,q3-1.7,top5pct,final_rkl,6,6,-0.6,-0.1847454928828464
+320,Code,q3-1.7,top5pct,remaining,6,6,-0.6571428571428573,-0.36833388166966136
+320,Code,q3-1.7,top5pct,absolute_decrease,6,6,-0.7142857142857143,-0.569967067641456
+320,Code,q3-1.7,top5pct,late_log_decrease,6,6,0.7142857142857143,0.5340735819878993
+320,Code,q3-1.7,kappa_spec,final_rkl,6,6,0.8285714285714287,-0.17538465259271696
+320,Code,q3-1.7,kappa_spec,remaining,6,6,0.7714285714285715,-0.27049951622934565
+320,Code,q3-1.7,kappa_spec,absolute_decrease,6,6,0.942857142857143,0.6176299382371963
+320,Code,q3-1.7,kappa_spec,late_log_decrease,6,6,-0.942857142857143,-0.6693486464837219
+320,Code,q3-1.7,rho_sigma,final_rkl,6,6,0.8285714285714287,-0.17538465259271696
+320,Code,q3-1.7,rho_sigma,remaining,6,6,0.7714285714285715,-0.27049951622934565
+320,Code,q3-1.7,rho_sigma,absolute_decrease,6,6,0.942857142857143,0.6176299382371963
+320,Code,q3-1.7,rho_sigma,late_log_decrease,6,6,-0.942857142857143,-0.6693486464837219
+320,Code,q3-1.7-nonthinking,norm_over_base,final_rkl,6,6,0.028571428571428574,-0.9356904664844549
+320,Code,q3-1.7-nonthinking,norm_over_base,remaining,6,6,0.028571428571428574,-0.252828528479067
+320,Code,q3-1.7-nonthinking,norm_over_base,absolute_decrease,6,6,-0.08571428571428573,0.1318660906881829
+320,Code,q3-1.7-nonthinking,norm_over_base,late_log_decrease,6,6,-0.5428571428571429,-0.13081065881222276
+320,Code,q3-1.7-nonthinking,stable_rank_fraction,final_rkl,6,6,0.7142857142857143,0.7193835511872925
+320,Code,q3-1.7-nonthinking,stable_rank_fraction,remaining,6,6,0.942857142857143,0.9405760944981072
+320,Code,q3-1.7-nonthinking,stable_rank_fraction,absolute_decrease,6,6,-0.8285714285714287,-0.820988953648201
+320,Code,q3-1.7-nonthinking,stable_rank_fraction,late_log_decrease,6,6,-0.4285714285714286,-0.35722579169836
+320,Code,q3-1.7-nonthinking,rank90_fraction,final_rkl,6,6,0.50709255283711,0.4191473494515649
+320,Code,q3-1.7-nonthinking,rank90_fraction,remaining,6,6,0.8451542547285165,0.8394075133030686
+320,Code,q3-1.7-nonthinking,rank90_fraction,absolute_decrease,6,6,-0.8451542547285165,-0.8416228550812868
+320,Code,q3-1.7-nonthinking,rank90_fraction,late_log_decrease,6,6,-0.3380617018914066,-0.19776298692609307
+320,Code,q3-1.7-nonthinking,top1pct,final_rkl,6,6,-0.8285714285714287,-0.850177798023518
+320,Code,q3-1.7-nonthinking,top1pct,remaining,6,6,-0.8285714285714287,-0.8200708828494898
+320,Code,q3-1.7-nonthinking,top1pct,absolute_decrease,6,6,0.7714285714285715,0.7610420318607675
+320,Code,q3-1.7-nonthinking,top1pct,late_log_decrease,6,6,0.3142857142857143,0.19052807170583835
+320,Code,q3-1.7-nonthinking,top5pct,final_rkl,6,6,-0.8285714285714287,-0.850177798023518
+320,Code,q3-1.7-nonthinking,top5pct,remaining,6,6,-0.8285714285714287,-0.8200708828494898
+320,Code,q3-1.7-nonthinking,top5pct,absolute_decrease,6,6,0.7714285714285715,0.7610420318607675
+320,Code,q3-1.7-nonthinking,top5pct,late_log_decrease,6,6,0.3142857142857143,0.19052807170583835
+320,Code,q3-1.7-nonthinking,kappa_spec,final_rkl,6,6,0.5428571428571429,0.4943154512357646
+320,Code,q3-1.7-nonthinking,kappa_spec,remaining,6,6,0.8857142857142858,0.8804314451996393
+320,Code,q3-1.7-nonthinking,kappa_spec,absolute_decrease,6,6,-0.7142857142857143,-0.7003056200915544
+320,Code,q3-1.7-nonthinking,kappa_spec,late_log_decrease,6,6,-0.3142857142857143,-0.20151866076719355
+320,Code,q3-1.7-nonthinking,rho_sigma,final_rkl,6,6,0.5428571428571429,0.5277444768975971
+320,Code,q3-1.7-nonthinking,rho_sigma,remaining,6,6,1.0,1.0
+320,Code,q3-1.7-nonthinking,rho_sigma,absolute_decrease,6,6,-0.942857142857143,-0.9404724506392285
+320,Code,q3-1.7-nonthinking,rho_sigma,late_log_decrease,6,6,-0.6,-0.6028495192005512
+320,Code,pooled_compatible,norm_over_base,final_rkl,20,17,0.7361690804687199,0.22565995027855065
+320,Code,pooled_compatible,norm_over_base,remaining,20,17,0.8694021349093777,0.49949305456122645
+320,Code,pooled_compatible,norm_over_base,absolute_decrease,20,17,0.17764407258754383,-0.053924321778424524
+320,Code,pooled_compatible,norm_over_base,late_log_decrease,20,17,-0.684983500231631,-0.3193375570270097
+320,Code,pooled_compatible,stable_rank_fraction,final_rkl,20,17,0.6127215046027995,0.5572477771288619
+320,Code,pooled_compatible,stable_rank_fraction,remaining,20,17,0.6872416875950319,0.88490488567299
+320,Code,pooled_compatible,stable_rank_fraction,absolute_decrease,20,17,0.1806549890720785,-0.4226615180291197
+320,Code,pooled_compatible,stable_rank_fraction,late_log_decrease,20,17,-0.48927392873687925,-0.5469623509835251
+320,Code,pooled_compatible,rank90_fraction,final_rkl,20,17,-0.2013162555284153,0.2734178732342917
+320,Code,pooled_compatible,rank90_fraction,remaining,20,17,-0.20970443284209928,0.5328573458274773
+320,Code,pooled_compatible,rank90_fraction,absolute_decrease,20,17,-0.05566699489990272,-0.4171638278158544
+320,Code,pooled_compatible,rank90_fraction,late_log_decrease,20,17,0.2912985212570252,-0.20024877750113979
+320,Code,pooled_compatible,top1pct,final_rkl,20,17,-0.5991723804223936,-0.5748908357958751
+320,Code,pooled_compatible,top1pct,remaining,20,17,-0.6872416875950319,-0.8791576308732344
+320,Code,pooled_compatible,top1pct,absolute_decrease,20,17,-0.11140390992778172,0.4055162941844056
+320,Code,pooled_compatible,top1pct,late_log_decrease,20,17,0.5464813419430374,0.44337209021757656
+320,Code,pooled_compatible,top5pct,final_rkl,20,17,-0.5419649672162354,-0.5241010530088733
+320,Code,pooled_compatible,top5pct,remaining,20,17,-0.6676707304455568,-0.866739541309246
+320,Code,pooled_compatible,top5pct,absolute_decrease,20,17,-0.06774562090202943,0.3900027462467384
+320,Code,pooled_compatible,top5pct,late_log_decrease,20,17,0.5600304661234433,0.4955253969454908
+320,Code,pooled_compatible,kappa_spec,final_rkl,20,17,0.5780959650306512,0.2589767391898351
+320,Code,pooled_compatible,kappa_spec,remaining,20,17,0.5758377776672502,0.36386979099573435
+320,Code,pooled_compatible,kappa_spec,absolute_decrease,20,17,0.21829144512876147,-0.3075979090023405
+320,Code,pooled_compatible,kappa_spec,late_log_decrease,20,17,-0.48325209576781,-0.4562337396746333
+320,Code,pooled_compatible,rho_sigma,final_rkl,20,17,0.6262706287832054,0.15222756774483048
+320,Code,pooled_compatible,rho_sigma,remaining,20,17,0.5773432359095174,0.27529430170488806
+320,Code,pooled_compatible,rho_sigma,absolute_decrease,20,17,0.2935643572421275,-0.3494728826179987
+320,Code,pooled_compatible,rho_sigma,late_log_decrease,20,17,-0.47873572104100803,-0.35178925183630094
+320,IF,r1,norm_over_base,final_rkl,5,5,0.49999999999999994,
+320,IF,r1,norm_over_base,remaining,5,5,0.49999999999999994,
+320,IF,r1,norm_over_base,absolute_decrease,5,5,0.49999999999999994,
+320,IF,r1,norm_over_base,late_log_decrease,5,5,-0.3,
+320,IF,r1,stable_rank_fraction,final_rkl,5,5,0.3,
+320,IF,r1,stable_rank_fraction,remaining,5,5,0.3,
+320,IF,r1,stable_rank_fraction,absolute_decrease,5,5,0.3,
+320,IF,r1,stable_rank_fraction,late_log_decrease,5,5,-0.09999999999999999,
+320,IF,r1,rank90_fraction,final_rkl,5,5,0.3,
+320,IF,r1,rank90_fraction,remaining,5,5,0.3,
+320,IF,r1,rank90_fraction,absolute_decrease,5,5,0.3,
+320,IF,r1,rank90_fraction,late_log_decrease,5,5,-0.09999999999999999,
+320,IF,r1,top1pct,final_rkl,5,5,-0.3,
+320,IF,r1,top1pct,remaining,5,5,-0.3,
+320,IF,r1,top1pct,absolute_decrease,5,5,-0.3,
+320,IF,r1,top1pct,late_log_decrease,5,5,0.09999999999999999,
+320,IF,r1,top5pct,final_rkl,5,5,-0.3,
+320,IF,r1,top5pct,remaining,5,5,-0.3,
+320,IF,r1,top5pct,absolute_decrease,5,5,-0.3,
+320,IF,r1,top5pct,late_log_decrease,5,5,0.09999999999999999,
+320,IF,r1,kappa_spec,final_rkl,5,5,-0.49999999999999994,
+320,IF,r1,kappa_spec,remaining,5,5,-0.49999999999999994,
+320,IF,r1,kappa_spec,absolute_decrease,5,5,-0.49999999999999994,
+320,IF,r1,kappa_spec,late_log_decrease,5,5,0.09999999999999999,
+320,IF,r1,rho_sigma,final_rkl,5,5,-0.49999999999999994,
+320,IF,r1,rho_sigma,remaining,5,5,-0.49999999999999994,
+320,IF,r1,rho_sigma,absolute_decrease,5,5,-0.49999999999999994,
+320,IF,r1,rho_sigma,late_log_decrease,5,5,0.09999999999999999,
+320,IF,q3-1.7,norm_over_base,final_rkl,6,6,0.942857142857143,0.671935670954038
+320,IF,q3-1.7,norm_over_base,remaining,6,6,0.8857142857142858,0.4609767930502816
+320,IF,q3-1.7,norm_over_base,absolute_decrease,6,6,0.8285714285714287,-0.059187544634529334
+320,IF,q3-1.7,norm_over_base,late_log_decrease,6,6,-0.942857142857143,-0.6626821845463062
+320,IF,q3-1.7,stable_rank_fraction,final_rkl,6,6,0.6571428571428573,0.02133954888336828
+320,IF,q3-1.7,stable_rank_fraction,remaining,6,6,0.7714285714285715,0.4313432431981083
+320,IF,q3-1.7,stable_rank_fraction,absolute_decrease,6,6,0.7714285714285715,0.4120762545723105
+320,IF,q3-1.7,stable_rank_fraction,late_log_decrease,6,6,-0.6571428571428573,-0.007910985340501981
+320,IF,q3-1.7,rank90_fraction,final_rkl,6,6,-0.6377481392176932,0.06722138618651706
+320,IF,q3-1.7,rank90_fraction,remaining,6,6,-0.5797710356524485,0.14559031485019885
+320,IF,q3-1.7,rank90_fraction,absolute_decrease,6,6,-0.4638168285219587,0.7627510054184282
+320,IF,q3-1.7,rank90_fraction,late_log_decrease,6,6,0.550782483869826,-0.3952781684572258
+320,IF,q3-1.7,top1pct,final_rkl,6,6,-0.6,-0.20265543300462602
+320,IF,q3-1.7,top1pct,remaining,6,6,-0.6571428571428573,-0.3712467773701164
+320,IF,q3-1.7,top1pct,absolute_decrease,6,6,-0.7142857142857143,-0.5594389754274969
+320,IF,q3-1.7,top1pct,late_log_decrease,6,6,0.6,0.19895365815603047
+320,IF,q3-1.7,top5pct,final_rkl,6,6,-0.6,-0.20265543300462602
+320,IF,q3-1.7,top5pct,remaining,6,6,-0.6571428571428573,-0.3712467773701164
+320,IF,q3-1.7,top5pct,absolute_decrease,6,6,-0.7142857142857143,-0.5594389754274969
+320,IF,q3-1.7,top5pct,late_log_decrease,6,6,0.6,0.19895365815603047
+320,IF,q3-1.7,kappa_spec,final_rkl,6,6,0.8285714285714287,-0.07408345242256986
+320,IF,q3-1.7,kappa_spec,remaining,6,6,0.7714285714285715,-0.1773918506132215
+320,IF,q3-1.7,kappa_spec,absolute_decrease,6,6,0.942857142857143,0.6116882131483901
+320,IF,q3-1.7,kappa_spec,late_log_decrease,6,6,-0.8285714285714287,0.10956564588085639
+320,IF,q3-1.7,rho_sigma,final_rkl,6,6,0.8285714285714287,-0.07408345242256986
+320,IF,q3-1.7,rho_sigma,remaining,6,6,0.7714285714285715,-0.1773918506132215
+320,IF,q3-1.7,rho_sigma,absolute_decrease,6,6,0.942857142857143,0.6116882131483901
+320,IF,q3-1.7,rho_sigma,late_log_decrease,6,6,-0.8285714285714287,0.10956564588085639
+320,IF,q3-1.7-nonthinking,norm_over_base,final_rkl,6,6,0.2571428571428572,-0.3249002669315242
+320,IF,q3-1.7-nonthinking,norm_over_base,remaining,6,6,0.08571428571428573,-0.6298805314337653
+320,IF,q3-1.7-nonthinking,norm_over_base,absolute_decrease,6,6,-0.08571428571428573,0.6298805314337653
+320,IF,q3-1.7-nonthinking,norm_over_base,late_log_decrease,6,6,-0.14285714285714288,0.488160881145852
+320,IF,q3-1.7-nonthinking,stable_rank_fraction,final_rkl,6,6,0.6571428571428573,0.49257085767012987
+320,IF,q3-1.7-nonthinking,stable_rank_fraction,remaining,6,6,0.8285714285714287,0.7476823561040007
+320,IF,q3-1.7-nonthinking,stable_rank_fraction,absolute_decrease,6,6,-0.8285714285714287,-0.7476823561040006
+320,IF,q3-1.7-nonthinking,stable_rank_fraction,late_log_decrease,6,6,-0.8857142857142858,-0.8342532425851055
+320,IF,q3-1.7-nonthinking,rank90_fraction,final_rkl,6,6,0.8451542547285165,0.7522864005102134
+320,IF,q3-1.7-nonthinking,rank90_fraction,remaining,6,6,0.8451542547285165,0.7543951013496606
+320,IF,q3-1.7-nonthinking,rank90_fraction,absolute_decrease,6,6,-0.8451542547285165,-0.7543951013496607
+320,IF,q3-1.7-nonthinking,rank90_fraction,late_log_decrease,6,6,-0.8451542547285165,-0.7635457586901693
+320,IF,q3-1.7-nonthinking,top1pct,final_rkl,6,6,-0.6,-0.40910260926974973
+320,IF,q3-1.7-nonthinking,top1pct,remaining,6,6,-0.7714285714285715,-0.6640762588402518
+320,IF,q3-1.7-nonthinking,top1pct,absolute_decrease,6,6,0.7714285714285715,0.6640762588402517
+320,IF,q3-1.7-nonthinking,top1pct,late_log_decrease,6,6,0.7142857142857143,0.5863798866817058
+320,IF,q3-1.7-nonthinking,top5pct,final_rkl,6,6,-0.6,-0.40910260926974973
+320,IF,q3-1.7-nonthinking,top5pct,remaining,6,6,-0.7714285714285715,-0.6640762588402518
+320,IF,q3-1.7-nonthinking,top5pct,absolute_decrease,6,6,0.7714285714285715,0.6640762588402517
+320,IF,q3-1.7-nonthinking,top5pct,late_log_decrease,6,6,0.7142857142857143,0.5863798866817058
+320,IF,q3-1.7-nonthinking,kappa_spec,final_rkl,6,6,0.8285714285714287,0.7427933460559877
+320,IF,q3-1.7-nonthinking,kappa_spec,remaining,6,6,0.942857142857143,0.9147133487827145
+320,IF,q3-1.7-nonthinking,kappa_spec,absolute_decrease,6,6,-0.942857142857143,-0.9147133487827146
+320,IF,q3-1.7-nonthinking,kappa_spec,late_log_decrease,6,6,-0.942857142857143,-0.916110665633074
+320,IF,q3-1.7-nonthinking,rho_sigma,final_rkl,6,6,0.6,0.4121820691387866
+320,IF,q3-1.7-nonthinking,rho_sigma,remaining,6,6,0.7142857142857143,0.5820978510523048
+320,IF,q3-1.7-nonthinking,rho_sigma,absolute_decrease,6,6,-0.7142857142857143,-0.5820978510523048
+320,IF,q3-1.7-nonthinking,rho_sigma,late_log_decrease,6,6,-0.942857142857143,-0.9178695173549533
+320,IF,pooled_compatible,norm_over_base,final_rkl,20,17,0.6864889584738983,0.1800063495649281
+320,IF,pooled_compatible,norm_over_base,remaining,20,17,0.8498311777599026,0.38376815370667605
+320,IF,pooled_compatible,norm_over_base,absolute_decrease,20,17,0.43432470289412206,-0.3333214233019935
+320,IF,pooled_compatible,norm_over_base,late_log_decrease,20,17,-0.3846445808993004,0.09870104130647646
+320,IF,pooled_compatible,stable_rank_fraction,final_rkl,20,17,0.6789616672625617,0.474763616709131
+320,IF,pooled_compatible,stable_rank_fraction,remaining,20,17,0.7820855568578731,0.6945844269013101
+320,IF,pooled_compatible,stable_rank_fraction,absolute_decrease,20,17,0.31087712702820175,-0.6224813161362147
+320,IF,pooled_compatible,stable_rank_fraction,late_log_decrease,20,17,-0.47196115895080504,-0.28351079845194493
+320,IF,pooled_compatible,rank90_fraction,final_rkl,20,17,-0.12658522127923083,0.2610748574134097
+320,IF,pooled_compatible,rank90_fraction,remaining,20,17,-0.21961773330372578,0.49274920607301287
+320,IF,pooled_compatible,rank90_fraction,absolute_decrease,20,17,-0.14259901433262748,-0.49125395656863097
+320,IF,pooled_compatible,rank90_fraction,late_log_decrease,20,17,0.11514679766966178,-0.3008526614146162
+320,IF,pooled_compatible,top1pct,final_rkl,20,17,-0.6202487958141362,-0.42628622184058795
+320,IF,pooled_compatible,top1pct,remaining,20,17,-0.7308999766207841,-0.6721931011549228
+320,IF,pooled_compatible,top1pct,absolute_decrease,20,17,-0.22958238194576638,0.7002389170165041
+320,IF,pooled_compatible,top1pct,late_log_decrease,20,17,0.438841077620924,0.1884472195914411
+320,IF,pooled_compatible,top5pct,final_rkl,20,17,-0.5841177979997204,-0.4334460253157297
+320,IF,pooled_compatible,top5pct,remaining,20,17,-0.7053071865022398,-0.6662020317849424
+320,IF,pooled_compatible,top5pct,absolute_decrease,20,17,-0.1859240929200141,0.6735275812187413
+320,IF,pooled_compatible,top5pct,late_log_decrease,20,17,0.4147537457446469,0.19848922655377835
+320,IF,pooled_compatible,kappa_spec,final_rkl,20,17,0.6127215046027995,0.3787551434694154
+320,IF,pooled_compatible,kappa_spec,remaining,20,17,0.7098235612290417,0.5465217538064874
+320,IF,pooled_compatible,kappa_spec,absolute_decrease,20,17,0.2882952533941919,-0.5205677747026852
+320,IF,pooled_compatible,kappa_spec,late_log_decrease,20,17,-0.5216412809456267,-0.4876469429158112
+320,IF,pooled_compatible,rho_sigma,final_rkl,20,17,0.6368088364790767,0.21146336029029816
+320,IF,pooled_compatible,rho_sigma,remaining,20,17,0.7414381843166554,0.4300296030416794
+320,IF,pooled_compatible,rho_sigma,absolute_decrease,20,17,0.37410637320342915,-0.4842377843947252
+320,IF,pooled_compatible,rho_sigma,late_log_decrease,20,17,-0.5502449875487058,-0.3503830472669212

@@ -1,0 +1,37 @@
+{
+  "condition_matrices": 180,
+  "student_stage_matrices": 180,
+  "band_records": 720,
+  "parameter_distance_reconstruction": "passed",
+  "shared_ancestor_distance_identity": "passed",
+  "student_checkpoint_mode_identity": "passed",
+  "figures": {
+    "absolute-curve-groups-v2": "audit zero; visually reviewed",
+    "spectrum-dynamics-associations-v2": "audit zero; visually reviewed",
+    "common-ancestor-geometry-v2": "audit zero; visually reviewed",
+    "output-entropy-and-js-v2": "audit zero; visually reviewed",
+    "band-analysis-v3/teacher-band-amplitude": "audit zero; visually reviewed",
+    "band-analysis-v3/late-absolute-improvement": "audit zero; visually reviewed"
+  },
+  "sources": {
+    "analyze_curve_spectrum.py": "9663bfe0795f5d007e88fcf0108734b98717a04a26e601e991919aa7498239a1",
+    "measure_teacher_band_capture.py": "5b0d221a7c55aa219b88db1beb708b75ded7612defc9e1faa8b5929285b619e7",
+    "measure_teacher_band_capture_v2.py": "5224e861e9b562ba2a66edfb0dd91bd4f5fcde3dcb996c014c2be43b8afbcdca",
+    "measure_teacher_neighbors.py": "33dd271972ad2a7fef71d3b87ab5c46a2bf340ed9cd9c235e4e1d62a229a924b",
+    "measure_common_ancestor.py": "1926166a27775709a127e622231b33e512aaa6c1097ce66d4fa8ce8e3e39930b",
+    "analyze_band_and_states.py": "aec4364c8a03b2557f23a52375482273b06ff2dccce6aacbee8dc096bcb8cdca",
+    "analyze_geometry_neighbors.py": "52cf6a8ae84427076396fd4dea4e69ef9ec1848af7ff37662b22b1a9df6b7921",
+    "plot_common_geometry.py": "6e3d0e76a6366e441136d78a80a7090f72403a8a86bf456bafe13e5664fa62db"
+  },
+  "CPU_only": true,
+  "authoritative_band_data": "teacher-band-capture-v2 plus curve-spectrum-v1/band-analysis-v3",
+  "superseded": "band capture v1 omits repeated teacher input modes; exploratory failed attempts and logs retained",
+  "clustering": "41 curves, k4 descriptive, no claim of natural class count",
+  "remaining": [
+    "Full-layer SVD beyond six sampled k/v matrices",
+    "Embedding/head spectral coverage",
+    "Training-state gradient projection",
+    "Common-bank teacher-prefix full FKL",
+    "Temperature and common-initial-student functional controls"
+  ]
+}

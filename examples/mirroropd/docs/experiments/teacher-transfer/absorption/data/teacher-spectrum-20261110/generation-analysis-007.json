@@ -1,0 +1,999 @@
+{
+  "conditions": {
+    "endpoint": {
+      "cap16384": {
+        "AMC23": {
+          "n": 16,
+          "correct": 5,
+          "truncated": 3,
+          "mean_length": 3860.9375,
+          "wrong_to_correct": [],
+          "correct_to_wrong": [],
+          "paired_accuracy_difference": 0.0,
+          "paired_bootstrap_95": [
+            0.0,
+            0.0
+          ]
+        },
+        "MATH-500": {
+          "n": 16,
+          "correct": 11,
+          "truncated": 0,
+          "mean_length": 513.0625,
+          "wrong_to_correct": [],
+          "correct_to_wrong": [],
+          "paired_accuracy_difference": 0.0,
+          "paired_bootstrap_95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "same_trajectory_cap8192": {
+        "AMC23": {
+          "n": 16,
+          "correct": 5,
+          "truncated": 3,
+          "mean_length": 2324.9375,
+          "wrong_to_correct": [],
+          "correct_to_wrong": [],
+          "paired_accuracy_difference": 0.0,
+          "paired_bootstrap_95": [
+            0.0,
+            0.0
+          ]
+        },
+        "MATH-500": {
+          "n": 16,
+          "correct": 11,
+          "truncated": 0,
+          "mean_length": 513.0625,
+          "wrong_to_correct": [],
+          "correct_to_wrong": [],
+          "paired_accuracy_difference": 0.0,
+          "paired_bootstrap_95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "cap_extension_changes": [],
+      "matches_teacher_correctness": 17,
+      "prior_prefix_comparison": [
+        {
+          "prompt_id": "MATH-500:121",
+          "common_prefix": 221,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:82",
+          "common_prefix": 499,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:119",
+          "common_prefix": 545,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:3",
+          "common_prefix": 754,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:8",
+          "common_prefix": 891,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:10",
+          "common_prefix": 982,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:101",
+          "common_prefix": 1119,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:6",
+          "common_prefix": 2005,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:0",
+          "common_prefix": 367,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:28",
+          "common_prefix": 4,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:9",
+          "common_prefix": 482,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:2",
+          "common_prefix": 62,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:45",
+          "common_prefix": 11,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:1",
+          "common_prefix": 755,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:67",
+          "common_prefix": 299,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:14",
+          "common_prefix": 216,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:12",
+          "common_prefix": 183,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:5",
+          "common_prefix": 161,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:5",
+          "common_prefix": 88,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:70",
+          "common_prefix": 52,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:71",
+          "common_prefix": 425,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:68",
+          "common_prefix": 390,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:74",
+          "common_prefix": 314,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:51",
+          "common_prefix": 6,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:103",
+          "common_prefix": 170,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:56",
+          "common_prefix": 171,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:7",
+          "common_prefix": 36,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:11",
+          "common_prefix": 299,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:4",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:39",
+          "common_prefix": 10,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:13",
+          "common_prefix": 183,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:15",
+          "common_prefix": 200,
+          "is_prefix": false
+        }
+      ]
+    },
+    "patch-off-b1": {
+      "cap16384": {
+        "AMC23": {
+          "n": 16,
+          "correct": 1,
+          "truncated": 8,
+          "mean_length": 8352.1875,
+          "wrong_to_correct": [],
+          "correct_to_wrong": [
+            "AMC23:9",
+            "AMC23:0",
+            "AMC23:8",
+            "AMC23:1"
+          ],
+          "paired_accuracy_difference": -0.25,
+          "paired_bootstrap_95": [
+            -0.5,
+            -0.0625
+          ]
+        },
+        "MATH-500": {
+          "n": 16,
+          "correct": 5,
+          "truncated": 4,
+          "mean_length": 4182.5,
+          "wrong_to_correct": [
+            "MATH-500:68"
+          ],
+          "correct_to_wrong": [
+            "MATH-500:82",
+            "MATH-500:56",
+            "MATH-500:121",
+            "MATH-500:74",
+            "MATH-500:67",
+            "MATH-500:71",
+            "MATH-500:28"
+          ],
+          "paired_accuracy_difference": -0.375,
+          "paired_bootstrap_95": [
+            -0.6875,
+            -0.0625
+          ]
+        }
+      },
+      "same_trajectory_cap8192": {
+        "AMC23": {
+          "n": 16,
+          "correct": 1,
+          "truncated": 8,
+          "mean_length": 4256.1875,
+          "wrong_to_correct": [],
+          "correct_to_wrong": [
+            "AMC23:9",
+            "AMC23:0",
+            "AMC23:8",
+            "AMC23:1"
+          ],
+          "paired_accuracy_difference": -0.25,
+          "paired_bootstrap_95": [
+            -0.5,
+            -0.0625
+          ]
+        },
+        "MATH-500": {
+          "n": 16,
+          "correct": 5,
+          "truncated": 4,
+          "mean_length": 2134.5,
+          "wrong_to_correct": [
+            "MATH-500:68"
+          ],
+          "correct_to_wrong": [
+            "MATH-500:82",
+            "MATH-500:56",
+            "MATH-500:121",
+            "MATH-500:74",
+            "MATH-500:67",
+            "MATH-500:71",
+            "MATH-500:28"
+          ],
+          "paired_accuracy_difference": -0.375,
+          "paired_bootstrap_95": [
+            -0.6875,
+            -0.0625
+          ]
+        }
+      },
+      "cap_extension_changes": [],
+      "matches_teacher_correctness": 27,
+      "prior_prefix_comparison": [
+        {
+          "prompt_id": "MATH-500:82",
+          "common_prefix": 193,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:56",
+          "common_prefix": 79,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:121",
+          "common_prefix": 91,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:9",
+          "common_prefix": 429,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:74",
+          "common_prefix": 204,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:4",
+          "common_prefix": 190,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:67",
+          "common_prefix": 206,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:0",
+          "common_prefix": 74,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:12",
+          "common_prefix": 357,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:10",
+          "common_prefix": 116,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:6",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:45",
+          "common_prefix": 40,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:2",
+          "common_prefix": 57,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:3",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:101",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:14",
+          "common_prefix": 25,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:71",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:51",
+          "common_prefix": 115,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:119",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:8",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:1",
+          "common_prefix": 264,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:5",
+          "common_prefix": 4,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:70",
+          "common_prefix": 26,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:68",
+          "common_prefix": 147,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:39",
+          "common_prefix": 40,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:28",
+          "common_prefix": 80,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:7",
+          "common_prefix": 24,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:5",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:103",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:13",
+          "common_prefix": 74,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:11",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:15",
+          "common_prefix": 8192,
+          "is_prefix": true
+        }
+      ]
+    },
+    "random-frames-seed0": {
+      "cap16384": {
+        "AMC23": {
+          "n": 16,
+          "correct": 6,
+          "truncated": 3,
+          "mean_length": 4749.0,
+          "wrong_to_correct": [
+            "AMC23:13",
+            "AMC23:11"
+          ],
+          "correct_to_wrong": [
+            "AMC23:9"
+          ],
+          "paired_accuracy_difference": 0.0625,
+          "paired_bootstrap_95": [
+            -0.125,
+            0.25
+          ]
+        },
+        "MATH-500": {
+          "n": 16,
+          "correct": 8,
+          "truncated": 1,
+          "mean_length": 1425.6875,
+          "wrong_to_correct": [
+            "MATH-500:68"
+          ],
+          "correct_to_wrong": [
+            "MATH-500:82",
+            "MATH-500:28",
+            "MATH-500:5",
+            "MATH-500:71"
+          ],
+          "paired_accuracy_difference": -0.1875,
+          "paired_bootstrap_95": [
+            -0.4375,
+            0.0625
+          ]
+        }
+      },
+      "same_trajectory_cap8192": {
+        "AMC23": {
+          "n": 16,
+          "correct": 5,
+          "truncated": 4,
+          "mean_length": 2900.625,
+          "wrong_to_correct": [
+            "AMC23:13"
+          ],
+          "correct_to_wrong": [
+            "AMC23:9"
+          ],
+          "paired_accuracy_difference": 0.0,
+          "paired_bootstrap_95": [
+            -0.1875,
+            0.1875
+          ]
+        },
+        "MATH-500": {
+          "n": 16,
+          "correct": 8,
+          "truncated": 1,
+          "mean_length": 913.6875,
+          "wrong_to_correct": [
+            "MATH-500:68"
+          ],
+          "correct_to_wrong": [
+            "MATH-500:82",
+            "MATH-500:28",
+            "MATH-500:5",
+            "MATH-500:71"
+          ],
+          "paired_accuracy_difference": -0.1875,
+          "paired_bootstrap_95": [
+            -0.4375,
+            0.0625
+          ]
+        }
+      },
+      "cap_extension_changes": [
+        {
+          "prompt_id": "AMC23:11",
+          "correct_8k": false,
+          "correct_16k": true
+        }
+      ],
+      "matches_teacher_correctness": 19,
+      "prior_prefix_comparison": [
+        {
+          "prompt_id": "MATH-500:82",
+          "common_prefix": 518,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:12",
+          "common_prefix": 662,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:119",
+          "common_prefix": 723,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:8",
+          "common_prefix": 753,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:4",
+          "common_prefix": 1480,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:9",
+          "common_prefix": 1607,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:121",
+          "common_prefix": 221,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:67",
+          "common_prefix": 381,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:56",
+          "common_prefix": 218,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:74",
+          "common_prefix": 354,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:2",
+          "common_prefix": 301,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:28",
+          "common_prefix": 117,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:1",
+          "common_prefix": 656,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:14",
+          "common_prefix": 147,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:103",
+          "common_prefix": 75,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:45",
+          "common_prefix": 399,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:70",
+          "common_prefix": 225,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:5",
+          "common_prefix": 120,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:51",
+          "common_prefix": 6,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:68",
+          "common_prefix": 452,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:15",
+          "common_prefix": 34,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:0",
+          "common_prefix": 284,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:3",
+          "common_prefix": 602,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:71",
+          "common_prefix": 290,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:13",
+          "common_prefix": 103,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:7",
+          "common_prefix": 335,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:10",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:6",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:101",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:39",
+          "common_prefix": 212,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:11",
+          "common_prefix": 134,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:5",
+          "common_prefix": 8192,
+          "is_prefix": true
+        }
+      ]
+    },
+    "teacher": {
+      "cap16384": {
+        "AMC23": {
+          "n": 16,
+          "correct": 2,
+          "truncated": 8,
+          "mean_length": 8364.625,
+          "wrong_to_correct": [
+            "AMC23:13"
+          ],
+          "correct_to_wrong": [
+            "AMC23:0",
+            "AMC23:9",
+            "AMC23:8",
+            "AMC23:1"
+          ],
+          "paired_accuracy_difference": -0.1875,
+          "paired_bootstrap_95": [
+            -0.4375,
+            0.0625
+          ]
+        },
+        "MATH-500": {
+          "n": 16,
+          "correct": 3,
+          "truncated": 3,
+          "mean_length": 3262.0,
+          "wrong_to_correct": [
+            "MATH-500:39"
+          ],
+          "correct_to_wrong": [
+            "MATH-500:56",
+            "MATH-500:67",
+            "MATH-500:121",
+            "MATH-500:74",
+            "MATH-500:82",
+            "MATH-500:28",
+            "MATH-500:45",
+            "MATH-500:51",
+            "MATH-500:71"
+          ],
+          "paired_accuracy_difference": -0.5,
+          "paired_bootstrap_95": [
+            -0.75,
+            -0.1875
+          ]
+        }
+      },
+      "same_trajectory_cap8192": {
+        "AMC23": {
+          "n": 16,
+          "correct": 1,
+          "truncated": 8,
+          "mean_length": 4268.625,
+          "wrong_to_correct": [],
+          "correct_to_wrong": [
+            "AMC23:0",
+            "AMC23:9",
+            "AMC23:8",
+            "AMC23:1"
+          ],
+          "paired_accuracy_difference": -0.25,
+          "paired_bootstrap_95": [
+            -0.4375,
+            -0.0625
+          ]
+        },
+        "MATH-500": {
+          "n": 16,
+          "correct": 3,
+          "truncated": 3,
+          "mean_length": 1726.0,
+          "wrong_to_correct": [
+            "MATH-500:39"
+          ],
+          "correct_to_wrong": [
+            "MATH-500:56",
+            "MATH-500:67",
+            "MATH-500:121",
+            "MATH-500:74",
+            "MATH-500:82",
+            "MATH-500:28",
+            "MATH-500:45",
+            "MATH-500:51",
+            "MATH-500:71"
+          ],
+          "paired_accuracy_difference": -0.5,
+          "paired_bootstrap_95": [
+            -0.75,
+            -0.1875
+          ]
+        }
+      },
+      "cap_extension_changes": [
+        {
+          "prompt_id": "AMC23:13",
+          "correct_8k": false,
+          "correct_16k": true
+        }
+      ],
+      "matches_teacher_correctness": 32,
+      "prior_prefix_comparison": [
+        {
+          "prompt_id": "MATH-500:56",
+          "common_prefix": 95,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:0",
+          "common_prefix": 170,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:10",
+          "common_prefix": 129,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:67",
+          "common_prefix": 188,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:121",
+          "common_prefix": 150,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:74",
+          "common_prefix": 242,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:82",
+          "common_prefix": 194,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:4",
+          "common_prefix": 253,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:9",
+          "common_prefix": 346,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:14",
+          "common_prefix": 93,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:39",
+          "common_prefix": 49,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:28",
+          "common_prefix": 22,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:2",
+          "common_prefix": 186,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:45",
+          "common_prefix": 173,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:51",
+          "common_prefix": 127,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:70",
+          "common_prefix": 33,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "MATH-500:5",
+          "common_prefix": 18,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:15",
+          "common_prefix": 835,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:68",
+          "common_prefix": 993,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:119",
+          "common_prefix": 537,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:3",
+          "common_prefix": 601,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:6",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:101",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:71",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:12",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:8",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "MATH-500:103",
+          "common_prefix": 8192,
+          "is_prefix": true
+        },
+        {
+          "prompt_id": "AMC23:1",
+          "common_prefix": 29,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:5",
+          "common_prefix": 168,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:13",
+          "common_prefix": 161,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:11",
+          "common_prefix": 105,
+          "is_prefix": false
+        },
+        {
+          "prompt_id": "AMC23:7",
+          "common_prefix": 55,
+          "is_prefix": false
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "runs/teacher-spectrum-followup-20261110/generation-readout-v2/endpoint/endpoint/records.jsonl": "3779c9578d65306450ab2782da3bbe59c39065574a8eb6ce9537110f31361803",
+    "runs/teacher-spectrum-followup-20261110/generation-readout-v2/patch-off-b1/patch-off-b1/records.jsonl": "6d579fe5688a7b0086a5055ef69c7d508f6e94a90ff94b3623e123d34e27260f",
+    "runs/teacher-spectrum-followup-20261110/generation-readout-v2/random-frames-seed0/random-frames-seed0/records.jsonl": "300fee7ef7c929f72d07592d4a71633b664ef1709f45d70f41c3c2ff61593d7b",
+    "runs/teacher-spectrum-followup-20261110/generation-readout-v2/teacher/teacher/records.jsonl": "6c4de2d57deefa19f7df33e55c9c0d07aa40f1c8a7ee28e7bf18722dee02ebf7"
+  }
+}

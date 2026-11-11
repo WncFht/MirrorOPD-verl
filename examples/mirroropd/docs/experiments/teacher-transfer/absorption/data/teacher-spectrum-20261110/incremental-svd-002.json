@@ -1,0 +1,228 @@
+{
+  "source_sha256": "b705fad72481ceba139138de13c98ba7f20e63ffe6b8c7f0fbb0e30b994bbd68",
+  "protocol": "FP64 CPU; k_proj layers 0/13/27; rank16; actual saved intervals",
+  "results": {
+    "qwen-grpo": {
+      "model.layers.0.self_attn.k_proj.weight": [
+        {
+          "start": 64,
+          "end": 320,
+          "energy": 0.0002676452377447922,
+          "stable_rank": 6.823263609257666,
+          "early_capture": 0.23623346454831498,
+          "previous_capture": 0.23623346454831498,
+          "teacher_capture": 0.1931049866963955,
+          "current_capture": 0.31241250891885713,
+          "isotropic": 0.0078125
+        }
+      ],
+      "model.layers.13.self_attn.k_proj.weight": [
+        {
+          "start": 64,
+          "end": 320,
+          "energy": 0.0002941651816859001,
+          "stable_rank": 22.813228051221678,
+          "early_capture": 0.13170802505078338,
+          "previous_capture": 0.13170802505078338,
+          "teacher_capture": 0.10496538445143642,
+          "current_capture": 0.1916013420736011,
+          "isotropic": 0.0078125
+        }
+      ],
+      "model.layers.27.self_attn.k_proj.weight": [
+        {
+          "start": 64,
+          "end": 320,
+          "energy": 0.00046102904160435994,
+          "stable_rank": 9.236425086506877,
+          "early_capture": 0.22542436124812001,
+          "previous_capture": 0.22542436124812001,
+          "teacher_capture": 0.1973012192809274,
+          "current_capture": 0.296825387424056,
+          "isotropic": 0.0078125
+        }
+      ]
+    },
+    "qwen-sft": {
+      "model.layers.0.self_attn.k_proj.weight": [
+        {
+          "start": 64,
+          "end": 320,
+          "energy": 0.002903430910920923,
+          "stable_rank": 3.7191786408592393,
+          "early_capture": 0.39169538493433054,
+          "previous_capture": 0.39169538493433054,
+          "teacher_capture": 0.3216305966184491,
+          "current_capture": 0.48554519253606276,
+          "isotropic": 0.0078125
+        }
+      ],
+      "model.layers.13.self_attn.k_proj.weight": [
+        {
+          "start": 64,
+          "end": 320,
+          "energy": 0.0033716108364128207,
+          "stable_rank": 18.081815630980753,
+          "early_capture": 0.16290493809520679,
+          "previous_capture": 0.16290493809520679,
+          "teacher_capture": 0.06397873513595007,
+          "current_capture": 0.2889835898576785,
+          "isotropic": 0.0078125
+        }
+      ],
+      "model.layers.27.self_attn.k_proj.weight": [
+        {
+          "start": 64,
+          "end": 320,
+          "energy": 0.0038438722353850946,
+          "stable_rank": 7.506153032867454,
+          "early_capture": 0.24208827357720836,
+          "previous_capture": 0.24208827357720836,
+          "teacher_capture": 0.13034469795055767,
+          "current_capture": 0.42310951001318864,
+          "isotropic": 0.0078125
+        }
+      ]
+    },
+    "r1-justrl": {
+      "model.layers.0.self_attn.k_proj.weight": [
+        {
+          "start": 16,
+          "end": 80,
+          "energy": 0.0003945051992041212,
+          "stable_rank": 4.763398155389677,
+          "early_capture": 0.3858885709126103,
+          "previous_capture": 0.3858885709126103,
+          "teacher_capture": 0.2638774233985138,
+          "current_capture": 0.6051548038657923,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 80,
+          "end": 160,
+          "energy": 0.00015775042746175562,
+          "stable_rank": 5.049462015533577,
+          "early_capture": 0.26763045972295435,
+          "previous_capture": 0.2986091494538186,
+          "teacher_capture": 0.2260804003472814,
+          "current_capture": 0.37569433036176053,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 160,
+          "end": 240,
+          "energy": 0.00010717578647151754,
+          "stable_rank": 4.9708382506474145,
+          "early_capture": 0.25418503897683153,
+          "previous_capture": 0.27341497650787433,
+          "teacher_capture": 0.22413755492109055,
+          "current_capture": 0.3221325443826802,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 240,
+          "end": 320,
+          "energy": 7.531011615177725e-05,
+          "stable_rank": 4.194179596093535,
+          "early_capture": 0.28011874308224166,
+          "previous_capture": 0.30315541773685656,
+          "teacher_capture": 0.26288671192216556,
+          "current_capture": 0.3375266489039447,
+          "isotropic": 0.010416666666666666
+        }
+      ],
+      "model.layers.13.self_attn.k_proj.weight": [
+        {
+          "start": 16,
+          "end": 80,
+          "energy": 0.0004341620136840752,
+          "stable_rank": 8.158594743284004,
+          "early_capture": 0.2681828997650692,
+          "previous_capture": 0.2681828997650692,
+          "teacher_capture": 0.1529646000349406,
+          "current_capture": 0.514202182119772,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 80,
+          "end": 160,
+          "energy": 0.0002194588052816103,
+          "stable_rank": 11.07793738716549,
+          "early_capture": 0.131999464612009,
+          "previous_capture": 0.17671471681594203,
+          "teacher_capture": 0.12901877807032536,
+          "current_capture": 0.29450095721692965,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 160,
+          "end": 240,
+          "energy": 0.00012836688156406202,
+          "stable_rank": 10.820615780332993,
+          "early_capture": 0.0923078052266246,
+          "previous_capture": 0.13103332232330747,
+          "teacher_capture": 0.0972420708353924,
+          "current_capture": 0.1946960902292898,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 240,
+          "end": 320,
+          "energy": 8.757906370771889e-05,
+          "stable_rank": 10.024370444779171,
+          "early_capture": 0.09629844334638782,
+          "previous_capture": 0.14447571823802333,
+          "teacher_capture": 0.1062256751221238,
+          "current_capture": 0.1870441386983681,
+          "isotropic": 0.010416666666666666
+        }
+      ],
+      "model.layers.27.self_attn.k_proj.weight": [
+        {
+          "start": 16,
+          "end": 80,
+          "energy": 0.0004425533425723558,
+          "stable_rank": 4.57939245080218,
+          "early_capture": 0.3198051754933802,
+          "previous_capture": 0.3198051754933802,
+          "teacher_capture": 0.16627792816197562,
+          "current_capture": 0.5773475609012997,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 80,
+          "end": 160,
+          "energy": 0.00023651186583917847,
+          "stable_rank": 5.344255840268778,
+          "early_capture": 0.13603320846350225,
+          "previous_capture": 0.21693961347082263,
+          "teacher_capture": 0.19904367549552354,
+          "current_capture": 0.3461530962464736,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 160,
+          "end": 240,
+          "energy": 0.00014988245412618777,
+          "stable_rank": 3.6763387448251317,
+          "early_capture": 0.12219935370679041,
+          "previous_capture": 0.25523474357245507,
+          "teacher_capture": 0.2352089568365403,
+          "current_capture": 0.3461128501486175,
+          "isotropic": 0.010416666666666666
+        },
+        {
+          "start": 240,
+          "end": 320,
+          "energy": 0.00011839985946272506,
+          "stable_rank": 3.776854261343994,
+          "early_capture": 0.11937000502032359,
+          "previous_capture": 0.26309128377859753,
+          "teacher_capture": 0.22649948106598178,
+          "current_capture": 0.308175880904391,
+          "isotropic": 0.010416666666666666
+        }
+      ]
+    }
+  }
+}

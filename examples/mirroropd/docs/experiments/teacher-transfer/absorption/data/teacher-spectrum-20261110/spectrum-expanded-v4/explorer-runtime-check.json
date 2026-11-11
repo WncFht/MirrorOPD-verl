@@ -1,0 +1,152 @@
+{
+  "syntax": "passed",
+  "mockDOM": "passed",
+  "plotly_render_calls": 26,
+  "cases": [
+    {
+      "step": "64",
+      "panel": "All held-out",
+      "target": "remaining",
+      "count": "22 条曲线，19 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "All held-out",
+      "target": "final_rkl",
+      "count": "22 条曲线，19 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "All held-out",
+      "target": "late_relative_decrease",
+      "count": "0 条曲线，0 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "Math",
+      "target": "remaining",
+      "count": "22 条曲线，19 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "Math",
+      "target": "final_rkl",
+      "count": "22 条曲线，19 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "Math",
+      "target": "late_relative_decrease",
+      "count": "0 条曲线，0 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "Code",
+      "target": "remaining",
+      "count": "22 条曲线，19 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "Code",
+      "target": "final_rkl",
+      "count": "22 条曲线，19 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "Code",
+      "target": "late_relative_decrease",
+      "count": "0 条曲线，0 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "IF",
+      "target": "remaining",
+      "count": "22 条曲线，19 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "IF",
+      "target": "final_rkl",
+      "count": "22 条曲线，19 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "64",
+      "panel": "IF",
+      "target": "late_relative_decrease",
+      "count": "0 条曲线，0 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "All held-out",
+      "target": "remaining",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "All held-out",
+      "target": "final_rkl",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "All held-out",
+      "target": "late_relative_decrease",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "Math",
+      "target": "remaining",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "Math",
+      "target": "final_rkl",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "Math",
+      "target": "late_relative_decrease",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "Code",
+      "target": "remaining",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "Code",
+      "target": "final_rkl",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "Code",
+      "target": "late_relative_decrease",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "IF",
+      "target": "remaining",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "IF",
+      "target": "final_rkl",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    },
+    {
+      "step": "320",
+      "panel": "IF",
+      "target": "late_relative_decrease",
+      "count": "20 条曲线，17 个 teacher 权重。方形=SFT；圆形=RL；三角=其他训练历史。"
+    }
+  ],
+  "limitation": "No real-browser rendering or screenshot verification"
+}

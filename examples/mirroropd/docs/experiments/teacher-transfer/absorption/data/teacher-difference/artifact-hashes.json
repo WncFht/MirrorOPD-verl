@@ -1,0 +1,850 @@
+[
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/manifest.json",
+    "sha256": "769c11d1d13f68aeb257c178716553819b73194372a3ab8ba7df8fb0c3f9a55e"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/qwen-catalog.json",
+    "sha256": "9474d3962e59510c48633aaaa154539d8806c82c5137e3f8759dfc7f9fdf7d15"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/manifest.json",
+    "sha256": "5151d30e5b681e87170a81e5c6c2b95db858ed8f6302675d6b6df4b68d5e9921"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/sources.json",
+    "sha256": "1ebdd4e5228eb49e3ccc5b7de73cd5ee39ef3c0698481a3f75a1bac2dd191ee6"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/joint-analysis-audit.json",
+    "sha256": "2b07938a76a78504b91183724a089e5a52b6f139b326447b0063281dc99a9bd1"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_joint_transfer.png",
+    "sha256": "d28e426f64354b0d3868472f5343f3c970c00f0767ce0958c46af1ce4bdd907c"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_joint_transfer.pdf",
+    "sha256": "e3ac79e518d9f932621ef8e6ff5ea705305ffeb21dbf9116421e46384ab52f58"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/joint-risk.csv",
+    "sha256": "c500604087080b7fff6e4bdec96f5cdd6920f55d81e8bbcdefe9231474c9b313"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/joint-geometry.csv",
+    "sha256": "a6d374f7897eea76b89e988490ca0b9dc0bc6b41367efe4947878da8b2d0880b"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_joint_adam.png",
+    "sha256": "d28da560093aa2355b2c1cc386958565b221f1d044abf3c8ac7192924fdc8438"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_joint_adam.pdf",
+    "sha256": "850eeb62767ac215e3dac0b1310bcd65cf5b98458a4d07c8d2bc21251fbe2737"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/joint-adam.csv",
+    "sha256": "dd1659cf8b4fdf314cbef319251d472fa25d4d85c8bacc0515848d0c6f08e35d"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/factor-comparison.csv",
+    "sha256": "1665f8a000f5ccfce23d635584abea5b313cd754e2f2f466ad6490bd2b83459b"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/figure-audits.json",
+    "sha256": "520bec93b806979ee0291e791a3d134f6ce7ccf93460f42866ac6a08b37266c2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/frozen-pac.pdf",
+    "sha256": "dfbb6d3b7c874abb25a6960b86751f9bce8609fac3baca84cea549af3355a283"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/frozen-pac.png",
+    "sha256": "0167766f3eac3e0b5c79987fa7460a09c8a5a02ccfb9dad045c650b245c028be"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/frozen-pac.pdf",
+    "sha256": "dfbb6d3b7c874abb25a6960b86751f9bce8609fac3baca84cea549af3355a283"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/local-directions.pdf",
+    "sha256": "3062b9dd950b5d2cda94b2fc0589a609d621bf0a17e9a0d01f81b22eb754b94d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/local-directions.png",
+    "sha256": "6be0cf77698ffb367452607ecfe0cf5991237f7c6c2a0c6450e4a8942ae53772"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/local-directions.pdf",
+    "sha256": "3062b9dd950b5d2cda94b2fc0589a609d621bf0a17e9a0d01f81b22eb754b94d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pac.pdf",
+    "sha256": "7c24af97805126e81dc97d90050711b040c609912d50d5946512a9740a2fe724"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pac.png",
+    "sha256": "9e092e64f0a7643bbf8fdd53394ccc3bb5fc4f8bb60a48f02d0e62eb9ab6ebbb"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pac.pdf",
+    "sha256": "7c24af97805126e81dc97d90050711b040c609912d50d5946512a9740a2fe724"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/paired-contrasts.csv",
+    "sha256": "2a1a1869d395779b264853ed95b231aa5837fda99a01d674c351c645d70c8b59"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/panels.csv",
+    "sha256": "01590500c593e63706388996562de89329ec9d4a423e98557cb6f3cca537b387"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-all-train.pdf",
+    "sha256": "c506ed937740e6e5264ac343e89ed2b45989c246f8f7d5f3cffdb7f125d5f118"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-all-train.png",
+    "sha256": "170bfe3a2a9ebbe960010efee54f785dc8d219ab82d225c35bbe4f0ee452038a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-all-train.pdf",
+    "sha256": "c506ed937740e6e5264ac343e89ed2b45989c246f8f7d5f3cffdb7f125d5f118"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-future-train.pdf",
+    "sha256": "2144448f6585f91cdcc0d5359f6227b39cac0f9685a089fa917fba2545b44605"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-future-train.png",
+    "sha256": "0d8ddd015fc7415b51556165efe2e37df0328e456a38e24756a30703a3b61b21"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-future-train.pdf",
+    "sha256": "2144448f6585f91cdcc0d5359f6227b39cac0f9685a089fa917fba2545b44605"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/request-directions.pdf",
+    "sha256": "e42870b016e4a684a25ed5a2992b9d4f3a37159ec4a397f57aa245995f5a6703"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/request-directions.png",
+    "sha256": "02c452dd77568a068a9ccec538ef57eb9f013d6f62bae703d8b56c81525299a2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/request-directions.pdf",
+    "sha256": "e42870b016e4a684a25ed5a2992b9d4f3a37159ec4a397f57aa245995f5a6703"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/requests.csv",
+    "sha256": "a598565f3d9b937954d3cc6fc4209233080a005ea15f7fd289fd4243ec46762b"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/risk.pdf",
+    "sha256": "17b7fb49f8ac561125e3121dcaa8d7a2c8a96594f5b647baa094b7377616f2cc"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/risk.png",
+    "sha256": "faff3baef47a1b8aec9c38945d7e53901c8239fb63a5f1f30efcd4f691396520"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/risk.pdf",
+    "sha256": "17b7fb49f8ac561125e3121dcaa8d7a2c8a96594f5b647baa094b7377616f2cc"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/sources.json",
+    "sha256": "f0ba2e6f9ff997d2bbd29f2db6830af786225463f0f0918051962931bcaa68ed"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-all-train.pdf",
+    "sha256": "442b36a68fdc66c6d2a42c669220e6de94fa9b94e52aa99b3979b822af64e6d5"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-all-train.png",
+    "sha256": "6a430d525b83bd160e49119be75357435da0d4478fb67c4d232fbccb8bde993d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-all-train.pdf",
+    "sha256": "442b36a68fdc66c6d2a42c669220e6de94fa9b94e52aa99b3979b822af64e6d5"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-components.csv",
+    "sha256": "9c28c97bf11437d730cc3ec67c68f7d10a56ed14093e0bf3d6aa4521204afe2a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-future-train.pdf",
+    "sha256": "4baf35b763608a6eed5248acccf96735416a3505e3e554e1ef1619b9eab3789a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-future-train.png",
+    "sha256": "e7ffc1853440862f9d7cb9474273f74c74d91641914391149824b360a447e6e2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-future-train.pdf",
+    "sha256": "4baf35b763608a6eed5248acccf96735416a3505e3e554e1ef1619b9eab3789a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-late.pdf",
+    "sha256": "8b24d717ad5f27695d96c6a51b328ecc6dde2c796ccf9671ae0e777427c79d08"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-late.png",
+    "sha256": "edc1a623819ca5f3f627ecdc6ea664a2af406f21375e15dd5486adfc2e581703"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-late.pdf",
+    "sha256": "8b24d717ad5f27695d96c6a51b328ecc6dde2c796ccf9671ae0e777427c79d08"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer.csv",
+    "sha256": "735a0323d5d6be53a95df7e729297b5ee297fc33af6d89e7fdb02e6580064439"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/risk.png",
+    "sha256": "faff3baef47a1b8aec9c38945d7e53901c8239fb63a5f1f30efcd4f691396520"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/risk.pdf",
+    "sha256": "17b7fb49f8ac561125e3121dcaa8d7a2c8a96594f5b647baa094b7377616f2cc"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pac.png",
+    "sha256": "9e092e64f0a7643bbf8fdd53394ccc3bb5fc4f8bb60a48f02d0e62eb9ab6ebbb"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pac.pdf",
+    "sha256": "7c24af97805126e81dc97d90050711b040c609912d50d5946512a9740a2fe724"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer.csv",
+    "sha256": "735a0323d5d6be53a95df7e729297b5ee297fc33af6d89e7fdb02e6580064439"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/paired-contrasts.csv",
+    "sha256": "2a1a1869d395779b264853ed95b231aa5837fda99a01d674c351c645d70c8b59"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-future-train.png",
+    "sha256": "e7ffc1853440862f9d7cb9474273f74c74d91641914391149824b360a447e6e2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-future-train.pdf",
+    "sha256": "4baf35b763608a6eed5248acccf96735416a3505e3e554e1ef1619b9eab3789a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/request-directions.png",
+    "sha256": "02c452dd77568a068a9ccec538ef57eb9f013d6f62bae703d8b56c81525299a2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/request-directions.pdf",
+    "sha256": "e42870b016e4a684a25ed5a2992b9d4f3a37159ec4a397f57aa245995f5a6703"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/local-directions.png",
+    "sha256": "6be0cf77698ffb367452607ecfe0cf5991237f7c6c2a0c6450e4a8942ae53772"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/local-directions.pdf",
+    "sha256": "3062b9dd950b5d2cda94b2fc0589a609d621bf0a17e9a0d01f81b22eb754b94d"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/r1-span.json",
+    "sha256": "b00b29d8e7196d8370d7a99c61b8e9925cdf3b2176489d467a32818bb013718a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_propagation_controls.png",
+    "sha256": "fe30aa911017a2245f10b4b7ecf26027d9583f640c12fc7bbec5bff0d80a63a2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_propagation_controls.pdf",
+    "sha256": "2a639c9e51ef007a72be7cf08ecb0521e69e80f901cd8ac243807b31ebe0c752"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/transfer.png",
+    "sha256": "fe8d15f9eb05150eccc434ac6438df4c53936c7bbf1c320f716f577883171cc4"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/transfer.pdf",
+    "sha256": "ec5d2096356284f97193e69836856e39c5282c3d17615b9fa76f3ddf71cecd59"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/large/analysis/transfer.csv",
+    "sha256": "e09ebd12dcb9fbf26591460cd0c08ee894a555e40386258ec7382ff670907f90"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/large/analysis/paired-contrasts.csv",
+    "sha256": "320a22a4a0ddc2503d786601531320f8daafc5fc103ebf3bbbcbfe9cedbd5258"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/future_transfer.png",
+    "sha256": "940c050bb485d5a6184f2d270d6d58164b001fefdb0113f745dc8689916de8ed"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/future_transfer.pdf",
+    "sha256": "caba7ae1a333032981f5b1d33b2b316cbc87373915d3848918e3cf10cb6db562"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/analysis/sampling_all-train.png",
+    "sha256": "1788e44c7180782ef363121cd1e96f48069572966b3d6bf84152a04330be3abc"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/analysis/sampling_all-train.pdf",
+    "sha256": "229699e9abf67985f563acfa8df40def2efb07338c7d71e6bfe3166edaae6389"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/large-replicate/analysis/transfer.csv",
+    "sha256": "03e86bff476894546ef613bb5b5d80787eca3d25797f6d068a49ab42d3e4b949"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/analysis/sampling_future-train.png",
+    "sha256": "d234f5dfb29cd91daa47a9fe3bc55bccc809b2316a816fa421a2a2308592c9b9"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/analysis/sampling_future-train.pdf",
+    "sha256": "be10bd97e512a025b597a91de26d8ea691c5728db4e9ce8b04aafb7a94144d33"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/pac_heldout.png",
+    "sha256": "57fc7e7e4e746e6c510bb1fa4161746e72352cd8c5aa9f4feff040c3c149b7f0"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/pac_heldout.pdf",
+    "sha256": "21021d14f05465e49adb8da18e18c0dd011ea032d9c6a57e684a334be8fe8f89"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/large/analysis/panels.csv",
+    "sha256": "8f1119cf438df09152bdc33c5dac2d0de2cc68eb71ed553e23049cda48c40536"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/spectrum_heldout.png",
+    "sha256": "b96a41037935eb3d56ea07051830f8b637a6baf1b7e17824d62ba10bc553f1a3"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/spectrum_heldout.pdf",
+    "sha256": "0d9f34528db4d31ed697ec381cf227504751e88719934ea6e06bf1704522a3df"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/request_spectrum_heldout.png",
+    "sha256": "c15169849802946d10051612f7f7803c37b5c5abe4cbe9fb28d951e5256a4fe6"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/large/analysis/request_spectrum_heldout.pdf",
+    "sha256": "5b226e868d557f81b506b10841726d814b9b038c57d7ede1095800ee1b49d76c"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-response-20261109/complement-selection.json",
+    "sha256": "c5390aeecbf21113875d550041829bccfd8b0e35a68dcabcec723b2ac99dc4fd"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/main/analysis/accessibility.png",
+    "sha256": "f351c1e5d094bd609bdb35be7f2c2e161a136dc8f2371b35cae6bdb0f523284c"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/main/analysis/accessibility.pdf",
+    "sha256": "26894c7836ecddbf258196a1b2438318af9419b6c0b39462e54ae774cceba637"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/main/analysis/energy-concentration.png",
+    "sha256": "98ac6ef82ff7ede986f494567e53d494d9502e5a54b14c72ed2b6673752cfea5"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/main/analysis/energy-concentration.pdf",
+    "sha256": "0d5971d1578ee8550b7489821bec413686c2cabdc48f27655f4287a1ebc80e78"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/main/analysis/transfer-future-train.png",
+    "sha256": "5ad4f52e0c8964ebf017bcaaf6c6bf6b921109e4adb6b169794020cc0b2d2d62"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/main/analysis/transfer-future-train.pdf",
+    "sha256": "6293986d82c11e4a92524a06476c17207303794296b5372caf677518416daf56"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/small-displacement-test.png",
+    "sha256": "a03a46d0a19cacb1466606d08df4138aa2998097eb825866f5c402a80e8e3ceb"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/small-displacement-test.pdf",
+    "sha256": "0e745eb59788154464e60a6420e38fe1cbfdd9aa417338e9124d21508022b9dd"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-response-20261109/updates/analysis/direction-contrasts.csv",
+    "sha256": "611fd8e2380dac4923e92a291f311d74914e8968ef388004687b94c60bb8941d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/equal-displacement-test.pdf",
+    "sha256": "d66f0eb12ccc2e7384458d20d828a40465f25b8db48f5e4ada35a4bb72c03022"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/equal-displacement-test.png",
+    "sha256": "bebd4baf1307e92ad46d6d5bc8203c23e4243269b7afd3ccd69c5bcd7e520281"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/equal-displacement-test.pdf",
+    "sha256": "d66f0eb12ccc2e7384458d20d828a40465f25b8db48f5e4ada35a4bb72c03022"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-response-20261109/updates/analysis/figure-audits.json",
+    "sha256": "2a8eab4181afa5b70e5ff7d4e33c307d25d49d079611cdb89422419ebb1de8b1"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/fixed-displacement-test.pdf",
+    "sha256": "302fad9f49d74aabc4fb879a2f84b64320a9a5693b2977625fef6fd2f732c39a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/fixed-displacement-test.png",
+    "sha256": "da19c717a5471d6551f0ad6df2422f465e50f847af2c076a102ecb9f102d9845"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/fixed-displacement-test.pdf",
+    "sha256": "302fad9f49d74aabc4fb879a2f84b64320a9a5693b2977625fef6fd2f732c39a"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-response-20261109/updates/analysis/selected-test.csv",
+    "sha256": "903c9ce72e774abf57a4368dd086f6b992c49122fe25e107fea1e6509fbb6f24"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/small-displacement-test.pdf",
+    "sha256": "0e745eb59788154464e60a6420e38fe1cbfdd9aa417338e9124d21508022b9dd"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/small-displacement-test.png",
+    "sha256": "a03a46d0a19cacb1466606d08df4138aa2998097eb825866f5c402a80e8e3ceb"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-response-20261109/updates/analysis/small-displacement-test.pdf",
+    "sha256": "0e745eb59788154464e60a6420e38fe1cbfdd9aa417338e9124d21508022b9dd"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-response-20261109/updates/analysis/sources.json",
+    "sha256": "ca7594bb509242bcd1ee69fefb96b07d2979926d0332d6af0bc6554fda795142"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-response-20261109/updates/analysis/test-summary.csv",
+    "sha256": "da892079546e95b3d770dbef21fac6921373667af6b2bad14745abf2b5c08b7f"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-response-20261109/updates/analysis/update-groups.csv",
+    "sha256": "09977859e85b690a86cb5d23c094df38c934ba449ff788d78508a981d31d4a73"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-response-20261109/updates/analysis/updates.csv",
+    "sha256": "64a04fc645ce35aec779f90ecf7a28f9b9e72c662efa97215be0ce07ef3cdec1"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/adam-step-metadata.csv",
+    "sha256": "cfafbede14fe9493298b2e6907e4bdb54bbd59ea87f1b771808720b429f222de"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/calibration-selected-groups.csv",
+    "sha256": "4240704d086b6d515dfec7d36a096a7611eec972c5f640ee84f7901c400bba45"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/calibration-selected-summary.csv",
+    "sha256": "418ff392bdc58db51cd0aaa49a0a182d51d856fe6239562cb2a80031957b5526"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/direction-contrasts.csv",
+    "sha256": "8eebb0cc167d73a89ddbbba255bf5b76958cf261614bbb1eac9eb99271165a6c"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/figure-audits.json",
+    "sha256": "fdfef9be6a79fc3abf578f99e6a1812913b4c1fdd4265e4e04242b778b98564e"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/methods.json",
+    "sha256": "8e8a11f8715d115bc189eca52bc838bc808dd72da570a8af2ff50886e5fcae30"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/native-sgd-test.pdf",
+    "sha256": "bb007532f0068086d2a19b5f9e0d3023e666d8839fad9f87ae1e948ded7637e8"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/native-sgd-test.png",
+    "sha256": "ea5f2a03d1fad091cf4de2738fd1d4a6c06d55e69115fd5b25d0a5cab5e5988d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/native-sgd-test.pdf",
+    "sha256": "bb007532f0068086d2a19b5f9e0d3023e666d8839fad9f87ae1e948ded7637e8"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/paired-cell-contrasts.csv",
+    "sha256": "32e5af627b497c21fe13662afb6c0761d1725d562402a22381d3660980eb22e9"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/restored-adam-test.pdf",
+    "sha256": "11089a1cecb8d8f2d878c56f8e124d3cedab670176c229b68382323222b40161"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/restored-adam-test.png",
+    "sha256": "9633337d36475b28ba2fc46365702dd2be521a7dc0831c5f0e8e0b1296bf03f8"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/restored-adam-test.pdf",
+    "sha256": "11089a1cecb8d8f2d878c56f8e124d3cedab670176c229b68382323222b40161"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/sources.json",
+    "sha256": "001e1de610a589141ded4706507c4a9a9f41a564951896d67df58d49a52c9bd0"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/test-summary.csv",
+    "sha256": "0650d559aa8cd97f16ba3c1e2155ab95a1378af8aefe02375fcff15c3e9d3c2f"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-crossed-20261109/update-analysis/update-groups.csv",
+    "sha256": "778e23de5a4c263b1606b88f68de54e2b4a9f9feef869b6cd1abae8284081f5e"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_stage_pac.png",
+    "sha256": "a118aff73cb503abfb0890e3f776cd315e5e0302a71a611bc83e2617b4bb7afd"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_stage_pac.pdf",
+    "sha256": "cfdf271e1cdc3e44fb883ffe25aa76da27b84684b877190af1ce8ddd30013135"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_pac_factors.png",
+    "sha256": "8b1d9bd49d67e03368d3f12f525f70ff6a98692cc9b78d053a98627d6922a67c"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_pac_factors.pdf",
+    "sha256": "8722a094deda42aab2be1dd361b7629f08ba025a1599f783ce76e6ecca7bf802"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/r1_pac_factors.csv",
+    "sha256": "99d22c70450aeb59161c1c46e5b07fbffbfb08b1c3f555d759dd04916916e502"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_prefix_stratified.png",
+    "sha256": "e1f5056376597551e21b71c383e5eea3f12ab6bc1a53d45dc7e9aa2d4a97d657"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/r1_prefix_stratified.pdf",
+    "sha256": "455f04b28423e8a5fc159cd34a333dfbbd19103415148a0b7ce0e900006b6863"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/prefix-stratified.csv",
+    "sha256": "b2031f3e597a82f1ff946213dfb6178d666f553053992bab233c8a36dfe1904d"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/prefix-sensitivity.csv",
+    "sha256": "96fb753fcfcad6bbd74acc9e0268bda23ecf8f1341db460dcb3913342f1f4787"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/prefix-pooled.csv",
+    "sha256": "3ad084dfa01db7a7edfa37350c703c7eaad2806bf0f72c668f4f352cfaf48ecb"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/point-probe/mimo-rlzero/s000.json",
+    "sha256": "dbcaa20a49667665e18c459d1550edf37338d98089d983996150abc6c8817ef9"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/historical-span.json",
+    "sha256": "3b9b45f568b5e3665caef8ceb56754d23b2c580df3473971aa6f585c68938fd8"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/historical_span.png",
+    "sha256": "8eb2819910b5bf07257145de8a2e642c211eee8c49ca45c7ead39746661ce3b2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-stages-20261109/analysis/historical_span.pdf",
+    "sha256": "a9822c85de72c1a7a7a0161612996ffe8fc97eda3b51ba1e5928fc3d5f2aac74"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-pac-20261109/r1/full/justrl-student-full.json",
+    "sha256": "bd71c25d643c79a9f196af42541107498b14d9bbdcc06c8bf7c9e5dcda0fcbfa"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-pac-20261109/r1/full/justrl-teacher-full.json",
+    "sha256": "cfa7ada0becdc64b1a2812a021a26d1dd5401c48377da0b9d56bd55a9cf4a377"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-pac-20261109/r1/full/polaris-student-full.json",
+    "sha256": "73db16a7c1fbd6a0ebe4dbd6abeefc7cb5c37e2d9a06cd5ecb21745d36950cde"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-pac-20261109/r1/full/polaris-teacher-full.json",
+    "sha256": "ad8a3a0372c832d94635600cd2ce3ac8946516c9fab70d9e6caecb84dd6ede46"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/factor-comparison.csv",
+    "sha256": "1665f8a000f5ccfce23d635584abea5b313cd754e2f2f466ad6490bd2b83459b"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/figure-audits.json",
+    "sha256": "520bec93b806979ee0291e791a3d134f6ce7ccf93460f42866ac6a08b37266c2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/frozen-pac.pdf",
+    "sha256": "dfbb6d3b7c874abb25a6960b86751f9bce8609fac3baca84cea549af3355a283"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/frozen-pac.png",
+    "sha256": "0167766f3eac3e0b5c79987fa7460a09c8a5a02ccfb9dad045c650b245c028be"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/frozen-pac.pdf",
+    "sha256": "dfbb6d3b7c874abb25a6960b86751f9bce8609fac3baca84cea549af3355a283"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/local-directions.pdf",
+    "sha256": "3062b9dd950b5d2cda94b2fc0589a609d621bf0a17e9a0d01f81b22eb754b94d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/local-directions.png",
+    "sha256": "6be0cf77698ffb367452607ecfe0cf5991237f7c6c2a0c6450e4a8942ae53772"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/local-directions.pdf",
+    "sha256": "3062b9dd950b5d2cda94b2fc0589a609d621bf0a17e9a0d01f81b22eb754b94d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pac.pdf",
+    "sha256": "7c24af97805126e81dc97d90050711b040c609912d50d5946512a9740a2fe724"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pac.png",
+    "sha256": "9e092e64f0a7643bbf8fdd53394ccc3bb5fc4f8bb60a48f02d0e62eb9ab6ebbb"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pac.pdf",
+    "sha256": "7c24af97805126e81dc97d90050711b040c609912d50d5946512a9740a2fe724"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/paired-contrasts.csv",
+    "sha256": "2a1a1869d395779b264853ed95b231aa5837fda99a01d674c351c645d70c8b59"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/panels.csv",
+    "sha256": "01590500c593e63706388996562de89329ec9d4a423e98557cb6f3cca537b387"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-all-train.pdf",
+    "sha256": "c506ed937740e6e5264ac343e89ed2b45989c246f8f7d5f3cffdb7f125d5f118"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-all-train.png",
+    "sha256": "170bfe3a2a9ebbe960010efee54f785dc8d219ab82d225c35bbe4f0ee452038a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-all-train.pdf",
+    "sha256": "c506ed937740e6e5264ac343e89ed2b45989c246f8f7d5f3cffdb7f125d5f118"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-future-train.pdf",
+    "sha256": "2144448f6585f91cdcc0d5359f6227b39cac0f9685a089fa917fba2545b44605"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-future-train.png",
+    "sha256": "0d8ddd015fc7415b51556165efe2e37df0328e456a38e24756a30703a3b61b21"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/pressure-future-train.pdf",
+    "sha256": "2144448f6585f91cdcc0d5359f6227b39cac0f9685a089fa917fba2545b44605"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/request-directions.pdf",
+    "sha256": "e42870b016e4a684a25ed5a2992b9d4f3a37159ec4a397f57aa245995f5a6703"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/request-directions.png",
+    "sha256": "02c452dd77568a068a9ccec538ef57eb9f013d6f62bae703d8b56c81525299a2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/request-directions.pdf",
+    "sha256": "e42870b016e4a684a25ed5a2992b9d4f3a37159ec4a397f57aa245995f5a6703"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/requests.csv",
+    "sha256": "a598565f3d9b937954d3cc6fc4209233080a005ea15f7fd289fd4243ec46762b"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/risk.pdf",
+    "sha256": "17b7fb49f8ac561125e3121dcaa8d7a2c8a96594f5b647baa094b7377616f2cc"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/risk.png",
+    "sha256": "faff3baef47a1b8aec9c38945d7e53901c8239fb63a5f1f30efcd4f691396520"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/risk.pdf",
+    "sha256": "17b7fb49f8ac561125e3121dcaa8d7a2c8a96594f5b647baa094b7377616f2cc"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/sources.json",
+    "sha256": "f0ba2e6f9ff997d2bbd29f2db6830af786225463f0f0918051962931bcaa68ed"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-all-train.pdf",
+    "sha256": "442b36a68fdc66c6d2a42c669220e6de94fa9b94e52aa99b3979b822af64e6d5"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-all-train.png",
+    "sha256": "6a430d525b83bd160e49119be75357435da0d4478fb67c4d232fbccb8bde993d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-all-train.pdf",
+    "sha256": "442b36a68fdc66c6d2a42c669220e6de94fa9b94e52aa99b3979b822af64e6d5"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-components.csv",
+    "sha256": "9c28c97bf11437d730cc3ec67c68f7d10a56ed14093e0bf3d6aa4521204afe2a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-future-train.pdf",
+    "sha256": "4baf35b763608a6eed5248acccf96735416a3505e3e554e1ef1619b9eab3789a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-future-train.png",
+    "sha256": "e7ffc1853440862f9d7cb9474273f74c74d91641914391149824b360a447e6e2"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-future-train.pdf",
+    "sha256": "4baf35b763608a6eed5248acccf96735416a3505e3e554e1ef1619b9eab3789a"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-late.pdf",
+    "sha256": "8b24d717ad5f27695d96c6a51b328ecc6dde2c796ccf9671ae0e777427c79d08"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-late.png",
+    "sha256": "edc1a623819ca5f3f627ecdc6ea664a2af406f21375e15dd5486adfc2e581703"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer-late.pdf",
+    "sha256": "8b24d717ad5f27695d96c6a51b328ecc6dde2c796ccf9671ae0e777427c79d08"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/analysis/transfer.csv",
+    "sha256": "735a0323d5d6be53a95df7e729297b5ee297fc33af6d89e7fdb02e6580064439"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-logit-20261109/trajectory/completion.json",
+    "sha256": "05983b9ec7b3a376b0b227681856d8e113ec4768c0a03b5846f1979b31a03fbb"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/progress.json",
+    "sha256": "af2adc7b04aa216305de55adfbe6193b4984fef2d080c3a24acae67a80f45a04"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/audit.json",
+    "sha256": "c34260776432164189d63b60994c4597a86519e51a04b44ed4cddeff225e85a3"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-stages-20261109/analysis/pac.csv",
+    "sha256": "e5462e7661a7ceb8ed4ed9fb42e1c0b2c6e540f92cb4514b63f743cabc21d419"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/analysis/teacher-student-factors.png",
+    "sha256": "e73e8c73f27c2bb9e7c4416271bb244fc3a376b06b2eb4aba2f0054bd9629a0e"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/analysis/teacher-student-factors.pdf",
+    "sha256": "e81ded7b728ac2b7a4663c16b98214f64e87241bd3d9e913079658ad8b485c91"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/native-sgd-test.png",
+    "sha256": "ea5f2a03d1fad091cf4de2738fd1d4a6c06d55e69115fd5b25d0a5cab5e5988d"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/native-sgd-test.pdf",
+    "sha256": "bb007532f0068086d2a19b5f9e0d3023e666d8839fad9f87ae1e948ded7637e8"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/restored-adam-test.png",
+    "sha256": "9633337d36475b28ba2fc46365702dd2be521a7dc0831c5f0e8e0b1296bf03f8"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-crossed-20261109/update-analysis/restored-adam-test.pdf",
+    "sha256": "11089a1cecb8d8f2d878c56f8e124d3cedab670176c229b68382323222b40161"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-nonthinking-6768788c-transfer.png",
+    "sha256": "d7b3ae051707e0d141d8f74996db80c97ecec75718677726c0be956a388b63d8"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-nonthinking-6768788c-transfer.pdf",
+    "sha256": "cb025373189f9d6090137cac203390d2b1474abdf914b2c25dde1016ca35bbb5"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-a97da68a-transfer.png",
+    "sha256": "9d11554912f5443ef86cc781168f41e9e311ce3aea2010168291622005f76cf9"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-a97da68a-transfer.pdf",
+    "sha256": "4e11a6e47b5fcde2d04dbfbd55064faa401b1315f8e30315c080f444074d5287"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-ccdb427c-transfer.png",
+    "sha256": "58311186a916507c9035121fd94770288ba7de62e958079a55d540675b119b2e"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-ccdb427c-transfer.pdf",
+    "sha256": "bd095866ee56077fdcfb8cbca94965049037f26cb6b3996883e5f39e146c298e"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/cross-batch.csv",
+    "sha256": "5cda5caf248a96961b9d721a04122e004c51ba6df715ad1f8c9f94185f2e89f3"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/figure-audits.json",
+    "sha256": "c5d69003cb9f5fb9171c17bc55a7623590095d42224f13050770783337530be1"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/methods.json",
+    "sha256": "8f60fcb75d5f7e795f06376fe31689c76d6a0f73f88dce344e6e429cc6c9c6d8"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-nonthinking-6768788c-figure-key.csv",
+    "sha256": "f251c7ecc4b54b7d066cabd51d8234ef0bfdb1b81034464471e49c3b21535f6f"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-nonthinking-6768788c-transfer.pdf",
+    "sha256": "cb025373189f9d6090137cac203390d2b1474abdf914b2c25dde1016ca35bbb5"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-nonthinking-6768788c-transfer.png",
+    "sha256": "d7b3ae051707e0d141d8f74996db80c97ecec75718677726c0be956a388b63d8"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-nonthinking-6768788c-transfer.pdf",
+    "sha256": "cb025373189f9d6090137cac203390d2b1474abdf914b2c25dde1016ca35bbb5"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-a97da68a-figure-key.csv",
+    "sha256": "cbde4544b59912c90f8873de5a21a74c9270ae2dd9bf242d356e9843bcd64313"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-a97da68a-transfer.pdf",
+    "sha256": "4e11a6e47b5fcde2d04dbfbd55064faa401b1315f8e30315c080f444074d5287"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-a97da68a-transfer.png",
+    "sha256": "9d11554912f5443ef86cc781168f41e9e311ce3aea2010168291622005f76cf9"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-a97da68a-transfer.pdf",
+    "sha256": "4e11a6e47b5fcde2d04dbfbd55064faa401b1315f8e30315c080f444074d5287"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-ccdb427c-figure-key.csv",
+    "sha256": "2d784fd906566fea87f82917672642762a940331070a400ff66fdad08043f509"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-ccdb427c-transfer.pdf",
+    "sha256": "bd095866ee56077fdcfb8cbca94965049037f26cb6b3996883e5f39e146c298e"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-ccdb427c-transfer.png",
+    "sha256": "58311186a916507c9035121fd94770288ba7de62e958079a55d540675b119b2e"
+  },
+  {
+    "artifact": "figures/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/qwen-thinking-ccdb427c-transfer.pdf",
+    "sha256": "bd095866ee56077fdcfb8cbca94965049037f26cb6b3996883e5f39e146c298e"
+  },
+  {
+    "artifact": "data/teacher-difference/teacher-difference-qwen-20261109/cross-analysis/sources.json",
+    "sha256": "c9eb19bee63f808c16d649f8ef7001cd2306e4986447bf36ae6bd78b87e92e2e"
+  }
+]
