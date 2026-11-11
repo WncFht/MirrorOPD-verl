@@ -1,0 +1,51 @@
+{
+  "snapshot_utc": "2026-11-08T19:14:35+00:00",
+  "sources": [
+    {
+      "path": "runs/wandb-e85-e86-20261109/sjdbuh0p/history.jsonl",
+      "bytes": 8239831,
+      "sha256": "42ac0ebb13f5450f5001bec7cbf22a66382669a1c66ed035978b585cda135e2d"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sjdbuh0p/config.json",
+      "bytes": 41213,
+      "sha256": "19f6bb89c73f87f86aa22c5508f8b53d5a6a9ea7d74444823f40484abc1c4fdb"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sjdbuh0p/summary.json",
+      "bytes": 209386,
+      "sha256": "4c2c2481f7950db4863cad84d65b527d74ae71366ea2591c2ee4b0ea3f79d023"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sjdbuh0p/source.json",
+      "bytes": 451,
+      "sha256": "3886c5b3f6c158dd192b660fbe32aa8577396e9791050f435d9e65f8685ba64e"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sh3mrf3r/history.jsonl",
+      "bytes": 7368086,
+      "sha256": "affd4a03464f9aee02d7f6479140ba6d1bb58134ff5327a29f50dcd1922e8e16"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sh3mrf3r/config.json",
+      "bytes": 41231,
+      "sha256": "41b1f3d5230ab09562930b59f06936096bfc5cf19587fde3dcfdb2528d4423d1"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sh3mrf3r/summary.json",
+      "bytes": 208937,
+      "sha256": "fca3a8873a6e92b81bd6352983a108baf3942586df5a7a47379d5e6290f71547"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sh3mrf3r/source.json",
+      "bytes": 451,
+      "sha256": "25a20c7145449e955986a7be294eedd20aeda20ad2c28e8c76129fabfd581417"
+    }
+  ],
+  "settings": {
+    "E85": "future=none, token-sum",
+    "E86": "future=none, seq-mean-token-sum"
+  },
+  "validation": "Five benchmarks, avg@16, validation every 5 outer; macro5 weights benchmarks equally.",
+  "limits": "Both W&B runs are marked failed; complete validation curves stop at outer90/80. One run per condition; changing on-policy prefixes."
+}

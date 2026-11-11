@@ -1,0 +1,38 @@
+{
+  "run": "E84",
+  "wandb_run": "x73jzh0z",
+  "training_outers": 100,
+  "last_optimizer_counter": 1600,
+  "complete_validation_outers": [
+    20,
+    40,
+    60,
+    80,
+    100
+  ],
+  "validation_responses": 20400,
+  "final_metric_count": 3134,
+  "macro5": 0.32054583333333336,
+  "aime_mean": 0.12222222222222223,
+  "aime_length": 10962.389583333334,
+  "aime_length_rate": 0.02847222222222222,
+  "aime_repetition_rate": 0.10138888888888889,
+  "aime_stop_rate": 0.8701388888888889,
+  "training_seconds": 94216.7552463361,
+  "validation_seconds": 20609.451005706098,
+  "final_progress": "100/100 [31:54:22]",
+  "wandb_teardown": "BrokenPipeError after final validation and progress completion",
+  "evidence_scope": "Full received console preserved; no per-update history, validation responses or checkpoint tensors in attachment.",
+  "sources": [
+    {
+      "path": "runs/e84-results-20261110/train-console.txt",
+      "bytes": 2019046,
+      "sha256": "94410f1494d1a35abcd808e8f7f846c5838286a17871df7ad7b77b0f5e0254e4"
+    },
+    {
+      "path": "examples/mirroropd/research/studies/weighted_targets/analyze_e84.py",
+      "bytes": 16811,
+      "sha256": "fd4760abbdc8a55607ca8f9cf590544ed748d540f33de17cf45ab02f2a73f98a"
+    }
+  ]
+}

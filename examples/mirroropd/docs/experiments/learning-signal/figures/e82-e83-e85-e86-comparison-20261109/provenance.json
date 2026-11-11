@@ -1,0 +1,39 @@
+{
+  "snapshot_utc": "2026-11-10T08:29:02+00:00",
+  "sources": [
+    {
+      "path": "examples/mirroropd/docs/experiments/learning-signal/figures/e82-e83-comparison-20261107/validation.csv",
+      "bytes": 12840,
+      "sha256": "fd52d82c2945463e21be678ce5a5d4f8ac8be549ac92f05c7db3f071d6ea125e"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/learning-signal/figures/e82-e83-comparison-20261107/outers.csv",
+      "bytes": 36661,
+      "sha256": "0d60eebdb5f2c4051de3641654624a7e47e3d3df39a1a5896be89cf42e1da0ff"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/learning-signal/figures/e82-e83-comparison-20261107/source-audit.json",
+      "bytes": 790,
+      "sha256": "0eb5fbfece06d80c6515843103c3faf3f2a4cbbd49e0199691ca76ce078b512a"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sjdbuh0p/history.jsonl",
+      "bytes": 8239831,
+      "sha256": "42ac0ebb13f5450f5001bec7cbf22a66382669a1c66ed035978b585cda135e2d"
+    },
+    {
+      "path": "runs/wandb-e85-e86-20261109/sh3mrf3r/history.jsonl",
+      "bytes": 7368086,
+      "sha256": "affd4a03464f9aee02d7f6479140ba6d1bb58134ff5327a29f50dcd1922e8e16"
+    }
+  ],
+  "axis": "optimizer updates; 16 updates per outer",
+  "validation": "complete avg@16 nodes; equal-weight Macro-5",
+  "runs": {
+    "E82": "E82 | token-mean | 4 GPU",
+    "E83": "E83 | seq-mean-token-mean | 4 GPU",
+    "E85": "E85 | token-sum | 8 GPU",
+    "E86": "E86 | seq-mean-token-sum | 8 GPU"
+  },
+  "limits": "Card count is metadata, not a comparison axis. One run per condition; changing on-policy prefixes. Raw actor loss is run-specific."
+}

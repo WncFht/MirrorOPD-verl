@@ -1,0 +1,116 @@
+{
+  "E82": {
+    "objective": 0.03672488113867042,
+    "teacher_kl": 0.3676248974695788,
+    "grad_norm": 0.5611477663740516,
+    "clipped_fraction": 0.05,
+    "block_changes": {
+      "objective": {
+        "decreased": 100,
+        "mean_delta": -0.002576034460548411,
+        "median_relative_percent": -4.62971174875601
+      },
+      "teacher_kl": {
+        "decreased": 100,
+        "mean_delta": -0.011796828115547754,
+        "median_relative_percent": -2.354346677800234
+      }
+    }
+  },
+  "E84": {
+    "objective": 0.03699146830765248,
+    "teacher_kl": 0.3674274602429374,
+    "grad_norm": 0.8639681696891784,
+    "clipped_fraction": 0.36875,
+    "block_changes": {
+      "objective": {
+        "decreased": 100,
+        "mean_delta": -0.002532557036438145,
+        "median_relative_percent": -4.609990515482621
+      },
+      "teacher_kl": {
+        "decreased": 100,
+        "mean_delta": -0.011654739879203102,
+        "median_relative_percent": -2.3136223909436096
+      },
+      "coefficient": {
+        "decreased": 100,
+        "mean_delta": -0.00021203858058434544,
+        "median_relative_percent": -3.5249265740876834
+      },
+      "coefficient_p95": {
+        "decreased": 100,
+        "mean_delta": -0.00034194473177194594,
+        "median_relative_percent": -4.126220057566166
+      },
+      "score_surrogate": {
+        "decreased": 0,
+        "mean_delta": 0.0024918214577732776,
+        "median_relative_percent": -3.466366322024983
+      }
+    },
+    "first_update": {
+      "run": "E84",
+      "outer": 1,
+      "optimizer_update": 1,
+      "reuse": 1,
+      "objective": 0.05143178740045289,
+      "target_kl": 0.005143178641643297,
+      "teacher_kl": 0.43646642616925146,
+      "native_teacher_rkl": 0.44582866798011106,
+      "anchor_kl": 0,
+      "coefficient": 0.0043450556398792715,
+      "coefficient_std": 0.0023144821310236642,
+      "coefficient_p95": 0.008537711575627327,
+      "coefficient_max": 0.09616400301456451,
+      "suffix_mean_cost": 0.004348557631963777,
+      "effective_mass": 2898.5689101404596,
+      "score_surrogate": -0.1272902845010713,
+      "local_surrogate": 0.0514317960406279,
+      "training_surrogate": -0.07585849100449492,
+      "grad_norm": 3.470590829849243
+    },
+    "last_update": {
+      "run": "E84",
+      "outer": 100,
+      "optimizer_update": 1600,
+      "reuse": 16,
+      "objective": 0.035932450484775315,
+      "target_kl": 0.0035932450510840048,
+      "teacher_kl": 0.3651186580179378,
+      "native_teacher_rkl": 0.3669359517819178,
+      "anchor_kl": 0.00037578353860756087,
+      "coefficient": 0.0034530785748311406,
+      "coefficient_std": 0.0007137112153932197,
+      "coefficient_p95": 0.004678256344050169,
+      "coefficient_max": 0.044467486441135406,
+      "suffix_mean_cost": 0.0034534561184222765,
+      "effective_mass": 4848.053982275943,
+      "score_surrogate": -0.027568129036275896,
+      "local_surrogate": 0.03593245004167488,
+      "training_surrogate": 0.008364320953269522,
+      "grad_norm": 1.3411012887954712
+    },
+    "negative_surrogate_updates": 256,
+    "negative_surrogate_outers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "max_decomposition_error": 2.544051524999702e-09,
+    "final_scalar_cancellation_ratio": 0.7672209661267756
+  }
+}
