@@ -1,0 +1,542 @@
+[
+  {
+    "job_id": 0,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "left",
+    "shape": [
+      8960,
+      1536
+    ],
+    "reference_seconds": [
+      1.2546141743659973,
+      1.2514821588993073
+    ],
+    "newton_seconds": [
+      0.19471164792776108,
+      0.18228358775377274
+    ],
+    "speedup": 6.647554388147032,
+    "polar_relative_error": 7.578760242021295e-14,
+    "orthogonality_max": 9.758860386455126e-14,
+    "reconstructed_weight_relative_error": 7.577975964929046e-14,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.02172383033759089,
+      "orthogonality_max": 9.758860386455126e-14
+    },
+    "passed": true
+  },
+  {
+    "job_id": 0,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "right",
+    "shape": [
+      1536,
+      1536
+    ],
+    "reference_seconds": [
+      1.0149224400520325,
+      1.0141430497169495
+    ],
+    "newton_seconds": [
+      0.07917372137308121,
+      0.07900067418813705
+    ],
+    "speedup": 12.828027460257767,
+    "polar_relative_error": 7.415611181428867e-14,
+    "orthogonality_max": 9.980904991380157e-14,
+    "reconstructed_weight_relative_error": 7.409951231175969e-14,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.021728589120360967,
+      "orthogonality_max": 9.980904991380157e-14
+    },
+    "passed": true
+  },
+  {
+    "job_id": 0,
+    "tensor": "model.layers.0.self_attn.k_proj.weight",
+    "frame": "left",
+    "shape": [
+      256,
+      256
+    ],
+    "reference_seconds": [
+      0.04441697895526886,
+      0.04334171116352081
+    ],
+    "newton_seconds": [
+      0.001527443528175354,
+      0.0011856630444526672
+    ],
+    "speedup": 32.346200847459954,
+    "polar_relative_error": 4.415400044967781e-15,
+    "orthogonality_max": 5.662137425588298e-15,
+    "reconstructed_weight_relative_error": 4.558856110198622e-15,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.0036463621316712653,
+      "orthogonality_max": 5.662137425588298e-15
+    },
+    "passed": true
+  },
+  {
+    "job_id": 0,
+    "tensor": "model.layers.0.self_attn.k_proj.weight",
+    "frame": "right",
+    "shape": [
+      1536,
+      256
+    ],
+    "reference_seconds": [
+      0.05193578451871872,
+      0.051941871643066406
+    ],
+    "newton_seconds": [
+      0.0016558095812797546,
+      0.00156451016664505
+    ],
+    "speedup": 32.256938531872365,
+    "polar_relative_error": 4.4262125506952934e-15,
+    "orthogonality_max": 7.771561172376096e-15,
+    "reconstructed_weight_relative_error": 4.548371526803496e-15,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.003626863046841241,
+      "orthogonality_max": 7.771561172376096e-15
+    },
+    "passed": true
+  },
+  {
+    "job_id": 6,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "left",
+    "shape": [
+      18944,
+      3584
+    ],
+    "reference_seconds": [
+      7.5413923636078835,
+      7.54030192643404
+    ],
+    "newton_seconds": [
+      2.1142653673887253,
+      2.1138623654842377
+    ],
+    "speedup": 3.5669911702960992,
+    "polar_relative_error": 4.0679010742016924e-13,
+    "orthogonality_max": 4.992672941739329e-13,
+    "reconstructed_weight_relative_error": 4.066753138431239e-13,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.0507221748941606,
+      "orthogonality_max": 4.992672941739329e-13
+    },
+    "passed": true
+  },
+  {
+    "job_id": 6,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "right",
+    "shape": [
+      3584,
+      3584
+    ],
+    "reference_seconds": [
+      5.578766621649265,
+      5.576946891844273
+    ],
+    "newton_seconds": [
+      0.973969079554081,
+      0.9738451391458511
+    ],
+    "speedup": 5.727298531037223,
+    "polar_relative_error": 4.050964313550871e-13,
+    "orthogonality_max": 5.060396546241464e-13,
+    "reconstructed_weight_relative_error": 4.0452641784375114e-13,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.050683331071427376,
+      "orthogonality_max": 5.060396546241464e-13
+    },
+    "passed": true
+  },
+  {
+    "job_id": 6,
+    "tensor": "model.layers.0.self_attn.k_proj.weight",
+    "frame": "left",
+    "shape": [
+      512,
+      512
+    ],
+    "reference_seconds": [
+      0.13122458010911942,
+      0.13132545351982117
+    ],
+    "newton_seconds": [
+      0.0034284889698028564,
+      0.003320068120956421
+    ],
+    "speedup": 38.90461769797389,
+    "polar_relative_error": 9.660168422174184e-15,
+    "orthogonality_max": 1.5432100042289676e-14,
+    "reconstructed_weight_relative_error": 9.784373668880832e-15,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.0072418737358676145,
+      "orthogonality_max": 1.5432100042289676e-14
+    },
+    "passed": true
+  },
+  {
+    "job_id": 6,
+    "tensor": "model.layers.0.self_attn.k_proj.weight",
+    "frame": "right",
+    "shape": [
+      3584,
+      512
+    ],
+    "reference_seconds": [
+      0.16930383443832397,
+      0.16942211240530014
+    ],
+    "newton_seconds": [
+      0.008667506277561188,
+      0.008318468928337097
+    ],
+    "speedup": 19.941507198597783,
+    "polar_relative_error": 9.832964989655274e-15,
+    "orthogonality_max": 1.554312234475219e-14,
+    "reconstructed_weight_relative_error": 9.935316483164552e-15,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.007262910705077872,
+      "orthogonality_max": 1.554312234475219e-14
+    },
+    "passed": true
+  },
+  {
+    "job_id": 7,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "left",
+    "shape": [
+      6144,
+      2048
+    ],
+    "reference_seconds": [
+      2.0644623562693596,
+      2.063685104250908
+    ],
+    "newton_seconds": [
+      0.2873040661215782,
+      0.28717581927776337
+    ],
+    "speedup": 7.185886861209499,
+    "polar_relative_error": 1.3241364380135603e-13,
+    "orthogonality_max": 1.723066134218243e-13,
+    "reconstructed_weight_relative_error": 1.32440678157925e-13,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.028949406899805352,
+      "orthogonality_max": 1.723066134218243e-13
+    },
+    "passed": true
+  },
+  {
+    "job_id": 7,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "right",
+    "shape": [
+      2048,
+      2048
+    ],
+    "reference_seconds": [
+      1.5567151606082916,
+      1.5555877909064293
+    ],
+    "newton_seconds": [
+      0.18615979701280594,
+      0.18606170266866684
+    ],
+    "speedup": 8.361427145337018,
+    "polar_relative_error": 1.3329519709307208e-13,
+    "orthogonality_max": 1.7286172493413687e-13,
+    "reconstructed_weight_relative_error": 1.333068675400943e-13,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.028987120994781852,
+      "orthogonality_max": 1.7286172493413687e-13
+    },
+    "passed": true
+  },
+  {
+    "job_id": 7,
+    "tensor": "model.layers.0.self_attn.k_proj.weight",
+    "frame": "left",
+    "shape": [
+      1024,
+      1024
+    ],
+    "reference_seconds": [
+      0.48907470703125,
+      0.4888094663619995
+    ],
+    "newton_seconds": [
+      0.023983299732208252,
+      0.02366632968187332
+    ],
+    "speedup": 20.522387800654375,
+    "polar_relative_error": 3.435035799635267e-14,
+    "orthogonality_max": 4.7628567756419216e-14,
+    "reconstructed_weight_relative_error": 3.439871774006287e-14,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.014504698247441548,
+      "orthogonality_max": 4.7628567756419216e-14
+    },
+    "passed": true
+  },
+  {
+    "job_id": 7,
+    "tensor": "model.layers.0.self_attn.k_proj.weight",
+    "frame": "right",
+    "shape": [
+      2048,
+      1024
+    ],
+    "reference_seconds": [
+      0.45997560024261475,
+      0.4596676230430603
+    ],
+    "newton_seconds": [
+      0.03014221042394638,
+      0.02994868904352188
+    ],
+    "speedup": 15.30420132558587,
+    "polar_relative_error": 3.376505163483061e-14,
+    "orthogonality_max": 4.696243394164412e-14,
+    "reconstructed_weight_relative_error": 3.363947078359826e-14,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.01447529303071434,
+      "orthogonality_max": 4.696243394164412e-14
+    },
+    "passed": true
+  },
+  {
+    "job_id": 11,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "left",
+    "shape": [
+      8192,
+      3072
+    ],
+    "reference_seconds": [
+      4.015627562999725,
+      4.000353522598743
+    ],
+    "newton_seconds": [
+      0.9074527099728584,
+      0.9075667560100555
+    ],
+    "speedup": 4.416471137546427,
+    "polar_relative_error": 2.9892451318926625e-13,
+    "orthogonality_max": 3.6981528950263964e-13,
+    "reconstructed_weight_relative_error": 2.990159490448838e-13,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.04345698689635656,
+      "orthogonality_max": 3.6981528950263964e-13
+    },
+    "passed": true
+  },
+  {
+    "job_id": 11,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "right",
+    "shape": [
+      3072,
+      3072
+    ],
+    "reference_seconds": [
+      3.4396567195653915,
+      3.439686641097069
+    ],
+    "newton_seconds": [
+      0.6264072358608246,
+      0.6263293772935867
+    ],
+    "speedup": 5.491452304040321,
+    "polar_relative_error": 2.984745052848764e-13,
+    "orthogonality_max": 3.6637359812630166e-13,
+    "reconstructed_weight_relative_error": 2.9849069983600627e-13,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.04344509440855958,
+      "orthogonality_max": 3.6637359812630166e-13
+    },
+    "passed": true
+  },
+  {
+    "job_id": 11,
+    "tensor": "model.layers.0.self_attn.k_proj.weight",
+    "frame": "right",
+    "shape": [
+      3072,
+      1024
+    ],
+    "reference_seconds": [
+      0.5337392464280128,
+      0.5335787758231163
+    ],
+    "newton_seconds": [
+      0.03649525344371796,
+      0.03632321208715439
+    ],
+    "speedup": 14.657244072228158,
+    "polar_relative_error": 3.336383293500448e-14,
+    "orthogonality_max": 4.696243394164412e-14,
+    "reconstructed_weight_relative_error": 3.31257436758595e-14,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.014475789416667327,
+      "orthogonality_max": 4.696243394164412e-14
+    },
+    "passed": true
+  },
+  {
+    "job_id": 19,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "left",
+    "shape": [
+      11008,
+      4096
+    ],
+    "reference_seconds": [
+      7.518282480537891,
+      7.519039824604988
+    ],
+    "newton_seconds": [
+      2.1562100499868393,
+      2.156176410615444
+    ],
+    "speedup": 3.48700712297541,
+    "polar_relative_error": 5.314980419787419e-13,
+    "orthogonality_max": 6.492584248007915e-13,
+    "reconstructed_weight_relative_error": 5.317397983550664e-13,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.05794920175305357,
+      "orthogonality_max": 6.492584248007915e-13
+    },
+    "passed": true
+  },
+  {
+    "job_id": 19,
+    "tensor": "model.layers.0.mlp.up_proj.weight",
+    "frame": "right",
+    "shape": [
+      4096,
+      4096
+    ],
+    "reference_seconds": [
+      6.1010314747691154,
+      6.1021935641765594
+    ],
+    "newton_seconds": [
+      1.4830573052167892,
+      1.4828097000718117
+    ],
+    "speedup": 4.11455571581107,
+    "polar_relative_error": 5.318944382882847e-13,
+    "orthogonality_max": 6.455946888195285e-13,
+    "reconstructed_weight_relative_error": 5.327500537398561e-13,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.057966774076036356,
+      "orthogonality_max": 6.455946888195285e-13
+    },
+    "passed": true
+  },
+  {
+    "job_id": 19,
+    "tensor": "model.layers.0.self_attn.k_proj.weight",
+    "frame": "right",
+    "shape": [
+      4096,
+      1024
+    ],
+    "reference_seconds": [
+      0.5476728230714798,
+      0.5475173741579056
+    ],
+    "newton_seconds": [
+      0.04287564754486084,
+      0.0427207350730896
+    ],
+    "speedup": 12.79481870300104,
+    "polar_relative_error": 3.4637417429741093e-14,
+    "orthogonality_max": 5.062616992290714e-14,
+    "reconstructed_weight_relative_error": 3.496503954403845e-14,
+    "telemetry": {
+      "requested": "newton",
+      "used": "newton",
+      "iterations": 2,
+      "fallback": null,
+      "initial_gram_frobenius": 0.014522345299049635,
+      "orthogonality_max": 5.062616992290714e-14
+    },
+    "passed": true
+  }
+]

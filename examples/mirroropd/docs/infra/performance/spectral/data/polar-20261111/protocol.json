@@ -1,0 +1,8 @@
+{
+  "manifest_sha256": "6508b915dde10b7673f64a1d5aca4e71b8731f5584b0bf43dd85eb1dd5aa8f02",
+  "device": "NVIDIA H800",
+  "repeats": 2,
+  "arithmetic": "FP64 Gram/Newton and gesvd; FP32 output rounding separately gated",
+  "input": "Real layer-0 q/k/up checkpoint singular frames plus synthetic isotropic 1e-5 perturbation",
+  "unit": "matrix/frame; elapsed time is synchronized GPU wall time, not end-to-end training"
+}

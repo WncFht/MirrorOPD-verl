@@ -1,0 +1,49 @@
+{
+  "setting": "Qwen GRPO job7, layer13 k_proj only, two online steps, seed37, DAPO first8 rows; fixed heldout reporting",
+  "same_rollouts": true,
+  "train": [
+    {
+      "step": 1,
+      "row": "dapo-source-row-1",
+      "svd_loss": 0.010678816586732864,
+      "newton_loss": 0.010678816586732864,
+      "svd_optimizer_seconds": 0.8891196250915527,
+      "newton_optimizer_seconds": 0.09414911270141602
+    },
+    {
+      "step": 2,
+      "row": "dapo-source-row-0",
+      "svd_loss": 0.016065850853919983,
+      "newton_loss": 0.016065850853919983,
+      "svd_optimizer_seconds": 0.8275637626647949,
+      "newton_optimizer_seconds": 0.055159807205200195
+    }
+  ],
+  "scores": [
+    {
+      "step": 0,
+      "count": 12,
+      "max_rkl_absolute_difference": 0.0,
+      "svd_mean_rkl": 0.021280725697016917,
+      "newton_mean_rkl": 0.021280725697016917
+    },
+    {
+      "step": 1,
+      "count": 12,
+      "max_rkl_absolute_difference": 0.0,
+      "svd_mean_rkl": 0.021115194174239807,
+      "newton_mean_rkl": 0.021115194174239807
+    },
+    {
+      "step": 2,
+      "count": 12,
+      "max_rkl_absolute_difference": 0.0009721876087157369,
+      "svd_mean_rkl": 0.021158929986024127,
+      "newton_mean_rkl": 0.02120252596281635
+    }
+  ],
+  "wall_seconds": {
+    "svd": 25.548996448516846,
+    "newton": 21.03261113166809
+  }
+}

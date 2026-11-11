@@ -19,17 +19,21 @@ from ..absorption.banks import score
 from ..absorption.protocol import RunContext
 from ..scan import thin_svd
 from ..weights import DEFAULT_SCOPE, TensorCheckpoint
-from .math import polar
+from .retraction import retract, spectrum_gradient
 
 
 class FactorAdam:
     """Separate AdamW states on ambient frame variables, followed by polar retraction."""
 
-    def __init__(self, parameters, lr, mode):
+    def __init__(self, parameters, lr, mode, retraction="svd"):
+        self.retraction = retraction
+        self.retraction_stats = dict(calls=0, newton=0, fallback=0)
         self.mode, self.entries = mode, []
         self.offload = sum(p.numel() for _, p in parameters) > 2_200_000_000
         for name, parameter in parameters:
-            u, s, vh = thin_svd(parameter.detach().double(), driver="gesvd", transpose_wide=True)
+            u, s, vh = thin_svd(
+                parameter.detach().double(), driver="gesvd" if parameter.is_cuda else None, transpose_wide=True
+            )
             u, v, s = u.float(), vh.T.contiguous().float(), s.float()
             if self.offload:
                 u, v, s = u.cpu(), v.cpu(), s.cpu()
@@ -40,6 +44,13 @@ class FactorAdam:
                 s = torch.nn.Parameter(s)
                 optimizer = torch.optim.AdamW([s], lr=lr, weight_decay=0)
             self.entries.append((name, parameter, u, s, v, optimizer))
+
+    def _retract(self, matrix):
+        result, info = retract(matrix, method=self.retraction, return_info=True)
+        self.retraction_stats["calls"] += 1
+        self.retraction_stats["newton"] += info["used"] == "newton"
+        self.retraction_stats["fallback"] += info["fallback"] is not None
+        return result
 
     @torch.no_grad()
     def step(self):
@@ -54,15 +65,19 @@ class FactorAdam:
                     u.grad = ((g @ vg) * sg).cpu()
                     v.grad = ((g.T @ ug) * sg).cpu()
                 else:
-                    s.grad = (ug.T @ g @ vg).diagonal().contiguous().cpu()
+                    s.grad = spectrum_gradient(g, ug, vg).cpu()
                 optimizer.step()
                 optimizer.zero_grad(set_to_none=True)
                 if self.mode == "frames":
-                    ug = polar(u.to(device=g.device, dtype=torch.float64)).float()
-                    vg = polar(v.to(device=g.device, dtype=torch.float64)).float()
+                    ug = self._retract(u.to(device=g.device, dtype=torch.float64)).float()
+                    vg = self._retract(v.to(device=g.device, dtype=torch.float64)).float()
                     u.copy_(ug.cpu())
                     v.copy_(vg.cpu())
-                    maximum = max(maximum, float((ug.square().sum(0) - 1).abs().max()))
+                    maximum = max(
+                        maximum,
+                        float((ug.square().sum(0) - 1).abs().max()),
+                        float((vg.square().sum(0) - 1).abs().max()),
+                    )
                 else:
                     s.clamp_(min=0)
                     sg = s.to(g.device)
@@ -73,14 +88,14 @@ class FactorAdam:
                 v.grad = (g.T @ u) * s
                 optimizer.step()
                 optimizer.zero_grad(set_to_none=True)
-                u.copy_(polar(u.double()).float())
-                v.copy_(polar(v.double()).float())
+                u.copy_(self._retract(u.double()).float())
+                v.copy_(self._retract(v.double()).float())
                 # A cheap per-column check each step; full orthogonality on checkpoint sites below.
                 maximum = max(
                     maximum, float((u.square().sum(0) - 1).abs().max()), float((v.square().sum(0) - 1).abs().max())
                 )
             else:
-                s.grad = (u.T @ g @ v).diagonal().contiguous()
+                s.grad = spectrum_gradient(g, u, v)
                 optimizer.step()
                 optimizer.zero_grad(set_to_none=True)
                 s.clamp_(min=0)
@@ -99,7 +114,7 @@ class FactorAdam:
                 float((u.double().T @ u.double() - identity).abs().max()),
                 float((v.double().T @ v.double() - identity).abs().max()),
             )
-            actual = torch.linalg.svdvals(parameter.double(), driver="gesvd")
+            actual = torch.linalg.svdvals(parameter.double(), driver="gesvd" if parameter.is_cuda else None)
             relative = float((actual - s.detach().double().sort(descending=True).values).norm() / s.norm())
             if max(orth, relative) > 1e-5:
                 raise ValueError(f"Factor numerical gate failed: {name}, {orth}, {relative}")
@@ -157,6 +172,7 @@ def run(
     kl_backend="precompute",
     token_chunk=128,
     vocab_chunk=8192,
+    retraction="svd",
 ):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
@@ -192,7 +208,7 @@ def run(
     optimizer = (
         torch.optim.AdamW([p for _, p in parameters], lr=lr, weight_decay=0)
         if mode == "weights"
-        else FactorAdam(parameters, lr, mode)
+        else FactorAdam(parameters, lr, mode, retraction=retraction)
     )
     dump(
         output / "protocol.json",
@@ -206,6 +222,7 @@ def run(
             objective="online student-sampled full-vocabulary reverse KL; realized token sum / fixed H128",
             training_data=train_source,
             kl_execution=dict(backend=kl_backend, token_chunk=token_chunk, vocab_chunk=vocab_chunk),
+            retraction=retraction,
             arithmetic="FP32 model/factors/Adam states, BF16 autocast backbone, FP64 polar retraction",
             parameters=keys,
             factor_state_offload=getattr(optimizer, "offload", False),
@@ -276,6 +293,7 @@ def run(
             response_ids=answer,
             optimizer_seconds=optimizer_seconds,
             column_norm_error=maximum,
+            retraction_stats=dict(getattr(optimizer, "retraction_stats", {})),
             wall_seconds=time.time() - started,
             peak_allocated_bytes=torch.cuda.max_memory_allocated(),
         )
@@ -312,6 +330,7 @@ def main():
     )
     p.add_argument("--token-chunk", type=int, default=128)
     p.add_argument("--vocab-chunk", type=int, default=8192)
+    p.add_argument("--retraction", choices=["svd", "newton"], default="svd")
     p.add_argument("--smoke", action="store_true")
     torch.set_num_threads(2)
     torch.backends.cuda.matmul.allow_tf32 = False
