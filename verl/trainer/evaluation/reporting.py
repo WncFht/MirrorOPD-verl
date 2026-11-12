@@ -7,7 +7,7 @@ from collections import defaultdict
 from .metrics import position_rkl_metrics, readout_metrics, summarize_rkl
 
 
-def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None):
+def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None, public_equal_domains=True):
     source_baseline = baselines.get("source_heldout")
     spaces = {r.get("measure_id") for r in rows}
     if len(spaces) > 1:
@@ -26,7 +26,7 @@ def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None):
             panels.setdefault(row["domain"], []).append(row)
         for domain, panel in panels.items():
             prefix = f"eval/rkl/{bank}/{domain}"
-            group = "domain" if domain == "all" else None
+            group = "domain" if domain == "all" and public_equal_domains else None
             summary = summarize_rkl(panel, equal_groups=group)
             metrics.update({f"{prefix}/{k}": v for k, v in summary.items() if k != "mean"})
             if "mean" in summary:
@@ -47,6 +47,8 @@ def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None):
                     metrics[f"{prefix}/absolute_reduction"] = before["mean"] - summary["mean"]
                     if before["mean"] > 0:
                         metrics[f"{prefix}/reduction_percent"] = 100 * (1 - summary["mean"] / before["mean"])
+            if not public_equal_domains and panel and all(r["tokens"] > 0 for r in panel):
+                metrics[f"{prefix}/fixed_h1024"] = sum(r["rkl_sum"] for r in panel) / (1024 * len(panel))
     for bank in ("source_heldout", "history"):
         panel = [r for r in rows if r["bank"] == bank]
         for diagnostic in ("student_excluded_mass", "teacher_excluded_mass"):

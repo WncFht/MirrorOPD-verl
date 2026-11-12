@@ -110,6 +110,18 @@ class EvaluationCoordinator(ReadoutCallback):
             self.fixed[bank] = refs if bank == "source_heldout" else select_panel(refs, self.options.datasets)
         if self.options.source_enabled and len(self.fixed.get("source_heldout", [])) != self.options.source_count:
             raise ValueError("Source bank does not cover the declared source holdout")
+        for bank, path in self.options.fixed_banks.items():
+            store = ArtifactStore(path)
+            metadata = store.manifest(complete=True)["metadata"]
+            expected = self.student_identity if bank == "public_initial" else self.teacher_identity
+            if metadata.get("model_identity") != expected:
+                raise ValueError("External fixed bank generator weights differ")
+            if metadata.get("teacher_identity") != self.teacher_identity:
+                raise ValueError("External fixed bank supervision teacher differs")
+            for name, entry in store.manifest(complete=True)["files"].items():
+                if file_sha256(store.root / name) != entry["sha256"]:
+                    raise ValueError("External fixed bank contents changed")
+            self.fixed[bank] = trajectory_index(store, bank=bank)
         self.store = ArtifactStore.create(
             self.options.output,
             kind="unified_evaluation_run",
@@ -118,6 +130,10 @@ class EvaluationCoordinator(ReadoutCallback):
                 "bootstrap_sha256": file_sha256(self.bootstrap.manifest_path),
                 "contract_sha256": identity(contract),
                 "configuration": dataclasses.asdict(self.options),
+                "fixed_banks_sha256": {
+                    name: file_sha256(ArtifactStore(path).manifest_path)
+                    for name, path in self.options.fixed_banks.items()
+                },
                 "training_rollout_policy": OmegaConf.to_container(config.rollout_policy, resolve=True)
                 if OmegaConf.select(config, "rollout_policy") is not None
                 else None,
@@ -128,12 +144,14 @@ class EvaluationCoordinator(ReadoutCallback):
         self.completed, self.pending_outer = set(), 0
         self.pending_events = {}
         self.before_sync = False
-        self.initial_accuracy = ArtifactStore(self.bootstrap.root / "initial-accuracy").manifest(complete=True)[
-            "metadata"
-        ]["metrics"]
-        self.teacher_accuracy = ArtifactStore(self.bootstrap.root / "teacher-accuracy").manifest(complete=True)[
-            "metadata"
-        ]["metrics"]
+        self.initial_accuracy, self.teacher_accuracy = {}, {}
+        if self.options.accuracy_enabled:
+            self.initial_accuracy = ArtifactStore(self.bootstrap.root / "initial-accuracy").manifest(complete=True)[
+                "metadata"
+            ]["metrics"]
+            self.teacher_accuracy = ArtifactStore(self.bootstrap.root / "teacher-accuracy").manifest(complete=True)[
+                "metadata"
+            ]["metrics"]
 
     def on_readout(self, trainer, outer):
         if outer in self.pending_events:
@@ -165,13 +183,62 @@ class EvaluationCoordinator(ReadoutCallback):
                 sample_index=0,
                 producer="current_student"
                 if getattr(getattr(trainer, "rollout_policy", None), "default_path", True)
-                else f"policy_{trainer.rollout_policy.mode}",
+                else f"policy_{self.config.rollout_policy.get('model', {}).get('kind', trainer.rollout_policy.mode)}",
                 bank="history",
                 prompt_tokens=len(row["prompt_ids"]),
                 response_tokens=len(row["response_ids"]),
                 valid_tokens=sum(row["response_mask"]),
             )
         self.store.write_rows(shard, rows, schema=GENERATION)
+        if self.options.fixed_banks:
+            kind = self.config.rollout_policy.get("model", {}).get("kind", "current")
+            generator_identity = self.teacher_identity if kind == "teacher" else self.student_identity
+            rollout = self.config.actor_rollout_ref.rollout
+            sampling = json.dumps(
+                {key: rollout.get(key) for key in ("seed", "temperature", "top_p", "top_k", "response_length")}
+            )
+            self.store.write_rows(
+                f"trajectory-text/outer-{outer:03d}.parquet",
+                [
+                    {
+                        "id": row["id"],
+                        "prompt": self.input_model.tokenizer.decode(row["prompt_ids"], skip_special_tokens=False),
+                        "response": self.input_model.tokenizer.decode(row["response_ids"], skip_special_tokens=False),
+                        "generator_kind": kind,
+                        "generator_initial_identity": generator_identity,
+                        "generator_outer": outer - 1 if kind == "current" else 0,
+                        "learner_outer_before": outer - 1,
+                        "learner_outer_after": outer,
+                        "sampling": sampling,
+                        "request_seed": row.get("seed"),
+                        "behavior_log_probs": "not_available_in_native_capture",
+                    }
+                    for row in rows
+                ],
+                schema=pa.schema(
+                    [
+                        (key, pa.string())
+                        for key in (
+                            "id",
+                            "prompt",
+                            "response",
+                            "generator_kind",
+                            "generator_initial_identity",
+                            "sampling",
+                            "behavior_log_probs",
+                        )
+                    ]
+                    + [
+                        (key, pa.int64())
+                        for key in (
+                            "generator_outer",
+                            "learner_outer_before",
+                            "learner_outer_after",
+                            "request_seed",
+                        )
+                    ]
+                ),
+            )
         self.batches[outer] = [
             {k: row[k] for k in ("id", "source_id", "outer", "valid_tokens", "dataset", "domain", "sample_index")}
             | {
@@ -223,7 +290,10 @@ class EvaluationCoordinator(ReadoutCallback):
         plan = compile_plan(
             self.options, outer=outer, total=trainer.total_training_steps, optimizer_steps=trainer.actor_optimizer_step
         )
-        if not plan.tasks and not (outer == trainer.total_training_steps and self.options.final_export):
+        export_due = outer in self.options.export_outers or (
+            outer == trainer.total_training_steps and self.options.final_export
+        )
+        if not plan.tasks and not export_due:
             self.completed.add(outer)
             return {}
         service = trainer.rollout_service
@@ -257,13 +327,14 @@ class EvaluationCoordinator(ReadoutCallback):
                     chunk_size=self.options.generation_chunk_size,
                     timeout=self.options.request_timeout,
                 )
-                collector = AccuracyCollector(
-                    event.root / "accuracy",
-                    self.specifications,
-                    self.input_model.tokenizer,
-                    workers=self.options.verifier_workers,
-                )
-                collector.follow_generation(event.root / "current", self.options.protocols)
+                if "accuracy" in plan.tasks:
+                    collector = AccuracyCollector(
+                        event.root / "accuracy",
+                        self.specifications,
+                        self.input_model.tokenizer,
+                        workers=self.options.verifier_workers,
+                    )
+                    collector.follow_generation(event.root / "current", self.options.protocols)
                 current = asyncio.run(
                     generator.generate(
                         event.root / "current",
@@ -273,7 +344,7 @@ class EvaluationCoordinator(ReadoutCallback):
                         model_identity=self.student_identity,
                         outer=outer,
                         expected_version=outer,
-                        on_batch=collector.check,
+                        on_batch=collector.check if collector is not None else None,
                         progress=self._progress,
                     )
                 )
@@ -282,7 +353,7 @@ class EvaluationCoordinator(ReadoutCallback):
                 if "public_initial" not in plan.tasks:
                     refs.extend(self.fixed["public_initial"])
                 aliases["public_current"] = "public_initial"
-            if outer == 0:
+            if outer == 0 and self.options.accuracy_enabled:
                 metrics.update(self.initial_accuracy)
                 metrics.update(gap_recovery(self.initial_accuracy, self.initial_accuracy, self.teacher_accuracy))
                 for name, label in (("initial-accuracy", "initial_student"), ("teacher-accuracy", "teacher")):
@@ -306,7 +377,11 @@ class EvaluationCoordinator(ReadoutCallback):
                     self.baselines[bank] = [r for r in scores if r["bank"] == bank]
             metrics.update(
                 evaluation_metrics(
-                    scores, baselines=self.baselines, previous_history=self.previous_history, aliases=aliases
+                    scores,
+                    baselines=self.baselines,
+                    previous_history=self.previous_history,
+                    aliases=aliases,
+                    public_equal_domains=not bool(self.options.fixed_banks),
                 )
             )
             if collector is not None:
@@ -314,7 +389,7 @@ class EvaluationCoordinator(ReadoutCallback):
                 metrics.update(accuracy)
                 metrics.update(gap_recovery(accuracy, self.initial_accuracy, self.teacher_accuracy))
                 collector = None
-            if outer == trainer.total_training_steps and self.options.final_export:
+            if export_due:
                 from .checkpoint import final_model_export
 
                 metrics.update(
@@ -323,9 +398,11 @@ class EvaluationCoordinator(ReadoutCallback):
                         self.checkpoint_references(),
                         hidden_size=self.hidden_size,
                         budget=self.options.score,
-                        destination=self.store.root / "final-model",
+                        destination=self.store.root
+                        / ("final-model" if outer == trainer.total_training_steps else f"snapshots/outer-{outer:03d}"),
                         verify=self.options.verify_export,
                         live_payload_bytes=live_payload_bytes,
+                        max_ckpt_to_keep=None if self.options.export_outers else 1,
                     )
                 )
             event.write_rows("rkl.parquet", scores, schema=EVAL_RKL)

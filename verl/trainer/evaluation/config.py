@@ -196,6 +196,7 @@ class EvaluationConfig:
     source_file: str | None = None
     source_enabled: bool = False
     history_enabled: bool = False
+    accuracy_enabled: bool = True
     training_domain: str = "math"
     source_count: int = 128
     history_size: int = 128
@@ -208,10 +209,14 @@ class EvaluationConfig:
     schedules: dict[str, Schedule] = field(default_factory=dict)
     final_export: bool = True
     verify_export: bool = True
+    fixed_banks: dict[str, str] = field(default_factory=dict)
+    export_outers: tuple[int, ...] = ()
 
     @property
     def bootstrap_children(self):
-        children = ("initial", "teacher", "initial-accuracy", "teacher-accuracy")
+        children = ("initial", "teacher")
+        if self.accuracy_enabled:
+            children += ("initial-accuracy", "teacher-accuracy")
         return children + (("source",) if self.source_enabled else ())
 
     @classmethod
@@ -231,12 +236,19 @@ class EvaluationConfig:
             raise ValueError("Unknown evaluation schedule")
         value["schedules"] = {k: strict_record(Schedule, configured.get(k, v)) for k, v in defaults.items()}
         result = strict_record(cls, value)
+        if result.fixed_banks and set(result.fixed_banks) != {"public_initial", "public_teacher"}:
+            raise ValueError("External fixed banks require both initial and teacher sources")
+        if any(type(step) is not int or step <= 0 for step in result.export_outers):
+            raise ValueError("Model snapshot boundaries must be positive outer integers")
+        if result.export_outers and (not result.final_export or not result.verify_export):
+            raise ValueError("Intermediate snapshots require verified model export")
         if result.training_domain not in {"math", "code", "science", "if"}:
             raise ValueError("Unknown training domain")
         if len({d.name for d in result.datasets}) != len(result.datasets):
             raise ValueError("Dataset names must be unique")
-        if type(result.source_enabled) is not bool or type(result.history_enabled) is not bool:
-            raise ValueError("source_enabled and history_enabled must be booleans")
+        switches = ("source_enabled", "history_enabled", "accuracy_enabled")
+        if any(type(getattr(result, name)) is not bool for name in switches):
+            raise ValueError("source_enabled, history_enabled and accuracy_enabled must be booleans")
         if result.source_enabled and (not result.source_file or "source" not in result.protocols):
             raise ValueError("Enabled source evaluation requires source_file and a source protocol")
         if any(d.protocol not in result.protocols for d in result.datasets):

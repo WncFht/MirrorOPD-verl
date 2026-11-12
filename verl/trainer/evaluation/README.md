@@ -87,6 +87,24 @@ trainer:
 
 重新开启时，将对应开关设为true；source还需要`source_file`与`source`生成协议，并在新的bootstrap中准备其银行。四域launcher默认输出关闭配置，可用`--source-heldout`／`--training-history`显式开启。历史运行与冻结配置保持原样；专用SourceHistoryReadout继续作为显式诊断入口保留。
 
+### 独立关闭 accuracy
+
+`accuracy_enabled` 默认 `true`，保持已有实验行为。设为 `false` 后，bootstrap 不启动 verifier、不生成或要求 `initial-accuracy/teacher-accuracy`，训练评估也不读取这些产物，不输出 accuracy 和 teacher-gap 指标。已有包含 accuracy 的完整 bootstrap 可以继续用于 RKL-only 评估；重新开启 accuracy 时仍要求两个已绑定的 accuracy 产物。
+
+Accuracy 与 current-prefix RKL 独立：关闭 accuracy 后，`bench` 到期仍生成 current 回答并计算 RKL。只需要固定 bank 的实验同时关闭 `bench`，而 `banks` 与模型导出频率保持独立：
+
+```yaml
+trainer:
+  evaluation:
+    _target_: verl.trainer.evaluation.coordinator.EvaluationCoordinator
+    accuracy_enabled: false
+    schedules:
+      banks: {every: 1}
+      bench: {at: [], final: false}
+```
+
+Outer0 始终评分 initial/teacher 固定 bank，`public_current` 只作为 initial 的别名，不重新生成回答。该开关不改变 token、模型或生成协议身份；RKL-only bootstrap 不可在未补齐判分产物的情况下直接开启 accuracy。
+
 统一配置包含`_target_/output/source_file/bootstrap/datasets/protocols/score/schedules`。所有组件的 options 与 `_target_` 放在同一 `trainer.evaluation` 中；构造边界只解析一次目标，剩余字段由组件的严格类型配置验证。`datasets`逐 bench 声明 name、domain、path、verifier、n、protocol、panel_ids；`protocols`分别定义 source 和 public 的 T／top-p／top-k、回答 cap、prompt 预算和模板。配置拒绝未知字段，public prompt 超长时报错；不静默删题或截短回答。稳定采样 seed 由 seed／dataset／question／sample_index 决定，sample 0 不随 n 或 checkpoint 改变。
 
 | 任务                           | 默认 outer 边界      | 轨迹来源                                            |

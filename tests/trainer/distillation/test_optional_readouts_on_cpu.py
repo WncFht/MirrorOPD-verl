@@ -55,6 +55,90 @@ def test_opt_in_restores_the_original_schedule(tmp_path):
         options(tmp_path, history_enabled="false")
 
 
+def test_accuracy_switch_preserves_bank_and_current_rkl_schedules(tmp_path):
+    cfg = options(tmp_path, accuracy_enabled=False)
+    assert cfg.bootstrap_children == ("initial", "teacher")
+    for outer in range(51):
+        plan = compile_plan(cfg, outer=outer, total=50, optimizer_steps=outer * 16)
+        assert not {"accuracy", "teacher_accuracy"}.intersection(plan.tasks)
+        assert plan.generate_current == (outer in {25, 50})
+    initial = compile_plan(cfg, outer=0, total=50, optimizer_steps=0)
+    assert set(initial.tasks) == {"public_initial", "public_teacher", "public_current"}
+    fixed_only = options(
+        tmp_path,
+        accuracy_enabled=False,
+        schedules={"banks": {"every": 1}, "bench": {"at": [], "final": False}},
+    )
+    for outer in range(1, 51):
+        plan = compile_plan(fixed_only, outer=outer, total=50, optimizer_steps=outer * 16)
+        assert set(plan.tasks) == {"public_initial", "public_teacher"}
+        assert not plan.generate_current
+    assert options(tmp_path).accuracy_enabled
+    with pytest.raises(ValueError, match="booleans"):
+        options(tmp_path, accuracy_enabled="false")
+
+
+@pytest.mark.parametrize("outer", [0, 1, 50])
+@pytest.mark.parametrize("current_readout", [False, True])
+def test_no_accuracy_boundaries_score_without_accuracy_artifacts(tmp_path, monkeypatch, outer, current_readout):
+    from verl.trainer.evaluation import coordinator as module
+
+    coordinator = object.__new__(EvaluationCoordinator)
+    coordinator.options = options(
+        tmp_path,
+        accuracy_enabled=False,
+        final_export=False,
+        schedules={
+            "banks": {"every": 1},
+            "bench": {"every": 1} if current_readout else {"at": [], "final": False},
+        },
+    )
+    coordinator.pending_outer = outer
+    coordinator.completed = set()
+    coordinator.pending_events = {}
+    coordinator.fixed = {"public_initial": [], "public_teacher": []}
+    coordinator.baselines = {}
+    coordinator.previous_history = []
+    coordinator.hidden_size = 2
+    coordinator.before_sync = False
+    coordinator.store = ArtifactStore.create(tmp_path / "run", kind="test", metadata={})
+    coordinator._progress = lambda event: None
+    coordinator.config = OmegaConf.create({"actor_rollout_ref": {"rollout": {"max_model_len": 11264}}})
+    coordinator.input_model = SimpleNamespace(tokenizer=None)
+    coordinator.specifications = []
+    coordinator.student_identity = "student"
+    calls = []
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("RKL-only evaluation must not run generation or accuracy")
+
+    monkeypatch.setattr(module, "AccuracyCollector", forbidden)
+
+    class Generator:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def generate(self, *args, **kwargs):
+            assert kwargs["on_batch"] is None
+            calls.append("generate")
+
+    monkeypatch.setattr(module, "NativeGenerator", Generator if current_readout else forbidden)
+    monkeypatch.setattr(module, "trajectory_index", lambda *a, **k: [])
+    monkeypatch.setattr(module, "select_panel", lambda refs, specs: refs)
+    monkeypatch.setattr(module, "gap_recovery", forbidden)
+    monkeypatch.setattr(module, "score_native_rows", lambda *a, **k: (calls.append("score") or [], {}))
+    trainer = SimpleNamespace(
+        total_training_steps=50,
+        actor_optimizer_step=outer * 16,
+        checkpoint_manager=SimpleNamespace(replicas=[]),
+        rollout_service=SimpleNamespace(park=lambda: None, ensure_current=lambda version: None),
+    )
+    metrics = coordinator.validate(trainer)
+    assert calls == (["generate", "score"] if current_readout and outer > 0 else ["score"])
+    assert not any(key.startswith("eval/accuracy/") for key in metrics)
+    assert outer in coordinator.completed
+
+
 def test_off_skips_sampling_and_gpu_but_retains_training_tokens(tmp_path, monkeypatch):
     import verl.trainer.evaluation.coordinator as module
 
@@ -103,7 +187,8 @@ def test_reload_can_use_public_generation_and_legacy_option(tmp_path):
 
 
 @pytest.mark.parametrize("enabled", [False, True])
-def test_bootstrap_initial_only_generates_source_when_enabled(tmp_path, monkeypatch, enabled):
+@pytest.mark.parametrize("accuracy_enabled", [False, True])
+def test_bootstrap_initial_only_generates_source_when_enabled(tmp_path, monkeypatch, enabled, accuracy_enabled):
     import asyncio
 
     from verl.trainer.evaluation import bootstrap
@@ -117,6 +202,7 @@ def test_bootstrap_initial_only_generates_source_when_enabled(tmp_path, monkeypa
                     "output": str(tmp_path / "run"),
                     "bootstrap": str(tmp_path / "bootstrap"),
                     "source_enabled": enabled,
+                    "accuracy_enabled": accuracy_enabled,
                     "source_file": "unused-source",
                     "source_count": 1,
                     "datasets": [
@@ -159,7 +245,7 @@ def test_bootstrap_initial_only_generates_source_when_enabled(tmp_path, monkeypa
 
     class Collector:
         def __init__(self, *args, **kwargs):
-            pass
+            assert accuracy_enabled, "Disabled accuracy must not start verifier workers"
 
         def follow_generation(self, *args):
             pass
@@ -190,7 +276,8 @@ def test_bootstrap_initial_only_generates_source_when_enabled(tmp_path, monkeypa
 
 
 @pytest.mark.parametrize("enabled", [False, True])
-def test_finalize_requires_only_enabled_bootstrap_children(tmp_path, monkeypatch, enabled):
+@pytest.mark.parametrize("accuracy_enabled", [False, True])
+def test_finalize_requires_only_enabled_bootstrap_children(tmp_path, monkeypatch, enabled, accuracy_enabled):
     import json
 
     import pyarrow as pa
@@ -206,6 +293,7 @@ def test_finalize_requires_only_enabled_bootstrap_children(tmp_path, monkeypatch
         output=str(tmp_path / "out"),
         bootstrap=str(tmp_path / "boot"),
         source_enabled=enabled,
+        accuracy_enabled=accuracy_enabled,
         source_file=str(path) if enabled else None,
         source_count=1,
         datasets=[dict(name="math", domain="math", path=str(path), verifier="math", panel_ids=["q"])],
@@ -245,7 +333,8 @@ def test_finalize_requires_only_enabled_bootstrap_children(tmp_path, monkeypatch
             schema=GENERATION,
         )
         store.finish()
-    for child, producer in [("initial-accuracy", "initial"), ("teacher-accuracy", "teacher")]:
+    accuracy_children = [("initial-accuracy", "initial"), ("teacher-accuracy", "teacher")] if accuracy_enabled else []
+    for child, producer in accuracy_children:
         store = ArtifactStore.create(
             root.root / child,
             kind="accuracy",
@@ -270,6 +359,7 @@ def test_finalize_requires_only_enabled_bootstrap_children(tmp_path, monkeypatch
     result = root.manifest(complete=True)
     assert ("source" in result["metadata"]["children_sha256"]) == enabled
     assert (root.root / "source").exists() == enabled
+    assert ("initial-accuracy" in result["metadata"]["children_sha256"]) == accuracy_enabled
 
 
 def test_final_export_verifies_public_bank_without_source(tmp_path, monkeypatch):
@@ -299,6 +389,7 @@ def test_final_export_verifies_public_bank_without_source(tmp_path, monkeypatch)
     trainer = SimpleNamespace(
         global_steps=50,
         actor_optimizer_step=1600,
+        config=OmegaConf.create({"actor_rollout_ref": {"actor": {"checkpoint": {}}}}),
         actor_rollout_wg=SimpleNamespace(save_checkpoint=save, load_checkpoint=lambda *a, **k: None),
     )
     monkeypatch.setattr(checkpoint, "score_native_rows", score)

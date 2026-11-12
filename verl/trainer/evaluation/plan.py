@@ -23,13 +23,10 @@ def compile_plan(config, *, outer, total, optimizer_steps):
             0,
             optimizer_steps,
             (("source_heldout",) if config.source_enabled else ())
-            + (
-                "public_initial",
-                "public_teacher",
-                "accuracy",
-                "public_current",
-                "teacher_accuracy",
-            ),
+            + ("public_initial", "public_teacher")
+            + (("accuracy",) if config.accuracy_enabled else ())
+            + ("public_current",)
+            + (("teacher_accuracy",) if config.accuracy_enabled else ()),
             False,
         )
     tasks = []
@@ -41,9 +38,9 @@ def compile_plan(config, *, outer, total, optimizer_steps):
         tasks.extend(("public_initial", "public_teacher"))
     bench = config.schedules["bench"].due(outer, total)
     if bench:
-        tasks.extend(("accuracy", "public_current"))
-    if outer == 0:
-        tasks.append("teacher_accuracy")
+        if config.accuracy_enabled:
+            tasks.append("accuracy")
+        tasks.append("public_current")
     return EvaluationPlan(outer, optimizer_steps, tuple(tasks), bench and outer > 0)
 
 
