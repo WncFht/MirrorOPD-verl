@@ -92,11 +92,12 @@ def allocated_busy(devices):
     return any(GPU_UUIDS[gpu] in current for gpu in devices)
 
 
-def run(repo, value, command):
+def run(repo, value, command, *, source=None):
     devices = parse_gpus(value)
     if not command:
         raise ValueError("An explicit command is required")
     repo = repo.resolve()
+    source = source.resolve() if source is not None else repo
     workspace = repo.parent
     locks = []
     try:
@@ -131,7 +132,7 @@ def run(repo, value, command):
             OMP_NUM_THREADS="1",
             PYTHONPYCACHEPREFIX="/root/.cache/mirroropd-fusion/pycache",
             PYTHON_BIN=str(workspace / "envs/mirroropd-fusion/bin/python"),
-            PYTHONPATH=str(repo) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else ""),
+            PYTHONPATH=str(source) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else ""),
             VERL_USE_UV="0",
             SMOKE_RAY_TMPDIR=f"/tmp/mirroropd-fusion-{value.replace(',', '-')}-{os.getpid()}",
             LD_LIBRARY_PATH=str(workspace / "cache/fusion-runtime/cuda-compat-12-9/usr/local/cuda-12.9/compat")
@@ -160,7 +161,7 @@ def run(repo, value, command):
             signal.signal(sig, forward_stop)
         try:
             if not terminating:
-                child = subprocess.Popen(command, cwd=repo, env=env, close_fds=True, start_new_session=True)
+                child = subprocess.Popen(command, cwd=source, env=env, close_fds=True, start_new_session=True)
                 if terminating:
                     forward_stop(terminating[0][0])
                 killed = False
@@ -198,6 +199,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["run", "verify", "validate"])
     parser.add_argument("--repo", type=Path)
+    parser.add_argument("--source", type=Path, help="Execution checkout; resource locks remain under --repo")
     parser.add_argument("--workspace", type=Path)
     parser.add_argument("--gpus", required=True)
     argv = sys.argv[1:]
@@ -213,7 +215,7 @@ def main():
         if args.action == "verify":
             verify_allocation(args.workspace.resolve(), args.gpus)
             return 0
-        return run(args.repo, args.gpus, command)
+        return run(args.repo, args.gpus, command, source=args.source)
     except (OSError, ValueError, KeyError, TypeError, subprocess.CalledProcessError) as error:
         print(f"GPU allocation refused: {error}", file=sys.stderr)
         return 2

@@ -58,3 +58,60 @@ def test_preparation_preserves_originals_and_binds_an_immutable_view(monkeypatch
     (output / "config.json").write_text("{}")
     with pytest.raises(ValueError, match="metadata changed"):
         protocols.prepare("Olmo3-Base-BayesProtocol", root=tmp_path)
+
+
+def test_support_extension_is_explicit_and_keeps_existing_semantics():
+    left = definition()
+    tokenizer = Tokenizer.from_str(json.dumps(left))
+    tokenizer.add_tokens(["<think>", "</think>"])
+    right = json.loads(tokenizer.to_str())
+    with pytest.raises(ValueError, match="defined ID support"):
+        protocols.verify_tokenizer_change(left, right, [])
+    assert protocols.verify_tokenizer_change(left, right, [], added=(4, 5)) == []
+    right["added_tokens"][0]["special"] = False
+    with pytest.raises(ValueError, match="added-token semantics"):
+        protocols.verify_tokenizer_change(left, right, [], added=(4, 5))
+
+
+def test_base_extension_preserves_native_eos_template_and_weights(monkeypatch, tmp_path):
+    source, donor, output = (tmp_path / key for key in ["source", "donor", "output"])
+    for path in [source, donor]:
+        path.mkdir()
+        (path / "config.json").write_text(json.dumps({"eos_token_id": 3, "vocab_size": 6}))
+        (path / "tokenizer.json").write_text(json.dumps(definition()))
+        (path / "tokenizer_config.json").write_text(
+            json.dumps(
+                {
+                    "eos_token": "<eos>",
+                    "pad_token": "<eos>",
+                    "chat_template": "base template",
+                }
+            )
+        )
+    tok = Tokenizer.from_str(json.dumps(definition()))
+    tok.add_tokens(["<think>", "</think>"])
+    (donor / "tokenizer.json").write_text(tok.to_str())
+    (donor / "tokenizer_config.json").write_text(
+        json.dumps(
+            {
+                "eos_token": "</think>",
+                "pad_token": "<eos>",
+                "chat_template": "teacher template",
+                "added_tokens_decoder": {
+                    str(t["id"]): {k: v for k, v in t.items() if k != "id"}
+                    for t in json.loads(tok.to_str())["added_tokens"]
+                },
+            }
+        )
+    )
+    (source / "model.safetensors").write_bytes(b"unchanged weights")
+    targets = {"Qwen3-1.7B-Base": source, "Qwen3-1.7B-SFT": donor, "Qwen3-Base-AbsorptionProtocol": output}
+    monkeypatch.setattr(protocols, "registered_model", lambda name, **kwargs: targets[name])
+    monkeypatch.setitem(protocols.EXTENSIONS, "Qwen3-Base-AbsorptionProtocol", (4, 5))
+    protocols.prepare("Qwen3-Base-AbsorptionProtocol", root=tmp_path)
+    config = json.loads((output / "tokenizer_config.json").read_text())
+    assert config["eos_token"] == "<eos>" and config["chat_template"] == "base template"
+    assert json.loads((output / "config.json").read_text())["eos_token_id"] == 3
+    assert (output / "model.safetensors").resolve() == source / "model.safetensors"
+    assert set(config["added_tokens_decoder"]) == {"4", "5"}
+    assert protocols.prepare("Qwen3-Base-AbsorptionProtocol", root=tmp_path) == output

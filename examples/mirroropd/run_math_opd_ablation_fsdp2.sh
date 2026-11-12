@@ -11,6 +11,41 @@
 # 本注释与 --overview 共用 launchers/math_experiment.py 的 preset_overview()；修改源后同步生成区。
 # 以下均为当前预设默认值；已启动实验以其 resolved config 为准。
 #
+# E94–E123：30组吸收动力学，current OPD；四卡、batch64/reuse16、40 outer。
+# 训练和双固定bank均cap7168，每outer只读bank RKL，不测accuracy、不重新生成current heldout。
+# 保存outer1/2/3/4/8/12/20/30/40，9份FP32新增快照；ABSORPTION_ROOT指定新题单与bank。
+# Preset  Student                        Teacher
+# E94     DeepSeek-R1-Distill-Qwen-1.5B  deepscaler
+# E95     DeepSeek-R1-Distill-Qwen-1.5B  JustRL-DeepSeek-1.5B
+# E96     DeepSeek-R1-Distill-Qwen-1.5B  minimath
+# E97     DeepSeek-R1-Distill-Qwen-1.5B  nemotron
+# E98     DeepSeek-R1-Distill-Qwen-1.5B  brorl
+# E99     Qwen3-1.7B                     Qwen3-1.7B-GRPO-KL-math-reasoning
+# E100    Qwen3-1.7B                     e3-1.7B
+# E101    Qwen3-1.7B                     Qwen3-1.7B-Math
+# E102    Qwen3-1.7B                     Qwen3-4B-Instruct-2507
+# E103    Llama-3.2-3B-Instruct          Co-rewarding-I-Llama-3.2-3B-Instruct-MATH
+# E104    Llama-3.2-3B-Instruct          Llama-3.2-3B-Instruct-arithmetic-full
+# E105    MiMo-7B-Base                   MiMo-7B-SFT
+# E106    MiMo-7B-Base                   MiMo-7B-RL-Zero
+# E107    MiMo-7B-SFT                    MiMo-7B-RL
+# E108    DeepSeek-R1-Distill-Qwen-1.5B  DeepSeek-R1-Distill-Qwen-7B
+# E109    DeepSeek-R1-Distill-Qwen-1.5B  Polaris-7B-Preview
+# E110    DeepSeek-R1-Distill-Qwen-7B    Polaris-7B-Preview
+# E111    DeepSeek-R1-Distill-Qwen-7B    Light-R1-7B-DS
+# E112    Qwen3-0.6B                     Qwen3-4B-Instruct-2507
+# E113    Qwen3-4B                       Qwen3-4B-Instruct-2507
+# E114    DeepSeek-R1-Distill-Qwen-1.5B  Light-R1-7B-DS
+# E115    MiMo-7B-Base                   MiMo-7B-RL
+# E116    MiMo-7B-SFT                    MiMo-7B-RL-Zero
+# E117    Qwen3-Base-AbsorptionProtocol  Qwen3-1.7B-SFT
+# E118    Qwen3-Base-AbsorptionProtocol  GT-Qwen3-1.7B-Base-MATH
+# E119    DeepSeek-R1-Distill-Qwen-1.5B  agentica-org/DeepCoder-1.5B-Preview@103033da54f104b0d0a3570547fb3721fba99962
+# E120    DeepSeek-R1-Distill-Qwen-1.5B  UltraData-IF-1.5B
+# E121    Llama-3.1-Tulu-3-8B-SFT        Llama-3.1-Tulu-3-8B-DPO
+# E122    Llama-3.1-Tulu-3-8B-DPO        Llama-3.1-Tulu-3-8B
+# E123    Llama-3.1-Tulu-3-8B-SFT        Llama-3.1-Tulu-3-8B
+#
 # 一、E81–E90 / E92–E93：Qwen Base 的聚合与 future reward 对照
 # 学生 Qwen3-1.7B-Base ← 教师 Qwen3-30B-A3B-Instruct-2507。
 # 共同训练：full-vocab MDPO kappa=1/eta=0.1，LR=1e-6；shared_sync。
@@ -40,7 +75,7 @@
 # E81/E82、E85–E90、E92/E93 不保存 checkpoint、最终模型或 optimizer。
 # E85–E90、E92/E93 resume_mode=disable。
 # 本组未配置固定 bank RKL；训练 teacher RKL 读取当前训练前缀。
-# 实验解释见 docs/experiments/learning-signal/weighted-targets-active.md。
+# 实验解释见 docs/experiments/learning-signal/weighted-targets.md。
 #
 # 二、E1–E53：算法、模型、长度与精度对照
 #
@@ -144,31 +179,31 @@
 # 六、全部编号的预算与覆盖规则
 #
 # 训练预算：Eval/Save 均按 outer step；Updates*=默认 batch==mini-batch 时的更新尝试数。
-# Presets          Reuse  Outer  Updates*  LR      Eval/Save  Initial val
-# E1-E6            4      32     128       shared  32/32      no
-# E7-E12           16     200    3200      shared  50/100     no
-# E13,E15,E23-E32  1      250    250       1e-6    20/100     yes
-# E14              1      250    250       5e-7    20/100     yes
-# E16              4      250    1000      1e-6    20/100     yes
-# E17,E33-E40,E42  16     250    4000      1e-6    20/100     yes
-# E18              64     64     4096      1e-6    8/16       no
-# E19              32     128    4096      1e-6    16/32      no
-# E20              16     256    4096      1e-6    32/64      no
-# E41,E54          16     100    1600      1e-6    10/50      no
-# E43              16     100    1600      1e-6    10/50      yes
-# E44-E47,E50-E53  16     256    4096      1e-6    32/128     no
-# E48-E49          16     256    4096      1e-6    32/64      yes
-# E55-E62          16     100    1600      1e-6    10/-1      no
-# E63-E68          16     40     640       1e-6    -1/-1      yes
-# E71              32     25     800       1e-6    -1/-1      yes
-# E72-E73,E91      16     20     320       1e-6    -1/-1      yes
-# E74-E77          32     50     1600      1e-6    -1/-1      yes
-# E78-E80          16     100    1600      1e-6    -1/-1      yes
-# E81              16     25     400       1e-6    5/-1       no
-# E82              16     100    1600      1e-6    5/-1       no
-# E83              16     100    1600      1e-6    5/25       no
-# E84              16     100    1600      1e-6    20/25      no
-# E85-E90,E92-E93  16     100    1600      1e-6    20/-1      no
+# Presets           Reuse  Outer  Updates*  LR      Eval/Save  Initial val
+# E1-E6             4      32     128       shared  32/32      no
+# E7-E12            16     200    3200      shared  50/100     no
+# E13,E15,E23-E32   1      250    250       1e-6    20/100     yes
+# E14               1      250    250       5e-7    20/100     yes
+# E16               4      250    1000      1e-6    20/100     yes
+# E17,E33-E40,E42   16     250    4000      1e-6    20/100     yes
+# E18               64     64     4096      1e-6    8/16       no
+# E19               32     128    4096      1e-6    16/32      no
+# E20               16     256    4096      1e-6    32/64      no
+# E41,E54           16     100    1600      1e-6    10/50      no
+# E43               16     100    1600      1e-6    10/50      yes
+# E44-E47,E50-E53   16     256    4096      1e-6    32/128     no
+# E48-E49           16     256    4096      1e-6    32/64      yes
+# E55-E62           16     100    1600      1e-6    10/-1      no
+# E63-E68,E94-E123  16     40     640       1e-6    -1/-1      yes
+# E71               32     25     800       1e-6    -1/-1      yes
+# E72-E73,E91       16     20     320       1e-6    -1/-1      yes
+# E74-E77           32     50     1600      1e-6    -1/-1      yes
+# E78-E80           16     100    1600      1e-6    -1/-1      yes
+# E81               16     25     400       1e-6    5/-1       no
+# E82               16     100    1600      1e-6    5/-1       no
+# E83               16     100    1600      1e-6    5/25       no
+# E84               16     100    1600      1e-6    20/25      no
+# E85-E90,E92-E93   16     100    1600      1e-6    20/-1      no
 # Eval=-1 关闭常规验证；原生 evaluation 协议的 bank/bench 仍按各组独立日程执行。
 # Save=-1 关闭周期 checkpoint；原生协议的最终 HF 导出见各组说明。
 #

@@ -1695,6 +1695,23 @@
           "https://huggingface.co/Qwen/Qwen3-32B/tree/9216db5781bf21249d130ec9da846c4624c16137"
         ]
       }
+    },
+    {
+      "id": "MirrorOPD/Qwen3-Base-AbsorptionProtocol@content-800625500f965b0aabf23293793cba9fa13f687d5c6197ab19d2186cbc7cd08e",
+      "repo": "MirrorOPD/Qwen3-Base-AbsorptionProtocol",
+      "revision": "content-800625500f965b0aabf23293793cba9fa13f687d5c6197ab19d2186cbc7cd08e",
+      "aliases": [
+        "Qwen3-Base-AbsorptionProtocol"
+      ],
+      "path": "model/hub/MirrorOPD--Qwen3-Base-AbsorptionProtocol/content-800625500f965b0aabf23293793cba9fa13f687d5c6197ab19d2186cbc7cd08e",
+      "subfolder": null,
+      "origin": {
+        "kind": "explicit-token-support-extension",
+        "sources": [
+          "examples/mirroropd/assets/stage_protocols.py"
+        ],
+        "weight_edit": "none"
+      }
     }
   ],
   "locations": {

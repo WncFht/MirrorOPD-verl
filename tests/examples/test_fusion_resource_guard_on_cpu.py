@@ -148,6 +148,25 @@ def test_child_exit_status_propagates(local):
     assert guard.run(repo, "1", [sys.executable, "-c", "raise SystemExit(17)"]) == 17
 
 
+def test_frozen_source_controls_imports_without_moving_resource_locks(local):
+    repo, _ = local
+    source = repo / ".worktrees" / "frozen"
+    source.mkdir(parents=True)
+    (source / "checkout_marker.py").write_text("frozen = True\n")
+    code = """
+import os
+from pathlib import Path
+import checkout_marker
+from examples.mirroropd.benchmarks.fusion.resource_guard import verify_allocation
+source = Path.cwd()
+assert checkout_marker.frozen
+assert Path(checkout_marker.__file__).parent == source
+assert os.environ['PYTHONPATH'].split(os.pathsep)[0] == str(source)
+assert verify_allocation(source.parents[2], '4,5') == [4,5]
+"""
+    assert guard.run(repo, "4,5", [sys.executable, "-c", code], source=source) == 0
+
+
 def test_unowned_internal_worker_is_rejected(local, monkeypatch):
     repo, _ = local
     monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "0")
