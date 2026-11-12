@@ -137,3 +137,38 @@ def auto_await(func):
             return future.result()
 
     return wrapper
+
+
+def prewarm_local_ray():
+    """Warm shared-filesystem agent imports before the node startup deadline.
+
+    Opt in for short-lived local clusters. include_dashboard=False still starts
+    the metrics agent, whose module discovery can exceed Ray's startup limit.
+    """
+    import os
+
+    if os.environ.get("MIRROROPD_RAY_PREWARM") != "1":
+        return
+    from ray.dashboard.utils import DashboardAgentModule, get_all_modules
+
+    get_all_modules(DashboardAgentModule)
+    __import__("ray._private.runtime_env.agent.main")
+
+
+def with_hf_modules_cache(runtime_env):
+    """Expose trusted HF dynamic modules before Ray deserializes worker arguments.
+
+    AutoConfig adds HF_MODULES_CACHE to the driver's sys.path, which fresh Ray
+    workers do not inherit. Preserve the declared source path and other runtime
+    settings while making the same shared cache importable in those workers.
+    """
+    import os
+
+    from transformers.utils.hub import HF_MODULES_CACHE
+
+    result = dict(runtime_env)
+    env = dict(result.get("env_vars", {}))
+    paths = (env.get("PYTHONPATH", os.environ.get("PYTHONPATH", ""))).split(os.pathsep)
+    env["PYTHONPATH"] = os.pathsep.join(dict.fromkeys(p for p in [*paths, HF_MODULES_CACHE] if p))
+    result["env_vars"] = env
+    return result

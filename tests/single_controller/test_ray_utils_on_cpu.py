@@ -52,3 +52,21 @@ def test_parallel_put_workers(init_ray):
     assert len(refs_default) == len(data)
     retrieved_data_default = [ray.get(ref) for ref in refs_default]
     assert retrieved_data_default == data
+
+
+def test_hf_dynamic_module_path_preserves_runtime_env(monkeypatch):
+    import os
+
+    from transformers.utils.hub import HF_MODULES_CACHE
+
+    from verl.utils.ray_utils import with_hf_modules_cache
+
+    monkeypatch.setenv("PYTHONPATH", "/ambient")
+    original = {"env_vars": {"PYTHONPATH": "/frozen", "TOKENIZERS_PARALLELISM": "false"}, "num_cpus": 1}
+    result = with_hf_modules_cache(original)
+    assert result["env_vars"]["PYTHONPATH"].split(os.pathsep) == ["/frozen", HF_MODULES_CACHE]
+    assert original["env_vars"]["PYTHONPATH"] == "/frozen"
+    assert result["num_cpus"] == 1
+    assert result["env_vars"]["TOKENIZERS_PARALLELISM"] == "false"
+    assert with_hf_modules_cache(result) == result
+    assert with_hf_modules_cache({})["env_vars"]["PYTHONPATH"].split(os.pathsep) == ["/ambient", HF_MODULES_CACHE]
