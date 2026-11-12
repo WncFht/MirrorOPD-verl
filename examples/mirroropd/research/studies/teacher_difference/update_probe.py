@@ -16,11 +16,12 @@ import torch
 from verl.trainer.distillation.rows import precompute_kl_rows
 
 from .checkpoints import CheckpointStore
-from .inputs import source_fingerprint
+from .inputs import source_fingerprint, validate_source_exposure
 from .metrics import squared_norm
+from .reductions import response_denominator
 from .response import GradientBank, cotangents
 from .runtime import checkpoint_identity, flatten_tensors, hidden_states, load_model, write_json
-from .trajectory import panel, parser, request_cache, tasks
+from .trajectory import panel, parser, request_cache, select_source_groups, tasks
 
 
 @torch.no_grad()
@@ -36,7 +37,7 @@ def restore_step(model, baseline, direction, scale):
 
 
 @torch.no_grad()
-def evaluate(model, teacher, rows, *, cap, token_chunk):
+def evaluate(model, teacher, rows, *, cap, token_chunk, reduction="fixed_cap"):
     values = []
     for row in rows:
         key = row["row_id"]
@@ -52,13 +53,15 @@ def evaluate(model, teacher, rows, *, cap, token_chunk):
                 row_id=key,
                 group=row.get("diagnostic_group", row.get("group")),
                 split=row["split"],
-                loss=float(loss / cap),
+                loss=float(loss / response_denominator(len(hs), cap, reduction)),
             )
         )
     return values
 
 
-def source_directions(model, teacher, initial, rows, *, cap, token_chunk, fields=("live", "parallel")):
+def source_directions(
+    model, teacher, initial, rows, *, cap, token_chunk, fields=("live", "parallel"), reduction="fixed_cap"
+):
     bank = GradientBank(model, fields)
     for row in rows:
         key = row["row_id"]
@@ -74,6 +77,7 @@ def source_directions(model, teacher, initial, rows, *, cap, token_chunk, fields
                 (h0, initial["head"]),
                 fields=list(fields),
                 cap=cap,
+                reduction=reduction,
                 token_chunk=token_chunk,
                 bundle=min(3, len(fields)),
             )
@@ -92,11 +96,9 @@ def source_directions(model, teacher, initial, rows, *, cap, token_chunk, fields
 
 def run(task, initial_path, root, out, *, source_indices, displacements, token_chunk):
     rows, math, groups = panel(task)
-    source = [(label, batch) for label, batch in groups if label[0] == "train"]
     held = [(label, batch) for label, batch in groups if label[0] == "heldout"]
-    selected = [source[i] for i in source_indices]
-    if any(any(r["batch_index"] < task["stage"] // 16 for r in batch) for _, batch in selected):
-        raise ValueError("Update validation requires previously unseen source groups")
+    selected = select_source_groups(groups, source_indices)
+    validate_source_exposure(task, [r for _, batch in selected for r in batch])
     cal = {label[1] for label, _ in held[: len(held) // 2]}
     signature = dict(
         protocol="component-equal-displacement-v1",
@@ -124,12 +126,27 @@ def run(task, initial_path, root, out, *, source_indices, displacements, token_c
         baseline = flatten_tensors(parameters, [p.detach() for p in parameters])
         baseline_loss = store.json("baseline")
         if baseline_loss is None:
-            baseline_loss = evaluate(model, teacher, math, cap=task["cap"], token_chunk=token_chunk)
+            baseline_loss = evaluate(
+                model,
+                teacher,
+                math,
+                cap=task["cap"],
+                reduction=task.get("reduction", "fixed_cap"),
+                token_chunk=token_chunk,
+            )
             store.save_json("baseline", baseline_loss)
         results = []
         for label, batch in selected:
             source_key = label[1]
-            directions = source_directions(model, teacher, initial, batch, cap=task["cap"], token_chunk=token_chunk)
+            directions = source_directions(
+                model,
+                teacher,
+                initial,
+                batch,
+                cap=task["cap"],
+                reduction=task.get("reduction", "fixed_cap"),
+                token_chunk=token_chunk,
+            )
             evaluation = [row for _, batch_h in held for row in batch_h] + batch
             for field, direction in directions.items():
                 norm = squared_norm(direction) ** 0.5
@@ -141,7 +158,14 @@ def run(task, initial_path, root, out, *, source_indices, displacements, token_c
                     value = store.json(key)
                     if value is None:
                         restore_step(model, baseline, device_direction, delta / norm)
-                        values = evaluate(model, teacher, evaluation, cap=task["cap"], token_chunk=token_chunk)
+                        values = evaluate(
+                            model,
+                            teacher,
+                            evaluation,
+                            cap=task["cap"],
+                            reduction=task.get("reduction", "fixed_cap"),
+                            token_chunk=token_chunk,
+                        )
                         restore_step(model, baseline, device_direction, 0)
                         value = dict(
                             source=source_key, field=field, displacement=delta, gradient_norm=norm, records=values

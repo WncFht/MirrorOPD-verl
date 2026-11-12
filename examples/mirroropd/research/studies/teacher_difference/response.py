@@ -14,6 +14,8 @@ import torch
 from verl.trainer.distillation.rows import precompute_kl_rows
 from verl.trainer.distillation.vjp import add_product
 
+from .reductions import response_denominator
+
 
 def split_request(live, initial):
     """Orthogonal logit projection, including zero anchors and signed scales."""
@@ -32,7 +34,7 @@ def token_signs(row_id, length, probes, seed, *, device):
 
 
 @torch.no_grad()
-def cotangents(hs, ws, ht, wt, initial, *, fields, cap, token_chunk=128, bundle=4, signs=None):
+def cotangents(hs, ws, ht, wt, initial, *, fields, cap, token_chunk=128, bundle=4, signs=None, reduction="fixed_cap"):
     """Yield (field, dH, dW, token moments) for native/parallel/sign probes.
 
     H/W must also be supplied to autograd.backward by the caller. This preserves
@@ -49,6 +51,7 @@ def cotangents(hs, ws, ht, wt, initial, *, fields, cap, token_chunk=128, bundle=
             raise ValueError(f"Unknown request field {name}")
         if signed and (signs is None or not 0 <= int(name.rsplit("-", 1)[1]) < len(signs)):
             raise ValueError("missing sign probe")
+    denominator = response_denominator(len(hs), cap, reduction)
     h0, w0 = initial
     dtype = torch.float64 if hs.dtype == torch.float64 else torch.float32
     for offset in range(0, len(fields), bundle):
@@ -75,11 +78,11 @@ def cotangents(hs, ws, ht, wt, initial, *, fields, cap, token_chunk=128, bundle=
                 if request is None:
                     base = anchor if name.startswith("frozen-sign-") else live
                     request = base * signs[int(name.rsplit("-", 1)[1]), sl, None]
-                request = request / cap
+                request = request / denominator
                 add_product(dh[index][sl], request, ws)
                 add_product(dw[index], request.T, hs[sl])
         for index, name in enumerate(names):
-            yield name, dh[index], dw[index], moments / cap if offset + index == 0 else None
+            yield name, dh[index], dw[index], moments / denominator if offset + index == 0 else None
 
 
 class GradientBank:

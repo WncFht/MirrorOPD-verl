@@ -9,6 +9,7 @@ from contextlib import nullcontext
 import torch
 
 from .metrics import squared_norm
+from .reductions import response_denominator
 from .requests import trajectory_projection
 from .runtime import flatten_grad as _flatten_grad
 from .runtime import gradient_norms, hidden_states
@@ -16,7 +17,16 @@ from .signals import fisher_diagnostics, position_signal  # noqa: F401 -- compat
 
 
 def compute_batch(
-    student, teacher_head, teacher_hidden, rows, *, cap=1024, retain_samples=True, initial=None, token_chunk=128
+    student,
+    teacher_head,
+    teacher_hidden,
+    rows,
+    *,
+    cap=1024,
+    retain_samples=True,
+    initial=None,
+    token_chunk=128,
+    reduction="fixed_cap",
 ):
     """Compute per-record gradients and P/A/C inputs.
 
@@ -36,6 +46,7 @@ def compute_batch(
             teacher_hidden,
             rows,
             cap=cap,
+            reduction=reduction,
             retain_samples=retain_samples,
             norm_buffer=norm_buffer,
             initial=initial,
@@ -44,10 +55,11 @@ def compute_batch(
 
 
 def _compute_records(
-    student, teacher_head, teacher_hidden, rows, *, cap, retain_samples, norm_buffer, initial, token_chunk
+    student, teacher_head, teacher_hidden, rows, *, cap, retain_samples, norm_buffer, initial, token_chunk, reduction
 ):
     head_q = teacher_head.float()
     gradients, pressures, losses, gradient_norms, diagnostics = [], [], [], [], []
+    lengths, denominators = [], []
     for row in rows:
         if norm_buffer is not None:
             norm_buffer.zero_()
@@ -58,6 +70,9 @@ def _compute_records(
         hq = teacher_hidden[str(row.get("row_id", row.get("id")))]
         hq = hq[: len(hp)].to(hp.device)
         length = min(len(hp), cap)
+        denominator = response_denominator(length, cap, reduction)
+        lengths.append(length)
+        denominators.append(denominator)
         hp = hp[:length]
         hq = hq[:length]
         anchor = None
@@ -70,13 +85,14 @@ def _compute_records(
             head_q,
             initial=anchor,
             cap=cap,
+            reduction=reduction,
             token_chunk=token_chunk,
         )
         loss = result[0]
-        info = result[3].double().sum(0) / cap
+        info = result[3].double().sum(0) / denominator
         pressure = info[0 if initial is None else 1]
         diagnostics.append(info.detach().cpu().tolist())
-        current_loss = result[1].double().sum() / cap
+        current_loss = result[1].double().sum() / denominator
         loss.backward()
         if retain_samples:
             gradient = _flatten_grad(student)
@@ -97,6 +113,8 @@ def _compute_records(
         "gradient_norm_sq": gradient_norm_sq,
         "pressure": torch.tensor(pressures, dtype=torch.float64),
         "losses": losses,
+        "token_counts": lengths,
+        "denominators": denominators,
         "request_diagnostics": diagnostics,
         "parameter_count": int(gradient_tensor.shape[-1]),
         "records": len(rows),

@@ -10,10 +10,10 @@ from pathlib import Path
 import torch
 
 from .checkpoints import CheckpointStore
-from .inputs import source_fingerprint
+from .inputs import source_fingerprint, validate_source_exposure
 from .metrics import squared_norm, tensor_inner
 from .runtime import checkpoint_identity, collect_memory, flatten_tensors, load_model, write_json
-from .trajectory import panel, parser, request_cache, tasks
+from .trajectory import panel, parser, request_cache, select_source_groups, tasks
 from .update_probe import evaluate, restore_step, source_directions
 
 
@@ -49,16 +49,14 @@ def restored_step(model, gradient, state, *, clip=1.0):
     return before - after, dict(gradient_norm=norm, step_before=next(iter(old_steps)), step_after=next(iter(new_steps)))
 
 
-def run(task, initial_path, root, out, *, token_chunk, scales):
+def run(task, initial_path, root, out, *, token_chunk, scales, source_indices=(15, 17, 19)):
     optimizer_path = Path(task["student"]) / "optimizer.pt"
     if not optimizer_path.exists():
         raise FileNotFoundError(optimizer_path)
     rows, math, groups = panel(task)
-    source = [(label, batch) for label, batch in groups if label[0] == "train"]
-    selected = [source[i] for i in (15, 17, 19)]
+    selected = select_source_groups(groups, source_indices)
     held = [(label, batch) for label, batch in groups if label[0] == "heldout"]
-    if any(r["batch_index"] < task["stage"] // 16 for _, batch in selected for r in batch):
-        raise ValueError("Source must be unseen at checkpoint")
+    validate_source_exposure(task, [r for _, batch in selected for r in batch])
     calibration = {label[1] for label, _ in held[: len(held) // 2]}
     stat = optimizer_path.stat()
     signature = dict(
@@ -70,7 +68,7 @@ def run(task, initial_path, root, out, *, token_chunk, scales):
         optimizer=dict(path=str(optimizer_path), bytes=stat.st_size, mtime_ns=stat.st_mtime_ns),
         scales=scales,
         clip=1.0,
-        source_indices=[15, 17, 19],
+        source_indices=list(source_indices),
         calibration=sorted(calibration),
         token_chunk=token_chunk,
         precision="FP32 master/head/gradient; BF16 backbone autocast",
@@ -88,11 +86,25 @@ def run(task, initial_path, root, out, *, token_chunk, scales):
         baseline = flatten_tensors(parameters, [p.detach() for p in parameters])
         original = store.json("baseline")
         if original is None:
-            original = evaluate(model, teacher, math, cap=task["cap"], token_chunk=token_chunk)
+            original = evaluate(
+                model,
+                teacher,
+                math,
+                cap=task["cap"],
+                reduction=task.get("reduction", "fixed_cap"),
+                token_chunk=token_chunk,
+            )
             store.save_json("baseline", original)
         receiver = {
             label[1]: source_directions(
-                model, teacher, initial, batch, cap=task["cap"], token_chunk=token_chunk, fields=("live",)
+                model,
+                teacher,
+                initial,
+                batch,
+                cap=task["cap"],
+                reduction=task.get("reduction", "fixed_cap"),
+                token_chunk=token_chunk,
+                fields=("live",),
             )["native"]
             for label, batch in held
         }
@@ -105,7 +117,14 @@ def run(task, initial_path, root, out, *, token_chunk, scales):
                 trials.extend(saved)
                 continue
             gradient = source_directions(
-                model, teacher, initial, batch, cap=task["cap"], token_chunk=token_chunk, fields=("live",)
+                model,
+                teacher,
+                initial,
+                batch,
+                cap=task["cap"],
+                reduction=task.get("reduction", "fixed_cap"),
+                token_chunk=token_chunk,
+                fields=("live",),
             )["native"]
             state = torch.load(optimizer_path, map_location="cpu", weights_only=True, mmap=True)
             if state["step"] != task["stage"]:
@@ -126,7 +145,14 @@ def run(task, initial_path, root, out, *, token_chunk, scales):
             for scale, key, previous in zip(scales, keys, saved, strict=True):
                 if previous is None:
                     restore_step(model, baseline, device_delta, scale)
-                    values = evaluate(model, teacher, evaluation, cap=task["cap"], token_chunk=token_chunk)
+                    values = evaluate(
+                        model,
+                        teacher,
+                        evaluation,
+                        cap=task["cap"],
+                        reduction=task.get("reduction", "fixed_cap"),
+                        token_chunk=token_chunk,
+                    )
                     restore_step(model, baseline, None, 0)
                     previous = dict(
                         source=source_name,
@@ -167,13 +193,22 @@ def run(task, initial_path, root, out, *, token_chunk, scales):
 
 def main():
     arguments = parser(__doc__)
+    arguments.add_argument("--source-indices", type=int, nargs="+", default=[15, 17, 19])
     arguments.add_argument("--scales", type=float, nargs="+", default=[0.25, 0.5, 1.0])
     args = arguments.parse_args()
     if args.max_groups is not None or any(scale <= 0 for scale in args.scales):
         arguments.error("complete panel and positive displacement scales required")
     initial, selected = tasks(args)
     for task in selected:
-        run(task, initial, args.manifest.parent, args.out, token_chunk=args.token_chunk, scales=args.scales)
+        run(
+            task,
+            initial,
+            args.manifest.parent,
+            args.out,
+            token_chunk=args.token_chunk,
+            scales=args.scales,
+            source_indices=args.source_indices,
+        )
 
 
 if __name__ == "__main__":

@@ -13,7 +13,8 @@ import json
 import re
 from pathlib import Path
 
-from .inputs import load_records, normalize_records, source_fingerprint, validate_records
+from .inputs import load_records, normalize_records, source_fingerprint, validate_records, validate_source_policy
+from .reductions import validate_reduction
 from .runtime import checkpoint_identity, write_json
 
 
@@ -27,13 +28,17 @@ def compile_plan(plan, *, base, gpus):
 
     models = {key: resolve(value) for key, value in plan["models"].items()}
     identities = {key: checkpoint_identity(path) for key, path in models.items()}
-    defaults = dict(cap=1024, group_size=8, checkpointing=True) | plan.get("defaults", {})
+    defaults = dict(
+        cap=1024, group_size=8, checkpointing=True, reduction="fixed_cap", source_policy="training_batches"
+    ) | plan.get("defaults", {})
     banks = {}
     for name, bank in plan["banks"].items():
         bank = dict(defaults) | bank
         bank["records"] = resolve(bank.pop("path"))
         if bank["cap"] < 1 or bank["group_size"] < 1:
             raise ValueError("cap and group_size must be positive")
+        validate_reduction(bank["reduction"])
+        validate_source_policy(bank["source_policy"])
         rows = normalize_records(load_records(bank["records"]), cap=bank["cap"], bank_id=name)
         bank["audit"] = validate_records(rows)
         bank["fingerprint"] = source_fingerprint(rows)
@@ -72,6 +77,8 @@ def compile_plan(plan, *, base, gpus):
                             teacher=models[target],
                             records=bank["records"],
                             cap=bank["cap"],
+                            reduction=bank["reduction"],
+                            source_policy=bank["source_policy"],
                             group_size=bank["group_size"],
                             checkpointing=bank["checkpointing"],
                             input_identity=dict(

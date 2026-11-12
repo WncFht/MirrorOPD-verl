@@ -9,6 +9,7 @@ import torch
 
 from .checkpoints import CheckpointStore
 from .inputs import source_fingerprint
+from .reductions import response_denominator
 from .response import cotangents, token_signs
 from .runtime import checkpoint_identity, gradient_norms, hidden_states, load_model, write_json
 from .trajectory import panel, parser, request_cache, tasks
@@ -61,6 +62,7 @@ def run(task, initial_path, root, out, *, probes, seed, token_chunk, bundle):
                                 (h0, initial["head"]),
                                 fields=fields,
                                 cap=task["cap"],
+                                reduction=task.get("reduction", "fixed_cap"),
                                 token_chunk=token_chunk,
                                 bundle=bundle,
                                 signs=signs,
@@ -76,6 +78,8 @@ def run(task, initial_path, root, out, *, probes, seed, token_chunk, bundle):
                                 moments = info.cpu().tolist()
                     value = dict(
                         row_id=key,
+                        token_count=len(hs),
+                        denominator=response_denominator(len(hs), task["cap"], task.get("reduction", "fixed_cap")),
                         group=label[1],
                         split=label[0],
                         moments=moments,
