@@ -16,6 +16,6 @@ Reuse 和 response cap 如何改变学习效果与预算，归[预算研究](../
 
 [模型验证资源与并发标定](inference/validation-resources.md#calibration)保存历史 A–F 的接口独立测量，按冻结条件解释。
 
-[全层谱计算加速调研](spectral/2026-11-11-全层谱计算加速调研.md)核查 GPU FP64 solver、分解需求裁剪、跨阶段复用及 ISO／SPACE／Pion 实现。
+[全层谱计算加速调研](spectral/2026-11-12-全层谱计算加速调研.md)核查 GPU FP64 solver、分解需求裁剪、跨阶段复用及 ISO／SPACE／Pion 实现。
 
 [固定谱优化器加速](spectral/固定谱优化器加速.md)：FP64 Newton 极分解、18 种真实形状、完整优化器与 DAPO 两步低精度读出。

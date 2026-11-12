@@ -1,0 +1,6177 @@
+{
+  "protocol": "Historical H1024 curves; exact selected-matrix delta geometry; no task-accuracy classification",
+  "h128_classification": [
+    {
+      "job_id": 0,
+      "family": "R1",
+      "teacher": "deepcoder",
+      "cohort": "continuous",
+      "steps": 64,
+      "initial_rkl": 0.08254541045450382,
+      "endpoint_rkl": 0.023245056941884078,
+      "remaining": 0.2816032631480578,
+      "teacher_relative_update": 0.0017308854037525214,
+      "teacher_top16": 0.3247211097746493,
+      "student_top16": 0.547424527434961,
+      "teacher_rho": 0.02559918595007518,
+      "student_rho": 0.02610612747477388,
+      "teacher_kappa": 1.3145315792409622,
+      "student_kappa": 1.4105983892781142,
+      "parameter_residual_energy": 1.1394272450506142,
+      "update_cosine": 0.13716311371638168,
+      "teacher_update_norm": 2.4983958124335253,
+      "student_update_norm": 1.3365374339282758,
+      "student_teacher_norm_ratio": 0.534958242916058,
+      "absolute_top16_energy_ratio": 0.5227415915137951,
+      "name": "R1 DeepCoder (64)",
+      "teacher_energy": 6.241981635585374,
+      "teacher_top16_energy": 1.797747565023375,
+      "teacher_pooled_top16": 0.2880091083213804,
+      "endpoint_energy": 1.7863323122915802,
+      "endpoint_top16_energy": 0.9397574232803688,
+      "endpoint_pooled_top16": 0.5260820827199892,
+      "residual_from_amplitude_angle": 1.1394272450506142,
+      "residual_identity_error": 0.0,
+      "student_relative_update": 0.0009259514142805004,
+      "group": "higher residual",
+      "budget_note": "short run"
+    },
+    {
+      "job_id": 1,
+      "family": "R1",
+      "teacher": "deepscaler",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.023055437554680227,
+      "endpoint_rkl": 0.000584432094435539,
+      "remaining": 0.02534899166625879,
+      "teacher_relative_update": 0.0012361263500921965,
+      "teacher_top16": 0.3351709648728186,
+      "student_top16": 0.4913375681830786,
+      "teacher_rho": 0.025653090201719488,
+      "student_rho": 0.025882548467515126,
+      "teacher_kappa": 1.35642241041975,
+      "student_kappa": 1.4559201238781996,
+      "parameter_residual_energy": 1.2733034921670303,
+      "update_cosine": 0.2630034072881391,
+      "teacher_update_norm": 1.7842503553462548,
+      "student_update_norm": 1.5134304703891546,
+      "student_teacher_norm_ratio": 0.8482164321023523,
+      "absolute_top16_energy_ratio": 1.1787667161811746,
+      "name": "R1 DeepScaleR",
+      "teacher_energy": 3.183549330553236,
+      "teacher_top16_energy": 0.916805828074008,
+      "teacher_pooled_top16": 0.28798229048163854,
+      "endpoint_energy": 2.2904717887023374,
+      "endpoint_top16_energy": 1.080700195334561,
+      "endpoint_pooled_top16": 0.471824276843344,
+      "residual_from_amplitude_angle": 1.2733034921670303,
+      "residual_identity_error": 0.0,
+      "student_relative_update": 0.0010485026823029062,
+      "group": "lower residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 2,
+      "family": "R1",
+      "teacher": "justrl",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.09693025011427085,
+      "endpoint_rkl": 0.009331652642129012,
+      "remaining": 0.09627183083844257,
+      "teacher_relative_update": 0.004571804610706614,
+      "teacher_top16": 0.26942286122849013,
+      "student_top16": 0.46518547850231806,
+      "teacher_rho": 0.45166221286164354,
+      "student_rho": 0.026282732996818284,
+      "teacher_kappa": 386.1236826913662,
+      "student_kappa": 1.586836198517417,
+      "parameter_residual_energy": 1.0257163081233134,
+      "update_cosine": 0.12713956082168773,
+      "teacher_update_norm": 6.599037388547306,
+      "student_update_norm": 2.1894780698178002,
+      "student_teacher_norm_ratio": 0.3317874927663936,
+      "absolute_top16_energy_ratio": 0.16241848292107303,
+      "name": "R1 JustRL",
+      "teacher_energy": 43.547294455445254,
+      "teacher_top16_energy": 11.851595137679542,
+      "teacher_pooled_top16": 0.2721545686335421,
+      "endpoint_energy": 4.79381421821308,
+      "endpoint_top16_energy": 1.9249181024566768,
+      "endpoint_pooled_top16": 0.40154207377151974,
+      "residual_from_amplitude_angle": 1.0257163081233132,
+      "residual_identity_error": 2.220446049250313e-16,
+      "student_relative_update": 0.0015168675892041855,
+      "group": "lower residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 3,
+      "family": "R1",
+      "teacher": "minimath",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.11688815055657112,
+      "endpoint_rkl": 0.030098640493641866,
+      "remaining": 0.2574995014492494,
+      "teacher_relative_update": 0.027357623557795866,
+      "teacher_top16": 0.07014927488232552,
+      "student_top16": 0.4371884295486367,
+      "teacher_rho": 0.022193530010459074,
+      "student_rho": 0.02615334131830277,
+      "teacher_kappa": 1.4373235902633419,
+      "student_kappa": 1.5150766002217786,
+      "parameter_residual_energy": 1.0004818632564927,
+      "update_cosine": 0.02564967469845138,
+      "teacher_update_norm": 39.48856000908453,
+      "student_update_norm": 2.3460209085120654,
+      "student_teacher_norm_ratio": 0.05941014075905406,
+      "absolute_top16_energy_ratio": 0.022263080309992134,
+      "name": "R1 MiniMath SFT",
+      "teacher_energy": 1559.34637159107,
+      "teacher_top16_energy": 93.14753866190657,
+      "teacher_pooled_top16": 0.059734989197341715,
+      "endpoint_energy": 5.503814103175776,
+      "endpoint_top16_energy": 2.073751133908123,
+      "endpoint_pooled_top16": 0.37678437080778954,
+      "residual_from_amplitude_angle": 1.0004818632564927,
+      "residual_identity_error": 0.0,
+      "student_relative_update": 0.0016253202664018658,
+      "group": "higher residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 4,
+      "family": "R1",
+      "teacher": "brorl",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.2656713422165655,
+      "endpoint_rkl": 0.07930655718007078,
+      "remaining": 0.2985137821730994,
+      "teacher_relative_update": 0.005457435703900574,
+      "teacher_top16": 0.23544857774279102,
+      "student_top16": 0.5273206128535963,
+      "teacher_rho": 0.02530011179865925,
+      "student_rho": 0.026502057969666155,
+      "teacher_kappa": 1.2229750938863606,
+      "student_kappa": 1.6570186503381568,
+      "parameter_residual_energy": 1.0133212850221596,
+      "update_cosine": 0.1524715310313325,
+      "teacher_update_norm": 7.877375636590602,
+      "student_update_norm": 2.7074648288912324,
+      "student_teacher_norm_ratio": 0.34370137388332633,
+      "absolute_top16_energy_ratio": 0.33152974177821704,
+      "name": "R1 BroRL",
+      "teacher_energy": 62.0530469199512,
+      "teacher_top16_energy": 10.486245138723216,
+      "teacher_pooled_top16": 0.16898840039636628,
+      "endpoint_energy": 7.330365799683031,
+      "endpoint_top16_energy": 3.4765021430639913,
+      "endpoint_pooled_top16": 0.47426039000868375,
+      "residual_from_amplitude_angle": 1.0133212850221596,
+      "residual_identity_error": 0.0,
+      "student_relative_update": 0.0018757281493105454,
+      "group": "higher residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 5,
+      "family": "R1",
+      "teacher": "nemotron",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.17752655680475868,
+      "endpoint_rkl": 0.042391510129529665,
+      "remaining": 0.2387896824707262,
+      "teacher_relative_update": 0.004531298426118422,
+      "teacher_top16": 0.1746138004597932,
+      "student_top16": 0.49607418493232946,
+      "teacher_rho": 0.024930612582468793,
+      "student_rho": 0.02624396654891927,
+      "teacher_kappa": 1.1588190787592794,
+      "student_kappa": 1.5806558777165414,
+      "parameter_residual_energy": 1.036102397969922,
+      "update_cosine": 0.12985786114168799,
+      "teacher_update_norm": 6.540569923437599,
+      "student_update_norm": 2.354605996493961,
+      "student_teacher_norm_ratio": 0.36000012599153214,
+      "absolute_top16_energy_ratio": 0.44268669515788095,
+      "name": "R1 Nemotron",
+      "teacher_energy": 42.77905492337651,
+      "teacher_top16_energy": 5.503870956823254,
+      "teacher_pooled_top16": 0.12865807733905024,
+      "endpoint_energy": 5.5441693987253196,
+      "endpoint_top16_energy": 2.4364904444515303,
+      "endpoint_pooled_top16": 0.439468975282702,
+      "residual_from_amplitude_angle": 1.0361023979699218,
+      "residual_identity_error": 2.220446049250313e-16,
+      "student_relative_update": 0.0016312680043078633,
+      "group": "higher residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 6,
+      "family": "R1",
+      "teacher": "light",
+      "cohort": "continuous",
+      "steps": 64,
+      "initial_rkl": 0.2782749718574608,
+      "endpoint_rkl": 0.09982354287727595,
+      "remaining": 0.35872267710948863,
+      "teacher_relative_update": 0.011591009554222265,
+      "teacher_top16": 0.11452052532624071,
+      "student_top16": 0.2964602868730545,
+      "teacher_rho": 0.04272608238872872,
+      "student_rho": 0.01750020602691109,
+      "teacher_kappa": 16.40480795046564,
+      "student_kappa": 1.6075230131750224,
+      "parameter_residual_energy": 1.0040785088449407,
+      "update_cosine": 0.030028577412304584,
+      "teacher_update_norm": 23.743852363832566,
+      "student_update_norm": 2.388614493044305,
+      "student_teacher_norm_ratio": 0.10059928171903236,
+      "absolute_top16_energy_ratio": 0.03538659808559618,
+      "name": "R1-7B Light SFT (64)",
+      "teacher_energy": 563.7705250754773,
+      "teacher_top16_energy": 43.15251407939947,
+      "teacher_pooled_top16": 0.07654269274475148,
+      "endpoint_energy": 5.705479196381301,
+      "endpoint_top16_energy": 1.5270206721107396,
+      "endpoint_pooled_top16": 0.26764109017858695,
+      "residual_from_amplitude_angle": 1.0040785088449409,
+      "residual_identity_error": 2.220446049250313e-16,
+      "student_relative_update": 0.0011660472355532012,
+      "group": "higher residual",
+      "budget_note": "short run"
+    },
+    {
+      "job_id": 7,
+      "family": "Qwen",
+      "teacher": "grpo-kl",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.01923992942578453,
+      "endpoint_rkl": 0.0015716633929653287,
+      "remaining": 0.08168758617477322,
+      "teacher_relative_update": 0.0005365263942595194,
+      "teacher_top16": 0.15141981712688213,
+      "student_top16": 0.33376427982281376,
+      "teacher_rho": 0.021638540322668577,
+      "student_rho": 0.022251255738700584,
+      "teacher_kappa": 1.0072361616310865,
+      "student_kappa": 1.0716184558858999,
+      "parameter_residual_energy": 2.2443381628935635,
+      "update_cosine": 0.1281899842466436,
+      "teacher_update_norm": 0.7031269624869074,
+      "student_update_norm": 0.8796332789306349,
+      "student_teacher_norm_ratio": 1.2510305049594996,
+      "absolute_top16_energy_ratio": 3.4872030599009816,
+      "name": "Qwen GRPO",
+      "teacher_energy": 0.49438752537606495,
+      "teacher_top16_energy": 0.06730584801163544,
+      "teacher_pooled_top16": 0.1361398590315118,
+      "endpoint_energy": 0.7737547054022602,
+      "endpoint_top16_energy": 0.23470915913540552,
+      "endpoint_pooled_top16": 0.3033379409478159,
+      "residual_from_amplitude_angle": 2.244338162893563,
+      "residual_identity_error": 4.440892098500626e-16,
+      "student_relative_update": 0.0006712108859345861,
+      "group": "lower residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 8,
+      "family": "Qwen",
+      "teacher": "sft-gsm8k",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.5128249307852851,
+      "endpoint_rkl": 0.13195425355099522,
+      "remaining": 0.2573085777029885,
+      "teacher_relative_update": 0.007400160933989407,
+      "teacher_top16": 0.271700240963437,
+      "student_top16": 0.39320157298968894,
+      "teacher_rho": 0.021364735673938616,
+      "student_rho": 0.0219398684065954,
+      "teacher_kappa": 1.0600171849889073,
+      "student_kappa": 1.1104850305619727,
+      "parameter_residual_energy": 1.011350550484843,
+      "update_cosine": 0.08053828209218357,
+      "teacher_update_norm": 9.698036732398704,
+      "student_update_norm": 2.076285506610352,
+      "student_teacher_norm_ratio": 0.2140933844552273,
+      "absolute_top16_energy_ratio": 0.07130150959119648,
+      "name": "Qwen SFT thinking",
+      "teacher_energy": 94.05191646295454,
+      "teacher_top16_energy": 22.49129947339442,
+      "teacher_pooled_top16": 0.23913706726277464,
+      "endpoint_energy": 4.310961504960206,
+      "endpoint_top16_energy": 1.6036636051207045,
+      "endpoint_pooled_top16": 0.3719967351310199,
+      "residual_from_amplitude_angle": 1.0113505504848428,
+      "residual_identity_error": 2.220446049250313e-16,
+      "student_relative_update": 0.001584325499871148,
+      "group": "higher residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 9,
+      "family": "Qwen",
+      "teacher": "e3",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.017174787505866283,
+      "endpoint_rkl": 0.0015141444662850898,
+      "remaining": 0.08816088500471479,
+      "teacher_relative_update": 0.0005080106529001994,
+      "teacher_top16": 0.18972128316956222,
+      "student_top16": 0.3553819323742043,
+      "teacher_rho": 0.021493607470846728,
+      "student_rho": 0.022176106931981028,
+      "teacher_kappa": 1.0075835317296784,
+      "student_kappa": 1.08939577808272,
+      "parameter_residual_energy": 2.5835666778650603,
+      "update_cosine": 0.11787682770473247,
+      "teacher_update_norm": 0.6657565985689997,
+      "student_update_norm": 0.9199318906462884,
+      "student_teacher_norm_ratio": 1.3817841124273074,
+      "absolute_top16_energy_ratio": 3.4628823218310747,
+      "name": "Qwen e3",
+      "teacher_energy": 0.4432318485381643,
+      "teacher_top16_energy": 0.08602274063613255,
+      "teacher_pooled_top16": 0.1940806846796922,
+      "endpoint_energy": 0.8462746834280548,
+      "endpoint_top16_energy": 0.297886627824323,
+      "endpoint_pooled_top16": 0.3519975649249675,
+      "residual_from_amplitude_angle": 2.5835666778650603,
+      "residual_identity_error": 0.0,
+      "student_relative_update": 0.000701961049121319,
+      "group": "lower residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 10,
+      "family": "Qwen",
+      "teacher": "sft-gsm8k",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.40770770892940833,
+      "endpoint_rkl": 0.08544751877825485,
+      "remaining": 0.20958033637045964,
+      "teacher_relative_update": 0.007400160933989407,
+      "teacher_top16": 0.271700240963437,
+      "student_top16": 0.4634949793270716,
+      "teacher_rho": 0.021364735673938616,
+      "student_rho": 0.021815322393859672,
+      "teacher_kappa": 1.0600171849889073,
+      "student_kappa": 1.0954345414695643,
+      "parameter_residual_energy": 1.0027774335757538,
+      "update_cosine": 0.09764941561583054,
+      "teacher_update_norm": 9.698036732398704,
+      "student_update_norm": 2.023133254451359,
+      "student_teacher_norm_ratio": 0.20861266153927624,
+      "absolute_top16_energy_ratio": 0.08101982630717977,
+      "name": "Qwen SFT nonthinking",
+      "teacher_energy": 94.05191646295454,
+      "teacher_top16_energy": 22.49129947339442,
+      "teacher_pooled_top16": 0.23913706726277464,
+      "endpoint_energy": 4.093068165266948,
+      "endpoint_top16_energy": 1.8222411767571798,
+      "endpoint_pooled_top16": 0.4452017662985424,
+      "residual_from_amplitude_angle": 1.0027774335757538,
+      "residual_identity_error": 0.0,
+      "student_relative_update": 0.0015437672682585065,
+      "group": "higher residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 11,
+      "family": "Llama",
+      "teacher": "coreward-i",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.09080020856342888,
+      "endpoint_rkl": 0.003321215357327096,
+      "remaining": 0.03657717762847479,
+      "teacher_relative_update": 0.0011268282157499217,
+      "teacher_top16": 0.1746523756492363,
+      "student_top16": 0.4319564455782857,
+      "teacher_rho": 0.017777887926928394,
+      "student_rho": 0.01807534178563874,
+      "teacher_kappa": 1.0347383662164473,
+      "student_kappa": 1.1285284437645002,
+      "parameter_residual_energy": 1.3844366850353511,
+      "update_cosine": 0.17632255577632772,
+      "teacher_update_norm": 1.1551650559639552,
+      "student_update_norm": 0.9483164336488547,
+      "student_teacher_norm_ratio": 0.8209358729757533,
+      "absolute_top16_energy_ratio": 1.627506544653035,
+      "name": "Llama CoReward-I",
+      "teacher_energy": 1.334406306520208,
+      "teacher_top16_energy": 0.22679351360082167,
+      "teacher_pooled_top16": 0.16995836462452085,
+      "endpoint_energy": 0.8993040583284826,
+      "endpoint_top16_energy": 0.3691079276701944,
+      "endpoint_pooled_top16": 0.4104372978770356,
+      "residual_from_amplitude_angle": 1.3844366850353511,
+      "residual_identity_error": 0.0,
+      "student_relative_update": 0.0009250537049903725,
+      "group": "lower residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 12,
+      "family": "Llama",
+      "teacher": "gt",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.0879521924708412,
+      "endpoint_rkl": 0.0027720877002709488,
+      "remaining": 0.031518119360014585,
+      "teacher_relative_update": 0.001181822403650156,
+      "teacher_top16": 0.16054165450126817,
+      "student_top16": 0.4176850462500161,
+      "teacher_rho": 0.017701070492588934,
+      "student_rho": 0.018171204951756642,
+      "teacher_kappa": 1.0314088243574906,
+      "student_kappa": 1.1425081192073265,
+      "parameter_residual_energy": 1.3562847675475693,
+      "update_cosine": 0.17424889509346517,
+      "teacher_update_norm": 1.2115422066738246,
+      "student_update_norm": 0.9644587252539469,
+      "student_teacher_norm_ratio": 0.7960587092560134,
+      "absolute_top16_energy_ratio": 1.630220444829499,
+      "name": "Llama GT",
+      "teacher_energy": 1.4678345185520805,
+      "teacher_top16_energy": 0.22603336710546354,
+      "teacher_pooled_top16": 0.15399104207498143,
+      "endpoint_energy": 0.9301806327184684,
+      "endpoint_top16_energy": 0.3684842162689782,
+      "endpoint_pooled_top16": 0.39614264510332464,
+      "residual_from_amplitude_angle": 1.3562847675475693,
+      "residual_identity_error": 0.0,
+      "student_relative_update": 0.0009408000172195824,
+      "group": "lower residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 13,
+      "family": "Llama",
+      "teacher": "arithmetic-full",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.4896221231398792,
+      "endpoint_rkl": 0.22783684856501818,
+      "remaining": 0.46533201380675343,
+      "teacher_relative_update": 0.048468246055872764,
+      "teacher_top16": 0.09790015382613648,
+      "student_top16": 0.32981291225420983,
+      "teacher_rho": 0.021039193268969098,
+      "student_rho": 0.017855996849284593,
+      "teacher_kappa": 2.0040704848905357,
+      "student_kappa": 1.141206649104321,
+      "parameter_residual_energy": 0.997275142092505,
+      "update_cosine": 0.052451043720281226,
+      "teacher_update_norm": 49.687098161937286,
+      "student_update_norm": 2.860730564596957,
+      "student_teacher_norm_ratio": 0.05757491724055671,
+      "absolute_top16_energy_ratio": 0.011440886957163037,
+      "name": "Llama arithmetic SFT",
+      "teacher_energy": 2468.807723753992,
+      "teacher_top16_energy": 213.92623760611593,
+      "teacher_pooled_top16": 0.08665163979673005,
+      "endpoint_energy": 8.183779363219223,
+      "endpoint_top16_energy": 2.4475059016227725,
+      "endpoint_pooled_top16": 0.29906792363229184,
+      "residual_from_amplitude_angle": 0.9972751420925048,
+      "residual_identity_error": 2.220446049250313e-16,
+      "student_relative_update": 0.0027905552554618137,
+      "group": "higher residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 19,
+      "family": "MiMo",
+      "teacher": "MiMo-RL-from-SFT",
+      "cohort": "continuous",
+      "steps": 320,
+      "initial_rkl": 0.04398575412238952,
+      "endpoint_rkl": 0.003760854077235575,
+      "remaining": 0.0855016391618766,
+      "teacher_relative_update": 0.0034194385165008086,
+      "teacher_top16": 0.1111587241723016,
+      "student_top16": 0.2138249787011981,
+      "teacher_rho": 0.06750333062513819,
+      "student_rho": 0.015583396046395706,
+      "teacher_kappa": 20.47026134446527,
+      "student_kappa": 1.188541523929355,
+      "parameter_residual_energy": 1.0845875585841724,
+      "update_cosine": 0.197143523839325,
+      "teacher_update_norm": 4.145226018456667,
+      "student_update_norm": 2.2736668191304275,
+      "student_teacher_norm_ratio": 0.5485024963673631,
+      "absolute_top16_energy_ratio": 0.6524220190593073,
+      "name": "MiMo SFT to RL",
+      "teacher_energy": 17.182898744090117,
+      "teacher_top16_energy": 1.3683377740089253,
+      "teacher_pooled_top16": 0.07963369827105285,
+      "endpoint_energy": 5.169560804414676,
+      "endpoint_top16_energy": 0.8927336932740212,
+      "endpoint_pooled_top16": 0.17269043291098324,
+      "residual_from_amplitude_angle": 1.0845875585841722,
+      "residual_identity_error": 2.220446049250313e-16,
+      "student_relative_update": 0.0018755705624754063,
+      "group": "lower residual",
+      "budget_note": "320 steps"
+    },
+    {
+      "job_id": 20,
+      "family": "MiMo",
+      "teacher": "MiMo-Zero-from-SFT",
+      "cohort": "branch_control",
+      "steps": 320,
+      "initial_rkl": 0.3048532626384539,
+      "endpoint_rkl": 0.13782420774663573,
+      "remaining": 0.4521001564942763,
+      "teacher_relative_update": 0.19494677274049976,
+      "teacher_top16": 0.029009251973068233,
+      "student_top16": 0.21383268131139435,
+      "teacher_rho": 0.05891132998998989,
+      "student_rho": 0.01655359791725767,
+      "teacher_kappa": 173.4558898057187,
+      "student_kappa": 1.761483446793543,
+      "parameter_residual_energy": 0.9994773715903579,
+      "update_cosine": 0.02454753581289477,
+      "teacher_update_norm": 236.32489096631707,
+      "student_update_norm": 3.688059261570383,
+      "student_teacher_norm_ratio": 0.015605885806146571,
+      "absolute_top16_energy_ratio": 0.001820776727123928,
+      "name": "MiMo branch",
+      "teacher_energy": 55849.45409024165,
+      "teacher_top16_energy": 1440.00528246287,
+      "teacher_pooled_top16": 0.025783694861835297,
+      "endpoint_energy": 13.601781116855081,
+      "endpoint_top16_energy": 2.621928105243912,
+      "endpoint_pooled_top16": 0.19276358608615352,
+      "residual_from_amplitude_angle": 0.9994773715903578,
+      "residual_identity_error": 1.1102230246251565e-16,
+      "student_relative_update": 0.0030423170736650464,
+      "group": "higher residual",
+      "budget_note": "320 steps"
+    }
+  ],
+  "trajectories": [
+    {
+      "job_id": 100,
+      "label": "Llama coreward-i",
+      "group": "lower",
+      "reference_step": 640,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.021832473577013185,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.005084161835970907,
+          "remaining": 0.2328715442176869
+        },
+        {
+          "step": 32,
+          "rkl": 0.002402788232735251,
+          "remaining": 0.11005570322847344
+        },
+        {
+          "step": 48,
+          "rkl": 0.0016327080534065392,
+          "remaining": 0.07478346636478117
+        },
+        {
+          "step": 64,
+          "rkl": 0.001303339905113683,
+          "remaining": 0.05969730825580542
+        },
+        {
+          "step": 80,
+          "rkl": 0.001121231024861183,
+          "remaining": 0.05135611505064165
+        },
+        {
+          "step": 96,
+          "rkl": 0.0009908002874893101,
+          "remaining": 0.04538195289664734
+        },
+        {
+          "step": 112,
+          "rkl": 0.0008694525353457191,
+          "remaining": 0.03982382171579229
+        },
+        {
+          "step": 128,
+          "rkl": 0.0007994712307650654,
+          "remaining": 0.03661844490249638
+        },
+        {
+          "step": 144,
+          "rkl": 0.0007220242810802475,
+          "remaining": 0.03307111668008371
+        },
+        {
+          "step": 160,
+          "rkl": 0.0006873832752074224,
+          "remaining": 0.03148444324380859
+        },
+        {
+          "step": 176,
+          "rkl": 0.0006445288846423652,
+          "remaining": 0.02952156943503516
+        },
+        {
+          "step": 192,
+          "rkl": 0.000616543102978279,
+          "remaining": 0.028239727431866465
+        },
+        {
+          "step": 208,
+          "rkl": 0.0005872790182261541,
+          "remaining": 0.026899334890045815
+        },
+        {
+          "step": 224,
+          "rkl": 0.0005982147634523839,
+          "remaining": 0.027400228441463816
+        },
+        {
+          "step": 240,
+          "rkl": 0.0005979467745414692,
+          "remaining": 0.02738795365684221
+        },
+        {
+          "step": 256,
+          "rkl": 0.0005871680638314528,
+          "remaining": 0.026894252809249522
+        },
+        {
+          "step": 272,
+          "rkl": 0.0005670521179839727,
+          "remaining": 0.02597287549593127
+        },
+        {
+          "step": 288,
+          "rkl": 0.0005559375852663645,
+          "remaining": 0.025463792881979988
+        },
+        {
+          "step": 304,
+          "rkl": 0.0005402518734612071,
+          "remaining": 0.024745335042110093
+        },
+        {
+          "step": 320,
+          "rkl": 0.0005408916609971113,
+          "remaining": 0.024774639441982483
+        },
+        {
+          "step": 336,
+          "rkl": 0.0020406213698533457,
+          "remaining": 0.09346725475952758
+        },
+        {
+          "step": 352,
+          "rkl": 0.0012336695829266377,
+          "remaining": 0.05650617547182261
+        },
+        {
+          "step": 368,
+          "rkl": 0.0010245019056617714,
+          "remaining": 0.046925599247738994
+        },
+        {
+          "step": 384,
+          "rkl": 0.0008713453746346402,
+          "remaining": 0.0399105200590764
+        },
+        {
+          "step": 400,
+          "rkl": 0.0008068664851487938,
+          "remaining": 0.036957172182190176
+        },
+        {
+          "step": 416,
+          "rkl": 0.000750373532252003,
+          "remaining": 0.034369606797190894
+        },
+        {
+          "step": 432,
+          "rkl": 0.0007179044519189263,
+          "remaining": 0.03288241478394772
+        },
+        {
+          "step": 448,
+          "rkl": 0.0006807996793827889,
+          "remaining": 0.031182892629243085
+        },
+        {
+          "step": 464,
+          "rkl": 0.0006626369628408446,
+          "remaining": 0.03035097972309088
+        },
+        {
+          "step": 480,
+          "rkl": 0.0006585682496859156,
+          "remaining": 0.030164619110282773
+        },
+        {
+          "step": 496,
+          "rkl": 0.0006344749953000066,
+          "remaining": 0.029061067820003134
+        },
+        {
+          "step": 512,
+          "rkl": 0.0006330353370334163,
+          "remaining": 0.02899512667680138
+        },
+        {
+          "step": 528,
+          "rkl": 0.0006137697387229321,
+          "remaining": 0.028112698112647827
+        },
+        {
+          "step": 544,
+          "rkl": 0.0006073224291686005,
+          "remaining": 0.027817389863145588
+        },
+        {
+          "step": 560,
+          "rkl": 0.0005981556815831514,
+          "remaining": 0.027397522295088596
+        },
+        {
+          "step": 576,
+          "rkl": 0.0005901309839948694,
+          "remaining": 0.027029964420348697
+        },
+        {
+          "step": 592,
+          "rkl": 0.000585142394103844,
+          "remaining": 0.026801470389499267
+        },
+        {
+          "step": 608,
+          "rkl": 0.0005812461315967018,
+          "remaining": 0.026623008590683925
+        },
+        {
+          "step": 624,
+          "rkl": 0.0005676325076268593,
+          "remaining": 0.025999459274486606
+        },
+        {
+          "step": 640,
+          "rkl": 0.0005661343747607411,
+          "remaining": 0.02593083979988454
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.021832473577013185,
+          "final": 0.001303339905113683,
+          "absolute_reduction": 0.020529133671899503,
+          "relative_reduction": 0.9403026917441946,
+          "change_ci95": [
+            -0.024158471855910506,
+            -0.01707298526388577
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.001303339905113683,
+          "final": 0.0005408916609971113,
+          "absolute_reduction": 0.0007624482441165718,
+          "relative_reduction": 0.5849957030588024,
+          "change_ci95": [
+            -0.0008632122623780414,
+            -0.0006664864847733639
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.0005408916609971113,
+          "final": 0.0005661343747607411,
+          "absolute_reduction": -2.5242713763629977e-05,
+          "relative_reduction": -0.04666870573877232,
+          "change_ci95": [
+            2.5833009788758357e-06,
+            5.0419382983390017e-05
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.029450628034682656,
+              "top16": 0.46712253296336625,
+              "right_overlap_16": 0.7420888338512135,
+              "right_overlap_128": 0.652882271739328
+            },
+            "v_proj": {
+              "energy": 0.029807277067512444,
+              "top16": 0.5277652094017891,
+              "right_overlap_16": 0.8677005230537918,
+              "right_overlap_128": 0.7088603514507432
+            },
+            "q_proj": {
+              "energy": 0.016106861117867452,
+              "top16": 0.412391975315729,
+              "right_overlap_16": 0.7561641576810696,
+              "right_overlap_128": 0.6864369807048935
+            },
+            "o_proj": {
+              "energy": 0.01618623886030801,
+              "top16": 0.4618472529784363,
+              "right_overlap_16": 0.8424053387338408,
+              "right_overlap_128": 0.7644521990276748
+            },
+            "gate_proj": {
+              "energy": 0.008367334173585945,
+              "top16": 0.3393551233770753,
+              "right_overlap_16": 0.8576294143144929,
+              "right_overlap_128": 0.8202412540344085
+            },
+            "up_proj": {
+              "energy": 0.007754924763115466,
+              "top16": 0.42828345854276734,
+              "right_overlap_16": 0.8306223701648419,
+              "right_overlap_128": 0.773474313878366
+            },
+            "down_proj": {
+              "energy": 0.0075649047215511425,
+              "top16": 0.42884701529444325,
+              "right_overlap_16": 0.8146858700229481,
+              "right_overlap_128": 0.6848920071919959
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 100,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 0.8514662634110268,
+            "cosine": 0.19966923191517635,
+            "residual": 1.3849715680932062
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.03084205752274872,
+              "top16": 0.4547311365139318,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.031219817499914024,
+              "top16": 0.5057453559005709,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.01689347060643696,
+              "top16": 0.4267941245293557,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.01676611139270436,
+              "top16": 0.4516803847751741,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 0.9999999999999998
+            },
+            "gate_proj": {
+              "energy": 0.008882278524481039,
+              "top16": 0.34253737665933737,
+              "right_overlap_16": 0.9999999999999987,
+              "right_overlap_128": 1.0000000000000002
+            },
+            "up_proj": {
+              "energy": 0.008449153643216733,
+              "top16": 0.42647555936064363,
+              "right_overlap_16": 0.9999999999999987,
+              "right_overlap_128": 0.9999999999999998
+            },
+            "down_proj": {
+              "energy": 0.008402930735574068,
+              "top16": 0.42094996208208396,
+              "right_overlap_16": 1.0000000000000004,
+              "right_overlap_128": 0.9999999999999993
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 100,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 0.8741348521483239,
+            "cosine": 0.19579149543756283,
+            "residual": 1.4218153999079457
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 101,
+      "label": "Llama gt",
+      "group": "lower",
+      "reference_step": 640,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.0229319696144494,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.0054503682107543295,
+          "remaining": 0.23767553779244763
+        },
+        {
+          "step": 32,
+          "rkl": 0.0028964311184273396,
+          "remaining": 0.12630537922055776
+        },
+        {
+          "step": 48,
+          "rkl": 0.0019219148673293236,
+          "remaining": 0.08380941103804393
+        },
+        {
+          "step": 64,
+          "rkl": 0.0015278081046559413,
+          "remaining": 0.06662350117947442
+        },
+        {
+          "step": 80,
+          "rkl": 0.0012928398643223737,
+          "remaining": 0.056377183733391886
+        },
+        {
+          "step": 96,
+          "rkl": 0.0011479922263230905,
+          "remaining": 0.05006077740482188
+        },
+        {
+          "step": 112,
+          "rkl": 0.0010251416318692555,
+          "remaining": 0.04470360152680977
+        },
+        {
+          "step": 128,
+          "rkl": 0.0009324479317797318,
+          "remaining": 0.040661484707017824
+        },
+        {
+          "step": 144,
+          "rkl": 0.0008574194818310646,
+          "remaining": 0.03738970076477015
+        },
+        {
+          "step": 160,
+          "rkl": 0.000790625555183794,
+          "remaining": 0.034477001691368976
+        },
+        {
+          "step": 176,
+          "rkl": 0.0007539955377789717,
+          "remaining": 0.03287966757569224
+        },
+        {
+          "step": 192,
+          "rkl": 0.0007171841548247939,
+          "remaining": 0.031274424608207105
+        },
+        {
+          "step": 208,
+          "rkl": 0.0006834451159763126,
+          "remaining": 0.029803158100544264
+        },
+        {
+          "step": 224,
+          "rkl": 0.0006566826023379358,
+          "remaining": 0.028636118631701006
+        },
+        {
+          "step": 240,
+          "rkl": 0.000632178811909989,
+          "remaining": 0.027567575857577187
+        },
+        {
+          "step": 256,
+          "rkl": 0.0006135907984756205,
+          "remaining": 0.02675700381571227
+        },
+        {
+          "step": 272,
+          "rkl": 0.0005927856145046828,
+          "remaining": 0.025849747076725996
+        },
+        {
+          "step": 288,
+          "rkl": 0.0005714591558797989,
+          "remaining": 0.024919758986586278
+        },
+        {
+          "step": 304,
+          "rkl": 0.0005512694087300704,
+          "remaining": 0.024039339751379937
+        },
+        {
+          "step": 320,
+          "rkl": 0.0005398546867360468,
+          "remaining": 0.023541575181395893
+        },
+        {
+          "step": 336,
+          "rkl": 0.0023262073517709573,
+          "remaining": 0.10143949215357487
+        },
+        {
+          "step": 352,
+          "rkl": 0.0014747139809048607,
+          "remaining": 0.06430821275707803
+        },
+        {
+          "step": 368,
+          "rkl": 0.0011932043933130403,
+          "remaining": 0.05203235541360581
+        },
+        {
+          "step": 384,
+          "rkl": 0.0009805334919452977,
+          "remaining": 0.04275836347382324
+        },
+        {
+          "step": 400,
+          "rkl": 0.0008936452604897269,
+          "remaining": 0.038969407142709724
+        },
+        {
+          "step": 416,
+          "rkl": 0.0008241974910700835,
+          "remaining": 0.03594098129934543
+        },
+        {
+          "step": 432,
+          "rkl": 0.0007884271958671478,
+          "remaining": 0.034381137299709354
+        },
+        {
+          "step": 448,
+          "rkl": 0.0007593442962351151,
+          "remaining": 0.03311291219209768
+        },
+        {
+          "step": 464,
+          "rkl": 0.0007348092261939831,
+          "remaining": 0.032043005400241804
+        },
+        {
+          "step": 480,
+          "rkl": 0.0007071868358843931,
+          "remaining": 0.03083846907937623
+        },
+        {
+          "step": 496,
+          "rkl": 0.0006792144885308157,
+          "remaining": 0.02961867209621818
+        },
+        {
+          "step": 512,
+          "rkl": 0.0006616334549160943,
+          "remaining": 0.02885201166929857
+        },
+        {
+          "step": 528,
+          "rkl": 0.0006454676531298083,
+          "remaining": 0.028147065602385068
+        },
+        {
+          "step": 544,
+          "rkl": 0.0006280373973915802,
+          "remaining": 0.027386980183152464
+        },
+        {
+          "step": 560,
+          "rkl": 0.000625502710048953,
+          "remaining": 0.027276449453117392
+        },
+        {
+          "step": 576,
+          "rkl": 0.0006180552741052106,
+          "remaining": 0.026951687294918394
+        },
+        {
+          "step": 592,
+          "rkl": 0.0006080206473783549,
+          "remaining": 0.026514104876331338
+        },
+        {
+          "step": 608,
+          "rkl": 0.0005955073848471417,
+          "remaining": 0.025968435980828847
+        },
+        {
+          "step": 624,
+          "rkl": 0.0005796481276342698,
+          "remaining": 0.025276857478000247
+        },
+        {
+          "step": 640,
+          "rkl": 0.0005801495891731873,
+          "remaining": 0.02529872483380738
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.0229319696144494,
+          "final": 0.0015278081046559413,
+          "absolute_reduction": 0.021404161509793462,
+          "relative_reduction": 0.9333764988205256,
+          "change_ci95": [
+            -0.024967191865886088,
+            -0.017952890597902973
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.0015278081046559413,
+          "final": 0.0005398546867360468,
+          "absolute_reduction": 0.0009879534179198944,
+          "relative_reduction": 0.6466475828405028,
+          "change_ci95": [
+            -0.001112606245159285,
+            -0.000867900706481011
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.0005398546867360468,
+          "final": 0.0005801495891731873,
+          "absolute_reduction": -4.02949024371404e-05,
+          "relative_reduction": -0.07464027529475156,
+          "change_ci95": [
+            2.3589592275957168e-05,
+            5.714610457011303e-05
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.030375954318356053,
+              "top16": 0.4607826136578999,
+              "right_overlap_16": 0.7683589038620299,
+              "right_overlap_128": 0.6587617465324049
+            },
+            "v_proj": {
+              "energy": 0.030552861025722956,
+              "top16": 0.5162645923190929,
+              "right_overlap_16": 0.9158274052412765,
+              "right_overlap_128": 0.7156593369359869
+            },
+            "q_proj": {
+              "energy": 0.016223604796667887,
+              "top16": 0.40596425965633837,
+              "right_overlap_16": 0.7710093654420588,
+              "right_overlap_128": 0.6877962075109962
+            },
+            "o_proj": {
+              "energy": 0.01649649755313216,
+              "top16": 0.4384950199614928,
+              "right_overlap_16": 0.9048735627599144,
+              "right_overlap_128": 0.7714605454587573
+            },
+            "gate_proj": {
+              "energy": 0.008750780976876414,
+              "top16": 0.3223494441386195,
+              "right_overlap_16": 0.9459795961760535,
+              "right_overlap_128": 0.8357086787662001
+            },
+            "up_proj": {
+              "energy": 0.008082159885720065,
+              "top16": 0.40800222802379965,
+              "right_overlap_16": 0.9492044462979738,
+              "right_overlap_128": 0.7894476383792843
+            },
+            "down_proj": {
+              "energy": 0.007882232666367022,
+              "top16": 0.40151520177886335,
+              "right_overlap_16": 0.8987057036950861,
+              "right_overlap_128": 0.7081324335121086
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 101,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 0.8272650975396795,
+            "cosine": 0.19615329577677626,
+            "residual": 1.3598259908803265
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.030967001251493646,
+              "top16": 0.4520916486404437,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.03134898738701686,
+              "top16": 0.4994982166211337,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.016610287528984857,
+              "top16": 0.40392584707063917,
+              "right_overlap_16": 0.9999999999999999,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.016785787741948586,
+              "top16": 0.4294223039781814,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 0.9999999999999998
+            },
+            "gate_proj": {
+              "energy": 0.009067231397333644,
+              "top16": 0.3145183948175589,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 0.9999999999999993
+            },
+            "up_proj": {
+              "energy": 0.008516286149825286,
+              "top16": 0.39161784048261883,
+              "right_overlap_16": 0.9999999999999999,
+              "right_overlap_128": 0.9999999999999998
+            },
+            "down_proj": {
+              "energy": 0.008413949515161142,
+              "top16": 0.3807969230887894,
+              "right_overlap_16": 0.9999999999999984,
+              "right_overlap_128": 0.9999999999999996
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 101,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 0.8388745370369718,
+            "cosine": 0.1950846479932964,
+            "residual": 1.3764074013521994
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 102,
+      "label": "Llama arithmetic-full",
+      "group": "higher, improving",
+      "reference_step": 1280,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.21937493674148878,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.1652585704346215,
+          "remaining": 0.7533156380091042
+        },
+        {
+          "step": 32,
+          "rkl": 0.13866462832154292,
+          "remaining": 0.632089656098432
+        },
+        {
+          "step": 48,
+          "rkl": 0.11761597481267277,
+          "remaining": 0.5361413503278696
+        },
+        {
+          "step": 64,
+          "rkl": 0.10860289163297229,
+          "remaining": 0.49505605902897576
+        },
+        {
+          "step": 80,
+          "rkl": 0.10123888950074722,
+          "remaining": 0.4614879484617107
+        },
+        {
+          "step": 96,
+          "rkl": 0.09716073044853876,
+          "remaining": 0.44289804428767937
+        },
+        {
+          "step": 112,
+          "rkl": 0.09277904953200797,
+          "remaining": 0.4229245642647807
+        },
+        {
+          "step": 128,
+          "rkl": 0.08899841223280495,
+          "remaining": 0.40569088499695205
+        },
+        {
+          "step": 144,
+          "rkl": 0.08676295189236073,
+          "remaining": 0.39550074945253255
+        },
+        {
+          "step": 160,
+          "rkl": 0.08370917788884305,
+          "remaining": 0.38158040810052
+        },
+        {
+          "step": 176,
+          "rkl": 0.08157865001079596,
+          "remaining": 0.37186859730894495
+        },
+        {
+          "step": 192,
+          "rkl": 0.08029787313268255,
+          "remaining": 0.36603029646593355
+        },
+        {
+          "step": 208,
+          "rkl": 0.07853481442835634,
+          "remaining": 0.35799355931394156
+        },
+        {
+          "step": 224,
+          "rkl": 0.07751347140568916,
+          "remaining": 0.35333786328121414
+        },
+        {
+          "step": 240,
+          "rkl": 0.0764897715904764,
+          "remaining": 0.3486714240315058
+        },
+        {
+          "step": 256,
+          "rkl": 0.0755139361218127,
+          "remaining": 0.34422316990020724
+        },
+        {
+          "step": 272,
+          "rkl": 0.07453578304696651,
+          "remaining": 0.33976435117927534
+        },
+        {
+          "step": 288,
+          "rkl": 0.07396582588028054,
+          "remaining": 0.3371662550833772
+        },
+        {
+          "step": 304,
+          "rkl": 0.07201956752127968,
+          "remaining": 0.32829441954961097
+        },
+        {
+          "step": 320,
+          "rkl": 0.07141729328578511,
+          "remaining": 0.32554900913746215
+        },
+        {
+          "step": 336,
+          "rkl": 0.07311308238838417,
+          "remaining": 0.33327910414187634
+        },
+        {
+          "step": 352,
+          "rkl": 0.0740365062777796,
+          "remaining": 0.3374884450224328
+        },
+        {
+          "step": 368,
+          "rkl": 0.07132050519817618,
+          "remaining": 0.325107809750483
+        },
+        {
+          "step": 384,
+          "rkl": 0.06969454044826975,
+          "remaining": 0.3176960024854514
+        },
+        {
+          "step": 400,
+          "rkl": 0.06925892456452809,
+          "remaining": 0.3157102884826936
+        },
+        {
+          "step": 416,
+          "rkl": 0.0687506351178385,
+          "remaining": 0.31339329888379264
+        },
+        {
+          "step": 432,
+          "rkl": 0.06749262388289684,
+          "remaining": 0.3076587730823147
+        },
+        {
+          "step": 448,
+          "rkl": 0.06694117393682562,
+          "remaining": 0.3051450404095571
+        },
+        {
+          "step": 464,
+          "rkl": 0.06670940566081908,
+          "remaining": 0.304088546539067
+        },
+        {
+          "step": 480,
+          "rkl": 0.06601116491075917,
+          "remaining": 0.3009056818033259
+        },
+        {
+          "step": 496,
+          "rkl": 0.06525365885230203,
+          "remaining": 0.2974526617377302
+        },
+        {
+          "step": 512,
+          "rkl": 0.06512123936620848,
+          "remaining": 0.2968490399746407
+        },
+        {
+          "step": 528,
+          "rkl": 0.06432551815489512,
+          "remaining": 0.29322181973183314
+        },
+        {
+          "step": 544,
+          "rkl": 0.0640923895645705,
+          "remaining": 0.29215912499656654
+        },
+        {
+          "step": 560,
+          "rkl": 0.06408419029947016,
+          "remaining": 0.29212174941838004
+        },
+        {
+          "step": 576,
+          "rkl": 0.06350923538235353,
+          "remaining": 0.2895008715475677
+        },
+        {
+          "step": 592,
+          "rkl": 0.06353981361299153,
+          "remaining": 0.28964025953368955
+        },
+        {
+          "step": 608,
+          "rkl": 0.06311074124818083,
+          "remaining": 0.28768437354605586
+        },
+        {
+          "step": 624,
+          "rkl": 0.06254977519939811,
+          "remaining": 0.2851272626148114
+        },
+        {
+          "step": 640,
+          "rkl": 0.06210812584936858,
+          "remaining": 0.2831140456238934
+        },
+        {
+          "step": 656,
+          "rkl": 0.06331167336698862,
+          "remaining": 0.2886003036964748
+        },
+        {
+          "step": 672,
+          "rkl": 0.06408926513189349,
+          "remaining": 0.2921448825643023
+        },
+        {
+          "step": 688,
+          "rkl": 0.06312500597441714,
+          "remaining": 0.28774939795790616
+        },
+        {
+          "step": 704,
+          "rkl": 0.06199880551353143,
+          "remaining": 0.28261571916299066
+        },
+        {
+          "step": 720,
+          "rkl": 0.06185040256932636,
+          "remaining": 0.281939238310577
+        },
+        {
+          "step": 736,
+          "rkl": 0.06156247505225611,
+          "remaining": 0.2806267478258069
+        },
+        {
+          "step": 752,
+          "rkl": 0.06092166897879166,
+          "remaining": 0.2777056936571642
+        },
+        {
+          "step": 768,
+          "rkl": 0.060418774783301474,
+          "remaining": 0.27541329780301615
+        },
+        {
+          "step": 784,
+          "rkl": 0.06056551727067371,
+          "remaining": 0.27608220961925134
+        },
+        {
+          "step": 800,
+          "rkl": 0.0598622426346474,
+          "remaining": 0.27287639838815775
+        },
+        {
+          "step": 816,
+          "rkl": 0.05962144920802516,
+          "remaining": 0.2717787642180976
+        },
+        {
+          "step": 832,
+          "rkl": 0.05956713702687903,
+          "remaining": 0.27153118725259345
+        },
+        {
+          "step": 848,
+          "rkl": 0.05888297816043747,
+          "remaining": 0.2684125134578392
+        },
+        {
+          "step": 864,
+          "rkl": 0.05908743460370084,
+          "remaining": 0.2693445089095543
+        },
+        {
+          "step": 880,
+          "rkl": 0.05901208299827716,
+          "remaining": 0.26900102570886186
+        },
+        {
+          "step": 896,
+          "rkl": 0.058477385727250655,
+          "remaining": 0.26656365852841407
+        },
+        {
+          "step": 912,
+          "rkl": 0.05862477667483568,
+          "remaining": 0.2672355262894916
+        },
+        {
+          "step": 928,
+          "rkl": 0.05834860177806433,
+          "remaining": 0.26597660901811343
+        },
+        {
+          "step": 944,
+          "rkl": 0.05798710459448424,
+          "remaining": 0.26432875813346074
+        },
+        {
+          "step": 960,
+          "rkl": 0.05773134647719494,
+          "remaining": 0.2631629088295784
+        },
+        {
+          "step": 976,
+          "rkl": 0.058280778889252885,
+          "remaining": 0.26566744476344123
+        },
+        {
+          "step": 992,
+          "rkl": 0.059066931707315695,
+          "remaining": 0.2692510483862617
+        },
+        {
+          "step": 1008,
+          "rkl": 0.05859033259988261,
+          "remaining": 0.2670785162159404
+        },
+        {
+          "step": 1024,
+          "rkl": 0.05772132373331069,
+          "remaining": 0.2631172210949943
+        },
+        {
+          "step": 1040,
+          "rkl": 0.057526694111554755,
+          "remaining": 0.26223002028415016
+        },
+        {
+          "step": 1056,
+          "rkl": 0.057312211681969163,
+          "remaining": 0.26125232231750256
+        },
+        {
+          "step": 1072,
+          "rkl": 0.056835908128421105,
+          "remaining": 0.25908113740174654
+        },
+        {
+          "step": 1088,
+          "rkl": 0.056502393253739555,
+          "remaining": 0.257560841238313
+        },
+        {
+          "step": 1104,
+          "rkl": 0.056670384304397914,
+          "remaining": 0.2583266126302215
+        },
+        {
+          "step": 1120,
+          "rkl": 0.056079283848389505,
+          "remaining": 0.2556321368401044
+        },
+        {
+          "step": 1136,
+          "rkl": 0.05594010444824547,
+          "remaining": 0.25499770064510713
+        },
+        {
+          "step": 1152,
+          "rkl": 0.05595938408381173,
+          "remaining": 0.2550855850490989
+        },
+        {
+          "step": 1168,
+          "rkl": 0.055431253862691265,
+          "remaining": 0.2526781531475102
+        },
+        {
+          "step": 1184,
+          "rkl": 0.055544853819737144,
+          "remaining": 0.25319598785886444
+        },
+        {
+          "step": 1200,
+          "rkl": 0.05548232904608433,
+          "remaining": 0.25291097456344636
+        },
+        {
+          "step": 1216,
+          "rkl": 0.055269752625422205,
+          "remaining": 0.2519419649590693
+        },
+        {
+          "step": 1232,
+          "rkl": 0.055318464094769954,
+          "remaining": 0.2521640116070195
+        },
+        {
+          "step": 1248,
+          "rkl": 0.05507258350189105,
+          "remaining": 0.25104318806841885
+        },
+        {
+          "step": 1264,
+          "rkl": 0.05481417746392191,
+          "remaining": 0.24986526846735865
+        },
+        {
+          "step": 1280,
+          "rkl": 0.05464073455232396,
+          "remaining": 0.24907464528052514
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.21937493674148878,
+          "final": 0.10860289163297229,
+          "absolute_reduction": 0.11077204510851649,
+          "relative_reduction": 0.5049439409710242,
+          "change_ci95": [
+            -0.12455339059809835,
+            -0.09808409354816439
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.10860289163297229,
+          "final": 0.07141729328578511,
+          "absolute_reduction": 0.03718559834718719,
+          "relative_reduction": 0.34239970766945477,
+          "change_ci95": [
+            -0.04128675683321697,
+            -0.03338606269086687
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.07141729328578511,
+          "final": 0.06210812584936858,
+          "absolute_reduction": 0.009309167436416514,
+          "relative_reduction": 0.1303489254229327,
+          "change_ci95": [
+            -0.010298940246665033,
+            -0.008369399073154314
+          ]
+        },
+        {
+          "start": 640,
+          "stop": 1280,
+          "initial": 0.06210812584936858,
+          "final": 0.05464073455232396,
+          "absolute_reduction": 0.007467391297044627,
+          "relative_reduction": 0.12023211447653985,
+          "change_ci95": [
+            -0.00825440631244062,
+            -0.006697170457251099
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.2532918208486041,
+              "top16": 0.4176945432433544,
+              "right_overlap_16": 0.6472043186154615,
+              "right_overlap_128": 0.6474520585045958
+            },
+            "v_proj": {
+              "energy": 0.2558308206539699,
+              "top16": 0.40064989209551716,
+              "right_overlap_16": 0.7976554540349465,
+              "right_overlap_128": 0.7029171107701866
+            },
+            "q_proj": {
+              "energy": 0.1331713893284969,
+              "top16": 0.3452341061806336,
+              "right_overlap_16": 0.6666800703149733,
+              "right_overlap_128": 0.6827451709163933
+            },
+            "o_proj": {
+              "energy": 0.1446683675659784,
+              "top16": 0.3458186845153679,
+              "right_overlap_16": 0.7545063511913177,
+              "right_overlap_128": 0.7495366203162789
+            },
+            "gate_proj": {
+              "energy": 0.07419581290377467,
+              "top16": 0.24128566323595516,
+              "right_overlap_16": 0.8634978525207339,
+              "right_overlap_128": 0.8215126027906299
+            },
+            "up_proj": {
+              "energy": 0.07345496981501301,
+              "top16": 0.2661778453200095,
+              "right_overlap_16": 0.8323194763179689,
+              "right_overlap_128": 0.7803503754612806
+            },
+            "down_proj": {
+              "energy": 0.07289321334847565,
+              "top16": 0.2382241951278247,
+              "right_overlap_16": 0.7297072477058231,
+              "right_overlap_128": 0.6730525415827334
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 102,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 0.05710620865015189,
+            "cosine": 0.05008220458077294,
+            "residual": 0.9975411094174962
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.40018678015701364,
+              "top16": 0.4100835392441463,
+              "right_overlap_16": 0.8658723034753218,
+              "right_overlap_128": 0.8413923320419925
+            },
+            "v_proj": {
+              "energy": 0.38976256177259755,
+              "top16": 0.35944235760513465,
+              "right_overlap_16": 0.9196309168999324,
+              "right_overlap_128": 0.864748342725233
+            },
+            "q_proj": {
+              "energy": 0.21301295752521324,
+              "top16": 0.3298059222136267,
+              "right_overlap_16": 0.8626623476799256,
+              "right_overlap_128": 0.8563429958207535
+            },
+            "o_proj": {
+              "energy": 0.22674616648498747,
+              "top16": 0.2940610065260634,
+              "right_overlap_16": 0.9240239014160226,
+              "right_overlap_128": 0.8828557526546329
+            },
+            "gate_proj": {
+              "energy": 0.12461257711730916,
+              "top16": 0.22043921596960958,
+              "right_overlap_16": 0.9187359188224024,
+              "right_overlap_128": 0.9249373308412651
+            },
+            "up_proj": {
+              "energy": 0.12007222903896694,
+              "top16": 0.23011781753248903,
+              "right_overlap_16": 0.9338959014412834,
+              "right_overlap_128": 0.9093368449533368
+            },
+            "down_proj": {
+              "energy": 0.11871607144758764,
+              "top16": 0.19358892057279198,
+              "right_overlap_16": 0.8944727834066286,
+              "right_overlap_128": 0.8625279155071779
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 102,
+            "label": "step640",
+            "matrix_count": 69,
+            "norm_ratio": 0.07180955154859464,
+            "cosine": 0.06395957309330237,
+            "residual": 0.9959707951714709
+          }
+        },
+        {
+          "step": 1280,
+          "modules": {
+            "k_proj": {
+              "energy": 0.6464007850402212,
+              "top16": 0.3996853092486542,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.6157154161214257,
+              "top16": 0.3310645684849869,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.35105345527815757,
+              "top16": 0.3164448017321574,
+              "right_overlap_16": 0.9999999999999996,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.36786118014859126,
+              "top16": 0.2614136775262813,
+              "right_overlap_16": 1.000000000000001,
+              "right_overlap_128": 1.0
+            },
+            "gate_proj": {
+              "energy": 0.2117191146361888,
+              "top16": 0.2045461475421129,
+              "right_overlap_16": 0.9999999999999999,
+              "right_overlap_128": 1.0
+            },
+            "up_proj": {
+              "energy": 0.19875418581212673,
+              "top16": 0.20406982202054866,
+              "right_overlap_16": 0.9999999999999999,
+              "right_overlap_128": 1.0000000000000002
+            },
+            "down_proj": {
+              "energy": 0.1969392339432089,
+              "top16": 0.1632272622117953,
+              "right_overlap_16": 1.0000000000000009,
+              "right_overlap_128": 1.0
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 102,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 0.09153322332440812,
+            "cosine": 0.07850086759891203,
+            "residual": 0.9940074560819738
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 103,
+      "label": "Qwen e3 thinking",
+      "group": "lower",
+      "reference_step": 1280,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.03380434384468154,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.011520655995355289,
+          "remaining": 0.34080401170596425
+        },
+        {
+          "step": 32,
+          "rkl": 0.005208087301357037,
+          "remaining": 0.15406562320174802
+        },
+        {
+          "step": 48,
+          "rkl": 0.003197042523302231,
+          "remaining": 0.0945749025034019
+        },
+        {
+          "step": 64,
+          "rkl": 0.0027330761733450636,
+          "remaining": 0.08084985130616758
+        },
+        {
+          "step": 80,
+          "rkl": 0.0023864506908950252,
+          "remaining": 0.07059597730575348
+        },
+        {
+          "step": 96,
+          "rkl": 0.002148134180246868,
+          "remaining": 0.06354609899002182
+        },
+        {
+          "step": 112,
+          "rkl": 0.001991254607135015,
+          "remaining": 0.05890528792051381
+        },
+        {
+          "step": 128,
+          "rkl": 0.0019316718244312993,
+          "remaining": 0.0571427102181488
+        },
+        {
+          "step": 144,
+          "rkl": 0.001781561816589467,
+          "remaining": 0.05270215640851024
+        },
+        {
+          "step": 160,
+          "rkl": 0.0017048960505745927,
+          "remaining": 0.05043422994417403
+        },
+        {
+          "step": 176,
+          "rkl": 0.0016358139388517605,
+          "remaining": 0.04839064311875777
+        },
+        {
+          "step": 192,
+          "rkl": 0.001570076701853149,
+          "remaining": 0.04644600436757687
+        },
+        {
+          "step": 208,
+          "rkl": 0.001495552591303022,
+          "remaining": 0.04424143234888785
+        },
+        {
+          "step": 224,
+          "rkl": 0.001456180611010528,
+          "remaining": 0.04307673054389517
+        },
+        {
+          "step": 240,
+          "rkl": 0.001428903108488967,
+          "remaining": 0.042269807544682673
+        },
+        {
+          "step": 256,
+          "rkl": 0.001373074494697606,
+          "remaining": 0.04061828565602029
+        },
+        {
+          "step": 272,
+          "rkl": 0.0013400984378836365,
+          "remaining": 0.03964278804052205
+        },
+        {
+          "step": 288,
+          "rkl": 0.0013316938770088207,
+          "remaining": 0.039394164345489494
+        },
+        {
+          "step": 304,
+          "rkl": 0.0013094832064491674,
+          "remaining": 0.038737128354443394
+        },
+        {
+          "step": 320,
+          "rkl": 0.0012979217623877153,
+          "remaining": 0.038395117750286346
+        },
+        {
+          "step": 336,
+          "rkl": 0.004464954871890896,
+          "remaining": 0.13208228186311538
+        },
+        {
+          "step": 352,
+          "rkl": 0.002891574843727689,
+          "remaining": 0.08553855850636848
+        },
+        {
+          "step": 368,
+          "rkl": 0.0018741538091188571,
+          "remaining": 0.05544121245866806
+        },
+        {
+          "step": 384,
+          "rkl": 0.001775078825721397,
+          "remaining": 0.05251037659175483
+        },
+        {
+          "step": 400,
+          "rkl": 0.0016446886371311706,
+          "remaining": 0.048653174417107654
+        },
+        {
+          "step": 416,
+          "rkl": 0.0015964167873198662,
+          "remaining": 0.04722519669823532
+        },
+        {
+          "step": 432,
+          "rkl": 0.0015347628493658993,
+          "remaining": 0.04540135008736058
+        },
+        {
+          "step": 448,
+          "rkl": 0.0015076068818885566,
+          "remaining": 0.04459802233746801
+        },
+        {
+          "step": 464,
+          "rkl": 0.00146967679290035,
+          "remaining": 0.043475974556789844
+        },
+        {
+          "step": 480,
+          "rkl": 0.0014245516891699351,
+          "remaining": 0.04214108387120967
+        },
+        {
+          "step": 496,
+          "rkl": 0.001397289029003969,
+          "remaining": 0.041334599938516646
+        },
+        {
+          "step": 512,
+          "rkl": 0.0014004114035694893,
+          "remaining": 0.041426966013712964
+        },
+        {
+          "step": 528,
+          "rkl": 0.001391179917327913,
+          "remaining": 0.04115388021491766
+        },
+        {
+          "step": 544,
+          "rkl": 0.001389765247532166,
+          "remaining": 0.041112031457188565
+        },
+        {
+          "step": 560,
+          "rkl": 0.0013396537552882986,
+          "remaining": 0.039629633441297135
+        },
+        {
+          "step": 576,
+          "rkl": 0.001314525408443309,
+          "remaining": 0.03888628675897592
+        },
+        {
+          "step": 592,
+          "rkl": 0.0013012873604477523,
+          "remaining": 0.03849467886218075
+        },
+        {
+          "step": 608,
+          "rkl": 0.0013070216515310056,
+          "remaining": 0.03866431064410795
+        },
+        {
+          "step": 624,
+          "rkl": 0.0012874466448791317,
+          "remaining": 0.03808524285501511
+        },
+        {
+          "step": 640,
+          "rkl": 0.00128053274105122,
+          "remaining": 0.037880715772351456
+        },
+        {
+          "step": 656,
+          "rkl": 0.002540838183183922,
+          "remaining": 0.07516306764770037
+        },
+        {
+          "step": 672,
+          "rkl": 0.0019680174377104814,
+          "remaining": 0.058217886043071675
+        },
+        {
+          "step": 688,
+          "rkl": 0.0016019834754557325,
+          "remaining": 0.04738987045026681
+        },
+        {
+          "step": 704,
+          "rkl": 0.0015651786975073305,
+          "remaining": 0.046301111617452116
+        },
+        {
+          "step": 720,
+          "rkl": 0.0014930969560513713,
+          "remaining": 0.0441687897541097
+        },
+        {
+          "step": 736,
+          "rkl": 0.0014338225343721242,
+          "remaining": 0.04241533398666185
+        },
+        {
+          "step": 752,
+          "rkl": 0.001402533908275381,
+          "remaining": 0.04148975394166814
+        },
+        {
+          "step": 768,
+          "rkl": 0.0014238283049671104,
+          "remaining": 0.04211968472185335
+        },
+        {
+          "step": 784,
+          "rkl": 0.0013862082007742816,
+          "remaining": 0.041006806910478595
+        },
+        {
+          "step": 800,
+          "rkl": 0.0013740152398280714,
+          "remaining": 0.040646114775697566
+        },
+        {
+          "step": 816,
+          "rkl": 0.001346472481540842,
+          "remaining": 0.03983134498120671
+        },
+        {
+          "step": 832,
+          "rkl": 0.0013606580040530377,
+          "remaining": 0.040250981066361116
+        },
+        {
+          "step": 848,
+          "rkl": 0.0013784513224813365,
+          "remaining": 0.04077734295967437
+        },
+        {
+          "step": 864,
+          "rkl": 0.0013911100693156377,
+          "remaining": 0.04115181397122435
+        },
+        {
+          "step": 880,
+          "rkl": 0.0013588725324795979,
+          "remaining": 0.04019816325153698
+        },
+        {
+          "step": 896,
+          "rkl": 0.0013072918628774211,
+          "remaining": 0.038672304035361364
+        },
+        {
+          "step": 912,
+          "rkl": 0.001311394657841991,
+          "remaining": 0.03879367290391331
+        },
+        {
+          "step": 928,
+          "rkl": 0.0012942186510375873,
+          "remaining": 0.03828557232123905
+        },
+        {
+          "step": 944,
+          "rkl": 0.0013048255403715755,
+          "remaining": 0.03859934529026111
+        },
+        {
+          "step": 960,
+          "rkl": 0.0013021108761617122,
+          "remaining": 0.0385190401016044
+        },
+        {
+          "step": 976,
+          "rkl": 0.002496551214050914,
+          "remaining": 0.0738529706573109
+        },
+        {
+          "step": 992,
+          "rkl": 0.0018526918021119312,
+          "remaining": 0.05480632343063261
+        },
+        {
+          "step": 1008,
+          "rkl": 0.0016011382812714452,
+          "remaining": 0.04736486791839781
+        },
+        {
+          "step": 1024,
+          "rkl": 0.0016420469417499817,
+          "remaining": 0.048575027792125774
+        },
+        {
+          "step": 1040,
+          "rkl": 0.0015103756283344964,
+          "remaining": 0.044679927386672966
+        },
+        {
+          "step": 1056,
+          "rkl": 0.0014570635904580383,
+          "remaining": 0.04310285083930949
+        },
+        {
+          "step": 1072,
+          "rkl": 0.0014556501723568297,
+          "remaining": 0.043061039109204544
+        },
+        {
+          "step": 1088,
+          "rkl": 0.001429606084321861,
+          "remaining": 0.04229060297369984
+        },
+        {
+          "step": 1104,
+          "rkl": 0.0014264231159628973,
+          "remaining": 0.04219644441308443
+        },
+        {
+          "step": 1120,
+          "rkl": 0.00139046982978889,
+          "remaining": 0.041132874407430735
+        },
+        {
+          "step": 1136,
+          "rkl": 0.0014250904195881368,
+          "remaining": 0.0421570205928534
+        },
+        {
+          "step": 1152,
+          "rkl": 0.0014244822513203403,
+          "remaining": 0.04213902976094757
+        },
+        {
+          "step": 1168,
+          "rkl": 0.0014426294587458212,
+          "remaining": 0.04267586039753264
+        },
+        {
+          "step": 1184,
+          "rkl": 0.0014455997660763702,
+          "remaining": 0.04276372802023215
+        },
+        {
+          "step": 1200,
+          "rkl": 0.001434665530755096,
+          "remaining": 0.04244027150317881
+        },
+        {
+          "step": 1216,
+          "rkl": 0.001419097049604327,
+          "remaining": 0.041979724739653376
+        },
+        {
+          "step": 1232,
+          "rkl": 0.0014175511106536594,
+          "remaining": 0.04193399277817024
+        },
+        {
+          "step": 1248,
+          "rkl": 0.001438003774565923,
+          "remaining": 0.04253902342175368
+        },
+        {
+          "step": 1264,
+          "rkl": 0.0014136914499882367,
+          "remaining": 0.04181981630773921
+        },
+        {
+          "step": 1280,
+          "rkl": 0.0013939982063090875,
+          "remaining": 0.04123725083125393
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.03380434384468154,
+          "final": 0.0027330761733450636,
+          "absolute_reduction": 0.03107126767133648,
+          "relative_reduction": 0.9191501486938325,
+          "change_ci95": [
+            -0.033090917692920996,
+            -0.02896978596381307
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.0027330761733450636,
+          "final": 0.0012979217623877153,
+          "absolute_reduction": 0.0014351544109573486,
+          "relative_reduction": 0.5251058953109368,
+          "change_ci95": [
+            -0.001588371448941144,
+            -0.0012906826391827421
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.0012979217623877153,
+          "final": 0.00128053274105122,
+          "absolute_reduction": 1.7389021336495192e-05,
+          "relative_reduction": 0.01339758823714117,
+          "change_ci95": [
+            -4.055248535850897e-05,
+            6.311420195022397e-06
+          ]
+        },
+        {
+          "start": 640,
+          "stop": 1280,
+          "initial": 0.00128053274105122,
+          "final": 0.0013939982063090875,
+          "absolute_reduction": -0.00011346546525786746,
+          "relative_reduction": -0.08860801572689266,
+          "change_ci95": [
+            7.452368632001806e-05,
+            0.00015402031085275805
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.03513349898734254,
+              "top16": 0.3557274284032963,
+              "right_overlap_16": 0.6408567107995851,
+              "right_overlap_128": 0.5713724194148795
+            },
+            "v_proj": {
+              "energy": 0.03629732152971186,
+              "top16": 0.4453802013525613,
+              "right_overlap_16": 0.7684777334455608,
+              "right_overlap_128": 0.6077581850978747
+            },
+            "q_proj": {
+              "energy": 0.012904842428168096,
+              "top16": 0.3811142941726379,
+              "right_overlap_16": 0.6191369132574386,
+              "right_overlap_128": 0.5822613877385266
+            },
+            "o_proj": {
+              "energy": 0.012248615141941158,
+              "top16": 0.46939433689140236,
+              "right_overlap_16": 0.7920365726266542,
+              "right_overlap_128": 0.6768305047476966
+            },
+            "gate_proj": {
+              "energy": 0.007342171620813864,
+              "top16": 0.2514956763916761,
+              "right_overlap_16": 0.8283723780259434,
+              "right_overlap_128": 0.7741925772021572
+            },
+            "up_proj": {
+              "energy": 0.007075876699659908,
+              "top16": 0.2869993304818612,
+              "right_overlap_16": 0.8266725785130086,
+              "right_overlap_128": 0.7131256066603215
+            },
+            "down_proj": {
+              "energy": 0.007303239131494559,
+              "top16": 0.35546003873829746,
+              "right_overlap_16": 0.7733517655738792,
+              "right_overlap_128": 0.5436747240240462
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 103,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 1.245632471320444,
+            "cosine": 0.13942161516345128,
+            "residual": 2.2042640715048014
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.03192924729112219,
+              "top16": 0.3664752064835143,
+              "right_overlap_16": 0.8073128064932,
+              "right_overlap_128": 0.7327931284354664
+            },
+            "v_proj": {
+              "energy": 0.034205864956631415,
+              "top16": 0.4612697956433808,
+              "right_overlap_16": 0.8803645144481226,
+              "right_overlap_128": 0.7622887354998502
+            },
+            "q_proj": {
+              "energy": 0.011935744876379639,
+              "top16": 0.3880858701895857,
+              "right_overlap_16": 0.7827100909250553,
+              "right_overlap_128": 0.7480167800859863
+            },
+            "o_proj": {
+              "energy": 0.011457481683747932,
+              "top16": 0.48280175092070154,
+              "right_overlap_16": 0.8803143774238266,
+              "right_overlap_128": 0.7923299282809474
+            },
+            "gate_proj": {
+              "energy": 0.006273292711206859,
+              "top16": 0.26465778234829535,
+              "right_overlap_16": 0.9420936663331989,
+              "right_overlap_128": 0.8690115681254369
+            },
+            "up_proj": {
+              "energy": 0.006136536823827999,
+              "top16": 0.304158414460433,
+              "right_overlap_16": 0.8998507325520152,
+              "right_overlap_128": 0.8252826555859564
+            },
+            "down_proj": {
+              "energy": 0.006640259344654629,
+              "top16": 0.37556555730784824,
+              "right_overlap_16": 0.8773205778441104,
+              "right_overlap_128": 0.7325260157530765
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 103,
+            "label": "step640",
+            "matrix_count": 69,
+            "norm_ratio": 1.1933260112888562,
+            "cosine": 0.14904746365379284,
+            "residual": 2.0683025386291685
+          }
+        },
+        {
+          "step": 1280,
+          "modules": {
+            "k_proj": {
+              "energy": 0.03816994868945275,
+              "top16": 0.33950698398955936,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.03870973572650372,
+              "top16": 0.42341979267595276,
+              "right_overlap_16": 1.0000000000000004,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.014352839844552755,
+              "top16": 0.3523494842846746,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.012997063654836757,
+              "top16": 0.44495045728116445,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 0.9999999999999998
+            },
+            "gate_proj": {
+              "energy": 0.007365036018288806,
+              "top16": 0.23681634655445283,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 0.9999999999999999
+            },
+            "up_proj": {
+              "energy": 0.007074054887537524,
+              "top16": 0.27255712602115983,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 1.0000000000000002
+            },
+            "down_proj": {
+              "energy": 0.007602674407694357,
+              "top16": 0.32976541171665924,
+              "right_overlap_16": 1.0000000000000009,
+              "right_overlap_128": 1.0000000000000002
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 103,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 1.286885034394074,
+            "cosine": 0.14108261028163915,
+            "residual": 2.292958892178051
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 104,
+      "label": "Qwen Samsung nonthinking",
+      "group": "partial, improving",
+      "reference_step": 1280,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.14480119802497476,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.09620516279306002,
+          "remaining": 0.6643947985600707
+        },
+        {
+          "step": 32,
+          "rkl": 0.05440999062212848,
+          "remaining": 0.37575649486507734
+        },
+        {
+          "step": 48,
+          "rkl": 0.03944051533229369,
+          "remaining": 0.2723769959796267
+        },
+        {
+          "step": 64,
+          "rkl": 0.03276614050697228,
+          "remaining": 0.22628362854650486
+        },
+        {
+          "step": 80,
+          "rkl": 0.02862714323853799,
+          "remaining": 0.19769962976135383
+        },
+        {
+          "step": 96,
+          "rkl": 0.02570108891402914,
+          "remaining": 0.17749223946059006
+        },
+        {
+          "step": 112,
+          "rkl": 0.02409993276778943,
+          "remaining": 0.16643462275521204
+        },
+        {
+          "step": 128,
+          "rkl": 0.022703457269201026,
+          "remaining": 0.1567905347391202
+        },
+        {
+          "step": 144,
+          "rkl": 0.021136739743791086,
+          "remaining": 0.14597075184519884
+        },
+        {
+          "step": 160,
+          "rkl": 0.020133232629538967,
+          "remaining": 0.13904051143324425
+        },
+        {
+          "step": 176,
+          "rkl": 0.019237409080226815,
+          "remaining": 0.13285393589705535
+        },
+        {
+          "step": 192,
+          "rkl": 0.018416697100103574,
+          "remaining": 0.12718608237569368
+        },
+        {
+          "step": 208,
+          "rkl": 0.01775243442049704,
+          "remaining": 0.12259867088554867
+        },
+        {
+          "step": 224,
+          "rkl": 0.017180810338653957,
+          "remaining": 0.11865102342378876
+        },
+        {
+          "step": 240,
+          "rkl": 0.016604813347735066,
+          "remaining": 0.11467317656357463
+        },
+        {
+          "step": 256,
+          "rkl": 0.016035047333210813,
+          "remaining": 0.11073836095227022
+        },
+        {
+          "step": 272,
+          "rkl": 0.015565731668839285,
+          "remaining": 0.10749725748922717
+        },
+        {
+          "step": 288,
+          "rkl": 0.01510769997104173,
+          "remaining": 0.10433408132739351
+        },
+        {
+          "step": 304,
+          "rkl": 0.014567375219028575,
+          "remaining": 0.10060258767000015
+        },
+        {
+          "step": 320,
+          "rkl": 0.014366406289675518,
+          "remaining": 0.09921469218229571
+        },
+        {
+          "step": 336,
+          "rkl": 0.014226987577174846,
+          "remaining": 0.09825186373610686
+        },
+        {
+          "step": 352,
+          "rkl": 0.014162150209415482,
+          "remaining": 0.0978040955639942
+        },
+        {
+          "step": 368,
+          "rkl": 0.01364296324292838,
+          "remaining": 0.09421857988063947
+        },
+        {
+          "step": 384,
+          "rkl": 0.013380580174921884,
+          "remaining": 0.09240655711021156
+        },
+        {
+          "step": 400,
+          "rkl": 0.013206900450484841,
+          "remaining": 0.09120712142317335
+        },
+        {
+          "step": 416,
+          "rkl": 0.01304439910977976,
+          "remaining": 0.09008488388010374
+        },
+        {
+          "step": 432,
+          "rkl": 0.012926068951160188,
+          "remaining": 0.0892676934132185
+        },
+        {
+          "step": 448,
+          "rkl": 0.012799904533586842,
+          "remaining": 0.08839639939566772
+        },
+        {
+          "step": 464,
+          "rkl": 0.012590313556306895,
+          "remaining": 0.08694895987072818
+        },
+        {
+          "step": 480,
+          "rkl": 0.012211624312245928,
+          "remaining": 0.08433372429791439
+        },
+        {
+          "step": 496,
+          "rkl": 0.012243810291749964,
+          "remaining": 0.08455600132284953
+        },
+        {
+          "step": 512,
+          "rkl": 0.012151564925670311,
+          "remaining": 0.08391895296041994
+        },
+        {
+          "step": 528,
+          "rkl": 0.01204923175666436,
+          "remaining": 0.08321223802710634
+        },
+        {
+          "step": 544,
+          "rkl": 0.011881849179472088,
+          "remaining": 0.08205629056620617
+        },
+        {
+          "step": 560,
+          "rkl": 0.011765236912408841,
+          "remaining": 0.08125096389312758
+        },
+        {
+          "step": 576,
+          "rkl": 0.011527477565574143,
+          "remaining": 0.07960899303875875
+        },
+        {
+          "step": 592,
+          "rkl": 0.011485205244349535,
+          "remaining": 0.07931705953405586
+        },
+        {
+          "step": 608,
+          "rkl": 0.011339245026492865,
+          "remaining": 0.07830905531967432
+        },
+        {
+          "step": 624,
+          "rkl": 0.01119895420034114,
+          "remaining": 0.07734020403898582
+        },
+        {
+          "step": 640,
+          "rkl": 0.011133666520935292,
+          "remaining": 0.07688932600554174
+        },
+        {
+          "step": 656,
+          "rkl": 0.01110502461646861,
+          "remaining": 0.07669152443444051
+        },
+        {
+          "step": 672,
+          "rkl": 0.011082489101737723,
+          "remaining": 0.07653589371426511
+        },
+        {
+          "step": 688,
+          "rkl": 0.01093964229069699,
+          "remaining": 0.07554939075027654
+        },
+        {
+          "step": 704,
+          "rkl": 0.010771842479489327,
+          "remaining": 0.07439056186283376
+        },
+        {
+          "step": 720,
+          "rkl": 0.010650780081329768,
+          "remaining": 0.07355450249446667
+        },
+        {
+          "step": 736,
+          "rkl": 0.010578118420784016,
+          "remaining": 0.07305269959824187
+        },
+        {
+          "step": 752,
+          "rkl": 0.010532858549968376,
+          "remaining": 0.07274013401568478
+        },
+        {
+          "step": 768,
+          "rkl": 0.01047339888462698,
+          "remaining": 0.07232950436515427
+        },
+        {
+          "step": 784,
+          "rkl": 0.010340003021631017,
+          "remaining": 0.07140826983936702
+        },
+        {
+          "step": 800,
+          "rkl": 0.010189448403226432,
+          "remaining": 0.07036853660194851
+        },
+        {
+          "step": 816,
+          "rkl": 0.010148088820867485,
+          "remaining": 0.07008290649029837
+        },
+        {
+          "step": 832,
+          "rkl": 0.010036814475702576,
+          "remaining": 0.06931444361372939
+        },
+        {
+          "step": 848,
+          "rkl": 0.00998159786608387,
+          "remaining": 0.06893311659177213
+        },
+        {
+          "step": 864,
+          "rkl": 0.009891709081131978,
+          "remaining": 0.06831234282623748
+        },
+        {
+          "step": 880,
+          "rkl": 0.009830832118235752,
+          "remaining": 0.06789192529014966
+        },
+        {
+          "step": 896,
+          "rkl": 0.009705415999372538,
+          "remaining": 0.0670257990386142
+        },
+        {
+          "step": 912,
+          "rkl": 0.009697133621042275,
+          "remaining": 0.06696860076647812
+        },
+        {
+          "step": 928,
+          "rkl": 0.009607156115120025,
+          "remaining": 0.06634721429212913
+        },
+        {
+          "step": 944,
+          "rkl": 0.009530141637448702,
+          "remaining": 0.06581535075286449
+        },
+        {
+          "step": 960,
+          "rkl": 0.00952573655391428,
+          "remaining": 0.06578492915694881
+        },
+        {
+          "step": 976,
+          "rkl": 0.009518342154002712,
+          "remaining": 0.06573386328171832
+        },
+        {
+          "step": 992,
+          "rkl": 0.009580635310058625,
+          "remaining": 0.06616406107638828
+        },
+        {
+          "step": 1008,
+          "rkl": 0.009474255656019812,
+          "remaining": 0.06542940103565806
+        },
+        {
+          "step": 1024,
+          "rkl": 0.009329312177663397,
+          "remaining": 0.06442841844481365
+        },
+        {
+          "step": 1040,
+          "rkl": 0.009279091376464547,
+          "remaining": 0.06408159257676946
+        },
+        {
+          "step": 1056,
+          "rkl": 0.009267776715327991,
+          "remaining": 0.06400345329829053
+        },
+        {
+          "step": 1072,
+          "rkl": 0.009172026374519946,
+          "remaining": 0.06334219950955094
+        },
+        {
+          "step": 1088,
+          "rkl": 0.009154396694722178,
+          "remaining": 0.06322044858457083
+        },
+        {
+          "step": 1104,
+          "rkl": 0.009031822072877452,
+          "remaining": 0.06237394576887187
+        },
+        {
+          "step": 1120,
+          "rkl": 0.00892608398868595,
+          "remaining": 0.061643716422473335
+        },
+        {
+          "step": 1136,
+          "rkl": 0.00894166665482016,
+          "remaining": 0.06175133062972266
+        },
+        {
+          "step": 1152,
+          "rkl": 0.008854991696571675,
+          "remaining": 0.061152751616353335
+        },
+        {
+          "step": 1168,
+          "rkl": 0.008889441556845151,
+          "remaining": 0.06139066304763538
+        },
+        {
+          "step": 1184,
+          "rkl": 0.008833862029492526,
+          "remaining": 0.0610068297084731
+        },
+        {
+          "step": 1200,
+          "rkl": 0.008770473992228581,
+          "remaining": 0.06056907064205286
+        },
+        {
+          "step": 1216,
+          "rkl": 0.008677022950361756,
+          "remaining": 0.05992369585827029
+        },
+        {
+          "step": 1232,
+          "rkl": 0.008683273061582866,
+          "remaining": 0.059966859252678334
+        },
+        {
+          "step": 1248,
+          "rkl": 0.008642392243560414,
+          "remaining": 0.05968453549721189
+        },
+        {
+          "step": 1264,
+          "rkl": 0.008568384277927521,
+          "remaining": 0.05917343499084641
+        },
+        {
+          "step": 1280,
+          "rkl": 0.008607054554509951,
+          "remaining": 0.05944049270245291
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.14480119802497476,
+          "final": 0.03276614050697228,
+          "absolute_reduction": 0.1120350575180025,
+          "relative_reduction": 0.7737163714534953,
+          "change_ci95": [
+            -0.12785090428828622,
+            -0.0970637018316457
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.03276614050697228,
+          "final": 0.014366406289675518,
+          "absolute_reduction": 0.018399734217296765,
+          "relative_reduction": 0.5615471926997779,
+          "change_ci95": [
+            -0.020123091060695573,
+            -0.01683425073842779
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.014366406289675518,
+          "final": 0.011133666520935292,
+          "absolute_reduction": 0.0032327397687402287,
+          "relative_reduction": 0.2250207674457496,
+          "change_ci95": [
+            -0.0036256582241929007,
+            -0.002888396424907004
+          ]
+        },
+        {
+          "start": 640,
+          "stop": 1280,
+          "initial": 0.011133666520935292,
+          "final": 0.008607054554509951,
+          "absolute_reduction": 0.002526611966425339,
+          "relative_reduction": 0.22693440311638585,
+          "change_ci95": [
+            -0.0028592656893364557,
+            -0.00223304603400464
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.15858594311177557,
+              "top16": 0.441954412900595,
+              "right_overlap_16": 0.7215288113120595,
+              "right_overlap_128": 0.6502763368023972
+            },
+            "v_proj": {
+              "energy": 0.1901581167662464,
+              "top16": 0.5630699641059638,
+              "right_overlap_16": 0.8570074314662484,
+              "right_overlap_128": 0.7070235099329398
+            },
+            "q_proj": {
+              "energy": 0.057905417892821415,
+              "top16": 0.4210148395282355,
+              "right_overlap_16": 0.7252666659686009,
+              "right_overlap_128": 0.6641627602781507
+            },
+            "o_proj": {
+              "energy": 0.07190190661229293,
+              "top16": 0.5622021875536021,
+              "right_overlap_16": 0.8739603279101885,
+              "right_overlap_128": 0.7451332280880509
+            },
+            "gate_proj": {
+              "energy": 0.030907182008249955,
+              "top16": 0.3711862598923306,
+              "right_overlap_16": 0.891263902920082,
+              "right_overlap_128": 0.8276133766895413
+            },
+            "up_proj": {
+              "energy": 0.03205547297733874,
+              "top16": 0.41253340774345015,
+              "right_overlap_16": 0.8530018518992685,
+              "right_overlap_128": 0.7844393638161102
+            },
+            "down_proj": {
+              "energy": 0.03355949461253456,
+              "top16": 0.47130565735165336,
+              "right_overlap_16": 0.8455492518702171,
+              "right_overlap_128": 0.6778810464383603
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 104,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 0.2107316496587178,
+            "cosine": 0.10641208557749005,
+            "residual": 0.9995590394931463
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.1906698135774039,
+              "top16": 0.4368941006927936,
+              "right_overlap_16": 0.892261607251591,
+              "right_overlap_128": 0.8512667997176213
+            },
+            "v_proj": {
+              "energy": 0.23447862016242493,
+              "top16": 0.5559290235556081,
+              "right_overlap_16": 0.9332984213395181,
+              "right_overlap_128": 0.8730927387542677
+            },
+            "q_proj": {
+              "energy": 0.07100531337236136,
+              "top16": 0.40792967740546004,
+              "right_overlap_16": 0.8888281006989196,
+              "right_overlap_128": 0.8585798362967669
+            },
+            "o_proj": {
+              "energy": 0.08908632865642008,
+              "top16": 0.5705073300512808,
+              "right_overlap_16": 0.942628832061235,
+              "right_overlap_128": 0.8926682322618478
+            },
+            "gate_proj": {
+              "energy": 0.0368829260157682,
+              "top16": 0.35498975652509734,
+              "right_overlap_16": 0.951274106201649,
+              "right_overlap_128": 0.9311739785686
+            },
+            "up_proj": {
+              "energy": 0.03834437579225815,
+              "top16": 0.39472861369076,
+              "right_overlap_16": 0.908032902003367,
+              "right_overlap_128": 0.9109164595852356
+            },
+            "down_proj": {
+              "energy": 0.04087668426707228,
+              "top16": 0.4458433610270155,
+              "right_overlap_16": 0.9374649233022918,
+              "right_overlap_128": 0.8674196665652276
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 104,
+            "label": "step640",
+            "matrix_count": 69,
+            "norm_ratio": 0.2327199626677282,
+            "cosine": 0.1323485288700361,
+            "residual": 0.9925582916285417
+          }
+        },
+        {
+          "step": 1280,
+          "modules": {
+            "k_proj": {
+              "energy": 0.24388728143530233,
+              "top16": 0.42269135787581347,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.2987134663985399,
+              "top16": 0.5312191586585155,
+              "right_overlap_16": 0.9999999999999999,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.09163160612741429,
+              "top16": 0.3987907609605474,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.11395584952411647,
+              "top16": 0.546442944637128,
+              "right_overlap_16": 1.0000000000000004,
+              "right_overlap_128": 1.0
+            },
+            "gate_proj": {
+              "energy": 0.04660208943733145,
+              "top16": 0.32882579609397655,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 1.0000000000000007
+            },
+            "up_proj": {
+              "energy": 0.04837671376925894,
+              "top16": 0.3667543728452509,
+              "right_overlap_16": 0.9999999999999994,
+              "right_overlap_128": 0.9999999999999997
+            },
+            "down_proj": {
+              "energy": 0.05189348750404932,
+              "top16": 0.40938618838581425,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 0.9999999999999999
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 104,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 0.262902230579377,
+            "cosine": 0.1596022922248637,
+            "residual": 0.9851979855806154
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 105,
+      "label": "Qwen CoReward-I",
+      "group": "higher, improving",
+      "reference_step": 1280,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.24211965224344278,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.17984115604108386,
+          "remaining": 0.7427780205972703
+        },
+        {
+          "step": 32,
+          "rkl": 0.1447398647322127,
+          "remaining": 0.5978030423845226
+        },
+        {
+          "step": 48,
+          "rkl": 0.12687462030701552,
+          "remaining": 0.5240162007974782
+        },
+        {
+          "step": 64,
+          "rkl": 0.11711071013947424,
+          "remaining": 0.4836894033769863
+        },
+        {
+          "step": 80,
+          "rkl": 0.11198204280960772,
+          "remaining": 0.4625070363846951
+        },
+        {
+          "step": 96,
+          "rkl": 0.10489845048189841,
+          "remaining": 0.4332504590599144
+        },
+        {
+          "step": 112,
+          "rkl": 0.0986714989280963,
+          "remaining": 0.407531970304028
+        },
+        {
+          "step": 128,
+          "rkl": 0.09658946538696708,
+          "remaining": 0.3989327776245514
+        },
+        {
+          "step": 144,
+          "rkl": 0.0937909666256437,
+          "remaining": 0.38737444794997555
+        },
+        {
+          "step": 160,
+          "rkl": 0.09207430100909975,
+          "remaining": 0.3802842939676878
+        },
+        {
+          "step": 176,
+          "rkl": 0.09171559124813314,
+          "remaining": 0.3788027547467165
+        },
+        {
+          "step": 192,
+          "rkl": 0.08843975804328293,
+          "remaining": 0.3652729434550809
+        },
+        {
+          "step": 208,
+          "rkl": 0.08815854084910311,
+          "remaining": 0.3641114632052371
+        },
+        {
+          "step": 224,
+          "rkl": 0.0871856845332204,
+          "remaining": 0.3600933824469493
+        },
+        {
+          "step": 240,
+          "rkl": 0.08594218349043889,
+          "remaining": 0.3549574877301866
+        },
+        {
+          "step": 256,
+          "rkl": 0.08473747674079132,
+          "remaining": 0.34998182078830503
+        },
+        {
+          "step": 272,
+          "rkl": 0.08482096719239414,
+          "remaining": 0.35032665215919623
+        },
+        {
+          "step": 288,
+          "rkl": 0.08316185732362705,
+          "remaining": 0.3434742143112395
+        },
+        {
+          "step": 304,
+          "rkl": 0.08242111546101512,
+          "remaining": 0.34041481018708714
+        },
+        {
+          "step": 320,
+          "rkl": 0.08157990526197187,
+          "remaining": 0.33694045281357893
+        },
+        {
+          "step": 336,
+          "rkl": 0.08117547156475483,
+          "remaining": 0.3352700650797885
+        },
+        {
+          "step": 352,
+          "rkl": 0.08128600968913102,
+          "remaining": 0.33572660845969166
+        },
+        {
+          "step": 368,
+          "rkl": 0.08070727316971191,
+          "remaining": 0.33333631707253397
+        },
+        {
+          "step": 384,
+          "rkl": 0.07954358884914547,
+          "remaining": 0.32853008052880894
+        },
+        {
+          "step": 400,
+          "rkl": 0.07933954684153333,
+          "remaining": 0.32768734840970365
+        },
+        {
+          "step": 416,
+          "rkl": 0.07909514466140669,
+          "remaining": 0.3266779211374354
+        },
+        {
+          "step": 432,
+          "rkl": 0.07834824444405916,
+          "remaining": 0.32359308184237257
+        },
+        {
+          "step": 448,
+          "rkl": 0.07831137958420412,
+          "remaining": 0.32344082299219884
+        },
+        {
+          "step": 464,
+          "rkl": 0.07817837256649766,
+          "remaining": 0.32289147882920327
+        },
+        {
+          "step": 480,
+          "rkl": 0.07749915009215988,
+          "remaining": 0.3200861614250016
+        },
+        {
+          "step": 496,
+          "rkl": 0.07744465557850005,
+          "remaining": 0.3198610887671034
+        },
+        {
+          "step": 512,
+          "rkl": 0.07694448981135094,
+          "remaining": 0.3177953094612327
+        },
+        {
+          "step": 528,
+          "rkl": 0.07690162182079932,
+          "remaining": 0.3176182565448155
+        },
+        {
+          "step": 544,
+          "rkl": 0.07662833706276592,
+          "remaining": 0.3164895387579643
+        },
+        {
+          "step": 560,
+          "rkl": 0.07623422631694168,
+          "remaining": 0.3148617867676881
+        },
+        {
+          "step": 576,
+          "rkl": 0.07581391744039298,
+          "remaining": 0.31312583153789086
+        },
+        {
+          "step": 592,
+          "rkl": 0.07534119621607326,
+          "remaining": 0.3111734033894958
+        },
+        {
+          "step": 608,
+          "rkl": 0.07529969754189264,
+          "remaining": 0.3110020060089193
+        },
+        {
+          "step": 624,
+          "rkl": 0.07537491350850237,
+          "remaining": 0.31131266219032705
+        },
+        {
+          "step": 640,
+          "rkl": 0.07516529537000144,
+          "remaining": 0.3104468995950208
+        },
+        {
+          "step": 656,
+          "rkl": 0.07532759688717161,
+          "remaining": 0.31111723558661136
+        },
+        {
+          "step": 672,
+          "rkl": 0.07538830948512645,
+          "remaining": 0.31136799010980803
+        },
+        {
+          "step": 688,
+          "rkl": 0.07544382014201124,
+          "remaining": 0.3115972596315938
+        },
+        {
+          "step": 704,
+          "rkl": 0.07478778782576068,
+          "remaining": 0.3088877219704751
+        },
+        {
+          "step": 720,
+          "rkl": 0.07479719147026258,
+          "remaining": 0.3089265608024938
+        },
+        {
+          "step": 736,
+          "rkl": 0.07464100980887609,
+          "remaining": 0.30828150097385393
+        },
+        {
+          "step": 752,
+          "rkl": 0.07412446714286444,
+          "remaining": 0.30614808197533216
+        },
+        {
+          "step": 768,
+          "rkl": 0.07399931122024972,
+          "remaining": 0.30563116432137455
+        },
+        {
+          "step": 784,
+          "rkl": 0.07407862783681753,
+          "remaining": 0.30595875696341274
+        },
+        {
+          "step": 800,
+          "rkl": 0.07394735830134713,
+          "remaining": 0.3054165889309789
+        },
+        {
+          "step": 816,
+          "rkl": 0.07396934420179356,
+          "remaining": 0.3055073948620246
+        },
+        {
+          "step": 832,
+          "rkl": 0.07391359316444616,
+          "remaining": 0.3052771325234213
+        },
+        {
+          "step": 848,
+          "rkl": 0.07378119889814841,
+          "remaining": 0.3047303191397451
+        },
+        {
+          "step": 864,
+          "rkl": 0.0736861541598291,
+          "remaining": 0.3043377663773458
+        },
+        {
+          "step": 880,
+          "rkl": 0.07336799912796253,
+          "remaining": 0.3030237258650677
+        },
+        {
+          "step": 896,
+          "rkl": 0.0731602258797388,
+          "remaining": 0.30216558301586677
+        },
+        {
+          "step": 912,
+          "rkl": 0.07278182644285262,
+          "remaining": 0.30060272170584923
+        },
+        {
+          "step": 928,
+          "rkl": 0.07279864777919694,
+          "remaining": 0.30067219700943754
+        },
+        {
+          "step": 944,
+          "rkl": 0.0727585051197471,
+          "remaining": 0.3005064002264095
+        },
+        {
+          "step": 960,
+          "rkl": 0.0726527693737104,
+          "remaining": 0.30006969157819785
+        },
+        {
+          "step": 976,
+          "rkl": 0.07282666687613777,
+          "remaining": 0.30078792118416364
+        },
+        {
+          "step": 992,
+          "rkl": 0.07295259824477185,
+          "remaining": 0.3013080415769827
+        },
+        {
+          "step": 1008,
+          "rkl": 0.07310468484071854,
+          "remaining": 0.3019361880101098
+        },
+        {
+          "step": 1024,
+          "rkl": 0.07256271720721112,
+          "remaining": 0.29969775908257074
+        },
+        {
+          "step": 1040,
+          "rkl": 0.0725560967491801,
+          "remaining": 0.2996704153375683
+        },
+        {
+          "step": 1056,
+          "rkl": 0.07236698024607494,
+          "remaining": 0.29888932837765886
+        },
+        {
+          "step": 1072,
+          "rkl": 0.07210692896956836,
+          "remaining": 0.2978152673747746
+        },
+        {
+          "step": 1088,
+          "rkl": 0.07212428314868255,
+          "remaining": 0.2978869434198762
+        },
+        {
+          "step": 1104,
+          "rkl": 0.07216312365511583,
+          "remaining": 0.29804736206443233
+        },
+        {
+          "step": 1120,
+          "rkl": 0.07204908088412218,
+          "remaining": 0.2975763438305263
+        },
+        {
+          "step": 1136,
+          "rkl": 0.07206221672232752,
+          "remaining": 0.29763059732909036
+        },
+        {
+          "step": 1152,
+          "rkl": 0.07207604418667196,
+          "remaining": 0.29768770737454237
+        },
+        {
+          "step": 1168,
+          "rkl": 0.0720614798583124,
+          "remaining": 0.29762755394121054
+        },
+        {
+          "step": 1184,
+          "rkl": 0.07203379797325497,
+          "remaining": 0.2975132225154013
+        },
+        {
+          "step": 1200,
+          "rkl": 0.07189698710609463,
+          "remaining": 0.2969481677340456
+        },
+        {
+          "step": 1216,
+          "rkl": 0.07175680158749648,
+          "remaining": 0.29636917500338855
+        },
+        {
+          "step": 1232,
+          "rkl": 0.0714668265321413,
+          "remaining": 0.2951715231289194
+        },
+        {
+          "step": 1248,
+          "rkl": 0.07142371210156319,
+          "remaining": 0.2949934523685387
+        },
+        {
+          "step": 1264,
+          "rkl": 0.07137449192759174,
+          "remaining": 0.29479016373205097
+        },
+        {
+          "step": 1280,
+          "rkl": 0.0713833845654929,
+          "remaining": 0.29482689201006873
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.24211965224344278,
+          "final": 0.11711071013947424,
+          "absolute_reduction": 0.12500894210396857,
+          "relative_reduction": 0.5163105966230138,
+          "change_ci95": [
+            -0.1461472839383452,
+            -0.10454016077264347
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.11711071013947424,
+          "final": 0.08157990526197187,
+          "absolute_reduction": 0.03553080487750239,
+          "relative_reduction": 0.3033950083232063,
+          "change_ci95": [
+            -0.038586130246032295,
+            -0.03271635159751874
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.08157990526197187,
+          "final": 0.07516529537000144,
+          "absolute_reduction": 0.006414609891970424,
+          "relative_reduction": 0.07862977863692822,
+          "change_ci95": [
+            -0.007210200039153357,
+            -0.005633769183709112
+          ]
+        },
+        {
+          "start": 640,
+          "stop": 1280,
+          "initial": 0.07516529537000144,
+          "final": 0.0713833845654929,
+          "absolute_reduction": 0.0037819108045085374,
+          "relative_reduction": 0.050314587149455976,
+          "change_ci95": [
+            -0.0042881800907597105,
+            -0.003306401052367266
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.23134643452790937,
+              "top16": 0.35582955375007586,
+              "right_overlap_16": 0.6618015402271455,
+              "right_overlap_128": 0.6459525988396126
+            },
+            "v_proj": {
+              "energy": 0.23970728278284018,
+              "top16": 0.40571942412844864,
+              "right_overlap_16": 0.7772313950773719,
+              "right_overlap_128": 0.6866589879545487
+            },
+            "q_proj": {
+              "energy": 0.08427755908068732,
+              "top16": 0.3122561748740932,
+              "right_overlap_16": 0.6583232558034998,
+              "right_overlap_128": 0.6607721186110085
+            },
+            "o_proj": {
+              "energy": 0.0874219929979385,
+              "top16": 0.38990706391917024,
+              "right_overlap_16": 0.8148034931679466,
+              "right_overlap_128": 0.7293070066652848
+            },
+            "gate_proj": {
+              "energy": 0.04977667361291668,
+              "top16": 0.27153930838070245,
+              "right_overlap_16": 0.8842331493643126,
+              "right_overlap_128": 0.8198000425799007
+            },
+            "up_proj": {
+              "energy": 0.05099558521456754,
+              "top16": 0.2889950493628752,
+              "right_overlap_16": 0.8373685591172088,
+              "right_overlap_128": 0.7748066183141581
+            },
+            "down_proj": {
+              "energy": 0.05108600737483458,
+              "top16": 0.3053325506861837,
+              "right_overlap_16": 0.7702871451613482,
+              "right_overlap_128": 0.6394585757152017
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 105,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 0.019254814068421718,
+            "cosine": 0.012919189098305492,
+            "residual": 0.9998732346968043
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.3456223733572097,
+              "top16": 0.32819340011989007,
+              "right_overlap_16": 0.8657956382605335,
+              "right_overlap_128": 0.8366583658309175
+            },
+            "v_proj": {
+              "energy": 0.3447750910512513,
+              "top16": 0.35844218887743273,
+              "right_overlap_16": 0.9022474591087633,
+              "right_overlap_128": 0.8526254991980224
+            },
+            "q_proj": {
+              "energy": 0.12714360511963438,
+              "top16": 0.29238634869916347,
+              "right_overlap_16": 0.8642660417737419,
+              "right_overlap_128": 0.8409599883899096
+            },
+            "o_proj": {
+              "energy": 0.12610802378892622,
+              "top16": 0.3477301867012073,
+              "right_overlap_16": 0.9168479352282303,
+              "right_overlap_128": 0.872503915384996
+            },
+            "gate_proj": {
+              "energy": 0.07482594809247006,
+              "top16": 0.23456274116097783,
+              "right_overlap_16": 0.9698579762089321,
+              "right_overlap_128": 0.9182933432612331
+            },
+            "up_proj": {
+              "energy": 0.07570530997445274,
+              "top16": 0.24183579817601616,
+              "right_overlap_16": 0.9462923859026056,
+              "right_overlap_128": 0.8961453897042003
+            },
+            "down_proj": {
+              "energy": 0.07527059688020922,
+              "top16": 0.23782762003621813,
+              "right_overlap_16": 0.912173939850382,
+              "right_overlap_128": 0.8402355390354138
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 105,
+            "label": "step640",
+            "matrix_count": 69,
+            "norm_ratio": 0.02335892765896219,
+            "cosine": 0.017149791272137584,
+            "residual": 0.9997444380339925
+          }
+        },
+        {
+          "step": 1280,
+          "modules": {
+            "k_proj": {
+              "energy": 0.5383146979857587,
+              "top16": 0.3082924090243373,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.5241815062523633,
+              "top16": 0.311449338106318,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.2000513699203471,
+              "top16": 0.2756744952178682,
+              "right_overlap_16": 1.0000000000000004,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.1918262106645989,
+              "top16": 0.31442558372847684,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 0.9999999999999999
+            },
+            "gate_proj": {
+              "energy": 0.11693636812801664,
+              "top16": 0.2071600401146057,
+              "right_overlap_16": 0.9999999999999996,
+              "right_overlap_128": 1.0
+            },
+            "up_proj": {
+              "energy": 0.11711214835787867,
+              "top16": 0.20614527408583813,
+              "right_overlap_16": 0.999999999999999,
+              "right_overlap_128": 0.9999999999999997
+            },
+            "down_proj": {
+              "energy": 0.11643374776641312,
+              "top16": 0.18591869909625647,
+              "right_overlap_16": 1.0000000000000009,
+              "right_overlap_128": 1.0
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 105,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 0.02901904935812962,
+            "cosine": 0.021511018103702213,
+            "residual": 0.9995936466334598
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 106,
+      "label": "Qwen CoReward-II",
+      "group": "higher, improving",
+      "reference_step": 1280,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.2326267422524377,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.17314989125240288,
+          "remaining": 0.7443249627100361
+        },
+        {
+          "step": 32,
+          "rkl": 0.14011472742755693,
+          "remaining": 0.6023156498297593
+        },
+        {
+          "step": 48,
+          "rkl": 0.12048554812558994,
+          "remaining": 0.5179350704006489
+        },
+        {
+          "step": 64,
+          "rkl": 0.11063600239336988,
+          "remaining": 0.4755945138642396
+        },
+        {
+          "step": 80,
+          "rkl": 0.10605274873070056,
+          "remaining": 0.4558923350936847
+        },
+        {
+          "step": 96,
+          "rkl": 0.10116335489249847,
+          "remaining": 0.43487414178168665
+        },
+        {
+          "step": 112,
+          "rkl": 0.09498458835193743,
+          "remaining": 0.40831328089039637
+        },
+        {
+          "step": 128,
+          "rkl": 0.09115194303280008,
+          "remaining": 0.39183776615796584
+        },
+        {
+          "step": 144,
+          "rkl": 0.0882032418017785,
+          "remaining": 0.3791620900836229
+        },
+        {
+          "step": 160,
+          "rkl": 0.08689522757415441,
+          "remaining": 0.3735392875848255
+        },
+        {
+          "step": 176,
+          "rkl": 0.08570960230604346,
+          "remaining": 0.368442602411698
+        },
+        {
+          "step": 192,
+          "rkl": 0.08410710790862064,
+          "remaining": 0.36155390861017517
+        },
+        {
+          "step": 208,
+          "rkl": 0.08290505380661657,
+          "remaining": 0.35638660028455005
+        },
+        {
+          "step": 224,
+          "rkl": 0.08247704677809782,
+          "remaining": 0.35454671281342565
+        },
+        {
+          "step": 240,
+          "rkl": 0.08107212697563144,
+          "remaining": 0.3485073392278135
+        },
+        {
+          "step": 256,
+          "rkl": 0.07979907976103712,
+          "remaining": 0.3430348505437186
+        },
+        {
+          "step": 272,
+          "rkl": 0.07909385962553259,
+          "remaining": 0.3400032982437717
+        },
+        {
+          "step": 288,
+          "rkl": 0.07815692341350003,
+          "remaining": 0.33597566065163353
+        },
+        {
+          "step": 304,
+          "rkl": 0.07779194163998909,
+          "remaining": 0.3344067018553363
+        },
+        {
+          "step": 320,
+          "rkl": 0.07735001866360491,
+          "remaining": 0.33250699345506723
+        },
+        {
+          "step": 336,
+          "rkl": 0.07671532816635235,
+          "remaining": 0.32977862916166273
+        },
+        {
+          "step": 352,
+          "rkl": 0.07723303560791679,
+          "remaining": 0.3320041146606714
+        },
+        {
+          "step": 368,
+          "rkl": 0.07674347060001586,
+          "remaining": 0.3298996059392723
+        },
+        {
+          "step": 384,
+          "rkl": 0.07599477718820553,
+          "remaining": 0.3266811736792449
+        },
+        {
+          "step": 400,
+          "rkl": 0.07576991130278658,
+          "remaining": 0.3257145355221626
+        },
+        {
+          "step": 416,
+          "rkl": 0.07547081240552567,
+          "remaining": 0.32442878954831256
+        },
+        {
+          "step": 432,
+          "rkl": 0.07489932998501714,
+          "remaining": 0.3219721398313665
+        },
+        {
+          "step": 448,
+          "rkl": 0.07440883574245025,
+          "remaining": 0.3198636365792571
+        },
+        {
+          "step": 464,
+          "rkl": 0.0746251976866458,
+          "remaining": 0.32079371857284306
+        },
+        {
+          "step": 480,
+          "rkl": 0.07419177529305454,
+          "remaining": 0.31893055189907804
+        },
+        {
+          "step": 496,
+          "rkl": 0.07391294816700253,
+          "remaining": 0.3177319488349925
+        },
+        {
+          "step": 512,
+          "rkl": 0.0732313976139081,
+          "remaining": 0.3148021457242442
+        },
+        {
+          "step": 528,
+          "rkl": 0.07319659491400653,
+          "remaining": 0.3146525382476292
+        },
+        {
+          "step": 544,
+          "rkl": 0.07281891102150093,
+          "remaining": 0.3130289764470871
+        },
+        {
+          "step": 560,
+          "rkl": 0.0726344030690904,
+          "remaining": 0.31223582622444285
+        },
+        {
+          "step": 576,
+          "rkl": 0.07230315911897901,
+          "remaining": 0.31081189728616143
+        },
+        {
+          "step": 592,
+          "rkl": 0.07192491256154365,
+          "remaining": 0.30918591673993123
+        },
+        {
+          "step": 608,
+          "rkl": 0.07179948543244763,
+          "remaining": 0.308646739137728
+        },
+        {
+          "step": 624,
+          "rkl": 0.07151330132249037,
+          "remaining": 0.3074165103721689
+        },
+        {
+          "step": 640,
+          "rkl": 0.07133015073351034,
+          "remaining": 0.30662919509101655
+        },
+        {
+          "step": 656,
+          "rkl": 0.07149063753225844,
+          "remaining": 0.3073190848139012
+        },
+        {
+          "step": 672,
+          "rkl": 0.07160717712503087,
+          "remaining": 0.30782005728011047
+        },
+        {
+          "step": 688,
+          "rkl": 0.0714969274325403,
+          "remaining": 0.30734612340895245
+        },
+        {
+          "step": 704,
+          "rkl": 0.07099665140561318,
+          "remaining": 0.30519557088827864
+        },
+        {
+          "step": 720,
+          "rkl": 0.07101695206308593,
+          "remaining": 0.3052828379723473
+        },
+        {
+          "step": 736,
+          "rkl": 0.07106535625941374,
+          "remaining": 0.3054909146356712
+        },
+        {
+          "step": 752,
+          "rkl": 0.07075492925425182,
+          "remaining": 0.3041564721629092
+        },
+        {
+          "step": 768,
+          "rkl": 0.07070721832484718,
+          "remaining": 0.3039513756682299
+        },
+        {
+          "step": 784,
+          "rkl": 0.0707328651991153,
+          "remaining": 0.3040616247050336
+        },
+        {
+          "step": 800,
+          "rkl": 0.07052840050050589,
+          "remaining": 0.3031826857806879
+        },
+        {
+          "step": 816,
+          "rkl": 0.07057731839963408,
+          "remaining": 0.303392970714632
+        },
+        {
+          "step": 832,
+          "rkl": 0.07016805091055411,
+          "remaining": 0.3016336394996686
+        },
+        {
+          "step": 848,
+          "rkl": 0.0701295444876165,
+          "remaining": 0.3014681107106533
+        },
+        {
+          "step": 864,
+          "rkl": 0.0699049979197764,
+          "remaining": 0.3005028452142366
+        },
+        {
+          "step": 880,
+          "rkl": 0.06988319371772608,
+          "remaining": 0.30040911479511456
+        },
+        {
+          "step": 896,
+          "rkl": 0.0697082428839974,
+          "remaining": 0.299657048063514
+        },
+        {
+          "step": 912,
+          "rkl": 0.06952155797545895,
+          "remaining": 0.2988545396900963
+        },
+        {
+          "step": 928,
+          "rkl": 0.06936544173579795,
+          "remaining": 0.2981834378290231
+        },
+        {
+          "step": 944,
+          "rkl": 0.06920467573271102,
+          "remaining": 0.2974923478815378
+        },
+        {
+          "step": 960,
+          "rkl": 0.06908902908101491,
+          "remaining": 0.2969952139296269
+        },
+        {
+          "step": 976,
+          "rkl": 0.06916662307612637,
+          "remaining": 0.29732876971242356
+        },
+        {
+          "step": 992,
+          "rkl": 0.06927200778191248,
+          "remaining": 0.2977817903099942
+        },
+        {
+          "step": 1008,
+          "rkl": 0.06925381908892758,
+          "remaining": 0.29770360199506196
+        },
+        {
+          "step": 1024,
+          "rkl": 0.06894743770148595,
+          "remaining": 0.2963865505482891
+        },
+        {
+          "step": 1040,
+          "rkl": 0.06893419221803908,
+          "remaining": 0.2963296117659349
+        },
+        {
+          "step": 1056,
+          "rkl": 0.0688617909743604,
+          "remaining": 0.2960183782294222
+        },
+        {
+          "step": 1072,
+          "rkl": 0.06867636816635858,
+          "remaining": 0.29522129528785473
+        },
+        {
+          "step": 1088,
+          "rkl": 0.0687475965363928,
+          "remaining": 0.29552748695500586
+        },
+        {
+          "step": 1104,
+          "rkl": 0.06884457536288267,
+          "remaining": 0.2959443729310156
+        },
+        {
+          "step": 1120,
+          "rkl": 0.0686576406881457,
+          "remaining": 0.2951407908796704
+        },
+        {
+          "step": 1136,
+          "rkl": 0.06868539209790735,
+          "remaining": 0.2952600867503555
+        },
+        {
+          "step": 1152,
+          "rkl": 0.06846183026740738,
+          "remaining": 0.2942990543757656
+        },
+        {
+          "step": 1168,
+          "rkl": 0.06845107574908116,
+          "remaining": 0.29425282358466187
+        },
+        {
+          "step": 1184,
+          "rkl": 0.06844732332873063,
+          "remaining": 0.294236692935562
+        },
+        {
+          "step": 1200,
+          "rkl": 0.06839091244110679,
+          "remaining": 0.2939941976528716
+        },
+        {
+          "step": 1216,
+          "rkl": 0.06833800201952417,
+          "remaining": 0.2937667499352519
+        },
+        {
+          "step": 1232,
+          "rkl": 0.06812514439539788,
+          "remaining": 0.29285173207417
+        },
+        {
+          "step": 1248,
+          "rkl": 0.06801532251788325,
+          "remaining": 0.29237963726490057
+        },
+        {
+          "step": 1264,
+          "rkl": 0.06772787903101286,
+          "remaining": 0.2911439947756185
+        },
+        {
+          "step": 1280,
+          "rkl": 0.06772832398346443,
+          "remaining": 0.2911459075069203
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.2326267422524377,
+          "final": 0.11063600239336988,
+          "absolute_reduction": 0.12199073985906782,
+          "relative_reduction": 0.5244054861357603,
+          "change_ci95": [
+            -0.14228212599331302,
+            -0.10254948240676008
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.11063600239336988,
+          "final": 0.07735001866360491,
+          "absolute_reduction": 0.033285983729764955,
+          "relative_reduction": 0.3008603258405484,
+          "change_ci95": [
+            -0.036249662226947366,
+            -0.0305519495231108
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.07735001866360491,
+          "final": 0.07133015073351034,
+          "absolute_reduction": 0.006019867930094559,
+          "relative_reduction": 0.07782632808758526,
+          "change_ci95": [
+            -0.0066725226484916755,
+            -0.0053653481582449395
+          ]
+        },
+        {
+          "start": 640,
+          "stop": 1280,
+          "initial": 0.07133015073351034,
+          "final": 0.06772832398346443,
+          "absolute_reduction": 0.0036018267500459314,
+          "relative_reduction": 0.050495151251009784,
+          "change_ci95": [
+            -0.004094666860919928,
+            -0.003128406551139101
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.2311721946651612,
+              "top16": 0.3579077070220136,
+              "right_overlap_16": 0.6637658301057512,
+              "right_overlap_128": 0.6471579261710028
+            },
+            "v_proj": {
+              "energy": 0.23850479007797554,
+              "top16": 0.4094679077097514,
+              "right_overlap_16": 0.7850586677320035,
+              "right_overlap_128": 0.685785586512583
+            },
+            "q_proj": {
+              "energy": 0.08397600041583814,
+              "top16": 0.3163300487823186,
+              "right_overlap_16": 0.6521473365965453,
+              "right_overlap_128": 0.6650688396529314
+            },
+            "o_proj": {
+              "energy": 0.08701622539721536,
+              "top16": 0.39610371937677474,
+              "right_overlap_16": 0.8145597701440487,
+              "right_overlap_128": 0.7263618926161343
+            },
+            "gate_proj": {
+              "energy": 0.049570289206186016,
+              "top16": 0.27055864168134114,
+              "right_overlap_16": 0.8756484253537189,
+              "right_overlap_128": 0.8213455920589229
+            },
+            "up_proj": {
+              "energy": 0.0506358038816702,
+              "top16": 0.2879819886403769,
+              "right_overlap_16": 0.8388047500160699,
+              "right_overlap_128": 0.7756982860173699
+            },
+            "down_proj": {
+              "energy": 0.05063742069518561,
+              "top16": 0.302247440488341,
+              "right_overlap_16": 0.778739497042447,
+              "right_overlap_128": 0.6426507947711043
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 106,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 0.019217211998769093,
+            "cosine": 0.01317638085817258,
+            "residual": 0.9998628746283496
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.3462587383340955,
+              "top16": 0.33017063338060315,
+              "right_overlap_16": 0.8639788750530562,
+              "right_overlap_128": 0.8356961341238027
+            },
+            "v_proj": {
+              "energy": 0.34415158059492557,
+              "top16": 0.35908150146400925,
+              "right_overlap_16": 0.9053255497839852,
+              "right_overlap_128": 0.8520206493244766
+            },
+            "q_proj": {
+              "energy": 0.1272939185130667,
+              "top16": 0.29733158808890364,
+              "right_overlap_16": 0.8457937023790122,
+              "right_overlap_128": 0.8460937171845114
+            },
+            "o_proj": {
+              "energy": 0.12585186119041974,
+              "top16": 0.3554223972288719,
+              "right_overlap_16": 0.9161641504357769,
+              "right_overlap_128": 0.8715954990423896
+            },
+            "gate_proj": {
+              "energy": 0.07466563657507594,
+              "top16": 0.23311494790152995,
+              "right_overlap_16": 0.9607072322011143,
+              "right_overlap_128": 0.9223251171659733
+            },
+            "up_proj": {
+              "energy": 0.07529984078713027,
+              "top16": 0.24031044010373165,
+              "right_overlap_16": 0.9515463341562506,
+              "right_overlap_128": 0.8957374046583918
+            },
+            "down_proj": {
+              "energy": 0.0749258533737767,
+              "top16": 0.2352546448971819,
+              "right_overlap_16": 0.9001179449003188,
+              "right_overlap_128": 0.8447073931633768
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 106,
+            "label": "step640",
+            "matrix_count": 69,
+            "norm_ratio": 0.023348878186900464,
+            "cosine": 0.017504974632451355,
+            "residual": 0.9997277270718709
+          }
+        },
+        {
+          "step": 1280,
+          "modules": {
+            "k_proj": {
+              "energy": 0.5465816297169211,
+              "top16": 0.3071048516861383,
+              "right_overlap_16": 0.9999999999999999,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.5283889807444591,
+              "top16": 0.3117150438009181,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.20218889065222048,
+              "top16": 0.2765439857062192,
+              "right_overlap_16": 1.0000000000000007,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.19366955693893195,
+              "top16": 0.31953487541101944,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "gate_proj": {
+              "energy": 0.11798943823462718,
+              "top16": 0.20563121659887956,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "up_proj": {
+              "energy": 0.11766423701926679,
+              "top16": 0.20450066217544113,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 0.9999999999999999
+            },
+            "down_proj": {
+              "energy": 0.11729190704745628,
+              "top16": 0.18312659103418863,
+              "right_overlap_16": 1.0000000000000004,
+              "right_overlap_128": 1.0
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 106,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 0.029170711156157658,
+            "cosine": 0.021972145279866562,
+            "residual": 0.9995690441824756
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 107,
+      "label": "Qwen base-GT",
+      "group": "higher, improving",
+      "reference_step": 1280,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.24598226746901053,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.18310468581634456,
+          "remaining": 0.7443816487276367
+        },
+        {
+          "step": 32,
+          "rkl": 0.14649763347336342,
+          "remaining": 0.5955617654098565
+        },
+        {
+          "step": 48,
+          "rkl": 0.12930479674952966,
+          "remaining": 0.5256671469857875
+        },
+        {
+          "step": 64,
+          "rkl": 0.11916212321888686,
+          "remaining": 0.48443379453723917
+        },
+        {
+          "step": 80,
+          "rkl": 0.11421608755335398,
+          "remaining": 0.46432650909579576
+        },
+        {
+          "step": 96,
+          "rkl": 0.10816894073238023,
+          "remaining": 0.439742839373605
+        },
+        {
+          "step": 112,
+          "rkl": 0.10133020077150984,
+          "remaining": 0.41194107938807284
+        },
+        {
+          "step": 128,
+          "rkl": 0.09783258346738966,
+          "remaining": 0.39772209791388663
+        },
+        {
+          "step": 144,
+          "rkl": 0.09407888930159529,
+          "remaining": 0.38246207854575365
+        },
+        {
+          "step": 160,
+          "rkl": 0.09244067491225343,
+          "remaining": 0.3758021903912213
+        },
+        {
+          "step": 176,
+          "rkl": 0.09160518987895763,
+          "remaining": 0.3724056649347632
+        },
+        {
+          "step": 192,
+          "rkl": 0.08953596680127368,
+          "remaining": 0.3639935826372267
+        },
+        {
+          "step": 208,
+          "rkl": 0.08874924614996932,
+          "remaining": 0.36079530066593185
+        },
+        {
+          "step": 224,
+          "rkl": 0.08778596704372006,
+          "remaining": 0.35687924965883794
+        },
+        {
+          "step": 240,
+          "rkl": 0.0870823182382131,
+          "remaining": 0.35401868246126295
+        },
+        {
+          "step": 256,
+          "rkl": 0.08620023606460178,
+          "remaining": 0.350432724080249
+        },
+        {
+          "step": 272,
+          "rkl": 0.08551385604872827,
+          "remaining": 0.3476423602750207
+        },
+        {
+          "step": 288,
+          "rkl": 0.08480869381186493,
+          "remaining": 0.34477564047395953
+        },
+        {
+          "step": 304,
+          "rkl": 0.08438517167802104,
+          "remaining": 0.3430538816732068
+        },
+        {
+          "step": 320,
+          "rkl": 0.08370418305907898,
+          "remaining": 0.3402854356955802
+        },
+        {
+          "step": 336,
+          "rkl": 0.0830563523238639,
+          "remaining": 0.33765178757988135
+        },
+        {
+          "step": 352,
+          "rkl": 0.08314629362306554,
+          "remaining": 0.33801742897398296
+        },
+        {
+          "step": 368,
+          "rkl": 0.08304360120399507,
+          "remaining": 0.33759995002264587
+        },
+        {
+          "step": 384,
+          "rkl": 0.08241537600863769,
+          "remaining": 0.3350460049687142
+        },
+        {
+          "step": 400,
+          "rkl": 0.08195406274629524,
+          "remaining": 0.33317061261995246
+        },
+        {
+          "step": 416,
+          "rkl": 0.08164050360841403,
+          "remaining": 0.3318958900917494
+        },
+        {
+          "step": 432,
+          "rkl": 0.0811855099451496,
+          "remaining": 0.33004618902205035
+        },
+        {
+          "step": 448,
+          "rkl": 0.08096349398881754,
+          "remaining": 0.32914362007422965
+        },
+        {
+          "step": 464,
+          "rkl": 0.0807571130472681,
+          "remaining": 0.32830461267880656
+        },
+        {
+          "step": 480,
+          "rkl": 0.08040518731441311,
+          "remaining": 0.3268739171393432
+        },
+        {
+          "step": 496,
+          "rkl": 0.08014192024832681,
+          "remaining": 0.32580364866513517
+        },
+        {
+          "step": 512,
+          "rkl": 0.07934404331381012,
+          "remaining": 0.3225600126798005
+        },
+        {
+          "step": 528,
+          "rkl": 0.07950537065285809,
+          "remaining": 0.3232158621469508
+        },
+        {
+          "step": 544,
+          "rkl": 0.07921920038642244,
+          "remaining": 0.3220524845206684
+        },
+        {
+          "step": 560,
+          "rkl": 0.07865104574402915,
+          "remaining": 0.31974274630970223
+        },
+        {
+          "step": 576,
+          "rkl": 0.07845908536175628,
+          "remaining": 0.3189623632997885
+        },
+        {
+          "step": 592,
+          "rkl": 0.07788994250733068,
+          "remaining": 0.31664860767715075
+        },
+        {
+          "step": 608,
+          "rkl": 0.07763176374131735,
+          "remaining": 0.3155990248406731
+        },
+        {
+          "step": 624,
+          "rkl": 0.07757680326595347,
+          "remaining": 0.3153755921683533
+        },
+        {
+          "step": 640,
+          "rkl": 0.07735117182425595,
+          "remaining": 0.31445832506605725
+        },
+        {
+          "step": 656,
+          "rkl": 0.07737543769334468,
+          "remaining": 0.3145569739212711
+        },
+        {
+          "step": 672,
+          "rkl": 0.07709166519919997,
+          "remaining": 0.31340334403947295
+        },
+        {
+          "step": 688,
+          "rkl": 0.07721203341906108,
+          "remaining": 0.3138926810193277
+        },
+        {
+          "step": 704,
+          "rkl": 0.07694775690279636,
+          "remaining": 0.3128183087932972
+        },
+        {
+          "step": 720,
+          "rkl": 0.07713624324245336,
+          "remaining": 0.31358456866071116
+        },
+        {
+          "step": 736,
+          "rkl": 0.07679350655830124,
+          "remaining": 0.3121912296705529
+        },
+        {
+          "step": 752,
+          "rkl": 0.07660845727345,
+          "remaining": 0.31143894257784793
+        },
+        {
+          "step": 768,
+          "rkl": 0.07665449965994103,
+          "remaining": 0.3116261202429893
+        },
+        {
+          "step": 784,
+          "rkl": 0.07668903302940452,
+          "remaining": 0.311766509913427
+        },
+        {
+          "step": 800,
+          "rkl": 0.07625359470732891,
+          "remaining": 0.30999630783115506
+        },
+        {
+          "step": 816,
+          "rkl": 0.07646039767593951,
+          "remaining": 0.31083703090740955
+        },
+        {
+          "step": 832,
+          "rkl": 0.07627401076675183,
+          "remaining": 0.3100793059254201
+        },
+        {
+          "step": 848,
+          "rkl": 0.07621739320732472,
+          "remaining": 0.30984913665342473
+        },
+        {
+          "step": 864,
+          "rkl": 0.07597604597723948,
+          "remaining": 0.30886797962707263
+        },
+        {
+          "step": 880,
+          "rkl": 0.07575839170532897,
+          "remaining": 0.3079831423818922
+        },
+        {
+          "step": 896,
+          "rkl": 0.07575794177041323,
+          "remaining": 0.3079813132463193
+        },
+        {
+          "step": 912,
+          "rkl": 0.07544084671961486,
+          "remaining": 0.3066922160521961
+        },
+        {
+          "step": 928,
+          "rkl": 0.0752251797069974,
+          "remaining": 0.30581545767917784
+        },
+        {
+          "step": 944,
+          "rkl": 0.0750458072909705,
+          "remaining": 0.30508624895257935
+        },
+        {
+          "step": 960,
+          "rkl": 0.07508399106321423,
+          "remaining": 0.30524147872843516
+        },
+        {
+          "step": 976,
+          "rkl": 0.07495226920299267,
+          "remaining": 0.30470598541187666
+        },
+        {
+          "step": 992,
+          "rkl": 0.07475981684689337,
+          "remaining": 0.3039236023641899
+        },
+        {
+          "step": 1008,
+          "rkl": 0.07483852146649606,
+          "remaining": 0.3042435629061123
+        },
+        {
+          "step": 1024,
+          "rkl": 0.0746523846571549,
+          "remaining": 0.30348685466345576
+        },
+        {
+          "step": 1040,
+          "rkl": 0.0748965907781894,
+          "remaining": 0.30447963403551054
+        },
+        {
+          "step": 1056,
+          "rkl": 0.07480390103003313,
+          "remaining": 0.30410281927926824
+        },
+        {
+          "step": 1072,
+          "rkl": 0.07446400968294123,
+          "remaining": 0.30272104753373086
+        },
+        {
+          "step": 1088,
+          "rkl": 0.07452010969694693,
+          "remaining": 0.30294911281088654
+        },
+        {
+          "step": 1104,
+          "rkl": 0.0744978921861899,
+          "remaining": 0.3028587912158153
+        },
+        {
+          "step": 1120,
+          "rkl": 0.07427933012827874,
+          "remaining": 0.3019702635176198
+        },
+        {
+          "step": 1136,
+          "rkl": 0.07430796684562502,
+          "remaining": 0.3020866813295252
+        },
+        {
+          "step": 1152,
+          "rkl": 0.07430189335129399,
+          "remaining": 0.3020619905483826
+        },
+        {
+          "step": 1168,
+          "rkl": 0.07446605560125902,
+          "remaining": 0.3027293648744028
+        },
+        {
+          "step": 1184,
+          "rkl": 0.07430163985850416,
+          "remaining": 0.302060960015603
+        },
+        {
+          "step": 1200,
+          "rkl": 0.07428003451267923,
+          "remaining": 0.3019731270752564
+        },
+        {
+          "step": 1216,
+          "rkl": 0.07427224391305727,
+          "remaining": 0.301941455688119
+        },
+        {
+          "step": 1232,
+          "rkl": 0.07405342416168167,
+          "remaining": 0.3010518803799998
+        },
+        {
+          "step": 1248,
+          "rkl": 0.07388570756529,
+          "remaining": 0.3003700564496923
+        },
+        {
+          "step": 1264,
+          "rkl": 0.07371961234846768,
+          "remaining": 0.2996948239683784
+        },
+        {
+          "step": 1280,
+          "rkl": 0.0737370429389828,
+          "remaining": 0.299765685135301
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.24598226746901053,
+          "final": 0.11916212321888686,
+          "absolute_reduction": 0.12682014425012367,
+          "relative_reduction": 0.5155662054627608,
+          "change_ci95": [
+            -0.14837962999595858,
+            -0.10598131377553008
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.11916212321888686,
+          "final": 0.08370418305907898,
+          "absolute_reduction": 0.035457940159807896,
+          "relative_reduction": 0.2975604932338761,
+          "change_ci95": [
+            -0.03864571562708709,
+            -0.03246346441332221
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.08370418305907898,
+          "final": 0.07735117182425595,
+          "absolute_reduction": 0.006353011234823002,
+          "relative_reduction": 0.07589837213199971,
+          "change_ci95": [
+            -0.007102441599533355,
+            -0.005601316203992285
+          ]
+        },
+        {
+          "start": 640,
+          "stop": 1280,
+          "initial": 0.07735117182425595,
+          "final": 0.0737370429389828,
+          "absolute_reduction": 0.00361412888527316,
+          "relative_reduction": 0.04672364749023535,
+          "change_ci95": [
+            -0.004058357069149205,
+            -0.0031938866237696414
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.23432493769222537,
+              "top16": 0.35105734638366104,
+              "right_overlap_16": 0.6555404423074858,
+              "right_overlap_128": 0.6459119480042271
+            },
+            "v_proj": {
+              "energy": 0.2428254477631582,
+              "top16": 0.40481223147060985,
+              "right_overlap_16": 0.7824276396520963,
+              "right_overlap_128": 0.6868601802378727
+            },
+            "q_proj": {
+              "energy": 0.08512788882543293,
+              "top16": 0.3111527308082586,
+              "right_overlap_16": 0.6602493063152529,
+              "right_overlap_128": 0.6616877416125454
+            },
+            "o_proj": {
+              "energy": 0.08841821714728139,
+              "top16": 0.39145197054486774,
+              "right_overlap_16": 0.8206816742870117,
+              "right_overlap_128": 0.7259056039096197
+            },
+            "gate_proj": {
+              "energy": 0.05029486907352038,
+              "top16": 0.2709080927728734,
+              "right_overlap_16": 0.8702276455277085,
+              "right_overlap_128": 0.8199848110198588
+            },
+            "up_proj": {
+              "energy": 0.05156309566039165,
+              "top16": 0.28862563492650073,
+              "right_overlap_16": 0.8467991336407649,
+              "right_overlap_128": 0.7756281646716904
+            },
+            "down_proj": {
+              "energy": 0.05156344058415964,
+              "top16": 0.30224147892371933,
+              "right_overlap_16": 0.7830417807348784,
+              "right_overlap_128": 0.6438801482417725
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 107,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 0.0193695910243837,
+            "cosine": 0.012784752026361815,
+            "residual": 0.9998799102202544
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.3512327227784829,
+              "top16": 0.32696723396579586,
+              "right_overlap_16": 0.8552514127612043,
+              "right_overlap_128": 0.8351109928071379
+            },
+            "v_proj": {
+              "energy": 0.3497592306693967,
+              "top16": 0.3537967046613317,
+              "right_overlap_16": 0.9043234411741939,
+              "right_overlap_128": 0.8521311940804293
+            },
+            "q_proj": {
+              "energy": 0.12936118656638437,
+              "top16": 0.29040720081704674,
+              "right_overlap_16": 0.8712328076224003,
+              "right_overlap_128": 0.8434246646180399
+            },
+            "o_proj": {
+              "energy": 0.12798169350855182,
+              "top16": 0.34931126760532516,
+              "right_overlap_16": 0.9274990386594235,
+              "right_overlap_128": 0.8660181773773276
+            },
+            "gate_proj": {
+              "energy": 0.07575900627979198,
+              "top16": 0.23353906439256336,
+              "right_overlap_16": 0.97075076976077,
+              "right_overlap_128": 0.918038416638301
+            },
+            "up_proj": {
+              "energy": 0.07664123246917362,
+              "top16": 0.24171887927460006,
+              "right_overlap_16": 0.9253323485851102,
+              "right_overlap_128": 0.8951463281435504
+            },
+            "down_proj": {
+              "energy": 0.07620818867671508,
+              "top16": 0.23664882872139775,
+              "right_overlap_16": 0.9272236053950955,
+              "right_overlap_128": 0.8449287969633712
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 107,
+            "label": "step640",
+            "matrix_count": 69,
+            "norm_ratio": 0.023532906347332277,
+            "cosine": 0.017044430999570676,
+            "residual": 0.9997515876842392
+          }
+        },
+        {
+          "step": 1280,
+          "modules": {
+            "k_proj": {
+              "energy": 0.5430126474721312,
+              "top16": 0.30547716362591265,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.5281025461956154,
+              "top16": 0.3085390088450206,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.20221362319194214,
+              "top16": 0.27363922579031874,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.1933105213753824,
+              "top16": 0.3143561584072617,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "gate_proj": {
+              "energy": 0.11740782538495612,
+              "top16": 0.20673319123348982,
+              "right_overlap_16": 0.9999999999999993,
+              "right_overlap_128": 1.0
+            },
+            "up_proj": {
+              "energy": 0.1173907069504564,
+              "top16": 0.20692029758288485,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "down_proj": {
+              "energy": 0.11692764749740865,
+              "top16": 0.1865233825874248,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 0.9999999999999998
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 107,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 0.02912736382680203,
+            "cosine": 0.021315406974124148,
+            "residual": 0.9996066800953956
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 108,
+      "label": "Qwen Thinking-Space nonthinking",
+      "group": "higher, plateau",
+      "reference_step": 1280,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.08596993852846488,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.07856507059231402,
+          "remaining": 0.91386677642326
+        },
+        {
+          "step": 32,
+          "rkl": 0.0745294367635437,
+          "remaining": 0.8669243928663135
+        },
+        {
+          "step": 48,
+          "rkl": 0.07209656445894924,
+          "remaining": 0.8386252880136453
+        },
+        {
+          "step": 64,
+          "rkl": 0.07015207346177289,
+          "remaining": 0.8160070213211256
+        },
+        {
+          "step": 80,
+          "rkl": 0.06911563675944056,
+          "remaining": 0.8039512176288947
+        },
+        {
+          "step": 96,
+          "rkl": 0.06838735487789965,
+          "remaining": 0.795479862478399
+        },
+        {
+          "step": 112,
+          "rkl": 0.06793190238929328,
+          "remaining": 0.7901820514481448
+        },
+        {
+          "step": 128,
+          "rkl": 0.06690565244232775,
+          "remaining": 0.7782447398188509
+        },
+        {
+          "step": 144,
+          "rkl": 0.06622049191288205,
+          "remaining": 0.7702749710697568
+        },
+        {
+          "step": 160,
+          "rkl": 0.06607518716209648,
+          "remaining": 0.7685847901382273
+        },
+        {
+          "step": 176,
+          "rkl": 0.06567092882318847,
+          "remaining": 0.7638824680727746
+        },
+        {
+          "step": 192,
+          "rkl": 0.06491683895245354,
+          "remaining": 0.7551109150899229
+        },
+        {
+          "step": 208,
+          "rkl": 0.064436550228554,
+          "remaining": 0.7495242096424076
+        },
+        {
+          "step": 224,
+          "rkl": 0.06469658062287545,
+          "remaining": 0.7525488761569166
+        },
+        {
+          "step": 240,
+          "rkl": 0.06437717144047539,
+          "remaining": 0.7488335171853117
+        },
+        {
+          "step": 256,
+          "rkl": 0.06376322187775016,
+          "remaining": 0.7416920724752872
+        },
+        {
+          "step": 272,
+          "rkl": 0.06340051786319614,
+          "remaining": 0.7374731091869289
+        },
+        {
+          "step": 288,
+          "rkl": 0.06307023748728854,
+          "remaining": 0.7336312967864438
+        },
+        {
+          "step": 304,
+          "rkl": 0.06302191076134914,
+          "remaining": 0.7330691616172601
+        },
+        {
+          "step": 320,
+          "rkl": 0.06310336641268219,
+          "remaining": 0.7340166515506871
+        },
+        {
+          "step": 336,
+          "rkl": 0.06293247326349014,
+          "remaining": 0.7320288270609037
+        },
+        {
+          "step": 352,
+          "rkl": 0.0627654634205172,
+          "remaining": 0.7300861730840412
+        },
+        {
+          "step": 368,
+          "rkl": 0.06254940853280086,
+          "remaining": 0.7275730284730934
+        },
+        {
+          "step": 384,
+          "rkl": 0.061873517557839985,
+          "remaining": 0.7197110829310818
+        },
+        {
+          "step": 400,
+          "rkl": 0.061905224612884446,
+          "remaining": 0.7200798985378762
+        },
+        {
+          "step": 416,
+          "rkl": 0.061670386919166265,
+          "remaining": 0.7173482728354753
+        },
+        {
+          "step": 432,
+          "rkl": 0.06152725239427787,
+          "remaining": 0.7156833359128905
+        },
+        {
+          "step": 448,
+          "rkl": 0.06113763393420874,
+          "remaining": 0.7111513045221721
+        },
+        {
+          "step": 464,
+          "rkl": 0.06115899534763727,
+          "remaining": 0.7113997799054765
+        },
+        {
+          "step": 480,
+          "rkl": 0.061104206854502546,
+          "remaining": 0.7107624816350285
+        },
+        {
+          "step": 496,
+          "rkl": 0.06080788297724453,
+          "remaining": 0.7073156503085188
+        },
+        {
+          "step": 512,
+          "rkl": 0.06058762461437314,
+          "remaining": 0.7047536109882458
+        },
+        {
+          "step": 528,
+          "rkl": 0.06045853406964906,
+          "remaining": 0.7032520332631281
+        },
+        {
+          "step": 544,
+          "rkl": 0.06062463922139227,
+          "remaining": 0.7051841638960726
+        },
+        {
+          "step": 560,
+          "rkl": 0.06054063292923686,
+          "remaining": 0.7042070049775794
+        },
+        {
+          "step": 576,
+          "rkl": 0.06012379363570071,
+          "remaining": 0.6993583415881304
+        },
+        {
+          "step": 592,
+          "rkl": 0.05994582113444939,
+          "remaining": 0.697288170266647
+        },
+        {
+          "step": 608,
+          "rkl": 0.05984976347628718,
+          "remaining": 0.6961708301846785
+        },
+        {
+          "step": 624,
+          "rkl": 0.05995839038787856,
+          "remaining": 0.6974343754826133
+        },
+        {
+          "step": 640,
+          "rkl": 0.059916856194504264,
+          "remaining": 0.6969512508685304
+        },
+        {
+          "step": 656,
+          "rkl": 0.05979795651773107,
+          "remaining": 0.6955682130438166
+        },
+        {
+          "step": 672,
+          "rkl": 0.05982270576990906,
+          "remaining": 0.6958560956758344
+        },
+        {
+          "step": 688,
+          "rkl": 0.05984202110444663,
+          "remaining": 0.6960807711248133
+        },
+        {
+          "step": 704,
+          "rkl": 0.059529038521805966,
+          "remaining": 0.6924401661878092
+        },
+        {
+          "step": 720,
+          "rkl": 0.059562745144869776,
+          "remaining": 0.6928322407157287
+        },
+        {
+          "step": 736,
+          "rkl": 0.05942394626613212,
+          "remaining": 0.6912177359119164
+        },
+        {
+          "step": 752,
+          "rkl": 0.05940205676583919,
+          "remaining": 0.6909631178364867
+        },
+        {
+          "step": 768,
+          "rkl": 0.0591688486954289,
+          "remaining": 0.6882504478683317
+        },
+        {
+          "step": 784,
+          "rkl": 0.05907161948165142,
+          "remaining": 0.68711948028313
+        },
+        {
+          "step": 800,
+          "rkl": 0.05895870844934527,
+          "remaining": 0.6858061022089004
+        },
+        {
+          "step": 816,
+          "rkl": 0.058997966077064076,
+          "remaining": 0.6862627458728459
+        },
+        {
+          "step": 832,
+          "rkl": 0.05880014012346796,
+          "remaining": 0.6839616397306028
+        },
+        {
+          "step": 848,
+          "rkl": 0.058688657206272345,
+          "remaining": 0.6826648734527171
+        },
+        {
+          "step": 864,
+          "rkl": 0.058837494902387474,
+          "remaining": 0.6843961495087754
+        },
+        {
+          "step": 880,
+          "rkl": 0.05884077078809094,
+          "remaining": 0.6844342545226852
+        },
+        {
+          "step": 896,
+          "rkl": 0.05863126866414823,
+          "remaining": 0.6819973314827399
+        },
+        {
+          "step": 912,
+          "rkl": 0.05844044433604184,
+          "remaining": 0.6797776680588419
+        },
+        {
+          "step": 928,
+          "rkl": 0.05845203385481765,
+          "remaining": 0.6799124770278162
+        },
+        {
+          "step": 944,
+          "rkl": 0.058503518824044254,
+          "remaining": 0.6805113487975053
+        },
+        {
+          "step": 960,
+          "rkl": 0.05855455422973104,
+          "remaining": 0.6811049912562572
+        },
+        {
+          "step": 976,
+          "rkl": 0.0584855195625151,
+          "remaining": 0.6803019818741686
+        },
+        {
+          "step": 992,
+          "rkl": 0.05845804629257209,
+          "remaining": 0.6799824135411761
+        },
+        {
+          "step": 1008,
+          "rkl": 0.058463513651025895,
+          "remaining": 0.680046009706852
+        },
+        {
+          "step": 1024,
+          "rkl": 0.05816689767192481,
+          "remaining": 0.6765957806596034
+        },
+        {
+          "step": 1040,
+          "rkl": 0.058177273747238065,
+          "remaining": 0.6767164748870376
+        },
+        {
+          "step": 1056,
+          "rkl": 0.05814270938964837,
+          "remaining": 0.6763144232143096
+        },
+        {
+          "step": 1072,
+          "rkl": 0.05813162249606216,
+          "remaining": 0.6761854607679476
+        },
+        {
+          "step": 1088,
+          "rkl": 0.05802255055478628,
+          "remaining": 0.6749167388967582
+        },
+        {
+          "step": 1104,
+          "rkl": 0.057924288359361774,
+          "remaining": 0.6737737556969741
+        },
+        {
+          "step": 1120,
+          "rkl": 0.0578293109004641,
+          "remaining": 0.672668980463638
+        },
+        {
+          "step": 1136,
+          "rkl": 0.05789450260320583,
+          "remaining": 0.6734272885868914
+        },
+        {
+          "step": 1152,
+          "rkl": 0.057751783153382266,
+          "remaining": 0.6717671798062353
+        },
+        {
+          "step": 1168,
+          "rkl": 0.05771436448492864,
+          "remaining": 0.6713319268667298
+        },
+        {
+          "step": 1184,
+          "rkl": 0.05779771407949187,
+          "remaining": 0.6723014470965906
+        },
+        {
+          "step": 1200,
+          "rkl": 0.05784061741265445,
+          "remaining": 0.6728004975076638
+        },
+        {
+          "step": 1216,
+          "rkl": 0.05769607876972056,
+          "remaining": 0.6711192279219467
+        },
+        {
+          "step": 1232,
+          "rkl": 0.057496606235463626,
+          "remaining": 0.6687989687979868
+        },
+        {
+          "step": 1248,
+          "rkl": 0.05751605483062368,
+          "remaining": 0.6690251943309226
+        },
+        {
+          "step": 1264,
+          "rkl": 0.05751053760033534,
+          "remaining": 0.668961018057416
+        },
+        {
+          "step": 1280,
+          "rkl": 0.05759686383615902,
+          "remaining": 0.6699651624979184
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.08596993852846488,
+          "final": 0.07015207346177289,
+          "absolute_reduction": 0.01581786506669198,
+          "relative_reduction": 0.18399297867887437,
+          "change_ci95": [
+            -0.018044163106354514,
+            -0.013717977095783662
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.07015207346177289,
+          "final": 0.06310336641268219,
+          "absolute_reduction": 0.007048707049090716,
+          "relative_reduction": 0.10047752976156409,
+          "change_ci95": [
+            -0.008161909554870195,
+            -0.0059891306352622175
+          ]
+        },
+        {
+          "start": 320,
+          "stop": 640,
+          "initial": 0.06310336641268219,
+          "final": 0.059916856194504264,
+          "absolute_reduction": 0.0031865102181779176,
+          "relative_reduction": 0.050496675523439415,
+          "change_ci95": [
+            -0.0036495912579829932,
+            -0.0027320208792991716
+          ]
+        },
+        {
+          "start": 640,
+          "stop": 1280,
+          "initial": 0.059916856194504264,
+          "final": 0.05759686383615902,
+          "absolute_reduction": 0.0023199923583452475,
+          "relative_reduction": 0.038720195045180685,
+          "change_ci95": [
+            -0.0027173751728959816,
+            -0.0019667987971358136
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.16697175342448234,
+              "top16": 0.30596531002036625,
+              "right_overlap_16": 0.6248960965244366,
+              "right_overlap_128": 0.6434271898559649
+            },
+            "v_proj": {
+              "energy": 0.16471155378292032,
+              "top16": 0.33233531036621283,
+              "right_overlap_16": 0.7454743152740801,
+              "right_overlap_128": 0.6821487277887905
+            },
+            "q_proj": {
+              "energy": 0.059964491760645736,
+              "top16": 0.2862993882439335,
+              "right_overlap_16": 0.6515765098823607,
+              "right_overlap_128": 0.6549218874079182
+            },
+            "o_proj": {
+              "energy": 0.059664765816363756,
+              "top16": 0.2932982465948989,
+              "right_overlap_16": 0.7845520332599121,
+              "right_overlap_128": 0.7138803598623008
+            },
+            "gate_proj": {
+              "energy": 0.03698085262907748,
+              "top16": 0.2090570295513682,
+              "right_overlap_16": 0.8727509128412788,
+              "right_overlap_128": 0.8236756100980605
+            },
+            "up_proj": {
+              "energy": 0.03720710378629437,
+              "top16": 0.22630295907365391,
+              "right_overlap_16": 0.8089502424979483,
+              "right_overlap_128": 0.7745199886290346
+            },
+            "down_proj": {
+              "energy": 0.03660503601821512,
+              "top16": 0.2179224379384096,
+              "right_overlap_16": 0.7237012580949215,
+              "right_overlap_128": 0.6308588832864193
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 108,
+            "label": "step320",
+            "matrix_count": 69,
+            "norm_ratio": 0.01642414346517892,
+            "cosine": 0.014506916640537711,
+            "residual": 0.9997932251282816
+          }
+        },
+        {
+          "step": 640,
+          "modules": {
+            "k_proj": {
+              "energy": 0.25195229636691485,
+              "top16": 0.2946167603024895,
+              "right_overlap_16": 0.8427774354524651,
+              "right_overlap_128": 0.8400382583732129
+            },
+            "v_proj": {
+              "energy": 0.2401662225903903,
+              "top16": 0.290615267993116,
+              "right_overlap_16": 0.8932899015090279,
+              "right_overlap_128": 0.8551019512741478
+            },
+            "q_proj": {
+              "energy": 0.09264285650802136,
+              "top16": 0.27673856008423287,
+              "right_overlap_16": 0.8495477202532248,
+              "right_overlap_128": 0.8438488777567531
+            },
+            "o_proj": {
+              "energy": 0.08680559725679927,
+              "top16": 0.27304649364456335,
+              "right_overlap_16": 0.9257345312128881,
+              "right_overlap_128": 0.8678273295870426
+            },
+            "gate_proj": {
+              "energy": 0.05729285847651719,
+              "top16": 0.19206864697789755,
+              "right_overlap_16": 0.9188333251425167,
+              "right_overlap_128": 0.9237022503789785
+            },
+            "up_proj": {
+              "energy": 0.05674976731130808,
+              "top16": 0.19911227812405394,
+              "right_overlap_16": 0.9328283466617437,
+              "right_overlap_128": 0.9058248738583882
+            },
+            "down_proj": {
+              "energy": 0.05626311383263892,
+              "top16": 0.17745721853130247,
+              "right_overlap_16": 0.8939175573794181,
+              "right_overlap_128": 0.8397869117602001
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 108,
+            "label": "step640",
+            "matrix_count": 69,
+            "norm_ratio": 0.02010004394619357,
+            "cosine": 0.019471778012821447,
+            "residual": 0.9996212445791026
+          }
+        },
+        {
+          "step": 1280,
+          "modules": {
+            "k_proj": {
+              "energy": 0.415471516248487,
+              "top16": 0.28365505129228147,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.384519243072472,
+              "top16": 0.2588539608370847,
+              "right_overlap_16": 1.0000000000000004,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.15356448263914202,
+              "top16": 0.26288964136268456,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.13778179483999747,
+              "top16": 0.24938207789089503,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 0.9999999999999999
+            },
+            "gate_proj": {
+              "energy": 0.09556106464328568,
+              "top16": 0.17777460134046177,
+              "right_overlap_16": 0.9999999999999993,
+              "right_overlap_128": 0.9999999999999999
+            },
+            "up_proj": {
+              "energy": 0.0931331503068015,
+              "top16": 0.17729387906223762,
+              "right_overlap_16": 0.9999999999999993,
+              "right_overlap_128": 0.9999999999999998
+            },
+            "down_proj": {
+              "energy": 0.09330970423814436,
+              "top16": 0.14669244416849517,
+              "right_overlap_16": 0.9999999999999992,
+              "right_overlap_128": 0.9999999999999996
+            }
+          },
+          "teacher_geometry": {
+            "job_id": 108,
+            "label": "endpoint",
+            "matrix_count": 69,
+            "norm_ratio": 0.02567219343383201,
+            "cosine": 0.024472229350061006,
+            "residual": 0.9994025499044404
+          }
+        }
+      ]
+    },
+    {
+      "job_id": 109,
+      "label": "Qwen e3 lineage",
+      "group": "lower",
+      "reference_step": 320,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.03380434384468154,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.011664176161232576,
+          "remaining": 0.3450496248300263
+        },
+        {
+          "step": 32,
+          "rkl": 0.005218773538153518,
+          "remaining": 0.15438174342717173
+        },
+        {
+          "step": 48,
+          "rkl": 0.0031821439307569326,
+          "remaining": 0.0941341723826295
+        },
+        {
+          "step": 64,
+          "rkl": 0.0027464390916920023,
+          "remaining": 0.08124515311732937
+        },
+        {
+          "step": 80,
+          "rkl": 0.0023924598548429443,
+          "remaining": 0.07077374037595324
+        },
+        {
+          "step": 96,
+          "rkl": 0.002168164752765111,
+          "remaining": 0.06413864332723114
+        },
+        {
+          "step": 112,
+          "rkl": 0.002032519094780214,
+          "remaining": 0.06012597387243745
+        },
+        {
+          "step": 128,
+          "rkl": 0.001902829821455753,
+          "remaining": 0.05628950617111672
+        },
+        {
+          "step": 144,
+          "rkl": 0.0017860641336824592,
+          "remaining": 0.052835343939487876
+        },
+        {
+          "step": 160,
+          "rkl": 0.0017120320311710142,
+          "remaining": 0.05064532650114933
+        },
+        {
+          "step": 176,
+          "rkl": 0.0016311167749085316,
+          "remaining": 0.048251691628830605
+        },
+        {
+          "step": 192,
+          "rkl": 0.001586871550960971,
+          "remaining": 0.04694282954439403
+        },
+        {
+          "step": 208,
+          "rkl": 0.0015112816269074007,
+          "remaining": 0.04470672863378686
+        },
+        {
+          "step": 224,
+          "rkl": 0.0014637455070793536,
+          "remaining": 0.043300515277111214
+        },
+        {
+          "step": 240,
+          "rkl": 0.0014228233617223371,
+          "remaining": 0.0420899564937478
+        },
+        {
+          "step": 256,
+          "rkl": 0.0013557878925179257,
+          "remaining": 0.0401069134412805
+        },
+        {
+          "step": 272,
+          "rkl": 0.0013290721156327366,
+          "remaining": 0.03931660740818788
+        },
+        {
+          "step": 288,
+          "rkl": 0.0013259784668563533,
+          "remaining": 0.03922509109920116
+        },
+        {
+          "step": 304,
+          "rkl": 0.001287995152038551,
+          "remaining": 0.03810146879218873
+        },
+        {
+          "step": 320,
+          "rkl": 0.0012628873548567688,
+          "remaining": 0.03735873000994396
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.03380434384468154,
+          "final": 0.0027464390916920023,
+          "absolute_reduction": 0.03105790475298954,
+          "relative_reduction": 0.9187548468826706,
+          "change_ci95": [
+            -0.03308461509689433,
+            -0.028955590405326335
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.0027464390916920023,
+          "final": 0.0012628873548567688,
+          "absolute_reduction": 0.0014835517368352335,
+          "relative_reduction": 0.5401728155279277,
+          "change_ci95": [
+            -0.0016428192916445286,
+            -0.0013351681114175211
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 64,
+          "modules": {
+            "k_proj": {
+              "energy": 0.02501849102813289,
+              "top16": 0.3994943817022047,
+              "right_overlap_16": 0.7237272076234417,
+              "right_overlap_128": 0.7037875449899964
+            },
+            "v_proj": {
+              "energy": 0.02678885141364167,
+              "top16": 0.5216794150331928,
+              "right_overlap_16": 0.8156817891861692,
+              "right_overlap_128": 0.7041840740478632
+            },
+            "q_proj": {
+              "energy": 0.009106627182874787,
+              "top16": 0.39322418770666956,
+              "right_overlap_16": 0.7003837211216156,
+              "right_overlap_128": 0.7209489123780098
+            },
+            "o_proj": {
+              "energy": 0.009317553067798478,
+              "top16": 0.5542395981640482,
+              "right_overlap_16": 0.8354474769208027,
+              "right_overlap_128": 0.7616762276333106
+            },
+            "gate_proj": {
+              "energy": 0.0053729628517921605,
+              "top16": 0.313733414830765,
+              "right_overlap_16": 0.9255510406275912,
+              "right_overlap_128": 0.8472684254146261
+            },
+            "up_proj": {
+              "energy": 0.0053201737551097725,
+              "top16": 0.36032755659477406,
+              "right_overlap_16": 0.8485702117960762,
+              "right_overlap_128": 0.797110059859546
+            },
+            "down_proj": {
+              "energy": 0.00556552234784058,
+              "top16": 0.44085940709516735,
+              "right_overlap_16": 0.7939624022947115,
+              "right_overlap_128": 0.6841337877150564
+            }
+          },
+          "teacher_geometry": null
+        },
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.03372464672502545,
+              "top16": 0.36352198881570025,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.03519389047313866,
+              "top16": 0.4538104616058961,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.012402335515053342,
+              "top16": 0.3806761572757861,
+              "right_overlap_16": 1.0000000000000004,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.01185257557276761,
+              "top16": 0.4785850801321572,
+              "right_overlap_16": 0.9999999999999997,
+              "right_overlap_128": 1.0
+            },
+            "gate_proj": {
+              "energy": 0.007097706867839882,
+              "top16": 0.25587086967656436,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 1.0
+            },
+            "up_proj": {
+              "energy": 0.006872078448149021,
+              "top16": 0.29376721296992014,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 1.0
+            },
+            "down_proj": {
+              "energy": 0.007104289133672965,
+              "top16": 0.36478505650728066,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 0.9999999999999999
+            }
+          },
+          "teacher_geometry": null
+        }
+      ]
+    },
+    {
+      "job_id": 110,
+      "label": "Qwen DeepMath lineage",
+      "group": "higher",
+      "reference_step": 320,
+      "risks": [
+        {
+          "step": 0,
+          "rkl": 0.6160081357913156,
+          "remaining": 1.0
+        },
+        {
+          "step": 16,
+          "rkl": 0.5203026141567947,
+          "remaining": 0.8446359454139694
+        },
+        {
+          "step": 32,
+          "rkl": 0.3991985310759433,
+          "remaining": 0.6480410044635828
+        },
+        {
+          "step": 48,
+          "rkl": 0.3326810116375317,
+          "remaining": 0.54005944452369
+        },
+        {
+          "step": 64,
+          "rkl": 0.270061010997532,
+          "remaining": 0.4384049419259947
+        },
+        {
+          "step": 80,
+          "rkl": 0.24039657649663115,
+          "remaining": 0.39024902842853043
+        },
+        {
+          "step": 96,
+          "rkl": 0.22602953611869248,
+          "remaining": 0.3669262189667966
+        },
+        {
+          "step": 112,
+          "rkl": 0.2197756665054574,
+          "remaining": 0.35677396731641636
+        },
+        {
+          "step": 128,
+          "rkl": 0.21400670937598498,
+          "remaining": 0.34740890085984805
+        },
+        {
+          "step": 144,
+          "rkl": 0.2102796157853244,
+          "remaining": 0.34135850416196545
+        },
+        {
+          "step": 160,
+          "rkl": 0.20869835271459553,
+          "remaining": 0.3387915525604292
+        },
+        {
+          "step": 176,
+          "rkl": 0.2063496616113651,
+          "remaining": 0.3349787926847608
+        },
+        {
+          "step": 192,
+          "rkl": 0.20423835871735696,
+          "remaining": 0.33155139818891377
+        },
+        {
+          "step": 208,
+          "rkl": 0.20354744600290187,
+          "remaining": 0.33042980145291034
+        },
+        {
+          "step": 224,
+          "rkl": 0.2017658817399826,
+          "remaining": 0.3275376898728731
+        },
+        {
+          "step": 240,
+          "rkl": 0.19808242447524457,
+          "remaining": 0.3215581304308434
+        },
+        {
+          "step": 256,
+          "rkl": 0.19398731986381207,
+          "remaining": 0.3149103211349938
+        },
+        {
+          "step": 272,
+          "rkl": 0.19522216305954843,
+          "remaining": 0.31691491023697066
+        },
+        {
+          "step": 288,
+          "rkl": 0.19356942853489725,
+          "remaining": 0.3142319350802739
+        },
+        {
+          "step": 304,
+          "rkl": 0.19226998600732878,
+          "remaining": 0.31212247831814977
+        },
+        {
+          "step": 320,
+          "rkl": 0.19197745280447617,
+          "remaining": 0.3116475930271027
+        }
+      ],
+      "windows": [
+        {
+          "start": 0,
+          "stop": 64,
+          "initial": 0.6160081357913156,
+          "final": 0.270061010997532,
+          "absolute_reduction": 0.34594712479378376,
+          "relative_reduction": 0.5615950580740054,
+          "change_ci95": [
+            -0.3592242902694172,
+            -0.33234541002756385
+          ]
+        },
+        {
+          "start": 64,
+          "stop": 320,
+          "initial": 0.270061010997532,
+          "final": 0.19197745280447617,
+          "absolute_reduction": 0.07808355819305579,
+          "relative_reduction": 0.2891330292537836,
+          "change_ci95": [
+            -0.08092994270583428,
+            -0.07529033636617982
+          ]
+        }
+      ],
+      "stages": [
+        {
+          "step": 64,
+          "modules": {
+            "k_proj": {
+              "energy": 0.07293354103151513,
+              "top16": 0.49798455178889933,
+              "right_overlap_16": 0.4285950744234774,
+              "right_overlap_128": 0.4319992046633706
+            },
+            "v_proj": {
+              "energy": 0.08683226997297268,
+              "top16": 0.6404035617042785,
+              "right_overlap_16": 0.6115647007462017,
+              "right_overlap_128": 0.456872123928453
+            },
+            "q_proj": {
+              "energy": 0.025056433124549887,
+              "top16": 0.43148268068229967,
+              "right_overlap_16": 0.45864629987499506,
+              "right_overlap_128": 0.45762896306930817
+            },
+            "o_proj": {
+              "energy": 0.030897763904565057,
+              "top16": 0.6224992600198008,
+              "right_overlap_16": 0.6213970785909197,
+              "right_overlap_128": 0.527876042846081
+            },
+            "gate_proj": {
+              "energy": 0.01660354693758707,
+              "top16": 0.44650126800164036,
+              "right_overlap_16": 0.6465737472772426,
+              "right_overlap_128": 0.6274097952971276
+            },
+            "up_proj": {
+              "energy": 0.017958593595800525,
+              "top16": 0.5189822317543193,
+              "right_overlap_16": 0.6131409408904523,
+              "right_overlap_128": 0.5704956014224881
+            },
+            "down_proj": {
+              "energy": 0.02038138649275624,
+              "top16": 0.6366592890803703,
+              "right_overlap_16": 0.5860926702140801,
+              "right_overlap_128": 0.40589588749049244
+            }
+          },
+          "teacher_geometry": null
+        },
+        {
+          "step": 320,
+          "modules": {
+            "k_proj": {
+              "energy": 0.24878204190430686,
+              "top16": 0.35075542561485307,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "v_proj": {
+              "energy": 0.26033118231601543,
+              "top16": 0.4111859490537376,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 1.0
+            },
+            "q_proj": {
+              "energy": 0.0903436022210809,
+              "top16": 0.3031353061375055,
+              "right_overlap_16": 0.9999999999999998,
+              "right_overlap_128": 1.0
+            },
+            "o_proj": {
+              "energy": 0.09250194057305419,
+              "top16": 0.42002161178162656,
+              "right_overlap_16": 1.0,
+              "right_overlap_128": 0.9999999999999999
+            },
+            "gate_proj": {
+              "energy": 0.05605831580536757,
+              "top16": 0.25806051860231444,
+              "right_overlap_16": 0.9999999999999996,
+              "right_overlap_128": 0.9999999999999999
+            },
+            "up_proj": {
+              "energy": 0.05736682839656843,
+              "top16": 0.2947092300513113,
+              "right_overlap_16": 1.0000000000000004,
+              "right_overlap_128": 1.0
+            },
+            "down_proj": {
+              "energy": 0.05667619956504397,
+              "top16": 0.33973222756784005,
+              "right_overlap_16": 1.0000000000000002,
+              "right_overlap_128": 1.0
+            }
+          },
+          "teacher_geometry": null
+        }
+      ]
+    }
+  ]
+}

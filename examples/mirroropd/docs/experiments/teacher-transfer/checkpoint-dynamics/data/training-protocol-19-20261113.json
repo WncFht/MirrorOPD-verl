@@ -1,0 +1,1523 @@
+{
+  "schema": 1,
+  "accepted_on": "2026-11-13 Asia/Shanghai",
+  "experiments": [
+    {
+      "experiment": "E105",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E106",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E107",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E108",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E109",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E110",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E111",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E112",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E113",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E114",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E115",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E116",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E117",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E118",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E119",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E120",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E121",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E122",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    },
+    {
+      "experiment": "E123",
+      "passed": true,
+      "checks": 55,
+      "bank_rows_per_outer": 512,
+      "optimizer_updates": 640,
+      "snapshots": 9
+    }
+  ],
+  "settings": {
+    "data.train_batch_size": 64,
+    "data.max_prompt_length": 4096,
+    "data.max_response_length": 7168,
+    "data.shuffle": false,
+    "data.filter_overlong_prompts": false,
+    "data.truncation": "error",
+    "data.seed": 42,
+    "actor_rollout_ref.actor.ppo_mini_batch_size": 64,
+    "actor_rollout_ref.actor.ppo_epochs": 16,
+    "actor_rollout_ref.actor.optim.lr": 1e-06,
+    "actor_rollout_ref.actor.optim.lr_scheduler_type": "constant",
+    "actor_rollout_ref.actor.loss_agg_mode": "token-mean",
+    "actor_rollout_ref.actor.use_kl_loss": false,
+    "actor_rollout_ref.actor.fsdp_config.model_dtype": "fp32",
+    "actor_rollout_ref.actor.fsdp_config.dtype": "bfloat16",
+    "actor_rollout_ref.rollout.n": 1,
+    "actor_rollout_ref.rollout.response_length": 7168,
+    "actor_rollout_ref.rollout.max_model_len": 11264,
+    "actor_rollout_ref.rollout.ignore_eos": false,
+    "actor_rollout_ref.rollout.temperature": 1.0,
+    "actor_rollout_ref.rollout.top_p": 1.0,
+    "actor_rollout_ref.rollout.top_k": -1,
+    "distillation.enabled": true,
+    "distillation.execution_mode": "shared_sync",
+    "distillation.distillation_loss.mirror.objective": "mdpo",
+    "distillation.distillation_loss.mirror.estimator": "full_vocab",
+    "distillation.distillation_loss.mirror.kappa": 0,
+    "distillation.distillation_loss.mirror.eta": 1,
+    "distillation.distillation_loss.use_task_rewards": false,
+    "distillation.distillation_loss.use_policy_gradient": false,
+    "distillation.distillation_loss.full_vocab.backend": "precompute_fused",
+    "distillation.distillation_loss.distillation_loss_coef": 1.0,
+    "trainer.n_gpus_per_node": 4,
+    "trainer.total_training_steps": 40,
+    "trainer.total_epochs": 1,
+    "trainer.save_freq": -1,
+    "trainer.test_freq": -1,
+    "trainer.resume_mode": "disable",
+    "rollout_policy.mode": "single",
+    "rollout_policy.model.kind": "current"
+  },
+  "seed": 42,
+  "training_domains": [
+    "DAPO Math"
+  ],
+  "pair_contracts": [
+    {
+      "experiment": "E105",
+      "student": "MiMo-7B-Base",
+      "teacher": "MiMo-7B-SFT",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "contract": {
+        "student_type": "mimo",
+        "teacher_type": "mimo",
+        "student_width": 151680,
+        "teacher_width": 151680,
+        "student_context": 32768,
+        "teacher_context": 32768,
+        "shared_input_ids": 151665,
+        "student_eos": null,
+        "teacher_eos": 151645,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151680,
+          "teacher_width": 151680,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "e360e6f6266884e6667874f3a7d158ca20c4639e2e1dc80427e1edc2c69a38c7",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151645,
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 981,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 367,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 396,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 103,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E106",
+      "student": "MiMo-7B-Base",
+      "teacher": "MiMo-7B-RL-Zero",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "contract": {
+        "student_type": "mimo",
+        "teacher_type": "mimo",
+        "student_width": 151680,
+        "teacher_width": 151680,
+        "student_context": 32768,
+        "teacher_context": 32768,
+        "shared_input_ids": 151665,
+        "student_eos": null,
+        "teacher_eos": null,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151680,
+          "teacher_width": 151680,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "e360e6f6266884e6667874f3a7d158ca20c4639e2e1dc80427e1edc2c69a38c7",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 981,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 367,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 396,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 103,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E107",
+      "student": "MiMo-7B-SFT",
+      "teacher": "MiMo-7B-RL",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "contract": {
+        "student_type": "mimo",
+        "teacher_type": "mimo",
+        "student_width": 151680,
+        "teacher_width": 151680,
+        "student_context": 32768,
+        "teacher_context": 32768,
+        "shared_input_ids": 151665,
+        "student_eos": 151645,
+        "teacher_eos": 151645,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151680,
+          "teacher_width": 151680,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "e360e6f6266884e6667874f3a7d158ca20c4639e2e1dc80427e1edc2c69a38c7",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151645,
+      "teacher_eos": 151645,
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 981,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 367,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 396,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 103,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E108",
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "DeepSeek-R1-Distill-Qwen-7B",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 128,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "contract": {
+        "student_type": "qwen2",
+        "teacher_type": "qwen2",
+        "student_width": 151936,
+        "teacher_width": 152064,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 151665,
+        "student_eos": 151643,
+        "teacher_eos": 151643,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 152064,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "b0744a70204d988ea404735547af052452ca276f07230a5dbca96d33f17ef2bd",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 967,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 353,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 382,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 89,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E109",
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "Polaris-7B-Preview",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 128,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/POLARIS-Project--Polaris-7B-Preview/faea72cf7123681069668e8da45c1c074e378830",
+      "contract": {
+        "student_type": "qwen2",
+        "teacher_type": "qwen2",
+        "student_width": 151936,
+        "teacher_width": 152064,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 151665,
+        "student_eos": 151643,
+        "teacher_eos": 151643,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 152064,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "b0744a70204d988ea404735547af052452ca276f07230a5dbca96d33f17ef2bd",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 967,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 353,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 382,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 89,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E110",
+      "student": "DeepSeek-R1-Distill-Qwen-7B",
+      "teacher": "Polaris-7B-Preview",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/POLARIS-Project--Polaris-7B-Preview/faea72cf7123681069668e8da45c1c074e378830",
+      "contract": {
+        "student_type": "qwen2",
+        "teacher_type": "qwen2",
+        "student_width": 152064,
+        "teacher_width": 152064,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 151665,
+        "student_eos": 151643,
+        "teacher_eos": 151643,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 152064,
+          "teacher_width": 152064,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "b0744a70204d988ea404735547af052452ca276f07230a5dbca96d33f17ef2bd",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 967,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 353,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 382,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 89,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E111",
+      "student": "DeepSeek-R1-Distill-Qwen-7B",
+      "teacher": "Light-R1-7B-DS",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/qihoo360--Light-R1-7B-DS/06c9338cdbec28416e15f28a325b1439729ec237",
+      "contract": {
+        "student_type": "qwen2",
+        "teacher_type": "qwen2",
+        "student_width": 152064,
+        "teacher_width": 152064,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 151665,
+        "student_eos": 151643,
+        "teacher_eos": 151643,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 152064,
+          "teacher_width": 152064,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "b0744a70204d988ea404735547af052452ca276f07230a5dbca96d33f17ef2bd",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 967,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 353,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 382,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 89,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E112",
+      "student": "Qwen3-0.6B",
+      "teacher": "Qwen3-4B-Instruct-2507",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554",
+      "contract": {
+        "student_type": "qwen3",
+        "teacher_type": "qwen3",
+        "student_width": 151936,
+        "teacher_width": 151936,
+        "student_context": 40960,
+        "teacher_context": 262144,
+        "shared_input_ids": 151669,
+        "student_eos": 151645,
+        "teacher_eos": 151645,
+        "student_tied": true,
+        "teacher_tied": true,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 151936,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "41e00eccf531cffc2e562d38bdd879d41e5044ea279af5b73c6a32aabcc8fe04",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151645,
+      "teacher_eos": 151645,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 974,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 360,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 389,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 96,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E113",
+      "student": "Qwen3-4B",
+      "teacher": "Qwen3-4B-Instruct-2507",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-4B/1cfa9a7208912126459214e8b04321603b3df60c",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-4B-Instruct-2507/cdbee75f17c01a7cc42f958dc650907174af0554",
+      "contract": {
+        "student_type": "qwen3",
+        "teacher_type": "qwen3",
+        "student_width": 151936,
+        "teacher_width": 151936,
+        "student_context": 40960,
+        "teacher_context": 262144,
+        "shared_input_ids": 151669,
+        "student_eos": 151645,
+        "teacher_eos": 151645,
+        "student_tied": true,
+        "teacher_tied": true,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 151936,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "41e00eccf531cffc2e562d38bdd879d41e5044ea279af5b73c6a32aabcc8fe04",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151645,
+      "teacher_eos": 151645,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 974,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 360,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 389,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 96,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E114",
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "Light-R1-7B-DS",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 128,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/qihoo360--Light-R1-7B-DS/06c9338cdbec28416e15f28a325b1439729ec237",
+      "contract": {
+        "student_type": "qwen2",
+        "teacher_type": "qwen2",
+        "student_width": 151936,
+        "teacher_width": 152064,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 151665,
+        "student_eos": 151643,
+        "teacher_eos": 151643,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 152064,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "b0744a70204d988ea404735547af052452ca276f07230a5dbca96d33f17ef2bd",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 967,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 353,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 382,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 89,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E115",
+      "student": "MiMo-7B-Base",
+      "teacher": "MiMo-7B-RL",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
+      "contract": {
+        "student_type": "mimo",
+        "teacher_type": "mimo",
+        "student_width": 151680,
+        "teacher_width": 151680,
+        "student_context": 32768,
+        "teacher_context": 32768,
+        "shared_input_ids": 151665,
+        "student_eos": null,
+        "teacher_eos": 151645,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151680,
+          "teacher_width": 151680,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "e360e6f6266884e6667874f3a7d158ca20c4639e2e1dc80427e1edc2c69a38c7",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151645,
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 981,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 367,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 396,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 103,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E116",
+      "student": "MiMo-7B-SFT",
+      "teacher": "MiMo-7B-RL-Zero",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
+      "contract": {
+        "student_type": "mimo",
+        "teacher_type": "mimo",
+        "student_width": 151680,
+        "teacher_width": 151680,
+        "student_context": 32768,
+        "teacher_context": 32768,
+        "shared_input_ids": 151665,
+        "student_eos": 151645,
+        "teacher_eos": null,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151680,
+          "teacher_width": 151680,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "e360e6f6266884e6667874f3a7d158ca20c4639e2e1dc80427e1edc2c69a38c7",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151645,
+      "teacher_eos": 151643,
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 981,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 367,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 396,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 103,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E117",
+      "student": "Qwen3-Base-AbsorptionProtocol",
+      "teacher": "Qwen3-1.7B-SFT",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/MirrorOPD--Qwen3-Base-AbsorptionProtocol/content-800625500f965b0aabf23293793cba9fa13f687d5c6197ab19d2186cbc7cd08e",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Thinking-Space--Qwen3-1.7B-SFT/f0065babe7440257d7db331a5aa442ef7c3cf266",
+      "contract": {
+        "student_type": "qwen3",
+        "teacher_type": "qwen3",
+        "student_width": 151936,
+        "teacher_width": 151936,
+        "student_context": 32768,
+        "teacher_context": 32768,
+        "shared_input_ids": 151669,
+        "student_eos": 151643,
+        "teacher_eos": 151645,
+        "student_tied": true,
+        "teacher_tied": true,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 151936,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "41e00eccf531cffc2e562d38bdd879d41e5044ea279af5b73c6a32aabcc8fe04",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151645,
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 974,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 360,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 389,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 96,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E118",
+      "student": "Qwen3-Base-AbsorptionProtocol",
+      "teacher": "GT-Qwen3-1.7B-Base-MATH",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/MirrorOPD--Qwen3-Base-AbsorptionProtocol/content-800625500f965b0aabf23293793cba9fa13f687d5c6197ab19d2186cbc7cd08e",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/TMLR-Group-HF--GT-Qwen3-1.7B-Base-MATH/679b8b3a531200f6748eb782c265c83a58b1417d",
+      "contract": {
+        "student_type": "qwen3",
+        "teacher_type": "qwen3",
+        "student_width": 151936,
+        "teacher_width": 151936,
+        "student_context": 32768,
+        "teacher_context": 32768,
+        "shared_input_ids": 151669,
+        "student_eos": 151643,
+        "teacher_eos": 151643,
+        "student_tied": true,
+        "teacher_tied": true,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 151936,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "41e00eccf531cffc2e562d38bdd879d41e5044ea279af5b73c6a32aabcc8fe04",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [
+        151643,
+        151645
+      ],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 974,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 360,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 389,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 96,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E119",
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "agentica-org/DeepCoder-1.5B-Preview@103033da54f104b0d0a3570547fb3721fba99962",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 128,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/agentica-org--DeepCoder-1.5B-Preview/103033da54f104b0d0a3570547fb3721fba99962",
+      "contract": {
+        "student_type": "qwen2",
+        "teacher_type": "qwen2",
+        "student_width": 151936,
+        "teacher_width": 151936,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 151665,
+        "student_eos": 151643,
+        "teacher_eos": 151643,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 151936,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "b0744a70204d988ea404735547af052452ca276f07230a5dbca96d33f17ef2bd",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 967,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 353,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 382,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 89,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E120",
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "UltraData-IF-1.5B",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 128,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-1.5B/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Thinking-Space--UltraData-IF-1.5B/be67d8ba9be0b9f405da4481f7dab1045a0256e1",
+      "contract": {
+        "student_type": "qwen2",
+        "teacher_type": "qwen2",
+        "student_width": 151936,
+        "teacher_width": 151936,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 151665,
+        "student_eos": 151643,
+        "teacher_eos": 151643,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 151936,
+          "teacher_width": 151936,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "b0744a70204d988ea404735547af052452ca276f07230a5dbca96d33f17ef2bd",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 151643,
+      "teacher_eos": 151643,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 967,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 353,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 382,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 89,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E121",
+      "student": "Llama-3.1-Tulu-3-8B-SFT",
+      "teacher": "Llama-3.1-Tulu-3-8B-DPO",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "contract": {
+        "student_type": "llama",
+        "teacher_type": "llama",
+        "student_width": 128264,
+        "teacher_width": 128264,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 128257,
+        "student_eos": 128001,
+        "teacher_eos": 128001,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 128264,
+          "teacher_width": 128264,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "693f50110f9ed9ea85be1714d16e556ba9b5afbe24352df04b283efc6756b834",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 128001,
+      "teacher_eos": 128001,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 971,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 348,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 383,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 94,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E122",
+      "student": "Llama-3.1-Tulu-3-8B-DPO",
+      "teacher": "Llama-3.1-Tulu-3-8B",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/allenai--Llama-3.1-Tulu-3-8B-DPO/a7beb67e33ffd01cc87ac3b46cadc1000985b8db",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
+      "contract": {
+        "student_type": "llama",
+        "teacher_type": "llama",
+        "student_width": 128264,
+        "teacher_width": 128264,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 128257,
+        "student_eos": 128001,
+        "teacher_eos": 128001,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 128264,
+          "teacher_width": 128264,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "693f50110f9ed9ea85be1714d16e556ba9b5afbe24352df04b283efc6756b834",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 128001,
+      "teacher_eos": 128001,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 971,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 348,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 383,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 94,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    },
+    {
+      "experiment": "E123",
+      "student": "Llama-3.1-Tulu-3-8B-SFT",
+      "teacher": "Llama-3.1-Tulu-3-8B",
+      "status": "cpu_accepted",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "student_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/allenai--Llama-3.1-Tulu-3-8B-SFT/f2a0b46b0cfda21003c6141b1ff837b7e165524d",
+      "teacher_asset": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/allenai--Llama-3.1-Tulu-3-8B/666943798adbde0b1aff34626007e26986a3c107",
+      "contract": {
+        "student_type": "llama",
+        "teacher_type": "llama",
+        "student_width": 128264,
+        "teacher_width": 128264,
+        "student_context": 131072,
+        "teacher_context": 131072,
+        "shared_input_ids": 128257,
+        "student_eos": 128001,
+        "teacher_eos": 128001,
+        "student_tied": false,
+        "teacher_tied": false,
+        "distribution": {
+          "schema": 1,
+          "basis": "head_rows",
+          "spec": {
+            "mode": "native",
+            "common_vocab_size": null,
+            "student_ids": [],
+            "teacher_ids": []
+          },
+          "student_width": 128264,
+          "teacher_width": 128264,
+          "termination_ids": [],
+          "temperature": 1.0
+        },
+        "tokenizer_sha256": "693f50110f9ed9ea85be1714d16e556ba9b5afbe24352df04b283efc6756b834",
+        "dynamic_date": false,
+        "input_mapping_sha256": "identity",
+        "input_protocol": "shared_student_prefix"
+      },
+      "student_eos": 128001,
+      "teacher_eos": 128001,
+      "stop_token_ids": [],
+      "teacher_generation_closed": true,
+      "prompt_budgets": {
+        "train": {
+          "rows": 2560,
+          "max_prompt_tokens": 971,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "math": {
+          "rows": 128,
+          "max_prompt_tokens": 348,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "code": {
+          "rows": 64,
+          "max_prompt_tokens": 383,
+          "shared_prefix_encoding_mismatches": 0
+        },
+        "if": {
+          "rows": 64,
+          "max_prompt_tokens": 94,
+          "shared_prefix_encoding_mismatches": 0
+        }
+      }
+    }
+  ],
+  "question_files": {
+    "train": "fcd6760caea6312b3f9c40cf2334961ddb96dd4d3154536ab0179a2c348867f1",
+    "math": "5caa82f167b8de189f477fd4055b9f085ecf51976130484252f8fe9f453ace3d",
+    "code": "dba2fe0ee993de71a7635c0ce822e6fc2e1dabab14d830447996d5e2688b9e72",
+    "if": "9831f127c37c38850c0c3b2fc0659f58d8be374af9d1aa518097c898232737f9"
+  },
+  "training_prompts": 2560,
+  "unique_training_prompts": 2560,
+  "training_heldout_normalized_text_overlap": 0,
+  "gpu_training_acceptance": "pending first complete outer and native export audit",
+  "completed_experiments_excluded": [
+    "E94",
+    "E95",
+    "E96",
+    "E97",
+    "E98",
+    "E99",
+    "E100",
+    "E101",
+    "E102",
+    "E103",
+    "E104"
+  ]
+}

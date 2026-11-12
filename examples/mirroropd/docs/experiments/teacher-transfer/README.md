@@ -2,6 +2,8 @@
 
 [师生配对 RKL 总览：R1、Qwen3、Llama](fixed-state-results/README.md)汇集已有配对的训练与留出结果。
 
+[Checkpoint 动力学与 30 组配对面板](checkpoint-dynamics/README.md#扩展至-30-组的配对面板)维护当前谱／frame 测量与新增 12 组的来源核查；E105–E123 已通过 CPU 协议与训练设置验收，按四卡两队列执行。
+
 本研究先记录哪些 pair 和 setting 下没有观察到充分吸收，再用跨 domain、跨 batch 的证据解释差距。结果按实际 pair、训练与读出条件解释。模型阶段和谱系术语见[公共资料](../../settings/模型与师生配对.md)。
 
 ## 失败复现与吸收边界

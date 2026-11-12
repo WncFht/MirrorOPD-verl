@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "timestamp_utc": "2026-11-12T15:12:43.534165+00:00",
+  "training_launched": false,
+  "gpu_validation": false,
+  "question_source": "runs/absorption-parallel-20261112-v5/absorption-front4/questions",
+  "pairs": [
+    {
+      "experiment": "E112",
+      "student": "Qwen3-0.6B",
+      "teacher": "Qwen3-4B-Instruct-2507",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E113",
+      "student": "Qwen3-4B",
+      "teacher": "Qwen3-4B-Instruct-2507",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E114",
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "Light-R1-7B-DS",
+      "training_domain": "DAPO Math",
+      "concurrency": 128,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E115",
+      "student": "MiMo-7B-Base",
+      "teacher": "MiMo-7B-RL",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E116",
+      "student": "MiMo-7B-SFT",
+      "teacher": "MiMo-7B-RL-Zero",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E117",
+      "student": "Qwen3-Base-AbsorptionProtocol",
+      "teacher": "Qwen3-1.7B-SFT",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E118",
+      "student": "Qwen3-Base-AbsorptionProtocol",
+      "teacher": "GT-Qwen3-1.7B-Base-MATH",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E119",
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "agentica-org/DeepCoder-1.5B-Preview@103033da54f104b0d0a3570547fb3721fba99962",
+      "training_domain": "DAPO Math",
+      "concurrency": 128,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E120",
+      "student": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "teacher": "UltraData-IF-1.5B",
+      "training_domain": "DAPO Math",
+      "concurrency": 128,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E121",
+      "student": "Llama-3.1-Tulu-3-8B-SFT",
+      "teacher": "Llama-3.1-Tulu-3-8B-DPO",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E122",
+      "student": "Llama-3.1-Tulu-3-8B-DPO",
+      "teacher": "Llama-3.1-Tulu-3-8B",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    },
+    {
+      "experiment": "E123",
+      "student": "Llama-3.1-Tulu-3-8B-SFT",
+      "teacher": "Llama-3.1-Tulu-3-8B",
+      "training_domain": "DAPO Math",
+      "concurrency": 32,
+      "status": "blocked",
+      "error": "TypeError(\"'<' not supported between instances of 'str' and 'int'\")"
+    }
+  ]
+}

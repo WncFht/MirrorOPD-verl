@@ -1,0 +1,35 @@
+{
+  "schema": "sigma0-bank-performance-protocol-v2",
+  "torch": "2.11.0+cu129",
+  "cuda": "12.9",
+  "python": "3.12.11",
+  "device": "NVIDIA H800 80 GiB",
+  "pairs": [
+    "E94",
+    "E99",
+    "E102",
+    "E103"
+  ],
+  "weight_precision": "FP64 decomposition/correction -> FP32 -> native BF16",
+  "score_precision": "BF16 FA2 hidden, BF16 heads with FP32 outputs, mainline Triton RKL",
+  "rows": "shortest and longest complete response in each of 2 banks x 3 domains; 12 total",
+  "matrix_scope": "all 196 Transformer q/k/v/o/gate/up/down matrices at update 640",
+  "rkl_abs_error_gate": 1e-06,
+  "fp32_weight_abs_error_gate": 1e-06,
+  "gram_condition_limit": 100000000.0,
+  "gram_relative_eigen_residual_gate": 1e-10,
+  "score_chunk_repetitions": 2,
+  "score_chunks": [
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "timing": "CUDA synchronized before and after; all-matrix SVD/Gram alternatives interleaved; score kernels warmed before timing",
+  "source_sha256": {
+    "benchmark_spectrum_bank.py": "bfcca048ccea378da855f7a6ea794214b0b50dd982c21eb6845567f070e6291f",
+    "spectrum_bank_acceleration.py": "461d5f4f13f22fd39d2b12d35da86972bad8da94009233de23c7d6a5ba9aa41c",
+    "spectrum_bank_worker.py": "3b002d33502d2f57fd1d503e072bba441a17bb98b89f33e214fe500e59e58c12",
+    "spectrum_bank.py": "c532af688c5095f322d377fbab7e09a05ebf2103fa1c3320182a9ada1f52946d"
+  }
+}

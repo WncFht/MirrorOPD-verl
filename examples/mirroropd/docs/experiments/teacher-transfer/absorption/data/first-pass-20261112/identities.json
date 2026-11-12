@@ -1,0 +1,3736 @@
+[
+  {
+    "job_id": 0,
+    "run_id": "r1--deepcoder--82946e34",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/arms/NEW-DC",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64
+    ],
+    "protocol": {
+      "arms": {
+        "CONT-J": {
+          "teacher": "justrl",
+          "old_arm": "TB1-J",
+          "start": 64,
+          "stop": 128
+        },
+        "CONT-N": {
+          "teacher": "nemotron",
+          "old_arm": "TB1-N",
+          "start": 64,
+          "stop": 128
+        },
+        "CONT-M": {
+          "teacher": "minimath",
+          "old_arm": "TB2-M1",
+          "start": 64,
+          "stop": 128
+        },
+        "NEW-DS": {
+          "teacher": "deepscaler",
+          "old_arm": null,
+          "start": 0,
+          "stop": 64
+        },
+        "NEW-BRO": {
+          "teacher": "brorl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 64
+        },
+        "NEW-DC": {
+          "teacher": "deepcoder",
+          "old_arm": null,
+          "start": 0,
+          "stop": 64
+        }
+      },
+      "new_models": {
+        "deepscaler": [
+          "agentica-org/DeepScaleR-1.5B-Preview",
+          "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+        ],
+        "brorl": [
+          "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+          "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+        ],
+        "deepcoder": [
+          "agentica-org/DeepCoder-1.5B-Preview",
+          "103033da54f104b0d0a3570547fb3721fba99962"
+        ],
+        "math15": [
+          "Qwen/Qwen2.5-Math-1.5B",
+          "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2"
+        ]
+      },
+      "effective_batch": 16,
+      "reuse": 16,
+      "horizon": 1024,
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "clip": 1,
+      "scope": "3 continuations 64->128; 3 new teachers 0->64; Math15 evaluation only",
+      "checkpoint_policy": "final FP32 weights only; no new optimizer snapshots or per-32 model saves",
+      "evaluation": "Five benchmarks, avg@4, T0.7/top_p0.9, per-prompt seeds72000000+100*i+r; shuffled requests",
+      "shared_response_cap": 31744,
+      "math_native_response_cap": 3072,
+      "old_reference": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+      "heldout_panel": "primary M01-M04; additional M05-M12 kept separate",
+      "arm": "NEW-DC",
+      "teacher": "deepcoder",
+      "old_arm": null,
+      "start": 0,
+      "stop": 64,
+      "resume": {
+        "optimizer_reset": false,
+        "fresh": true
+      },
+      "optimization": {
+        "analytic": {
+          "loss": 1.7462298274040222e-10,
+          "hidden": 8.731149137020111e-11,
+          "head": 6.411937647499144e-11
+        },
+        "thresholds": {
+          "loss_absolute": 1e-05,
+          "gradient_relative_l2": 0.01,
+          "cosine": 0.9999
+        },
+        "probes": [
+          {
+            "model": "S0",
+            "reference": {
+              "loss": 0.020815549869439565,
+              "seconds": 0.4664916545152664,
+              "peak_gib": 18.007194995880127
+            },
+            "candidates": [
+              {
+                "loss": 0.020815549312733304,
+                "seconds": 0.41136007010936737,
+                "peak_gib": 18.088221073150635,
+                "chunk": 128,
+                "relative_l2": 0.0033350769146006415,
+                "cosine": 0.999994440371355,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.412099482674195,
+                "loss_error": 5.567062609512785e-10,
+                "accepted": true
+              },
+              {
+                "loss": 0.020815548720871824,
+                "seconds": 0.3775077909231186,
+                "peak_gib": 18.160648822784424,
+                "chunk": 256,
+                "relative_l2": 0.0031635256845480566,
+                "cosine": 0.9999949950016664,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4121050514539526,
+                "loss_error": 1.1485677409162065e-09,
+                "accepted": true
+              },
+              {
+                "loss": 0.02081554837029736,
+                "seconds": 0.3704899922013283,
+                "peak_gib": 18.305668354034424,
+                "chunk": 512,
+                "relative_l2": 0.0030902398231570515,
+                "cosine": 0.9999952244165325,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4120984191374229,
+                "loss_error": 1.4991422062071713e-09,
+                "accepted": true
+              }
+            ]
+          },
+          {
+            "model": "JustRL-step064",
+            "reference": {
+              "loss": 0.004238148259901209,
+              "seconds": 0.4573143869638443,
+              "peak_gib": 18.011545658111572
+            },
+            "candidates": [
+              {
+                "loss": 0.004238147671246001,
+                "seconds": 0.37868473678827286,
+                "peak_gib": 18.306339740753174,
+                "chunk": 512,
+                "relative_l2": 0.003633615364176774,
+                "cosine": 0.9999933994992389,
+                "reference_norm": 0.1681516322741397,
+                "candidate_norm": 0.16815121917980924,
+                "loss_error": 5.886552079115148e-10,
+                "accepted": true
+              }
+            ]
+          }
+        ],
+        "cache_seconds_two_rows": 0.12683451920747757,
+        "chunk": 512,
+        "microbatch": 1,
+        "head": "analytic FP32 full-vocabulary VJP",
+        "teacher_cache": "FP32 log probabilities resident for current batch16",
+        "snapshots": "disabled",
+        "optimizer": "unchanged AdamW foreach=False"
+      },
+      "cuda_visible_devices": "6",
+      "final_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-boundary-20261029/models/NEW-DC/step064",
+      "weights_dtype": "FP32",
+      "optimizer_exports": false
+    },
+    "checkpoint_receipt": {
+      "arm": "NEW-DC",
+      "step": 64,
+      "optimizer_saved": false,
+      "dtype": "FP32"
+    }
+  },
+  {
+    "job_id": 1,
+    "run_id": "r1--deepscaler--a7c14513",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/NEW-DS",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "arms": {
+        "CONT-J": {
+          "teacher": "justrl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-N": {
+          "teacher": "nemotron",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-M": {
+          "teacher": "minimath",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "NEW-DS": {
+          "teacher": "deepscaler",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-BRO": {
+          "teacher": "brorl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-DC": {
+          "teacher": "deepcoder",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        }
+      },
+      "new_models": {
+        "deepscaler": [
+          "agentica-org/DeepScaleR-1.5B-Preview",
+          "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+        ],
+        "brorl": [
+          "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+          "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+        ],
+        "deepcoder": [
+          "agentica-org/DeepCoder-1.5B-Preview",
+          "103033da54f104b0d0a3570547fb3721fba99962"
+        ],
+        "math15": [
+          "Qwen/Qwen2.5-Math-1.5B",
+          "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2"
+        ]
+      },
+      "effective_batch": 16,
+      "reuse": 16,
+      "horizon": 1024,
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "clip": 1,
+      "scope": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim.",
+      "checkpoint_policy": "final FP32 weights and Adam/RNG; no intermediate model exports",
+      "evaluation": "Five benchmarks, avg@4, T0.7/top_p0.9, per-prompt seeds72000000+100*i+r; shuffled requests",
+      "shared_response_cap": 31744,
+      "math_native_response_cap": 3072,
+      "old_reference": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+      "heldout_panel": "primary M01-M04; additional M05-M12 kept separate",
+      "arm": "NEW-DS",
+      "teacher": "deepscaler",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 64,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 64,
+      "new_updates": 320,
+      "budget_increment_over_prior": 256,
+      "resume": {
+        "optimizer_reset": false,
+        "fresh": true
+      },
+      "optimization": {
+        "analytic": {
+          "loss": 1.7462298274040222e-10,
+          "hidden": 8.731149137020111e-11,
+          "head": 6.411937647499144e-11
+        },
+        "thresholds": {
+          "loss_absolute": 1e-05,
+          "gradient_relative_l2": 0.01,
+          "cosine": 0.9999
+        },
+        "probes": [
+          {
+            "model": "S0",
+            "reference": {
+              "loss": 0.020815549869439565,
+              "seconds": 0.4664916545152664,
+              "peak_gib": 18.007194995880127
+            },
+            "candidates": [
+              {
+                "loss": 0.020815549312733304,
+                "seconds": 0.41136007010936737,
+                "peak_gib": 18.088221073150635,
+                "chunk": 128,
+                "relative_l2": 0.0033350769146006415,
+                "cosine": 0.999994440371355,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.412099482674195,
+                "loss_error": 5.567062609512785e-10,
+                "accepted": true
+              },
+              {
+                "loss": 0.020815548720871824,
+                "seconds": 0.3775077909231186,
+                "peak_gib": 18.160648822784424,
+                "chunk": 256,
+                "relative_l2": 0.0031635256845480566,
+                "cosine": 0.9999949950016664,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4121050514539526,
+                "loss_error": 1.1485677409162065e-09,
+                "accepted": true
+              },
+              {
+                "loss": 0.02081554837029736,
+                "seconds": 0.3704899922013283,
+                "peak_gib": 18.305668354034424,
+                "chunk": 512,
+                "relative_l2": 0.0030902398231570515,
+                "cosine": 0.9999952244165325,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4120984191374229,
+                "loss_error": 1.4991422062071713e-09,
+                "accepted": true
+              }
+            ]
+          },
+          {
+            "model": "JustRL-step064",
+            "reference": {
+              "loss": 0.004238148259901209,
+              "seconds": 0.4573143869638443,
+              "peak_gib": 18.011545658111572
+            },
+            "candidates": [
+              {
+                "loss": 0.004238147671246001,
+                "seconds": 0.37868473678827286,
+                "peak_gib": 18.306339740753174,
+                "chunk": 512,
+                "relative_l2": 0.003633615364176774,
+                "cosine": 0.9999933994992389,
+                "reference_norm": 0.1681516322741397,
+                "candidate_norm": 0.16815121917980924,
+                "loss_error": 5.886552079115148e-10,
+                "accepted": true
+              }
+            ]
+          }
+        ],
+        "cache_seconds_two_rows": 0.12683451920747757,
+        "chunk": 512,
+        "microbatch": 1,
+        "head": "analytic FP32 full-vocabulary VJP",
+        "teacher_cache": "FP32 log probabilities resident for current batch16",
+        "snapshots": "disabled",
+        "optimizer": "unchanged AdamW foreach=False"
+      },
+      "engine_mode": "validated",
+      "cuda_visible_devices": "1",
+      "final_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030/models/NEW-DS/step320",
+      "weights_dtype": "FP32",
+      "optimizer_exports": true,
+      "extension_plan": {
+        "name": "r1-samesize-deterministic320-20261030",
+        "models": {
+          "r1": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+            "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+          ],
+          "justrl": [
+            "hbx/JustRL-DeepSeek-1.5B",
+            "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+          ],
+          "nemotron": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "b89048893f95246c6b5749b287f0049e6df42ee9"
+          ],
+          "minimath": [
+            "oumi-ai/MiniMath-R1-1.5B",
+            "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+          ],
+          "deepscaler": [
+            "agentica-org/DeepScaleR-1.5B-Preview",
+            "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+          ],
+          "brorl": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+          ],
+          "deepcoder": [
+            "agentica-org/DeepCoder-1.5B-Preview",
+            "103033da54f104b0d0a3570547fb3721fba99962"
+          ]
+        },
+        "gpus": [
+          0,
+          1
+        ],
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030",
+        "arms": {
+          "CONT-J": {
+            "teacher": "justrl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-N": {
+            "teacher": "nemotron",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-M": {
+            "teacher": "minimath",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "NEW-DS": {
+            "teacher": "deepscaler",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-BRO": {
+            "teacher": "brorl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-DC": {
+            "teacher": "deepcoder",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          }
+        },
+        "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/protocol.json",
+        "source_protocol_sha256": "98f9eb7d9850de451bd3130d5141c2ff94ea1ae80cac5623af269bc5b034ad00",
+        "legacy_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029",
+        "initial_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "train_groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T"
+          ],
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1,
+          "seed": 42,
+          "engine": "validated"
+        },
+        "scoring": {
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "M01",
+            "M02",
+            "M03",
+            "M04",
+            "Code01",
+            "Code02",
+            "IF01",
+            "IF02"
+          ],
+          "interval": 16
+        },
+        "replay_acceptance": {
+          "per_prompt_rkl_absolute_tolerance": 0.0001,
+          "failure_action": "stop before new-budget updates; preserve evidence",
+          "max_loss_absolute_tolerance": 0.0001
+        },
+        "storage": {
+          "final_fp32_weights": true,
+          "final_adam_rng": true,
+          "intermediate_weights": false
+        },
+        "accuracy_gate": false,
+        "teacher_cache_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-stage320-20261030",
+        "execution_condition": "deterministic_from_initial",
+        "repeatability_probe": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-stage320-20261030/diagnostics/1793346863727536763/repeatability.json",
+        "repeatability_sha256": "6466c932f12f052853566bdaf8e9d26ff19816ef51ef615387e05f6fbde7787c",
+        "interpretation": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim."
+      },
+      "flash_attention_deterministic": true
+    },
+    "checkpoint_receipt": {
+      "arm": "NEW-DS",
+      "step": 320,
+      "optimizer_saved": true,
+      "dtype": "FP32",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "bytes": 3981165560,
+          "sha256": "1d90df325bb496125f5a72f014025d81f94081695b27b727deb612ec2ac539bb"
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "bytes": 3127224776,
+          "sha256": "eb4ed5079e3f8b905fea3834984739af82a276d940de5acaf1aaf6daefbfc56f"
+        }
+      ],
+      "weight_identity": "61c8ea5b5f34c58d3b413b8cdd8c8bb4fca3f2c311bc7be32e7208209b3958b5"
+    }
+  },
+  {
+    "job_id": 2,
+    "run_id": "r1--justrl--534ec3bd",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-J",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "arms": {
+        "CONT-J": {
+          "teacher": "justrl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-N": {
+          "teacher": "nemotron",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-M": {
+          "teacher": "minimath",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "NEW-DS": {
+          "teacher": "deepscaler",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-BRO": {
+          "teacher": "brorl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-DC": {
+          "teacher": "deepcoder",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        }
+      },
+      "new_models": {
+        "deepscaler": [
+          "agentica-org/DeepScaleR-1.5B-Preview",
+          "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+        ],
+        "brorl": [
+          "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+          "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+        ],
+        "deepcoder": [
+          "agentica-org/DeepCoder-1.5B-Preview",
+          "103033da54f104b0d0a3570547fb3721fba99962"
+        ],
+        "math15": [
+          "Qwen/Qwen2.5-Math-1.5B",
+          "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2"
+        ]
+      },
+      "effective_batch": 16,
+      "reuse": 16,
+      "horizon": 1024,
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "clip": 1,
+      "scope": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim.",
+      "checkpoint_policy": "final FP32 weights and Adam/RNG; no intermediate model exports",
+      "evaluation": "Five benchmarks, avg@4, T0.7/top_p0.9, per-prompt seeds72000000+100*i+r; shuffled requests",
+      "shared_response_cap": 31744,
+      "math_native_response_cap": 3072,
+      "old_reference": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+      "heldout_panel": "primary M01-M04; additional M05-M12 kept separate",
+      "arm": "CONT-J",
+      "teacher": "justrl",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 128,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 128,
+      "new_updates": 320,
+      "budget_increment_over_prior": 192,
+      "resume": {
+        "optimizer_reset": false,
+        "fresh": true
+      },
+      "optimization": {
+        "analytic": {
+          "loss": 1.7462298274040222e-10,
+          "hidden": 8.731149137020111e-11,
+          "head": 6.411937647499144e-11
+        },
+        "thresholds": {
+          "loss_absolute": 1e-05,
+          "gradient_relative_l2": 0.01,
+          "cosine": 0.9999
+        },
+        "probes": [
+          {
+            "model": "S0",
+            "reference": {
+              "loss": 0.020815549869439565,
+              "seconds": 0.4664916545152664,
+              "peak_gib": 18.007194995880127
+            },
+            "candidates": [
+              {
+                "loss": 0.020815549312733304,
+                "seconds": 0.41136007010936737,
+                "peak_gib": 18.088221073150635,
+                "chunk": 128,
+                "relative_l2": 0.0033350769146006415,
+                "cosine": 0.999994440371355,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.412099482674195,
+                "loss_error": 5.567062609512785e-10,
+                "accepted": true
+              },
+              {
+                "loss": 0.020815548720871824,
+                "seconds": 0.3775077909231186,
+                "peak_gib": 18.160648822784424,
+                "chunk": 256,
+                "relative_l2": 0.0031635256845480566,
+                "cosine": 0.9999949950016664,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4121050514539526,
+                "loss_error": 1.1485677409162065e-09,
+                "accepted": true
+              },
+              {
+                "loss": 0.02081554837029736,
+                "seconds": 0.3704899922013283,
+                "peak_gib": 18.305668354034424,
+                "chunk": 512,
+                "relative_l2": 0.0030902398231570515,
+                "cosine": 0.9999952244165325,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4120984191374229,
+                "loss_error": 1.4991422062071713e-09,
+                "accepted": true
+              }
+            ]
+          },
+          {
+            "model": "JustRL-step064",
+            "reference": {
+              "loss": 0.004238148259901209,
+              "seconds": 0.4573143869638443,
+              "peak_gib": 18.011545658111572
+            },
+            "candidates": [
+              {
+                "loss": 0.004238147671246001,
+                "seconds": 0.37868473678827286,
+                "peak_gib": 18.306339740753174,
+                "chunk": 512,
+                "relative_l2": 0.003633615364176774,
+                "cosine": 0.9999933994992389,
+                "reference_norm": 0.1681516322741397,
+                "candidate_norm": 0.16815121917980924,
+                "loss_error": 5.886552079115148e-10,
+                "accepted": true
+              }
+            ]
+          }
+        ],
+        "cache_seconds_two_rows": 0.12683451920747757,
+        "chunk": 512,
+        "microbatch": 1,
+        "head": "analytic FP32 full-vocabulary VJP",
+        "teacher_cache": "FP32 log probabilities resident for current batch16",
+        "snapshots": "disabled",
+        "optimizer": "unchanged AdamW foreach=False"
+      },
+      "engine_mode": "validated",
+      "cuda_visible_devices": "0",
+      "final_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030/models/CONT-J/step320",
+      "weights_dtype": "FP32",
+      "optimizer_exports": true,
+      "extension_plan": {
+        "name": "r1-samesize-deterministic320-20261030",
+        "models": {
+          "r1": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+            "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+          ],
+          "justrl": [
+            "hbx/JustRL-DeepSeek-1.5B",
+            "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+          ],
+          "nemotron": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "b89048893f95246c6b5749b287f0049e6df42ee9"
+          ],
+          "minimath": [
+            "oumi-ai/MiniMath-R1-1.5B",
+            "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+          ],
+          "deepscaler": [
+            "agentica-org/DeepScaleR-1.5B-Preview",
+            "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+          ],
+          "brorl": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+          ],
+          "deepcoder": [
+            "agentica-org/DeepCoder-1.5B-Preview",
+            "103033da54f104b0d0a3570547fb3721fba99962"
+          ]
+        },
+        "gpus": [
+          0,
+          1
+        ],
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030",
+        "arms": {
+          "CONT-J": {
+            "teacher": "justrl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-N": {
+            "teacher": "nemotron",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-M": {
+            "teacher": "minimath",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "NEW-DS": {
+            "teacher": "deepscaler",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-BRO": {
+            "teacher": "brorl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-DC": {
+            "teacher": "deepcoder",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          }
+        },
+        "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/protocol.json",
+        "source_protocol_sha256": "98f9eb7d9850de451bd3130d5141c2ff94ea1ae80cac5623af269bc5b034ad00",
+        "legacy_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029",
+        "initial_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "train_groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T"
+          ],
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1,
+          "seed": 42,
+          "engine": "validated"
+        },
+        "scoring": {
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "M01",
+            "M02",
+            "M03",
+            "M04",
+            "Code01",
+            "Code02",
+            "IF01",
+            "IF02"
+          ],
+          "interval": 16
+        },
+        "replay_acceptance": {
+          "per_prompt_rkl_absolute_tolerance": 0.0001,
+          "failure_action": "stop before new-budget updates; preserve evidence",
+          "max_loss_absolute_tolerance": 0.0001
+        },
+        "storage": {
+          "final_fp32_weights": true,
+          "final_adam_rng": true,
+          "intermediate_weights": false
+        },
+        "accuracy_gate": false,
+        "teacher_cache_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-stage320-20261030",
+        "execution_condition": "deterministic_from_initial",
+        "repeatability_probe": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-stage320-20261030/diagnostics/1793346863727536763/repeatability.json",
+        "repeatability_sha256": "6466c932f12f052853566bdaf8e9d26ff19816ef51ef615387e05f6fbde7787c",
+        "interpretation": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim."
+      },
+      "flash_attention_deterministic": true
+    },
+    "checkpoint_receipt": {
+      "arm": "CONT-J",
+      "step": 320,
+      "optimizer_saved": true,
+      "dtype": "FP32",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "bytes": 3981165560,
+          "sha256": "d0d27110f47b130f4fb386bce7102ec414cc80bfe1461a3f87492a8e44ecbeb5"
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "bytes": 3127224776,
+          "sha256": "0c046e63cd7167da9dd5780963ca8a13450791c199d86285c1d81e6e8bb3c957"
+        }
+      ],
+      "weight_identity": "3607e3e7d1a040efa3a1d5ea8303dec0cd064a1326eea3a2339549304846a89a"
+    }
+  },
+  {
+    "job_id": 3,
+    "run_id": "r1--minimath--18ba6165",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-M",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "arms": {
+        "CONT-J": {
+          "teacher": "justrl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-N": {
+          "teacher": "nemotron",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-M": {
+          "teacher": "minimath",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "NEW-DS": {
+          "teacher": "deepscaler",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-BRO": {
+          "teacher": "brorl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-DC": {
+          "teacher": "deepcoder",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        }
+      },
+      "new_models": {
+        "deepscaler": [
+          "agentica-org/DeepScaleR-1.5B-Preview",
+          "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+        ],
+        "brorl": [
+          "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+          "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+        ],
+        "deepcoder": [
+          "agentica-org/DeepCoder-1.5B-Preview",
+          "103033da54f104b0d0a3570547fb3721fba99962"
+        ],
+        "math15": [
+          "Qwen/Qwen2.5-Math-1.5B",
+          "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2"
+        ]
+      },
+      "effective_batch": 16,
+      "reuse": 16,
+      "horizon": 1024,
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "clip": 1,
+      "scope": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim.",
+      "checkpoint_policy": "final FP32 weights and Adam/RNG; no intermediate model exports",
+      "evaluation": "Five benchmarks, avg@4, T0.7/top_p0.9, per-prompt seeds72000000+100*i+r; shuffled requests",
+      "shared_response_cap": 31744,
+      "math_native_response_cap": 3072,
+      "old_reference": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+      "heldout_panel": "primary M01-M04; additional M05-M12 kept separate",
+      "arm": "CONT-M",
+      "teacher": "minimath",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 128,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 128,
+      "new_updates": 320,
+      "budget_increment_over_prior": 192,
+      "resume": {
+        "optimizer_reset": false,
+        "fresh": true
+      },
+      "optimization": {
+        "analytic": {
+          "loss": 1.7462298274040222e-10,
+          "hidden": 8.731149137020111e-11,
+          "head": 6.411937647499144e-11
+        },
+        "thresholds": {
+          "loss_absolute": 1e-05,
+          "gradient_relative_l2": 0.01,
+          "cosine": 0.9999
+        },
+        "probes": [
+          {
+            "model": "S0",
+            "reference": {
+              "loss": 0.020815549869439565,
+              "seconds": 0.4664916545152664,
+              "peak_gib": 18.007194995880127
+            },
+            "candidates": [
+              {
+                "loss": 0.020815549312733304,
+                "seconds": 0.41136007010936737,
+                "peak_gib": 18.088221073150635,
+                "chunk": 128,
+                "relative_l2": 0.0033350769146006415,
+                "cosine": 0.999994440371355,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.412099482674195,
+                "loss_error": 5.567062609512785e-10,
+                "accepted": true
+              },
+              {
+                "loss": 0.020815548720871824,
+                "seconds": 0.3775077909231186,
+                "peak_gib": 18.160648822784424,
+                "chunk": 256,
+                "relative_l2": 0.0031635256845480566,
+                "cosine": 0.9999949950016664,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4121050514539526,
+                "loss_error": 1.1485677409162065e-09,
+                "accepted": true
+              },
+              {
+                "loss": 0.02081554837029736,
+                "seconds": 0.3704899922013283,
+                "peak_gib": 18.305668354034424,
+                "chunk": 512,
+                "relative_l2": 0.0030902398231570515,
+                "cosine": 0.9999952244165325,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4120984191374229,
+                "loss_error": 1.4991422062071713e-09,
+                "accepted": true
+              }
+            ]
+          },
+          {
+            "model": "JustRL-step064",
+            "reference": {
+              "loss": 0.004238148259901209,
+              "seconds": 0.4573143869638443,
+              "peak_gib": 18.011545658111572
+            },
+            "candidates": [
+              {
+                "loss": 0.004238147671246001,
+                "seconds": 0.37868473678827286,
+                "peak_gib": 18.306339740753174,
+                "chunk": 512,
+                "relative_l2": 0.003633615364176774,
+                "cosine": 0.9999933994992389,
+                "reference_norm": 0.1681516322741397,
+                "candidate_norm": 0.16815121917980924,
+                "loss_error": 5.886552079115148e-10,
+                "accepted": true
+              }
+            ]
+          }
+        ],
+        "cache_seconds_two_rows": 0.12683451920747757,
+        "chunk": 512,
+        "microbatch": 1,
+        "head": "analytic FP32 full-vocabulary VJP",
+        "teacher_cache": "FP32 log probabilities resident for current batch16",
+        "snapshots": "disabled",
+        "optimizer": "unchanged AdamW foreach=False"
+      },
+      "engine_mode": "validated",
+      "cuda_visible_devices": "0",
+      "final_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030/models/CONT-M/step320",
+      "weights_dtype": "FP32",
+      "optimizer_exports": true,
+      "extension_plan": {
+        "name": "r1-samesize-deterministic320-20261030",
+        "models": {
+          "r1": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+            "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+          ],
+          "justrl": [
+            "hbx/JustRL-DeepSeek-1.5B",
+            "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+          ],
+          "nemotron": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "b89048893f95246c6b5749b287f0049e6df42ee9"
+          ],
+          "minimath": [
+            "oumi-ai/MiniMath-R1-1.5B",
+            "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+          ],
+          "deepscaler": [
+            "agentica-org/DeepScaleR-1.5B-Preview",
+            "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+          ],
+          "brorl": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+          ],
+          "deepcoder": [
+            "agentica-org/DeepCoder-1.5B-Preview",
+            "103033da54f104b0d0a3570547fb3721fba99962"
+          ]
+        },
+        "gpus": [
+          0,
+          1
+        ],
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030",
+        "arms": {
+          "CONT-J": {
+            "teacher": "justrl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-N": {
+            "teacher": "nemotron",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-M": {
+            "teacher": "minimath",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "NEW-DS": {
+            "teacher": "deepscaler",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-BRO": {
+            "teacher": "brorl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-DC": {
+            "teacher": "deepcoder",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          }
+        },
+        "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/protocol.json",
+        "source_protocol_sha256": "98f9eb7d9850de451bd3130d5141c2ff94ea1ae80cac5623af269bc5b034ad00",
+        "legacy_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029",
+        "initial_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "train_groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T"
+          ],
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1,
+          "seed": 42,
+          "engine": "validated"
+        },
+        "scoring": {
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "M01",
+            "M02",
+            "M03",
+            "M04",
+            "Code01",
+            "Code02",
+            "IF01",
+            "IF02"
+          ],
+          "interval": 16
+        },
+        "replay_acceptance": {
+          "per_prompt_rkl_absolute_tolerance": 0.0001,
+          "failure_action": "stop before new-budget updates; preserve evidence",
+          "max_loss_absolute_tolerance": 0.0001
+        },
+        "storage": {
+          "final_fp32_weights": true,
+          "final_adam_rng": true,
+          "intermediate_weights": false
+        },
+        "accuracy_gate": false,
+        "teacher_cache_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-stage320-20261030",
+        "execution_condition": "deterministic_from_initial",
+        "repeatability_probe": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-stage320-20261030/diagnostics/1793346863727536763/repeatability.json",
+        "repeatability_sha256": "6466c932f12f052853566bdaf8e9d26ff19816ef51ef615387e05f6fbde7787c",
+        "interpretation": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim."
+      },
+      "flash_attention_deterministic": true
+    },
+    "checkpoint_receipt": {
+      "arm": "CONT-M",
+      "step": 320,
+      "optimizer_saved": true,
+      "dtype": "FP32",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "bytes": 3981165560,
+          "sha256": "363c9404d6209d2ae783df36f538fb516284f46312c8f1c21464b0f9d4cbc15b"
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "bytes": 3127224776,
+          "sha256": "a0652f4364059c9c3187f96392e1e99db64b7fbc2ac2b6ece305512504ca7f64"
+        }
+      ],
+      "weight_identity": "558cef54048629d27b7e5800352a6142d1cce599c6250606176e485490a208f8"
+    }
+  },
+  {
+    "job_id": 4,
+    "run_id": "r1--brorl--c9731fdc",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/NEW-BRO",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "arms": {
+        "CONT-J": {
+          "teacher": "justrl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-N": {
+          "teacher": "nemotron",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-M": {
+          "teacher": "minimath",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "NEW-DS": {
+          "teacher": "deepscaler",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-BRO": {
+          "teacher": "brorl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-DC": {
+          "teacher": "deepcoder",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        }
+      },
+      "new_models": {
+        "deepscaler": [
+          "agentica-org/DeepScaleR-1.5B-Preview",
+          "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+        ],
+        "brorl": [
+          "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+          "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+        ],
+        "deepcoder": [
+          "agentica-org/DeepCoder-1.5B-Preview",
+          "103033da54f104b0d0a3570547fb3721fba99962"
+        ],
+        "math15": [
+          "Qwen/Qwen2.5-Math-1.5B",
+          "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2"
+        ]
+      },
+      "effective_batch": 16,
+      "reuse": 16,
+      "horizon": 1024,
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "clip": 1,
+      "scope": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim.",
+      "checkpoint_policy": "final FP32 weights and Adam/RNG; no intermediate model exports",
+      "evaluation": "Five benchmarks, avg@4, T0.7/top_p0.9, per-prompt seeds72000000+100*i+r; shuffled requests",
+      "shared_response_cap": 31744,
+      "math_native_response_cap": 3072,
+      "old_reference": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+      "heldout_panel": "primary M01-M04; additional M05-M12 kept separate",
+      "arm": "NEW-BRO",
+      "teacher": "brorl",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 64,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 64,
+      "new_updates": 320,
+      "budget_increment_over_prior": 256,
+      "resume": {
+        "optimizer_reset": false,
+        "fresh": true
+      },
+      "optimization": {
+        "analytic": {
+          "loss": 1.7462298274040222e-10,
+          "hidden": 8.731149137020111e-11,
+          "head": 6.411937647499144e-11
+        },
+        "thresholds": {
+          "loss_absolute": 1e-05,
+          "gradient_relative_l2": 0.01,
+          "cosine": 0.9999
+        },
+        "probes": [
+          {
+            "model": "S0",
+            "reference": {
+              "loss": 0.020815549869439565,
+              "seconds": 0.4664916545152664,
+              "peak_gib": 18.007194995880127
+            },
+            "candidates": [
+              {
+                "loss": 0.020815549312733304,
+                "seconds": 0.41136007010936737,
+                "peak_gib": 18.088221073150635,
+                "chunk": 128,
+                "relative_l2": 0.0033350769146006415,
+                "cosine": 0.999994440371355,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.412099482674195,
+                "loss_error": 5.567062609512785e-10,
+                "accepted": true
+              },
+              {
+                "loss": 0.020815548720871824,
+                "seconds": 0.3775077909231186,
+                "peak_gib": 18.160648822784424,
+                "chunk": 256,
+                "relative_l2": 0.0031635256845480566,
+                "cosine": 0.9999949950016664,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4121050514539526,
+                "loss_error": 1.1485677409162065e-09,
+                "accepted": true
+              },
+              {
+                "loss": 0.02081554837029736,
+                "seconds": 0.3704899922013283,
+                "peak_gib": 18.305668354034424,
+                "chunk": 512,
+                "relative_l2": 0.0030902398231570515,
+                "cosine": 0.9999952244165325,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4120984191374229,
+                "loss_error": 1.4991422062071713e-09,
+                "accepted": true
+              }
+            ]
+          },
+          {
+            "model": "JustRL-step064",
+            "reference": {
+              "loss": 0.004238148259901209,
+              "seconds": 0.4573143869638443,
+              "peak_gib": 18.011545658111572
+            },
+            "candidates": [
+              {
+                "loss": 0.004238147671246001,
+                "seconds": 0.37868473678827286,
+                "peak_gib": 18.306339740753174,
+                "chunk": 512,
+                "relative_l2": 0.003633615364176774,
+                "cosine": 0.9999933994992389,
+                "reference_norm": 0.1681516322741397,
+                "candidate_norm": 0.16815121917980924,
+                "loss_error": 5.886552079115148e-10,
+                "accepted": true
+              }
+            ]
+          }
+        ],
+        "cache_seconds_two_rows": 0.12683451920747757,
+        "chunk": 512,
+        "microbatch": 1,
+        "head": "analytic FP32 full-vocabulary VJP",
+        "teacher_cache": "FP32 log probabilities resident for current batch16",
+        "snapshots": "disabled",
+        "optimizer": "unchanged AdamW foreach=False"
+      },
+      "engine_mode": "validated",
+      "cuda_visible_devices": "0",
+      "final_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030/models/NEW-BRO/step320",
+      "weights_dtype": "FP32",
+      "optimizer_exports": true,
+      "extension_plan": {
+        "name": "r1-samesize-deterministic320-20261030",
+        "models": {
+          "r1": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+            "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+          ],
+          "justrl": [
+            "hbx/JustRL-DeepSeek-1.5B",
+            "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+          ],
+          "nemotron": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "b89048893f95246c6b5749b287f0049e6df42ee9"
+          ],
+          "minimath": [
+            "oumi-ai/MiniMath-R1-1.5B",
+            "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+          ],
+          "deepscaler": [
+            "agentica-org/DeepScaleR-1.5B-Preview",
+            "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+          ],
+          "brorl": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+          ],
+          "deepcoder": [
+            "agentica-org/DeepCoder-1.5B-Preview",
+            "103033da54f104b0d0a3570547fb3721fba99962"
+          ]
+        },
+        "gpus": [
+          0,
+          1
+        ],
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030",
+        "arms": {
+          "CONT-J": {
+            "teacher": "justrl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-N": {
+            "teacher": "nemotron",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-M": {
+            "teacher": "minimath",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "NEW-DS": {
+            "teacher": "deepscaler",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-BRO": {
+            "teacher": "brorl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-DC": {
+            "teacher": "deepcoder",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          }
+        },
+        "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/protocol.json",
+        "source_protocol_sha256": "98f9eb7d9850de451bd3130d5141c2ff94ea1ae80cac5623af269bc5b034ad00",
+        "legacy_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029",
+        "initial_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "train_groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T"
+          ],
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1,
+          "seed": 42,
+          "engine": "validated"
+        },
+        "scoring": {
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "M01",
+            "M02",
+            "M03",
+            "M04",
+            "Code01",
+            "Code02",
+            "IF01",
+            "IF02"
+          ],
+          "interval": 16
+        },
+        "replay_acceptance": {
+          "per_prompt_rkl_absolute_tolerance": 0.0001,
+          "failure_action": "stop before new-budget updates; preserve evidence",
+          "max_loss_absolute_tolerance": 0.0001
+        },
+        "storage": {
+          "final_fp32_weights": true,
+          "final_adam_rng": true,
+          "intermediate_weights": false
+        },
+        "accuracy_gate": false,
+        "teacher_cache_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-stage320-20261030",
+        "execution_condition": "deterministic_from_initial",
+        "repeatability_probe": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-stage320-20261030/diagnostics/1793346863727536763/repeatability.json",
+        "repeatability_sha256": "6466c932f12f052853566bdaf8e9d26ff19816ef51ef615387e05f6fbde7787c",
+        "interpretation": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim."
+      },
+      "flash_attention_deterministic": true
+    },
+    "checkpoint_receipt": {
+      "arm": "NEW-BRO",
+      "step": 320,
+      "optimizer_saved": true,
+      "dtype": "FP32",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "bytes": 3981165560,
+          "sha256": "b9d3e093997227115d050172136df21fd42c4d43f6ac51cfc5e9f0e90e35b3e2"
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "bytes": 3127224776,
+          "sha256": "87d3558efe0eeaa92c9f7bd7cf99e448523b4e58d995370ef849d0e0a4fdef9d"
+        }
+      ],
+      "weight_identity": "df2ee7705e110e64cd56fc04ddda38d12bbc18675c740168c2f19ec0c7baf51e"
+    }
+  },
+  {
+    "job_id": 5,
+    "run_id": "r1--nemotron--49bfdcb0",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030/arms/CONT-N",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "arms": {
+        "CONT-J": {
+          "teacher": "justrl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-N": {
+          "teacher": "nemotron",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "CONT-M": {
+          "teacher": "minimath",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 128,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 128,
+          "new_updates": 320,
+          "budget_increment_over_prior": 192
+        },
+        "NEW-DS": {
+          "teacher": "deepscaler",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-BRO": {
+          "teacher": "brorl",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        },
+        "NEW-DC": {
+          "teacher": "deepcoder",
+          "old_arm": null,
+          "start": 0,
+          "stop": 320,
+          "prior_completed_stop": 64,
+          "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+          "replay_through": 64,
+          "new_updates": 320,
+          "budget_increment_over_prior": 256
+        }
+      },
+      "new_models": {
+        "deepscaler": [
+          "agentica-org/DeepScaleR-1.5B-Preview",
+          "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+        ],
+        "brorl": [
+          "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+          "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+        ],
+        "deepcoder": [
+          "agentica-org/DeepCoder-1.5B-Preview",
+          "103033da54f104b0d0a3570547fb3721fba99962"
+        ],
+        "math15": [
+          "Qwen/Qwen2.5-Math-1.5B",
+          "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2"
+        ]
+      },
+      "effective_batch": 16,
+      "reuse": 16,
+      "horizon": 1024,
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "clip": 1,
+      "scope": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim.",
+      "checkpoint_policy": "final FP32 weights and Adam/RNG; no intermediate model exports",
+      "evaluation": "Five benchmarks, avg@4, T0.7/top_p0.9, per-prompt seeds72000000+100*i+r; shuffled requests",
+      "shared_response_cap": 31744,
+      "math_native_response_cap": 3072,
+      "old_reference": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+      "heldout_panel": "primary M01-M04; additional M05-M12 kept separate",
+      "arm": "CONT-N",
+      "teacher": "nemotron",
+      "old_arm": null,
+      "start": 0,
+      "stop": 320,
+      "prior_completed_stop": 128,
+      "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "replay_through": 128,
+      "new_updates": 320,
+      "budget_increment_over_prior": 192,
+      "resume": {
+        "optimizer_reset": false,
+        "fresh": true
+      },
+      "optimization": {
+        "analytic": {
+          "loss": 1.7462298274040222e-10,
+          "hidden": 8.731149137020111e-11,
+          "head": 6.411937647499144e-11
+        },
+        "thresholds": {
+          "loss_absolute": 1e-05,
+          "gradient_relative_l2": 0.01,
+          "cosine": 0.9999
+        },
+        "probes": [
+          {
+            "model": "S0",
+            "reference": {
+              "loss": 0.020815549869439565,
+              "seconds": 0.4664916545152664,
+              "peak_gib": 18.007194995880127
+            },
+            "candidates": [
+              {
+                "loss": 0.020815549312733304,
+                "seconds": 0.41136007010936737,
+                "peak_gib": 18.088221073150635,
+                "chunk": 128,
+                "relative_l2": 0.0033350769146006415,
+                "cosine": 0.999994440371355,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.412099482674195,
+                "loss_error": 5.567062609512785e-10,
+                "accepted": true
+              },
+              {
+                "loss": 0.020815548720871824,
+                "seconds": 0.3775077909231186,
+                "peak_gib": 18.160648822784424,
+                "chunk": 256,
+                "relative_l2": 0.0031635256845480566,
+                "cosine": 0.9999949950016664,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4121050514539526,
+                "loss_error": 1.1485677409162065e-09,
+                "accepted": true
+              },
+              {
+                "loss": 0.02081554837029736,
+                "seconds": 0.3704899922013283,
+                "peak_gib": 18.305668354034424,
+                "chunk": 512,
+                "relative_l2": 0.0030902398231570515,
+                "cosine": 0.9999952244165325,
+                "reference_norm": 0.41211170912691614,
+                "candidate_norm": 0.4120984191374229,
+                "loss_error": 1.4991422062071713e-09,
+                "accepted": true
+              }
+            ]
+          },
+          {
+            "model": "JustRL-step064",
+            "reference": {
+              "loss": 0.004238148259901209,
+              "seconds": 0.4573143869638443,
+              "peak_gib": 18.011545658111572
+            },
+            "candidates": [
+              {
+                "loss": 0.004238147671246001,
+                "seconds": 0.37868473678827286,
+                "peak_gib": 18.306339740753174,
+                "chunk": 512,
+                "relative_l2": 0.003633615364176774,
+                "cosine": 0.9999933994992389,
+                "reference_norm": 0.1681516322741397,
+                "candidate_norm": 0.16815121917980924,
+                "loss_error": 5.886552079115148e-10,
+                "accepted": true
+              }
+            ]
+          }
+        ],
+        "cache_seconds_two_rows": 0.12683451920747757,
+        "chunk": 512,
+        "microbatch": 1,
+        "head": "analytic FP32 full-vocabulary VJP",
+        "teacher_cache": "FP32 log probabilities resident for current batch16",
+        "snapshots": "disabled",
+        "optimizer": "unchanged AdamW foreach=False"
+      },
+      "engine_mode": "validated",
+      "cuda_visible_devices": "1",
+      "final_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030/models/CONT-N/step320",
+      "weights_dtype": "FP32",
+      "optimizer_exports": true,
+      "extension_plan": {
+        "name": "r1-samesize-deterministic320-20261030",
+        "models": {
+          "r1": [
+            "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+            "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+          ],
+          "justrl": [
+            "hbx/JustRL-DeepSeek-1.5B",
+            "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+          ],
+          "nemotron": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "b89048893f95246c6b5749b287f0049e6df42ee9"
+          ],
+          "minimath": [
+            "oumi-ai/MiniMath-R1-1.5B",
+            "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+          ],
+          "deepscaler": [
+            "agentica-org/DeepScaleR-1.5B-Preview",
+            "e3f524ce413a296b4d388e7560dd5c82c1c56725"
+          ],
+          "brorl": [
+            "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+            "3441fcdf8c6e81a2959e6352ff50122e3c677d72"
+          ],
+          "deepcoder": [
+            "agentica-org/DeepCoder-1.5B-Preview",
+            "103033da54f104b0d0a3570547fb3721fba99962"
+          ]
+        },
+        "gpus": [
+          0,
+          1
+        ],
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-deterministic320-20261030",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-deterministic320-20261030",
+        "arms": {
+          "CONT-J": {
+            "teacher": "justrl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-N": {
+            "teacher": "nemotron",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "CONT-M": {
+            "teacher": "minimath",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 128,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 128,
+            "new_updates": 320,
+            "budget_increment_over_prior": 192
+          },
+          "NEW-DS": {
+            "teacher": "deepscaler",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-BRO": {
+            "teacher": "brorl",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          },
+          "NEW-DC": {
+            "teacher": "deepcoder",
+            "old_arm": null,
+            "start": 0,
+            "stop": 320,
+            "prior_completed_stop": 64,
+            "source_weights": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/teacher-boundary/r1/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+            "replay_through": 64,
+            "new_updates": 320,
+            "budget_increment_over_prior": 256
+          }
+        },
+        "source_protocol": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029/protocol.json",
+        "source_protocol_sha256": "98f9eb7d9850de451bd3130d5141c2ff94ea1ae80cac5623af269bc5b034ad00",
+        "legacy_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261029",
+        "initial_output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "train_groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T"
+          ],
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1,
+          "seed": 42,
+          "engine": "validated"
+        },
+        "scoring": {
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "M01",
+            "M02",
+            "M03",
+            "M04",
+            "Code01",
+            "Code02",
+            "IF01",
+            "IF02"
+          ],
+          "interval": 16
+        },
+        "replay_acceptance": {
+          "per_prompt_rkl_absolute_tolerance": 0.0001,
+          "failure_action": "stop before new-budget updates; preserve evidence",
+          "max_loss_absolute_tolerance": 0.0001
+        },
+        "storage": {
+          "final_fp32_weights": true,
+          "final_adam_rng": true,
+          "intermediate_weights": false
+        },
+        "accuracy_gate": false,
+        "teacher_cache_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/r1-samesize-stage320-20261030",
+        "execution_condition": "deterministic_from_initial",
+        "repeatability_probe": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/r1-samesize-stage320-20261030/diagnostics/1793346863727536763/repeatability.json",
+        "repeatability_sha256": "6466c932f12f052853566bdaf8e9d26ff19816ef51ef615387e05f6fbde7787c",
+        "interpretation": "Six independent deterministic S0 replicas; historical endpoint comparison is diagnostic, never an exact-resume claim."
+      },
+      "flash_attention_deterministic": true
+    },
+    "checkpoint_receipt": {
+      "arm": "CONT-N",
+      "step": 320,
+      "optimizer_saved": true,
+      "dtype": "FP32",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "bytes": 3981165560,
+          "sha256": "64cc744cb37199deb2ca3aa316aa6153c3bd2a1ab384ca866b7cb995b83963db"
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "bytes": 3127224776,
+          "sha256": "ab906cfb45fda444bef0bca0a80991ceb40ac342653cf19a0b94483fd2a63279"
+        }
+      ],
+      "weight_identity": "76e8ce63bba0f1891a955d7967cb85a5d154ab2588ee03f45b71fd7e22a637e4"
+    }
+  },
+  {
+    "job_id": 6,
+    "run_id": "r7--light--7e4c0413",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/teacher-boundary-20261028/arms/TB2-L7",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64
+    ],
+    "protocol": {
+      "status": "authorized-TB0-TB1-TB2",
+      "physical_gpus": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "models": {
+        "r1": [
+          "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+          "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
+        ],
+        "r7": [
+          "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+          "916b56a44061fd5cd7d6a8fb632557ed4f724f60"
+        ],
+        "justrl": [
+          "hbx/JustRL-DeepSeek-1.5B",
+          "0637e4096c789c67f9eecbe8355e0bdeddede1c2"
+        ],
+        "polaris": [
+          "POLARIS-Project/Polaris-7B-Preview",
+          "faea72cf7123681069668e8da45c1c074e378830"
+        ],
+        "skywork": [
+          "Skywork/Skywork-OR1-Math-7B",
+          "fcef970f1d10682f13c182b280146a194ed57d1e"
+        ],
+        "nemotron": [
+          "nvidia/Nemotron-Research-Reasoning-Qwen-1.5B",
+          "b89048893f95246c6b5749b287f0049e6df42ee9"
+        ],
+        "light": [
+          "qihoo360/Light-R1-7B-DS",
+          "06c9338cdbec28416e15f28a325b1439729ec237"
+        ],
+        "minimath": [
+          "oumi-ai/MiniMath-R1-1.5B",
+          "9fcff43e7b6739a86f1e443e3b8d8b85fb00a998"
+        ]
+      },
+      "arms": {
+        "TB1-J": [
+          "r1",
+          "justrl"
+        ],
+        "TB1-P": [
+          "r1",
+          "polaris"
+        ],
+        "TB1-R": [
+          "r1",
+          "r7"
+        ],
+        "TB1-S": [
+          "r1",
+          "skywork"
+        ],
+        "TB1-N": [
+          "r1",
+          "nemotron"
+        ],
+        "TB2-P7": [
+          "r7",
+          "polaris"
+        ],
+        "TB2-L1": [
+          "r1",
+          "light"
+        ],
+        "TB2-L7": [
+          "r7",
+          "light"
+        ],
+        "TB2-M1": [
+          "r1",
+          "minimath"
+        ]
+      },
+      "updates_per_arm": 64,
+      "train_groups": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "scoring_groups": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "M01",
+        "M02",
+        "M03",
+        "M04",
+        "Code01",
+        "Code02",
+        "IF01",
+        "IF02"
+      ],
+      "batch_size": 16,
+      "reuse": 16,
+      "horizon": 1024,
+      "generation": "frozen initial student; per-prompt RNG; BF16 backbone and FP32 head",
+      "optimizer": {
+        "name": "AdamW",
+        "lr": 1e-06,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "weight_decay": 0.01,
+        "clip": 1
+      },
+      "seed": 42,
+      "evaluation": {
+        "samples": 4,
+        "cap": 31744,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "seed_formula": "72000000+100*i+r"
+      },
+      "replaced_training_prompts": [],
+      "historical_holdout_overlap": "L prompts reused; development is not a pristine test set",
+      "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/derived/MirrorOPD-verl/teacher-boundary-20261028",
+      "arm": "TB2-L7",
+      "student": "r7",
+      "teacher": "light",
+      "parameters": 7615616512,
+      "cuda_visible_devices": "6,7",
+      "parallelism": "two-GPU layer model parallel",
+      "parallelism_reason": "FP32 7B state exceeds one H800; global batch16 and loss denominator are preserved",
+      "smoke": false
+    },
+    "checkpoint_receipt": {
+      "step": 64,
+      "optimizer_steps": [
+        64
+      ]
+    }
+  },
+  {
+    "job_id": 7,
+    "run_id": "q3-1.7--grpo-kl--7a02ee6c",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-grpo-kl",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "ff86a53a9cdd6e92cb551ea017142de096315b937e67a4087f19dce1104bcd96",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "Q3-grpo-kl",
+          "teacher": "grpo-kl",
+          "updates": 320,
+          "evaluate_at": [
+            64,
+            320
+          ]
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "8757c55932d199d6a4a9fea05b9c013f0c2836bcf2375a949b41386b9d507ec4"
+      },
+      "execution": {
+        "microbatch": 4,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final weights; transient readout weights; no Adam"
+    },
+    "checkpoint_receipt": {
+      "fingerprint": "195ecf42bbc580e783a05e6100e7ab65adb73ce708f191fcdeda70641d69d063",
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "ff86a53a9cdd6e92cb551ea017142de096315b937e67a4087f19dce1104bcd96",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "Q3-grpo-kl",
+          "teacher": "grpo-kl",
+          "updates": 320,
+          "evaluate_at": [
+            64,
+            320
+          ]
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "8757c55932d199d6a4a9fea05b9c013f0c2836bcf2375a949b41386b9d507ec4",
+        "step": 320
+      },
+      "completed_at": 1793266446.9461968,
+      "weight_identity": "a01cf3a7fe5d912ed09536ec7e2db456f4d139bccc9014432e2174fb741f70a7",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "sha256": "acd3001dfc52a9244cf927b374ec4f39c3e1b70fddc59a3493304429f52d4e11",
+          "bytes": 3962819960
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "sha256": "34cbd19f6c0276f2446f6e45a5d7e1f6b3b8cad2ba5903a2270443c29791f75c",
+          "bytes": 2919515280
+        }
+      ],
+      "dtype": "float32",
+      "optimizer_saved": false,
+      "transient": false
+    }
+  },
+  {
+    "job_id": 8,
+    "run_id": "q3-1.7--sft-gsm8k--a19448d4",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-teacher-lineage-20261029/arms/Q3-sft-gsm8k",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "Q3-sft-gsm8k",
+          "teacher": "sft-gsm8k",
+          "updates": 320,
+          "evaluate_at": [
+            64,
+            320
+          ]
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "8757c55932d199d6a4a9fea05b9c013f0c2836bcf2375a949b41386b9d507ec4"
+      },
+      "execution": {
+        "microbatch": 4,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final weights; transient readout weights; no Adam"
+    },
+    "checkpoint_receipt": {
+      "fingerprint": "995c46ce1ecf19527abb32d1d53e5bc301ebc5190ea3767907ce50657dd13813",
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "Q3-sft-gsm8k",
+          "teacher": "sft-gsm8k",
+          "updates": 320,
+          "evaluate_at": [
+            64,
+            320
+          ]
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "8757c55932d199d6a4a9fea05b9c013f0c2836bcf2375a949b41386b9d507ec4",
+        "step": 320
+      },
+      "completed_at": 1793266423.3744915,
+      "weight_identity": "96cc458affc120bb92fbb06e8b31290a39ac5be93ebf22a3d8deae9e1667af13",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "sha256": "1169d8bcef2f14825c4de2e96dcb95b638dfe1564e00bd717b04a43dfdf2c91f",
+          "bytes": 3962819960
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "sha256": "4cce288056e80f7bad0798b637f37c88d3a6936435f4953a7838ce7527d314ae",
+          "bytes": 2919515280
+        }
+      ],
+      "dtype": "float32",
+      "optimizer_saved": false,
+      "transient": false
+    }
+  },
+  {
+    "job_id": 9,
+    "run_id": "q3-1.7--e3--eef55d0d",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-thinking-e3-stage1280-20261030/arms/T-E3",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "T-E3",
+          "teacher": "e3",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "43a10e8e91e49d19a251798aa4ed97579551fc881fbe1c9a2aea2d3bb0f1b4e4",
+          "signature": "a0ebf6dd710c4378f23b36ded9902e56a6b47aaccab6ca52de1a9d5900b1a376"
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "f4d7b0e1c762c8c4ac01db4df604d35e2d1c2248fd312fcf8503fe7d1cb9fa00"
+      },
+      "execution": {
+        "microbatch": 4,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "checkpoint_receipt": {
+      "fingerprint": "9321b1b6a5b02a78e8841aa7db80f279b9d65345f5f4267297e1fbef3de01b01",
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "T-E3",
+          "teacher": "e3",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "f4d7b0e1c762c8c4ac01db4df604d35e2d1c2248fd312fcf8503fe7d1cb9fa00",
+        "step": 320
+      },
+      "completed_at": 1793312838.076931,
+      "weight_identity": "a17b2b37778b75e85283dd907f18726553f48bdd379bf6bd758d4cb6c5b04634",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "sha256": "f61a825a4df9240d61972e596f05c1fde096261e01e10d3dbb7cdbf398c9b1aa",
+          "bytes": 3962819960
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "sha256": "7bb405aef408837a71f71190e4414960057a85c7822d8c46d69036a57d2cf957",
+          "bytes": 2919515280
+        }
+      ],
+      "dtype": "float32",
+      "optimizer_saved": false,
+      "transient": false
+    }
+  },
+  {
+    "job_id": 10,
+    "run_id": "q3-1.7-nonthinking--sft-gsm8k--319ebf4f",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/qwen3-nonthinking-origin-controls1280-20261030/arms/NT-C-sft-gsm8k",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-sft-gsm8k",
+          "teacher": "sft-gsm8k",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "e1584be8e2a7adf858dd5ace6f2e26d67a47b0f55fca23d037cc4a48529d5835",
+          "signature": "fbafe6cc4922044ef4231efa11313ce4378224a066af5540be918a6a7da46b29"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "checkpoint_receipt": {
+      "fingerprint": "777b21c5d6a0a30a58bec3eadd1e67bf5922e670ffd9be2520df325b7d723048",
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-sft-gsm8k",
+          "teacher": "sft-gsm8k",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b",
+        "step": 320
+      },
+      "completed_at": 1793317714.3820121,
+      "weight_identity": "39e344ab34aa88a7625986ad92b6ab85eab0816cf8ffb59ab9ffea6e44642398",
+      "files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "sha256": "eeab35357b8501c5a31f662fabc7c5679a9f89ef418605108edac7e1a2a4c90f",
+          "bytes": 3962819960
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "sha256": "3b54480a6e63ee6c2a3675c56fb032ff0c3b8c13fc536a72f667b13c6a5809ad",
+          "bytes": 2919515280
+        }
+      ],
+      "dtype": "float32",
+      "optimizer_saved": false,
+      "transient": false
+    }
+  },
+  {
+    "job_id": 11,
+    "run_id": "llama3-3b-off--coreward-i--72c4db04",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-coreward-i",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "b5e89be96985f66c808b574aa699c249ffedd1901c7bd2a0f69c0184733a4b6a",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-coreward-i",
+          "teacher": "coreward-i",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "26a0d5dbc92ec5df9b57bf83721a48752e0e3bba087b193f58c43ace6cf1fd7e",
+          "signature": "0d3c26c96de87ad4f2eb00f6ff34334c3d21cc0083c7bc56c73c04207a7efca5"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "checkpoint_receipt": {
+      "fingerprint": "ad9273cf7b45adba06471df60ad0b5b750de4af76ba75c9a17d8f845b9853348",
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "b5e89be96985f66c808b574aa699c249ffedd1901c7bd2a0f69c0184733a4b6a",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-coreward-i",
+          "teacher": "coreward-i",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566",
+        "step": 320
+      },
+      "completed_at": 1793314373.9532237,
+      "weight_identity": "26a0d5dbc92ec5df9b57bf83721a48752e0e3bba087b193f58c43ace6cf1fd7e",
+      "files": [
+        {
+          "name": "model-00001-of-00004.safetensors",
+          "sha256": "7a2f5a4c8482a13630407498cbc7fb36d70fb6aa8fe85d4bff77fecc55c760f1",
+          "bytes": 3992095008
+        },
+        {
+          "name": "model-00002-of-00004.safetensors",
+          "sha256": "dee96cc5146e7bae0ec726ae4549bae42e925557b7e1bb7ad86b69551bdd7fa1",
+          "bytes": 3976443664
+        },
+        {
+          "name": "model-00003-of-00004.safetensors",
+          "sha256": "0be5a4693a98597067860d6fa6cc9caa20cfb7e6ded99473e0ea114780ba2247",
+          "bytes": 3989039120
+        },
+        {
+          "name": "model-00004-of-00004.safetensors",
+          "sha256": "b955e5ad0686c789d425ede8d0823d2ec49f51cc5d78effa3c2afa1e35dfeb4a",
+          "bytes": 893450696
+        }
+      ],
+      "dtype": "float32",
+      "optimizer_saved": false,
+      "transient": false
+    }
+  },
+  {
+    "job_id": 12,
+    "run_id": "llama3-3b-off--gt--59498cdb",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage640-20261030/arms/L3-gt",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "8028edc6670f55f91a57164bbf51a39090de6bf9006ab077643916778dd66553",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-gt",
+          "teacher": "gt",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "2bc0d767228fa3c47407d063a34c82f2b7d3e631dc4d770fe15cf1e2e3a2ebd0",
+          "signature": "150fca29d950fd73cf6669882c8694d7ce9841fe414a9f4be9418c1fd3dcd4c9"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "checkpoint_receipt": {
+      "fingerprint": "80a9d5da793587238429ed7d9cb03d022907bcab2fb9c0d996a39ef378eaf78f",
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "8028edc6670f55f91a57164bbf51a39090de6bf9006ab077643916778dd66553",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-gt",
+          "teacher": "gt",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566",
+        "step": 320
+      },
+      "completed_at": 1793314352.8458478,
+      "weight_identity": "2bc0d767228fa3c47407d063a34c82f2b7d3e631dc4d770fe15cf1e2e3a2ebd0",
+      "files": [
+        {
+          "name": "model-00001-of-00004.safetensors",
+          "sha256": "20fe059d493b5834fb41ade15f9f33a0ff59fb4a6fce5597bc8140b590ef5f1d",
+          "bytes": 3992095008
+        },
+        {
+          "name": "model-00002-of-00004.safetensors",
+          "sha256": "13146a83ff7dc24753efafc6211b88193d8e51f71dbc3a825bae58b66f914434",
+          "bytes": 3976443664
+        },
+        {
+          "name": "model-00003-of-00004.safetensors",
+          "sha256": "dfef84fdb6506bce26282cf855da91c84f94ddbec3b713373a7c5574c76a9df3",
+          "bytes": 3989039120
+        },
+        {
+          "name": "model-00004-of-00004.safetensors",
+          "sha256": "d05873bfe21593fa9139566771d2ae32628a3e2b6af562395ca87b0f280465ad",
+          "bytes": 893450696
+        }
+      ],
+      "dtype": "float32",
+      "optimizer_saved": false,
+      "transient": false
+    }
+  },
+  {
+    "job_id": 13,
+    "run_id": "llama3-3b-off--arithmetic-full--131f84b3",
+    "source_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/llama-reasoning-off-stage1280-20261030/arms/L3-arithmetic-full",
+    "steps": [
+      0,
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320
+    ],
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "da756f21666bd4a280beeaf0ad3777c2f0ecaa37900a1c1d0d0d6acc08dab8f8",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-arithmetic-full",
+          "teacher": "arithmetic-full",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "c3a93760d15eec7bb2174bdc46aa206cd416265036e544408c27164de4a03427",
+          "signature": "266e9d34fb356c70fdd6ae0eaa059d133e79a09308ab6a2dd3933571bceb8137"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "checkpoint_receipt": {
+      "fingerprint": "b6daffd60210c0ee807c2b123abc4818cc34d15ada8074fb4a3bf2ead1a5af52",
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "da756f21666bd4a280beeaf0ad3777c2f0ecaa37900a1c1d0d0d6acc08dab8f8",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-arithmetic-full",
+          "teacher": "arithmetic-full",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566",
+        "step": 320
+      },
+      "completed_at": 1793315765.4355962,
+      "weight_identity": "bffa3487c88201eb959b1398a98a51adc1f87fcd797a0939a10960a744f6c7e8",
+      "files": [
+        {
+          "name": "model-00001-of-00004.safetensors",
+          "sha256": "14a7bf11309e0f8e928b327a9beb302e3a77581a6bc0f50749cd2d8c91519607",
+          "bytes": 3992095008
+        },
+        {
+          "name": "model-00002-of-00004.safetensors",
+          "sha256": "8330fb3b1047f3aa74018047087d493e2387ea8511860a2ae2df9e2b8f144b16",
+          "bytes": 3976443664
+        },
+        {
+          "name": "model-00003-of-00004.safetensors",
+          "sha256": "9c3f9fb9effc261b1ba68b24a9447169d83be9e5ca2294af7eb39c1320191e06",
+          "bytes": 3989039120
+        },
+        {
+          "name": "model-00004-of-00004.safetensors",
+          "sha256": "639c729b56f8ba1f3d7af1fe04001d5977601c3b488255f5b886145c2bfb0ed2",
+          "bytes": 893450696
+        }
+      ],
+      "dtype": "float32",
+      "optimizer_saved": false,
+      "transient": false
+    }
+  }
+]

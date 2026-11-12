@@ -1,0 +1,86 @@
+{
+  "pair": "E102",
+  "rows": 12,
+  "chunks": [
+    {
+      "chunk": 256,
+      "resident": false,
+      "seconds": [
+        0.765641339123249,
+        0.7607361674308777
+      ],
+      "max_rkl_error": 0.0,
+      "passed": true
+    },
+    {
+      "chunk": 256,
+      "resident": true,
+      "seconds": [
+        0.6619536131620407,
+        0.6568948924541473
+      ],
+      "max_rkl_error": 0.0,
+      "passed": true
+    },
+    {
+      "chunk": 512,
+      "resident": false,
+      "seconds": [
+        0.7516996189951897,
+        0.740016259253025
+      ],
+      "max_rkl_error": 0.0,
+      "passed": true
+    },
+    {
+      "chunk": 512,
+      "resident": true,
+      "seconds": [
+        0.6333360150456429,
+        0.633660078048706
+      ],
+      "max_rkl_error": 0.0,
+      "passed": true
+    },
+    {
+      "chunk": 1024,
+      "resident": false,
+      "seconds": [
+        0.7441455945372581,
+        0.7289232537150383
+      ],
+      "max_rkl_error": 0.0,
+      "passed": true
+    },
+    {
+      "chunk": 1024,
+      "resident": true,
+      "seconds": [
+        0.6331812962889671,
+        0.6323807239532471
+      ],
+      "max_rkl_error": 0.0,
+      "passed": true
+    },
+    {
+      "chunk": 2048,
+      "resident": false,
+      "seconds": [
+        0.7354282215237617,
+        0.7278665453195572
+      ],
+      "max_rkl_error": 0.0,
+      "passed": true
+    },
+    {
+      "chunk": 2048,
+      "resident": true,
+      "seconds": [
+        0.6347768604755402,
+        0.6358468607068062
+      ],
+      "max_rkl_error": 0.0,
+      "passed": true
+    }
+  ]
+}

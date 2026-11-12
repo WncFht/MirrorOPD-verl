@@ -1,0 +1,3336 @@
+{
+  "scope": "Read-only CPU check of selected existing Qwen and MiMo banks and R1 legacy bank; not a ten-pair reuse certification",
+  "banks": [
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/S0",
+      "exists": true,
+      "status": "complete",
+      "manifest_sha256": "b22596490b12e05484cb3d3f420b4cabfbcedbab20bb99b9e2bc780511817cce",
+      "metadata": {
+        "model_identity": "checkpoint-v2:88c207b27733caa38ed2f62ed62d25aa5eca4c6f48395c1692e58d8a02f54912",
+        "teacher_identity": "checkpoint-v2:f25df8d1e880944bbeda73cf69e3d6ec3b843a1e7bf0f384c5bd2a5b83db667a",
+        "provenance": "Imported actual frozen Qwen trajectories; not regenerated native samples",
+        "original_receipt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-prefix-six-20261031/banks/S0/complete.json",
+        "original_receipt_sha256": "e2a424b074aa93cd2b18c71f5de8a4f6d8468f867b5b4a6f3e6f77ccb257c6ee",
+        "original_bank_sha256": "abcc57bafd62d93bef6ecc8db000c6613355381ca972982e26a0446439283a75",
+        "sampling": {
+          "generators": [
+            "S0",
+            "Q"
+          ],
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "seed": 52000000,
+          "stop_ids": [
+            151645,
+            151643
+          ],
+          "math_horizon": 7168,
+          "other_horizon": 1024,
+          "support": "shared_legal_token_ids; native scoring heads unchanged"
+        },
+        "counts": {
+          "math": 64,
+          "code": 32,
+          "if": 32
+        }
+      },
+      "files": [
+        {
+          "name": "archive/full.parquet",
+          "rows": 128,
+          "bytes": 195088,
+          "valid": true
+        },
+        {
+          "name": "generations/short.parquet",
+          "rows": 128,
+          "bytes": 149418,
+          "valid": true
+        }
+      ],
+      "all_files_valid": true
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/Q",
+      "exists": true,
+      "status": "complete",
+      "manifest_sha256": "0c6e004b3dbc1c2d43312af6039524622c4f91e0252016461b7c54e28e0ddbdc",
+      "metadata": {
+        "model_identity": "checkpoint-v2:f25df8d1e880944bbeda73cf69e3d6ec3b843a1e7bf0f384c5bd2a5b83db667a",
+        "teacher_identity": "checkpoint-v2:f25df8d1e880944bbeda73cf69e3d6ec3b843a1e7bf0f384c5bd2a5b83db667a",
+        "provenance": "Imported actual frozen Qwen trajectories; not regenerated native samples",
+        "original_receipt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-prefix-six-20261031/banks/Q/complete.json",
+        "original_receipt_sha256": "42ea2ec900975d0b9bd35c802c327dfeeb6906d4890d8534746d28a7b83021be",
+        "original_bank_sha256": "18aa3aba85e4e4284e89b8a5c1a3528cf959a7234730092b38979ed7ef10bfc6",
+        "sampling": {
+          "generators": [
+            "S0",
+            "Q"
+          ],
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "seed": 52000000,
+          "stop_ids": [
+            151645,
+            151643
+          ],
+          "math_horizon": 7168,
+          "other_horizon": 1024,
+          "support": "shared_legal_token_ids; native scoring heads unchanged"
+        },
+        "counts": {
+          "math": 64,
+          "code": 32,
+          "if": 32
+        }
+      },
+      "files": [
+        {
+          "name": "archive/full.parquet",
+          "rows": 128,
+          "bytes": 329102,
+          "valid": true
+        },
+        {
+          "name": "generations/short.parquet",
+          "rows": 128,
+          "bytes": 199263,
+          "valid": true
+        }
+      ],
+      "all_files_valid": true
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E72-r16-o20/initial",
+      "exists": true,
+      "status": "complete",
+      "manifest_sha256": "c52723ae89b087e374223c79353a6be455f0d456d4e9e1866e6bda2a7bf9eaff",
+      "metadata": {
+        "producer": "initial",
+        "model_identity": "checkpoint-v2:9011d5acd96b197dae63044ce3c66938563c4b12f4603ff00f49265233ed6de9",
+        "sample_identity_schema": 3,
+        "outer": 0,
+        "protocols": {
+          "math": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "code": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "science": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "if": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 8192,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          }
+        },
+        "expected_samples": 6703,
+        "expected_version": null,
+        "engine_contract": {
+          "schema": 1,
+          "sampler": "mirroropd-crossing-token-v1",
+          "support": "tokenizer_ids",
+          "support_ids_sha256": "fc752cfb4d8bd0b3c92cd2e252cdd63ae91e3b1e84a8ae1f1a24e507bba14b72",
+          "head_width": 151680,
+          "input_id": "3dfe1bc4823ba7027f498afadb7b0b254f318469367510fac7ca9c604c1c8232",
+          "logits_processors": [
+            "verl.workers.rollout.vllm_rollout.tokenizer_support:TokenizerSupport"
+          ],
+          "native_eos": 151643,
+          "engine_stop_token_ids": [
+            151643,
+            151645
+          ],
+          "ignore_eos": false,
+          "model_generation": {
+            "bos_token_id": 151643,
+            "do_sample": false,
+            "eos_token_id": 151643,
+            "max_new_tokens": 2048,
+            "transformers_version": "4.37.0"
+          },
+          "engine_generation_config": "auto",
+          "generation_overrides": {},
+          "dtype": "bfloat16",
+          "kv_cache_dtype": "auto",
+          "quantization": null
+        },
+        "engine_contract_id": "1c54e699c893529b5bcd4bab4706eb317107425e200db6d6c427223c92e567cb",
+        "question_set_sha256": "2e8bffcbb61d7416992e04e2b245c2cd1a09b897885c7088cf67831b222ddc19",
+        "observed_samples": 6703
+      },
+      "files": [
+        {
+          "name": "generations/part-00000.parquet",
+          "rows": 64,
+          "bytes": 33308,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00001.parquet",
+          "rows": 64,
+          "bytes": 46489,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00002.parquet",
+          "rows": 64,
+          "bytes": 49968,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00003.parquet",
+          "rows": 64,
+          "bytes": 80365,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00004.parquet",
+          "rows": 64,
+          "bytes": 60284,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00005.parquet",
+          "rows": 64,
+          "bytes": 60052,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00006.parquet",
+          "rows": 64,
+          "bytes": 81079,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00007.parquet",
+          "rows": 52,
+          "bytes": 239388,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00008.parquet",
+          "rows": 64,
+          "bytes": 35226,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00009.parquet",
+          "rows": 64,
+          "bytes": 49356,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00010.parquet",
+          "rows": 64,
+          "bytes": 64423,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00011.parquet",
+          "rows": 64,
+          "bytes": 52383,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00012.parquet",
+          "rows": 64,
+          "bytes": 73852,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00013.parquet",
+          "rows": 64,
+          "bytes": 96411,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00014.parquet",
+          "rows": 64,
+          "bytes": 160200,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00015.parquet",
+          "rows": 64,
+          "bytes": 146130,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00016.parquet",
+          "rows": 64,
+          "bytes": 187461,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00017.parquet",
+          "rows": 64,
+          "bytes": 374635,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00018.parquet",
+          "rows": 64,
+          "bytes": 37083,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00019.parquet",
+          "rows": 64,
+          "bytes": 62125,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00020.parquet",
+          "rows": 64,
+          "bytes": 86256,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00021.parquet",
+          "rows": 64,
+          "bytes": 155319,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00022.parquet",
+          "rows": 64,
+          "bytes": 221047,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00023.parquet",
+          "rows": 64,
+          "bytes": 251441,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00024.parquet",
+          "rows": 64,
+          "bytes": 304070,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00025.parquet",
+          "rows": 32,
+          "bytes": 335616,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00026.parquet",
+          "rows": 64,
+          "bytes": 39199,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00027.parquet",
+          "rows": 64,
+          "bytes": 61543,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00028.parquet",
+          "rows": 64,
+          "bytes": 96723,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00029.parquet",
+          "rows": 64,
+          "bytes": 193915,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00030.parquet",
+          "rows": 64,
+          "bytes": 330943,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00031.parquet",
+          "rows": 64,
+          "bytes": 202051,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00032.parquet",
+          "rows": 64,
+          "bytes": 450235,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00033.parquet",
+          "rows": 32,
+          "bytes": 333811,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00034.parquet",
+          "rows": 64,
+          "bytes": 36145,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00035.parquet",
+          "rows": 64,
+          "bytes": 64178,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00036.parquet",
+          "rows": 64,
+          "bytes": 84985,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00037.parquet",
+          "rows": 64,
+          "bytes": 150848,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00038.parquet",
+          "rows": 64,
+          "bytes": 246400,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00039.parquet",
+          "rows": 64,
+          "bytes": 262585,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00040.parquet",
+          "rows": 64,
+          "bytes": 324114,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00041.parquet",
+          "rows": 32,
+          "bytes": 326578,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00042.parquet",
+          "rows": 64,
+          "bytes": 53631,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00043.parquet",
+          "rows": 64,
+          "bytes": 74708,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00044.parquet",
+          "rows": 64,
+          "bytes": 97436,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00045.parquet",
+          "rows": 64,
+          "bytes": 138702,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00046.parquet",
+          "rows": 64,
+          "bytes": 144138,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00047.parquet",
+          "rows": 64,
+          "bytes": 352070,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00048.parquet",
+          "rows": 64,
+          "bytes": 382913,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00049.parquet",
+          "rows": 64,
+          "bytes": 284682,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00050.parquet",
+          "rows": 64,
+          "bytes": 254353,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00051.parquet",
+          "rows": 64,
+          "bytes": 211003,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00052.parquet",
+          "rows": 64,
+          "bytes": 212463,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00053.parquet",
+          "rows": 64,
+          "bytes": 223838,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00054.parquet",
+          "rows": 64,
+          "bytes": 169075,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00055.parquet",
+          "rows": 64,
+          "bytes": 311508,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00056.parquet",
+          "rows": 64,
+          "bytes": 209522,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00057.parquet",
+          "rows": 64,
+          "bytes": 192225,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00058.parquet",
+          "rows": 64,
+          "bytes": 150130,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00059.parquet",
+          "rows": 64,
+          "bytes": 219224,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00060.parquet",
+          "rows": 64,
+          "bytes": 245406,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00061.parquet",
+          "rows": 64,
+          "bytes": 211259,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00062.parquet",
+          "rows": 64,
+          "bytes": 152387,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00063.parquet",
+          "rows": 64,
+          "bytes": 320238,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00064.parquet",
+          "rows": 64,
+          "bytes": 301573,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00065.parquet",
+          "rows": 64,
+          "bytes": 250576,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00066.parquet",
+          "rows": 64,
+          "bytes": 201797,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00067.parquet",
+          "rows": 64,
+          "bytes": 257572,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00068.parquet",
+          "rows": 64,
+          "bytes": 214246,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00069.parquet",
+          "rows": 64,
+          "bytes": 253050,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00070.parquet",
+          "rows": 64,
+          "bytes": 231718,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00071.parquet",
+          "rows": 64,
+          "bytes": 407071,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00072.parquet",
+          "rows": 64,
+          "bytes": 202914,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00073.parquet",
+          "rows": 64,
+          "bytes": 202021,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00074.parquet",
+          "rows": 64,
+          "bytes": 448456,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00075.parquet",
+          "rows": 64,
+          "bytes": 220891,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00076.parquet",
+          "rows": 64,
+          "bytes": 206337,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00077.parquet",
+          "rows": 64,
+          "bytes": 204467,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00078.parquet",
+          "rows": 64,
+          "bytes": 198555,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00079.parquet",
+          "rows": 64,
+          "bytes": 204086,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00080.parquet",
+          "rows": 64,
+          "bytes": 232328,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00081.parquet",
+          "rows": 64,
+          "bytes": 255779,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00082.parquet",
+          "rows": 64,
+          "bytes": 129454,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00083.parquet",
+          "rows": 64,
+          "bytes": 205576,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00084.parquet",
+          "rows": 64,
+          "bytes": 291140,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00085.parquet",
+          "rows": 38,
+          "bytes": 586353,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00086.parquet",
+          "rows": 64,
+          "bytes": 44123,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00087.parquet",
+          "rows": 64,
+          "bytes": 74064,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00088.parquet",
+          "rows": 64,
+          "bytes": 99123,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00089.parquet",
+          "rows": 64,
+          "bytes": 186974,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00090.parquet",
+          "rows": 64,
+          "bytes": 206147,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00091.parquet",
+          "rows": 64,
+          "bytes": 165888,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00092.parquet",
+          "rows": 64,
+          "bytes": 140660,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00093.parquet",
+          "rows": 64,
+          "bytes": 193570,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00094.parquet",
+          "rows": 64,
+          "bytes": 136448,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00095.parquet",
+          "rows": 64,
+          "bytes": 144241,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00096.parquet",
+          "rows": 64,
+          "bytes": 159820,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00097.parquet",
+          "rows": 64,
+          "bytes": 373814,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00098.parquet",
+          "rows": 24,
+          "bytes": 232679,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00099.parquet",
+          "rows": 64,
+          "bytes": 40227,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00100.parquet",
+          "rows": 64,
+          "bytes": 56009,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00101.parquet",
+          "rows": 64,
+          "bytes": 65436,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00102.parquet",
+          "rows": 64,
+          "bytes": 80670,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00103.parquet",
+          "rows": 64,
+          "bytes": 82121,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00104.parquet",
+          "rows": 64,
+          "bytes": 64219,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00105.parquet",
+          "rows": 64,
+          "bytes": 68757,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00106.parquet",
+          "rows": 64,
+          "bytes": 119939,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00107.parquet",
+          "rows": 29,
+          "bytes": 56409,
+          "valid": true
+        }
+      ],
+      "all_files_valid": true
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E72-r16-o20/teacher",
+      "exists": true,
+      "status": "complete",
+      "manifest_sha256": "ce87e0c730155674f6d0673f82e3332fc8b7b8694de7b3a13fe876ee827be53f",
+      "metadata": {
+        "producer": "teacher",
+        "execution": {
+          "scheduler": "global_bounded_v1",
+          "routing": "least_inflight",
+          "replicas": 4,
+          "concurrency": 64,
+          "result_buffer": 64,
+          "chunk_size": 64,
+          "wall_seconds": 18957.164731055498,
+          "preflight_seconds": 0.9351418688893318,
+          "publication_seconds": 50.84091179817915,
+          "last_admission_to_completion_seconds": 77.2136689722538,
+          "new_response_tokens": 71552218
+        },
+        "model_identity": "checkpoint-v2:e14ad0d907a8c8b221d7d024b2c9476173d17f0e7779c962637f0041cf8d8a71",
+        "sample_identity_schema": 3,
+        "outer": 0,
+        "protocols": {
+          "math": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "code": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "science": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "if": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 8192,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          }
+        },
+        "expected_samples": 6703,
+        "expected_version": null,
+        "engine_contract": {
+          "schema": 1,
+          "sampler": "mirroropd-crossing-token-v1",
+          "support": "tokenizer_ids",
+          "support_ids_sha256": "fc752cfb4d8bd0b3c92cd2e252cdd63ae91e3b1e84a8ae1f1a24e507bba14b72",
+          "head_width": 151680,
+          "input_id": "3dfe1bc4823ba7027f498afadb7b0b254f318469367510fac7ca9c604c1c8232",
+          "logits_processors": [
+            "verl.workers.rollout.vllm_rollout.tokenizer_support:TokenizerSupport"
+          ],
+          "native_eos": 151643,
+          "engine_stop_token_ids": [
+            151643,
+            151645
+          ],
+          "ignore_eos": false,
+          "model_generation": {
+            "bos_token_id": 151643,
+            "do_sample": false,
+            "eos_token_id": 151643,
+            "max_new_tokens": 2048,
+            "transformers_version": "4.37.0"
+          },
+          "engine_generation_config": "auto",
+          "generation_overrides": {},
+          "dtype": "bfloat16",
+          "kv_cache_dtype": "auto",
+          "quantization": null
+        },
+        "engine_contract_id": "1c54e699c893529b5bcd4bab4706eb317107425e200db6d6c427223c92e567cb",
+        "question_set_sha256": "2e8bffcbb61d7416992e04e2b245c2cd1a09b897885c7088cf67831b222ddc19",
+        "observed_samples": 6703
+      },
+      "files": [
+        {
+          "name": "generations/part-00000.parquet",
+          "rows": 64,
+          "bytes": 65462,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00001.parquet",
+          "rows": 64,
+          "bytes": 146180,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00002.parquet",
+          "rows": 64,
+          "bytes": 206544,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00003.parquet",
+          "rows": 64,
+          "bytes": 198862,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00004.parquet",
+          "rows": 64,
+          "bytes": 238720,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00005.parquet",
+          "rows": 64,
+          "bytes": 276487,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00006.parquet",
+          "rows": 64,
+          "bytes": 280899,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00007.parquet",
+          "rows": 64,
+          "bytes": 282254,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00008.parquet",
+          "rows": 64,
+          "bytes": 341761,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00009.parquet",
+          "rows": 64,
+          "bytes": 449854,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00010.parquet",
+          "rows": 64,
+          "bytes": 623485,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00011.parquet",
+          "rows": 64,
+          "bytes": 502720,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00012.parquet",
+          "rows": 64,
+          "bytes": 472585,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00013.parquet",
+          "rows": 64,
+          "bytes": 409484,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00014.parquet",
+          "rows": 64,
+          "bytes": 357811,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00015.parquet",
+          "rows": 64,
+          "bytes": 446116,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00016.parquet",
+          "rows": 64,
+          "bytes": 494345,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00017.parquet",
+          "rows": 64,
+          "bytes": 500532,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00018.parquet",
+          "rows": 64,
+          "bytes": 702098,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00019.parquet",
+          "rows": 64,
+          "bytes": 740291,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00020.parquet",
+          "rows": 64,
+          "bytes": 534757,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00021.parquet",
+          "rows": 64,
+          "bytes": 731764,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00022.parquet",
+          "rows": 64,
+          "bytes": 939885,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00023.parquet",
+          "rows": 64,
+          "bytes": 950453,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00024.parquet",
+          "rows": 64,
+          "bytes": 905038,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00025.parquet",
+          "rows": 64,
+          "bytes": 753356,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00026.parquet",
+          "rows": 64,
+          "bytes": 543875,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00027.parquet",
+          "rows": 64,
+          "bytes": 1009348,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00028.parquet",
+          "rows": 64,
+          "bytes": 914434,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00029.parquet",
+          "rows": 64,
+          "bytes": 864945,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00030.parquet",
+          "rows": 64,
+          "bytes": 964220,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00031.parquet",
+          "rows": 64,
+          "bytes": 962833,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00032.parquet",
+          "rows": 64,
+          "bytes": 744639,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00033.parquet",
+          "rows": 64,
+          "bytes": 676849,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00034.parquet",
+          "rows": 64,
+          "bytes": 668738,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00035.parquet",
+          "rows": 64,
+          "bytes": 983358,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00036.parquet",
+          "rows": 64,
+          "bytes": 880102,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00037.parquet",
+          "rows": 64,
+          "bytes": 831293,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00038.parquet",
+          "rows": 64,
+          "bytes": 841318,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00039.parquet",
+          "rows": 64,
+          "bytes": 932208,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00040.parquet",
+          "rows": 64,
+          "bytes": 836759,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00041.parquet",
+          "rows": 64,
+          "bytes": 852381,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00042.parquet",
+          "rows": 64,
+          "bytes": 950951,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00043.parquet",
+          "rows": 64,
+          "bytes": 841466,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00044.parquet",
+          "rows": 64,
+          "bytes": 963431,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00045.parquet",
+          "rows": 64,
+          "bytes": 750251,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00046.parquet",
+          "rows": 64,
+          "bytes": 975261,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00047.parquet",
+          "rows": 64,
+          "bytes": 802781,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00048.parquet",
+          "rows": 64,
+          "bytes": 1076284,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00049.parquet",
+          "rows": 64,
+          "bytes": 842174,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00050.parquet",
+          "rows": 64,
+          "bytes": 1462776,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00051.parquet",
+          "rows": 64,
+          "bytes": 1204187,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00052.parquet",
+          "rows": 64,
+          "bytes": 914007,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00053.parquet",
+          "rows": 64,
+          "bytes": 868243,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00054.parquet",
+          "rows": 64,
+          "bytes": 809610,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00055.parquet",
+          "rows": 64,
+          "bytes": 977222,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00056.parquet",
+          "rows": 64,
+          "bytes": 835117,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00057.parquet",
+          "rows": 64,
+          "bytes": 753032,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00058.parquet",
+          "rows": 64,
+          "bytes": 923447,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00059.parquet",
+          "rows": 64,
+          "bytes": 1052599,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00060.parquet",
+          "rows": 64,
+          "bytes": 704021,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00061.parquet",
+          "rows": 64,
+          "bytes": 1211707,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00062.parquet",
+          "rows": 64,
+          "bytes": 794324,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00063.parquet",
+          "rows": 64,
+          "bytes": 830519,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00064.parquet",
+          "rows": 64,
+          "bytes": 1276322,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00065.parquet",
+          "rows": 64,
+          "bytes": 777227,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00066.parquet",
+          "rows": 64,
+          "bytes": 885900,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00067.parquet",
+          "rows": 64,
+          "bytes": 921599,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00068.parquet",
+          "rows": 64,
+          "bytes": 961724,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00069.parquet",
+          "rows": 64,
+          "bytes": 967939,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00070.parquet",
+          "rows": 64,
+          "bytes": 1036636,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00071.parquet",
+          "rows": 64,
+          "bytes": 1655064,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00072.parquet",
+          "rows": 64,
+          "bytes": 1369360,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00073.parquet",
+          "rows": 64,
+          "bytes": 1396133,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00074.parquet",
+          "rows": 64,
+          "bytes": 888687,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00075.parquet",
+          "rows": 64,
+          "bytes": 1161194,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00076.parquet",
+          "rows": 64,
+          "bytes": 927465,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00077.parquet",
+          "rows": 64,
+          "bytes": 961308,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00078.parquet",
+          "rows": 64,
+          "bytes": 836409,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00079.parquet",
+          "rows": 64,
+          "bytes": 1003749,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00080.parquet",
+          "rows": 64,
+          "bytes": 1136294,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00081.parquet",
+          "rows": 64,
+          "bytes": 936265,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00082.parquet",
+          "rows": 64,
+          "bytes": 1075860,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00083.parquet",
+          "rows": 64,
+          "bytes": 930715,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00084.parquet",
+          "rows": 64,
+          "bytes": 763851,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00085.parquet",
+          "rows": 64,
+          "bytes": 700764,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00086.parquet",
+          "rows": 64,
+          "bytes": 675060,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00087.parquet",
+          "rows": 64,
+          "bytes": 621639,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00088.parquet",
+          "rows": 64,
+          "bytes": 681384,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00089.parquet",
+          "rows": 64,
+          "bytes": 603108,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00090.parquet",
+          "rows": 64,
+          "bytes": 758431,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00091.parquet",
+          "rows": 64,
+          "bytes": 669770,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00092.parquet",
+          "rows": 64,
+          "bytes": 590455,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00093.parquet",
+          "rows": 64,
+          "bytes": 761168,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00094.parquet",
+          "rows": 64,
+          "bytes": 572902,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00095.parquet",
+          "rows": 64,
+          "bytes": 465967,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00096.parquet",
+          "rows": 64,
+          "bytes": 288130,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00097.parquet",
+          "rows": 64,
+          "bytes": 286054,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00098.parquet",
+          "rows": 64,
+          "bytes": 217655,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00099.parquet",
+          "rows": 64,
+          "bytes": 272618,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00100.parquet",
+          "rows": 64,
+          "bytes": 134025,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00101.parquet",
+          "rows": 64,
+          "bytes": 237697,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00102.parquet",
+          "rows": 64,
+          "bytes": 217751,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00103.parquet",
+          "rows": 64,
+          "bytes": 204017,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00104.parquet",
+          "rows": 47,
+          "bytes": 369639,
+          "valid": true
+        }
+      ],
+      "all_files_valid": true
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E73-r16-o20/initial",
+      "exists": true,
+      "status": "complete",
+      "manifest_sha256": "c52723ae89b087e374223c79353a6be455f0d456d4e9e1866e6bda2a7bf9eaff",
+      "metadata": {
+        "producer": "initial",
+        "model_identity": "checkpoint-v2:9011d5acd96b197dae63044ce3c66938563c4b12f4603ff00f49265233ed6de9",
+        "sample_identity_schema": 3,
+        "outer": 0,
+        "protocols": {
+          "math": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "code": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "science": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "if": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 8192,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          }
+        },
+        "expected_samples": 6703,
+        "expected_version": null,
+        "engine_contract": {
+          "schema": 1,
+          "sampler": "mirroropd-crossing-token-v1",
+          "support": "tokenizer_ids",
+          "support_ids_sha256": "fc752cfb4d8bd0b3c92cd2e252cdd63ae91e3b1e84a8ae1f1a24e507bba14b72",
+          "head_width": 151680,
+          "input_id": "3dfe1bc4823ba7027f498afadb7b0b254f318469367510fac7ca9c604c1c8232",
+          "logits_processors": [
+            "verl.workers.rollout.vllm_rollout.tokenizer_support:TokenizerSupport"
+          ],
+          "native_eos": 151643,
+          "engine_stop_token_ids": [
+            151643,
+            151645
+          ],
+          "ignore_eos": false,
+          "model_generation": {
+            "bos_token_id": 151643,
+            "do_sample": false,
+            "eos_token_id": 151643,
+            "max_new_tokens": 2048,
+            "transformers_version": "4.37.0"
+          },
+          "engine_generation_config": "auto",
+          "generation_overrides": {},
+          "dtype": "bfloat16",
+          "kv_cache_dtype": "auto",
+          "quantization": null
+        },
+        "engine_contract_id": "1c54e699c893529b5bcd4bab4706eb317107425e200db6d6c427223c92e567cb",
+        "question_set_sha256": "2e8bffcbb61d7416992e04e2b245c2cd1a09b897885c7088cf67831b222ddc19",
+        "observed_samples": 6703
+      },
+      "files": [
+        {
+          "name": "generations/part-00000.parquet",
+          "rows": 64,
+          "bytes": 33308,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00001.parquet",
+          "rows": 64,
+          "bytes": 46489,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00002.parquet",
+          "rows": 64,
+          "bytes": 49968,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00003.parquet",
+          "rows": 64,
+          "bytes": 80365,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00004.parquet",
+          "rows": 64,
+          "bytes": 60284,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00005.parquet",
+          "rows": 64,
+          "bytes": 60052,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00006.parquet",
+          "rows": 64,
+          "bytes": 81079,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00007.parquet",
+          "rows": 52,
+          "bytes": 239388,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00008.parquet",
+          "rows": 64,
+          "bytes": 35226,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00009.parquet",
+          "rows": 64,
+          "bytes": 49356,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00010.parquet",
+          "rows": 64,
+          "bytes": 64423,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00011.parquet",
+          "rows": 64,
+          "bytes": 52383,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00012.parquet",
+          "rows": 64,
+          "bytes": 73852,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00013.parquet",
+          "rows": 64,
+          "bytes": 96411,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00014.parquet",
+          "rows": 64,
+          "bytes": 160200,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00015.parquet",
+          "rows": 64,
+          "bytes": 146130,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00016.parquet",
+          "rows": 64,
+          "bytes": 187461,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00017.parquet",
+          "rows": 64,
+          "bytes": 374635,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00018.parquet",
+          "rows": 64,
+          "bytes": 37083,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00019.parquet",
+          "rows": 64,
+          "bytes": 62125,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00020.parquet",
+          "rows": 64,
+          "bytes": 86256,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00021.parquet",
+          "rows": 64,
+          "bytes": 155319,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00022.parquet",
+          "rows": 64,
+          "bytes": 221047,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00023.parquet",
+          "rows": 64,
+          "bytes": 251441,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00024.parquet",
+          "rows": 64,
+          "bytes": 304070,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00025.parquet",
+          "rows": 32,
+          "bytes": 335616,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00026.parquet",
+          "rows": 64,
+          "bytes": 39199,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00027.parquet",
+          "rows": 64,
+          "bytes": 61543,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00028.parquet",
+          "rows": 64,
+          "bytes": 96723,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00029.parquet",
+          "rows": 64,
+          "bytes": 193915,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00030.parquet",
+          "rows": 64,
+          "bytes": 330943,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00031.parquet",
+          "rows": 64,
+          "bytes": 202051,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00032.parquet",
+          "rows": 64,
+          "bytes": 450235,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00033.parquet",
+          "rows": 32,
+          "bytes": 333811,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00034.parquet",
+          "rows": 64,
+          "bytes": 36145,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00035.parquet",
+          "rows": 64,
+          "bytes": 64178,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00036.parquet",
+          "rows": 64,
+          "bytes": 84985,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00037.parquet",
+          "rows": 64,
+          "bytes": 150848,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00038.parquet",
+          "rows": 64,
+          "bytes": 246400,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00039.parquet",
+          "rows": 64,
+          "bytes": 262585,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00040.parquet",
+          "rows": 64,
+          "bytes": 324114,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00041.parquet",
+          "rows": 32,
+          "bytes": 326578,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00042.parquet",
+          "rows": 64,
+          "bytes": 53631,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00043.parquet",
+          "rows": 64,
+          "bytes": 74708,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00044.parquet",
+          "rows": 64,
+          "bytes": 97436,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00045.parquet",
+          "rows": 64,
+          "bytes": 138702,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00046.parquet",
+          "rows": 64,
+          "bytes": 144138,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00047.parquet",
+          "rows": 64,
+          "bytes": 352070,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00048.parquet",
+          "rows": 64,
+          "bytes": 382913,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00049.parquet",
+          "rows": 64,
+          "bytes": 284682,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00050.parquet",
+          "rows": 64,
+          "bytes": 254353,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00051.parquet",
+          "rows": 64,
+          "bytes": 211003,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00052.parquet",
+          "rows": 64,
+          "bytes": 212463,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00053.parquet",
+          "rows": 64,
+          "bytes": 223838,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00054.parquet",
+          "rows": 64,
+          "bytes": 169075,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00055.parquet",
+          "rows": 64,
+          "bytes": 311508,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00056.parquet",
+          "rows": 64,
+          "bytes": 209522,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00057.parquet",
+          "rows": 64,
+          "bytes": 192225,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00058.parquet",
+          "rows": 64,
+          "bytes": 150130,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00059.parquet",
+          "rows": 64,
+          "bytes": 219224,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00060.parquet",
+          "rows": 64,
+          "bytes": 245406,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00061.parquet",
+          "rows": 64,
+          "bytes": 211259,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00062.parquet",
+          "rows": 64,
+          "bytes": 152387,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00063.parquet",
+          "rows": 64,
+          "bytes": 320238,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00064.parquet",
+          "rows": 64,
+          "bytes": 301573,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00065.parquet",
+          "rows": 64,
+          "bytes": 250576,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00066.parquet",
+          "rows": 64,
+          "bytes": 201797,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00067.parquet",
+          "rows": 64,
+          "bytes": 257572,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00068.parquet",
+          "rows": 64,
+          "bytes": 214246,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00069.parquet",
+          "rows": 64,
+          "bytes": 253050,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00070.parquet",
+          "rows": 64,
+          "bytes": 231718,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00071.parquet",
+          "rows": 64,
+          "bytes": 407071,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00072.parquet",
+          "rows": 64,
+          "bytes": 202914,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00073.parquet",
+          "rows": 64,
+          "bytes": 202021,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00074.parquet",
+          "rows": 64,
+          "bytes": 448456,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00075.parquet",
+          "rows": 64,
+          "bytes": 220891,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00076.parquet",
+          "rows": 64,
+          "bytes": 206337,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00077.parquet",
+          "rows": 64,
+          "bytes": 204467,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00078.parquet",
+          "rows": 64,
+          "bytes": 198555,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00079.parquet",
+          "rows": 64,
+          "bytes": 204086,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00080.parquet",
+          "rows": 64,
+          "bytes": 232328,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00081.parquet",
+          "rows": 64,
+          "bytes": 255779,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00082.parquet",
+          "rows": 64,
+          "bytes": 129454,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00083.parquet",
+          "rows": 64,
+          "bytes": 205576,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00084.parquet",
+          "rows": 64,
+          "bytes": 291140,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00085.parquet",
+          "rows": 38,
+          "bytes": 586353,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00086.parquet",
+          "rows": 64,
+          "bytes": 44123,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00087.parquet",
+          "rows": 64,
+          "bytes": 74064,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00088.parquet",
+          "rows": 64,
+          "bytes": 99123,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00089.parquet",
+          "rows": 64,
+          "bytes": 186974,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00090.parquet",
+          "rows": 64,
+          "bytes": 206147,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00091.parquet",
+          "rows": 64,
+          "bytes": 165888,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00092.parquet",
+          "rows": 64,
+          "bytes": 140660,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00093.parquet",
+          "rows": 64,
+          "bytes": 193570,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00094.parquet",
+          "rows": 64,
+          "bytes": 136448,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00095.parquet",
+          "rows": 64,
+          "bytes": 144241,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00096.parquet",
+          "rows": 64,
+          "bytes": 159820,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00097.parquet",
+          "rows": 64,
+          "bytes": 373814,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00098.parquet",
+          "rows": 24,
+          "bytes": 232679,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00099.parquet",
+          "rows": 64,
+          "bytes": 40227,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00100.parquet",
+          "rows": 64,
+          "bytes": 56009,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00101.parquet",
+          "rows": 64,
+          "bytes": 65436,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00102.parquet",
+          "rows": 64,
+          "bytes": 80670,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00103.parquet",
+          "rows": 64,
+          "bytes": 82121,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00104.parquet",
+          "rows": 64,
+          "bytes": 64219,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00105.parquet",
+          "rows": 64,
+          "bytes": 68757,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00106.parquet",
+          "rows": 64,
+          "bytes": 119939,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00107.parquet",
+          "rows": 29,
+          "bytes": 56409,
+          "valid": true
+        }
+      ],
+      "all_files_valid": true
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E73-r16-o20/teacher",
+      "exists": true,
+      "status": "complete",
+      "manifest_sha256": "6f222701a7af992afa1ffb496e9c4e8c8874438c230e9d055c8bc4cf572b4684",
+      "metadata": {
+        "producer": "teacher",
+        "execution": {
+          "scheduler": "global_bounded_v1",
+          "routing": "least_inflight",
+          "replicas": 4,
+          "concurrency": 64,
+          "result_buffer": 64,
+          "chunk_size": 64,
+          "wall_seconds": 16191.110731743276,
+          "preflight_seconds": 0.92225531488657,
+          "publication_seconds": 47.17367809265852,
+          "last_admission_to_completion_seconds": 49.842322021722794,
+          "new_response_tokens": 65432922
+        },
+        "model_identity": "checkpoint-v2:c42c14e35d555bb8bb2464951fb2900c96d38f4af9607fac791a53a9668cc80e",
+        "sample_identity_schema": 3,
+        "outer": 0,
+        "protocols": {
+          "math": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "code": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "science": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 24576,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          },
+          "if": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": -1,
+            "max_new_tokens": 8192,
+            "prompt_limit": 8192,
+            "repetition_penalty": 1.0,
+            "seed": 42,
+            "model_family": "qwen25",
+            "template_json": "{}",
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "answer_channel": "after_thinking"
+          }
+        },
+        "expected_samples": 6703,
+        "expected_version": null,
+        "engine_contract": {
+          "schema": 1,
+          "sampler": "mirroropd-crossing-token-v1",
+          "support": "tokenizer_ids",
+          "support_ids_sha256": "fc752cfb4d8bd0b3c92cd2e252cdd63ae91e3b1e84a8ae1f1a24e507bba14b72",
+          "head_width": 151680,
+          "input_id": "3dfe1bc4823ba7027f498afadb7b0b254f318469367510fac7ca9c604c1c8232",
+          "logits_processors": [
+            "verl.workers.rollout.vllm_rollout.tokenizer_support:TokenizerSupport"
+          ],
+          "native_eos": 151645,
+          "engine_stop_token_ids": [
+            151643,
+            151645
+          ],
+          "ignore_eos": false,
+          "model_generation": {
+            "bos_token_id": 151643,
+            "do_sample": false,
+            "eos_token_id": 151645,
+            "max_new_tokens": 2048,
+            "transformers_version": "4.37.0"
+          },
+          "engine_generation_config": "auto",
+          "generation_overrides": {},
+          "dtype": "bfloat16",
+          "kv_cache_dtype": "auto",
+          "quantization": null
+        },
+        "engine_contract_id": "9144f0ea89d703a23959d9ba28aa2ff2b818cc617610d82dd56685b54145947e",
+        "question_set_sha256": "2e8bffcbb61d7416992e04e2b245c2cd1a09b897885c7088cf67831b222ddc19",
+        "observed_samples": 6703
+      },
+      "files": [
+        {
+          "name": "generations/part-00000.parquet",
+          "rows": 64,
+          "bytes": 165328,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00001.parquet",
+          "rows": 64,
+          "bytes": 201298,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00002.parquet",
+          "rows": 64,
+          "bytes": 268641,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00003.parquet",
+          "rows": 64,
+          "bytes": 264667,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00004.parquet",
+          "rows": 64,
+          "bytes": 233223,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00005.parquet",
+          "rows": 64,
+          "bytes": 266063,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00006.parquet",
+          "rows": 64,
+          "bytes": 265134,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00007.parquet",
+          "rows": 64,
+          "bytes": 240058,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00008.parquet",
+          "rows": 64,
+          "bytes": 431875,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00009.parquet",
+          "rows": 64,
+          "bytes": 436638,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00010.parquet",
+          "rows": 64,
+          "bytes": 548336,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00011.parquet",
+          "rows": 64,
+          "bytes": 446946,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00012.parquet",
+          "rows": 64,
+          "bytes": 302723,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00013.parquet",
+          "rows": 64,
+          "bytes": 360987,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00014.parquet",
+          "rows": 64,
+          "bytes": 446385,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00015.parquet",
+          "rows": 64,
+          "bytes": 358317,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00016.parquet",
+          "rows": 64,
+          "bytes": 475839,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00017.parquet",
+          "rows": 64,
+          "bytes": 541993,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00018.parquet",
+          "rows": 64,
+          "bytes": 686986,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00019.parquet",
+          "rows": 64,
+          "bytes": 816324,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00020.parquet",
+          "rows": 64,
+          "bytes": 408641,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00021.parquet",
+          "rows": 64,
+          "bytes": 677977,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00022.parquet",
+          "rows": 64,
+          "bytes": 1056970,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00023.parquet",
+          "rows": 64,
+          "bytes": 949784,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00024.parquet",
+          "rows": 64,
+          "bytes": 675378,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00025.parquet",
+          "rows": 64,
+          "bytes": 785409,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00026.parquet",
+          "rows": 64,
+          "bytes": 651620,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00027.parquet",
+          "rows": 64,
+          "bytes": 1116143,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00028.parquet",
+          "rows": 64,
+          "bytes": 715262,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00029.parquet",
+          "rows": 64,
+          "bytes": 957182,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00030.parquet",
+          "rows": 64,
+          "bytes": 838554,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00031.parquet",
+          "rows": 64,
+          "bytes": 918412,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00032.parquet",
+          "rows": 64,
+          "bytes": 871267,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00033.parquet",
+          "rows": 64,
+          "bytes": 620014,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00034.parquet",
+          "rows": 64,
+          "bytes": 483414,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00035.parquet",
+          "rows": 64,
+          "bytes": 982811,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00036.parquet",
+          "rows": 64,
+          "bytes": 873974,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00037.parquet",
+          "rows": 64,
+          "bytes": 699327,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00038.parquet",
+          "rows": 64,
+          "bytes": 926955,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00039.parquet",
+          "rows": 64,
+          "bytes": 933218,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00040.parquet",
+          "rows": 64,
+          "bytes": 820274,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00041.parquet",
+          "rows": 64,
+          "bytes": 675124,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00042.parquet",
+          "rows": 64,
+          "bytes": 810466,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00043.parquet",
+          "rows": 64,
+          "bytes": 710233,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00044.parquet",
+          "rows": 64,
+          "bytes": 784876,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00045.parquet",
+          "rows": 64,
+          "bytes": 672020,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00046.parquet",
+          "rows": 64,
+          "bytes": 797021,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00047.parquet",
+          "rows": 64,
+          "bytes": 682324,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00048.parquet",
+          "rows": 64,
+          "bytes": 720399,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00049.parquet",
+          "rows": 64,
+          "bytes": 913298,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00050.parquet",
+          "rows": 64,
+          "bytes": 1451248,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00051.parquet",
+          "rows": 64,
+          "bytes": 1091053,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00052.parquet",
+          "rows": 64,
+          "bytes": 815846,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00053.parquet",
+          "rows": 64,
+          "bytes": 720775,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00054.parquet",
+          "rows": 64,
+          "bytes": 686413,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00055.parquet",
+          "rows": 64,
+          "bytes": 715821,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00056.parquet",
+          "rows": 64,
+          "bytes": 623334,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00057.parquet",
+          "rows": 64,
+          "bytes": 587884,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00058.parquet",
+          "rows": 64,
+          "bytes": 819275,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00059.parquet",
+          "rows": 64,
+          "bytes": 777466,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00060.parquet",
+          "rows": 64,
+          "bytes": 714832,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00061.parquet",
+          "rows": 64,
+          "bytes": 867777,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00062.parquet",
+          "rows": 64,
+          "bytes": 619190,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00063.parquet",
+          "rows": 64,
+          "bytes": 958692,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00064.parquet",
+          "rows": 64,
+          "bytes": 749433,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00065.parquet",
+          "rows": 64,
+          "bytes": 598112,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00066.parquet",
+          "rows": 64,
+          "bytes": 805465,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00067.parquet",
+          "rows": 64,
+          "bytes": 624777,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00068.parquet",
+          "rows": 64,
+          "bytes": 934488,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00069.parquet",
+          "rows": 64,
+          "bytes": 748926,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00070.parquet",
+          "rows": 64,
+          "bytes": 1072839,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00071.parquet",
+          "rows": 64,
+          "bytes": 1549137,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00072.parquet",
+          "rows": 64,
+          "bytes": 1168345,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00073.parquet",
+          "rows": 64,
+          "bytes": 1223705,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00074.parquet",
+          "rows": 64,
+          "bytes": 774356,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00075.parquet",
+          "rows": 64,
+          "bytes": 673744,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00076.parquet",
+          "rows": 64,
+          "bytes": 781098,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00077.parquet",
+          "rows": 64,
+          "bytes": 791861,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00078.parquet",
+          "rows": 64,
+          "bytes": 658623,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00079.parquet",
+          "rows": 64,
+          "bytes": 674497,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00080.parquet",
+          "rows": 64,
+          "bytes": 830460,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00081.parquet",
+          "rows": 64,
+          "bytes": 789321,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00082.parquet",
+          "rows": 64,
+          "bytes": 819054,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00083.parquet",
+          "rows": 64,
+          "bytes": 884212,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00084.parquet",
+          "rows": 64,
+          "bytes": 964137,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00085.parquet",
+          "rows": 64,
+          "bytes": 718450,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00086.parquet",
+          "rows": 64,
+          "bytes": 700160,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00087.parquet",
+          "rows": 64,
+          "bytes": 685993,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00088.parquet",
+          "rows": 64,
+          "bytes": 722797,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00089.parquet",
+          "rows": 64,
+          "bytes": 757344,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00090.parquet",
+          "rows": 64,
+          "bytes": 764140,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00091.parquet",
+          "rows": 64,
+          "bytes": 657536,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00092.parquet",
+          "rows": 64,
+          "bytes": 770303,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00093.parquet",
+          "rows": 64,
+          "bytes": 690983,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00094.parquet",
+          "rows": 64,
+          "bytes": 678457,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00095.parquet",
+          "rows": 64,
+          "bytes": 484936,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00096.parquet",
+          "rows": 64,
+          "bytes": 289918,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00097.parquet",
+          "rows": 64,
+          "bytes": 350106,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00098.parquet",
+          "rows": 64,
+          "bytes": 235850,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00099.parquet",
+          "rows": 64,
+          "bytes": 290561,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00100.parquet",
+          "rows": 64,
+          "bytes": 308522,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00101.parquet",
+          "rows": 64,
+          "bytes": 241654,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00102.parquet",
+          "rows": 64,
+          "bytes": 214404,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00103.parquet",
+          "rows": 64,
+          "bytes": 244304,
+          "valid": true
+        },
+        {
+          "name": "generations/part-00104.parquet",
+          "rows": 47,
+          "bytes": 273666,
+          "valid": true
+        }
+      ],
+      "all_files_valid": true
+    },
+    {
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/wandb-logs/MirrorOPD-verl/analysis/twenty-batch-pass-20261027/bank.json",
+      "exists": true,
+      "format": "legacy JSON; not a native ArtifactStore input",
+      "bytes": 15324054,
+      "sha256": "df06178f6a644d0d5b686022f7b7b55db841deff7382e912bb93af0c9b78b7e3",
+      "top_type": "list",
+      "records": 640
+    }
+  ],
+  "length_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/docs/progress/data/20261101/rq3-long-risk.csv",
+  "length_source_sha256": "4fd0e6951fae206b1e2ec83993e735134b06fe33fc0e27e75e0c6dfa81008767",
+  "length_summary": [
+    {
+      "case": "J-S",
+      "outer": 0,
+      "rkl": {
+        "all": 0.10173959431537313,
+        "0_1024": 0.11484394450369716,
+        "1024_4096": 0.10400729132145711,
+        "4096_7168": 0.08780389433418995
+      },
+      "last_over_first": 0.7645496217814365,
+      "source_question_counts": {
+        "all": [
+          32,
+          32
+        ],
+        "0_1024": [
+          32,
+          32
+        ],
+        "1024_4096": [
+          32,
+          32
+        ],
+        "4096_7168": [
+          25,
+          26
+        ]
+      }
+    },
+    {
+      "case": "J-S",
+      "outer": 40,
+      "rkl": {
+        "all": 0.00208923780504065,
+        "0_1024": 0.002474610981201807,
+        "1024_4096": 0.0018926109216458773,
+        "4096_7168": 0.002176035136604041
+      },
+      "last_over_first": 0.8793443305368502,
+      "source_question_counts": {
+        "all": [
+          32,
+          32
+        ],
+        "0_1024": [
+          32,
+          32
+        ],
+        "1024_4096": [
+          32,
+          32
+        ],
+        "4096_7168": [
+          25,
+          26
+        ]
+      }
+    },
+    {
+      "case": "P-S",
+      "outer": 0,
+      "rkl": {
+        "all": 0.47712239662846095,
+        "0_1024": 0.3667284750458175,
+        "1024_4096": 0.48874690922976993,
+        "4096_7168": 0.5453123626253629
+      },
+      "last_over_first": 1.4869648792808734,
+      "source_question_counts": {
+        "all": [
+          32,
+          32
+        ],
+        "0_1024": [
+          32,
+          32
+        ],
+        "1024_4096": [
+          32,
+          32
+        ],
+        "4096_7168": [
+          25,
+          25
+        ]
+      }
+    },
+    {
+      "case": "P-S",
+      "outer": 40,
+      "rkl": {
+        "all": 0.26749451118174594,
+        "0_1024": 0.22333771128714278,
+        "1024_4096": 0.27155788099137834,
+        "4096_7168": 0.30386201044611283
+      },
+      "last_over_first": 1.360549495626562,
+      "source_question_counts": {
+        "all": [
+          32,
+          32
+        ],
+        "0_1024": [
+          32,
+          32
+        ],
+        "1024_4096": [
+          32,
+          32
+        ],
+        "4096_7168": [
+          25,
+          25
+        ]
+      }
+    },
+    {
+      "case": "P-TM",
+      "outer": 0,
+      "rkl": {
+        "all": 0.47712239662846095,
+        "0_1024": 0.3667284750458175,
+        "1024_4096": 0.48874690922976993,
+        "4096_7168": 0.5453123626253629
+      },
+      "last_over_first": 1.4869648792808734,
+      "source_question_counts": {
+        "all": [
+          32,
+          32
+        ],
+        "0_1024": [
+          32,
+          32
+        ],
+        "1024_4096": [
+          32,
+          32
+        ],
+        "4096_7168": [
+          25,
+          25
+        ]
+      }
+    },
+    {
+      "case": "P-TM",
+      "outer": 40,
+      "rkl": {
+        "all": 0.2560989542729208,
+        "0_1024": 0.22408507972154357,
+        "1024_4096": 0.25893257653660684,
+        "4096_7168": 0.28462329030376265
+      },
+      "last_over_first": 1.2701572574909767,
+      "source_question_counts": {
+        "all": [
+          32,
+          32
+        ],
+        "0_1024": [
+          32,
+          32
+        ],
+        "1024_4096": [
+          32,
+          32
+        ],
+        "4096_7168": [
+          25,
+          25
+        ]
+      }
+    }
+  ]
+}

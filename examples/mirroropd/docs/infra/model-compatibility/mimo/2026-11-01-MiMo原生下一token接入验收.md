@@ -34,7 +34,7 @@ MiMo 发布的模型类继承 Qwen2；普通下一 token forward 不调用 MTP �
 
 普通单模型采样的预检原来拒绝所有自定义模型代码，导致统一评估在分配 worker 前退出。现在只在模型配置声明 `model_type=mimo`、`architectures=[MiMoForCausalLM]` 且显式信任代码时允许该采样路径，继续拒绝未验收的其他自定义架构和配置覆盖。MiMo 组合模型采样不在此验收范围。
 
-自定义配置最初只在 driver 能导入，Ray worker 反序列化时报 `No module named transformers_modules`。MiMo launcher 现在将项目与 HF 动态模块缓存加入 driver 和 Ray 的 `PYTHONPATH`，bootstrap 同时转发配置中的 Ray 运行环境。Tokenizer 加载也显式信任该固定模型代码，避免交互询问和回退。
+自定义配置最初只在 driver 能导入，Ray worker 反序列化时报 `No module named transformers_modules`。公共 Ray 初始化函数 `with_hf_modules_cache` 现在将 HF 动态模块缓存加入 worker 的 `PYTHONPATH`，保留配置指定的源码路径、其他环境变量和运行环境设置；训练 `main_ppo` 与独立 bootstrap 共用该函数，不再依赖特定 launcher 预先注入缓存路径。真实 MiMo Base 的 `HFModelConfig` 在独立 CPU Ray worker 中验证：原路径复现相同反序列化错误，修复后模型类型、词表大小和 tokenizer 类型均与 driver 一致。此验证不加载模型权重、不生成 bank、不启动训练。Tokenizer 加载也显式信任该固定模型代码，避免交互询问和回退。
 
 FSDP2 动态改变模型的 Python 类，原有 `custom_object_save` 把包装层的 PyTorch 源码写入 HF 导出，漏掉 `modeling_mimo.py`。源码打包现在从模型继承链取得原始 HF 类，创建只供源码检查的对象，不修改运行中模型的类型；PEFT 先解包到 Base。回归检查验证原始源码被复制、HF 自动类能加载、运行对象类型不变，并保留原有 PEFT 用例。旧导出保持冻结，其审计中的 `hf_reload_forward=not_tested` 不改写为通过。
 

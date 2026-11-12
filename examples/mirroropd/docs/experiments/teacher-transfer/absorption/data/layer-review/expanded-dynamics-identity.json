@@ -1,0 +1,6 @@
+{
+  "scan_justrl_endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/r1-samesize-deterministic320-20261030/models/CONT-J/step320",
+  "accepted_historical_endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/checkpoints/twenty-batch-pass-20261027/checkpoints/justrl/batch-20",
+  "reason": "Different stored tensor SHA; accepted trajectory uses historical batch20 endpoint; original scan-endpoint attempt retained.",
+  "validation": "27 historical k_proj capture comparisons agree within 1e-8 after identity correction."
+}

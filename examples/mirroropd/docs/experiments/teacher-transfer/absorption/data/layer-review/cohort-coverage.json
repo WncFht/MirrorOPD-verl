@@ -1,0 +1,243 @@
+{
+  "Llama coreward-i": {
+    "matrices": 69,
+    "checkpoints": 2,
+    "steps": [
+      320,
+      640
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Llama gt": {
+    "matrices": 69,
+    "checkpoints": 2,
+    "steps": [
+      320,
+      640
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Llama arithmetic-full": {
+    "matrices": 69,
+    "checkpoints": 3,
+    "steps": [
+      320,
+      640,
+      1280
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Qwen e3 thinking": {
+    "matrices": 69,
+    "checkpoints": 3,
+    "steps": [
+      320,
+      640,
+      1280
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Qwen Samsung nonthinking": {
+    "matrices": 69,
+    "checkpoints": 3,
+    "steps": [
+      320,
+      640,
+      1280
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Qwen CoReward-I": {
+    "matrices": 69,
+    "checkpoints": 3,
+    "steps": [
+      320,
+      640,
+      1280
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Qwen CoReward-II": {
+    "matrices": 69,
+    "checkpoints": 3,
+    "steps": [
+      320,
+      640,
+      1280
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Qwen base-GT": {
+    "matrices": 69,
+    "checkpoints": 3,
+    "steps": [
+      320,
+      640,
+      1280
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Qwen Thinking-Space nonthinking": {
+    "matrices": 69,
+    "checkpoints": 3,
+    "steps": [
+      320,
+      640,
+      1280
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": true
+    }
+  },
+  "Qwen e3 lineage": {
+    "matrices": 69,
+    "checkpoints": 2,
+    "steps": [
+      64,
+      320
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": false
+    }
+  },
+  "Qwen DeepMath lineage": {
+    "matrices": 69,
+    "checkpoints": 2,
+    "steps": [
+      64,
+      320
+    ],
+    "training_complete": "historical",
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": false,
+      "teacher_parameter_comparison": false
+    }
+  },
+  "E63 current": {
+    "matrices": 69,
+    "checkpoints": 11,
+    "steps": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      128,
+      160,
+      240,
+      320,
+      480,
+      640
+    ],
+    "training_complete": true,
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": true,
+      "teacher_parameter_comparison": false
+    }
+  },
+  "E64 initial": {
+    "matrices": 69,
+    "checkpoints": 11,
+    "steps": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      128,
+      160,
+      240,
+      320,
+      480,
+      640
+    ],
+    "training_complete": true,
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": true,
+      "teacher_parameter_comparison": false
+    }
+  },
+  "E65 teacher": {
+    "matrices": 69,
+    "checkpoints": 8,
+    "steps": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      128,
+      160,
+      240
+    ],
+    "training_complete": false,
+    "geometry": {
+      "delta_spectrum": true,
+      "left_and_right_subspace": true,
+      "full_weight_ISO": true,
+      "teacher_parameter_comparison": false
+    }
+  }
+}
