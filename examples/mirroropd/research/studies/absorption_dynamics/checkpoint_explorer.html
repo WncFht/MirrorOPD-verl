@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OPD checkpoint 动力学对比</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#193344;background:#f3f6f8;font-size:14px}*{box-sizing:border-box}body{margin:0}header{padding:20px 28px;background:#153c50;color:white}h1{font-size:23px;margin:0 0 8px}header p{margin:0;opacity:.85}main{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;padding:20px}aside,.card{background:white;border:1px solid #d9e2e8;border-radius:10px;padding:18px}aside{align-self:start;position:sticky;top:12px;max-height:95vh;overflow:auto}label.control{display:block;font-weight:600;margin:16px 0 5px}select,button{font:inherit;border:1px solid #bdccd5;border-radius:5px;padding:7px;background:white;color:#193344}select{width:100%}button{cursor:pointer;margin:4px 3px 4px 0}button:hover{background:#e5f2f6}.runs label{display:block;padding:6px 0}.runs{max-height:340px;overflow:auto;border-bottom:1px solid #e4eaf0}.runs small{display:block;margin-left:24px;color:#627584;font-size:11px}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.notice{padding:12px 16px;background:#e9f3f7;border-left:4px solid #3b8b9b;line-height:1.7;margin-bottom:16px}.muted{color:#526d7c;line-height:1.7}#plots>div{min-height:440px;margin-bottom:16px}#status{white-space:pre-line}a{color:#126e89}.gallery-image{width:100%;height:auto;border:1px solid #d9e2e8}#failure{color:#a12620}.hidden{display:none!important}footer{font-size:12px;margin-top:14px}@media(max-width:850px){main{grid-template-columns:1fr}aside{position:static;max-height:none}.runs{display:grid;grid-template-columns:1fr 1fr}header{padding:16px}}
+</style>
+<header><h1>OPD checkpoint 动力学对比</h1><p>E94–E104 · 选择 pair 叠加曲线，或对照各层与训练阶段 · 离线数据快照</p></header>
+<main><aside>
+<label class="control" for="view">视图</label><select id="view"><option value="trajectory">多 pair 轨迹叠加</option><option value="layers">层 × 模块热图</option><option value="scatter">几何指标 × RKL 散点</option><option value="pairwise">Checkpoint 两两 frame</option><option value="gallery">原始 28 类静态图对照</option></select>
+<label class="control">选择 pair</label><div class="row"><button id="preset">E99 / E100 / E101</button><button id="all">全选</button><button id="none">清空</button></div><div class="runs" id="runs"></div>
+<label class="control" for="metric">指标</label><select id="metric"></select>
+<label class="control" for="rank">Frame rank</label><select id="rank"><option>16</option><option>32</option><option selected>64</option><option>128</option><option>256</option></select>
+<label class="control" for="module">模块</label><select id="module"><option value="all">全部七类矩阵</option><option value="Attention">Attention：q / k / v / o</option><option value="MLP">MLP：gate / up / down</option></select>
+<label class="control" for="layer">层</label><select id="layer"><option value="all">全部 28 层</option></select>
+<label class="control" for="step">热图／散点 checkpoint</label><select id="step"></select>
+<label class="control" for="bank">RKL bank</label><select id="bank"><option value="initial">initial bank</option><option value="teacher" selected>teacher bank</option></select>
+<label class="control" for="domain">RKL 域</label><select id="domain"><option value="math">Math</option><option value="all">三域等权平均</option><option value="code">Code</option><option value="if">IF</option></select>
+<p><label><input type="checkbox" id="relative"> RKL／各 pair 初始 RKL</label></p>
+<p><label><input type="checkbox" id="bands" checked> 显示矩阵间 IQR</label></p>
+<p><label><input type="checkbox" id="log"> 纵轴对数（仅正值）</label></p>
+<label class="control" for="figure">原始图类型</label><select id="figure"></select>
+</aside><section>
+<div class="notice" id="description">正在解压内嵌数据……</div>
+<div class="card"><div class="row"><button id="csv">导出当前数值 CSV</button><button id="share">把当前选择写入地址栏</button><a href="图集.md">静态图集</a><a href="README.md">设置与结果</a></div><p class="muted" id="status"></p><p id="failure"></p></div>
+<div id="plots"></div>
+<footer class="muted">每条几何曲线先逐矩阵测量，再取所选矩阵的中位数；阴影为矩阵间四分位区间，不是多 seed 置信区间。RKL 为逐题平均后域内平均，三域均值等权。几何层／模块筛选不改变整模型 RKL。静态原图模式读取相邻 figures 目录，其余视图完全内嵌，可单独复制此 HTML。</footer>
+</section></main>
+<script>/*__PLOTLY__*/</script>
+<script id="payload" type="application/octet-stream">__PAYLOAD__</script>
+<script>/*__APP__*/</script>
+</html>
