@@ -9,13 +9,15 @@ import torch
 from verl.trainer.distillation.rows import precompute_kl_rows
 from verl.trainer.distillation.vjp import precompute_rows
 
+from .reductions import response_denominator
+
 
 def _prepare(hs, ws, ht, wt, h0, w0, *, frozen):
     live_loss, live = precompute_kl_rows(hs, ws, ht, wt)
     if frozen:
         initial_loss, initial = precompute_kl_rows(h0, w0, ht, wt)
         # All reductions concern the unweighted logit requests. The production
-        # executor applies 1/cap once to the selected VJP, including tied heads.
+        # executor applies the response normalization once to the selected VJP, including tied heads.
         info = torch.stack(
             (live.square().sum(-1), initial.square().sum(-1), (live * initial).sum(-1), initial_loss), -1
         )
@@ -24,7 +26,7 @@ def _prepare(hs, ws, ht, wt, h0, w0, *, frozen):
     return live_loss, live, live_loss, info, None
 
 
-def trajectory_projection(hs, ws, ht, wt, *, initial=None, cap=1024, token_chunk=128):
+def trajectory_projection(hs, ws, ht, wt, *, initial=None, cap=1024, token_chunk=128, reduction="fixed_cap"):
     """Return the production scalar VJP and detached per-position statistics.
 
     With ``initial=(h0,w0)``, the derivative is J_current.T B_initial.
@@ -34,6 +36,7 @@ def trajectory_projection(hs, ws, ht, wt, *, initial=None, cap=1024, token_chunk
     """
     if cap <= 0 or token_chunk <= 0 or len(hs) > cap:
         raise ValueError("positive chunks/cap and at most cap positions are required")
+    denominator = response_denominator(len(hs), cap, reduction)
     return precompute_rows(
         hs,
         ws,
@@ -43,6 +46,6 @@ def trajectory_projection(hs, ws, ht, wt, *, initial=None, cap=1024, token_chunk
         partial(_prepare, frozen=initial is not None),
         hq=None if initial is None else initial[0],
         wq=None if initial is None else initial[1],
-        row_weights=hs.new_full((len(hs),), 1 / cap),
+        row_weights=hs.new_full((len(hs),), 1 / denominator),
         diagnostic_count=1 if initial is None else 4,
     )

@@ -1,5 +1,6 @@
 # Copyright 2026 MirrorOPD-verl contributors
 # SPDX-License-Identifier: Apache-2.0
+import pytest
 import torch
 
 from examples.mirroropd.research.studies.teacher_difference.inputs import normalize_records, validate_records
@@ -71,7 +72,8 @@ def test_streaming_moments_and_chunked_gram_match_dense():
     assert opposite["cross_record_inner"] == -1
 
 
-def test_full_parameter_native_kernel_matches_dense_and_streaming():
+@pytest.mark.parametrize("reduction", ["fixed_cap", "valid_tokens"])
+def test_full_parameter_native_kernel_matches_dense_and_streaming(reduction):
     from transformers import Qwen2Config, Qwen2ForCausalLM
 
     from examples.mirroropd.research.studies.teacher_difference.pac import _flatten_grad, compute_batch
@@ -97,7 +99,7 @@ def test_full_parameter_native_kernel_matches_dense_and_streaming():
         cap=4,
     )
     hidden = {r["row_id"]: _hidden(teacher, r) for r in rows}
-    exact = compute_batch(student, teacher.lm_head.weight.detach(), hidden, rows, cap=4)
+    exact = compute_batch(student, teacher.lm_head.weight.detach(), hidden, rows, cap=4, reduction=reduction)
     for i, row in enumerate(rows):
         student.zero_grad(set_to_none=True)
         ids = torch.tensor([row["prompt_ids"] + row["response_ids"][:-1]])
@@ -105,17 +107,21 @@ def test_full_parameter_native_kernel_matches_dense_and_streaming():
         with torch.no_grad():
             zq = teacher(ids).logits[0, len(row["prompt_ids"]) - 1 :]
         lp, lq = z.log_softmax(-1), zq.log_softmax(-1)
-        loss = (lp.exp() * (lp - lq)).sum() / 4
+        loss = (lp.exp() * (lp - lq)).sum() / (4 if reduction == "fixed_cap" else len(row["response_ids"]))
         loss.backward()
         torch.testing.assert_close(exact["gradient_vectors"][i], _flatten_grad(student), rtol=2e-4, atol=2e-7)
         assert abs(exact["losses"][i] - loss.item()) < 1e-6
-    stream = compute_batch(student, teacher.lm_head.weight.detach(), hidden, rows, cap=4, retain_samples=False)
+    stream = compute_batch(
+        student, teacher.lm_head.weight.detach(), hidden, rows, cap=4, retain_samples=False, reduction=reduction
+    )
     torch.testing.assert_close(stream["gradient_vectors"][0], exact["gradient_vectors"].mean(0))
 
     torch.testing.assert_close(stream["gradient_norm_sq"], exact["gradient_norm_sq"], rtol=1e-6, atol=1e-10)
     student.train()
     student.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
-    checkpointed = compute_batch(student, teacher.lm_head.weight.detach(), hidden, rows, cap=4, retain_samples=False)
+    checkpointed = compute_batch(
+        student, teacher.lm_head.weight.detach(), hidden, rows, cap=4, retain_samples=False, reduction=reduction
+    )
     torch.testing.assert_close(checkpointed["gradient_vectors"], stream["gradient_vectors"])
     torch.testing.assert_close(checkpointed["gradient_norm_sq"], stream["gradient_norm_sq"])
 
@@ -218,6 +224,15 @@ def test_compiled_matrix_tracks_inputs_and_rejects_changed_bank(tmp_path):
     assert len(manifest["tasks"]) == 2
     assert all(task["lane"] == 0 for task in manifest["tasks"])
     assert status(manifest, tmp_path)["completed"] == 0
+    plan["defaults"] = dict(reduction="valid_tokens", source_policy="independent")
+    revised = compile_plan(plan, base=tmp_path, gpus=[0, 5])
+    assert revised["tasks"][0]["reduction"] == "valid_tokens"
+    assert revised["tasks"][0]["source_policy"] == "independent"
+    assert revised["tasks"][0] != manifest["tasks"][0]
+    plan["defaults"]["reduction"] = "typo"
+    with pytest.raises(ValueError, match="reduction"):
+        compile_plan(plan, base=tmp_path, gpus=[0, 5])
+    plan.pop("defaults")
     row["response_ids"] = [4]
     bank.write_text(json.dumps([row]))
     with pytest.raises(ValueError, match="Inputs changed after plan compilation"):
@@ -368,7 +383,8 @@ def test_joint_analysis_preserves_negative_transfer_and_paired_prefix_ratios():
     assert np.allclose(prefix_ratios(initial, final, "teacher", [0, 0, 1]), [0.5, 2.0, 2.0])
 
 
-def test_trajectory_frozen_vjp_matches_dense_tied_head_and_scaling():
+@pytest.mark.parametrize("reduction,denominator", [("fixed_cap", 4), ("valid_tokens", 2)])
+def test_trajectory_frozen_vjp_matches_dense_tied_head_and_scaling(reduction, denominator):
     from examples.mirroropd.research.studies.teacher_difference.requests import trajectory_projection
     from verl.trainer.distillation.numerics import kl_rows
 
@@ -381,8 +397,8 @@ def test_trajectory_frozen_vjp_matches_dense_tied_head_and_scaling():
     ht, wt = torch.randn_like(h), torch.randn(9, 3, dtype=torch.float64)
     initial_loss, b0 = kl_rows(h0 @ w0.T, ht @ wt.T)
     live_loss, live = kl_rows(h @ w.T, ht @ wt.T)
-    expected = torch.autograd.grad(((h @ w.T) * b0.detach()).sum() / 4, w, retain_graph=True)[0]
-    result = trajectory_projection(h, w, ht, wt, initial=(h0, w0), cap=4, token_chunk=1)
+    expected = torch.autograd.grad(((h @ w.T) * b0.detach()).sum() / denominator, w, retain_graph=True)[0]
+    result = trajectory_projection(h, w, ht, wt, initial=(h0, w0), cap=4, token_chunk=1, reduction=reduction)
     actual = torch.autograd.grad(result[0], w, retain_graph=True)[0]
     torch.testing.assert_close(actual, expected)
     torch.testing.assert_close(result[1], live_loss)
@@ -390,7 +406,7 @@ def test_trajectory_frozen_vjp_matches_dense_tied_head_and_scaling():
     torch.testing.assert_close(result[3][:, 1], b0.square().sum(-1))
     torch.testing.assert_close(result[3][:, 2], (live * b0).sum(-1))
     torch.testing.assert_close(result[3][:, 3], initial_loss)
-    native = trajectory_projection(h, w, ht, wt, cap=4, token_chunk=1)
+    native = trajectory_projection(h, w, ht, wt, cap=4, token_chunk=1, reduction=reduction)
     native_g = torch.autograd.grad(native[0], w, retain_graph=True)[0]
-    dense_g = torch.autograd.grad(live_loss.sum() / 4, w)[0]
+    dense_g = torch.autograd.grad(live_loss.sum() / denominator, w)[0]
     torch.testing.assert_close(native_g, dense_g)

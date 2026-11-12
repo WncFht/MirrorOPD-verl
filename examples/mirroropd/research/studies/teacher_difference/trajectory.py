@@ -43,6 +43,7 @@ def parser(description):
     result.add_argument("--out", type=Path, required=True)
     result.add_argument("--branch", required=True)
     result.add_argument("--model", default="r1")
+    result.add_argument("--bank", help="Required when the model has multiple banks")
     result.add_argument("--stages", type=int, nargs="+", required=True)
     result.add_argument("--max-groups", type=int)
     result.add_argument("--token-chunk", type=int, default=128)
@@ -50,12 +51,17 @@ def parser(description):
 
 
 def tasks(args):
-    if args.token_chunk <= 0 or any(s < 0 or s > 320 for s in args.stages):
-        raise ValueError("positive chunk and stages in [0,320] required")
+    if args.token_chunk <= 0 or any(s < 0 for s in args.stages):
+        raise ValueError("positive chunk and nonnegative stages required")
     if args.max_groups is not None and args.max_groups < 1:
         raise ValueError("max_groups must be positive")
     torch.set_num_threads(4)
     items = [t for t in json.loads(args.manifest.read_text())["tasks"] if t["model"] == args.model]
+    bank = getattr(args, "bank", None)
+    if bank is not None:
+        items = [t for t in items if t["bank"] == bank]
+    if len({t.get("bank") for t in items}) > 1:
+        raise ValueError("Select one bank with --bank and use a separate output directory per bank")
     initial_paths = {t["student"] for t in items if t["stage"] == 0}
     if len(initial_paths) != 1:
         raise ValueError("A trajectory comparison requires one shared initial student")
@@ -64,3 +70,11 @@ def tasks(args):
     if {t["stage"] for t in selected} != set(args.stages):
         raise ValueError("Requested branch/stages are absent from manifest")
     return initial, selected
+
+
+def select_source_groups(groups, indices):
+    """Validate explicit source selection before loading any GPU models."""
+    source = [(label, batch) for label, batch in groups if label[0] == "train"]
+    if not indices or len(set(indices)) != len(indices) or any(i < 0 or i >= len(source) for i in indices):
+        raise ValueError(f"source indices must be distinct positions in [0,{len(source)})")
+    return [source[i] for i in indices]

@@ -12,12 +12,15 @@ import torch
 from .checkpoints import CheckpointStore
 from .inputs import source_fingerprint
 from .metrics import chunked_gram, tensor_inner
+from .reductions import response_denominator
 from .response import GradientBank, cotangents, token_signs
 from .runtime import checkpoint_identity, collect_memory, gradient_norms, hidden_states, load_model, write_json
 from .trajectory import panel, parser, request_cache, tasks
 
 
-def record_response(student, teacher, initial, row, *, cap, probes, seed, token_chunk, bundle, bank):
+def record_response(
+    student, teacher, initial, row, *, cap, probes, seed, token_chunk, bundle, bank, reduction="fixed_cap"
+):
     student.zero_grad(set_to_none=True)
     hidden = hidden_states(student, row["prompt_ids"] + row["response_ids"][:-1])
     hidden = hidden[len(row["prompt_ids"]) - 1 :][:cap]
@@ -40,6 +43,7 @@ def record_response(student, teacher, initial, row, *, cap, probes, seed, token_
                 fields=fields,
                 signs=signs,
                 cap=cap,
+                reduction=reduction,
                 token_chunk=token_chunk,
                 bundle=bundle,
             )
@@ -61,6 +65,7 @@ def record_response(student, teacher, initial, row, *, cap, probes, seed, token_
                 values["native_parallel_inner"] = float(dot)
                 del native
     values["norm_sq"] = dict(zip(fields, torch.stack(norm_values).cpu().tolist(), strict=True))
+    values.update(token_count=len(hidden), denominator=response_denominator(len(hidden), cap, reduction))
     values.update(row_id=key, split=row["split"], group=row.get("diagnostic_group", row.get("group")))
     student.zero_grad(set_to_none=True)
     return values
@@ -102,6 +107,7 @@ def run(task, initial_path, root, out, *, probes, seed, token_chunk, bundle, max
                     initial,
                     row,
                     cap=task["cap"],
+                    reduction=task.get("reduction", "fixed_cap"),
                     probes=probes,
                     seed=seed,
                     token_chunk=token_chunk,
@@ -133,7 +139,14 @@ def run(task, initial_path, root, out, *, probes, seed, token_chunk, bundle, max
         gram = chunked_gram(vectors, chunk=16777216, device="cuda").tolist()
         source_hashes = {
             name: hashlib.sha256((Path(__file__).parent / name).read_bytes()).hexdigest()
-            for name in ("response_probe.py", "response.py", "trajectory.py", "runtime.py", "metrics.py")
+            for name in (
+                "response_probe.py",
+                "response.py",
+                "trajectory.py",
+                "runtime.py",
+                "metrics.py",
+                "reductions.py",
+            )
         }
         write_json(
             destination,

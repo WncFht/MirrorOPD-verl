@@ -3,6 +3,7 @@
 import itertools
 
 import numpy as np
+import pytest
 import torch
 
 from examples.mirroropd.research.studies.teacher_difference.response import (
@@ -14,7 +15,8 @@ from examples.mirroropd.research.studies.teacher_difference.response import (
 from verl.trainer.distillation.numerics import kl_rows
 
 
-def test_bundled_vjp_matches_dense_tied_head_extra_teacher_support():
+@pytest.mark.parametrize("reduction,denominator", [("fixed_cap", 4), ("valid_tokens", 3)])
+def test_bundled_vjp_matches_dense_tied_head_extra_teacher_support(reduction, denominator):
     torch.manual_seed(71)
     w = torch.randn(7, 3, dtype=torch.float64, requires_grad=True)
     x = torch.randn(3, 7, dtype=torch.float64)
@@ -30,27 +32,31 @@ def test_bundled_vjp_matches_dense_tied_head_extra_teacher_support():
     requests = [b, parallel, b0, *[b * sign[:, None] for sign in signs]]
     results = []
     for (field, dh, dw, moments), request in zip(
-        cotangents(h, w, ht, wt, (h0, w0), fields=fields, cap=4, token_chunk=2, bundle=3, signs=signs),
+        cotangents(
+            h, w, ht, wt, (h0, w0), fields=fields, cap=4, token_chunk=2, bundle=3, signs=signs, reduction=reduction
+        ),
         requests,
         strict=True,
     ):
         actual = torch.autograd.grad((h, w), w, (dh, dw), retain_graph=True)[0]
-        expected = torch.autograd.grad(((h @ w.T) * request.detach()).sum() / 4, w, retain_graph=True)[0]
+        expected = torch.autograd.grad(((h @ w.T) * request.detach()).sum() / denominator, w, retain_graph=True)[0]
         torch.testing.assert_close(actual, expected)
         results.append(actual)
         if field == "live":
-            torch.testing.assert_close(moments[1], b.square().sum() / 4)
+            torch.testing.assert_close(moments[1], b.square().sum() / denominator)
             torch.testing.assert_close(moments[3] + moments[4], moments[1])
     token_gradients = [
         torch.autograd.grad(((h @ w.T)[t] * b[t].detach()).sum(), w, retain_graph=True)[0] for t in range(3)
     ]
-    exact_u = sum(v.square().sum() for v in token_gradients) / 4
-    estimated_u = 4 * torch.stack([v.square().sum() for v in results[3:]]).mean()
+    exact_u = sum(v.square().sum() for v in token_gradients) / denominator
+    estimated_u = denominator * torch.stack([v.square().sum() for v in results[3:]]).mean()
     torch.testing.assert_close(exact_u, estimated_u)
-    frozen_signed = next(cotangents(h, w, ht, wt, (h0, w0), fields=["frozen-sign-0"], cap=4, signs=signs))
+    frozen_signed = next(
+        cotangents(h, w, ht, wt, (h0, w0), fields=["frozen-sign-0"], cap=4, signs=signs, reduction=reduction)
+    )
     _, dh, dw, _ = frozen_signed
     actual = torch.autograd.grad((h, w), w, (dh, dw), retain_graph=True)[0]
-    expected = torch.autograd.grad(((h @ w.T) * b0.detach() * signs[0, :, None]).sum() / 4, w)[0]
+    expected = torch.autograd.grad(((h @ w.T) * b0.detach() * signs[0, :, None]).sum() / denominator, w)[0]
     torch.testing.assert_close(actual, expected)
 
 

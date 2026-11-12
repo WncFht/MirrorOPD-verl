@@ -20,6 +20,8 @@ import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from .inputs import future_source_groups, load_records
+from .reductions import record_denominator
 from .report_groups import basic_interval, bootstrap_weights
 from .report_stages import AUDITS, DEFAULT_STYLE, digest, frame, save
 from .results import write_csv
@@ -34,21 +36,25 @@ def positive_interval(samples):
 def arrays(data, split):
     records = {row["row_id"]: row for row in data["records"]}
     groups = [g for g in data["groups"] if g["field"] == "live" and g["split"] == split]
-    cap, k = data["signature"]["task"]["cap"], data["signature"]["probes"]
-    moments, native, parallel, cross, probes = [], [], [], [], []
+    task, k = data["signature"]["task"], data["signature"]["probes"]
+    moments, native, parallel, cross, probes, diagonals = [], [], [], [], [], []
     for group in groups:
         rows = [records[key] for key in group["rows"]]
         moments.append(np.mean([r["moments"] for r in rows], axis=0))
         native.append(np.mean([r["norm_sq"]["live"] for r in rows]))
         parallel.append(np.mean([r["norm_sq"]["parallel"] for r in rows]))
         cross.append(np.mean([r["native_parallel_inner"] for r in rows]))
-        probes.append([cap * np.mean([r["norm_sq"][f"sign-{j}"] for r in rows]) for j in range(k)])
+        probes.append(
+            [np.mean([record_denominator(r, task) * r["norm_sq"][f"sign-{j}"] for r in rows]) for j in range(k)]
+        )
+        diagonals.append([np.mean([r["norm_sq"][f"sign-{j}"] for r in rows]) for j in range(k)])
     return dict(
         moments=np.asarray(moments),
         native=np.asarray(native),
         parallel=np.asarray(parallel),
         cross=np.asarray(cross),
         probes=np.asarray(probes),
+        diagonals=np.asarray(diagonals),
         groups=groups,
     )
 
@@ -58,7 +64,7 @@ def factors(data, split, weights):
     loss, p, p0, pp, perp, reverse, _ = (weights @ a["moments"]).T
     native, parallel, cross = [weights @ a[key] for key in ("native", "parallel", "cross")]
     u = weights @ a["probes"].mean(1)
-    cap = data["signature"]["task"]["cap"]
+    diagonal = weights @ a["diagonals"].mean(1)
     return dict(
         L=loss,
         P=p,
@@ -66,9 +72,9 @@ def factors(data, split, weights):
         U=u,
         A_token=u / p,
         R_agg=native / u,
-        aggregation_over_diagonal=cap * native / u,
-        diagonal=u / cap,
-        offdiagonal=native - u / cap,
+        aggregation_over_diagonal=native / diagonal,
+        diagonal=diagonal,
+        offdiagonal=native - diagonal,
         second=native,
         parallel_second=parallel,
         perpendicular_second=native + parallel - 2 * cross,
@@ -93,14 +99,12 @@ def factors(data, split, weights):
 def component_transfer(data, role, ws=None, wh=None):
     groups, gram = data["groups"], np.asarray(data["gram"])
     task = data["signature"]["task"]
-    bank = json.loads(Path(task["records"]).read_text())
-    batch_index = {r["group"]: r["batch_index"] for r in bank if r["split"] == "train"}
+    bank = load_records(task["records"])
+    future = future_source_groups(task, bank)
     source = [
         i
         for i, g in enumerate(groups)
-        if g["field"] == "live"
-        and g["split"] == "train"
-        and (role == "all-train" or batch_index[g["group"]] >= task["stage"] // 16)
+        if g["field"] == "live" and g["split"] == "train" and (role == "all-train" or g["group"] in future)
     ]
     held = [i for i, g in enumerate(groups) if g["field"] == "live" and g["split"] == "heldout"]
     if not source or not held:
@@ -163,7 +167,11 @@ def analyze(data, replicates=4000):
         row["maximum_pressure_share"] = float(individual_pressure.max() / individual_pressure.sum())
         individual = [r for r in data["records"] if r["split"] == split]
         token_energy = np.array(
-            [np.mean([r["norm_sq"][f"sign-{j}"] for j in range(data["signature"]["probes"])]) for r in individual]
+            [
+                record_denominator(r, task)
+                * np.mean([r["norm_sq"][f"sign-{j}"] for j in range(data["signature"]["probes"])])
+                for r in individual
+            ]
         )
         trajectory_energy = np.array([r["norm_sq"]["live"] for r in individual])
         row["maximum_token_energy_share"] = float(token_energy.max() / token_energy.sum())
@@ -183,10 +191,10 @@ def analyze(data, replicates=4000):
                 )
     transfer = []
     train = arrays(data, "train")["groups"]
-    bank = json.loads(Path(task["records"]).read_text())
-    batch_index = {r["group"]: r["batch_index"] for r in bank if r["split"] == "train"}
+    bank = load_records(task["records"])
+    future = future_source_groups(task, bank)
     for role in ("all-train", "future-train"):
-        n = sum(role == "all-train" or batch_index[g["group"]] >= task["stage"] // 16 for g in train)
+        n = sum(role == "all-train" or g["group"] in future for g in train)
         nh = len(arrays(data, "heldout")["groups"])
         if not n or not nh:
             continue
@@ -214,7 +222,7 @@ def frozen_factors(data, frozen, replicates=4000):
             energy.append(np.mean([r["norm_sq"]["frozen"] for r in rows]))
             probes.append(
                 [
-                    task["cap"] * np.mean([r["norm_sq"][f"frozen-sign-{j}"] for r in rows])
+                    np.mean([record_denominator(r, task) * r["norm_sq"][f"frozen-sign-{j}"] for r in rows])
                     for j in range(frozen["signature"]["probes"])
                 ]
             )
@@ -270,10 +278,10 @@ def plot_factors(rows, out, fv, name, keys, labels, *, logarithmic=False):
 
 def question_sensitivity(data):
     """Finite-panel leave-one-question-out energies; never trim the estimand."""
-    cap, k = data["signature"]["task"]["cap"], data["signature"]["probes"]
+    task, k = data["signature"]["task"], data["signature"]["probes"]
     rows = [r for r in data["records"] if r["split"] == "heldout"]
     p = np.array([r["moments"][1] for r in rows])
-    u = cap * np.array([np.mean([r["norm_sq"][f"sign-{j}"] for j in range(k)]) for r in rows])
+    u = np.array([record_denominator(r, task) * np.mean([r["norm_sq"][f"sign-{j}"] for j in range(k)]) for r in rows])
     e = np.array([r["norm_sq"]["live"] for r in rows])
     output = []
     for i, row in enumerate(rows):

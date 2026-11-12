@@ -10,6 +10,7 @@ from verl.trainer.distillation.rows import precompute_kl_rows
 
 from .checkpoints import CheckpointStore
 from .inputs import source_fingerprint
+from .reductions import response_denominator
 from .runtime import checkpoint_identity, teacher_cache, write_json
 from .trajectory import panel, parser, tasks
 
@@ -66,7 +67,11 @@ def run(task, initial_path, root, out, *, token_chunk):
                         row_id=key,
                         split=row["split"],
                         group=row["group"],
-                        moments=(moment / task["cap"]).cpu().tolist(),
+                        token_count=len(h),
+                        denominator=response_denominator(len(h), task["cap"], task.get("reduction", "fixed_cap")),
+                        moments=(moment / response_denominator(len(h), task["cap"], task.get("reduction", "fixed_cap")))
+                        .cpu()
+                        .tolist(),
                     )
                     store.save_json("row-" + key, value)
                 records.append(value)

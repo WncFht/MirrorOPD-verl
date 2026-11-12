@@ -47,7 +47,7 @@ def run(task, initial_path, root, out, *, max_groups=None, token_chunk=128):
         started = time.monotonic()
         source_hashes = {
             name: hashlib.sha256((Path(__file__).parent / name).read_bytes()).hexdigest()
-            for name in ("trajectory_probe.py", "requests.py", "pac.py", "runtime.py", "metrics.py")
+            for name in ("trajectory_probe.py", "requests.py", "pac.py", "runtime.py", "metrics.py", "reductions.py")
         }
         teacher, initial = request_cache(task, initial_path, root, rows, math)
         student = load_model(task["student"], checkpointing=task.get("checkpointing", False))
@@ -62,6 +62,7 @@ def run(task, initial_path, root, out, *, max_groups=None, token_chunk=128):
                     teacher["hidden"],
                     batch,
                     cap=task["cap"],
+                    reduction=task.get("reduction", "fixed_cap"),
                     retain_samples=False,
                     initial=initial if field == "frozen" else None,
                     token_chunk=token_chunk,
@@ -74,6 +75,8 @@ def run(task, initial_path, root, out, *, max_groups=None, token_chunk=128):
                         group=label[1],
                         rows=[r["row_id"] for r in batch],
                         losses=result["losses"],
+                        token_counts=result["token_counts"],
+                        denominators=result["denominators"],
                         pressure=result["pressure"].tolist(),
                         second=result["gradient_norm_sq"].tolist(),
                         request=result["request_diagnostics"],

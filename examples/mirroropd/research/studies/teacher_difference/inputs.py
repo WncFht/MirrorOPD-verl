@@ -42,8 +42,11 @@ def load_records(path: str | Path):
 
 def normalize_records(rows, *, cap: int | None = None, bank_id: str = "default"):
     """Copy records, truncate only after EOS, and add stable diagnostic metadata."""
+    if cap is not None and cap < 1:
+        raise ValueError("cap must be positive")
     out = []
     seen = set()
+    row_ids = set()
     for index, source in enumerate(rows):
         row = dict(source)
         for key in REQUIRED:
@@ -51,9 +54,13 @@ def normalize_records(rows, *, cap: int | None = None, bank_id: str = "default")
                 raise ValueError(f"record {index} is missing list field {key}")
         prompt_ids = [int(x) for x in row["prompt_ids"]]
         response_ids = [int(x) for x in row["response_ids"]]
-        eos = row.get("eos_token_id")
-        if eos is not None and int(eos) in response_ids:
-            response_ids = response_ids[: response_ids.index(int(eos)) + 1]
+        if not prompt_ids:
+            raise ValueError(f"record {index} has an empty prompt")
+        eos = row.get("eos_token_ids", row.get("eos_token_id"))
+        eos_ids = set() if eos is None else {int(x) for x in (eos if isinstance(eos, list) else [eos])}
+        stop = next((i for i, token in enumerate(response_ids) if token in eos_ids), None)
+        if stop is not None:
+            response_ids = response_ids[: stop + 1]
         if cap is not None:
             response_ids = response_ids[:cap]
         if not response_ids:
@@ -69,6 +76,9 @@ def normalize_records(rows, *, cap: int | None = None, bank_id: str = "default")
             bank_id=bank_id,
             token_count=len(response_ids),
         )
+        if row["row_id"] in row_ids:
+            raise ValueError(f"duplicate row_id in bank {bank_id}: {row['row_id']}")
+        row_ids.add(row["row_id"])
         out.append(row)
     return out
 
@@ -91,3 +101,37 @@ def validate_records(rows, *, expected=None):
 
 def source_fingerprint(rows):
     return fingerprint(rows)
+
+
+def validate_source_policy(policy):
+    if policy not in ("training_batches", "independent"):
+        raise ValueError(f"Unknown source policy: {policy!r}")
+    return policy
+
+
+def future_source_groups(task, rows):
+    """Only observed training-batch provenance supports a future-batch claim.
+
+    An independent diagnostic source has no training exposure clock. It is
+    included in all-train summaries, never relabelled as a future batch.
+    """
+    if validate_source_policy(task.get("source_policy", "training_batches")) == "independent":
+        return set()
+    groups = {}
+    for row in rows:
+        if row["split"] != "train":
+            continue
+        key = row.get("diagnostic_group", row.get("group"))
+        if key is None or "batch_index" not in row:
+            raise ValueError("training_batches requires group and batch_index; use independent for a new source panel")
+        unseen = row["batch_index"] >= task["stage"] // 16
+        groups[key] = groups.get(key, True) and unseen
+    return {key for key, unseen in groups.items() if unseen}
+
+
+def validate_source_exposure(task, rows):
+    if validate_source_policy(task.get("source_policy", "training_batches")) == "independent":
+        return
+    future = future_source_groups(task, rows)
+    if any(row.get("diagnostic_group", row.get("group")) not in future for row in rows):
+        raise ValueError("Source must be unseen at checkpoint")

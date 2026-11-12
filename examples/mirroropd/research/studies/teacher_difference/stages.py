@@ -101,7 +101,15 @@ def run(task, root):
             if resident_vectors is not None:
                 resident_vectors.append(np.load(vector_path))
         else:
-            result = compute_batch(student, head, hidden, batch, cap=task["cap"], retain_samples=False)
+            result = compute_batch(
+                student,
+                head,
+                hidden,
+                batch,
+                cap=task["cap"],
+                reduction=task.get("reduction", "fixed_cap"),
+                retain_samples=False,
+            )
             vector = result["gradient_vectors"][0].numpy()
             np.save(vector_path, vector)
             if resident_vectors is not None:
@@ -113,6 +121,8 @@ def run(task, root):
                     split=r.get("split"),
                     pressure=float(result["pressure"][j]),
                     loss=result["losses"][j],
+                    token_count=result["token_counts"][j],
+                    denominator=result["denominators"][j],
                     gradient_norm_sq=float(result["gradient_norm_sq"][j]),
                 )
                 for j, r in enumerate(batch)

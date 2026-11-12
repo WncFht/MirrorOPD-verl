@@ -18,6 +18,7 @@ import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from .inputs import future_source_groups, load_records
 from .metrics import moment_summary
 from .report_groups import basic_interval, bootstrap_weights
 from .report_stages import DEFAULT_STYLE, digest, frame, save
@@ -53,11 +54,12 @@ def analyze(data, *, replicates=4000):
     groups, gram = data["groups"], np.asarray(data["gram"])
     n = len(groups) // 2
     meta = dict(branch=data["signature"]["task"]["target"], stage=data["signature"]["task"]["stage"])
-    bank = json.loads(Path(data["signature"]["task"]["records"]).read_text())
-    batch_index = {r["group"]: r["batch_index"] for r in bank if r["split"] == "train"}
+    task = data["signature"]["task"]
+    bank = load_records(task["records"])
+    future_groups = future_source_groups(task, bank)
     held = [i for i, g in enumerate(groups[:n]) if g["split"] == "heldout"]
     train = [i for i, g in enumerate(groups[:n]) if g["split"] == "train"]
-    future = [i for i in train if batch_index[groups[i]["group"]] >= meta["stage"] // 16]
+    future = [i for i in train if groups[i]["group"] in future_groups]
     panels, transfer, rotations = [], [], []
     for split, indices in (("train", train), ("heldout", held)):
         for field, offset in (("live", 0), ("frozen", n)):
@@ -167,9 +169,10 @@ def paired_contrasts(artifacts, *, replicates=4000):
         assert [(g["rows"], g["split"]) for g in left["groups"]] == [(g["rows"], g["split"]) for g in right["groups"]]
         source = [i for i, g in enumerate(left["groups"][:n]) if g["split"] == "train"]
         held = [i for i, g in enumerate(left["groups"][:n]) if g["split"] == "heldout"]
-        bank = json.loads(Path(left["signature"]["task"]["records"]).read_text())
-        batch_index = {r["group"]: r["batch_index"] for r in bank if r["split"] == "train"}
-        future = [i for i in source if batch_index[left["groups"][i]["group"]] >= stage // 16]
+        task = left["signature"]["task"]
+        bank = load_records(task["records"])
+        future_groups = future_source_groups(task, bank)
+        future = [i for i in source if left["groups"][i]["group"] in future_groups]
         for role, selected in (("all-train", source), ("future-train", future)):
             if not selected:
                 continue
@@ -234,7 +237,13 @@ def plot(rows, out, fv, *, filename, keys, labels, field="live", split=None, rol
             frame(ax, "Optimizer updates", label)
             ax.set_xticks(sorted(set(r["stage"] for r in rows if role is None or r.get("role") == role)))
     fig.legend(*axes[0, 0].get_legend_handles_labels(), loc="upper center", ncol=2, frameon=False)
-    save(fig, out / filename, "H1024 trajectories; B8 cluster intervals where shaded.", fv, caption_fontsize=7)
+    save(
+        fig,
+        out / filename,
+        "Fixed trajectories; group bootstrap intervals where shaded; see task normalization.",
+        fv,
+        caption_fontsize=7,
+    )
 
 
 def main():
